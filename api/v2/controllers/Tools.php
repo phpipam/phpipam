@@ -12,7 +12,7 @@ class Tools_controller extends Common_functions {
 
 	/* object holders */
 	private $Database;
-	private $Exceptions;
+	private $Result;
 	protected $Tools;
 
 	/**
@@ -24,9 +24,9 @@ class Tools_controller extends Common_functions {
 	 * @param mixed $params		// post/get values
 	 * @return void
 	 */
-	public function __construct($Database, $Tools, $params, $Exceptions) {
+	public function __construct($Database, $Tools, $params, $Result) {
 		$this->Database = $Database;
-		$this->Exceptions = $Exceptions;
+		$this->Result 	= $Result;
 		$this->Tools 	= $Tools;
 		$this->_params 	= $params;
 	}
@@ -44,13 +44,13 @@ class Tools_controller extends Common_functions {
 	public function OPTIONS () {
 		// controllers
 		$controllers = array(
-						array("href"=>"/api/".$_GET['app_id']."/sections/"),
-						array("href"=>"/api/".$_GET['app_id']."/subnets/"),
-						array("href"=>"/api/".$_GET['app_id']."/folders/"),
-						array("href"=>"/api/".$_GET['app_id']."/addresses/"),
-						array("href"=>"/api/".$_GET['app_id']."/vlans/"),
-						array("href"=>"/api/".$_GET['app_id']."/vrfs/"),
-						array("href"=>"/api/".$_GET['app_id']."/tools/"),
+						array("rel"=>"sections",	"href"=>"/api/".$_GET['app_id']."/sections/"),
+						array("rel"=>"subnets",		"href"=>"/api/".$_GET['app_id']."/subnets/"),
+						array("rel"=>"folders",		"href"=>"/api/".$_GET['app_id']."/folders/"),
+						array("rel"=>"addresses",	"href"=>"/api/".$_GET['app_id']."/addresses/"),
+						array("rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlans/"),
+						array("rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrfs/"),
+						array("rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/")
 					);
 		# result
 		return array("code"=>200, "data"=>$controllers);

@@ -55,11 +55,11 @@ class Subnets_controller extends Common_functions {
 	public function OPTIONS () {
 		// methods
 		$result['methods'] = array(
-								array("href"=>"/api/subnets/".$this->_params->app_id."/",		"method"=>"OPTIONS"),
-								array("href"=>"/api/subnets/".$this->_params->app_id."/{id}/", 	"method"=>"GET"),
-								array("href"=>"/api/subnets/".$this->_params->app_id."/{id}/", 	"method"=>"POST"),
-								array("href"=>"/api/subnets/".$this->_params->app_id."/{id}/", 	"method"=>"PATCH"),
-								array("href"=>"/api/subnets/".$this->_params->app_id."/{id}/", 	"method"=>"DELETE")
+								array("href"=>"/api/subnets/".$this->_params->app_id."/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/subnets/".$this->_params->app_id."/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
+																												 array("rel"=>"create", "method"=>"POST"),
+																												 array("rel"=>"update", "method"=>"PATCH"),
+																												 array("rel"=>"delete", "method"=>"DELETE"))),
 							);
 		# result
 		return array("code"=>200, "data"=>$result);
@@ -125,22 +125,33 @@ class Subnets_controller extends Common_functions {
 	 * @return void
 	 */
 	public function GET () {
+		// cidr check
 		// check if id2 is set ?
 		if(isset($this->_params->id2)) {
-			// validate id
-			$this->validate_subnet_id ();
+			// is IP address provided
+			if($this->_params->id=="cidr") {
+				$result = $this->read_search_subnet ();
+				// check result
+				if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
+				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			}
+			else {
+				// validate id
+				$this->validate_subnet_id ();
+			}
+
 			// slaves
 			if($this->_params->id2=="slaves") {
 				$result = $this->read_subnet_slaves ();
 				// check result
-				if($result==NULL)						{ return array("code"=>200, NULL); }
+				if($result==NULL)						{ $this->Response->throw_exception(404, "No slaves"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// slaves-recursive
 			elseif ($this->_params->id2=="slaves_recursive") {
 				$result = $this->read_subnet_slaves_recursive ();
 				// check result
-				if($result==NULL)						{ return array("code"=>200, NULL); }
+				if($result==NULL)						{ $this->Response->throw_exception(404, "No slaves"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// usage
@@ -160,11 +171,11 @@ class Subnets_controller extends Common_functions {
 		elseif (is_numeric($this->_params->id)) {
 			$result = $this->read_subnet ();
 			// check result
-			if($result==NULL)							{ return array("code"=>200, NULL); }
+			if($result==NULL)							{ $this->Response->throw_exception(404, "Invalid Id"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "Subnets", true, true)); }
 		}
 		// false
-		else 											{ $this->Response->throw_exception(400, 'Invalid Id'); }
+		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }
 	}
 
 
@@ -179,7 +190,6 @@ class Subnets_controller extends Common_functions {
 	 *	forbidden params : subnet, mask
 	 *
 	 *	if id2 is present than execute:
-	 *		- {id}/truncate/
 	 *		- {id}/resize/
 	 *		- {id}/split/
 	 *
@@ -192,10 +202,8 @@ class Subnets_controller extends Common_functions {
 
 		// check if id2 is set > additional methods
 		if(isset($this->_params->id2)) {
-			// truncate
-			if($this->_params->id2=="truncate") 		{ return $this->subnet_truncate (); }
 			// resize
-			elseif($this->_params->id2=="resize") 		{ return $this->subnet_resize (); }
+			if($this->_params->id2=="resize") 			{ return $this->subnet_resize (); }
 			// split
 			elseif($this->_params->id2=="split") 		{ return $this->subnet_split (); }
 			// error
@@ -233,25 +241,35 @@ class Subnets_controller extends Common_functions {
 	 *
 	 *	required params : id
 	 *
+	 *	if id2 is present than execute:
+	 *		- {id}/truncate/
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function DELETE () {
-		# Check for id
-		if(!isset($this->_params->id))				{ $this->Response->throw_exception(400, "Subnet id required"); }
-		# check that subnet exists
-		if(sizeof($this->Subnets->fetch_subnet ("id", $this->_params->id))==0)
-													{ $this->Response->throw_exception(400, "Invalid subnet Id"); }
+		// Check for id
+		$this->validate_subnet_id ();
 
-		# set variables for delete
-		$values["id"] = $this->_params->id;
-
-		# execute update
-		if(!$this->Subnets->modify_subnet ("delete", $values))
-													{ $this->Response->throw_exception(500, "Failed to delete subnet"); }
+		// check if id2 is set > additional methods
+		if(isset($this->_params->id2)) {
+			// truncate
+			if($this->_params->id2=="truncate") 		{ return $this->subnet_truncate (); }
+			// error
+			else										{ $this->Response->throw_exception(400, 'Invalid parameters'); }
+		}
+		// ok, delete subnet
 		else {
-			//set result
-			return array("code"=>200, "data"=>"Subnet deleted");
+			# set variables for delete
+			$values["id"] = $this->_params->id;
+
+			# execute update
+			if(!$this->Subnets->modify_subnet ("delete", $values))
+														{ $this->Response->throw_exception(500, "Failed to delete subnet"); }
+			else {
+				//set result
+				return array("code"=>200, "data"=>"Subnet deleted");
+			}
 		}
 	}
 
@@ -448,6 +466,29 @@ class Subnets_controller extends Common_functions {
 		return $result===false ? NULL : $result;
 	}
 
+	/**
+	 * Searches for subnet in database
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function read_search_subnet () {
+		// transform
+		$this->_params->id2 = $this->Subnets->transform_address ($this->_params->id2, "decimal");
+		// check
+		$subnet = $this->Tools->fetch_multiple_objects ("subnets", "subnet", $this->_params->id2);
+		// validate mask
+		if($subnet!==false) {
+			foreach($subnet as $s) {
+				if($s->mask == $this->_params->id3) {
+					$result[] = $s;
+				}
+			}
+		}
+		# result
+		return !isset($result) ? false : $result;
+	}
+
 
 
 
@@ -490,9 +531,20 @@ class Subnets_controller extends Common_functions {
 	private function validate_cidr () {
 		// not for folder
 		if($this->_params->isFolder!=1) {
+			// check
 			if(strlen($err = $this->Subnets->verify_cidr_address($this->_params->subnet."/".$this->_params->mask))>1)
 																									{ $this->Response->throw_exception(400, $err); }
 		}
+	}
+
+	/**
+	 * Checks if GET request is subnet
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_cidr_request () {
+		return (strlen($err = $this->Subnets->verify_cidr_address($this->_params->id."/".$this->_params->id2))>1) ? false : true;
 	}
 
 	/**

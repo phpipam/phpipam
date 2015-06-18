@@ -6,7 +6,7 @@ RewriteEngine on
 RewriteBase /
 
 # passthroughs
-RewriteRule ^(api)($|/) - [L]
+RewriteRule ^api/.$ - [L]
 RewriteRule ^index.php$ - [L]
 RewriteRule ^(css|js|site|test)/.*$ - [L]
 RewriteRule site/login/captcha/captchashow.php - [L]
