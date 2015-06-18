@@ -55,11 +55,11 @@ class Sections_controller extends Common_functions {
 	public function OPTIONS () {
 		// methods
 		$result['methods'] = array(
-								array("href"=>"/api/sections/".$this->_params->app_id."/",			"method"=>"OPTIONS"),
-								array("href"=>"/api/sections/".$this->_params->app_id."/{id}/", 	"method"=>"GET"),
-								array("href"=>"/api/sections/".$this->_params->app_id."/{id}/", 	"method"=>"POST"),
-								array("href"=>"/api/sections/".$this->_params->app_id."/{id}/", 	"method"=>"PATCH"),
-								array("href"=>"/api/sections/".$this->_params->app_id."/{id}/", 	"method"=>"DELETE")
+								array("href"=>"/api/sections/".$this->_params->app_id."/", 			"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/sections/".$this->_params->app_id."/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
+																													 array("rel"=>"create", "method"=>"POST"),
+																													 array("rel"=>"update", "method"=>"PATCH"),
+																													 array("rel"=>"delete", "method"=>"DELETE"))),
 							);
 		# result
 		return array("code"=>200, "data"=>$result);

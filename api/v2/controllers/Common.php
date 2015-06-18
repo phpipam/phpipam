@@ -16,7 +16,9 @@ class Common_functions {
 	 * @return void
 	 */
 	protected function init_object ($Object, $Database) {
-		$this->$Object	= new $Object ($Database);
+		// admin fix
+		if($Object=="Admin")	{ $this->$Object	= new $Object ($Database, false); }
+		else					{ $this->$Object	= new $Object ($Database); }
 		// set exit method
 		$this->$Object->Result->exit_method = "exception";
 	}
@@ -78,7 +80,11 @@ class Common_functions {
 		$controller = is_null($controller) ? $this->_params->controller : $controller;
 
 		// links
-		if($links) { $result = $this->add_links ($result, $controller); }
+		if($links) {
+			// explicitly set to no
+			if(@$this->_params->links!="false")
+								{ $result = $this->add_links ($result, $controller); }
+		}
 		// transform address
 		if($transform_address)	{ $result = $this->transform_address ($result); }
 
@@ -95,22 +101,81 @@ class Common_functions {
 	 * @return void
 	 */
 	protected function add_links ($result, $controller=null) {
+		// lower controller
+		$controller = strtolower($controller);
+
 		// multiple options
 		if(is_array($result)) {
 			foreach($result as $k=>$r) {
-				$result[$k]->links = new stdClass ();
-				$result[$k]->links->rel  = "self";
-				$result[$k]->links->href = "/api/".$this->_params->app_id."/$controller/".$r->id."/";
+				$m=0;
+				// custom links
+				$custom_links = $this->define_links ($controller);
+				if($custom_links!==false) {
+					foreach($this->define_links ($controller) as $link=>$method) {
+						// self only !
+						if ($link=="self") {
+						$result[$k]->links[$m] = new stdClass ();
+						$result[$k]->links[$m]->rel  	= $link;
+						$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
+						}
+					}
+				}
 			}
 		}
 		// single item
 		else {
-				$result->links = new stdClass ();
-				$result->links->rel  = "self";
-				$result->links->href = "/api/".$this->_params->app_id."/$controller/".$result->id."/";
+			$m=0;
+				// custom links
+				$custom_links = $this->define_links ($controller);
+				if($custom_links!==false) {
+					foreach($this->define_links ($controller) as $link=>$method) {
+						$result->links[$m] = new stdClass ();
+						$result->links[$m]->rel  	= $link;
+						// self ?
+						if ($link=="self")
+						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
+						else
+						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
+						$result->links[$m]->methods = $method;
+						// next
+						$m++;
+					}
+				}
 		}
 		# return
 		return $result;
+	}
+
+	/**
+	 * Defines links for controller
+	 *
+	 * @access private
+	 * @param mixed $controller
+	 * @return void
+	 */
+	private function define_links ($controller) {
+		// subnets
+		if($controller=="subnets") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["usage"]            = array ("GET");
+			$result["first_free"]       = array ("GET");
+			$result["slaves"]           = array ("GET");
+			$result["slaves_recursive"] = array ("GET");
+			$result["truncate"]         = array ("DELETE");
+			$result["resize"]           = array ("PATCH");
+			$result["split"]            = array ("PATCH");
+			// return
+			return $result;
+		}
+		// sections
+		if($controller=="sections") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["subnets"]          = array ("GET");
+			// return
+			return $result;
+		}
+		// default
+		return false;
 	}
 
 	/**

@@ -1,4 +1,4 @@
-== 1.16.002
+== 1.16.005
 
 	New features:
 	------------
@@ -10,7 +10,7 @@
 	+ Added customizable address tags with compressed option;
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
-	+ API (work in progress):
+	+ REST API (in progress):
 		+ API v2, old v1 support added
 		+ Complete rewrite of all API calls;
 		+ New security models (crypt, ssl, none);

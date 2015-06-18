@@ -3,21 +3,10 @@
 /**
  *	phpIPAM API class to work with vrfs
  *
- *	actions:
- *		- add/create
- *		- read/fetch
- *		- edit/update
- *		- delete
  *
- *	identifiers
- *		- id
- *		- name
- *
- *	add/create
- *		all parameters
  */
 
-class Vrfs_controller {
+class Vrfs_controller extends Common_functions {
 
 	/* public variables */
 	public $_params;
@@ -26,10 +15,10 @@ class Vrfs_controller {
 	protected $valid_keys;
 
 	/* object holders */
-	private $Database;			// Database object
-	private $Sections;			// Sections object
-	private $Tools;				// Tools object
-	private $Admin;				// Admin object
+	protected $Database;			// Database object
+	protected $Sections;			// Sections object
+	protected $Tools;				// Tools object
+	protected $Admin;				// Admin object
 
 
 	/**
@@ -41,85 +30,18 @@ class Vrfs_controller {
 	 * @param mixed $params		// post/get values
 	 * @return void
 	 */
-	public function __construct($Database, $Tools, $params) {
+	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
 		$this->Tools 	= $Tools;
 		$this->_params 	= $params;
-		// subnets
-		$this->init_Admin ($Database);
+		$this->Response = $Response;
+		// init required objects
+		$this->init_object ("Admin", $Database);
 		// set valid keys
-		$this->set_valid_keys ();
-	}
+		$this->set_valid_keys ("vrf");
 
-	/**
-	 * Initializes Admin object
-	 *
-	 * @access private
-	 * @param class $Database
-	 * @return void
-	 */
-	private function init_Admin ($Database) {
-		$this->Admin = new Admin ($Database, false);
-		//set exit method
-		$this->Admin->Result->exit_method = "exception";
-	}
-
-	/**
-	 * Sets valid keys for actions
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_valid_keys () {
-
-		# array of controller keys
-		$this->controller_keys = array("app_id", "controller", "action");
-
-		# array of all valid keys - fetch from SHCEMA
-		$this->valid_keys = $this->Tools->fetch_standard_fields ("vrf");
-
-		# add custom fields
-		$custom_fields = $this->Tools->fetch_custom_fields("vrf");
-		if(sizeof($custom_fields)>0) {
-			foreach($custom_fields as $cf) {
-				$this->custom_keys[] = $cf['name'];
-			}
-		}
-
-		# merge all
-		$this->valid_keys = array_merge($this->controller_keys, $this->valid_keys);
-		if(isset($this->custom_keys)) {
-			$this->valid_keys = array_merge($this->valid_keys, $this->custom_keys);
-		}
-
-		# set items to remove
-		$this->remove_keys = array("editDate");
-		# remove update time
-		foreach($this->valid_keys as $k=>$v) {
-			if(in_array($v, $this->remove_keys)) {
-				unset($this->valid_keys[$k]);
-			}
-		}
-	}
-
-	/**
-	 * Validates posted keys and returns proper inset valies
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function validate_keys () {
-		foreach($this->_params as $pk=>$pv) {
-			if(!in_array($pk, $this->valid_keys)) 		{ throw new Exception('Invalid request key '.$pk); }
-			// set parameters
-			else {
-				if(!in_array($pk, $this->controller_keys)) {
-					 $values[$pk] = $pv;
-				}
-			}
-		}
-		# return
-		return $values;
+		//die
+		$this->Response->throw_exception(501, 'Not implemented');
 	}
 
 
@@ -127,52 +49,6 @@ class Vrfs_controller {
 
 
 
-	/**
-	 * Creates new VRF
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function add () {
-		# check for valid keys
-		$values = $this->validate_keys ();
-
-		# validate input
-		$this->validate_vrf_edit ("add");
-
-		# execute update
-		if(!$this->Admin->object_modify ("vrf", "add", "vrfId", $values))
-													{ throw new Exception('Vrf create failed'); }
-		else {
-			//set result
-			$result['result']   = "success";
-			$result['response'] = "Vrf created successfully";
-			$result['id'] 		= $this->Admin->lastId;
-		}
-		# return
-		return $result;
-	}
-
-	/**
-	 * Alias for add
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function create () {
-		return $this->add();
-	}
-
-	/**
-	 * Validates VLAN
-	 *
-	 * @access private
-	 * @param mixed $action
-	 * @return void
-	 */
-	private function validate_vrf_edit ($action="add") {
-		if(@$this->_params->name == "" || !isset($this->_params->name)) 			{ throw new Exception('Name is mandatory'); }
-	}
 
 
 
@@ -185,7 +61,7 @@ class Vrfs_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function read () {
+	public function GET () {
 		// id must be set
 		if(!isset($this->_params->id))			{ throw new Exception('VRF Id is required'); }
 		// all
@@ -214,28 +90,36 @@ class Vrfs_controller {
 		else								{ return $result; }
 	}
 
+
+
+
+
 	/**
-	 * Alias for read function
+	 * Creates new VRF
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function fetch () {
-		return $this->read ();
+	public function POST () {
+		# check for valid keys
+		$values = $this->validate_keys ();
+
+		# validate input
+		$this->validate_vrf_edit ("add");
+
+		# execute update
+		if(!$this->Admin->object_modify ("vrf", "add", "vrfId", $values))
+													{ throw new Exception('Vrf create failed'); }
+		else {
+			//set result
+			$result['result']   = "success";
+			$result['response'] = "Vrf created successfully";
+			$result['id'] 		= $this->Admin->lastId;
+		}
+		# return
+		return $result;
 	}
 
-	/**
-	 * Validates vrf
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function validate_vrf () {
-		// validate id
-		if(!isset($this->_params->id))													{ throw new Exception('Vrf Id is required'); }
-		// check that it exists
-		if($this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id) === false )	{ throw new Exception('Invalid Vrf Id'); }
-	}
 
 
 
@@ -246,7 +130,7 @@ class Vrfs_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function edit() {
+	public function PATCH () {
 		# verify
 		$this->validate_vrf_edit ("edit");
 		# check that it exists
@@ -271,16 +155,6 @@ class Vrfs_controller {
 		return $result;
 	}
 
-	/**
-	 * Alias function for edit
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function update() {
-		return $this->edit();
-	}
-
 
 
 
@@ -292,7 +166,7 @@ class Vrfs_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function delete() {
+	public function DELETE () {
 		# check that vrf exists
 		$this->validate_vrf ();
 
@@ -312,6 +186,42 @@ class Vrfs_controller {
 		}
 		# return
 		return $result;
+	}
+
+
+
+
+
+
+
+
+
+
+	/* @validations ---------- */
+
+	/**
+	 * Validates VLAN
+	 *
+	 * @access private
+	 * @param mixed $action
+	 * @return void
+	 */
+	private function validate_vrf_edit ($action="add") {
+		if(@$this->_params->name == "" || !isset($this->_params->name)) 			{ throw new Exception('Name is mandatory'); }
+	}
+
+
+	/**
+	 * Validates vrf
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_vrf () {
+		// validate id
+		if(!isset($this->_params->id))													{ throw new Exception('Vrf Id is required'); }
+		// check that it exists
+		if($this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id) === false )	{ throw new Exception('Invalid Vrf Id'); }
 	}
 }
 

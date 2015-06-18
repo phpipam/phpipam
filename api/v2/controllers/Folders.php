@@ -4,8 +4,9 @@
  *	phpIPAM API class to work with folders
  *
  *	just an alias for subnets
+ *
  */
-class Folders_controller {
+class Folders_controller extends Common_functions {
 
 	/**
 	 * __construct function
@@ -16,18 +17,29 @@ class Folders_controller {
 	 * @param mixed $params		// post/get values
 	 * @return void
 	 */
-	public function __construct($Database, $Tools, $params) {
+	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
 		$this->Tools 	= $Tools;
 		$this->_params 	= $params;
+		$this->Response = $Response;
 		// include
-		include("Subnets.php");
+		require("Subnets.php");
 		// subnets
-		$this->Subnets_controller = new Subnets_controller ($Database, $Tools, $params);
+		$this->Subnets_controller = new Subnets_controller ($Database, $Tools, $params, $Response);
 	}
 
 
 
+
+	/**
+	 * Options
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function OPTIONS () {
+		return $this->Subnets_controller->OPTIONS ();
+	}
 
 
 	/**
@@ -36,22 +48,9 @@ class Folders_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function add () {
-		return $this->Subnets_controller->add ();
+	public function POST () {
+		return $this->Subnets_controller->POST ();
 	}
-
-	/**
-	 * Alias for add
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function create () {
-		return $this->add();
-	}
-
-
-
 
 
 	/**
@@ -60,22 +59,9 @@ class Folders_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function read () {
-		return $this->Subnets_controller->read ();
+	public function GET () {
+		return $this->Subnets_controller->GET ();
 	}
-
-	/**
-	 * Alias for read function
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function fetch () {
-		return $this->read ();
-	}
-
-
-
 
 
 	/**
@@ -84,22 +70,9 @@ class Folders_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function edit() {
-		return $this->Subnets_controller->edit ();
+	public function PATCH () {
+		return $this->Subnets_controller->PATCH ();
 	}
-
-	/**
-	 * Alias function for edit
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function update() {
-		return $this->edit();
-	}
-
-
-
 
 
 	/**
@@ -108,8 +81,8 @@ class Folders_controller {
 	 * @access public
 	 * @return void
 	 */
-	public function delete() {
-		return $this->Subnets_controller->delete ();
+	public function DELETE () {
+		return $this->Subnets_controller->DELETE ();
 	}
 }
 
