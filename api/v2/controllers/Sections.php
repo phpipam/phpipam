@@ -204,16 +204,6 @@ class Sections_controller extends Common_functions {
 		}
 	}
 
-	/**
-	 * Alias function for edit
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function PUT () {
-		return $this->PATCH ();
-	}
-
 
 
 
