@@ -1,0 +1,258 @@
+<?php
+
+/**
+ *
+ * Class to handle exceptions
+ *
+ */
+class Responses {
+
+	/* public variables */
+	public $errors;				// error code handler
+	public $result = null;		// result handler
+	public $exception = false;	// is exception set?
+
+	/**
+	 * __construct function
+	 *
+	 * @access public
+	 * @param mixed $type
+	 * @return void
+	 */
+	public function __construct() {
+		# set error codes
+		$this->set_error_codes ();
+	}
+
+	/**
+	 * Sets error code object
+	 *
+	 *	http://www.restapitutorial.com/httpstatuscodes.html
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_error_codes () {
+		// OK
+		$this->errors[200] = "OK";
+		$this->errors[201] = "Created";
+		$this->errors[202] = "Accepted";
+		$this->errors[204] = "No Content";
+		// Client errors
+		$this->errors[400] = "Bad Request";
+		$this->errors[401] = "Unauthorized";
+		$this->errors[403] = "Forbidden";
+		$this->errors[404] = "Not Found";
+		$this->errors[405] = "Method Not Allowed";
+		$this->errors[415] = "Unsupported Media Type";
+		// Server errors
+		$this->errors[500] = "Internal Server Error";
+		$this->errors[501] = "Not Implemented";
+		$this->errors[503] = "Service Unavailable";
+		$this->errors[505] = "HTTP Version Not Supported";
+		$this->errors[511] = "Network Authentication Required";
+	}
+
+	/**
+	 * Sets new header and throws exception
+	 *
+	 * @access public
+	 * @param int $code (default: 400)
+	 * @param mixed $exception
+	 * @return void
+	 */
+	public function throw_exception ($code = 400, $exception) {
+		// set failed
+		$this->exception = true;
+
+		// set success
+		$this->result['success'] = false;
+		// set exit code
+		$this->result['code'] = $code;
+		// set message
+		$this->result['message'] = $exception;
+
+		// set header
+		$this->set_header ();
+		// throw exception
+		throw new Exception($exception);
+	}
+
+	/**
+	 * Sets header based on provided HTTP code
+	 *
+	 * @access private
+	 * @param mixed $code
+	 * @return void
+	 */
+	private function set_header () {
+		// wrong code
+		if(!isset($this->exception))		{ header("HTTP/1.1 500 Invalid result code"); }
+		else								{ header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
+	}
+
+	/**
+	 * Formulates result to JSON or XML
+	 *
+	 * @access public
+	 * @param mixed $result
+	 * @return void
+	 */
+	public function formulate_result ($result) {
+		// make sure result is array
+		$this->result = is_null($this->result) ? (array) $result : $this->result;
+
+		// get requested content type
+		$this->get_request_content_type ();
+
+		// set result contrnt type
+		$this->set_content_type_header ();
+		// set cache header
+		$this->set_cache_header ();
+		// set result header if not already set with $result['success']=false
+		$this->exception===true ? : $this->set_success_header ();
+
+		// return result
+		return $this->create_result ();
+	}
+
+	/**
+	 * Validates that proper content type is set in request
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function validate_content_type () {
+		// not set, presume json
+		if( !isset($_SERVER['CONTENT_TYPE']) ) {}
+		// post
+		elseif($_SERVER['CONTENT_TYPE']=="application/x-www-form-urlencoded") {}
+		// set, verify
+		elseif (!($_SERVER['CONTENT_TYPE']=="application/xml" || $_SERVER['CONTENT_TYPE']=="application/json")) {
+			$this->throw_exception (415, "Invalid Content type ".$_SERVER['CONTENT_TYPE']);
+		}
+	}
+
+	/**
+	 * Sets request content type
+	 *
+	 * @access public
+	 * @return void
+	 */
+	private function get_request_content_type () {
+		$this->result_type = $_SERVER['CONTENT_TYPE']=="application/xml" ? "xml" : "json";
+	}
+
+	/**
+	 * Sets result content type
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_content_type_header () {
+		// content_type
+		$this->result_type == "xml" ? header('Content-Type: application/xml') : header('Content-Type: application/json');
+	}
+
+	/**
+	 * Sets Cache header.
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_cache_header ($seconds = NULL) {
+		// none
+		if($seconds===NULL) {
+			header("Cache-Control: no-cache");
+			header("Pragma: no-cache");
+		}
+		// cache
+		else {
+			header("Cache-Control: $seconds");
+		}
+	}
+
+	/**
+	 * Sets success header
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_success_header () {
+		// check fo location
+		if(isset($this->result['location'])) {
+			$this->set_location_header ($this->result['location']);
+		}
+
+		// set success
+		$this->result['success'] = true;
+
+		// set header
+		$this->set_header ();
+
+	}
+
+	/**
+	 * Sets location header for newly created objects
+	 *
+	 * @access private
+	 * @param mixed $location
+	 * @return void
+	 */
+	private function set_location_header ($location) {
+		header("Location: ".$location);
+	}
+
+	/**
+	 * Outputs result
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function create_result () {
+		// reorder
+		$this->reorder_result ();
+		// creates result
+		return $this->result_type == "xml" ? $this->create_xml () : $this->create_json ();
+	}
+
+	/**
+	 * Reorders result to proper format
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function reorder_result () {
+		$tmp = $this->result;
+		unset($this->result);
+		// reset
+		$this->result['code'] = $tmp['code'];
+		$this->result['success'] = $tmp['success'];
+		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
+		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
+	}
+
+	/**
+	 * Creates XML result
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function create_xml () {
+		return json_encode((array) $this->result);
+	}
+
+	/**
+	 * Creates JSON result
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function create_json () {
+		return json_encode((array) $this->result);
+	}
+
+
+}
+
+?>

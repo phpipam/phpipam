@@ -1,0 +1,34 @@
+<IfModule mod_rewrite.c>
+
+RewriteEngine on
+
+# change rewrite base if not in root
+RewriteBase /
+
+# passthroughs
+RewriteRule ^(api)($|/) - [L]
+RewriteRule ^index.php$ - [L]
+RewriteRule ^(css|js|site|test)/.*$ - [L]
+RewriteRule site/login/captcha/captchashow.php - [L]
+
+# redirect errors
+ErrorDocument 400 /error/400/
+ErrorDocument 401 /error/401/
+ErrorDocument 403 /error/403/
+ErrorDocument 404 /error/404/
+ErrorDocument 500 /error/500/
+
+# IE login dashboard fix
+RewriteRule ^login/dashboard/$ dashboard/ [R]
+RewriteRule ^logout/dashboard/$ dashboard/ [R]
+# search override
+RewriteRule ^tools/search/(.*)/(.*)/(.*)/(.*)$ index.php?page=tools&section=search&addresses=$1&subnets=$2&vlans=$3&ip=$4 [L]
+
+# Rewrites
+RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L]
+RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4 [L]
+RewriteRule ^(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3 [L]
+RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L]
+RewriteRule ^(.*)/$ index.php?page=$1 [L]
+
+</IfModule>

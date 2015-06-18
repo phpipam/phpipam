@@ -1,0 +1,29 @@
+phpIPAM API documentation v 1.16
+================================
+
+phpIPAM provides API server for providing data to clients. It is a webapp and can be called
+via HTTP requests by providing appropriate GET parameters that define controller, actions and
+additional parameters required for each controller, such as id, name, etc.
+
+Response is in JSON format with success true or false and provided error message or object.
+
+You can find examples of client API calls in folder api/_examples/.
+
+Since version 1.16 API has 3 different security models:
+	* Crypt
+	* SSL
+	* None
+
+If security type is crypt client based request values can be encrypted with app_id and app_code.
+You first have to enable API module in phpipam administration and create an app_id and app_code,
+that will be used for external app with appropriate permissions. ApiCaller in included in
+_examples directory of phpipam.
+
+For SSL and none security models crypting is not used, only app_id is required to match app and
+permissions for it.
+
+For security set to none all information will be sent via clear text, use with caution in internal
+network, use of no security is HIGHLY discouraged, but might be needed in some cases.
+
+
+API documentation and references are available on phpipam API website (http://phpipam.net/api/);

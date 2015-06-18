@@ -1,0 +1,6 @@
+# redirect errors
+ErrorDocument 400 error/400/
+ErrorDocument 401 error/401/
+ErrorDocument 403 error/403/
+ErrorDocument 404 error/404/
+ErrorDocument 500 error/500/

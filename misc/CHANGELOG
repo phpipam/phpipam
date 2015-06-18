@@ -1,0 +1,491 @@
+== 1.16.002
+
+	New features:
+	------------
+	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius);
+	+ Added fping scanning support;
+	+ Added selectable scanning type (ping/pear/fping);
+	+ Added L2 domains;
+	+ Added option to define address as default GW for subnet;
+	+ Added customizable address tags with compressed option;
+	+ Added temporary subnet / address shares;
+	+ Added quick subnet masks;
+	+ API (work in progress):
+		+ API v2, old v1 support added
+		+ Complete rewrite of all API calls;
+		+ New security models (crypt, ssl, none);
+		+ Support for custom fields;
+		+ Full read/write controllers (Sections, Subnets/Folders, Addresses, Vlans, Vrfs);
+
+	Enhancements:
+	----------------------------
+	+ All tables are now InnoDB by default;
+	+ Upgraded jQuery to 2.1.3;
+	+ All functions rewritten to classes/methods;
+	+ Parametized all SQL queries, moved from MySQLI to PDO;
+	+ Added VLAN to search results export;
+	+ Redesigned admin and tools menu;
+	+ Added scanned/discovered subnets to tools for faster overview;
+	+ Per-user display settings;
+	+ New widget - tools shortcuts;
+	+ New widget - IP calculator;
+
+	Security Fixes:
+	----------------------------
+	+ Parametized all MySQL querries;
+	+ Fixed plainpass being logged on user update;
+
+	Bugfixes:
+	----------------------------
+	+ Fixed bug with SSL/TLS smtp servers;
+	+ Fixed visual subnet display issues on 32bit systems;
+	+ Fixed IPv6 split subnets bug;
+	+ Fixed /31 ping bug scanning out of boundaries;
+	+ Fixed nested broadcast not counted to used percentage;
+	+ Fixed invalid redirect after timeout;
+	+ Fixed discovery script index overridden;
+
+== 1.1.010
+
+	Bugfixes:
+	----------------------------
+	+ Fixed login fails with LDAP when escape characters are in password;
+	+ Fixed login not working with spaces in password for AD login;
+	+ Fixed Ivalid action when adding vlans from subnet popup menu;
+	+ Fixed custom fields not appearing properly on IP request editing;
+	+ Fixed Invalid ID error for IP address details on sorting;
+	+ Fixed warnings if no VLAN search results are present;
+	+ Fixed test mail not sending;
+	+ Fixed unable to login if $phpsessname not defined;
+	+ Fixed unable to login after upgrade;
+
+== 1.1
+
+	Enhancements:
+	----------------------------
+	+ Caching of SQL results to avoid multiple queries;
+	+ Reduced number of DB queries;
+	+ Added selected mail notifications to admins to be notified on IP/subnet change;
+	+ Added new subnetId index to ipaddresses table that significantly improves network loading;
+	+ Now using only 1 network connection towards MySQL server;
+	+ Updated pagination;
+	+ mod_rewrite no longer required, selectable URL structure under settings;
+	+ Added option not to display free ranges;
+	+ Added option to set maximum VLAN number;
+	+ Selectable custom fields to be visible/hidden in tables view and updated device/VLAN view;
+	+ Added additional confirmation before section, subnet, folder and IP address deletion;
+	+ New script added for cron checks that discovers new hosts for selected networks;
+	+ Added inactivity timeout to settings;
+	+ Changed install procedure and updated install scripts;
+	+ Added PEAR check for installation;
+	+ Added free range disaply for VLANs;
+	+ Addes SSL/TLS option for SMTP mail;
+	+ API:
+		+ Bugfixes;
+		+ Added API admin permissions;
+		+ read/delete actions for IP addresses;
+		+ read/delete actions for Vlans;
+		+ read/delete actions for VRFs;
+
+	Security Fixes:
+	----------------------------
+	+ Fixed known command injection vulnerabilities in the scan functions;
+	+ Fixed known SQL injection vulnerabilities;
+	+ Fixed known XSS vulnerabilities;
+	+ Fixed known action XSS events;
+	+ Moved to crypt method for storing password in database with salting;
+	+ Added option to force user to change pass after first login;
+	+ Admin password must be changed after installation;
+	+ Added captcha code request after 5x unsuccesfull login to prevent brute-force attacks;
+
+	Translations:
+	----------------------------
+	+ Added es_ES translation;
+
+	Bugfixes:
+	----------------------------
+	+ Fixed top 10 widgets not escaping strings;
+	+ Fixed section parent can be set to self that caused section to disapear;
+	+ Fixed username instead of password being sent to smtp server;
+	+ Fixed IE search bug with workaround;
+	+ Fixed subnet and bcast not showing on strict mode disabled;
+	+ Fixed top subnets missing on dashboard for non-admin users;
+	+ Fixed bug when installation was silently failing bacause pf missing _() function (missing gettext extension)
+	+ Fixed device custom field not populated on adding device;
+	+ Fixed XLS export silently failed when description longer than 31 characters;
+	+ Fixed overlapping check not working;
+	+ Fixed subnet free space calcultation;
+	+ Fixed visual subnet display not showing on /31 and /32 networks;
+	+ Fixed custom fields display on folder edit;
+	+ Fixed unable to edit IP addresses when fields are sorted;
+	+ Fixde ordering of custom fields defaults to varchar 256;
+	+ Fixed IPv6 subnet / broadcast calculation bug and next subnet suggestion;
+
+== 1.0
+
+	New features:
+	----------------------------
+	+ IP address page with IP address details and IP history (Changelog);
+	+ IP address changelog, subnet and section changelogs with full changelog under tools;
+	+ Favourite subnets for quick access;
+	+ Adding subnets from free space with automatic mask provided;
+	+ Automatic database validity check after upgrading and automatic field/table fix under administration;
+	+ Automatic weekly check for new phpipam version;
+
+	Enhancements:
+	----------------------------
+	+ Bootstrap 3;
+	+ UI enhancements;
+	+ Improved views based on browser width;
+	+ Widget order can now be set;
+	+ Widgets can be reordered (dragged) directly on dashboard;
+	+ Subnet can now be splitted to max 256 new subnets (16 before);
+	+ Scan settings are moved to Administration;
+	+ Widget management has moved to administration, which allows creation of new widgets;
+	+ Improved ICMP error detection;
+	+ Mail settings can now be set on gui (localhost / smtp);
+	+ Popup windows are now draggable;
+	+ VLAN adding in the fly enhancements;
+	+ Master section now shows all subnets in subsections;
+	+ Tools > devices redone;
+	+ DeviceTypes can now be edited/set/added;
+	+ Ping subnet enhancements;
+	+ Custom field types are now defineable (int/varchar/date/datetime/text/bool/set);
+	+ Date and timepicker popups if type = date/datetime;
+	+ For `set` and boolean custom fields dropdown is presented that users can pick;
+
+	+ Favourite subnets widget;
+	+ IP requests widget;
+	+ Changelog widget;
+
+	Translations:
+	----------------------------
+	+ Added Brazil translation (Michel Braga Guimarães);
+
+	Bugfixes:
+	--------
+	+ UI fixes;
+	+ Fixed bug where last page of IP addresses was inaccessible;
+	+ IP address state change is now sent to all admins;
+	+ Fixed subnet displaying as 0.0.0.0/0 in details;
+	+ Fixed links to subnets form vlans and vrfs;
+	+ Fixed search result showing all folders if searched item is not IP address;
+	+ Fixed disapearing section when L2 section was selected as master section;
+	+ Fixed device ID showing in mail notification instead of hostname;
+	+ Fixed device ID showing in search results and export instead of hostname;
+	+ Fixed search for subnet name returned no results;
+	+ Fixed apostophe in IP address description throws SQL error for scan results and XLS import;
+	+ Fixed requester email gets cut if longer than 32 chars;
+	+ Fixed admin folder edit appearing as subnet;
+	+ Fixed missing device/port in import;
+	+ Fixed master section delete did not delete subsections and belonging subnets/ips;
+	+ Fixed online status was not updated when running Ping status scans;
+	+ Fixed Folder name not appearing when deleting folder;
+
+== 0.9
+
+	New features:
+	----------------------------
+	+ Support for ICMP network discovery;
+	+ Cron script to check status for selected subnets/hosts with threading suport (pcntl php extension required);
+	+ ICMP check IP status in demand;
+	+ Compressed (grouped) DHCP IP ranges;
+	+ API server version 0.1;
+	+ Option to show and group subnets by VLAN in subnets list;
+	+ Option to show and group subnets by VRF in subnets list;
+	+ Added subsections;
+	+ Added AD username search;
+	+ Added folders;
+
+	Enhancements:
+	----------------------------
+	+ Added error catching/displaying for ajax-loaded php scripts;
+	+ Added default language for login/requests display and new users;
+	+ Added direct links to different pages in IP address table;
+	+ Subnets can now be edited directly from nested subnets list;
+	+ When adding nested subnets default vlan/vrf is selected from parent;
+	+ Added Section ordering;
+	+ Added per/section subnet ordering (overrides dafault form settings);
+	+ Clicking on section now shows all subnets and belonging details;
+	+ If session timeouts after re-login last requested page will be opened;
+	+ Searh for IP address now returns also subnet, even if IP is not existing;
+	+ Per-user selection of widgets to display;
+	+ Added description and required field checkbox for custom IP/Subnet Fields;
+	+ Added custom device fields;
+	+ Mails are now sent through phpmailer;
+	+ Admin user cannot be deleted;
+
+	Translations:
+	----------------------------
+	+ Added French translation (Denis Darré);
+	+ Added Dutch translation (Michiel Visser);
+	+ Added German translation (Carsten Brückner);
+
+	Bugfixes:
+	----------------------------
+	+ Fixed wrong VLAN display in tools;
+	+ Fixed subnet/section links from VLANS if base not /;
+	+ Fixed warning in apache log on subnet editing if no VRFs are configured;
+	+ Fixed admin menu off-screen overflow;
+	+ Fixed firefox error when selectiong rights for section/subnets was not possible;
+	+ Fixed subnet description in Cyrillic problem;
+	+ Fixed errors on no permissions for user;
+	+ Fixed Inaccurate Free Space Calculation (and Chart);
+	+ Fixed VLAN permissions where VLAN was not displayed;
+
+== 0.8
+
+	New features:
+	----------------------------
+	+ New group and permission management;
+	+ Support for translations;
+	+ Subnet resizing;
+	+ Subnet splitting into smaller subnets;
+	+ Added free space display for nested subnets;
+	+ Added visual display of subnet usage per IP address;
+	+ Added truncate network option that deletes all IP addresses in subnet;
+	+ Added button the updates subnet with RIPE information;
+
+	Enhancements:
+	----------------------------
+	+ Added add nested subnet under subnet details to simplify master subnet selection in hierarchy;
+	+ Added edit subnet link from search results;
+	+ Added reverse IPv6 DNS entries to IPCalc (Vincent Boisard);
+	+ Added option for plain-text emails;
+	+ Added ckEditor to write instructions;
+	+ StrictMode is not set globally anymore but set per section;
+	+ Added custom user fields;
+	+ Added option to verify that hostname is unique;
+	+ Improved MySQL exception handling;
+	+ Added mod_rewrite error detection on installation and upgrade;
+	+ Added hostname validation;
+	+ Added Hostfile dump of IP addresses;
+	+ Search also searches in custom fields;
+	+ jQuery updated to v 1.9.1;
+
+	Bugfixes:
+	------------------------
+	+ Fixed overlay on second popup;
+	+ Fixed IE search bug;
+	+ Fixed support for non-standard ports;
+	+ Fixed permitting overlapping subnets if vrfs are different;
+	+ Fixed dates in logging appearing in 12h format;
+	+ Fixed broken subnets link in tools > subnets if installation is not at document root;
+	+ Fixed error when adding new subnet if checkboxes are not selected in newer MySQL servers;
+	+ Fixed bad display of multilined navigation bar;
+	+ Fixed wrong output of tools > VLAN list when using Duplicate VLANs;
+	+ Fixed wrong link for upgrade script;
+	+ On VRF change all child subnets are updated also;
+	+ Fixed wrong maximum on dashboard top10 percentage;
+	+ Fixed Adding a vlan while editing a subnet resets the edit subnet form;
+	+ Fixed wrong free space calculation for nested subnets;
+	+ Fixed IP use statistics not cumulative up the hierarchy if subnes has slaves;
+
+== 0.7
+
+	New features:
+	----------------------------
+	+ Completely rewritten UI using twitter's bootstrap as base;
+	+ Using mod_rewrite apache module to handle GET requests (new install requitements!);
+	+ Unlimited number of subnetting levels;
+	+ OpenLDAP authentication support;
+	+ New URL structure;
+	+ Sorting of IP addresses;
+	+ Custom subnet fields;
+	+ Custom VLAN fields and admin option to allow duplicate VLAN names (metro area VLANs);
+	+ Script to automatically update IP <-> hostname, run via cron (functions/scripts/resolveIPaddresses.php);
+	+ Show Subnet name instead of subnet IP address option;
+	+ Strict mode option in config files that controlls overlapping checks;
+	+ New subnet menu;
+	+ Added printLimit feature to break IP addresses into pages;
+
+	Enhancements:
+	----------------------------
+	+ Lots of UI changes;
+	+ Less Ajax usage to display websites and details;
+	+ Hierarchy display under subnet details (breadcrumbs);
+	+ Search results covering VLANs;
+	+ Custom IP fields ordering;
+	+ VLAN creation from adding/editing subnets;
+	+ IP addresses can now be edited;
+	+ Collapsed switch list;
+	+ Removing VLANs also removes references from subnet list;
+	+ Removing VRFs also removes references from subnet list;
+	+ Logs for admin on dashboard;
+	+ Search via GET;
+	+ Support for range networks (allows use of subnet and broadcast as IP);
+	+ Import of custom IP fields;
+	+ Abiility to move subnets between sections;
+	+ Improved display of nested subnets now shows all IP addresses from nested subnets and orphaned IPs;
+	+ Hides display of custom fields in subnet if none is filled in whole subnet;
+	+ Replaced Highcharts with Flot because of licencing issues;
+
+	Bugfixes:
+	------------------------
+	+ Fixed error with missing custom IP fields when adding new IP address;
+	+ Fixed bug when deleteing root subnet only deleted directly nested subnets (now whole tree);
+	+ Fixed checkboxes not working in various browsers;
+	+ Fixed change in switch details causing IP address associations to switch to be lost;
+	+ Fixed subnet description display in under subnet administration;
+	+ Fixed depricated error when showing XLS files;
+	+ Fixed error when custom fields were not updated on adding IP address;
+	+ Fixed error when custom fields were with spaces in name were not updated;
+	+ Fixed error when providing already requested IP address;
+	+ Search available also to viewer user types;
+	+ Fixed /127 and /128 IPv6 subnets;
+	+ Fixed /31 and /32 IPv4 subnets;
+	+ Significally reduced php processing for dashboard statistics;
+	+ Fixed importing of if quote is present;
+
+== 0.6
+
+	New features:
+	----------------------------
+	+ Selectable IP address list display fields;
+	+ Custom IP address fields;
+	+ Search and replace IP fields function;
+	+ Full page width theme;
+
+	Enhancements:
+	----------------------------
+	+ Independant VLAN management;
+	+ Added additional level of subnet nesting;
+	+ Added option to clear and export log files;
+	+ Export of search results to XLS;
+	+ Clickable search results;
+	+ Selectable export fields when exporting subnet;
+	+ Subnet can be deleted from ip address edit subnet;
+	+ IP Requests for locked subnets and viewer users can be placed from ip address list;
+	+ jQuery updated to v 1.7.1;
+	+ HighCharts updated to v 2.2.0;
+
+	Bugfixes:
+	------------------------
+	+ Upgrade is supported only for versions 0.4 and higher;
+	+ Fixed broken UTF-8 support;
+	+ Fixed wrong logging when authenticating via AD;
+	+ Fixed issues where external attacker might get information about internal hosts through resolvedns script;
+	+ Fixed wrong subnet nesting under administration/manage subnets;
+	+ Fixed editing subnet can be outside of its own root subnet;
+	+ Fixed errors when adding new switch auto-adds itselt to all hosts without no switch defined;
+	+ Fixed removing switch not removed in ip address list;
+	+ Vlan1 can now be used;
+	+ Fixed mail sending settings with missing information;
+	+ Fixed errors on adding switch with no sections;
+	+ Fixed version check;
+	+ Removed masterSubnets from subnets available for IP requests;
+	+ Fixed error when non-admin user could not open dashboard;
+	+ Added how subnet list switch when list hidden;
+
+== 0.5
+
+	New features:
+	-------------
+	+ Importing subnets from RIPE by AS in admin section;
+	+ Added switch management and changed switch logic;
+	+ Added VRF support;
+	+ Added AD domain authentication;
+	+ Added MAC address field to ip address;
+	+ Added database table and belonging fields check under admin;
+
+	Bugfixes / enhancements:
+	------------------------
+	+ Added DNS resolving when editing/adding IP address;
+	+ Added IE compatibility meta tag and IE UI improvements for IE >= 8;
+	+ Search returns also subnets and MAC searches;
+	+ Added mac address and IP status to XLS import/export scripts;
+	+ jQuery update from 1.6.2 to 1.7;
+	+ Highcharts update from 2.1.2 to 2.1.8;
+
+	+ Fixed dashboard errors if no IPv4/IPv6 subnets configured;
+	+ Fixed errors with viewing / modifying IP addresses for Operator users;
+	+ Fixed session cookie error on hosts;
+	+ Fixed error when saving settings;
+	+ Fixed instructions errors when inserting html code;
+	+ Fixed first free IP address not displaying in IP request;
+
+
+== 0.4
+
+	New features:
+	-------------
+	+ Massive add / edit / delete by specifying IP range (e.g. 10.10.0.1 - 10.10.0.254);
+	+ Database upgrade / install from browser -> simplified installation/update procedure;
+	+ New usertype viewer - can only view IP address list;
+	+ Subnets can now be edited directly from IP address list;
+	+ Option to lock subnet for writing to no-admin users;
+	+ Device and Host list;
+	+ Option to specify which subnet can have IP requests when editing / adding subnet if module is enabled;
+	+ Latest version check on admin page;
+
+	Bugfixes / enhancements:
+	------------------------
+	+ Fixed overspanning of multiple sections;
+	+ Admin menu and add subnet now shown only to admins;
+	+ Fixed VLAN table to show nesting and IP request option and statistics;
+	+ Fixed subnet table to show nesting and IP request option;
+	+ Subnet Adding shows only master subnets in section not in all sections;
+	+ Tooltips and button hovers are now in separate javascript file;
+	+ Graphs show only subnets with non-0 ip addresses;
+	+ Various code enhancements + improved error handling;
+	+ Fixed URL links not updating after few clicks;
+	+ If loading slave subnet directly the subnet menu drops down and shows active slave subnet;
+	+ Clicking on master shubnet shows all nested subnets and statistics;
+	+ Redesigned log table;
+	+ Fixed search;
+
+== 0.3
+
+	New features:
+	-------------
+	+ Subnet nesting - you can now have master subnet and normal subnets belonging to it;
+	+ Server settings are now moved to database and can be set under admin menu (database settings & debugging remain in config.php);
+	+ Request IP module on login page with email notification;
+	+ Confirm/reject IP address request from admin page with mail notification;
+	+ Admin dashboard notification of new requests;
+	+ Autocomplete of owner and Switch name from all available when adding/editing IP address;
+	+ New settings quick access on button hover;
+	+ Option to export each subnet indivudually;
+
+	Bugfixes / enhancements:
+	------------------------
+	+ jQuery update from 1.6 to 1.6.2;
+	+ VLANs are now grouped by section;
+	+ Direct access to subnet from vlan table;
+	+ UI enhancements;
+	+ Fixed user editing bug where user update broke password;
+	+ Fixed password in new account notification;
+	+ Fixed percentage display on Dashboard;
+	+ IPv6 calculator /64 limit fixed;
+	+ Changed tooltip effect to appear instantly for smoother display;
+	+ Login functions are now separate file;
+
+
+== 0.2 (First public version)
+
+	Bugfixes / enhancements:
+	------------------------
+	+ now also works with php 5.2;
+	+ fixed empty fields in xls import;
+	+ passwords are now stored in md5 hash;
+	+ high numbers for free/used IP addresses (mainly IPv6) are now represented in k/m/G values to improve readibility;
+	+ fixed log search bug;
+	+ cursor not displayed as link on images and non-href links;
+	+ same add image on all pages;
+	+ fixed IP mail notification apperance;
+	+ UI enhancements and bugfixes;
+	+ Fixed some javascript bugs;
+	+ Minified javascript to make loading faster;
+	+ adding new ip address now automatically provides first available IP address in subnet;
+
+	New features:
+	-------------
+	+ added switch / port fields to IP addresses;
+	+ hide subets on request to get better view;
+	+ Informational tooltips added + option to disable them in config file if someone finds them annoying;
+	+ export whole IP address database to XLS file from admin menu;
+	+ create MySQL database dump from admin menu;
+	+ added IP instructions for users, that can be edited from admin menu;
+
+
+== 0.1 (First test version)

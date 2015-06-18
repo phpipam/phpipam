@@ -1,0 +1,1285 @@
+#
+# List of changes in translation
+#
+
+
+#
+# Added 07/06/13
+#
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet edit successfull"
+msgstr ""
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet add successfull"
+msgstr ""
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet delete successfull"
+msgstr ""
+
+#: site/functons/functions-common.php
+msgid "Read / Write / Admin"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP edit successful"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP add successful"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP delete successful"
+msgstr ""
+
+
+#
+# Added 11/06/13
+#
+
+#: site/admin/subnetDetailsSlaves.php
+msgid "You do not have permissions to truncate subnet"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to add device"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to edit device"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to delete device"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device add successfull"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device edit successfull"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device delete successfull"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to add VLAN"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to edit VLAN"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to delete VLAN"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN add successfull"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN edit successfull"
+msgstr ""
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN delete successfull"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to add VRF"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to edit VRF"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to delete VRF"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF add successfull"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF edit successfull"
+msgstr ""
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF delete successfull"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to add field"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to edit field"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to delete field"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field add success"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field edit success"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field delete success"
+msgstr ""
+
+#: site/tools/userMenuSelfMod.php
+msgid "To apply language change please log in again"
+msgstr ""
+
+
+#
+# Added 13/06/13
+#
+
+#: site/dashboard/top10_percentage.php
+#: site/dashboard/top10_hosts.php
+msgid "No IPv4 hosts configured"
+msgstr ""
+
+#: site/dashboard/top10_hosts.php
+msgid "No IPv6 hosts configured"
+msgstr ""
+
+#: site/dashboard/top10_percentage.php
+msgid "Add some hosts to subnets to calculate usage percentage"
+msgstr ""
+
+#: site/dashboard/top10_hosts.php
+msgid "Add some hosts to subnets to show graph of used hosts per subnet"
+msgstr ""
+
+
+#
+# Added 14/06/13
+#
+
+#: site/admin/usersEditPrint.php
+msgid "edit user"
+msgstr""
+
+#: site/admin/usersEditPrint.php
+msgid "delete user"
+msgstr ""
+
+#
+# Added 20/06/13
+#
+
+#: site/admin/manageSubnetEdit.php
+msgid "Check hosts status"
+msgstr ""
+
+#: site/admin/manageSubnetEdit.php
+msgid "Ping hosts inside subnet to check avalibility"
+msgstr ""
+
+#: site/ipaddr/subnetDetials.php
+msgid "Hosts check"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Ping exclude"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Exclude from ping status checks"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check avalibility"
+msgstr ""
+
+#: site/ipaddr/pingCheck.php
+msgid "Insufficient permissions"
+msgstr ""
+
+#: site/ipaddr/pingCheck.php
+msgid "is alive"
+msgstr ""
+
+#: site/ipaddr/pingCheck.php
+msgid "is not alive"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Ping status intervals"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
+msgstr ""
+
+#: site/admin/settingsEdit.php
+msgid "Invalid ping status intervals"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is alive"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device warning"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is offline"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device status unknown"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Last seen"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Never"
+msgstr ""
+
+#
+# Added 21/06/13
+#
+
+#: site/tools/ipCalcResult.php
+msgid "Number of hosts"
+msgstr ""
+
+#
+# Added 26/06/13
+#
+
+#: site/ipaddr/subnetDetails.php
+msgid "Scan subnet for new hosts"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "You do not have permissions to modify hosts in this subnet"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Scan subnet"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Select Scan type"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "scan"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "You can set parameters for scan under functions/scan/config-scan.php"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Discovery scans"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Status update scans"
+msgstr ""
+
+#: site/ipaddr/subnetScanUpdatePing.php
+msgid "Scan results"
+msgstr ""
+
+
+####### 0.82.006 #######
+
+#: site/admin/settings.php
+msgid "Default language"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Select default language"
+msgstr ""
+
+#: site/admin/languages.php
+msgid "Version"
+msgstr ""
+
+
+### 0.84.001 ###
+
+#: site/admin/manageSection.php
+msgid "Section order"
+msgstr ""
+
+#: site/admin/manageSectionOrder.php
+msgid "You can manually set order in which sections are displayed in. Default is creation date."
+msgstr ""
+
+#: site/admin/manageSectionOrder.php
+msgid "Order"
+msgstr ""
+
+#: site/admin/manageSectionOrderResult.php
+msgid "Section reordering successful"
+msgstr ""
+
+#: site/functions/functions-admin.php
+msgid "Cannot reorder sections"
+msgstr ""
+
+
+### 0.84.002 ###
+
+#: site/admin/manageSectionEdit.php
+msgid "Default"
+msgstr ""
+
+
+### 0.84.005 ###
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Threading is required for scanning subnets. Please recompile PHP with pcntl extension"
+msgstr ""
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Add discovered hosts"
+msgstr ""
+
+#: site/ipaddr/subnetDiscoveryPingResult.php
+msgid "Scan results added to database"
+msgstr ""
+
+#: site/ipaddr/subnetScan.php
+msgid "Invalid ping path"
+msgstr ""
+
+
+### 0.85.002 ###
+
+#: site/admin/settings.php
+msgid "Display settings"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Enable or disable API server module"
+msgstr ""
+
+#: site/admin/api.php
+msgid "Please enable API module under server management"
+msgstr ""
+
+#: site/admin/adminMenu.php
+#: site/admin/api.php
+msgid "API management"
+msgstr ""
+
+#: site/admin/api.php
+msgid "Create API key"
+msgstr ""
+
+#: site/admin/api.php
+msgid "App id"
+msgstr ""
+
+#: site/admin/api.php
+msgid "App code"
+msgstr ""
+
+#: site/admin/api.php
+msgid "App permissions"
+msgstr ""
+
+#: site/admin/api.php
+msgid "edit app details"
+msgstr ""
+
+#: site/admin/api.php
+msgid "remove app"
+msgstr ""
+
+#: site/admin/api.php
+msgid "No Apps available"
+msgstr ""
+
+#: site/admin/api.php
+msgid "API instructions"
+msgstr ""
+
+#: site/admin/api.php
+msgid "API documentation"
+msgstr ""
+
+#: site/admin/api.php
+msgid "The following PHP extensions for API server are missing"
+msgstr ""
+
+#: site/admin/api.php
+msgid "Please recompile PHP to include missing extensions for API server"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Add new api key"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Enter application identifier"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Application code"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Regenerate"
+msgstr ""
+
+#: site/admin/apiEdit.php
+msgid "Disabled"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application code"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application id"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "Invalid permissions"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API add error"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API edit error"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API delete error"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API add success"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API edit success"
+msgstr ""
+
+#: site/admin/apiEditResult.php
+msgid "API delete success"
+msgstr ""
+
+
+
+### 0.86.001 ###
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "DHCP range"
+msgstr ""
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check avalibility (disabled)"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "DHCP compress"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Compress DHCP ranges in IP table"
+msgstr ""
+
+
+### 0.86.002 ###
+
+#: site/subnets.php
+msgid "Add new"
+msgstr ""
+
+#: site/subnets.php
+msgid "Add new folder to"
+msgstr ""
+
+# site/subnets.php
+msgid "Available VLANs"
+msgstr ""
+
+# site/subnets.php
+msgid "Available VRFs"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "Subnet contains more subnets"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "Click on folder to open/close"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "VLAN contains subnets"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "VRF contains subnets"
+msgstr ""
+
+
+### 0.87.001 ###
+
+#: site/admin/manageSection.php
+msgid "Show VLANs"
+msgstr ""
+
+#: site/admin/manageSection.php
+msgid "Show VRFs"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VLANs and belonging subnets in subnet list"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VRFs and belonging subnets in subnet list"
+msgstr ""
+
+#: site/ipaddr/vlanDetails.php
+msgid "VLAN details"
+msgstr ""
+
+#: site/ipaddr/vlanSubnets.php
+msgid "has no belonging subnets"
+msgstr ""
+
+#: site/ipaddr/vlanSubnets.php
+msgid "belonging subnets"
+msgstr ""
+
+#: site/ipaddr/vlanDetails.php
+msgid "VRF details"
+msgstr ""
+
+#: site/ipaddr/vlanDetails.php
+msgid "Invalid VLAN id"
+msgstr ""
+
+#: site/ipaddr/vrfDetails.php
+msgid "Invalid VRF id"
+msgstr ""
+
+
+### 0.87.004 ###
+
+#: site/ipaddr/scan/subnetScan.php
+msgid "IPv6 scanning is not supported"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "You do not have permissions to add new folder in this section"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "You do not have permissions to add edit/delete this folder"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "folder"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "Enter folder name"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "Enter master folder if you want to nest it under existing folder, "
+"or select root to create root folder"
+msgstr ""
+
+#: site/admin/manageFolderEdit.php
+msgid "Master Folder"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Select Master folder"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Root folder"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Subnets"
+msgstr ""
+
+#: functions-functions-network.php
+msgid "Folders"
+msgstr ""
+
+#: functions-functions-common.php
+msgid "Folder contains more subnets"
+msgstr ""
+
+
+### 0.88.001 ###
+
+#: site/admin/manageSection.php
+msgid "Parent"
+msgstr ""
+
+#: site/sections.php
+msgid "SubSections in"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php
+msgid "Select parent section to create subsection"
+msgstr ""
+
+### 0.89.001 ###
+
+#: site/tools/userMenu.php
+msgid "Widgets"
+msgstr ""
+
+msgid "Select widgets to be displayed on dashboard"
+msgstr ""
+
+#: site/dashboard/index.php
+msgid "No widgets selected"
+msgstr ""
+
+msgid "Please select widgets to be displayed on dashboard on user menu page"
+msgstr ""
+
+
+### 0.89.002 ###
+
+#: site/admin/customUserFieldsEdit.php
+msgid "Enter comment for users"
+msgstr ""
+
+msgid "Required field"
+msgstr ""
+
+#: site/admin/custopmIPFields.php
+msgid "Required"
+msgstr ""
+
+#: site/admin/customDeviceFieldsEdit.php
+msgid "Custom device fields"
+msgstr ""
+
+msgid "Add new custom device field"
+msgstr ""
+
+#: site/ipaddr/sectionAllSubnets.php
+msgid "Belonging subsections"
+msgstr ""
+
+#: site/subnets.php
+msgid "Back to"
+msgstr ""
+
+
+### 0.891.001 ###
+
+#: site/admin/manageAD_AD.php
+msgid "Domain account"
+msgstr ""
+
+msgid "Domain account for search operations"
+msgstr ""
+
+#: site/admin/userADsearchResult.php
+msgid "No users found"
+msgstr ""
+
+msgid "Possible reasons"
+msgstr ""
+
+msgid "Username not existing"
+msgstr ""
+
+msgid "Invalid baseDN setting for AD"
+msgstr ""
+
+msgid "AD account does not have enough privileges for search"
+msgstr ""
+
+
+### 0.891.003 ###
+
+#: site/admin/usersEditResult.php
+msgid "Admin user cannot be deleted"
+msgstr ""
+
+
+### 0.891.004 ###
+
+#: site/admin/manageFolderSubmit.php
+msgid "Error adding new folder"
+msgstr ""
+
+msgid "Folder, IP addresses and all belonging subnets deleted successfully"
+msgstr ""
+
+msgid "Folder add successfull"
+msgstr ""
+
+msgid "Folder edit successfull"
+msgstr ""
+
+#: site/ipaddr/folderDetails.php
+msgid "Folder does not exist"
+msgstr ""
+
+msgid "You do not have permission to access this folder"
+msgstr ""
+
+msgid "Folder details"
+msgstr ""
+
+msgid "Folder name"
+msgstr ""
+
+msgid "Add new nested folder"
+msgstr ""
+
+msgid "directly nested folders"
+msgstr ""
+
+msgid "Folder has no nested folders or belonging subnets"
+msgstr ""
+
+msgid "You do not have permissions to edit folder"
+msgstr ""
+
+msgid "Edit folder"
+msgstr ""
+
+msgid "Manage folder permissions"
+msgstr ""
+
+msgid "Delete folder"
+msgstr ""
+
+
+
+
+### 0.891.005 ###
+
+#: site/admin/CSVimportSubmit.php
+msgid "Errors marked with red will be ignored from importing"
+msgstr ""
+
+
+
+### 0.9 ###
+
+#: site/admin/userADsearchForm.php
+msgid "Search user in AD"
+msgstr ""
+
+msgid "Following users were found"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+
+
+### 0.91.001 ###
+
+#: functions/functions-common.php
+msgid "Favourite subnets"
+msgstr ""
+
+msgid "No favourite subnets selected"
+msgstr ""
+
+msgid "You can add subnets to favourites by clicking star icon in subnet details"
+msgstr ""
+
+msgid "Click to remove from favourites"
+msgstr ""
+
+msgid "Click to add to favourites"
+msgstr ""
+
+#: site/tools/favouriteEdit.php
+msgid "Error editing favourite"
+msgstr ""
+
+#: site/sections.php
+msgid "Favourite networks"
+msgstr ""
+
+
+### 0.92.001 ###
+
+#: site/ipaddr/ipDetailsChangelog.php
+msgid "Changelog"
+msgstr ""
+
+msgid "No changelogs available"
+msgstr ""
+
+msgid "No changelog entries are available for this host"
+msgstr ""
+
+msgid "No changelog entries are available for this subnet"
+msgstr ""
+
+msgid "No changelog entries are available for this section"
+msgstr ""
+
+msgid "No changelog entries are available"
+msgstr ""
+
+#: site/ipaddr/ipDetails.php
+msgid "Avalibility"
+msgstr ""
+
+msgid "Last edited"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Result"
+msgstr ""
+
+msgid "Change"
+msgstr ""
+
+#: site/tools/changelogPrint.php
+msgid "Output has been limited to last 50 lines"
+msgstr ""
+
+msgid "Output has been limited to last 100 lines"
+msgstr ""
+
+msgid "Output has been limited to last 250 lines"
+msgstr ""
+
+msgid "Output has been limited to last 500 lines"
+msgstr ""
+
+#: site/admin/settings.php
+msgid "Enable changelog"
+msgstr ""
+
+#: site/tools/changelog.php
+msgid "Change logging is disabled. You can enable it under administration"
+msgstr ""
+
+
+
+### 0.94.002 ###
+
+#: site/admin/settings.php
+msgid "Ping path"
+msgstr ""
+
+msgid "Set path for ping executable file (default /bin/ping)"
+msgstr ""
+
+msgid "Max scan threads"
+msgstr ""
+
+msgid "Set maximum nubmer of concurrent ICMP checks (default 128)"
+msgstr ""
+
+#: functions/functions-common.php
+msgid "Last 5 change log entries"
+msgstr ""
+
+
+### 0.95.001 ###
+
+#: site/admin/widgets.php
+msgid "Widgets"
+msgstr ""
+
+msgid "You can manage widgets here"
+msgstr ""
+
+msgid "Create new widget"
+msgstr ""
+
+msgid "No widgets created yet"
+msgstr ""
+
+msgid "Create widget file in directory site/dashboard/widgets/"
+msgstr ""
+
+#: site/admin/widgetEdit.php
+msgid "Add new widget"
+msgstr ""
+
+msgid "Edit widget"
+msgstr ""
+
+msgid "Delete widget"
+msgstr ""
+
+#: site/admin/widgetEditResult.php
+msgid "Widget add error"
+msgstr ""
+
+msgid "Widget edit error"
+msgstr ""
+
+msgid "Widget delete error"
+msgstr ""
+
+msgid "Widget add success"
+msgstr ""
+
+msgid "Widget edit success"
+msgstr ""
+
+msgid "Widget delete success"
+msgstr ""
+
+
+### 0.96.002 ###
+
+#: site/dashboard/widgets/requests.php
+msgid "Active IP address requests"
+msgstr ""
+
+#: site/sections.php
+msgid "Click to reorder widgets"
+msgstr ""
+
+msgid "Click to save widgets order"
+msgstr ""
+
+#: site/dashboard/widgetPopup.php
+msgid "Add new widget to dashboard"
+msgstr ""
+
+msgid "All available widgets are already on dashboard"
+msgstr ""
+
+#: site/tools/userMenu.php
+msgid "Save order"
+msgstr ""
+
+#: site/admin/widgets.php
+msgid "File"
+msgstr ""
+
+msgid "Admin only"
+msgstr ""
+
+msgid "Link to page"
+msgstr ""
+
+msgid "Widget size"
+msgstr ""
+
+
+### 0.96.007 ###
+
+#: site/ipaddr/scan/subnetScanDiscoveryPing.php
+msgid "No alive host found"
+msgstr ""
+
+msgid "Errors occured during scan"
+msgstr ""
+
+msgid "Excluded from check"
+msgstr ""
+
+
+### 0.97.001 ###
+
+#: site/login/loginCheck.php
+msgid "Invalid characters in username"
+msgstr ""
+
+msgid "Invalid characters in password"
+msgstr ""
+
+#: site/admin/adminMenu.php
+msgid "Mail settings"
+msgstr ""
+
+msgid "Mail server settings"
+msgstr ""
+
+msgid "Server type"
+msgstr ""
+
+msgid "Localhost"
+msgstr ""
+
+msgid "SMTP"
+msgstr ""
+
+msgid "Select server type for sending mail messages"
+msgstr ""
+
+msgid "Server authentication"
+msgstr ""
+
+msgid "Select yes if authentication is required"
+msgstr ""
+
+msgid "Set username for SMTP authentication"
+msgstr ""
+
+msgid "Set password for SMTP authentication"
+msgstr ""
+
+msgid "Mail sender settings"
+msgstr ""
+
+msgid "Send test email"
+msgstr ""
+
+msgid "Mail server type"
+msgstr ""
+
+msgid "SMTP settings"
+msgstr ""
+
+msgid "Server address"
+msgstr ""
+
+msgid "Sender name"
+msgstr ""
+
+msgid "Sender mail"
+msgstr ""
+
+#: site/admin.settings.php
+msgid "Set administrator name"
+msgstr ""
+
+msgid "Set administrator email"
+msgstr ""
+
+
+
+### 0.97.003 ###
+
+#: site/ipaddr/scan/subnetScan.php
+msgid "Separate multiple ports with ;"
+msgstr ""
+
+#: site/ipaddr/scan/subnetScanDiscoveryTelnet.php
+msgid "Please enter ports to scan"
+msgstr ""
+
+msgid "Invalid port"
+msgstr ""
+
+
+
+### 0.98.001 ###
+
+#: site/admin/verifyDatabase.php
+msgid "Cannot get fix for table"
+msgstr ""
+
+msgid "Fix table"
+msgstr ""
+
+msgid "Fix field"
+msgstr ""
+
+#: site/admin/verifyDatabaseFix.php
+msgid "Wrong parameters"
+msgstr ""
+
+msgid "Table fixed"
+magstr ""
+
+msgid "Field fixed"
+magstr ""
+
+#: site/sections.php
+msgid "Database errors detected"
+msgstr ""
+
+
+### 0.99.002 ###
+
+#: site/tools/devicesPrint.php
+msgid "Show all hosts"
+msgstr ""
+
+msgid "No hosts belonging to this device"
+msgstr ""
+
+msgid "Sort by vendor"
+msgstr ""
+
+
+
+### 1.02.001 ###
+
+#: site/admin/userEditPrint.php
+msgid "Mail State changes"
+msgstr ""
+
+msgid "Select yes to receive notification change mail for State change"
+msgstr ""
+
+msgid "Mail Changelog"
+msgstr ""
+
+msgid "Select yes to receive notification change mail for changelog"
+msgstr ""
+
+
+### 1.03.001 ###
+
+#: site/admin/usersEditPrint.php
+msgid "Require user to change password after initial login"
+msgstr ""
+
+#: site/tools/changePasswordRequired.php
+msgid "Password change required"
+msgstr ""
+
+msgid "You are required to change your password before you can access phpipam."
+msgstr ""
+
+msgid "Password change"
+msgstr ""
+
+msgid "Save password"
+msgstr ""
+
+
+
+### 1.04.001 ###
+
+#: site/login/loginCheck.php
+msgid "You have been blocked for 5 minutes due to authentication failures"
+msgstr ""
+
+
+### 1.06.001 ###
+
+#: site/admin/settings.php
+msgid "Use nicer URL structure"
+msgstr ""
+
+msgid "Please note that mod_rewrite is required with appropriate settings if pretified links are selected."
+msgstr ""
+
+
+### 1.07.002 ##
+
+#: site/admin/settings.php
+msgid "Hide free range"
+msgstr ""
+
+msgid "Do not display free range in IP address and subnets list"
+msgstr ""
+
+msgid "Highest VLAN number"
+msgstr ""
+
+msgid "Set highest VLAN number (default 4096)"
+msgstr ""
+
+#: site/admin/manageVLANresult.php
+msgid "Highest possible VLAN number is "
+msgstr ""
+
+msgid "VLAN number cannot be negative"
+msgstr ""
+
+msgid "Not number"
+msgstr ""
+
+
+### 1.07.004 ###
+
+#: site/admin.custimFilterFields.php
+msgid "Fields saved"
+msgstr ""
+
+msgid "Filter custom field display"
+msgstr ""
+
+msgid "Selected fields will not be visible in table view, only in detail view"
+msgstr ""
+
+msgid "Save filter"
+msgstr ""
+
+
+### 1.07.010 ###
+
+#: site/admin/manageSubnetEditResult.php
+msgid "I will delete"
+msgstr ""
+
+msgid "Are you sure you want to delete above items?"
+msgstr ""
+
+msgid "Are you sure you want to delete IP address"
+msgstr ""
+
+
+### 1.08.001 ###
+
+#:site/settings/setitngs.php
+msgid "Inactivity timeout"
+msgstr ""
+
+msgid "Select inactive timeout for user sessions. Please note that if default php session settings in php.ini are lower they will override this"
+msgstr ""
+
+#: site/login/index.php
+msgid "You session has timed out"
+msgstr ""
+
+#: site/admin/manageSubnetEdit.php
+msgid "Discover new hosts"
+msgstr ""
+
+msgid "Discover new hosts in this subnet"
+msgstr ""

@@ -1,0 +1,5 @@
+# controller rewrites
+RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4 [L,QSA]
+RewriteRule ^(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3 [L,QSA]
+RewriteRule ^(.*)/(.*)/$ ?app_id=$1&controller=$2 [L,QSA]
+RewriteRule ^(.*)/$ ?app_id=$1 [L,QSA]
