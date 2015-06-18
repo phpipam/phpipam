@@ -130,7 +130,7 @@ try {
 
 	//check if the action exists in the controller. if not, throw an exception.
 	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
-		$Response->throw_exception(400, 'invalid request method');
+		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
 	//execute the action

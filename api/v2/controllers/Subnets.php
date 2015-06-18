@@ -146,7 +146,7 @@ class Subnets_controller extends Common_functions {
 			// usage
 			elseif ($this->_params->id2=="usage") 		{ return array("code"=>200, "data"=>$this->subnet_usage ()); }
 			// first available address
-			elseif ($this->_params->id2=="first_free") { return array("code"=>200, "data"=>$this->subnet_first_free ());  }
+			elseif ($this->_params->id2=="first_free") 	{ return array("code"=>200, "data"=>$this->subnet_first_free ());  }
 			// fail
 			else										{ $this->Response->throw_exception(400, 'Invalid request'); }
 		}
@@ -222,16 +222,6 @@ class Subnets_controller extends Common_functions {
 				return array("code"=>200, "data"=>"Subnet updated");
 			}
 		}
-	}
-
-	/**
-	 * Alias function for edit
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function PUT () {
-		return $this->PATCH ();
 	}
 
 
