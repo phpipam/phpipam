@@ -41,6 +41,16 @@ class Folders_controller extends Common_functions {
 		return $this->Subnets_controller->OPTIONS ();
 	}
 
+	/**
+	 * HEAD, no response
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function HEAD () {
+		return $this->Subnets_controller->GET ();
+	}
+
 
 	/**
 	 * Creates new folder

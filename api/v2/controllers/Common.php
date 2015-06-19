@@ -104,9 +104,15 @@ class Common_functions {
 		// lower controller
 		$controller = strtolower($controller);
 
+		// reset controller for vlans subnets
+		if($controller=="vlans" && @$this->_params->id2=="subnets")	{ $controller="subnets"; }
+
 		// multiple options
 		if(is_array($result)) {
 			foreach($result as $k=>$r) {
+				// fix for Vlans
+				if($controller=="vlans")	{ $r->id = $r->vlanId; }
+
 				$m=0;
 				// custom links
 				$custom_links = $this->define_links ($controller);
@@ -120,11 +126,17 @@ class Common_functions {
 						}
 					}
 				}
+
+				// remove id for vlans
+				if($controller=="vlans")	{ unset($r->id); }
 			}
 		}
 		// single item
 		else {
-			$m=0;
+				// fix for Vlans
+				if($controller=="vlans")	{ $result->id = $result->vlanId; }
+
+				$m=0;
 				// custom links
 				$custom_links = $this->define_links ($controller);
 				if($custom_links!==false) {
@@ -141,6 +153,9 @@ class Common_functions {
 						$m++;
 					}
 				}
+
+				// remove id for vlans
+				if($controller=="vlans")	{ unset($result->id); }
 		}
 		# return
 		return $result;
@@ -154,8 +169,15 @@ class Common_functions {
 	 * @return void
 	 */
 	private function define_links ($controller) {
+		// sections
+		if($controller=="sections") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["subnets"]          = array ("GET");
+			// return
+			return $result;
+		}
 		// subnets
-		if($controller=="subnets") {
+		elseif($controller=="subnets") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
 			$result["usage"]            = array ("GET");
 			$result["first_free"]       = array ("GET");
@@ -167,8 +189,8 @@ class Common_functions {
 			// return
 			return $result;
 		}
-		// sections
-		if($controller=="sections") {
+		// vlans
+		elseif($controller=="vlans") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
 			$result["subnets"]          = array ("GET");
 			// return
@@ -217,7 +239,7 @@ class Common_functions {
 	 */
 	protected function validate_keys () {
 		foreach($this->_params as $pk=>$pv) {
-			if(!in_array($pk, $this->valid_keys)) 		{ $this->Exceptions->throw_exception(400, 'Invalid request key '.$pk); }
+			if(!in_array($pk, $this->valid_keys)) 	{ $this->Response->throw_exception(400, 'Invalid request key '.$pk); }
 			// set parameters
 			else {
 				if(!in_array($pk, $this->controller_keys)) {
@@ -227,6 +249,20 @@ class Common_functions {
 		}
 		# return
 		return $values;
+	}
+
+	/**
+	 * Validates OPTIONS request
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function validate_options_request () {
+		foreach($this->_params as $key=>$val) {
+			if(!in_array($key, array("app_id", "controller"))) {
+													{ $this->Response->throw_exception(400, 'Invalid request key parameter '.$key); }
+			}
+		}
 	}
 }
 

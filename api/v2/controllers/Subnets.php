@@ -53,6 +53,9 @@ class Subnets_controller extends Common_functions {
 	 * @return void
 	 */
 	public function OPTIONS () {
+		// validate
+		$this->validate_options_request ();
+
 		// methods
 		$result['methods'] = array(
 								array("href"=>"/api/subnets/".$this->_params->app_id."/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
@@ -100,9 +103,6 @@ class Subnets_controller extends Common_functions {
 			//set result
 			return array("code"=>201, "data"=>"Subnet created", "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/");
 		}
-		# return
-		return $result;
-
 	}
 
 
@@ -164,7 +164,7 @@ class Subnets_controller extends Common_functions {
 		// custom fields
 		elseif ($this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)			{ return array("code"=>200, NULL); }
+			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
 			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// id
@@ -176,6 +176,20 @@ class Subnets_controller extends Common_functions {
 		}
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }
+	}
+
+
+
+
+
+	/**
+	 * HEAD, no response
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function HEAD () {
+		return $this->GET ();
 	}
 
 
