@@ -7,12 +7,11 @@
 class Tools_controller extends Common_functions {
 
 	/* public variables */
-	public $result_type;				// sets output - JSON or XML
-	public $result;						// result
+	public $Response_type;				// sets output - JSON or XML
 
 	/* object holders */
-	private $Database;
-	private $Result;
+	protected $Database;
+	protected $Response;
 	protected $Tools;
 
 	/**
@@ -24,9 +23,9 @@ class Tools_controller extends Common_functions {
 	 * @param mixed $params		// post/get values
 	 * @return void
 	 */
-	public function __construct($Database, $Tools, $params, $Result) {
+	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
-		$this->Result 	= $Result;
+		$this->Response = $Response;
 		$this->Tools 	= $Tools;
 		$this->_params 	= $params;
 	}
@@ -42,6 +41,9 @@ class Tools_controller extends Common_functions {
 	 * @return void
 	 */
 	public function OPTIONS () {
+		// validate
+		$this->validate_options_request ();
+
 		// controllers
 		$controllers = array(
 						array("rel"=>"sections",	"href"=>"/api/".$_GET['app_id']."/sections/"),
@@ -52,7 +54,7 @@ class Tools_controller extends Common_functions {
 						array("rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrfs/"),
 						array("rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/")
 					);
-		# result
+		# Response
 		return array("code"=>200, "data"=>$controllers);
 	}
 

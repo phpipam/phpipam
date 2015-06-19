@@ -53,6 +53,9 @@ class Sections_controller extends Common_functions {
 	 * @return void
 	 */
 	public function OPTIONS () {
+		// validate
+		$this->validate_options_request ();
+
 		// methods
 		$result['methods'] = array(
 								array("href"=>"/api/sections/".$this->_params->app_id."/", 			"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
@@ -110,7 +113,7 @@ class Sections_controller extends Common_functions {
 			# return custom fields
 			elseif($this->_params->id=="custom_fields") {
 				// check result
-				if(sizeof($this->custom_fields)==0)		{ return array("code"=>200, NULL); }
+				if(sizeof($this->custom_fields)==0)		{ $this->Response->throw_exception(404, 'No custom fields defined'); }
 				else									{ return array("code"=>200, "data"=>$result); }
 			}
 			# fetch by name
@@ -129,6 +132,19 @@ class Sections_controller extends Common_functions {
 				if($result===false) 					{ return array("code"=>204, NULL); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
+	}
+
+
+
+
+	/**
+	 * HEAD, no response
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function HEAD () {
+		return $this->GET ();
 	}
 
 
