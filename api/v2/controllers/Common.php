@@ -105,7 +105,8 @@ class Common_functions {
 		$controller = strtolower($controller);
 
 		// reset controller for vlans subnets
-		if($controller=="vlans" && @$this->_params->id2=="subnets")	{ $controller="subnets"; }
+		if($controller=="vlans" 	&& @$this->_params->id2=="subnets")	{ $controller="subnets"; }
+		if($controller=="l2domains" && @$this->_params->id2=="vlans")	{ $controller="vlans"; }
 
 		// multiple options
 		if(is_array($result)) {
@@ -186,6 +187,13 @@ class Common_functions {
 			$result["truncate"]         = array ("DELETE");
 			$result["resize"]           = array ("PATCH");
 			$result["split"]            = array ("PATCH");
+			// return
+			return $result;
+		}
+		// vlan domains
+		elseif($controller=="l2domains") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["vlans"]          	= array ("GET");
 			// return
 			return $result;
 		}

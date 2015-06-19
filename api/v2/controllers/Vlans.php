@@ -166,7 +166,7 @@ class Vlans_controller extends Common_functions {
 
 		# execute update
 		if(!$this->Admin->object_modify ("vlans", "add", "vlanId", $values))
-													{ $this->Response->throw_exception(500, "Vlan create failed"); }
+													{ $this->Response->throw_exception(500, "Vlan creation failed"); }
 		else {
 			//set result
 			return array("code"=>201, "data"=>"Vlan created", "location"=>"/api/".$this->_params->app_id."/vlans/".$this->Admin->lastId."/");
