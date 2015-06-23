@@ -92,7 +92,11 @@ $values = array("id"=>@$_POST['userId'],
 				);
 # update pass ?
 if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->type=="local")) {
-$values['password'] = $_POST['password1'];
+	$values['password'] = $_POST['password1'];
+}
+# pass change
+if(isset($_POST['passChange'])) {
+	$values['passChange'] = "Yes";
 }
 # set groups user belongs to
 if($_POST['role']=="Administrator") {

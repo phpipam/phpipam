@@ -2544,8 +2544,10 @@ class Subnets {
 		$section_subnets = $this->fetch_section_subnets ($sectionId);
 		# folder or subnet?
 		foreach($section_subnets as $s) {
+			// folders array
 			if($s->isFolder==1)	{ $children_folders[$s->masterSubnetId][] = (array) $s; }
-			else				{ $children_subnets[$s->masterSubnetId][] = (array) $s; }
+			// all subnets, includin folders
+			$children_subnets[$s->masterSubnetId][] = (array) $s;
 		}
 
 		//initialize html
@@ -2626,6 +2628,12 @@ class Subnets {
 				# selected
 				if($option['value']['id'] == $current_master) 	{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
 				else 											{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
+			}
+			// folder - disabled
+			elseif ($option['value']['isFolder']==1) {
+				if($option['value']['id'] == $current_master) 	{ $html[] = "<option value='".$option['value']['id']."' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
+				else 											{ $html[] = "<option value='".$option['value']['id']."'					    disabled>$repeat ".$option['value']['description']."</option>"; }
+
 			}
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack_subnet ); }
