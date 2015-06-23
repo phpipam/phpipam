@@ -161,6 +161,9 @@ class Sections_controller extends Common_functions {
 		# check for valid keys
 		$values = $this->validate_keys ();
 
+		// remove editDate if set
+		unset($values['editDate']);
+
 		# validate mandatory parameters
 		if(strlen($this->_params->name)<4)				{ $this->Response->throw_exception(400, 'Name is mandatory'); }
 
@@ -198,18 +201,8 @@ class Sections_controller extends Common_functions {
 		if(sizeof($this->Sections->fetch_section ("id", $this->_params->id))==0)
 														{ $this->Response->throw_exception(404, "Section does not exist"); }
 
-		# set variables for update
-		$values["id"] = $this->_params->id;
-		# check for valid keys
-		foreach($this->_params as $pk=>$pv) {
-			if(!in_array($pk, $this->valid_keys)) 		{ $this->Response->throw_exception(400, 'Invalid request key '.$pk); }
-			// set parameters
-			else {
-				if(!in_array($pk, $this->controller_keys)) {
-					 $values[$pk] = $pv;
-				}
-			}
-		}
+		# validate and prepare keys
+		$values = $this->validate_keys ();
 
 		# execute update
 		if(!$this->Sections->modify_section ("edit", $values))

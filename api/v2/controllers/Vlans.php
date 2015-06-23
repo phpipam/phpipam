@@ -107,7 +107,7 @@ class Vlans_controller extends Common_functions {
 
 			// check result
 			if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
 		// custom fields
 		elseif (@$this->_params->id=="custom_fields") {
@@ -259,7 +259,7 @@ class Vlans_controller extends Common_functions {
 		// validate number
 		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(400, "Vlan Id must be numeric"); }
 		// check that it exists
-		if($this->Tools->fetch_object ("vlans", "vlanId", $this->_params->id) === false )	{ $this->Response->throw_exception(404, "Invalid Vlan id"); }
+		if($this->Tools->fetch_object ("vlans", "vlanId", $this->_params->id) === false )	{ $this->Response->throw_exception(400, "Invalid Vlan id"); }
 	}
 
 
@@ -267,7 +267,6 @@ class Vlans_controller extends Common_functions {
 	 * Validates VLAN on add and edit
 	 *
 	 * @access private
-	 * @param mixed $action
 	 * @return void
 	 */
 	private function validate_vlan_edit () {
