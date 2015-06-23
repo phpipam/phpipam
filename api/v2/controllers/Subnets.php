@@ -120,7 +120,7 @@ class Subnets_controller extends Common_functions {
 	 *		- {id}/first_free/			// returns first available address in subnet
 	 *		- {id}/slaves/ 				// returns all immediate slave subnets
 	 *		- {id}/slaves_recursive/ 	// returns all slave subnets recursively
-	 *		- {id}/addresses/			// returns all IP addresses in subnt
+	 *		- {id}/addresses/			// returns all IP addresses in subnet
 	 *
 	 * @access public
 	 * @return void
@@ -146,7 +146,7 @@ class Subnets_controller extends Common_functions {
 				$result = $this->read_subnet_addresses ();
 				// check result
 				if($result===false)						{ $this->Response->throw_exception(404, "No addresses found"); }
-				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, true)); }
 			}
 			// slaves
 			elseif($this->_params->id2=="slaves") {
@@ -180,7 +180,7 @@ class Subnets_controller extends Common_functions {
 			$result = $this->read_subnet ();
 			// check result
 			if($result==NULL)							{ $this->Response->throw_exception(404, "Invalid Id"); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "Subnets", true, true)); }
+			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }

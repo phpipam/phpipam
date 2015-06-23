@@ -78,7 +78,7 @@ class Addresses_controller extends Common_functions  {
 	 *	identifiers can be:
 	 *		- {id}
 	 *		- {id}/ping/					// pings address
-	 *		- {ip_address} 					// searches for addresses in database, returns multiple if found
+	 *		- /search/{ip_address}/			// searches for addresses in database, returns multiple if found
 	 *		- custom_fields
 	 *		- tags							// all tags
 	 *		- tags/{id}/					// specific tag
@@ -130,7 +130,7 @@ class Addresses_controller extends Common_functions  {
 				// fetch all by tag
 				if(isset($this->_params->id2)) {
 					// numeric
-					if(is_numeric($this->_params->id2)) { $result = $this->Tools->fetch_multiple_objects ("ipTags", "id", $this->_params->id2); }
+					if(is_numeric($this->_params->id2)) { $result = $this->Tools->fetch_object ("ipTags", "id", $this->_params->id2); }
 					// type
 					else 								{ $result = $this->Tools->fetch_multiple_objects ("ipTags", "type", $this->_params->id2); }
 				}
@@ -162,7 +162,7 @@ class Addresses_controller extends Common_functions  {
 
 				// success
 				if($result['exit_code']==0) 			{ $Scan->ping_update_lastseen ($this->_params->id); return array("code"=>200, "data"=>$result); }
-				else									{ $this->Response->throw_exception(404, "Address offline. Exit code: ".$result['exit_code']); }
+				else									{ $this->Response->throw_exception(404, "Address offline. Exit code: ".$result['exit_code']."( ".$Scan->ping_exit_explain ($result['exit_code'])." )"); }
 			}
 			else {
 				// fetch
@@ -173,16 +173,18 @@ class Addresses_controller extends Common_functions  {
 			}
 		}
 		// ip address ?
-		else {
+		elseif (@$this->_params->id=="search") {
 			// validate
-			if(!$this->Addresses->validate_address ($this->_params->id))
+			if(!$this->Addresses->validate_address ($this->_params->id2))
 														{ $this->Response->throw_exception(404, 'Invalid address'); }
 			// search
-			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Subnets->transform_address ($this->_params->id, "decimal"));
+			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Subnets->transform_address ($this->_params->id2, "decimal"));
 			// check result
 			if($result===false)							{ $this->Response->throw_exception(404, 'Address not found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)); }
 		}
+		// false
+		else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
 
 

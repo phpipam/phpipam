@@ -93,7 +93,7 @@ class Common_functions {
 		$result = $this->remove_subnets ($result);
 
 		// remap keys
-		$result = $this->remap_keys ($result);
+		$result = $this->remap_keys ($result, $controller);
 
 		# return
 		return $result;
@@ -111,15 +111,12 @@ class Common_functions {
 		// lower controller
 		$controller = strtolower($controller);
 
-		// reset controller for vlans subnets
-		if($controller=="vlans" 	&& @$this->_params->id2=="subnets")	{ $controller="subnets"; }
-		if($controller=="l2domains" && @$this->_params->id2=="vlans")	{ $controller="vlans"; }
-
 		// multiple options
 		if(is_array($result)) {
 			foreach($result as $k=>$r) {
-				// fix for Vlans
+				// fix for Vlans and vrfs
 				if($controller=="vlans")	{ $r->id = $r->vlanId; }
+				if($controller=="vrfs")		{ $r->id = $r->vrfId; }
 
 				$m=0;
 				// custom links
@@ -127,7 +124,7 @@ class Common_functions {
 				if($custom_links!==false) {
 					foreach($this->define_links ($controller) as $link=>$method) {
 						// self only !
-						if ($link=="self" || $link=="addresses") {
+						if ($link=="self") {
 						$result[$k]->links[$m] = new stdClass ();
 						$result[$k]->links[$m]->rel  	= $link;
 						$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
@@ -137,12 +134,14 @@ class Common_functions {
 
 				// remove id for vlans
 				if($controller=="vlans")	{ unset($r->id); }
+				if($controller=="vrfs")		{ unset($r->id); }
 			}
 		}
 		// single item
 		else {
-				// fix for Vlans
+				// fix for Vlans and Vrfs
 				if($controller=="vlans")	{ $result->id = $result->vlanId; }
+				if($controller=="vrfs")		{ $result->id = $result->vrfId; }
 
 				$m=0;
 				// custom links
@@ -152,7 +151,7 @@ class Common_functions {
 						$result->links[$m] = new stdClass ();
 						$result->links[$m]->rel  	= $link;
 						// self ?
-						if ($link=="self" || $link=="addresses")
+						if ($link=="self")
 						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
 						else
 						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
@@ -164,6 +163,7 @@ class Common_functions {
 
 				// remove id for vlans
 				if($controller=="vlans")	{ unset($result->id); }
+				if($controller=="vrfs")		{ unset($result->id); }
 		}
 		# return
 		return $result;
@@ -201,11 +201,13 @@ class Common_functions {
 		// addresses
 		elseif($controller=="addresses") {
 			$result["self"]				= array ("GET","POST","DELETE","PATCH");
+			$result["ping"]				= array ("GET");
 			// return
 			return $result;
 		}
 		// tags
 		elseif($controller=="addresses/tags") {
+			$result["self"]				= array ("GET");
 			$result["addresses"]		= array ("GET");
 			// return
 			return $result;
@@ -219,6 +221,13 @@ class Common_functions {
 		}
 		// vlans
 		elseif($controller=="vlans") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["subnets"]          = array ("GET");
+			// return
+			return $result;
+		}
+		// vrfs
+		elseif($controller=="vrfs") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
 			$result["subnets"]          = array ("GET");
 			// return
@@ -275,6 +284,8 @@ class Common_functions {
 				}
 			}
 		}
+		# remove editDate
+		unset($values['editDate']);
 		# return
 		return $values;
 	}
@@ -359,13 +370,17 @@ class Common_functions {
 	 *
 	 * @access protected
 	 * @param mixed $result (default: null)
+	 * @param mixed $controller (default: null)
 	 * @return void
 	 */
-	protected function remap_keys ($result  = null) {
+	protected function remap_keys ($result  = null, $controller) {
 		// define keys array
 		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname");
-		// only for vlan
-		if($this->_params->controller=="vlans") { $this->keys['vlanId'] = "id"; }
+
+		// exceptions
+		if($controller=="vlans") { $this->keys['vlanId'] = "id"; }
+		if($controller=="vrfs")  { $this->keys['vrfId'] = "id"; }
+
 		// POST / PATCH
 		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH")		{ return $this->remap_update_keys (); }
 		// GET
@@ -417,27 +432,22 @@ class Common_functions {
 		}
 		# array
 		else {
-			$m=0;
 			// loop
-			foreach ($result as $r) {
+			foreach ($result as $m=>$r) {
 				// start object
 				$result_remapped[$m] = new StdClass ();
 
 				// search and replace
 				foreach($r as $k=>$v) {
-
 					if(array_key_exists($k, $this->keys)) {
 						// replace
-						$key = $this->keys[$k];
-						$result_remapped[$m]->$key = $v;
+						$key_val = $this->keys[$k];
+						$result_remapped[$m]->$key_val = $v;
 					}
 					else {
 						$result_remapped[$m]->$k = $v;
 					}
 				}
-
-				// next
-				$m++;
 			}
 		}
 

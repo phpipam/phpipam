@@ -405,7 +405,7 @@ class Scan {
 	 * @access public
 	 * @return void
 	 */
-	function ping_set_exit_code_explains () {
+	public function ping_set_exit_code_explains () {
 		$explain_codes[0]  = "SUCCESS";
 		$explain_codes[1]  = "OFFLINE";
 		$explain_codes[2]  = "ERROR";
