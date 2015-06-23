@@ -137,7 +137,7 @@ class Scan {
 	}
 
 	/**
-	 * Set weather the code sohuld exit or return
+	 * Set weather the code should exit or return
 	 *
 	 *	Default is return
 	 *

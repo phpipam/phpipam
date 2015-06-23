@@ -97,9 +97,9 @@ class Result  {
 	 */
 	public function throw_exception ($content) {
 		// include Exceptions class for API
-		include_once( dirname(__FILE__) . '../../../api/v2/controllers/Exceptions.php' );
+		include_once( dirname(__FILE__) . '../../../api/v2/controllers/Responses.php' );
 		// initialize exceptions
-		$Exceptions = new Api_exceptions ();
+		$Exceptions = new Responses ();
 		// throw error
 		$Exceptions->throw_exception(500, $content);
 	}

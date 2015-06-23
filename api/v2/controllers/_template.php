@@ -1,7 +1,17 @@
 <?php
 
 /**
- *	phpIPAM API class to work with tools
+ *	phpIPAM API class template
+ *
+ *
+ *	Exception handling:
+ *		$this->Response->throw_exception(404, "Exception text");
+ *		(codes are available in Responses controller)
+ *
+ *	Success handling:
+ *		return array("code"=>200, "data"=>"Text or object with result");
+ *		return array("code"=>200, "data"=>$this->prepare_result ("Text or object with result", null, true, true));
+ *		return array("code"=>201, "data"=>"Object created", "location"=>"/api/".$this->_params->app_id."/".$this->_params->controller."/".$this->Tools->lastId."/");
  *
  */
 class Tools_controller extends Common_functions {
@@ -11,8 +21,8 @@ class Tools_controller extends Common_functions {
 	public $result;						// result
 
 	/* object holders */
-	private $Database;
-	private $Exceptions;
+	protected $Database;
+	protected $Response;
 	protected $Tools;
 
 	/**
@@ -24,11 +34,15 @@ class Tools_controller extends Common_functions {
 	 * @param mixed $params		// post/get values
 	 * @return void
 	 */
-	public function __construct($Database, $Tools, $params, $Exceptions) {
+	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
-		$this->Exceptions = $Exceptions;
+		$this->Response = $Response;
 		$this->Tools 	= $Tools;
 		$this->_params 	= $params;
+		// init required objects
+		$this->init_object ("Subnets", $Database);
+		// set valid keys
+		$this->set_valid_keys ("mydatabase");
 	}
 
 
@@ -79,6 +93,20 @@ class Tools_controller extends Common_functions {
 
 
 	/**
+	 * HEAD, no response
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function HEAD () {
+		return $this->GET ();
+	}
+
+
+
+
+
+	/**
 	 * Update object
 	 *
 	 * @access public
@@ -86,16 +114,6 @@ class Tools_controller extends Common_functions {
 	 */
 	public function PATCH () {
 
-	}
-
-	/**
-	 * Alias function for PATCH
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function PUT () {
-		return $this->PATCH ();
 	}
 
 

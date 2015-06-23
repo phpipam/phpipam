@@ -120,6 +120,7 @@ class Subnets_controller extends Common_functions {
 	 *		- {id}/first_free/			// returns first available address in subnet
 	 *		- {id}/slaves/ 				// returns all immediate slave subnets
 	 *		- {id}/slaves_recursive/ 	// returns all slave subnets recursively
+	 *		- {id}/addresses/			// returns all IP addresses in subnt
 	 *
 	 * @access public
 	 * @return void
@@ -140,8 +141,15 @@ class Subnets_controller extends Common_functions {
 				$this->validate_subnet_id ();
 			}
 
+			// addresses in subnet
+			if($this->_params->id2=="addresses") {
+				$result = $this->read_subnet_addresses ();
+				// check result
+				if($result===false)						{ $this->Response->throw_exception(404, "No addresses found"); }
+				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+			}
 			// slaves
-			if($this->_params->id2=="slaves") {
+			elseif($this->_params->id2=="slaves") {
 				$result = $this->read_subnet_slaves ();
 				// check result
 				if($result==NULL)						{ $this->Response->throw_exception(404, "No slaves"); }
@@ -227,6 +235,10 @@ class Subnets_controller extends Common_functions {
 		else {
 			// new section
 			if(isset($this->_params->sectionId)) 		{ $this->validate_section (); }
+
+			// validate vlan and vrf
+			$this->validate_vlan ();
+			$this->validate_vrf ();
 
 			// if subnet is provided die
 			if(isset($this->_params->subnet))			{ $this->Response->throw_exception(400, 'Subnet cannot be changed'); }
@@ -451,6 +463,19 @@ class Subnets_controller extends Common_functions {
 	}
 
 	/**
+	 * Fetches all addresses in subnet
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function read_subnet_addresses () {
+		// fetch
+		$result = $this->Addresses->fetch_subnet_addresses ($this->_params->id);
+		# result
+		return sizeof($result)==0 ? false : $result;
+	}
+
+	/**
 	 * Returns all immediate subnet slaves
 	 *
 	 * @access private
@@ -534,6 +559,10 @@ class Subnets_controller extends Common_functions {
 		$this->validate_folder ();
 		# verify overlapping
 		$this->validate_overlapping ();
+		# verify vlan
+		$this->validate_vlan ();
+		# verify vrf
+		$this->validate_vrf ();
 	}
 
 	/**
@@ -663,7 +692,6 @@ class Subnets_controller extends Common_functions {
 		}
 		else 									{ $parent_is_folder = false; }
 
-
 		// create cidr address
 		$cidr = $this->Addresses->transform_address($this->_params->subnet,"dotted")."/".$this->_params->mask;
 
@@ -687,6 +715,30 @@ class Subnets_controller extends Common_functions {
 		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($this->_params->sectionId, $cidr, $this->_params->vrfId, $this->_params->masterSubnetId);
 				if($overlap!==false) 																{ $this->Response->throw_exception(400, $overlap); }
 		    }
+		}
+	}
+
+	/**
+	 * Validates VLAN id
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_vlan () {
+		if(isset($this->_params->vlanId)) {
+			if($this->Tools->fetch_object("vlans", "vlanId", $this->_params->vlanId)===false)		{ $this->Response->throw_exception(400, "Vlan does not exist"); }
+		}
+	}
+
+	/**
+	 * Validates VRF id
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_vrf () {
+		if(isset($this->_params->vrfId)) {
+			if($this->Tools->fetch_object("vrf", "vrfId", $this->_params->vrfId)===false)			{ $this->Response->throw_exception(400, "VRF does not exist"); }
 		}
 	}
 
