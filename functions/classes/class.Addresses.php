@@ -359,6 +359,8 @@ class Addresses {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		# save id
+		$this->lastId = $this->Database->lastInsertId();
 		# ok
 		return true;
 	}
@@ -993,6 +995,30 @@ class Addresses {
 		elseif (!$this->Net_IPv6->isInNetmask($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
 		# default
 		return false;
+	}
+
+	/**
+	 * Validates IP address
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function validate_address ($address) {
+		# Initialize PEAR NET object
+		$this->initialize_pear_net_IPv4 ();
+		$this->initialize_pear_net_IPv6 ();
+
+		// transform
+		$address = $this->transform_address ($address, "dotted");
+		// ipv6
+		if($this->identify_address ($address)=="IPv6") {
+			return $this->Net_IPv6->checkIPv6($address) ?  true : false;
+		}
+		// ipv4
+		else {
+			return $this->Net_IPv4->validateIP($address) ? true : false;
+		}
 	}
 
 	/**

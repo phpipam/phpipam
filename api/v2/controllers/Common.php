@@ -88,6 +88,13 @@ class Common_functions {
 		// transform address
 		if($transform_address)	{ $result = $this->transform_address ($result); }
 
+		// remove subnets and addresses if needed
+		$result = $this->remove_folders ($result);
+		$result = $this->remove_subnets ($result);
+
+		// remap keys
+		$result = $this->remap_keys ($result);
+
 		# return
 		return $result;
 	}
@@ -120,7 +127,7 @@ class Common_functions {
 				if($custom_links!==false) {
 					foreach($this->define_links ($controller) as $link=>$method) {
 						// self only !
-						if ($link=="self") {
+						if ($link=="self" || $link=="addresses") {
 						$result[$k]->links[$m] = new stdClass ();
 						$result[$k]->links[$m]->rel  	= $link;
 						$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
@@ -145,7 +152,7 @@ class Common_functions {
 						$result->links[$m] = new stdClass ();
 						$result->links[$m]->rel  	= $link;
 						// self ?
-						if ($link=="self")
+						if ($link=="self" || $link=="addresses")
 						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
 						else
 						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
@@ -180,6 +187,7 @@ class Common_functions {
 		// subnets
 		elseif($controller=="subnets") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["addresses"]        = array ("GET");
 			$result["usage"]            = array ("GET");
 			$result["first_free"]       = array ("GET");
 			$result["slaves"]           = array ("GET");
@@ -187,6 +195,18 @@ class Common_functions {
 			$result["truncate"]         = array ("DELETE");
 			$result["resize"]           = array ("PATCH");
 			$result["split"]            = array ("PATCH");
+			// return
+			return $result;
+		}
+		// addresses
+		elseif($controller=="addresses") {
+			$result["self"]				= array ("GET","POST","DELETE","PATCH");
+			// return
+			return $result;
+		}
+		// tags
+		elseif($controller=="addresses/tags") {
+			$result["addresses"]		= array ("GET");
 			// return
 			return $result;
 		}
@@ -222,8 +242,8 @@ class Common_functions {
 				// remove IP
 				if (isset($r->ip))					{ unset($r->ip); }
 				// transform
-				if (isset($r->subnet))				{ $r->subnet  = $this->Subnets->transform_address ($r->subnet, "dotted"); }
-				elseif (isset($r->ip_addr))			{ $r->ip_addr = $this->Subnets->transform_address ($r->subnet, "dotted"); }
+				if (isset($r->subnet))				{ $r->subnet  = $this->Subnets->transform_address ($r->subnet,  "dotted"); }
+				elseif (isset($r->ip_addr))			{ $r->ip_addr = $this->Subnets->transform_address ($r->ip_addr, "dotted"); }
 			}
 		}
 		// single item
@@ -231,8 +251,8 @@ class Common_functions {
 				// remove IP
 				if (isset($result->ip))				{ unset($result->ip); }
 				// transform
-				if (isset($result->subnet))			{ $result->subnet  = $this->Subnets->transform_address ($result->subnet, "dotted"); }
-				elseif (isset($result->ip_addr))	{ $result->ip_addr = $this->Subnets->transform_address ($result->subnet, "dotted"); }
+				if (isset($result->subnet))			{ $result->subnet  = $this->Subnets->transform_address ($result->subnet,  "dotted"); }
+				elseif (isset($result->ip_addr))	{ $result->ip_addr = $this->Subnets->transform_address ($result->ip_addr, "dotted"); }
 		}
 
 		# return
@@ -272,6 +292,160 @@ class Common_functions {
 			}
 		}
 	}
+
+	/**
+	 * This method removes all folders if controller is subnets
+	 *
+	 * @access protected
+	 * @param mixed $result
+	 * @return void
+	 */
+	protected function remove_folders ($result) {
+		// must be subnets
+		if($this->_params->controller!="subnets") {
+			return $result;
+		}
+		else {
+			// multiple options
+			if (is_array($result)) {
+				foreach($result as $k=>$r) {
+					// remove
+					if($r->isFolder=="1")				{ unset($r); }
+			}	}
+			// single item
+			else {
+					// remove
+					if($result->isFolder=="1")			{ unset($result); }
+			}
+			# return
+			if($result===false)	{ $this->Response->throw_exception(404, "No subnets found"); }
+			else				{ return $result; }
+	}	}
+
+	/**
+	 * This method removes all subnets if controller is subnets
+	 *
+	 * @access protected
+	 * @param mixed $result
+	 * @return void
+	 */
+	protected function remove_subnets ($result) {
+		// must be subnets
+		if($this->_params->controller!="folders") {
+			return $result;
+		}
+		else {
+			// multiple options
+			if (is_array($result)) {
+				foreach($result as $k=>$r) {
+					// remove
+					if($r->isFolder!="1")				{ unset($r); }
+			}	}
+			// single item
+			else {
+					// remove
+					if($result->isFolder!="1")			{ unset($result); }
+			}
+			# return
+			if($result===NULL)	{ $this->Response->throw_exception(404, "No folders found"); }
+			else				{ return $result; }
+	}	}
+
+
+
+
+	/**
+	 * Remaps keys based on request type
+	 *
+	 * @access protected
+	 * @param mixed $result (default: null)
+	 * @return void
+	 */
+	protected function remap_keys ($result  = null) {
+		// define keys array
+		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname");
+		// only for vlan
+		if($this->_params->controller=="vlans") { $this->keys['vlanId'] = "id"; }
+		// POST / PATCH
+		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH")		{ return $this->remap_update_keys (); }
+		// GET
+		elseif ($_SERVER['REQUEST_METHOD']=="GET")											{ return $this->remap_result_keys ($result); }
+	}
+
+	/**
+	 * Updates request keys to database ones
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function remap_update_keys () {
+		// loop
+		foreach($this->keys as $k=>$v) {
+			// match
+			if(array_key_exists($v, $this->_params)) {
+				// replace
+				$this->_params->$k = $this->_params->$v;
+				// remove
+				unset($this->_params->$v);
+			}
+		}
+	}
+
+	/**
+	 * Remap result keys - what is offered to client
+	 *
+	 * @access private
+	 * @param mixed $result
+	 * @return void
+	 */
+	private function remap_result_keys ($result) {
+		# single
+		if(!is_array($result)) {
+			// params
+			$result_remapped = new StdClass ();
+			// search and replace
+			foreach($result as $k=>$v) {
+				if(array_key_exists($k, $this->keys)) {
+					// replace
+					$key = $this->keys[$k];
+					$result_remapped->$key = $v;
+				}
+				else {
+					$result_remapped->$k = $v;
+				}
+			}
+		}
+		# array
+		else {
+			$m=0;
+			// loop
+			foreach ($result as $r) {
+				// start object
+				$result_remapped[$m] = new StdClass ();
+
+				// search and replace
+				foreach($r as $k=>$v) {
+
+					if(array_key_exists($k, $this->keys)) {
+						// replace
+						$key = $this->keys[$k];
+						$result_remapped[$m]->$key = $v;
+					}
+					else {
+						$result_remapped[$m]->$k = $v;
+					}
+				}
+
+				// next
+				$m++;
+			}
+		}
+
+
+		# result
+		return $result_remapped;
+	}
+
 }
 
 ?>
