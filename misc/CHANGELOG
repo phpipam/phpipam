@@ -1,4 +1,4 @@
-== 1.16.010
+== 1.16.012
 
 	New features:
 	------------
@@ -11,10 +11,12 @@
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
 	+ REST API (in progress):
+		+ documentation: http://phpipam.net/api-documentation/
 		+ API v2, old v1 support added
 		+ Complete rewrite of all API calls;
 		+ New security models (crypt, ssl, none);
 		+ Support for custom fields;
+		+ JSON / XML output
 		+ Full read/write controllers (Sections, Subnets/Folders, Addresses, Vlans, Vrfs);
 
 	Enhancements:

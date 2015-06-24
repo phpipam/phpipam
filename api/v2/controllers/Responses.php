@@ -239,7 +239,65 @@ class Responses {
 	 * @return void
 	 */
 	private function create_xml () {
-		return json_encode((array) $this->result);
+		// convert whole object to array
+		$this->result = $this->object_to_array($this->result);
+
+		// new SimpleXMLElement object
+		$xml = new SimpleXMLElement('<'.$_GET['controller'].'/>');
+		// generate xml from result
+		$this->array_to_xml($xml, $this->result);
+
+		// return XML result
+		return $xml->asXML();
+	}
+
+	/**
+	 * Transforms array to XML
+	 *
+	 * @access private
+	 * @param SimpleXMLElement $object
+	 * @param array $data
+	 * @return void
+	 */
+	private function array_to_xml(SimpleXMLElement $object, array $data) {
+		// loop through values
+	    foreach ($data as $key => $value) {
+		    // if spaces exist in key replace them with underscores
+		    if(strpos($key, " ")>0)	{ $key = str_replace(" ", "_", $key); }
+
+		    // if key is numeric append item
+		    if(is_numeric($key)) $key = "item".$key;
+
+			// if array add child
+	        if (is_array($value)) {
+	            $new_object = $object->addChild($key);
+	            $this->array_to_xml($new_object, $value);
+	        }
+	        // else write value
+	        else {
+	            $object->addChild($key, $value);
+	        }
+	    }
+	}
+
+	/**
+	 * Transforms object to array
+	 *
+	 * @access private
+	 * @param mixed $obj
+	 * @return void
+	 */
+	private function object_to_array ($obj) {
+		// object to array
+	    if(is_object($obj)) $obj = (array) $obj;
+	    if(is_array($obj)) {
+	        $new = array();
+	        foreach($obj as $key => $val) {
+	            $new[$key] = $this->object_to_array($val);
+	        }
+	    }
+	    else $new = $obj;
+	    return $new;
 	}
 
 	/**

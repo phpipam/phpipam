@@ -136,7 +136,7 @@ try {
 	//execute the action
 	$result = $controller->$_SERVER['REQUEST_METHOD'] ();
 
-} catch( Exception $e ) {
+} catch ( Exception $e ) {
 	//catch any exceptions and report the problem
 	$result = $e->getMessage();
 
@@ -152,6 +152,8 @@ try {
 
 //output result
 echo $Response->formulate_result ($result);
+
+// exit
 exit();
 
 ?>

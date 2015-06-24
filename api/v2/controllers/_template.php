@@ -71,7 +71,10 @@ class Tools_controller extends Common_functions {
 	 * @return void
 	 */
 	public function POST () {
-
+		// remap keys if needed
+		$this->remap_keys ();
+		// check for valid keys
+		$values = $this->validate_keys ();
 	}
 
 
@@ -113,7 +116,10 @@ class Tools_controller extends Common_functions {
 	 * @return void
 	 */
 	public function PATCH () {
-
+		// remap keys if needed
+		$this->remap_keys ();
+		// check for valid keys
+		$values = $this->validate_keys ();
 	}
 
 
