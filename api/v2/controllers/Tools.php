@@ -28,6 +28,8 @@ class Tools_controller extends Common_functions {
 		$this->Response = $Response;
 		$this->Tools 	= $Tools;
 		$this->_params 	= $params;
+		// init required objects
+		$this->init_object ("Subnets", $Database);
 	}
 
 
@@ -44,6 +46,9 @@ class Tools_controller extends Common_functions {
 		// validate
 		$this->validate_options_request ();
 
+		// get api
+		$app = $this->Tools->fetch_object ("api", "app_id", $this->_params->app_id);
+
 		// controllers
 		$controllers = array(
 						array("rel"=>"sections",	"href"=>"/api/".$_GET['app_id']."/sections/"),
@@ -55,7 +60,7 @@ class Tools_controller extends Common_functions {
 						array("rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/")
 					);
 		# Response
-		return array("code"=>200, "data"=>$controllers);
+		return array("code"=>200, "data"=>array("permissions"=>$this->Subnets->parse_permissions($app->app_permissions), "controllers"=>$controllers));
 	}
 
 
