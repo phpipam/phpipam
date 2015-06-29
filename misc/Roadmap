@@ -5,13 +5,11 @@ version - 1.2
 
 	+ Add request resolve to subnet for RWA users;
 
-	+ Add missing api actions;
-
 	+ add customers module;
 
 	+ per-section DNS resolvers (PEAR DNS2)
 
-	+ assign a state to a subnet, ipaddr, vlan
+	+ assign a state to a subnet, vlan
 
 	+ Mail subnet details
 

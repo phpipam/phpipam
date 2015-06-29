@@ -85,6 +85,10 @@ class Common_functions {
 			if(@$this->_params->links!="false")
 								{ $result = $this->add_links ($result, $controller); }
 		}
+		// filter
+		if (isset($this->_params->filter_by)) {
+								{ $result = $this->filter_result ($result, $controller); }
+		}
 		// transform address
 		if($transform_address)	{ $result = $this->transform_address ($result); }
 
@@ -97,6 +101,73 @@ class Common_functions {
 
 		# return
 		return $result;
+	}
+
+	/**
+	 * Filters result
+	 *
+	 *	parameters: filter_by, filter_value
+	 *
+	 * @access protected
+	 * @param mixed $result
+	 * @return void
+	 */
+	protected function filter_result ($result) {
+		// validate
+		$this->validate_filter_by ($result);
+
+		// filter - array
+		if (is_array($result)) {
+			foreach ($result as $m=>$r) {
+				foreach ($r as $k=>$v) {
+					if ($k == $this->_params->filter_by) {
+						if ($v != $this->_params->filter_value) {
+							unset($result[$m]);
+							break;
+						}
+					}
+				}
+			}
+		}
+		// filter - single
+		else {
+				foreach ($result as $k=>$v) {
+					if ($k == $this->_params->filter_by) {
+						if ($v != $this->_params->filter_value) {
+							unset($result);
+							break;
+						}
+					}
+				}
+		}
+
+		# null?
+		if (sizeof($result)==0)				{ $this->Response->throw_exception(404, 'No results (filter applied)'); }
+
+		# result
+		return $result;
+	}
+
+	/**
+	 * Validates filter_by
+	 *
+	 * @access protected
+	 * @param mixed $result
+	 * @return void
+	 */
+	protected function validate_filter_by ($result) {
+		// validate filter
+		if (is_array($result))	{ $result_tmp = $result[0]; }
+		else					{ $result_tmp = $result; }
+
+		$error = true;
+		foreach ($result_tmp as $k=>$v) {
+			if ($k==$this->_params->filter_by) {
+				$error = false;
+			}
+		}
+		// die
+		if ($error)							{ $this->Response->throw_exception(400, 'Invalid filter value'); }
 	}
 
 	/**
@@ -115,8 +186,10 @@ class Common_functions {
 		if(is_array($result)) {
 			foreach($result as $k=>$r) {
 				// fix for Vlans and vrfs
-				if($controller=="vlans")	{ $r->id = $r->vlanId; }
-				if($controller=="vrfs")		{ $r->id = $r->vrfId; }
+				if($controller=="vlans")				{ $r->id = $r->vlanId; }
+				if($controller=="tools/vlans")			{ $r->id = $r->vlanId; }
+				if($controller=="vrfs")					{ $r->id = $r->vrfId; }
+				if($this->_params->id=="deviceTypes")	{ $r->id = $r->tid; }
 
 				$m=0;
 				// custom links
@@ -140,8 +213,10 @@ class Common_functions {
 		// single item
 		else {
 				// fix for Vlans and Vrfs
-				if($controller=="vlans")	{ $result->id = $result->vlanId; }
-				if($controller=="vrfs")		{ $result->id = $result->vrfId; }
+				if($controller=="vlans")				{ $result->id = $result->vlanId; }
+				if($controller=="tools/vlans")			{ $result->id = $result->vlanId; }
+				if($controller=="vrfs")					{ $result->id = $result->vrfId; }
+				if($this->_params->id=="deviceTypes")	{ $result->id = $result->tid; }
 
 				$m=0;
 				// custom links
@@ -212,6 +287,55 @@ class Common_functions {
 			// return
 			return $result;
 		}
+		// tools - devices
+		elseif($controller=="tools/devices") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["addresses"]        = array ("GET");
+			// return
+			return $result;
+		}
+		// tools - devices
+		elseif($controller=="tools/devicetypes") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["devices"]        	= array ("GET");
+			// return
+			return $result;
+		}
+		// tools - tags
+		elseif($controller=="tools/iptags") {
+			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
+			$result["addresses"]        = array ("GET");
+			// return
+			return $result;
+		}
+		// tools - tags
+		elseif($controller=="tools/vlans") {
+			$result["self"]			 	= array ("GET");
+			$result["subnets"]          = array ("GET");
+			// return
+			return $result;
+		}
+		// tools - tags
+		elseif($controller=="tools/vrf") {
+			$result["self"]			 	= array ("GET");
+			$result["subnets"]          = array ("GET");
+			// return
+			return $result;
+		}
+		// tags
+		elseif($controller=="iptags") {
+			$result["self"]				= array ("GET");
+			$result["addresses"]		= array ("GET");
+			// return
+			return $result;
+		}
+		// tags
+		elseif($controller=="devices") {
+			$result["self"]				= array ("GET");
+			$result["addresses"]		= array ("GET");
+			// return
+			return $result;
+		}
 		// vlan domains
 		elseif($controller=="l2domains") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
@@ -233,6 +357,7 @@ class Common_functions {
 			// return
 			return $result;
 		}
+
 		// default
 		return false;
 	}
@@ -375,7 +500,7 @@ class Common_functions {
 	 */
 	protected function remap_keys ($result  = null, $controller) {
 		// define keys array
-		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname");
+		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname", "tid"=>"id");
 
 		// exceptions
 		if($controller=="vlans") { $this->keys['vlanId'] = "id"; }

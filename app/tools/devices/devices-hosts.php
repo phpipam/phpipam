@@ -72,7 +72,7 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
 
-	if(sizeof($custom) > 0) {
+	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 
 			# fix for boolean
@@ -81,6 +81,9 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 				elseif($device[$field['name']]=="1")	{ $device[$field['name']] = "true"; }
 				else									{ $device[$field['name']] = ""; }
 			}
+
+			# create links
+			$device[$field['name']] = create_links ($device[$field['name']]);
 
 			print "<tr>";
 			print "<th>$field[name]</th>";

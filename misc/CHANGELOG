@@ -1,4 +1,4 @@
-== 1.16.012
+== 1.16.013
 
 	New features:
 	------------
@@ -31,6 +31,7 @@
 	+ Per-user display settings;
 	+ New widget - tools shortcuts;
 	+ New widget - IP calculator;
+	+ Clickable links for subnet fields;
 
 	Security Fixes:
 	----------------------------
