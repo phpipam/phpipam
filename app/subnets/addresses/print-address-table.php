@@ -357,6 +357,9 @@ else {
 							if(!in_array($myField['name'], $hidden_cfields)) 	{
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
+								// create html links
+								$addresses[$n]->$myField['name'] = create_links($addresses[$n]->$myField['name']);
+
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
 									if($addresses[$n]->$myField['name'] == "0")		{ print _("No"); }

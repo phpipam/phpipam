@@ -127,7 +127,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
 				}
 				else {
-					$html_custom[] = $subnet[$key];
+					$html_custom[] = create_links($subnet[$key]);
 				}
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";

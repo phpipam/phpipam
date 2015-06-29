@@ -187,7 +187,7 @@ if(sizeof($address)>1) {
 	print "	</td>";
 	print "</tr>";
 
-	# custom subnet fields
+	# custom device fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $key=>$field) {
 			if(strlen($address[$key])>0) {
@@ -201,7 +201,7 @@ if(sizeof($address)>1) {
 				elseif($address[$key] == 1)	{ print _("Yes"); }
 			}
 			else {
-				print $address[$key];
+				print create_links($address[$key]);
 			}
 			print "	</td>";
 			print "</tr>";

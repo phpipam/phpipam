@@ -67,6 +67,9 @@ print "<a class='btn btn-sm btn-default' href='".create_link("tools","vlan", $vl
 				else					{ $vlan[$key] = ""; }
 			}
 
+			// create links
+			$vlan[$key] = create_links($vlan[$key]);
+
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
