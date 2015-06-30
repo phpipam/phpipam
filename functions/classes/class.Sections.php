@@ -317,7 +317,7 @@ class Sections  {
 			return $this->sections[$id];
 		}
 		else {
-			try { $section = $this->Database->getObjectQuery("SELECT * FROM `sections` where `$method` = ? limit 1;", array($id)); }
+			try { $section = $this->Database->getObjectQuery("SELECT * FROM `sections` where `$method` = ?;", array($id)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
