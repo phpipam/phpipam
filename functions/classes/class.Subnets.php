@@ -698,7 +698,7 @@ class Subnets {
 
 			// fake cidr
 			$this->initialize_pear_net_IPv4 ();
-			$net = Net_IPv4::parseAddress("10.0.0.0/$mask");
+			$net = $this->Net_IPv4->parseAddress("10.0.0.0/$mask");
 
 			// set
 			$out[$mask]->bitmask = $mask;									// bitmask
