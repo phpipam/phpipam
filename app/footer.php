@@ -3,7 +3,7 @@
 <table class="donate">
 <tr>
 	<td>
-		<a href="https://sourceforge.net/projects/phpipam/">phpIPAM IP address management <?php print '[v'. VERSION. ']'; ?><?php if(REVISION > 0) { print " rev".REVISION; } ?></a>
+		<a href="https://github.com/phpipam/phpipam">phpIPAM IP address management <?php print '[v'. VERSION. ']'; ?><?php if(REVISION > 0) { print " rev".REVISION; } ?></a>
 	</td>
 
 	<?php
