@@ -28,36 +28,39 @@ class Result  {
 
 		# override for api !
 		if($this->exit_method == "exception")  {
-			return $this->throw_exception ($utext);
-		}
-
-		# text
-		if(!is_array( $utext )) {}
-		# array
-		elseif( is_array( $utext ) && sizeof( $utext )>0) {
-			if(sizeof( $utext )==1) {								# single value
-				$utext = $utext[0];
-			} else {												# multiple values
-				$utext = "<ul>";
-				foreach( $utext as $l ) { $utext .= "<li>$l</li>"; }
-				$utext .= "</ul>";
-			}
-		}
-
-		# print popup or normal
-		if(!$popup) {
-			print "<div class='alert alert-".$uclass."'>".$utext."</div>";
+			# ok, just return success
+			if ($uclass=="success") 	{ return true; }
+			else						{ return $this->throw_exception ($utext); }
 		}
 		else {
-			print '<div class="pHeader">'._("Error").'</div>';
-			print '<div class="pContent">';
-			print '<div class="alert alert-'.$uclass.'">'.$utext.'</div>';
-			print '</div>';
-			print '<div class="pFooter"><button class="btn btn-sm btn-default hidePopups">'._('Close').'</button></div>';
-		}
+			# text
+			if(!is_array( $utext )) {}
+			# array
+			elseif( is_array( $utext ) && sizeof( $utext )>0) {
+				if(sizeof( $utext )==1) {								# single value
+					$utext = $utext[0];
+				} else {												# multiple values
+					$utext = "<ul>";
+					foreach( $utext as $l ) { $utext .= "<li>$l</li>"; }
+					$utext .= "</ul>";
+				}
+			}
 
-		# die if set
-		if($die)	die();
+			# print popup or normal
+			if(!$popup) {
+				print "<div class='alert alert-".$uclass."'>".$utext."</div>";
+			}
+			else {
+				print '<div class="pHeader">'._("Error").'</div>';
+				print '<div class="pContent">';
+				print '<div class="alert alert-'.$uclass.'">'.$utext.'</div>';
+				print '</div>';
+				print '<div class="pFooter"><button class="btn btn-sm btn-default hidePopups">'._('Close').'</button></div>';
+			}
+
+			# die if set
+			if($die)	die();
+		}
 	}
 
 	/**

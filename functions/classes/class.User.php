@@ -12,6 +12,7 @@ class User {
 	 * public variables
 	 */
 	public $username;						// (char) username
+	public $api = false;					// from api
 	public $authenticated = false;			// (bin) flag if user is authenticated
 	public $timeout = false;				// (bin) timeout flag
 	public $settings;						// (obj) settings
@@ -37,7 +38,7 @@ class User {
 	/**
 	 * object holders
 	 */
-	protected $Result;						// for Result printing
+	public $Result;						// for Result printing
 	protected $Database;					// for Database connection
 
 
@@ -51,10 +52,13 @@ class User {
 	 * @access public
 	 * @return void
 	 */
-	public function __construct (Database_PDO $database) {
+	public function __construct (Database_PDO $database, $api = false) {
 
 		# Save database object
 		$this->Database = $database;
+
+		# set api
+		$this->api = $api;
 
 		# initialize Result
 		$this->Result = new Result ();
@@ -91,14 +95,17 @@ class User {
 	 * @return void
 	 */
 	private function register_session () {
-		//set session name
-		$this->set_session_name();
-		//set debugging
-		$this->set_debugging();
-		//register session
-		session_name($this->sessname);
-		if(@$_SESSION===NULL) {
-		session_start();
+		// not for api
+		if ($this->api !== true) {
+			//set session name
+			$this->set_session_name();
+			//set debugging
+			$this->set_debugging();
+			//register session
+			session_name($this->sessname);
+			if(@$_SESSION===NULL) {
+			session_start();
+			}
 		}
 	}
 
@@ -141,9 +148,12 @@ class User {
 	 * @return void
 	 */
 	private function write_session_parameters () {
-		$_SESSION['ipamusername'] = $this->user->username;
-		$_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
-		$_SESSION['lastactive']   = time();
+		// not for api
+		if ($this->api !== true) {
+			$_SESSION['ipamusername'] = $this->user->username;
+			$_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
+			$_SESSION['lastactive']   = time();
+		}
 	}
 
 	/**
@@ -153,9 +163,12 @@ class User {
 	 * @return void
 	 */
 	public function update_session_language () {
-		# update user object
-		$this->fetch_user_details ($this->username);
-		$_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
+		// not for api
+		if ($this->api !== true) {
+			# update user object
+			$this->fetch_user_details ($this->username);
+			$_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
+		}
 	}
 
 	/**

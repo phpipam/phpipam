@@ -3,7 +3,7 @@ version - 1.2
 	+ DNS/DHCP
 	https://sourceforge.net/p/phpipam/feature-requests/141/
 
-	+ Add request resolve to subnet for RWA users;
+	+ Add resolve requests to subnet for RWA users;
 
 	+ add customers module;
 
@@ -17,21 +17,19 @@ version - 1.2
 
 	+ IPv6 pinging;
 
-	+ Mark subnet as full
+	+ Mark subnet as full;
 
-	+ phpipam scan Agents
+-	+ phpipam scan Agents;
 
-	+ custom fields for IP requests
+	+ custom fields for IP requests;
 
 	+ custom VRF fields
 
-	+ Rack tables
+-	+ Rack tables
 
 	+ ARIN whois (https://www.arin.net/resources/whoisrws/whois_api.html);
 
 	+ Override entries on import checkbox;
-
-	+ Resolve requests - rwa users;
 
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
