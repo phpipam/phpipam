@@ -552,4 +552,4 @@ VALUES
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.16';
+UPDATE `settings` set `version` = '1.17';
