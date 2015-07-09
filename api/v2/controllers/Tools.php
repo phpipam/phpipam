@@ -358,6 +358,8 @@ class Tools_controller extends Common_functions {
 	 * @return void
 	 */
 	private function validate_subcontroller () {
+		// not options
+		if($this->_params->controller !== "options")
 		if (!in_array($this->_params->id, @$this->subcontrollers))			{ $this->Response->throw_exception(400, "Invalid subcontroller"); }
 	}
 

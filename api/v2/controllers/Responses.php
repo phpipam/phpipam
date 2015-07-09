@@ -89,6 +89,11 @@ class Responses {
 		// wrong code
 		if(!isset($this->exception))		{ header("HTTP/1.1 500 Invalid result code"); }
 		else								{ header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
+
+		// 401 - add location
+		if ($this->result['code']==401) {
+			$this->set_location_header ("/api/".$_REQUEST['app_id']."/user/");
+		}
 	}
 
 	/**

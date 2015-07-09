@@ -18,6 +18,8 @@ class Common_functions {
 	protected function init_object ($Object, $Database) {
 		// admin fix
 		if($Object=="Admin")	{ $this->$Object	= new $Object ($Database, false); }
+		// User fix
+		elseif($Object=="User")	{ $this->$Object	= new $Object ($Database, true); $this->$Object->user = null; }
 		else					{ $this->$Object	= new $Object ($Database); }
 		// set exit method
 		$this->$Object->Result->exit_method = "exception";

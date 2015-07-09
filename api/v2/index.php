@@ -22,6 +22,9 @@ require( dirname(__FILE__) . '/../../functions/functions.php');		// functions an
 require( dirname(__FILE__) . '/controllers/Common.php');			// common methods
 require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
+# settings
+$enable_authentication = true;
+
 # database object
 $Database 	= new Database_PDO;
 $Tools	    = new Tools ($Database);
@@ -40,7 +43,7 @@ if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
 /* wrap in a try-catch block to catch exceptions */
 try {
 
-	/* Do some checks before processing request ---------- */
+	/* Validate application ---------- */
 
 	// verify that API is enabled on server
 	if($settings->api!=1) 									{ $Response->throw_exception(503, "API server disabled");}
@@ -84,21 +87,34 @@ try {
 		$Response->throw_exception(503, 'Invalid app security');
 	}
 
+
 	// append POST parameters if POST
 	if($_SERVER['REQUEST_METHOD']=="POST" && sizeof(@$_POST)>0) {
 		$params = array_merge((array) $params, $_POST);
 		$params = (object) $params;
 	}
 
+
+
+
+	/* Authentication ---------- */
+
+	# authenticate user if required
+	if (@$params->controller != "user" && $enable_authentication) {
+		if($app->app_security=="ssl" || $app->app_security=="none") {
+			// start auth class and validate connection
+			require( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
+			$Authentication->check_auth ();
+		}
+	}
+
+
 	/* verify request ---------- */
 
 	// check if the request is valid by checking if it's an array and looking for the controller and action
 	if( $params == false || isset($params->controller) == false ) {
 		$Response->throw_exception(400, 'Request is not valid');
-	}
-	// verify permissions for admin
-	if(strtolower($params->controller=="admin" && $app->app_permissions!=3)) {
-		$Response->throw_exception(401, 'invalid permissions');
 	}
 	// verify permissions for delete/create/edit
 	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
@@ -144,8 +160,8 @@ try {
 	if($Response->exception!==true) {
 		$Response->exception = true;
 		$Response->result['success'] = false;
-		$Response->result['code']=500;
-		$Response->result['message']=$result;
+		$Response->result['code'] 	 = 500;
+		$Response->result['message'] = $result;
 	}
 }
 

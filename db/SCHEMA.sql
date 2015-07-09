@@ -130,6 +130,8 @@ CREATE TABLE `settings` (
   `enableIPrequests` tinyint(1) DEFAULT NULL,
   `enableVRF` tinyint(1) DEFAULT '1',
   `enableDNSresolving` tinyint(1) DEFAULT NULL,
+  `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
+  `powerDNS` TEXT  NULL,
   `version` varchar(5) DEFAULT NULL,
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
   `donate` tinyint(1) DEFAULT '0',
@@ -228,6 +230,8 @@ CREATE TABLE `subnets` (
   `permissions` varchar(1024) DEFAULT NULL,
   `pingSubnet` BOOL NULL  DEFAULT '0',
   `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
+  `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
+  `scanAgent` INT(11)  DEFAULT NULL,
   `isFolder` BOOL NULL  DEFAULT '0',
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
@@ -313,6 +317,8 @@ CREATE TABLE `users` (
   `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
   `printLimit` int(4) unsigned DEFAULT '30',
+  `token` VARCHAR(24)  NULL  DEFAULT NULL,
+  `token_valid_until` DATETIME  NULL,
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`),
   KEY `id` (`id`)
@@ -546,4 +552,4 @@ VALUES
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.16';
+UPDATE `settings` set `version` = '1.17';

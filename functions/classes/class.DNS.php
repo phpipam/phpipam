@@ -2,6 +2,7 @@
 
 /**
  *	phpIPAM DNS class to manage DNS-related dunctions
+ *
  */
 
 class DNS  {
@@ -99,5 +100,20 @@ class DNS  {
  	}
 
 
+
+}
+
+
+
+
+
+
+/**
+ *	phpIPAM PowerDNS class to work with PowerDNS
+ *
+ *	https://wiki.powerdns.com/trac/wiki/fields
+ *
+ */
+class PowerDNS extends DNS {
 
 }
