@@ -1969,6 +1969,7 @@ table#userPrint h4 {
 	height: 100%;
 }
 .popup_max .pFooter {
+	position: absolute;
 	float: left;
 	width: 100%;
 	bottom: 0px;

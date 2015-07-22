@@ -29,6 +29,7 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-desktop
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
 if($User->settings->enableVRF==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VRF", 						"href"=>"vrfs", 					"description"=>"VRF management");
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-upload", 	"name"=>"Import / Export", 	"href"=>"import-export", 		"description"=>"Import/Export IP related data (VRF, VLAN, Subnets, IP, Devices)");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud-download", 	"name"=>"RIPE import", 	"href"=>"ripe-import", 				"description"=>"Import subnets from RIPE");
 if($User->settings->enableIPrequests==1) {
 $request_cnt = $requests>0 ? "<span class='ipreqMenu'>$requests</span>" : "";
