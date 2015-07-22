@@ -177,6 +177,9 @@ table td.info2,
 	padding-left: 10px;
 	padding-right: 10px;
 }
+tbody {
+	border-top: none !important;
+}
 
 
 
@@ -265,6 +268,22 @@ td#actions .btn-group .btn {
 	margin-right: 0px;
 }
 
+
+
+
+/* @badges */
+.badge1 {
+	font-weight: normal;
+	padding: 5px 10px;
+
+	border-radius: 3px;
+
+	background: white;
+
+	border: 1px solid #ccc;
+
+	color: #aaa;
+}
 
 
 
@@ -1612,6 +1631,10 @@ table#manageSection tr.slave td:nth-child(2) {
 }
 table#manageSection tr.slave td:nth-child(1):before {
 	content: " - ";
+}
+.powerDNS tr.alert-danger ,
+.powerDNS tr.alert-danger td {
+	border: 0px !important;
 }
 
 table#logs span {

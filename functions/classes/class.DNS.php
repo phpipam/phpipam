@@ -10,7 +10,7 @@ class DNS  {
 	/**
 	 * private variables
 	 */
-	private $settings = false;				//settings
+	protected $settings = false;				//settings
 
 	/**
 	 * object holders
@@ -42,7 +42,7 @@ class DNS  {
 	 * @access private
 	 * @return void
 	 */
-	private function get_settings () {
+	protected function get_settings () {
 		# cache check
 		if($this->settings == false) {
 			try { $this->settings = $this->Database->getObject("settings", 1); }
@@ -98,22 +98,5 @@ class DNS  {
 				return array("class"=>"", "name"=>$address->dns_name);
 		}
  	}
-
-
-
-}
-
-
-
-
-
-
-/**
- *	phpIPAM PowerDNS class to work with PowerDNS
- *
- *	https://wiki.powerdns.com/trac/wiki/fields
- *
- */
-class PowerDNS extends DNS {
 
 }

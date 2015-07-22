@@ -1,5 +1,11 @@
 version - 1.2
 
+	+ syslog (db prepared)
+
+	+ Mark subnet as full (db prepared);
+
+	+ phpipam scan Agents (db prepared);
+
 	+ DNS/DHCP
 	https://sourceforge.net/p/phpipam/feature-requests/141/
 
@@ -17,30 +23,27 @@ version - 1.2
 
 	+ IPv6 pinging;
 
-	+ Mark subnet as full;
-
--	+ phpipam scan Agents;
-
 	+ custom fields for IP requests;
 
 	+ custom VRF fields
 
 -	+ Rack tables
+		http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/
 
 	+ ARIN whois (https://www.arin.net/resources/whoisrws/whois_api.html);
 
 	+ Override entries on import checkbox;
-
-	+ NAT module
-		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
-		- Ability to create NAT pools and link subnet / address to that pool - source NAT
-		- Show bindings under tools and next to IP address
 
 
 features for next releases:
 ---------------------------
 
 	+ Ability to log changes to syslog
+
+	+ NAT module
+		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
+		- Ability to create NAT pools and link subnet / address to that pool - source NAT
+		- Show bindings under tools and next to IP address
 
 	+ BGP support
 

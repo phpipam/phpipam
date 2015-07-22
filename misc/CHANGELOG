@@ -1,4 +1,4 @@
-== 1.17.001
+== 1.18.001
 
 	New features:
 	------------
@@ -18,6 +18,10 @@
 		+ Support for custom fields;
 		+ JSON / XML output
 		+ Full read/write controllers (Sections, Subnets/Folders, Addresses, Vlans, Vrfs);
+	+ PowerDNS integration:
+		+ Automatic reverse records creation (PTR) - IPv4 and IPv6;
+		+ Automatic SOA, NS record creation;
+		+ DNS domain management;
 
 	Enhancements:
 	----------------------------
