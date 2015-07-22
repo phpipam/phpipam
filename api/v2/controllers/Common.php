@@ -5,7 +5,7 @@
  *
  *
  */
-class Common_functions {
+class Common_api_functions {
 
 	/**
 	 * Initializes new Object.

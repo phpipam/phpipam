@@ -6,7 +6,7 @@
  *
  */
 
-class User_controller extends Common_functions {
+class User_controller extends Common_api_functions {
 
 	/* vars */
 	public $token;					// users token
