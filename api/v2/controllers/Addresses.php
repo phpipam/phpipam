@@ -215,7 +215,7 @@ class Addresses_controller extends Common_functions  {
 	 */
 	public function POST () {
 		// remap keys
-		$this->remap_keys ();
+		//$this->remap_keys ();
 
 		// validate ip address - format, proper subnet, subnet/broadcast check
 		$this->validate_create_parameters ();
