@@ -328,12 +328,21 @@ else {
 
 		//delete
 		if ($_POST['action']=="delete") {
-			// check for zone and remove it, along with records
+			// if zone exists
 			if ($domain!==false) {
-				// remove domain
-				$PowerDNS->domain_edit ("delete", array("id"=>$domain->id));
-				// remove records
-				$PowerDNS->remove_all_records ($domain->id);
+				print "<hr><p class='hidden alert-danger'></p>";
+				print "<div class='alert alert-warning'>";
+
+				print "	<div class='btn-group pull-right'>";
+				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
+				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
+				print "	</div>";
+
+				print _('Do you wish to delete DNS zone and all records')."?<br>";
+				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'></form>";
+				print "	<div class='domain-edit-result'></div>";
+				print "</div>";
 			}
 		}
 		//create
@@ -353,12 +362,19 @@ else {
 		elseif ($_POST['action']=="edit" && $_POST['DNSrecursive']!=$subnet_old_details['DNSrecursive']) {
 			// remove domain
 			if (!isset($_POST['DNSrecursive']) && $domain!==false) {
-				// remove domain
-				$PowerDNS->domain_edit ("delete", array("id"=>$domain->id));
-				// remove records
-				$PowerDNS->remove_all_records ($domain->id);
-				// unlink all records
-				$Addresses->ptr_unlink_subnet_addresses ($subnet_old_details['id']);
+				print "<hr><p class='hidden alert-danger'></p>";
+				print "<div class='alert alert-warning'>";
+
+				print "	<div class='btn-group pull-right'>";
+				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
+				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
+				print "	</div>";
+
+				print _('Do you wish to delete DNS zone and all records')."?<br>";
+				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'></form>";
+				print "	<div class='domain-edit-result'></div>";
+				print "</div>";
 			}
 			// create domain
 			elseif (isset($_POST['DNSrecursive']) && $domain===false) {

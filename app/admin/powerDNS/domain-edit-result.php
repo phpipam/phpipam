@@ -45,21 +45,21 @@ if ($_POST['action']!="delete") {
 
 # set update array
 $values = array("id"=>@$_POST['id'],
-				"master"=>$_POST['master'],
-				"type"=>$_POST['type']
+				"master"=>@$_POST['master'],
+				"type"=>@$_POST['type']
 				);
 # name only on add
 if ($_POST['action']=="add")
 $values['name'] = $_POST['name'];
 
 
+# remove all references if delete
+if ($_POST['action']=="delete") 									{ $PowerDNS->remove_all_records ($values['id']); }
+
+
 # update
 if(!$PowerDNS->domain_edit($_POST['action'], $values))				{ $Result->show("danger",  _("Failed to $_POST[action] domain").'!', true); }
 else																{ $Result->show("success", _("Domain $_POST[action] successfull").'!', false); }
-
-
-# remove all references if delete
-if ($_POST['action']=="delete") 									{ $PowerDNS->remove_all_records ($values['id']); }
 
 # update all references if edit
 if ($_POST['action']=="edit" && $old_domain->name!=$values['name'])	{ $PowerDNS->update_all_records ($values['id'], $values['name']); }

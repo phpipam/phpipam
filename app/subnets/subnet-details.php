@@ -85,8 +85,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 	if(!$slaves) {
 		# divider
 		print "<tr>";
-		print "	<th><hr></th>";
-		print "	<td></td>";
+		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
 
 		# Are IP requests allowed?
@@ -109,8 +108,10 @@ $rowSpan = 10 + sizeof($custom_fields);
 		if($subnet['discoverSubnet'] == 1) 			{ print "	<td>"._('enabled')."</td>"; }		# yes
 		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 		print "</tr>";
-		# autocreate PTR records
-		if($User->settings->enablePowerDNS==1) {
+	}
+
+	# autocreate PTR records
+	if($User->settings->enablePowerDNS==1) {
 		if ($subnet['DNSrecursive'] == 1) {
 		# powerDNS class
 		$PowerDNS = new PowerDNS ($Database);
@@ -149,6 +150,11 @@ $rowSpan = 10 + sizeof($custom_fields);
 			$zone = "<span class='badge alert-danger'>Cannot connect to powerDNS database!</span>";
 		}
 		}
+		# divider
+		print "<tr>";
+		print "	<td colspan='2'><hr></td>";
+		print "</tr>";
+
 		print "<tr>";
 		print "	<th>"._('Autocreate reverse records')."</th>";
 		if($subnet['DNSrecursive'] == 1) 			{ print "	<td>"._('enabled')." $btns $zone</td>"; }		# yes
@@ -159,8 +165,8 @@ $rowSpan = 10 + sizeof($custom_fields);
 		if($subnet['DNSrecords'] == 1) 				{ print "	<td>"._('enabled')."</td>"; }		# yes
 		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 		print "</tr>";
-		}
 	}
+
 	?>
 
 	<?php

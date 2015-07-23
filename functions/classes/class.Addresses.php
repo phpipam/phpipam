@@ -983,7 +983,7 @@ class Addresses {
 	 */
 	public function count_addresses_in_multiple_subnets ($subnets) {
 		# empty
-		if(empty($address)) { return 0; }
+		if(empty($subnets)) { return 0; }
 
 		# create query
 		foreach($subnets as $k=>$s) {
