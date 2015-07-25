@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# powerdns class
+$PowerDNS = new PowerDNS ($Database);
+
 # checks
 if(!is_numeric($_GET['subnetId']))		{ $Result->show("danger", _("Invalid ID"), true); }
 if(!is_numeric($_GET['section']))		{ $Result->show("danger", _("Invalid ID"), true); }
@@ -186,6 +189,32 @@ if(sizeof($address)>1) {
 
 	print "	</td>";
 	print "</tr>";
+
+
+	# search for DNS records
+	if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+		$records = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
+		$ptr	 = $PowerDNS->fetch_record ($address['PTR']);
+		if ($records !== false || $ptr!==false) {
+
+			print "<tr><td colspan='2'><hr></tr>";
+			print "<tr>";
+			print "<th>"._('DNS records')."</th>";
+			print "<td>";
+			if($records!==false) {
+				foreach ($records as $r) {
+					print "<span class='badge badge1 badge3'>$r->type</span> $r->content <br>";
+				}
+			}
+			if($ptr!==false) {
+					print "<span class='badge badge1 badge3'>$ptr->type</span> $ptr->name <br>";
+			}
+			print "</td>";
+			print "</tr>";
+			print "<tr><td colspan='2'><hr></tr>";
+		}
+	}
+
 
 	# custom device fields
 	if(sizeof($custom_fields) > 0) {

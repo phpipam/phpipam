@@ -27,15 +27,19 @@ if($_POST['action']!="add") {
 	$record = $PowerDNS->fetch_record ($_POST['id']);
 	$record!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 }
-else {
-	$record = new StdClass ();
-	// default
-	$record->ttl = 3600;
-}
 
 // get domain
 $domain = $PowerDNS->fetch_domain ($_POST['domain_id']);
 $domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+
+// name
+if ($_POST['action']=="add") {
+	$record = new StdClass ();
+	// default
+	$record->ttl = 3600;
+	// name
+	$record->name = $domain->name;
+}
 
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";

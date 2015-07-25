@@ -561,6 +561,35 @@ class PowerDNS extends Common_functions {
 		return sizeof($records)>0 ? $records : false;
 	}
 
+	/**
+	 * Searches for domain record
+	 *
+	 * @access public
+	 * @param string $field (default: "content")
+	 * @param mixed $value (default: null)
+	 * @param string $dortField (default: 'id')
+	 * @param bool $sortAsc (default: true)
+	 * @return void
+	 */
+	public function search_records ($field = "content", $value = null, $sortField = 'id', $sortAsc = true) {
+		// fetch
+		try { $records = $this->Database_pdns->findObjects("records", $field, $value, $sortField, $sortAsc); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# result
+		return sizeof($records)>0 ? $records : false;
+	}
+
+	/**
+	 * Edit PowerDNS record
+	 *
+	 * @access public
+	 * @param mixed $action
+	 * @param mixed $values
+	 * @return void
+	 */
 	public function record_edit ($action, $values) {
 		# strip tags
 		$values = $this->strip_input_tags ($values);

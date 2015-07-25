@@ -320,8 +320,34 @@ else {
 				    if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($addresses[$n]->state); }
 				    print "</td>";
 
+
+					# search for DNS records
+					if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
+					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
+					unset($dns_records);
+					if ($records !== false || $ptr!==false) {
+						$dns_records[] = "<ul class='submenu-dns'>";
+						if($records!==false) {
+							foreach ($records as $r) {
+								if($r->type!="SOA" && $r->type!="NS")
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$r->type</span> $r->content </li>";
+							}
+						}
+						if($ptr!==false) {
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$ptr->type</span> $ptr->name </li>";
+						}
+						$dns_records[] = "</ul>";
+						$dns_records = implode(" ", $dns_records);
+					} else {
+						$dns_records = "";
+					}
+					}
+
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name]</td>";
+					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name]<hr>$dns_records</td>";
+
+
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
