@@ -285,7 +285,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
         print '	<td>' . "\n";
         print '		<input type="checkbox" name="pingSubnet" class="input-switch" value="1" '.$checked.'>'. "\n";
         print '	</td>' . "\n";
-        print '	<td class="info2">'._('Ping hosts inside subnet to check avalibility').'</td>' . "\n";
+        print '	<td class="info2">'._('Ping hosts inside subnet to check availability').'</td>' . "\n";
         print '</tr>';
 
 		//Discover new hosts

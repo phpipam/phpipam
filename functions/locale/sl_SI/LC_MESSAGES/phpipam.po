@@ -3891,7 +3891,7 @@ msgid "Check hosts status"
 msgstr "Preverjanje dosegljivosti"
 
 #: site/admin/manageSubnetEdit.php
-msgid "Ping hosts inside subnet to check avalibility"
+msgid "Ping hosts inside subnet to check availability"
 msgstr "Preverjanje dosegljivosti IP s pingom"
 
 #: site/ipaddr/subnetDetails.php
@@ -3907,7 +3907,7 @@ msgid "Exclude from ping status checks"
 msgstr "Izključi preverjanje statusa"
 
 #: site/ipaddr/ipAddressPrintTable.php
-msgid "Check avalibility"
+msgid "Check availability"
 msgstr "Preveri dosegljivost"
 
 #: site/ipaddr/pingCheck.php
@@ -4173,7 +4173,7 @@ msgid "DHCP range"
 msgstr "DHCP razpon"
 
 #: site/ipaddr/ipAddressPrintTable.php
-msgid "Check avalibility (disabled)"
+msgid "Check availability (disabled)"
 msgstr "Preveri razpoložljivost (onemogočeno)"
 
 #: site/admin/settings.php
@@ -4439,7 +4439,7 @@ msgid "No changelog entries are available"
 msgstr "Ni zabeleženih sprememb"
 
 #: site/ipaddr/ipDetails.php
-msgid "Avalibility"
+msgid "Availability"
 msgstr "Razpoložljivost"
 
 msgid "Last edited"
