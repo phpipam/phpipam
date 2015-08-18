@@ -65,7 +65,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('IP address'); ?></th>
 		<td>
-			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print @request['ip_addr']; ?>" size="30">
+			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print @$request['ip_addr']; ?>" size="30">
 			<input type="hidden" name="requestId" value="<?php print $request['id']; ?>">
 			<input type="hidden" name="requester" value="<?php print $request['requester']; ?>">
     	</td>
