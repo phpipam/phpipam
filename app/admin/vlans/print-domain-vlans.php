@@ -91,7 +91,7 @@ else {
 		print '<tr>'. "\n";
 
 		print '	<td class="name">'. $vlan['name'] .'</td>'. "\n";
-		print '	<td class="number"><a href="'.create_link("tools","vlan",$vlan['vlanId']).'">'. $vlan['number'] .'</a></td>'. "\n";
+		print '	<td class="number"><a href="'.create_link("tools","vlan", $vlan['domainId'], $vlan['vlanId']).'">'. $vlan['number'] .'</a></td>'. "\n";
 		print '	<td class="description">'. $vlan['description'] .'</td>'. "\n";
 
 		if(sizeof($custom) > 0) {
@@ -100,7 +100,7 @@ else {
 
 					print "<td class='customField hidden-xs hidden-sm'>";
 
-					// creat links
+					// create links
 					$vlan[$field['name']] = create_links ($vlan[$field['name']]);
 
 					//booleans
