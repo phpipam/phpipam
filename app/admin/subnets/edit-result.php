@@ -249,7 +249,8 @@ else {
 					"allowRequests"=>$Admin->verify_checkbox(@$_POST['allowRequests']),
 					"showName"=>$Admin->verify_checkbox(@$_POST['showName']),
 					"discoverSubnet"=>$Admin->verify_checkbox(@$_POST['discoverSubnet']),
-					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet'])
+					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
+					"nameserverId"=>$_POST['nameserverId']
 					);
 	# for new subnets we add permissions
 	if($_POST['action']=="add") {

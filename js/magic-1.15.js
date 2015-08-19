@@ -1715,6 +1715,16 @@ $(document).on("click", "#editVRF", function() {
     submit_popup_data (".vrfManagementEditResult", "app/admin/vrfs/edit-result.php", $('form#vrfManagementEdit').serialize());
 });
 
+/* ---- Nameservers ----- */
+//load edit form
+$('.nameserverManagement').click(function() {
+	open_popup("400", "app/admin/nameservers/edit.php", {nameserverId:$(this).attr('data-nameserverid'), action:$(this).attr('data-action')} );
+});
+//submit form
+$(document).on("click", "#editNameservers", function() {
+    submit_popup_data (".nameserverManagementEditResult", "app/admin/nameservers/edit-result.php", $('form#nameserverManagementEdit').serialize());
+});
+
 
 /* ---- IP requests ----- */
 //load edit form

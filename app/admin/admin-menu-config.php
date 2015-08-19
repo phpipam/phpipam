@@ -27,6 +27,7 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server"
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 					"href"=>"subnets", 					"description"=>"Subnet management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-desktop","name"=>"Devices", 					"href"=>"devices", 					"description"=>"Device management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"Nameservers", 					"href"=>"nameservers", 					"description"=>"Recursive nameserver sets for subnets");
 if($User->settings->enableVRF==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VRF", 						"href"=>"vrfs", 					"description"=>"VRF management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud-download", 	"name"=>"RIPE import", 	"href"=>"ripe-import", 				"description"=>"Import subnets from RIPE");
