@@ -1,1 +1,1 @@
-http://phpipam.net/phpipam-installation-guide/
+http://phpipam.net/documents/installation/
