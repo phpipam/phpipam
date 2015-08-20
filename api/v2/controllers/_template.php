@@ -14,7 +14,7 @@
  *		return array("code"=>201, "data"=>"Object created", "location"=>"/api/".$this->_params->app_id."/".$this->_params->controller."/".$this->Tools->lastId."/");
  *
  */
-class Tools_controller extends Common_functions {
+class Tools_controller extends Common_api_functions {
 
 	/* public variables */
 	public $result_type;				// sets output - JSON or XML

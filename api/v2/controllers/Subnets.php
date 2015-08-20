@@ -5,7 +5,7 @@
  *
  *
  */
-class Subnets_controller extends Common_functions {
+class Subnets_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;

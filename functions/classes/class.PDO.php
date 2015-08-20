@@ -33,12 +33,16 @@ class Database_PDO extends DB {
 	 * @param mixed $charset (default: null)
 	 * @return void
 	 */
-	public function __construct($username=null, $password=null) {
+	public function __construct($username=null, $password=null, $host=null, $port=null, $dbname=null, $charset=null) {
 		# set parameters
 		$this->set_db_params ();
 		# rewrite user/pass if requested - for installation
 		$username==null ? : $this->username = $username;
 		$password==null ? : $this->password = $password;
+		$host==null 	? : $this->host = $host;
+		$port==null 	? : $this->port = $port;
+		$dbname==null 	? : $this->dbname = $dbname;
+
 		# construct
 		parent::__construct($this->username, $this->password, $this->charset);
 	}

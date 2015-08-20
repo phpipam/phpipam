@@ -298,6 +298,28 @@ $(".input-switch").bootstrapSwitch(switch_options);
         print '	<td class="info2">'._('Discover new hosts in this subnet').'</td>' . "\n";
         print '</tr>';
 
+		//autocreate reverse records
+		if($User->settings->enablePowerDNS==1) {
+		$checked = @$subnet_old_details['DNSrecursive']==1 ? "checked": "";
+		print '<tr>' . "\n";
+        print '	<td>'._('Autocreate reverse records').'</td>' . "\n";
+        print '	<td>' . "\n";
+        print '		<input type="checkbox" name="DNSrecursive" class="input-switch" value="1" '.$checked.'>'. "\n";
+        print '	</td>' . "\n";
+        print '	<td class="info2">'._('Auto create reverse (PTR) records for this subnet').'</td>' . "\n";
+        print '</tr>';
+
+		// show records
+		$checked = @$subnet_old_details['DNSrecords']==1 ? "checked": "";
+		print '<tr>' . "\n";
+        print '	<td>'._('Show DNS records').'</td>' . "\n";
+        print '	<td>' . "\n";
+        print '		<input type="checkbox" name="DNSrecords" class="input-switch" value="1" '.$checked.'>'. "\n";
+        print '	</td>' . "\n";
+        print '	<td class="info2">'._('Show DNS records for hosts').'</td>' . "\n";
+        print '</tr>';
+        }
+
     	//custom Subnet fields
 	    if(sizeof($custom_fields) > 0) {
 	    	# count datepickers

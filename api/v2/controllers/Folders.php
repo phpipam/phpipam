@@ -6,7 +6,7 @@
  *	just an alias for subnets
  *
  */
-class Folders_controller extends Common_functions {
+class Folders_controller extends Common_api_functions {
 
 	/**
 	 * __construct function

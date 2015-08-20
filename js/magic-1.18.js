@@ -41,8 +41,8 @@ function submit_popup_data (result_div, target_script, post_data, reload) {
         $('div'+result_div).html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         if(reload) {
-	        if(data.search("alert-danger") == -1)     { setTimeout(function (){window.location.reload();}, 1500); }
-	        else                               		  { hideSpinner(); }
+	        if(data.search("alert-danger") == -1 && data.search("alert-warning") == -1 )     { setTimeout(function (){window.location.reload();}, 1500); }
+	        else                               		  										{ hideSpinner(); }
         }
         else {
 	        hideSpinner();
@@ -108,6 +108,7 @@ function hidePopupMasks() {
 $(document).on("click", "#popupOverlay, .hidePopups", function() { hidePopups(); });
 $(document).on("click", "button.hidePopup2", function() { hidePopup2(); });
 $(document).on("click", ".hidePopupMasks", function() { hidePopupMasks(); });
+$(document).on("click", ".hidePopupsReload", function() { window.location.reload(); });
 
 //prevent loading for disabled buttons
 $('a.disabled, button.disabled').click(function() { return false; });
@@ -1267,6 +1268,69 @@ $(document).on("click", "#sectionOrderSubmit", function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
 });
+
+
+/*    powerDNS
+********************************/
+
+/* powerdns db settings */
+$('#pdns-settings').submit(function() {
+    showSpinner();
+    var settings = $(this).serialize();
+    //load submit results
+    $.post('app/admin/powerDNS/settings-save.php', settings, function(data) {
+        $('div.settingsEdit').html(data).slideDown('fast');
+        //reload after 1 second if all is ok!
+        if(data.search("alert-danger") == -1)   { setTimeout(function (){window.location.reload();}, 1000); }
+        else                             { hideSpinner(); }
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+/* powerdns defaults */
+$('#pdns-defaults').submit(function() {
+    showSpinner();
+    var settings = $(this).serialize();
+    //load submit results
+    $.post('app/admin/powerDNS/defaults-save.php', settings, function(data) {
+        $('div.settingsEdit').html(data).slideDown('fast');
+        //reload after 1 second if all is ok!
+        if(data.search("alert-danger") == -1)   { setTimeout(function (){window.location.reload();}, 1000); }
+        else                             { hideSpinner(); }
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+//load edit form
+$(document).on("click", ".editDomain", function() {
+	open_popup("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+});
+//hide defaults
+$(document).on("click", ".hideDefaults", function () {
+    if ($(this).is(':checked')) { $("tbody.defaults").hide(); }
+    else						{ $("tbody.defaults").show(); }
+});
+//submit form
+$(document).on("click", "#editDomainSubmit", function() {
+    submit_popup_data (".domain-edit-result", "app/admin/powerDNS/domain-edit-result.php", $('form#domainEdit').serialize());
+});
+
+// refresh subnet PTR records
+$('.refreshPTRsubnet').click(function() {
+	open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );
+	return false;
+});
+$(document).on("click", ".refreshPTRsubnetSubmit", function() {
+	submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );
+	return false;
+});
+//edit record
+$(".editRecord").click(function() {
+	open_popup("700", "app/admin/powerDNS/record-edit.php", {id:$(this).attr('data-id'),domain_id:$(this).attr('data-domain_id'), action:$(this).attr('data-action')} );
+	returnfalse;
+});
+$(document).on("click", "#editRecordSubmit", function() {
+    submit_popup_data (".record-edit-result", "app/admin/powerDNS/record-edit-result.php", $('form#recordEdit').serialize());
+});
+
 
 
 /*    Subnets

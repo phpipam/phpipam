@@ -32,6 +32,8 @@ CREATE TABLE `ipaddresses` (
   `note` text,
   `lastSeen` DATETIME  NULL  DEFAULT '0000-00-00 00:00:00',
   `excludePing` BINARY  NULL  DEFAULT '0',
+  `PTRignore` BINARY  NULL  DEFAULT '0',
+  `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `subnetid` (`subnetId`)
@@ -158,6 +160,7 @@ CREATE TABLE `settings` (
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
+  `log` SET('Database','syslog')  NOT NULL  DEFAULT 'Database',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -227,10 +230,12 @@ CREATE TABLE `subnets` (
   `allowRequests` tinyint(1) DEFAULT '0',
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `showName` tinyint(1) DEFAULT '0',
+  `device` INT  UNSIGNED  NULL  DEFAULT '0',
   `permissions` varchar(1024) DEFAULT NULL,
   `pingSubnet` BOOL NULL  DEFAULT '0',
   `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
   `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
+  `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
   `isFolder` BOOL NULL  DEFAULT '0',
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
@@ -552,4 +557,4 @@ VALUES
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.17';
+UPDATE `settings` set `version` = '1.18';

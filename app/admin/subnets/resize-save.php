@@ -36,7 +36,7 @@ $Subnets->verify_subnet_resize ($subnet_old['subnet'], $_POST['newMask'], $subne
 $values = array("id"=>$_POST['subnetId'],
 				"mask"=>$subnet_new['mask']
 				);
-if(!$Subnet->modify_subnet ("resize", $values))					{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
+if(!$Subnets->modify_subnet ("resize", $values))					{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
 else															{ $Result->show("success", _("Subnet resized successfully")."!", true); }
 
 ?>

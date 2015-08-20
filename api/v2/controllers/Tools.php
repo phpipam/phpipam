@@ -6,7 +6,7 @@
  *
  */
 
-class Tools_controller extends Common_functions {
+class Tools_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;					// parameters

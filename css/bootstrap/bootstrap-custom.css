@@ -177,6 +177,9 @@ table td.info2,
 	padding-left: 10px;
 	padding-right: 10px;
 }
+tbody {
+	border-top: none !important;
+}
 
 
 
@@ -264,7 +267,66 @@ td#actions .btn-group .btn {
 .btn:hover {
 	margin-right: 0px;
 }
+.fa-href {
+	cursor: pointer;
+}
 
+
+
+
+/* @badges */
+.badge1 {
+	font-weight: normal;
+	padding: 5px 10px;
+
+	border-radius: 3px;
+
+	background: white;
+
+	border: 1px solid #ccc;
+
+	color: #aaa;
+}
+.badge2 {
+	padding: 2px 4px;
+	margin-left: 5px;
+
+	font-size: 10px;
+}
+.badge3 {
+	padding: 4px 6px;
+	margin-left: 10px;
+	margin-bottom: 4px;
+
+
+}
+ul.submenu-dns {
+	line-height: 14px;
+	padding: 3px;
+	padding-left: 5px !important;
+}
+ul.submenu-dns li {
+	list-style: none;
+	background: url("../../css/images/li-dns.png") no-repeat 4px -3px !important;
+
+	font-size: 10px;
+}
+ul.submenu-dns li:last-child {
+	list-style: none;
+	background: url("../../css/images/li-dns-last.png") no-repeat 4px -3px !important;
+}
+ul.submenu-dns li i {
+	color: #e1e1e1 !important;
+	padding-top:8px !important;
+	padding-left: 3px !important;
+}
+table.ipaddresses tr:hover ul.submenu-dns li i {
+/* 	color: #ffffff !important; */
+	text-shadow: 1px 1px 0px white;
+}
+table.ipaddresses hr {
+	margin-bottom: 0px;
+}
 
 
 
@@ -1612,6 +1674,10 @@ table#manageSection tr.slave td:nth-child(2) {
 }
 table#manageSection tr.slave td:nth-child(1):before {
 	content: " - ";
+}
+.powerDNS tr.alert-danger ,
+.powerDNS tr.alert-danger td {
+	border: 0px !important;
 }
 
 table#logs span {

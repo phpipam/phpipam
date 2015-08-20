@@ -1,46 +1,45 @@
 version - 1.2
 
-	+ DNS/DHCP
-	https://sourceforge.net/p/phpipam/feature-requests/141/
+	+ To fix / finish
+		+ logging: db, syslog (db prepared)
+		+ scan filter out invalid masks / subnets / folders ;
+		+ fix domain user search;
+		+ Export domain in bind format + script;
+		+ Verify upgrade/import scripts;
+
+	+ Import
+		https://github.com/malaiam/phpipam
+
+	+ attach subnet to device (db prepared);
+
+	+ Mark subnet as full (db prepared);
+
+	+ phpipam scan Agents (db prepared);
 
 	+ Add resolve requests to subnet for RWA users;
 
-	+ add customers module;
-
 	+ per-section DNS resolvers (PEAR DNS2)
 
-	+ assign a state to a subnet, vlan
-
-	+ Mail subnet details
-
-	+ IP address owner (from internal users)
+	+ IP address owner (from internal users - suggestions)
 
 	+ IPv6 pinging;
-
-	+ Mark subnet as full;
-
--	+ phpipam scan Agents;
 
 	+ custom fields for IP requests;
 
 	+ custom VRF fields
 
--	+ Rack tables
-
-	+ ARIN whois (https://www.arin.net/resources/whoisrws/whois_api.html);
-
 	+ Override entries on import checkbox;
+
+
+features for next releases:
+---------------------------
 
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
 		- Ability to create NAT pools and link subnet / address to that pool - source NAT
 		- Show bindings under tools and next to IP address
 
-
-features for next releases:
----------------------------
-
-	+ Ability to log changes to syslog
+	+ assign a state to a subnet, vlan
 
 	+ BGP support
 
@@ -48,3 +47,14 @@ features for next releases:
 
 	+ Scan subnet for alive hosts and import
 		SNMP router table fetching
+
+	+ Mail subnet details
+
+	+ add customers module;
+
+	+ Rack tables
+		http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/
+
+	+ ARIN whois (https://www.arin.net/resources/whoisrws/whois_api.html);
+
+	+ DNS scripts (nsupdate,...)
