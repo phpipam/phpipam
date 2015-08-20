@@ -22,11 +22,12 @@ $User->check_user_session();
 
 # fetch all permitted domains
 $permitted_domains = $Sections->fetch_section_domains ($_POST['sectionId']);
+
 # fetch all belonging vlans
 $cnt = 0;
 foreach($permitted_domains as $k=>$d) {
 	// fetch vlans and append
-	$vlans = $Tools->fetch_multiple_objects("vlans", "domainId", $d, "number");
+	$vlans = $Tools->fetch_multiple_objects("vlans", "vlanId", $d, "number");
 	//fetch domain
 	$domain = $Tools->fetch_object("vlanDomains","id",$d);
 	//save to array

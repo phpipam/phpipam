@@ -1,4 +1,4 @@
-== 1.18.002
+== 1.18.005
 
 	New features:
 	------------
@@ -10,6 +10,7 @@
 	+ Added customizable address tags with compressed option;
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
+	+ Added nameserver sets per subnets (jonashauge);
 	+ REST API:
 		+ documentation: http://phpipam.net/api-documentation/
 		+ API v2, old v1 support added

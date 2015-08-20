@@ -66,6 +66,38 @@ $rowSpan = 10 + sizeof($custom_fields);
 		?>
 		</td>
 	</tr>
+	
+	<!-- nameservers -->
+		<tr>
+		<th><?php print _('Nameservers'); ?></th>
+		<td>
+		<?php
+		
+		// Only show nameservers if defined for subnet
+		if(!empty($subnet['nameserverId'])) {
+			# fetch recursive nameserver details
+			$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+			
+			print $nameservers['namesrv1'];
+		
+			// Print secondary and tertiery nameserver if defined)
+			if(!empty($nameservers['namesrv2'])) {print ' , '.$nameservers['namesrv2']; }
+			if(!empty($nameservers['namesrv3'])) {print ' , '.$nameservers['namesrv3']; }
+			
+			//Print name of nameserver group
+			print ' ('.$nameservers['name'].')';				
+		
+			}
+			
+		else {
+			print "<span class='text-muted'>-</span>";
+			}
+		
+		?>
+		</td>
+	</tr>
+	
+	
 
 	<?php
 	# VRF

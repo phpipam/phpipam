@@ -162,6 +162,15 @@ $(".input-switch").bootstrapSwitch(switch_options);
         <td class="info2"><?php print _('Select VLAN'); ?></td>
     </tr>
 
+	<!-- Nameservers -->
+	<tr>
+		<td class="middle"><?php print _('Nameservers'); ?></td>
+		<td id="nameserverDropdown">
+			<?php include('edit-nameserver-dropdown.php'); ?>
+		</td>
+		<td class="info2"><?php print _('Select nameserver set'); ?></td>
+    </tr>
+
     <!-- Master subnet -->
     <tr>
         <td><?php print _('Master Subnet'); ?></td>

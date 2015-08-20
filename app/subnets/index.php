@@ -8,7 +8,7 @@ $User->check_user_session();
 # subnet id must be numeric
 if(!is_numeric($_GET['subnetId'])) 	{ $Result->show("danger", _('Invalid ID'), true); }
 
-# fetch subnet reated stuff
+# fetch subnet related stuff
 $custom_fields = $Tools->fetch_custom_fields ('subnets');											//custom fields
 $subnet  = (array) $Subnets->fetch_subnet(null, $_GET['subnetId']);									//subnet details
 if(sizeof($subnet)==0) 				{ $Result->show("danger", _('Subnet does not exist'), true); }	//die if empty
@@ -22,6 +22,9 @@ if($subnet_permission == 0)			{ $Result->show("danger", _('You do not have permi
 
 # fetch VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
+
+# fetch recursive nameserver details
+$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
 # fetch all addresses and calculate usage
 if($slaves) {
