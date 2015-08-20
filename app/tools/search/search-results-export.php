@@ -24,13 +24,19 @@ $User->check_user_session();
 $search_term = $_REQUEST['search_term'];
 
 # check if mac address or ip address
-if(strlen($search_term)==17) {
-	if(substr_count($search_term, ":") == 5) 												{ $type = "mac"; }	//count : -> must be 5
+if(strlen($search_term)==17 && substr_count($search_term, ":") == 5)
+{
+        $type = "mac"; //count : -> must be 5
 }
-else if(strlen($search_term) == 12) {
-	if( (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0) ) 	{ $type = "mac"; }	//no dots or : -> mac without :
+else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0))
+{
+        $type = "mac"; //no dots or : -> mac without :
 }
-else 																						{ $type = $Addresses->identify_address( $search_term ); }		# identify address type
+else
+{
+        $type = $Addresses->identify_address( $search_term ); //identify address type
+}
+
 
 # reformat if IP address for search
 if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
