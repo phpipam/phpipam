@@ -251,7 +251,8 @@ else {
 					"discoverSubnet"=>$Admin->verify_checkbox(@$_POST['discoverSubnet']),
 					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
 					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
-					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords'])
+					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
+					"nameserverId"=>$_POST['nameserverId']
 					);
 	# for new subnets we add permissions
 	if($_POST['action']=="add") {

@@ -2651,6 +2651,4 @@ class Subnets {
 		# join and print
 		print implode( "\n", $html );
 	}
-
-
 }
