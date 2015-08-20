@@ -6,7 +6,7 @@
  *
  */
 
-class Vrfs_controller extends Common_functions {
+class Vrfs_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;

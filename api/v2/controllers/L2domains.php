@@ -6,7 +6,7 @@
  *
  */
 
-class L2domains_controller extends Common_functions {
+class L2domains_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;

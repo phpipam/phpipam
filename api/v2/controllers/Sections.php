@@ -5,7 +5,7 @@
  *
  *
  */
-class Sections_controller extends Common_functions {
+class Sections_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;

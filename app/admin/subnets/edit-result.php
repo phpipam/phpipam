@@ -250,6 +250,8 @@ else {
 					"showName"=>$Admin->verify_checkbox(@$_POST['showName']),
 					"discoverSubnet"=>$Admin->verify_checkbox(@$_POST['discoverSubnet']),
 					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
+					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
+					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"=>$_POST['nameserverId']
 					);
 	# for new subnets we add permissions
@@ -307,10 +309,116 @@ else {
 
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
-		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', true); }
+		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
 
     	# send mail
 		# sendObjectUpdateMails("subnet", $_POST['action'], $subnet_old_details, $_POST);
 	}
+
+
+	# powerDNS
+	if ($User->settings->enablePowerDNS==1) {
+		# powerDNS class
+		$PowerDNS = new PowerDNS ($Database);
+		if($PowerDNS->db_check()===false) { $Result->show("danger", _("Cannot connect to powerDNS database"), true); }
+
+		// set zone
+		$zone = $_POST['action']=="add" ? $PowerDNS->get_ptr_zone_name ($_POST['subnet'], $_POST['mask']) : $PowerDNS->get_ptr_zone_name ($subnet_old_details['ip'], $subnet_old_details['mask']);
+		// try to fetch domain
+		$domain = $PowerDNS->fetch_domain_by_name ($zone);
+
+		//delete
+		if ($_POST['action']=="delete") {
+			// if zone exists
+			if ($domain!==false) {
+				print "<hr><p class='hidden alert-danger'></p>";
+				print "<div class='alert alert-warning'>";
+
+				print "	<div class='btn-group pull-right'>";
+				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
+				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
+				print "	</div>";
+
+				print _('Do you wish to delete DNS zone and all records')."?<br>";
+				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'></form>";
+				print "	<div class='domain-edit-result'></div>";
+				print "</div>";
+			}
+		}
+		//create
+		elseif ($_POST['action']=="add" && @$_POST['DNSrecursive']=="1") {
+			// if zone exists do nothing, otherwise create zone
+			if ($domain===false) {
+				// use default values
+				$values = json_decode($User->settings->powerDNS, true);
+				$values['name'] = $zone;
+				// create domain
+				$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
+				// create default records
+				$PowerDNS->create_default_records ($values);
+			}
+		}
+		// update
+		elseif ($_POST['action']=="edit" && $_POST['DNSrecursive']!=$subnet_old_details['DNSrecursive']) {
+			// remove domain
+			if (!isset($_POST['DNSrecursive']) && $domain!==false) {
+				print "<hr><p class='hidden alert-danger'></p>";
+				print "<div class='alert alert-warning'>";
+
+				print "	<div class='btn-group pull-right'>";
+				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
+				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
+				print "	</div>";
+
+				print _('Do you wish to delete DNS zone and all records')."?<br>";
+				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'></form>";
+				print "	<div class='domain-edit-result'></div>";
+				print "</div>";
+			}
+			// create domain
+			elseif (isset($_POST['DNSrecursive']) && $domain===false) {
+				// use default values
+				$values = json_decode($User->settings->powerDNS, true);
+				$values['name'] = $zone;
+				// create domain
+				$PowerDNS->domain_edit ("add", array("name"=>$zone,"type"=>"NATIVE"));
+				// save id
+				$domain_id = $PowerDNS->get_last_db_id ();
+				// create default records
+				$PowerDNS->create_default_records ($values);
+
+				// create PTR records
+				$Addresses->pdns_validate_connection ();
+				$hosts = $Addresses->fetch_subnet_addresses ($subnet_old_details['id'], "ip_addr", "asc");
+				// loop
+				if (sizeof($hosts)>0) {
+					$cnt = 0;
+					$err = 0;
+					$ski = 0;
+					// loop
+					foreach ($hosts as $h) {
+						if ($h->PTRignore=="1") {
+							$ski++;
+						}
+						elseif ($Addresses->ptr_add ($h, false, $h->id) !== false) {
+							$cnt++;
+						}
+						else {
+							$err++;
+						}
+					}
+					// print
+					$Result->show ("success", "$cnt PTR records created");
+					// error
+					if ($err!=0) {
+					$Result->show ("warning", "$err invalid hostnames");
+					}
+				}
+			}
+		}
+	}
 }
 ?>
+

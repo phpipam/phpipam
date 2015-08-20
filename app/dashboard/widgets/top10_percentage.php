@@ -125,8 +125,10 @@ $(function () {
 
 	//open link
 	$('#IPv4top10').bind('plotclick', function(event, pos, item) {
-		//get from array
-		var plink = "subnets" + "/" + all_links[item.datapoint[0]]['sectionId'] + "/" + all_links[item.datapoint[0]]['id'] + "/";
+		//set prettylinks of not
+		if ($('#prettyLinks').html()=="Yes")	{ var plink = $("div.iebase").html()+"subnets/"+all_links[item.datapoint[0]]['sectionId']+"/"+ all_links[item.datapoint[0]]['id']+"/"; }
+		else									{ var plink = $("div.iebase").html()+"?page=subnets&section="+all_links[item.datapoint[0]]['sectionId']+"&subnetId="+all_links[item.datapoint[0]]['id'] + ""; }
+		//open
 		document.location = plink;
 	});
 

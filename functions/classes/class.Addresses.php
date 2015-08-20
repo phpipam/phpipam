@@ -340,7 +340,8 @@ class Addresses {
 						"port"=>@$address['port'],
 						"note"=>@$address['note'],
 						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing']
+						"excludePing"=>@$address['excludePing'],
+						"PTRignore"=>@$address['PTRignore']
 						);
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
@@ -361,6 +362,10 @@ class Addresses {
 		}
 		# save id
 		$this->lastId = $this->Database->lastInsertId();
+
+		# edit DNS PTR record
+		$this->ptr_modify ("add", $insert);
+
 		# ok
 		return true;
 	}
@@ -388,7 +393,8 @@ class Addresses {
 						"port"=>@$address['port'],
 						"note"=>@$address['note'],
 						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing']
+						"excludePing"=>@$address['excludePing'],
+						"PTRignore"=>@$address['PTRignore']
 						);
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
@@ -414,6 +420,11 @@ class Addresses {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# edit DNS PTR record
+		$insert['PTR']=@$address['PTR'];
+		$this->ptr_modify ("edit", $insert);
+
 		# ok
 		return true;
 	}
@@ -440,6 +451,10 @@ class Addresses {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# edit DNS PTR record
+		$this->ptr_modify ("delete", $address);
+
 		# ok
 		return true;
 	}
@@ -588,6 +603,251 @@ class Addresses {
 
 
 
+	/**
+	 * @powerDNS
+	 * -------------------------------
+	 */
+
+	/**
+	 * Modifes powerDNS PTR record
+	 *
+	 * @access public
+	 * @param mixed $action
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function ptr_modify ($action, $address, $print_error = true) {
+		// first check if subnet selected for PTR records
+		$this->initialize_subnets_object ();
+		$subnet = $this->Subnets->fetch_subnet ("id", $address['subnetId']);
+		if (@$subnet->DNSrecursive!="1") { return false; }
+
+		// ignore if PTRignore set
+		if (@$address['PTRignore']==1)	{
+				// validate db
+				$this->pdns_validate_connection ();
+				// remove if it exists
+				if ($this->ptr_exists ($address['PTR'])) {
+					$this->ptr_delete ($address, false);
+										{ return false; }
+				}
+				else {
+										{ return true; }
+				}
+		}
+		// validate db
+		$this->pdns_validate_connection ();
+		// to object
+		$address = (object) $address;
+		# execute based on action
+		if($action=="add")				{ return $this->ptr_add ($address, $print_error); }							//create new PTR
+		elseif($action=="edit")			{ return $this->ptr_edit ($address, $print_error); }						//modify existing PTR
+		elseif($action=="delete")		{ return $this->ptr_delete ($address, $print_error); }						//delete PTR
+		else							{ return $this->Result->show("danger", _("Invalid PDNS action"), true); }
+	}
+
+	/**
+	 *  Validates pdns database connection
+	 *
+	 * @access public
+	 * @param bool $die (default: false)
+	 * @return void
+	 */
+	public function pdns_validate_connection ($die = true) {
+		# powerDNS class
+		$this->PowerDNS = new PowerDNS ($this->Database);
+		# check connection
+		if($this->PowerDNS->db_check()===false && $die) { $this->Result->show("danger", _("Cannot connect to powerDNS database"), true); }
+		# get settings
+		$this->get_settings ();
+	}
+
+	/**
+	 * Set zone name and fetch domain details
+	 *
+	 * @access private
+	 * @param mixed $ip
+	 * @param mixed $mask
+	 * @return void
+	 */
+	private function pdns_fetch_domain ($subnet_id) {
+		# initialize subnets
+		$this->initialize_subnets_object ();
+		// fetch subnet
+		$subnet = $this->Subnets->fetch_subnet ("id", $subnet_id);
+		if($subnet===false)							{  $this->Result->show("danger", _("Invalid subnet Id"), true); }
+
+		// set PTR zone name from IP/mash
+		$zone = $this->PowerDNS->get_ptr_zone_name ($this->transform_address ($subnet->subnet, "dotted"), $subnet->mask);
+		// try to fetch
+		return  $this->PowerDNS->fetch_domain_by_name ($zone);
+	}
+
+	/**
+	 * Create new PTR record when adding new IP address
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param mixed $print_error
+	 * @param mixed $id (default: NULL)
+	 * @return void
+	 */
+	public function ptr_add ($address, $print_error, $id = null) {
+		// validate hostname
+		if (validate_hostname ($address->dns_name)===false)		{ return false; }
+		// fetch domain
+		$domain = $this->pdns_fetch_domain ($address->subnetId);
+		// decode values
+		$values = json_decode($this->settings->powerDNS);
+
+		// formulate new record
+		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->dns_name, $values->ttl);
+		// insert record
+		$this->PowerDNS->add_domain_record ($record, false);
+		// link to address
+		$id = $id===null ? $this->lastId : $id;
+		$this->ptr_link ($id, $this->PowerDNS->lastId);
+		// ok
+		if ($print_error)
+		$this->Result->show("success", "PTR record created", false);
+
+		return true;
+	}
+
+	/**
+	 * Edits PTR
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param mixed $print_error
+	 * @return void
+	 */
+	public function ptr_edit ($address, $print_error) {
+		// validate hostname
+		if (validate_hostname ($address->dns_name)===false)		{ return false; }
+
+		// new record
+ 		if ($this->ptr_exists ($address->PTR)===false) {
+	 		// fake lastid
+	 		$this->lastId = $address->id;
+	 		// new ptr record
+	 		$this->ptr_add ($address, true);
+ 		}
+ 		// update PTR
+ 		else {
+			// fetch domain
+			$domain = $this->pdns_fetch_domain ($address->subnetId);
+
+			// fetch old
+			$old_record = $this->PowerDNS->fetch_record ($address->PTR);
+
+			// create insert array
+			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->dns_name, null, null, null, $old_record->change_date);
+			$update['id'] = $address->PTR;
+
+			// update
+			$this->PowerDNS->update_domain_record ($domain->id, $update);
+			// ok
+			$this->Result->show("success", "PTR record updated", false);
+ 		}
+	}
+
+	/**
+	 * Remove PTR from database
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param mixed $print_error
+	 * @return void
+	 */
+	public function ptr_delete ($address, $print_error) {
+		$address = (object) $address;
+
+		// remove link from ipaddresses
+		$this->ptr_unlink ($address->id);
+
+		// exists
+		if ($this->ptr_exists ($address->PTR)!==false)	{
+			// fetch domain
+			$domain = $this->pdns_fetch_domain ($address->subnetId);
+			//remove
+			$this->PowerDNS->remove_domain_record ($domain->id, $address->PTR);
+			// ok
+			$this->Result->show("success", "PTR record removed", false);
+		}
+	}
+
+	/**
+	 * Links PTR record with address record
+	 *
+	 * @access public
+	 * @param mixed $address_id
+	 * @param mixed $ptr_id
+	 * @return void
+	 */
+	public function ptr_link ($address_id, $ptr_id) {
+		# execute
+		try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "PTR"=>$ptr_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+	}
+
+	/**
+	 * Remove PTR link if it exists
+	 *
+	 * @access private
+	 * @param mixed $address_id
+	 * @return void
+	 */
+	private function ptr_unlink ($address_id) {
+		# execute
+		try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "PTR"=>0)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+	}
+
+	/**
+	 * Removes all PTR references for all hosts in subnet
+	 *
+	 * @access public
+	 * @param mixed $subnet_id
+	 * @return void
+	 */
+	public function ptr_unlink_subnet_addresses ($subnet_id) {
+		try { $address = $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		#result
+		return true;
+	}
+
+	/**
+	 * Checks if PTR record exists
+	 *
+	 * @access private
+	 * @param mixed $ptr_id (default: 0)
+	 * @return void
+	 */
+	private function ptr_exists ($ptr_id = 0) {
+		return $this->PowerDNS->record_id_exists ($ptr_id);
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -723,7 +983,7 @@ class Addresses {
 	 */
 	public function count_addresses_in_multiple_subnets ($subnets) {
 		# empty
-		if(empty($address)) { return 0; }
+		if(empty($subnets)) { return 0; }
 
 		# create query
 		foreach($subnets as $k=>$s) {

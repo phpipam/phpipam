@@ -37,6 +37,9 @@ isset($address['subnetId']) ?:		$Result->show("danger", _("Missing required fiel
 isset($address['id']) ?:			$Result->show("danger", _("Missing required fields"), true);
 isset($address['state']) ?:			$Result->show("danger", _("Missing required fields"), true);
 
+# ptr
+if(!isset($address['PTRignore']))	$address['PTRignore']=0;
+
 
 # set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $address['subnetId']);

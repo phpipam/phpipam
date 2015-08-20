@@ -125,6 +125,8 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="subnetId" 	value="<?php print $subnetId; 	?>">
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
+			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+
 			<?php if($action=="edit" || $action=="delete") { ?>
 			<input type="hidden" name="nostrict" value="yes">
 			<?php }  ?>
@@ -290,6 +292,21 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
 		</td>
 	</tr>
+	<?php
+	// ignore PTR
+	if ($User->settings->enablePowerDNS==1) {
+		//we can exclude individual IP addresses from PTR creation
+		if(@$address['PTRignore'] == "1")	{ $checked = "checked='checked'"; }
+		else								{ $checked = ""; }
+
+		print '<tr>';
+	 	print '<td>'._("PTR exclude").'</td>';
+	 	print '<td>';
+		print ' 	<input type="checkbox" class="ip_addr input-switch" name="PTRignore" value="1" '.$checked.' '.$delete.'> <span class="text-muted">'. _('Dont create PTR records').'</span>';
+	 	print '</td>';
+	 	print '</tr>';
+	}
+	?>
 
 	<tr>
 		<td colspan="2"><hr></td>

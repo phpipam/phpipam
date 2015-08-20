@@ -41,7 +41,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 	<!-- name  -->
 	<tr>
-		<td><?php print _('Name'); ?></td>
+		<td style="width: 200px;"><?php print _('Name'); ?></td>
 		<td>
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('Nameserver set'); ?>" value="<?php print @$nameservers['name']; ?>" <?php print $readonly; ?>>
 		</td>
@@ -77,10 +77,10 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$nameservers['description']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
-	
+
 	<!-- sections -->
 	<tr>
-		<td style="vertical-align: top !important"><?php print _('Sections to display<br>nameserver set in'); ?>:</td>
+		<td style="vertical-align: top !important"><?php print _('Sections to display nameserver set in'); ?>:</td>
 		<td>
 		<?php
 		# select sections

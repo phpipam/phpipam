@@ -1,4 +1,4 @@
-== 1.17.001
+== 1.18.005
 
 	New features:
 	------------
@@ -10,6 +10,7 @@
 	+ Added customizable address tags with compressed option;
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
+	+ Added nameserver sets per subnets (jonashauge);
 	+ REST API:
 		+ documentation: http://phpipam.net/api-documentation/
 		+ API v2, old v1 support added
@@ -18,6 +19,10 @@
 		+ Support for custom fields;
 		+ JSON / XML output
 		+ Full read/write controllers (Sections, Subnets/Folders, Addresses, Vlans, Vrfs);
+	+ PowerDNS integration:
+		+ Automatic reverse records creation (PTR) - IPv4 and IPv6;
+		+ Automatic SOA, NS record creation;
+		+ DNS domain management;
 
 	Enhancements:
 	----------------------------
@@ -47,6 +52,7 @@
 	+ Fixed nested broadcast not counted to used percentage;
 	+ Fixed invalid redirect after timeout;
 	+ Fixed discovery script index overridden;
+	+ Fixed dashboard graphs links to subnets;
 
 == 1.1.010
 

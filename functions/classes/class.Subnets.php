@@ -2651,31 +2651,4 @@ class Subnets {
 		# join and print
 		print implode( "\n", $html );
 	}
-	
-        /**
-         * Fetches all nameservers defined
-         *
-         * @access public
-         * @param mixed $sectionId
-         * @return void
-         */
-		 
-	/*	 
-    public function fetch_nameservers() {
-                
-			# set query
-            $query = "select distinct(`v`.`id`),`v`.`name`,`v`.`namesrv1`, `v`.`namesrv2` , `v`.`namesrv3` from `nameservers` order by `v`.`name` asc;";
-            
-			# fetch
-            try { $nameservers = $this->Database->getObjectsQuery($query, array(); }
-            catch (Exception $e) {
-                    $this->Result->show("danger", _("Error: ").$e->getMessage());
-                    return false;
-            }
-            # result
-            return sizeof($nameservers)>0 ? $nameservers : false;
-
-	}	
-	*/
-
 }

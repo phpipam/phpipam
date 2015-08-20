@@ -5,7 +5,7 @@
  *
  *
  */
-class Addresses_controller extends Common_functions  {
+class Addresses_controller extends Common_api_functions  {
 
 	/* public variables */
 	public $_params;

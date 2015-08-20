@@ -320,8 +320,43 @@ else {
 				    if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($addresses[$n]->state); }
 				    print "</td>";
 
+
+					# search for DNS records
+					if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
+					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
+					unset($dns_records);
+					if ($records !== false || $ptr!==false) {
+						$dns_records[] = "<hr>";
+						$dns_records[] = "<ul class='submenu-dns'>";
+						if($records!==false) {
+							foreach ($records as $r) {
+								if($r->type!="SOA" && $r->type!="NS")
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$r->type</span> $r->content </li>";
+							}
+						}
+						if($ptr!==false) {
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$ptr->type</span> $ptr->name </li>";
+						}
+						$dns_records[] = "</ul>";
+						// if none ignore
+						$dns_records = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
+					} else {
+						$dns_records = "";
+					}
+					// add new button
+					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					}
+					// disabled
+					else {
+						$dns_records = "";
+						$button = "";
+					}
+
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name]</td>";
+					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>";
+
+
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
@@ -401,7 +436,7 @@ else {
 					else
 					{
 						print "<a class='edit_ipaddress   btn btn-xs btn-default modIPaddr' data-action='edit'   data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' >															<i class='fa fa-gray fa-pencil'></i></a>";
-						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check avalibility')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
+						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
 						print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
@@ -420,7 +455,7 @@ else {
 					else
 					{
 						print "<a class='edit_ipaddress   btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>													<i class='fa fa-gray fa-pencil'></i></a>";
-						print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check avalibility')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
+						print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>				<i class='fa fa-gray fa-envelope-o'></i></a>";
 						print "<a class='delete_ipaddress btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>														<i class='fa fa-gray fa-times'></i></a>";

@@ -409,6 +409,13 @@ class Sections  {
 	}
 
 
+	/**
+	 * Fetches section domains
+	 *
+	 * @access public
+	 * @param mixed $sectionId
+	 * @return void
+	 */
 	public function fetch_section_domains ($sectionId) {
 		# first fetch all domains
 		$Admin = new Admin ($this->Database, false);
@@ -429,7 +436,14 @@ class Sections  {
 		# return permitted
 		return $permitted;
 	}
-	
+
+	/**
+	 * Fetches nameserver sets to belong to section
+	 *
+	 * @access public
+	 * @param mixed $sectionId
+	 * @return void
+	 */
 	public function fetch_section_nameserver_sets ($sectionId) {
 		# first fetch all nameserver sets
 		$Admin = new Admin ($this->Database, false);
