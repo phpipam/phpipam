@@ -327,6 +327,7 @@ else {
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
 					unset($dns_records);
 					if ($records !== false || $ptr!==false) {
+						$dns_records[] = "<hr>";
 						$dns_records[] = "<ul class='submenu-dns'>";
 						if($records!==false) {
 							foreach ($records as $r) {
@@ -338,14 +339,22 @@ else {
 								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$ptr->type</span> $ptr->name </li>";
 						}
 						$dns_records[] = "</ul>";
-						$dns_records = implode(" ", $dns_records);
+						// if none ignore
+						$dns_records = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
 					} else {
 						$dns_records = "";
 					}
+					// add new button
+					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					}
+					// disabled
+					else {
+						$dns_records = "";
+						$button = "";
 					}
 
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name]<hr>$dns_records</td>";
+					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>";
 
 
 

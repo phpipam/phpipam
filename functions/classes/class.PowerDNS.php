@@ -21,6 +21,8 @@ class PowerDNS extends Common_functions {
 	public $domain_types;				// (obj) types of domain
 	public $record_types;				// (obj) record types
 
+	// cache
+	private $domains_cache = array();				// array of domains - index = id
 
 	/* objects */
 	protected $Database;				// Database object - phpipam
@@ -375,6 +377,10 @@ class PowerDNS extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+		# cache
+		if (sizeof($res)>0) {
+			foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+		}
 		# result
 		return sizeof($res)>0 ? $res : false;
 	}
@@ -399,12 +405,19 @@ class PowerDNS extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_domain_by_id ($id) {
+		# chcek cache
+		if (array_key_exists($id, $this->domains_cache)) { return $this->domains_cache[$id]; }
+
 		# fetch
 		try { $domain = $this->Database_pdns->getObject("domains", $id); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+
+		# cache
+		$this->domains_cache[$domain->id] = $domain;
+
 		# result
 		return sizeof($domain)>0 ? $domain : false;
 	}
@@ -423,6 +436,10 @@ class PowerDNS extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+
+		# cache
+		$this->domains_cache[$domain->id] = $domain;
+
 		# result
 		return sizeof($domain[0])>0 ? $domain[0] : false;
 	}

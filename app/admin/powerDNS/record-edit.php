@@ -22,24 +22,50 @@ $User->check_user_session();
 // save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
 
+// default post
+$post = $_POST;
+
 # get record
 if($_POST['action']!="add") {
 	$record = $PowerDNS->fetch_record ($_POST['id']);
 	$record!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+}
+# new record
+else {
+	// from IP table
+	// we provide record hostname and strip domain from it
+	if (!is_numeric($_POST['domain_id']) && !is_numeric($_POST['id'])) {
+		// fetch all domains
+		foreach($PowerDNS->fetch_all_domains () as $domain_s) {
+			if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
+				$_POST['domain_id'] = $domain_s->id;
+				break;
+			}
+		}
+		// die if not existing
+		if (!is_numeric($_POST['domain_id'])) {
+			$Result->show("danger", _("Domain does not exist"), true, true);
+		}
+		else {
+			$record = new StdClass ();
+			$record->ttl = 3600;
+			$record->name = $post['domain_id'];
+			$record->content = $_POST['id'];
+		}
+	}
 }
 
 // get domain
 $domain = $PowerDNS->fetch_domain ($_POST['domain_id']);
 $domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
-// name
-if ($_POST['action']=="add") {
+// default
+if (!isset($record)) {
 	$record = new StdClass ();
-	// default
 	$record->ttl = 3600;
-	// name
 	$record->name = $domain->name;
 }
+
 
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";

@@ -267,6 +267,9 @@ td#actions .btn-group .btn {
 .btn:hover {
 	margin-right: 0px;
 }
+.fa-href {
+	cursor: pointer;
+}
 
 
 
@@ -291,7 +294,7 @@ td#actions .btn-group .btn {
 	font-size: 10px;
 }
 .badge3 {
-	padding: 7px 9px;
+	padding: 4px 6px;
 	margin-left: 10px;
 	margin-bottom: 4px;
 

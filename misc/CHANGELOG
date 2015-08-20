@@ -1,4 +1,4 @@
-== 1.18.001
+== 1.18.002
 
 	New features:
 	------------
@@ -51,6 +51,7 @@
 	+ Fixed nested broadcast not counted to used percentage;
 	+ Fixed invalid redirect after timeout;
 	+ Fixed discovery script index overridden;
+	+ Fixed dashboard graphs links to subnets;
 
 == 1.1.010
 

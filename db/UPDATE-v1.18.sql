@@ -12,3 +12,6 @@ ALTER TABLE `subnets` ADD `DNSrecords` TINYINT(1)  NULL  DEFAULT '0'  AFTER `DNS
 
 /* log destination */
 ALTER TABLE `settings` ADD `log` SET('Database','syslog')  NOT NULL  DEFAULT 'Database'  AFTER `tempAccess`;
+
+/* link subnet to device */
+ALTER TABLE `subnets` ADD `device` INT  UNSIGNED  NULL  DEFAULT '0'  AFTER `showName`;
