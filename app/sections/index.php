@@ -103,7 +103,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 							if( ($section->name == $_GET['section']) || ($section->id == $_GET['section']) ) 	{ print "<li class='active'>"; }
 							else 																				{ print "<li>"; }
 
-							print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='"._('Show all subnets in section')." $section->name'>$section->name</a>";
+							print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='$section->description'>$section->name</a>";
 							print "</li>";
 						}
 					}
