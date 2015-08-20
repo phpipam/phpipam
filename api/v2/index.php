@@ -89,10 +89,20 @@ try {
 
 
 	// append POST parameters if POST
-	if($_SERVER['REQUEST_METHOD']=="POST" && sizeof(@$_POST)>0) {
-		$params = array_merge((array) $params, $_POST);
-		$params = (object) $params;
-	}
+	if($_SERVER['REQUEST_METHOD']=="POST"){
+		// if application tupe is JSON (application/json)
+                if($_SERVER['CONTENT_TYPE']=="application/json"){
+                        $rawPostData = file_get_contents('php://input');
+                        $json = json_decode($rawPostData,true);
+                        $params = array_merge((array) $params, $json);
+                        $params = (object) $params;
+                }
+		//if application type is default (application/x-www-form-urlencoded)
+                elseif(sizeof(@$_POST)>0) {
+                        $params = array_merge((array) $params, $_POST);
+                        $params = (object) $params;
+                }
+        }
 
 
 
