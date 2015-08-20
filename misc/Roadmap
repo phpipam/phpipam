@@ -26,8 +26,6 @@ version - 1.2
 
 	+ custom fields for IP requests;
 
-	+ custom VRF fields
-
 	+ Override entries on import checkbox;
 
 

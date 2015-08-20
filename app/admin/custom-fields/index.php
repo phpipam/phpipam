@@ -12,6 +12,7 @@ $User->check_user_session();
 $custom_tables = array( "ipaddresses"=>"IP address",
 						"subnets"=>"subnet",
 						"vlans"=>"VLAN",
+						"vrf"=>"VRF",
 						"users"=>"User",
 						"devices"=>"devices");
 

@@ -11,6 +11,16 @@ $User->check_user_session();
 # fetch all VRFs
 $vrfs = $Tools->fetch_all_objects("vrf", "vrfId");
 
+# get custom VLAN fields
+$custom = $Tools->fetch_custom_fields('vrf');
+
+# set hidden fields
+$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
+
+# size of custom fields
+$csize = sizeof($custom) - sizeof($hidden_fields);
+
 
 # title
 print "<h4>"._('Available VRFs and belonging subnets')."</h4>";
@@ -48,6 +58,13 @@ else {
 		print "	<tr>";
 		print "	<th>"._('VLAN')."</th>";
 		print "	<th>"._('Description')."</td>";
+		if(sizeof($custom) > 0) {
+			foreach($custom as $field) {
+				if(!in_array($field['name'], $hidden_fields)) {
+					print "<th class='customField hidden-xs hidden-sm'>$field[name]</th>";
+				}
+			}
+		}
 		print "	<th>"._('Subnet')."</td>";
 		print "	<th>"._('Master Subnet')."</td>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
@@ -79,6 +96,36 @@ else {
 
 					print "	<td>$subnet[VLAN]</td>";
 					print "	<td>$subnet[description]</td>";
+
+					// custom fields
+					if(sizeof($custom) > 0) {
+						foreach($custom as $field) {
+							if(!in_array($field['name'], $hidden_fields)) {
+
+								print "<td class='customField hidden-xs hidden-sm'>";
+
+								// create links
+								$vrf[$field['name']] = create_links ($vrf[$field['name']]);
+
+								//booleans
+								if($field['type']=="tinyint(1)")	{
+									if($vrf[$field['name']] == "0")		{ print _("No"); }
+									elseif($vrf[$field['name']] == "1")	{ print _("Yes"); }
+								}
+								//text
+								elseif($field['type']=="text") {
+									if(strlen($vrf[$field['name']])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vrf[$field['name']])."'>"; }
+									else											{ print ""; }
+								}
+								else {
+									print $vrf[$field['name']];
+
+								}
+								print "</td>";
+							}
+						}
+					}
+
 					# folder?
 					if($subnet->isFolder==1) {
 						print "	<td><a href='".create_link("folder",$section['id'],$subnet['id'])."'>$subnet[description]</a></td>";

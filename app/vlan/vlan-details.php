@@ -40,6 +40,9 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 	<?php
 	# print custom subnet fields if any
 	if(sizeof($cfields) > 0) {
+		// divider
+		print "<tr><td><hr></td><td></td></tr>";
+		// fields
 		foreach($cfields as $key=>$field) {
 			$vlan[$key] = str_replace("\n", "<br>",$vlan[$key]);
 			// create links
@@ -49,6 +52,8 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
 			print "</tr>";
 		}
+		// divider
+		print "<tr><td><hr></td><td></td></tr>";
 	}
 
 	# action button groups
