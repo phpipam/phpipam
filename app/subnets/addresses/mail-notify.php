@@ -49,8 +49,8 @@ $title = _('IP address details').' :: ' . $address['ip'];
 # description
 empty($address['description']) ? : 		$content[] = "&bull; "._('Description').":\t\t $address[description]";
 # hostname
-empty($address['dns_name']) ? : 		$content[] = "&bull; "._('Hostname').": \t\t $address[dns_name]";
-# Only show subnet description if defined
+empty($address['dns_name']) ? : 		$content[] = "&bull; "._('Hostname').": \t $address[dns_name]";
+# subnet desc
 $s_descrip = empty($subnet['description']) ? "" : 	 " (" . $subnet['description']. ")";
 # subnet
 						$content[] = "&bull; "._('Subnet').": \t\t $subnet[ip]/$subnet[mask] $s_descrip";
@@ -76,7 +76,6 @@ if ( !empty( $subnet['nameserverId'] ) ) {
 	}
 						$content[] = "&bull; "._('Nameservers').": \t $nslist (${nameservers['name']})";
 }
-
 
 # Switch
 if(!empty($address['switch'])) {

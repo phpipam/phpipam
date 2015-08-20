@@ -27,3 +27,7 @@ network, use of no security is HIGHLY discouraged, but might be needed in some c
 
 
 API documentation and references are available on phpipam API website (http://phpipam.net/api/);
+
+
+Example for JSON POST:
+curl -X POST -H "Content-Type: application/json" -d '{"name":"Test Section","description":"My Section"}' "http://api.phpipam.net/api/myAPP/sections/"
