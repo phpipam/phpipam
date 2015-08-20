@@ -27,7 +27,7 @@ $id = $_POST['id'];
 # fetch address, subnet and vlan
 $address = (array) $Addresses->fetch_address (null, $id);
 $subnet  = (array) $Subnets->fetch_subnet (null, $address['subnetId']);
-$vlan    = (array) $Tools->fetch_object("vlans", "vlanId", @$address['vlanId']);
+$vlan    = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -49,7 +49,7 @@ empty($address['description']) ? : 		$content[] = "&bull; "._('Description').":\
 # hostname
 empty($address['dns_name']) ? : 		$content[] = "&bull; "._('Hostname').": \t $address[dns_name]";
 # subnet desc
-$s_descrip = empty($address['description']) ? "" : 	 " (" . $subnet['description']. ")";
+$s_descrip = empty($subnet['description']) ? "" : 	 " (" . $subnet['description']. ")";
 # subnet
 										$content[] = "&bull; "._('Subnet').": \t $subnet[ip]/$subnet[mask] $s_descrip";
 # gateway
@@ -57,7 +57,8 @@ $gateway = $Subnets->find_gateway($subnet['id']);
 if($gateway !==false)
  										$content[] = "&bull; "._('Gateway').": \t". $Subnets->transform_to_dotted($gateway->ip_addr);
 # VLAN
-empty($address['vlan']) ? : 			$content[] = "&bull; "._('VLAN').": \t\t $address[vlan]";
+empty($subnet['vlanId']) ? : 			$content[] = "&bull; "._('VLAN ID').": \t $vlan[number] ($vlan[name])";
+
 # Switch
 if(!empty($address['switch'])) {
 	# get device by id
