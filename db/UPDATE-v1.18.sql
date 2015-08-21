@@ -31,6 +31,11 @@ CREATE TABLE `nameservers` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/* insert default google nameservers for global use */
+INSERT INTO `nameservers` (`name`, `namesrv1`, `namesrv2`, `description`)
+VALUES
+        ('Global', '8.8.8.8', '8.8.4.4', 'Google nameservers');
+
 /* add reference to nameservers in subnets table */
 ALTER TABLE `subnets` ADD `nameserverId` int(11) NULL DEFAULT '0' AFTER `DNSrecursive`;
 
