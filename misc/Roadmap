@@ -2,7 +2,6 @@ version - 1.2
 
 	+ To fix / finish
 		+ logging: db, syslog (db prepared)
-		+ scan filter out invalid masks / subnets / folders ;
 		+ fix domain user search;
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts;
@@ -38,6 +37,8 @@ features for next releases:
 		- Show bindings under tools and next to IP address
 
 	+ assign a state to a subnet, vlan
+
+	+ DHCP
 
 	+ BGP support
 
