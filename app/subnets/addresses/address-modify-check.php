@@ -31,11 +31,11 @@ if(isset($_POST['action-visual'])) {
 $address = $_POST;
 
 # required fields
-isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"), true);
-isset($address['subnet']) ?:		$Result->show("danger", _("Missing required fields"), true);
-isset($address['subnetId']) ?:		$Result->show("danger", _("Missing required fields"), true);
-isset($address['id']) ?:			$Result->show("danger", _("Missing required fields"), true);
-isset($address['state']) ?:			$Result->show("danger", _("Missing required fields"), true);
+isset($address['action']) ?:		$Result->show("danger", _("Missing required fields: action"), true);
+isset($address['subnet']) ?:		$Result->show("danger", _("Missing required fields: subnet"), true);
+isset($address['subnetId']) ?:		$Result->show("danger", _("Missing required fields: subnetId"), true);
+isset($address['id']) ?:			$Result->show("danger", _("Missing required fields: id"), true);
+isset($address['state']) ?:			$Result->show("danger", _("Missing required fields: state"), true);
 
 # ptr
 if(!isset($address['PTRignore']))	$address['PTRignore']=0;
