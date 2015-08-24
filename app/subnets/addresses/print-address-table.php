@@ -95,6 +95,7 @@ if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected
 $addresses_visual = $addresses;
 # new compress functions
 $Addresses->addresses_types_fetch();
+$address_types = (array) $Addresses->address_types;
 foreach($Addresses->address_types as $t) {
 	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
 		if(sizeof($addresses)>0) {
