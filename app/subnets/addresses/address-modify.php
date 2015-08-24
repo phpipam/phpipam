@@ -257,10 +257,17 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '	<td>'._('Tag').'</td>'. "\n";
 		print '	<td>'. "\n";
 		print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">'. "\n";
-		# printout
-		foreach($ip_types as $k=>$type) {
-			if($address['state']==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
-			else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
+		if(count($ip_types)) {
+			# printout
+			foreach ($ip_types as $k => $type) {
+				if ($address['state'] == $k) {
+					print "<option value='$k' selected>" . _($type['type']) . "</option>";
+				} else {
+					print "<option value='$k'>" . _($type['type']) . "</option>";
+				}
+			}
+		} else {
+			print "<option value='2' selected>" . _("reeserved") . "</option>";
 		}
 		print '		</select>'. "\n";
 		print '	</td>'. "\n";

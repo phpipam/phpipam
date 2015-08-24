@@ -53,10 +53,10 @@ else {
 
 	# fetch all addresses - sorted
 	if($slaves) {
-		$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false, $sort['field'], $sort['direction']);
+		$addresses = (array) $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false, $sort['field'], $sort['direction']);
 		$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
 	} else {
-		$addresses = $Addresses->fetch_subnet_addresses ($subnet['id'], $sort['field'], $sort['direction']);
+		$addresses = (array) $Addresses->fetch_subnet_addresses ($subnet['id'], $sort['field'], $sort['direction']);
 	}
 
 	# set permissions
@@ -96,7 +96,7 @@ $addresses_visual = $addresses;
 # new compress functions
 $Addresses->addresses_types_fetch();
 $address_types = (array) $Addresses->address_types;
-foreach($Addresses->address_types as $t) {
+foreach($address_types as $t) {
 	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
 		if(sizeof($addresses)>0) {
 			$addresses = $Addresses->compress_address_ranges ($addresses, $t['id']);

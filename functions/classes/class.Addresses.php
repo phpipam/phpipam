@@ -170,12 +170,14 @@ class Addresses {
 		# fetch address states
 		$this->addresses_types_fetch();
 		# result
-		if(!isset($this->address_types[$state]))	{
+		$address_types = (array) $this->address_types;
+		if(!isset($address_types[$state]))	{
 			return $state;
 		}
 		else {
-			if($this->address_types[$state]['showtag']==1) {
-				return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._($this->address_types[$state]['type'])."'></i>";
+			$address_type = (array) $address_types[$state];
+			if($address_type['showtag']==1) {
+				return "<i class='fa fa-".$address_type['type']." fa-tag state' rel='tooltip' style='color:".$address_type['bgcolor']."' title='"._($address_type['type'])."'></i>";
 			}
 		}
 	}

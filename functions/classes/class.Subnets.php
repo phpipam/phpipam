@@ -1016,7 +1016,7 @@ class Subnets {
 	    # calculate use percentage for each type
 	    $details['freehosts_percent'] = round( ( ($details['freehosts'] * 100) / $details['maxhosts']), 2 );
 		$address_types = (array) $this->address_types;
-	    foreach($this->address_types as $t) {
+	    foreach($address_types as $t) {
 		    $details[$t['type']."_percent"] = round( ( ($details[$t['type']] * 100) / $details['maxhosts']), 2 );
 	    }
 	    return( $details );
