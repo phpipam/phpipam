@@ -32,6 +32,7 @@ print '	<th></th>'. "\n";
 print '</tr>'. "\n";
 
 # loop
+$all_types = (array) $all_types;
 foreach ($all_types as $type) {
 	//cast
 	$type = (array) $type;
