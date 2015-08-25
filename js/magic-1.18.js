@@ -687,7 +687,7 @@ $('form#ipCalc input.reset').click(function () {
 $('.searchSubmit').click(function () {
     showSpinner();
     var ip = $('.searchInput').val();
-    ip = ip.replace("/", "%252F");
+    ip = ip.replace(/\//g, "%252F");
     if($('#searchSelect input[name=addresses]').is(":checked"))	{ var addresses = "on"; }
     else														{ var addresses = "off"; }
     if($('#searchSelect input[name=subnets]').is(":checked"))	{ var subnets = "on"; }
@@ -711,7 +711,7 @@ $('.searchSubmit').click(function () {
 $('form#userMenuSearch').submit(function () {
     showSpinner();
     var ip = $('.searchInput').val();
-	ip = ip.replace("/", "%252F");
+	ip = ip.replace(/\//g, "%252F");
     if($('#searchSelect input[name=addresses]').is(":checked"))	{ var addresses = "on"; }
     else														{ var addresses = "off"; }
     if($('#searchSelect input[name=addresses]').is(":checked"))	{ var subnets = "on"; }
