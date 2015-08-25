@@ -5,6 +5,7 @@ version - 1.2
 		+ fix domain user search;
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts;
+		+ Back buttons;
 
 	+ Import
 		https://github.com/malaiam/phpipam

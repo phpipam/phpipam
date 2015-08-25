@@ -90,6 +90,9 @@ else {
 				if(!in_array($field['name'], $hidden_custom_fields)) {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
 
+					// create links
+					$device[$field['name']] = create_links ($device[$field['name']]);
+
 					//booleans
 					if($field['type']=="tinyint(1)")	{
 						if($device[$field['name']] == "0")		{ print _("No"); }
