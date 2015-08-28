@@ -1,4 +1,4 @@
-== 1.18.006
+== 1.18.007
 
 	New features:
 	------------
@@ -44,6 +44,10 @@
 	+ Parametized all MySQL querries;
 	+ Fixed plainpass being logged on user update;
 	+ Fixed XSS exploit on /error/;
+
+	Translations:
+	----------------------------
+	+ Added Czech translation;
 
 	Bugfixes:
 	----------------------------

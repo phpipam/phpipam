@@ -2023,7 +2023,7 @@ msgstr ""
 msgid "Varchar size limit is 256 characters"
 msgstr ""
 
-msgid "Interer values must be numeric"
+msgid "Integer values must be numeric"
 msgstr ""
 
 msgid "Filter custom field display"
@@ -2167,10 +2167,10 @@ msgstr ""
 msgid "Radius authentication"
 msgstr ""
 
-msgid "For AD/LDAP connection phpipam is using adLDAP, for documentationplease check "
+msgid "For AD/LDAP connection phpipam is using adLDAP, for documentation please check "
 msgstr ""
 
-msgid "First create new user under user management with <u>same username as on AD</u> and set authention typeto one of available methods."
+msgid "First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods."
 msgstr ""
 
 msgid "Failed to edit authentication method"
