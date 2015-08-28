@@ -980,10 +980,12 @@ $(document).on("click", ".userselect", function() {
 	var uname 	 = $(this).attr('data-uname');
 	var username = $(this).attr('data-username');
 	var email 	 = $(this).attr('data-email');
+	var server 	 = $(this).attr('data-server');
 	//fill
 	$('form#usersEdit input[name=real_name]').val(uname);
 	$('form#usersEdit input[name=username]').val(username);
 	$('form#usersEdit input[name=email]').val(email);
+	$('form#usersEdit select[name=authMethod]').val(server);
 
 	hidePopup2();
 	hidePopup('popup_w500');
