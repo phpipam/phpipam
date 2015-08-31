@@ -29,14 +29,15 @@ if($Subnets->check_permission ($User->user, $_POST['subnetId'])<3)	{ $Result->sh
 # fetch old subnet details and set new
 $subnet_old = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
 
+
 # verify resizing
 $Subnets->verify_subnet_resize ($subnet_old['subnet'], $_POST['newMask'], $subnet_old['id'], $subnet_old['vrfId'], $subnet_old['masterSubnetId'], $subnet_old['mask']);
 
 # set update values
 $values = array("id"=>$_POST['subnetId'],
-				"mask"=>$subnet_new['mask']
+				"mask"=>$_POST['newMask']
 				);
-if(!$Subnets->modify_subnet ("resize", $values))					{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
+if(!$Subnets->modify_subnet ("resize", $values))				{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
 else															{ $Result->show("success", _("Subnet resized successfully")."!", true); }
 
 ?>

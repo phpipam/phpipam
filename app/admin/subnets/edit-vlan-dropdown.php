@@ -26,10 +26,10 @@ $permitted_domains = $Sections->fetch_section_domains ($_POST['sectionId']);
 # fetch all belonging vlans
 $cnt = 0;
 foreach($permitted_domains as $k=>$d) {
-	// fetch vlans and append
-	$vlans = $Tools->fetch_multiple_objects("vlans", "vlanId", $d, "number");
 	//fetch domain
 	$domain = $Tools->fetch_object("vlanDomains","id",$d);
+	// fetch vlans and append
+	$vlans = $Tools->fetch_multiple_objects("vlans", "domainId", $domain->id, "number");
 	//save to array
 	$out[$d]['domain'] = $domain;
 	$out[$d]['vlans']  = $vlans;

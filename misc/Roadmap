@@ -5,7 +5,6 @@ version - 1.2
 		+ fix domain user search;
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ Check missing vlans for domains in some sections (?);
 
 	+ Import updates
 		https://github.com/malaiam/phpipam
