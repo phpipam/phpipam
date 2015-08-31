@@ -1,4 +1,4 @@
-== 1.18.007
+== 1.18.009
 
 	New features:
 	------------
@@ -38,6 +38,7 @@
 	+ New widget - IP calculator;
 	+ Clickable links for subnet fields;
 	+ Custom VRF fields;
+	+ Subnets can be now linked to devices;
 
 	Security Fixes:
 	----------------------------

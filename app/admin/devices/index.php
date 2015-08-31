@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# fetch all APIs
+# fetch all Devices
 $devices = $Admin->fetch_all_objects("devices");
 
 

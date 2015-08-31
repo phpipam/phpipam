@@ -2448,6 +2448,20 @@ class Subnets {
 					}
 				}
 
+				//device
+				$device = ( $option['value']['device']==0 || empty($option['value']['device']) ) ? false : true;
+
+				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
+				else {
+					$device = $Tools->fetch_object ("devices", "id", $option['value']['device']);
+					if ($device!==false) {
+						$html[] = "	<td><a href='".create_link("tools","devices","hosts",$option['value']['device'])."'>".$device->hostname .'</a></td>' . "\n";
+					}
+					else {
+						$html[] ='	<td>/</td>' . "\n";
+					}
+				}
+
 				//requests
 				$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "";
 				$html[] = "	<td class='hidden-xs hidden-sm'>$requests</td>";

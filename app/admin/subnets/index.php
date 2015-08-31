@@ -59,7 +59,7 @@ if(sizeof($sections) > 0) {
 		//cast
 		$section = (array) $section;
 		# set colcount
-		$colCount = $User->settings->enableVRF==1 ? 9 : 8;
+		$colCount = $User->settings->enableVRF==1 ? 10 : 9;
 
 		# just for count
 		if(sizeof($custom_fields) > 0) {
@@ -94,6 +94,7 @@ if(sizeof($sections) > 0) {
 		print "	<th class='hidden-xs hidden-sm'>"._('VRF')."</th>";
 		}
 		print "	<th>"._('Master Subnet')."</th>";
+		print "	<th>"._('Device')."</th>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Hosts check')."</th>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Discover')."</th>";

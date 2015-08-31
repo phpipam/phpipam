@@ -28,8 +28,8 @@ if($permission != 0) {
 	print "<table id='manageSubnets' class='table table-striped table-condensed table-top table-absolute'>";
 
 		# set colcount
-		if($User->settings->enableVRF == 1)		{ $colCount = 8; }
-		else									{ $colCount = 7; }
+		if($User->settings->enableVRF == 1)		{ $colCount = 10; }
+		else									{ $colCount = 9; }
 
 		# get Available subnets in section
 		$subnets = $Subnets->fetch_section_subnets($_GET['section']);
@@ -64,6 +64,7 @@ if($permission != 0) {
 		print "	<th class='hidden-xs hidden-sm'>"._('VRF')."</th>";
 		}
 		print "	<th>"._('Master Subnet')."</th>";
+		print "	<th>"._('Device')."</th>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Hosts check')."</th>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Discover')."</th>";
