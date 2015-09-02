@@ -25,6 +25,9 @@ $permitted_nameservers = $Sections->fetch_section_nameserver_sets ($_POST['secti
 
 # fetch all belonging nameserver set
 $cnt = 0;
+
+# Only parse nameserver if any exists
+if($permitted_nameservers != false) {
 foreach($permitted_nameservers as $k=>$n) {
 	// fetch nameserver sets and append
 	$nameserver_set = $Tools->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1", "namesrv2", "namesrv3");
@@ -37,6 +40,9 @@ foreach($permitted_nameservers as $k=>$n) {
 }
 //filter out empty
 $permitted_nameservers = array_filter($nsout);
+
+}
+
 ?>
 
 <select name="nameserverId" class="form-control input-sm input-w-auto">
