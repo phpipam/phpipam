@@ -53,7 +53,7 @@ else {
 	}
 	//number
 	elseif($_POST['fieldType']=="int") {
-		if(!is_numeric($_POST['fieldSize']))								{ $errors[] = _('Interer values must be numeric'); }
+		if(!is_numeric($_POST['fieldSize']))								{ $errors[] = _('Integer values must be numeric'); }
 
 	}
 }

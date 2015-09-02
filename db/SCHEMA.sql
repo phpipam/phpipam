@@ -354,7 +354,9 @@ VALUES
 	(3, 'fr_FR', 'Français'),
 	(4, 'nl_NL','Nederlands'),
 	(5, 'de_DE','Deutsch'),
-	(6, 'pt_BR', 'Brazil');
+	(6, 'pt_BR', 'Brazil'),
+	(7,	'es_ES'	,'Español'),
+	(8, 'cs_CZ', 'Czech');
 
 
 # Dump of table vlans

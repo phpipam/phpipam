@@ -914,8 +914,8 @@ class User {
 	 */
 	private function detect_crypt_type () {
 		if(CRYPT_SHA512 == 1)		{ return '$6$rounds=3000$'; }
-		elseif(CRYPT_SHA512 == 1)	{ return '$5$rounds=3000$'; }
-		elseif(CRYPT_BLOWFISH == 1)	{ return '$2y$'; }
+		elseif(CRYPT_SHA256 == 1)	{ return '$5$rounds=3000$'; }
+		elseif(CRYPT_BLOWFISH == 1)	{ return '$2y$'.str_pad(rand(4,31),2,0, STR_PAD_LEFT).'$'; }
 		elseif(CRYPT_MD5 == 1)		{ return '$5$rounds=3000$'; }
 		else						{ $this->Result->show("danger", _("No crypt types supported"), true); }
 	}

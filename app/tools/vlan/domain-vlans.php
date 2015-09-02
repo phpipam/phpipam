@@ -11,11 +11,12 @@ $User->check_user_session();
 $vlan_domain = $Tools->fetch_object("vlanDomains", "id", $_GET['subnetId']);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
+
 # get all VLANs and subnet descriptions
 $vlans = $Tools->fetch_vlans_and_subnets ($vlan_domain->id);
 
 # get custom VLAN fields
-$custom_fields = $Tools->fetch_custom_fields('vlans');
+$custom_fields = (array) $Tools->fetch_custom_fields('vlans');
 
 # set hidden fields
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
@@ -26,12 +27,13 @@ $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 
 # set disabled for non-admins
-$disabled = $User->admin==true ? "" : "hidden";
+$disabled = $User->isadmin==true ? "" : "hidden";
 
 
 # title
 print "<h4>"._('Available VLANs in domain')." $vlan_domain->name</h4>";
 print "<hr>";
+print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->description."</div><hr>";
 
 if(sizeof($vlan_domains)>1) {
 print "<div class='btn-group' style='margin-bottom:10px;'>";
@@ -53,16 +55,15 @@ else {
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="description" data-sortable="true">'._('Description').'</th>' . "\n";
-	print ' <th>'._('Belonging subnets').'</th>' . "\n";
-	print ' <th>'._('Section').'</th>' . "\n";
-	if(sizeof(@$custom) > 0) {
-		foreach($custom as $field) {
+	if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
 				print "	<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
 			}
 		}
 	}
-	print "	<th></th>";
+	print ' <th>'._('Belonging subnets').'</th>' . "\n";
+	print ' <th>'._('Section').'</th>' . "\n";
 	print "</tr>";
 	print "</thead>";
 
@@ -126,8 +127,37 @@ else {
 					print "	<td><a href='".create_link("tools","vlan", $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->number."</td>";
 					print "	<td>".$vlan[0]->name."</td>";
 					print "	<td>".$vlan[0]->description."</td>";
+			        //custom fields - no subnets
+			        if(sizeof(@$custom_fields) > 0) {
+				   		foreach($custom_fields as $field) {
+					   		# hidden
+					   		if(!in_array($field['name'], $hidden_fields)) {
+
+								// create links
+								$v->$field['name'] = create_links ($v->$field['name']);
+
+								print "<td class='hidden-xs hidden-sm hidden-md'>";
+								//booleans
+								if($field['type']=="tinyint(1)")	{
+									if($v->$field['name'] == "0")		{ print _("No"); }
+									elseif($v->$field['name'] == "1")	{ print _("Yes"); }
+								}
+								//text
+								elseif($field['type']=="text") {
+									if(strlen($v->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlan[$field['name']])."'>"; }
+									else									{ print ""; }
+								}
+								else {
+									print $v->$field['name'];
+
+								}
+								print "</td>";
+							}
+				    	}
+				    }
 				} else {
 					print "<tr class='$class'>";
+					print "<td></td>";
 					print "<td></td>";
 					print "<td></td>";
 					print "<td></td>";
@@ -138,40 +168,12 @@ else {
 					$section = $Sections->fetch_section (null, $v->sectionId);
 					print " <td><a href='".create_link("subnets",$section->id,$v->subnetId)."'>". $Subnets->transform_to_dotted($v->subnet) ."/$v->mask</a></td>";
 					print " <td><a href='".create_link("subnets",$section->id)."'>$section->name</a></td>";
-			        //custom fields
-			        if(sizeof(@$custom) > 0) {
-				   		foreach($custom as $field) {
-					   		# hidden
-					   		if(!in_array($field['name'], $ffields)) {
-								print "<td class='hidden-xs hidden-sm hidden-md'>";
-								//booleans
-								if($field['type']=="tinyint(1)")	{
-									if($vlan[$field['name']] == "0")		{ print _("No"); }
-									elseif($vlan[$field['name']] == "1")	{ print _("Yes"); }
-								}
-								//text
-								elseif($field['type']=="text") {
-									if(strlen($vlan[$field['name']])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlan[$field['name']])."'>"; }
-									else									{ print ""; }
-								}
-								else {
-									print $vlan[$field['name']];
-
-								}
-								print "</td>";
-							}
-				    	}
-				    }
 				    print "</tr>";
 				}
 				// no subnets
 				else {
 					print "	<td>/</td>";
 					print "	<td>/</td>";
-					//custom
-					for($z=0; $z<$csize; $z++) {
-					print "	<td>/</td>";
-					}
 					print "</tr>";
 				}
 			}

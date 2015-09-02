@@ -11,6 +11,9 @@ $vrf = $Tools->fetch_vrf ($method="vrfId", $_GET['subnetId']);
 
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
+
+# get custom VLAN fields
+$cfields = $Tools->fetch_custom_fields ('vrf');
 ?>
 
 <!-- for adding IP address! -->
@@ -37,6 +40,24 @@ if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
 	</tr>
 
 	<?php
+
+	# print custom subnet fields if any
+	if(sizeof($cfields) > 0) {
+		// divider
+		print "<tr><td><hr></td><td></td></tr>";
+		// fields
+		foreach($cfields as $key=>$field) {
+			$vrf->$key = str_replace("\n", "<br>",$vrf->$key);
+			// create links
+			$vrf->$key = create_links($vrf->$key);
+			print "<tr>";
+			print "	<th>$key</th>";
+			print "	<td style='vertical-align:top;align:left;'>".$vrf->$key."</td>";
+			print "</tr>";
+		}
+		// divider
+		print "<tr><td><hr></td><td></td></tr>";
+	}
 
 	# action button groups
 	print "<tr>";

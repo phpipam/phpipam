@@ -1,6 +1,14 @@
 <h4><?php print _("Select l2 domain"); ?></h4>
 <hr>
 
+<!-- Manage link -->
+<?php if($User->isadmin===true) { ?>
+<div class="btn-group" style="margin-bottom:10px;">
+	<button class="btn btn-sm btn-default editVLANdomain" data-action="add" data-domainid="" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add L2 Domain'); ?></button>
+</div>
+<?php } ?>
+
+
 <table class="table table-striped table-condensed table-auto table-auto-wide">
 <!-- headers -->
 <tr>
@@ -8,6 +16,7 @@
 	<th><?php print _('Descripton'); ?></th>
 	<th><?php print _('Sections'); ?></th>
 	<th></th>
+	<?php if($User->isadmin===true) { ?><th></th><?php } ?>
 </tr>
 <!-- content -->
 <?php
@@ -38,6 +47,15 @@ foreach($vlan_domains as $domain) {
 	print "	<td>$domain->description</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
 	print "	<td><a href='".create_link("tools", "vlan", $domain->id)."'>Show VLANs</a></td>";
+	//manage
+	if($User->isadmin===true) {
+	print "	<td class='actions'>";
+	print "	<div class='btn-group'>";
+	print "		<button class='btn btn-xs btn-default editVLANdomain' data-action='edit'   data-domainid='$domain->id'><i class='fa fa-pencil'></i></button>";
+	print "		<button class='btn btn-xs btn-default editVLANdomain' data-action='delete' data-domainid='$domain->id'><i class='fa fa-times'></i></button>";
+	print "	</div>";
+	print "	</td>";
+	}
 	print "	</td>";
 
 	print "</tr>";

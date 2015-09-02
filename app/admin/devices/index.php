@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# fetch all APIs
+# fetch all Devices
 $devices = $Admin->fetch_all_objects("devices");
 
 
@@ -89,6 +89,9 @@ else {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_custom_fields)) {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
+
+					// create links
+					$device[$field['name']] = create_links ($device[$field['name']]);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{

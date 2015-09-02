@@ -79,6 +79,7 @@ else {
 
 					print "	<td>$subnet[VLAN]</td>";
 					print "	<td>$subnet[description]</td>";
+
 					# folder?
 					if($subnet->isFolder==1) {
 						print "	<td><a href='".create_link("folder",$section['id'],$subnet['id'])."'>$subnet[description]</a></td>";

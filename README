@@ -22,9 +22,8 @@ Features and tools:
 - IP request module
 - Custom IP address fields
 - and much more...
+- PowerDNS integration;
 
-What it does not do:
-- Updates DNS server
 
 License
 =======
@@ -35,7 +34,7 @@ Requirements
 - Apache2 web server with php and mod_rewrite support
 - Mysql server (5.1+)
 - PHP version 5.2+ with following modules (On windows php 5.3 is required!)
-	+ + mysqli              : Adds support for the improved mySQL libraries
+	+ + pdo, pdo_mysql      : Adds support for mysql connections
     + + session             : Adds persistent session support
     + + gmp                 : Adds support for dev-libs/gmp (GNU MP library) -> to calculate IPv6 networks
     + + ldap                : Adds LDAP support (Lightweight Directory Access Protocol)

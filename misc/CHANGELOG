@@ -1,4 +1,4 @@
-== 1.18.005
+== 1.18.009
 
 	New features:
 	------------
@@ -37,11 +37,18 @@
 	+ New widget - tools shortcuts;
 	+ New widget - IP calculator;
 	+ Clickable links for subnet fields;
+	+ Custom VRF fields;
+	+ Subnets can be now linked to devices;
 
 	Security Fixes:
 	----------------------------
 	+ Parametized all MySQL querries;
 	+ Fixed plainpass being logged on user update;
+	+ Fixed XSS exploit on /error/;
+
+	Translations:
+	----------------------------
+	+ Added Czech translation;
 
 	Bugfixes:
 	----------------------------

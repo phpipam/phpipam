@@ -487,7 +487,7 @@ class Subnets {
 	 */
 	public function fetch_all_subnets_for_pingCheck () {
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `pingSubnet` = 1;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `pingSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009;"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -506,7 +506,7 @@ class Subnets {
 	 */
 	public function fetch_all_subnets_for_discoveryCheck () {
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `discoverSubnet` = 1;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `discoverSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009 and `mask` > 20;"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -2445,6 +2445,20 @@ class Subnets {
 						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
 					else {
 						$html[] = "	<td><a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
+					}
+				}
+
+				//device
+				$device = ( $option['value']['device']==0 || empty($option['value']['device']) ) ? false : true;
+
+				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
+				else {
+					$device = $Tools->fetch_object ("devices", "id", $option['value']['device']);
+					if ($device!==false) {
+						$html[] = "	<td><a href='".create_link("tools","devices","hosts",$option['value']['device'])."'>".$device->hostname .'</a></td>' . "\n";
+					}
+					else {
+						$html[] ='	<td>/</td>' . "\n";
 					}
 				}
 
