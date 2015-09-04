@@ -53,7 +53,7 @@ else {
 
 	# fetch all addresses - sorted
 	if($slaves) {
-		$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false, $sort['field'], $sort['direction']);
+		$addresses = (array) $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false, $sort['field'], $sort['direction']);
 		$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
 	} else {
 		$addresses = $Addresses->fetch_subnet_addresses ($subnet['id'], $sort['field'], $sort['direction']);
@@ -97,7 +97,7 @@ $addresses_visual = $addresses;
 $Addresses->addresses_types_fetch();
 foreach($Addresses->address_types as $t) {
 	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
-		if(sizeof($addresses)>0) {
+		if(sizeof($addresses)>0 && $addresses!==false) {
 			$addresses = $Addresses->compress_address_ranges ($addresses, $t['id']);
 		}
 	}
@@ -113,6 +113,7 @@ foreach($custom_fields as $field) {
 	$sizeMyFields[$field['name']] = 0;				// default value
 	# check against each IP address
 	if($addresses!==false) {
+		$addresses = (array) $addresses;
 		foreach($addresses as $ip) {
 			$ip = (array) $ip;
 			if(strlen($ip[$field['name']]) > 0) {
