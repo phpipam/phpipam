@@ -4,7 +4,9 @@ version - 1.2
 		+ logging: db, syslog (db prepared)
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ Check user login and pages;
+		+ VLAN domain permissions;
+		+ Devices permissions ?
+		+ Save opened folders in left menu;
 
 	+ Import updates
 		https://github.com/malaiam/phpipam

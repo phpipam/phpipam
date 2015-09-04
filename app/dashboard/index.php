@@ -93,6 +93,24 @@ $widgets = (array) $widgets;
 # show user-selected widgets
 $uwidgets = array_filter(explode(";",$User->user->widgets));
 
+# if user has no groups and is not admin print warning
+if ($User->isadmin!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) {
+	print '<div class="row-fluid">';
+	print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='min-height:10px'>";
+	print "	<div class='inner' style='min-height:10px'>";
+	print " <h4>"._("No groups")."</h4>";
+	print "	<div class='hContent'>";
+	print "		<div class='alert alert-info' style='margin:10px;'>"._("You are not member of any group. Please contact system administrator!")."</div>";
+	print "	</div>";
+	print "	</div>";
+	print "	</div>";
+	print "</div>";
+	print "<div class='clearfix'></div>";
+
+	// reset uwidgets
+	$uwidgets = array("tools", "ipcalc");
+}
+
 # split widgets to rows (chunks)
 $currSize = 0;					//to calculate size
 $m=0;							//to calculate chunk index
@@ -115,7 +133,6 @@ foreach($uwidgets as $uk=>$uv) {
 	//add to array
 	$uwidgetschunk[$m][] = $uv;
 }
-
 
 # print
 print "<div class='add-widgets' style='display:none;padding-left:20px;'>";

@@ -26,6 +26,9 @@ print "	<th>"._('Discover')."</th>";
 print "	<th></th>";
 print "</tr>";
 
+// count
+$cnt=0;
+
 //loop
 if($subnets!==false) {
 	foreach($subnets as $subnet) {
@@ -36,19 +39,35 @@ if($subnets!==false) {
 		//set discovery
 		$discovery 	  = $subnet->discoverSubnet==1 ? "<i class='fa fa-check'></i>" : "";
 
-		# print
-		print "<tr>";
-		print "	<td><a href='".create_link("subnets", $section->id, $subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask</a></td>";
-		print "	<td>$subnet->description</td>";
-		print "	<td>$section->name ($section->description)</td>";
-		print "	<td>$status_check</td>";
-		print "	<td>$discovery</td>";
 
-		print "	<td class='actions' style='padding:0px;'>";
-		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$subnet->id."'  data-sectionid='".$section->id."'><i class='fa fa-gray fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$subnet->id."'  data-sectionid='".$section->id."'><i class='fa fa-gray fa-times'></i></button>";
-		print "	</div>";
+		# check permission
+		$permission = $Subnets->check_permission ($User->user, $subnet->id);
+
+		# permission
+		if($permission > 0) {
+			$cnt++;
+			# print
+			print "<tr>";
+			print "	<td><a href='".create_link("subnets", $section->id, $subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask</a></td>";
+			print "	<td>$subnet->description</td>";
+			print "	<td>$section->name ($section->description)</td>";
+			print "	<td>$status_check</td>";
+			print "	<td>$discovery</td>";
+
+			print "	<td class='actions' style='padding:0px;'>";
+			print "	<div class='btn-group'>";
+			print "		<button class='btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$subnet->id."'  data-sectionid='".$section->id."'><i class='fa fa-gray fa-pencil'></i></button>";
+			print "		<button class='btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$subnet->id."'  data-sectionid='".$section->id."'><i class='fa fa-gray fa-times'></i></button>";
+			print "	</div>";
+			print "	</td>";
+			print "</tr>";
+		}
+	}
+	# none available
+	if ($cnt===0) {
+		print "<tr>";
+		print "	<td colspan=6>";
+		$Result->show("info", _('No subnets available'), false);
 		print "	</td>";
 		print "</tr>";
 	}

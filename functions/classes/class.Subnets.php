@@ -1936,9 +1936,11 @@ class Subnets {
 		if(sizeof($sectionP) > 0) {
 			foreach($sectionP as $sk=>$sp) {
 				# check each group if user is in it and if so check for permissions for that group
-				foreach($groups as $uk=>$up) {
-					if($uk == $sk) {
-						if($sp > $out) { $out = $sp; }
+				if(is_array($groups)) {
+					foreach($groups as $uk=>$up) {
+						if($uk == $sk) {
+							if($sp > $out) { $out = $sp; }
+						}
 					}
 				}
 			}
@@ -2328,9 +2330,11 @@ class Subnets {
 		$rootId = 0;
 
 		# remove all not permitted!
+		if(sizeof($subnets)>0) {
 		foreach($subnets as $k=>$s) {
 			$permission = $this->check_permission ($user, $s->id);
 			if($permission == 0) { unset($subnets[$k]); }
+		}
 		}
 
 		# create loop array
@@ -2339,6 +2343,9 @@ class Subnets {
 			$item = (array) $item;
 			$children_subnets[$item['masterSubnetId']][] = $item;
 		}
+		}
+		else {
+			return false;
 		}
 
 		# loop will be false if the root has no children (i.e., an empty menu!)

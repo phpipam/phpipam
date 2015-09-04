@@ -24,6 +24,7 @@ print "<hr>";
 # table
 print "<table id='manageSubnets' class='table table-striped table-condensed table-top table-absolute'>";
 
+$section_count = 0;
 # print vlans in each section
 foreach ($sections as $section) {
 	# cast
@@ -82,13 +83,23 @@ foreach ($sections as $section) {
 			print "</td></tr>";
 		}
 		else {
-			$Subnets->print_subnets_tools($User->user, $subnets, $custom_fields);
+			// print subnets, if none print no available
+			if($Subnets->print_subnets_tools($User->user, $subnets, $custom_fields)===false) {
+				print "<tr><td colspan='$colSpan'><div class='alert alert-info'>". _("No subnets available")."</td></tr>";
+			}
+
+			$section_count++;
 		}
 
 		print '</tbody>';
 
 	}	# end permission check
 }
-?>
 
+# none
+if ($section_count===0) {
+	print "<tr><td colspan='$colSpan'>".$Result->show("info", _("No subnets available"), false)."</td></tr>";
+}
+
+?>
 </table>
