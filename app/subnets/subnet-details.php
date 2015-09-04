@@ -263,13 +263,15 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		foreach(json_decode($User->settings->tempAccess) as $s) {
-			if($s->type=="subnets" && $s->id==$subnet['id']) {
-				if(time()<$s->validity) {
-					$active_shares[] = $s;
-				}
-				else {
-					$expired_shares[] = $s;
+		if (is_array(json_decode($User->settings->tempAccess))) {
+			foreach(json_decode($User->settings->tempAccess) as $s) {
+				if($s->type=="subnets" && $s->id==$subnet['id']) {
+					if(time()<$s->validity) {
+						$active_shares[] = $s;
+					}
+					else {
+						$expired_shares[] = $s;
+					}
 				}
 			}
 		}

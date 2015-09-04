@@ -449,20 +449,25 @@ class Sections  {
 		$Admin = new Admin ($this->Database, false);
 		$nameservers = $Admin->fetch_all_objects ("nameservers");
 		# loop and check
-		foreach($nameservers as $n) {
-			//default
-			if($n->id==1) {
-					$permitted[] = $n->id;
-			}
-			else {
-				//array
-				if(in_array($sectionId, explode(";", $n->permissions))) {
-					$permitted[] = $n->id;
+		if ($nameservers!==false) {
+			foreach($nameservers as $n) {
+				//default
+				if($n->id==1) {
+						$permitted[] = $n->id;
+				}
+				else {
+					//array
+					if(in_array($sectionId, explode(";", $n->permissions))) {
+						$permitted[] = $n->id;
+					}
 				}
 			}
+			# return permitted
+			return $permitted;
 		}
-		# return permitted
-		return $permitted;
+		else {
+			return false;
+		}
 	}
 
 
