@@ -30,17 +30,19 @@ if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $
 if(strlen($_POST['dname'])<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
 
-
 //open connection
 try {
+	//set options
+	$options = array(
+			'base_dn'=>$params->base_dn,
+			'account_suffix'=>$params->account_suffix,
+			'domain_controllers'=>explode(";",$params->domain_controllers),
+			'use_ssl'=>$params->use_ssl,
+			'use_tls'=>$params->use_tls,
+			'ad_port'=>$params->ad_port
+			);
 	//AD
-	$adldap = new adLDAP(array( 'base_dn'=>$params->base_dn, 'account_suffix'=>$params->account_suffix,
-								'domain_controllers'=>explode(";",$params->domain_controllers), 'use_ssl'=>$params->use_ssl,
-								'use_tls'=> $params->use_tls, 'ad_port'=> $params->ad_port
-								));
-
-	//first check connection
-	if(@fsockopen($adldap->selected_controller, $params->ad_port, $errno, $errstr, 2)==false)	{ $Result->show("danger",  "Cannot connect to controller $adldap->selected_controller<br>$errstr ($errno)", true); }
+	$adldap = new adLDAP($options);
 
 	//try to login with higher credentials for search
 	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
@@ -57,13 +59,13 @@ try {
 	//echo $adldap->getLastError();
 }
 catch (adLDAPException $e) {
-	$Result->show("danger", $e, true);
+	$Result->show("danger", $e->getMessage(), true);
 }
 
 
 //check for found
 if(!isset($userinfo['count'])) {
-	print "<div class='alert alert-info alert-block'>";
+	print "<div class='alert alert-info'>";
 	print _('No users found')."!<hr>";
 	print _('Possible reasons').":";
 	print "<ul>";
