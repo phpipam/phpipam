@@ -47,7 +47,7 @@ $values = array("id"=>@$_POST['nameserverId'],
 				"permissions"=>$_POST['permissions']
 				);
 # update
-if(!$Admin->object_modify("nameservers", $_POST['action'], "nameserverid", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] nameserver set").'!', true); }
+if(!$Admin->object_modify("nameservers", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] nameserver set").'!', true); }
 else																	{ $Result->show("success", _("Nameserver set $_POST[action] successfull").'!', false); }
 
 

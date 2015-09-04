@@ -1015,7 +1015,8 @@ class Subnets {
 	    $details['freehosts']         = gmp_strval( gmp_sub ($details['maxhosts'] , $details['used']) );
 	    # calculate use percentage for each type
 	    $details['freehosts_percent'] = round( ( ($details['freehosts'] * 100) / $details['maxhosts']), 2 );
-	    foreach($this->address_types as $t) {
+		$address_types = (array) $this->address_types;
+	    foreach($address_types as $t) {
 		    $details[$t['type']."_percent"] = round( ( ($details[$t['type']] * 100) / $details['maxhosts']), 2 );
 	    }
 	    return( $details );
@@ -1031,9 +1032,9 @@ class Subnets {
 	public function calculate_subnet_usage_sort_addresses ($addresses) {
 		$count['used'] = 0;				//initial sum count
 		# fetch address types
-		$address_types = $this->get_addresses_types();
+		$address_types = (array) $this->get_addresses_types();
 		# create array of keys with initial value of 0
-		foreach($this->address_types as $a) {
+		foreach($address_types as $a) {
 			$count[$a['type']] = 0;
 		}
 		# count
