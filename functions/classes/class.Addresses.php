@@ -620,10 +620,10 @@ class Addresses {
 		// first check if subnet selected for PTR records
 		$this->initialize_subnets_object ();
 		$subnet = $this->Subnets->fetch_subnet ("id", $address['subnetId']);
-		if (@$subnet->DNSrecursive!="1") { return false; }
+		if ($subnet->DNSrecursive!="1") { return false; }
 
 		// ignore if PTRignore set
-		if (@$address['PTRignore']==1)	{
+		if ($address['PTRignore']=="1")	{
 				// validate db
 				$this->pdns_validate_connection ();
 				// remove if it exists

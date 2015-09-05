@@ -30,6 +30,7 @@ else {
 	print '	<th>'._('Primary').'</th>'. "\n";
 	print '	<th>'._('Secondary').'</th>'. "\n";
 	print '	<th>'._('Tertiary').'</th>'. "\n";
+	print '	<th>'._('Sections').'</th>'. "\n";
 	print '	<th>'._('Description').'</th>'. "\n";
 	print '	<th></th>'. "\n";
 	print '</tr>'. "\n";
@@ -39,12 +40,37 @@ else {
 		//cast
 		$nameservers = (array) $nameservers;
 
+		unset($permitted_sections);
+
+		// sections
+		if (!is_null($nameservers['permissions'])) {
+			$sections = array_filter(explode(";", $nameservers['permissions']));
+			// some
+			if (sizeof($sections)>0) {
+				foreach($sections as $id) {
+					$sect = $Admin->fetch_object ("sections", "id", $id);
+					// exists
+					if ($sect!==false) {
+						$permitted_sections[] = $sect->name;
+					}
+				}
+			}
+			else {
+				$permitted_sections[] = "/";
+			}
+		}
+		// none
+		else {
+			$permitted_sections[] = "/";
+		}
+
 		//print details
 		print '<tr>'. "\n";
 		print '	<td class="name">'. $nameservers['name'] .'</td>'. "\n";
 		print '	<td class="namesrv1">'. $nameservers['namesrv1'] .'</td>'. "\n";
 		print '	<td class="namesrv2">'. $nameservers['namesrv2'] .'</td>'. "\n";
 		print '	<td class="namesrv3">'. $nameservers['namesrv3'] .'</td>'. "\n";
+		print '	<td class="sections">'. implode("<br>", $permitted_sections).'</td>'. "\n";
 		print '	<td class="description">'. $nameservers['description'] .'</td>'. "\n";
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";

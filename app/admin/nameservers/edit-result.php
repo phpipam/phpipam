@@ -22,20 +22,15 @@ if($_POST['name'] == "") { $Result->show("danger", _("Name is mandatory"), true)
 if($_POST['namesrv1'] == "") { $Result->show("danger", _("Primary nameserver is mandatory"), true); }
 
 // set sections
-if(@$_POST['nameserverId']!=1) {
-	foreach($_POST as $key=>$line) {
-		if (strlen(strstr($key,"section-"))>0) {
-			$key2 = str_replace("section-", "", $key);
-			$temp[] = $key2;
-			unset($_POST[$key]);
-		}
+foreach($_POST as $key=>$line) {
+	if (strlen(strstr($key,"section-"))>0) {
+		$key2 = str_replace("section-", "", $key);
+		$temp[] = $key2;
+		unset($_POST[$key]);
 	}
-	# glue sections together
-	$_POST['permissions'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 }
-else {
-	$_POST['permissions'] = "";
-}
+# glue sections together
+$_POST['permissions'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 
 # set update array
 $values = array("id"=>@$_POST['nameserverId'],
