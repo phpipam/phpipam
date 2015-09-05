@@ -341,7 +341,8 @@ class Addresses {
 						"note"=>@$address['note'],
 						"is_gateway"=>@$address['is_gateway'],
 						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore']
+						"PTRignore"=>@$address['PTRignore'],
+						"lastSeen"=>@$address['lastSeen']
 						);
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
@@ -708,7 +709,7 @@ class Addresses {
 		$id = $id===null ? $this->lastId : $id;
 		$this->ptr_link ($id, $this->PowerDNS->lastId);
 		// ok
-		if ($print_error)
+		if ($print_error && php_sapi_name()!="cli")
 		$this->Result->show("success", "PTR record created", false);
 
 		return true;

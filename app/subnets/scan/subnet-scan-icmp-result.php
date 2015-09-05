@@ -50,10 +50,11 @@ if(sizeof($res)>0) {
 						"dns_name"=>$r['dns_name'],
 						"subnetId"=>$_POST['subnetId'],
 						"description"=>$r['description'],
-						"lastSeen"=>date("Y-m-d H:i:s")
+						"lastSeen"=>date("Y-m-d H:i:s"),
+						"action"=>"add"
 						);
 		# insert
-		if(!$Admin->object_modify("ipaddresses", "add", "id", $values))	{ $Result->show("danger", "Failed to import entry ".$r['ip_addr'], false); $errors++; }
+		if(!$Addresses->modify_address($values))	{ $Result->show("danger", "Failed to import entry ".$r['ip_addr'], false); $errors++; }
 	}
 
 	# success if no errors

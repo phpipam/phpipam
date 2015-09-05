@@ -221,9 +221,12 @@ foreach($scan_subnets as $s) {
 							"dns_name"=>$hostname['name'],
 							"description"=>"-- autodiscovered --",
 							"note"=>"This host was autodiscovered on ".date("Y-m-d H:i:s"),
-							"lastSeen"=>date("Y-m-d H:i:s")
+							"lastSeen"=>date("Y-m-d H:i:s"),
+							"state"=>"2",
+							"action"=>"add"
 							);
-			$Admin->object_modify("ipaddresses", "add", "id", $values);
+			//insert
+			$Addresses->modify_address($values);
 
 			//set discovered
 			$discovered++;

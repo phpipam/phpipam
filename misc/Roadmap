@@ -7,7 +7,6 @@ version - 1.2
 		+ VLAN domain permissions;
 		+ Devices permissions ?
 		+ Save opened folders in left menu;
-		+ Autodiscovered hosts PTR;
 
 	+ Import updates
 		https://github.com/malaiam/phpipam
