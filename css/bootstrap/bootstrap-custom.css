@@ -180,6 +180,9 @@ table td.info2,
 tbody {
 	border-top: none !important;
 }
+.table.table-top.table-td-top td {
+	vertical-align: top !important;
+}
 
 
 

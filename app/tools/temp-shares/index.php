@@ -38,6 +38,8 @@ else {
 </tr>
 
 <?php
+$cnt = 0;
+// loop
 foreach($temp_shares as $s) {
 	# fetch object
 	$object = $Tools->fetch_object ($s->type, "id", $s->id);
@@ -47,48 +49,59 @@ foreach($temp_shares as $s) {
 	//type test
 	$s->type_text = $s->type=="subnets" ? "Subnet" : "IP address";
 
-	//set details
-	unset($tmp);
-	if($s->type=="subnets") {
-		$tmp[] = "Share type: subnet<hr>"."<a href='".create_link("subnets", $object->sectionId, $object->id)."'>".$Subnets->transform_to_dotted($object->subnet)."/$object->mask</a>";
-		$tmp[] = $object->description;
-	}
-	else {
-		$tmp[] = "Share type: IP address<hr>".$Subnets->transform_to_dotted($object->ip_addr);
-		$tmp[] = $object->description;
-	}
-	$s->details = implode("<br>", $tmp);
-
-	//validity
-	$class = time()>$s->validity ? "alert-danger" : "alert-success";
-
-	//access logs
-	unset($logText);
-	$logs = $Tools->fetch_multiple_objects ("logs", "details", $s->code, "date", false);
-	if($logs===false)	{ $logText = "<span class='text-muted'>"._("No access")."</span>"; }
-	else {
-		foreach($logs as $l) {
-			$logText[] = $l->date." <span class='text-muted'>(IP $l->ipaddr)</span>";
+	# check permission
+	if($Subnets->check_permission ($User->user, $object->id)>0) {
+		$cnt++;
+		//set details
+		unset($tmp);
+		if($s->type=="subnets") {
+			$tmp[] = "Share type: subnet<hr>"."<a href='".create_link("subnets", $object->sectionId, $object->id)."'>".$Subnets->transform_to_dotted($object->subnet)."/$object->mask</a>";
+			$tmp[] = $object->description;
 		}
-		$logText = implode("<br>", $logText);
+		else {
+			$tmp[] = "Share type: IP address<hr>".$Subnets->transform_to_dotted($object->ip_addr);
+			$tmp[] = $object->description;
+		}
+		$s->details = implode("<br>", $tmp);
+
+		//validity
+		$class = time()>$s->validity ? "alert-danger" : "alert-success";
+
+		//access logs
+		unset($logText);
+		$logs = $Tools->fetch_multiple_objects ("logs", "details", $s->code, "date", false);
+		if($logs===false)	{ $logText = "<span class='text-muted'>"._("No access")."</span>"; }
+		else {
+			foreach($logs as $l) {
+				$logText[] = $l->date." <span class='text-muted'>(IP $l->ipaddr)</span>";
+			}
+			$logText = implode("<br>", $logText);
+		}
+
+		print "<tr class='text-top'>";
+		print "	<td>$s->type_text</td>";
+		print "	<td>$s->details</td>";
+		print "	<td><a href='".createURL().BASE."temp_share/$s->code/'>$s->code</a></td>";
+		print "	<td class='$class'>".date("Y-m-d H:i:s", $s->validity)."</td>";
+		print "	<td>$user->real_name ($user->username)</td>";
+		print "	<td>$logText</td>";
+		# remove
+		print "	<td class='actions'>";
+		print "	<div class='btn-group'>";
+		print "		<button class='btn btn-xs btn-default removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button>";
+		print "	</div>";
+		print "</td>";
+
+		print "</tr>";
 	}
-
-	print "<tr class='text-top'>";
-	print "	<td>$s->type_text</td>";
-	print "	<td>$s->details</td>";
-	print "	<td><a href='".createURL().BASE."temp_share/$s->code/'>$s->code</a></td>";
-	print "	<td class='$class'>".date("Y-m-d H:i:s", $s->validity)."</td>";
-	print "	<td>$user->real_name ($user->username)</td>";
-	print "	<td>$logText</td>";
-	# remove
-	print "	<td class='actions'>";
-	print "	<div class='btn-group'>";
-	print "		<button class='btn btn-xs btn-default removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button>";
-	print "	</div>";
-	print "</td>";
-
+}
+// none permitted
+if($cnt===0) {
+	print "<tr>";
+	print "	<td colspan='7'><div class='alert alert-info'>"._("No temporary shares available")."</div></td>";
 	print "</tr>";
 }
+
 ?>
 
 </table>

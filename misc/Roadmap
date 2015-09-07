@@ -2,9 +2,11 @@ version - 1.2
 
 	+ To fix / finish
 		+ logging: db, syslog (db prepared)
-		+ fix domain user search;
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
+		+ VLAN domain permissions;
+		+ Devices permissions ?
+		+ Save opened folders in left menu;
 
 	+ Import updates
 		https://github.com/malaiam/phpipam

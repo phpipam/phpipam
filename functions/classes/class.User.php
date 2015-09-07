@@ -759,9 +759,6 @@ class User {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
 
-		# check connection
-		if(@fsockopen($adldap->selected_controller, $ad['ad_port'], $errno, $errstr, 2)==false)	{ $this->Result->show("danger",  "Cannot connect to controller $adldap->selected_controller<br>$errstr ($errno)", true); }
-
 		# authenticate
 		if($adldap->authenticate($username, $password)) {
 			# save to session

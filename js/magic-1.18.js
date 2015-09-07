@@ -980,10 +980,12 @@ $(document).on("click", ".userselect", function() {
 	var uname 	 = $(this).attr('data-uname');
 	var username = $(this).attr('data-username');
 	var email 	 = $(this).attr('data-email');
+	var server 	 = $(this).attr('data-server');
 	//fill
 	$('form#usersEdit input[name=real_name]').val(uname);
 	$('form#usersEdit input[name=username]').val(username);
 	$('form#usersEdit input[name=email]').val(email);
+	$('form#usersEdit select[name=authMethod]').val(server);
 
 	hidePopup2();
 	hidePopup('popup_w500');
@@ -1805,6 +1807,20 @@ $(document).on("click", "#editVRF", function() {
 //load edit form
 $('.nameserverManagement').click(function() {
 	open_popup("700", "app/admin/nameservers/edit.php", {nameserverId:$(this).attr('data-nameserverid'), action:$(this).attr('data-action')} );
+});
+// add new
+$(document).on("click", "#add_nameserver", function() {
+	showSpinner();
+	//get old number
+	var num = $(this).attr("data-id");
+	// append
+	$('table#nameserverManagementEdit2 tbody#nameservers').append("<tr id='namesrv-"+num+"'><td>Nameserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='namesrv-"+num+"'></td></tr>");
+	// add number
+	num++;
+	$(this).attr("data-id", num);
+
+	hideSpinner();
+	return false;
 });
 //submit form
 $(document).on("click", "#editNameservers", function() {

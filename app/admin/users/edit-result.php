@@ -95,7 +95,7 @@ if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->
 	$values['password'] = $_POST['password1'];
 }
 # pass change
-if(isset($_POST['passChange'])) {
+if(isset($_POST['passChange']) && $auth_method->type=="local") {
 	$values['passChange'] = "Yes";
 }
 # set groups user belongs to

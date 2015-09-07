@@ -106,11 +106,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			# fetch recursive nameserver details
 			$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
-			print $nameservers['namesrv1'];
-
-			// Print secondary and tertiery nameserver if defined)
-			if(!empty($nameservers['namesrv2'])) {print ' , '.$nameservers['namesrv2']; }
-			if(!empty($nameservers['namesrv3'])) {print ' , '.$nameservers['namesrv3']; }
+			print str_replace(";", ", ", $nameservers['namesrv1']);
 
 			//Print name of nameserver group
 			print ' ('.$nameservers['name'].')';
@@ -263,17 +259,20 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		foreach(json_decode($User->settings->tempAccess) as $s) {
-			if($s->type=="subnets" && $s->id==$subnet['id']) {
-				if(time()<$s->validity) {
-					$active_shares[] = $s;
-				}
-				else {
-					$expired_shares[] = $s;
+		if (is_array(json_decode($User->settings->tempAccess, true))) {
+			foreach(json_decode($User->settings->tempAccess) as $s) {
+				if($s->type=="subnets" && $s->id==$subnet['id']) {
+					if(time()<$s->validity) {
+						$active_shares[] = $s;
+					}
+					else {
+						$expired_shares[] = $s;
+					}
 				}
 			}
 		}
-		if(sizeof(@$active_shares)>0) {
+
+		if(isset($active_shares)) {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
@@ -291,7 +290,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			print "<td>";
 			print "</tr>";
 		}
-		if(sizeof(@$expired_shares)>0) {
+		if(isset($expired_shares)) {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
