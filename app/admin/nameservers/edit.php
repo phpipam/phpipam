@@ -27,6 +27,9 @@ if($_POST['action']!="add") {
 
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
+
+# set nameservers
+$nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nameservers['namesrv1']);
 ?>
 
 
@@ -39,6 +42,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<form id="nameserverManagementEdit">
 	<table id="nameserverManagementEdit2" class="table table-noborder table-condensed">
 
+	<tbody>
 	<!-- name  -->
 	<tr>
 		<td style="width: 200px;"><?php print _('Name'); ?></td>
@@ -46,23 +50,32 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('Nameserver set'); ?>" value="<?php print @$nameservers['name']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
+	</tbody>
+
+	<tbody id="nameservers">
 	<!-- Nameservers -->
+	<?php
+	//loop
+	$m=1;
+	foreach ($nameservers['namesrv1'] as $ns) {
+		print "<tr id='namesrv-$m'>";
+		print "	<td>"._("Nameserver")." $m</td>";
+		print "	<td>";
+		print "	<input type='text' class='rd form-control input-sm' name='namesrv-$m' value='$ns' $readonly>";
+		print "	</td>";
+		print "</tr>";
+		//next
+		$m++;
+	}
+	?>
+	</tbody>
+
+	<tbody>
+	<!-- add new -->
 	<tr>
-		<td><?php print _('Primary'); ?></td>
+		<td></td>
 		<td>
-			<input type="text" class="rd form-control input-sm" name="namesrv1" placeholder="<?php print _('Primary nameserver'); ?>" value="<?php print @$nameservers['namesrv1']; ?>" <?php print $readonly; ?>>
-		</td>
-	</tr>
-	<tr>
-		<td><?php print _('Secondary'); ?></td>
-		<td>
-			<input type="text" class="rd form-control input-sm" name="namesrv2" placeholder="<?php print _('Secondary nameserver'); ?>" value="<?php print @$nameservers['namesrv2']; ?>" <?php print $readonly; ?>>
-		</td>
-	</tr>
-	<tr>
-		<td><?php print _('Tertiary'); ?></td>
-		<td>
-			<input type="text" class="rd form-control input-sm" name="namesrv3" placeholder="<?php print _('Tertiary nameserver'); ?>" value="<?php print @$nameservers['namesrv3']; ?>" <?php print $readonly; ?>>
+			<button class="btn btn-sm btn-default" id="add_nameserver" data-id='<?php print $m; ?>' <?php print $readonly; ?>><i class="fa fa-plus"></i> <?php print _('Add nameserver'); ?></button>
 		</td>
 	</tr>
 
@@ -96,6 +109,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		?>
 		</td>
 	</tr>
+	</tbody>
 
 	</table>
 	</form>

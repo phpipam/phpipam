@@ -28,13 +28,13 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 
 <?php
 /* first check if they exist! */
-if(sizeof($devices) == 0) {
+if($devices===false) {
 	$Result->show("warn alert-absolute", _('No devices configured').'!', false);
 }
 /* Print them out */
 else {
 
-	print '<table id="switchManagement" class="table table-striped table-auto table-top">';
+	print '<table id="switchManagement" class="table table-striped table-auto table-top table-td-top">';
 
 	# headers
 	print '<tr>';

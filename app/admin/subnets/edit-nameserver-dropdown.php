@@ -30,7 +30,7 @@ $cnt = 0;
 if($permitted_nameservers != false) {
 	foreach($permitted_nameservers as $k=>$n) {
 		// fetch nameserver sets and append
-		$nameserver_set = $Tools->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1", "namesrv2", "namesrv3");
+		$nameserver_set = $Tools->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1");
 
 		//save to array
 		$nsout[$n] = $nameserver_set;
@@ -57,17 +57,7 @@ if($permitted_nameservers != false) {
 				foreach($n as $ns) {
 					// set print
 					$printNS = "$ns->name";
-					$printNS .= " (" . $ns->namesrv1;
-
-						// Only print namesrv2+3 if present
-					if ( !empty($ns->namesrv2) ) {
-						$printNS .= ", " . $ns->namesrv2;
-					}
-					if ( !empty($ns->namesrv3) ) {
-						$printNS .= ", " . $ns->namesrv3;
-					}
-						$printNS .= ")";
-
+					$printNS .= " (" . array_shift(explode(";",$ns->namesrv1)).",...)";
 
 					/* selected? */
 					if(@$subnet_old_details['nameserverId']==$ns->id) 	{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }

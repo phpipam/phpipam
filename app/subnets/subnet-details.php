@@ -106,11 +106,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			# fetch recursive nameserver details
 			$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
-			print $nameservers['namesrv1'];
-
-			// Print secondary and tertiery nameserver if defined)
-			if(!empty($nameservers['namesrv2'])) {print ' , '.$nameservers['namesrv2']; }
-			if(!empty($nameservers['namesrv3'])) {print ' , '.$nameservers['namesrv3']; }
+			print str_replace(";", ", ", $nameservers['namesrv1']);
 
 			//Print name of nameserver group
 			print ' ('.$nameservers['name'].')';
