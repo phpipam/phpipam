@@ -23,6 +23,7 @@ require( dirname(__FILE__) . '/classes/class.Addresses.php' );	//Class for addre
 require( dirname(__FILE__) . '/classes/class.Scan.php' );		//Class for Scanning and pinging
 require( dirname(__FILE__) . '/classes/class.DNS.php' );		//Class for DNS management
 require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerDNS management
+require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
 
 /* @common functions ------------- */

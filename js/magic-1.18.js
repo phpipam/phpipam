@@ -1333,6 +1333,27 @@ $(document).on("click", "#editRecordSubmit", function() {
 });
 
 
+/*    Firewall zones
+********************************/
+
+// firewall zone settings 
+$('#firewallZoneSettings').submit(function() {
+    showSpinner();
+    var settings = $(this).serialize();
+    //load submit results
+    $.post('app/admin/firewall-zones/settings-save.php', settings, function(data) {
+        $('div.settingsEdit').html(data).slideDown('fast');
+        //reload after 1 second if all is ok!
+        if(data.search("alert-danger") == -1)   { setTimeout(function (){window.location.reload();}, 1000); }
+        else                             { hideSpinner(); }
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+
+// load edit form 
+$(document).on("click", ".editFirewallZone", function() {
+    open_popup("700", "app/admin/firewall-zones/zones-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+});
 
 /*    Subnets
 ********************************/
