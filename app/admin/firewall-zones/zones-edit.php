@@ -9,11 +9,20 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database = new Database_PDO;
 $User = new User ($Database);
 $Subnets = new Subnets ($Database);
+$Sections = new Sections ($Database);
 $Result = new Result ();
 $Zones = new FirewallZones($Database);
 
 // validate session parameters
 $User->check_user_session();
+
+// DEBUG
+print 'DEBUG<br><pre>';
+print_r($_POST);
+print '<br>';
+//var_dump($sectionIds);
+print '</pre>';
+// !DEBUG
 
 // validate $_POST['id'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['id'])) {
@@ -22,6 +31,12 @@ if (!preg_match('/^[0-9]+$/i', $_POST['id'])) {
 // validate $_POST['action'] values
 if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] != 'delete') {
 	$Result->show("danger", _("Invalid action. Do not manipulate the POST values!"), true);
+}
+// validate $_POST['sectionId'] values
+if (isset($_POST['sectionId'])) {
+	if (!preg_match('/^[0-9]+$/i', $_POST['sectionId'])) {
+		$Result->show("danger", _("Invalid section ID. Do not manipulate the POST values!"), true);
+	}	
 }
 
 // fetch module settings
@@ -33,51 +48,31 @@ if ($_POST['action'] != 'add') {
 // disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
-$subnets = $Subnets->fetch_all_subnets_search();
-
+// $subnets = $Subnets->fetch_all_subnets_search();
+$subnets = $Database->getObjectsQuery('SELECT id,subnet,mask,description FROM subnets ORDER BY subnet * 1 ASC;');
 if(sizeof($subnets)>0) {
 	foreach($subnets as $subnet) {
 		// add decimal format
-		$subnet->ip = $Subnets->transform_to_dotted ($subnet->subnet);
+		$subnet->subnet = $Subnets->transform_to_dotted ($subnet->subnet);
 		// save to subnets
 		$subnets[$subnet->id] = (object) $subnet;
 	}
 }
 
-$subnets = (array)$subnets;
 
-// DEBUG
-print 'DEBUG<br><pre>';
-print_r($subnets[0]);
-print '<br>';
 
-print '</pre>';
-// !DEBUG
+
+
 
 
 
 ?>
 
-<script type="text/javascript">
-$(function() {
-	var subnets=["192.168.210.0","10.0.0.64","213.157.0.0"];
-    //var subnets = <?php json_encode($subnets); ?>
-    //autocomplete
-    $(".searchSubnet").autocomplete({
-        source: subnets,
-        minLength: 0
-    }).focus(function() {
-                $(this).autocomplete("search", "");
-            });                
-
-});
-</script>
-
 
 <?php
 
 
-// header  
+// header 
 print '<div class="pHeader">'._('Add a firewall zone').'</div>';
 
 // content
@@ -111,8 +106,13 @@ print '<td>'._('Description').'</td>';
 print '<td><input type="text" class="form-control input-sm" name="description" placeholder="'._('Zone description').'" value="'.$FirewallZones->description.'"></td>';
 
 print '</tr><tr>';
-print '<td>'._('Subnet').'</td>';
-print '<td><input type="text" class="searchSubnet form-control input-sm" name="subnetId" placeholder="'._('Select a subnet').'" value="'.$FirewallZones->subnetId.'"></td>';
+print '<td>'._('Section').'</td>';
+print '<td><select name="sectionId" class="firewallZoneSection form-control input-sm input-w-auto input-max-200">';
+print $Subnets->print_simple_subnet_dropdown_menu();
+print '</td>';
+//<input type="text" class="searchSubnet form-control input-sm" name="subnetId" placeholder="'._('Select a subnet').'" value="'.$FirewallZones->subnetId.'"></td>';
+
+
 
 print '</tr><tr>';
 print '<td>'._('VLAN').'</td>';

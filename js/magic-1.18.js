@@ -1357,6 +1357,7 @@ $(document).on("click", ".editFirewallZone", function() {
     open_popup("700", "app/admin/firewall-zones/zones-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
 });
 
+
 /*    Subnets
 ********************************/
 //show subnets
