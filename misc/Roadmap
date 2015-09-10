@@ -10,7 +10,6 @@ version - 1.2
 		+ Save opened folders in left menu;
 
 		+ on subnet create reload in new subnet;
-		+ on invalid id open section;
 		+ changelog mail;
 
 	+ Import updates
