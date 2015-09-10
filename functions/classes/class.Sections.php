@@ -4,7 +4,7 @@
  *	phpIPAM Section class
  */
 
-class Sections  {
+class Sections extends Common_functions {
 
 	/* public variables */
 	public $sections;						//(array of objects) to store sections, section ID is array index
@@ -16,6 +16,7 @@ class Sections  {
 	/* object holders */
 	public $Result;							//for Result printing
 	protected $Database;					//for Database connection
+	public $Log;							//for Logging connection
 
 
 
@@ -31,55 +32,8 @@ class Sections  {
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
-	}
-
-	/**
-	 * Changes empty array fields to specified character
-	 *
-	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
-	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
-		}
-		# result
-		return $out;
-	}
-
-	/**
-	 * Function to verify checkbox if 0 length
-	 *
-	 * @access public
-	 * @param mixed $field
-	 * @return void
-	 */
-	public function verify_checkbox ($field) {
-		return @$field==""||strlen(@$field)==0 ? 0 : $field;
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
 
 
@@ -108,10 +62,6 @@ class Sections  {
 		# strip tags
 		$values = $this->strip_input_tags ($values);
 
-		# fetch user
-		$User = new User ($this->Database);
-		$this->user = $User->user;
-
 		# execute based on action
 		if($action=="add")			{ return $this->section_add ($values); }
 		elseif($action=="edit")		{ return $this->section_edit ($values); }
@@ -138,15 +88,17 @@ class Sections  {
 		try { $this->Database->insertObject("sections", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "Sections creation", "Failed to create new section<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->user->username);
+			// write log and changelog
+			$this->Log->write( "Sections creation", "Failed to create new section<hr>".$e->getMessage()."<hr>".$this->array_to_log($values), 2);
 			return false;
 		}
 		# save id
 		$this->lastInsertId = $this->Database->lastInsertId();
-		# write changelog
-		write_changelog('section', "delete", 'success', array(), $values);
 		# ok
-		write_log( "$table object creation", "New $table database object createdt<hr>".array_to_log($values), 0, $this->user->username);
+		$values['id'] = $this->lastInsertId;
+		$this->Log->write( "Section created", "New section created<hr>".$this->array_to_log($values), 0);
+		# write changelog
+		$this->Log->write_changelog('section', "add", 'success', array(), $values);
 		return true;
 	}
 
@@ -174,7 +126,7 @@ class Sections  {
 		try { $this->Database->updateObject("sections", $values, "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "Section $old_section->name edit", "Failed to edit section $old_section->name<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->user->username);
+			$this->Log->write( "Section $old_section->name edit", "Failed to edit section $old_section->name<hr>".$e->getMessage()."<hr>".$this->array_to_log($values), 2);
 			return false;
 		}
 
@@ -183,9 +135,9 @@ class Sections  {
 	        if(!$this->delegate_section_permissions ($values['id'], $values['permissions']))	{ $this->Result->show("danger", _("Failed to delegate permissions"), false); }
         }
 		# write changelog
-		write_changelog('section', "edit", 'success', $old_section, $values);
+		$this->Log->write_changelog('section', "edit", 'success', $old_section, $values);
 		# ok
-		write_log( "Section $old_section->name edit", "Section $old_section->name edited<hr>".array_to_log($values), 0, $this->user->username);
+		$this->Log->write( "Section $old_section->name edit", "Section $old_section->name edited<hr>".$this->array_to_log($values), 0);
 		return true;
 	}
 
@@ -218,16 +170,16 @@ class Sections  {
 			# delete all sections
 			try { $this->Database->deleteRow("sections", "id", $id); }
 			catch (Exception $e) {
-				write_log( "Section $old_section->name delete", "Failed to delete section $old_section->name<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->user->username);
+				$this->Log->write( "Section $old_section->name delete", "Failed to delete section $old_section->name<hr>".$e->getMessage()."<hr>".$this->array_to_log($values), 2);
 				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 				return false;
 			}
 		}
 
 		# write changelog
-		write_changelog('section', "delete", 'success', $old_section, array());
+		$this->Log->write_changelog('section', "delete", 'success', $old_section, array());
 		# log
-		write_log( "Section $old_section->name delete", "Section $old_section->name deleted<hr>".array_to_log($old_section), 0, $this->user->username);
+		$this->Log->write( "Section $old_section->name delete", "Section $old_section->name deleted<hr>".$this->array_to_log((array) $old_section), 0);
 		return true;
 	}
 

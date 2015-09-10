@@ -4,7 +4,7 @@
  *	phpIPAM Section class
  */
 
-class Tools  {
+class Tools extends Common_functions {
 
 	/**
 	 * public variables
@@ -42,17 +42,6 @@ class Tools  {
 	}
 
 	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
-	}
-
-	/**
 	 * Initializes PEAR Net IPv4 object
 	 *
 	 * @access private
@@ -79,24 +68,6 @@ class Tools  {
 			//initialize object
 			$this->Net_IPv6 = new Net_IPv6();
 		}
-	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
 	}
 
 
@@ -522,266 +493,6 @@ class Tools  {
 		}
 		# return
 		return $device_type;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@log methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * fetches logs for specified parameters
-	 *
-	 * @access public
-	 * @param mixed $logCount
-	 * @param mixed $direction (default: NULL)
-	 * @param mixed $lastId (default: NULL)
-	 * @param mixed $highestId (default: NULL)
-	 * @param mixed $informational
-	 * @param mixed $notice
-	 * @param mixed $warning
-	 * @return void
-	 */
-	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational, $notice, $warning) {
-
-		# query start
-		$query  = 'select * from ('. "\n";
-		$query .= 'select * from logs '. "\n";
-		# append severities
-		$query .= 'where (`severity` = "'. $informational .'" or `severity` = "'. $notice .'" or `severity` = "'. $warning .'" )'. "\n";
-		# set query based on direction */
-		if( ($direction == "next") && ($lastId != $highestId) ) {
-			$query .= 'and `id` < '. $lastId .' '. "\n";
-			$query .= 'order by `id` desc limit '. $logCount . "\n";
-		}
-		elseif( ($direction == "prev") && ($lastId != $highestId)) {
-			$query .= 'and `id` > '. $lastId .' '. "\n";
-			$query .= 'order by `id` asc limit '. $logCount . "\n";
-		}
-		else {
-			$query .= 'order by `id` desc limit '. $logCount . "\n";
-		}
-		# append limit and order
-		$query .= ') as test '. "\n";
-		$query .= 'order by `id` desc limit '. $logCount .';'. "\n";
-
-
-	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-	    # return results
-	    return $logs;
-	}
-
-	/**
-	 * Returns highest (last) log id
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function log_fetch_highest_id () {
-		# fetch
-	    try { $id = $this->Database->getObjectQuery("select id from logs order by id desc limit 1;"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-		# return result
-		return $id->id;
-	}
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@changelog methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * fetches all changelogs
-	 *
-	 * @access public
-	 * @param bool $filter (default: false)
-	 * @param mixed $expr
-	 * @param int $limit (default: 100)
-	 * @return void
-	 */
-	public function fetch_all_changelogs ($filter = false, $expr, $limit = 100) {
-	    # set query
-		if(!$filter) {
-		    $query = "select * from (
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-						where `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-					) as `ips` order by `cid` desc limit $limit;";
-		}
-		# filter
-		else {
-			/* replace * with % */
-			if(substr($expr, 0, 1)=="*")								{ $expr[0] = "%"; }
-			if(substr($expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
-			if(substr($expr, 0, 1)!="*" && substr($expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
-
-		    $query = "select * from (
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-						where `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-					) as `ips`
-					where `coid`='$expr' or `ctype`='$expr' or `real_name` like '$expr' or `cdate` like '$expr' or `cdiff` like '$expr' or INET_NTOA(`ip_addr`) like '$expr'
-					order by `cid` desc limit $limit;";
-		}
-
-	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-	    # return results
-	    return $logs;
-	}
-
-	/**
-	 * Fetches changelog for addresses in subnet for all slave subnets
-	 *
-	 * @access public
-	 * @param mixed $subnetId
-	 * @param int $limit (default: 50)
-	 * @return void
-	 */
-	public function fetch_subnet_addresses_changelog_recursive ($subnetId, $limit = 50) {
-	    # get all addresses ids
-	    $ips  = array();
-		$Addresses = new Addresses ($this->Database);
-	    $ips = $Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
-
-	    # fetch changelog for IPs
-	    if(sizeof($ips) > 0) {
-		    # query
-		    $query  = "select
-		    			`u`.`real_name`,`o`.`id`,`o`.`ip_addr`,`o`.`description`,`o`.`id`,`o`.`subnetId`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`
-						from `changelog` as `c`, `users` as `u`, `ipaddresses` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (";
-			foreach($ips as $ip) {
-			$query .= "`c`.`coid` = ? or ";
-			$args[] = $ip->id;
-			}
-			$query  = substr($query, 0, -3);
-			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
-
-			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
-			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-		    # return result
-		    return $logs;
-	    }
-		else {
-			return false;
-		}
-	}
-
-	/**
-	 * fetch changelog entries for specified type entry
-	 *
-	 * @param $ctype = 'ip_addr','subnet','section'
-	 * @param $coid = objectId from ctype definition
-	 * @param $long (default: false)
-	 * @param $limit (default: 50)
-	 */
-	public function fetch_changlog_entries($ctype, $coid, $long = false, $limit = 50) {
-	    # change ctype to match table
-		if($ctype=="ip_addr")	$ctypeTable = "ipaddresses";
-		elseif($ctype=="subnet")$ctypeTable = "subnets";
-		else					$ctypeTable = $ctype;
-
-	    # query
-	    if($long) {
-		    $query = "select *
-						from `changelog` as `c`, `users` as `u`, `$ctypeTable` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
-		} else {
-		    $query = "select *
-						from `changelog` as `c`, `users` as `u`
-						where `c`.`cuser` = `u`.`id`
-						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
-		}
-	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $ctype)); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-	    # return result
-	    return $logs;
-	}
-
-	/**
-	 * Fetches changelog entries for all slave subnets recursive
-	 *
-	 * @access public
-	 * @param mixed $subnetId
-	 * @param int $limit (default: 50)
-	 * @return void
-	 */
-	public function fetch_subnet_slaves_changlog_entries_recursive($subnetId, $limit = 50) {
-		# fetch all slave subnet ids
-		$Subnets = new Subnets ($this->Database);
-		$Subnets->reset_subnet_slaves_recursive ();
-		$Subnets->fetch_subnet_slaves_recursive ($subnetId);
-		# remove master subnet ID
-		$key = array_search($subnetId, $Subnets->slaves);
-		unset($Subnets->slaves[$key]);
-		$Subnets->slaves = array_unique($Subnets->slaves);
-
-	    # if some slaves are present get changelog
-	    if(sizeof($Subnets->slaves) > 0) {
-		    # set query
-		    $query  = "select
-						`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (";
-			foreach($Subnets->slaves as $slaveId) {
-			$query .= "`c`.`coid` = ? or ";
-			$args[] = $slaveId;							//set keys
-			}
-			$query  = substr($query, 0, -3);
-			$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
-
-			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
-			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-		    # return result
-		    return $logs;
-	    }
-		else {
-			return false;
-		}
 	}
 
 
@@ -1868,10 +1579,10 @@ class Tools  {
         }
 
         # /min / max hosts
-        $maxIp = gmp_strval( gmp_add(gmp_pow(2, 128 - $mask),ip2long6 ($subnet)));
+        $maxIp = gmp_strval( gmp_add(gmp_pow(2, 128 - $mask),$Result->ip2long6 ($subnet)));
 
         $out['Min host IP']               = $subnet;
-        $out['Max host IP']               = long2ip6 ($maxIp);
+        $out['Max host IP']               = $this->long2ip6 ($maxIp);
         $out['Number of hosts']           = $Subnets->get_max_hosts ($mask, "IPv6");
 
         # set address type

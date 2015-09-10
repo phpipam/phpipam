@@ -294,7 +294,7 @@ else {
 	}
 
 	# execute
-	if(!$Admin->object_modify("subnets", $_POST['action'], "id", $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
+	if (!$Subnets->modify_subnet ($_POST['action'], $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
 	else {
 		# update also all slave subnets!
 		if(isset($values['sectionId'])&&$_POST['action']!="add") {

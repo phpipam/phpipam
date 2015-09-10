@@ -101,7 +101,7 @@ else {
 					print "<td class='customField hidden-xs hidden-sm'>";
 
 					// create links
-					$vlan[$field['name']] = create_links ($vlan[$field['name']]);
+					$vlan[$field['name']] = $Result->create_links ($vlan[$field['name']]);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{

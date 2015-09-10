@@ -134,7 +134,7 @@ else {
 					   		if(!in_array($field['name'], $hidden_fields)) {
 
 								// create links
-								$v->$field['name'] = create_links ($v->$field['name']);
+								$v->$field['name'] = $Result->create_links ($v->$field['name']);
 
 								print "<td class='hidden-xs hidden-sm hidden-md'>";
 								//booleans
@@ -157,7 +157,6 @@ else {
 				    }
 				} else {
 					print "<tr class='$class'>";
-					print "<td></td>";
 					print "<td></td>";
 					print "<td></td>";
 					print "<td></td>";

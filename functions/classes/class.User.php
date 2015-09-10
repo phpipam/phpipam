@@ -6,7 +6,7 @@
 *
 */
 
-class User {
+class User extends Common_functions {
 
 	/**
 	 * public variables
@@ -38,8 +38,9 @@ class User {
 	/**
 	 * object holders
 	 */
-	public $Result;						// for Result printing
+	public $Result;							// for Result printing
 	protected $Database;					// for Database connection
+	public $Log;							// for Logging connection
 
 
 
@@ -56,16 +57,19 @@ class User {
 
 		# Save database object
 		$this->Database = $database;
-
 		# set api
 		$this->api = $api;
-
 		# initialize Result
 		$this->Result = new Result ();
-		# register new session
-		$this->register_session ();
+
 		# get settings
 		$this->get_settings ();
+
+		# Log object
+		$this->Log = new Logging ($this->Database, $this->settings);
+
+		# register new session
+		$this->register_session ();
 		# check timeut
 		$this->check_timeout ();
 		# set authenticated flag
@@ -128,17 +132,6 @@ class User {
 	private function set_session_name () {
 		include( dirname(__FILE__) . '/../../config.php' );
 		$this->sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
-	}
-
-	/**
-	 * Sets debugging
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		include( dirname(__FILE__) . '/../../config.php' );
-		$this->debugging = $debugging ? true : false;
 	}
 
 	/**
@@ -230,7 +223,7 @@ class User {
 		# not authenticated
 		if($this->authenticated===false && $redirect) {
 			# set url
-			$url = createURL();
+			$url = $this->createURL();
 
 			# error print for AJAX
 			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") {
@@ -377,7 +370,7 @@ class User {
 	private function check_referrer () {
 	    if ( ($_SERVER['HTTP_X_REQUESTED_WITH'] != "XMLHttpRequest") && ($_SERVER['HTTP_ORIGIN'] != $_SERVER['HTTP_HOST'] ) ) {
 	        # write log and die
-	    	write_log ("referrer_check", _('Page not referred properly'), 0 );
+	    	$this->Log->write ("referrer_check", _('Page not referred properly'), 0 );
 	        $this->Result->show ("danger", _('Page not referred properly', true));
 	    }
 	}
@@ -416,17 +409,6 @@ class User {
 	 */
 	public function fetch_available_auth_method_types () {
 		return array("AD", "LDAP", "Radius");
-	}
-
-	/**
-	 * Function to verify checkbox if 0 length
-	 *
-	 * @access public
-	 * @param mixed $field
-	 * @return void
-	 */
-	public function verify_checkbox ($field=0) {
-		return $field==""||$field=="0" ? 0 : 1;
 	}
 
 
@@ -705,7 +687,7 @@ class User {
 			$this->write_session_parameters ();
 
 			$this->Result->show("success", _("Login successful"));
-			write_log( "User login", "User ".$this->user->real_name." logged in", 0, $username );
+			$this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0 );
 
 			# write last logintime
 			$this->update_login_time ();
@@ -718,7 +700,7 @@ class User {
 			# add blocked count
 			$this->block_ip ();
 
-			write_log( "User login", "Invalid username or password", 1 );
+			$this->Log->write( "User login", "Invalid username or password", 1 );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
@@ -755,7 +737,7 @@ class User {
 	    	if($this->ldap)	{ $adldap->setUseOpenLDAP(true); }
 		}
 		catch (adLDAPException $e) {
-			write_log( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 0 );
+			$this->Log->write( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 0 );
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
 
@@ -764,7 +746,7 @@ class User {
 			# save to session
 			$this->write_session_parameters ();
 
-	    	write_log( "AD login", "User ".$this->user->real_name." logged in via AD", 0, $username );
+	    	$this->Log->write( "AD login", "User ".$this->user->real_name." logged in via AD", 0 );
 	    	$this->Result->show("success", _("AD Login successful"));
 
 			# write last logintime
@@ -774,21 +756,21 @@ class User {
     	}
     	# failed to connect
     	else if (@$authAD == 'Failed to connect to AD!') {
-			write_log( "AD login", "Failed to connect to AD server", 2 );
+			$this->Log->write( "AD login", "Failed to connect to AD server", 2 );
 			$this->Result->show("danger", _("Failed to connect to AD server"), true);
 		}
 		# failed to authenticate
 		else if (@$authAD == 'Failed to authenticate user via AD!') {
 			# add blocked count
 			$this->block_ip ();
-			write_log( "AD login", "Failed to authenticate user against AD", 1 );
+			$this->Log->write( "AD login", "Failed to authenticate user against AD", 1 );
 			$this->Result->show("danger", _("Failed to authenticate user against AD"), true);
 		}
 		# wrong user/pass by default
 		else {
 			# add blocked count
 			$this->block_ip ();
-			write_log( "AD login", "Failed to authenticate user against AD", 1 );
+			$this->Log->write( "AD login", "Failed to authenticate user against AD", 1 );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
@@ -821,7 +803,7 @@ class User {
 
 		# check for socket support !
 		if(!in_array("sockets", get_loaded_extensions())) {
-			write_log( "Radius login", "php Socket extension missing", 2 );
+			$this->Log->write( "Radius login", "php Socket extension missing", 2 );
 			$this->Result->show("danger", _("php Socket extension missing"), true);
 		}
 
@@ -846,7 +828,7 @@ class User {
 			# save to session
 			$this->write_session_parameters ();
 
-	    	write_log( "Radius login", "User ".$this->user->real_name." logged in via radius", 0, $username );
+	    	$this->Log->write( "Radius login", "User ".$this->user->real_name." logged in via radius", 0 );
 	    	$this->Result->show("success", _("Radius login successful"));
 
 			# write last logintime
@@ -857,7 +839,7 @@ class User {
 		else {
 			# add blocked count
 			$this->block_ip ();
-			write_log( "Radius login", "Failed to authenticate user on radius server", 1 );
+			$this->Log->write( "Radius login", "Failed to authenticate user on radius server", 1 );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
@@ -970,20 +952,20 @@ class User {
 		}
 
 	    # prepare log file
-	    $log = array_to_log ($post);
+	    $log = $this->array_to_log ($post);
 
 		# update
 		try { $this->Database->updateObject("users", $items); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "User self update", "User self update failed!<br>".$log, 2, $this->username );
+			$this->Log->write( "User self update", "User self update failed!<br>".$log, 2 );
 			return false;
 		}
 		# update language
 		$this->update_session_language ();
 
 		# ok, update log table
-		write_log( "User self update", "User self update suceeded!", 0, $this->username );
+		$this->Log->write( "User self update", "User self update suceeded!", 0 );
 	    return true;
 	}
 

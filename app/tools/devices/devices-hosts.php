@@ -91,7 +91,7 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 			}
 
 			# create links
-			$device[$field['name']] = create_links ($device[$field['name']]);
+			$device[$field['name']] = $Result->create_links ($device[$field['name']]);
 
 			print "<tr>";
 			print "<th>$field[name]</th>";

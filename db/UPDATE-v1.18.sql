@@ -36,6 +36,3 @@ VALUES
 
 /* add reference to nameservers in subnets table */
 ALTER TABLE `subnets` ADD `nameserverId` int(11) NULL DEFAULT '0' AFTER `DNSrecursive`;
-
-/* add bool to show/hide nameservers per section */
-ALTER TABLE `sections` ADD `ShowNameservers` BOOL NOT NULL DEFAULT '0' AFTER `ShowVRF`;

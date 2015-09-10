@@ -2,11 +2,17 @@ version - 1.2
 
 	+ To fix / finish
 		+ logging: db, syslog (db prepared)
+			+ Addresses write log;
+			+ DNS write log;
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ VLAN domain permissions;
+		+ VLAN domain permissions ?;
 		+ Devices permissions ?
 		+ Save opened folders in left menu;
+
+		+ on subnet create reload in new subnet;
+		+ on invalid id open section;
+		+ changelog mail;
 
 	+ Import updates
 		https://github.com/malaiam/phpipam

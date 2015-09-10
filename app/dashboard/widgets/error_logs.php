@@ -7,6 +7,7 @@ if(!is_object($User)) {
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
+	$Log		= new Logging ($Database);
 }
 
 # user must be authenticated
@@ -18,7 +19,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 }
 
 # print last 5 access logs
-$logs = $Tools->fetch_logs(5, NULL, NULL, NULL, 1, 2, 2);
+$logs = $Log->fetch_logs(5, NULL, NULL, NULL, 1, 2, 2);
 
 print "<table class='table table-condensed table-hover table-top'>";
 

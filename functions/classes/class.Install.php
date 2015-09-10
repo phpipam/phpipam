@@ -4,7 +4,7 @@
  *	phpIPAM Install class
  */
 
-class Install  {
+class Install extends Common_functions {
 
 	/**
 	 * public varibles
@@ -24,6 +24,8 @@ class Install  {
 	protected $Result;						//for Result printing
 	protected $Database;					//for Database connection
 	protected $Database_root;				//for Database connection for installation
+	public $Log;							// for Logging connection
+
 
 	/**
 	 * __construct method
@@ -40,6 +42,8 @@ class Install  {
 		$this->set_debugging ();
 		# set debugging
 		$this->set_db_params ();
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
 
 	/**
@@ -109,7 +113,7 @@ class Install  {
 
 	    # return true, if some errors occured script already died! */
 		sleep(1);
-		write_log( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
+		$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
 		return true;
 	}
 
@@ -256,7 +260,7 @@ class Install  {
 	 * @access private
 	 * @return void
 	 */
-	private function set_debugging () {
+	public function set_debugging () {
 		require( dirname(__FILE__) . '/../../config.php' );
 		if($debugging==true) { $this->debugging = true; }
 	}
@@ -380,7 +384,7 @@ class Install  {
 			try { $this->Database->runQuery($query); }
 			catch (Exception $e) {
 				# write log
-				write_log( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
+				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
 				# fail
 				$this->Result->show("danger", _("Update: ").$e->getMessage()."<br>query: ".$query, true);
 			}
@@ -389,7 +393,7 @@ class Install  {
 
 		# all good, print it
 		sleep(1);
-		write_log( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
+		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
 		return true;
 	}
 

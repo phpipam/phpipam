@@ -804,7 +804,7 @@ class PowerDNS extends Common_functions {
 		if (sizeof($ns)>0) {
 			foreach($ns as $s) {
 				// validate
-				if(validate_hostname($s)===false)		{ $this->Result->show("danger", "Invalid NS". " $n", true); }
+				if($this->validate_hostname($s)===false)		{ $this->Result->show("danger", "Invalid NS". " $n", true); }
 				// save
 				$records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl']);
 			}
@@ -905,7 +905,7 @@ class PowerDNS extends Common_functions {
 	 */
 	private function validate_record_name ($name) {
 		// null is ok, otherwise URI is required
-		if (strlen($name)>0 && !validate_hostname($name))		{ $this->Result->show("danger", _("Invalid record name"), true); }
+		if (strlen($name)>0 && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
 		// ok
 		return $name;
 	}

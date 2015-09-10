@@ -4,7 +4,7 @@
  *	phpIPAM Admin class
  */
 
-class Admin  {
+class Admin extends Common_functions {
 
 	/**
 	 * public variables
@@ -27,6 +27,7 @@ class Admin  {
 	protected $Database;					//for Database connection
 	protected $debugging = false;			//(bool) debugging flag
 	protected $settings = false;			//(obj) settings
+	public $Log;							// for Logging connection
 
 
 
@@ -49,17 +50,8 @@ class Admin  {
 		$this->set_admin_required ($admin_required);
 		# verify that user is admin
 		$this->is_admin ();
-	}
-
-	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
 
 	/**
@@ -71,55 +63,6 @@ class Admin  {
 	 */
 	public function set_admin_required ($bool) {
 		$this->admin_required = is_bool($bool) ? $bool : true;
-	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
-	}
-
-	/**
-	 * Changes empty array fields to specified character
-	 *
-	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
-	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
-		}
-		# result
-		return $out;
-	}
-
-	/**
-	 * Function to verify checkbox if 0 length
-	 *
-	 * @access public
-	 * @param mixed $field
-	 * @return void
-	 */
-	public function verify_checkbox ($field=0) {
-		return $field==""||$field=="0" ? 0 : 1;
 	}
 
 	/**
@@ -323,13 +266,13 @@ class Admin  {
 		try { $this->Database->insertObject($table, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->User->username);
+			$this->Log->write( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".$this->array_to_log($values), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table object creation", "New $table database object created<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "$table object creation", "New $table database object created<hr>".$this->array_to_log($values), 0);
 		return true;
 	}
 
@@ -353,13 +296,13 @@ class Admin  {
 		try { $this->Database->updateObject($table, $values, $key); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->User->username);
+			$this->Log->write( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($values), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".$this->array_to_log($values), 0);
 		return true;
 	}
 
@@ -383,13 +326,13 @@ class Admin  {
 		try { $this->Database->updateMultipleObjects($table, $ids, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "$table multiple objects edit", "Failed to edit multiple objects in $table<hr>".$e->getMessage()."<hr>".array_to_log($ids)."<hr>".array_to_log($values), 2, $this->User->username);
+			$this->Log->write( "$table multiple objects edit", "Failed to edit multiple objects in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($values), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table multiple objects edit", "Multiple objects in $table edited<hr>".array_to_log($ids)."<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "$table multiple objects edit", "Multiple objects in $table edited<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($values), 0);
 		return true;
 	}
 
@@ -406,14 +349,14 @@ class Admin  {
 		# execute
 		try { $this->Database->deleteRow($table, $field, $id); }
 		catch (Exception $e) {
-			write_log( "$table object $values[$id] delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "$table object $values[$id] delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table object $id edit", "Object $field=$id in $table deleted.", 0, $this->User->username);
+		$this->Log->write( "$table object $id edit", "Object $field=$id in $table deleted.", 0);
 		return true;
 	}
 
@@ -867,11 +810,11 @@ class Admin  {
 		try { $res = $this->Database->runQuery($query, array(@$field['Comment'])); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-	        write_log( "Custom field $field[action]", "Custom Field $field[action] failed ($field[name])<hr>".array_to_log($field), 2, $this->User->username);
+	        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] failed ($field[name])<hr>".$this->array_to_log($field), 2);
 			return false;
 		}
 		# field updated
-        write_log( "Custom field $field[action]", "Custom Field $field[action] success ($field[name])<hr>".array_to_log($field), 0, $this->User->username);
+        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] success ($field[name])<hr>".$this->array_to_log($field), 0);
 	    return true;
 	}
 

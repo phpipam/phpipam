@@ -12,6 +12,8 @@ if(!is_object($User)) {
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 	$Subnets 	= new Subnets ($Database);
+	$Sections 	= new Sections ($Database);
+	$Log		= new Logging ($Database);
 }
 
 # user must be authenticated
@@ -23,7 +25,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 }
 
 /* get logs */
-$clogs = $Tools->fetch_all_changelogs (false, "", 50);
+$clogs = $Log->fetch_all_changelogs (false, "", 50);
 
 
 if(sizeof($clogs)==0) {
@@ -60,7 +62,7 @@ else {
 			elseif($l['ctype']=="section")	{ $permission = $Sections->check_permission ($User->user, $l['sectionId']); }
 			else							{ $permission = 0; }
 
-			# if 0 die
+			# if 0 ignore
 			if($permission > 0)	{
 				# format diff
 				$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
@@ -88,7 +90,9 @@ else {
 				elseif($l['ctype']=="Folder")   {
 					print "	<td><a href='".create_link("folder",$l['sectionId'],$l['tid'])."'>$l[sDescription]</a></td>";
 				}
-
+				elseif($l['ctype']=="Section")   {
+					print "	<td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
+				}
 				print "	<td>$l[cdate]</td>";
 				print "	<td>$l[cdiff]</td>";
 				print "</tr>";
