@@ -310,6 +310,9 @@ else {
 
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
+		# create - for redirect
+		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$Subnets->lastInsertId.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		#
 		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
 
     	# send mail

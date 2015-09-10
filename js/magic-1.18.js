@@ -1465,7 +1465,30 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
                 //from ipcalc - load ip list
                 sectionId = $('form#editSubnetDetails input[name=sectionId]').val();
                 subnetId  = $('form#editSubnetDetails input[name=subnetId]').val();
-                setTimeout(function (){window.location.reload();}, 1500);
+	            //check for .subnet_id_new if new subnet id present and set location
+	            if($(".subnet_id_new").html()!=="undefined") {
+		            var subnet_id_new = $(".subnet_id_new").html();
+		            if (subnet_id_new % 1 === 0) {
+			            // section
+			            var section_id_new = $(".section_id_new").html();
+						//lets try to detect IEto set location
+					    var ua = window.navigator.userAgent;
+					    var msie = ua.indexOf("MSIE ");
+					    //IE
+					    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+					    else 																{ var base = ""; }
+					    //go to search page
+					    var prettyLinks = $('#prettyLinks').html();
+						if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+						else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
+		            }
+		            else {
+		            	setTimeout(function (){window.location.reload();}, 1500);
+	            	}
+	            }
+	            else {
+		             setTimeout(function (){window.location.reload();}, 1500);
+	            }
             }
             //from free space
             else if(subnetData.search("freespace") != -1) {
@@ -1474,8 +1497,9 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
             //from ipcalc - ignore
             else if (subnetData.search("ipcalc") != -1) {
             }
+            //from admin
             else {
-                //from admin, reload
+                //reload
                 setTimeout(function (){window.location.reload();}, 1500);
             }
         }
