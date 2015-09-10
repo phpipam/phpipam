@@ -183,9 +183,6 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		else							{ $Result->show("success", _("Folder $_POST[action] successfull").'!', true); }
-
-    	# send mail
-		# sendObjectUpdateMails("subnet", $_POST['action'], $subnet_old_details, $_POST);
 	}
 }
 

@@ -110,10 +110,11 @@ class Logging extends Common_functions {
 				try { $user_id = $this->Database->getObjectQuery("select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 			}
-			# save
+			# save id
 			$this->user_id = $user_id->id;
+			# save user
+			$this->user = $user_id;
 		}
-
 	}
 
 
@@ -167,6 +168,12 @@ class Logging extends Common_functions {
 	private function write_changelog_syslog ($changelog) {
 
 	}
+
+
+
+
+
+
 
 
 
@@ -288,13 +295,15 @@ class Logging extends Common_functions {
 	 * @param mixed $result
 	 * @param array $old (default: array())
 	 * @param array $new (default: array())
+	 * @param bool $mail_changelog (default: true)
 	 * @return void
 	 */
-	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array()) {
+	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array(), $mail_changelog = true) {
 		//set values
-		$this->object_type 	 = $object_type;
-		$this->object_action = $action;
-		$this->object_result = $result;
+		$this->object_type 	  = $object_type;
+		$this->object_action  = $action;
+		$this->object_result  = $result;
+		$this->mail_changelog = $mail_changelog;
 		//cast diff objects as array
 		$this->object_old = (array) $old;		// new object
 		$this->object_new = (array) $new;		// old object
@@ -312,7 +321,6 @@ class Logging extends Common_functions {
 		    $this->Subnets 		= new Subnets ($this->Database);
 		    $this->Sections 	= new Sections ($this->Database);
 		    $this->Tools	 	= new Tools ($this->Database);
-
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
@@ -369,7 +377,7 @@ class Logging extends Common_functions {
 	 */
 	private function write_changelog_to_db ($changelog) {
 		# log to array
-		$changelog = str_replace("<br>", "\n", $this->array_to_log ($changelog));
+		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog));
 		# fetch user id
 		$this->get_active_user_id ();
 
@@ -395,6 +403,9 @@ class Logging extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		# mail
+		if ($this->mail_changelog)
+		$this->changelog_send_mail ($changelog, $obj_id);
 		# ok
 		return true;
 	}
@@ -436,6 +447,8 @@ class Logging extends Common_functions {
 		}
 		// ip address - old needs to be transformed to dotted format
 		$this->object_old['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_old['ip_addr']);
+		$this->object_new['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_new['ip_addr']);
+
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
@@ -484,7 +497,9 @@ class Logging extends Common_functions {
 					$this->object_new['type'],
 					$this->object_new['section'],
 					$this->object_new['ip_addr_old'],
-					$this->object_new['nostrict']
+					$this->object_new['nostrict'],
+					$this->object_new['start'],
+					$this->object_new['stop']
 					);
 		}
 		# remove subnet fields
@@ -964,6 +979,150 @@ class Logging extends Common_functions {
 		    # return result
 		    return $logs;
 	    }
+		else {
+			return false;
+		}
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 *	@changelog mail methods
+	 *	--------------------------------
+	 */
+
+	/**
+	 * Send mail on new changelog
+	 *
+	 * @access public
+	 * @param mixed $changelog
+	 * @param int $obj_id
+	 * @return void
+	 */
+	public function changelog_send_mail ($changelog, $obj_id) {
+
+		# initialize tools class
+		$this->Tools = new Tools ($this->Database);
+
+		# set object
+		$obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
+
+		# change ip_addr
+		$this->object_type = str_replace("ip_addr", "address", $this->object_type);
+		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
+
+		# set subject
+		if($this->object_action == "add") 		{ $subject = ucwords($this->object_type)." create notification"; }
+		elseif($this->object_action == "edit") 	{ $subject = ucwords($this->object_type)." change notification"; }
+		elseif($this->object_action == "delete"){ $subject = ucwords($this->object_type)." delete notification"; }
+
+		// if address we need subnet details !
+		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $obj_details['subnetId']); }
+
+		# set object details
+		if ($this->object_type=="section") 		{ $details = "<a href='".$this->createURL().create_link("subnets",$obj_details['id'])."'>".$obj_details['name'] . "(".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="subnet")	{ $details = "<a href='".$this->createURL().create_link("subnets",$obj_details['sectionId'],$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['subnet'], "dotted")."/".$obj_details['mask']." (".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="address")	{ $details = "<a href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$obj_details['subnetId'],"address-details",$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['dns_name'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="address range")	{ $details = $changelog; }
+
+		# set content
+		$style = "face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'";
+		$content[] = "<div style='padding:10px;'>";
+		$content[] = "<table>";
+		$content[] = "<tr><td><font $style>Object type:</font><td><font $style>".$this->object_type."</font></td></tr>";
+		$content[] = "<tr><td><font $style>Object details:</font><td><font $style>".$details."</font></td></tr>";
+		$content[] = "<tr><td><font $style>User:</font><td><font $style>".$this->user->real_name." (".$this->user->username.")"."</font></td></tr>";
+		$content[] = "<tr><td><font $style>Action:</font><td><font $style>".$this->object_action."</font></td></tr>";
+		$content[] = "<tr><td><font $style>Date:</font><td><font $style>".date("Y-m-d H:i:s")."</font></td></tr>";
+		$content[] = "<tr><td colspan='2'><hr></td></tr>";
+		$content[] = "<tr><td colspan='2'><font $style>Changes:<br>";
+		$content[] = "<tr><td colspan='2'><font $style>&nbsp;<br>";
+		$content[] = str_replace("\r\n", "<br>",$changelog)."</font>";
+		$content[] = "</td></tr>";
+		$content[] = "</table>";
+		$content[] = "</div>";
+
+		# set plain content
+		$content_plain[] = "Object type: ".$this->object_type;
+		$content_plain[] = "Object details: ".$details;
+		$content_plain[] = "User: ".$this->user->real_name." (".$this->user->username.")";
+		$content_plain[] = "Action: ".$this->object_action;
+		$content_plain[] = "Date: ".date("Y-m-d H:i:s");
+		$content_plain[] = "\r\n--------------------\r\n";
+		$content_plain[] = str_replace("<br>", "\r\n",$changelog);
+
+
+		# get all admins and check who to end mail to
+		$recipients = $this->changelog_mail_get_recepients ();
+		if($recipients ===false) 				{ return true; }
+
+		# fetch mailer settings
+		$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
+
+		# initialize mailer
+		require( dirname(__FILE__) . '/class.Mail.php' );
+		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail->initialize_mailer();
+
+		// set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
+		# try to send
+		try {
+			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
+			foreach($recipients as $r) {
+			$phpipam_mail->Php_mailer->addAddress(trim($r->email));
+			}
+			$phpipam_mail->Php_mailer->Subject = $subject;
+			$phpipam_mail->Php_mailer->msgHTML($content);
+			$phpipam_mail->Php_mailer->AltBody = $content_plain;
+			//send
+			$phpipam_mail->Php_mailer->send();
+		} catch (phpmailerException $e) {
+			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		} catch (Exception $e) {
+			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		}
+
+		# ok
+		return true;
+	}
+
+
+	/**
+	 * Get all admins that are set to receive changelog
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function changelog_mail_get_recepients () {
+		// get all admins and check who to end mail to
+		$recipients = $this->Tools->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
+		//check recepients
+		if ($recipients!==false) {
+			// check
+			$m = 0;
+			foreach($recipients as $k=>$r) {
+				if($r->mailChangelog!="Yes") {
+					unset($recipients[$k]);
+				} else {
+					$m++;
+				}
+			}
+			// if none return false
+			if ($m==0) 	{ return false; }
+			else 		{ return $recipients; }
+		}
 		else {
 			return false;
 		}

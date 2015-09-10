@@ -147,7 +147,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 				$address['action'] = $Addresses->address_exists ($m, $address['subnetId'])===true ? "edit" : "add";
 			}
 			# if it fails set error log
-			if (!$Addresses->modify_address($address)) {
+			if (!$Addresses->modify_address($address, false)) {
 		        $errors[] = _('Cannot').' '. $address['action']. ' '._('IP address').' '. $Addresses->transform_to_dotted($m);
 		    }
 			# next IP
@@ -163,13 +163,17 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 		else {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
-
-	    	/* @mail functions ------------------- */
-			include_once('../../../functions/functions-mail.php');
-			//sendObjectUpdateMails("ip", $action, array(), $address, true);
-
+			# log and changelog
 			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successfull")."!", false);
 			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successfull!", 0);
+
+			# send changelog mail
+			$Log->object_action = $action;
+			$Log->object_type   = "address range";
+			$Log->object_result = "success";
+			$Log->user 			= $User->user;
+
+			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action", null);
 		}
 	}
 }

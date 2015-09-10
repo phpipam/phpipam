@@ -166,9 +166,12 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# autocreate PTR records
 	if($User->settings->enablePowerDNS==1) {
+		// initialize class
+		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
+			# powerDNS class
+			$PowerDNS = new PowerDNS ($Database);
+		}
 		if ($subnet['DNSrecursive'] == 1) {
-		# powerDNS class
-		$PowerDNS = new PowerDNS ($Database);
 		if($PowerDNS->db_check()!==false) {
 			// set name
 			$zone = $PowerDNS->get_ptr_zone_name ($subnet['ip'], $subnet['mask']);

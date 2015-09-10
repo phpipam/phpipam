@@ -12,6 +12,7 @@ class Addresses extends Common_functions {
 	public $addresses;						//(array of objects) to store addresses, address ID is array index
 	public $settings = null;				//(object) phpipam settings
 	public $address_types;					//(array) address types
+	public $mail_changelog = true;
 
 	/**
 	 * protected variables
@@ -279,10 +280,13 @@ class Addresses extends Common_functions {
 	 * Address modification
 	 *
 	 * @access public
-	 * @param array $address
+	 * @param mixed $address
+	 * @param bool $mail_changelog (default: true)
 	 * @return void
 	 */
-	public function modify_address ($address) {
+	public function modify_address ($address, $mail_changelog = true) {
+		# save changelog
+		$this->mail_changelog  = $mail_changelog;
 		# null empty values
 		$address = $this->reformat_empty_array_fields ($address, null);
 		# strip tags
@@ -343,7 +347,7 @@ class Addresses extends Common_functions {
 		# log and changelog
 		$address['id'] = $this->lastId;
 		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($address), 0);
-		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address);
+		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("add", $insert);
@@ -406,7 +410,7 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($address), 0);
-		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address);
+		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
 		# edit DNS PTR record
 		$insert['PTR']=@$address['PTR'];
@@ -444,7 +448,7 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
-		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array());
+		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("delete", $address);

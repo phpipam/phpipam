@@ -314,9 +314,6 @@ else {
 		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$Subnets->lastInsertId.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
 		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
-
-    	# send mail
-		# sendObjectUpdateMails("subnet", $_POST['action'], $subnet_old_details, $_POST);
 	}
 
 
