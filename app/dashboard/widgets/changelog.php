@@ -27,7 +27,6 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 /* get logs */
 $clogs = $Log->fetch_all_changelogs (false, "", 50);
 
-
 if(sizeof($clogs)==0) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No changelogs available")."</p>";
@@ -43,6 +42,7 @@ else {
 	# headers
 	print "<tr>";
 	print "	<th>"._('User')."</th>";
+	print "	<th>"._('Type')."</th>";
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Date')."</th>";
 	print "	<th>"._('Change')."</th>";
@@ -79,6 +79,7 @@ else {
 
 				print "<tr>";
 				print "	<td>$l[real_name]</td>";
+				print "	<td>$l[ctype] / $l[caction] $l[cresult]</td>";
 
 				# subnet, section or ip address
 				if($l['ctype']=="IP address")	{
@@ -97,6 +98,7 @@ else {
 				print "	<td>$l[cdiff]</td>";
 				print "</tr>";
 
+				// next item
 				$pc++;
 			}
 		}

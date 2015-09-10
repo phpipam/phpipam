@@ -2,7 +2,6 @@ version - 1.2
 
 	+ To fix / finish
 		+ logging: db, syslog (db prepared)
-			+ Addresses write log;
 			+ DNS write log;
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;

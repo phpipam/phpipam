@@ -240,10 +240,10 @@ class Subnets extends Common_functions {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", "subnetId", $subnetId); }
 		catch (Exception $e) {
-			$this->Log->write( "Subnet truncate", "Failed to truncate subnet id $subnetId<hr>".$e->getMessage(), 2);
+			$this->Log->write( "Subnet truncate", "Failed to truncate subnet $old_subnet->description id $old_subnet->id<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
-		$this->Log->write( "Subnet truncate", "Subnet $old_subnet->name truncated", 0);
+		$this->Log->write( "Subnet truncate", "Subnet $old_subnet->description id $old_subnet->id truncated", 0);
 		return true;
 	}
 
@@ -262,11 +262,11 @@ class Subnets extends Common_functions {
 		try { $this->Database->updateObject("subnets", array("id"=>$subnetId, "mask"=>$mask), "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Subnet edit", "Failed to resize subnet<hr>".$e->getMessage(), 2);
+			$this->Log->write( "Subnet edit", "Failed to resize subnet $old_subnet->description id $old_subnet->id<hr>".$e->getMessage(), 2);
 			return false;
 		}
 		# ok
-		$this->Log->write( "Subnet resize", "Subnet resized<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
+		$this->Log->write( "Subnet resize", "Subnet $old_subnet->description id $old_subnet->id resized<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
 		return true;
 	}
 

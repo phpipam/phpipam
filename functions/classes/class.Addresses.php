@@ -333,11 +333,17 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $insert); }
 		catch (Exception $e) {
+			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($address), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# save id
 		$this->lastId = $this->Database->lastInsertId();
+
+		# log and changelog
+		$address['id'] = $this->lastId;
+		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($address), 0);
+		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("add", $insert);
@@ -393,9 +399,14 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
 		catch (Exception $e) {
+			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($address), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# log and changelog
+		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($address), 0);
+		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address);
 
 		# edit DNS PTR record
 		$insert['PTR']=@$address['PTR'];
@@ -413,6 +424,8 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_delete ($address) {
+		# fetch old details for logging
+		$address_old = $this->fetch_address (null, $address['id']);
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -424,9 +437,14 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
 		catch (Exception $e) {
+			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# log and changelog
+		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
+		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array());
 
 		# edit DNS PTR record
 		$this->ptr_modify ("delete", $address);

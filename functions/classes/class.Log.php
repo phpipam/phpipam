@@ -434,6 +434,8 @@ class Logging extends Common_functions {
 				$this->object_old[$k] = 0;
 			}
 		}
+		// ip address - old needs to be transformed to dotted format
+		$this->object_old['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_old['ip_addr']);
 		// check each value
 		foreach($this->object_new as $k=>$v) {
 			//change
@@ -479,7 +481,11 @@ class Logging extends Common_functions {
 		# remove ip address fields
 		if($this->object_type == "ip_addr") {
 			unset(	$this->object_new['subnet'],
-					$this->object_new['type']);
+					$this->object_new['type'],
+					$this->object_new['section'],
+					$this->object_new['ip_addr_old'],
+					$this->object_new['nostrict']
+					);
 		}
 		# remove subnet fields
 		elseif($this->object_type == "subnet")	{
@@ -799,7 +805,7 @@ class Logging extends Common_functions {
 		if(!$filter) {
 		    $query = "select * from (
 						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`, `sections` as `se`
+						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
 						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
 						union all
 						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
