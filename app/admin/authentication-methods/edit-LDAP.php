@@ -62,7 +62,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		<td style="width:130px;"><?php print _('OpenLDAP servers'); ?></td>
 		<td style="width:250px;">
 			<input type="text" name="domain_controllers" class="form-control input-sm" value="<?php print @$method_settings->params->domain_controllers; ?>" <?php print $delete; ?>>
-			<input type="hidden" name="type" value="AD">
+			<input type="hidden" name="type" value="LDAP">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
 			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
 		</td>
