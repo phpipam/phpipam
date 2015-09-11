@@ -1,4 +1,4 @@
-== 1.18.012
+== 1.18.020
 
 	New features:
 	------------
@@ -11,6 +11,7 @@
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
 	+ Added nameserver sets per subnets (jonashauge);
+	+ Added optional syslog as log location;
 	+ REST API:
 		+ documentation: http://phpipam.net/api-documentation/
 		+ API v2, old v1 support added

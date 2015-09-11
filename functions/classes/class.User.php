@@ -584,7 +584,10 @@ class User extends Common_functions {
 		$this->get_auth_method_type ();
 
 		# authenticate based on name of auth method
-		if(!method_exists($this, $this->authmethodtype))	{ $this->Result->show("danger", _("Error: Invalid authentication method"), true); }
+		if(!method_exists($this, $this->authmethodtype))	{
+			$this->Log->write ("User login", _('Error: Invalid authentication method'), 1 );
+			$this->Result->show("danger", _("Error: Invalid authentication method"), true);
+		}
 		else {
 			# set method name variable
 			$authmethodtype = $this->authmethodtype;
@@ -612,7 +615,7 @@ class User extends Common_functions {
 			# admin?
 			if($user->role == "Administrator")	{ $this->isadmin = true; }
 
-			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Result->show("danger", _("Invalid username or password"), true);}
+			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 1 ); $this->Result->show("danger", _("Invalid username or password"), true);}
 			else 					{ $this->user = $user; }
 		}
 	}
@@ -737,7 +740,7 @@ class User extends Common_functions {
 	    	if($this->ldap)	{ $adldap->setUseOpenLDAP(true); }
 		}
 		catch (adLDAPException $e) {
-			$this->Log->write( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 0 );
+			$this->Log->write( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 2 );
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
 
@@ -839,7 +842,7 @@ class User extends Common_functions {
 		else {
 			# add blocked count
 			$this->block_ip ();
-			$this->Log->write( "Radius login", "Failed to authenticate user on radius server", 1 );
+			$this->Log->write( "Radius login", "Failed to authenticate user on radius server", 2 );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}

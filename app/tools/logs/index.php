@@ -17,6 +17,14 @@ if ($User->isadmin) {
 <h4><?php print _('Log files'); ?>:</h4>
 <hr>
 
+<?php
+//print if syslog
+if ($User->settings->log=="syslog") {
+	$Result->show("warning", _("Log files are sent to syslog"));
+}
+else {
+?>
+
 <!-- severity filter -->
 <form id="logs" name="logs">
     <?php print _('Informational'); ?>	<input type="checkbox" name="Informational" value="Informational" checked> ::
@@ -45,6 +53,7 @@ if ($User->isadmin) {
 </div>		<!-- end filter overlay div -->
 
 <?php
+}
 }
 # for non admins
 else {

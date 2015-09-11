@@ -143,7 +143,9 @@ class Logging extends Common_functions {
 		!is_null($this->log_command) ? : $this->Result->show("danger", _("Invalid log command"));
 
 		// execute
-		$this->log_type == "syslog" ? $this->write_syslog () : $this->write_database_log ();
+		if ($this->log_type == "syslog")	{ $this->write_syslog (); }
+		elseif ($this->log_type == "both")	{ $this->write_database_log (); $this->write_syslog (); }
+		else								{ $this->write_database_log (); }
 	}
 
 
@@ -159,14 +161,97 @@ class Logging extends Common_functions {
 	/**
 	 * Generates new syslog message
 	 *
+	 *		syslogd example:
+	 *
+	 *		# phpipam syslog messages setup
+	 *		user.alert;user.warning;user.debug              /var/log/messages
+	 *		auth.alert;auth.warning;auth.debug              /var/log/auth.log
+	 *
+	 *		# log all phpipam messages
+	 *		!phpipam
+	 *		*.*                                             /var/log/phpipam.log
+	 *		!*
+	 *
+	 *
 	 * @access private
 	 * @return void
 	 */
 	private function write_syslog () {
+
+		# set facility
+		$this->set_syslog_facility ();
+
+		# set priority
+		$this->set_syslog_priority ();
+
+		# format details
+		$this->syslog_format_details ();
+
+		# add username if present
+		$username = $this->log_username!==null ? $this->log_username." | " : "";
+
+		# open syslog and write log
+		openlog('phpipam', LOG_NDELAY | LOG_PID, $this->syslog_facility);
+		syslog($this->syslog_priority, "$_SERVER[REMOTE_ADDR] | ".$username.$this->log_command." | ".$this->log_details);
+
+		# close
+		closelog();
 	}
 
-	private function write_changelog_syslog ($changelog) {
+	/**
+	 * Sets facility for syslog
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_syslog_facility () {
+		# for windows we can only use LOG_USER
+		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')		{ $facility = "LOG_USER"; }
+		else {
+			//login, logout
+			if (strpos($this->log_command, "login")>0 ||
+				strpos($this->log_command, "logged out")>0) { $facility = "LOG_AUTH"; }
+			else 											{ $facility = "LOG_USER"; }
+		}
+		# save
+		$this->syslog_facility = constant($facility);
+	}
 
+	/**
+	 * Sets priority
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_syslog_priority () {
+		# definitions
+		$priorities[] = "LOG_EMERG";
+		$priorities[] = "LOG_ALERT";
+		$priorities[] = "LOG_CRIT";
+		$priorities[] = "LOG_ERR";
+		$priorities[] = "LOG_WARNING";
+		$priorities[] = "LOG_NOTICE";
+		$priorities[] = "LOG_INFO";
+		$priorities[] = "LOG_DEBUG";
+		# set
+		if ($this->log_severity == "2")		{ $priority = "LOG_ALERT"; }
+		elseif ($this->log_severity == "1")	{ $priority = "LOG_WARNING"; }
+		else								{ $priority = "LOG_DEBUG"; }
+		# set
+		$this->syslog_priority = constant($priority);
+	}
+
+	/**
+	 * Reformat syslog details
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function syslog_format_details () {
+		// replace <br>
+		$this->log_details = str_replace(array("<br>", "<hr>"), ",",$this->log_details);
+		// replace spaces
+		$this->log_details = str_replace(": ", ":",$this->log_details);
 	}
 
 
@@ -358,8 +443,7 @@ class Logging extends Common_functions {
 
 			//if change happened write it!
 			if(isset($log)) {
-				// execute
-				return $this->log_type == "syslog" ? $this->write_changelog_syslog ($log) : $this->write_changelog_to_db ($log);
+				$this->write_changelog_to_db ($log);
 			}
 		}
 		# not enabled

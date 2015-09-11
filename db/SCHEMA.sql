@@ -161,7 +161,7 @@ CREATE TABLE `settings` (
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
-  `log` SET('Database','syslog')  NOT NULL  DEFAULT 'Database',
+  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */

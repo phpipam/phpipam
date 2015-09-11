@@ -39,13 +39,13 @@ if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
 	}
 	# count set, captcha required
 	elseif(!isset($_POST['captcha'])) {
-		$Log->write( "Login IP blocked", "Login from IP address $ip was blocked because of 5 minute block after 5 failed attempts", 1);
+		$Log->write( "Login IP blocked", "Login from IP address $_SERVER[REMOTE_ADDR] was blocked because of 5 minute block after 5 failed attempts", 1);
 		$Result->show("danger", _('You have been blocked for 5 minutes due to authentication failures'), true);
 	}
 	# captcha check
 	else {
 		# check captcha
-		if($_POST['captcha']!=$_SESSION['securimage_code_value']) {
+		if(strtolower($_POST['captcha'])!=strtolower($_SESSION['securimage_code_value'])) {
 			$Result->show("danger", _("Invalid security code"), true);
 		}
 	}
