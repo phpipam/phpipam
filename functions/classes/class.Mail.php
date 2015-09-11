@@ -122,6 +122,18 @@ class phpipam_mail {
 		}
 	}
 
+	/**
+	 * Resets SMTP debugging
+	 *
+	 * @access public
+	 * @param int $level (default: 2)
+	 * @return void
+	 */
+	public function set_debugging ($level = 2) {
+		$this->Php_mailer->SMTPDebug = $level==1 ? 1 : 2;
+	}
+
+
 
 
 

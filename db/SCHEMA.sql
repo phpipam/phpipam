@@ -161,7 +161,7 @@ CREATE TABLE `settings` (
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
-  `log` SET('Database','syslog')  NOT NULL  DEFAULT 'Database',
+  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -417,18 +417,15 @@ CREATE TABLE `nameservers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `namesrv1` varchar(255) DEFAULT NULL,
-  `namesrv2` varchar(255) DEFAULT NULL,
-  `namesrv3` varchar(255) DEFAULT NULL,
   `description` text,
   `permissions` varchar(128) DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
-INSERT INTO `nameservers` (`name`, `namesrv1`, `namesrv2`, `description`)
+INSERT INTO `nameservers` (`name`, `namesrv1`, `description`, `permissions`)
 VALUES
-	('Global', '10.10.10.10', '10.10.11.12', ''),
-	('DMZ1', '192.168.100.10', '192.168.11.12', 'Nameservers used by DMZ servers');
+	('Google NS', '8.8.8.8;8.8.4.4', 'Google public nameservers', '1;2');
 
 
 

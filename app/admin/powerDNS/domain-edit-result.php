@@ -22,7 +22,7 @@ $User->check_user_session();
 if ($_POST['action']!="delete") {
 	// fqdn
 	if ($_POST['action']=="add")
-	if(validate_hostname($_POST['name'])===false)					{ $Result->show("danger", "Invalid domain name", true); }
+	if($Result->validate_hostname($_POST['name'])===false)			{ $Result->show("danger", "Invalid domain name", true); }
 	// master
 	if (strlen($_POST['master'])>0) {
 		if(!filter_var($_POST['master'], FILTER_VALIDATE_IP))		{ $Result->show("danger", "Master must be an IP address", true); }
@@ -33,7 +33,7 @@ if ($_POST['action']!="delete") {
 	# new domain
 	if ($_POST['action']=="add" && !isset($_POST['manual'])) {
 		// admin
-		if (validate_email($_POST['hostmaster'])===false)			{ $Result->show("danger", "Invalid domain admin", true); }
+		if ($Result->validate_email($_POST['hostmaster'])===false)	{ $Result->show("danger", "Invalid domain admin", true); }
 	}
 
 

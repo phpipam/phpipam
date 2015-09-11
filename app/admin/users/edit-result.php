@@ -42,7 +42,7 @@ if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->
 # general checks
 if(strlen(@$_POST['real_name'])==0)										{ $Result->show("danger", _("Real name field is mandatory!"), true); }
 # email format must be valid
-if (!validate_email(@$_POST['email'])) 									{ $Result->show("danger", _("Invalid email address!"), true); }
+if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
 
 # username must not already exist (if action is add)
 if ($_POST['action']=="add") {
@@ -95,7 +95,7 @@ if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->
 	$values['password'] = $_POST['password1'];
 }
 # pass change
-if(isset($_POST['passChange'])) {
+if(isset($_POST['passChange']) && $auth_method->type=="local") {
 	$values['passChange'] = "Yes";
 }
 # set groups user belongs to

@@ -980,10 +980,12 @@ $(document).on("click", ".userselect", function() {
 	var uname 	 = $(this).attr('data-uname');
 	var username = $(this).attr('data-username');
 	var email 	 = $(this).attr('data-email');
+	var server 	 = $(this).attr('data-server');
 	//fill
 	$('form#usersEdit input[name=real_name]').val(uname);
 	$('form#usersEdit input[name=username]').val(username);
 	$('form#usersEdit input[name=email]').val(email);
+	$('form#usersEdit select[name=authMethod]').val(server);
 
 	hidePopup2();
 	hidePopup('popup_w500');
@@ -1463,7 +1465,30 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
                 //from ipcalc - load ip list
                 sectionId = $('form#editSubnetDetails input[name=sectionId]').val();
                 subnetId  = $('form#editSubnetDetails input[name=subnetId]').val();
-                setTimeout(function (){window.location.reload();}, 1500);
+	            //check for .subnet_id_new if new subnet id present and set location
+	            if($(".subnet_id_new").html()!=="undefined") {
+		            var subnet_id_new = $(".subnet_id_new").html();
+		            if (subnet_id_new % 1 === 0) {
+			            // section
+			            var section_id_new = $(".section_id_new").html();
+						//lets try to detect IEto set location
+					    var ua = window.navigator.userAgent;
+					    var msie = ua.indexOf("MSIE ");
+					    //IE
+					    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+					    else 																{ var base = ""; }
+					    //go to search page
+					    var prettyLinks = $('#prettyLinks').html();
+						if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+						else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
+		            }
+		            else {
+		            	setTimeout(function (){window.location.reload();}, 1500);
+	            	}
+	            }
+	            else {
+		             setTimeout(function (){window.location.reload();}, 1500);
+	            }
             }
             //from free space
             else if(subnetData.search("freespace") != -1) {
@@ -1472,8 +1497,9 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
             //from ipcalc - ignore
             else if (subnetData.search("ipcalc") != -1) {
             }
+            //from admin
             else {
-                //from admin, reload
+                //reload
                 setTimeout(function (){window.location.reload();}, 1500);
             }
         }
@@ -1784,6 +1810,20 @@ $(document).on("click", "#editVRF", function() {
 //load edit form
 $('.nameserverManagement').click(function() {
 	open_popup("700", "app/admin/nameservers/edit.php", {nameserverId:$(this).attr('data-nameserverid'), action:$(this).attr('data-action')} );
+});
+// add new
+$(document).on("click", "#add_nameserver", function() {
+	showSpinner();
+	//get old number
+	var num = $(this).attr("data-id");
+	// append
+	$('table#nameserverManagementEdit2 tbody#nameservers').append("<tr id='namesrv-"+num+"'><td>Nameserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='namesrv-"+num+"'></td></tr>");
+	// add number
+	num++;
+	$(this).attr("data-id", num);
+
+	hideSpinner();
+	return false;
 });
 //submit form
 $(document).on("click", "#editNameservers", function() {

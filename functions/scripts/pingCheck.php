@@ -325,7 +325,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 			$ago	  = "never";
 		} else {
 			$timeDiff = time() - strtotime($change['lastSeen']);
-			$ago 	  = $change['lastSeen']." (".sec2hms($timeDiff)." ago)";
+			$ago 	  = $change['lastSeen']." (".$Result->sec2hms($timeDiff)." ago)";
 		}
 
 		//content

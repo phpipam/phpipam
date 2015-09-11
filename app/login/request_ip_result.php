@@ -18,7 +18,7 @@ $settings = $Tools->fetch_settings();
 # requests must be enabled!
 if($settings['enableIPrequests']==1) {
 	# verify email
-	if(!validate_email($_POST['requester']) ) 						{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$_POST['requester'].')', true); }
+	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$_POST['requester'].')', true); }
 
 	# formulate insert values
 	$values = array("subnetId"=>$_POST['subnetId'],

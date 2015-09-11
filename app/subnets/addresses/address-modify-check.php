@@ -15,6 +15,7 @@ $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);
 $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
+$Log 		= new Logging ($Database, $User->settings);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -31,11 +32,11 @@ if(isset($_POST['action-visual'])) {
 $address = $_POST;
 
 # required fields
-isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"), true);
-isset($address['subnet']) ?:		$Result->show("danger", _("Missing required fields"), true);
-isset($address['subnetId']) ?:		$Result->show("danger", _("Missing required fields"), true);
-isset($address['id']) ?:			$Result->show("danger", _("Missing required fields"), true);
-isset($address['state']) ?:			$Result->show("danger", _("Missing required fields"), true);
+isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). "action", true);
+isset($address['subnet']) ?:		$Result->show("danger", _("Missing required fields"). "subnet", true);
+isset($address['subnetId']) ?:		$Result->show("danger", _("Missing required fields"). "subnetId", true);
+isset($address['id']) ?:			$Result->show("danger", _("Missing required fields"). "id", true);
+isset($address['state']) ?:			$Result->show("danger", _("Missing required fields"). "state", true);
 
 # ptr
 if(!isset($address['PTRignore']))	$address['PTRignore']=0;
@@ -146,7 +147,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 				$address['action'] = $Addresses->address_exists ($m, $address['subnetId'])===true ? "edit" : "add";
 			}
 			# if it fails set error log
-			if (!$Addresses->modify_address($address)) {
+			if (!$Addresses->modify_address($address, false)) {
 		        $errors[] = _('Cannot').' '. $address['action']. ' '._('IP address').' '. $Addresses->transform_to_dotted($m);
 		    }
 			# next IP
@@ -155,20 +156,24 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 		# print errors if they exist
 		if(isset($errors)) {
-			$log = array_to_log ($errors);
+			$log = $Result->array_to_log ($errors);
 			$Result->show("danger", $log, false);
-			write_log( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2, $User->username);
+			$Log->write( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2);
 		}
 		else {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
-
-	    	/* @mail functions ------------------- */
-			include_once('../../../functions/functions-mail.php');
-			//sendObjectUpdateMails("ip", $action, array(), $address, true);
-
+			# log and changelog
 			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successfull")."!", false);
-			write_log( "IP address modification", "Range $address[start] - $address[stop] $action successfull!", 0, $User->username);
+			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successfull!", 0);
+
+			# send changelog mail
+			$Log->object_action = $action;
+			$Log->object_type   = "address range";
+			$Log->object_result = "success";
+			$Log->user 			= $User->user;
+
+			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action", null);
 		}
 	}
 }
@@ -233,12 +238,12 @@ else {
 			//fail
 		    if (!$Addresses->modify_address($address)) {
 		        $Result->show("danger", _('Error inserting IP address')."!", false);
-		        write_log( "IP address modification", "Error $action IP address $address[ip_addr]<br>SubnetId: $address[subnetId]", 2, $User->username );
+		        $Log->write( "IP address modification", "Error $action IP address $address[ip_addr]<br>SubnetId: $address[subnetId]", 2);
 		    }
 		    //success, save log file and send email
 		    else {
 		        $Result->show("success", _("IP $action successful"),false);
-		        write_log( "IP address modification", "$action of IP address $address[ip_addr] succesfull!<br>SubnetId: $address[subnetId]", 0, $User->username );
+		        $Log->write( "IP address modification", "$action of IP address $address[ip_addr] succesfull!<br>SubnetId: $address[subnetId]", 0);
 		    }
 		}
 	}

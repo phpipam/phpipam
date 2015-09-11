@@ -108,7 +108,7 @@ foreach ($sections_sorted as $section) {
    	print '	<td class="actions">'. "\n";
    	print "	<div class='btn-group btn-group-xs'>";
 	print "		<button class='btn btn-default editSection' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
-	print "		<a class='btn btn-default' href='".create_link("administration","manageSection","section-changelog",$section['id'])."'><i class='fa fa-clock-o'></i></a>";
+	print "		<a class='btn btn-default' href='".create_link("administration","sections","section-changelog",$section['id'])."'><i class='fa fa-clock-o'></i></a>";
 	print "		<button class='btn btn-default editSection' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
 	print "	</div>";
 	print '	</td>'. "\n";

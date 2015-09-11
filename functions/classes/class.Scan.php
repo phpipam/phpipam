@@ -4,7 +4,7 @@
  *	phpIPAM SCAN and PING class
  */
 
-class Scan {
+class Scan extends Common_functions {
 
 	/**
 	 * public variables
@@ -29,6 +29,8 @@ class Scan {
 	protected $Database;					//for Database connection
 	protected $Subnets;						//for Subnets object
 	protected $Addresses;					//for Addresses object
+	public $Log;							//for Logging connection
+
 
 
 
@@ -54,6 +56,8 @@ class Scan {
 		$this->reset_scan_method ($this->settings->scanPingType);
 		# set php exec
 		$this->set_php_exec ();
+		# Log object
+		$this->Log = new Logging ($this->Database, $this->settings);
 	}
 
 	/**
@@ -102,17 +106,6 @@ class Scan {
 		else {
 			$this->icmp_type = $method;
 		}
-	}
-
-	/**
-	 * Sets debugging
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		include( dirname(__FILE__) . '/../../config.php' );
-		$this->debugging = $debugging ? true : false;
 	}
 
 	/**
@@ -438,7 +431,7 @@ class Scan {
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log
-			!$this->debugging ? : write_log ("status_update", _('Failed to update address status'), 0 );
+			!$this->debugging ? : $this->Log->write ("status_update", _('Failed to update address status'), 0 );
 		}
 	}
 

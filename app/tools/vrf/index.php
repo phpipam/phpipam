@@ -21,7 +21,7 @@ if($User->isadmin) {
 
 
 /* for each VRF check which subnet has it configured */
-if(!$vrfs) {
+if($vrfs===false) {
 	$Result->show("info", _('No VRFs configured'), false);
 }
 else {
@@ -55,6 +55,9 @@ else {
 
 		# subnets
 		if($subnets) {
+			# count
+			$subnet_allowed = 0;
+
 			foreach ($subnets as $subnet) {
 				# cast
 				$subnet = (array) $subnet;
@@ -64,6 +67,7 @@ else {
 
 				# permission
 				if($permission > 0) {
+					$subnet_allowed++;
 
 					# check if it is master
 					$masterSubnet = ($subnet['masterSubnetId'] == 0)||(empty($subnet['masterSubnetId'])) ? true : false;
@@ -107,12 +111,21 @@ else {
 					print '</tr>' . "\n";
 				}
 			}
+
+			if ($subnet_allowed==0) {
+				// none available
+				print '<tr>'. "\n";
+				print '<td colspan="8">';
+				$Result->show("info", _('No subnets available')."!", false);
+				print '</td>'. "\n";
+				print '</tr>'. "\n";
+			}
 		}
 		# no subnets!
 		else {
 			print '<tr>'. "\n";
 			print '<td colspan="8">';
-			$Result->show("info", _('No subnets belonging to this VRF')."!", false);
+			$Result->show("info", _('No subnets available')."!", false);
 			print '</td>'. "\n";
 			print '</tr>'. "\n";
 		}

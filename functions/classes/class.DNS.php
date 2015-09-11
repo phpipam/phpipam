@@ -5,7 +5,7 @@
  *
  */
 
-class DNS  {
+class DNS extends Common_functions {
 
 	/**
 	 * private variables

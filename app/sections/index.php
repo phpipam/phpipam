@@ -193,7 +193,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 	<ul class="nav navbar-nav navbar-right hidden-xs hidden-sm icon-ul">
 
 		<!-- Dash lock/unlock -->
-		<?php if($_GET['page']=="dashboard") { ?>
+		<?php if($_GET['page']=="dashboard" && !($User->isadmin!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) ) { ?>
 			<li class="w-lock">
 				<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Clik to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
 			</li>

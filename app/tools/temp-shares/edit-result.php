@@ -85,7 +85,7 @@ if(strlen($_POST['email'])>0) {
 	$phpipam_mail->initialize_mailer();
 
 	// generate url
-	$url = createURL().rtrim(BASE, "/").create_link("temp_share",$_POST['code']);
+	$url = $Result->createURL().create_link("temp_share",$_POST['code']);
 
 	// set subject
 	$subject	= "New ipam share created";

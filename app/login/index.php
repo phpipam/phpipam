@@ -110,7 +110,7 @@ include('functions/checks/check_php_build.php');		# check for support for PHP mo
 			else								{ $Result->show("success", _('You have logged out')); }
 
 			# write log
-			write_log( "User logged out", "User $User->username has logged out", 0, $User->username );
+			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );
 
 			# destroy session
 			$User->destroy_session();

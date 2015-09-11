@@ -10,9 +10,6 @@ require('functions/functions.php');
 # set default page
 if(!isset($_GET['page'])) { $_GET['page'] = "dashboard"; }
 
-# reset url for base
-$url = createURL ();
-
 # if not install fetch settings etc
 if($_GET['page']!="install" ) {
 	# database object
@@ -28,6 +25,10 @@ if($_GET['page']!="install" ) {
 	$Subnets	= new Subnets ($Database);
 	$Tools	    = new Tools ($Database);
 	$Addresses	= new Addresses ($Database);
+	$Log 		= new Logging ($Database);
+
+	# reset url for base
+	$url = $Result->createURL ();
 }
 
 /** include proper subpage **/

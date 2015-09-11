@@ -20,8 +20,8 @@ else {
 }
 
 # get clog entries
-if(!isset($_REQUEST['cfilter'])) 	{ $clogs = $Tools->fetch_all_changelogs (false, "", $_REQUEST['climit']); }
-else								{ $clogs = $Tools->fetch_all_changelogs (true, $_REQUEST['cfilter'], $_REQUEST['climit']); }
+if(!isset($_REQUEST['cfilter'])) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $_REQUEST['climit']); }
+else								{ $clogs = $Log->fetch_all_changelogs (true, $_REQUEST['cfilter'], $_REQUEST['climit']); }
 
 # empty
 if(sizeof($clogs)==0) {
@@ -88,6 +88,12 @@ else {
 			}
 			elseif($l['ctype']=="Folder")   {
 				print "	<td><a href='".create_link("folder",$l['sectionId'],$l['tid'])."'>$l[sDescription]</a></td>";
+			}
+			elseif($l['ctype']=="Section")   {
+				print "	<td><a href='".create_link("subnets",$l['tid'])."'>".$l['ip_addr']."</a></td>";
+			}
+			else {
+				print "	<td></td>";
 			}
 
 			print "	<td>"._("$l[caction]")."</td>";
