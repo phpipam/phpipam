@@ -1872,21 +1872,22 @@ class Subnets extends Common_functions {
 	public function check_permission ($user, $subnetId) {
 
 		# get all user groups
-		$groups = json_decode($user->groups);
+		$groups = json_decode($user->groups, true);
 
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
 		# set subnet permissions
 		$subnet  = $this->fetch_subnet ("id", $subnetId);
+		if($subnet===false)	return 0;
 		//null?
-		if(is_null(@$subnet->permissions) || $subnet->permissions=="null")	return 0;
+		if(is_null($subnet->permissions) || $subnet->permissions=="null")	return 0;
 		$subnetP = json_decode(@$subnet->permissions);
 
 		# set section permissions
 		$Section = new Sections ($this->Database);
-		$section = $Section->fetch_section ("id", @$subnet->sectionId);
-		$sectionP = json_decode(@$section->permissions);
+		$section = $Section->fetch_section ("id", $subnet->sectionId);
+		$sectionP = json_decode($section->permissions);
 
 		# default permission
 		$out = 0;
