@@ -14,3 +14,6 @@ ALTER TABLE `nameservers` DROP `namesrv3`;
 
 /* add syslog location */
 ALTER TABLE `settings` CHANGE `log` `log` SET('Database','syslog','both')  CHARACTER SET utf8  NOT NULL  DEFAULT 'Database';
+
+/* mastersubnetid must not be null */
+ALTER TABLE `subnets` CHANGE `masterSubnetId` `masterSubnetId` INT(11)  UNSIGNED  NOT NULL DEFAULT 0;

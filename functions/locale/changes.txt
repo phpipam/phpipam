@@ -2621,3 +2621,12 @@ msgstr ""
 msgid "No subnets belong to this device"
 msgstr ""
 
+
+### 1.18.021 ###
+
+msgid "Log files are sent to syslog"
+msgstr ""
+
+msgid "Syslog files are sent to syslog"
+msgstr ""
+

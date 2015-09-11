@@ -227,7 +227,7 @@ CREATE TABLE `subnets` (
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `masterSubnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
   `allowRequests` tinyint(1) DEFAULT '0',
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `showName` tinyint(1) DEFAULT '0',

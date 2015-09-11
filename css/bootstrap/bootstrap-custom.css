@@ -801,6 +801,9 @@ table#subnetsMenu td#subnetsContent {
 
 	min-height: 260px;
 }
+#dashboard .inner .alert {
+	margin: 10px;
+}
 .inner.install h4 {
 	background: #F1FAFE !important;
 	border-bottom: 1px solid #DAE3EA;

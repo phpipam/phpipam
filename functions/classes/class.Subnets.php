@@ -2527,7 +2527,7 @@ class Subnets extends Common_functions {
 		foreach($section_subnets as $s) {
 			// folders array
 			if($s->isFolder==1)	{ $children_folders[$s->masterSubnetId][] = (array) $s; }
-			// all subnets, includin folders
+			// all subnets, including folders
 			$children_subnets[$s->masterSubnetId][] = (array) $s;
 		}
 
@@ -2612,8 +2612,9 @@ class Subnets extends Common_functions {
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {
-				if($option['value']['id'] == $current_master) 	{ $html[] = "<option value='".$option['value']['id']."' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
-				else 											{ $html[] = "<option value='".$option['value']['id']."'					    disabled>$repeat ".$option['value']['description']."</option>"; }
+				$html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
+				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
+				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
 
 			}
 
