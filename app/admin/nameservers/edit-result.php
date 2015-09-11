@@ -48,7 +48,8 @@ $_POST['permissions'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 $values = array("id"=>@$_POST['nameserverId'],
 				"name"=>$_POST['name'],
 				"permissions"=>$_POST['permissions'],
-				"namesrv1"=>$_POST['namesrv1']
+				"namesrv1"=>$_POST['namesrv1'],
+				"description"=>$_POST['description']
 				);
 # update
 if(!$Admin->object_modify("nameservers", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] nameserver set").'!', true); }
