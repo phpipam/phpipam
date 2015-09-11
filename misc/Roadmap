@@ -3,13 +3,9 @@ version - 1.2
 	+ To fix / finish
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ VLAN domain permissions ?;
-		+ Devices permissions ?
 		+ Save opened folders in left menu;
 
 		+ DNS write log;
-
-		+ changelog folders;
 
 	+ Import updates
 		https://github.com/malaiam/phpipam
@@ -34,6 +30,10 @@ features for next releases:
 		- Show bindings under tools and next to IP address
 
 	+ IP address owner (from internal users - suggestions)
+
+	+ VLAN domain permissions;
+
+	+ Devices permissions;
 
 	+ IPv6 pinging;
 

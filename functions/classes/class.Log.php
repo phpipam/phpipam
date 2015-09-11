@@ -172,6 +172,8 @@ class Logging extends Common_functions {
 	 *		*.*                                             /var/log/phpipam.log
 	 *		!*
 	 *
+	 *		# rysylog
+	 *		if $programname == 'phpipam' then /var/log/phpipam.log
 	 *
 	 * @access private
 	 * @return void
@@ -400,7 +402,6 @@ class Logging extends Common_functions {
 
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
-
 		    # get user details and initialize required objects
 		    $this->Addresses 	= new Addresses ($this->Database);
 		    $this->Subnets 		= new Subnets ($this->Database);
@@ -597,14 +598,17 @@ class Logging extends Common_functions {
 					$this->object_new['sectionId'],
 					$this->object_new['ip']
 				);
+
 			# if section does not change
 			if($this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
 				unset(	$this->object_new['sectionIdNew'],
-						$this->object_new['sectionId']);
+						$this->object_new['sectionId'],
+						$this->object_old['sectionId']);
 			}
 			else {
 				$this->object_old['sectionIdNew'] = $this->object_old['sectionId'];
 			}
+
 			//transform subnet to IP address format
 			if(strlen($new['subnet'])>0) {
 		    	$this->object_new['subnet'] = $this->Subnets->transform_address (substr($this->object_new['subnet'], 0, strpos($this->object_new['subnet'], "/")), "decimal");
@@ -1104,6 +1108,9 @@ class Logging extends Common_functions {
 		$this->object_type = str_replace("ip_addr", "address", $this->object_type);
 		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
 
+		# folder
+		if ( $this->object_new['isFolder']=="1"	||$this->object_old['isFolder']=="1")	{ $this->object_type = "folder"; }
+
 		# set subject
 		if($this->object_action == "add") 		{ $subject = ucwords($this->object_type)." create notification"; }
 		elseif($this->object_action == "edit") 	{ $subject = ucwords($this->object_type)." change notification"; }
@@ -1115,6 +1122,7 @@ class Logging extends Common_functions {
 		# set object details
 		if ($this->object_type=="section") 		{ $details = "<a href='".$this->createURL().create_link("subnets",$obj_details['id'])."'>".$obj_details['name'] . "(".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="subnet")	{ $details = "<a href='".$this->createURL().create_link("subnets",$obj_details['sectionId'],$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['subnet'], "dotted")."/".$obj_details['mask']." (".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="folder")	{ $details = "<a href='".$this->createURL().create_link("folder",$obj_details['sectionId'],$obj_details['id'])."'>".$obj_details['description']." - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="address")	{ $details = "<a href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$obj_details['subnetId'],"address-details",$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['dns_name'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="address range")	{ $details = $changelog; }
 

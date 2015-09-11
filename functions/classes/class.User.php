@@ -766,14 +766,14 @@ class User extends Common_functions {
 		else if (@$authAD == 'Failed to authenticate user via AD!') {
 			# add blocked count
 			$this->block_ip ();
-			$this->Log->write( "AD login", "Failed to authenticate user against AD", 1 );
+			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1 );
 			$this->Result->show("danger", _("Failed to authenticate user against AD"), true);
 		}
 		# wrong user/pass by default
 		else {
 			# add blocked count
 			$this->block_ip ();
-			$this->Log->write( "AD login", "Failed to authenticate user against AD", 1 );
+			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1 );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
