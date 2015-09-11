@@ -143,9 +143,9 @@ class Logging extends Common_functions {
 		!is_null($this->log_command) ? : $this->Result->show("danger", _("Invalid log command"));
 
 		// execute
-		if ($this->log_type == "syslog")	{ $this->write_syslog (); }
-		elseif ($this->log_type == "both")	{ $this->write_database_log (); $this->write_syslog (); }
-		else								{ $this->write_database_log (); }
+		if ($this->log_type == "syslog")	{ $this->syslog_write (); }
+		elseif ($this->log_type == "both")	{ $this->database_write_log (); $this->syslog_write (); }
+		else								{ $this->database_write_log (); }
 	}
 
 
@@ -161,10 +161,10 @@ class Logging extends Common_functions {
 	/**
 	 * Generates new syslog message
 	 *
-	 *		syslogd example:
+	 *		# > syslogd example:
 	 *
 	 *		# phpipam syslog messages setup
-	 *		user.alert;user.warning;user.debug              /var/log/messages
+	 *		# user.alert;user.warning;user.debug            /var/log/messages
 	 *		auth.alert;auth.warning;auth.debug              /var/log/auth.log
 	 *
 	 *		# log all phpipam messages
@@ -172,20 +172,24 @@ class Logging extends Common_functions {
 	 *		*.*                                             /var/log/phpipam.log
 	 *		!*
 	 *
-	 *		# rysylog
+	 *		# changelog
+	 *		!phpipam-changelog
+	 *		*.*                                             /var/log/phpipam-changelog.log
+	 *		!*
+	 *
+	 *		# > rysylog example
+	 *		auth.alert;auth.warning;auth.debug              /var/log/auth.log
 	 *		if $programname == 'phpipam' then /var/log/phpipam.log
+	 *		if $programname == 'phpipam-changelog' then /var/log/phpipam-changelog.log
 	 *
 	 * @access private
 	 * @return void
 	 */
-	private function write_syslog () {
-
+	private function syslog_write () {
 		# set facility
-		$this->set_syslog_facility ();
-
+		$this->syslog_set_facility ();
 		# set priority
-		$this->set_syslog_priority ();
-
+		$this->syslog_set_priority ();
 		# format details
 		$this->syslog_format_details ();
 
@@ -206,7 +210,7 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function set_syslog_facility () {
+	private function syslog_set_facility () {
 		# for windows we can only use LOG_USER
 		if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')		{ $facility = "LOG_USER"; }
 		else {
@@ -225,7 +229,7 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function set_syslog_priority () {
+	private function syslog_set_priority () {
 		# definitions
 		$priorities[] = "LOG_EMERG";
 		$priorities[] = "LOG_ALERT";
@@ -256,6 +260,32 @@ class Logging extends Common_functions {
 		$this->log_details = str_replace(": ", ":",$this->log_details);
 	}
 
+	/**
+	 * Writes changelog to syslog
+	 *
+	 * @access private
+	 * @param mixed $changelog
+	 * @return void
+	 */
+	private function syslog_write_changelog ($changelog) {
+		# fetch user id
+		$this->get_active_user_id ();
+		# set update id based on action
+		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
+		else								{ $obj_id = $this->object_old['id']; }
+
+		# formulate
+		foreach($changelog as $k=>$l) {
+			$log[] = "$k: $l";
+		}
+
+		# open syslog and write log
+		openlog('phpipam-changelog', LOG_NDELAY | LOG_PID, LOG_USER);
+		syslog(LOG_DEBUG, "changelog | $this->log_username | $this->object_type | $obj_id | $this->object_action | ".date("Y-m-d H:i:s")." | ".implode(", ",$log));
+		# close
+		closelog();
+	}
+
 
 
 
@@ -277,7 +307,7 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function write_database_log () {
+	private function database_write_log () {
 	    # set values
 	    $values = array(
 	    			"command"=>$this->log_command,
@@ -444,7 +474,10 @@ class Logging extends Common_functions {
 
 			//if change happened write it!
 			if(isset($log)) {
-				$this->write_changelog_to_db ($log);
+				// execute
+				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog (); }
+				elseif ($this->log_type == "both")	{ $this->changelog_write_to_db ($log); $this->syslog_write_changelog ($log); }
+				else								{ $this->changelog_write_to_db ($log); }
 			}
 		}
 		# not enabled
@@ -460,7 +493,7 @@ class Logging extends Common_functions {
 	 * @param mixed $changelog
 	 * @return void
 	 */
-	private function write_changelog_to_db ($changelog) {
+	private function changelog_write_to_db ($changelog) {
 		# log to array
 		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog));
 		# fetch user id
