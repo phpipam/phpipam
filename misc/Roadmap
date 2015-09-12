@@ -18,6 +18,8 @@ version - 1.2
 
 	+ Override entries on import checkbox;
 
+	+ L2 domain permissions for groups ?
+
 
 features for next releases:
 ---------------------------
@@ -29,9 +31,7 @@ features for next releases:
 		- Ability to create NAT pools and link subnet / address to that pool - source NAT
 		- Show bindings under tools and next to IP address
 
-	+ IP address owner (from internal users - suggestions)
-
-	+ VLAN domain permissions;
+	+ IP address owner (from internal users - suggestions);
 
 	+ Devices permissions;
 

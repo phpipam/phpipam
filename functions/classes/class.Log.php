@@ -255,7 +255,8 @@ class Logging extends Common_functions {
 	 */
 	private function syslog_format_details () {
 		// replace <br>
-		$this->log_details = str_replace(array("<br>", "<hr>"), ",",$this->log_details);
+		$this->log_details = str_replace("<br>", ",",$this->log_details);
+		$this->log_details = str_replace("<hr>", ",",$this->log_details);
 		// replace spaces
 		$this->log_details = str_replace(": ", ":",$this->log_details);
 	}
@@ -273,6 +274,10 @@ class Logging extends Common_functions {
 		# set update id based on action
 		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
 		else								{ $obj_id = $this->object_old['id']; }
+
+		# format
+		$changelog = str_replace("<br>", ",",$changelog);
+		$changelog = str_replace("<hr>", ",",$changelog);
 
 		# formulate
 		foreach($changelog as $k=>$l) {
@@ -450,7 +455,6 @@ class Logging extends Common_functions {
 				foreach ($this->object_new as $k=>$v) {
 					$this->object_new[$k] = $this->changelog_make_booleans ($k, $v);
 				}
-				$log['[create]'] = $this->object_type." created";
 				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new);
 			}
 			elseif($action == "delete") {
@@ -458,7 +462,6 @@ class Logging extends Common_functions {
 				foreach ($this->object_old as $k=>$v) {
 					$this->changelog_make_booleans ($k, $v);
 				}
-				$log['[delete]']  = $this->object_type." deleted";
 				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old);
 			}
 			elseif($action == "truncate") {
@@ -473,9 +476,9 @@ class Logging extends Common_functions {
 			}
 
 			//if change happened write it!
-			if(isset($log)) {
+			if(isset($log) && sizeof($log)>0) {
 				// execute
-				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog (); }
+				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog ($log); }
 				elseif ($this->log_type == "both")	{ $this->changelog_write_to_db ($log); $this->syslog_write_changelog ($log); }
 				else								{ $this->changelog_write_to_db ($log); }
 			}

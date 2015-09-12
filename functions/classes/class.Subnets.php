@@ -138,7 +138,7 @@ class Subnets extends Common_functions {
 		elseif($action=="edit")		{ return $this->subnet_edit ($values); }
 		elseif($action=="delete")	{ return $this->subnet_delete ($values['id']); }
 		elseif($action=="truncate")	{ return $this->subnet_truncate ($values['id']); }
-		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['mask']); }
+		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['subnet'], $values['mask']); }
 		else						{ return $this->Result->show("danger", _("Invalid action"), true); }
 	}
 
@@ -223,7 +223,7 @@ class Subnets extends Common_functions {
 		# write changelog
 		$this->Log->write_changelog('subnet', "delete", 'success', $old_subnet, array());
 		# ok
-		$this->Log->write( "Subnet $old_subnet->description delete", "Subnet $old_subnet->description deleted<hr>".$this->array_to_log($old_subnet), 0);
+		$this->Log->write( "Subnet $old_subnet->description delete", "Subnet $old_subnet->description deleted<hr>".$this->array_to_log((array) $old_subnet), 0);
 		return true;
 	}
 
@@ -252,14 +252,15 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnetId
-	 * @param mixed $mask
+	 * @param int $subnet
+	 * @param int $mask
 	 * @return void
 	 */
-	private function subnet_resize ($subnetId, $mask) {
+	private function subnet_resize ($subnetId, $subnet, $mask) {
 		# save old values
 		$old_subnet = $this->fetch_subnet (null, $subnetId);
 		# execute
-		try { $this->Database->updateObject("subnets", array("id"=>$subnetId, "mask"=>$mask), "id"); }
+		try { $this->Database->updateObject("subnets", array("id"=>$subnetId, "subnet"=>$subnet, "mask"=>$mask), "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			$this->Log->write( "Subnet edit", "Failed to resize subnet $old_subnet->description id $old_subnet->id<hr>".$e->getMessage(), 2);
@@ -1585,11 +1586,13 @@ class Subnets extends Common_functions {
 		$Sections = new Sections ($this->Database);
 	    $section  = $Sections->fetch_section (null, $sectionId);
 
-	    // subnet myst be in dotted format
-
 		# new mask must be > 8
 		if($mask < 8) 											{ $this->Result->show("danger", _('New mask must be at least /8').'!', true); }
 		if(!is_numeric($mask))									{ $this->Result->show("danger", _('Mask must be an integer').'!', true);; }
+
+		//new subnet
+		$new_boundaries = $this->get_network_boundaries ($this->transform_address($subnet, "dotted"), $mask);
+		$subnet = $this->transform_address($new_boundaries['network'], "decimal");
 
 		# verify new address
 		$verify = $this->verify_cidr_address($this->transform_address ($subnet, "dotted")."/".$mask);
@@ -1599,10 +1602,6 @@ class Subnets extends Common_functions {
 		if($mask==$mask_old) 									{ $this->Result->show("warning", _("New network is same as old network"), true); }
 		# if we are expanding network get new network address!
 		elseif($mask < $mask_old) {
-			//new subnet
-			$new_boundaries = $this->get_network_boundaries ($this->transform_address($subnet, "dotted"), $mask);
-			$subnet = $this->transform_address($new_boundaries['network'], "decimal");
-
 			//Checks for strict mode
 			if ($section->strictMode==1) {
 				//if it has parent make sure it is still within boundaries
