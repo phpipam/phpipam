@@ -258,7 +258,6 @@ class Logging extends Common_functions {
 		$this->log_details = str_replace("<br>", ",",$this->log_details);
 		$this->log_details = str_replace("<hr>", ",",$this->log_details);
 		// replace spaces
-		$this->log_details = str_replace(": ", ":",$this->log_details);
 		$this->log_details = trim($this->log_details, ",");
 	}
 
