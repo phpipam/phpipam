@@ -16,7 +16,7 @@ $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 
 # set size of custom fields
-$custom_size = sizeof($custom) - sizeof($hidden_fields);
+$custom_size = sizeof($custom) - sizeof($hidden_fields) + 1;
 ?>
 
 

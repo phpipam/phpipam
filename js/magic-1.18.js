@@ -2120,6 +2120,212 @@ $('button#hostfileDump').click(function () {
 });
 
 
+/*  Data Import / Export
+*************************/
+//Export Section
+$('button.dataExport').click(function () {
+	var implemented = ["vrf","vlan","subnets"]; var popsize = {};
+	popsize["subnets"] = "w700";
+	var dataType = $('select[name=dataType]').find(":selected").val();
+    //show popup window
+	if (implemented.indexOf(dataType) > -1) {
+		showSpinner();
+		$.post('app/admin/import-export/export-' + dataType + '-field-select.php', function(data) {
+		if (popsize[dataType] !== undefined) { 
+			$('div.popup_'+popsize[dataType]).html(data);
+			showPopup('popup_'+popsize[dataType]);
+		} else {
+			$('div.popup_w400').html(data);
+			showPopup('popup_w400');
+		}
+		hideSpinner();
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+	} else {
+		$.post('app/admin/import-export/not-implemented.php', function(data) {
+		$('div.popup_w400').html(data);
+		showPopup('popup_w400');
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+	}
+    return false;
+});
+//export buttons
+$(document).on("click", "button#dataExportSubmit", function() {
+    //get selected fields
+	var dataType = $(this).attr('data-type');
+    var exportFields = $('form#selectExportFields').serialize();
+	//show popup window
+	switch(dataType) {
+		case 'vrf':	
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-vrf.php?" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'vlan':	
+			var exportDomains = $('form#selectExportDomains').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-vlan.php?" + exportDomains + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'subnets':	
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-subnets.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+	}	
+    return false;
+});
+// Check/uncheck all
+$(document).on("click", "input#exportSelectAll", function() {
+	if(this.checked) { // check select status
+		$('input#exportCheck').each(function() { //loop through each checkbox
+			this.checked = true;  //deselect all checkboxes with same class
+		});
+	}else{
+		$('input#exportCheck').each(function() { //loop through each checkbox
+			this.checked = false; //deselect all checkboxes with same class
+		});         
+	}
+});
+// Check/uncheck all
+$(document).on("click", "input#recomputeSectionSelectAll", function() {
+	if(this.checked) { // check select status
+		$('input#recomputeSectionCheck').each(function() { //loop through each checkbox
+			this.checked = true;  //select all checkboxes with same class
+		});
+	}else{
+		$('input#recomputeSectionCheck').each(function() { //loop through each checkbox
+			this.checked = false; //deselect all checkboxes with same class
+		});         
+	}
+});
+// Check/uncheck all
+$(document).on("click", "input#recomputeIPv4SelectAll", function() {
+	if(this.checked) { // check select status
+		$('input#recomputeIPv4Check').each(function() { //loop through each checkbox
+			this.checked = true;  //select all checkboxes with same class
+		});
+	}else{
+		$('input#recomputeIPv4Check').each(function() { //loop through each checkbox
+			this.checked = false; //deselect all checkboxes with same class
+		});         
+	}
+});
+// Check/uncheck all
+$(document).on("click", "input#recomputeIPv6SelectAll", function() {
+	if(this.checked) { // check select status
+		$('input#recomputeIPv6Check').each(function() { //loop through each checkbox
+			this.checked = true;  //select all checkboxes with same class
+		});
+	}else{
+		$('input#recomputeIPv6Check').each(function() { //loop through each checkbox
+			this.checked = false; //deselect all checkboxes with same class
+		});         
+	}
+});
+// Check/uncheck all
+$(document).on("click", "input#recomputeCVRFSelectAll", function() {
+	if(this.checked) { // check select status
+		$('input#recomputeCVRFCheck').each(function() { //loop through each checkbox
+			this.checked = true;  //select all checkboxes with same class
+		});
+	}else{
+		$('input#recomputeCVRFCheck').each(function() { //loop through each checkbox
+			this.checked = false; //deselect all checkboxes with same class
+		});         
+	}
+});
+//Import Section
+$('button.dataImport').click(function () {
+	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
+	popsize["subnets"] = "max";
+	var dataType = $('select[name=dataType]').find(":selected").val();
+    //show popup window, if implemented
+	if (implemented.indexOf(dataType) > -1) {
+		showSpinner();
+		$.post('app/admin/import-export/import-' + dataType + '-select.php', function(data) {
+		if (popsize[dataType] !== undefined) { 
+			$('div.popup_'+popsize[dataType]).html(data);
+			showPopup('popup_'+popsize[dataType]);
+		} else {
+			$('div.popup_w700').html(data);
+			showPopup('popup_w700');
+		}
+		hideSpinner();
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+	} else {
+		$.post('app/admin/import-export/not-implemented.php', function(data) {
+		$('div.popup_w400').html(data);
+		showPopup('popup_w400');
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });		
+	}
+    return false;
+});
+//import buttons
+$(document).on("click", "button#dataImportPreview", function() {
+    //get data from previous window
+	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
+	popsize["subnets"] = "max"; popsize["recompute"] = "max";
+	var dataType = $(this).attr('data-type');
+    var importFields = $('form#selectImportFields').serialize();
+    //show popup window, if implemented
+	if (implemented.indexOf(dataType) > -1) {
+		showSpinner();
+		$.post('app/admin/import-export/import-' + dataType + '-preview.php?' + importFields, function(data) {
+		if (popsize[dataType] !== undefined) { 
+			$('div.popup_'+popsize[dataType]).html(data);
+			showPopup('popup_'+popsize[dataType]);
+		} else {
+			$('div.popup_w700').html(data);
+			showPopup('popup_w700');
+		}
+		hideSpinner();
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	
+	} else {
+		$.post('app/admin/import-export/not-implemented.php', function(data) {
+		$('div.popup_w400').html(data);
+		showPopup('popup_w400');
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });		
+	}
+    return false;
+});
+$(document).on("click", "button#dataImportSubmit", function() {
+    //get data from previous window
+	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
+	popsize["subnets"] = "max";	popsize["recompute"] = "max";
+	var dataType = $(this).attr('data-type');
+    var importFields = $('form#selectImportFields').serialize();
+    //show popup window, if implemented
+	if (implemented.indexOf(dataType) > -1) {
+		showSpinner();
+		$.post('app/admin/import-export/import-' + dataType + '.php?' + importFields, function(data) {
+		if (popsize[dataType] !== undefined) { 
+			$('div.popup_'+popsize[dataType]).html(data);
+			showPopup('popup_'+popsize[dataType]);
+		} else {
+			$('div.popup_w700').html(data);
+			showPopup('popup_w700');
+		}
+		hideSpinner();
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	
+	} else {
+		$.post('app/admin/import-export/not-implemented.php', function(data) {
+		$('div.popup_w400').html(data);
+		showPopup('popup_w400');
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });		
+	}
+    return false;
+});
+// recompute button
+$('button.dataRecompute').click(function () {
+	showSpinner();
+	$.post('app/admin/import-export/import-recompute-select.php', function(data) {
+	$('div.popup_w700').html(data);
+	showPopup('popup_w700');
+	hideSpinner();
+	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	
+    return false;
+});
 
 
 /*	Fix database
