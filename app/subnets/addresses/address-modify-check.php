@@ -238,12 +238,10 @@ else {
 			//fail
 		    if (!$Addresses->modify_address($address)) {
 		        $Result->show("danger", _('Error inserting IP address')."!", false);
-		        $Log->write( "IP address modification", "Error $action IP address $address[ip_addr]<br>SubnetId: $address[subnetId]", 2);
 		    }
 		    //success, save log file and send email
 		    else {
 		        $Result->show("success", _("IP $action successful"),false);
-		        $Log->write( "IP address modification", "$action of IP address $address[ip_addr] succesfull!<br>SubnetId: $address[subnetId]", 0);
 		    }
 		}
 	}

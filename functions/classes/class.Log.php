@@ -259,6 +259,7 @@ class Logging extends Common_functions {
 		$this->log_details = str_replace("<hr>", ",",$this->log_details);
 		// replace spaces
 		$this->log_details = str_replace(": ", ":",$this->log_details);
+		$this->log_details = trim($this->log_details, ",");
 	}
 
 	/**
@@ -455,21 +456,21 @@ class Logging extends Common_functions {
 				foreach ($this->object_new as $k=>$v) {
 					$this->object_new[$k] = $this->changelog_make_booleans ($k, $v);
 				}
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new);
+				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new, true);
 			}
 			elseif($action == "delete") {
 				//booleans
 				foreach ($this->object_old as $k=>$v) {
 					$this->changelog_make_booleans ($k, $v);
 				}
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old);
+				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old, true);
 			}
 			elseif($action == "truncate") {
 				$log['[truncate]'] = "Subnet truncated";
 			}
 			elseif($action == "resize") {
 				$log['[resize]'] = "Subnet Resized";
-				$log['[New mask]'] = "/".$this->object_new['mask'];
+				$log['[mask]'] = $this->object_old['mask']."/".$this->object_new['mask'];
 			}
 			elseif($action == "perm_change") {
 				$log = $this->changelog_format_permission_change ();
@@ -498,7 +499,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_write_to_db ($changelog) {
 		# log to array
-		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog));
+		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog, true));
 		# fetch user id
 		$this->get_active_user_id ();
 
@@ -567,8 +568,8 @@ class Logging extends Common_functions {
 			}
 		}
 		// ip address - old needs to be transformed to dotted format
-		$this->object_old['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_old['ip_addr']);
-		$this->object_new['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_new['ip_addr']);
+		$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
+		$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
 
 		// check each value
 		foreach($this->object_new as $k=>$v) {

@@ -50,6 +50,7 @@ if(sizeof($res)>0) {
 						"dns_name"=>$r['dns_name'],
 						"subnetId"=>$_POST['subnetId'],
 						"description"=>$r['description'],
+						"state"=>2,
 						"lastSeen"=>date("Y-m-d H:i:s"),
 						"action"=>"add"
 						);

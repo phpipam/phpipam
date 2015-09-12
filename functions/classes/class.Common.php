@@ -119,16 +119,28 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $logs
+	 * @param bool $changelog
 	 * @return void
 	 */
-	public function array_to_log ($logs) {
+	public function array_to_log ($logs, $changelog = false) {
 		$result = "";
 		# reformat
 		if(is_array($logs)) {
-		    foreach($logs as $key=>$req) {
-		    	# ignore __ and PHPSESSID
-		    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
-		    	else 																  { $result .= " ". $key . ": " . $req . "<br>"; }
+			// changelog
+			if ($changelog===true) {
+			    foreach($logs as $key=>$req) {
+			    	# ignore __ and PHPSESSID
+			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
+			    	else 																  { $result .= "[$key]:$req<br>"; }
+				}
+
+			}
+			else {
+			    foreach($logs as $key=>$req) {
+			    	# ignore __ and PHPSESSID
+			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
+			    	else 																  { $result .= " ". $key . ": " . $req . "<br>"; }
+				}
 			}
 		}
 		return $result;

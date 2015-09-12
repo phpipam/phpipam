@@ -164,7 +164,7 @@ class Subnets extends Common_functions {
 		$this->lastInsertId = $this->Database->lastInsertId();
 		$values['id'] = $this->lastInsertId;
 		# ok
-		$this->Log->write( "Subnet created", "New subnet created<hr>".$this->array_to_log($values), 0);
+		$this->Log->write( "Subnet created", "New subnet created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		# write changelog
 		$this->Log->write_changelog('subnet', "add", 'success', array(), $values);
 		return true;
@@ -195,7 +195,7 @@ class Subnets extends Common_functions {
 		$this->lastInsertId = $this->Database->lastInsertId();
 		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
-		$this->Log->write( "Subnet $old_subnet->description edit", "Subnet $old_subnet->description edited<hr>".$this->array_to_log($values), 0);
+		$this->Log->write( "Subnet $old_subnet->description edit", "Subnet $old_subnet->description edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -223,7 +223,7 @@ class Subnets extends Common_functions {
 		# write changelog
 		$this->Log->write_changelog('subnet', "delete", 'success', $old_subnet, array());
 		# ok
-		$this->Log->write( "Subnet $old_subnet->description delete", "Subnet $old_subnet->description deleted<hr>".$this->array_to_log((array) $old_subnet), 0);
+		$this->Log->write( "Subnet $old_subnet->description delete", "Subnet $old_subnet->description deleted<hr>".$this->array_to_log($this->reformat_empty_array_fields ((array) $old_subnet)), 0);
 		return true;
 	}
 
