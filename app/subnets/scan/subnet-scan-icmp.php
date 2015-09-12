@@ -35,7 +35,6 @@ if ($User->settings->scanPingType=="fping" && isset($script_result->values->aliv
 	$script_result->values->alive = array_values($script_result->values->alive);
 }
 
-
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
 

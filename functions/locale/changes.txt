@@ -2630,3 +2630,8 @@ msgstr ""
 msgid "Syslog files are sent to syslog"
 msgstr ""
 
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+msgstr ""
+
+msgid "Please adjust your php.ini settings for value `max_input_vars`"
+msgstr "";
