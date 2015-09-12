@@ -1,4 +1,4 @@
-== 1.18.020
+== 1.18.028
 
 	New features:
 	------------
@@ -61,6 +61,7 @@
 	+ Fixed invalid redirect after timeout;
 	+ Fixed discovery script index overridden;
 	+ Fixed dashboard graphs links to subnets;
+	+ Fixed Invalid ID on subnet scan of large subnets;
 
 == 1.1.010
 
