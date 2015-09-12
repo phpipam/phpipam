@@ -943,12 +943,12 @@ $(document).on("click", "#editUserSubmit", function() {
     return false;
 });
 //disable pass if domain user
-$(document).on("change", "select#domainUser", function() {
+$(document).on("change", "form#usersEdit select[name=authMethod]", function() {
     //get details - we need Section, network and subnet bitmask
-    var type = $(this).val();
+    var type = $("select[name=authMethod]").find(":selected").val();
     //we changed to domain
-    if(type == "1") { $('input.userPass').attr('disabled',''); }
-    else             { $('input.userPass').removeAttr('disabled'); }
+    if(type == "1") { $('tbody#user_password').show(); }
+    else            { $('tbody#user_password').hide(); }
 });
 // generate random pass
 $(document).on("click", "a#randomPass", function() {
