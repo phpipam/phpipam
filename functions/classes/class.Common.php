@@ -326,6 +326,26 @@ class Common_functions  {
 	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
 	}
 
+	/**
+	 * Returns text representation of json errors
+	 *
+	 * @access public
+	 * @param mixed $error_int
+	 * @return void
+	 */
+	public function json_error_decode ($error_int) {
+		// error definitions
+		$error[0] = "JSON_ERROR_NONE";
+		$error[1] = "JSON_ERROR_DEPTH";
+		$error[2] = "JSON_ERROR_STATE_MISMATCH";
+		$error[3] = "JSON_ERROR_CTRL_CHAR";
+		$error[4] = "JSON_ERROR_SYNTAX";
+		$error[5] = "JSON_ERROR_UTF8";
+		// return def
+		if (isset($error[$error_int]))	{ return $error[$error_int]; }
+		else							{ return "JSON_ERROR_UNKNOWN"; }
+	}
+
 
 }
 

@@ -187,7 +187,8 @@ function print_tools_breadcrumbs ($Section, $Subnet, $req) {
  *	Ping address helper for CLI threading
  */
 function ping_address ($address) {
-	global $Scan;
+	$Database 	= new Database_PDO;
+	$Scan		= new Scan ($Database);
 	//scan
 	return $Scan->ping_address ($address);
 }
@@ -196,7 +197,8 @@ function ping_address ($address) {
  *	Telnet address helper for CLI threading
  */
 function telnet_address ($address, $port) {
-	global $Scan;
+	$Database 	= new Database_PDO;
+	$Scan		= new Scan ($Database);
 	//scan
 	return $Scan->telnet_address ($address, $port);
 }
@@ -205,7 +207,8 @@ function telnet_address ($address, $port) {
  *	fping subnet helper for fping threading
  */
 function fping_subnet ($subnet_cidr, $return = true) {
-	global $Scan;
+	$Database 	= new Database_PDO;
+	$Scan		= new Scan ($Database);
 	//scan
 	return $Scan->ping_address_method_fping_subnet ($subnet_cidr, $return);
 }

@@ -13,7 +13,6 @@ exec($cmd, $output, $retval);
 # format result back to object
 $script_result = json_decode($output[0]);
 
-
 # recode to same array with statuses
 $m=0;
 if($script_result->status==0) {
@@ -63,8 +62,10 @@ if($script_result->status==0) {
 <hr>
 
 <?php
+# json error
+if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), false); }
 # die if error
-if($retval!=0) 									{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
+elseif($retval!=0) 								{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
