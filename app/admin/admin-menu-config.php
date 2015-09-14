@@ -45,6 +45,5 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-magic",
 $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-check", 				"name"=>"Version check", 			"href"=>"version-check", 			"description"=>"Check for latest version of phpipam");
 $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-magic", 				"name"=>"Verify database", 			"href"=>"verify-database", 			"description"=>"Verify that database files are installed ok");
 $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search-plus", 			"name"=>"Replace fields", 			"href"=>"replace-fields", 			"description"=>"Search and replace content in database");
-$admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-cloud-download", 		"name"=>"Export database", 			"href"=>"export-database", 			"description"=>"Make backup of whole database");
 
 ?>

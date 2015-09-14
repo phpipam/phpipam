@@ -66,7 +66,7 @@ $(function(){
 			// Append the file name and file size
 			$('#uploadResult').append(data.files[0].name + ' (<i>' + formatFileSize(data.files[0].size) + '</i>)');
 			$('#uploadResult').append(' <span rel="tooltip" data-placement="bottom" title="<?php print _("Cancel upload");?>"> <i class="fa fa-times-circle" ></i></span>');
-			
+
 			// Listen for clicks on the cancel icon
 			$('#uploadResult').find('span').click(function(){
 				if($('#uploadResult').hasClass('working')){
@@ -89,7 +89,7 @@ $(function(){
 			var resp = jQuery.parseJSON(e);
 			//get status
 			var respStat = resp['status'];
-			//success	
+			//success
 			if(respStat == "success") {
 				$('#uploadResult').addClass('alert alert-success');		//add success class
 				$('#uploadResult').append('<br><strong>Upload successfull</strong>');	//add ok sign
@@ -102,7 +102,7 @@ $(function(){
 					$('#bottommsg').empty();
 					$('#topmsg').append('<?php print "<h4>"._("Match fields")."</h4><hr>"._("Please match the DB fields with the uploaded fields:"); ?>');
 				    $("#fieldstable > tbody").append('<tr id="fieldsrow"></tr>');
-					
+
 					resp.expfields.forEach(function(expfield) {
 						//console.log(resp.fields);
 						var td= $('<td></td>').appendTo("#fieldstable > tbody #fieldsrow");
@@ -120,7 +120,7 @@ $(function(){
 				    });
 					if (matches == 0) {
 						$('#bottommsg').addClass('alert alert-danger');
-						$('#bottommsg').append('<i class="fa fa-exclamation-triangle"></i> <?php print _("No fields were automatically matched. The import file needs to have a header row!"); ?><br>');											
+						$('#bottommsg').append('<i class="fa fa-exclamation-triangle"></i> <?php print _("No fields were automatically matched. The import file needs to have a header row!"); ?><br>');
 					}
 					if ((matches > 0) && (matches != resp.expfields.length)) {
 						// console.log(matches + " mismatches vs " + resp.expfields.length);
@@ -138,7 +138,7 @@ $(function(){
 				    $('#dataImportPreview').addClass('btn-success');
 					// add the filetype to the hidden input to be used in the preview section
 					$('#filetype').val(resp.filetype);
-				
+
 				} else {
 					$('#topmsg').append('<?php print _("No header row found in uploaded file. Please check."); ?><br>');
 				}

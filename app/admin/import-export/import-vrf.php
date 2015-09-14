@@ -42,13 +42,13 @@ foreach ($data as &$cdata) {
 						);
 		# update
 		$cdata['result'] = $Admin->object_modify("vrf", $cdata['action'], "vrfId", $values);
-		
+
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
 			$msg = "VRF ".$cdata['action']." successful.";
 		} else {
 			$trc = "danger";
-			$msg = "VRF ".$cdata['action']." failed.";		
+			$msg = "VRF ".$cdata['action']." failed.";
 		}
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 			<td>".$cdata['name']."</td>

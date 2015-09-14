@@ -73,12 +73,12 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$subnet['andip'] = ($subnet['type'] == "IPv4") ? $subnet['subnet'] : $pi6->_ip2Bin($subnet['ip']);
 		# Add to array
 		$edata[$sect_id][] = $subnet;
-	}	
+	}
 }
 
 $rows = ""; $counters = array();
 
-# Recompute master/nested relations for the selected sections and address families 
+# Recompute master/nested relations for the selected sections and address families
 foreach ($rlist as $sect_id => $sect_check) {
 	# Skip empty sections
 	if (!$edata[$sect_id]) { continue; }
@@ -90,7 +90,7 @@ foreach ($rlist as $sect_id => $sect_check) {
 
 		# Check against all other subnets in section
 		foreach ($edata[$sect_id] as $m_subnet) {
-			if ($c_subnet['type'] != $m_subnet['type']) { continue; }	# Skip if current IP version doesn't match master IP version	
+			if ($c_subnet['type'] != $m_subnet['type']) { continue; }	# Skip if current IP version doesn't match master IP version
 			if ((!$sect_check["CVRF"]) && ($c_subnet['vrfId'] != $m_subnet['vrfId'])) { continue; }	# Skip IPs from other VRFs if cross VRF reordering is not wanted (default is on)
 			# Main logic here - check if subnet within subnet
 			if ((($c_subnet['andip'] & $masks[$c_subnet['type']][$m_subnet['mask']]) == $m_subnet['andip']) && ($c_subnet['mask'] > $m_subnet['mask'])) {	# We have a match
@@ -99,9 +99,9 @@ foreach ($rlist as $sect_id => $sect_check) {
 				}
 			}
 		}
-		
+
 		# At the end, save the new master
-		$c_subnet['new_masterSubnetId'] = $c_master_id; 
+		$c_subnet['new_masterSubnetId'] = $c_master_id;
 		$c_subnet['new_master'] = (($c_master_id === "0") ? _("Root") : $c_master_ip."/".$c_master_mask);
 		$c_subnet['action'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? "skip" : "edit");
 		$c_subnet['msg'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? "No change, skip" : "New master, update");

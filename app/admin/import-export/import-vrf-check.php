@@ -22,7 +22,7 @@ $edata = array();
 foreach ($all_vrfs as $vrf) {
 	//cast
 	$vrf = (array) $vrf;
-	$edata[$vrf['rd']] = $vrf;	
+	$edata[$vrf['rd']] = $vrf;
 }
 
 $rows = "";
@@ -33,17 +33,17 @@ foreach ($data as &$cdata) {
 	$msg = ""; $action = "";
 
 	# check if required fields are present and not empty
-	foreach($reqfields as $creq) { 
+	foreach($reqfields as $creq) {
 		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
-	
+
 	# check data format
 	if ($action != "error") {
 		if (!preg_match("/^[a-zA-Z0-9-]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
 		if (!preg_match("/^[0-9:]+$/", $cdata['rd'])) { $msg.="Invalid RD format."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 	}
-	
+
 	# check if existing
 	if ($action != "error") {
 		if (isset($edata[$cdata['rd']])) {
@@ -59,11 +59,11 @@ foreach ($data as &$cdata) {
 			$msg.="New entry, will be added."; $action = "add";
 		}
 	}
-	
+
 	$cdata['msg'].= $msg;
 	$cdata['action'] = $action;
 	$counters[$action]++;
-	
+
 	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 		<td>".$cdata['name']."</td>
 		<td>".$cdata['rd']."</td>

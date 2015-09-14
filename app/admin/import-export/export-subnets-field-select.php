@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	Subnets export 
+ *	Subnets export
  */
 
 # include required scripts
@@ -112,7 +112,7 @@ if(sizeof($all_sections) > 0) {
     print "	<th>"._('Description')."</th>";
     print "	<th>"._('Parent')."</th>";
     print "	</tr>\n";
-	
+
 	# existing sections
 	foreach ($sections_sorted as $section) {
 		//cast
@@ -133,7 +133,7 @@ if(sizeof($all_sections) > 0) {
 	}
 
 	print '</table>';
-	
+
 	print '<div class="checkbox"><label><input type="checkbox" name="exportSections" checked>'._("Include the sections in a separate sheet.").'</label></div>';
 
 }
@@ -146,6 +146,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="subnets"><i class="fa fa-download"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="subnets"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
 	</div>
 </div>

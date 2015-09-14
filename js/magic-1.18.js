@@ -2095,33 +2095,29 @@ $('button#searchReplaceSave').click(function() {
 });
 
 
-/* exports
-***********************/
+/*  Data Import / Export
+*************************/
 // XLS exports
 $('button#XLSdump').click(function () {
     showSpinner();
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/export-database/generate-xls.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-xls.php'></iframe></div>");
     hideSpinner();
 });
 // MySQL export
 $('button#MySQLdump').click(function () {
     showSpinner();
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/export-database/generate-mysql.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-mysql.php'></iframe></div>");
     hideSpinner();
 });
 // Hostfile export
 $('button#hostfileDump').click(function () {
     showSpinner();
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/export-database/generate-hosts.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-hosts.php'></iframe></div>");
     hideSpinner();
 });
-
-
-/*  Data Import / Export
-*************************/
 //Export Section
 $('button.dataExport').click(function () {
 	var implemented = ["vrf","vlan","subnets"]; var popsize = {};
@@ -2131,7 +2127,7 @@ $('button.dataExport').click(function () {
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
 		$.post('app/admin/import-export/export-' + dataType + '-field-select.php', function(data) {
-		if (popsize[dataType] !== undefined) { 
+		if (popsize[dataType] !== undefined) {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
@@ -2155,24 +2151,24 @@ $(document).on("click", "button#dataExportSubmit", function() {
     var exportFields = $('form#selectExportFields').serialize();
 	//show popup window
 	switch(dataType) {
-		case 'vrf':	
+		case 'vrf':
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-vrf.php?" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
-		case 'vlan':	
+		case 'vlan':
 			var exportDomains = $('form#selectExportDomains').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-vlan.php?" + exportDomains + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
-		case 'subnets':	
+		case 'subnets':
 			var exportSections = $('form#selectExportSections').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-subnets.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
-	}	
+	}
     return false;
 });
 // Check/uncheck all
@@ -2184,7 +2180,7 @@ $(document).on("click", "input#exportSelectAll", function() {
 	}else{
 		$('input#exportCheck').each(function() { //loop through each checkbox
 			this.checked = false; //deselect all checkboxes with same class
-		});         
+		});
 	}
 });
 // Check/uncheck all
@@ -2196,7 +2192,7 @@ $(document).on("click", "input#recomputeSectionSelectAll", function() {
 	}else{
 		$('input#recomputeSectionCheck').each(function() { //loop through each checkbox
 			this.checked = false; //deselect all checkboxes with same class
-		});         
+		});
 	}
 });
 // Check/uncheck all
@@ -2208,7 +2204,7 @@ $(document).on("click", "input#recomputeIPv4SelectAll", function() {
 	}else{
 		$('input#recomputeIPv4Check').each(function() { //loop through each checkbox
 			this.checked = false; //deselect all checkboxes with same class
-		});         
+		});
 	}
 });
 // Check/uncheck all
@@ -2220,7 +2216,7 @@ $(document).on("click", "input#recomputeIPv6SelectAll", function() {
 	}else{
 		$('input#recomputeIPv6Check').each(function() { //loop through each checkbox
 			this.checked = false; //deselect all checkboxes with same class
-		});         
+		});
 	}
 });
 // Check/uncheck all
@@ -2232,7 +2228,7 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 	}else{
 		$('input#recomputeCVRFCheck').each(function() { //loop through each checkbox
 			this.checked = false; //deselect all checkboxes with same class
-		});         
+		});
 	}
 });
 //Import Section
@@ -2244,7 +2240,7 @@ $('button.dataImport').click(function () {
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
 		$.post('app/admin/import-export/import-' + dataType + '-select.php', function(data) {
-		if (popsize[dataType] !== undefined) { 
+		if (popsize[dataType] !== undefined) {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
@@ -2257,7 +2253,7 @@ $('button.dataImport').click(function () {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('div.popup_w400').html(data);
 		showPopup('popup_w400');
-		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });		
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
 });
@@ -2272,7 +2268,7 @@ $(document).on("click", "button#dataImportPreview", function() {
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
 		$.post('app/admin/import-export/import-' + dataType + '-preview.php?' + importFields, function(data) {
-		if (popsize[dataType] !== undefined) { 
+		if (popsize[dataType] !== undefined) {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
@@ -2280,12 +2276,12 @@ $(document).on("click", "button#dataImportPreview", function() {
 			showPopup('popup_w700');
 		}
 		hideSpinner();
-		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	} else {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('div.popup_w400').html(data);
 		showPopup('popup_w400');
-		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });		
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
 });
@@ -2299,7 +2295,7 @@ $(document).on("click", "button#dataImportSubmit", function() {
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
 		$.post('app/admin/import-export/import-' + dataType + '.php?' + importFields, function(data) {
-		if (popsize[dataType] !== undefined) { 
+		if (popsize[dataType] !== undefined) {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
@@ -2307,12 +2303,12 @@ $(document).on("click", "button#dataImportSubmit", function() {
 			showPopup('popup_w700');
 		}
 		hideSpinner();
-		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	} else {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('div.popup_w400').html(data);
 		showPopup('popup_w400');
-		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });		
+		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
 });
@@ -2323,7 +2319,7 @@ $('button.dataRecompute').click(function () {
 	$('div.popup_w700').html(data);
 	showPopup('popup_w700');
 	hideSpinner();
-	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	
+	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
 

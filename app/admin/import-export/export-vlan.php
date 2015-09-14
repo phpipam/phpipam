@@ -75,7 +75,7 @@ if(sizeof($custom_fields) > 0) {
 			$rowCount++;
 		}
 	}
-}	
+}
 
 
 $lineCount++;
@@ -128,7 +128,7 @@ foreach ($vlan_domains as $vlan_domain) {
 					}
 				}
 			}
-			
+
 			$lineCount++;
 		}
 	}
@@ -153,7 +153,7 @@ if( (isset($_GET['exportVLANDomains'])) && ($_GET['exportVLANDomains'] == "on") 
 
 	$lineCount++;
 	$rowCount = 0;
-	
+
 	foreach ($vlan_domains as $vlan_domain) {
 		//cast
 		$vlan_domain = (array) $vlan_domain;
@@ -164,7 +164,7 @@ if( (isset($_GET['exportVLANDomains'])) && ($_GET['exportVLANDomains'] == "on") 
 			$worksheet_domains->write($lineCount, $rowCount, $vlan_domain['description'], $format_text);
 			$rowCount++;
 		}
-		
+
 		$lineCount++;
 		$rowCount = 0;
 	}

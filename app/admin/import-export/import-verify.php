@@ -50,18 +50,18 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		/* format file */
 		$data = str_replace( array("\r\n","\r") , "" , $data);	//remove line break
 		$data = preg_split("/[;,]/", $data); //split by comma or semi-colon
-		
+
 		foreach ($data as $col) {
 			$firstrow[] = $col;
 		}
 	}
-	// grab first row from XLS 
+	// grab first row from XLS
 	elseif(strtolower($filetype) == "xls") {
 		# get excel object
 		require_once(dirname(__FILE__) . '/../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
 		$data = new Spreadsheet_Excel_Reader('upload/data_import.xls', false);
 		$sheet = 0; $row = 1;
-		
+
 		for($col=1;$col<=$data->colcount($sheet);$col++) {
 			$firstrow[] = $data->val($row,$col,$sheet);
 		}

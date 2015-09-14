@@ -47,7 +47,7 @@ $extfields["vrf"]["pname"] = "vrf";
 $reqfields = array("section","subnet");
 
 # manually adjust the standard fields
-foreach($expfields as $std_field) {		
+foreach($expfields as $std_field) {
 	# extra table and field
 	if (isset($extfields[$std_field])) {
 		$cfield = $extfields[$std_field]["field"];
@@ -59,14 +59,14 @@ foreach($expfields as $std_field) {
 		$ctable = $mtable;
 		$pname = "";
 	}
-	
+
 	# read field attributes
 	$field = $Tools->fetch_full_field_definition($ctable,$cfield);
 	$field = (array) $field;
-	
+
 	# mark required fields with *
 	$msgr = in_array($std_field,$reqfields) ? "*" : "";
-		
+
 	#prebuild template table rows to avoid useless foreach loops
 	$tpl_field_names.= "<th>".$pname.$field['Field'].$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
@@ -74,10 +74,10 @@ foreach($expfields as $std_field) {
 
 # append the custom fields, if any
 $custom_fields = $Tools->fetch_custom_fields($mtable);
-if(sizeof($custom_fields) > 0) { 
+if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $myField) {
 		# add field to required fields if needed
-		if ($myField['Null'] == "NO") { $reqfields[] = $myField['name']; }		
+		if ($myField['Null'] == "NO") { $reqfields[] = $myField['name']; }
 		# mark required fields with *
 		$msgr = in_array($myField['name'],$reqfields) ? "*" : "";
 

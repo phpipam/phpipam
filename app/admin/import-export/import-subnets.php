@@ -47,9 +47,9 @@ foreach ($data as &$cdata) {
 						"permissions"=>$cdata['permissions'],
 						"isFolder"=>0
 						);
-						
+
 		# add custom fields
-		if(sizeof($custom_fields) > 0) { 
+		if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				if(isset($cdata[$myField['name']])) { $values[$myField['name']] = $cdata[$myField['name']]; }
 			}
@@ -57,13 +57,13 @@ foreach ($data as &$cdata) {
 
 		# update
 		$cdata['result'] = $Admin->object_modify("subnets", $cdata['action'], "id", $values);
-		
+
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
 			$msg = "Subnets ".$cdata['action']." successful.";
 		} else {
 			$trc = "danger";
-			$msg = "Subnets ".$cdata['action']." failed.";		
+			$msg = "Subnets ".$cdata['action']." failed.";
 		}
 
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";

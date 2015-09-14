@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	VLAN export 
+ *	VLAN export
  */
 
 # include required scripts
@@ -107,6 +107,6 @@ print '</form>';
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vlan"><i class="fa fa-download"></i> <?php print _('Export'); ?></button>
+		<button class="btn btn-sm btn-success" id="dataExportSubmit" data-type="vlan"><i class="fa fa-upload"></i> <?php print _('Export'); ?></button>
 	</div>
 </div>

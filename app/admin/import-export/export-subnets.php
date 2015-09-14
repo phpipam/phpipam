@@ -119,7 +119,7 @@ if(sizeof($custom_fields) > 0) {
 			$rowCount++;
 		}
 	}
-}	
+}
 
 $rowCount = 0;
 $lineCount++;
@@ -134,9 +134,9 @@ foreach ($all_sections as $section) {
 		$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 
 		if (sizeof($section_subnets)==0) { continue; }
-		
+
 		foreach ($section_subnets as $subnet) {
-			
+
 			$subnet = (array) $subnet;
 
 			if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
@@ -153,7 +153,7 @@ foreach ($all_sections as $section) {
 				$worksheet->write($lineCount, $rowCount, $subnet['description'], $format_text);
 				$rowCount++;
 			}
-			
+
 			if( (isset($_GET['VLAN'])) && ($_GET['VLAN'] == "on") ) {
 				// get VLAN
 				$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
@@ -164,7 +164,7 @@ foreach ($all_sections as $section) {
 				$rowCount++;
 				// VLAN Domain
 				$vlan_domain = (array) $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
-				$worksheet->write($lineCount, $rowCount, $vlan_domain['name'], $format_text);				
+				$worksheet->write($lineCount, $rowCount, $vlan_domain['name'], $format_text);
 				$rowCount++;
 			}
 
@@ -175,7 +175,7 @@ foreach ($all_sections as $section) {
 					$worksheet->write($lineCount, $rowCount, $vrf['name'], $format_text);
 				} else {
 					$worksheet->write($lineCount, $rowCount, '', $format_text);
-				}					
+				}
 				$rowCount++;
 			}
 
@@ -186,7 +186,7 @@ foreach ($all_sections as $section) {
 				if($masterSubnet) {
 					$master = (array) $Subnets->fetch_subnet (null, $subnet['masterSubnetId']);
 					if($master['isFolder']) {
-						$worksheet->write($lineCount, $rowCount, $master['description']." [folder]", $format_text);							
+						$worksheet->write($lineCount, $rowCount, $master['description']." [folder]", $format_text);
 					} else {
 						$worksheet->write($lineCount, $rowCount, $master['ip']."/".$master['mask'], $format_text);
 					}
@@ -195,12 +195,12 @@ foreach ($all_sections as $section) {
 				}
 				$rowCount++;
 			}
-			
+
 			if( (isset($_GET['requests'])) && ($_GET['requests'] == "on") ) {
 				$worksheet->write($lineCount, $rowCount, $subnet['allowRequests'], $format_text);
 				$rowCount++;
 			}
-			
+
 			if( (isset($_GET['hostscheck'])) && ($_GET['hostscheck'] == "on") ) {
 				$worksheet->write($lineCount, $rowCount, $subnet['pingSubnet'], $format_text);
 				$rowCount++;
@@ -229,8 +229,8 @@ foreach ($all_sections as $section) {
 		$lineCount++;
 		}
 	}
-}	
-	
+}
+
 //new line
 $lineCount++;
 
@@ -252,7 +252,7 @@ if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 
 	$lineCount++;
 	$rowCount = 0;
-	
+
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
@@ -273,7 +273,7 @@ if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 				$rowCount++;
 			}
 		}
-		
+
 		$lineCount++;
 		$rowCount = 0;
 	}

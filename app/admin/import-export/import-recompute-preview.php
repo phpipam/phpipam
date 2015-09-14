@@ -1,7 +1,7 @@
 <?php
 
 /**
- *	Preview Subnets master/nested recompute data 
+ *	Preview Subnets master/nested recompute data
  ************************************/
 
 # include required scripts
@@ -29,7 +29,7 @@ include 'import-recompute-logic.php';
 <?php
 
 print '<h4>'._("Recomputed data").'</h4><hr>';
-print _("The entries marked with ")."<i class='fa ".$icons['edit']."'></i>, "._("have new masters and will be updated, 
+print _("The entries marked with ")."<i class='fa ".$icons['edit']."'></i>, "._("have new masters and will be updated,
 	the ones marked with ")."<i class='fa ".$icons['skip']."'></i>, "._("didn't change the master.");
 
 print "<form id='selectImportFields'>".$pass_inputs."</form>";

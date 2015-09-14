@@ -48,8 +48,8 @@ $(document).on('change', "select#dataType", function() {
 		<td>Action</td>
 		<td colspan="2">
 			<div class="btn-group">
-				<button class='dataImport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Import data entries for the selected type'); ?>'><i class='fa fa-upload'></i> <?php print _('Import'); ?></button>
-				<button class='dataExport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Export data entries for the selected type'); ?>'><i class='fa fa-download'></i> <?php print _('Export'); ?></button>
+				<button class='dataImport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Import data entries for the selected type'); ?>'><i class='fa fa-download'></i> <?php print _('Import'); ?></button>
+				<button class='dataExport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Export data entries for the selected type'); ?>'><i class='fa fa-upload'></i> <?php print _('Export'); ?></button>
 			</div>
 			<button class="dataRecompute btn btn-sm btn-default" id="dataRecompute" style="display: none;" rel='tooltip' data-placement='bottom' title='<?php print _('Recompute master/nested subnet relations.'); ?>'><i class="fa fa-magic"></i> <?php print _('Recompute'); ?></button>
 		</td>
@@ -57,3 +57,22 @@ $(document).on('change', "select#dataType", function() {
 </table>
 </form>
 
+
+
+<h4 style="margin-top:100px;"><?php print _('phpIPAM database export'); ?></h4>
+<hr><br>
+
+<div class="alert alert-info alert-absolute"><?php print _('You can download MySQL dump of database or generate XLS file of IP addresses'); ?>!</div>
+
+<!-- MySQL dump -->
+<hr style="margin-top:50px;">
+<h4><?php print _('Create MySQL database dump'); ?></h4>
+<button class="btn btn-sm btn-default" id="MySQLdump"><i class="fa fa-upload"></i> <?php print _('Prepare MySQL dump'); ?></button>
+
+<!-- XLS dump -->
+<h4><?php print _('Create XLS file of IP addresses'); ?></h4>
+<button class="btn btn-sm btn-default" id="XLSdump"><i class="fa fa-upload"></i> <?php print _('Prepare XLS dump'); ?></button>
+
+<!-- XLS dump -->
+<h4><?php print _('Create hostfile dump'); ?></h4>
+<button class="btn btn-sm btn-default" id="hostfileDump"><i class="fa fa-upload"></i> <?php print _('Prepare hostfile dump'); ?></button>

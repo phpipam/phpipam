@@ -39,7 +39,7 @@ foreach ($vlan_domains as $vlan_domain) {
 	if (sizeof($all_vlans)==0) {
 		# create entry for domain check
 		$vlan_data[$vlan_domain['name']] = array();
-		continue; 
+		continue;
 	}
 	//write all VLAN entries
 	foreach ($all_vlans as $vlan) {
@@ -54,11 +54,11 @@ $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
 # insert default VRF in the list
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 # process for easier later check
-$vrf_data = array(); 
+$vrf_data = array();
 foreach ($all_vrfs as $vrf) {
 	//cast
 	$vrf = (array) $vrf;
-	$vrf_data[$vrf['name']] = $vrf;	
+	$vrf_data[$vrf['name']] = $vrf;
 	$vrf_data[$vrf['rd']] = $vrf;	# add also RD as VRF name, will allow matches against both name and RD
 }
 
@@ -74,7 +74,7 @@ foreach ($all_sections as $section) {
 	$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 	# skip empty sections
 	if (sizeof($section_subnets)==0) { continue; }
-	
+
 	foreach ($section_subnets as $subnet) {
 		$subnet = (array) $subnet;
 		# load whole record in array
@@ -94,7 +94,7 @@ foreach ($data as &$cdata) {
 	$msg = ""; $action = ""; $cfieldtds = "";
 
 	# check if required fields are present and not empty
-	foreach($reqfields as $creq) { 
+	foreach($reqfields as $creq) {
 		if ((!isset($cdata[$creq])) or ($cdata[$creq] == "")) { $msg.= "Required field ".$creq." missing or empty."; $action = "error"; }
 	}
 
@@ -107,8 +107,8 @@ foreach ($data as &$cdata) {
 		} else { # check that mask is provided
 			if ((!isset($cdata['mask'])) or ($cdata['mask'] == "")) { $msg.= "Required field mask missing or empty."; $action = "error"; }
 		}
-		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) { 
-			$msg.="Invalid network mask format."; $action = "error"; 
+		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
+			$msg.="Invalid network mask format."; $action = "error";
 		} else {
 			$cdata['type'] = $Subnets->identify_address($cdata['subnet']);
 			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.="Invalid IPv6 network mask."; $action = "error"; }
@@ -116,12 +116,12 @@ foreach ($data as &$cdata) {
 	}
 
 	# Check if section is provided and valid and link it if it is
-	if (!isset($section_names[$cdata['section']])) { 
-		$msg.= "Invalid section."; $action = "error"; 
+	if (!isset($section_names[$cdata['section']])) {
+		$msg.= "Invalid section."; $action = "error";
 	} else {
 		$cdata['sectionId'] = $section_names[$cdata['section']]['id'];
 	}
-	
+
 	# Check if VRF is provided and valid and link it if it is
 	if (!empty($cdata['vrf'])) {
 		if (!isset($vrf_data[$cdata['vrf']])) {
@@ -133,7 +133,7 @@ foreach ($data as &$cdata) {
 		# no VRF provided
 		$cdata['vrfId'] = 0;
 	}
-	
+
 	# Check if VLAN Domain and VLAN are valid, and link them if they are
 	if (!empty($cdata['domain'])) { $cdom = $cdata['domain']; } else { $cdom = "default"; }
 	if (!isset($vlan_data[$cdom])) {
@@ -154,7 +154,7 @@ foreach ($data as &$cdata) {
 			}
 		}
 	}
-	
+
 	# check data format
 	if ($action != "error") {
 		if ($net = $Subnets->get_network_boundaries($cdata['subnet'],$cdata['mask'])) {
@@ -166,13 +166,13 @@ foreach ($data as &$cdata) {
 		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-:]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
 		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
 		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_ ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
-	}	
-	
-	# check if duplicate in the import data
-	if ($action != "error") { 
-		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) { $msg.="Duplicate entry in imported data."; $action = "error"; } 
 	}
-	
+
+	# check if duplicate in the import data
+	if ($action != "error") {
+		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) { $msg.="Duplicate entry in imported data."; $action = "error"; }
+	}
+
 	# check if existing in database
 	if ($action != "error") {
 		if (isset($edata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
@@ -184,14 +184,14 @@ foreach ($data as &$cdata) {
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Subnet description will be updated."; $action = "edit"; }
 			if ($cdata['vlanId'] != $cedata['vlanId']) { $msg.= "VLAN ID will be updated."; $action = "edit"; }
 			# Check if the values of the custom fields have changed
-			if(sizeof($custom_fields) > 0) { 
+			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) {
-					if ($cdata[$myField['name']] != $cedata[$myField['name']]) { 
-						$msg.= $myField['name']." will be updated."; $action = "edit"; 
+					if ($cdata[$myField['name']] != $cedata[$myField['name']]) {
+						$msg.= $myField['name']." will be updated."; $action = "edit";
 					}
 				}
 			}
-			
+
 			if ($action == "skip") {
 				$msg.= "Duplicate, will skip.";
 			} else {
@@ -200,8 +200,8 @@ foreach ($data as &$cdata) {
 				# copy some fields which we don't import, but need to set
 				$cdata['masterSubnetId'] = $cedata['masterSubnetId'];
 				$cdata['permissions'] = $cedata['permissions'];
-				// $cdata['allowRequests'] = $cedata['allowRequests'];			$cdata['showName'] = $cedata['showName'];				
-				// $cdata['pingSubnet'] = $cedata['pingSubnet'];				$cdata['discoverSubnet'] = $cedata['discoverSubnet'];		
+				// $cdata['allowRequests'] = $cedata['allowRequests'];			$cdata['showName'] = $cedata['showName'];
+				// $cdata['pingSubnet'] = $cedata['pingSubnet'];				$cdata['discoverSubnet'] = $cedata['discoverSubnet'];
 			}
 		} else {
 			$msg.="New entry, will be added."; $action = "add";
@@ -209,23 +209,23 @@ foreach ($data as &$cdata) {
 			$cdata['masterSubnetId'] = "0";
 			# Inherit section permissions for new subnets
 			$cdata['permissions'] = $section_names[$cdata['section']]['permissions'];
-			
+
 			# No overlap checking, smaller subnets will be considered nested, larger ones will be masters
 			# Master ID is set later, with the recompute functions
-			
+
 			# Add it to ndata for duplicate check
 			$ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']] = $cdata;
 		}
 	}
-		
+
 	$cdata['msg'].= $msg;
 	$cdata['action'] = $action;
 	$counters[$action]++;
-	
+
 	$rows.="<tr class='".$colors[$action]."'><td><i class='fa ".$icons[$action]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";
 	foreach ($expfields as $cfield) { $rows.= "<td>".$cdata[$cfield]."</td>"; }
 	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
-	
+
 }
 
 ?>

@@ -25,12 +25,12 @@ $reqfields = array("rd","name");
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {
-	if (in_array($std_field,$reqfields)) { 
-		$msgr = "*"; 
+	if (in_array($std_field,$reqfields)) {
+		$msgr = "*";
 	} else {
 		$msgr = "";
 	}
-	
+
 	$field = $Tools->fetch_full_field_definition("vrf",$std_field);
 	$field = (array) $field;
 
@@ -39,7 +39,7 @@ foreach($expfields as $std_field) {
 	$res[$field['Field']]['Comment'] = $field['Comment'];
 	$res[$field['Field']]['Null'] 	 = $field['Null'];
 	$res[$field['Field']]['Default'] = $field['Default'];
-	
+
 	#prebuild template table rows to avoid useless foreach loops
 	$tpl_field_names.= "<th>".$field['Field'].$msgr."</th>";
 	$tpl_field_types.= "<td><small>". wordwrap($field['Type'],18,"<br>\n",true) ."</small></td>";
@@ -47,7 +47,7 @@ foreach($expfields as $std_field) {
 
 # append the custom fields, if any
 $custom_fields = $Tools->fetch_custom_fields("vrf");
-if(sizeof($custom_fields) > 0) { 
+if(sizeof($custom_fields) > 0) {
 	$res[] = $custom_fields;
 	foreach($custom_fields as $myField) {
 		$tpl_field_names.= "<th>". $myField['name'] ."</th>";

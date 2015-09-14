@@ -44,13 +44,13 @@ foreach ($rlist as $sect_id => $sect_check) {
 
 			# update
 			$c_subnet['result'] = $Admin->object_modify("subnets", $c_subnet['action'], "id", $values);
-			
+
 			if ($c_subnet['result']) {
 				$trc = $colors[$c_subnet['action']];
 				$msg = "Master ".$c_subnet['action']." successful.";
 			} else {
 				$trc = "danger";
-				$msg = "Master ".$c_subnet['action']." failed.";		
+				$msg = "Master ".$c_subnet['action']." failed.";
 			}
 
 			$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$c_subnet['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>";

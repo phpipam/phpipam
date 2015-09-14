@@ -39,24 +39,24 @@ foreach ($data as &$cdata) {
 						"number"=>$cdata['number'],
 						"name"=>$cdata['name'],
 						"description"=>$cdata['description'],
-						"domainId"=>$cdata['domainId']				
+						"domainId"=>$cdata['domainId']
 						);
 		# add custom fields
-		if(sizeof($custom_fields) > 0) { 
+		if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				if(isset($cdata[$myField['name']])) { $values[$myField['name']] = $cdata[$myField['name']]; }
 			}
 		}
-		
+
 		# update
 		$cdata['result'] = $Admin->object_modify("vlans", $cdata['action'], "vlanId", $values);
-		
+
 		if ($cdata['result']) {
 			$trc = $colors[$cdata['action']];
 			$msg = "VLAN ".$cdata['action']." successful.";
 		} else {
 			$trc = "danger";
-			$msg = "VLAN ".$cdata['action']." failed.";		
+			$msg = "VLAN ".$cdata['action']." failed.";
 		}
 		$rows.="<tr class='".$trc."'><td><i class='fa ".$icons[$cdata['action']]."' rel='tooltip' data-placement='bottom' title='"._($msg)."'></i></td>
 			<td>".$cdata['name']."</td>

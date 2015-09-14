@@ -29,7 +29,7 @@ foreach ($expfields as $expfield) {
 	if (isset($_GET['importFields__'.str_replace(" ", "_",$expfield)])) {
 		$impfield = $_GET['importFields__'.str_replace(" ", "_",$expfield)];
 		if (in_array($expfield,$reqfields) && ($impfield == "-")) {
-			$Result->show('danger', _("Error: missing required field mapping for expected field")." <b>".$expfield."</b>."._("Please check field matching in previous window."), true, true);	
+			$Result->show('danger', _("Error: missing required field mapping for expected field")." <b>".$expfield."</b>."._("Please check field matching in previous window."), true, true);
 		} else {
 			if ($impfield != "-") { $impfields[$impfield] = $expfield; }
 		}
@@ -48,7 +48,7 @@ $data = array();
 if (strtolower($filetype) == "csv") {
 	# open CSV file
 	$filehdl = fopen('upload/data_import.csv', 'r');
-	
+
 	# read header row
 	$row = 0;$col = 0;
 	$line = fgets($filehdl);
@@ -61,7 +61,7 @@ if (strtolower($filetype) == "csv") {
 		$fieldmap[$col] = $impfields[$val];
 		$hcol = $col;
 	}
-	
+
 	# read each remaining row into a dictionary with expected fields as keys
 	while (($line = fgets($filehdl)) !== false) {
 		$row++;$col = 0;
@@ -81,19 +81,19 @@ if (strtolower($filetype) == "csv") {
 	}
 	fclose($filehdl);
 }
-# read first row from XLS 
+# read first row from XLS
 elseif(strtolower($filetype) == "xls") {
 	# get excel object
 	require_once(dirname(__FILE__) . '/../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
 	$xls = new Spreadsheet_Excel_Reader('upload/data_import.xls', false);
 	$sheet = 0; $row = 1;
-	
+
 	# map import columns to expected fields as per previous window
 	for($col=1;$col<=$xls->colcount($sheet);$col++) {
 		$fieldmap[$col] = $impfields[$xls->val($row,$col,$sheet)];
 		$hcol = $col;
 	}
-		
+
 	# read each remaining row into a dictionary with expected fields as keys
 	for($row=2;$row<=$xls->rowcount($sheet);$row++) {
 		$record = array();

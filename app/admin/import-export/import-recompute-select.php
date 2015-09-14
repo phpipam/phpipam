@@ -61,10 +61,10 @@ if(sizeof($all_sections) > 0) {
 			$last_master = $section['id'];
 		}
 		$section_rows.= "<tr>";
-		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeSectionCheck' name='recomputeSection_".$section['id']."' checked>".$sect_prefix.str_replace('_', ' ', $section['name'])."</label></div></td>";		
-		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeIPv4Check' name='recomputeSectionIPv4_".$section['id']."' checked></label></div></td>";		
-		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeIPv6Check' name='recomputeSectionIPv6_".$section['id']."' checked></label></div></td>";		
-		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeCVRFCheck' name='recomputeSectionCVRF_".$section['id']."' checked></label></div></td>";		
+		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeSectionCheck' name='recomputeSection_".$section['id']."' checked>".$sect_prefix.str_replace('_', ' ', $section['name'])."</label></div></td>";
+		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeIPv4Check' name='recomputeSectionIPv4_".$section['id']."' checked></label></div></td>";
+		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeIPv6Check' name='recomputeSectionIPv6_".$section['id']."' checked></label></div></td>";
+		$section_rows.= "<td><div class='checkbox'><label><input type='checkbox' id='recomputeCVRFCheck' name='recomputeSectionCVRF_".$section['id']."' checked></label></div></td>";
 		$section_rows.="</tr>\n";
 	}
 } else {
