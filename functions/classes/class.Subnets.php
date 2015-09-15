@@ -11,19 +11,18 @@ class Subnets extends Common_functions {
 	 */
 	public $subnets;						// (array of objects) to store subnets, subnet ID is array index
 	public $slaves;							// (array of ids) to store id's of all recursively slaves
-	public $settings = null;				// (object) phpipam settings
 	public $address_types = null;			// (array) IP address types from Addresses object
 
 	/**
 	 * protected variables
 	 */
-	protected $user = null;					//(object) for User profile
+	protected $user = null;					// (object) for User profile
 
 	/**
 	 * object holders
 	 */
-	protected $Net_IPv4;					//PEAR NET IPv4 object
-	protected $Net_IPv6;					//PEAR NET IPv6 object
+	protected $Net_IPv4;					// PEAR NET IPv4 object
+	protected $Net_IPv6;					// PEAR NET IPv6 object
 	public    $Result;						// for Result printing
 	protected $Database;					// for Database connection
 	public $Log;							// for Logging connection
@@ -45,20 +44,6 @@ class Subnets extends Common_functions {
 		$this->Result = new Result ();
 		# Log object
 		$this->Log = new Logging ($this->Database);
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 	/**

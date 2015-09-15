@@ -12,7 +12,6 @@ class PowerDNS extends Common_functions {
 	public $error = false;				// connection error string
 	public $db_settings;				// (obj) db settings
 	public $defaults;					// (obj) defaults settings
-	private $settings = false;			// (obj) settings
 
 	public $limit;						// number of results
 	public $orderby;					// order field
@@ -41,7 +40,7 @@ class PowerDNS extends Common_functions {
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
-		// get settings form parent
+		// get settings
 		$this->get_settings ();
 		// set database
 		$this->db_set ();
@@ -54,20 +53,6 @@ class PowerDNS extends Common_functions {
 		$this->set_query_values ();
 		// set ttl values
 		$this->set_ttl_values ();
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	protected function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 	/**

@@ -2634,4 +2634,9 @@ msgid "Number of discovered hosts exceed maximum possible defined by php.ini - s
 msgstr ""
 
 msgid "Please adjust your php.ini settings for value `max_input_vars`"
-msgstr "";
+msgstr ""
+
+msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
+msgstr ""
+
+

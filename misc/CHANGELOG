@@ -1,8 +1,8 @@
-== 1.18.028
+== 1.18.030
 
 	New features:
 	------------
-	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius);
+	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius, NetIQ);
 	+ Added fping scanning support;
 	+ Added selectable scanning type (ping/pear/fping);
 	+ Added L2 domains;
@@ -40,6 +40,7 @@
 	+ Clickable links for subnet fields;
 	+ Custom VRF fields;
 	+ Subnets can be now linked to devices;
+	+ Import/export enhancements;
 
 	Security Fixes:
 	----------------------------

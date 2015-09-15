@@ -16,7 +16,6 @@ class Install extends Common_functions {
 	 */
 	protected $db;							//db parameters
 	protected $debugging = false;			//(bool) debugging flag
-	protected $settings = array();			//)object) settings for upgrade
 
 	/**
 	 * object holders
@@ -44,24 +43,6 @@ class Install extends Common_functions {
 		$this->set_db_params ();
 		# Log object
 		$this->Log = new Logging ($this->Database);
-	}
-
-	/**
-	 * Fetch settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function fetch_settings () {
-		# check if already set
-		if(sizeof($this->settings)>0) {
-			return $this->settings;
-		}
-		# fetch
-		else {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 
@@ -356,7 +337,7 @@ class Install extends Common_functions {
 	 */
 	public function upgrade_database () {
 		# first check version
-		$this->fetch_settings ();
+		$this->get_settings ();
 
 		if($this->settings->version == VERSION)				{ $this->Result->show("danger", "Database already at latest version", true); }
 		else {

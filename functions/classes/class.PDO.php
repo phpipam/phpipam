@@ -21,6 +21,8 @@ class Database_PDO extends DB {
 
 	public $install = false;		//flag if installation is happenig!
 
+	protected $debug = true;
+
 	/**
 	 * __construct function.
 	 *
@@ -162,6 +164,7 @@ abstract class DB {
 		try {
 			$this->pdo = new \PDO($dsn, $this->username, $this->password);
 			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
@@ -176,6 +179,17 @@ abstract class DB {
 	public function resetConn() {
 		unset($this->pdo);
 		$this->install = false;
+	}
+
+	//logs queries to file
+	private function log_query ($query) {
+		if($this->debug) {
+
+			$myFile = "/tmp/queries.txt";
+			$fh = fopen($myFile, 'a') or die("can't open file");
+			fwrite($fh, $query->queryString."\n");
+			fclose($fh);
+		}
 	}
 
 	/**
@@ -232,7 +246,8 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
-
+		//debuq
+		$this->log_query ($statement);
 		return $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 	}
 
@@ -261,6 +276,8 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'`;');
 
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute();
 
 		return $statement->fetchColumn();
@@ -278,6 +295,8 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'`=?;');
 
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute(array($value));
 
 		return $statement->fetchColumn();
@@ -335,6 +354,8 @@ abstract class DB {
 		//merge the parameters and values
 		$paramValues = array_merge(array_values($obj), $objId);
 
+		//debuq
+		$this->log_query ($statement);
 		//run the update on the object
 		return $statement->execute($paramValues);
 	}
@@ -466,6 +487,9 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
+
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
 		if (is_object($statement)) {
@@ -495,6 +519,9 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
+
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
 		$results = array();
@@ -530,6 +557,8 @@ abstract class DB {
 			$statement = $this->pdo->prepare('SELECT * FROM `'.$tableName.'` LIMIT 1;');
 		}
 
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute();
 
 		//we can then extract the single object (if we have a result)
@@ -546,6 +575,8 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
 		$resultObj = $statement->fetchObject($class);

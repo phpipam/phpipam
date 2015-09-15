@@ -6,6 +6,9 @@
 
 class Common_functions  {
 
+	//vars
+	public $settings = null;
+
 	/**
 	 * __construct function
 	 *
@@ -13,6 +16,31 @@ class Common_functions  {
 	 * @return void
 	 */
 	public function __construct () {
+	}
+
+
+	/**
+	 * fetches settings from database
+	 *
+	 * @access private
+	 * @return none
+	 */
+	public function get_settings () {
+		# cache check
+		if($this->settings === null) {
+			try { $this->settings = $this->Database->getObject("settings", 1); }
+			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
+		}
+	}
+
+	/**
+	 * get_settings alias
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function settings () {
+		return $this->get_settings();
 	}
 
 

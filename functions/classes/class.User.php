@@ -15,7 +15,6 @@ class User extends Common_functions {
 	public $api = false;					// from api
 	public $authenticated = false;			// (bin) flag if user is authenticated
 	public $timeout = false;				// (bin) timeout flag
-	public $settings;						// (obj) settings
 	public $user = null;					// (obj) user details
 	public $isadmin = false;				// (bin) flag if user is admin
 	public $blocklimit = 5;					// (int) limit for IP block
@@ -373,17 +372,6 @@ class User extends Common_functions {
 	    	$this->Log->write ("referrer_check", _('Page not referred properly'), 0 );
 	        $this->Result->show ("danger", _('Page not referred properly', true));
 	    }
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function get_settings () {
-		try { $this->settings = $this->Database->getObject("settings", 1); }
-		catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
 	}
 
 	/**

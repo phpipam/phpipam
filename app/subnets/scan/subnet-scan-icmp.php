@@ -32,7 +32,9 @@ if ($User->settings->scanPingType=="fping" && isset($script_result->values->aliv
 		unset($script_result->values->alive);
 	}
 	//rekey
-	$script_result->values->alive = array_values($script_result->values->alive);
+	else {
+		$script_result->values->alive = array_values($script_result->values->alive);
+	}
 }
 
 //title

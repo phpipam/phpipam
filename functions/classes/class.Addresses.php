@@ -10,7 +10,6 @@ class Addresses extends Common_functions {
 	 * public variables
 	 */
 	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $settings = null;				//(object) phpipam settings
 	public $address_types;					//(array) address types
 	public $mail_changelog = true;
 
@@ -48,20 +47,6 @@ class Addresses extends Common_functions {
 
 		# Log object
 		$this->Log = new Logging ($this->Database);
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 	/**

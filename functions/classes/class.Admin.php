@@ -26,7 +26,6 @@ class Admin extends Common_functions {
 	protected $User;						//User object
 	protected $Database;					//for Database connection
 	protected $debugging = false;			//(bool) debugging flag
-	protected $settings = false;			//(obj) settings
 	public $Log;							// for Logging connection
 
 

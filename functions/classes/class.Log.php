@@ -13,11 +13,6 @@
 class Logging extends Common_functions {
 
 	/**
-	 * public variables
-	 */
-	public $settings = null;				//(object) phpipam settings
-
-	/**
 	 * protected variables
 	 */
 	protected $debugging = false;			//(bool) debugging flag
@@ -77,22 +72,6 @@ class Logging extends Common_functions {
 	private function set_log_type () {
 		# check settings
 		$this->log_type = $this->settings->log;
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings === null) {
-			try { $settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
-		# ok
-		return $settings;
 	}
 
 	/**
