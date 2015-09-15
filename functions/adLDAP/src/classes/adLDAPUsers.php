@@ -226,9 +226,9 @@ class adLDAPUsers {
              $filter = "userPrincipalName=" . $username;
         }
         else {
-             $filter = "samaccountname=" . $username;
+             $filter = ($type == "NetIQ")? "cn=" . $username:"samaccountname=" . $username;
         }
-        $filter = "(&(objectCategory=person)({$filter}))";
+        $filter = ($type == "NetIQ")? "(&(objectClass=person)({$filter}))":"(&(objectCategory=person)({$filter}))";
         if ($fields === NULL) { 
             $fields = array("samaccountname","mail","memberof","department","displayname","telephonenumber","primarygroupid","objectsid"); 
         }
@@ -238,6 +238,12 @@ class adLDAPUsers {
         $sr = ldap_search($this->adldap->getLdapConnection(), $this->adldap->getBaseDn(), $filter, $fields);
         $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
         
+		if($type == "NetIQ" && sizeof(@$entries)>0 && isset($entries)) {
+			foreach($entries as $key => $u) {
+				@$entries[@$key]['displayname'] = $u['fullname'];
+				@$entries[@$key]['samaccountname'] = $u['cn'];
+			}
+		}
         if (isset($entries[0])) {
             if ($entries[0]['count'] >= 1) {
                 if (in_array("memberof", $fields)) {

@@ -17,3 +17,9 @@ ALTER TABLE `settings` CHANGE `log` `log` SET('Database','syslog','both')  CHARA
 
 /* mastersubnetid must not be null */
 ALTER TABLE `subnets` CHANGE `masterSubnetId` `masterSubnetId` INT(11)  UNSIGNED  NOT NULL DEFAULT 0;
+
+/* change username lenght to 25 */
+ALTER TABLE `users` CHANGE `username` `username` varchar(25) CHARACTER SET utf8 NOT NULL DEFAULT '';
+
+/* add NetIQ authentication type */
+ALTER TABLE `usersAuthMethod` CHANGE `type` `type` set('local','AD','LDAP','NetIQ', 'Radius') NOT NULL DEFAULT 'local';

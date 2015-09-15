@@ -408,7 +408,7 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_available_auth_method_types () {
-		return array("AD", "LDAP", "Radius");
+		return array("AD", "LDAP", "NetIQ", "Radius");
 	}
 
 
@@ -792,6 +792,18 @@ class User extends Common_functions {
 		$this->auth_AD ();					//we use AD class for login
 	}
 
+	/**
+	 *	NetIQ authentication
+	 *	same as AD authentication, only add cn= before username
+	 *
+	 * @access private
+	 * @param mixed $username
+	 * @param mixed $password
+	 * @return void
+	 */	
+	private function auth_NetIQ ($username, $password) {
+		$this->auth_AD ("cn=".$username, $password);
+	}
 	/**
 	 * Authenticates user on radius server
 	 *
