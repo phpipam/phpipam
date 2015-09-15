@@ -19,7 +19,7 @@ $User->check_user_session();
 # fetch all available LDAP servers
 $servers = $Admin->fetch_all_objects ("usersAuthMethod");
 foreach($servers as $k=>$s) {
-	if($s->type!="AD" && $s->type!="LDAP") {
+	if($s->type!="AD" && $s->type!="LDAP" && $s->type!="NetIQ") {
 		unset($servers[$k]);
 	}
 }
