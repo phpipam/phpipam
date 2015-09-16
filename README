@@ -13,7 +13,7 @@ Features and tools:
 - Displays free range and number of clients
 - Subnet statistics
 - User management
-- AD/LDAP/OpenLDAP/Radius authentication support (multiple servers)
+- AD/LDAP/OpenLDAP/NetIQ/Radius authentication support (multiple servers)
 - E-Mail notification with IP details
 - Import IP addresses from XLS / CSV file
 - Export IP database to XLS file
