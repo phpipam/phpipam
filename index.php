@@ -2,7 +2,8 @@
 ob_start();
 
 /* config */
-require('config.php');
+if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
+else 							{ require('config.php'); }
 
 /* site functions */
 require('functions/functions.php');

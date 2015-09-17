@@ -21,7 +21,7 @@ class Database_PDO extends DB {
 
 	public $install = false;		//flag if installation is happenig!
 
-	protected $debug = true;
+	protected $debug = false;
 
 	/**
 	 * __construct function.
