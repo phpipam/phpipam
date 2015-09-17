@@ -1,4 +1,4 @@
-== 1.18.030
+== 1.18.033
 
 	New features:
 	------------
@@ -41,6 +41,7 @@
 	+ Custom VRF fields;
 	+ Subnets can be now linked to devices;
 	+ Import/export enhancements;
+	+ Fast user switching for admins to impersonate user;
 
 	Security Fixes:
 	----------------------------

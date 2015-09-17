@@ -15,11 +15,6 @@ $custom = $Tools->fetch_custom_fields('users');
 /* check customfields */
 $ffields = json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
-if($_GET['switch']){
-	$_SESSION['realipamusername'] = $_SESSION['ipamusername'];
-	$_SESSION['ipamusername'] = $_GET['switch'];
-	print	'<script>window.location.href = "'.create_link(null).'";</script>';
-}
 ?>
 
 <!-- display existing users -->
@@ -145,7 +140,7 @@ foreach ($users as $user) {
 	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='edit'  ><i class='fa fa-pencil'></i></button>";
 	print "		<a class='btn btn-xs btn-default";
 	if($_SESSION['realipamusername']) { print " disabled";}
-	print "' href='".create_link("administration","users")."&switch=$user[username]'><i class='fa fa-exchange'></i></a></button>";
+	print "' href='".create_link("administration","users","switch","$user[username]")."'><i class='fa fa-exchange'></i></a></button>";
 	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='delete'><i class='fa fa-times'></i></button>";
 	print "	</div>";
 	print "	</td>";
