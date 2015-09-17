@@ -129,6 +129,7 @@ CREATE TABLE `settings` (
   `siteAdminMail` varchar(64) DEFAULT NULL,
   `siteDomain` varchar(32) DEFAULT NULL,
   `siteURL` varchar(64) DEFAULT NULL,
+  `siteLoginText` varchar(128) DEFAULT NULL,
   `domainAuth` tinyint(1) DEFAULT NULL,
   `enableIPrequests` tinyint(1) DEFAULT NULL,
   `enableVRF` tinyint(1) DEFAULT '1',
