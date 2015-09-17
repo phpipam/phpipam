@@ -52,13 +52,14 @@ $pdns = $PowerDNS->db_settings;
 <div>
 <?php
 // include content
-$section = $_GET['subnetId'];
-if (preg_match("/reverse_/", $section)) {
+$pdns_section = $_GET['subnetId'];
+if (preg_match("/reverse_/", $pdns_section)) {
 	$filename = 'domains.php';
 } else {
 	$filename = "$_GET[subnetId].php";
 }
 
+// include file
 if(!file_exists(dirname(__FILE__) . '/'.$filename)) 	{ $Result->show("danger", "Invalid request", true); }
 else													{ include(dirname(__FILE__) . '/'.$filename); }
 ?>

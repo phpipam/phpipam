@@ -32,11 +32,11 @@ else {
 ?>
 
 <br>
-<h4><?php print _('Records for domain'); ?> <strong><?php print $_GET['ipaddrid']; ?></strong></h4><hr>
+<h4><?php print _('Records for domain'); ?> <strong><?php print $domain->name; ?></strong></h4><hr>
 
 <!-- Add new -->
 <div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
-	<a href="<?php print create_link ("administration", "powerDNS", "domains"); ?>" class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _('Domains'); ?></a>
+	<a href="<?php print create_link ("administration", "powerDNS", $_GET['subnetId']); ?>" class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _('Domains'); ?></a>
 	<button class='btn btn-sm btn-default btn-success editRecord' data-action='add' data-id='0' data-domain_id='<?php print $domain->id; ?>'><i class='fa fa-plus'></i> <?php print _('New record'); ?></button>
 </div>
 
