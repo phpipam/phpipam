@@ -12,6 +12,7 @@ class Tools extends Common_functions {
 	public $vlans;							//to store vlans, vlanId is array index (array of objects)
 	public $vrfs;							//to store vrfs, vrfId is array index (array of objects)
 	public $devices;						//to store devices, id is array index (array of objects)
+	public $settings = null;				//settings
 
 	/**
 	 * object holders
@@ -230,7 +231,7 @@ class Tools extends Common_functions {
 	 */
 	public function validate_vlan ($number) {
 		# fetch highest vlan id
-		$settings = $this->fetch_settings();
+		$settings = $this->get_settings();
 
 		if(empty($number)) 							{ return true; }
 		elseif(!is_numeric($number)) 				{ return _('VLAN must be numeric value!'); }
@@ -1107,46 +1108,6 @@ class Tools extends Common_functions {
 
 		# save
 		return sizeof($subnets)>0 ? (array) $subnets : NULL;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@settings methods
-	 *	------------------------------
-	 */
-
-	/**
-	 * fetch and return settings
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function fetch_settings () {
-		try { $this->settings = $this->Database->getObject("settings", 1); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage()); }
-
-		# save
-		return sizeof($this->settings)>0 ? (array) $this->settings : NULL;
-	}
-
-	/**
-	 * Alias function of fetch_settings
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function settings () {
-		return $this->fetch_settings();
 	}
 
 

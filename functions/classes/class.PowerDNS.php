@@ -12,7 +12,6 @@ class PowerDNS extends Common_functions {
 	public $error = false;				// connection error string
 	public $db_settings;				// (obj) db settings
 	public $defaults;					// (obj) defaults settings
-	private $settings = false;			// (obj) settings
 
 	public $limit;						// number of results
 	public $orderby;					// order field
@@ -41,7 +40,7 @@ class PowerDNS extends Common_functions {
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
-		// get settings form parent
+		// get settings
 		$this->get_settings ();
 		// set database
 		$this->db_set ();
@@ -54,20 +53,6 @@ class PowerDNS extends Common_functions {
 		$this->set_query_values ();
 		// set ttl values
 		$this->set_ttl_values ();
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	protected function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 	/**
@@ -384,6 +369,69 @@ class PowerDNS extends Common_functions {
 		# result
 		return sizeof($res)>0 ? $res : false;
 	}
+
+    /**
+     * Fetches all forward domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_all_forward_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.arpa", "name", true, true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res)>0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res)>0 ? $res : false;
+    }
+
+    /**
+     * Fetches all reverse IPv4 domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_reverse_v4_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.in-addr.arpa", "name", true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res) > 0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res) > 0 ? $res : false;
+    }
+
+    /**
+     * Fetches all reverse IPv6 domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_reverse_v6_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ipv6.arpa", "name", true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res) > 0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res) > 0 ? $res : false;
+    }
 
 	/**
 	 * Fetches domain record by id (numberic) of name (varchar)

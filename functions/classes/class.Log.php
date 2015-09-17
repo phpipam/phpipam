@@ -13,11 +13,6 @@
 class Logging extends Common_functions {
 
 	/**
-	 * public variables
-	 */
-	public $settings = null;				//(object) phpipam settings
-
-	/**
 	 * protected variables
 	 */
 	protected $debugging = false;			//(bool) debugging flag
@@ -77,22 +72,6 @@ class Logging extends Common_functions {
 	private function set_log_type () {
 		# check settings
 		$this->log_type = $this->settings->log;
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings === null) {
-			try { $settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
-		# ok
-		return $settings;
 	}
 
 	/**
@@ -255,9 +234,10 @@ class Logging extends Common_functions {
 	 */
 	private function syslog_format_details () {
 		// replace <br>
-		$this->log_details = str_replace(array("<br>", "<hr>"), ",",$this->log_details);
+		$this->log_details = str_replace("<br>", ",",$this->log_details);
+		$this->log_details = str_replace("<hr>", ",",$this->log_details);
 		// replace spaces
-		$this->log_details = str_replace(": ", ":",$this->log_details);
+		$this->log_details = trim($this->log_details, ",");
 	}
 
 	/**
@@ -273,6 +253,10 @@ class Logging extends Common_functions {
 		# set update id based on action
 		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
 		else								{ $obj_id = $this->object_old['id']; }
+
+		# format
+		$changelog = str_replace("<br>", ",",$changelog);
+		$changelog = str_replace("<hr>", ",",$changelog);
 
 		# formulate
 		foreach($changelog as $k=>$l) {
@@ -450,32 +434,30 @@ class Logging extends Common_functions {
 				foreach ($this->object_new as $k=>$v) {
 					$this->object_new[$k] = $this->changelog_make_booleans ($k, $v);
 				}
-				$log['[create]'] = $this->object_type." created";
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new);
+				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new, true);
 			}
 			elseif($action == "delete") {
 				//booleans
 				foreach ($this->object_old as $k=>$v) {
 					$this->changelog_make_booleans ($k, $v);
 				}
-				$log['[delete]']  = $this->object_type." deleted";
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old);
+				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old, true);
 			}
 			elseif($action == "truncate") {
 				$log['[truncate]'] = "Subnet truncated";
 			}
 			elseif($action == "resize") {
 				$log['[resize]'] = "Subnet Resized";
-				$log['[New mask]'] = "/".$this->object_new['mask'];
+				$log['[mask]'] = $this->object_old['mask']."/".$this->object_new['mask'];
 			}
 			elseif($action == "perm_change") {
 				$log = $this->changelog_format_permission_change ();
 			}
 
 			//if change happened write it!
-			if(isset($log)) {
+			if(isset($log) && sizeof($log)>0) {
 				// execute
-				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog (); }
+				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog ($log); }
 				elseif ($this->log_type == "both")	{ $this->changelog_write_to_db ($log); $this->syslog_write_changelog ($log); }
 				else								{ $this->changelog_write_to_db ($log); }
 			}
@@ -495,7 +477,7 @@ class Logging extends Common_functions {
 	 */
 	private function changelog_write_to_db ($changelog) {
 		# log to array
-		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog));
+		$changelog = str_replace("<br>", "\r\n", $this->array_to_log ($changelog, true));
 		# fetch user id
 		$this->get_active_user_id ();
 
@@ -564,8 +546,8 @@ class Logging extends Common_functions {
 			}
 		}
 		// ip address - old needs to be transformed to dotted format
-		$this->object_old['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_old['ip_addr']);
-		$this->object_new['ip_addr'] = $this->Subnets->transform_to_dotted($this->object_new['ip_addr']);
+		$this->object_old['ip_addr'] = $this->Subnets->transform_address($this->object_old['ip_addr'], "dotted");
+		$this->object_new['ip_addr'] = $this->Subnets->transform_address($this->object_new['ip_addr'], "dotted");
 
 		// check each value
 		foreach($this->object_new as $k=>$v) {

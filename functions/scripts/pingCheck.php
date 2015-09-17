@@ -231,7 +231,7 @@ else {
 
 	# re-initialize classes
 	$Database = new Database_PDO;
-	$Scan = new Scan ($Database);
+	$Scan = new Scan ($Database, $Subnets->settings);
 	// reset debugging
 	$Scan->reset_debugging(false);
 

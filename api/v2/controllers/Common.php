@@ -23,6 +23,8 @@ class Common_api_functions {
 		else					{ $this->$Object	= new $Object ($Database); }
 		// set exit method
 		$this->$Object->Result->exit_method = "exception";
+		// set API flag
+		$this->$Object->api = true;
 	}
 
 	/**

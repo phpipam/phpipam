@@ -15,7 +15,6 @@ class User extends Common_functions {
 	public $api = false;					// from api
 	public $authenticated = false;			// (bin) flag if user is authenticated
 	public $timeout = false;				// (bin) timeout flag
-	public $settings;						// (obj) settings
 	public $user = null;					// (obj) user details
 	public $isadmin = false;				// (bin) flag if user is admin
 	public $blocklimit = 5;					// (int) limit for IP block
@@ -376,17 +375,6 @@ class User extends Common_functions {
 	}
 
 	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function get_settings () {
-		try { $this->settings = $this->Database->getObject("settings", 1); }
-		catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-	}
-
-	/**
 	 * fetches default language
 	 *
 	 * @access public
@@ -408,7 +396,7 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_available_auth_method_types () {
-		return array("AD", "LDAP", "Radius");
+		return array("AD", "LDAP", "NetIQ", "Radius");
 	}
 
 
@@ -792,6 +780,18 @@ class User extends Common_functions {
 		$this->auth_AD ();					//we use AD class for login
 	}
 
+	/**
+	 *	NetIQ authentication
+	 *	same as AD authentication, only add cn= before username
+	 *
+	 * @access private
+	 * @param mixed $username
+	 * @param mixed $password
+	 * @return void
+	 */	
+	private function auth_NetIQ ($username, $password) {
+		$this->auth_AD ("cn=".$username, $password);
+	}
 	/**
 	 * Authenticates user on radius server
 	 *

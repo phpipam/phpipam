@@ -256,7 +256,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 			if(sizeof($dberrsize = $Tools->verify_database())>0) {
 				$esize = sizeof($dberrsize['tableError']) + sizeof($dberrsize['fieldError']);
 				print "<li>";
-				print "	<a href='".create_link("administration","verifyDatabase")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._('Database errors detected')."'><i class='fa fa-exclamation-triangle'></i><sup>$esize</sup></a>";
+				print "	<a href='".create_link("administration","verify-database")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._('Database errors detected')."'><i class='fa fa-exclamation-triangle'></i><sup>$esize</sup></a>";
 				print "</li>";
 			}
 			else {

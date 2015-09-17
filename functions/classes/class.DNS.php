@@ -10,7 +10,7 @@ class DNS extends Common_functions {
 	/**
 	 * private variables
 	 */
-	protected $settings = false;				//settings
+	public $settings = false;				//settings
 
 	/**
 	 * object holders
@@ -33,21 +33,6 @@ class DNS extends Common_functions {
 		$this->Database = $Database;
 		# settings
 		if(!is_null($settings)) { $this->settings = $settings; }
-	}
-
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	protected function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 

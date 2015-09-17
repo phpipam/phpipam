@@ -2,7 +2,8 @@
 ob_start();
 
 /* config */
-require('config.php');
+if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
+else 							{ require('config.php'); }
 
 /* site functions */
 require('functions/functions.php');
@@ -44,6 +45,11 @@ else {
 	# make upgrade and php build checks
 	include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 	include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
+	if($_GET['switch'] && $_SESSION['realipamusername'] && $_GET['switch'] == "back"){
+		$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
+		unset($_SESSION['realipamusername']);
+		print	'<script>window.location.href = "'.create_link(null).'";</script>';
+	}
 ?>
 <!DOCTYPE HTML>
 <html lang="en">

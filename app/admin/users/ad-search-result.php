@@ -32,6 +32,7 @@ if(strlen($_POST['dname'])<2) 													{ $Result->show("danger", _('Please e
 
 //open connection
 try {
+	if($server->type == "NetIQ") { $params->account_suffix = ""; }
 	//set options
 	$options = array(
 			'base_dn'=>$params->base_dn,
@@ -54,7 +55,7 @@ try {
 	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
 
 	//search for domain user!
-	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"));
+	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"),false,$server->type);
 
 	//echo $adldap->getLastError();
 }

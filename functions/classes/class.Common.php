@@ -6,6 +6,9 @@
 
 class Common_functions  {
 
+	//vars
+	public $settings = null;
+
 	/**
 	 * __construct function
 	 *
@@ -13,6 +16,31 @@ class Common_functions  {
 	 * @return void
 	 */
 	public function __construct () {
+	}
+
+
+	/**
+	 * fetches settings from database
+	 *
+	 * @access private
+	 * @return none
+	 */
+	public function get_settings () {
+		# cache check
+		if($this->settings === null) {
+			try { $this->settings = $this->Database->getObject("settings", 1); }
+			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
+		}
+	}
+
+	/**
+	 * get_settings alias
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function settings () {
+		return $this->get_settings();
 	}
 
 
@@ -119,16 +147,28 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $logs
+	 * @param bool $changelog
 	 * @return void
 	 */
-	public function array_to_log ($logs) {
+	public function array_to_log ($logs, $changelog = false) {
 		$result = "";
 		# reformat
 		if(is_array($logs)) {
-		    foreach($logs as $key=>$req) {
-		    	# ignore __ and PHPSESSID
-		    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
-		    	else 																  { $result .= " ". $key . ": " . $req . "<br>"; }
+			// changelog
+			if ($changelog===true) {
+			    foreach($logs as $key=>$req) {
+			    	# ignore __ and PHPSESSID
+			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
+			    	else 																  { $result .= "[$key]:$req<br>"; }
+				}
+
+			}
+			else {
+			    foreach($logs as $key=>$req) {
+			    	# ignore __ and PHPSESSID
+			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
+			    	else 																  { $result .= " ". $key . ": " . $req . "<br>"; }
+				}
 			}
 		}
 		return $result;
@@ -312,6 +352,96 @@ class Common_functions  {
 	    }
 	    // compress result
 	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
+	}
+
+	/**
+	 * Returns text representation of json errors
+	 *
+	 * @access public
+	 * @param mixed $error_int
+	 * @return void
+	 */
+	public function json_error_decode ($error_int) {
+		// error definitions
+		$error[0] = "JSON_ERROR_NONE";
+		$error[1] = "JSON_ERROR_DEPTH";
+		$error[2] = "JSON_ERROR_STATE_MISMATCH";
+		$error[3] = "JSON_ERROR_CTRL_CHAR";
+		$error[4] = "JSON_ERROR_SYNTAX";
+		$error[5] = "JSON_ERROR_UTF8";
+		// return def
+		if (isset($error[$error_int]))	{ return $error[$error_int]; }
+		else							{ return "JSON_ERROR_UNKNOWN"; }
+	}
+
+	/**
+	 * Prints pagination
+	 *
+	 * @access public
+	 * @param int $page	//current page number
+	 * @param int $pages	//number of all subpages
+	 * @return mixed
+	 */
+	public function print_powerdns_pagination ($page, $pages) {
+
+		print "<hr>";
+		print "<div class='text-right'>";
+		print "<ul class='pagination pagination-sm'>";
+
+		//previous - disabled?
+		if($page == 1)			{ print "<li class='disabled'><a href='#'>&laquo;</a></li>"; }
+		else					{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",($page-1))."'>&laquo;</a></li>"; }
+
+		# less than 8
+		if($pages<8) {
+			for($m=1; $m<=$pages; $m++) {
+				//active?
+				if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+			}
+		}
+		# more than seven
+		else {
+			//first page
+			if($page<=3) {
+				for($m=1; $m<=5; $m++) {
+					//active?
+					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				}
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", $pages)."'>$pages</a></li>";
+			}
+			//last pages
+			elseif($page>$pages-4) {
+				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", 1)."'>1</li>";
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				for($m=$pages-4; $m<=$pages; $m++) {
+					//active?
+					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				}
+			}
+			//page more than 2
+			else {
+				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", 1)."'>1</li>";
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				for($m=$page-1; $m<=$page+1; $m++) {
+					//active?
+					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				}
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				print "<li><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", "$pages")."'>$pages</li>";
+			}
+		}
+
+		//next - disabled?
+		if($page == $pages)		{ print "<li class='disabled'><a href='#'>&raquo;</a></li>"; }
+		else					{ print "<li>				  <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", ($page+1))."'>&raquo;</a></li>"; }
+
+		print "</ul>";
+		print "</div>";
 	}
 
 

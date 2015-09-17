@@ -97,14 +97,16 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 		<td>
 		<?php
 		# select sections
-		$Sections->fetch_all_sections();
+		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
 		$nameservers_sections = explode(";", @$nameservers['permissions']);
 		$nameservers_sections = is_array($nameservers_sections) ? $nameservers_sections : array();
 		// loop
-		foreach($Sections->sections as $section) {
-			if(in_array($section->id, @$nameservers_sections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
-			else 												{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+		if ($sections !== false) {
+			foreach($sections as $section) {
+				if(in_array($section->id, @$nameservers_sections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
+				else 												{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+			}
 		}
 		?>
 		</td>

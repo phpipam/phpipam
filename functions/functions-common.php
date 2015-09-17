@@ -185,9 +185,17 @@ function print_tools_breadcrumbs ($Section, $Subnet, $req) {
 
 /**
  *	Ping address helper for CLI threading
+ *
+ *	used for:
+ *		- icmp status update (web > ping, pear)
+ *		- icmp subnet discovery (web > ping, pear)
+ *		- icmp status update (cli)
+ *		- icmp discovery (cli)
  */
 function ping_address ($address) {
-	global $Scan;
+//	$Database = new Database_PDO;
+//	$Scan = new Scan ($Database);
+ 	global $Scan;
 	//scan
 	return $Scan->ping_address ($address);
 }
@@ -202,7 +210,7 @@ function telnet_address ($address, $port) {
 }
 
 /**
- *	fping subnet helper for fping threading
+ *	fping subnet helper for fping threading, all methods
  */
 function fping_subnet ($subnet_cidr, $return = true) {
 	global $Scan;

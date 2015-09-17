@@ -10,7 +10,6 @@ class Addresses extends Common_functions {
 	 * public variables
 	 */
 	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $settings = null;				//(object) phpipam settings
 	public $address_types;					//(array) address types
 	public $mail_changelog = true;
 
@@ -48,20 +47,6 @@ class Addresses extends Common_functions {
 
 		# Log object
 		$this->Log = new Logging ($this->Database);
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 	/**
@@ -337,7 +322,7 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $insert); }
 		catch (Exception $e) {
-			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($address), 2);
+			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -346,7 +331,7 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$address['id'] = $this->lastId;
-		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($address), 0);
+		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
 
 		# edit DNS PTR record
@@ -403,13 +388,13 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
 		catch (Exception $e) {
-			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($address), 2);
+			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 
 		# log and changelog
-		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($address), 0);
+		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
 		# edit DNS PTR record
@@ -441,7 +426,7 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
 		catch (Exception $e) {
-			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old_old), 2);
+			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -985,7 +970,7 @@ class Addresses extends Common_functions {
 
 		# create query
 		foreach($subnets as $k=>$s) {
-			$tmp[] = " `subnetId`=$s ";
+			$tmp[] = " `subnetId`={$s->id} ";
 		}
 		$query  = "select count(*) as `cnt` from `ipaddresses` where ".implode("or", $tmp).";";
 

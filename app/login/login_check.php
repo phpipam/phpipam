@@ -25,11 +25,6 @@ if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
 	# initialize array
 	$ipampassword = array();
 
-	# verify that there are no invalid characters
-	if(strpos($_POST['ipamusername'], " ") >0 ) 	{
-		$Result->show("danger", _("Invalid characters in username"), true);
-	}
-
 	# check failed table
 	$cnt = $User->block_check_ip ();
 
