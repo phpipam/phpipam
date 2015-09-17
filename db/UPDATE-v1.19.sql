@@ -23,3 +23,6 @@ ALTER TABLE `users` CHANGE `username` `username` varchar(25) CHARACTER SET utf8 
 
 /* add NetIQ authentication type */
 ALTER TABLE `usersAuthMethod` CHANGE `type` `type` set('local','AD','LDAP','NetIQ', 'Radius') NOT NULL DEFAULT 'local';
+
+/* add header infotext for login page */
+ALTER TABLE `settings`  ADD `siteLoginText` varchar(128) NULL DEFAULT NULL AFTER `siteURL`;
