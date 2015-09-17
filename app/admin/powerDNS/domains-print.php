@@ -6,8 +6,27 @@
 
 # verify that user is logged in
 $User->check_user_session();
+
 # fetch domains
-$domains = $PowerDNS->fetch_all_domains ();
+$type = $_GET['subnetId'];
+
+switch ($type) {
+	case 'domains':
+		$domains = $PowerDNS->fetch_all_forward_domains ();
+		break;
+
+	case 'reverse_v4':
+		$domains = $PowerDNS->fetch_reverse_v4_domains ();
+		break;
+
+	case 'reverse_v6':
+		$domains = $PowerDNS->fetch_reverse_v6_domains ();
+		break;
+
+	default:
+		$Result->show("danger", "Invalid request", true);
+		break;
+}
 
 # split to reverse and normal
 if (sizeof($domains)>0) {

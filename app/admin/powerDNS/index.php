@@ -29,9 +29,9 @@ $pdns = $PowerDNS->db_settings;
 <ul class="nav nav-tabs">
 	<?php
 	// tabs
-	$tabs = array("domains", "settings", "defaults");
+	$tabs = array("domains", "reverse_v4", "reverse_v6", "settings", "defaults");
 
-	//default tab
+	// default tab
 	if(!isset($_GET['subnetId'])) {
 		if(!$test)	{ $_GET['subnetId'] = "settings"; }
 		else		{ $_GET['subnetId'] = "domains"; }
@@ -42,8 +42,9 @@ $pdns = $PowerDNS->db_settings;
 
 	// print
 	foreach($tabs as $t) {
+		$title = str_replace('_', ' ', $t);
 		$class = $_GET['subnetId']==$t ? "class='active'" : "";
-		print "<li role='presentation' $class><a href=".create_link("administration", "powerDNS", "$t").">". _(ucwords($t))."</a></li>";
+		print "<li role='presentation' $class><a href=".create_link("administration", "powerDNS", "$t").">". _(ucwords($title))."</a></li>";
 	}
 	?>
 </ul>
@@ -51,8 +52,15 @@ $pdns = $PowerDNS->db_settings;
 <div>
 <?php
 // include content
-if(!file_exists(dirname(__FILE__) . '/'.$_GET['subnetId'].".php")) 	{ $Result->show("danger", "Invalid request", true); }
-else																{ include(dirname(__FILE__) . '/'.$_GET['subnetId'].".php"); }
+$section = $_GET['subnetId'];
+if (preg_match("/reverse_/", $section)) {
+	$filename = 'domains.php';
+} else {
+	$filename = "$_GET[subnetId].php";
+}
+
+if(!file_exists(dirname(__FILE__) . '/'.$filename)) 	{ $Result->show("danger", "Invalid request", true); }
+else													{ include(dirname(__FILE__) . '/'.$filename); }
 ?>
 </div>
 
