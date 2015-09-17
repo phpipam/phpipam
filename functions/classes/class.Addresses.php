@@ -970,7 +970,7 @@ class Addresses extends Common_functions {
 
 		# create query
 		foreach($subnets as $k=>$s) {
-			$tmp[] = " `subnetId`=$s ";
+			$tmp[] = " `subnetId`={$s->id} ";
 		}
 		$query  = "select count(*) as `cnt` from `ipaddresses` where ".implode("or", $tmp).";";
 
