@@ -23,22 +23,24 @@ $User->check_user_session();
 $all_sections = $Sections->fetch_all_sections();
 
 # Lets do some reordering to show slaves!
-foreach($all_sections as $s) {
-	if($s->masterSection=="0") {
-		# it is master
-		$s->class = "master";
-		$sectionssorted[] = $s;
-		# check for slaves
-		foreach($all_sections as $ss) {
-			if($ss->masterSection==$s->id) {
-				$ss->class = "slave";
-				$sectionssorted[] = $ss;
+if($all_sections!==false) {
+	foreach($all_sections as $s) {
+		if($s->masterSection=="0") {
+			# it is master
+			$s->class = "master";
+			$sectionssorted[] = $s;
+			# check for slaves
+			foreach($all_sections as $ss) {
+				if($ss->masterSection==$s->id) {
+					$ss->class = "slave";
+					$sectionssorted[] = $ss;
+				}
 			}
 		}
 	}
+	# set new array
+	$sections_sorted = @$sectionssorted;
 }
-# set new array
-$sections_sorted = @$sectionssorted;
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields('subnets');
@@ -104,7 +106,7 @@ print '</form>';
 print '<form id="selectExportSections">';
 
 # show sections
-if(sizeof($all_sections) > 0) {
+if($all_sections!==false) {
 	print '<h4>Sections</h4>';
 	print "	<table class='table table-striped table-condensed'>";
 	print "	<tr>";
