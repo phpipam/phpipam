@@ -370,6 +370,69 @@ class PowerDNS extends Common_functions {
 		return sizeof($res)>0 ? $res : false;
 	}
 
+    /**
+     * Fetches all forward domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_all_forward_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.arpa", "name", true, true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res)>0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res)>0 ? $res : false;
+    }
+
+    /**
+     * Fetches all reverse IPv4 domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_reverse_v4_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.in-addr.arpa", "name", true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res) > 0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res) > 0 ? $res : false;
+    }
+
+    /**
+     * Fetches all reverse IPv6 domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_reverse_v6_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ipv6.arpa", "name", true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res) > 0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res) > 0 ? $res : false;
+    }
+
 	/**
 	 * Fetches domain record by id (numberic) of name (varchar)
 	 *

@@ -520,7 +520,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 
-		//debuq
+		//debug
 		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
@@ -599,12 +599,14 @@ abstract class DB {
 		}
 	}
 
-	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true) {
+	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false) {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
 		$sortField = $this->escape($sortField);
+		$like === true ? $operator = "LIKE" : $operator = "=";
+		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`=? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
 	}
 
 	public function findObject($table, $field, $value) {

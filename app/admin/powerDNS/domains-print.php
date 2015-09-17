@@ -6,30 +6,35 @@
 
 # verify that user is logged in
 $User->check_user_session();
-# fetch domains
-$domains = $PowerDNS->fetch_all_domains ();
 
-# split to reverse and normal
-if (sizeof($domains)>0) {
-	foreach($domains as $d) {
-		// ipv4 reverse records
-		if (strpos($d->name, ".in-addr.arpa")) {
-			$reverse4[] = $d;
-		}
-		// ipv6 reverse records
-		elseif (strpos($d->name, ".ipv6.arpa")) {
-			$reverse6[] = $d;
-		}
-		// normal
-		else {
-			$records[] = $d;
-		}
-	}
+# fetch domains
+$type = $_GET['subnetId'];
+
+switch ($type) {
+	case 'domains':
+		$title = _("Domains");
+		$domains = $PowerDNS->fetch_all_forward_domains ();
+		break;
+
+	case 'reverse_v4':
+		$title = _("IPv4 reverse domains");
+		$domains = $PowerDNS->fetch_reverse_v4_domains ();
+		break;
+
+	case 'reverse_v6':
+		$title = _("IPv6 reverse domains");
+		$domains = $PowerDNS->fetch_reverse_v6_domains ();
+		break;
+
+	default:
+		$Result->show("danger", "Invalid request", true);
+		break;
 }
+
 ?>
 
 <br>
-<h4><?php print _('Domains'); ?></h4><hr>
+<h4><?php print $title; ?></h4><hr>
 
 <!-- Add new -->
 <button class='btn btn-sm btn-default btn-success editDomain' style="margin-bottom:10px;margin-top: 25px;" data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain'); ?></button>
@@ -93,35 +98,13 @@ function print_records_domains ($d) {
 }
 
 // domain records
-if (isset($records)) {
-	print "<tr>";
-	print "	<th colspan='6'  style='padding-top:20px;'>"._("Domains")."</th>";
-	print "</tr>";
+if (isset($domains)) {
 	// print
-	foreach ($records as $r) {
+	foreach ($domains as $r) {
 		print_records_domains ($r);
 	}
 }
-// ipv4 reverse records records
-if (isset($reverse4)) {
-	print "<tr>";
-	print "	<th colspan='6'  style='padding-top:20px;'>"._("IPv4 reverse domain")."</th>";
-	print "</tr>";
-	// print
-	foreach ($reverse4 as $r) {
-		print_records_domains ($r);
-	}
-}
-// ipv6 reverse records records
-if (isset($reverse6)) {
-	print "<tr>";
-	print "	<th colspan='6'  style='padding-top:20px;'>"._("IPv6 reverse domains")."</th>";
-	print "</tr>";
-	// print
-	foreach ($reverse6 as $r) {
-		print_records_domains ($r);
-	}
-}
+
 ?>
 
 </table>
