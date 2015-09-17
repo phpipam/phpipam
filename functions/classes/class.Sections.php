@@ -223,7 +223,7 @@ class Sections extends Common_functions {
 	 * @access public
 	 * @param string $order_by (default: "order")
 	 * @param bool $sort_asc (default: true)
-	 * @return void
+	 * @return array
 	 */
 	public function fetch_all_sections ($order_by="order", $sort_asc=true) {
 		# fetch all
@@ -239,7 +239,7 @@ class Sections extends Common_functions {
 			}
 		}
 		# response
-		return sizeof($sections)>0 ? $sections : false;
+		return sizeof($sections)>0 ? $sections : array();
 	}
 
 	/**
