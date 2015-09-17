@@ -58,22 +58,15 @@ $s_descrip = empty($subnet['description']) ? "" : 	 " (" . $subnet['description'
 $gateway = $Subnets->find_gateway($subnet['id']);
 if($gateway !==false)
  						$content[] = "&bull; "._('Gateway').": \t\t". $Subnets->transform_to_dotted($gateway->ip_addr);
-									
+
 
 # VLAN
 empty($subnet['vlanId']) ? : 			$content[] = "&bull; "._('VLAN ID').": \t\t $vlan[number] ($vlan[name])";
 
 # Nameserver sets
 if ( !empty( $subnet['nameserverId'] ) ) {
-	$nslist = $nameservers['namesrv1'];
+	$nslist = str_replace(";", ", ", $nameservers['namesrv1']);
 
-	// Only print namesrv2+3 if present
-	if ( !empty($nameservers['namesrv2']) ) {
-		$nslist .= ", " . $nameservers['namesrv2'];
-	}
-	if ( !empty($nameservers['namesrv3']) ) {
-		$nslist .= ", " . $nameservers['namesrv3'];
-	}
 						$content[] = "&bull; "._('Nameservers').": \t $nslist (${nameservers['name']})";
 }
 

@@ -1,8 +1,8 @@
-== 1.18.005
+== 1.18.033
 
 	New features:
 	------------
-	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius);
+	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius, NetIQ);
 	+ Added fping scanning support;
 	+ Added selectable scanning type (ping/pear/fping);
 	+ Added L2 domains;
@@ -11,6 +11,7 @@
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
 	+ Added nameserver sets per subnets (jonashauge);
+	+ Added optional syslog as log location;
 	+ REST API:
 		+ documentation: http://phpipam.net/api-documentation/
 		+ API v2, old v1 support added
@@ -37,11 +38,20 @@
 	+ New widget - tools shortcuts;
 	+ New widget - IP calculator;
 	+ Clickable links for subnet fields;
+	+ Custom VRF fields;
+	+ Subnets can be now linked to devices;
+	+ Import/export enhancements;
+	+ Fast user switching for admins to impersonate user;
 
 	Security Fixes:
 	----------------------------
 	+ Parametized all MySQL querries;
 	+ Fixed plainpass being logged on user update;
+	+ Fixed XSS exploit on /error/;
+
+	Translations:
+	----------------------------
+	+ Added Czech translation;
 
 	Bugfixes:
 	----------------------------
@@ -53,6 +63,7 @@
 	+ Fixed invalid redirect after timeout;
 	+ Fixed discovery script index overridden;
 	+ Fixed dashboard graphs links to subnets;
+	+ Fixed Invalid ID on subnet scan of large subnets;
 
 == 1.1.010
 

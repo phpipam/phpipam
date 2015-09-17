@@ -12,6 +12,9 @@ if(!is_object($User)) {
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 	$Subnets 	= new Subnets ($Database);
+	$Sections 	= new Sections ($Database);
+	$Log		= new Logging ($Database);
+	$Result 	= new Result ();
 }
 
 # user must be authenticated
@@ -22,11 +25,18 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	header("Location: ".create_link("tools","changelog"));
 }
 
-/* get logs */
-$clogs = $Tools->fetch_all_changelogs (false, "", 50);
+# changelog to syslog
+if ($User->settings->log!="syslog") {
+	/* get logs */
+	$clogs = $Log->fetch_all_changelogs (false, "", 50);
+}
 
-
-if(sizeof($clogs)==0) {
+# syslog
+if ($User->settings->log=="syslog") {
+	$Result->show("warning", _("Changelog files are sent to syslog"), false);
+}
+# none
+elseif(sizeof($clogs)==0) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No changelogs available")."</p>";
 	print "<small>"._("No changelog entries are available")."</small>";
@@ -41,6 +51,7 @@ else {
 	# headers
 	print "<tr>";
 	print "	<th>"._('User')."</th>";
+	print "	<th>"._('Type')."</th>";
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Date')."</th>";
 	print "	<th>"._('Change')."</th>";
@@ -60,7 +71,7 @@ else {
 			elseif($l['ctype']=="section")	{ $permission = $Sections->check_permission ($User->user, $l['sectionId']); }
 			else							{ $permission = 0; }
 
-			# if 0 die
+			# if 0 ignore
 			if($permission > 0)	{
 				# format diff
 				$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
@@ -77,6 +88,7 @@ else {
 
 				print "<tr>";
 				print "	<td>$l[real_name]</td>";
+				print "	<td>$l[ctype] / $l[caction] $l[cresult]</td>";
 
 				# subnet, section or ip address
 				if($l['ctype']=="IP address")	{
@@ -88,11 +100,14 @@ else {
 				elseif($l['ctype']=="Folder")   {
 					print "	<td><a href='".create_link("folder",$l['sectionId'],$l['tid'])."'>$l[sDescription]</a></td>";
 				}
-
+				elseif($l['ctype']=="Section")   {
+					print "	<td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
+				}
 				print "	<td>$l[cdate]</td>";
 				print "	<td>$l[cdiff]</td>";
 				print "</tr>";
 
+				// next item
 				$pc++;
 			}
 		}

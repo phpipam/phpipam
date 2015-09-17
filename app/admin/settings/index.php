@@ -238,6 +238,27 @@ $settings = (array) $User->settings;
 	</td>
 </tr>
 
+<!-- Log location -->
+<tr>
+	<td class="title"><?php print _('Syslog'); ?></td>
+	<td>
+		<select name="log" class="form-control input-sm input-w-auto">
+		<?php
+		$types = array("Database"=>"Database", "syslog"=>"Syslog", "both"=>"Syslog and local Database");
+		//default
+		foreach($types as $k=>$d) {
+			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
+			else						{ print "<option value='$k' 				   >$d</option>"; }
+		}
+		?>
+		</select>
+
+	</td>
+	<td class="info2">
+		<?php print _('Set where to send system logs'); ?>
+	</td>
+</tr>
+
 
 
 <!-- ICPM -->

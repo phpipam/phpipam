@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# fetch all APIs
+# fetch all Devices
 $devices = $Admin->fetch_all_objects("devices");
 
 
@@ -28,13 +28,13 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 
 <?php
 /* first check if they exist! */
-if(sizeof($devices) == 0) {
+if($devices===false) {
 	$Result->show("warn alert-absolute", _('No devices configured').'!', false);
 }
 /* Print them out */
 else {
 
-	print '<table id="switchManagement" class="table table-striped table-auto table-top">';
+	print '<table id="switchManagement" class="table table-striped table-auto table-top table-td-top">';
 
 	# headers
 	print '<tr>';
@@ -89,6 +89,9 @@ else {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_custom_fields)) {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
+
+					// create links
+					$device[$field['name']] = $Result->create_links ($device[$field['name']]);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{

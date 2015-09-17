@@ -8,12 +8,22 @@
 $User->check_user_session();
 
 # admin class
-$Admin = new Admin($Database);
+$Admin = new Admin($Database, false);
 
+# only for admin
+if ($User->isadmin) {
 ?>
 
 <h4><?php print _('Log files'); ?>:</h4>
 <hr>
+
+<?php
+//print if syslog
+if ($User->settings->log=="syslog") {
+	$Result->show("warning", _("Log files are sent to syslog"));
+}
+else {
+?>
 
 <!-- severity filter -->
 <form id="logs" name="logs">
@@ -41,3 +51,14 @@ $Admin = new Admin($Database);
 <div class="normalTable logs">
 <?php include('show-logs.php'); ?>
 </div>		<!-- end filter overlay div -->
+
+<?php
+}
+}
+# for non admins
+else {
+	print "<h4>"._('Log files').":</h4><hr>";
+	$Result->show("danger", _("Administrative privileges required!"), false);
+}
+
+?>

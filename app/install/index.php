@@ -14,6 +14,9 @@ $Result		= new Result;
 $Tools	    = new Tools ($Database);
 $Install 	= new Install ($Database);
 
+# reset url for base
+$url = $Result->createURL ();
+
 # If User is not available create fake user object for create_link!
 if(!is_object(@$User)) {
 	$User = new StdClass ();

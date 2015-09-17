@@ -25,18 +25,23 @@ $permitted_nameservers = $Sections->fetch_section_nameserver_sets ($_POST['secti
 
 # fetch all belonging nameserver set
 $cnt = 0;
-foreach($permitted_nameservers as $k=>$n) {
-	// fetch nameserver sets and append
-	$nameserver_set = $Tools->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1", "namesrv2", "namesrv3");
 
-	//save to array
-	$nsout[$n] = $nameserver_set;
+# Only parse nameserver if any exists
+if($permitted_nameservers != false) {
+	foreach($permitted_nameservers as $k=>$n) {
+		// fetch nameserver sets and append
+		$nameserver_set = $Tools->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1");
 
-	//count add
-	$cnt++;
+		//save to array
+		$nsout[$n] = $nameserver_set;
+
+		//count add
+		$cnt++;
+	}
+	//filter out empty
+	$permitted_nameservers = isset($nsout) ? array_filter($nsout) : false;
 }
-//filter out empty
-$permitted_nameservers = array_filter($nsout);
+
 ?>
 
 <select name="nameserverId" class="form-control input-sm input-w-auto">
@@ -45,28 +50,20 @@ $permitted_nameservers = array_filter($nsout);
 	<option value="0"><?php print _('No nameservers'); ?></option>
 	<?php
 	# print all available nameserver sets
-	foreach($permitted_nameservers as $n) {
+	if ($permitted_nameservers!==false) {
+		foreach($permitted_nameservers as $n) {
 
-		if($n[0]!==null) {
-			foreach($n as $ns) {
-				// set print
-				$printNS = "$ns->name";
-				$printNS .= " (" . $ns->namesrv1;
+			if($n[0]!==null) {
+				foreach($n as $ns) {
+					// set print
+					$printNS = "$ns->name";
+					$printNS .= " (" . array_shift(explode(";",$ns->namesrv1)).",...)";
 
-					// Only print namesrv2+3 if present
-				if ( !empty($ns->namesrv2) ) {
-					$printNS .= ", " . $ns->namesrv2;
+					/* selected? */
+					if(@$subnet_old_details['nameserverId']==$ns->id) 	{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
+					elseif(@$_POST['nameserverId'] == $ns->id) 			{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
+					else 												{ print '<option value="'. $ns->id .'">'. $printNS .'</option>'. "\n"; }
 				}
-				if ( !empty($ns->namesrv3) ) {
-					$printNS .= ", " . $ns->namesrv3;
-				}
-					$printNS .= ")";
-
-
-				/* selected? */
-				if(@$subnet_old_details['nameserverId']==$ns->id) 	{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
-				elseif(@$_POST['nameserverId'] == $ns->id) 			{ print '<option value="'. $ns->id .'" selected>'. $printNS .'</option>'. "\n"; }
-				else 												{ print '<option value="'. $ns->id .'">'. $printNS .'</option>'. "\n"; }
 			}
 		}
 	}

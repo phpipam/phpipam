@@ -33,27 +33,35 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 	print "	<th>". _('Hostname').'</a></th>';
 	print "	<td>$device[hostname]</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('IP address').'</th>';
 	print "	<td>$device[ip_addr]</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('Description').'</th>';
 	print "	<td>$device[description]</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('Number of hosts').'</th>';
 	print "	<td>".sizeof($addresses)."</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('Type').'</th>';
 	print "	<td>$device_type->tname</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('Vendor').'</th>';
 	print "	<td>$device[vendor]</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('Model').'</th>';
 	print "	<td>$device[model]</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('SW version').'</th>';
 	print "	<td>$device[version]</td>";
 	print "</tr>";
+	print '<tr>';
 	print "	<th>". _('Sections').':</th>';
 	print "	<td>";
 	if(strlen($device['hostname'])>0) {
@@ -83,7 +91,7 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 			}
 
 			# create links
-			$device[$field['name']] = create_links ($device[$field['name']]);
+			$device[$field['name']] = $Result->create_links ($device[$field['name']]);
 
 			print "<tr>";
 			print "<th>$field[name]</th>";
@@ -121,49 +129,96 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 	print "</table>";
 }
 
-# main table frame
+
+# format device
+if(empty($device['hostname'])) {
+	$device['hostname'] = _('Device not specified');
+}
+else 										{
+	if(empty($device['hostname'])) 				{ $device['hostname'] = "Unspecified";}
+}
+
+
+
+
+
+
+# title - subnets
+print "<h4 style='margin-top:40px;'>"._("Belonging subnets")."</h4><hr>";
+
+//fetch
+$subnets = $Tools->fetch_multiple_objects ("subnets", "device", $device['id']);
+
+# Hosts table
 print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";
 
-	if(empty($device['hostname'])) 		{
-		$device['hostname'] = _('Device not specified');
-		$device['ip_addr']  = "";
+# headers
+print "<tr>";
+print "	<th>"._('Section')."</th>";
+print "	<th>"._('Subnet')."</th>";
+print "	<th>"._('Description')."</th>";
+print "	<th>"._('VLAN')."</th>";
+print "</tr>";
+
+// loop
+$ipcnt = 0;
+if ($subnets !== false ) {
+	// loop
+	foreach ($subnets as $s) {
+		// permission check
+		$subnet_permission  = $Subnets->check_permission($User->user, $s->id);
+
+		if($subnet_permission>0) {
+			# fetch section
+			$section = (array) $Sections->fetch_section (null, $s->sectionId);
+			$vlan	 = $Tools->fetch_object ("vlans", 'vlanId', $s->vlanId);
+
+			# print
+			print "<tr>";
+			print "	<td class='ip'><a href='".create_link("subnets",$section['id'])."'>".$section['description']."</a></td>";
+			print "	<td class='ip'><a href='".create_link("subnets",$section['id'],$s->id)."'>".$Subnets->transform_to_dotted($s->subnet)."/".$s->mask."</a></td>";
+			print "	<td class='port'>".$s->description."</td>";
+			print "	<td class='description'>".@$vlan->number ." ".@$vlan->description."</td>";
+
+			// add count
+			$ipcnt++;
+		}
 	}
-	else 										{
-		$device['ip_addr'] = "($device[ip_addr])";
-	}
+}
 
-	/* reformat if empty */
-	if(empty($device['hostname'])) 				{ $device['hostname'] = "Unspecified";}
+# empty
+if($ipcnt == 0) {
+print "<tr class='alert text-info'>";
+print "	<td colspan='8'>"._('No subnets belong to this device')."!</td>";
+print "</tr>";
+}
 
-	# print name
-	print "<tbody id='switch'>";
-	print "<tr class='switch-title'>";
-	print "	<th colspan='7'>";
-	print "		<h4> $device[hostname] $device[ip_addr]</h4>";
-	print "	</th>";
-	print "</tr>";
-	print "</tbody>";
+print "</table>";			# end table
 
-	# collapsed div with details
-	print "<tbody id='content-switch'>";
 
-	# headers
-	print "<tr>";
-	print "	<th>"._('IP address')."</th>";
-	print "	<th>"._('Port')."</th>";
-	print "	<th>"._('Subnet')."</th>";
-	print "	<th colspan='2'>"._('Description')."</th>";
-	print "	<th class='hidden-xs'>"._('Hostname')."</th>";
-	print "	<th class='hidden-xs hidden-sm'>"._('Owner')."</th>";
-	print "</tr>";
 
-	if(sizeof($addresses) == 0) {
-	print "<tr>";
-	print '	<td colspan="8">'.$Result->show('info', _('No hosts belonging to this device').'!', false).'</td>'. "\n";
-	print "</tr>";
-	}
 
-	# IP addresses
+
+
+# title - hosts
+print "<h4 style='margin-top:40px;'>"._("Belonging hosts")."</h4><hr>";
+
+# Hosts table
+print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";
+
+# headers
+print "<tr>";
+print "	<th>"._('IP address')."</th>";
+print "	<th>"._('Port')."</th>";
+print "	<th>"._('Subnet')."</th>";
+print "	<th colspan='2'>"._('Description')."</th>";
+print "	<th class='hidden-xs'>"._('Hostname')."</th>";
+print "	<th class='hidden-xs hidden-sm'>"._('Owner')."</th>";
+print "</tr>";
+
+# IP addresses
+$ipcnt = 0;
+if(sizeof($addresses) > 0) {
 	foreach ($addresses as $ip) {
 		# cast
 		$ip = (array) $ip;
@@ -194,11 +249,18 @@ print "<table id='switchMainTable' class='devices table table-striped table-top 
 			print "	<td class='dns hidden-xs'>$ip[dns_name]</td>";
 			print "	<td class='owner hidden-xs hidden-sm'>$ip[owner]</td>";
 			print "</tr>";
+
+			$ipcnt++;
 		}
 	}
+}
 
-	print "</tr>";
-	print "</tbody>";
+# empty
+if($ipcnt == 0) {
+print "<tr class='alert text-info'>";
+print "	<td colspan='8'>"._('No hosts belonging to this device')."!</td>";
+print "</tr>";
+}
 
-print "</table>";			# end major table
+print "</table>";			# end table
 ?>

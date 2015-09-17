@@ -17,12 +17,13 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-
+# check for number of input values
+$max = ini_get("max_input_vars");
+if(sizeof($_POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
 # subnet Id must be a integer
 if(!is_numeric($_POST['subnetId']) || $_POST['subnetId']==0)			{ $Result->show("danger", _("Invalid ID"), true); }
 # verify that user has write permissionss for subnet
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
-
 
 # ok, lets get results form post array!
 foreach($_POST as $key=>$line) {
@@ -36,7 +37,6 @@ foreach($_POST as $key=>$line) {
 	if(substr($key, 0,2)=="ip") {
 		if($Addresses->address_exists ($line, $_POST['subnetId']) === true) {
 			$Result->show("danger", "IP address $line already exists!", true);
-
 		}
 	}
 }
@@ -50,10 +50,12 @@ if(sizeof($res)>0) {
 						"dns_name"=>$r['dns_name'],
 						"subnetId"=>$_POST['subnetId'],
 						"description"=>$r['description'],
-						"lastSeen"=>date("Y-m-d H:i:s")
+						"state"=>2,
+						"lastSeen"=>date("Y-m-d H:i:s"),
+						"action"=>"add"
 						);
 		# insert
-		if(!$Admin->object_modify("ipaddresses", "add", "id", $values))	{ $Result->show("danger", "Failed to import entry ".$r['ip_addr'], false); $errors++; }
+		if(!$Addresses->modify_address($values))	{ $Result->show("danger", "Failed to import entry ".$r['ip_addr'], false); $errors++; }
 	}
 
 	# success if no errors

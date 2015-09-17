@@ -29,6 +29,8 @@ $phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
 $phpipam_mail->override_settings($_POST);
 //create object
 $phpipam_mail->initialize_mailer();
+//debugging
+$phpipam_mail->set_debugging(2);
 
 
 # set content

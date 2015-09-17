@@ -23,6 +23,8 @@ class Common_api_functions {
 		else					{ $this->$Object	= new $Object ($Database); }
 		// set exit method
 		$this->$Object->Result->exit_method = "exception";
+		// set API flag
+		$this->$Object->api = true;
 	}
 
 	/**
@@ -500,22 +502,13 @@ class Common_api_functions {
 	 * @param mixed $controller (default: null)
 	 * @return void
 	 */
-<<<<<<< HEAD
-	protected function remap_keys ($result  = null, $controller = null) {
-=======
 	protected function remap_keys ($result = null, $controller = null) {
->>>>>>> master
 		// define keys array
 		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname");
 
 		// exceptions
-<<<<<<< HEAD
-		if($controller=="vlans") { $this->keys['vlanId'] = "id"; }
-		if($controller=="vrfs")  { $this->keys['vrfId'] = "id"; }
-=======
-		if($controller=="vlans") 		{ $this->keys['vlanId'] = "id"; }
-		if($controller=="vrfs")  		{ $this->keys['vrfId'] = "id"; }
->>>>>>> master
+		if($controller=="vlans") 	{ $this->keys['vlanId'] = "id"; }
+		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
 
 		// POST / PATCH

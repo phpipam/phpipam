@@ -252,7 +252,8 @@ else {
 					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
 					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
 					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
-					"nameserverId"=>$_POST['nameserverId']
+					"nameserverId"=>$_POST['nameserverId'],
+					"device"=>$_POST['device']
 					);
 	# for new subnets we add permissions
 	if($_POST['action']=="add") {
@@ -293,7 +294,7 @@ else {
 	}
 
 	# execute
-	if(!$Admin->object_modify("subnets", $_POST['action'], "id", $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
+	if (!$Subnets->modify_subnet ($_POST['action'], $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
 	else {
 		# update also all slave subnets!
 		if(isset($values['sectionId'])&&$_POST['action']!="add") {
@@ -309,10 +310,10 @@ else {
 
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
+		# create - for redirect
+		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$Subnets->lastInsertId.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		#
 		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
-
-    	# send mail
-		# sendObjectUpdateMails("subnet", $_POST['action'], $subnet_old_details, $_POST);
 	}
 
 

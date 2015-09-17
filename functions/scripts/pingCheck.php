@@ -75,29 +75,35 @@ if($Scan->debugging)							{ print_r($scan_subnets); }
 if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates"); }
 //fetch all addresses that need to be checked
 foreach($scan_subnets as $s) {
-	$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
-	//set array for fping
-	if($Scan->icmp_type=="fping")	{
-		$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
-	}
-	//save addresses
-	if(sizeof($subnet_addresses)>1) {
-		foreach($subnet_addresses as $a) {
-			//ignore excludePing
-			if($a->excludePing!=1) {
-				//create old status
-				$tDiff = time() - strtotime($a->lastSeen);
-				$oldStatus = $tDiff <= $statuses[1] ? 0 : 2;
-				//create different array for fping
-				if($Scan->icmp_type=="fping")	{
-					$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
-					$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
-				}
-				else {
-					$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);
+
+	// if subnet has slaves dont check it
+	if ($Subnets->has_slaves ($s->id) === false) {
+
+		$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
+		//set array for fping
+		if($Scan->icmp_type=="fping")	{
+			$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
+		}
+		//save addresses
+		if(sizeof($subnet_addresses)>1) {
+			foreach($subnet_addresses as $a) {
+				//ignore excludePing
+				if($a->excludePing!=1) {
+					//create old status
+					$tDiff = time() - strtotime($a->lastSeen);
+					$oldStatus = $tDiff <= $statuses[1] ? 0 : 2;
+					//create different array for fping
+					if($Scan->icmp_type=="fping")	{
+						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
+						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
+					}
+					else {
+						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);
+					}
 				}
 			}
 		}
+
 	}
 }
 
@@ -225,7 +231,7 @@ else {
 
 	# re-initialize classes
 	$Database = new Database_PDO;
-	$Scan = new Scan ($Database);
+	$Scan = new Scan ($Database, $Subnets->settings);
 	// reset debugging
 	$Scan->reset_debugging(false);
 
@@ -244,19 +250,21 @@ if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($
 # all done, mail diff?
 if(sizeof($address_change)>0 && $send_mail) {
 
-	if(!is_object(@$Scan)) {
-		$Database 	= new Database_PDO;
-		$Subnets	= new Subnets ($Database);
-		$Addresses	= new Addresses ($Database);
-		$Tools		= new Tools ($Database);
-		$Scan		= new Scan ($Database);
-		$Result		= new Result();
+	# remove old classes
+	unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);
 
-		// set exit flag to true
-		$Scan->ping_set_exit(true);
-		// set debugging
-		$Scan->reset_debugging(false);
-	}
+	$Database 	= new Database_PDO;
+	$Subnets	= new Subnets ($Database);
+	$Addresses	= new Addresses ($Database);
+	$Tools		= new Tools ($Database);
+	$Scan		= new Scan ($Database);
+	$Result		= new Result();
+
+	// set exit flag to true
+	$Scan->ping_set_exit(true);
+	// set debugging
+	$Scan->reset_debugging(false);
+
 
 	# check for recipients
 	foreach($Tools->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
@@ -317,7 +325,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 			$ago	  = "never";
 		} else {
 			$timeDiff = time() - strtotime($change['lastSeen']);
-			$ago 	  = $change['lastSeen']." (".sec2hms($timeDiff)." ago)";
+			$ago 	  = $change['lastSeen']." (".$Result->sec2hms($timeDiff)." ago)";
 		}
 
 		//content

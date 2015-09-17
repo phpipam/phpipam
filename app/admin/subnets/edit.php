@@ -141,10 +141,12 @@ $(".input-switch").bootstrapSwitch(switch_options);
         <td>
         	<select name="sectionIdNew" class="form-control input-sm input-w-auto">
             	<?php
-            	foreach($sections as $section) {
-            		/* selected? */
-            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
-            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }
+            	if($sections!==false) {
+	            	foreach($sections as $section) {
+	            		/* selected? */
+	            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
+	            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }
+	            	}
             	}
             ?>
         	</select>
@@ -160,6 +162,33 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<?php include('edit-vlan-dropdown.php'); ?>
          </td>
         <td class="info2"><?php print _('Select VLAN'); ?></td>
+    </tr>
+
+	<!-- Device -->
+	<tr>
+		<td class="middle"><?php print _('Device'); ?></td>
+		<td id="deviceDropdown">
+			<select name="device" class="form-control input-sm input-w-auto">
+				<option value="0"><?php print _('None'); ?></option>
+				<?php
+				// fetch all devices
+				$devices = $Admin->fetch_all_objects("devices");
+				// loop
+				if ($devices!==false) {
+					foreach($devices as $device) {
+						//check if permitted in this section!
+						$sections = explode(";", $device->sections);
+						if(in_array($subnet_old_details['sectionId'], $sections)) {
+							//if same
+							if($device->id == @$subnet_old_details['device']) 	{ print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n"; }
+							else 												{ print '<option value="'. $device->id .'">'. $device->hostname .'</option>'. "\n";			 }
+						}
+					}
+				}
+				?>
+			</select>
+		</td>
+		<td class="info2"><?php print _('Select device where subnet is located'); ?></td>
     </tr>
 
 	<!-- Nameservers -->

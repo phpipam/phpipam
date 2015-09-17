@@ -106,7 +106,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 	<hr>
 
 	<h4><?php print _('API documentation'); ?></h4>
-	<pre style="background:white;"><?php print file_get_contents(dirname(__FILE__) . '/../../../api/README'); ?></pre>
+	<a href="http://phpipam.net/api-documentation/">http://phpipam.net/api-documentation/</a>
 
 <?php
 } else {

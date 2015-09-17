@@ -71,7 +71,10 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck ();
 //set addresses
 foreach($scan_subnets as $s) {
-	$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id);
+	// if subnet has slaves dont check it
+	if ($Subnets->has_slaves ($s->id) === false) {
+		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id);
+	}
 }
 //reindex
 foreach($addresses_tmp as $s_id=>$a) {
@@ -218,9 +221,12 @@ foreach($scan_subnets as $s) {
 							"dns_name"=>$hostname['name'],
 							"description"=>"-- autodiscovered --",
 							"note"=>"This host was autodiscovered on ".date("Y-m-d H:i:s"),
-							"lastSeen"=>date("Y-m-d H:i:s")
+							"lastSeen"=>date("Y-m-d H:i:s"),
+							"state"=>"2",
+							"action"=>"add"
 							);
-			$Admin->object_modify("ipaddresses", "add", "id", $values);
+			//insert
+			$Addresses->modify_address($values);
 
 			//set discovered
 			$discovered++;

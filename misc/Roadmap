@@ -1,16 +1,11 @@
 version - 1.2
 
 	+ To fix / finish
-		+ logging: db, syslog (db prepared)
-		+ scan filter out invalid masks / subnets / folders ;
-		+ fix domain user search;
 		+ Export domain in bind format + script;
-		+ Verify upgrade/import scripts;
+		+ Verify upgrade/import scripts from older versions;
+		+ Save opened folders in left menu;
 
-	+ Import
-		https://github.com/malaiam/phpipam
-
-	+ attach subnet to device (db prepared);
+		+ DNS write log;
 
 	+ Mark subnet as full (db prepared);
 
@@ -18,32 +13,36 @@ version - 1.2
 
 	+ Add resolve requests to subnet for RWA users;
 
-	+ per-section DNS resolvers (PEAR DNS2)
-
-	+ IP address owner (from internal users - suggestions)
-
-	+ IPv6 pinging;
-
-	+ custom fields for IP requests;
-
-	+ custom VRF fields
-
 	+ Override entries on import checkbox;
+
+	+ L2 domain permissions for groups ?
 
 
 features for next releases:
 ---------------------------
+
+	+ per-section DNS resolvers (PEAR DNS2)
 
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
 		- Ability to create NAT pools and link subnet / address to that pool - source NAT
 		- Show bindings under tools and next to IP address
 
+	+ IP address owner (from internal users - suggestions);
+
+	+ Devices permissions;
+
+	+ IPv6 pinging;
+
 	+ assign a state to a subnet, vlan
+
+	+ DHCP
 
 	+ BGP support
 
 	+ Imports
+
+	+ custom fields for IP requests;
 
 	+ Scan subnet for alive hosts and import
 		SNMP router table fetching

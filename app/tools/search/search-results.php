@@ -26,6 +26,9 @@ if(!is_object($Subnets)) {
 
 # set searchterm
 if(isset($_REQUEST['ip'])) {
+	// escape
+	$_REQUEST['ip'] = htmlspecialchars($_REQUEST['ip']);
+
 	$search_term = @$search_term=="search" ? "" : $_REQUEST['ip'];
 }
 
@@ -36,16 +39,13 @@ $User->check_user_session();
 $search_term = str_replace("*", "%", $search_term);
 
 # check if mac address or ip address
-if(strlen($search_term)==17 && substr_count($search_term, ":") == 5)
-{
+if(strlen($search_term)==17 && substr_count($search_term, ":") == 5) {
         $type = "mac"; //count : -> must be 5
 }
-else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0))
-{
+else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0)){
         $type = "mac"; //no dots or : -> mac without :
 }
-else
-{
+else{
         $type = $Addresses->identify_address( $search_term ); //identify address type
 }
 
@@ -292,7 +292,7 @@ if(sizeof($result_addresses) > 0) {
 			if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($line['state']); }
 			print ' </td>' . "\n";
 			//description
-			print ' <td>'. shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
+			print ' <td>'. $Result->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
 			//dns
 			print ' <td>'. $line['dns_name']  .'</td>' . "\n";
 			//mac

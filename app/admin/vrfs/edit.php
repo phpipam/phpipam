@@ -26,6 +26,9 @@ if($_POST['action']!="add") {
 
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
+
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('vrf');
 ?>
 
 
@@ -64,6 +67,97 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$vrf['description']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
+
+	<!-- Custom -->
+	<?php
+	if(sizeof($custom) > 0) {
+
+		print '<tr>';
+		print '	<td colspan="2"><hr></td>';
+		print '</tr>';
+
+		foreach($custom as $field) {
+
+			# replace spaces
+		    $field['nameNew'] = str_replace(" ", "___", $field['name']);
+
+			# required
+			if($field['Null']=="NO")	{ $required = "*"; }
+			else						{ $required = ""; }
+
+			print '<tr>'. "\n";
+			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. "\n";
+
+			//set type
+			if(substr($field['type'], 0,3) == "set") {
+				//parse values
+				$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $field['type']));
+				//null
+				if($field['Null']!="NO") { array_unshift($tmp, ""); }
+
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
+				foreach($tmp as $v) {
+					if($v==$vrf[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
+					else								{ print "<option value='$v'>$v</option>"; }
+				}
+				print "</select>";
+			}
+			//date and time picker
+			elseif($field['type'] == "date" || $field['type'] == "datetime") {
+				// just for first
+				if($timeP==0) {
+					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<script type="text/javascript">';
+					print '$(document).ready(function() {';
+					//date only
+					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
+					//date + time
+					print '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
+
+					print '})';
+					print '</script>';
+				}
+				$timeP++;
+
+				//set size
+				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
+				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
+
+				//field
+				if(!isset($vrf[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" '.$readonly.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+				else								{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $vrf[$field['name']]. '" '.$readonly.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+			}
+			//boolean
+			elseif($field['type'] == "tinyint(1)") {
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
+				$tmp = array(0=>"No",1=>"Yes");
+				//null
+				if($field['Null']!="NO") { $tmp[2] = ""; }
+
+				foreach($tmp as $k=>$v) {
+					if(strlen($vrf[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					elseif($k==$vrf[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					else												{ print "<option value='$k'>"._($v)."</option>"; }
+				}
+				print "</select>";
+			}
+			//text
+			elseif($field['type'] == "text") {
+				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" '.$readonly.' rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $vrf[$field['name']]. '</textarea>'. "\n";
+			}
+			//default - input field
+			else {
+				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. @$vrf[$field['name']]. '" size="30" '.$readonly.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
+			}
+
+			print '	</td>'. "\n";
+			print '</tr>'. "\n";
+		}
+	}
+	?>
+
 
 	</table>
 	</form>

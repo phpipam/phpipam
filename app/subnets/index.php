@@ -11,7 +11,7 @@ if(!is_numeric($_GET['subnetId'])) 	{ $Result->show("danger", _('Invalid ID'), t
 # fetch subnet related stuff
 $custom_fields = $Tools->fetch_custom_fields ('subnets');											//custom fields
 $subnet  = (array) $Subnets->fetch_subnet(null, $_GET['subnetId']);									//subnet details
-if(sizeof($subnet)==0) 				{ $Result->show("danger", _('Subnet does not exist'), true); }	//die if empty
+if(sizeof($subnet)==0) 				{ header("Location: ".create_link("subnets", $_GET['section'])); }	//redirect if false
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);			//set network boundaries
 $slaves = $Subnets->has_slaves ($subnet['id']) ? true : false;										//check if subnet has slaves and set slaves flag true/false
 

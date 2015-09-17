@@ -180,6 +180,9 @@ table td.info2,
 tbody {
 	border-top: none !important;
 }
+.table.table-top.table-td-top td {
+	vertical-align: top !important;
+}
 
 
 
@@ -797,6 +800,9 @@ table#subnetsMenu td#subnetsContent {
 	background: white;
 
 	min-height: 260px;
+}
+#dashboard .inner .alert {
+	margin: 10px;
 }
 .inner.install h4 {
 	background: #F1FAFE !important;
@@ -2035,6 +2041,7 @@ table#userPrint h4 {
 	height: 100%;
 }
 .popup_max .pFooter {
+	position: absolute;
 	float: left;
 	width: 100%;
 	bottom: 0px;

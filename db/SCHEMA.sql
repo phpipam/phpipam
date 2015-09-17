@@ -161,7 +161,7 @@ CREATE TABLE `settings` (
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
-  `log` SET('Database','syslog')  NOT NULL  DEFAULT 'Database',
+  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -227,7 +227,7 @@ CREATE TABLE `subnets` (
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `masterSubnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
   `allowRequests` tinyint(1) DEFAULT '0',
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `showName` tinyint(1) DEFAULT '0',
@@ -304,7 +304,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(25) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
   `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL,
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
@@ -354,7 +354,9 @@ VALUES
 	(3, 'fr_FR', 'Français'),
 	(4, 'nl_NL','Nederlands'),
 	(5, 'de_DE','Deutsch'),
-	(6, 'pt_BR', 'Brazil');
+	(6, 'pt_BR', 'Brazil'),
+	(7,	'es_ES'	,'Español'),
+	(8, 'cs_CZ', 'Czech');
 
 
 # Dump of table vlans
@@ -415,18 +417,15 @@ CREATE TABLE `nameservers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `namesrv1` varchar(255) DEFAULT NULL,
-  `namesrv2` varchar(255) DEFAULT NULL,
-  `namesrv3` varchar(255) DEFAULT NULL,
   `description` text,
   `permissions` varchar(128) DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
-INSERT INTO `nameservers` (`name`, `namesrv1`, `namesrv2`, `description`)
+INSERT INTO `nameservers` (`name`, `namesrv1`, `description`, `permissions`)
 VALUES
-	('Global', '10.10.10.10', '10.10.11.12', ''),
-	('DMZ1', '192.168.100.10', '192.168.11.12', 'Nameservers used by DMZ servers');
+	('Google NS', '8.8.8.8;8.8.4.4', 'Google public nameservers', '1;2');
 
 
 
@@ -540,7 +539,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','AD','LDAP', 'Radius') NOT NULL DEFAULT 'local',
+  `type` set('local','AD','LDAP','NetIQ', 'Radius') NOT NULL DEFAULT 'local',
   `params` varchar(1024) DEFAULT NULL,
   `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
