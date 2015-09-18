@@ -9,7 +9,7 @@
 	</div>
 
         <!-- login text -->
-        <div class="col-xs-12"><?php print $User->settings->siteLoginText; ?></div>
+        <div class="col-xs-12" style="margin-bottom:1em;"><?php print $User->settings->siteLoginText; ?></div>
 
 	<!-- username -->
 	<div class="col-xs-12"><strong><?php print _('Username'); ?></strong></div>
