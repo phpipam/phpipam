@@ -420,7 +420,7 @@ class PowerDNS extends Common_functions {
      */
     public function fetch_reverse_v6_domains () {
         # fetch
-        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ipv6.arpa", "name", true, true); }
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ip6.arpa", "name", true, true); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
