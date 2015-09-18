@@ -1182,10 +1182,19 @@ class PowerDNS extends Common_functions {
 
 		// remove netmask and ::
 		$subnet = $this->Net_IPv6->removeNetmaskSpec($ip);
-		$subnet = str_replace(":", "", $subnet);
+		$subnet = rtrim($subnet, "::");
+
+		// to array
+		$ip = explode(":", $subnet);
+
+		// if 0 than add 4 nulls
+		foreach ($ip as $k=>$i) {
+			$ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
+		}
+
 		// to array and reverse
-		$zone = array_reverse(str_split($subnet));
-		// return
+		$zone = array_reverse(str_split(implode("", $ip)));
+
 		return implode(".", $zone).".ip6.arpa";
 	}
 
