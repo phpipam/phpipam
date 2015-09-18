@@ -5,7 +5,7 @@
 
 # verify that user is logged in
 $User->check_user_session();
-echo $User->settings->version
+
 # get latest version */
 if(!$version = $Tools->check_latest_phpipam_version()) 	{ $Result->show("danger", _("Version check failed").'!', false); }
 else {
