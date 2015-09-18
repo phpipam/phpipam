@@ -1186,7 +1186,7 @@ class PowerDNS extends Common_functions {
 		// to array and reverse
 		$zone = array_reverse(str_split($subnet));
 		// return
-		return implode(".", $zone).".ipv6.arpa";
+		return implode(".", $zone).".ip6.arpa";
 	}
 
 	/**
@@ -1208,19 +1208,17 @@ class PowerDNS extends Common_functions {
 			// uncompress and remove netmask
 			$ip = $this->Net_IPv6->uncompress($ip);
 			$ip = $this->Net_IPv6->removeNetmaskSpec($ip);
+
 			// to array
 			$ip = explode(":", $ip);
 
 			// if 0 than add 4 nulls
 			foreach ($ip as $k=>$i) {
-				if ($i=="0") { $ip[$k] = "0000"; }
+				$ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
 			}
+
 			$ip = str_split(implode("", $ip));
-
-
-
-			$prefix = ".ipv6.arpa";
-
+			$prefix = ".ip6.arpa";
 			$zone = array_reverse($ip);
 		}
 		// return
