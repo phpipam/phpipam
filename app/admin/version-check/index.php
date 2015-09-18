@@ -7,7 +7,7 @@
 $User->check_user_session();
 
 # get latest version */
-if(!$version = $Tools->check_latest_phpipam_version()) 	{ $Result->show("danger", _("Version check failed").'!', false); }
+if(!$version = $Tools->check_latest_phpipam_version()) { $Result->show("danger", _("Version check failed").'!', false); }
 else {
 	print "<h4>phpIPAM version check</h4><hr>";
 
