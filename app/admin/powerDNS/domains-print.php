@@ -195,7 +195,7 @@ foreach ($domains_split as $k=>$split) {
 	<td colspan="6" class="text-right">
 	<?php
 	// print pagination
-	if(!isset($_POST['domain-filter'])) {
+	if(!isset($_POST['domain-filter']) && sizeof($domains_split)>1) {
 		$Tools->print_powerdns_pagination ($_GET['ipaddrid'], sizeof($domains_split));
 	}
 	?>
