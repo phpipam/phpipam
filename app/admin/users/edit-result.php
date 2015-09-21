@@ -114,7 +114,7 @@ if($_POST['role']=="Administrator") {
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }
 else																	{ $Result->show("success", _("User $_POST[action] successfull").'!', false); }
 
-/* mail user */
+# mail user
 if($Admin->verify_checkbox(@$_POST['notifyUser'])==1) { include("edit-notify.php"); }
 
 ?>

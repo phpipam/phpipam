@@ -420,7 +420,7 @@ class PowerDNS extends Common_functions {
      */
     public function fetch_reverse_v6_domains () {
         # fetch
-        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ipv6.arpa", "name", true, true); }
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ip6.arpa", "name", true, true); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
@@ -1182,11 +1182,20 @@ class PowerDNS extends Common_functions {
 
 		// remove netmask and ::
 		$subnet = $this->Net_IPv6->removeNetmaskSpec($ip);
-		$subnet = str_replace(":", "", $subnet);
+		$subnet = rtrim($subnet, "::");
+
+		// to array
+		$ip = explode(":", $subnet);
+
+		// if 0 than add 4 nulls
+		foreach ($ip as $k=>$i) {
+			$ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
+		}
+
 		// to array and reverse
-		$zone = array_reverse(str_split($subnet));
-		// return
-		return implode(".", $zone).".ipv6.arpa";
+		$zone = array_reverse(str_split(implode("", $ip)));
+
+		return implode(".", $zone).".ip6.arpa";
 	}
 
 	/**
@@ -1208,19 +1217,17 @@ class PowerDNS extends Common_functions {
 			// uncompress and remove netmask
 			$ip = $this->Net_IPv6->uncompress($ip);
 			$ip = $this->Net_IPv6->removeNetmaskSpec($ip);
+
 			// to array
 			$ip = explode(":", $ip);
 
 			// if 0 than add 4 nulls
 			foreach ($ip as $k=>$i) {
-				if ($i=="0") { $ip[$k] = "0000"; }
+				$ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
 			}
+
 			$ip = str_split(implode("", $ip));
-
-
-
-			$prefix = ".ipv6.arpa";
-
+			$prefix = ".ip6.arpa";
 			$zone = array_reverse($ip);
 		}
 		// return

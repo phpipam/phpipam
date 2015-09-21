@@ -12,6 +12,20 @@ $groups = $Admin->fetch_all_objects("userGroups", "g_id");
 
 # fetch all admin users
 $admins = $Admin->fetch_multiple_objects("users", "role", "Administrator");
+
+# fetch all auth methods
+$auth_methods = $Admin->fetch_all_objects ("usersAuthMethod");
+if ($auth_methods!==false) {
+	foreach ($auth_methods as $k=>$m) {
+		if (!($m->type=="AD" || $m->type=="LDAP")) {
+			unset($auth_methods[$k]);
+		}
+	}
+	// none
+	if (sizeof($auth_methods)==0) {
+		$auth_methods = false;
+	}
+}
 ?>
 
 <!-- display existing groups -->
@@ -19,8 +33,12 @@ $admins = $Admin->fetch_multiple_objects("users", "role", "Administrator");
 <hr><br>
 
 <!-- Add new -->
-<button class='btn btn-sm btn-default editGroup' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
-
+<div class="btn-group">
+	<button class='btn btn-sm btn-default editGroup' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
+	<?php if($auth_methods!==false) { ?>
+	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'> <?php print _('Search domain groups'); ?></i></button>
+	<?php } ?>
+</div>
 
 <!-- table -->
 <table id="userPrint" class="table table-striped table-top table-auto">
