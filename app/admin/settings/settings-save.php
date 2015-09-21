@@ -57,6 +57,7 @@ $values = array("id"=>1,
 				"vlanMax"=>@$_POST['vlanMax'],
 				"enableChangelog"=>$Admin->verify_checkbox(@$_POST['enableChangelog']),
 				"tempShare"=>$Admin->verify_checkbox(@$_POST['tempShare']),
+				"enablePowerDNS"=>$Admin->verify_checkbox(@$_POST['enablePowerDNS']),
 				"log"=>@$_POST['log'],
 				//display
 				"donate"=>$Admin->verify_checkbox(@$_POST['donate']),

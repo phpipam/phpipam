@@ -213,6 +213,17 @@ $settings = (array) $User->settings;
 	</td>
 </tr>
 
+<!-- powerdns -->
+<tr>
+	<td class="title"><?php print _('Enable PowerDNS'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enablePowerDNS" <?php if($settings['enablePowerDNS'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable PowerDNS module'); ?>
+	</td>
+</tr>
+
 <!-- DNS resolving -->
 <tr>
 	<td class="title"><?php print _('Resolve DNS names'); ?></td>
