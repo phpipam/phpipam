@@ -1,6 +1,6 @@
 <?php
 /* set latest version */
-define("VERSION", "1.19");									//version changes if database structure changes
+define("VERSION", "1.18");									//version changes if database structure changes
 /* set latest revision */
 define("REVISION", "033");									//revision always changes, verision only if database structure changes
 /* set last possible upgrade */
