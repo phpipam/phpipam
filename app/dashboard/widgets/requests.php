@@ -1,13 +1,15 @@
 <?php
 
 # required functions
-if(!is_object($User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
-	# classes
-	$Database	= new Database_PDO;
-	$User 		= new User ($Database);
-	$Tools 		= new Tools ($Database);
-	$Subnets 	= new Subnets ($Database);
+if(isset($User)) {
+	if(!is_object($User)) {
+		require( dirname(__FILE__) . '/../../../functions/functions.php' );
+		# classes
+		$Database	= new Database_PDO;
+		$User 		= new User ($Database);
+		$Tools 		= new Tools ($Database);
+		$Subnets 	= new Subnets ($Database);
+	}
 }
 
 # user must be authenticated

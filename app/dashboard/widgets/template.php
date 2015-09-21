@@ -7,12 +7,14 @@ This is a template for creating new widgets
 */
 
 # required functions
-if(!is_object($User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
-	# classes
-	$Database	= new Database_PDO;
-	$User 		= new User ($Database);
-	$Tools 		= new Tools ($Database);
+if(isset($User)) {
+	if(!is_object($User)) {
+		require( dirname(__FILE__) . '/../../../functions/functions.php' );
+		# classes
+		$Database	= new Database_PDO;
+		$User 		= new User ($Database);
+		$Tools 		= new Tools ($Database);
+	}
 }
 
 # user must be authenticated
