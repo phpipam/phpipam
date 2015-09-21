@@ -4,16 +4,14 @@
  **********************************************/
 
 # required functions
-if(isset($User)) {
-	if(!is_object($User)) {
-		require( dirname(__FILE__) . '/../../../functions/functions.php' );
-		# classes
-		$Database	= new Database_PDO;
-		$User 		= new User ($Database);
-		$Tools 		= new Tools ($Database);
-		$Subnets 	= new Subnets ($Database);
-		$Result		= new Result ();
-	}
+if(!is_object(@$User)) {
+	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	# classes
+	$Database	= new Database_PDO;
+	$User 		= new User ($Database);
+	$Tools 		= new Tools ($Database);
+	$Subnets 	= new Subnets ($Database);
+	$Result		= new Result ();
 }
 
 # user must be authenticated

@@ -43,16 +43,14 @@ $(document).ready(function() {
 
 <?php
 # required functions
-if(isset($User)) {
-	if(!is_object($User)) {
-		require( dirname(__FILE__) . '/../../../functions/functions.php' );
-		# classes
-		$Database	= new Database_PDO;
-		$User 		= new User ($Database);
-		$Tools 		= new Tools ($Database);
-		$Subnets 	= new Subnets ($Database);
-		$Addresses 	= new Addresses ($Database);
-	}
+if(!is_object(@$User)) {
+	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	# classes
+	$Database	= new Database_PDO;
+	$User 		= new User ($Database);
+	$Tools 		= new Tools ($Database);
+	$Subnets 	= new Subnets ($Database);
+	$Addresses 	= new Addresses ($Database);
 }
 
 # user must be authenticated
