@@ -20,7 +20,8 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # we dont need any errors!
-//ini_set('display_errors', 0);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 # fetch subnet details
 $subnet = (array) $Subnets->fetch_subnet (null, $_GET['subnetId']);
@@ -65,11 +66,14 @@ $format_top->setTop(1);
 
 // Create a worksheet
 //$worksheet =& $workbook->addWorksheet($subnet['description']);
-$worksheet_name = $subnet['description'];
-$worksheet_name = (strlen($worksheet_name) > 30) ? substr($worksheet_name,0,27).'...' : $worksheet_name;
+$worksheet_name = strlen($subnet['description']) > 30 ? substr($subnet['description'],0,27).'...' : $subnet['description'];
 $worksheet =& $workbook->addWorksheet($worksheet_name);
 
+// encode
+$worksheet->setInputEncoding('utf-8');
+
 $lineCount = 0;
+$rowCount  = 0;
 
 # Write title - subnet details
 $worksheet->write($lineCount, $rowCount, $subnet['description'], $format_header );
@@ -149,9 +153,15 @@ $lineCount++;
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
 $devices = $Tools->fetch_devices ();
-foreach($devices as $d) {
-	$devices_indexed[$d->id] = $d;
+if (sizeof($devices)>0) {
+	foreach($devices as $d) {
+		$devices_indexed[$d->id] = (object) $d;
+	}
 }
+//add blank
+$devices_indexed[0] = new StdClass ();
+$devices_indexed[0]->hostname = 0;
+
 //write all IP addresses
 foreach ($addresses as $ip) {
 	$ip = (array) $ip;

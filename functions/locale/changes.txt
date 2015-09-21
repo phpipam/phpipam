@@ -2639,4 +2639,20 @@ msgstr ""
 msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
 msgstr ""
 
+msgid "Search domain groups"
+msgstr ""
+
+msgid "Add group"
+msgstr ""
+
+msgid "Select"
+msgstr ""
+
+msgid "No members"
+msgstr ""
+
+msgid "Group already exists"
+msgstr ""
+
+
 

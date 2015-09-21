@@ -977,15 +977,33 @@ $(document).on("click", "#adsearchusersubmit", function() {
 });
 //get user data from result
 $(document).on("click", ".userselect", function() {
-	var uname 	 = $(this).attr('data-uname');
-	var username = $(this).attr('data-username');
-	var email 	 = $(this).attr('data-email');
-	var server 	 = $(this).attr('data-server');
+	var uname 	 	= $(this).attr('data-uname');
+	var username 	= $(this).attr('data-username');
+	var email 	 	= $(this).attr('data-email');
+	var server 	 	= $(this).attr('data-server');
+	var server_type = $(this).attr('data-server-type');
+
 	//fill
 	$('form#usersEdit input[name=real_name]').val(uname);
 	$('form#usersEdit input[name=username]').val(username);
 	$('form#usersEdit input[name=email]').val(email);
 	$('form#usersEdit select[name=authMethod]').val(server);
+	//hide password
+	$('tbody#user_password').hide();
+	//check server type and fetch group membership
+	if (server_type=="AD" || server_type=="LDAP") {
+		$.post('app/admin/users/ad-search-result-groups-membership.php', {server:server,username:username}, function(data) {
+			//some data found
+			if(data.length>0) {
+				// to array and check
+				var groups = data.replace(/\s/g, '');
+				groups = groups.split(";");
+				for (m = 0; m < groups.length; ++m) {
+					$("input[name='group"+groups[m]+"']").attr('checked', "checked");
+				}
+			}
+		});
+	}
 
 	hidePopup2();
 	hidePopup('popup_w500');
@@ -997,6 +1015,37 @@ $(document).on("click", ".userselect", function() {
 
 /*    Edit groups
 ***************************/
+//search AD group popup
+$(document).on("click", ".adLookup", function() {
+	$('div.popup_w700').load('app/admin/groups/ad-search-group-form.php');
+
+    showPopup('popup_w700');
+    hideSpinner();
+});
+//search AD domain groups
+$(document).on("click", "#adsearchgroupsubmit", function() {
+	showSpinner();
+	var dfilter = $('#dfilter').val();
+	var server = $('#adserver').find(":selected").val();
+	$.post('app/admin/groups/ad-search-group-result.php', {dfilter:dfilter, server:server}, function(data) {
+		$('div#adsearchgroupresult').html(data)
+		hideSpinner();
+	});
+});
+//search domaingroup  add
+$(document).on("click", ".groupselect", function() {
+	showSpinner();
+	var gname = $(this).attr("data-gname");
+	var gdescription = $(this).attr("data-gdescription");
+	var gmembers = $(this).attr("data-members");
+	var gid = $(this).attr("data-gid");
+
+	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers}, function(data) {
+		$('div.adgroup-'+gid).html(data)
+		hideSpinner();
+	});
+	return false;
+});
 //open form
 $('.editGroup').click(function () {
     showSpinner();
