@@ -2395,7 +2395,7 @@ class Subnets extends Common_functions {
 					if($master['isFolder']==1)
 						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
 					else {
-						$html[] = "	<td><a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
+						$html[] = "	<td><a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
 					}
 				}
 
