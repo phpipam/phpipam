@@ -1875,6 +1875,10 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function print_subnets_menu( $user, $section_subnets, $rootId = 0 ) {
+		# open / close via cookie
+		if (isset($_COOKIE['sstr'])) { $cookie = array_filter(explode("|", $_COOKIE['sstr'])); }
+		else						 { $cookie= array(); }
+
 		# initialize html array
 		$html = array();
 		# create children array
@@ -1901,11 +1905,15 @@ class Subnets extends Common_functions {
 		# loop through subnets
 		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
+			# save id for structure on reloading
+			$curr_id = $option['value']['id'];
+
 			# count levels
 			$count = count( $parent_stack ) + 1;
 
 			# set opened or closed tag for displaying proper folders
-			if(in_array($option['value']['id'], $allParents))		{ $open = "open";	$openf = "-open"; }
+			if(in_array($option['value']['id'], $allParents) ||
+				in_array($option['value']['id'], $cookie))			{ $open = "open";	$openf = "-open"; }
 			else													{ $open = "close";	$openf = ""; }
 
 			# show also child's by default
@@ -1944,17 +1952,17 @@ class Subnets extends Common_functions {
 				if($permission != 0) {
 					# folder
 					if($option['value']['isFolder'] == 1) {
-						$html[] = '<li class="folderF folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder fa-folder'.$openf.'" rel="tooltip" data-placement="right" data-html="true" title="'._('Folder contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
+						$html[] = '<li class="folderF folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder fa-folder'.$openf.'" rel="tooltip" data-placement="right" data-html="true" title="'._('Folder contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
 						$html[] = '<a href="'.create_link("folder",$option['value']['sectionId'],$option['value']['id']).'">'.$option['value']['description'].'</a>';
 					}
 					# print name
 					elseif($option['value']['showName'] == 1) {
-						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
+						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'">'.$option['value']['description'].'</a>';
 					}
 					# print subnet
 					else {
-						$html[] = '<li class="folder folder-'.$open.' '.$active.'""><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
+						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$option['value']['description'].'">'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'</a>';
 					}
 
@@ -1971,17 +1979,17 @@ class Subnets extends Common_functions {
 				if($permission != 0) {
 					# folder - opened
 					if($option['value']['isFolder'] == 1) {
-						$html[] = '<li class="leaf '.$active.'"><i class="fa fa-gray fa-sfolder fa-folder'.$openf.'"></i>';
+						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-sfolder fa-folder'.$openf.'"></i>';
 						$html[] = '<a href="'.create_link("folder",$option['value']['sectionId'],$option['value']['id']).'">'.$option['value']['description'].'</a></li>';
 					}
 					# print name
 					elseif($option['value']['showName'] == 1) {
-						$html[] = '<li class="leaf '.$active.'"><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
+						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'">'.$option['value']['description'].'</a></li>';
 					}
 					# print subnet
 					else {
-						$html[] = '<li class="leaf '.$active.'"><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
+						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$option['value']['description'].'">'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'</a></li>';
 					}
 				}

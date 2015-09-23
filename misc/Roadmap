@@ -3,7 +3,6 @@ version - 1.2
 	+ To fix / finish
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ Save opened folders in left menu;
 
 		+ DNS write log;
 

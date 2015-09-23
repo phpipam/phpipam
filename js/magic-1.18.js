@@ -140,13 +140,15 @@ function createCookie(name,value,days) {
     var date;
     var expires;
 
-    if (days) {
+    if (typeof days === 'undefined') {
         date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000));
         expires = "; expires="+date.toGMTString();
     }
     else {
+	    var expires = "";
     }
+
     document.cookie = name+"="+value+expires+"; path=/";
 }
 function readCookie(name) {
@@ -164,9 +166,6 @@ function readCookie(name) {
 $(function() {
 	$(".popup").draggable({ handle: ".pHeader" });
 });
-
-
-
 
 
 
@@ -248,12 +247,16 @@ $('ul#subnets').on("click", ".fa-folder-close-o", function() {
     $(this).removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideDown('fast');
+	//save cookie
+    update_subnet_structure_cookie ("add", $(this).attr("data-str_id"));
 });
 $('ul#subnets').on("click", ".fa-folder", function() {
     //change icon
     $(this).removeClass('fa-folder').addClass('fa-folder-open');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideDown('fast');
+	//save cookie
+    update_subnet_structure_cookie ("add", $(this).attr("data-str_id"));
 });
 // hide submenus
 $('ul#subnets').on("click", ".fa-folder-open-o", function() {
@@ -261,13 +264,45 @@ $('ul#subnets').on("click", ".fa-folder-open-o", function() {
     $(this).removeClass('fa-folder-open-o').addClass('fa-folder-close-o');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideUp('fast');
+	//save cookie
+    update_subnet_structure_cookie ("remove", $(this).attr("data-str_id"));
 });
 $('ul#subnets').on("click", ".fa-folder-open", function() {
     //change icon
     $(this).removeClass('fa-folder-open').addClass('fa-folder');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideUp('fast');
+	//save cookie
+    update_subnet_structure_cookie ("remove", $(this).attr("data-str_id"));
 });
+
+
+/* Function to save subnets structure left menu to cookie */
+function update_subnet_structure_cookie (action, cid) {
+	// read old cookie
+	var s_cookie = readCookie("sstr");
+	// defualt - if empty
+ 	if(typeof s_cookie === 'undefined' || s_cookie==null || s_cookie.length===0)	s_cookie = "|";
+	// add or replace
+	if (action == "add") {
+		// split to array and check if it already exists
+		var arr = s_cookie.split('|');
+		var exists = false;
+		for(var i=0;i < arr.length;i++) {
+        	if(arr[i]==cid) {
+	     		exists = true;
+        }	}
+        // new
+        if(exists==false)	s_cookie += cid+"|";
+	}
+	else if (action == "remove")	{
+		s_cookie = s_cookie.replace("|"+cid+"|", "|");
+	}
+	// save cookie
+	createCookie("sstr",s_cookie, 365);
+}
+
+
 
 
 //hide subnets list

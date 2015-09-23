@@ -1,4 +1,4 @@
-== 1.18.033
+== 1.18.040
 
 	New features:
 	------------
@@ -42,6 +42,7 @@
 	+ Subnets can be now linked to devices;
 	+ Import/export enhancements;
 	+ Fast user switching for admins to impersonate user;
+	+ Opened folders and subnets in tree menu are saved on page reload;
 
 	Security Fixes:
 	----------------------------
