@@ -647,7 +647,7 @@ class Tools extends Common_functions {
 				# cast
 				$s = (array) $s;
 				//first verify address type
-				$type = $Subnets->identify_address($s['subnet']);
+				$type = $this->identify_address($s['subnet']);
 				if($type == "IPv4") {
 					# Initialize PEAR NET object
 					$this->initialize_pear_net_IPv4 ();
@@ -1401,7 +1401,7 @@ class Tools extends Common_functions {
 		# addresses class
 		$Addresses = new Addresses ($this->Database);
 		# detect address and calculate
-		return $Addresses->identify_address($cidr)=="IPv6" ? $this->calculate_IPv6_calc_results($cidr) : $this->calculate_IPv4_calc_results($cidr);
+		return $this->identify_address($cidr)=="IPv6" ? $this->calculate_IPv6_calc_results($cidr) : $this->calculate_IPv4_calc_results($cidr);
 	}
 
 	/**

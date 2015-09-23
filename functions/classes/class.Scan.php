@@ -161,14 +161,11 @@ class Scan extends Common_functions {
 		$this->icmp_timeout = $timeout;
 		$this->icmp_count = $count;
 
-		# Initialize object
-		$this->Addresses = new Addresses ($this->Database);
-
 		# escape address
 		$address = escapeshellarg($address);
 
 		# make sure it is in right format
-		$address = $this->Addresses->transform_address ($address, "dotted");
+		$address = $this->transform_address ($address, "dotted");
 		# set method name variable
 		$ping_method = "ping_address_method_".$this->icmp_type;
 		# ping with selected method

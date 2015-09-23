@@ -143,6 +143,17 @@ class Common_functions  {
 	}
 
 	/**
+	 * Alias of identify_address_format function
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function get_ip_version ($address) {
+		return $this->identify_address ($address);
+	}
+
+	/**
 	 * Transforms array to log format
 	 *
 	 * @access public
@@ -352,6 +363,63 @@ class Common_functions  {
 	    }
 	    // compress result
 	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
+	}
+
+	/**
+	 * Identifies IP address format
+	 *
+	 *	0 = decimal
+	 *	1 = dotted
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return mixed decimal or dotted
+	 */
+	public function identify_address_format ($address) {
+		return is_numeric($address) ? "decimal" : "dotted";
+	}
+
+	/**
+	 * Transforms IP address to required format
+	 *
+	 *	format can be decimal (1678323323) or dotted (10.10.0.0)
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param string $format (default: "dotted")
+	 * @return mixed requested format
+	 */
+	public function transform_address ($address, $format = "dotted") {
+		# no change
+		if($this->identify_address_format ($address) == $format)		{ return $address; }
+		else {
+			if($this->identify_address_format ($address) == "dotted")	{ return $this->transform_to_decimal ($address); }
+			else														{ return $this->transform_to_dotted ($address); }
+		}
+	}
+
+	/**
+	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
+	 *
+	 * @access public
+	 * @param int $address
+	 * @return mixed dotted format
+	 */
+	public function transform_to_dotted ($address) {
+	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
+	    else 								 			  				{ return($this->long2ip6($address)); }
+	}
+
+	/**
+	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return int IP address
+	 */
+	public function transform_to_decimal ($address) {
+	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
+	    else 								 							{ return($this->ip2long6($address)); }
 	}
 
 	/**
