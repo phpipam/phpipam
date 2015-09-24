@@ -557,6 +557,8 @@ $(document).on("click", "input#csvimportcheck", function() {
     $.post('app/subnets/import-subnet/print-file.php', { filetype : filetype }, function(data) {
         $('div.csvimportverify').html(data).slideDown('fast');
         hideSpinner();
+        // add reload class
+        $('.importFooter').removeClass("hidePopups").addClass("hidePopupsReload");
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
 //import file script
@@ -573,9 +575,7 @@ $(document).on("click", "input#csvImportYes", function() {
 
     $.post('app/subnets/import-subnet/import-file.php', postData, function(data) {
         $('div.csvImportResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        if(data.search("alert-danger") == -1)     { setTimeout(function (){window.location.reload();}, 1500); }
-        else                             { hideSpinner(); }
+        hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
 //donwload template

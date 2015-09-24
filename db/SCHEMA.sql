@@ -36,6 +36,7 @@ CREATE TABLE `ipaddresses` (
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
   KEY `subnetid` (`subnetId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
