@@ -4,8 +4,6 @@ version - 1.2
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
 
-		+ DNS write log;
-
 	+ Mark subnet as full (db prepared);
 
 	+ phpipam scan Agents (db prepared);
