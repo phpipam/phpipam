@@ -13,10 +13,10 @@ $Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
 
 # fetch settings, user is not authenticated !
-$settings = $Tools->fetch_settings();
+$Tools->get_settings();
 
 # requests must be enabled!
-if($settings['enableIPrequests']==1) {
+if($Tools->settings->enableIPrequests==1) {
 	# verify email
 	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$_POST['requester'].')', true); }
 
@@ -34,8 +34,7 @@ if($settings['enableIPrequests']==1) {
 	else {
 																	{ $Result->show("success", _('Request submitted successfully')); }
 		# send mail
-		//if(!sendIPReqEmail($_POST))									{ $Result->show("danger",  _('Sending mail for new IP request failed'), true); }
-		//else														{ $Result->show("success", _('Sending mail for IP request succeeded'), true); }
+		$Tools->ip_request_send_mail ("new", $values);
 	}
 }
 else 																{ $Result->show("danger",  _('IP requests disabled'), true); }

@@ -1110,6 +1110,172 @@ class Tools extends Common_functions {
 		return sizeof($subnets)>0 ? (array) $subnets : NULL;
 	}
 
+	/**
+	 * Sends mail for IP request
+	 *
+	 * @access public
+	 * @param string $action (default: "new")
+	 * @param mixed $values
+	 * @return void
+	 */
+	public function ip_request_send_mail ($action="new", $values) {
+
+		# get all admins and check who to end mail to
+		$recipients = $this->ip_request_get_mail_recipients ();
+		if($recipients ===false) 				{ return true; }
+
+		# reformat key / vaues
+		$values = $this->ip_request_reformat_mail_values ($values);
+		#reformat empty
+		$values = $this->reformat_empty_array_fields ($values, "/");
+
+		# generate content
+		if ($action=="new")			{ $subject	= "New IP address request"; }
+		elseif ($action=="accept")	{ $subject	= "IP address request accepted"; }
+		elseif ($action=="reject")	{ $subject	= "IP address request rejected"; }
+		else						{ $this->Result->show("danger", _("Invalid request action"), true); }
+
+		// set html content
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
+		foreach($values as $k=>$v) {
+		$content[] = "<tr>";
+		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$k</font></td>";
+		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$v</font></td>";
+		$content[] = "</tr>";
+		}
+		$content[] = "<tr><td style='padding:5px;padding-left:15px;margin:0px;font-style:italic;padding-bottom:3px;text-align:right;color:#ccc;text-shadow:1px 1px 1px white;border-top:1px solid white;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;'>Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
+		//set alt content
+		$content_plain[] = "$subject"."\r\n------------------------------\r\n";
+		foreach($values as $k=>$v) {
+		$content_plain[] = $k." => ".$v;
+		}
+		$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
+		$content[] = "</table>";
+
+
+		# fetch mailer settings
+		$mail_settings = $this->fetch_object("settingsMail", "id", 1);
+
+		# initialize mailer
+		$this->get_settings ();
+		if (!class_exists(phpipam_mail)) {
+			require( dirname(__FILE__) . '/class.Mail.php' );
+		}
+		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail->initialize_mailer();
+
+		// set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
+		# try to send
+		try {
+			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
+			foreach($recipients as $r) {
+			$phpipam_mail->Php_mailer->addAddress(trim($r->email));
+			}
+			$phpipam_mail->Php_mailer->Subject = $subject;
+			$phpipam_mail->Php_mailer->msgHTML($content);
+			$phpipam_mail->Php_mailer->AltBody = $content_plain;
+			//send
+			$phpipam_mail->Php_mailer->send();
+		} catch (phpmailerException $e) {
+			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		} catch (Exception $e) {
+			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		}
+
+		# ok
+		return true;
+
+	}
+
+	/**
+	 * Returns list of recipients to get new
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function ip_request_get_mail_recipients () {
+		// get all admins and check who to end mail to
+		$recipients = $this->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
+		//check recepients
+		if ($recipients!==false) {
+			// check
+			$m = 0;
+			foreach($recipients as $k=>$r) {
+				if($r->mailNotify!="Yes") {
+					unset($recipients[$k]);
+				} else {
+					$m++;
+				}
+			}
+			// if none return false
+			if ($m==0) 	{ return false; }
+			else 		{ return $recipients; }
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Reformats request value/key pairs for request mailing
+	 *
+	 * @access private
+	 * @param mixed $values
+	 * @return void
+	 */
+	private function ip_request_reformat_mail_values ($values) {
+		// no array
+		if (!is_array($values)) { return $values; }
+
+		// change fields for mailings
+		foreach ($values as $k=>$v) {
+			// subnetId
+			if ($k=="subnetId")	{
+				$subnet = $this->fetch_object("subnets", "id", $v);
+				$mail["Subnet"]  = $this->transform_address ($subnet->subnet, "dotted")."/".$subnet->mask;
+				$mail["Subnet"] .= strlen($subnet->description)>0 ? " - ".$subnet->description : "";
+			}
+			// ip_addr
+			elseif ($k=="ip_addr") {
+				if (strlen($v)>0) {
+					$mail['IP address'] = $this->transform_address($v, "dotted");
+				} else {
+					$mail['IP address'] = "Automatic";
+				}
+			}
+			// description
+			elseif ($k=="descriotion") {
+				$mail['Description'] = $v;
+			}
+			// dns_name
+			elseif ($k=="dns_name") {
+				$mail['Hostname'] = $v;
+			}
+			// owner
+			elseif ($k=="owner") {
+				$mail['Address owner'] = $v;
+			}
+			// requester
+			elseif ($k=="requester") {
+				$mail['Requested by'] = $v;
+			}
+			// comment
+			elseif ($k=="comment") {
+				$mail['Request comment'] = $v;
+			}
+			// admin comment
+			elseif ($k=="adminComment") {
+				$mail['Admin comment'] = "<hr><b>".$v."</b>";
+			}
+		}
+		// response
+		return $mail;
+	}
+
 
 
 

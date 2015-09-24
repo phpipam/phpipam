@@ -28,8 +28,12 @@ class Common_functions  {
 	public function get_settings () {
 		# cache check
 		if($this->settings === null) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
+			try { $settings = $this->Database->getObject("settings", 1); }
 			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
+			# save
+			if ($settings!==false)	 {
+				$this->settings = $settings;
+			}
 		}
 	}
 

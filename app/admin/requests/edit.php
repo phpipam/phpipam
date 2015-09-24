@@ -19,12 +19,36 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-
 # fetch request
-$request = (array) $Admin->fetch_object("requests", "id", $_POST['requestId']);
+$request = $Admin->fetch_object("requests", "id", $_POST['requestId']);
 
 //fail
-if(@$request[0]===false) { $Result->show("danger", _("Request does not exist"), true, true); }
+if($request===false) { $Result->show("danger", _("Request does not exist"), true, true); }
+else				 { $request = (array) $request; }
+
+# set IP address
+# if provided (requested from logged in user) check if already in use, if it is warn and set next free
+# else get next free
+if(strlen($request['ip_addr'])>0) {
+	// check if it exists
+	if ( $Addresses->address_exists ($request['ip_addr'], $request['subnetId'])) {
+		$errmsg = "Requested IP address ($request[ip_addr]) already used. First available address automatically provided.";
+		$errmsg_class = "warning";
+		//fetch first free
+		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
+	}
+
+} else {
+	// fetch first free
+	$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
+}
+
+// false
+if ($ip_address===false) {
+	$ip_address = "";
+	$errmsg = "No IP addresses available in requested subnet";
+	$errmsg_class = "danger";
+}
 
 
 # set selected address fields array
@@ -39,10 +63,21 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 <!-- content -->
 <div class="pContent">
 
+	<?php
+	// if error / warning message provided
+	if (isset($errmsg)) {
+		$Result->show($errmsg_class, $errmsg, false, false);
+		print "<hr>";
+	}
+	// error check
+	if (@$errmsg_class!="danger") {
+	?>
+
 	<!-- IP address request form -->
 	<form class="manageRequestEdit" name="manageRequestEdit">
 	<!-- edit IP address table -->
 	<table id="manageRequestEdit" class="table table-striped table-condensed">
+
 	<!-- Section -->
 	<tr>
 		<th><?php print _('Requested subnet'); ?></th>
@@ -65,7 +100,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('IP address'); ?></th>
 		<td>
-			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets)); ?>" size="30">
+			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $ip_address; ?>" size="30">
 			<input type="hidden" name="requestId" value="<?php print $request['id']; ?>">
 			<input type="hidden" name="requester" value="<?php print $request['requester']; ?>">
     	</td>
@@ -265,14 +300,17 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	</table>
 	</form>
+	<?php } ?>
 </div>
 
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+		<?php if (@$errmsg_class!="danger") { ?>
 		<button class="btn btn-sm btn-default btn-danger manageRequest" data-action='reject'><i class="fa fa-times"></i> <?php print _('Reject'); ?></button>
 		<button class="btn btn-sm btn-default btn-success manageRequest" data-action='accept'><i class="fa fa-check"></i> <?php print _('Accept'); ?></button>
+		<?php } ?>
 	</div>
 
 	<!-- result -->

@@ -24,8 +24,9 @@ else {
 
 <!-- headers -->
 <tr>
-	<th></th>
+	<th style="width:50px;"></th>
 	<th><?php print _('Subnet'); ?></th>
+	<th><?php print _('IP'); ?></th>
 	<th><?php print _('Hostname'); ?></th>
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Requested by'); ?></th>
@@ -46,9 +47,13 @@ else {
 			unset($active_requests[$k]);
 		}
 		else {
+			// ip not provided
+			$request['ip_addr'] = strlen($request['ip_addr'])>0 ? $request['ip_addr'] : _("Automatic");
+
 			print '<tr>'. "\n";
 			print "	<td><button class='btn btn-sm btn-default' data-requestid='$request[id]'><i class='fa fa-pencil'></i> "._('Process')."</button></td>";
 			print '	<td>'. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .' ('. $subnet['description'] .')</td>'. "\n";
+			print '	<td>'. $request['ip_addr'] .'</td>'. "\n";
 			print '	<td>'. $request['dns_name'] .'</td>'. "\n";
 			print '	<td>'. $request['description'] .'</td>'. "\n";
 			print '	<td>'. $request['requester'] .'</td>'. "\n";
