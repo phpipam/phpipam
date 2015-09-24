@@ -64,6 +64,24 @@ if($subnets===false) { ?>
 		<input type="text" name="dns_name" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
 </tr>
 
+<!-- state -->
+<tr>
+	<th><?php print _('State'); ?></th>
+	<td>
+		<select name="state" class="form-control input-sm input-w-auto">
+		<?php
+		$states = $Addresses->addresses_types_fetch ();
+		# default tag
+		$request['state'] = "2";
+		foreach($states as $s) {
+			if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>$s[type]</option>"; }
+			else								{ print "<option value='$s[id]'>$s[type]</option>"; }
+		}
+		?>
+		</select>
+	</td>
+</tr>
+
 <!-- owner -->
 <?php
 # check which fields are set to be displayed

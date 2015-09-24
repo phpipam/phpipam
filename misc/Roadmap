@@ -8,8 +8,6 @@ version - 1.2
 
 	+ phpipam scan Agents (db prepared);
 
-	+ Add resolve requests to subnet for RWA users;
-
 	+ L2 domain permissions for groups ?
 
 

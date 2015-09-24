@@ -10,14 +10,17 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Addresses	= new Addresses ($Database);
+$Subnets	= new Subnets ($Database);
 $Tools		= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
 
+# verify permissions
+if($Subnets->check_permission($User->user, $_POST['subnetId']) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true); }
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('ipaddresses');

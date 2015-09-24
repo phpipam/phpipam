@@ -10,7 +10,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
 $Tools		= new Tools ($Database);
@@ -26,6 +26,10 @@ $request = $Admin->fetch_object("requests", "id", $_POST['requestId']);
 if($request===false) { $Result->show("danger", _("Request does not exist"), true, true); }
 else				 { $request = (array) $request; }
 
+# verify permissions
+if($Subnets->check_permission($User->user, $request['subnetId']) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true, true); }
+
+
 # set IP address
 # if provided (requested from logged in user) check if already in use, if it is warn and set next free
 # else get next free
@@ -36,6 +40,9 @@ if(strlen($request['ip_addr'])>0) {
 		$errmsg_class = "warning";
 		//fetch first free
 		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
+	}
+	else {
+		$ip_address = $request['ip_addr'];
 	}
 
 } else {
@@ -128,8 +135,11 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 			<select name="state" class="form-control input-sm input-w-auto">
 			<?php
 			$states = $Addresses->addresses_types_fetch ();
+			# default tag
+			if (!isset($request['state']))	{ $request['state'] = "2"; }
 			foreach($states as $s) {
-				print "<option value='$s[index]'>$s[type]</option>";
+				if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>$s[type]</option>"; }
+				else								{ print "<option value='$s[id]'>$s[type]</option>"; }
 			}
 			?>
 			</select>

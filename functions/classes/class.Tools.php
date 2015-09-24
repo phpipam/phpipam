@@ -1231,6 +1231,9 @@ class Tools extends Common_functions {
 		// no array
 		if (!is_array($values)) { return $values; }
 
+		// addresses
+		$this->Addresses = new Addresses ($this->Database);
+
 		// change fields for mailings
 		foreach ($values as $k=>$v) {
 			// subnetId
@@ -1246,6 +1249,10 @@ class Tools extends Common_functions {
 				} else {
 					$mail['IP address'] = "Automatic";
 				}
+			}
+			// state
+			elseif ($k=="state") {
+				$mail['State'] = $this->Addresses-> address_type_index_to_type ($v);
 			}
 			// description
 			elseif ($k=="descriotion") {
@@ -1269,7 +1276,7 @@ class Tools extends Common_functions {
 			}
 			// admin comment
 			elseif ($k=="adminComment") {
-				$mail['Admin comment'] = "<hr><b>".$v."</b>";
+				$mail['Admin comment'] = strlen($v)>0 ? "<hr><b>".$v."</b>" : "";
 			}
 		}
 		// response

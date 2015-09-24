@@ -28,7 +28,29 @@ $User->check_user_session();
 $sections = $Sections->fetch_all_sections ();
 
 # check for requests
-$requests = $Tools->requests_fetch(true);
+if ($User->settings->enableIPrequests==1) {
+	# count requests
+	$requests = $Tools->requests_fetch(true);
+	# remove
+	if ($requests==0) { unset($requests); }
+	# parse
+	if ($User->isAdmin==false && isset($requests)) {
+		# fetch all Active requests
+		$requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
+		foreach ($requests as $k=>$r) {
+			// check permissions
+			if($Subnets->check_permission($User->user, $r->subnetId) != 3) {
+				unset($requests[$k]);
+			}
+		}
+		# null
+		if (sizeof($requests)==0) {
+			unset($requests);
+		} else {
+			$requests = sizeof($requests);
+		}
+	}
+}
 
 # get admin and tools menu items
 require( dirname(__FILE__) . '/../tools/tools-menu-config.php' );
@@ -268,16 +290,13 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		?>
 
 		<?php
-		# show IP request link if enabled in config file!
-		if($User->settings->enableIPrequests==1 && $User->isadmin) {
-			# get all request
-			if($requests>0) { ?>
-			<li>
-				<a href="<?php print create_link("administration","requests"); ?>" rel='tooltip' class="icon-li btn-info" data-placement='bottom' title="<?php print $requests." "._('requests')." "._('for IP address waiting for your approval'); ?>"><i class='fa fa-envelope-o' style="padding-right:2px;"></i><sup><?php print $requests; ?></sup></a>
-			</li>
+		# get all request
+		if(isset($requests)) { ?>
+		<li>
+			<a href="<?php print create_link("tools","requests"); ?>" rel='tooltip' class="icon-li btn-info" data-placement='bottom' title="<?php print $requests." "._('requests')." "._('for IP address waiting for your approval'); ?>"><i class='fa fa-envelope-o' style="padding-right:2px;"></i><sup><?php print $requests; ?></sup></a>
+		</li>
 
 		<?php
-			}
 		}
 
 		# check for new version periodically, 1x/week
