@@ -383,7 +383,7 @@ else {
 		        	if(in_array('switch', $selected_ip_fields)) {
 			        	# get device details
 			        	$device = (array) $Tools->fetch_device(null, $addresses[$n]->switch);
-																			  print "<td class='hidden-xs hidden-sm hidden-md'>".@$device['hostname']."</td>";
+																			  print "<td class='hidden-xs hidden-sm hidden-md'><a href='".create_link("tools","devices","hosts",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
 					}
 
 					# print port
