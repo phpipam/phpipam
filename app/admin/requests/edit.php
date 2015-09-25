@@ -85,7 +85,12 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<!-- edit IP address table -->
 	<table id="manageRequestEdit" class="table table-striped table-condensed">
 
-	<!-- Section -->
+	<!-- divider -->
+	<tr>
+		<td colspan="2"><h4>Request details</h4><hr></td>
+	</tr>
+
+	<!-- Subnet -->
 	<tr>
 		<th><?php print _('Requested subnet'); ?></th>
 		<td>
@@ -287,18 +292,22 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	<!-- divider -->
 	<tr>
-		<td colspan="2"><hr></td>
+		<td colspan="2"><h4>Additional information</h4><hr></td>
 	</tr>
 
 	<!-- requested by -->
 	<tr>
 		<th><?php print _('Requester email'); ?></th>
-		<td><?php print @$request['requester']; ?></td>
+		<td>
+			<input type="text" disabled="disabled" class="form-control" value="<?php print @$request['requester']; ?>">
+		</td>
 	</tr>
 	<!-- comment -->
 	<tr>
 		<th><?php print _('Requester comment'); ?></th>
-		<td><i><?php print '"'. @$request['comment'] .'"'; print "<input type='hidden' name='comment' value='".@$request['comment']."'>"; ?></i></td>
+		<td>
+			<input type="text" disabled="disabled" class="form-control" value="<?php print @$request['comment']; ?>">
+			<?php print "<input type='hidden' name='comment' value='".@$request['comment']."'>"; ?></i></td>
 	</tr>
 	<!-- Admin comment -->
 	<tr>

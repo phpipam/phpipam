@@ -1122,7 +1122,9 @@ class Tools extends Common_functions {
 
 		# get all admins and check who to end mail to
 		$recipients = $this->ip_request_get_mail_recipients ();
-		if($recipients ===false) 				{ return true; }
+
+		# add requester to cc
+		$recipients_requester = $values['requester'];
 
 		# reformat key / vaues
 		$values = $this->ip_request_reformat_mail_values ($values);
@@ -1139,10 +1141,17 @@ class Tools extends Common_functions {
 		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
 		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
 		foreach($values as $k=>$v) {
+		// title search
+		if (preg_match("/s_title_/", $k)) {
+		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$v</font></td></tr>";
+		}
+		else {
+		//content
 		$content[] = "<tr>";
 		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$k</font></td>";
 		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$v</font></td>";
 		$content[] = "</tr>";
+		}
 		}
 		$content[] = "<tr><td style='padding:5px;padding-left:15px;margin:0px;font-style:italic;padding-bottom:3px;text-align:right;color:#ccc;text-shadow:1px 1px 1px white;border-top:1px solid white;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;'>Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
 		//set alt content
@@ -1172,8 +1181,14 @@ class Tools extends Common_functions {
 		# try to send
 		try {
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
+			if ($recipients!==false) {
 			foreach($recipients as $r) {
 			$phpipam_mail->Php_mailer->addAddress(trim($r->email));
+			}
+			$phpipam_mail->Php_mailer->AddCC(trim($recipients_requester));
+			}
+			else {
+			$phpipam_mail->Php_mailer->addAddress(trim($recipients_requester));
 			}
 			$phpipam_mail->Php_mailer->Subject = $subject;
 			$phpipam_mail->Php_mailer->msgHTML($content);
@@ -1238,12 +1253,18 @@ class Tools extends Common_functions {
 		foreach ($values as $k=>$v) {
 			// subnetId
 			if ($k=="subnetId")	{
+				// add title
+				$mail["s_title_1"] = "<br>Subnet details";
+
 				$subnet = $this->fetch_object("subnets", "id", $v);
 				$mail["Subnet"]  = $this->transform_address ($subnet->subnet, "dotted")."/".$subnet->mask;
 				$mail["Subnet"] .= strlen($subnet->description)>0 ? " - ".$subnet->description : "";
 			}
 			// ip_addr
 			elseif ($k=="ip_addr") {
+				// add title
+				$mail["s_title_2"] = "<br>Address details";
+
 				if (strlen($v)>0) {
 					$mail['IP address'] = $this->transform_address($v, "dotted");
 				} else {
@@ -1276,7 +1297,26 @@ class Tools extends Common_functions {
 			}
 			// admin comment
 			elseif ($k=="adminComment") {
-				$mail['Admin comment'] = strlen($v)>0 ? "<hr><b>".$v."</b>" : "";
+				// add title
+				$mail["s_title_3"] = "<br>Admin comment";
+
+				$mail['Admin comment'] = $v;
+			}
+			// admin comment
+			elseif ($k=="gateway") {
+				$mail['Gateway'] = $v;
+			}
+			// nameservers
+			elseif ($k=="dns") {
+				if (strlen($v)>0) {
+				$mail['DNS servers'] = $v;
+				}
+			}
+			// vlans
+			elseif ($k=="vlan") {
+				if (strlen($v)>0) {
+				$mail['VLAN'] = $v;
+				}
 			}
 		}
 		// response

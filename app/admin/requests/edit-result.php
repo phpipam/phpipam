@@ -82,7 +82,24 @@ else {
 	if(!$Admin->object_modify("requests", "edit", "id", $values2))		{ $Result->show("danger",  _("Cannot confirm IP address"), true); }
 	else																{ $Result->show("success", _("IP request accepted/rejected"), false); }
 
+
 	# send mail
+
+	//save subnt
+	$tmp['subnetId'] = $_POST['subnetId'];
+	unset($_POST['subnetId']);
+	// gateway
+	$gateway=$Subnets->find_gateway ($tmp['subnetId']);
+	if($gateway !== false) { $tmp['gateway'] = $Subnets->transform_address($gateway->ip_addr,"dotted"); }
+	//set vlan
+	$vlan = $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
+	$tmp['vlan'] = $vlan==false ? "" : $vlan->number." - ".$vlan->description;
+	//set dns
+	$dns = $Tools->fetch_object ("nameservers", "id", $subnet['nameserverId']);
+	$tmp['dns'] = $dns==false ? "" : $dns->description." <br> ".str_replace(";", ", ", $dns->namesrv1);
+
+	$_POST = array_merge($tmp, $_POST);
+
 	$Tools->ip_request_send_mail ("accept", $_POST);
 }
 
