@@ -414,6 +414,9 @@ class Logging extends Common_functions {
 			return true;
 		}
 
+		// make sure we have settings
+		$this->get_settings ();
+
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
@@ -434,21 +437,21 @@ class Logging extends Common_functions {
 				foreach ($this->object_new as $k=>$v) {
 					$this->object_new[$k] = $this->changelog_make_booleans ($k, $v);
 				}
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new, true);
+				$log['details'] = "<br>".$this->array_to_log ($this->object_new, true);
 			}
 			elseif($action == "delete") {
 				//booleans
 				foreach ($this->object_old as $k=>$v) {
 					$this->changelog_make_booleans ($k, $v);
 				}
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old, true);
+				$log['details'] = "<br>".$this->array_to_log ($this->object_old, true);
 			}
 			elseif($action == "truncate") {
-				$log['[truncate]'] = "Subnet truncated";
+				$log['truncate'] = "Subnet truncated";
 			}
 			elseif($action == "resize") {
-				$log['[resize]'] = "Subnet Resized";
-				$log['[mask]'] = $this->object_old['mask']."/".$this->object_new['mask'];
+				$log['resize'] = "Subnet Resized";
+				$log['mask'] = $this->object_old['mask']."/".$this->object_new['mask'];
 			}
 			elseif($action == "perm_change") {
 				$log = $this->changelog_format_permission_change ();
@@ -902,7 +905,7 @@ class Logging extends Common_functions {
 		if($this->object_new['permissions_change']!="null") {
 			$new_permissions = json_decode($this->object_new['permissions_change']);
 			foreach($new_permissions as $group_id=>$p) {
-				$log['[Permissions]'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
+				$log['Permissions'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 			}
 		}
 		//result
