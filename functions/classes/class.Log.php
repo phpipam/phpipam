@@ -457,6 +457,9 @@ class Logging extends Common_functions {
 				$log = $this->changelog_format_permission_change ();
 			}
 
+			# reformat null values
+			$log =str_replace(": <br>", ": / <br>", $log);
+
 			//if change happened write it!
 			if(isset($log) && sizeof($log)>0) {
 				// execute
@@ -580,7 +583,7 @@ class Logging extends Common_functions {
 				$v = $this->changelog_make_booleans ($k, $v);
 				//set log
 				if ($k!=="id")
-				$log["[$k]"] = $this->object_old[$k]." => $v";
+				$log["$k"] = $this->object_old[$k]." => $v";
 			}
 		}
 		// result
@@ -604,6 +607,18 @@ class Logging extends Common_functions {
 					$this->object_new['start'],
 					$this->object_new['stop']
 					);
+			unset(	$this->object_old['subnet'],
+					$this->object_old['type'],
+					$this->object_old['section'],
+					$this->object_old['ip_addr_old'],
+					$this->object_old['nostrict'],
+					$this->object_old['start'],
+					$this->object_old['stop']
+					);
+			# reformat ip
+			if (isset($this->object_old['ip_addr']))	{ $this->object_old['ip_addr'] = $this->Subnets->transform_address ($this->object_old['ip_addr'],"dotted"); }
+			if (isset($this->object_new['ip_addr']))	{ $this->object_new['ip_addr'] = $this->Subnets->transform_address ($this->object_new['ip_addr'],"dotted"); }
+
 		}
 		# remove subnet fields
 		elseif($this->object_type == "subnet")	{
@@ -615,6 +630,14 @@ class Logging extends Common_functions {
 					$this->object_new['state'],
 					$this->object_new['sectionId'],
 					$this->object_new['ip']
+				);
+			unset(	$this->object_old['subnetId'],
+					$this->object_old['location'],
+					$this->object_old['vrfIdOld'],
+					$this->object_old['permissions'],
+					$this->object_old['state'],
+					$this->object_old['sectionId'],
+					$this->object_old['ip']
 				);
 
 			# if section does not change
@@ -1156,8 +1179,8 @@ class Logging extends Common_functions {
 		$content[] = "<tr><td colspan='2'><hr></td></tr>";
 		$content[] = "<tr><td colspan='2'><font $style>Changes:<br>";
 		$content[] = "<tr><td colspan='2'><font $style>&nbsp;<br>";
-		$content[] = str_replace("\r\n", "<br>",$changelog)."</font>";
-		$content[] = "</td></tr>";
+		$changelog = str_replace("\r\n", "<br>",$changelog);
+		$content[] = "$changelog</font></td></tr>";
 		$content[] = "</table>";
 		$content[] = "</div>";
 

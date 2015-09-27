@@ -1753,7 +1753,8 @@ class Tools extends Common_functions {
         }
 
         # /min / max hosts
-        $maxIp = gmp_strval( gmp_add(gmp_pow(2, 128 - $mask),$Result->ip2long6 ($subnet)));
+        $maxIp = gmp_strval(gmp_add(gmp_pow(2, 128 - $mask),$this->ip2long6 ($subnet)));
+		$maxIp = gmp_strval(gmp_sub($maxIp, 1));
 
         $out['Min host IP']               = $subnet;
         $out['Max host IP']               = $this->long2ip6 ($maxIp);

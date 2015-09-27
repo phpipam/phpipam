@@ -1671,7 +1671,12 @@ $(document).on("change", "select#selectSectionfromIPCalc", function() {
     var sectionId = $(this).val();
     var subnet      = $('table.ipCalcResult td#sub2').html();
     var bitmask      = $('table.ipCalcResult td#sub4').html();
-    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+    // ipv6 override
+    if ($("table.ipCalcResult td#sub0").html() == "IPv6") {
+    	var postdata  = "sectionId=" + sectionId + "&subnet=" + $('table.ipCalcResult td#sub3').html() + "&bitmask=&action=add&location=ipcalc";
+    } else {
+	    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+    }
     //make section active
     $('table.newSections ul#sections li#' + sectionId ).addClass('active');
     //load add Subnet form / popup
