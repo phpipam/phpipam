@@ -685,7 +685,8 @@ $(document).on("click", "button#requestIPAddressSubmit", function() {
     var request = $('form#requestIP').serialize();
     $.post('app/login/request_ip_result.php', request, function(data) {
         $('div#requestIPresult').html(data).slideDown('fast');
-        hideSpinner();
+        if(data.search("alert-danger") == -1)   { setTimeout(function (){window.location.reload();}, 1500); }
+        else                             { hideSpinner(); }
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
