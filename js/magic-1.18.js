@@ -1915,6 +1915,18 @@ $(document).on("click", "#add_nameserver", function() {
 	hideSpinner();
 	return false;
 });
+// remove
+$(document).on("click", "#remove_nameserver", function() {
+	showSpinner();
+	//get old number
+	var id = $(this).attr("data-id");
+	// append
+	var el = document.getElementById(id);
+	el.parentNode.removeChild(el);
+	
+	hideSpinner();
+	return false;
+});
 //submit form
 $(document).on("click", "#editNameservers", function() {
     submit_popup_data (".nameserverManagementEditResult", "app/admin/nameservers/edit-result.php", $('form#nameserverManagementEdit').serialize());
