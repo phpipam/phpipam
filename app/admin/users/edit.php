@@ -183,7 +183,7 @@ $(document).ready(function(){
     <!-- send notification mail -->
     <tr>
     	<td><?php print _('Notification'); ?></td>
-    	<td><input type="checkbox" name="notifyUser" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
+    	<td><input type="checkbox" name="notifyUser" value="on" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
     	<td class="info2"><?php print _('Send notification email to user with account details'); ?></td>
     </tr>
 
