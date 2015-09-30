@@ -49,6 +49,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 		<td>
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('Nameserver set'); ?>" value="<?php print @$nameservers['name']; ?>" <?php print $readonly; ?>>
 		</td>
+		<td></td>
 	</tr>
 	</tbody>
 
@@ -63,6 +64,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 		print "	<td>";
 		print "	<input type='text' class='rd form-control input-sm' name='namesrv-$m' value='$ns' $readonly>";
 		print "	</td>";
+		print "	<td><button class='btn btn-sm btn-default' id='remove_nameserver' data-id='namesrv-".$m."'><i class='fa fa-trash-o'></i></button></td>";
 		print "</tr>";
 		//next
 		$m++;
@@ -77,6 +79,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 		<td>
 			<button class="btn btn-sm btn-default" id="add_nameserver" data-id='<?php print $m; ?>' <?php print $readonly; ?>><i class="fa fa-plus"></i> <?php print _('Add nameserver'); ?></button>
 		</td>
+		<td></td>
 	</tr>
 
 	<!-- Description -->
@@ -89,6 +92,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$nameservers['description']; ?>" <?php print $readonly; ?>>
 		</td>
+		<td></td>
 	</tr>
 
 	<!-- sections -->
@@ -110,6 +114,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 		}
 		?>
 		</td>
+		<td></td>
 	</tr>
 	</tbody>
 
