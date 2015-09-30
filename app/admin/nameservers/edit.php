@@ -63,6 +63,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 		print "	<td>";
 		print "	<input type='text' class='rd form-control input-sm' name='namesrv-$m' value='$ns' $readonly>";
 		print "	</td>";
+		print "	<td><button class='btn btn-sm btn-default' id='remove_nameserver' data-id='namesrv-".$m."'><i class='fa fa-trash-o'></i></button></td>";
 		print "</tr>";
 		//next
 		$m++;
