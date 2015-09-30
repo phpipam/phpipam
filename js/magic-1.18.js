@@ -1357,6 +1357,39 @@ $(document).on("click", ".editFirewallZone", function() {
     open_popup("700", "app/admin/firewall-zones/zones-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
 });
 
+//submit form
+$(document).on("click", "#editZoneSubmit", function() {
+    submit_popup_data (".zones-edit-result", "app/admin/firewall-zones/zones-edit-result.php", $('form#zoneEdit').serialize());
+});
+
+
+
+
+// zone edit menu - ajax request to fetch all subnets for a specific section id
+$(document).on("change", ".firewallZoneSection",(function () {
+    showSpinner();
+    var sectionId = $(this).serialize();
+    //load results
+    $.post('app/admin/firewall-zones/ajax.php', sectionId, function(data) {
+        $('div.sectionSubnets').html(data).slideDown('fast');
+
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    hideSpinner();
+    return false;
+}));
+
+// zone edit menu - ajax request to fetch all subnets for a specific section id
+$(document).on("change", ".firewallZoneVlan",(function() {
+    showSpinner();
+    var vlanDomain = $(this).serialize();
+    //load results
+    $.post('app/admin/firewall-zones/ajax.php', vlanDomain, function(data) {
+        $('div.domainVlans').html(data).slideDown('fast');
+
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    hideSpinner();
+    return false;
+}));
 
 /*    Subnets
 ********************************/

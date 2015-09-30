@@ -2,6 +2,7 @@
 // firewall zone fwzones.php
 // display firewall zones
 
+
 // validate session parameters
 $User->check_user_session();
 
@@ -48,9 +49,11 @@ if($firewallZones) {
 		print '</td><td>';
 		print $zoneObject->description;
 		print '</td><td>';
-		print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$Subnets->transform_to_dotted($zoneObject->subnet).'/'.$subnet->mask.'</a>';
+		if ($zoneObject->subnetId) {
+			print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$Subnets->transform_to_dotted($zoneObject->subnet).'/'.$zoneObject->subnetMask.'</a>';
+		}
 		print '</td><td>';
-		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlanId.'</a>';
+		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlan.'</a>';
 		print '</td><td>';
 		print $zoneObject->vlanName;
 		// action menu
