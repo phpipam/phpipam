@@ -345,8 +345,18 @@ class Subnets_controller extends Common_api_functions {
 		// validate resizing
 		$this->Subnets->verify_subnet_resize ($old_subnet->subnet, $this->_params->mask, $this->_params->id, $old_subnet->vrfId, $old_subnet->masterSubnetId, $old_subnet->mask);
 
+		// regenerate subnet if needed
+		if ($old_subnet->mask < $this->_params->mask) {
+			$subnet_new = $old_subnet->subnet;
+		}
+		else {
+			$new_boundaries = $this->Subnets->get_network_boundaries ($this->Subnets->transform_address($old_subnet->subnet, "dotted"), $this->_params->mask);
+			$subnet_new 	= $this->Subnets->transform_address($new_boundaries['network'], "decimal");
+		}
+
 		# set update values
 		$values = array("id"=>$this->_params->id,
+						"subnet"=>$subnet_new,
 						"mask"=>$this->_params->mask
 						);
 		$this->Subnets->modify_subnet ("resize", $values);

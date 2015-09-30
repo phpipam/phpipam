@@ -67,14 +67,16 @@ $(document).ready(function(){
 		<td>
 		<?php
 		# select sections
-		$Sections->fetch_all_sections();
+		$sections = $Sections->fetch_all_sections();
 		# reformat domains sections to array
 		$domain_sections = explode(";", @$l2_domain['permissions']);
 		$domain_sections = is_array($domain_sections) ? $domain_sections : array();
 		// loop
-		foreach($Sections->sections as $section) {
-			if(in_array($section->id, @$domain_sections) || @$l2_domain['id']=="1") 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
-			else 																		{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+		if($sections!==false) {
+			foreach($Sections->sections as $section) {
+				if(in_array($section->id, @$domain_sections) || @$l2_domain['id']=="1") 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
+				else 																		{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+			}
 		}
 		?>
 		</td>

@@ -51,8 +51,10 @@ $(document).ready(function() {
 	<!-- list -->
 	<ul id='sortableSec' class='sortable'>
 	<?php
-	foreach($sections as $s) {
-		print "<li id='$s->id'><i class='fa fa-arrows'></i> <strong>$s->name</strong> <span class='info2'>( $s->description )</span></li>";
+	if($sections!==false) {
+		foreach($sections as $s) {
+			print "<li id='$s->id'><i class='fa fa-arrows'></i> <strong>$s->name</strong> <span class='info2'>( $s->description )</span></li>";
+		}
 	}
 	?>
 	</ul>

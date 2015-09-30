@@ -68,7 +68,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link("tools","vlan", $vl
 			}
 
 			// create links
-			$vlan[$key] = create_links($vlan[$key]);
+			$vlan[$key] = $Result->create_links($vlan[$key]);
 
 			print "<tr>";
 			print "	<th>$key</th>";

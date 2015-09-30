@@ -201,6 +201,7 @@ if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($s
 # reinitialize objects
 $Database 	= new Database_PDO;
 $Admin		= new Admin ($Database, false);
+$Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);
 $Result		= new Result();

@@ -1,15 +1,11 @@
 version - 1.2
 
 	+ To fix / finish
-		+ logging: db, syslog (db prepared)
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ VLAN domain permissions;
-		+ Devices permissions ?
 		+ Save opened folders in left menu;
 
-	+ Import updates
-		https://github.com/malaiam/phpipam
+		+ DNS write log;
 
 	+ Mark subnet as full (db prepared);
 
@@ -18,6 +14,8 @@ version - 1.2
 	+ Add resolve requests to subnet for RWA users;
 
 	+ Override entries on import checkbox;
+
+	+ L2 domain permissions for groups ?
 
 
 features for next releases:
@@ -30,7 +28,9 @@ features for next releases:
 		- Ability to create NAT pools and link subnet / address to that pool - source NAT
 		- Show bindings under tools and next to IP address
 
-	+ IP address owner (from internal users - suggestions)
+	+ IP address owner (from internal users - suggestions);
+
+	+ Devices permissions;
 
 	+ IPv6 pinging;
 

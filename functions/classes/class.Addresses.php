@@ -4,14 +4,14 @@
  *	phpIPAM IP addresses class
  */
 
-class Addresses {
+class Addresses extends Common_functions {
 
 	/**
 	 * public variables
 	 */
 	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $settings = null;				//(object) phpipam settings
 	public $address_types;					//(array) address types
+	public $mail_changelog = true;
 
 	/**
 	 * protected variables
@@ -26,6 +26,7 @@ class Addresses {
 	public $Result;							//for Result printing
 	protected $Database;					//for Database connection
 	protected $Subnets;						//for Subnets object
+	public $Log;							//for Logging connection
 
 
 
@@ -43,49 +44,9 @@ class Addresses {
 		$this->Result = new Result ();
 		# debugging
 		$this->set_debugging();
-	}
 
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
-	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
-	}
-
-	/**
-	 * Sets debugging
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		include( dirname(__FILE__) . '/../../config.php' );
-		$this->debugging = $debugging ? true : false;
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
 
 	/**
@@ -304,10 +265,13 @@ class Addresses {
 	 * Address modification
 	 *
 	 * @access public
-	 * @param array $address
+	 * @param mixed $address
+	 * @param bool $mail_changelog (default: true)
 	 * @return void
 	 */
-	public function modify_address ($address) {
+	public function modify_address ($address, $mail_changelog = true) {
+		# save changelog
+		$this->mail_changelog  = $mail_changelog;
 		# null empty values
 		$address = $this->reformat_empty_array_fields ($address, null);
 		# strip tags
@@ -358,11 +322,17 @@ class Addresses {
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $insert); }
 		catch (Exception $e) {
+			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# save id
 		$this->lastId = $this->Database->lastInsertId();
+
+		# log and changelog
+		$address['id'] = $this->lastId;
+		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("add", $insert);
@@ -418,9 +388,14 @@ class Addresses {
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
 		catch (Exception $e) {
+			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# log and changelog
+		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
 		# edit DNS PTR record
 		$insert['PTR']=@$address['PTR'];
@@ -438,6 +413,8 @@ class Addresses {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_delete ($address) {
+		# fetch old details for logging
+		$address_old = $this->fetch_address (null, $address['id']);
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -449,9 +426,14 @@ class Addresses {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
 		catch (Exception $e) {
+			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# log and changelog
+		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
+		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("delete", $address);
@@ -695,7 +677,7 @@ class Addresses {
 	 */
 	public function ptr_add ($address, $print_error, $id = null) {
 		// validate hostname
-		if (validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
 		// fetch domain
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
 		// decode values
@@ -725,7 +707,7 @@ class Addresses {
 	 */
 	public function ptr_edit ($address, $print_error) {
 		// validate hostname
-		if (validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
 
 		// new record
  		if ($this->ptr_exists ($address->PTR)===false) {
@@ -1344,83 +1326,6 @@ class Addresses {
 	*/
 
 	/**
-	 * identify ip address type - ipv4 or ipv6
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return mixed IP version
-	 */
-	public function identify_address ($address) {
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
-	}
-
-	/**
-	 * Identifies IP address format
-	 *
-	 *	0 = decimal
-	 *	1 = dotted
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return mixed decimal or dotted
-	 */
-	private function identify_address_format ($address) {
-		return is_numeric($address) ? "decimal" : "dotted";
-	}
-
-	/**
-	 * Transforms IP address to required format
-	 *
-	 *	format can be decimal (1678323323) or dotted (10.10.0.0)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @param string $format (default: "dotted")
-	 * @return mixed requested format
-	 */
-	public function transform_address ($address, $format = "dotted") {
-		# no change
-		if($this->identify_address_format ($address) == $format)		{ return $address; }
-		else {
-			if($this->identify_address_format ($address) == "dotted")	{ return $this->transform_to_decimal ($address); }
-			else														{ return $this->transform_to_dotted ($address); }
-		}
-	}
-
-	/**
-	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
-	 *
-	 * @access public
-	 * @param int $address
-	 * @return mixed dotted format
-	 */
-	public function transform_to_dotted ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
-	    else 								 			  				{ return(long2ip6($address)); }
-	}
-
-	/**
-	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return int IP address
-	 */
-	public function transform_to_decimal ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
-	    else 								 							{ return(ip2long6($address)); }
-	}
-
-	/**
 	 * This function compresses all ranges
 	 *
 	 *	input is array of ip addresses
@@ -1485,26 +1390,6 @@ class Addresses {
 		$addresses = @array_values($addresses_formatted);
 		# return
 		return $addresses;
-	}
-
-	/**
-	 * Changes empty array fields to specified character
-	 *
-	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
-	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
-		}
-		# result
-		return $out;
 	}
 
 

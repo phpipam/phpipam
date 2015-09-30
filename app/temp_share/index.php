@@ -97,16 +97,16 @@ $max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_G
 	# disbled
 	if($settings->tempShare!=1)										{ $Result->show("danger", _("Temporary sharing disabled"), false); }
 	# none
-	elseif(sizeof($temp_objects)==0)								{ write_log( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(sizeof($temp_objects)==0)								{ $Log->write( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# try to fetch object
-	elseif(!array_key_exists($_GET['section'], $temp_objects))		{ write_log( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
+	elseif(!array_key_exists($_GET['section'], $temp_objects))		{ $Log->write( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Invalid share key")."! <a href='".create_link("login")."' class='btn btn-sm btn-default'>Login</a>", false); }
 	# ok, include script
 	else {
 		//check if expired
-		if(time()>$temp_objects[$_GET['section']]->validity)		{ write_log( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Share expired")."!", false); }
+		if(time()>$temp_objects[$_GET['section']]->validity)		{ $Log->write( "Tempory share access", $_GET['section'], 2); $Result->show("danger", _("Share expired")."!", false); }
 		else {
 			//log
-			write_log( "Tempory share access", $_GET['section'], 0);
+			$Log->write( "Tempory share access", $_GET['section'], 0);
 
 			if($temp_objects[$_GET['section']]->type=="subnets") 		{
 				# address?

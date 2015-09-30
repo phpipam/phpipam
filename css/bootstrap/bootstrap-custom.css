@@ -801,6 +801,9 @@ table#subnetsMenu td#subnetsContent {
 
 	min-height: 260px;
 }
+#dashboard .inner .alert {
+	margin: 10px;
+}
 .inner.install h4 {
 	background: #F1FAFE !important;
 	border-bottom: 1px solid #DAE3EA;
@@ -2038,6 +2041,7 @@ table#userPrint h4 {
 	height: 100%;
 }
 .popup_max .pFooter {
+	position: absolute;
 	float: left;
 	width: 100%;
 	bottom: 0px;

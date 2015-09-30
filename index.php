@@ -2,16 +2,14 @@
 ob_start();
 
 /* config */
-require('config.php');
+if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
+else 							{ require('config.php'); }
 
 /* site functions */
 require('functions/functions.php');
 
 # set default page
 if(!isset($_GET['page'])) { $_GET['page'] = "dashboard"; }
-
-# reset url for base
-$url = createURL ();
 
 # if not install fetch settings etc
 if($_GET['page']!="install" ) {
@@ -28,6 +26,10 @@ if($_GET['page']!="install" ) {
 	$Subnets	= new Subnets ($Database);
 	$Tools	    = new Tools ($Database);
 	$Addresses	= new Addresses ($Database);
+	$Log 		= new Logging ($Database);
+
+	# reset url for base
+	$url = $Result->createURL ();
 }
 
 /** include proper subpage **/
@@ -43,6 +45,11 @@ else {
 	# make upgrade and php build checks
 	include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 	include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
+	if($_GET['switch'] && $_SESSION['realipamusername'] && $_GET['switch'] == "back"){
+		$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
+		unset($_SESSION['realipamusername']);
+		print	'<script>window.location.href = "'.create_link(null).'";</script>';
+	}
 ?>
 <!DOCTYPE HTML>
 <html lang="en">

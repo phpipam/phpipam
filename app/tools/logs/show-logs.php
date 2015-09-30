@@ -26,6 +26,7 @@ if(!is_object($User)) {
 	$User 		= new User ($Database);
 	$Tools	 	= new Tools ($Database);
 	$Result 	= new Result ();
+	$Log		= new Logging ($Database);
 
 	# verify that user is logged in
 	$User->check_user_session();
@@ -60,14 +61,14 @@ $_POST['NoticeQuery'] 		 = @$_POST['Notice']==_("Notice") ? 1 : 10;
 $_POST['WarningQuery'] 		 = @$_POST['Warning']==_("Warning") ? 1 : 10;
 
 //get highest lastId */
-$highestId = $Tools->log_fetch_highest_id();
+$highestId = $Log->log_fetch_highest_id();
 if(empty($_POST['lastId']) || ($_POST['lastId'] == "undefined")) 	{ $_POST['lastId'] = $highestId; }
 
 //set empty direction
 if(!isset($_POST['direction'])) 									{ $_POST['direction'] = ""; }
 
 /* get requested logs */
-$logs = $Tools->fetch_logs($logCount, $_POST['direction'], $_POST['lastId'], $highestId, $_POST['InformationalQuery'], $_POST['NoticeQuery'], $_POST['WarningQuery']);
+$logs = $Log->fetch_logs($logCount, $_POST['direction'], $_POST['lastId'], $highestId, $_POST['InformationalQuery'], $_POST['NoticeQuery'], $_POST['WarningQuery']);
 
 $x = 0;
 foreach ($logs as $log) {

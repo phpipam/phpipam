@@ -11,7 +11,7 @@
  *
  */
 
-class Result  {
+class Result extends Common_functions {
 
 	/* exit methods - to override for api */
 	public $exit_method = "result";			//what to do when failed - result shows result, exception throws exception (for API)
@@ -24,7 +24,7 @@ class Result  {
 	 * @param  boolean $die    [controls stop of php execution]
 	 * @return [type]          [description]
 	 */
-	public function show($uclass="muted", $utext="No value provided", $die=false, $popup=false) {
+	public function show($uclass="muted", $utext="No value provided", $die=false, $popup=false, $inline = false) {
 
 		# override for api !
 		if($this->exit_method == "exception")  {
@@ -47,7 +47,10 @@ class Result  {
 			}
 
 			# print popup or normal
-			if(!$popup) {
+			if($inline) {
+				return "<div class='alert alert-".$uclass."'>".$utext."</div>";
+			}
+			elseif(!$popup) {
 				print "<div class='alert alert-".$uclass."'>".$utext."</div>";
 			}
 			else {

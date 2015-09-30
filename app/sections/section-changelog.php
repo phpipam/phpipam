@@ -4,13 +4,13 @@
 $User->is_admin (true);
 
 # get clog entries
-$clogs = $Tools->fetch_changlog_entries("section", $_GET['sPage']);
+$clogs = $Log->fetch_changlog_entries("section", $_GET['sPage']);
 
 # header
 print "<h4>"._('Section')." - "._('Changelog')."</h4><hr>";
 
 # back
-print "<a class='btn btn-sm btn-default' href='".create_link("administration","manageSection")."'><i class='fa fa-angle-left'></i> "._('Back to section')."</a>";
+print "<a class='btn btn-sm btn-default' href='".create_link("administration","sections")."'><i class='fa fa-angle-left'></i> "._('Back to section')."</a>";
 
 
 # empty

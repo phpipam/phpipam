@@ -292,7 +292,7 @@ if(sizeof($result_addresses) > 0) {
 			if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($line['state']); }
 			print ' </td>' . "\n";
 			//description
-			print ' <td>'. shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
+			print ' <td>'. $Result->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
 			//dns
 			print ' <td>'. $line['dns_name']  .'</td>' . "\n";
 			//mac

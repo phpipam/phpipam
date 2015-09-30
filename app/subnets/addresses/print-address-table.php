@@ -83,9 +83,8 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
-$selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
-$selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
+$selected_ip_fields = explode(";", $User->settings->IPfilter);																		//format to array
+$selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
 if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
@@ -103,11 +102,6 @@ foreach($Addresses->address_types as $t) {
 	}
 }
 
-# set colspan for output
-$colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
-$colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
-$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
-
 # remove custom fields if all are empty!
 foreach($custom_fields as $field) {
 	$sizeMyFields[$field['name']] = 0;				// default value
@@ -123,13 +117,23 @@ foreach($custom_fields as $field) {
 		# unset if value == 0
 		if($sizeMyFields[$field['name']] == 0) {
 			unset($custom_fields[$field['name']]);
-
-			$colspan['empty']--;
-			$colspan['unused']--;						//unused  span -1
-			$colspan['dhcp']--;							//dhcp span -1
 		}
 	}
 }
+
+# hidden custom
+if(sizeof($custom_fields) > 0) {
+	foreach($custom_fields as $ck=>$myField) 	{
+		if(in_array($myField['name'], $hidden_cfields)) {
+			unset($custom_fields[$ck]);
+		}
+	}
+}
+
+# set colspan for output
+$colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
+$colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
+$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);		//dhcp colspan
 
 /* output variables */
 
@@ -199,9 +203,7 @@ if(sizeof($addresses)>$page_limit) { $Addresses->print_pagination ($_REQUEST['sP
 	# custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
-			if(!in_array($myField['name'], $hidden_cfields)) {
-				print "<th class='hidden-xs hidden-sm hidden-md'><a href='' data-id='$myField[name]|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name] ";  if($sort['field'] == $myField['name']) print $icon;  print "</a></th>";
-			}
+			print "<th class='hidden-xs hidden-sm hidden-md'><a href='' data-id='$myField[name]|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name] ";  if($sort['field'] == $myField['name']) print $icon;  print "</a></th>";
 		}
 	}
 	?>
@@ -346,7 +348,10 @@ else {
 						$dns_records = "";
 					}
 					// add new button
+					if (strlen($addresses[$n]->dns_name) > 0 )
 					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					else
+					$button = "";
 					}
 					// disabled
 					else {
@@ -394,7 +399,7 @@ else {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$addresses[$n]->$myField['name'] = create_links($addresses[$n]->$myField['name']);
+								$addresses[$n]->$myField['name'] = $Result->create_links($addresses[$n]->$myField['name']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{

@@ -47,7 +47,7 @@ $share->details = implode("<br>", $tmp);
 $share->validity = date("Y-m-d H:i:s", strtotime("+1 day"));
 
 # set url for printing
-$url = createURL().create_link("temp_share",$share->code);
+$url = $Result->createURL().create_link("temp_share",$share->code);
 
 ?>
 

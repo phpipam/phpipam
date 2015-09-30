@@ -4,28 +4,28 @@
  *	phpIPAM Subnets class
  */
 
-class Subnets {
+class Subnets extends Common_functions {
 
 	/**
 	 * public variables
 	 */
 	public $subnets;						// (array of objects) to store subnets, subnet ID is array index
 	public $slaves;							// (array of ids) to store id's of all recursively slaves
-	public $settings = null;				// (object) phpipam settings
 	public $address_types = null;			// (array) IP address types from Addresses object
 
 	/**
 	 * protected variables
 	 */
-	protected $user = null;					//(object) for User profile
+	protected $user = null;					// (object) for User profile
 
 	/**
 	 * object holders
 	 */
-	protected $Net_IPv4;					//PEAR NET IPv4 object
-	protected $Net_IPv6;					//PEAR NET IPv6 object
+	protected $Net_IPv4;					// PEAR NET IPv4 object
+	protected $Net_IPv6;					// PEAR NET IPv6 object
 	public    $Result;						// for Result printing
 	protected $Database;					// for Database connection
+	public $Log;							// for Logging connection
 
 
 
@@ -42,20 +42,8 @@ class Subnets {
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
 
 	/**
@@ -67,55 +55,6 @@ class Subnets {
 	private function get_subnet_order () {
 	    $this->get_settings ();
 	    return explode(",", $this->settings->subnetOrdering);
-	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
-	}
-
-	/**
-	 * Changes empty array fields to specified character
-	 *
-	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
-	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
-		}
-		# result
-		return $out;
-	}
-
-	/**
-	 * Function to verify checkbox if 0 length
-	 *
-	 * @access public
-	 * @param mixed $field
-	 * @return void
-	 */
-	public function verify_checkbox ($field) {
-		return @$field==""||strlen(@$field)==0 ? 0 : $field;
 	}
 
 	/**
@@ -184,7 +123,7 @@ class Subnets {
 		elseif($action=="edit")		{ return $this->subnet_edit ($values); }
 		elseif($action=="delete")	{ return $this->subnet_delete ($values['id']); }
 		elseif($action=="truncate")	{ return $this->subnet_truncate ($values['id']); }
-		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['mask']); }
+		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['subnet'], $values['mask']); }
 		else						{ return $this->Result->show("danger", _("Invalid action"), true); }
 	}
 
@@ -203,26 +142,30 @@ class Subnets {
 		try { $this->Database->insertObject("subnets", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "Subnet creation", "Failed to add new subnet<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "Subnet creation", "Failed to add new subnet<hr>".$e->getMessage(), 2);
 			return false;
 		}
 		# save id
 		$this->lastInsertId = $this->Database->lastInsertId();
+		$values['id'] = $this->lastInsertId;
 		# ok
-		write_log( "Subnet creation", "New subnet created<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "Subnet created", "New subnet created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		# write changelog
+		$this->Log->write_changelog('subnet', "add", 'success', array(), $values);
 		return true;
 	}
 
 	/**
 	 * Edit subnet
 	 *
-	 *	needed for API only
-	 *
 	 * @access private
 	 * @param mixed $values
 	 * @return void
 	 */
 	private function subnet_edit ($values) {
+		# save old values
+		$old_subnet = $this->fetch_subnet (null, $values['id']);
+
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -230,13 +173,14 @@ class Subnets {
 		try { $this->Database->updateObject("subnets", $values, "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "Subnet edit", "Failed to edit subnet<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "Subnet edit", "Failed to edit subnet<hr>".$e->getMessage(), 2);
 			return false;
 		}
 		# save ID
 		$this->lastInsertId = $this->Database->lastInsertId();
+		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
-		write_log( "Subnet edit", "Subnet edited<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "Subnet $old_subnet->description edit", "Subnet $old_subnet->description edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -257,14 +201,14 @@ class Subnets {
 		# delete subnet
 		try { $this->Database->deleteRow("subnets", "id", $id); }
 		catch (Exception $e) {
-			write_log( "Subnet delete", "Failed to delete subnet $old_subnet->name<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "Subnet delete", "Failed to delete subnet $old_subnet->name<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
-		# ok
-		write_log( "Subnet delete", "Subnet $old_subnet->name deleted<hr>".array_to_log($old_subnet), 0, $this->User->username);
 		# write changelog
-		write_changelog('subnet', "delete", 'success', array(), $old_subnet);
+		$this->Log->write_changelog('subnet', "delete", 'success', $old_subnet, array());
+		# ok
+		$this->Log->write( "Subnet $old_subnet->description delete", "Subnet $old_subnet->description deleted<hr>".$this->array_to_log($this->reformat_empty_array_fields ((array) $old_subnet)), 0);
 		return true;
 	}
 
@@ -281,10 +225,10 @@ class Subnets {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", "subnetId", $subnetId); }
 		catch (Exception $e) {
-			write_log( "Subnet truncate", "Failed to truncate subnet id $subnetId<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "Subnet truncate", "Failed to truncate subnet $old_subnet->description id $old_subnet->id<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
-		write_log( "Subnet truncate", "Subnet $old_subnet->name truncated", 0, $this->User->username);
+		$this->Log->write( "Subnet truncate", "Subnet $old_subnet->description id $old_subnet->id truncated", 0);
 		return true;
 	}
 
@@ -293,21 +237,22 @@ class Subnets {
 	 *
 	 * @access private
 	 * @param mixed $subnetId
-	 * @param mixed $mask
+	 * @param int $subnet
+	 * @param int $mask
 	 * @return void
 	 */
-	private function subnet_resize ($subnetId, $mask) {
+	private function subnet_resize ($subnetId, $subnet, $mask) {
 		# save old values
 		$old_subnet = $this->fetch_subnet (null, $subnetId);
 		# execute
-		try { $this->Database->updateObject("subnets", array("id"=>$subnetId, "mask"=>$mask), "id"); }
+		try { $this->Database->updateObject("subnets", array("id"=>$subnetId, "subnet"=>$subnet, "mask"=>$mask), "id"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "Subnet edit", "Failed to resize subnet<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "Subnet edit", "Failed to resize subnet $old_subnet->description id $old_subnet->id<hr>".$e->getMessage(), 2);
 			return false;
 		}
 		# ok
-		write_log( "Subnet resize", "Subnet resized<hr>".array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0, $this->User->username);
+		$this->Log->write( "Subnet resize", "Subnet $old_subnet->description id $old_subnet->id resized<hr>".$this->array_to_log(array("id"=>$subnetId, "mask"=>$mask)), 0);
 		return true;
 	}
 
@@ -885,93 +830,6 @@ class Subnets {
 	* @transform IP/subnet functions
 	* -------------------------------
 	*/
-
-	/**
-	 * identify ip address type - ipv4 or ipv6
-	 *
-	 * @access public
-	 * @param mixed $subnet
-	 * @return void
-	 */
-	public function identify_address ($address) {
-		# if cidr provided strip it !
-
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
-	}
-
-	/**
-	 * Identifies IP address format
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	private function identify_address_format ($address) {
-		return is_numeric($address) ? "decimal" : "dotted";
-	}
-
-	/**
-	 * Alias of identify_address_format function
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	public function get_ip_version ($address) {
-		return $this->identify_address ($address);
-	}
-
-	/**
-	 * Transforms IP address to required format
-	 *
-	 *	format cen be decimal (1678323323) or dotted (10.10.0.0)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @param string $format (default: "dotted")
-	 * @return void
-	 */
-	public function transform_address ($address, $format = "dotted") {
-		# no change
-		if($this->identify_address_format ($address) == $format)		{ return $address; }
-		else {
-			if($this->identify_address_format ($address) == "dotted")	{ return $this->transform_to_decimal ($address); }
-			else														{ return $this->transform_to_dotted ($address); }
-		}
-	}
-
-	/**
-	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	public function transform_to_dotted ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
-	    else 								 			  				{ return(long2ip6($address)); }
-	}
-
-	/**
-	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	public function transform_to_decimal ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
-	    else 								 							{ return(ip2long6($address)); }
-	}
 
 	/**
 	 * Calculate subnet usage
@@ -1626,11 +1484,13 @@ class Subnets {
 		$Sections = new Sections ($this->Database);
 	    $section  = $Sections->fetch_section (null, $sectionId);
 
-	    // subnet myst be in dotted format
-
 		# new mask must be > 8
 		if($mask < 8) 											{ $this->Result->show("danger", _('New mask must be at least /8').'!', true); }
 		if(!is_numeric($mask))									{ $this->Result->show("danger", _('Mask must be an integer').'!', true);; }
+
+		//new subnet
+		$new_boundaries = $this->get_network_boundaries ($this->transform_address($subnet, "dotted"), $mask);
+		$subnet = $this->transform_address($new_boundaries['network'], "decimal");
 
 		# verify new address
 		$verify = $this->verify_cidr_address($this->transform_address ($subnet, "dotted")."/".$mask);
@@ -1640,10 +1500,6 @@ class Subnets {
 		if($mask==$mask_old) 									{ $this->Result->show("warning", _("New network is same as old network"), true); }
 		# if we are expanding network get new network address!
 		elseif($mask < $mask_old) {
-			//new subnet
-			$new_boundaries = $this->get_network_boundaries ($this->transform_address($subnet, "dotted"), $mask);
-			$subnet = $this->transform_address($new_boundaries['network'], "decimal");
-
 			//Checks for strict mode
 			if ($section->strictMode==1) {
 				//if it has parent make sure it is still within boundaries
@@ -1913,21 +1769,22 @@ class Subnets {
 	public function check_permission ($user, $subnetId) {
 
 		# get all user groups
-		$groups = json_decode($user->groups);
+		$groups = json_decode($user->groups, true);
 
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
 		# set subnet permissions
 		$subnet  = $this->fetch_subnet ("id", $subnetId);
+		if($subnet===false)	return 0;
 		//null?
-		if(is_null(@$subnet->permissions) || $subnet->permissions=="null")	return 0;
+		if(is_null($subnet->permissions) || $subnet->permissions=="null")	return 0;
 		$subnetP = json_decode(@$subnet->permissions);
 
 		# set section permissions
 		$Section = new Sections ($this->Database);
-		$section = $Section->fetch_section ("id", @$subnet->sectionId);
-		$sectionP = json_decode(@$section->permissions);
+		$section = $Section->fetch_section ("id", $subnet->sectionId);
+		$sectionP = json_decode($section->permissions);
 
 		# default permission
 		$out = 0;
@@ -2448,10 +2305,10 @@ class Subnets {
 				if($masterSubnet) { $html[] ='	<td>/</td>' . "\n"; }
 				else {
 					$master = (array) $this->fetch_subnet (null, $option['value']['masterSubnetId']);
-					if($master['isFolder'])
-						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
+					if($master['isFolder']==1)
+						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
 					else {
-						$html[] = "	<td><a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
+						$html[] = "	<td><a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
 					}
 				}
 
@@ -2567,7 +2424,7 @@ class Subnets {
 		foreach($section_subnets as $s) {
 			// folders array
 			if($s->isFolder==1)	{ $children_folders[$s->masterSubnetId][] = (array) $s; }
-			// all subnets, includin folders
+			// all subnets, including folders
 			$children_subnets[$s->masterSubnetId][] = (array) $s;
 		}
 
@@ -2652,8 +2509,9 @@ class Subnets {
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {
-				if($option['value']['id'] == $current_master) 	{ $html[] = "<option value='".$option['value']['id']."' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
-				else 											{ $html[] = "<option value='".$option['value']['id']."'					    disabled>$repeat ".$option['value']['description']."</option>"; }
+				$html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
+				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
+				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
 
 			}
 

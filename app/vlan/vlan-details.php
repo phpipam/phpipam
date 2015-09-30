@@ -46,7 +46,7 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 		foreach($cfields as $key=>$field) {
 			$vlan[$key] = str_replace("\n", "<br>",$vlan[$key]);
 			// create links
-			$vlan[$key] = create_links($vlan[$key]);
+			$vlan[$key] = $Result->create_links($vlan[$key]);
 			print "<tr>";
 			print "	<th>$key</th>";
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";

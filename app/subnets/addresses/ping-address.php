@@ -14,7 +14,7 @@ $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);
 $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
-$Ping		= new Scan ($Database, $User->settings);
+$Ping		= new Scan ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
