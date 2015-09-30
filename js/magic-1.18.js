@@ -1907,7 +1907,7 @@ $(document).on("click", "#add_nameserver", function() {
 	//get old number
 	var num = $(this).attr("data-id");
 	// append
-	$('table#nameserverManagementEdit2 tbody#nameservers').append("<tr id='namesrv-"+num+"'><td>Nameserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='namesrv-"+num+"'></td></tr>");
+	$('table#nameserverManagementEdit2 tbody#nameservers').append("<tr id='namesrv-"+num+"'><td>Nameserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='namesrv-"+num+"'></input><td><button class='btn btn-sm btn-default' id='remove_nameserver' data-id='namesrv-"+num+"'><i class='fa fa-trash-o'></i></buttom></td></td></tr>");
 	// add number
 	num++;
 	$(this).attr("data-id", num);
@@ -1923,7 +1923,7 @@ $(document).on("click", "#remove_nameserver", function() {
 	// append
 	var el = document.getElementById(id);
 	el.parentNode.removeChild(el);
-	
+
 	hideSpinner();
 	return false;
 });
