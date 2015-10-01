@@ -8,6 +8,11 @@
 		<legend style="margin-top:10px;"><?php print _('Please login'); ?></legend>
 	</div>
 
+	<?php if(strlen(@$User->settings->siteLoginText)>0) { ?>
+    <!-- login text -->
+    <div class="col-xs-12 text-muted text-right" style="margin-bottom:1em;"><?php print $User->settings->siteLoginText; ?></div>
+	<?php } ?>
+
 	<!-- username -->
 	<div class="col-xs-12"><strong><?php print _('Username'); ?></strong></div>
 	<div class="col-xs-12">

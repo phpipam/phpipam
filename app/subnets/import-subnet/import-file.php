@@ -80,6 +80,14 @@ else {
 }
 
 
+# Fetch all devices
+$devices = $Tools->fetch_devices ();
+
+# cnt
+$edit = 0;
+$add  = 0;
+$errors = 0;
+
 # import each value
 foreach($outFile as $k=>$line) {
 
@@ -95,34 +103,50 @@ foreach($outFile as $k=>$line) {
 	else {
 		// reformat IP state
 		$lineArr[1] = $Addresses->address_type_type_to_index($lineArr[1]);
+
 		// reformat device from name to id
-		$devices = $Tools->fetch_devices ();
 		foreach($devices as $d) {
 			if($d->hostname==$lineArr[6])	{ $lineArr[6] = $d->id; }
 		}
 
+		// set action
+		if($id = $Addresses->address_exists ($lineArr[0], $_POST['subnetId'], false))	{ $action = "edit"; }
+		else																			{ $action = "add"; }
+
+		// set insert / update values
+		$address_insert = array("action"=>$action,
+								"subnetId"=>$_POST['subnetId'],
+								"ip_addr"=>$lineArr[0],
+								"state"=>$Addresses->address_type_type_to_index($lineArr[1]),
+								"description"=>$lineArr[2],
+								"dns_name"=>$lineArr[3],
+								"mac"=>$lineArr[4],
+								"owner"=>$lineArr[5],
+								"switch"=>$lineArr[6],
+								"port"=>$lineArr[7],
+								"note"=>$lineArr[8]
+								);
+		// add id
+		if ($action=="edit")	{ $address_insert["id"] = $id; }
+
 		// insert
-		$ret = $Addresses->import_address_from_csv ($lineArr, $_POST['subnetId']);
-		if(!is_bool($ret) && strlen($ret)>0) { $errors[] = $ret; $failed = true; }
-		elseif($ret===false) { $failed = true; }
+		if($Addresses->modify_address ($address_insert)===false)	{ $errors++; }
+		else {
+			if ($action=="edit")	{ $edit++; }
+			else 					{ $add++; }
+		}
 	}
 }
 
 # print success if no errors
-if(@$failed===true)	{
-	# errors
-	if(sizeof($errors)>0) {
-		foreach($errors as $e) {
-			$Result->show("danger", _("Error").": "._($e), false);
-		}
-	} else {
-		"<hr>".$Result->show("danger", _('Import failed'), false);
-	}
-}
-else {
+if($errors==0)	{
 	$Result->show("success", _('Import successfull'), false);
-
 	# erase file on success
 	unlink('upload/import.'.$filetype);
 }
+
+# print
+$Result->show("success", _("Created $add addresses and edited $edit addresses"), false);
+
+print "<br><br>";
 ?>

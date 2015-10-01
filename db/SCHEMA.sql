@@ -36,6 +36,7 @@ CREATE TABLE `ipaddresses` (
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
   KEY `subnetid` (`subnetId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -79,6 +80,7 @@ CREATE TABLE `requests` (
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(32) DEFAULT NULL,
   `dns_name` varchar(32) DEFAULT NULL,
+  `state` INT  NULL  DEFAULT '2',
   `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
   `comment` text,
@@ -129,6 +131,7 @@ CREATE TABLE `settings` (
   `siteAdminMail` varchar(64) DEFAULT NULL,
   `siteDomain` varchar(32) DEFAULT NULL,
   `siteURL` varchar(64) DEFAULT NULL,
+  `siteLoginText` varchar(128) DEFAULT NULL,
   `domainAuth` tinyint(1) DEFAULT NULL,
   `enableIPrequests` tinyint(1) DEFAULT NULL,
   `enableVRF` tinyint(1) DEFAULT '1',

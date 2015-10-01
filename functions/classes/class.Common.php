@@ -28,8 +28,12 @@ class Common_functions  {
 	public function get_settings () {
 		# cache check
 		if($this->settings === null) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
+			try { $settings = $this->Database->getObject("settings", 1); }
 			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
+			# save
+			if ($settings!==false)	 {
+				$this->settings = $settings;
+			}
 		}
 	}
 
@@ -143,6 +147,17 @@ class Common_functions  {
 	}
 
 	/**
+	 * Alias of identify_address_format function
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function get_ip_version ($address) {
+		return $this->identify_address ($address);
+	}
+
+	/**
 	 * Transforms array to log format
 	 *
 	 * @access public
@@ -159,7 +174,7 @@ class Common_functions  {
 			    foreach($logs as $key=>$req) {
 			    	# ignore __ and PHPSESSID
 			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
-			    	else 																  { $result .= "[$key]:$req<br>"; }
+			    	else 																  { $result .= "[$key]: $req<br>"; }
 				}
 
 			}
@@ -355,6 +370,63 @@ class Common_functions  {
 	}
 
 	/**
+	 * Identifies IP address format
+	 *
+	 *	0 = decimal
+	 *	1 = dotted
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return mixed decimal or dotted
+	 */
+	public function identify_address_format ($address) {
+		return is_numeric($address) ? "decimal" : "dotted";
+	}
+
+	/**
+	 * Transforms IP address to required format
+	 *
+	 *	format can be decimal (1678323323) or dotted (10.10.0.0)
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param string $format (default: "dotted")
+	 * @return mixed requested format
+	 */
+	public function transform_address ($address, $format = "dotted") {
+		# no change
+		if($this->identify_address_format ($address) == $format)		{ return $address; }
+		else {
+			if($this->identify_address_format ($address) == "dotted")	{ return $this->transform_to_decimal ($address); }
+			else														{ return $this->transform_to_dotted ($address); }
+		}
+	}
+
+	/**
+	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
+	 *
+	 * @access public
+	 * @param int $address
+	 * @return mixed dotted format
+	 */
+	public function transform_to_dotted ($address) {
+	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
+	    else 								 			  				{ return($this->long2ip6($address)); }
+	}
+
+	/**
+	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return int IP address
+	 */
+	public function transform_to_decimal ($address) {
+	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
+	    else 								 							{ return($this->ip2long6($address)); }
+	}
+
+	/**
 	 * Returns text representation of json errors
 	 *
 	 * @access public
@@ -372,6 +444,76 @@ class Common_functions  {
 		// return def
 		if (isset($error[$error_int]))	{ return $error[$error_int]; }
 		else							{ return "JSON_ERROR_UNKNOWN"; }
+	}
+
+	/**
+	 * Prints pagination
+	 *
+	 * @access public
+	 * @param int $page	//current page number
+	 * @param int $pages	//number of all subpages
+	 * @return mixed
+	 */
+	public function print_powerdns_pagination ($page, $pages) {
+
+		print "<hr>";
+		print "<div class='text-right'>";
+		print "<ul class='pagination pagination-sm'>";
+
+		//previous - disabled?
+		if($page == 1)			{ print "<li class='disabled'><a href='#'>&laquo;</a></li>"; }
+		else					{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",($page-1))."'>&laquo;</a></li>"; }
+
+		# less than 8
+		if($pages<8) {
+			for($m=1; $m<=$pages; $m++) {
+				//active?
+				if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+			}
+		}
+		# more than seven
+		else {
+			//first page
+			if($page<=3) {
+				for($m=1; $m<=5; $m++) {
+					//active?
+					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				}
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", $pages)."'>$pages</a></li>";
+			}
+			//last pages
+			elseif($page>$pages-4) {
+				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", 1)."'>1</li>";
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				for($m=$pages-4; $m<=$pages; $m++) {
+					//active?
+					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				}
+			}
+			//page more than 2
+			else {
+				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", 1)."'>1</li>";
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				for($m=$page-1; $m<=$page+1; $m++) {
+					//active?
+					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
+				}
+				print "<li class='disabled'><a href='#'>...</a></li>";
+				print "<li><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", "$pages")."'>$pages</li>";
+			}
+		}
+
+		//next - disabled?
+		if($page == $pages)		{ print "<li class='disabled'><a href='#'>&raquo;</a></li>"; }
+		else					{ print "<li>				  <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", ($page+1))."'>&raquo;</a></li>"; }
+
+		print "</ul>";
+		print "</div>";
 	}
 
 

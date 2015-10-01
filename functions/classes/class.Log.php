@@ -414,6 +414,9 @@ class Logging extends Common_functions {
 			return true;
 		}
 
+		// make sure we have settings
+		$this->get_settings ();
+
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
@@ -434,25 +437,28 @@ class Logging extends Common_functions {
 				foreach ($this->object_new as $k=>$v) {
 					$this->object_new[$k] = $this->changelog_make_booleans ($k, $v);
 				}
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_new, true);
+				$log['details'] = "<br>".$this->array_to_log ($this->object_new, true);
 			}
 			elseif($action == "delete") {
 				//booleans
 				foreach ($this->object_old as $k=>$v) {
 					$this->changelog_make_booleans ($k, $v);
 				}
-				$log['[details]'] = "<br>".$this->array_to_log ($this->object_old, true);
+				$log['details'] = "<br>".$this->array_to_log ($this->object_old, true);
 			}
 			elseif($action == "truncate") {
-				$log['[truncate]'] = "Subnet truncated";
+				$log['truncate'] = "Subnet truncated";
 			}
 			elseif($action == "resize") {
-				$log['[resize]'] = "Subnet Resized";
-				$log['[mask]'] = $this->object_old['mask']."/".$this->object_new['mask'];
+				$log['resize'] = "Subnet Resized";
+				$log['mask'] = $this->object_old['mask']."/".$this->object_new['mask'];
 			}
 			elseif($action == "perm_change") {
 				$log = $this->changelog_format_permission_change ();
 			}
+
+			# reformat null values
+			$log =str_replace(": <br>", ": / <br>", $log);
 
 			//if change happened write it!
 			if(isset($log) && sizeof($log)>0) {
@@ -577,7 +583,7 @@ class Logging extends Common_functions {
 				$v = $this->changelog_make_booleans ($k, $v);
 				//set log
 				if ($k!=="id")
-				$log["[$k]"] = $this->object_old[$k]." => $v";
+				$log["$k"] = $this->object_old[$k]." => $v";
 			}
 		}
 		// result
@@ -601,6 +607,18 @@ class Logging extends Common_functions {
 					$this->object_new['start'],
 					$this->object_new['stop']
 					);
+			unset(	$this->object_old['subnet'],
+					$this->object_old['type'],
+					$this->object_old['section'],
+					$this->object_old['ip_addr_old'],
+					$this->object_old['nostrict'],
+					$this->object_old['start'],
+					$this->object_old['stop']
+					);
+			# reformat ip
+			if (isset($this->object_old['ip_addr']))	{ $this->object_old['ip_addr'] = $this->Subnets->transform_address ($this->object_old['ip_addr'],"dotted"); }
+			if (isset($this->object_new['ip_addr']))	{ $this->object_new['ip_addr'] = $this->Subnets->transform_address ($this->object_new['ip_addr'],"dotted"); }
+
 		}
 		# remove subnet fields
 		elseif($this->object_type == "subnet")	{
@@ -612,6 +630,14 @@ class Logging extends Common_functions {
 					$this->object_new['state'],
 					$this->object_new['sectionId'],
 					$this->object_new['ip']
+				);
+			unset(	$this->object_old['subnetId'],
+					$this->object_old['location'],
+					$this->object_old['vrfIdOld'],
+					$this->object_old['permissions'],
+					$this->object_old['state'],
+					$this->object_old['sectionId'],
+					$this->object_old['ip']
 				);
 
 			# if section does not change
@@ -902,7 +928,7 @@ class Logging extends Common_functions {
 		if($this->object_new['permissions_change']!="null") {
 			$new_permissions = json_decode($this->object_new['permissions_change']);
 			foreach($new_permissions as $group_id=>$p) {
-				$log['[Permissions]'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
+				$log['Permissions'] .= "<br>". $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 			}
 		}
 		//result
@@ -1153,8 +1179,8 @@ class Logging extends Common_functions {
 		$content[] = "<tr><td colspan='2'><hr></td></tr>";
 		$content[] = "<tr><td colspan='2'><font $style>Changes:<br>";
 		$content[] = "<tr><td colspan='2'><font $style>&nbsp;<br>";
-		$content[] = str_replace("\r\n", "<br>",$changelog)."</font>";
-		$content[] = "</td></tr>";
+		$changelog = str_replace("\r\n", "<br>",$changelog);
+		$content[] = "$changelog</font></td></tr>";
 		$content[] = "</table>";
 		$content[] = "</div>";
 

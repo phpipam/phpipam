@@ -31,20 +31,20 @@
 	</div>
 
 	<!-- settings -->
-	<?php if($User->authenticated) { 
+	<?php if($User->authenticated) {
 	if($_SESSION['realipamusername']){
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>
-	
+
 	<span class="info"><?php print _('Hi'); ?>,<?php print $realuser->real_name;  ?></span><br>
-	<a href="<?php print create_link("tools","user-menu"); ?>"><?php print _('Switched to'); ?>  <?php print $User->user->real_name; ?></a><br>
+	<a href="<?php print create_link("tools","user-menu"); ?>"><?php print _('Switched to'); ?>&nbsp;<?php print $User->user->real_name; ?></a><br>
 	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>
-	
+
 	<!-- switch back -->
-	<a  href="<?php print create_link(null)."?switch=back"; ?>"><?php print _('Switch back user'); ?>  <i class="fa fa-pad-left fa-undo"></i></a>
-	
+	<a href="<?php print create_link(null)."?switch=back"; ?>"><?php print _('Switch back user'); ?>  <i class="fa fa-pad-left fa-undo"></i></a>
+
 	<?php }else{ ?>
-	
+
 
 	<a href="<?php print create_link("tools","user-menu"); ?>"><?php print _('Hi'); ?>, <?php print $User->user->real_name;  ?></a><br>
 	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>

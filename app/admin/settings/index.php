@@ -66,6 +66,14 @@ $settings = (array) $User->settings;
 	</td>
 	<td class="info2"><?php print _('Set site URL'); ?></td>
 </tr>
+<!-- Login header text -->
+<tr>
+        <td class="title"><?php print _('Login text'); ?></td>
+        <td>
+                <input type="text" class="form-control input-sm" name="siteLoginText" value="<?php print $settings['siteLoginText']; ?>">
+        </td>
+        <td class="info2"><?php print _("Show text above 'username' field on login page (default empty)"); ?></td>
+</tr>
 <!-- prettyLinks -->
 <tr>
 	<td class="title"><?php print _('Prettify links'); ?></td>
@@ -202,6 +210,17 @@ $settings = (array) $User->settings;
 	</td>
 	<td class="info2">
 		<?php print _('Enable or disable VRF module'); ?>
+	</td>
+</tr>
+
+<!-- powerdns -->
+<tr>
+	<td class="title"><?php print _('Enable PowerDNS'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enablePowerDNS" <?php if($settings['enablePowerDNS'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable PowerDNS module'); ?>
 	</td>
 </tr>
 

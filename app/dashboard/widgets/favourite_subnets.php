@@ -9,7 +9,7 @@ $(document).ready(function() {
 
 <?php
 # required functions
-if(!is_object($User)) {
+if(!is_object(@$User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;

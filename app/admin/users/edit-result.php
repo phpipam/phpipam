@@ -17,6 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+
 # fetch auth method
 $auth_method = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['authMethod']);
 $auth_method!==false ? : $Result->show("danger", _("Invalid authentication method"), true);
@@ -114,7 +115,7 @@ if($_POST['role']=="Administrator") {
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }
 else																	{ $Result->show("success", _("User $_POST[action] successfull").'!', false); }
 
-/* mail user */
-if($Admin->verify_checkbox(@$_POST['notifyUser'])==1) { include("edit-notify.php"); }
+# mail user
+if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }
 
 ?>

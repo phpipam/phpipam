@@ -832,93 +832,6 @@ class Subnets extends Common_functions {
 	*/
 
 	/**
-	 * identify ip address type - ipv4 or ipv6
-	 *
-	 * @access public
-	 * @param mixed $subnet
-	 * @return void
-	 */
-	public function identify_address ($address) {
-		# if cidr provided strip it !
-
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
-	}
-
-	/**
-	 * Identifies IP address format
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	private function identify_address_format ($address) {
-		return is_numeric($address) ? "decimal" : "dotted";
-	}
-
-	/**
-	 * Alias of identify_address_format function
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	public function get_ip_version ($address) {
-		return $this->identify_address ($address);
-	}
-
-	/**
-	 * Transforms IP address to required format
-	 *
-	 *	format cen be decimal (1678323323) or dotted (10.10.0.0)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @param string $format (default: "dotted")
-	 * @return void
-	 */
-	public function transform_address ($address, $format = "dotted") {
-		# no change
-		if($this->identify_address_format ($address) == $format)		{ return $address; }
-		else {
-			if($this->identify_address_format ($address) == "dotted")	{ return $this->transform_to_decimal ($address); }
-			else														{ return $this->transform_to_dotted ($address); }
-		}
-	}
-
-	/**
-	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	public function transform_to_dotted ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
-	    else 								 			  				{ return($this->long2ip6($address)); }
-	}
-
-	/**
-	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return void
-	 */
-	public function transform_to_decimal ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
-	    else 								 							{ return($this->ip2long6($address)); }
-	}
-
-	/**
 	 * Calculate subnet usage
 	 *
 	 *	used, maximum, free, free_percentage
@@ -1962,6 +1875,10 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function print_subnets_menu( $user, $section_subnets, $rootId = 0 ) {
+		# open / close via cookie
+		if (isset($_COOKIE['sstr'])) { $cookie = array_filter(explode("|", $_COOKIE['sstr'])); }
+		else						 { $cookie= array(); }
+
 		# initialize html array
 		$html = array();
 		# create children array
@@ -1988,11 +1905,15 @@ class Subnets extends Common_functions {
 		# loop through subnets
 		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
+			# save id for structure on reloading
+			$curr_id = $option['value']['id'];
+
 			# count levels
 			$count = count( $parent_stack ) + 1;
 
 			# set opened or closed tag for displaying proper folders
-			if(in_array($option['value']['id'], $allParents))		{ $open = "open";	$openf = "-open"; }
+			if(in_array($option['value']['id'], $allParents) ||
+				in_array($option['value']['id'], $cookie))			{ $open = "open";	$openf = "-open"; }
 			else													{ $open = "close";	$openf = ""; }
 
 			# show also child's by default
@@ -2031,17 +1952,17 @@ class Subnets extends Common_functions {
 				if($permission != 0) {
 					# folder
 					if($option['value']['isFolder'] == 1) {
-						$html[] = '<li class="folderF folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder fa-folder'.$openf.'" rel="tooltip" data-placement="right" data-html="true" title="'._('Folder contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
+						$html[] = '<li class="folderF folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder fa-folder'.$openf.'" rel="tooltip" data-placement="right" data-html="true" title="'._('Folder contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
 						$html[] = '<a href="'.create_link("folder",$option['value']['sectionId'],$option['value']['id']).'">'.$option['value']['description'].'</a>';
 					}
 					# print name
 					elseif($option['value']['showName'] == 1) {
-						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
+						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'">'.$option['value']['description'].'</a>';
 					}
 					# print subnet
 					else {
-						$html[] = '<li class="folder folder-'.$open.' '.$active.'""><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
+						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$option['value']['description'].'">'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'</a>';
 					}
 
@@ -2058,17 +1979,17 @@ class Subnets extends Common_functions {
 				if($permission != 0) {
 					# folder - opened
 					if($option['value']['isFolder'] == 1) {
-						$html[] = '<li class="leaf '.$active.'"><i class="fa fa-gray fa-sfolder fa-folder'.$openf.'"></i>';
+						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-sfolder fa-folder'.$openf.'"></i>';
 						$html[] = '<a href="'.create_link("folder",$option['value']['sectionId'],$option['value']['id']).'">'.$option['value']['description'].'</a></li>';
 					}
 					# print name
 					elseif($option['value']['showName'] == 1) {
-						$html[] = '<li class="leaf '.$active.'"><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
+						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'">'.$option['value']['description'].'</a></li>';
 					}
 					# print subnet
 					else {
-						$html[] = '<li class="leaf '.$active.'"><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
+						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
 						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$option['value']['description'].'">'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'</a></li>';
 					}
 				}
@@ -2392,10 +2313,10 @@ class Subnets extends Common_functions {
 				if($masterSubnet) { $html[] ='	<td>/</td>' . "\n"; }
 				else {
 					$master = (array) $this->fetch_subnet (null, $option['value']['masterSubnetId']);
-					if($master['isFolder'])
-						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
+					if($master['isFolder']==1)
+						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
 					else {
-						$html[] = "	<td><a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
+						$html[] = "	<td><a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
 					}
 				}
 

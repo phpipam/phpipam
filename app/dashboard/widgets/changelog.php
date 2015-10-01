@@ -5,7 +5,7 @@
  *********************************************/
 
 # required functions if requested via AJAX
-if(!is_object($User)) {
+if(!is_object(@$User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -74,7 +74,8 @@ else {
 			# if 0 ignore
 			if($permission > 0)	{
 				# format diff
-				$l['cdiff'] = str_replace("\n", "<br>", $l['cdiff']);
+				$l['cdiff'] = str_replace("\n\n", "", trim($l['cdiff']));
+				$l['cdiff'] = str_replace("\n", "; ", $l['cdiff']);
 
 				# format type
 				switch($l['ctype']) {

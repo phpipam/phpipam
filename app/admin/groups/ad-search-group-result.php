@@ -27,7 +27,7 @@ $params = json_decode($server->params);
 //no login parameters
 if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $Result->show("danger", _("Missing credentials"), true); }
 //at least 2 chars
-if(strlen($_POST['dname'])<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
+if(strlen($_POST['dfilter'])<2) 												{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
 
 //open connection
@@ -54,46 +54,63 @@ try {
 	// set OpenLDAP flag
 	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
 
-	//search for domain user!
-	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"),false,$server->type);
+	//search groups
+	$groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP,true,"*$_POST[dfilter]*");
 
 	//echo $adldap->getLastError();
 }
 catch (adLDAPException $e) {
+	$Result->show("danger", $adldap->getLastError(), false);
 	$Result->show("danger", $e->getMessage(), true);
 }
 
 
 //check for found
-if(!isset($userinfo['count'])) {
+if(sizeof($groups)==0) {
 	print "<div class='alert alert-info'>";
-	print _('No users found')."!<hr>";
+	print _('No groups found')."!<hr>";
 	print _('Possible reasons').":";
 	print "<ul>";
-	print "<li>"._('Username not existing')."</li>";
 	print "<li>"._('Invalid baseDN setting for AD')."</li>";
 	print "<li>"._('AD account does not have enough privileges for search')."</li>";
 	print "</div>";
 } else {
-	print _(" Following users were found").": ($userinfo[count]):<hr>";
+	print _(" Following groups were found").": (".sizeof($groups)."):<hr>";
 
-	print "<table class='table table-striped'>";
+	print "<table class='table table-top table-td-top  table-striped'>";
 
-	unset($userinfo['count']);
-	if(sizeof(@$userinfo)>0 && isset($userinfo)) {
-		// loop
-		foreach($userinfo as $u) {
-			print "<tr>";
-			print "	<td>".$u['displayname'][0];
-			print "</td>";
-			print "	<td>".$u['samaccountname'][0]."</td>";
-			print "	<td>".$u['mail'][0]."</td>";
-			//actions
-			print " <td style='width:10px;'>";
-			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".$u['displayname'][0]."' data-username='".$u['samaccountname'][0]."' data-email='".$u['mail'][0]."' data-server='".$_POST['server']."' data-server-type='".$server->type."'>"._('Select')."</a>";
-			print "	</td>";
-			print "</tr>";
+	// loop
+ 	foreach($groups as $k=>$g) {
+		print "<tr>";
+		print "	<td>$k</td>";
+		print "	<td>$g</td>";
+		//actions
+		print " <td style='width:10px;'>";
+		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k'>"._('Add group')."</a>";
+		print "	</td>";
+		print "</tr>";
+
+		print "<tr>";
+		print "	<td>"._("Members:")."</td>";
+		print "<td colspan='2'>";
+		print "	<div class='adgroup-$k'></div>";
+		// search members
+		$groupMembers = $adldap->group()->members($k);
+		unset($members);
+		if($groupMembers!==false) {
+			foreach($groupMembers as $m) {
+				print "<span class='muted'>$m</span><br>";
+				$members[] = $m;
+			}
+			$members = implode(";", $members);
 		}
+		else {
+			$members = "";
+			print "<span class='muted'>"._("No members")."</span>";
+		}
+		print "	</td>";
+		print "	</tr>";
+
 	}
 	print "</table>";
 }

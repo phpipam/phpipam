@@ -603,7 +603,7 @@ class User extends Common_functions {
 			# admin?
 			if($user->role == "Administrator")	{ $this->isadmin = true; }
 
-			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 1 ); $this->Result->show("danger", _("Invalid username or password"), true);}
+			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 1, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
 			else 					{ $this->user = $user; }
 		}
 	}
@@ -678,7 +678,7 @@ class User extends Common_functions {
 			$this->write_session_parameters ();
 
 			$this->Result->show("success", _("Login successful"));
-			$this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0 );
+			$this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0, $username );
 
 			# write last logintime
 			$this->update_login_time ();
@@ -691,7 +691,7 @@ class User extends Common_functions {
 			# add blocked count
 			$this->block_ip ();
 
-			$this->Log->write( "User login", "Invalid username or password", 1 );
+			$this->Log->write( "User login", "Invalid username or password", 1, $username );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
@@ -728,7 +728,7 @@ class User extends Common_functions {
 	    	if($this->ldap)	{ $adldap->setUseOpenLDAP(true); }
 		}
 		catch (adLDAPException $e) {
-			$this->Log->write( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 2 );
+			$this->Log->write( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 2, $username );
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 		}
 
@@ -737,7 +737,7 @@ class User extends Common_functions {
 			# save to session
 			$this->write_session_parameters ();
 
-	    	$this->Log->write( "AD login", "User ".$this->user->real_name." logged in via AD", 0 );
+	    	$this->Log->write( "AD login", "User ".$this->user->real_name." logged in via AD", 0, $username );
 	    	$this->Result->show("success", _("AD Login successful"));
 
 			# write last logintime
@@ -747,21 +747,21 @@ class User extends Common_functions {
     	}
     	# failed to connect
     	else if (@$authAD == 'Failed to connect to AD!') {
-			$this->Log->write( "AD login", "Failed to connect to AD server", 2 );
+			$this->Log->write( "AD login", "Failed to connect to AD server", 2, $username );
 			$this->Result->show("danger", _("Failed to connect to AD server"), true);
 		}
 		# failed to authenticate
 		else if (@$authAD == 'Failed to authenticate user via AD!') {
 			# add blocked count
 			$this->block_ip ();
-			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1 );
+			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1, $username );
 			$this->Result->show("danger", _("Failed to authenticate user against AD"), true);
 		}
 		# wrong user/pass by default
 		else {
 			# add blocked count
 			$this->block_ip ();
-			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1 );
+			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1, $username );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
@@ -788,7 +788,7 @@ class User extends Common_functions {
 	 * @param mixed $username
 	 * @param mixed $password
 	 * @return void
-	 */	
+	 */
 	private function auth_NetIQ ($username, $password) {
 		$this->auth_AD ("cn=".$username, $password);
 	}
@@ -831,7 +831,7 @@ class User extends Common_functions {
 			# save to session
 			$this->write_session_parameters ();
 
-	    	$this->Log->write( "Radius login", "User ".$this->user->real_name." logged in via radius", 0 );
+	    	$this->Log->write( "Radius login", "User ".$this->user->real_name." logged in via radius", 0, $username );
 	    	$this->Result->show("success", _("Radius login successful"));
 
 			# write last logintime
@@ -842,7 +842,7 @@ class User extends Common_functions {
 		else {
 			# add blocked count
 			$this->block_ip ();
-			$this->Log->write( "Radius login", "Failed to authenticate user on radius server", 2 );
+			$this->Log->write( "Radius login", "Failed to authenticate user on radius server", 2, $username );
 			$this->Result->show("danger", _("Invalid username or password"), true);
 		}
 	}
@@ -1072,8 +1072,7 @@ class User extends Common_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function block_ip ()
-	{
+	private function block_ip () {
 		# validate IP
 		if(!filter_var($this->ip, FILTER_VALIDATE_IP))	{ return false; }
 

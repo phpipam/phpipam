@@ -140,13 +140,15 @@ function createCookie(name,value,days) {
     var date;
     var expires;
 
-    if (days) {
+    if (typeof days === 'undefined') {
         date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000));
         expires = "; expires="+date.toGMTString();
     }
     else {
+	    var expires = "";
     }
+
     document.cookie = name+"="+value+expires+"; path=/";
 }
 function readCookie(name) {
@@ -164,9 +166,6 @@ function readCookie(name) {
 $(function() {
 	$(".popup").draggable({ handle: ".pHeader" });
 });
-
-
-
 
 
 
@@ -248,12 +247,16 @@ $('ul#subnets').on("click", ".fa-folder-close-o", function() {
     $(this).removeClass('fa-folder-close-o').addClass('fa-folder-open-o');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideDown('fast');
+	//save cookie
+    update_subnet_structure_cookie ("add", $(this).attr("data-str_id"));
 });
 $('ul#subnets').on("click", ".fa-folder", function() {
     //change icon
     $(this).removeClass('fa-folder').addClass('fa-folder-open');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideDown('fast');
+	//save cookie
+    update_subnet_structure_cookie ("add", $(this).attr("data-str_id"));
 });
 // hide submenus
 $('ul#subnets').on("click", ".fa-folder-open-o", function() {
@@ -261,13 +264,45 @@ $('ul#subnets').on("click", ".fa-folder-open-o", function() {
     $(this).removeClass('fa-folder-open-o').addClass('fa-folder-close-o');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideUp('fast');
+	//save cookie
+    update_subnet_structure_cookie ("remove", $(this).attr("data-str_id"));
 });
 $('ul#subnets').on("click", ".fa-folder-open", function() {
     //change icon
     $(this).removeClass('fa-folder-open').addClass('fa-folder');
     //find next submenu and hide it
     $(this).nextAll('.submenu').slideUp('fast');
+	//save cookie
+    update_subnet_structure_cookie ("remove", $(this).attr("data-str_id"));
 });
+
+
+/* Function to save subnets structure left menu to cookie */
+function update_subnet_structure_cookie (action, cid) {
+	// read old cookie
+	var s_cookie = readCookie("sstr");
+	// defualt - if empty
+ 	if(typeof s_cookie === 'undefined' || s_cookie==null || s_cookie.length===0)	s_cookie = "|";
+	// add or replace
+	if (action == "add") {
+		// split to array and check if it already exists
+		var arr = s_cookie.split('|');
+		var exists = false;
+		for(var i=0;i < arr.length;i++) {
+        	if(arr[i]==cid) {
+	     		exists = true;
+        }	}
+        // new
+        if(exists==false)	s_cookie += cid+"|";
+	}
+	else if (action == "remove")	{
+		s_cookie = s_cookie.replace("|"+cid+"|", "|");
+	}
+	// save cookie
+	createCookie("sstr",s_cookie, 365);
+}
+
+
 
 
 //hide subnets list
@@ -522,6 +557,8 @@ $(document).on("click", "input#csvimportcheck", function() {
     $.post('app/subnets/import-subnet/print-file.php', { filetype : filetype }, function(data) {
         $('div.csvimportverify').html(data).slideDown('fast');
         hideSpinner();
+        // add reload class
+        $('.importFooter').removeClass("hidePopups").addClass("hidePopupsReload");
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
 //import file script
@@ -538,9 +575,7 @@ $(document).on("click", "input#csvImportYes", function() {
 
     $.post('app/subnets/import-subnet/import-file.php', postData, function(data) {
         $('div.csvImportResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        if(data.search("alert-danger") == -1)     { setTimeout(function (){window.location.reload();}, 1500); }
-        else                             { hideSpinner(); }
+        hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
 //donwload template
@@ -650,7 +685,8 @@ $(document).on("click", "button#requestIPAddressSubmit", function() {
     var request = $('form#requestIP').serialize();
     $.post('app/login/request_ip_result.php', request, function(data) {
         $('div#requestIPresult').html(data).slideDown('fast');
-        hideSpinner();
+        if(data.search("alert-danger") == -1)   { setTimeout(function (){window.location.reload();}, 1500); }
+        else                             { hideSpinner(); }
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
@@ -977,15 +1013,33 @@ $(document).on("click", "#adsearchusersubmit", function() {
 });
 //get user data from result
 $(document).on("click", ".userselect", function() {
-	var uname 	 = $(this).attr('data-uname');
-	var username = $(this).attr('data-username');
-	var email 	 = $(this).attr('data-email');
-	var server 	 = $(this).attr('data-server');
+	var uname 	 	= $(this).attr('data-uname');
+	var username 	= $(this).attr('data-username');
+	var email 	 	= $(this).attr('data-email');
+	var server 	 	= $(this).attr('data-server');
+	var server_type = $(this).attr('data-server-type');
+
 	//fill
 	$('form#usersEdit input[name=real_name]').val(uname);
 	$('form#usersEdit input[name=username]').val(username);
 	$('form#usersEdit input[name=email]').val(email);
 	$('form#usersEdit select[name=authMethod]').val(server);
+	//hide password
+	$('tbody#user_password').hide();
+	//check server type and fetch group membership
+	if (server_type=="AD" || server_type=="LDAP") {
+		$.post('app/admin/users/ad-search-result-groups-membership.php', {server:server,username:username}, function(data) {
+			//some data found
+			if(data.length>0) {
+				// to array and check
+				var groups = data.replace(/\s/g, '');
+				groups = groups.split(";");
+				for (m = 0; m < groups.length; ++m) {
+					$("input[name='group"+groups[m]+"']").attr('checked', "checked");
+				}
+			}
+		});
+	}
 
 	hidePopup2();
 	hidePopup('popup_w500');
@@ -997,6 +1051,37 @@ $(document).on("click", ".userselect", function() {
 
 /*    Edit groups
 ***************************/
+//search AD group popup
+$(document).on("click", ".adLookup", function() {
+	$('div.popup_w700').load('app/admin/groups/ad-search-group-form.php');
+
+    showPopup('popup_w700');
+    hideSpinner();
+});
+//search AD domain groups
+$(document).on("click", "#adsearchgroupsubmit", function() {
+	showSpinner();
+	var dfilter = $('#dfilter').val();
+	var server = $('#adserver').find(":selected").val();
+	$.post('app/admin/groups/ad-search-group-result.php', {dfilter:dfilter, server:server}, function(data) {
+		$('div#adsearchgroupresult').html(data)
+		hideSpinner();
+	});
+});
+//search domaingroup  add
+$(document).on("click", ".groupselect", function() {
+	showSpinner();
+	var gname = $(this).attr("data-gname");
+	var gdescription = $(this).attr("data-gdescription");
+	var gmembers = $(this).attr("data-members");
+	var gid = $(this).attr("data-gid");
+
+	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers}, function(data) {
+		$('div.adgroup-'+gid).html(data)
+		hideSpinner();
+	});
+	return false;
+});
 //open form
 $('.editGroup').click(function () {
     showSpinner();
@@ -1587,7 +1672,12 @@ $(document).on("change", "select#selectSectionfromIPCalc", function() {
     var sectionId = $(this).val();
     var subnet      = $('table.ipCalcResult td#sub2').html();
     var bitmask      = $('table.ipCalcResult td#sub4').html();
-    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+    // ipv6 override
+    if ($("table.ipCalcResult td#sub0").html() == "IPv6") {
+    	var postdata  = "sectionId=" + sectionId + "&subnet=" + $('table.ipCalcResult td#sub3').html() + "&bitmask=&action=add&location=ipcalc";
+    } else {
+	    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+    }
     //make section active
     $('table.newSections ul#sections li#' + sectionId ).addClass('active');
     //load add Subnet form / popup
@@ -1817,10 +1907,22 @@ $(document).on("click", "#add_nameserver", function() {
 	//get old number
 	var num = $(this).attr("data-id");
 	// append
-	$('table#nameserverManagementEdit2 tbody#nameservers').append("<tr id='namesrv-"+num+"'><td>Nameserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='namesrv-"+num+"'></td></tr>");
+	$('table#nameserverManagementEdit2 tbody#nameservers').append("<tr id='namesrv-"+num+"'><td>Nameserver "+num+"</td><td><input type='text' class='rd form-control input-sm' name='namesrv-"+num+"'></input><td><button class='btn btn-sm btn-default' id='remove_nameserver' data-id='namesrv-"+num+"'><i class='fa fa-trash-o'></i></buttom></td></td></tr>");
 	// add number
 	num++;
 	$(this).attr("data-id", num);
+
+	hideSpinner();
+	return false;
+});
+// remove
+$(document).on("click", "#remove_nameserver", function() {
+	showSpinner();
+	//get old number
+	var id = $(this).attr("data-id");
+	// append
+	var el = document.getElementById(id);
+	el.parentNode.removeChild(el);
 
 	hideSpinner();
 	return false;
