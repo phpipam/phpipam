@@ -171,7 +171,9 @@ class Addresses extends Common_functions {
 	 * @param mixed $type
 	 * @return void
 	 */
-	public function address_type_type_to_index ($type) {
+	public function address_type_type_to_index ($type = "Used") {
+		# null of no length
+		$type = strlen($type)==0 || is_null($type) ? "Used" : $type;
 		# fetch address states
 		$this->addresses_types_fetch();
 		# reindex
@@ -180,7 +182,7 @@ class Addresses extends Common_functions {
 		}
 		# return
 		if(isset($states_assoc[$type])) {
-			return $states_assoc[$type]['index'];
+			return $states_assoc[$type]['id'];
 		}
 		else {
 			return $type;
@@ -490,16 +492,20 @@ class Addresses extends Common_functions {
 	/**
 	 * Checks if address already exists in subnet
 	 *
+	 *	if cnt is false we will return id if it exists and false ifnot
+	 *
 	 * @access public
 	 * @param int $address
 	 * @param int $subnetId
+	 * @param int $subnetId
 	 * @return boolean success/failure
 	 */
-	public function address_exists ($address, $subnetId) {
+	public function address_exists ($address, $subnetId, $cnt = true) {
 		# make sure it is in decimal format
 		$address = $this->transform_address($address, "decimal");
 		# check
-	    $query      = "select count(*) as `cnt` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;";
+		if($cnt===true) { $query = "select count(*) as `cnt` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;"; }
+		else			{ $query = "select `id` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;";  }
 		# fetch
 		try { $count = $this->Database->getObjectQuery($query, array($subnetId, $address)); }
 		catch (Exception $e) {
@@ -507,7 +513,8 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# result
-		return $count->cnt==0 ? false : true;
+		if ($cnt===true)	{ return $count->cnt==0 ? false : true; }
+		else				{ return is_null($count->id) ? false : $count->id; }
 	}
 
 	/**
@@ -860,8 +867,17 @@ class Addresses extends Common_functions {
 	    if ($this->address_exists($address[0], $subnetId)) { return _('IP address already exists').' - '.$address[0]; }
 
 		# format insert array
-		$address_insert = array("subnetId"=>$subnetId, "ip_addr"=>$address[0], "state"=>$address[1], "description"=>$address[2], "dns_name"=>$address[3], "mac"=>$address[4],
-								"owner"=>$address[5], "switch"=>$address[6], "port"=>$address[7], "note"=>$address[8]);
+		$address_insert = array("subnetId"=>$subnetId,
+								"ip_addr"=>$address[0],
+								"state"=>$address[1],
+								"description"=>$address[2],
+								"dns_name"=>$address[3],
+								"mac"=>$address[4],
+								"owner"=>$address[5],
+								"switch"=>$address[6],
+								"port"=>$address[7],
+								"note"=>$address[8]
+								);
 
 		# switch to 0, state to active
 		$address_insert['switch'] = strlen($address_insert['switch'])==0 ? 0 : $address_insert['switch'];

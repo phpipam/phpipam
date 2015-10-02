@@ -54,6 +54,24 @@ $User->check_user_session();
 		<td><input type="text" class="form-control" name="dns_name" size="30" placeholder="<?php print _('hostname');?>"></td>
 	</tr>
 
+	<!-- state -->
+	<tr>
+		<td><?php print _('State'); ?></td>
+		<td>
+			<select name="state" class="form-control input-sm input-w-auto">
+			<?php
+			$states = $Addresses->addresses_types_fetch ();
+			# default tag
+			$request['state'] = "2";
+			foreach($states as $s) {
+				if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>$s[type]</option>"; }
+				else								{ print "<option value='$s[id]'>$s[type]</option>"; }
+			}
+			?>
+			</select>
+		</td>
+	</tr>
+
 	<!-- owner -->
 	<tr class="owner">
 		<td><?php print _('Owner');?></td>

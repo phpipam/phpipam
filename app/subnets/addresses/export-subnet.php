@@ -82,8 +82,9 @@ $worksheet->write($lineCount, $rowCount, $Subnets->transform_address($subnet['su
 $lineCount++;
 
 # write VLAN details
-$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
+$vlan = $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 if($vlan!=false) {
+	$vlan = (array) $vlan;
 	$vlan_text = strlen($vlan['name'])>0 ? "vlan: $vlan[number] - $vlan[name]" : "vlan: $vlan[number]";
 
 	$worksheet->write($lineCount, $rowCount, $vlan_text, $format_vlan );

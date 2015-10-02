@@ -3,17 +3,10 @@ version - 1.2
 	+ To fix / finish
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
-		+ Save opened folders in left menu;
-
-		+ DNS write log;
 
 	+ Mark subnet as full (db prepared);
 
 	+ phpipam scan Agents (db prepared);
-
-	+ Add resolve requests to subnet for RWA users;
-
-	+ Override entries on import checkbox;
 
 	+ L2 domain permissions for groups ?
 

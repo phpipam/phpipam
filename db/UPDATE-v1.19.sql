@@ -26,3 +26,9 @@ ALTER TABLE `usersAuthMethod` CHANGE `type` `type` set('local','AD','LDAP','NetI
 
 /* add header infotext for login page */
 ALTER TABLE `settings`  ADD `siteLoginText` varchar(128) NULL DEFAULT NULL AFTER `siteURL`;
+
+/* add unique ip+subnet requirement */
+ALTER TABLE `ipaddresses` ADD UNIQUE INDEX `sid_ip_unique` (`ip_addr`, `subnetId`);
+
+/* add tag to ip requests */
+ALTER TABLE `requests` ADD `state` INT  NULL  DEFAULT '2'  AFTER `dns_name`;

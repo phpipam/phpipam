@@ -28,8 +28,12 @@ class Common_functions  {
 	public function get_settings () {
 		# cache check
 		if($this->settings === null) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
+			try { $settings = $this->Database->getObject("settings", 1); }
 			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
+			# save
+			if ($settings!==false)	 {
+				$this->settings = $settings;
+			}
 		}
 	}
 
@@ -170,7 +174,7 @@ class Common_functions  {
 			    foreach($logs as $key=>$req) {
 			    	# ignore __ and PHPSESSID
 			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
-			    	else 																  { $result .= "[$key]:$req<br>"; }
+			    	else 																  { $result .= "[$key]: $req<br>"; }
 				}
 
 			}

@@ -2654,5 +2654,6 @@ msgstr ""
 msgid "Group already exists"
 msgstr ""
 
-
+msgid "You do not have permissions to process this request"
+msgstr ""
 
