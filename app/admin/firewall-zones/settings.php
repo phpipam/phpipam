@@ -34,10 +34,6 @@ $User->check_user_session();
 // fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 
-$FirewallZones = new FirewallZones($Database);
-
-$Fsettings = $FirewallZones->get_zones();
-var_dump($Fsettings);
 ?>
 
 <!-- database settings -->
@@ -121,7 +117,7 @@ var_dump($Fsettings);
 		<input type="checkbox" class="form-control input-sm" name="padding" <?php if($firewallZoneSettings['padding'] == 'on'){ print 'value="'.$firewallZoneSettings['padding'].'" checked';} ?>>
 	</td>
 	<td>
-		<span class="text-muted"><?php print _("Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>You may not want to use this feature with the text option."); ?></span>
+		<span class="text-muted"><?php print _("Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>This setting will be ignored if you use the \"text\" zone name generator."); ?></span>
 	</td>
 </tr>
 <!-- strict mode -->

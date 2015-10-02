@@ -52,15 +52,6 @@ $sections = $Sections->fetch_all_sections();
 // fetch all layer2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 
-// DEBUG
-print 'DEBUG<br><pre>';
-print_r($FirewallZones);
-print '<br>';
-//var_dump($sectionIds);
-print '</pre>';
-// !DEBUG
-
-
 ?>
 <!-- header  -->
 <div class="pHeader"><?php print _('Add a firewall zone'); ?></div>
@@ -84,16 +75,23 @@ print '</pre>';
 
 	if ($_POST['action'] == 'add') {
 		// check if we have to autogenerate a zone name or if we have to display a text box
-		if ($firewallZoneSettings[zoneGenerator] != 0 && $firewallZoneSettings[zoneGenerator] != 1) {
-			print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('Zone name').'" value="'.$FirewallZones->zone.'" '.$readonly.'></td>';
+		if ($firewallZoneSettings['zoneGenerator'] == 2) {
+			print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('Zone name (Only alphanumeric and special characters like .-_ and space.)').'" value="'.$FirewallZones->zone.'" '.$readonly.'></td>';
 		} else {
 			print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('The zone name will be automatically generated').'" value="'.$FirewallZones->zone.'" '.$readonly.' disabled></td>';
 		}
 	} else {
-		print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('Zone name').'" value="'.$FirewallZones->zone.'" '.$readonly.'></td>';
+		if ($FirewallZones->generator == 1) {
+			print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('Zone name').'" readonly value="'.$FirewallZones->zone.'"></td>';
+		} elseif ($FirewallZones->generator != 2) {
+			print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('Zone name').'" readonly value="'.$FirewallZones->zone.'"></td>';
+		} else {
+			print '<td><input type="text" class="form-control input-sm" name="zone" placeholder="'._('Zone name (Only alphanumeric and special characters like .-_ and space.)').'" value="'.$FirewallZones->zone.'" '.$readonly.'></td>';
+		}
 	}
 	?>
-	<input type="hidden" name="generator" value="<?php print $firewallZoneSettings[zoneGenerator]; ?>">
+	<input type="hidden" name="generator" value="<?php print $firewallZoneSettings['zoneGenerator']; ?>">
+	
 </tr>
 <tr>
 	<!-- zone indicator -->
@@ -101,14 +99,36 @@ print '</pre>';
 		<?php print _('Indicator'); ?>
 	</td>
 	<td>
-		<input type="radio" name="indicator" value="0" <?php (($FirewallZones->indicator == false) ? print 'checked' : print ''); ?> ><?php print _(' Own zone'); ?>
+		<div class="radio" style="margin-top:5px;margin-bottom:2px;">
+			<label>
+				<input type="radio" name="indicator" value="0" <?php (($FirewallZones->indicator == false) ? print 'checked' : print ''); ?> ><?php print _(' Own zone'); ?>
+			</label>
+		</div>
 	</td>
 </tr>
 <tr>
 	<td>
-		<input type="radio" name="indicator" value="1" <?php (($FirewallZones->indicator == true) ? print 'checked' : print ''); ?> ><?php print _(' Customer zone'); ?>
+		<div class="radio" style="margin-top:2px;margin-bottom:2px;">
+			<label>
+				<input type="radio" name="indicator" value="1" <?php (($FirewallZones->indicator == true) ? print 'checked' : print ''); ?> ><?php print _(' Customer zone'); ?>
+			</label>
+		</div>
 	</td>
 </tr>
+<?php if($FirewallZones->generator != 2 && $firewallZoneSettings['zoneGenerator'] != 2) { ?>
+	<tr>
+		<td>
+			<?php print _('Padding'); ?>
+		</td>
+		<td>
+			<div class="checkbox">
+				<label>
+					<input type="checkbox"  name="padding" <?php if($_POST['action'] == 'edit' && $FirewallZones->padding == 1){ print 'checked';} elseif($_POST['action'] == 'edit' && $FirewallZones->padding == 0) {} elseif ($firewallZoneSettings['padding'] == 'on'){print 'checked';}?>> Enable padding
+				</label>
+			</div>
+		</td>
+	</tr>
+<?php } ?>
 <tr>
 	<!-- description -->
 	<td>

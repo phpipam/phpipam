@@ -10,14 +10,6 @@ $User->check_user_session();
 $Zones = new FirewallZones($Database);
 $firewallZones = $Zones->get_zones();
 
-// DEBUG
-print 'DEBUG<br><pre>';
-print_r($firewallZones);
-print '<br>';
-print '</pre>';
-// !DEBUG
-
-
 
 // Add new firewall zone
 print '<button class="btn btn-sm btn-default btn-success editFirewallZone" style="margin-bottom:10px;margin-top: 25px;" data-action="add" data-id="0"><i style="padding-right:5px;" class="fa fa-plus"></i>'._('Create Firewall zone').'</button>';
@@ -34,7 +26,7 @@ if($firewallZones) {
 	print '<th>'._('Zone name').'</th>';
 	print '<th>'._('Indicator').'</th>';
 	print '<th>'._('Description').'</th>';
-	print '<th>'._('Subnet').'</th>';
+	print '<th colspan="2">'._('Subnet').'</th>';
 	print '<th>'._('VLAN').'</th>';
 	print '<th>'._('VLAN Name').'</th>';
 	print '<th></th>';
@@ -43,14 +35,27 @@ if($firewallZones) {
 	// firewall zones
 	foreach ($firewallZones as $zoneObject ) {
 		print '<tr><td>';
-		print $zoneObject->zone;
+
+			print $zoneObject->zone;
+		
 		print '</td><td>';
 		print $zoneObject->indicator;
 		print '</td><td>';
 		print $zoneObject->description;
 		print '</td><td>';
-		if ($zoneObject->subnetId) {
-			print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$Subnets->transform_to_dotted($zoneObject->subnet).'/'.$zoneObject->subnetMask.'</a>';
+		// check if there is a subnetId and if it is convertable to dotted decimal
+		if ($zoneObject->subnetId && $zoneObject->subnetDescription) {
+			if (!$zoneObject->subnetIsFolder) {
+				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$Subnets->transform_to_dotted($zoneObject->subnet).'/'.$zoneObject->subnetMask.'</a>';
+				print '</td><td>';
+				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$zoneObject->subnetDescription.'</a>';
+			} else {
+				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">Folder</a>';
+				print '</td><td>';
+				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$zoneObject->subnetDescription.'</a>';
+			}
+		} else {
+			print '</td><td>';
 		}
 		print '</td><td>';
 		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlan.'</a>';
