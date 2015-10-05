@@ -5,34 +5,45 @@
 // validate session parameters
 $User->check_user_session();
 
-// default settings for firewall zones and firewall address objects: 
+// default settings for firewall zones and firewall address objects: (JSON)
 // {
-//	/* zoneLength defines the maximum length of the unique generated or free text zone name */
-// 	"zoneLength": 3,
+//	/* zoneLength defines the maximum padding length of the unique generated or free text zone name */
+//	"zoneLength":"3",
 //	/* ipType is used to indicate IPv4 and IPv6 address objects (the address object name will be generated as an additional information for ip addresses) */
-// 	"ipType": {
-// 		"0":"v4",
-// 		"1":"v6"
-// 		},
-// 	/* standard separator used to keep address objects tidy */
-// 	"separator": "_",
-//	/* indicator is used to indicate a zone wether is owned by the company or by a customer. the indicater is the leading character of the zone name but separated in the database. */
-// 	"indicator"{
-// 		"0": "own",
-// 		"1": "customer"
-// 		},
+//	"ipType":{
+//		"0":"4",
+//		"1":"6"
+//		},
+// 	/* standard separator used to keep address objects tid
+//	"separator":"_",
+//	/* indicator: Zone type is own zone or customer zone. */
+//	"indicator":{
+//		"0":"0",
+//		"1":"1"
+//		},
 //	/* to automaticaly generate firewall zone names you may choose between "decimal" and "hex" (see "zoneGeneratorType" below). to define free text zone names choose "text" */
-// 	"zoneGenerator": "0",
-// 	"zoneGeneratorType"{
-// 		"0":"decimal",
-// 		"1":"hex",
-// 		"2":"text"
-// 		}
+//	"zoneGenerator":"0",
+//	"zoneGeneratorType":{
+//		"0":"decimal",
+//		"1":"hex",
+//		"2":"text"
+//		},
+//	/* strictMode is only used to be sure not to have duplicate zone names of the type "text" */
+//	"strictMode":"on",
+// 	/* device type ID for firewall devices, default: 3 */
+//	"deviceType":"3",
+//	/* Adds some padding to the zone name (decimal or hex) to generate zone names of equal length */
+//	"padding":"on"
 // }
 
+// initialize classes
+$Database = new Database_PDO;
+$Tools = new Tools($Database);
 
 // fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+// fetch device types
+$deviceTypes = $Tools->fetch_device_types();
 
 ?>
 
@@ -128,6 +139,24 @@ $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 	</td>
 	<td>
 		<span class="text-muted"><?php print _("Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the &quot;text&quot; mode you may uncheck this to have not unique zone names."); ?></span>
+	</td>
+</tr>
+<!-- device type -->
+<tr>
+	<td><?php print _('Firewall device Type'); ?></td>
+	<td>
+		<select name="deviceType" class="form-control input-w-auto input-sm" style="width:110px;">
+			<?php foreach ($deviceTypes as $deviceType) {
+				if ($firewallZoneSettings['deviceType'] == $deviceType->tid) {
+					print '<option value='.$deviceType->tid.' selected>'.$deviceType->tname.'</option>';
+				} else {
+					print '<option value='.$deviceType->tid.'>'.$deviceType->tname.'</option>';
+				}				
+			}?>
+		</select>
+	</td>
+	<td>
+		<span class="text-muted"><?php print _("Select the appropriate device type to match firewall devices."); ?></span>
 	</td>
 </tr>
 <!-- submit -->

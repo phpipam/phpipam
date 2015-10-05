@@ -5,13 +5,6 @@
 // validate session parameters
 $User->check_user_session();
 
-
-
-
-// DEBUG
-print "<br>Index DEBUG:<br>";
-print_r($fwZoneMapping);
-// !DEBUG
 ?>
 
 

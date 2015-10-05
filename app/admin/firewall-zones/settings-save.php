@@ -77,6 +77,11 @@ if ($_POST['strictMode']) {
 	}
 }
 
+// validate device type ID.
+if (!preg_match('/^[0-9]+$/i', $_POST['deviceType'])) {
+	$Result->show("danger", _("Invalid device type."), true);
+}
+
 // formulate json
 $values = new StdClass ();
 
@@ -88,6 +93,7 @@ $values->indicator = $_POST['indicator'];
 $values->zoneGenerator = $_POST['zoneGenerator'];
 $values->zoneGeneratorType = $_POST['zoneGeneratorType'];
 $values->strictMode = $_POST['strictMode'];
+$values->deviceType = $_POST['deviceType'];
 
 // be sure that padding and strictMode will be set even if they are not delivered by $_POST.
 if($_POST['padding'] != 'on'){

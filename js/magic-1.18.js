@@ -1437,6 +1437,7 @@ $('#firewallZoneSettings').submit(function() {
     return false;
 });
 
+// zone edit menu
 // load edit form 
 $(document).on("click", ".editFirewallZone", function() {
     open_popup("700", "app/admin/firewall-zones/zones-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
@@ -1446,8 +1447,6 @@ $(document).on("click", ".editFirewallZone", function() {
 $(document).on("click", "#editZoneSubmit", function() {
     submit_popup_data (".zones-edit-result", "app/admin/firewall-zones/zones-edit-result.php", $('form#zoneEdit').serialize());
 });
-
-
 
 
 // zone edit menu - ajax request to fetch all subnets for a specific section id
@@ -1475,6 +1474,31 @@ $(document).on("change", ".firewallZoneVlan",(function() {
     hideSpinner();
     return false;
 }));
+
+// mapping edit menu
+// load edit form 
+$(document).on("click", ".editMapping", function() {
+    open_popup("700", "app/admin/firewall-zones/mapping-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+});
+
+//submit form
+$(document).on("click", "#editMappingSubmit", function() {
+    submit_popup_data (".mapping-edit-result", "app/admin/firewall-zones/mapping-edit-result.php", $('form#mappingEdit').serialize());
+});
+
+// mapping edit menu - ajax request to fetch all zone informations for the selected zone
+$(document).on("change", ".mappingZoneInformation",(function() {
+    showSpinner();
+    var zoneId = $(this).serialize();
+    //load results
+    $.post('app/admin/firewall-zones/ajax.php', zoneId, function(data) {
+        $('div.zoneInformation').html(data).slideDown('fast');
+
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    hideSpinner();
+    return false;
+}));
+
 
 /*    Subnets
 ********************************/

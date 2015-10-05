@@ -8,9 +8,10 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 // initialize classes
 $Database = new Database_PDO;
 $User = new User ($Database);
-$Admin = new Admin($Database);
+$Admin = new Admin ($Database);
 $Subnets = new Subnets ($Database);
 $Result = new Result ();
+$Zones = new FirewallZones($Database);
 
 // validate session parameters
 $User->check_user_session();
@@ -39,6 +40,16 @@ if($_POST['vlanDomain']){
 				}
 			}
 		print '</select>';
+	} else {
+		$Result->show('danger', _('Invalid ID.'), true);
+	}
+}
+
+if ($_POST['zoneId']) {
+	if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
+		// return the zone details
+		$Zones->get_zone_detail($_POST['zoneId']);
+		
 	} else {
 		$Result->show('danger', _('Invalid ID.'), true);
 	}

@@ -1,6 +1,6 @@
 <?php
-// firewall zone ajax.php
-// deliver content for ajax requests
+// firewall zone zones-result.php
+// verify and update zone informations
 
 // functions 
 require( dirname(__FILE__) . '/../../../functions/functions.php');
@@ -12,13 +12,8 @@ $Admin = new Admin ($Database);
 $Result = new Result ();
 $Zones = new FirewallZones($Database);
 
-
-// DEBUG
-print 'DEBUG<br><pre>';
-print_r($_POST);
-print '<br>';
-print '</pre>';
-// !DEBUG
+// validate session parameters
+$User->check_user_session();
 
 // fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
@@ -29,7 +24,7 @@ if($_POST['action'] != 'add' && $_POST['action'] != 'delete' && $_POST['action']
 	$Result->show("danger", _("Invalid action."), true);
 }
 // check the zone name. valid values are alphanumeric characters and special characters like ".-_ "
-if($_POST['zone'] && !preg_match('/^[0-9a-zA-Z.-_ ]+$/i',$_POST['zone'])) {
+if($_POST['zone'] && !preg_match('/^[0-9a-zA-Z.\-_ ]+$/i',$_POST['zone'])) {
 	$Result->show("danger", _("Invalid zone name value."), true);
 }
 // check the zone indicator ID. valid values are 0 or 1.
@@ -93,6 +88,7 @@ if ($_POST['generator'] == 2 ) {
 	}
 }
 
+// build the query parameter arrary
 if($_POST['generator'] != 2 && $_POST['action'] == 'edit') {
 	$zoneSettings = array(	'id' => $_POST['id'],
 							'indicator' => $_POST['indicator'],

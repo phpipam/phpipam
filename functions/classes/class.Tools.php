@@ -464,7 +464,7 @@ class Tools extends Common_functions {
 	 */
 	private function rekey_device_types ($device_types) {
 		foreach($device_types as $t) {
-			$out[$t['tid']] = $t;
+			$out[$t->tid] = $t;
 		}
 		# return
 		return $out;

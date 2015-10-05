@@ -38,7 +38,8 @@ class FirewallZones extends Common_functions {
 		$this->Log = new Logging ($this->Database);
 		// get settings
 		$this->get_settings();
-				
+		// subnet object
+		$this->Subnets = new Subnets ($this->Database);
 	}
 
 	/**
@@ -173,9 +174,13 @@ class FirewallZones extends Common_functions {
 						devices.hostname AS deviceName,
 						firewallZoneMapping.interface AS interface,
 						firewallZones.subnetId AS subnetId,
+						subnets.sectionId AS sectionId,
 						subnets.subnet AS subnet,
-						subnets.mask AS mask,
+						subnets.description AS subnetDescription,
+						subnets.isFolder AS subnetIsFolder,
+						subnets.mask AS subnetMask,
 						firewallZones.vlanId AS vlanId,
+						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
 						FROM firewallZoneMapping
@@ -186,6 +191,20 @@ class FirewallZones extends Common_functions {
 						having  deviceId is not NULL order by firewallZones.id ASC;');}
 		// throw exception 
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		// modify the zone output values
+		foreach ($mapping as $key => $val) {
+			// transform the zone name from decimal to hex
+			if($mapping[$key]->generator == 1 ){
+				$mapping[$key]->zone = dechex($mapping[$key]->zone);
+			}
+			
+			// add some padding if it is activated and the zone generatore is not text
+			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
+			// remove leading zeros (padding) and raise the value in case of any zone name length changes
+			// add some padding to reach the maximum zone name lenght
+			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);				
+			}
+		}
 		// return the values
 		return sizeof($mapping)>0 ? $mapping : false;
 	}
@@ -214,8 +233,11 @@ class FirewallZones extends Common_functions {
 						firewallZoneMapping.interface AS interface,
 						firewallZones.subnetId AS subnetId,
 						subnets.subnet AS subnet,
-						subnets.mask AS mask,
+						subnets.description AS subnetDescription,
+						subnets.isFolder AS subnetIsFolder,
+						subnets.mask AS subnetMask,
 						firewallZones.vlanId AS vlanId,
+						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
 						FROM firewallZoneMapping
@@ -226,8 +248,22 @@ class FirewallZones extends Common_functions {
 						having  deviceId is not NULL AND mappingId = ?;',$id);}
 		// throw exception 
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		// modify the zone output values
+		foreach ($mapping as $key => $val) {
+			// transform the zone name from decimal to hex
+			if($mapping[$key]->generator == 1 ){
+				$mapping[$key]->zone = dechex($mapping[$key]->zone);
+			}
+			
+			// add some padding if it is activated and the zone generatore is not text
+			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
+			// remove leading zeros (padding) and raise the value in case of any zone name length changes
+			// add some padding to reach the maximum zone name lenght
+			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);				
+			}
+		}
 		// return the values
-		return sizeof($mapping)>0 ? $mapping : false;
+		return sizeof($mapping)>0 ? $mapping[0] : false;
 	}
 
 	/**
@@ -327,8 +363,58 @@ class FirewallZones extends Common_functions {
 			}
 		}		
 		// return the values
-		return sizeof($zone)>0 ? $zone : false;
+		return sizeof($zone)>0 ? $zone[0] : false;
 	}
+
+
+	/**
+	 * display formated zone data
+	 *
+	 * @access public
+	 * @param mixid $id
+	 * @return void
+	 */
+	public function get_zone_detail ($id) {
+
+		$zoneInformation = $this->get_zone($id);
+
+		print '<table class="table table-condensed">';
+		print '<tr>';
+		print '<td>'._('Zone Name').'</td>';
+		print '<td>'.$zoneInformation->zone.'</td>';
+		print '</tr><tr>';
+		print '<td>'._('Indicator').'</td>';
+		if ($zoneInformation->indicator == 0) {
+			print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
+		} else {
+			print '<td><span class="fa fa-group" title="'._('Customer Zone').'"></span></td>';
+		}
+		print '</tr><tr>';
+		print '<td>'._('Description').'</td>';
+		print '<td>'.$zoneInformation->description.'</td>';
+		print '</tr><tr>';
+		print '<td>'._('Subnet').'</td>';
+		if ($zoneInformation->subnetId) {
+			if (!$zoneInformation->subnetIsFolder) {
+				print '<td>'.$this->Subnets->transform_to_dotted($zoneInformation->subnet).'/'.$zoneInformation->subnetMask.'</td>';
+				print '<td>'.$zoneInformation->subnetDescription.'</td>';
+			} else{
+				print '<td>'.$this->Subnets->transform_to_dotted($zoneInformation->subnet).'/'.$zoneInformation->subnetMask.'</td>';
+				print '<td>Folder - '.$zoneInformation->subnetDescription.'</td>';
+			}
+		} else {
+			print '</td><td>';
+		}
+
+		print '</tr><tr>';
+		print '<td>'._('VLAN').'</td>';
+		if ($zoneInformation->vlan) {
+			print '<td>'.$zoneInformation->vlan.' ('.$zoneInformation->vlanName.')</td>';
+		} else {
+			print '</td><td>';
+		}
+		print '</table>';
+}
 
 	/**
 	 * Changes empty array fields to specified character
@@ -375,7 +461,7 @@ class FirewallZones extends Common_functions {
 	}
 
 	/**
-	 * Create new subnet method
+	 * Create new zone method
 	 *
 	 * @access private
 	 * @param mixed $values
@@ -392,11 +478,11 @@ class FirewallZones extends Common_functions {
 		try { $this->Database->insertObject("firewallZones", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "Firewall zone creation", "Failed to add new firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "Firewall zone created", "Failed to add new firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
 		// ok
-		$this->Log->write( "Firewall zone creation", "New firewall zone created<hr>".$this->array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "Firewall zone created", "New firewall zone created<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
 
@@ -431,10 +517,15 @@ class FirewallZones extends Common_functions {
 		// save old values
 		$old_zone = $this->get_zone($id);
 
-		// first truncate it
-		//$this->subnet_truncate ($id);
+		// delete mappings
+		try { $this->Database->deleteRow("firewallZoneMapping", "zoneId", $id); }
+		catch (Exception $e) {
+			$this->Log->write( "Firewall zone and mappings delete", "Failed to delete firewall zone mappfings of $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
 
-		// delete subnet
+		// delete zone
 		try { $this->Database->deleteRow("firewallZones", "id", $id); }
 		catch (Exception $e) {
 			$this->Log->write( "Firewall zone delete", "Failed to delete firewall zone $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
@@ -448,4 +539,94 @@ class FirewallZones extends Common_functions {
 	}
 
 
+	/**
+	 * Modify mapping - main method
+	 *
+	 * @access public
+	 * @param mixed $action
+	 * @param mixed $values
+	 * @return void
+	 */
+	public function modify_mapping ($action, $values) {
+
+		
+		// initialize user
+		$this->User = new User ($this->Database);
+		
+		// null empty values
+		$values = $this->reformat_empty_array_fields ($values, null);
+
+		// execute based on action
+		if($action=="add")			{ return $this->mapping_add ($values); }
+		elseif($action=="edit")		{ return $this->mapping_edit ($values); }
+		elseif($action=="delete")	{ return $this->mapping_delete ($values['id']); }
+		else						{ return $this->Result->show("danger", _("Invalid action"), true); }
+	}
+
+	/**
+	 * Create new mapping
+	 *
+	 * @access private
+	 * @param mixed $values
+	 * @return void
+	 */
+	private function mapping_add ($values) {
+		// get the settings
+		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+
+		// execute
+		try { $this->Database->insertObject("firewallZoneMapping", $values); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			$this->Log->write( "Firewall zone mapping created", "Failed to add new firewall zone mapping<hr>".$e->getMessage(), 2, $this->User->username);
+			return false;
+		}
+		// ok
+		$this->Log->write( "Firewall zone mapping created", "New firewall zone mapping created<hr>".$this->array_to_log($values), 0, $this->User->username);
+		return true;
+	}
+
+	/**
+	 * Edit mapping
+	 *
+	 * @access private
+	 * @param mixed $values
+	 * @return void
+	 */
+	private function mapping_edit ($values) {
+		// execute
+		try { $this->Database->updateObject("firewallZoneMapping", $values, "id"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			$this->Log->write( "Firewall zone mapping edited", "Failed to edit firewall zone mapping<hr>".$e->getMessage(), 2, $this->User->username);
+			return false;
+		}
+		// ok
+		$this->Log->write( "Firewall zone mapping edited", "Firewall zone mapping edited<hr>".$this->array_to_log($values), 0, $this->User->username);
+		return true;
+	}
+
+	/**
+	 * Deletes single mapping
+	 *
+	 * @access private
+	 * @param mixed $id
+	 * @return void
+	 */
+	private function mapping_delete ($id) {
+		// save old values
+		$old_mapping = $this->get_zone_mapping($id);
+
+		// delete mapping
+		try { $this->Database->deleteRow("firewallZoneMapping", "id", $id); }
+		catch (Exception $e) {
+			$this->Log->write( "Firewall zone mapping delete", "Failed to delete firewall zone mapping $old_zone->zone<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+		// ok
+		$this->Log->write( "Firewall zone mapping deleted", "Firewall zone mapping ".$old_zone->zone." deleted<hr>".$this->array_to_log($old_subnet), 0, $this->User->username);
+
+		return true;
+	}
 }

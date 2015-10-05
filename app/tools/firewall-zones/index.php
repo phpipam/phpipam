@@ -14,9 +14,8 @@ $Zones = new FirewallZones($Database);
 // fetch all zone mappings
 $firewallZoneMapping = $Zones->get_zone_mappings();
 
+print '<h4>'._('Firewall zone and device mappings').'</h4>';
 ?>
-<!-- Add new firewall zone mapping -->
-<button class="btn btn-sm btn-default btn-success editMapping" style="margin-bottom:10px;margin-top: 25px;" data-action="add" data-id="0"><i style="padding-right:5px;" class="fa fa-plus"></i><?php print _('Create Firewall zone mapping') ?></button>
 
 <!-- table -->
 <table id="mappingsPrint" class="table table-striped table-top table-auto">
@@ -65,11 +64,6 @@ foreach ($firewallZoneMapping as $mapping) {
 		print '</td>';
 		print '<td><a href="'.create_link('tools','vlan',$mapping->domainId,$mapping->vlanId).'">'.$mapping->vlan.'</a></td>';
 		print '<td><a href="'.create_link('tools','vlan',$mapping->domainId,$mapping->vlanId).'">'.$mapping->vlanName.'</a></td>';
-		// action menu
-		print '<td><div class="btn-group">';
-		print '<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="'.$mapping->mappingId.'"><i class="fa fa-pencil"></i></button>';
-		print '<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="'.$mapping->mappingId.'"><i class="fa fa-remove"></i></button>';
-		print '</td></div>';
 	print '</tr>';
 } 
 ?>

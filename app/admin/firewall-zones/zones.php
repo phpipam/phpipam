@@ -23,23 +23,24 @@ if($firewallZones) {
 
 	// table headers
 	print '<tr>';
-	print '<th>'._('Zone name').'</th>';
-	print '<th>'._('Indicator').'</th>';
+	print '<th>'._('Type').'</th>';
+	print '<th>'._('Zone').'</th>';
 	print '<th>'._('Description').'</th>';
 	print '<th colspan="2">'._('Subnet').'</th>';
-	print '<th>'._('VLAN').'</th>';
-	print '<th>'._('VLAN Name').'</th>';
+	print '<th colspan="2">'._('VLAN').'</th>';
 	print '<th></th>';
 	print '</tr>';
 
 	// firewall zones
 	foreach ($firewallZones as $zoneObject ) {
-		print '<tr><td>';
-
-			print $zoneObject->zone;
-		
-		print '</td><td>';
-		print $zoneObject->indicator;
+		print '<tr>';
+		if ($zoneObject->indicator == 0 ) {
+			print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
+		} else {
+			print '<td><span class="fa fa-group" title="'._('Customer Zone').'"></span></td>';
+		}	
+		print '<td>';
+		print $zoneObject->zone;
 		print '</td><td>';
 		print $zoneObject->description;
 		print '</td><td>';
@@ -60,7 +61,7 @@ if($firewallZones) {
 		print '</td><td>';
 		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlan.'</a>';
 		print '</td><td>';
-		print $zoneObject->vlanName;
+		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlanName.'</a>';
 		// action menu
 		print '</td><td><div class="btn-group">';
 		print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
