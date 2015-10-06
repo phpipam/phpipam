@@ -6,8 +6,6 @@
 
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
-require( dirname(__FILE__) . '/../../../functions/classes/class.Mail.php');
-
 
 # initialize user object
 $Database 	= new Database_PDO;

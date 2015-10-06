@@ -26,7 +26,6 @@
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Mail.php');
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -68,7 +67,7 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 
 //first fetch all subnets to be scanned
-$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck ();
+$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
 //set addresses
 foreach($scan_subnets as $s) {
 	// if subnet has slaves dont check it
@@ -285,8 +284,8 @@ if($discovered>0 && $send_mail) {
 
 				$content[] = "<tr>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
+				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
+				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 				$content[] = "</tr>";
 
 				//plain content
@@ -319,10 +318,5 @@ if($discovered>0 && $send_mail) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	}
 }
-
-
-
-
-
 
 ?>

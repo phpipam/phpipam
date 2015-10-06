@@ -577,10 +577,30 @@ VALUES
 	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');
 
 
+# Dump of table usersAuthMethod
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `scanAgents`;
+
+CREATE TABLE `scanAgents` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `description` text,
+  `type` set('direct','api','mysql') NOT NULL DEFAULT '',
+  `code` varchar(32) DEFAULT NULL,
+  `last_access` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `scanAgents` (`id`, `name`, `description`, `type`)
+VALUES
+	(1, 'locahost', 'Scanning from local machine', 'direct');
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.18';
+UPDATE `settings` set `version` = '1.19';

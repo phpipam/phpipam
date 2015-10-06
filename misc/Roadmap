@@ -3,12 +3,10 @@ version - 1.2
 	+ To fix / finish
 		+ Export domain in bind format + script;
 		+ Verify upgrade/import scripts from older versions;
+		+ Verify API new fields and update web documentation;
+		+ Slave subnets are not deleted - check;
 
 	+ Mark subnet as full (db prepared);
-
-	+ phpipam scan Agents (db prepared);
-
-	+ L2 domain permissions for groups ?
 
 
 features for next releases:
@@ -22,6 +20,8 @@ features for next releases:
 		- Show bindings under tools and next to IP address
 
 	+ IP address owner (from internal users - suggestions);
+
+	+ L2 domain permissions for groups ?
 
 	+ Devices permissions;
 

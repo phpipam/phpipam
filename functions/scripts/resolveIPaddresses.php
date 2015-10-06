@@ -24,7 +24,6 @@ $resolve_config['verbose']  = true;				# verbose response - prints results, cron
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Mail.php');
 
 # initialize objects
 $Database 	= new Database_PDO;

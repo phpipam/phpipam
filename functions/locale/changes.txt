@@ -2622,7 +2622,7 @@ msgid "No subnets belong to this device"
 msgstr ""
 
 
-### 1.18.021 ###
+### 1.19.000 ###
 
 msgid "Log files are sent to syslog"
 msgstr ""
@@ -2657,3 +2657,68 @@ msgstr ""
 msgid "You do not have permissions to process this request"
 msgstr ""
 
+msgid "Select agent"
+msgstr ""
+
+msgid "Select which scanagent to use"
+msgstr ""
+
+msgid "No agents available"
+msgstr ""
+
+msgid "phpipam Scan agents"
+msgstr ""
+
+msgid "Create new agent"
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "edit agent details"
+msgstr ""
+
+msgid "Create new scan agent"
+msgstr ""
+
+msgid "Enter scan agent name"
+msgstr ""
+
+msgid "Agent description'"
+msgstr ""
+
+msgid "Agent type"
+msgstr ""
+
+msgid "Invalid agent code"
+msgstr ""
+
+msgid "Invalid agent name"
+msgstr ""
+
+msgid "Invalid agent Id"
+msgstr ""
+
+msgid "Agent add error"
+msgstr ""
+
+msgid "Agent edit error"
+msgstr ""
+
+msgid "Agent delete error"
+msgstr ""
+
+msgid "Agent add success"
+msgstr ""
+
+msgid "Agent edit success"
+msgstr ""
+
+msgid "Agent delete success"
+msgstr ""
+
+msgid "Cannot remove localhost scan agent"
+msgstr ""
+
+msgid "Scan agent references removed"
+magstr ""

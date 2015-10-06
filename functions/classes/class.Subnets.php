@@ -428,11 +428,14 @@ class Subnets extends Common_functions {
 	 *	Needed for pingCheck script
 	 *
 	 * @access public
+	 * @param int $agentId (default:null)
 	 * @return void
 	 */
-	public function fetch_all_subnets_for_pingCheck () {
+	public function fetch_all_subnets_for_pingCheck ($agentId=null) {
+		# null
+		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `pingSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `pingSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -447,11 +450,14 @@ class Subnets extends Common_functions {
 	 *	Needed for discoveryCheck script
 	 *
 	 * @access public
+	 * @param int $agentId (default:null)
 	 * @return void
 	 */
-	public function fetch_all_subnets_for_discoveryCheck () {
+	public function fetch_all_subnets_for_discoveryCheck ($agentId=null) {
+		# null
+		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `discoverSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009 and `mask` > 20;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `discoverSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009 and `mask` > 20;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -593,16 +599,35 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Checks for all subnets that are marked for scanning and new hosts discovery
+	 * Fetches all scanning agents
 	 *
 	 * @access public
 	 * @return void
 	 */
-	public function fetch_scanned_subnets () {
-		// set query
-		$query = "select * from `subnets` where `pingSubnet`=1 or `discoverSubnet`=1;";
+	public function fetch_scanning_agents () {
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery($query); }
+		try { $agents = $this->Database->getObjects("scanAgents"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return sizeof($agents)>0 ? $agents : false;
+	}
+
+	/**
+	 * Checks for all subnets that are marked for scanning and new hosts discovery
+	 *
+	 * @access public
+	 * @param int $agentId (default: null)
+	 * @return void
+	 */
+	public function fetch_scanned_subnets ($agentId=null) {
+		// agent not set false
+		if (is_null($agentId) || !is_numeric($agentId)) { return false; }
+		// set query
+		$query = "select * from `subnets` where `scanAgent` = ? and ( `pingSubnet`=1 or `discoverSubnet`=1 );";
+		# fetch
+		try { $subnets = $this->Database->getObjectsQuery($query, array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -2337,12 +2362,6 @@ class Subnets extends Common_functions {
 				//requests
 				$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "";
 				$html[] = "	<td class='hidden-xs hidden-sm'>$requests</td>";
-				//ping check
-				$pCheck	= $option['value']['pingSubnet']==1 ? "<i class='fa fa-gray fa-check'></i>" : "";
-				$html[] = "	<td class='hidden-xs hidden-sm'>$pCheck</td>";
-				//discover subnet
-				$discover = $option['value']['discoverSubnet']==1 ? "<i class='fa fa-gray fa-check'></i>" : "";
-				$html[] = "	<td class='hidden-xs hidden-sm'>$discover</td>";
 
 				//custom
 				if(sizeof($custom_fields) > 0) {

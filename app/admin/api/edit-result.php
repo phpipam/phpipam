@@ -34,14 +34,7 @@ if($_POST['action']!="delete") {
 
 # die if errors
 if(sizeof($error) > 0) {
-	print "<div class='alert alert alert-danger'>";
-	print _('Error');
-	print "<ul>";
-	foreach($error as $err) {
-		print "<li>"._($err)."</li>";
-	}
-	print "</ul>";
-	print "</idv>";
+	$Result->show("danger", $error, true);
 }
 else {
 	# create array of values for modification

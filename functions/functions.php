@@ -25,6 +25,7 @@ require( dirname(__FILE__) . '/classes/class.Scan.php' );		//Class for Scanning 
 require( dirname(__FILE__) . '/classes/class.DNS.php' );		//Class for DNS management
 require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerDNS management
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
+require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 
 /* @common functions ------------- */
 require( dirname(__FILE__) . '/functions-common.php' );			//General use functions

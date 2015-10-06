@@ -32,3 +32,21 @@ ALTER TABLE `ipaddresses` ADD UNIQUE INDEX `sid_ip_unique` (`ip_addr`, `subnetId
 
 /* add tag to ip requests */
 ALTER TABLE `requests` ADD `state` INT  NULL  DEFAULT '2'  AFTER `dns_name`;
+
+
+/* scanagents */
+ALTER TABLE `scanAgents` ADD `type` SET('direct','api','mysql')  CHARACTER SET utf8  NOT NULL DEFAULT '';
+ALTER TABLE `scanAgents` ADD `code` VARCHAR(32)  NULL  DEFAULT NULL;
+ALTER TABLE `scanAgents` ADD `last_access` DATETIME  NULL;
+/* unique key */
+ALTER TABLE `scanAgents` ADD UNIQUE INDEX (`code`);
+
+
+INSERT INTO `scanAgents` (`id`, `name`, `description`, `type`)
+VALUES
+	(1, 'locahost', 'Scanning from local machine', 'direct');
+
+
+/* set all to localhost */
+update `subnets` set `scanAgent` = "1" WHERE `pingSubnet` = 1;
+update `subnets` set `scanAgent` = "1" WHERE `discoverSubnet` = 1;

@@ -238,6 +238,9 @@ elseif ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 /* execute */
 else {
 
+	# remove scanagent if not needed
+	if (!isset($_POST['pingSubnet'])&&!isset($_POST['discoverSubnet']))	{ $_POST['scanAgent']=0; }
+
 	# create array of default update values
 	$values = array("id"=>@$_POST['subnetId'],
 					"isFolder"=>0,
@@ -250,6 +253,7 @@ else {
 					"showName"=>$Admin->verify_checkbox(@$_POST['showName']),
 					"discoverSubnet"=>$Admin->verify_checkbox(@$_POST['discoverSubnet']),
 					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
+					"scanAgent"=>@$_POST['scanAgent'],
 					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
 					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"=>$_POST['nameserverId'],

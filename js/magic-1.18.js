@@ -2183,6 +2183,29 @@ $(document).on('click', "#regApiKey", function() {
 
 
 
+/* agents
+*********/
+//load edit form
+$('.editAgent').click(function() {
+	open_popup("700", "app/admin/scan-agents/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+});
+//submit form
+$(document).on("click", "#agentEditSubmit", function() {
+    submit_popup_data (".agentEditResult", "app/admin/scan-agents/edit-result.php", $('form#agentEdit').serialize());
+});
+//regenerate agent key
+$(document).on('click', "#regAgentKey", function() {
+	showSpinner();
+    $.post('app/admin/api/generate-key.php', function(data) {
+        $('input[name=code]').val(data);
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+
+
+
+
 
 /*    Search and replace
 ************************/

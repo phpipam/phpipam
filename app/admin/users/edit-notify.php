@@ -4,9 +4,6 @@
  *	Send notification mail to user if selected
  ***********************************************/
 
-/* functions */
-require( dirname(__FILE__) . '/../../../functions/classes/class.Mail.php');
-
 # verify that user is logged in
 $User->check_user_session();
 
