@@ -201,6 +201,7 @@ if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($s
 # reinitialize objects
 $Database 	= new Database_PDO;
 $Admin		= new Admin ($Database, false);
+$Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);
 $Result		= new Result();
@@ -221,9 +222,12 @@ foreach($scan_subnets as $s) {
 							"dns_name"=>$hostname['name'],
 							"description"=>"-- autodiscovered --",
 							"note"=>"This host was autodiscovered on ".date("Y-m-d H:i:s"),
-							"lastSeen"=>date("Y-m-d H:i:s")
+							"lastSeen"=>date("Y-m-d H:i:s"),
+							"state"=>"2",
+							"action"=>"add"
 							);
-			$Admin->object_modify("ipaddresses", "add", "id", $values);
+			//insert
+			$Addresses->modify_address($values);
 
 			//set discovered
 			$discovered++;

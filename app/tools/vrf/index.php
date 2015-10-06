@@ -21,7 +21,7 @@ if($User->isadmin) {
 
 
 /* for each VRF check which subnet has it configured */
-if(!$vrfs) {
+if($vrfs===false) {
 	$Result->show("info", _('No VRFs configured'), false);
 }
 else {
@@ -55,6 +55,9 @@ else {
 
 		# subnets
 		if($subnets) {
+			# count
+			$subnet_allowed = 0;
+
 			foreach ($subnets as $subnet) {
 				# cast
 				$subnet = (array) $subnet;
@@ -64,6 +67,7 @@ else {
 
 				# permission
 				if($permission > 0) {
+					$subnet_allowed++;
 
 					# check if it is master
 					$masterSubnet = ($subnet['masterSubnetId'] == 0)||(empty($subnet['masterSubnetId'])) ? true : false;
@@ -93,8 +97,10 @@ else {
 					}
 					else {
 						$master = (array) $Subnets->fetch_subnet (null, $subnet['masterSubnetId']);
+						# folder
+						if($master['isFolder']==1)		{ print "	<td><i class='fa fa-folder fa-gray'></i> <a href='".create_link("folder",$subnet['sectionId'],$subnet['masterSubnetId'])."'>$master[description]</a></td>"; }
 						# orphaned
-						if(strlen($master['subnet']) == 0)	{ print "	<td>".$Result->show('warning', _('Master subnet does not exist')."!", false)."</td>";}
+						elseif(strlen(@$master['subnet']) == 0)	{ print "	<td>".$Result->show('warning', _('Master subnet does not exist')."!", false, false, true)."</td>";}
 						# folder
 						elseif($master['isFolder']==1)		{ print "	<td><i class='fa fa-folder fa-gray'></i> <a href='".create_link("folder",$subnet['sectionId'],$subnet['masterSubnetId'])."'>$master[description]</a></td>"; }
 						else 								{ print "	<td><a href='".create_link("subnets",$subnet['sectionId'],$subnet['masterSubnetId'])."'>".$Subnets->transform_to_dotted($master['subnet'])."/$master[mask] ($master[description])</a></td>"; }
@@ -107,12 +113,21 @@ else {
 					print '</tr>' . "\n";
 				}
 			}
+
+			if ($subnet_allowed==0) {
+				// none available
+				print '<tr>'. "\n";
+				print '<td colspan="8">';
+				$Result->show("info", _('No subnets available')."!", false);
+				print '</td>'. "\n";
+				print '</tr>'. "\n";
+			}
 		}
 		# no subnets!
 		else {
 			print '<tr>'. "\n";
 			print '<td colspan="8">';
-			$Result->show("info", _('No subnets belonging to this VRF')."!", false);
+			$Result->show("info", _('No subnets available')."!", false);
 			print '</td>'. "\n";
 			print '</tr>'. "\n";
 		}

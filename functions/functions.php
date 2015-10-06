@@ -14,6 +14,7 @@ else			 { error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT); }
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
 require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
+require( dirname(__FILE__) . '/classes/class.Log.php' );		//Class for log saving
 require( dirname(__FILE__) . '/classes/class.Result.php' );		//Class for result printing
 require( dirname(__FILE__) . '/classes/class.Install.php' );	//Class for Install
 require( dirname(__FILE__) . '/classes/class.Sections.php' );	//Class for sections
@@ -23,6 +24,7 @@ require( dirname(__FILE__) . '/classes/class.Addresses.php' );	//Class for addre
 require( dirname(__FILE__) . '/classes/class.Scan.php' );		//Class for Scanning and pinging
 require( dirname(__FILE__) . '/classes/class.DNS.php' );		//Class for DNS management
 require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerDNS management
+require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
 
 /* @common functions ------------- */

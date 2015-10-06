@@ -188,6 +188,6 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 </div>
 
 <!-- footer -->
-<div class="pFooter">
+<div class="pFooter importFooter">
 	<button class="btn btn-sm btn-default hidePopups"><?php print _('Close window'); ?></button>
 </div>

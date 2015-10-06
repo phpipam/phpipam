@@ -66,8 +66,7 @@ class phpipam_mail {
 		# initialize object
 		$this->Php_mailer = new PHPMailer(true);			//localhost by default
 		$this->Php_mailer->CharSet="UTF-8";					//set utf8
-		$this->Php_mailer->SMTPDebug = 2;					//debugging
-		$this->Php_mailer->Debugoutput = 'html';			//debug type
+		$this->Php_mailer->SMTPDebug = 0;					//default no debugging
 
 		# localhost or smtp?
 		if($this->mail_settings->mtype=="smtp") 	{ $this->set_smtp(); }
@@ -121,6 +120,20 @@ class phpipam_mail {
 			$this->mail_settings->$k = $s;
 		}
 	}
+
+	/**
+	 * Resets SMTP debugging
+	 *
+	 * @access public
+	 * @param int $level (default: 2)
+	 * @return void
+	 */
+	public function set_debugging ($level = 2) {
+		$this->Php_mailer->SMTPDebug = $level==1 ? 1 : 2;
+		// output
+		$this->Php_mailer->Debugoutput = 'html';
+	}
+
 
 
 

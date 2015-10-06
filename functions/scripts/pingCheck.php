@@ -231,7 +231,7 @@ else {
 
 	# re-initialize classes
 	$Database = new Database_PDO;
-	$Scan = new Scan ($Database);
+	$Scan = new Scan ($Database, $Subnets->settings);
 	// reset debugging
 	$Scan->reset_debugging(false);
 
@@ -325,7 +325,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 			$ago	  = "never";
 		} else {
 			$timeDiff = time() - strtotime($change['lastSeen']);
-			$ago 	  = $change['lastSeen']." (".sec2hms($timeDiff)." ago)";
+			$ago 	  = $change['lastSeen']." (".$Result->sec2hms($timeDiff)." ago)";
 		}
 
 		//content

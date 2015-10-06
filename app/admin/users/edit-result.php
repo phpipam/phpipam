@@ -17,6 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+
 # fetch auth method
 $auth_method = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['authMethod']);
 $auth_method!==false ? : $Result->show("danger", _("Invalid authentication method"), true);
@@ -42,7 +43,7 @@ if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->
 # general checks
 if(strlen(@$_POST['real_name'])==0)										{ $Result->show("danger", _("Real name field is mandatory!"), true); }
 # email format must be valid
-if (!validate_email(@$_POST['email'])) 									{ $Result->show("danger", _("Invalid email address!"), true); }
+if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
 
 # username must not already exist (if action is add)
 if ($_POST['action']=="add") {
@@ -95,7 +96,7 @@ if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->
 	$values['password'] = $_POST['password1'];
 }
 # pass change
-if(isset($_POST['passChange'])) {
+if(isset($_POST['passChange']) && $auth_method->type=="local") {
 	$values['passChange'] = "Yes";
 }
 # set groups user belongs to
@@ -114,7 +115,7 @@ if($_POST['role']=="Administrator") {
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }
 else																	{ $Result->show("success", _("User $_POST[action] successfull").'!', false); }
 
-/* mail user */
-if($Admin->verify_checkbox(@$_POST['notifyUser'])==1) { include("edit-notify.php"); }
+# mail user
+if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }
 
 ?>

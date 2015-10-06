@@ -30,17 +30,20 @@ if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $
 if(strlen($_POST['dname'])<2) 													{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
 
-
 //open connection
 try {
+	if($server->type == "NetIQ") { $params->account_suffix = ""; }
+	//set options
+	$options = array(
+			'base_dn'=>$params->base_dn,
+			'account_suffix'=>$params->account_suffix,
+			'domain_controllers'=>explode(";",$params->domain_controllers),
+			'use_ssl'=>$params->use_ssl,
+			'use_tls'=>$params->use_tls,
+			'ad_port'=>$params->ad_port
+			);
 	//AD
-	$adldap = new adLDAP(array( 'base_dn'=>$params->base_dn, 'account_suffix'=>$params->account_suffix,
-								'domain_controllers'=>explode(";",$params->domain_controllers), 'use_ssl'=>$params->use_ssl,
-								'use_tls'=> $params->use_tls, 'ad_port'=> $params->ad_port
-								));
-
-	//first check connection
-	if(@fsockopen($adldap->selected_controller, $params->ad_port, $errno, $errstr, 2)==false)	{ $Result->show("danger",  "Cannot connect to controller $adldap->selected_controller<br>$errstr ($errno)", true); }
+	$adldap = new adLDAP($options);
 
 	//try to login with higher credentials for search
 	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
@@ -52,18 +55,18 @@ try {
 	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
 
 	//search for domain user!
-	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"));
+	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"),false,$server->type);
 
 	//echo $adldap->getLastError();
 }
 catch (adLDAPException $e) {
-	$Result->show("danger", $e, true);
+	$Result->show("danger", $e->getMessage(), true);
 }
 
 
 //check for found
 if(!isset($userinfo['count'])) {
-	print "<div class='alert alert-info alert-block'>";
+	print "<div class='alert alert-info'>";
 	print _('No users found')."!<hr>";
 	print _('Possible reasons').":";
 	print "<ul>";
@@ -78,7 +81,8 @@ if(!isset($userinfo['count'])) {
 
 	unset($userinfo['count']);
 	if(sizeof(@$userinfo)>0 && isset($userinfo)) {
-	 	foreach($userinfo as $u) {
+		// loop
+		foreach($userinfo as $u) {
 			print "<tr>";
 			print "	<td>".$u['displayname'][0];
 			print "</td>";
@@ -86,7 +90,7 @@ if(!isset($userinfo['count'])) {
 			print "	<td>".$u['mail'][0]."</td>";
 			//actions
 			print " <td style='width:10px;'>";
-			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".$u['displayname'][0]."' data-username='".$u['samaccountname'][0]."' data-email='".$u['mail'][0]."'>"._('Select')."</a>";
+			print "		<a href='' class='btn btn-sm btn-default btn-success userselect' data-uname='".$u['displayname'][0]."' data-username='".$u['samaccountname'][0]."' data-email='".$u['mail'][0]."' data-server='".$_POST['server']."' data-server-type='".$server->type."'>"._('Select')."</a>";
 			print "	</td>";
 			print "</tr>";
 		}

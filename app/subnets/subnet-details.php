@@ -106,11 +106,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			# fetch recursive nameserver details
 			$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
-			print $nameservers['namesrv1'];
-
-			// Print secondary and tertiery nameserver if defined)
-			if(!empty($nameservers['namesrv2'])) {print ' , '.$nameservers['namesrv2']; }
-			if(!empty($nameservers['namesrv3'])) {print ' , '.$nameservers['namesrv3']; }
+			print str_replace(";", ", ", $nameservers['namesrv1']);
 
 			//Print name of nameserver group
 			print ' ('.$nameservers['name'].')';
@@ -170,9 +166,12 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# autocreate PTR records
 	if($User->settings->enablePowerDNS==1) {
+		// initialize class
+		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
+			# powerDNS class
+			$PowerDNS = new PowerDNS ($Database);
+		}
 		if ($subnet['DNSrecursive'] == 1) {
-		# powerDNS class
-		$PowerDNS = new PowerDNS ($Database);
 		if($PowerDNS->db_check()!==false) {
 			// set name
 			$zone = $PowerDNS->get_ptr_zone_name ($subnet['ip'], $subnet['mask']);
@@ -242,7 +241,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
 				}
 				else {
-					$html_custom[] = create_links($subnet[$key]);
+					$html_custom[] = $Result->create_links($subnet[$key]);
 				}
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";
@@ -263,17 +262,20 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		foreach(json_decode($User->settings->tempAccess) as $s) {
-			if($s->type=="subnets" && $s->id==$subnet['id']) {
-				if(time()<$s->validity) {
-					$active_shares[] = $s;
-				}
-				else {
-					$expired_shares[] = $s;
+		if (is_array(json_decode($User->settings->tempAccess, true))) {
+			foreach(json_decode($User->settings->tempAccess) as $s) {
+				if($s->type=="subnets" && $s->id==$subnet['id']) {
+					if(time()<$s->validity) {
+						$active_shares[] = $s;
+					}
+					else {
+						$expired_shares[] = $s;
+					}
 				}
 			}
 		}
-		if(sizeof(@$active_shares)>0) {
+
+		if(isset($active_shares)) {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
@@ -291,7 +293,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			print "<td>";
 			print "</tr>";
 		}
-		if(sizeof(@$expired_shares)>0) {
+		if(isset($expired_shares)) {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
@@ -413,11 +415,11 @@ $rowSpan = 10 + sizeof($custom_fields);
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
-		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
+		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-download'></i></a>";
 		else
-		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>											<i class='fa fa-upload'></i></a>";
+		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>									<i class='fa fa-download'></i></a>";
 		//export
-		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-download'></i></a>";
+		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
 		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";

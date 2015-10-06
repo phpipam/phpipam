@@ -66,6 +66,14 @@ $settings = (array) $User->settings;
 	</td>
 	<td class="info2"><?php print _('Set site URL'); ?></td>
 </tr>
+<!-- Login header text -->
+<tr>
+        <td class="title"><?php print _('Login text'); ?></td>
+        <td>
+                <input type="text" class="form-control input-sm" name="siteLoginText" value="<?php print $settings['siteLoginText']; ?>">
+        </td>
+        <td class="info2"><?php print _("Show text above 'username' field on login page (default empty)"); ?></td>
+</tr>
 <!-- prettyLinks -->
 <tr>
 	<td class="title"><?php print _('Prettify links'); ?></td>
@@ -205,6 +213,28 @@ $settings = (array) $User->settings;
 	</td>
 </tr>
 
+<!-- powerdns -->
+<tr>
+	<td class="title"><?php print _('Enable PowerDNS'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enablePowerDNS" <?php if($settings['enablePowerDNS'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable PowerDNS module'); ?>
+	</td>
+</tr>
+
+<!-- firewall zone management -->
+<tr>
+	<td class="title"><?php print _('Enable Firewall Zones'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableFirewallZones" <?php if($settings['enableFirewallZones'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable firewall zone management module'); ?>
+	</td>
+</tr>
+
 <!-- DNS resolving -->
 <tr>
 	<td class="title"><?php print _('Resolve DNS names'); ?></td>
@@ -235,6 +265,27 @@ $settings = (array) $User->settings;
 	</td>
 	<td class="info2">
 		<?php print _('Enable changelog module'); ?>
+	</td>
+</tr>
+
+<!-- Log location -->
+<tr>
+	<td class="title"><?php print _('Syslog'); ?></td>
+	<td>
+		<select name="log" class="form-control input-sm input-w-auto">
+		<?php
+		$types = array("Database"=>"Database", "syslog"=>"Syslog", "both"=>"Syslog and local Database");
+		//default
+		foreach($types as $k=>$d) {
+			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
+			else						{ print "<option value='$k' 				   >$d</option>"; }
+		}
+		?>
+		</select>
+
+	</td>
+	<td class="info2">
+		<?php print _('Set where to send system logs'); ?>
 	</td>
 </tr>
 

@@ -249,7 +249,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	if(in_array('state', $selected_ip_fields)) {
 
 		# fetch all states
-		$ip_types = $Addresses->addresses_types_fetch();
+		$ip_types = (array) $Addresses->addresses_types_fetch();
 		# default type
 		if(!is_numeric(@$address['state'])) 		{ $address['state'] = 2; }
 

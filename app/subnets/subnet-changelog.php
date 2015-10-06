@@ -8,11 +8,11 @@
 $User->check_user_session();
 
 # get clog entries for current subnet
-$clogs = $Tools->fetch_changlog_entries("subnet", $_GET['subnetId'], true);
+$clogs = $Log->fetch_changlog_entries("subnet", $_GET['subnetId'], true);
 # subnet changelog for all slave subnets
-$clogsSlaves = $Tools->fetch_subnet_slaves_changlog_entries_recursive($_GET['subnetId']);
+$clogsSlaves = $Log->fetch_subnet_slaves_changlog_entries_recursive($_GET['subnetId']);
 # changelog for each IP address, also in slave subnets
-$clogsAddresses = $Tools->fetch_subnet_addresses_changelog_recursive($_GET['subnetId']);  //se ne dela !
+$clogsAddresses = $Log->fetch_subnet_addresses_changelog_recursive($_GET['subnetId']);  //se ne dela !
 
 # get subnet details
 $subnet = (array) $Subnets-> fetch_subnet("id",$_GET['subnetId']);

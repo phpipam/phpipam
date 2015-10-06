@@ -12,7 +12,6 @@ class PowerDNS extends Common_functions {
 	public $error = false;				// connection error string
 	public $db_settings;				// (obj) db settings
 	public $defaults;					// (obj) defaults settings
-	private $settings = false;			// (obj) settings
 
 	public $limit;						// number of results
 	public $orderby;					// order field
@@ -41,7 +40,10 @@ class PowerDNS extends Common_functions {
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
-		// get settings form parent
+		# Log object
+		$this->Log = new Logging ($this->Database);
+
+		// get settings
 		$this->get_settings ();
 		// set database
 		$this->db_set ();
@@ -54,20 +56,6 @@ class PowerDNS extends Common_functions {
 		$this->set_query_values ();
 		// set ttl values
 		$this->set_ttl_values ();
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	protected function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
 	}
 
 	/**
@@ -318,9 +306,13 @@ class PowerDNS extends Common_functions {
 		# execute
 		try { $this->Database_pdns->insertObject("domains", $values); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS domain create", "Failed to create PowerDNS domain: ".$e->getMessage()."<hr>".$this->array_to_log((array) $values), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS domain create", "New PowerDNS domain created<hr>".$this->array_to_log((array) $values), 0);
 		# ok
 		return true;
 	}
@@ -339,9 +331,13 @@ class PowerDNS extends Common_functions {
 		# execute
 		try { $this->Database_pdns->updateObject("domains", $values); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS domain edit", "Failed to edit PowerDNS domain: ".$e->getMessage()."<hr>".$this->array_to_log((array) $values), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS domain edit", "PowerDNS domain edited<hr>".$this->array_to_log((array) $values), 0);
 		# ok
 		return true;
 	}
@@ -354,12 +350,18 @@ class PowerDNS extends Common_functions {
 	 * @return void
 	 */
 	private function domain_delete ($values) {
+		# save old
+		$old_domain = $this->fetch_domain ($values['id']);
 		# execute
 		try { $this->Database_pdns->deleteRow("domains", "id", $values['id']); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS domain delete", "Failed to delete PowerDNS domain: ".$e->getMessage()."<hr>".$this->array_to_log((array) $old_domain), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS domain delete", "PowerDNS domain deleted<hr>".$this->array_to_log((array) $old_domain), 0);
 		return true;
 	}
 
@@ -384,6 +386,69 @@ class PowerDNS extends Common_functions {
 		# result
 		return sizeof($res)>0 ? $res : false;
 	}
+
+    /**
+     * Fetches all forward domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_all_forward_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.arpa", "name", true, true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res)>0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res)>0 ? $res : false;
+    }
+
+    /**
+     * Fetches all reverse IPv4 domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_reverse_v4_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.in-addr.arpa", "name", true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res) > 0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res) > 0 ? $res : false;
+    }
+
+    /**
+     * Fetches all reverse IPv6 domains
+     *
+     * @access public
+     * @return void
+     */
+    public function fetch_reverse_v6_domains () {
+        # fetch
+        try { $res = $this->Database_pdns->findObjects("domains", "name", "%.ip6.arpa", "name", true, true); }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # cache
+        if (sizeof($res) > 0) {
+            foreach ($res as $r) { $this->domains_cache[$r->id] = $r; }
+        }
+        # result
+        return sizeof($res) > 0 ? $res : false;
+    }
 
 	/**
 	 * Fetches domain record by id (numberic) of name (varchar)
@@ -634,9 +699,14 @@ class PowerDNS extends Common_functions {
 		# execute
 		try { $this->Database_pdns->insertObject("records", $record); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS record create", "Failed to create PowerDNS domain record: ".$e->getMessage()."<hr>".$this->array_to_log((array) $record), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS record create", "New PowerDNS domain record created<hr>".$this->array_to_log((array) $record), 0);
+
 		# print ?
 		if ($print_success)
 		$this->Result->show("success", _("Record created"));
@@ -713,12 +783,19 @@ class PowerDNS extends Common_functions {
 	 * @return void
 	 */
 	public function remove_domain_record_by_id ($id) {
+		# fetch old records
+		$old_record = $this->fetch_record ($id);
 		# execute
 		try { $this->Database_pdns->deleteRow("records", "id", $id); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS record delete", "Failed to delete PowerDNS domain record: ".$e->getMessage()."<hr>".$this->array_to_log((array) $old_record), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS record delete", "PowerDNS domain record deleted<hr>".$this->array_to_log((array) $old_record), 0);
+
 		# ok
 		return true;
 	}
@@ -734,9 +811,13 @@ class PowerDNS extends Common_functions {
 		# execute
 		try { $this->Database_pdns->updateObject("records", $content); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS record update", "Failed to update PowerDNS domain record: ".$e->getMessage()."<hr>".$this->array_to_log((array) $content), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS record updated", "PowerDNS domain record updated<hr>".$this->array_to_log((array) $content), 0);
 		# ok
 		return true;
 	}
@@ -804,7 +885,7 @@ class PowerDNS extends Common_functions {
 		if (sizeof($ns)>0) {
 			foreach($ns as $s) {
 				// validate
-				if(validate_hostname($s)===false)		{ $this->Result->show("danger", "Invalid NS". " $n", true); }
+				if($this->validate_hostname($s)===false)		{ $this->Result->show("danger", "Invalid NS". " $n", true); }
 				// save
 				$records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl']);
 			}
@@ -905,7 +986,7 @@ class PowerDNS extends Common_functions {
 	 */
 	private function validate_record_name ($name) {
 		// null is ok, otherwise URI is required
-		if (strlen($name)>0 && !validate_hostname($name))		{ $this->Result->show("danger", _("Invalid record name"), true); }
+		if (strlen($name)>0 && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
 		// ok
 		return $name;
 	}
@@ -1071,9 +1152,14 @@ class PowerDNS extends Common_functions {
 		// execute
 		try { $res = $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ?;", array($domain_id)); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS domain truncate", "Failed to remove all PowerDNS domain records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS domain truncate", "PowerDNS domain records truncated<hr>".$this->array_to_log((array) $domain_id), 0);
+
 		# ok
 		$this->Result->show("success", _("All records for domain removed"));
 		return true;
@@ -1134,11 +1220,20 @@ class PowerDNS extends Common_functions {
 
 		// remove netmask and ::
 		$subnet = $this->Net_IPv6->removeNetmaskSpec($ip);
-		$subnet = str_replace(":", "", $subnet);
+		$subnet = rtrim($subnet, "::");
+
+		// to array
+		$ip = explode(":", $subnet);
+
+		// if 0 than add 4 nulls
+		foreach ($ip as $k=>$i) {
+			$ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
+		}
+
 		// to array and reverse
-		$zone = array_reverse(str_split($subnet));
-		// return
-		return implode(".", $zone).".ipv6.arpa";
+		$zone = array_reverse(str_split(implode("", $ip)));
+
+		return implode(".", $zone).".ip6.arpa";
 	}
 
 	/**
@@ -1160,19 +1255,17 @@ class PowerDNS extends Common_functions {
 			// uncompress and remove netmask
 			$ip = $this->Net_IPv6->uncompress($ip);
 			$ip = $this->Net_IPv6->removeNetmaskSpec($ip);
+
 			// to array
 			$ip = explode(":", $ip);
 
 			// if 0 than add 4 nulls
 			foreach ($ip as $k=>$i) {
-				if ($i=="0") { $ip[$k] = "0000"; }
+				$ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
 			}
+
 			$ip = str_split(implode("", $ip));
-
-
-
-			$prefix = ".ipv6.arpa";
-
+			$prefix = ".ip6.arpa";
 			$zone = array_reverse($ip);
 		}
 		// return
@@ -1232,9 +1325,13 @@ class PowerDNS extends Common_functions {
 		// execute
 		try { $res = $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ? and `type` = 'PTR';", array($domain_id)); }
 		catch (Exception $e) {
+			// write log
+			$this->Log->write( "PowerDNS records delete", "Failed to delete all PowerDNS domain PTR records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
+		// write log
+		$this->Log->write( "PowerDNS records delete", "All PTR records for PowerDNS removed<hr>".$this->array_to_log((array) $domain_id), 0);
 		# ok
 		return true;
 	}

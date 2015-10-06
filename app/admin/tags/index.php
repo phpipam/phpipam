@@ -32,29 +32,34 @@ print '	<th></th>'. "\n";
 print '</tr>'. "\n";
 
 # loop
-foreach ($all_types as $type) {
-	//cast
-	$type = (array) $type;
+if ($all_types!==false) {
+	// cast
+	$all_types = (array) $all_types;
+	// loop
+	foreach ($all_types as $type) {
+		//cast
+		$type = (array) $type;
 
-	//format type
-	$showtag = $type['showtag']==1 ? "Yes" : "No";
+		//format type
+		$showtag = $type['showtag']==1 ? "Yes" : "No";
 
-	//print details
-	print '<tr>'. "\n";
-	print '	<td>'. $type['type'] .'</td>'. "\n";
-	print '	<td>'.$showtag.'</td>'. "\n";
-	print '	<td style="background-color:'.$type['bgcolor'].'">'. $type['bgcolor'] .'</td>'. "\n";
-	print '	<td style="background-color:'.$type['fgcolor'].'">'. $type['fgcolor'] .'</td>'. "\n";
-	print '	<td>'. $type['compress'] .'</td>'. "\n";
-	print '	<td>'. $type['locked'] .'</td>'. "\n";
+		//print details
+		print '<tr>'. "\n";
+		print '	<td>'. $type['type'] .'</td>'. "\n";
+		print '	<td>'.$showtag.'</td>'. "\n";
+		print '	<td style="background-color:'.$type['bgcolor'].'">'. $type['bgcolor'] .'</td>'. "\n";
+		print '	<td style="background-color:'.$type['fgcolor'].'">'. $type['fgcolor'] .'</td>'. "\n";
+		print '	<td>'. $type['compress'] .'</td>'. "\n";
+		print '	<td>'. $type['locked'] .'</td>'. "\n";
 
-	print "	<td class='actions'>";
-	print "	<div class='btn-group'>";
-	print "		<button class='btn btn-xs btn-default editType' data-action='edit'   data-id='$type[id]'><i class='fa fa-pencil'></i></button>";
-	print "		<button class='btn btn-xs btn-default editType' data-action='delete' data-id='$type[id]'><i class='fa fa-times'></i></button>";
-	print "	</div>";
-	print "	</td>";
-	print '</tr>'. "\n";
+		print "	<td class='actions'>";
+		print "	<div class='btn-group'>";
+		print "		<button class='btn btn-xs btn-default editType' data-action='edit'   data-id='$type[id]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default editType' data-action='delete' data-id='$type[id]'><i class='fa fa-times'></i></button>";
+		print "	</div>";
+		print "	</td>";
+		print '</tr>'. "\n";
+	}
 }
 print '</table>'. "\n";
 ?>

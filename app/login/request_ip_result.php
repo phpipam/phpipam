@@ -13,18 +13,19 @@ $Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
 
 # fetch settings, user is not authenticated !
-$settings = $Tools->fetch_settings();
+$Tools->get_settings();
 
 # requests must be enabled!
-if($settings['enableIPrequests']==1) {
+if($Tools->settings->enableIPrequests==1) {
 	# verify email
-	if(!validate_email($_POST['requester']) ) 						{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$_POST['requester'].')', true); }
+	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$_POST['requester'].')', true); }
 
 	# formulate insert values
 	$values = array("subnetId"=>$_POST['subnetId'],
 					"ip_addr"=>@$_POST['ip_addr'],
 	    			"description"=>@$_POST['description'],
 	    			"dns_name"=>@$_POST['dns_name'],
+	    			"state"=>$_POST['state'],
 	    			"owner"=>$_POST['owner'],
 	    			"requester"=>$_POST['requester'],
 	    			"comment"=>@$_POST['comment'],
@@ -34,8 +35,7 @@ if($settings['enableIPrequests']==1) {
 	else {
 																	{ $Result->show("success", _('Request submitted successfully')); }
 		# send mail
-		//if(!sendIPReqEmail($_POST))									{ $Result->show("danger",  _('Sending mail for new IP request failed'), true); }
-		//else														{ $Result->show("success", _('Sending mail for IP request succeeded'), true); }
+		$Tools->ip_request_send_mail ("new", $values);
 	}
 }
 else 																{ $Result->show("danger",  _('IP requests disabled'), true); }

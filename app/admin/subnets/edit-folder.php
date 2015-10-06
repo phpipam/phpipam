@@ -88,10 +88,13 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
         <td>
         	<select name="sectionIdNew" class="form-control input-sm input-w-auto">
             	<?php
-            	foreach($sections as $section) {
-            		/* selected? */
-            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
-            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }            	}
+	            if($sections!==false) {
+	            	foreach($sections as $section) {
+	            		/* selected? */
+	            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
+	            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }
+	            	}
+            	}
             	?>
             </select>
 

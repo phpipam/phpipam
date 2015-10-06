@@ -4,13 +4,12 @@
  *	phpIPAM SCAN and PING class
  */
 
-class Scan {
+class Scan extends Common_functions {
 
 	/**
 	 * public variables
 	 */
 	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $settings = null;				//(object) phpipam settings
 	public $php_exec = null;				//(int) php executable file
 	public $debugging = false;				//(bool) debugging flag
 	public $icmp_type = "ping";				//(varchar) default icmp type
@@ -29,6 +28,8 @@ class Scan {
 	protected $Database;					//for Database connection
 	protected $Subnets;						//for Subnets object
 	protected $Addresses;					//for Addresses object
+	public $Log;							//for Logging connection
+
 
 
 
@@ -49,27 +50,13 @@ class Scan {
 		# debugging
 		$this->set_debugging();
 		# fetch settings
-		is_null($settings) ? $this->get_settings() : $this->settings = (object) $settings;
+		is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 		# set type
 		$this->reset_scan_method ($this->settings->scanPingType);
 		# set php exec
 		$this->set_php_exec ();
-	}
-
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-			# set method
-			$this->icmp_type = $this->settings->scanPingType;
-		}
+		# Log object
+		$this->Log = new Logging ($this->Database, $this->settings);
 	}
 
 	/**
@@ -102,17 +89,6 @@ class Scan {
 		else {
 			$this->icmp_type = $method;
 		}
-	}
-
-	/**
-	 * Sets debugging
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		include( dirname(__FILE__) . '/../../config.php' );
-		$this->debugging = $debugging ? true : false;
 	}
 
 	/**
@@ -185,14 +161,11 @@ class Scan {
 		$this->icmp_timeout = $timeout;
 		$this->icmp_count = $count;
 
-		# Initialize object
-		$this->Addresses = new Addresses ($this->Database);
-
 		# escape address
 		$address = escapeshellarg($address);
 
 		# make sure it is in right format
-		$address = $this->Addresses->transform_address ($address, "dotted");
+		$address = $this->transform_address ($address, "dotted");
 		# set method name variable
 		$ping_method = "ping_address_method_".$this->icmp_type;
 		# ping with selected method
@@ -213,7 +186,7 @@ class Scan {
 		$this->ping_verify_path ($this->settings->scanPingPath);
 
 		# set ping command based on OS type
-		if(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                           { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
+		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
 		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
 		elseif(PHP_OS == "WIN32" || PHP_OS == "Windows" || PHP_OS == "WINNT")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -I ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
 		else																	{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
@@ -343,7 +316,7 @@ class Scan {
 		# verify ping path
 		$this->ping_verify_path ($this->settings->scanFPingPath);
 		# set command
-		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr \n";
+		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -438,7 +411,7 @@ class Scan {
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log
-			!$this->debugging ? : write_log ("status_update", _('Failed to update address status'), 0 );
+			!$this->debugging ? : $this->Log->write ("status_update", _('Failed to update address status'), 0 );
 		}
 	}
 

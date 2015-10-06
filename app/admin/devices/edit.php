@@ -228,15 +228,17 @@ $(document).ready(function(){
 		<?php
 		# select sections
 		$Sections = new Sections ($Database);
-		$Sections->fetch_all_sections();
+		$sections = $Sections->fetch_all_sections();
 
 		# reformat device sections to array
 		$deviceSections = explode(";", $device['sections']);
 		$deviceSections = is_array($deviceSections) ? $deviceSections : array();
 
-		foreach($Sections->sections as $section) {
-			if(in_array($section->id, $deviceSections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
-			else 											{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+		if ($sections!==false) {
+			foreach($sections as $section) {
+				if(in_array($section->id, $deviceSections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
+				else 											{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+			}
 		}
 		?>
 		</td>

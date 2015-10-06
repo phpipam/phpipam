@@ -230,7 +230,7 @@ if(sizeof($address)>1) {
 				elseif($address[$key] == 1)	{ print _("Yes"); }
 			}
 			else {
-				print create_links($address[$key]);
+				print $Result->create_links($address[$key]);
 			}
 			print "	</td>";
 			print "</tr>";

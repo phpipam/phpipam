@@ -113,7 +113,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
         	<?php
         	# set CIDR
         	if (isset($subnet_old_temp['subnet']))	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
-        	if (@$_POST['location'] == "ipcalc") 	{ $cidr = $_POST['subnet'].'/'.$_POST['bitmask']; }  														//from ipcalc
+        	if (@$_POST['location'] == "ipcalc") 	{ $cidr = strlen($_POST['bitmask'])>0 ? $_POST['subnet'].'/'.$_POST['bitmask'] : $_POST['subnet']; }  														//from ipcalc
             if ($_POST['action'] != "add") 			{ $cidr = $Subnets->transform_to_dotted($subnet_old_details['subnet']).'/'.$subnet_old_details['mask']; } 	//editing existing
         	?>
             <input type="text" class="form-control input-sm input-w-200" name="subnet"   placeholder="<?php print _('subnet in CIDR'); ?>"   value="<?php print @$cidr; ?>" <?php if ($readonly) print "readonly"; ?>>
@@ -141,10 +141,12 @@ $(".input-switch").bootstrapSwitch(switch_options);
         <td>
         	<select name="sectionIdNew" class="form-control input-sm input-w-auto">
             	<?php
-            	foreach($sections as $section) {
-            		/* selected? */
-            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
-            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }
+            	if($sections!==false) {
+	            	foreach($sections as $section) {
+	            		/* selected? */
+	            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
+	            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }
+	            	}
             	}
             ?>
         	</select>

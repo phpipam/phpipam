@@ -61,6 +61,7 @@ $(document).ready(function(){
 	<form id="usersEdit" name="usersEdit">
 	<table class="usersEdit table table-noborder table-condensed">
 
+	<tbody>
 	<!-- real name -->
 	<tr>
 	    <td><?php print _('Real name'); ?></td>
@@ -112,7 +113,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _("Authentication method"); ?></td>
 		<td>
-			<select name="authMethod" class="form-control input-sm input-w-auto">
+			<select name="authMethod" id="authMethod" class="form-control input-sm input-w-auto">
 			<?php
 			foreach($auth_types as $type) {
 				# match
@@ -125,11 +126,14 @@ $(document).ready(function(){
 		<td class="info2"><?php print _("Select authentication method for user"); ?></td>
 	</tr>
 
-
-    <!-- password -->
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
+
+	</tbody>
+
+    <!-- password -->
+	<tbody id="user_password" <?php if(@$user['authMethod']!="1" && isset($user['authMethod'])) print "style='display:none'"; ?>>
 
     <tr class="password">
     	<td><?php print _('Password'); ?></td>
@@ -157,8 +161,9 @@ $(document).ready(function(){
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
+	</tbody>
 
-
+	<tbody>
 	<!-- Language -->
 	<tr>
 		<td><?php print _('Language'); ?></td>
@@ -178,7 +183,7 @@ $(document).ready(function(){
     <!-- send notification mail -->
     <tr>
     	<td><?php print _('Notification'); ?></td>
-    	<td><input type="checkbox" name="notifyUser" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
+    	<td><input type="checkbox" name="notifyUser" value="on" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
     	<td class="info2"><?php print _('Send notification email to user with account details'); ?></td>
     </tr>
 
@@ -336,6 +341,7 @@ $(document).ready(function(){
 		}
 	}
 	?>
+	</tbody>
 
 
 </table>
