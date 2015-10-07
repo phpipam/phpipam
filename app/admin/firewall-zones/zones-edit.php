@@ -2,35 +2,34 @@
 // firewall zone fwzones-edit.php
 // add, edit and delete firewall zones
 
-# functions
+// functions 
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize classes
-$Database = new Database_PDO;
-$User 	  = new User ($Database);
-$Admin 	  = new Admin($Database);
-$Subnets  = new Subnets ($Database);
-$Sections = new Sections ($Database);
-$Result   = new Result ();
-$Zones    = new FirewallZones($Database);
+$Database 	= new Database_PDO;
+$User 		= new User ($Database);
+$Admin		= new Admin($Database);
+$Subnets 	= new Subnets ($Database);
+$Sections 	= new Sections ($Database);
+$Result 	= new Result ();
+$Zones 	= new FirewallZones($Database);
 
 # validate session parameters
 $User->check_user_session();
 
 
 // validate $_POST['id'] values
-if (!preg_match('/^[0-9]+$/i', $_POST['id'])) 												 { $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true); }
+if (!preg_match('/^[0-9]+$/i', $_POST['id'])) 													{	$Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true); }
 // validate $_POST['action'] values
-if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] != 'delete') { $Result->show("danger", _("Invalid action. Do not manipulate the POST values!"), true); }
+if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] != 'delete') 	{ $Result->show("danger", _("Invalid action. Do not manipulate the POST values!"), true); }
 // validate $_POST['sectionId'] values
 if (isset($_POST['sectionId'])) {
-	if (!preg_match('/^[0-9]+$/i', $_POST['sectionId'])) 									 { $Result->show("danger", _("Invalid section ID. Do not manipulate the POST values!"), true); }
+	if (!preg_match('/^[0-9]+$/i', $_POST['sectionId'])) 										{ $Result->show("danger", _("Invalid section ID. Do not manipulate the POST values!"), true); }	
 }
 
 // fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 
-// fetch old zone
 if ($_POST['action'] != 'add') {
 	$firewallZone = $Zones->get_zone($_POST['id']);
 }
@@ -39,11 +38,13 @@ if ($_POST['action'] != 'add') {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 
+
 // fetch all sections
 $sections = $Sections->fetch_all_sections();
 
 // fetch all layer2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
+
 ?>
 <!-- header  -->
 <div class="pHeader"><?php print _('Add a firewall zone'); ?></div>
@@ -86,7 +87,7 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 		}
 		?>
 		<input type="hidden" name="generator" value="<?php print $firewallZoneSettings['zoneGenerator']; ?>">
-
+		
 	</tr>
 	<tr>
 		<!-- zone indicator -->
@@ -147,7 +148,7 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			foreach ($sections as $section) {
 				// select the section if already configured
 				if ($firewallZone->sectionId == $section->id) {
-					print '<option value="'.$section->id.'" selected>'. $section->name.' ('.$section->description.')</option>';
+					print '<option value="'.$section->id.'" selected>'.	$section->name.' ('.$section->description.')</option>';	
 				} else {
 					print '<option value="'.$section->id.'">'.			$section->name.' ('.$section->description.')</option>';
 				}
@@ -191,9 +192,9 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			<?php
 			foreach ($vlan_domains as $vlan_domain) {
 				if ($firewallZone->domainId == $vlan_domain->id) {
-					print '<option value="'.$vlan_domain->id.'" selected>'. $vlan_domain->name.' ('.$vlan_domain->description.')</option>';
+					print '<option value="'.$vlan_domain->id.'" selected>'.$vlan_domain->name.' - '.$vlan_domain->description.'</option>';
 				} else {
-					print '<option value="'.$vlan_domain->id.'">'.			$vlan_domain->name.' ('.$vlan_domain->description.')</option>';
+					print '<option value="'.$vlan_domain->id.'">'.$vlan_domain->name.' - '.$vlan_domain->description.'</option>';
 				}
 			}
 			?>
@@ -206,16 +207,16 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			<?php print _('VLAN'); ?>
 		</td>
 			<?php
-			// if there is only one layer2 domain or if there is one already selected, fetch the vlans of that domain
+			// if there is only one layer2 domain or if there is one already selected, fetch the vlans of that domain 
 			if($firewallZone->vlanId){
 				// fetch all vlans of that particular domain
 				$vlans = $Admin->fetch_multiple_objects("vlans", "domainId", $firewallZone->domainId, "number");
-				print '<td><div class="domainVlans"><select name="vlanId" class="form-control input-sm input-w-auto input-max-200">';
+				print '<td><div class="domainVlans"><select name="vlanId" class="form-control input-sm input-w-auto input-max-200">';		
 				foreach ($vlans as $vlan) {
 					if ($firewallZone->vlanId == $vlan->vlanId) {
-						print '<option value="'.$vlan->vlanId.'" selected>'.$vlan->number.' ('.$vlan->description.')</option>';
+						print '<option value="'.$vlan->vlanId.'" selected>'.	$vlan->number.' ('.$vlan->description.')</option>';
 					} else {
-						print '<option value="'.$vlan->vlanId.'">'.			$vlan->number.' ('.$vlan->name.' - '.$vlan->description.')</option>';
+						print '<option value="'.$vlan->vlanId.'">'.				$vlan->number.' ('.$vlan->name.' - '.$vlan->description.')</option>';
 					}
 				}
 				print '</select></div></td>';
