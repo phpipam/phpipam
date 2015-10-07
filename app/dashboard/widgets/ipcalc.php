@@ -1,22 +1,3 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-
-	//submit form
-	$('form#ipCalc2').submit(function () {
-	    var ipCalcData = $(this).serialize();
-	    $.post('app/dashboard/widgets/ipcalc-result.php', ipCalcData, function(data) {
-	        $('div.ipCalcResult2').html(data).fadeIn('fast');
-	    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	    return false;
-	});
-});
-</script>
-
-<style type="text/css">
-</style>
-
-
 <?php
 # required functions
 if(!is_object(@$User)) {
@@ -37,6 +18,22 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	header("Location: ".create_link("tools", "ip-calculator"));
 }
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	//submit form
+	$('form#ipCalc2').submit(function () {
+	    var ipCalcData = $(this).serialize();
+	    $.post('app/dashboard/widgets/ipcalc-result.php', ipCalcData, function(data) {
+	        $('div.ipCalcResult2').html(data).fadeIn('fast');
+	    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+	    return false;
+	});
+});
+</script>
+
 
 <div style="padding: 10px;">
 
