@@ -61,7 +61,7 @@ class phpipam_mail {
 	 */
 	public function initialize_mailer () {
 		# we need phpmailer
-		require_once( dirname(__FILE__) . '/../PHPMailer/class.phpmailer.php');
+		require_once( dirname(__FILE__) . '/../PHPMailer/PHPMailerAutoload.php');
 
 		# initialize object
 		$this->Php_mailer = new PHPMailer(true);			//localhost by default
