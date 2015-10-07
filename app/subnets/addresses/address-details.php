@@ -78,7 +78,7 @@ if(sizeof($address)>1) {
 	print "<tr>";
 	print "	<th>"._('Hierarchy')."</th>";
 	print "	<td>";
-	print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+	$Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
 	print "</td>";
 	print "</tr>";
 

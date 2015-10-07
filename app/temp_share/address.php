@@ -63,7 +63,7 @@ if(sizeof($address)>1) {
 	print "<tr>";
 	print "	<th>"._('Hierarchy')."</th>";
 	print "	<td>";
-	print_breadcrumbs($Sections, $Subnets, array("page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'], "ipaddrid"=>$address['id']), $Addresses);
+	$Sections->print_breadcrumbs($Sections, $Subnets, array("page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'], "ipaddrid"=>$address['id']), $Addresses);
 	print "</td>";
 	print "</tr>";
 

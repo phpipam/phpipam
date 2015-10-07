@@ -20,7 +20,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php print_breadcrumbs($Sections, $Subnets, $_GET); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET); ?>
 		</td>
 	</tr>
 	<tr>

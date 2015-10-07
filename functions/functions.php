@@ -8,6 +8,14 @@ ini_set('display_errors', 1);
 if (!$debugging) { error_reporting(E_ERROR ^ E_WARNING); }
 else			 { error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT); }
 
+/**
+ * detect missing gettext and fake function
+ */
+if(!function_exists('gettext')) {
+	function gettext ($text) 	{ return $text; }
+	function _($text) 			{ return $text; }
+}
+
 //error_reporting(-1);
 
 /* @classes ---------------------- */

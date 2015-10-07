@@ -517,6 +517,149 @@ class Common_functions  {
 	}
 
 
+
+
+
+
+
+
+
+	/**
+	 *	@breadcrumbs functions
+	 * ------------------------
+	 */
+
+	/**
+	 *	print breadcrumbs
+	 */
+	public function print_breadcrumbs ($Section, $Subnet, $req, $Address=null) {
+		# subnets
+		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs  ($Section, $Subnet, $req, $Address); }
+		# folders
+		if($req['page'] == "folder")		{ $this->print_folder_breadcrumbs  ($Section, $Subnet, $req); }
+		# admin
+		else if($req['page'] == "admin")	{ $this->print_admin_breadcrumbs   ($Section, $Subnet, $req); }
+		# tools
+		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs   ($Section, $Subnet, $req); }
+	}
+
+	/**
+	 * Print address breadcrumbs
+	 *
+	 * @access private
+	 * @param obj $Section
+	 * @param obj $Subnet
+	 * @param mixed $req
+	 * @param obj $Address
+	 * @return void
+	 */
+	private function print_subnet_breadcrumbs ($Section, $Subnet, $req, $Address) {
+		if(isset($req['subnetId'])) {
+			# get all parents
+			$parents = $Subnet->fetch_parents_recursive ($req['subnetId']);
+			print "<ul class='breadcrumb'>";
+			# remove root - 0
+			array_shift($parents);
+
+			# section details
+			$section = (array) $Section->fetch_section(null, $req['section']);
+
+			# section name
+			print "	<li><a href='".create_link("subnets",$section['id'])."'>$section[name]</a> <span class='divider'></span></li>";
+
+			# all parents
+			foreach($parents as $parent) {
+				$parent = $parent;
+				$subnet = (array) $Subnet->fetch_subnet(null,$parent);
+				if($subnet['isFolder']==1) {
+					print "	<li><a href='".create_link("folder",$section['id'],$parent)."'><i class='icon-folder-open icon-gray'></i> $subnet[description]</a> <span class='divider'></span></li>";
+				} else {
+					print "	<li><a href='".create_link("subnets",$section['id'],$parent)."'>$subnet[description] ($subnet[ip]/$subnet[mask])</a> <span class='divider'></span></li>";
+				}
+			}
+			# parent subnet
+			$subnet = (array) $Subnet->fetch_subnet(null,$req['subnetId']);
+			# ip set
+			if(isset($req['ipaddrid'])) {
+				$ip = (array) $Address->fetch_address (null, $req['ipaddrid']);
+				print "	<li><a href='".create_link("subnets",$section['id'],$subnet['id'])."'>$subnet[description] ($subnet[ip]/$subnet[mask])</a> <span class='divider'></span></li>";
+				print "	<li class='active'>$ip[ip]</li>";			//IP address
+			}
+			else {
+				print "	<li class='active'>$subnet[description] ($subnet[ip]/$subnet[mask])</li>";		//active subnet
+
+			}
+			print "</ul>";
+		}
+	}
+
+	/**
+	 * Print admin breadcrumbs
+	 *
+	 * @access private
+	 * @param obj $Section
+	 * @param obj $Subnet
+	 * @param mixed $req
+	 * @return void
+	 */
+	private function print_admin_breadcrumbs ($Section, $Subnet, $req) {
+		# nothing here
+	}
+
+
+	/**
+	 * Print folder breadcrumbs
+	 *
+	 * @access private
+	 * @param obj $Section
+	 * @param obj $Subnet
+	 * @param mixed $req
+	 * @return void
+	 */
+	private function print_folder_breadcrumbs ($Section, $Subnet, $req) {
+		if(isset($req['subnetId'])) {
+			# get all parents
+			$parents = $Subnet->fetch_parents_recursive ($req['subnetId']);
+			print "<ul class='breadcrumb'>";
+			# remove root - 0
+			array_shift($parents);
+
+			# section details
+			$section = (array) $Section->fetch_section(null, $req['section']);
+
+			# section name
+			print "	<li><a href='".create_link("subnets",$section['id'])."'>$section[name]</a> <span class='divider'></span></li>";
+
+			# all parents
+			foreach($parents as $parent) {
+				$parent = (array) $parent;
+				$subnet = (array) $Subnet->fetch_subnet(null,$parent['id']);
+				print "	<li><a href='".create_link("subnets",$section['id'],$parent)."'><i class='icon-folder-open icon-gray'></i> $subnet[description]</a> <span class='divider'></span></li>";
+			}
+			# parent subnet
+			$subnet = (array) $Subnet->fetch_subnet(null,$req['subnetId']);
+			print "	<li>$subnet[description]</li>";																		# active subnet
+			print "</ul>";
+		}
+	}
+
+	/**
+	 * Prints tools breadcrumbs
+	 *
+	 * @access public
+	 * @param obj $Section
+	 * @param obj $Subnet
+	 * @param mixed $req
+	 * @return void
+	 */
+	private function print_tools_breadcrumbs ($Section, $Subnet, $req) {
+		if(isset($req['tpage'])) {
+			print "<ul class='breadcrumb'>";
+			print "	<li><a href='".create_link("tools")."'>"._('Tools')."</a> <span class='divider'></span></li>";
+			print "	<li class='active'>$req[tpage]></li>";
+			print "</ul>";
+		}
+	}
 }
 
 ?>
