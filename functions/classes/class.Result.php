@@ -33,17 +33,19 @@ class Result extends Common_functions {
 			else						{ return $this->throw_exception ($utext); }
 		}
 		else {
-			# text
-			if(!is_array( $utext )) {}
 			# array
-			elseif( is_array( $utext ) && sizeof( $utext )>0) {
-				if(sizeof( $utext )==1) {								# single value
-					$utext = $utext[0];
-				} else {												# multiple values
-					$utext = "<ul>";
-					foreach( $utext as $l ) { $utext .= "<li>$l</li>"; }
-					$utext .= "</ul>";
+			if(is_array($utext)) {
+				if(sizeof( $utext )==1) {							# single value
+					$utext1 = $utext;
 				}
+				else {												# multiple values
+					$utext1[] = "Errors:";
+					$utext1[] = "<ul>";
+					foreach( $utext as $l ) { $utext1[] = "<li>$l</li>"; }
+					$utext1[] = "</ul>";
+				}
+				// join
+				$utext = implode("\n", $utext1);
 			}
 
 			# print popup or normal

@@ -10,7 +10,7 @@
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php print_breadcrumbs($Sections, $Subnets, array("page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'])); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, array("page"=>"subnets", "section"=>$subnet['sectionId'], "subnetId"=>$subnet['id'])); ?>
 		</td>
 	</tr>
 	<tr>

@@ -47,7 +47,7 @@ class Logging extends Common_functions {
   		$this->log_username = @$_SESSION['ipamusername'];
 
 		# settings
-		$this->settings = $settings===null ? $this->get_settings () : (object) $settings;
+		$this->settings = $settings===null || $settings===false ? $this->get_settings () : (object) $settings;
 		# debugging
 		$this->set_debugging();
 		# set log type
@@ -487,6 +487,9 @@ class Logging extends Common_functions {
 		# fetch user id
 		$this->get_active_user_id ();
 
+		# null and from cli, set admin user
+		if ($this->user===null && php_sapi_name()=="cli") { $this->user_id = 1; }
+
 		# set update id based on action
 		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
 		else								{ $obj_id = $this->object_old['id']; }
@@ -651,9 +654,12 @@ class Logging extends Common_functions {
 			}
 
 			//transform subnet to IP address format
-			if(strlen($new['subnet'])>0) {
-		    	$this->object_new['subnet'] = $this->Subnets->transform_address (substr($this->object_new['subnet'], 0, strpos($this->object_new['subnet'], "/")), "decimal");
-			}
+			if(strlen($this->object_new['subnet'])>0) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address (substr($this->object_new['subnet'], 0, strpos($this->object_new['subnet'], "/")), "decimal");}
+			if(strlen($this->object_old['subnet'])>0) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address (substr($this->object_old['subnet'], 0, strpos($this->object_old['subnet'], "/")), "decimal");}
+
+			//remove subnet/mask for folders
+			if (@$this->object_new['isFolder']=="1")	{ unset($this->object_new['subnet'], $this->object_new['mask']); }
+			if (@$this->object_old['isFolder']=="1")	{ unset($this->object_old['subnet'], $this->object_old['mask']); }
 		}
 		# remove order fields
 		elseif($this->object_type == "section") {
@@ -1202,7 +1208,6 @@ class Logging extends Common_functions {
 		$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
 
 		# initialize mailer
-		require( dirname(__FILE__) . '/class.Mail.php' );
 		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
 		$phpipam_mail->initialize_mailer();
 

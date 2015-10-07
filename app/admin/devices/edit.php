@@ -72,9 +72,9 @@ $(document).ready(function(){
 			<select name="type" class="form-control input-sm input-w-auto">
 			<?php
 			$types = $Admin->fetch_all_objects("deviceTypes", "tid");
-			foreach($types as $key=>$name) {
-				if($device['type'] == $key)	{ print "<option value='$key' selected='selected'>$name->tname</option>"; }
-				else						{ print "<option value='$key' >$name->tname</option>"; }
+			foreach($types as $name) {
+				if($device['type'] == $name->tid)	{ print "<option value='$name->tid' selected='selected'>$name->tname</option>"; }
+				else								{ print "<option value='$name->tid' >$name->tname</option>"; }
 			}
 			?>
 			</select>

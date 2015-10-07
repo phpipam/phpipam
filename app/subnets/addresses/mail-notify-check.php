@@ -6,7 +6,6 @@
 
 # include required scripts
 require( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/classes/class.Mail.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;

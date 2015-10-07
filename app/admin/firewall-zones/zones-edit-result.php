@@ -2,17 +2,17 @@
 // firewall zone zones-result.php
 // verify and update zone informations
 
-// functions 
+# functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
-// initialize classes
+# initialize classes
 $Database = new Database_PDO;
-$User = new User ($Database);
-$Admin = new Admin ($Database);
-$Result = new Result ();
-$Zones = new FirewallZones($Database);
+$User 	  = new User ($Database);
+$Admin 	  = new Admin ($Database);
+$Result   = new Result ();
+$Zones 	  = new FirewallZones($Database);
 
-// validate session parameters
+# validate session parameters
 $User->check_user_session();
 
 // fetch module settings
@@ -90,27 +90,28 @@ if ($_POST['generator'] == 2 ) {
 
 // build the query parameter arrary
 if($_POST['generator'] != 2 && $_POST['action'] == 'edit') {
-	$zoneSettings = array(	'id' => $_POST['id'],
-							'indicator' => $_POST['indicator'],
-							'padding' => $padding,
-							'description' => $description,
-							'subnetId' => $_POST['masterSubnetId'],
-							'vlanId' => $_POST['vlanId']);
-} else {
-	$zoneSettings = array(	'id' => $_POST['id'],
-							'generator' => $_POST['generator'],
-							'zone' => $zone,
-							'indicator' => $_POST['indicator'],
-							'padding' => $padding,
-							'description' => $description,
-							'subnetId' => $_POST['masterSubnetId'],
-							'vlanId' => $_POST['vlanId']);	
+	$values = array('id' => $_POST['id'],
+					'indicator' => $_POST['indicator'],
+					'padding' => $padding,
+					'description' => $description,
+					'subnetId' => $_POST['masterSubnetId'],
+					'vlanId' => $_POST['vlanId']
+					);
+}
+else {
+	$values = array('id' => $_POST['id'],
+					'generator' => $_POST['generator'],
+					'zone' => $zone,
+					'indicator' => $_POST['indicator'],
+					'padding' => $padding,
+					'description' => $description,
+					'subnetId' => $_POST['masterSubnetId'],
+					'vlanId' => $_POST['vlanId']
+					);
 }
 
-if(!$Zones->modify_zone($_POST['action'],$zoneSettings)) {
-	$Result->show("danger",  _("Cannot add zone"), true);
-} else { 
-	$Result->show("success", _("Zone modified successfully"), true); 
-}
+# update
+if(!$Zones->modify_zone($_POST['action'],$values))	{ $Result->show("danger",  _("Cannot add zone"), true); }
+else 												{ $Result->show("success", _("Zone modified successfully"), true);  }
 
 ?>

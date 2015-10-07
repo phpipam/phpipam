@@ -2,7 +2,7 @@
 // firewall zone index.php
 // list firewall zone to device mappings
 
-// validate session parameters
+# validate session parameters
 $User->check_user_session();
 
 ?>
@@ -11,11 +11,10 @@ $User->check_user_session();
 <h4><?php print _('Firewall zone management'); ?></h4>
 <hr><br>
 
-<?php 
+<?php
 // check if the feature is activated, otherwise provide a short notice to enable this feature in the phpIPAM settings menu
 if($User->settings->enableFirewallZones==1) {
 ?>
-
 <!-- tabs -->
 <ul class="nav nav-tabs">
 	<?php

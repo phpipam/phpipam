@@ -29,7 +29,6 @@
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Mail.php');
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -70,7 +69,7 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 
 //first fetch all subnets to be scanned
-$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck ();
+$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
 if($Scan->debugging)							{ print_r($scan_subnets); }
 if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates"); }
 //fetch all addresses that need to be checked
@@ -330,10 +329,10 @@ if(sizeof($address_change)>0 && $send_mail) {
 
 		//content
 		$content[] = "<tr>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($change['ip_addr'])."</a></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($change['ip_addr'])."</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$change[description]</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ago</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$oldStatus</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$newStatus</td>";

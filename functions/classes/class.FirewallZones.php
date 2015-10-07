@@ -20,7 +20,7 @@ class FirewallZones extends Common_functions {
 
 	/* objects */
 	protected $Database;				// Database object - phpipam
-	
+
 
 
 	/**
@@ -56,7 +56,7 @@ class FirewallZones extends Common_functions {
 		} else {
 			return dechex($zone);
 		}
-		
+
 	}
 
 	/**
@@ -71,8 +71,8 @@ class FirewallZones extends Common_functions {
 		// get settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
 		// execute based on action
-		if($firewallZoneSettings['zoneGenerator'] == 0 || $firewallZoneSettings['zoneGenerator'] == 1 ) { 
-			return $this->generate_numeric_zone_name ($firewallZoneSettings['zoneLength']); 
+		if($firewallZoneSettings['zoneGenerator'] == 0 || $firewallZoneSettings['zoneGenerator'] == 1 ) {
+			return $this->generate_numeric_zone_name ($firewallZoneSettings['zoneLength']);
 		} elseif($firewallZoneSettings['zoneGenerator'] == 2 ) {
 			return $this->validate_text_zone_name ($values);
 		} else {
@@ -88,7 +88,7 @@ class FirewallZones extends Common_functions {
 	 * @return void
 	 */
 	private function generate_numeric_zone_name ($zoneLength) {
-		
+
 		// execute
 		try { $maxZone = $this->Database->getObjectsQuery('SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');}
 		catch (Exception $e) {
@@ -99,7 +99,7 @@ class FirewallZones extends Common_functions {
 		if ($maxZone[0]->zone) {
 			// add 1 to the zone name
 			$zoneName = ++$maxZone[0]->zone;
-			
+
 		} else {
 			// set the initial zone name to "1"
 			$zoneName = 1;
@@ -108,7 +108,6 @@ class FirewallZones extends Common_functions {
 		// return the values
 		return sizeof($zoneName)>0 ? $zoneName : false;
 	}
-
 
 	/**
 	 * validate text zone names
@@ -129,7 +128,7 @@ class FirewallZones extends Common_functions {
 
 		// get settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		// execute 
+		// execute
 		try { $uniqueZone = $this->Database->getObjectsQuery($query,$params);}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -139,18 +138,15 @@ class FirewallZones extends Common_functions {
 		if ($uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
 
 			$this->Result->show("danger", _("Error: The zone name ".$zone." is not unique!"), false);
-			
+
 		} else {
-			// set the initial zone name to "1" 
+			// set the initial zone name to "1"
 			$zoneName = $values[0];
 		}
-		
+
 		// return the values
 		return sizeof($zoneName)>0 ? $zoneName : false;
 	}
-
-
-
 
 	/**
 	 * Fetches zone mappings from database
@@ -160,7 +156,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_mappings () {
 		// try to fetch all mappings
-		try { $mapping = $this->Database->getObjectsQuery('SELECT 
+		try { $mapping = $this->Database->getObjectsQuery('SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -189,7 +185,7 @@ class FirewallZones extends Common_functions {
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
 						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
 						having  deviceId is not NULL order by firewallZones.id ASC;');}
-		// throw exception 
+		// throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		// modify the zone output values
 		foreach ($mapping as $key => $val) {
@@ -197,12 +193,12 @@ class FirewallZones extends Common_functions {
 			if($mapping[$key]->generator == 1 ){
 				$mapping[$key]->zone = dechex($mapping[$key]->zone);
 			}
-			
+
 			// add some padding if it is activated and the zone generatore is not text
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			// remove leading zeros (padding) and raise the value in case of any zone name length changes
 			// add some padding to reach the maximum zone name lenght
-			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);				
+			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
 			}
 		}
 		// return the values
@@ -218,7 +214,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_mapping ($id) {
 		// try to fetch all mappings
-		try { $mapping = $this->Database->getObjectsQuery('SELECT 
+		try { $mapping = $this->Database->getObjectsQuery('SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -246,7 +242,7 @@ class FirewallZones extends Common_functions {
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
 						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
 						having  deviceId is not NULL AND mappingId = ?;',$id);}
-		// throw exception 
+		// throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		// modify the zone output values
 		foreach ($mapping as $key => $val) {
@@ -254,12 +250,12 @@ class FirewallZones extends Common_functions {
 			if($mapping[$key]->generator == 1 ){
 				$mapping[$key]->zone = dechex($mapping[$key]->zone);
 			}
-			
+
 			// add some padding if it is activated and the zone generatore is not text
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			// remove leading zeros (padding) and raise the value in case of any zone name length changes
 			// add some padding to reach the maximum zone name lenght
-			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);				
+			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
 			}
 		}
 		// return the values
@@ -274,7 +270,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zones () {
 		// try to fetch all mappings
-		try { $zones =  $this->Database->getObjectsQuery('SELECT 
+		try { $zones =  $this->Database->getObjectsQuery('SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -291,12 +287,12 @@ class FirewallZones extends Common_functions {
 						subnets.isFolder AS subnetIsFolder,
 						firewallZones.vlanId AS vlanId,
 						vlans.domainId AS domainId,
-						vlans.number As vlan, 
+						vlans.number As vlan,
 						vlans.name AS vlanName
 						FROM firewallZones
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
 						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId ORDER BY id ASC;');}
-		// throw exception 
+		// throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
 		// modify the zone output values
@@ -309,7 +305,7 @@ class FirewallZones extends Common_functions {
 			if($zones[$key]->padding == 1 && $zones[$key]->generator != 2){
 			// remove leading zeros (padding) and raise the value in case of any zone name length changes
 			// add some padding to reach the maximum zone name lenght
-			$zones[$key]->zone = str_pad(ltrim($zones[$key]->zone,0),$zones[$key]->length,"0",STR_PAD_LEFT);				
+			$zones[$key]->zone = str_pad(ltrim($zones[$key]->zone,0),$zones[$key]->length,"0",STR_PAD_LEFT);
 			}
 		}
 		// return the values
@@ -325,7 +321,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone ($id) {
 		// try to fetch all mappings
-		try { $zone = $this->Database->getObjectsQuery('SELECT 
+		try { $zone = $this->Database->getObjectsQuery('SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -339,14 +335,14 @@ class FirewallZones extends Common_functions {
 						subnets.subnet AS subnet,
 						subnets.mask AS subnetMask,
 						firewallZones.vlanId AS vlanId,
-						vlans.domainId AS domainId, 
+						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
 						FROM firewallZones
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId 
+						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
 						HAVING id = ?;', $id);}
-		// throw exception 
+		// throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 		// modify the zone output values
 		foreach ($zone as $key => $val) {
@@ -354,14 +350,14 @@ class FirewallZones extends Common_functions {
 			if($zone[$key]->generator == 1 ){
 				$zone[$key]->zone = dechex($zone[$key]->zone);
 			}
-			
+
 			// add some padding if it is activated and the zone generatore is not text
 			if($zone[$key]->padding == 1 && $zone[$key]->generator != 2){
 			// remove leading zeros (padding) and raise the value in case of any zone name length changes
 			// add some padding to reach the maximum zone name lenght
-			$zone[$key]->zone = str_pad(ltrim($zone[$key]->zone,0),$zone[$key]->length,"0",STR_PAD_LEFT);				
+			$zone[$key]->zone = str_pad(ltrim($zone[$key]->zone,0),$zone[$key]->length,"0",STR_PAD_LEFT);
 			}
-		}		
+		}
 		// return the values
 		return sizeof($zone)>0 ? $zone[0] : false;
 	}
@@ -414,26 +410,6 @@ class FirewallZones extends Common_functions {
 			print '</td><td>';
 		}
 		print '</table>';
-}
-
-	/**
-	 * Changes empty array fields to specified character
-	 *
-	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
-	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
-		}
-		// result
-		return $out;
 	}
 
 	/**
@@ -446,10 +422,10 @@ class FirewallZones extends Common_functions {
 	 */
 	public function modify_zone ($action, $values) {
 
-		
+
 		// initialize user
 		$this->User = new User ($this->Database);
-		
+
 		// null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -471,7 +447,7 @@ class FirewallZones extends Common_functions {
 		// get the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
 
-		// push the zone name length into the values array	
+		// push the zone name length into the values array
 		$values['length'] = $firewallZoneSettings['zoneLength'];
 
 		// execute
@@ -548,11 +524,9 @@ class FirewallZones extends Common_functions {
 	 * @return void
 	 */
 	public function modify_mapping ($action, $values) {
-
-		
 		// initialize user
 		$this->User = new User ($this->Database);
-		
+
 		// null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 

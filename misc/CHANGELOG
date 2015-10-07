@@ -1,4 +1,4 @@
-== 1.18.041
+== 1.19.002
 
 	New features:
 	------------
@@ -24,6 +24,8 @@
 		+ Automatic reverse records creation (PTR) - IPv4 and IPv6;
 		+ Automatic SOA, NS record creation;
 		+ DNS domain management;
+	+ Added Scan agents to scan subnets remotely;
+	+ Added firewall zone mappings and module;
 
 	Enhancements:
 	----------------------------

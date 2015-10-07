@@ -2,7 +2,7 @@
 // firewall zone mapping-edit-result.php
 // verify and update mapping informations
 
-// functions 
+// functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 // initialize classes
@@ -14,7 +14,8 @@ $Zones = new FirewallZones($Database);
 // validate session parameters
 $User->check_user_session();
 
-// validations
+/* validations */
+
 // validate the action type
 if($_POST['action'] != 'add' && $_POST['action'] != 'delete' && $_POST['action'] != 'edit'){
 	$Result->show("danger", _("Invalid action."), true);
@@ -32,7 +33,7 @@ if ($_POST['action'] != 'delete') {
 	if(!preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
 		$Result->show("danger", _("Invalid zone ID."), true);
 	} elseif (preg_match('/^0$/i',$_POST['zoneId'])) {
-		$Result->show("danger", _("Please select a zone."), true);
+		$Result->show("danger", _("Invalid zone ID."), true);
 	}
 	// check the device ID. valid value: integer
 	if(!preg_match('/^[0-9]+$/i',$_POST['deviceId'])) {
@@ -47,17 +48,14 @@ if ($_POST['action'] != 'delete') {
 }
 
 
-// build the query parameter arrary
-
-$mappingSettings = array('id' => $_POST['id'],
-						'zoneId' => $_POST['zoneId'],
-						'alias' => $_POST['alias'],
-						'deviceId' => $_POST['deviceId'],
-						'interface' => $_POST['interface']);	
-
-if(!$Zones->modify_mapping($_POST['action'],$mappingSettings)) {
-	$Result->show("danger",  _("Cannot add mapping"), true);
-} else { 
-	$Result->show("success", _("Mapping modified successfully"), true); 
-}
+# build the query parameter arrary
+$values = array('id' => $_POST['id'],
+				'zoneId' => $_POST['zoneId'],
+				'alias' => $_POST['alias'],
+				'deviceId' => $_POST['deviceId'],
+				'interface' => $_POST['interface']
+				);
+# modify
+if(!$Zones->modify_mapping($_POST['action'],$values)) 	{ $Result->show("danger",  _("Cannot add mapping"), true); }
+else 													{ $Result->show("success", _("Mapping modified successfully"), true);  }
 ?>

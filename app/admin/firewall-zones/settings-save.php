@@ -6,13 +6,13 @@
 // functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
-// initialize user object
+# initialize objects
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Result 	= new Result ();
 
-// verify that user is logged in
+# verify that user is logged in
 $User->check_user_session();
 
 // validations
@@ -47,7 +47,7 @@ if (!preg_match('/^[a-zA-Z0-9\-\_.]+$/i', $_POST['indicator'][1])) {
 	$Result->show("danger", _("Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."), true);
 }
 
-// validate the zoneGenerator value. 
+// validate the zoneGenerator value.
 if (!preg_match('/^[0-3]$/i', $_POST['zoneGenerator'])) {
 	$Result->show("danger", _("Invalid zone generator method. Do not manipulate the POST values!"), true);
 }
@@ -96,26 +96,19 @@ $values->strictMode = $_POST['strictMode'];
 $values->deviceType = $_POST['deviceType'];
 
 // be sure that padding and strictMode will be set even if they are not delivered by $_POST.
-if($_POST['padding'] != 'on'){
-	$values->padding = 'off';	
-} else {
-	$values->padding = $_POST['padding'];
-}
-if($_POST['strictMode'] != 'on'){
-	$values->strictMode = 'off';	
-} else {
-	$values->strictMode = $_POST['strictMode'];
-}
+if($_POST['padding'] != 'on')	{ $values->padding = 'off'; }
+else 							{ $values->padding = $_POST['padding']; }
+
+if($_POST['strictMode'] != 'on'){ $values->strictMode = 'off'; }
+else 							{ $values->strictMode = $_POST['strictMode']; }
 
 // prepare the database update and encode the array with JSON_FORCE_OBJECT to keep the ids.
 $values = array('id' => 1,
-				'firewallZoneSettings' => json_encode($values,JSON_FORCE_OBJECT), );
+				'firewallZoneSettings' => json_encode($values,JSON_FORCE_OBJECT)
+				);
 
 // update the settings, alert or reply the success message.
-if(!$Admin->object_modify("settings", "edit", "id", $values)) {
-	$Result->show("danger",  _("Cannot update settings"), true);
-} else { 
-	$Result->show("success", _("Settings updated successfully"), true); 
-}
+if(!$Admin->object_modify("settings", "edit", "id", $values)) 	{ $Result->show("danger",  _("Cannot update settings"), true); }
+else 															{ $Result->show("success", _("Settings updated successfully"), true);  }
 
 ?>

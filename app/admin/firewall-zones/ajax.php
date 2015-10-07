@@ -2,18 +2,18 @@
 // firewall zone ajax.php
 // deliver content for ajax requests
 
-// functions 
+// functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
-// initialize classes
+# initialize user object
 $Database = new Database_PDO;
-$User = new User ($Database);
-$Admin = new Admin ($Database);
-$Subnets = new Subnets ($Database);
-$Result = new Result ();
-$Zones = new FirewallZones($Database);
+$User 	  = new User ($Database);
+$Admin 	  = new Admin ($Database);
+$Subnets  = new Subnets ($Database);
+$Result   = new Result ();
+$Zones 	  = new FirewallZones($Database);
 
-// validate session parameters
+# verify that user is logged in
 $User->check_user_session();
 
 if($_POST['sectionId']) {
@@ -25,7 +25,7 @@ if($_POST['sectionId']) {
 	}
 }
 
-if($_POST['vlanDomain']){ 
+if($_POST['vlanDomain']){
 	if(preg_match('/^[0-9]+$/i',$_POST['vlanDomain'])) {
 		$vlanDomain = $_POST['vlanDomain'];
 		$vlans = $Admin->fetch_multiple_objects("vlans", "domainId", $vlanDomain, "number");
@@ -49,7 +49,7 @@ if ($_POST['zoneId']) {
 	if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
 		// return the zone details
 		$Zones->get_zone_detail($_POST['zoneId']);
-		
+
 	} else {
 		$Result->show('danger', _('Invalid ID.'), true);
 	}

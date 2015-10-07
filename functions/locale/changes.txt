@@ -1131,10 +1131,10 @@ msgid "Wrong parameters"
 msgstr ""
 
 msgid "Table fixed"
-magstr ""
+msgstr ""
 
 msgid "Field fixed"
-magstr ""
+msgstr ""
 
 #: site/sections.php
 msgid "Database errors detected"
@@ -2622,7 +2622,7 @@ msgid "No subnets belong to this device"
 msgstr ""
 
 
-### 1.18.021 ###
+### 1.19.000 ###
 
 msgid "Log files are sent to syslog"
 msgstr ""
@@ -2645,9 +2645,6 @@ msgstr ""
 msgid "Add group"
 msgstr ""
 
-msgid "Select"
-msgstr ""
-
 msgid "No members"
 msgstr ""
 
@@ -2657,3 +2654,293 @@ msgstr ""
 msgid "You do not have permissions to process this request"
 msgstr ""
 
+msgid "Select agent"
+msgstr ""
+
+msgid "Select which scanagent to use"
+msgstr ""
+
+msgid "No agents available"
+msgstr ""
+
+msgid "phpipam Scan agents"
+msgstr ""
+
+msgid "Create new agent"
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "edit agent details"
+msgstr ""
+
+msgid "Create new scan agent"
+msgstr ""
+
+msgid "Enter scan agent name"
+msgstr ""
+
+msgid "Agent description'"
+msgstr ""
+
+msgid "Agent type"
+msgstr ""
+
+msgid "Invalid agent code"
+msgstr ""
+
+msgid "Invalid agent name"
+msgstr ""
+
+msgid "Invalid agent Id"
+msgstr ""
+
+msgid "Agent add error"
+msgstr ""
+
+msgid "Agent edit error"
+msgstr ""
+
+msgid "Agent delete error"
+msgstr ""
+
+msgid "Agent add success"
+msgstr ""
+
+msgid "Agent edit success"
+msgstr ""
+
+msgid "Agent delete success"
+msgstr ""
+
+msgid "Cannot remove localhost scan agent"
+msgstr ""
+
+msgid "Scan agent references removed"
+msgstr ""
+
+
+### 1.19.002 ###
+
+msgid "Enable Firewall Zones"
+msgstr ""
+
+msgid "Enable or disable firewall zone management module"
+msgstr ""
+
+msgid "Firewall zone management"
+msgstr ""
+
+msgid "Invalid zone alias value."
+msgstr ""
+
+msgid "Invalid interface."
+msgstr ""
+
+msgid "Invalid zone ID."
+msgstr ""
+
+msgid "Invalid mapping ID."
+msgstr ""
+
+msgid "Cannot add mapping"
+msgstr ""
+
+msgid "Mapping modified successfully"
+msgstr ""
+
+msgid "Invalid ID. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid action. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Add a mapping between a firewall device and a firewall zone"
+msgstr ""
+
+msgid "Zone to map"
+msgstr ""
+
+msgid "Select a firewall zone"
+msgstr ""
+
+msgid "Firewall to map"
+msgstr ""
+
+msgid "Select firewall"
+msgstr ""
+
+msgid "Interface"
+msgstr ""
+
+msgid "Create Firewall zone mapping"
+msgstr ""
+
+msgid "Firewall interface"
+msgstr ""
+
+msgid "Zone alias"
+msgstr ""
+
+msgid "Local zone alias"
+msgstr ""
+
+msgid "You are about to remove the firewall to zone mapping!"
+msgstr ""
+
+msgid "Zone"
+msgstr ""
+
+msgid "Alias"
+msgstr ""
+
+msgid "Devicename"
+msgstr ""
+
+msgid "No firewall zones configured"
+msgstr ""
+
+msgid "Invalid zone name length parameter. A valid valid value is between 3 and 31"
+msgstr ""
+
+msgid "Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+
+msgid "Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+
+msgid "Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+
+msgid "Invalid zone generator method. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid zone generator types [decimal]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid zone generator types [hex]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid zone generator types [text]. Do not manipulate the POST values!"
+msgstr ""
+
+msgid "Invalid padding value. Use the checkbox to set the padding value to on or off."
+msgstr ""
+
+msgid "Invalid device type."
+msgstr ""
+
+msgid "Maximum zone name length"
+msgstr ""
+
+msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr ""
+
+msgid "IPv4 address type alias"
+msgstr ""
+
+msgid "IPv6 address type alias"
+msgstr ""
+
+msgid "Address type aliases are used to indicate a IPv4 or IPv6 address object."
+msgstr ""
+
+msgid "The separator is used to keep the name of address objects tidy."
+msgstr ""
+
+msgid "Own zone indicator"
+msgstr ""
+
+msgid "The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It is the leading character of the zone name but will be separated from the zone name in the database."
+msgstr ""
+
+msgid "Customer zone indicator"
+msgstr ""
+
+msgid "Zone generator method"
+msgstr ""
+
+msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgstr ""
+
+msgid "Zone name padding"
+msgstr ""
+
+msgid "Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>This setting will be ignored if you use the \"text\" zone name generator."
+msgstr ""
+
+msgid "Zone name strict mode"
+msgstr ""
+
+msgid "Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the &quot;text&quot; mode you may uncheck this to have not unique zone names."
+msgstr ""
+
+msgid "Firewall device Type"
+msgstr ""
+
+msgid "Select the appropriate device type to match firewall devices."
+msgstr ""
+
+msgid "Invalid zone name value."
+msgstr ""
+
+msgid "Invalid indicator ID."
+msgstr ""
+
+msgid "Invalid section ID."
+msgstr ""
+
+msgid "Invalid subnet ID."
+msgstr ""
+
+msgid "Invalid L2 domain ID."
+msgstr ""
+
+msgid "Invalid VLAN ID."
+msgstr ""
+
+msgid "Invalid generator ID."
+msgstr ""
+
+msgid "Invalid padding setting."
+msgstr ""
+
+msgid "Cannot generate zone name"
+msgstr ""
+
+msgid "Cannot validate zone name"
+msgstr ""
+
+msgid "Cannot add zone"
+msgstr ""
+
+msgid "Zone modified successfully"
+msgstr ""
+
+msgid "Add a firewall zone"
+msgstr ""
+
+msgid "Zone name (Only alphanumeric and special characters like .-_ and space.)"
+msgstr ""
+
+msgid "The zone name will be automatically generated"
+msgstr ""
+
+msgid "Zone name"
+msgstr ""
+
+msgid "Own zone"
+msgstr ""
+
+msgid "Customer zone"
+msgstr ""
+
+msgid "Removing this firewall zone will also remove all referenced mappings!"
+msgstr ""
+
+msgid "Create Firewall zone"
+msgstr ""
+
+msgid "Firewall zone and device mappings"
+msgstr ""

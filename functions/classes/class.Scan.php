@@ -614,6 +614,45 @@ class Scan extends Common_functions {
 			return array();
 		}
 	}
+}
 
 
+/**
+ *	@scan helper functions
+ * ------------------------
+ */
+
+/**
+ *	Ping address helper for CLI threading
+ *
+ *	used for:
+ *		- icmp status update (web > ping, pear)
+ *		- icmp subnet discovery (web > ping, pear)
+ *		- icmp status update (cli)
+ *		- icmp discovery (cli)
+ */
+function ping_address ($address) {
+//	$Database = new Database_PDO;
+//	$Scan = new Scan ($Database);
+ 	global $Scan;
+	//scan
+	return $Scan->ping_address ($address);
+}
+
+/**
+ *	Telnet address helper for CLI threading
+ */
+function telnet_address ($address, $port) {
+	global $Scan;
+	//scan
+	return $Scan->telnet_address ($address, $port);
+}
+
+/**
+ *	fping subnet helper for fping threading, all methods
+ */
+function fping_subnet ($subnet_cidr, $return = true) {
+	global $Scan;
+	//scan
+	return $Scan->ping_address_method_fping_subnet ($subnet_cidr, $return);
 }

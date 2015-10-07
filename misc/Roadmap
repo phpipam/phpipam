@@ -1,14 +1,13 @@
 version - 1.2
 
 	+ To fix / finish
-		+ Export domain in bind format + script;
-		+ Verify upgrade/import scripts from older versions;
+		+ Verify API new fields and update web documentation;
+		+ Slave subnets are not deleted - check;
+		+ db port;
+		+ BASE auto-detect;
+		+ Settings to CONSTANT;
 
 	+ Mark subnet as full (db prepared);
-
-	+ phpipam scan Agents (db prepared);
-
-	+ L2 domain permissions for groups ?
 
 
 features for next releases:
@@ -16,12 +15,16 @@ features for next releases:
 
 	+ per-section DNS resolvers (PEAR DNS2)
 
+	+ Export domain in bind format + script;
+
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
 		- Ability to create NAT pools and link subnet / address to that pool - source NAT
 		- Show bindings under tools and next to IP address
 
 	+ IP address owner (from internal users - suggestions);
+
+	+ L2 domain permissions for groups ?
 
 	+ Devices permissions;
 

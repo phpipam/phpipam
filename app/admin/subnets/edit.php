@@ -92,6 +92,21 @@ var switch_options = {
 };
 
 $(".input-switch").bootstrapSwitch(switch_options);
+$(".input-switch-agents-ping").bootstrapSwitch(switch_options);
+$(".input-switch-agents-scan").bootstrapSwitch(switch_options);
+
+// change - agent selector
+$('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.bootstrapSwitch', function (e, data) {
+	// get state from both
+	var ping = ($(".input-switch-agents-ping").bootstrapSwitch('state'));
+	var scan = ($(".input-switch-agents-scan").bootstrapSwitch('state'));
+
+	// change
+	if 		(ping==true || scan==true)		{ $("tr#scanAgentDropdown").removeClass("hidden"); }
+	else if (ping==false && scan==false)	{ $("tr#scanAgentDropdown").addClass("hidden"); }
+});
+
+
 });
 </script>
 
@@ -271,6 +286,54 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	    <td colspan="3"><hr></td>
     </tr>
 
+	<!-- Scan agents -->
+	<?php
+	//fetch agents
+	$agents = $Tools->fetch_all_objects ("scanAgents");
+	// set hidden
+	if (@$subnet_old_details['pingSubnet']=="1" || @$subnet_old_details['discoverSubnet']=="1")	{ $hidden = ""; }
+	else																						{ $hidden = "hidden"; }
+	//print form
+	if ($agents!==false) {
+		print "<tr id='scanAgentDropdown' class='$hidden'>";
+		print "<td>"._('Select agent')."</td>";
+		print "<td>";
+		print "<select name='scanAgent' class='form-control input-sm'>";
+		foreach ($agents as $a) {
+			if ($a->id==@$subnet_old_details['scanAgent'])	{ print "<option value='".$a->id."' selected='selected'>".$a->name." (".$a->description.")</option>"; }
+			else											{ print "<option value='".$a->id."'>".$a->name." (".$a->description.")</option>"; }
+		}
+		print "</select>";
+		print "</td>";
+		print '	<td class="info2">'._('Select which scanagent to use').'</td>' . "\n";
+		print "</tr>";
+	}
+
+	//check host status
+	$checked = @$subnet_old_details['pingSubnet']==1 ? "checked": "";
+	print '<tr>' . "\n";
+    print '	<td>'._('Check hosts status').'</td>' . "\n";
+    print '	<td>' . "\n";
+    print '		<input type="checkbox" name="pingSubnet" class="input-switch-agents-ping" value="1" '.$checked.'>'. "\n";
+    print '	</td>' . "\n";
+    print '	<td class="info2">'._('Ping hosts inside subnet to check availability').'</td>' . "\n";
+    print '</tr>';
+
+	//Discover new hosts
+	$checked = @$subnet_old_details['discoverSubnet']==1 ? "checked": "";
+	print '<tr>' . "\n";
+    print '	<td>'._('Discover new hosts').'</td>' . "\n";
+    print '	<td>' . "\n";
+    print '		<input type="checkbox" name="discoverSubnet" class="input-switch-agents-scan" value="1" '.$checked.'>'. "\n";
+    print '	</td>' . "\n";
+    print '	<td class="info2">'._('Discover new hosts in this subnet').'</td>' . "\n";
+    print '</tr>';
+	?>
+
+    <tr>
+	    <td colspan="3"><hr></td>
+    </tr>
+
 	<?php
 	/* allow / deny IP requests if enabled in settings */
 	if($User->settings->enableIPrequests==1) {
@@ -314,27 +377,6 @@ $(".input-switch").bootstrapSwitch(switch_options);
         print '	</td>' . "\n";
         print '	<td class="info2">'._('Show Subnet name instead of subnet IP address').'</td>' . "\n";
     	print '</tr>' . "\n";
-
-
-		//check host status
-		$checked = @$subnet_old_details['pingSubnet']==1 ? "checked": "";
-		print '<tr>' . "\n";
-        print '	<td>'._('Check hosts status').'</td>' . "\n";
-        print '	<td>' . "\n";
-        print '		<input type="checkbox" name="pingSubnet" class="input-switch" value="1" '.$checked.'>'. "\n";
-        print '	</td>' . "\n";
-        print '	<td class="info2">'._('Ping hosts inside subnet to check availability').'</td>' . "\n";
-        print '</tr>';
-
-		//Discover new hosts
-		$checked = @$subnet_old_details['discoverSubnet']==1 ? "checked": "";
-		print '<tr>' . "\n";
-        print '	<td>'._('Discover new hosts').'</td>' . "\n";
-        print '	<td>' . "\n";
-        print '		<input type="checkbox" name="discoverSubnet" class="input-switch" value="1" '.$checked.'>'. "\n";
-        print '	</td>' . "\n";
-        print '	<td class="info2">'._('Discover new hosts in this subnet').'</td>' . "\n";
-        print '</tr>';
 
 		//autocreate reverse records
 		if($User->settings->enablePowerDNS==1) {

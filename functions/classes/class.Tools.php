@@ -1168,9 +1168,6 @@ class Tools extends Common_functions {
 
 		# initialize mailer
 		$this->get_settings ();
-		if (!class_exists(phpipam_mail)) {
-			require( dirname(__FILE__) . '/class.Mail.php' );
-		}
 		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
 		$phpipam_mail->initialize_mailer();
 
@@ -1450,7 +1447,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	public function get_table_fix ($table) {
-		$res = fopen(dirname(__FILE__) . "/../db/SCHEMA.sql", "r");
+		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
 		$file = fread($res, 100000);
 
 		//go from delimiter on
