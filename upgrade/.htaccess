@@ -1,0 +1,3 @@
+<IfModule mod_dir.c>
+    DirectoryIndex disabled
+</IfModule>
