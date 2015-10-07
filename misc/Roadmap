@@ -1,10 +1,12 @@
 version - 1.2
 
 	+ To fix / finish
-		+ Export domain in bind format + script;
-		+ Verify upgrade/import scripts from older versions;
 		+ Verify API new fields and update web documentation;
 		+ Slave subnets are not deleted - check;
+
+	+ BASE auto-detect;
+
+	+ Settings to CONSTANT;
 
 	+ Mark subnet as full (db prepared);
 
@@ -13,6 +15,8 @@ features for next releases:
 ---------------------------
 
 	+ per-section DNS resolvers (PEAR DNS2)
+
+	+ Export domain in bind format + script;
 
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT

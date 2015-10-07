@@ -18,12 +18,12 @@ CREATE TABLE `ipTags` (
   `bgcolor` varchar(7) DEFAULT '#000',
   `fgcolor` varchar(7) DEFAULT '#fff',
   `locked` set('No','Yes') NOT NULL DEFAULT 'No',
+  `compress` set('No','Yes') NOT NULL DEFAULT 'No',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-/* insert default values */
-INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `locked`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `locked`, `compress`)
 VALUES
-	(0, 'Offline', 1, '#f59c99', '#ffffff', 'Yes'),
-	(1, 'Used', 0, '#a9c9a4', '#ffffff', 'Yes'),
-	(2, 'Reserved', 1, '#9ac0cd', '#ffffff', 'Yes'),
-	(3, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes');
+	(1, 'Offline', 1, '#f59c99', '#ffffff', 'Yes', 'No'),
+	(2, 'Used', 0, '#a9c9a4', '#ffffff', 'Yes', 'No'),
+	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'Yes', 'Yes'),
+	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');

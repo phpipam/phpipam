@@ -72,3 +72,4 @@ else {
 <hr>
 
 <h4><?php print _('phpipam-agent documentation'); ?></h4>
+<a href="https://github.com/phpipam/phpipam-agent">https://github.com/phpipam/phpipam-agent</a>

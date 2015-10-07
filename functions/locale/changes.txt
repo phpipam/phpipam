@@ -1131,10 +1131,10 @@ msgid "Wrong parameters"
 msgstr ""
 
 msgid "Table fixed"
-magstr ""
+msgstr ""
 
 msgid "Field fixed"
-magstr ""
+msgstr ""
 
 #: site/sections.php
 msgid "Database errors detected"
@@ -2645,9 +2645,6 @@ msgstr ""
 msgid "Add group"
 msgstr ""
 
-msgid "Select"
-msgstr ""
-
 msgid "No members"
 msgstr ""
 
@@ -2721,4 +2718,5 @@ msgid "Cannot remove localhost scan agent"
 msgstr ""
 
 msgid "Scan agent references removed"
-magstr ""
+msgstr ""
+

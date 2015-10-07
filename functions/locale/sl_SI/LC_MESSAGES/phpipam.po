@@ -4,10 +4,10 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.18.009\n"
+# "Project-Id-Version: 1.19.001\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
-# "PO-Revision-Date: 2015-09-01 14:33+0200\n"
+# "PO-Revision-Date: 2015-10-07 14:33+0200\n"
 # "Last-Translator: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "Language: Slovenian (sl_SI)\n"
 # "MIME-Version: 1.0\n"
@@ -6078,3 +6078,101 @@ msgstr "Pripadajoči naslovi"
 
 msgid "No subnets belong to this device"
 msgstr "Tej nepravi ne pripada nobeno omrežje"
+
+### 1.19.000 ###
+
+msgid "Log files are sent to syslog"
+msgstr "Log zapisi se pošiljajo v syslog"
+
+msgid "Syslog files are sent to syslog"
+msgstr "Syslog zapisi se pošiljajo v syslog"
+
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+msgstr "Število zaznanih hostov je večje ob maximalne vrenosti v php.ini - max vrednost je"
+
+msgid "Please adjust your php.ini settings for value `max_input_vars`"
+msgstr "Prosimo nastavite php.ini nastavitve za vrednost `max_input_vars`"
+
+msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
+msgstr "Za AD/LDAP/NetIQ povezave phpipam uporablja adLDAP, za dokumentacijo obiščite "
+
+msgid "Search domain groups"
+msgstr "Izkanje domenski skupin"
+
+msgid "Add group"
+msgstr "Dodaj skupino"
+
+msgid "No members"
+msgstr "Ni članov"
+
+msgid "Group already exists"
+msgstr "Skupina že obstaja"
+
+msgid "You do not have permissions to process this request"
+msgstr "Nimate pravic za obdelavo zahtevka"
+
+msgid "Select agent"
+msgstr "Izberite agenta"
+
+msgid "Select which scanagent to use"
+msgstr "Izberite, kateri agent bo v uporabi"
+
+msgid "No agents available"
+msgstr "Ni razpoložjivih agentov"
+
+msgid "phpipam Scan agents"
+msgstr "phpipam scan agenti"
+
+msgid "Create new agent"
+msgstr "Ustvari novega agenta"
+
+msgid "Last access"
+msgstr "Zadnji dostop"
+
+msgid "edit agent details"
+msgstr "uredi podatke o agentu"
+
+msgid "Create new scan agent"
+msgstr "Ustvari novega agenta"
+
+msgid "Enter scan agent name"
+msgstr "Vnesite ime agenta"
+
+msgid "Agent description'"
+msgstr "Opis"
+
+msgid "Agent type"
+msgstr "Tip"
+
+msgid "Invalid agent code"
+msgstr "Neveljavna koda agenta"
+
+msgid "Invalid agent name"
+msgstr "Neveljavno ime agenta"
+
+msgid "Invalid agent Id"
+msgstr "Neveljaven Id agenta"
+
+msgid "Agent add error"
+msgstr "Napaka pri dodajanju agenta"
+
+msgid "Agent edit error"
+msgstr "Napaka pri urejanju agenta"
+
+msgid "Agent delete error"
+msgstr "Napaka pri izbrisu agenta"
+
+msgid "Agent add success"
+msgstr "Agent dodan"
+
+msgid "Agent edit success"
+msgstr "Agent urejen"
+
+msgid "Agent delete success"
+msgstr "Agent izbrisan"
+
+msgid "Cannot remove localhost scan agent"
+msgstr "localhost agenta ne morem izbrisati"
+
+msgid "Scan agent references removed"
+msgstr "Pripadajoča omrežja izbrisana"

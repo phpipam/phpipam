@@ -1447,7 +1447,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	public function get_table_fix ($table) {
-		$res = fopen(dirname(__FILE__) . "/../db/SCHEMA.sql", "r");
+		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
 		$file = fread($res, 100000);
 
 		//go from delimiter on

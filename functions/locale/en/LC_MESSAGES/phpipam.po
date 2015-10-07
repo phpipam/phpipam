@@ -4,10 +4,10 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.18.009\n"
+# "Project-Id-Version: 1.19.001\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
-# "PO-Revision-Date: 2015-09-01 14:33+0200\n"
+# "PO-Revision-Date: 2015-10-07 14:33+0200\n"
 # "Last-Translator: \n"
 # "Language: English\n"
 # "MIME-Version: 1.0\n"
@@ -6059,4 +6059,101 @@ msgid "Belonging hosts"
 msgstr ""
 
 msgid "No subnets belong to this device"
+msgstr ""
+
+# 1.19
+msgid "Log files are sent to syslog"
+msgstr ""
+
+msgid "Syslog files are sent to syslog"
+msgstr ""
+
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+msgstr ""
+
+msgid "Please adjust your php.ini settings for value `max_input_vars`"
+msgstr ""
+
+msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
+msgstr ""
+
+msgid "Search domain groups"
+msgstr ""
+
+msgid "Add group"
+msgstr ""
+
+msgid "No members"
+msgstr ""
+
+msgid "Group already exists"
+msgstr ""
+
+msgid "You do not have permissions to process this request"
+msgstr ""
+
+msgid "Select agent"
+msgstr ""
+
+msgid "Select which scanagent to use"
+msgstr ""
+
+msgid "No agents available"
+msgstr ""
+
+msgid "phpipam Scan agents"
+msgstr ""
+
+msgid "Create new agent"
+msgstr ""
+
+msgid "Last access"
+msgstr ""
+
+msgid "edit agent details"
+msgstr ""
+
+msgid "Create new scan agent"
+msgstr ""
+
+msgid "Enter scan agent name"
+msgstr ""
+
+msgid "Agent description'"
+msgstr ""
+
+msgid "Agent type"
+msgstr ""
+
+msgid "Invalid agent code"
+msgstr ""
+
+msgid "Invalid agent name"
+msgstr ""
+
+msgid "Invalid agent Id"
+msgstr ""
+
+msgid "Agent add error"
+msgstr ""
+
+msgid "Agent edit error"
+msgstr ""
+
+msgid "Agent delete error"
+msgstr ""
+
+msgid "Agent add success"
+msgstr ""
+
+msgid "Agent edit success"
+msgstr ""
+
+msgid "Agent delete success"
+msgstr ""
+
+msgid "Cannot remove localhost scan agent"
+msgstr ""
+
+msgid "Scan agent references removed"
 msgstr ""
