@@ -7,9 +7,9 @@ $User->check_user_session();
 
 // initialize classes
 $Database = new Database_PDO;
-$Subnets = new Subnets ($Database);
-$Result = new Result ();
-$Zones = new FirewallZones($Database);
+$Subnets  = new Subnets ($Database);
+$Result   = new Result ();
+$Zones 	  = new FirewallZones($Database);
 
 // fetch all zone mappings
 $firewallZoneMapping = $Zones->get_zone_mappings();
@@ -18,7 +18,7 @@ print '<h4>'._('Firewall zone and device mappings').'</h4>';
 ?>
 
 <!-- table -->
-<table id="mappingsPrint" class="table table-striped table-top table-auto">
+<table id="mappingsPrint" class="table table-striped table-top table-auto" style="margin-top:30px;">
 	<tr>
 		<!-- header -->
 		<th><?php print _('Type'); ?></th>
@@ -29,7 +29,6 @@ print '<h4>'._('Firewall zone and device mappings').'</h4>';
 		<th><?php print _('Interface'); ?></th>
 		<th colspan="2"><?php print _('Subnet'); ?></th>
 		<th colspan="2"><?php print _('VLAN'); ?></th>
-		<th></th>
 	</tr>
 <?php
 foreach ($firewallZoneMapping as $mapping) {

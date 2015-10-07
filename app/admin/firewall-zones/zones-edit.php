@@ -147,9 +147,9 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			foreach ($sections as $section) {
 				// select the section if already configured
 				if ($firewallZone->sectionId == $section->id) {
-					print '<option value="'.$section->id.'" selected>'.$section->name.' - '.$section->description.'</option>';
+					print '<option value="'.$section->id.'" selected>'. $section->name.' ('.$section->description.')</option>';
 				} else {
-					print '<option value="'.$section->id.'">'.$section->name.' - '.$section->description.'</option>';
+					print '<option value="'.$section->id.'">'.			$section->name.' ('.$section->description.')</option>';
 				}
 			}
 			?>
@@ -191,9 +191,9 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			<?php
 			foreach ($vlan_domains as $vlan_domain) {
 				if ($firewallZone->domainId == $vlan_domain->id) {
-					print '<option value="'.$vlan_domain->id.'" selected>'.$vlan_domain->name.' - '.$vlan_domain->description.'</option>';
+					print '<option value="'.$vlan_domain->id.'" selected>'. $vlan_domain->name.' ('.$vlan_domain->description.')</option>';
 				} else {
-					print '<option value="'.$vlan_domain->id.'">'.$vlan_domain->name.' - '.$vlan_domain->description.'</option>';
+					print '<option value="'.$vlan_domain->id.'">'.			$vlan_domain->name.' ('.$vlan_domain->description.')</option>';
 				}
 			}
 			?>
@@ -213,9 +213,9 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 				print '<td><div class="domainVlans"><select name="vlanId" class="form-control input-sm input-w-auto input-max-200">';
 				foreach ($vlans as $vlan) {
 					if ($firewallZone->vlanId == $vlan->vlanId) {
-						print '<option value="'.$vlan->vlanId.'" selected>'.$vlan->number.' - '.$vlan->description.'</option>';
+						print '<option value="'.$vlan->vlanId.'" selected>'.$vlan->number.' ('.$vlan->description.')</option>';
 					} else {
-						print '<option value="'.$vlan->vlanId.'">'.$vlan->number.' - '.$vlan->name.' - '.$vlan->description.'</option>';
+						print '<option value="'.$vlan->vlanId.'">'.			$vlan->number.' ('.$vlan->name.' - '.$vlan->description.')</option>';
 					}
 				}
 				print '</select></div></td>';

@@ -58,8 +58,8 @@ if ($_POST['action'] != 'add') {
 			<option value="0"><?php print _('Select a firewall zone'); ?></option>
 			<?php
 			foreach ($firewallZones as $zone) {
-				if ($zone->id == $mapping->id) 	{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.' - '.$zone->description.'</option>'; }
-				else 							{ print '<option value="'.$zone->id.'">'.		  $zone->zone.' - '.$zone->description.'</option>'; }
+				if ($zone->id == $mapping->id) 	{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.' ('.$zone->description.')</option>'; }
+				else 							{ print '<option value="'.$zone->id.'">'.		  $zone->zone.' ('.$zone->description.')</option>'; }
 			}
 			?>
 		</td>
@@ -89,8 +89,8 @@ if ($_POST['action'] != 'add') {
 			<option value="0"><?php print _('Select firewall'); ?></option>
 			<?php
 			foreach ($devices as $device) {
-				if ($device->id == $mapping->deviceId) 	{ print '<option value="'.$device->id.'" selected>'.$device->hostname.' - '.$device->description.'</option>'; }
-				else 									{ print '<option value="'.$device->id.'">'.			$device->hostname.' - '.$device->description.'</option>'; }
+				if ($device->id == $mapping->deviceId) 	{ print '<option value="'.$device->id.'" selected>'.$device->hostname.' ('.$device->description.')</option>'; }
+				else 									{ print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
 			}
 			?>
 		</td>

@@ -161,6 +161,9 @@ $deviceTypes = $Tools->fetch_device_types();
 	</tr>
 	<!-- submit -->
 	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<tr>
 		<td>
 			<?php
 			foreach ($firewallZoneSettings['zoneGeneratorType'] as $key => $value) {
