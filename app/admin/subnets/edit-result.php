@@ -300,14 +300,17 @@ else {
 	# execute
 	if (!$Subnets->modify_subnet ($_POST['action'], $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
 	else {
-		# update also all slave subnets!
-		if(isset($values['sectionId'])&&$_POST['action']!="add") {
+		# if edd save id !
+		if ($_POST['action']=="add") { $new_subnet_id = $Subnets->lastInsertId; }
+		# update also all slave subnets if section changes!
+		if( (isset($values['sectionId']) && $_POST['action']=="edit") || ($_POST['action']=="delete")) {
 			$Subnets->reset_subnet_slaves_recursive();
 			$Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
 			$Subnets->remove_subnet_slaves_master($_POST['subnetId']);
 			if(sizeof($Subnets->slaves)>0) {
 				foreach($Subnets->slaves as $slaveId) {
-					$Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$_POST['sectionIdNew']));
+					if ($_POST['action']=="edit") 	{ $Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$_POST['sectionIdNew'])); }
+					else							{ $Admin->object_modify ("subnets", "delete", "id", array("id"=>$slaveId)); }
 				}
 			}
 		}
@@ -315,7 +318,7 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$Subnets->lastInsertId.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
 		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
 	}
