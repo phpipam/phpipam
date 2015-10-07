@@ -577,6 +577,41 @@ VALUES
 	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'No', 'Yes'),
 	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');
 
+# Dump of table firewallZones
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `firewallZones`;
+
+CREATE TABLE `firewallZones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `generator` tinyint(1) NOT NULL,
+  `length` int(2) DEFAULT NULL,
+  `padding` tinyint(1) DEFAULT NULL,
+  `zone` varchar(31) COLLATE utf8_unicode_ci NOT NULL,
+  `indicator` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `subnetId` int(11) unsigned DEFAULT NULL,
+  `stacked` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `vlanId` int(11) unsigned DEFAULT NULL,
+  `permissions` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+# Dump of table firewallZoneMapping
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `firewallZoneMapping`;
+
+CREATE TABLE `firewallZoneMapping` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `zoneId` int(11) unsigned NOT NULL,
+  `alias` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `deviceId` int(11) unsigned DEFAULT NULL,
+  `interface` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
 
 # Dump of table usersAuthMethod
 # ------------------------------------------------------------
