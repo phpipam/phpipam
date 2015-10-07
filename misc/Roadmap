@@ -3,7 +3,6 @@ version - 1.2
 	+ To fix / finish
 		+ Verify API new fields and update web documentation;
 		+ Slave subnets are not deleted - check;
-		+ db port;
 		+ BASE auto-detect;
 		+ Settings to CONSTANT;
 

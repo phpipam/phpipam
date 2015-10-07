@@ -79,9 +79,6 @@ else				{ $delete = ""; }
 
 ?>
 
-
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
-<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 /* bootstrap switch */
