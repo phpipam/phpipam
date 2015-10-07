@@ -136,6 +136,28 @@ $rowSpan = 10 + sizeof($custom_fields);
 		print "</tr>";
 	}
 
+	# FW zone info
+	if($User->settings->enableFirewallZones==1) {
+		# search
+		$zone_check = $Tools->fetch_object ("firewallZones", "subnetId", $subnet['id']);
+		if ($zone_check!==false) {
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+			# class
+			$Zones = new FirewallZones ($Database);
+			$zone = $Zones->get_zone_mapping ($zone_check->id);
+			# zone details
+			print "<tr>";
+			print "	<th>"._('Firewall Zone')."</th>";
+			print "	<td>";
+			print $zone->zone." (".$zone->alias.") - ".$zone->description;
+			print "	</td>";
+			print "</tr>";
+		}
+	}
+
 	if(!$slaves) {
 		# divider
 		print "<tr>";
