@@ -48,7 +48,7 @@ else {
 		}
 		else {
 			// ip not provided
-			$request['ip_addr'] = strlen($request['ip_addr'])>0 ? $request['ip_addr'] : _("Automatic");
+			$request['ip_addr'] = strlen($request['ip_addr'])>0 ? $Subnets->transform_to_dotted($request['ip_addr']) : _("Automatic");
 
 			print '<tr>'. "\n";
 			print "	<td><button class='btn btn-sm btn-default' data-requestid='$request[id]'><i class='fa fa-pencil'></i> "._('Process')."</button></td>";

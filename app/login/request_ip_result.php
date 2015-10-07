@@ -18,6 +18,7 @@ if($Tools->settings->enableIPrequests==1) {
 	# verify email
 	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$_POST['requester'].')', true); }
 
+	$_POST['ip_addr'] = (@$_POST['ip_addr'])?$Subnets->transform_to_decimal(@$_POST['ip_addr']):'';
 	# formulate insert values
 	$values = array("subnetId"=>$_POST['subnetId'],
 					"ip_addr"=>@$_POST['ip_addr'],
