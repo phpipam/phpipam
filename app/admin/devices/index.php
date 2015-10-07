@@ -10,6 +10,13 @@ $User->check_user_session();
 # fetch all Devices
 $devices = $Admin->fetch_all_objects("devices");
 
+# fetch all Device types and reindex
+$device_types = $Admin->fetch_all_objects("deviceTypes", "tid");
+if ($device_types !== false) {
+	foreach ($device_types as $dt) {
+		$device_types_i[$dt->tid] = $dt;
+	}
+}
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
@@ -65,7 +72,7 @@ else {
 
 		print '	<td><a href="'.create_link("tools","devices","hosts",$device['id']).'">'. $device['hostname'] .'</a></td>'. "\n";
 		print '	<td>'. $device['ip_addr'] .'</td>'. "\n";
-		print '	<td>'. $device['description'] .'</td>'. "\n";
+		print '	<td>'. @$device_types_i[$device['type']]->tname .'</td>'. "\n";
 		print '	<td>'. $device['vendor'] .'</td>'. "\n";
 		print '	<td>'. $device['model'] .'</td>'. "\n";
 		print '	<td class="description">'. $device['description'] .'</td>'. "\n";
