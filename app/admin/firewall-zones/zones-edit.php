@@ -98,7 +98,7 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 <tr>
 	<!-- zone indicator -->
 	<td rowspan="2">
-		<?php print _('Indicator'); ?>
+		<?php print _('Type'); ?>
 	</td>
 	<td>
 		<div class="radio" style="margin-top:5px;margin-bottom:2px;">
