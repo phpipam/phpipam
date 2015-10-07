@@ -83,7 +83,9 @@ if (@$agent->type=="direct" && $_POST['action']=="delete") {
 	    <td>
 	    	<select name="type" class="form-control input-sm input-w-auto" <?php if(@$agent->type=="direct"||$_POST['action'] == "delete") print "readonly"; ?>>
 	    	<?php
-	    	$types = array("mysql"=>"MySQL", "api"=>"Api");
+	    	//$types = array("mysql"=>"MySQL", "api"=>"Api");
+	    	$types = array("mysql"=>"MySQL");
+
 	    	foreach($types as $k=>$p) {
 		    	if($k==$agent->type)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
 		    	else					{ print "<option value='$k' 				   >"._($p)."</option>"; }
