@@ -3,10 +3,9 @@ version - 1.2
 	+ To fix / finish
 		+ Verify API new fields and update web documentation;
 		+ Slave subnets are not deleted - check;
-
-	+ BASE auto-detect;
-
-	+ Settings to CONSTANT;
+		+ db port;
+		+ BASE auto-detect;
+		+ Settings to CONSTANT;
 
 	+ Mark subnet as full (db prepared);
 

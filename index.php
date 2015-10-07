@@ -86,7 +86,7 @@ else {
 	<script type="text/javascript" src="js/login.js"></script>
 	<?php } ?>
 <!-- 	<script type="text/javascript" src="js/magic-1.11.min.js"></script> -->
-	<script type="text/javascript" src="js/magic-1.18.js"></script>
+	<script type="text/javascript" src="js/magic-1.19.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript">
