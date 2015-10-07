@@ -1,4 +1,4 @@
-== 1.19.001
+== 1.19.002
 
 	New features:
 	------------
@@ -25,6 +25,7 @@
 		+ Automatic SOA, NS record creation;
 		+ DNS domain management;
 	+ Added Scan agents to scan subnets remotely;
+	+ Added firewall zone mappings and module;
 
 	Enhancements:
 	----------------------------

@@ -58,6 +58,7 @@ $values = array("id"=>1,
 				"enableChangelog"=>$Admin->verify_checkbox(@$_POST['enableChangelog']),
 				"tempShare"=>$Admin->verify_checkbox(@$_POST['tempShare']),
 				"enablePowerDNS"=>$Admin->verify_checkbox(@$_POST['enablePowerDNS']),
+				"enableFirewallZones"=>$Admin->verify_checkbox(@$_POST['enableFirewallZones']),
 				"log"=>@$_POST['log'],
 				//display
 				"donate"=>$Admin->verify_checkbox(@$_POST['donate']),

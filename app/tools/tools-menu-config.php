@@ -29,6 +29,8 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VL
 if($User->settings->enableVRF == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"Show VRFs and belonging networks");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 		"description"=>"Show all configured devices");
+if($User->settings->enableFirewallZones == 1)
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-fire",		"name"=>"Firewall Zones", 		"href"=>"firewall-zones", "description"=>"Display firewall zone to device mappings");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-eye", 		 "name"=>"Scanned networks", 	"href"=>"scanned-networks",	"description"=>"List of subnets to be scanned for online hosts and detect new hosts");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-th-large", 	 "name"=>"Subnet masks", 		"href"=>"subnet-masks",	"description"=>"Table of all subnet masks with different representations");
 // temp shares

@@ -29,6 +29,8 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"n
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server", "name"=>"Sections", 				"href"=>"sections", 				"description"=>"Section management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 				"href"=>"subnets", 					"description"=>"Subnet management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-desktop","name"=>"Devices", 				"href"=>"devices", 					"description"=>"Device management");
+if($User->settings->enableFirewallZones == 1)
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-fire","name"=>"Firewall Zones", 		"href"=>"firewall-zones", 			"description"=>"Firewall zone management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"Nameservers", 					"href"=>"nameservers", 					"description"=>"Recursive nameserver sets for subnets");
 if($User->settings->enableVRF==1)

@@ -224,6 +224,17 @@ $settings = (array) $User->settings;
 	</td>
 </tr>
 
+<!-- firewall zone management -->
+<tr>
+	<td class="title"><?php print _('Enable Firewall Zones'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableFirewallZones" <?php if($settings['enableFirewallZones'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable firewall zone management module'); ?>
+	</td>
+</tr>
+
 <!-- DNS resolving -->
 <tr>
 	<td class="title"><?php print _('Resolve DNS names'); ?></td>
