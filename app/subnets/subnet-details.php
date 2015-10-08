@@ -141,20 +141,28 @@ $rowSpan = 10 + sizeof($custom_fields);
 		# search
 		$zone_check = $Tools->fetch_object ("firewallZones", "subnetId", $subnet['id']);
 		if ($zone_check!==false) {
-			# divider
-			print "<tr>";
-			print "	<td colspan='2'><hr></td>";
-			print "</tr>";
 			# class
 			$Zones = new FirewallZones ($Database);
 			$zone = $Zones->get_zone_mapping ($zone_check->id);
-			# zone details
-			print "<tr>";
-			print "	<th>"._('Firewall Zone')."</th>";
-			print "	<td>";
-			print $zone->zone." (".$zone->alias.") - ".$zone->description;
-			print "	</td>";
-			print "</tr>";
+
+			if ($zone!==false) {
+				// alias fix
+				$zone->alias 		= strlen($zone->alias)>0 ? "(".$zone->alias.")" : "";
+				$zone->description 	= strlen($zone->description)>0 ? " - ".$zone->description : "";
+				$zone->interface 	= strlen($zone->interface)>0 ? "(".$zone->interface.")" : "";
+
+				# divider
+				print "<tr>";
+				print "	<td colspan='2'><hr></td>";
+				print "</tr>";
+				# zone details
+				print "<tr>";
+				print "	<th>"._('Firewall Zone')."</th>";
+				print "	<td>";
+				print $zone->zone." ".$zone->alias." ".$zone->description."<br>".$zone->deviceName." ".$zone->interface;
+				print "	</td>";
+				print "</tr>";
+			}
 		}
 	}
 

@@ -186,7 +186,9 @@ class FirewallZones extends Common_functions {
 						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
 						having  deviceId is not NULL order by firewallZones.id ASC;');}
 		// throw exception
-		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Database error: ").$e->getMessage());
+		}
 		// modify the zone output values
 		foreach ($mapping as $key => $val) {
 			// transform the zone name from decimal to hex
@@ -219,7 +221,7 @@ class FirewallZones extends Common_functions {
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
 						firewallZones.padding AS padding,
-						firewallZoneMapping.id AS mappingId,
+						firewallZoneMapping.zoneId AS mappingId,
 						firewallZones.zone AS zone,
 						firewallZones.indicator AS indicator,
 						firewallZoneMapping.alias AS alias,
@@ -243,19 +245,23 @@ class FirewallZones extends Common_functions {
 						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
 						having  deviceId is not NULL AND mappingId = ?;',$id);}
 		// throw exception
-		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Database error: ").$e->getMessage());
+		}
 		// modify the zone output values
-		foreach ($mapping as $key => $val) {
-			// transform the zone name from decimal to hex
-			if($mapping[$key]->generator == 1 ){
-				$mapping[$key]->zone = dechex($mapping[$key]->zone);
-			}
+		if (sizeof($mapping)>0) {
+			foreach ($mapping as $key => $val) {
+				// transform the zone name from decimal to hex
+				if($mapping[$key]->generator == 1 ){
+					$mapping[$key]->zone = dechex($mapping[$key]->zone);
+				}
 
-			// add some padding if it is activated and the zone generatore is not text
-			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
-			// remove leading zeros (padding) and raise the value in case of any zone name length changes
-			// add some padding to reach the maximum zone name lenght
-			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
+				// add some padding if it is activated and the zone generatore is not text
+				if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
+				// remove leading zeros (padding) and raise the value in case of any zone name length changes
+				// add some padding to reach the maximum zone name lenght
+				$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
+				}
 			}
 		}
 		// return the values
