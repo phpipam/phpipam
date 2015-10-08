@@ -135,6 +135,14 @@ $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//em
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
 $colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);		//dhcp colspan
 
+
+$max_fields = $selected_ip_fields_size + sizeof($custom_fields) + 4;
+
+$colspan['empty']  = $max_fields; //empty colspan
+$colspan['unused'] = $max_fields-1; //unused colspan
+$colspan['dhcp']   = $max_fields-4; //dhcp colspan
+$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0:$colspan['dhcp'];
+
 /* output variables */
 
 # set page limit for pagination
