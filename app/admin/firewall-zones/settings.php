@@ -1,3 +1,14 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
 <?php
 // firewall zone settings.php
 // modify firewall zone module settings like zone indicator, max. chars, ...
@@ -125,7 +136,7 @@ $deviceTypes = $Tools->fetch_device_types();
 	<tr>
 		<td><?php print _('Zone name padding'); ?></td>
 		<td>
-			<input type="checkbox" class="form-control input-sm" name="padding" <?php if($firewallZoneSettings['padding'] == 'on'){ print 'value="'.$firewallZoneSettings['padding'].'" checked';} ?>>
+			<input type="checkbox" class="input-switch" name="padding" value="on" <?php if($firewallZoneSettings['padding'] == 'on'){ print 'value="'.$firewallZoneSettings['padding'].'" checked';} ?>>
 		</td>
 		<td>
 			<span class="text-muted"><?php print _("Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>This setting will be ignored if you use the \"text\" zone name generator."); ?></span>
@@ -135,7 +146,7 @@ $deviceTypes = $Tools->fetch_device_types();
 	<tr>
 		<td><?php print _('Zone name strict mode'); ?></td>
 		<td>
-			<input type="checkbox" class="form-control input-sm" name="strictMode" <?php if($firewallZoneSettings['strictMode'] == 'on'){ print 'value="'.$firewallZoneSettings['strictMode'].'" checked';} ?>>
+			<input type="checkbox" class="input-switch" name="strictMode" value="on" <?php if($firewallZoneSettings['strictMode'] == 'on'){ print 'value="'.$firewallZoneSettings['strictMode'].'" checked';} ?>>
 		</td>
 		<td>
 			<span class="text-muted"><?php print _("Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the &quot;text&quot; mode you may uncheck this to have not unique zone names."); ?></span>
