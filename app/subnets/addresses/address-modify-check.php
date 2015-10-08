@@ -47,6 +47,7 @@ $subnet_permission > 1 ?:		$Result->show("danger", _('Cannot edit IP address'), 
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
+if (@$_POST['verifydatabase']!=="yes")
 sizeof($subnet)>0 ?:			$Result->show("danger", _("Invalid subnet"), true);
 
 # replace empty fields with nulls
@@ -193,6 +194,7 @@ else {
 		$address['ip_addr'] = $address_old['ip'];
 	}
 	# verify address
+	if($action!=="delete")
 	$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
 
 	# if errors are present print them, else execute query!

@@ -25,7 +25,7 @@ $User->check_user_session();
 $Tools->validate_action ($_POST['action']);
 
 # validate post
-is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid ID"), true, true);
+is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
@@ -35,6 +35,7 @@ $id      = $_POST['id'];
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
+if (strpos($_SERVER['HTTP_REFERER'], "verify-database")==0)
 sizeof($subnet)>0 ?:			$Result->show("danger", _("Invalid subnet"), true, true);
 
 # set and check permissions
@@ -123,6 +124,9 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
 			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+			<?php
+			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
+			?>
 
 			<?php if($action=="edit" || $action=="delete") { ?>
 			<input type="hidden" name="nostrict" value="yes">
