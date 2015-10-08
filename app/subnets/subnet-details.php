@@ -167,13 +167,14 @@ $rowSpan = 10 + sizeof($custom_fields);
 	}
 
 	if(!$slaves) {
-		# divider
-		print "<tr>";
-		print "	<td colspan='2'><hr></td>";
-		print "</tr>";
 
 		# Are IP requests allowed?
 		if ($User->settings->enableIPrequests==1) {
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+
 			print "<tr>";
 			print "	<th>"._('IP requests')."</th>";
 			if($subnet['allowRequests'] == 1) 		{ print "	<td>"._('enabled')."</td>"; }		# yes

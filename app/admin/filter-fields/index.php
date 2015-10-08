@@ -17,7 +17,7 @@ foreach($Tools->fetch_standard_fields("ipaddresses") as $s) {
 $selected_fields = explode(";", $User->settings->IPfilter);
 
 /* unset mandatory fields -> id,subnetid,ip_addr */
-unset($standard_fields['id'], $standard_fields['subnetId'], $standard_fields['ip_addr'], $standard_fields['description'], $standard_fields['dns_name'], $standard_fields['lastSeen'], $standard_fields['excludePing'], $standard_fields['editDate'], $standard_fields['is_gateway'], $standard_fields['PTR'], $standard_fields['PTRignore']);
+unset($standard_fields['id'], $standard_fields['state'], $standard_fields['subnetId'], $standard_fields['ip_addr'], $standard_fields['description'], $standard_fields['dns_name'], $standard_fields['lastSeen'], $standard_fields['excludePing'], $standard_fields['editDate'], $standard_fields['is_gateway'], $standard_fields['PTR'], $standard_fields['PTRignore']);
 ?>
 
 
@@ -41,9 +41,12 @@ foreach($standard_fields as $field) {
 	# set active
 	$checked = in_array($field, $selected_fields) ? "checked" : "";
 
+	# replace switch
+	$field_print = $field=="switch" ? "device" : $field;
+
 	print '<tr>'. "\n";
 	print '	<td style="width:10px;padding-left:10px;"><input type="checkbox" class="input-switch" name="'. $field .'" value="'. $field .'" '. $checked .'></td>';
-	print '	<td>'. ucfirst($field) .'</td>';
+	print '	<td>'. ucfirst($field_print) .'</td>';
 	print '</tr>';
 }
 ?>
