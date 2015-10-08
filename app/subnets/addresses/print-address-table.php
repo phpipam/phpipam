@@ -131,9 +131,9 @@ if(sizeof($custom_fields) > 0) {
 }
 
 # set colspan for output
-$colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
-$colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
-$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);		//dhcp colspan
+$colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +2;		//empty colspan
+$colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +1;		//unused colspan
+$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields) -2;		//dhcp colspan
 
 
 $max_fields = $selected_ip_fields_size + sizeof($custom_fields) + 4;
