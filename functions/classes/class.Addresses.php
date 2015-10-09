@@ -1408,6 +1408,59 @@ class Addresses extends Common_functions {
 		return $addresses;
 	}
 
+	/**
+	 * Finds invalid addresses - that have subnetId that does not exist
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function find_invalid_addresses () {
+		// find unique ids
+		$ids = $this->find_unique_subnetids ();
+		if ($ids===false)										{ return false; }
+		// validate
+		foreach ($ids as $id) {
+			if ($this->verify_subnet_id ($id->subnetId)===0) {
+				$false[] = $this->fetch_subnet_addresses ($id->subnetId);
+			}
+		}
+		// return
+		return isset($false) ? $false : false;
+	}
+
+	/**
+	 * Finds all unique master subnet ids
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function find_unique_subnetids () {
+		try { $res = $this->Database->getObjectsQuery("select distinct(`subnetId`) from `ipaddresses` order by `subnetId` asc;"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return sizeof($res)>0 ? $res : false;
+	}
+
+	/**
+	 * Verifies that subnetid exists
+	 *
+	 * @access private
+	 * @param mixed $id
+	 * @return void
+	 */
+	private function verify_subnet_id ($id) {
+		try { $res = $this->Database->getObjectQuery("select count(*) as `cnt` from `subnets` where `id` = ?;", array($id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return (int) $res->cnt;
+	}
+
 
 
 

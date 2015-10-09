@@ -1765,6 +1765,59 @@ class Subnets extends Common_functions {
     	else 													{ return false; }
 	}
 
+	/**
+	 * Finds invalid subnets - that have masterSubnetId that does not exist
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function find_invalid_subnets () {
+		// find unique ids
+		$ids = $this->find_unique_mastersubnetids ();
+		if ($ids===false)										{ return false; }
+		// validate
+		foreach ($ids as $id) {
+			if ($this->verify_subnet_id ($id->masterSubnetId)===0) {
+				$false[] = $this->fetch_subnet_slaves ($id->masterSubnetId);
+			}
+		}
+		// return
+		return isset($false) ? $false : false;
+	}
+
+	/**
+	 * Finds all unique master subnet ids
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function find_unique_mastersubnetids () {
+		try { $res = $this->Database->getObjectsQuery("select distinct(`masterSubnetId`) from `subnets` where `masterSubnetId` != '0' order by `masterSubnetId` asc;"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return sizeof($res)>0 ? $res : false;
+	}
+
+	/**
+	 * Verifies that subnetid exists
+	 *
+	 * @access private
+	 * @param mixed $id
+	 * @return void
+	 */
+	private function verify_subnet_id ($id) {
+		try { $res = $this->Database->getObjectQuery("select count(*) as `cnt` from `subnets` where `id` = ?;", array($id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return (int) $res->cnt;
+	}
+
 
 
 
