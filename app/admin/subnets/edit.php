@@ -125,14 +125,14 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
         	<?php
             if ($_POST['subnetId'] && $_POST['action'] == "add"){ $showDropMenuFull = 1; }
         	# set CIDR
-        	if (isset($subnet_old_temp['subnet']))	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
-        	if (isset($subnet_old_temp['subnet']) && ($showDropMenuFull)) { $dropdown_menu = $Subnets->subnet_dropdown_print_available($_POST['sectionId'], $_POST['subnetId']);  }
+        	if (isset($subnet_old_temp['subnet'])&&$subnet_old_temp['isFolder']!="1")	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
+        	if (isset($subnet_old_temp['subnet']) && ($showDropMenuFull)) 				{ $dropdown_menu = $Subnets->subnet_dropdown_print_available($_POST['sectionId'], $_POST['subnetId']);  }
 
         	if (@$_POST['location'] == "ipcalc") 	{ $cidr = strlen($_POST['bitmask'])>0 ? $_POST['subnet'].'/'.$_POST['bitmask'] : $_POST['subnet']; }  														//from ipcalc
             if ($_POST['action'] != "add") 			{ $cidr = $Subnets->transform_to_dotted($subnet_old_details['subnet']).'/'.$subnet_old_details['mask']; } 	//editing existing
 
         	# reset CIDR if $showDropMenuFull
-        	if ($showDropMenuFull) {
+        	if ($showDropMenuFull && strlen(@$dropdown_menu)>2) {
 	        	$cidr = explode("\n",$dropdown_menu);
 	        	$cidr = substr(strip_tags($cidr[1]), 2);
 	        	//validate
