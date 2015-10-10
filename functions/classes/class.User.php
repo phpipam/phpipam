@@ -1057,9 +1057,9 @@ class User extends Common_functions {
 		$this->block_get_ip ();
 		# set date and query
 		$now = date("Y-m-d H:i:s", time() - 5*60);
-		$query = "select count from `loginAttempts` where `ip` = '".$this->ip."' and `datetime` > '$now';";
+		$query = "select count from `loginAttempts` where `ip` = ? and `datetime` > ?;";
 		# fetch
-		try { $cnt = $this->Database->getObjectQuery($query); }
+		try { $cnt = $this->Database->getObjectQuery($query, array($this->ip, $now)); }
 		catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
 
 	    # verify
@@ -1104,9 +1104,9 @@ class User extends Common_functions {
 	private function purge_blocked_entries () {
 		# set date 5 min ago and query
 		$ago = date("Y-m-d H:i:s", time() - 5*60);
-		$query = "delete from `loginAttempts` where `datetime` < '$ago'; ";
+		$query = "delete from `loginAttempts` where `datetime` < ?; ";
 
-		try { $this->Database->runQuery($query); }
+		try { $this->Database->runQuery($query, array($ago)); }
 		catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
 	}
 

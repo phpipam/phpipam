@@ -1724,6 +1724,16 @@ $(document).on("click", ".editSubnetPermissionsSubmit", function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
 });
+//auto-suggest possible slaves select
+$(document).on("click", ".dropdown-subnets li a", function() {
+	var subnet = $(this).attr('data-cidr');
+	var inputfield = $('form#editSubnetDetails input[name=subnet]');
+	// fill
+	$(inputfield).val(subnet);
+	// hide
+	$('.dropdown-subnets').parent().removeClass("open");
+	return false;
+});
 
 
 /*    Add subnet from IPCalc result
