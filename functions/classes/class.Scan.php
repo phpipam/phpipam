@@ -185,6 +185,9 @@ class Scan extends Common_functions {
 		# verify ping path
 		$this->ping_verify_path ($this->settings->scanPingPath);
 
+		# if ipv6 append 6
+		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath+"6"; }
+
 		# set ping command based on OS type
 		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
 		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }

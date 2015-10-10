@@ -2557,50 +2557,66 @@ class Subnets extends Common_functions {
 		# join and print
 		print implode( "\n", $html );
 	}
-		/**
-	  * Print the Master only
+
+	/**
+	 * Print only master.
+	 *
+	 * @access public
+	 * @param mixed $subnetMasterId
+	 * @return void
 	 */
-	public  function printMasterOnly($subnetMasterId ) {
+	public  function subnet_dropdown_master_only($subnetMasterId ) {
 		$subnet = (array) $this->fetch_subnet (null, $subnetMasterId);
 		$html = array();
 		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>\n";
-		$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask']."</option> </select>\n";	
+		$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask']."</option> </select>\n";
 		print implode( "\n", $html );
 	}
 
 	/**
-	  *	Print dropdown menu for Available subnets under a given subnet!
+	 * 	Print dropdown menu for Available subnets under a given subnet!
+	 *
+	 * @access public
+	 * @param mixed $sectionId
+	 * @param mixed $subnetMasterId
+	 * @return void
 	 */
- 	public function printDropdownMenuAvailable($sectionId, $subnetMasterId ) {
+	public function subnet_dropdown_print_available($sectionId, $subnetMasterId ) {
+
 		/* Remove STRICT Error reporting for ParseAddress fuction */
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
 		$mask_drill_down = 8;
- 
+
 		# must be integer
-		if(isset($_GET['subnetId']))    { if(!is_numeric($_GET['subnetId']))    { die('<div class="alert alert-danger">'._("Invalid ID").'</div>'); } }
+		if(isset($_GET['subnetId'])) { if(!is_numeric($_GET['subnetId']))    { $this->Result->show("danger", _("Invalid ID"), true); } }
+
+		// result array
 		$html = array();
 		$history_subnet = array ();
- 
-		/* Get Current and Previous subnets */
-		$subnets = $this->fetch_subnet_slaves($subnetMasterId);
-		$taken_subnet = $this->fetch_subnet (null, $subnetMasterId);
-		$parent_subnet = $taken_subnet->subnet;
-		$parent_subnetmask = $taken_subnet->mask; #$subnet['mask'];
-	 
-		$type = $this->identify_address( $parent_subnet );
- 
-		if ($type == 'IPv4') {$this->initialize_pear_net_IPv4 ();}
-		else {$this->initialize_pear_net_IPv6 ();}
 
-		foreach ($subnets as $row ) {
-			$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
+		// Get Current and Previous subnets
+		$subnets 			= $this->fetch_subnet_slaves($subnetMasterId);
+		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
+		$parent_subnet 		= $taken_subnet->subnet;
+		$parent_subnetmask 	= $taken_subnet->mask;
+
+		// detect type
+		$type = $this->identify_address( $parent_subnet );
+
+		// initialize pear objet
+		if ($type == 'IPv4') 	{ $this->initialize_pear_net_IPv4 (); }
+		else 					{ $this->initialize_pear_net_IPv6 (); }
+
+		// if it has slaves
+		if($subnets) {
+			foreach ($subnets as $row ) {
+				$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
+			}
 		}
-		$html[] = "<select name='subnet' class='form-control input-sm input-w-auto input-max-200'>";
-		$html[] = "<option value=''>Please Select</option>";
-	
+
 		# prepare the entry into for loop
 		$subnetmask_start = $parent_subnetmask + 1;
-		$subnetmask_final = $parent_subnetmask + $mask_drill_down; // plus 'X' numbers, default 8, gives you /16 -> /24, /24 -> /32 etc.. 
+		$subnetmask_final = $parent_subnetmask + $mask_drill_down; // plus 'X' numbers, default 8, gives you /16 -> /24, /24 -> /32 etc..
 		if ($subnetmask_final > 32 && $type == 'IPv4'){
 			$subnetmask_final = 32; // Cant be larger then /32
 		}
@@ -2612,55 +2628,57 @@ class Subnets extends Common_functions {
 		$square_count = 1;
 
 		# Outer for loop, start with mask one more then current, increment up to X more, or 32, which ever is first
-		for ($i = $subnetmask_start; $i <= $subnetmask_final;$i++){
+		for ($i = $subnetmask_start; $i <= $subnetmask_final; $i++){
 			$showmask = 1; // Set so only show subnet masks that are available
 			$dec_subnet = $parent_subnet; // have to reset each time though the loop
 			$isquare = pow(2,$square_count); // 2^nth power, that's how many subnets there are per this unique mask
-			for ($ii = 0;$ii < $isquare;$ii++ ){
+			for ($ii = 0; $ii < $isquare; $ii++ ){
 				$cidr_subnet = $this->transform_to_dotted($dec_subnet).'/'.$i;
-				 #$html[] = "<option value=>Subnet Mask: $cidr_subnet $dec_subnet</option>";
 				if ($type == 'IPv4'){
 					// Get broadcast, which is one decimal away from next subnet, and increment
 					$net1 = $this->Net_IPv4->parseAddress($cidr_subnet);
-					$bc1  = $net1->broadcast; 
-					$dec_subnet = $this->transform_to_decimal ($bc1); 
-					$dec_subnet++; 
+					$bc1  = $net1->broadcast;
+					$dec_subnet = $this->transform_to_decimal ($bc1);
+					$dec_subnet++;
 				}
 				else {
 					// Get broadcast, which is one decimal away from next subnet, and increment
 					$net1 = $this->Net_IPv6->parseAddress($cidr_subnet);
 					$bc1  = $net1['end'];
-					$dec_subnet = $this->transform_to_decimal ($bc1); 
-					$dec_subnet = $this->ipv6DecAddOne($dec_subnet);
+					$dec_subnet = $this->transform_to_decimal ($bc1);
+					$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
 				}
 				foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
-					if ($type == 'IPv4'){$overlap = $this->verify_IPv4_subnet_overlapping($cidr_subnet,$unavailable_sub);} //overlap function
+					if ($type == 'IPv4') { $overlap = $this->verify_IPv4_subnet_overlapping($cidr_subnet,$unavailable_sub);} //overlap function
 					else {$overlap = $this->verify_IPv6_subnet_overlapping ($cidr_subnet,$unavailable_sub);}
 					if ($overlap!==false){
 						$match = 1;
-						break; 
+						break;
 					}
 				}
 				if ($match != 1){
 					if ($showmask){ // Highlight Change in Masks
-					$html[] = "<option value=>Subnet Mask: $i</option>";
+					$html[] = "<li class='disabled'>Subnet Mask: $i</li>";
 						$showmask = 0;
 					}
-					$html[] = "<option value='".$cidr_subnet."'> -- ".$cidr_subnet."</option>";
+					$html[] = "<li><a href='' data-cidr='$cidr_subnet'>- $cidr_subnet</a></li>";
 				}
 				$match = 0; //Reset
 			}
 			$square_count++;
 		}
-		$html[] = "</optgroup>";
-		$html[] = "</select>";
-		print implode( "\n", $html );
+		// return html
+		return implode( "\n", $html );
 	 }
- 
+
 	/**
-	  *      Take in decimal from IPv6 address and add one to it
+	 * Take in decimal from IPv6 address and add one to it
+	 *
+	 * @access public
+	 * @param mixed $decimalIpv6
+	 * @return void
 	 */
-	public  function ipv6DecAddOne ($decimalIpv6) {
+	public  function subnet_dropdown_ipv6_decimal_add_one ($decimalIpv6) {
 		# Take digit, make array of earch number and reverse it
 		$singledigit = array_reverse(str_split($decimalIpv6));
 		$start = 1;
@@ -2680,6 +2698,7 @@ class Subnets extends Common_functions {
 			}
 		}
 		$decimalIpv6 = $output;
+		// return result
 		return $decimalIpv6;
 	}
 }
