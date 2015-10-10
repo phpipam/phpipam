@@ -166,6 +166,7 @@ CREATE TABLE `settings` (
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
+  `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */

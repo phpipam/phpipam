@@ -442,6 +442,29 @@ $settings = (array) $User->settings;
 	</td>
 </tr>
 
+<!-- Subnet View -->
+<tr>
+	<td class="title"><?php print _('Subnet Display'); ?></td>
+	<td>
+		<select name="subnetView" class="form-control input-sm input-w-auto">
+			<?php
+			$opts = array(
+				"0"=>_("Subnet Network Only"),
+				"1"=>"Description Only",
+				"2"=>"Subnet Network and Description"
+			);
+			foreach($opts as $key=>$line) {
+				if($settings['subnetView'] == $key) { print "<option value='$key' selected>$line</option>"; }
+				else 								{ print "<option value='$key'>$line</option>"; }
+			}
+			?>
+		</select>
+	</td>
+	<td class="info2">
+		<?php print _('Select which view you would prefer on the menu'); ?>
+	</td>
+</tr>
+
 
 <!-- result -->
 <tr class="th">
