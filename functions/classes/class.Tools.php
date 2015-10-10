@@ -652,9 +652,19 @@ class Tools extends Common_functions {
 					# Initialize PEAR NET object
 					$this->initialize_pear_net_IPv4 ();
 					# parse address
-					$net = $this->Net_IPv4->parseAddress($Subnets->transform_to_decimal($s['subnet']).'/'.$s['mask']);
+					$net = $this->Net_IPv4->parseAddress($Subnets->transform_to_dotted($s['subnet']).'/'.$s['mask']);
 
 					if($low>$Subnets->transform_to_decimal(@$net->network) && $low<$Subnets->transform_to_decimal($net->broadcast)) {
+						$ids[] = $s['id'];
+					}
+				}
+				elseif($type == "IPv6") {
+					# Initialize PEAR NET object
+					$this->initialize_pear_net_IPv6 ();
+					# parse address
+					$net = $this->Net_IPv6->parseAddress($Subnets->transform_to_dotted($s['subnet']).'/'.$s['mask']);
+
+					if(gmp_cmp($low, $Subnets->transform_to_decimal(@$net['start'])) == 1 && gmp_cmp($low, $Subnets->transform_to_decimal($net['end'])) == -1) {
 						$ids[] = $s['id'];
 					}
 				}
