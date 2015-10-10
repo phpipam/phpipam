@@ -130,6 +130,14 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 
         	if (@$_POST['location'] == "ipcalc") 	{ $cidr = strlen($_POST['bitmask'])>0 ? $_POST['subnet'].'/'.$_POST['bitmask'] : $_POST['subnet']; }  														//from ipcalc
             if ($_POST['action'] != "add") 			{ $cidr = $Subnets->transform_to_dotted($subnet_old_details['subnet']).'/'.$subnet_old_details['mask']; } 	//editing existing
+
+        	# reset CIDR if $showDropMenuFull
+        	if ($showDropMenuFull) {
+	        	$cidr = explode("\n",$dropdown_menu);
+	        	$cidr = substr(strip_tags($cidr[1]), 2);
+	        	//validate
+	        	if ($Subnets->verify_cidr_address($cidr)===false) { unset($cidr); };
+	        }
         	?>
 
 
