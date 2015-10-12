@@ -572,16 +572,15 @@ class Tools extends Common_functions {
 	 * @param number $low
 	 * @return array
 	 */
-	public function search_subnets($search_term, $high, $low) {
+	public function search_subnets($search_term, $high, $low, $search_req) {
 		# first search if range provided
 		$result1 = $this->search_subnets_range  ($search_term, $high, $low);
 		# search inside subnets even if IP does not exist!
 		$result2 = $this->search_subnets_inside ($high, $low);
+		# search inside subnets even if IP does not exist - IPv6
+		$result3 = $this->search_subnets_inside_v6 ($high, $low, $search_req);
 		# merge arrays
-		if(sizeof($result1)>0 && sizeof($result2)>0)	{ $result = array_merge($result1, $result2); }
-		elseif(sizeof($result1)>0)						{ $result = $result1; }
-		elseif(sizeof($result2)>0)						{ $result = $result2; }
-		else											{ $result = array(); }
+		$result = array_merge($result1, $result2, $result3);
 	    # result
 	    return array_filter($result);
 	}
@@ -646,25 +645,17 @@ class Tools extends Common_functions {
 			foreach($subnets as $s) {
 				# cast
 				$s = (array) $s;
+
 				//first verify address type
 				$type = $this->identify_address($s['subnet']);
+
 				if($type == "IPv4") {
 					# Initialize PEAR NET object
 					$this->initialize_pear_net_IPv4 ();
 					# parse address
-					$net = $this->Net_IPv4->parseAddress($Subnets->transform_to_dotted($s['subnet']).'/'.$s['mask']);
+					$net = $this->Net_IPv4->parseAddress($this->transform_address($s['subnet']).'/'.$s['mask'], "dotted");
 
-					if($low>$Subnets->transform_to_decimal(@$net->network) && $low<$Subnets->transform_to_decimal($net->broadcast)) {
-						$ids[] = $s['id'];
-					}
-				}
-				elseif($type == "IPv6") {
-					# Initialize PEAR NET object
-					$this->initialize_pear_net_IPv6 ();
-					# parse address
-					$net = $this->Net_IPv6->parseAddress($Subnets->transform_to_dotted($s['subnet']).'/'.$s['mask']);
-
-					if(gmp_cmp($low, $Subnets->transform_to_decimal(@$net['start'])) == 1 && gmp_cmp($low, $Subnets->transform_to_decimal($net['end'])) == -1) {
+					if($low>$this->transform_to_decimal(@$net->network) && $low<$this->transform_address($net->broadcast, "decimal")) {
 						$ids[] = $s['id'];
 					}
 				}
@@ -679,6 +670,65 @@ class Tools extends Common_functions {
 			}
 			# return
 			return sizeof(@$result)>0 ? array_filter($result) : array();
+		}
+		else {
+			return array();
+		}
+	}
+
+
+	/**
+	 * Search inside subnets if host address is provided! ipv6
+	 *
+	 * @access private
+	 * @param mixed $search_term
+	 * @param number $high
+	 * @param number $low
+	 * @return array
+	 */
+	private function search_subnets_inside_v6 ($high, $low, $search_req) {
+		// same
+		if($low==$high) {
+			# Initialize PEAR NET object
+			$this->initialize_pear_net_IPv6 ();
+
+			// validate
+			if ($this->Net_IPv6->checkIPv6($search_req)) {
+				# ifmask remove it
+				if (strpos($search_req, "/")>0) {
+					$search_req = $this->Net_IPv6->removeNetmaskSpec($search_req);
+				}
+				# subnets class
+				$Subnets = new Subnets ($this->Database);
+				# fetch all subnets
+				$subnets = $Subnets->fetch_all_subnets_search("IPv6");
+				# loop and search
+				foreach($subnets as $s) {
+					# cast
+					$s = (array) $s;
+					# parse address
+					$net = $this->Net_IPv6->parseAddress($this->transform_address($s['subnet'], "dotted").'/'.$s['mask']);
+
+					if(gmp_cmp($low, $this->transform_address(@$net['start'], "decimal")) == 1 && gmp_cmp($low, $this->transform_address($net['end'], "decimal")) == -1) {
+						$ids[] = $s['id'];
+
+					}
+				}
+				# filter
+				$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
+				# search
+				if(sizeof($ids)>0) {
+					foreach($ids as $id) {
+						$result[] = $Subnets->fetch_subnet(null, $id);
+					}
+				}
+				# return
+				return sizeof(@$result)>0 ? array_filter($result) : array();
+			}
+			// empty
+			else {
+				return array();
+			}
 		}
 		else {
 			return array();
@@ -779,41 +829,40 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 * Reformat possible nun-full IPv6 address for search
+	 * Reformat possible non-full IPv6 address for search - set lowest and highest IPs
+	 *
+	 *	we can have
+	 *		a:a:a:a:a:a:a
+	 *		a:a:a::a
+	 *		a:a:a:a:a:a:a:a/mask
 	 *
 	 * @access public
 	 * @param mixed $address
 	 * @return void
 	 */
 	public function reformat_IPv6_for_search ($address) {
-		# we need Subnets class
-		$Subnets = new Subnets ($this->Database);
-		# split network and subnet part
-		$address = explode("/", $address);
+		# parse address
+		$this->initialize_pear_net_IPv6 ();
 
-		# if subnet is not provided we are looking for host
-		if (sizeof($address) < 2) {
-			$return['low']  = $Subnets->transform_to_decimal($address[0]);
-			$return['high'] = $Subnets->transform_to_decimal($address[0]);
+		# validate
+		if ($this->Net_IPv6->checkIPv6($address)==false) {
+			// return 0
+			return array("high"=>0, "low"=>0);
 		}
+		else {
+			# fake mask
+			if (strpos($address, "/")==0)	{ $address .= "/128"; }
 
-		//if network part ends with :: we must search the complete provided subnet!
-		$lastChars = substr($address[0], -2);
+			# parse address
+			$parsed = $this->Net_IPv6->parseAddress($address);
 
-		if ($lastChars == "::") {
-			$return['low']  = $Subnets->transform_to_decimal ($address[0]);
+			# result
+			$return['low']  = gmp_strval($this->transform_address($parsed['start'], "decimal"));
+			$return['high'] = gmp_strval($this->transform_address($parsed['end'], "decimal"));
 
-			//set highest IP address
-			$subnet = substr($ip[0], 0, -2);
-			$subnet = $Subnets->transform_to_decimal ($subnet);
-
-			//calculate all possible hosts in subnet mask
-			$maxHosts = $Subnets->get_max_hosts ($address[1], "IPv6");
-
-			$return['high'] = gmp_strval(gmp_add($return['low'], $maxHosts));
+			# return result array low/high
+			return $return;
 		}
-		# return result array low/high
-		return $return;
 	}
 
 

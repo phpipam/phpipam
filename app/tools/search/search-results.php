@@ -1,8 +1,3 @@
-<script type="text/javascript">
-/* fix for ajax-loading tooltips */
-$('body').tooltip({ selector: '[rel=tooltip]' });
-</script>
-
 <?php
 
 /*
@@ -10,7 +5,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
  **********************************/
 
 # for ajax-loaded pages
-if(!is_object($Subnets)) {
+if(!isset($Subnets)) {
 	# include required scripts
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
 
@@ -26,6 +21,8 @@ if(!is_object($Subnets)) {
 
 # set searchterm
 if(isset($_REQUEST['ip'])) {
+	// trim
+	$_REQUEST['ip'] = trim($_REQUEST['ip']);
 	// escape
 	$_REQUEST['ip'] = htmlspecialchars($_REQUEST['ip']);
 
@@ -38,15 +35,24 @@ $User->check_user_session();
 # change * to % for database wildchar
 $search_term = str_replace("*", "%", $search_term);
 
-# check if mac address or ip address
-if(strlen($search_term)==17 && substr_count($search_term, ":") == 5) {
-        $type = "mac"; //count : -> must be 5
+
+//initialize Pear IPv6 object
+require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv6.php' );
+$Net_IPv6 = new Net_IPv6();
+
+// ipv6 ?
+if ($Net_IPv6->checkIPv6($search_term)!=false) {
+	$type = "IPv6";
+}
+// check if mac address or ip address
+elseif(strlen($search_term)==17 && substr_count($search_term, ":") == 5) {
+    $type = "mac"; //count : -> must be 5
 }
 else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0)){
-        $type = "mac"; //no dots or : -> mac without :
+    $type = "mac"; //no dots or : -> mac without :
 }
-else{
-        $type = $Addresses->identify_address( $search_term ); //identify address type
+else {
+    $type = $Addresses->identify_address( $search_term ); //identify address type
 }
 
 # reformat if IP address for search
@@ -82,7 +88,7 @@ $colSpan 	= $fieldSize + $mySize + 4;
 # search addresses
 if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low']); }
 # search subnets
-if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low']); }
+if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
 # search vlans
 if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($search_term); }
 
@@ -101,6 +107,12 @@ if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_
 	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$export_input.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
 }
 ?>
+
+
+<script type="text/javascript">
+/* fix for ajax-loading tooltips */
+$('body').tooltip({ selector: '[rel=tooltip]' });
+</script>
 
 
 <!-- search result subnet -->
