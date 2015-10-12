@@ -46,7 +46,7 @@ class Database_PDO extends DB {
 		$dbname==null 	? : $this->dbname = $dbname;
 
 		# construct
-		parent::__construct($this->username, $this->password, $this->charset);
+		parent::__construct($this->username, $this->password, $this->charset, $this->ssl);
 	}
 
 
@@ -65,6 +65,16 @@ class Database_PDO extends DB {
 		$this->username = $db['user'];
 		$this->password = $db['pass'];
 		$this->dbname 	= $db['name'];
+		# ssl ?
+		if ($db['ssl']===true) {
+			$this->ssl = new StdClass();
+			$this->ssl->ssl_key	= $db['ssl_key'];
+			$this->ssl->ssl_cert= $db['ssl_cert'];
+			$this->ssl->ssl_ca	= $db['ssl_ca'];;
+		}
+		else {
+			$this->ssl = false;
+		}
 	}
 
 	/**
@@ -137,10 +147,14 @@ abstract class DB {
 	protected $charset = 'utf8';
 	protected $pdo = null;
 
-	public function __construct($username = null, $password = null, $charset = null) {
+	public function __construct($username = null, $password = null, $charset = null, $ssl) {
 		if (isset($username)) $this->username = $username;
 		if (isset($password)) $this->password = $password;
-		if (isset($charset)) $this->charset = $charset;
+		if (isset($charset))  $this->charset = $charset;
+		# ssl
+		if ($ssl!==false) {
+			$this->ssl = (object) $ssl;
+		}
 	}
 
 	//convert a date object/string ready for use in sql
@@ -162,9 +176,20 @@ abstract class DB {
 		$dsn = $this->makeDsn();
 
 		try {
-			$this->pdo = new \PDO($dsn, $this->username, $this->password);
-			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
+			# ssl?
+			if ($this->ssl!==false) {
+				# set array
+				$ssl_arr = array(PDO::MYSQL_ATTR_SSL_KEY  => $this->ssl->ssl_key,
+								 PDO::MYSQL_ATTR_SSL_CERT => $this->ssl->ssl_cert,
+								 PDO::MYSQL_ATTR_SSL_CA	  => $this->ssl->ssl_ca
+								);
+				$this->pdo = new \PDO($dsn, $this->username, $this->password, $ssl_arr);
+				$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			}
+			else {
+				$this->pdo = new \PDO($dsn, $this->username, $this->password);
+				$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			}
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}

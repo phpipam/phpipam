@@ -1,4 +1,4 @@
-== 1.19.008
+== 1.19.010
 
 	New features:
 	------------
@@ -47,6 +47,7 @@
 	+ Opened folders and subnets in tree menu are saved on page reload;
 	+ RWA users can now process IP requests;
 	+ Added auto-suggest for possible slave subnets;
+	+ SSL option for MySQL connections;
 
 	Security Fixes:
 	----------------------------

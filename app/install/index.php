@@ -3,10 +3,8 @@
 /**
  *	phpipam installation page!
  */
-
 # check if php is built properly
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
-
 
 # initialize install class
 $Database 	= new Database_PDO;
