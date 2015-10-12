@@ -5,7 +5,6 @@ version - 1.2
 		+ BASE auto-detect;
 		+ Settings to CONSTANT;
 		+ Add admin password reset option / script;
-		+ Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
 		+ Fix online / offline in state change mails;
 
 	+ Mark subnet as full (db prepared);
@@ -17,6 +16,8 @@ features for next releases:
 	+ per-section DNS resolvers (PEAR DNS2)
 
 	+ Export domain in bind format + script;
+
+	+ Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
 
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
