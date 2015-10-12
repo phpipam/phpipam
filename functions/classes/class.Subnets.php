@@ -291,7 +291,8 @@ class Subnets extends Common_functions {
 							"vlanId"=>@$subnet['vlanId'],
 							"vrfId"=>@$subnet['vrfId'],
 							"allowRequests"=>@$subnet['allowRequests'],
-							"showName"=>@$subnet['showName']
+							"showName"=>@$subnet['showName'],
+							"permissions"=>$subnet['permissions']
 							);
 			//create new subnets
 			$this->modify_subnet ("add", $values);
