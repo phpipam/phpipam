@@ -83,7 +83,7 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	public function POST () {
 		# add required parameters
-		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = null; }
+		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
 
 		# validate parameters
