@@ -6,6 +6,7 @@ version - 1.2
 		+ Settings to CONSTANT;
 		+ Add admin password reset option / script;
 		+ Fix online / offline in state change mails;
+		+ Verify AD migration from 1.1 to 1.2
 
 	+ Mark subnet as full (db prepared);
 

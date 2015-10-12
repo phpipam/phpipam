@@ -986,6 +986,15 @@ $(document).on("change", "form#usersEdit select[name=authMethod]", function() {
     if(type == "1") { $('tbody#user_password').show(); }
     else            { $('tbody#user_password').hide(); }
 });
+// toggle notificaitons for user
+$(document).on("change", "form#usersEdit select[name=role]", function() {
+    //get details - we need Section, network and subnet bitmask
+    var type = $("form#usersEdit select[name=role]").find(":selected").val();
+    //we changed to domain
+    if(type == "Administrator") { $('tbody#user_notifications').show(); }
+    else            			{ $('tbody#user_notifications').hide(); }
+});
+
 // generate random pass
 $(document).on("click", "a#randomPass", function() {
     var password = randomPass();

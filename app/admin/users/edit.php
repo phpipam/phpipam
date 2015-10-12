@@ -186,8 +186,10 @@ $(document).ready(function(){
     	<td><input type="checkbox" name="notifyUser" value="on" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
     	<td class="info2"><?php print _('Send notification email to user with account details'); ?></td>
     </tr>
+	</tbody>
 
 	<!-- mailNotify -->
+	<tbody id="user_notifications" <?php if(@$user['role']!="Administrator") print "style='display:none'"; ?>>
 	<tr>
     	<td><?php print _('Mail State changes'); ?></td>
     	<td>
@@ -214,11 +216,13 @@ $(document).ready(function(){
         </td>
         <td class="info2"><?php print _('Select yes to receive notification change mail for changelog'); ?></td>
 	</tr>
+	</tbody>
+
+	<!-- groups -->
+	<tbody>
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
-
-	<!-- groups -->
 	<tr>
 		<td><?php print _('Groups'); ?></td>
 		<td class="groups">
