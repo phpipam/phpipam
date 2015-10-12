@@ -80,7 +80,7 @@ if (sizeof($users)>0) {
 	# try to send
 	try {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
-		$phpipam_mail->Php_mailer->addAddress($_POST['email'], $_POST['real_name']);
+		$phpipam_mail->Php_mailer->addAddress(addslashes(trim($_POST['email'])), addslashes(trim($_POST['real_name'])));
 		//add all admins to CC
 		foreach($users as $admin) {
 			$phpipam_mail->Php_mailer->AddCC($admin->email);

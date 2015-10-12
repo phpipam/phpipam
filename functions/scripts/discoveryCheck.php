@@ -305,7 +305,7 @@ if($discovered>0 && $send_mail) {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
-			$phpipam_mail->Php_mailer->addAddress($admin['email'], $admin['name']);
+			$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
 		}
 		$phpipam_mail->Php_mailer->Subject = $subject;
 		$phpipam_mail->Php_mailer->msgHTML($content);

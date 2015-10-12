@@ -1219,7 +1219,7 @@ class Logging extends Common_functions {
 		try {
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			foreach($recipients as $r) {
-			$phpipam_mail->Php_mailer->addAddress(trim($r->email));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
 			}
 			$phpipam_mail->Php_mailer->Subject = $subject;
 			$phpipam_mail->Php_mailer->msgHTML($content);

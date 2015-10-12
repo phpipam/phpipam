@@ -1239,12 +1239,12 @@ class Tools extends Common_functions {
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			if ($recipients!==false) {
 			foreach($recipients as $r) {
-			$phpipam_mail->Php_mailer->addAddress(trim($r->email));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
 			}
-			$phpipam_mail->Php_mailer->AddCC(trim($recipients_requester));
+			$phpipam_mail->Php_mailer->AddCC(addslashes(trim($recipients_requester)));
 			}
 			else {
-			$phpipam_mail->Php_mailer->addAddress(trim($recipients_requester));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($recipients_requester)));
 			}
 			$phpipam_mail->Php_mailer->Subject = $subject;
 			$phpipam_mail->Php_mailer->msgHTML($content);

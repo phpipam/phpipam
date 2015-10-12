@@ -61,7 +61,7 @@ $content_plain 	= implode("\r\n",$content_plain);
 try {
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 	foreach(explode(",", $_POST['recipients']) as $r) {
-	$phpipam_mail->Php_mailer->addAddress(trim($r));
+	$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
 	}
 	$phpipam_mail->Php_mailer->Subject = $subject;
 	$phpipam_mail->Php_mailer->msgHTML($content);
