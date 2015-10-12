@@ -64,6 +64,7 @@ $values = array("id"=>1,
 				"donate"=>$Admin->verify_checkbox(@$_POST['donate']),
 				"visualLimit"=>@$_POST['visualLimit'],
 				"subnetOrdering"=>@$_POST['subnetOrdering'],
+				"subnetView"=>@$_POST['subnetView'],
 				//ping
 				"scanPingType"=>@$_POST['scanPingType'],
 				"pingStatus"=>@$_POST['pingStatus'],
