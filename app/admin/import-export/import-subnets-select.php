@@ -116,6 +116,7 @@ print "<div id='bottommsg'>"._("The fields marked with * are mandatory.")."
 #print "<div class='checkbox'><label><input name='showspecific' id='showspecific' type='checkbox' unchecked>"._("Show PHPIPAM specific columns.")."</label></div>";
 print "</form>";
 
+$templatetype = 'subnets';
 # print upload section
 print "<div id='uplmsg'>";
 print '<h4>'._("Upload file").'</h4><hr>';

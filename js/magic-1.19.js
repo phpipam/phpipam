@@ -582,7 +582,7 @@ $(document).on("click", "input#csvImportYes", function() {
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
-//donwload template
+//download template
 $(document).on("click", "#csvtemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/subnets/import-subnet/import-template.php'></iframe></div>");
@@ -590,6 +590,74 @@ $(document).on("click", "#csvtemplate", function() {
 
 	return false;
 });
+//download vrf template
+$(document).on("click", "#vrftemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vrf'></iframe></div>");
+
+
+	return false;
+});
+
+//download domain template
+$(document).on("click", "#vlanstemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlans'></iframe></div>");
+
+
+	return false;
+});
+
+
+//download vlan domain template
+$(document).on("click", "#vlandomaintemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlandomain'></iframe></div>");
+
+
+	return false;
+});
+
+
+//download subnet template
+$(document).on("click", "#subnetstemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=subnets'></iframe></div>");
+
+
+	return false;
+});
+
+
+//download ip address template
+$(document).on("click", "#ipaddresstemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=ipaddress'></iframe></div>");
+
+
+	return false;
+});
+
+
+//download device template
+$(document).on("click", "#devicestemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");
+
+
+	return false;
+});
+
+
+//download device types template
+$(document).on("click", "#devicetypestemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devicetypes'></iframe></div>");
+
+
+	return false;
+});
+
 
 
 /*    export IP addresses

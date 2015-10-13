@@ -19,6 +19,9 @@ $User->check_user_session();
 	<input type="hidden" name="expfields" value="<?php print implode('|',$expfields); ?>" style="display:none;">
 
 	<?php print _('Select file'); ?>: <a class="btn btn-sm btn-default"><i class="fa fa-folder-open"></i> <?php print _("Browse / Drag & Drop"); ?></a>
+<!-- Download template -->
+	<?php print "<a class=\"csvtemplate btn btn-sm btn-default pull-right\" id=\"". $templatetype . "template\">Download template</a>"; ?>
+
 </div>
 <span class="fname" style="display:none"></span>
 <br>
