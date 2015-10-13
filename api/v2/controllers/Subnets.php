@@ -343,7 +343,7 @@ class Subnets_controller extends Common_api_functions {
 		$old_subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id);
 
 		// validate resizing
-		$this->Subnets->verify_subnet_resize ($old_subnet->subnet, $this->_params->mask, $this->_params->id, $old_subnet->vrfId, $old_subnet->masterSubnetId, $old_subnet->mask);
+		$this->Subnets->verify_subnet_resize ($old_subnet->subnet, $this->_params->mask, $this->_params->id, $old_subnet->vrfId, $old_subnet->masterSubnetId, $old_subnet->mask, $old_subnet->sectionId);
 
 		// regenerate subnet if needed
 		if ($old_subnet->mask < $this->_params->mask) {

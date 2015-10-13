@@ -1506,9 +1506,10 @@ class Subnets extends Common_functions {
 	 * @param mixed $vrfId		//vrfId
 	 * @param mixed $masterSubnetId	//master Subnet Id
 	 * @param mixed $mask_old	//old mask
+	 * @param mixed $sectionId	//section ID
 	 * @return void
 	 */
-	public function verify_subnet_resize ($subnet, $mask, $subnetId, $vrfId, $masterSubnetId, $mask_old) {
+	public function verify_subnet_resize ($subnet, $mask, $subnetId, $vrfId, $masterSubnetId, $mask_old, $sectionId=0) {
 	    # fetch section and set section ordering
 		$Sections = new Sections ($this->Database);
 	    $section  = $Sections->fetch_section (null, $sectionId);
@@ -1530,7 +1531,7 @@ class Subnets extends Common_functions {
 		# if we are expanding network get new network address!
 		elseif($mask < $mask_old) {
 			//Checks for strict mode
-			if ($section->strictMode==1) {
+			if ($section->strictMode=="1") {
 				//if it has parent make sure it is still within boundaries
 				if((int) $masterSubnetId>0) {
 					//if parent is folder check for other in same folder
@@ -1539,6 +1540,22 @@ class Subnets extends Common_functions {
 						//check that new is inside its master subnet
 						if(!$this->verify_subnet_nesting ($parent_subnet->id, $this->transform_to_dotted($subnet)."/".$mask)) {
 							$this->Result->show("danger", _("New subnet not in master subnet")."!", true);
+						}
+						// it cannot be same !
+						if ($parent_subnet->mask == $mask) {
+							$this->Result->show("danger", _("New subnet cannot be same as master subnet")."!", true);
+						}
+						//fetch all slave subnets and validate
+						$slave_subnets = $this->fetch_subnet_slaves ($parent_subnet->id);
+						if ($slave_subnets!==false) {
+							foreach ($slave_subnets as $ss) {
+								// not self
+								if ($ss->id != $subnetId) {
+									if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
+										$this->Result->show("danger", _("Subnet overlapps with")." ".$this->transform_to_dotted($ss->subnet)."/".$ss->mask, true);
+									}
+								}
+							}
 						}
 					}
 					//folder
