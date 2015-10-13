@@ -19,7 +19,7 @@ else {
 	$records = $PowerDNS->fetch_all_domain_records ($domain->id);
 
 	# exclude SOA, NS
-	if (sizeof($records)>0) {
+	if ($records !== false) {
 		foreach ($records as $k=>$r) {
 			// soa, NS
 			if ($r->type=="SOA" || $r->type=="NS") {

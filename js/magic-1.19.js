@@ -1412,7 +1412,7 @@ $(document).on("click", ".refreshPTRsubnetSubmit", function() {
 //edit record
 $(".editRecord").click(function() {
 	open_popup("700", "app/admin/powerDNS/record-edit.php", {id:$(this).attr('data-id'),domain_id:$(this).attr('data-domain_id'), action:$(this).attr('data-action')} );
-	returnfalse;
+	return false;
 });
 $(document).on("click", "#editRecordSubmit", function() {
     submit_popup_data (".record-edit-result", "app/admin/powerDNS/record-edit-result.php", $('form#recordEdit').serialize());
