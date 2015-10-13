@@ -24,8 +24,8 @@ $User->check_user_session();
 # identify address and set proper url
 $type = $Subnets->identify_address($_POST['subnet']);
 
-if ($type == "IPv4") 	{ $url = "http://apps.db.ripe.net/whois/lookup/ripe/inetnum/$_POST[subnet].xml"; }
-else 					{ $url = "http://apps.db.ripe.net/whois/lookup/ripe/inet6num/$_POST[subnet].xml"; }
+if ($type == "IPv4") 	{ $url = "http://apps.db.ripe.net/whois/lookup/ripe/inetnum/$_GET[subnet].xml"; }
+else 					{ $url = "http://apps.db.ripe.net/whois/lookup/ripe/inet6num/$_GET[subnet].xml"; }
 
 /* querry ripe db and parse result */
 $xml = @simplexml_load_file($url);
