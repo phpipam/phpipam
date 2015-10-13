@@ -776,8 +776,8 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	private function auth_LDAP ($username, $password) {
-		$this->ldap = true;					//set ldap flag
-		$this->auth_AD ();					//we use AD class for login
+		$this->ldap = true;							//set ldap flag
+		$this->auth_AD ($username, $password);		//we use AD class for login
 	}
 
 	/**
