@@ -714,7 +714,11 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_edit ($address, $print_error) {
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->dns_name)===false)	{
+			// remove pointer if it exists!
+			if ($this->ptr_exists ($address->PTR)===true)	{ $this->ptr_delete ($address, $print_error); }
+			else											{ return false; }
+		}
 
 		// new record
  		if ($this->ptr_exists ($address->PTR)===false) {
@@ -986,7 +990,8 @@ class Addresses extends Common_functions {
 
 		# create query
 		foreach($subnets as $k=>$s) {
-			$tmp[] = " `subnetId`=$s ";
+			if (is_object($s))	{ $tmp[] = " `subnetId`=$s->id "; }
+			else				{ $tmp[] = " `subnetId`=$s "; }
 		}
 		$query  = "select count(*) as `cnt` from `ipaddresses` where ".implode("or", $tmp).";";
 
