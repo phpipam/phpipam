@@ -494,7 +494,7 @@ class Scan extends Common_functions {
 		if($subnet===false)										 { die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided"))); }
 
 		// we should support only up to 4094 hosts!
-		if($Subnets->get_max_hosts ($subnet->mask, "IPv4")>4094) { die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
+		if($Subnets->get_max_hosts ($subnet->mask, "IPv4")>4094 && php_sapi_name()!="cli") { die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
 
 		# set array of addresses to scan, exclude existing!
 		$ip = $this->get_all_possible_subnet_addresses ($subnet->subnet, $subnet->mask);
