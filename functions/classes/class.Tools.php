@@ -1611,12 +1611,25 @@ class Tools extends Common_functions {
 	 */
 
 	/**
-	 * Checks for latest phpipam version from phpipam webpage
+	 * Check for latest version
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function check_latest_phpipam_version () {
+		# fetch settings
+		$this->get_settings ();
+		# check for release
+		return $this->settings->version >= "1.2" ? $this->check_latest_phpipam_version_github () : $this->check_latest_phpipam_version_phpipamnet ();
+	}
+
+	/**
+	 * Checks for latest phpipam version from phpipam webpage
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function check_latest_phpipam_version_phpipamnet () {
 		# fetch webpage
 		$handle = @fopen("http://phpipam.net/phpipamversion.php", "r");
 		if($handle) {
@@ -1631,6 +1644,43 @@ class Tools extends Common_functions {
 
 		# return version or false
 		return is_numeric($versionT) ? $version : false;
+	}
+
+	/**
+	 * Fetch latest version form Github for phpipam > 1.2
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function check_latest_phpipam_version_github () {
+		# set releases href
+		$feed = implode(file('https://github.com/phpipam/phpipam/releases.atom'));
+		// fetch
+		$xml = simplexml_load_string($feed);
+
+		// if ok
+		if ($xml!==false) {
+			// encode to json
+			$json = json_decode(json_encode($xml));
+			// save all releases
+			$this->phpipam_releases = $json->entry;
+			// check for latest release
+			foreach ($json->entry as $e) {
+				// releases will be named with numberic values
+				if (is_numeric($e->title)) {
+					// save
+					$this->phpipam_latest_release = $e;
+					// return
+					return $e->title;
+					break;
+				}
+			}
+			// none
+			return false;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**

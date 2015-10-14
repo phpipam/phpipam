@@ -1365,6 +1365,19 @@ $('#clearLogs').click(function() {
 });
 
 
+// commit logs
+$('.log-tabs li a').click(function() {
+	// navigation
+	$('.log-tabs li').removeClass("active");
+	$(this).parent('li').addClass("active");
+	// load
+	$('div.log-print').hide();
+	$('div.'+$(this).attr("data-target")).show();
+
+	return false;
+});
+
+
 
 /*    Sections
 ********************************/
