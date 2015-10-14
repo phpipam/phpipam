@@ -165,7 +165,7 @@ class Sections_controller extends Common_api_functions {
 		unset($values['editDate']);
 
 		# validate mandatory parameters
-		if(strlen($this->_params->name)<4)				{ $this->Response->throw_exception(400, 'Name is mandatory'); }
+		if(strlen($this->_params->name)<3)				{ $this->Response->throw_exception(400, 'Name is mandatory or too short (mininum 3 characters)'); }
 
 		# verify masterSection
 		if(isset($this->_params->masterSection)) {
