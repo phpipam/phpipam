@@ -444,7 +444,7 @@ CREATE TABLE `api` (
   `app_code` varchar(32) NULL DEFAULT '',
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
-  `app_security` SET('crypt','ssl','none')  NOT NULL  DEFAULT 'ssl',
+  `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
