@@ -90,7 +90,7 @@ foreach($scan_subnets as $s) {
 				if($a->excludePing!=1) {
 					//create old status
 					$tDiff = time() - strtotime($a->lastSeen);
-					$oldStatus = $tDiff <= $statuses[1] ? 0 : 2;
+					$oldStatus = $tDiff >= $statuses[1] ? 2 : 0;
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
 						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check

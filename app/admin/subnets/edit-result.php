@@ -335,6 +335,9 @@ else {
 		// try to fetch domain
 		$domain = $PowerDNS->fetch_domain_by_name ($zone);
 
+		// POST DNSrecursive not set, fake it if old is also 0
+		if (!isset($_POST['DNSrecursive']) && @$subnet_old_details['DNSrecursive']==0) { $_POST['DNSrecursive'] = 0; }
+
 		//delete
 		if ($_POST['action']=="delete") {
 			// if zone exists
