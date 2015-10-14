@@ -348,16 +348,19 @@ else {
 					} else {
 						$dns_records = "";
 					}
-					// add new button
-					if (strlen($addresses[$n]->dns_name) > 0 )
-					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
-					else
-					$button = "";
 					}
 					// disabled
 					else {
 						$dns_records = "";
 						$button = "";
+					}
+					// add button
+					if ($User->settings->enablePowerDNS==1) {
+					// add new button
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name))
+					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					else
+					$button = "";
 					}
 
 				    # resolve dns name
