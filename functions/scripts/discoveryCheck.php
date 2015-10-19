@@ -67,12 +67,12 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 
 //first fetch all subnets to be scanned
-$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
+$scan_subnets = $Subnets->fetch_all_subnets_for_discoveryCheck (1);
 //set addresses
 foreach($scan_subnets as $s) {
 	// if subnet has slaves dont check it
 	if ($Subnets->has_slaves ($s->id) === false) {
-		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id);
+		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
 	}
 }
 //reindex

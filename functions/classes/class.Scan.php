@@ -467,11 +467,12 @@ class Scan extends Common_functions {
 	 * @access public
 	 * @param mixed $type		//discovery, update
 	 * @param mixed $subnet
+	 * @param bool $type
 	 * @return void
 	 */
-	public function prepare_addresses_to_scan ($type, $subnet) {
+	public function prepare_addresses_to_scan ($type, $subnet, $die = true) {
 		# discover new addresses
-		if($type=="discovery") 	{ return is_numeric($subnet) ? $this->prepare_addresses_to_discover_subnetId ($subnet) : $this->prepare_addresses_to_discover_subnet ($subnet); }
+		if($type=="discovery") 	{ return is_numeric($subnet) ? $this->prepare_addresses_to_discover_subnetId ($subnet, $die) : $this->prepare_addresses_to_discover_subnet ($subnet, $die); }
 		# update addresses statuses
 		elseif($type=="update") { return $this->prepare_addresses_to_update ($subnet); }
 		# fail
@@ -485,16 +486,21 @@ class Scan extends Common_functions {
 	 * @param mixed $subnetId
 	 * @return void
 	 */
-	public function prepare_addresses_to_discover_subnetId ($subnetId) {
+	public function prepare_addresses_to_discover_subnetId ($subnetId, $die) {
 		# initialize classes
 		$Subnets   = new Subnets ($this->Database);
 
 		//subnet ID is provided, fetch subnet
 		$subnet = $Subnets->fetch_subnet(null, $subnetId);
-		if($subnet===false)										 { die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided"))); }
+		if($subnet===false)	{
+			 if ($die)											{ die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided"))); }
+			 else												{ return array(); }
+		}
 
 		// we should support only up to 4094 hosts!
-		if($Subnets->get_max_hosts ($subnet->mask, "IPv4")>4094 && php_sapi_name()!="cli") { die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
+		if($Subnets->get_max_hosts ($subnet->mask, "IPv4")>4094 && php_sapi_name()!="cli")
+		if ($die)												{ die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
+		else													{ return array(); }
 
 		# set array of addresses to scan, exclude existing!
 		$ip = $this->get_all_possible_subnet_addresses ($subnet->subnet, $subnet->mask);
@@ -503,7 +509,10 @@ class Scan extends Common_functions {
 		$ip = $this->remove_existing_subnet_addresses ($ip, $subnetId);
 
 		//none to scan?
-		if(sizeof($ip)==0)										 { die(json_encode(array("status"=>1, "error"=>"Didn't find any address to scan!"))); }
+		if(sizeof($ip)==0)	{
+			if ($die)											{ die(json_encode(array("status"=>1, "error"=>"Didn't find any address to scan!"))); }
+			else												{ return array(); }
+		}
 
 		//return
 		return $ip;
