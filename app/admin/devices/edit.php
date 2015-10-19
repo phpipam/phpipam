@@ -143,9 +143,9 @@ $(document).ready(function(){
 			print '	<td>'. "\n";
 
 			//set type
-			if(substr($myField['type'], 0,3) == "set") {
+			if(substr($myField['type'], 0,3) == "set" || substr($myField['type'], 0,4) == "enum") {
 				//parse values
-				$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $myField['type']));
+				$tmp = substr($myField['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $myField['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $myField['type']));
 				//null
 				if($myField['Null']!="NO") { array_unshift($tmp, ""); }
 

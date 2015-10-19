@@ -780,12 +780,11 @@ class Admin extends Common_functions {
 	    else																																{ $field['ftype'] = $field['fieldType']."(".$field['fieldSize'].")"; }
 
 	    # default value null
-	    if(strlen($field['fieldDefault'])==0)	{ $field['fieldDefault'] = "NULL"; }
-	    else									{ $field['fieldDefault'] = "'$field[fieldDefault]'"; }
+	    $field['fieldDefault'] = strlen($field['fieldDefault'])==0 ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
-	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set")	{ $charset = "CHARACTER SET utf8"; }
-	    else																							{ $charset = ""; }
+	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8"; }
+	    else																															{ $charset = ""; }
 
 	    # escape fields
 	    $field['table'] 		= $this->Database->escape($field['table']);
@@ -805,8 +804,24 @@ class Admin extends Common_functions {
 		    return false;
 	    }
 
+
+	    # set update query
+	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[name]`;"; }
+	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER IGNORE TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
+	    else if ($field['action']=="edit") 							{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default COMMENT :comment;"; }
+	    else if ($field['action']=="add"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
+	    else if ($field['action']=="add")							{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NULL COMMENT :comment;"; }
+	    else {
+		    return false;
+	    }
+
+	    # set parametized values
+	    $params = array();
+	    if (strpos($query, ":default")>0)	$params['default'] = $field['fieldDefault'];
+	    if (strpos($query, ":comment")>0)	$params['comment'] = $field['Comment'];
+
 		# execute
-		try { $res = $this->Database->runQuery($query, array(@$field['Comment'])); }
+		try { $res = $this->Database->runQuery($query, $params); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 	        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] failed ($field[name])<hr>".$this->array_to_log($field), 2);

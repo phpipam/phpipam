@@ -450,9 +450,9 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 				print '	<td colspan="2">'. "\n";
 
 				//set type
-				if(substr($field['type'], 0,3) == "set") {
+				if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 					//parse values
-					$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $field['type']));
+					$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
 					//null
 					if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
