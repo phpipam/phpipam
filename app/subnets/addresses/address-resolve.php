@@ -21,7 +21,7 @@ $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 $nsid = $subnet===false ? false : $subnet->nameserverId;
 
 # resolve
-$hostname = $DNS->resolve_address ($_POST['ipaddress'], false, true, 0);
+$hostname = $DNS->resolve_address ($_POST['ipaddress'], false, true, $nsid);
 
 # print result
 print $hostname['name'];

@@ -49,6 +49,7 @@
 	+ RWA users can now process IP requests;
 	+ Added auto-suggest for possible slave subnets;
 	+ SSL option for MySQL connections;
+	+ Enum custom field support;
 
 	Security Fixes:
 	----------------------------
