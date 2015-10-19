@@ -1,3 +1,14 @@
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
 <?php
 // firewall zone fwzones-edit.php
 // add, edit and delete firewall zones
@@ -116,11 +127,7 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 				<?php print _('Padding'); ?>
 			</td>
 			<td>
-				<div class="checkbox">
-					<label>
-						<input type="checkbox"  name="padding" <?php if($_POST['action'] == 'edit' && $firewallZone->padding == 1){ print 'checked';} elseif($_POST['action'] == 'edit' && $firewallZone->padding == 0) {} elseif ($firewallZoneSettings['padding'] == 'on'){print 'checked';}?>> Enable padding
-					</label>
-				</div>
+				<input type="checkbox" class="input-switch" name="padding" <?php if($_POST['action'] == 'edit' && $firewallZone->padding == 1){ print 'checked';} elseif($_POST['action'] == 'edit' && $firewallZone->padding == 0) {} elseif ($firewallZoneSettings['padding'] == 'on'){print 'checked';}?>>
 			</td>
 		</tr>
 	<?php } ?>
