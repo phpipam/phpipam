@@ -133,7 +133,8 @@ if(sizeof($custom_fields) > 0) {
 # set colspan for output
 $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
-$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);		//dhcp colspan
+$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
+$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0:$colspan['dhcp'];				//dhcp colspan negative fix
 
 /* output variables */
 
@@ -320,7 +321,7 @@ else {
 
 				    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_REQUEST['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr);
 				    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
-				    if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($addresses[$n]->state); }
+				    print $Addresses->address_type_format_tag($addresses[$n]->state);
 				    print "</td>";
 
 
@@ -347,16 +348,19 @@ else {
 					} else {
 						$dns_records = "";
 					}
-					// add new button
-					if (strlen($addresses[$n]->dns_name) > 0 )
-					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
-					else
-					$button = "";
 					}
 					// disabled
 					else {
 						$dns_records = "";
 						$button = "";
+					}
+					// add button
+					if ($User->settings->enablePowerDNS==1) {
+					// add new button
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name))
+					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					else
+					$button = "";
 					}
 
 				    # resolve dns name

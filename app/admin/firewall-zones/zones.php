@@ -17,7 +17,7 @@ print '<button class="btn btn-sm btn-default btn-success editFirewallZone" style
 
 // display the zone table if there are any zones in the database
 if($firewallZones) {
-	
+
 	// table
 	print '<table id="zonesPrint" class="table table-striped table-top table-auto">';
 
@@ -38,7 +38,7 @@ if($firewallZones) {
 			print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
 		} else {
 			print '<td><span class="fa fa-group" title="'._('Customer Zone').'"></span></td>';
-		}	
+		}
 		print '<td>';
 		print $zoneObject->zone;
 		print '</td><td>';

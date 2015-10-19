@@ -1,15 +1,6 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-
-	return false;
-});
-</script>
-
-
 <?php
 # required functions
-if(!is_object(@$User)) {
+if(!isset($User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
@@ -26,7 +17,17 @@ $User->check_user_session ();
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	header("Location: ".create_link("tools","favourites"));
 }
+?>
 
+<script type="text/javascript">
+$(document).ready(function() {
+	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	return false;
+});
+</script>
+
+<?php
 # fetch favourite subnets with details
 $fsubnets = $User->fetch_favourite_subnets ();
 

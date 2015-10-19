@@ -78,17 +78,18 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css">
 	<link rel="shortcut icon" type="image/png" href="css/images/favicon.png">
-
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
 	<!-- js -->
 	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="js/jclock.jquery.js"></script>
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/login.js"></script>
 	<?php } ?>
-<!-- 	<script type="text/javascript" src="js/magic-1.11.min.js"></script> -->
+<!-- 	<script type="text/javascript" src="js/magic-1.2.min.js"></script> -->
 	<script type="text/javascript" src="js/magic-1.19.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }

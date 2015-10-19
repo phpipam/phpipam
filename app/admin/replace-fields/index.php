@@ -28,8 +28,8 @@ $User->check_user_session();
 			# fetch custom fields
 			$custom = $Tools->fetch_custom_fields('ipaddresses');
 
-			if(sizeof($myFields) > 0) {
-				foreach($myFields as $myField) {
+			if(sizeof($custom) > 0) {
+				foreach($custom as $myField) {
 					print '<option value="'. $myField['name'] .'"> '. $myField['name'] .'</option>';
 				}
 			}

@@ -25,7 +25,7 @@ $User->check_user_session();
 $Tools->validate_action ($_POST['action']);
 
 # validate post
-is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid ID"), true, true);
+is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
@@ -35,6 +35,7 @@ $id      = $_POST['id'];
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
+if (strpos($_SERVER['HTTP_REFERER'], "verify-database")==0)
 sizeof($subnet)>0 ?:			$Result->show("danger", _("Invalid subnet"), true, true);
 
 # set and check permissions
@@ -79,9 +80,6 @@ else				{ $delete = ""; }
 
 ?>
 
-
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
-<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 /* bootstrap switch */
@@ -126,6 +124,9 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
 			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+			<?php
+			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
+			?>
 
 			<?php if($action=="edit" || $action=="delete") { ?>
 			<input type="hidden" name="nostrict" value="yes">
@@ -246,26 +247,23 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	?>
 	<!-- state -->
 	<?php
-	if(in_array('state', $selected_ip_fields)) {
+	# fetch all states
+	$ip_types = (array) $Addresses->addresses_types_fetch();
+	# default type
+	if(!is_numeric(@$address['state'])) 		{ $address['state'] = 2; } // online
 
-		# fetch all states
-		$ip_types = (array) $Addresses->addresses_types_fetch();
-		# default type
-		if(!is_numeric(@$address['state'])) 		{ $address['state'] = 2; }
-
-		print '<tr>'. "\n";
-		print '	<td>'._('Tag').'</td>'. "\n";
-		print '	<td>'. "\n";
-		print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">'. "\n";
-		# printout
-		foreach($ip_types as $k=>$type) {
-			if($address['state']==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
-			else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
-		}
-		print '		</select>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
+	print '<tr>'. "\n";
+	print '	<td>'._('Tag').'</td>'. "\n";
+	print '	<td>'. "\n";
+	print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">'. "\n";
+	# printout
+	foreach($ip_types as $k=>$type) {
+		if($address['state']==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
+		else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
 	}
+	print '		</select>'. "\n";
+	print '	</td>'. "\n";
+	print '</tr>'. "\n";
 	?>
 	<!-- exclude Ping -->
 	<?php

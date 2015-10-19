@@ -112,7 +112,7 @@ if(sizeof($sections) > 0) {
 			# add new link
 			print "<tr>";
 			print "	<td colspan='$colCount'>";
-			print "		<button class='btn btn-sm btn-default editSubnet' data-action='add' data-sectionid='$section[id]' rel='tooltip' data-placement='right' title='"._('Add new subnet to section')." $section[name]'><i class='fa fa-plus'></i> "._('Add subnet')."</button>";
+			print "		<button class='btn btn-sm btn-default editSubnet' data-action='add' data-sectionid='$section[id]' data-subnetId='' rel='tooltip' data-placement='right' title='"._('Add new subnet to section')." $section[name]'><i class='fa fa-plus'></i> "._('Add subnet')."</button>";
 			print "	</td>";
 			print "	</tr>";
 

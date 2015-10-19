@@ -654,8 +654,8 @@ class Logging extends Common_functions {
 			}
 
 			//transform subnet to IP address format
-			if(strlen($this->object_new['subnet'])>0) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address (substr($this->object_new['subnet'], 0, strpos($this->object_new['subnet'], "/")), "decimal");}
-			if(strlen($this->object_old['subnet'])>0) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address (substr($this->object_old['subnet'], 0, strpos($this->object_old['subnet'], "/")), "decimal");}
+			if(strlen($this->object_new['subnet'])>0) 	{ $this->object_new['subnet'] = $this->Subnets->transform_address ($this->object_new['subnet'], "dotted");}
+			if(strlen($this->object_old['subnet'])>0) 	{ $this->object_old['subnet'] = $this->Subnets->transform_address ($this->object_old['subnet'], "dotted");}
 
 			//remove subnet/mask for folders
 			if (@$this->object_new['isFolder']=="1")	{ unset($this->object_new['subnet'], $this->object_new['mask']); }
@@ -1219,7 +1219,7 @@ class Logging extends Common_functions {
 		try {
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			foreach($recipients as $r) {
-			$phpipam_mail->Php_mailer->addAddress(trim($r->email));
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
 			}
 			$phpipam_mail->Php_mailer->Subject = $subject;
 			$phpipam_mail->Php_mailer->msgHTML($content);

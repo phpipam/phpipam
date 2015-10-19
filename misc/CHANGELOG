@@ -1,4 +1,4 @@
-== 1.19.002
+== 1.19.010
 
 	New features:
 	------------
@@ -46,6 +46,8 @@
 	+ Fast user switching for admins to impersonate user;
 	+ Opened folders and subnets in tree menu are saved on page reload;
 	+ RWA users can now process IP requests;
+	+ Added auto-suggest for possible slave subnets;
+	+ SSL option for MySQL connections;
 
 	Security Fixes:
 	----------------------------

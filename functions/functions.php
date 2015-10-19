@@ -44,7 +44,7 @@ require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
  *
  *	levels: page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5
  */
-function create_link ($l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null, $install = false ) {
+function create_link ($l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null ) {
 	# get settings
 	global $User;
 
@@ -56,9 +56,6 @@ function create_link ($l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null
 		elseif(!is_null($l2))	{ $link = "$l1/$l2/"; }
 		elseif(!is_null($l1))	{ $link = "$l1/"; }
 		else					{ $link = ""; }
-
-		# prepend base
-		$link = BASE.$link;
 	}
 	# normal
 	else {
@@ -68,10 +65,9 @@ function create_link ($l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null
 		elseif(!is_null($l2))	{ $link = "?page=$l1&section=$l2"; }
 		elseif(!is_null($l1))	{ $link = "?page=$l1"; }
 		else					{ $link = ""; }
-
-		# prepend base
-		$link = BASE.$link;
 	}
+	# prepend base
+	$link = BASE.$link;
 
 	# result
 	return $link;

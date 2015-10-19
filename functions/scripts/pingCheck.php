@@ -90,7 +90,7 @@ foreach($scan_subnets as $s) {
 				if($a->excludePing!=1) {
 					//create old status
 					$tDiff = time() - strtotime($a->lastSeen);
-					$oldStatus = $tDiff <= $statuses[1] ? 0 : 2;
+					$oldStatus = $tDiff >= $statuses[1] ? 2 : 0;
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
 						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
@@ -354,7 +354,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
-			$phpipam_mail->Php_mailer->addAddress($admin['email'], $admin['name']);
+			$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
 		}
 		$phpipam_mail->Php_mailer->Subject = $subject;
 		$phpipam_mail->Php_mailer->msgHTML($content);

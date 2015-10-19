@@ -166,6 +166,7 @@ CREATE TABLE `settings` (
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
+  `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -317,7 +318,7 @@ CREATE TABLE `users` (
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
-  `lang` INT(11) UNSIGNED  NULL  DEFAULT '1',
+  `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
   `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
   `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
@@ -360,7 +361,8 @@ VALUES
 	(5, 'de_DE','Deutsch'),
 	(6, 'pt_BR', 'Brazil'),
 	(7,	'es_ES'	,'Español'),
-	(8, 'cs_CZ', 'Czech');
+	(8, 'cs_CZ', 'Czech'),
+	(9, 'en_US', 'English (US)');
 
 
 # Dump of table vlans
@@ -443,7 +445,7 @@ CREATE TABLE `api` (
   `app_code` varchar(32) NULL DEFAULT '',
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
-  `app_security` SET('crypt','ssl','none')  NOT NULL  DEFAULT 'ssl',
+  `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

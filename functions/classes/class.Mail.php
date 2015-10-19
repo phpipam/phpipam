@@ -61,7 +61,7 @@ class phpipam_mail {
 	 */
 	public function initialize_mailer () {
 		# we need phpmailer
-		require_once( dirname(__FILE__) . '/../PHPMailer/class.phpmailer.php');
+		require_once( dirname(__FILE__) . '/../PHPMailer/PHPMailerAutoload.php');
 
 		# initialize object
 		$this->Php_mailer = new PHPMailer(true);			//localhost by default
@@ -180,6 +180,7 @@ class phpipam_mail {
 		$html[] = "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>";
 		$html[] = "<html><head>";
 		$html[] = "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>";
+		$html[] = "<meta name='viewport' content='width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=no'>";
 		$html[] = "</head>";
 		# return
 		return implode("\n", $html);

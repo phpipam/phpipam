@@ -8,6 +8,12 @@ $db['pass'] = "phpipamadmin";
 $db['name'] = "phpipam";
 $db['port'] = 3306;
 
+// SSL options
+$db['ssl']  	= false;
+$db['ssl_key']	= "";
+$db['ssl_cert']	= "";
+$db['ssl_ca']	= "";
+
 /**
  * php debugging on/off
  *

@@ -27,6 +27,10 @@ if($_POST['action'] != 'add' && $_POST['action'] != 'delete' && $_POST['action']
 if($_POST['zone'] && !preg_match('/^[0-9a-zA-Z.\-_ ]+$/i',$_POST['zone'])) {
 	$Result->show("danger", _("Invalid zone name value."), true);
 }
+if($firewallZoneSettings['zoneGenerator']=="2")
+if(strlen(@$_POST['zone'])<3 || strlen(@$_POST['zone'])>$firewallZoneSettings['zoneLength']) {
+	$Result->show("danger", _("Invalid zone name length."), true);
+}
 // check the zone indicator ID. valid values are 0 or 1.
 if($_POST['indicator'] && !preg_match('/^[0-1]$/i',$_POST['indicator'])) {
 	$Result->show("danger", _("Invalid indicator ID."), true);

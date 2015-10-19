@@ -42,6 +42,11 @@ class Install extends Common_functions {
 		# set debugging
 		$this->set_db_params ();
 		# Log object
+		try { $this->Database->connect();
+		} catch ( Exception $e ) {
+
+		}
+		if(!isset($e))
 		$this->Log = new Logging ($this->Database);
 	}
 
@@ -232,7 +237,7 @@ class Install extends Common_functions {
 	 */
 	private function redirect_to_install () {
 		# redirect to install
-		header("Location: ".BASE.create_link("install", null,null,null,null,true));
+		header("Location: ".create_link("install"));
 	}
 
 	/**

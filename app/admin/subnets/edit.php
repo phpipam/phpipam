@@ -77,9 +77,6 @@ if(isset($_POST['vlanId'])) {
 $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : false;
 ?>
 
-
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
-<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 /* bootstrap switch */
@@ -126,17 +123,45 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
         <td class="middle"><?php print _('Subnet'); ?></td>
         <td>
         	<?php
+            if ($_POST['subnetId'] && $_POST['action'] == "add"){ $showDropMenuFull = 1; }
         	# set CIDR
-        	if (isset($subnet_old_temp['subnet']))	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
+        	if (isset($subnet_old_temp['subnet'])&&$subnet_old_temp['isFolder']!="1")	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
+        	if (isset($subnet_old_temp['subnet']) && ($showDropMenuFull)) 				{ $dropdown_menu = $Subnets->subnet_dropdown_print_available($_POST['sectionId'], $_POST['subnetId']);  }
+
         	if (@$_POST['location'] == "ipcalc") 	{ $cidr = strlen($_POST['bitmask'])>0 ? $_POST['subnet'].'/'.$_POST['bitmask'] : $_POST['subnet']; }  														//from ipcalc
             if ($_POST['action'] != "add") 			{ $cidr = $Subnets->transform_to_dotted($subnet_old_details['subnet']).'/'.$subnet_old_details['mask']; } 	//editing existing
+
+        	# reset CIDR if $showDropMenuFull
+        	if ($showDropMenuFull && strlen(@$dropdown_menu)>2) {
+	        	$cidr = explode("\n",$dropdown_menu);
+	        	$cidr = substr(strip_tags($cidr[1]), 2);
+	        	//validate
+	        	if ($Subnets->verify_cidr_address($cidr)===false) { unset($cidr); };
+	        }
         	?>
-            <input type="text" class="form-control input-sm input-w-200" name="subnet"   placeholder="<?php print _('subnet in CIDR'); ?>"   value="<?php print @$cidr; ?>" <?php if ($readonly) print "readonly"; ?>>
+
+
+			<?php  if (!$showDropMenuFull){ ?>
+                <input type="text" class="form-control input-sm input-w-200" name="subnet" placeholder="<?php print _('subnet in CIDR'); ?>"  value="<?php print @$cidr; ?>" <?php if ($readonly) print "readonly"; ?>>
+            <?php } else { ?>
+			<div class="input-group input-w-200">
+				<input type="text" class="form-control input-sm input-w-200" name="subnet" placeholder="<?php print _('subnet in CIDR'); ?>" value="<?php print @$cidr; ?>">
+				<?php if (strlen($dropdown_menu)>0) { ?>
+				<div class="input-group-btn">
+					<button type="button" class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+					<ul class="dropdown-menu dropdown-menu-right dropdown-subnets">
+						<?php print $dropdown_menu; ?>
+					</ul>
+				</div>
+				<?php } ?>
+			</div>
+			<?php } ?>
+
         </td>
         <td class="info2">
         	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopupMasks"><i class="fa fa-th-large"></i></button>
         	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE database'); ?>'><i class="fa fa-refresh"></i></button>
-        	<?php print _('Enter subnet in CIDR format (e.g. 192.168.1.1/24)'); ?>
+        	<?php print _('Enter subnet in CIDR format'); ?>
         </td>
     </tr>
 
@@ -219,7 +244,10 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
     <tr>
         <td><?php print _('Master Subnet'); ?></td>
         <td>
-        	<?php $Subnets->print_mastersubnet_dropdown_menu($_POST['sectionId'], @$subnet_old_details['masterSubnetId']); ?>
+			<?php
+			if ($showDropMenuFull)	{ $Subnets->subnet_dropdown_master_only (@$subnet_old_details['masterSubnetId']); }
+			else 					{ $Subnets->print_mastersubnet_dropdown_menu ($_POST['sectionId'], @$subnet_old_details['masterSubnetId']);}
+			?>
         </td>
         <td class="info2"><?php print _('Enter master subnet if you want to nest it under existing subnet, or select root to create root subnet'); ?>!</td>
     </tr>

@@ -14,6 +14,15 @@ $User->check_user_session();
 # fetch all zone mappings
 $firewallZoneMapping = $Zones->get_zone_mappings();
 
+// reorder by device
+if ($firewallZoneMapping!==false) {
+	// devices
+	$devices = array();
+	// add
+	foreach ($firewallZoneMapping as $m) {
+		$devices[$m->deviceId][] = $m;
+	}
+}
 ?>
 <!-- Add new firewall zone mapping -->
 <button class="btn btn-sm btn-default btn-success editMapping" style="margin-bottom:10px;margin-top: 25px;" data-action="add" data-id="0"><i style="padding-right:5px;" class="fa fa-plus"></i><?php print _('Create Firewall zone mapping') ?></button>
@@ -29,7 +38,6 @@ if($firewallZoneMapping) {
 			<th><?php print _('Zone'); ?></th>
 			<th><?php print _('Alias'); ?></th>
 			<th><?php print _('Description'); ?></th>
-			<th><?php print _('Devicename'); ?></th>
 			<th><?php print _('Interface'); ?></th>
 			<th colspan="2"><?php print _('Subnet'); ?></th>
 			<th colspan="2"><?php print _('VLAN'); ?></th>
@@ -37,8 +45,15 @@ if($firewallZoneMapping) {
 		</tr>
 	<?php
 	// loop
-	foreach ($firewallZoneMapping as $mapping) {
-		print '<tr>';
+	foreach ($devices as $k=>$firewallZoneMapping) {
+		// header
+		print "<tr>";
+		print "	<th colspan='10'><h4> ".$devices[$k][0]->deviceName."</h4></th>";
+		print "</tr>";
+
+		// mappings
+		foreach ($firewallZoneMapping as $mapping) {
+			print '<tr>';
 			// columns
 			if ($mapping->indicator == 0 ) {
 				print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
@@ -48,7 +63,6 @@ if($firewallZoneMapping) {
 			print '<td>'.$mapping->zone.'</td>';
 			print '<td>'.$mapping->alias.'</td>';
 			print '<td>'.$mapping->description.'</td>';
-			print '<td>'.$mapping->deviceName.'</td>';
 			print '<td>'.$mapping->interface.'</td>';
 			//print '<td>'.$Subnets->transform_to_dotted($mapping->subnet).'/'.$mapping->subnetMask.'</td>';
 			print '<td>';
@@ -77,7 +91,7 @@ if($firewallZoneMapping) {
 				</div>
 			</td>
 		</tr>
-	<?php } ?>
+	<?php } } ?>
 	</table>
 
 <?php

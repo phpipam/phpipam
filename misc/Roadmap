@@ -2,10 +2,10 @@ version - 1.2
 
 	+ To fix / finish
 		+ Verify API new fields and update web documentation;
-		+ Slave subnets are not deleted - check;
-		+ db port;
 		+ BASE auto-detect;
 		+ Settings to CONSTANT;
+		+ Add admin password reset option / script;
+		+ Fix online / offline in state change mails;
 
 	+ Mark subnet as full (db prepared);
 
@@ -13,9 +13,14 @@ version - 1.2
 features for next releases:
 ---------------------------
 
+	+ Inventory management:
+		- rack tables (http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/)
+
 	+ per-section DNS resolvers (PEAR DNS2)
 
 	+ Export domain in bind format + script;
+
+	+ Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
 
 	+ NAT module
 		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
@@ -27,8 +32,6 @@ features for next releases:
 	+ L2 domain permissions for groups ?
 
 	+ Devices permissions;
-
-	+ IPv6 pinging;
 
 	+ assign a state to a subnet, vlan
 
@@ -46,9 +49,6 @@ features for next releases:
 	+ Mail subnet details
 
 	+ add customers module;
-
-	+ Rack tables
-		http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/
 
 	+ ARIN whois (https://www.arin.net/resources/whoisrws/whois_api.html);
 

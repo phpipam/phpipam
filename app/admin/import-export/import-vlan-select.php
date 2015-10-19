@@ -95,6 +95,7 @@ print "<div id='bottommsg'>"._("The fields marked with * are mandatory.")."<br>"
 ##print "<div class='checkbox'><label><input name='adddomain' type='checkbox' checked>"._("Add missing VLAN domains")."</label></div>";
 print "</form>";
 
+$templatetype = 'vlans';
 # print upload section
 print "<div id='uplmsg'>";
 print '<h4>'._("Upload file").'</h4><hr>';

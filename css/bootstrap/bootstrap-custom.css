@@ -1074,6 +1074,28 @@ ul#subnets li i[class*="fa-folder"] {
 	min-width: 14px;
 }
 
+/* subnets suggestions dropdown */
+ul.dropdown-subnets {
+	max-height: 350px;
+	overflow: scroll;
+	padding-top: 0px;
+}
+ul.dropdown-subnets li.disabled {
+	background: #eee;
+	border-top: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	padding: 5px 10px;
+	margin-top: 7px;
+}
+ul.dropdown-subnets li:nth-child(1) {
+	margin-top: 0px;
+	border-top: none;
+}
+ul.dropdown-subnets li.disabled,
+ul.dropdown-subnets li a {
+	font-size: 12px;
+}
+
 
 .alert hr {
 	border-top: 0px;

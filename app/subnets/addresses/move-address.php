@@ -88,7 +88,7 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 				<?php
 				foreach($Subnets->slaves as $slave) {
 					$slave_subnet = (array) $Subnets->fetch_subnet(null, $slave);
-					print "<option value='$slave_subnet[id]'>$slave_subnet[description] (".Transform2long($slave_subnet['subnet'])."/$slave_subnet[mask])</option>";
+					print "<option value='$slave_subnet[id]'>$slave_subnet[description] (".$Subnets->transform_address($slave_subnet['subnet'], "dotted")."/$slave_subnet[mask])</option>";
 				}
 				?>
 			</select>
@@ -103,9 +103,10 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 
 <!-- footer -->
 <div class="pFooter">
-	<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-	<button class="btn btn-sm btn-default" id="editIPAddressSubmit"><?php print _('Move IP address'); ?></button>
-
+	<div class="btn-group">
+		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+		<button class="btn btn-sm btn-default" id="editIPAddressSubmit"><?php print _('Move IP address'); ?></button>
+	</div>
 	<!-- holder for result -->
 	<div class="addnew_check"></div>
 </div>
