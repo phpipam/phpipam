@@ -48,7 +48,11 @@ if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", 
 # username must not already exist (if action is add)
 if ($_POST['action']=="add") {
 	//username > 8 chars
-	if(strlen($_POST['username'])<6)									{ $Result->show("danger", _("Username must be at least 6 characters long!"), true); }
+	if ($auth_method->type=="local") {
+		if(strlen($_POST['username'])<6)								{ $Result->show("danger", _("Username must be at least 6 characters long!"), true); }
+	} else {
+		if(strlen($_POST['username'])==0)								{ $Result->show("danger", _("Username must be at least 1 character long!"), true); }
+	}
 	//check duplicate
 	if($Admin->fetch_object("users", "username", $_POST['username'])!==false) {
 																		{ $Result->show("danger", _("User")." ".$_POST['username']." "._("already exists!"), true); }
