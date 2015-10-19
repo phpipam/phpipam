@@ -221,7 +221,7 @@ class FirewallZones extends Common_functions {
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
 						firewallZones.padding AS padding,
-						firewallZoneMapping.zoneId AS mappingId,
+						firewallZoneMapping.id AS mappingId,
 						firewallZones.zone AS zone,
 						firewallZones.indicator AS indicator,
 						firewallZoneMapping.alias AS alias,
