@@ -56,8 +56,7 @@ else {
 	$m=0;
 	foreach($script_result->values->alive as $ip=>$port) {
 		//resolve?
-		$address1 = array("ip_addr"=>$Subnets->transform_to_dotted($ip), "dns_name"=>"");
-		$hostname = $DNS->resolve_address ( (object) $address1, true);
+		$hostname = $DNS->resolve_address ( $ip, null, true, false);
 
 		print "<tr class='result$m'>";
 		//ip

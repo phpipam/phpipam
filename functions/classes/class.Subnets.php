@@ -57,35 +57,6 @@ class Subnets extends Common_functions {
 	    return explode(",", $this->settings->subnetOrdering);
 	}
 
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
-	}
-
 
 
 

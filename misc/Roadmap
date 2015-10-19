@@ -16,8 +16,6 @@ features for next releases:
 	+ Inventory management:
 		- rack tables (http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/)
 
-	+ per-section DNS resolvers (PEAR DNS2)
-
 	+ Export domain in bind format + script;
 
 	+ Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;

@@ -393,7 +393,8 @@ $(document).on("click", "a.moveIPaddr", function() {
 $(document).on("click", "#refreshHostname", function() {
     showSpinner();
     var ipaddress = $('input.ip_addr').val();
-    $.post('app/subnets/addresses/address-resolve.php', {ipaddress:ipaddress}, function(data) {
+    var subnetId  = $(this).attr('data-subnetId');;
+    $.post('app/subnets/addresses/address-resolve.php', {ipaddress:ipaddress, subnetId: subnetId}, function(data) {
         if(data.length !== 0) {
             $('input[name=dns_name]').val(data);
         }

@@ -10,18 +10,18 @@ require( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize required objects
 $Database 	= new Database_PDO;
 $User		= new User ($Database);
+$Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
 
-# create object
-$address = new StdClass();
-$address->ip_addr  = $_POST['ipaddress'];
-$address->dns_name = null;
+# fetch subnet
+$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+$nsid = $subnet===false ? false : $subnet->nameserverId;
 
 # resolve
-$hostname = $DNS->resolve_address ($address, true);
+$hostname = $DNS->resolve_address ($_POST['ipaddress'], false, true, 0);
 
 # print result
 print $hostname['name'];

@@ -144,7 +144,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '	<div class="input-group">';
 		print ' <input type="text" name="dns_name" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['dns_name']. '" '.$delete.'>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
-		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' rel='tooltip' data-placement='left' title='"._('Click to check for hostname')."'></i></span>";
+		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='left' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
 		print "	</div>";
 		print '	</td>'. "\n";

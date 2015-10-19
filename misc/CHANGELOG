@@ -1,4 +1,4 @@
-== 1.19.010
+== 1.19.015
 
 	New features:
 	------------
@@ -26,6 +26,7 @@
 		+ DNS domain management;
 	+ Added Scan agents to scan subnets remotely;
 	+ Added firewall zone mappings and module;
+	+ Added per-subnet DNS resolvers;
 
 	Enhancements:
 	----------------------------

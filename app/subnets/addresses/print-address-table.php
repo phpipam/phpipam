@@ -364,9 +364,8 @@ else {
 					}
 
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>";
-
-
+				    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+																			{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";

@@ -59,6 +59,52 @@ class Common_functions  {
 		$this->debugging = $debugging ? true : false;
 	}
 
+
+	/**
+	 * Initializes PEAR Net IPv4 object
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize_pear_net_IPv4 () {
+		//initialize NET object
+		if(!is_object($this->Net_IPv4)) {
+			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
+			//initialize object
+			$this->Net_IPv4 = new Net_IPv4();
+		}
+	}
+
+	/**
+	 * Initializes PEAR Net IPv6 object
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize_pear_net_IPv6 () {
+		//initialize NET object
+		if(!is_object($this->Net_IPv6)) {
+			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
+			//initialize object
+			$this->Net_IPv6 = new Net_IPv6();
+		}
+	}
+
+	/**
+	 * Initializes PEAR Net IPv6 object
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function initialize_pear_net_DNS2 () {
+		//initialize NET object
+		if(!is_object($this->DNS2)) {
+			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/DNS2.php' );
+			//initialize object
+			$this->DNS2 = new Net_DNS2_Resolver();
+		}
+	}
+
 	/**
 	 * Strip tags from array or field to protect from XSS
 	 *

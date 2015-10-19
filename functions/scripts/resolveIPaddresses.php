@@ -57,12 +57,12 @@ elseif ( (!$resolve_config['clionly']) && (!defined('STDIN')) ) {
 # check all subnets
 if(sizeof($resolve_config['subnets']) == 0) {
 	# get ony ip's with empty DNS
-	if($resolve_config['emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name` from `ipaddresses` where `dns_name` like "" order by `ip_addr` ASC;'; }
-	else 									{ $query = 'select `id`,`ip_addr`,`dns_name` from `ipaddresses` order by `ip_addr` ASC;'; }
+	if($resolve_config['emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where `dns_name` like "" order by `ip_addr` ASC;'; }
+	else 									{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
 }
 # check selected subnets
 else {
-	$query[] = "select `id`,`ip_addr`,`dns_name` from `ipaddresses` where ";
+	$query[] = "select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where ";
 	//go through subnets
 	foreach($resolve_config['subnets'] as $k=>$subnetId) {
 		// last
@@ -85,8 +85,11 @@ $ipaddresses = $Database->getObjectsQuery($query);
 
 # try to update dns records
 foreach($ipaddresses as $ip) {
+	# fetch subnet
+	$subnet = $Subnets->fetch_subnet ("id", $ip->subnetId);
+	$nsid = $subnet===false ? false : $subnet->nameserverId;
 	# try to resolve
-	$hostname = $DNS->resolve_address ($ip, true);
+	$hostname = $DNS->resolve_address ($ip->ip_addr, null, true, $nsid);
 
 	# update if change
 	if($hostname['name'] != $Subnets->transform_to_dotted($ip->ip_addr)) {

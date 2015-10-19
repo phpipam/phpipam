@@ -211,10 +211,12 @@ $discovered = 0;				//for mailing
 foreach($scan_subnets as $s) {
 	if(sizeof(@$s->discovered)>0) {
 		foreach($s->discovered as $ip) {
+			// fetch subnet
+			$subnet = $Subnets->fetch_subnet ("id", $s->id);
+			$nsid = $subnet===false ? false : $subnet->nameserverId;
 			// try to resolve hostname
-			$tmp = new stdClass();
-			$tmp->ip_addr = $ip;
-			$hostname = $DNS->resolve_address($tmp, true);
+			$hostname = $DNS->resolve_address ($ip, false, true, $nsid);
+
 			//set update query
 			$values = array("subnetId"=>$s->id,
 							"ip_addr"=>$Subnets->transform_address($ip, "decimal"),
