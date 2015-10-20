@@ -316,34 +316,37 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		$timeP = 0;
 
 		# all my fields
-		foreach($custom_fields as $myField) {
+		foreach($custom_fields as $field) {
 			# replace spaces with |
-			$myField['nameNew'] = str_replace(" ", "___", $myField['name']);
+			$field['nameNew'] = str_replace(" ", "___", $field['name']);
 
 			# required
-			if($myField['Null']=="NO")	{ $required = "*"; }
+			if($field['Null']=="NO")	{ $required = "*"; }
 			else						{ $required = ""; }
 
+			# set default value !
+			if ($_POST['action']=="add")	{ $address[$field['name']] = $field['Default']; }
+
 			print '<tr>'. "\n";
-			print '	<td>'. $myField['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type
-			if(substr($myField['type'], 0,3) == "set" || substr($myField['type'], 0,4) == "enum") {
+			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 				//parse values
-				$tmp = substr($myField['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $myField['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $myField['type']));
+				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
 				//null
-				if($myField['Null']!="NO") { array_unshift($tmp, ""); }
+				if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
-				print "<select name='$myField[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$myField[Comment]'>";
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
 				foreach($tmp as $v) {
-					if($v==@$address[$myField['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
+					if($v==@$address[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
 					else								{ print "<option value='$v'>$v</option>"; }
 				}
 				print "</select>";
 			}
 			//date and time picker
-			elseif($myField['type'] == "date" || $myField['type'] == "datetime") {
+			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
 					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
@@ -361,34 +364,34 @@ $(".input-switch").bootstrapSwitch(switch_options);
 				$timeP++;
 
 				//set size
-				if($myField['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
+				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
 				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
 
 				//field
-				if(!isset($address[$myField['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $myField['nameNew'] .'" maxlength="'.$size.'" '.$delete.' rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n"; }
-				else									{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $myField['nameNew'] .'" maxlength="'.$size.'" value="'. $address[$myField['name']]. '" '.$delete.' rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n"; }
+				if(!isset($address[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+				else									{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $address[$field['name']]. '" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
 			}
 			//boolean
-			elseif($myField['type'] == "tinyint(1)") {
-				print "<select name='$myField[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$myField[Comment]'>";
+			elseif($field['type'] == "tinyint(1)") {
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
 				$tmp = array(0=>"No",1=>"Yes");
 				//null
-				if($myField['Null']!="NO") { $tmp[2] = ""; }
+				if($field['Null']!="NO") { $tmp[2] = ""; }
 
 				foreach($tmp as $k=>$v) {
-					if(strlen(@$address[$myField['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					elseif($k==@$address[$myField['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					if(strlen(@$address[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					elseif($k==@$address[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
 					else												{ print "<option value='$k'>"._($v)."</option>"; }
 				}
 				print "</select>";
 			}
 			//text
-			elseif($myField['type'] == "text") {
-				print ' <textarea class="form-control input-sm" name="'. $myField['nameNew'] .'" placeholder="'. $myField['name'] .'" '.$delete.' rowspan=3 rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. $address[$myField['name']]. '</textarea>'. "\n";
+			elseif($field['type'] == "text") {
+				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" '.$delete.' rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $address[$field['name']]. '</textarea>'. "\n";
 			}
 			//default - input field
 			else {
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $myField['nameNew'] .'" placeholder="'. $myField['name'] .'" value="'. @$address[$myField['name']]. '" size="30" '.$delete.' rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n";
+				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. @$address[$field['name']]. '" size="30" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
 			}
 
 			print '	</td>'. "\n";

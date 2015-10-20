@@ -85,6 +85,9 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			if($field['Null']=="NO")	{ $required = "*"; }
 			else						{ $required = ""; }
 
+			# set default value !
+			if ($_POST['action']=="add")	{ $vrf[$field['name']] = $field['Default']; }
+
 			print '<tr>'. "\n";
 			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";

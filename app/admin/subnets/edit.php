@@ -443,6 +443,9 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 		    	# retain newlines
 		    	$subnet_old_details[$field['name']] = str_replace("\n", "\\n", @$subnet_old_details[$field['name']]);
 
+				# set default value !
+				if ($_POST['action']=="add")	{ $subnet_old_details[$field['name']] = $field['Default']; }
+
 		    	# required
 		    	$required = $field['Null']=="NO" ? "*" : "";
 				print '<tr>'. "\n";

@@ -109,6 +109,9 @@ $(document).ready(function(){
 			if($field['Null']=="NO")	{ $required = "*"; }
 			else						{ $required = ""; }
 
+			# set default value !
+			if ($_POST['action']=="add")	{ $vlan[$field['name']] = $field['Default']; }
+
 			print '<tr>'. "\n";
 			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";

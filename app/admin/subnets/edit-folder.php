@@ -136,6 +136,9 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
 		    	# retain newlines
 		    	$folder_old_details[$field['name']] = str_replace("\n", "\\n", @$folder_old_details[$field['name']]);
 
+				# set default value !
+				if ($_POST['action']=="add"){ $folder_old_details[$field['name']] = $field['Default']; }
+
 		    	# required
 				if($field['Null']=="NO")	{ $required = "*"; }
 				else						{ $required = ""; }
