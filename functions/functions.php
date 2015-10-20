@@ -16,7 +16,9 @@ if(!function_exists('gettext')) {
 	function _($text) 			{ return $text; }
 }
 
-//error_reporting(-1);
+// auto-set base if not already defines
+if(!defined('BASE'))
+define('BASE', substr(str_replace($_SERVER['DOCUMENT_ROOT'], "", dirname(__FILE__)),0,-9));
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions

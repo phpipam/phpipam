@@ -3,7 +3,7 @@
 RewriteEngine on
 
 # change rewrite base if not in root
-RewriteBase /
+# RewriteBase /
 
 # passthroughs
 RewriteRule ^api/.$ - [L]
