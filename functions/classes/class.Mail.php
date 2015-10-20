@@ -27,7 +27,6 @@ class phpipam_mail {
 	/**
 	 * object holders
 	 */
-	protected $Result;						//for Result printing
 	public $Php_mailer;						//for Php mailer object
 
 
@@ -46,9 +45,6 @@ class phpipam_mail {
 		# set settings and mailsettings
 		$this->settings = $settings;
 		$this->mail_settings= $mail_settings;
-
-		# initialize Result
-		$this->Result = new Result ();
 	}
 
 
