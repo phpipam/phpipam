@@ -50,6 +50,9 @@ elseif($script_result->status===1)				{ $Result->show("danger", $script_result->
 elseif(!isset($script_result->values->alive)) 	{ $Result->show("danger", _("No alive host found")."!", false); }
 # ok
 else {
+	// fetch subnet and set nsid
+	$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+	$nsid = $subnet===false ? false : $subnet->nameserverId;
 
 	//form
 	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
@@ -67,7 +70,7 @@ else {
 	$m=0;
 	foreach($script_result->values->alive as $ip) {
 		//resolve?
-		$hostname = $DNS->resolve_address($ip, false, false, null);
+		$hostname = $DNS->resolve_address($ip, false, true, $nsid);
 
 		print "<tr class='result$m'>";
 		//ip

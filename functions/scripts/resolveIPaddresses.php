@@ -13,7 +13,6 @@
 
 
 /* settings */
-$resolve_config['clionly']   = true;			# if true it can only be run from CLI
 $resolve_config['emptyonly'] = true;			# if true it will only update the ones without DNS entry!
 $resolve_config['subnets']	 = array();			# which subnets to check - by id
 												# example -> array(1,3,5)	will only update subnets with id 1,3,5
@@ -23,7 +22,6 @@ $resolve_config['verbose']  = true;				# verbose response - prints results, cron
 
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
-require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -36,16 +34,18 @@ $Result		= new Result();
 ini_set('display_errors', 0);
 error_reporting(E_ERROR);
 
-
 # cli required
-if( ($resolve_config['clionly']) && (!defined('STDIN')) ) {
-	$Result->show_cli("cli only\n", true);;
-}
-# cli not required and STDIN not provided
-elseif ( (!$resolve_config['clionly']) && (!defined('STDIN')) ) {
-	$User = new User ($Database);
-	# verify that user is logged in
-	$User->check_user_session();
+if( php_sapi_name()!="cli" ) { $Result->show_cli("cli only\n", true); }
+
+# set subnet
+if (isset($argv[1])) {
+	$req_subnets = explode(",", $argv[1]);
+	foreach ($req_subnets as $s) {
+		if (!is_numeric($s)) { $Result->show_cli("Invalid subnetId provided - $s\n", true); }
+		else {
+			$resolve_config['subnets'][] = $s;
+		}
+	}
 }
 
 
@@ -57,21 +57,23 @@ elseif ( (!$resolve_config['clionly']) && (!defined('STDIN')) ) {
 # check all subnets
 if(sizeof($resolve_config['subnets']) == 0) {
 	# get ony ip's with empty DNS
-	if($resolve_config['emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where `dns_name` like "" order by `ip_addr` ASC;'; }
+	if($resolve_config['emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where `dns_name` = "" or `dns_name` is NULL order by `ip_addr` ASC;'; }
 	else 									{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
 }
 # check selected subnets
 else {
 	$query[] = "select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where ";
 	//go through subnets
+	$m=1;
 	foreach($resolve_config['subnets'] as $k=>$subnetId) {
 		// last
-		if($k==sizeof($resolve_config['subnets']))	{ $query[] = '`subnetId` = "'. $subnetId .'" '; }
+		if($m==sizeof($resolve_config['subnets']))	{ $query[] = '`subnetId` = "'. $subnetId .'" '; }
 		else										{ $query[] = '`subnetId` = "'. $subnetId .'" or '; }
+		$m++;
 	}
 	# get ony ip's with empty DNS
 	if($resolve_config['emptyonly'] == 1) {
-		$query[] = ' and `dns_name` like "" ';
+		$query[] = ' and (`dns_name` = "" or `dns_name` is NULL ) ';
 	}
 	$query[] = 'order by `ip_addr` ASC;';
 
@@ -79,38 +81,36 @@ else {
 	$query = implode("\n", $query);
 }
 
-
 # fetch records
 $ipaddresses = $Database->getObjectsQuery($query);
 
 # try to update dns records
-foreach($ipaddresses as $ip) {
-	# fetch subnet
-	$subnet = $Subnets->fetch_subnet ("id", $ip->subnetId);
-	$nsid = $subnet===false ? false : $subnet->nameserverId;
-	# try to resolve
-	$hostname = $DNS->resolve_address ($ip->ip_addr, null, true, $nsid);
+if (sizeof($ipaddresses)>0) {
+	foreach($ipaddresses as $ip) {
+		# fetch subnet
+		$subnet = $Subnets->fetch_subnet ("id", $ip->subnetId);
+		$nsid = $subnet===false ? false : $subnet->nameserverId;
+		# try to resolve
+		$hostname = $DNS->resolve_address ($ip->ip_addr, null, true, $nsid);
 
-	# update if change
-	if($hostname['name'] != $Subnets->transform_to_dotted($ip->ip_addr)) {
-		# values
-		$values = array("dns_name"=>$hostname['name'],
-						"id"=>$ip->id
-						);
-		# execute
-		if(!$Admin->object_modify("ipaddresses", "edit", "id", $values))	{ $Result->show_cli("Failed to update address ".$Subnets->transform_to_dotted($ip->ip_addr)); }
+		# update if change
+		if($hostname['class']=="resolved") {
+			# values
+			$values = array("dns_name"=>$hostname['name'],
+							"id"=>$ip->id
+							);
+			# execute
+			if(!$Admin->object_modify("ipaddresses", "edit", "id", $values))	{ $Result->show_cli("Failed to update address ".$Subnets->transform_to_dotted($ip->ip_addr)); }
 
-		# set text
-		$res[] = 'updated ip address '. $Subnets->transform_to_dotted($ip->ip_addr) . ' with hostname '. $hostname['name'];
+			# set text
+			$res[] = 'updated ip address '. $Subnets->transform_to_dotted($ip->ip_addr) . ' with hostname '. $hostname['name'];
+		}
 	}
-
 }
 
 
 # if verbose print result so it can be emailed via cron!
-if($resolve_config['verbose'] == 1) {
-	foreach($res as $line) {
-		print $line . "\n";
-	}
+if($resolve_config['verbose'] == true && isset($res)) {
+	print implode("\n", $res);
 }
 ?>
