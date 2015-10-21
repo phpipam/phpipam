@@ -2046,7 +2046,7 @@ msgid "AD connection settings"
 msgstr "Configura&ccedil;&otilde;es de conex&atilde;o com AD"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "Configura&ccedil;&otilde;es de conex&atilde;o com OpenLDAP"
 
 #: site/admin/adminMenu.php:38
@@ -3191,7 +3191,7 @@ msgstr ""
 "grupo (permiss&otilde;es) para esse usu&aacute;rio."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "Servidor OpenLDAP"
 
 #: site/admin/manageAD_LDAP.php:54

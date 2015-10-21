@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.19.001\n"
+# "Project-Id-Version: 1.2.000\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2015-10-07 14:33+0200\n"
@@ -1955,7 +1955,7 @@ msgid "AD connection settings"
 msgstr ""
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr ""
 
 #: site/admin/adminMenu.php:38
@@ -3005,7 +3005,7 @@ msgid "First create new user under user management with <u>same username as on "
 msgstr ""
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr ""
 
 #: site/admin/manageAD_LDAP.php:54
@@ -6381,3 +6381,46 @@ msgstr ""
 
 msgid "Firewall zone and device mappings"
 msgstr ""
+
+msgid "Base DN for your directory"
+msgstr ""
+
+msgid "Users DN"
+msgstr ""
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr ""
+
+msgid "LDAP Security Type"
+msgstr ""
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr ""
+
+msgid "LDAP port"
+msgstr ""
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr ""
+
+msgid "Bind user"
+msgstr ""
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr ""
+
+msgid "Bind password"
+msgstr ""
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr ""
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr ""
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr ""
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr ""
+
