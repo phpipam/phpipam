@@ -1201,7 +1201,7 @@ class Logging extends Common_functions {
 
 
 		# get all admins and check who to end mail to
-		$recipients = $this->changelog_mail_get_recepients ();
+		$recipients = $this->changelog_mail_get_recipients ();
 		if($recipients ===false) 				{ return true; }
 
 		# fetch mailer settings
@@ -1243,10 +1243,10 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function changelog_mail_get_recepients () {
+	private function changelog_mail_get_recipients () {
 		// get all admins and check who to end mail to
 		$recipients = $this->Tools->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
-		//check recepients
+		//check recipients
 		if ($recipients!==false) {
 			// check
 			$m = 0;

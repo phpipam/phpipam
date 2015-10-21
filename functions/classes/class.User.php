@@ -697,11 +697,114 @@ class User extends Common_functions {
 	}
 
 	/**
-	 *	AD (Active directory) authentication function
+	 *	Connect to a directory given our auth method settings
 	 *
-	 *	Authenticates users against MS Active Directory
+	 *	Connect using adLDAP
+	 *
+	 * @access private
+	 * @return adLDAP object
+	 */
+	private function directory_connect ($authparams)
+	{
+
+		# adLDAP script
+		require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
+
+		$dirparams = Array();
+		$dirparams['base_dn'] = @$authparams['base_dn'];
+		$dirparams['ad_port'] = @$authparams['ad_port'];
+		$dirparams['account_suffix'] = @$authparams['account_suffix'];
+		$dirparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
+
+		if ($this->ldap) {
+
+			$dirparams['use_ssl'] = false;
+			$dirparams['use_tls'] = false;
+
+			if ($authparams['ldap_security'] == 'tls') {
+				$dirparams['use_tls'] = true;
+			} elseif ($authparams['ldap_security'] == 'ssl') {
+				$dirparams['use_ssl'] = true;
+			}
+
+			if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
+				$dirparams['admin_username'] = $authparams['adminUsername'];
+				$dirparams['admin_password'] = $authparams['adminPassword'];
+			}
+
+		} else {
+			$dirparams['use_ssl'] = @$authparams['use_ssl'];
+			$dirparams['use_tls'] = @$authparams['use_tls'];
+		}
+
+		# open connection
+		try {
+
+			# Initialize adLDAP
+			$dirconn = new adLDAP($dirparams);
+
+		} catch (adLDAPException $e) {
+			$this->Log->write("Directory connection error", "Failed to connect: " . $e->getMessage(), 2, $username);
+			$this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
+		}
+
+		return $dirconn;
+
+	}
+
+	/**
+	 *	Authenticate against a directory
+	 *
+	 *	Authenticates users against a directory - AD or LDAP
 	 *	Using library > adLDAP - LDAP Authentication with PHP for Active Directory
 	 *	http://adldap.sourceforge.net
+	 *
+	 * @access private
+  	 * @param array $authparams
+  	 * @param mixed $username
+	 * @param mixed $password
+	 * @return void
+	 */
+	private function directory_authenticate ($authparams, $username, $password)
+	{
+		$method = "AD";
+		if ($this->ldap) {
+			$method = "LDAP";
+		}
+
+		$adldap = $this->directory_connect($authparams);
+
+		# authenticate
+		try {
+			if ($adldap->authenticate($username, $password)) {
+				# save to session
+				$this->write_session_parameters();
+
+				$this->Log->write($method . " login", "User " . $this->user->real_name . " logged in via " . $method, 0, $username);
+				$this->Result->show("success", _($method . " Login successful"));
+
+				# write last logintime
+				$this->update_login_time();
+				# remove possible blocked IP
+				$this->block_remove_entry();
+			} # wrong user/pass by default
+			else {
+				# add blocked count
+				//$this->block_ip();
+				$this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
+				$this->Result->show("danger", _("Invalid username or password " . $username . " " . $password), true);
+
+			}
+		} catch (adLDAPException $e) {
+			$this->Log->write("Error", "Something went wrong during auth: " . $e->getMessage(), 2, $username);
+			$this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
+		}
+
+	}
+
+	/**
+	 *	AD (Active directory) authentication function
+	 *
 	 *
 	 * @access private
 	 * @param mixed $username
@@ -709,61 +812,8 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	private function auth_AD ($username, $password) {
-
-		# adLDAP script
-		require (dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
-
-		# open connection
-		try {
-			$ad = json_decode($this->authmethodparams, true);		// parse settings for LDAP connection and store them to array
-			# set controllers
-			$ad['domain_controllers'] = explode(";", str_replace(" ", "", $ad['domain_controllers']));
-
-			# Initialize AD class
-	    	$adldap = new adLDAP(array( 'base_dn'=>@$ad['base_dn'], 'account_suffix'=>@$ad['account_suffix'],
-	    								'domain_controllers'=>@$ad['domain_controllers'], 'use_ssl'=>@$ad['use_ssl'],
-	    								'use_tls'=>@$ad['use_tls'], 'ad_port'=>@$ad['ad_port']
-	    								));
-	    	# set OpenLDAP flag
-	    	if($this->ldap)	{ $adldap->setUseOpenLDAP(true); }
-		}
-		catch (adLDAPException $e) {
-			$this->Log->write( "AD connect error", "Failed to connect to AD: ".$e->getMessage(), 2, $username );
-			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
-		}
-
-		# authenticate
-		if($adldap->authenticate($username, $password)) {
-			# save to session
-			$this->write_session_parameters ();
-
-	    	$this->Log->write( "AD login", "User ".$this->user->real_name." logged in via AD", 0, $username );
-	    	$this->Result->show("success", _("AD Login successful"));
-
-			# write last logintime
-			$this->update_login_time ();
-			# remove possible blocked IP
-			$this->block_remove_entry ();
-    	}
-    	# failed to connect
-    	else if (@$authAD == 'Failed to connect to AD!') {
-			$this->Log->write( "AD login", "Failed to connect to AD server", 2, $username );
-			$this->Result->show("danger", _("Failed to connect to AD server"), true);
-		}
-		# failed to authenticate
-		else if (@$authAD == 'Failed to authenticate user via AD!') {
-			# add blocked count
-			$this->block_ip ();
-			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1, $username );
-			$this->Result->show("danger", _("Failed to authenticate user against AD"), true);
-		}
-		# wrong user/pass by default
-		else {
-			# add blocked count
-			$this->block_ip ();
-			$this->Log->write( "AD login", "User $username failed to authenticate against AD", 1, $username );
-			$this->Result->show("danger", _("Invalid username or password"), true);
-		}
+		$authparams = json_decode($this->authmethodparams, true);        // parse settings for LDAP connection and store them to array
+		$this->directory_authenticate($authparams, $username, $password);
 	}
 
 	/**
@@ -776,8 +826,22 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	private function auth_LDAP ($username, $password) {
+		$authparams = json_decode($this->authmethodparams, true);        // parse settings for LDAP connection and store them to array
 		$this->ldap = true;							//set ldap flag
-		$this->auth_AD ($username, $password);		//we use AD class for login
+
+		if (isset($authparams['uid_attr'])) {
+			$udn = $authparams['uid_attr'] . '=' . $username;
+		} else {
+			$udn = 'uid=' . $username;
+		}
+
+		if (isset($authparams['users_base_dn'])) {
+			$udn = $udn . "," . $authparams['users_base_dn'];
+		} else {
+			$udn = $udn . "," . $authparams['base_dn'];
+		}
+
+		$this->directory_authenticate($authparams, $udn, $password);
 	}
 
 	/**
