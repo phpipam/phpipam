@@ -1976,7 +1976,7 @@ msgid "AD connection settings"
 msgstr "Paramètres de connexion AD"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "Paramètres de connection OpenLDAP"
 
 #: site/admin/adminMenu.php:38
@@ -3039,7 +3039,7 @@ msgstr "Créez d'abord un nouvel utilisateur avec le même <u>nom que dans l'AD<
 "pour le nouvel utilisateur."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "Serveurs OpenLDAP"
 
 #: site/admin/manageAD_LDAP.php:54

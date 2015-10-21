@@ -702,10 +702,10 @@ class User extends Common_functions {
 	 *	Connect using adLDAP
 	 *
 	 * @access private
+	 * @param mixed $authparams
 	 * @return adLDAP object
 	 */
-	private function directory_connect ($authparams)
-	{
+	private function directory_connect ($authparams) {
 
 		# adLDAP script
 		require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
@@ -716,30 +716,27 @@ class User extends Common_functions {
 		$dirparams['account_suffix'] = @$authparams['account_suffix'];
 		$dirparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
 
+		// set ssl and tls separate for ldap and AD
 		if ($this->ldap) {
-
+			// set ssl and tls
 			$dirparams['use_ssl'] = false;
 			$dirparams['use_tls'] = false;
 
-			if ($authparams['ldap_security'] == 'tls') {
-				$dirparams['use_tls'] = true;
-			} elseif ($authparams['ldap_security'] == 'ssl') {
-				$dirparams['use_ssl'] = true;
-			}
+			if ($authparams['ldap_security'] == 'tls') 		{ $dirparams['use_tls'] = true; }
+			elseif ($authparams['ldap_security'] == 'ssl') 	{ $dirparams['use_ssl'] = true; }
 
 			if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
 				$dirparams['admin_username'] = $authparams['adminUsername'];
 				$dirparams['admin_password'] = $authparams['adminPassword'];
 			}
-
-		} else {
+		}
+		else {
 			$dirparams['use_ssl'] = @$authparams['use_ssl'];
 			$dirparams['use_tls'] = @$authparams['use_tls'];
 		}
 
 		# open connection
 		try {
-
 			# Initialize adLDAP
 			$dirconn = new adLDAP($dirparams);
 
@@ -749,7 +746,6 @@ class User extends Common_functions {
 		}
 
 		return $dirconn;
-
 	}
 
 	/**
@@ -765,13 +761,10 @@ class User extends Common_functions {
 	 * @param mixed $password
 	 * @return void
 	 */
-	private function directory_authenticate ($authparams, $username, $password)
-	{
-		$method = "AD";
-		if ($this->ldap) {
-			$method = "LDAP";
-		}
-
+	private function directory_authenticate ($authparams, $username, $password) {
+		// set method
+		$method = $this->ldap ? "LDAP" : "AD";
+		// connect
 		$adldap = $this->directory_connect($authparams);
 
 		# authenticate
@@ -790,7 +783,7 @@ class User extends Common_functions {
 			} # wrong user/pass by default
 			else {
 				# add blocked count
-				//$this->block_ip();
+				$this->block_ip();
 				$this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
 				$this->Result->show("danger", _("Invalid username or password " . $username . " " . $password), true);
 
@@ -812,7 +805,9 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	private function auth_AD ($username, $password) {
-		$authparams = json_decode($this->authmethodparams, true);        // parse settings for LDAP connection and store them to array
+		// parse settings for LDAP connection and store them to array
+		$authparams = json_decode($this->authmethodparams, true);
+		// authenticate
 		$this->directory_authenticate($authparams, $username, $password);
 	}
 
@@ -826,21 +821,17 @@ class User extends Common_functions {
 	 * @return void
 	 */
 	private function auth_LDAP ($username, $password) {
-		$authparams = json_decode($this->authmethodparams, true);        // parse settings for LDAP connection and store them to array
+		// parse settings for LDAP connection and store them to array
+		$authparams = json_decode($this->authmethodparams, true);
 		$this->ldap = true;							//set ldap flag
 
-		if (isset($authparams['uid_attr'])) {
-			$udn = $authparams['uid_attr'] . '=' . $username;
-		} else {
-			$udn = 'uid=' . $username;
-		}
-
-		if (isset($authparams['users_base_dn'])) {
-			$udn = $udn . "," . $authparams['users_base_dn'];
-		} else {
-			$udn = $udn . "," . $authparams['base_dn'];
-		}
-
+		// set uid
+		if (isset($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
+		else 								{ $udn = 'uid=' . $username; }
+		// set DN
+		if (isset($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
+		else 									 { $udn = $udn . "," . $authparams['base_dn']; }
+		// authenticate
 		$this->directory_authenticate($authparams, $udn, $password);
 	}
 

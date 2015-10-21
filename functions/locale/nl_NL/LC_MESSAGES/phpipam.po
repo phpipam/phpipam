@@ -2033,7 +2033,7 @@ msgid "AD connection settings"
 msgstr "AD connectie-instellingen"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "OpenLDAP connectie-instellingen"
 
 #: site/admin/adminMenu.php:38
@@ -3147,7 +3147,7 @@ msgstr ""
 "worden."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "OpenLDAP-servers"
 
 #: site/admin/manageAD_LDAP.php:54
