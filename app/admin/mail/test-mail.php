@@ -19,6 +19,10 @@ $User->check_user_session();
 # fetch mailer settings
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
+# verify admin mail and name
+if (strlen($mail_settings->mAdminMail)==0 || strlen($mail_settings->mAdminName)==0) {
+	$Result->show("danger", _("Mail settings are missing. Please set admin mail and name!"), true);
+}
 
 
 # initialize mailer
