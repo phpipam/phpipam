@@ -33,7 +33,6 @@ class PowerDNS extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -462,7 +461,7 @@ class PowerDNS extends Common_functions {
 	 * Fetches domain details by name
 	 *
 	 * @access public
-	 * @param mixed $id
+	 * @param mixed $name
 	 * @return void
 	 */
 	public function fetch_domain_by_name ($name) {
@@ -534,9 +533,6 @@ class PowerDNS extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $domain_id
-	 * @param int $limit (default: 1000000)
-	 * @param string $orderby (default: "id")
-	 * @param mixed $orderdir (default: asc)
 	 * @return void
 	 */
 	public function fetch_all_domain_records ($domain_id) {
@@ -620,7 +616,7 @@ class PowerDNS extends Common_functions {
 	 * @access public
 	 * @param string $field (default: "content")
 	 * @param mixed $value (default: null)
-	 * @param string $dortField (default: 'id')
+	 * @param string $sortField (default: 'id')
 	 * @param bool $sortAsc (default: true)
 	 * @return void
 	 */

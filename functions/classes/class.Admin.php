@@ -36,7 +36,6 @@ class Admin extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database, $admin_required = true) {
 		# initialize database object

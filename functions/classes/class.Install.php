@@ -30,7 +30,6 @@ class Install extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -42,10 +41,8 @@ class Install extends Common_functions {
 		# set debugging
 		$this->set_db_params ();
 		# Log object
-		try { $this->Database->connect();
-		} catch ( Exception $e ) {
-			$err = true;
-		}
+		try { $this->Database->connect(); }
+		catch ( Exception $e ) {}
 	}
 
 

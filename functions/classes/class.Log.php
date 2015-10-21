@@ -36,7 +36,6 @@ class Logging extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
 		# Save database object
@@ -93,12 +92,12 @@ class Logging extends Common_functions {
 					$admin = new Admin($this->Database, False);
 					$token = $admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN']);
 					if ($token === False) {
-						$this->user_id = null; 
+						$this->user_id = null;
 					} else {
 						$user_id = $token;
 					}
 				} else {
-					$this->user_id = null; 
+					$this->user_id = null;
 				}
 			}
 			else {

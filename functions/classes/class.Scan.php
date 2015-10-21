@@ -40,7 +40,6 @@ class Scan extends Common_functions {
 	 * @access public
 	 * @param Database_PDO $database
 	 * @param mixed $settings (default: null)
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
 		# Save database object

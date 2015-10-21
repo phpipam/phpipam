@@ -35,7 +35,6 @@ class Subnets extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object

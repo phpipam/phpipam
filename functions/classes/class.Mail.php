@@ -39,7 +39,6 @@ class phpipam_mail {
 	 *
 	 * @access public
 	 * @param mixed $settings
-	 * @return void
 	 */
 	public function __construct ($settings, $mail_settings) {
 		# set settings and mailsettings

@@ -8,6 +8,18 @@
 class Common_api_functions {
 
 	/**
+	 * vars
+	 */
+	public $controller_keys;
+	public $valid_keys;
+	public $custom_keys;
+	public $remove_keys;
+
+	private $Tools;
+	private $Response;
+	private $Subnets;
+
+	/**
 	 * Initializes new Object.
 	 *
 	 * @access protected

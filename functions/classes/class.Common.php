@@ -13,7 +13,6 @@ class Common_functions  {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct () {
 	}

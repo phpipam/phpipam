@@ -31,7 +31,6 @@ class Tools extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# set database object

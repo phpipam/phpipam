@@ -25,7 +25,6 @@ class DNS extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $Database, $settings=null) {
 		# initialize Result

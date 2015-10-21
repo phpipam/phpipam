@@ -43,9 +43,11 @@ if(!is_null($Tools->phpipam_releases)) {
 print "<div class='log-print releaselog' style='display:none'>";
 print "<h4 style='margin-top:40px;'>Release log</h4><hr>";
 foreach ($Tools->phpipam_releases as $r) {
+	// pre-release ?
+	$prerelease = !is_numeric($r->title) ? "<span class='label label-danger'>Prerelease</span>" : "";
 
 	// title
-	print "<h5><i class='fa fa-angle-double-right'></i> $r->title</h5>";
+	print "<h5><i class='fa fa-angle-double-right'></i> $r->title $prerelease</h5>";
 	// date
 	print "<div style='padding-left:20px;margin-bottom:20px;'>";
 	print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime($r->updated))."</span> ";

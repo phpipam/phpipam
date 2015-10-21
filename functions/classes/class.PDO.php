@@ -33,7 +33,6 @@ class Database_PDO extends DB {
 	 * @param mixed $username (default: null)
 	 * @param mixed $password (default: null)
 	 * @param mixed $charset (default: null)
-	 * @return void
 	 */
 	public function __construct($username=null, $password=null, $host=null, $port=null, $dbname=null, $charset=null) {
 		# set parameters
