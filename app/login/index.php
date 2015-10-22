@@ -1,6 +1,16 @@
 <?php
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
+
+if( !empty($_SERVER['REMOTE_USER']) ) {
+	$User->authenticate ($_SERVER['REMOTE_USER'], '');
+	// Redirect user where he came from, if unknown go to dashboard.
+	if( isset($_COOKIE['phpipamredirect']) ) {
+		header("Location: ".$_COOKIE['phpipamredirect']);
+	} else {
+		header("Location: ".create_link("dashboard"));
+	}
+}
 ?>
 
 <!DOCTYPE HTML>
