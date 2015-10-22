@@ -348,22 +348,24 @@ else {
 					} else {
 						$dns_records = "";
 					}
-					// add new button
-					if (strlen($addresses[$n]->dns_name) > 0 )
-					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
-					else
-					$button = "";
 					}
 					// disabled
 					else {
 						$dns_records = "";
 						$button = "";
 					}
+					// add button
+					if ($User->settings->enablePowerDNS==1) {
+					// add new button
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name))
+					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					else
+					$button = "";
+					}
 
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>";
-
-
+				    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+																			{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";

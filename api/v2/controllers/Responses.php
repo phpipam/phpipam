@@ -16,8 +16,6 @@ class Responses {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param mixed $type
-	 * @return void
 	 */
 	public function __construct() {
 		# set error codes

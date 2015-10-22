@@ -55,9 +55,9 @@ if(sizeof($custom) > 0) {
 		if($myField['Null']=="NO" && strlen($device[$myField['name']])==0) {
 																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 		}
+		# save to update array
+		$update[$myField['name']] = $device[$myField['name']];
 	}
-	# save to update array
-	$update[$myField['name']] = $device[$myField['name']];
 }
 
 # set update values

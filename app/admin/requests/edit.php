@@ -222,9 +222,9 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	        print ' <td>'. "\n";
 
 	        //set type
-	        if(substr($myField['type'], 0,3) == "set") {
-	            //parse values
-	            $tmp = explode(",", str_replace(array("set(", ")", "'"), "", $myField['type']));
+		    if(substr($myField['type'], 0,3) == "set" || substr($myField['type'], 0,4) == "enum") {
+				//parse values
+				$tmp = substr($myField['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $myField['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $myField['type']));
 	            //null
 	            if($myField['Null']!="NO") { array_unshift($tmp, ""); }
 

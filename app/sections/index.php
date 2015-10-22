@@ -309,7 +309,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 				# new version available
 				if ($User->settings->version < $version) {
 					print "<li>";
-					print "	<a href='".create_link("administration","versionCheck")."' class='icon-li btn-warning' rel='tooltip' data-placement='bottom' title='"._('New version available')."'><i class='fa fa-bullhorn'></i><sup>$version</sup></a>";
+					print "	<a href='".create_link("administration","version-check")."' class='icon-li btn-warning' rel='tooltip' data-placement='bottom' title='"._('New version available')."'><i class='fa fa-bullhorn'></i><sup>$version</sup></a>";
 					print "</li>";
 				} else {
 					# version ok

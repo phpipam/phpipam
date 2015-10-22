@@ -1973,7 +1973,7 @@ msgid "AD connection settings"
 msgstr "Preferencias conexión a AD"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "Preferencias conexión a LDAP"
 
 #: site/admin/adminMenu.php:38
@@ -3037,7 +3037,7 @@ msgstr "Añadir primero un nuevo usuario en Administración de usuarios con <u>e
 "del nuevo usuario"
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "Servidores OpenLDAP"
 
 #: site/admin/manageAD_LDAP.php:54

@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.19.001\n"
+# "Project-Id-Version: 1.2.000\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2015-10-07 14:33+0200\n"
@@ -1974,7 +1974,7 @@ msgid "AD connection settings"
 msgstr "AD povezava"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "OpenLDAP povezava"
 
 #: site/admin/adminMenu.php:38
@@ -3037,7 +3037,7 @@ msgstr "Najprej ustvarite novega uporabnika z <u>enakim uporabniškim imenom kot
 "LDAPu</u> in izberite tip uporabnika domenski uporabnik. Nastavite tudi ustrezne skupine za uporabnika"
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "OpenLDAP strežniki"
 
 #: site/admin/manageAD_LDAP.php:54
@@ -6176,3 +6176,46 @@ msgstr "localhost agenta ne morem izbrisati"
 
 msgid "Scan agent references removed"
 msgstr "Pripadajoča omrežja izbrisana"
+
+msgid "Base DN for your directory"
+msgstr "Base DN za direktorij"
+
+msgid "Users DN"
+msgstr "DN uporabnikov"
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr "Base DN za uporabnike, v kolikor je drugačen od base DN zgoraj"
+
+msgid "LDAP Security Type"
+msgstr "Tip LDAP varnosti"
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr "SSL, TLS, ali brez (default: TLS)"
+
+msgid "LDAP port"
+msgstr "LDAP vrata"
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr "Vrata, na katerih posluša LDAP servis. TLS/nekriptirano privzeto 389 <br> SSL privzeto 636"
+
+msgid "Bind user"
+msgstr "Bind uporabnika"
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr "DN uporabnika za isaknje uporabnikov (opcijsko)."
+
+msgid "Bind password"
+msgstr "Geslo"
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr "Geslo uporabnika za iskanje (samo ce je nastavljen uporabnik)"
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr "Trenutno je podprto samo AD iskanje skupin."
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr "Neveljavna baseDN nastavitev za LDAP"
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr "LDAP racun nima dovolj pravic za iskanje"
+

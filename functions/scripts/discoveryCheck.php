@@ -67,12 +67,12 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 
 //first fetch all subnets to be scanned
-$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
+$scan_subnets = $Subnets->fetch_all_subnets_for_discoveryCheck (1);
 //set addresses
 foreach($scan_subnets as $s) {
 	// if subnet has slaves dont check it
 	if ($Subnets->has_slaves ($s->id) === false) {
-		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id);
+		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
 	}
 }
 //reindex
@@ -211,10 +211,12 @@ $discovered = 0;				//for mailing
 foreach($scan_subnets as $s) {
 	if(sizeof(@$s->discovered)>0) {
 		foreach($s->discovered as $ip) {
+			// fetch subnet
+			$subnet = $Subnets->fetch_subnet ("id", $s->id);
+			$nsid = $subnet===false ? false : $subnet->nameserverId;
 			// try to resolve hostname
-			$tmp = new stdClass();
-			$tmp->ip_addr = $ip;
-			$hostname = $DNS->resolve_address($tmp, true);
+			$hostname = $DNS->resolve_address ($ip, false, true, $nsid);
+
 			//set update query
 			$values = array("subnetId"=>$s->id,
 							"ip_addr"=>$Subnets->transform_address($ip, "decimal"),

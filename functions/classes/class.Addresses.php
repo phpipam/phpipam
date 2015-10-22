@@ -35,7 +35,6 @@ class Addresses extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -48,36 +47,6 @@ class Addresses extends Common_functions {
 		# Log object
 		$this->Log = new Logging ($this->Database);
 	}
-
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
-	}
-
 
 
 
@@ -714,7 +683,11 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_edit ($address, $print_error) {
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->dns_name)===false)	{
+			// remove pointer if it exists!
+			if ($this->ptr_exists ($address->PTR)===true)	{ $this->ptr_delete ($address, $print_error); }
+			else											{ return false; }
+		}
 
 		// new record
  		if ($this->ptr_exists ($address->PTR)===false) {
@@ -986,7 +959,8 @@ class Addresses extends Common_functions {
 
 		# create query
 		foreach($subnets as $k=>$s) {
-			$tmp[] = " `subnetId`=$s ";
+			if (is_object($s))	{ $tmp[] = " `subnetId`=$s->id "; }
+			else				{ $tmp[] = " `subnetId`=$s "; }
 		}
 		$query  = "select count(*) as `cnt` from `ipaddresses` where ".implode("or", $tmp).";";
 

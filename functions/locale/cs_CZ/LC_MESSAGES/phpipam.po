@@ -1967,7 +1967,7 @@ msgid "AD connection settings"
 msgstr "Nastavení AD spojení"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "Nastavení OpenLDAP spojení"
 
 #: site/admin/adminMenu.php:38
@@ -3020,7 +3020,7 @@ msgid "First create new user under user management with <u>same username as on "
 msgstr ""
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "OpenLDAP servery"
 
 #: site/admin/manageAD_LDAP.php:54

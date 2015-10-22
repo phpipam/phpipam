@@ -36,7 +36,6 @@ class Logging extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
 		# Save database object
@@ -84,7 +83,23 @@ class Logging extends Common_functions {
 		# cache
 		if ($this->user_id===null) {
 			# null
-			if (!isset($_SESSION['ipamusername'])) { $this->user_id = null; }
+			$user_id = null;
+			if (!isset($_SESSION['ipamusername'])) {
+				// when API calls subnet_create we get:
+				// Error: SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'cuser' cannot be null
+				// so let's get a user_id
+				if (array_key_exists("HTTP_PHPIPAM_TOKEN", $_SERVER)) {
+					$admin = new Admin($this->Database, False);
+					$token = $admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN']);
+					if ($token === False) {
+						$this->user_id = null;
+					} else {
+						$user_id = $token;
+					}
+				} else {
+					$this->user_id = null;
+				}
+			}
 			else {
 				try { $user_id = $this->Database->getObjectQuery("select * from `users` where `username` = ? limit 1", array($_SESSION['ipamusername'])); }
 				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
@@ -1201,7 +1216,7 @@ class Logging extends Common_functions {
 
 
 		# get all admins and check who to end mail to
-		$recipients = $this->changelog_mail_get_recepients ();
+		$recipients = $this->changelog_mail_get_recipients ();
 		if($recipients ===false) 				{ return true; }
 
 		# fetch mailer settings
@@ -1227,9 +1242,9 @@ class Logging extends Common_functions {
 			//send
 			$phpipam_mail->Php_mailer->send();
 		} catch (phpmailerException $e) {
-			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		} catch (Exception $e) {
-			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		}
 
 		# ok
@@ -1243,10 +1258,10 @@ class Logging extends Common_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function changelog_mail_get_recepients () {
+	private function changelog_mail_get_recipients () {
 		// get all admins and check who to end mail to
 		$recipients = $this->Tools->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
-		//check recepients
+		//check recipients
 		if ($recipients!==false) {
 			// check
 			$m = 0;

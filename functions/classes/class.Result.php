@@ -56,7 +56,7 @@ class Result extends Common_functions {
 				print "<div class='alert alert-".$uclass."'>".$utext."</div>";
 			}
 			else {
-				print '<div class="pHeader">'._("Error").'</div>';
+				print '<div class="pHeader">'._(ucwords($uclass)).'</div>';
 				print '<div class="pContent">';
 				print '<div class="alert alert-'.$uclass.'">'.$utext.'</div>';
 				print '</div>';
