@@ -1757,39 +1757,30 @@ $(document).on("click", "#get-ripe", function() {
 	showSpinner();
 	var subnet = $('form#editSubnetDetails input[name=subnet]').val();
 
-	$.getJSON("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
-		//fill fields
-		dcnt = 0;
-		$.each(data, function(key, val) {
-			//error?
-			if(key=="Error") {
-		        $('div.popup_w500').html("<div class='pHeader'>Error</div><div class='pContent'><div class='alert alert-warning'>"+val+"</div></div><div class='pFooter'><button class='btn btn-sm btn-default hidePopup2'>Close</button></div>");
-		        showPopup('popup_w500');
-		        $('popup_w700').css("z-index","99");
-				hideSpinner();
-
-			} else {
-				//check taht it exists
-				if($('form#editSubnetDetails #field-'+key).length) {
-					$('form#editSubnetDetails #field-'+key).val(val);
-					dcnt++;
-				}
-			}
-		});
-		//if no hit print it!
-		if(dcnt===0) {
-			var ripenote = "<div class='pHeader'>Cannot find matched fileds!</div><div class='pContent'>";
-			$.each(data, function(key, val) {
-				ripenote += key+": "+val+"<br>";
-			})
-			ripenote += "</div><div class='pFooter'><button class='btn btn-sm btn-default hidePopup2'>Close</button></div>";
-
-	        $('div.popup_w500').html(ripenote);
-	        showPopup('popup_w500');
-		}
+	$.post("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
+        $('div.popup_w500').html(data);
+        showPopup('popup_w500');
 		hideSpinner();
 	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
+});
+// fill ripe fields
+$(document).on('click', "#ripeMatchSubmit", function() {
+	var cfields_temp = $('form#ripe-fields').serialize();
+	// to array
+	var cfields = cfields_temp.split("&");
+	// loop
+	for (index = 0; index < cfields.length; ++index) {
+		// check for =0match and ignore
+		if (cfields[index].indexOf("=0") > -1) {}
+		else {
+			console.log(cfields[index]);
+			var cdata = cfields[index].split("=");
+			$('form#editSubnetDetails input[name='+cdata[1]+']').val(cdata[0].replace(/___/g, " "));
+		}
+	}
+	// hide
+	hidePopup2();
 });
 //change subnet permissions
 $('.showSubnetPerm').click(function() {

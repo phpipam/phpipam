@@ -2946,7 +2946,7 @@ msgid "Firewall zone and device mappings"
 msgstr ""
 
 
-### 1.19.20
+### 1.19.020
 
 msgid "Base DN for your directory"
 msgstr ""
@@ -2990,3 +2990,10 @@ msgstr ""
 msgid "LDAP account does not have enough privileges for search"
 msgstr ""
 
+### 1.19.021
+
+msgid "Please select fields to populate:"
+msgstr ""
+
+msgid "fill"
+msgstr ""

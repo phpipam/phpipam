@@ -160,7 +160,7 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
         </td>
         <td class="info2">
         	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopupMasks"><i class="fa fa-th-large"></i></button>
-        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE database'); ?>'><i class="fa fa-refresh"></i></button>
+        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
         	<?php print _('Enter subnet in CIDR format'); ?>
         </td>
     </tr>
