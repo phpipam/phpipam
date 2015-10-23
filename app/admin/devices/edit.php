@@ -51,7 +51,7 @@ $(document).ready(function(){
 
 	<!-- hostname  -->
 	<tr>
-		<td><?php print _('Hostname'); ?></td>
+		<td><?php print _('Name'); ?></td>
 		<td>
 			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $device['hostname']; ?>" <?php print $readonly; ?>>
 		</td>
