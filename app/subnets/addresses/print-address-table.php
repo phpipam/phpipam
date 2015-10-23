@@ -327,6 +327,9 @@ else {
 
 					# search for DNS records
 					if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+					# for ajax-loaded subnets
+					if(!isset($PowerDNS)) { $PowerDNS = new PowerDNS ($Database); }
+
 					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
 					unset($dns_records);

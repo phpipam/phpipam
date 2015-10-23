@@ -242,13 +242,15 @@ if(sizeof($address)>1) {
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		foreach(json_decode($User->settings->tempAccess) as $s) {
-			if($s->type=="ipaddresses" && $s->id==$address['id']) {
-				if(time()<$s->validity) {
-					$active_shares[] = $s;
-				}
-				else {
-					$expired_shares[] = $s;
+		if (strlen($User->settings->tempAccess)>0) {
+			foreach(json_decode($User->settings->tempAccess) as $s) {
+				if($s->type=="ipaddresses" && $s->id==$address['id']) {
+					if(time()<$s->validity) {
+						$active_shares[] = $s;
+					}
+					else {
+						$expired_shares[] = $s;
+					}
 				}
 			}
 		}

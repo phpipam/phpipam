@@ -908,6 +908,10 @@ class Addresses extends Common_functions {
 		if(!is_null($order)) 	{ $order = array($order, $order_direction); }
 		else 					{ $order = array("ip_addr", "asc"); }
 
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
+
 		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -996,6 +1000,10 @@ class Addresses extends Common_functions {
 		# ip address order
 		if(!is_null($order)) 	{ $order_addr = array($order, $order_direction); }
 		else 					{ $order_addr = array("ip_addr", "asc"); }
+
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
 
 	    # set query to fetch all ip addresses for specified subnets or just count
 		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = "" '; }
