@@ -71,7 +71,7 @@ $missing = $Admin->group_fetch_missing_users ($_POST['g_id']);
     </table>
     </form>
 
-    <?php } else { $Result->show("info", _('No available users to add to group'), true); } ?>
+    <?php } else { $Result->show("info", _('No available users to add to group'), false); } ?>
 </div>
 
 

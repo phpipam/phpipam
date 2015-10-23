@@ -21,8 +21,7 @@ function open_popup (popup_class, target_script, post_data) {
 	showSpinner();
 	// post
     $.post(target_script, post_data, function(data) {
-        $('div.popup_w'+popup_class).html(data);
-        showPopup('popup_w'+popup_class);
+        showPopup('popup_w'+popup_class, data, true);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText+"<br>Status: "+textStatus+"<br>Error: "+errorThrown); });
     // prevent reload
@@ -88,33 +87,47 @@ $('.disabled a').click(function() {
 function hideTooltips() { $('.tooltip').hide(); }
 
 /* popups */
-function showPopup(pClass) {
-    $('#popupOverlay').fadeIn('fast');
-    $('.'+pClass).fadeIn('fast');
-    $('body').addClass('stop-scrolling');        //disable page scrolling on bottom
+function showPopup(pClass, data, secondary) {
+	showSpinner();
+	// secondary - load secondary popupoverlay
+	if (secondary === true) { var oclass = "#popupOverlay2";}
+	else 					{ var oclass = "#popupOverlay"; }
+	// show overlay
+    $(oclass).fadeIn('fast');
+    // load data and show it
+    if (data!==false && typeof(data)!=="undefined") {
+    $(oclass+' .'+pClass).html(data);
+    }
+    $(oclass+' .'+pClass).fadeIn('fast');
+    //disable page scrolling on bottom
+    $('body').addClass('stop-scrolling');
 }
-function hidePopup(pClass) {
-    $('.'+pClass).fadeOut('fast');
+function hidePopup(pClass, secondary) {
+	// secondary - load secondary popupoverlay
+	if (secondary === true) { var oclass = "#popupOverlay2";}
+	else 					{ var oclass = "#popupOverlay"; }
+	// hide
+    $(oclass+' .'+pClass).fadeOut('fast');
 }
 function hidePopups() {
     $('#popupOverlay').fadeOut('fast');
+    $('#popupOverlay2').fadeOut('fast');
+
     $('.popup').fadeOut('fast');
     $('body').removeClass('stop-scrolling');        //enable scrolling back
-    $('.popup_w700').css("z-index", "100");        //set popup back
     hideSpinner();
 }
 function hidePopup2() {
-    $('.popup_w400').fadeOut('fast');
-    $('.popup_w500').fadeOut('fast');
-    $('.popup_w700').css("z-index", "100");        //set popup back
+    $('#popupOverlay2').fadeOut('fast');
+    $('#popupOverlay2 .popup').fadeOut('fast');
     hideSpinner();
 }
 function hidePopupMasks() {
     $('.popup_wmasks').fadeOut('fast');
     hideSpinner();
 }
-$(document).on("click", "#popupOverlay, .hidePopups", function() { hidePopups(); });
-$(document).on("click", "button.hidePopup2", function() { hidePopup2(); });
+$(document).on("click", ".hidePopups", function() {hidePopups(); });
+$(document).on("click", ".hidePopup2", function() { hidePopup2(); });
 $(document).on("click", ".hidePopupMasks", function() { hidePopupMasks(); });
 $(document).on("click", ".hidePopupsReload", function() { window.location.reload(); });
 
@@ -368,8 +381,8 @@ $(document).on("click", ".modIPaddr", function() {
     //format posted values
     var postdata = "action="+action+"&id="+id+"&subnetId="+subnetId+"&stopIP="+stopIP;
     $.post('app/subnets/addresses/address-modify.php', postdata, function(data) {
-        $('div.popup_w400').html(data);
-        showPopup('popup_w400');
+        $('div.popup_w500').html(data);
+        showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
@@ -1073,10 +1086,8 @@ $(document).on("click", "a#randomPass", function() {
 });
 //search domain popup
 $(document).on("click", ".adsearchuser", function() {
-	$('div.popup_w500').load('app/admin/users/ad-search-form.php');
-
-    showPopup('popup_w500');
-    $('.popup_w700').css("z-index", "99");        //set behind popup
+	$('#popupOverlay2 .popup_w500').load('app/admin/users/ad-search-form.php');
+    showPopup('popup_w500', false, true);
     hideSpinner();
 });
 //search domain user result
@@ -1635,9 +1646,7 @@ $(document).on("click", "#resize, #split, #truncate", function() {
 	var subnetId = $(this).attr('data-subnetId');
 	//dimm and show popup2
     $.post("app/admin/subnets/"+action+".php", {action:action, subnetId:subnetId}, function(data) {
-        $('div.popup_w500').html(data);
-        showPopup('popup_w500');
-        $('.popup_w700').css("z-index", "99");        //set behind popup
+        showPopup('popup_w500', data, true);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
@@ -1758,8 +1767,7 @@ $(document).on("click", "#get-ripe", function() {
 	var subnet = $('form#editSubnetDetails input[name=subnet]').val();
 
 	$.post("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
-        $('div.popup_w500').html(data);
-        showPopup('popup_w500');
+        showPopup('popup_w500', data, true);
 		hideSpinner();
 	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
@@ -1887,9 +1895,7 @@ $(document).on("change", "select[name=vlanId]", function() {
     if($(this).val() == 'Add') {
         showSpinner();
         $.post('app/admin/vlans/edit.php', {action:"add", fromSubnet:"true", domain:domain}, function(data) {
-            $('div.popup_w400').html(data);
-            showPopup('popup_w400');
-            $('.popup_w700').css("z-index", "99");        //set behind popup
+            showPopup('popup_w400', data, true);
             hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     }
@@ -1909,12 +1915,10 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
             var sectionId = $('#editSubnetDetails input[name=sectionId]').val();
             $.post('app/admin/subnets/edit-vlan-dropdown.php', {vlanId:vlanId, sectionId:sectionId} , function(data) {
                 $('.editSubnetDetails td#vlanDropdown').html(data);
-                //bring to front
-                $('.popup_w700').delay(1000).css("z-index", "101");        //bring to front
                 hideSpinner();
 			}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
             //hide popup after 1 second
-            setTimeout(function (){hidePopup('popup_w400'); parameter = null;}, 1000);
+            setTimeout(function (){ hidePopup('popup_w400', true); parameter = null;}, 1000);
         }
         else                      { hideSpinner(); }
     });
