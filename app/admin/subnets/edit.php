@@ -218,7 +218,7 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 					foreach($devices as $device) {
 						//check if permitted in this section!
 						$sections = explode(";", $device->sections);
-						if(in_array($subnet_old_details['sectionId'], $sections)) {
+						if(in_array($_POST['sectionId'], $sections)) {
 							//if same
 							if($device->id == @$subnet_old_details['device']) 	{ print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n"; }
 							else 												{ print '<option value="'. $device->id .'">'. $device->hostname .'</option>'. "\n";			 }

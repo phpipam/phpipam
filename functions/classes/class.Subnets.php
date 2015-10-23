@@ -2625,10 +2625,28 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public  function subnet_dropdown_master_only($subnetMasterId ) {
-		$subnet = (array) $this->fetch_subnet (null, $subnetMasterId);
+		$subnet = $this->fetch_subnet (null, $subnetMasterId);
+
 		$html = array();
-		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>\n";
-		$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask']."</option> </select>\n";
+
+		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
+
+		// false subnet
+		if($subnet===false) {
+			$html[] = "</select>";
+		}
+		else {
+			// foder
+			if ($subnet->isFolder==1) {
+				$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$subnet->description."</option> </select>";
+			}
+			else {
+				$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</option> </select>";
+			}
+		}
+		$html[] = "</select>";
+
+		// result
 		print implode( "\n", $html );
 	}
 

@@ -308,17 +308,13 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_devices ($field=null, $val=null, $order_field="id", $order_direction="asc") {
 		# escape sorts
-		$field 	 		 = $this->Database->escape ($field);
 		$order_field 	 = $this->Database->escape ($order_field);
 		$order_direction = $this->Database->escape ($order_direction);
 
 		# set query
 		if(!is_null($field)) {
-			# escape method/table
-			$field = $this->Database->escape($field);
-
-			$query  = "SELECT * FROM `devices` where `$field` like ? order by $order_field $order_direction;";
-			$params = array("%$val%");
+			$query  = "SELECT * FROM `devices` where ? like ? order by $order_field $order_direction;";
+			$params = array($field, "%$val%");
 		}
 		else {
 			$query  = "SELECT * FROM `devices` order by $order_field $order_direction;";
