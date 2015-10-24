@@ -263,6 +263,8 @@ else {
 	if($_POST['action']=="add") {
 		$values['permissions']=$_POST['permissions'];
 		$values['sectionId']=$_POST['sectionId'];
+		// add vrf
+		$values['vrfId']=$_POST['vrfId'];
 	}
 	else {
 		# if section change
@@ -334,6 +336,9 @@ else {
 		$zone = $_POST['action']=="add" ? $PowerDNS->get_ptr_zone_name ($_POST['subnet'], $_POST['mask']) : $PowerDNS->get_ptr_zone_name ($subnet_old_details['ip'], $subnet_old_details['mask']);
 		// try to fetch domain
 		$domain = $PowerDNS->fetch_domain_by_name ($zone);
+
+		// POST DNSrecursive not set, fake it if old is also 0
+		if (!isset($_POST['DNSrecursive']) && @$subnet_old_details['DNSrecursive']==0) { $_POST['DNSrecursive'] = 0; }
 
 		//delete
 		if ($_POST['action']=="delete") {

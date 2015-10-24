@@ -11,6 +11,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Subnets	= new Subnets ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -24,7 +25,7 @@ if(substr($_POST['as'], 0,2)=="AS" || substr($_POST['as'], 0,2)=="as") {
 
 
 # fetch subnets form ripe
-$subnet   = $Admin->ripe_fetch_subnets ($_POST['as']);
+$subnet   = $Subnets->ripe_fetch_subnets ($_POST['as']);
 
 # fetch all sections
 $sections = $Admin->fetch_all_objects ("sections", "id");

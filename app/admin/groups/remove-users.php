@@ -71,7 +71,7 @@ $existing = $Admin->group_fetch_users ($_POST['g_id']);
     </table>
     </form>
 
-    <?php } else { $Result->show("info", _('No users in this group'), true);  } ?>
+    <?php } else { $Result->show("info", _('No users in this group'), false);  } ?>
 </div>
 
 

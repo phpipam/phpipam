@@ -428,7 +428,7 @@ msgstr "Sectie"
 #: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
 #: site/admin/manageSubnetEdit.php:76
 #: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/ripeImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
+#: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
 #: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr "Subnet"
@@ -449,7 +449,7 @@ msgstr "Subnet"
 #: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
 #: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
 #: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
-#: site/admin/ripeImportTelnet.php:90 site/admin/manageSection.php:28
+#: site/admin/RIPE / ARINImportTelnet.php:90 site/admin/manageSection.php:28
 #: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
 #: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
@@ -609,7 +609,7 @@ msgstr "Bovenliggend subnet"
 #: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
 #: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
 #: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/ripeImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
+#: site/admin/RIPE / ARINImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
 #: site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr "VLAN"
@@ -965,7 +965,7 @@ msgstr "IP-rekenmachine"
 msgid "Instructions"
 msgstr "Instructies"
 
-#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
 #: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
 msgstr "Zoek"
@@ -1608,19 +1608,19 @@ msgstr "Ontbrekende tabel"
 msgid "Missing fields"
 msgstr "Ontbrekend veld"
 
-#: site/admin/ripeImport.php:12
-msgid "Import subnets from RIPE"
-msgstr "Importeer subnetten vanaf RIPE"
+#: site/admin/RIPE / ARINImport.php:12
+msgid "Import subnets from RIPE / ARIN"
+msgstr "Importeer subnetten vanaf RIPE / ARIN"
 
-#: site/admin/ripeImport.php:15
+#: site/admin/RIPE / ARINImport.php:15
 msgid ""
-"This script imports subnets from RIPE database for specific AS. Enter "
+"This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
 msgstr ""
-"Dit script importeert subnetten met een specifiek AS-nummer uit de RIPE-"
+"Dit script importeert subnetten met een specifiek AS-nummer uit de RIPE / ARIN-"
 "database. Geef het gewenste AS-nummer om naar subnetten te zoeken"
 
-#: site/admin/ripeImport.php:19
+#: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
 msgstr "AS-nummer"
 
@@ -2033,7 +2033,7 @@ msgid "AD connection settings"
 msgstr "AD connectie-instellingen"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "OpenLDAP connectie-instellingen"
 
 #: site/admin/adminMenu.php:38
@@ -2061,8 +2061,8 @@ msgid "VRF management"
 msgstr "VRF-beheer"
 
 #: site/admin/adminMenu.php:68
-msgid "RIPE import"
-msgstr "RIPE-import"
+msgid "RIPE / ARIN import"
+msgstr "RIPE / ARIN-import"
 
 #: site/admin/adminMenu.php:77
 msgid "Filter IP fields"
@@ -2225,8 +2225,8 @@ msgid "subnet in CIDR"
 msgstr "subnet in CIDR-formaat"
 
 #: site/admin/manageSubnetEdit.php:86
-msgid "Get information from RIPE database"
-msgstr "Haal informatie uit de RIPE-database"
+msgid "Get information from RIPE / ARIN database"
+msgstr "Haal informatie uit de RIPE / ARIN-database"
 
 #: site/admin/manageSubnetEdit.php:87
 msgid "Enter subnet in CIDR format (e.g. 192.168.1.1/24)"
@@ -2355,7 +2355,7 @@ msgstr "IP"
 msgid "Status"
 msgstr "Status"
 
-#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
+#: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
 msgid "Import to database"
 msgstr "Importeer naar database"
 
@@ -2510,7 +2510,7 @@ msgstr "RD"
 msgid "Errors occured when importing to database!"
 msgstr "Er is een fout opgetreden bij het importeren naar de database"
 
-#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
+#: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
 msgid "Import successfull"
 msgstr "Import geslaagd"
 
@@ -2887,19 +2887,19 @@ msgstr "Fout bij bijwerken van instructies"
 msgid "Instructions updated successfully"
 msgstr "Instructies bijwerken geslaagd"
 
-#: site/admin/ripeImportTelnet.php:48
+#: site/admin/RIPE / ARINImportTelnet.php:48
 msgid "No subnets found"
 msgstr "Geen subnetten gevonden"
 
-#: site/admin/ripeImportTelnet.php:56
+#: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
 msgstr "De volgende routes bij deze AS zijn gevonden"
 
-#: site/admin/ripeImportTelnet.php:69
+#: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"
 msgstr "Verwijder dit subnet"
 
-#: site/admin/ripeImportTelnet.php:79
+#: site/admin/RIPE / ARINImportTelnet.php:79
 msgid "select section"
 msgstr "selecteer sectie"
 
@@ -3103,11 +3103,11 @@ msgstr "Fout bij leegmaken logbestanden"
 msgid "Logs cleared successfully"
 msgstr "Logbestanden leegmaken geslaagd"
 
-#: site/admin/ripeImportResult.php:66
+#: site/admin/RIPE / ARINImportResult.php:66
 msgid "Failed to import subnet"
 msgstr "Fout bij importeren van subnet"
 
-#: site/admin/ripeImportResult.php:76
+#: site/admin/RIPE / ARINImportResult.php:76
 msgid "Please fix the following errors before inserting"
 msgstr "De volgende fouten dienen voor het invoegen verholpen te worden"
 
@@ -3147,7 +3147,7 @@ msgstr ""
 "worden."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "OpenLDAP-servers"
 
 #: site/admin/manageAD_LDAP.php:54

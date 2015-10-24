@@ -16,7 +16,11 @@ if(!function_exists('gettext')) {
 	function _($text) 			{ return $text; }
 }
 
-//error_reporting(-1);
+// auto-set base if not already defined
+if(!defined('BASE')) {
+$root = substr($_SERVER['DOCUMENT_ROOT'],-1)=="/" ? substr($_SERVER['DOCUMENT_ROOT'],0,-1) : $_SERVER['DOCUMENT_ROOT'];	// fix for missing / in some environments
+define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
+}
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions

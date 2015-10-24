@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.19.001\n"
+# "Project-Id-Version: 1.2.000\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2015-10-07 14:33+0200\n"
@@ -416,7 +416,7 @@ msgstr "Razdelek"
 #: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
 #: site/admin/manageSubnetEdit.php:76
 #: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/ripeImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
+#: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
 #: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr "Omrežje"
@@ -437,7 +437,7 @@ msgstr "Omrežje"
 #: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
 #: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
 #: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
-#: site/admin/ripeImportTelnet.php:90 site/admin/manageSection.php:28
+#: site/admin/RIPE / ARINImportTelnet.php:90 site/admin/manageSection.php:28
 #: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
 #: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
@@ -597,7 +597,7 @@ msgstr "Glavno omrežje"
 #: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
 #: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
 #: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/ripeImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
+#: site/admin/RIPE / ARINImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
 #: site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr "VLAN"
@@ -940,7 +940,7 @@ msgstr "IP kalkulator"
 msgid "Instructions"
 msgstr "Navodila"
 
-#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
 #: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
 msgstr "Iskanje"
@@ -1577,17 +1577,17 @@ msgstr "Manjkajoča tabela"
 msgid "Missing fields"
 msgstr "Manjkajoča polja"
 
-#: site/admin/ripeImport.php:12
-msgid "Import subnets from RIPE"
-msgstr "Uvozi omrežja iz RIPE"
+#: site/admin/RIPE / ARINImport.php:12
+msgid "Import subnets from RIPE / ARIN"
+msgstr "Uvozi omrežja iz RIPE / ARIN"
 
-#: site/admin/ripeImport.php:15
-msgid "This script imports subnets from RIPE database for specific AS. Enter "
+#: site/admin/RIPE / ARINImport.php:15
+msgid "This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
-msgstr "Ta skripta uvozi omrežja iz RIPE podatkovne baze za določen AS. "
+msgstr "Ta skripta uvozi omrežja iz RIPE / ARIN podatkovne baze za določen AS. "
 "Vnesite žljeni AS za iskanje pripadajočih omrežij"
 
-#: site/admin/ripeImport.php:19
+#: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
 msgstr "AS številka"
 
@@ -1974,7 +1974,7 @@ msgid "AD connection settings"
 msgstr "AD povezava"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "OpenLDAP povezava"
 
 #: site/admin/adminMenu.php:38
@@ -2002,8 +2002,8 @@ msgid "VRF management"
 msgstr "VRF"
 
 #: site/admin/adminMenu.php:68
-msgid "RIPE import"
-msgstr "RIPE uvoz"
+msgid "RIPE / ARIN import"
+msgstr "RIPE / ARIN uvoz"
 
 #: site/admin/adminMenu.php:77
 msgid "Filter IP fields"
@@ -2161,8 +2161,8 @@ msgid "subnet in CIDR"
 msgstr "omrežje - CIDR zapis"
 
 #: site/admin/manageSubnetEdit.php:86
-msgid "Get information from RIPE database"
-msgstr "Potegni informacije in RIPE baze"
+msgid "Get information from RIPE / ARIN database"
+msgstr "Potegni informacije in RIPE / ARIN baze"
 
 #: site/admin/manageSubnetEdit.php:87
 msgid "Enter subnet in CIDR format (e.g. 192.168.1.1/24)"
@@ -2287,7 +2287,7 @@ msgstr "IP"
 msgid "Status"
 msgstr "Status"
 
-#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
+#: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
 msgid "Import to database"
 msgstr "Uvozi v podatkovno bazo"
 
@@ -2439,7 +2439,7 @@ msgstr "RD"
 msgid "Errors occured when importing to database!"
 msgstr "Pri uvozu v podatkovno bazo je prišlo do napak"
 
-#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
+#: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
 msgid "Import successfull"
 msgstr "Uvoz uspešen"
 
@@ -2797,19 +2797,19 @@ msgstr "Napaka pri posodobitvi navodil"
 msgid "Instructions updated successfully"
 msgstr "Navodila uspešno posodobljena"
 
-#: site/admin/ripeImportTelnet.php:48
+#: site/admin/RIPE / ARINImportTelnet.php:48
 msgid "No subnets found"
 msgstr "Nisem našel nobenega omrežja"
 
-#: site/admin/ripeImportTelnet.php:56
+#: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
 msgstr "Našel sem sledeča omrežja, ki pripadajo izbranemu AS"
 
-#: site/admin/ripeImportTelnet.php:69
+#: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"
 msgstr "Odstrani to omrežje"
 
-#: site/admin/ripeImportTelnet.php:79
+#: site/admin/RIPE / ARINImportTelnet.php:79
 msgid "select section"
 msgstr "izberite razdelek"
 
@@ -3000,11 +3000,11 @@ msgstr "Napaka pri izbrisu log datotek"
 msgid "Logs cleared successfully"
 msgstr "Log datoteke pobrisane"
 
-#: site/admin/ripeImportResult.php:66
+#: site/admin/RIPE / ARINImportResult.php:66
 msgid "Failed to import subnet"
 msgstr "Napaka pri uvozu omrežja"
 
-#: site/admin/ripeImportResult.php:76
+#: site/admin/RIPE / ARINImportResult.php:76
 msgid "Please fix the following errors before inserting"
 msgstr "Prosimo popravite sledeče napake pred uvozom"
 
@@ -3037,7 +3037,7 @@ msgstr "Najprej ustvarite novega uporabnika z <u>enakim uporabniškim imenom kot
 "LDAPu</u> in izberite tip uporabnika domenski uporabnik. Nastavite tudi ustrezne skupine za uporabnika"
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "OpenLDAP strežniki"
 
 #: site/admin/manageAD_LDAP.php:54
@@ -6176,3 +6176,51 @@ msgstr "localhost agenta ne morem izbrisati"
 
 msgid "Scan agent references removed"
 msgstr "Pripadajoča omrežja izbrisana"
+
+msgid "Base DN for your directory"
+msgstr "Base DN za direktorij"
+
+msgid "Users DN"
+msgstr "DN uporabnikov"
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr "Base DN za uporabnike, v kolikor je drugačen od base DN zgoraj"
+
+msgid "LDAP Security Type"
+msgstr "Tip LDAP varnosti"
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr "SSL, TLS, ali brez (default: TLS)"
+
+msgid "LDAP port"
+msgstr "LDAP vrata"
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr "Vrata, na katerih posluša LDAP servis. TLS/nekriptirano privzeto 389 <br> SSL privzeto 636"
+
+msgid "Bind user"
+msgstr "Bind uporabnika"
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr "DN uporabnika za isaknje uporabnikov (opcijsko)."
+
+msgid "Bind password"
+msgstr "Geslo"
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr "Geslo uporabnika za iskanje (samo ce je nastavljen uporabnik)"
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr "Trenutno je podprto samo AD iskanje skupin."
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr "Neveljavna baseDN nastavitev za LDAP"
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr "LDAP racun nima dovolj pravic za iskanje"
+
+msgid "Please select fields to populate:"
+msgstr ""
+
+msgid "fill"
+msgstr ""

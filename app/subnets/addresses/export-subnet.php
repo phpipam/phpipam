@@ -34,6 +34,7 @@ $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # Create a workbook
 $filename = "phpipam_subnet_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //formatting headers
 $format_header =& $workbook->addFormat();
@@ -65,12 +66,9 @@ $format_top->setTop(1);
 
 
 // Create a worksheet
-//$worksheet =& $workbook->addWorksheet($subnet['description']);
 $worksheet_name = strlen($subnet['description']) > 30 ? substr($subnet['description'],0,27).'...' : $subnet['description'];
 $worksheet =& $workbook->addWorksheet($worksheet_name);
-
-// encode
-$worksheet->setInputEncoding('utf-8');
+$worksheet->setInputEncoding("utf-8");
 
 $lineCount = 0;
 $rowCount  = 0;
@@ -171,14 +169,14 @@ foreach ($addresses as $ip) {
 	$rowCount = 0;
 
 	//change switch ID to name
-	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);
 		$rowCount++;
 	}
 	if( (isset($_GET['state'])) && ($_GET['state'] == "on") ) {
-		if($ip_types[$ip['state']]['showtag']==1) {
+		if(@$ip_types[$ip['state']]['showtag']==1) {
 		$worksheet->write($lineCount, $rowCount, $ip_types[$ip['state']]['type']);
 		}
 		$rowCount++;

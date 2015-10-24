@@ -30,7 +30,7 @@ if($Subnets->check_permission ($User->user, $_POST['subnetId'])<3)	{ $Result->sh
 $subnet_old = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
 
 # verify resizing
-$Subnets->verify_subnet_resize ($subnet_old['subnet'], $_POST['newMask'], $subnet_old['id'], $subnet_old['vrfId'], $subnet_old['masterSubnetId'], $subnet_old['mask']);
+$Subnets->verify_subnet_resize ($subnet_old['subnet'], $_POST['newMask'], $subnet_old['id'], $subnet_old['vrfId'], $subnet_old['masterSubnetId'], $subnet_old['mask'], $subnet_old['sectionId']);
 
 # we need to recalculate subnet address if needed
 if ($subnet_old['mask'] < $_POST['newMask']) {

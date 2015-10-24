@@ -14,17 +14,18 @@ $User->check_user_session();
 ?>
 
 <form id="dataimport" method="post" action="app/admin/import-export/import-verify.php" enctype="multipart/form-data">
-<div id="drop">
-	<input type="file" name="file" id="csvfile" style="display:none;">
-	<input type="hidden" name="expfields" value="<?php print implode('|',$expfields); ?>" style="display:none;">
+	<div id="drop">
+		<input type="file" name="file" id="csvfile" style="display:none;">
+		<input type="hidden" name="expfields" value="<?php print implode('|',$expfields); ?>" style="display:none;">
 
-	<?php print _('Select file'); ?>: <a class="btn btn-sm btn-default"><i class="fa fa-folder-open"></i> <?php print _("Browse / Drag & Drop"); ?></a>
-</div>
-<span class="fname" style="display:none"></span>
-<br>
-<div id="uploadResult">
-</div>
-
+		<?php print _('Select file'); ?>: <a class="btn btn-sm btn-default"><i class="fa fa-folder-open"></i> <?php print _("Browse / Drag & Drop"); ?></a>
+	</div>
+	<!-- Download template -->
+	<?php print "<a class=\"csvtemplate btn btn-sm btn-default pull-right\" id=\"". $templatetype . "template\">Download template</a>"; ?>
+	<span class="fname" style="display:none"></span>
+	<br>
+	<!-- Download result -->
+	<div id="uploadResult"></div>
 </form>
 
 <!-- jQuery File Upload Dependencies -->

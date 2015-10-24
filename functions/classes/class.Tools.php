@@ -31,7 +31,6 @@ class Tools extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# set database object
@@ -40,35 +39,6 @@ class Tools extends Common_functions {
 		$this->Result = new Result ();
 		# set debugging
 		$this->set_debugging ();
-	}
-
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
 	}
 
 
@@ -337,17 +307,18 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_devices ($field=null, $val=null, $order_field="id", $order_direction="asc") {
+		# escape sorts
+		$order_field 	 = $this->Database->escape ($order_field);
+		$order_direction = $this->Database->escape ($order_direction);
+
 		# set query
 		if(!is_null($field)) {
-			# escape method/table
-			$field = $this->Database->escape($field);
-
-			$query  = "SELECT * FROM `devices` where `$field` like ? order by ? ?;";
-			$params = array("%$val%", $order_field, $order_direction);
+			$query  = "SELECT * FROM `devices` where ? like ? order by $order_field $order_direction;";
+			$params = array($field, "%$val%");
 		}
 		else {
-			$query  = "SELECT * FROM `devices` order by ? ?;";
-			$params = array($order_field, $order_direction);
+			$query  = "SELECT * FROM `devices` order by $order_field $order_direction;";
+			$params = array();
 		}
 		# fetch
 		try { $devices = $this->Database->getObjectsQuery($query, $params); }
@@ -1611,12 +1582,25 @@ class Tools extends Common_functions {
 	 */
 
 	/**
-	 * Checks for latest phpipam version from phpipam webpage
+	 * Check for latest version
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function check_latest_phpipam_version () {
+		# fetch settings
+		$this->get_settings ();
+		# check for release
+		return $this->settings->version >= "1.2" ? $this->check_latest_phpipam_version_github () : $this->check_latest_phpipam_version_phpipamnet ();
+	}
+
+	/**
+	 * Checks for latest phpipam version from phpipam webpage
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function check_latest_phpipam_version_phpipamnet () {
 		# fetch webpage
 		$handle = @fopen("http://phpipam.net/phpipamversion.php", "r");
 		if($handle) {
@@ -1631,6 +1615,43 @@ class Tools extends Common_functions {
 
 		# return version or false
 		return is_numeric($versionT) ? $version : false;
+	}
+
+	/**
+	 * Fetch latest version form Github for phpipam > 1.2
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function check_latest_phpipam_version_github () {
+		# set releases href
+		$feed = implode(file('https://github.com/phpipam/phpipam/releases.atom'));
+		// fetch
+		$xml = simplexml_load_string($feed);
+
+		// if ok
+		if ($xml!==false) {
+			// encode to json
+			$json = json_decode(json_encode($xml));
+			// save all releases
+			$this->phpipam_releases = $json->entry;
+			// check for latest release
+			foreach ($json->entry as $e) {
+				// releases will be named with numberic values
+				if (is_numeric($e->title)) {
+					// save
+					$this->phpipam_latest_release = $e;
+					// return
+					return $e->title;
+					break;
+				}
+			}
+			// none
+			return false;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**

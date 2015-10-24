@@ -159,8 +159,8 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 
         </td>
         <td class="info2">
-        	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopupMasks"><i class="fa fa-th-large"></i></button>
-        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE database'); ?>'><i class="fa fa-refresh"></i></button>
+        	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopup2"><i class="fa fa-th-large"></i></button>
+        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
         	<?php print _('Enter subnet in CIDR format'); ?>
         </td>
     </tr>
@@ -218,7 +218,7 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 					foreach($devices as $device) {
 						//check if permitted in this section!
 						$sections = explode(";", $device->sections);
-						if(in_array($subnet_old_details['sectionId'], $sections)) {
+						if(in_array($_POST['sectionId'], $sections)) {
 							//if same
 							if($device->id == @$subnet_old_details['device']) 	{ print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n"; }
 							else 												{ print '<option value="'. $device->id .'">'. $device->hostname .'</option>'. "\n";			 }
@@ -443,6 +443,9 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 		    	# retain newlines
 		    	$subnet_old_details[$field['name']] = str_replace("\n", "\\n", @$subnet_old_details[$field['name']]);
 
+				# set default value !
+				if ($_POST['action']=="add")	{ $subnet_old_details[$field['name']] = $field['Default']; }
+
 		    	# required
 		    	$required = $field['Null']=="NO" ? "*" : "";
 				print '<tr>'. "\n";
@@ -450,9 +453,9 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 				print '	<td colspan="2">'. "\n";
 
 				//set type
-				if(substr($field['type'], 0,3) == "set") {
+				if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 					//parse values
-					$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $field['type']));
+					$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
 					//null
 					if($field['Null']!="NO") { array_unshift($tmp, ""); }
 

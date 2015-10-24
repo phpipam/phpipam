@@ -1,6 +1,9 @@
 <?php
 
-// phpIPAM firewall zone management class
+/**
+ *	phpIPAM firewall zone management class
+ *
+ */
 
 class FirewallZones extends Common_functions {
 
@@ -27,7 +30,6 @@ class FirewallZones extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		// initialize Result

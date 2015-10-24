@@ -1,4 +1,4 @@
-== 1.19.010
+== 1.19.020
 
 	New features:
 	------------
@@ -26,6 +26,8 @@
 		+ DNS domain management;
 	+ Added Scan agents to scan subnets remotely;
 	+ Added firewall zone mappings and module;
+	+ Added per-subnet DNS resolvers;
+	+ BASE auto-detect;
 
 	Enhancements:
 	----------------------------
@@ -48,6 +50,7 @@
 	+ RWA users can now process IP requests;
 	+ Added auto-suggest for possible slave subnets;
 	+ SSL option for MySQL connections;
+	+ Enum custom field support;
 
 	Security Fixes:
 	----------------------------

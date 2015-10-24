@@ -81,6 +81,7 @@ print "</tbody></table>";
 print "<div id='bottommsg'>"._("The fields marked with * are mandatory.")."</div>";
 print "</form>";
 
+$templatetype = 'vrf';
 # print upload section
 print "<div id='uplmsg'>";
 print '<h4>'._("Upload file").'</h4><hr>';

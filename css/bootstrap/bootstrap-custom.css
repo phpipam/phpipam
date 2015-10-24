@@ -76,6 +76,10 @@ h5 {
 	text-shadow: 1px 1px 0px white;
 	font-size: 14px;
 }
+h5 .label {
+	text-shadow: none;
+	margin-left: 10px;
+}
 h1, h2, h3, h4, h5, .pHeader {
 	font-family: "Lato", Arial, sans-serif;
 	font-weight: 300;
@@ -1754,6 +1758,7 @@ td.groups input[type=checkbox] {
 	white-space: nowrap;
 	text-shadow: none;
 	font-size: 11px;
+	z-index: 1120 !important;
 }
 .tooltip-inner {
 	max-width: 500px;
@@ -1889,34 +1894,31 @@ table#userPrint h4 {
 
 
 /* @popup ---------- */
-#popupOverlay {
+#popupOverlay,
+#popupOverlay2 {
 	display: none;
 
 	position: fixed;
 
 	background: rgba(0,0,0,0.5);
-/*
-	width: 100%;
-	height: 100%;
-*/
+
 	top: 0px;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
 
-	z-index: 100;
+	z-index: 98;
 
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-
 .popup_w400 {
 	width: 400px;
 
 	left: 50%;
 	margin-left: -200px;
 
-	z-index: 103;
+	z-index: 102;
 }
 .popup_w500 {
 	width: 500px;
@@ -1924,7 +1926,7 @@ table#userPrint h4 {
 	left: 50%;
 	margin-left: -250px;
 
-	z-index: 102;
+	z-index: 103;
 }
 .popup_w700,
 .popup_wmasks {
@@ -1933,17 +1935,17 @@ table#userPrint h4 {
 	left: 50%;
 	margin-left: -350px;
 
-	z-index: 101;
+	z-index: 104;
 }
 .popup_wmasks {
 
 	width: 800px;
 	margin-left: -400px;
 
-	z-index: 104;
+	z-index: 105;
 }
 .popup_wmasks .pContent {
-	max-height: 700px !important;
+/* 	max-height: 700px !important; */
 }
 .popup_max {
 	width: 90%;
@@ -1951,7 +1953,7 @@ table#userPrint h4 {
 	left: 50%;
 	margin-left: -45%;
 
-	z-index: 101;
+	z-index: 106;
 
 	height: 90%;
 	top: 5% !important;
@@ -1963,11 +1965,15 @@ table#userPrint h4 {
 .popup {
 	display: none;
 
-	top: 10%;
+	position: relative;
+	margin-top: 80px;
+	margin-bottom: 50px;
+	height: auto;
 
-	position: fixed;
+	z-index: 100;
 
 /* 	overflow-x: hidden; */
+	overflow: visible;
 
   background-color: #ffffff;
   border: 1px solid #999;
@@ -2009,6 +2015,7 @@ table#userPrint h4 {
 	padding: 15px;
 	padding-bottom: 0px;
 	overflow-y: auto;
+	overflow-x: visible;
 }
 .popup .pContent table th,
 .popup .pContent table td {
@@ -2069,6 +2076,21 @@ table#userPrint h4 {
 	bottom: 0px;
 }
 
+.popup .pHeader {
+	position: relative;
+	width: 100%;
+}
+.popup .pContent {
+	height: auto;
+	position: relative;
+	height: auto !important;
+	max-height: 100% !important;
+}
+.popup .pFooter {
+	position: relative;
+	bottom: 0px;
+}
+
 
 
 
@@ -2081,6 +2103,7 @@ body {
 /* 	background: #f2f2f2; */
 }
 body.stop-scrolling {
+	position: relative;
 	overflow: hidden;
 }
 div.wrapper {

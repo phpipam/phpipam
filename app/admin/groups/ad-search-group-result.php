@@ -21,8 +21,18 @@ $User->check_user_session();
 $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
+
+
 //parse parameters
 $params = json_decode($server->params);
+
+if ($server->type == "LDAP") {
+
+	// Just discovered that adLDAP flat out won't work for normal ldap groups. Stop LDAP here.
+	$Result->show("danger", _("Only AD group search is supported right now. Sorry."), true);
+	return;
+
+}
 
 //no login parameters
 if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $Result->show("danger", _("Missing credentials"), true); }
@@ -32,7 +42,7 @@ if(strlen($_POST['dfilter'])<2) 												{ $Result->show("danger", _('Please 
 
 //open connection
 try {
-	if($server->type == "NetIQ") { $params->account_suffix = ""; }
+	if($server->type == "NetIQ" || $server->type == "LDAP") { $params->account_suffix = ""; }
 	//set options
 	$options = array(
 			'base_dn'=>$params->base_dn,
@@ -45,14 +55,13 @@ try {
 	//AD
 	$adldap = new adLDAP($options);
 
-	//try to login with higher credentials for search
-	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
-	if ($authUser == false) {
-		$Result->show("danger", _("Invalid credentials"), true);
+	// Use credentials if they've been provided
+	if (isset($params->adminUsername) && isset($params->adminPassword)) {
+		$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
+		if ($authUser == false) {
+			$Result->show("danger", _("Invalid credentials"), true);
+		}
 	}
-
-	// set OpenLDAP flag
-	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
 
 	//search groups
 	$groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP,true,"*$_POST[dfilter]*");
@@ -71,8 +80,8 @@ if(sizeof($groups)==0) {
 	print _('No groups found')."!<hr>";
 	print _('Possible reasons').":";
 	print "<ul>";
-	print "<li>"._('Invalid baseDN setting for AD')."</li>";
-	print "<li>"._('AD account does not have enough privileges for search')."</li>";
+	print "<li>"._('Invalid baseDN setting for ' . $server->type)."</li>";
+	print "<li>"._($server->type . ' account does not have enough privileges for search')."</li>";
 	print "</div>";
 } else {
 	print _(" Following groups were found").": (".sizeof($groups)."):<hr>";

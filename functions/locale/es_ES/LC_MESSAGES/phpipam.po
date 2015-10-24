@@ -1,5 +1,5 @@
 # PHPIPAM translations file - template
-# Copyright (C) phpipam 2013 
+# Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
@@ -416,7 +416,7 @@ msgstr "Sección"
 #: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
 #: site/admin/manageSubnetEdit.php:76
 #: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/ripeImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
+#: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
 #: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr "Subred"
@@ -437,7 +437,7 @@ msgstr "Subred"
 #: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
 #: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
 #: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
-#: site/admin/ripeImportTelnet.php:90 site/admin/manageSection.php:28
+#: site/admin/RIPE / ARINImportTelnet.php:90 site/admin/manageSection.php:28
 #: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
 #: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
@@ -597,7 +597,7 @@ msgstr "Subred Maestra"
 #: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
 #: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
 #: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/ripeImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
+#: site/admin/RIPE / ARINImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
 #: site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr "VLAN"
@@ -941,7 +941,7 @@ msgstr "Calculadora IP"
 msgid "Instructions"
 msgstr "Instrucciones"
 
-#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
 #: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
 msgstr "Buscar"
@@ -1576,17 +1576,17 @@ msgstr "No existe la tabla"
 msgid "Missing fields"
 msgstr "No existe los campos"
 
-#: site/admin/ripeImport.php:12
-msgid "Import subnets from RIPE"
-msgstr "Importar subredes de RIPE"
+#: site/admin/RIPE / ARINImport.php:12
+msgid "Import subnets from RIPE / ARIN"
+msgstr "Importar subredes de RIPE / ARIN"
 
-#: site/admin/ripeImport.php:15
-msgid "This script imports subnets from RIPE database for specific AS. Enter "
+#: site/admin/RIPE / ARINImport.php:15
+msgid "This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
-msgstr "Este script importa subredes desde la BBDD RIPE para un AS específico. "
+msgstr "Este script importa subredes desde la BBDD RIPE / ARIN para un AS específico. "
 "Introduzca el AS para búsqueda de subredes"
 
-#: site/admin/ripeImport.php:19
+#: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
 msgstr "Número de AS"
 
@@ -1973,7 +1973,7 @@ msgid "AD connection settings"
 msgstr "Preferencias conexión a AD"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "Preferencias conexión a LDAP"
 
 #: site/admin/adminMenu.php:38
@@ -2001,8 +2001,8 @@ msgid "VRF management"
 msgstr "Administracion VRF"
 
 #: site/admin/adminMenu.php:68
-msgid "RIPE import"
-msgstr "Importar RIPE"
+msgid "RIPE / ARIN import"
+msgstr "Importar RIPE / ARIN"
 
 #: site/admin/adminMenu.php:77
 msgid "Filter IP fields"
@@ -2159,7 +2159,7 @@ msgid "subnet in CIDR"
 msgstr "subred en CIDR"
 
 #: site/admin/manageSubnetEdit.php:86
-msgid "Get information from RIPE database"
+msgid "Get information from RIPE / ARIN database"
 msgstr "Obtener información de"
 
 #: site/admin/manageSubnetEdit.php:87
@@ -2285,7 +2285,7 @@ msgstr "IP"
 msgid "Status"
 msgstr "Estado"
 
-#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
+#: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
 msgid "Import to database"
 msgstr "Importar a BBDD"
 
@@ -2438,7 +2438,7 @@ msgstr "RD"
 msgid "Errors occured when importing to database!"
 msgstr "Errores durante la importación a la BBDD"
 
-#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
+#: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
 msgid "Import successfull"
 msgstr "Importación correcta"
 
@@ -2797,19 +2797,19 @@ msgstr "Fallo actualizando instrucciones"
 msgid "Instructions updated successfully"
 msgstr "Instrucciones actualziadas correctamente"
 
-#: site/admin/ripeImportTelnet.php:48
+#: site/admin/RIPE / ARINImportTelnet.php:48
 msgid "No subnets found"
 msgstr "No se han encontrado subredes"
 
-#: site/admin/ripeImportTelnet.php:56
+#: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
 msgstr "Encontradas las siguientes rutas pertenecientes al AS"
 
-#: site/admin/ripeImportTelnet.php:69
+#: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"
 msgstr "Eliminar esta subred"
 
-#: site/admin/ripeImportTelnet.php:79
+#: site/admin/RIPE / ARINImportTelnet.php:79
 msgid "select section"
 msgstr "seleccionar sección"
 
@@ -2999,11 +2999,11 @@ msgstr "Error limpiando registros"
 msgid "Logs cleared successfully"
 msgstr "Registros limpiados correctamente"
 
-#: site/admin/ripeImportResult.php:66
+#: site/admin/RIPE / ARINImportResult.php:66
 msgid "Failed to import subnet"
 msgstr "Error al importar subredes"
 
-#: site/admin/ripeImportResult.php:76
+#: site/admin/RIPE / ARINImportResult.php:76
 msgid "Please fix the following errors before inserting"
 msgstr "Corrija los siguientes errores antes de añadir"
 
@@ -3037,7 +3037,7 @@ msgstr "Añadir primero un nuevo usuario en Administración de usuarios con <u>e
 "del nuevo usuario"
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "Servidores OpenLDAP"
 
 #: site/admin/manageAD_LDAP.php:54

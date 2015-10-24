@@ -85,14 +85,17 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			if($field['Null']=="NO")	{ $required = "*"; }
 			else						{ $required = ""; }
 
+			# set default value !
+			if ($_POST['action']=="add")	{ $vrf[$field['name']] = $field['Default']; }
+
 			print '<tr>'. "\n";
 			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type
-			if(substr($field['type'], 0,3) == "set") {
+			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 				//parse values
-				$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $field['type']));
+				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
 				//null
 				if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
