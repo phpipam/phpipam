@@ -6,16 +6,10 @@ class FirewallZones extends Common_functions {
 
 	/* variables */
 	public $error = false;				// connection error string
-	public $db_settings;				// (obj) db settings
-	public $defaults;					// (obj) defaults settings
-	// private $settings = false;			// (obj) settings
-
 	public $limit;						// number of results
 	public $orderby;					// order field
 	public $orderdir;					// $order direction
 	public $firewallZoneSettings;		// Settings
-	// public $domain_types;				// (obj) types of domain
-	// public $record_types;				// (obj) record types
 	public $Log;						// for Logging connection
 
 	/* objects */
