@@ -38,7 +38,7 @@ $firewallZones = $Zones->get_zones();
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 
 # fetch all devices
-$devices = $Tools->fetch_devices("type",$firewallZoneSettings['deviceType']);
+$devices = $Zones->fetch_firewalls($firewallZoneSettings['deviceType']);
 
 # fetch old mapping
 if ($_POST['action'] != 'add') {
