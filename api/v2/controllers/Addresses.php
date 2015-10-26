@@ -12,6 +12,7 @@ class Addresses_controller extends Common_api_functions  {
 
 	/* protected variables */
 	protected $valid_keys;
+	protected $custom_fields;
 
 	/* object holders */
 	protected $Database;			// Database object
@@ -28,7 +29,6 @@ class Addresses_controller extends Common_api_functions  {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
-	 * @return void
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;

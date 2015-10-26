@@ -28,7 +28,6 @@ class Subnets_controller extends Common_api_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
-	 * @return void
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;

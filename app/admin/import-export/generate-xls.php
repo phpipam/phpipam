@@ -26,6 +26,7 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_IP_adress_export_". date("Y-m-d") .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //fetch sections, and for each section write new tab, inside tab write all values!
 $sections = $Sections->fetch_sections();
@@ -76,7 +77,9 @@ foreach ($sections as $section) {
 	//cast
 	$section = (array) $section;
 	// Create a worksheet
-	$worksheet = $workbook->addWorksheet($section['name']);
+	$worksheet_name = strlen($section['name']) > 30 ? substr($section['name'],0,27).'...' : $section['name'];
+	$worksheet =& $workbook->addWorksheet($worksheet_name);
+	$worksheet->setInputEncoding("utf-8");
 
 	//get all subnets in this section
 	$subnets = $Subnets->fetch_section_subnets ($section['id']);
@@ -139,11 +142,11 @@ foreach ($sections as $section) {
 				$ip = (array) $ip;
 
 				//reformat state
-				if($ip_types[$ip['state']]['showtag']==1) 	{ $ip['state'] = $ip_types[$ip['state']]['type']; }
+				if(@$ip_types[$ip['state']]['showtag']==1) 	{ $ip['state'] = $ip_types[$ip['state']]['type']; }
 				else										{ $ip['state'] = ""; }
 
 				//change switch ID to name
-				$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+				$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
 				$worksheet->write($lineCount, 1, $ip['state']);

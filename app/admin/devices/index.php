@@ -45,7 +45,7 @@ else {
 
 	# headers
 	print '<tr>';
-	print '	<th>'._('Hostname').'</th>';
+	print '	<th>'._('Name').'</th>';
 	print '	<th>'._('IP address').'</th>';
 	print '	<th>'._('Type').'</th>';
 	print '	<th>'._('Vendor').'</th>';

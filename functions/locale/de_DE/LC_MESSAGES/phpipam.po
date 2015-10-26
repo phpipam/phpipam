@@ -2025,7 +2025,7 @@ msgid "AD connection settings"
 msgstr "AD Verbindungseinstellungen"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "OpenLDAP Verbindungseinstellungen"
 
 #: site/admin/adminMenu.php:38
@@ -3138,7 +3138,7 @@ msgstr ""
 "Verzeichnis</u> und setzen Sie den Benutzertyp auf Domain User."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "OpenLDAP Server"
 
 #: site/admin/manageAD_LDAP.php:54

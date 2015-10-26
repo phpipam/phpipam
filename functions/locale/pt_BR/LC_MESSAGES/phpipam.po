@@ -422,7 +422,7 @@ msgstr "Se&ccedil;&atilde;o"
 #: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
 #: site/admin/manageSubnetEdit.php:76
 #: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/ripeImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
+#: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
 #: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr "Sub-Rede"
@@ -443,7 +443,7 @@ msgstr "Sub-Rede"
 #: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
 #: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
 #: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
-#: site/admin/ripeImportTelnet.php:90 site/admin/manageSection.php:28
+#: site/admin/RIPE / ARINImportTelnet.php:90 site/admin/manageSection.php:28
 #: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
 #: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
@@ -604,7 +604,7 @@ msgstr "Sub-rede mestre"
 #: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
 #: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
 #: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/ripeImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
+#: site/admin/RIPE / ARINImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
 #: site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr "VLAN"
@@ -967,7 +967,7 @@ msgstr "Calculadora IP"
 msgid "Instructions"
 msgstr "Instru&ccedil;&otilde;es"
 
-#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
 #: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
 msgstr "Pesquisa"
@@ -1615,19 +1615,19 @@ msgstr "Tabelas faltando"
 msgid "Missing fields"
 msgstr "Campos faltando"
 
-#: site/admin/ripeImport.php:12
-msgid "Import subnets from RIPE"
-msgstr "Importar sub-redes do RIPE"
+#: site/admin/RIPE / ARINImport.php:12
+msgid "Import subnets from RIPE / ARIN"
+msgstr "Importar sub-redes do RIPE / ARIN"
 
-#: site/admin/ripeImport.php:15
+#: site/admin/RIPE / ARINImport.php:15
 msgid ""
-"This script imports subnets from RIPE database for specific AS. Enter "
+"This script imports subnets from RIPE / ARIN database for specific AS. Enter "
 "desired AS to search for subnets"
 msgstr ""
-"Esse script importa sub-redes do banco de dados RIPE para uma AS "
+"Esse script importa sub-redes do banco de dados RIPE / ARIN para uma AS "
 "espec&iacute;fica. Entre com a AS desejada para pesquisar por sub-redes"
 
-#: site/admin/ripeImport.php:19
+#: site/admin/RIPE / ARINImport.php:19
 msgid "AS number"
 msgstr "N&uacute;mero da AS"
 
@@ -2046,7 +2046,7 @@ msgid "AD connection settings"
 msgstr "Configura&ccedil;&otilde;es de conex&atilde;o com AD"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "OpenLDAP connection settings"
+msgid "LDAP connection settings"
 msgstr "Configura&ccedil;&otilde;es de conex&atilde;o com OpenLDAP"
 
 #: site/admin/adminMenu.php:38
@@ -2074,8 +2074,8 @@ msgid "VRF management"
 msgstr "Gerenciamento de VRF"
 
 #: site/admin/adminMenu.php:68
-msgid "RIPE import"
-msgstr "Importar RIPE"
+msgid "RIPE / ARIN import"
+msgstr "Importar RIPE / ARIN"
 
 #: site/admin/adminMenu.php:77
 msgid "Filter IP fields"
@@ -2243,8 +2243,8 @@ msgid "subnet in CIDR"
 msgstr "CIDR na sub-rede"
 
 #: site/admin/manageSubnetEdit.php:86
-msgid "Get information from RIPE database"
-msgstr "Obter informa&ccedil;&otilde;es do banco de dados RIPE"
+msgid "Get information from RIPE / ARIN database"
+msgstr "Obter informa&ccedil;&otilde;es do banco de dados RIPE / ARIN"
 
 #: site/admin/manageSubnetEdit.php:87
 msgid "Enter subnet in CIDR format (e.g. 192.168.1.1/24)"
@@ -2374,7 +2374,7 @@ msgstr "IP"
 msgid "Status"
 msgstr "Estado"
 
-#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
+#: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
 msgid "Import to database"
 msgstr "Importar para o banco de dados"
 
@@ -2532,7 +2532,7 @@ msgid "Errors occured when importing to database!"
 msgstr ""
 "Erros ocorreram no momento da importa&ccedil;&atilde;o do banco de dados"
 
-#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
+#: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
 msgid "Import successfull"
 msgstr "Importa&ccedil;&atilde;o feita com sucesso"
 
@@ -2923,19 +2923,19 @@ msgstr "Falha ao atualizar as instru&ccedil;&otilde;es"
 msgid "Instructions updated successfully"
 msgstr "Instru&ccedil;&otilde;es atualizadas com sucesso"
 
-#: site/admin/ripeImportTelnet.php:48
+#: site/admin/RIPE / ARINImportTelnet.php:48
 msgid "No subnets found"
 msgstr "Nenhuma sub-rede encontrada"
 
-#: site/admin/ripeImportTelnet.php:56
+#: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
 msgstr "Eu encontrei as seguintes rotas pertencentes as AS's"
 
-#: site/admin/ripeImportTelnet.php:69
+#: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"
 msgstr "Remover essa sub-rede"
 
-#: site/admin/ripeImportTelnet.php:79
+#: site/admin/RIPE / ARINImportTelnet.php:79
 msgid "select section"
 msgstr "selecionar se&ccedil;&atilde;o"
 
@@ -3147,11 +3147,11 @@ msgstr "Erro ao apagar logs"
 msgid "Logs cleared successfully"
 msgstr "Logs apagados com sucesso"
 
-#: site/admin/ripeImportResult.php:66
+#: site/admin/RIPE / ARINImportResult.php:66
 msgid "Failed to import subnet"
 msgstr "Falha ao importar sub-rede"
 
-#: site/admin/ripeImportResult.php:76
+#: site/admin/RIPE / ARINImportResult.php:76
 msgid "Please fix the following errors before inserting"
 msgstr "Por favor, corrija os seguintes erros antes de inserir o desejado"
 
@@ -3191,7 +3191,7 @@ msgstr ""
 "grupo (permiss&otilde;es) para esse usu&aacute;rio."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "OpenLDAP servers"
+msgid "LDAP servers"
 msgstr "Servidor OpenLDAP"
 
 #: site/admin/manageAD_LDAP.php:54

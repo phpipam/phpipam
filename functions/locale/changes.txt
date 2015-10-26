@@ -2944,3 +2944,56 @@ msgstr ""
 
 msgid "Firewall zone and device mappings"
 msgstr ""
+
+
+### 1.19.020
+
+msgid "Base DN for your directory"
+msgstr ""
+
+msgid "Users DN"
+msgstr ""
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr ""
+
+msgid "LDAP Security Type"
+msgstr ""
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr ""
+
+msgid "LDAP port"
+msgstr ""
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr ""
+
+msgid "Bind user"
+msgstr ""
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr ""
+
+msgid "Bind password"
+msgstr ""
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr ""
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr ""
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr ""
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr ""
+
+### 1.19.021
+
+msgid "Please select fields to populate:"
+msgstr ""
+
+msgid "fill"
+msgstr ""

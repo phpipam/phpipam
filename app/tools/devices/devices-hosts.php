@@ -30,7 +30,7 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
 	# device details
 	print "<table class='ipaddress_subnet table-condensed table-full'>";
 	print '<tr>';
-	print "	<th>". _('Hostname').'</a></th>';
+	print "	<th>". _('Name').'</a></th>';
 	print "	<td>$device[hostname]</td>";
 	print "</tr>";
 	print '<tr>';

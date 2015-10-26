@@ -45,7 +45,7 @@ if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have perm
 
  # resolve dns name
 $DNS = new DNS ($Database);
-$resolve = $DNS->resolve_address((object) $address);
+$resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], false, $subnet['nameserverId']);
 
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
@@ -105,9 +105,11 @@ if(sizeof($address)>1) {
 	print "</tr>";
 
 	# hostname
+	$resolve1['name'] = strlen($resolve['name'])==0 ? "<span class='text-muted'>/</span>" : $resolve['name'];
+
 	print "<tr>";
 	print "	<th>"._('Hostname')."</th>";
-	print "	<td>$address[dns_name]</td>";
+	print "	<td>$resolve1[name]</td>";
 	print "</tr>";
 
 	# mac
@@ -240,13 +242,15 @@ if(sizeof($address)>1) {
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		foreach(json_decode($User->settings->tempAccess) as $s) {
-			if($s->type=="ipaddresses" && $s->id==$address['id']) {
-				if(time()<$s->validity) {
-					$active_shares[] = $s;
-				}
-				else {
-					$expired_shares[] = $s;
+		if (strlen($User->settings->tempAccess)>0) {
+			foreach(json_decode($User->settings->tempAccess) as $s) {
+				if($s->type=="ipaddresses" && $s->id==$address['id']) {
+					if(time()<$s->validity) {
+						$active_shares[] = $s;
+					}
+					else {
+						$expired_shares[] = $s;
+					}
 				}
 			}
 		}

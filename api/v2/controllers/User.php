@@ -31,7 +31,6 @@ class User_controller extends Common_api_functions {
 	 * @access public
 	 * @param mixed $Database
 	 * @param mixed $Response
-	 * @return void
 	 */
 	public function __construct ($Database, $Tools=null, $params=null, $Response) {
 		$this->Database = $Database;

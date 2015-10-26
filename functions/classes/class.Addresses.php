@@ -35,7 +35,6 @@ class Addresses extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -48,36 +47,6 @@ class Addresses extends Common_functions {
 		# Log object
 		$this->Log = new Logging ($this->Database);
 	}
-
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
-	}
-
 
 
 
@@ -939,6 +908,10 @@ class Addresses extends Common_functions {
 		if(!is_null($order)) 	{ $order = array($order, $order_direction); }
 		else 					{ $order = array("ip_addr", "asc"); }
 
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
+
 		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -1027,6 +1000,10 @@ class Addresses extends Common_functions {
 		# ip address order
 		if(!is_null($order)) 	{ $order_addr = array($order, $order_direction); }
 		else 					{ $order_addr = array("ip_addr", "asc"); }
+
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
 
 	    # set query to fetch all ip addresses for specified subnets or just count
 		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = "" '; }

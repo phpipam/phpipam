@@ -30,7 +30,6 @@ class Install extends Common_functions {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -42,12 +41,8 @@ class Install extends Common_functions {
 		# set debugging
 		$this->set_db_params ();
 		# Log object
-		try { $this->Database->connect();
-		} catch ( Exception $e ) {
-
-		}
-		if(!isset($e))
-		$this->Log = new Logging ($this->Database);
+		try { $this->Database->connect(); }
+		catch ( Exception $e ) {}
 	}
 
 
@@ -99,6 +94,7 @@ class Install extends Common_functions {
 
 	    # return true, if some errors occured script already died! */
 		sleep(1);
+		$this->Log = new Logging ($this->Database);
 		$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
 		return true;
 	}
@@ -156,22 +152,25 @@ class Install extends Common_functions {
 	    $query  = file_get_contents("../../db/SCHEMA.sql");
 
 	    # formulate queries
-	    $queries = explode(";\n", $query);
+	    $queries = array_filter(explode(";\n", $query));
 
 	    # execute
 	    foreach($queries as $q) {
-			try { $this->Database_root->runQuery($q.";"); }
-			catch (Exception $e) {
-				//unlock tables
-				$this->Database_root->runQuery("UNLOCK TABLES;");
-				//drop database
-				try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
+		    //length check
+		    if (strlen($q)>0) {
+				try { $this->Database_root->runQuery($q.";"); }
 				catch (Exception $e) {
-					$this->Result->show("danger", 'Cannot set permissions for user '. $db['user'] .': '.$e->getMessage(), true);
+					//unlock tables
+					$this->Database_root->runQuery("UNLOCK TABLES;");
+					//drop database
+					try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
+					catch (Exception $e) {
+						$this->Result->show("danger", 'Cannot set permissions for user '. $db['user'] .': '.$e->getMessage(), true);
+					}
+					//print error
+					$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
+					$this->Result->show("info", "Database dropped", false);
 				}
-				//print error
-				$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
-				$this->Result->show("info", "Database dropped", false);
 			}
 	    }
 	}
@@ -369,6 +368,7 @@ class Install extends Common_functions {
 	    foreach($queries as $query) {
 			try { $this->Database->runQuery($query); }
 			catch (Exception $e) {
+				$this->Log = new Logging ($this->Database);
 				# write log
 				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
 				# fail
@@ -379,6 +379,7 @@ class Install extends Common_functions {
 
 		# all good, print it
 		sleep(1);
+		$this->Log = new Logging ($this->Database);
 		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
 		return true;
 	}

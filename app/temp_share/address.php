@@ -28,7 +28,7 @@ if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist')
 
  # resolve dns name
 $DNS = new DNS ($Database);
-$resolve = $DNS->resolve_address((object) $address);
+$resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], false, $subnet['nameserverId']);
 
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
@@ -92,7 +92,7 @@ if(sizeof($address)>1) {
 	# hostname
 	print "<tr>";
 	print "	<th>"._('Hostname')."</th>";
-	print "	<td>$address[dns_name]</td>";
+	print "	<td>$resolve[name]</td>";
 	print "</tr>";
 
 	# mac

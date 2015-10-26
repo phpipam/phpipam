@@ -15,7 +15,7 @@ class Folders_controller extends Common_api_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
-	 * @return void
+	 * @param mixed $Response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;

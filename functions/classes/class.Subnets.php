@@ -17,6 +17,8 @@ class Subnets extends Common_functions {
 	 * protected variables
 	 */
 	protected $user = null;					// (object) for User profile
+	protected $ripe = array();				// array of /8 ripe subnets
+	protected $arin = array();				// array of /8 arin subnets
 
 	/**
 	 * object holders
@@ -35,7 +37,6 @@ class Subnets extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -55,35 +56,6 @@ class Subnets extends Common_functions {
 	private function get_subnet_order () {
 	    $this->get_settings ();
 	    return explode(",", $this->settings->subnetOrdering);
-	}
-
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
 	}
 
 
@@ -2653,10 +2625,28 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public  function subnet_dropdown_master_only($subnetMasterId ) {
-		$subnet = (array) $this->fetch_subnet (null, $subnetMasterId);
+		$subnet = $this->fetch_subnet (null, $subnetMasterId);
+
 		$html = array();
-		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>\n";
-		$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask']."</option> </select>\n";
+
+		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
+
+		// false subnet
+		if($subnet===false) {
+			$html[] = "</select>";
+		}
+		else {
+			// foder
+			if ($subnet->isFolder==1) {
+				$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$subnet->description."</option> </select>";
+			}
+			else {
+				$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</option> </select>";
+			}
+		}
+		$html[] = "</select>";
+
+		// result
 		print implode( "\n", $html );
 	}
 
@@ -2791,4 +2781,225 @@ class Subnets extends Common_functions {
 		// return result
 		return $decimalIpv6;
 	}
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * @ripe @arin methods
+	 *
+	 * https://apps.db.ripe.net/search/query.html
+	 *
+	 * -------------------------------
+	 */
+
+	/**
+	 * Fetch subnet information form  RIPE / ARIN
+	 *
+	 * @access public
+	 * @param mixed $subnet
+	 * @return void
+	 */
+	public function resolve_ripe_arin ($subnet) {
+		// set subnet allocations
+		$this->define_ripe_arin_subnets ();
+		// take only first bit of ip address to match /8 delegations
+		$subnet_check = reset(explode(".", $subnet));
+		// ripe or arin?
+		if (in_array($subnet_check, $this->ripe))		{ return $this->query_ripe ($subnet); }
+		elseif (in_array($subnet_check, $this->arin))	{ return $this->query_arin ($subnet); }
+		else											{ return array("result"=>"error", "error"=>"$subnet Not RIPE or ARIN subnet"); }
+	}
+
+
+	/**
+	 * Queries ripe for subnet information
+	 *
+	 *	Example:
+	 *		curl -X GET -H "Accept: application/json" "http://rest.db.ripe.net/ripe/inetnum/185.72.140.0/24"
+	 *
+	 * @access private
+	 * @param mixed $subnet
+	 * @return void
+	 */
+	private function query_ripe ($subnet) {
+		// fetch
+		$ripe_result = $this->identify_address ($subnet)=="IPv4" ? $this->curl_fetch ("ripe", "inetnum", $subnet) : $this->curl_fetch ("ripe", "inet6num", $subnet);
+		// not existings
+		if ($ripe_result['result_code']==404) {
+			// return array
+			return array("result"=>"error", "error"=>$ripe_result['result']->errormessages->errormessage[0]->text);
+		}
+		// fail
+		if ($ripe_result['result_code']!==200) {
+			// return array
+			return array("result"=>"error", "error"=>"Error connecting to ripe rest api");
+		}
+		else {
+			// loop
+			if (isset($ripe_result['result']->objects->object[0]->attributes->attribute)) {
+				foreach($ripe_result['result']->objects->object[0]->attributes->attribute as $k=>$v) {
+					$out[$v->name] = $v->value;
+				}
+			}
+			// return array
+			return array("result"=>"success", "data"=>array_filter($out));
+		}
+	}
+
+	/**
+	 * Query arin for subnet information
+	 *
+	 * @access private
+	 * @param mixed $subnet
+	 * @return void
+	 */
+	private function query_arin ($subnet) {
+		// remove netmask
+		$subnet = reset(explode("/", $subnet));
+		// fetch
+		$arin_result = $this->curl_fetch ("arin", null, $subnet);
+
+		// not existings
+		if ($arin_result['result_code']==404) {
+			// return array
+			return array("result"=>"error", "error"=>"Subnet not found");
+		}
+		// fail
+		if ($arin_result['result_code']!==200) {
+			// return array
+			return array("result"=>"error", "error"=>"Error connecting to arin rest api");
+		}
+		else {
+			// loop
+			if (isset($arin_result['result']->nets->net )) {
+				foreach($arin_result['result']->nets->net  as $k=>$v) {
+					// netblocks ?
+					if($k=="netBlocks") {
+						foreach ($v->netBlock as $k1=>$v1) {
+							$out[$k1] = $v1->{'$'};
+						}
+					}
+					else {
+						$out[$k] = $v->{'$'};
+					}
+				}
+			}
+			// do some formats
+			if (array_key_exists("cidrLength", $out) && array_key_exists("startAddress", $out)) {
+				$out = array_merge(array("CIDR"=>$out['startAddress']."/".$out['cidrLength']), $out);
+				$out = array_merge(array('NetRange'=>$out['startAddress']." - ".$out['endAddress']), $out);
+				unset($out['startAddress'], $out['endAddress'], $out['cidrLength']);
+			}
+			unset($out['orgRef'], $out['parentNetRef'], $out['version'], $out['registrationDate']);
+
+			// return array
+			return array("result"=>"success", "data"=>array_filter($out));
+		}
+	}
+
+	/**
+	 * Fetch details from ripe
+	 *
+	 * @access private
+	 * @param string $network (default: "ripe")
+	 * @param string $type (default: "inetnum")
+	 * @param mixed $subnet
+	 * @return void
+	 */
+	private function curl_fetch ($network = "ripe", $type = "inetnum", $subnet) {
+		// set url
+		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
+		// fetch with curl
+	    $curl = curl_init();
+	    curl_setopt($curl, CURLOPT_URL, $url);
+	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Accept: application/json"));
+	    // fetch result
+		$result = json_decode(curl_exec ($curl));
+	    // http response code
+	    $result_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+	    // close
+	    curl_close ($curl);
+
+	    // result
+	    return array("result"=>$result, "result_code"=>$result_code);
+	}
+
+	/**
+	 * Fetch subnets from RIPE for specified AS
+	 *
+	 * @access public
+	 * @param mixed $as
+	 * @return void
+	 */
+	public function ripe_fetch_subnets ($as) {
+		//open connection
+		$ripe_connection = fsockopen("whois.ripe.net", 43, $errno, $errstr, 5);
+		if(!$ripe_connection) {
+			$this->Result->show("danger", "$errstr ($errno)", false);
+			return false;
+		}
+		else {
+			//fetch result
+			fputs ($ripe_connection, '-i origin as'. $as ."\r\n");
+			//save result to var out
+			$out = "";
+		    while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
+
+		    //parse it
+		    $out = explode("\n", $out);
+
+		    //we only need route
+		    foreach($out as $line) {
+				if (strlen(strstr($line,"route"))>0) {
+					//replace route6 with route
+					$line = str_replace("route6:", "route:", $line);
+					//only take IP address
+					$line = explode("route:", $line);
+					$line = trim($line[1]);
+					//set result
+					$subnet[] = $line;
+				}
+		    }
+		    //return
+		    return isset($subnet) ? $subnet : array();
+		}
+	}
+
+
+	/**
+	 * Defines master (/8) subnets for arin and ripe allocations
+	 *
+	 * @access private
+	 */
+	private function define_ripe_arin_subnets () {
+		// ripe
+		if (sizeof($this->ripe)==0) {
+			$this->ripe = array (
+						"2", "5", "31", "37", "46", "51", "62", "77", "78", "79", "8", "81", "82", "83", "84", "85", "86", "87",
+						"88", "89", "9", "91", "92", "93", "94", "95", "19", "141", "145", "151", "176", "178", "185", "188", "193",
+						"194", "195", "212", "213", "217"
+						);
+		}
+		// arin
+		if (sizeof($this->arin)==0) {
+			$this->arin = array (
+						"7", "13", "23", "24", "32", "35", "4", "45", "47", "5", "52", "54", "63", "64", "65", "66", "67", "68",
+						"69", "7", "71", "72", "73", "74", "75", "76", "96", "97", "98", "99", "1", "14", "17", "18", "128", "129",
+						"13", "131", "132", "134", "135", "136", "137", "138", "139", "14", "142", "143", "144", "146", "147", "148", "149",
+						"152", "155", "156", "157", "158", "159", "16", "161", "162", "164", "165", "166", "167", "168", "169", "17", "172",
+						"173", "174", "184", "192", "198", "199", "24", "25", "26", "27", "28", "29", "216"
+						);
+		}
+	}
+
+
 }

@@ -327,6 +327,9 @@ else {
 
 					# search for DNS records
 					if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+					# for ajax-loaded subnets
+					if(!isset($PowerDNS)) { $PowerDNS = new PowerDNS ($Database); }
+
 					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
 					unset($dns_records);
@@ -364,9 +367,8 @@ else {
 					}
 
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>";
-
-
+				    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+																			{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";

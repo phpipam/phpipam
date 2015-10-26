@@ -21,8 +21,7 @@ function open_popup (popup_class, target_script, post_data) {
 	showSpinner();
 	// post
     $.post(target_script, post_data, function(data) {
-        $('div.popup_w'+popup_class).html(data);
-        showPopup('popup_w'+popup_class);
+        showPopup('popup_w'+popup_class, data, false);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText+"<br>Status: "+textStatus+"<br>Error: "+errorThrown); });
     // prevent reload
@@ -88,33 +87,47 @@ $('.disabled a').click(function() {
 function hideTooltips() { $('.tooltip').hide(); }
 
 /* popups */
-function showPopup(pClass) {
-    $('#popupOverlay').fadeIn('fast');
-    $('.'+pClass).fadeIn('fast');
-    $('body').addClass('stop-scrolling');        //disable page scrolling on bottom
+function showPopup(pClass, data, secondary) {
+	showSpinner();
+	// secondary - load secondary popupoverlay
+	if (secondary === true) { var oclass = "#popupOverlay2";}
+	else 					{ var oclass = "#popupOverlay"; }
+	// show overlay
+    $(oclass).fadeIn('fast');
+    // load data and show it
+    if (data!==false && typeof(data)!=="undefined") {
+    $(oclass+' .'+pClass).html(data);
+    }
+    $(oclass+' .'+pClass).fadeIn('fast');
+    //disable page scrolling on bottom
+    $('body').addClass('stop-scrolling');
 }
-function hidePopup(pClass) {
-    $('.'+pClass).fadeOut('fast');
+function hidePopup(pClass, secondary) {
+	// secondary - load secondary popupoverlay
+	if (secondary === true) { var oclass = "#popupOverlay2";}
+	else 					{ var oclass = "#popupOverlay"; }
+	// hide
+    $(oclass+' .'+pClass).fadeOut('fast');
 }
 function hidePopups() {
     $('#popupOverlay').fadeOut('fast');
+    $('#popupOverlay2').fadeOut('fast');
+
     $('.popup').fadeOut('fast');
     $('body').removeClass('stop-scrolling');        //enable scrolling back
-    $('.popup_w700').css("z-index", "100");        //set popup back
     hideSpinner();
 }
 function hidePopup2() {
-    $('.popup_w400').fadeOut('fast');
-    $('.popup_w500').fadeOut('fast');
-    $('.popup_w700').css("z-index", "100");        //set popup back
+    $('#popupOverlay2').fadeOut('fast');
+    $('#popupOverlay2 .popup').fadeOut('fast');
     hideSpinner();
 }
 function hidePopupMasks() {
     $('.popup_wmasks').fadeOut('fast');
     hideSpinner();
 }
-$(document).on("click", "#popupOverlay, .hidePopups", function() { hidePopups(); });
-$(document).on("click", "button.hidePopup2", function() { hidePopup2(); });
+$(document).on("click", ".hidePopups", function() {hidePopups(); });
+$(document).on("click", ".hidePopup2", function() { hidePopup2(); });
 $(document).on("click", ".hidePopupMasks", function() { hidePopupMasks(); });
 $(document).on("click", ".hidePopupsReload", function() { window.location.reload(); });
 
@@ -199,7 +212,7 @@ $(document).on('click','.add-new-widget',function() {
     showSpinner();
 
     $.post('app/dashboard/widget-popup.php', function(data) {
-	    $('div.popup_w700').html(data);
+	    $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -368,8 +381,8 @@ $(document).on("click", ".modIPaddr", function() {
     //format posted values
     var postdata = "action="+action+"&id="+id+"&subnetId="+subnetId+"&stopIP="+stopIP;
     $.post('app/subnets/addresses/address-modify.php', postdata, function(data) {
-        $('div.popup_w400').html(data);
-        showPopup('popup_w400');
+        $('#popupOverlay div.popup_w500').html(data);
+        showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
@@ -383,7 +396,7 @@ $(document).on("click", "a.moveIPaddr", function() {
     //format posted values
     var postdata = "action="+action+"&id="+id+"&subnetId="+subnetId;
     $.post('app/subnets/addresses/move-address.php', postdata, function(data) {
-        $('div.popup_w400').html(data);
+        $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -393,7 +406,8 @@ $(document).on("click", "a.moveIPaddr", function() {
 $(document).on("click", "#refreshHostname", function() {
     showSpinner();
     var ipaddress = $('input.ip_addr').val();
-    $.post('app/subnets/addresses/address-resolve.php', {ipaddress:ipaddress}, function(data) {
+    var subnetId  = $(this).attr('data-subnetId');;
+    $.post('app/subnets/addresses/address-resolve.php', {ipaddress:ipaddress, subnetId: subnetId}, function(data) {
         if(data.length !== 0) {
             $('input[name=dns_name]').val(data);
         }
@@ -426,7 +440,7 @@ $(document).on("click", ".ping_ipaddress", function() {
 	var subnetId = $(this).attr('data-subnetId');
 	//check
 	$.post('app/subnets/addresses/ping-address.php', {id:id, subnetId:subnetId}, function(data) {
-        $('div.popup_w400').html(data);
+        $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -441,7 +455,7 @@ $(document).on("click", "a.mail_ipaddress", function() {
     //get IP address id
     var IPid = $(this).attr('data-id');
     $.post('app/subnets/addresses/mail-notify.php', { id:IPid }, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -488,7 +502,7 @@ $('a.scan_subnet').click(function() {
 	showSpinner();
 	var subnetId = $(this).attr('data-subnetId');
 	$.post('app/subnets/scan/subnet-scan.php', {subnetId:subnetId}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -668,7 +682,7 @@ $('a.csvExport').click(function() {
     var subnetId = $(this).attr('data-subnetId');
     //show select fields
     $.post('app/subnets/addresses/export-field-select.php', {subnetId:subnetId}, function(data) {
-	    $('div.popup_w400').html(data);
+	    $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -718,7 +732,7 @@ $(document).on('click', 'a.editFavourite', function() {
 		}
 		//fail
 		else {
-	        $('div.popup_w500').html(data);
+	        $('#popupOverlay div.popup_w500').html(data);
 	        showPopup('popup_w500');
 	        hideSpinner();
 		}
@@ -734,7 +748,7 @@ $('a.request_ipaddress').click(function () {
     showSpinner();
     var subnetId  = $(this).attr('data-subnetId');
     $.post('app/tools/request-ip/index.php', {subnetId:subnetId}, function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1028,7 +1042,7 @@ $('.editUser').click(function () {
     var action = $(this).attr('data-action');
 
     $.post('app/admin/users/edit.php',{id:id, action:action}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1072,10 +1086,8 @@ $(document).on("click", "a#randomPass", function() {
 });
 //search domain popup
 $(document).on("click", ".adsearchuser", function() {
-	$('div.popup_w500').load('app/admin/users/ad-search-form.php');
-
-    showPopup('popup_w500');
-    $('.popup_w700').css("z-index", "99");        //set behind popup
+	$('#popupOverlay2 .popup_w500').load('app/admin/users/ad-search-form.php');
+    showPopup('popup_w500', false, true);
     hideSpinner();
 });
 //search domain user result
@@ -1130,7 +1142,7 @@ $(document).on("click", ".userselect", function() {
 ***************************/
 //search AD group popup
 $(document).on("click", ".adLookup", function() {
-	$('div.popup_w700').load('app/admin/groups/ad-search-group-form.php');
+	$('#popupOverlay div.popup_w700').load('app/admin/groups/ad-search-group-form.php');
 
     showPopup('popup_w700');
     hideSpinner();
@@ -1166,7 +1178,7 @@ $('.editGroup').click(function () {
     var action = $(this).attr('data-action');
 
     $.post('app/admin/groups/edit-group.php',{id:id, action:action}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1190,7 +1202,7 @@ $('.addToGroup').click(function() {
 	var g_id = $(this).attr('data-groupid');
 
     $.post('app/admin/groups/add-users.php',{g_id:g_id}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1214,7 +1226,7 @@ $('.removeFromGroup').click(function() {
 	var g_id = $(this).attr('data-groupid');
 
     $.post('app/admin/groups/remove-users.php',{g_id:g_id}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1244,7 +1256,7 @@ $('.editAuthMethod').click(function () {
     var type   = $(this).attr('data-type');
 
     $.post('app/admin/authentication-methods/edit.php',{id:id, action:action, type:type}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1267,7 +1279,7 @@ $('.checkAuthMethod').click(function () {
     showSpinner();
     var id     = $(this).attr('data-id');
     $.post('app/admin/authentication-methods/check-connection.php',{id:id}, function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1316,7 +1328,7 @@ $('form#logs').change(function () {
 $(document).on("click", "a.openLogDetail", function() {
     var id = $(this).attr('data-logid');
     $.post('app/tools/logs/detail-popup.php', {id:id}, function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1388,7 +1400,7 @@ $('button.editSection').click(function() {
     var action         = $(this).attr('data-action');
     //load edit data
     $.post("app/admin/sections/edit.php", {sectionId:sectionId, action:action}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1413,7 +1425,7 @@ $('button.sectionOrder').click(function() {
     showSpinner();
     //load edit data
     $.post("app/admin/sections/edit-order.php", function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1622,7 +1634,7 @@ $('button.editSubnet').click(function() {
 
     //load edit data
     $.post("app/admin/subnets/edit.php", postdata, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1634,9 +1646,7 @@ $(document).on("click", "#resize, #split, #truncate", function() {
 	var subnetId = $(this).attr('data-subnetId');
 	//dimm and show popup2
     $.post("app/admin/subnets/"+action+".php", {action:action, subnetId:subnetId}, function(data) {
-        $('div.popup_w500').html(data);
-        showPopup('popup_w500');
-        $('.popup_w700').css("z-index", "99");        //set behind popup
+        showPopup('popup_w500', data, true);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
@@ -1756,39 +1766,29 @@ $(document).on("click", "#get-ripe", function() {
 	showSpinner();
 	var subnet = $('form#editSubnetDetails input[name=subnet]').val();
 
-	$.getJSON("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
-		//fill fields
-		dcnt = 0;
-		$.each(data, function(key, val) {
-			//error?
-			if(key=="Error") {
-		        $('div.popup_w500').html("<div class='pHeader'>Error</div><div class='pContent'><div class='alert alert-warning'>"+val+"</div></div><div class='pFooter'><button class='btn btn-sm btn-default hidePopup2'>Close</button></div>");
-		        showPopup('popup_w500');
-		        $('popup_w700').css("z-index","99");
-				hideSpinner();
-
-			} else {
-				//check taht it exists
-				if($('form#editSubnetDetails #field-'+key).length) {
-					$('form#editSubnetDetails #field-'+key).val(val);
-					dcnt++;
-				}
-			}
-		});
-		//if no hit print it!
-		if(dcnt===0) {
-			var ripenote = "<div class='pHeader'>Cannot find matched fileds!</div><div class='pContent'>";
-			$.each(data, function(key, val) {
-				ripenote += key+": "+val+"<br>";
-			})
-			ripenote += "</div><div class='pFooter'><button class='btn btn-sm btn-default hidePopup2'>Close</button></div>";
-
-	        $('div.popup_w500').html(ripenote);
-	        showPopup('popup_w500');
-		}
+	$.post("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
+        showPopup('popup_w500', data, true);
 		hideSpinner();
 	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
+});
+// fill ripe fields
+$(document).on('click', "#ripeMatchSubmit", function() {
+	var cfields_temp = $('form#ripe-fields').serialize();
+	// to array
+	var cfields = cfields_temp.split("&");
+	// loop
+	for (index = 0; index < cfields.length; ++index) {
+		// check for =0match and ignore
+		if (cfields[index].indexOf("=0") > -1) {}
+		else {
+			console.log(cfields[index]);
+			var cdata = cfields[index].split("=");
+			$('form#editSubnetDetails input[name='+cdata[1]+']').val(cdata[0].replace(/___/g, " "));
+		}
+	}
+	// hide
+	hidePopup2();
 });
 //change subnet permissions
 $('.showSubnetPerm').click(function() {
@@ -1797,7 +1797,7 @@ $('.showSubnetPerm').click(function() {
 	var sectionId = $(this).attr('data-sectionId');
 
 	$.post("app/admin/subnets/permissions-show.php", {subnetId:subnetId, sectionId:sectionId}, function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1846,7 +1846,7 @@ $(document).on("change", "select#selectSectionfromIPCalc", function() {
     $('table.newSections ul#sections li#' + sectionId ).addClass('active');
     //load add Subnet form / popup
     $.post('app/admin/subnets/edit.php', postdata , function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1862,7 +1862,7 @@ $(document).on("click", ".createfromfree", function() {
     var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&freespaceMSID=" + freespaceMSISD + "&action=add&location=ipcalc";
     //load add Subnet form / popup
     $.post('app/admin/subnets/edit.php', postdata , function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1880,7 +1880,7 @@ $(document).on("click", '.edit_subnet, button.edit_subnet, button#add_subnet', f
     var postdata     = "sectionId="+sectionId+"&subnetId="+subnetId+"&action="+action+"&location=IPaddresses";
     //load add Subnet form / popup
     $.post('app/admin/subnets/edit.php', postdata , function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1895,9 +1895,7 @@ $(document).on("change", "select[name=vlanId]", function() {
     if($(this).val() == 'Add') {
         showSpinner();
         $.post('app/admin/vlans/edit.php', {action:"add", fromSubnet:"true", domain:domain}, function(data) {
-            $('div.popup_w400').html(data);
-            showPopup('popup_w400');
-            $('.popup_w700').css("z-index", "99");        //set behind popup
+            showPopup('popup_w400', data, true);
             hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     }
@@ -1917,12 +1915,10 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
             var sectionId = $('#editSubnetDetails input[name=sectionId]').val();
             $.post('app/admin/subnets/edit-vlan-dropdown.php', {vlanId:vlanId, sectionId:sectionId} , function(data) {
                 $('.editSubnetDetails td#vlanDropdown').html(data);
-                //bring to front
-                $('.popup_w700').delay(1000).css("z-index", "101");        //bring to front
                 hideSpinner();
 			}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
             //hide popup after 1 second
-            setTimeout(function (){hidePopup('popup_w400'); parameter = null;}, 1000);
+            setTimeout(function (){ hidePopup('popup_w400', true); parameter = null;}, 1000);
         }
         else                      { hideSpinner(); }
     });
@@ -1946,7 +1942,7 @@ $('#add_folder, .add_folder').click(function() {
     var postdata     = "sectionId="+sectionId+"&subnetId="+subnetId+"&action="+action+"&location=IPaddresses";
 
     $.post('app/admin/subnets/edit-folder.php', postdata, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
 	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2123,7 +2119,7 @@ $(document).on("click", "#shareTempSubmit", function() {
 //remove temp
 $('.removeSharedTemp').click(function() {
 	showPopup("popup_w400");
-    submit_popup_data (".popup_w400", "app/tools/temp-shares/delete-result.php", {code:$(this).attr('data-code')});
+    submit_popup_data ("#popupOverlay .popup_w400", "app/tools/temp-shares/delete-result.php", {code:$(this).attr('data-code')});
     hideSpinner();
 });
 
@@ -2188,7 +2184,7 @@ $(document).on("click", ".edit-custom-field", function() {
     var fieldName = $(this).attr('data-fieldname');
     var table	  = $(this).attr('data-table');
     $.post('app/admin/custom-fields/edit.php',  {action:action, fieldName:fieldName, table:table}, function(data) {
-        $('div.popup_w400').html(data);
+        $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2223,7 +2219,7 @@ $('.edit-custom-filter').click(function() {
 	showSpinner();
 	var table = $(this).attr('data-table');
     $.post('app/admin/custom-fields/filter.php',  {table:table}, function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2254,7 +2250,7 @@ $('button.lang').click(function() {
     var langid    = $(this).attr('data-langid');
     var action   = $(this).attr('data-action');
     $.post('app/admin/languages/edit.php', {langid:langid, action:action}, function(data) {
-        $('div.popup_w400').html(data);
+        $('#popupOverlay div.popup_w400').html(data);
         showPopup('popup_w400');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2281,7 +2277,7 @@ $('button.wedit').click(function() {
     var wid    = $(this).attr('data-wid');
     var action = $(this).attr('data-action');
     $.post('app/admin/widgets/edit.php', {wid:wid, action:action}, function(data) {
-        $('div.popup_w500').html(data);
+        $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2309,7 +2305,7 @@ $('button.editAPI').click(function() {
     var appid    = $(this).attr('data-appid');
     var action   = $(this).attr('data-action');
     $.post('app/admin/api/edit.php', {appid:appid, action:action}, function(data) {
-        $('div.popup_w700').html(data);
+        $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -2412,14 +2408,14 @@ $('button.dataExport').click(function () {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
-			$('div.popup_w400').html(data);
+			$('#popupOverlay div.popup_w400').html(data);
 			showPopup('popup_w400');
 		}
 		hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	} else {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
-		$('div.popup_w400').html(data);
+		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
@@ -2525,14 +2521,14 @@ $('button.dataImport').click(function () {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
-			$('div.popup_w700').html(data);
+			$('#popupOverlay div.popup_w700').html(data);
 			showPopup('popup_w700');
 		}
 		hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	} else {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
-		$('div.popup_w400').html(data);
+		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
@@ -2553,14 +2549,14 @@ $(document).on("click", "button#dataImportPreview", function() {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
-			$('div.popup_w700').html(data);
+			$('#popupOverlay div.popup_w700').html(data);
 			showPopup('popup_w700');
 		}
 		hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	} else {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
-		$('div.popup_w400').html(data);
+		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
@@ -2580,14 +2576,14 @@ $(document).on("click", "button#dataImportSubmit", function() {
 			$('div.popup_'+popsize[dataType]).html(data);
 			showPopup('popup_'+popsize[dataType]);
 		} else {
-			$('div.popup_w700').html(data);
+			$('#popupOverlay div.popup_w700').html(data);
 			showPopup('popup_w700');
 		}
 		hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	} else {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
-		$('div.popup_w400').html(data);
+		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
@@ -2597,7 +2593,7 @@ $(document).on("click", "button#dataImportSubmit", function() {
 $('button.dataRecompute').click(function () {
 	showSpinner();
 	$.post('app/admin/import-export/import-recompute-select.php', function(data) {
-	$('div.popup_w700').html(data);
+	$('#popupOverlay div.popup_w700').html(data);
 	showPopup('popup_w700');
 	hideSpinner();
 	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });

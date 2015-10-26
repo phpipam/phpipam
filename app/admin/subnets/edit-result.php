@@ -263,6 +263,8 @@ else {
 	if($_POST['action']=="add") {
 		$values['permissions']=$_POST['permissions'];
 		$values['sectionId']=$_POST['sectionId'];
+		// add vrf
+		$values['vrfId']=$_POST['vrfId'];
 	}
 	else {
 		# if section change
