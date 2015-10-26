@@ -1,6 +1,9 @@
 <?php
-// firewall zone mapping.php
-// list all firewall zone mappings
+
+/**
+ *	firewall zone mapping.php
+ *	list all firewall zone mappings
+ ***************************************/
 
 # initialize classes
 $Database 	= new Database_PDO;
@@ -14,11 +17,11 @@ $User->check_user_session();
 # fetch all zone mappings
 $firewallZoneMapping = $Zones->get_zone_mappings();
 
-// reorder by device
+# reorder by device
 if ($firewallZoneMapping!==false) {
-	// devices
+	# devices
 	$devices = array();
-	// add
+	# add
 	foreach ($firewallZoneMapping as $m) {
 		$devices[$m->deviceId][] = $m;
 	}
@@ -44,17 +47,17 @@ if($firewallZoneMapping) {
 			<th></th>
 		</tr>
 	<?php
-	// loop
+	# loop
 	foreach ($devices as $k=>$firewallZoneMapping) {
-		// header
+		# header
 		print "<tr>";
 		print "	<th colspan='10'><h4> ".$devices[$k][0]->deviceName."</h4></th>";
 		print "</tr>";
 
-		// mappings
+		# mappings
 		foreach ($firewallZoneMapping as $mapping) {
 			print '<tr>';
-			// columns
+			# columns
 			if ($mapping->indicator == 0 ) {
 				print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
 			} else {
@@ -64,9 +67,9 @@ if($firewallZoneMapping) {
 			print '<td>'.$mapping->alias.'</td>';
 			print '<td>'.$mapping->description.'</td>';
 			print '<td>'.$mapping->interface.'</td>';
-			//print '<td>'.$Subnets->transform_to_dotted($mapping->subnet).'/'.$mapping->subnetMask.'</td>';
+			# print '<td>'.$Subnets->transform_to_dotted($mapping->subnet).'/'.$mapping->subnetMask.'</td>';
 			print '<td>';
-			// check if there is a subnetId and if it is convertable to dotted decimal
+			# check if there is a subnetId and if it is convertable to dotted decimal
 			if ($mapping->subnetId && $mapping->subnetDescription) {
 				if (!$mapping->subnetIsFolder) {
 					print '<a href="'.create_link("subnets",$mapping->sectionId,$mapping->subnetId).'">'.$Subnets->transform_to_dotted($mapping->subnet).'/'.$mapping->subnetMask.'</a>';
@@ -97,7 +100,7 @@ if($firewallZoneMapping) {
 <?php
 }
 else {
-	// print an info if there are no zones in the database
+	# print an info if there are no zones in the database
 	$Result->show("info", _("No firewall zones configured"), false);
 }
 ?>

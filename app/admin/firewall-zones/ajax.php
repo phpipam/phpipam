@@ -1,8 +1,10 @@
 <?php
-// firewall zone ajax.php
-// deliver content for ajax requests
+/**
+ *	firewall zone ajax.php
+ *	deliver content for ajax requests
+ **************************************/
 
-// functions
+# functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
@@ -47,7 +49,7 @@ if($_POST['vlanDomain']){
 
 if ($_POST['zoneId']) {
 	if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
-		// return the zone details
+		# return the zone details
 		$Zones->get_zone_detail($_POST['zoneId']);
 
 	} else {

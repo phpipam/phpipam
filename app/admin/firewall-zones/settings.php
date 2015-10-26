@@ -9,51 +9,55 @@ $(document).ready(function() {
 	$(".input-switch").bootstrapSwitch(switch_options);
 });
 </script>
-<?php
-// firewall zone settings.php
-// modify firewall zone module settings like zone indicator, max. chars, ...
 
-// validate session parameters
+<?php
+
+/**
+ *	firewall zone settings.php
+ *	modify firewall zone module settings like zone indicator, max. chars, ...
+ *******************************************************************************/
+
+# validate session parameters
 $User->check_user_session();
 
-// default settings for firewall zones and firewall address objects: (JSON)
-// {
-//	/* zoneLength defines the maximum padding length of the unique generated or free text zone name */
-//	"zoneLength":"3",
-//	/* ipType is used to indicate IPv4 and IPv6 address objects (the address object name will be generated as an additional information for ip addresses) */
-//	"ipType":{
-//		"0":"4",
-//		"1":"6"
-//		},
-// 	/* standard separator used to keep address objects tid
-//	"separator":"_",
-//	/* indicator: Zone type is own zone or customer zone. */
-//	"indicator":{
-//		"0":"0",
-//		"1":"1"
-//		},
-//	/* to automaticaly generate firewall zone names you may choose between "decimal" and "hex" (see "zoneGeneratorType" below). to define free text zone names choose "text" */
-//	"zoneGenerator":"0",
-//	"zoneGeneratorType":{
-//		"0":"decimal",
-//		"1":"hex",
-//		"2":"text"
-//		},
-//	/* strictMode is only used to be sure not to have duplicate zone names of the type "text" */
-//	"strictMode":"on",
-// 	/* device type ID for firewall devices, default: 3 */
-//	"deviceType":"3",
-//	/* Adds some padding to the zone name (decimal or hex) to generate zone names of equal length */
-//	"padding":"on"
-// }
+# default settings for firewall zones and firewall address objects: (JSON)
+# {
+#	/* zoneLength defines the maximum padding length of the unique generated or free text zone name */
+#	"zoneLength":"3",
+#	/* ipType is used to indicate IPv4 and IPv6 address objects (the address object name will be generated as an additional information for ip addresses) */
+#	"ipType":{
+#		"0":"4",
+#		"1":"6"
+#		},
+# 	/* standard separator used to keep address objects tid
+#	"separator":"_",
+#	/* indicator: Zone type is own zone or customer zone. */
+#	"indicator":{
+#		"0":"0",
+#		"1":"1"
+#		},
+#	/* to automaticaly generate firewall zone names you may choose between "decimal" and "hex" (see "zoneGeneratorType" below). to define free text zone names choose "text" */
+#	"zoneGenerator":"0",
+#	"zoneGeneratorType":{
+#		"0":"decimal",
+#		"1":"hex",
+#		"2":"text"
+#		},
+#	/* strictMode is only used to be sure not to have duplicate zone names of the type "text" */
+#	"strictMode":"on",
+# 	/* device type ID for firewall devices, default: 3 */
+#	"deviceType":"3",
+#	/* Adds some padding to the zone name (decimal or hex) to generate zone names of equal length */
+#	"padding":"on"
+# }
 
-// initialize classes
+# initialize classes
 $Database = new Database_PDO;
 $Tools = new Tools($Database);
 
-// fetch module settings
+# fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
-// fetch device types
+# fetch device types
 $deviceTypes = $Tools->fetch_device_types();
 
 ?>
