@@ -10,14 +10,14 @@ class Common_api_functions {
 	/**
 	 * vars
 	 */
-	public $controller_keys;
-	public $valid_keys;
-	public $custom_keys;
-	public $remove_keys;
+	protected $controller_keys;
+	protected $valid_keys;
+	protected $custom_keys;
+	protected $remove_keys;
 
-	private $Tools;
-	private $Response;
-	private $Subnets;
+	protected $Tools;
+	protected $Response;
+	protected $Subnets;
 
 	/**
 	 * Initializes new Object.
@@ -50,7 +50,7 @@ class Common_api_functions {
 		# array of controller keys
 		$this->controller_keys = array("app_id", "controller");
 
-		# array of all valid keys - fetch from SHCEMA
+		# array of all valid keys - fetch from SCHEMA
 		$this->valid_keys = $this->Tools->fetch_standard_fields ($controller);
 
 		# add custom fields
@@ -439,7 +439,7 @@ class Common_api_functions {
 	 */
 	protected function validate_options_request () {
 		foreach($this->_params as $key=>$val) {
-			if(!in_array($key, array("app_id", "controller"))) {
+			if(!in_array($key, array("app_id", "controller", "id"))) {
 													{ $this->Response->throw_exception(400, 'Invalid request key parameter '.$key); }
 			}
 		}

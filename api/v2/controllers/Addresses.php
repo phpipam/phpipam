@@ -10,10 +10,6 @@ class Addresses_controller extends Common_api_functions  {
 	/* public variables */
 	public $_params;
 
-	/* protected variables */
-	protected $valid_keys;
-	protected $custom_fields;
-
 	/* object holders */
 	protected $Database;			// Database object
 	protected $Sections;			// Sections object

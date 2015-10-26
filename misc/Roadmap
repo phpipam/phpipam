@@ -8,9 +8,13 @@ version - 1.2
 
 	+ Mark subnet as full (db prepared);
 
+	+ IP status check from add/edit;
+
 
 features for next releases:
 ---------------------------
+
+	+ LDAP auth without local user;
 
 	+ Inventory management:
 		- rack tables (http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/)
@@ -36,14 +40,11 @@ features for next releases:
 
 	+ BGP support
 
-	+ Imports
-
 	+ custom fields for IP requests;
 
-	+ Scan subnet for alive hosts and import
-		SNMP router table fetching
+	+ SNMP router table fetching
 
-	+ Mail subnet details
+	+ Mail subnet details;
 
 	+ add customers module;
 
