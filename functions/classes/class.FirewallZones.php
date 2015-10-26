@@ -171,7 +171,7 @@ class FirewallZones extends Common_functions {
 						subnets.description AS subnetDescription,
 						subnets.isFolder AS subnetIsFolder,
 						subnets.mask AS subnetMask,
-						firewallZones.vlanId AS vlanId,
+						subnets.vlanId AS vlanId,
 						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
@@ -179,7 +179,7 @@ class FirewallZones extends Common_functions {
 						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
 						LEFT JOIN devices ON deviceId = devices.id
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
 						having  deviceId is not NULL order by firewallZones.id ASC;');}
 		# throw exception
 		catch (Exception $e) {
@@ -230,7 +230,7 @@ class FirewallZones extends Common_functions {
 						subnets.description AS subnetDescription,
 						subnets.isFolder AS subnetIsFolder,
 						subnets.mask AS subnetMask,
-						firewallZones.vlanId AS vlanId,
+						subnets.vlanId AS vlanId,
 						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
@@ -238,7 +238,7 @@ class FirewallZones extends Common_functions {
 						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
 						LEFT JOIN devices ON deviceId = devices.id
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
 						having  deviceId is not NULL AND mappingId = ?;',$id);}
 		# throw exception
 		catch (Exception $e) {
@@ -287,13 +287,13 @@ class FirewallZones extends Common_functions {
 						subnets.mask AS subnetMask,
 						subnets.description AS subnetDescription,
 						subnets.isFolder AS subnetIsFolder,
-						firewallZones.vlanId AS vlanId,
+						subnets.vlanId AS vlanId,
 						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
 						FROM firewallZones
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId ORDER BY id ASC;');}
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY id ASC;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
@@ -336,13 +336,13 @@ class FirewallZones extends Common_functions {
 						subnets.sectionId AS sectionId,
 						subnets.subnet AS subnet,
 						subnets.mask AS subnetMask,
-						firewallZones.vlanId AS vlanId,
+						subnets.vlanId AS vlanId,
 						vlans.domainId AS domainId,
 						vlans.number As vlan,
 						vlans.name AS vlanName
 						FROM firewallZones
 						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON firewallZones.vlanId = vlans.vlanId
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
 						HAVING id = ?;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}

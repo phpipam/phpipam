@@ -191,51 +191,6 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			}
 			?>
 	</tr>
-	<tr>
-		<!-- layer2 domain -->
-		<td>
-			<?php _('L2 Domain'); ?>
-		</td>
-		<td>
-			<select name="vlanDomain" class="firewallZoneVlan form-control input-sm input-w-auto input-max-200">
-			<option value="0"><?php print _('No L2 domain selected'); ?></option>
-			<?php
-			foreach ($vlan_domains as $vlan_domain) {
-				if ($firewallZone->domainId == $vlan_domain->id) {
-					print '<option value="'.$vlan_domain->id.'" selected>'. $vlan_domain->name.' ('.$vlan_domain->description.')</option>';
-				} else {
-					print '<option value="'.$vlan_domain->id.'">'.			$vlan_domain->name.' ('.$vlan_domain->description.')</option>';
-				}
-			}
-			?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<!-- vlan -->
-		<td>
-			<?php print _('VLAN'); ?>
-		</td>
-			<?php
-			# if there is only one layer2 domain or if there is one already selected, fetch the vlans of that domain
-			if($firewallZone->vlanId){
-				# fetch all vlans of that particular domain
-				$vlans = $Admin->fetch_multiple_objects("vlans", "domainId", $firewallZone->domainId, "number");
-				print '<td><div class="domainVlans"><select name="vlanId" class="form-control input-sm input-w-auto input-max-200">';
-				foreach ($vlans as $vlan) {
-					if ($firewallZone->vlanId == $vlan->vlanId) {
-						print '<option value="'.$vlan->vlanId.'" selected>'.$vlan->number.' ('.$vlan->description.')</option>';
-					} else {
-						print '<option value="'.$vlan->vlanId.'">'.			$vlan->number.' ('.$vlan->name.' - '.$vlan->description.')</option>';
-					}
-				}
-				print '</select></div></td>';
-			} else {
-				# if there are more than one section, use ajax to fetch the subnets of the selected section
-				print '<td><div class="domainVlans"></div></td>';
-			}
-			?>
-	</tr>
 </table>
 </form>
 

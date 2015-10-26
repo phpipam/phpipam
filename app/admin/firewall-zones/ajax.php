@@ -27,26 +27,6 @@ if($_POST['sectionId']) {
 	}
 }
 
-if($_POST['vlanDomain']){
-	if(preg_match('/^[0-9]+$/i',$_POST['vlanDomain'])) {
-		$vlanDomain = $_POST['vlanDomain'];
-		$vlans = $Admin->fetch_multiple_objects("vlans", "domainId", $vlanDomain, "number");
-
-		print '<select name="vlanId" class="form-control input-sm input-w-auto input-max-200">';
-
-			if ($vlans == false) {
-				print '<option disabled selected>'._('No VLAN available').'</option>';
-			} else {
-				foreach ($vlans as $vlan) {
-					print '<option value="'.$vlan->vlanId.'">'.$vlan->number.' - '.$vlan->name.' - '.$vlan->description.'</option>';
-				}
-			}
-		print '</select>';
-	} else {
-		$Result->show('danger', _('Invalid ID.'), true);
-	}
-}
-
 if ($_POST['zoneId']) {
 	if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
 		# return the zone details

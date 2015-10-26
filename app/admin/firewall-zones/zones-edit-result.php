@@ -25,33 +25,30 @@ $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 if($_POST['action'] != 'add' && $_POST['action'] != 'delete' && $_POST['action'] != 'edit'){
 	$Result->show("danger", _("Invalid action."), true);
 }
+
 # check the zone name. valid values are alphanumeric characters and special characters like ".-_ "
 if($_POST['zone'] && !preg_match('/^[0-9a-zA-Z.\-_ ]+$/i',$_POST['zone'])) {
 	$Result->show("danger", _("Invalid zone name value."), true);
 }
+
 if($firewallZoneSettings['zoneGenerator']=="2")
 if(strlen(@$_POST['zone'])<3 || strlen(@$_POST['zone'])>$firewallZoneSettings['zoneLength']) {
 	$Result->show("danger", _("Invalid zone name length."), true);
 }
+
 # check the zone indicator ID. valid values are 0 or 1.
 if($_POST['indicator'] && !preg_match('/^[0-1]$/i',$_POST['indicator'])) {
 	$Result->show("danger", _("Invalid indicator ID."), true);
 }
+
 # check the section ID. valid value: integer
 if($_POST['sectionId'] && !preg_match('/^[0-9]+$/i',$_POST['sectionId'])) {
 	$Result->show("danger", _("Invalid section ID."), true);
 }
+
 # check the subnet ID. valid value: integer
 if($_POST['masterSubnetId'] && !preg_match('/^[0-9]+$/i',$_POST['masterSubnetId'])) {
 	$Result->show("danger", _("Invalid subnet ID."), true);
-}
-# check the layer2 domain ID. valid value: integer
-if($_POST['vlanDomain'] && !preg_match('/^[0-9]+$/i',$_POST['vlanDomain'])) {
-	$Result->show("danger", _("Invalid L2 domain ID."), true);
-}
-# check the vlan ID. valid value: integer
-if($_POST['vlanId'] && !preg_match('/^[0-9]+$/i',$_POST['vlanId'])) {
-	$Result->show("danger", _("Invalid VLAN ID."), true);
 }
 
 # check the generator value. valid value: integer
@@ -100,8 +97,7 @@ if($_POST['generator'] != 2 && $_POST['action'] == 'edit') {
 					'indicator' => $_POST['indicator'],
 					'padding' => $padding,
 					'description' => $description,
-					'subnetId' => $_POST['masterSubnetId'],
-					'vlanId' => $_POST['vlanId']
+					'subnetId' => $_POST['masterSubnetId']
 					);
 }
 else {
@@ -111,8 +107,7 @@ else {
 					'indicator' => $_POST['indicator'],
 					'padding' => $padding,
 					'description' => $description,
-					'subnetId' => $_POST['masterSubnetId'],
-					'vlanId' => $_POST['vlanId']
+					'subnetId' => $_POST['masterSubnetId']
 					);
 }
 

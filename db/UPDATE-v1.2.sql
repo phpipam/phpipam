@@ -13,3 +13,6 @@ ALTER TABLE `api` CHANGE `app_security` `app_security` SET('crypt','ssl','user',
 
 /* add english_US language */
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`) VALUES (NULL, 'en_US', 'English (US)');
+
+/* update the firewallZones table to suit the new layout */
+ALTER TABLE `firewallZones` DROP COLUMN `vlanId`, DROP COLUMN `stacked`;

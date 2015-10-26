@@ -592,8 +592,6 @@ CREATE TABLE `firewallZones` (
   `indicator` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
   `description` text COLLATE utf8_unicode_ci,
   `subnetId` int(11) unsigned DEFAULT NULL,
-  `stacked` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `vlanId` int(11) unsigned DEFAULT NULL,
   `permissions` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
