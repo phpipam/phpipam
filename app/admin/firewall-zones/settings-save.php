@@ -21,8 +21,8 @@ $User->check_user_session();
 # validations
 
 # check for the maximum length of the zone name, it has to be between 3 and 31. also be sure that this value is decimal.
-if (($_POST['zoneLength'] < 3) || ($_POST['zoneLength'] > 31)) {
-	$Result->show("danger", _("Invalid zone name length parameter. A valid valid value is between 3 and 31."), true);
+if (($_POST['zoneLength'] < 1) || ($_POST['zoneLength'] > 31)) {
+	$Result->show("danger", _("Invalid zone name length parameter. A valid valid value is between 1 and 31."), true);
 }
 
 # validate the IPv4 type alias.

@@ -73,7 +73,7 @@ $deviceTypes = $Tools->fetch_device_types();
 			<input type="text" class="form-control input-sm" name="zoneLength" value="<?php print $firewallZoneSettings['zoneLength']; ?>">
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"); ?></span>
+			<span class="text-muted"><?php print _("Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"); ?></span>
 		</td>
 	</tr>
 	<!-- ipType -->
@@ -133,7 +133,7 @@ $deviceTypes = $Tools->fetch_device_types();
 			</select>
 		</td>
 		<td>
-			<span class="text-muted"><?php print _("Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."); ?></span>
+			<span class="text-muted"><?php print _("Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."); ?></span>
 		</td>
 	</tr>
 	<!-- zone name padding / zero fill -->

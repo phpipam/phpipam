@@ -68,7 +68,7 @@ class FirewallZones extends Common_functions {
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
 		# execute based on action
 		if($firewallZoneSettings['zoneGenerator'] == 0 || $firewallZoneSettings['zoneGenerator'] == 1 ) {
-			return $this->generate_numeric_zone_name ($firewallZoneSettings['zoneLength']);
+			return $this->generate_numeric_zone_name ($firewallZoneSettings['zoneLength'],$firewallZoneSettings['zoneGenerator']);
 		} elseif($firewallZoneSettings['zoneGenerator'] == 2 ) {
 			return $this->validate_text_zone_name ($values);
 		} else {
@@ -83,7 +83,7 @@ class FirewallZones extends Common_functions {
 	 * @param mixed $zoneLength
 	 * @return void
 	 */
-	private function generate_numeric_zone_name ($zoneLength) {
+	private function generate_numeric_zone_name ($zoneLength,$zoneGenerator) {
 
 		# execute
 		try { $maxZone = $this->Database->getObjectsQuery('SELECT MAX(CAST(zone as UNSIGNED)) as zone FROM firewallZones WHERE generator NOT LIKE 2;');}
@@ -92,9 +92,22 @@ class FirewallZones extends Common_functions {
 			return false;
 		}
 
-		if ($maxZone[0]->zone) {
+		if($maxZone[0]->zone) {
 			# add 1 to the zone name
 			$zoneName = ++$maxZone[0]->zone;
+			if($zoneGenerator == 0 ) {	
+				if(strlen($zoneName) > $zoneLength) {
+					return $this->Result->show("danger", _("Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."), true);
+				}				
+			} elseif($zoneGenerator == 1) {
+				# the highest convertable integer value for dechex() is 4294967295!
+				if($zoneName > 4294967295) {
+					return $this->Result->show("danger", _("The maximum convertable vlaue is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
+				}
+				if(strlen(dechex($zoneName)) > $zoneLength){
+					return $this->Result->show("danger", _("Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."), true);
+				}
+			}
 
 		} else {
 			# set the initial zone name to "1"
@@ -113,7 +126,9 @@ class FirewallZones extends Common_functions {
 	 * @return void
 	 */
 	private function validate_text_zone_name ($values) {
-
+		# get settings
+		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		
 		if($values[1]){
 			$query = 'SELECT zone FROM firewallZones WHERE zone = ? AND id NOT LIKE ?;';
 			$params = $values;
@@ -122,8 +137,6 @@ class FirewallZones extends Common_functions {
 			$params = $values[0];
 		}
 
-		# get settings
-		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
 		# execute
 		try { $uniqueZone = $this->Database->getObjectsQuery($query,$params);}
 		catch (Exception $e) {
