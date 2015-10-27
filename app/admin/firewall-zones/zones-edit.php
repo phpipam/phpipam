@@ -158,10 +158,11 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			foreach ($sections as $section) {
 				# select the section if already configured
 				if ($firewallZone->sectionId == $section->id) {
-					print '<option value="'.$section->id.'" selected>'. $section->name.' ('.$section->description.')</option>';
-				} else {
-					print '<option value="'.$section->id.'">'.			$section->name.' ('.$section->description.')</option>';
-				}
+					if($section->description) 	{	print '<option value="'.$section->id.'" selected>'. $section->name.' ('.$section->description.')</option>'; }
+					else 						{	print '<option value="'.$section->id.'" selected>'. $section->name.'</option>'; }}
+				else {
+					if($section->description) 	{	print '<option value="'.$section->id.'">'.			$section->name.' ('.$section->description.')</option>'; }
+					else 						{	print '<option value="'.$section->id.'">'.			$section->name.'</option>'; }}
 			}
 			?>
 			</select>
