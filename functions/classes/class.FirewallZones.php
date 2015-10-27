@@ -606,32 +606,4 @@ class FirewallZones extends Common_functions {
 		return true;
 	}
 
-	/**
-	 * Fetches all available firewalls
-	 *
-	 * @access public
-	 * @param mixed $val
-	 * @return array
-	 */
-	public function fetch_firewalls ($val=null, $order_field="id", $order_direction="asc") {
-
-		# set query
-		$query  = "SELECT * FROM `devices` where type like ? order by `id` asc;";
-		$params = array("%$val%");
-
-		# fetch
-		try { $devices = $this->Database->getObjectsQuery($query, $params); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save to devices array
-		if(sizeof($devices)>0) {
-			foreach($devices as $device) {
-				$this->devices[$device->id] = (object) $device;
-			}
-		}
-		# return
-		return sizeof($devices)>0 ? $devices : array();
-	}
 }
