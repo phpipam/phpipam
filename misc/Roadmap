@@ -8,9 +8,6 @@ version - 1.2
 
 	+ Mark subnet as full (db prepared);
 
-	+ IP status check from add/edit;
-
-
 features for next releases:
 ---------------------------
 

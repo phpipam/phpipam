@@ -447,10 +447,12 @@ $(document).on("click", ".ping_ipaddress", function() {
 	showSpinner();
 	var id       = $(this).attr('data-id');
 	var subnetId = $(this).attr('data-subnetId');
+	// new ip?
+	if ($(this).hasClass("ping_ipaddress_new")) { id = $("input[name=ip_addr]").val(); }
 	//check
 	$.post('app/subnets/addresses/ping-address.php', {id:id, subnetId:subnetId}, function(data) {
-        $('#popupOverlay div.popup_w400').html(data);
-        showPopup('popup_w400');
+        $('#popupOverlay2 div.popup_w400').html(data);
+        showPopup('popup_w400', false, true);
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
