@@ -242,6 +242,9 @@ else {
 	}
 }
 
+# update scan time
+$Scan->ping_update_scanagent_checktime (1);
+
 
 # print change
 if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
