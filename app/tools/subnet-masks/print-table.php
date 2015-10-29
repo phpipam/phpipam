@@ -8,8 +8,10 @@
 $masks = $Subnets->get_ipv4_masks ();
 ?>
 
+<?php if(!$popup) { ?>
 <div id="dashboard">
 	<div class="widget-dash inner" style="position:absolute">
+<?php } ?>
 		<table class="<?php if(!$popup) print "subnet-mask-table";?> table table-striped <?php if($popup) print 'table-condensed'; ?> table-top <?php if(!$popup) print 'table-auto'; ?>">
 
 		<!-- headers -->
@@ -50,5 +52,8 @@ $masks = $Subnets->get_ipv4_masks ();
 		</tbody>
 
 		</table>
+
+<?php if(!$popup) { ?>
 	</div>
 </div>
+<?php } ?>

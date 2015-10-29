@@ -4,7 +4,6 @@
  *
  *
  */
-
 $(document).ready(function () {
 
 /* @general functions */
@@ -13,15 +12,24 @@ $(document).ready(function () {
 function showSpinner() { $('div.loading').show(); }
 function hideSpinner() { $('div.loading').fadeOut('fast'); }
 
+/* escape hide popups */
+$(document).keydown(function(e) {
+    if(e.keyCode === 27) {
+	 hidePopups();
+    }
+});
+
 
 /* this functions opens popup */
 /* -------------------------- */
-function open_popup (popup_class, target_script, post_data) {
+function open_popup (popup_class, target_script, post_data, secondary) {
+	// class
+	secondary = typeof secondary !== 'undefined' ? secondary : false;
 	// show spinner
 	showSpinner();
 	// post
     $.post(target_script, post_data, function(data) {
-        showPopup('popup_w'+popup_class, data, false);
+        showPopup('popup_w'+popup_class, data, secondary);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText+"<br>Status: "+textStatus+"<br>Error: "+errorThrown); });
     // prevent reload
@@ -58,6 +66,7 @@ function reload_window (data) {
 		data.search("alert-warning") == -1 )    { setTimeout(function (){window.location.reload();}, 1500); }
 	else                               		  	{ hideSpinner(); }
 }
+
 
 /* hide error div if jquery loads ok
 *********************************************/
@@ -975,7 +984,7 @@ $(document).on('submit', "#deviceFilter", function() {
 
 // show subnet masks popup
 $(document).on("click", '.show-masks', function() {
-	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')});
+	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')}, true);
 	return false;
 });
 
@@ -1918,7 +1927,7 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
                 hideSpinner();
 			}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
             //hide popup after 1 second
-            setTimeout(function (){ hidePopup('popup_w400', true); parameter = null;}, 1000);
+            setTimeout(function (){ hidePopup('popup_w400', true); hidePopup2(); parameter = null;}, 1000);
         }
         else                      { hideSpinner(); }
     });

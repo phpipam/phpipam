@@ -1,7 +1,7 @@
 version - 1.2
 
 	+ To fix / finish
-		+ Verify API new fields and update web documentation;
+		+ Verify API methods;
 		+ Settings to CONSTANT;
 		+ Add admin password reset option / script;
 		+ Fix online / offline in state change mails;

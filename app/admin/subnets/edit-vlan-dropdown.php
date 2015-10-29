@@ -5,7 +5,7 @@
  *******************************/
 
 /* required functions */
-if(!is_object($User)) {
+if(!isset($User)) {
 	/* functions */
 	require( dirname(__FILE__) . '/../../../functions/functions.php');
 
