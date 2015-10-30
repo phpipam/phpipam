@@ -41,16 +41,6 @@ if($_POST['indicator'] && !preg_match('/^[0-1]$/i',$_POST['indicator'])) {
 	$Result->show("danger", _("Invalid indicator ID."), true);
 }
 
-# check the section ID. valid value: integer
-if($_POST['sectionId'] && !preg_match('/^[0-9]+$/i',$_POST['sectionId'])) {
-	$Result->show("danger", _("Invalid section ID."), true);
-}
-
-# check the subnet ID. valid value: integer
-if($_POST['masterSubnetId'] && !preg_match('/^[0-9]+$/i',$_POST['masterSubnetId'])) {
-	$Result->show("danger", _("Invalid subnet ID."), true);
-}
-
 # check the generator value. valid value: integer
 if($_POST['generator'] && !preg_match('/^[0-9]+$/i',$_POST['generator'])) {
 	$Result->show("danger", _("Invalid generator ID."), true);
@@ -69,7 +59,6 @@ if($_POST['generator'] != 2) {
 		$padding = 0;
 	}
 }
-
 
 # transform description to valid value
 $description = trim(htmlspecialchars($_POST['description']));
@@ -97,7 +86,7 @@ if($_POST['generator'] != 2 && $_POST['action'] == 'edit') {
 					'indicator' => $_POST['indicator'],
 					'padding' => $padding,
 					'description' => $description,
-					'subnetId' => $_POST['masterSubnetId']
+					'network' => $_POST['network']
 					);
 }
 else {
@@ -107,7 +96,7 @@ else {
 					'indicator' => $_POST['indicator'],
 					'padding' => $padding,
 					'description' => $description,
-					'subnetId' => $_POST['masterSubnetId']
+					'network' => $_POST['network']
 					);
 }
 

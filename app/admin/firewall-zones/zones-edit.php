@@ -25,7 +25,6 @@ $Database = new Database_PDO;
 $User 	  = new User ($Database);
 $Admin 	  = new Admin($Database);
 $Subnets  = new Subnets ($Database);
-$Sections = new Sections ($Database);
 $Result   = new Result ();
 $Zones    = new FirewallZones($Database);
 
@@ -37,10 +36,7 @@ $User->check_user_session();
 if (!preg_match('/^[0-9]+$/i', $_POST['id'])) 												 { $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true); }
 # validate $_POST['action'] values
 if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] != 'delete') { $Result->show("danger", _("Invalid action. Do not manipulate the POST values!"), true); }
-# validate $_POST['sectionId'] values
-if (isset($_POST['sectionId'])) {
-	if (!preg_match('/^[0-9]+$/i', $_POST['sectionId'])) 									 { $Result->show("danger", _("Invalid section ID. Do not manipulate the POST values!"), true); }
-}
+
 
 # fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
@@ -54,8 +50,7 @@ if ($_POST['action'] != 'add') {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 
-# fetch all sections
-$sections = $Sections->fetch_all_sections();
+
 
 # fetch all layer2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
@@ -144,55 +139,40 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 			<input type="text" class="form-control input-sm" name="description" placeholder="<?php print _('Zone description'); ?>" value="<?php print $firewallZone->description; ?>">
 		</td>
 	</tr>
-	<tr>
-		<!-- section  -->
-		<td>
-			<?php print _('Section'); ?>
-		</td>
-		<td>
-			<select name="sectionId" class="firewallZoneSection form-control input-sm input-w-auto input-max-200">
-			<?php
-			if(sizeof($sections)>1){
-				print '<option value="0">'._('No section selected').'</option>';
-			}
-			foreach ($sections as $section) {
-				# select the section if already configured
-				if ($firewallZone->sectionId == $section->id) {
-					if($section->description) 	{	print '<option value="'.$section->id.'" selected>'. $section->name.' ('.$section->description.')</option>'; }
-					else 						{	print '<option value="'.$section->id.'" selected>'. $section->name.'</option>'; }}
-				else {
-					if($section->description) 	{	print '<option value="'.$section->id.'">'.			$section->name.' ('.$section->description.')</option>'; }
-					else 						{	print '<option value="'.$section->id.'">'.			$section->name.'</option>'; }}
-			}
-			?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<!-- subnet -->
-		<td>
-			<?php print _('Subnet'); ?>
-		</td>
-			<?php
-			# display the subnet if already configured
-			if ($firewallZone->sectionId) {
-				print '<td><div class="sectionSubnets">';
-				print $Subnets->print_mastersubnet_dropdown_menu($firewallZone->sectionId,$firewallZone->subnetId);
-				print '</div></td>';
-			} else {
-				# if there is only one section, fetch the subnets of that section
-				if(sizeof($sections)<=1){
-					print '<td>';
-					print $Subnets->print_mastersubnet_dropdown_menu($sections[0]->id,$firewallZone->subnetId);
-					print '</td>';
-				} else {
-					# if there are more than one section, use ajax to fetch the subnets of the selected section
-					print '<td><div class="sectionSubnets"></div></td>';
-				}
-			}
-			?>
-	</tr>
 </table>
+
+<!-- network information -->
+<span class="btn btn-sm btn-default btn-success editNetwork" style="margin-bottom:10px;margin-top: 25px;" data-action="add" data-zoneId="<?php print $firewallZone->id; ?>"><i style="padding-right:5px;" class="fa fa-plus"></i><?php print _('Add a network to the Zone'); ?></span>
+
+<div class="zoneNetwork">
+<table class="table table-noborder table-condensed" style="padding-bottom:20px;">
+<?php
+if ($firewallZone->network) {
+	$rowspan = count($firewallZone->network);
+	$i = 1;
+	foreach ($firewallZone->network as $network) {
+		print '<tr>';
+		if ($i === 1) {
+			print '<td rowspan="'.$rowspan.'" style="width:150px;">Network</td>';
+		}
+		print '<td>';
+		print '<span alt="'._('Delete Network').'" title="'._('Delete Network').'" class="editNetwork" style="color:red;margin-bottom:10px;margin-top: 10px;margin-right:15px;" data-action="delete" data-zoneId="'.$firewallZone->id.'" data-subnetId="'.$network->subnetId.'"><i class="fa fa-close"></i></span>';
+		if ($network->subnetIsFolder == 1) {
+			print 'Folder: '.$network->subnetDescription.'</td>';
+		} else {
+			# display network information with or without description
+			if ($network->subnetDescription) 	{	print $Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.' ('.$network->subnetDescription.')</td>';	}
+			else 								{	print $Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td>';	}
+		}
+		print '</tr>';
+		$i++;
+	}
+}
+?>
+</table>
+</div>
+
+
 </form>
 
 <?php

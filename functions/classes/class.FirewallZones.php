@@ -38,6 +38,7 @@ class FirewallZones extends Common_functions {
 		$this->Subnets = new Subnets ($this->Database);
 	}
 
+
 	/**
 	 * convert zone name from decimal to hex (only for display reasons)
 	 *
@@ -55,12 +56,12 @@ class FirewallZones extends Common_functions {
 
 	}
 
+
 	/**
 	 * Generate unique zone names by generator type
 	 *
 	 * @access public
-	 * @param mixed $zone
-	 * @param mixed $id
+	 * @param mixed $values
 	 * @return void
 	 */
 	public function generate_zone_name ($values = NULL) {
@@ -76,11 +77,13 @@ class FirewallZones extends Common_functions {
 		}
 	}
 
+
 	/**
 	 * Create decimal zone name
 	 *
 	 * @access private
 	 * @param mixed $zoneLength
+	 * @param mixed $zoneGenerator
 	 * @return void
 	 */
 	private function generate_numeric_zone_name ($zoneLength,$zoneGenerator) {
@@ -118,6 +121,7 @@ class FirewallZones extends Common_functions {
 		return sizeof($zoneName)>0 ? $zoneName : false;
 	}
 
+
 	/**
 	 * validate text zone names
 	 *
@@ -128,7 +132,7 @@ class FirewallZones extends Common_functions {
 	private function validate_text_zone_name ($values) {
 		# get settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		if($values[1]){
 			$query = 'SELECT zone FROM firewallZones WHERE zone = ? AND id NOT LIKE ?;';
 			$params = $values;
@@ -157,6 +161,7 @@ class FirewallZones extends Common_functions {
 		return sizeof($zoneName)>0 ? $zoneName : false;
 	}
 
+
 	/**
 	 * Fetches zone mappings from database
 	 *
@@ -164,8 +169,8 @@ class FirewallZones extends Common_functions {
 	 * @return void
 	 */
 	public function get_zone_mappings () {
-		# try to fetch all mappings
-		try { $mapping = $this->Database->getObjectsQuery('SELECT
+		# try to fetch all zone mappings
+		try { $mappings =  $this->Database->getObjectsQuery('SELECT
 						firewallZones.id AS id,
 						firewallZones.generator AS generator,
 						firewallZones.length AS length,
@@ -177,105 +182,161 @@ class FirewallZones extends Common_functions {
 						firewallZones.description AS description,
 						firewallZoneMapping.deviceId AS deviceId,
 						devices.hostname AS deviceName,
-						firewallZoneMapping.interface AS interface,
-						firewallZones.subnetId AS subnetId,
-						subnets.sectionId AS sectionId,
-						subnets.subnet AS subnet,
-						subnets.description AS subnetDescription,
-						subnets.isFolder AS subnetIsFolder,
-						subnets.mask AS subnetMask,
-						subnets.vlanId AS vlanId,
-						vlans.domainId AS domainId,
-						vlans.number As vlan,
-						vlans.name AS vlanName
+						firewallZoneMapping.interface AS interface
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
 						LEFT JOIN devices ON deviceId = devices.id
-						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
 						having  deviceId is not NULL order by firewallZones.id ASC;');}
 		# throw exception
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Database error: ").$e->getMessage());
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# try to fetch all subnet and vlan informations for all zones
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+						firewallZoneSubnet.zoneId AS zoneId,
+						firewallZoneSubnet.subnetId AS subnetId,
+						subnets.sectionId AS sectionId,
+						subnets.subnet AS subnet,
+						subnets.mask AS subnetMask,
+						subnets.description AS subnetDescription,
+						subnets.isFolder AS subnetIsFolder,
+						vlans.vlanId AS vlanId,
+						vlans.domainId AS domainId,
+						vlans.number AS vlan,
+						vlans.name AS vlanName
+						FROM firewallZoneSubnet
+						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY subnet ASC;');}
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# modify the zone output values
+		foreach ($mappings as $key => $val) {
+			# transform the zone name from decimal to hex
+			if($mappings[$key]->generator == 1 ){
+				$mappings[$key]->zone = dechex($mappings[$key]->zone);
+			}
+			# add some padding if it is activated and the zone generatore is not text
+			if($mappings[$key]->padding == 1 && $mappings[$key]->generator != 2){
+			# remove leading zeros (padding) and raise the value in case of any zone name length changes
+			# add some padding to reach the maximum zone name lenght
+			$mappings[$key]->zone = str_pad(ltrim($mappings[$key]->zone,0),$mappings[$key]->length,"0",STR_PAD_LEFT);
+			}
+			# inject network informations
+			foreach ($networkInformation as $nkey => $nval) {
+				if($mappings[$key]->id == $nval->zoneId) {
+					# add each network and vlan information to the object
+					$mappings[$key]->network[] = $networkInformation[$nkey];
+				}
+			}
 		}
+		# return the values
+		return sizeof($mappings)>0 ? $mappings : false;
+	}
+
+
+	/**
+	 * Fetches zone mapping from database, depending on id
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	public function get_zone_mapping ($id) {
+		# try to fetch id specific zone mapping
+		try { $mapping =  $this->Database->getObjectsQuery('SELECT
+						firewallZones.id AS id,
+						firewallZones.generator AS generator,
+						firewallZones.length AS length,
+						firewallZones.padding AS padding,
+						firewallZoneMapping.id AS mappingId,
+						firewallZones.zone AS zone,
+						firewallZones.indicator AS indicator,
+						firewallZoneMapping.alias AS alias,
+						firewallZones.description AS description,
+						firewallZoneMapping.deviceId AS deviceId,
+						devices.hostname AS deviceName,
+						firewallZoneMapping.interface AS interface
+						FROM firewallZoneMapping
+						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
+						LEFT JOIN devices ON deviceId = devices.id
+						having  deviceId is not NULL AND mappingId = ?;', $id);}
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# try to fetch all subnet and vlan informations for all zones
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+						firewallZoneSubnet.zoneId AS zoneId,
+						firewallZoneSubnet.subnetId AS subnetId,
+						subnets.sectionId AS sectionId,
+						subnets.subnet AS subnet,
+						subnets.mask AS subnetMask,
+						subnets.description AS subnetDescription,
+						subnets.isFolder AS subnetIsFolder,
+						vlans.vlanId AS vlanId,
+						vlans.domainId AS domainId,
+						vlans.number AS vlan,
+						vlans.name AS vlanName
+						FROM firewallZoneSubnet
+						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId 
+						HAVING zoneId = ? ORDER BY subnet ASC;', $mapping[0]->id);}
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
 		# modify the zone output values
 		foreach ($mapping as $key => $val) {
 			# transform the zone name from decimal to hex
 			if($mapping[$key]->generator == 1 ){
 				$mapping[$key]->zone = dechex($mapping[$key]->zone);
 			}
-
 			# add some padding if it is activated and the zone generatore is not text
 			if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name lenght
 			$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
 			}
-		}
-		# return the values
-		return sizeof($mapping)>0 ? $mapping : false;
-	}
-
-	/**
-	 * Fetches zone mapping from database, depending on id
-	 *
-	 * @access public
-	 * @param mixid $id
-	 * @return void
-	 */
-	public function get_zone_mapping ($id) {
-		# try to fetch all mappings
-		try { $mapping = $this->Database->getObjectsQuery('SELECT
-						firewallZones.id AS id,
-						firewallZones.generator AS generator,
-						firewallZones.length AS length,
-						firewallZones.padding AS padding,
-						firewallZoneMapping.id AS mappingId,
-						firewallZones.zone AS zone,
-						firewallZones.indicator AS indicator,
-						firewallZoneMapping.alias AS alias,
-						firewallZones.description AS description,
-						firewallZoneMapping.deviceId AS deviceId,
-						devices.hostname AS deviceName,
-						firewallZoneMapping.interface AS interface,
-						firewallZones.subnetId AS subnetId,
-						subnets.subnet AS subnet,
-						subnets.description AS subnetDescription,
-						subnets.isFolder AS subnetIsFolder,
-						subnets.mask AS subnetMask,
-						subnets.vlanId AS vlanId,
-						vlans.domainId AS domainId,
-						vlans.number As vlan,
-						vlans.name AS vlanName
-						FROM firewallZoneMapping
-						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
-						LEFT JOIN devices ON deviceId = devices.id
-						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
-						having  deviceId is not NULL AND mappingId = ?;',$id);}
-		# throw exception
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Database error: ").$e->getMessage());
-		}
-		# modify the zone output values
-		if (sizeof($mapping)>0) {
-			foreach ($mapping as $key => $val) {
-				# transform the zone name from decimal to hex
-				if($mapping[$key]->generator == 1 ){
-					$mapping[$key]->zone = dechex($mapping[$key]->zone);
-				}
-
-				# add some padding if it is activated and the zone generatore is not text
-				if($mapping[$key]->padding == 1 && $mapping[$key]->generator != 2){
-				# remove leading zeros (padding) and raise the value in case of any zone name length changes
-				# add some padding to reach the maximum zone name lenght
-				$mapping[$key]->zone = str_pad(ltrim($mapping[$key]->zone,0),$mapping[$key]->length,"0",STR_PAD_LEFT);
+			# inject network informations
+			foreach ($networkInformation as $nkey => $nval) {
+				if($mapping[$key]->id == $nval->zoneId) {
+					# remove the zoneId, we don't need it anymore
+					unset($networkInformation[$nkey]->zoneId);
+					# add each network and vlan information to the object
+					$mapping[$key]->network[] = $networkInformation[$nkey];
 				}
 			}
 		}
 		# return the values
 		return sizeof($mapping)>0 ? $mapping[0] : false;
 	}
+
+
+	/**
+	 * Fetches zone mapping informations for subnet detaul from database, depending on id
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	public function get_zone_subnet_info ($id) {
+		# try to fetch id specific zone information
+		try { $info =  $this->Database->getObjectsQuery('SELECT 
+						firewallZones.zone as zone,
+						firewallZoneMapping.alias as alias,
+						firewallZones.description as description,
+						firewallZoneSubnet.subnetId,
+						firewallZoneMapping.interface as interface,
+						devices.hostname as deviceName
+						FROM firewallZoneMapping
+						RIGHT JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
+						LEFT JOIN firewallZoneSubnet on firewallZoneMapping.zoneId = firewallZoneSubnet.zoneId
+						LEFT JOIN devices ON deviceId = devices.id
+						HAVING firewallZoneSubnet.subnetId = ?;', $id);}
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		# return the values
+		return sizeof($info)>0 ? $info[0] : false;
+	}
+
 
 	/**
 	 * Fetches all zones from database
@@ -284,29 +345,27 @@ class FirewallZones extends Common_functions {
 	 * @return void
 	 */
 	public function get_zones () {
-		# try to fetch all mappings
-		try { $zones =  $this->Database->getObjectsQuery('SELECT
-						firewallZones.id AS id,
-						firewallZones.generator AS generator,
-						firewallZones.length AS length,
-						firewallZones.padding AS padding,
-						firewallZones.zone AS zone,
-						firewallZones.indicator AS indicator,
-						firewallZones.description AS description,
-						firewallZones.permissions AS permissions,
-						firewallZones.subnetId AS subnetId,
+		# try to fetch all zones
+		try { $zones =  $this->Database->getObjectsQuery('SELECT * FROM firewallZones;');}
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# try to fetch all subnet and vlan informations for all zones
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+						firewallZoneSubnet.zoneId AS zoneId,
+						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
 						subnets.subnet AS subnet,
 						subnets.mask AS subnetMask,
 						subnets.description AS subnetDescription,
 						subnets.isFolder AS subnetIsFolder,
-						subnets.vlanId AS vlanId,
+						vlans.vlanId AS vlanId,
 						vlans.domainId AS domainId,
-						vlans.number As vlan,
+						vlans.number AS vlan,
 						vlans.name AS vlanName
-						FROM firewallZones
-						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY id ASC;');}
+						FROM firewallZoneSubnet
+						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY subnet ASC;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
 
@@ -322,57 +381,77 @@ class FirewallZones extends Common_functions {
 			# add some padding to reach the maximum zone name lenght
 			$zones[$key]->zone = str_pad(ltrim($zones[$key]->zone,0),$zones[$key]->length,"0",STR_PAD_LEFT);
 			}
+			# inject network informations
+			foreach ($networkInformation as $nkey => $nval) {
+				if($zones[$key]->id == $nval->zoneId) {
+					# remove the zoneId, we don't need it anymore
+					unset($networkInformation[$nkey]->zoneId);
+					# add each network and vlan information to the object
+					$zones[$key]->network[] = $networkInformation[$nkey];
+				}
+			}
 		}
 		# return the values
 		return sizeof($zones)>0 ? $zones : false;
 	}
 
+
 	/**
 	 * Fetches single zone from database, depending on zone id
 	 *
 	 * @access public
-	 * @param mixid $id
+	 * @param mixed $id
 	 * @return void
 	 */
 	public function get_zone ($id) {
-		# try to fetch all mappings
-		try { $zone = $this->Database->getObjectsQuery('SELECT
-						firewallZones.id AS id,
-						firewallZones.generator AS generator,
-						firewallZones.length AS length,
-						firewallZones.padding AS padding,
-						firewallZones.zone AS zone,
-						firewallZones.indicator AS indicator,
-						firewallZones.description AS description,
-						firewallZones.permissions AS permissions,
-						firewallZones.subnetId AS subnetId,
+		# try to fetch zone with ID $id
+		try { $zone = $this->Database->getObjectsQuery('SELECT * FROM firewallZones WHERE id = ?;', $id);}
+
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# try to fetch all subnet and vlan informations for this zone
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+						firewallZoneSubnet.zoneId AS zoneId,
+						firewallZoneSubnet.subnetId AS subnetId,
 						subnets.sectionId AS sectionId,
 						subnets.subnet AS subnet,
 						subnets.mask AS subnetMask,
-						subnets.vlanId AS vlanId,
+						subnets.description AS subnetDescription,
+						subnets.isFolder AS subnetIsFolder,
+						vlans.vlanId AS vlanId,
 						vlans.domainId AS domainId,
-						vlans.number As vlan,
+						vlans.number AS vlan,
 						vlans.name AS vlanName
-						FROM firewallZones
-						LEFT JOIN subnets ON firewallZones.subnetId = subnets.id
-						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
-						HAVING id = ?;', $id);}
+						FROM firewallZoneSubnet
+						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId HAVING zoneId = ? ORDER BY subnet ASC;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
 		# modify the zone output values
 		foreach ($zone as $key => $val) {
 			# transform the zone name from decimal to hex
 			if($zone[$key]->generator == 1 ){
 				$zone[$key]->zone = dechex($zone[$key]->zone);
 			}
-
 			# add some padding if it is activated and the zone generatore is not text
 			if($zone[$key]->padding == 1 && $zone[$key]->generator != 2){
 			# remove leading zeros (padding) and raise the value in case of any zone name length changes
 			# add some padding to reach the maximum zone name lenght
 			$zone[$key]->zone = str_pad(ltrim($zone[$key]->zone,0),$zone[$key]->length,"0",STR_PAD_LEFT);
 			}
+			# inject network informations
+			foreach ($networkInformation as $nkey => $nval) {
+				if($zone[$key]->id == $nval->zoneId) {
+					# remove the zoneId, we don't need it anymore
+					unset($networkInformation[$nkey]->zoneId);
+					# add each network and vlan information to the object
+					$zone[$key]->network[] = $networkInformation[$nkey];
+				}
+			}
 		}
+
 		# return the values
 		return sizeof($zone)>0 ? $zone[0] : false;
 	}
@@ -382,16 +461,17 @@ class FirewallZones extends Common_functions {
 	 * display formated zone data
 	 *
 	 * @access public
-	 * @param mixid $id
+	 * @param mixed $id
 	 * @return void
 	 */
 	public function get_zone_detail ($id) {
-
+		# get zone informations
 		$zoneInformation = $this->get_zone($id);
 
+		# build html output
 		print '<table class="table table-condensed">';
 		print '<tr>';
-		print '<td>'._('Zone Name').'</td>';
+		print '<td style="width:150px;">'._('Zone Name').'</td>';
 		print '<td>'.$zoneInformation->zone.'</td>';
 		print '</tr><tr>';
 		print '<td>'._('Indicator').'</td>';
@@ -403,29 +483,169 @@ class FirewallZones extends Common_functions {
 		print '</tr><tr>';
 		print '<td>'._('Description').'</td>';
 		print '<td>'.$zoneInformation->description.'</td>';
-		print '</tr><tr>';
-		print '<td>'._('Subnet').'</td>';
-		if ($zoneInformation->subnetId) {
-			if (!$zoneInformation->subnetIsFolder) {
-				print '<td>'.$this->Subnets->transform_to_dotted($zoneInformation->subnet).'/'.$zoneInformation->subnetMask.'</td>';
-				print '<td>'.$zoneInformation->subnetDescription.'</td>';
-			} else{
-				print '<td>'.$this->Subnets->transform_to_dotted($zoneInformation->subnet).'/'.$zoneInformation->subnetMask.'</td>';
-				print '<td>Folder - '.$zoneInformation->subnetDescription.'</td>';
+		print '</tr>';
+		print '</table>';
+		if ($zoneInformation->network) {
+			print '<table class="table table-condensed">';
+			print '<tr>';
+			print '<th colspan="2">'._('Subnet').'</th>';
+			print '<th colspan="2">'._('VLAN').'</th>';
+			print '</tr>';
+			foreach ($zoneInformation->network as $network) {
+				print '<tr>';
+				if (!$network->subnetIsFolder) {
+					if ($network->subnetDescription){
+						print '<td style="width:120px;">'.$this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td><td  style="width:120px;">'.$network->subnetDescription.'</td>';
+					} else {
+						print '<td colspan="2">'.$this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td>';
+					}
+				} else{
+					print '<td  style="width:120px;">Folder</td><td  style="width:120px;">'.$network->subnetDescription.'</td>';
+				}
+				if ($network->vlanName) {
+					print '<td  style="width:25px;">'.$network->vlan.'</td><td  style="width:120px;">'.$network->vlanName.'</td>';
+				} else {
+					print '<td colspan="2">'.$network->vlan.'</td>';
+				}
+				print '</tr>';
 			}
-		} else {
-			print '</td><td>';
-		}
+		} 
+	}
 
-		print '</tr><tr>';
-		print '<td>'._('VLAN').'</td>';
-		if ($zoneInformation->vlan) {
-			print '<td>'.$zoneInformation->vlan.' ('.$zoneInformation->vlanName.')</td>';
-		} else {
-			print '</td><td>';
+
+	/**
+	 * display formated zone network(s)
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	public function get_zone_network ($id) {
+		# try to fetch all subnet and vlan informations for this zone
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT
+						firewallZoneSubnet.zoneId AS zoneId,
+						firewallZoneSubnet.subnetId AS subnetId,
+						subnets.sectionId AS sectionId,
+						subnets.subnet AS subnet,
+						subnets.mask AS subnetMask,
+						subnets.description AS subnetDescription,
+						subnets.isFolder AS subnetIsFolder,
+						vlans.vlanId AS vlanId,
+						vlans.domainId AS domainId,
+						vlans.number AS vlan,
+						vlans.name AS vlanName
+						FROM firewallZoneSubnet
+						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId HAVING zoneId = ? ORDER BY subnet ASC;', $id);}
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		$rowspan = count($networkInformation);
+		$i = 1;
+		print '<table class="table table-noborder table-condensed" style="padding-bottom:20px;">';
+		foreach ($networkInformation as $network) {
+			print '<tr>';
+			if ($i === 1) {
+				print '<td rowspan="'.$rowspan.'" style="width:150px;">Network</td>';
+			}
+			print '<td>';
+			print '<span alt="'._('Delete Network').'" title="'._('Delete Network').'" class="editNetwork" style="color:red;margin-bottom:10px;margin-top: 10px;margin-right:15px;" data-action="delete" data-zoneId="'.$id.'" data-subnetId="'.$network->subnetId.'"><i class="fa fa-close"></i></span>';
+			if ($network->subnetIsFolder == 1 ) {
+				print 'Folder: '.$network->subnetDescription;
+			} else {
+				# display network information with or without description
+				if ($network->subnetDescription) 	{	print $this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.' ('.$network->subnetDescription.')</td>';	}
+				else 								{	print $this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td>';	}
+			}
+			print '</tr>';
+			$i++;
 		}
 		print '</table>';
 	}
+
+
+	/**
+	 * validate if a network is suitable to map to a zone
+	 *
+	 * @access public
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	public function check_zone_network ($subnetId) {
+		# check if the subnet is already bound to this or any other zone
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
+
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		if(!sizeof($networkInformation)>0 ) {
+			# return dummy value
+			return 'success';
+		} else {
+			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.<br>The binding must be unique."), false);
+			return false;
+		}
+		# return dummy value
+		return 'success';
+	}
+
+
+	/**
+	 * add a network to a zone
+	 *
+	 * @access public
+	 * @param mixed $zoneId
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	public function add_zone_network ($zoneId,$subnetId) {
+		# check if the subnet is already bound to this or any other zone
+		try { $networkInformation =  $this->Database->getObjectsQuery('SELECT * FROM firewallZoneSubnet WHERE subnetId = ?;', $subnetId);}
+
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		if(!sizeof($networkInformation)>0 ) {
+			$query = 'INSERT INTO firewallZoneSubnet (zoneId, subnetId) VALUES (?,?);';
+			$params = array('zoneId' => $zoneId, 'subnetId' => $subnetId);
+
+			# try to fetch all subnet and vlan informations for this zone
+			try { $addRow =  $this->Database->insertObject("firewallZoneSubnet", $params);}
+
+			# throw exception
+			catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		} else {
+			$this->Result->show("danger","<strong>"._('Error').":</strong><br>"._("This network is already bound to this or another zone.<br>The binding must be unique."), false);
+			return false;
+		}
+		# return dummy value
+		return 'success';
+	}
+
+
+	/**
+	 * delete a network of a zone
+	 *
+	 * @access public
+	 * @param mixed $zoneId
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	public function delete_zone_network ($zoneId,$subnetId) {
+		# try to fetch all subnet and vlan informations for this zone
+		try { $deleteRow =  $this->Database->deleteRow("firewallZoneSubnet", "zoneId", $zoneId, "subnetId", $subnetId); }
+
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# return dummy value or false
+		if ($deleteRow) {
+			return 'success';
+		} else {
+			return false;
+		}
+	}
+
 
 	/**
 	 * Modify zone details main method
@@ -436,46 +656,74 @@ class FirewallZones extends Common_functions {
 	 * @return void
 	 */
 	public function modify_zone ($action, $values) {
-
-
 		# initialize user
 		$this->User = new User ($this->Database);
 
+		# separate network informations if available
+		$network = $values['network'];
+		unset($values['network']);
+
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
+		if ($network) {
+			$network = $this->reformat_empty_array_fields ($network, null);
+		}
 
 		# execute based on action
-		if($action=="add")			{ return $this->zone_add ($values); }
+		if($action=="add")			{ return $this->zone_add ($values,$network); }
 		elseif($action=="edit")		{ return $this->zone_edit ($values); }
 		elseif($action=="delete")	{ return $this->zone_delete ($values['id']); }
 		else						{ return $this->Result->show("danger", _("Invalid action"), true); }
 	}
+
 
 	/**
 	 * Create new zone method
 	 *
 	 * @access private
 	 * @param mixed $values
+	 * @param mixed $network
 	 * @return void
 	 */
-	private function zone_add ($values) {
+	private function zone_add ($values,$network) {
 		# get the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
 
 		# push the zone name length into the values array
 		$values['length'] = $firewallZoneSettings['zoneLength'];
 
-		# execute
+		# execute insert
 		try { $this->Database->insertObject("firewallZones", $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			$this->Log->write( "Firewall zone created", "Failed to add new firewall zone<hr>".$e->getMessage(), 2, $this->User->username);
 			return false;
 		}
+
+		# fetch the highest inserted id, matching the zone name
+		try { $lastId=$this->Database->getObjectsQuery("SELECT MAX(id) AS id FROM firewallZones WHERE zone = ? ;", $values['zone']);}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+
+		if ($network) {
+			foreach ($network as $subnetId) {
+				$values = array('zoneId' => $lastId[0]->id, 'subnetId' => $subnetId);
+				# add the network bindings if there are any
+				try { $this->Database->insertObject("firewallZoneSubnet", $values); }
+				catch (Exception $e) {
+					$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+					return false;
+				}
+			}
+			# ok
+			return true;
+		}
 		# ok
-		$this->Log->write( "Firewall zone created", "New firewall zone created<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
+
 
 	/**
 	 * Edit zone
@@ -496,6 +744,7 @@ class FirewallZones extends Common_functions {
 		$this->Log->write( "Firewall zone edited", "Firewall zone edited<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
+
 
 	/**
 	 * Deletes zone and all corresponding mappings
@@ -552,6 +801,7 @@ class FirewallZones extends Common_functions {
 		else						{ return $this->Result->show("danger", _("Invalid action"), true); }
 	}
 
+
 	/**
 	 * Create new mapping
 	 *
@@ -575,6 +825,7 @@ class FirewallZones extends Common_functions {
 		return true;
 	}
 
+
 	/**
 	 * Edit mapping
 	 *
@@ -594,6 +845,7 @@ class FirewallZones extends Common_functions {
 		$this->Log->write( "Firewall zone mapping edited", "Firewall zone mapping edited<hr>".$this->array_to_log($values), 0, $this->User->username);
 		return true;
 	}
+
 
 	/**
 	 * Deletes single mapping
