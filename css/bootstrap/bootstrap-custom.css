@@ -1758,7 +1758,8 @@ td.groups input[type=checkbox] {
 	white-space: nowrap;
 	text-shadow: none;
 	font-size: 11px;
-	z-index: 1120 !important;
+
+	position: fixed;
 }
 .tooltip-inner {
 	max-width: 500px;
@@ -1986,6 +1987,9 @@ table#userPrint h4 {
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding-box;
           background-clip: padding-box;
+}
+#popupOverlay2 .popup {
+	margin-top: 100px;
 }
 .popup .pContent::-webkit-scrollbar {
     display: none;

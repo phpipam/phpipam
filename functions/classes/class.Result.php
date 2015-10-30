@@ -24,7 +24,7 @@ class Result extends Common_functions {
 	 * @param  boolean $die    [controls stop of php execution]
 	 * @return [type]          [description]
 	 */
-	public function show($uclass="muted", $utext="No value provided", $die=false, $popup=false, $inline = false) {
+	public function show($uclass="muted", $utext="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false) {
 
 		# override for api !
 		if($this->exit_method == "exception")  {
@@ -56,11 +56,14 @@ class Result extends Common_functions {
 				print "<div class='alert alert-".$uclass."'>".$utext."</div>";
 			}
 			else {
+				// set close class
+				$class = $popup2===false ? "hidePopups" : "hidePopup2";
+
 				print '<div class="pHeader">'._(ucwords($uclass)).'</div>';
 				print '<div class="pContent">';
 				print '<div class="alert alert-'.$uclass.'">'.$utext.'</div>';
 				print '</div>';
-				print '<div class="pFooter"><button class="btn btn-sm btn-default hidePopups">'._('Close').'</button></div>';
+				print '<div class="pFooter"><button class="btn btn-sm btn-default '.$class.'">'._('Close').'</button></div>';
 			}
 
 			# die if set
