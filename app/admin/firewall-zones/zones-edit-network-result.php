@@ -27,6 +27,15 @@ if($_POST['masterSubnetId'] && !preg_match('/^[0-9]+$/i',$_POST['masterSubnetId'
 	$Result->show("danger", _("Please choose a appropriate network to bind to the firewall zone."), true);
 }
 
+# validate network ID informations
+if($_POST['network']) {
+	foreach ($_POST['network'] as $network) {
+		if(!preg_match('/^[0-9]+$/i',$network)) {
+			$Result->show("danger", _("Invalid network ID."), true);			
+		}
+	}
+}
+
 # check if the network information should be delivered as form data
 if($_POST['noZone'] == 1) {
 	# update
