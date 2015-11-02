@@ -1469,7 +1469,8 @@ span.ipreqMenu {
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 
-	float: right;
+	position:absolute;
+	right: 25px;
 	margin-top: 0px;
 
 	color: white;
