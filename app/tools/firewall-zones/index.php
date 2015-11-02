@@ -40,7 +40,10 @@ if($firewallZoneMapping) {
 	foreach ($devices as $k=>$firewallZoneMapping) { ?>
 		<!-- header -->
 		<tr>
-		<th colspan='10'><h4><?php print $devices[$k][0]->deviceName; ?></h4></th>
+		<?php
+			if( strlen($devices[$k][0]->deviceDescription) < 1 )	{	print '<th colspan="10"><h4>'.$devices[$k][0]->deviceName											.'</h4></th>'; 	}
+			else 													{	print '<th colspan="10"><h4>'.$devices[$k][0]->deviceName.' ( '.$devices[$k][0]->deviceDescription	.' )</h4></th>';}
+		?>
 		</tr>
 		<tr>
 			<!-- header -->

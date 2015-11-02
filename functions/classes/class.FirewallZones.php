@@ -182,6 +182,7 @@ class FirewallZones extends Common_functions {
 						firewallZones.description AS description,
 						firewallZoneMapping.deviceId AS deviceId,
 						devices.hostname AS deviceName,
+						devices.description AS deviceDescription,
 						firewallZoneMapping.interface AS interface
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones ON zoneId = firewallZones.id
