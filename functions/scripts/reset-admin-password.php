@@ -11,7 +11,7 @@
 require( dirname(__FILE__) . '/../functions.php' );
 
 # set debugging
-$debugging = true;
+$debugging = false;
 $fail	   = false;
 
 # initialize objects
