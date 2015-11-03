@@ -34,6 +34,8 @@ if(sizeof($errors = $Tools->verify_database())>0) {
 
 		print '</ul>'. "\n";
 		print '</div>'. "\n";
+		// clearfix
+		print "<div class='clearfix'></div>";
 	}
 
 	//fields
@@ -57,6 +59,8 @@ if(sizeof($errors = $Tools->verify_database())>0) {
 
 		print '</ul>'. "\n";
 		print '</div>'. "\n";
+		// clearfix
+		print "<div class='clearfix'></div>";
 	}
 
 
