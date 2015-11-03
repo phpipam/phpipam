@@ -957,6 +957,20 @@ class User extends Common_functions {
 	}
 
 	/**
+	 * Returns crypt type used to encrypt password
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function return_crypt_type () {
+		if(CRYPT_SHA512 == 1)		{ return 'CRYPT_SHA512'; }
+		elseif(CRYPT_SHA256 == 1)	{ return 'CRYPT_SHA256'; }
+		elseif(CRYPT_BLOWFISH == 1)	{ return 'CRYPT_BLOWFISH'; }
+		elseif(CRYPT_MD5 == 1)		{ return 'CRYPT_MD5'; }
+		else						{ return "No crypt types supported"; }
+	}
+
+	/**
 	 * Updates users password
 	 *
 	 * @access public

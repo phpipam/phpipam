@@ -3,7 +3,6 @@ version - 1.2
 	+ To fix / finish
 		+ Verify API methods;
 		+ Settings to CONSTANT;
-		+ Add admin password reset option / script;
 
 	+ Mark subnet as full (db prepared);
 
