@@ -2,7 +2,7 @@ version - 1.2
 
 	+ To fix / finish
 		+ Verify API methods;
-		+ Settings to CONSTANT;
+		+ Verify install / upgrade scripts;
 
 	+ Mark subnet as full (db prepared);
 

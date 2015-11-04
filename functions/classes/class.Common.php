@@ -25,13 +25,21 @@ class Common_functions  {
 	 * @return none
 	 */
 	public function get_settings () {
-		# cache check
-		if($this->settings === null) {
-			try { $settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-			# save
-			if ($settings!==false)	 {
-				$this->settings = $settings;
+		# constant defined
+		if (defined('SETTINGS')) {
+			if ($this->settings === null || $this->settings === false) {
+				$this->settings = json_decode(SETTINGS);
+			}
+		}
+		else {
+			# cache check
+			if($this->settings === null) {
+				try { $settings = $this->Database->getObject("settings", 1); }
+				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
+				# save
+				if ($settings!==false)	 {
+					$this->settings = $settings;
+				}
 			}
 		}
 	}

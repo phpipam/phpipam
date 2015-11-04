@@ -40,6 +40,18 @@ require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for f
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
 require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 
+# save settings to constant
+if($_GET['page']!="install" ) {
+	# database object
+	$Database 	= new Database_PDO;
+	# try to fetch settings
+	try { $settings = $Database->getObject("settings", 1); }
+	catch (Exception $e) { var_dump($e); $settings = false; }
+	if ($settings!==false) {
+		define(SETTINGS, json_encode($settings));
+	}
+}
+
 
 /**
  * create links function
