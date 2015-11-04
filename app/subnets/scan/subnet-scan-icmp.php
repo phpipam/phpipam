@@ -16,7 +16,6 @@ exec($cmd, $output, $retval);
 # format result back to object
 $script_result = json_decode($output[0]);
 
-
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
 	// fetch all hosts to be scanned
