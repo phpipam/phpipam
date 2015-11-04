@@ -90,13 +90,13 @@ class Install extends Common_functions {
 		$this->Database_root->resetConn();
 
 		# install database
-		$this->install_database_execute ();
-
-	    # return true, if some errors occured script already died! */
-		sleep(1);
-		$this->Log = new Logging ($this->Database);
-		$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
-		return true;
+		if($this->install_database_execute () !== false) {
+		    # return true, if some errors occured script already died! */
+			sleep(1);
+			$this->Log = new Logging ($this->Database);
+			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
+			return true;
+		}
 	}
 
 	/**
@@ -161,15 +161,18 @@ class Install extends Common_functions {
 				try { $this->Database_root->runQuery($q.";"); }
 				catch (Exception $e) {
 					//unlock tables
-					$this->Database_root->runQuery("UNLOCK TABLES;");
+					try { $this->Database_root->runQuery("UNLOCK TABLES;"); }
+					catch (Exception $e) {}
 					//drop database
 					try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
 					catch (Exception $e) {
-						$this->Result->show("danger", 'Cannot set permissions for user '. $db['user'] .': '.$e->getMessage(), true);
+						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
 					}
 					//print error
 					$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
 					$this->Result->show("info", "Database dropped", false);
+
+					return false;
 				}
 			}
 	    }

@@ -46,7 +46,7 @@ if($_GET['page']!="install" ) {
 	$Database 	= new Database_PDO;
 	# try to fetch settings
 	try { $settings = $Database->getObject("settings", 1); }
-	catch (Exception $e) { var_dump($e); $settings = false; }
+	catch (Exception $e) { $settings = false; }
 	if ($settings!==false) {
 		define(SETTINGS, json_encode($settings));
 	}
