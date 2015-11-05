@@ -118,7 +118,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
     			</a>
  			</span>
 			<span class="input-group-addon">
-    			<i class="fa fa-gray fa-info" rel="tooltip" data-html='true' data-placement="left" title="<?php print _('You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)'); ?>"></i>
+    			<i class="fa fa-gray fa-info" rel="tooltip" data-html='true' data-placement="right" title="<?php print _('You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)'); ?>"></i>
     		</span>
 			</div>
 
@@ -149,7 +149,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '	<div class="input-group">';
 		print ' <input type="text" name="dns_name" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['dns_name']. '" '.$delete.'>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
-		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='left' title='"._('Click to check for hostname')."'></i></span>";
+		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='right' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
 		print "	</div>";
 		print '	</td>'. "\n";

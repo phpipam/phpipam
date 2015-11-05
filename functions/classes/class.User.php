@@ -784,7 +784,7 @@ class User extends Common_functions {
 				# add blocked count
 				$this->block_ip();
 				$this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
-				$this->Result->show("danger", _("Invalid username or password " . $username . " " . $password), true);
+				$this->Result->show("danger", _("Invalid username or password " . $username ), true);
 
 			}
 		} catch (adLDAPException $e) {
@@ -954,6 +954,20 @@ class User extends Common_functions {
 		elseif(CRYPT_BLOWFISH == 1)	{ return '$2y$'.str_pad(rand(4,31),2,0, STR_PAD_LEFT).'$'; }
 		elseif(CRYPT_MD5 == 1)		{ return '$5$rounds=3000$'; }
 		else						{ $this->Result->show("danger", _("No crypt types supported"), true); }
+	}
+
+	/**
+	 * Returns crypt type used to encrypt password
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function return_crypt_type () {
+		if(CRYPT_SHA512 == 1)		{ return 'CRYPT_SHA512'; }
+		elseif(CRYPT_SHA256 == 1)	{ return 'CRYPT_SHA256'; }
+		elseif(CRYPT_BLOWFISH == 1)	{ return 'CRYPT_BLOWFISH'; }
+		elseif(CRYPT_MD5 == 1)		{ return 'CRYPT_MD5'; }
+		else						{ return "No crypt types supported"; }
 	}
 
 	/**

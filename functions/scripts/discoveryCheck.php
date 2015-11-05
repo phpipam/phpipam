@@ -203,6 +203,7 @@ $Admin		= new Admin ($Database, false);
 $Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);
+$Scan		= new Scan ($Database);
 $Result		= new Result();
 
 # insert to database
@@ -235,6 +236,9 @@ foreach($scan_subnets as $s) {
 		}
 	}
 }
+
+# update scan time
+$Scan->ping_update_scanagent_checktime (1);
 
 
 

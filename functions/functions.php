@@ -18,8 +18,8 @@ if(!function_exists('gettext')) {
 
 // auto-set base if not already defined
 if(!defined('BASE')) {
-$root = substr($_SERVER['DOCUMENT_ROOT'],-1)=="/" ? substr($_SERVER['DOCUMENT_ROOT'],0,-1) : $_SERVER['DOCUMENT_ROOT'];	// fix for missing / in some environments
-define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
+	$root = substr($_SERVER['DOCUMENT_ROOT'],-1)=="/" ? substr($_SERVER['DOCUMENT_ROOT'],0,-1) : $_SERVER['DOCUMENT_ROOT'];	// fix for missing / in some environments
+	define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
 }
 
 /* @classes ---------------------- */
@@ -39,6 +39,18 @@ require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerD
 require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
 require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
+
+# save settings to constant
+if($_GET['page']!="install" ) {
+	# database object
+	$Database 	= new Database_PDO;
+	# try to fetch settings
+	try { $settings = $Database->getObject("settings", 1); }
+	catch (Exception $e) { $settings = false; }
+	if ($settings!==false) {
+		define(SETTINGS, json_encode($settings));
+	}
+}
 
 
 /**

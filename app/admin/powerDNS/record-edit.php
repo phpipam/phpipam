@@ -36,10 +36,25 @@ else {
 	// we provide record hostname and strip domain from it
 	if (!is_numeric($_POST['domain_id']) && !is_numeric($_POST['id'])) {
 		// fetch all domains
-		foreach($PowerDNS->fetch_all_domains () as $domain_s) {
-			if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
-				$_POST['domain_id'] = $domain_s->id;
-				break;
+		$all_domains = $PowerDNS->fetch_all_domains ();
+		if ($all_domains!==false) {
+			foreach($all_domains as $dk=>$domain_s) {
+				// loop through and find all matches
+				if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
+					// check best match to avoid for example a.example.net.nz1 added to example.net.nz
+					if (substr($_POST['domain_id'], -strlen($domain_s->name)) === $domain_s->name) {
+						$matches[$dk] = $domain_s;
+					}
+				}
+			}
+			// match found ?
+			if (isset($matches)) {
+				foreach($matches as $k=>$m){
+					$length = strlen($m->name);
+					if($length > $max){ $max = $length; $element_id = $k; }
+				}
+				// save longest match id
+				$_POST['domain_id'] = $all_domains[$element_id]->id;
 			}
 		}
 		// die if not existing

@@ -34,7 +34,20 @@ if ($firewallZoneMapping!==false) {
 if($firewallZoneMapping) {
 ?>
 	<!-- table -->
-	<table id="mappingsPrint" class="table table-condensed">
+	<table id="mappingsPrint" class="table table-td-top table-top table-condensed">
+
+	<!-- header -->
+	<tr>
+		<th><?php print _('Type'); ?></th>
+		<th><?php print _('Zone'); ?></th>
+		<th><?php print _('Alias'); ?></th>
+		<th><?php print _('Description'); ?></th>
+		<th><?php print _('Interface'); ?></th>
+		<th><?php print _('Subnets'); ?></th>
+		<th><?php print _('VLAN'); ?></th>
+		<th style="width:60px"></th>
+	</tr>
+
 	<?php
 
 	# loop
@@ -42,19 +55,9 @@ if($firewallZoneMapping) {
 		<!-- header -->
 		<tr>
 		<?php
-			if( strlen($devices[$k][0]->deviceDescription) < 1 )	{	print '<th colspan="10"><h4>'.$devices[$k][0]->deviceName											.'</h4></th>'; 	}
-			else 													{	print '<th colspan="10"><h4>'.$devices[$k][0]->deviceName.' ( '.$devices[$k][0]->deviceDescription	.' )</h4></th>';}
+		$devices[$k][0]->deviceDescription = strlen($devices[$k][0]->deviceDescription)<1 ? "" : "(".$devices[$k][0]->deviceDescription.")";
+		print '<th colspan="8" style="background:white"><h4>'.$devices[$k][0]->deviceName.$devices[$k][0]->deviceDescription	.'</h4></th>';
 		?>
-		</tr>
-		<tr>
-			<!-- header -->
-			<th><?php print _('Type'); ?></th>
-			<th><?php print _('Zone'); ?></th>
-			<th><?php print _('Alias'); ?></th>
-			<th><?php print _('Description'); ?></th>
-			<th><?php print _('Interface'); ?></th>
-			<th colspan="2"><?php print _('Subnet'); ?></th>
-			<th colspan="3"><?php print _('VLAN'); ?></th>
 		</tr>
 		<?php
 
@@ -69,76 +72,71 @@ if($firewallZoneMapping) {
 			$i = 1;
 			if ($mapping->network) {
 				foreach ($mapping->network as $key => $network) {
-					print '<tr>';
+					print '<tr class="border-top">';
 					if ($i === 1) {
-						print '<td rowspan="'.$counter.'">';
-					# columns
-					if ($mapping->indicator == 0 ) {
-						print '<span class="fa fa-home"  title="'._('Own Zone').'"></span>';
-					} else {
-						print '<span class="fa fa-group" title="'._('Customer Zone').'"></span>';
-					}
-					print '</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->interface.'</td>';
+						$title = $mapping->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+						// print
+						print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->interface.'</td>';
 					}
 					# display subnet informations
 					if ($network->subnetId) {
+						// description fix
+						$network->subnetDescription = strlen($network->subnetDescription)>0 ? " (".$network->subnetDescription.")" : "";
+						// subnet
 						if (!$network->subnetIsFolder) {
-							if ($network->subnetDescription) {
-								print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</a></td>';
-								print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$network->subnetDescription.'</a></td>';
-							} else {
-								print '<td colspan="2"><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</a></td>';
-							}
-						} else {
-							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder</a></td>';
-							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$network->subnetDescription.'</a></td>';
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</a></td>';
+						}
+						else {
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$network->subnetDescription.'</a></td>';
 						}
 					} else {
-						print '<td colspan="2"></td>';
+						print '<td></td>';
 					}
 					# display vlan informations
 					if ($network->vlanId) {
-						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlan.'</a></td>';
-						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlanName.'</a></td>';
+						// name fix
+						$network->vlanName = strlen($network->vlanName)>0 ? " (".$network->vlanName.")" : "";
+						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.''.$network->vlanName.'</a></td>';
 					} else {
-						print '<td colspan="2"></td>';
+						print '<td></td>';
 					}
 					if ($i === 1) {
 						# action menu
-						print '<td rowspan="'.$counter.'"><div class="btn-group">';
+						print '<td rowspan="'.$counter.'">';
+						print '<div class="btn-group">';
 						print '<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="'.$mapping->mappingId.'""><i class="fa fa-pencil"></i></button>';
 						print '<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="'.$mapping->mappingId.'"><i class="fa fa-remove"></i></button>';
+						print '</div>';
 						print '</td>';
 					}
 					print '</tr>';
 					# increase the loop counter
 					$i++;
-					}
-				} else {
-					# display only the zone mapping data if there is no network data available
-					print '<td rowspan="'.$counter.'">';
-					# columns
-					if ($mapping->indicator == 0 ) {
-						print '<span class="fa fa-home"  title="'._('Own Zone').'"></span>';
-					} else {
-						print '<span class="fa fa-group" title="'._('Customer Zone').'"></span>';
-					}
-					print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
-					print '<td rowspan="'.$counter.'">'.$mapping->interface.'</td>';
-					print '<td colspan="4">';
-					# action menu
-					print '<td><div class="btn-group">';
-					print '<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="'.$mapping->mappingId.'""><i class="fa fa-pencil"></i></button>';
-					print '<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="'.$mapping->mappingId.'"><i class="fa fa-remove"></i></button>';
-					print '</td>';
-					print '</tr>';
 				}
+			} else {
+				print "<tr class='border-top'>";
+				# display only the zone mapping data if there is no network data available
+				$title = $mapping->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+
+				print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->interface.'</td>';
+				print '<td colspan="2"></td>';
+				# action menu
+				print '<td>';
+				print '<div class="btn-group">';
+				print '<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="'.$mapping->mappingId.'""><i class="fa fa-pencil"></i></button>';
+				print '<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="'.$mapping->mappingId.'"><i class="fa fa-remove"></i></button>';
+				print '</div>';
+				print '</td>';
+				print '</tr>';
+			}
 		}
 	}
 	print '</table>';

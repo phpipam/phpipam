@@ -21,15 +21,16 @@ print '<button class="btn btn-sm btn-default btn-success editFirewallZone" style
 if($firewallZones) {
 
 	# table
-	print '<table id="zonesPrint" class="table table-condensed">';
+	print '<table id="zonesPrint" class="table table-top table-td-top table-condensed">';
 
 	# table headers
-	print '<tr>';
+	print '<tr style="background:white">';
 	print '<th>'._('Type').'</th>';
 	print '<th>'._('Zone').'</th>';
 	print '<th>'._('Description').'</th>';
-	print '<th colspan="2">'._('Subnet').'</th>';
-	print '<th colspan="3">'._('VLAN').'</th>';
+	print '<th>'._('Subnet').'</th>';
+	print '<th>'._('VLAN').'</th>';
+	print '<th style="width:60px;"></th>';
 	print '</tr>';
 
 	# display all firewall zones and network information
@@ -43,76 +44,72 @@ if($firewallZones) {
 		$i = 1;
 		if ($zoneObject->network) {
 			foreach ($zoneObject->network as $key => $network) {
-				print '<tr>';
+				print '<tr class="border-top">';
 				if ($i === 1) {
-					print '<td rowspan="'.$counter.'">';
-					if ($zoneObject->indicator == 0 ) {
-						print '<span class="fa fa-home"  title="'._('Own Zone').'"></span>';
-					} else {
-						print '<span class="fa fa-group" title="'._('Customer Zone').'"></span>';
-					}
-					print '</td><td rowspan="'.$counter.'">';
-					print $zoneObject->zone;
-					print '</td><td rowspan="'.$counter.'">';
-					print $zoneObject->description;
-					print '</td>';
+					// set title
+					$title = $zoneObject->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+					// print
+					print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+					print '<td rowspan="'.$counter.'">'.$zoneObject->zone.'</td>';
+					print '<td rowspan="'.$counter.'">'.$zoneObject->description.'</td>';
 				}
 				# display subnet informations
 				if ($network->subnetId) {
+					// description fix
+					$network->subnetDescription = strlen($network->subnetDescription)>0 ? " (".$network->subnetDescription.")" : "";
+
 					if (!$network->subnetIsFolder) {
-						if ($network->subnetDescription) {
-							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</a></td>';
-							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$network->subnetDescription.'</a></td>';
-						} else {
-							print '<td colspan="2"><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</a></td>';
-						}
+						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</a></td>';
 					} else {
-						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder</a></td>';
-						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$network->subnetDescription.'</a></td>';
+						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$network->subnetDescription.'</a></td>';
 					}
 				} else {
-					print '<td colspan="2"></td>';
+					print '<td>/</td>';
 				}
 				# display vlan informations
 				if ($network->vlanId) {
-					print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlan.'</a></td>';
-					print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlanName.'</a></td>';
+					// name fix
+					$network->vlanName = strlen($network->vlanName)>0 ? " (".$network->vlanName.")" : "";
+					print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlan.$network->vlanName.'</a></td>';
 				} else {
-					print '<td colspan="2"></td>';
+					print '<td>/</td>';
 				}
+				// actions
 				if ($i === 1) {
 					# action menu
-					print '<td rowspan="'.$counter.'"><div class="btn-group">';
+					print '<td rowspan="'.$counter.'">';
+					print '<div class="btn-group">';
 					print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
 					print '<button class="btn btn-default btn-xs editFirewallZone" data-action="delete" data-id="'.$zoneObject->id.'"><i class="fa fa-remove"></i></button>';
+					print '</div>';
 					print '</td>';
 				}
 				print '</tr>';
-				# increase the loop counter
+
+				// increase the loop counter
 				$i++;
-				}
-			} else {
-				# display only the zone data if there is no network data available
-				print '<tr>';
-				print '<td rowspan="'.$counter.'">';
-				if ($zoneObject->indicator == 0 ) {
-					print '<span class="fa fa-home"  title="'._('Own Zone').'"></span>';
-				} else {
-					print '<span class="fa fa-group" title="'._('Customer Zone').'"></span>';
-				}
-				print '</td><td>';
-				print $zoneObject->zone;
-				print '</td><td>';
-				print $zoneObject->description;
-				print '</td>';
-				print '<td colspan="4">';
-				# action menu
-				print '<td><div class="btn-group">';
-				print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
-				print '<button class="btn btn-default btn-xs editFirewallZone" data-action="delete" data-id="'.$zoneObject->id.'"><i class="fa fa-remove"></i></button>';
-				print '</td>';
-				print '</tr>';
 			}
+		}
+		# display only the zone data if there is no network data available
+		else {
+			// set title
+			$title = $zoneObject->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+
+			print '<tr class="border-top">';
+			print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+			print '<td>'.$zoneObject->zone.'</td>';
+			print '<td>'.$zoneObject->description.'</td>';
+			print '<td>/</td>';
+			print '<td>/</td>';
+			# action menu
+			print '<td>';
+			print '<div class="btn-group">';
+			print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
+			print '<button class="btn btn-default btn-xs editFirewallZone" data-action="delete" data-id="'.$zoneObject->id.'"><i class="fa fa-remove"></i></button>';
+			print '</div>';
+			print '</td>';
+			print '</tr>';
+		}
 	}
 	print '</table>';
 } else {

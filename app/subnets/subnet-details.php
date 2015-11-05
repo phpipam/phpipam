@@ -191,7 +191,10 @@ $rowSpan = 10 + sizeof($custom_fields);
 		// fetch
 		$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
 		if ($agent===false)		{ print _("Invalid scan agent"); }
-		else					{ print "<strong>".$agent->name ."</strong> (".$agent->description.")"; }
+		else					{
+			$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00" ? "Never" : $agent->last_access;
+			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>Last check $last_check</span>";
+		}
 		print "	</td>";
 		print "</tr>";
 		}

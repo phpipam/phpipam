@@ -2,8 +2,7 @@
 UPDATE `settings` set `version` = '1.2';
 
 /* reset db check field and donation */
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
+UPDATE `settings` set `dbverified` = 0, `donate` = 0;
 
 /* add subnetView Setting */
 ALTER TABLE `settings` ADD `subnetView` TINYINT  NOT NULL  DEFAULT '0';
@@ -34,7 +33,7 @@ CREATE TABLE `firewallZoneSubnet` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
 
-/* cpoy old subnet IDs from firewallZones table into firewallZoneSubnet */
+/* copy old subnet IDs from firewallZones table into firewallZoneSubnet */
 INSERT INTO `firewallZoneSubnet` (zoneId,subnetId) SELECT id AS zoneId,subnetId from `firewallZones`;
 
 /* remove the field subnetId from firewallZones, it's not longer needed */

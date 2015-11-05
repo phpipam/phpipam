@@ -580,6 +580,7 @@ VALUES
 	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'No', 'Yes'),
 	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');
 
+
 # Dump of table firewallZones
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `firewallZones`;
@@ -597,6 +598,7 @@ CREATE TABLE `firewallZones` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+
 # Dump of table firewallZoneMapping
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `firewallZoneMapping`;
@@ -612,6 +614,7 @@ CREATE TABLE `firewallZoneMapping` (
   KEY `devId_idx` (`deviceId`),
   CONSTRAINT `devId` FOREIGN KEY (`deviceId`) REFERENCES `devices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 
 # Dump of table firewallZoneMapping
 # ------------------------------------------------------------
@@ -633,7 +636,8 @@ CREATE TABLE `firewallZoneSubnet` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
 
-# Dump of table usersAuthMethod
+
+# Dump of table scanAgents
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `scanAgents`;
 
@@ -652,6 +656,11 @@ INSERT INTO `scanAgents` (`id`, `name`, `description`, `type`)
 VALUES
 	(1, 'locahost', 'Scanning from local machine', 'direct');
 
+
+# Dump of table -- for autofix comment, leave as it is
+# ------------------------------------------------------------
+
+
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.19';
+UPDATE `settings` set `version` = '1.2';

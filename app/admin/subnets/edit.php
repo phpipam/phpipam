@@ -44,6 +44,8 @@ else {
 # we are editing or deleting existing subnet, get old details
 if ($_POST['action'] != "add") {
     $subnet_old_details = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
+	# false id
+	if (sizeof($subnet_old_details)==0) 	{ $Result->show("danger", _("Invalid subnetId"), true, true); }
 }
 # we are adding new subnet
 else {
