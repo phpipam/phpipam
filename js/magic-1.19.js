@@ -146,6 +146,13 @@ $('a.disabled, button.disabled').click(function() { return false; });
 //fix for menus on ipad
 $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
 
+// close all popups by esc key press event
+$( document ).on( 'keydown', function ( e ) {
+    if ( e.keyCode === 27 ) {
+        hidePopups();
+    }
+});
+
 /*    generate random password */
 function randomPass() {
     var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -1550,6 +1557,58 @@ $(document).on("click", "#editZoneSubmit", function() {
     submit_popup_data (".zones-edit-result", "app/admin/firewall-zones/zones-edit-result.php", $('form#zoneEdit').serialize());
 });
 
+// add network to zone
+$(document).on("click", ".editNetwork", function() {
+     var pData = $('form#zoneEdit').serializeArray();
+     pData.push({name:'action',value:$(this).attr('data-action')});
+     pData.push({name:'subnetId',value:$(this).attr('data-subnetId')});
+     $('#popupOverlay2 .popup_w500').load('app/admin/firewall-zones/zones-edit-network.php',pData);
+    showPopup('popup_w500', false, true);
+    hideSpinner();
+});
+
+// remove a non persitent network from the selection
+$(document).on("click", ".deleteTempNetwork", function() {
+    // show spinner
+    showSpinner();
+    var filterName = 'network['+$(this).attr("data-subnetArrayKey")+']';
+    var pData =$('form#zoneEdit :input[name != "'+filterName+'"][name *= "network["]').serializeArray();
+    pData.push({name:'noZone',value:1});
+ 
+    // post
+    $.post("app/admin/firewall-zones/ajax.php", pData , function(data) {
+        $('div'+".zoneNetwork").html(data).slideDown('fast');
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    setTimeout(function (){hideSpinner();}, 500);
+
+    return false;
+});
+
+//submit form network
+$(document).on("click", "#editNetworkSubmit", function() {
+    // show spinner
+    showSpinner();
+    // set reload
+    reload = typeof reload !== 'undefined' ? reload : true;
+    // post
+    $.post("app/admin/firewall-zones/zones-edit-network-result.php", $('form#networkEdit :input[name != "sectionId"]').serialize(), function(data) {
+        $('div'+".zones-edit-network-result").html(data).slideDown('fast');
+
+        if(reload) {
+            if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning") == -1 ) {
+                $.post("app/admin/firewall-zones/ajax.php", $('form#networkEdit :input[name != "sectionId"]').serialize(), function(data) {
+                    $('div'+".zoneNetwork").html(data).slideDown('fast');
+                }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+                setTimeout(function (){hideSpinner();hidePopup2();}, 500);
+            } else { hideSpinner(); }
+        }
+        else {
+            hideSpinner();
+        }
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    // prevent reload
+    return false;
+});
 
 // zone edit menu - ajax request to fetch all subnets for a specific section id
 $(document).on("change", ".firewallZoneSection",(function () {

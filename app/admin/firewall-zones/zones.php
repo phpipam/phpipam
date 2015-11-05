@@ -1,78 +1,122 @@
 <?php
-// firewall zone fwzones.php
-// display firewall zones
 
+/**
+ *	firewall zone fwzones.php
+ *	display firewall zones
+ *******************************/
 
-// validate session parameters
+# validate session parameters
 $User->check_user_session();
 
-// initialize classes
+# initialize classes
 $Zones = new FirewallZones($Database);
 $firewallZones = $Zones->get_zones();
 
 
-// Add new firewall zone
+# Add new firewall zone
 print '<button class="btn btn-sm btn-default btn-success editFirewallZone" style="margin-bottom:10px;margin-top: 25px;" data-action="add" data-id="0"><i style="padding-right:5px;" class="fa fa-plus"></i>'._('Create Firewall zone').'</button>';
 
 
-// display the zone table if there are any zones in the database
+# display the zone table if there are any zones in the database
 if($firewallZones) {
 
-	// table
-	print '<table id="zonesPrint" class="table table-striped table-top table-auto">';
+	# table
+	print '<table id="zonesPrint" class="table table-condensed">';
 
-	// table headers
+	# table headers
 	print '<tr>';
 	print '<th>'._('Type').'</th>';
 	print '<th>'._('Zone').'</th>';
 	print '<th>'._('Description').'</th>';
 	print '<th colspan="2">'._('Subnet').'</th>';
-	print '<th colspan="2">'._('VLAN').'</th>';
-	print '<th></th>';
+	print '<th colspan="3">'._('VLAN').'</th>';
 	print '</tr>';
 
-	// firewall zones
+	# display all firewall zones and network information
 	foreach ($firewallZones as $zoneObject ) {
-		print '<tr>';
-		if ($zoneObject->indicator == 0 ) {
-			print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
-		} else {
-			print '<td><span class="fa fa-group" title="'._('Customer Zone').'"></span></td>';
+		# set rowspan in case if there are more than one networks bound to the zone
+		$counter = count($zoneObject->network);
+		if ($counter === 0) {
+			$counter = 1;
 		}
-		print '<td>';
-		print $zoneObject->zone;
-		print '</td><td>';
-		print $zoneObject->description;
-		print '</td><td>';
-		// check if there is a subnetId and if it is convertable to dotted decimal
-		if ($zoneObject->subnetId && $zoneObject->subnetDescription) {
-			if (!$zoneObject->subnetIsFolder) {
-				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$Subnets->transform_to_dotted($zoneObject->subnet).'/'.$zoneObject->subnetMask.'</a>';
-				print '</td><td>';
-				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$zoneObject->subnetDescription.'</a>';
+		# set the loop counter
+		$i = 1;
+		if ($zoneObject->network) {
+			foreach ($zoneObject->network as $key => $network) {
+				print '<tr>';
+				if ($i === 1) {
+					print '<td rowspan="'.$counter.'">';
+					if ($zoneObject->indicator == 0 ) {
+						print '<span class="fa fa-home"  title="'._('Own Zone').'"></span>';
+					} else {
+						print '<span class="fa fa-group" title="'._('Customer Zone').'"></span>';
+					}
+					print '</td><td rowspan="'.$counter.'">';
+					print $zoneObject->zone;
+					print '</td><td rowspan="'.$counter.'">';
+					print $zoneObject->description;
+					print '</td>';
+				}
+				# display subnet informations
+				if ($network->subnetId) {
+					if (!$network->subnetIsFolder) {
+						if ($network->subnetDescription) {
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</a></td>';
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$network->subnetDescription.'</a></td>';
+						} else {
+							print '<td colspan="2"><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</a></td>';
+						}
+					} else {
+						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder</a></td>';
+						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$network->subnetDescription.'</a></td>';
+					}
+				} else {
+					print '<td colspan="2"></td>';
+				}
+				# display vlan informations
+				if ($network->vlanId) {
+					print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlan.'</a></td>';
+					print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">'.$network->vlanName.'</a></td>';
+				} else {
+					print '<td colspan="2"></td>';
+				}
+				if ($i === 1) {
+					# action menu
+					print '<td rowspan="'.$counter.'"><div class="btn-group">';
+					print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
+					print '<button class="btn btn-default btn-xs editFirewallZone" data-action="delete" data-id="'.$zoneObject->id.'"><i class="fa fa-remove"></i></button>';
+					print '</td>';
+				}
+				print '</tr>';
+				# increase the loop counter
+				$i++;
+				}
 			} else {
-				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">Folder</a>';
+				# display only the zone data if there is no network data available
+				print '<tr>';
+				print '<td rowspan="'.$counter.'">';
+				if ($zoneObject->indicator == 0 ) {
+					print '<span class="fa fa-home"  title="'._('Own Zone').'"></span>';
+				} else {
+					print '<span class="fa fa-group" title="'._('Customer Zone').'"></span>';
+				}
 				print '</td><td>';
-				print '<a href="'.create_link("subnets",$zoneObject->sectionId,$zoneObject->subnetId).'">'.$zoneObject->subnetDescription.'</a>';
+				print $zoneObject->zone;
+				print '</td><td>';
+				print $zoneObject->description;
+				print '</td>';
+				print '<td colspan="4">';
+				# action menu
+				print '<td><div class="btn-group">';
+				print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
+				print '<button class="btn btn-default btn-xs editFirewallZone" data-action="delete" data-id="'.$zoneObject->id.'"><i class="fa fa-remove"></i></button>';
+				print '</td>';
+				print '</tr>';
 			}
-		} else {
-			print '</td><td>';
-		}
-		print '</td><td>';
-		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlan.'</a>';
-		print '</td><td>';
-		print '<a href="'.create_link('tools','vlan',$zoneObject->domainId,$zoneObject->vlanId).'">'.$zoneObject->vlanName.'</a>';
-		// action menu
-		print '</td><td><div class="btn-group">';
-		print '<button class="btn btn-default btn-xs editFirewallZone" data-action="edit" data-id="'.$zoneObject->id.'""><i class="fa fa-pencil"></i></button>';
-		print '<button class="btn btn-default btn-xs editFirewallZone" data-action="delete" data-id="'.$zoneObject->id.'"><i class="fa fa-remove"></i></button>';
-		print '</td></tr></div>';
 	}
-
 	print '</table>';
-
 } else {
-	// print an info if there are no zones in the database
+	# print an info if there are no zones in the database
 	$Result->show("info", _("No firewall zones configured"), false);
 }
 ?>
