@@ -8,7 +8,30 @@ $(document).ready(function() {
 	};
 	$(".input-switch").bootstrapSwitch(switch_options);
 });
+
+$(function() {
+	$('div#availableItems').sortable({
+	  connectWith: "div",
+	  receive: function (e, ui) {
+	  	$(ui.item.children('input')).attr('name','');
+	  }
+	});
+
+	$('div#itemList').sortable({
+	  connectWith: "div",
+	  receive: function (e, ui) {
+	  	$(ui.item.children('input')).attr('name','pattern[]');
+	  }
+	});
+
+	$('div#itemList input').attr('name','pattern[]');
+	$('#availableItems,#itemList').disableSelection();
+});
 </script>
+
+<style>
+.label-default { cursor: pointer; }
+</style>
 
 <?php
 
@@ -47,6 +70,8 @@ $User->check_user_session();
 #	"strictMode":"on",
 # 	/* device type ID for firewall devices, default: 3 */
 #	"deviceType":"3",
+#	/* default value for firewall address object name pattern */
+#	"pattern":{"0":"patternFQDN"}
 #	/* Adds some padding to the zone name (decimal or hex) to generate zone names of equal length */
 #	"padding":"on"
 # }
@@ -60,13 +85,26 @@ $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 # fetch device types
 $deviceTypes = $Tools->fetch_device_types();
 
+# build the array for name pattern
+$namePattern = array (	'patternIndicator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternIndicator">Indicator</span>',
+						'patternZoneName' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternZoneName">Zone name</span>',
+						'patternIPType' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternIPType">IP Type</span>',
+						'patternHost' 		=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternHost">Host</span>',
+						'patternFQDN' 		=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternFQDN">FQDN</span>',
+						'patternSeparator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternSeparator">'.$firewallZoneSettings['separator'].'</span>');
 ?>
 
 <!-- database settings -->
 <form name="firewallZoneSettings" id="firewallZoneSettings">
 <table id="settings" class="table table-hover table-condensed table-auto">
-
+<!-- zone settings -->
 	<!-- zoneLength -->
+	<tr>
+		<td colspan="3" style="padding-top:25px;">
+			<strong><?php print _('Zone settings'); ?></strong>
+			<hr>
+		</td>
+	</tr>
 	<tr>
 		<td><?php print _('Maximum zone name length'); ?></td>
 		<td style="width:120px;">
@@ -76,48 +114,7 @@ $deviceTypes = $Tools->fetch_device_types();
 			<span class="text-muted"><?php print _("Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"); ?></span>
 		</td>
 	</tr>
-	<!-- ipType -->
-	<tr>
-		<td><?php print _('IPv4 address type alias'); ?></td>
-		<td>
-			<input type="text" class="form-control input-sm" name="ipType[0]" value="<?php print $firewallZoneSettings['ipType']['0']; ?>">
-		</td>
-		<td rowspan="2">
-			<span class="text-muted"><?php print _("Address type aliases are used to indicate a IPv4 or IPv6 address object."); ?></span>
-		</td>
-	</tr>
-	<tr>
-		<td><?php print _('IPv6 address type alias'); ?></td>
-		<td>
-			<input type="text" class="form-control input-sm" name="ipType[1]" value="<?php print $firewallZoneSettings['ipType']['1']; ?>">
-		</td>
-	</tr>
-	<!-- separator -->
-	<tr>
-		<td><?php print _('Separator'); ?></td>
-		<td>
-			<input type="text" class="form-control input-sm" name="separator" value="<?php print $firewallZoneSettings['separator']; ?>">
-		</td>
-		<td>
-			<span class="text-muted"><?php print _("The separator is used to keep the name of address objects tidy."); ?></span>
-		</td>
-	</tr>
-	<!-- indicator -->
-	<tr>
-		<td><?php print _('Own zone indicator'); ?></td>
-		<td>
-			<input type="text" class="form-control input-sm" name="indicator[0]" value="<?php print $firewallZoneSettings['indicator']['0']; ?>">
-		</td>
-		<td rowspan="2">
-			<span class="text-muted"><?php print _("The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It is the leading character of the zone name but will be separated from the zone name in the database."); ?></span>
-		</td>
-	</tr>
-	<tr>
-		<td><?php print _('Customer zone indicator'); ?></td>
-		<td>
-			<input type="text" class="form-control input-sm" name="indicator[1]" value="<?php print $firewallZoneSettings['indicator']['1']; ?>">
-		</td>
-	</tr>
+
 	<!-- zoneGenerator -->
 	<tr>
 		<td><?php print _('Zone generator method'); ?></td>
@@ -172,6 +169,120 @@ $deviceTypes = $Tools->fetch_device_types();
 		</td>
 		<td>
 			<span class="text-muted"><?php print _("Select the appropriate device type to match firewall devices."); ?></span>
+		</td>
+	</tr>
+	<!-- address object settings -->
+	<tr>
+		<td colspan="3" style="padding-top:25px;">
+			<strong><?php print _('Firewall address object settings'); ?></strong>
+			<hr>
+		</td>
+	</tr>
+	<!-- enable or disable auto generated address objects -->
+	<tr>
+		<td><?php print _('Autogenerate address objects'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" name="autogen" value="on" <?php if($firewallZoneSettings['autogen'] == 'on'){ print 'value="'.$firewallZoneSettings['autogen'].'" checked';} ?>>
+		</td>
+		<td>
+			<span class="text-muted"><?php print _("Automaticaly generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"); ?></span>
+		</td>
+	</tr>
+	<!-- ipType -->
+	<tr>
+		<td><?php print _('IPv4 address type alias'); ?></td>
+		<td>
+			<input type="text" class="form-control input-sm" name="ipType[0]" value="<?php print $firewallZoneSettings['ipType']['0']; ?>">
+		</td>
+		<td rowspan="2">
+			<span class="text-muted"><?php print _("Address type aliases are used to indicate a IPv4 or IPv6 address object."); ?></span>
+		</td>
+	</tr>
+	<tr>
+		<td><?php print _('IPv6 address type alias'); ?></td>
+		<td>
+			<input type="text" class="form-control input-sm" name="ipType[1]" value="<?php print $firewallZoneSettings['ipType']['1']; ?>">
+		</td>
+	</tr>
+	<!-- separator -->
+	<tr>
+		<td><?php print _('Separator'); ?></td>
+		<td>
+			<input type="text" class="form-control input-sm" name="separator" value="<?php print $firewallZoneSettings['separator']; ?>">
+		</td>
+		<td>
+			<span class="text-muted"><?php print _("The separator is used to keep the name of address objects tidy."); ?></span>
+		</td>
+	</tr>
+	<!-- indicator -->
+	<tr>
+		<td><?php print _('Own zone indicator'); ?></td>
+		<td>
+			<input type="text" class="form-control input-sm" name="indicator[0]" value="<?php print $firewallZoneSettings['indicator']['0']; ?>">
+		</td>
+		<td rowspan="2">
+			<span class="text-muted"><?php print _("The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It is the leading character of the zone name but will be separated from the zone name in the database."); ?></span>
+		</td>
+	</tr>
+	<tr>
+		<td><?php print _('Customer zone indicator'); ?></td>
+		<td>
+			<input type="text" class="form-control input-sm" name="indicator[1]" value="<?php print $firewallZoneSettings['indicator']['1']; ?>">
+		</td>
+	</tr>
+	<!-- address object pattern -->
+	<tr>
+		<td>
+		</td>
+		<td colspan="2" style="padding-top:15px;">
+			<span class="text-muted"><?php print _('To organize the order of the firewall IP addres object name pattern simply drag and drop the different parts in the lower field.<br>It\'s also possible to reorganize them to fit your needs.'); ?></span>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php print _('Available Items'); ?>
+		</td>
+		<td colspan="2">
+			<div id="availableItems" class="alert alert-info dropable" style="text-align:center;">
+					<?php
+					$patternCount = 0;
+					foreach ($namePattern as $key => $pattern) {
+						if (preg_match('/patternSeparator/i',$settingsPattern)) {
+							$patternCount++;
+						
+						} elseif (!$firewallZoneSettings['pattern']) {
+							print $pattern;
+						} elseif (!in_array($key,$firewallZoneSettings['pattern'])) {
+							print $pattern;
+						}
+					}
+					while ( $patternCount <= 4 ) {
+						print $namePattern['patternSeparator'];
+						$patternCount++;
+					}
+					?>
+			</div> 
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<?php print _('Name pattern'); ?>
+		</td>
+		<td colspan="2">
+			<div id="itemList" class="alert alert-info dropable" style="text-align:center;">
+				<?php
+				if ($firewallZoneSettings['pattern']) {
+					foreach ($firewallZoneSettings['pattern'] as $settingsPattern) {
+						foreach ($namePattern as $key => $pattern) {
+							if ($settingsPattern == $key) {
+								print $pattern;
+							}
+						}
+					}
+				}
+				?>
+			</div>
+		</td>
 		</td>
 	</tr>
 	<!-- submit -->

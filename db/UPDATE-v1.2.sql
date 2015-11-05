@@ -43,3 +43,9 @@ ALTER TABLE `firewallZones` DROP COLUMN `subnetId`;
 /* add fk constrain and index to firewallZoneMappings to automatically remove a mapping if a device has been deleted */
 ALTER TABLE `firewallZoneMapping` ADD INDEX `devId_idx` (`deviceId` ASC)  COMMENT '';
 ALTER TABLE `firewallZoneMapping` ADD CONSTRAINT `devId` FOREIGN KEY (`deviceId`) REFERENCES `devices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+/* add firewallAddresObject field to the ipaddresses table to store fw addr. obj. names permanently */
+ALTER TABLE `ipaddresses` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL AFTER `PTR`;
+
+/* activate the firewallAddressObject IP field filter on default */
+UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject');
