@@ -98,10 +98,10 @@ class FirewallZones extends Common_functions {
 		if($maxZone[0]->zone) {
 			# add 1 to the zone name
 			$zoneName = ++$maxZone[0]->zone;
-			if($zoneGenerator == 0 ) {	
+			if($zoneGenerator == 0 ) {
 				if(strlen($zoneName) > $zoneLength) {
 					return $this->Result->show("danger", _("Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."), true);
-				}				
+				}
 			} elseif($zoneGenerator == 1) {
 				# the highest convertable integer value for dechex() is 4294967295!
 				if($zoneName > 4294967295) {
@@ -279,7 +279,7 @@ class FirewallZones extends Common_functions {
 						vlans.name AS vlanName
 						FROM firewallZoneSubnet
 						LEFT JOIN subnets ON subnetId = subnets.id
-						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId 
+						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId
 						HAVING zoneId = ? ORDER BY subnet ASC;', $mapping[0]->id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -320,7 +320,7 @@ class FirewallZones extends Common_functions {
 	 */
 	public function get_zone_subnet_info ($id) {
 		# try to fetch id specific zone information
-		try { $info =  $this->Database->getObjectsQuery('SELECT 
+		try { $info =  $this->Database->getObjectsQuery('SELECT
 						firewallZones.zone as zone,
 						firewallZoneMapping.alias as alias,
 						firewallZones.description as description,
@@ -470,47 +470,46 @@ class FirewallZones extends Common_functions {
 		$zoneInformation = $this->get_zone($id);
 
 		# build html output
-		print '<table class="table table-condensed">';
+		print '<table class="table table-auto table-condensed" style="margin-bottom:0px;">';
+		print "<tr><td colspan='2'><h4>Zone details</h4><hr></td></tr>";
 		print '<tr>';
-		print '<td style="width:150px;">'._('Zone Name').'</td>';
+		print '<td style="width:110px;">'._('Zone Name').'</td>';
 		print '<td>'.$zoneInformation->zone.'</td>';
-		print '</tr><tr>';
+		print '</tr>';
+		print '<tr>';
 		print '<td>'._('Indicator').'</td>';
-		if ($zoneInformation->indicator == 0) {
-			print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
-		} else {
-			print '<td><span class="fa fa-group" title="'._('Customer Zone').'"></span></td>';
-		}
-		print '</tr><tr>';
+		$title = $zoneInformation->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+		print '<td><span class="fa fa-home"  title="'._($title).'"></span></td>';
+		print '</tr>';
+		print '<tr>';
 		print '<td>'._('Description').'</td>';
 		print '<td>'.$zoneInformation->description.'</td>';
 		print '</tr>';
-		print '</table>';
+		print "</table>";
+		// networks
 		if ($zoneInformation->network) {
-			print '<table class="table table-condensed">';
+			print "<table class='table table-condensed' style='margin-bottom:30px;'>";
+			print "<tr><td colspan='2'><br><h4>Subnets</h4><hr></td></tr>";
 			print '<tr>';
-			print '<th colspan="2">'._('Subnet').'</th>';
-			print '<th colspan="2">'._('VLAN').'</th>';
+			print '<th>'._('Subnet').'</th>';
+			print '<th>'._('VLAN').'</th>';
 			print '</tr>';
 			foreach ($zoneInformation->network as $network) {
 				print '<tr>';
+				// description fix
+				$network->subnetDescription = $network->subnetDescription ? " (".$network->subnetDescription.")" : "/";
+				$network->vlanName = $network->vlanName ? "(".$network->vlanName.")" : "";
+
 				if (!$network->subnetIsFolder) {
-					if ($network->subnetDescription){
-						print '<td style="width:120px;">'.$this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td><td  style="width:120px;">'.$network->subnetDescription.'</td>';
-					} else {
-						print '<td colspan="2">'.$this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.'</td>';
-					}
-				} else{
-					print '<td  style="width:120px;">Folder</td><td  style="width:120px;">'.$network->subnetDescription.'</td>';
+					print '<td>'.$this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</td>';
 				}
-				if ($network->vlanName) {
-					print '<td  style="width:25px;">'.$network->vlan.'</td><td  style="width:120px;">'.$network->vlanName.'</td>';
-				} else {
-					print '<td colspan="2">'.$network->vlan.'</td>';
+				else{
+					print '<td>Folder '.$network->subnetDescription.'</td>';
 				}
+				print '<td>'.$network->vlan.$network->vlanName.'</td>';
 				print '</tr>';
 			}
-		} 
+		}
 	}
 
 
@@ -550,7 +549,10 @@ class FirewallZones extends Common_functions {
 				print '<td rowspan="'.$rowspan.'" style="width:150px;">Network</td>';
 			}
 			print '<td>';
-			print '<span alt="'._('Delete Network').'" title="'._('Delete Network').'" class="editNetwork" style="color:red;margin-bottom:10px;margin-top: 10px;margin-right:15px;" data-action="delete" data-zoneId="'.$id.'" data-subnetId="'.$network->subnetId.'"><i class="fa fa-close"></i></span>';
+			print '<a class="btn btn-xs btn-danger editNetwork" style="margin-right:5px;" alt="'._('Delete Network').'" title="'._('Delete Network').'" data-action="delete" data-zoneId="'.$id.'" data-subnetId="'.$network->subnetId.'">';
+			print '<span><i class="fa fa-close"></i></span>';
+			print "</a>";
+
 			if ($network->subnetIsFolder == 1 ) {
 				print 'Folder: '.$network->subnetDescription;
 			} else {

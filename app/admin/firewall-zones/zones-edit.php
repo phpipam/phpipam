@@ -148,15 +148,19 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 <table class="table table-noborder table-condensed" style="padding-bottom:20px;">
 <?php
 if ($firewallZone->network) {
+	print "<tr><td colspan='2'><hr></tr>";
 	$rowspan = count($firewallZone->network);
 	$i = 1;
 	foreach ($firewallZone->network as $network) {
 		print '<tr>';
 		if ($i === 1) {
-			print '<td rowspan="'.$rowspan.'" style="width:150px;">Network</td>';
+			print '<td rowspan="'.$rowspan.'" style="width:150px;vertical-align:top">Networks</td>';
 		}
 		print '<td>';
-		print '<span alt="'._('Delete Network').'" title="'._('Delete Network').'" class="editNetwork" style="color:red;margin-bottom:10px;margin-top: 10px;margin-right:15px;" data-action="delete" data-zoneId="'.$firewallZone->id.'" data-subnetId="'.$network->subnetId.'"><i class="fa fa-close"></i></span>';
+		print '<a class="btn btn-xs btn-danger editNetwork" style="margin-right:5px;" alt="'._('Delete Network').'" title="'._('Delete Network').'" data-action="delete" data-zoneId="'.$firewallZone->id.'" data-subnetId="'.$network->subnetId.'">';
+		print '<span><i class="fa fa-close"></i></span>';
+		print "</a>";
+
 		if ($network->subnetIsFolder == 1) {
 			print 'Folder: '.$network->subnetDescription.'</td>';
 		} else {

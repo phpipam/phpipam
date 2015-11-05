@@ -52,8 +52,8 @@ if ($_POST['netZoneId']) {
 # deliver networkinformations about a specific zone
 if ($_POST['noZone'] == 1) {
 	if($_POST['masterSubnetId']) {
-		$_POST['network'][] = $_POST['masterSubnetId']; 
-	} 
+		$_POST['network'][] = $_POST['masterSubnetId'];
+	}
 	if ($_POST['network']) {
 		$rowspan = count($_POST['network']);
 		$i = 1;

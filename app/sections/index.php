@@ -165,7 +165,11 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 				# only selected
 				if($i['show']) {
 					# active?
-					$active = $_GET['section']==$i['href'] ? "active" : "";
+					if($_GET['page']=="administration") {
+						$active = $_GET['section']==$i['href'] ? "active" : "";
+					} else {
+						$active = "";
+					}
 					print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>"._($i['name'])."</a></li>";
 				}
 			}
@@ -200,7 +204,11 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 						# only active
 						if($i['show']) {
 							# active?
-							$active = $_GET['section']==$i['href'] ? "active" : "";
+							if($_GET['page']=="tools") {
+								$active = $_GET['section']==$i['href'] ? "active" : "";
+							} else {
+								$active = "";
+							}
 							print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
 						}
 					}
@@ -262,7 +270,11 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 						# only selected
 						if($i['show']) {
 							# active?
-							$active = $_GET['section']==$i['href'] ? "active" : "";
+							if($_GET['page']=="tools") {
+								$active = $_GET['section']==$i['href'] ? "active" : "";
+							} else {
+								$active = "";
+							}
 							print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
 						}
 					}

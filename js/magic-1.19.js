@@ -146,13 +146,6 @@ $('a.disabled, button.disabled').click(function() { return false; });
 //fix for menus on ipad
 $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropagation(); });
 
-// close all popups by esc key press event
-$( document ).on( 'keydown', function ( e ) {
-    if ( e.keyCode === 27 ) {
-        hidePopups();
-    }
-});
-
 /*    generate random password */
 function randomPass() {
     var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
@@ -1574,7 +1567,7 @@ $(document).on("click", ".deleteTempNetwork", function() {
     var filterName = 'network['+$(this).attr("data-subnetArrayKey")+']';
     var pData =$('form#zoneEdit :input[name != "'+filterName+'"][name *= "network["]').serializeArray();
     pData.push({name:'noZone',value:1});
- 
+
     // post
     $.post("app/admin/firewall-zones/ajax.php", pData , function(data) {
         $('div'+".zoneNetwork").html(data).slideDown('fast');

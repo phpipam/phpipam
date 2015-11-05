@@ -179,6 +179,10 @@ tbody {
 .table.table-top.table-td-top td {
 	vertical-align: top !important;
 }
+table#zonesPrint tr.border-top td,
+table#mappingsPrint tr.border-top td {
+	border-bottom: 1px solid #eee;
+}
 
 
 

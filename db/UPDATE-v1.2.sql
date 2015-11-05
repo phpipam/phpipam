@@ -33,7 +33,7 @@ CREATE TABLE `firewallZoneSubnet` (
     ON DELETE CASCADE
     ON UPDATE NO ACTION);
 
-/* cpoy old subnet IDs from firewallZones table into firewallZoneSubnet */
+/* copy old subnet IDs from firewallZones table into firewallZoneSubnet */
 INSERT INTO `firewallZoneSubnet` (zoneId,subnetId) SELECT id AS zoneId,subnetId from `firewallZones`;
 
 /* remove the field subnetId from firewallZones, it's not longer needed */

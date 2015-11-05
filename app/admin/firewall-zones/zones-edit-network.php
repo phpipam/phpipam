@@ -33,12 +33,12 @@ $Zones    = new FirewallZones($Database);
 $User->check_user_session();
 
 # validate $_POST['action'] values
-if ($_POST['action'] != 'add' && $_POST['action'] != 'delete') 		{ $Result->show("danger", _("Invalid action. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
+if ($_POST['action'] != 'add' && $_POST['action'] != 'delete') 	{ $Result->show("danger", _("Invalid action. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
 # validate $_POST['id'] values
 if ($_POST['id'] && !preg_match('/^[0-9]+$/i', $_POST['id'])) 	{ $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!").'<button style="margin-left:50px;" class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
 # validate $_POST['sectionId'] values
 if ($_POST['id'] && $_POST['subnetId'] != '') {
-	if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 				{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
+	if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 		{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!").'<button class="btn btn-sm btn-default hidePopup2">'._('Cancel').'</button>', true); }
 }
 
 # fetch all sections
@@ -58,7 +58,7 @@ $sections = $Sections->fetch_all_sections();
 		<!-- delete warning and network information-->
 		<tr>
 			<td style="width:150px;">
-				<?php 
+				<?php
 				$subnet = $Subnets->fetch_subnet('id',$_POST['subnetId']);
 				# display network information with or without description
 				if ($subnet->description) 	{	$network = $Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask.' ('.$subnet->description.')';	}
@@ -66,7 +66,7 @@ $sections = $Sections->fetch_all_sections();
 				$Result->show("warning", "<strong>"._('Warning').":</strong><br>"._("You are about to remove the following Network from the firewall zone:<br>".$network), false); ?>
 				<input type="hidden" name="masterSubnetId" value="<?php print $_POST['subnetId']; ?>">
 			</td>
-	<?php } else { 
+	<?php } else {
 		# add a network to the zone
 		?>
 	<tr>
@@ -120,9 +120,9 @@ $sections = $Sections->fetch_all_sections();
 <?php } ?>
 </table>
 <input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-<?php 
+<?php
 if ($_POST['id']) 	{ print '<input type="hidden" name="netZoneId" value="'.$_POST['id'].'">'; }
-else 				{ print '<input type="hidden" name="noZone" value="1">'; 
+else 				{ print '<input type="hidden" name="noZone" value="1">';
 						if ($_POST['network']) {
 					  		foreach ($_POST['network'] as $key => $network) {
 					    		print '<input type="hidden" name="network['.$key.']" value="'.$network.'">';
