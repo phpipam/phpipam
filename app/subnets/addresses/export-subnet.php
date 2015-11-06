@@ -110,6 +110,10 @@ if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
 	$rowCount++;
 }
+if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('fw object') ,$format_title);
+	$rowCount++;
+}
 if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('mac') ,$format_title);
 	$rowCount++;
@@ -187,6 +191,10 @@ foreach ($addresses as $ip) {
 	}
 	if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['dns_name']);
+		$rowCount++;
+	}
+	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['firewallAddressObject']);
 		$rowCount++;
 	}
 	if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
