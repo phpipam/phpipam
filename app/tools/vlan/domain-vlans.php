@@ -76,10 +76,10 @@ else {
 
 		// show free vlans - start
 		if($User->user->hideFreeRange!=1) {
-			if($m==0 && $vlan->number!=1)	{
+			if($m==0 && $vlan[0]->number!=1)	{
 				print "<tr class='success'>";
 				print "<td></td>";
-				print "<td colspan='".(5+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='".$vlan_domain->id."'  data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN')." 1 - ".($vlan[0]->number -1)." (".($vlan[0]->number -1)." "._('free').")</td>";
+				print "<td colspan='".(5+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='".$vlan_domain->id."'  data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN')." 1 - ".($vlan[0]->number)." (".($vlan[0]->number -1)." "._('free').")</td>";
 				print "</tr>";
 			}
 			# show free vlans - before vlan

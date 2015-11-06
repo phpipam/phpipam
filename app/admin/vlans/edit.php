@@ -112,6 +112,20 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+	<?php if($_POST['action']=="add" || $_POST['action']=="edit") { ?>
+    <!-- require unique -->
+    <tr>
+	    <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+    	<td><?php print _('Unique VLAN'); ?></td>
+    	<td>
+	    	<input type="checkbox" name="unique" value="on">
+	    	<span class="text-muted"><?php print _('Require unique vlan accross domains'); ?></span>
+	    </td>
+    </tr>
+	<?php } ?>
+
 	<!-- Custom -->
 	<?php
 	if(sizeof($custom) > 0) {
