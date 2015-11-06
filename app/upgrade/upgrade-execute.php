@@ -25,6 +25,7 @@ if($Install->upgrade_database()===true) {
 
 	# migrate settings
 	$User->migrate_domain_settings ();
+  $User->migrate_ldap_settings ();
 
 	# check for possible errors
 	if(sizeof($errors = $Tools->verify_database())>0) {
