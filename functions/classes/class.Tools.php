@@ -1961,6 +1961,42 @@ class Tools extends Common_functions {
 	 */
 
 	/**
+	 * Fetch all l2 domans and vlans
+	 *
+	 * @access public
+	 * @param string $search (default: false)
+	 * @return void
+	 */
+	public function fetch_all_domains_and_vlans ($search = false) {
+		// set query
+		$query = "select `d`.`name` as `domainName`,
+						`d`.`description` as `domainDescription`,
+						`v`.`domainId` as `domainId`,
+						`v`.`name` as `name`,
+						`v`.`number` as `number`,
+						`v`.`description` as `description`,
+						`v`.`vlanId` as `id`
+						from
+						`vlans` as `v`,
+						`vlanDomains` as `d`
+						where `v`.`domainId` = `d`.`id`
+						order by `v`.`number` asc;";
+		// fetch
+		try { $domains = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
+		// filter if requested
+		if ($search !== false && sizeof($domains)>0) {
+			foreach ($domains as $k=>$d) {
+				if (strpos($d->number, $search)===false && strpos($d->name, $search)===false && strpos($d->description, $search)===false) {
+					unset($domains[$k]);
+				}
+			}
+		}
+		// return
+		return sizeof($domains)>0 ? $domains : false;
+	}
+
+	/**
 	 * Fetches instructions from database
 	 *
 	 * @access public

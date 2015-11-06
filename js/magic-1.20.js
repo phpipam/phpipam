@@ -1987,6 +1987,24 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
     });
     return false;
 });
+// filter vlans
+$('.vlansearchsubmit').click(function() {
+	showSpinner();
+	var search = $('input.vlanfilter').val();
+	var location = $('input.vlanfilter').attr('data-location');
+    //go to search page
+    var prettyLinks = $('#prettyLinks').html();
+	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = location +search+"/";}, 500); }
+	else					{ setTimeout(function (){window.location = location + "&sPage="+search;}, 500); }
+
+
+    //go to search page
+    var prettyLinks = $('#prettyLinks').html();
+	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+	else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
+
+	return false;
+});
 
 
 
