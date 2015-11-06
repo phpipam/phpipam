@@ -34,6 +34,7 @@ CREATE TABLE `ipaddresses` (
   `excludePing` BINARY  NULL  DEFAULT '0',
   `PTRignore` BINARY  NULL  DEFAULT '0',
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
+  `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
@@ -136,7 +137,7 @@ CREATE TABLE `settings` (
   `enableVRF` tinyint(1) DEFAULT '1',
   `enableDNSresolving` tinyint(1) DEFAULT NULL,
   `enableFirewallZones` TINYINT(1) NOT NULL DEFAULT '0',
-  `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on"}',
+  `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on","pattern":{"0":"patternFQDN"}}',
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
   `powerDNS` TEXT  NULL,
   `version` varchar(5) DEFAULT NULL,
@@ -172,7 +173,7 @@ CREATE TABLE `settings` (
 /* insert default values */
 INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
 VALUES
-	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note', 1, 'subnet,asc', 24);
+	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
 
 
 # Dump of table settingsDomain
@@ -620,10 +621,10 @@ CREATE TABLE `firewallZoneMapping` (
 DROP TABLE IF EXISTS `firewallZoneSubnet`;
 
 CREATE TABLE `firewallZoneSubnet` (
-  `zoneId` INT NOT NULL COMMENT '',
-  `subnetId` INT(11) NOT NULL COMMENT '',
-  INDEX `fk_zoneId_idx` (`zoneId` ASC)  COMMENT '',
-  INDEX `fk_subnetId_idx` (`subnetId` ASC)  COMMENT '',
+  `zoneId` INT NOT NULL,
+  `subnetId` INT(11) NOT NULL,
+  INDEX `fk_zoneId_idx` (`zoneId` ASC),
+  INDEX `fk_subnetId_idx` (`subnetId` ASC),
   CONSTRAINT `fk_zoneId`
     FOREIGN KEY (`zoneId`)
     REFERENCES `firewallZones` (`id`)

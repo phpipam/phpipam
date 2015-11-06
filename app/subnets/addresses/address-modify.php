@@ -270,6 +270,18 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	print '	</td>'. "\n";
 	print '</tr>'. "\n";
 	?>
+
+	<!-- set gateway -->
+	<tr>
+    	<td colspan="2"><hr></td>
+	</tr>
+	<tr>
+		<td><?php print _("Is gateway"); ?></td>
+		<td>
+			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
+		</td>
+	</tr>
+
 	<!-- exclude Ping -->
 	<?php
 	if($subnet['pingSubnet']==1) {
@@ -280,21 +292,11 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '<tr>';
 	 	print '<td>'._("Ping exclude").'</td>';
 	 	print '<td>';
-	 	print "	<div class='checkbox info2'>";
-		print ' 	<input type="checkbox" class="ip_addr" name="excludePing" value="1" '.$checked.' '.$delete.'>'. _('Exclude from ping status checks');
-		print "	</div>";
+		print ' <input type="checkbox" class="ip_addr input-switch" name="excludePing" value="1" '.$checked.' '.$delete.'> <span class="text-muted">'. _('Exclude from ping status checks')."</span>";
 	 	print '</td>';
 	 	print '</tr>';
 	}
 	?>
-
-	<!-- set gateway -->
-	<tr>
-		<td><?php print _("Is gateway"); ?></td>
-		<td>
-			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
-		</td>
-	</tr>
 	<?php
 	// ignore PTR
 	if ($User->settings->enablePowerDNS==1) {

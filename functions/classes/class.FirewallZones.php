@@ -322,18 +322,40 @@ class FirewallZones extends Common_functions {
 		# try to fetch id specific zone information
 		try { $info =  $this->Database->getObjectsQuery('SELECT
 						firewallZones.zone as zone,
+						firewallZones.padding as padding,
+						firewallZones.length as length,
+						firewallZones.indicator as indicator,
+						firewallZones.generator as generator,
 						firewallZoneMapping.alias as alias,
 						firewallZones.description as description,
-						firewallZoneSubnet.subnetId,
+						firewallZoneSubnet.subnetId as subnetId,
+						subnets.subnet as subnet,
 						firewallZoneMapping.interface as interface,
 						devices.hostname as deviceName
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
 						LEFT JOIN firewallZoneSubnet on firewallZoneMapping.zoneId = firewallZoneSubnet.zoneId
 						LEFT JOIN devices ON deviceId = devices.id
+						LEFT JOIN subnets ON subnet = subnets.id
 						HAVING firewallZoneSubnet.subnetId = ?;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+		if ($info) {
+			# modify the zone output values
+			foreach ($info as $key => $val) {
+				# transform the zone name from decimal to hex
+				if($info[$key]->generator == 1 ){
+					$info[$key]->zone = dechex($info[$key]->zone);
+				}
+				# add some padding if it is activated and the zone generatore is not text
+				if($info[$key]->padding == 1 && $info[$key]->generator != 2){
+				# remove leading zeros (padding) and raise the value in case of any zone name length changes
+				# add some padding to reach the maximum zone name lenght
+				$info[$key]->zone = str_pad(ltrim($info[$key]->zone,0),$info[$key]->length,"0",STR_PAD_LEFT);
+				}
+			}
+		}
+
 		# return the values
 		return sizeof($info)>0 ? $info[0] : false;
 	}
@@ -874,4 +896,202 @@ class FirewallZones extends Common_functions {
 		return true;
 	}
 
+	/**
+	 * generate a firewall address object
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @param mixed $dnsName
+	 * @return void
+	 */
+	public function generate_address_object ($id,$dnsName) {
+		# fetch the settings
+		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		
+		# fetch zone informations
+		$zone = $this->get_zone_subnet_info($id);
+
+		foreach ($firewallZoneSettings['pattern'] as $key => $pattern) {
+			switch ($pattern) {
+				case 'patternIndicator':
+					if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }
+					else 						{ 	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1]; }
+					break;
+				case 'patternZoneName':
+					$firewallAddressObject = $firewallAddressObject.$zone->zone;
+					break;
+				case 'patternIPType':
+					# check if the subnet is v4 or v6
+					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) {
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) {
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+					}
+					break;
+				case 'patternHost':
+						$hostName = explode('.', $dnsName);
+						$firewallAddressObject = $firewallAddressObject.$hostName[0];
+					break;
+				case 'patternFQDN':
+						$firewallAddressObject = $firewallAddressObject.$dnsName;
+					break;
+				case 'patternSeparator':
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+					break;
+			}
+		}
+		return $firewallAddressObject;
+	} 
+
+	/**
+	 * update a firewall address object
+	 *
+	 * @access public
+	 * @param mixed $subnetId
+	 * @param mixed $IPId
+	 * @param mixed $dnsName
+	 * @return void
+	 */
+	public function update_address_object ($subnetId,$IPId,$dnsName) {
+		# Addresses object
+		$this->Addresses = new Addresses ($this->Database);
+
+		# fetch old details for logging
+		$address_old = $this->Addresses->fetch_address (null, $IPId);
+
+		# fetch the settings
+		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+
+		# fetch zone informations
+		$zone = $this->get_zone_subnet_info($subnetId);
+
+		foreach ($firewallZoneSettings['pattern'] as $key => $pattern) {
+			switch ($pattern) {
+				case 'patternIndicator':
+					if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }
+					else 						{ 	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1]; }
+					break;
+				case 'patternZoneName':
+					$firewallAddressObject = $firewallAddressObject.$zone->zone;
+					break;
+				case 'patternIPType':
+					# check if the subnet is v4 or v6
+					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) {
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) {
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+					}
+					break;
+				case 'patternHost':
+						$hostName = explode('.', $dnsName);
+						$firewallAddressObject = $firewallAddressObject.$hostName[0];
+					break;
+				case 'patternFQDN':
+						$firewallAddressObject = $firewallAddressObject.$dnsName;
+					break;
+				case 'patternSeparator':
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+					break;
+			}
+		}
+
+		if ($address_old->firewallAddressObject != $firewallAddressObject) {
+			# update field in database
+			$values = array('id' => $IPId , 'subnetId' => $subnetId, 'firewallAddressObject' => $firewallAddressObject);
+			try { $this->Database->updateObject("ipaddresses", $values, "id", "subnetId"); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+				return false;
+			}
+			# clone the address_old obj and replace the firewallAddressObject field to get a diff for logging
+			$address = clone($address_old);
+			$address->firewallAddressObject = $firewallAddressObject;
+
+			# write changelog
+			$this->Log->write_changelog('ip_addr', 'edit', 'success', (array)$address_old,(array)$address);
+
+			return ture;
+		}
+
+		return false;
+	} 
+
+	/**
+	 * update a firewall address objects for a whole network
+	 *
+	 * @access public
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	public function update_address_objects ($subnetId) {
+		# Addresses object
+		$this->Addresses = new Addresses ($this->Database);
+		
+		# fetch the settings
+		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		
+		# fetch zone informations
+		$zone = $this->get_zone_subnet_info($subnetId);
+
+		try { $ipaddresses = $this->Database->getObjectsQuery('SELECT id, dns_name FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+		foreach ($ipaddresses as $ipaddress) {
+			# fetch old details for logging
+			$address_old = $this->Addresses->fetch_address (null, $ipaddress->id);
+
+			foreach ($firewallZoneSettings['pattern'] as $key => $pattern) {
+				switch ($pattern) {
+					case 'patternIndicator':
+						if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }
+						else 						{ 	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1]; }
+						break;
+					case 'patternZoneName':
+						$firewallAddressObject = $firewallAddressObject.$zone->zone;
+						break;
+					case 'patternIPType':
+						# check if the subnet is v4 or v6
+						if (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) {
+							$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+						} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) {
+							$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+						}
+						break;
+					case 'patternHost':
+							$hostName = explode('.', $ipaddress->dns_name);
+							$firewallAddressObject = $firewallAddressObject.$hostName[0];
+						break;
+					case 'patternFQDN':
+							$firewallAddressObject = $firewallAddressObject.$ipaddress->dns_name;
+						break;
+					case 'patternSeparator':
+							$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+						break;
+				}
+			}
+
+			if ($address_old->firewallAddressObject != $firewallAddressObject) {
+				# update field in database
+				$values = array('id' => $ipaddress->id , 'subnetId' => $subnetId, 'firewallAddressObject' => $firewallAddressObject);
+				try { $this->Database->updateObject("ipaddresses", $values, "id", "subnetId"); }
+				catch (Exception $e) {
+					$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+					return false;
+				}
+				# clone the address_old obj and replace the firewallAddressObject field to get a diff for logging
+				$address = clone($address_old);
+				$address->firewallAddressObject = $firewallAddressObject;
+
+				# write changelog
+				$this->Log->write_changelog('ip_addr', 'edit', 'success', (array)$address_old,(array)$address);
+			}
+
+			# unset firewallAddressObject to avoid chaining
+			unset($firewallAddressObject);
+
+	}
+	return true;
+	} 
 }

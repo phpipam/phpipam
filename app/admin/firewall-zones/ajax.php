@@ -80,4 +80,18 @@ if ($_POST['noZone'] == 1) {
 		print '</table>';
 	}
 }
+
+
+# generate a new firewall address object on request
+if ($_POST['operation'] == 'autogen') {
+	if ($_POST['action'] == 'net') {
+		if (preg_match('/^[0-9]+$/i',$_POST['subnetId'])){
+			$Zones->update_address_objects($_POST['subnetId']);
+		}
+	} elseif ($_POST['action'] == 'adr') {
+		if (preg_match('/^[0-9]+$/i',$_POST['subnetId']) && preg_match('/^[0-9a-zA-Z-.]+$/i',$_POST['dnsName']) && preg_match('/^[0-9]+$/i',$_POST['IPId'])) {
+			$Zones->update_address_object($_POST['subnetId'],$_POST['IPId'],$_POST['dnsName']);
+		}
+	}
+}
 ?>

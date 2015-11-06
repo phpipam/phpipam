@@ -1633,6 +1633,7 @@ $(document).on("change", ".firewallZoneVlan",(function() {
 // load edit form
 $(document).on("click", ".editMapping", function() {
     open_popup("700", "app/admin/firewall-zones/mapping-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
 });
 
 //submit form
@@ -1653,6 +1654,27 @@ $(document).on("change", ".mappingZoneInformation",(function() {
     return false;
 }));
 
+/*    regenerate firewall address objects
+********************************************/
+// execute regeneration of the address object via ajax, reload the page to refresh the data
+$(document).on("click", "a.fw_autogen", function() {
+    //build vars
+    var subnetId = $(this).attr('data-subnetid');
+    var IPId = $(this).attr('data-ipid');
+    var dnsName = $(this).attr('data-dnsname');
+    var action = $(this).attr('data-action');
+    var operation = 'autogen';
+
+    showSpinner();
+
+    // send information to ajax.php to generate a new address object
+    $.post('app/admin/firewall-zones/ajax.php', {subnetId:subnetId, IPId:IPId, dnsName:dnsName, action:action, operation:operation}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+
+    // hide the spinner and reload the window on success
+    setTimeout(function (){hideSpinner();window.location.reload();}, 500);
+
+    return false;
+});
 
 /*    Subnets
 ********************************/

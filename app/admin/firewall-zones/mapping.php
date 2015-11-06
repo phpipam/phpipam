@@ -76,7 +76,7 @@ if($firewallZoneMapping) {
 					if ($i === 1) {
 						$title = $mapping->indicator == 0 ? 'Own Zone' : 'Customer Zone';
 						// print
-						print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+						print '<td rowspan="'.$counter.'"><span class="fa '.($mapping->indicator == 0 ? 'fa-home':'fa-group').'"  title="'._($title).'"></span></td>';
 						print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
 						print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
 						print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
@@ -94,7 +94,7 @@ if($firewallZoneMapping) {
 							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$network->subnetDescription.'</a></td>';
 						}
 					} else {
-						print '<td></td>';
+						print '<td>/</td>';
 					}
 					# display vlan informations
 					if ($network->vlanId) {
@@ -102,7 +102,7 @@ if($firewallZoneMapping) {
 						$network->vlanName = strlen($network->vlanName)>0 ? " (".$network->vlanName.")" : "";
 						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.''.$network->vlanName.'</a></td>';
 					} else {
-						print '<td></td>';
+						print '<td>/</td>';
 					}
 					if ($i === 1) {
 						# action menu

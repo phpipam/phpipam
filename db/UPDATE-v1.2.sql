@@ -18,10 +18,10 @@ ALTER TABLE `firewallZones` DROP COLUMN `vlanId`, DROP COLUMN `stacked`;
 
 /* add a new table to store subnetId and zoneId */
 CREATE TABLE `firewallZoneSubnet` (
-  `zoneId` INT NOT NULL COMMENT '',
-  `subnetId` INT(11) NOT NULL COMMENT '',
-  INDEX `fk_zoneId_idx` (`zoneId` ASC)  COMMENT '',
-  INDEX `fk_subnetId_idx` (`subnetId` ASC)  COMMENT '',
+  `zoneId` INT NOT NULL,
+  `subnetId` INT(11) NOT NULL,
+  INDEX `fk_zoneId_idx` (`zoneId` ASC),
+  INDEX `fk_subnetId_idx` (`subnetId` ASC),
   CONSTRAINT `fk_zoneId`
     FOREIGN KEY (`zoneId`)
     REFERENCES `firewallZones` (`id`)
@@ -40,5 +40,11 @@ INSERT INTO `firewallZoneSubnet` (zoneId,subnetId) SELECT id AS zoneId,subnetId 
 ALTER TABLE `firewallZones` DROP COLUMN `subnetId`;
 
 /* add fk constrain and index to firewallZoneMappings to automatically remove a mapping if a device has been deleted */
-ALTER TABLE `firewallZoneMapping` ADD INDEX `devId_idx` (`deviceId` ASC)  COMMENT '';
+ALTER TABLE `firewallZoneMapping` ADD INDEX `devId_idx` (`deviceId` ASC);
 ALTER TABLE `firewallZoneMapping` ADD CONSTRAINT `devId` FOREIGN KEY (`deviceId`) REFERENCES `devices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
+
+/* add firewallAddresObject field to the ipaddresses table to store fw addr. obj. names permanently */
+ALTER TABLE `ipaddresses` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL AFTER `PTR`;
+
+/* activate the firewallAddressObject IP field filter on default */
+UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject');

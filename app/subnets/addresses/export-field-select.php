@@ -62,6 +62,12 @@ print "	<td>"._('Hostname')."</td>";
 print "	<td><input type='checkbox' name='dns_name' checked> </td>";
 print "	</tr>";
 
+# firewallAddressObject - mandatory
+print "	<tr>";
+print "	<td>"._('FW Object')."</td>";
+print "	<td><input type='checkbox' name='firewallAddressObject' checked> </td>";
+print "	</tr>";
+
 # mac
 print "	<tr>";
 print "	<td>"._('MAC address')."</td>";

@@ -83,7 +83,10 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);																		//format to array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+// if fw not set remove!
+if($User->settings->enableFirewallZones != 1) { unset($selected_ip_fields['firewallAddressObject']); }
+// set size
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
 if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
 
@@ -134,7 +137,8 @@ if(sizeof($custom_fields) > 0) {
 $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
 $colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
-$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0:$colspan['dhcp'];				//dhcp colspan negative fix
+$colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
+$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp colspan negative fix
 
 /* output variables */
 
@@ -188,6 +192,14 @@ if(sizeof($addresses)>$page_limit) { $Addresses->print_pagination ($_REQUEST['sP
 												  print "<th class='s_ipaddr'><a href='' data-id='ip_addr|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body' title='"._('Sort by IP address')."'>"._('IP address')." "; if($sort['field'] == "ip_addr") 	print $icon;  print "</a></th>";
 	# hostname - mandatory
 												  print "<th><a href='' data-id='dns_name|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by hostname')."'					>"._('Hostname')." "; 	if($sort['field'] == "dns_name") 	print $icon;  print "</a></th>";
+	# firewall address object - mandatory if enabled
+	if(in_array('firewallAddressObject', $selected_ip_fields)) {
+			# class
+			$Zones = new FirewallZones ($Database);
+			$zone = $Zones->get_zone_subnet_info ($subnet['id']);
+
+			if($zone) {							  print "<th><a href='' data-id='description|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by firewall address object')."'>"._('FW object')." "; if($sort['field'] == "firewallAddressObject") print $icon;  print "</a></th>"; }
+	}
 	# Description - mandatory
 												  print "<th><a href='' data-id='description|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by description')."'			>"._('Description')." "; if($sort['field'] == "description") print $icon;  print "</a></th>";
 	# MAC address
@@ -289,6 +301,9 @@ else {
 				    print 		$Addresses->address_type_format_tag($addresses[$n]->state);
 				    print "	</td>";
 					print "	<td>".$Addresses->address_type_index_to_type($addresses[$n]->state)." ("._("range").")</td>";
+	        		if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+	        			print "	<td class=fw'>".$addresses[$n]->firewallAddressObject."</td>";
+	        		}
 	        		print "	<td>".$addresses[$n]->description."</td>";
 	        		if($colspan['dhcp']!=0)
 	        		print "	<td colspan='$colspan[dhcp]' class='unused'></td>";
@@ -369,6 +384,11 @@ else {
 				    # resolve dns name
 				    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
 																			{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
+
+					# print firewall address object - mandatory if enabled
+					if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+						                                                    { print "<td class='fwzone'>".$addresses[$n]->firewallAddressObject."</td>"; }
+					}
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
@@ -451,6 +471,7 @@ else {
 						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
+						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$addresses[$n]->subnetId."' data-action='adr' data-ipid='".$addresses[$n]->id."' data-dnsname='".$addresses[$n]->dns_name."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>"; }}
 						print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
 					}
 				}

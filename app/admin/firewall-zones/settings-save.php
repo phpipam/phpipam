@@ -80,6 +80,30 @@ if ($_POST['strictMode']) {
 	}
 }
 
+# validate the autogen checkbox value
+if ($_POST['autogen']) {
+	if ($_POST['autogen'] != 'on' && $_POST['autogen'] != 'off') {
+		$Result->show("danger", _("Invalid autogen value. Use the checkbox to set the autogen value to on or off."), true);
+	}
+}
+
+# validate the pattern array
+if ($_POST['pattern']) {
+	foreach ($_POST['pattern'] as $pattern) {
+		if (	$pattern != 'patternIndicator' 
+			&& 	$pattern != 'patternZoneName' 
+			&& 	$pattern != 'patternIPType' 
+			&& 	$pattern != 'patternHost' 
+			&& 	$pattern != 'patternFQDN' 
+			&& 	$pattern != 'patternSeparator' 
+			&& 	$pattern != '') {
+			$Result->show("danger", _("Invalid pattern value."), true);
+		}
+	}
+} else {
+	$Result->show("danger", _("Please select at least one item to generate a valid name pattern."), true);
+}
+
 # validate device type ID.
 if (!preg_match('/^[0-9]+$/i', $_POST['deviceType'])) {
 	$Result->show("danger", _("Invalid device type."), true);
@@ -97,13 +121,18 @@ $values->zoneGenerator = $_POST['zoneGenerator'];
 $values->zoneGeneratorType = $_POST['zoneGeneratorType'];
 $values->strictMode = $_POST['strictMode'];
 $values->deviceType = $_POST['deviceType'];
+$values->pattern = $_POST['pattern'];
+$values->autogen = $_POST['autogen'];
 
-# be sure that padding and strictMode will be set even if they are not delivered by $_POST.
+# be sure that padding, strictMode and autogen will be set even if they are not delivered by $_POST.
 if($_POST['padding'] != 'on')	{ $values->padding = 'off'; }
 else 							{ $values->padding = $_POST['padding']; }
 
 if($_POST['strictMode'] != 'on'){ $values->strictMode = 'off'; }
 else 							{ $values->strictMode = $_POST['strictMode']; }
+
+if($_POST['autogen'] != 'on')	{ $values->autogen = 'off'; }
+else 							{ $values->autogen = $_POST['autogen']; }
 
 # prepare the database update and encode the array with JSON_FORCE_OBJECT to keep the ids.
 $values = array('id' => 1,
