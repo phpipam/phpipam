@@ -49,7 +49,7 @@ if($firewallZones) {
 					// set title
 					$title = $zoneObject->indicator == 0 ? 'Own Zone' : 'Customer Zone';
 					// print
-					print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+					print '<td rowspan="'.$counter.'"><span class="fa '.($zoneObject->indicator == 0 ? 'fa-home':'fa-group').'"  title="'._($title).'"></span></td>';
 					print '<td rowspan="'.$counter.'">'.$zoneObject->zone.'</td>';
 					print '<td rowspan="'.$counter.'">'.$zoneObject->description.'</td>';
 				}
