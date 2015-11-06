@@ -19,6 +19,14 @@ class Database_PDO extends DB {
 	protected $username = null;
 	protected $password = null;
 
+	protected $pdo_ssl_opts = array (
+		'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
+		'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
+		'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
+		'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
+		'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
+	);
+
 	public $install = false;		//flag if installation is happenig!
 
 	protected $debug = false;
@@ -64,16 +72,20 @@ class Database_PDO extends DB {
 		$this->username = $db['user'];
 		$this->password = $db['pass'];
 		$this->dbname 	= $db['name'];
-		# ssl ?
+
+		$this->ssl = false;
 		if ($db['ssl']===true) {
-			$this->ssl = new StdClass();
-			$this->ssl->ssl_key	= $db['ssl_key'];
-			$this->ssl->ssl_cert= $db['ssl_cert'];
-			$this->ssl->ssl_ca	= $db['ssl_ca'];;
+
+			$this->ssl = array();
+
+			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
+				if ($db[$key]) {
+					$this->ssl[$pdoopt] = $db[$key];
+				}
+			}
+
 		}
-		else {
-			$this->ssl = false;
-		}
+
 	}
 
 	/**
@@ -146,13 +158,13 @@ abstract class DB {
 	protected $charset = 'utf8';
 	protected $pdo = null;
 
-	public function __construct($username = null, $password = null, $charset = null, $ssl) {
+	public function __construct($username = null, $password = null, $charset = null, $ssl = null) {
 		if (isset($username)) $this->username = $username;
 		if (isset($password)) $this->password = $password;
 		if (isset($charset))  $this->charset = $charset;
 		# ssl
-		if ($ssl!==false) {
-			$this->ssl = (object) $ssl;
+		if ($ssl) {
+			$this->ssl = $ssl;
 		}
 	}
 
@@ -176,19 +188,15 @@ abstract class DB {
 
 		try {
 			# ssl?
-			if ($this->ssl!==false) {
-				# set array
-				$ssl_arr = array(PDO::MYSQL_ATTR_SSL_KEY  => $this->ssl->ssl_key,
-								 PDO::MYSQL_ATTR_SSL_CERT => $this->ssl->ssl_cert,
-								 PDO::MYSQL_ATTR_SSL_CA	  => $this->ssl->ssl_ca
-								);
-				$this->pdo = new \PDO($dsn, $this->username, $this->password, $ssl_arr);
-				$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			if ($this->ssl) {
+				$this->pdo = new \PDO($dsn, $this->username, $this->password, $this->ssl);
 			}
 			else {
 				$this->pdo = new \PDO($dsn, $this->username, $this->password);
-				$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 			}
+
+			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
