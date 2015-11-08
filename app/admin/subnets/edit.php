@@ -538,6 +538,20 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	    print "</tr>";
     ?>
 
+    <!-- set parameters to slave subnets -->
+    <?php if($slaves && $_POST['action']=="edit") { ?>
+    <tr>
+        <td><?php print _('Propagate changes'); ?></td>
+        <td colspan="2">
+            <input type="checkbox" name="set_inheritance" class="input-switch" value="Yes">
+            <span class="text-muted"><?php print _("Apply changes to underlying subnets"); ?></span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" class="hr"><hr></td>
+    </tr>
+    <?php } ?>
+
     </table>
     </form>
 

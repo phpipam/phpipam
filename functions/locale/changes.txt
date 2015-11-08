@@ -2997,3 +2997,12 @@ msgstr ""
 
 msgid "fill"
 msgstr ""
+
+
+### 1.19.040
+
+msgid "Propagate changes"
+msgstr ""
+
+msgid "Apply changes to underlying subnets"
+msgstr ""
