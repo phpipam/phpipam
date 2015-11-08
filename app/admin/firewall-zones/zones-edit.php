@@ -1,15 +1,3 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	/* bootstrap switch */
-	var switch_options = {
-	    onColor: 'default',
-	    offColor: 'default',
-	    size: "mini"
-	};
-	$(".input-switch").bootstrapSwitch(switch_options);
-});
-</script>
-
 <?php
 
 /**
@@ -49,12 +37,22 @@ if ($_POST['action'] != 'add') {
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
-
-
-
 # fetch all layer2 domains
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
+
 <!-- header  -->
 <div class="pHeader"><?php print _('Add a firewall zone'); ?></div>
 <!-- content -->
