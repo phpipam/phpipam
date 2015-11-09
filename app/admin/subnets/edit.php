@@ -49,12 +49,22 @@ if ($_POST['action'] != "add") {
 }
 # we are adding new subnet
 else {
-	# for selecting master subnet if added from subnet details!
+	# for selecting master subnet if added from subnet details and slave inheritance!
 	if(strlen($_POST['subnetId']) > 0) {
     	$subnet_old_temp = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
-    	$subnet_old_details['masterSubnetId'] 	= @$subnet_old_temp['id'];			// same master subnet ID for nested
-    	$subnet_old_details['vlanId'] 		 	= @$subnet_old_temp['vlanId'];		// same default vlan for nested
-    	$subnet_old_details['vrfId'] 		 	= @$subnet_old_temp['vrfId'];		// same default vrf for nested
+    	$subnet_old_details['masterSubnetId'] 	= @$subnet_old_temp['id'];                // same master subnet ID for nested
+    	// slave subnet inheritance
+        $subnet_old_details['vlanId'] 		 	= @$subnet_old_temp['vlanId'];            // inherit vlanId
+    	$subnet_old_details['vrfId'] 		 	= @$subnet_old_temp['vrfId'];             // inherit vrfId
+    	$subnet_old_details['allowRequests'] 	= @$subnet_old_temp['allowRequests'];     // inherit requests
+    	$subnet_old_details['showName'] 	    = @$subnet_old_temp['showName'];          // inherit show name
+    	$subnet_old_details['device'] 	        = @$subnet_old_temp['device'];            // inherit device
+    	$subnet_old_details['permissions'] 	    = @$subnet_old_temp['permissions'];       // inherit permissions
+    	$subnet_old_details['scanAgent'] 	    = @$subnet_old_temp['scanAgent'];         // inherit scanAgent
+    	$subnet_old_details['pingSubnet'] 	    = @$subnet_old_temp['pingSubnet'];        // inherit pingSubnet
+    	$subnet_old_details['discoverSubnet']   = @$subnet_old_temp['discoverSubnet'];    // inherit discovery
+    	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
+
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
@@ -527,6 +537,20 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	    print "	<td colspan='3' class='hr'><hr></td>";
 	    print "</tr>";
     ?>
+
+    <!-- set parameters to slave subnets -->
+    <?php if($slaves && $_POST['action']=="edit") { ?>
+    <tr>
+        <td><?php print _('Propagate changes'); ?></td>
+        <td colspan="2">
+            <input type="checkbox" name="set_inheritance" class="input-switch" value="Yes">
+            <span class="text-muted"><?php print _("Apply changes to underlying subnets"); ?></span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" class="hr"><hr></td>
+    </tr>
+    <?php } ?>
 
     </table>
     </form>

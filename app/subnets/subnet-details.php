@@ -479,8 +479,9 @@ $rowSpan = 10 + sizeof($custom_fields);
 		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 		if ( $User->settings->enableFirewallZones == 1 && $firewallZoneSettings['autogen'] == 'on' && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
-			print "<a class='fw_autogen btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Regenerate all firewall address objects for this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-fire'></i></a>";
-			print "</div>";	
+			print "<a class='btn btn-xs btn-default editMapping disabled' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-id='0' data-action='add'><i class='fa fa-fire'></i></a>";
+			print "<a class='fw_autogen btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Regenerate all firewall address objects for this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
+			print "</div>";
 		}
 	}
 

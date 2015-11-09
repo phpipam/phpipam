@@ -1,38 +1,3 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	/* bootstrap switch */
-	var switch_options = {
-	    onColor: 'default',
-	    offColor: 'default',
-	    size: "mini"
-	};
-	$(".input-switch").bootstrapSwitch(switch_options);
-});
-
-$(function() {
-	$('div#availableItems').sortable({
-	  connectWith: "div",
-	  receive: function (e, ui) {
-	  	$(ui.item.children('input')).attr('name','');
-	  }
-	});
-
-	$('div#itemList').sortable({
-	  connectWith: "div",
-	  receive: function (e, ui) {
-	  	$(ui.item.children('input')).attr('name','pattern[]');
-	  }
-	});
-
-	$('div#itemList input').attr('name','pattern[]');
-	$('#availableItems,#itemList').disableSelection();
-});
-</script>
-
-<style>
-.label-default { cursor: pointer; }
-</style>
-
 <?php
 
 /**
@@ -93,6 +58,41 @@ $namePattern = array (	'patternIndicator' 	=> '<span class="label label-default"
 						'patternFQDN' 		=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternFQDN">FQDN</span>',
 						'patternSeparator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternSeparator">'.$firewallZoneSettings['separator'].'</span>');
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+
+$(function() {
+	$('div#availableItems').sortable({
+	  connectWith: "div",
+	  receive: function (e, ui) {
+	  	$(ui.item.children('input')).attr('name','');
+	  }
+	});
+
+	$('div#itemList').sortable({
+	  connectWith: "div",
+	  receive: function (e, ui) {
+	  	$(ui.item.children('input')).attr('name','pattern[]');
+	  }
+	});
+
+	$('div#itemList input').attr('name','pattern[]');
+	$('#availableItems,#itemList').disableSelection();
+});
+</script>
+
+<style>
+.label-default { cursor: pointer; }
+</style>
 
 <!-- database settings -->
 <form name="firewallZoneSettings" id="firewallZoneSettings">
@@ -249,7 +249,7 @@ $namePattern = array (	'patternIndicator' 	=> '<span class="label label-default"
 					foreach ($namePattern as $key => $pattern) {
 						if (preg_match('/patternSeparator/i',$settingsPattern)) {
 							$patternCount++;
-						
+
 						} elseif (!$firewallZoneSettings['pattern']) {
 							print $pattern;
 						} elseif (!in_array($key,$firewallZoneSettings['pattern'])) {
@@ -261,7 +261,7 @@ $namePattern = array (	'patternIndicator' 	=> '<span class="label label-default"
 						$patternCount++;
 					}
 					?>
-			</div> 
+			</div>
 		</td>
 	</tr>
 	<tr>

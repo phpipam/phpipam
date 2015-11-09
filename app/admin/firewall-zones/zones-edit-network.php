@@ -1,15 +1,3 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	/* bootstrap switch */
-	var switch_options = {
-	    onColor: 'default',
-	    offColor: 'default',
-	    size: "mini"
-	};
-	$(".input-switch").bootstrapSwitch(switch_options);
-});
-</script>
-
 <?php
 
 /**
@@ -45,6 +33,19 @@ if ($_POST['id'] && $_POST['subnetId'] != '') {
 $sections = $Sections->fetch_all_sections();
 
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
+
 <!-- header  -->
 <div class="pHeader"><?php print _(ucwords($_POST['action']).' network mapping'); ?></div>
 <!-- content -->

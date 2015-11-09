@@ -77,6 +77,10 @@ if(isset($update)) {
 
 # update device
 if(!$Admin->object_modify("devices", $_POST['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Device $device[action] successfull").'!', true); }
+else																	{ $Result->show("success", _("Device $device[action] successfull").'!', false); }
+
+# remove all references from subnets and ip addresses
+$Admin->remove_object_references ("subnets", "device", $values["id"]);
+$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
 
 ?>

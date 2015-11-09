@@ -48,8 +48,8 @@ function submit_popup_data (result_div, target_script, post_data, reload) {
         $('div'+result_div).html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         if(reload) {
-	        if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning") == -1 )     { setTimeout(function (){window.location.reload();}, 1500); }
-	        else                               		  										{ hideSpinner(); }
+	        if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning")==-1 )	{ setTimeout(function (){window.location.reload();}, 1500); }
+	        else                               		  																{ hideSpinner(); }
         }
         else {
 	        hideSpinner();
@@ -1633,6 +1633,7 @@ $(document).on("change", ".firewallZoneVlan",(function() {
 // load edit form
 $(document).on("click", ".editMapping", function() {
     open_popup("700", "app/admin/firewall-zones/mapping-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
 });
 
 //submit form
@@ -1667,7 +1668,7 @@ $(document).on("click", "a.fw_autogen", function() {
     showSpinner();
 
     // send information to ajax.php to generate a new address object
-    $.post('app/admin/firewall-zones/ajax.php', {subnetId, IPId, dnsName, action, operation}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    $.post('app/admin/firewall-zones/ajax.php', {subnetId:subnetId, IPId:IPId, dnsName:dnsName, action:action, operation:operation}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 
     // hide the spinner and reload the window on success
     setTimeout(function (){hideSpinner();window.location.reload();}, 500);
@@ -2007,6 +2008,24 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
         else                      { hideSpinner(); }
     });
     return false;
+});
+// filter vlans
+$('.vlansearchsubmit').click(function() {
+	showSpinner();
+	var search = $('input.vlanfilter').val();
+	var location = $('input.vlanfilter').attr('data-location');
+    //go to search page
+    var prettyLinks = $('#prettyLinks').html();
+	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = location +search+"/";}, 500); }
+	else					{ setTimeout(function (){window.location = location + "&sPage="+search;}, 500); }
+
+
+    //go to search page
+    var prettyLinks = $('#prettyLinks').html();
+	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+	else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
+
+	return false;
 });
 
 

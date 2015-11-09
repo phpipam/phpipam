@@ -621,10 +621,10 @@ CREATE TABLE `firewallZoneMapping` (
 DROP TABLE IF EXISTS `firewallZoneSubnet`;
 
 CREATE TABLE `firewallZoneSubnet` (
-  `zoneId` INT NOT NULL COMMENT '',
-  `subnetId` INT(11) NOT NULL COMMENT '',
-  INDEX `fk_zoneId_idx` (`zoneId` ASC)  COMMENT '',
-  INDEX `fk_subnetId_idx` (`subnetId` ASC)  COMMENT '',
+  `zoneId` INT NOT NULL,
+  `subnetId` INT(11) NOT NULL,
+  INDEX `fk_zoneId_idx` (`zoneId` ASC),
+  INDEX `fk_subnetId_idx` (`subnetId` ASC),
   CONSTRAINT `fk_zoneId`
     FOREIGN KEY (`zoneId`)
     REFERENCES `firewallZones` (`id`)

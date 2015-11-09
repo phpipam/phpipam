@@ -373,7 +373,9 @@ class Install extends Common_functions {
 
 		# explode each query
 		foreach ($subversion_queries as $q) {
-			$subversion_query = explode(";", $q);
+			/// replace CRLF
+			$q = str_replace("\r\n", "\n", $q);
+			$subversion_query = explode(";\n", $q);
 			// save to final array
 			$queries = array_filter(array_merge($queries, $subversion_query));
 		}

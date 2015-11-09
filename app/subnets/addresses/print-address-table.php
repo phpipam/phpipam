@@ -83,7 +83,10 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);																		//format to array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+// if fw not set remove!
+if($User->settings->enableFirewallZones != 1) { unset($selected_ip_fields['firewallAddressObject']); }
+// set size
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
 if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
 
@@ -134,7 +137,8 @@ if(sizeof($custom_fields) > 0) {
 $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
 $colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
-$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0:$colspan['dhcp'];				//dhcp colspan negative fix
+$colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
+$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp colspan negative fix
 
 /* output variables */
 
@@ -158,7 +162,7 @@ $statuses = explode(";", $User->settings->pingStatus);
 <h4 style="margin-top:40px;">
 <?php
 if(!$slaves)		{ print _("IP addresses in subnet "); }
-elseif(@$orphaned)	{ print "<p class='alert alert-warning'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span></p>"; }
+elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 # print page # if present
 if(sizeof($addresses)  > $page_limit)
@@ -190,13 +194,11 @@ if(sizeof($addresses)>$page_limit) { $Addresses->print_pagination ($_REQUEST['sP
 												  print "<th><a href='' data-id='dns_name|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by hostname')."'					>"._('Hostname')." "; 	if($sort['field'] == "dns_name") 	print $icon;  print "</a></th>";
 	# firewall address object - mandatory if enabled
 	if(in_array('firewallAddressObject', $selected_ip_fields)) {
-		if($User->settings->enableFirewallZones == 1) {
 			# class
 			$Zones = new FirewallZones ($Database);
 			$zone = $Zones->get_zone_subnet_info ($subnet['id']);
 
 			if($zone) {							  print "<th><a href='' data-id='description|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by firewall address object')."'>"._('FW object')." "; if($sort['field'] == "firewallAddressObject") print $icon;  print "</a></th>"; }
-		}
 	}
 	# Description - mandatory
 												  print "<th><a href='' data-id='description|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by description')."'			>"._('Description')." "; if($sort['field'] == "description") print $icon;  print "</a></th>";
@@ -299,8 +301,8 @@ else {
 				    print 		$Addresses->address_type_format_tag($addresses[$n]->state);
 				    print "	</td>";
 					print "	<td>".$Addresses->address_type_index_to_type($addresses[$n]->state)." ("._("range").")</td>";
-	        		if($zone) {
-	        			print "	<td>".$addresses[$n]->firewallAddressObject."</td>";	
+	        		if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+	        			print "	<td class=fw'>".$addresses[$n]->firewallAddressObject."</td>";
 	        		}
 	        		print "	<td>".$addresses[$n]->description."</td>";
 	        		if($colspan['dhcp']!=0)
@@ -384,8 +386,8 @@ else {
 																			{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
 					# print firewall address object - mandatory if enabled
-					if(in_array('firewallAddressObject', $selected_ip_fields)) {
-						if($zone) {											  print "<td class='description'>".$addresses[$n]->firewallAddressObject."</td>"; }
+					if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+						                                                    { print "<td class='fwzone'>".$addresses[$n]->firewallAddressObject."</td>"; }
 					}
 
 					# print description - mandatory

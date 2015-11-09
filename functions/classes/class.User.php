@@ -345,7 +345,52 @@ class User extends Common_functions {
 		}
 	}
 
+	/**
+	 *	Check if migration of LDAP settings is required
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function migrate_ldap_settings () {
 
+		# fetch LDAP settings
+		$ldaps = $this->Database->getObjectsQuery("select * from usersAuthMethod where type = 'LDAP'");
+
+		foreach ($ldaps as $ldapobj) {
+
+			$ldap = json_decode($ldapobj->params);
+
+			if (!property_exists($ldap, 'ldap_security')) {
+				$ldap->ldap_security = 'none';
+			}
+			
+			if (property_exists($ldap, 'use_ssl')) {
+
+				if ($ldap->use_ssl == '1') {
+					$ldap->ldap_security = 'ssl';
+				}
+				unset($ldap->use_ssl);
+
+			}
+
+			if (property_exists($ldap, 'use_tls')) {
+
+				if ($ldap->use_tls == '1') {
+					$ldap->ldap_security = 'tls';
+				}
+				unset($ldap->use_tls);
+			}
+
+			if (!property_exists($ldap, 'uid_attr')) {
+				$ldap->uid_attr = 'uid';
+			}
+
+			$ldapobj->params = json_encode($ldap);
+
+			$this->Database->updateObject("usersAuthMethod", $ldapobj);
+
+		}
+	}
 
 
 
@@ -721,8 +766,10 @@ class User extends Common_functions {
 			$dirparams['use_ssl'] = false;
 			$dirparams['use_tls'] = false;
 
-			if ($authparams['ldap_security'] == 'tls') 		{ $dirparams['use_tls'] = true; }
-			elseif ($authparams['ldap_security'] == 'ssl') 	{ $dirparams['use_ssl'] = true; }
+			// Support the pre-1.2 auth settings as well as the current version
+			// TODO: remove legacy support at some point
+			if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1) 		{ $dirparams['use_tls'] = true; }
+			elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1) 	{ $dirparams['use_ssl'] = true; }
 
 			if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
 				$dirparams['admin_username'] = $authparams['adminUsername'];
