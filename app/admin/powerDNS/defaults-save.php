@@ -30,6 +30,7 @@ $values->name 		= $old_values->name;
 $values->username 	= $old_values->username;
 $values->password 	= $old_values->password;
 $values->port 		= $old_values->port;
+$values->autoserial = @$old_values->autoserial;
 
 // defaults
 $values->ns 		= $_POST['ns'];
