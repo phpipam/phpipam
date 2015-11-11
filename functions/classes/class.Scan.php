@@ -422,9 +422,13 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
+	 * @param datetime $date
 	 * @return void
 	 */
-	public function ping_update_scanagent_checktime ($id) {
+	public function ping_update_scanagent_checktime ($id, $date = false) {
+    	# set time
+    	if ($date === false)    { $date = date("Y-m-d H:i:s"); }
+    	else                    { $date = $date; }
 		# execute
 		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>date("Y-m-d H:i:s")), "id"); }
 		catch (Exception $e) {

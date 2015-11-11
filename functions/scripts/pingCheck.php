@@ -23,6 +23,10 @@
  *
  *	In case of problems set reset_debugging to true
  *
+ *  Statuses:
+ *      0 = online
+ *      2 = offline
+ *
  */
 
 
@@ -45,7 +49,7 @@ $Scan->reset_debugging(false);
 // fetch agent
 $agent = $Tools->fetch_object("scanAgents", "id", 1);
 // change scan type?
-// $Scan->reset_scan_method ("pear");
+// $Scan->reset_scan_method ("fping");
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
@@ -53,6 +57,10 @@ $send_mail = true;
 
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
+
+// set now for whole script
+$now     = time();
+$nowdate = date ("Y-m-d H:i:s");
 
 
 // script can only be run from cli
@@ -89,16 +97,13 @@ foreach($scan_subnets as $s) {
 			foreach($subnet_addresses as $a) {
 				//ignore excludePing
 				if($a->excludePing!=1) {
-					//create old status
-					$tDiff = time() - strtotime($a->lastSeen);
-					$oldStatus = $tDiff >= $statuses[1] ? 2 : 0;
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
-						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
+						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen);	//used for status check
 						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
 					}
 					else {
-						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);
+						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen);
 					}
 				}
 			}
@@ -165,19 +170,17 @@ if($Scan->icmp_type=="fping") {
 			foreach($addresses[$s['id']] as $ak=>$a) {
 				//offline host
 				if(array_search($Subnets->transform_to_dotted($a), $subnets[$sk]['result'])===false) {
-					//change?
-					if($addresses2[$s['id']][$ak]['oldStatus']!=2) {
-						$address_change[] = $addresses2[$s['id']][$ak];
-					}
+    				// new change = null
+    				$addresses2[$s['id']][$ak]['lastSeenNew'] = NULL;
+					//save to out array
+                    $address_change[] = $addresses2[$s['id']][$ak];
 				}
 				//online host
 				else {
-					//update alive time
-					$Scan->ping_update_lastseen ($ak);
-					//change?
-					if($addresses2[$s['id']][$ak]['oldStatus']!=0) {
-						$address_change[] = $addresses2[$s['id']][$ak];
-					}
+    				// new change = now
+    				$addresses2[$s['id']][$ak]['lastSeenNew'] = $nowdate;
+					//save to out array
+                    $address_change[] = $addresses2[$s['id']][$ak];
 				}
 			}
 		}
@@ -203,19 +206,17 @@ else {
 	    while( !empty( $threads ) ) {
 	        foreach( $threads as $index => $thread ) {
 	            if( ! $thread->isAlive() ) {
-	            	//online, check diff
+	            	//online
 	            	if($thread->getExitCode() == 0) {
-						//if old is offline than check for time diff
-						if($addresses[$index]['oldStatus']==2) {
-							$address_change[] = $addresses[$index];	 				//change to online
-						}
+    	            	// set new available time
+    	            	$addresses[$index]['lastSeenNew'] =  $nowdate;
+                        $address_change[$index] = $addresses[$index];	 				//change to online
 	            	}
 	            	//offline
 	            	else {
-						//if online before change
-						if($addresses[$index]['oldStatus']==0) {
-							$address_change[] = $addresses[$index];	 				//change to offline
-						}
+    	            	// set nw online
+    	            	$addresses[$index]['lastSeenNew'] =  NULL;
+                        $address_change[$index] = $addresses[$index];	 				//change to online
 					}
 	            	//save exit code for host
 	                $addresses[$index]['newStatus'] = $thread->getExitCode();
@@ -243,24 +244,51 @@ else {
 	}
 }
 
-# Fix online > offline not obeying statuses[1]
+
+
+/**
+ * Now check for diffs - if time change between lastSeenOld and lastSeen > statuses[1]
+ */
+
+// loop
 foreach ($address_change as $k=>$change) {
-	// if new status is offline (old = online), check if report or not
-	if ($change['oldStatus']==0) {
-		$tDiff = time() - strtotime($change['lastSeen']);	// now - device last seen
-		$aDiff = time() - strtotime($agent->last_access);	// now - last agent check
-		// if more than last period
-		if ($tDiff > $aDiff) {
-			// remove if less
-			if ($tDiff < $statuses[1]) {
-				unset($address_change[$k]);
-			}
-		}
-	}
+    // null old - set to epoch time
+    if (strtotime($change['lastSeenOld'])===false)  { $change['lastSeenOld'] = date("Y-m-d H:i:s", 0); }
+
+    // set general diffs
+    $deviceDiff = $now - strtotime($change['lastSeenOld']);	        // now - device last seen
+    $agentDiff  = $now - strtotime($agent->last_access);	        // now - last agent check
+
+    // first check if diff between last available and now is > statuses[1]
+    if ($deviceDiff >= (int) $statuses[1]) {
+        print "a\n";
+        if ($deviceDiff <= ((int) $statuses[1] + $agentDiff))  {
+            print "b\n";
+            // now offline hosts
+            if ($change['lastSeenNew']==NULL) {
+                $address_change[$k]['oldStatus'] = 0;
+                $address_change[$k]['newStatus'] = 2;
+            }
+            // now online hosts
+            else {
+                $address_change[$k]['oldStatus'] = 2;
+                $address_change[$k]['newStatus'] = 0;
+            }
+        }
+        else {
+            unset ($address_change[$k]);
+        }
+    }
+    // remove
+    else {
+        unset ($address_change[$k]);
+    }
 }
 
+var_dump($address_change);
+
 # update scan time
-$Scan->ping_update_scanagent_checktime (1);
+$Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 # print change
