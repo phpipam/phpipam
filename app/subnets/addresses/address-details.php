@@ -112,6 +112,22 @@ if(sizeof($address)>1) {
 	print "	<td>$resolve1[name]</td>";
 	print "</tr>";
 
+	# firewall address object
+	if(in_array('firewallAddressObject', $selected_ip_fields)) {
+		if($User->settings->enableFirewallZones == 1) {
+			# class
+			$Zones = new FirewallZones ($Database);
+			$zone = $Zones->get_zone_subnet_info ($address['subnetId']);
+
+			if($zone) {
+				print "<tr>";
+				print "	<th>"._('Firewall address object')."</th>";
+				print "	<td>$address[firewallAddressObject]</td>";
+				print "</tr>";
+			}
+		}
+	}
+
 	# mac
 	if(in_array('owner', $selected_ip_fields)) {
 	print "<tr>";
@@ -318,6 +334,9 @@ if(sizeof($address)>1) {
 			print "		<a class='ping_ipaddress   btn btn-default btn-xs' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 						   													rel='tooltip' data-container='body' title='"._('Check availability')."'>							<i class='fa fa-gray fa-cogs'></i></a>";
 			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
+			if($zone) {
+			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['dns_name'])) ? '':$address['dns_name'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>";
+			}
 			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
 			//share
 			if($User->settings->tempShare==1) {

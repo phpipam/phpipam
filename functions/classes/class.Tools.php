@@ -313,8 +313,15 @@ class Tools extends Common_functions {
 
 		# set query
 		if(!is_null($field)) {
-			$query  = "SELECT * FROM `devices` where ? like ? order by $order_field $order_direction;";
-			$params = array($field, "%$val%");
+			// validate field
+			$permitted_fields = $this->get_permitted_fields ("devices");
+			if (!in_array($field, $permitted_fields)) {
+				$this->Result->show("danger", _('Invalid field '.$field), false);
+				return false;
+			}
+
+			$query  = "SELECT * FROM `devices` where `$field` like ? order by $order_field $order_direction;";
+			$params = array("%$val%");
 		}
 		else {
 			$query  = "SELECT * FROM `devices` order by $order_field $order_direction;";
@@ -370,6 +377,27 @@ class Tools extends Common_functions {
 				return false;
 			}
 		}
+	}
+
+	/**
+	 * Get permitted fields from database
+	 *
+	 * @access private
+	 * @param mixed $table
+	 * @return void
+	 */
+	private function get_permitted_fields ($table) {
+		try { $fields = $this->Database->getObjectsQuery("describe `$table`;", array($table)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		// loop and return array of permitted
+		foreach ($fields as $f) {
+			$out[] = $f->Field;
+		}
+		// return fields
+		return $out;
 	}
 
 	/**
@@ -1931,6 +1959,42 @@ class Tools extends Common_functions {
 	 *	@misc methods
 	 *	------------------------------
 	 */
+
+	/**
+	 * Fetch all l2 domans and vlans
+	 *
+	 * @access public
+	 * @param string $search (default: false)
+	 * @return void
+	 */
+	public function fetch_all_domains_and_vlans ($search = false) {
+		// set query
+		$query = "select `d`.`name` as `domainName`,
+						`d`.`description` as `domainDescription`,
+						`v`.`domainId` as `domainId`,
+						`v`.`name` as `name`,
+						`v`.`number` as `number`,
+						`v`.`description` as `description`,
+						`v`.`vlanId` as `id`
+						from
+						`vlans` as `v`,
+						`vlanDomains` as `d`
+						where `v`.`domainId` = `d`.`id`
+						order by `v`.`number` asc;";
+		// fetch
+		try { $domains = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
+		// filter if requested
+		if ($search !== false && sizeof($domains)>0) {
+			foreach ($domains as $k=>$d) {
+				if (strpos($d->number, $search)===false && strpos($d->name, $search)===false && strpos($d->description, $search)===false) {
+					unset($domains[$k]);
+				}
+			}
+		}
+		// return
+		return sizeof($domains)>0 ? $domains : false;
+	}
 
 	/**
 	 * Fetches instructions from database

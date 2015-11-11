@@ -1,8 +1,10 @@
 <?php
-// firewall zone mapping-edit.php
-// add, edit and delete firewall zones mappings
+/**
+ * firewall zone mapping-edit.php
+ * add, edit and delete firewall zones mappings
+ **************************************************/
 
-// functions
+# functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize classes
@@ -16,25 +18,29 @@ $Zones 	  = new FirewallZones($Database);
 # validate session parameters
 $User->check_user_session();
 
-// validate $_POST['id'] values
+# validate $_POST['id'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['id'])) {
 	$Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true);
 }
-// validate $_POST['action'] values
+
+# validate $_POST['action'] values
 if ($_POST['action'] != 'add' && $_POST['action'] != 'edit' && $_POST['action'] != 'delete') {
 	$Result->show("danger", _("Invalid action. Do not manipulate the POST values!"), true);
 }
 
-// disable edit on delete
+# disable edit on delete
 $readonly = $_POST['action']=="delete" ? "disabled" : "";
-// fetch all firewall zones
-$firewallZones = $Zones->get_zones();
-// fetch settings
-$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
-// fetch all devices
-$devices = $Tools->fetch_devices("type",$firewallZoneSettings['deviceType']);
 
-// fetch old mapping
+# fetch all firewall zones
+$firewallZones = $Zones->get_zones();
+
+# fetch settings
+$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+
+# fetch all devices
+$devices = $Tools->fetch_devices('type',$firewallZoneSettings['deviceType']);
+
+# fetch old mapping
 if ($_POST['action'] != 'add') {
 	$mapping = $Zones->get_zone_mapping($_POST['id']);
 }
@@ -58,8 +64,12 @@ if ($_POST['action'] != 'add') {
 			<option value="0"><?php print _('Select a firewall zone'); ?></option>
 			<?php
 			foreach ($firewallZones as $zone) {
-				if ($zone->id == $mapping->id) 	{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.' ('.$zone->description.')</option>'; }
-				else 							{ print '<option value="'.$zone->id.'">'.		  $zone->zone.' ('.$zone->description.')</option>'; }
+				if ($zone->id == $mapping->id) 	{ 
+					if($zone->description) 	{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.' ('.$zone->description.')</option>'; }
+					else 					{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.'</option>'; }}
+				else {
+					if($zone->description) 	{ print '<option value="'.$zone->id.'">'.		  $zone->zone.' ('.$zone->description.')</option>'; }
+					else 					{ print '<option value="'.$zone->id.'">'.		  $zone->zone.'</option>'; }}
 			}
 			?>
 		</td>
@@ -72,7 +82,7 @@ if ($_POST['action'] != 'add') {
 			<div class="zoneInformation">
 				<?php
 				if ($mapping->zoneId) {
-					// return the zone details
+					# return the zone details
 					$Zones->get_zone_detail($mapping->id);
 				}
 				?>
@@ -89,8 +99,12 @@ if ($_POST['action'] != 'add') {
 			<option value="0"><?php print _('Select firewall'); ?></option>
 			<?php
 			foreach ($devices as $device) {
-				if ($device->id == $mapping->deviceId) 	{ print '<option value="'.$device->id.'" selected>'.$device->hostname.' ('.$device->description.')</option>'; }
-				else 									{ print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
+				if ($device->id == $mapping->deviceId) 	{ 
+					if($device->description) 	{	print '<option value="'.$device->id.'" selected>'.	$device->hostname.' ('.$device->description.')</option>'; }
+					else 						{ 	print '<option value="'.$device->id.'" selected>'.	$device->hostname.'</option>'; }}
+				else { 
+					if($device->description)	{	print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
+					else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
 			}
 			?>
 		</td>
@@ -120,7 +134,7 @@ if ($_POST['action'] != 'add') {
 	</form>
 
 	<?php
-	//print delete warning
+	# print delete warning
 	if($_POST['action'] == "delete"){
 		$Result->show("warning", "<strong>"._('Warning').":</strong> "._("You are about to remove the firewall to zone mapping!"), false);
 	}

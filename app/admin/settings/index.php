@@ -1,15 +1,3 @@
-<script type="text/javascript">
-$(document).ready(function() {
-	/* bootstrap switch */
-	var switch_options = {
-	    onColor: 'default',
-	    offColor: 'default',
-	    size: "mini"
-	};
-	$(".input-switch").bootstrapSwitch(switch_options);
-});
-</script>
-
 <?php
 
 /**
@@ -25,6 +13,18 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 # set settings
 $settings = (array) $User->settings;
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
 
 <!-- title -->
 <h4><?php print _('phpIPAM Server settings'); ?></h4>
@@ -400,7 +400,7 @@ $settings = (array) $User->settings;
 				"21"=>"/21 (2046)",
 				"22"=>"/22 (1024)",
 				"23"=>"/23 (512)",
-				"24"=>"/24 (255)"
+				"24"=>"/24 (256)"
 			);
 
 			foreach($opts as $key=>$line) {

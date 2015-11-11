@@ -345,7 +345,52 @@ class User extends Common_functions {
 		}
 	}
 
+	/**
+	 *	Check if migration of LDAP settings is required
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function migrate_ldap_settings () {
 
+		# fetch LDAP settings
+		$ldaps = $this->Database->getObjectsQuery("select * from usersAuthMethod where type = 'LDAP'");
+
+		foreach ($ldaps as $ldapobj) {
+
+			$ldap = json_decode($ldapobj->params);
+
+			if (!property_exists($ldap, 'ldap_security')) {
+				$ldap->ldap_security = 'none';
+			}
+			
+			if (property_exists($ldap, 'use_ssl')) {
+
+				if ($ldap->use_ssl == '1') {
+					$ldap->ldap_security = 'ssl';
+				}
+				unset($ldap->use_ssl);
+
+			}
+
+			if (property_exists($ldap, 'use_tls')) {
+
+				if ($ldap->use_tls == '1') {
+					$ldap->ldap_security = 'tls';
+				}
+				unset($ldap->use_tls);
+			}
+
+			if (!property_exists($ldap, 'uid_attr')) {
+				$ldap->uid_attr = 'uid';
+			}
+
+			$ldapobj->params = json_encode($ldap);
+
+			$this->Database->updateObject("usersAuthMethod", $ldapobj);
+
+		}
+	}
 
 
 
@@ -721,8 +766,10 @@ class User extends Common_functions {
 			$dirparams['use_ssl'] = false;
 			$dirparams['use_tls'] = false;
 
-			if ($authparams['ldap_security'] == 'tls') 		{ $dirparams['use_tls'] = true; }
-			elseif ($authparams['ldap_security'] == 'ssl') 	{ $dirparams['use_ssl'] = true; }
+			// Support the pre-1.2 auth settings as well as the current version
+			// TODO: remove legacy support at some point
+			if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1) 		{ $dirparams['use_tls'] = true; }
+			elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1) 	{ $dirparams['use_ssl'] = true; }
 
 			if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
 				$dirparams['admin_username'] = $authparams['adminUsername'];
@@ -784,7 +831,7 @@ class User extends Common_functions {
 				# add blocked count
 				$this->block_ip();
 				$this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
-				$this->Result->show("danger", _("Invalid username or password " . $username . " " . $password), true);
+				$this->Result->show("danger", _("Invalid username or password " . $username ), true);
 
 			}
 		} catch (adLDAPException $e) {
@@ -954,6 +1001,20 @@ class User extends Common_functions {
 		elseif(CRYPT_BLOWFISH == 1)	{ return '$2y$'.str_pad(rand(4,31),2,0, STR_PAD_LEFT).'$'; }
 		elseif(CRYPT_MD5 == 1)		{ return '$5$rounds=3000$'; }
 		else						{ $this->Result->show("danger", _("No crypt types supported"), true); }
+	}
+
+	/**
+	 * Returns crypt type used to encrypt password
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function return_crypt_type () {
+		if(CRYPT_SHA512 == 1)		{ return 'CRYPT_SHA512'; }
+		elseif(CRYPT_SHA256 == 1)	{ return 'CRYPT_SHA256'; }
+		elseif(CRYPT_BLOWFISH == 1)	{ return 'CRYPT_BLOWFISH'; }
+		elseif(CRYPT_MD5 == 1)		{ return 'CRYPT_MD5'; }
+		else						{ return "No crypt types supported"; }
 	}
 
 	/**

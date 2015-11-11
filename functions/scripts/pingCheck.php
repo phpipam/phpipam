@@ -42,13 +42,14 @@ $Result		= new Result();
 $Scan->ping_set_exit(true);
 // set debugging
 $Scan->reset_debugging(false);
+// fetch agent
+$agent = $Tools->fetch_object("scanAgents", "id", 1);
 // change scan type?
 // $Scan->reset_scan_method ("pear");
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
 $send_mail = true;
-
 
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
@@ -93,11 +94,11 @@ foreach($scan_subnets as $s) {
 					$oldStatus = $tDiff >= $statuses[1] ? 2 : 0;
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
-						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
+						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
 						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
 					}
 					else {
-						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);
+						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);
 					}
 				}
 			}
@@ -242,6 +243,25 @@ else {
 	}
 }
 
+# Fix online > offline not obeying statuses[1]
+foreach ($address_change as $k=>$change) {
+	// if new status is offline (old = online), check if report or not
+	if ($change['oldStatus']==0) {
+		$tDiff = time() - strtotime($change['lastSeen']);	// now - device last seen
+		$aDiff = time() - strtotime($agent->last_access);	// now - last agent check
+		// if more than last period
+		if ($tDiff > $aDiff) {
+			// remove if less
+			if ($tDiff < $statuses[1]) {
+				unset($address_change[$k]);
+			}
+		}
+	}
+}
+
+# update scan time
+$Scan->ping_update_scanagent_checktime (1);
+
 
 # print change
 if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
@@ -293,6 +313,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 	$content[] = "<tr>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Description</th>";
+	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>last seen</th>";
@@ -331,6 +352,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 		$content[] = "<tr>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($change['ip_addr'])."</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$change[description]</td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$change[dns_name]</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ago</td>";

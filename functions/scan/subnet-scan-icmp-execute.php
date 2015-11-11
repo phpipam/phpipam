@@ -81,7 +81,7 @@ if($Scan->settings->scanPingType=="fping" && $argv[1]=="discovery") {
 	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
 
 	# parse result
-	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "alive"=>null))); }
+	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {
@@ -111,7 +111,7 @@ elseif($Scan->settings->scanPingType=="fping") {
 	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
 
 	# parse result
-	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "alive"=>null))); }
+	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {

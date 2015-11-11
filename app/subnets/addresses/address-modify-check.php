@@ -16,6 +16,7 @@ $Subnets	= new Subnets ($Database);
 $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
 $Log 		= new Logging ($Database, $User->settings);
+$Zones 		= new FirewallZones($Database);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -40,6 +41,19 @@ isset($address['id']) ?:			$Result->show("danger", _("Missing required fields").
 # ptr
 if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 
+# generate firewall address object name
+$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+if ($firewallZoneSettings->autogen == 'on') {
+	if ($address['action'] == 'add' ) {
+		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['dns_name']);
+	} else {
+		if ($_POST['firewallAddressObject']) {
+			$address['firewallAddressObject'] = $_POST['firewallAddressObject'];
+		} else {
+			$address['firewallAddressObject'] = NULL ;
+		}
+	}
+}
 
 # set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $address['subnetId']);

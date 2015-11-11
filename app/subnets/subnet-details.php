@@ -138,31 +138,27 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# FW zone info
 	if($User->settings->enableFirewallZones==1) {
-		# search
-		$zone_check = $Tools->fetch_object ("firewallZones", "subnetId", $subnet['id']);
-		if ($zone_check!==false) {
-			# class
-			$Zones = new FirewallZones ($Database);
-			$zone = $Zones->get_zone_mapping ($zone_check->id);
+		# class
+		$Zones = new FirewallZones ($Database);
+		$zone = $Zones->get_zone_subnet_info ($subnet['id']);
 
-			if ($zone!==false) {
-				// alias fix
-				$zone->alias 		= strlen($zone->alias)>0 ? "(".$zone->alias.")" : "";
-				$zone->description 	= strlen($zone->description)>0 ? " - ".$zone->description : "";
-				$zone->interface 	= strlen($zone->interface)>0 ? "(".$zone->interface.")" : "";
+		if ($zone!==false) {
+			// alias fix
+			$zone->alias 		= strlen($zone->alias)>0 ? "(".$zone->alias.")" : "";
+			$zone->description 	= strlen($zone->description)>0 ? " - ".$zone->description : "";
+			$zone->interface 	= strlen($zone->interface)>0 ? "(".$zone->interface.")" : "";
 
-				# divider
-				print "<tr>";
-				print "	<td colspan='2'><hr></td>";
-				print "</tr>";
-				# zone details
-				print "<tr>";
-				print "	<th>"._('Firewall Zone')."</th>";
-				print "	<td>";
-				print $zone->zone." ".$zone->alias." ".$zone->description."<br>".$zone->deviceName." ".$zone->interface;
-				print "	</td>";
-				print "</tr>";
-			}
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+			# zone details
+			print "<tr>";
+			print "	<th>"._('Firewall Zone')."</th>";
+			print "	<td>";
+			print $zone->zone." ".$zone->alias." ".$zone->description."<br>".$zone->deviceName." ".$zone->interface;
+			print "	</td>";
+			print "</tr>";
 		}
 	}
 
@@ -195,7 +191,10 @@ $rowSpan = 10 + sizeof($custom_fields);
 		// fetch
 		$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
 		if ($agent===false)		{ print _("Invalid scan agent"); }
-		else					{ print "<strong>".$agent->name ."</strong> (".$agent->description.")"; }
+		else					{
+			$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00" ? "Never" : $agent->last_access;
+			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>Last check $last_check</span>";
+		}
 		print "	</td>";
 		print "</tr>";
 		}
@@ -475,6 +474,15 @@ $rowSpan = 10 + sizeof($custom_fields);
 		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";
 		}
 	print "</div>";
+
+		# firewall address object actions
+		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+		if ( $User->settings->enableFirewallZones == 1 && $firewallZoneSettings['autogen'] == 'on' && $subnet_permission > 1) {
+			print "<div class='btn-group'>";
+			print "<a class='btn btn-xs btn-default editMapping disabled' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-id='0' data-action='add'><i class='fa fa-fire'></i></a>";
+			print "<a class='fw_autogen btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Regenerate all firewall address objects for this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
+			print "</div>";
+		}
 	}
 
 	print "	</div>";

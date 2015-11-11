@@ -4,19 +4,11 @@
  *
  */
 
-
-
 @font-face {
-  font-family: 'Lato';
+  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url("../fonts/lato/Lato-light.ttf") format('truetype');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url("../fonts/lato/Lato-regular.ttf") format('truetype');
+  src: local('Source Sans Pro Light'), local('Source-sans-pro-light'), url("../fonts/source_sans_pro/Source-sans-pro-light.ttf") format('truetype');
 }
 
 
@@ -81,7 +73,7 @@ h5 .label {
 	margin-left: 10px;
 }
 h1, h2, h3, h4, h5, .pHeader {
-	font-family: "Lato", Arial, sans-serif;
+	font-family: "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
 
 /* font-family: 'ecoicons'; */
@@ -186,6 +178,10 @@ tbody {
 }
 .table.table-top.table-td-top td {
 	vertical-align: top !important;
+}
+table#zonesPrint tr.border-top td,
+table#mappingsPrint tr.border-top td {
+	border-bottom: 1px solid #eee;
 }
 
 
@@ -1469,7 +1465,8 @@ span.ipreqMenu {
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 
-	float: right;
+	position:absolute;
+	right: 25px;
 	margin-top: 0px;
 
 	color: white;
@@ -1758,7 +1755,8 @@ td.groups input[type=checkbox] {
 	white-space: nowrap;
 	text-shadow: none;
 	font-size: 11px;
-	z-index: 1120 !important;
+
+	position: fixed;
 }
 .tooltip-inner {
 	max-width: 500px;
@@ -1986,6 +1984,9 @@ table#userPrint h4 {
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding-box;
           background-clip: padding-box;
+}
+#popupOverlay2 .popup {
+	margin-top: 100px;
 }
 .popup .pContent::-webkit-scrollbar {
     display: none;

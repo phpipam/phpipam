@@ -1,16 +1,15 @@
 version - 1.2
 
 	+ To fix / finish
-		+ Verify API new fields and update web documentation;
-		+ Settings to CONSTANT;
-		+ Add admin password reset option / script;
-		+ Fix online / offline in state change mails;
+		+ Verify API methods;
+		+ Verify install / upgrade scripts;
 
 	+ Mark subnet as full (db prepared);
 
-
 features for next releases:
 ---------------------------
+
+	+ LDAP auth without local user;
 
 	+ Inventory management:
 		- rack tables (http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/)
@@ -36,14 +35,11 @@ features for next releases:
 
 	+ BGP support
 
-	+ Imports
-
 	+ custom fields for IP requests;
 
-	+ Scan subnet for alive hosts and import
-		SNMP router table fetching
+	+ SNMP router table fetching
 
-	+ Mail subnet details
+	+ Mail subnet details;
 
 	+ add customers module;
 

@@ -4,7 +4,6 @@
  *
  *
  */
-
 $(document).ready(function () {
 
 /* @general functions */
@@ -13,15 +12,24 @@ $(document).ready(function () {
 function showSpinner() { $('div.loading').show(); }
 function hideSpinner() { $('div.loading').fadeOut('fast'); }
 
+/* escape hide popups */
+$(document).keydown(function(e) {
+    if(e.keyCode === 27) {
+	 hidePopups();
+    }
+});
+
 
 /* this functions opens popup */
 /* -------------------------- */
-function open_popup (popup_class, target_script, post_data) {
+function open_popup (popup_class, target_script, post_data, secondary) {
+	// class
+	secondary = typeof secondary !== 'undefined' ? secondary : false;
 	// show spinner
 	showSpinner();
 	// post
     $.post(target_script, post_data, function(data) {
-        showPopup('popup_w'+popup_class, data, false);
+        showPopup('popup_w'+popup_class, data, secondary);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText+"<br>Status: "+textStatus+"<br>Error: "+errorThrown); });
     // prevent reload
@@ -40,8 +48,8 @@ function submit_popup_data (result_div, target_script, post_data, reload) {
         $('div'+result_div).html(data).slideDown('fast');
         //reload after 2 seconds if succeeded!
         if(reload) {
-	        if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning") == -1 )     { setTimeout(function (){window.location.reload();}, 1500); }
-	        else                               		  										{ hideSpinner(); }
+	        if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning")==-1 )	{ setTimeout(function (){window.location.reload();}, 1500); }
+	        else                               		  																{ hideSpinner(); }
         }
         else {
 	        hideSpinner();
@@ -58,6 +66,7 @@ function reload_window (data) {
 		data.search("alert-warning") == -1 )    { setTimeout(function (){window.location.reload();}, 1500); }
 	else                               		  	{ hideSpinner(); }
 }
+
 
 /* hide error div if jquery loads ok
 *********************************************/
@@ -438,10 +447,12 @@ $(document).on("click", ".ping_ipaddress", function() {
 	showSpinner();
 	var id       = $(this).attr('data-id');
 	var subnetId = $(this).attr('data-subnetId');
+	// new ip?
+	if ($(this).hasClass("ping_ipaddress_new")) { id = $("input[name=ip_addr]").val(); }
 	//check
 	$.post('app/subnets/addresses/ping-address.php', {id:id, subnetId:subnetId}, function(data) {
-        $('#popupOverlay div.popup_w400').html(data);
-        showPopup('popup_w400');
+        $('#popupOverlay2 div.popup_w400').html(data);
+        showPopup('popup_w400', false, true);
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
@@ -975,7 +986,7 @@ $(document).on('submit', "#deviceFilter", function() {
 
 // show subnet masks popup
 $(document).on("click", '.show-masks', function() {
-	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')});
+	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')}, true);
 	return false;
 });
 
@@ -1539,6 +1550,58 @@ $(document).on("click", "#editZoneSubmit", function() {
     submit_popup_data (".zones-edit-result", "app/admin/firewall-zones/zones-edit-result.php", $('form#zoneEdit').serialize());
 });
 
+// add network to zone
+$(document).on("click", ".editNetwork", function() {
+     var pData = $('form#zoneEdit').serializeArray();
+     pData.push({name:'action',value:$(this).attr('data-action')});
+     pData.push({name:'subnetId',value:$(this).attr('data-subnetId')});
+     $('#popupOverlay2 .popup_w500').load('app/admin/firewall-zones/zones-edit-network.php',pData);
+    showPopup('popup_w500', false, true);
+    hideSpinner();
+});
+
+// remove a non persitent network from the selection
+$(document).on("click", ".deleteTempNetwork", function() {
+    // show spinner
+    showSpinner();
+    var filterName = 'network['+$(this).attr("data-subnetArrayKey")+']';
+    var pData =$('form#zoneEdit :input[name != "'+filterName+'"][name *= "network["]').serializeArray();
+    pData.push({name:'noZone',value:1});
+
+    // post
+    $.post("app/admin/firewall-zones/ajax.php", pData , function(data) {
+        $('div'+".zoneNetwork").html(data).slideDown('fast');
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    setTimeout(function (){hideSpinner();}, 500);
+
+    return false;
+});
+
+//submit form network
+$(document).on("click", "#editNetworkSubmit", function() {
+    // show spinner
+    showSpinner();
+    // set reload
+    reload = typeof reload !== 'undefined' ? reload : true;
+    // post
+    $.post("app/admin/firewall-zones/zones-edit-network-result.php", $('form#networkEdit :input[name != "sectionId"]').serialize(), function(data) {
+        $('div'+".zones-edit-network-result").html(data).slideDown('fast');
+
+        if(reload) {
+            if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning") == -1 ) {
+                $.post("app/admin/firewall-zones/ajax.php", $('form#networkEdit :input[name != "sectionId"]').serialize(), function(data) {
+                    $('div'+".zoneNetwork").html(data).slideDown('fast');
+                }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+                setTimeout(function (){hideSpinner();hidePopup2();}, 500);
+            } else { hideSpinner(); }
+        }
+        else {
+            hideSpinner();
+        }
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    // prevent reload
+    return false;
+});
 
 // zone edit menu - ajax request to fetch all subnets for a specific section id
 $(document).on("change", ".firewallZoneSection",(function () {
@@ -1570,6 +1633,7 @@ $(document).on("change", ".firewallZoneVlan",(function() {
 // load edit form
 $(document).on("click", ".editMapping", function() {
     open_popup("700", "app/admin/firewall-zones/mapping-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
 });
 
 //submit form
@@ -1590,6 +1654,27 @@ $(document).on("change", ".mappingZoneInformation",(function() {
     return false;
 }));
 
+/*    regenerate firewall address objects
+********************************************/
+// execute regeneration of the address object via ajax, reload the page to refresh the data
+$(document).on("click", "a.fw_autogen", function() {
+    //build vars
+    var subnetId = $(this).attr('data-subnetid');
+    var IPId = $(this).attr('data-ipid');
+    var dnsName = $(this).attr('data-dnsname');
+    var action = $(this).attr('data-action');
+    var operation = 'autogen';
+
+    showSpinner();
+
+    // send information to ajax.php to generate a new address object
+    $.post('app/admin/firewall-zones/ajax.php', {subnetId:subnetId, IPId:IPId, dnsName:dnsName, action:action, operation:operation}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+
+    // hide the spinner and reload the window on success
+    setTimeout(function (){hideSpinner();window.location.reload();}, 500);
+
+    return false;
+});
 
 /*    Subnets
 ********************************/
@@ -1918,11 +2003,29 @@ $(document).on("click", ".vlanManagementEditFromSubnetButton", function() {
                 hideSpinner();
 			}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
             //hide popup after 1 second
-            setTimeout(function (){ hidePopup('popup_w400', true); parameter = null;}, 1000);
+            setTimeout(function (){ hidePopup('popup_w400', true); hidePopup2(); parameter = null;}, 1000);
         }
         else                      { hideSpinner(); }
     });
     return false;
+});
+// filter vlans
+$('.vlansearchsubmit').click(function() {
+	showSpinner();
+	var search = $('input.vlanfilter').val();
+	var location = $('input.vlanfilter').attr('data-location');
+    //go to search page
+    var prettyLinks = $('#prettyLinks').html();
+	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = location +search+"/";}, 500); }
+	else					{ setTimeout(function (){window.location = location + "&sPage="+search;}, 500); }
+
+
+    //go to search page
+    var prettyLinks = $('#prettyLinks').html();
+	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
+	else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
+
+	return false;
 });
 
 

@@ -110,6 +110,10 @@ if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
 	$rowCount++;
 }
+if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('fw object') ,$format_title);
+	$rowCount++;
+}
 if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('mac') ,$format_title);
 	$rowCount++;
@@ -169,7 +173,7 @@ foreach ($addresses as $ip) {
 	$rowCount = 0;
 
 	//change switch ID to name
-	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);
@@ -187,6 +191,10 @@ foreach ($addresses as $ip) {
 	}
 	if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['dns_name']);
+		$rowCount++;
+	}
+	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['firewallAddressObject']);
 		$rowCount++;
 	}
 	if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {

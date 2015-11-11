@@ -1,6 +1,8 @@
 <?php
-// firewall zone zones-result.php
-// verify and update zone informations
+/**
+ *	firewall zone zones-result.php
+ *	verify and update zone informations
+ *****************************************/
 
 # functions
 require( dirname(__FILE__) . '/../../../functions/functions.php');
@@ -15,54 +17,41 @@ $Zones 	  = new FirewallZones($Database);
 # validate session parameters
 $User->check_user_session();
 
-// fetch module settings
+# fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 
-// validations
-// validate the action type
+# validations
+# validate the action type
 if($_POST['action'] != 'add' && $_POST['action'] != 'delete' && $_POST['action'] != 'edit'){
 	$Result->show("danger", _("Invalid action."), true);
 }
-// check the zone name. valid values are alphanumeric characters and special characters like ".-_ "
+
+# check the zone name. valid values are alphanumeric characters and special characters like ".-_ "
 if($_POST['zone'] && !preg_match('/^[0-9a-zA-Z.\-_ ]+$/i',$_POST['zone'])) {
 	$Result->show("danger", _("Invalid zone name value."), true);
 }
+
 if($firewallZoneSettings['zoneGenerator']=="2")
-if(strlen(@$_POST['zone'])<3 || strlen(@$_POST['zone'])>$firewallZoneSettings['zoneLength']) {
+if(strlen(@$_POST['zone']) < 1 || strlen(@$_POST['zone'])>$firewallZoneSettings['zoneLength']) {
 	$Result->show("danger", _("Invalid zone name length."), true);
 }
-// check the zone indicator ID. valid values are 0 or 1.
+
+# check the zone indicator ID. valid values are 0 or 1.
 if($_POST['indicator'] && !preg_match('/^[0-1]$/i',$_POST['indicator'])) {
 	$Result->show("danger", _("Invalid indicator ID."), true);
 }
-// check the section ID. valid value: integer
-if($_POST['sectionId'] && !preg_match('/^[0-9]+$/i',$_POST['sectionId'])) {
-	$Result->show("danger", _("Invalid section ID."), true);
-}
-// check the subnet ID. valid value: integer
-if($_POST['masterSubnetId'] && !preg_match('/^[0-9]+$/i',$_POST['masterSubnetId'])) {
-	$Result->show("danger", _("Invalid subnet ID."), true);
-}
-// check the layer2 domain ID. valid value: integer
-if($_POST['vlanDomain'] && !preg_match('/^[0-9]+$/i',$_POST['vlanDomain'])) {
-	$Result->show("danger", _("Invalid L2 domain ID."), true);
-}
-// check the vlan ID. valid value: integer
-if($_POST['vlanId'] && !preg_match('/^[0-9]+$/i',$_POST['vlanId'])) {
-	$Result->show("danger", _("Invalid VLAN ID."), true);
-}
 
-// check the generator value. valid value: integer
+# check the generator value. valid value: integer
 if($_POST['generator'] && !preg_match('/^[0-9]+$/i',$_POST['generator'])) {
 	$Result->show("danger", _("Invalid generator ID."), true);
 }
 
-// check the padding value. valid value: on or off
+# check the padding value. valid value: on or off
 if($_POST['padding'] && !preg_match('/^(on|off)$/i',$_POST['padding'])) {
 	$Result->show("danger", _("Invalid padding setting."), true);
 }
 
-// transform the padding checkbox values into 1 or 0
+# transform the padding checkbox values into 1 or 0
 if($_POST['generator'] != 2) {
 	if($_POST['padding']) {
 		$padding = 1;
@@ -71,11 +60,10 @@ if($_POST['generator'] != 2) {
 	}
 }
 
-
-// transform description to valid value
+# transform description to valid value
 $description = trim(htmlspecialchars($_POST['description']));
 
-// generate a unique zone name if the generator is set to decimal or hex
+# generate a unique zone name if the generator is set to decimal or hex
 if (!$_POST['zone'] && $_POST['action'] == 'add')  {
 	if(!$zone=$Zones->generate_zone_name()){
 		$Result->show("danger",  _("Cannot generate zone name"), true);
@@ -84,7 +72,7 @@ if (!$_POST['zone'] && $_POST['action'] == 'add')  {
 	$zone = $_POST['zone'];
 }
 
-// validate the zone name if text mode is enabled
+# validate the zone name if text mode is enabled
 if ($_POST['generator'] == 2 ) {
 	$textSettings = array ( $_POST['zone'],$_POST['id']);
 	if(!$zone=$Zones->generate_zone_name($textSettings)){
@@ -92,14 +80,13 @@ if ($_POST['generator'] == 2 ) {
 	}
 }
 
-// build the query parameter arrary
+# build the query parameter arrary
 if($_POST['generator'] != 2 && $_POST['action'] == 'edit') {
 	$values = array('id' => $_POST['id'],
 					'indicator' => $_POST['indicator'],
 					'padding' => $padding,
 					'description' => $description,
-					'subnetId' => $_POST['masterSubnetId'],
-					'vlanId' => $_POST['vlanId']
+					'network' => $_POST['network']
 					);
 }
 else {
@@ -109,8 +96,7 @@ else {
 					'indicator' => $_POST['indicator'],
 					'padding' => $padding,
 					'description' => $description,
-					'subnetId' => $_POST['masterSubnetId'],
-					'vlanId' => $_POST['vlanId']
+					'network' => $_POST['network']
 					);
 }
 

@@ -1199,10 +1199,12 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function verify_cidr_address_IPv6 ($cidr, $issubnet = true) {
+		# to lower
+		$cidr = strtolower($cidr);
 		# Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
         # validate
-        if (!$this->Net_IPv6->checkIPv6 ($cidr) ) 						{ return _("Invalid IPv6 address!"); }
+        if (!$this->Net_IPv6->checkIPv6 ($cidr) ) 					{ return _("Invalid IPv6 address!"); }
         else {
             $subnet = $this->Net_IPv6->getNetmask($cidr);			//validate subnet
             $subnet = $this->Net_IPv6->compress($subnet);			//get subnet part
@@ -2590,8 +2592,12 @@ class Subnets extends Common_functions {
 			# print table line if it exists and it is not folder
 			if(strlen($option['value']['subnet']) > 0 && $option['value']['isFolder']!=1) {
 				# selected
-				if($option['value']['id'] == $current_master) 	{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-				else 											{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
+				if($option['value']['id'] == $current_master) 	{
+					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
+					else 								{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+				else {
+					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
+					else 								{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {

@@ -7,6 +7,20 @@
 # verify that user is logged in
 $User->check_user_session();
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
+
+
 <!-- database settings -->
 <form name="pdns" id="pdns-settings">
 <table id="settings" class="table table-hover table-condensed table-auto">
@@ -49,6 +63,13 @@ $User->check_user_session();
 	<td><?php print _('Port'); ?></th>
 	<td>
 		<input type="text" class="form-control input-sm" name="port" value="<?php print $pdns->port; ?>">
+	</td>
+</tr>
+<!-- autoserial -->
+<tr>
+	<td><?php print _('Autoserial'); ?></th>
+	<td>
+        <input type="checkbox" class="input-switch" value="Yes" name="autoserial" <?php if(@$pdns->autoserial == "Yes") print 'checked'; ?>>
 	</td>
 </tr>
 <!-- submit -->

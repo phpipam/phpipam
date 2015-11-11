@@ -418,6 +418,20 @@ class Scan extends Common_functions {
 	}
 
 	/**
+	 * Update last check time for agent
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return void
+	 */
+	public function ping_update_scanagent_checktime ($id) {
+		# execute
+		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>date("Y-m-d H:i:s")), "id"); }
+		catch (Exception $e) {
+		}
+	}
+
+	/**
 	 * Opens socket connection on specified TCP ports, if at least one is available host is alive
 	 *
 	 * @access public
