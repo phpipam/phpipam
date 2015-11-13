@@ -36,9 +36,6 @@ if ($_POST['action'] != 'add') {
 
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
-
-# fetch all layer2 domains
-$vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 ?>
 
 <script type="text/javascript">

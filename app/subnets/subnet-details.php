@@ -140,13 +140,13 @@ $rowSpan = 10 + sizeof($custom_fields);
 	if($User->settings->enableFirewallZones==1) {
 		# class
 		$Zones = new FirewallZones ($Database);
-		$zone = $Zones->get_zone_subnet_info ($subnet['id']);
+		$fwZone = $Zones->get_zone_subnet_info ($subnet['id']);
 
-		if ($zone!==false) {
+		if ($fwZone!==false) {
 			// alias fix
-			$zone->alias 		= strlen($zone->alias)>0 ? "(".$zone->alias.")" : "";
-			$zone->description 	= strlen($zone->description)>0 ? " - ".$zone->description : "";
-			$zone->interface 	= strlen($zone->interface)>0 ? "(".$zone->interface.")" : "";
+			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
+			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
+			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
 
 			# divider
 			print "<tr>";
@@ -156,7 +156,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			print "<tr>";
 			print "	<th>"._('Firewall Zone')."</th>";
 			print "	<td>";
-			print $zone->zone." ".$zone->alias." ".$zone->description."<br>".$zone->deviceName." ".$zone->interface;
+			print $fwZone->zone." ".$fwZone->alias." ".$fwZone->description."<br>".$fwZone->deviceName." ".$fwZone->interface;
 			print "	</td>";
 			print "</tr>";
 		}
@@ -479,8 +479,8 @@ $rowSpan = 10 + sizeof($custom_fields);
 		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 		if ( $User->settings->enableFirewallZones == 1 && $firewallZoneSettings['autogen'] == 'on' && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
-			print "<a class='btn btn-xs btn-default editMapping disabled' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-id='0' data-action='add'><i class='fa fa-fire'></i></a>";
-			print "<a class='fw_autogen btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Regenerate all firewall address objects for this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
+			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";
+			print "<a class='fw_autogen btn btn-xs btn-default ".(($fwZone == false) ? 'disabled':'')."'  href='' data-container='body' rel='tooltip' title='"._('Regenerate all firewall address objects for this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
 			print "</div>";
 		}
 	}
