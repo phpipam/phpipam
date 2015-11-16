@@ -310,6 +310,24 @@ class FirewallZones extends Common_functions {
 		return sizeof($mapping)>0 ? $mapping[0] : false;
 	}
 
+	/**
+	 * Checks if there is any mapping for a specific zone
+	 *
+	 * @access public
+	 * @param mixed $zoneId
+	 * @return void
+	 */
+	public function check_zone_mapping ($zoneId) {
+		# try to fetch id specific zone mapping
+		try { $mapping =  $this->Database->getObjectsQuery('SELECT id FROM firewallZoneMapping WHERE zoneId = ?;', $zoneId);}
+
+		# throw exception
+		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
+
+		# return the values
+		return sizeof($mapping)>0 ? $mapping[0] : false;
+	}
+
 
 	/**
 	 * Fetches zone mapping informations for subnet detaul from database, depending on id

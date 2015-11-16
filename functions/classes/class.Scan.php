@@ -424,11 +424,14 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
+	 * @param datetime $datetime
 	 * @return void
 	 */
-	public function ping_update_lastseen ($id) {
+	public function ping_update_lastseen ($id, $datetime = null) {
+    	# set datetime
+    	$datetime = is_null($datetime) ? date("Y-m-d H:i:s") : $datetime;
 		# execute
-		try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "lastSeen"=>date("Y-m-d H:i:s")), "id"); }
+		try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "lastSeen"=>$datetime), "id"); }
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log

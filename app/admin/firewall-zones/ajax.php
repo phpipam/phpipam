@@ -14,28 +14,33 @@ $Admin 	  = new Admin ($Database);
 $Subnets  = new Subnets ($Database);
 $Result   = new Result ();
 $Zones 	  = new FirewallZones($Database);
+$Tools	  = new Tools($Database);
 
 # verify that user is logged in
 $User->check_user_session();
 
 # generate a dropdown list for all subnets within a section
-if($_POST['sectionId']) {
-	if(preg_match('/^[0-9]+$/i',$_POST['sectionId'])) {
-		$sectionId = $_POST['sectionId'];
-		print $Subnets->print_mastersubnet_dropdown_menu($sectionId);
-	} else {
-		$Result->show('danger', _('Invalid ID.'), true);
+if ($_POST['operation'] == 'fetchSectionSubnets') {
+	if($_POST['sectionId']) {
+		if(preg_match('/^[0-9]+$/i',$_POST['sectionId'])) {
+			$sectionId = $_POST['sectionId'];
+			print $Subnets->print_mastersubnet_dropdown_menu($sectionId);
+		} else {
+			$Result->show('danger', _('Invalid ID.'), true);
+		}
 	}
 }
 
 # deliver zone details
-if ($_POST['zoneId']) {
-	if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
-		# return the zone details
-		$Zones->get_zone_detail($_POST['zoneId']);
+if ($_POST['operation'] == 'deliverZoneDetail') {
+	if ($_POST['zoneId']) {
+		if(preg_match('/^[0-9]+$/i',$_POST['zoneId'])) {
+			# return the zone details
+			$Zones->get_zone_detail($_POST['zoneId']);
 
-	} else {
-		$Result->show('danger', _('Invalid zone ID.'), true);
+		} else {
+			$Result->show('danger', _('Invalid zone ID.'), true);
+		}
 	}
 }
 
@@ -94,4 +99,72 @@ if ($_POST['operation'] == 'autogen') {
 		}
 	}
 }
+
+# check if there is any mapping for a specific zone, if not, display inputs
+if ($_POST['operation'] == 'checkMapping') {
+
+	if (!$Zones->check_zone_mapping($_POST['zoneId'])) {
+		# fetch all firewall zones
+		$firewallZones = $Zones->get_zones();
+
+		# fetch settings
+		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+
+		# fetch all devices
+		$devices = $Tools->fetch_devices('type',$firewallZoneSettings['deviceType']);
+
+		?>
+		<table class="table table-noborder table-condensed">
+			<tr>
+				<td colspan="2">
+					<?php print _('In order to map this network to a zone without an existing device mapping you have to specify the following values.'); ?>
+				</td>
+			</tr>
+			<tr>
+				<!-- zone indicator -->
+				<td>
+					<?php print _('Firewall to map'); ?>
+				</td>
+				<td>
+					<select name="deviceId" class="form-control input-sm input-w-auto input-max-200" <?php print $readonly; ?>>
+					<option value="0"><?php print _('Select firewall'); ?></option>
+					<?php
+					foreach ($devices as $device) {
+						if ($device->id == $mapping->deviceId) 	{ 
+							if($device->description) 	{	print '<option value="'.$device->id.'" selected>'.	$device->hostname.' ('.$device->description.')</option>'; }
+							else 						{ 	print '<option value="'.$device->id.'" selected>'.	$device->hostname.'</option>'; }}
+						else { 
+							if($device->description)	{	print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
+							else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
+					}
+					?>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<?php print _('Interface'); ?>
+				</td>
+				<td>
+					<input type="text" class="form-control input-sm" name="interface" placeholder="<?php print _('Firewall interface'); ?>" value="<?php print $mapping->interface; ?>" <?php print $readonly; ?>>
+				</td>
+			</tr>
+			<tr>
+				<!-- description -->
+				<td>
+					<?php print _('Zone alias'); ?>
+				</td>
+				<td>
+					<input type="text" class="form-control input-sm" name="alias" placeholder="<?php print _('Local zone alias'); ?>" value="<?php print $mapping->alias; ?>" <?php print $readonly; ?>>
+				</td>
+			</tr>
+		</table>
+		<?php
+	} else {
+		# return the zone details
+		$Zones->get_zone_detail($_POST['zoneId']);
+	}
+}
+
+
 ?>

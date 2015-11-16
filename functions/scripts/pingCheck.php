@@ -99,11 +99,11 @@ foreach($scan_subnets as $s) {
 				if($a->excludePing!=1) {
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
-						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen);	//used for status check
+						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen);	//used for status check
 						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
 					}
 					else {
-						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen);
+						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen);
 					}
 				}
 			}
@@ -181,6 +181,8 @@ if($Scan->icmp_type=="fping") {
     				$addresses2[$s['id']][$ak]['lastSeenNew'] = $nowdate;
 					//save to out array
                     $address_change[] = $addresses2[$s['id']][$ak];
+                    //update status
+                    $Scan->ping_update_lastseen ($addresses2[$s['id']][$ak]['id'], $nowdate);
 				}
 			}
 		}
@@ -239,7 +241,7 @@ else {
 	# update all active statuses
 	foreach($addresses as $k=>$a) {
 		if($a['newStatus']==0) {
-			$Scan->ping_update_lastseen ($a['id']);
+			$Scan->ping_update_lastseen ($a['id'], $nowdate);
 		}
 	}
 }
@@ -261,9 +263,7 @@ foreach ($address_change as $k=>$change) {
 
     // first check if diff between last available and now is > statuses[1]
     if ($deviceDiff >= (int) $statuses[1]) {
-        print "a\n";
         if ($deviceDiff <= ((int) $statuses[1] + $agentDiff))  {
-            print "b\n";
             // now offline hosts
             if ($change['lastSeenNew']==NULL) {
                 $address_change[$k]['oldStatus'] = 0;
@@ -284,8 +284,6 @@ foreach ($address_change as $k=>$change) {
         unset ($address_change[$k]);
     }
 }
-
-var_dump($address_change);
 
 # update scan time
 $Scan->ping_update_scanagent_checktime (1, $nowdate);

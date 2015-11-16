@@ -1550,6 +1550,43 @@ $(document).on("click", "#editZoneSubmit", function() {
     submit_popup_data (".zones-edit-result", "app/admin/firewall-zones/zones-edit-result.php", $('form#zoneEdit').serialize());
 });
 
+// bind a subnet which is not part of a zone to an existing zone
+// load edit form
+
+$(document).on("click", ".subnet_to_zone", function() {
+    showSpinner();
+    var subnetId  = $(this).attr('data-subnetId');
+    var operation = $(this).attr('data-operation');
+    //format posted values
+    var postdata = "operation="+operation+"&subnetId="+subnetId;
+    $.post('app/admin/firewall-zones/subnet-to-zone.php', postdata, function(data) {
+        $('#popupOverlay div.popup_w500').html(data);
+        showPopup('popup_w500');
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+
+//submit form
+$(document).on("click", "#subnet-to-zone-submit", function() {
+    submit_popup_data (".subnet-to-zone-result", "app/admin/firewall-zones/subnet-to-zone-save.php", $('form#subnet-to-zone-edit').serialize());
+});
+
+// trigger the check for any mapping of the selected zone
+$(document).on("change", ".checkMapping",(function () {
+    showSpinner();
+    var pData = $(this).serializeArray();
+    pData.push({name:'operation',value:'checkMapping'});
+
+    //load results
+    $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
+        $('div.mappingAdd').html(data).slideDown('fast');
+
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    hideSpinner();
+    return false;
+}));
+
 // add network to zone
 $(document).on("click", ".editNetwork", function() {
      var pData = $('form#zoneEdit').serializeArray();
@@ -1606,23 +1643,11 @@ $(document).on("click", "#editNetworkSubmit", function() {
 // zone edit menu - ajax request to fetch all subnets for a specific section id
 $(document).on("change", ".firewallZoneSection",(function () {
     showSpinner();
-    var sectionId = $(this).serialize();
+    var pData = $(this).serializeArray();
+    pData.push({name:'operation',value:'fetchSectionSubnets'});
     //load results
-    $.post('app/admin/firewall-zones/ajax.php', sectionId, function(data) {
+    $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
         $('div.sectionSubnets').html(data).slideDown('fast');
-
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    hideSpinner();
-    return false;
-}));
-
-// zone edit menu - ajax request to fetch all subnets for a specific section id
-$(document).on("change", ".firewallZoneVlan",(function() {
-    showSpinner();
-    var vlanDomain = $(this).serialize();
-    //load results
-    $.post('app/admin/firewall-zones/ajax.php', vlanDomain, function(data) {
-        $('div.domainVlans').html(data).slideDown('fast');
 
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     hideSpinner();
@@ -1644,9 +1669,10 @@ $(document).on("click", "#editMappingSubmit", function() {
 // mapping edit menu - ajax request to fetch all zone informations for the selected zone
 $(document).on("change", ".mappingZoneInformation",(function() {
     showSpinner();
-    var zoneId = $(this).serialize();
+    var pData = $(this).serializeArray();
+    pData.push({name:'operation',value:'deliverZoneDetail'});
     //load results
-    $.post('app/admin/firewall-zones/ajax.php', zoneId, function(data) {
+    $.post('app/admin/firewall-zones/ajax.php', pData, function(data) {
         $('div.zoneInformation').html(data).slideDown('fast');
 
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
