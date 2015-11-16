@@ -228,6 +228,7 @@ class Subnets_controller extends Common_api_functions {
 			if($this->_params->id2=="resize") 			{ return $this->subnet_resize (); }
 			// split
 			elseif($this->_params->id2=="split") 		{ return $this->subnet_split (); }
+			elseif($this->_params->id2=="") { }
 			// error
 			else										{ $this->Response->throw_exception(400, 'Invalid parameters'); }
 		}
