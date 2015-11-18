@@ -610,7 +610,7 @@ class Tools extends Common_functions {
 				$query[] = " or `$myField[name]` like :search_term ";
 			}
 		}
-		$query[] = ";";
+		$query[] = "order by `subnet` asc, `mask` asc;";
 
 		# join query
 		$query = implode("\n", $query);
