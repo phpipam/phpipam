@@ -261,19 +261,17 @@ foreach ($address_change as $k=>$change) {
     $deviceDiff = $now - strtotime($change['lastSeenOld']);	        // now - device last seen
     $agentDiff  = $now - strtotime($agent->last_access);	        // now - last agent check
 
-    // first check if diff between last available and now is > statuses[1]
-    if ($deviceDiff >= (int) $statuses[1]) {
+    // if now online and old offline send mail
+    if ($change['lastSeenNew']!=NULL && $deviceDiff >= (int) $statuses[1]) {
+        $address_change[$k]['oldStatus'] = 2;
+        $address_change[$k]['newStatus'] = 0;
+    }
+    // now offline, and diff > offline period, do checks
+    elseif($change['lastSeenNew']==NULL && $deviceDiff >= (int) $statuses[1]) {
+        // if not already reported
         if ($deviceDiff <= ((int) $statuses[1] + $agentDiff))  {
-            // now offline hosts
-            if ($change['lastSeenNew']==NULL) {
-                $address_change[$k]['oldStatus'] = 0;
-                $address_change[$k]['newStatus'] = 2;
-            }
-            // now online hosts
-            else {
-                $address_change[$k]['oldStatus'] = 2;
-                $address_change[$k]['newStatus'] = 0;
-            }
+            $address_change[$k]['oldStatus'] = 0;
+            $address_change[$k]['newStatus'] = 2;
         }
         else {
             unset ($address_change[$k]);
@@ -331,7 +329,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 	$phpipam_mail->initialize_mailer();
 
 	// set subject
-	$subject	= "phpIPAM IP state change ".date("Y-m-d H:i:s");
+	$subject	= "phpIPAM IP state change ".$nowdate;
 
 	//html
 	$content[] = "<h3>phpIPAM host changes</h3>";
@@ -370,7 +368,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 		if(is_null($change['lastSeen']) || $change['lastSeen']=="0000-00-00 00:00:00") {
 			$ago	  = "never";
 		} else {
-			$timeDiff = time() - strtotime($change['lastSeen']);
+			$timeDiff = $now - strtotime($change['lastSeen']);
 			$ago 	  = $change['lastSeen']." (".$Result->sec2hms($timeDiff)." ago)";
 		}
 
