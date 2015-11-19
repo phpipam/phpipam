@@ -32,8 +32,10 @@ print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
 # custom
+if(isset($visible_fields)) {
 foreach ($visible_fields as $f) {
 print "	<th class='small hidden-xs hidden-sm hidden-md'>$f[name]</th>";
+}
 }
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Used')."</th>";
 print "	<th class='small hidden-xs hidden-sm hidden-md'>% "._('Free')."</th>";
@@ -74,6 +76,7 @@ foreach ($slave_subnets as $slave_subnet) {
     print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a></td>";
 
     # custom
+    if(isset($visible_fields)) {
     foreach ($visible_fields as $key=>$field) {
 		#booleans
 		if($field['type']=="tinyint(1)")	{
@@ -85,6 +88,7 @@ foreach ($slave_subnets as $slave_subnet) {
 		}
 
         print "<td>".$html_custom."</td>";
+    }
     }
 
 	# calculate free / used / percentage
