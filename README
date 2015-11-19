@@ -22,7 +22,7 @@ Features and tools:
 - IP request module
 - Custom IP address fields
 - and much more...
-- PowerDNS integration;
+- PowerDNS integration (3.4+);
 
 
 License
