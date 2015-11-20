@@ -50,7 +50,7 @@ $(document).ready(function() {
 		$(this).removeClass('w-unlock').addClass('w-lock');
 		$(this).find('i').removeClass('fa fa-check').addClass('fa fa-dashboard');	//change icon
 		$(this).find('a').removeClass('btn-success');	//remove success class
-		$(this).find('a').attr('data-original-title','Clik to reorder widgets');
+		$(this).find('a').attr('data-original-title','Click to reorder widgets');
 		$('#dashboard .inner .icon-action').fadeOut('fast');
 		$('#dashboard .add-widgets').fadeOut('fast');
 		$('#dashboard .inner').removeClass('movable');
