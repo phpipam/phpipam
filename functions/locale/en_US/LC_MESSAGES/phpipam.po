@@ -4491,10 +4491,6 @@ msgstr ""
 msgid "Active IP address requests"
 msgstr ""
 
-#: site/sections.php
-msgid "Click to reorder widgets"
-msgstr ""
-
 msgid "Click to save widgets order"
 msgstr ""
 
@@ -5944,7 +5940,7 @@ msgstr ""
 msgid "No sections available!"
 msgstr ""
 
-msgid "Clik to reorder widgets"
+msgid "Click to reorder widgets"
 msgstr ""
 
 msgid "Database verified"
