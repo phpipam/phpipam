@@ -407,19 +407,20 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	}
 	?>
 
+    <?php if ($action!=="delete") {  ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
 
-	 <tr>
-		<td colspan="2"><hr></td>
-	 </tr>
-
-	 <tr>
-	 	<td><?php print _('Unique'); ?></td>
-	 	<td>
-		<div class='checkbox info2'>
-		 	<input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
-		</div>
-	 	</td>
-	 </tr>
+    <tr>
+        <td><?php print _('Unique'); ?></td>
+    <td>
+        <div class='checkbox info2'>
+        <input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
+        </div>
+        </td>
+    </tr>
+    <?php } ?>
 
 	<?php
 	#get type

@@ -29,6 +29,7 @@ $values->name 		= $_POST['name'];
 $values->username 	= $_POST['username'];
 $values->password 	= $_POST['password'];
 $values->port 		= $_POST['port'];
+$values->autoserial = isset($_POST['autoserial']) ? "Yes" : "No";
 
 // get old settings for defaults
 $old_values = json_decode($User->settings->powerDNS);
@@ -42,9 +43,20 @@ $values->nxdomain_ttl = $old_values->nxdomain_ttl;
 $values->ttl 		= $old_values->ttl;
 
 # set update values
-$values = array("id"=>1,
+$values_new = array("id"=>1,
 				"powerDNS"=>json_encode($values),
 				);
-if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true); }
-else															{ $Result->show("success", _("Settings updated successfully"), true); }
+if(!$Admin->object_modify("settings", "edit", "id", $values_new))	{ $Result->show("danger",  _("Cannot update settings"), false); }
+else															    { $Result->show("success", _("Settings updated successfully"), false); }
+
+# autoserial change - set default SOA for all records !
+if ($values->autoserial!==@$old_values->autoserial) {
+    // start class
+    $PowerDNS 	= new PowerDNS ($Database);
+    // check connection
+    if($PowerDNS->db_check()!==false) {
+        // update all serials
+        $PowerDNS->update_all_soa_serials ($values->autoserial);
+    }
+}
 ?>
