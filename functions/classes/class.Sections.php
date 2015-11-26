@@ -510,24 +510,26 @@ class Sections extends Common_functions {
 		$sections = $this->fetch_all_sections();
 
 		# loop through sections and check if group_id in permissions
-		foreach($sections as $section) {
-			$p = json_decode($section->permissions, true);
-			if(sizeof($p)>0) {
-				if($name) {
-					if(array_key_exists($gid, $p)) {
-						$out[$section->name] = $p[$gid];
-					}
-				}
-				else {
-					if(array_key_exists($gid, $p)) {
-						$out[$section->id] = $p[$gid];
-					}
-				}
-			}
-			# no permissions
-			else {
-				$out[$section->name] = 0;
-			}
+        if ($sections !== false) {
+    		foreach($sections as $section) {
+    			$p = json_decode($section->permissions, true);
+    			if(sizeof($p)>0) {
+    				if($name) {
+    					if(array_key_exists($gid, $p)) {
+    						$out[$section->name] = $p[$gid];
+    					}
+    				}
+    				else {
+    					if(array_key_exists($gid, $p)) {
+    						$out[$section->id] = $p[$gid];
+    					}
+    				}
+    			}
+    			# no permissions
+    			else {
+    				$out[$section->name] = 0;
+    			}
+    		}
 		}
 		# return
 		return $out;

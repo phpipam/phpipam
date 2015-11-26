@@ -82,7 +82,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
 		# printout
-		if(sizeof(@$sections)>0) {
+		if($sections!==false) {
 			# loop
 			foreach($sections as $section) {
 				# check permissions for user
@@ -133,7 +133,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 			}
 		}
 		else {
-			print _("No sections available!");
+			print "<div class='text-muted'>"._("No sections available!")."</div>";
 		}
 
 		?>
