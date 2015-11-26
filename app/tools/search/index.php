@@ -5,8 +5,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# search form
-$searchTerm = isset($_GET['ip']) ? $_GET['ip'] : "";
+# get posted search term
+if(@$_GET['ip']) { $searchTerm = htmlspecialchars($_GET['ip']); }
+else			 { $searchTerm = ""; }
 
 ?>
 

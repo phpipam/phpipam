@@ -30,7 +30,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 <?php
 
 # first check if they exist!
-if($all_vrfs===false) { $Result->show("danger", _("No VRFs configured")."!", true);}
+if($all_vrfs===false) { $Result->show("info", _("No VRFs configured")."!", false);}
 else {
 	print '<table id="vrfManagement" class="table table-striped table-top table-hover table-auto">'. "\n";
 

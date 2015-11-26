@@ -232,6 +232,7 @@ CREATE TABLE `subnets` (
   `mask` VARCHAR(255) NULL DEFAULT NULL,
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
+  `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
   `allowRequests` tinyint(1) DEFAULT '0',
