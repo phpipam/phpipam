@@ -348,13 +348,16 @@ class FirewallZones extends Common_functions {
 						firewallZones.description as description,
 						firewallZoneSubnet.subnetId as subnetId,
 						subnets.subnet as subnet,
+						subnets.mask as mask,
+						subnets.description as subnetDescription,
+						subnets.firewallAddressObject as firewallAddressObject,
 						firewallZoneMapping.interface as interface,
 						devices.hostname as deviceName
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
 						LEFT JOIN firewallZoneSubnet on firewallZoneMapping.zoneId = firewallZoneSubnet.zoneId
 						LEFT JOIN devices ON deviceId = devices.id
-						LEFT JOIN subnets ON subnet = subnets.id
+						LEFT JOIN subnets ON subnetId = subnets.id
 						HAVING firewallZoneSubnet.subnetId = ?;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -915,6 +918,80 @@ class FirewallZones extends Common_functions {
 	}
 
 	/**
+	 * generate a firewall subnet object
+	 *
+	 * @access public
+	 * @param mixed $id
+	 * @return void
+	 */
+	public function generate_subnet_object ($id) {
+		# fetch the settings
+		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
+		
+		# fetch zone informations
+		$zone = $this->get_zone_subnet_info($id);
+
+		# build the object name prefix
+		foreach ($firewallZoneSettings['pattern'] as $pattern) {
+			switch ($pattern) {
+				case 'patternIndicator':
+					if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }
+					else 						{ 	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][1]; }
+					break;
+				case 'patternZoneName':
+					$firewallAddressObject = $firewallAddressObject.$zone->zone;
+					break;
+				case 'patternIPType':
+					# check if the subnet is v4 or v6
+					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
+					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
+					}
+					break;
+				case 'patternSeparator':
+						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];
+					break;
+			}
+		}
+
+		#build the object name
+		if ($firewallZoneSettings['subnetPatternValues'][$firewallZoneSettings['subnetPattern']] == 'network' ) {
+			# check if the subnet is v4 or v6
+			if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+				$firewallAddressObject = $firewallAddressObject.$this->Subnets->transform_to_dotted($zone->subnet).'-'.$zone->mask;
+			} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+				$firewallAddressObject = $firewallAddressObject.str_replace(':',$firewallZoneSettings['separator'],$this->Subnets->transform_to_dotted($zone->subnet)).'-'.$zone->mask;
+			}
+		} elseif ($firewallZoneSettings['subnetPatternValues'][$firewallZoneSettings['subnetPattern']] == 'description' ) {
+			$firewallAddressObject = $firewallAddressObject.str_replace(' ',$firewallZoneSettings['separator'],strtolower($zone->subnetDescription));
+		}
+
+		# get subnet information to compare against the changes
+		$subnet = (array) $this->Subnets->fetch_subnet("id",$id);
+
+		# compare both versions, if there is no difference, just do nothing
+		if ($zone->firewallAddressObject != $firewallAddressObject ) {
+			# update field in database
+			$values = array('id' => $id , 'firewallAddressObject' => $firewallAddressObject);
+			try { $this->Database->updateObject("subnets", $values, "id"); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+				return false;
+			}
+			# clone the address_old obj and replace the firewallAddressObject field to get a diff for logging
+			$subnet_old = $subnet;
+			$subnet['firewallAddressObject'] = $firewallAddressObject;
+
+			# write changelog
+			$this->Log->write_changelog('subnet', 'edit', 'success', $subnet_old,$subnet);
+
+			return ture;
+		}
+		return false;
+	}
+
+	/**
 	 * generate a firewall address object
 	 *
 	 * @access public
@@ -929,7 +1006,7 @@ class FirewallZones extends Common_functions {
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
 
-		foreach ($firewallZoneSettings['pattern'] as $key => $pattern) {
+		foreach ($firewallZoneSettings['pattern'] as $pattern) {
 			switch ($pattern) {
 				case 'patternIndicator':
 					if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }
@@ -940,9 +1017,9 @@ class FirewallZones extends Common_functions {
 					break;
 				case 'patternIPType':
 					# check if the subnet is v4 or v6
-					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) {
+					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
-					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) {
+					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
 					}
 					break;
@@ -983,7 +1060,7 @@ class FirewallZones extends Common_functions {
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
 
-		foreach ($firewallZoneSettings['pattern'] as $key => $pattern) {
+		foreach ($firewallZoneSettings['pattern'] as $pattern) {
 			switch ($pattern) {
 				case 'patternIndicator':
 					if ($zone->indicator == 0 ) {	$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['indicator'][0]; }
@@ -994,9 +1071,9 @@ class FirewallZones extends Common_functions {
 					break;
 				case 'patternIPType':
 					# check if the subnet is v4 or v6
-					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) {
+					if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
-					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) {
+					} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 						$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
 					}
 					break;
@@ -1071,9 +1148,9 @@ class FirewallZones extends Common_functions {
 						break;
 					case 'patternIPType':
 						# check if the subnet is v4 or v6
-						if (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4))) {
+						if (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
 							$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][0];
-						} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6))) {
+						} elseif (filter_var($this->Subnets->transform_to_dotted($zone->subnet), FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
 							$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['ipType'][1];
 						}
 						break;

@@ -39,6 +39,9 @@ $User->check_user_session();
 #	"pattern":{"0":"patternFQDN"}
 #	/* Adds some padding to the zone name (decimal or hex) to generate zone names of equal length */
 #	"padding":"on"
+#	/* use the network and subnetmask or the network description to genereate firewall address objects for subnets */
+# 	"subnetPatternValues":{"0":"network","1":"description"}
+# 	"subnetPattern":"0"
 # }
 
 # initialize classes
@@ -47,6 +50,13 @@ $Tools = new Tools($Database);
 
 # fetch module settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+
+# check if subnetPatternValues are already available, if not set them
+if (!$firewallZoneSettings['subnetPatternValues']) {
+	$firewallZoneSettings['subnetPatternValues'][0] = 'network';
+	$firewallZoneSettings['subnetPatternValues'][1] = 'description';
+}
+
 # fetch device types
 $deviceTypes = $Tools->fetch_device_types();
 
@@ -240,7 +250,7 @@ $(function() {
 	</tr>
 	<tr>
 		<td>
-			<?php print _('Available Items'); ?>
+			<?php print _('Available items'); ?>
 		</td>
 		<td colspan="2">
 			<div id="availableItems" class="alert alert-info dropable" style="text-align:center;">
@@ -285,6 +295,24 @@ $(function() {
 		</td>
 		</td>
 	</tr>
+	<!-- subnet pattern type -->
+	<tr>
+		<td><?php print _('Subnet name'); ?></td>
+		<td>
+			<select name="subnetPattern" class="form-control input-w-auto input-sm" style="width:110px;">
+				<?php foreach ($firewallZoneSettings['subnetPatternValues'] as $key => $subnetObjectPattern) {
+					if ($firewallZoneSettings['subnetPattern'] == $key) {
+						print '<option value='.$key.' selected>'.$subnetObjectPattern.'</option>';
+					} else {
+						print '<option value='.$key.'>'.$subnetObjectPattern.'</option>';
+					}
+				}?>
+			</select>
+		</td>
+		<td>
+			<span class="text-muted"><?php print _("Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hiven or underline will be replaced by the separator value."); ?></span>
+		</td>
+	</tr>
 	<!-- submit -->
 	<tr>
 		<td colspan="3"><hr></td>
@@ -294,6 +322,9 @@ $(function() {
 			<?php
 			foreach ($firewallZoneSettings['zoneGeneratorType'] as $key => $value) {
 				print '<input type="hidden" name="zoneGeneratorType['.$key.']" value="'.$value.'">';
+			}
+			foreach ($firewallZoneSettings['subnetPatternValues'] as $key => $value) {
+				print '<input type="hidden" name="subnetPatternValues['.$key.']" value="'.$value.'">';
 			} ?>
 		</td>
 		<td style="text-align: right">

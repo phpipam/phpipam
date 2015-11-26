@@ -48,3 +48,6 @@ ALTER TABLE `ipaddresses` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL D
 
 /* activate the firewallAddressObject IP field filter on default */
 UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject');
+
+/* add a column for subnet firewall address objects */
+ALTER TABLE `subnets` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL AFTER `description`;
