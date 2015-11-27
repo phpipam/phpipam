@@ -42,6 +42,7 @@ $firewallZones = $Zones->get_zones();
 		</td>
 		<td>
 			<select name="zoneId" class="form-control input-sm input-w-auto input-max-200 checkMapping">
+			<option value="0"><?php print _('Select a Zone'); ?></option>
 			<?php
 				foreach ($firewallZones as $firewallZone) {
 					print '<option value="'.$firewallZone->id.'">'.$firewallZone->zone.' '.(($firewallZone->description) ? ' ('.$firewallZone->description.')' : '' ).'</option>';
