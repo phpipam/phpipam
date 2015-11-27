@@ -185,13 +185,20 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->settings->scanPingPath);
 
 		# if ipv6 append 6
-		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath+"6"; }
+		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath."6"; }
 
 		# set ping command based on OS type
 		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
 		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
 		elseif(PHP_OS == "WIN32" || PHP_OS == "Windows" || PHP_OS == "WINNT")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -I ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
 		else																	{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
+
+        # for IPv6 remove wait
+        if ($this->identify_address ($address)=="IPv6") {
+            $cmd = explode(" ", $cmd);
+            unset($cmd[3], $cmd[4]);
+            $cmd = implode(" ", $cmd);
+        }
 
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
@@ -212,6 +219,13 @@ class Scan extends Common_functions {
 		# we need pear ping package
 		require_once(dirname(__FILE__) . '/../../functions/PEAR/Net/Ping.php');
 		$ping = Net_Ping::factory();
+
+		# ipv6 not supported
+		if ($this->identify_address ($address)=="IPv6") {
+    		//return result for web or cmd
+    		if($this->icmp_exit) 	{ exit	(255); }
+    		else	  				{ return 255; }
+		}
 
 		# check for errors
 		if($ping->pear->isError($ping)) {
@@ -268,6 +282,10 @@ class Scan extends Common_functions {
 	public function ping_address_method_fping ($address) {
 		# verify ping path
 		$this->ping_verify_path ($this->settings->scanFPingPath);
+
+		# if ipv6 append 6
+		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanFPingPath = $this->settings->scanFPingPath."6"; }
+
 		# set command
 		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
 		# execute command, return $retval
@@ -395,6 +413,7 @@ class Scan extends Common_functions {
 		$explain_codes[74] = "EX_IOERR";
 		$explain_codes[75] = "EX_TEMPFAIL";
 		$explain_codes[77] = "EX_NOPERM";
+		$explain_codes[255] = "EX_NOT_SUPPORTED";
 		$explain_codes[1000] = "Invalid ping path";
 		# return codes
 		return $explain_codes;
@@ -405,11 +424,14 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
+	 * @param datetime $datetime
 	 * @return void
 	 */
-	public function ping_update_lastseen ($id) {
+	public function ping_update_lastseen ($id, $datetime = null) {
+    	# set datetime
+    	$datetime = is_null($datetime) ? date("Y-m-d H:i:s") : $datetime;
 		# execute
-		try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "lastSeen"=>date("Y-m-d H:i:s")), "id"); }
+		try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "lastSeen"=>$datetime), "id"); }
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log
@@ -422,9 +444,13 @@ class Scan extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $id
+	 * @param datetime $date
 	 * @return void
 	 */
-	public function ping_update_scanagent_checktime ($id) {
+	public function ping_update_scanagent_checktime ($id, $date = false) {
+    	# set time
+    	if ($date === false)    { $date = date("Y-m-d H:i:s"); }
+    	else                    { $date = $date; }
 		# execute
 		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>date("Y-m-d H:i:s")), "id"); }
 		catch (Exception $e) {

@@ -96,6 +96,7 @@ class PowerDNS extends Common_functions {
 		$this->defaults->username 	= "pdns";
 		$this->defaults->password 	= "pdns";
 		$this->defaults->port		= 3306;
+		$this->defaults->autoserial	= "No";
 		// default values
 		$this->defaults->ns			= "localhost";
 		$this->defaults->hostmaster	= $this->settings->siteAdminMail;
@@ -794,18 +795,22 @@ class PowerDNS extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $domain_id
+	 * @param mixed $serial
 	 * @return void
 	 */
-	private function update_soa_serial ($domain_id) {
+	private function update_soa_serial ($domain_id, $serial = false) {
 		// fetch record
 		$soa = $this->fetch_domain_records_by_type ($domain_id, "SOA");
 		// if not set exit
 		if ($soa === false)			{ return false; }
 		else						{ $soa = $soa[0]; }
 
-		// update serial
-		$soa_serial = explode(" ", $soa->content);
-		$soa_serial[2] = (int) $soa_serial[2]+1;
+		// update serial it not autoserial
+        $soa_serial = explode(" ", $soa->content);
+        $soa_serial[2] = $this->db_settings->autoserial=="Yes" ? 0 : (int) $soa_serial[2]+1;
+
+        // if serail set override it
+        if($serial!==false)         { $soa_serial[2] = $serial; }
 
 		// set update content
 		$content = array(
@@ -817,6 +822,25 @@ class PowerDNS extends Common_functions {
 		$this->update_domain_record_content ($content);
 	}
 
+	/**
+	 * Updates all SOA serials if it changes from autoserial false to true
+	 *
+	 * @access public
+	 * @param bool $autoserial (Default : No)
+	 * @return void
+	 */
+	public function update_all_soa_serials ($autoserial = "No") {
+    	// fetch all domains
+    	$all_domains = $this->fetch_all_domains ();
+    	// set new serial
+    	$serial = $autoserial==="Yes" ? 0 : date("Ymd")."01";
+    	// set new serial
+    	if ($all_domains !== false) {
+        	foreach ($all_domains as $d) {
+            	$this->update_soa_serial ($d->id, $serial);
+        	}
+    	}
+	}
 
 	/**
 	 * Create default records for domain if requested

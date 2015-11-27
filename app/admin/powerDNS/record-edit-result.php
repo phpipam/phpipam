@@ -25,8 +25,8 @@ if($_POST['action']!="add") {
 
 # edit and add - check that smth is in name and content!
 if ($_POST['action']!="delete") {
-	if (strlen($_POST['name'])<2)		{ $Result->show ("danger", _("Invalid name"), "true"); }
-	if (strlen($_POST['content'])<2)	{ $Result->show ("danger", _("Invalid content"), "true"); }
+	if (strlen($_POST['name'])<2)		{ $Result->show ("danger", _("Invalid name"), true); }
+	if (strlen($_POST['content'])<2)	{ $Result->show ("danger", _("Invalid content"), true); }
 }
 
 

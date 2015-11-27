@@ -302,7 +302,7 @@ else {
 	# execute
 	if (!$Subnets->modify_subnet ($_POST['action'], $values))	{ $Result->show("danger", _('Error editing subnet'), true); }
 	else {
-		# if edd save id !
+		# if add save id !
 		if ($_POST['action']=="add") { $new_subnet_id = $Subnets->lastInsertId; }
 		# update also all slave subnets if section changes!
 		if( (isset($values['sectionId']) && $_POST['action']=="edit") || ($_POST['action']=="delete")) {
@@ -323,6 +323,35 @@ else {
 		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successfull").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
 		else							{ $Result->show("success", _("Subnet $_POST[action] successfull").'!', false); }
+	}
+
+	# propagate to slaves
+	if (@$_POST['set_inheritance']=="Yes" && $_POST['action']=="edit") {
+        # reset slaves
+        if ($Subnets->slaves===NULL) {
+    		$Subnets->reset_subnet_slaves_recursive();
+    		$Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
+    		$Subnets->remove_subnet_slaves_master($_POST['subnetId']);
+		}
+    	# set what to update
+    	$values = array(
+					"vlanId"=>$_POST['vlanId'],
+					"vrfId"=>$_POST['vrfId'],
+					"nameserverId"=>$_POST['nameserverId'],
+					"scanAgent"=>@$_POST['scanAgent'],
+					"device"=>$_POST['device']);
+        # optional values
+        if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);
+        if(isset($_POST['showName']))       $values['showName']       = $Admin->verify_checkbox(@$_POST['showName']);
+        if(isset($_POST['discoverSubnet'])) $values['discoverSubnet'] = $Admin->verify_checkbox(@$_POST['discoverSubnet']);
+        if(isset($_POST['pingSubnet']))     $values['pingSubnet']     = $Admin->verify_checkbox(@$_POST['pingSubnet']);
+
+        # propagate changes
+		if(sizeof($Subnets->slaves)>0) {
+			foreach($Subnets->slaves as $slaveId) {
+				 $Admin->object_modify ("subnets", "edit", "id", array_merge(array("id"=>$slaveId), $values));
+			}
+        }
 	}
 
 

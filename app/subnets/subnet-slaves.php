@@ -4,6 +4,18 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>
 <?php
 
+# set which custom fields to display
+$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+# set visible fields
+foreach ($custom_fields as $k=>$f) {
+    if (!in_array($k, $hidden_fields['subnets'])) {
+        $visible_fields[$k] = $f;
+    }
+}
+# set colspan
+$colspan_subnets = 5 + sizeof($visible_fields);
+
+
 /**
  * Script to display all slave IP addresses and subnets in content div of subnets table!
  ***************************************************************************************/
@@ -19,10 +31,16 @@ print "<tr>";
 print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
+# custom
+if(isset($visible_fields)) {
+foreach ($visible_fields as $f) {
+print "	<th class='small hidden-xs hidden-sm hidden-md'>$f[name]</th>";
+}
+}
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Used')."</th>";
 print "	<th class='small hidden-xs hidden-sm hidden-md'>% "._('Free')."</th>";
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Requests')."</th>";
-print " <th></th>";
+print " <th style='width:80px;'></th>";
 print "</tr>";
 
 $m = 0;				//slave index
@@ -43,7 +61,7 @@ foreach ($slave_subnets as $slave_subnet) {
 			print "<tr class='success'>";
 			print "	<td></td>";
 			print "	<td class='small description'><a href='#' data-sectionId='$section[id]' data-masterSubnetId='$subnet[id]' class='btn btn-sm btn-default createfromfree' data-cidr='".$Subnets->get_first_possible_subnet($subnet['ip'] , $diff, false)."'><i class='fa fa-plus'></i></a> "._('Free space')."</td>";
-			print "	<td colspan='5'>$subnet[ip] - ". $Subnets->transform_to_dotted(gmp_strval(gmp_add($subnet['subnet'], gmp_sub($diff,1)))) ." ( ".$diff." )</td>";
+			print "	<td colspan='$colspan_subnets'>$subnet[ip] - ". $Subnets->transform_to_dotted(gmp_strval(gmp_add($subnet['subnet'], gmp_sub($diff,1)))) ." ( ".$diff." )</td>";
 			print "</tr>";
 	}	}	}
 
@@ -56,6 +74,22 @@ foreach ($slave_subnets as $slave_subnet) {
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
     print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a></td>";
+
+    # custom
+    if(isset($visible_fields)) {
+    foreach ($visible_fields as $key=>$field) {
+		#booleans
+		if($field['type']=="tinyint(1)")	{
+			if($slave_subnet[$key] == "0")		{ $html_custom = _("No"); }
+			elseif($slave_subnet[$key] == "1")	{ $html_custom = _("Yes"); }
+		}
+		else {
+			$html_custom = $Result->create_links($slave_subnet[$key]);
+		}
+
+        print "<td>".$html_custom."</td>";
+    }
+    }
 
 	# calculate free / used / percentage
 	if(!$Subnets->has_slaves ($slave_subnet['id'])) {
@@ -113,7 +147,7 @@ foreach ($slave_subnets as $slave_subnet) {
 			print "<tr class='success'>";
 			print "	<td></td>";
 			print "	<td class='small description'><a href='#' data-sectionId='$section[id]' data-masterSubnetId='$subnet[id]' class='btn btn-sm btn-default createfromfree' data-cidr='".$Subnets->get_first_possible_subnet($Subnets->transform_to_dotted(gmp_strval(gmp_add($current_slave_bcast, 1))), $diff, false)."'><i class='fa fa-plus'></i></a> "._('Free space')."</td>";
-			print "	<td colspan='5'>".$Subnets->transform_to_dotted(gmp_strval(gmp_add($current_slave_bcast, 1))) ." - ".$Subnets->transform_to_dotted(gmp_strval(gmp_sub($next_slave_subnet, 1))) ." ( ".gmp_strval(gmp_sub($diff, 1))." )</td>";
+			print "	<td colspan='$colspan_subnets'>".$Subnets->transform_to_dotted(gmp_strval(gmp_add($current_slave_bcast, 1))) ." - ".$Subnets->transform_to_dotted(gmp_strval(gmp_sub($next_slave_subnet, 1))) ." ( ".gmp_strval(gmp_sub($diff, 1))." )</td>";
 			print "</tr>";
 	}	}	}
 
@@ -143,7 +177,7 @@ foreach ($slave_subnets as $slave_subnet) {
 			print "<tr class='success'>";
 			print "	<td></td>";
 			print "	<td class='small description'><a href='#' data-sectionId='$section[id]' data-masterSubnetId='$subnet[id]' class='btn btn-sm btn-default createfromfree' data-cidr='".$Subnets->get_first_possible_subnet($Subnets->transform_to_dotted(gmp_strval(gmp_add($max_last_slave,1))), gmp_strval(gmp_sub($max_host,$max_last_slave)), false)."'><i class='fa fa-plus'></i></a> "._('Free space')."</td>";
-			print "	<td colspan='5'>". $Subnets->transform_to_dotted(gmp_strval(gmp_add($max_last_slave,1))) ." - ". $Subnets->transform_to_dotted(gmp_strval($max_host)) ." ( ".gmp_strval(gmp_sub($max_host,$max_last_slave))." )</td>";
+			print "	<td colspan='$colspan_subnets'>". $Subnets->transform_to_dotted(gmp_strval(gmp_add($max_last_slave,1))) ." - ". $Subnets->transform_to_dotted(gmp_strval($max_host)) ." ( ".gmp_strval(gmp_sub($max_host,$max_last_slave))." )</td>";
 			print "</tr>";
 	}	}	}
 

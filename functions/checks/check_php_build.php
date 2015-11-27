@@ -45,6 +45,13 @@ if ((@include_once 'PEAR.php') != true) {
 	$missingExt[] = "php PEAR support";
 }
 
+# if db ssl = true check version
+if (@$db['ssl']==true) {
+    if (phpversion() < "5.3.7") {
+        $missingExt[] = "For SSL MySQL php version 5.3.7 is required!";
+    }
+}
+
 # if any extension is missing print error and die!
 if (sizeof($missingExt) != 1) {
 

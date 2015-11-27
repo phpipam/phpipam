@@ -277,6 +277,7 @@ class Addresses extends Common_functions {
 						"is_gateway"=>@$address['is_gateway'],
 						"excludePing"=>@$address['excludePing'],
 						"PTRignore"=>@$address['PTRignore'],
+						"firewallAddressObject"=>@$address['firewallAddressObject'],
 						"lastSeen"=>@$address['lastSeen']
 						);
 		# custom fields, append to array
@@ -364,7 +365,10 @@ class Addresses extends Common_functions {
 			return false;
 		}
 
-		# log and changelog
+		# set the firewall address object to avoid logging
+		$address['firewallAddressObject'] = $address_old->firewallAddressObject;
+
+ 		# log and changelog
 		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 

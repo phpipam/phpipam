@@ -35,9 +35,14 @@ if(!isset($_POST['domain'])) 	{ $_POST['domain']=1; }
 
 # fetch l2 domain
 if($_POST['action']=="add") {
-	$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['domain']);
+	# all
+	if (@$_POST['domain']=="all") {
+		$vlan_domains = $Admin->fetch_all_objects("vlanDomains");
+	} else {
+		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['domain']);
+	}
 } else {
-	$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan['domainId']);
+		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan['domainId']);
 }
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true); }
 ?>
@@ -60,7 +65,20 @@ $(document).ready(function(){
 	<!-- domain -->
 	<tr>
 		<td><?php print _('l2 domain'); ?></td>
-		<th><?php print $vlan_domain->name." (".$vlan_domain->description.")"; ?></th>
+		<th>
+		<?php
+		# not all
+		if (@$_POST['domain']!="all") {
+			print $vlan_domain->name." (".$vlan_domain->description.")";
+		} else {
+			print "<select name='domainId' class='form-control input-sm'>";
+			foreach ($vlan_domains as $d) {
+				print "<option value='$d->id'>$d->name</option>";
+			}
+			print "</select>";
+		}
+		?>
+		</th>
 	</tr>
 	<tr>
 		<td colspan="2"><hr></td>
@@ -87,10 +105,26 @@ $(document).ready(function(){
 		<td>
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$vlan['description']; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="vlanId" value="<?php print @$_POST['vlanId']; ?>">
+			<?php if(@$_POST['domain']!=="all") { ?>
 			<input type="hidden" name="domainId" value="<?php print $vlan_domain->id; ?>">
+			<?php } ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 		</td>
 	</tr>
+
+	<?php if($_POST['action']=="add" || $_POST['action']=="edit") { ?>
+    <!-- require unique -->
+    <tr>
+	    <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+    	<td><?php print _('Unique VLAN'); ?></td>
+    	<td>
+	    	<input type="checkbox" name="unique" value="on">
+	    	<span class="text-muted"><?php print _('Require unique vlan accross domains'); ?></span>
+	    </td>
+    </tr>
+	<?php } ?>
 
 	<!-- Custom -->
 	<?php

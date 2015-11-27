@@ -47,6 +47,10 @@ $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
 $send_mail = true;
 
+// set now for whole script
+$now     = time();
+$nowdate = date ("Y-m-d H:i:s");
+
 
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
@@ -69,17 +73,25 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_discoveryCheck (1);
 //set addresses
-foreach($scan_subnets as $s) {
-	// if subnet has slaves dont check it
-	if ($Subnets->has_slaves ($s->id) === false) {
-		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
-	}
-}
-//reindex
-foreach($addresses_tmp as $s_id=>$a) {
-	foreach($a as $ip) {
-		$addresses[] = array("subnetId"=>$s_id, "ip_addr"=>$ip);
-	}
+if ($scan_subnets!==false) {
+    // initial array
+    $addresses_tmp = array();
+    // loop
+    foreach($scan_subnets as $s) {
+    	// if subnet has slaves dont check it
+    	if ($Subnets->has_slaves ($s->id) === false) {
+    		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
+    	}
+    }
+
+    //reindex
+    if(sizeof($addresses_tmp)>0) {
+        foreach($addresses_tmp as $s_id=>$a) {
+        	foreach($a as $ip) {
+        		$addresses[] = array("subnetId"=>$s_id, "ip_addr"=>$ip);
+        	}
+        }
+    }
 }
 
 
@@ -136,13 +148,15 @@ if($Scan->icmp_type=="fping") {
 
 	//fping finds all subnet addresses, we must remove existing ones !
 	foreach($scan_subnets as $sk=>$s) {
-		foreach($s->discovered as $rk=>$result) {
-			if(!in_array($Subnets->transform_to_decimal($result), $addresses_tmp[$s->id])) {
-				unset($scan_subnets[$sk]->discovered[$rk]);
-			}
+    	if(isset($s->discovered)) {
+    		foreach($s->discovered as $rk=>$result) {
+    			if(!in_array($Subnets->transform_to_decimal($result), $addresses_tmp[$s->id])) {
+    				unset($scan_subnets[$sk]->discovered[$rk]);
+    			}
+    		}
+            //rekey
+            $scan_subnets[$sk]->discovered = array_values($scan_subnets[$sk]->discovered);
 		}
-		//rekey
-		$scan_subnets[$sk]->discovered = array_values($scan_subnets[$sk]->discovered);
 	}
 }
 //ping, pear
@@ -223,8 +237,8 @@ foreach($scan_subnets as $s) {
 							"ip_addr"=>$Subnets->transform_address($ip, "decimal"),
 							"dns_name"=>$hostname['name'],
 							"description"=>"-- autodiscovered --",
-							"note"=>"This host was autodiscovered on ".date("Y-m-d H:i:s"),
-							"lastSeen"=>date("Y-m-d H:i:s"),
+							"note"=>"This host was autodiscovered on ".$nowdate,
+							"lastSeen"=>$nowdate,
 							"state"=>"2",
 							"action"=>"add"
 							);
@@ -238,7 +252,7 @@ foreach($scan_subnets as $s) {
 }
 
 # update scan time
-$Scan->ping_update_scanagent_checktime (1);
+$Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 
