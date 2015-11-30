@@ -16,7 +16,11 @@ $User->check_user_session();
 
 $expfields = explode("|",$_GET['expfields']);
 $reqfields = explode("|",$_GET['reqfields']);
-$filetype = $_GET['filetype'];
+if (isset($_GET['filetype'])) {
+	$filetype = $_GET['filetype'];
+} else {
+	$Result->show('danger', _("Error: could not read the uploaded file type!"), true, true);
+}
 
 # Load colors and icons
 include 'import-constants.php';

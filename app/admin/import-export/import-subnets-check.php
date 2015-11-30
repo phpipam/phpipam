@@ -51,6 +51,7 @@ foreach ($vlan_domains as $vlan_domain) {
 
 # fetch all VRFs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
+if (!$all_vrfs) { $all_vrfs = array(); }
 # insert default VRF in the list
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 # process for easier later check
