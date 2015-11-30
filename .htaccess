@@ -3,7 +3,7 @@
 RewriteEngine on
 
 # change rewrite base if not in root
-# RewriteBase /
+RewriteBase /phpipam/
 
 # passthroughs
 RewriteRule ^api/.$ - [L]
@@ -31,4 +31,12 @@ RewriteRule ^(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3 [L]
 RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L]
 RewriteRule ^(.*)/$ index.php?page=$1 [L]
 
+</IfModule>
+
+# Password request Marius
+<IfModule mod_authn_file.c>
+AuthType Basic
+AuthName "devz auth"
+AuthUserFile /etc/httpd/htpasswd.devz
+Require valid-user
 </IfModule>
