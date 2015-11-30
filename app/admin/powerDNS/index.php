@@ -24,6 +24,14 @@ $test = $PowerDNS->db_check();
 // save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
 
+// check if TTL is set
+if ($test!==false) {
+    $test_ttl = json_decode($User->settings->powerDNS);
+    if ($test_ttl->ttl==NULL) {
+        $Result->show("warning", "Please set <a href='".create_link("administration", "powerDNS", "defaults")."'>default powerDNS values</a>!", false);
+    }
+}
+
 ?>
 <!-- tabs -->
 <ul class="nav nav-tabs">
