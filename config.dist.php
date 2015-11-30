@@ -9,13 +9,15 @@ $db['name'] = "phpipam";
 $db['port'] = 3306;
 
 /* SSL options
- ******************************/
-// See http://php.net/manual/en/ref.pdo-mysql.php 
-//     https://dev.mysql.com/doc/refman/5.7/en/ssl-options.html
+ ******************************
+ See http://php.net/manual/en/ref.pdo-mysql.php
+     https://dev.mysql.com/doc/refman/5.7/en/ssl-options.html
 
-// Please update these settings before setting 'ssl' to true.
-// All settings can be commented out or set to NULL if not needed
+     Please update these settings before setting 'ssl' to true.
+     All settings can be commented out or set to NULL if not needed
 
+     php 5.3.7 required
+*/
 $db['ssl']        = false;                           # true/false, enable or disable SSL as a whole
 $db['ssl_key']    = "/path/to/cert.key";             # path to an SSL key file. Only makes sense combined with ssl_cert
 $db['ssl_cert']   = "/path/to/cert.crt";             # path to an SSL certificate file. Only makes sense combined with ssl_key

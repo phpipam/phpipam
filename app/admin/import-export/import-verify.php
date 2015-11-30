@@ -21,8 +21,15 @@ $filetype = strtolower(end(explode(".", $filename)));
 
 /* list of permitted file extensions */
 $allowed = array('xls','csv');
+/* upload dir */
+$upload_dir = "upload/";
 
 $today = date("Ymd-His");
+
+if (!is_dir($upload_dir) || !is_writable($upload_dir)) {
+	echo '{"status":"error", "error":"Upload directory is not writable, or does not exist."}';
+	exit;
+}
 
 /* no errors */
 if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
@@ -31,11 +38,15 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		echo '{"status":"error", "error":"Invalid document type"}';
         exit;
     }
-
 	//if cannot move
-	else if(!move_uploaded_file($_FILES["file"]["tmp_name"], "upload/data_import.".$filetype )) {
+	elseif(!move_uploaded_file($_FILES["file"]["tmp_name"], $upload_dir."data_import.".$filetype )) {
 		echo '{"status":"error", "error":"Cannot move file to upload dir"}';
 		exit;
+	}
+	//other errors
+	elseif($_FILES['file']['error'] != 0) {
+		echo '{"status":"error", "error":"Error: '.$_FILES['file']['error'].'" }';
+        exit;
 	}
 	else {
 	//default - success

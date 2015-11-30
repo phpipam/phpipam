@@ -287,8 +287,11 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	        foreach($vrfs as $vrf) {
 				//cast
 				$vrf = (array) $vrf;
-	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'. $vrf['name'] .'</option>'; }
-	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'. $vrf['name'] .'</option>'; }
+				// set description if present
+				$vrf['description'] = strlen($vrf['description'])>0 ? " ($vrf[description])" : "";
+
+	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'.$vrf['name'].$vrf['description'].'</option>'; }
+	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'.$vrf['name'].$vrf['description'].'</option>'; }
 	        }
         }
 

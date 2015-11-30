@@ -17,6 +17,8 @@ $User->check_user_session();
 
 # Load existing data
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
+if (!$all_vrfs) { $all_vrfs = array(); }
+
 $edata = array();
 # process for easier later check
 foreach ($all_vrfs as $vrf) {

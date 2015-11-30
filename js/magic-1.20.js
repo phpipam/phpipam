@@ -107,6 +107,8 @@ function showPopup(pClass, data, secondary) {
     if (data!==false && typeof(data)!=="undefined") {
     $(oclass+' .'+pClass).html(data);
     }
+	// malaiam: Weird popup_max bug loads same content in both popupOverlay and popupOverlay2, duplicating forms and URL parameter, messing things up, so we delete it
+	if (secondary != true) { $('#popupOverlay2 > div').empty(); }
     $(oclass+' .'+pClass).fadeIn('fast');
     //disable page scrolling on bottom
     $('body').addClass('stop-scrolling');
@@ -117,11 +119,17 @@ function hidePopup(pClass, secondary) {
 	else 					{ var oclass = "#popupOverlay"; }
 	// hide
     $(oclass+' .'+pClass).fadeOut('fast');
+	// IMPORTANT: also empty loaded content to avoid issues on popup reopening
+	$(oclass+' > div').empty();
 }
 function hidePopups() {
     $('#popupOverlay').fadeOut('fast');
     $('#popupOverlay2').fadeOut('fast');
 
+	// IMPORTANT: also empty loaded content to avoid issues on popup reopening
+	$('#popupOverlay > div').empty();
+	$('#popupOverlay2 > div').empty();
+		
     $('.popup').fadeOut('fast');
     $('body').removeClass('stop-scrolling');        //enable scrolling back
     hideSpinner();
@@ -129,6 +137,8 @@ function hidePopups() {
 function hidePopup2() {
     $('#popupOverlay2').fadeOut('fast');
     $('#popupOverlay2 .popup').fadeOut('fast');
+	// IMPORTANT: also empty loaded content to avoid issues on popup reopening
+	$('#popupOverlay2 > div').empty();
     hideSpinner();
 }
 function hidePopupMasks() {
@@ -2673,6 +2683,7 @@ $(document).on("click", "button#dataImportPreview", function() {
     //show popup window, if implemented
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
+		//console.log(dataType + " form import fields " + importFields);
 		$.post('app/admin/import-export/import-' + dataType + '-preview.php?' + importFields, function(data) {
 		if (popsize[dataType] !== undefined) {
 			$('div.popup_'+popsize[dataType]).html(data);

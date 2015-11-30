@@ -50,6 +50,7 @@ foreach($all_sections as $section) { $section = (array) $section; $sect_names[$s
 
 # fetch all VRFs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId"); $vrf_name = array();
+if (!$all_vrfs) { $all_vrfs = array(); }
 # insert default VRF in the list
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[$vrf['vrfId']] = $vrf['name']; }
