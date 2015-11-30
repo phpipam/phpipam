@@ -2500,9 +2500,10 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $sectionId
 	 * @param string $current_master (default: "0")
+	 * @param boolean $isFolder (default: false)
 	 * @return void
 	 */
-	public function print_mastersubnet_dropdown_menu($sectionId, $current_master = 0) {
+	public function print_mastersubnet_dropdown_menu($sectionId, $current_master = 0, $isFolder = false) {
 		# must be integer
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
@@ -2537,6 +2538,14 @@ class Subnets extends Common_functions {
 		# folders
 		if(sizeof(@$children_folders)>0) {
 			$html[] = "<optgroup label='"._("Folders")."'>";
+
+    		# root subnet
+    		if(!isset($current_master) || $current_master==0) {
+    			$html[] = "<option value='0' selected='selected'>"._("Root folder")."</option>";
+    		} else {
+    			$html[] = "<option value='0'>"._("Root folder")."</option>";
+    		}
+
 			# return table content (tr and td's) - folders
 			while ( $loopF && ( ( $option = each( $children_folders[$parent] ) ) || ( $parent > $rootId ) ) )
 			{
@@ -2565,6 +2574,9 @@ class Subnets extends Common_functions {
 			}
 			$html[] = "</optgroup>";
 		}
+
+		# if not folder
+        if ($isFolder===false) {
 
 		# subnets
 		$html[] = "<optgroup label='"._("Subnets")."'>";
@@ -2618,6 +2630,7 @@ class Subnets extends Common_functions {
 		}
 		}
 		$html[] = "</optgroup>";
+		}
 		$html[] = "</select>";
 		# join and print
 		print implode( "\n", $html );
