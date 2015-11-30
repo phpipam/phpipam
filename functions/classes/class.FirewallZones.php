@@ -356,8 +356,8 @@ class FirewallZones extends Common_functions {
 						FROM firewallZoneMapping
 						RIGHT JOIN firewallZones on firewallZoneMapping.zoneId = firewallZones.id
 						LEFT JOIN firewallZoneSubnet on firewallZoneMapping.zoneId = firewallZoneSubnet.zoneId
-						LEFT JOIN devices ON deviceId = devices.id
-						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN devices ON firewallZoneMapping.deviceId = devices.id
+						LEFT JOIN subnets ON firewallZoneSubnet.subnetId = subnets.id
 						HAVING firewallZoneSubnet.subnetId = ?;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -408,7 +408,7 @@ class FirewallZones extends Common_functions {
 						vlans.number AS vlan,
 						vlans.name AS vlanName
 						FROM firewallZoneSubnet
-						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN subnets ON firewallZoneSubnet.subnetId = subnets.id
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId ORDER BY subnet ASC;');}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -468,7 +468,7 @@ class FirewallZones extends Common_functions {
 						vlans.number AS vlan,
 						vlans.name AS vlanName
 						FROM firewallZoneSubnet
-						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN subnets ON firewallZoneSubnet.subnetId = subnets.id
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId HAVING zoneId = ? ORDER BY subnet ASC;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
@@ -578,7 +578,7 @@ class FirewallZones extends Common_functions {
 						vlans.number AS vlan,
 						vlans.name AS vlanName
 						FROM firewallZoneSubnet
-						LEFT JOIN subnets ON subnetId = subnets.id
+						LEFT JOIN subnets ON firewallZoneSubnet.subnetId = subnets.id
 						LEFT JOIN vlans ON subnets.vlanId = vlans.vlanId HAVING zoneId = ? ORDER BY subnet ASC;', $id);}
 		# throw exception
 		catch (Exception $e) {$this->Result->show("danger", _("Database error: ").$e->getMessage());}
