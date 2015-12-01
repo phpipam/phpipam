@@ -87,6 +87,10 @@ if($_POST['action']!="add") {
 	    	<select name="app_security" class="form-control input-sm input-w-auto">
 	    	<?php
 	    	$perms = array(0=>"crypt",1=>"ssl",2=>"none",3=>"user");
+
+	    	// user not yet supported
+	    	unset($perms[3]);
+
 	    	foreach($perms as $k=>$p) {
 		    	if($p==$api->app_security)		{ print "<option value='$p' selected='selected'>"._($p)."</option>"; }
 		    	else							{ print "<option value='$p' 				   >"._($p)."</option>"; }
