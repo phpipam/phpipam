@@ -741,6 +741,30 @@ class User extends Common_functions {
 	}
 
 	/**
+	 * HTTP REMOTE_USER authentication, the user is already authenticated
+	 * by the web server so just create the session
+	 *
+	 * @access private
+	 * @param mixed $username
+	 * @param mixed $password
+	 * @return void
+	 */
+	private function auth_http ($username, $password) {
+		# save to session
+		$this->write_session_parameters ();
+
+		$this->Result->show("success", _("Login successful"));
+		$this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0, $username );
+
+		# write last logintime
+		$this->update_login_time ();
+
+		# remove possible blocked IP
+		$this->block_remove_entry ();
+	}
+
+
+	/**
 	 *	Connect to a directory given our auth method settings
 	 *
 	 *	Connect using adLDAP
