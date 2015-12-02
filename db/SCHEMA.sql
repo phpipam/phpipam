@@ -384,7 +384,7 @@ CREATE TABLE `vlans` (
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
 VALUES
 	(1,'IPv6 private 1',2001,'IPv6 private 1 subnets'),
-	(2,'Servers DMZ',4101,'DMZ public');
+	(2,'Servers DMZ',4001,'DMZ public');
 
 
 # Dump of table vlanDomains

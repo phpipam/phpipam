@@ -26,6 +26,8 @@ features for next releases:
         + IP address owner (from internal users - suggestions);
         + L2 domain permissions for groups ?
 
+    + Configurable cron from UI;
+
     + Tools enhancements
         + Devices permissions;
         + custom fields for IP requests;
@@ -35,6 +37,8 @@ features for next releases:
         + Export domain in bind format + script;
         + DNS scripts (nsupdate,...)
 
-	+ assign a state to a subnet, vlan;
+    + Subnet, addresses
+    	+ assign a state to a subnet, vlan;
+        + pagination for available subnets;
 
 	+ Mail subnet details;
