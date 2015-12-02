@@ -557,7 +557,7 @@ CREATE TABLE `usersAuthMethod` (
 INSERT INTO `usersAuthMethod` (`id`, `type`, `params`, `protected`, `description`)
 VALUES
 	(1, 'local', NULL, 'Yes', 'Local database'),
-	(2, 'http', NULL, 'Yes', 'HTTP REMOTE_USER');
+	(2, 'http', NULL, 'Yes', 'Apache authentication');
 
 
 # Dump of table usersAuthMethod

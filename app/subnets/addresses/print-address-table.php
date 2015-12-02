@@ -489,7 +489,7 @@ else {
 					{
 						print "<a class='edit_ipaddress   btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>													<i class='fa fa-gray fa-pencil'></i></a>";
 						print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
-						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>				<i class='fa fa-gray fa-envelope-o'></i></a>";
 						print "<a class='delete_ipaddress btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>														<i class='fa fa-gray fa-times'></i></a>";
 					}

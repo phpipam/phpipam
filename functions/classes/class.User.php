@@ -363,7 +363,7 @@ class User extends Common_functions {
 			if (!property_exists($ldap, 'ldap_security')) {
 				$ldap->ldap_security = 'none';
 			}
-			
+
 			if (property_exists($ldap, 'use_ssl')) {
 
 				if ($ldap->use_ssl == '1') {
@@ -617,7 +617,7 @@ class User extends Common_functions {
 
 		# authenticate based on name of auth method
 		if(!method_exists($this, $this->authmethodtype))	{
-			$this->Log->write ("User login", _('Error: Invalid authentication method'), 1 );
+			$this->Log->write ("User login", _('Error: Invalid authentication method'), 2 );
 			$this->Result->show("danger", _("Error: Invalid authentication method"), true);
 		}
 		else {
@@ -647,7 +647,7 @@ class User extends Common_functions {
 			# admin?
 			if($user->role == "Administrator")	{ $this->isadmin = true; }
 
-			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 1, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
+			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
 			else 					{ $this->user = $user; }
 		}
 	}
@@ -735,8 +735,11 @@ class User extends Common_functions {
 			# add blocked count
 			$this->block_ip ();
 
-			$this->Log->write( "User login", "Invalid username or password", 1, $username );
-			$this->Result->show("danger", _("Invalid username or password"), true);
+			$this->Log->write( "User login", "Invalid username or password", 2, $username );
+
+			# apache
+			if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
+			else                                 { $this->Result->show("danger", _("Invalid username or password"), true); }
 		}
 	}
 
@@ -749,7 +752,7 @@ class User extends Common_functions {
 	 * @param mixed $password
 	 * @return void
 	 */
-	private function auth_http ($username, $password) {
+	public function auth_http ($username, $password) {
 		# save to session
 		$this->write_session_parameters ();
 
@@ -763,6 +766,18 @@ class User extends Common_functions {
 		$this->block_remove_entry ();
 	}
 
+	/**
+	 * Shows login prompt for apache logins
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function show_http_login () {
+        header('WWW-Authenticate: Basic realm="phpIPAM authentication"');
+        header('HTTP/1.0 401 Unauthorized');
+        echo 'Authentication failed';
+        exit;
+	}
 
 	/**
 	 *	Connect to a directory given our auth method settings
@@ -917,6 +932,7 @@ class User extends Common_functions {
 	private function auth_NetIQ ($username, $password) {
 		$this->auth_AD ("cn=".$username, $password);
 	}
+
 	/**
 	 * Authenticates user on radius server
 	 *
