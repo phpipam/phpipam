@@ -43,13 +43,13 @@
 	<!-- switch back -->
 	<a href="<?php print create_link(null)."?switch=back"; ?>"><?php print _('Switch back user'); ?>  <i class="fa fa-pad-left fa-undo"></i></a>
 
-	<?php }else{ ?>
-
+	<?php } else { ?>
 
 	<a href="<?php print create_link("tools","user-menu"); ?>"><?php print _('Hi'); ?>, <?php print $User->user->real_name;  ?></a><br>
 	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>
 
 	<!-- logout -->
+	<?php if(!isset($_SERVER['REMOTE_USER'])) { ?>
 	<a  href="<?php print create_link("login"); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
-	<?php }} ?>
+	<?php }}} ?>
 </div>
