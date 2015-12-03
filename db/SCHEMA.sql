@@ -139,7 +139,7 @@ CREATE TABLE `settings` (
   `enableFirewallZones` TINYINT(1) NOT NULL DEFAULT '0',
   `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on","pattern":{"0":"patternFQDN"}}',
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
-  `powerDNS` TEXT  '{"host":"127.0.0.1","name":"pdns","username":"pdns","password":"pdns","port":"3306","autoserial":"Yes","ns":"","hostmaster":"","refresh":"604800","retry":"60","expire":"21600","nxdomain_ttl":"600","ttl":"180"}',
+  `powerDNS` TEXT  NULL,
   `version` varchar(5) DEFAULT NULL,
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
   `donate` tinyint(1) DEFAULT '0',
@@ -384,7 +384,7 @@ CREATE TABLE `vlans` (
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
 VALUES
 	(1,'IPv6 private 1',2001,'IPv6 private 1 subnets'),
-	(2,'Servers DMZ',4101,'DMZ public');
+	(2,'Servers DMZ',4001,'DMZ public');
 
 
 # Dump of table vlanDomains
@@ -547,7 +547,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','AD','LDAP','NetIQ', 'Radius') NOT NULL DEFAULT 'local',
+  `type` set('local','http','AD','LDAP','NetIQ','Radius') NOT NULL DEFAULT 'local',
   `params` varchar(1024) DEFAULT NULL,
   `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
@@ -556,7 +556,8 @@ CREATE TABLE `usersAuthMethod` (
 /* insert default values */
 INSERT INTO `usersAuthMethod` (`id`, `type`, `params`, `protected`, `description`)
 VALUES
-	(1, 'local', NULL, 'Yes', 'Local database');
+	(1, 'local', NULL, 'Yes', 'Local database'),
+	(2, 'http', NULL, 'Yes', 'Apache authentication');
 
 
 # Dump of table usersAuthMethod

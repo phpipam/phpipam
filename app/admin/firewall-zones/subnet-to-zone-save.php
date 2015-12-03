@@ -18,9 +18,9 @@ $Zones    = new FirewallZones($Database);
 $User->check_user_session();
 
 # validate $_POST['subnetId'] values
-if (!preg_match('/^[0-9]+$/i', $_POST['subnetId']))  { $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
+if (!preg_match('/^[0-9]+$/i', $_POST['subnetId']))  						{ $Result->show("danger", _("Invalid subnet ID. Do not manipulate the POST values!"), true); }
 # validate $_POST['zoneId'] values
-if (!preg_match('/^[0-9]+$/i', $_POST['zoneId'])) 	 { $Result->show("danger", _("Invalid zone ID. Do not manipulate the POST values!"), true); }
+if (!preg_match('/^[0-9]+$/i', $_POST['zoneId']) || $_POST['zoneId'] == 0) 	 { $Result->show("danger", _("Invalid or no zone ID. "), true); }
 
 # validate $_POST['deviceId'] values
 if ($_POST['deviceId'] && !preg_match('/^[0-9]+$/i', $_POST['deviceId'])) 	 { $Result->show("danger", _("Invalid device ID. Do not manipulate the POST values!"), true); }

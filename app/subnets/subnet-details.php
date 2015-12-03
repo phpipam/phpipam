@@ -171,7 +171,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 				print $fwZone->firewallAddressObject;
 			}
 			if($subnet_permission > 1) {
-				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet[id].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';	
+				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet[id].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
 			}
 			print "	</td>";
 			print "</tr>";

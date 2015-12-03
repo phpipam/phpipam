@@ -1,48 +1,44 @@
 version - 1.2
 
 	+ To fix / finish
-		+ Verify API methods;
 		+ Verify install / upgrade scripts;
 
 	+ Mark subnet as full (db prepared);
 
+
 features for next releases:
 ---------------------------
 
-	+ LDAP auth without local user;
+    + Modules:
+        + BGP support;
+        + DHCP integration;
+        + Inventory management:
+		    - rack tables (http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/)
+        + SNMP router table fetching;
+    	+ NAT module
+    		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
+    		- Ability to create NAT pools and link subnet / address to that pool - source NAT
+    		- Show bindings under tools and next to IP address
+        + Customers module;
 
-	+ Inventory management:
-		- rack tables (http://www.jaredwatkins.com/2011/10/dynamic-rack-face-diagrams-with-php-and-gd/)
+    + User
+    	+ LDAP auth without local user;
+        + IP address owner (from internal users - suggestions);
+        + L2 domain permissions for groups ?
 
-	+ Export domain in bind format + script;
+    + Configurable cron from UI;
 
-	+ Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
+    + Tools enhancements
+        + Devices permissions;
+        + custom fields for IP requests;
+        + Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
 
-	+ NAT module
-		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
-		- Ability to create NAT pools and link subnet / address to that pool - source NAT
-		- Show bindings under tools and next to IP address
+    + DNS enhancements
+        + Export domain in bind format + script;
+        + DNS scripts (nsupdate,...)
 
-	+ IP address owner (from internal users - suggestions);
-
-	+ L2 domain permissions for groups ?
-
-	+ Devices permissions;
-
-	+ assign a state to a subnet, vlan
-
-	+ DHCP
-
-	+ BGP support
-
-	+ custom fields for IP requests;
-
-	+ SNMP router table fetching
+    + Subnet, addresses
+    	+ assign a state to a subnet, vlan;
+        + pagination for available subnets;
 
 	+ Mail subnet details;
-
-	+ add customers module;
-
-	+ ARIN whois (https://www.arin.net/resources/whoisrws/whois_api.html);
-
-	+ DNS scripts (nsupdate,...)

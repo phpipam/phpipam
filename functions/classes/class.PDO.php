@@ -19,13 +19,7 @@ class Database_PDO extends DB {
 	protected $username = null;
 	protected $password = null;
 
-	protected $pdo_ssl_opts = array (
-		'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
-		'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
-		'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
-		'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
-		'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
-	);
+	protected $pdo_ssl_opts = array ();
 
 	public $install = false;		//flag if installation is happenig!
 
@@ -76,6 +70,14 @@ class Database_PDO extends DB {
 		$this->ssl = false;
 		if ($db['ssl']===true) {
 
+			$this->pdo_ssl_opts = array (
+				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
+				'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
+				'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
+				'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
+				'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
+			);
+			
 			$this->ssl = array();
 
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {

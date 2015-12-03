@@ -108,7 +108,7 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
     <tr>
         <td><?php print _('Master Folder'); ?></td>
         <td>
-        	<?php $Subnets->print_mastersubnet_dropdown_menu($_POST['sectionId'], @$folder_old_details['masterSubnetId']); ?>
+        	<?php $Subnets->print_mastersubnet_dropdown_menu($_POST['sectionId'], @$folder_old_details['masterSubnetId'], true); ?>
         </td>
         <td class="info2"><?php print _('Enter master folder if you want to nest it under existing folder, or select root to create root folder'); ?>!</td>
     </tr>

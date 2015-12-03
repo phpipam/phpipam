@@ -1,6 +1,15 @@
 <?php
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
+
+// http auth
+if( !empty($_SERVER['PHP_AUTH_USER']) ) {
+    // try to authenticate
+	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
+	// Redirect user where he came from, if unknown go to dashboard.
+	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
+	else                                        { header("Location: ".create_link("dashboard")); }
+}
 ?>
 
 <!DOCTYPE HTML>

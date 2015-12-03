@@ -2,7 +2,7 @@
 
 	New features:
 	------------
-	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius, NetIQ);
+	+ Added multiple simultaneous authentication methods (Apache, AD, LDAP, Radius, NetIQ);
 	+ Added fping scanning support;
 	+ Added selectable scanning type (ping/pear/fping);
 	+ Added L2 domains;

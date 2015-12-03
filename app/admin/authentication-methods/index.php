@@ -86,9 +86,10 @@ foreach($all_methods as $method) {
 <div class="alert alert-info alert-absolute" style="margin-top:30px;">
 	<?php print _("Here you can set different authentication methods for your users."); ?>
 	<hr>
-	<?php print _("phpIPAM currently supports 5 methods for authentication:"); ?>
+	<?php print _("phpIPAM currently supports 6 methods for authentication:"); ?>
 	<ul>
 		<li><?php print _("Local authentication"); ?></li>
+		<li><?php print _("Apache authentication"); ?></li>
 		<li><?php print _("AD (Active Directory) authentication"); ?></li>
 		<li><?php print _("LDAP authentication"); ?></li>
 		<li><?php print _("NetIQ authentication"); ?></li>
