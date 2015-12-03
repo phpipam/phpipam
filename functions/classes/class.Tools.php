@@ -1969,20 +1969,29 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_all_domains_and_vlans ($search = false) {
 		// set query
-		$query = "select `d`.`name` as `domainName`,
-						`d`.`description` as `domainDescription`,
-						`v`.`domainId` as `domainId`,
-						`v`.`name` as `name`,
-						`v`.`number` as `number`,
-						`v`.`description` as `description`,
-						`v`.`vlanId` as `id`
-						from
-						`vlans` as `v`,
-						`vlanDomains` as `d`
-						where `v`.`domainId` = `d`.`id`
-						order by `v`.`number` asc;";
+		$query[] = "select `d`.`name` as `domainName`,";
+		$query[] = "	`d`.`description` as `domainDescription`,";
+		$query[] = "	`v`.`domainId` as `domainId`,";
+		$query[] = "	`v`.`name` as `name`,";
+		$query[] = "	`v`.`number` as `number`,";
+		$query[] = "	`v`.`description` as `description`,";
+		// fetch custom fields
+		$custom_vlan_fields = $this->fetch_custom_fields ("vlans");
+		if ($custom_vlan_fields != false) {
+    		foreach ($custom_vlan_fields as $f) {
+        		$query[] = "  `v`.`$f[name]` as `$f[name]`,";
+    		}
+
+		}
+		$query[] = "	`v`.`vlanId` as `id`";
+		$query[] = "	from";
+		$query[] = "	`vlans` as `v`,";
+		$query[] = "	`vlanDomains` as `d`";
+		$query[] = "	where `v`.`domainId` = `d`.`id`";
+		$query[] = "	order by `v`.`number` asc;";
+
 		// fetch
-		try { $domains = $this->Database->getObjectsQuery($query); }
+		try { $domains = $this->Database->getObjectsQuery(implode("\n",$query)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 		// filter if requested
 		if ($search !== false && sizeof($domains)>0) {
