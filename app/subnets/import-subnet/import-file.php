@@ -27,7 +27,8 @@ if($permission < 2) 			   $Result->show("danger", _('You cannot write to this su
 is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # set filetype
-$filetype = end(explode(".", $_POST['filetype']));
+$filetype = explode(".", $_POST['filetype']);
+$filetype = end($filetype);
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
