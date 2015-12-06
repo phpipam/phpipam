@@ -330,6 +330,9 @@ table.ipaddresses tr:hover ul.submenu-dns li i {
 table.ipaddresses hr {
 	margin-bottom: 0px;
 }
+table.ipaddresses td {
+    vertical-align: top !important;
+}
 
 
 

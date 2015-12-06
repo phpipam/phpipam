@@ -974,7 +974,7 @@ class Tools extends Common_functions {
 		$definition = trim(strstr($definition, ";\n", true));
 
 		# get each line to array
-		$definition = explode("\n", $definition);
+		$definition = explode(PHP_EOL, $definition);
 
 		# go through,if it begins with ` use it !
 		foreach($definition as $d) {
@@ -1534,7 +1534,7 @@ class Tools extends Common_functions {
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = explode("\n", $file);
+		$file = explode(PHP_EOL, $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
 				//get previous
