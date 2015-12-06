@@ -46,7 +46,17 @@ else {
 
 <script type="text/javascript">
 $(document).ready(function(){
-     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+    if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini",
+	    onText: "Yes",
+	    offText: "No"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 </script>
 
@@ -252,6 +262,21 @@ $(document).ready(function(){
 		</td>
 		<td class="info2"><?php print _('Select to which groups the user belongs to'); ?></td>
 	</tr>
+
+	<!-- pdns -->
+    <?php if ($User->settings->enablePowerDNS==1) { ?>
+	<tbody>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<tr>
+    	<td><?php print _("PowerDNS"); ?></td>
+    	<td>
+            <input type="checkbox" class="input-switch" value="Yes" name="pdns" <?php if(@$user->pdns == "Yes") print 'checked'; ?>>
+    	</td>
+		<td class="info2"><?php print _('Select to allow user to create DNS records'); ?></td>
+	</tr>
+    <?php } ?>
 
 	<!-- Custom -->
 	<?php

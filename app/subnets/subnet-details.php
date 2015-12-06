@@ -244,7 +244,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			$domain = $PowerDNS->fetch_domain_by_name ($zone);
 			// count PTR records
 			if ($domain!==false) {
-				if ($User->is_admin (false)) {
+				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("administration", "powerDNS", "domains", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
@@ -258,7 +258,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
 			}
 			else {
-				if ($User->is_admin ()) {
+				if ($User->is_admin () || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";

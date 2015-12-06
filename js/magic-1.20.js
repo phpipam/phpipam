@@ -129,7 +129,7 @@ function hidePopups() {
 	// IMPORTANT: also empty loaded content to avoid issues on popup reopening
 	$('#popupOverlay > div').empty();
 	$('#popupOverlay2 > div').empty();
-		
+
     $('.popup').fadeOut('fast');
     $('body').removeClass('stop-scrolling');        //enable scrolling back
     hideSpinner();
@@ -1530,6 +1530,12 @@ $(".editRecord").click(function() {
 });
 $(document).on("click", "#editRecordSubmit", function() {
     submit_popup_data (".record-edit-result", "app/admin/powerDNS/record-edit-result.php", $('form#recordEdit').serialize());
+});
+$(document).on("click", "#editRecordSubmitDelete", function() {
+    var formData = $('form#recordEdit').serialize();
+    // replace edit action with delete
+    formData = formData.replace("action=edit", "action=delete");
+    submit_popup_data (".record-edit-result", "app/admin/powerDNS/record-edit-result.php", formData);
 });
 
 

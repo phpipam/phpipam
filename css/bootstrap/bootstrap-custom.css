@@ -295,6 +295,7 @@ td#actions .btn-group .btn {
 	margin-left: 5px;
 
 	font-size: 10px;
+	cursor: pointer;
 }
 .badge3 {
 	padding: 4px 6px;
