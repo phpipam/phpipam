@@ -8,8 +8,10 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 # set visible fields
 foreach ($custom_fields as $k=>$f) {
-    if (!in_array($k, $hidden_fields['subnets'])) {
-        $visible_fields[$k] = $f;
+    if (isset($hidden_fields)) {
+        if (!in_array($k, $hidden_fields['subnets'])) {
+            $visible_fields[$k] = $f;
+        }
     }
 }
 # set colspan
