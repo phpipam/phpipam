@@ -83,7 +83,8 @@ if ( ($_POST['sectionId'] != @$_POST['sectionIdNew']) && $_POST['action']=="edit
 	$_POST['masterSubnetId'] = 0;
 
     //check for overlapping
-    if($section['strictMode']==1 && !$parent_is_folder) {
+    $sectionIdNew = (array) $Sections->fetch_section(null, $_POST['sectionIdNew']);
+    if($sectionIdNew['strictMode']==1 && !$parent_is_folder) {
     	/* verify that no overlapping occurs if we are adding root subnet */
     	$overlap=$Subnets->verify_subnet_overlapping ($_POST['sectionIdNew'], $_POST['cidr'], $_POST['vrfId']);
     	if($overlap!==false) {
