@@ -67,10 +67,12 @@ if ($_GET['sPage']=="search" && strlen(@$_POST['domain-filter'])>0) {
 <!-- Back -->
 <div class="btn-group" style="margin-bottom:10px;margin-top: 10px;">
     <?php if ($domains===false && isset($_POST['domain-filter'])) { ?>
-    <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link ("administration", "powerDNS", $_GET['subnetId']); ?>"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
+    <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link ("tools", "powerDNS", $_GET['subnetId']); ?>"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
     <?php } ?>
+    <?php if ($User->is_admin()) { ?>
     <!-- Add new -->
-    <button class='btn btn-sm btn-default btn-success editDomain' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain'); ?></button>
+    <a class='btn btn-sm btn-default btn-default btn-success'  href="<?php print create_link ("administration", "powerDNS"); ?>"><i class='fa fa-pencil'></i> <?php print _('Manage domains'); ?></a>
+   <?php } ?>
 </div>
 <br>
 
@@ -101,7 +103,7 @@ if (isset($_POST['domain-filter'])) { $domains_split = array($domains); }
 <tr>
 	<td colspan="6">
 		<!-- search -->
-		<form method="post" action="<?php print create_link ("administration", "powerDNS", $_GET['subnetId'], "search"); ?>">
+		<form method="post" action="<?php print create_link ("tools", "powerDNS", $_GET['subnetId'], "search"); ?>">
 		<div class="input-group pull-right">
 				<input type="text" class="form-control input-sm" name='domain-filter' placeholder="<?php print _("Filter"); ?>" value="<?php print $_POST['domain-filter'] ?>">
 				<span class="input-group-btn">
@@ -125,7 +127,6 @@ if (isset($_POST['domain-filter'])) { $domains_split = array($domains); }
 <!-- Headers -->
 <tbody id="headers">
 <tr>
-	<th></th>
     <th><?php print _('Domain'); ?></th>
     <th><?php print _('Type'); ?></th>
     <th><?php print _('Master NS'); ?></th>
@@ -170,16 +171,8 @@ foreach ($domains_split as $k=>$split) {
 			$serial = $serial[2];
 
 			print "<tr>";
-			// actions
-			print "	<td>";
-			print "	<div class='btn-group'>";
-			print "		<button class='btn btn-default btn-xs editDomain' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-			print "		<button class='btn btn-default btn-xs editDomain' data-action='delete' data-id='$d->id'><i class='fa fa-remove'></i></button>";
-			print "	</div>";
-			print "	</td>";
-
 			// content
-			print "	<td><a href='".create_link("administration", "powerDNS", $_GET['subnetId'], "records", $d->name)."'>$d->name</a></td>";
+			print "	<td><a href='".create_link("tools", "powerDNS", $_GET['subnetId'], "records", $d->name)."'>$d->name</a></td>";
 			print "	<td><span class='badge badge1'>$d->type</span></td>";
 			print "	<td>$d->master</td>";
 			print "	<td><span class='badge'>$cnt</span></td>";
