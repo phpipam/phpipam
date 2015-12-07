@@ -81,7 +81,7 @@ else {
 			# usage
 			if(!$master) {
 	    		$address_count = $Addresses->count_subnet_addresses ($f['subnetId']);
-	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet']);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet'], $f['isFull']);
 	    	}
 
 			# add address
