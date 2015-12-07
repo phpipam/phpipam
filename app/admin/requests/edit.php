@@ -35,14 +35,14 @@ if($Subnets->check_permission($User->user, $request['subnetId']) != 3)	{ $Result
 # else get next free
 if(strlen($request['ip_addr'])>0) {
 	// check if it exists
-	if ( $Addresses->address_exists ($request['ip_addr'], $request['subnetId'])) {
+	if ( $Addresses->address_exists ($Subnets->transform_to_dotted($request['ip_addr']), $request['subnetId'])) {
 		$errmsg = "Requested IP address ($request[ip_addr]) already used. First available address automatically provided.";
 		$errmsg_class = "warning";
 		//fetch first free
 		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
 	}
 	else {
-		$ip_address = $request['ip_addr'];
+		$ip_address = $Subnets->transform_to_dotted($request['ip_addr']);
 	}
 
 } else {

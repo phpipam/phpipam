@@ -514,7 +514,12 @@ class Addresses extends Common_functions {
 	public function get_first_available_address ($subnetId, $Subnets) {
 
 		# fetch all addresses in subnet and subnet
-		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc");
+		try { $addresses = $this->Database->getObjectsQuery("(SELECT `ip_addr` FROM `ipaddresses` where `subnetId` = ?) UNION (SELECT `ip_addr` from `requests` where `processed` = '0' and `ip_addr` is not null and `subnetId` = ?) order by `ip_addr` asc;", array($subnetId,$subnetId)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		
 		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
 
 	    # get max hosts
