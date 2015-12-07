@@ -1150,9 +1150,7 @@ $(document).on("click", ".userselect", function() {
 			}
 		});
 	}
-
 	hidePopup2();
-	hidePopup('popup_w500');
 
 	return false;
 });
