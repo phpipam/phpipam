@@ -58,7 +58,7 @@ if($slaves) {
 # verify that is it displayed in proper section, otherwise warn!
 if($subnet['sectionId']!=$_GET['section'])	{
 	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
-	$Result->show("warning", _("Subnet is in section")."<a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
+	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
 ?>
 
