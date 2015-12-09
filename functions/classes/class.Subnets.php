@@ -433,7 +433,7 @@ class Subnets extends Common_functions {
 		# null
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `discoverSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009 and `mask` > 20;", array($agentId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `discoverSubnet` = 1 and `isFolder`= 0 and `isFull`!= 1 and `mask` > '0' and subnet > 16843009 and `mask` > 20;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -841,16 +841,26 @@ class Subnets extends Common_functions {
 	 * @param mixed $used_hosts (int)
 	 * @param mixed $netmask (int)
 	 * @param mixed $subnet	(int)
+	 * @param bin $infull	(default: 0)
 	 * @return void
 	 */
-	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet) {
+	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0) {
 		# set IP version
 		$ipversion = $this->get_ip_version ($subnet);
-		# set initial vars
-		$out['used'] = (int) $used_hosts;														//set used hosts
-		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
-		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));					//free hosts
-		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
+		# marked as full
+		if ($isFull!=1) {
+    		# set initial vars
+    		$out['used'] = (int) $used_hosts;														//set used hosts
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
+    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));			//free hosts
+    		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
+		}
+		else {
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);
+    		$out['used']     = $out['maxhosts'];
+    		$out['freehosts']= 0;
+    		$out['freehosts_percent'] = 0;
+		}
 		# result
 		return $out;
 	}
@@ -862,9 +872,10 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet		//subnet in decimal format
 	 * @param mixed $bitmask	//netmask in decimal format
 	 * @param mixed $addresses	//all addresses to be calculated, either all slave or per subnet
+	 * @param bin $isFull       //if subnet is marked as full
 	 * @return void
 	 */
-	public function calculate_subnet_usage_detailed ($subnet, $bitmask, $addresses) {
+	public function calculate_subnet_usage_detailed ($subnet, $bitmask, $addresses, $isFull=0) {
 		# get IP address count per address type
 		$details = $this->calculate_subnet_usage_sort_addresses ($addresses);
 
@@ -877,7 +888,13 @@ class Subnets extends Common_functions {
 	    foreach($this->address_types as $t) {
 		    $details[$t['type']."_percent"] = round( ( ($details[$t['type']] * 100) / $details['maxhosts']), 2 );
 	    }
-	    return( $details );
+	    # if marked as full override
+	    if ($isFull==1) {
+    	    $details['Used_percent'] = $details['Used_percent'] + $details['freehosts_percent'];
+    	    $details['freehosts_percent'] = 0;
+	    }
+	    # result
+	    return $details;
 	}
 
 	/**
@@ -946,9 +963,10 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet
 	 * @param mixed $netmask
 	 * @param mixed $Addresses
+	 * @param bin isFull (default: 0)
 	 * @return void
 	 */
-	public function calculate_subnet_usage_recursive ($subnetId, $subnet, $netmask, $Addresses) {
+	public function calculate_subnet_usage_recursive ($subnetId, $subnet, $netmask, $Addresses, $isFull=0) {
 		# identify address
 		$address_type = $this->get_ip_version ($subnet);
 		# fetch all slave subnets recursive
@@ -959,15 +977,22 @@ class Subnets extends Common_functions {
 		# go through each and calculate used hosts
 		# add +2 for subnet and broadcast if required
 		foreach($this->slaves_full as $s) {
-			# fetch all addresses
-			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
-			# mask fix
-			if($address_type=="IPv4" && $netmask<31) {
-				$used = $used+1;
-			}
+    		# full?
+    		if ($s->isFull==1) {
+        		# get max
+        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, true);
+    		}
+    		else {
+    			# fetch all addresses
+    			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
+    			# mask fix
+    			if($address_type=="IPv4" && $netmask<31) {
+    				$used = $used+1;
+    			}
+    		}
 		}
 		# we counted, now lets calculate and return result
-		return $this->calculate_subnet_usage ($used, $netmask, $subnet);
+		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull);
 	}
 
 	/**
@@ -2353,12 +2378,15 @@ class Subnets extends Common_functions {
 
 					}
 					else {
+                        # add full information
+                        $fullinfo = $option['value']['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 						# last?
 						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						} else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
 						}
 				}
@@ -2370,13 +2398,16 @@ class Subnets extends Common_functions {
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open'></i> $description</td>";
 					}
 					else {
+                        # add full information
+                        $fullinfo = $option['value']['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 						# last?
 						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						}
 						else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
 
 						}

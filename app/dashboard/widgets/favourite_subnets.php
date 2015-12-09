@@ -56,6 +56,9 @@ else {
 		# must be either subnet or folder
 		if(sizeof($f)>0) {
 
+            # add full information
+            $fullinfo = $f['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 			print "<tr class='favSubnet-$f[subnetId]'>";
 
 			if($f['isFolder']==1) {
@@ -64,8 +67,8 @@ else {
 			}
 			else {
 				//master?
-				if($Subnets->has_slaves ($f['subnetId'])) { $master = true;	 print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-folder-o'></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a></td>"; }
-				else 									  { $master = false; print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-sitemap' ></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a></td>"; }
+				if($Subnets->has_slaves ($f['subnetId'])) { $master = true;	 print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-folder-o'></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a> $fullinfo</td>"; }
+				else 									  { $master = false; print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-sitemap' ></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a> $fullinfo</td>"; }
 			}
 			print "	<td>$f[description]</td>";
 			print "	<td><a href='".create_link("subnets",$f['sectionId'])."'>$f[section]</a></td>";
@@ -81,7 +84,7 @@ else {
 			# usage
 			if(!$master) {
 	    		$address_count = $Addresses->count_subnet_addresses ($f['subnetId']);
-	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet']);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet'], $f['isFull']);
 	    	}
 
 			# add address

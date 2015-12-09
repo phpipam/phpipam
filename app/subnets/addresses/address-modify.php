@@ -49,6 +49,9 @@ $selected_ip_fields = explode(";", $selected_ip_fields);																			//for
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
+# if subnet is full we cannot any more ip addresses
+if (($action=="add" || $action=="all-add") && $subnet['isFull']==1)   $Result->show("warning", _("Cannot add address as subnet is market as used"), true, true);
+
 
 # if action is not add then fetch current details, otherwise fetch first available IP address
 if ($action == "all-add") {

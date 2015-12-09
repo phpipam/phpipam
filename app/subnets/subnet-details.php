@@ -119,6 +119,15 @@ $rowSpan = 10 + sizeof($custom_fields);
 		</td>
 	</tr>
 
+    <?php if(@$subnet['isFull']=="1") { ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+    </tr>
+    <?php } ?>
 
 
 	<?php
@@ -189,7 +198,8 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 			print "<tr>";
 			print "	<th>"._('IP requests')."</th>";
-			if($subnet['allowRequests'] == 1) 		{ print "	<td>"._('enabled')."</td>"; }		# yes
+			if(@$subnet['isFull'] == 1) 		    { print "	<td class='info2'>"._('disabled - marked as full')."</td>"; }		# yes
+			elseif($subnet['allowRequests'] == 1) 	{ print "	<td>"._('enabled')."</td>"; }		# yes
 			else 									{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 			print "</tr>";
 		}

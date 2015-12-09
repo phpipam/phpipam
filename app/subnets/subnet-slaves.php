@@ -8,8 +8,10 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 # set visible fields
 foreach ($custom_fields as $k=>$f) {
-    if (!in_array($k, $hidden_fields['subnets'])) {
-        $visible_fields[$k] = $f;
+    if (isset($hidden_fields)) {
+        if (!in_array($k, $hidden_fields['subnets'])) {
+            $visible_fields[$k] = $f;
+        }
     }
 }
 # set colspan
@@ -21,7 +23,7 @@ $colspan_subnets = 5 + sizeof($visible_fields);
  ***************************************************************************************/
 
 # print title
-print "<h4>$subnet[description] ($subnet[ip]/$subnet[mask]) "._('has')." ".sizeof($slave_subnets)." "._('directly nested subnets').":</h4><hr><br>";
+print "<h4 style='margin-top:25px;'>$subnet[description] ($subnet[ip]/$subnet[mask]) "._('has')." ".sizeof($slave_subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
 # print HTML table
 print '<table class="slaves table table-striped table-condensed table-hover table-full table-top">'. "\n";
@@ -70,10 +72,13 @@ foreach ($slave_subnets as $slave_subnet) {
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);
 	if(!$slave_vlan) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
 
+	# add full information
+	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 	print "<tr>";
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
-    print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a></td>";
+    print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a> $fullinfo</td>";
 
     # custom
     if(isset($visible_fields)) {
@@ -94,9 +99,9 @@ foreach ($slave_subnets as $slave_subnet) {
 	# calculate free / used / percentage
 	if(!$Subnets->has_slaves ($slave_subnet['id'])) {
 		$slave_addresses = (int) $Addresses->count_subnet_addresses ($slave_subnet['id']);
-		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet']);
+		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet'], $slave_subnet['isFull']);
 	} else {
-		$calculate = $Subnets->calculate_subnet_usage_recursive( $slave_subnet['id'], $slave_subnet['subnet'], $slave_subnet['mask'], $Addresses);
+		$calculate = $Subnets->calculate_subnet_usage_recursive( $slave_subnet['id'], $slave_subnet['subnet'], $slave_subnet['mask'], $Addresses, $slave_subnet['isFull']);
 	}
 
     print ' <td class="small hidden-xs hidden-sm hidden-md">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";

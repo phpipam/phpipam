@@ -3,8 +3,6 @@ version - 1.2
 	+ To fix / finish
 		+ Verify install / upgrade scripts;
 
-	+ Mark subnet as full (db prepared);
-
 
 features for next releases:
 ---------------------------

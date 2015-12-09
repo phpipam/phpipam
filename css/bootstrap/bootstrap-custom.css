@@ -301,8 +301,9 @@ td#actions .btn-group .btn {
 	padding: 4px 6px;
 	margin-left: 10px;
 	margin-bottom: 4px;
-
-
+}
+.badge.badge4 {
+    cursor: default;
 }
 ul.submenu-dns {
 	line-height: 14px;
@@ -359,6 +360,9 @@ table.ipaddresses td {
 .text-muted,
 td.info2 {
 	font-size: 12px;
+}
+.isFull .alert-info {
+    margin-bottom: 0px;
 }
 
 

@@ -129,6 +129,14 @@ foreach($outFile as $k=>$line) {
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
+        // custom fields
+        $currIndex = 8;
+        if(sizeof($custom_address_fields) > 0) {
+        	foreach($custom_address_fields as $field) {
+            	$currIndex++;
+        		$address_insert[$field['name']] = $lineArr[$currIndex];
+        	}
+        }
 
 		// insert
 		if($Addresses->modify_address ($address_insert)===false)	{ $errors++; }

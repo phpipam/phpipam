@@ -1,4 +1,4 @@
-== 1.19.020
+== 1.19.045
 
 	New features:
 	------------
@@ -27,7 +27,7 @@
 	+ Added Scan agents to scan subnets remotely;
 	+ Added firewall zone mappings and module;
 	+ Added per-subnet DNS resolvers;
-	+ BASE auto-detect;
+	+ Added option to mark subnet as utilized;
 
 	Enhancements:
 	----------------------------
