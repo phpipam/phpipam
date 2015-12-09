@@ -125,7 +125,7 @@ $rowSpan = 10 + sizeof($custom_fields);
     </tr>
     <tr>
         <th></th>
-        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as fully used"), false, false, true); ?></td>
+        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
     </tr>
     <?php } ?>
 

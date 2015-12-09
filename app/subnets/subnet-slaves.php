@@ -72,10 +72,13 @@ foreach ($slave_subnets as $slave_subnet) {
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);
 	if(!$slave_vlan) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
 
+	# add full information
+	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 	print "<tr>";
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
-    print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a></td>";
+    print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a> $fullinfo</td>";
 
     # custom
     if(isset($visible_fields)) {
