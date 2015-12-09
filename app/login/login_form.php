@@ -59,7 +59,7 @@
 
 <?php
 /* show request module if enabled in config file */
-if($User->settings->enableIPrequests == 1) {
+if($User->settings->enablePublicIPrequests == 1) {
 ?>
 <div class="iprequest">
 	<a href="<?php print create_link("request_ip"); ?>">
