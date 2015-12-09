@@ -60,3 +60,6 @@ VALUES ('http', NULL, 'Yes', 'Apache authentication');
 
 /* allow powerdns record management for user */
 ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `email`;
+
+/* add Public IP Request Setting */
+ALTER TABLE `settings` ADD COLUMN `enablePublicIPrequests` TINYINT  NOT NULL  DEFAULT '0' AFTER `enableIPrequests`;
