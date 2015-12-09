@@ -51,6 +51,7 @@ $values = array("id"=>1,
 				//features
 				"api"=>$Admin->verify_checkbox(@$_POST['api']),
 				"enableIPrequests"=>$Admin->verify_checkbox(@$_POST['enableIPrequests']),
+				"enablePublicIPrequests"=>$Admin->verify_checkbox(@$_POST['enablePublicIPrequests']),
 				"enableVRF"=>$Admin->verify_checkbox(@$_POST['enableVRF']),
 				"enableDNSresolving"=>$Admin->verify_checkbox(@$_POST['enableDNSresolving']),
 				"vlanDuplicate"=>$Admin->verify_checkbox(@$_POST['vlanDuplicate']),
