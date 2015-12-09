@@ -306,6 +306,23 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	}
 
 	?>
+
+	<?php if($_POST['action']!="delete") { ?>
+	<!-- mark full -->
+    <tr>
+	    <td colspan="3"><hr></td>
+    </tr>
+	<tr>
+        <td class="middle"><?php print _('Mark as full'); ?></td>
+        <td>
+            <?php $checked = @$subnet_old_details['isFull']==1 ? "checked": ""; ?>
+            <input type="checkbox" name="isFull" class="input-switch" value="1" <?php print $checked; ?>>
+        </td>
+        <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
+    </tr>
+
+	<?php } ?>
+
 	<?php if($_POST['action']=="edit") { ?>
 	<!-- resize / split -->
     <tr>

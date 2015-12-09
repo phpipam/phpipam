@@ -30,16 +30,35 @@ $nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['namese
 if($slaves) {
 	$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false);
 	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
-	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'] );		//Calculate free/used etc
+	// save count
+	$addresses_cnt = gmp_strval(sizeof($addresses));
+
+	# full ?
+	if (sizeof($slave_subnets)>0) {
+    	foreach ($slave_subnets as $ss) {
+        	if ($ss->isFull==1) {
+            	# calculate max
+            	$max_hosts = $Subnets->get_max_hosts ($ss->mask, $Subnets->identify_address($ss->subnet), true);
+            	# count
+            	$count_hosts = $Addresses->count_subnet_addresses ($ss->id);
+            	# add
+            	$addresses_cnt = gmp_strval(gmp_add($addresses_cnt, gmp_sub($max_hosts, $count_hosts)));
+        	}
+    	}
+	}
+
+	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );		//Calculate free/used etc
 } else {
 	$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
-	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'] );		//Calculate free/used etc
+	// save count
+	$addresses_cnt = gmp_strval(sizeof($addresses));
+	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );		//Calculate free/used etc
 }
 
 # verify that is it displayed in proper section, otherwise warn!
 if($subnet['sectionId']!=$_GET['section'])	{
 	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
-	$Result->show("warning", _("Subnet is in section")."<a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
+	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
 ?>
 

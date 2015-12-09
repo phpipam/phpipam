@@ -124,7 +124,7 @@ if($slaves) {
 				}
 
 				# print usage
-				$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'] );
+				$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'], $slave['isFull'] );
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
 			    print '	<td class="small hidden-xs hidden-sm">'. $calculate['freehosts_percent'] .'</td>';
 

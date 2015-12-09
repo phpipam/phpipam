@@ -295,6 +295,7 @@ td#actions .btn-group .btn {
 	margin-left: 5px;
 
 	font-size: 10px;
+	cursor: pointer;
 }
 .badge3 {
 	padding: 4px 6px;
@@ -330,6 +331,9 @@ table.ipaddresses tr:hover ul.submenu-dns li i {
 table.ipaddresses hr {
 	margin-bottom: 0px;
 }
+table.ipaddresses td {
+    vertical-align: top !important;
+}
 
 
 
@@ -355,6 +359,9 @@ table.ipaddresses hr {
 .text-muted,
 td.info2 {
 	font-size: 12px;
+}
+.isFull .alert-info {
+    margin-bottom: 0px;
 }
 
 

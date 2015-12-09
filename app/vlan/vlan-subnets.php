@@ -72,7 +72,7 @@ else {
 			}
 
 			# print usage
-			$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $subnet['mask'], $subnet['subnet'] );
+			$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );
 		    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
 		    print '	<td class="small hidden-xs hidden-sm">'. $calculate['freehosts_percent'] .'</td>';
 

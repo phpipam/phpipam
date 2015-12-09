@@ -354,11 +354,11 @@ else {
 						if($records!==false) {
 							foreach ($records as $r) {
 								if($r->type!="SOA" && $r->type!="NS")
-								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$r->type</span> $r->content </li>";
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
 							}
 						}
 						if($ptr!==false) {
-								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$ptr->type</span> $ptr->name </li>";
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$ptr->id' data-domain_id='$ptr->domain_id'>$ptr->type</span> $ptr->name </li>";
 						}
 						$dns_records[] = "</ul>";
 						// if none ignore
@@ -375,7 +375,7 @@ else {
 					// add button
 					if ($User->settings->enablePowerDNS==1) {
 					// add new button
-					if ($Subnets->validate_hostname($addresses[$n]->dns_name))
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name) && ($User->isadmin || @$User->user->pdns=="Yes"))
 					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
 					else
 					$button = "";
@@ -434,7 +434,7 @@ else {
 								}
 								//text
 								elseif($myField['type']=="text") {
-									if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+									if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->$myField['name'])."'>"; }
 									else											{ print ""; }
 								}
 								else {

@@ -32,10 +32,10 @@ $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 if($slaves) {
 	$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false);
 	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
-	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'] );		//Calculate free/used etc
+	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );		//Calculate free/used etc
 } else {
 	$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
-	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'] );		//Calculate free/used etc
+	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );		//Calculate free/used etc
 }
 ?>
 

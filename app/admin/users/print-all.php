@@ -36,6 +36,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
     <th><?php print _('Role'); ?></th>
     <th><?php print _('Language'); ?></th>
     <th><?php print _('Authentication'); ?></th>
+    <th><?php print _('PowerDNS'); ?></th>
     <th><?php print _('Groups'); ?></th>
     <th><?php print _('Last login'); ?></th>
 	<?php
@@ -83,6 +84,11 @@ foreach ($users as $user) {
 	if($auth_method===false) { print "<span class='text-muted'>No auth method</span>"; }
 	else 					 { print $auth_method->type." <span class='text-muted'>(".$auth_method->description."</a>)"; }
 	print "</span></td>";
+
+	# powerDNS
+	print "<td>";
+	print $user['pdns'];
+	print "</td>";
 
 	# groups
 	if($user['role'] == "Administrator") {

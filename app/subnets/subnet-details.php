@@ -119,6 +119,15 @@ $rowSpan = 10 + sizeof($custom_fields);
 		</td>
 	</tr>
 
+    <?php if(@$subnet['isFull']=="1") { ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as fully used"), false, false, true); ?></td>
+    </tr>
+    <?php } ?>
 
 
 	<?php
@@ -189,7 +198,8 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 			print "<tr>";
 			print "	<th>"._('IP requests')."</th>";
-			if($subnet['allowRequests'] == 1) 		{ print "	<td>"._('enabled')."</td>"; }		# yes
+			if(@$subnet['isFull'] == 1) 		    { print "	<td class='info2'>"._('disabled - marked as full')."</td>"; }		# yes
+			elseif($subnet['allowRequests'] == 1) 	{ print "	<td>"._('enabled')."</td>"; }		# yes
 			else 									{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 			print "</tr>";
 		}
@@ -244,7 +254,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			$domain = $PowerDNS->fetch_domain_by_name ($zone);
 			// count PTR records
 			if ($domain!==false) {
-				if ($User->is_admin ()) {
+				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("administration", "powerDNS", "domains", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
@@ -258,7 +268,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
 			}
 			else {
-				if ($User->is_admin ()) {
+				if ($User->is_admin () || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";

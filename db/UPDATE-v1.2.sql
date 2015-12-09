@@ -57,3 +57,6 @@ ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetI
 
 INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`)
 VALUES ('http', NULL, 'Yes', 'Apache authentication');
+
+/* allow powerdns record management for user */
+ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `email`;

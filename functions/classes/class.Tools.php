@@ -974,7 +974,7 @@ class Tools extends Common_functions {
 		$definition = trim(strstr($definition, ";\n", true));
 
 		# get each line to array
-		$definition = explode("\n", $definition);
+		$definition = explode(PHP_EOL, $definition);
 
 		# go through,if it begins with ` use it !
 		foreach($definition as $d) {
@@ -1161,7 +1161,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	public function requests_fetch_available_subnets () {
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull` != 1;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		# save
@@ -1534,7 +1534,7 @@ class Tools extends Common_functions {
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = explode("\n", $file);
+		$file = explode(PHP_EOL, $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
 				//get previous
