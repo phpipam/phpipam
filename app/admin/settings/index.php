@@ -200,6 +200,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Public IP requests -->
+<tr>
+	<td class="title"><?php print _('Public IP request module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" id="PublicIPrequests" value="1" name="enablePublicIPrequests" <?php if($settings['enablePublicIPrequests'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Public IP request module'); ?>
+	</td>
+</tr>
+
 <!-- VRF -->
 <tr>
 	<td class="title"><?php print _('Enable VRF support'); ?></td>
