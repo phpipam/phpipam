@@ -1388,7 +1388,7 @@ $('#downloadLogs').click(function() {
 //logs clear
 $('#clearLogs').click(function() {
     showSpinner();
-    $.post('app/admin/logs/clear-logs.php', function(data) {
+    $.post('app/tools/logs/clear-logs.php', function(data) {
     	$('div.logs').html(data);
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
