@@ -60,3 +60,8 @@ VALUES ('http', NULL, 'Yes', 'Apache authentication');
 
 /* allow powerdns record management for user */
 ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `email`;
+
+/* add Ip request widget */
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
+VALUES
+(12, 'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes')
