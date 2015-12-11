@@ -775,6 +775,18 @@ $('a.request_ipaddress').click(function () {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
+//show request form from widget
+$(document).on("click", "button#requestIP_widget", function() {
+    showSpinner();
+	var subnetId = $('select#subnetId option:selected').attr('value');
+    var ip_addr = document.getElementById('ip_addr_widget').value;
+    $.post('app/tools/request-ip/index.php', {subnetId:subnetId, ip_addr:ip_addr}, function(data) {
+        $('div.popup_w500').html(data);
+        showPopup('popup_w500');
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
 //auto-suggest first available IP in selected subnet
 $(document).on("change", "select#subnetId", function() {
     showSpinner();
