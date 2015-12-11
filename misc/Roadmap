@@ -19,6 +19,8 @@ features for next releases:
     		- Show bindings under tools and next to IP address
         + Customers module;
 
+    + PostgreSQL support (#205);
+
     + User
     	+ LDAP auth without local user;
         + IP address owner (from internal users - suggestions);
@@ -34,6 +36,7 @@ features for next releases:
     + DNS enhancements
         + Export domain in bind format + script;
         + DNS scripts (nsupdate,...)
+        + Mass record update;
 
     + Subnet, addresses
     	+ assign a state to a subnet, vlan;

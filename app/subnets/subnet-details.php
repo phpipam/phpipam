@@ -125,7 +125,7 @@ $rowSpan = 10 + sizeof($custom_fields);
     </tr>
     <tr>
         <th></th>
-        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as fully used"), false, false, true); ?></td>
+        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
     </tr>
     <?php } ?>
 
@@ -256,7 +256,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			if ($domain!==false) {
 				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
-				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("administration", "powerDNS", "domains", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
 				$btns = implode("\n", $btns);
