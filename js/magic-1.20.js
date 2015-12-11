@@ -2543,6 +2543,7 @@ $('button.dataExport').click(function () {
 	var implemented = ["vrf","vlan","subnets"]; var popsize = {};
 	popsize["subnets"] = "w700";
 	var dataType = $('select[name=dataType]').find(":selected").val();
+	hidePopups();
     //show popup window
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
@@ -2656,6 +2657,7 @@ $('button.dataImport').click(function () {
 	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
+	hidePopups();
     //show popup window, if implemented
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
@@ -2684,10 +2686,10 @@ $(document).on("click", "button#dataImportPreview", function() {
 	popsize["subnets"] = "max"; popsize["recompute"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
+	hidePopups();
     //show popup window, if implemented
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();
-		//console.log(dataType + " form import fields " + importFields);
 		$.post('app/admin/import-export/import-' + dataType + '-preview.php?' + importFields, function(data) {
 		if (popsize[dataType] !== undefined) {
 			$('div.popup_'+popsize[dataType]).html(data);
@@ -2712,6 +2714,7 @@ $(document).on("click", "button#dataImportSubmit", function() {
 	popsize["subnets"] = "max";	popsize["recompute"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
+	hidePopups();
     //show popup window, if implemented
 	if (implemented.indexOf(dataType) > -1) {
 		showSpinner();

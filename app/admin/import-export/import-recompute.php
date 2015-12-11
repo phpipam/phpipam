@@ -33,7 +33,7 @@ $rows = "";
 # Update Subnet master
 foreach ($rlist as $sect_id => $sect_check) {
 	# Skip empty sections
-	if (!$edata[$sect_id]) { continue; }
+	if (!$edata[$sect_id]) { print("Skip ".$sect_id."; "); continue; }
 
 	# Grab a subnet and find its closest master
 	foreach ($edata[$sect_id] as &$c_subnet) {

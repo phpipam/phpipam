@@ -47,7 +47,7 @@ print "<br><br><br>";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default hidePopups" id="dataImportSubmit" data-type="recompute" disabled><i class="fa fa-magic"></i> <?php print _('Save'); ?></button>
+		<button class="btn btn-sm btn-default" id="dataImportSubmit" data-type="recompute" disabled><i class="fa fa-magic"></i> <?php print _('Save'); ?></button>
 	</div>
 </div>
 
