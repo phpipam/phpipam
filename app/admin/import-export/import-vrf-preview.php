@@ -58,7 +58,7 @@ print "</tbody></table><br>";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default hidePopups" id="dataImportSubmit" data-type="vrf" disabled><i class="fa fa-download"></i> <?php print _('Import'); ?></button>
+		<button class="btn btn-sm btn-default" id="dataImportSubmit" data-type="vrf" disabled><i class="fa fa-download"></i> <?php print _('Import'); ?></button>
 	</div>
 </div>
 
