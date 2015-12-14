@@ -148,7 +148,13 @@ if($all_sections!==false) {
 				}
 
 				if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
-					$worksheet->write($lineCount, $rowCount, $subnet['ip']."/".$subnet['mask'], $format_text);
+					$subnet_text = '';
+                                        if ($subnet['isFolder']) {
+						$subnet_text = $subnet['description']." (folder)";	
+					} else {
+						$subnet_text = $subnet['ip']."/".$subnet['mask'];
+					}
+					$worksheet->write($lineCount, $rowCount, $subnet_text, $format_text);
 					$rowCount++;
 				}
 
