@@ -55,8 +55,8 @@ class Vlans_controller extends Common_api_functions {
 
 		// methods
 		$result['methods'] = array(
-								array("href"=>"/api/vlans/".$this->_params->app_id."/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/vlans/".$this->_params->app_id."/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
+								array("href"=>"/api/".$this->_params->app_id."/vlans/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/".$this->_params->app_id."/vlans/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																												 array("rel"=>"create", "method"=>"POST"),
 																												 array("rel"=>"update", "method"=>"PATCH"),
 																												 array("rel"=>"delete", "method"=>"DELETE"))),
