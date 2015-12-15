@@ -27,6 +27,26 @@ $pi6 = new Net_IPv6();	# Pear IPv6
 $rlist = array();
 $pass_inputs = ""; # Pass fields from one page to another
 
+# Pear IPv6 ip2Bin, local copy
+function my_ip2Bin($pi6,$ip)
+{
+	$binstr = '';
+
+	$ip = $pi6->removeNetmaskSpec($ip);
+	$ip = $pi6->Uncompress($ip);
+
+	$parts = explode(':', $ip);
+
+	foreach ( $parts as $v ) {
+
+		$str     = base_convert($v, 16, 2);
+		$binstr .= str_pad($str, 16, '0', STR_PAD_LEFT);
+
+	}
+
+	return $binstr;
+}
+
 # Read selected fields and pass them to the save form
 foreach($_GET as $key => $value) {
 	if (preg_match("/recomputeSection_(\d+)$/",$key,$matches) && ($value == "on")) {
@@ -66,14 +86,17 @@ foreach ($rlist as $sect_id => $sect_check) {
 	# skip empty sections
 	if (sizeof($section_subnets)==0) { continue; }
 
+	$isFolder[$sect_id] = array();
+	
 	foreach ($section_subnets as &$subnet) {
 		$subnet = (array) $subnet;
 		$subnet['ip'] = $Subnets->transform_to_dotted($subnet['subnet']);
 		$subnet['type'] = $Subnets->identify_address($subnet['ip']);
 		# Precompute subnet in AND format (long for IPv4 and bin str for IPv6)
-		$subnet['andip'] = ($subnet['type'] == "IPv4") ? $subnet['subnet'] : $pi6->_ip2Bin($subnet['ip']);
+		$subnet['andip'] = ($subnet['type'] == "IPv4") ? $subnet['subnet'] : my_ip2Bin($pi6,$subnet['ip']);
 		# Add to array
 		$edata[$sect_id][] = $subnet;
+		$isFolder[$sect_id][$subnet['id']] = $subnet['isFolder'];
 	}
 }
 
@@ -87,6 +110,9 @@ foreach ($rlist as $sect_id => $sect_check) {
 	# Grab a subnet and find its closest master
 	foreach ($edata[$sect_id] as &$c_subnet) {
 		if (!$sect_check[$c_subnet['type']]) { continue; }	# Skip the IP version we don't want to reorder
+		if ($c_subnet['isFolder']) { continue; } # Skip folders
+		if ($isFolder[$sect_id][$c_subnet['masterSubnetId']]) { continue; } # Skip changing subne with folder masters
+
 		$c_master_id = "0"; $c_master_ip = ""; $c_master_mask = "";
 
 		# Check against all other subnets in section
@@ -105,7 +131,7 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$c_subnet['new_masterSubnetId'] = $c_master_id;
 		$c_subnet['new_master'] = (($c_master_id === "0") ? _("Root") : $c_master_ip."/".$c_master_mask);
 		$c_subnet['action'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? "skip" : "edit");
-		$c_subnet['msg'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? "No change, skip" : "New master, update");
+		$c_subnet['msg'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? _("No change, skip") : _("New master, update"));
 
 		$rows.="<tr class='".$colors[$c_subnet['action']]."'><td><i class='fa ".$icons[$c_subnet['action']]."' rel='tooltip' data-placement='bottom' title='"._($c_subnet['msg'])."'></i></td>";
 		$rows.="<td>".$sect_names[$sect_id]."</td><td>".$c_subnet['ip']."/".$c_subnet['mask']."</td>";

@@ -102,6 +102,6 @@ print "</form>";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default" id="dataImportPreview" data-type="recompute"><i class="fa fa-eye"></i> <?php print _('Preview'); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="dataImportPreview" data-type="recompute"><i class="fa fa-eye"></i> <?php print _('Preview'); ?></button>
 	</div>
 </div>
