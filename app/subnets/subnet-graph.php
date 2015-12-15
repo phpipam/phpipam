@@ -5,8 +5,34 @@
  ********************************************/
 
 # get details
-$details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet['mask'], $addresses);
+if($slaves) {
+    $addresses_slaves = $addresses;
+    // if we have slaves we need to check against every slave
+    $Subnets->reset_subnet_slaves_recursive ();
+    $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
+    $Subnets->remove_subnet_slaves_master ($subnet['id']);
+    // loop
+    if (isset($Subnets->slaves_full)) {
+        foreach ($Subnets->slaves_full as $ss) {
+            if ($ss->isFull==1) {
+                $cnt = $Addresses->count_subnet_addresses ($ss->id);
+                $max = $Subnets->get_max_hosts ($ss->mask, $Addresses->identify_address($ss->subnet), true);
+                // add
+                for ($m=$cnt; $m<=$max; $m++) {
+                    $ip = new StdClass();
+                    $ip->state = 2;
 
+                    $addresses_slaves[] = $ip;
+                }
+            }
+        }
+    }
+
+    $details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet['mask'], $addresses_slaves, $subnet['isFull']);
+}
+else {
+    $details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet['mask'], $addresses, $subnet['isFull']);
+}
 ?>
 
 

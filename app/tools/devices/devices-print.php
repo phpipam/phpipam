@@ -100,14 +100,13 @@ print "</div>";
 
 # filter notification
 if($filter)
-$Result->show("warning", _('Filter applied:'). '$_POST[ffield] like *$_POST[fval]*', false);
-
+$Result->show("warning", _('Filter applied:'). " $_POST[ffield] like *$_POST[fval]*", false);
 
 print '<table id="switchManagement" class="table table-striped table-top">';
 
 #headers
 print '<tr>';
-print "	<th><a href='' data-id='hostname|$sort[directionNext]' 		class='sort' rel='tooltip' data-container='body' title='"._('Sort by hostname')."'>"; ; 	if($sort['field'] == "hostname") 	print $icon; print _('Hostname').'</a></th>';
+print "	<th><a href='' data-id='hostname|$sort[directionNext]' 		class='sort' rel='tooltip' data-container='body' title='"._('Sort by hostname')."'>"; ; 	if($sort['field'] == "hostname") 	print $icon; print _('Name').'</a></th>';
 print "	<th><a href='' data-id='ip_addr|$sort[directionNext]'  	 	class='sort' rel='tooltip' data-container='body' title='"._('Sort by IP address')."'>"; ; 	if($sort['field'] == "ip_addr") 	print $icon; print _('IP address').'</th>';
 print "	<th><a href='' data-id='description|$sort[directionNext]'  	class='sort' rel='tooltip' data-container='body' title='"._('Sort by description')."'>"; ; 	if($sort['field'] == "description") print $icon; print _('Description').'</th>';
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
@@ -126,12 +125,21 @@ if(sizeof(@$custom) > 0) {
 print '	<th class="actions"></th>';
 print '</tr>';
 
-if(sizeof(@$devices) == 0) {
+// search - none found
+if(sizeof(@$devices) == 0 && isset($filter)) {
 	$colspan = 8 + $colspanCustom;
 	print "<tr>";
-	print "	<td colspan='$colspan'>".$Result->show('info', _('No devices configured')."!", false)."</td>";
+	print "	<td colspan='$colspan'>".$Result->show('info', _('No devices configured')."!", false, false, true)."</td>";
 	print "</tr>";
 }
+// no devices
+elseif(sizeof(@$devices) == 0) {
+	$colspan = 8 + $colspanCustom;
+	print "<tr>";
+	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
+	print "</tr>";
+}
+// result
 else {
 	foreach ($devices as $device) {
 	//cast
@@ -140,6 +148,13 @@ else {
 	//count items
 	$cnt = $Tools->count_device_addresses($device['id']);
 
+	// reindex types
+	if (isset($device_types)) {
+		foreach($device_types as $dt) {
+			$device_types_indexed[$dt->tid] = $dt;
+		}
+	}
+
 	//print details
 	print '<tr>'. "\n";
 
@@ -147,7 +162,7 @@ else {
 	print "	<td>". $device['ip_addr'] .'</td>'. "\n";
 	print '	<td class="description">'. $device['description'] .'</td>'. "\n";
 	print '	<td><strong>'. $cnt .'</strong> '._('Hosts').'</td>'. "\n";
-	print '	<td class="hidden-sm">'. $device_types[$device['type']]->tname .'</td>'. "\n";
+	print '	<td class="hidden-sm">'. $device_types_indexed[$device['type']]->tname .'</td>'. "\n";
 	print '	<td class="hidden-sm hidden-xs">'. $device['vendor'] .'</td>'. "\n";
 	print '	<td class="hidden-sm hidden-xs">'. $device['model'] .'</td>'. "\n";
 

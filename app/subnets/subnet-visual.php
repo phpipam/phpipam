@@ -52,7 +52,7 @@ for($m=$start_visual; $m<=$stop_visual; $m=gmp_strval(gmp_add($m,1))) {
 		$class = "unused";
 		$id = $m;
 		$action = 'all-add';
-		$title = "";
+		$title = $Subnets->transform_to_dotted($m);
 
 		# set colors
 		$background = "#ffffff";

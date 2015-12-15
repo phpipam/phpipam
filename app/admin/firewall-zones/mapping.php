@@ -1,6 +1,9 @@
 <?php
-// firewall zone mapping.php
-// list all firewall zone mappings
+
+/**
+ *	firewall zone mapping.php
+ *	list all firewall zone mappings
+ ***************************************/
 
 # initialize classes
 $Database 	= new Database_PDO;
@@ -14,11 +17,11 @@ $User->check_user_session();
 # fetch all zone mappings
 $firewallZoneMapping = $Zones->get_zone_mappings();
 
-// reorder by device
+# reorder by device
 if ($firewallZoneMapping!==false) {
-	// devices
+	# devices
 	$devices = array();
-	// add
+	# add
 	foreach ($firewallZoneMapping as $m) {
 		$devices[$m->deviceId][] = $m;
 	}
@@ -31,73 +34,115 @@ if ($firewallZoneMapping!==false) {
 if($firewallZoneMapping) {
 ?>
 	<!-- table -->
-	<table id="mappingsPrint" class="table table-striped table-top table-auto">
-		<tr>
-			<!-- header -->
-			<th><?php print _('Type'); ?></th>
-			<th><?php print _('Zone'); ?></th>
-			<th><?php print _('Alias'); ?></th>
-			<th><?php print _('Description'); ?></th>
-			<th><?php print _('Interface'); ?></th>
-			<th colspan="2"><?php print _('Subnet'); ?></th>
-			<th colspan="2"><?php print _('VLAN'); ?></th>
-			<th></th>
-		</tr>
-	<?php
-	// loop
-	foreach ($devices as $k=>$firewallZoneMapping) {
-		// header
-		print "<tr>";
-		print "	<th colspan='10'><h4> ".$devices[$k][0]->deviceName."</h4></th>";
-		print "</tr>";
+	<table id="mappingsPrint" class="table table-td-top table-top table-condensed">
 
-		// mappings
-		foreach ($firewallZoneMapping as $mapping) {
-			print '<tr>';
-			// columns
-			if ($mapping->indicator == 0 ) {
-				print '<td><span class="fa fa-home"  title="'._('Own Zone').'"></span></td>';
-			} else {
-				print '<td><span class="fa fa-group" title="'._('Customer Zone').'"></span></td>';
+	<!-- header -->
+	<tr>
+		<th><?php print _('Type'); ?></th>
+		<th><?php print _('Zone'); ?></th>
+		<th><?php print _('Alias'); ?></th>
+		<th><?php print _('Description'); ?></th>
+		<th><?php print _('Interface'); ?></th>
+		<th><?php print _('Subnets'); ?></th>
+		<th><?php print _('VLAN'); ?></th>
+		<th style="width:60px"></th>
+	</tr>
+
+	<?php
+
+	# loop
+	foreach ($devices as $k=>$firewallZoneMapping) { ?>
+		<!-- header -->
+		<tr>
+		<?php
+		$devices[$k][0]->deviceDescription = strlen($devices[$k][0]->deviceDescription)<1 ? "" : "(".$devices[$k][0]->deviceDescription.")";
+		print '<th colspan="8" style="background:white"><h4>'.$devices[$k][0]->deviceName.$devices[$k][0]->deviceDescription	.'</h4></th>';
+		?>
+		</tr>
+		<?php
+
+		# mappings
+		foreach ($firewallZoneMapping as $mapping ) {
+			# set rowspan in case if there are more than one networks bound to the zone
+			$counter = count($mapping->network);
+			if ($counter === 0) {
+				$counter = 1;
 			}
-			print '<td>'.$mapping->zone.'</td>';
-			print '<td>'.$mapping->alias.'</td>';
-			print '<td>'.$mapping->description.'</td>';
-			print '<td>'.$mapping->interface.'</td>';
-			//print '<td>'.$Subnets->transform_to_dotted($mapping->subnet).'/'.$mapping->subnetMask.'</td>';
-			print '<td>';
-			// check if there is a subnetId and if it is convertable to dotted decimal
-			if ($mapping->subnetId && $mapping->subnetDescription) {
-				if (!$mapping->subnetIsFolder) {
-					print '<a href="'.create_link("subnets",$mapping->sectionId,$mapping->subnetId).'">'.$Subnets->transform_to_dotted($mapping->subnet).'/'.$mapping->subnetMask.'</a>';
-					print '</td><td>';
-					print '<a href="'.create_link("subnets",$mapping->sectionId,$mapping->subnetId).'">'.$mapping->subnetDescription.'</a>';
-				} else {
-					print '<a href="'.create_link("subnets",$mapping->sectionId,$mapping->subnetId).'">Folder</a>';
-					print '</td><td>';
-					print '<a href="'.create_link("subnets",$mapping->sectionId,$mapping->subnetId).'">'.$mapping->subnetDescription.'</a>';
+			# set the loop counter
+			$i = 1;
+			if ($mapping->network) {
+				foreach ($mapping->network as $key => $network) {
+					print '<tr class="border-top">';
+					if ($i === 1) {
+						$title = $mapping->indicator == 0 ? 'Own Zone' : 'Customer Zone';
+						// print
+						print '<td rowspan="'.$counter.'"><span class="fa '.($mapping->indicator == 0 ? 'fa-home':'fa-group').'"  title="'._($title).'"></span></td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
+						print '<td rowspan="'.$counter.'">'.$mapping->interface.'</td>';
+					}
+					# display subnet informations
+					if ($network->subnetId) {
+						// description fix
+						$network->subnetDescription = strlen($network->subnetDescription)>0 ? " (".$network->subnetDescription.")" : "";
+						// subnet
+						if (!$network->subnetIsFolder) {
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</a></td>';
+						}
+						else {
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$network->subnetDescription.'</a></td>';
+						}
+					} else {
+						print '<td>/</td>';
+					}
+					# display vlan informations
+					if ($network->vlanId) {
+						// name fix
+						$network->vlanName = strlen($network->vlanName)>0 ? " (".$network->vlanName.")" : "";
+						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.''.$network->vlanName.'</a></td>';
+					} else {
+						print '<td>/</td>';
+					}
+					if ($i === 1) {
+						# action menu
+						print '<td rowspan="'.$counter.'">';
+						print '<div class="btn-group">';
+						print '<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="'.$mapping->mappingId.'""><i class="fa fa-pencil"></i></button>';
+						print '<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="'.$mapping->mappingId.'"><i class="fa fa-remove"></i></button>';
+						print '</div>';
+						print '</td>';
+					}
+					print '</tr>';
+					# increase the loop counter
+					$i++;
 				}
 			} else {
-				print '</td><td>';
-			} ?>
-			</td>
-			<td><a href="<?php create_link('tools','vlan',$mapping->domainId,$mapping->vlanId); ?>"><?php print $mapping->vlan; ?></a></td>
-			<td><a href="<?php create_link('tools','vlan',$mapping->domainId,$mapping->vlanId); ?>"><?php print $mapping->vlanName; ?></a></td>
-			<!-- action menu -->
-			<td>
-				<div class="btn-group">
-					<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="<?php print $mapping->mappingId; ?>"><i class="fa fa-pencil"></i></button>
-					<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="<?php print $mapping->mappingId; ?>"><i class="fa fa-remove"></i></button>
-				</div>
-			</td>
-		</tr>
-	<?php } } ?>
-	</table>
+				print "<tr class='border-top'>";
+				# display only the zone mapping data if there is no network data available
+				$title = $mapping->indicator == 0 ? 'Own Zone' : 'Customer Zone';
 
-<?php
+				print '<td rowspan="'.$counter.'"><span class="fa fa-home"  title="'._($title).'"></span></td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->zone.'</td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->alias.'</td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->description.'</td>';
+				print '<td rowspan="'.$counter.'">'.$mapping->interface.'</td>';
+				print '<td colspan="2"></td>';
+				# action menu
+				print '<td>';
+				print '<div class="btn-group">';
+				print '<button class="btn btn-default btn-xs editMapping" data-action="edit" data-id="'.$mapping->mappingId.'""><i class="fa fa-pencil"></i></button>';
+				print '<button class="btn btn-default btn-xs editMapping" data-action="delete" data-id="'.$mapping->mappingId.'"><i class="fa fa-remove"></i></button>';
+				print '</div>';
+				print '</td>';
+				print '</tr>';
+			}
+		}
+	}
+	print '</table>';
 }
 else {
-	// print an info if there are no zones in the database
+	# print an info if there are no zones in the database
 	$Result->show("info", _("No firewall zones configured"), false);
 }
 ?>

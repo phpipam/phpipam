@@ -57,7 +57,7 @@ $(document).ready(function(){
 		<td><?php print _('New domain'); ?></td>
 		<td>
 		<input type="hidden" name="vlanId" value="<?php print $vlan->vlanId; ?>">
-		<select name="newDomainId" class="form-control input-w-auto">
+		<select name="newDomainId" class="form-control input-w-auto input-sm">
 		<?php
 		$m=0;
 		foreach($vlan_domains as $d) {

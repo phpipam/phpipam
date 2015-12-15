@@ -49,6 +49,9 @@ $selected_ip_fields = explode(";", $selected_ip_fields);																			//for
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
+# if subnet is full we cannot any more ip addresses
+if (($action=="add" || $action=="all-add") && $subnet['isFull']==1)   $Result->show("warning", _("Cannot add address as subnet is market as used"), true, true);
+
 
 # if action is not add then fetch current details, otherwise fetch first available IP address
 if ($action == "all-add") {
@@ -112,8 +115,13 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		<td>
 		<div class="input-group">
 			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($_POST['stopIP'])>0) print "-".$Subnets->transform_address($_POST['stopIP'],"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
-    		<span class="input-group-addon">
-    			<i class="fa fa-gray fa-info" rel="tooltip" data-html='true' data-placement="left" title="<?php print _('You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)'); ?>"></i>
+    		<span class="input-group-addon" style="border-left:none;">
+    			<a class="ping_ipaddress ping_ipaddress_new" data-subnetid="<?php print $subnetId; ?>" data-id="" href="#" rel="tooltip" data-container="body" title="" data-original-title="Check availability">
+ 					<i class="fa fa-gray fa-cogs"></i>
+    			</a>
+ 			</span>
+			<span class="input-group-addon">
+    			<i class="fa fa-gray fa-info" rel="tooltip" data-html='true' data-placement="right" title="<?php print _('You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)'); ?>"></i>
     		</span>
 			</div>
 
@@ -144,7 +152,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '	<div class="input-group">';
 		print ' <input type="text" name="dns_name" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['dns_name']. '" '.$delete.'>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
-		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='left' title='"._('Click to check for hostname')."'></i></span>";
+		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='right' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
 		print "	</div>";
 		print '	</td>'. "\n";
@@ -265,6 +273,18 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	print '	</td>'. "\n";
 	print '</tr>'. "\n";
 	?>
+
+	<!-- set gateway -->
+	<tr>
+    	<td colspan="2"><hr></td>
+	</tr>
+	<tr>
+		<td><?php print _("Is gateway"); ?></td>
+		<td>
+			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
+		</td>
+	</tr>
+
 	<!-- exclude Ping -->
 	<?php
 	if($subnet['pingSubnet']==1) {
@@ -275,21 +295,11 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '<tr>';
 	 	print '<td>'._("Ping exclude").'</td>';
 	 	print '<td>';
-	 	print "	<div class='checkbox info2'>";
-		print ' 	<input type="checkbox" class="ip_addr" name="excludePing" value="1" '.$checked.' '.$delete.'>'. _('Exclude from ping status checks');
-		print "	</div>";
+		print ' <input type="checkbox" class="ip_addr input-switch" name="excludePing" value="1" '.$checked.' '.$delete.'> <span class="text-muted">'. _('Exclude from ping status checks')."</span>";
 	 	print '</td>';
 	 	print '</tr>';
 	}
 	?>
-
-	<!-- set gateway -->
-	<tr>
-		<td><?php print _("Is gateway"); ?></td>
-		<td>
-			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
-		</td>
-	</tr>
 	<?php
 	// ignore PTR
 	if ($User->settings->enablePowerDNS==1) {
@@ -400,19 +410,20 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	}
 	?>
 
+    <?php if ($action!=="delete") {  ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
 
-	 <tr>
-		<td colspan="2"><hr></td>
-	 </tr>
-
-	 <tr>
-	 	<td><?php print _('Unique'); ?></td>
-	 	<td>
-		<div class='checkbox info2'>
-		 	<input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
-		</div>
-	 	</td>
-	 </tr>
+    <tr>
+        <td><?php print _('Unique'); ?></td>
+    <td>
+        <div class='checkbox info2'>
+        <input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
+        </div>
+        </td>
+    </tr>
+    <?php } ?>
 
 	<?php
 	#get type

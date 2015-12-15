@@ -101,10 +101,13 @@ if($slaves) {
 				# reformat empty VLAN
 				if(sizeof($vlan)==1) { $vlan['number'] = "/"; }
 
+				# add full information
+                $fullinfo = $slave['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 				print "<tr>";
 			    print "	<td class='small'>".$vlan['number']."</td>";
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
-			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask]</a></td>";
+			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask] $fullinfo</a></td>";
 
 				# increase IP count
 				$ipCount = 0;
@@ -124,7 +127,7 @@ if($slaves) {
 				}
 
 				# print usage
-				$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'] );
+				$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'], $slave['isFull'] );
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
 			    print '	<td class="small hidden-xs hidden-sm">'. $calculate['freehosts_percent'] .'</td>';
 

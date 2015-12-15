@@ -29,13 +29,20 @@ foreach($_POST as $key=>$val) {
 	}
 }
 
-# fetch all possible slaves + master
-$Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
-
 # set values and update
 $permissions = isset($perm) ? array("permissions"=>json_encode($perm)) : array("permissions"=>"");
 
-if(!$Admin->object_modify("subnets", "edit-multiple", $Subnets->slaves, $permissions))	{ $Result->show("danger",  _("Failed to set subnet permissons")."!", true); }
-else																					{ $Result->show("success", _("Subnet permissions set")."!", true); }
+# propagate ?
+if (@$_POST['set_inheritance']=="Yes") {
+    # fetch all possible slaves + master
+    $Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
+    # update
+    if(!$Admin->object_modify("subnets", "edit-multiple", $Subnets->slaves, $permissions))	{ $Result->show("danger",  _("Failed to set subnet permissons")."!", true); }
+    else																					{ $Result->show("success", _("Subnet permissions set")."!", true); }
+}
+else {
+    if(!$Admin->object_modify("subnets", "edit", "id", array_merge(array("id"=>$_POST['subnetId']), $permissions)))	{ $Result->show("danger",  _("Failed to set subnet permissons")."!", true); }
+    else																					                        { $Result->show("success", _("Subnet permissions set")."!", true); }
+}
 
 ?>

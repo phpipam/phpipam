@@ -90,13 +90,13 @@ class Install extends Common_functions {
 		$this->Database_root->resetConn();
 
 		# install database
-		$this->install_database_execute ();
-
-	    # return true, if some errors occured script already died! */
-		sleep(1);
-		$this->Log = new Logging ($this->Database);
-		$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
-		return true;
+		if($this->install_database_execute () !== false) {
+		    # return true, if some errors occured script already died! */
+			sleep(1);
+			$this->Log = new Logging ($this->Database);
+			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
+			return true;
+		}
 	}
 
 	/**
@@ -161,15 +161,18 @@ class Install extends Common_functions {
 				try { $this->Database_root->runQuery($q.";"); }
 				catch (Exception $e) {
 					//unlock tables
-					$this->Database_root->runQuery("UNLOCK TABLES;");
+					try { $this->Database_root->runQuery("UNLOCK TABLES;"); }
+					catch (Exception $e) {}
 					//drop database
 					try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
 					catch (Exception $e) {
-						$this->Result->show("danger", 'Cannot set permissions for user '. $db['user'] .': '.$e->getMessage(), true);
+						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
 					}
 					//print error
 					$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
 					$this->Result->show("info", "Database dropped", false);
+
+					return false;
 				}
 			}
 	    }
@@ -362,7 +365,20 @@ class Install extends Common_functions {
 	 */
 	private function upgrade_database_execute () {
 		# set queries
-		$queries = $this->get_upgrade_queries ();
+		$subversion_queries = $this->get_upgrade_queries ();
+		// create default arrays
+		$queries = array();
+		// succesfull queries:
+		$queries_ok = array();
+
+		# explode each query
+		foreach ($subversion_queries as $q) {
+			/// replace CRLF
+			$q = str_replace("\r\n", "\n", $q);
+			$subversion_query = explode(";\n", $q);
+			// save to final array
+			$queries = array_filter(array_merge($queries, $subversion_query));
+		}
 
 	    # execute all queries
 	    foreach($queries as $query) {
@@ -372,8 +388,17 @@ class Install extends Common_functions {
 				# write log
 				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
 				# fail
-				$this->Result->show("danger", _("Update: ").$e->getMessage()."<br>query: ".$query, true);
+				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
+				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
+				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
+				# revert version
+				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
+				//catch (Exception $e) { var_dump($e); }
+				// false
+				return false;
 			}
+			// save ok
+			$queries_ok[] = $query;
 	    }
 
 

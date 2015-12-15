@@ -26,7 +26,7 @@ $custom_fields = $Tools->fetch_custom_fields('vlans');
 <hr>
 
 <?php
-print "<a class='btn btn-sm btn-default' href='".create_link("tools","vlan", $vlan_domain->id)."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('Back')."</a>";
+print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id)."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('Back')."</a>";
 ?>
 
 <table class="ipaddress_subnet table-condensed">

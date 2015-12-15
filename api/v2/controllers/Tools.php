@@ -65,7 +65,9 @@ class Tools_controller extends Common_api_functions {
 									  "devices"=>"devices",
 									  "deviceTypes"=>"devicetypes",
 									  "vlans"=>"vlans",
-									  "vrf"=>"vrfs"
+									  "vrf"=>"vrfs",
+									  "nameservers"=>"nameservers",
+									  "scanAgents"=>"scanagents"
 									  );
 	}
 
@@ -81,7 +83,9 @@ class Tools_controller extends Common_api_functions {
 								"devices"=>array("id2", "id3"),
 								"deviceTypes"=>array("id2", "id3"),
 								"vlans"=>array("id2", "id3"),
-								"vrf"=>array("id2", "id3")
+								"vrf"=>array("id2", "id3"),
+								"nameservers"=>array("id2"),
+								"scanAgents"=>array("id2")
 								);
 	}
 
@@ -126,6 +130,8 @@ class Tools_controller extends Common_api_functions {
 						array("rel"=>"addresses",	"href"=>"/api/".$_GET['app_id']."/addresses/"),
 						array("rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlans/"),
 						array("rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrfs/"),
+						array("rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/nameservers/"),
+						array("rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/scanagents/"),
 						array("rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/")
 					);
 		# Response

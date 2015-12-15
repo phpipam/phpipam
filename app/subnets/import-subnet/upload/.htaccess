@@ -1,0 +1,8 @@
+# Don't list directory contents
+IndexIgnore *
+# Deny access via web to it
+Deny from all
+
+# Disable script execution
+AddHandler cgi-script .php .php2 .php3 .php4 .php5 .php6 .php7 .php8 .pl .py .js .jsp .asp .htm .html .shtml .sh .cgi
+Options -ExecCGI -Indexes

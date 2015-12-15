@@ -307,17 +307,25 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_devices ($field=null, $val=null, $order_field="id", $order_direction="asc") {
+		# escape sorts
+		$order_field 	 = $this->Database->escape ($order_field);
+		$order_direction = $this->Database->escape ($order_direction);
+
 		# set query
 		if(!is_null($field)) {
-			# escape method/table
-			$field = $this->Database->escape($field);
+			// validate field
+			$permitted_fields = $this->get_permitted_fields ("devices");
+			if (!in_array($field, $permitted_fields)) {
+				$this->Result->show("danger", _('Invalid field '.$field), false);
+				return false;
+			}
 
-			$query  = "SELECT * FROM `devices` where `$field` like ? order by ? ?;";
-			$params = array("%$val%", $order_field, $order_direction);
+			$query  = "SELECT * FROM `devices` where `$field` like ? order by $order_field $order_direction;";
+			$params = array("%$val%");
 		}
 		else {
-			$query  = "SELECT * FROM `devices` order by ? ?;";
-			$params = array($order_field, $order_direction);
+			$query  = "SELECT * FROM `devices` order by $order_field $order_direction;";
+			$params = array();
 		}
 		# fetch
 		try { $devices = $this->Database->getObjectsQuery($query, $params); }
@@ -369,6 +377,27 @@ class Tools extends Common_functions {
 				return false;
 			}
 		}
+	}
+
+	/**
+	 * Get permitted fields from database
+	 *
+	 * @access private
+	 * @param mixed $table
+	 * @return void
+	 */
+	private function get_permitted_fields ($table) {
+		try { $fields = $this->Database->getObjectsQuery("describe `$table`;", array($table)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		// loop and return array of permitted
+		foreach ($fields as $f) {
+			$out[] = $f->Field;
+		}
+		// return fields
+		return $out;
 	}
 
 	/**
@@ -581,7 +610,7 @@ class Tools extends Common_functions {
 				$query[] = " or `$myField[name]` like :search_term ";
 			}
 		}
-		$query[] = ";";
+		$query[] = "order by `subnet` asc, `mask` asc;";
 
 		# join query
 		$query = implode("\n", $query);
@@ -945,7 +974,7 @@ class Tools extends Common_functions {
 		$definition = trim(strstr($definition, ";\n", true));
 
 		# get each line to array
-		$definition = explode("\n", $definition);
+		$definition = explode(PHP_EOL, $definition);
 
 		# go through,if it begins with ` use it !
 		foreach($definition as $d) {
@@ -1132,7 +1161,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	public function requests_fetch_available_subnets () {
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull` != 1;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		# save
@@ -1505,7 +1534,7 @@ class Tools extends Common_functions {
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = explode("\n", $file);
+		$file = explode(PHP_EOL, $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
 				//get previous
@@ -1930,6 +1959,51 @@ class Tools extends Common_functions {
 	 *	@misc methods
 	 *	------------------------------
 	 */
+
+	/**
+	 * Fetch all l2 domans and vlans
+	 *
+	 * @access public
+	 * @param string $search (default: false)
+	 * @return void
+	 */
+	public function fetch_all_domains_and_vlans ($search = false) {
+		// set query
+		$query[] = "select `d`.`name` as `domainName`,";
+		$query[] = "	`d`.`description` as `domainDescription`,";
+		$query[] = "	`v`.`domainId` as `domainId`,";
+		$query[] = "	`v`.`name` as `name`,";
+		$query[] = "	`v`.`number` as `number`,";
+		$query[] = "	`v`.`description` as `description`,";
+		// fetch custom fields
+		$custom_vlan_fields = $this->fetch_custom_fields ("vlans");
+		if ($custom_vlan_fields != false) {
+    		foreach ($custom_vlan_fields as $f) {
+        		$query[] = "  `v`.`$f[name]` as `$f[name]`,";
+    		}
+
+		}
+		$query[] = "	`v`.`vlanId` as `id`";
+		$query[] = "	from";
+		$query[] = "	`vlans` as `v`,";
+		$query[] = "	`vlanDomains` as `d`";
+		$query[] = "	where `v`.`domainId` = `d`.`id`";
+		$query[] = "	order by `v`.`number` asc;";
+
+		// fetch
+		try { $domains = $this->Database->getObjectsQuery(implode("\n",$query)); }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
+		// filter if requested
+		if ($search !== false && sizeof($domains)>0) {
+			foreach ($domains as $k=>$d) {
+				if (strpos($d->number, $search)===false && strpos($d->name, $search)===false && strpos($d->description, $search)===false) {
+					unset($domains[$k]);
+				}
+			}
+		}
+		// return
+		return sizeof($domains)>0 ? $domains : false;
+	}
 
 	/**
 	 * Fetches instructions from database

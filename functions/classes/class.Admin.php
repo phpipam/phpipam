@@ -650,57 +650,6 @@ class Admin extends Common_functions {
 
 
 
-
-	/**
-	 *	@ripe method
-	 *	--------------------------------
-	 */
-
-	public function ripe_fetch_subnets ($as) {
-		//open connection
-		$ripe_connection = fsockopen("whois.ripe.net", 43, $errno, $errstr, 5);
-		if(!$ripe_connection) {
-			$this->Result->show("danger", "$errstr ($errno)", false);
-			return false;
-		}
-		else {
-			//fetch result
-			fputs ($ripe_connection, '-i origin as'. $as ."\r\n");
-			//save result to var out
-			$out = "";
-		    while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
-
-		    //parse it
-		    $out = explode("\n", $out);
-
-		    //we only need route
-		    foreach($out as $line) {
-				if (strlen(strstr($line,"route"))>0) {
-					//replace route6 with route
-					$line = str_replace("route6:", "route:", $line);
-					//only take IP address
-					$line = explode("route:", $line);
-					$line = trim($line[1]);
-					//set result
-					$subnet[] = $line;
-				}
-		    }
-		    //return
-		    return isset($subnet) ? $subnet : array();
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 *	@search/replace fields
 	 *	--------------------------------

@@ -277,6 +277,7 @@ class Addresses extends Common_functions {
 						"is_gateway"=>@$address['is_gateway'],
 						"excludePing"=>@$address['excludePing'],
 						"PTRignore"=>@$address['PTRignore'],
+						"firewallAddressObject"=>@$address['firewallAddressObject'],
 						"lastSeen"=>@$address['lastSeen']
 						);
 		# custom fields, append to array
@@ -364,7 +365,10 @@ class Addresses extends Common_functions {
 			return false;
 		}
 
-		# log and changelog
+		# set the firewall address object to avoid logging
+		$address['firewallAddressObject'] = $address_old->firewallAddressObject;
+
+ 		# log and changelog
 		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
@@ -908,6 +912,10 @@ class Addresses extends Common_functions {
 		if(!is_null($order)) 	{ $order = array($order, $order_direction); }
 		else 					{ $order = array("ip_addr", "asc"); }
 
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
+
 		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -996,6 +1004,10 @@ class Addresses extends Common_functions {
 		# ip address order
 		if(!is_null($order)) 	{ $order_addr = array($order, $order_direction); }
 		else 					{ $order_addr = array("ip_addr", "asc"); }
+
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
 
 	    # set query to fetch all ip addresses for specified subnets or just count
 		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = "" '; }

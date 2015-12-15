@@ -4,19 +4,11 @@
  *
  */
 
-
-
 @font-face {
-  font-family: 'Lato';
+  font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Lato Light'), local('Lato-Light'), url("../fonts/lato/Lato-light.ttf") format('truetype');
-}
-@font-face {
-  font-family: 'Lato';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Lato Regular'), local('Lato-Regular'), url("../fonts/lato/Lato-regular.ttf") format('truetype');
+  src: local('Source Sans Pro Light'), local('Source-sans-pro-light'), url("../fonts/source_sans_pro/Source-sans-pro-light.ttf") format('truetype');
 }
 
 
@@ -81,7 +73,7 @@ h5 .label {
 	margin-left: 10px;
 }
 h1, h2, h3, h4, h5, .pHeader {
-	font-family: "Lato", Arial, sans-serif;
+	font-family: "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
 
 /* font-family: 'ecoicons'; */
@@ -186,6 +178,10 @@ tbody {
 }
 .table.table-top.table-td-top td {
 	vertical-align: top !important;
+}
+table#zonesPrint tr.border-top td,
+table#mappingsPrint tr.border-top td {
+	border-bottom: 1px solid #eee;
 }
 
 
@@ -299,13 +295,15 @@ td#actions .btn-group .btn {
 	margin-left: 5px;
 
 	font-size: 10px;
+	cursor: pointer;
 }
 .badge3 {
 	padding: 4px 6px;
 	margin-left: 10px;
 	margin-bottom: 4px;
-
-
+}
+.badge.badge4 {
+    cursor: default;
 }
 ul.submenu-dns {
 	line-height: 14px;
@@ -334,6 +332,9 @@ table.ipaddresses tr:hover ul.submenu-dns li i {
 table.ipaddresses hr {
 	margin-bottom: 0px;
 }
+table.ipaddresses td {
+    vertical-align: top !important;
+}
 
 
 
@@ -359,6 +360,9 @@ table.ipaddresses hr {
 .text-muted,
 td.info2 {
 	font-size: 12px;
+}
+.isFull .alert-info {
+    margin-bottom: 0px;
 }
 
 
@@ -1469,7 +1473,8 @@ span.ipreqMenu {
 	-moz-border-radius: 6px;
 	border-radius: 6px;
 
-	float: right;
+	position:absolute;
+	right: 25px;
 	margin-top: 0px;
 
 	color: white;
@@ -1758,6 +1763,8 @@ td.groups input[type=checkbox] {
 	white-space: nowrap;
 	text-shadow: none;
 	font-size: 11px;
+
+	position: fixed;
 }
 .tooltip-inner {
 	max-width: 500px;
@@ -1893,34 +1900,31 @@ table#userPrint h4 {
 
 
 /* @popup ---------- */
-#popupOverlay {
+#popupOverlay,
+#popupOverlay2 {
 	display: none;
 
 	position: fixed;
 
 	background: rgba(0,0,0,0.5);
-/*
-	width: 100%;
-	height: 100%;
-*/
+
 	top: 0px;
 	left: 0px;
 	right: 0px;
 	bottom: 0px;
 
-	z-index: 100;
+	z-index: 98;
 
 	overflow-x: hidden;
 	overflow-y: auto;
 }
-
 .popup_w400 {
 	width: 400px;
 
 	left: 50%;
 	margin-left: -200px;
 
-	z-index: 103;
+	z-index: 102;
 }
 .popup_w500 {
 	width: 500px;
@@ -1928,7 +1932,7 @@ table#userPrint h4 {
 	left: 50%;
 	margin-left: -250px;
 
-	z-index: 102;
+	z-index: 103;
 }
 .popup_w700,
 .popup_wmasks {
@@ -1937,17 +1941,17 @@ table#userPrint h4 {
 	left: 50%;
 	margin-left: -350px;
 
-	z-index: 101;
+	z-index: 104;
 }
 .popup_wmasks {
 
 	width: 800px;
 	margin-left: -400px;
 
-	z-index: 104;
+	z-index: 105;
 }
 .popup_wmasks .pContent {
-	max-height: 700px !important;
+/* 	max-height: 700px !important; */
 }
 .popup_max {
 	width: 90%;
@@ -1955,7 +1959,7 @@ table#userPrint h4 {
 	left: 50%;
 	margin-left: -45%;
 
-	z-index: 101;
+	z-index: 106;
 
 	height: 90%;
 	top: 5% !important;
@@ -1967,11 +1971,15 @@ table#userPrint h4 {
 .popup {
 	display: none;
 
-	top: 10%;
+	position: relative;
+	margin-top: 80px;
+	margin-bottom: 50px;
+	height: auto;
 
-	position: fixed;
+	z-index: 100;
 
 /* 	overflow-x: hidden; */
+	overflow: visible;
 
   background-color: #ffffff;
   border: 1px solid #999;
@@ -1984,6 +1992,9 @@ table#userPrint h4 {
   -webkit-background-clip: padding-box;
      -moz-background-clip: padding-box;
           background-clip: padding-box;
+}
+#popupOverlay2 .popup {
+	margin-top: 100px;
 }
 .popup .pContent::-webkit-scrollbar {
     display: none;
@@ -2013,6 +2024,7 @@ table#userPrint h4 {
 	padding: 15px;
 	padding-bottom: 0px;
 	overflow-y: auto;
+	overflow-x: visible;
 }
 .popup .pContent table th,
 .popup .pContent table td {
@@ -2073,6 +2085,21 @@ table#userPrint h4 {
 	bottom: 0px;
 }
 
+.popup .pHeader {
+	position: relative;
+	width: 100%;
+}
+.popup .pContent {
+	height: auto;
+	position: relative;
+	height: auto !important;
+	max-height: 100% !important;
+}
+.popup .pFooter {
+	position: relative;
+	bottom: 0px;
+}
+
 
 
 
@@ -2085,6 +2112,7 @@ body {
 /* 	background: #f2f2f2; */
 }
 body.stop-scrolling {
+	position: relative;
 	overflow: hidden;
 }
 div.wrapper {

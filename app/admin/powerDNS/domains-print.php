@@ -65,11 +65,13 @@ if ($_GET['sPage']=="search" && strlen(@$_POST['domain-filter'])>0) {
 <h4><?php print $title; ?></h4><hr>
 
 <!-- Back -->
-<?php if ($domains===false && isset($_POST['domain-filter'])) { ?>
-<a class='btn btn-sm btn-default btn-default' style="margin-bottom:10px;margin-top: 25px;" href="<?php print create_link ("administration", "powerDNS", $_GET['subnetId']); ?>"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
-<?php } ?>
-<!-- Add new -->
-<button class='btn btn-sm btn-default btn-success editDomain' style="margin-bottom:10px;margin-top: 25px;" data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain'); ?></button>
+<div class="btn-group" style="margin-bottom:10px;margin-top: 10px;">
+    <?php if ($domains===false && isset($_POST['domain-filter'])) { ?>
+    <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link ("administration", "powerDNS", $_GET['subnetId']); ?>"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
+    <?php } ?>
+    <!-- Add new -->
+    <button class='btn btn-sm btn-default btn-success editDomain' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain'); ?></button>
+</div>
 <br>
 
 

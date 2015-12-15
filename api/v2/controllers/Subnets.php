@@ -10,9 +10,6 @@ class Subnets_controller extends Common_api_functions {
 	/* public variables */
 	public $_params;
 
-	/* protected variables */
-	protected $valid_keys;
-
 	/* object holders */
 	protected $Database;		// Database object
 	protected $Response;		// Response handler
@@ -420,7 +417,7 @@ class Subnets_controller extends Common_api_functions {
 			$addresses = $this->Addresses->fetch_subnet_addresses ($this->_params->id);
 		}
 		// calculate
-		$subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet );		//Calculate free/used etc
+		$subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet, $subnet->isFull );		//Calculate free/used etc
 
 		# return
 		return $subnet_usage;

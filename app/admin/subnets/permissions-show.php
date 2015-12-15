@@ -29,6 +29,31 @@ $subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
 ?>
 
 
+<script type="text/javascript">
+$(document).ready(function() {
+/* bootstrap switch */
+var switch_options = {
+	onText: "Yes",
+	offText: "No",
+    onColor: 'default',
+    offColor: 'default',
+    size: "mini"
+};
+
+$(".input-switch").bootstrapSwitch(switch_options);
+
+$('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
+	// get state from both
+	var state = ($(".input-switch").bootstrapSwitch('state'));
+	// change
+	if (state==true)	{ $("tr.warning2").removeClass("hidden"); }
+	else            	{ $("tr.warning2").addClass("hidden"); }
+});
+});
+</script>
+
+
+
 <!-- header -->
 <div class="pHeader"><?php print $subnet->isFolder==1 ? _('Manage folder permissions') : _('Manage subnet permissions'); ?></div>
 
@@ -41,7 +66,7 @@ $subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
 	<hr>
 
 	<form id="editSubnetPermissions">
-	<table class="editSubnetPermissions table table-noborder table-condensed table-hover">
+	<table class="editSubnetPermissions table table-noborder table-condensed">
 
 	<?php
 	# parse permissions
@@ -82,13 +107,29 @@ $subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
 	}
 	?>
 
+    <!-- set parameters to slave subnets -->
+    <?php if($Subnets->has_slaves($_POST['subnetId'])) { ?>
+    <tr>
+        <td colspan="2" class="hr"><hr></td>
+    </tr>
+    <tr>
+        <td><?php print _('Propagate changes'); ?></td>
+        <td>
+            <input type="checkbox" name="set_inheritance" class="input-switch" value="Yes" checked="checked">
+        </td>
+    </tr>
+    <tr class="warning2">
+        <td colspan="2">
+        <?php $Result->show("info", _('Permissions for all nested subnets will be overridden')."!", false); ?>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2" class="hr"><hr></td>
+    </tr>
+    <?php } ?>
+
     </table>
     </form>
-
-    <?php
-    # print warning if slaves exist
-    if($Subnets->has_slaves($_POST['subnetId'])) { $Result->show("info", _('Permissions for all nested subnets will be overridden')."!", false); }
-    ?>
 
 </div>
 

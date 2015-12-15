@@ -1,8 +1,8 @@
-== 1.19.020
+== 1.19.045
 
 	New features:
 	------------
-	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius, NetIQ);
+	+ Added multiple simultaneous authentication methods (Apache, AD, LDAP, Radius, NetIQ);
 	+ Added fping scanning support;
 	+ Added selectable scanning type (ping/pear/fping);
 	+ Added L2 domains;
@@ -27,7 +27,7 @@
 	+ Added Scan agents to scan subnets remotely;
 	+ Added firewall zone mappings and module;
 	+ Added per-subnet DNS resolvers;
-	+ BASE auto-detect;
+	+ Added option to mark subnet as utilized;
 
 	Enhancements:
 	----------------------------
@@ -51,6 +51,7 @@
 	+ Added auto-suggest for possible slave subnets;
 	+ SSL option for MySQL connections;
 	+ Enum custom field support;
+	+ Added password reset script;
 
 	Security Fixes:
 	----------------------------

@@ -31,7 +31,7 @@ include 'import-vlan-check.php';
 
 print '<h4>'._("Uploaded data").'</h4><hr>';
 print _("The entries marked with ")."<i class='fa ".$icons['add']."'></i>, "._("will be added,
-	the ones marked with ")."<i class='fa ".$icons['update']."'></i>, "._("will be updated
+	the ones marked with ")."<i class='fa ".$icons['edit']."'></i>, "._("will be updated
 	and the ones marked with ")."<i class='fa ".$icons['skip']."'></i> "._("will be skipped.");
 
 print "<b>"._("Summary: ")."</b>".($counters['add'] > 0 ? $counters['add'] : "no")._(" new entries.
@@ -58,7 +58,7 @@ print "</tbody></table><br>";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default hidePopups" id="dataImportSubmit" data-type="vlan" disabled><i class="fa fa-download"></i> <?php print _('Import'); ?></button>
+		<button class="btn btn-sm btn-default" id="dataImportSubmit" data-type="vlan" disabled><i class="fa fa-download"></i> <?php print _('Import'); ?></button>
 	</div>
 </div>
 

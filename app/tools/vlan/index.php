@@ -13,8 +13,12 @@ $vlan_domains = $Tools->fetch_all_objects("vlanDomains", "id");
 # set default domain
 if(sizeof($vlan_domains)==1) { $_GET['subnetId'] = 1; }
 
+# search vlan requested
+if(@$_GET['subnetId']=="all")									{ include("domain-vlans-all.php"); }
 # vlan requested
-if(isset($_GET['sPage']))										{ include("vlan-details.php"); }
+elseif(isset($_GET['sPage']))									{ include("vlan-details.php"); }
+# print all domains
+elseif(@$_GET['subnetId']=="all") 								{ include("domain-vlans-all.php"); }
 # we have more domains
 elseif(sizeof($vlan_domains)>1 && !isset($_GET['subnetId'])) 	{ include("domains.php"); }
 # only 1 domain, print vlans

@@ -44,15 +44,27 @@ else {
 # we are editing or deleting existing subnet, get old details
 if ($_POST['action'] != "add") {
     $subnet_old_details = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
+	# false id
+	if (sizeof($subnet_old_details)==0) 	{ $Result->show("danger", _("Invalid subnetId"), true, true); }
 }
 # we are adding new subnet
 else {
-	# for selecting master subnet if added from subnet details!
+	# for selecting master subnet if added from subnet details and slave inheritance!
 	if(strlen($_POST['subnetId']) > 0) {
     	$subnet_old_temp = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
-    	$subnet_old_details['masterSubnetId'] 	= @$subnet_old_temp['id'];			// same master subnet ID for nested
-    	$subnet_old_details['vlanId'] 		 	= @$subnet_old_temp['vlanId'];		// same default vlan for nested
-    	$subnet_old_details['vrfId'] 		 	= @$subnet_old_temp['vrfId'];		// same default vrf for nested
+    	$subnet_old_details['masterSubnetId'] 	= @$subnet_old_temp['id'];                // same master subnet ID for nested
+    	// slave subnet inheritance
+        $subnet_old_details['vlanId'] 		 	= @$subnet_old_temp['vlanId'];            // inherit vlanId
+    	$subnet_old_details['vrfId'] 		 	= @$subnet_old_temp['vrfId'];             // inherit vrfId
+    	$subnet_old_details['allowRequests'] 	= @$subnet_old_temp['allowRequests'];     // inherit requests
+    	$subnet_old_details['showName'] 	    = @$subnet_old_temp['showName'];          // inherit show name
+    	$subnet_old_details['device'] 	        = @$subnet_old_temp['device'];            // inherit device
+    	$subnet_old_details['permissions'] 	    = @$subnet_old_temp['permissions'];       // inherit permissions
+    	$subnet_old_details['scanAgent'] 	    = @$subnet_old_temp['scanAgent'];         // inherit scanAgent
+    	$subnet_old_details['pingSubnet'] 	    = @$subnet_old_temp['pingSubnet'];        // inherit pingSubnet
+    	$subnet_old_details['discoverSubnet']   = @$subnet_old_temp['discoverSubnet'];    // inherit discovery
+    	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
+
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
@@ -159,8 +171,8 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 
         </td>
         <td class="info2">
-        	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopupMasks"><i class="fa fa-th-large"></i></button>
-        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE database'); ?>'><i class="fa fa-refresh"></i></button>
+        	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopup2"><i class="fa fa-th-large"></i></button>
+        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
         	<?php print _('Enter subnet in CIDR format'); ?>
         </td>
     </tr>
@@ -218,7 +230,7 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 					foreach($devices as $device) {
 						//check if permitted in this section!
 						$sections = explode(";", $device->sections);
-						if(in_array($subnet_old_details['sectionId'], $sections)) {
+						if(in_array($_POST['sectionId'], $sections)) {
 							//if same
 							if($device->id == @$subnet_old_details['device']) 	{ print '<option value="'. $device->id .'" selected>'. $device->hostname .'</option>'. "\n"; }
 							else 												{ print '<option value="'. $device->id .'">'. $device->hostname .'</option>'. "\n";			 }
@@ -275,8 +287,11 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	        foreach($vrfs as $vrf) {
 				//cast
 				$vrf = (array) $vrf;
-	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'. $vrf['name'] .'</option>'; }
-	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'. $vrf['name'] .'</option>'; }
+				// set description if present
+				$vrf['description'] = strlen($vrf['description'])>0 ? " ($vrf[description])" : "";
+
+	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'.$vrf['name'].$vrf['description'].'</option>'; }
+	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'.$vrf['name'].$vrf['description'].'</option>'; }
 	        }
         }
 
@@ -291,6 +306,23 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	}
 
 	?>
+
+	<?php if($_POST['action']!="delete") { ?>
+	<!-- mark full -->
+    <tr>
+	    <td colspan="3"><hr></td>
+    </tr>
+	<tr>
+        <td class="middle"><?php print _('Mark as full'); ?></td>
+        <td>
+            <?php $checked = @$subnet_old_details['isFull']==1 ? "checked": ""; ?>
+            <input type="checkbox" name="isFull" class="input-switch" value="1" <?php print $checked; ?>>
+        </td>
+        <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
+    </tr>
+
+	<?php } ?>
+
 	<?php if($_POST['action']=="edit") { ?>
 	<!-- resize / split -->
     <tr>
@@ -525,6 +557,20 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	    print "	<td colspan='3' class='hr'><hr></td>";
 	    print "</tr>";
     ?>
+
+    <!-- set parameters to slave subnets -->
+    <?php if($slaves && $_POST['action']=="edit") { ?>
+    <tr>
+        <td><?php print _('Propagate changes'); ?></td>
+        <td colspan="2">
+            <input type="checkbox" name="set_inheritance" class="input-switch" value="Yes">
+            <span class="text-muted"><?php print _("Apply changes to underlying subnets"); ?></span>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="3" class="hr"><hr></td>
+    </tr>
+    <?php } ?>
 
     </table>
     </form>

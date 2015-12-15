@@ -27,7 +27,8 @@ if($permission < 2) 			   $Result->show("danger", _('You cannot write to this su
 is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # set filetype
-$filetype = end(explode(".", $_POST['filetype']));
+$filetype = explode(".", $_POST['filetype']);
+$filetype = end($filetype);
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
@@ -128,6 +129,14 @@ foreach($outFile as $k=>$line) {
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
+        // custom fields
+        $currIndex = 8;
+        if(sizeof($custom_address_fields) > 0) {
+        	foreach($custom_address_fields as $field) {
+            	$currIndex++;
+        		$address_insert[$field['name']] = $lineArr[$currIndex];
+        	}
+        }
 
 		// insert
 		if($Addresses->modify_address ($address_insert)===false)	{ $errors++; }

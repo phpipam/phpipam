@@ -86,7 +86,7 @@ else {
 	<script type="text/javascript" src="js/login.js"></script>
 	<?php } ?>
 <!-- 	<script type="text/javascript" src="js/magic-1.2.min.js"></script> -->
-	<script type="text/javascript" src="js/magic-1.19.js"></script>
+	<script type="text/javascript" src="js/magic-1.20.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
@@ -114,12 +114,20 @@ else {
 </div>
 
 <!-- Popups -->
-<div id="popupOverlay"></div>
-<div id="popup" class="popup popup_w400"></div>
-<div id="popup" class="popup popup_w500"></div>
-<div id="popup" class="popup popup_w700"></div>
-<div id="popup" class="popup popup_wmasks"></div>
-<div id="popup" class="popup popup_max"></div>
+<div id="popupOverlay" class="popupOverlay">
+	<div id="popup" class="popup popup_w400"></div>
+	<div id="popup" class="popup popup_w500"></div>
+	<div id="popup" class="popup popup_w700"></div>
+	<div id="popup" class="popup popup_wmasks"></div>
+	<div id="popup" class="popup popup_max"></div>
+</div>
+<div id="popupOverlay2">
+	<div id="popup" class="popup popup_w400"></div>
+	<div id="popup" class="popup popup_w500"></div>
+	<div id="popup" class="popup popup_w700"></div>
+	<div id="popup" class="popup popup_wmasks"></div>
+	<div id="popup" class="popup popup_max"></div>
+</div>
 
 <!-- loader -->
 <div class="loading"><?php print _('Loading');?>...<br><i class="fa fa-spinner fa-spin"></i></div>

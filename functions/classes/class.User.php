@@ -345,7 +345,52 @@ class User extends Common_functions {
 		}
 	}
 
+	/**
+	 *	Check if migration of LDAP settings is required
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function migrate_ldap_settings () {
 
+		# fetch LDAP settings
+		$ldaps = $this->Database->getObjectsQuery("select * from usersAuthMethod where type = 'LDAP'");
+
+		foreach ($ldaps as $ldapobj) {
+
+			$ldap = json_decode($ldapobj->params);
+
+			if (!property_exists($ldap, 'ldap_security')) {
+				$ldap->ldap_security = 'none';
+			}
+
+			if (property_exists($ldap, 'use_ssl')) {
+
+				if ($ldap->use_ssl == '1') {
+					$ldap->ldap_security = 'ssl';
+				}
+				unset($ldap->use_ssl);
+
+			}
+
+			if (property_exists($ldap, 'use_tls')) {
+
+				if ($ldap->use_tls == '1') {
+					$ldap->ldap_security = 'tls';
+				}
+				unset($ldap->use_tls);
+			}
+
+			if (!property_exists($ldap, 'uid_attr')) {
+				$ldap->uid_attr = 'uid';
+			}
+
+			$ldapobj->params = json_encode($ldap);
+
+			$this->Database->updateObject("usersAuthMethod", $ldapobj);
+
+		}
+	}
 
 
 
@@ -432,7 +477,7 @@ class User extends Common_functions {
 	    	if(sizeof($subnets)>0) {
 		    	# fetch details for each subnet
 				foreach($subnets as $id) {
-					$query = "select `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
+					$query = "select `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
 							  from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
 					try { $fsubnet = $this->Database->getObjectQuery($query, array($id)); }
@@ -572,7 +617,7 @@ class User extends Common_functions {
 
 		# authenticate based on name of auth method
 		if(!method_exists($this, $this->authmethodtype))	{
-			$this->Log->write ("User login", _('Error: Invalid authentication method'), 1 );
+			$this->Log->write ("User login", _('Error: Invalid authentication method'), 2 );
 			$this->Result->show("danger", _("Error: Invalid authentication method"), true);
 		}
 		else {
@@ -602,7 +647,7 @@ class User extends Common_functions {
 			# admin?
 			if($user->role == "Administrator")	{ $this->isadmin = true; }
 
-			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 1, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
+			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
 			else 					{ $this->user = $user; }
 		}
 	}
@@ -690,9 +735,48 @@ class User extends Common_functions {
 			# add blocked count
 			$this->block_ip ();
 
-			$this->Log->write( "User login", "Invalid username or password", 1, $username );
-			$this->Result->show("danger", _("Invalid username or password"), true);
+			$this->Log->write( "User login", "Invalid username or password", 2, $username );
+
+			# apache
+			if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
+			else                                 { $this->Result->show("danger", _("Invalid username or password"), true); }
 		}
+	}
+
+	/**
+	 * HTTP REMOTE_USER authentication, the user is already authenticated
+	 * by the web server so just create the session
+	 *
+	 * @access private
+	 * @param mixed $username
+	 * @param mixed $password
+	 * @return void
+	 */
+	public function auth_http ($username, $password) {
+		# save to session
+		$this->write_session_parameters ();
+
+		$this->Result->show("success", _("Login successful"));
+		$this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0, $username );
+
+		# write last logintime
+		$this->update_login_time ();
+
+		# remove possible blocked IP
+		$this->block_remove_entry ();
+	}
+
+	/**
+	 * Shows login prompt for apache logins
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function show_http_login () {
+        header('WWW-Authenticate: Basic realm="phpIPAM authentication"');
+        header('HTTP/1.0 401 Unauthorized');
+        echo 'Authentication failed';
+        exit;
 	}
 
 	/**
@@ -721,8 +805,10 @@ class User extends Common_functions {
 			$dirparams['use_ssl'] = false;
 			$dirparams['use_tls'] = false;
 
-			if ($authparams['ldap_security'] == 'tls') 		{ $dirparams['use_tls'] = true; }
-			elseif ($authparams['ldap_security'] == 'ssl') 	{ $dirparams['use_ssl'] = true; }
+			// Support the pre-1.2 auth settings as well as the current version
+			// TODO: remove legacy support at some point
+			if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1) 		{ $dirparams['use_tls'] = true; }
+			elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1) 	{ $dirparams['use_ssl'] = true; }
 
 			if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
 				$dirparams['admin_username'] = $authparams['adminUsername'];
@@ -784,7 +870,7 @@ class User extends Common_functions {
 				# add blocked count
 				$this->block_ip();
 				$this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
-				$this->Result->show("danger", _("Invalid username or password " . $username . " " . $password), true);
+				$this->Result->show("danger", _("Invalid username or password " . $username ), true);
 
 			}
 		} catch (adLDAPException $e) {
@@ -846,6 +932,7 @@ class User extends Common_functions {
 	private function auth_NetIQ ($username, $password) {
 		$this->auth_AD ("cn=".$username, $password);
 	}
+
 	/**
 	 * Authenticates user on radius server
 	 *
@@ -954,6 +1041,20 @@ class User extends Common_functions {
 		elseif(CRYPT_BLOWFISH == 1)	{ return '$2y$'.str_pad(rand(4,31),2,0, STR_PAD_LEFT).'$'; }
 		elseif(CRYPT_MD5 == 1)		{ return '$5$rounds=3000$'; }
 		else						{ $this->Result->show("danger", _("No crypt types supported"), true); }
+	}
+
+	/**
+	 * Returns crypt type used to encrypt password
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function return_crypt_type () {
+		if(CRYPT_SHA512 == 1)		{ return 'CRYPT_SHA512'; }
+		elseif(CRYPT_SHA256 == 1)	{ return 'CRYPT_SHA256'; }
+		elseif(CRYPT_BLOWFISH == 1)	{ return 'CRYPT_BLOWFISH'; }
+		elseif(CRYPT_MD5 == 1)		{ return 'CRYPT_MD5'; }
+		else						{ return "No crypt types supported"; }
 	}
 
 	/**

@@ -11,9 +11,6 @@ class Vrfs_controller extends Common_api_functions {
 	/* public variables */
 	public $_params;
 
-	/* protected variables */
-	protected $valid_keys;
-
 	/* object holders */
 	protected $Database;			// Database object
 	protected $Sections;			// Sections object

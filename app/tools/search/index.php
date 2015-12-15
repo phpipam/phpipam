@@ -6,7 +6,7 @@
 $User->check_user_session();
 
 # get posted search term
-if(@$_GET['ip']) { $searchTerm = $_GET['ip']; }
+if(@$_GET['ip']) { $searchTerm = htmlspecialchars($_GET['ip']); }
 else			 { $searchTerm = ""; }
 
 ?>

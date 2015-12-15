@@ -10,7 +10,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 $PowerDNS 	= new PowerDNS ($Database);
@@ -36,10 +36,25 @@ else {
 	// we provide record hostname and strip domain from it
 	if (!is_numeric($_POST['domain_id']) && !is_numeric($_POST['id'])) {
 		// fetch all domains
-		foreach($PowerDNS->fetch_all_domains () as $domain_s) {
-			if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
-				$_POST['domain_id'] = $domain_s->id;
-				break;
+		$all_domains = $PowerDNS->fetch_all_domains ();
+		if ($all_domains!==false) {
+			foreach($all_domains as $dk=>$domain_s) {
+				// loop through and find all matches
+				if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
+					// check best match to avoid for example a.example.net.nz1 added to example.net.nz
+					if (substr($_POST['domain_id'], -strlen($domain_s->name)) === $domain_s->name) {
+						$matches[$dk] = $domain_s;
+					}
+				}
+			}
+			// match found ?
+			if (isset($matches)) {
+				foreach($matches as $k=>$m){
+					$length = strlen($m->name);
+					if($length > $max){ $max = $length; $element_id = $k; }
+				}
+				// save longest match id
+				$_POST['domain_id'] = $all_domains[$element_id]->id;
 			}
 		}
 		// die if not existing
@@ -170,6 +185,9 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+		<?php if($_POST['action']!=="delete") { ?>
+		<button class="btn btn-sm btn-default btn-danger" id="editRecordSubmitDelete"><i class="fa fa-trash-o"></i> <?php print _("Delete"); ?></button>
+		<?php } ?>
 		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
 	</div>
 	<!-- result -->
