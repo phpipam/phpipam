@@ -335,7 +335,7 @@ class Common_functions  {
 	public function create_links ($text) {
 		// regular expression
 		//$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-		$reg_exUrl = "#(http|https|ftp|ftps)://\S+[^\s.,>)\];'\"!?]#";
+		$reg_exUrl = "#(http|https|ftp|ftps|telnet|ssh)://\S+[^\s.,>)\];'\"!?]#";
 
 		// Check if there is a url in the text
 		if(preg_match($reg_exUrl, $text, $url)) {
