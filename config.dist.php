@@ -50,4 +50,35 @@ $phpsessname = "phpipam";
 if(!defined('BASE'))
 define('BASE', "/");
 
+/*  proxy connection details
+ ******************************/
+$proxy_enabled  = False;                                  # Enable/Disable usage of the Proxy server
+$proxy_server   = "myproxy.something.com";                # Proxy server FQDN or IP
+$proxy_port     = "8080";                                 # Proxy server port
+$proxy_user     = "USERNAME";                             # Proxy Username
+$proxy_pass     = "PASSWORD";                             # Proxy Password
+$proxy_use_auth = False;                                  # Enable/Disable Proxy authentication
+
+/**
+ * proxy to use for every internet access like update check
+ */
+$proxy_auth     = base64_encode("$proxy_user:$proxy_pass");
+
+if ($proxy_enabled == True && proxy_use_auth == False)
+{
+ stream_context_set_default(['http'=>['proxy'=>'tcp://$proxy_server:$proxy_port']]);
+}
+else if ($proxy_enabled == True && proxy_use_auth == True)
+{
+ stream_context_set_default(
+  array(
+   'http' => array(
+    'proxy' => "tcp://$proxy_server:$proxy_port",
+    'request_fulluri' => true,
+    'header' => "Proxy-Authorization: Basic $proxy_auth"
+   )
+  )
+ );
+}
+
 ?>
