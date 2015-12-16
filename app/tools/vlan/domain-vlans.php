@@ -149,7 +149,7 @@ else {
 					   		if(!in_array($field['name'], $hidden_fields)) {
 
 								// create links
-								$v->$field['name'] = $Result->create_links ($v->$field['name']);
+								$v->$field['name'] = $Result->create_links ($v->$field['name'],$field['type']);
 
 								print "<td class='hidden-xs hidden-sm hidden-md'>";
 								//booleans
