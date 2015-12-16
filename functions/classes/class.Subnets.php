@@ -2567,7 +2567,7 @@ class Subnets extends Common_functions {
 		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
 
 		# folders
-		if(sizeof(@$children_folders)>0) {
+		if(sizeof(@$children_folders)>0 || $isFolder) {
 			$html[] = "<optgroup label='"._("Folders")."'>";
 
     		# root subnet
