@@ -44,7 +44,7 @@ function calculateIpCalcResult ($cidr)
     /* IPv4 */
     if ($type == "IPv4")
     {
-        $net = Net_IPv4::parseAddress( $cidr );
+        $net = (new Net_IPv4)->parseAddress( $cidr );
 
         //set ip address type
         $out['Type']            = 'IPv4';
