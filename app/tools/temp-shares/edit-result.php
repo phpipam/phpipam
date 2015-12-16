@@ -6,7 +6,6 @@
 
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
-require( dirname(__FILE__) . '/../../../functions/classes/class.Mail.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -85,7 +84,7 @@ if(strlen($_POST['email'])>0) {
 	$phpipam_mail->initialize_mailer();
 
 	// generate url
-	$url = createURL().rtrim(BASE, "/").create_link("temp_share",$_POST['code']);
+	$url = $Result->createURL().create_link("temp_share",$_POST['code']);
 
 	// set subject
 	$subject	= "New ipam share created";
@@ -114,7 +113,7 @@ if(strlen($_POST['email'])>0) {
 	try {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		foreach(explode(",", $_POST['email']) as $r) {
-		$phpipam_mail->Php_mailer->addAddress(trim($r));
+		$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
 		}
 		$phpipam_mail->Php_mailer->Subject = $subject;
 		$phpipam_mail->Php_mailer->msgHTML($content);

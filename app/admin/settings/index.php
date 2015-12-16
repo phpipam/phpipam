@@ -1,17 +1,3 @@
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
-<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	/* bootstrap switch */
-	var switch_options = {
-	    onColor: 'default',
-	    offColor: 'default',
-	    size: "mini"
-	};
-	$(".input-switch").bootstrapSwitch(switch_options);
-});
-</script>
-
 <?php
 
 /**
@@ -27,6 +13,18 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 # set settings
 $settings = (array) $User->settings;
 ?>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
 
 <!-- title -->
 <h4><?php print _('phpIPAM Server settings'); ?></h4>
@@ -65,6 +63,14 @@ $settings = (array) $User->settings;
 		<input type="text" class="form-control input-sm" name="siteURL" value="<?php print $settings['siteURL']; ?>">
 	</td>
 	<td class="info2"><?php print _('Set site URL'); ?></td>
+</tr>
+<!-- Login header text -->
+<tr>
+        <td class="title"><?php print _('Login text'); ?></td>
+        <td>
+                <input type="text" class="form-control input-sm" name="siteLoginText" value="<?php print $settings['siteLoginText']; ?>">
+        </td>
+        <td class="info2"><?php print _("Show text above 'username' field on login page (default empty)"); ?></td>
 </tr>
 <!-- prettyLinks -->
 <tr>
@@ -205,6 +211,28 @@ $settings = (array) $User->settings;
 	</td>
 </tr>
 
+<!-- powerdns -->
+<tr>
+	<td class="title"><?php print _('Enable PowerDNS'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enablePowerDNS" <?php if($settings['enablePowerDNS'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable PowerDNS module'); ?>
+	</td>
+</tr>
+
+<!-- firewall zone management -->
+<tr>
+	<td class="title"><?php print _('Enable Firewall Zones'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableFirewallZones" <?php if($settings['enableFirewallZones'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable firewall zone management module'); ?>
+	</td>
+</tr>
+
 <!-- DNS resolving -->
 <tr>
 	<td class="title"><?php print _('Resolve DNS names'); ?></td>
@@ -235,6 +263,27 @@ $settings = (array) $User->settings;
 	</td>
 	<td class="info2">
 		<?php print _('Enable changelog module'); ?>
+	</td>
+</tr>
+
+<!-- Log location -->
+<tr>
+	<td class="title"><?php print _('Syslog'); ?></td>
+	<td>
+		<select name="log" class="form-control input-sm input-w-auto">
+		<?php
+		$types = array("Database"=>"Database", "syslog"=>"Syslog", "both"=>"Syslog and local Database");
+		//default
+		foreach($types as $k=>$d) {
+			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
+			else						{ print "<option value='$k' 				   >$d</option>"; }
+		}
+		?>
+		</select>
+
+	</td>
+	<td class="info2">
+		<?php print _('Set where to send system logs'); ?>
 	</td>
 </tr>
 
@@ -351,7 +400,7 @@ $settings = (array) $User->settings;
 				"21"=>"/21 (2046)",
 				"22"=>"/22 (1024)",
 				"23"=>"/23 (512)",
-				"24"=>"/24 (255)"
+				"24"=>"/24 (256)"
 			);
 
 			foreach($opts as $key=>$line) {
@@ -390,6 +439,29 @@ $settings = (array) $User->settings;
 	</td>
 	<td class="info2">
 		<?php print _('How to order display of subnets'); ?>
+	</td>
+</tr>
+
+<!-- Subnet View -->
+<tr>
+	<td class="title"><?php print _('Subnet Display'); ?></td>
+	<td>
+		<select name="subnetView" class="form-control input-sm input-w-auto">
+			<?php
+			$opts = array(
+				"0"=>_("Subnet Network Only"),
+				"1"=>"Description Only",
+				"2"=>"Subnet Network and Description"
+			);
+			foreach($opts as $key=>$line) {
+				if($settings['subnetView'] == $key) { print "<option value='$key' selected>$line</option>"; }
+				else 								{ print "<option value='$key'>$line</option>"; }
+			}
+			?>
+		</select>
+	</td>
+	<td class="info2">
+		<?php print _('Select which view you would prefer on the menu'); ?>
 	</td>
 </tr>
 

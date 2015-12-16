@@ -32,6 +32,13 @@ if($User->settings->vlanDuplicate==0 && $_POST['action']=="add") {
 	}
 }
 
+// if unique required
+if (isset($_POST['unique'])) {
+	if ($_POST['unique']=="on") {
+		if ($Tools->fetch_object ("vlans", "number", $_POST['number'])!==false) { $Result->show("danger", _("VLAN already exists in another domain!"), true); }
+	}
+}
+
 //if number too high
 if($_POST['number']>$User->settings->vlanMax && $_POST['action']!="delete")	{ $Result->show("danger", _('Highest possible VLAN number is ').$settings['vlanMax'].'!', true); }
 if($_POST['action']=="add") {

@@ -27,7 +27,6 @@ class phpipam_mail {
 	/**
 	 * object holders
 	 */
-	protected $Result;						//for Result printing
 	public $Php_mailer;						//for Php mailer object
 
 
@@ -40,15 +39,11 @@ class phpipam_mail {
 	 *
 	 * @access public
 	 * @param mixed $settings
-	 * @return void
 	 */
 	public function __construct ($settings, $mail_settings) {
 		# set settings and mailsettings
 		$this->settings = $settings;
 		$this->mail_settings= $mail_settings;
-
-		# initialize Result
-		$this->Result = new Result ();
 	}
 
 
@@ -61,13 +56,12 @@ class phpipam_mail {
 	 */
 	public function initialize_mailer () {
 		# we need phpmailer
-		require( dirname(__FILE__) . '/../phpMailer/class.phpmailer.php');
+		require_once( dirname(__FILE__) . '/../PHPMailer/PHPMailerAutoload.php');
 
 		# initialize object
 		$this->Php_mailer = new PHPMailer(true);			//localhost by default
 		$this->Php_mailer->CharSet="UTF-8";					//set utf8
-		$this->Php_mailer->SMTPDebug = 2;					//debugging
-		$this->Php_mailer->Debugoutput = 'html';			//debug type
+		$this->Php_mailer->SMTPDebug = 0;					//default no debugging
 
 		# localhost or smtp?
 		if($this->mail_settings->mtype=="smtp") 	{ $this->set_smtp(); }
@@ -88,6 +82,8 @@ class phpipam_mail {
 		//server
 		$this->Php_mailer->Host = $this->mail_settings->mserver;
 		$this->Php_mailer->Port = $this->mail_settings->mport;
+		//permit self-signed certs and dont verify certs
+		$this->Php_mailer->SMTPOptions = array("ssl"=>array("verify_peer"=>false, "verify_peer_name"=>false, "allow_self_signed"=>true));
 		//set smtp auth
 		$this->set_smtp_auth();
 	}
@@ -121,6 +117,20 @@ class phpipam_mail {
 			$this->mail_settings->$k = $s;
 		}
 	}
+
+	/**
+	 * Resets SMTP debugging
+	 *
+	 * @access public
+	 * @param int $level (default: 2)
+	 * @return void
+	 */
+	public function set_debugging ($level = 2) {
+		$this->Php_mailer->SMTPDebug = $level==1 ? 1 : 2;
+		// output
+		$this->Php_mailer->Debugoutput = 'html';
+	}
+
 
 
 
@@ -167,6 +177,7 @@ class phpipam_mail {
 		$html[] = "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>";
 		$html[] = "<html><head>";
 		$html[] = "<meta http-equiv='Content-Type' content='text/html; charset=utf-8'>";
+		$html[] = "<meta name='viewport' content='width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=no'>";
 		$html[] = "</head>";
 		# return
 		return implode("\n", $html);

@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # get clog entries for current subnet
-$clogs = $Tools->fetch_changlog_entries("ip_addr", $address['id']);
+$clogs = $Log->fetch_changlog_entries("ip_addr", $address['id']);
 
 # permissions
 $permission = $Subnets->check_permission ($User->user, $_GET['subnetId']);

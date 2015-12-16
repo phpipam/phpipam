@@ -46,9 +46,12 @@ else {
 		$m=0;
 		if($permission > 0) {
 
+            # add full information
+            $fullinfo = $subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 			print "<tr>";
 		    print "	<td class='small description'><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[description]</a></td>";
-		    print "	<td><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[ip]/$subnet[mask]</a></td>";
+		    print "	<td><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[ip]/$subnet[mask] $fullinfo</a></td>";
 
 			# host check
 			if($subnet['pingSubnet'] == 1) 				{ print '<td class="allowRequests small hidden-xs hidden-sm">'._('enabled').'</td>'; }
@@ -72,7 +75,7 @@ else {
 			}
 
 			# print usage
-			$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $subnet['mask'], $subnet['subnet'] );
+			$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );
 		    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
 		    print '	<td class="small hidden-xs hidden-sm">'. $calculate['freehosts_percent'] .'</td>';
 

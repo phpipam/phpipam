@@ -23,14 +23,24 @@ $User->check_user_session();
 # fetch search term
 $search_term = $_REQUEST['search_term'];
 
-# check if mac address or ip address
-if(strlen($search_term)==17) {
-	if(substr_count($search_term, ":") == 5) 												{ $type = "mac"; }	//count : -> must be 5
+//initialize Pear IPv6 object
+require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv6.php' );
+$Net_IPv6 = new Net_IPv6();
+
+// ipv6 ?
+if ($Net_IPv6->checkIPv6($search_term)!=false) {
+	$type = "IPv6";
 }
-else if(strlen($search_term) == 12) {
-	if( (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0) ) 	{ $type = "mac"; }	//no dots or : -> mac without :
+// check if mac address or ip address
+elseif(strlen($search_term)==17 && substr_count($search_term, ":") == 5) {
+    $type = "mac"; //count : -> must be 5
 }
-else 																						{ $type = $Addresses->identify_address( $search_term ); }		# identify address type
+else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0)){
+    $type = "mac"; //no dots or : -> mac without :
+}
+else {
+    $type = $Addresses->identify_address( $search_term ); //identify address type
+}
 
 # reformat if IP address for search
 if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
@@ -55,7 +65,7 @@ $colSpan 	= $fieldSize + $mySize + 3;
 # search addresses
 if(@$_REQUEST['addresses']=="on") 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low']); }
 # search subnets
-if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low']); }
+if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
 # search vlans
 if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term); }
 

@@ -6,8 +6,6 @@
 
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
-require( dirname(__FILE__) . '/../../../functions/classes/class.Mail.php');
-
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,6 +19,10 @@ $User->check_user_session();
 # fetch mailer settings
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
+# verify admin mail and name
+if (strlen($mail_settings->mAdminMail)==0 || strlen($mail_settings->mAdminName)==0) {
+	$Result->show("danger", _("Mail settings are missing. Please set admin mail and name!"), true);
+}
 
 
 # initialize mailer
@@ -29,6 +31,8 @@ $phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
 $phpipam_mail->override_settings($_POST);
 //create object
 $phpipam_mail->initialize_mailer();
+//debugging
+$phpipam_mail->set_debugging(2);
 
 
 # set content

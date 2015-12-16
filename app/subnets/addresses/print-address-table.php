@@ -53,7 +53,7 @@ else {
 
 	# fetch all addresses - sorted
 	if($slaves) {
-		$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false, $sort['field'], $sort['direction']);
+		$addresses = (array) $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false, $sort['field'], $sort['direction']);
 		$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
 	} else {
 		$addresses = $Addresses->fetch_subnet_addresses ($subnet['id'], $sort['field'], $sort['direction']);
@@ -83,9 +83,11 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
-$selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
-$selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
+$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+// if fw not set remove!
+if($User->settings->enableFirewallZones != 1) { unset($selected_ip_fields['firewallAddressObject']); }
+// set size
+$selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
 if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
 
 
@@ -97,22 +99,18 @@ $addresses_visual = $addresses;
 $Addresses->addresses_types_fetch();
 foreach($Addresses->address_types as $t) {
 	if($t['compress']=="Yes" && $User->user->compressOverride!="Uncompress") {
-		if(sizeof($addresses)>0) {
+		if(sizeof($addresses)>0 && $addresses!==false) {
 			$addresses = $Addresses->compress_address_ranges ($addresses, $t['id']);
 		}
 	}
 }
-
-# set colspan for output
-$colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
-$colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
-$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
 
 # remove custom fields if all are empty!
 foreach($custom_fields as $field) {
 	$sizeMyFields[$field['name']] = 0;				// default value
 	# check against each IP address
 	if($addresses!==false) {
+		$addresses = (array) $addresses;
 		foreach($addresses as $ip) {
 			$ip = (array) $ip;
 			if(strlen($ip[$field['name']]) > 0) {
@@ -122,13 +120,25 @@ foreach($custom_fields as $field) {
 		# unset if value == 0
 		if($sizeMyFields[$field['name']] == 0) {
 			unset($custom_fields[$field['name']]);
-
-			$colspan['empty']--;
-			$colspan['unused']--;						//unused  span -1
-			$colspan['dhcp']--;							//dhcp span -1
 		}
 	}
 }
+
+# hidden custom
+if(sizeof($custom_fields) > 0) {
+	foreach($custom_fields as $ck=>$myField) 	{
+		if(in_array($myField['name'], $hidden_cfields)) {
+			unset($custom_fields[$ck]);
+		}
+	}
+}
+
+# set colspan for output
+$colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
+$colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
+$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
+$colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
+$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp colspan negative fix
 
 /* output variables */
 
@@ -152,7 +162,7 @@ $statuses = explode(";", $User->settings->pingStatus);
 <h4 style="margin-top:40px;">
 <?php
 if(!$slaves)		{ print _("IP addresses in subnet "); }
-elseif(@$orphaned)	{ print "<p class='alert alert-warning'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span></p>"; }
+elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 # print page # if present
 if(sizeof($addresses)  > $page_limit)
@@ -182,6 +192,14 @@ if(sizeof($addresses)>$page_limit) { $Addresses->print_pagination ($_REQUEST['sP
 												  print "<th class='s_ipaddr'><a href='' data-id='ip_addr|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body' title='"._('Sort by IP address')."'>"._('IP address')." "; if($sort['field'] == "ip_addr") 	print $icon;  print "</a></th>";
 	# hostname - mandatory
 												  print "<th><a href='' data-id='dns_name|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by hostname')."'					>"._('Hostname')." "; 	if($sort['field'] == "dns_name") 	print $icon;  print "</a></th>";
+	# firewall address object - mandatory if enabled
+	if(in_array('firewallAddressObject', $selected_ip_fields)) {
+			# class
+			$Zones = new FirewallZones ($Database);
+			$zone = $Zones->get_zone_subnet_info ($subnet['id']);
+
+			if($zone) {							  print "<th><a href='' data-id='description|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by firewall address object')."'>"._('FW object')." "; if($sort['field'] == "firewallAddressObject") print $icon;  print "</a></th>"; }
+	}
 	# Description - mandatory
 												  print "<th><a href='' data-id='description|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body'  title='"._('Sort by description')."'			>"._('Description')." "; if($sort['field'] == "description") print $icon;  print "</a></th>";
 	# MAC address
@@ -198,9 +216,7 @@ if(sizeof($addresses)>$page_limit) { $Addresses->print_pagination ($_REQUEST['sP
 	# custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
-			if(!in_array($myField['name'], $hidden_cfields)) {
-				print "<th class='hidden-xs hidden-sm hidden-md'><a href='' data-id='$myField[name]|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name] ";  if($sort['field'] == $myField['name']) print $icon;  print "</a></th>";
-			}
+			print "<th class='hidden-xs hidden-sm hidden-md'><a href='' data-id='$myField[name]|$sort[directionNext]' class='sort' data-subnetId='$subnet[id]' rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name] ";  if($sort['field'] == $myField['name']) print $icon;  print "</a></th>";
 		}
 	}
 	?>
@@ -285,6 +301,9 @@ else {
 				    print 		$Addresses->address_type_format_tag($addresses[$n]->state);
 				    print "	</td>";
 					print "	<td>".$Addresses->address_type_index_to_type($addresses[$n]->state)." ("._("range").")</td>";
+	        		if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+	        			print "	<td class=fw'>".$addresses[$n]->firewallAddressObject."</td>";
+	        		}
 	        		print "	<td>".$addresses[$n]->description."</td>";
 	        		if($colspan['dhcp']!=0)
 	        		print "	<td colspan='$colspan[dhcp]' class='unused'></td>";
@@ -317,11 +336,59 @@ else {
 
 				    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_REQUEST['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr);
 				    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
-				    if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($addresses[$n]->state); }
+				    print $Addresses->address_type_format_tag($addresses[$n]->state);
 				    print "</td>";
 
+
+					# search for DNS records
+					if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+					# for ajax-loaded subnets
+					if(!isset($PowerDNS)) { $PowerDNS = new PowerDNS ($Database); }
+
+					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
+					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
+					unset($dns_records);
+					if ($records !== false || $ptr!==false) {
+						$dns_records[] = "<hr>";
+						$dns_records[] = "<ul class='submenu-dns'>";
+						if($records!==false) {
+							foreach ($records as $r) {
+								if($r->type!="SOA" && $r->type!="NS")
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
+							}
+						}
+						if($ptr!==false) {
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$ptr->id' data-domain_id='$ptr->domain_id'>$ptr->type</span> $ptr->name </li>";
+						}
+						$dns_records[] = "</ul>";
+						// if none ignore
+						$dns_records = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
+					} else {
+						$dns_records = "";
+					}
+					}
+					// disabled
+					else {
+						$dns_records = "";
+						$button = "";
+					}
+					// add button
+					if ($User->settings->enablePowerDNS==1) {
+					// add new button
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name) && ($User->isadmin || @$User->user->pdns=="Yes"))
+					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+					else
+					$button = "";
+					}
+
 				    # resolve dns name
-					$resolve = $DNS->resolve_address($addresses[$n]);	  	print "<td class='$resolve[class] hostname'>$resolve[name]</td>";
+				    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+																			{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
+
+					# print firewall address object - mandatory if enabled
+					if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+						                                                    { print "<td class='fwzone'>".$addresses[$n]->firewallAddressObject."</td>"; }
+					}
 
 					# print description - mandatory
 		        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
@@ -342,7 +409,7 @@ else {
 		        	if(in_array('switch', $selected_ip_fields)) {
 			        	# get device details
 			        	$device = (array) $Tools->fetch_device(null, $addresses[$n]->switch);
-																			  print "<td class='hidden-xs hidden-sm hidden-md'>".@$device['hostname']."</td>";
+																			  print "<td class='hidden-xs hidden-sm hidden-md'><a href='".create_link("tools","devices","hosts",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
 					}
 
 					# print port
@@ -358,7 +425,7 @@ else {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$addresses[$n]->$myField['name'] = create_links($addresses[$n]->$myField['name']);
+								$addresses[$n]->$myField['name'] = $Result->create_links($addresses[$n]->$myField['name']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
@@ -367,7 +434,7 @@ else {
 								}
 								//text
 								elseif($myField['type']=="text") {
-									if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+									if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->$myField['name'])."'>"; }
 									else											{ print ""; }
 								}
 								else {
@@ -401,9 +468,10 @@ else {
 					else
 					{
 						print "<a class='edit_ipaddress   btn btn-xs btn-default modIPaddr' data-action='edit'   data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' >															<i class='fa fa-gray fa-pencil'></i></a>";
-						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check avalibility')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
+						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
+						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$addresses[$n]->subnetId."' data-action='adr' data-ipid='".$addresses[$n]->id."' data-dnsname='".$addresses[$n]->dns_name."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
 						print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
 					}
 				}
@@ -420,8 +488,8 @@ else {
 					else
 					{
 						print "<a class='edit_ipaddress   btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>													<i class='fa fa-gray fa-pencil'></i></a>";
-						print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check avalibility')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
-						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+						print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
+						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>				<i class='fa fa-gray fa-envelope-o'></i></a>";
 						print "<a class='delete_ipaddress btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>														<i class='fa fa-gray fa-times'></i></a>";
 					}

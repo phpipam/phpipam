@@ -20,7 +20,8 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # we dont need any errors!
-//ini_set('display_errors', 0);
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 # fetch subnet details
 $subnet = (array) $Subnets->fetch_subnet (null, $_GET['subnetId']);
@@ -33,6 +34,7 @@ $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 # Create a workbook
 $filename = "phpipam_subnet_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //formatting headers
 $format_header =& $workbook->addFormat();
@@ -64,12 +66,12 @@ $format_top->setTop(1);
 
 
 // Create a worksheet
-//$worksheet =& $workbook->addWorksheet($subnet['description']);
-$worksheet_name = $subnet['description'];
-$worksheet_name = (strlen($worksheet_name) > 30) ? substr($worksheet_name,0,27).'...' : $worksheet_name;
+$worksheet_name = strlen($subnet['description']) > 30 ? substr($subnet['description'],0,27).'...' : $subnet['description'];
 $worksheet =& $workbook->addWorksheet($worksheet_name);
+$worksheet->setInputEncoding("utf-8");
 
 $lineCount = 0;
+$rowCount  = 0;
 
 # Write title - subnet details
 $worksheet->write($lineCount, $rowCount, $subnet['description'], $format_header );
@@ -78,8 +80,9 @@ $worksheet->write($lineCount, $rowCount, $Subnets->transform_address($subnet['su
 $lineCount++;
 
 # write VLAN details
-$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
+$vlan = $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 if($vlan!=false) {
+	$vlan = (array) $vlan;
 	$vlan_text = strlen($vlan['name'])>0 ? "vlan: $vlan[number] - $vlan[name]" : "vlan: $vlan[number]";
 
 	$worksheet->write($lineCount, $rowCount, $vlan_text, $format_vlan );
@@ -105,6 +108,10 @@ if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
 }
 if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
+	$rowCount++;
+}
+if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('fw object') ,$format_title);
 	$rowCount++;
 }
 if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
@@ -149,9 +156,15 @@ $lineCount++;
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
 $devices = $Tools->fetch_devices ();
-foreach($devices as $d) {
-	$devices_indexed[$d->id] = $d;
+if (sizeof($devices)>0) {
+	foreach($devices as $d) {
+		$devices_indexed[$d->id] = (object) $d;
+	}
 }
+//add blank
+$devices_indexed[0] = new StdClass ();
+$devices_indexed[0]->hostname = 0;
+
 //write all IP addresses
 foreach ($addresses as $ip) {
 	$ip = (array) $ip;
@@ -160,14 +173,14 @@ foreach ($addresses as $ip) {
 	$rowCount = 0;
 
 	//change switch ID to name
-	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0 ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
 
 	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);
 		$rowCount++;
 	}
 	if( (isset($_GET['state'])) && ($_GET['state'] == "on") ) {
-		if($ip_types[$ip['state']]['showtag']==1) {
+		if(@$ip_types[$ip['state']]['showtag']==1) {
 		$worksheet->write($lineCount, $rowCount, $ip_types[$ip['state']]['type']);
 		}
 		$rowCount++;
@@ -178,6 +191,10 @@ foreach ($addresses as $ip) {
 	}
 	if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['dns_name']);
+		$rowCount++;
+	}
+	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['firewallAddressObject']);
 		$rowCount++;
 	}
 	if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {

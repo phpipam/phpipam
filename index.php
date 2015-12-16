@@ -2,16 +2,14 @@
 ob_start();
 
 /* config */
-require('config.php');
+if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
+else 							{ require('config.php'); }
 
 /* site functions */
 require('functions/functions.php');
 
 # set default page
 if(!isset($_GET['page'])) { $_GET['page'] = "dashboard"; }
-
-# reset url for base
-$url = createURL ();
 
 # if not install fetch settings etc
 if($_GET['page']!="install" ) {
@@ -28,6 +26,10 @@ if($_GET['page']!="install" ) {
 	$Subnets	= new Subnets ($Database);
 	$Tools	    = new Tools ($Database);
 	$Addresses	= new Addresses ($Database);
+	$Log 		= new Logging ($Database);
+
+	# reset url for base
+	$url = $Result->createURL ();
 }
 
 /** include proper subpage **/
@@ -43,6 +45,11 @@ else {
 	# make upgrade and php build checks
 	include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 	include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
+	if($_GET['switch'] && $_SESSION['realipamusername'] && $_GET['switch'] == "back"){
+		$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
+		unset($_SESSION['realipamusername']);
+		print	'<script>window.location.href = "'.create_link(null).'";</script>';
+	}
 ?>
 <!DOCTYPE HTML>
 <html lang="en">
@@ -71,17 +78,18 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css">
 	<link rel="shortcut icon" type="image/png" href="css/images/favicon.png">
-
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
 	<!-- js -->
 	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="js/jclock.jquery.js"></script>
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/login.js"></script>
 	<?php } ?>
-<!-- 	<script type="text/javascript" src="js/magic-1.11.min.js"></script> -->
-	<script type="text/javascript" src="js/magic-1.15.js"></script>
+<!-- 	<script type="text/javascript" src="js/magic-1.2.min.js"></script> -->
+	<script type="text/javascript" src="js/magic-1.20.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
+	<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
@@ -106,12 +114,20 @@ else {
 </div>
 
 <!-- Popups -->
-<div id="popupOverlay"></div>
-<div id="popup" class="popup popup_w400"></div>
-<div id="popup" class="popup popup_w500"></div>
-<div id="popup" class="popup popup_w700"></div>
-<div id="popup" class="popup popup_wmasks"></div>
-<div id="popup" class="popup popup_max"></div>
+<div id="popupOverlay" class="popupOverlay">
+	<div id="popup" class="popup popup_w400"></div>
+	<div id="popup" class="popup popup_w500"></div>
+	<div id="popup" class="popup popup_w700"></div>
+	<div id="popup" class="popup popup_wmasks"></div>
+	<div id="popup" class="popup popup_max"></div>
+</div>
+<div id="popupOverlay2">
+	<div id="popup" class="popup popup_w400"></div>
+	<div id="popup" class="popup popup_w500"></div>
+	<div id="popup" class="popup popup_w700"></div>
+	<div id="popup" class="popup popup_wmasks"></div>
+	<div id="popup" class="popup popup_max"></div>
+</div>
 
 <!-- loader -->
 <div class="loading"><?php print _('Loading');?>...<br><i class="fa fa-spinner fa-spin"></i></div>

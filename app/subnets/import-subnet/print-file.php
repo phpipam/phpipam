@@ -18,7 +18,8 @@ $Result 	= new Result;
 $User->check_user_session();
 
 # set filetype
-$filetype = end(explode(".", $_POST['filetype']));
+$filetype = explode(".", $_POST['filetype']);
+$filetype = end($filetype);
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
@@ -27,7 +28,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 # CSV
 if (strtolower($filetype) == "csv") {
 	/* get file to string */
-	$outFile = file_get_contents('upload/import.csv') or die ($Result->show("danger", _('Cannot open upload/import.csv'), true));
+	$outFile = file_get_contents(dirname(__FILE__) . '/upload/import.csv') or die ($Result->show("danger", _('Cannot open upload/import.csv'), true));
 
 	/* format file */
 	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
@@ -37,7 +38,7 @@ if (strtolower($filetype) == "csv") {
 elseif(strtolower($filetype) == "xls") {
 	# get excel object
 	require_once('../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
-	$data = new Spreadsheet_Excel_Reader('upload/import.xls', false);
+	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/upload/import.xls', false);
 
 	//get number of rows
 	$numRows = $data->rowcount(0);

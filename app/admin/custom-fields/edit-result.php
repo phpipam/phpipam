@@ -34,7 +34,7 @@ else {
 	if(is_numeric(substr($_POST['name'], 0, 1))) 							{ $errors[] = _('Name must not start with number'); }
 
 	# only alphanumeric and _ are allowed
-	if(!preg_match('/^[a-zA-Z0-9.\_]+$/i', $_POST['name'])) 				{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
+	if(!preg_match('/^[a-zA-Z0-9 \_]+$/i', $_POST['name'])) 				{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
 
 	# required must have default value
 	if($_POST['NULL']=="NO" && strlen($_POST['fieldDefault'])==0)			{ $errors[] = _('Required fields must have default values'); }
@@ -53,7 +53,7 @@ else {
 	}
 	//number
 	elseif($_POST['fieldType']=="int") {
-		if(!is_numeric($_POST['fieldSize']))								{ $errors[] = _('Interer values must be numeric'); }
+		if(!is_numeric($_POST['fieldSize']))								{ $errors[] = _('Integer values must be numeric'); }
 
 	}
 }

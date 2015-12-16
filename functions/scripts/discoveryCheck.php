@@ -26,7 +26,6 @@
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Mail.php');
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -48,6 +47,10 @@ $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
 $send_mail = true;
 
+// set now for whole script
+$now     = time();
+$nowdate = date ("Y-m-d H:i:s");
+
 
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
@@ -68,16 +71,27 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 
 //first fetch all subnets to be scanned
-$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck ();
+$scan_subnets = $Subnets->fetch_all_subnets_for_discoveryCheck (1);
 //set addresses
-foreach($scan_subnets as $s) {
-	$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id);
-}
-//reindex
-foreach($addresses_tmp as $s_id=>$a) {
-	foreach($a as $ip) {
-		$addresses[] = array("subnetId"=>$s_id, "ip_addr"=>$ip);
-	}
+if ($scan_subnets!==false) {
+    // initial array
+    $addresses_tmp = array();
+    // loop
+    foreach($scan_subnets as $s) {
+    	// if subnet has slaves dont check it
+    	if ($Subnets->has_slaves ($s->id) === false) {
+    		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
+    	}
+    }
+
+    //reindex
+    if(sizeof($addresses_tmp)>0) {
+        foreach($addresses_tmp as $s_id=>$a) {
+        	foreach($a as $ip) {
+        		$addresses[] = array("subnetId"=>$s_id, "ip_addr"=>$ip);
+        	}
+        }
+    }
 }
 
 
@@ -134,13 +148,15 @@ if($Scan->icmp_type=="fping") {
 
 	//fping finds all subnet addresses, we must remove existing ones !
 	foreach($scan_subnets as $sk=>$s) {
-		foreach($s->discovered as $rk=>$result) {
-			if(!in_array($Subnets->transform_to_decimal($result), $addresses_tmp[$s->id])) {
-				unset($scan_subnets[$sk]->discovered[$rk]);
-			}
+    	if(isset($s->discovered)) {
+    		foreach($s->discovered as $rk=>$result) {
+    			if(!in_array($Subnets->transform_to_decimal($result), $addresses_tmp[$s->id])) {
+    				unset($scan_subnets[$sk]->discovered[$rk]);
+    			}
+    		}
+            //rekey
+            $scan_subnets[$sk]->discovered = array_values($scan_subnets[$sk]->discovered);
 		}
-		//rekey
-		$scan_subnets[$sk]->discovered = array_values($scan_subnets[$sk]->discovered);
 	}
 }
 //ping, pear
@@ -198,8 +214,10 @@ if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($s
 # reinitialize objects
 $Database 	= new Database_PDO;
 $Admin		= new Admin ($Database, false);
+$Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);
+$Scan		= new Scan ($Database);
 $Result		= new Result();
 
 # insert to database
@@ -208,25 +226,33 @@ $discovered = 0;				//for mailing
 foreach($scan_subnets as $s) {
 	if(sizeof(@$s->discovered)>0) {
 		foreach($s->discovered as $ip) {
+			// fetch subnet
+			$subnet = $Subnets->fetch_subnet ("id", $s->id);
+			$nsid = $subnet===false ? false : $subnet->nameserverId;
 			// try to resolve hostname
-			$tmp = new stdClass();
-			$tmp->ip_addr = $ip;
-			$hostname = $DNS->resolve_address($tmp, true);
+			$hostname = $DNS->resolve_address ($ip, false, true, $nsid);
+
 			//set update query
 			$values = array("subnetId"=>$s->id,
 							"ip_addr"=>$Subnets->transform_address($ip, "decimal"),
 							"dns_name"=>$hostname['name'],
 							"description"=>"-- autodiscovered --",
-							"note"=>"This host was autodiscovered on ".date("Y-m-d H:i:s"),
-							"lastSeen"=>date("Y-m-d H:i:s")
+							"note"=>"This host was autodiscovered on ".$nowdate,
+							"lastSeen"=>$nowdate,
+							"state"=>"2",
+							"action"=>"add"
 							);
-			$Admin->object_modify("ipaddresses", "add", "id", $values);
+			//insert
+			$Addresses->modify_address($values);
 
 			//set discovered
 			$discovered++;
 		}
 	}
 }
+
+# update scan time
+$Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 
@@ -278,8 +304,8 @@ if($discovered>0 && $send_mail) {
 
 				$content[] = "<tr>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
+				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
+				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 				$content[] = "</tr>";
 
 				//plain content
@@ -299,7 +325,7 @@ if($discovered>0 && $send_mail) {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
-			$phpipam_mail->Php_mailer->addAddress($admin['email'], $admin['name']);
+			$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
 		}
 		$phpipam_mail->Php_mailer->Subject = $subject;
 		$phpipam_mail->Php_mailer->msgHTML($content);
@@ -312,10 +338,5 @@ if($discovered>0 && $send_mail) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	}
 }
-
-
-
-
-
 
 ?>

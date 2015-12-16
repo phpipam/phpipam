@@ -5,13 +5,10 @@
  *
  *
  */
-class Sections_controller extends Common_functions {
+class Sections_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;
-
-	/* protected variables */
-	protected $valid_keys;
 
 	/* object holders */
 	protected $Database;		// Database object
@@ -28,7 +25,6 @@ class Sections_controller extends Common_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
-	 * @return void
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -165,7 +161,7 @@ class Sections_controller extends Common_functions {
 		unset($values['editDate']);
 
 		# validate mandatory parameters
-		if(strlen($this->_params->name)<4)				{ $this->Response->throw_exception(400, 'Name is mandatory'); }
+		if(strlen($this->_params->name)<3)				{ $this->Response->throw_exception(400, 'Name is mandatory or too short (mininum 3 characters)'); }
 
 		# verify masterSection
 		if(isset($this->_params->masterSection)) {

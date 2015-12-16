@@ -1,9 +1,15 @@
 <IfModule mod_rewrite.c>
 
+# apache auth basic auth example
+#AuthUserFile /path/to/.htpasswd
+#AuthName "phpIPAM authentication"
+#AuthType Basic
+#require valid-user
+
 RewriteEngine on
 
 # change rewrite base if not in root
-RewriteBase /
+# RewriteBase /
 
 # passthroughs
 RewriteRule ^api/.$ - [L]

@@ -46,7 +46,17 @@ else {
 
 <script type="text/javascript">
 $(document).ready(function(){
-     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+    if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini",
+	    onText: "Yes",
+	    offText: "No"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 </script>
 
@@ -61,6 +71,7 @@ $(document).ready(function(){
 	<form id="usersEdit" name="usersEdit">
 	<table class="usersEdit table table-noborder table-condensed">
 
+	<tbody>
 	<!-- real name -->
 	<tr>
 	    <td><?php print _('Real name'); ?></td>
@@ -112,7 +123,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _("Authentication method"); ?></td>
 		<td>
-			<select name="authMethod" class="form-control input-sm input-w-auto">
+			<select name="authMethod" id="authMethod" class="form-control input-sm input-w-auto">
 			<?php
 			foreach($auth_types as $type) {
 				# match
@@ -125,11 +136,14 @@ $(document).ready(function(){
 		<td class="info2"><?php print _("Select authentication method for user"); ?></td>
 	</tr>
 
-
-    <!-- password -->
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
+
+	</tbody>
+
+    <!-- password -->
+	<tbody id="user_password" <?php if(@$user['authMethod']!="1" && isset($user['authMethod'])) print "style='display:none'"; ?>>
 
     <tr class="password">
     	<td><?php print _('Password'); ?></td>
@@ -157,8 +171,9 @@ $(document).ready(function(){
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
+	</tbody>
 
-
+	<tbody>
 	<!-- Language -->
 	<tr>
 		<td><?php print _('Language'); ?></td>
@@ -178,11 +193,13 @@ $(document).ready(function(){
     <!-- send notification mail -->
     <tr>
     	<td><?php print _('Notification'); ?></td>
-    	<td><input type="checkbox" name="notifyUser" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
+    	<td><input type="checkbox" name="notifyUser" value="on" <?php if($_POST['action'] == "add") { print 'checked'; } else if($_POST['action'] == "delete") { print 'disabled="disabled"';} ?>></td>
     	<td class="info2"><?php print _('Send notification email to user with account details'); ?></td>
     </tr>
+	</tbody>
 
 	<!-- mailNotify -->
+	<tbody id="user_notifications" <?php if(@$user['role']!="Administrator") print "style='display:none'"; ?>>
 	<tr>
     	<td><?php print _('Mail State changes'); ?></td>
     	<td>
@@ -209,11 +226,13 @@ $(document).ready(function(){
         </td>
         <td class="info2"><?php print _('Select yes to receive notification change mail for changelog'); ?></td>
 	</tr>
+	</tbody>
+
+	<!-- groups -->
+	<tbody>
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
-
-	<!-- groups -->
 	<tr>
 		<td><?php print _('Groups'); ?></td>
 		<td class="groups">
@@ -244,6 +263,21 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Select to which groups the user belongs to'); ?></td>
 	</tr>
 
+	<!-- pdns -->
+    <?php if ($User->settings->enablePowerDNS==1) { ?>
+	<tbody>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<tr>
+    	<td><?php print _("PowerDNS"); ?></td>
+    	<td>
+            <input type="checkbox" class="input-switch" value="Yes" name="pdns" <?php if(@$user->pdns == "Yes") print 'checked'; ?>>
+    	</td>
+		<td class="info2"><?php print _('Select to allow user to create DNS records'); ?></td>
+	</tr>
+    <?php } ?>
+
 	<!-- Custom -->
 	<?php
 	if(sizeof($custom) > 0) {
@@ -255,34 +289,37 @@ $(document).ready(function(){
 		$timeP = 0;
 
 		# all my fields
-		foreach($custom as $myField) {
+		foreach($custom as $field) {
 			# replace spaces with |
-			$myField['nameNew'] = str_replace(" ", "___", $myField['name']);
+			$field['nameNew'] = str_replace(" ", "___", $field['name']);
 
 			# required
-			if($myField['Null']=="NO")	{ $required = "*"; }
+			if($field['Null']=="NO")	{ $required = "*"; }
 			else						{ $required = ""; }
 
+			# set default value !
+			if ($_POST['action']=="add")	{ $user[$field['name']] = $field['Default']; }
+
 			print '<tr>'. "\n";
-			print '	<td>'. $myField['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type
-			if(substr($myField['type'], 0,3) == "set") {
+			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 				//parse values
-				$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $myField['type']));
+				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
 				//null
-				if($myField['Null']!="NO") { array_unshift($tmp, ""); }
+				if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
-				print "<select name='$myField[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$myField[Comment]'>";
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
 				foreach($tmp as $v) {
-					if($v==$user[$myField['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
+					if($v==$user[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
 					else								{ print "<option value='$v'>$v</option>"; }
 				}
 				print "</select>";
 			}
 			//date and time picker
-			elseif($myField['type'] == "date" || $myField['type'] == "datetime") {
+			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
 					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
@@ -300,42 +337,43 @@ $(document).ready(function(){
 				$timeP++;
 
 				//set size
-				if($myField['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
+				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
 				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
 
 				//field
-				if(!isset($user[$myField['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $myField['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n"; }
-				else									{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $myField['nameNew'] .'" maxlength="'.$size.'" value="'. $user[$myField['name']]. '" rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n"; }
+				if(!isset($user[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+				else								{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $user[$field['name']]. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
 			}
 			//boolean
-			elseif($myField['type'] == "tinyint(1)") {
-				print "<select name='$myField[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$myField[Comment]'>";
+			elseif($field['type'] == "tinyint(1)") {
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
 				$tmp = array(0=>"No",1=>"Yes");
 				//null
-				if($myField['Null']!="NO") { $tmp[2] = ""; }
+				if($field['Null']!="NO") { $tmp[2] = ""; }
 
 				foreach($tmp as $k=>$v) {
-					if(strlen($user[$myField['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					elseif($k==$user[$myField['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					else												{ print "<option value='$k'>"._($v)."</option>"; }
+					if(strlen($user[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					elseif($k==$user[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					else											{ print "<option value='$k'>"._($v)."</option>"; }
 				}
 				print "</select>";
 			}
 			//text
-			elseif($myField['type'] == "text") {
-				print ' <textarea class="form-control input-sm" name="'. $myField['nameNew'] .'" placeholder="'. $myField['name'] .'" rowspan=3>'. $user[$myField['name']]. '</textarea>'. "\n";
+			elseif($field['type'] == "text") {
+				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3>'. $user[$field['name']]. '</textarea>'. "\n";
 			}
 			//default - input field
 			else {
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. @$myField['nameNew'] .'" placeholder="'. @$myField['name'] .'" value="'. @$user[$myField['name']]. '" size="30">'. "\n";
+				print ' <input type="text" class="ip_addr form-control input-sm" name="'. @$field['nameNew'] .'" placeholder="'. @$field['name'] .'" value="'. @$user[$field['name']]. '" size="30">'. "\n";
 			}
 
-			print "	<td class='info2'>".$myField['Comment']."</td>";
+			print "	<td class='info2'>".$field['Comment']."</td>";
 			print '	</td>'. "\n";
 			print '</tr>'. "\n";
 		}
 	}
 	?>
+	</tbody>
 
 
 </table>

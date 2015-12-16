@@ -86,14 +86,16 @@ foreach($all_methods as $method) {
 <div class="alert alert-info alert-absolute" style="margin-top:30px;">
 	<?php print _("Here you can set different authentication methods for your users."); ?>
 	<hr>
-	<?php print _("phpIPAM currently supports 4 methods for authentication:"); ?>
+	<?php print _("phpIPAM currently supports 6 methods for authentication:"); ?>
 	<ul>
 		<li><?php print _("Local authentication"); ?></li>
+		<li><?php print _("Apache authentication"); ?></li>
 		<li><?php print _("AD (Active Directory) authentication"); ?></li>
 		<li><?php print _("LDAP authentication"); ?></li>
+		<li><?php print _("NetIQ authentication"); ?></li>
 		<li><?php print _("Radius authentication"); ?></li>
 	</ul>
 	<br>
-	<?php print _("For AD/LDAP connection phpipam is using adLDAP, for documentationplease check ")."<a href='http://adldap.sourceforge.net/'>adLDAP</a><br><br>"; ?>
-	<?php print _('First create new user under user management with <u>same username as on AD</u> and set authention typeto one of available methods.')."<br>"._('Also set proper permissions - group membership for new user'); ?>
+	<?php print _("For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check ")."<a href='http://adldap.sourceforge.net/'>adLDAP</a><br><br>"; ?>
+	<?php print _('First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods.')."<br>"._('Also set proper permissions - group membership for new user'); ?>
 </div>

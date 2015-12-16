@@ -4,7 +4,7 @@
  *	phpIPAM Install class
  */
 
-class Install  {
+class Install extends Common_functions {
 
 	/**
 	 * public varibles
@@ -16,7 +16,6 @@ class Install  {
 	 */
 	protected $db;							//db parameters
 	protected $debugging = false;			//(bool) debugging flag
-	protected $settings = array();			//)object) settings for upgrade
 
 	/**
 	 * object holders
@@ -24,12 +23,13 @@ class Install  {
 	protected $Result;						//for Result printing
 	protected $Database;					//for Database connection
 	protected $Database_root;				//for Database connection for installation
+	public $Log;							// for Logging connection
+
 
 	/**
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -40,24 +40,9 @@ class Install  {
 		$this->set_debugging ();
 		# set debugging
 		$this->set_db_params ();
-	}
-
-	/**
-	 * Fetch settings from database
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function fetch_settings () {
-		# check if already set
-		if(sizeof($this->settings)>0) {
-			return $this->settings;
-		}
-		# fetch
-		else {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
+		# Log object
+		try { $this->Database->connect(); }
+		catch ( Exception $e ) {}
 	}
 
 
@@ -105,12 +90,13 @@ class Install  {
 		$this->Database_root->resetConn();
 
 		# install database
-		$this->install_database_execute ();
-
-	    # return true, if some errors occured script already died! */
-		sleep(1);
-		write_log( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
-		return true;
+		if($this->install_database_execute () !== false) {
+		    # return true, if some errors occured script already died! */
+			sleep(1);
+			$this->Log = new Logging ($this->Database);
+			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
+			return true;
+		}
 	}
 
 	/**
@@ -166,22 +152,28 @@ class Install  {
 	    $query  = file_get_contents("../../db/SCHEMA.sql");
 
 	    # formulate queries
-	    $queries = explode(";\n", $query);
+	    $queries = array_filter(explode(";\n", $query));
 
 	    # execute
 	    foreach($queries as $q) {
-			try { $this->Database_root->runQuery($q.";"); }
-			catch (Exception $e) {
-				//unlock tables
-				$this->Database_root->runQuery("UNLOCK TABLES;");
-				//drop database
-				try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
+		    //length check
+		    if (strlen($q)>0) {
+				try { $this->Database_root->runQuery($q.";"); }
 				catch (Exception $e) {
-					$this->Result->show("danger", 'Cannot set permissions for user '. $db['user'] .': '.$e->getMessage(), true);
+					//unlock tables
+					try { $this->Database_root->runQuery("UNLOCK TABLES;"); }
+					catch (Exception $e) {}
+					//drop database
+					try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
+					catch (Exception $e) {
+						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
+					}
+					//print error
+					$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
+					$this->Result->show("info", "Database dropped", false);
+
+					return false;
 				}
-				//print error
-				$this->Result->show("danger", "Cannot install sql SCHEMA file: ".$e->getMessage()."<br>query that failed: <pre>$q</pre>", false);
-				$this->Result->show("info", "Database dropped", false);
 			}
 	    }
 	}
@@ -247,7 +239,7 @@ class Install  {
 	 */
 	private function redirect_to_install () {
 		# redirect to install
-		header("Location: ".BASE.create_link("install", null,null,null,null,true));
+		header("Location: ".create_link("install"));
 	}
 
 	/**
@@ -256,7 +248,7 @@ class Install  {
 	 * @access private
 	 * @return void
 	 */
-	private function set_debugging () {
+	public function set_debugging () {
 		require( dirname(__FILE__) . '/../../config.php' );
 		if($debugging==true) { $this->debugging = true; }
 	}
@@ -352,7 +344,7 @@ class Install  {
 	 */
 	public function upgrade_database () {
 		# first check version
-		$this->fetch_settings ();
+		$this->get_settings ();
 
 		if($this->settings->version == VERSION)				{ $this->Result->show("danger", "Database already at latest version", true); }
 		else {
@@ -373,23 +365,47 @@ class Install  {
 	 */
 	private function upgrade_database_execute () {
 		# set queries
-		$queries = $this->get_upgrade_queries ();
+		$subversion_queries = $this->get_upgrade_queries ();
+		// create default arrays
+		$queries = array();
+		// succesfull queries:
+		$queries_ok = array();
+
+		# explode each query
+		foreach ($subversion_queries as $q) {
+			/// replace CRLF
+			$q = str_replace("\r\n", "\n", $q);
+			$subversion_query = explode(";\n", $q);
+			// save to final array
+			$queries = array_filter(array_merge($queries, $subversion_query));
+		}
 
 	    # execute all queries
 	    foreach($queries as $query) {
 			try { $this->Database->runQuery($query); }
 			catch (Exception $e) {
+				$this->Log = new Logging ($this->Database);
 				# write log
-				write_log( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
+				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
 				# fail
-				$this->Result->show("danger", _("Update: ").$e->getMessage()."<br>query: ".$query, true);
+				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
+				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
+				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
+				# revert version
+				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
+				//catch (Exception $e) { var_dump($e); }
+				// false
+				return false;
 			}
+			// save ok
+			$queries_ok[] = $query;
 	    }
 
 
 		# all good, print it
 		sleep(1);
-		write_log( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
+		$this->Log = new Logging ($this->Database);
+		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
 		return true;
 	}
 

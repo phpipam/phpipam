@@ -19,7 +19,11 @@ class Database_PDO extends DB {
 	protected $username = null;
 	protected $password = null;
 
+	protected $pdo_ssl_opts = array ();
+
 	public $install = false;		//flag if installation is happenig!
+
+	protected $debug = false;
 
 	/**
 	 * __construct function.
@@ -31,16 +35,19 @@ class Database_PDO extends DB {
 	 * @param mixed $username (default: null)
 	 * @param mixed $password (default: null)
 	 * @param mixed $charset (default: null)
-	 * @return void
 	 */
-	public function __construct($username=null, $password=null) {
+	public function __construct($username=null, $password=null, $host=null, $port=null, $dbname=null, $charset=null) {
 		# set parameters
 		$this->set_db_params ();
 		# rewrite user/pass if requested - for installation
 		$username==null ? : $this->username = $username;
 		$password==null ? : $this->password = $password;
+		$host==null 	? : $this->host = $host;
+		$port==null 	? : $this->port = $port;
+		$dbname==null 	? : $this->dbname = $dbname;
+
 		# construct
-		parent::__construct($this->username, $this->password, $this->charset);
+		parent::__construct($this->username, $this->password, $this->charset, $this->ssl);
 	}
 
 
@@ -59,6 +66,28 @@ class Database_PDO extends DB {
 		$this->username = $db['user'];
 		$this->password = $db['pass'];
 		$this->dbname 	= $db['name'];
+
+		$this->ssl = false;
+		if ($db['ssl']===true) {
+
+			$this->pdo_ssl_opts = array (
+				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
+				'ssl_cert'   => PDO::MYSQL_ATTR_SSL_CERT,
+				'ssl_ca'     => PDO::MYSQL_ATTR_SSL_CA,
+				'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
+				'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
+			);
+			
+			$this->ssl = array();
+
+			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
+				if ($db[$key]) {
+					$this->ssl[$pdoopt] = $db[$key];
+				}
+			}
+
+		}
+
 	}
 
 	/**
@@ -131,10 +160,14 @@ abstract class DB {
 	protected $charset = 'utf8';
 	protected $pdo = null;
 
-	public function __construct($username = null, $password = null, $charset = null) {
+	public function __construct($username = null, $password = null, $charset = null, $ssl = null) {
 		if (isset($username)) $this->username = $username;
 		if (isset($password)) $this->password = $password;
-		if (isset($charset)) $this->charset = $charset;
+		if (isset($charset))  $this->charset = $charset;
+		# ssl
+		if ($ssl) {
+			$this->ssl = $ssl;
+		}
 	}
 
 	//convert a date object/string ready for use in sql
@@ -156,8 +189,16 @@ abstract class DB {
 		$dsn = $this->makeDsn();
 
 		try {
-			$this->pdo = new \PDO($dsn, $this->username, $this->password);
+			# ssl?
+			if ($this->ssl) {
+				$this->pdo = new \PDO($dsn, $this->username, $this->password, $this->ssl);
+			}
+			else {
+				$this->pdo = new \PDO($dsn, $this->username, $this->password);
+			}
+
 			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
@@ -172,6 +213,17 @@ abstract class DB {
 	public function resetConn() {
 		unset($this->pdo);
 		$this->install = false;
+	}
+
+	//logs queries to file
+	private function log_query ($query) {
+		if($this->debug) {
+
+			$myFile = "/tmp/queries.txt";
+			$fh = fopen($myFile, 'a') or die("can't open file");
+			fwrite($fh, $query->queryString."\n");
+			fclose($fh);
+		}
 	}
 
 	/**
@@ -228,7 +280,8 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
-
+		//debuq
+		$this->log_query ($statement);
 		return $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 	}
 
@@ -257,6 +310,8 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'`;');
 
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute();
 
 		return $statement->fetchColumn();
@@ -274,6 +329,8 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'`=?;');
 
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute(array($value));
 
 		return $statement->fetchColumn();
@@ -331,6 +388,8 @@ abstract class DB {
 		//merge the parameters and values
 		$paramValues = array_merge(array_values($obj), $objId);
 
+		//debuq
+		$this->log_query ($statement);
 		//run the update on the object
 		return $statement->execute($paramValues);
 	}
@@ -462,6 +521,9 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
+
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
 		if (is_object($statement)) {
@@ -491,6 +553,9 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
+
+		//debug
+		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
 		$results = array();
@@ -526,6 +591,8 @@ abstract class DB {
 			$statement = $this->pdo->prepare('SELECT * FROM `'.$tableName.'` LIMIT 1;');
 		}
 
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute();
 
 		//we can then extract the single object (if we have a result)
@@ -542,6 +609,8 @@ abstract class DB {
 		if (!$this->isConnected()) $this->connect();
 
 		$statement = $this->pdo->prepare($query);
+		//debuq
+		$this->log_query ($statement);
 		$statement->execute((array)$values);
 
 		$resultObj = $statement->fetchObject($class);
@@ -564,12 +633,14 @@ abstract class DB {
 		}
 	}
 
-	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true) {
+	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false) {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
 		$sortField = $this->escape($sortField);
+		$like === true ? $operator = "LIKE" : $operator = "=";
+		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`=? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
 	}
 
 	public function findObject($table, $field, $value) {

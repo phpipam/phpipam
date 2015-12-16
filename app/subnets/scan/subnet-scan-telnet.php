@@ -31,14 +31,20 @@ $script_result = json_decode($output[0]);
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
 
+# json error
+if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), false); }
 # die if error
-if($retval!=0) 									{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
+elseif($retval!=0) 								{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
 elseif(!isset($script_result->values->alive)) 	{ $Result->show("danger", _("No alive host found")."!", false); }
 # ok
 else {
+	// fetch subnet and set nsid
+	$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
+	$nsid = $subnet===false ? false : $subnet->nameserverId;
+
 	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
@@ -54,8 +60,7 @@ else {
 	$m=0;
 	foreach($script_result->values->alive as $ip=>$port) {
 		//resolve?
-		$address1 = array("ip_addr"=>$Subnets->transform_to_dotted($ip), "dns_name"=>"");
-		$hostname = $DNS->resolve_address ( (object) $address1, true);
+		$hostname = $DNS->resolve_address ( $ip, null, true, $nsid);
 
 		print "<tr class='result$m'>";
 		//ip

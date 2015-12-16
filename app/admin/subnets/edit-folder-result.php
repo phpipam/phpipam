@@ -167,7 +167,7 @@ else {
 	}
 
 	# execute
-	if(!$Admin->object_modify("subnets", $_POST['action'], "id", $values))	{ $Result->show("danger", _('Error editing folder'), true); }
+	if(!$Subnets->modify_subnet ($_POST['action'], $values))	{ $Result->show("danger", _('Error editing folder'), true); }
 	else {
 		# update also all slave subnets!
 		if(isset($values['sectionId'])&&$_POST['action']!="add") {
@@ -183,9 +183,6 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		else							{ $Result->show("success", _("Folder $_POST[action] successfull").'!', true); }
-
-    	# send mail
-		# sendObjectUpdateMails("subnet", $_POST['action'], $subnet_old_details, $_POST);
 	}
 }
 

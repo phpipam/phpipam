@@ -25,7 +25,7 @@ $User->check_user_session();
 $Tools->validate_action ($_POST['action']);
 
 # validate post
-is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid ID"), true, true);
+is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet ID"), true, true);
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
@@ -35,6 +35,7 @@ $id      = $_POST['id'];
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
+if (strpos($_SERVER['HTTP_REFERER'], "verify-database")==0)
 sizeof($subnet)>0 ?:			$Result->show("danger", _("Invalid subnet"), true, true);
 
 # set and check permissions
@@ -47,6 +48,9 @@ $selected_ip_fields = explode(";", $selected_ip_fields);																			//for
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
+
+# if subnet is full we cannot any more ip addresses
+if (($action=="add" || $action=="all-add") && $subnet['isFull']==1)   $Result->show("warning", _("Cannot add address as subnet is market as used"), true, true);
 
 
 # if action is not add then fetch current details, otherwise fetch first available IP address
@@ -79,9 +83,6 @@ else				{ $delete = ""; }
 
 ?>
 
-
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-switch.min.css">
-<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 /* bootstrap switch */
@@ -114,8 +115,13 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		<td>
 		<div class="input-group">
 			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $Subnets->transform_address($address['ip_addr'], "dotted");; if(is_numeric($_POST['stopIP'])>0) print "-".$Subnets->transform_address($_POST['stopIP'],"dotted"); ?>" placeholder="<?php print _('IP address'); ?>">
-    		<span class="input-group-addon">
-    			<i class="fa fa-gray fa-info" rel="tooltip" data-html='true' data-placement="left" title="<?php print _('You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)'); ?>"></i>
+    		<span class="input-group-addon" style="border-left:none;">
+    			<a class="ping_ipaddress ping_ipaddress_new" data-subnetid="<?php print $subnetId; ?>" data-id="" href="#" rel="tooltip" data-container="body" title="" data-original-title="Check availability">
+ 					<i class="fa fa-gray fa-cogs"></i>
+    			</a>
+ 			</span>
+			<span class="input-group-addon">
+    			<i class="fa fa-gray fa-info" rel="tooltip" data-html='true' data-placement="right" title="<?php print _('You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)'); ?>"></i>
     		</span>
 			</div>
 
@@ -125,6 +131,11 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="subnetId" 	value="<?php print $subnetId; 	?>">
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
+			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+			<?php
+			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
+			?>
+
 			<?php if($action=="edit" || $action=="delete") { ?>
 			<input type="hidden" name="nostrict" value="yes">
 			<?php }  ?>
@@ -141,7 +152,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '	<div class="input-group">';
 		print ' <input type="text" name="dns_name" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['dns_name']. '" '.$delete.'>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
-		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' rel='tooltip' data-placement='left' title='"._('Click to check for hostname')."'></i></span>";
+		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='right' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
 		print "	</div>";
 		print '	</td>'. "\n";
@@ -244,27 +255,36 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	?>
 	<!-- state -->
 	<?php
-	if(in_array('state', $selected_ip_fields)) {
+	# fetch all states
+	$ip_types = (array) $Addresses->addresses_types_fetch();
+	# default type
+	if(!is_numeric(@$address['state'])) 		{ $address['state'] = 2; } // online
 
-		# fetch all states
-		$ip_types = $Addresses->addresses_types_fetch();
-		# default type
-		if(!is_numeric(@$address['state'])) 		{ $address['state'] = 2; }
-
-		print '<tr>'. "\n";
-		print '	<td>'._('Tag').'</td>'. "\n";
-		print '	<td>'. "\n";
-		print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">'. "\n";
-		# printout
-		foreach($ip_types as $k=>$type) {
-			if($address['state']==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
-			else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
-		}
-		print '		</select>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
+	print '<tr>'. "\n";
+	print '	<td>'._('Tag').'</td>'. "\n";
+	print '	<td>'. "\n";
+	print '		<select name="state" '.$delete.' class="ip_addr form-control input-sm input-w-auto">'. "\n";
+	# printout
+	foreach($ip_types as $k=>$type) {
+		if($address['state']==$k)				{ print "<option value='$k' selected>"._($type['type'])."</option>"; }
+		else									{ print "<option value='$k'>"._($type['type'])."</option>"; }
 	}
+	print '		</select>'. "\n";
+	print '	</td>'. "\n";
+	print '</tr>'. "\n";
 	?>
+
+	<!-- set gateway -->
+	<tr>
+    	<td colspan="2"><hr></td>
+	</tr>
+	<tr>
+		<td><?php print _("Is gateway"); ?></td>
+		<td>
+			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
+		</td>
+	</tr>
+
 	<!-- exclude Ping -->
 	<?php
 	if($subnet['pingSubnet']==1) {
@@ -275,21 +295,26 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		print '<tr>';
 	 	print '<td>'._("Ping exclude").'</td>';
 	 	print '<td>';
-	 	print "	<div class='checkbox info2'>";
-		print ' 	<input type="checkbox" class="ip_addr" name="excludePing" value="1" '.$checked.' '.$delete.'>'. _('Exclude from ping status checks');
-		print "	</div>";
+		print ' <input type="checkbox" class="ip_addr input-switch" name="excludePing" value="1" '.$checked.' '.$delete.'> <span class="text-muted">'. _('Exclude from ping status checks')."</span>";
 	 	print '</td>';
 	 	print '</tr>';
 	}
 	?>
+	<?php
+	// ignore PTR
+	if ($User->settings->enablePowerDNS==1) {
+		//we can exclude individual IP addresses from PTR creation
+		if(@$address['PTRignore'] == "1")	{ $checked = "checked='checked'"; }
+		else								{ $checked = ""; }
 
-	<!-- set gateway -->
-	<tr>
-		<td><?php print _("Is gateway"); ?></td>
-		<td>
-			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
-		</td>
-	</tr>
+		print '<tr>';
+	 	print '<td>'._("PTR exclude").'</td>';
+	 	print '<td>';
+		print ' 	<input type="checkbox" class="ip_addr input-switch" name="PTRignore" value="1" '.$checked.' '.$delete.'> <span class="text-muted">'. _('Dont create PTR records').'</span>';
+	 	print '</td>';
+	 	print '</tr>';
+	}
+	?>
 
 	<tr>
 		<td colspan="2"><hr></td>
@@ -301,34 +326,37 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		$timeP = 0;
 
 		# all my fields
-		foreach($custom_fields as $myField) {
+		foreach($custom_fields as $field) {
 			# replace spaces with |
-			$myField['nameNew'] = str_replace(" ", "___", $myField['name']);
+			$field['nameNew'] = str_replace(" ", "___", $field['name']);
 
 			# required
-			if($myField['Null']=="NO")	{ $required = "*"; }
+			if($field['Null']=="NO")	{ $required = "*"; }
 			else						{ $required = ""; }
 
+			# set default value !
+			if ($_POST['action']=="add")	{ $address[$field['name']] = $field['Default']; }
+
 			print '<tr>'. "\n";
-			print '	<td>'. $myField['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type
-			if(substr($myField['type'], 0,3) == "set") {
+			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 				//parse values
-				$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $myField['type']));
+				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
 				//null
-				if($myField['Null']!="NO") { array_unshift($tmp, ""); }
+				if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
-				print "<select name='$myField[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$myField[Comment]'>";
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
 				foreach($tmp as $v) {
-					if($v==@$address[$myField['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
+					if($v==@$address[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
 					else								{ print "<option value='$v'>$v</option>"; }
 				}
 				print "</select>";
 			}
 			//date and time picker
-			elseif($myField['type'] == "date" || $myField['type'] == "datetime") {
+			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
 					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
@@ -346,34 +374,34 @@ $(".input-switch").bootstrapSwitch(switch_options);
 				$timeP++;
 
 				//set size
-				if($myField['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
+				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
 				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
 
 				//field
-				if(!isset($address[$myField['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $myField['nameNew'] .'" maxlength="'.$size.'" '.$delete.' rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n"; }
-				else									{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $myField['nameNew'] .'" maxlength="'.$size.'" value="'. $address[$myField['name']]. '" '.$delete.' rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n"; }
+				if(!isset($address[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+				else									{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $address[$field['name']]. '" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
 			}
 			//boolean
-			elseif($myField['type'] == "tinyint(1)") {
-				print "<select name='$myField[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$myField[Comment]'>";
+			elseif($field['type'] == "tinyint(1)") {
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
 				$tmp = array(0=>"No",1=>"Yes");
 				//null
-				if($myField['Null']!="NO") { $tmp[2] = ""; }
+				if($field['Null']!="NO") { $tmp[2] = ""; }
 
 				foreach($tmp as $k=>$v) {
-					if(strlen(@$address[$myField['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					elseif($k==@$address[$myField['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					if(strlen(@$address[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
+					elseif($k==@$address[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
 					else												{ print "<option value='$k'>"._($v)."</option>"; }
 				}
 				print "</select>";
 			}
 			//text
-			elseif($myField['type'] == "text") {
-				print ' <textarea class="form-control input-sm" name="'. $myField['nameNew'] .'" placeholder="'. $myField['name'] .'" '.$delete.' rowspan=3 rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. $address[$myField['name']]. '</textarea>'. "\n";
+			elseif($field['type'] == "text") {
+				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" '.$delete.' rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $address[$field['name']]. '</textarea>'. "\n";
 			}
 			//default - input field
 			else {
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $myField['nameNew'] .'" placeholder="'. $myField['name'] .'" value="'. @$address[$myField['name']]. '" size="30" '.$delete.' rel="tooltip" data-placement="right" title="'.$myField['Comment'].'">'. "\n";
+				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. @$address[$field['name']]. '" size="30" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
 			}
 
 			print '	</td>'. "\n";
@@ -382,19 +410,20 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	}
 	?>
 
+    <?php if ($action!=="delete") {  ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
 
-	 <tr>
-		<td colspan="2"><hr></td>
-	 </tr>
-
-	 <tr>
-	 	<td><?php print _('Unique'); ?></td>
-	 	<td>
-		<div class='checkbox info2'>
-		 	<input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
-		</div>
-	 	</td>
-	 </tr>
+    <tr>
+        <td><?php print _('Unique'); ?></td>
+    <td>
+        <div class='checkbox info2'>
+        <input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
+        </div>
+        </td>
+    </tr>
+    <?php } ?>
 
 	<?php
 	#get type

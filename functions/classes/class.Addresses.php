@@ -4,14 +4,14 @@
  *	phpIPAM IP addresses class
  */
 
-class Addresses {
+class Addresses extends Common_functions {
 
 	/**
 	 * public variables
 	 */
 	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $settings = null;				//(object) phpipam settings
 	public $address_types;					//(array) address types
+	public $mail_changelog = true;
 
 	/**
 	 * protected variables
@@ -26,6 +26,7 @@ class Addresses {
 	public $Result;							//for Result printing
 	protected $Database;					//for Database connection
 	protected $Subnets;						//for Subnets object
+	public $Log;							//for Logging connection
 
 
 
@@ -34,7 +35,6 @@ class Addresses {
 	 * __construct function
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -43,80 +43,10 @@ class Addresses {
 		$this->Result = new Result ();
 		# debugging
 		$this->set_debugging();
-	}
 
-	/**
-	 * fetches settings from database
-	 *
-	 * @access private
-	 * @return none
-	 */
-	private function get_settings () {
-		# cache check
-		if($this->settings == false) {
-			try { $this->settings = $this->Database->getObject("settings", 1); }
-			catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-		}
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
-	}
-
-	/**
-	 * Sets debugging
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		include( dirname(__FILE__) . '/../../config.php' );
-		$this->debugging = $debugging ? true : false;
-	}
-
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
-	}
-
 
 
 
@@ -210,7 +140,9 @@ class Addresses {
 	 * @param mixed $type
 	 * @return void
 	 */
-	public function address_type_type_to_index ($type) {
+	public function address_type_type_to_index ($type = "Used") {
+		# null of no length
+		$type = strlen($type)==0 || is_null($type) ? "Used" : $type;
 		# fetch address states
 		$this->addresses_types_fetch();
 		# reindex
@@ -219,7 +151,7 @@ class Addresses {
 		}
 		# return
 		if(isset($states_assoc[$type])) {
-			return $states_assoc[$type]['index'];
+			return $states_assoc[$type]['id'];
 		}
 		else {
 			return $type;
@@ -304,10 +236,13 @@ class Addresses {
 	 * Address modification
 	 *
 	 * @access public
-	 * @param array $address
+	 * @param mixed $address
+	 * @param bool $mail_changelog (default: true)
 	 * @return void
 	 */
-	public function modify_address ($address) {
+	public function modify_address ($address, $mail_changelog = true) {
+		# save changelog
+		$this->mail_changelog  = $mail_changelog;
 		# null empty values
 		$address = $this->reformat_empty_array_fields ($address, null);
 		# strip tags
@@ -340,7 +275,10 @@ class Addresses {
 						"port"=>@$address['port'],
 						"note"=>@$address['note'],
 						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing']
+						"excludePing"=>@$address['excludePing'],
+						"PTRignore"=>@$address['PTRignore'],
+						"firewallAddressObject"=>@$address['firewallAddressObject'],
+						"lastSeen"=>@$address['lastSeen']
 						);
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
@@ -356,11 +294,21 @@ class Addresses {
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $insert); }
 		catch (Exception $e) {
+			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# save id
 		$this->lastId = $this->Database->lastInsertId();
+
+		# log and changelog
+		$address['id'] = $this->lastId;
+		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
+
+		# edit DNS PTR record
+		$this->ptr_modify ("add", $insert);
+
 		# ok
 		return true;
 	}
@@ -388,7 +336,8 @@ class Addresses {
 						"port"=>@$address['port'],
 						"note"=>@$address['note'],
 						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing']
+						"excludePing"=>@$address['excludePing'],
+						"PTRignore"=>@$address['PTRignore']
 						);
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
@@ -411,9 +360,22 @@ class Addresses {
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
 		catch (Exception $e) {
+			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# set the firewall address object to avoid logging
+		$address['firewallAddressObject'] = $address_old->firewallAddressObject;
+
+ 		# log and changelog
+		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
+
+		# edit DNS PTR record
+		$insert['PTR']=@$address['PTR'];
+		$this->ptr_modify ("edit", $insert);
+
 		# ok
 		return true;
 	}
@@ -426,6 +388,8 @@ class Addresses {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_delete ($address) {
+		# fetch old details for logging
+		$address_old = $this->fetch_address (null, $address['id']);
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -437,9 +401,18 @@ class Addresses {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
 		catch (Exception $e) {
+			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+
+		# log and changelog
+		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
+		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
+
+		# edit DNS PTR record
+		$this->ptr_modify ("delete", $address);
+
 		# ok
 		return true;
 	}
@@ -492,16 +465,20 @@ class Addresses {
 	/**
 	 * Checks if address already exists in subnet
 	 *
+	 *	if cnt is false we will return id if it exists and false ifnot
+	 *
 	 * @access public
 	 * @param int $address
 	 * @param int $subnetId
+	 * @param int $subnetId
 	 * @return boolean success/failure
 	 */
-	public function address_exists ($address, $subnetId) {
+	public function address_exists ($address, $subnetId, $cnt = true) {
 		# make sure it is in decimal format
 		$address = $this->transform_address($address, "decimal");
 		# check
-	    $query      = "select count(*) as `cnt` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;";
+		if($cnt===true) { $query = "select count(*) as `cnt` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;"; }
+		else			{ $query = "select `id` from `ipaddresses` where `subnetId`=? and `ip_addr`=?;";  }
 		# fetch
 		try { $count = $this->Database->getObjectQuery($query, array($subnetId, $address)); }
 		catch (Exception $e) {
@@ -509,7 +486,8 @@ class Addresses {
 			return false;
 		}
 		# result
-		return $count->cnt==0 ? false : true;
+		if ($cnt===true)	{ return $count->cnt==0 ? false : true; }
+		else				{ return is_null($count->id) ? false : $count->id; }
 	}
 
 	/**
@@ -588,6 +566,255 @@ class Addresses {
 
 
 
+	/**
+	 * @powerDNS
+	 * -------------------------------
+	 */
+
+	/**
+	 * Modifes powerDNS PTR record
+	 *
+	 * @access public
+	 * @param mixed $action
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function ptr_modify ($action, $address, $print_error = true) {
+		// first check if subnet selected for PTR records
+		$this->initialize_subnets_object ();
+		$subnet = $this->Subnets->fetch_subnet ("id", $address['subnetId']);
+		if ($subnet->DNSrecursive!="1") { return false; }
+
+		// ignore if PTRignore set
+		if ($address['PTRignore']=="1")	{
+				// validate db
+				$this->pdns_validate_connection ();
+				// remove if it exists
+				if ($this->ptr_exists ($address['PTR'])) {
+					$this->ptr_delete ($address, false);
+										{ return false; }
+				}
+				else {
+										{ return true; }
+				}
+		}
+		// validate db
+		$this->pdns_validate_connection ();
+		// to object
+		$address = (object) $address;
+		# execute based on action
+		if($action=="add")				{ return $this->ptr_add ($address, $print_error); }							//create new PTR
+		elseif($action=="edit")			{ return $this->ptr_edit ($address, $print_error); }						//modify existing PTR
+		elseif($action=="delete")		{ return $this->ptr_delete ($address, $print_error); }						//delete PTR
+		else							{ return $this->Result->show("danger", _("Invalid PDNS action"), true); }
+	}
+
+	/**
+	 *  Validates pdns database connection
+	 *
+	 * @access public
+	 * @param bool $die (default: false)
+	 * @return void
+	 */
+	public function pdns_validate_connection ($die = true) {
+		# powerDNS class
+		$this->PowerDNS = new PowerDNS ($this->Database);
+		# check connection
+		if($this->PowerDNS->db_check()===false && $die) { $this->Result->show("danger", _("Cannot connect to powerDNS database"), true); }
+		# get settings
+		$this->get_settings ();
+	}
+
+	/**
+	 * Set zone name and fetch domain details
+	 *
+	 * @access private
+	 * @param mixed $ip
+	 * @param mixed $mask
+	 * @return void
+	 */
+	private function pdns_fetch_domain ($subnet_id) {
+		# initialize subnets
+		$this->initialize_subnets_object ();
+		// fetch subnet
+		$subnet = $this->Subnets->fetch_subnet ("id", $subnet_id);
+		if($subnet===false)							{  $this->Result->show("danger", _("Invalid subnet Id"), true); }
+
+		// set PTR zone name from IP/mash
+		$zone = $this->PowerDNS->get_ptr_zone_name ($this->transform_address ($subnet->subnet, "dotted"), $subnet->mask);
+		// try to fetch
+		return  $this->PowerDNS->fetch_domain_by_name ($zone);
+	}
+
+	/**
+	 * Create new PTR record when adding new IP address
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param mixed $print_error
+	 * @param mixed $id (default: NULL)
+	 * @return void
+	 */
+	public function ptr_add ($address, $print_error, $id = null) {
+		// validate hostname
+		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
+		// fetch domain
+		$domain = $this->pdns_fetch_domain ($address->subnetId);
+		// decode values
+		$values = json_decode($this->settings->powerDNS);
+
+		// formulate new record
+		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->dns_name, $values->ttl);
+		// insert record
+		$this->PowerDNS->add_domain_record ($record, false);
+		// link to address
+		$id = $id===null ? $this->lastId : $id;
+		$this->ptr_link ($id, $this->PowerDNS->lastId);
+		// ok
+		if ($print_error && php_sapi_name()!="cli")
+		$this->Result->show("success", "PTR record created", false);
+
+		return true;
+	}
+
+	/**
+	 * Edits PTR
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param mixed $print_error
+	 * @return void
+	 */
+	public function ptr_edit ($address, $print_error) {
+		// validate hostname
+		if ($this->validate_hostname ($address->dns_name)===false)	{
+			// remove pointer if it exists!
+			if ($this->ptr_exists ($address->PTR)===true)	{ $this->ptr_delete ($address, $print_error); }
+			else											{ return false; }
+		}
+
+		// new record
+ 		if ($this->ptr_exists ($address->PTR)===false) {
+	 		// fake lastid
+	 		$this->lastId = $address->id;
+	 		// new ptr record
+	 		$this->ptr_add ($address, true);
+ 		}
+ 		// update PTR
+ 		else {
+			// fetch domain
+			$domain = $this->pdns_fetch_domain ($address->subnetId);
+
+			// fetch old
+			$old_record = $this->PowerDNS->fetch_record ($address->PTR);
+
+			// create insert array
+			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->dns_name, null, null, null, $old_record->change_date);
+			$update['id'] = $address->PTR;
+
+			// update
+			$this->PowerDNS->update_domain_record ($domain->id, $update);
+			// ok
+			$this->Result->show("success", "PTR record updated", false);
+ 		}
+	}
+
+	/**
+	 * Remove PTR from database
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @param mixed $print_error
+	 * @return void
+	 */
+	public function ptr_delete ($address, $print_error) {
+		$address = (object) $address;
+
+		// remove link from ipaddresses
+		$this->ptr_unlink ($address->id);
+
+		// exists
+		if ($this->ptr_exists ($address->PTR)!==false)	{
+			// fetch domain
+			$domain = $this->pdns_fetch_domain ($address->subnetId);
+			//remove
+			$this->PowerDNS->remove_domain_record ($domain->id, $address->PTR);
+			// ok
+			$this->Result->show("success", "PTR record removed", false);
+		}
+	}
+
+	/**
+	 * Links PTR record with address record
+	 *
+	 * @access public
+	 * @param mixed $address_id
+	 * @param mixed $ptr_id
+	 * @return void
+	 */
+	public function ptr_link ($address_id, $ptr_id) {
+		# execute
+		try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "PTR"=>$ptr_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+	}
+
+	/**
+	 * Remove PTR link if it exists
+	 *
+	 * @access private
+	 * @param mixed $address_id
+	 * @return void
+	 */
+	private function ptr_unlink ($address_id) {
+		# execute
+		try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "PTR"=>0)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
+			return false;
+		}
+	}
+
+	/**
+	 * Removes all PTR references for all hosts in subnet
+	 *
+	 * @access public
+	 * @param mixed $subnet_id
+	 * @return void
+	 */
+	public function ptr_unlink_subnet_addresses ($subnet_id) {
+		try { $address = $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		#result
+		return true;
+	}
+
+	/**
+	 * Checks if PTR record exists
+	 *
+	 * @access private
+	 * @param mixed $ptr_id (default: 0)
+	 * @return void
+	 */
+	private function ptr_exists ($ptr_id = 0) {
+		return $this->PowerDNS->record_id_exists ($ptr_id);
+	}
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -617,8 +844,17 @@ class Addresses {
 	    if ($this->address_exists($address[0], $subnetId)) { return _('IP address already exists').' - '.$address[0]; }
 
 		# format insert array
-		$address_insert = array("subnetId"=>$subnetId, "ip_addr"=>$address[0], "state"=>$address[1], "description"=>$address[2], "dns_name"=>$address[3], "mac"=>$address[4],
-								"owner"=>$address[5], "switch"=>$address[6], "port"=>$address[7], "note"=>$address[8]);
+		$address_insert = array("subnetId"=>$subnetId,
+								"ip_addr"=>$address[0],
+								"state"=>$address[1],
+								"description"=>$address[2],
+								"dns_name"=>$address[3],
+								"mac"=>$address[4],
+								"owner"=>$address[5],
+								"switch"=>$address[6],
+								"port"=>$address[7],
+								"note"=>$address[8]
+								);
 
 		# switch to 0, state to active
 		$address_insert['switch'] = strlen($address_insert['switch'])==0 ? 0 : $address_insert['switch'];
@@ -676,6 +912,10 @@ class Addresses {
 		if(!is_null($order)) 	{ $order = array($order, $order_direction); }
 		else 					{ $order = array("ip_addr", "asc"); }
 
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
+
 		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `subnetId` = ? order by `$order[0]` $order[1];", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -723,11 +963,12 @@ class Addresses {
 	 */
 	public function count_addresses_in_multiple_subnets ($subnets) {
 		# empty
-		if(empty($address)) { return 0; }
+		if(empty($subnets)) { return 0; }
 
 		# create query
 		foreach($subnets as $k=>$s) {
-			$tmp[] = " `subnetId`=$s ";
+			if (is_object($s))	{ $tmp[] = " `subnetId`=$s->id "; }
+			else				{ $tmp[] = " `subnetId`=$s "; }
 		}
 		$query  = "select count(*) as `cnt` from `ipaddresses` where ".implode("or", $tmp).";";
 
@@ -763,6 +1004,10 @@ class Addresses {
 		# ip address order
 		if(!is_null($order)) 	{ $order_addr = array($order, $order_direction); }
 		else 					{ $order_addr = array("ip_addr", "asc"); }
+
+		# escape ordering
+		$order[0] = $this->Database->escape ($order[0]);
+		$order[1] = $this->Database->escape ($order[1]);
 
 	    # set query to fetch all ip addresses for specified subnets or just count
 		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = "" '; }
@@ -1083,83 +1328,6 @@ class Addresses {
 	*/
 
 	/**
-	 * identify ip address type - ipv4 or ipv6
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return mixed IP version
-	 */
-	public function identify_address ($address) {
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
-	}
-
-	/**
-	 * Identifies IP address format
-	 *
-	 *	0 = decimal
-	 *	1 = dotted
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return mixed decimal or dotted
-	 */
-	private function identify_address_format ($address) {
-		return is_numeric($address) ? "decimal" : "dotted";
-	}
-
-	/**
-	 * Transforms IP address to required format
-	 *
-	 *	format can be decimal (1678323323) or dotted (10.10.0.0)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @param string $format (default: "dotted")
-	 * @return mixed requested format
-	 */
-	public function transform_address ($address, $format = "dotted") {
-		# no change
-		if($this->identify_address_format ($address) == $format)		{ return $address; }
-		else {
-			if($this->identify_address_format ($address) == "dotted")	{ return $this->transform_to_decimal ($address); }
-			else														{ return $this->transform_to_dotted ($address); }
-		}
-	}
-
-	/**
-	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
-	 *
-	 * @access public
-	 * @param int $address
-	 * @return mixed dotted format
-	 */
-	public function transform_to_dotted ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
-	    else 								 			  				{ return(long2ip6($address)); }
-	}
-
-	/**
-	 * Transform IP address from dotted to decimal (10.2.1.0 -> 167903488)
-	 *
-	 * @access public
-	 * @param mixed $address
-	 * @return int IP address
-	 */
-	public function transform_to_decimal ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
-	    else 								 							{ return(ip2long6($address)); }
-	}
-
-	/**
 	 * This function compresses all ranges
 	 *
 	 *	input is array of ip addresses
@@ -1227,23 +1395,56 @@ class Addresses {
 	}
 
 	/**
-	 * Changes empty array fields to specified character
+	 * Finds invalid addresses - that have subnetId that does not exist
 	 *
 	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
+	 * @return void
 	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
+	public function find_invalid_addresses () {
+		// find unique ids
+		$ids = $this->find_unique_subnetids ();
+		if ($ids===false)										{ return false; }
+		// validate
+		foreach ($ids as $id) {
+			if ($this->verify_subnet_id ($id->subnetId)===0) {
+				$false[] = $this->fetch_subnet_addresses ($id->subnetId);
 			}
 		}
-		# result
-		return $out;
+		// return
+		return isset($false) ? $false : false;
+	}
+
+	/**
+	 * Finds all unique master subnet ids
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function find_unique_subnetids () {
+		try { $res = $this->Database->getObjectsQuery("select distinct(`subnetId`) from `ipaddresses` order by `subnetId` asc;"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return sizeof($res)>0 ? $res : false;
+	}
+
+	/**
+	 * Verifies that subnetid exists
+	 *
+	 * @access private
+	 * @param mixed $id
+	 * @return void
+	 */
+	private function verify_subnet_id ($id) {
+		try { $res = $this->Database->getObjectQuery("select count(*) as `cnt` from `subnets` where `id` = ?;", array($id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return (int) $res->cnt;
 	}
 
 

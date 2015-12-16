@@ -24,6 +24,13 @@ $permission = $Subnets->check_permission ($User->user, $_POST['subnetId']);
 # die if write not permitted
 if($permission < 2) { $Result->show("danger", _('You cannot write to this subnet'), true); }
 
+# fetch subnet details
+$subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
+$subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+
+# full
+if ($_POST['type']!="update-icmp" && $subnet->isFull==1)                { $Result->show("warning", _("Cannot scan as subnet is market as used"), true, true); }
+
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 ?>
@@ -188,6 +195,6 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 </div>
 
 <!-- footer -->
-<div class="pFooter">
+<div class="pFooter importFooter">
 	<button class="btn btn-sm btn-default hidePopups"><?php print _('Close window'); ?></button>
 </div>

@@ -4,7 +4,7 @@
  *	phpIPAM Admin class
  */
 
-class Admin  {
+class Admin extends Common_functions {
 
 	/**
 	 * public variables
@@ -26,7 +26,7 @@ class Admin  {
 	protected $User;						//User object
 	protected $Database;					//for Database connection
 	protected $debugging = false;			//(bool) debugging flag
-	protected $settings = false;			//(obj) settings
+	public $Log;							// for Logging connection
 
 
 
@@ -36,7 +36,6 @@ class Admin  {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database, $admin_required = true) {
 		# initialize database object
@@ -49,17 +48,8 @@ class Admin  {
 		$this->set_admin_required ($admin_required);
 		# verify that user is admin
 		$this->is_admin ();
-	}
-
-	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
+		# Log object
+		$this->Log = new Logging ($this->Database);
 	}
 
 	/**
@@ -74,63 +64,17 @@ class Admin  {
 	}
 
 	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
-	}
-
-	/**
-	 * Changes empty array fields to specified character
-	 *
-	 * @access public
-	 * @param array $fields
-	 * @param string $char (default: "/")
-	 * @return array
-	 */
-	public function reformat_empty_array_fields ($fields, $char = "/") {
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
-		}
-		# result
-		return $out;
-	}
-
-	/**
-	 * Function to verify checkbox if 0 length
-	 *
-	 * @access public
-	 * @param mixed $field
-	 * @return void
-	 */
-	public function verify_checkbox ($field=0) {
-		return $field==""||$field=="0" ? 0 : 1;
-	}
-
-	/**
 	 * Checks if current user is admin
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function is_admin () {
-		# initialize user class
-		$this->User = new User ($this->Database);
+		// user not required for cli
+		if (php_sapi_name()!="cli") {
+			# initialize user class
+			$this->User = new User ($this->Database);
+		}
 		# save settings
 		$this->settings = $this->User->settings;
 		# if required die !
@@ -323,13 +267,13 @@ class Admin  {
 		try { $this->Database->insertObject($table, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->User->username);
+			$this->Log->write( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table object creation", "New $table database object created<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "$table object creation", "New $table database object created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -353,13 +297,13 @@ class Admin  {
 		try { $this->Database->updateObject($table, $values, $key); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".array_to_log($values), 2, $this->User->username);
+			$this->Log->write( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -383,13 +327,13 @@ class Admin  {
 		try { $this->Database->updateMultipleObjects($table, $ids, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			write_log( "$table multiple objects edit", "Failed to edit multiple objects in $table<hr>".$e->getMessage()."<hr>".array_to_log($ids)."<hr>".array_to_log($values), 2, $this->User->username);
+			$this->Log->write( "$table multiple objects edit", "Failed to edit multiple objects in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table multiple objects edit", "Multiple objects in $table edited<hr>".array_to_log($ids)."<hr>".array_to_log($values), 0, $this->User->username);
+		$this->Log->write( "$table multiple objects edit", "Multiple objects in $table edited<hr>".$this->array_to_log($ids)."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
 		return true;
 	}
 
@@ -406,14 +350,14 @@ class Admin  {
 		# execute
 		try { $this->Database->deleteRow($table, $field, $id); }
 		catch (Exception $e) {
-			write_log( "$table object $values[$id] delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2, $this->User->username);
+			$this->Log->write( "$table object $values[$id] delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		write_log( "$table object $id edit", "Object $field=$id in $table deleted.", 0, $this->User->username);
+		$this->Log->write( "$table object $id edit", "Object $field=$id in $table deleted.", 0);
 		return true;
 	}
 
@@ -706,57 +650,6 @@ class Admin  {
 
 
 
-
-	/**
-	 *	@ripe method
-	 *	--------------------------------
-	 */
-
-	public function ripe_fetch_subnets ($as) {
-		//open connection
-		$ripe_connection = fsockopen("whois.ripe.net", 43, $errno, $errstr, 5);
-		if(!$ripe_connection) {
-			$this->Result->show("danger", "$errstr ($errno)", false);
-			return false;
-		}
-		else {
-			//fetch result
-			fputs ($ripe_connection, '-i origin as'. $as ."\r\n");
-			//save result to var out
-			$out = "";
-		    while (!feof($ripe_connection)) { $out .= fgets($ripe_connection); }
-
-		    //parse it
-		    $out = explode("\n", $out);
-
-		    //we only need route
-		    foreach($out as $line) {
-				if (strlen(strstr($line,"route"))>0) {
-					//replace route6 with route
-					$line = str_replace("route6:", "route:", $line);
-					//only take IP address
-					$line = explode("route:", $line);
-					$line = trim($line[1]);
-					//set result
-					$subnet[] = $line;
-				}
-		    }
-		    //return
-		    return isset($subnet) ? $subnet : array();
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 *	@search/replace fields
 	 *	--------------------------------
@@ -838,12 +731,11 @@ class Admin  {
 	    else																																{ $field['ftype'] = $field['fieldType']."(".$field['fieldSize'].")"; }
 
 	    # default value null
-	    if(strlen($field['fieldDefault'])==0)	{ $field['fieldDefault'] = "NULL"; }
-	    else									{ $field['fieldDefault'] = "'$field[fieldDefault]'"; }
+	    $field['fieldDefault'] = strlen($field['fieldDefault'])==0 ? NULL : $field['fieldDefault'];
 
 	    # character set if needed
-	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set")	{ $charset = "CHARACTER SET utf8"; }
-	    else																							{ $charset = ""; }
+	    if($field['fieldType']=="varchar" || $field['fieldType']=="text" || $field['fieldType']=="set" || $field['fieldType']=="enum")	{ $charset = "CHARACTER SET utf8"; }
+	    else																															{ $charset = ""; }
 
 	    # escape fields
 	    $field['table'] 		= $this->Database->escape($field['table']);
@@ -863,15 +755,31 @@ class Admin  {
 		    return false;
 	    }
 
+
+	    # set update query
+	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[name]`;"; }
+	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER IGNORE TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
+	    else if ($field['action']=="edit") 							{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default COMMENT :comment;"; }
+	    else if ($field['action']=="add"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
+	    else if ($field['action']=="add")							{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NULL COMMENT :comment;"; }
+	    else {
+		    return false;
+	    }
+
+	    # set parametized values
+	    $params = array();
+	    if (strpos($query, ":default")>0)	$params['default'] = $field['fieldDefault'];
+	    if (strpos($query, ":comment")>0)	$params['comment'] = $field['Comment'];
+
 		# execute
-		try { $res = $this->Database->runQuery($query, array(@$field['Comment'])); }
+		try { $res = $this->Database->runQuery($query, $params); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-	        write_log( "Custom field $field[action]", "Custom Field $field[action] failed ($field[name])<hr>".array_to_log($field), 2, $this->User->username);
+	        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] failed ($field[name])<hr>".$this->array_to_log($field), 2);
 			return false;
 		}
 		# field updated
-        write_log( "Custom field $field[action]", "Custom Field $field[action] success ($field[name])<hr>".array_to_log($field), 0, $this->User->username);
+        $this->Log->write( "Custom field $field[action]", "Custom Field $field[action] success ($field[name])<hr>".$this->array_to_log($field), 0);
 	    return true;
 	}
 

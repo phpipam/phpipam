@@ -88,10 +88,13 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
         <td>
         	<select name="sectionIdNew" class="form-control input-sm input-w-auto">
             	<?php
-            	foreach($sections as $section) {
-            		/* selected? */
-            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
-            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }            	}
+	            if($sections!==false) {
+	            	foreach($sections as $section) {
+	            		/* selected? */
+	            		if($_POST['sectionId'] == $section->id)  { print '<option value="'. $section->id .'" selected>'. $section->name .'</option>'. "\n"; }
+	            		else 									 { print '<option value="'. $section->id .'">'. $section->name .'</option>'. "\n"; }
+	            	}
+            	}
             	?>
             </select>
 
@@ -105,7 +108,7 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
     <tr>
         <td><?php print _('Master Folder'); ?></td>
         <td>
-        	<?php $Subnets->print_mastersubnet_dropdown_menu($_POST['sectionId'], @$folder_old_details['masterSubnetId']); ?>
+        	<?php $Subnets->print_mastersubnet_dropdown_menu($_POST['sectionId'], @$folder_old_details['masterSubnetId'], true); ?>
         </td>
         <td class="info2"><?php print _('Enter master folder if you want to nest it under existing folder, or select root to create root folder'); ?>!</td>
     </tr>
@@ -133,6 +136,9 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
 		    	# retain newlines
 		    	$folder_old_details[$field['name']] = str_replace("\n", "\\n", @$folder_old_details[$field['name']]);
 
+				# set default value !
+				if ($_POST['action']=="add"){ $folder_old_details[$field['name']] = $field['Default']; }
+
 		    	# required
 				if($field['Null']=="NO")	{ $required = "*"; }
 				else						{ $required = ""; }
@@ -142,9 +148,10 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
 				print '	<td colspan="2">'. "\n";
 
 				//set type
-				if(substr($field['type'], 0,3) == "set") {
+				if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
 					//parse values
-					$tmp = explode(",", str_replace(array("set(", ")", "'"), "", $field['type']));
+					$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
+
 					//null
 					if($field['Null']!="NO") { array_unshift($tmp, ""); }
 

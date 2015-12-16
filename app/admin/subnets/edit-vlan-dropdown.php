@@ -5,7 +5,7 @@
  *******************************/
 
 /* required functions */
-if(!is_object($User)) {
+if(!isset($User)) {
 	/* functions */
 	require( dirname(__FILE__) . '/../../../functions/functions.php');
 
@@ -22,13 +22,14 @@ $User->check_user_session();
 
 # fetch all permitted domains
 $permitted_domains = $Sections->fetch_section_domains ($_POST['sectionId']);
+
 # fetch all belonging vlans
 $cnt = 0;
 foreach($permitted_domains as $k=>$d) {
-	// fetch vlans and append
-	$vlans = $Tools->fetch_multiple_objects("vlans", "domainId", $d, "number");
 	//fetch domain
 	$domain = $Tools->fetch_object("vlanDomains","id",$d);
+	// fetch vlans and append
+	$vlans = $Tools->fetch_multiple_objects("vlans", "domainId", $domain->id, "number");
 	//save to array
 	$out[$d]['domain'] = $domain;
 	$out[$d]['vlans']  = $vlans;

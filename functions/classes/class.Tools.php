@@ -4,7 +4,7 @@
  *	phpIPAM Section class
  */
 
-class Tools  {
+class Tools extends Common_functions {
 
 	/**
 	 * public variables
@@ -12,6 +12,7 @@ class Tools  {
 	public $vlans;							//to store vlans, vlanId is array index (array of objects)
 	public $vrfs;							//to store vrfs, vrfId is array index (array of objects)
 	public $devices;						//to store devices, id is array index (array of objects)
+	public $settings = null;				//settings
 
 	/**
 	 * object holders
@@ -30,7 +31,6 @@ class Tools  {
 	 * __construct method
 	 *
 	 * @access public
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# set database object
@@ -39,64 +39,6 @@ class Tools  {
 		$this->Result = new Result ();
 		# set debugging
 		$this->set_debugging ();
-	}
-
-	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
-	}
-
-	/**
-	 * Initializes PEAR Net IPv4 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv4 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv4)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv4.php' );
-			//initialize object
-			$this->Net_IPv4 = new Net_IPv4();
-		}
-	}
-	/**
-	 * Initializes PEAR Net IPv6 object
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function initialize_pear_net_IPv6 () {
-		//initialize NET object
-		if(!is_object($this->Net_IPv6)) {
-			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/IPv6.php' );
-			//initialize object
-			$this->Net_IPv6 = new Net_IPv6();
-		}
-	}
-
-	/**
-	 * Strip tags from array or field to protect from XSS
-	 *
-	 * @access public
-	 * @param mixed $input
-	 * @return void
-	 */
-	public function strip_input_tags ($input) {
-		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
-		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
 	}
 
 
@@ -259,7 +201,7 @@ class Tools  {
 	 */
 	public function validate_vlan ($number) {
 		# fetch highest vlan id
-		$settings = $this->fetch_settings();
+		$settings = $this->get_settings();
 
 		if(empty($number)) 							{ return true; }
 		elseif(!is_numeric($number)) 				{ return _('VLAN must be numeric value!'); }
@@ -365,17 +307,25 @@ class Tools  {
 	 * @return array
 	 */
 	public function fetch_devices ($field=null, $val=null, $order_field="id", $order_direction="asc") {
+		# escape sorts
+		$order_field 	 = $this->Database->escape ($order_field);
+		$order_direction = $this->Database->escape ($order_direction);
+
 		# set query
 		if(!is_null($field)) {
-			# escape method/table
-			$field = $this->Database->escape($field);
+			// validate field
+			$permitted_fields = $this->get_permitted_fields ("devices");
+			if (!in_array($field, $permitted_fields)) {
+				$this->Result->show("danger", _('Invalid field '.$field), false);
+				return false;
+			}
 
-			$query  = "SELECT * FROM `devices` where `$field` like ? order by ? ?;";
-			$params = array("%$val%", $order_field, $order_direction);
+			$query  = "SELECT * FROM `devices` where `$field` like ? order by $order_field $order_direction;";
+			$params = array("%$val%");
 		}
 		else {
-			$query  = "SELECT * FROM `devices` order by ? ?;";
-			$params = array($order_field, $order_direction);
+			$query  = "SELECT * FROM `devices` order by $order_field $order_direction;";
+			$params = array();
 		}
 		# fetch
 		try { $devices = $this->Database->getObjectsQuery($query, $params); }
@@ -427,6 +377,27 @@ class Tools  {
 				return false;
 			}
 		}
+	}
+
+	/**
+	 * Get permitted fields from database
+	 *
+	 * @access private
+	 * @param mixed $table
+	 * @return void
+	 */
+	private function get_permitted_fields ($table) {
+		try { $fields = $this->Database->getObjectsQuery("describe `$table`;", array($table)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		// loop and return array of permitted
+		foreach ($fields as $f) {
+			$out[] = $f->Field;
+		}
+		// return fields
+		return $out;
 	}
 
 	/**
@@ -492,7 +463,7 @@ class Tools  {
 	 */
 	private function rekey_device_types ($device_types) {
 		foreach($device_types as $t) {
-			$out[$t['tid']] = $t;
+			$out[$t->tid] = $t;
 		}
 		# return
 		return $out;
@@ -522,266 +493,6 @@ class Tools  {
 		}
 		# return
 		return $device_type;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@log methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * fetches logs for specified parameters
-	 *
-	 * @access public
-	 * @param mixed $logCount
-	 * @param mixed $direction (default: NULL)
-	 * @param mixed $lastId (default: NULL)
-	 * @param mixed $highestId (default: NULL)
-	 * @param mixed $informational
-	 * @param mixed $notice
-	 * @param mixed $warning
-	 * @return void
-	 */
-	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational, $notice, $warning) {
-
-		# query start
-		$query  = 'select * from ('. "\n";
-		$query .= 'select * from logs '. "\n";
-		# append severities
-		$query .= 'where (`severity` = "'. $informational .'" or `severity` = "'. $notice .'" or `severity` = "'. $warning .'" )'. "\n";
-		# set query based on direction */
-		if( ($direction == "next") && ($lastId != $highestId) ) {
-			$query .= 'and `id` < '. $lastId .' '. "\n";
-			$query .= 'order by `id` desc limit '. $logCount . "\n";
-		}
-		elseif( ($direction == "prev") && ($lastId != $highestId)) {
-			$query .= 'and `id` > '. $lastId .' '. "\n";
-			$query .= 'order by `id` asc limit '. $logCount . "\n";
-		}
-		else {
-			$query .= 'order by `id` desc limit '. $logCount . "\n";
-		}
-		# append limit and order
-		$query .= ') as test '. "\n";
-		$query .= 'order by `id` desc limit '. $logCount .';'. "\n";
-
-
-	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-	    # return results
-	    return $logs;
-	}
-
-	/**
-	 * Returns highest (last) log id
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function log_fetch_highest_id () {
-		# fetch
-	    try { $id = $this->Database->getObjectQuery("select id from logs order by id desc limit 1;"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-		# return result
-		return $id->id;
-	}
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@changelog methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * fetches all changelogs
-	 *
-	 * @access public
-	 * @param bool $filter (default: false)
-	 * @param mixed $expr
-	 * @param int $limit (default: 100)
-	 * @return void
-	 */
-	public function fetch_all_changelogs ($filter = false, $expr, $limit = 100) {
-	    # set query
-		if(!$filter) {
-		    $query = "select * from (
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-						where `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-					) as `ips` order by `cid` desc limit $limit;";
-		}
-		# filter
-		else {
-			/* replace * with % */
-			if(substr($expr, 0, 1)=="*")								{ $expr[0] = "%"; }
-			if(substr($expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
-			if(substr($expr, 0, 1)!="*" && substr($expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
-
-		    $query = "select * from (
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-						where `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-					) as `ips`
-					where `coid`='$expr' or `ctype`='$expr' or `real_name` like '$expr' or `cdate` like '$expr' or `cdiff` like '$expr' or INET_NTOA(`ip_addr`) like '$expr'
-					order by `cid` desc limit $limit;";
-		}
-
-	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-	    # return results
-	    return $logs;
-	}
-
-	/**
-	 * Fetches changelog for addresses in subnet for all slave subnets
-	 *
-	 * @access public
-	 * @param mixed $subnetId
-	 * @param int $limit (default: 50)
-	 * @return void
-	 */
-	public function fetch_subnet_addresses_changelog_recursive ($subnetId, $limit = 50) {
-	    # get all addresses ids
-	    $ips  = array();
-		$Addresses = new Addresses ($this->Database);
-	    $ips = $Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
-
-	    # fetch changelog for IPs
-	    if(sizeof($ips) > 0) {
-		    # query
-		    $query  = "select
-		    			`u`.`real_name`,`o`.`id`,`o`.`ip_addr`,`o`.`description`,`o`.`id`,`o`.`subnetId`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`
-						from `changelog` as `c`, `users` as `u`, `ipaddresses` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (";
-			foreach($ips as $ip) {
-			$query .= "`c`.`coid` = ? or ";
-			$args[] = $ip->id;
-			}
-			$query  = substr($query, 0, -3);
-			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
-
-			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
-			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-		    # return result
-		    return $logs;
-	    }
-		else {
-			return false;
-		}
-	}
-
-	/**
-	 * fetch changelog entries for specified type entry
-	 *
-	 * @param $ctype = 'ip_addr','subnet','section'
-	 * @param $coid = objectId from ctype definition
-	 * @param $long (default: false)
-	 * @param $limit (default: 50)
-	 */
-	public function fetch_changlog_entries($ctype, $coid, $long = false, $limit = 50) {
-	    # change ctype to match table
-		if($ctype=="ip_addr")	$ctypeTable = "ipaddresses";
-		elseif($ctype=="subnet")$ctypeTable = "subnets";
-		else					$ctypeTable = $ctype;
-
-	    # query
-	    if($long) {
-		    $query = "select *
-						from `changelog` as `c`, `users` as `u`, `$ctypeTable` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
-		} else {
-		    $query = "select *
-						from `changelog` as `c`, `users` as `u`
-						where `c`.`cuser` = `u`.`id`
-						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
-		}
-	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $ctype)); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-	    # return result
-	    return $logs;
-	}
-
-	/**
-	 * Fetches changelog entries for all slave subnets recursive
-	 *
-	 * @access public
-	 * @param mixed $subnetId
-	 * @param int $limit (default: 50)
-	 * @return void
-	 */
-	public function fetch_subnet_slaves_changlog_entries_recursive($subnetId, $limit = 50) {
-		# fetch all slave subnet ids
-		$Subnets = new Subnets ($this->Database);
-		$Subnets->reset_subnet_slaves_recursive ();
-		$Subnets->fetch_subnet_slaves_recursive ($subnetId);
-		# remove master subnet ID
-		$key = array_search($subnetId, $Subnets->slaves);
-		unset($Subnets->slaves[$key]);
-		$Subnets->slaves = array_unique($Subnets->slaves);
-
-	    # if some slaves are present get changelog
-	    if(sizeof($Subnets->slaves) > 0) {
-		    # set query
-		    $query  = "select
-						`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
-						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
-						and (";
-			foreach($Subnets->slaves as $slaveId) {
-			$query .= "`c`.`coid` = ? or ";
-			$args[] = $slaveId;							//set keys
-			}
-			$query  = substr($query, 0, -3);
-			$query .= ") and `c`.`ctype` = 'subnet' order by `c`.`cid` desc limit $limit;";
-
-			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
-			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
-
-		    # return result
-		    return $logs;
-	    }
-		else {
-			return false;
-		}
 	}
 
 
@@ -860,16 +571,15 @@ class Tools  {
 	 * @param number $low
 	 * @return array
 	 */
-	public function search_subnets($search_term, $high, $low) {
+	public function search_subnets($search_term, $high, $low, $search_req) {
 		# first search if range provided
 		$result1 = $this->search_subnets_range  ($search_term, $high, $low);
 		# search inside subnets even if IP does not exist!
 		$result2 = $this->search_subnets_inside ($high, $low);
+		# search inside subnets even if IP does not exist - IPv6
+		$result3 = $this->search_subnets_inside_v6 ($high, $low, $search_req);
 		# merge arrays
-		if(sizeof($result1)>0 && sizeof($result2)>0)	{ $result = array_merge($result1, $result2); }
-		elseif(sizeof($result1)>0)						{ $result = $result1; }
-		elseif(sizeof($result2)>0)						{ $result = $result2; }
-		else											{ $result = array(); }
+		$result = array_merge($result1, $result2, $result3);
 	    # result
 	    return array_filter($result);
 	}
@@ -900,7 +610,7 @@ class Tools  {
 				$query[] = " or `$myField[name]` like :search_term ";
 			}
 		}
-		$query[] = ";";
+		$query[] = "order by `subnet` asc, `mask` asc;";
 
 		# join query
 		$query = implode("\n", $query);
@@ -934,15 +644,17 @@ class Tools  {
 			foreach($subnets as $s) {
 				# cast
 				$s = (array) $s;
+
 				//first verify address type
-				$type = $Subnets->identify_address($s['subnet']);
+				$type = $this->identify_address($s['subnet']);
+
 				if($type == "IPv4") {
 					# Initialize PEAR NET object
 					$this->initialize_pear_net_IPv4 ();
 					# parse address
-					$net = $this->Net_IPv4->parseAddress($Subnets->transform_to_decimal($s['subnet']).'/'.$s['mask']);
+					$net = $this->Net_IPv4->parseAddress($this->transform_address($s['subnet']).'/'.$s['mask'], "dotted");
 
-					if($low>$Subnets->transform_to_decimal(@$net->network) && $low<$Subnets->transform_to_decimal($net->broadcast)) {
+					if($low>$this->transform_to_decimal(@$net->network) && $low<$this->transform_address($net->broadcast, "decimal")) {
 						$ids[] = $s['id'];
 					}
 				}
@@ -957,6 +669,65 @@ class Tools  {
 			}
 			# return
 			return sizeof(@$result)>0 ? array_filter($result) : array();
+		}
+		else {
+			return array();
+		}
+	}
+
+
+	/**
+	 * Search inside subnets if host address is provided! ipv6
+	 *
+	 * @access private
+	 * @param mixed $search_term
+	 * @param number $high
+	 * @param number $low
+	 * @return array
+	 */
+	private function search_subnets_inside_v6 ($high, $low, $search_req) {
+		// same
+		if($low==$high) {
+			# Initialize PEAR NET object
+			$this->initialize_pear_net_IPv6 ();
+
+			// validate
+			if ($this->Net_IPv6->checkIPv6($search_req)) {
+				# ifmask remove it
+				if (strpos($search_req, "/")>0) {
+					$search_req = $this->Net_IPv6->removeNetmaskSpec($search_req);
+				}
+				# subnets class
+				$Subnets = new Subnets ($this->Database);
+				# fetch all subnets
+				$subnets = $Subnets->fetch_all_subnets_search("IPv6");
+				# loop and search
+				foreach($subnets as $s) {
+					# cast
+					$s = (array) $s;
+					# parse address
+					$net = $this->Net_IPv6->parseAddress($this->transform_address($s['subnet'], "dotted").'/'.$s['mask']);
+
+					if(gmp_cmp($low, $this->transform_address(@$net['start'], "decimal")) == 1 && gmp_cmp($low, $this->transform_address($net['end'], "decimal")) == -1) {
+						$ids[] = $s['id'];
+
+					}
+				}
+				# filter
+				$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
+				# search
+				if(sizeof($ids)>0) {
+					foreach($ids as $id) {
+						$result[] = $Subnets->fetch_subnet(null, $id);
+					}
+				}
+				# return
+				return sizeof(@$result)>0 ? array_filter($result) : array();
+			}
+			// empty
+			else {
+				return array();
+			}
 		}
 		else {
 			return array();
@@ -1057,41 +828,40 @@ class Tools  {
 	}
 
 	/**
-	 * Reformat possible nun-full IPv6 address for search
+	 * Reformat possible non-full IPv6 address for search - set lowest and highest IPs
+	 *
+	 *	we can have
+	 *		a:a:a:a:a:a:a
+	 *		a:a:a::a
+	 *		a:a:a:a:a:a:a:a/mask
 	 *
 	 * @access public
 	 * @param mixed $address
 	 * @return void
 	 */
 	public function reformat_IPv6_for_search ($address) {
-		# we need Subnets class
-		$Subnets = new Subnets ($this->Database);
-		# split network and subnet part
-		$address = explode("/", $address);
+		# parse address
+		$this->initialize_pear_net_IPv6 ();
 
-		# if subnet is not provided we are looking for host
-		if (sizeof($address) < 2) {
-			$return['low']  = $Subnets->transform_to_decimal($address[0]);
-			$return['high'] = $Subnets->transform_to_decimal($address[0]);
+		# validate
+		if ($this->Net_IPv6->checkIPv6($address)==false) {
+			// return 0
+			return array("high"=>0, "low"=>0);
 		}
+		else {
+			# fake mask
+			if (strpos($address, "/")==0)	{ $address .= "/128"; }
 
-		//if network part ends with :: we must search the complete provided subnet!
-		$lastChars = substr($address[0], -2);
+			# parse address
+			$parsed = $this->Net_IPv6->parseAddress($address);
 
-		if ($lastChars == "::") {
-			$return['low']  = $Subnets->transform_to_decimal ($address[0]);
+			# result
+			$return['low']  = gmp_strval($this->transform_address($parsed['start'], "decimal"));
+			$return['high'] = gmp_strval($this->transform_address($parsed['end'], "decimal"));
 
-			//set highest IP address
-			$subnet = substr($ip[0], 0, -2);
-			$subnet = $Subnets->transform_to_decimal ($subnet);
-
-			//calculate all possible hosts in subnet mask
-			$maxHosts = $Subnets->get_max_hosts ($address[1], "IPv6");
-
-			$return['high'] = gmp_strval(gmp_add($return['low'], $maxHosts));
+			# return result array low/high
+			return $return;
 		}
-		# return result array low/high
-		return $return;
 	}
 
 
@@ -1204,7 +974,7 @@ class Tools  {
 		$definition = trim(strstr($definition, ";\n", true));
 
 		# get each line to array
-		$definition = explode("\n", $definition);
+		$definition = explode(PHP_EOL, $definition);
 
 		# go through,if it begins with ` use it !
 		foreach($definition as $d) {
@@ -1391,51 +1161,221 @@ class Tools  {
 	 * @return void
 	 */
 	public function requests_fetch_available_subnets () {
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull` != 1;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		# save
 		return sizeof($subnets)>0 ? (array) $subnets : NULL;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
 	/**
-	 *	@settings methods
-	 *	------------------------------
-	 */
-
-	/**
-	 * fetch and return settings
+	 * Sends mail for IP request
 	 *
 	 * @access public
+	 * @param string $action (default: "new")
+	 * @param mixed $values
 	 * @return void
 	 */
-	public function fetch_settings () {
-		try { $this->settings = $this->Database->getObject("settings", 1); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage()); }
+	public function ip_request_send_mail ($action="new", $values) {
 
-		# save
-		return sizeof($this->settings)>0 ? (array) $this->settings : NULL;
+		# get all admins and check who to end mail to
+		$recipients = $this->ip_request_get_mail_recipients ();
+
+		# add requester to cc
+		$recipients_requester = $values['requester'];
+
+		# reformat key / vaues
+		$values = $this->ip_request_reformat_mail_values ($values);
+		#reformat empty
+		$values = $this->reformat_empty_array_fields ($values, "/");
+
+		# generate content
+		if ($action=="new")			{ $subject	= "New IP address request"; }
+		elseif ($action=="accept")	{ $subject	= "IP address request accepted"; }
+		elseif ($action=="reject")	{ $subject	= "IP address request rejected"; }
+		else						{ $this->Result->show("danger", _("Invalid request action"), true); }
+
+		// set html content
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
+		foreach($values as $k=>$v) {
+		// title search
+		if (preg_match("/s_title_/", $k)) {
+		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$v</font></td></tr>";
+		}
+		else {
+		//content
+		$content[] = "<tr>";
+		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$k</font></td>";
+		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$v</font></td>";
+		$content[] = "</tr>";
+		}
+		}
+		$content[] = "<tr><td style='padding:5px;padding-left:15px;margin:0px;font-style:italic;padding-bottom:3px;text-align:right;color:#ccc;text-shadow:1px 1px 1px white;border-top:1px solid white;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;'>Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
+		//set alt content
+		$content_plain[] = "$subject"."\r\n------------------------------\r\n";
+		foreach($values as $k=>$v) {
+		$content_plain[] = $k." => ".$v;
+		}
+		$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
+		$content[] = "</table>";
+
+
+		# fetch mailer settings
+		$mail_settings = $this->fetch_object("settingsMail", "id", 1);
+
+		# initialize mailer
+		$this->get_settings ();
+		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail->initialize_mailer();
+
+		// set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
+		# try to send
+		try {
+			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
+			if ($recipients!==false) {
+			foreach($recipients as $r) {
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
+			}
+			$phpipam_mail->Php_mailer->AddCC(addslashes(trim($recipients_requester)));
+			}
+			else {
+			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($recipients_requester)));
+			}
+			$phpipam_mail->Php_mailer->Subject = $subject;
+			$phpipam_mail->Php_mailer->msgHTML($content);
+			$phpipam_mail->Php_mailer->AltBody = $content_plain;
+			//send
+			$phpipam_mail->Php_mailer->send();
+		} catch (phpmailerException $e) {
+			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		} catch (Exception $e) {
+			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+		}
+
+		# ok
+		return true;
+
 	}
 
 	/**
-	 * Alias function of fetch_settings
+	 * Returns list of recipients to get new
 	 *
-	 * @access public
+	 * @access private
 	 * @return void
 	 */
-	public function settings () {
-		return $this->fetch_settings();
+	private function ip_request_get_mail_recipients () {
+		// get all admins and check who to end mail to
+		$recipients = $this->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
+		//check recepients
+		if ($recipients!==false) {
+			// check
+			$m = 0;
+			foreach($recipients as $k=>$r) {
+				if($r->mailNotify!="Yes") {
+					unset($recipients[$k]);
+				} else {
+					$m++;
+				}
+			}
+			// if none return false
+			if ($m==0) 	{ return false; }
+			else 		{ return $recipients; }
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
+	 * Reformats request value/key pairs for request mailing
+	 *
+	 * @access private
+	 * @param mixed $values
+	 * @return void
+	 */
+	private function ip_request_reformat_mail_values ($values) {
+		// no array
+		if (!is_array($values)) { return $values; }
+
+		// addresses
+		$this->Addresses = new Addresses ($this->Database);
+
+		// change fields for mailings
+		foreach ($values as $k=>$v) {
+			// subnetId
+			if ($k=="subnetId")	{
+				// add title
+				$mail["s_title_1"] = "<br>Subnet details";
+
+				$subnet = $this->fetch_object("subnets", "id", $v);
+				$mail["Subnet"]  = $this->transform_address ($subnet->subnet, "dotted")."/".$subnet->mask;
+				$mail["Subnet"] .= strlen($subnet->description)>0 ? " - ".$subnet->description : "";
+			}
+			// ip_addr
+			elseif ($k=="ip_addr") {
+				// add title
+				$mail["s_title_2"] = "<br>Address details";
+
+				if (strlen($v)>0) {
+					$mail['IP address'] = $this->transform_address($v, "dotted");
+				} else {
+					$mail['IP address'] = "Automatic";
+				}
+			}
+			// state
+			elseif ($k=="state") {
+				$mail['State'] = $this->Addresses-> address_type_index_to_type ($v);
+			}
+			// description
+			elseif ($k=="descriotion") {
+				$mail['Description'] = $v;
+			}
+			// dns_name
+			elseif ($k=="dns_name") {
+				$mail['Hostname'] = $v;
+			}
+			// owner
+			elseif ($k=="owner") {
+				$mail['Address owner'] = $v;
+			}
+			// requester
+			elseif ($k=="requester") {
+				$mail['Requested by'] = $v;
+			}
+			// comment
+			elseif ($k=="comment") {
+				$mail['Request comment'] = $v;
+			}
+			// admin comment
+			elseif ($k=="adminComment") {
+				// add title
+				$mail["s_title_3"] = "<br>Admin comment";
+
+				$mail['Admin comment'] = $v;
+			}
+			// admin comment
+			elseif ($k=="gateway") {
+				$mail['Gateway'] = $v;
+			}
+			// nameservers
+			elseif ($k=="dns") {
+				if (strlen($v)>0) {
+				$mail['DNS servers'] = $v;
+				}
+			}
+			// vlans
+			elseif ($k=="vlan") {
+				if (strlen($v)>0) {
+				$mail['VLAN'] = $v;
+				}
+			}
+		}
+		// response
+		return $mail;
 	}
 
 
@@ -1565,7 +1505,7 @@ class Tools  {
 	 * @return void
 	 */
 	public function get_table_fix ($table) {
-		$res = fopen(dirname(__FILE__) . "/../db/SCHEMA.sql", "r");
+		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
 		$file = fread($res, 100000);
 
 		//go from delimiter on
@@ -1594,7 +1534,7 @@ class Tools  {
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = explode("\n", $file);
+		$file = explode(PHP_EOL, $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
 				//get previous
@@ -1670,12 +1610,25 @@ class Tools  {
 	 */
 
 	/**
-	 * Checks for latest phpipam version from phpipam webpage
+	 * Check for latest version
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function check_latest_phpipam_version () {
+		# fetch settings
+		$this->get_settings ();
+		# check for release
+		return $this->settings->version >= "1.2" ? $this->check_latest_phpipam_version_github () : $this->check_latest_phpipam_version_phpipamnet ();
+	}
+
+	/**
+	 * Checks for latest phpipam version from phpipam webpage
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function check_latest_phpipam_version_phpipamnet () {
 		# fetch webpage
 		$handle = @fopen("http://phpipam.net/phpipamversion.php", "r");
 		if($handle) {
@@ -1690,6 +1643,43 @@ class Tools  {
 
 		# return version or false
 		return is_numeric($versionT) ? $version : false;
+	}
+
+	/**
+	 * Fetch latest version form Github for phpipam > 1.2
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function check_latest_phpipam_version_github () {
+		# set releases href
+		$feed = implode(file('https://github.com/phpipam/phpipam/releases.atom'));
+		// fetch
+		$xml = simplexml_load_string($feed);
+
+		// if ok
+		if ($xml!==false) {
+			// encode to json
+			$json = json_decode(json_encode($xml));
+			// save all releases
+			$this->phpipam_releases = $json->entry;
+			// check for latest release
+			foreach ($json->entry as $e) {
+				// releases will be named with numberic values
+				if (is_numeric($e->title)) {
+					// save
+					$this->phpipam_latest_release = $e;
+					// return
+					return $e->title;
+					break;
+				}
+			}
+			// none
+			return false;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**
@@ -1729,7 +1719,7 @@ class Tools  {
 		# addresses class
 		$Addresses = new Addresses ($this->Database);
 		# detect address and calculate
-		return $Addresses->identify_address($cidr)=="IPv6" ? $this->calculate_IPv6_calc_results($cidr) : $this->calculate_IPv4_calc_results($cidr);
+		return $this->identify_address($cidr)=="IPv6" ? $this->calculate_IPv6_calc_results($cidr) : $this->calculate_IPv4_calc_results($cidr);
 	}
 
 	/**
@@ -1868,10 +1858,11 @@ class Tools  {
         }
 
         # /min / max hosts
-        $maxIp = gmp_strval( gmp_add(gmp_pow(2, 128 - $mask),ip2long6 ($subnet)));
+        $maxIp = gmp_strval(gmp_add(gmp_pow(2, 128 - $mask),$this->ip2long6 ($subnet)));
+		$maxIp = gmp_strval(gmp_sub($maxIp, 1));
 
         $out['Min host IP']               = $subnet;
-        $out['Max host IP']               = long2ip6 ($maxIp);
+        $out['Max host IP']               = $this->long2ip6 ($maxIp);
         $out['Number of hosts']           = $Subnets->get_max_hosts ($mask, "IPv6");
 
         # set address type
@@ -1968,6 +1959,51 @@ class Tools  {
 	 *	@misc methods
 	 *	------------------------------
 	 */
+
+	/**
+	 * Fetch all l2 domans and vlans
+	 *
+	 * @access public
+	 * @param string $search (default: false)
+	 * @return void
+	 */
+	public function fetch_all_domains_and_vlans ($search = false) {
+		// set query
+		$query[] = "select `d`.`name` as `domainName`,";
+		$query[] = "	`d`.`description` as `domainDescription`,";
+		$query[] = "	`v`.`domainId` as `domainId`,";
+		$query[] = "	`v`.`name` as `name`,";
+		$query[] = "	`v`.`number` as `number`,";
+		$query[] = "	`v`.`description` as `description`,";
+		// fetch custom fields
+		$custom_vlan_fields = $this->fetch_custom_fields ("vlans");
+		if ($custom_vlan_fields != false) {
+    		foreach ($custom_vlan_fields as $f) {
+        		$query[] = "  `v`.`$f[name]` as `$f[name]`,";
+    		}
+
+		}
+		$query[] = "	`v`.`vlanId` as `id`";
+		$query[] = "	from";
+		$query[] = "	`vlans` as `v`,";
+		$query[] = "	`vlanDomains` as `d`";
+		$query[] = "	where `v`.`domainId` = `d`.`id`";
+		$query[] = "	order by `v`.`number` asc;";
+
+		// fetch
+		try { $domains = $this->Database->getObjectsQuery(implode("\n",$query)); }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
+		// filter if requested
+		if ($search !== false && sizeof($domains)>0) {
+			foreach ($domains as $k=>$d) {
+				if (strpos($d->number, $search)===false && strpos($d->name, $search)===false && strpos($d->description, $search)===false) {
+					unset($domains[$k]);
+				}
+			}
+		}
+		// return
+		return sizeof($domains)>0 ? $domains : false;
+	}
 
 	/**
 	 * Fetches instructions from database

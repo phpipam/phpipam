@@ -20,7 +20,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
-			<?php print_breadcrumbs($Sections, $Subnets, $_GET); ?>
+			<?php $Subnets->print_breadcrumbs($Sections, $Subnets, $_GET); ?>
 		</td>
 	</tr>
 	<tr>
@@ -67,6 +67,69 @@ $rowSpan = 10 + sizeof($custom_fields);
 		</td>
 	</tr>
 
+	<!-- devices -->
+	<tr>
+		<th><?php print _('Device'); ?></th>
+		<td>
+		<?php
+
+		// Only show nameservers if defined for subnet
+		if(!empty($subnet['device'])) {
+			# fetch recursive nameserver details
+			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
+			if ($device!==false) {
+				print $device->hostname;
+				if (strlen($device->description)>0) {
+					print ' ('.$device->description.')';
+				}
+			}
+			else {
+				print "<span class='text-muted'>/</span>";
+			}
+		}
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+
+
+	<!-- nameservers -->
+	<tr>
+		<th><?php print _('Nameservers'); ?></th>
+		<td>
+		<?php
+
+		// Only show nameservers if defined for subnet
+		if(!empty($subnet['nameserverId'])) {
+			# fetch recursive nameserver details
+			$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+
+			print str_replace(";", ", ", $nameservers['namesrv1']);
+
+			//Print name of nameserver group
+			print ' ('.$nameservers['name'].')';
+		}
+
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+
+    <?php if(@$subnet['isFull']=="1") { ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+    </tr>
+    <?php } ?>
+
+
 	<?php
 	# VRF
 	if(!empty($subnet['vrfId']) && $User->settings->enableVRF==1) {
@@ -82,21 +145,86 @@ $rowSpan = 10 + sizeof($custom_fields);
 		print "</tr>";
 	}
 
+	# FW zone info
+	if($User->settings->enableFirewallZones==1) {
+		# class
+		$Zones = new FirewallZones ($Database);
+		$fwZone = $Zones->get_zone_subnet_info ($subnet['id']);
+
+		if ($fwZone!==false) {
+			// alias fix
+			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
+			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
+			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
+
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+			# zone details
+			print "<tr>";
+			print "	<th>"._('Firewall zone')."</th>";
+			print "	<td>";
+			print $fwZone->zone." ".$fwZone->alias." ".$fwZone->description."<br>".$fwZone->deviceName." ".$fwZone->interface;
+			print "	</td>";
+			print "</tr>";
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+			# address object information
+			print "<tr>";
+			print "	<th>"._('Address object')."</th>";
+			print "	<td>";
+			if($fwZone->firewallAddressObject) {
+				print $fwZone->firewallAddressObject;
+			}
+			if($subnet_permission > 1) {
+				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet[id].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
+			}
+			print "	</td>";
+			print "</tr>";
+		}
+	}
+
 	if(!$slaves) {
-		# divider
-		print "<tr>";
-		print "	<th><hr></th>";
-		print "	<td></td>";
-		print "</tr>";
 
 		# Are IP requests allowed?
 		if ($User->settings->enableIPrequests==1) {
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+
 			print "<tr>";
 			print "	<th>"._('IP requests')."</th>";
-			if($subnet['allowRequests'] == 1) 		{ print "	<td>"._('enabled')."</td>"; }		# yes
+			if(@$subnet['isFull'] == 1) 		    { print "	<td class='info2'>"._('disabled - marked as full')."</td>"; }		# yes
+			elseif($subnet['allowRequests'] == 1) 	{ print "	<td>"._('enabled')."</td>"; }		# yes
 			else 									{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 			print "</tr>";
 		}
+
+		# divider
+		print "<tr>";
+		print "	<td colspan='2'><hr></td>";
+		print "</tr>";
+
+		# agent
+		if ($subnet['pingSubnet']==1 || $subnet['discoverSubnet']==1) {
+		print "<tr>";
+		print "	<th>"._('Scan agent')."</th>";
+		print "	<td>";
+		// fetch
+		$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
+		if ($agent===false)		{ print _("Invalid scan agent"); }
+		else					{
+			$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00" ? "Never" : $agent->last_access;
+			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>Last check $last_check</span>";
+		}
+		print "	</td>";
+		print "</tr>";
+		}
+
 		# ping-check hosts inside subnet
 		print "<tr>";
 		print "	<th>"._('Hosts check')."</th>";
@@ -110,6 +238,67 @@ $rowSpan = 10 + sizeof($custom_fields);
 		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 		print "</tr>";
 	}
+
+	# autocreate PTR records
+	if($User->settings->enablePowerDNS==1) {
+		// initialize class
+		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
+			# powerDNS class
+			$PowerDNS = new PowerDNS ($Database);
+		}
+		if ($subnet['DNSrecursive'] == 1) {
+		if($PowerDNS->db_check()!==false) {
+			// set name
+			$zone = $PowerDNS->get_ptr_zone_name ($subnet['ip'], $subnet['mask']);
+			// fetch domain
+			$domain = $PowerDNS->fetch_domain_by_name ($zone);
+			// count PTR records
+			if ($domain!==false) {
+				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
+				$btns[] = "<div class='btn-group'>";
+				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
+				$btns[] = "</div>";
+				$btns = implode("\n", $btns);
+				}
+				else {
+				$btns = "";
+				}
+
+				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
+			}
+			else {
+				if ($User->is_admin () || $User->user->pdns=="Yes") {
+				$btns[] = "<div class='btn-group'>";
+				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
+				$btns[] = "</div>";
+				$btns = implode("\n", $btns);
+				}
+
+				$zone = "<span class='badge alert-danger'>Zone $zone missing</span>";
+			}
+		}
+		else {
+			$zone = "<span class='badge alert-danger'>Cannot connect to powerDNS database!</span>";
+		}
+		}
+		# divider
+		print "<tr>";
+		print "	<td colspan='2'><hr></td>";
+		print "</tr>";
+
+		print "<tr>";
+		print "	<th>"._('Autocreate reverse records')."</th>";
+		if($subnet['DNSrecursive'] == 1) 			{ print "	<td>"._('enabled')." $btns $zone</td>"; }		# yes
+		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+		print "</tr>";
+		print "<tr>";
+		print "	<th>"._('Show DNS records')."</th>";
+		if($subnet['DNSrecords'] == 1) 				{ print "	<td>"._('enabled')."</td>"; }		# yes
+		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+		print "</tr>";
+	}
+
 	?>
 
 	<?php
@@ -127,7 +316,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
 				}
 				else {
-					$html_custom[] = create_links($subnet[$key]);
+					$html_custom[] = $Result->create_links($subnet[$key]);
 				}
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";
@@ -148,17 +337,20 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 	# check for temporary shares!
 	if($User->settings->tempShare==1) {
-		foreach(json_decode($User->settings->tempAccess) as $s) {
-			if($s->type=="subnets" && $s->id==$subnet['id']) {
-				if(time()<$s->validity) {
-					$active_shares[] = $s;
-				}
-				else {
-					$expired_shares[] = $s;
+		if (is_array(json_decode($User->settings->tempAccess, true))) {
+			foreach(json_decode($User->settings->tempAccess) as $s) {
+				if($s->type=="subnets" && $s->id==$subnet['id']) {
+					if(time()<$s->validity) {
+						$active_shares[] = $s;
+					}
+					else {
+						$expired_shares[] = $s;
+					}
 				}
 			}
 		}
-		if(sizeof(@$active_shares)>0) {
+
+		if(isset($active_shares)) {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
@@ -176,7 +368,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 			print "<td>";
 			print "</tr>";
 		}
-		if(sizeof(@$expired_shares)>0) {
+		if(isset($expired_shares)) {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
@@ -298,16 +490,25 @@ $rowSpan = 10 + sizeof($custom_fields);
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
-		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
+		print "<a class='csvImport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-download'></i></a>";
 		else
-		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>											<i class='fa fa-upload'></i></a>";
+		print "<a class='btn btn-xs btn-default disabled'  	href='' data-container='body' rel='tooltip' title='"._('Import IP addresses')."'>									<i class='fa fa-download'></i></a>";
 		//export
-		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-download'></i></a>";
+		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
 		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";
 		}
 	print "</div>";
+
+		# firewall address object actions
+		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
+		if ( $User->settings->enableFirewallZones == 1 && $subnet_permission > 1) {
+			print "<div class='btn-group'>";
+			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";
+			print "<a class='fw_autogen btn btn-xs btn-default ".(($fwZone == false) ? 'disabled':'')."'  href='' data-container='body' rel='tooltip' title='"._('Generate or regenerate firewall address objects for all ip addresses within this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
+			print "</div>";
+		}
 	}
 
 	print "	</div>";

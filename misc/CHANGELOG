@@ -1,8 +1,8 @@
-== 1.17.001
+== 1.19.045
 
 	New features:
 	------------
-	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius);
+	+ Added multiple simultaneous authentication methods (Apache, AD, LDAP, Radius, NetIQ);
 	+ Added fping scanning support;
 	+ Added selectable scanning type (ping/pear/fping);
 	+ Added L2 domains;
@@ -10,6 +10,8 @@
 	+ Added customizable address tags with compressed option;
 	+ Added temporary subnet / address shares;
 	+ Added quick subnet masks;
+	+ Added nameserver sets per subnets (jonashauge);
+	+ Added optional syslog as log location;
 	+ REST API:
 		+ documentation: http://phpipam.net/api-documentation/
 		+ API v2, old v1 support added
@@ -18,6 +20,14 @@
 		+ Support for custom fields;
 		+ JSON / XML output
 		+ Full read/write controllers (Sections, Subnets/Folders, Addresses, Vlans, Vrfs);
+	+ PowerDNS integration:
+		+ Automatic reverse records creation (PTR) - IPv4 and IPv6;
+		+ Automatic SOA, NS record creation;
+		+ DNS domain management;
+	+ Added Scan agents to scan subnets remotely;
+	+ Added firewall zone mappings and module;
+	+ Added per-subnet DNS resolvers;
+	+ Added option to mark subnet as utilized;
 
 	Enhancements:
 	----------------------------
@@ -32,11 +42,26 @@
 	+ New widget - tools shortcuts;
 	+ New widget - IP calculator;
 	+ Clickable links for subnet fields;
+	+ Custom VRF fields;
+	+ Subnets can be now linked to devices;
+	+ Import/export enhancements;
+	+ Fast user switching for admins to impersonate user;
+	+ Opened folders and subnets in tree menu are saved on page reload;
+	+ RWA users can now process IP requests;
+	+ Added auto-suggest for possible slave subnets;
+	+ SSL option for MySQL connections;
+	+ Enum custom field support;
+	+ Added password reset script;
 
 	Security Fixes:
 	----------------------------
 	+ Parametized all MySQL querries;
 	+ Fixed plainpass being logged on user update;
+	+ Fixed XSS exploit on /error/;
+
+	Translations:
+	----------------------------
+	+ Added Czech translation;
 
 	Bugfixes:
 	----------------------------
@@ -47,6 +72,8 @@
 	+ Fixed nested broadcast not counted to used percentage;
 	+ Fixed invalid redirect after timeout;
 	+ Fixed discovery script index overridden;
+	+ Fixed dashboard graphs links to subnets;
+	+ Fixed Invalid ID on subnet scan of large subnets;
 
 == 1.1.010
 

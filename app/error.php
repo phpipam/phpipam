@@ -56,6 +56,9 @@ $http_codes = array(
     509 => 'Bandwidth Limit Exceeded',
     510 => 'Not Extended'
 );
+
+// validate
+if (!array_key_exists($_REQUEST['section'], $http_codes)) { $_REQUEST['section'] = 404; }
 ?>
 
 <div class="container" style="margin-top:20px;">

@@ -18,9 +18,9 @@ if($_POST['action']!="add") {
 else {
 	$method_settings = new StdClass ();
 	# set default values
-   @$method_settings->params->domain_controllers = "dc1.domain.local;dc2.domain.local";
+   @$method_settings->params->domain_controllers = "ldap1.domain.local;ldap2.domain.local";
 	$method_settings->params->base_dn = "CN=Users,CN=Company,DC=domain,DC=local";
-	$method_settings->params->account_suffix = "@domain.local";
+	$method_settings->params->account_suffix = "";
 	$method_settings->params->ad_port = 389;
 }
 
@@ -29,7 +29,17 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print _('OpenLDAP connection settings'); ?></div>
+<div class="pHeader"><?php print _('LDAP connection settings'); ?></div>
+
+<script>
+	$( "select#ldap_security" ).change(function () {
+		if ($(this).val() === "ssl" ) {
+			$('input#ad_port').val("636")
+		} else {
+			$('input#ad_port').val("389")
+		}
+	});
+</script>
 
 <!-- content -->
 <div class="pContent">
@@ -59,64 +69,98 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 
 	<!-- DC -->
 	<tr>
-		<td style="width:130px;"><?php print _('OpenLDAP servers'); ?></td>
+		<td style="width:130px;"><?php print _('LDAP servers'); ?></td>
 		<td style="width:250px;">
 			<input type="text" name="domain_controllers" class="form-control input-sm" value="<?php print @$method_settings->params->domain_controllers; ?>" <?php print $delete; ?>>
-			<input type="hidden" name="type" value="AD">
+			<input type="hidden" name="type" value="LDAP">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
 			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
 		</td>
-		<td class="info2"><?php print _('Enter domain controllers, separated by ;'); ?>
+		<td class="info2"><?php print _('LDAP hosts, separated by a semicolon (;)'); ?>
 		</td>
 	</tr>
 
-	<!-- BasedN -->
+	<!-- BaseDN -->
 	<tr>
 		<td><?php print _('Base DN'); ?></td>
 		<td>
 			<input type="text" name="base_dn" class="form-control input-sm" value="<?php print @$method_settings->params->base_dn; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="base_dn info2">
-			<?php print _('Enter base DN for LDAP'); ?>
+			<?php print _('Base DN for your directory'); ?>
 		</td>
 	</tr>
 
-	<!-- SSL -->
+	<!-- UsersDN -->
 	<tr>
-		<td><?php print _('Use SSL'); ?></td>
+		<td><?php print _('Users DN'); ?></td>
 		<td>
-			<select name="use_ssl" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
-				<option value="0" <?php if(@$method_settings->params->use_ssl == 0) { print 'selected'; } ?>><?php print _('false'); ?></option>
-				<option value="1" <?php if(@$method_settings->params->use_ssl == 1) { print 'selected'; } ?>><?php print _('true'); ?></option>
-			</select>
+			<input type="text" name="users_base_dn" class="form-control input-sm" value="<?php print @$method_settings->params->users_base_dn; ?>" <?php print $delete; ?>>
 		</td>
-		<td class="info2">
-			<?php print _('Use SSL (LDAPS), your server needs to be setup (default: false)'); ?><br>
+		<td class="users_base_dn info2">
+			<?php print _('Base DN for your users, if different from the base DN above.'); ?>
+		</td>
+	</tr>
+
+	<!-- UIDAttr -->
+	<tr>
+		<td><?php print _('UID Attribute'); ?></td>
+		<td>
+			<input type="text" name="uid_attr" class="form-control input-sm" value="<?php print @$method_settings->params->uid_attr; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="uid_attr_dn info2">
+			<?php print _('LDAP uid naming attribute for users, e.g. "uid" or "cn"'); ?>
 		</td>
 	</tr>
 
 	<!-- TLS -->
 	<tr>
-		<td><?php print _('Use TLS'); ?></td>
+		<td><?php print _('LDAP Security Type'); ?></td>
 		<td>
-			<select name="use_tls" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
-				<option value="0" <?php if(@$method_settings->params->use_tls == 0) { print 'selected'; } ?>><?php print _('false'); ?></option>
-				<option value="1" <?php if(@$method_settings->params->use_tls == 1) { print 'selected'; } ?>><?php print _('true'); ?></option>
+			<select id='ldap_security' name="ldap_security" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
+				<option name="ldap_security" class="form-control input-sm input-w-auto" value="tls" <?php if(@$method_settings->params->ldap_security == 'tls') { print 'selected'; } ?>>TLS</option>
+				<option name="ldap_security" class="form-control input-sm input-w-auto" value="ssl" <?php if(@$method_settings->params->ldap_security == 'ssl') { print 'selected'; } ?>>SSL</option>
+				<option name="ldap_security" class="form-control input-sm input-w-auto" value="none" <?php if(@$method_settings->params->ldap_security == 'none') { print 'selected'; } ?>>None</option>
 			</select>
 		</td>
 		<td class="info2">
-			<?php print _('If you wish to use TLS you should ensure that useSSL is set to false and vice-versa (default: false)'); ?>
+			<?php print _('SSL, TLS, or None (default: TLS)'); ?>
 		</td>
 	</tr>
 
-	<!-- AD port -->
+	<!-- LDAP port -->
 	<tr>
-		<td><?php print _('AD port'); ?></td>
+		<td><?php print _('LDAP port'); ?></td>
 		<td>
-			<input type="text" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
+			<input type="text" id="ad_port" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="port info2">
-			<?php print _('The default port for LDAP non-SSL connections'); ?>
+			<?php print _('Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636'); ?>
+		</td>
+	</tr>
+
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<!-- Username -->
+	<tr>
+		<td><?php print _('Bind user'); ?></td>
+		<td>
+			<input type="text" name="adminUsername" class="form-control input-sm" style="margin-bottom:5px;" placeholder="<?php print _('Username'); ?>" value="<?php print @$method_settings->params->adminUsername; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="info2">
+			<?php print _('User DN to bind as for search operations (optional). '); ?>
+		</td>
+	</tr>
+
+	<!-- Username -->
+	<tr>
+		<td><?php print _('Bind password'); ?></td>
+		<td>
+			<input type="password" name="adminPassword" class="form-control input-sm" placeholder="<?php print _('Password'); ?>" value="<?php print @$method_settings->params->adminPassword; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="info2">
+			<?php print _('Password for the bind account (only required if bind user is set).'); ?>
 		</td>
 	</tr>
 

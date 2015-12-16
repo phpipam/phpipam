@@ -23,13 +23,16 @@
  *
  *	In case of problems set reset_debugging to true
  *
+ *  Statuses:
+ *      0 = online
+ *      2 = offline
+ *
  */
 
 
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Mail.php');
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -43,16 +46,21 @@ $Result		= new Result();
 $Scan->ping_set_exit(true);
 // set debugging
 $Scan->reset_debugging(false);
+// fetch agent
+$agent = $Tools->fetch_object("scanAgents", "id", 1);
 // change scan type?
-// $Scan->reset_scan_method ("pear");
+// $Scan->reset_scan_method ("fping");
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
 $send_mail = true;
 
-
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
+
+// set now for whole script
+$now     = time();
+$nowdate = date ("Y-m-d H:i:s");
 
 
 // script can only be run from cli
@@ -70,34 +78,37 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 
 //first fetch all subnets to be scanned
-$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck ();
+$scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
 if($Scan->debugging)							{ print_r($scan_subnets); }
 if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates"); }
 //fetch all addresses that need to be checked
 foreach($scan_subnets as $s) {
-	$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
-	//set array for fping
-	if($Scan->icmp_type=="fping")	{
-		$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
-	}
-	//save addresses
-	if(sizeof($subnet_addresses)>1) {
-		foreach($subnet_addresses as $a) {
-			//ignore excludePing
-			if($a->excludePing!=1) {
-				//create old status
-				$tDiff = time() - strtotime($a->lastSeen);
-				$oldStatus = $tDiff <= $statuses[1] ? 0 : 2;
-				//create different array for fping
-				if($Scan->icmp_type=="fping")	{
-					$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);	//used for status check
-					$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
-				}
-				else {
-					$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "subnetId"=>$a->subnetId, "lastSeen"=>$a->lastSeen, "oldStatus"=>$oldStatus);
+
+	// if subnet has slaves dont check it
+	if ($Subnets->has_slaves ($s->id) === false) {
+
+		$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
+		//set array for fping
+		if($Scan->icmp_type=="fping")	{
+			$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
+		}
+		//save addresses
+		if(sizeof($subnet_addresses)>1) {
+			foreach($subnet_addresses as $a) {
+				//ignore excludePing
+				if($a->excludePing!=1) {
+					//create different array for fping
+					if($Scan->icmp_type=="fping")	{
+						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen);	//used for status check
+						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
+					}
+					else {
+						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen);
+					}
 				}
 			}
 		}
+
 	}
 }
 
@@ -159,19 +170,19 @@ if($Scan->icmp_type=="fping") {
 			foreach($addresses[$s['id']] as $ak=>$a) {
 				//offline host
 				if(array_search($Subnets->transform_to_dotted($a), $subnets[$sk]['result'])===false) {
-					//change?
-					if($addresses2[$s['id']][$ak]['oldStatus']!=2) {
-						$address_change[] = $addresses2[$s['id']][$ak];
-					}
+    				// new change = null
+    				$addresses2[$s['id']][$ak]['lastSeenNew'] = NULL;
+					//save to out array
+                    $address_change[] = $addresses2[$s['id']][$ak];
 				}
 				//online host
 				else {
-					//update alive time
-					$Scan->ping_update_lastseen ($ak);
-					//change?
-					if($addresses2[$s['id']][$ak]['oldStatus']!=0) {
-						$address_change[] = $addresses2[$s['id']][$ak];
-					}
+    				// new change = now
+    				$addresses2[$s['id']][$ak]['lastSeenNew'] = $nowdate;
+					//save to out array
+                    $address_change[] = $addresses2[$s['id']][$ak];
+                    //update status
+                    $Scan->ping_update_lastseen ($addresses2[$s['id']][$ak]['id'], $nowdate);
 				}
 			}
 		}
@@ -197,19 +208,17 @@ else {
 	    while( !empty( $threads ) ) {
 	        foreach( $threads as $index => $thread ) {
 	            if( ! $thread->isAlive() ) {
-	            	//online, check diff
+	            	//online
 	            	if($thread->getExitCode() == 0) {
-						//if old is offline than check for time diff
-						if($addresses[$index]['oldStatus']==2) {
-							$address_change[] = $addresses[$index];	 				//change to online
-						}
+    	            	// set new available time
+    	            	$addresses[$index]['lastSeenNew'] =  $nowdate;
+                        $address_change[$index] = $addresses[$index];	 				//change to online
 	            	}
 	            	//offline
 	            	else {
-						//if online before change
-						if($addresses[$index]['oldStatus']==0) {
-							$address_change[] = $addresses[$index];	 				//change to offline
-						}
+    	            	// set nw online
+    	            	$addresses[$index]['lastSeenNew'] =  NULL;
+                        $address_change[$index] = $addresses[$index];	 				//change to online
 					}
 	            	//save exit code for host
 	                $addresses[$index]['newStatus'] = $thread->getExitCode();
@@ -225,17 +234,57 @@ else {
 
 	# re-initialize classes
 	$Database = new Database_PDO;
-	$Scan = new Scan ($Database);
+	$Scan = new Scan ($Database, $Subnets->settings);
 	// reset debugging
 	$Scan->reset_debugging(false);
 
 	# update all active statuses
 	foreach($addresses as $k=>$a) {
 		if($a['newStatus']==0) {
-			$Scan->ping_update_lastseen ($a['id']);
+			$Scan->ping_update_lastseen ($a['id'], $nowdate);
 		}
 	}
 }
+
+
+
+/**
+ * Now check for diffs - if time change between lastSeenOld and lastSeen > statuses[1]
+ */
+
+// loop
+foreach ($address_change as $k=>$change) {
+    // null old - set to epoch time
+    if (strtotime($change['lastSeenOld'])===false)  { $change['lastSeenOld'] = date("Y-m-d H:i:s", 0); }
+
+    // set general diffs
+    $deviceDiff = $now - strtotime($change['lastSeenOld']);	        // now - device last seen
+    $agentDiff  = $now - strtotime($agent->last_access);	        // now - last agent check
+
+    // if now online and old offline send mail
+    if ($change['lastSeenNew']!=NULL && $deviceDiff >= (int) $statuses[1]) {
+        $address_change[$k]['oldStatus'] = 2;
+        $address_change[$k]['newStatus'] = 0;
+    }
+    // now offline, and diff > offline period, do checks
+    elseif($change['lastSeenNew']==NULL && $deviceDiff >= (int) $statuses[1]) {
+        // if not already reported
+        if ($deviceDiff <= ((int) $statuses[1] + $agentDiff))  {
+            $address_change[$k]['oldStatus'] = 0;
+            $address_change[$k]['newStatus'] = 2;
+        }
+        else {
+            unset ($address_change[$k]);
+        }
+    }
+    // remove
+    else {
+        unset ($address_change[$k]);
+    }
+}
+
+# update scan time
+$Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 # print change
@@ -244,19 +293,21 @@ if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($
 # all done, mail diff?
 if(sizeof($address_change)>0 && $send_mail) {
 
-	if(!is_object(@$Scan)) {
-		$Database 	= new Database_PDO;
-		$Subnets	= new Subnets ($Database);
-		$Addresses	= new Addresses ($Database);
-		$Tools		= new Tools ($Database);
-		$Scan		= new Scan ($Database);
-		$Result		= new Result();
+	# remove old classes
+	unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);
 
-		// set exit flag to true
-		$Scan->ping_set_exit(true);
-		// set debugging
-		$Scan->reset_debugging(false);
-	}
+	$Database 	= new Database_PDO;
+	$Subnets	= new Subnets ($Database);
+	$Addresses	= new Addresses ($Database);
+	$Tools		= new Tools ($Database);
+	$Scan		= new Scan ($Database);
+	$Result		= new Result();
+
+	// set exit flag to true
+	$Scan->ping_set_exit(true);
+	// set debugging
+	$Scan->reset_debugging(false);
+
 
 	# check for recipients
 	foreach($Tools->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
@@ -278,7 +329,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 	$phpipam_mail->initialize_mailer();
 
 	// set subject
-	$subject	= "phpIPAM IP state change ".date("Y-m-d H:i:s");
+	$subject	= "phpIPAM IP state change ".$nowdate;
 
 	//html
 	$content[] = "<h3>phpIPAM host changes</h3>";
@@ -286,6 +337,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 	$content[] = "<tr>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Description</th>";
+	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>last seen</th>";
@@ -316,16 +368,17 @@ if(sizeof($address_change)>0 && $send_mail) {
 		if(is_null($change['lastSeen']) || $change['lastSeen']=="0000-00-00 00:00:00") {
 			$ago	  = "never";
 		} else {
-			$timeDiff = time() - strtotime($change['lastSeen']);
-			$ago 	  = $change['lastSeen']." (".sec2hms($timeDiff)." ago)";
+			$timeDiff = $now - strtotime($change['lastSeen']);
+			$ago 	  = $change['lastSeen']." (".$Result->sec2hms($timeDiff)." ago)";
 		}
 
 		//content
 		$content[] = "<tr>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($change['ip_addr'])."</a></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($change['ip_addr'])."</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$change[description]</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".$Scan->settings->siteURL."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$change[dns_name]</td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ago</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$oldStatus</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$newStatus</td>";
@@ -347,7 +400,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
-			$phpipam_mail->Php_mailer->addAddress($admin['email'], $admin['name']);
+			$phpipam_mail->Php_mailer->addAddress(addslashes($admin['email']), addslashes($admin['name']));
 		}
 		$phpipam_mail->Php_mailer->Subject = $subject;
 		$phpipam_mail->Php_mailer->msgHTML($content);

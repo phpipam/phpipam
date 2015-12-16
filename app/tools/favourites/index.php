@@ -40,14 +40,17 @@ else {
 		if(sizeof($f)>0) {
 			print "<tr class='favSubnet-$f[subnetId]'>";
 
+            # add full information
+            $fullinfo = $f['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 			if($f['isFolder']==1) {
 				$master = true;
 				print "	<td><a href='".create_link("folder",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-folder fa-sfolder'></i> $f[description]</a></td>";
 			}
 			else {
 				//master?
-				if($Subnets->has_slaves ($f['subnetId'])) { $master = true;	 print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-folder-o'></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a></td>"; }
-				else 									  { $master = false; print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-sitemap' ></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a></td>"; }
+				if($Subnets->has_slaves ($f['subnetId'])) { $master = true;	 print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-folder-o'></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a>$fullinfo</td>"; }
+				else 									  { $master = false; print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-sitemap' ></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a>$fullinfo</td>"; }
 			}
 
 			print "	<td>$f[description]</td>";
@@ -64,7 +67,7 @@ else {
 			}
 			elseif(!$master) {
 	    		$address_count = $Addresses->count_subnet_addresses ($f['subnetId']);
-	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet']);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet'], $f['isFull']);
 
 	    		print ' <td class="used hidden-xs hidden-sm">'.$Subnets->reformat_number($subnet_usage['used']) .'/'. $Subnets->reformat_number($subnet_usage['maxhosts']) .' ('.$Subnets->reformat_number(100-$subnet_usage['freehosts_percent']) .' %)</td>';
 	    	}

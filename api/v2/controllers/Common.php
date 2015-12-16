@@ -5,7 +5,19 @@
  *
  *
  */
-class Common_functions {
+class Common_api_functions {
+
+	/**
+	 * vars
+	 */
+	protected $controller_keys;
+	protected $valid_keys;
+	protected $custom_keys;
+	protected $remove_keys;
+
+	protected $Tools;
+	protected $Response;
+	protected $Subnets;
 
 	/**
 	 * Initializes new Object.
@@ -23,6 +35,8 @@ class Common_functions {
 		else					{ $this->$Object	= new $Object ($Database); }
 		// set exit method
 		$this->$Object->Result->exit_method = "exception";
+		// set API flag
+		$this->$Object->api = true;
 	}
 
 	/**
@@ -36,7 +50,7 @@ class Common_functions {
 		# array of controller keys
 		$this->controller_keys = array("app_id", "controller");
 
-		# array of all valid keys - fetch from SHCEMA
+		# array of all valid keys - fetch from SCHEMA
 		$this->valid_keys = $this->Tools->fetch_standard_fields ($controller);
 
 		# add custom fields
@@ -115,6 +129,8 @@ class Common_functions {
 	 * @return void
 	 */
 	protected function filter_result ($result) {
+    	// remap keys before applying filter
+    	$result = $this->remap_keys ($result, false);
 		// validate
 		$this->validate_filter_by ($result);
 
@@ -425,7 +441,7 @@ class Common_functions {
 	 */
 	protected function validate_options_request () {
 		foreach($this->_params as $key=>$val) {
-			if(!in_array($key, array("app_id", "controller"))) {
+			if(!in_array($key, array("app_id", "controller", "id"))) {
 													{ $this->Response->throw_exception(400, 'Invalid request key parameter '.$key); }
 			}
 		}
@@ -505,8 +521,8 @@ class Common_functions {
 		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname");
 
 		// exceptions
-		if($controller=="vlans") 		{ $this->keys['vlanId'] = "id"; }
-		if($controller=="vrfs")  		{ $this->keys['vrfId'] = "id"; }
+		if($controller=="vlans") 	{ $this->keys['vlanId'] = "id"; }
+		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
 
 		// POST / PATCH

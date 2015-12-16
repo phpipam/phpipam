@@ -64,6 +64,24 @@ if($subnets===false) { ?>
 		<input type="text" name="dns_name" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
 </tr>
 
+<!-- state -->
+<tr>
+	<th><?php print _('State'); ?></th>
+	<td>
+		<select name="state" class="form-control input-sm input-w-auto">
+		<?php
+		$states = $Addresses->addresses_types_fetch ();
+		# default tag
+		$request['state'] = "2";
+		foreach($states as $s) {
+			if ($request['state']==$s['id'])	{ print "<option value='$s[id]' selected='selected'>$s[type]</option>"; }
+			else								{ print "<option value='$s[id]'>$s[type]</option>"; }
+		}
+		?>
+		</select>
+	</td>
+</tr>
+
 <!-- owner -->
 <?php
 # check which fields are set to be displayed
@@ -93,15 +111,19 @@ if(in_array('owner', $setFields)) {
 <tr>
 	<th><?php print _('Additional comment'); ?></th>
 	<td class="comment">
-		<textarea name="comment" rows="3" class="form-control" placeholder="<?php print _('If there is anything else you want to say about request write it in this box'); ?>!"></textarea>
+		<textarea name="comment" rows="3" class="form-control" style="width:100%" placeholder="<?php print _('If there is anything else you want to say about request write it in this box'); ?>!"></textarea>
 	</td>
 </tr>
 
 <!-- submit -->
 <tr>
 	<td class="submit"></td>
-	<td class="submit">
-		<input type="submit" class="btn btn-sm btn-default pull-right" value="<?php print _('Submit request'); ?>">	</td>
+	<td class="submit text-right">
+		<div class="btn-group text-right">
+			<input type="button" class="btn btn-sm btn-default clearIPrequest" value="<?php print _('Reset'); ?>">
+			<input type="submit" class="btn btn-sm btn-default" value="<?php print _('Submit request'); ?>">
+		</div>
+	</td>
 	<td class="submit"></td>
 </tr>
 

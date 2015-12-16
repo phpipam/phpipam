@@ -52,12 +52,12 @@ if ( $Subnets->identify_address($subnet->subnet) == "IPv6") 			{ $Result->show("
     		<select name="type" id="type" class="form-control input-sm input-w-auto">
     			<!-- Discovery scans -->
 	    		<optgroup label="<?php print _('Discovery scans');?>">
-		    		<option value="scan-icmp">Ping <?php print _('scan');?></option>
-		    		<option value="scan-telnet">Telnet <?php print _('scan');?></option>
+		    		<option value="scan-icmp"><?php print _('Discovery scans');?>: Ping <?php print _('scan');?></option>
+		    		<option value="scan-telnet"><?php print _('Discovery scans');?>: Telnet <?php print _('scan');?></option>
 	    		</optgroup>
     			<!-- Status update scans -->
 	    		<optgroup label="<?php print _('Status update scans');?>">
-		    		<option value="update-icmp">Ping <?php print _('scan');?></option>
+		    		<option value="update-icmp"><?php print _('Status update scans');?>: Ping <?php print _('scan');?></option>
 	    		</optgroup>
 
 			</select>

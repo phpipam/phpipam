@@ -62,7 +62,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 				<select name="masterSection" class="form-control input-sm input-w-auto pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
 					<option value="0">Root</option>
 					<?php
-					if(sizeof($sections)>0) {
+					if($sections!==false) {
 						foreach($sections as $s) {
 							# show only roots and ignore self
 							if($s->masterSection==0 && $s->id!=$_POST['sectionId']) {

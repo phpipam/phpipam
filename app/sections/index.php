@@ -28,7 +28,29 @@ $User->check_user_session();
 $sections = $Sections->fetch_all_sections ();
 
 # check for requests
-$requests = $Tools->requests_fetch(true);
+if ($User->settings->enableIPrequests==1) {
+	# count requests
+	$requests = $Tools->requests_fetch(true);
+	# remove
+	if ($requests==0) { unset($requests); }
+	# parse
+	if ($User->isAdmin==false && isset($requests)) {
+		# fetch all Active requests
+		$requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
+		foreach ($requests as $k=>$r) {
+			// check permissions
+			if($Subnets->check_permission($User->user, $r->subnetId) != 3) {
+				unset($requests[$k]);
+			}
+		}
+		# null
+		if (sizeof($requests)==0) {
+			unset($requests);
+		} else {
+			$requests = sizeof($requests);
+		}
+	}
+}
 
 # get admin and tools menu items
 require( dirname(__FILE__) . '/../tools/tools-menu-config.php' );
@@ -60,7 +82,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
 		# printout
-		if(sizeof(@$sections)>0) {
+		if($sections!==false) {
 			# loop
 			foreach($sections as $section) {
 				# check permissions for user
@@ -103,7 +125,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 							if( ($section->name == $_GET['section']) || ($section->id == $_GET['section']) ) 	{ print "<li class='active'>"; }
 							else 																				{ print "<li>"; }
 
-							print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='"._('Show all subnets in section')." $section->name'>$section->name</a>";
+							print "	<a href='".create_link("subnets",$section->id)."' rel='tooltip' data-placement='bottom' title='$section->description'>$section->name</a>";
 							print "</li>";
 						}
 					}
@@ -111,7 +133,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 			}
 		}
 		else {
-			print _("No sections available!");
+			print "<div class='text-muted'>"._("No sections available!")."</div>";
 		}
 
 		?>
@@ -143,7 +165,11 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 				# only selected
 				if($i['show']) {
 					# active?
-					$active = $_GET['section']==$i['href'] ? "active" : "";
+					if($_GET['page']=="administration") {
+						$active = $_GET['section']==$i['href'] ? "active" : "";
+					} else {
+						$active = "";
+					}
 					print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>"._($i['name'])."</a></li>";
 				}
 			}
@@ -178,7 +204,11 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 						# only active
 						if($i['show']) {
 							# active?
-							$active = $_GET['section']==$i['href'] ? "active" : "";
+							if($_GET['page']=="tools") {
+								$active = $_GET['section']==$i['href'] ? "active" : "";
+							} else {
+								$active = "";
+							}
 							print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
 						}
 					}
@@ -193,9 +223,9 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 	<ul class="nav navbar-nav navbar-right hidden-xs hidden-sm icon-ul">
 
 		<!-- Dash lock/unlock -->
-		<?php if($_GET['page']=="dashboard") { ?>
+		<?php if($_GET['page']=="dashboard" && !($User->isadmin!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) ) { ?>
 			<li class="w-lock">
-				<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Clik to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
+				<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Click to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
 			</li>
 		<?php } ?>
 
@@ -240,7 +270,11 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 						# only selected
 						if($i['show']) {
 							# active?
-							$active = $_GET['section']==$i['href'] ? "active" : "";
+							if($_GET['page']=="tools") {
+								$active = $_GET['section']==$i['href'] ? "active" : "";
+							} else {
+								$active = "";
+							}
 							print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
 						}
 					}
@@ -256,7 +290,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 			if(sizeof($dberrsize = $Tools->verify_database())>0) {
 				$esize = sizeof($dberrsize['tableError']) + sizeof($dberrsize['fieldError']);
 				print "<li>";
-				print "	<a href='".create_link("administration","verifyDatabase")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._('Database errors detected')."'><i class='fa fa-exclamation-triangle'></i><sup>$esize</sup></a>";
+				print "	<a href='".create_link("administration","verify-database")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._('Database errors detected')."'><i class='fa fa-exclamation-triangle'></i><sup>$esize</sup></a>";
 				print "</li>";
 			}
 			else {
@@ -268,16 +302,13 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		?>
 
 		<?php
-		# show IP request link if enabled in config file!
-		if($User->settings->enableIPrequests==1 && $User->isadmin) {
-			# get all request
-			if($requests>0) { ?>
-			<li>
-				<a href="<?php print create_link("administration","requests"); ?>" rel='tooltip' class="icon-li btn-info" data-placement='bottom' title="<?php print $requests." "._('requests')." "._('for IP address waiting for your approval'); ?>"><i class='fa fa-envelope-o' style="padding-right:2px;"></i><sup><?php print $requests; ?></sup></a>
-			</li>
+		# get all request
+		if(isset($requests)) { ?>
+		<li>
+			<a href="<?php print create_link("tools","requests"); ?>" rel='tooltip' class="icon-li btn-info" data-placement='bottom' title="<?php print $requests." "._('requests')." "._('for IP address waiting for your approval'); ?>"><i class='fa fa-envelope-o' style="padding-right:2px;"></i><sup><?php print $requests; ?></sup></a>
+		</li>
 
 		<?php
-			}
 		}
 
 		# check for new version periodically, 1x/week
@@ -290,7 +321,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 				# new version available
 				if ($User->settings->version < $version) {
 					print "<li>";
-					print "	<a href='".create_link("administration","versionCheck")."' class='icon-li btn-warning' rel='tooltip' data-placement='bottom' title='"._('New version available')."'><i class='fa fa-bullhorn'></i><sup>$version</sup></a>";
+					print "	<a href='".create_link("administration","version-check")."' class='icon-li btn-warning' rel='tooltip' data-placement='bottom' title='"._('New version available')."'><i class='fa fa-bullhorn'></i><sup>$version</sup></a>";
 					print "</li>";
 				} else {
 					# version ok

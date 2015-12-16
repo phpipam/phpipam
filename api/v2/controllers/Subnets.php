@@ -5,13 +5,10 @@
  *
  *
  */
-class Subnets_controller extends Common_functions {
+class Subnets_controller extends Common_api_functions {
 
 	/* public variables */
 	public $_params;
-
-	/* protected variables */
-	protected $valid_keys;
 
 	/* object holders */
 	protected $Database;		// Database object
@@ -28,7 +25,6 @@ class Subnets_controller extends Common_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
-	 * @return void
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -83,7 +79,7 @@ class Subnets_controller extends Common_functions {
 	 */
 	public function POST () {
 		# add required parameters
-		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = null; }
+		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
 
 		# validate parameters
@@ -343,10 +339,20 @@ class Subnets_controller extends Common_functions {
 		$old_subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id);
 
 		// validate resizing
-		$this->Subnets->verify_subnet_resize ($old_subnet->subnet, $this->_params->mask, $this->_params->id, $old_subnet->vrfId, $old_subnet->masterSubnetId, $old_subnet->mask);
+		$this->Subnets->verify_subnet_resize ($old_subnet->subnet, $this->_params->mask, $this->_params->id, $old_subnet->vrfId, $old_subnet->masterSubnetId, $old_subnet->mask, $old_subnet->sectionId);
+
+		// regenerate subnet if needed
+		if ($old_subnet->mask < $this->_params->mask) {
+			$subnet_new = $old_subnet->subnet;
+		}
+		else {
+			$new_boundaries = $this->Subnets->get_network_boundaries ($this->Subnets->transform_address($old_subnet->subnet, "dotted"), $this->_params->mask);
+			$subnet_new 	= $this->Subnets->transform_address($new_boundaries['network'], "decimal");
+		}
 
 		# set update values
 		$values = array("id"=>$this->_params->id,
+						"subnet"=>$subnet_new,
 						"mask"=>$this->_params->mask
 						);
 		$this->Subnets->modify_subnet ("resize", $values);
@@ -411,7 +417,7 @@ class Subnets_controller extends Common_functions {
 			$addresses = $this->Addresses->fetch_subnet_addresses ($this->_params->id);
 		}
 		// calculate
-		$subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet );		//Calculate free/used etc
+		$subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet, $subnet->isFull );		//Calculate free/used etc
 
 		# return
 		return $subnet_usage;

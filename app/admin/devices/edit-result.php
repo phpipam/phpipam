@@ -55,9 +55,9 @@ if(sizeof($custom) > 0) {
 		if($myField['Null']=="NO" && strlen($device[$myField['name']])==0) {
 																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
 		}
+		# save to update array
+		$update[$myField['name']] = $device[$myField['name']];
 	}
-	# save to update array
-	$update[$myField['name']] = $device[$myField['name']];
 }
 
 # set update values
@@ -77,6 +77,12 @@ if(isset($update)) {
 
 # update device
 if(!$Admin->object_modify("devices", $_POST['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Device $device[action] successfull").'!', true); }
+else																	{ $Result->show("success", _("Device $device[action] successfull").'!', false); }
+
+if($_POST['action']=="delete"){
+	# remove all references from subnets and ip addresses
+	$Admin->remove_object_references ("subnets", "device", $values["id"]);
+	$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
+}
 
 ?>

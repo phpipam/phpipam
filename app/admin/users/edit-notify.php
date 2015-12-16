@@ -4,15 +4,24 @@
  *	Send notification mail to user if selected
  ***********************************************/
 
-/* functions */
-require( dirname(__FILE__) . '/../../../functions/classes/class.Mail.php');
-
 # verify that user is logged in
 $User->check_user_session();
+
+# fetch users to receive notification and filter
+$users = $Admin->fetch_multiple_objects ("users", "role", "Administrator");
+foreach ($users as $k=>$u) {
+	if ($u->mailNotify != "Yes") {
+		unset($users[$k]);
+	}
+}
 
 # fetch mailer settings
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
+# verify admin mail and name
+if (strlen($mail_settings->mAdminMail)==0 || strlen($mail_settings->mAdminName)==0) {
+	$Result->show("danger", _("Cannot send mail, mail settings are missing. Please set them under administration > Mail Settings !"), true);
+}
 
 # initialize mailer
 $phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
@@ -68,14 +77,15 @@ $content_plain[] = "\r\n"._("Sent by user")." ".$User->user->real_name." at ".da
 $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
 $content_plain 	= implode("\r\n",$content_plain);
 
-
 # try to send
 try {
 	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
-	$phpipam_mail->Php_mailer->addAddress($_POST['email'], $_POST['real_name']);
+	$phpipam_mail->Php_mailer->addAddress(addslashes(trim($_POST['email'])), addslashes(trim($_POST['real_name'])));
 	//add all admins to CC
-	foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
-		$phpipam_mail->Php_mailer->AddCC($admin->email);
+	if (sizeof($users)>0) {
+		foreach($users as $admin) {
+			$phpipam_mail->Php_mailer->AddCC($admin->email);
+		}
 	}
 	$phpipam_mail->Php_mailer->Subject = $subject;
 	$phpipam_mail->Php_mailer->msgHTML($content);

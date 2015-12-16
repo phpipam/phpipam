@@ -32,8 +32,12 @@ CREATE TABLE `ipaddresses` (
   `note` text,
   `lastSeen` DATETIME  NULL  DEFAULT '0000-00-00 00:00:00',
   `excludePing` BINARY  NULL  DEFAULT '0',
+  `PTRignore` BINARY  NULL  DEFAULT '0',
+  `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
+  `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
   KEY `subnetid` (`subnetId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -77,6 +81,7 @@ CREATE TABLE `requests` (
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(32) DEFAULT NULL,
   `dns_name` varchar(32) DEFAULT NULL,
+  `state` INT  NULL  DEFAULT '2',
   `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
   `comment` text,
@@ -126,10 +131,13 @@ CREATE TABLE `settings` (
   `siteAdminMail` varchar(64) DEFAULT NULL,
   `siteDomain` varchar(32) DEFAULT NULL,
   `siteURL` varchar(64) DEFAULT NULL,
+  `siteLoginText` varchar(128) DEFAULT NULL,
   `domainAuth` tinyint(1) DEFAULT NULL,
   `enableIPrequests` tinyint(1) DEFAULT NULL,
   `enableVRF` tinyint(1) DEFAULT '1',
   `enableDNSresolving` tinyint(1) DEFAULT NULL,
+  `enableFirewallZones` TINYINT(1) NOT NULL DEFAULT '0',
+  `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on","pattern":{"0":"patternFQDN"}}',
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
   `powerDNS` TEXT  NULL,
   `version` varchar(5) DEFAULT NULL,
@@ -158,12 +166,14 @@ CREATE TABLE `settings` (
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
+  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
+  `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
 VALUES
-	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note', 1, 'subnet,asc', 24);
+	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
 
 
 # Dump of table settingsDomain
@@ -222,15 +232,19 @@ CREATE TABLE `subnets` (
   `mask` VARCHAR(255) NULL DEFAULT NULL,
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
+  `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `masterSubnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
   `allowRequests` tinyint(1) DEFAULT '0',
   `vlanId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `showName` tinyint(1) DEFAULT '0',
+  `device` INT  UNSIGNED  NULL  DEFAULT '0',
   `permissions` varchar(1024) DEFAULT NULL,
   `pingSubnet` BOOL NULL  DEFAULT '0',
   `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
   `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
+  `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
+  `nameserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
   `isFolder` BOOL NULL  DEFAULT '0',
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
@@ -297,16 +311,17 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(20) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(25) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
   `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL,
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
-  `lang` INT(11) UNSIGNED  NULL  DEFAULT '1',
+  `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
   `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
   `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
@@ -347,7 +362,10 @@ VALUES
 	(3, 'fr_FR', 'Français'),
 	(4, 'nl_NL','Nederlands'),
 	(5, 'de_DE','Deutsch'),
-	(6, 'pt_BR', 'Brazil');
+	(6, 'pt_BR', 'Brazil'),
+	(7,	'es_ES'	,'Español'),
+	(8, 'cs_CZ', 'Czech'),
+	(9, 'en_US', 'English (US)');
 
 
 # Dump of table vlans
@@ -367,7 +385,7 @@ CREATE TABLE `vlans` (
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
 VALUES
 	(1,'IPv6 private 1',2001,'IPv6 private 1 subnets'),
-	(2,'Servers DMZ',4101,'DMZ public');
+	(2,'Servers DMZ',4001,'DMZ public');
 
 
 # Dump of table vlanDomains
@@ -400,6 +418,25 @@ CREATE TABLE `vrf` (
   PRIMARY KEY (`vrfId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# Dump of table nameservers
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `nameservers`;
+
+CREATE TABLE `nameservers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `namesrv1` varchar(255) DEFAULT NULL,
+  `description` text,
+  `permissions` varchar(128) DEFAULT NULL,
+  `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `nameservers` (`name`, `namesrv1`, `description`, `permissions`)
+VALUES
+	('Google NS', '8.8.8.8;8.8.4.4', 'Google public nameservers', '1;2');
+
+
 
 # Dump of table api
 # ------------------------------------------------------------
@@ -411,7 +448,7 @@ CREATE TABLE `api` (
   `app_code` varchar(32) NULL DEFAULT '',
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
-  `app_security` SET('crypt','ssl','none')  NOT NULL  DEFAULT 'ssl',
+  `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -511,7 +548,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','AD','LDAP', 'Radius') NOT NULL DEFAULT 'local',
+  `type` set('local','http','AD','LDAP','NetIQ','Radius') NOT NULL DEFAULT 'local',
   `params` varchar(1024) DEFAULT NULL,
   `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
@@ -520,7 +557,8 @@ CREATE TABLE `usersAuthMethod` (
 /* insert default values */
 INSERT INTO `usersAuthMethod` (`id`, `type`, `params`, `protected`, `description`)
 VALUES
-	(1, 'local', NULL, 'Yes', 'Local database');
+	(1, 'local', NULL, 'Yes', 'Local database'),
+	(2, 'http', NULL, 'Yes', 'Apache authentication');
 
 
 # Dump of table usersAuthMethod
@@ -546,10 +584,86 @@ VALUES
 	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');
 
 
+# Dump of table firewallZones
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `firewallZones`;
+
+CREATE TABLE `firewallZones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `generator` tinyint(1) NOT NULL,
+  `length` int(2) DEFAULT NULL,
+  `padding` tinyint(1) DEFAULT NULL,
+  `zone` varchar(31) COLLATE utf8_unicode_ci NOT NULL,
+  `indicator` varchar(8) COLLATE utf8_unicode_ci NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `permissions` varchar(1024) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+# Dump of table firewallZoneMapping
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `firewallZoneMapping`;
+
+CREATE TABLE `firewallZoneMapping` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `zoneId` int(11) unsigned NOT NULL,
+  `alias` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `deviceId` int(11) unsigned DEFAULT NULL,
+  `interface` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `devId_idx` (`deviceId`),
+  CONSTRAINT `devId` FOREIGN KEY (`deviceId`) REFERENCES `devices` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+# Dump of table firewallZoneMapping
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `firewallZoneSubnet`;
+
+CREATE TABLE `firewallZoneSubnet` (
+  `zoneId` INT NOT NULL,
+  `subnetId` INT(11) NOT NULL,
+  INDEX `fk_zoneId_idx` (`zoneId` ASC),
+  INDEX `fk_subnetId_idx` (`subnetId` ASC),
+  CONSTRAINT `fk_zoneId`
+    FOREIGN KEY (`zoneId`)
+    REFERENCES `firewallZones` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_subnetId`
+    FOREIGN KEY (`subnetId`)
+    REFERENCES `subnets` (`id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION);
+
+
+# Dump of table scanAgents
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `scanAgents`;
+
+CREATE TABLE `scanAgents` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `description` text,
+  `type` set('direct','api','mysql') NOT NULL DEFAULT '',
+  `code` varchar(32) DEFAULT NULL,
+  `last_access` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `scanAgents` (`id`, `name`, `description`, `type`)
+VALUES
+	(1, 'locahost', 'Scanning from local machine', 'direct');
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.17';
+UPDATE `settings` set `version` = '1.2';

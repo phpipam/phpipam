@@ -8,10 +8,10 @@ $User->check_user_session();
 # subnet id must be numeric
 if(!is_numeric($_GET['subnetId'])) 	{ $Result->show("danger", _('Invalid ID'), true); }
 
-# fetch subnet reated stuff
+# fetch subnet related stuff
 $custom_fields = $Tools->fetch_custom_fields ('subnets');											//custom fields
 $subnet  = (array) $Subnets->fetch_subnet(null, $_GET['subnetId']);									//subnet details
-if(sizeof($subnet)==0) 				{ $Result->show("danger", _('Subnet does not exist'), true); }	//die if empty
+if(sizeof($subnet)==0) 				{ header("Location: ".create_link("subnets", $_GET['section'])); }	//redirect if false
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);			//set network boundaries
 $slaves = $Subnets->has_slaves ($subnet['id']) ? true : false;										//check if subnet has slaves and set slaves flag true/false
 
@@ -23,20 +23,42 @@ if($subnet_permission == 0)			{ $Result->show("danger", _('You do not have permi
 # fetch VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 
+# fetch recursive nameserver details
+$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+
 # fetch all addresses and calculate usage
 if($slaves) {
 	$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false);
 	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
-	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'] );		//Calculate free/used etc
+	// save count
+	$addresses_cnt = gmp_strval(sizeof($addresses));
+
+	# full ?
+	if (sizeof($slave_subnets)>0) {
+    	foreach ($slave_subnets as $ss) {
+        	if ($ss->isFull==1) {
+            	# calculate max
+            	$max_hosts = $Subnets->get_max_hosts ($ss->mask, $Subnets->identify_address($ss->subnet), true);
+            	# count
+            	$count_hosts = $Addresses->count_subnet_addresses ($ss->id);
+            	# add
+            	$addresses_cnt = gmp_strval(gmp_add($addresses_cnt, gmp_sub($max_hosts, $count_hosts)));
+        	}
+    	}
+	}
+
+	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );		//Calculate free/used etc
 } else {
 	$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
-	$subnet_usage  = $Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet['mask'], $subnet['subnet'] );		//Calculate free/used etc
+	// save count
+	$addresses_cnt = gmp_strval(sizeof($addresses));
+	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $subnet['mask'], $subnet['subnet'], $subnet['isFull'] );		//Calculate free/used etc
 }
 
 # verify that is it displayed in proper section, otherwise warn!
 if($subnet['sectionId']!=$_GET['section'])	{
 	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
-	$Result->show("warning", _("Subnet is in section")."<a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
+	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
 ?>
 

@@ -71,10 +71,19 @@ $(document).on("submit", "#requestIP", function() {
     $.post('app/login/request_ip_result.php', postData, function(data) {
         $('div#requestIPresult').html(data).slideDown('fast');
         hideSpinner();
-        //reset sender to prevent duplicates
-        $('input[name=requester]').val('');
+        //reset sender to prevent duplicates on success
+        if(data.search("alert alert-success") != -1) {
+        	$('form#requestIP input[type="text"]').val('');
+			$('form#requestIP textarea').val('');
+        }
     });
 	return false;
+});
+// clear request field
+$(".clearIPrequest").click(function() {
+	$('form#requestIP input[type="text"]').val('');
+	$('form#requestIP textarea').val('');
+
 });
 
 });

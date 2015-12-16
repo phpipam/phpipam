@@ -3,16 +3,17 @@
 /**
  *	phpipam installation page!
  */
-
 # check if php is built properly
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
-
 
 # initialize install class
 $Database 	= new Database_PDO;
 $Result		= new Result;
 $Tools	    = new Tools ($Database);
 $Install 	= new Install ($Database);
+
+# reset url for base
+$url = $Result->createURL ();
 
 # If User is not available create fake user object for create_link!
 if(!is_object(@$User)) {

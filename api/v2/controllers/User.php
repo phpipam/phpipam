@@ -6,7 +6,7 @@
  *
  */
 
-class User_controller extends Common_functions {
+class User_controller extends Common_api_functions {
 
 	/* vars */
 	public $token;					// users token
@@ -31,7 +31,6 @@ class User_controller extends Common_functions {
 	 * @access public
 	 * @param mixed $Database
 	 * @param mixed $Response
-	 * @return void
 	 */
 	public function __construct ($Database, $Tools=null, $params=null, $Response) {
 		$this->Database = $Database;
@@ -363,12 +362,12 @@ class User_controller extends Common_functions {
 	 */
 	private function validate_requested_token_user () {
 		// check that token is present
-		if(!isset($_SERVER['HTTP_PHPIPAM_TOKEN']))	{ $this->Response->throw_exception(500, "Please provide token"); }
+		if(!isset($_SERVER['HTTP_PHPIPAM_TOKEN']))	{ $this->Response->throw_exception(403, "Please provide token"); }
 		// validate and remove token
 		else {
 			// fetch token
 			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
-													{ $this->Response->throw_exception(500, "Invalid token"); }
+													{ $this->Response->throw_exception(403, "Invalid token"); }
 			// save token
 			$this->User->user = $token;
 			$this->token = $token->token;
@@ -376,7 +375,7 @@ class User_controller extends Common_functions {
 
 			// expired
 			if($this->validate_token_expiration () === true)
-													{  $this->Response->throw_exception(500, "Token expired");  }
+													{  $this->Response->throw_exception(403, "Token expired");  }
 		}
 	}
 

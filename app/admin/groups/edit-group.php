@@ -42,7 +42,9 @@ if($_POST['action']=="add") {
 	<tr>
 	    <td><?php print _('Group name'); ?></td>
 	    <td><input type="text" name="g_name" class="form-control input-sm" value="<?php print @$group['g_name']; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
-       	<td class="info2"><?php print _('Enter group name'); ?></td>
+       	<td class="info2">
+	   		<?php print _('Enter group name'); ?>
+       	</td>
     </tr>
 
     <!-- description -->

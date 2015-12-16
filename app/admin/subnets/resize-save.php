@@ -30,13 +30,23 @@ if($Subnets->check_permission ($User->user, $_POST['subnetId'])<3)	{ $Result->sh
 $subnet_old = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
 
 # verify resizing
-$Subnets->verify_subnet_resize ($subnet_old['subnet'], $_POST['newMask'], $subnet_old['id'], $subnet_old['vrfId'], $subnet_old['masterSubnetId'], $subnet_old['mask']);
+$Subnets->verify_subnet_resize ($subnet_old['subnet'], $_POST['newMask'], $subnet_old['id'], $subnet_old['vrfId'], $subnet_old['masterSubnetId'], $subnet_old['mask'], $subnet_old['sectionId']);
+
+# we need to recalculate subnet address if needed
+if ($subnet_old['mask'] < $_POST['newMask']) {
+	$subnet_new['subnet'] = $subnet_old['subnet'];
+}
+else {
+	$new_boundaries		  = $Subnets->get_network_boundaries ($Subnets->transform_address($subnet_old['subnet'], "dotted"), $_POST['newMask']);
+	$subnet_new['subnet'] = $Subnets->transform_address($new_boundaries['network'], "decimal");
+}
 
 # set update values
 $values = array("id"=>$_POST['subnetId'],
-				"mask"=>$subnet_new['mask']
+				"subnet"=>$subnet_new['subnet'],
+				"mask"=>$_POST['newMask']
 				);
-if(!$Subnet->modify_subnet ("resize", $values))					{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
+if(!$Subnets->modify_subnet ("resize", $values))				{ $Result->show("danger",  _("Error resizing subnet")."!", true); }
 else															{ $Result->show("success", _("Subnet resized successfully")."!", true); }
 
 ?>

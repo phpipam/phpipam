@@ -67,7 +67,7 @@ try {
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
 		// decrypt request - to JSON
-		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app[$_GET['app_id']], base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->$_GET['app_id'], base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
 	}
 	// SSL checks
 	elseif($app->app_security=="ssl") {
@@ -89,10 +89,27 @@ try {
 
 
 	// append POST parameters if POST
-	if($_SERVER['REQUEST_METHOD']=="POST" && sizeof(@$_POST)>0) {
-		$params = array_merge((array) $params, $_POST);
-		$params = (object) $params;
-	}
+	if($_SERVER['REQUEST_METHOD']=="POST"){
+		// if application tupe is JSON (application/json)
+        if($_SERVER['CONTENT_TYPE']=="application/json"){
+                $rawPostData = file_get_contents('php://input');
+                $json = json_decode($rawPostData,true);
+                $params = array_merge((array) $params, $json);
+                $params = (object) $params;
+        }
+		// if application tupe is XML (application/json)
+        elseif($_SERVER['CONTENT_TYPE']=="application/xml"){
+                $rawPostData = file_get_contents('php://input');
+                $xml = $Response->xml_to_array($rawPostData);
+                $params = array_merge((array) $params, $xml);
+                $params = (object) $params;
+        }
+		//if application type is default (application/x-www-form-urlencoded)
+        elseif(sizeof(@$_POST)>0) {
+                $params = array_merge((array) $params, $_POST);
+                $params = (object) $params;
+        }
+    }
 
 
 
@@ -116,12 +133,14 @@ try {
 	if( $params == false || isset($params->controller) == false ) {
 		$Response->throw_exception(400, 'Request is not valid');
 	}
-	// verify permissions for delete/create/edit
-	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
-	  || $_SERVER['REQUEST_METHOD']=="PUT"  || $_SERVER['REQUEST_METHOD']=="DELETE"
-	  )
-	  && $app->app_permissions<2) {
-		$Response->throw_exception(401, 'invalid permissions');
+	// verify permissions for delete/create/edit if controller is not user (needed for auth)
+	if (@$params->controller != "user") {
+    	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
+    	  || $_SERVER['REQUEST_METHOD']=="PUT"  || $_SERVER['REQUEST_METHOD']=="DELETE"
+    	  )
+    	  && $app->app_permissions<2) {
+    		$Response->throw_exception(401, 'invalid permissions');
+    	}
 	}
 	// verify content type
 	$Response->validate_content_type ();

@@ -7,9 +7,16 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# fetch all APIs
+# fetch all Devices
 $devices = $Admin->fetch_all_objects("devices");
 
+# fetch all Device types and reindex
+$device_types = $Admin->fetch_all_objects("deviceTypes", "tid");
+if ($device_types !== false) {
+	foreach ($device_types as $dt) {
+		$device_types_i[$dt->tid] = $dt;
+	}
+}
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
@@ -28,17 +35,17 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 
 <?php
 /* first check if they exist! */
-if(sizeof($devices) == 0) {
+if($devices===false) {
 	$Result->show("warn alert-absolute", _('No devices configured').'!', false);
 }
 /* Print them out */
 else {
 
-	print '<table id="switchManagement" class="table table-striped table-auto table-top">';
+	print '<table id="switchManagement" class="table table-striped table-auto table-top table-td-top">';
 
 	# headers
 	print '<tr>';
-	print '	<th>'._('Hostname').'</th>';
+	print '	<th>'._('Name').'</th>';
 	print '	<th>'._('IP address').'</th>';
 	print '	<th>'._('Type').'</th>';
 	print '	<th>'._('Vendor').'</th>';
@@ -65,7 +72,7 @@ else {
 
 		print '	<td><a href="'.create_link("tools","devices","hosts",$device['id']).'">'. $device['hostname'] .'</a></td>'. "\n";
 		print '	<td>'. $device['ip_addr'] .'</td>'. "\n";
-		print '	<td>'. $device['description'] .'</td>'. "\n";
+		print '	<td>'. @$device_types_i[$device['type']]->tname .'</td>'. "\n";
 		print '	<td>'. $device['vendor'] .'</td>'. "\n";
 		print '	<td>'. $device['model'] .'</td>'. "\n";
 		print '	<td class="description">'. $device['description'] .'</td>'. "\n";
@@ -89,6 +96,9 @@ else {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_custom_fields)) {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
+
+					// create links
+					$device[$field['name']] = $Result->create_links ($device[$field['name']]);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{
