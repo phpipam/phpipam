@@ -55,8 +55,8 @@ class Vrfs_controller extends Common_api_functions {
 
 		// methods
 		$result['methods'] = array(
-								array("href"=>"/api/vrfs/".$this->_params->app_id."/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
-								array("href"=>"/api/vrfs/".$this->_params->app_id."/{id}/", "methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
+								array("href"=>"/api/".$this->_params->app_id."/vrfs/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
+								array("href"=>"/api/".$this->_params->app_id."/vrfs/{id}/", "methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																											 array("rel"=>"create", "method"=>"POST"),
 																											 array("rel"=>"update", "method"=>"PATCH"),
 																											 array("rel"=>"delete", "method"=>"DELETE"))),
