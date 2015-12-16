@@ -776,7 +776,7 @@ $('a.request_ipaddress').click(function () {
     return false;
 });
 //auto-suggest first available IP in selected subnet
-$(document).on("click", "select#subnetId", function() {
+$(document).on("change", "select#subnetId", function() {
     showSpinner();
     var subnetId = $('select#subnetId option:selected').attr('value');
     //post it via json to request_ip_first_free.php
