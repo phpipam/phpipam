@@ -28,6 +28,7 @@ if($_POST['name'] == "") { $Result->show("danger", _("Name is mandatory"), true)
 # set update array
 $values = array("vrfId"=>@$_POST['vrfId'],
 				"name"=>$_POST['name'],
+				"rd"=>$_POST['rd'],
 				"description"=>$_POST['description']
 				);
 # append custom

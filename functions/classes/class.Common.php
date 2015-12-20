@@ -329,20 +329,24 @@ class Common_functions  {
 	 *	source: https://css-tricks.com/snippets/php/find-urls-in-text-make-links/
 	 *
 	 * @access public
+	 * @param mixed $field_type
 	 * @param mixed $text
 	 * @return void
 	 */
-	public function create_links ($text) {
-		// regular expression
-		$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
+	public function create_links ($text, $field_type = "varchar") {
+        // create links only for varchar fields
+        if (strpos($field_type, "varchar")!==false) {
+    		// regular expression
+    		$reg_exUrl = "#(http|https|ftp|ftps|telnet|ssh)://\S+[^\s.,>)\];'\"!?]#";
 
-		// Check if there is a url in the text
-		if(preg_match($reg_exUrl, $text, $url)) {
-	       // make the urls hyper links
-	       $text = preg_replace($reg_exUrl, "<a href='{$url[0]}' target='_blank'>{$url[0]}</a> ", $text);
-		}
-		// return text
-		return $text;
+    		// Check if there is a url in the text
+    		if(preg_match($reg_exUrl, $text, $url)) {
+    	       // make the urls hyper links
+    	       $text = preg_replace($reg_exUrl, "<a href='{$url[0]}' target='_blank'>{$url[0]}</a> ", $text);
+    		}
+        }
+        // return text
+        return $text;
 	}
 
 	/**

@@ -68,7 +68,7 @@ else {
 					print "<td class='customField hidden-xs hidden-sm'>";
 
 					// create links
-					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']]);
+					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{
