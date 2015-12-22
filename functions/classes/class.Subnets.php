@@ -653,6 +653,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->subnet_bits = 32-$out[$mask]->host_bits;			// network bits
 			$out[$mask]->hosts = number_format($this->get_max_hosts ($mask, "IPv4"), 0, ",", ".");		// max hosts
 			$out[$mask]->subnets = number_format(pow(2,($mask-8)), 0, ",", ".");
+			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
 			$parts = explode(".", $net->netmask);
