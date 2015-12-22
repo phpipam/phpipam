@@ -150,8 +150,13 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 	}
 	# ok, edit
 	else {
+    	$c = 0;
 		# for each IP in range modify
 		while (gmp_cmp($m, $n) != 0) {
+
+    		# remove gateway if not 0
+    		if ($c!=0)  { unset($address['is_gateway']); }
+            $c++;
 
 			# reset IP address field
 			$address['ip_addr'] = $m;
