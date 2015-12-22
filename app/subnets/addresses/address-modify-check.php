@@ -17,6 +17,7 @@ $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
 $Log 		= new Logging ($Database, $User->settings);
 $Zones 		= new FirewallZones($Database);
+$Ping		= new Scan ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -262,6 +263,17 @@ else {
 		    //success, save log file and send email
 		    else {
 		        $Result->show("success", _("IP $action successful"),false);
+		        // try to ping
+		        if ($subnet['pingSubnet']=="1") {
+    		        $Ping->ping_address($Subnets->transform_address($address['ip_addr'], "dotted"));
+    		        // update status
+    		        if($pingRes==0) {
+        		        // print alive
+        		        $Result->show("success", _("IP address")." ".$Subnets->transform_address($address['ip_addr'], "dotted")." "._("is alive"), false);
+        		        // update status
+        		        @$Ping->ping_update_lastseen($Addresses->lastId);
+                    }
+		        }
 		    }
 		}
 	}
