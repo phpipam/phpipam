@@ -2367,7 +2367,7 @@ class Subnets extends Common_functions {
 
 
 			# print table line
-			if(strlen($option['value']['subnet']) > 0) {
+			if(strlen($option['value']['subnet']) > 0 || $option['value']['isFolder']==1) {
 				$html[] = "<tr>";
 
 				//which level?
