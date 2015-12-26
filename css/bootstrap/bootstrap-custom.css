@@ -3,12 +3,17 @@
  *	Bootstrap fixes for phpipam
  *
  */
-
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Source Sans Pro Light'), local('Source-sans-pro-light'), url("../fonts/source_sans_pro/Source-sans-pro-light.ttf") format('truetype');
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url("../fonts/source_sans_pro/SourceSansPro-Light.woff") format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url("../fonts/source_sans_pro/SourceSansPro-Regular.woff") format('woff');
 }
 
 
@@ -73,11 +78,8 @@ h5 .label {
 	margin-left: 10px;
 }
 h1, h2, h3, h4, h5, .pHeader {
-	font-family: "Source Sans Pro", Arial, sans-serif;
+	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
-
-/* font-family: 'ecoicons'; */
-/* 	-webkit-font-smoothing: antialiased; */
 }
 .row {
 	margin: 0px;

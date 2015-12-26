@@ -795,8 +795,12 @@ class Tools extends Common_functions {
 		}
 		# else calculate options
 		else {
-			# if subnet is not provided maye wildcard is, so explode it to array
-			$address = array_filter(explode(".", $address));
+			# if subnet is not provided maybe wildcard is, so explode it to array
+			$address = explode(".", $address);
+            # remove empty
+            foreach($address as $k=>$a) {
+                if (strlen($a)==0)  unset($address[$k]);
+            }
 
 			# 4 pieces is ok, host
 			if (sizeof($address) == 4) {

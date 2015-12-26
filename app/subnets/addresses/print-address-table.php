@@ -234,7 +234,7 @@ $m = sizeof($addresses) -1;		//last address index
 
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
-	if($User->user->hideFreeRange!=1) {
+	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
     	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
 		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
     }
@@ -274,7 +274,7 @@ else {
 		       	}
 
 		       	# if there is some result for unused print it - if sort == ip_addr
-		       	if($User->user->hideFreeRange!=1) {
+		       	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 				    if ( $unused && ($sort['field'] == 'ip_addr') && $sort['direction'] == "asc" ) {
 		        		print "<tr class='th'>";
 		        		print "	<td></td>";
@@ -503,7 +503,7 @@ else {
 				****************************************************/
 				if ( $n == $m )
 				{
-					if($User->user->hideFreeRange!=1) {
+					if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 						# compressed?
 						if(isset($addresses[$n]->stopIP))	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->stopIP,  $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
 						else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }

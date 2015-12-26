@@ -33,6 +33,7 @@ if(isset($_REQUEST['ip'])) {
 $User->check_user_session();
 
 # change * to % for database wildchar
+$search_term = trim($search_term);
 $search_term = str_replace("*", "%", $search_term);
 
 
@@ -197,6 +198,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 				if(sizeof($custom_subnet_fields) > 0) {
 					foreach($custom_subnet_fields as $field) {
 						if(!in_array($field['name'], $hidden_subnet_fields)) {
+							$line[$field['name']] = $Result->create_links ($line[$field['name']], $field['type']);
 							print "	<td class='hidden-xs hidden-sm'>".$line[$field['name']]."</td>";
 						}
 					}
@@ -354,7 +356,10 @@ if(sizeof($result_addresses) > 0) {
 			//custom fields
 			if(sizeof($custom_address_fields) > 0) {
 				foreach($custom_address_fields as $field) {
-					if(!in_array($field['name'], $hidden_address_fields))  					{ print '<td class="customField hidden-sm hidden-xs hidden-md">'. $line[$field['name']] .'</td>'. "\n"; }
+					if(!in_array($field['name'], $hidden_address_fields)){
+						$line[$field['name']] = $Result->create_links ($line[$field['name']], $field['type']);
+						print '<td class="customField hidden-sm hidden-xs hidden-md">'. $line[$field['name']] .'</td>'. "\n";
+					}
 				}
 			}
 
@@ -433,6 +438,7 @@ if(sizeof($result_vlans) > 0) {
 		if(sizeof($custom_vlan_fields) > 0) {
 			foreach($custom_vlan_fields as $field) {
 				if(!in_array($field['name'], $hidden_vlan_fields)) {
+					$vlan[$field['name']] = $Result->create_links ($vlan[$field['name']], $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$vlan[$field['name']]."</td>";
 				}
 			}
