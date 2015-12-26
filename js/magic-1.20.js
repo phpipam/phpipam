@@ -645,9 +645,9 @@ $(document).on("click", "#vlanstemplate", function() {
 
 
 //download vlan domain template
-$(document).on("click", "#vlandomaintemplate", function() {
+$(document).on("click", "#l2domtemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlandomain'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=l2dom'></iframe></div>");
 
 
 	return false;
@@ -2540,7 +2540,7 @@ $('button#hostfileDump').click(function () {
 });
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets"]; var popsize = {};
+	var implemented = ["vrf","vlan","l2dom","subnets"]; var popsize = {};
 	popsize["subnets"] = "w700";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
@@ -2581,6 +2581,11 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			var exportDomains = $('form#selectExportDomains').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-vlan.php?" + exportDomains + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'l2dom':
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-l2dom.php?" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
 		case 'subnets':
@@ -2654,7 +2659,7 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
+	var implemented = ["vrf","vlan","l2dom","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
@@ -2682,7 +2687,7 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
+	var implemented = ["vrf","vlan","l2dom","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max"; popsize["recompute"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
@@ -2710,7 +2715,7 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
+	var implemented = ["vrf","vlan","l2dom","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max";	popsize["recompute"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
