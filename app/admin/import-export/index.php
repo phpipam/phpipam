@@ -34,7 +34,7 @@ $(document).on('change', "select#dataType", function() {
 			<select name="dataType" id="dataType" class="form-control input-sm input-w-auto" rel='tooltip' data-placement='right' title='<?php print _('Pick data set'); ?>'>
 					<option value='vrf'><?php print _('VRF'); ?></option>
 					<option value='vlan'><?php print _('VLAN'); ?></option>
-					<option value='l2dom'><?php print _('VLAN Domains'); ?></option>
+					<option value='l2dom'><?php print _('L2 Domains'); ?></option>
 					<option value='subnets'><?php print _('Subnets'); ?></option>
 					<option value='iphost' disabled><?php print _('IP addresses'); ?></option>
 					<option value='devices' disabled><?php print _('Devices'); ?></option>
