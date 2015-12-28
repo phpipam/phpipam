@@ -2540,8 +2540,8 @@ $('button#hostfileDump').click(function () {
 });
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","l2dom","subnets"]; var popsize = {};
-	popsize["subnets"] = "w700";
+	var implemented = ["vrf","vlan","l2dom","subnets","ipaddr"]; var popsize = {};
+	popsize["subnets"] = "w700"; popsize["ipaddr"] = "w700";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2592,6 +2592,12 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			var exportSections = $('form#selectExportSections').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-subnets.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'ipaddr':
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-ipaddr.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
 	}
@@ -2680,6 +2686,7 @@ $('button.dataImport').click(function () {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
+		hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
@@ -2709,6 +2716,7 @@ $(document).on("click", "button#dataImportPreview", function() {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
+		hideSpinner();		
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
@@ -2737,6 +2745,7 @@ $(document).on("click", "button#dataImportSubmit", function() {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
+		hideSpinner();		
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;

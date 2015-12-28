@@ -36,7 +36,7 @@ $(document).on('change', "select#dataType", function() {
 					<option value='vlan'><?php print _('VLAN'); ?></option>
 					<option value='l2dom'><?php print _('L2 Domains'); ?></option>
 					<option value='subnets'><?php print _('Subnets'); ?></option>
-					<option value='iphost' disabled><?php print _('IP addresses'); ?></option>
+					<option value='ipaddr'><?php print _('IP addresses'); ?></option>
 					<option value='devices' disabled><?php print _('Devices'); ?></option>
 					<option value='devtype' disabled><?php print _('Device types'); ?></option>
 			</select>
