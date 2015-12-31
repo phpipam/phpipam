@@ -34,10 +34,9 @@ $(document).on('change', "select#dataType", function() {
 			<select name="dataType" id="dataType" class="form-control input-sm input-w-auto" rel='tooltip' data-placement='right' title='<?php print _('Pick data set'); ?>'>
 					<option value='vrf'><?php print _('VRF'); ?></option>
 					<option value='vlan'><?php print _('VLAN'); ?></option>
-					<option value='vdomain' disabled><?php print _('VLAN Domains'); ?></option>
+					<option value='l2dom'><?php print _('L2 Domains'); ?></option>
 					<option value='subnets'><?php print _('Subnets'); ?></option>
-<!--					<option value='recompute'><?php print _('Master/Nested recompute'); ?></option> -->
-					<option value='iphost' disabled><?php print _('IP addresses'); ?></option>
+					<option value='ipaddr'><?php print _('IP addresses'); ?></option>
 					<option value='devices' disabled><?php print _('Devices'); ?></option>
 					<option value='devtype' disabled><?php print _('Device types'); ?></option>
 			</select>
