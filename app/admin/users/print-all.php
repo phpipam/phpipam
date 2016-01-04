@@ -158,7 +158,7 @@ foreach ($users as $user) {
 
 <div class="alert alert-info alert-absolute">
 <ul>
-	<li><?php print _('Adminstrator users will be able to view and edit all all sections and subnets'); ?></li>
-	<li><?php print _('Normal users will have premissions set based on group access to sections and subnets'); ?></li>
+	<li><?php print _('Administrator users will be able to view and edit all sections and subnets'); ?></li>
+	<li><?php print _('Normal users will have permissions set based on group access to sections and subnets'); ?></li>
 </ul>
 </div>
