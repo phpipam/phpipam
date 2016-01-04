@@ -133,7 +133,7 @@ if($slaves) {
 
 				# allow requests
 				if($slave['allowRequests'] == 1) 			{ print '<td class="allowRequests small hidden-xs hidden-sm"><i class="fa fa-gray fa-check"></i></td>'; }
-				else 										{ print '<td class="allowRequests small hidden-xs hidden-sm"><i class="fa fa-gray fa-check"></i></td>'; }
+				else 										{ print '<td class="allowRequests small hidden-xs hidden-sm"></td>'; }
 
 				# edit buttons
 				if($permission == 3) {
