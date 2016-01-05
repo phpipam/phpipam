@@ -1923,11 +1923,11 @@ msgid "All groups"
 msgstr "Todos los grupos"
 
 #: site/admin/users.php:116
-msgid "Adminstrator users will be able to view and edit all all sections and subnets"
+msgid "Administrator users will be able to view and edit all all sections and subnets"
 msgstr "Los usuarios administradores serán capaces de ver y editar todas las secciones y subredes"
 
 #: site/admin/users.php:117
-msgid "Normal users will have premissions set based on group access to sections and "
+msgid "Normal users will have permissions set based on group access to sections and "
 "subnets"
 msgstr "Los usuarios normales tendrán permisos en secciones y subredes basados en "
 "los de sus grupos"
