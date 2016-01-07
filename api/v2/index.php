@@ -88,8 +88,8 @@ try {
 	}
 
 
-	// append POST parameters if POST
-	if($_SERVER['REQUEST_METHOD']=="POST"){
+	// append POST parameters if POST or PATCH
+	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"){
 		// if application tupe is JSON (application/json)
         if($_SERVER['CONTENT_TYPE']=="application/json"){
                 $rawPostData = file_get_contents('php://input');
