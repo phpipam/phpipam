@@ -363,7 +363,7 @@ $(document).ready(function() {
 		<input type="text" class="form-control input-sm" name="scanMaxThreads" value="<?php print $settings['scanMaxThreads']; ?>">
 	</td>
 	<td class="info2">
-		<?php print _('Set maximum nubmer of concurrent ICMP checks (default 128)'); ?>
+		<?php print _('Set maximum number of concurrent ICMP checks (default 128)'); ?>
 	</td>
 </tr>
 
