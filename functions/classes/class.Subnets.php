@@ -2045,8 +2045,17 @@ class Subnets extends Common_functions {
 				$current_description = $description_print;
 			}
 			elseif ($this->settings->subnetView == 2) {
-				$description_print = strlen($option['value']['description'])>0 ? "(".$option['value']['description'].")" : "";		// fix for empty
-				$current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
+			        if (strlen($option['value']['description'])>0) {
+                                 $temp_description = "(".$option['value']['description'].")";
+			        
+			            if (strlen($temp_description)>34) {
+                                     $temp_description = substr($temp_description, 0, 32) . "...)";
+                                    }
+                                } else {
+                                $temp_description = "";
+                                }
+                                $description_print = $temp_description;
+                                $current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
 			}
 
 			if ( $option === false )
@@ -2637,14 +2646,19 @@ class Subnets extends Common_functions {
 			if(strlen($option['value']['subnet']) > 0 && $option['value']['isFolder']!=1) {
 				# selected
 				if($option['value']['id'] == $current_master) 	{
-					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
+					if($option['value']['description']) { 
+					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
+					 $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
 					else 								{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
 				else {
-					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
+					if($option['value']['description']) { 
+					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
+					 $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
 					else 								{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {
+					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
 				$html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
 				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
 				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
