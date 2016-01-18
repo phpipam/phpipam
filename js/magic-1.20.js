@@ -467,7 +467,20 @@ $(document).on("click", ".ping_ipaddress", function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	return false;
 });
-
+//show info
+$(document).on("click", ".info_ipaddress", function() {
+    showSpinner();
+    var id        = $(this).attr('data-id');
+    var subnetId  = $(this).attr('data-subnetId');
+    //format posted values
+    var postdata = "&id="+id+"&subnetId="+subnetId;
+    $.post('app/subnets/addresses/info-address.php', postdata, function(data) {
+        $('#popupOverlay div.popup_w500').html(data);
+        showPopup('popup_w500');
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
 
 /*    send notification mail
 ********************************/
