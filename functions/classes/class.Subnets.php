@@ -465,12 +465,12 @@ class Subnets extends Common_functions {
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vlanId, $sectionId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vlanId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vlanId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vlanId);
 		}
 
 		# fetch
@@ -532,12 +532,12 @@ class Subnets extends Common_functions {
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vrfId, $sectionId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vrfId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vrfId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vrfId);
 		}
 
 		# fetch
