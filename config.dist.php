@@ -1,6 +1,6 @@
 <?php
 
-/*  database connection details
+/* database connection details
  ******************************/
 $db['host'] = "localhost";
 $db['user'] = "phpipam";
@@ -8,7 +8,7 @@ $db['pass'] = "phpipamadmin";
 $db['name'] = "phpipam";
 $db['port'] = 3306;
 
-/* SSL options
+/* SSL options for MySQL
  ******************************
  See http://php.net/manual/en/ref.pdo-mysql.php
      https://dev.mysql.com/doc/refman/5.7/en/ssl-options.html

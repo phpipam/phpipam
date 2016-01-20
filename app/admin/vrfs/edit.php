@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # get VRF
 if($_POST['action']!="add") {
 	$vrf = $Admin->fetch_object ("vrf", "vrfId", $_POST['vrfId']);
@@ -64,6 +67,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="vrfId" value="'. $_POST['vrfId'] .'">'. "\n";}
 			?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$vrf['description']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>

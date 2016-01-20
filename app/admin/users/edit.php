@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # fetch custom fields
 $custom 	= $Tools->fetch_custom_fields('users');
@@ -108,6 +111,7 @@ $(document).ready(function(){
 
         <input type="hidden" name="userId" value="<?php print @$user['id']; ?>">
         <input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
         </td>
         <td class="info2"><?php print _('Select user role'); ?>

@@ -19,6 +19,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch request
 $request = $Admin->fetch_object("requests", "id", $_POST['requestId']);
 
@@ -115,6 +118,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 			<input type="text" name="ip_addr" class="ip_addr form-control input-sm" value="<?php print $ip_address; ?>" size="30">
 			<input type="hidden" name="requestId" value="<?php print $request['id']; ?>">
 			<input type="hidden" name="requester" value="<?php print $request['requester']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
 	</tr>
 	<!-- description -->

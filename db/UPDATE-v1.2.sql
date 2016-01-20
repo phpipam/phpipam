@@ -60,3 +60,6 @@ VALUES ('http', NULL, 'Yes', 'Apache authentication');
 
 /* allow powerdns record management for user */
 ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `email`;
+
+/* transform subnet to biginteger */
+ALTER TABLE `subnets` CHANGE `subnet` `subnet` BIGINT(64)  NULL  DEFAULT NULL;

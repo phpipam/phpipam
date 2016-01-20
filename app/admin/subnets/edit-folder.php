@@ -19,6 +19,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # ID must be numeric
 if($_POST['action']!="add") {
@@ -119,6 +122,7 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
     <input type="hidden" name="action"    		value="<?php print $_POST['action']; ?>">
 	<input type="hidden" name="vlanId" 			value="0">
 	<input type="hidden" name="vrfId" 			value="0">
+	<input type="hidden" name="csrf_cookie"     value="<?php print $csrf; ?>">
 
     <?php
     	# custom Subnet fields

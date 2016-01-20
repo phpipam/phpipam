@@ -9,6 +9,9 @@ $User->check_user_session();
 
 # fetch mail settings
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
+
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
 ?>
 
 <!-- title -->
@@ -31,6 +34,7 @@ $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 				<option value="localhost"><?php print _("Localhost"); ?></option>
 				<option value="smtp" <?php if($mail_settings->mtype=="smtp") print "selected='selected'"; ?>><?php print _("SMTP"); ?></option>
 			</select>
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="info2"><?php print _('Select server type for sending mail messages'); ?></td>
 	</tr>

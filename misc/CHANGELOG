@@ -1,4 +1,4 @@
-== 1.19.045
+== 1.20
 
 	New features:
 	------------
@@ -27,7 +27,7 @@
 	+ Added Scan agents to scan subnets remotely;
 	+ Added firewall zone mappings and module;
 	+ Added per-subnet DNS resolvers;
-	+ Added option to mark subnet as utilized;
+	+ Added option to mark subnet as utilized (full);
 
 	Enhancements:
 	----------------------------
@@ -35,7 +35,7 @@
 	+ Upgraded jQuery to 2.1.3;
 	+ All functions rewritten to classes/methods;
 	+ Parametized all SQL queries, moved from MySQLI to PDO;
-	+ Added VLAN to search results export;
+	+ Added VLAN/VRF to search and to search results export;
 	+ Redesigned admin and tools menu;
 	+ Added scanned/discovered subnets to tools for faster overview;
 	+ Per-user display settings;
@@ -58,6 +58,7 @@
 	+ Parametized all MySQL querries;
 	+ Fixed plainpass being logged on user update;
 	+ Fixed XSS exploit on /error/;
+	+ Added CSRF protection to forms;
 
 	Translations:
 	----------------------------

@@ -65,7 +65,7 @@ else {
 	<meta name="robots" content="noindex, nofollow">
 	<meta http-equiv="X-UA-Compatible" content="IE=9" >
 
-	<meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=no">
+	<meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=1, user-scalable=yes">
 
 	<!-- chrome frame support -->
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -85,8 +85,7 @@ else {
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/login.js"></script>
 	<?php } ?>
-<!-- 	<script type="text/javascript" src="js/magic-1.2.min.js"></script> -->
-	<script type="text/javascript" src="js/magic-1.20.js"></script>
+	<script type="text/javascript" src="js/magic-1.2.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap-switch.min.js"></script>

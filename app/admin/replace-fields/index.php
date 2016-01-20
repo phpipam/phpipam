@@ -6,6 +6,9 @@
 
 # verify that user is logged in
 $User->check_user_session();
+
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
 ?>
 
 <h4><?php print _('Search and replace fields in IP address list'); ?></h4>
@@ -42,6 +45,7 @@ $User->check_user_session();
 		<td><?php print _('Select search string'); ?></td>
 		<td>
 			<input type="text" name="search" class="form-control input-sm" placeholder="<?php print _('search string'); ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
 

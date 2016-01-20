@@ -766,7 +766,41 @@ class Tools extends Common_functions {
 
 	    # return result
 	    return $search;
+	}
 
+
+	/**
+	 * Function to search vrf
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @return void
+	 */
+	public function search_vrfs ($search_term) {
+		# fetch custom fields
+		$custom_fields = $this->fetch_custom_fields ("vrf");
+		# query
+		$query[] = "select * from `vrf` where `name` like :search_term or `description` like :search_term or `rd` like :search_term ";
+		# custom
+	    if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
 	}
 
 	/**

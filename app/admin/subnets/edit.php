@@ -20,6 +20,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # verify that user has permissions to add subnet
 if($_POST['action'] == "add") {
@@ -432,6 +435,7 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
             <input type="hidden" name="freespace"    	value="true">
             <?php } ?>
             <input type="hidden" name="vrfIdOld"        value="<?php print $subnet_old_details['vrfId'];    ?>">
+            <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
         <?php
         print '	</td>' . "\n";

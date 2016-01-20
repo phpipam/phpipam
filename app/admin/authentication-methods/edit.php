@@ -1,6 +1,5 @@
 <?php
 
-
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
@@ -13,6 +12,9 @@ $Log 		= new Logging ($Database, $User->settings);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
 
 # if edit check if protected?
 if($_POST['action']!="add") {

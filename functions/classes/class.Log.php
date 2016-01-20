@@ -318,6 +318,7 @@ class Logging extends Common_functions {
 					);
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
+		$values = $this->strip_input_tags ($values);
 
 		# execute
 		try { $this->Database->insertObject("logs", $values); }

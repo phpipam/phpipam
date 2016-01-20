@@ -1,50 +1,6 @@
 #
 # phpipam update instructions
 #
+please follow this instructions:
 
-phpIPAM supports upgrading only to 2 older release, for example only version >= 0.9 can be upgraded to 1.1.
-
-
-It is recommended that you backup the old phpipam database before you upgrade to new version (change username and pass to ones in config.php):
-	/usr/bin/mysqldump -u ipv6 -pipv6admin phpipam > <my_backup_dir>/phpipam_<version>_migration_backup.db
-
-Backup phpipam files:
-	mv <mywebdir>/phpipam <myphpipamdir>/phpipam-<version>
-
-
-#
-# !!! important !!!
-#
-
-since version 0.7 phpipam uses mod_rewrite to handle url's. Please make sure you meet the following requirements:
-	1.) Apache2 with mod_rewrite support
-	2.) "AllowOverride all" set in vhost config for mod_rewrite to work
-	
-In case your URL for phpipam is not root please set the following variables (example for /phpipam/):
-	3.) Set BASE in config.php to /phpipam/
-	4.) RewriteBase /phpipam/ in .htaccess
-
-
-#
-# a) Automatic upgrade procedure
-#
-
-	1.) Extract files form tar package:
-		tar -xvf phpipam-1.1.tar
-	2.) Set database connection settings in config.php;
-	3.) Open phpipam in browser and update database;
-
- 
-
-#
-# b) Manual upgrade procedure
-#
-	1.) Extract files form tar package:
-		tar -xvf phpipam-1.1.tar
-	2.) Set database connection settings in config.php;
-	3.) Manual database structure update
-		Update database structure by importing database scheme for your version.
-		If you have version 1.0 and want to upgrade to 1.1 use all update files form UPDATE-v1.0.sql on;
-			mysql -u root -p phpipam < db/UPDATE-v1.01.sql
-			mysql -u root -p phpipam < db/UPDATE-v1.02.sql
-			...
+http://phpipam.net/documents/upgrade/

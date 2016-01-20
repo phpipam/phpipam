@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 
@@ -58,6 +61,7 @@ if (@$agent->type=="direct" && $_POST['action']=="delete") {
 	    	<input type="text" name="name" class="form-control input-sm" value="<?php print @$agent->name; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $agent->id; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+    		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
        	<td class="info2"><?php print _('Enter scan agent name'); ?></td>
     </tr>

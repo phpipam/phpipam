@@ -288,6 +288,19 @@ class User extends Common_functions {
 	}
 
 	/**
+	 * Cerates cookie to prevent csrf
+	 *
+	 * @access private
+	 * @return void
+	 */
+	public function create_csrf_cookie () {
+    	// save cookie
+    	$_SESSION['csrf_cookie'] = md5(uniqid(mt_rand(), true));
+    	// return
+    	return $_SESSION['csrf_cookie'];
+	}
+
+	/**
 	 * Sets translation for logged in user
 	 *
 	 * @access private

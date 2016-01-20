@@ -1,9 +1,3 @@
-version - 1.2
-
-	+ To fix / finish
-		+ Verify install / upgrade scripts;
-
-
 features for next releases:
 ---------------------------
 
@@ -18,8 +12,6 @@ features for next releases:
     		- Ability to create NAT pools and link subnet / address to that pool - source NAT
     		- Show bindings under tools and next to IP address
         + Customers module;
-
-    + PostgreSQL support (#205);
 
     + User
     	+ LDAP auth without local user;
@@ -36,7 +28,6 @@ features for next releases:
     + DNS enhancements
         + Export domain in bind format + script;
         + DNS scripts (nsupdate,...)
-        + Mass record update;
 
     + Subnet, addresses
     	+ assign a state to a subnet, vlan;

@@ -645,9 +645,9 @@ $(document).on("click", "#vlanstemplate", function() {
 
 
 //download vlan domain template
-$(document).on("click", "#l2domtemplate", function() {
+$(document).on("click", "#vlandomaintemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=l2dom'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlandomain'></iframe></div>");
 
 
 	return false;
@@ -836,6 +836,8 @@ $('.searchSubmit').click(function () {
     else														{ var subnets = "off"; }
     if($('#searchSelect input[name=vlans]').is(":checked"))		{ var vlans = "on"; }
     else														{ var vlans = "off"; }
+    if($('#searchSelect input[name=vrf]').is(":checked"))		{ var vrf = "on"; }
+    else														{ var vrf = "off"; }
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
@@ -845,8 +847,8 @@ $('.searchSubmit').click(function () {
     else 																{ var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
-	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+addresses+"/"+subnets+"/"+vlans+"/"+ip; }
-	else					{ window.location = base + "?page=tools&section=search&addresses="+addresses+"&subnets="+subnets+"&vlans="+vlans+"&ip="+ip; }
+	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+addresses+"/"+subnets+"/"+vlans+"/"+vrf+"/"+ip; }
+	else					{ window.location = base + "?page=tools&section=search&addresses="+addresses+"&subnets="+subnets+"&vlans="+vlans+"&vrf="+vrf+"&ip="+ip; }
     return false;
 });
 //submit form - topmenu
@@ -860,7 +862,8 @@ $('form#userMenuSearch').submit(function () {
     else														{ var subnets = "off"; }
     if($('#searchSelect input[name=addresses]').is(":checked"))	{ var vlans = "on"; }
     else														{ var vlans = "off"; }
-
+    if($('#searchSelect input[name=vrf]').is(":checked"))		{ var vrf = "on"; }
+    else														{ var vrf = "off"; }
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
@@ -870,11 +873,12 @@ $('form#userMenuSearch').submit(function () {
     else 																{ var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
-	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+addresses+"/"+subnets+"/"+vlans+"/"+ip; }
-	else					{ window.location = base + "?page=tools&section=search&addresses="+addresses+"&subnets="+subnets+"&vlans="+vlans+"&ip="+ip; }
+	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+addresses+"/"+subnets+"/"+vlans+"/"+vrf+"/"+ip; }
+	else					{ window.location = base + "?page=tools&section=search&addresses="+addresses+"&subnets="+subnets+"&vlans="+vlans+"&vrf="+vrf+"&ip="+ip; }
     return false;
 
 });
+
 //show/hide search select fields
 $(document).on("mouseenter", "#userMenuSearch", function(event){
     var object1 = $("#searchSelect");
@@ -1309,11 +1313,12 @@ $('.checkAuthMethod').click(function () {
 /*    instructions
 ***********************/
 $('#instructionsForm').submit(function () {
+    var csrf_cookie = $("#instructionsForm input[name=csrf_cookie]").val();
 	var instructions = CKEDITOR.instances.instructions.getData();
 	$('div.instructionsPreview').hide('fast');
 
     showSpinner();
-    $.post('app/admin/instructions/edit-result.php', {instructions:instructions}, function(data) {
+    $.post('app/admin/instructions/edit-result.php', {instructions:instructions, csrf_cookie:csrf_cookie}, function(data) {
         $('div.instructionsResult').html(data).fadeIn('fast');
         if(data.search("alert-danger")==-1 && data.search("error")==-1)     	{ $('div.instructionsResult').delay(2000).fadeOut('slow'); hideSpinner(); }
         else                             	{ hideSpinner(); }
@@ -2540,8 +2545,8 @@ $('button#hostfileDump').click(function () {
 });
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","l2dom","subnets","ipaddr"]; var popsize = {};
-	popsize["subnets"] = "w700"; popsize["ipaddr"] = "w700";
+	var implemented = ["vrf","vlan","subnets"]; var popsize = {};
+	popsize["subnets"] = "w700";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2583,21 +2588,10 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-vlan.php?" + exportDomains + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
-		case 'l2dom':
-			$("div.dl").remove();    //remove old innerDiv
-			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-l2dom.php?" + exportFields + "'></iframe></div>");
-			setTimeout(function (){hidePopups();}, 1500);
-			break;
 		case 'subnets':
 			var exportSections = $('form#selectExportSections').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-subnets.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
-			setTimeout(function (){hidePopups();}, 1500);
-			break;
-		case 'ipaddr':
-			var exportSections = $('form#selectExportSections').serialize();
-			$("div.dl").remove();    //remove old innerDiv
-			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-ipaddr.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
 	}
@@ -2665,7 +2659,7 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","l2dom","subnets","recompute"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
@@ -2686,7 +2680,6 @@ $('button.dataImport').click(function () {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
-		hideSpinner();
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
@@ -2694,7 +2687,7 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","l2dom","subnets","recompute"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max"; popsize["recompute"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
@@ -2716,14 +2709,13 @@ $(document).on("click", "button#dataImportPreview", function() {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
-		hideSpinner();		
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","l2dom","subnets","recompute"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
 	popsize["subnets"] = "max";	popsize["recompute"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
@@ -2745,7 +2737,6 @@ $(document).on("click", "button#dataImportSubmit", function() {
 		$.post('app/admin/import-export/not-implemented.php', function(data) {
 		$('#popupOverlay div.popup_w400').html(data);
 		showPopup('popup_w400');
-		hideSpinner();		
 		}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 	}
     return false;
