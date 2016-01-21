@@ -765,7 +765,7 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function reset_subnet_slaves_recursive () {
-		$this->slaves = null;
+		$this->slaves_full = null;
 	}
 
 	/**
@@ -776,9 +776,9 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_slaves_master ($subnetId) {
-		foreach($this->slaves as $k=>$s) {
+		foreach($this->slaves_full as $k=>$s) {
 			if($s==$subnetId) {
-				unset($this->slaves[$k]);
+				unset($this->slaves_full[$k]);
 			}
 		}
 	}
@@ -845,19 +845,19 @@ class Subnets extends Common_functions {
 	 * @param bin $infull	(default: 0)
 	 * @return void
 	 */
-	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0) {
+	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0, $offset=0) {
 		# set IP version
 		$ipversion = $this->get_ip_version ($subnet);
 		# marked as full
 		if ($isFull!=1) {
     		# set initial vars
     		$out['used'] = (int) $used_hosts;														//set used hosts
-    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
-    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));			//free hosts
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion) - $offset;		//get maximum hosts
+    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));		//free hosts
     		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
 		}
 		else {
-    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion) - $offset;
     		$out['used']     = $out['maxhosts'];
     		$out['freehosts']= 0;
     		$out['freehosts_percent'] = 0;
@@ -986,14 +986,12 @@ class Subnets extends Common_functions {
     		else {
     			# fetch all addresses
     			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
-    			# mask fix
-    			if($address_type=="IPv4" && $netmask<31) {
-    				$used = $used+1;
-    			}
     		}
 		}
+		# calcultaing the offset for maxhosts
+		$offset = (count($this->slaves_full) * 2) -2;
 		# we counted, now lets calculate and return result
-		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull);
+		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull, $offset);
 	}
 
 	/**
