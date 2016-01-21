@@ -309,7 +309,7 @@ if(sizeof($result_addresses) > 0) {
 			//address
 			print ' <td><a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id'],"address-details",$line['id']).'">'. $Subnets->transform_to_dotted($line['ip_addr'])."</a>";
 			//tag
-			if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($line['state']); }
+			print $Addresses->address_type_format_tag($line['state']);
 			print ' </td>' . "\n";
 			//description
 			print ' <td>'. $Result->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
