@@ -41,6 +41,7 @@
 	+ Per-user display settings;
 	+ New widget - tools shortcuts;
 	+ New widget - IP calculator;
+	+ New widget - request IP address;
 	+ Clickable links for subnet fields;
 	+ Custom VRF fields;
 	+ Subnets can be now linked to devices;

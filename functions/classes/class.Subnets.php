@@ -765,7 +765,7 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function reset_subnet_slaves_recursive () {
-		$this->slaves_full = null;
+		$this->slaves = null;
 	}
 
 	/**
@@ -776,9 +776,9 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_slaves_master ($subnetId) {
-		foreach($this->slaves_full as $k=>$s) {
+		foreach($this->slaves as $k=>$s) {
 			if($s==$subnetId) {
-				unset($this->slaves_full[$k]);
+				unset($this->slaves[$k]);
 			}
 		}
 	}
@@ -845,19 +845,19 @@ class Subnets extends Common_functions {
 	 * @param bin $infull	(default: 0)
 	 * @return void
 	 */
-	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0, $offset=0) {
+	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0) {
 		# set IP version
 		$ipversion = $this->get_ip_version ($subnet);
 		# marked as full
 		if ($isFull!=1) {
     		# set initial vars
     		$out['used'] = (int) $used_hosts;														//set used hosts
-    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion) - $offset;		//get maximum hosts
-    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));		//free hosts
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
+    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));			//free hosts
     		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
 		}
 		else {
-    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion) - $offset;
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);
     		$out['used']     = $out['maxhosts'];
     		$out['freehosts']= 0;
     		$out['freehosts_percent'] = 0;
@@ -986,12 +986,14 @@ class Subnets extends Common_functions {
     		else {
     			# fetch all addresses
     			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
+    			# mask fix
+    			if($address_type=="IPv4" && $netmask<31) {
+    				$used = $used+1;
+    			}
     		}
 		}
-		# calcultaing the offset for maxhosts
-		$offset = (count($this->slaves_full) * 2) -2;
 		# we counted, now lets calculate and return result
-		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull, $offset);
+		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull);
 	}
 
 	/**
@@ -2043,17 +2045,18 @@ class Subnets extends Common_functions {
 				$current_description = $description_print;
 			}
 			elseif ($this->settings->subnetView == 2) {
-			        if (strlen($option['value']['description'])>0) {
-                                 $temp_description = "(".$option['value']['description'].")";
-			        
-			            if (strlen($temp_description)>34) {
-                                     $temp_description = substr($temp_description, 0, 32) . "...)";
-                                    }
-                                } else {
-                                $temp_description = "";
-                                }
-                                $description_print = $temp_description;
-                                $current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
+			    if (strlen($option['value']['description'])>0) {
+                    $temp_description = "(".$option['value']['description'].")";
+
+                    if (strlen($temp_description)>34) {
+                        $temp_description = substr($temp_description, 0, 32) . "...)";
+                    }
+                }
+                else {
+                    $temp_description = "";
+                }
+                $description_print = $temp_description;
+                $current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
 			}
 
 			if ( $option === false )
@@ -2644,23 +2647,34 @@ class Subnets extends Common_functions {
 			if(strlen($option['value']['subnet']) > 0 && $option['value']['isFolder']!=1) {
 				# selected
 				if($option['value']['id'] == $current_master) 	{
-					if($option['value']['description']) { 
-					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
-					 $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-					else 								{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+					if($option['value']['description']) {
+                        if(strlen($option['value']['description'])>34) {
+                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
+    				    }
+                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
+				    }
+                    else {
+                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
+                    }
+                }
 				else {
-					if($option['value']['description']) { 
-					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
-					 $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-					else 								{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+					if($option['value']['description']) {
+                        if(strlen($option['value']['description'])>34) {
+                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
+                        }
+                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
+                    }
+					else {
+                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
+                    }
+                }
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {
 					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
-				$html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
+                     $html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
 				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
 				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
-
 			}
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack_subnet ); }

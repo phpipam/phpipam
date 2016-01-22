@@ -17,6 +17,7 @@ features for next releases:
     	+ LDAP auth without local user;
         + IP address owner (from internal users - suggestions);
         + L2 domain permissions for groups ?
+        + 2FA;
 
     + Configurable cron from UI;
 
