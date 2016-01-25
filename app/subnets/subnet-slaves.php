@@ -75,6 +75,14 @@ foreach ($slave_subnets as $slave_subnet) {
 	# add full information
 	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
 
+	# slaves info
+	$has_slaves = $Subnets->has_slaves ($slave_subnet['id']) ? true : false;
+
+	# description
+	$has_slaves_ind = $has_slaves ? " <i class='fa fa-folder'></i> ":"";
+	$slave_subnet['description'] = strlen($slave_subnet['description'])>0 ? $slave_subnet['description'] : " / ";
+	$slave_subnet['description'] = $has_slaves_ind . $slave_subnet['description'];
+
 	print "<tr>";
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
@@ -97,7 +105,7 @@ foreach ($slave_subnets as $slave_subnet) {
     }
 
 	# calculate free / used / percentage
-	if(!$Subnets->has_slaves ($slave_subnet['id'])) {
+	if(!$has_slaves) {
 		$slave_addresses = (int) $Addresses->count_subnet_addresses ($slave_subnet['id']);
 		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet'], $slave_subnet['isFull']);
 	} else {
