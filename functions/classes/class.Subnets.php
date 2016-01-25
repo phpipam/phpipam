@@ -766,6 +766,7 @@ class Subnets extends Common_functions {
 	 */
 	public function reset_subnet_slaves_recursive () {
 		$this->slaves = null;
+		$this->slaves_full = null;
 	}
 
 	/**
@@ -776,8 +777,13 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_slaves_master ($subnetId) {
-		foreach($this->slaves as $k=>$s) {
+		foreach($this->slaves_full as $k=>$s) {
 			if($s==$subnetId) {
+				unset($this->slaves_full[$k]);
+			}
+		}
+		foreach ($this->slaves as $k=>$s) {
+ 			if($s==$subnetId) {
 				unset($this->slaves[$k]);
 			}
 		}
@@ -975,13 +981,16 @@ class Subnets extends Common_functions {
 		$this->fetch_subnet_slaves_recursive ($subnetId);
 		$this->remove_subnet_slaves_master ($subnetId);
 
+		# initial used value
+		$used = 0;
+
 		# go through each and calculate used hosts
 		# add +2 for subnet and broadcast if required
 		foreach($this->slaves_full as $s) {
     		# full?
     		if ($s->isFull==1) {
         		# get max
-        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, true);
+        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, false);
     		}
     		else {
     			# fetch all addresses
