@@ -228,8 +228,8 @@ DROP TABLE IF EXISTS `subnets`;
 
 CREATE TABLE `subnets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `subnet` BIGINT(64) NULL  DEFAULT NULL,
-  `mask` VARCHAR(255) NULL DEFAULT NULL,
+  `subnet` VARCHAR(255) NULL  DEFAULT NULL,
+  `mask` VARCHAR(3) NULL DEFAULT NULL,
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,

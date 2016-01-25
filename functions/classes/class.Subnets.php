@@ -1775,7 +1775,14 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	private function is_IPv6_subnet_inside_subnet ($cidr1, $cidr2) {
-		# Initialize PEAR NET object
+    	//mask 2 must be bigger than mask 1
+    	$mask1 = end(explode("/", $cidr1));
+    	$mask2 = end(explode("/", $cidr2));
+
+        //check mask
+        if ($mask1 < $mask2)                                    { return false; }
+
+		// Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
 
     	//remove netmask from subnet1

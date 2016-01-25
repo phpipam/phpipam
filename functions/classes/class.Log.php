@@ -685,6 +685,7 @@ class Logging extends Common_functions {
 		# common
 		unset($this->object_new['action']);
 		unset($this->object_new['editDate'], $this->object_old['editDate']);
+		unset($this->object_new['csrf_cookie']);
 	}
 
 	/**

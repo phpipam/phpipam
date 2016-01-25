@@ -61,10 +61,10 @@ VALUES ('http', NULL, 'Yes', 'Apache authentication');
 /* allow powerdns record management for user */
 ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `email`;
 
-/* transform subnet to biginteger */
-ALTER TABLE `subnets` CHANGE `subnet` `subnet` BIGINT(64)  NULL  DEFAULT NULL;
-
 /* add Ip request widget */
 INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
 VALUES
 ('IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes');
+
+/* change mask size */
+ALTER TABLE `subnets` CHANGE `mask` `mask` VARCHAR(3)  CHARACTER SET utf8  NULL  DEFAULT NULL;

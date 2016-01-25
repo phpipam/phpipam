@@ -374,6 +374,9 @@ else {
 		// POST DNSrecursive not set, fake it if old is also 0
 		if (!isset($_POST['DNSrecursive']) && @$subnet_old_details['DNSrecursive']==0) { $_POST['DNSrecursive'] = 0; }
 
+		// recreate csrf cookie
+		$csrf = $User->create_csrf_cookie ();
+
 		//delete
 		if ($_POST['action']=="delete") {
 			// if zone exists
@@ -388,7 +391,7 @@ else {
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
 				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
-				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'></form>";
+				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
 			}
@@ -420,7 +423,7 @@ else {
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
 				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
-				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'></form>";
+				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
 			}
