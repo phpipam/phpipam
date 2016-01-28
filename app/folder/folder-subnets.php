@@ -101,36 +101,29 @@ if($slaves) {
 				# reformat empty VLAN
 				if(sizeof($vlan)==1) { $vlan['number'] = "/"; }
 
+				# add full information
+                $fullinfo = $slave['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 				print "<tr>";
 			    print "	<td class='small'>".$vlan['number']."</td>";
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
-			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask]</a></td>";
+			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask] $fullinfo</a></td>";
 
-				# increase IP count
-				$ipCount = 0;
-				if(!$Subnets->has_slaves ($slave['id']))	{ $ipCount = $Addresses->count_subnet_addresses ($slave['id']); }			//ip count - no slaves
-				else 										{
-					# fix for subnet and broadcast free space calculation
-					$ipCount = 0;															//initial count
-					$Subnets->reset_subnet_slaves_recursive ();
-					$slaves2 = $Subnets->fetch_subnet_slaves_recursive ($slave['id']);		//fetch all slaves
-					foreach($Subnets->slaves as $s) {
-						$ipCount = $ipCount + $Addresses->count_subnet_addresses ($s['id']);
-						# subnet and broadcast add used
-						if($Subnets->get_ip_version ($s['subnet'])=="IPv4" && $s['mask']<31) {
-							$ipCount = $ipCount+2;
-						}
-					}
+				# calculate free / used / percentage
+				if(!$Subnets->has_slaves ($slave['id']))	{ 
+					$ipCount = $Addresses->count_subnet_addresses ($slave['id']); 
+					$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'], $slave['isFull'] );
+				} else {
+					$calculate = $Subnets->calculate_subnet_usage_recursive( $slave['id'], $slave['subnet'], $slave['mask'], $Addresses, $slave['isFull']);
 				}
 
 				# print usage
-				$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'] );
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
 			    print '	<td class="small hidden-xs hidden-sm">'. $calculate['freehosts_percent'] .'</td>';
 
 				# allow requests
 				if($slave['allowRequests'] == 1) 			{ print '<td class="allowRequests small hidden-xs hidden-sm"><i class="fa fa-gray fa-check"></i></td>'; }
-				else 										{ print '<td class="allowRequests small hidden-xs hidden-sm"><i class="fa fa-gray fa-check"></i></td>'; }
+				else 										{ print '<td class="allowRequests small hidden-xs hidden-sm"></td>'; }
 
 				# edit buttons
 				if($permission == 3) {

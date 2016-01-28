@@ -39,6 +39,7 @@ else {
 		$nameservers = (array) $nameservers;
 
 		unset($permitted_sections);
+		$permitted_sections = array();
 
 		// sections
 		if (!is_null($nameservers['permissions'])) {

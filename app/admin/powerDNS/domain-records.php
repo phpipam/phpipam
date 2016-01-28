@@ -34,8 +34,51 @@ else {
 <br>
 <h4><?php print _('Records for domain'); ?> <strong><?php print $domain->name; ?></strong></h4><hr>
 
+<!-- domain details -->
+<blockquote style="margin-left: 30px;margin-top: 10px;">
+
+    <table class="table table-pdns-details table-auto table-condensed">
+    <tr>
+        <td><?php print _("Domain type:"); ?></td>
+        <td><span class="badge badge1"><?php print $domain->type; ?></span></td>
+    </tr>
+    <?php
+    # slave check
+    if ($domain->type=="SLAVE") {
+        // master servers
+        print "<tr class='text-top'>";
+        if(strpos($domain->master, ";")!==false)    { $master=explode(";", $domain->master);  }
+        else                                        { $master=array($domain->master); }
+        print "<td>"._("Master servers").":</td>";
+        print "<td>";
+        foreach ($master as $k=>$m) {
+            if(strlen($m)>0) {
+                print "<span class='badge badge1'>$m</span><br>";
+            }
+        }
+        print "</td>";
+        print "</tr>";
+
+        // notified serial
+        $domain->notified_serial = strlen($domain->notified_serial)>0 ? $domain->notified_serial : "/";
+        print "<tr>";
+        print " <td>"._("Notified serial:")."</td>";
+        print " <td>".$domain->notified_serial."</td>";
+        print "</tr>";
+        // last check
+        $domain->last_check = strlen($domain->last_check)>0 ? $domain->last_check : "Never";
+        print "<tr>";
+        print " <td>"._("Last check:")."</td>";
+        print " <td>".$domain->last_check."</td>";
+        print "</tr>";
+    }
+    ?>
+
+    </table>
+</blockquote>
+
 <!-- Add new -->
-<div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
+<div class="btn-group" style="margin-bottom:10px;margin-top:15px;">
 	<a href="<?php print create_link ("administration", "powerDNS", $_GET['subnetId']); ?>" class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _('Domains'); ?></a>
 	<button class='btn btn-sm btn-default btn-success editRecord' data-action='add' data-id='0' data-domain_id='<?php print $domain->id; ?>'><i class='fa fa-plus'></i> <?php print _('New record'); ?></button>
 </div>

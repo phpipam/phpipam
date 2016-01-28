@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # fetch custom fields
 $custom 	= $Tools->fetch_custom_fields('users');
@@ -46,7 +49,17 @@ else {
 
 <script type="text/javascript">
 $(document).ready(function(){
-     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+    if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini",
+	    onText: "Yes",
+	    offText: "No"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 </script>
 
@@ -98,6 +111,7 @@ $(document).ready(function(){
 
         <input type="hidden" name="userId" value="<?php print @$user['id']; ?>">
         <input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
         </td>
         <td class="info2"><?php print _('Select user role'); ?>
@@ -253,6 +267,21 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Select to which groups the user belongs to'); ?></td>
 	</tr>
 
+	<!-- pdns -->
+    <?php if ($User->settings->enablePowerDNS==1) { ?>
+	<tbody>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<tr>
+    	<td><?php print _("PowerDNS"); ?></td>
+    	<td>
+            <input type="checkbox" class="input-switch" value="Yes" name="pdns" <?php if(@$user->pdns == "Yes") print 'checked'; ?>>
+    	</td>
+		<td class="info2"><?php print _('Select to allow user to create DNS records'); ?></td>
+	</tr>
+    <?php } ?>
+
 	<!-- Custom -->
 	<?php
 	if(sizeof($custom) > 0) {
@@ -297,8 +326,8 @@ $(document).ready(function(){
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only

@@ -19,8 +19,9 @@ $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-list", 			"name"=>"Log 
 if($User->settings->enableIPrequests==1) {
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-plus", 			"name"=>"IP requests", 			"href"=>"requests", 	"description"=>"Manage IP requests");
 }
-
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-info", 	  		"name"=>"Instructions",  		"href"=>"instructions", "description"=>"Instructions for managing IP addresses");
+if($User->settings->enablePowerDNS==1)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  		"name"=>"PowerDNS",  		"href"=>"powerDNS", "description"=>"PowerDNS settings");
 
 # Subnets
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-star", 	  	"name"=>"Favourite networks",  	"href"=>"favourites", 	"description"=>"Show favourite networks");

@@ -3,12 +3,17 @@
  *	Bootstrap fixes for phpipam
  *
  */
-
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Source Sans Pro Light'), local('Source-sans-pro-light'), url("../fonts/source_sans_pro/Source-sans-pro-light.ttf") format('truetype');
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url("../fonts/source_sans_pro/SourceSansPro-Light.woff") format('woff');
+}
+@font-face {
+  font-family: 'Source Sans Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url("../fonts/source_sans_pro/SourceSansPro-Regular.woff") format('woff');
 }
 
 
@@ -50,6 +55,10 @@ table.table-auto-wide td {
 	padding-left: 25px !important;
 	padding-right: 25px !important;
 }
+table.table-pdns-details td {
+    color: #999;
+    font-size: 13px;
+}
 
 hr {
   margin: 5px;
@@ -73,11 +82,8 @@ h5 .label {
 	margin-left: 10px;
 }
 h1, h2, h3, h4, h5, .pHeader {
-	font-family: "Source Sans Pro", Arial, sans-serif;
+	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
-
-/* font-family: 'ecoicons'; */
-/* 	-webkit-font-smoothing: antialiased; */
 }
 .row {
 	margin: 0px;
@@ -102,6 +108,10 @@ blockquote {
 }
 blockquote p {
 	font-size: 15px;
+}
+blockquote p.small2 {
+    color: #999;
+    font-size: 12px
 }
 blockquote small {
 	font-size: 12px;
@@ -295,13 +305,15 @@ td#actions .btn-group .btn {
 	margin-left: 5px;
 
 	font-size: 10px;
+	cursor: pointer;
 }
 .badge3 {
 	padding: 4px 6px;
 	margin-left: 10px;
 	margin-bottom: 4px;
-
-
+}
+.badge.badge4 {
+    cursor: default;
 }
 ul.submenu-dns {
 	line-height: 14px;
@@ -330,6 +342,9 @@ table.ipaddresses tr:hover ul.submenu-dns li i {
 table.ipaddresses hr {
 	margin-bottom: 0px;
 }
+table.ipaddresses td {
+    vertical-align: top !important;
+}
 
 
 
@@ -355,6 +370,9 @@ table.ipaddresses hr {
 .text-muted,
 td.info2 {
 	font-size: 12px;
+}
+.isFull .alert-info {
+    margin-bottom: 0px;
 }
 
 
@@ -1633,7 +1651,17 @@ table#manageSubnets .structure {
 	background: url("../../css/images/sn-bg.png")  0px 7px;
 	padding-top: 8px;
 	padding-bottom: 8px;
+}
+table#manageSubnets .structure-last {
+    background: url("../../css/images/sn-bg-last.png") no-repeat 1px 0px;
+	padding-top: 7px;
+	padding-bottom: 8px;
+}
 
+table#manageSubnets>tbody>tr:last-child .structure {
+    background: url("../../css/images/sn-bg-last.png") no-repeat 1px 0px !important;
+	padding-top: 7px;
+	padding-bottom: 8px;
 }
 table#manageSubnets .structure i {
 

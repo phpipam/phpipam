@@ -98,7 +98,7 @@ else {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
 
 					// create links
-					$device[$field['name']] = $Result->create_links ($device[$field['name']]);
+					$device[$field['name']] = $Result->create_links ($device[$field['name']], $field['type']);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{

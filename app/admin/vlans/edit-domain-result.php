@@ -17,6 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
 
 # we cannot delete default domain
 if(@$_POST['id']==1 && $_POST['action']=="delete")						{ $Result->show("danger", _("Default domain cannot be deleted"), true); }

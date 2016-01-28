@@ -88,7 +88,7 @@ foreach($custom_fields as $k=>$cf) {
 		foreach($cf as $f)
 		{
 			# space?
-			$class = !preg_match('/^[a-zA-Z0-9.\_]+$/i', $f['name']) ? "alert-danger" : "";
+			$class = !preg_match('/^[a-zA-Z0-9 \_]+$/i', $f['name']) ? "alert-danger" : "";
 
 			print "<tr class='$class'>";
 

@@ -26,6 +26,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 /* reset field name for add! */
 if($_POST['action'] == "add") 	{ $_POST['fieldName'] = ""; }
@@ -53,6 +56,7 @@ $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST[
 			<input type="hidden" name="oldname" value="<?php print $_POST['oldname']; ?>">
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="table" value="<?php print $_POST['table']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
 

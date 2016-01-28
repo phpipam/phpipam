@@ -82,6 +82,8 @@ class phpipam_mail {
 		//server
 		$this->Php_mailer->Host = $this->mail_settings->mserver;
 		$this->Php_mailer->Port = $this->mail_settings->mport;
+		//permit self-signed certs and dont verify certs
+		$this->Php_mailer->SMTPOptions = array("ssl"=>array("verify_peer"=>false, "verify_peer_name"=>false, "allow_self_signed"=>true));
 		//set smtp auth
 		$this->set_smtp_auth();
 	}

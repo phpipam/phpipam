@@ -20,6 +20,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # verify that user has permissions to add subnet
 if($_POST['action'] == "add") {
@@ -285,10 +288,18 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 
         if($vrfs!=false) {
 	        foreach($vrfs as $vrf) {
-				//cast
-				$vrf = (array) $vrf;
-	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'. $vrf['name'] .'</option>'; }
-	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'. $vrf['name'] .'</option>'; }
+    	        // set permitted
+    	        $permitted_sections = explode(";", $vrf->sections);
+    	        // section must be in array
+    	        if (strlen($vrf->sections)==0 || in_array(@$_POST['sectionId'], $permitted_sections)) {
+    				//cast
+    				$vrf = (array) $vrf;
+    				// set description if present
+    				$vrf['description'] = strlen($vrf['description'])>0 ? " ($vrf[description])" : "";
+
+    	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'.$vrf['name'].$vrf['description'].'</option>'; }
+    	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'.$vrf['name'].$vrf['description'].'</option>'; }
+    	        }
 	        }
         }
 
@@ -303,6 +314,23 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	}
 
 	?>
+
+	<?php if($_POST['action']!="delete") { ?>
+	<!-- mark full -->
+    <tr>
+	    <td colspan="3"><hr></td>
+    </tr>
+	<tr>
+        <td class="middle"><?php print _('Mark as full'); ?></td>
+        <td>
+            <?php $checked = @$subnet_old_details['isFull']==1 ? "checked": ""; ?>
+            <input type="checkbox" name="isFull" class="input-switch" value="1" <?php print $checked; ?>>
+        </td>
+        <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
+    </tr>
+
+	<?php } ?>
+
 	<?php if($_POST['action']=="edit") { ?>
 	<!-- resize / split -->
     <tr>
@@ -412,6 +440,7 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
             <input type="hidden" name="freespace"    	value="true">
             <?php } ?>
             <input type="hidden" name="vrfIdOld"        value="<?php print $subnet_old_details['vrfId'];    ?>">
+            <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
         <?php
         print '	</td>' . "\n";
@@ -482,8 +511,8 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 				elseif($field['type'] == "date" || $field['type'] == "datetime") {
 					// just for first
 					if($timeP==0) {
-						print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-						print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+						print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+						print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 						print '<script type="text/javascript">';
 						print '$(document).ready(function() {';
 						//date only

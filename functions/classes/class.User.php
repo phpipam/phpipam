@@ -288,6 +288,19 @@ class User extends Common_functions {
 	}
 
 	/**
+	 * Cerates cookie to prevent csrf
+	 *
+	 * @access private
+	 * @return void
+	 */
+	public function create_csrf_cookie () {
+    	// save cookie
+    	$_SESSION['csrf_cookie'] = md5(uniqid(mt_rand(), true));
+    	// return
+    	return $_SESSION['csrf_cookie'];
+	}
+
+	/**
 	 * Sets translation for logged in user
 	 *
 	 * @access private
@@ -363,7 +376,7 @@ class User extends Common_functions {
 			if (!property_exists($ldap, 'ldap_security')) {
 				$ldap->ldap_security = 'none';
 			}
-			
+
 			if (property_exists($ldap, 'use_ssl')) {
 
 				if ($ldap->use_ssl == '1') {
@@ -477,7 +490,7 @@ class User extends Common_functions {
 	    	if(sizeof($subnets)>0) {
 		    	# fetch details for each subnet
 				foreach($subnets as $id) {
-					$query = "select `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
+					$query = "select `su`.`id` as `subnetId`,`se`.`id` as `sectionId`, `subnet`, `mask`,`isFull`,`su`.`description`,`se`.`description` as `section`, `vlanId`, `isFolder`
 							  from `subnets` as `su`, `sections` as `se` where `su`.`id` = ? and `su`.`sectionId` = `se`.`id` limit 1;";
 
 					try { $fsubnet = $this->Database->getObjectQuery($query, array($id)); }
@@ -617,7 +630,7 @@ class User extends Common_functions {
 
 		# authenticate based on name of auth method
 		if(!method_exists($this, $this->authmethodtype))	{
-			$this->Log->write ("User login", _('Error: Invalid authentication method'), 1 );
+			$this->Log->write ("User login", _('Error: Invalid authentication method'), 2 );
 			$this->Result->show("danger", _("Error: Invalid authentication method"), true);
 		}
 		else {
@@ -647,7 +660,7 @@ class User extends Common_functions {
 			# admin?
 			if($user->role == "Administrator")	{ $this->isadmin = true; }
 
-			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 1, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
+			if(sizeof($usert)==0)	{ $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
 			else 					{ $this->user = $user; }
 		}
 	}
@@ -735,9 +748,48 @@ class User extends Common_functions {
 			# add blocked count
 			$this->block_ip ();
 
-			$this->Log->write( "User login", "Invalid username or password", 1, $username );
-			$this->Result->show("danger", _("Invalid username or password"), true);
+			$this->Log->write( "User login", "Invalid username or password", 2, $username );
+
+			# apache
+			if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
+			else                                 { $this->Result->show("danger", _("Invalid username or password"), true); }
 		}
+	}
+
+	/**
+	 * HTTP REMOTE_USER authentication, the user is already authenticated
+	 * by the web server so just create the session
+	 *
+	 * @access private
+	 * @param mixed $username
+	 * @param mixed $password
+	 * @return void
+	 */
+	public function auth_http ($username, $password) {
+		# save to session
+		$this->write_session_parameters ();
+
+		$this->Result->show("success", _("Login successful"));
+		$this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0, $username );
+
+		# write last logintime
+		$this->update_login_time ();
+
+		# remove possible blocked IP
+		$this->block_remove_entry ();
+	}
+
+	/**
+	 * Shows login prompt for apache logins
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function show_http_login () {
+        header('WWW-Authenticate: Basic realm="phpIPAM authentication"');
+        header('HTTP/1.0 401 Unauthorized');
+        echo 'Authentication failed';
+        exit;
 	}
 
 	/**
@@ -893,6 +945,7 @@ class User extends Common_functions {
 	private function auth_NetIQ ($username, $password) {
 		$this->auth_AD ("cn=".$username, $password);
 	}
+
 	/**
 	 * Authenticates user on radius server
 	 *

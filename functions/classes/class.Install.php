@@ -135,7 +135,7 @@ class Install extends Common_functions {
 	 */
 	private function create_grants () {
 	 	# set query
-	    $query = 'grant ALL on '. $this->db['name'] .'.* to '. $this->db['user'] .'@localhost identified by "'. $this->db['pass'] .'";';
+	    $query = 'grant ALL on `'. $this->db['name'] .'`.* to '. $this->db['user'] .'@localhost identified by "'. $this->db['pass'] .'";';
 		# execute
 		try { $this->Database_root->runQuery($query); }
 		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
@@ -164,7 +164,7 @@ class Install extends Common_functions {
 					try { $this->Database_root->runQuery("UNLOCK TABLES;"); }
 					catch (Exception $e) {}
 					//drop database
-					try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
+					try { $this->Database_root->runQuery("drop database if exists `". $this->db['name'] ."`;"); }
 					catch (Exception $e) {
 						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
 					}

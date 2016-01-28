@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['tid'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 # set delete flag
@@ -46,6 +49,7 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 		<td>
 			<input type="text" name="tname" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php print @$device->tname; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 				print '<input type="hidden" name="tid" value="'. $_POST['tid'] .'">'. "\n";

@@ -1,6 +1,6 @@
 <?php
 
-/*  database connection details
+/* database connection details
  ******************************/
 $db['host'] = "localhost";
 $db['user'] = "phpipam";
@@ -8,14 +8,16 @@ $db['pass'] = "phpipamadmin";
 $db['name'] = "phpipam";
 $db['port'] = 3306;
 
-/* SSL options
- ******************************/
-// See http://php.net/manual/en/ref.pdo-mysql.php 
-//     https://dev.mysql.com/doc/refman/5.7/en/ssl-options.html
+/* SSL options for MySQL
+ ******************************
+ See http://php.net/manual/en/ref.pdo-mysql.php
+     https://dev.mysql.com/doc/refman/5.7/en/ssl-options.html
 
-// Please update these settings before setting 'ssl' to true.
-// All settings can be commented out or set to NULL if not needed
+     Please update these settings before setting 'ssl' to true.
+     All settings can be commented out or set to NULL if not needed
 
+     php 5.3.7 required
+*/
 $db['ssl']        = false;                           # true/false, enable or disable SSL as a whole
 $db['ssl_key']    = "/path/to/cert.key";             # path to an SSL key file. Only makes sense combined with ssl_cert
 $db['ssl_cert']   = "/path/to/cert.crt";             # path to an SSL certificate file. Only makes sense combined with ssl_key
@@ -47,5 +49,31 @@ $phpsessname = "phpipam";
  ******************************/
 if(!defined('BASE'))
 define('BASE', "/");
+
+/*  proxy connection details
+ ******************************/
+$proxy_enabled  = false;                                  # Enable/Disable usage of the Proxy server
+$proxy_server   = "myproxy.something.com";                # Proxy server FQDN or IP
+$proxy_port     = "8080";                                 # Proxy server port
+$proxy_user     = "USERNAME";                             # Proxy Username
+$proxy_pass     = "PASSWORD";                             # Proxy Password
+$proxy_use_auth = false;                                  # Enable/Disable Proxy authentication
+
+/**
+ * proxy to use for every internet access like update check
+ */
+$proxy_auth     = base64_encode("$proxy_user:$proxy_pass");
+
+if ($proxy_enabled == true && proxy_use_auth == false) {
+    stream_context_set_default(['http'=>['proxy'=>'tcp://$proxy_server:$proxy_port']]);
+}
+elseif ($proxy_enabled == true && proxy_use_auth == true) {
+    stream_context_set_default(
+        array('http' => array(
+              'proxy' => "tcp://$proxy_server:$proxy_port",
+              'request_fulluri' => true,
+              'header' => "Proxy-Authorization: Basic $proxy_auth"
+        )));
+}
 
 ?>

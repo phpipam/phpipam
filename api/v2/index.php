@@ -88,8 +88,8 @@ try {
 	}
 
 
-	// append POST parameters if POST
-	if($_SERVER['REQUEST_METHOD']=="POST"){
+	// append POST parameters if POST or PATCH
+	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"){
 		// if application tupe is JSON (application/json)
         if($_SERVER['CONTENT_TYPE']=="application/json"){
                 $rawPostData = file_get_contents('php://input');
@@ -133,12 +133,14 @@ try {
 	if( $params == false || isset($params->controller) == false ) {
 		$Response->throw_exception(400, 'Request is not valid');
 	}
-	// verify permissions for delete/create/edit
-	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
-	  || $_SERVER['REQUEST_METHOD']=="PUT"  || $_SERVER['REQUEST_METHOD']=="DELETE"
-	  )
-	  && $app->app_permissions<2) {
-		$Response->throw_exception(401, 'invalid permissions');
+	// verify permissions for delete/create/edit if controller is not user (needed for auth)
+	if (@$params->controller != "user") {
+    	if( ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"
+    	  || $_SERVER['REQUEST_METHOD']=="PUT"  || $_SERVER['REQUEST_METHOD']=="DELETE"
+    	  )
+    	  && $app->app_permissions<2) {
+    		$Response->throw_exception(401, 'invalid permissions');
+    	}
 	}
 	// verify content type
 	$Response->validate_content_type ();

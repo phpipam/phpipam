@@ -33,6 +33,7 @@ if(isset($_REQUEST['ip'])) {
 $User->check_user_session();
 
 # change * to % for database wildchar
+$search_term = trim($search_term);
 $search_term = str_replace("*", "%", $search_term);
 
 
@@ -64,6 +65,7 @@ elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_searc
 $custom_address_fields = $Tools->fetch_custom_fields ("ipaddresses");
 $custom_subnet_fields  = $Tools->fetch_custom_fields ("subnets");
 $custom_vlan_fields    = $Tools->fetch_custom_fields ("vlans");
+$custom_vrf_fields     = $Tools->fetch_custom_fields ("vrf");
 
 # set hidden custom fields
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
@@ -71,6 +73,8 @@ $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_address_fields = is_array(@$hidden_fields['ipaddresses']) ? $hidden_fields['ipaddresses'] : array();
 $hidden_subnet_fields  = is_array(@$hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 $hidden_vlan_fields    = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
+$hidden_vrf_fields     = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
+
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
@@ -91,18 +95,21 @@ if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_addres
 if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
 # search vlans
 if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($search_term); }
+# search vrf
+if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vrf       = $Tools->search_vrfs($search_term); }
 
 
 # all are off?
-if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) ) 	{ include("search-tips.php"); }
-elseif(strlen($_REQUEST['ip'])==0) 																	{ include("search-tips.php"); }
+if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) ) 	 { include("search-tips.php"); }
+elseif(strlen($_REQUEST['ip'])==0) 																	                             { include("search-tips.php"); }
 else {
-if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_vlans)!=0) {
+if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_vlans)!=0 || sizeof($result_vrf)!=0) {
 	# formulate for results
 	$export_input = "search_term=$search_term";
 	sizeof($result_subnets)==0 	 ? : $export_input .= "&subnets=on";
 	sizeof($result_addresses)==0 ? : $export_input .= "&addresses=on";
 	sizeof($result_vlans)==0 	 ? : $export_input .= "&vlans=on";
+	sizeof($result_vrf)==0 	     ? : $export_input .= "&vrf=on";
 
 	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$export_input.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
 }
@@ -197,6 +204,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 				if(sizeof($custom_subnet_fields) > 0) {
 					foreach($custom_subnet_fields as $field) {
 						if(!in_array($field['name'], $hidden_subnet_fields)) {
+							$line[$field['name']] = $Result->create_links ($line[$field['name']], $field['type']);
 							print "	<td class='hidden-xs hidden-sm'>".$line[$field['name']]."</td>";
 						}
 					}
@@ -301,7 +309,7 @@ if(sizeof($result_addresses) > 0) {
 			//address
 			print ' <td><a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id'],"address-details",$line['id']).'">'. $Subnets->transform_to_dotted($line['ip_addr'])."</a>";
 			//tag
-			if(in_array('state', $selected_ip_fields)) 				{ print $Addresses->address_type_format_tag($line['state']); }
+			print $Addresses->address_type_format_tag($line['state']);
 			print ' </td>' . "\n";
 			//description
 			print ' <td>'. $Result->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
@@ -354,7 +362,10 @@ if(sizeof($result_addresses) > 0) {
 			//custom fields
 			if(sizeof($custom_address_fields) > 0) {
 				foreach($custom_address_fields as $field) {
-					if(!in_array($field['name'], $hidden_address_fields))  					{ print '<td class="customField hidden-sm hidden-xs hidden-md">'. $line[$field['name']] .'</td>'. "\n"; }
+					if(!in_array($field['name'], $hidden_address_fields)){
+						$line[$field['name']] = $Result->create_links ($line[$field['name']], $field['type']);
+						print '<td class="customField hidden-sm hidden-xs hidden-md">'. $line[$field['name']] .'</td>'. "\n";
+					}
 				}
 			}
 
@@ -433,6 +444,7 @@ if(sizeof($result_vlans) > 0) {
 		if(sizeof($custom_vlan_fields) > 0) {
 			foreach($custom_vlan_fields as $field) {
 				if(!in_array($field['name'], $hidden_vlan_fields)) {
+					$vlan[$field['name']] = $Result->create_links ($vlan[$field['name']], $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$vlan[$field['name']]."</td>";
 				}
 			}
@@ -458,6 +470,78 @@ if(sizeof($result_vlans) == 0) {
 }
 ?>
 <?php } ?>
+
+
+<?php if(@$_REQUEST['vrf']=="on") { ?>
+<!-- search result table -->
+<br>
+<h4><?php print _('Search results (VRFs)');?>:</h4>
+<hr>
+
+<table class="searchTable table table-striped table-condensed table-top">
+
+<!-- headers -->
+<tr id="searchHeader">
+	<th><?php print _('Name');?></th>
+	<th><?php print _('RD');?></th>
+	<th><?php print _('Description');?></th>
+	<?php
+	$mf=3;
+	if(sizeof($custom_vrf_fields) > 0) {
+		foreach($custom_vrf_fields as $field) {
+			if(!in_array($field['name'], $hidden_vrf_fields)) {
+				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				$mf++;
+			}
+		}
+	}
+	?>
+	<th></th>
+</tr>
+
+
+<?php
+if(sizeof($result_vrf) > 0) {
+	# print vlans
+	foreach($result_vrf as $vrf) {
+		# cast
+		$vrf = (array) $vrf;
+
+		print '<tr class="nolink">' . "\n";
+		print ' <td><dd>'. $vrf['name']      .'</dd></td>' . "\n";
+		print ' <td><dd>'. $vrf['rd']     .'</dd></td>' . "\n";
+		print ' <td><dd>'. $vrf['description'] .'</dd></td>' . "\n";
+		# custom fields
+		if(sizeof($custom_vlan_fields) > 0) {
+			foreach($custom_vlan_fields as $field) {
+				if(!in_array($field['name'], $hidden_vlan_fields)) {
+					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
+					print "	<td class='hidden-xs hidden-sm'>".$vrf[$field['name']]."</td>";
+				}
+			}
+		}
+		# for admins print link
+		print " <td class='actions'>";
+		if($User->isadmin) {
+		print '<div class="btn-group">';
+		print '	<a class="btn btn-xs btn-default editVRF" data-action="edit"   data-vlanid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-pencil"></i></a>';
+		print '	<a class="btn btn-xs btn-default editVRF" data-action="delete" data-vlanid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-times"></i></a>';
+		print '</div>';
+		}
+		print "</td>";
+		print '</tr>'. "\n";
+    }
+}
+?>
+
+</table>
+<?php
+if(sizeof($result_vrf) == 0) {
+	$Result->show("info", _("No results"), false);
+}
+?>
+<?php } ?>
+
 <?php } ?>
 
 

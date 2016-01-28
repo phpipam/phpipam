@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['id'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 
@@ -28,8 +31,8 @@ if($_POST['action']!="add") {
 }
 ?>
 
-<script type="text/javascript" src="js/bootstrap-colorpicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-colorpicker.min.css">
+<script type="text/javascript" src="js/1.2/bootstrap-colorpicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-colorpicker.min.css">
 <script type="text/javascript">
 $(function(){
     $('.select-bgcolor').colorpicker();
@@ -57,6 +60,7 @@ $(function(){
 		    <input type="text" name="type" class="form-control input-sm"  value="<?php print @$tag->type; ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 			<input type="hidden" name="id" value="<?php print @$tag->id; ?>">
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
     </tr>
 

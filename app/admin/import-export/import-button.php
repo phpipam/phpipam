@@ -14,14 +14,17 @@ $User->check_user_session();
 ?>
 
 <form id="dataimport" method="post" action="app/admin/import-export/import-verify.php" enctype="multipart/form-data">
+	<table><tr><td align="left">
 	<div id="drop">
 		<input type="file" name="file" id="csvfile" style="display:none;">
 		<input type="hidden" name="expfields" value="<?php print implode('|',$expfields); ?>" style="display:none;">
 
 		<?php print _('Select file'); ?>: <a class="btn btn-sm btn-default"><i class="fa fa-folder-open"></i> <?php print _("Browse / Drag & Drop"); ?></a>
 	</div>
+	</td><td>&nbsp;</td><td align="right">
 	<!-- Download template -->
-	<?php print "<a class=\"csvtemplate btn btn-sm btn-default pull-right\" id=\"". $templatetype . "template\">Download template</a>"; ?>
+	<?php print "<a class=\"csvtemplate btn btn-sm btn-default\" id=\"". $templatetype . "template\">Download template</a>"; ?>
+	</td></tr></table>
 	<span class="fname" style="display:none"></span>
 	<br>
 	<!-- Download result -->
@@ -29,9 +32,9 @@ $User->check_user_session();
 </form>
 
 <!-- jQuery File Upload Dependencies -->
-<script src="js/uploader/jquery.ui.widget.js"></script>
-<script src="js/uploader/jquery.iframe-transport.js"></script>
-<script src="js/uploader/jquery.fileupload.js"></script>
+<script src="js/1.2/uploader/jquery.ui.widget.js"></script>
+<script src="js/1.2/uploader/jquery.iframe-transport.js"></script>
+<script src="js/1.2/uploader/jquery.fileupload.js"></script>
 
 <script type="text/javascript">
 $(function(){

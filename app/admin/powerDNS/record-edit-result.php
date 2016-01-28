@@ -10,12 +10,15 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
 $PowerDNS 	= new PowerDNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
 
 # fetch old record
 if($_POST['action']!="add") {

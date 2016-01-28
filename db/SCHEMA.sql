@@ -229,9 +229,10 @@ DROP TABLE IF EXISTS `subnets`;
 CREATE TABLE `subnets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `subnet` VARCHAR(255) NULL  DEFAULT NULL,
-  `mask` VARCHAR(255) NULL DEFAULT NULL,
+  `mask` VARCHAR(3) NULL DEFAULT NULL,
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
+  `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,
   `allowRequests` tinyint(1) DEFAULT '0',
@@ -317,6 +318,7 @@ CREATE TABLE `users` (
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
@@ -383,7 +385,7 @@ CREATE TABLE `vlans` (
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
 VALUES
 	(1,'IPv6 private 1',2001,'IPv6 private 1 subnets'),
-	(2,'Servers DMZ',4101,'DMZ public');
+	(2,'Servers DMZ',4001,'DMZ public');
 
 
 # Dump of table vlanDomains
@@ -412,6 +414,7 @@ CREATE TABLE `vrf` (
   `name` varchar(32) NOT NULL DEFAULT '',
   `rd` varchar(32) DEFAULT NULL,
   `description` varchar(256) DEFAULT NULL,
+  `sections` VARCHAR(128)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`vrfId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -499,7 +502,8 @@ VALUES
 	(8, 'Last 5 informational logs', 'Shows list of last 5 informational logs', 'access_logs', NULL, 'yes', '6', 'yes', 'yes'),
 	(9, 'Last 5 warning / error logs', 'Shows list of last 5 warning and error logs', 'error_logs', NULL, 'yes', '6', 'yes', 'yes'),
 	(10,'Tools menu', 'Shows quick access to tools menu', 'tools', NULL, 'yes', '6', 'no', 'yes'),
-	(11,'IP Calculator', 'Shows IP calculator as widget', 'ipcalc', NULL, 'yes', '6', 'no', 'yes');
+	(11,'IP Calculator', 'Shows IP calculator as widget', 'ipcalc', NULL, 'yes', '6', 'no', 'yes'),
+	(12,'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes');
 
 
 # Dump of table deviceTypes
@@ -546,7 +550,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','AD','LDAP','NetIQ', 'Radius') NOT NULL DEFAULT 'local',
+  `type` set('local','http','AD','LDAP','NetIQ','Radius') NOT NULL DEFAULT 'local',
   `params` varchar(1024) DEFAULT NULL,
   `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
@@ -555,7 +559,8 @@ CREATE TABLE `usersAuthMethod` (
 /* insert default values */
 INSERT INTO `usersAuthMethod` (`id`, `type`, `params`, `protected`, `description`)
 VALUES
-	(1, 'local', NULL, 'Yes', 'Local database');
+	(1, 'local', NULL, 'Yes', 'Local database'),
+	(2, 'http', NULL, 'Yes', 'Apache authentication');
 
 
 # Dump of table usersAuthMethod

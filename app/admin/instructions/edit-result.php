@@ -17,6 +17,9 @@ $Log 		= new Logging ($Database, $User->settings);
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+
 # execute
 #
 #	we do it directly because we permit html tags for instructions

@@ -433,7 +433,7 @@ class Subnets extends Common_functions {
 		# null
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `discoverSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009 and `mask` > 20;", array($agentId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `discoverSubnet` = 1 and `isFolder`= 0 and `isFull`!= 1 and `mask` > '0' and subnet > 16843009 and `mask` > 20;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -465,12 +465,12 @@ class Subnets extends Common_functions {
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vlanId, $sectionId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vlanId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vlanId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vlanId);
 		}
 
 		# fetch
@@ -532,12 +532,12 @@ class Subnets extends Common_functions {
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vrfId, $sectionId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vrfId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vrfId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vrfId);
 		}
 
 		# fetch
@@ -653,6 +653,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->subnet_bits = 32-$out[$mask]->host_bits;			// network bits
 			$out[$mask]->hosts = number_format($this->get_max_hosts ($mask, "IPv4"), 0, ",", ".");		// max hosts
 			$out[$mask]->subnets = number_format(pow(2,($mask-8)), 0, ",", ".");
+			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
 			$parts = explode(".", $net->netmask);
@@ -765,6 +766,7 @@ class Subnets extends Common_functions {
 	 */
 	public function reset_subnet_slaves_recursive () {
 		$this->slaves = null;
+		$this->slaves_full = null;
 	}
 
 	/**
@@ -775,10 +777,19 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_slaves_master ($subnetId) {
-		foreach($this->slaves as $k=>$s) {
-			if($s==$subnetId) {
-				unset($this->slaves[$k]);
-			}
+        if(isset($this->slaves_full)) {
+    		foreach($this->slaves_full as $k=>$s) {
+    			if($s==$subnetId) {
+    				unset($this->slaves_full[$k]);
+    			}
+    		}
+		}
+		if(isset($this->slaves)) {
+    		foreach ($this->slaves as $k=>$s) {
+     			if($s==$subnetId) {
+    				unset($this->slaves[$k]);
+    			}
+    		}
 		}
 	}
 
@@ -841,16 +852,26 @@ class Subnets extends Common_functions {
 	 * @param mixed $used_hosts (int)
 	 * @param mixed $netmask (int)
 	 * @param mixed $subnet	(int)
+	 * @param bin $infull	(default: 0)
 	 * @return void
 	 */
-	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet) {
+	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0) {
 		# set IP version
 		$ipversion = $this->get_ip_version ($subnet);
-		# set initial vars
-		$out['used'] = (int) $used_hosts;														//set used hosts
-		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
-		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));					//free hosts
-		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
+		# marked as full
+		if ($isFull!=1) {
+    		# set initial vars
+    		$out['used'] = (int) $used_hosts;														//set used hosts
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
+    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));			//free hosts
+    		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
+		}
+		else {
+    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);
+    		$out['used']     = $out['maxhosts'];
+    		$out['freehosts']= 0;
+    		$out['freehosts_percent'] = 0;
+		}
 		# result
 		return $out;
 	}
@@ -862,9 +883,10 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet		//subnet in decimal format
 	 * @param mixed $bitmask	//netmask in decimal format
 	 * @param mixed $addresses	//all addresses to be calculated, either all slave or per subnet
+	 * @param bin $isFull       //if subnet is marked as full
 	 * @return void
 	 */
-	public function calculate_subnet_usage_detailed ($subnet, $bitmask, $addresses) {
+	public function calculate_subnet_usage_detailed ($subnet, $bitmask, $addresses, $isFull=0) {
 		# get IP address count per address type
 		$details = $this->calculate_subnet_usage_sort_addresses ($addresses);
 
@@ -877,7 +899,13 @@ class Subnets extends Common_functions {
 	    foreach($this->address_types as $t) {
 		    $details[$t['type']."_percent"] = round( ( ($details[$t['type']] * 100) / $details['maxhosts']), 2 );
 	    }
-	    return( $details );
+	    # if marked as full override
+	    if ($isFull==1) {
+    	    $details['Used_percent'] = $details['Used_percent'] + $details['freehosts_percent'];
+    	    $details['freehosts_percent'] = 0;
+	    }
+	    # result
+	    return $details;
 	}
 
 	/**
@@ -946,9 +974,10 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet
 	 * @param mixed $netmask
 	 * @param mixed $Addresses
+	 * @param bin isFull (default: 0)
 	 * @return void
 	 */
-	public function calculate_subnet_usage_recursive ($subnetId, $subnet, $netmask, $Addresses) {
+	public function calculate_subnet_usage_recursive ($subnetId, $subnet, $netmask, $Addresses, $isFull=0) {
 		# identify address
 		$address_type = $this->get_ip_version ($subnet);
 		# fetch all slave subnets recursive
@@ -956,18 +985,28 @@ class Subnets extends Common_functions {
 		$this->fetch_subnet_slaves_recursive ($subnetId);
 		$this->remove_subnet_slaves_master ($subnetId);
 
+		# initial used value
+		$used = 0;
+
 		# go through each and calculate used hosts
 		# add +2 for subnet and broadcast if required
 		foreach($this->slaves_full as $s) {
-			# fetch all addresses
-			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
-			# mask fix
-			if($address_type=="IPv4" && $netmask<31) {
-				$used = $used+1;
-			}
+    		# full?
+    		if ($s->isFull==1) {
+        		# get max
+        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, false);
+    		}
+    		else {
+    			# fetch all addresses
+    			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
+    			# mask fix
+    			if($address_type=="IPv4" && $netmask<31) {
+    				$used = $used+1;
+    			}
+    		}
 		}
 		# we counted, now lets calculate and return result
-		return $this->calculate_subnet_usage ($used, $netmask, $subnet);
+		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull);
 	}
 
 	/**
@@ -1749,7 +1788,14 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	private function is_IPv6_subnet_inside_subnet ($cidr1, $cidr2) {
-		# Initialize PEAR NET object
+    	//mask 2 must be bigger than mask 1
+    	$mask1 = end(explode("/", $cidr1));
+    	$mask2 = end(explode("/", $cidr2));
+
+        //check mask
+        if ($mask1 < $mask2)                                    { return false; }
+
+		// Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
 
     	//remove netmask from subnet1
@@ -2019,8 +2065,18 @@ class Subnets extends Common_functions {
 				$current_description = $description_print;
 			}
 			elseif ($this->settings->subnetView == 2) {
-				$description_print = strlen($option['value']['description'])>0 ? "(".$option['value']['description'].")" : "";		// fix for empty
-				$current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
+			    if (strlen($option['value']['description'])>0) {
+                    $temp_description = "(".$option['value']['description'].")";
+
+                    if (strlen($temp_description)>34) {
+                        $temp_description = substr($temp_description, 0, 32) . "...)";
+                    }
+                }
+                else {
+                    $temp_description = "";
+                }
+                $description_print = $temp_description;
+                $current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
 			}
 
 			if ( $option === false )
@@ -2306,14 +2362,14 @@ class Subnets extends Common_functions {
 		$parent = $rootId;
 		$parent_stack = array();
 
+		# old count
+		$old_count = 0;
+
 		# return table content (tr and td's)
 		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
 			# repeat
 			$repeat  = str_repeat( " - ", ( count($parent_stack)) );
-			# dashes
-			if(count($parent_stack) == 0)	{ $dash = ""; }
-			else							{ $dash = "-"; }
 
 			if(count($parent_stack) == 0) {
 				$margin = "0px";
@@ -2325,7 +2381,7 @@ class Subnets extends Common_functions {
 
 				# margin
 				$margin  = (count($parent_stack) * 10) -10;
-				$margin  = $margin *2;
+				$margin  = $margin *1.5;
 				$margin  = $margin."px";
 			}
 
@@ -2341,7 +2397,11 @@ class Subnets extends Common_functions {
 
 
 			# print table line
-			if(strlen($option['value']['subnet']) > 0) {
+			if(strlen($option['value']['subnet']) > 0 || $option['value']['isFolder']==1) {
+
+    			# count change?
+    			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
+
 				$html[] = "<tr>";
 
 				//which level?
@@ -2353,16 +2413,20 @@ class Subnets extends Common_functions {
 
 					}
 					else {
+                        # add full information
+                        $fullinfo = $option['value']['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 						# last?
 						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						} else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
 						}
+				    }
 				}
-				} else {
+				else {
 					# is folder?
 					if($option['value']['isFolder']==1) {
 						# last?
@@ -2370,15 +2434,17 @@ class Subnets extends Common_functions {
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open'></i> $description</td>";
 					}
 					else {
+                        # add full information
+                        $fullinfo = $option['value']['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+
 						# last?
 						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						}
 						else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']."</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
-
 						}
 					}
 				}
@@ -2477,8 +2543,10 @@ class Subnets extends Common_functions {
 				$html[] = "	</div>";
 				$html[] = "	</td>";
 
-
 				$html[] = "</tr>";
+
+                # save old level count
+                $old_count = $count;
 			}
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack ); }
@@ -2500,9 +2568,10 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $sectionId
 	 * @param string $current_master (default: "0")
+	 * @param boolean $isFolder (default: false)
 	 * @return void
 	 */
-	public function print_mastersubnet_dropdown_menu($sectionId, $current_master = 0) {
+	public function print_mastersubnet_dropdown_menu($sectionId, $current_master = 0, $isFolder = false) {
 		# must be integer
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
@@ -2535,16 +2604,21 @@ class Subnets extends Common_functions {
 		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
 
 		# folders
-		if(sizeof(@$children_folders)>0) {
+		if(sizeof(@$children_folders)>0 || $isFolder) {
 			$html[] = "<optgroup label='"._("Folders")."'>";
+
+    		# root subnet
+    		if(!isset($current_master) || $current_master==0) {
+    			$html[] = "<option value='0' selected='selected'>"._("Root folder")."</option>";
+    		} else {
+    			$html[] = "<option value='0'>"._("Root folder")."</option>";
+    		}
+
 			# return table content (tr and td's) - folders
 			while ( $loopF && ( ( $option = each( $children_folders[$parent] ) ) || ( $parent > $rootId ) ) )
 			{
 				# repeat
 				$repeat  = str_repeat( " - ", ( count($parent_stack_folder)) );
-				# dashes
-				if(count($parent_stack_folder)==0)	{ $dash = ""; }
-				else								{ $dash = $repeat; }
 
 				# count levels
 				$count = count($parent_stack_folder)+1;
@@ -2566,6 +2640,9 @@ class Subnets extends Common_functions {
 			$html[] = "</optgroup>";
 		}
 
+		# if not folder
+        if ($isFolder===false) {
+
 		# subnets
 		$html[] = "<optgroup label='"._("Subnets")."'>";
 
@@ -2582,9 +2659,6 @@ class Subnets extends Common_functions {
 		{
 			# repeat
 			$repeat  = str_repeat( " - ", ( count($parent_stack_subnet)) );
-			# dashes
-			if(count($parent_stack_subnet)==0)	{ $dash = ""; }
-			else								{ $dash = $repeat; }
 
 			# count levels
 			$count = count($parent_stack_subnet)+1;
@@ -2593,18 +2667,34 @@ class Subnets extends Common_functions {
 			if(strlen($option['value']['subnet']) > 0 && $option['value']['isFolder']!=1) {
 				# selected
 				if($option['value']['id'] == $current_master) 	{
-					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-					else 								{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+					if($option['value']['description']) {
+                        if(strlen($option['value']['description'])>34) {
+                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
+    				    }
+                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
+				    }
+                    else {
+                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
+                    }
+                }
 				else {
-					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-					else 								{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+					if($option['value']['description']) {
+                        if(strlen($option['value']['description'])>34) {
+                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
+                        }
+                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
+                    }
+					else {
+                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
+                    }
+                }
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {
-				$html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
+					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
+                     $html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
 				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
 				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
-
 			}
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack_subnet ); }
@@ -2618,6 +2708,7 @@ class Subnets extends Common_functions {
 		}
 		}
 		$html[] = "</optgroup>";
+		}
 		$html[] = "</select>";
 		# join and print
 		print implode( "\n", $html );

@@ -129,6 +129,8 @@ class Common_api_functions {
 	 * @return void
 	 */
 	protected function filter_result ($result) {
+    	// remap keys before applying filter
+    	$result = $this->remap_keys ($result, false);
 		// validate
 		$this->validate_filter_by ($result);
 

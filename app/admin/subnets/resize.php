@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # ID must be numeric
 if(!is_numeric($_POST['subnetId']))									{ $Result->show("danger", _("Invalid ID"), true, true); }
@@ -51,6 +54,7 @@ $subnet = (array) $Subnets->fetch_subnet (null, $_POST['subnetId']);
         <td style="vertical-align:middle">
 	        <span class="pull-left" style='margin-right:5px;'> / </span> <input type="text" class="form-control input-sm input-w-100" name="newMask">
 	        <input type="hidden" name="subnetId" value="<?php print $_POST['subnetId']; ?>">
+	        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </td>
     </tr>
 

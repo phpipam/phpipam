@@ -234,7 +234,7 @@ $m = sizeof($addresses) -1;		//last address index
 
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
-	if($User->user->hideFreeRange!=1) {
+	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
     	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
 		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
     }
@@ -274,7 +274,7 @@ else {
 		       	}
 
 		       	# if there is some result for unused print it - if sort == ip_addr
-		       	if($User->user->hideFreeRange!=1) {
+		       	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 				    if ( $unused && ($sort['field'] == 'ip_addr') && $sort['direction'] == "asc" ) {
 		        		print "<tr class='th'>";
 		        		print "	<td></td>";
@@ -354,11 +354,11 @@ else {
 						if($records!==false) {
 							foreach ($records as $r) {
 								if($r->type!="SOA" && $r->type!="NS")
-								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$r->type</span> $r->content </li>";
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
 							}
 						}
 						if($ptr!==false) {
-								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$ptr->type</span> $ptr->name </li>";
+								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$ptr->id' data-domain_id='$ptr->domain_id'>$ptr->type</span> $ptr->name </li>";
 						}
 						$dns_records[] = "</ul>";
 						// if none ignore
@@ -375,7 +375,7 @@ else {
 					// add button
 					if ($User->settings->enablePowerDNS==1) {
 					// add new button
-					if ($Subnets->validate_hostname($addresses[$n]->dns_name))
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name, false) && ($User->isadmin || @$User->user->pdns=="Yes"))
 					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
 					else
 					$button = "";
@@ -425,7 +425,7 @@ else {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$addresses[$n]->$myField['name'] = $Result->create_links($addresses[$n]->$myField['name']);
+								$addresses[$n]->$myField['name'] = $Result->create_links($addresses[$n]->$myField['name'], $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
@@ -434,7 +434,7 @@ else {
 								}
 								//text
 								elseif($myField['type']=="text") {
-									if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+									if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n]->$myField['name'])."'>"; }
 									else											{ print ""; }
 								}
 								else {
@@ -471,7 +471,7 @@ else {
 						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
-						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$addresses[$n]->subnetId."' data-action='adr' data-ipid='".$addresses[$n]->id."' data-dnsname='".$addresses[$n]->dns_name."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>"; }}
+						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$addresses[$n]->subnetId."' data-action='adr' data-ipid='".$addresses[$n]->id."' data-dnsname='".$addresses[$n]->dns_name."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
 						print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
 					}
 				}
@@ -489,7 +489,7 @@ else {
 					{
 						print "<a class='edit_ipaddress   btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>													<i class='fa fa-gray fa-pencil'></i></a>";
 						print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
-						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search","on","off","off",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>				<i class='fa fa-gray fa-envelope-o'></i></a>";
 						print "<a class='delete_ipaddress btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>														<i class='fa fa-gray fa-times'></i></a>";
 					}
@@ -503,7 +503,7 @@ else {
 				****************************************************/
 				if ( $n == $m )
 				{
-					if($User->user->hideFreeRange!=1) {
+					if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 						# compressed?
 						if(isset($addresses[$n]->stopIP))	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->stopIP,  $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
 						else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }

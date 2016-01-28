@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 ?>
 <!-- database settings -->
 <form name="pdns" id="pdns-defaults">
@@ -22,6 +25,7 @@ $User->check_user_session();
 	<td><?php print _('Name servers'); ?></th>
 	<td style="width:300px;">
 		<input type="text" class="form-control input-sm" name="ns" value="<?php print $pdns->ns; ?>">
+		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	</td>
 	<td>
 		<span class="text-muted"><?php print _("Enter name servers, separate multiple with ;"); ?></span>

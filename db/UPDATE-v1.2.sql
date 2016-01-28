@@ -48,3 +48,26 @@ ALTER TABLE `ipaddresses` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL D
 
 /* activate the firewallAddressObject IP field filter on default */
 UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject');
+
+/* add a column for subnet firewall address objects */
+ALTER TABLE `subnets` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL AFTER `description`;
+
+/* add http auth method */
+ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';
+
+INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`)
+VALUES ('http', NULL, 'Yes', 'Apache authentication');
+
+/* allow powerdns record management for user */
+ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `email`;
+
+/* add Ip request widget */
+INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
+VALUES
+('IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes');
+
+/* change mask size */
+ALTER TABLE `subnets` CHANGE `mask` `mask` VARCHAR(3)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* add section to vrf */
+ALTER TABLE `vrf` ADD `sections` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `description`;

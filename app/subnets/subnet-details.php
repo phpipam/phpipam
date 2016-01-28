@@ -119,6 +119,15 @@ $rowSpan = 10 + sizeof($custom_fields);
 		</td>
 	</tr>
 
+    <?php if(@$subnet['isFull']=="1") { ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <th></th>
+        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+    </tr>
+    <?php } ?>
 
 
 	<?php
@@ -140,13 +149,13 @@ $rowSpan = 10 + sizeof($custom_fields);
 	if($User->settings->enableFirewallZones==1) {
 		# class
 		$Zones = new FirewallZones ($Database);
-		$zone = $Zones->get_zone_subnet_info ($subnet['id']);
+		$fwZone = $Zones->get_zone_subnet_info ($subnet['id']);
 
-		if ($zone!==false) {
+		if ($fwZone!==false) {
 			// alias fix
-			$zone->alias 		= strlen($zone->alias)>0 ? "(".$zone->alias.")" : "";
-			$zone->description 	= strlen($zone->description)>0 ? " - ".$zone->description : "";
-			$zone->interface 	= strlen($zone->interface)>0 ? "(".$zone->interface.")" : "";
+			$fwZone->alias 		= strlen($fwZone->alias)>0 ? "(".$fwZone->alias.")" : "";
+			$fwZone->description 	= strlen($fwZone->description)>0 ? " - ".$fwZone->description : "";
+			$fwZone->interface 	= strlen($fwZone->interface)>0 ? "(".$fwZone->interface.")" : "";
 
 			# divider
 			print "<tr>";
@@ -154,9 +163,25 @@ $rowSpan = 10 + sizeof($custom_fields);
 			print "</tr>";
 			# zone details
 			print "<tr>";
-			print "	<th>"._('Firewall Zone')."</th>";
+			print "	<th>"._('Firewall zone')."</th>";
 			print "	<td>";
-			print $zone->zone." ".$zone->alias." ".$zone->description."<br>".$zone->deviceName." ".$zone->interface;
+			print $fwZone->zone." ".$fwZone->alias." ".$fwZone->description."<br>".$fwZone->deviceName." ".$fwZone->interface;
+			print "	</td>";
+			print "</tr>";
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
+			# address object information
+			print "<tr>";
+			print "	<th>"._('Address object')."</th>";
+			print "	<td>";
+			if($fwZone->firewallAddressObject) {
+				print $fwZone->firewallAddressObject;
+			}
+			if($subnet_permission > 1) {
+				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet[id].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
+			}
 			print "	</td>";
 			print "</tr>";
 		}
@@ -173,7 +198,8 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 			print "<tr>";
 			print "	<th>"._('IP requests')."</th>";
-			if($subnet['allowRequests'] == 1) 		{ print "	<td>"._('enabled')."</td>"; }		# yes
+			if(@$subnet['isFull'] == 1) 		    { print "	<td class='info2'>"._('disabled - marked as full')."</td>"; }		# yes
+			elseif($subnet['allowRequests'] == 1) 	{ print "	<td>"._('enabled')."</td>"; }		# yes
 			else 									{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
 			print "</tr>";
 		}
@@ -228,9 +254,9 @@ $rowSpan = 10 + sizeof($custom_fields);
 			$domain = $PowerDNS->fetch_domain_by_name ($zone);
 			// count PTR records
 			if ($domain!==false) {
-				if ($User->is_admin ()) {
+				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
-				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("administration", "powerDNS", "domains", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
 				$btns = implode("\n", $btns);
@@ -242,7 +268,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
 			}
 			else {
-				if ($User->is_admin ()) {
+				if ($User->is_admin () || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
@@ -477,10 +503,10 @@ $rowSpan = 10 + sizeof($custom_fields);
 
 		# firewall address object actions
 		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
-		if ( $User->settings->enableFirewallZones == 1 && $firewallZoneSettings['autogen'] == 'on' && $subnet_permission > 1) {
+		if ( $User->settings->enableFirewallZones == 1 && $subnet_permission > 1) {
 			print "<div class='btn-group'>";
-			print "<a class='btn btn-xs btn-default editMapping disabled' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-id='0' data-action='add'><i class='fa fa-fire'></i></a>";
-			print "<a class='fw_autogen btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Regenerate all firewall address objects for this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
+			print "<a class='subnet_to_zone btn btn-xs btn-default".(($fwZone == false) ? '':' disabled')."' href='' data-container='body' rel='tooltip' title='"._('Map subnet to firewall zone')."' data-subnetId='$subnet[id]' data-operation='subnet2zone'><i class='fa fa-fire'></i></a>";
+			print "<a class='fw_autogen btn btn-xs btn-default ".(($fwZone == false) ? 'disabled':'')."'  href='' data-container='body' rel='tooltip' title='"._('Generate or regenerate firewall address objects for all ip addresses within this subnet.')."' data-subnetid='$subnet[id]' data-action='net'>		<i class='fa fa-repeat'></i></a>";
 			print "</div>";
 		}
 	}

@@ -72,6 +72,7 @@ if ($_POST['action'] != 'add') {
 					else 					{ print '<option value="'.$zone->id.'">'.		  $zone->zone.'</option>'; }}
 			}
 			?>
+			</select>
 		</td>
 	</tr>
 	<tr>
@@ -107,6 +108,7 @@ if ($_POST['action'] != 'add') {
 					else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
 			}
 			?>
+			</select>
 		</td>
 	</tr>
 	<tr>

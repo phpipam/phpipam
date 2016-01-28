@@ -17,6 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
 
 # fetch auth method
 $auth_method = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['authMethod']);
@@ -93,7 +95,8 @@ $values = array("id"=>@$_POST['userId'],
 				"authMethod"=>$_POST['authMethod'],
 				"lang"=>$_POST['lang'],
 				"mailNotify"=>$_POST['mailNotify'],
-				"mailChangelog"=>$_POST['mailChangelog']
+				"mailChangelog"=>$_POST['mailChangelog'],
+				"pdns"=>$_POST['pdns']
 				);
 # update pass ?
 if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->type=="local")) {

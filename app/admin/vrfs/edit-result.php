@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vrf');
 
@@ -24,10 +27,24 @@ $custom = $Tools->fetch_custom_fields('vrf');
 # Hostname must be present!
 if($_POST['name'] == "") { $Result->show("danger", _("Name is mandatory"), true); }
 
+// set sections
+foreach($_POST as $key=>$line) {
+	if (strlen(strstr($key,"section-"))>0) {
+		$key2 = str_replace("section-", "", $key);
+		$temp[] = $key2;
+		unset($_POST[$key]);
+	}
+}
+# glue sections together
+$_POST['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
+
+
 
 # set update array
 $values = array("vrfId"=>@$_POST['vrfId'],
 				"name"=>$_POST['name'],
+				"rd"=>$_POST['rd'],
+				"sections"=>$_POST['sections'],
 				"description"=>$_POST['description']
 				);
 # append custom

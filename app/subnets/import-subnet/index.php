@@ -24,6 +24,13 @@ $permission = $Subnets->check_permission ($User->user, $_POST['subnetId']);
 # die if write not permitted
 if($permission < 2) { $Result->show("danger", _('You cannot write to this subnet'), true); }
 
+# fetch subnet details
+$subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
+$subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+
+# full
+if ($_POST['type']!="update-icmp" && $subnet->isFull==1)                { $Result->show("warning", _("Cannot scan as subnet is market as used"), true, true); }
+
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 ?>
@@ -50,7 +57,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<!-- notes -->
 	<?php print _('To successfully import data please use the following XLS/CSV structure:<br>( ip | State | Description | hostname | MAC | Owner | Device | Port | Note '); ?> <?php print $custFields; ?> )
 	<br>
-	<img src="css/images/csvuploadexample.jpg" style="border:1px solid #999999">
+	<img src="css/1.2/images/csvuploadexample.jpg" style="border:1px solid #999999">
 	<br><br>
 
 	<!-- Download template -->
@@ -76,9 +83,9 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 
     <!-- jQuery File Upload Dependencies -->
-    <script src="js/uploader/jquery.ui.widget.js"></script>
-    <script src="js/uploader/jquery.iframe-transport.js"></script>
-    <script src="js/uploader/jquery.fileupload.js"></script>
+    <script src="js/1.2/uploader/jquery.ui.widget.js"></script>
+    <script src="js/1.2/uploader/jquery.iframe-transport.js"></script>
+    <script src="js/1.2/uploader/jquery.fileupload.js"></script>
 
 
     <script type="text/javascript">

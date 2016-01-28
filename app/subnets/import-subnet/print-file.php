@@ -18,7 +18,8 @@ $Result 	= new Result;
 $User->check_user_session();
 
 # set filetype
-$filetype = end(explode(".", $_POST['filetype']));
+$filetype = explode(".", $_POST['filetype']);
+$filetype = end($filetype);
 
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');

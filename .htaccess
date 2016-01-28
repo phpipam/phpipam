@@ -1,5 +1,11 @@
 <IfModule mod_rewrite.c>
 
+# apache auth basic auth example
+#AuthUserFile /path/to/.htpasswd
+#AuthName "phpIPAM authentication"
+#AuthType Basic
+#require valid-user
+
 RewriteEngine on
 
 # change rewrite base if not in root
@@ -22,7 +28,7 @@ ErrorDocument 500 /error/500/
 RewriteRule ^login/dashboard/$ dashboard/ [R]
 RewriteRule ^logout/dashboard/$ dashboard/ [R]
 # search override
-RewriteRule ^tools/search/(.*)/(.*)/(.*)/(.*)$ index.php?page=tools&section=search&addresses=$1&subnets=$2&vlans=$3&ip=$4 [L]
+RewriteRule ^tools/search/(.*)/(.*)/(.*)/(.*)/(.*)$ index.php?page=tools&section=search&addresses=$1&subnets=$2&vlans=$3&vrf=$4&ip=$5 [L]
 
 # Rewrites
 RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L]

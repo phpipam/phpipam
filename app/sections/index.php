@@ -82,7 +82,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
 		# printout
-		if(sizeof(@$sections)>0) {
+		if($sections!==false) {
 			# loop
 			foreach($sections as $section) {
 				# check permissions for user
@@ -133,7 +133,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 			}
 		}
 		else {
-			print _("No sections available!");
+			print "<div class='text-muted'>"._("No sections available!")."</div>";
 		}
 
 		?>
@@ -225,7 +225,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		<!-- Dash lock/unlock -->
 		<?php if($_GET['page']=="dashboard" && !($User->isadmin!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) ) { ?>
 			<li class="w-lock">
-				<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Clik to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
+				<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Click to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
 			</li>
 		<?php } ?>
 

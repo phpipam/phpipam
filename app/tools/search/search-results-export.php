@@ -51,6 +51,7 @@ elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_searc
 $custom_address_fields = $Tools->fetch_custom_fields ("ipaddresses");
 $custom_subnet_fields  = $Tools->fetch_custom_fields ("subnets");
 $custom_vlan_fields    = $Tools->fetch_custom_fields ("vlans");
+$custom_vrf_fields     = $Tools->fetch_custom_fields ("vrf");
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
@@ -68,6 +69,8 @@ if(@$_REQUEST['addresses']=="on") 	{ $result_addresses = $Tools->search_addresse
 if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
 # search vlans
 if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term); }
+# search vrf
+if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_term); }
 
 
 /*
@@ -348,6 +351,53 @@ if(sizeof($result_vlans)>0) {
 		$c=3;
 		if(sizeof($custom_vlan_fields) > 0) {
 			foreach($custom_subnet_fields as $field) {
+				$worksheet->write($lineCount, $c, $line[$field['name']]);
+				$c++;
+			}
+		}
+		//new line
+		$lineCount++;
+	}
+}
+
+
+
+
+
+
+/* -- Create a worksheet for VRFs -- */
+if(sizeof($result_vrf)>0) {
+	$lineCount = 0;
+
+	$worksheet =& $workbook->addWorksheet(_('VRF search results'));
+
+	//write headers
+	$worksheet->write($lineCount, 0, _('Name') ,$format_title);
+	$worksheet->write($lineCount, 1, _('RD') ,$format_title);
+	$worksheet->write($lineCount, 2, _('Description') ,$format_title);
+	$c=3;
+	if(sizeof($custom_vrf_fields) > 0) {
+		foreach($custom_vrf_fields as $field) {
+			$worksheet->write($lineCount, $c, $field['name'], $format_title);
+			$c++;
+		}
+	}
+
+	//new line
+	$lineCount++;
+
+	foreach($result_vrf as $line) {
+		//cast
+		$line = (array) $line;
+
+		//print subnet
+		$worksheet->write($lineCount, 0, $line['name'], $format_left);
+		$worksheet->write($lineCount, 1, $line['rd']);
+		$worksheet->write($lineCount, 2, $line['description']);
+		//custom
+		$c=3;
+		if(sizeof($custom_vrf_fields) > 0) {
+			foreach($custom_vrf_fields as $field) {
 				$worksheet->write($lineCount, $c, $line[$field['name']]);
 				$c++;
 			}

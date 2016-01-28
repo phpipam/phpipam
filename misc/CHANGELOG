@@ -1,8 +1,8 @@
-== 1.19.020
+== 1.20
 
 	New features:
 	------------
-	+ Added multiple simultaneous authentication methods (AD, LDAP, Radius, NetIQ);
+	+ Added multiple simultaneous authentication methods (Apache, AD, LDAP, Radius, NetIQ);
 	+ Added fping scanning support;
 	+ Added selectable scanning type (ping/pear/fping);
 	+ Added L2 domains;
@@ -27,7 +27,7 @@
 	+ Added Scan agents to scan subnets remotely;
 	+ Added firewall zone mappings and module;
 	+ Added per-subnet DNS resolvers;
-	+ BASE auto-detect;
+	+ Added option to mark subnet as utilized (full);
 
 	Enhancements:
 	----------------------------
@@ -35,12 +35,13 @@
 	+ Upgraded jQuery to 2.1.3;
 	+ All functions rewritten to classes/methods;
 	+ Parametized all SQL queries, moved from MySQLI to PDO;
-	+ Added VLAN to search results export;
+	+ Added VLAN/VRF to search and to search results export;
 	+ Redesigned admin and tools menu;
 	+ Added scanned/discovered subnets to tools for faster overview;
 	+ Per-user display settings;
 	+ New widget - tools shortcuts;
 	+ New widget - IP calculator;
+	+ New widget - request IP address;
 	+ Clickable links for subnet fields;
 	+ Custom VRF fields;
 	+ Subnets can be now linked to devices;
@@ -52,12 +53,14 @@
 	+ SSL option for MySQL connections;
 	+ Enum custom field support;
 	+ Added password reset script;
+	+ Set sections to display VRF in;
 
 	Security Fixes:
 	----------------------------
 	+ Parametized all MySQL querries;
 	+ Fixed plainpass being logged on user update;
 	+ Fixed XSS exploit on /error/;
+	+ Added CSRF protection to forms;
 
 	Translations:
 	----------------------------

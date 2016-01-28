@@ -580,33 +580,40 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
-		// first check if subnet selected for PTR records
-		$this->initialize_subnets_object ();
-		$subnet = $this->Subnets->fetch_subnet ("id", $address['subnetId']);
-		if ($subnet->DNSrecursive!="1") { return false; }
+        //check if powerdns enabled
+        if ($this->settings->enablePowerDNS!=1) {
+            return false;
+        }
+        //enabled, proceed
+        else {
+    		// first check if subnet selected for PTR records
+    		$this->initialize_subnets_object ();
+    		$subnet = $this->Subnets->fetch_subnet ("id", $address['subnetId']);
+    		if ($subnet->DNSrecursive!="1") { return false; }
 
-		// ignore if PTRignore set
-		if ($address['PTRignore']=="1")	{
-				// validate db
-				$this->pdns_validate_connection ();
-				// remove if it exists
-				if ($this->ptr_exists ($address['PTR'])) {
-					$this->ptr_delete ($address, false);
-										{ return false; }
-				}
-				else {
-										{ return true; }
-				}
-		}
-		// validate db
-		$this->pdns_validate_connection ();
-		// to object
-		$address = (object) $address;
-		# execute based on action
-		if($action=="add")				{ return $this->ptr_add ($address, $print_error); }							//create new PTR
-		elseif($action=="edit")			{ return $this->ptr_edit ($address, $print_error); }						//modify existing PTR
-		elseif($action=="delete")		{ return $this->ptr_delete ($address, $print_error); }						//delete PTR
-		else							{ return $this->Result->show("danger", _("Invalid PDNS action"), true); }
+    		// ignore if PTRignore set
+    		if ($address['PTRignore']=="1")	{
+    				// validate db
+    				$this->pdns_validate_connection ();
+    				// remove if it exists
+    				if ($this->ptr_exists ($address['PTR'])) {
+    					$this->ptr_delete ($address, false);
+    										{ return false; }
+    				}
+    				else {
+    										{ return true; }
+    				}
+    		}
+    		// validate db
+    		$this->pdns_validate_connection ();
+    		// to object
+    		$address = (object) $address;
+    		# execute based on action
+    		if($action=="add")				{ return $this->ptr_add ($address, $print_error); }							//create new PTR
+    		elseif($action=="edit")			{ return $this->ptr_edit ($address, $print_error); }						//modify existing PTR
+    		elseif($action=="delete")		{ return $this->ptr_delete ($address, $print_error); }						//delete PTR
+    		else							{ return $this->Result->show("danger", _("Invalid PDNS action"), true); }
+        }
 	}
 
 	/**

@@ -5,7 +5,7 @@
  ********************************************/
 
 # get details
-$details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet['mask'], $addresses);
+$details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet['mask'], $addresses, $subnet['isFull']);
 
 ?>
 
@@ -15,9 +15,9 @@ $details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet
 <div id="pieChart" style="height:220px;width:100%;"></div>
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/1.2/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="js/1.2/flot/jquery.flot.pie.js"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/1.2/flot/excanvas.min.js"></script><![endif]-->
 
 
 <script type="text/javascript">

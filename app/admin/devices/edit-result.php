@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+
 
 # get modified details
 $device = $_POST;
@@ -79,8 +82,10 @@ if(isset($update)) {
 if(!$Admin->object_modify("devices", $_POST['action'], "id", $values))	{}
 else																	{ $Result->show("success", _("Device $device[action] successfull").'!', false); }
 
-# remove all references from subnets and ip addresses
-$Admin->remove_object_references ("subnets", "device", $values["id"]);
-$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
+if($_POST['action']=="delete"){
+	# remove all references from subnets and ip addresses
+	$Admin->remove_object_references ("subnets", "device", $values["id"]);
+	$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
+}
 
 ?>

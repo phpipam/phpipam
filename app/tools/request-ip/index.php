@@ -31,8 +31,12 @@ $User->check_user_session();
 		<td>
 			<?php
 			require_once('../../../functions/functions.php');
-			# get first IP address
-			$first  = $Subnets->transform_to_dotted($Addresses->get_first_available_address ($_POST['subnetId'], $Subnets));
+			if(isset($_POST['ip_addr'])){
+				$first = $_POST['ip_addr'];
+			}else{
+				# get first IP address
+				$first  = $Subnets->transform_to_dotted($Addresses->get_first_available_address ($_POST['subnetId'], $Subnets));
+			}
 			# get subnet details
 			$subnet = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
 			?>

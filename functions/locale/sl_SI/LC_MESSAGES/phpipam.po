@@ -1924,11 +1924,11 @@ msgid "All groups"
 msgstr "Vse skupine"
 
 #: site/admin/users.php:116
-msgid "Adminstrator users will be able to view and edit all all sections and subnets"
+msgid "Administrator users will be able to view and edit all all sections and subnets"
 msgstr "Administratorji imajo dostop do vseh razdelkov in omrežij"
 
 #: site/admin/users.php:117
-msgid "Normal users will have premissions set based on group access to sections and "
+msgid "Normal users will have permissions set based on group access to sections and "
 "subnets"
 msgstr "Navadni uporabniki bodo imeli pravice dostopa vezane na pripadnost skupinam "
 "in pravice skupin"
@@ -4538,10 +4538,6 @@ msgstr "Widget izbrisan"
 msgid "Active IP address requests"
 msgstr "Aktivni zahtevki za IP naslov"
 
-#: site/sections.php
-msgid "Click to reorder widgets"
-msgstr "Klikni za prerazporeditev widgetov"
-
 msgid "Click to save widgets order"
 msgstr "Shrani vrstni red widgetov"
 
@@ -5965,7 +5961,7 @@ msgstr "Meni omrežij"
 msgid "No sections available!"
 msgstr "Na voljo ni nobenega razdelka!"
 
-msgid "Clik to reorder widgets"
+msgid "Click to reorder widgets"
 msgstr "Klikni za razporejanje"
 
 msgid "Database verified"

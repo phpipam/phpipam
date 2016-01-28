@@ -1906,11 +1906,11 @@ msgid "All groups"
 msgstr ""
 
 #: site/admin/users.php:116
-msgid "Adminstrator users will be able to view and edit all all sections and subnets"
+msgid "Administrator users will be able to view and edit all all sections and subnets"
 msgstr ""
 
 #: site/admin/users.php:117
-msgid "Normal users will have premissions set based on group access to sections and "
+msgid "Normal users will have permissions set based on group access to sections and "
 "subnets"
 msgstr ""
 
@@ -4491,10 +4491,6 @@ msgstr ""
 msgid "Active IP address requests"
 msgstr ""
 
-#: site/sections.php
-msgid "Click to reorder widgets"
-msgstr ""
-
 msgid "Click to save widgets order"
 msgstr ""
 
@@ -5944,7 +5940,7 @@ msgstr ""
 msgid "No sections available!"
 msgstr ""
 
-msgid "Clik to reorder widgets"
+msgid "Click to reorder widgets"
 msgstr ""
 
 msgid "Database verified"

@@ -22,7 +22,7 @@ Features and tools:
 - IP request module
 - Custom IP address fields
 - and much more...
-- PowerDNS integration;
+- PowerDNS integration (3.4+);
 
 
 License
@@ -53,7 +53,7 @@ API guide
 
 Update
 =======
-- see UPDATE file for details
+- http://phpipam.net/documents/upgrade/
 
 Demo page
 ============
@@ -62,6 +62,10 @@ http://demo.phpipam.net
 Default user
 ============
 Admin / ipamadmin
+
+Reset admin password
+====================
+php functions/scripts/reset-admin-password.php
 
 Changelog
 =========

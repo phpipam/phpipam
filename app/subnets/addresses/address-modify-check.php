@@ -17,9 +17,13 @@ $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
 $Log 		= new Logging ($Database, $User->settings);
 $Zones 		= new FirewallZones($Database);
+$Ping		= new Scan ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# validate csrf cookie
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
 
 # validate action
 $Tools->validate_action ($_POST['action']);
@@ -150,8 +154,13 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 	}
 	# ok, edit
 	else {
+    	$c = 0;
 		# for each IP in range modify
 		while (gmp_cmp($m, $n) != 0) {
+
+    		# remove gateway if not 0
+    		if ($c!=0)  { unset($address['is_gateway']); }
+            $c++;
 
 			# reset IP address field
 			$address['ip_addr'] = $m;
@@ -257,6 +266,17 @@ else {
 		    //success, save log file and send email
 		    else {
 		        $Result->show("success", _("IP $action successful"),false);
+		        // try to ping
+		        if ($subnet['pingSubnet']=="1" && $action=="add") {
+    		        $Ping->ping_address($Subnets->transform_address($address['ip_addr'], "dotted"));
+    		        // update status
+    		        if($pingRes==0) {
+        		        // print alive
+        		        $Result->show("success", _("IP address")." ".$Subnets->transform_address($address['ip_addr'], "dotted")." "._("is alive"), false);
+        		        // update status
+        		        @$Ping->ping_update_lastseen($Addresses->lastId);
+                    }
+		        }
 		    }
 		}
 	}

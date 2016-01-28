@@ -21,6 +21,9 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # validate action
 $Tools->validate_action ($_POST['action']);
 
@@ -48,6 +51,9 @@ $selected_ip_fields = explode(";", $selected_ip_fields);																			//for
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
+
+# if subnet is full we cannot any more ip addresses
+if (($action=="add" || $action=="all-add") && $subnet['isFull']==1)   $Result->show("warning", _("Cannot add address as subnet is market as used"), true, true);
 
 
 # if action is not add then fetch current details, otherwise fetch first available IP address
@@ -129,6 +135,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
 			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<?php
 			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
 			?>
@@ -356,8 +363,8 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only
@@ -407,19 +414,20 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	}
 	?>
 
+    <?php if ($action!=="delete") {  ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
 
-	 <tr>
-		<td colspan="2"><hr></td>
-	 </tr>
-
-	 <tr>
-	 	<td><?php print _('Unique'); ?></td>
-	 	<td>
-		<div class='checkbox info2'>
-		 	<input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
-		</div>
-	 	</td>
-	 </tr>
+    <tr>
+        <td><?php print _('Unique'); ?></td>
+    <td>
+        <div class='checkbox info2'>
+        <input type="checkbox" name="unique" value="1" <?php print $delete; ?>><?php print _('Unique hostname'); ?>
+        </div>
+        </td>
+    </tr>
+    <?php } ?>
 
 	<?php
 	#get type

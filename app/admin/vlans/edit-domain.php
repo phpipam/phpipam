@@ -18,6 +18,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch vlan details
 $l2_domain = $Admin->fetch_object ("vlanDomains", "id", @$_POST['id']);
 $l2_domain = $l2_domain!==false ? (array) $l2_domain : array();
@@ -56,6 +59,7 @@ $(document).ready(function(){
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$l2_domain['description']; ?>" <?php print $readonly; ?>>
 			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
 	<tr>

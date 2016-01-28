@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['appid'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 
@@ -53,6 +56,7 @@ if($_POST['action']!="add") {
 	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print @$api->app_id; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $api->id; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+    		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
        	<td class="info2"><?php print _('Enter application identifier'); ?></td>
     </tr>
@@ -87,6 +91,10 @@ if($_POST['action']!="add") {
 	    	<select name="app_security" class="form-control input-sm input-w-auto">
 	    	<?php
 	    	$perms = array(0=>"crypt",1=>"ssl",2=>"none",3=>"user");
+
+	    	// user not yet supported
+	    	unset($perms[3]);
+
 	    	foreach($perms as $k=>$p) {
 		    	if($p==$api->app_security)		{ print "<option value='$p' selected='selected'>"._($p)."</option>"; }
 		    	else							{ print "<option value='$p' 				   >"._($p)."</option>"; }

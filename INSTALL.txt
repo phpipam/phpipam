@@ -1,1 +1,6 @@
+#
+# phpipam update instructions
+#
+please follow this instructions:
+
 http://phpipam.net/documents/installation/

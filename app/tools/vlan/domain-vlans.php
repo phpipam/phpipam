@@ -33,13 +33,25 @@ $disabled = $User->isadmin==true ? "" : "hidden";
 print "<h4>"._('Available VLANs in domain')." $vlan_domain->name</h4>";
 print "<hr>";
 print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->description."</div><hr>";
+?>
+<br>
+<div class="btn-group" style="margin-bottom:10px;">
+    <?php
+    // back
+    if(sizeof($vlan_domains)>1) {
+    print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
+    }
+    ?>
+    <?php
+    // l2 domains
+    if($User->isadmin===true && sizeof($vlan_domains)==1) { ?>
+	<button class="btn btn-sm btn-default editVLANdomain" data-action="add" data-domainid="" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add L2 Domain'); ?></button>
+	<?php } ?>
+	<button class="btn btn-sm btn-default editVLAN" data-action="add" data-domain="<?php print $vlan_domain->id; ?>" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add VLAN'); ?></button>
 
-if(sizeof($vlan_domains)>1) {
-print "<div class='btn-group' style='margin-bottom:10px;'>";
-print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
-print "</div>";
-}
+</div>
 
+<?php
 # no VLANS?
 if($vlans===false) {
 	$Result->show("info", _("No VLANS configured"), false);
@@ -137,7 +149,7 @@ else {
 					   		if(!in_array($field['name'], $hidden_fields)) {
 
 								// create links
-								$v->$field['name'] = $Result->create_links ($v->$field['name']);
+								$v->$field['name'] = $Result->create_links ($v->$field['name'],$field['type']);
 
 								print "<td class='hidden-xs hidden-sm hidden-md'>";
 								//booleans

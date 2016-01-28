@@ -1,6 +1,15 @@
 <?php
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
+
+// http auth
+if( !empty($_SERVER['PHP_AUTH_USER']) ) {
+    // try to authenticate
+	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
+	// Redirect user where he came from, if unknown go to dashboard.
+	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
+	else                                        { header("Location: ".create_link("dashboard")); }
+}
 ?>
 
 <!DOCTYPE HTML>
@@ -26,22 +35,22 @@ include('functions/checks/check_php_build.php');		# check for support for PHP mo
 	<title><?php print $User->settings->siteTitle; ?></title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
+	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/login.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/login.js"></script>
+	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->
 </head>
 

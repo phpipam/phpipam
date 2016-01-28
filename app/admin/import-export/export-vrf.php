@@ -19,6 +19,7 @@ $User->check_user_session();
 
 # fetch all vrfs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
+if (!$all_vrfs) { $all_vrfs = array(); }
 
 # Create a workbook
 $today = date("Ymd");

@@ -72,7 +72,7 @@ foreach ($data as &$cdata) {
 
 	}
 }
-print _("After the import you should perform an automatic recomputation of the master/nested relations using the Recompute button after you close this window.")
+print _("After the import you should perform an automatic recomputation of the master/nested relations using the Recompute button after you close this window.");
 print "<table class='table table-condensed table-hover' id='resultstable'><tbody>";
 print "<tr class='active'>".$hrow."<th>Result</th></tr>";
 print $rows;

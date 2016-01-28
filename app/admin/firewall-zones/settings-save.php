@@ -109,6 +109,19 @@ if (!preg_match('/^[0-9]+$/i', $_POST['deviceType'])) {
 	$Result->show("danger", _("Invalid device type."), true);
 }
 
+# validate the hidden values (subnetPatternValues).
+if ($_POST['subnetPatternValues'][0] != 'network') {
+	$Result->show("danger", _("Invalid subnet name type [network]. Do not manipulate the POST values!"), true);
+}
+if ($_POST['subnetPatternValues'][1] != 'description') {
+	$Result->show("danger", _("Invalid subnet name type [description]. Do not manipulate the POST values!"), true);
+}
+
+# validate the subnetPattern value.
+if (!preg_match('/^[0-1]$/i', $_POST['subnetPattern'])) {
+	$Result->show("danger", _("Invalid subnet name. Do not manipulate the POST values!"), true);
+}
+
 # formulate json
 $values = new StdClass ();
 
@@ -123,6 +136,8 @@ $values->strictMode = $_POST['strictMode'];
 $values->deviceType = $_POST['deviceType'];
 $values->pattern = $_POST['pattern'];
 $values->autogen = $_POST['autogen'];
+$values->subnetPattern = $_POST['subnetPattern'];
+$values->subnetPatternValues = $_POST['subnetPatternValues'];
 
 # be sure that padding, strictMode and autogen will be set even if they are not delivered by $_POST.
 if($_POST['padding'] != 'on')	{ $values->padding = 'off'; }
