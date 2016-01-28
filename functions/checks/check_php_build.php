@@ -62,8 +62,8 @@ if (sizeof($missingExt) != 1) {
     $error   = "<html>";
     $error  .= "<head>";
     $error  .= "<base href='$url' />";
-    $error  .= '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">';
-	$error  .= '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css">';
+    $error  .= '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">';
+	$error  .= '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">';
 	$error  .= "</head>";
     $error  .= "<body style='margin:0px;'>";
 	$error  .= '<div class="row header-install" id="header"><div class="col-xs-12">';

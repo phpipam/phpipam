@@ -32,7 +32,7 @@ if($rowcount < 18) { $rowcount = 18; }
 	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print stripslashes($instructions->instructions); ?></textarea>
 	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
-	<script src="js/ckeditor/ckeditor.js"></script>
+	<script src="js/1.2/ckeditor/ckeditor.js"></script>
 	<script>
     	CKEDITOR.replace( 'instructions', {
 	    	uiColor: '#f9f9f9',

@@ -32,9 +32,9 @@ $User->check_user_session();
 </form>
 
 <!-- jQuery File Upload Dependencies -->
-<script src="js/uploader/jquery.ui.widget.js"></script>
-<script src="js/uploader/jquery.iframe-transport.js"></script>
-<script src="js/uploader/jquery.fileupload.js"></script>
+<script src="js/1.2/uploader/jquery.ui.widget.js"></script>
+<script src="js/1.2/uploader/jquery.iframe-transport.js"></script>
+<script src="js/1.2/uploader/jquery.fileupload.js"></script>
 
 <script type="text/javascript">
 $(function(){
