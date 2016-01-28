@@ -288,13 +288,18 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 
         if($vrfs!=false) {
 	        foreach($vrfs as $vrf) {
-				//cast
-				$vrf = (array) $vrf;
-				// set description if present
-				$vrf['description'] = strlen($vrf['description'])>0 ? " ($vrf[description])" : "";
+    	        // set permitted
+    	        $permitted_sections = explode(";", $vrf->sections);
+    	        // section must be in array
+    	        if (strlen($vrf->sections)==0 || in_array(@$_POST['sectionId'], $permitted_sections)) {
+    				//cast
+    				$vrf = (array) $vrf;
+    				// set description if present
+    				$vrf['description'] = strlen($vrf['description'])>0 ? " ($vrf[description])" : "";
 
-	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'.$vrf['name'].$vrf['description'].'</option>'; }
-	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'.$vrf['name'].$vrf['description'].'</option>'; }
+    	        	if ($vrf['vrfId'] == $subnet_old_details['vrfId']) 	{ print '<option value="'. $vrf['vrfId'] .'" selected>'.$vrf['name'].$vrf['description'].'</option>'; }
+    	        	else 												{ print '<option value="'. $vrf['vrfId'] .'">'.$vrf['name'].$vrf['description'].'</option>'; }
+    	        }
 	        }
         }
 

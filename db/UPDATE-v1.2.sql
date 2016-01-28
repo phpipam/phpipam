@@ -68,3 +68,6 @@ VALUES
 
 /* change mask size */
 ALTER TABLE `subnets` CHANGE `mask` `mask` VARCHAR(3)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* add section to vrf */
+ALTER TABLE `vrf` ADD `sections` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `description`;

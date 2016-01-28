@@ -414,6 +414,7 @@ CREATE TABLE `vrf` (
   `name` varchar(32) NOT NULL DEFAULT '',
   `rd` varchar(32) DEFAULT NULL,
   `description` varchar(256) DEFAULT NULL,
+  `sections` VARCHAR(128)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`vrfId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

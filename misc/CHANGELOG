@@ -53,6 +53,7 @@
 	+ SSL option for MySQL connections;
 	+ Enum custom field support;
 	+ Added password reset script;
+	+ Set sections to display VRF in;
 
 	Security Fixes:
 	----------------------------

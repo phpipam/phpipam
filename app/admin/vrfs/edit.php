@@ -12,6 +12,7 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
+$Sections	= new Sections ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -58,7 +59,6 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			<input type="text" class="rd form-control input-sm" name="rd" placeholder="<?php print _('Route distinguisher'); ?>" value="<?php print @$vrf['rd']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
-
 	<!-- Description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
@@ -69,6 +69,29 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$vrf['description']; ?>" <?php print $readonly; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><hr></td>
+	</tr>
+	<!-- sections -->
+	<tr>
+		<td style="vertical-align: top !important"><?php print _('Sections'); ?>:</td>
+		<td>
+		<?php
+		# select sections
+		$sections = $Sections->fetch_all_sections();
+		# reformat domains sections to array
+		$vrf_sections = explode(";", @$vrf['sections']);
+		$vrf_sections = is_array($vrf_sections) ? $vrf_sections : array();
+		// loop
+		if($sections!==false) {
+			foreach($Sections->sections as $section) {
+				if(in_array($section->id, @$vrf_sections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
+				else 										{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+			}
+		}
+		?>
 		</td>
 	</tr>
 

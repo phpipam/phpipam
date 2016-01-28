@@ -39,6 +39,36 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		<td><?php print $vrf->description; ?></td>
 	</tr>
 
+	<tr>
+        <td><hr></td>
+        <td></td>
+	</tr>
+	<tr>
+		<th><?php print _('Sections'); ?></th>
+		<td>
+        <div class="text-muted">
+        <?php
+        	// format sections
+        	if(strlen($vrf->sections)==0) {
+        		$sections = "All sections";
+        	}
+        	else {
+        		//explode
+        		$sections_tmp = explode(";", $vrf->sections);
+        		foreach($sections_tmp as $t) {
+        			//fetch section
+        			$tmp_section = $Sections->fetch_section(null, $t);
+        			$sec[] = $tmp_section->name;
+        		}
+        		//implode
+        		$sections = implode("<br>", $sec);
+        	}
+        	print $sections;
+        ?>
+        </div>
+		</td>
+	</tr>
+
 	<?php
 
 	# print custom subnet fields if any

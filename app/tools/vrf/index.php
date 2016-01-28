@@ -41,6 +41,23 @@ else {
 	    print "	<th colspan='8'><h4>$vrf[name]</h4></th>";
 		print "</tr>";
 
+		# sections
+		print "<tr class='text-top'>";
+	    print "	<td colspan='8'>";
+	    print _("Available in sections")." ";
+            $vrf_sections = array_filter(explode(";", $vrf['sections']));
+            if (sizeof($vrf_sections)==0)   {
+                print "<span class='badge badge1'>"._("All sections")."</span>";
+            }
+            else {
+                foreach ($vrf_sections as $s) {
+                    $tmp_section = $Sections->fetch_section(null, $s);
+                    print "<span class='badge badge1'><a href='".create_link("subnets",$tmp_section->id)."'>".$tmp_section->name."</a></span> ";
+                }
+            }
+	    print " </td>";
+		print "</tr>";
+
 		# fetch subnets in vrf
 		$subnets = $Subnets->fetch_vrf_subnets ($vrf['vrfId'], null);
 
@@ -48,6 +65,7 @@ else {
 		print "	<tr>";
 		print "	<th>"._('VLAN')."</th>";
 		print "	<th>"._('Description')."</td>";
+		print "	<th>"._('Section')."</td>";
 		print "	<th>"._('Subnet')."</td>";
 		print "	<th>"._('Master Subnet')."</td>";
 		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
@@ -83,6 +101,7 @@ else {
 
 					print "	<td>$subnet[VLAN]</td>";
 					print "	<td>$subnet[description]</td>";
+					print "	<td><a href='".create_link("subnets",$section['id'])."'>$section[name]</a></td>";
 
 					# folder?
 					if($subnet->isFolder==1) {
