@@ -1517,7 +1517,9 @@ $('#pdns-defaults').submit(function() {
 });
 //load edit form
 $(document).on("click", ".editDomain", function() {
-	open_popup("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    // editDomain2 > from error in create_record
+    if ($(this).hasClass('editDomain2'))   { open_popup ("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action'), secondary:true}, true); }
+    else                                   { open_popup ("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')}); }
 });
 //hide defaults
 $(document).on("click", ".hideDefaults", function () {
@@ -1526,7 +1528,31 @@ $(document).on("click", ".hideDefaults", function () {
 });
 //submit form
 $(document).on("click", "#editDomainSubmit", function() {
-    submit_popup_data (".domain-edit-result", "app/admin/powerDNS/domain-edit-result.php", $('form#domainEdit').serialize());
+    //dont reload if it cane from ip addresses
+    if ($(this).hasClass('editDomainSubmit2'))  {
+    	// show spinner
+    	showSpinner();
+    	// post
+        $.post("app/admin/powerDNS/domain-edit-result.php", $('form#domainEdit').serialize(), function(data) {
+            $('#popupOverlay2 div.domain-edit-result').html(data).slideDown('fast');
+            //reload after 2 seconds if succeeded!
+	        if(data.search("alert-danger")==-1 && data.search("error")==-1 && data.search("alert-warning")==-1 ) {
+    	        $.post("app/admin/powerDNS/record-edit.php", {id:$('#popupOverlay .pContent .ip_dns_addr').html(),domain_id:$('#popupOverlay .pContent strong').html(),action:"add"}, function(data2) {
+        	        $("#popupOverlay .popup_w700").html(data2);
+    	        });
+    	        setTimeout(function (){ $('#popupOverlay2').fadeOut('fast'); }, 1500);
+    	        setTimeout(function (){ hideSpinner(); }, 1500);
+    	    }
+	        else {
+    	        hideSpinner();
+    	    }
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        // prevent reload
+        return false;
+    }
+    else {
+        submit_popup_data (".domain-edit-result", "app/admin/powerDNS/domain-edit-result.php", $('form#domainEdit').serialize());
+    }
 });
 
 // refresh subnet PTR records

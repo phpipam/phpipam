@@ -365,12 +365,26 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $hostname
+	 * @param bool $permit_root_domain
 	 * @return void
 	 */
-	public function validate_hostname($hostname) {
-	    return (preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $hostname) 	//valid chars check
+	public function validate_hostname($hostname, $permit_root_domain=true) {
+    	// first validate hostname
+    	$valid =  (preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $hostname) 	//valid chars check
 	            && preg_match("/^.{1,253}$/", $hostname) 										//overall length check
 	            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $hostname)   ); 				//length of each label
+	    // if it fails return immediately
+	    if (!$valid) {
+    	    return $valid;
+	    }
+	    // than validate root_domain if requested
+	    elseif ($permit_root_domain)    {
+    	    return $valid;
+	    }
+	    else {
+    	    if(strpos($hostname, ".")!==false)  { return $valid; }
+    	    else                                { return false; }
+	    }
 	}
 
 	/**
