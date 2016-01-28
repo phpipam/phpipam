@@ -777,15 +777,19 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_slaves_master ($subnetId) {
-		foreach($this->slaves_full as $k=>$s) {
-			if($s==$subnetId) {
-				unset($this->slaves_full[$k]);
-			}
+        if(isset($this->slaves_full)) {
+    		foreach($this->slaves_full as $k=>$s) {
+    			if($s==$subnetId) {
+    				unset($this->slaves_full[$k]);
+    			}
+    		}
 		}
-		foreach ($this->slaves as $k=>$s) {
- 			if($s==$subnetId) {
-				unset($this->slaves[$k]);
-			}
+		if(isset($this->slaves)) {
+    		foreach ($this->slaves as $k=>$s) {
+     			if($s==$subnetId) {
+    				unset($this->slaves[$k]);
+    			}
+    		}
 		}
 	}
 

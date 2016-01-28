@@ -2150,9 +2150,10 @@ $(document).on("click", ".editFolderSubmit", function() {
 $(document).on("click", ".editFolderSubmitDelete", function() {
 	showSpinner();
     var subnetId  = $(this).attr('data-subnetId');
-    var description  = $('form#editFolderDetails #field-description').val();
+    var description = $('form#editFolderDetails #field-description').val();
+    var csrf_cookie = $('form#editFolderDetails input[name=csrf_cookie]').val();
     //format posted values
-    var postData     = "subnetId="+subnetId+"&description="+description+"&action=delete";
+    var postData     = "subnetId="+subnetId+"&description="+description+"&action=delete"+"&csrf_cookie="+csrf_cookie;
 	//append deleteconfirm
 	if($(this).attr('id') == "editFolderSubmitDelete") { postData += "&deleteconfirm=yes"; };
 	$.post('app/admin/subnets/edit-folder-result.php', postData, function(data) {
