@@ -55,6 +55,10 @@ table.table-auto-wide td {
 	padding-left: 25px !important;
 	padding-right: 25px !important;
 }
+table.table-pdns-details td {
+    color: #999;
+    font-size: 13px;
+}
 
 hr {
   margin: 5px;
@@ -104,6 +108,10 @@ blockquote {
 }
 blockquote p {
 	font-size: 15px;
+}
+blockquote p.small2 {
+    color: #999;
+    font-size: 12px
 }
 blockquote small {
 	font-size: 12px;
