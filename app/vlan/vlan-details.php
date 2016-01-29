@@ -33,6 +33,16 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 		</td>
 	</tr>
 	<tr>
+		<th><?php print _('Domain'); ?></th>
+		<td>
+        <?php
+		// domain
+		$l2domain = $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
+		if($l2domain!==false)       { print $l2domain->name; }
+        ?>
+		</td>
+	</tr>
+	<tr>
 		<th><?php print _('Description'); ?></th>
 		<td><?php print $vlan['description']; ?></td>
 	</tr>
