@@ -315,6 +315,9 @@ td#actions .btn-group .btn {
 .badge.badge4 {
     cursor: default;
 }
+.badge.badge5 {
+	padding: 2px 6px;
+}
 ul.submenu-dns {
 	line-height: 14px;
 	padding: 3px;

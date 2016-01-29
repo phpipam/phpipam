@@ -328,7 +328,7 @@ class Sections extends Common_functions {
 	 */
 	public function fetch_section_vlans ($sectionId) {
 		# set query
-		$query = "select distinct(`v`.`vlanId`),`v`.`name`,`v`.`number`, `v`.`description` from `subnets` as `s`,`vlans` as `v` where `s`.`sectionId` = ? and `s`.`vlanId`=`v`.`vlanId` order by `v`.`number` asc;";
+		$query = "select distinct(`v`.`vlanId`),`v`.`name`,`v`.`number`,`v`.`domainId`, `v`.`description` from `subnets` as `s`,`vlans` as `v` where `s`.`sectionId` = ? and `s`.`vlanId`=`v`.`vlanId` order by `v`.`number` asc;";
 		# fetch
 		try { $vlans = $this->Database->getObjectsQuery($query, array($sectionId)); }
 		catch (Exception $e) {

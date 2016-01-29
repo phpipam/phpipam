@@ -2155,6 +2155,8 @@ class Subnets extends Common_functions {
 	public function print_vlan_menu( $user, $vlans, $sectionId ) {
 		# initialize html array
 		$html = array();
+		# tools
+		$Tools = new Tools($this->Database);
 		# must be numeric
 		if(isset($_GET['section']))		if(!is_numeric($_GET['section']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
 		if(isset($_GET['subnetId']))	if(!is_numeric($_GET['subnetId']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
@@ -2181,9 +2183,18 @@ class Subnets extends Common_functions {
 				$leafClass="fa-gray";
 			}
 
+			# domain
+			$item['l2domain'] = "";
+			if($item['domainId']!=1) {
+    			$domain = $Tools->fetch_object("vlanDomains", "id", $item['domainId']);
+    			if ($domain!==false) {
+        			$item['l2domain'] = " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $domain->name'>$domain->name</span>";
+    			}
+			}
+
 			# new item
 			$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('VLAN contains subnets').'.<br>'._('Click on folder to open/close').'"></i>';
-			$html[] = '<a href="'.create_link("vlan",$sectionId,$item['vlanId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['number'].' ('.$item['name'].')</a>';
+			$html[] = '<a href="'.create_link("vlan",$sectionId,$item['vlanId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['number'].' ('.$item['name'].') '.$item['l2domain'].'</a>';
 
 			# fetch all subnets in VLAN
 			$subnets = $this->fetch_vlan_subnets ($item['vlanId'], $sectionId);
@@ -2365,6 +2376,15 @@ class Subnets extends Common_functions {
 		# old count
 		$old_count = 0;
 
+		# fetch all vlans and domains and reindex
+		$vlans_and_domains = $Tools->fetch_all_domains_and_vlans ();
+		if (!$vlans_and_domains) { $all_vlans = array(); }
+		else {
+    		foreach ($vlans_and_domains as $vd) {
+        		$all_vlans[$vd->id] = $vd;
+    		}
+		}
+
 		# return table content (tr and td's)
 		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
@@ -2388,9 +2408,11 @@ class Subnets extends Common_functions {
 			# count levels
 			$count = count( $parent_stack ) + 1;
 
-			# get VLAN
-			$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $option['value']['vlanId']);
-			if(@$vlan[0]===false) 	{ $vlan['number'] = ""; }			# no VLAN
+			# vlan
+			if (!array_key_exists ($option['value']['vlanId'], $all_vlans)) { $vlan['number'] = ""; }
+			else {
+    			$vlan['number'] = $all_vlans[$option['value']['vlanId']]->domainId==1 ? $all_vlans[$option['value']['vlanId']]->number : $all_vlans[$option['value']['vlanId']]->number." <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain ".$all_vlans[$option['value']['vlanId']]->domainName."'>".$all_vlans[$option['value']['vlanId']]->domainName."</span>";
+            }
 
 			# description
 			$description = strlen($option['value']['description'])==0 ? "/" : $option['value']['description'];

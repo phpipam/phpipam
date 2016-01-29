@@ -2011,6 +2011,7 @@ class Tools extends Common_functions {
 		$query[] = "	`d`.`description` as `domainDescription`,";
 		$query[] = "	`v`.`domainId` as `domainId`,";
 		$query[] = "	`v`.`name` as `name`,";
+		$query[] = "	`d`.`name` as `domainName`,";
 		$query[] = "	`v`.`number` as `number`,";
 		$query[] = "	`v`.`description` as `description`,";
 		// fetch custom fields
