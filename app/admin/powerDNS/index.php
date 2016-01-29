@@ -37,7 +37,7 @@ if ($test!==false) {
 <ul class="nav nav-tabs">
 	<?php
 	// tabs
-	$tabs = array("domains", "reverse_v4", "reverse_v6", "settings", "defaults");
+	$tabs = array("domains", "host_records", "reverse_v4", "reverse_v6", "settings", "defaults");
 
 	// default tab
 	if(!isset($_GET['subnetId'])) {
