@@ -1264,6 +1264,10 @@ table.ipaddresses tr[class*="hidden-"] {
 table.ipaddresses td.gateway {
 	font-weight: bold;
 }
+table.ipaddresses td.gateway ul li {
+	font-weight: normal;
+	color: #555;
+}
 table.ipaddresses td.gateway a i.fa-gateway {
 	margin-left: 5px;
 	color: #555;

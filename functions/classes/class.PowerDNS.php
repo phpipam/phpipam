@@ -633,6 +633,51 @@ class PowerDNS extends Common_functions {
 	}
 
 	/**
+	 * Search aliases for specific hostname
+	 *
+	 * @access public
+	 * @param mixed $hostname
+	 * @return void
+	 */
+	public function seach_aliases ($hostname) {
+		// fetch
+		try { $records = $this->Database_pdns->findObjects("records", "content", $hostname, "content", "asc"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		// remove not CNAME
+		if (sizeof($records)>0) {
+    		foreach ($records as $k=>$r) {
+        		if ($r->type!=="CNAME") {
+            		unset($records[$k]);
+        		}
+    		}
+		}
+		# result
+		return sizeof($records)>0 ? $records : false;
+	}
+
+	/**
+	 * Returns unique IP addresses from content field in pdns table
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function search_unique_ips () {
+		// query
+		$query = "select DISTINCT(`content`) from records WHERE INET_ATON(`content`) IS NOT NULL or `content` LIKE '%:%';";
+ 		// search
+		try { $records = $this->Database_pdns->getObjectsQuery($query); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# result
+		return sizeof($records)>0 ? $records : false;
+	}
+
+	/**
 	 * Edit PowerDNS record
 	 *
 	 * @access public
