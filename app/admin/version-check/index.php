@@ -44,7 +44,7 @@ print "<div class='log-print releaselog' style='display:none'>";
 print "<h4 style='margin-top:40px;'>Release log</h4><hr>";
 foreach ($Tools->phpipam_releases as $r) {
 	// pre-release ?
-	$prerelease = !is_numeric($r->title) ? "<span class='label label-danger'>Prerelease</span>" : "";
+	$prerelease = !is_numeric(str_replace("Version", "", $r->title)) ? "<span class='label label-danger'>Prerelease</span>" : "";
 
 	// title
 	print "<h5><i class='fa fa-angle-double-right'></i> $r->title $prerelease</h5>";
