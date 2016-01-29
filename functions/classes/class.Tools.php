@@ -1704,11 +1704,11 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric($e->title)) {
+				if (is_numeric(str_replace("Version", "", $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
-					return $e->title;
+					return str_replace("Version", "", $e->title);
 					break;
 				}
 			}
