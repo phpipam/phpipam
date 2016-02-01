@@ -924,10 +924,10 @@ class User extends Common_functions {
 		$this->ldap = true;							//set ldap flag
 
 		// set uid
-		if (isset($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
+		if (!empty($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
 		else 								{ $udn = 'uid=' . $username; }
 		// set DN
-		if (isset($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
+		if (!empty($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
 		else 									 { $udn = $udn . "," . $authparams['base_dn']; }
 		// authenticate
 		$this->directory_authenticate($authparams, $udn, $password);
