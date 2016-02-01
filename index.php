@@ -85,7 +85,7 @@ else {
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/1.2/login.js"></script>
 	<?php } ?>
-	<script type="text/javascript" src="js/1.2/magic.min.js"></script>
+	<script type="text/javascript" src="js/1.2/magic.js"></script>
 	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/1.2/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/1.2/bootstrap-switch.min.js"></script>

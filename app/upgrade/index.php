@@ -149,20 +149,8 @@ elseif($User->is_admin(false)) {
 		$content .= "<div style='display:none' id='manualShow'>";
 		$content .= "<span class='text-muted'>copy and paste below commands to mysql directly!</span>";
 		// get file
-		$dir = "db/";
-		$files = scandir($dir);
-		foreach($files as $f) {
-			//get only UPDATE- for specific version
-			if(substr($f, 0, 6) == "UPDATE") {
-				$ver = str_replace(".sql", "",substr($f, 8));
-				if($ver>$User->settings->version) {
-					//printout
-					$tmp[] = file_get_contents("db/$f");
-				}
-			}
-		}
-		$tmp = implode("<br><br>", $tmp);
-		$content .= "<pre>".str_replace("\n","<br>",$tmp)."</pre>";
+		$install_queries = $Install->get_upgrade_queries ();
+		$content .= "<pre>".str_replace("\n","<br>",$install_queries)."</pre>";
 		$content .= "</div>";
 		$content .= "</div>";
 	}
