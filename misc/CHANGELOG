@@ -7,7 +7,8 @@
 	Enhancements:
 	----------------------------
 	+ API:
-	    - Api v1 removed
+	    - Api v1 removed;
+	    + If subnet gateway defined gatewayId is returned in subnet details;
 
 	Bugfixes:
 	----------------------------

@@ -464,6 +464,13 @@ class Subnets_controller extends Common_api_functions {
 		$subnetId = !is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
 		$result = $this->Subnets->fetch_subnet ("id", $this->_params->id);
+		// fetch gateway
+		if(sizeof($result)>0) {
+    		$gateway = $this->read_subnet_gateway ();
+    		if ( $gateway!== false) {
+        		$result->gatewayId = $gateway->id;
+    		}
+		}
 		# result
 		return sizeof($result)==0 ? false : $result;
 	}
@@ -479,6 +486,16 @@ class Subnets_controller extends Common_api_functions {
 		$result = $this->Addresses->fetch_subnet_addresses ($this->_params->id);
 		# result
 		return sizeof($result)==0 ? false : $result;
+	}
+
+	/**
+	 * Returns id of subnet gateay
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function read_subnet_gateway () {
+    	return $this->Subnets->find_gateway ($this->_params->id);
 	}
 
 	/**
