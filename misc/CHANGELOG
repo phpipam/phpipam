@@ -1,4 +1,4 @@
-== 1.20.002
+== 1.20.004
 
 	New features:
 	------------
@@ -12,6 +12,7 @@
 
 	Bugfixes:
 	----------------------------
+	+ Fixed powerDNS delimiter for multiple slave servers on domain;
 
 == 1.20
 

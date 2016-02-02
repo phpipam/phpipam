@@ -29,9 +29,9 @@ if ($_POST['action']!="delete") {
 	// master
 	if (strlen($_POST['master'])>0) {
     	// if multilpe masters
-    	if (strpos($_POST['master'], ";")!==false) {
+    	if (strpos($_POST['master'], ",")!==false) {
         	// to array and trim, check each
-        	$masters = array_filter(explode(";", $_POST['master']));
+        	$masters = array_filter(explode(",", $_POST['master']));
         	foreach ($masters as $m) {
                            if(!filter_var($m, FILTER_VALIDATE_IP))  { $Result->show("danger", "Master must be an IP address". " - ". $m, true); }
         	}
@@ -53,9 +53,9 @@ if ($_POST['action']!="delete") {
 	if ($_POST['type']=="SLAVE") {
     	if (strlen($_POST['master'])==0)                            { $Result->show("danger", "Please set master server(s) if domain type is SLAVE", true); }
         else {
-        	if (strpos($_POST['master'], ";")!==false) {
+        	if (strpos($_POST['master'], ",")!==false) {
             	// to array and trim, check each
-            	$masters = array_filter(explode(";", $_POST['master']));
+            	$masters = array_filter(explode(",", $_POST['master']));
             	foreach ($masters as $m) {
                                if(!filter_var($m, FILTER_VALIDATE_IP))  { $Result->show("danger", "Master must be an IP address". " - ". $m, true); }
             	}
