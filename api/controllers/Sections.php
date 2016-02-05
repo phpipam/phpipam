@@ -93,6 +93,15 @@ class Sections_controller extends Common_api_functions {
 			$this->init_object ("Subnets", $this->Database);
 			//fetch
 			$result = $this->Subnets->fetch_section_subnets ($this->_params->id);
+            // add gateway
+			if($result!=false) {
+				foreach ($result as $k=>$r) {
+            		$gateway = $this->read_subnet_gateway ($r->id);
+            		if ( $gateway!== false) {
+                		$result[$k]->gatewayId = $gateway->id;
+            		}
+				}
+			}
 			// check result
 			if(sizeof($result)==0) 						{ return array("code"=>200, "data"=>NULL); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
@@ -236,6 +245,17 @@ class Sections_controller extends Common_api_functions {
 			//set result
 			return array("code"=>200, "data"=>NULL);
 		}
+	}
+
+	/**
+	 * Returns id of subnet gateay
+	 *
+	 * @access private
+	 * @params mixed $subnetId
+	 * @return void
+	 */
+	private function read_subnet_gateway ($subnetId) {
+    	return $this->Subnets->find_gateway ($subnetId);
 	}
 }
 

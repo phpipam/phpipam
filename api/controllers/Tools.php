@@ -179,11 +179,29 @@ class Tools_controller extends Common_api_functions {
 			elseif ($this->_params->id == "vlans" && $this->_params->id3=="subnets") {
 				// fetch
 				$result = $this->Tools->fetch_multiple_objects ("subnets", "vlanId", $this->_params->id2, "id", true);
+                // add gateway
+    			if($result!=false) {
+    				foreach ($result as $k=>$r) {
+                		$gateway = $this->read_subnet_gateway ($r->id);
+                		if ( $gateway!== false) {
+                    		$result[$k]->gatewayId = $gateway->id;
+                		}
+    				}
+    			}
 			}
 			// vrfs
 			elseif ($this->_params->id == "vrf" && $this->_params->id3=="subnets") {
 				// fetch
 				$result = $this->Tools->fetch_multiple_objects ("subnets", "vrfId", $this->_params->id2, "id", true);
+                // add gateway
+    			if($result!=false) {
+    				foreach ($result as $k=>$r) {
+                		$gateway = $this->read_subnet_gateway ($r->id);
+                		if ( $gateway!== false) {
+                    		$result[$k]->gatewayId = $gateway->id;
+                		}
+    				}
+    			}
 			}
 			else {
 				// id3 can only be addresses
@@ -448,6 +466,16 @@ class Tools_controller extends Common_api_functions {
 		}
 	}
 
+	/**
+	 * Returns id of subnet gateay
+	 *
+	 * @access private
+	 * @params mixed $subnetId
+	 * @return void
+	 */
+	private function read_subnet_gateway ($subnetId) {
+    	return $this->Subnets->find_gateway ($subnetId);
+	}
 }
 
 ?>

@@ -98,6 +98,16 @@ class Vrfs_controller extends Common_api_functions {
 				$this->validate_vrf ();
 				// fetch
 				$result = $this->Tools->fetch_multiple_objects ("subnets", "vrfId", $this->_params->id, 'subnet', true);
+				// add gateway if present
+    			if($result!=false) {
+    				foreach ($result as $k=>$r) {
+                		$gateway = $this->read_subnet_gateway ($r->id);
+                		if ( $gateway!== false) {
+                    		$result[$k]->gatewayId = $gateway->id;
+                		}
+    				}
+    			}
+
 				// check result
 				if($result===false)					{ $this->Response->throw_exception(404, 'No subnets belonging to this vrf'); }
 				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
@@ -275,6 +285,17 @@ class Vrfs_controller extends Common_api_functions {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns id of subnet gateay
+	 *
+	 * @access private
+	 * @params mixed $subnetId
+	 * @return void
+	 */
+	private function read_subnet_gateway ($subnetId) {
+    	return $this->Subnets->find_gateway ($subnetId);
 	}
 
 }

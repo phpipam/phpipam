@@ -101,6 +101,16 @@ class Vlans_controller extends Common_api_functions {
 				}
 			}
 
+			// add gateway
+			if($result!=NULL) {
+				foreach ($result as $k=>$r) {
+            		$gateway = $this->read_subnet_gateway ($r->id);
+            		if ( $gateway!== false) {
+                		$result[$k]->gatewayId = $gateway->id;
+            		}
+				}
+			}
+
 			// check result
 			if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
@@ -305,6 +315,17 @@ class Vlans_controller extends Common_api_functions {
 		// check that it exists
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->domainId) === false )
 																							{ $this->Response->throw_exception(400, "Invalid domain id"); }
+	}
+
+	/**
+	 * Returns id of subnet gateay
+	 *
+	 * @access private
+	 * @params mixed $subnetId
+	 * @return void
+	 */
+	private function read_subnet_gateway ($subnetId) {
+    	return $this->Subnets->find_gateway ($subnetId);
 	}
 }
 
