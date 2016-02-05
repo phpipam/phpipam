@@ -67,7 +67,7 @@ try {
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
 		// decrypt request - to JSON
-		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->$_GET['app_id'], base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
 	}
 	// SSL checks
 	elseif($app->app_security=="ssl") {
