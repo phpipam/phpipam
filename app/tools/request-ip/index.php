@@ -58,6 +58,12 @@ $User->check_user_session();
 		<td><input type="text" class="form-control" name="dns_name" size="30" placeholder="<?php print _('hostname');?>"></td>
 	</tr>
 
+	<!-- MAC address -->
+	<tr>
+		<td><?php print _('MAC address');?></td>
+		<td><input type="text" class="form-control" name="mac" size="30" placeholder="<?php print _('MAC address');?>"></td>
+	</tr>
+
 	<!-- state -->
 	<tr>
 		<td><?php print _('State'); ?></td>

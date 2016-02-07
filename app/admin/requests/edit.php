@@ -136,6 +136,14 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 		</td>
 	</tr>
 
+	<!-- MAC address -->
+	<tr>
+		<th><?php print _('MAC address'); ?></th>
+		<td>
+			<input type="text" name="mac" class="form-control input-sm" value="<?php print @$request['mac']; ?>" size="30" placeholder="<?php print _('MAC address'); ?>">
+		</td>
+	</tr>
+
 	<?php if(in_array('state', $selected_ip_fields)) { ?>
 	<!-- state -->
 	<tr>

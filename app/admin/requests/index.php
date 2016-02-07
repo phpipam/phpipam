@@ -28,6 +28,7 @@ else {
 	<th><?php print _('IP'); ?></th>
 	<th><?php print _('Subnet'); ?></th>
 	<th><?php print _('Hostname'); ?></th>
+	<th><?php print _('MAC address'); ?></th>
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Requested by'); ?></th>
 	<th><?php print _('Comment'); ?></th>
@@ -55,6 +56,7 @@ else {
 			print '	<td>'. $request['ip_addr'] .'</td>'. "\n";
 			print '	<td>'. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .' ('. $subnet['description'] .')</td>'. "\n";
 			print '	<td>'. $request['dns_name'] .'</td>'. "\n";
+			print '	<td>'. $request['mac'] .'</td>'. "\n";
 			print '	<td>'. $request['description'] .'</td>'. "\n";
 			print '	<td>'. $request['requester'] .'</td>'. "\n";
 			print '	<td>'. $request['comment'] .'</td>'. "\n";
@@ -78,6 +80,7 @@ if($inactive_requests!==false) { ?>
 <tr>
 	<th><?php print _('Subnet'); ?></th>
 	<th><?php print _('Hostname'); ?></th>
+	<th><?php print _('MAC address'); ?></th>
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Requested by'); ?></th>
 	<th><?php print _('Comment'); ?></th>
@@ -102,6 +105,7 @@ if($inactive_requests!==false) { ?>
 			print '<tr>'. "\n";
 			print '	<td>'. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .' ('. $subnet['description'] .')</td>'. "\n";
 			print '	<td>'. $request['dns_name'] .'</td>'. "\n";
+			print '	<td>'. $request['mac'] .'</td>'. "\n";
 			print '	<td>'. $request['description'] .'</td>'. "\n";
 			print '	<td>'. $request['requester'] .'</td>'. "\n";
 			print '	<td>'. $request['comment'] .'</td>'. "\n";
