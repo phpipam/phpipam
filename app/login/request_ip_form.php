@@ -64,6 +64,13 @@ if($subnets===false) { ?>
 		<input type="text" name="dns_name" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
 </tr>
 
+<!-- MAC address -->
+<tr>
+	<th><?php print _('MAC address'); ?></th>
+	<td>
+		<input type="text" name="mac" class="form-control" size="30" placeholder="<?php print _('MAC address'); ?>"></td>
+</tr>
+
 <!-- state -->
 <tr>
 	<th><?php print _('State'); ?></th>

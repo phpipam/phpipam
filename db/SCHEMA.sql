@@ -81,6 +81,7 @@ CREATE TABLE `requests` (
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(32) DEFAULT NULL,
   `dns_name` varchar(32) DEFAULT NULL,
+  `mac` varchar(20) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
   `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,

@@ -1376,6 +1376,10 @@ class Tools extends Common_functions {
 			elseif ($k=="dns_name") {
 				$mail['Hostname'] = $v;
 			}
+			// mac
+			elseif ($k=="mac") {
+				$mail['MAC address'] = $v;
+			}
 			// owner
 			elseif ($k=="owner") {
 				$mail['Address owner'] = $v;

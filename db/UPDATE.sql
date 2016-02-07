@@ -474,3 +474,5 @@ ALTER TABLE `vrf` ADD `sections` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `descri
 
 /* VERSION 1.21 */
 
+/* add tag to ip requests */
+ALTER TABLE `requests` ADD `mac` varchar(20) DEFAULT NULL AFTER `dns_name`;
