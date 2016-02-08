@@ -748,7 +748,7 @@ class User extends Common_functions {
 			# add blocked count
 			$this->block_ip ();
 
-			$this->Log->write( "User login", "Invalid username or password", 2, $username );
+			$this->Log->write( "User login", "Invalid username or password for ", 2, $username );
 
 			# apache
 			if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
@@ -883,7 +883,7 @@ class User extends Common_functions {
 				# add blocked count
 				$this->block_ip();
 				$this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
-				$this->Result->show("danger", _("Invalid username or password " . $username ), true);
+				$this->Result->show("danger", _("Invalid username or password for " . $username ), true);
 
 			}
 		} catch (adLDAPException $e) {
