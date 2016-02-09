@@ -748,7 +748,7 @@ class User extends Common_functions {
 			# add blocked count
 			$this->block_ip ();
 
-			$this->Log->write( "User login", "Invalid username or password for ", 2, $username );
+			$this->Log->write( "User login", "Invalid username or password", 2, $username );
 
 			# apache
 			if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
