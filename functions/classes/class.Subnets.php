@@ -465,12 +465,12 @@ class Subnets extends Common_functions {
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vlanId, $sectionId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vlanId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vlanId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vlanId);
 		}
 
 		# fetch
@@ -532,12 +532,12 @@ class Subnets extends Common_functions {
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vrfId, $sectionId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vrfId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, ? ?;";
-			$params = array($vrfId, $order[0], $order[1]);
+			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$params = array($vrfId);
 		}
 
 		# fetch
@@ -653,6 +653,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->subnet_bits = 32-$out[$mask]->host_bits;			// network bits
 			$out[$mask]->hosts = number_format($this->get_max_hosts ($mask, "IPv4"), 0, ",", ".");		// max hosts
 			$out[$mask]->subnets = number_format(pow(2,($mask-8)), 0, ",", ".");
+			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
 			// binary
 			$parts = explode(".", $net->netmask);
@@ -765,6 +766,7 @@ class Subnets extends Common_functions {
 	 */
 	public function reset_subnet_slaves_recursive () {
 		$this->slaves = null;
+		$this->slaves_full = null;
 	}
 
 	/**
@@ -775,10 +777,19 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_slaves_master ($subnetId) {
-		foreach($this->slaves as $k=>$s) {
-			if($s==$subnetId) {
-				unset($this->slaves[$k]);
-			}
+        if(isset($this->slaves_full)) {
+    		foreach($this->slaves_full as $k=>$s) {
+    			if($s==$subnetId) {
+    				unset($this->slaves_full[$k]);
+    			}
+    		}
+		}
+		if(isset($this->slaves)) {
+    		foreach ($this->slaves as $k=>$s) {
+     			if($s==$subnetId) {
+    				unset($this->slaves[$k]);
+    			}
+    		}
 		}
 	}
 
@@ -974,13 +985,16 @@ class Subnets extends Common_functions {
 		$this->fetch_subnet_slaves_recursive ($subnetId);
 		$this->remove_subnet_slaves_master ($subnetId);
 
+		# initial used value
+		$used = 0;
+
 		# go through each and calculate used hosts
 		# add +2 for subnet and broadcast if required
 		foreach($this->slaves_full as $s) {
     		# full?
     		if ($s->isFull==1) {
         		# get max
-        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, true);
+        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, false);
     		}
     		else {
     			# fetch all addresses
@@ -1774,7 +1788,14 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	private function is_IPv6_subnet_inside_subnet ($cidr1, $cidr2) {
-		# Initialize PEAR NET object
+    	//mask 2 must be bigger than mask 1
+    	$mask1 = end(explode("/", $cidr1));
+    	$mask2 = end(explode("/", $cidr2));
+
+        //check mask
+        if ($mask1 < $mask2)                                    { return false; }
+
+		// Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
 
     	//remove netmask from subnet1
@@ -2044,8 +2065,18 @@ class Subnets extends Common_functions {
 				$current_description = $description_print;
 			}
 			elseif ($this->settings->subnetView == 2) {
-				$description_print = strlen($option['value']['description'])>0 ? "(".$option['value']['description'].")" : "";		// fix for empty
-				$current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
+			    if (strlen($option['value']['description'])>0) {
+                    $temp_description = "(".$option['value']['description'].")";
+
+                    if (strlen($temp_description)>34) {
+                        $temp_description = substr($temp_description, 0, 32) . "...)";
+                    }
+                }
+                else {
+                    $temp_description = "";
+                }
+                $description_print = $temp_description;
+                $current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
 			}
 
 			if ( $option === false )
@@ -2124,6 +2155,8 @@ class Subnets extends Common_functions {
 	public function print_vlan_menu( $user, $vlans, $sectionId ) {
 		# initialize html array
 		$html = array();
+		# tools
+		$Tools = new Tools($this->Database);
 		# must be numeric
 		if(isset($_GET['section']))		if(!is_numeric($_GET['section']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
 		if(isset($_GET['subnetId']))	if(!is_numeric($_GET['subnetId']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
@@ -2150,9 +2183,18 @@ class Subnets extends Common_functions {
 				$leafClass="fa-gray";
 			}
 
+			# domain
+			$item['l2domain'] = "";
+			if($item['domainId']!=1) {
+    			$domain = $Tools->fetch_object("vlanDomains", "id", $item['domainId']);
+    			if ($domain!==false) {
+        			$item['l2domain'] = " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $domain->name'>$domain->name</span>";
+    			}
+			}
+
 			# new item
 			$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('VLAN contains subnets').'.<br>'._('Click on folder to open/close').'"></i>';
-			$html[] = '<a href="'.create_link("vlan",$sectionId,$item['vlanId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['number'].' ('.$item['name'].')</a>';
+			$html[] = '<a href="'.create_link("vlan",$sectionId,$item['vlanId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['number'].' ('.$item['name'].') '.$item['l2domain'].'</a>';
 
 			# fetch all subnets in VLAN
 			$subnets = $this->fetch_vlan_subnets ($item['vlanId'], $sectionId);
@@ -2331,14 +2373,23 @@ class Subnets extends Common_functions {
 		$parent = $rootId;
 		$parent_stack = array();
 
+		# old count
+		$old_count = 0;
+
+		# fetch all vlans and domains and reindex
+		$vlans_and_domains = $Tools->fetch_all_domains_and_vlans ();
+		if (!$vlans_and_domains) { $all_vlans = array(); }
+		else {
+    		foreach ($vlans_and_domains as $vd) {
+        		$all_vlans[$vd->id] = $vd;
+    		}
+		}
+
 		# return table content (tr and td's)
 		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
 			# repeat
 			$repeat  = str_repeat( " - ", ( count($parent_stack)) );
-			# dashes
-			if(count($parent_stack) == 0)	{ $dash = ""; }
-			else							{ $dash = "-"; }
 
 			if(count($parent_stack) == 0) {
 				$margin = "0px";
@@ -2350,23 +2401,29 @@ class Subnets extends Common_functions {
 
 				# margin
 				$margin  = (count($parent_stack) * 10) -10;
-				$margin  = $margin *2;
+				$margin  = $margin *1.5;
 				$margin  = $margin."px";
 			}
 
 			# count levels
 			$count = count( $parent_stack ) + 1;
 
-			# get VLAN
-			$vlan = (array) $Tools->fetch_object("vlans", "vlanId", $option['value']['vlanId']);
-			if(@$vlan[0]===false) 	{ $vlan['number'] = ""; }			# no VLAN
+			# vlan
+			if (!array_key_exists ($option['value']['vlanId'], $all_vlans)) { $vlan['number'] = ""; }
+			else {
+    			$vlan['number'] = $all_vlans[$option['value']['vlanId']]->domainId==1 ? $all_vlans[$option['value']['vlanId']]->number : $all_vlans[$option['value']['vlanId']]->number." <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain ".$all_vlans[$option['value']['vlanId']]->domainName."'>".$all_vlans[$option['value']['vlanId']]->domainName."</span>";
+            }
 
 			# description
 			$description = strlen($option['value']['description'])==0 ? "/" : $option['value']['description'];
 
 
 			# print table line
-			if(strlen($option['value']['subnet']) > 0) {
+			if(strlen($option['value']['subnet']) > 0 || $option['value']['isFolder']==1) {
+
+    			# count change?
+    			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
+
 				$html[] = "<tr>";
 
 				//which level?
@@ -2383,14 +2440,15 @@ class Subnets extends Common_functions {
 
 						# last?
 						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						} else {
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
 						}
+				    }
 				}
-				} else {
+				else {
 					# is folder?
 					if($option['value']['isFolder']==1) {
 						# last?
@@ -2403,13 +2461,12 @@ class Subnets extends Common_functions {
 
 						# last?
 						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						}
 						else {
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
-
 						}
 					}
 				}
@@ -2508,8 +2565,10 @@ class Subnets extends Common_functions {
 				$html[] = "	</div>";
 				$html[] = "	</td>";
 
-
 				$html[] = "</tr>";
+
+                # save old level count
+                $old_count = $count;
 			}
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack ); }
@@ -2567,7 +2626,7 @@ class Subnets extends Common_functions {
 		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
 
 		# folders
-		if(sizeof(@$children_folders)>0) {
+		if(sizeof(@$children_folders)>0 || $isFolder) {
 			$html[] = "<optgroup label='"._("Folders")."'>";
 
     		# root subnet
@@ -2582,9 +2641,6 @@ class Subnets extends Common_functions {
 			{
 				# repeat
 				$repeat  = str_repeat( " - ", ( count($parent_stack_folder)) );
-				# dashes
-				if(count($parent_stack_folder)==0)	{ $dash = ""; }
-				else								{ $dash = $repeat; }
 
 				# count levels
 				$count = count($parent_stack_folder)+1;
@@ -2625,9 +2681,6 @@ class Subnets extends Common_functions {
 		{
 			# repeat
 			$repeat  = str_repeat( " - ", ( count($parent_stack_subnet)) );
-			# dashes
-			if(count($parent_stack_subnet)==0)	{ $dash = ""; }
-			else								{ $dash = $repeat; }
 
 			# count levels
 			$count = count($parent_stack_subnet)+1;
@@ -2636,18 +2689,34 @@ class Subnets extends Common_functions {
 			if(strlen($option['value']['subnet']) > 0 && $option['value']['isFolder']!=1) {
 				# selected
 				if($option['value']['id'] == $current_master) 	{
-					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-					else 								{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+					if($option['value']['description']) {
+                        if(strlen($option['value']['description'])>34) {
+                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
+    				    }
+                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
+				    }
+                    else {
+                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
+                    }
+                }
 				else {
-					if($option['value']['description']) { $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>"; }
-					else 								{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>"; }}
+					if($option['value']['description']) {
+                        if(strlen($option['value']['description'])>34) {
+                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
+                        }
+                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
+                    }
+					else {
+                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
+                    }
+                }
 			}
 			// folder - disabled
 			elseif ($option['value']['isFolder']==1) {
-				$html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
+					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
+                     $html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
 				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
 				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
-
 			}
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack_subnet ); }

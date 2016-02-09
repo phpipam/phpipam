@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
 
@@ -115,6 +118,7 @@ $(document).ready(function(){
 				print '<input type="hidden" name="switchId" value="'. $_POST['switchId'] .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
 
@@ -163,8 +167,8 @@ $(document).ready(function(){
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only

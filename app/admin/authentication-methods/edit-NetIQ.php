@@ -65,6 +65,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="hidden" name="type" value="NetIQ">
 			<input type="hidden" name="id" value="<?php print @$method_settings->id; ?>">
 			<input type="hidden" name="action" value="<?php print @$_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 		<td class="info2"><?php print _('Enter domain controllers, separated by ;'); ?>
 		</td>

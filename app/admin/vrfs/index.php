@@ -38,6 +38,7 @@ else {
 	print '<tr>'. "\n";
 	print '	<th>'._('Name').'</th>'. "\n";
 	print '	<th>'._('RD').'</th>'. "\n";
+	print '	<th>'._('Sections').'</th>'. "\n";
 	print '	<th>'._('Description').'</th>'. "\n";
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
@@ -54,10 +55,28 @@ else {
 		//cast
 		$vrf = (array) $vrf;
 
+    	// format sections
+    	if(strlen($vrf['sections'])==0) {
+    		$sections = "All sections";
+    	}
+    	else {
+    		//explode
+    		unset($sec);
+    		$sections_tmp = explode(";", $vrf['sections']);
+    		foreach($sections_tmp as $t) {
+    			//fetch section
+    			$tmp_section = $Sections->fetch_section(null, $t);
+    			$sec[] = " &middot; ".$tmp_section->name;
+    		}
+    		//implode
+    		$sections = implode("<br>", $sec);
+    	}
+
 		//print details
-		print '<tr>'. "\n";
+		print '<tr class="text-top">'. "\n";
 		print '	<td class="name">'. $vrf['name'] .'</td>'. "\n";
 		print '	<td class="rd">'. $vrf['rd'] .'</td>'. "\n";
+		print "	<td><span class='text-muted'>$sections</span></td>";
 		print '	<td class="description">'. $vrf['description'] .'</td>'. "\n";
 
 		// custom fields
@@ -68,7 +87,7 @@ else {
 					print "<td class='customField hidden-xs hidden-sm'>";
 
 					// create links
-					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']]);
+					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
 
 					//booleans
 					if($field['type']=="tinyint(1)")	{

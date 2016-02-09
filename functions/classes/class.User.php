@@ -288,6 +288,19 @@ class User extends Common_functions {
 	}
 
 	/**
+	 * Cerates cookie to prevent csrf
+	 *
+	 * @access private
+	 * @return void
+	 */
+	public function create_csrf_cookie () {
+    	// save cookie
+    	$_SESSION['csrf_cookie'] = md5(uniqid(mt_rand(), true));
+    	// return
+    	return $_SESSION['csrf_cookie'];
+	}
+
+	/**
 	 * Sets translation for logged in user
 	 *
 	 * @access private
@@ -911,10 +924,10 @@ class User extends Common_functions {
 		$this->ldap = true;							//set ldap flag
 
 		// set uid
-		if (isset($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
+		if (!empty($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
 		else 								{ $udn = 'uid=' . $username; }
 		// set DN
-		if (isset($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
+		if (!empty($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
 		else 									 { $udn = $udn . "," . $authparams['base_dn']; }
 		// authenticate
 		$this->directory_authenticate($authparams, $udn, $password);

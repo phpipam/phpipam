@@ -12,10 +12,14 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
+$Sections	= new Sections ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
 
 # get VRF
 if($_POST['action']!="add") {
@@ -55,7 +59,6 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			<input type="text" class="rd form-control input-sm" name="rd" placeholder="<?php print _('Route distinguisher'); ?>" value="<?php print @$vrf['rd']; ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
-
 	<!-- Description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
@@ -64,7 +67,31 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="vrfId" value="'. $_POST['vrfId'] .'">'. "\n";}
 			?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$vrf['description']; ?>" <?php print $readonly; ?>>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2"><hr></td>
+	</tr>
+	<!-- sections -->
+	<tr>
+		<td style="vertical-align: top !important"><?php print _('Sections'); ?>:</td>
+		<td>
+		<?php
+		# select sections
+		$sections = $Sections->fetch_all_sections();
+		# reformat domains sections to array
+		$vrf_sections = explode(";", @$vrf['sections']);
+		$vrf_sections = is_array($vrf_sections) ? $vrf_sections : array();
+		// loop
+		if($sections!==false) {
+			foreach($Sections->sections as $section) {
+				if(in_array($section->id, @$vrf_sections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
+				else 										{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+			}
+		}
+		?>
 		</td>
 	</tr>
 
@@ -110,8 +137,8 @@ $custom = $Tools->fetch_custom_fields('vrf');
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only

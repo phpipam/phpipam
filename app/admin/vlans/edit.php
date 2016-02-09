@@ -17,6 +17,10 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+if(@$_POST['fromSubnet']=="true")   { $csrf = $_SESSION['csrf_cookie']; }
+else                                { $csrf = $User->create_csrf_cookie (); }
+
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanId", @$_POST['vlanId']);
 $vlan = $vlan!==false ? (array) $vlan : array();
@@ -109,6 +113,7 @@ $(document).ready(function(){
 			<input type="hidden" name="domainId" value="<?php print $vlan_domain->id; ?>">
 			<?php } ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
 
@@ -169,8 +174,8 @@ $(document).ready(function(){
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only

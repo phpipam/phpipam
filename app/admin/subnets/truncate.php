@@ -18,6 +18,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # id must be numeric
 if(!is_numeric($_POST['subnetId']))			{ $Result->show("danger", _("Invalid ID"), true, true); }
@@ -59,7 +62,7 @@ if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissio
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopup2"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default btn-danger" id="subnetTruncateSubmit" data-subnetId='<?php print $subnet->id; ?>'><i class="fa fa-trash-o"></i> <?php print _('Truncate subnet'); ?></button>
+		<button class="btn btn-sm btn-default btn-danger" id="subnetTruncateSubmit" data-subnetId='<?php print $subnet->id; ?>' data-csrf_cookie="<?php print $csrf; ?>"><i class="fa fa-trash-o"></i> <?php print _('Truncate subnet'); ?></button>
 	</div>
 
 	<div class="subnetTruncateResult"></div>

@@ -35,7 +35,7 @@ if ($User->is_admin() || $User->user->pdns=="Yes") {
         <ul class="nav nav-tabs">
         	<?php
         	// tabs
-        	$tabs = array("domains", "reverse_v4", "reverse_v6");
+        	$tabs = array("domains", "host_records", "reverse_v4", "reverse_v6");
 
         	// default tab
         	if(!isset($_GET['subnetId'])) {

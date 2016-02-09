@@ -19,7 +19,7 @@
 <!-- headers -->
 <tr>
 	<th><?php print _('Name'); ?></th>
-	<th><?php print _('Descripton'); ?></th>
+	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Sections'); ?></th>
 	<th></th>
 	<?php if($_GET['page']=="administration") { ?><th></th><?php } ?>

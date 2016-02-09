@@ -59,8 +59,8 @@ foreach ($users as $user) {
 	print '<tr>' . "\n";
 
 	# set icon based on normal user or admin
-	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
-	else 									{ print '	<td><img src="css/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
+	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/1.2/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
+	else 									{ print '	<td><img src="css/1.2/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
 
 	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a></td>'. "\n";
 	print '	<td>' . $user['username']  . '</td>'. "\n";
@@ -158,7 +158,7 @@ foreach ($users as $user) {
 
 <div class="alert alert-info alert-absolute">
 <ul>
-	<li><?php print _('Adminstrator users will be able to view and edit all all sections and subnets'); ?></li>
-	<li><?php print _('Normal users will have premissions set based on group access to sections and subnets'); ?></li>
+	<li><?php print _('Administrator users will be able to view and edit all sections and subnets'); ?></li>
+	<li><?php print _('Normal users will have permissions set based on group access to sections and subnets'); ?></li>
 </ul>
 </div>

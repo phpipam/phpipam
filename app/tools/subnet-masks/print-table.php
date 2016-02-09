@@ -19,7 +19,8 @@ $masks = $Subnets->get_ipv4_masks ();
 			<tr>
 				<th><?php print _("Bitmask"); ?></th>
 				<th><?php print _("Netmask"); ?></th>
-				<th><?php print _("Binary"); ?></th>
+				<th><?php print _("Wildcard mask"); ?></th>
+				<th class="visible-lg"><?php print _("Binary"); ?></th>
 				<th><?php print _("Subnets"); ?></th>
 				<th><?php print _("Hosts"); ?></th>
 				<?php
@@ -38,7 +39,8 @@ $masks = $Subnets->get_ipv4_masks ();
 			print "<tr>";
 			print "	<td>/$m->bitmask</td>";
 			print "	<td>$m->netmask</td>";
-			print "	<td>$m->binary</td>";
+			print "	<td>$m->wildcard</td>";
+			print "	<td class='visible-lg'>$m->binary</td>";
 			print "	<td>$m->subnets</td>";
 			print "	<td>$m->hosts</td>";
 			if(!$popup) {

@@ -201,7 +201,7 @@ if($User->user->authMethod == 1) {
 <span class="info2"><?php print _("Select widgets to be displayed on dashboard"); ?></span>
 
 
-<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="js/1.2/jquery-ui-1.10.3.custom.min.js"></script>
 <script>
 $(document).ready(function() {
 	// initialize sortable

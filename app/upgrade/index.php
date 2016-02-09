@@ -30,24 +30,24 @@ $User->check_user_session();
 	<title><?php print $User->settings->siteTitle; ?></title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
+	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/jclock.jquery.js"></script>
-	<script type="text/javascript" src="js/login.js"></script>
-	<script type="text/javascript" src="js/install.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jclock.jquery.js"></script>
+	<script type="text/javascript" src="js/1.2/login.js"></script>
+	<script type="text/javascript" src="js/1.2/install.js"></script>
+	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -149,20 +149,8 @@ elseif($User->is_admin(false)) {
 		$content .= "<div style='display:none' id='manualShow'>";
 		$content .= "<span class='text-muted'>copy and paste below commands to mysql directly!</span>";
 		// get file
-		$dir = "db/";
-		$files = scandir($dir);
-		foreach($files as $f) {
-			//get only UPDATE- for specific version
-			if(substr($f, 0, 6) == "UPDATE") {
-				$ver = str_replace(".sql", "",substr($f, 8));
-				if($ver>$User->settings->version) {
-					//printout
-					$tmp[] = file_get_contents("db/$f");
-				}
-			}
-		}
-		$tmp = implode("<br><br>", $tmp);
-		$content .= "<pre>".str_replace("\n","<br>",$tmp)."</pre>";
+		$install_queries = $Install->get_upgrade_queries ();
+		$content .= "<pre>".str_replace("\n","<br>",$install_queries)."</pre>";
 		$content .= "</div>";
 		$content .= "</div>";
 	}

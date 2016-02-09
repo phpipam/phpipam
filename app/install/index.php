@@ -57,22 +57,22 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 	<title>phpipam installation</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
+	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/install.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/install.js"></script>
+	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->
 </head>
 

@@ -29,9 +29,9 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	$height = 350;
 	$slimit = 20;
 	# include flot JS
-	print '<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>';
-	print '<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.categories.js"></script>';
-	print '<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->';
+	print '<script language="javascript" type="text/javascript" src="js/1.2/flot/jquery.flot.js"></script>';
+	print '<script language="javascript" type="text/javascript" src="js/1.2/flot/jquery.flot.categories.js"></script>';
+	print '<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/1.2/flot/excanvas.min.js"></script><![endif]-->';
 	# and print title
 	print "<div class='container'>";
 	print "<h4 style='margin-top:40px;'>$widget[wtitle]</h4><hr>";

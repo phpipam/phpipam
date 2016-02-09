@@ -18,6 +18,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 
 # ID must be numeric
 if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
@@ -106,6 +109,7 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
 		print "</tr>";
 	}
 	?>
+	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
     <!-- set parameters to slave subnets -->
     <?php if($Subnets->has_slaves($_POST['subnetId'])) { ?>

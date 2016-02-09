@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['appid'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 
@@ -53,6 +56,7 @@ if($_POST['action']!="add") {
 	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print @$api->app_id; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $api->id; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+    		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	    </td>
        	<td class="info2"><?php print _('Enter application identifier'); ?></td>
     </tr>

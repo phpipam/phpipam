@@ -21,6 +21,9 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # validate action
 $Tools->validate_action ($_POST['action']);
 
@@ -132,6 +135,7 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
 			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<?php
 			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
 			?>
@@ -359,8 +363,8 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only

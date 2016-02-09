@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch widget
 if($_POST['action']!="add") {
 	$w = $Admin->fetch_object ("widgets", "wid", $_POST['wid']);
@@ -48,6 +51,7 @@ if($_POST['action']!="add") {
 
     		<input type="hidden" name="wid" value="<?php print $_POST['wid']; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+    		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
     </tr>
 

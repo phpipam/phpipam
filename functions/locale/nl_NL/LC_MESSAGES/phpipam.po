@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.00.000\n"
+"Project-Id-Version: phpIPAM\n"
 "POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: Michiel Visser <michiel@connectionservices.nl>\n"
@@ -8,16 +8,17 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.5.7\n"
-"Language: Dutch\n"
+"X-Generator: Poedit 1.8.6\n"
+"Language: nl\n"
 
 # PHPIPAM translations file - template
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
+# "Project-Id-Version: 1.19.002\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
-# "POT-Creation-Date: 2013-04-02 14:33+0200\n"
+# "POT-Creation-Date: 2014-11-19 09:55+0200\n"
 # "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 # "Last-Translator: \n"
 # "Language: Nederlands (Dutch)\n"
@@ -81,8 +82,7 @@ msgstr ""
 #: functions/functions-tools.php:817 functions/functions-tools.php:856
 #: functions/functions-tools.php:880 functions/functions-tools.php:905
 #: functions/functions-tools.php:941 site/ipaddr/modifyIpAddressCheck.php:102
-#: site/ipaddr/modifyIpAddressCheck.php:103
-#: site/ipaddr/modifyIpAddressCheck.php:179
+#: site/ipaddr/modifyIpAddressCheck.php:103 site/ipaddr/modifyIpAddressCheck.php:179
 msgid "Error"
 msgstr "Fout"
 
@@ -165,8 +165,7 @@ msgid "Name is mandatory"
 msgstr "Naam is verplicht"
 
 #: functions/functions-admin.php:1138 functions/functions-admin.php:1158
-#: site/tools/searchResults.php:114
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:89
+#: site/tools/searchResults.php:114 site/ipaddr/ipAddressPrintTableOrphaned.php:89
 #: site/ipaddr/mailNotifyIP.php:62 site/ipaddr/exportSelectFields.php:74
 #: site/admin/CSVimportShowFile.php:70 site/admin/searchReplaceResult.php:20
 #: site/admin/searchReplaceResult.php:21 site/admin/replaceFields.php:31
@@ -254,8 +253,7 @@ msgstr "Lezen / Schrijven"
 msgid "error"
 msgstr "fout"
 
-#: functions/functions-common.php:768 site/tools/toolsMenu.php:22
-#: site/sections.php:88
+#: functions/functions-common.php:768 site/tools/toolsMenu.php:22 site/sections.php:88
 msgid "Tools"
 msgstr "Hulpmiddelen"
 
@@ -339,9 +337,7 @@ msgstr "De volgende PHP-extensies missen:"
 
 #: functions/checkPhpBuild.php:63
 msgid "Please recompile PHP to include missing extensions and restart Apache."
-msgstr ""
-"U dient PHP met alle missende extensies te hercompileren en daarna Apache te "
-"herstarten."
+msgstr "U dient PHP met alle missende extensies te hercompileren en daarna Apache te herstarten."
 
 #: functions/checkPhpBuild.php:82
 msgid "Database connection failed"
@@ -353,30 +349,27 @@ msgstr "(closest parent)"
 
 #: functions/functions-mail.php:167 functions/functions-mail.php:196
 #: site/tools/searchResults.php:337 site/admin/customIPFieldsEdit.php:29
-#: site/admin/manageVRF.php:34 site/admin/manageVRFEdit.php:36
-#: site/admin/manageVLANEdit.php:42 site/admin/customVLANFieldsEdit.php:29
-#: site/admin/manageSection.php:27 site/admin/manageSectionEdit.php:40
-#: site/admin/manageVLANs.php:34 site/admin/groupAddUsers.php:40
-#: site/admin/groupRemoveUsers.php:40 site/admin/customUserFieldsEdit.php:29
+#: site/admin/manageVRF.php:34 site/admin/manageVRFEdit.php:36 site/admin/manageVLANEdit.php:42
+#: site/admin/customVLANFieldsEdit.php:29 site/admin/manageSection.php:27
+#: site/admin/manageSectionEdit.php:40 site/admin/manageVLANs.php:34
+#: site/admin/groupAddUsers.php:40 site/admin/groupRemoveUsers.php:40
+#: site/admin/customUserFieldsEdit.php:29
 msgid "Name"
 msgstr "Naam"
 
 #: functions/functions-mail.php:170 functions/functions-mail.php:176
 #: functions/functions-mail.php:199 functions/functions-mail.php:205
-#: site/dashboard/error_logs.php:13 site/dashboard/access_logs.php:13
-#: site/admin/users.php:38 site/admin/usersEditPrint.php:65
-#: site/admin/logsExport.php:61 site/admin/logResult.php:26
-#: site/admin/groupAddUsers.php:41 site/admin/groupRemoveUsers.php:41
-#: site/login/loginForm.php:11 site/login/loginForm.php:13
+#: site/dashboard/error_logs.php:13 site/dashboard/access_logs.php:13 site/admin/users.php:38
+#: site/admin/usersEditPrint.php:65 site/admin/logsExport.php:61 site/admin/logResult.php:26
+#: site/admin/groupAddUsers.php:41 site/admin/groupRemoveUsers.php:41 site/login/loginForm.php:11
+#: site/login/loginForm.php:13
 msgid "Username"
 msgstr "Gebruikersnaam"
 
 #: functions/functions-mail.php:172 functions/functions-mail.php:177
-#: functions/functions-mail.php:201 functions/functions-mail.php:206
-#: site/tools/userMenu.php:51 site/tools/userMenu.php:55
-#: site/tools/userMenu.php:60 site/admin/usersEditPrint.php:114
-#: site/admin/usersEditPrint.php:121 site/login/loginForm.php:19
-#: site/login/loginForm.php:21
+#: functions/functions-mail.php:201 functions/functions-mail.php:206 site/tools/userMenu.php:51
+#: site/tools/userMenu.php:55 site/tools/userMenu.php:60 site/admin/usersEditPrint.php:114
+#: site/admin/usersEditPrint.php:121 site/login/loginForm.php:19 site/login/loginForm.php:21
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -393,8 +386,7 @@ msgstr "uw domein-wachtwoord"
 msgid "Email"
 msgstr "E-mailadres"
 
-#: functions/functions-mail.php:181 functions/functions-mail.php:210
-#: site/admin/users.php:40
+#: functions/functions-mail.php:181 functions/functions-mail.php:210 site/admin/users.php:40
 msgid "Role"
 msgstr "Rol"
 
@@ -413,67 +405,60 @@ msgstr "Nieuwe aanvraag voor IP-adres in subnet"
 
 #: functions/functions-mail.php:282 functions/functions-mail.php:305
 #: functions/functions-mail.php:383 functions/functions-mail.php:411
-#: site/tools/searchResultsExport.php:269 site/tools/vlan.php:29
-#: site/tools/searchResults.php:258 site/tools/searchResults.php:341
-#: site/admin/manageSubnetEdit.php:103 site/admin/manageSectionEdit.php:26
-#: site/admin/manageSectionEditResult.php:46
+#: site/tools/searchResultsExport.php:269 site/tools/vlan.php:29 site/tools/searchResults.php:258
+#: site/tools/searchResults.php:341 site/admin/manageSubnetEdit.php:103
+#: site/admin/manageSectionEdit.php:26 site/admin/manageSectionEditResult.php:46
 #: site/admin/exportGenerateHostDump.php:27
 msgid "Section"
 msgstr "Sectie"
 
 #: functions/functions-mail.php:283 functions/functions-mail.php:306
-#: functions/functions-mail.php:384 functions/functions-mail.php:412
-#: site/tools/vrf.php:44 site/tools/devices.php:68 site/tools/subnets.php:45
-#: site/tools/searchResults.php:259
+#: functions/functions-mail.php:384 functions/functions-mail.php:412 site/tools/vrf.php:44
+#: site/tools/devices.php:68 site/tools/subnets.php:45 site/tools/searchResults.php:259
 #: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
-#: site/admin/manageSubnetEdit.php:76
-#: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/RIPE / ARINImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
-#: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
+#: site/admin/manageSubnetEdit.php:76 site/admin/manageSubnetEditResult.php:169
+#: site/admin/manageRequests.php:24 site/admin/ripeImportTelnet.php:74
+#: site/admin/manageSubnetsplit.php:64 site/admin/manageSubnetresize.php:35
+#: site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr "Subnet"
 
 #: functions/functions-mail.php:284 functions/functions-mail.php:307
 #: functions/functions-mail.php:388 functions/functions-mail.php:416
-#: site/tools/searchResultsExport.php:272 site/tools/vrf.php:43
-#: site/tools/devices.php:69 site/tools/requestIPform.php:29
-#: site/tools/subnets.php:46 site/tools/searchResults.php:109
+#: site/tools/searchResultsExport.php:272 site/tools/vrf.php:43 site/tools/devices.php:69
+#: site/tools/requestIPform.php:29 site/tools/subnets.php:46 site/tools/searchResults.php:109
 #: site/tools/searchResults.php:261 site/tools/searchResults.php:339
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:85
-#: site/ipaddr/mailNotifyIP.php:46 site/ipaddr/moveIpAddress.php:61
-#: site/ipaddr/modifyIpAddress.php:131 site/ipaddr/modifyIpAddress.php:135
-#: site/ipaddr/exportSelectFields.php:49 site/admin/manageRequestEdit.php:74
-#: site/admin/manageSubnet.php:77 site/admin/manageSubnetEdit.php:93
-#: site/admin/CSVimportShowFile.php:66 site/admin/manageVRF.php:36
-#: site/admin/manageDevicesEdit.php:91 site/admin/manageDevicesEdit.php:93
-#: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
-#: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
-#: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
-#: site/admin/RIPE / ARINImportTelnet.php:90 site/admin/manageSection.php:28
-#: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
-#: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:85 site/ipaddr/mailNotifyIP.php:46
+#: site/ipaddr/moveIpAddress.php:61 site/ipaddr/modifyIpAddress.php:131
+#: site/ipaddr/modifyIpAddress.php:135 site/ipaddr/exportSelectFields.php:49
+#: site/admin/manageRequestEdit.php:74 site/admin/manageSubnet.php:77
+#: site/admin/manageSubnetEdit.php:93 site/admin/CSVimportShowFile.php:66
+#: site/admin/manageVRF.php:36 site/admin/manageDevicesEdit.php:91
+#: site/admin/manageDevicesEdit.php:93 site/admin/manageVRFEdit.php:51
+#: site/admin/manageVRFEdit.php:57 site/admin/manageVLANEdit.php:58
+#: site/admin/manageVLANEdit.php:60 site/admin/manageRequests.php:26
+#: site/admin/replaceFields.php:27 site/admin/ripeImportTelnet.php:90
+#: site/admin/manageSection.php:28 site/admin/manageSectionEdit.php:51
+#: site/admin/manageVLANs.php:36 site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
 #: site/login/requestIPform.php:82
 msgid "Description"
 msgstr "Omschrijving"
 
 #: functions/functions-mail.php:285 functions/functions-mail.php:308
-#: functions/functions-mail.php:389 functions/functions-mail.php:417
-#: site/tools/devices.php:70 site/tools/searchResults.php:110
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:81
+#: functions/functions-mail.php:389 functions/functions-mail.php:417 site/tools/devices.php:70
+#: site/tools/searchResults.php:110 site/ipaddr/ipAddressPrintTableOrphaned.php:81
 #: site/ipaddr/mailNotifyIP.php:50 site/ipaddr/modifyIpAddress.php:146
 #: site/ipaddr/exportSelectFields.php:54 site/admin/manageRequestEdit.php:81
 #: site/admin/CSVimportShowFile.php:67 site/admin/manageDevicesEdit.php:35
 #: site/admin/manageDevicesEdit.php:37 site/admin/manageRequests.php:25
-#: site/admin/replaceFields.php:28 site/admin/manageDevices.php:31
-#: site/login/requestIPform.php:89
+#: site/admin/replaceFields.php:28 site/admin/manageDevices.php:31 site/login/requestIPform.php:89
 msgid "Hostname"
 msgstr "DNS-naam"
 
 #: functions/functions-mail.php:286 functions/functions-mail.php:309
-#: functions/functions-mail.php:390 functions/functions-mail.php:418
-#: site/tools/devices.php:71 site/tools/requestIPform.php:41
-#: site/tools/searchResults.php:118 site/tools/searchResults.php:119
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:93
+#: functions/functions-mail.php:390 functions/functions-mail.php:418 site/tools/devices.php:71
+#: site/tools/requestIPform.php:41 site/tools/searchResults.php:118
+#: site/tools/searchResults.php:119 site/ipaddr/ipAddressPrintTableOrphaned.php:93
 #: site/ipaddr/modifyIpAddress.php:171 site/ipaddr/exportSelectFields.php:67
 #: site/admin/CSVimportShowFile.php:69 site/admin/replaceFields.php:29
 #: site/login/requestIPform.php:106
@@ -602,15 +587,13 @@ msgstr "Subnetmasker"
 msgid "Master subnet"
 msgstr "Bovenliggend subnet"
 
-#: site/tools/searchResultsExport.php:274 site/tools/vrf.php:42
-#: site/tools/subnets.php:47 site/tools/searchResults.php:107
-#: site/tools/searchResults.php:263
-#: site/ipaddr/ipAddressPrintTableSlaves.php:32
-#: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
-#: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
-#: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/RIPE / ARINImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
-#: site/admin/manageVLANEditResult.php:48
+#: site/tools/searchResultsExport.php:274 site/tools/vrf.php:42 site/tools/subnets.php:47
+#: site/tools/searchResults.php:107 site/tools/searchResults.php:263
+#: site/ipaddr/ipAddressPrintTableSlaves.php:32 site/ipaddr/mailNotifyIP.php:58
+#: site/ipaddr/subnetDetailsSlaves.php:85 site/ipaddr/subnetDetails.php:96
+#: site/admin/manageSubnet.php:78 site/admin/manageSubnetEdit.php:125
+#: site/admin/manageVLANEdit.php:32 site/admin/ripeImportTelnet.php:95
+#: site/admin/manageVLANEditResult.php:47 site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr "VLAN"
 
@@ -638,18 +621,16 @@ msgstr "Selecteer"
 msgid "IPv4v6 calculator"
 msgstr "IPv4 en v6 rekenmachine"
 
-#: site/tools/ipCalc.php:15 site/tools/devices.php:66
-#: site/tools/requestIPform.php:12 site/tools/searchResults.php:106
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:79
+#: site/tools/ipCalc.php:15 site/tools/devices.php:66 site/tools/requestIPform.php:12
+#: site/tools/searchResults.php:106 site/ipaddr/ipAddressPrintTableOrphaned.php:79
 #: site/ipaddr/mailNotifyIP.php:43 site/ipaddr/modifyIpAddressCheck.php:134
-#: site/ipaddr/modifyIpAddressCheck.php:187
-#: site/ipaddr/modifyIpAddressCheck.php:196 site/ipaddr/moveIpAddress.php:47
-#: site/ipaddr/modifyIpAddress.php:99 site/ipaddr/modifyIpAddress.php:111
-#: site/ipaddr/modifyIpAddress.php:114 site/ipaddr/exportSelectFields.php:36
-#: site/admin/logDetail.php:73 site/admin/manageRequestEdit.php:65
-#: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
-#: site/admin/manageDevicesEdit.php:43 site/admin/manageDevicesEdit.php:45
-#: site/admin/logResult.php:27 site/admin/manageDevices.php:32
+#: site/ipaddr/modifyIpAddressCheck.php:187 site/ipaddr/modifyIpAddressCheck.php:196
+#: site/ipaddr/moveIpAddress.php:47 site/ipaddr/modifyIpAddress.php:99
+#: site/ipaddr/modifyIpAddress.php:111 site/ipaddr/modifyIpAddress.php:114
+#: site/ipaddr/exportSelectFields.php:36 site/admin/logDetail.php:73
+#: site/admin/manageRequestEdit.php:65 site/admin/manageRequestResult.php:54
+#: site/admin/manageRequestResult.php:58 site/admin/manageDevicesEdit.php:43
+#: site/admin/manageDevicesEdit.php:45 site/admin/logResult.php:27 site/admin/manageDevices.php:32
 msgid "IP address"
 msgstr "IP-adres"
 
@@ -677,14 +658,12 @@ msgstr "Beschikbare VRFs en bijbehorende subnetten"
 msgid "No VRFs configured"
 msgstr "Geen VRF geconfigureerd"
 
-#: site/tools/vrf.php:45 site/tools/subnets.php:48
-#: site/admin/manageSubnetEdit.php:162
+#: site/tools/vrf.php:45 site/tools/subnets.php:48 site/admin/manageSubnetEdit.php:162
 msgid "Master Subnet"
 msgstr "Bovenliggend subnet"
 
 #: site/tools/vrf.php:46 site/tools/vlan.php:30 site/tools/subnets.php:49
-#: site/ipaddr/ipAddressPrintTableSlaves.php:35
-#: site/ipaddr/subnetDetails.php:89
+#: site/ipaddr/ipAddressPrintTableSlaves.php:35 site/ipaddr/subnetDetails.php:89
 msgid "Used"
 msgstr "Gebruikt"
 
@@ -693,8 +672,7 @@ msgstr "Gebruikt"
 msgid "Free"
 msgstr "Vrij"
 
-#: site/tools/vrf.php:48 site/tools/subnets.php:51
-#: site/tools/searchResults.php:264
+#: site/tools/vrf.php:48 site/tools/subnets.php:51 site/tools/searchResults.php:264
 #: site/ipaddr/ipAddressPrintTableSlaves.php:37 site/admin/manageSubnet.php:82
 msgid "Requests"
 msgstr "Aanvragen"
@@ -703,8 +681,7 @@ msgstr "Aanvragen"
 msgid "Master subnet does not exist"
 msgstr "Bovenliggend subnet bestaat niet"
 
-#: site/tools/vrf.php:104 site/tools/subnets.php:104
-#: site/ipaddr/subnetDetails.php:126
+#: site/tools/vrf.php:104 site/tools/subnets.php:104 site/ipaddr/subnetDetails.php:126
 msgid "enabled"
 msgstr "Actief"
 
@@ -725,11 +702,10 @@ msgid "click to show/hide belonging IP addresses"
 msgstr "Klik om de bijbehorende IP-adressen te tonen/verbergen"
 
 #: site/tools/devices.php:67 site/tools/searchResults.php:116
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:91
-#: site/ipaddr/mailNotifyIP.php:66 site/ipaddr/modifyIpAddress.php:213
-#: site/ipaddr/modifyIpAddress.php:215 site/ipaddr/exportSelectFields.php:81
-#: site/admin/manageRequestEdit.php:131 site/admin/CSVimportShowFile.php:71
-#: site/admin/replaceFields.php:32
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:91 site/ipaddr/mailNotifyIP.php:66
+#: site/ipaddr/modifyIpAddress.php:213 site/ipaddr/modifyIpAddress.php:215
+#: site/ipaddr/exportSelectFields.php:81 site/admin/manageRequestEdit.php:131
+#: site/admin/CSVimportShowFile.php:71 site/admin/replaceFields.php:32
 msgid "Port"
 msgstr "Poort"
 
@@ -737,8 +713,8 @@ msgstr "Poort"
 msgid "Available VLANs:"
 msgstr "Beschikbare VLANs:"
 
-#: site/tools/vlan.php:25 site/tools/searchResults.php:338
-#: site/admin/manageVLANEdit.php:50 site/admin/manageVLANs.php:35
+#: site/tools/vlan.php:25 site/tools/searchResults.php:338 site/admin/manageVLANEdit.php:50
+#: site/admin/manageVLANs.php:35
 msgid "Number"
 msgstr "Nummer"
 
@@ -859,8 +835,7 @@ msgstr "Zoek in tekst"
 #: site/tools/searchTips.php:17
 msgid "Text searches through description, hostname, switch, port and owner"
 msgstr ""
-"Zoekopdrachten in de tekst zoekt door de omschrijving, DNS-naam, switch, "
-"poort en eigenaar"
+"Zoekopdrachten in de tekst zoekt door de omschrijving, DNS-naam, switch, poort en eigenaar"
 
 #: site/tools/searchTips.php:18
 msgid "For wildcard search add * (user*)"
@@ -883,12 +858,8 @@ msgid "IPv6 search tips"
 msgstr "IPv6 zoektips"
 
 #: site/tools/searchTips.php:37
-msgid ""
-"You can search through ranges by specifying whole subnet (e.g. "
-"2002:8a10::/32)"
-msgstr ""
-"Door het hele subnet op te geven kan worden gezocht in reeksen (bijv. "
-"2002:8a10::/32)"
+msgid "You can search through ranges by specifying whole subnet (e.g. 2002:8a10::/32)"
+msgstr "Door het hele subnet op te geven kan worden gezocht in reeksen (bijv. 2002:8a10::/32)"
 
 #: site/tools/searchTips.php:44
 msgid "Hostname search tips"
@@ -896,11 +867,11 @@ msgstr "Apparatnaam-zoektips"
 
 #: site/tools/searchTips.php:46
 msgid ""
-"You can get all IP addresses some host uses and all ports it is connected to "
-"by entering hostname in search field"
+"You can get all IP addresses some host uses and all ports it is connected to by entering "
+"hostname in search field"
 msgstr ""
-"Het is mogelijk om alle IP-adressen en alle poorten die een apparaat "
-"gebruikt door de DNS-naam in het zoekveld op te geven"
+"Het is mogelijk om alle IP-adressen en alle poorten die een apparaat gebruikt door de DNS-naam "
+"in het zoekveld op te geven"
 
 #: site/tools/searchTips.php:53
 msgid "Device search tips"
@@ -908,12 +879,11 @@ msgstr "Zoektips voor apparaten"
 
 #: site/tools/searchTips.php:55
 msgid ""
-"You can get all used / available ports and connected IP's / hostnames in "
-"some device by entering device name in search field"
+"You can get all used / available ports and connected IP's / hostnames in some device by "
+"entering device name in search field"
 msgstr ""
-"Het is mogelijk om alle gebruike/beschikbare poorten en gerelateerde IP/"
-"apparaatnamen van een apparaat te krijgen door een DNS-naam in het zoekveld "
-"op te nemen"
+"Het is mogelijk om alle gebruike/beschikbare poorten en gerelateerde IP/apparaatnamen van een "
+"apparaat te krijgen door een DNS-naam in het zoekveld op te nemen"
 
 #: site/tools/searchTips.php:62
 msgid "MAC search tips"
@@ -921,12 +891,12 @@ msgstr "Zoektips voor MAC-adressen"
 
 #: site/tools/searchTips.php:64
 msgid ""
-"You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or "
-"001dd478ec46 format, or search multiple with 00:1c:c4:"
+"You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or 001dd478ec46 format, "
+"or search multiple with 00:1c:c4:"
 msgstr ""
-"Zoek op MAC-adres door het invoeren van het MAC-adres in het formaat 00:1c:"
-"d4:78:ec:46 of 001dd478ec46. Meerdere adressen zoeken kan door een deel van "
-"het adres op te geven (bijv. 00:1c:d4:)"
+"Zoek op MAC-adres door het invoeren van het MAC-adres in het formaat 00:1c:d4:78:ec:46 of "
+"001dd478ec46. Meerdere adressen zoeken kan door een deel van het adres op te geven (bijv. 00:1c:"
+"d4:)"
 
 #: site/tools/searchTips.php:71
 msgid "Custom field search tips"
@@ -960,18 +930,17 @@ msgstr "Beschikbare subnetten"
 msgid "IP calculator"
 msgstr "IP-rekenmachine"
 
-#: site/tools/toolsMenu.php:28 site/admin/manageAD_AD.php:19
-#: site/admin/manageAD_LDAP.php:19
+#: site/tools/toolsMenu.php:28 site/admin/manageAD_AD.php:19 site/admin/manageAD_LDAP.php:19
 msgid "Instructions"
 msgstr "Instructies"
 
-#: site/tools/toolsMenu.php:31 site/admin/RIPE / ARINImport.php:19
-#: site/userMenu.php:22 site/sections.php:104
+#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19 site/userMenu.php:22
+#: site/sections.php:104
 msgid "Search"
 msgstr "Zoek"
 
-#: site/tools/toolsMenu.php:35 site/tools/toolsMenu.php:38
-#: site/sections.php:98 site/sections.php:147
+#: site/tools/toolsMenu.php:35 site/tools/toolsMenu.php:38 site/sections.php:98
+#: site/sections.php:147
 msgid "Devices"
 msgstr "Apparaten"
 
@@ -1076,13 +1045,12 @@ msgstr "heeft"
 msgid "directly nested subnets"
 msgstr "direct onderliggende subnetten"
 
-#: site/ipaddr/ipAddressPrintTableSlaves.php:33
-#: site/ipaddr/subnetDetailsSlaves.php:77 site/ipaddr/subnetDetails.php:79
+#: site/ipaddr/ipAddressPrintTableSlaves.php:33 site/ipaddr/subnetDetailsSlaves.php:77
+#: site/ipaddr/subnetDetails.php:79
 msgid "Subnet description"
 msgstr "Subnet-omschrijving"
 
-#: site/ipaddr/ipAddressPrintTableSlaves.php:59
-#: site/ipaddr/ipAddressPrintTableSlaves.php:111
+#: site/ipaddr/ipAddressPrintTableSlaves.php:59 site/ipaddr/ipAddressPrintTableSlaves.php:111
 #: site/ipaddr/ipAddressPrintTableSlaves.php:139
 msgid "Free space"
 msgstr "Vrije ruimte"
@@ -1095,24 +1063,22 @@ msgstr "IP-adressen in subnet"
 msgid "All IP addresses belonging to ALL nested subnets"
 msgstr "Alle IP-adressen behorende bij alle onderliggende subnetten"
 
-#: site/ipaddr/ipAddressPrintTable.php:60
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:39
+#: site/ipaddr/ipAddressPrintTable.php:60 site/ipaddr/ipAddressPrintTableOrphaned.php:39
 #: site/ipaddr/subnetDetailsSlaves.php:24 site/ipaddr/subnetDetails.php:23
 msgid "Subnet does not exist"
 msgstr "Subnet bestaat niet"
 
-#: site/ipaddr/ipAddressPrintTable.php:106
-#: site/ipaddr/ipAddressPrintTable.php:126
+#: site/ipaddr/ipAddressPrintTable.php:106 site/ipaddr/ipAddressPrintTable.php:126
 msgid "Page"
 msgstr "Pagina"
 
-#: site/ipaddr/ipAddressPrintTable.php:113
-#: site/ipaddr/ipAddressPrintTable.php:346 site/admin/logs.php:27
+#: site/ipaddr/ipAddressPrintTable.php:113 site/ipaddr/ipAddressPrintTable.php:346
+#: site/admin/logs.php:27
 msgid "Previous page"
 msgstr "Vorige"
 
-#: site/ipaddr/ipAddressPrintTable.php:114
-#: site/ipaddr/ipAddressPrintTable.php:347 site/admin/logs.php:28
+#: site/ipaddr/ipAddressPrintTable.php:114 site/ipaddr/ipAddressPrintTable.php:347
+#: site/admin/logs.php:28
 msgid "Next page"
 msgstr "Volgende"
 
@@ -1150,14 +1116,12 @@ msgstr "Sorteer op"
 msgid "Offline"
 msgstr "Offline"
 
-#: site/ipaddr/ipAddressPrintTable.php:262
-#: site/ipaddr/ipAddressPrintTableOrphaned.php:136
+#: site/ipaddr/ipAddressPrintTable.php:262 site/ipaddr/ipAddressPrintTableOrphaned.php:136
 #: site/admin/CSVimportShowFile.php:68
 msgid "MAC"
 msgstr "MAC-adres"
 
-#: site/ipaddr/ipAddressPrintTable.php:300
-#: site/ipaddr/ipAddressPrintTable.php:307
+#: site/ipaddr/ipAddressPrintTable.php:300 site/ipaddr/ipAddressPrintTable.php:307
 msgid "Search same hostnames in db"
 msgstr "Zoek op gelijke apparaatnamen"
 
@@ -1166,11 +1130,10 @@ msgid "Orphaned IP addresses for subnet"
 msgstr "Losse IP-adressen voor dit subnet"
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:69
-msgid ""
-"This happens if subnet had IP addresses<br>when new nested subnet was added"
+msgid "This happens if subnet had IP addresses<br>when new nested subnet was added"
 msgstr ""
-"Dit gebeurt wanneer het subnet IP-adressen had<br>wanneer een onderliggend "
-"subnet werd toegevoegd"
+"Dit gebeurt wanneer het subnet IP-adressen had<br>wanneer een onderliggend subnet werd "
+"toegevoegd"
 
 #: site/ipaddr/ipAddressPrintTableOrphaned.php:171
 msgid "Move to different subnet"
@@ -1232,10 +1195,8 @@ msgstr "Reeks"
 msgid "updated successfully"
 msgstr "met succes bijgewerkt"
 
-#: site/ipaddr/modifyIpAddressCheck.php:150
-#: site/admin/manageVRFEditResult.php:27
-#: site/admin/manageDevicesEditResult.php:65
-#: site/admin/manageDevicesEditResult.php:69
+#: site/ipaddr/modifyIpAddressCheck.php:150 site/admin/manageVRFEditResult.php:27
+#: site/admin/manageDevicesEditResult.php:65 site/admin/manageDevicesEditResult.php:69
 #: site/admin/manageSubnetEditResult.php:169 site/admin/usersEditResult.php:97
 #: site/admin/manageVLANEditResult.php:48
 msgid "successfull"
@@ -1245,8 +1206,7 @@ msgstr "met succes"
 msgid "Hostname is not unique"
 msgstr "DNS-naam is niet uniek"
 
-#: site/ipaddr/modifyIpAddressCheck.php:187
-#: site/ipaddr/modifyIpAddressCheck.php:196
+#: site/ipaddr/modifyIpAddressCheck.php:187 site/ipaddr/modifyIpAddressCheck.php:196
 msgid "already existing in database"
 msgstr "bestaat reeds in de database"
 
@@ -1266,9 +1226,8 @@ msgstr "Fout bij invoegen van IP-adres"
 msgid "You do not have permission to access this network"
 msgstr "U heeft geen toegang tot dit netwerk"
 
-#: site/ipaddr/subnetDetailsSlaves.php:58
-#: site/ipaddr/subnetDetailsSlaves.php:63 site/ipaddr/subnetDetails.php:59
-#: site/ipaddr/subnetDetails.php:64
+#: site/ipaddr/subnetDetailsSlaves.php:58 site/ipaddr/subnetDetailsSlaves.php:63
+#: site/ipaddr/subnetDetails.php:59 site/ipaddr/subnetDetails.php:64
 msgid "Subnet details"
 msgstr "Details van subnet"
 
@@ -1288,9 +1247,8 @@ msgstr "Acties"
 msgid "You do not have permissions to edit subnet"
 msgstr "U heeft geen rechten om het subnet te bewerken"
 
-#: site/ipaddr/subnetDetailsSlaves.php:137
-#: site/ipaddr/subnetDetailsSlaves.php:149 site/ipaddr/subnetDetails.php:159
-#: site/ipaddr/subnetDetails.php:177
+#: site/ipaddr/subnetDetailsSlaves.php:137 site/ipaddr/subnetDetailsSlaves.php:149
+#: site/ipaddr/subnetDetails.php:159 site/ipaddr/subnetDetails.php:177
 msgid "Add new nested subnet"
 msgstr "Voeg nieuw onderliggend subnet toe"
 
@@ -1337,11 +1295,11 @@ msgstr "verwijderen"
 
 #: site/ipaddr/modifyIpAddress.php:115
 msgid ""
-"You can add,edit or delete multiple IP addresses<br>by specifying IP range "
-"(e.g. 10.10.0.0-10.10.0.25)"
+"You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. "
+"10.10.0.0-10.10.0.25)"
 msgstr ""
-"Meerdere IP-adressen kunnen toegevoegd, bewerkt of verwijderd worden door de "
-"IP-reeks op te geven (bijv. 10.10.0.0-10.10.0.25)"
+"Meerdere IP-adressen kunnen toegevoegd, bewerkt of verwijderd worden door de IP-reeks op te "
+"geven (bijv. 10.10.0.0-10.10.0.25)"
 
 #: site/ipaddr/modifyIpAddress.php:147
 msgid "Click to check for hostname"
@@ -1357,8 +1315,7 @@ msgid "IP address owner"
 msgstr "Eigenaar"
 
 #: site/ipaddr/modifyIpAddress.php:186 site/admin/manageRequestEdit.php:115
-#: site/admin/manageDevicesEditResult.php:65
-#: site/admin/manageDevicesEditResult.php:69
+#: site/admin/manageDevicesEditResult.php:65 site/admin/manageDevicesEditResult.php:69
 msgid "Device"
 msgstr "Apparaat"
 
@@ -1379,8 +1336,7 @@ msgstr "Opmerking"
 msgid "Additional notes about IP address"
 msgstr "Aanvullende opmerkingen over IP-adres"
 
-#: site/ipaddr/modifyIpAddress.php:240 site/admin/users.php:41
-#: site/admin/manageDevices.php:33
+#: site/ipaddr/modifyIpAddress.php:240 site/admin/users.php:41 site/admin/manageDevices.php:33
 msgid "Type"
 msgstr "Type"
 
@@ -1418,8 +1374,7 @@ msgstr "Subnet-gebruik"
 msgid "Total"
 msgstr "Totaal"
 
-#: site/ipaddr/subnetDetails.php:125 site/admin/adminMenu.php:73
-#: site/sections.php:133
+#: site/ipaddr/subnetDetails.php:125 site/admin/adminMenu.php:73 site/sections.php:133
 msgid "IP requests"
 msgstr "IP-verzoeken"
 
@@ -1429,8 +1384,7 @@ msgstr "Niet actief"
 
 #: site/ipaddr/subnetDetails.php:155
 msgid "You do not have permissions to edit subnet or IP addresses"
-msgstr ""
-"U heeft geen rechten om wijzigingen in dit subnet of de IP-adressen te maken"
+msgstr "U heeft geen rechten om wijzigingen in dit subnet of de IP-adressen te maken"
 
 #: site/ipaddr/subnetDetails.php:165 site/ipaddr/subnetDetails.php:182
 msgid "Export IP addresses"
@@ -1474,11 +1428,9 @@ msgstr "phpIPAM is een vrij open-source project"
 
 #: site/footer.php:26
 msgid ""
-"If you like the software you can donate by clicking this button to support "
-"further development"
+"If you like the software you can donate by clicking this button to support further development"
 msgstr ""
-"Indien deze software bevalt, ondersteun dan verdere ontwikkeling door op "
-"deze knop te klikken"
+"Indien deze software bevalt, ondersteun dan verdere ontwikkeling door op deze knop te klikken"
 
 #: site/dashboard/statistics.php:27
 msgid "Number of Sections"
@@ -1500,20 +1452,17 @@ msgstr "Aantal IPv6-adressen"
 msgid "Number of users"
 msgstr "Aantal gebruikers"
 
-#: site/dashboard/error_logs.php:10 site/dashboard/access_logs.php:10
-#: site/admin/logDetail.php:61 site/admin/logsExport.php:59
-#: site/admin/logResult.php:25
+#: site/dashboard/error_logs.php:10 site/dashboard/access_logs.php:10 site/admin/logDetail.php:61
+#: site/admin/logsExport.php:59 site/admin/logResult.php:25
 msgid "Severity"
 msgstr "Niveau"
 
-#: site/dashboard/error_logs.php:11 site/dashboard/access_logs.php:11
-#: site/admin/logsExport.php:62
+#: site/dashboard/error_logs.php:11 site/dashboard/access_logs.php:11 site/admin/logsExport.php:62
 msgid "Command"
 msgstr "Commando"
 
-#: site/dashboard/error_logs.php:12 site/dashboard/access_logs.php:12
-#: site/admin/logDetail.php:65 site/admin/logsExport.php:60
-#: site/admin/logResult.php:24
+#: site/dashboard/error_logs.php:12 site/dashboard/access_logs.php:12 site/admin/logDetail.php:65
+#: site/admin/logsExport.php:60 site/admin/logResult.php:24
 msgid "Date"
 msgstr "Datum"
 
@@ -1608,76 +1557,60 @@ msgstr "Ontbrekende tabel"
 msgid "Missing fields"
 msgstr "Ontbrekend veld"
 
-#: site/admin/RIPE / ARINImport.php:12
-msgid "Import subnets from RIPE / ARIN"
-msgstr "Importeer subnetten vanaf RIPE / ARIN"
+#: site/admin/ripeImport.php:12
+msgid "Import subnets from RIPE"
+msgstr "Importeer subnetten vanaf RIPE"
 
-#: site/admin/RIPE / ARINImport.php:15
+#: site/admin/ripeImport.php:15
 msgid ""
-"This script imports subnets from RIPE / ARIN database for specific AS. Enter "
-"desired AS to search for subnets"
+"This script imports subnets from RIPE database for specific AS. Enter desired AS to search for "
+"subnets"
 msgstr ""
-"Dit script importeert subnetten met een specifiek AS-nummer uit de RIPE / ARIN-"
-"database. Geef het gewenste AS-nummer om naar subnetten te zoeken"
+"Dit script importeert subnetten met een specifiek AS-nummer uit de RIPE-database. Geef het "
+"gewenste AS-nummer om naar subnetten te zoeken"
 
-#: site/admin/RIPE / ARINImport.php:19
+#: site/admin/ripeImport.php:19
 msgid "AS number"
 msgstr "AS-nummer"
 
-#: site/admin/customIPFieldsEditResult.php:22
-#: site/admin/customVLANFieldsEditResult.php:22
-#: site/admin/customSubnetFieldsEditResult.php:22
-#: site/admin/customUserFieldsEditResult.php:22
+#: site/admin/customIPFieldsEditResult.php:22 site/admin/customVLANFieldsEditResult.php:22
+#: site/admin/customSubnetFieldsEditResult.php:22 site/admin/customUserFieldsEditResult.php:22
 msgid "Name must be between 4 and 24 characters"
 msgstr "De naam moet tussen de 4 en 24 tekens zijn"
 
-#: site/admin/customIPFieldsEditResult.php:27
-#: site/admin/customVLANFieldsEditResult.php:27
-#: site/admin/customSubnetFieldsEditResult.php:27
-#: site/admin/customUserFieldsEditResult.php:27
+#: site/admin/customIPFieldsEditResult.php:27 site/admin/customVLANFieldsEditResult.php:27
+#: site/admin/customSubnetFieldsEditResult.php:27 site/admin/customUserFieldsEditResult.php:27
 msgid "Name must not start with number"
 msgstr "De naam mag niet met een getal beginnen"
 
-#: site/admin/customIPFieldsEditResult.php:30
-#: site/admin/customVLANFieldsEditResult.php:30
-#: site/admin/customSubnetFieldsEditResult.php:30
-#: site/admin/customUserFieldsEditResult.php:30
+#: site/admin/customIPFieldsEditResult.php:30 site/admin/customVLANFieldsEditResult.php:30
+#: site/admin/customSubnetFieldsEditResult.php:30 site/admin/customUserFieldsEditResult.php:30
 msgid "Only alphanumeric, spaces and underscore characters are allowed"
 msgstr "Alleen alfanumerieke tekens, spaties en underscore zijn toegestaan"
 
-#: site/admin/customIPFieldsEditResult.php:36
-#: site/admin/customSubnetFieldsEditResult.php:38
+#: site/admin/customIPFieldsEditResult.php:36 site/admin/customSubnetFieldsEditResult.php:38
 msgid "Please correct the following errors"
 msgstr "De volgende fouten dienen verholpen te worden:"
 
-#: site/admin/customIPFieldsEditResult.php:45
-#: site/admin/manageVRFEditResult.php:26
-#: site/admin/customVLANFieldsEditResult.php:46
-#: site/admin/manageDevicesEditResult.php:60
-#: site/admin/manageVLANEditResult.php:47
-#: site/admin/customSubnetFieldsEditResult.php:47
+#: site/admin/customIPFieldsEditResult.php:45 site/admin/manageVRFEditResult.php:26
+#: site/admin/customVLANFieldsEditResult.php:46 site/admin/manageDevicesEditResult.php:60
+#: site/admin/manageVLANEditResult.php:47 site/admin/customSubnetFieldsEditResult.php:47
 #: site/admin/customUserFieldsEditResult.php:46
 msgid "Failed to"
 msgstr "Fout bij"
 
-#: site/admin/customIPFieldsEditResult.php:45
-#: site/admin/customVLANFieldsEditResult.php:46
-#: site/admin/customSubnetFieldsEditResult.php:47
-#: site/admin/customUserFieldsEditResult.php:46
+#: site/admin/customIPFieldsEditResult.php:45 site/admin/customVLANFieldsEditResult.php:46
+#: site/admin/customSubnetFieldsEditResult.php:47 site/admin/customUserFieldsEditResult.php:46
 msgid "field"
 msgstr "veld"
 
-#: site/admin/customIPFieldsEditResult.php:46
-#: site/admin/customVLANFieldsEditResult.php:47
-#: site/admin/customSubnetFieldsEditResult.php:48
-#: site/admin/customUserFieldsEditResult.php:47
+#: site/admin/customIPFieldsEditResult.php:46 site/admin/customVLANFieldsEditResult.php:47
+#: site/admin/customSubnetFieldsEditResult.php:48 site/admin/customUserFieldsEditResult.php:47
 msgid "Field"
 msgstr "Veld"
 
-#: site/admin/customIPFieldsEditResult.php:46
-#: site/admin/customVLANFieldsEditResult.php:47
-#: site/admin/groupEditResult.php:24
-#: site/admin/customSubnetFieldsEditResult.php:48
+#: site/admin/customIPFieldsEditResult.php:46 site/admin/customVLANFieldsEditResult.php:47
+#: site/admin/groupEditResult.php:24 site/admin/customSubnetFieldsEditResult.php:48
 #: site/admin/customUserFieldsEditResult.php:47
 msgid "success"
 msgstr "succes"
@@ -1687,31 +1620,27 @@ msgid "Active Directory connection settings"
 msgstr "Verbindingsinstellingen voor Active Directory"
 
 #: site/admin/manageAD_AD.php:17
-msgid ""
-"Here you can set parameters for connecting to AD for authenticating users. "
-"phpIPAM uses"
+msgid "Here you can set parameters for connecting to AD for authenticating users. phpIPAM uses"
 msgstr ""
-"Hier kunnen instellingen gemaakt worden om gebruikers tegen AD te "
-"authenticeren. phpIPAM gebruikt"
+"Hier kunnen instellingen gemaakt worden om gebruikers tegen AD te authenticeren. phpIPAM "
+"gebruikt"
 
 #: site/admin/manageAD_AD.php:17 site/admin/manageAD_LDAP.php:17
 msgid ""
-"to authenticate users. If you need additional settings please take a look at "
-"functions/adLDAP or check online documentation!"
+"to authenticate users. If you need additional settings please take a look at functions/adLDAP "
+"or check online documentation!"
 msgstr ""
-"deze om gebruikers te authenticeren. Indien aanvullende instellingen gemaakt "
-"dienen te worden, raadpleeg dan de online documentatie!"
+"deze om gebruikers te authenticeren. Indien aanvullende instellingen gemaakt dienen te worden, "
+"raadpleeg dan de online documentatie!"
 
 #: site/admin/manageAD_AD.php:20
 msgid ""
-"First create new user under user management with <u>same username as on AD</"
-"u> and set usertype to domain user. Also set proper permissions - group "
-"membership for new user."
+"First create new user under user management with <u>same username as on AD</u> and set usertype "
+"to domain user. Also set proper permissions - group membership for new user."
 msgstr ""
-"Maak eerst de nieuwe gebruiker aan in het gebruikersmanagement met "
-"<u>dezelfde gebruikersnaam als in AD</u> en zet het gebruikerstype als "
-"domeingebruiker. De groepsrechten voor de nieuwe gebruiken dienen ook "
-"ingesteld te worden."
+"Maak eerst de nieuwe gebruiker aan in het gebruikersmanagement met <u>dezelfde gebruikersnaam "
+"als in AD</u> en zet het gebruikerstype als domeingebruiker. De groepsrechten voor de nieuwe "
+"gebruiken dienen ook ingesteld te worden."
 
 #: site/admin/manageAD_AD.php:29 site/admin/manageAD_LDAP.php:29
 msgid "ldap extension not enabled in php"
@@ -1722,12 +1651,8 @@ msgid "Domain controllers"
 msgstr "Domeincontrollers"
 
 #: site/admin/manageAD_AD.php:43 site/admin/manageAD_LDAP.php:42
-msgid ""
-"Enter domain controllers, separated by ; (default: dc1.domain.local;dc2."
-"domain.local)"
-msgstr ""
-"Geef domeincontrollers gescheiden door ; (standaard: dc1.domain.local;dc2."
-"domain.local)"
+msgid "Enter domain controllers, separated by ; (default: dc1.domain.local;dc2.domain.local)"
+msgstr "Geef domeincontrollers gescheiden door ; (standaard: dc1.domain.local;dc2.domain.local)"
 
 #: site/admin/manageAD_AD.php:49 site/admin/manageAD_LDAP.php:48
 msgid "Base DN"
@@ -1735,15 +1660,13 @@ msgstr "Base-DN"
 
 #: site/admin/manageAD_AD.php:54
 msgid ""
-"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
-"<br>\n"
-"\t\tIf this is set to null then adLDAP will attempt to obtain this "
-"automatically from the rootDSE"
+"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
+"\t\tIf this is set to null then adLDAP will attempt to obtain this automatically from the "
+"rootDSE"
 msgstr ""
-"Geef de base DN voor LDAP (standaard: CN=Users,CN=Company,DC=domain,DC=local)"
-"<br>\n"
-"\t\tIndien er geen waarde wordt opgegeven zal adLDAP deze proberen "
-"automatisch uit de rootDSE te halen"
+"Geef de base DN voor LDAP (standaard: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
+"\t\tIndien er geen waarde wordt opgegeven zal adLDAP deze proberen automatisch uit de rootDSE "
+"te halen"
 
 #: site/admin/manageAD_AD.php:61
 msgid "Account suffix"
@@ -1751,29 +1674,23 @@ msgstr "Achtervoegsel (UPN)"
 
 #: site/admin/manageAD_AD.php:66
 msgid "The account suffix for your domain (default: @domain.local)"
-msgstr ""
-"Standaard account achtervoegsel voor het domein (standaard: @domain.local)"
+msgstr "Standaard account achtervoegsel voor het domein (standaard: @domain.local)"
 
 #: site/admin/manageAD_AD.php:72 site/admin/manageAD_LDAP.php:61
 msgid "Use SSL"
 msgstr "Gebruik SSL"
 
-#: site/admin/manageAD_AD.php:75 site/admin/manageAD_AD.php:90
-#: site/admin/manageAD_LDAP.php:79
+#: site/admin/manageAD_AD.php:75 site/admin/manageAD_AD.php:90 site/admin/manageAD_LDAP.php:79
 msgid "false"
 msgstr "onwaar"
 
-#: site/admin/manageAD_AD.php:76 site/admin/manageAD_AD.php:91
-#: site/admin/manageAD_LDAP.php:80
+#: site/admin/manageAD_AD.php:76 site/admin/manageAD_AD.php:91 site/admin/manageAD_LDAP.php:80
 msgid "true"
 msgstr "waar"
 
 #: site/admin/manageAD_AD.php:80 site/admin/manageAD_LDAP.php:69
-msgid ""
-"Use SSL (LDAPS), your server needs to be setup (default: false), please see"
-msgstr ""
-"Gebruik SSL (LDAPS), de server dient dit te ondersteunen (standaard: uit), "
-"bekijk ook"
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false), please see"
+msgstr "Gebruik SSL (LDAPS), de server dient dit te ondersteunen (standaard: uit), bekijk ook"
 
 #: site/admin/manageAD_AD.php:87 site/admin/manageAD_LDAP.php:76
 msgid "Use TLS"
@@ -1781,11 +1698,11 @@ msgstr "Gebruik TLS"
 
 #: site/admin/manageAD_AD.php:95 site/admin/manageAD_LDAP.php:84
 msgid ""
-"If you wish to use TLS you should ensure that useSSL is set to false and "
-"vice-versa (default: false)"
+"If you wish to use TLS you should ensure that useSSL is set to false and vice-versa (default: "
+"false)"
 msgstr ""
-"Indien u TLS wenst te gebruiken zorg dan dat 'Gebruik SSL' uitgeschakeld "
-"staat en omgekeerd (standaard: uit)"
+"Indien u TLS wenst te gebruiken zorg dan dat 'Gebruik SSL' uitgeschakeld staat en omgekeerd "
+"(standaard: uit)"
 
 #: site/admin/manageAD_AD.php:102
 msgid "AD port"
@@ -1807,24 +1724,21 @@ msgstr "Instellingen opslaan"
 msgid "Log files"
 msgstr "Logbestanden"
 
-#: site/admin/logs.php:16 site/admin/logDetail.php:23
-#: site/admin/logsExport.php:72 site/admin/logResult.php:16
-#: site/admin/logResult.php:40 site/admin/logResult.php:76
+#: site/admin/logs.php:16 site/admin/logDetail.php:23 site/admin/logsExport.php:72
+#: site/admin/logResult.php:16 site/admin/logResult.php:40 site/admin/logResult.php:76
 msgid "Informational"
 msgstr "Informatie"
 
-#: site/admin/logs.php:17 site/admin/logDetail.php:27
-#: site/admin/logResult.php:17 site/admin/logResult.php:45
-#: site/admin/logResult.php:80
+#: site/admin/logs.php:17 site/admin/logDetail.php:27 site/admin/logResult.php:17
+#: site/admin/logResult.php:45 site/admin/logResult.php:80
 msgid "Notice"
 msgstr "Opmerking"
 
-#: site/admin/logs.php:18 site/admin/logDetail.php:31
-#: site/admin/manageSubnetEdit.php:310 site/admin/customIPFields.php:141
-#: site/admin/customIPFields.php:210 site/admin/customIPFields.php:275
-#: site/admin/manageVLANEdit.php:97 site/admin/manageSectionEdit.php:136
-#: site/admin/manageAD_LDAP.php:29 site/admin/logsExport.php:73
-#: site/admin/logResult.php:18 site/admin/logResult.php:51
+#: site/admin/logs.php:18 site/admin/logDetail.php:31 site/admin/manageSubnetEdit.php:310
+#: site/admin/customIPFields.php:141 site/admin/customIPFields.php:210
+#: site/admin/customIPFields.php:275 site/admin/manageVLANEdit.php:97
+#: site/admin/manageSectionEdit.php:136 site/admin/manageAD_LDAP.php:29
+#: site/admin/logsExport.php:73 site/admin/logResult.php:18 site/admin/logResult.php:51
 #: site/admin/logResult.php:84
 msgid "Warning"
 msgstr "Waarschuwing"
@@ -1867,13 +1781,11 @@ msgstr "Filter welke velden in de IP-lijst getoond worden"
 
 #: site/admin/filterIPFields.php:36
 msgid ""
-"You can select which fields are actually being used for IP management, so "
-"you dont show any overhead if not used. IP, hostname and description are "
-"mandatory"
+"You can select which fields are actually being used for IP management, so you dont show any "
+"overhead if not used. IP, hostname and description are mandatory"
 msgstr ""
-"Er kan gekozen worden welke velden worden gebruikt voor het IP-management, "
-"zodat er geen onnodige overhead is. De velden IP, DNS-naam en omschrijving "
-"zijn verplicht"
+"Er kan gekozen worden welke velden worden gebruikt voor het IP-management, zodat er geen "
+"onnodige overhead is. De velden IP, DNS-naam en omschrijving zijn verplicht"
 
 #: site/admin/filterIPFields.php:44
 msgid "Check which fields to use for IP addresses"
@@ -1925,8 +1837,7 @@ msgstr "Opmerkingen bij toe-/afwijzing"
 
 #: site/admin/manageRequestEdit.php:190
 msgid "Enter reason for reject/approval to be sent to requester"
-msgstr ""
-"Geef de reden voor toe-/afwijzing die naar de aanvrager wordt verstuurd"
+msgstr "Geef de reden voor toe-/afwijzing die naar de aanvrager wordt verstuurd"
 
 #: site/admin/manageRequestEdit.php:201
 msgid "Reject"
@@ -1952,8 +1863,7 @@ msgstr "Naam"
 msgid "E-mail"
 msgstr "E-mailadres"
 
-#: site/admin/users.php:42 site/admin/usersEditPrint.php:157
-#: site/sections.php:140
+#: site/admin/users.php:42 site/admin/usersEditPrint.php:157 site/sections.php:140
 msgid "Groups"
 msgstr "Groepen"
 
@@ -1978,19 +1888,12 @@ msgid "All groups"
 msgstr "Alle groepen"
 
 #: site/admin/users.php:116
-msgid ""
-"Adminstrator users will be able to view and edit all all sections and subnets"
-msgstr ""
-"Beheerders hebben rechten om alle secties en subnetten te bekijken en "
-"bewerken"
+msgid "Adminstrator users will be able to view and edit all all sections and subnets"
+msgstr "Beheerders hebben rechten om alle secties en subnetten te bekijken en bewerken"
 
 #: site/admin/users.php:117
-msgid ""
-"Normal users will have premissions set based on group access to sections and "
-"subnets"
-msgstr ""
-"Gebruikers hebben rechten gebaseerd op de groepstoegang voor secties en "
-"subnetten"
+msgid "Normal users will have premissions set based on group access to sections and subnets"
+msgstr "Gebruikers hebben rechten gebaseerd op de groepstoegang voor secties en subnetten"
 
 #: site/admin/manageSubnet.php:11 site/admin/adminMenu.php:53
 msgid "Subnet management"
@@ -2033,7 +1936,7 @@ msgid "AD connection settings"
 msgstr "AD connectie-instellingen"
 
 #: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
-msgid "LDAP connection settings"
+msgid "OpenLDAP connection settings"
 msgstr "OpenLDAP connectie-instellingen"
 
 #: site/admin/adminMenu.php:38
@@ -2061,8 +1964,8 @@ msgid "VRF management"
 msgstr "VRF-beheer"
 
 #: site/admin/adminMenu.php:68
-msgid "RIPE / ARIN import"
-msgstr "RIPE / ARIN-import"
+msgid "RIPE import"
+msgstr "RIPE-import"
 
 #: site/admin/adminMenu.php:77
 msgid "Filter IP fields"
@@ -2121,12 +2024,8 @@ msgid "Local authenticates here"
 msgstr "Een lokale gebruiker authenticeert hier"
 
 #: site/admin/usersEditPrint.php:101
-msgid ""
-"Domain authenticates on AD, but still needs to be setup here for permissions "
-"etc."
-msgstr ""
-"Domeingebruikers authenticeren tegen AD, maar hun rechten moeten hier gezet "
-"worden."
+msgid "Domain authenticates on AD, but still needs to be setup here for permissions etc."
+msgstr "Domeingebruikers authenticeren tegen AD, maar hun rechten moeten hier gezet worden."
 
 #: site/admin/usersEditPrint.php:116
 msgid "User's password"
@@ -2177,11 +2076,9 @@ msgid "phpIPAM database export"
 msgstr "Export van phpIPAM database"
 
 #: site/admin/export.php:16
-msgid ""
-"You can download MySQL dump of database or generate XLS file of IP addresses"
+msgid "You can download MySQL dump of database or generate XLS file of IP addresses"
 msgstr ""
-"Het is mogelijk om een MySQL-export van de database te amken of een XLS-"
-"bestand van IP-adressen"
+"Het is mogelijk om een MySQL-export van de database te amken of een XLS-bestand van IP-adressen"
 
 #: site/admin/export.php:19
 msgid "Create MySQL database dump"
@@ -2213,8 +2110,7 @@ msgstr "U heeft geen rechten om een nieuw subnet in deze sectie toe te voegen"
 
 #: site/admin/manageSubnetEdit.php:21 site/admin/manageSubnetEditResult.php:21
 msgid "You do not have permissions to add edit/delete this subnet"
-msgstr ""
-"U heeft geen rechten om dit subnet toe voegen of te bewerken of verwijderen"
+msgstr "U heeft geen rechten om dit subnet toe voegen of te bewerken of verwijderen"
 
 #: site/admin/manageSubnetEdit.php:65
 msgid "subnet"
@@ -2225,8 +2121,8 @@ msgid "subnet in CIDR"
 msgstr "subnet in CIDR-formaat"
 
 #: site/admin/manageSubnetEdit.php:86
-msgid "Get information from RIPE / ARIN database"
-msgstr "Haal informatie uit de RIPE / ARIN-database"
+msgid "Get information from RIPE database"
+msgstr "Haal informatie uit de RIPE-database"
 
 #: site/admin/manageSubnetEdit.php:87
 msgid "Enter subnet in CIDR format (e.g. 192.168.1.1/24)"
@@ -2249,28 +2145,25 @@ msgstr "Verplaats naar andere sectie"
 msgid "Select VLAN"
 msgstr "Kies VLAN"
 
-#: site/admin/manageSubnetEdit.php:135
-#: site/admin/manageVLANdropdownReload.php:23
+#: site/admin/manageSubnetEdit.php:135 site/admin/manageVLANdropdownReload.php:23
 msgid "No VLAN"
 msgstr "Geen VLAN"
 
-#: site/admin/manageSubnetEdit.php:138
-#: site/admin/manageVLANdropdownReload.php:26
+#: site/admin/manageSubnetEdit.php:138 site/admin/manageVLANdropdownReload.php:26
 msgid "Add"
 msgstr "Toevoegen"
 
-#: site/admin/manageSubnetEdit.php:139
-#: site/admin/manageVLANdropdownReload.php:27
+#: site/admin/manageSubnetEdit.php:139 site/admin/manageVLANdropdownReload.php:27
 msgid "+ Add new VLAN"
 msgstr "+ Nieuw VLAN"
 
 #: site/admin/manageSubnetEdit.php:166
 msgid ""
-"Enter master subnet if you want to nest it under existing subnet, or select "
-"root to create root subnet"
+"Enter master subnet if you want to nest it under existing subnet, or select root to create root "
+"subnet"
 msgstr ""
-"Geef bovenliggend subniet indien u wilt nesten onder een bestaand subnet, "
-"kies hoofd om een nieuw subnet te maken"
+"Geef bovenliggend subniet indien u wilt nesten onder een bestaand subnet, kies hoofd om een "
+"nieuw subnet te maken"
 
 #: site/admin/manageSubnetEdit.php:188
 msgid "Select VRF"
@@ -2324,12 +2217,10 @@ msgid "Show Subnet name instead of subnet IP address"
 msgstr "Toon naam van subnet in plaats van IP-adres"
 
 #: site/admin/manageSubnetEdit.php:310
-msgid ""
-"Removing subnets will delete ALL underlaying subnets and belonging IP "
-"addresses"
+msgid "Removing subnets will delete ALL underlaying subnets and belonging IP addresses"
 msgstr ""
-"Verwijderen van subnet verwijdert tevens alle onderliggende subnetten en "
-"bijbehorende IP-adressen"
+"Verwijderen van subnet verwijdert tevens alle onderliggende subnetten en bijbehorende IP-"
+"adressen"
 
 #: site/admin/manageSubnetEdit.php:324
 msgid "Delete subnet"
@@ -2355,13 +2246,13 @@ msgstr "IP"
 msgid "Status"
 msgstr "Status"
 
-#: site/admin/CSVimportShowFile.php:100 site/admin/RIPE / ARINImportTelnet.php:108
+#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
 msgid "Import to database"
 msgstr "Importeer naar database"
 
 #: site/admin/CSVimportShowFile.php:102
 msgid "Should I import values to database"
-msgstr "Moeten deze waarden geÃ¯mporteerd worden"
+msgstr "Moeten deze waarden geïmporteerd worden"
 
 #: site/admin/CSVimportShowFile.php:105 site/admin/manageSectionEdit.php:62
 #: site/admin/manageSubnetsplit.php:89
@@ -2372,15 +2263,13 @@ msgstr "Ja"
 msgid "custom subnet field"
 msgstr "eigen subnetveld"
 
-#: site/admin/customSubnetFieldsEdit.php:31
-#: site/admin/customIPFieldsEdit.php:31 site/admin/customVLANFieldsEdit.php:31
-#: site/admin/customUserFieldsEdit.php:31
+#: site/admin/customSubnetFieldsEdit.php:31 site/admin/customIPFieldsEdit.php:31
+#: site/admin/customVLANFieldsEdit.php:31 site/admin/customUserFieldsEdit.php:31
 msgid "Select field name"
 msgstr "Kies veldnaam"
 
-#: site/admin/customSubnetFieldsEdit.php:45
-#: site/admin/customIPFieldsEdit.php:45 site/admin/customVLANFieldsEdit.php:45
-#: site/admin/customUserFieldsEdit.php:45
+#: site/admin/customSubnetFieldsEdit.php:45 site/admin/customIPFieldsEdit.php:45
+#: site/admin/customVLANFieldsEdit.php:45 site/admin/customUserFieldsEdit.php:45
 msgid "Close"
 msgstr "Sluiten"
 
@@ -2444,11 +2333,11 @@ msgstr "Voeg een nieuw eigen gebruikersveld toe"
 
 #: site/admin/customIPFields.php:304
 msgid ""
-"You can add additional custom fields to IP addresses and subnets (like "
-"CustomerId, location, ...)"
+"You can add additional custom fields to IP addresses and subnets (like CustomerId, "
+"location, ...)"
 msgstr ""
-"Het is mogelijk om extra eigen velden voor IP-adressen en subnetten toe te "
-"voegen (zoals KlantID, Lokatie, ...)"
+"Het is mogelijk om extra eigen velden voor IP-adressen en subnetten toe te voegen (zoals "
+"KlantID, Lokatie, ...)"
 
 #: site/admin/searchReplaceResult.php:16
 msgid "Please enter something in search field"
@@ -2510,7 +2399,7 @@ msgstr "RD"
 msgid "Errors occured when importing to database!"
 msgstr "Er is een fout opgetreden bij het importeren naar de database"
 
-#: site/admin/CSVimportSubmit.php:95 site/admin/RIPE / ARINImportResult.php:72
+#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
 msgid "Import successfull"
 msgstr "Import geslaagd"
 
@@ -2526,8 +2415,7 @@ msgstr "Kan bestand niet naar de uploadmap verplaatsen"
 msgid "Success"
 msgstr "Geslaagd"
 
-#: site/admin/manageDevicesEdit.php:24
-#: site/admin/manageDevicesEditResult.php:60
+#: site/admin/manageDevicesEdit.php:24 site/admin/manageDevicesEditResult.php:60
 msgid "device"
 msgstr "apparaat"
 
@@ -2569,8 +2457,7 @@ msgstr "VRF-naam"
 msgid "Route distinguisher"
 msgstr "Route-onderscheiding"
 
-#: site/admin/manageSubnetEditResult.php:87
-#: site/admin/manageSubnetEditResult.php:104
+#: site/admin/manageSubnetEditResult.php:87 site/admin/manageSubnetEditResult.php:104
 msgid "Nested subnet not in root subnet!"
 msgstr "Onderliggend subnet niet in hoofd-subnet!"
 
@@ -2600,9 +2487,7 @@ msgstr "VLAN-nummer"
 
 #: site/admin/manageVLANEdit.php:97
 msgid "removing VLAN will also remove VLAN reference from belonging subnets"
-msgstr ""
-"Verwijderen van een VLAN verwijdert tevens alle referenties in subnetten "
-"naar het VLAN"
+msgstr "Verwijderen van een VLAN verwijdert tevens alle referenties in subnetten naar het VLAN"
 
 #: site/admin/manageRequests.php:15
 msgid "List of all active IP addresses requests"
@@ -2696,22 +2581,20 @@ msgid "Admin name"
 msgstr "Naam beheerder"
 
 #: site/admin/settings.php:66
-msgid ""
-"Set administrator name to display when sending mails and for contact info"
+msgid "Set administrator name to display when sending mails and for contact info"
 msgstr ""
-"Geef de naam van de beheerder om weer te geven bij het versturen van e-mail "
-"en voor contact-informatie"
+"Geef de naam van de beheerder om weer te geven bij het versturen van e-mail en voor contact-"
+"informatie"
 
 #: site/admin/settings.php:72
 msgid "Admin mail"
 msgstr "E-mailadres beheerder"
 
 #: site/admin/settings.php:77
-msgid ""
-"Set administrator e-mail to display when sending mails and for contact info"
+msgid "Set administrator e-mail to display when sending mails and for contact info"
 msgstr ""
-"Geef het e-mailadres van de beheerder, deze wordt weergegeven bij het "
-"versturen van e-mail en voor contact-informatie"
+"Geef het e-mailadres van de beheerder, deze wordt weergegeven bij het versturen van e-mail en "
+"voor contact-informatie"
 
 #: site/admin/settings.php:85
 msgid "Feature settings"
@@ -2735,11 +2618,11 @@ msgstr "Authenticatie via LDAP"
 
 #: site/admin/settings.php:99
 msgid ""
-"Set authentication type for users. Requires php LDAP support. Set connection "
-"settings in admin menu"
+"Set authentication type for users. Requires php LDAP support. Set connection settings in admin "
+"menu"
 msgstr ""
-"Stelt het type authenticatie in voor gebruikers. Verieist de PHP LDAP-"
-"extensie. Instellingen voor de verbinding worden gemaakt in het beheer-menu"
+"Stelt het type authenticatie in voor gebruikers. Verieist de PHP LDAP-extensie. Instellingen "
+"voor de verbinding worden gemaakt in het beheer-menu"
 
 #: site/admin/settings.php:105
 msgid "Tooltips"
@@ -2771,13 +2654,12 @@ msgstr "Vertaal DNS-namen"
 
 #: site/admin/settings.php:143
 msgid ""
-"Check reverse dns lookups for IP addresses that do not have hostname in "
-"database. (Activating this feature can significantly increase ip address "
-"pages loading time!)"
+"Check reverse dns lookups for IP addresses that do not have hostname in database. (Activating "
+"this feature can significantly increase ip address pages loading time!)"
 msgstr ""
-"Vink aan om een DNS-verzoek te doen voor IP-adressen die geen DNS-naam in de "
-"database hebben. Het activeren van deze optie kan een aanzienlijke "
-"vergroting van de laadtijd van pagina's opleveren."
+"Vink aan om een DNS-verzoek te doen voor IP-adressen die geen DNS-naam in de database hebben. "
+"Het activeren van deze optie kan een aanzienlijke vergroting van de laadtijd van pagina's "
+"opleveren."
 
 #: site/admin/settings.php:149
 msgid "Duplicate VLANs"
@@ -2809,11 +2691,11 @@ msgstr "Toon grafisch IP-overzicht niet"
 
 #: site/admin/settings.php:205
 msgid ""
-"Select netmask limit for visual display of IP addresses (mask equal or "
-"bigger than - more then /22 not recommended)"
+"Select netmask limit for visual display of IP addresses (mask equal or bigger than - more "
+"then /22 not recommended)"
 msgstr ""
-"Kies subnetmasker dat als limiet voor het grafisch overzicht wordt gebruikt "
-"(masker gelijk aan of groter dan - groter dan /22 niet aangeraden)"
+"Kies subnetmasker dat als limiet voor het grafisch overzicht wordt gebruikt (masker gelijk aan "
+"of groter dan - groter dan /22 niet aangeraden)"
 
 #: site/admin/settings.php:212
 msgid "IP address print limit"
@@ -2887,19 +2769,19 @@ msgstr "Fout bij bijwerken van instructies"
 msgid "Instructions updated successfully"
 msgstr "Instructies bijwerken geslaagd"
 
-#: site/admin/RIPE / ARINImportTelnet.php:48
+#: site/admin/ripeImportTelnet.php:48
 msgid "No subnets found"
 msgstr "Geen subnetten gevonden"
 
-#: site/admin/RIPE / ARINImportTelnet.php:56
+#: site/admin/ripeImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
 msgstr "De volgende routes bij deze AS zijn gevonden"
 
-#: site/admin/RIPE / ARINImportTelnet.php:69
+#: site/admin/ripeImportTelnet.php:69
 msgid "Remove this subnet"
 msgstr "Verwijder dit subnet"
 
-#: site/admin/RIPE / ARINImportTelnet.php:79
+#: site/admin/ripeImportTelnet.php:79
 msgid "select section"
 msgstr "selecteer sectie"
 
@@ -2944,11 +2826,8 @@ msgid "Permissions info"
 msgstr "Informatie over rechten"
 
 #: site/admin/manageSection.php:92
-msgid ""
-"If group is not set in permissions then it will not have access to subnet"
-msgstr ""
-"Indien voor de groep geen rechten toegekend worden heeft deze geen toegang "
-"tot het subnet"
+msgid "If group is not set in permissions then it will not have access to subnet"
+msgstr "Indien voor de groep geen rechten toegekend worden heeft deze geen toegang tot het subnet"
 
 #: site/admin/manageSection.php:93
 msgid "Groups with RO permissions will not be able to create new subnets"
@@ -2956,38 +2835,31 @@ msgstr "Groepen met leesrechten kunnen geen nieuwe subnetten aanmaken"
 
 #: site/admin/manageSection.php:94
 msgid ""
-"Subnet permissions must be set separately. By default if group has access to "
-"section<br>it will have same permission on subnets"
+"Subnet permissions must be set separately. By default if group has access to section<br>it will "
+"have same permission on subnets"
 msgstr ""
-"Rechten op de subnetten moeten separaat toegekend worden. Standaard zijn de "
-"rechten<br>op de subnetten hetzelfde als voor de sectie"
+"Rechten op de subnetten moeten separaat toegekend worden. Standaard zijn de rechten<br>op de "
+"subnetten hetzelfde als voor de sectie"
 
 #: site/admin/manageSection.php:95
-msgid ""
-"You can choose to delegate section permissions to all underlying subnets"
-msgstr ""
-"Het is mogelijk om de sectierechten te delegeren naar alle onderliggende "
-"subnetten"
+msgid "You can choose to delegate section permissions to all underlying subnets"
+msgstr "Het is mogelijk om de sectierechten te delegeren naar alle onderliggende subnetten"
 
 #: site/admin/manageSection.php:96
 msgid ""
-"If group does not have access to section it will not be able to access "
-"subnet, even if<br>subnet permissions are set"
+"If group does not have access to section it will not be able to access subnet, even "
+"if<br>subnet permissions are set"
 msgstr ""
-"Als een groep geen rechten geeft op de sectie kan deze de subnetten niet "
-"benaderen,<br>zelfs als de subnetrechten aanwezig zijin"
+"Als een groep geen rechten geeft op de sectie kan deze de subnetten niet benaderen,<br>zelfs "
+"als de subnetrechten aanwezig zijin"
 
-#: site/admin/customSubnetFieldsOrder.php:15
-#: site/admin/customIPFieldsOrder.php:15
-#: site/admin/customVLANFieldsOrder.php:15
-#: site/admin/customUserFieldsOrder.php:15
+#: site/admin/customSubnetFieldsOrder.php:15 site/admin/customIPFieldsOrder.php:15
+#: site/admin/customVLANFieldsOrder.php:15 site/admin/customUserFieldsOrder.php:15
 msgid "Fileds cannot be empty"
 msgstr "Velden kunnen niet leeg zijn"
 
-#: site/admin/customSubnetFieldsOrder.php:19
-#: site/admin/customIPFieldsOrder.php:19
-#: site/admin/customVLANFieldsOrder.php:19
-#: site/admin/customUserFieldsOrder.php:19
+#: site/admin/customSubnetFieldsOrder.php:19 site/admin/customIPFieldsOrder.php:19
+#: site/admin/customVLANFieldsOrder.php:19 site/admin/customUserFieldsOrder.php:19
 msgid "Reordering failed"
 msgstr "Fout bij verandering van volgorde"
 
@@ -3021,7 +2893,7 @@ msgstr "Laatste versie"
 
 #: site/admin/versionCheck.php:19
 msgid "already installed"
-msgstr "is al geÃ¯nstalleerd"
+msgstr "is al geïnstalleerd"
 
 #: site/admin/versionCheck.php:22
 msgid "Development version"
@@ -3029,7 +2901,7 @@ msgstr "Ontwikkelversie"
 
 #: site/admin/versionCheck.php:22
 msgid "installed! Latest production version is"
-msgstr "geÃ¯nstalleerd! Laatste produktieversie is"
+msgstr "geïnstalleerd! Laatste produktieversie is"
 
 #: site/admin/versionCheck.php:25
 msgid "New version of phpipam available"
@@ -3037,7 +2909,7 @@ msgstr "Er is een nieuwe versie van phpIPAM beschikbaar"
 
 #: site/admin/versionCheck.php:26
 msgid "Installed version"
-msgstr "GeÃ¯nstalleerde versie"
+msgstr "Geïnstalleerde versie"
 
 #: site/admin/versionCheck.php:27
 msgid "Available version"
@@ -3064,12 +2936,10 @@ msgid "Strict Mode"
 msgstr "Stricte modus"
 
 #: site/admin/manageSectionEdit.php:65
-msgid ""
-"No disables overlapping subnet checks. Subnets can be nested/created "
-"randomly. Anarchy."
+msgid "No disables overlapping subnet checks. Subnets can be nested/created randomly. Anarchy."
 msgstr ""
-"'Nee' schakelt controle op overlappende subnetten uit. Subnetten kunnen "
-"willekeurig worden genest en aangemaakt. Chaos."
+"'Nee' schakelt controle op overlappende subnetten uit. Subnetten kunnen willekeurig worden "
+"genest en aangemaakt. Chaos."
 
 #: site/admin/manageSectionEdit.php:90
 msgid "Permissions"
@@ -3085,12 +2955,9 @@ msgstr "Delegeer rechten voor alle subnetten in sectie"
 
 #: site/admin/manageSectionEdit.php:136
 msgid "Deleting Section will delete all belonging subnets and IP addresses"
-msgstr ""
-"Verwijderen van de sectie verwijderd tevens alle bijbehorende subnetten en "
-"IP-adressen"
+msgstr "Verwijderen van de sectie verwijderd tevens alle bijbehorende subnetten en IP-adressen"
 
-#: site/admin/customIPFieldsOrder.php:20
-#: site/admin/customVLANFieldsOrder.php:20
+#: site/admin/customIPFieldsOrder.php:20 site/admin/customVLANFieldsOrder.php:20
 #: site/admin/customUserFieldsOrder.php:20
 msgid "Fields reordered successfully"
 msgstr "Veld-reorganisatie geslaagd"
@@ -3103,11 +2970,11 @@ msgstr "Fout bij leegmaken logbestanden"
 msgid "Logs cleared successfully"
 msgstr "Logbestanden leegmaken geslaagd"
 
-#: site/admin/RIPE / ARINImportResult.php:66
+#: site/admin/ripeImportResult.php:66
 msgid "Failed to import subnet"
 msgstr "Fout bij importeren van subnet"
 
-#: site/admin/RIPE / ARINImportResult.php:76
+#: site/admin/ripeImportResult.php:76
 msgid "Please fix the following errors before inserting"
 msgstr "De volgende fouten dienen voor het invoegen verholpen te worden"
 
@@ -3129,32 +2996,27 @@ msgstr "Geen VLANs ingevoerd"
 
 #: site/admin/manageAD_LDAP.php:17
 msgid ""
-"Here you can set parameters for connecting to OpenLDAP for authenticating "
-"users. phpIPAM uses"
+"Here you can set parameters for connecting to OpenLDAP for authenticating users. phpIPAM uses"
 msgstr ""
-"Hier worden de parameters ingesteld voor het verbinden met OpenLDAP ten "
-"behoeve van het authenticeren van gebruikers. phpIPAM gebruikt"
+"Hier worden de parameters ingesteld voor het verbinden met OpenLDAP ten behoeve van het "
+"authenticeren van gebruikers. phpIPAM gebruikt"
 
 #: site/admin/manageAD_LDAP.php:20
 msgid ""
-"First create new user under user management with <u>same username as on "
-"LDAP</u> and set usertype to domain user. Also set proper groups "
-"(premissions) for this user."
+"First create new user under user management with <u>same username as on LDAP</u> and set "
+"usertype to domain user. Also set proper groups (premissions) for this user."
 msgstr ""
-"Maak eerst een nieuwe gebruiker in gebruikersbeheer met <u>dezelfde "
-"gebruikersnaam als in LDAP</u> and het gebruikerstype domeingebruiker. "
-"Daarnaast moeten de juiste groepen (rechten) aan de gebruiker gekoppeld "
-"worden."
+"Maak eerst een nieuwe gebruiker in gebruikersbeheer met <u>dezelfde gebruikersnaam als in LDAP</"
+"u> and het gebruikerstype domeingebruiker. Daarnaast moeten de juiste groepen (rechten) aan de "
+"gebruiker gekoppeld worden."
 
 #: site/admin/manageAD_LDAP.php:38
-msgid "LDAP servers"
+msgid "OpenLDAP servers"
 msgstr "OpenLDAP-servers"
 
 #: site/admin/manageAD_LDAP.php:54
-msgid ""
-"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
-msgstr ""
-"Geef de Base-DN voor LDAP (standaard: CN=Users,CN=Company,DC=domain,DC=local)"
+msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
+msgstr "Geef de Base-DN voor LDAP (standaard: CN=Users,CN=Company,DC=domain,DC=local)"
 
 #: site/admin/manageAD_LDAP.php:91
 msgid "Server port"
@@ -3250,12 +3112,11 @@ msgstr "Importeren subnet van XLS / CSV"
 
 #: site/admin/CSVimport.php:42
 msgid ""
-"To successfully import data please use the following XLS/CSV structure:<br>"
-"( ip | State | Description | hostname | MAC | Owner | Device | Port | Note "
+"To successfully import data please use the following XLS/CSV structure:<br>( ip | State | "
+"Description | hostname | MAC | Owner | Device | Port | Note "
 msgstr ""
-"Om data met succes te importeren, gebruik de volgende XLS/CSV structuur:<br>"
-"( IP-adres | Status | Omschrijving | DNS-naam | IP-naam | MAC | Eigenaar | "
-"Apparaat | Poort | Opmerkingen"
+"Om data met succes te importeren, gebruik de volgende XLS/CSV structuur:<br>( IP-adres | Status "
+"| Omschrijving | DNS-naam | IP-naam | MAC | Eigenaar | Apparaat | Poort | Opmerkingen"
 
 #: site/admin/CSVimport.php:48
 msgid "Upload file"
@@ -3281,11 +3142,9 @@ msgstr "Importeer bestand"
 msgid "Show uploaded subnets"
 msgstr "Toon ge-uploadde subnetten"
 
-#: site/admin/manageSubnetResizeSave.php:12
-#: site/admin/manageSubnetsplit.php:12 site/admin/manageSubnetresize.php:12
-#: site/admin/manageSubnetSplitSave.php:12
-#: site/admin/manageSubnettruncate.php:12
-#: site/admin/manageSubnetTruncateSave.php:12
+#: site/admin/manageSubnetResizeSave.php:12 site/admin/manageSubnetsplit.php:12
+#: site/admin/manageSubnetresize.php:12 site/admin/manageSubnetSplitSave.php:12
+#: site/admin/manageSubnettruncate.php:12 site/admin/manageSubnetTruncateSave.php:12
 msgid "You do not have permissions to resize subnet"
 msgstr "U heeft geen rechten om het subnet te vergroten/verkleinen"
 
@@ -3318,11 +3177,8 @@ msgid "Group under current"
 msgstr "Groeperen onder huidig"
 
 #: site/admin/manageSubnetsplit.php:107
-msgid ""
-"You can split subnet to smaller subnets by specifying new subnets. Please "
-"note:"
-msgstr ""
-"Het is mogelijk om een subnet te splitsen in kleinere subnetten. Opmerkingen:"
+msgid "You can split subnet to smaller subnets by specifying new subnets. Please note:"
+msgstr "Het is mogelijk om een subnet te splitsen in kleinere subnetten. Opmerkingen:"
 
 #: site/admin/manageSubnetsplit.php:109
 msgid "Existing IP addresses will be assigned to new subnets"
@@ -3330,17 +3186,15 @@ msgstr "Bestaande IP-adressen worden toegewezen aan de nieuwe subnetten"
 
 #: site/admin/manageSubnetsplit.php:110
 msgid "Group under current will create new nested subnets under current one"
-msgstr ""
-"Groeperen onder huidige subnet zal nieuwe subnetten maken onder het huidige "
-"subnet"
+msgstr "Groeperen onder huidige subnet zal nieuwe subnetten maken onder het huidige subnet"
 
 #: site/admin/manageSubnetsplit.php:111
 msgid ""
-"If existing IP will fall to subnet/broadcast of new subnets split will fail, "
-"except if strict mode is disabled"
+"If existing IP will fall to subnet/broadcast of new subnets split will fail, except if strict "
+"mode is disabled"
 msgstr ""
-"Indien bestaande adressen een netwerk/broadcastadres binnen een nieuw subnet "
-"wordt zal het splitsen niet lukken, behalve indien stricte modus inactief is"
+"Indien bestaande adressen een netwerk/broadcastadres binnen een nieuw subnet wordt zal het "
+"splitsen niet lukken, behalve indien stricte modus inactief is"
 
 #: site/admin/manageSubnetresize.php:41
 msgid "Current mask"
@@ -3351,27 +3205,21 @@ msgid "New mask"
 msgstr "Nieuw subnetmasker"
 
 #: site/admin/manageSubnetresize.php:59
-msgid ""
-"You can change subnet size by specifying new mask (bigger or smaller). "
-"Please note"
+msgid "You can change subnet size by specifying new mask (bigger or smaller). Please note"
 msgstr ""
-"De grootte van het subnet kan veranderd worden door het opgeven van het "
-"nieuwe subnetmasker (groter of kleiner). Opmerkingen:"
+"De grootte van het subnet kan veranderd worden door het opgeven van het nieuwe subnetmasker "
+"(groter of kleiner). Opmerkingen:"
 
 #: site/admin/manageSubnetresize.php:61
-msgid ""
-"If subnet has hosts outside of resized subnet resizing will not be possible"
+msgid "If subnet has hosts outside of resized subnet resizing will not be possible"
 msgstr ""
-"Als het subnet apparaten heeft buiten het nieuwe subnet is vergroten/"
-"verkleinen niet mogelijk"
+"Als het subnet apparaten heeft buiten het nieuwe subnet is vergroten/verkleinen niet mogelijk"
 
 #: site/admin/manageSubnetresize.php:62
-msgid ""
-"If strict mode is enabled check will be made to ensure it is still inside "
-"master subnet"
+msgid "If strict mode is enabled check will be made to ensure it is still inside master subnet"
 msgstr ""
-"Als stricte modus actief is wordt er gecontroleerd of het nieuwe subnet nog "
-"binnen het hoofd subnet past"
+"Als stricte modus actief is wordt er gecontroleerd of het nieuwe subnet nog binnen het hoofd "
+"subnet past"
 
 #: site/admin/manageDevices.php:17
 msgid "Add device"
@@ -3389,13 +3237,11 @@ msgstr "Geeft aan in welke sectie het apparaat zichtbaar is voor selectie"
 msgid "Sections"
 msgstr "Secties"
 
-#: site/admin/manageSubnetSplitSave.php:111
-#: site/admin/manageSubnetSplitSave.php:147
+#: site/admin/manageSubnetSplitSave.php:111 site/admin/manageSubnetSplitSave.php:147
 msgid "Wrong IP addresses (subnet or broadcast)"
 msgstr "Verkeerde IP-adressen (subnet of broadcast)"
 
-#: site/admin/manageSubnetSplitSave.php:157
-#: site/admin/manageSubnetSplitSave.php:162
+#: site/admin/manageSubnetSplitSave.php:157 site/admin/manageSubnetSplitSave.php:162
 msgid "Subnet splitted ok"
 msgstr "Subnetsplitsing geslaagd"
 
@@ -3408,12 +3254,9 @@ msgid "Number of IP addresses"
 msgstr "Aantal IP-adressen"
 
 #: site/admin/manageSubnettruncate.php:51
-msgid ""
-"Truncating network will remove all IP addresses, that belong to selected "
-"subnet!"
+msgid "Truncating network will remove all IP addresses, that belong to selected subnet!"
 msgstr ""
-"Verkleinen van het netwerk verwijdert alle adressen die in het geselecteerde "
-"subnet zitten!"
+"Verkleinen van het netwerk verwijdert alle adressen die in het geselecteerde subnet zitten!"
 
 #: site/admin/manageSubnetTruncateSave.php:23
 msgid "Subnet truncated succesfully"
@@ -3459,8 +3302,7 @@ msgstr "Voeg gebruikers aan groep toe"
 msgid "No available users to add to group"
 msgstr "Geen gebruikers beschikbaar om aan de groep toe te voegen"
 
-#: site/admin/groupAddUsersResult.php:22
-#: site/admin/groupRemoveUsersResult.php:21
+#: site/admin/groupAddUsersResult.php:22 site/admin/groupRemoveUsersResult.php:21
 msgid "Error - no group ID"
 msgstr "Fout - Geen groep-ID"
 
@@ -3581,11 +3423,8 @@ msgid "Your email address"
 msgstr "Uw e-mailadres"
 
 #: site/login/requestIPform.php:128
-msgid ""
-"If there is anything else you want to say about request write it in this box"
-msgstr ""
-"Als u nog meer informatie wil geven over deze aanvraag dan kan dit in dit "
-"veld"
+msgid "If there is anything else you want to say about request write it in this box"
+msgstr "Als u nog meer informatie wil geven over deze aanvraag dan kan dit in dit veld"
 
 #: site/login/requestIPform.php:136
 msgid "Submit request"
@@ -3951,45 +3790,33 @@ msgstr "Bewerken VRF geslaagd"
 msgid "VRF delete successfull"
 msgstr "Verwijderen VRF geslaagd"
 
-#: site/admin/customIPFieldsEditResult.php
-#: site/admin/customSubnetFieldsEditResult.php
-#: site/admin/customVLANFieldsEditResult.php
-#: site/admin/customUserFieldsEditResult.php
+#: site/admin/customIPFieldsEditResult.php site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php site/admin/customUserFieldsEditResult.php
 msgid "Failed to add field"
 msgstr "Fout bij toevoegen veld"
 
-#: site/admin/customIPFieldsEditResult.php
-#: site/admin/customSubnetFieldsEditResult.php
-#: site/admin/customVLANFieldsEditResult.php
-#: site/admin/customUserFieldsEditResult.php
+#: site/admin/customIPFieldsEditResult.php site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php site/admin/customUserFieldsEditResult.php
 msgid "Failed to edit field"
 msgstr "Fout bij bewerken veld"
 
-#: site/admin/customIPFieldsEditResult.php
-#: site/admin/customSubnetFieldsEditResult.php
-#: site/admin/customVLANFieldsEditResult.php
-#: site/admin/customUserFieldsEditResult.php
+#: site/admin/customIPFieldsEditResult.php site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php site/admin/customUserFieldsEditResult.php
 msgid "Failed to delete field"
 msgstr "Fout bij verwijderen veld"
 
-#: site/admin/customIPFieldsEditResult.php
-#: site/admin/customSubnetFieldsEditResult.php
-#: site/admin/customVLANFieldsEditResult.php
-#: site/admin/customUserFieldsEditResult.php
+#: site/admin/customIPFieldsEditResult.php site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php site/admin/customUserFieldsEditResult.php
 msgid "Field add success"
 msgstr "Toevoegen veld geslaagd"
 
-#: site/admin/customIPFieldsEditResult.php
-#: site/admin/customSubnetFieldsEditResult.php
-#: site/admin/customVLANFieldsEditResult.php
-#: site/admin/customUserFieldsEditResult.php
+#: site/admin/customIPFieldsEditResult.php site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php site/admin/customUserFieldsEditResult.php
 msgid "Field edit success"
 msgstr "Bewerken veld geslaagd"
 
-#: site/admin/customIPFieldsEditResult.php
-#: site/admin/customSubnetFieldsEditResult.php
-#: site/admin/customVLANFieldsEditResult.php
-#: site/admin/customUserFieldsEditResult.php
+#: site/admin/customIPFieldsEditResult.php site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php site/admin/customUserFieldsEditResult.php
 msgid "Field delete success"
 msgstr "Verwijderen veld geslaagd"
 
@@ -4007,8 +3834,7 @@ msgstr "Geen IPv6-apparaten ingevoerd"
 
 #: site/dashboard/top10_percentage.php
 msgid "Add some hosts to subnets to calculate usage percentage"
-msgstr ""
-"Voeg apparaten toe om de gebruikspercentages van de subnetten te berekenen"
+msgstr "Voeg apparaten toe om de gebruikspercentages van de subnetten te berekenen"
 
 #: site/dashboard/top10_hosts.php
 msgid "Add some hosts to subnets to show graph of used hosts per subnet"
@@ -4026,7 +3852,7 @@ msgid "Check hosts status"
 msgstr "Statuscontrole"
 
 #: site/admin/manageSubnetEdit.php
-msgid "Ping hosts inside subnet to check availability"
+msgid "Ping hosts inside subnet to check avalibility"
 msgstr "Controleer apparaten in subnet met ping"
 
 #: site/ipaddr/subnetDetials.php
@@ -4042,7 +3868,7 @@ msgid "Exclude from ping status checks"
 msgstr "Uitgesloten van statuscontrole met ping"
 
 #: site/ipaddr/ipAddressPrintTable.php
-msgid "Check availability"
+msgid "Check avalibility"
 msgstr "Controleer beschikbaarheid"
 
 #: site/ipaddr/pingCheck.php
@@ -4062,12 +3888,10 @@ msgid "Ping status intervals"
 msgstr "Tijdsinterval voor ping status"
 
 #: site/admin/settings.php
-msgid ""
-"Ping status intervals for IP addresses in seconds - warning;offline "
-"(Default: 1800;3600)"
+msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
 msgstr ""
-"Tijdsinterval in seconden voor ping status van IP-adressen - waarschuwing;"
-"offline (Standaard: 1800;3600)"
+"Tijdsinterval in seconden voor ping status van IP-adressen - waarschuwing;offline (Standaard: "
+"1800;3600)"
 
 #: site/admin/settingsEdit.php
 msgid "Invalid ping status intervals"
@@ -4129,9 +3953,7 @@ msgstr "zoek"
 
 #: site/ipaddr/subnetScan.php
 msgid "You can set parameters for scan under functions/scan/config-scan.php"
-msgstr ""
-"Parameters voor zoeken zijn in te stellen onder functions/scan/config-scan."
-"php"
+msgstr "Parameters voor zoeken zijn in te stellen onder functions/scan/config-scan.php"
 
 #: site/ipaddr/subnetScan.php
 msgid "Discovery scans"
@@ -4164,12 +3986,10 @@ msgid "Section order"
 msgstr "Sectie-volgorde"
 
 #: site/admin/manageSectionOrder.php
-msgid ""
-"You can manually set order in which sections are displayed in. Default is "
-"creation date."
+msgid "You can manually set order in which sections are displayed in. Default is creation date."
 msgstr ""
-"De volgorde waarin de secties weergegeven kan handmatig bepaald worden. "
-"Standaard volgorde is op datum van aanmaken."
+"De volgorde waarin de secties weergegeven kan handmatig bepaald worden. Standaard volgorde is "
+"op datum van aanmaken."
 
 #: site/admin/manageSectionOrder.php
 msgid "Order"
@@ -4190,12 +4010,10 @@ msgstr "Standaard"
 
 # ## 0.84.005 ###
 #: site/ipaddr/subnetDiscoveryPing.php
-msgid ""
-"Threading is required for scanning subnets. Please recompile PHP with pcntl "
-"extension"
+msgid "Threading is required for scanning subnets. Please recompile PHP with pcntl extension"
 msgstr ""
-"De threading-optie is vereist voor het scannen van subnetten. PHP moet met "
-"de pcntl-extensie gecompileerd worden"
+"De threading-optie is vereist voor het scannen van subnetten. PHP moet met de pcntl-extensie "
+"gecompileerd worden"
 
 #: site/ipaddr/subnetDiscoveryPing.php
 msgid "Add discovered hosts"
@@ -4332,7 +4150,7 @@ msgid "DHCP range"
 msgstr "DHCP-reeks"
 
 #: site/ipaddr/ipAddressPrintTable.php
-msgid "Check availability (disabled)"
+msgid "Check avalibility (disabled)"
 msgstr "Controleer beschikbaarheid (uitgeschakeld)"
 
 #: site/admin/settings.php
@@ -4428,8 +4246,7 @@ msgstr "U heeft geen rechten om een nieuwe map in deze sectie aan te maken"
 
 #: site/admin/manageFolderEdit.php
 msgid "You do not have permissions to add edit/delete this folder"
-msgstr ""
-"U heeft geen rechten om deze map aan te maken, te bewerken of te verwijderen"
+msgstr "U heeft geen rechten om deze map aan te maken, te bewerken of te verwijderen"
 
 #: site/admin/manageFolderEdit.php
 msgid "folder"
@@ -4441,11 +4258,11 @@ msgstr "Mapnaam"
 
 #: site/admin/manageFolderEdit.php
 msgid ""
-"Enter master folder if you want to nest it under existing folder, or select "
-"root to create root folder"
+"Enter master folder if you want to nest it under existing folder, or select root to create root "
+"folder"
 msgstr ""
-"Geef bovenliggende map indien u wilt nesten onder een bestaande map, kies "
-"hoofd om een nieuwe map te maken"
+"Geef bovenliggende map indien u wilt nesten onder een bestaande map, kies hoofd om een nieuwe "
+"map te maken"
 
 #: site/admin/manageFolderEdit.php
 msgid "Master Folder"
@@ -4623,11 +4440,9 @@ msgstr "Favoriete subnetten"
 msgid "No favourite subnets selected"
 msgstr "Geen favoriete subnetten geselecteerd"
 
-msgid ""
-"You can add subnets to favourites by clicking star icon in subnet details"
+msgid "You can add subnets to favourites by clicking star icon in subnet details"
 msgstr ""
-"Favoriete subnetten kunnen toegevoegd door vanuit de detailweergave op het "
-"ster-icoon te klikken"
+"Favoriete subnetten kunnen toegevoegd door vanuit de detailweergave op het ster-icoon te klikken"
 
 msgid "Click to remove from favourites"
 msgstr "Klik om uit de favorieten te verwijderen"
@@ -4664,7 +4479,7 @@ msgid "No changelog entries are available"
 msgstr "Er zijn geen veranderingen beschikbaar"
 
 #: site/ipaddr/ipDetails.php
-msgid "Availability"
+msgid "Avalibility"
 msgstr "Beschikbaarheid"
 
 msgid "Last edited"
@@ -4699,8 +4514,7 @@ msgstr "Activeer bijhouden van veranderingen"
 #: site/tools/changelog.php
 msgid "Change logging is disabled. You can enable it under administration"
 msgstr ""
-"Het bijhouden van veranderingen is uitgeschakeld. Dit kan ingeschakeld "
-"worden in het Beheer"
+"Het bijhouden van veranderingen is uitgeschakeld. Dit kan ingeschakeld worden in het Beheer"
 
 # ## 0.94.002 ###
 #: site/admin/settings.php
@@ -4918,3 +4732,1834 @@ msgstr "Geen computers aan dit apparaat gekoppeld"
 
 msgid "Sort by vendor"
 msgstr "Sorteer op leverancier"
+
+# ## 1.02.001 ###
+#: site/admin/userEditPrint.php
+msgid "Mail State changes"
+msgstr "E-mail statusveranderingen"
+
+msgid "Select yes to receive notification change mail for State change"
+msgstr "Selecteer om veranderingen in de status per mail te ontvangen"
+
+msgid "Mail Changelog"
+msgstr "E-mail changelog"
+
+msgid "Select yes to receive notification change mail for changelog"
+msgstr "Selecteer om veranderingen in het changelog per mail te ontvangen"
+
+# ## 1.03.001 ###
+#: site/admin/usersEditPrint.php
+msgid "Require user to change password after initial login"
+msgstr "Gebruiker moet wachtwoord bij eerste inlog veranderen"
+
+#: site/tools/changePasswordRequired.php
+msgid "Password change required"
+msgstr "Veranderen van wachtwoord vereist"
+
+msgid "You are required to change your password before you can access phpipam."
+msgstr "U dient uw wachtwoord te veranderen voordat u PHPipam kan gebruiken."
+
+msgid "Password change"
+msgstr "Wachtwoord veranderen"
+
+msgid "Save password"
+msgstr "Wachtwoord opslaan"
+
+# ## 1.04.001 ###
+#: site/login/loginCheck.php
+msgid "You have been blocked for 5 minutes due to authentication failures"
+msgstr "Uw account is wegens authenticatie-fouten voor 5 minuten geblokkeerd"
+
+# ## 1.06.001 ###
+#: site/admin/settings.php
+msgid "Use nicer URL structure"
+msgstr "Gebruik vriendelijke URL-structuur"
+
+msgid ""
+"Please note that mod_rewrite is required with appropriate settings if pretified links are "
+"selected."
+msgstr ""
+"mod_rewrite met de bijbehorende instellingen is vereist indien de vriendelijke URL-structuur is "
+"ingeschakeld."
+
+# ## 1.07.002 ##
+#: site/admin/settings.php
+msgid "Hide free range"
+msgstr "Verberg vrije reeksen"
+
+msgid "Do not display free range in IP address and subnets list"
+msgstr "Vrije reeksen in de IP-adressen en subnetlijsten niet weergeven"
+
+msgid "Highest VLAN number"
+msgstr "Hoogste VLAN nummer"
+
+msgid "Set highest VLAN number (default 4096)"
+msgstr "Hoogste VLAN-nummer (standaard 4096)"
+
+#: site/admin/manageVLANresult.php
+msgid "Highest possible VLAN number is "
+msgstr "Hoogst mogelijke VLAN-nummer is"
+
+msgid "VLAN number cannot be negative"
+msgstr "Het VLAN-nummer kan niet negatief zijn"
+
+msgid "Not number"
+msgstr "Geen getal"
+
+# ## 1.07.004 ###
+#: site/admin.custimFilterFields.php
+msgid "Fields saved"
+msgstr "Velden opgeslagen"
+
+msgid "Filter custom field display"
+msgstr "Weergave "
+
+msgid "Selected fields will not be visible in table view, only in detail view"
+msgstr ""
+"De geselecteerde velden zijn niet zichtbaar in de tabel-weergave, alleen in de de detail-"
+"weergave"
+
+msgid "Save filter"
+msgstr "Filter bewaren"
+
+# ## 1.07.010 ###
+#: site/admin/manageSubnetEditResult.php
+msgid "I will delete"
+msgstr "Deze worden verwijderd"
+
+msgid "Are you sure you want to delete above items?"
+msgstr "Weet u zeker dat u bovenstaande wil verwijderen?"
+
+msgid "Are you sure you want to delete IP address"
+msgstr "Weet u zeker dat u dit IP-adres wil verwijderen?"
+
+# ## 1.08.001 ###
+msgid "Inactivity timeout"
+msgstr "Automatisch uitloggen"
+
+msgid ""
+"Select inactive timeout for user sessions. Please note that if default php session settings in "
+"php.ini are lower they will override this"
+msgstr ""
+"Kies de tijd die mag verstrijken voordat gebruikers automatisch uitgelogd worden. Een eventuele "
+"lagere instelling in php.ini zal deze waarde overschrijven."
+
+#: site/login/index.php
+msgid "You session has timed out"
+msgstr "Uw sessie is verlopen."
+
+#: site/admin/manageSubnetEdit.php
+msgid "Discover new hosts"
+msgstr "Zoek nieuwe apparaten"
+
+msgid "Discover new hosts in this subnet"
+msgstr "Doorzoek subnet naar nieuwe apparaten"
+
+# ## 1.18.006 ###
+msgid "Invalid ID"
+msgstr "Ongeldig ID"
+
+msgid "IP address request added"
+msgstr "Verzoek voor IP-adres is toegevoegd"
+
+msgid "IP address request edited"
+msgstr "Verzoek voor IP-adres is aangepast"
+
+msgid "IP address request deleted"
+msgstr "Verzoek voor IP-adres is verwijderd"
+
+msgid "Online"
+msgstr "Online"
+
+msgid "Discover"
+msgstr "Doorzoeken"
+
+msgid "Back"
+msgstr "Terug"
+
+msgid "l2 domain"
+msgstr "L2-domein"
+
+msgid "Select l2 domain"
+msgstr "Kies L2-domein"
+
+msgid "Add L2 Domain"
+msgstr "Voeg L2-domein toe"
+
+msgid "Descripton"
+msgstr "Omschrijving"
+
+msgid "Available VLANs in domain"
+msgstr "Beschikbare VLANs in domein"
+
+msgid "L2 Domains"
+msgstr "L2-domeinen"
+
+msgid "No VLANS configured"
+msgstr "Geen VLANs geconfigureerd"
+
+msgid "Addresses"
+msgstr "Adressen"
+
+msgid "Folder"
+msgstr "Map"
+
+msgid "VLAN search results"
+msgstr "Zoekresultaten op VLAN"
+
+msgid "Edit folder details"
+msgstr "Bewerk details van map"
+
+msgid "No results"
+msgstr "Geen resultaten"
+
+msgid "Search term"
+msgstr "Zoekterm"
+
+msgid "IP addresses"
+msgstr "IP-adressen"
+
+msgid "Error updating user account!"
+msgstr "Fout bij bijwerken gebruikersaccount!"
+
+msgid "Mail notifications"
+msgstr "E-mailberichten"
+
+msgid "Select yes to receive notification change mail for state change"
+msgstr "Selecteer om veranderingen in de status per mail te ontvangen"
+
+msgid "Override compression"
+msgstr "Compressie omzeilen"
+
+msgid "Uncompress address ranges if compressed"
+msgstr "Vouw adresreeksen uit indien gecomprimeerd"
+
+msgid "Widgets updated"
+msgstr "Widgets zijn bijgwerkt"
+
+msgid "Manage"
+msgstr "Beheer"
+
+msgid "Password repeat"
+msgstr "Herhaal wachtwoord"
+
+msgid "Invalid password"
+msgstr "Ongeldig wachtwoord"
+
+msgid "Passwords do not match"
+msgstr "Wachtwoorden komen niet overeen"
+
+msgid "Temporary sharing disabled"
+msgstr "Tijdelijk gedeelde items staan uitgeschakeld"
+
+msgid "Invalid type"
+msgstr "Ongeldig type"
+
+msgid "Invalid code"
+msgstr "Ongeldige code"
+
+msgid "Invalid date"
+msgstr "Ongeldige datum"
+
+msgid "1 week is max validity time"
+msgstr "Maximale geldigheidsduur is 1 week"
+
+msgid "Invalid email address"
+msgstr "Ongeldig e-mailadres"
+
+msgid "Temporary share create error"
+msgstr "Fout bij het maken van een tijdelijk gedeeld item"
+
+msgid "Temporary share created"
+msgstr "Tijdelijk gedeeld item gemaakt"
+
+msgid "Create new temporary access"
+msgstr "Nieuwe tijdelijke toegang maken"
+
+msgid "Share details"
+msgstr "Details van gedeeld item"
+
+msgid "Set validity"
+msgstr "Geldigheidsduur"
+
+msgid "Set validity time for created share"
+msgstr "Geef de geldigheidsduur van het gedeelde item"
+
+msgid "Mail invitation"
+msgstr "Uitnodiging per mail"
+
+msgid "If you wish to mail share details enter email address (separate multiple with ,)"
+msgstr ""
+"Geef eventuele mailadressen op welke de gegevens van het gedeelde item dienen te ontvangen "
+"(meerdere adressen gescheiden door ,)"
+
+msgid "List of temporary shared objects"
+msgstr "Lijst met tijdelijk gedeelde items"
+
+msgid "No temporary shares available"
+msgstr "Geen tijdelijk gedeelde items beschikbaar"
+
+msgid "Share type"
+msgstr "Type gedeeld item"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Valid until"
+msgstr "Geldig tot"
+
+msgid "Created by"
+msgstr "Aangemaakt door"
+
+msgid "Access log"
+msgstr "Toegangslogboek"
+
+msgid "Remove temporary share"
+msgstr "Tijdelijk gedeeld item verwijderen"
+
+msgid "Code does not exist"
+msgstr "De code bestaat niet"
+
+msgid "Temporary share delete error"
+msgstr "Fout bij verwijderen van tijdelijk gedeeld item"
+
+msgid "Temporary share deleted"
+msgstr "Tijdelijk gedeeld item is verwijderd"
+
+msgid "Object"
+msgstr "Object"
+
+msgid "Subnet masks"
+msgstr "Subnetmaskers"
+
+msgid "Bitmask"
+msgstr "Bitmasker"
+
+msgid "Netmask"
+msgstr "Netmasker"
+
+msgid "Binary"
+msgstr "Binair"
+
+msgid "Hosts"
+msgstr "Apparaten"
+
+msgid "Subnet bits"
+msgstr "Subnet-bits"
+
+msgid "Host bits"
+msgstr "Host-bits"
+
+msgid "Scanned subnets summary"
+msgstr "Samenvatting van doorzochte subnetten"
+
+msgid "No subnets"
+msgstr "Geen subnetten"
+
+msgid "Device details"
+msgstr "Details van apparaat"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Filter applied:"
+msgstr "Toegepast filter:"
+
+msgid "Sort by type"
+msgstr "Sorteer op type"
+
+msgid "Sort by model"
+msgstr "Sorteer op model"
+
+msgid "VRF has no belonging subnets"
+msgstr "VRF heeft geen onderliggende subnetten"
+
+msgid "Invalid request"
+msgstr "Ongeldig verzoek"
+
+msgid "Database already installed"
+msgstr "De database bestaat al"
+
+msgid "Number of VLANs"
+msgstr "Aantal VLANs"
+
+msgid "Invalid widget"
+msgstr "Ongeldige widget"
+
+msgid "No $type hosts configured"
+msgstr "Geen apparaten van $type geconfigureerd"
+
+msgid "Loading statistics"
+msgstr "Statistieken worden geladen"
+
+msgid "upgrade"
+msgstr "bijwerken"
+
+msgid "Set SMTP server address"
+msgstr "Geef het adres van de SMTP-server"
+
+msgid "Set SMTP server port"
+msgstr "Geef het poortnummer van de SMTP-server"
+
+msgid "Security"
+msgstr "Beveiliging"
+
+msgid "SSL"
+msgstr "SSL"
+
+msgid "TLS"
+msgstr "TLS"
+
+msgid "No languages present created yet"
+msgstr "Er zijn op dit moment nog geen talen gemaakt"
+
+msgid "Prettify links"
+msgstr "Maak leesbare koppelingen"
+
+msgid "API"
+msgstr "API"
+
+msgid "Temporary shares"
+msgstr "Tijdelijke delingen"
+
+msgid "Allow temporary subnet sharing"
+msgstr "Sta tijdelijk delen van subnet toe"
+
+msgid "Enable changelog module"
+msgstr "Activeer de module voor het wijzigigen-logboek"
+
+msgid "ICMP settings"
+msgstr "Instellingen voor ICMP"
+
+msgid "Scan type"
+msgstr "Type scan"
+
+msgid "Select which utility to use for status checks."
+msgstr "Selecteer het te gebruiken hulpprogramma voor statuscontrole."
+
+msgid "FPing path"
+msgstr "Pad naar FPing"
+
+msgid "Set path for fping executable file (default /bin/fping)"
+msgstr "Geef het pad naar het uitvoerbare bestand van fping (standaard /bin/fping)"
+
+msgid "Invalid email"
+msgstr "Ongeldig emailadres"
+
+msgid "Invalid value for Max VLAN number"
+msgstr "Ongeldig nummer voor maximaal aantal VLANs"
+
+msgid "Manage device types"
+msgstr "Beheer apparaat-typen"
+
+msgid "Cannot delete locked tag"
+msgstr "Kan een vergrendeld label niet verwijderen"
+
+msgid "Invalid tag name"
+msgstr "Ongeldige labelnaam"
+
+msgid "Invalid bg color"
+msgstr "Ongeldige achtergrond-kleur"
+
+msgid "Invalid fg color"
+msgstr "Ongeldige voorgrond-kleur"
+
+msgid "Tag add error"
+msgstr "Fout bij toevoegen van label"
+
+msgid "Tag edit error"
+msgstr "Fout bij bewerken van label"
+
+msgid "Tag delete error"
+msgstr "Fout bij verwijderen van label"
+
+msgid "Tag add success"
+msgstr "Label is met succes toegevoegd"
+
+msgid "Tag edit success"
+msgstr "Label is met succes bewerkt"
+
+msgid "Tag delete success"
+msgstr "Label is met succes verwijderd"
+
+msgid "Manage Address Tags"
+msgstr "Beheer adreslabels"
+
+msgid "Add Tag"
+msgstr "Voeg label toe"
+
+msgid "type"
+msgstr "type"
+
+msgid "Show Tag"
+msgstr "Toon label"
+
+msgid "BG color"
+msgstr "Achtergrondkleur"
+
+msgid "FG color"
+msgstr "Voorgrondkleur"
+
+msgid "Compress range"
+msgstr "Vat reeks samen"
+
+msgid "Locked"
+msgstr "Vergrendeld"
+
+msgid "tag"
+msgstr "label"
+
+msgid "Show tag"
+msgstr "Toon label"
+
+msgid "Bg color"
+msgstr "achtergrondkleur"
+
+msgid "Fg color"
+msgstr "voorgrondkleur"
+
+msgid "Default value settings"
+msgstr "Standaardinstellingen"
+
+msgid "Name servers"
+msgstr "Naamservers"
+
+msgid "Enter name servers, separate multiple with ;"
+msgstr "Geef DNS-servers. Meerdere gescheiden door ;"
+
+msgid "Hostmaster"
+msgstr "Domeinbeheerder"
+
+msgid "Enter default hostmaster for domain"
+msgstr "Geef de standaard domeinbeheer voor domein"
+
+msgid "Refresh"
+msgstr "Verversen"
+
+msgid ""
+"How often a secondary will poll the primary server to see if the serial number for the zone has "
+"increased."
+msgstr ""
+"Specificeert hoe vaak een secundaire server controleert of een het serienummer voor een zone "
+"hoger is geworden."
+
+msgid "Retry"
+msgstr "Probeer opnieuw"
+
+msgid ""
+"If a secondary was unable to contact the primary at the last refresh, wait the retry value "
+"before trying again."
+msgstr ""
+"Tijd tussen twee pogingen dat een secundaire server wacht indien er geen contact opgenomen kon "
+"worden met de primaire server."
+
+msgid "Expire"
+msgstr "Verloopt"
+
+msgid ""
+"How long a secondary will still treat its copy of the zone data as valid if it can't contact "
+"the primary."
+msgstr ""
+"Specificeert hoe lang een secundaire server de data als geldig beschouwd indien de primaire "
+"server niet bereikt kan worden."
+
+msgid ""
+"negative caching time - the time a NAME ERROR = NXDOMAIN result may be cached by any resolver"
+msgstr ""
+"Negatieve cache-tijd - dit is de tijd dat een NAME ERROR = NXDOMAIN resultaat vastgehouden wordt"
+
+msgid "Default TTL for domain records"
+msgstr "Standaard geldigheidsduur (TTL) voor domeingegevens"
+
+msgid "Failed to add domain"
+msgstr "Kan domein niet toevoegen"
+
+msgid "Failed to edit domain"
+msgstr "Kan domein niet bewerken"
+
+msgid "Failed to delete domain"
+msgstr "Kan domein niet verwijderen"
+
+msgid "Domain add successfull"
+msgstr "Domein met succes toegevoegd"
+
+msgid "Domain edit successfull"
+msgstr "Domein met succes bijgewerkt"
+
+msgid "Domain delete successfull"
+msgstr "Domein met succes verwijderd"
+
+msgid "domain"
+msgstr "domein"
+
+msgid "FQDN domain name"
+msgstr "Volledige domeinnaam (FQDN)"
+
+msgid "Master NS"
+msgstr "Primaire DNS-server"
+
+msgid "NULL"
+msgstr "NULL"
+
+msgid "Domain type"
+msgstr "Type domein"
+
+msgid "Default record values (SOA, NS)"
+msgstr "Standaardwaarden voor SOA en NS"
+
+msgid "Dont create default records (SOA, NS)"
+msgstr "Maak geen standaard-records aan (SOA, NS)"
+
+msgid "removing Domain will also remove all referenced entries!"
+msgstr "Verwijderen van het domein verwijderd ook alle gekoppelde inhoud!"
+
+msgid "Invalid domain"
+msgstr "Ongeldig domein"
+
+msgid "Records for domain"
+msgstr "Inhoud van domein"
+
+msgid "Domains"
+msgstr "Domeinen"
+
+msgid "New record"
+msgstr "Nieuw record"
+
+msgid "Domain has no records"
+msgstr "Domein heeft nog geen inhoud"
+
+msgid "Prio"
+msgstr "Prio"
+
+msgid "Last update"
+msgstr "Laatst bijgewerkt op"
+
+msgid "SOA, NS records"
+msgstr "SOA, NS records"
+
+msgid "Domain records"
+msgstr "Records in domein"
+
+msgid "No records"
+msgstr "Geen inhoud"
+
+msgid "Create domain"
+msgstr "Maak domein"
+
+msgid "No domains configured"
+msgstr "Geen domeinen geconfigureerd"
+
+msgid "Domain"
+msgstr "Domein"
+
+msgid "Records"
+msgstr "Records"
+
+msgid "Serial number"
+msgstr "Serienummer"
+
+msgid "IPv4 reverse domain"
+msgstr "IPv4 reverse domein"
+
+msgid "IPv6 reverse domains"
+msgstr "IPv6 reverse domeinen"
+
+msgid "PowerDNS management"
+msgstr "Beheer van PowerDNS"
+
+msgid "Please enable powerDNS module under server management"
+msgstr "U dient de module voor PowerDNS te activeren in het serverbeheer"
+
+msgid "Invalid name"
+msgstr "Ongeldige naam"
+
+msgid "Invalid content"
+msgstr "Ongeldige inhoud"
+
+msgid "Domain does not exist"
+msgstr "Domein bestaat niet"
+
+msgid "DNS record"
+msgstr "DNS-record"
+
+msgid "Record type"
+msgstr "Type record"
+
+msgid "Priority"
+msgstr "Prioriteit"
+
+msgid "Invalid subnet"
+msgstr "Ongeldig subnet"
+
+msgid "Automatic PTR creation for this subnet is disabled"
+msgstr "Automatisch aanmaken van PTR-records is uitgeschakeld voor dit subnet"
+
+msgid "PowerDNS not enabled"
+msgstr "PowerDNS is niet geactiveerd"
+
+msgid "PTR zone refresh records"
+msgstr "Vernieuw PTR-records in de zone"
+
+msgid "Clicking on regenerate will remove all PTR records for subnet and recreate new."
+msgstr "Dit zal alle PTR-records voor dit subnet verwijderen en opnieuw genereren."
+
+msgid "Database settings"
+msgstr "Database-instellingen"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Primary nameserver is mandatory"
+msgstr "De primaire DNS-server is verplicht"
+
+msgid "Failed to add nameserver set"
+msgstr "Fout bij toevoegen van set met DNS-servers"
+
+msgid "Failed to edit nameserver set"
+msgstr "Fout bij bewerken van set met DNS-servers"
+
+msgid "Failed to delete nameserver set"
+msgstr "Fout bij verwijderen van ser met DNS-servers"
+
+msgid "Nameserver set add successfull"
+msgstr "Set met DNS-servers met succes toegevoegd"
+
+msgid "Nameserver set edit successfull"
+msgstr "Set met DNS-servers met succes bewerkt"
+
+msgid "Nameserver set delete successfull"
+msgstr "Set met DNS-servers met succes verwijderd"
+
+msgid "Nameserver set"
+msgstr "Set met DNS-servers"
+
+msgid "Primary"
+msgstr "Primaire"
+
+msgid "Primary nameserver"
+msgstr "Primaire DNS-server"
+
+msgid "Secondary"
+msgstr "Secundaire"
+
+msgid "Secondary nameserver"
+msgstr "Secundaire DNS-server"
+
+msgid "Tertiary"
+msgstr "Tertiaire"
+
+msgid "Tertiary nameserver"
+msgstr "Tertiaire DNS-server"
+
+msgid "Sections to display nameserver set in"
+msgstr "Secties waarin deze DNS-servers zichtbaar zijn"
+
+msgid "removing nameserver set will also remove all references from belonging subnets!"
+msgstr ""
+"Verwijderen van de DNS-server verwijdert oof alle referenties uit onderliggende subnetten!"
+
+msgid "Manage Nameserver sets"
+msgstr "Beheer DNS-servers"
+
+msgid "Add nameserver set"
+msgstr "Voeg DNS-servers toe"
+
+msgid "No nameserver sets defined"
+msgstr "Geen DNS-servers geconfigureerd"
+
+msgid "device type"
+msgstr "type apparaat"
+
+msgid "Device type management"
+msgstr "Beheer apparaattypen"
+
+msgid "Add device type"
+msgstr "Voeg apparaattype toe"
+
+msgid "subnets"
+msgstr "subnetten"
+
+msgid "Confirm"
+msgstr "Bevestig"
+
+msgid "Section add failed"
+msgstr "Fout bij toevoegen van sectie"
+
+msgid "Section edit failed"
+msgstr "Fout bij bewerken van sectie"
+
+msgid "Section delete failed"
+msgstr "Fout bij verwijderen van sectie"
+
+msgid "Section reordering failed"
+msgstr "Fout bij het rangschikken van sectie"
+
+msgid "No groups available"
+msgstr "Geen groepen beschikbaar"
+
+msgid "Default domain cannot be deleted"
+msgstr "Het standaard-domein kan niet worden verwijderd"
+
+msgid "Name is required"
+msgstr "De naam is verplicht"
+
+msgid "VLANs in domain"
+msgstr "VLANs in domein"
+
+msgid "domain name"
+msgstr "domeinnaam"
+
+msgid "Sections to display domain in"
+msgstr "Secties waarin domein zichtbaar is"
+
+msgid "Current l2 domain"
+msgstr "Huidig L2-domein"
+
+msgid "New domain"
+msgstr "Nieuw domein"
+
+msgid "No domains available!"
+msgstr "Geen domeinen beschikbaar!"
+
+msgid "Failed to move VLAN to new domain"
+msgstr "Fout bij verplaatsen van VLAN naar nieuw domein"
+
+msgid "VLAN moved to new domain successfully"
+msgstr "VLAN met succes verplaatst naar het nieuwe domein"
+
+msgid "removing VRF will also remove VRF reference from belonging subnets!"
+msgstr ""
+"Verwijderen van de VRF verwijdert ook alle referenties naar de VRF uit de onderliggende "
+"subnetten!"
+
+msgid "Show name"
+msgstr "Toon naam"
+
+msgid "Failed to reject IP request"
+msgstr "Fout bij afwijzen van IP-verzoek"
+
+msgid "Failed to create IP address"
+msgstr "Fout bij het maken van IP-adres"
+
+msgid "IP request accepted/rejected"
+msgstr "IP-adres is geaccepteerd/afgewezen"
+
+msgid "Enter IP owner"
+msgstr "Geef de eigenaar van het IP"
+
+msgid "Process"
+msgstr "Proces"
+
+msgid "List of all processes IP addresses requests"
+msgstr "Lijst met alle te verwerken verzoeken voor IP-adressen"
+
+msgid "Admin comment"
+msgstr "Commentaar van beheerder"
+
+msgid "Accepted"
+msgstr "Geaccepteerd"
+
+msgid "custom field"
+msgstr "eigen veld"
+
+msgid "Size / Length"
+msgstr "Grootte / Lengte"
+
+msgid "Enter field length"
+msgstr "Geef de lengte van het veld op"
+
+msgid "Default value"
+msgstr "Standaardwaarde"
+
+msgid "Enter default value"
+msgstr "Geef de standaardwaarde op"
+
+msgid "Required fields must have default values"
+msgstr "Vereiste velden moeten een standaardwaarde hebben"
+
+msgid "Boolean values can only be 0 or 1"
+msgstr "Binaire waarden kunnen alleen 0 of 1 zijn"
+
+msgid "Default boolean values can only be 0 or 1"
+msgstr "Binaire standaardwaarden kunnen alleen 0 of 1 zijn"
+
+msgid "Fieldsize must be numeric"
+msgstr "De grootte van het veld kan alleen cijfers bevatten"
+
+msgid "Varchar size limit is 256 characters"
+msgstr "De limiet van een varchar is 256 karakters"
+
+msgid "Integer values must be numeric"
+msgstr "Een integer-waarde moet numeriek zijn"
+
+msgid "Filter saved"
+msgstr "Filter opgeslagen"
+
+msgid "Field type"
+msgstr "Type veld"
+
+msgid "Visible"
+msgstr "Zichtbaar"
+
+msgid "Set which field to display in table"
+msgstr "Selecteer welk veld zichtbaar is in de tabel"
+
+msgid "Cannot get fix for table field "
+msgstr "Kan veld in tabel niet repareren"
+
+msgid "No users"
+msgstr "Geen gebruikers"
+
+msgid "App security"
+msgstr "Beveiliging van app"
+
+msgid "Not used"
+msgstr "Niet gebruikt"
+
+msgid "Per user"
+msgstr "Per gebruiker"
+
+msgid "api"
+msgstr "api"
+
+msgid "Application permissions"
+msgstr "Rechten van applicatie"
+
+msgid "Application security"
+msgstr "Applicatie-beveiliging"
+
+msgid "Invalid server ID"
+msgstr "Ongeldig Server-ID"
+
+msgid "Missing credentials"
+msgstr "Accountgegevens ontbreken"
+
+msgid "Please enter at least 2 characters"
+msgstr "Er dienen minimaal 2 karakters ingevoerd te worden"
+
+msgid "Invalid credentials"
+msgstr "Ongeldige gebruikergegevens"
+
+msgid " Following users were found"
+msgstr "De volgende gebruikers zijn gevonden"
+
+msgid "Authentication method"
+msgstr "Authenticatiemethode"
+
+msgid "Select authentication method for user"
+msgstr "Kies de authenticatiemethode voor de gebruiker"
+
+msgid "Invalid authentication method"
+msgstr "Ongeldige authenticatiemethode"
+
+msgid "Username must be at least 6 characters long!"
+msgstr "De gebruikersnaam moet minimaal 6 karakters lang zijn!"
+
+msgid "No servers available"
+msgstr "Geen servers beschikbaar"
+
+msgid "Authentication"
+msgstr "Authenticatie"
+
+msgid "Last login"
+msgstr "Laatste inlog"
+
+msgid "All users"
+msgstr "Alle gebruikers"
+
+msgid "Authentication settings"
+msgstr "Authenticatie-instellingen"
+
+msgid "Last activity"
+msgstr "Laatste activiteit"
+
+msgid "compress override"
+msgstr "comprimeren omzeilen"
+
+msgid "Changelog notifications"
+msgstr "Berichten bij veranderingen"
+
+msgid "Set name for authentication method"
+msgstr "Geef een naam voor de authenticatiemethode"
+
+msgid "Enter domain controllers, separated by ;"
+msgstr "Geef de domeincontrollers, gescheiden door ;"
+
+msgid "Enter base DN for LDAP"
+msgstr "Basis-DN voor LDAP"
+
+msgid "Authentication methods"
+msgstr "Authenticatiemethoden"
+
+msgid "Create new Radius authentication"
+msgstr "Maak nieuwe Radius-authenticatie"
+
+msgid "Create new AD authentication"
+msgstr "Maak nieuwe AD-authenticatie"
+
+msgid "Create new LDAP authentication"
+msgstr "Maak nieuwe LDAP-authenticatie"
+
+msgid "Parameters"
+msgstr "Instellingen"
+
+msgid "Protected"
+msgstr "Beschermd"
+
+msgid "Here you can set different authentication methods for your users."
+msgstr "Hier kunt u verschillende methoden van authenticatie opgeven voor de gebruikers."
+
+msgid "phpIPAM currently supports 4 methods for authentication:"
+msgstr "phpIPAM ondersteunt 4 authenticatie-methoden:"
+
+msgid "Local authentication"
+msgstr "Lokale authenticatie"
+
+msgid "AD (Active Directory) authentication"
+msgstr "Authenticatie bij AD (Active Directory)"
+
+msgid "LDAP authentication"
+msgstr "Authenticatie via LDAP"
+
+msgid "Radius authentication"
+msgstr "Authenticatie via Radius"
+
+msgid "For AD/LDAP connection phpipam is using adLDAP, for documentation please check "
+msgstr "phpipam gebruikt adLDAP voor connectie met AD en/of LDAP. Voor documentatie bekijk"
+
+msgid ""
+"First create new user under user management with <u>same username as on AD</u> and set "
+"authention type to one of available methods."
+msgstr ""
+"Maak eerst een nieuwe gebruiker in het gebruikersbeheer met <u>dezelfde gebruikersnaam als in "
+"AD</u> en stel de authenticatiemethode in op een van de beschikbare methodes."
+
+msgid "Failed to edit authentication method"
+msgstr "Fout bij het bewerken van de authenticatiemethode"
+
+msgid "Authentication method updated"
+msgstr "Authentiecatiemethode bijgewerkt"
+
+msgid "Method cannot be change as it is protected"
+msgstr "Deze methode kan niet gewijzigd worden omdat deze beveiligd is"
+
+msgid "Invalid method type"
+msgstr "Ongeldige methode"
+
+msgid "The account suffix for your domain"
+msgstr "Account achtervoegsel voor het domein"
+
+msgid "Domain account for search operations (optional)"
+msgstr "Domeingebruiker voor zoekopdrachten (optioneel)"
+
+msgid "Radius connection settings"
+msgstr "Radius connectie-instellingen"
+
+msgid "Radius server"
+msgstr "Radius server"
+
+msgid "Enter Radius server"
+msgstr "Geef de Radius server"
+
+msgid "Secret"
+msgstr "Gedeeld geheim"
+
+msgid "Enter radius secret"
+msgstr "Geen het Radius gedeelde geheim"
+
+msgid "Enter radius port (default 1812)"
+msgstr "Geef de radiuspoort (standaard 1812)"
+
+msgid "Suffix"
+msgstr "Achtervoegsel"
+
+msgid "Enter suffix"
+msgstr "Geef het achtervoegsel"
+
+msgid "Timeout"
+msgstr "Time-out"
+
+msgid "Set timeout in seconds"
+msgstr "Geef de  time-out in seconden"
+
+msgid "php Socket extension missing!"
+msgstr "De Socket-extensie in php ontbreekt!"
+
+msgid "Check for  not implemented"
+msgstr "De controle op  is niet ge-implementeerd"
+
+msgid "Filename and title are mandatory"
+msgstr "De bestandsnaam en titel zijn verplicht"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Nameservers"
+msgstr "Naamservers"
+
+msgid "Select nameserver set"
+msgstr "Kies een naamserver-set"
+
+msgid "Autocreate reverse records"
+msgstr "Maak omgekeerde DNS-records automatisch"
+
+msgid "Auto create reverse (PTR) records for this subnet"
+msgstr "Maak automatisch omgekeerde DNS-records voor dit subnet"
+
+msgid "Show DNS records"
+msgstr "Toon DNS records"
+
+msgid "Show DNS records for hosts"
+msgstr "Toon DNS records voor apparaten"
+
+msgid "No VLANs"
+msgstr "Geen VLANs"
+
+msgid "Please enter subnet description to show as name!"
+msgstr "Geef de omschrijving van het subnet die als naam getoond dient te worden!"
+
+msgid "Error editing subnet"
+msgstr "Fout bij bewerken van subnet"
+
+msgid "Cannot connect to powerDNS database"
+msgstr "Kan geen verbinding met de PowerDNS database maken"
+
+msgid "Do you wish to delete DNS zone and all records"
+msgstr "Weet u zeker dat u de DNS zone met alle records wilt verwijderen"
+
+msgid "Failed to set subnet permissons"
+msgstr "Fout bij het instellen van de rechten voor subnet"
+
+msgid "Manage permissions for folder"
+msgstr "Beheer rechten van de map"
+
+msgid "Only subnets that have no nested subnets can be splitted"
+msgstr "Alleen subnetten die geen onderliggende subnetten hebben kunnen worden gesplitst"
+
+msgid "Subnet too small to be splitted"
+msgstr "Het subnet is te klein om gesplitst te worden"
+
+msgid "Name prefix"
+msgstr "Voorvoegsel voor naam"
+
+msgid "Folder name must have at least 2 characters"
+msgstr "De naam van de map dient minimaal 2 karakters te zijn"
+
+msgid "Error editing folder"
+msgstr "Fout bij bewerken van de map"
+
+msgid "Failed to truncate subnet"
+msgstr "Fout bij het afkappen van subnet"
+
+msgid "No nameservers"
+msgstr "Geen naamservers"
+
+msgid "Error: "
+msgstr "Fout:"
+
+msgid "Security code"
+msgstr "Beveilingscode"
+
+msgid "Invalid security code"
+msgstr "Ongeldige beveiligingscode"
+
+msgid "IP requests disabled"
+msgstr "IP-aanvragen zijn uitgeschakeld"
+
+msgid "Invalid share key"
+msgstr "Ongeldige sleutel voor delen"
+
+msgid "Share expired"
+msgstr "Deling is verlopen"
+
+msgid "Share expires on "
+msgstr "Delen verloopt op"
+
+msgid "Gateway"
+msgstr "Gateway"
+
+msgid "IP addresses belonging to ALL nested subnets"
+msgstr "Alle IP-adressen behorende bij alle onderliggende subnetten"
+
+msgid "Address is marked as gateway"
+msgstr "Adres is gemarkeerd als gateway"
+
+msgid "Back to subnet"
+msgstr "Terug naar subnet"
+
+msgid "IP status"
+msgstr "Status van IP"
+
+msgid "IP address not existing in database"
+msgstr "Het IP-adres bestaat niet in de database"
+
+msgid "Usage graph"
+msgstr "Verbruiksgrafiek"
+
+msgid "Subnet is empty"
+msgstr "Subnet is leeg"
+
+msgid "status"
+msgstr "status"
+
+msgid "Invalid scan type"
+msgstr "Ongeldige zoekmethode"
+
+msgid "No entries available"
+msgstr "Geen data beschikbaar"
+
+msgid "Ports"
+msgstr "Poorten"
+
+msgid "Debug"
+msgstr "Debug"
+
+msgid "Discovery scans discover new hosts"
+msgstr "Nieuwe apparaten worden gevonden tijdens het zoeken"
+
+msgid "Status update scans update alive status for whole subnet"
+msgstr "Bijwerken van status werkt ook de status van het gehele subnet bij"
+
+msgid "Subnet is in section"
+msgstr "Subnet zit in sectie"
+
+msgid "Slave subnets"
+msgstr "Gekoppelde subnetten"
+
+msgid "Underlying hosts"
+msgstr "Onderliggende apparaten"
+
+msgid "Active subnet shares"
+msgstr "Actieve gedeelde subnetten"
+
+msgid "Expires"
+msgstr "Verloopt"
+
+msgid "Expired subnet shares"
+msgstr "Verlopen gedeelde subnetten"
+
+msgid "Expired"
+msgstr "Verlopen"
+
+msgid "Temporary share subnet"
+msgstr "Deel tijdelijk dit subnet"
+
+msgid "DNS records"
+msgstr "DNS records"
+
+msgid "Active shares"
+msgstr "Actieve delingen"
+
+msgid "Expired shares"
+msgstr "Verlopen delingen"
+
+msgid "Temporary share address"
+msgstr "Adres van tijdelijk gedeeld item"
+
+msgid "Missing required fields"
+msgstr "Vereiste velden ontbreken"
+
+msgid " can not be empty!"
+msgstr " kan niet leeg zijn!"
+
+msgid "Invalid address range"
+msgstr "Ongeldige adresreeks"
+
+msgid "Tag"
+msgstr "Label"
+
+msgid "Is gateway"
+msgstr "Is gateway"
+
+msgid "PTR exclude"
+msgstr "PTR uitgesloten"
+
+msgid "Dont create PTR records"
+msgstr "Maak geen nieuwe PTR-records"
+
+msgid "You do not have access to this network"
+msgstr "U heeft geen toegang tot dit netwerk"
+
+msgid "VLAN ID"
+msgstr "VLAN-ID"
+
+msgid "Mac address"
+msgstr "MAC-adres"
+
+msgid "Owners"
+msgstr "Eigenaren"
+
+msgid "Separate multiple recepients with "
+msgstr "Scheid meerdere ontvangers met"
+
+msgid "Ping check result"
+msgstr "Resultaat van ping-controle"
+
+msgid "Repeat"
+msgstr "Herhaal"
+
+msgid "range"
+msgstr "reeks"
+
+msgid "Cannot open upload/import.csv"
+msgstr "Kan csvupload/import.csv niet openen"
+
+msgid "Invalid file type"
+msgstr "Ongeldig bestandstype"
+
+msgid "Invalid subnet ID"
+msgstr "Ongeldig subnet-ID"
+
+msgid "Import failed"
+msgstr "Fout bij importeren"
+
+msgid "Import file and show addresses"
+msgstr "Importeer bestand en toon adressen"
+
+msgid "VLAN has no belonging subnets"
+msgstr "VLAN heeft geen onderliggende subnetten"
+
+msgid "Folder has no subfolders"
+msgstr "Map heeft geen submappen"
+
+msgid "Folder has no belonging subnets"
+msgstr "Map heeft geen onderliggende subnetten"
+
+msgid "Folder has no subfolders or belonging subnets"
+msgstr "Map heeft geen submappen of onderliggende subnetten"
+
+msgid "Subnets menu"
+msgstr "Subnetten-menu"
+
+msgid "No sections available!"
+msgstr "Geen sectie beschikbaar!"
+
+msgid "Clik to reorder widgets"
+msgstr "Klik om widget-volgorde te wijzigen"
+
+msgid "Database verified"
+msgstr "Database is gecontroleerd"
+
+msgid "New version available"
+msgstr "Nieuwe versie beschikbaar"
+
+msgid "Back to section"
+msgstr "Terug naar sectie"
+
+msgid "Available subnets in subsection"
+msgstr "Beschikbare subnetten in subsectie"
+
+msgid "Invalid action"
+msgstr "Ongeldige actie"
+
+msgid "Database error: "
+msgstr "Fout in database:"
+
+msgid "Error: Invalid authentication method"
+msgstr "Fout: ongeldige authenticatie-methode"
+
+msgid "Invalid username or password"
+msgstr "Ongeldige gebruikersnaam of wachtwoord"
+
+msgid "php Socket extension missing"
+msgstr "De Socket-extensie in php ontbreekt!"
+
+msgid "Radius login successful"
+msgstr "Inloggen via Radius geslaagd"
+
+msgid "No crypt types supported"
+msgstr "Er worden geen versleutelingsmethoden ondersteund"
+
+msgid "your password was updated"
+msgstr "uw wachtwoord is gewijzigd"
+
+msgid "Administrative privileges required"
+msgstr "Beheerrechten vereist"
+
+msgid "No records found to replace"
+msgstr "Geen records gevonden om te vervangen"
+
+msgid "Update: "
+msgstr "Bijwerken:"
+
+msgid "Invalid action!"
+msgstr "Ongeldige actie!"
+
+msgid "Failed to update address status"
+msgstr "Fout bij het bijwerken van de adres-status"
+
+msgid "Failed to delegate permissions"
+msgstr "Fout bij het delegeren van rechten"
+
+msgid "Invalid PDNS action"
+msgstr "Ongeldige PDNS actie"
+
+msgid "Invalid subnet Id"
+msgstr "Ongeldig subnet-ID"
+
+msgid "Failed to move IP address"
+msgstr "Fout bij het verplaatsen van IP-adres"
+
+msgid "Invalid Network!"
+msgstr "Ongeldig netwerk!"
+
+msgid "Subnet $new_subnet overlapps with"
+msgstr "Subnet $new_subnet overlapt met"
+
+msgid "Mask must be an integer"
+msgstr "Masker moet een geheel nummer zijn"
+
+msgid "New network is same as old network"
+msgstr "Nieuw netwerk is hetzelfde als het oude netwerk"
+
+msgid "Subnet it same as "
+msgstr "Subnet is hetzelfde als"
+
+msgid "Invalid number of subnets"
+msgstr "Ongeldig aantal subnetten"
+
+msgid "Subnet overlapping - "
+msgstr "Subnet-overlap -"
+
+msgid "Record created"
+msgstr "Record gemaakt"
+
+msgid "Record updated"
+msgstr "Record bijgewerkt"
+
+msgid "Record deleted"
+msgstr "record verwijderd"
+
+msgid "Domain id must be an integer"
+msgstr "ID van domein moet een geheel getal zijn"
+
+msgid "Invalid record name"
+msgstr "Ongeldige record-naam"
+
+msgid "Invalid record type"
+msgstr "Ongeldig type record"
+
+msgid "All records for domain removed"
+msgstr "Alle records voor het domein zijn verwijderd"
+
+# ## 1.18.009 ###
+msgid "Select device where subnet is located"
+msgstr "Kies apparaat waar dit subnet te vinden is"
+
+msgid "Belonging hosts"
+msgstr "Gekoppelde apparaten"
+
+msgid "No subnets belong to this device"
+msgstr "Er zijn geen subnetten gekoppeld aan dit apparaat"
+
+# ## 1.19.000 ###
+msgid "Log files are sent to syslog"
+msgstr "Logbestanden worden naar syslog gestuurd"
+
+msgid "Syslog files are sent to syslog"
+msgstr "Syslog-bestanden worden naar syslog gestuurd"
+
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+msgstr ""
+"Het aantal ontdekte apparaten is groter dan het maximale aantal dat in php.ini gedefinieerd is "
+"- stel in op"
+
+msgid "Please adjust your php.ini settings for value `max_input_vars`"
+msgstr "Pas de waarde voor 'max_input_vars' in de instellingen in php.ini aan"
+
+msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
+msgstr "phpipam gebruikt adLDAP voor connectie met AD/LDAP/NetIQ. Voor documentatie bekijk"
+
+msgid "Search domain groups"
+msgstr "Zoek domeingroepen"
+
+msgid "Add group"
+msgstr "Groep toevoegen"
+
+msgid "No members"
+msgstr "Geen leden"
+
+msgid "Group already exists"
+msgstr "Groep bestaat al"
+
+msgid "You do not have permissions to process this request"
+msgstr "U heeft geen rechten om dit verzoek uit te voeren"
+
+msgid "Select agent"
+msgstr "Kies agent"
+
+msgid "Select which scanagent to use"
+msgstr "Kies het te gebruiken hulpprogramma voor zoeken"
+
+msgid "No agents available"
+msgstr "Geen agents beschikbaar"
+
+msgid "phpipam Scan agents"
+msgstr "phpipam zoek-agents"
+
+msgid "Create new agent"
+msgstr "Nieuwe agent"
+
+msgid "Last access"
+msgstr "Laatste toegang"
+
+msgid "edit agent details"
+msgstr "bewerkt details van agent"
+
+msgid "Create new scan agent"
+msgstr "Maak nieuwe zoek-agent"
+
+msgid "Enter scan agent name"
+msgstr "Geef naam van agent"
+
+msgid "Agent description'"
+msgstr "Beschrijving van agent"
+
+msgid "Agent type"
+msgstr "Agenttype"
+
+msgid "Invalid agent code"
+msgstr "Ongeldige code voor agent"
+
+msgid "Invalid agent name"
+msgstr "Ongeldige naam voor agent"
+
+msgid "Invalid agent Id"
+msgstr "Ongeldige agent-ID"
+
+msgid "Agent add error"
+msgstr "Fout bij toevoegen van agent"
+
+msgid "Agent edit error"
+msgstr "Fout bij bewerken van agent"
+
+msgid "Agent delete error"
+msgstr "Fout bij verwijderen van agent"
+
+msgid "Agent add success"
+msgstr "Toevoegen van agent geslaagd"
+
+msgid "Agent edit success"
+msgstr "Bewerken van agent geslaagd"
+
+msgid "Agent delete success"
+msgstr "Verwijderen van agent geslaagd"
+
+msgid "Cannot remove localhost scan agent"
+msgstr "Kan de lokale zoekagent nier verwijderen"
+
+msgid "Scan agent references removed"
+msgstr "Referenties naar zoekagent verwijderd"
+
+# ## 1.19.002 ###
+msgid "Enable Firewall Zones"
+msgstr "Activeer firewall-zones"
+
+msgid "Enable or disable firewall zone management module"
+msgstr "Activeer of de-activeer de module voor firewall-zonebeheer"
+
+msgid "Firewall zone management"
+msgstr "Firewall en zone beheer"
+
+msgid "Invalid zone alias value."
+msgstr "Ongeldige waarde voor zone-alias."
+
+msgid "Invalid interface."
+msgstr "Ongeldige interface."
+
+msgid "Invalid zone ID."
+msgstr "Ongeldig Zone-ID."
+
+msgid "Invalid mapping ID."
+msgstr "Ongeldig koppel-ID."
+
+msgid "Cannot add mapping"
+msgstr "Kan de koppeling niet toevoegen"
+
+msgid "Mapping modified successfully"
+msgstr "Koppeling met succes aangepast"
+
+msgid "Invalid ID. Do not manipulate the POST values!"
+msgstr "Ongeldig ID. De POST-waarden mogen niet aangepast worden!"
+
+msgid "Invalid action. Do not manipulate the POST values!"
+msgstr "Ongeldige actie. De POST-waarden mogen niet aangepast worden!"
+
+msgid "Add a mapping between a firewall device and a firewall zone"
+msgstr "Voeg een koppeling tussen een firewall-apparaat en een firewall-zone toe"
+
+msgid "Zone to map"
+msgstr "Zone voor koppeling"
+
+msgid "Select a firewall zone"
+msgstr "Kies een firewall-zone"
+
+msgid "Firewall to map"
+msgstr "Firewall voor koppeling"
+
+msgid "Select firewall"
+msgstr "Kies firewall"
+
+msgid "Interface"
+msgstr "Interface"
+
+msgid "Create Firewall zone mapping"
+msgstr "Maak firewall-zone koppeling"
+
+msgid "Firewall interface"
+msgstr "Interface op firewall"
+
+msgid "Zone alias"
+msgstr "Zone-alias"
+
+msgid "Local zone alias"
+msgstr "Lokale zone-alias"
+
+msgid "You are about to remove the firewall to zone mapping!"
+msgstr "U gaat de koppeling tussen de firewall en de zone verwijderen!"
+
+msgid "Zone"
+msgstr "Zone"
+
+msgid "Alias"
+msgstr "Alias"
+
+msgid "Devicename"
+msgstr "Apparaatnaam"
+
+msgid "No firewall zones configured"
+msgstr "Geen firewall-zones geconfigureerd"
+
+msgid "Invalid zone name length parameter. A valid valid value is between 3 and 31"
+msgstr "Ongeldige waarde voor lengte van de zonenaam. Geldige waarden zijn tussen 3 en 31"
+
+msgid ""
+"Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and "
+"&quot;.&quot; are allowed."
+msgstr ""
+"Ongeldig alias voor het IPv4-adrestype. Alleen alfanumerieke karakters en de speciale tekens  "
+"&quot;-&quot;, &quot;_&quot; and &quot;.&quot; zijn toegestaan."
+
+msgid "Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr ""
+"Ongeldig scheidingsteken. Alleen  &quot;-&quot;, &quot;_&quot; and &quot;.&quot; zijn "
+"toegestaan."
+
+msgid ""
+"Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;."
+"&quot; are allowed."
+msgstr ""
+"Ongeldige zone-indicator. Alleen alfanumerieke karakters en de speciale tekens  &quot;-&quot;, "
+"&quot;_&quot; and &quot;.&quot; zijn toegestaan."
+
+msgid "Invalid zone generator method. Do not manipulate the POST values!"
+msgstr "Ongeldige methode voor zone-generatie. De POST-waarden mogen niet aangepast worden!"
+
+msgid "Invalid zone generator types [decimal]. Do not manipulate the POST values!"
+msgstr ""
+"Ongeldige types voor zone-generatie [decimaal]. De POST-waarden mogen niet aangepast worden!"
+
+msgid "Invalid zone generator types [hex]. Do not manipulate the POST values!"
+msgstr "Ongeldige types voor zone-generatie [hex]. De POST-waarden mogen niet aangepast worden!"
+
+msgid "Invalid zone generator types [text]. Do not manipulate the POST values!"
+msgstr "Ongeldige types voor zone-generatie [tekst]. De POST-waarden mogen niet aangepast worden!"
+
+msgid "Invalid padding value. Use the checkbox to set the padding value to on or off."
+msgstr ""
+"Ongeldige waarde voor aanvullen. Gebruik het vinkje om het aanvullen uit of aan te schakelen."
+
+msgid "Invalid device type."
+msgstr "Ongeldig apparaattype."
+
+msgid "Maximum zone name length"
+msgstr "Maximale lengte van de zonenaam"
+
+msgid ""
+"Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 "
+"characters.<br>(keep in mind that your firewall may have a limit for the length of zone names "
+"or address objects )"
+msgstr ""
+"Kies een maximale lengte voor de zonenamen.<br> De standaardlengte is 3, het maximum is 31 "
+"karakters.<br>(Houd er rekening mee dat de firewall een lengte-limiet kan hebben voor zonenamen "
+"of adresobjecten)"
+
+msgid "IPv4 address type alias"
+msgstr "Alias voor IPv4 adrestype"
+
+msgid "IPv6 address type alias"
+msgstr "Alias voor IPv6 adrestype"
+
+msgid "Address type aliases are used to indicate a IPv4 or IPv6 address object."
+msgstr "Aliases voor het adrestype worden gebruikt om een IPv4 of IPv6 adresobject aan te wijzen."
+
+msgid "The separator is used to keep the name of address objects tidy."
+msgstr "Het scheidingsteken wordt gebruikt om namen van adresobjecten leesbaar te houden."
+
+msgid "Own zone indicator"
+msgstr "Eigen indicator voor zone"
+
+msgid ""
+"The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It "
+"is the leading character of the zone name but will be separated from the zone name in the "
+"database."
+msgstr ""
+"The indicator wordt gebruikt om aan te geven dat een bedrijf of een klant eigenaar is van de "
+"zone.<br>Dit is het eerste karakter van de zonenaam maar wordt  in de database gescheiden van "
+"de zonenaam."
+
+msgid "Customer zone indicator"
+msgstr "Zone-indicator voor klant"
+
+msgid "Zone generator method"
+msgstr "Methode van zone-generatie"
+
+msgid ""
+"Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To "
+"use your own unique zone names you can choose the option &quot;text&quot."
+msgstr ""
+"Genereer automatische zonenamen met de instelling voor &quot;decimaal&quot; of &quot;hex&quot;."
+"<br>Om eigen unieke zonenamen te genereren kan gebruik gemaakt worden van de optie &quot;"
+"text&quot;."
+
+msgid "Zone name padding"
+msgstr "Aanvulling van zonenaam"
+
+msgid ""
+"Insert leading zeros into the zone name if you want to have a constant length of your zone name."
+"<br>This setting will be ignored if you use the \"text\" zone name generator."
+msgstr ""
+"Voeg voorloop-nullen in de zonenaam in voor het hebben van een constante lengte van de "
+"zonenamen.<br>De instelling wordt genegeerd indien de optie &quot;text&quot; wordt gebruikt "
+"voor het genereren van zone-namen."
+
+msgid "Zone name strict mode"
+msgstr "Stricte mode voor zonenamen"
+
+msgid ""
+"Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the "
+"&quot;text&quot; mode you may uncheck this to have not unique zone names."
+msgstr ""
+"Stricte zonenamen zijn standaard ingeschakeld.<br>Indien er gebruik gemaakt wordt van zonenamen "
+"in de &quot;text&quot;-modus kan deze instelling uitgezet worden om niet-unieke zonenamen toe "
+"te staan."
+
+msgid "Firewall device Type"
+msgstr "Type firewall-apparaat"
+
+msgid "Select the appropriate device type to match firewall devices."
+msgstr "Selecteer het juiste type apparaat dat overeenkomt met de firewall."
+
+msgid "Invalid zone name value."
+msgstr "Ongeldige waarde voor zonenaam."
+
+msgid "Invalid indicator ID."
+msgstr "Ongeldig indicator-ID."
+
+msgid "Invalid section ID."
+msgstr "Ongeldig sectie-ID."
+
+msgid "Invalid subnet ID."
+msgstr "Ongeldig subnet-ID."
+
+msgid "Invalid L2 domain ID."
+msgstr "Ongeldig L2-domein ID."
+
+msgid "Invalid VLAN ID."
+msgstr "Ongeldig VLAN-ID."
+
+msgid "Invalid generator ID."
+msgstr "Ongeldig generator-ID."
+
+msgid "Invalid padding setting."
+msgstr "Ongeldige instelling voor aanvulling."
+
+msgid "Cannot generate zone name"
+msgstr "Kan de zonenaam niet genereren"
+
+msgid "Cannot validate zone name"
+msgstr "Kan de zonenaam niet valideren"
+
+msgid "Cannot add zone"
+msgstr "Kan zone niet toevoegen"
+
+msgid "Zone modified successfully"
+msgstr "Zone met succes bijgewerkt"
+
+msgid "Add a firewall zone"
+msgstr "Voeg een firewall-zone toe"
+
+msgid "Zone name (Only alphanumeric and special characters like .-_ and space.)"
+msgstr "Zonenaam (Alleen alfanumerieke en speciale karakters zoals .-_ en spatie)"
+
+msgid "The zone name will be automatically generated"
+msgstr "De zonenaam wordt automatisch gegenereerd"
+
+msgid "Zone name"
+msgstr "Zonenaam"
+
+msgid "Own zone"
+msgstr "Eigen zone"
+
+msgid "Customer zone"
+msgstr "Klantzone"
+
+msgid "Removing this firewall zone will also remove all referenced mappings!"
+msgstr "Verwijderen van deze zone verwijdert ook alle koppelingen naar de zone!"
+
+msgid "Create Firewall zone"
+msgstr "Maak zone voor firewall"
+
+msgid "Firewall zone and device mappings"
+msgstr "Zone en gekoppelde apparaten"
+
+# ## 1.19.020
+msgid "Base DN for your directory"
+msgstr "DN-basis van de directory"
+
+msgid "Users DN"
+msgstr "DN van gebruikers"
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr "DN-basis voor de gebruikers, indien verschillend van de hierboven genoemde DN-basis"
+
+msgid "LDAP Security Type"
+msgstr "LDAP Beveiligingstype"
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr "SSL, TLS of Geen (standaard: TLS)"
+
+msgid "LDAP port"
+msgstr "LDAP-poort"
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr ""
+"Poort voor uw LDAP-service. TLS/Niet-versleuteld is standaard: 389 <br /> SSL is standaard 636"
+
+msgid "Bind user"
+msgstr "Gebruiker voor connectie"
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr "Gebruiker-DN voor zoekoperaties (optionel)."
+
+msgid "Bind password"
+msgstr "Wachtwoord voor connectie"
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr "Wachtwoord voor het connectie-account (alleen vereist indien de gebruiker ingevuld is)."
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr "Er kan alleen worden gezocht op AD groepen. Sorry."
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr "Ongeldige DN-basis instelling voor LDAP"
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr "De LDAP-gebruiker heeft niet genoeg rechten om te zoeken"
+
+# ## 1.19.021
+msgid "Please select fields to populate:"
+msgstr "Kies de velden om te vullen:"
+
+msgid "fill"
+msgstr "vullen"

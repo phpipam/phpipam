@@ -1,4 +1,3 @@
-.svn
-functions/functions_old
 db/bkp
+app/subnets/import-subnet/upload/
 config.php

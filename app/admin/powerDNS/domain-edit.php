@@ -18,8 +18,10 @@ $PowerDNS 	= new PowerDNS ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
 
-// save settings for powerDNS default
+# save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
 
 # get VRF
@@ -49,7 +51,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<input type="text" class="name form-control input-sm" name="name" placeholder="<?php print _('FQDN domain name'); ?>" value="<?php print $domain->name; ?>" <?php print $readonly; ?> <?php if($_POST['action']!="add") { print "disabled='disabled'"; } ?>>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="id" value="<?php print @$_POST['id']; ?>">
-
+            <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
 
@@ -202,8 +204,8 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editDomainSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class="btn btn-sm btn-default <?php if(@$_POST['secondary']=="true") { print "hidePopup2"; } else { print "hidePopups"; } ?>"><?php print _('Cancel'); ?></button>
+		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> <?php if(@$_POST['secondary']=="true") { print "editDomainSubmit2"; } ?>" id="editDomainSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
 	</div>
 	<!-- result -->
 	<div class="domain-edit-result"></div>

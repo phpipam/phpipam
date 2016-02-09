@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch all languages
 $languages = $Admin->fetch_all_objects("lang", "l_id");
 
@@ -43,6 +46,7 @@ $(document).ready(function() {
 	<td><?php print _('Site title'); ?></th>
 	<td>
 		<input type="text" class="form-control input-sm" name="siteTitle" value="<?php print $settings['siteTitle']; ?>">
+		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	</td>
 	<td class="info2"><?php print _('Set site title'); ?></td>
 </tr>
@@ -363,7 +367,7 @@ $(document).ready(function() {
 		<input type="text" class="form-control input-sm" name="scanMaxThreads" value="<?php print $settings['scanMaxThreads']; ?>">
 	</td>
 	<td class="info2">
-		<?php print _('Set maximum nubmer of concurrent ICMP checks (default 128)'); ?>
+		<?php print _('Set maximum number of concurrent ICMP checks (default 128)'); ?>
 	</td>
 </tr>
 

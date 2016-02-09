@@ -766,7 +766,41 @@ class Tools extends Common_functions {
 
 	    # return result
 	    return $search;
+	}
 
+
+	/**
+	 * Function to search vrf
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @return void
+	 */
+	public function search_vrfs ($search_term) {
+		# fetch custom fields
+		$custom_fields = $this->fetch_custom_fields ("vrf");
+		# query
+		$query[] = "select * from `vrf` where `name` like :search_term or `description` like :search_term or `rd` like :search_term ";
+		# custom
+	    if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
 	}
 
 	/**
@@ -795,8 +829,12 @@ class Tools extends Common_functions {
 		}
 		# else calculate options
 		else {
-			# if subnet is not provided maye wildcard is, so explode it to array
-			$address = array_filter(explode(".", $address));
+			# if subnet is not provided maybe wildcard is, so explode it to array
+			$address = explode(".", $address);
+            # remove empty
+            foreach($address as $k=>$a) {
+                if (strlen($a)==0)  unset($address[$k]);
+            }
 
 			# 4 pieces is ok, host
 			if (sizeof($address) == 4) {
@@ -1666,11 +1704,11 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric($e->title)) {
+				if (is_numeric(str_replace("Version", "", $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
-					return $e->title;
+					return str_replace("Version", "", $e->title);
 					break;
 				}
 			}
@@ -1973,6 +2011,7 @@ class Tools extends Common_functions {
 		$query[] = "	`d`.`description` as `domainDescription`,";
 		$query[] = "	`v`.`domainId` as `domainId`,";
 		$query[] = "	`v`.`name` as `name`,";
+		$query[] = "	`d`.`name` as `domainName`,";
 		$query[] = "	`v`.`number` as `number`,";
 		$query[] = "	`v`.`description` as `description`,";
 		// fetch custom fields

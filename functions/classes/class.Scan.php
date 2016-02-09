@@ -582,8 +582,8 @@ class Scan extends Common_functions {
 		}
 		else {
 			//set loop limits
-			$start = $Subnets->transform_to_decimal($boundaries->network)+1;
-			$stop  = $Subnets->transform_to_decimal($boundaries->broadcast);
+			$start = gmp_strval(gmp_add($Subnets->transform_to_decimal($boundaries->network),1));
+			$stop  = gmp_strval($Subnets->transform_to_decimal($boundaries->broadcast));
 			//loop
 			for($m=$start; $m<$stop; $m++) {
 				$ip[] = $m;

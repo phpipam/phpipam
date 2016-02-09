@@ -17,6 +17,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch all sections for master section
 $sections = $Sections->fetch_all_sections ();
 # fetch groups
@@ -46,6 +49,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 				<!-- hidden -->
 				<input type="hidden" name="action" 	value="<?php print $_POST['action']; ?>">
 				<input type="hidden" name="id" 		value="<?php print $_POST['sectionId']; ?>">
+				<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			</td>
 		</tr>
 		<!-- description -->

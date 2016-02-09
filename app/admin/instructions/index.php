@@ -8,6 +8,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # fetch instructions
 $instructions = $Admin->fetch_object("instructions", "id", 1);
 
@@ -27,8 +30,9 @@ if($rowcount < 18) { $rowcount = 18; }
 <form name="instructions" id="instructionsForm">
 
 	<textarea style="width:100%;" name="instructions" id="instructions" rows="<?php print $rowcount; ?>"><?php print stripslashes($instructions->instructions); ?></textarea>
+	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 
-	<script src="js/ckeditor/ckeditor.js"></script>
+	<script src="js/1.2/ckeditor/ckeditor.js"></script>
 	<script>
     	CKEDITOR.replace( 'instructions', {
 	    	uiColor: '#f9f9f9',

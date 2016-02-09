@@ -30,6 +30,9 @@ $subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 # IPv6 scanning is not supported
 if ( $Subnets->identify_address($subnet->subnet) == "IPv6") 			{ $Result->show("danger", _('IPv6 scanning is not supported').'!', true, true); }
+
+# fix description
+$subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description.")" : "";
 ?>
 
 
@@ -43,7 +46,7 @@ if ( $Subnets->identify_address($subnet->subnet) == "IPv6") 			{ $Result->show("
     <!-- subnet -->
     <tr>
         <td class="middle"><?php print _('Subnet'); ?></td>
-        <td><?php print $Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask ($subnet->description)"; ?></td>
+        <td><?php print $Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask $subnet->description"; ?></td>
     </tr>
     <!-- Scan type -->
     <tr>

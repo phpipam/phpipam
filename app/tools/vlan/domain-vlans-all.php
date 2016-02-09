@@ -135,7 +135,7 @@ else {
 		   		if(!in_array($field['name'], $hidden_fields)) {
 
 					// create links
-					$vlan->$field['name'] = $Result->create_links ($vlan->$field['name']);
+					$vlan->$field['name'] = $Result->create_links ($vlan->$field['name'], $field['type']);
 
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
 					//booleans

@@ -68,6 +68,12 @@ elseif ($type == 'vlans'){
 		$fc++;
 	}
 }
+elseif ($type == 'l2dom'){
+	// set headers
+	$worksheet->write($lineCount, 0, _('name'));
+	$worksheet->write($lineCount, 1, _('description'));
+	$fc =2 ;
+}
 // sending HTTP headers
 $workbook->send($filename);
 // Let's send the file

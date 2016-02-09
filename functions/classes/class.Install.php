@@ -135,7 +135,7 @@ class Install extends Common_functions {
 	 */
 	private function create_grants () {
 	 	# set query
-	    $query = 'grant ALL on '. $this->db['name'] .'.* to '. $this->db['user'] .'@localhost identified by "'. $this->db['pass'] .'";';
+	    $query = 'grant ALL on `'. $this->db['name'] .'`.* to '. $this->db['user'] .'@localhost identified by "'. $this->db['pass'] .'";';
 		# execute
 		try { $this->Database_root->runQuery($query); }
 		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
@@ -164,7 +164,7 @@ class Install extends Common_functions {
 					try { $this->Database_root->runQuery("UNLOCK TABLES;"); }
 					catch (Exception $e) {}
 					//drop database
-					try { $this->Database_root->runQuery("drop database if exists ". $this->db['name'] .";"); }
+					try { $this->Database_root->runQuery("drop database if exists `". $this->db['name'] ."`;"); }
 					catch (Exception $e) {
 						$this->Result->show("danger", 'Cannot drop database: '.$e->getMessage(), true);
 					}
@@ -371,14 +371,9 @@ class Install extends Common_functions {
 		// succesfull queries:
 		$queries_ok = array();
 
-		# explode each query
-		foreach ($subversion_queries as $q) {
-			/// replace CRLF
-			$q = str_replace("\r\n", "\n", $q);
-			$subversion_query = explode(";\n", $q);
-			// save to final array
-			$queries = array_filter(array_merge($queries, $subversion_query));
-		}
+		// replace CRLF
+		$subversion_queries = str_replace("\r\n", "\n", $subversion_queries);
+		$queries = explode(";\n", $subversion_queries);
 
 	    # execute all queries
 	    foreach($queries as $query) {
@@ -412,24 +407,37 @@ class Install extends Common_functions {
 	/**
 	 * Fetch all upgrade queries from DB files
 	 *
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function get_upgrade_queries () {
-		$dir = dirname(__FILE__) . '/../../db/';
-		$files = scandir($dir);
+	public function get_upgrade_queries () {
+		// save all queries fro UPDATE.sql file
+		$queries = str_replace("\r\n", "\n", (file_get_contents( dirname(__FILE__) . '/../../db/UPDATE.sql')));
 
-		# set queries
-		foreach($files as $f) {
-			//get only UPGRADE- for specific version
-			if(substr($f, 0, 6) == "UPDATE") {
-				$new_version = str_replace(".sql", "",substr($f, 8));
-				if($new_version>$this->settings->version) {
-					$queries[] = file_get_contents($dir.$f);
-				}
-			}
-		}
+		// fetch settings if not present - for manual instructions
+		if (!isset($this->settings->version)) { $this->get_settings (); }
+
+        // explode and loop to get next version from current
+        $delimiter = false;
+        foreach (explode("/* VERSION ", $queries) as $k=>$q) {
+            $q_version = str_replace(" */", "", array_shift(explode("\n", $q)));
+
+            // if delimiter was found in previous loop
+            if ($delimiter!==false) {
+                $delimiter = $q_version;
+                break;
+            }
+            // if match with current set pointer to next item - delimiter
+            if ($q_version==$this->settings->version) {
+                $delimiter = true;
+            };
+        }
+
+        // remove older queries before this version
+        $old_queries = explode("/* VERSION $delimiter */", $queries);
+        $old_queries = trim($old_queries[1]);
+
 		# return
-		return $queries;
+		return $old_queries;
 	}
 }

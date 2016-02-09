@@ -234,7 +234,7 @@ $m = sizeof($addresses) -1;		//last address index
 
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
-	if($User->user->hideFreeRange!=1) {
+	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
     	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
 		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
     }
@@ -274,7 +274,7 @@ else {
 		       	}
 
 		       	# if there is some result for unused print it - if sort == ip_addr
-		       	if($User->user->hideFreeRange!=1) {
+		       	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 				    if ( $unused && ($sort['field'] == 'ip_addr') && $sort['direction'] == "asc" ) {
 		        		print "<tr class='th'>";
 		        		print "	<td></td>";
@@ -331,55 +331,92 @@ else {
 					    $hTooltip = "";
 				    }
 
-				    // gateway
-				    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
-
-				    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_REQUEST['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr);
-				    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
-				    print $Addresses->address_type_format_tag($addresses[$n]->state);
-				    print "</td>";
-
-
 					# search for DNS records
 					if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
-					# for ajax-loaded subnets
-					if(!isset($PowerDNS)) { $PowerDNS = new PowerDNS ($Database); }
+    					# for ajax-loaded subnets
+    					if(!isset($PowerDNS)) { $PowerDNS = new PowerDNS ($Database); }
 
-					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
-					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
-					unset($dns_records);
-					if ($records !== false || $ptr!==false) {
-						$dns_records[] = "<hr>";
-						$dns_records[] = "<ul class='submenu-dns'>";
-						if($records!==false) {
-							foreach ($records as $r) {
+                        // search for hostname records
+    					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
+    					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
+    					unset($dns_records);
+    					if ($records !== false || $ptr!==false) {
+    						$dns_records[] = "<hr>";
+    						$dns_records[] = "<ul class='submenu-dns'>";
+    						if($records!==false) {
+    							foreach ($records as $r) {
+    								if($r->type!="SOA" && $r->type!="NS")
+    								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
+    							}
+    						}
+    						if($ptr!==false) {
+    								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$ptr->id' data-domain_id='$ptr->domain_id'>$ptr->type</span> $ptr->name </li>";
+    						}
+    						$dns_records[] = "</ul>";
+    						// if none ignore
+    						$dns_records = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
+    					} else {
+    						$dns_records = "";
+    					}
+
+    					// search for IP records
+    					$records2 = $PowerDNS->search_records ("content", $addresses[$n]->ip, 'content', true);
+    					unset($dns_records2);
+    					if ($records2 !== false) {
+                            $dns_cname_unique = array();        // unique CNAME records to prevent multiple
+                            unset($cname);
+    						$dns_records2[] = "<hr>";
+    						$dns_records2[] = "<ul class='submenu-dns'>";
+							foreach ($records2 as $r) {
 								if($r->type!="SOA" && $r->type!="NS")
-								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
-							}
-						}
-						if($ptr!==false) {
-								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$ptr->id' data-domain_id='$ptr->domain_id'>$ptr->type</span> $ptr->name </li>";
-						}
-						$dns_records[] = "</ul>";
-						// if none ignore
-						$dns_records = sizeof($dns_records)==3 ? "" : implode(" ", $dns_records);
-					} else {
-						$dns_records = "";
-					}
+								$dns_records2[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->name </li>";
+                                //search also for CNAME records
+                                $dns_records_cname = $PowerDNS->seach_aliases ($r->name);
+                                if($dns_records_cname!==false) {
+                                    foreach ($dns_records_cname as $cn) {
+                                        if (!in_array($cn->name, $dns_cname_unique)) {
+                                            $cname[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$cn->id' data-domain_id='$cn->domain_id'>$cn->type</span> $cn->name </li>";
+                                            $dns_cname_unique[] = $cn->name;
+                                        }
+                                    }
+                                }
+						    }
+                            // merge cnames
+                            if (isset($cname)) {
+                                foreach ($cname as $cna) {
+                                    $dns_records2[] = $cna;
+                                }
+                            }
+    						$dns_records2[] = "</ul>";
+    						// if none ignore
+    						$dns_records2 = sizeof($dns_records2)==3 ? "" : implode(" ", $dns_records2);
+    					} else {
+    						$dns_records2 = "";
+    					}
 					}
 					// disabled
 					else {
 						$dns_records = "";
+						$dns_records2 = "";
 						$button = "";
 					}
 					// add button
 					if ($User->settings->enablePowerDNS==1) {
 					// add new button
-					if ($Subnets->validate_hostname($addresses[$n]->dns_name) && ($User->isadmin || @$User->user->pdns=="Yes"))
+					if ($Subnets->validate_hostname($addresses[$n]->dns_name, false) && ($User->isadmin || @$User->user->pdns=="Yes"))
 					$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
 					else
 					$button = "";
 					}
+
+
+				    // gateway
+				    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
+
+				    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_REQUEST['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
+				    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
+				    print $Addresses->address_type_format_tag($addresses[$n]->state);
+				    print $dns_records2."</td>";
 
 				    # resolve dns name
 				    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
@@ -425,7 +462,7 @@ else {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$addresses[$n]->$myField['name'] = $Result->create_links($addresses[$n]->$myField['name']);
+								$addresses[$n]->$myField['name'] = $Result->create_links($addresses[$n]->$myField['name'], $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
@@ -503,7 +540,7 @@ else {
 				****************************************************/
 				if ( $n == $m )
 				{
-					if($User->user->hideFreeRange!=1) {
+					if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 						# compressed?
 						if(isset($addresses[$n]->stopIP))	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->stopIP,  $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
 						else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'] ); }
