@@ -5,7 +5,7 @@
 	<td>
 		<?php
 		// set href
-		$href = REVISION=="000" ? "https://sourceforge.net/projects/phpipam/" : "https://github.com/phpipam/phpipam/tree/master";
+		$href = REVISION=="000" ? "http://phpipam.net" : "http://phpipam.net";
 		?>
 		<a href="<?php print $href; ?>">phpIPAM IP address management <?php print '[v'. VERSION. ']'; ?><?php if(REVISION > 0) { print " rev".REVISION; } ?></a>
 	</td>
