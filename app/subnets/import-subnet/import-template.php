@@ -36,6 +36,7 @@ $worksheet->write($lineCount, 0, _('ip address'));
 $worksheet->write($lineCount, 1, _('ip state'));
 $worksheet->write($lineCount, 2, _('description'));
 $worksheet->write($lineCount, 3, _('hostname'));
+$worksheet->write($lineCount, 3, _('fw_object'));
 $worksheet->write($lineCount, 4, _('mac'));
 $worksheet->write($lineCount, 5, _('owner'));
 $worksheet->write($lineCount, 6, _('device'));
