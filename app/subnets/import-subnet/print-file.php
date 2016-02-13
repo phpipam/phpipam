@@ -52,10 +52,10 @@ elseif(strtolower($filetype) == "xls") {
 
 			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
 			$outFile[$m] .= $data->val($m,'E').','.$data->val($m,'F').','.$data->val($m,'G').','.$data->val($m,'H').',';
-			$outFile[$m] .= $data->val($m,'I');
+			$outFile[$m] .= $data->val($m,'I').','.$data->val($m,'J');
 			//add custom fields
 			if(sizeof($custom_address_fields) > 0) {
-				$currLett = "J";
+				$currLett = "K";
 				foreach($custom_address_fields as $field) {
 					$outFile[$m] .= ",".$data->val($m,$currLett++);
 				}
@@ -80,6 +80,7 @@ print '	<th>'._('IP').'</th>';
 print '	<th>'._('Status').'</th>';
 print '	<th>'._('Description').'</th>';
 print '	<th>'._('Hostname').'</th>';
+print '	<th>'._('FW object').'</th>';
 print '	<th>'._('MAC').'</th>';
 print '	<th>'._('Owner').'</th>';
 print '	<th>'._('Switch').'</th>';

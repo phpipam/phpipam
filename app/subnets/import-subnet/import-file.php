@@ -64,10 +64,10 @@ elseif(strtolower($filetype) == "xls") {
 
 			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
 			$outFile[$m] .= $data->val($m,'E').','.$data->val($m,'F').','.$data->val($m,'G').','.$data->val($m,'H').',';
-			$outFile[$m] .= $data->val($m,'I');
+			$outFile[$m] .= $data->val($m,'I').','.$data->val($m,'J');
 			//add custom fields
 			if(sizeof($custom_address_fields) > 0) {
-				$currLett = "J";
+				$currLett = "K";
 				foreach($custom_address_fields as $field) {
 					$outFile[$m] .= ",".$data->val($m,$currLett++);
 				}
@@ -107,7 +107,7 @@ foreach($outFile as $k=>$line) {
 
 		// reformat device from name to id
 		foreach($devices as $d) {
-			if($d->hostname==$lineArr[6])	{ $lineArr[6] = $d->id; }
+			if($d->hostname==$lineArr[7])	{ $lineArr[7] = $d->id; }
 		}
 
 		// set action
@@ -121,11 +121,12 @@ foreach($outFile as $k=>$line) {
 								"state"=>$Addresses->address_type_type_to_index($lineArr[1]),
 								"description"=>$lineArr[2],
 								"dns_name"=>$lineArr[3],
-								"mac"=>$lineArr[4],
-								"owner"=>$lineArr[5],
-								"switch"=>$lineArr[6],
-								"port"=>$lineArr[7],
-								"note"=>$lineArr[8]
+								"firewallAddressObject"=>$lineArr[4],
+								"mac"=>$lineArr[5],
+								"owner"=>$lineArr[6],
+								"switch"=>$lineArr[7],
+								"port"=>$lineArr[8],
+								"note"=>$lineArr[9]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }

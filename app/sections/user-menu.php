@@ -3,6 +3,9 @@
 /**
  * Display usermenu on top right
  */
+
+# filter ip value
+$_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
 ?>
 
 <div class="container-fluid">
@@ -53,7 +56,6 @@
 	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>
 
 	<!-- logout -->
-	<?php if(!isset($_SERVER['REMOTE_USER'])) { ?>
 	<a  href="<?php print create_link("login"); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
-	<?php }}} ?>
+	<?php }} ?>
 </div>

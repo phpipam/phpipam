@@ -23,7 +23,7 @@ VALUES
 /* Add authMethod field */
 ALTER TABLE `users` ADD `authMethod` INT(2)  NULL  DEFAULT 1  AFTER `username`;
 /* update all domain users to use domain auth, settings will be migrated after first successfull login */
-UPDATE `users` set `authMethod`=2 where `domainUser` = 1;
+UPDATE `users` set `authMethod`=3 where `domainUser` = 1;
 
 
 /* add ping types */

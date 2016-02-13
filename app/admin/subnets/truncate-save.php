@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+$_POST['csrf_cookie']==$_SESSION['csrf_cookie_2'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
 
 
 # id must be numeric

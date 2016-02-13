@@ -7,13 +7,7 @@
   font-family: 'Source Sans Pro';
   font-style: normal;
   font-weight: 300;
-  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url("../fonts/source_sans_pro/SourceSansPro-Light.woff") format('woff');
-}
-@font-face {
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Source Sans Pro'), local('SourceSansPro-Regular'), url("../fonts/source_sans_pro/SourceSansPro-Regular.woff") format('woff');
+  src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url("../fonts/source_sans_pro/SourceSansPro-Light.woff2") format('woff2');
 }
 
 
@@ -82,7 +76,7 @@ h5 .label {
 	margin-left: 10px;
 }
 h1, h2, h3, h4, h5, .pHeader {
-	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
 }
 .row {

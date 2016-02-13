@@ -72,7 +72,8 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 
 	# set rewrite
 	if($User->settings->prettyLinks=="Yes") {
-		if(!is_null($l5))		{ $link = "$l0/$l1/$l2/$l3/$l4/$l5"; }
+		if(!is_null($l6))		{ $link = "$l0/$l1/$l2/$l3/$l4/$l5/$l6"; }
+		elseif(!is_null($l5))	{ $link = "$l0/$l1/$l2/$l3/$l4/$l5/"; }
 		elseif(!is_null($l4))	{ $link = "$l0/$l1/$l2/$l3/$l4/"; }
 		elseif(!is_null($l3))	{ $link = "$l0/$l1/$l2/$l3/"; }
 		elseif(!is_null($l2))	{ $link = "$l0/$l1/$l2/"; }
@@ -82,7 +83,8 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	}
 	# normal
 	else {
-		if(!is_null($l5))		{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
+		if(!is_null($l6))		{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
+		elseif(!is_null($l5))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
 		elseif(!is_null($l4))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
 		elseif(!is_null($l3))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
 		elseif(!is_null($l2))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }

@@ -580,6 +580,8 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
+        // fetch settings
+        $this->settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;

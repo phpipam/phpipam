@@ -1845,7 +1845,8 @@ $(document).on("click", "button#subnetSplitSubmit", function() {
 $(document).on("click", "button#subnetTruncateSubmit", function() {
 	showSpinner();
 	var subnetId = $(this).attr('data-subnetId');
-	$.post("app/admin/subnets/truncate-save.php", {subnetId:subnetId}, function(data) {
+    var csrf_cookie = $(this).attr('data-csrf_cookie');
+	$.post("app/admin/subnets/truncate-save.php", {subnetId:subnetId, csrf_cookie:csrf_cookie}, function(data) {
 		$('div.subnetTruncateResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);

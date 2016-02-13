@@ -21,6 +21,9 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->create_csrf_cookie ();
+
 # validate action
 $Tools->validate_action ($_POST['action']);
 
@@ -60,7 +63,7 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 			<input type="hidden" name="subnetId" 	value="<?php print $subnet['id']; ?>">
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
 			<input type="hidden" name="state" 		value="">
-
+            <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	</td>
 	</tr>
 
