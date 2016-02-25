@@ -132,7 +132,7 @@ else {
 <div class="loading"><?php print _('Loading');?>...<br><i class="fa fa-spinner fa-spin"></i></div>
 
 <!-- header -->
-<div class="row" id="header">
+<div class="row hidden-print" id="header">
 	<!-- usermenu -->
 	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 pull-right" id="user_menu">
 		<?php include('app/sections/user-menu.php'); ?>
@@ -198,7 +198,7 @@ else {
 			}
 			else {
 				# left menu
-				print "<td id='subnetsLeft'>";
+				print "<td id='subnetsLeft' class='hidden-print'>";
 				print "<div id='leftMenu' class='menu-$_GET[page]'>";
 					if($_GET['page'] == "subnets" || $_GET['page'] == "vlan" ||
 					   $_GET['page'] == "vrf" 	  || $_GET['page'] == "folder")			{ include("app/subnets/subnets-menu.php"); }
@@ -273,7 +273,7 @@ else {
 <div id="prettyLinks" style="display:none"><?php print $User->settings->prettyLinks; ?></div>
 
 <!-- Page footer -->
-<div class="footer"><?php include('app/footer.php'); ?></div>
+<div class="footer hidden-print"><?php include('app/footer.php'); ?></div>
 
 <!-- export div -->
 <div class="exportDIV"></div>
