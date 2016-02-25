@@ -486,7 +486,7 @@ else {
 
 				# print action links if user can edit
 				print "<td class='btn-actions'>";
-				print "	<div class='btn-group'>";
+				print "	<div class='btn-group hidden-print'>";
 				# orphaned
 				if(@$orphaned && $subnet_permission > 1) {
 					print "		<a class='move_ipaddress   btn btn-xs btn-default moveIPaddr' data-action='move'   data-subnetId='$subnet[id]' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' title='"._('Move to different subnet')."'>		<i class='fa fa-gray fa-pencil'> </i></a>";

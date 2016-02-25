@@ -88,7 +88,7 @@ if($subnet['sectionId']!=$_GET['section'])	{
 	</div>
 
 	<!-- visual subnet display -->
-	<div class="col-xs-12">
+	<div class="col-xs-12 hidden-print">
 	<?php
 	if($Subnets->identify_address($subnet['subnet']) == "IPv4") {
 		if($User->settings->visualLimit > 0) {
