@@ -23,7 +23,7 @@ $expfields = array ("section","subnet","mask","description","vrf");
 # required fields without which we will not continue, vrf is optional - if not set we check against default VRF
 $reqfields = array("section","subnet");
 # we don't care about custom fields here
-$custom_fields = [];
+$custom_fields = array();
 # fetch all sections
 $all_sections = $Sections->fetch_all_sections();
 
