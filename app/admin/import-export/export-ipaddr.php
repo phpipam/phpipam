@@ -92,6 +92,16 @@ if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('Subnet') ,$format_header);
 	$rowCount++;
 }
+if( (isset($_GET['vrf'])) && ($_GET['vrf'] == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('VRF') ,$format_header);
+	$rowCount++;
+	# fetch all VRFs
+	$all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
+	if (!$all_vrfs) { $all_vrfs = array(); }
+	# prepare list for easy processing
+	$vrfs = array(); $vrfs[0] = "default";
+	foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrfs[$vrf['vrfId']] = $vrf['name']; }
+}
 if( (isset($_GET['mac'])) && ($_GET['mac'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('MAC') ,$format_header);
 	$rowCount++;
@@ -192,6 +202,11 @@ if($all_sections!==false) {
 
 					if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
 						$worksheet->write($lineCount, $rowCount, $subnet['ip']."/".$subnet['mask'], $format_text);
+						$rowCount++;
+					}
+
+					if( (isset($_GET['vrf'])) && ($_GET['vrf'] == "on") ) {
+						$worksheet->write($lineCount, $rowCount, $vrfs[$subnet['vrfId']], $format_text);
 						$rowCount++;
 					}
 
