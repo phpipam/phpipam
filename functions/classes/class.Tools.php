@@ -1009,7 +1009,7 @@ class Tools extends Common_functions {
 
 		# get definition
 		$definition = strstr($schema, "CREATE TABLE `$table` (");
-		$definition = trim(strstr($definition, ";\n", true));
+		$definition = trim(strstr($definition, ";" . PHP_EOL, true));
 
 		# get each line to array
 		$definition = explode(PHP_EOL, $definition);
