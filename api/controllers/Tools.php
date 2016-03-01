@@ -182,10 +182,16 @@ class Tools_controller extends Common_api_functions {
                 // add gateway
     			if($result!=false) {
     				foreach ($result as $k=>$r) {
+        				//gateway
                 		$gateway = $this->read_subnet_gateway ($r->id);
                 		if ( $gateway!== false) {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
+                    	//nameservers
+                		$ns = $this->read_subnet_nameserver ();
+                        if ($ns!==false) {
+                            $result[$k]->nameservers = $ns;
+                        }
     				}
     			}
 			}
@@ -475,6 +481,17 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function read_subnet_gateway ($subnetId) {
     	return $this->Subnets->find_gateway ($subnetId);
+	}
+
+	/**
+	 * Returns nameserver details
+	 *
+	 * @access private
+	 * @param mixed $nsid
+	 * @return void
+	 */
+	private function read_subnet_nameserver ($nsid) {
+    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
 	}
 }
 

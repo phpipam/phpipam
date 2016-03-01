@@ -464,6 +464,13 @@ class Subnets_controller extends Common_api_functions {
 		$subnetId = !is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
 		$result = $this->Subnets->fetch_subnet ("id", $this->_params->id);
+        // add nameservers
+        if($result!==false) {
+            $ns = $this->read_subnet_nameserver($result->nameserverId);
+            if ($ns!==false) {
+                $result->nameservers = $ns;
+            }
+        }
 		// fetch gateway
 		if(sizeof($result)>0) {
     		$gateway = $this->read_subnet_gateway ();
@@ -496,6 +503,17 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function read_subnet_gateway () {
     	return $this->Subnets->find_gateway ($this->_params->id);
+	}
+
+	/**
+	 * Returns nameserver details
+	 *
+	 * @access private
+	 * @param mixed $nsid
+	 * @return void
+	 */
+	private function read_subnet_nameserver ($nsid) {
+    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
 	}
 
 	/**
