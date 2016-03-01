@@ -35,12 +35,12 @@ if($rack['name'] == "") 											    { $Result->show("danger", _('Name is mand
 if (!is_numeric($rack['size']))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 # validate rack
 if ($rack['action']=="edit") {
-    if (!is_numeric($rack['id']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
-    $rack_details = $Racks->fetch_rack_details ($rack['id']);
+    if (!is_numeric($rack['rackid']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    $rack_details = $Racks->fetch_rack_details ($rack['rackid']);
     if ($rack_details===false)                                          { $Result->show("danger", _('Rack does not exist').'!', true); }
 }
 elseif($rack['action']=="delete") {
-    if (!is_numeric($rack['id']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    if (!is_numeric($rack['rackid']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
 }
 
 # fetch custom fields
