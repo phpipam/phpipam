@@ -1066,7 +1066,7 @@ ul[class*="submenu-"] li:last-child {
 }
 li.active ul[class*="submenu-"] li:last-child {
 	/* last child in active line  */
-	background: url("../../1.2/images/ul-li-bg-active.png") no-repeat 3px 0px;
+	background: url("../../1.2/images/ul-li-bg-active.png") no-repeat 3px 0px !important;
 }
 /* active leaf */
 ul#subnets li.folder li.leaf.active {
@@ -1074,8 +1074,12 @@ ul#subnets li.folder li.leaf.active {
 }
 /* active submenu background */
 ul[class*="submenu-"] li.folder.active {
-	background: #F1FAFE url("../../1.2/images/li.png") no-repeat 4px -3px !important;
+	background: #F1FAFE url("../../1.2/images/ul-li-bg.png") no-repeat 3px 0px !important;
 }
+ul#subnets li.folder li.leaf.active:last-of-type {
+    background: #F1FAFE url("../../1.2/images/ul-li-bg-active.png") no-repeat 3px 0px !important;
+}
+
 
 ul.submenu.submenu-open {
 	display: block;
