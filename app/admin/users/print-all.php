@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all APIs
-$users = $Admin->fetch_all_objects("users");
+$users = $Admin->fetch_all_objects("users", "username");
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('users');
 

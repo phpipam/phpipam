@@ -11,7 +11,7 @@ $User->check_user_session();
 $Racks      = new phpipam_rack ($Database);
 
 # fetch all Devices
-$devices = $Admin->fetch_all_objects("devices");
+$devices = $Admin->fetch_all_objects("devices", "hostname");
 
 # fetch all Device types and reindex
 $device_types = $Admin->fetch_all_objects("deviceTypes", "tid");
