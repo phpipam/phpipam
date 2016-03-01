@@ -18,6 +18,8 @@ $User 		= new User ($Database);
 $Result 	= new Result ();
 $Log 		= new Logging ($Database);
 
+# strip input tags
+$_POST = $User->strip_input_tags ($_POST);
 
 # Authenticate
 if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {

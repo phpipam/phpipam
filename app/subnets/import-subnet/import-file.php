@@ -33,53 +33,11 @@ $filetype = end($filetype);
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
+# fetch subnet
+$subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
 
-# CSV
-if (strtolower($filetype) == "csv") {
-	/* get file to string */
-	$outFile = file_get_contents('upload/import.csv') or die ($Result->show("danger", _('Cannot open upload/import.csv'), true));
-
-	/* format file */
-	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
-	$outFile = explode("\n", $outFile);
-}
-# XLS
-elseif(strtolower($filetype) == "xls") {
-	# get excel object
-	require_once('../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
-	$data = new Spreadsheet_Excel_Reader('upload/import.xls', false);
-
-	//get number of rows
-	$numRows = $data->rowcount(0);
-	$numRows++;
-
-	//add custom fields
-	$numRows = $numRows + sizeof($custom_address_fields);
-
-	//get all to array!
-	for($m=0; $m < $numRows; $m++) {
-
-		//IP must be present!
-		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
-
-			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
-			$outFile[$m] .= $data->val($m,'E').','.$data->val($m,'F').','.$data->val($m,'G').','.$data->val($m,'H').',';
-			$outFile[$m] .= $data->val($m,'I').','.$data->val($m,'J');
-			//add custom fields
-			if(sizeof($custom_address_fields) > 0) {
-				$currLett = "K";
-				foreach($custom_address_fields as $field) {
-					$outFile[$m] .= ",".$data->val($m,$currLett++);
-				}
-			}
-		}
-	}
-}
-# die
-else {
-	$Result->show('danger', _("Invalid file type"), true);
-}
-
+# Parse file
+$outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
 
 # Fetch all devices
 $devices = $Tools->fetch_devices ();
@@ -87,55 +45,49 @@ $devices = $Tools->fetch_devices ();
 # cnt
 $edit = 0;
 $add  = 0;
+$invalid_lines = array();
 $errors = 0;
 
 # import each value
 foreach($outFile as $k=>$line) {
 
-	// explode it to array for verifications
-	$lineArr = explode(",", $line);
+    // if not error
+    if ($line['class']!="danger" || ($line['class']=="danger" && @$_POST['ignoreError']=="1")) {
 
-	// array size must be at least 9
-	if(sizeof($lineArr)<9) {
-		$errors[] = "Line $k is invalid";
-		unset($outFile[$k]);									//wrong line, unset!
-	}
-	// all good, reformat
-	else {
-		// reformat IP state
-		$lineArr[1] = $Addresses->address_type_type_to_index($lineArr[1]);
+		// reformat IP state from name to id
+		$line[1] = $Addresses->address_type_type_to_index($line[1]);
 
 		// reformat device from name to id
 		foreach($devices as $d) {
-			if($d->hostname==$lineArr[6])	{ $lineArr[6] = $d->id; }
+			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
 		}
 
 		// set action
-		if($id = $Addresses->address_exists ($lineArr[0], $_POST['subnetId'], false))	{ $action = "edit"; }
-		else																			{ $action = "add"; }
+		if($id = $Addresses->address_exists ($line[0], $_POST['subnetId'], false))	{ $action = "edit"; }
+		else																		{ $action = "add"; }
 
 		// set insert / update values
 		$address_insert = array("action"=>$action,
 								"subnetId"=>$_POST['subnetId'],
-								"ip_addr"=>$lineArr[0],
-								"state"=>$Addresses->address_type_type_to_index($lineArr[1]),
-								"description"=>$lineArr[2],
-								"dns_name"=>$lineArr[3],
-								"firewallAddressObject"=>$lineArr[4],
-								"mac"=>$lineArr[5],
-								"owner"=>$lineArr[6],
-								"switch"=>$lineArr[7],
-								"port"=>$lineArr[8],
-								"note"=>$lineArr[9]
+								"ip_addr"=>$line[0],
+								"state"=>$Addresses->address_type_type_to_index($line[1]),
+								"description"=>$line[2],
+								"dns_name"=>$line[3],
+								"firewallAddressObject"=>$line[4],
+								"mac"=>$line[5],
+								"owner"=>$line[6],
+								"switch"=>$line[7],
+								"port"=>$line[8],
+								"note"=>$line[9]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
         // custom fields
-        $currIndex = 8;
+        $currIndex = 10;
         if(sizeof($custom_address_fields) > 0) {
         	foreach($custom_address_fields as $field) {
             	$currIndex++;
-        		$address_insert[$field['name']] = $lineArr[$currIndex];
+        		$address_insert[$field['name']] = $line[$currIndex];
         	}
         }
 
@@ -145,7 +97,10 @@ foreach($outFile as $k=>$line) {
 			if ($action=="edit")	{ $edit++; }
 			else 					{ $add++; }
 		}
-	}
+    }
+    else {
+        $invalid_lines[] = $line;
+    }
 }
 
 # print success if no errors
@@ -156,7 +111,7 @@ if($errors==0)	{
 }
 
 # print
-$Result->show("success", _("Created $add addresses and edited $edit addresses"), false);
+$Result->show("success", _("Created $add addresses, skipped ".sizeof($invalid_lines)." entries and edited $edit addresses"), false);
 
 print "<br><br>";
 ?>

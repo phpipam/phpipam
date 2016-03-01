@@ -38,6 +38,9 @@ else {
 # get user details
 $user = $Admin->fetch_object("users", "username", $log['username']);
 $userprint = $user===false ? "" : $user->real_name."(".$user->username.")";
+
+# details format
+$log['details'] = str_replace("\n", "<br>", $log['details']);
 ?>
 
 

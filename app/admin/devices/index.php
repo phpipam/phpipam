@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# rack object
+$Racks      = new phpipam_rack ($Database);
+
 # fetch all Devices
 $devices = $Admin->fetch_all_objects("devices");
 
@@ -31,6 +34,9 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 <div class="btn-group">
 	<button class='btn btn-sm btn-default editSwitch' data-action='add'   data-switchid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add device'); ?></button>
 	<a href="<?php print create_link("administration", "device-types"); ?>" class="btn btn-sm btn-default"><i class="fa fa-tablet"></i> <?php print _('Manage device types'); ?></a>
+    <?php if($User->settings->enableSNMP=="1") { ?>
+	<a href="<?php print create_link("administration", "snmp"); ?>" class="btn btn-sm btn-default"><i class="fa fa-cogs"></i> <?php print _('Manage SNMP queries'); ?></a>
+	<?php } ?>
 </div>
 
 <?php
@@ -48,9 +54,11 @@ else {
 	print '	<th>'._('Name').'</th>';
 	print '	<th>'._('IP address').'</th>';
 	print '	<th>'._('Type').'</th>';
-	print '	<th>'._('Vendor').'</th>';
-	print '	<th>'._('Model').'</th>';
 	print '	<th>'._('Description').'</th>';
+    if($User->settings->enableSNMP=="1")
+	print '	<th>'._('SNMP').'</th>';
+    if($User->settings->enableRACK=="1")
+	print '	<th>'._('Rack').'</th>';
 	print '	<th><i class="icon-gray icon-info-sign" rel="tooltip" title="'._('Shows in which sections device will be visible for selection').'"></i> '._('Sections').'</th>';
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
@@ -73,9 +81,33 @@ else {
 		print '	<td><a href="'.create_link("tools","devices","hosts",$device['id']).'">'. $device['hostname'] .'</a></td>'. "\n";
 		print '	<td>'. $device['ip_addr'] .'</td>'. "\n";
 		print '	<td>'. @$device_types_i[$device['type']]->tname .'</td>'. "\n";
-		print '	<td>'. $device['vendor'] .'</td>'. "\n";
-		print '	<td>'. $device['model'] .'</td>'. "\n";
 		print '	<td class="description">'. $device['description'] .'</td>'. "\n";
+
+		// SNMP
+		if($User->settings->enableSNMP=="1") {
+    		print "<td>";
+    		// not set
+    		if ($device['snmp_version']==0 || strlen($device['snmp_version'])==0) {
+        		print "<span class='text-muted'>"._("Disabled")."</span>";
+    		}
+    		else {
+                print _("Version").": $device[snmp_version]<br>";
+                print _("Community").": $device[snmp_community]<br>";
+    		}
+    		print "</td>";
+		}
+
+		// rack
+        if($User->settings->enableRACK=="1") {
+            print "<td>";
+            # rack
+            $rack = $Racks->fetch_rack_details ($device['rack']);
+            if ($rack!==false) {
+                print "<a href='".create_link("administration", "racks", $rack->id)."'>".$rack->name."</a><br>";
+                print "<span class='text-muted'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
+            }
+            print "</td>";
+        }
 
 		//sections
 		print '	<td class="sections">';
@@ -122,6 +154,8 @@ else {
 		print '	<td class="actions">'. "\n";
 		print "	<div class='btn-group'>";
 		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='$device[id]'><i class='fa fa-pencil'></i></button>";
+		if($User->settings->enableSNMP=="1")
+		print "		<button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]'><i class='fa fa-cogs'></i></button>";
 		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='$device[id]'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print '	</td>'. "\n";

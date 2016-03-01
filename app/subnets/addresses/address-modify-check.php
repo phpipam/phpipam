@@ -103,7 +103,8 @@ $address['excludePing'] = @$address['excludePing']==1 ? 1 : 0;
 # no strict checks flag - for range networks and /31, /32
 $not_strict = @$address['nostrict']=="yes" ? true : false;
 
-
+# check if subnet is multicast
+$subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);
 
 # are we adding/editing range?
 if (strlen(strstr($address['ip_addr'],"-")) > 0) {
@@ -120,8 +121,14 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 	$address['stop']  = $range[1];
 
 	# verify both IP addresses
-	$Addresses->verify_address( $address['start'], "$subnet[ip]/$subnet[mask]", $not_strict );
-	$Addresses->verify_address( $address['stop'] , "$subnet[ip]/$subnet[mask]", $not_strict );
+	if ($subnet['isFolder']=="1") {
+    	if($Addresses->validate_ip( $address['start'])===false)     { $Result->show("danger", _("Invalid IP address")."!", true); }
+    	if($Addresses->validate_ip( $address['stop'])===false)      { $Result->show("danger", _("Invalid IP address")."!", true); }
+	}
+	else {
+    	$Addresses->verify_address( $address['start'], "$subnet[ip]/$subnet[mask]", $not_strict );
+    	$Addresses->verify_address( $address['stop'] , "$subnet[ip]/$subnet[mask]", $not_strict );
+    }
 
 	# go from start to stop and insert / update / delete IPs
 	$start = $Subnets->transform_to_decimal($address['start']);
@@ -164,6 +171,23 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 			# reset IP address field
 			$address['ip_addr'] = $m;
+
+			# set multicast MAC
+			if ($User->settings->enableMulticast==1) {
+                if ($Subnets->is_multicast ($address['ip_addr'])) {
+                    $address['mac'] = $Subnets->create_multicast_mac ($Subnets->transform_address($address['ip_addr'],"dotted"));
+                }
+            }
+
+    	    # multicast check
+    	    if ($User->settings->enableMulticast==1) {
+        	    if ($Subnets->is_multicast ($address['ip_addr'])) {
+            	    if (!$User->is_admin(false)) {
+                	    $mtest = $Subnets->validate_multicast_mac ($address['mac'], $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE);
+                	    if ($mtest !== true)                                                        { $Result->show("danger", _($mtest), true); }
+            	    }
+        	    }
+    	    }
 
 			# modify action - if delete ok, dynamically reset add / edit -> if IP already exists set edit
 			if($action != "delete") {
@@ -217,7 +241,7 @@ else {
 		$address['ip_addr'] = $address_old['ip'];
 	}
 	# verify address
-	if($action!=="delete")
+	if($action!=="delete" && $subnet['isFolder']!="1")
 	$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
 
 	# if errors are present print them, else execute query!
@@ -241,6 +265,13 @@ else {
 	    if($action == "move") {
 		    # check if not already used in new subnet
 	        if ($Addresses->address_exists ($address['ip_addr'], $address['newSubnet'])) 	{ $Result->show("danger", _('IP address')." $address[ip_addr] "._('already existing in selected network').'!', true); }
+	    }
+	    # multicast check
+	    if ($User->settings->enableMulticast==1 && $subnet_is_multicast) {
+    	    if (!$User->is_admin(false)) {
+        	    $mtest = $Subnets->validate_multicast_mac ($address['mac'], $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE);
+        	    if ($mtest !== true)                                                        { $Result->show("danger", _($mtest), true); }
+    	    }
 	    }
 
 	    # for delete actions check if delete was confirmed

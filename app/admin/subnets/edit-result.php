@@ -4,21 +4,27 @@
  * Function to add / edit / delete subnet
  ********************************************/
 
-/* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+/* this can come from snmp, so if objects are already initialized print it */
+if (!function_exists("create_link")) {
+    /* functions */
+    require( dirname(__FILE__) . '/../../../functions/functions.php');
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
-$Subnets	= new Subnets ($Database);
-$Sections	= new Sections ($Database);
-$Addresses	= new Addresses ($Database);
-$Tools		= new Tools ($Database);
-$Result 	= new Result ();
+    # initialize user object
+    $Database 	= new Database_PDO;
+    $User 		= new User ($Database);
+    $Admin	 	= new Admin ($Database, false);
+    $Subnets	= new Subnets ($Database);
+    $Sections	= new Sections ($Database);
+    $Addresses	= new Addresses ($Database);
+    $Tools		= new Tools ($Database);
+    $Result 	= new Result ();
+}
 
 # verify that user is logged in
 $User->check_user_session();
+
+# strip input tags
+$_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
 $_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :               $Result->show("danger", _("Invalid CSRF cookie"), true);
@@ -264,6 +270,13 @@ else {
 					"device"=>$_POST['device'],
                     "isFull"=>$Admin->verify_checkbox($_POST['isFull'])
 					);
+    # threshold
+    if (isset($_POST['threshold'])) {
+        if (!is_numeric($_POST['threshold'])) {
+            $Result->show("danger", _("Invalid threshold value"), true);
+        }
+        $values['threshold'] = $_POST['threshold'];
+    }
 	# for new subnets we add permissions
 	if($_POST['action']=="add") {
 		$values['permissions']=$_POST['permissions'];

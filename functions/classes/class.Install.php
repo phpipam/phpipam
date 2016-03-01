@@ -373,27 +373,29 @@ class Install extends Common_functions {
 
 		// replace CRLF
 		$subversion_queries = str_replace("\r\n", "\n", $subversion_queries);
-		$queries = explode(";\n", $subversion_queries);
+		$queries = array_filter(explode(";\n", $subversion_queries));
 
 	    # execute all queries
 	    foreach($queries as $query) {
-			try { $this->Database->runQuery($query); }
-			catch (Exception $e) {
-				$this->Log = new Logging ($this->Database);
-				# write log
-				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
-				# fail
-				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
-				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
-				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
-				# revert version
-				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
-				//catch (Exception $e) { var_dump($e); }
-				// false
-				return false;
+    	    if (strlen($query)>5) {
+    			try { $this->Database->runQuery($query); }
+    			catch (Exception $e) {
+    				$this->Log = new Logging ($this->Database);
+    				# write log
+    				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
+    				# fail
+    				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
+    				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
+    				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
+    				# revert version
+    				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
+    				//catch (Exception $e) { var_dump($e); }
+    				// false
+    				return false;
+    			}
+    			// save ok
+    			$queries_ok[] = $query;
 			}
-			// save ok
-			$queries_ok[] = $query;
 	    }
 
 

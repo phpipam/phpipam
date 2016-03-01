@@ -82,7 +82,10 @@ $(function () {
 			$sp = $Subnets-> check_permission ($User->user, $subnet['id']);
 			if($sp != "0") {
 				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
-				$subnet['descriptionLong'] = $subnet['description'];
+                //length
+                $subnet['description'] = strlen($subnet['description'])>10 ? substr($subnet['description'], 0,10)."..." : $subnet['description'];
+
+				//$subnet['descriptionLong'] = $subnet['description'];
 				# odd/even if more than 5 items
 				if(sizeof($top_subnets) > 5) {
 					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}

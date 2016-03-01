@@ -1005,12 +1005,12 @@ class Logging extends Common_functions {
 						from `changelog` as `c`, `users` as `u`,`sections` as `su`
 						where `c`.`ctype` = 'section' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
 					) as `ips`
-					where `coid`='$expr' or `ctype`='$expr' or `real_name` like '$expr' or `cdate` like '$expr' or `cdiff` like '$expr' or INET_NTOA(`ip_addr`) like '$expr'
+					where `coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr
 					order by `cid` desc limit $limit;";
 		}
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
+	    try { $logs = $this->Database->getObjectsQuery($query, array("expr"=>$expr)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results

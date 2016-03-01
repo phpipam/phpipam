@@ -59,6 +59,7 @@ if (($action=="add" || $action=="all-add") && $subnet['isFull']==1)   $Result->s
 # if action is not add then fetch current details, otherwise fetch first available IP address
 if ($action == "all-add") {
 	$address['ip_addr'] = $Subnets->transform_address($id, "dotted");
+	$address['id'] = 0;
 }
 else if ($action == "add") {
 	# get first available IP address
@@ -66,9 +67,12 @@ else if ($action == "add") {
 	$first = !$first ? "" : $Subnets->transform_address($first, "dotted");
 
 	$address['ip_addr'] = $first;
+	$address['id'] = 0;
 }
 else {
 	$address = (array) $Addresses->fetch_address(null, $id);
+	// save old mac for multicast check
+	$address['mac_old'] = @$address['mac'];
 }
 
 
@@ -84,6 +88,22 @@ else							{ $btnName = ""; }
 if($act=="delete")	{ $delete = "readonly='readonly'"; }
 else				{ $delete = ""; }
 
+# multicast MAC address check
+if ($act=="add" && $User->settings->enableMulticast==1) {
+    if ($Subnets->is_multicast ($address['ip_addr'])) {
+        // propose mac
+        $address['mac'] = $Subnets->create_multicast_mac ($address['ip_addr']);
+        // if add validate
+        if ($act=="add") {
+            $mcast_err_check = $Subnets->validate_multicast_mac ($address['mac'], $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE, 0);
+            // check if proposed already exists
+            if ($mcast_err_check !== true) {
+                $mcast_err = $mcast_err_check;
+            }
+        }
+    }
+}
+
 ?>
 
 <script type="text/javascript">
@@ -98,6 +118,38 @@ var switch_options = {
 };
 
 $(".input-switch").bootstrapSwitch(switch_options);
+
+
+<?php if (($act=="add"||$act=="edit") && $User->settings->enableMulticast==1) { ?>
+$("input[name=ip_addr]").focusout(function() {
+    // update mac
+    $.post('app/tools/multicast-networks/create_mac.php', {ip:$(this).val()}, function(data) {
+        if (data!="False") {
+            $("input[name=mac]").val(data);
+            validate_mac ( $("input[name=ip_addr]").val(), data, $("input[name=section]").val(), $("input[name=subnetvlan]").val(), $("input[name=addressId]").val());
+        }
+    });
+});
+$("input[name=mac]").focusout(function() {
+    //validate
+    validate_mac ($("input[name=ip_addr]").val(), $(this).val(), $("input[name=section]").val(), $("input[name=subnetvlan]").val(), $("input[name=addressId]").val());
+});
+//validatemac
+function validate_mac (ip, mac, sectionId, vlanId, id) {
+    $.post('app/tools/multicast-networks/validate_mac.php', {ip:ip, mac:mac, sectionId:sectionId, vlanId:vlanId, id:id}, function(data) {
+        if (data==="True") {
+            $("input[name=mac]").parent().removeClass("has-error");
+            $('#helpBlock2').remove();
+        }
+        else {
+            $("input[name=mac]").parent().addClass("has-error");
+            if($('#helpBlock2').length)    { $("#helpBlock2").html(data); }
+            else                           { $("input[name=mac]").parent().append("<span id='helpBlock2' class='help-block'>"+data+"</span>"); }
+        }
+    });
+}
+<?php } ?>
+
 });
 </script>
 
@@ -133,8 +185,11 @@ $(".input-switch").bootstrapSwitch(switch_options);
 			<input type="hidden" name="subnet"   	value="<?php print $subnet['ip']."/".$subnet['mask']; 	?>">
 			<input type="hidden" name="subnetId" 	value="<?php print $subnetId; 	?>">
 			<input type="hidden" name="section" 	value="<?php print $subnet['sectionId']; ?>">
+			<input type="hidden" name="subnetvlan" 	value="<?php print $subnet['vlanId']; ?>">
 			<input type="hidden" name="ip_addr_old" value="<?php print $address['ip_addr']; ?>">
+			<input type="hidden" name="mac_old"     value="<?php print @$address['mac_old']; ?>">
 			<input type="hidden" name="PTR" 		value="<?php print $address['PTR']; ?>">
+			<input type="hidden" name="addressId" 	value="<?php print $address['id']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			<?php
 			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
@@ -178,12 +233,35 @@ $(".input-switch").bootstrapSwitch(switch_options);
 	if(in_array('mac', $selected_ip_fields)) {
 		if(!isset($address['mac'])) {$address['mac'] = "";}
 
-		print '<tr>'. "\n";
-		print '	<td>'._('MAC address').'</td>'. "\n";
+		print '<tr class="text-top">'. "\n";
+		print '	<td style="padding-top:7px;">'._('MAC address').'</td>'. "\n";
 		print '	<td>'. "\n";
-		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
+
+		# multicast selection
+		if ($User->settings->enableMulticast==1) {
+    		# initial mcast validation
+    		if (isset($mcast_err))  { $mcast_class='has-error'; $mcast_help_block = "<span id='helpBlock2' class='help-block'>$mcast_err</span>"; }
+    		else                    { $mcast_class=""; $mcast_help_block = ""; }
+
+     		if ($User->is_admin (false)) {
+        		print ' <div class="form-group '.$mcast_class.'">';
+        		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'.$mcast_help_block;
+        		print ' </div>';
+    		}
+    		else {
+         		print ' <div class="form-group '.$mcast_class.'">';
+        		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.' disabled="disabled">'.$mcast_help_block;
+        		print ' <input type="hidden" name="mac" value="'. $address['mac']. '">';
+        		print ' </div>';
+    		}
+		}
+		else {
+        		print ' <div class="form-group">';
+        		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'. "\n";
+        		print ' </div>';
+		}
+        print '	</td>'. "\n";
+    	print '</tr>'. "\n";
 	}
 	?>
 	<!-- Owner -->

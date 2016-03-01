@@ -2045,6 +2045,166 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Parses import file
+	 *
+	 * @access public
+	 * @param string $filetype (default: "xls")
+	 * @param object $subnet
+	 * @param array $custom_address_fields
+	 * @return void
+	 */
+	public function parse_import_file ($filetype = "xls", $subnet = object, $custom_address_fields) {
+    	# start object and get settings
+    	$this->settings ();
+    	$this->Subnets = new Subnets ($this->Database);
+
+        # CSV
+        if (strtolower($filetype) == "csv")     { $outFile = $this->parse_import_file_csv ($subnet, $custom_address_fields); }
+        # XLS
+        elseif(strtolower($filetype) == "xls")  { $outFile = $this->parse_import_file_xls ($subnet, $custom_address_fields); }
+        # error
+        else                                    { $this->Result->show("danger", _('Invalid filetype'), true); }
+
+        # validate
+        return $this->parse_validate_file ($outFile, $subnet);
+	}
+
+	/**
+	 * Parses xls import file
+	 *
+	 * @access private
+	 * @param object $subnet
+	 * @param array $custom_address_fields
+	 * @return void
+	 */
+	private function parse_import_file_xls ($subnet, $custom_address_fields) {
+     	# get excel object
+    	require_once('../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
+    	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.xls', false);
+
+    	//get number of rows
+    	$numRows = $data->rowcount(0);
+    	$numRows++;
+
+    	//get all to array!
+    	for($m=0; $m < $numRows; $m++) {
+
+    		//IP must be present!
+    		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
+        		//for multicast
+        		if ($this->settings-enableMulticast=="1") {
+            		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
+                		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
+                    }
+                    else {
+                        $mac = $data->val($m,'F');
+                    }
+                }
+
+    			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
+    			$outFile[$m] .= $data->val($m,'E').','.$mac.','.$data->val($m,'G').','.$data->val($m,'H').',';
+    			$outFile[$m] .= $data->val($m,'I').','.$data->val($m,'J');
+    			//add custom fields
+    			if(sizeof($custom_address_fields) > 0) {
+    				$currLett = "K";
+    				foreach($custom_address_fields as $field) {
+    					$outFile[$m] .= ",".$data->val($m,$currLett++);
+    				}
+    			}
+    		}
+    	}
+    	// return
+    	return $outFile;
+	}
+
+	/**
+	 * Parses CSV import file
+	 *
+	 * @access private
+	 * @param object $subnet
+	 * @param array $custom_address_fields
+	 * @return void
+	 */
+	private function parse_import_file_csv ($subnet, $custom_address_fields) {
+    	/* get file to string */
+    	$outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
+
+    	/* format file */
+    	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
+    	$outFile = explode("\n", $outFile);
+
+    	/* validate IP */
+    	foreach($outFile as $k=>$v) {
+        	if(!filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
+            	unset($outFile[$k]);
+        	}
+        	else {
+            	# mac
+        		if ($this->settings-enableMulticast=="1") {
+            		if (strlen($v[6])==0 && $this->Subnets->is_multicast($v[1]))  {
+                		$mac = $this->Subnets->create_multicast_mac ($v[1]);
+                    }
+                    else {
+                        $mac = $v[6];
+                    }
+        		}
+        	}
+    	}
+
+    	# return
+    	return $outFile;
+	}
+
+	/**
+	 * Validates each import line from provided array
+	 *
+	 *      append class to array
+	 *
+	 * @access private
+	 * @param mixed $outFile
+	 * @param object $subnet
+	 * @return void
+	 */
+	private function parse_validate_file ($outFile = array(), $subnet = object) {
+    	# present ?
+    	if (sizeof($outFile)>0) {
+            foreach($outFile as $k=>$line) {
+            	//put it to array
+            	$field = explode(",", $line);
+
+            	//verify IP address
+            	if(!filter_var($field[0], FILTER_VALIDATE_IP)) 	{ $class = "danger";	$errors++; }
+            	else											{ $class = ""; }
+
+            	// verify that address is in subnet for subnets
+            	if($subnet->isFolder!="1") {
+            	    if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/32", $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
+                }
+            	// make sure mac does not exist
+                if ($this->settings-enableMulticast=="1" && strlen($class)==0) {
+                    if (strlen($field[5])>0 && $this->Subnets->is_multicast($field[0])) {
+                        if($this->Subnets->validate_multicast_mac ($field[5], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
+                            $errors++; $class = "danger";
+                        }
+                    }
+                }
+
+                // set class
+                $field['class'] = $class;
+
+                // save outfile
+                $result[] = $field;
+            }
+        }
+        else {
+            $result = array();
+        }
+
+        # return
+        return $result;
+	}
+
+	/**
 	 * Fetches instructions from database
 	 *
 	 * @access public

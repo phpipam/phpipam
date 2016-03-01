@@ -98,7 +98,6 @@ print "	<td>"._('Note')."</td>";
 print "	<td><input type='checkbox' name='note' checked> </td>";
 print "	</tr>";
 
-
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 if(sizeof($custom_fields) > 0) {
@@ -113,6 +112,12 @@ if(sizeof($custom_fields) > 0) {
 		print "	</tr>";
 	}
 }
+
+# set file name
+print "	<tr>";
+print "	<td style='width:140px;'>"._('Filename')."</td>";
+print "	<td><input type='text' class='form-control' name='filename' value='phpipam_subnet_export.xls' style='height:auto;'></td>";
+print "	</tr>";
 
 print '</table>';
 print '</form>';

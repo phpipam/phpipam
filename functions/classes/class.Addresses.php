@@ -309,6 +309,9 @@ class Addresses extends Common_functions {
 		# edit DNS PTR record
 		$this->ptr_modify ("add", $insert);
 
+		# threshold alert
+		$this->threshold_check($address);
+
 		# ok
 		return true;
 	}
@@ -434,6 +437,102 @@ class Addresses extends Common_functions {
 		# ok
 		return true;
 	}
+
+	/**
+	 * Checks if subnet usage is over threshold and sends alert
+	 *
+	 * @access private
+	 * @param mixed $address
+	 * @return void
+	 */
+	private function threshold_check ($address) {
+    	$address = (object) $address;
+        # fetch settings
+        $this->get_settings ();
+    	# enabled ?
+    	if ($this->settings->enableThreshold=="1") {
+        	# object
+        	if (!is_object($this->Subnets)) {
+            	$this->Subnets = new Subnets ($this->Database);
+        	}
+        	# fetch subnet
+        	$subnet = $this->Subnets->fetch_subnet("id", $address->subnetId);
+        	# threshold set ?
+        	if ($subnet->threshold>0) {
+            	# count number of hosts in subnet
+            	$used_hosts = $this->count_subnet_addresses ($address->subnetId);
+            	# calculate subnet usage
+            	$subnet_usage = $this->Subnets->calculate_subnet_usage ($used_hosts, $subnet->mask, $subnet->subnet, $subnet->isFull);
+            	# if over send mail
+            	if (gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) > $subnet->threshold) {
+                	// fetch mail settings
+                	$Tools = new Tools ($this->Database);
+                	$admins        = $Tools->fetch_multiple_objects ("users", "role", "Administrator");
+                	// if some recipients
+                	if ($admins !== false) {
+                    	// mail settings
+                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
+                    	// mail class
+                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
+
+                        // send
+                        $phpipam_mail->initialize_mailer();
+                        // set parameters
+                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
+                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
+                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;"><font face="Helvetica, Verdana, Arial, sans-serif" style="font-size:13px;">'._('Subnet').'</a></font></td>	 <td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><font face="Helvetica, Verdana, Arial, sans-serif" style="font-size:13px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'. $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</a></font></td></tr>';
+                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;"><font face="Helvetica, Verdana, Arial, sans-serif" style="font-size:13px;">'._('Subnet').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;"><font face="Helvetica, Verdana, Arial, sans-serif" style="font-size:13px;">'. $subnet->description .'</font></td></tr>';
+                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;"><font face="Helvetica, Verdana, Arial, sans-serif" style="font-size:13px;">'._('Usage').' (%)</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;"><font face="Helvetica, Verdana, Arial, sans-serif" style="font-size:13px;">'. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
+                        $content[] = "</table>";
+                        // plain
+                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
+                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
+                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
+
+                        # set content
+                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+                        $content_plain 	= implode("\r\n",$content_plain);
+                        # try to send
+                        try {
+                        	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
+                        	//add all admins to CC
+                        	$cnt = 0;
+                        	if (sizeof($admins)>0) {
+                        		foreach($admins as $a) {
+                            		if ($a->mailNotify=="Yes") {
+                        			    $phpipam_mail->Php_mailer->addAddress($a->email);
+                        			    $cnt++;
+                        			}
+                        		}
+                        	}
+                        	if ($cnt>0) {
+                            	$phpipam_mail->Php_mailer->Subject = $subject;
+                            	$phpipam_mail->Php_mailer->msgHTML($content);
+                            	$phpipam_mail->Php_mailer->AltBody = $content_plain;
+                            	//send
+                            	$phpipam_mail->Php_mailer->send();
+                        	}
+                        	else {
+                            	return true;
+                        	}
+                        } catch (phpmailerException $e) {
+                        	$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        } catch (Exception $e) {
+                        	$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        }
+                    }
+            	}
+        	}
+        	else {
+            	return true;
+        	}
+    	}
+    	else {
+        	return true;
+    	}
+	}
+
 	/**
 	 * Removes gateway if it exists
 	 *
@@ -517,6 +616,9 @@ class Addresses extends Common_functions {
 		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc");
 		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
 
+		# if folder return false
+		if ($subnet['isFolder']=="1")                                                                   { return false; }
+
 	    # get max hosts
 	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']));
 
@@ -580,6 +682,8 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
+        // fetch settings
+        $this->settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;

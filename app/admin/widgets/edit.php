@@ -61,6 +61,12 @@ if($_POST['action']!="add") {
 	    <td><input class="form-control input-sm input-w-250" type="text" name="wfile" value="<?php print @$w['wfile']; ?>.php" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
     </tr>
 
+	<!-- params -->
+	<tr>
+	    <td><?php print _('Parameters'); ?></td>
+	    <td><input class="form-control input-sm input-w-250" type="text" name="wparams" value="<?php print @$w['wparams']; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+    </tr>
+
 	<!-- Admin -->
 	<tr>
 	    <td><?php print _('Admin only'); ?></td>

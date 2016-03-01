@@ -473,4 +473,78 @@ ALTER TABLE `vrf` ADD `sections` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `descri
 
 
 /* VERSION 1.21 */
+UPDATE `settings` set `version` = '1.21';
 
+/* New modules */
+ALTER TABLE `settings` ADD `enableMulticast` TINYINT(1)  NULL  DEFAULT '0'  AFTER `powerDNS`;
+ALTER TABLE `settings` ADD `enableNAT` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableMulticast`;
+ALTER TABLE `settings` ADD `enableSNMP` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableNAT`;
+ALTER TABLE `settings` ADD `enableThreshold` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableSNMP`;
+ALTER TABLE `settings` ADD `enableRACK` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableThreshold`;
+ALTER TABLE `settings` ADD `link_field` VARCHAR(32)  NULL  DEFAULT '0'  AFTER `enableRACK`;
+
+/* add nat link */
+ALTER TABLE `ipaddresses` ADD `NAT` VARCHAR(64)  NULL  DEFAULT NULL  AFTER `PTR`;
+ALTER TABLE `subnets` ADD `NAT` VARCHAR(64)  NULL  DEFAULT NULL  AFTER `state`;
+
+/* NAT table */
+CREATE TABLE `nat` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `type` set('source','static','destination') DEFAULT 'source',
+  `src` text,
+  `dst` text,
+  `port` int(5) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/* snmp table */
+CREATE TABLE `snmp` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `oid` varchar(128) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `oid` (`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* default oids */
+INSERT INTO `snmp` (`id`, `oid`, `name`, `method`, `description`)
+VALUES
+	(1, '.1.3.6.1.2.1.1.1.0', 'SNMPv2-MIB::sysDescr.1', 'info', 'Displays system info'),
+	(2, '.1.3.6.1.2.1.4.22.1', 'IP-MIB::ipNetToMedia', 'arp', 'Fetches ARP table from device\n.1 = Index\n.2 = mac\n.3 = ip'),
+	(3, '.1.3.6.1.2.1.4.20.1', 'RFC1213-MIB::ipAdEnt', 'arp', 'Fetches interfaces\n.1 = IP\n.3 = mask'),
+	(4, '.1.3.6.1.2.1.4.24.4.1', 'IP-FORWARD-MIB::ipCidrRoute', 'route', 'Fetches routing table\n.1 = destination\n.2 = mask\n.4 = nexhop');
+
+/* snmp to devices */
+ALTER TABLE `devices` ADD `snmp_community` VARCHAR(100)  NULL  DEFAULT NULL  AFTER `sections`;
+ALTER TABLE `devices` ADD `snmp_version` SET('0','1','2')  NULL  DEFAULT '0'  AFTER `snmp_community`;
+ALTER TABLE `devices` ADD `snmp_port` mediumint(5) unsigned DEFAULT '161' AFTER `snmp_version`;
+ALTER TABLE `devices` ADD `snmp_timeout` mediumint(5) unsigned DEFAULT '1000000' AFTER `snmp_port`;
+ALTER TABLE `devices` ADD `snmp_queries` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `snmp_timeout`;
+
+/* racks */
+CREATE TABLE `racks` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `size` int(2) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* rack info to devices */
+ALTER TABLE `devices` ADD `rack` int(11) unsigned NOT NULL DEFAULT null AFTER `snmp_timeout`;
+ALTER TABLE `devices` ADD `rack_start` int(11) unsigned NOT NULL DEFAULT null AFTER `rack`;
+ALTER TABLE `devices` ADD `rack_size` int(11) unsigned NOT NULL DEFAULT null AFTER `rack_start`;
+
+/* add threshold module to subnets */
+ALTER TABLE `subnets` ADD `threshold` int(3)  NULL  DEFAULT 0  AFTER `NAT`;
+
+/* threshold and inactive hosts widget */
+INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes');
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;

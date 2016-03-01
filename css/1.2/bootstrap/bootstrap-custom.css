@@ -11,6 +11,7 @@
 }
 
 
+
 /* @general ---------- */
 body {
 	font-size: 13px;
@@ -53,6 +54,16 @@ table.table-pdns-details td {
     color: #999;
     font-size: 13px;
 }
+table.table-threshold td:nth-child(1) {
+    width: 10px;
+    white-space: nowrap;
+}
+table.table-threshold td {
+    border-bottom: 1px solid #eee !important;
+}
+table.table-threshold tr:last-child () {
+    border-bottom: none !important;
+}
 
 hr {
   margin: 5px;
@@ -91,6 +102,14 @@ pre {
 	border: 1px solid #ddd;
 	color: #686868;
 	font-weight: normal;
+}
+.alert-danger pre,
+.alert-info pre,
+.alert-warning pre,
+.alert-success pre {
+    background: transparent;
+    border: none;
+    margin: 0px;
 }
 xmp {
 	font-size: 12px;
@@ -312,6 +331,10 @@ td#actions .btn-group .btn {
 .badge.badge5 {
 	padding: 2px 6px;
 }
+.badge.badge5.alert-danger {
+    color: #a94442;
+    border-color: #ebccd1;
+}
 ul.submenu-dns {
 	line-height: 14px;
 	padding: 3px;
@@ -343,6 +366,35 @@ table.ipaddresses td {
     vertical-align: top !important;
 }
 
+
+
+
+
+/* @progress bars ---------- */
+.progress {
+    margin-bottom: 0px !important;
+}
+.progress-limit,
+.progress-limit-negative {
+    float:left;
+    width: 4px;
+    border-left:2px solid rgba(170, 70, 67, 0.8) !important;
+    color:#aaa;
+    padding:1px;
+    padding-left:3px;
+}
+.progress-limit-negative {
+    color: white;
+    border-left: 2px solid white !important;
+}
+.progress-bar-danger {
+    background: rgba(170, 70, 67, 0.8);
+}
+.progress-bar-info {
+    background: #ccc;
+    border:1px solid #ccc;
+    box-shadow: none;
+}
 
 
 
@@ -1268,6 +1320,13 @@ table.ipaddresses td.gateway ul li {
 table.ipaddresses td.gateway a i.fa-gateway {
 	margin-left: 5px;
 	color: #555;
+}
+table.ipaddress_subnet .alert {
+    margin-bottom: 0px;
+    padding: 4px 10px;
+}
+table.ipaddress_subnet i.pull-left {
+    padding-top: 3px;
 }
 a.createfromfree {
 	padding: 1px 4px;

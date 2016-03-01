@@ -35,7 +35,6 @@ if ( $Subnets->identify_address($subnet->subnet) == "IPv6") 			{ $Result->show("
 $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description.")" : "";
 ?>
 
-
 <!-- header -->
 <div class="pHeader"><?php print _('Scan subnet'); ?></div>
 
@@ -55,12 +54,14 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
     		<select name="type" id="type" class="form-control input-sm input-w-auto">
     			<!-- Discovery scans -->
 	    		<optgroup label="<?php print _('Discovery scans');?>">
-		    		<option value="scan-icmp"><?php print _('Discovery scans');?>: Ping <?php print _('scan');?></option>
-		    		<option value="scan-telnet"><?php print _('Discovery scans');?>: Telnet <?php print _('scan');?></option>
+		    		<option value="scan-icmp"   <?php if(@$_COOKIE['scantype']=="scan-icmp") print "selected"; ?>><?php print _('Discovery scans');?>: Ping <?php print _('scan');?></option>
+		    		<option value="scan-telnet" <?php if(@$_COOKIE['scantype']=="scan-telnet") print "selected"; ?>><?php print _('Discovery scans');?>: Telnet <?php print _('scan');?></option>
+		    		<option value="snmp-arp"    <?php if(@$_COOKIE['scantype']=="snmp-arp") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP ARP <?php print _('scan');?></option>
 	    		</optgroup>
     			<!-- Status update scans -->
 	    		<optgroup label="<?php print _('Status update scans');?>">
-		    		<option value="update-icmp"><?php print _('Status update scans');?>: Ping <?php print _('scan');?></option>
+		    		<option value="update-icmp"     <?php if(@$_COOKIE['scantype']=="update-icmp") print "selected"; ?>><?php print _('Status update scans');?>: Ping <?php print _('scan');?></option>
+		    		<option value="update-snmp-arp" <?php if(@$_COOKIE['scantype']=="update-snmp-arp") print "selected"; ?>><?php print _('Status update scans');?>: SNMP ARP <?php print _('scan');?></option>
 	    		</optgroup>
 
 			</select>

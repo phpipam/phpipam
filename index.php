@@ -94,6 +94,10 @@ else {
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
+	<?php if ($User->settings->enableThreshold=="1") { ?>
+	<link rel="stylesheet" type="text/css" href="css/1.2/slider.css">
+	<script type="text/javascript" src="js/1.2/bootstrap-slider.js"></script>
+    <?php }	?>
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->

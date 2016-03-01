@@ -6,6 +6,14 @@
 
 # set rowspan
 $rowSpan = 10 + sizeof($custom_fields);
+
+# detect multicast
+if ($User->settings->enableMulticast==1) {
+    $multicast_badge = $Subnets->is_multicast ($subnet['subnet']) ? " <span class='badge badge1 badge5'>"._("Multicast")."</span>" : "";
+}
+else {
+    $multicast_badge = "";
+}
 ?>
 
 <!-- subnet details upper table -->
@@ -15,7 +23,7 @@ $rowSpan = 10 + sizeof($custom_fields);
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
 		<th><?php print _('Subnet details'); ?></th>
-		<td><?php print "<b>$subnet[ip]/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></td>
+		<td><?php print "<b>$subnet[ip]/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?> <?php print $multicast_badge; ?></td>
 	</tr>
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
@@ -81,10 +89,16 @@ $rowSpan = 10 + sizeof($custom_fields);
 			# fetch recursive nameserver details
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
 			if ($device!==false) {
-				print $device->hostname;
+    			# rack
+    			if ($User->settings->enableRACK=="1" && strlen($device->rack)>0) {
+        			$rack = $Tools->fetch_object("racks", "id", $device->rack);
+        			$rack_text = $rack===false ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
+    			}
+				print "<a href='".create_link("tools","devices","hosts",$device->id)."'>".$device->hostname."</a>";
 				if (strlen($device->description)>0) {
 					print ' ('.$device->description.')';
 				}
+				print $rack_text;
 			}
 			else {
 				print "<span class='text-muted'>/</span>";
@@ -126,12 +140,33 @@ $rowSpan = 10 + sizeof($custom_fields);
     <tr>
         <td colspan="2"><hr></td>
     </tr>
+    <?php if ($subnet['isFull']=="1") { ?>
     <tr>
         <th></th>
-        <td class="isFull"><?php print $Result->show("info", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+        <td class="isFull"><?php print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
     </tr>
     <?php } ?>
 
+
+    <?php } ?>
+    <?php if($User->settings->enableThreshold=="1" && $subnet['threshold']>0) { ?>
+    <tr>
+        <td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <?php
+        // add alert class if over usage
+        $aclass = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)))>$subnet['threshold'] ? "alert alert-danger pull-left" : "";
+        $subnet['threshold'] = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)))>$subnet['threshold'] ? "<i class='fa fa-warning pull-left'></i> ".$subnet['threshold'] : $subnet['threshold'];
+        ?>
+        <th><?php print _("Alert threshold"); ?></th>
+        <td>
+            <div class="<?php print $aclass; ?>">
+                <?php print _('Threshold')." ".$subnet['threshold']."%, ". _("Current usage").": ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))); ?>%
+            </div>
+        </td>
+    </tr>
+    <?php } ?>
 
 	<?php
 	# VRF
@@ -142,6 +177,9 @@ $rowSpan = 10 + sizeof($custom_fields);
 		$vrfText = $vrf['name'];
 		if(!empty($vrf['description'])) { $vrfText .= " [$vrf[description]]";}
 
+        print "<tr>";
+        print "<td colspan='2'><hr></td>";
+        print "</tr>";
 		print "<tr>";
 		print "	<th>"._('VRF')."</th>";
 		print "	<td>$vrfText</td>";
@@ -449,6 +487,8 @@ $rowSpan = 10 + sizeof($custom_fields);
 		# add nested subnet
 		if($section_permission == 3) {
 		print "<a class='edit_subnet btn btn-xs btn-default '	href='' data-container='body' rel='tooltip' title='"._('Add new nested subnet')."' 		data-subnetId='$subnet[id]' data-action='add' data-id='' data-sectionId='$subnet[sectionId]'> <i class='fa fa-plus-circle'></i></a> ";
+        if($subnet_permission>1 && $User->settings->enableSNMP=="1")
+        print "<button class='btn btn-xs btn-success' id='snmp-routing-section' rel='tooltip' data-container='body' title='"._('Search for subnets through SNMP')."' data-subnetId='$subnet[id]' data-sectionId='$subnet[sectionId]'><i class='fa fa-cogs'></i></button>";
 		} else {
 		print "<a class='btn btn-xs btn-default disabled' 		href=''> 																																											  <i class='fa fa-plus-circle'></i></a> ";
 		}

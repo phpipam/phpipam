@@ -19,9 +19,6 @@ $folderId = $_GET['subnetId'];
 # get section details
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
 
-# get all slaves
-$slaves = $Subnets->fetch_subnet_slaves ($folderId);
-
 if($slaves) {
 	# sort slaves by folder / subnet
 	foreach($slaves as $s) {
@@ -110,8 +107,8 @@ if($slaves) {
 			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask] $fullinfo</a></td>";
 
 				# calculate free / used / percentage
-				if(!$Subnets->has_slaves ($slave['id']))	{ 
-					$ipCount = $Addresses->count_subnet_addresses ($slave['id']); 
+				if(!$Subnets->has_slaves ($slave['id']))	{
+					$ipCount = $Addresses->count_subnet_addresses ($slave['id']);
 					$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'], $slave['isFull'] );
 				} else {
 					$calculate = $Subnets->calculate_subnet_usage_recursive( $slave['id'], $slave['subnet'], $slave['mask'], $Addresses, $slave['isFull']);

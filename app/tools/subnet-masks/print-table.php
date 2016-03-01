@@ -36,19 +36,21 @@ $masks = $Subnets->get_ipv4_masks ();
 		<tbody>
 		<?php
 		foreach($masks as $m) {
-			print "<tr>";
-			print "	<td>/$m->bitmask</td>";
-			print "	<td>$m->netmask</td>";
-			print "	<td>$m->wildcard</td>";
-			print "	<td class='visible-lg'>$m->binary</td>";
-			print "	<td>$m->subnets</td>";
-			print "	<td>$m->hosts</td>";
-			if(!$popup) {
-			print "	<td>$m->subnet_bits</td>";
-			print "	<td>$m->host_bits</td>";
+    		if($m->bitmask<31 && $m->bitmask>7) {
+    			print "<tr>";
+    			print "	<td>/$m->bitmask</td>";
+    			print "	<td>$m->netmask</td>";
+    			print "	<td>$m->wildcard</td>";
+    			print "	<td class='visible-lg'>$m->binary</td>";
+    			print "	<td>$m->subnets</td>";
+    			print "	<td>$m->hosts</td>";
+    			if(!$popup) {
+    			print "	<td>$m->subnet_bits</td>";
+    			print "	<td>$m->host_bits</td>";
 
+    			}
+    			print "</tr>";
 			}
-			print "</tr>";
 		}
 		?>
 		</tbody>

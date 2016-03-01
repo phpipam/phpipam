@@ -1,18 +1,46 @@
-== 1.20.005
+== 1.21.001
 
 	New features:
 	------------
+	+ Multicast module (RFC1112, RFC2464) with IP to MAC mapping and multicast networks overview;
+	+ Threshold module for subnets;
+	+ Racks module (Rack drawing) for devices;
+	+ SNMP module:
+	    + Subnet discovery scans via ARP check/interface check on associated devices;
+	    + Status update scans via ARP check on associated devices;
+	    + Subnet discovery from route table;
 
-
-	Enhancements:
+	Enhancements, changes:
 	----------------------------
+	+ Folders can now contain addresses;
 	+ API:
 	    - Api v1 removed;
 	    + If subnet gateway defined gatewayId is returned in subnet details;
+    + Widgets:
+        + New threshold widget;
+        + New inactive hosts widget;
+
+== 1.20.1
+
+	Translations:
+	----------------------------
+    + French translation updated to verson 1.2;
+    + German translation updated to verson 1.2;
 
 	Bugfixes:
 	----------------------------
-	+ Fixed powerDNS delimiter for multiple slave servers on domain;
+    + Fixed upgrade bug that selected invalid auth method for AD/LDAP users;
+    + Fixed LDAP problems after 1.2 upgrade;
+    + Fixed PowerDNS Slave with multiple masters delimiter error;
+    + Fixed owerDNS PTR records not being updated automatically;
+    + Fixed csrf cookie bug when editing folder;
+    + Fixed csrf cookie bug when truncationg subnet;
+    + Fixed invalid code for API crypt method;
+    + Fixed strange headings font display in Firefox;
+    + Fixed invalid proxy settings in config.dist.php;
+    + Fixed search same hostnames in db link form address table;
+    + Fixed import subnet bug caused by fw object;
+    + Fixed Subnet Import (Preview button > no action);
 
 == 1.20
 

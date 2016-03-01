@@ -36,7 +36,7 @@ else {
 }
 # set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $_POST['subnetId']);
-$subnet_permission > 2 ?:								$Result->show("danger", _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
+$subnet_permission > 1 ?:								$Result->show("danger", _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
 
 # try to ping it
 $pingRes = $Ping->ping_address($address['ip']);

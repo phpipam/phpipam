@@ -358,7 +358,7 @@ class Subnets extends Common_functions {
 		$this->get_settings ();
 		$order = $this->get_subnet_order ();
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `sectionId` = ? order by isFolder desc, $order[0] $order[1];", array($sectionId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else  $order[0] end $order[1]", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -638,7 +638,7 @@ class Subnets extends Common_functions {
 	 */
 	public function get_ipv4_masks () {
 		# loop masks
-		for($mask=30; $mask>=8; $mask--) {
+		for($mask=32; $mask>=0; $mask--) {
 			// initialize
 			$out[$mask] = new StdClass ();
 
@@ -824,6 +824,31 @@ class Subnets extends Common_functions {
 		}
 		# return array
 		return $parents;
+	}
+
+	/**
+	 * Searches for cidr inside section
+	 *
+	 * @access public
+	 * @param bool $sectionId (default: false)
+	 * @param bool $cidr (default: false)
+	 * @return void
+	 */
+	public function find_subnet ($sectionId = false, $cidr = false) {
+    	// check
+    	if (!is_numeric($sectionId))                        { return false; }
+    	if ($this->verify_cidr_address ($cidr) !== true)    { return false; }
+    	// set subnet / mask
+    	$tmp = explode("/", $cidr);
+    	// search
+		try { $subnet = $this->Database->getObjectQuery("select * from `subnets` where `subnet`=? and `mask`=? and `sectionId`=?;", $values = array($this->transform_address($tmp[0],"decimal"), $tmp[1], $sectionId)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+        # result
+        return sizeof($subnet)>0 ? $subnet : false;
+
 	}
 
 
@@ -1264,7 +1289,7 @@ class Subnets extends Common_functions {
 	public function verify_cidr ($cidr) {
 		$cidr =  explode("/", $cidr);
 		# verify network part
-	    if(empty($cidr[0]) || empty($cidr[1])) 						{ return _("Invalid CIDR format!"); }
+	    if(strlen($cidr[0])==0 || strlen($cidr[1])==0) 				{ return _("Invalid CIDR format!"); }
 	    # verify network part
 		if($this->identify_address_format ($cidr[0])!="dotted")		{ return _("Invalid Network!"); }
 		# verify mask
@@ -1857,6 +1882,287 @@ class Subnets extends Common_functions {
 		}
 		# return
 		return (int) $res->cnt;
+	}
+
+	/**
+	 * Fetches all subnets that are marked for threshold
+	 *
+	 * @access public
+	 * @param int $limit (default: 10)
+	 * @return void
+	 */
+	public function fetch_threshold_subnets ($limit = 10) {
+ 		try { $res = $this->Database->getObjectsQuery("select * from `subnets` where `threshold` != 0 and `threshold` is not null limit $limit;"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return sizeof($res)>0 ? $res : false;
+	}
+
+	/**
+	 * Finds inactive hosts
+	 *
+	 * @access public
+	 * @param mixed $timelimit
+	 * @param int $maxresults (default: 100)
+	 * @return void
+	 */
+	public function find_inactive_hosts ($timelimit = 86400, $limit = 100) {
+    	// fetch settings
+    	$this->settings ();
+    	// search
+  		try { $res = $this->Database->getObjectsQuery("select * from `ipaddresses` where `lastSeen` between ? and ? limit $limit;", array(date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr($this->settings->pingStatus, ";")))) ); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		return sizeof($res)>0 ? $res : false;
+	}
+
+
+
+
+
+
+
+
+
+
+	/**
+	* @multicast methods
+	* -------------------------------
+	*/
+
+	/**
+	 * Fetches all multicast networks from database
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function fetch_multicast_subnets () {
+    	// set query
+    	$query = "select * from `subnets` where `subnet` between '3758096384' and '4026531839' or `subnet` between '338953138925153547590470800371487866878' and '338958331222012082418099330867817086976' order by subnet asc, mask asc;";
+    	// fetch
+		try { $res = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		# fetch all subnet ids
+		$res2 = $this->fetch_distinct_multicast_folders ();
+
+		# create
+		if (sizeof($res)>0 && sizeof($res2)>0)  { return $res2 + $res; }
+		elseif (sizeof($res)>0)                 { return $res; }
+		elseif (sizeof($res2)>0)                { return $res2; }
+		else                                    { return false; }
+	}
+
+	/**
+	 * Fetch all ids for multicast folders
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function fetch_distinct_multicast_folders () {
+    	// set query
+    	$query = "select distinct(`subnetId`) as `id` from `ipaddresses` where `ip_addr` between '3758096384' and '4026531839' or `ip_addr` between '338953138925153547590470800371487866878' and '338958331222012082418099330867817086976';";
+    	// fetch
+		try { $res = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# return
+		if(sizeof($res)>0) {
+    		foreach ($res as $r) {
+        		$out[] = "(`isfolder` = '1' and `id` = $r->id)";
+    		}
+        	// set query
+        	$query = "select * from subnets where ".implode(" or ",$out)." order by description asc;";
+        	// fetch
+    		try { $res2 = $this->Database->getObjectsQuery($query); }
+    		catch (Exception $e) {
+    			$this->Result->show("danger", _("Error: ").$e->getMessage());
+    			return false;
+    		}
+    		// return result
+    		return $res2;
+		}
+		else {
+    		return false;
+		}
+	}
+
+	/**
+	 * Checks if address is multicast.
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function is_multicast ($address) {
+    	# IPv4
+    	if ($this->identify_address ($address)=="IPv4") {
+    	    # transform to decimal
+            $address = $this->transform_address ($address, "decimal");
+            # check
+        	if ($address >= 3758096384 && $address <= 4026531839) {
+            	return true;
+        	}
+    	}
+    	else {
+    	    # transform to ip
+            $address = $this->transform_address ($address, "dotted");
+            $this->initialize_pear_net_IPv6 ();
+            if ($this->Net_IPv6->getAddressType($address)==31) {
+                return true;
+            }
+    	}
+    	// default false
+    	return false;
+	}
+
+	/**
+	 * This function returns multicast MAC address from provided multicast address
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function create_multicast_mac ($address) {
+    	// first verify that it is multicast
+    	if ($this->is_multicast ($address)===false) {
+        	return false;
+    	}
+    	// ipv4
+    	if ($this->identify_address ($address)=="IPv4") {
+        	// to array
+        	$mac_tmp = explode(".", $address);
+        	// check 3rd octet
+        	if ($mac_tmp[1]>=128) { $mac_tmp[1]=$mac_tmp[1]-128; }
+        	// create mac
+        	$mac = strtolower("01:00:5e:".str_pad(dechex($mac_tmp[1]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[2]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[3]),2,"0",STR_PAD_LEFT));
+    	}
+    	else {
+        	$this->initialize_pear_net_IPv6 ();
+        	if ($this->Net_IPv6->getAddressType($address)==31) {
+            	//expand
+            	$expanded = $this->Net_IPv6->uncompress($address);
+            	// to array
+                $mac_tmp = explode(":", $expanded);
+            	$mac = strtolower("33:33:".str_pad(dechex($mac_tmp[4]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[5]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[6]),2,"0",STR_PAD_LEFT).":".str_pad(dechex($mac_tmp[7]),2,"0",STR_PAD_LEFT));
+        	}
+        	else {
+                return false;
+        	}
+    	}
+    	// return
+    	return $mac;
+	}
+
+    /**
+     * Checks if address exists in database
+     *
+     *  parameter $unique_required defines where it cannot overlap:
+     *      - section : within section
+     *      - vlan    : within l2 domain
+     *
+     * @access private
+     * @param mixed $mac
+	 * @param mixed $sectionId
+	 * @param mixed $vlanId
+     * @param string $unique_required (default: "vlan")
+     * @param int $address_id (dafault: 0)
+     * @return void
+     */
+    private function multicast_address_exists ($mac, $sectionId, $vlanId, $unique_required = "vlan", $address_id = 0) {
+        // if vlan fetch l2 domainid
+        if ($unique_required=="vlan") {
+            $Tools = new Tools ($this->Database);
+            $vlan_details = $Tools->fetch_object("vlans", "vlanId", $vlanId);
+
+            // set query
+            $query = "select
+                `s`.`vlanId`,`v`.`domainId`,`v`.`number`,`i`.`id`,
+                LOWER(REPLACE(REPLACE(`mac`,\".\",\"\"),\":\", \"\")) as `mac`, `subnetId`
+                from `ipaddresses` as `i`, `subnets` as `s`, `vlans` as `v`
+                where `i`.`subnetId`=`s`.`id` and `s`.`vlanId`=`v`.`vlanId` and LOWER(REPLACE(REPLACE(`mac`,\".\",\"\"),\":\", \"\")) = ? and `i`.`id`!= ?;";
+        }
+        else {
+            // set query
+            $query = "select
+                `s`.`sectionId`,`v`.`number`,`i`.`id`,
+                LOWER(REPLACE(REPLACE(`mac`,\".\",\"\"),\":\", \"\")) as `mac`, `subnetId`
+                from `ipaddresses` as `i`, `subnets` as `s`, `vlans` as `v`
+                where `i`.`subnetId`=`s`.`id` and LOWER(REPLACE(REPLACE(`mac`,\".\",\"\"),\":\", \"\")) = ? and `i`.`id`!= ?;";
+        }
+
+		// fetch
+		try { $res = $this->Database->getObjectsQuery($query, array($mac, $address_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+        // than check by required unique
+        if (sizeof($res)>0) {
+            // check
+            foreach ($res as $line) {
+                // overlap requirement
+                if ($unique_required=="vlan" && $vlan_details->domainId==$line->domainId) { return true; }
+                elseif ($unique_required=="section" && $sectionId==$line->sectionId)      { return true; }
+            }
+        }
+        // default doesnt exist
+        return false;
+    }
+
+	/**
+	 * Validates provided mac address - checks if it already exist
+	 *
+     *  parameter $unique_required defines where it cannot overlap:
+     *      - section : within section
+     *      - vlan    : within l2 domain
+     *
+	 * @access public
+	 * @param mixed $mac
+	 * @param mixed $sectionId
+	 * @param mixed $vlanId
+	 * @param mixed $unique_required
+	 * @param int $address_id (defaut: 0)
+	 * @return true if ok, else error text to be displayed
+	 */
+	public function validate_multicast_mac ($mac, $sectionId, $vlanId, $unique_required="vlan", $address_id = 0) {
+    	// first put it to common format (1)
+    	$mac = $this->reformat_mac_address ($mac);
+    	$mac_delimited =  explode(":", $mac);
+    	// we permit empty
+        if (strlen($mac)==0) {
+            return true;
+        }
+    	// validate mac
+    	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1) {
+        	return "Invalid MAC address";
+    	}
+    	// multicast check
+    	elseif (!($mac_delimited[0]=="33" && $mac_delimited[1]=="33") && !($mac_delimited[0]=="01" && $mac_delimited[1]=="00" && $mac_delimited[2]=="5e")) {
+            return "Not multicast MAC address";
+    	}
+    	// check first 3 chars for multicast IPv4
+    	elseif ($type=="IPv6") {
+        	return "Not multicast MAC address";
+    	}
+    	// check if it already exists
+    	elseif ($this->multicast_address_exists ($this->reformat_mac_address($mac, 4), $sectionId, $vlanId, $unique_required, $address_id)) {
+        	return "MAC address already exists";
+    	}
+    	else {
+        	return true;
+    	}
 	}
 
 

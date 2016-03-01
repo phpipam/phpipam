@@ -231,17 +231,20 @@ class User extends Common_functions {
 				$this->destroy_session ();
 				# error
 				$this->Result->show("danger", _('Please login first')."!<hr><a class='btn btn-sm btn-default' href='".$url.create_link ("login")."'>"._('Login')."</a>", true, true);
+				die();
 			}
 			# timeout
 			elseif ($this->timeout) {
 				# set redirect cookie
 				$this->set_redirect_cookie ();
 				header("Location:".$url.create_link ("login","timeout"));
+				die();
 			}
 			else {
 				# set redirect cookie
 				$this->set_redirect_cookie ();
 				header("Location:".$url.create_link ("login"));
+				die();
 			}
 		}
 	}
@@ -291,13 +294,16 @@ class User extends Common_functions {
 	 * Cerates cookie to prevent csrf
 	 *
 	 * @access private
+	 * @mixed $index (default: null)
 	 * @return void
 	 */
-	public function create_csrf_cookie () {
+	public function create_csrf_cookie ($index = null) {
+    	// set cookie suffix
+    	$name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
     	// save cookie
-    	$_SESSION['csrf_cookie'] = md5(uniqid(mt_rand(), true));
+    	$_SESSION[$name] = md5(uniqid(mt_rand(), true));
     	// return
-    	return $_SESSION['csrf_cookie'];
+    	return $_SESSION[$name];
 	}
 
 	/**

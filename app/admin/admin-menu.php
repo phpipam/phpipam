@@ -19,6 +19,12 @@ foreach($admin_menu as $k=>$tool) {
 	foreach($tool as $t) {
 		# active?
 		$active = $_GET['section']==$t['href'] ? "active" : "";
+		# exception
+		if ($t['href']=="devices") {
+    		if ($_GET['section']=="device-types" || $_GET['section']=="snmp") {
+        		$active = "active";
+    		}
+        }
 		# print
 		print "<li class='list-group-item $active'>";
 		print "<a href='".create_link("administration", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";

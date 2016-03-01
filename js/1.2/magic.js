@@ -535,6 +535,11 @@ $(document).on('change', "select#type", function() {
 	if(pingType=="scan-telnet") { $('tbody#telnetPorts').show(); }
 	else 						{ $('tbody#telnetPorts').hide(); }
 });
+//save value to cookie
+$(document).on ('change', "select#type", function() {
+    var sel = ($(this).find(":selected").val());
+    createCookie("scantype",sel,32);
+});
 
 //start scanning
 $(document).on('click','#subnetScanSubmit', function() {
@@ -593,7 +598,8 @@ $(document).on("click", "input#csvimportcheck", function() {
     showSpinner();
     //get filetype
     var filetype = $('span.fname').html();
-    $.post('app/subnets/import-subnet/print-file.php', { filetype : filetype }, function(data) {
+    var xlsSubnetId  = $('a.csvImport').attr('data-subnetId');
+    $.post('app/subnets/import-subnet/print-file.php', { filetype:filetype, subnetId:xlsSubnetId }, function(data) {
         $('div.csvimportverify').html(data).slideDown('fast');
         hideSpinner();
         // add reload class
@@ -608,9 +614,12 @@ $(document).on("click", "input#csvImportYes", function() {
     showSpinner();
     //get filetype
     var filetype = $('span.fname').html();
+    //ignore errors
+    if($('input[name=ignoreErrors]').is(':checked'))    { var ignoreError = "1"; }
+    else                                                { var ignoreError = "0"; }
     // get active subnet ID
     var xlsSubnetId  = $('a.csvImport').attr('data-subnetId');
-    var postData = "subnetId=" + xlsSubnetId + "&filetype=" + filetype;
+    var postData = "subnetId=" + xlsSubnetId + "&filetype=" + filetype + "&ignoreError=" + ignoreError;
 
     $.post('app/subnets/import-subnet/import-file.php', postData, function(data) {
         $('div.csvImportResult').html(data).slideDown('fast');
@@ -1845,7 +1854,8 @@ $(document).on("click", "button#subnetSplitSubmit", function() {
 $(document).on("click", "button#subnetTruncateSubmit", function() {
 	showSpinner();
 	var subnetId = $(this).attr('data-subnetId');
-	$.post("app/admin/subnets/truncate-save.php", {subnetId:subnetId}, function(data) {
+    var csrf_cookie = $(this).attr('data-csrf_cookie');
+	$.post("app/admin/subnets/truncate-save.php", {subnetId:subnetId, csrf_cookie:csrf_cookie}, function(data) {
 		$('div.subnetTruncateResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
@@ -2176,6 +2186,59 @@ $(document).on("click", ".editSwitch", function() {
 $(document).on("click", "#editSwitchsubmit", function() {
     submit_popup_data (".switchManagementEditResult", "app/admin/devices/edit-result.php", $('form#switchManagementEdit').serialize());
 });
+// edit switch snmp
+$(document).on("click", ".editSwitchSNMP", function() {
+	open_popup("400", "app/admin/devices/edit-snmp.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
+});
+//submit form
+$(document).on("click", "#editSwitchSNMPsubmit", function() {
+    submit_popup_data (".switchSNMPManagementEditResult", "app/admin/devices/edit-snmp-result.php", $('form#switchSNMPManagementEdit').serialize());
+});
+//edit-snmp-methods
+$(document).on("click", ".edit-snmp-methods", function() {
+	open_popup("700", "app/admin/snmp/edit.php",  {snmpid:$(this).attr('data-snmpid'), action:$(this).attr('data-action')} );
+});
+//edit-snmp-methods-submit
+$(document).on("click", "#edit-snmp-methods-submit", function() {
+	 submit_popup_data ("#edit-snmp-methods-result", "app/admin/snmp/edit-result.php", $('form#edit-snmp-methods-edit').serialize());
+});
+//snmp test
+$(document).on("click", "#test-snmp", function() {
+	open_popup ("700", "app/admin/devices/edit-snmp-test.php", $('form#switchSNMPManagementEdit').serialize(), true);
+	return false;
+});
+//snmp route query popup
+$(document).on("click", "#snmp-routing", function() {
+    open_popup ("700", "app/subnets/scan/subnet-scan-snmp-route.php", "", true);
+    return false;
+});
+//snmp select subnet to add to new subnet
+$(document).on("click", ".select-snmp-subnet", function() {
+    $('form#editSubnetDetails input[name=subnet]').val($(this).attr('data-subnet')+"/"+$(this).attr('data-mask'));
+    hidePopup2();
+    return false;
+});
+//snmp route query popup - section search
+$(document).on("click", "#snmp-routing-section", function() {
+    open_popup ("masks", "app/subnets/scan/subnet-scan-snmp-route-all.php", {sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId')});
+    return false;
+});
+//remove all results for device
+$(document).on("click", ".remove-snmp-results", function () {
+    $("tbody#"+$(this).attr('data-target')).remove();
+    $(this).parent().remove();
+});
+//remove subnet from found subnet list
+$(document).on("click", ".remove-snmp-subnet", function() {
+   $('#editSubnetDetailsSNMPallTable tr#tr-' + $(this).attr('data-target-subnet')).remove();
+   return false;
+});
+///add subnets to section
+$(document).on("click", "#add-subnets-to-section-snmp", function() {
+   submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-snmp-route-all-result.php", $('form#editSubnetDetailsSNMPall').serialize());
+   return false;
+});
+
 
 
 /* ---- Device types ----- */
@@ -2187,6 +2250,32 @@ $(document).on("click", ".editDevType", function() {
 $(document).on("click", "#editDevTypeSubmit", function() {
     submit_popup_data (".devTypeEditResult", "app/admin/device-types/edit-result.php", $('form#devTypeEdit').serialize());
 });
+
+/* ---- RACKS ----- */
+//load edit form
+$(document).on("click", ".editRack", function() {
+	open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );
+	return false;
+});
+//submit form
+$(document).on("click", "#editRacksubmit", function() {
+    submit_popup_data (".rackManagementEditResult", "app/admin/racks/edit-result.php", $('form#rackManagementEdit').serialize());
+});
+//load edit rack devices form
+$(document).on("click", ".editRackDevice", function() {
+	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );
+	return false;
+});
+//submit edit rack devices form
+$(document).on("click", "#editRackDevicesubmit", function() {
+    submit_popup_data (".rackDeviceManagementEditResult", "app/admin/racks/edit-rack-devices-result.php", $('form#rackDeviceManagementEdit').serialize());
+});
+//show popup image
+$(document).on("click", ".showRackPopup", function() {
+	open_popup("400", "app/tools/racks/show-rack-popup.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid')}, true );
+	return false;
+});
+
 
 
 /* ---- tags ----- */

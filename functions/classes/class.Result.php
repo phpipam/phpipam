@@ -44,7 +44,7 @@ class Result extends Common_functions {
 			# cli or GUI
 			if (php_sapi_name()=="cli") { print $this->show_cli_message ($text); }
 			else {
-				# return or ptint
+				# return or print
 				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2); }
 				else					{ print  $this->show_message ($class, $text, $popup, $popup2); }
 			}
@@ -102,6 +102,8 @@ class Result extends Common_functions {
 	 * @return void
 	 */
 	public function show_message ($class, $text, $popup, $popup2) {
+    	// to array if object
+    	if (is_object($text))   { $text = (array) $text; }
 		// format if array
 		if(is_array($text)) {
 			// single value
@@ -110,7 +112,6 @@ class Result extends Common_functions {
 			}
 			// multiple values
 			else {
-				$out[] = "Errors:";
 				$out[] = "<ul>";
 				foreach( $text as $l ) { $out[] = "<li>$l</li>"; }
 				$out[] = "</ul>";

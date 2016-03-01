@@ -15,7 +15,7 @@ $devices = $Admin->fetch_all_objects("deviceTypes", "tid");
 <hr>
 
 <div class="btn-group">
-	<a href="<?php print create_link("administration", "devices"); ?>" class="btn btn-sm btn-default"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
+	<a href="<?php print create_link("administration", "devices"); ?>" class="btn btn-sm btn-default"><i class='fa fa-angle-left'></i> <?php print _('Manage devices'); ?></a>
 	<button class='btn btn-sm btn-default editDevType' data-action='add'   data-tid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add device type'); ?></button>
 </div>
 

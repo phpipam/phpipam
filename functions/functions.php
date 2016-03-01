@@ -39,6 +39,9 @@ require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerD
 require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
 require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
+require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
+require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
+
 
 # save settings to constant
 if($_GET['page']!="install" ) {
@@ -60,7 +63,7 @@ if($_GET['page']!="install" ) {
  *
  *	levels: $el
  */
-function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null ) {
+function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null, $l6 = null ) {
 	# get settings
 	global $User;
 
@@ -72,7 +75,8 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 
 	# set rewrite
 	if($User->settings->prettyLinks=="Yes") {
-		if(!is_null($l5))		{ $link = "$l0/$l1/$l2/$l3/$l4/$l5"; }
+		if(!is_null($l6))		{ $link = "$l0/$l1/$l2/$l3/$l4/$l5/$l6"; }
+		elseif(!is_null($l5))	{ $link = "$l0/$l1/$l2/$l3/$l4/$l5/"; }
 		elseif(!is_null($l4))	{ $link = "$l0/$l1/$l2/$l3/$l4/"; }
 		elseif(!is_null($l3))	{ $link = "$l0/$l1/$l2/$l3/"; }
 		elseif(!is_null($l2))	{ $link = "$l0/$l1/$l2/"; }
@@ -82,7 +86,8 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	}
 	# normal
 	else {
-		if(!is_null($l5))		{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
+		if(!is_null($l6))		{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
+		elseif(!is_null($l5))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
 		elseif(!is_null($l4))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
 		elseif(!is_null($l3))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
 		elseif(!is_null($l2))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }
