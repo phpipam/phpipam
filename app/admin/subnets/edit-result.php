@@ -102,6 +102,21 @@ if ( ($_POST['sectionId'] != @$_POST['sectionIdNew']) && $_POST['action']=="edit
     }
 }
 /**
+ *	If VRF changes then do checks!
+ */
+if ( ($_POST['vrfId'] != @$_POST['vrfIdOld']) && $_POST['action']=="edit" ) {
+	
+	if($section['strictMode']==1 && !$parent_is_folder) {
+    	/* verify that no overlapping occurs if we are adding root subnet
+	       only check for overlapping if vrf is empty or not exists!
+    	*/
+    	$overlap=$Subnets->verify_subnet_overlapping ($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId']);
+    	if($overlap!==false) {
+	    	$errors[] = $overlap;
+	    }
+    }
+}
+/**
  * Execute checks on add only and when root subnet is being added
  */
 else if (($_POST['action']=="add") && ($_POST['masterSubnetId']==0)) {

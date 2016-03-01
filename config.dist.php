@@ -72,7 +72,7 @@ $proxy_use_auth = false;                                  # Enable/Disable Proxy
 $proxy_auth     = base64_encode("$proxy_user:$proxy_pass");
 
 if ($proxy_enabled == true && $proxy_use_auth == false) {
-    stream_context_set_default(array('http' => array('proxy'=>'tcp://$proxy_server:$proxy_port')));
+    stream_context_set_default(array('http' => array('proxy'=>'tcp://'.$proxy_server.':'.$proxy_port)));
 }
 elseif ($proxy_enabled == true && $proxy_use_auth == true) {
     stream_context_set_default(
@@ -82,5 +82,8 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
               'header' => "Proxy-Authorization: Basic $proxy_auth"
         )));
 }
+
+/* for debugging proxy config uncomment next line */
+#var_dump(stream_context_get_options(stream_context_get_default()));
 
 ?>
