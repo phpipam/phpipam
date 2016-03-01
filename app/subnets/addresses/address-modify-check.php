@@ -299,7 +299,7 @@ else {
 		        $Result->show("success", _("IP $action successful"),false);
 		        // try to ping
 		        if ($subnet['pingSubnet']=="1" && $action=="add") {
-    		        $Ping->ping_address($Subnets->transform_address($address['ip_addr'], "dotted"));
+    		        $pingRes = $Ping->ping_address($Subnets->transform_address($address['ip_addr'], "dotted"));
     		        // update status
     		        if($pingRes==0) {
         		        // print alive
