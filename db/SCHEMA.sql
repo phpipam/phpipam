@@ -712,6 +712,7 @@ CREATE TABLE `snmp` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `oid` varchar(128) DEFAULT NULL,
   `name` varchar(64) DEFAULT NULL,
+  `method` set('info','arp','route') DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `oid` (`oid`)
@@ -732,4 +733,4 @@ VALUES
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.2';
+UPDATE `settings` set `version` = '1.21';

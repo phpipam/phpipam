@@ -504,6 +504,7 @@ CREATE TABLE `snmp` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `oid` varchar(128) DEFAULT NULL,
   `name` varchar(64) DEFAULT NULL,
+  `method` set('info','arp','route') DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `oid` (`oid`)
@@ -534,9 +535,9 @@ CREATE TABLE `racks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /* rack info to devices */
-ALTER TABLE `devices` ADD `rack` int(11) unsigned NOT NULL DEFAULT null AFTER `snmp_timeout`;
-ALTER TABLE `devices` ADD `rack_start` int(11) unsigned NOT NULL DEFAULT null AFTER `rack`;
-ALTER TABLE `devices` ADD `rack_size` int(11) unsigned NOT NULL DEFAULT null AFTER `rack_start`;
+ALTER TABLE `devices` ADD `rack` int(11) unsigned DEFAULT null AFTER `snmp_timeout`;
+ALTER TABLE `devices` ADD `rack_start` int(11) unsigned DEFAULT null AFTER `rack`;
+ALTER TABLE `devices` ADD `rack_size` int(11) unsigned DEFAULT null AFTER `rack_start`;
 
 /* add threshold module to subnets */
 ALTER TABLE `subnets` ADD `threshold` int(3)  NULL  DEFAULT 0  AFTER `NAT`;
