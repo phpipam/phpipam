@@ -6115,7 +6115,7 @@ msgstr ""
 msgid "Enter scan agent name"
 msgstr ""
 
-msgid "Agent description'"
+msgid "Agent description"
 msgstr ""
 
 msgid "Agent type"
