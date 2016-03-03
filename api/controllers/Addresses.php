@@ -206,12 +206,22 @@ class Addresses_controller extends Common_api_functions  {
 	 *
 	 *	required parameters: ip, subnetId
 	 *
+	 *   {subnetId}/first_free/     will search for first free address in subnet, creating ip_addr
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function POST () {
 		// remap keys
 		$this->remap_keys ();
+
+		// first free
+		if($this->_params->id=="first_free")   {
+    		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($this->_params->subnetId, $this->Subnets);
+    		// null
+    		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
+            else                                         { $this->_params->ip_addr = $this->Addresses->transform_address ($this->_params->ip_addr, "dotted"); }
+		}
 
 		// validate ip address - format, proper subnet, subnet/broadcast check
 		$this->validate_create_parameters ();
@@ -233,6 +243,7 @@ class Addresses_controller extends Common_api_functions  {
 			return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
 		}
 	}
+
 
 
 

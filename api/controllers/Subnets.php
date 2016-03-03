@@ -430,10 +430,10 @@ class Subnets_controller extends Common_api_functions {
 	/**
 	 * Returns first available address in subnet
 	 *
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function subnet_first_free () {
+	public function subnet_first_free () {
 		// Check for id
 		$this->validate_subnet_id ();
 		// fetch
