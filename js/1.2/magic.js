@@ -208,6 +208,19 @@ $(function() {
 });
 
 
+// table
+$('table.sorted').bdt({
+   pageRowCount: 25,
+   searchFormClass: 'search-form'
+});
+$("li.disabled a").click(function () {
+   return false;
+});
+$('form.search-form').submit(function() {
+   return false;
+});
+
+
 
 
 /* @dashboard widgets ----------  */
