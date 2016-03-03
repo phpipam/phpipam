@@ -513,7 +513,7 @@ class Subnets_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function read_subnet_nameserver ($nsid) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
+    	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
 
 	/**

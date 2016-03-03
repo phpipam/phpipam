@@ -102,7 +102,7 @@ class Sections_controller extends Common_api_functions {
                 		$result[$k]->gatewayId = $gateway->id;
             		}
             		//nameservers
-            		$ns = $this->read_subnet_nameserver ();
+            		$ns = $this->read_subnet_nameserver ($r->nameserverId);
                     if ($ns!==false) {
                         $result[$k]->nameservers = $ns;
                     }
@@ -272,7 +272,7 @@ class Sections_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function read_subnet_nameserver ($nsid) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
+    	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
 }
 
