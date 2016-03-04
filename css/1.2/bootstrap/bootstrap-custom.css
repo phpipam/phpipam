@@ -2411,3 +2411,26 @@ div.jqueryError a {
     margin-right: 10px;
     margin-left: 5px;
 }
+
+/* Don't print link hrefs */
+ @media print {
+   a[href]:after {
+     content: none
+   }
+   .table.ipaddresses th.btn-actions,
+   .table.ipaddresses td.btn-actions {
+         visibility: none;
+   }
+   td#actions .btn-toolbar{
+         visibility: none;
+   }
+   td#actions .btn-group{
+         visibility: none;
+   }
+   .btn-group, .btn-group-vertical {
+         visibility: none;
+   }
+   table#slaves .btn-group{
+         visibility: none;
+   }
+ }

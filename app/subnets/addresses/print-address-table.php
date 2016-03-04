@@ -410,7 +410,7 @@ else {
 		    }
 
 			# print action links if user can edit
-			print "<td class='btn-actions'>";
+			print "<td class='btn-actions hidden-print'>";
 			print "	<div class='btn-group'>";
 			# orphaned
 			if(@$orphaned && $subnet_permission > 1) {
