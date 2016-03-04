@@ -150,7 +150,7 @@ class Result extends Common_functions {
 	 */
 	public function throw_exception ($content) {
 		// include Exceptions class for API
-		include_once( dirname(__FILE__) . '../../../api/v2/controllers/Responses.php' );
+		include_once( dirname(__FILE__) . '../../../api/controllers/Responses.php' );
 		// initialize exceptions
 		$Exceptions = new Responses ();
 		// throw error

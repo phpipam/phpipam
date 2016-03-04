@@ -39,6 +39,7 @@ else {
 	print "<table class='table table-striped table-top table-condensed'>";
 
 	# headers
+	print "<thead>";
 	print "<tr>";
 	print "	<th>"._('User')."</th>";
 	print "	<th>"._('Type')."</th>";
@@ -48,7 +49,9 @@ else {
 	print "	<th>"._('Date')."</th>";
 	print "	<th>"._('Change')."</th>";
 	print "</tr>";
+	print "</thead>";
 
+    print "<tbody>";
 	# logs
 	foreach($clogs as $l) {
 		# cast
@@ -103,6 +106,7 @@ else {
 			print "</tr>";
 		}
 	}
+	print "</tbody>";
 	print "</table>";
 }
 ?>

@@ -22,11 +22,42 @@ print "<h4>"._('Available subnets')."</h4>";
 print "<hr>";
 
 # table
-print "<table id='manageSubnets' class='table table-striped table-condensed table-top table-absolute'>";
+print "<table id='manageSubnets' class='table sorted table-striped table-condensed table-top table-absolute'>";
 
 $section_count = 0;
 # print vlans in each section
 if ($sections!==false) {
+    $m=0;
+
+	# headers
+	print "<thead>";
+	print "	<tr>";
+	print "	<th>"._('Subnet')."</th>";
+	print "	<th>"._('Description')."</th>";
+	print "	<th>"._('VLAN')."</th>";
+	if($User->settings->enableVRF == 1) {
+	print "	<th>"._('VRF')."</th>";
+	}
+	print "	<th>"._('Master Subnet')."</th>";
+	print "	<th>"._('Device')."</th>";
+	print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
+
+	if(sizeof($custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			# hidden?
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "	<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
+			}
+		}
+	}
+	# actions
+	print "<th class='actions' style='padding:0px;'></th>";
+	print "</tr>";
+	print "</thead>";
+
+
+    print "<tbody>";
+	// loop
 	foreach ($sections as $section) {
 		# cast
 		$section = (array) $section;
@@ -34,45 +65,13 @@ if ($sections!==false) {
 		# check permission
 		$permission = $Sections->check_permission ($User->user, $section['id']);
 		if($permission > 0) {
-
 			# set colspan
 			$colSpan = 9 + (sizeof($custom_fields));
 
 			# section names
-			print "<tbody>";
 			print "	<tr class='subnets-title'>";
 			print "		<th colspan='$colSpan'><h4>$section[name] [$section[description]]</h4></th>";
 			print "	</tr>";
-			print "</tbody>";
-
-			# body
-			print "<tbody>";
-
-			# headers
-			print "	<tr>";
-			print "	<th>"._('Subnet')."</th>";
-			print "	<th>"._('Description')."</th>";
-			print "	<th>"._('VLAN')."</th>";
-			if($User->settings->enableVRF == 1) {
-			print "	<th>"._('VRF')."</th>";
-			}
-			print "	<th>"._('Master Subnet')."</th>";
-			print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
-			print "	<th class='hidden-xs hidden-sm'>"._('Hosts check')."</th>";
-			print "	<th class='hidden-xs hidden-sm'>"._('Discover')."</th>";
-
-			if(sizeof($custom_fields) > 0) {
-				foreach($custom_fields as $field) {
-					# hidden?
-					if(!in_array($field['name'], $hidden_fields)) {
-						print "	<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
-					}
-				}
-			}
-			# actions
-			print "<th class='actions' style='padding:0px;'></th>";
-
-			print "</tr>";
 
 			# get all subnets in section
 			$subnets = $Subnets->fetch_section_subnets ($section['id']);
@@ -91,11 +90,12 @@ if ($sections!==false) {
 
 				$section_count++;
 			}
-
-			print '</tbody>';
+            # index count
+            $m++;
 
 		}	# end permission check
 	}
+	print "</tbody>";
 }
 
 # none

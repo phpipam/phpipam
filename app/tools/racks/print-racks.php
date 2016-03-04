@@ -38,10 +38,11 @@ else {
     $Racks->fetch_all_racks();
 
     // table
-    print "<table class='table table-striped table-top table-td-top table-auto'>";
+    print "<table class='table sorted table-striped table-top table-td-top'>";
     // headers
+    print "<thead>";
     print "<tr>";
-    print " <th></th>";
+    print " <th style='width:80px'></th>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Size')."</th>";
     print " <th>"._('Description')."</th>";
@@ -54,7 +55,9 @@ else {
 		}
 	}
     print "</tr>";
+    print "</thead>";
 
+    print "<tbody>";
     # none
     if ($Racks->all_racks === false) {
         print "<tr>";
@@ -150,7 +153,7 @@ else {
             print "</tr>";
         }
     }
-
+    print "</tbody>";
     print "</table>";
 }
 ?>

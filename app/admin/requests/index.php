@@ -20,9 +20,10 @@ $inactive_requests = $Admin->fetch_multiple_objects ("requests", "processed", 1,
 if($active_requests===false) { print "<div class='alert alert-info'>"._('No IP address requests available')."!</div>"; }
 else {
 ?>
-<table id="requestedIPaddresses" class="table table-striped table-condensed table-hover table-top table-auto1">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top">
 
 <!-- headers -->
+<thead>
 <tr>
 	<th style="width:50px;"></th>
 	<th><?php print _('IP'); ?></th>
@@ -32,7 +33,9 @@ else {
 	<th><?php print _('Requested by'); ?></th>
 	<th><?php print _('Comment'); ?></th>
 </tr>
+</thead>
 
+<tbody>
 <?php
 	# print requests
 	foreach($active_requests as $k=>$request) {
@@ -62,7 +65,7 @@ else {
 		}
 	}
 ?>
-
+</tbody>
 </table>
 <?php
 }
@@ -72,9 +75,10 @@ if($inactive_requests!==false) { ?>
 <h4 style="margin-top:50px;"><?php print _('List of all processes IP addresses requests'); ?></h4>
 <hr><br>
 
-<table id="requestedIPaddresses" class="table table-striped table-condensed table-hover table-top table-auto1">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top table-auto1">
 
 <!-- headers -->
+<thead>
 <tr>
 	<th><?php print _('Subnet'); ?></th>
 	<th><?php print _('Hostname'); ?></th>
@@ -84,7 +88,9 @@ if($inactive_requests!==false) { ?>
 	<th><?php print _('Admin comment'); ?></th>
 	<th><?php print _('Accepted'); ?></th>
 </tr>
+</thead>
 
+<tbody>
 <?php
 	# print requests
 	foreach($inactive_requests as $k=>$request) {
@@ -113,7 +119,7 @@ if($inactive_requests!==false) { ?>
 		}
 	}
 ?>
-
+</tbody>
 </table>
 
 <?php } ?>

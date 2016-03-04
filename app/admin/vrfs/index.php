@@ -32,9 +32,10 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 # first check if they exist!
 if($all_vrfs===false) { $Result->show("info", _("No VRFs configured")."!", false);}
 else {
-	print '<table id="vrfManagement" class="table table-striped table-top table-hover table-auto">'. "\n";
+	print '<table id="vrfManagement" class="table sorted table-striped table-top table-hover">'. "\n";
 
 	# headers
+	print "<thead>";
 	print '<tr>'. "\n";
 	print '	<th>'._('Name').'</th>'. "\n";
 	print '	<th>'._('RD').'</th>'. "\n";
@@ -49,7 +50,9 @@ else {
 	}
 	print '	<th></th>'. "\n";
 	print '</tr>'. "\n";
+	print "</thead>";
 
+    print "<tbody>";
 	# loop
 	foreach ($all_vrfs as $vrf) {
 		//cast
@@ -116,6 +119,7 @@ else {
 		print "	</td>";
 		print '</tr>'. "\n";
 	}
+	print "</tbody>";
 	print '</table>'. "\n";
 }
 ?>

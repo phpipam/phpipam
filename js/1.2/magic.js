@@ -207,11 +207,19 @@ $(function() {
 	$(".popup").draggable({ handle: ".pHeader" });
 });
 
-
+//default row count
+if(readCookie('table-page-size')==null) { def_size = 25; }
+else                                    { def_size = readCookie('table-page-size'); }
 // table
 $('table.sorted').bdt({
-   pageRowCount: 25,
-   searchFormClass: 'search-form'
+   pageRowCount: def_size,
+   searchFormClass: 'form-inline pull-right',
+   divClass: 'text-right'
+});
+$('table.sorted-left').bdt({
+   pageRowCount: def_size,
+   searchFormClass: 'form-inline pull-left clearfix',
+   divClass: 'text-left clearfix'
 });
 $("li.disabled a").click(function () {
    return false;
@@ -513,18 +521,7 @@ $(document).on("click", "#mailIPAddressSubmit", function() {
 
 /*    sort IP address list
 *********************************************************/
-$(document).on("click", "table.ipaddresses th a.sort", function() {
-    showSpinner();
-
-    $(this).tooltip('hide');                            //hide tooltips fix for ajax-load
-
-    var direction = $(this).attr('data-id');            //sort direction
-    var subnetId  = $(this).attr('data-subnetId');        //id of the subnet
-
-    $.post('app/subnets/addresses/print-address-table.php', {direction:direction, subnetId:subnetId}, function(data) {
-        $('div.ipaddresses_overlay').html(data);
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+$("table.ipaddresses th a").click( function() {
     return false;
 });
 
@@ -1004,34 +1001,6 @@ $('form#changePassRequiredForm').submit(function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
-
-
-/*    sort device address list
-*********************************************************/
-$(document).on("click", "table#switchManagement th a.sort", function() {
-    showSpinner();
-
-    $(this).tooltip('hide');                            //hide tooltips fix for ajax-load
-
-    var direction = $(this).attr('data-id');            //sort direction
-
-    $.post('app/tools/devices/devices-print.php', {direction:direction}, function(data) {
-        $('div.devicePrintHolder').html(data);
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-/* device filter */
-$(document).on('submit', "#deviceFilter", function() {
-	var searchData = $(this).serialize();
-    $.post('app/tools/devices/devices-print.php', searchData, function(data) {
-        $('div.devicePrintHolder').html(data);
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-
-    return false;
-});
-
 // show subnet masks popup
 $(document).on("click", '.show-masks', function() {
 	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')}, true);
@@ -1221,9 +1190,8 @@ $(document).on("click", ".groupselect", function() {
 	var gdescription = $(this).attr("data-gdescription");
 	var gmembers = $(this).attr("data-members");
 	var gid = $(this).attr("data-gid");
-	var csrf_cookie = $(this).attr("data-csrf_cookie");
 
-	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers, csrf_cookie:csrf_cookie}, function(data) {
+	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers}, function(data) {
 		$('div.adgroup-'+gid).html(data)
 		hideSpinner();
 	});

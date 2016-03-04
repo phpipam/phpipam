@@ -22,8 +22,9 @@ if ($agents===false) {
 else {
 
 	# table
-	print "<table class='table table-striped table-condensed table-top'>";
+	print "<table class='table sorted table-striped table-condensed table-top'>";
 
+    print "<thead>";
 	print "<tr>";
 	print "	<th>"._('Subnet')."</th>";
 	print "	<th>"._('Description')."</th>";
@@ -32,10 +33,12 @@ else {
 	print "	<th>"._('Discover')."</th>";
 	print "	<th></th>";
 	print "</tr>";
+	print "</thead>";
 
 	// loop
 	$ac = 0;
 
+    print "<tbody>";
 	foreach ($agents as $a) {
 
 		$ac++;	// for ids
@@ -100,7 +103,7 @@ else {
 			print "</tr>";
 		}
 	}
-
+    print "</tbody>";
 	print "</table>";
 }
 ?>

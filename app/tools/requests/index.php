@@ -33,9 +33,10 @@ if ($requests !== false) {
 if($requests===false) { print "<div class='alert alert-info'>"._('No IP address requests available')."!</div>"; }
 else {
 ?>
-<table id="requestedIPaddresses" class="table table-striped table-condensed table-hover table-top table-auto1">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top">
 
 <!-- headers -->
+<thead>
 <tr>
 	<th style="width:50px;"></th>
 	<th><?php print _('IP'); ?></th>
@@ -45,7 +46,9 @@ else {
 	<th><?php print _('Requested by'); ?></th>
 	<th><?php print _('Comment'); ?></th>
 </tr>
+</thead>
 
+<tbody>
 <?php
 	# print requests
 	foreach($requests as $k=>$request) {
@@ -76,7 +79,7 @@ else {
 		}
 	}
 ?>
-
+</tbody>
 </table>
 <?php
 }

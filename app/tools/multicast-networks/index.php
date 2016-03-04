@@ -35,12 +35,47 @@ print "<h4>"._('Multicast networks')."</h4>";
 print "<hr>";
 
 # table
-print "<table class='ipaddresses multicast normalTable table table-condensed table-full table-top'>";
+print "<table class='ipaddresses multicast sorted table table-condensed table-full table-top'>";
 
 $subnet_count=0;
 # print multicast subnets
 if ($subnets!==false) {
 
+	# headers
+    print "<thead>";
+    print " <tr class='th1'>";
+
+    	# IP address - mandatory
+    												  print "<th>"._('IP address')."</th>";
+    	# hostname - mandatory
+    												  print "<th>"._('Hostname')."</th>";
+    	# Description - mandatory
+    												  print "<th>"._('Description')."</th>";
+    	# MAC address
+    	if(in_array('mac', $selected_ip_fields)) 	{ print "<th>"._('MAC address')."</th>"; }
+    	# note
+    	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
+    	# switch
+    	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
+    	# port
+    	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
+    	# owner
+    	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
+
+    	# custom fields
+    	if(sizeof($custom_fields) > 0) {
+    		foreach($custom_fields as $myField) 	{
+    			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+    		}
+    	}
+    	# actions
+    	print '<th class="actions"></th>';
+        print '</tr>';
+    print '</thead>';
+
+
+    print "<tbody>";
+    //loop
 	foreach ($subnets as $subnet) {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet->id);
@@ -73,7 +108,6 @@ if ($subnets!==false) {
             $subnet->description = strlen($subnet->description)>0 ? "[".$subnet->description."]" : "";
 
 			# section names
-			print "<tbody>";
 			print "	<tr class='subnets-title'>";
 			print "		<td colspan='$colSpan' style='padding-top:20px;'>";
 			if($subnet->isFolder=="1")
@@ -82,44 +116,9 @@ if ($subnets!==false) {
 			print "     <h4>".$Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask $subnet->description</h4>";
 
 			print " </td>";
-			print "	</tr>";
-			print "</tbody>";
-
-
-			# headers
-            print "<tbody>";
-            print " <tr class='th'>";
-
-            	# IP address - mandatory
-            												  print "<th>"._('IP address')."</th>";
-            	# hostname - mandatory
-            												  print "<th>"._('Hostname')."</th>";
-            	# Description - mandatory
-            												  print "<th>"._('Description')."</th>";
-            	# MAC address
-            	if(in_array('mac', $selected_ip_fields)) 	{ print "<th>"._('MAC address')."</th>"; }
-            	# note
-            	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
-            	# switch
-            	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
-            	# port
-            	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
-            	# owner
-            	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
-
-            	# custom fields
-            	if(sizeof($custom_fields) > 0) {
-            		foreach($custom_fields as $myField) 	{
-            			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
-            		}
-            	}
-            	# actions
-            	print '<th class="actions"></th>';
-                print '</tr>';
-            print '</tbody>';
+			print "</tr>";
 
             # print addresses
-            print "<tbody>";
 			# no subnets
 			if(sizeof($addresses) == 0) {
 				print "<tr><td colspan='$colSpan'>";
@@ -253,8 +252,8 @@ if ($subnets!==false) {
             print " </td>";
             print "</tr>";
         }
-        print '</tbody>';
     }
+    print "</tbody>";
 }
 
 # none

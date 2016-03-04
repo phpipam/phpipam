@@ -23,6 +23,7 @@ $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : 
 
 # size of custom fields
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);
+if($_GET['page']=="administration") { $csize++; }
 
 
 # set disabled for non-admins
@@ -58,7 +59,7 @@ if($vlans===false) {
 }
 else {
 	# table
-	print "<table class='table vlans table-condensed table-top'>";
+	print "<table class='table sorted vlans table-condensed table-top'>";
 
 	# headers
 	print "<thead>";
@@ -75,10 +76,7 @@ else {
 	}
 	print ' <th>'._('Belonging subnets').'</th>' . "\n";
 	print ' <th>'._('Section').'</th>' . "\n";
-	// administration
-	if ($_GET['page']=="administration") {
-		print "<th></th>";
-	}
+    print "<th></th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -159,7 +157,7 @@ else {
 								}
 								//text
 								elseif($field['type']=="text") {
-									if(strlen($v->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlan[$field['name']])."'>"; }
+									if(strlen($v->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $v->$field['name'])."'>"; }
 									else									{ print ""; }
 								}
 								else {
@@ -176,6 +174,14 @@ else {
 					print "<td></td>";
 					print "<td></td>";
 					print "<td></td>";
+			        if(sizeof(@$custom_fields) > 0) {
+				   		foreach($custom_fields as $field) {
+					   		# hidden
+					   		if(!in_array($field['name'], $hidden_fields)) {
+    					   		print "<td></td>";
+    					    }
+                        }
+                    }
 				}
 				//subnet?
 				if ($v->subnetId!=null) {
@@ -214,7 +220,8 @@ else {
 						print "	</td>";
 					}
 					else {
-						print "<td></td>";
+    					print "	<td>/</td>";
+
 					}
 
 					print "</tr>";

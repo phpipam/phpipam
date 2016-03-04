@@ -29,7 +29,7 @@ $permission = $Sections->check_permission ($User->user, $_GET['section']);
 if($permission != 0) {
 
 	# print  table structure
-	print "<table id='manageSubnets' class='table table-striped table-condensed table-top table-absolute'>";
+	print "<table id='manageSubnets' class='table sorted table-striped table-condensed table-top'>";
 
 		# set colcount
 		if($User->settings->enableVRF == 1)		{ $colCount = 10; }
@@ -57,8 +57,7 @@ if($permission != 0) {
 		}
 
 		# collapsed div with details
-		print "<tbody>";
-
+		print "<thead>";
 		# headers
 		print "<tr>";
 		print "	<th>"._('Subnet')."</th>";
@@ -79,6 +78,10 @@ if($permission != 0) {
 		}
 		print "	<th class='actions' style='width:140px;white-space:nowrap;'></th>";
 		print "</tr>";
+		print "</thead>";
+
+        # body
+        print "<tbody>";
 
 		# add new link
 		if ($permission>2) {

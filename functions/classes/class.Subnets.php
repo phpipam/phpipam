@@ -2794,7 +2794,7 @@ class Subnets extends Common_functions {
 				else {
 					$master = (array) $this->fetch_subnet (null, $option['value']['masterSubnetId']);
 					if($master['isFolder']==1)
-						$html[] = "	<td><i class='fa fa-gray fa-folder-open-o'></i> <a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
+						$html[] = "	<td><i class='fa fa-sfolde fa-gray fa-folder-open'></i> <a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
 					else {
 						$html[] = "	<td><a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
 					}
@@ -2815,7 +2815,7 @@ class Subnets extends Common_functions {
 				}
 
 				//requests
-				$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "";
+				$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "/";
 				$html[] = "	<td class='hidden-xs hidden-sm'>$requests</td>";
 
 				//custom

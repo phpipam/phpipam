@@ -47,9 +47,10 @@ if($devices===false) {
 /* Print them out */
 else {
 
-	print '<table id="switchManagement" class="table table-striped table-auto table-top table-td-top">';
+	print '<table id="switchManagement" class="table table-striped sorted table-td-top">';
 
 	# headers
+	print "<thead>";
 	print '<tr>';
 	print '	<th>'._('Name').'</th>';
 	print '	<th>'._('IP address').'</th>';
@@ -69,7 +70,9 @@ else {
 	}
 	print '	<th class="actions"></th>';
 	print '</tr>';
+    print "</thead>";
 
+    print "<tbody>";
 	# loop through devices
 	foreach ($devices as $device) {
 		//cast
@@ -104,7 +107,7 @@ else {
             $rack = $Racks->fetch_rack_details ($device['rack']);
             if ($rack!==false) {
                 print "<a href='".create_link("administration", "racks", $rack->id)."'>".$rack->name."</a><br>";
-                print "<span class='text-muted'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
+                print "<span class='badge badge1 badge5'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
             }
             print "</td>";
         }
@@ -163,6 +166,7 @@ else {
 		print '</tr>'. "\n";
 
 	}
+	print "</tbody>";
 	print '</table>';
 }
 ?>

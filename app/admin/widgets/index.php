@@ -23,7 +23,7 @@ print "</p>";
 <!-- Add new -->
 <button class="btn btn-sm btn-default wedit" data-action='add' style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _("Create new widget"); ?></button>
 
-<table class="table table-striped table-auto table-top" style="min-width:400px;">
+<table class="table sorted table-striped table-top" style="min-width:400px;">
 
 	<!-- Language list -->
 	<?php
@@ -34,6 +34,7 @@ print "</p>";
 		</tr>
 	<?php } else {
 		# headers
+		print "<thead>";
 		print "<tr>";
 		print "	<th>"._('Title')."</th>";
 		print "	<th>"._('Description')."</th>";
@@ -44,7 +45,9 @@ print "</p>";
 		print "	<th>"._('Validity')."</th>";
 		print "	<th></th>";
 		print "</tr>";
+		print "</thead>";
 
+        print "<tbody>";
 		# print
 		foreach($widgets as $w) {
 			# cast
@@ -72,6 +75,7 @@ print "</p>";
 			print "	</td>";
 			print "</tr>";
 		}
+		print "</tbody>";
 	}
 	?>
 

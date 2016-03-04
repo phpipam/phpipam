@@ -64,6 +64,10 @@ table.table-threshold td {
 table.table-threshold tr:last-child () {
     border-bottom: none !important;
 }
+table.multicast tr.subnets-title td {
+    border-bottom: medium double #ddd !important;
+}
+
 
 hr {
   margin: 5px;
@@ -2333,4 +2337,77 @@ div.jqueryErrorText {
 div.jqueryError a {
 	clear: both;
 	margin-top: 10px;
+}
+
+
+
+
+
+
+
+/**
+* Custom styles for BDT - Bootstrap Data Tables
+**/
+
+.bdt thead th {
+    cursor: pointer;
+}
+.table.bdt th {
+    border-bottom: double #dedede !important;
+    border-top: 1px solid #dedede !important;
+}
+.table.bdt th {
+    color: #428bca;
+    background: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.bdt .sort-icon {
+    width: 10px;
+    display: inline-block;
+    padding-left: 5px;
+}
+.search-form {
+    margin-right: 25px;
+    width: 250px;
+}
+
+#table-footer {
+    margin-bottom: 15px;
+}
+
+#table-footer a, #table-footer button {
+    outline: none;
+}
+
+#table-footer .form-horizontal .control-label {
+    text-align: left;
+    margin: 0 15px;
+}
+
+#table-footer .pagination {
+    margin: 0 15px;
+}
+
+#table-footer .pagination li:not(.active) {
+    cursor: pointer;
+}
+
+.disable-sorting {
+    cursor: auto !important;
+}
+.form-inline {
+    margin-bottom: 7px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #efefef;
+}
+.control-label {
+    padding: 6px 6px;
+    color: #aaa;
+    font-weight: normal;
+}
+#page-rows-form {
+    margin-right: 10px;
+    margin-left: 5px;
 }

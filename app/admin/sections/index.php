@@ -42,8 +42,9 @@ if ($sections !== false) {
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table id="manageSection" class="table table-striped table-condensed table-top">
+<table class="table sorted table-striped table-condensed table-top">
 <!-- headers -->
+<thead>
 <tr>
     <th><?php print _('Name'); ?></th>
     <th><?php print _('Description'); ?></th>
@@ -54,7 +55,9 @@ if ($sections !== false) {
     <th><?php print _('Group Permissions'); ?></th>
     <th></th>
 </tr>
+</thead>
 
+<tbody>
 <!-- existing sections -->
 <?php
 if(isset($sections_sorted)) {
@@ -120,7 +123,7 @@ if(isset($sections_sorted)) {
 	}
 }
 ?>
-
+</tbody>
 </table>	<!-- end table -->
 
 <!-- show no configured -->
