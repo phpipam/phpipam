@@ -239,8 +239,13 @@ class Addresses_controller extends Common_api_functions  {
 			$this->Response->throw_exception(500, "Failed to create address");
 		}
 		else {
-			//set result
-			return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+    		//set result
+    		if($this->_params->id=="first_free")   {
+        	    return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "ip"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
+    		}
+    		else {
+        	    return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+    		}
 		}
 	}
 

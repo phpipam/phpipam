@@ -16,7 +16,7 @@
 	+ API:
 	    - Api v1 removed;
 	    + If subnet gateway defined gatewayId is returned in subnet details;
-	    + Automaticall add nameservers to subnet results;
+	    + Automatically add nameservers to subnet results;
 	    + Creating address with POST /api/appid/{subnetId}/first_free/ will automatically give first available IP;
     + Widgets:
         + New threshold widget;
