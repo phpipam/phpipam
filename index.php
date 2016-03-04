@@ -92,6 +92,7 @@ else {
 	<script type="text/javascript" src="js/1.2/bootstrap-switch.min.js"></script>
 	<script type="text/javascript" src="js/1.2/bdt/jquery.sortelements.js"></script>
 	<script type="text/javascript" src="js/1.2/bdt/jquery.bdt.js"></script>
+	<script type="text/javascript" src="js/1.2/stickytableheaders/jquery.stickytableheaders.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }

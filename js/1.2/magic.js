@@ -221,6 +221,7 @@ $('table.sorted-left').bdt({
    searchFormClass: 'form-inline pull-left clearfix',
    divClass: 'text-left clearfix'
 });
+$('table.sorted').stickyTableHeaders();
 $("li.disabled a").click(function () {
    return false;
 });
