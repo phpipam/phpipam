@@ -21,6 +21,7 @@
     + Widgets:
         + New threshold widget;
         + New inactive hosts widget;
+    + jQuery tables;
 
 == 1.20.1
 

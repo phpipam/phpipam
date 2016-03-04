@@ -118,11 +118,11 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	if 		(ping==true || scan==true)		{ $("tr#scanAgentDropdown").removeClass("hidden"); }
 	else if (ping==false && scan==false)	{ $("tr#scanAgentDropdown").addClass("hidden"); }
 });
-
+<?php if ($User->settings->enableThreshold=="1") { ?>
 $('.slider').slider().on('slide', function(ev){
     $('.slider-text span').html(ev.value);
-
 });
+<?php } ?>
 
 });
 </script>
@@ -338,6 +338,7 @@ $('.slider').slider().on('slide', function(ev){
         </td>
         <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
     </tr>
+    <?php if ($User->settings->enableThreshold=="1") { ?>
 	<tr>
         <td class="middle"><?php print _('Threshold'); ?></td>
         <td>
@@ -346,6 +347,7 @@ $('.slider').slider().on('slide', function(ev){
         </td>
         <td class="info2"><?php print _('Set subnet alert threshold'); ?> <span class='badge badge1 badge5 slider-text'><span><?php print $svalue; ?></span>%</span></td>
     </tr>
+    <?php } ?>
 
 	<?php } ?>
 

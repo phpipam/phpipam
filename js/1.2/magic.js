@@ -363,17 +363,6 @@ function update_subnet_structure_cookie (action, cid) {
 	createCookie("sstr",s_cookie, 365);
 }
 
-
-
-
-//hide subnets list
-$('#hideSubnets').click(function() {
-    $('#leftMenu').hide('fast');
-    //expand content
-    $('#content').css("width","97.9147%");
-    return false;
-});
-
 //expand/contract all
 $('#expandfolders').click(function() {
     // get action
