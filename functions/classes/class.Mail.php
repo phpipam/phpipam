@@ -78,7 +78,18 @@ class phpipam_mail {
 		$this->Php_mailer->isSMTP();
 		//tls, ssl?
 		if($this->mail_settings->msecure!='none')
-		$this->Php_mailer->SMTPSecure = $this->mail_settings->msecure=='ssl' ? 'ssl' : 'tls';
+		{
+			$this->Php_mailer->$SMTPAutoTLS = true;
+			$this->Php_mailer->SMTPSecure = $this->mail_settings->msecure=='ssl' ? 'ssl' : 'tls';
+		}
+		else
+		{
+			// 14.03.2016 roland.breitschaft@x-company.de
+			// Deactivate AutoTLS if Security is setted to None			
+			$this->Php_mailer->$SMTPAutoTLS = false;
+			$this->Php_mailer->SMTPSecure = '';
+		}
+	
 		//server
 		$this->Php_mailer->Host = $this->mail_settings->mserver;
 		$this->Php_mailer->Port = $this->mail_settings->mport;
