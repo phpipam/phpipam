@@ -314,7 +314,7 @@ class RackDrawer extends Common_functions {
      */
     public function draw(Rack $rack) {
         $this->rack = $rack;
-        $this->template = imagecreatefrompng( $this->createURL().BASE."/css/1.2/images/blankracks/".$this->rack->getSpace().".png" );
+        $this->template = imagecreatefrompng( $this->createURL().BASE."css/1.2/images/blankracks/".$this->rack->getSpace().".png" );
         $this->drawNameplate();
         $this->drawContents();
 
