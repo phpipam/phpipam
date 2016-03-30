@@ -42,6 +42,10 @@ if(!is_numeric($_POST['vlanMax']))											{ $Result->show("danger", _("Invali
 if ($Admin->verify_checkbox(@$_POST['enableSNMP'])==1)
 if (!in_array("snmp", get_loaded_extensions()))                             { $Result->show("danger", _("Missing snmp support in php"), true); }
 
+//verify racktables gd support
+if ($Admin->verify_checkbox(@$_POST['enableRACK'])==1)
+if (!in_array("gd", get_loaded_extensions()))                               { $Result->show("danger", _("Missing gd support in php"), true); }
+
 # set update values
 $values = array("id"=>1,
 				//site settings

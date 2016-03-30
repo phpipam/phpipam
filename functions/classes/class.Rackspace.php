@@ -286,11 +286,22 @@ class phpipam_rack extends Tools {
  * Class RackDrawer
  * @package GlasOperator\Rack
  */
-class RackDrawer extends Common_functions
-{
-    /** @var Rack */
+class RackDrawer extends Common_functions {
+
+    /**
+     * rack
+     *
+     * @var mixed
+     * @access private
+     */
     private $rack;
-    /** @var resource */
+
+    /**
+     * template
+     *
+     * @var resource
+     * @access private
+     */
     private $template;
 
 
@@ -303,7 +314,7 @@ class RackDrawer extends Common_functions
      */
     public function draw(Rack $rack) {
         $this->rack = $rack;
-        $this->template = imagecreatefrompng($this->createURL().BASE."/css/1.2/images/blankracks/" . $this->rack->getSpace() . ".png");
+        $this->template = imagecreatefrompng( $this->createURL().BASE."/css/1.2/images/blankracks/".$this->rack->getSpace().".png" );
         $this->drawNameplate();
         $this->drawContents();
 
