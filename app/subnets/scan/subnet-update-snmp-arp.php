@@ -17,7 +17,7 @@ if ($subnet===false)                            { $Result->show("danger", "Inval
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 # set class
-$Snmp = new phpipamSNMP ($Database);
+$Snmp = new phpipamSNMP ();
 
 // no errors
 error_reporting(E_ERROR);
@@ -34,8 +34,8 @@ if (sizeof($all_subnet_hosts)>0) {
         $result[$h->ip_addr]['status'] = "Offline";
     }
 
-    # fetch devices for arp scanning
-    $devices_used = $Snmp->set_method_devices ("arp");
+    # fetch devices that use get_routing_table query
+    $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
 
     # filter out not in this section
     if ($devices_used !== false) {
@@ -58,11 +58,11 @@ if (sizeof($all_subnet_hosts)>0) {
         $Snmp->set_snmp_device ($d);
         // execute
         try {
-           $res = $Snmp->get_arp_table ($d);
+           $res = $Snmp->get_query("get_arp_table");
            // remove those not in subnet
            if (sizeof($res)>0) {
                // save for debug
-               $debug[$d->hostname] = $res;
+               $debug[$d->hostname]["get_arp_table"] = $res;
                // check
                foreach ($res as $kr=>$r) {
                    if ($Subnets->is_subnet_inside_subnet ($r['ip']."/32", $Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)===true) {

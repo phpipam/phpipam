@@ -34,9 +34,6 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 <div class="btn-group">
 	<button class='btn btn-sm btn-default editSwitch' data-action='add'   data-switchid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add device'); ?></button>
 	<a href="<?php print create_link("administration", "device-types"); ?>" class="btn btn-sm btn-default"><i class="fa fa-tablet"></i> <?php print _('Manage device types'); ?></a>
-    <?php if($User->settings->enableSNMP=="1") { ?>
-	<a href="<?php print create_link("administration", "snmp"); ?>" class="btn btn-sm btn-default"><i class="fa fa-cogs"></i> <?php print _('Manage SNMP queries'); ?></a>
-	<?php } ?>
 </div>
 
 <?php

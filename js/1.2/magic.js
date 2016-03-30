@@ -2166,14 +2166,6 @@ $(document).on("click", ".editSwitchSNMP", function() {
 $(document).on("click", "#editSwitchSNMPsubmit", function() {
     submit_popup_data (".switchSNMPManagementEditResult", "app/admin/devices/edit-snmp-result.php", $('form#switchSNMPManagementEdit').serialize());
 });
-//edit-snmp-methods
-$(document).on("click", ".edit-snmp-methods", function() {
-	open_popup("700", "app/admin/snmp/edit.php",  {snmpid:$(this).attr('data-snmpid'), action:$(this).attr('data-action')} );
-});
-//edit-snmp-methods-submit
-$(document).on("click", "#edit-snmp-methods-submit", function() {
-	 submit_popup_data ("#edit-snmp-methods-result", "app/admin/snmp/edit-result.php", $('form#edit-snmp-methods-edit').serialize());
-});
 //snmp test
 $(document).on("click", "#test-snmp", function() {
 	open_popup ("700", "app/admin/devices/edit-snmp-test.php", $('form#switchSNMPManagementEdit').serialize(), true);
@@ -2184,6 +2176,39 @@ $(document).on("click", "#snmp-routing", function() {
     open_popup ("700", "app/subnets/scan/subnet-scan-snmp-route.php", "", true);
     return false;
 });
+
+//snmp vlan query popup
+$(document).on("click", "#snmp-vlan", function() {
+    open_popup ("700", "app/admin/vlans/vlans-scan.php", {domainId:$(this).attr('data-domainid')}, true);
+    return false;
+});
+//snmp vlan query execute
+$(document).on("click", ".show-vlan-scan-result", function() {
+    submit_popup_data (".vlan-scan-result", "app/admin/vlans/vlans-scan-execute.php", $('form#select-devices-vlan-scan').serialize(), true);
+    return false;
+});
+// submit vlan query result
+$(document).on("click", "#saveVlanScanResults", function() {
+    submit_popup_data ("#vlanScanAddResult", "app/admin/vlans/vlans-scan-result.php", $('form#scan-snmp-vlan-form').serialize());
+    return false;
+});
+
+//snmp vrf query popup
+$(document).on("click", "#snmp-vrf", function() {
+    open_popup ("700", "app/admin/vrfs/vrf-scan.php", {}, true);
+    return false;
+});
+//snmp vrf query execute
+$(document).on("click", ".show-vrf-scan-result", function() {
+    submit_popup_data (".vrf-scan-result", "app/admin/vrfs/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
+    return false;
+});
+// submit vrf query result
+$(document).on("click", "#saveVrfScanResults", function() {
+    submit_popup_data ("#vrfScanAddResult", "app/admin/vrfs/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
+    return false;
+});
+
 //snmp select subnet to add to new subnet
 $(document).on("click", ".select-snmp-subnet", function() {
     $('form#editSubnetDetails input[name=subnet]').val($(this).attr('data-subnet')+"/"+$(this).attr('data-mask'));

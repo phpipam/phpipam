@@ -20,7 +20,7 @@ if ($subnet===false)                            { $Result->show("danger", _("Inv
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 # set class
-$Snmp = new phpipamSNMP ($Database);
+$Snmp = new phpipamSNMP ();
 
 // fetch all existing hosts
 $all_subnet_hosts = (array) $Addresses->fetch_subnet_addresses ($_POST['subnetId']);
@@ -31,11 +31,15 @@ if (sizeof($all_subnet_hosts)>0) {
     }
 }
 
+# set selected address fields array
+$selected_ip_fields = $User->settings->IPfilter;
+$selected_ip_fields = explode(";", $selected_ip_fields);
+
 // no errors
 error_reporting(E_ERROR);
 
-# fetch devices for arp scanning
-$devices_used = $Snmp->set_method_devices ("arp");
+# fetch devices that use get_routing_table query
+$devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
 
 # filter out not in this section
 if ($devices_used !== false) {
@@ -56,39 +60,47 @@ if (!isset($permitted_devices))                 { $Result->show("danger", _("No 
 foreach ($permitted_devices as $d) {
     // init
     $Snmp->set_snmp_device ($d);
-    // set all queries for device
-    $queries = explode(";", $d->snmp_queries);
-    // if set
-    if(sizeof($queries)>0) {
-        foreach($queries as $q) {
-            try {
-                $res = $Snmp->get_arp_table ($d, $q);
-                // remove those not in subnet
-                if (sizeof($res)>0) {
-                   // save for debug
-                   $debug[$d->hostname][$q] = $res;
-                   // check
-                   foreach ($res as $kr=>$r) {
-                       // if is inside subnet
-                       if ($Subnets->is_subnet_inside_subnet ($r['ip']."/32", $Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)===false) {
-                           //unset ($res[$kr]);
-                       }
-                       // check if host already exists, than remove it
-                       elseif (in_array($r['ip'], $subnet_ip_addresses)) {
-                           //unset ($res[$kr]);
-                       }
-                       // save
-                       else {
-                           $found[$d->id][] = $r;
-                       }
-                   }
-                }
-            } catch (Exception $e) {
-               // save for debug
-               $debug[$d->hostname][$q] = $res;
-               $errors[] = $e->getMessage();
-        	}
-    	}
+    // fetch arp table
+    try {
+        $res = $Snmp->get_query("get_arp_table");
+        // remove those not in subnet
+        if (sizeof($res)>0) {
+           // save for debug
+           $debug[$d->hostname]["get_arp_table"] = $res;
+           // check
+           foreach ($res as $kr=>$r) {
+               // if is inside subnet
+               if ($Subnets->is_subnet_inside_subnet ($r['ip']."/32", $Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)===false) { }
+               // check if host already exists, than remove it
+               elseif (in_array($r['ip'], $subnet_ip_addresses)) { }
+               // save
+               else {
+                   $found[$d->id][] = $r;
+               }
+           }
+        }
+        // get interfaces
+        $res = $Snmp->get_query("get_interfaces_ip");
+        // remove those not in subnet
+        if (sizeof($res)>0) {
+           // save for debug
+           $debug[$d->hostname]["get_interfaces_ip"] = $res;
+           // check
+           foreach ($res as $kr=>$r) {
+               // if is inside subnet
+               if ($Subnets->is_subnet_inside_subnet ($r['ip']."/32", $Subnets->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)===false) { }
+               // check if host already exists, than remove it
+               elseif (in_array($r['ip'], $subnet_ip_addresses)) { }
+               // save
+               else {
+                   $found[$d->id][] = $r;
+               }
+           }
+        }
+    } catch (Exception $e) {
+       // save for debug
+       $debug[$d->hostname][$q] = $res;
+       $errors[] = $e->getMessage();
 	}
 }
 
@@ -115,6 +127,12 @@ else {
         }
     }
 
+    // calculate colspan
+	$colspan = 5 + sizeof(@$required_fields);
+	// port
+	if(in_array('port', $selected_ip_fields)) { $colspan++; }
+
+
 	//form
 	print "<form name='scan-snmp-arp-form' class='scan-snmp-arp-form'>";
 	print "<table class='table table-striped table-top table-condensed'>";
@@ -125,6 +143,10 @@ else {
 	print "	<th>"._("Description")."</th>";
 	print "	<th>"._("MAC")."</th>";
 	print "	<th>"._("Hostname")."</th>";
+	// port
+	if(in_array('port', $selected_ip_fields)) {
+	print "	<th>"._('Port')."</th>";
+	}
     // custom
 	if (isset($required_fields)) {
 		foreach ($required_fields as $field) {
@@ -158,6 +180,12 @@ else {
     		print "<td>";
     		print "	<input type='text' class='form-control input-sm' name='dns_name$m' value='".@$hostname['name']."'>";
     		print "</td>";
+    		// port
+    		if(in_array('port', $selected_ip_fields)) {
+    		print "<td>";
+    		print "	<input type='text' class='form-control input-sm' name='port$m' value='".@$ip['port']."'>";
+    		print "</td>";
+    		}
     		// custom
     		if (isset($required_fields)) {
         		foreach ($required_fields as $field) {
@@ -235,9 +263,6 @@ else {
     		$m++;
 		}
 	}
-
-    // calculate colspan
-	$colspan = 5 + sizeof(@$required_fields);
 
 	//submit
 	print "<tr>";

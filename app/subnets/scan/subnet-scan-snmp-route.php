@@ -1,8 +1,11 @@
 <?php
 
 /*
- * Discover newsubnetshosts with snmp
- *******************************/
+ * This script finds slave subnets via snmp
+ *
+ * Used in creating new subnet
+ *
+ ******************************************/
 
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
@@ -10,9 +13,10 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Tools	 	= new Tools ($Database);
 $Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);
+$Snmp       = new phpipamSNMP ();
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -24,14 +28,11 @@ if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP 
 # check section permissions
 if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
 
-# set class
-$Snmp = new phpipamSNMP ($Database);
-
 // no errors
 error_reporting(E_ERROR);
 
-# fetch devices for arp scanning
-$devices_used = $Snmp->set_method_devices ("route");
+# fetch devices that use get_routing_table query
+$devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
 
 # fetch all IPv4 masks
 $masks =  $Subnets->get_ipv4_masks ();
@@ -43,29 +44,22 @@ if ($devices_used===false)                      { $Result->show("danger", _("No 
 foreach ($devices_used as $d) {
     // init
     $Snmp->set_snmp_device ($d);
-    // set all queries for device
-    $queries = explode(";", $d->snmp_queries);
-    // check
-    if(sizeof($queries)>0) {
-        foreach($queries as $q) {
-            // execute
-            try {
-               $res = $Snmp->get_routing_table ($d, $q);
-               // remove those not in subnet
-               if (sizeof($res)>0) {
-                   // save for debug
-                   $debug[$d->hostname][$q] = $res;
+    // execute
+    try {
+        $res = $Snmp->get_query("get_routing_table");
+        // remove those not in subnet
+        if (sizeof($res)>0) {
+           // save for debug
+           $debug[$d->hostname][$q] = $res;
 
-                   // save result
-                   $found[$d->id][$q] = $res;
-                }
-            } catch (Exception $e) {
-               // save for debug
-               $debug[$d->hostname][$q] = $res;
-               $errors[] = $e->getMessage();
-        	}
+           // save result
+           $found[$d->id][$q] = $res;
         }
-    }
+    } catch (Exception $e) {
+       // save for debug
+       $debug[$d->hostname][$q] = $res;
+       $errors[] = $e->getMessage();
+	}
 }
 
 # none and errors
@@ -99,7 +93,7 @@ else {
     	foreach($found as $deviceid=>$device) {
 
         	// fetch device
-        	$device_details = $Admin->fetch_object("devices", "id", $deviceid);
+        	$device_details = $Tools->fetch_object("devices", "id", $deviceid);
 
         	foreach ($device as $query_result ) {
             	if ($query_result!==false) {

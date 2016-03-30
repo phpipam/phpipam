@@ -10,9 +10,10 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Tools	 	= new Tools ($Database);
 $Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);
+$Snmp       = new phpipamSNMP ();
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -31,14 +32,11 @@ if ($section===false)                           { $Result->show("danger", "Inval
 # check section permissions
 if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
 
-# set class
-$Snmp = new phpipamSNMP ($Database);
-
 // no errors
 error_reporting(E_ERROR);
 
-# fetch devices for arp scanning
-$devices_used = $Snmp->set_method_devices ("route");
+# fetch devices that use get_routing_table query
+$devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
 
 # recolaculate ids for info
 foreach ($devices_used as $d) {
@@ -52,30 +50,23 @@ if ($devices_used===false)                      { $Result->show("danger", "No de
 foreach ($devices_used as $d) {
     // init
     $Snmp->set_snmp_device ($d);
-    // set all queries for device
-    $queries = explode(";", $d->snmp_queries);
-    // if set
-    if(sizeof($queries)>0) {
-        foreach($queries as $q) {
-            // execute
-            try {
-               $res = $Snmp->get_routing_table ($d, $q);
-               // remove those not in subnet
-               if (sizeof($res)>0) {
-                   // save for debug
-                   $debug[$d->hostname][$q] = $res;
+    // execute
+    try {
+       $res = $Snmp->get_query("get_routing_table");
+       // remove those not in subnet
+       if (sizeof($res)>0) {
+           // save for debug
+           $debug[$d->hostname][$q] = $res;
 
-                   // save result
-                   $found[$d->id][$q] = $res;
-                }
-            } catch (Exception $e) {
-               // save for debug
-               $debug[$d->hostname][$q] = $res;
-
-               $errors[] = $e->getMessage();
-        	}
+           // save result
+           $found[$d->id]["get_vlan_table"] = $res;
         }
-    }
+    } catch (Exception $e) {
+       // save for debug
+       $debug[$d->hostname]["get_vlan_table"] = $res;
+
+       $errors[] = $e->getMessage();
+	}
 }
 # none and errors
 if(sizeof($found)==0 && isset($errors))          { $Result->show("info", _("No new subnets found")."</div><hr><div class='alert alert-warning'>".implode("<hr>", $errors)."</div>", true, true); }
@@ -89,9 +80,9 @@ else {
     $cnt = 0;
     foreach($permitted_domains as $k=>$d) {
     	//fetch domain
-    	$domain = $Admin->fetch_object("vlanDomains","id",$d);
+    	$domain = $Tools->fetch_object("vlanDomains","id",$d);
     	// fetch vlans and append
-    	$vlans = $Admin->fetch_multiple_objects("vlans", "domainId", $domain->id, "number");
+    	$vlans = $Tools->fetch_multiple_objects("vlans", "domainId", $domain->id, "number");
     	//save to array
     	$out[$d]['domain'] = $domain;
     	$out[$d]['vlans']  = $vlans;
@@ -112,7 +103,7 @@ else {
     if($permitted_nameservers != false) {
     	foreach($permitted_nameservers as $k=>$n) {
     		// fetch nameserver sets and append
-    		$nameserver_set = $Admin->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1");
+    		$nameserver_set = $Tools->fetch_multiple_objects("nameservers", "id", $n, "name", "namesrv1");
     		//save to array
     		$nsout[$n] = $nameserver_set;
     		//count add
@@ -128,7 +119,7 @@ else {
 
     # fetch vrfs
     if($User->settings->enableVRF==1)
-    $vrfs  = $Admin->fetch_all_objects("vrf", "name");
+    $vrfs  = $Tools->fetch_all_objects("vrf", "name");
 
     # create csrf token
     $csrf = $User->create_csrf_cookie ();
@@ -164,11 +155,11 @@ else {
     	foreach($found as $deviceid=>$device) {
         	// we need to check if subnetId != 0 and isFolder!=1 for overlapping
         	if($_POST['subnetId']!=="0") {
-            	$subnet = $Admin->fetch_object("subnets", "id", $_POST['subnetId']);
+            	$subnet = $Tools->fetch_object("subnets", "id", $_POST['subnetId']);
             	if ($subnet===false)                { $Result->show("info", _("Invalid subnet ID")."!", true, true, false, true); }
         	}
         	// fetch device
-        	$device_details = $Admin->fetch_object("devices", "id", $deviceid);
+        	$device_details = $Tools->fetch_object("devices", "id", $deviceid);
 
         	// loop
         	foreach ($device as $query_result ) {

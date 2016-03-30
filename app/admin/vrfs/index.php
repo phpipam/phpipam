@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all vrfs
-$all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
+$all_vrfs = $Admin->fetch_all_objects("vrf", "name");
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vrf');
@@ -24,7 +24,15 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 <h4><?php print _('Manage VRF'); ?></h4>
 <hr><br>
 
-<button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+<div class="btn-group">
+    <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+    <?php
+    // snmp
+    if($User->isadmin===true && $User->settings->enableSNMP==1) { ?>
+	<button class="btn btn-sm btn-default" id="snmp-vrf" data-action="add"><i class="fa fa-cogs"></i> <?php print _('Scan for VRFs'); ?></button>
+	<?php } ?>
+
+</div>
 
 <!-- vrfs -->
 <?php

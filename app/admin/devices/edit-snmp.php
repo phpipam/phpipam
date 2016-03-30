@@ -12,6 +12,7 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
+$Snmp       = new phpipamSNMP ();
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -29,9 +30,6 @@ if(!is_numeric($_POST['switchId']))		     { $Result->show("danger", _("Invalid I
 # fetch device details
 $device = $Admin->fetch_object("devices", "id", $_POST['switchId']);
 if ($device===false)                         { $Result->show("danger", _("Invalid ID"), true, true);  }
-
-# fetch snmp methods
-$all_snmp_queries = $Admin->fetch_all_objects("snmp");
 
 // set show
 if ($device->snmp_version=="1" || $device->snmp_version=="2")   { $display=''; }
@@ -115,7 +113,6 @@ $('#switchSNMPManagementEdit').change(function() {
 	</tr>
 
 	<!-- associated queries -->
-	<?php if ($all_snmp_queries !== false) { ?>
 	<tr>
     	<td colspan="2">
     	    <hr>
@@ -129,14 +126,13 @@ $('#switchSNMPManagementEdit').change(function() {
 		$queries = explode(";", $device->snmp_queries);
 		$queries = is_array($queries) ? $queries : array();
         // loop
-		foreach($all_snmp_queries as $m) {
-			if(in_array($m->id, $queries)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $m->id .'" value="on" checked> '. $m->name .'</div>'. "\n"; }
-			else 							{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $m->id .'" value="on">'. $m->name .'</span></div>'. "\n"; }
+		foreach($Snmp->snmp_queries as $k=>$m) {
+			if(in_array($k, $queries)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $k .'" value="on" checked> '. $k .'</div>'. "\n"; }
+			else 							{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $k .'" value="on">'. $k .'</span></div>'. "\n"; }
 		}
 		?>
 		</td>
 	</tr>
-	<?php } ?>
 
 	<!-- test -->
 	<tr>

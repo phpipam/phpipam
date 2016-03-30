@@ -8,22 +8,101 @@
 */
 class Database_PDO extends DB {
 
-	/* public vars */
+
+	/**
+	 * Database name - needed for check
+	 *
+	 * (default value: '')
+	 *
+	 * @var string
+	 * @access public
+	 */
 	public $dbname 	= '';		// needed for DB check
 
-
-	/* protected vars */
+	/**
+	 * hosnamr
+	 *
+	 * (default value: 'localhost')
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $host 	= 'localhost';
+
+	/**
+	 * Default port number
+	 *
+	 * (default value: '3306')
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $port 	= '3306';
+
+	/**
+	 * Defaut charset
+	 *
+	 * (default value: 'utf8')
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $charset  = 'utf8';
+
+	/**
+	 * Default db username
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $username = null;
+
+	/**
+	 * Default db password
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $password = null;
 
+	/**
+	 * SSL options for db connection
+	 *
+	 * (default value: array ())
+	 *
+	 * @var array
+	 * @access protected
+	 */
 	protected $pdo_ssl_opts = array ();
 
-	public $install = false;		//flag if installation is happenig!
+	/**
+	 * flag if installation is happenig!
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $install = false;
 
+	/**
+	 * Debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
 	protected $debug = false;
+
+
+
+
+
 
 	/**
 	 * __construct function.
@@ -77,7 +156,7 @@ class Database_PDO extends DB {
 				'ssl_cipher' => PDO::MYSQL_ATTR_SSL_CIPHER,
 				'ssl_capath' => PDO::MYSQL_ATTR_SSL_CAPATH
 			);
-			
+
 			$this->ssl = array();
 
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
@@ -101,13 +180,24 @@ class Database_PDO extends DB {
 		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
 	}
 
+	/**
+	 * makeDsn function
+	 *
+	 * @access protected
+	 * @return void
+	 */
 	protected function makeDsn() {
 		# for installation
 		if($this->install)	{ return 'mysql:host=' . $this->host . ';port=' . $this->port . ';charset=' . $this->charset; }
 		else				{ return 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->dbname . ';charset=' . $this->charset; }
 	}
 
-	//more generic static useful methods
+	/**
+	 * more generic static useful methods
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function getColumnInfo() {
 		$columns = $this->getObjectsQuery("
 			SELECT `table_name`, `column_name`, `column_default`, `is_nullable`, `data_type`,`column_key`, `extra`
@@ -127,6 +217,12 @@ class Database_PDO extends DB {
 		return $columnsByTable;
 	}
 
+	/**
+	 * getForeignKeyInfo function.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function getForeignKeyInfo() {
 		$foreignLinks = $this->getObjectsQuery("
 			SELECT i.`table_name`, k.`column_name`, i.`constraint_type`, i.`constraint_name`, k.`referenced_table_name`, k.`referenced_column_name`
@@ -154,12 +250,67 @@ class Database_PDO extends DB {
 	}
 }
 
+/**
+ * Abstract DB clas.
+ *
+ * @abstract
+ */
 abstract class DB {
+
+	/**
+	 * username
+	 *
+	 * (default value: 'root')
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $username = 'root';
+
+	/**
+	 * password
+	 *
+	 * (default value: '')
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $password = '';
+
+	/**
+	 * charset
+	 *
+	 * (default value: 'utf8')
+	 *
+	 * @var string
+	 * @access protected
+	 */
 	protected $charset = 'utf8';
+
+	/**
+	 * pdo
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $pdo = null;
 
+
+
+
+
+	/**
+	 * __construct function.
+	 *
+	 * @access public
+	 * @param mixed $username (default: null)
+	 * @param mixed $password (default: null)
+	 * @param mixed $charset (default: null)
+	 * @param mixed $ssl (default: null)
+	 * @return void
+	 */
 	public function __construct($username = null, $password = null, $charset = null, $ssl = null) {
 		if (isset($username)) $this->username = $username;
 		if (isset($password)) $this->password = $password;
@@ -170,7 +321,14 @@ abstract class DB {
 		}
 	}
 
-	//convert a date object/string ready for use in sql
+	/**
+	 * convert a date object/string ready for use in sql
+	 *
+	 * @access public
+	 * @static
+	 * @param mixed $date (default: null)
+	 * @return void
+	 */
 	public static function toDate($date = null) {
 		if (is_int($date)) {
 			return date('Y-m-d H:i:s', $date);
@@ -182,9 +340,12 @@ abstract class DB {
 	}
 
 	/**
-	* Connect to the database
-	* Call whenever a connection is needed to be made
-	*/
+	 * Connect to the database
+	 * Call whenever a connection is needed to be made
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function connect() {
 		$dsn = $this->makeDsn();
 
@@ -206,16 +367,34 @@ abstract class DB {
 		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
 	}
 
+	/**
+	 * makeDsn function.
+	 *
+	 * @access protected
+	 * @return void
+	 */
 	protected function makeDsn() {
 		return ':charset=' . $this->charset;
 	}
 
+	/**
+	 * resets conection.
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function resetConn() {
 		unset($this->pdo);
 		$this->install = false;
 	}
 
-	//logs queries to file
+	/**
+	 * logs queries to file
+	 *
+	 * @access private
+	 * @param mixed $query
+	 * @return void
+	 */
 	private function log_query ($query) {
 		if($this->debug) {
 
@@ -227,10 +406,13 @@ abstract class DB {
 	}
 
 	/**
-	* Remove outer quotes from a string
-	* @param {string} quoted string
-	* @return {string} unquoted string
-	*/
+	 * Remove outer quotes from a string
+	 *
+	 * @access public
+	 * @static
+	 * @param mixed $str
+	 * @return void
+	 */
 	public static function unquote_outer($str) {
 		$len = strlen($str);
 
@@ -252,9 +434,11 @@ abstract class DB {
 	}
 
 	/**
-	* Are we currently connected to the database
-	* @return {boolean} we are connected
-	*/
+	 * Are we currently connected to the database
+	 *
+	 * @access public
+	 * @return void
+	 */
 	public function isConnected() {
 		return ($this->pdo !== null);
 	}
@@ -270,12 +454,14 @@ abstract class DB {
 	}
 
 	/**
-	* Run a statement on the database
-	* Note: no objects are fetched
-	* @param {string} prepared statement
-	* @param {array} list of values to use in the prepared statement (optional)
-	* @param {boolean} success
-	*/
+	 * Run a statement on the database
+	 * Note: no objects are fetched
+	 *
+	 * @access public
+	 * @param mixed $query
+	 * @param array $values (default: array())
+	 * @return void
+	 */
 	public function runQuery($query, $values = array()) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -286,12 +472,13 @@ abstract class DB {
 	}
 
 	/**
-	* Allow a value to be escaped, ready for insertion as a mysql parameter
-	* Note: for usage as a value (rather than prepared statements), you MUST manually quote around
-	*
-	* @param {string} value
-	* @return {string} mysql safe value
-	*/
+	 * Allow a value to be escaped, ready for insertion as a mysql parameter
+	 * Note: for usage as a value (rather than prepared statements), you MUST manually quote around.
+	 *
+	 * @access public
+	 * @param mixed $str
+	 * @return void
+	 */
 	public function escape($str) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -299,11 +486,12 @@ abstract class DB {
 	}
 
 	/**
-	* Get a quick number of objects in a table
-	*
-	* @param {string} table name
-	* @return {integer} number of objects
-	*/
+	 * Get a quick number of objects in a table
+	 *
+	 * @access public
+	 * @param mixed $tableName
+	 * @return void
+	 */
 	public function numObjects($tableName) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -315,14 +503,17 @@ abstract class DB {
 		$statement->execute();
 
 		return $statement->fetchColumn();
-	}
+    }
 
 	/**
-	* Get a quick number of objects in a table for filtered field
-	*
-	* @param {string} table name
-	* @return {integer} number of objects
-	*/
+	 * Get a quick number of objects in a table for filtered field
+	 *
+	 * @access public
+	 * @param mixed $tableName
+	 * @param mixed $method
+	 * @param mixed $value
+	 * @return void
+	 */
 	public function numObjectsFilter($tableName, $method, $value) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -337,13 +528,17 @@ abstract class DB {
 	}
 
 	/**
-	* Update an object in a table with values given
-	*
-	* Note: the id of the object is assumed to be in
-	* @param {string} name of table
-	* @param {object} new values for the object (can use an assoc array)
-	* @return {boolean} object updated sucessfully
-	*/
+	 * Update an object in a table with values given
+	 *
+	 * Note: the id of the object is assumed to be in.
+	 *
+	 * @access public
+	 * @param mixed $tableName
+	 * @param mixed $obj
+	 * @param string $primarykey (default: 'id')
+	 * @param mixed $primarykey2 (default: null)
+	 * @return void
+	 */
 	public function updateObject($tableName, $obj, $primarykey = 'id', $primarykey2 = null) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -395,12 +590,14 @@ abstract class DB {
 	}
 
 	/**
-	* Update multiple objects at once
-	* @param {string} table name
-	* @param {array} list of ids
-	* @param {array} list of values
-	* @return {boolean} success
-	*/
+	 * Update multiple objects at once.
+	 *
+	 * @access public
+	 * @param string $tableName
+	 * @param array $ids
+	 * @param array $values
+	 * @return void
+	 */
 	public function updateMultipleObjects($tableName, $ids, $values) {
 		$tableName = $this->escape($tableName);
 		//set ids
@@ -419,12 +616,16 @@ abstract class DB {
 	}
 
 	/**
-	* Insert an object into a table
-	* Note: an id field is ignored if specified
-	* @param {string} name of table
-	* @param {object} object values to insert (can use an assoc array)
-	* @return {int} id of the object / false on fail
-	*/
+	 * Insert an object into a table
+	 * Note: an id field is ignored if specified.
+	 *
+	 * @access public
+	 * @param string $tableName
+	 * @param object $obj
+	 * @param bool $raw (default: false)
+	 * @param bool $replace (default: false)
+	 * @return void
+	 */
 	public function insertObject($tableName, $obj, $raw = false, $replace = false) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -468,23 +669,33 @@ abstract class DB {
 		return $this->pdo->lastInsertId();
 	}
 
+
 	/**
-	* Check if an object exists
-	*/
+	 * Check if an object exists.
+	 *
+	 * @access public
+	 * @param string $tableName
+	 * @param string $query (default: null)
+	 * @param array $values (default: array())
+	 * @param mixed $id (default: null)
+	 * @return void
+	 */
 	public function objectExists($tableName, $query = null, $values = array(), $id = null) {
 		return is_object($this->getObject($tableName, $query, $values, $id));
 	}
 
 	/**
-	* Get a filtered list of objects from the database
-	* @param {string} table name
-	* @param {string} prepared query (optional)
-	* @param {array} values to use in query (optional)
-	* @param {int} offset (optional)
-	* @param {int} number of objects to get (optional)
-	* @param {string} return objects class (optional)
-	* @return {array} list of objects
-	*/
+	 * Get a filtered list of objects from the database.
+	 *
+	 * @access public
+	 * @param string $tableName
+	 * @param string $sortField (default: 'id')
+	 * @param bool $sortAsc (default: true)
+	 * @param mixed $numRecords (default: null)
+	 * @param int $offset (default: 0)
+	 * @param string $class (default: 'stdClass')
+	 * @return void
+	 */
 	public function getObjects($tableName, $sortField = 'id', $sortAsc = true, $numRecords = null, $offset = 0, $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 
@@ -516,7 +727,16 @@ abstract class DB {
 		return $results;
 	}
 
-	//use this function to conserve memory and read rows one by one rather than reading all of them
+
+	/**
+	 * use this function to conserve memory and read rows one by one rather than reading all of them
+	 *
+	 * @access public
+	 * @param mixed $query (default: null)
+	 * @param array $values (default: array())
+	 * @param mixed $callback (default: null)
+	 * @return void
+	 */
 	public function getObjectsQueryIncremental($query = null, $values = array(), $callback = null) {
 		if (!$this->isConnected()) $this->connect();
 
@@ -570,12 +790,14 @@ abstract class DB {
 	}
 
 	/**
-	* Get a single object from the database
-	* @param {string} name of table to get object from
-	* @param {int} id of object (optional)
-	* @param {string} class name to bind the results to
-	* @return {object} instantiated object or null
-	*/
+	 * Get a single object from the database
+	 *
+	 * @access public
+	 * @param mixed $tableName
+	 * @param mixed $id (default: null)
+	 * @param string $class (default: 'stdClass')
+	 * @return void
+	 */
 	public function getObject($tableName, $id = null, $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 		$id = intval($id);
@@ -605,6 +827,15 @@ abstract class DB {
 		}
 	}
 
+	/**
+	 * Fetches single object from provided query
+	 *
+	 * @access public
+	 * @param mixed $query (default: null)
+	 * @param array $values (default: array())
+	 * @param string $class (default: 'stdClass')
+	 * @return void
+	 */
 	public function getObjectQuery($query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
 
@@ -622,6 +853,15 @@ abstract class DB {
 		}
 	}
 
+	/**
+	 * Get single value
+	 *
+	 * @access public
+	 * @param mixed $query (default: null)
+	 * @param array $values (default: array())
+	 * @param string $class (default: 'stdClass')
+	 * @return void
+	 */
 	public function getValueQuery($query = null, $values = array(), $class = 'stdClass') {
 		$obj = $this->getObjectQuery($query, $values, $class);
 
@@ -633,6 +873,19 @@ abstract class DB {
 		}
 	}
 
+	/**
+	 * Searches for object in database
+	 *
+	 * @access public
+	 * @param mixed $table
+	 * @param mixed $field
+	 * @param mixed $value
+	 * @param string $sortField (default: 'id')
+	 * @param bool $sortAsc (default: true)
+	 * @param bool $like (default: false)
+	 * @param bool $negate (default: false)
+	 * @return void
+	 */
 	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false) {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
@@ -643,6 +896,15 @@ abstract class DB {
 		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
 	}
 
+	/**
+	 * Searches for single object.
+	 *
+	 * @access public
+	 * @param mixed $table
+	 * @param mixed $field
+	 * @param mixed $value
+	 * @return void
+	 */
 	public function findObject($table, $field, $value) {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
@@ -650,6 +912,15 @@ abstract class DB {
 		return $this->getObjectQuery('SELECT * FROM `' . $table . '` WHERE `' . $field . '` = ? LIMIT 1;', array($value));
 	}
 
+	/**
+	 * Get list of items.
+	 *
+	 * @access public
+	 * @param mixed $query (default: null)
+	 * @param array $values (default: array())
+	 * @param string $class (default: 'stdClass')
+	 * @return void
+	 */
 	public function getList($query = null, $values = array(), $class = 'stdClass') {
 		$objs = $this->getObjectsQuery($query, $values, $class);
 

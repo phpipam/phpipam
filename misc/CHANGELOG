@@ -1,4 +1,4 @@
-== 1.21.002
+== 1.21.003
 
 	New features:
 	------------
@@ -6,9 +6,11 @@
 	+ Threshold module for subnets;
 	+ Racks module (Rack drawing) for devices;
 	+ SNMP module:
-	    + Subnet discovery scans via ARP check/interface check on associated devices;
-	    + Status update scans via ARP check on associated devices;
+	    + Subnet discovery scans via ARP check/interface check;
+	    + Status update scans via ARP check;
 	    + Subnet discovery from route table;
+	    + VLAN discovery;
+	    + VRF discovery;
 
 	Enhancements, changes:
 	----------------------------

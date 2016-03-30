@@ -6,17 +6,15 @@
 
 class Common_functions  {
 
-	//vars
-	public $settings = null;
-
 	/**
-	 * __construct function
+	 * settings
 	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
 	 * @access public
 	 */
-	public function __construct () {
-	}
-
+	public $settings = null;
 
 	/**
 	 * fetches settings from database

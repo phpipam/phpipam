@@ -6,22 +6,82 @@
 
 class Tools extends Common_functions {
 
-	/**
-	 * public variables
-	 */
-	public $vlans;							//to store vlans, vlanId is array index (array of objects)
-	public $vrfs;							//to store vrfs, vrfId is array index (array of objects)
-	public $devices;						//to store devices, id is array index (array of objects)
-	public $settings = null;				//settings
 
 	/**
-	 * object holders
+	 * to store vlans, vlanId is array index (array of objects)
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	protected $Net_IPv4;					//PEAR NET IPv4 object
-	protected $Net_IPv6;					//PEAR NET IPv6 object
-	protected $Result;						//for Result printing
-	protected $debugging = false;			//debugging flag (bool)
-	protected $Database;					//for Database connection
+	public $vlans;
+
+	/**
+	 * to store vrfs, vrfId is array index (array of objects)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $vrfs;
+
+	/**
+	 * to store devices, id is array index (array of objects)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $devices;
+
+	/**
+	 * settings
+	 *
+	 * (default value: null)
+	 *
+	 * @var object
+	 * @access public
+	 */
+	public $settings = null;
+
+	/**
+	 * PEAR NET IPv4 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv4;
+
+	/**
+	 * PEAR NET IPv6 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv6;
+
+	/**
+	 * for Result printing
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Result;
+
+	/**
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $debugging = false;
+
+	/**
+	 * Database connection
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
 
 
 
@@ -121,16 +181,19 @@ class Tools extends Common_functions {
 	 *	doesnt cache
 	 *
 	 * @access public
-	 * @param mixed $table (default: null)
-	 * @param mixed $method (default: null)
-	 * @param mixed $id
+	 * @param mixed $table
+	 * @param mixed $field
+	 * @param mixed $value
+	 * @param string $sortField (default: 'id')
+	 * @param bool $sortAsc (default: true)
+	 * @param bool $like (default: false)
 	 * @return void
 	 */
-	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true) {
+	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false) {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
 		else {
-			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc); }
+			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;

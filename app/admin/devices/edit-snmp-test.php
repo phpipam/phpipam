@@ -47,7 +47,7 @@ $device->snmp_port      = $_POST['snmp_port'];
 $device->snmp_timeout   = $_POST['snmp_timeout'];
 
 # init snmp class
-$Snmp = new phpipamSNMP ($Database, $device);
+$Snmp = new phpipamSNMP ();
 
 
 # set queries
@@ -58,62 +58,41 @@ foreach($_POST as $k=>$p) {
         }
     }
 }
-
-# reindex queries and get details
-foreach ($Snmp->snmp_queries as $q) {
-    if (in_array($q->id, $queries)) {
-        $queries_parsed[] = $q;
-    }
-}
-
-# save all queries
+# fake as device queries
 $device->snmp_queries = implode(";", $queries);
 
 # open connection
-if (isset($queries_parsed)) {
+if (isset($queries)) {
+    // set device
+    $Snmp->set_snmp_device ($device);
+
     // loop
-    foreach($queries_parsed as $kk=>$q) {
-        // remove old
-        $method = false;
-
+    foreach($queries as $query) {
         try {
-            # try to get details
-            if ($q->method == "info")        { $method = "get_sysinfo"; }
-            elseif ($q->method == "arp")     { $method = "get_arp_table";; }
-            elseif ($q->method == "route")   { $method = "get_routing_table"; }
+            $Snmp->get_query ($query);
+            // ok
+            $debug[$query]['oid']    = $Snmp->snmp_queries[$query]->oid;
+            $debug[$query]['result'] = $Snmp->last_result;
 
-            # execute
-            if ($method!==false) {
-                $debug[$kk]['method'] = $method;
-                $debug[$kk]['oid']    = $q->oid;
-                $debug[$kk]['result'] = $Snmp->$method($device, $q->id);
-                # print
-                if ($method=="get_sysinfo") {
-                    $res[] = $Result->show("success", "<strong>$method</strong>: OK<hr> <pre>".$Snmp->last_result."</pre>", false, false, true);
-                }
-                else {
-                    $res[] = $Result->show("success", "<strong>$method</strong>: OK", false, false, true);
-                }
-            }
-            else {
-                $res[] = $Result->show("warning", "<strong>$method</strong><hr> "._("Invalid method"), false, false, true);
-            }
+            $res[] = $Result->show("success", "<strong>$query</strong>: OK<br><span class='text-muted'>".$Snmp->snmp_queries[$query]->description."</span>", false, false, true);
+
         } catch ( Exception $e ) {
-             $res[] = $Result->show("danger", "<strong>$method</strong><hr> ".$e->getMessage(), false, false, true);
+            // fail
+            $res[] = $Result->show("danger", "<strong>$query</strong><br><span class='text-muted'>".$Snmp->snmp_queries[$query]->description."</span><hr> ".$e->getMessage(), false, false, true);
         }
     }
 
     // debug
     $res[] = "<hr>";
     $res[] = "<div class='text-right'>";
-    $res[] = "  <a class='btn btn-sm btn-default pull-right' id='toggle_debug'>Toggle debug</a>";
+    $res[] = "  <a class='btn btn-sm btn-default pull-right' id='toggle_debug'>Toggle debug</a><br><br>";
     $res[] = "</div>";
     $res[] = " <pre id='debug' style='display:none;'>";
     $res[] = print_r($debug, true);
     $res[] = "</pre>";
 
     //print
-    $Result->show("Query result", implode("<br>", $res), false, true, false, true);
+    $Result->show("Query result", implode("", $res), false, true, false, true);
 }
 else {
    $Result->show("warning", _("No queries"), false, true, false, true);
