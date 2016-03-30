@@ -82,8 +82,6 @@ $values = array("id"=>@$device['switchId'],
 				"hostname"=>@$device['hostname'],
 				"ip_addr"=>@$device['ip_addr'],
 				"type"=>@$device['type'],
-				"vendor"=>@$device['vendor'],
-				"model"=>@$device['model'],
 				"description"=>@$device['description'],
 				"sections"=>@$device['sections']
 				);

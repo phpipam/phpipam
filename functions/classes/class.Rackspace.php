@@ -7,19 +7,82 @@
 
 class phpipam_rack extends Tools {
 
-    /* private variables */
-    public $rack_sizes = array();          // (array) all racksizes
-    public $all_racks = false;              // (object) list of all racks
-    private $rack_content = array();        // (array) content of rack
+    /**
+     * Array of all racksizes
+     *
+     * (default value: array())
+     *
+     * @var array
+     * @access public
+     */
+    public $rack_sizes = array();
 
-	/* object holders */
-	public $Result;							// (object) for Result printing
-	protected $Database;					// (object) for Database connection
-	public $Log;							// (object) for Logging connection
+    /**
+     * List of all racks
+     *
+     * (default value: false)
+     *
+     * @var bool
+     * @access public
+     */
+    public $all_racks = false;
 
-    /* rack classes */
+    /**
+     * Content of current rack
+     *
+     * (default value: array())
+     *
+     * @var array
+     * @access private
+     */
+    private $rack_content = array();
+
+	/**
+	 * Result printing class
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Database class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Logging class
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
+    /**
+     * Rack
+     *
+     * @var mixed
+     * @access protected
+     */
     protected $Rack;
+
+    /**
+     * Drawer
+     *
+     * @var mixed
+     * @access protected
+     */
     protected $Drawer;
+
+    /**
+     * RackContent
+     *
+     * @var mixed
+     * @access protected
+     */
     protected $RackContent;
 
 
@@ -230,11 +293,15 @@ class RackDrawer extends Common_functions
     /** @var resource */
     private $template;
 
+
     /**
+     * Draws rack
+     *
+     * @access public
      * @param Rack $rack
+     * @return void
      */
-    public function draw(Rack $rack)
-    {
+    public function draw(Rack $rack) {
         $this->rack = $rack;
         $this->template = imagecreatefrompng($this->createURL().BASE."/css/1.2/images/blankracks/" . $this->rack->getSpace() . ".png");
         $this->drawNameplate();
@@ -247,9 +314,11 @@ class RackDrawer extends Common_functions
 
     /**
      * Draws the name plate of the rack itself
+     *
+     * @access private
+     * @return void
      */
-    private function drawNameplate()
-    {
+    private function drawNameplate() {
         $nameplate = imagecreate(150, 20);
         imagecolorallocate( $nameplate, 255, 255, 255 ); // Allocate a background color (first color assigned)
         $textColour = imagecolorallocate($nameplate, 0, 0, 0);
@@ -265,8 +334,7 @@ class RackDrawer extends Common_functions
      * @param string $text
      * @param int $color
      */
-    private function imageCenterString($img, $font, $text, $color)
-    {
+    private function imageCenterString($img, $font, $text, $color) {
         if ($font < 0 || $font > 5) {
             $font = 0;
         }
@@ -277,11 +345,14 @@ class RackDrawer extends Common_functions
         imagestring($img, $font, $x/2, $y/2, $text, $color);
     }
 
+
     /**
-     * Draws a content slot into the result
+     *  Draws a content slot into the result.
+     *
+     * @access private
+     * @return void
      */
-    private function drawContents()
-    {
+    private function drawContents() {
         foreach ($this->rack->getContent() as $content)
         {
             $pixelSize = 20 * $content->getSize();
@@ -297,9 +368,13 @@ class RackDrawer extends Common_functions
     }
 
     /**
+     * Draws rack content.
+     *
+     * @access private
      * @param RackContent $content
-     * @param resource $img
-     * @param string $name
+     * @param mixed $img
+     * @param mixed $name
+     * @return void
      */
     private function drawContent(RackContent $content, $img, $name)
     {
@@ -323,10 +398,14 @@ class RackDrawer extends Common_functions
  * Class Model
  * @package GlasOperator\Rack
  */
-class Model
-{
+class Model {
+
     /**
+     * __construct function.
+     *
+     * @access public
      * @param array $fields
+     * @return void
      */
     public function __construct(array $fields)
     {
@@ -341,81 +420,132 @@ class Model
 }
 
 /**
- * Class Rack
+ * Rack class.
+ *
  * @package GlasOperator\Rack
+ *
+ * @extends Model
  */
-class Rack extends Model
-{
-    /** @var string */
-    private $name;
-    /** @var string */
-    private $space = 48;
-    /** @var RackContent[] */
-    private $content;
-    /** @var bool */
-    private $active = false;
+class Rack extends Model {
 
     /**
-     * @return string
+     * Name
+     *
+     * @var mixed
+     * @access private
      */
-    public function getName()
-    {
+    private $name;
+
+    /**
+     * space
+     *
+     * (default value: 48)
+     *
+     * @var int
+     * @access private
+     */
+    private $space = 48;
+
+    /**
+     * Rack content
+     *
+     * @var mixed
+     * @access private
+     */
+    private $content;
+
+    /**
+     * Active flag
+     *
+     * (default value: false)
+     *
+     * @var bool
+     * @access private
+     */
+    private $active = false;
+
+
+    /**
+     * returns name.
+     *
+     * @access public
+     * @return void
+     */
+    public function getName() {
         return $this->name;
     }
 
     /**
-     * @param string $name
+     * Set rack name.
+     *
+     * @access public
+     * @param mixed $name
+     * @return void
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
     /**
-     * @return string
+     * getSpace function.
+     *
+     * @access public
+     * @return void
      */
-    public function getSpace()
-    {
+    public function getSpace() {
         return $this->space;
     }
 
     /**
-     * @param string $space
+     * setSpace function.
+     *
+     * @access public
+     * @param mixed $space
+     * @return void
      */
-    public function setSpace($space)
-    {
+    public function setSpace($space) {
         $this->space = $space;
     }
 
     /**
-     * @return RackContent[]
+     * Returns rack content.
+     *
+     * @access public
+     * @return void
      */
-    public function getContent()
-    {
+    public function getContent() {
         return $this->content;
     }
 
     /**
-     * @param RackContent[] $content
+     * Sets rack content.
+     *
+     * @access public
+     * @param mixed $content
+     * @return void
      */
-    public function setContent($content)
-    {
+    public function setContent($content) {
         $this->content = $content;
     }
 
     /**
-     * @return boolean
+     * Checks if item is active
+     *
+     * @access public
+     * @return void
      */
-    public function isActive()
-    {
+    public function isActive() {
         return $this->active;
     }
 
     /**
-     * @param boolean $active
+     * Sets active item
+     *
+     * @access public
+     * @param bool $active (default: true)
+     * @return void
      */
-    public function setActive($active)
-    {
+    public function setActive($active) {
         $this->active = $active;
     }
 }
@@ -424,96 +554,153 @@ class Rack extends Model
  * Class RackContent
  * @package GlasOperator\Rack
  */
-class RackContent extends Model
-{
-    /** @var int */
-    private $id;
-    /** @var string */
-    private $name;
-    /** @var bool */
-    private $active;
-    /** @var int */
-    private $startLocation;
-    /** @var int */
-    private $size;
+class RackContent extends Model {
 
     /**
-     * @return int
+     * var id
+     *
+     * @var int
+     * @access private
      */
-    public function getId()
-    {
+    private $id;
+
+    /**
+     * Rack name
+     *
+     * @var mixed
+     * @access private
+     */
+    private $name;
+
+    /**
+     * Active item
+     *
+     * @var bool
+     * @access private
+     */
+    private $active;
+
+    /**
+     * Start location
+     *
+     * @var int
+     * @access private
+     */
+    private $startLocation;
+
+    /**
+     * Rack size
+     *
+     * @var int
+     * @access private
+     */
+    private $size;
+
+
+
+
+    /**
+     * returns id
+     *
+     * @access public
+     * @return void
+     */
+    public function getId() {
         return $this->id;
     }
 
     /**
-     * @param int $id
+     * Sets rack id
+     *
+     * @access public
+     * @param mixed $id
+     * @return void
      */
-    public function setId($id)
-    {
+    public function setId($id) {
         $this->id = $id;
     }
 
     /**
-     * @return string
+     * Returns rack name
+     *
+     * @access public
+     * @return void
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->name;
     }
 
     /**
-     * @param string $name
+     * Sets rack name
+     *
+     * @access public
+     * @param mixed $name
+     * @return void
      */
-    public function setName($name)
-    {
+    public function setName($name) {
         $this->name = $name;
     }
 
     /**
-     * @return boolean
+     * Checks if item is active
+     *
+     * @access public
+     * @return void
      */
-    public function isActive()
-    {
+    public function isActive() {
         return $this->active;
     }
 
     /**
-     * @param boolean $active
+     * Sets active item
+     *
+     * @access public
+     * @param bool $active (default: true)
+     * @return void
      */
-    public function setActive($active = true)
-    {
+    public function setActive($active = true) {
         $this->active = $active;
     }
 
     /**
-     * @return int
+     * Returns start position
+     *
+     * @access public
+     * @return void
      */
-    public function getStartLocation()
-    {
+    public function getStartLocation() {
         return $this->startLocation;
     }
 
     /**
-     * @param int $startLocation
+     * Sets start position
+     *
+     * @access public
+     * @param mixed $startLocation
+     * @return void
      */
-    public function setStartLocation($startLocation)
-    {
+    public function setStartLocation($startLocation) {
         $this->startLocation = $startLocation;
     }
 
     /**
-     * @return int
+     * Gets rack size.
+     *
+     * @access public
+     * @return void
      */
-    public function getSize()
-    {
+    public function getSize() {
         return $this->size;
     }
 
     /**
-     * @param int $size
+     * Sets rack size
+     *
+     * @access public
+     * @param mixed $size
+     * @return void
      */
-    public function setSize($size)
-    {
+    public function setSize($size) {
         $this->size = $size;
     }
 }
