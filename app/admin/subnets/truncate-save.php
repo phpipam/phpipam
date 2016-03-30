@@ -46,8 +46,10 @@ if ($User->settings->enablePowerDNS=="1" && $subnet->DNSrecursive=="1") {
 		$domain = $PowerDNS->fetch_domain_by_name ($zone);
 		// if it exist remove all PTR records
 		if ($domain!==false) {
+    		// get all PTRs
+    		$ptr_indexes = $Addresses->ptr_get_subnet_indexes ($subnet->id);
 			// remove existing records and links
-			$PowerDNS->remove_all_ptr_records ($domain->id);
+			$PowerDNS->remove_all_ptr_records ($domain->id, $ptr_indexes);
 			// ok
 			$Result->show("success", "PTR records removed", false);
 		}

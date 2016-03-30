@@ -8,24 +8,97 @@
  */
 class PowerDNS extends Common_functions {
 
-	/* variables */
-	public $error = false;				// connection error string
-	public $db_settings;				// (obj) db settings
-	public $defaults;					// (obj) defaults settings
+	/**
+	 * connection error string
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $error = false;
 
-	public $limit;						// number of results
-	public $orderby;					// order field
-	public $orderdir;					// $order direction
+	/**
+	 * Database settings
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $db_settings;
 
-	public $domain_types;				// (obj) types of domain
-	public $record_types;				// (obj) record types
+	/**
+	 * Default settings
+	 *
+	 * @var object
+	 * @access public
+	 */
+	public $defaults;
 
-	// cache
-	private $domains_cache = array();				// array of domains - index = id
+	/**
+	 * Number of results
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $limit;
 
-	/* objects */
-	protected $Database;				// Database object - phpipam
-	protected $Database_pdns;			// Database object - pdns
+	/**
+	 * Order field
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $orderby;
+
+	/**
+	 * Order direction
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $orderdir;
+
+	/**
+	 * Domain types
+	 *
+	 * @var object
+	 * @access public
+	 */
+	public $domain_types;
+
+	/**
+	 * Record types
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $record_types;
+
+	/**
+	 * array of domains - index = id
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access private
+	 */
+	private $domains_cache = array();
+
+	/**
+	 * Database class - phpipam
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Database class - pdns
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database_pdns;
 
 
 
@@ -1351,15 +1424,36 @@ class PowerDNS extends Common_functions {
 	}
 
 	/**
-	 * Removes all PTR records for domain
+	 * Removes all PTR records for subnet
 	 *
 	 * @access public
 	 * @param mixed $domain_id
+	 * @param mixed $$indexes (array of PTR indexes)
 	 * @return void
 	 */
-	public function remove_all_ptr_records ($domain_id) {
+	public function remove_all_ptr_records ($domain_id, $indexes = array()) {
+    	// if false return ok and dont execute
+    	if (sizeof($indexes)==0 || !is_array($indexes)) {
+        	return true;
+    	}
+     	// set parameters - default
+    	$params = array($domain_id);
+    	// set query - start
+    	$query  = "delete from `records` where `domain_id` = ? and `type` = 'PTR'";
+    	// loop
+    	if (sizeof($indexes)>0) {
+        	$query .= " and (";
+        	foreach ($indexes as $i) {
+            	$q_tmp[] = " `id` = ? ";
+            	$params[] = $i;
+        	}
+            // add to query
+            $query .= implode(" or ", $q_tmp);
+            $query .= ");";
+    	}
+
 		// execute
-		try { $res = $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ? and `type` = 'PTR';", array($domain_id)); }
+		try { $res = $this->Database_pdns->runQuery($query, $params); }
 		catch (Exception $e) {
 			// write log
 			$this->Log->write( "PowerDNS records delete", "Failed to delete all PowerDNS domain PTR records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);

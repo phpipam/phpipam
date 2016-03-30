@@ -25,6 +25,11 @@
         + New inactive hosts widget;
     + jQuery tables;
 
+
+	Bugfixes:
+	----------------------------
+	+ PowerDNS regenerate PTR records now only updates current subnet (before whole zone);
+
 == 1.20.1
 
 	Translations:

@@ -916,6 +916,31 @@ class Addresses extends Common_functions {
 		return $this->PowerDNS->record_id_exists ($ptr_id);
 	}
 
+	/**
+	 * Returns array of all ptr indexes in surrent subnet
+	 *
+	 * @access public
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	public function ptr_get_subnet_indexes ($subnetId) {
+		try { $indexes = $this->Database->getObjectsQuery("select `PTR` from `ipaddresses` where `PTR` != 0 and `subnetId` = ?;", array($subnetId)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# parse
+		if (sizeof($indexes)>0) {
+    		foreach ($indexes as $i) {
+        		$out[] = $i->PTR;
+    		}
+    		return $out;
+		}
+		else {
+    		return array();
+		}
+	}
+
 
 
 
