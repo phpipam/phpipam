@@ -6,27 +6,110 @@
 
 class Addresses extends Common_functions {
 
+
 	/**
-	 * public variables
+	 * (array of objects) to store addresses, address ID is array index
+	 *
+	 * (default value: array)
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $address_types;					//(array) address types
+	public $addresses = array();
+
+	/**
+	 * Address types array
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $address_types = array();
+
+	/**
+	 * Mail changelog or not
+	 *
+	 * (default value: true)
+	 *
+	 * @var bool
+	 * @access public
+	 */
 	public $mail_changelog = true;
 
-	/**
-	 * protected variables
-	 */
-	protected $debugging = false;			//(bool) debugging flag
+    /**
+     * Last insert id
+     *
+     * (default value: false)
+     *
+     * @var bool
+     * @access public
+     */
+    public $lastId = false;
 
 	/**
-	 * object holders
+	 * Debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
 	 */
-	protected $Net_IPv4;					//PEAR NET IPv4 object
-	protected $Net_IPv6;					//PEAR NET IPv6 object
-	public $Result;							//for Result printing
-	protected $Database;					//for Database connection
-	protected $Subnets;						//for Subnets object
-	public $Log;							//for Logging connection
+	protected $debugging = false;
+
+	/**
+	 * PEAR NET IPv4 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv4;
+
+	/**
+	 * PEAR NET IPv6 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv6;
+
+	/**
+	 * Result printing
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Database conenction
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Subnets object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
+
+	/**
+	 * Logging object
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
+	/**
+	 * PowerDNS object
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $PowerDNS;
 
 
 
@@ -79,6 +162,7 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to array
+			$types_out = array();
 			foreach($types as $t) {
 				$types_out[$t->id] = (array) $t;
 			}
@@ -146,6 +230,7 @@ class Addresses extends Common_functions {
 		# fetch address states
 		$this->addresses_types_fetch();
 		# reindex
+		$states_assoc = array();
 		foreach($this->address_types as $s) {
 			$states_assoc[$s['type']] = $s;
 		}
@@ -447,6 +532,9 @@ class Addresses extends Common_functions {
 	 */
 	private function threshold_check ($address) {
     	$address = (object) $address;
+    	$content = array();
+    	$content_plain = array();
+
         # fetch settings
         $this->get_settings ();
     	# enabled ?
@@ -517,9 +605,9 @@ class Addresses extends Common_functions {
                             	return true;
                         	}
                         } catch (phpmailerException $e) {
-                        	$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
                         } catch (Exception $e) {
-                        	$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
                         }
                     }
             	}
@@ -740,8 +828,7 @@ class Addresses extends Common_functions {
 	 * Set zone name and fetch domain details
 	 *
 	 * @access private
-	 * @param mixed $ip
-	 * @param mixed $mask
+	 * @param mixed $subnet_id
 	 * @return void
 	 */
 	private function pdns_fetch_domain ($subnet_id) {
@@ -835,10 +922,9 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @param mixed $print_error
 	 * @return void
 	 */
-	public function ptr_delete ($address, $print_error) {
+	public function ptr_delete ($address) {
 		$address = (object) $address;
 
 		// remove link from ipaddresses
@@ -896,7 +982,7 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_unlink_subnet_addresses ($subnet_id) {
-		try { $address = $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
+		try { $this->Database->runQuery("update `ipaddresses` set `PTR` = 0 where `subnetId` = ?;", array($subnet_id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -931,6 +1017,8 @@ class Addresses extends Common_functions {
 		}
 		# parse
 		if (sizeof($indexes)>0) {
+    		$out = array();
+    		// loop
     		foreach ($indexes as $i) {
         		$out[] = $i->PTR;
     		}
@@ -1074,9 +1162,11 @@ class Addresses extends Common_functions {
 	/**
 	 * Count number of IP addresses in subnet
 	 *
+	 * Returns number of addresses in subnet
+	 *
 	 * @access public
 	 * @param int $subnetId
-	 * @return int number of addresses in subnet
+	 * @return int
 	 */
 	public function count_subnet_addresses ($subnetId) {
 		try { $count = $this->Database->numObjectsFilter("ipaddresses", "subnetId", $subnetId); }
@@ -1102,6 +1192,7 @@ class Addresses extends Common_functions {
 		if(empty($subnets)) { return 0; }
 
 		# create query
+		$tmp = array();
 		foreach($subnets as $k=>$s) {
 			if (is_object($s))	{ $tmp[] = " `subnetId`=$s->id "; }
 			else				{ $tmp[] = " `subnetId`=$s "; }
@@ -1126,8 +1217,8 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $subnetId
-	 * @param {bool} $count
-	 * @return count or addresses
+	 * @param bool $count
+	 * @return void
 	 */
 	public function fetch_subnet_addresses_recursive ($subnetId, $count = false, $order=null, $order_direction=null ) {
 		# initialize subnets
@@ -1149,6 +1240,7 @@ class Addresses extends Common_functions {
 		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = "" '; }
 		else	 	{ $query = 'select * from `ipaddresses` where `subnetId` = "" '; }
 	    foreach($this->Subnets->slaves as $subnetId2) {
+    	    $ids = array();
 		    # ignore orphaned
 	    	if($subnetId2 != $subnetId) {
 				$query  .= " or `subnetId` = ? ";
@@ -1170,11 +1262,14 @@ class Addresses extends Common_functions {
 	/**
 	 * Search for unused address space between 2 IP addresses
 	 *
+	 * possible unused addresses by type
+	 *
 	 * @access public
 	 * @param int $address1
 	 * @param int $address2
 	 * @param int $netmask
-	 * @return possible unused addresses by type
+	 * @param bool $empty
+	 * @return void
 	 */
 	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false) {
 		# make sure addresses are in decimal format
@@ -1187,11 +1282,14 @@ class Addresses extends Common_functions {
 	/**
 	 * Search for unused address space between 2 IPv4 addresses.
 	 *
+	 * unused address range or false if none available
+	 *
 	 * @access protected
 	 * @param int $address1
 	 * @param int $address2
 	 * @param int $netmask
-	 * @return unused address range or false if none available
+	 * @param bool $empty
+	 * @return void
 	 */
 	protected function find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty) {
 		# calculate diff
@@ -1245,13 +1343,15 @@ class Addresses extends Common_functions {
 	/**
 	 * Search for unused address space between 2 IPv6 addresses
 	 *
+	 * Return unused address range or false if none available
+	 *
 	 * @access protected
 	 * @param int $address1
 	 * @param int $address2
 	 * @param int $netmask
-	 * @return unused address range or false if none available
+	 * @return void
 	 */
-	protected function find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty) {
+	protected function find_unused_addresses_IPv6 ($address1, $address2, $netmask) {
 		# calculate diff
 		$diff = $this->calculate_address_diff ($address1, $address2);
 
@@ -1338,7 +1438,7 @@ class Addresses extends Common_functions {
         $mask = explode("/", $subnet);
 
 		# is address valid?
-		if (!$this->Net_IPv4->validateIP($address)) 						{ $this->Result->show("danger", _("IP address not valid")."! ($ip)", $die); return true; }
+		if (!$this->Net_IPv4->validateIP($address)) 						{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
 		# is address in provided subnet
 		elseif (!$this->Net_IPv4->ipInNetwork($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
 		# ignore  /31 and /32 subnet broadcast and subnet checks!
@@ -1366,9 +1466,6 @@ class Addresses extends Common_functions {
 	public function verify_address_IPv6 ($address, $subnet, $die) {
 		# Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
-
-        # remove /xx from subnet
-        $subnet_short = $this->Net_IPv6->removeNetmaskSpec($subnet);
 
 		# is it valid?
 		if (!$this->Net_IPv6->checkIPv6($address)) 							{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
@@ -1407,7 +1504,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @param int $mask
+	 * @param int $netmask
 	 * @return boolean
 	 */
 	public function is_network ($address, $netmask) {
@@ -1421,7 +1518,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @param int $mask
+	 * @param int $netmask
 	 * @return boolean
 	 */
 	public function is_broadcast ($address, $netmask) {
@@ -1474,8 +1571,14 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function compress_address_ranges ($addresses, $state=4) {
+    	# set size
+    	$size = sizeof($addresses);
+    	// vars
+    	$addresses_formatted = array();
+    	$fIndex = int;
+
 		# loop through IP addresses
-		for($c=0; $c<sizeof($addresses); $c++) {
+		for($c=0; $c<$size; $c++) {
 			# ignore already comressed range
 			if($addresses[$c]->class!="compressed-range") {
 				# gap between this and previous
@@ -1537,6 +1640,8 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function find_invalid_addresses () {
+    	// init
+    	$false = array();
 		// find unique ids
 		$ids = $this->find_unique_subnetids ();
 		if ($ids===false)										{ return false; }
@@ -1605,10 +1710,10 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param object $user
-	 * @param int $subnetid
+	 * @param int $subnetId
 	 * @return int permission level
 	 */
-	public function check_permission ($user, $subnetid) {
+	public function check_permission ($user, $subnetId) {
 
 		# get all user groups
 		$groups = json_decode($user->groups);
@@ -1616,13 +1721,18 @@ class Addresses extends Common_functions {
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
+    	# object
+    	if (!is_object($this->Subnets)) {
+        	$this->Subnets = new Subnets ($this->Database);
+    	}
+        # fetch subnet
+        $subnet = $this->Subnets->fetch_subnet("id", $subnetId);
 		# set subnet permissions
-		$subnet  = $this->fetch_subnet ("id", $subnetId);
-		$subnetP = json_decode($subnet['permissions']);
+		$subnetP = json_decode($subnet->permissions);
 
 		# set section permissions
 		$Section = new Section ($this->Database);
-		$section = $Section->fetch_section ("id", $subnet['sectionId']);
+		$section = $Section->fetch_section ("id", $subnet->sectionId);
 		$sectionP = json_decode($section->permissions);
 
 		# default permission

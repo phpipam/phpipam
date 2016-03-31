@@ -7,27 +7,118 @@
 class Subnets extends Common_functions {
 
 	/**
-	 * public variables
+	 * (array of objects) to store subnets, subnet ID is array index
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public $subnets;						// (array of objects) to store subnets, subnet ID is array index
-	public $slaves;							// (array of ids) to store id's of all recursively slaves
-	public $address_types = null;			// (array) IP address types from Addresses object
+	public $subnets;
 
 	/**
-	 * protected variables
+	 * (array of ids) to store id's of all recursively slaves
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	protected $user = null;					// (object) for User profile
-	protected $ripe = array();				// array of /8 ripe subnets
-	protected $arin = array();				// array of /8 arin subnets
+	public $slaves;
 
 	/**
-	 * object holders
+	 * (array of object) full slave subnets
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	protected $Net_IPv4;					// PEAR NET IPv4 object
-	protected $Net_IPv6;					// PEAR NET IPv6 object
-	public    $Result;						// for Result printing
-	protected $Database;					// for Database connection
-	public $Log;							// for Logging connection
+	public $slaves_full;
+
+	/**
+	 * (array) IP address types from Addresses object
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $address_types = null;
+
+	/**
+	 * Last id of new entries
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $lastInsertId = null;
+
+	/**
+	 * (object) for User profile
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $user = null;
+
+	/**
+	 * array of /8 ripe subnets
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access protected
+	 */
+	protected $ripe = array();
+
+	/**
+	 * array of /8 arin subnets
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access protected
+	 */
+	protected $arin = array();
+
+	/**
+	 * PEAR NET IPv4 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv4;
+
+	/**
+	 * PEAR NET IPv6 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv6;
+
+	/**
+	 * for Result printing
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * for Database connection
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * for Logging connection
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
 
 
 
@@ -279,7 +370,7 @@ class Subnets extends Common_functions {
 
 			//replace all subnetIds in IP addresses to new subnet
 			if(isset($ids)) {
-				if(!$Admin->object_modify("ipaddresses", "edit-multiple", $ids, array("subnetId"=>$this->lastInsertId)))	{ $Result->show("danger", _("Failed to move IP address"), true); }
+				if(!$Admin->object_modify("ipaddresses", "edit-multiple", $ids, array("subnetId"=>$this->lastInsertId)))	{ $this->Result->show("danger", _("Failed to move IP address"), true); }
 			}
 
 			# next
@@ -288,7 +379,7 @@ class Subnets extends Common_functions {
 
 		# do we need to remove old subnet?
 		if($group!="yes") {
-			if(!$Admin->object_modify("subnets", "delete", "id", array("id"=>$subnet_old->id)))								{ $Result->show("danger", _("Failed to remove old subnet"), true); }
+			if(!$Admin->object_modify("subnets", "delete", "id", array("id"=>$subnet_old->id)))								{ $this->Result->show("danger", _("Failed to remove old subnet"), true); }
 		}
 
 		# result
@@ -358,7 +449,7 @@ class Subnets extends Common_functions {
 		$this->get_settings ();
 		$order = $this->get_subnet_order ();
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else  $order[0] end $order[1]", array($sectionId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -943,7 +1034,7 @@ class Subnets extends Common_functions {
 	public function calculate_subnet_usage_sort_addresses ($addresses) {
 		$count['used'] = 0;				//initial sum count
 		# fetch address types
-		$address_types = $this->get_addresses_types();
+		$this->get_addresses_types();
 		# create array of keys with initial value of 0
 		foreach($this->address_types as $a) {
 			$count[$a['type']] = 0;
@@ -986,7 +1077,7 @@ class Subnets extends Common_functions {
 	 */
 	public function translate_address_type ($index) {
 		# fetch
-		$all_types = $this->get_addresses_types();
+		$this->get_addresses_types();
 		# return
 		return $this->address_types[$index]["type"];
 	}
@@ -1399,7 +1490,7 @@ class Subnets extends Common_functions {
 	 */
 	public function verify_nested_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0) {
 		# fetch section subnets
-		$sections_subnets = $this->fetch_section_subnets ($sectionId);
+		$section_subnets = $this->fetch_section_subnets ($sectionId);
 		# fix null vrfid
 		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
 		# check
@@ -1681,7 +1772,7 @@ class Subnets extends Common_functions {
 			case "128": $mask_diff = 7; break;
 			case "256": $mask_diff = 8; break;
 			//otherwise die
-			default:	$Result->show("danger", _("Invalid number of subnets"), true);
+			default:	$this->Result->show("danger", _("Invalid number of subnets"), true);
 		}
 		//set new mask
 		$mask = $subnet_old->mask + $mask_diff;
@@ -1760,7 +1851,7 @@ class Subnets extends Common_functions {
 				foreach($newsubnets as $new_subnet) {
 					$new_subnet = (object) $new_subnet;
 					if($this->verify_overlapping ($this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask, $this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask)===true) {
-						$Result->show("danger", _("Subnet overlapping - ").$this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask." overlapps with ".$this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask, true);
+						$this->Result->show("danger", _("Subnet overlapping - ").$this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask." overlapps with ".$this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask, true);
 					}
 				}
 			}
@@ -2151,10 +2242,6 @@ class Subnets extends Common_functions {
     	// multicast check
     	elseif (!($mac_delimited[0]=="33" && $mac_delimited[1]=="33") && !($mac_delimited[0]=="01" && $mac_delimited[1]=="00" && $mac_delimited[2]=="5e")) {
             return "Not multicast MAC address";
-    	}
-    	// check first 3 chars for multicast IPv4
-    	elseif ($type=="IPv6") {
-        	return "Not multicast MAC address";
     	}
     	// check if it already exists
     	elseif ($this->multicast_address_exists ($this->reformat_mac_address($mac, 4), $sectionId, $vlanId, $unique_required, $address_id)) {
