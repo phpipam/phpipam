@@ -304,7 +304,7 @@ class Logging extends Common_functions {
 	 * Writes log to local database
 	 *
 	 * @access private
-	 * @return void
+	 * @return boolean
 	 */
 	private function database_write_log () {
 	    # set values
@@ -317,8 +317,8 @@ class Logging extends Common_functions {
 	    			"details"=>$this->log_details
 					);
 		# null empty values
-		$values = $this->reformat_empty_array_fields ($values, null);
-		$values = $this->strip_input_tags ($values);
+		$values = $this->reformat_empty_array_fields($values, null);
+		$values = $this->strip_input_tags($values);
 
 		# execute
 		try { $this->Database->insertObject("logs", $values); }
@@ -407,13 +407,13 @@ class Logging extends Common_functions {
 	 * Write new changelog to db or send to syslog
 	 *
 	 * @access public
-	 * @param mixed $object_type
-	 * @param mixed $action
-	 * @param mixed $result
+	 * @param string $object_type
+	 * @param string $action
+	 * @param string $result
 	 * @param array $old (default: array())
 	 * @param array $new (default: array())
 	 * @param bool $mail_changelog (default: true)
-	 * @return void
+	 * @return boolean|null
 	 */
 	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array(), $mail_changelog = true) {
 		//set values
@@ -539,7 +539,7 @@ class Logging extends Common_functions {
 	 * Checks if object should write changelog
 	 *
 	 * @access private
-	 * @return void
+	 * @return boolean
 	 */
 	private function changelog_validate_object () {
 		# set valid objects
@@ -692,7 +692,7 @@ class Logging extends Common_functions {
 	 * Formats tag from int to nam.
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -707,7 +707,7 @@ class Logging extends Common_functions {
 	 * Formats section if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -729,9 +729,9 @@ class Logging extends Common_functions {
 	 * Formats master subnet if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return string
 	 */
 	private function changelog_format_master_subnet_diff ($k, $v) {
 		//Old root or not
@@ -756,7 +756,7 @@ class Logging extends Common_functions {
 	 * Format device if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -785,7 +785,7 @@ class Logging extends Common_functions {
 	 * Format vlan if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -814,7 +814,7 @@ class Logging extends Common_functions {
 	 * Format vrf if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -843,7 +843,7 @@ class Logging extends Common_functions {
 	 * Format master section ifchange
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -872,9 +872,9 @@ class Logging extends Common_functions {
 	 * Format permissions on change - EDIT
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return string
 	 */
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
@@ -1086,7 +1086,7 @@ class Logging extends Common_functions {
 		}
 	    # fetch
 	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $object_type)); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); return false; }
 
 	    # return result
 	    return $logs;
@@ -1156,9 +1156,9 @@ class Logging extends Common_functions {
 	 * Send mail on new changelog
 	 *
 	 * @access public
-	 * @param mixed $changelog
+	 * @param string $changelog
 	 * @param int $obj_id
-	 * @return void
+	 * @return boolean
 	 */
 	public function changelog_send_mail ($changelog, $obj_id) {
 

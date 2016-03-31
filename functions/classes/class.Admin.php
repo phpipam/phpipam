@@ -56,7 +56,7 @@ class Admin extends Common_functions {
 	 * Sets admin required flag if needed
 	 *
 	 * @access public
-	 * @param mixed $bool
+	 * @param boolean $bool
 	 * @return void
 	 */
 	public function set_admin_required ($bool) {
@@ -108,8 +108,8 @@ class Admin extends Common_functions {
 	 * Fetch all objects from specified table in database
 	 *
 	 * @access public
-	 * @param mixed $table
-	 * @param mixed $sortField (default:id)
+	 * @param string $table
+	 * @param string $sortField (default:id)
 	 * @return void
 	 */
 	public function fetch_all_objects ($table=null, $sortField="id") {
@@ -129,8 +129,8 @@ class Admin extends Common_functions {
 	 * Fetches specified object specified table in database
 	 *
 	 * @access public
-	 * @param mixed $table
-	 * @param mixed $method (default: null)
+	 * @param string $table
+	 * @param string $method (default: null)
 	 * @param mixed $id
 	 * @return void
 	 */
@@ -172,8 +172,6 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $table (default: null)
-	 * @param mixed $method (default: null)
-	 * @param mixed $id
 	 * @return void
 	 */
 	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true) {
@@ -195,7 +193,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $table (default: null)
-	 * @return void
+	 * @return boolean
 	 */
 	public function truncate_table ($table = null) {
 		# null table
@@ -232,8 +230,8 @@ class Admin extends Common_functions {
 	 * Modify database object
 	 *
 	 * @access public
-	 * @param mixed $table
-	 * @param mixed $action
+	 * @param string $table
+	 * @param string $action
 	 * @param mixed $values
 	 * @return void
 	 */
@@ -257,7 +255,7 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table
 	 * @param mixed $values
-	 * @return void
+	 * @return boolean
 	 */
 	private function object_add ($table, $values) {
 		# null empty values
@@ -286,8 +284,7 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param array $values			//update variables
-	 * @param mixed $primary_key	//key to update on
-	 * @return void
+	 * @return boolean
 	 */
 	private function object_edit ($table, $key="id", $values) {
 		# null empty values
@@ -316,8 +313,8 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param array $values			//update variables
-	 * @param mixed $primary_key	//key to update on
-	 * @return void
+	 * @param string $ids
+	 * @return boolean
 	 */
 	private function object_edit_multiple ($table, $ids, $values) {
 		# null empty values
@@ -342,9 +339,9 @@ class Admin extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $table		//table to update
-	 * @param mixed $field		//field selection (where $field = $id)
+	 * @param string $field		//field selection (where $field = $id)
 	 * @param mixed $id			//field identifier
-	 * @return void
+	 * @return boolean
 	 */
 	private function object_delete ($table, $field="id", $id) {
 		# execute
@@ -368,8 +365,7 @@ class Admin extends Common_functions {
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $old_value
-	 * @param mixed $new_value
-	 * @return void
+	 * @return null|false
 	 */
 	public function remove_object_references ($table, $field, $old_value) {
 		try { $this->Database->runQuery("update `$table` set `$field` = NULL where `$field` = ?;", array($old_value)); }
@@ -387,7 +383,7 @@ class Admin extends Common_functions {
 	 * @param mixed $field
 	 * @param mixed $old_value
 	 * @param mixed $new_value
-	 * @return void
+	 * @return null|false
 	 */
 	public function update_object_references ($table, $field, $old_value, $new_value) {
 		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
@@ -470,8 +466,6 @@ class Admin extends Common_functions {
 	 * Fetches all users that are in group
 	 *
 	 * @access public
-	 * @param int $gid
-	 * @param bool $reverse
 	 * @return array of user ids
 	 */
 	public function group_fetch_users ($group_id) {
@@ -522,7 +516,7 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $gid
 	 * @param mixed $uid
-	 * @return void
+	 * @return boolean
 	 */
 	public function add_group_to_user ($gid, $uid) {
 		# get old groups
@@ -544,7 +538,7 @@ class Admin extends Common_functions {
 	 * @access public
 	 * @param mixed $gid
 	 * @param mixed $uid
-	 * @return void
+	 * @return boolean
 	 */
 	public function remove_group_from_user($gid, $uid) {
 		# get old groups
@@ -566,7 +560,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $uid
-	 * @param mixed $groups
+	 * @param string $groups
 	 * @return void
 	 */
 	public function update_user_groups ($uid, $groups) {
@@ -578,7 +572,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sid
-	 * @param mixed $groups
+	 * @param string $groups
 	 * @return void
 	 */
 	public function update_section_groups($sid, $groups) {
@@ -590,7 +584,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $gid	//group id
-	 * @return void
+	 * @return boolean
 	 */
 	public function remove_group_from_users($gid) {
 		# get all users
@@ -619,7 +613,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $gid
-	 * @return void
+	 * @return boolean
 	 */
 	public function remove_group_from_sections ($gid) {
 		# get all sections
@@ -789,7 +783,7 @@ class Admin extends Common_functions {
 	 * @access public
 	 * @param mixed $table				//name of custom fields table
 	 * @param mixed $filtered_fields	//array of field to hide for this table
-	 * @return void
+	 * @return boolean
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
@@ -818,7 +812,7 @@ class Admin extends Common_functions {
 	 * @param mixed $table
 	 * @param mixed $next
 	 * @param mixed $current
-	 * @return void
+	 * @return boolean
 	 */
 	public function reorder_custom_fields ($table, $next, $current) {
 	    # get current field details
