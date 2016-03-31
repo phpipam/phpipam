@@ -621,7 +621,7 @@ abstract class DB {
 	 *
 	 * @access public
 	 * @param string $tableName
-	 * @param object $obj
+	 * @param object|array $obj
 	 * @param bool $raw (default: false)
 	 * @param bool $replace (default: false)
 	 * @return void

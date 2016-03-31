@@ -819,7 +819,7 @@ class PowerDNS extends Common_functions {
 	 * Create new record
 	 *
 	 * @access public
-	 * @param array $record
+	 * @param array|object $record
 	 * @param bool $print_success
 	 * @return void
 	 */
@@ -1292,8 +1292,6 @@ class PowerDNS extends Common_functions {
 	 * @return void
 	 */
 	public function update_all_records ($domain_id, $old_name, $name) {
-		// set query
-		$query = "";
 		// execute
 		try { $this->Database_pdns->runQuery("update `records` set `name` = replace(`name`, ?, ?) where where `domain_id` = ?;", array($old_name, $name, $domain_id)); }
 		catch (Exception $e) {

@@ -39,7 +39,7 @@ class Logging extends Common_functions {
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $log_command 	= null;
+	protected $log_command = null;
 
 	/**
 	 * log_details
@@ -49,7 +49,7 @@ class Logging extends Common_functions {
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $log_details 	= null;
+	protected $log_details = null;
 
 	/**
 	 * Syslog facility
@@ -98,22 +98,38 @@ class Logging extends Common_functions {
 	protected $object_old;
 
 	/**
+	 * object_type
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $object_type;
+
+	/**
 	 * Object action
 	 *
 	 *  add, edit, delete
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $object_action;
+	public $object_action;
 
 	/**
 	 * Result - success, failure
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $object_result;
+	public $object_result;
+
+	/**
+	 * mail_changelog
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $mail_changelog;
 
 	/**
 	 * log_username
@@ -165,7 +181,7 @@ class Logging extends Common_functions {
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $Address;
+	protected $Addresses;
 
 	/**
 	 * Sections object
@@ -209,7 +225,6 @@ class Logging extends Common_functions {
 	 * @access public
 	 * @param Database_PDO $database
 	 * @param mixed $settings (default: null)
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
 		# Save database object
@@ -267,10 +282,12 @@ class Logging extends Common_functions {
 					$token = $admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN']);
 					if ($token === False) {
 						$this->user_id = null;
-					} else {
+					}
+					else {
 						$user_id = $token;
 					}
-				} else {
+				}
+				else {
 					$this->user_id = null;
 				}
 			}
@@ -302,8 +319,8 @@ class Logging extends Common_functions {
 	 */
 	public function write ($command, $details = NULL, $severity = 0, $username = null) {
 		// save provided values
-		$this->log_command 	= $command;
-		$this->log_details 	= $details;
+		$this->log_command = $command;
+		$this->log_details = $details;
 		$this->log_severity = $severity;
 		$this->log_username	= $username===null ? $this->log_username : $username;
 
@@ -613,10 +630,10 @@ class Logging extends Common_functions {
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
-		    $this->Addresses 	= new Addresses ($this->Database);
+		    $this->Addresses = new Addresses ($this->Database);
 		    $this->Subnets 		= new Subnets ($this->Database);
-		    $this->Sections 	= new Sections ($this->Database);
-		    $this->Tools	 	= new Tools ($this->Database);
+		    $this->Sections = new Sections ($this->Database);
+		    $this->Tools	 = new Tools ($this->Database);
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
@@ -877,7 +894,7 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	private function changelog_format_tag_diff ($k, $v) {
-		$this->object_old[$k] 	= $this->Addresses->address_type_index_to_type($this->object_old[$k]);
+		$this->object_old[$k] = $this->Addresses->address_type_index_to_type($this->object_old[$k]);
 		$v 						= $this->Addresses->address_type_index_to_type($v);
 		//result
 		return $v;
@@ -917,14 +934,16 @@ class Logging extends Common_functions {
 		//Old root or not
 		if($this->object_old[$k]==0){
 			$this->object_old[$k] = "Root";
-		} else {
+		}
+		else {
 			$subnet = $this->Subnets->fetch_subnet("id", $this->object_old[$k]);
 			$this->object_old[$k] = $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]";
 		}
 		//New root or not
 		if($v==0) {
 			$v = "Root";
-		} else {
+		}
+		else {
 			$subnet = $this->Subnets->fetch_subnet("id", $v);
 			$v  = $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]";
 		}
@@ -1226,8 +1245,9 @@ class Logging extends Common_functions {
 						from `changelog` as `c`, `users` as `u`, `ipaddresses` as `o`
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and (";
+
+            $args = array();
 			foreach($ips as $ip) {
-			if(!isset($args)) $args = array();
 			$query .= "`c`.`coid` = ? or ";
 			$args[] = $ip->id;
 			}
@@ -1235,7 +1255,7 @@ class Logging extends Common_functions {
 			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
 
 			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
+		    try { $logs = $this->Database->getObjectsQuery($query, array_filter($args)); }
 			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		    # return result
@@ -1266,7 +1286,8 @@ class Logging extends Common_functions {
 						from `changelog` as `c`, `users` as `u`, `$object_typeTable` as `o`
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
-		} else {
+		}
+		else {
 		    $query = "select *
 						from `changelog` as `c`, `users` as `u`
 						where `c`.`cuser` = `u`.`id`
@@ -1364,6 +1385,7 @@ class Logging extends Common_functions {
 		if ( $this->object_new['isFolder']=="1"	||$this->object_old['isFolder']=="1")	{ $this->object_type = "folder"; }
 
 		# set subject
+		$subject = string;
 		if($this->object_action == "add") 		{ $subject = ucwords($this->object_type)." create notification"; }
 		elseif($this->object_action == "edit") 	{ $subject = ucwords($this->object_type)." change notification"; }
 		elseif($this->object_action == "delete"){ $subject = ucwords($this->object_type)." delete notification"; }
@@ -1422,7 +1444,7 @@ class Logging extends Common_functions {
 
 		// set content
 		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-		$content_plain 	= implode("\r\n",$content_plain);
+		$content_plain = implode("\r\n",$content_plain);
 
 		# try to send
 		try {
@@ -1462,7 +1484,8 @@ class Logging extends Common_functions {
 			foreach($recipients as $k=>$r) {
 				if($r->mailChangelog!="Yes") {
 					unset($recipients[$k]);
-				} else {
+				}
+				else {
 					$m++;
 				}
 			}

@@ -165,7 +165,7 @@ class Common_functions  {
 	 * Strip tags from array or field to protect from XSS
 	 *
 	 * @access public
-	 * @param mixed $input
+	 * @param array|string $input
 	 * @return void
 	 */
 	public function strip_input_tags ($input) {
@@ -753,7 +753,7 @@ class Common_functions  {
 		# admin
 		else if($req['page'] == "admin")	{ $this->print_admin_breadcrumbs (); }
 		# tools
-		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs (); }
+		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs ($req); }
 	}
 
 	/**
