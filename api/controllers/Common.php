@@ -7,17 +7,91 @@
  */
 class Common_api_functions {
 
+
 	/**
-	 * vars
+	 * controller_keys
+	 *
+	 * @var mixed
+	 * @access protected
 	 */
 	protected $controller_keys;
+
+	/**
+	 * _params provided from request
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $_params;
+
+    /**
+     * Custom fields
+     *
+     * @var mixed
+     * @access public
+     */
+    public $custom_fields;
+
+	/**
+	 * valid_keys
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $valid_keys;
+
+	/**
+	 * custom_keys
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $custom_keys;
+
+	/**
+	 * Keys to be removed
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $remove_keys;
 
+	/**
+	 * keys
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $keys;
+
+	/**
+	 * Master Tools class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Tools;
+
+	/**
+	 * Response class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Response;
+
+	/**
+	 * Master subnets class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Subnets;
+
+
+
+
+
 
 	/**
 	 * Initializes new Object.
@@ -25,7 +99,6 @@ class Common_api_functions {
 	 * @access protected
 	 * @param mixed $Object		// object name
 	 * @param mixed $Database	// Database object
-	 * @return void
 	 */
 	protected function init_object ($Object, $Database) {
 		// admin fix
@@ -103,7 +176,7 @@ class Common_api_functions {
 		}
 		// filter
 		if (isset($this->_params->filter_by)) {
-								{ $result = $this->filter_result ($result, $controller); }
+								{ $result = $this->filter_result ($result); }
 		}
 		// transform address
 		if($transform_address)	{ $result = $this->transform_address ($result); }
@@ -270,6 +343,8 @@ class Common_api_functions {
 	 * @return void
 	 */
 	private function define_links ($controller) {
+    	// init
+    	$result = array();
 		// sections
 		if($controller=="sections") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
@@ -418,6 +493,9 @@ class Common_api_functions {
 	 * @return void
 	 */
 	protected function validate_keys () {
+    	// init values
+    	$values = array();
+    	// loop
 		foreach($this->_params as $pk=>$pv) {
 			if(!in_array($pk, $this->valid_keys)) 	{ $this->Response->throw_exception(400, 'Invalid request key '.$pk); }
 			// set parameters
@@ -579,6 +657,7 @@ class Common_api_functions {
 			// loop
 			foreach ($result as $m=>$r) {
 				// start object
+				$result_remapped = array();
 				$result_remapped[$m] = new StdClass ();
 
 				// search and replace

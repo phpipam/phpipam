@@ -7,15 +7,70 @@
  */
 class Subnets_controller extends Common_api_functions {
 
-	/* public variables */
+
+	/**
+	 * _params provided
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $_params;
 
-	/* object holders */
-	protected $Database;		// Database object
-	protected $Response;		// Response handler
-	protected $Subnets;			// Subnets object
-	protected $Addresses;		// Addresses object
-	protected $Tools;			// Tools object
+	/**
+	 * custom_fields
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $custom_fields;
+
+	/**
+	 * settings
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $settings;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Response handler
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Response;
+
+	/**
+	 * Master Subnets object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
+
+	/**
+	 * Master  Addresses object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Addresses;
+
+	/**
+	 * Master Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
 
 
 	/**
@@ -53,6 +108,7 @@ class Subnets_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
+		$result = array();
 		$result['methods'] = array(
 								array("href"=>"/api/".$this->_params->app_id."/subnets/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
 								array("href"=>"/api/".$this->_params->app_id."/subnets/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
@@ -283,6 +339,7 @@ class Subnets_controller extends Common_api_functions {
 		// ok, delete subnet
 		else {
 			# set variables for delete
+			$values = array();
 			$values["id"] = $this->_params->id;
 
 			# execute update
@@ -463,7 +520,7 @@ class Subnets_controller extends Common_api_functions {
 		// null
 		$subnetId = !is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
-		$result = $this->Subnets->fetch_subnet ("id", $this->_params->id);
+		$result = $this->Subnets->fetch_subnet ("id", $subnetId);
         // add nameservers
         if($result!==false) {
             $ns = $this->read_subnet_nameserver($result->nameserverId);
@@ -538,7 +595,7 @@ class Subnets_controller extends Common_api_functions {
 	private function read_subnet_slaves_recursive () {
 		// get array of ids
 		$this->Subnets->fetch_subnet_slaves_recursive ($this->_params->id);
-		// fetch all
+		// fetch all;
 		foreach($this->Subnets->slaves as $s) {
 			$result[] = $this->read_subnet ($s);
 		}
@@ -619,16 +676,6 @@ class Subnets_controller extends Common_api_functions {
 			if(strlen($err = $this->Subnets->verify_cidr_address($this->_params->subnet."/".$this->_params->mask))>1)
 																									{ $this->Response->throw_exception(400, $err); }
 		}
-	}
-
-	/**
-	 * Checks if GET request is subnet
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function validate_cidr_request () {
-		return (strlen($err = $this->Subnets->verify_cidr_address($this->_params->id."/".$this->_params->id2))>1) ? false : true;
 	}
 
 	/**

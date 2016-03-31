@@ -7,15 +7,62 @@
  */
 class Sections_controller extends Common_api_functions {
 
-	/* public variables */
+
+	/**
+	 * _params provided
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $_params;
 
-	/* object holders */
-	protected $Database;		// Database object
-	protected $Response;		// Response handler
-	protected $Subnets;			// Subnets object
-	protected $Sections;		// Sections object
-	protected $Tools;			// Tools object
+	/**
+	 * custom_fields
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $custom_fields;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 *  Response handler
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Response;
+
+	/**
+	 * Master Subnets object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
+
+	/**
+	 * Master Sections object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Sections;
+
+	/**
+	 * Master Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
 
 
 	/**
@@ -24,7 +71,8 @@ class Sections_controller extends Common_api_functions {
 	 * @access public
 	 * @param class $Database
 	 * @param class $Tools
-	 * @param mixed $params		// post/get values
+	 * @param mixed $params
+	 * @param mixed $Response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -53,6 +101,7 @@ class Sections_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
+		$result = array();
 		$result['methods'] = array(
 								array("href"=>"/api/".$this->_params->app_id."/sections/", 			"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
 								array("href"=>"/api/".$this->_params->app_id."/sections/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
@@ -242,6 +291,7 @@ class Sections_controller extends Common_api_functions {
 														{ $this->Response->throw_exception(404, "Section does not exist"); }
 
 		# set variables for update
+		$values = array();
 		$values["id"] = $this->_params->id;
 
 		# execute update

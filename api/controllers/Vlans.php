@@ -8,14 +8,62 @@
 
 class Vlans_controller extends Common_api_functions {
 
-	/* public variables */
+
+	/**
+	 * _params provided
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $_params;
 
-	/* object holders */
-	protected $Database;			// Database object
-	protected $Sections;			// Sections object
-	protected $Tools;				// Tools object
-	protected $Admin;				// Admin object
+	/**
+	 * custom_fields
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $custom_fields;
+
+	/**
+	 * settings
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $settings;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Master Sections object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Sections;
+
+	/**
+	 * Master Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
+
+	/**
+	 * Master Admin object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Admin;
 
 
 	/**
@@ -25,6 +73,7 @@ class Vlans_controller extends Common_api_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
+	 * @param class $Response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -228,6 +277,7 @@ class Vlans_controller extends Common_api_functions {
 		$this->validate_vlan ();
 
 		# set variables for update
+		$values = array();
 		$values["vlanId"] = $this->_params->id;
 
 		# execute delete
