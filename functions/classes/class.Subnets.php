@@ -544,6 +544,7 @@ class Subnets extends Common_functions {
 	public function fetch_vlan_subnets ($vlanId, $sectionId=null) {
 	    # fetch settings and set subnet ordering
 	    $this->get_settings();
+	    $order = array();
 	    $order = $this->get_subnet_order ();
 
 	    # fetch section and set section ordering
@@ -611,6 +612,7 @@ class Subnets extends Common_functions {
 	public function fetch_vrf_subnets ($vrfId, $sectionId=null) {
 	    # fetch settings and set subnet ordering
 	    $this->get_settings();
+	    $order = array();
 	    $order = $this->get_subnet_order ();
 
 	    # fetch section and set section ordering

@@ -767,6 +767,7 @@ class Addresses extends Common_functions {
 	 * @access public
 	 * @param mixed $action
 	 * @param mixed $address
+	 * @param bool $print_error (default: true)
 	 * @return void
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
@@ -849,11 +850,11 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @param mixed $print_error
+	 * @param mixed $print_error (default: true)
 	 * @param mixed $id (default: NULL)
 	 * @return void
 	 */
-	public function ptr_add ($address, $print_error, $id = null) {
+	public function ptr_add ($address, $print_error = true, $id = null) {
 		// validate hostname
 		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
 		// fetch domain
@@ -880,10 +881,10 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @param mixed $print_error
+	 * @param mixed $print_error (default: true)
 	 * @return void
 	 */
-	public function ptr_edit ($address, $print_error) {
+	public function ptr_edit ($address, $print_error = true) {
 		// validate hostname
 		if ($this->validate_hostname ($address->dns_name)===false)	{
 			// remove pointer if it exists!
@@ -913,6 +914,7 @@ class Addresses extends Common_functions {
 			// update
 			$this->PowerDNS->update_domain_record ($domain->id, $update);
 			// ok
+			if ($print_error && php_sapi_name()!="cli")
 			$this->Result->show("success", "PTR record updated", false);
  		}
 	}
@@ -922,9 +924,10 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
+	 * @param mixed $print_error
 	 * @return void
 	 */
-	public function ptr_delete ($address) {
+	public function ptr_delete ($address, $print_error) {
 		$address = (object) $address;
 
 		// remove link from ipaddresses
@@ -936,8 +939,9 @@ class Addresses extends Common_functions {
 			$domain = $this->pdns_fetch_domain ($address->subnetId);
 			//remove
 			$this->PowerDNS->remove_domain_record ($domain->id, $address->PTR);
-			// ok
-			$this->Result->show("success", "PTR record removed", false);
+    		// ok
+    		if ($print_error && php_sapi_name()!="cli")
+    		$this->Result->show("success", "PTR record removed", false);
 		}
 	}
 
@@ -1276,7 +1280,7 @@ class Addresses extends Common_functions {
 		$address1 = $this->transform_address ($address1, "decimal");
 		$address2 = $this->transform_address ($address2, "decimal");
 		# check for space
-		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
+		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
 	}
 
 	/**

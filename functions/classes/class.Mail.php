@@ -10,24 +10,34 @@
 
 class phpipam_mail {
 
-	/**
-	 * public variables
-	 */
-	private $settings = null;						//(obj) phpipam settings
-	private $mail_settings = null;					//(obj) mail settings
 
 	/**
-	 * private variables
+	 * (obj) phpipam settings
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access private
 	 */
+	private $settings = null;
 
 	/**
-	 * protected variables
+	 * (obj) mail settings
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access private
 	 */
+	private $mail_settings = null;
 
 	/**
-	 * object holders
+	 * Php_mailer object
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public $Php_mailer;						//for Php mailer object
+	public $Php_mailer;
 
 
 
@@ -43,7 +53,7 @@ class phpipam_mail {
 	public function __construct ($settings, $mail_settings) {
 		# set settings and mailsettings
 		$this->settings = $settings;
-		$this->mail_settings= $mail_settings;
+		$this->mail_settings = $mail_settings;
 	}
 
 
@@ -56,7 +66,7 @@ class phpipam_mail {
 	 */
 	public function initialize_mailer () {
 		# we need phpmailer
-		require_once( dirname(__FILE__) . '/../PHPMailer/PHPMailerAutoload.php');
+		require_once( dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php');
 
 		# initialize object
 		$this->Php_mailer = new PHPMailer(true);			//localhost by default
@@ -64,7 +74,7 @@ class phpipam_mail {
 		$this->Php_mailer->SMTPDebug = 0;					//default no debugging
 
 		# localhost or smtp?
-		if($this->mail_settings->mtype=="smtp") 	{ $this->set_smtp(); }
+		if ($this->mail_settings->mtype=="smtp")    { $this->set_smtp(); }
 	}
 
 	/**
@@ -126,7 +136,7 @@ class phpipam_mail {
 	 * @return void
 	 */
 	public function set_debugging ($level = 2) {
-		$this->Php_mailer->SMTPDebug = $level==1 ? 1 : 2;
+		$this->Php_mailer->SMTPDebug = $level == 1 ? 1 : 2;
 		// output
 		$this->Php_mailer->Debugoutput = 'html';
 	}
