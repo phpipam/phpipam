@@ -13,7 +13,7 @@ class PowerDNS extends Common_functions {
 	 *
 	 * (default value: false)
 	 *
-	 * @var bool
+	 * @var bool|string
 	 * @access public
 	 */
 	public $error = false;
@@ -75,6 +75,14 @@ class PowerDNS extends Common_functions {
 	public $record_types;
 
 	/**
+	 * Last insert id
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $lastId;
+
+	/**
 	 * array of domains - index = id
 	 *
 	 * (default value: array())
@@ -99,6 +107,38 @@ class PowerDNS extends Common_functions {
 	 * @access protected
 	 */
 	protected $Database_pdns;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Result;
+
+	/**
+	 * Net_IPv4 object
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Net_IPv4;
+
+	/**
+	 * Net_IPv6object
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Net_IPv6;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Log;
 
 
 
@@ -232,6 +272,22 @@ class PowerDNS extends Common_functions {
 	 *
 	 *	https://doc.powerdns.com/md/types/
 	 *
+     * $record_types[] = "DS";
+     * $record_types[] = "SSHFP";
+     * $record_types[] = "SRV";
+     * $record_types[] = "DNSKEY";
+     * $record_types[] = "NSEC";
+     * $record_types[] = "RRSIG";
+     * $record_types[] = "AFSDB";
+     * $record_types[] = "CERT";
+     * $record_types[] = "HINFO";
+     * $record_types[] = "KEY";
+     * $record_types[] = "LOC";
+     * $record_types[] = "NAPTR";
+     * $record_types[] = "RP";
+     * $record_types[] = "TLSA";
+     *
+	 *
 	 *	For now only basic record types are available because of validations.
 	 *	If some other record is required uncomment it, note that input will not be validated
 	 *
@@ -239,6 +295,8 @@ class PowerDNS extends Common_functions {
 	 * @return void
 	 */
 	private function set_record_types () {
+    	// init
+    	$record_types = array();
 		// set array
 		$record_types[] = "A";
 		$record_types[] = "AAAA";
@@ -249,21 +307,6 @@ class PowerDNS extends Common_functions {
 		$record_types[] = "NS";
 		$record_types[] = "SOA";
 		$record_types[] = "SPF";
-
-		// $record_types[] = "DS";
-		// $record_types[] = "SSHFP";
-		// $record_types[] = "SRV";
-		// $record_types[] = "DNSKEY";
-		// $record_types[] = "NSEC";
-		// $record_types[] = "RRSIG";
-		// $record_types[] = "AFSDB";
-		// $record_types[] = "CERT";
-		// $record_types[] = "HINFO";
-		// $record_types[] = "KEY";
-		// $record_types[] = "LOC";
-		// $record_types[] = "NAPTR";
-		// $record_types[] = "RP";
-		// $record_types[] = "TLSA";
 
 		// save
 		$this->record_types = (object) $record_types;
@@ -276,6 +319,8 @@ class PowerDNS extends Common_functions {
 	 * @return void
 	 */
 	private function set_ttl_values () {
+    	// init
+    	$ttl = array();
 		// set array
 		$ttl[60] 	= "1 minute";
 		$ttl[180] 	= "3 minutes";
@@ -755,7 +800,7 @@ class PowerDNS extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $action
-	 * @param mixed $values
+	 * @param array $values
 	 * @return void
 	 */
 	public function record_edit ($action, $values) {
@@ -774,8 +819,8 @@ class PowerDNS extends Common_functions {
 	 * Create new record
 	 *
 	 * @access public
-	 * @param (object) $record
-	 * @param (boolean) $print_success
+	 * @param array $record
+	 * @param bool $print_success
 	 * @return void
 	 */
 	public function add_domain_record ($record, $print_success = true) {
@@ -967,7 +1012,7 @@ class PowerDNS extends Common_functions {
 	 *	- One entry for each NS
 	 *
 	 * @access public
-	 * @param (array) $values
+	 * @param array $values
 	 * @return void
 	 */
 	public function create_default_records ($values) {
@@ -978,6 +1023,7 @@ class PowerDNS extends Common_functions {
 		$this->db_set_db_settings ();
 
 		// content
+		$soa   = array();
 		$soa[] = array_shift(explode(";", $values['ns']));
 		$soa[] = str_replace ("@", ".", $values['hostmaster']);
 		$soa[] = $this->set_default_change_date ();
@@ -994,7 +1040,7 @@ class PowerDNS extends Common_functions {
 		if (sizeof($ns)>0) {
 			foreach($ns as $s) {
 				// validate
-				if($this->validate_hostname($s)===false)		{ $this->Result->show("danger", "Invalid NS". " $n", true); }
+				if($this->validate_hostname($s)===false)		{ $this->Result->show("danger", "Invalid NS". " $s", true); }
 				// save
 				$records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl']);
 			}
@@ -1241,13 +1287,21 @@ class PowerDNS extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $domain_id
+	 * @param mixed $old_name
 	 * @param mixed $name
 	 * @return void
 	 */
-	public function update_all_records ($domain_id, $name) {
+	public function update_all_records ($domain_id, $old_name, $name) {
 		// set query
-		$query = "update `records` set `name` = replace(`name`, ?, ?) where where `domain_id` = $domain_id;";
-
+		$query = "";
+		// execute
+		try { $this->Database_pdns->runQuery("update `records` set `name` = replace(`name`, ?, ?) where where `domain_id` = ?;", array($old_name, $name, $domain_id)); }
+		catch (Exception $e) {
+			// write log
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	/**
@@ -1259,7 +1313,7 @@ class PowerDNS extends Common_functions {
 	 */
 	public function remove_all_records ($domain_id) {
 		// execute
-		try { $res = $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ?;", array($domain_id)); }
+		try { $this->Database_pdns->runQuery("delete from `records` where `domain_id` = ?;", array($domain_id)); }
 		catch (Exception $e) {
 			// write log
 			$this->Log->write( "PowerDNS domain truncate", "Failed to remove all PowerDNS domain records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);
@@ -1428,7 +1482,7 @@ class PowerDNS extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $domain_id
-	 * @param mixed $$indexes (array of PTR indexes)
+	 * @param mixed $indexes (array of PTR indexes)
 	 * @return void
 	 */
 	public function remove_all_ptr_records ($domain_id, $indexes = array()) {
@@ -1442,6 +1496,7 @@ class PowerDNS extends Common_functions {
     	$query  = "delete from `records` where `domain_id` = ? and `type` = 'PTR'";
     	// loop
     	if (sizeof($indexes)>0) {
+        	$q_tmp = array();
         	$query .= " and (";
         	foreach ($indexes as $i) {
             	$q_tmp[] = " `id` = ? ";
@@ -1453,7 +1508,7 @@ class PowerDNS extends Common_functions {
     	}
 
 		// execute
-		try { $res = $this->Database_pdns->runQuery($query, $params); }
+		try { $this->Database_pdns->runQuery($query, $params); }
 		catch (Exception $e) {
 			// write log
 			$this->Log->write( "PowerDNS records delete", "Failed to delete all PowerDNS domain PTR records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);

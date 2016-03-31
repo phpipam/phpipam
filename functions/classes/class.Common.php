@@ -17,6 +17,57 @@ class Common_functions  {
 	public $settings = null;
 
 	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Database;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Net_IPv4
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Net_IPv4;
+
+	/**
+	 * Net_IPv6
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Net_IPv6;
+
+	/**
+	 * NET_DNS object
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $DNS2;
+
+	/**
+	 * debugging flag
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $debugging;
+
+
+
+
+	/**
 	 * fetches settings from database
 	 *
 	 * @access private
@@ -137,6 +188,8 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function reformat_empty_array_fields ($fields, $char = "/") {
+    	$out = array();
+    	// loop
 		foreach($fields as $k=>$v) {
 			if(is_null($v) || strlen($v)==0) {
 				$out[$k] = 	$char;
@@ -445,7 +498,6 @@ class Common_functions  {
 	public function validate_mac ($mac) {
     	// first put it to common format (1)
     	$mac = $this->reformat_mac_address ($mac);
-    	$mac_delimited =  explode(":", $mac);
     	// we permit empty
         if (strlen($mac)==0)                                                            { return true; }
     	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1)   { return false; }
@@ -542,7 +594,7 @@ class Common_functions  {
 	 * Transform IP address from decimal to dotted (167903488 -> 10.2.1.0)
 	 *
 	 * @access public
-	 * @param int $address
+	 * @param mixed $address
 	 * @return mixed dotted format
 	 */
 	public function transform_to_dotted ($address) {
@@ -570,6 +622,8 @@ class Common_functions  {
 	 * @return void
 	 */
 	public function json_error_decode ($error_int) {
+    	// init
+    	$error = array();
 		// error definitions
 		$error[0] = "JSON_ERROR_NONE";
 		$error[1] = "JSON_ERROR_DEPTH";
@@ -693,13 +747,13 @@ class Common_functions  {
 	 */
 	public function print_breadcrumbs ($Section, $Subnet, $req, $Address=null) {
 		# subnets
-		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs  ($Section, $Subnet, $req, $Address); }
+		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs ($Section, $Subnet, $req, $Address); }
 		# folders
-		if($req['page'] == "folder")		{ $this->print_folder_breadcrumbs  ($Section, $Subnet, $req); }
+		if($req['page'] == "folder")		{ $this->print_folder_breadcrumbs ($Section, $Subnet, $req); }
 		# admin
-		else if($req['page'] == "admin")	{ $this->print_admin_breadcrumbs   ($Section, $Subnet, $req); }
+		else if($req['page'] == "admin")	{ $this->print_admin_breadcrumbs (); }
 		# tools
-		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs   ($Section, $Subnet, $req); }
+		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs (); }
 	}
 
 	/**
@@ -728,7 +782,6 @@ class Common_functions  {
 
 			# all parents
 			foreach($parents as $parent) {
-				$parent = $parent;
 				$subnet = (array) $Subnet->fetch_subnet(null,$parent);
 				if($subnet['isFolder']==1) {
 					print "	<li><a href='".create_link("folder",$section['id'],$parent)."'><i class='icon-folder-open icon-gray'></i> $subnet[description]</a> <span class='divider'></span></li>";
@@ -756,13 +809,11 @@ class Common_functions  {
 	 * Print admin breadcrumbs
 	 *
 	 * @access private
-	 * @param obj $Section
-	 * @param obj $Subnet
-	 * @param mixed $req
 	 * @return void
 	 */
-	private function print_admin_breadcrumbs ($Section, $Subnet, $req) {
+	private function print_admin_breadcrumbs () {
 		# nothing here
+		return true;
 	}
 
 
@@ -809,12 +860,10 @@ class Common_functions  {
 	 * Prints tools breadcrumbs
 	 *
 	 * @access public
-	 * @param obj $Section
-	 * @param obj $Subnet
 	 * @param mixed $req
 	 * @return void
 	 */
-	private function print_tools_breadcrumbs ($Section, $Subnet, $req) {
+	private function print_tools_breadcrumbs ($req) {
 		if(isset($req['tpage'])) {
 			print "<ul class='breadcrumb'>";
 			print "	<li><a href='".create_link("tools")."'>"._('Tools')."</a> <span class='divider'></span></li>";

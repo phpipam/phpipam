@@ -95,7 +95,7 @@ if(!$PowerDNS->domain_edit($_POST['action'], $values))				{ $Result->show("dange
 else																{ $Result->show("success", _("Domain $_POST[action] successfull").'!', false); }
 
 # update all references if edit
-if ($_POST['action']=="edit" && $old_domain->name!=$values['name'])	{ $PowerDNS->update_all_records ($values['id'], $values['name']); }
+if ($_POST['action']=="edit" && $old_domain->name!=$values['name'])	{ $PowerDNS->update_all_records ($values['id'], $old_domain->name, $values['name']); }
 
 # create default records
 if ($_POST['action']=="add" && !isset($_POST['manual']))			{ $PowerDNS->create_default_records ($_POST); }
