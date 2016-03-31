@@ -25,7 +25,7 @@ $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 
 # set disabled for non-admins
-$disabled = $User->isadmin==true ? "" : "hidden";
+$disabled = $User->is_admin()==true ? "" : "hidden";
 
 
 # title

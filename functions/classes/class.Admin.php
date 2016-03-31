@@ -6,36 +6,104 @@
 
 class Admin extends Common_functions {
 
+
 	/**
-	 * public variables
+	 * (array of objects) to store users, user id is array index
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public $users;							//(array of objects) to store users, user id is array index
-	public $groups;							//(array of objects) to store groups, group id is array index
-	public $lastId = null;					//id of last edited/added table
+	public $users;
 
 	/**
-	 * private variables
+	 * (array of objects) to store groups, group id is array index
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	private $isadmin = false;				//flag is user is admin
-	private $admin_required = true;			//if admin user is required to connect. Can be overridden
+	public $groups;
 
 	/**
-	 * object holders
+	 * id of last edited/added table
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public	  $Result;						//for Result printing
-	protected $User;						//User object
-	protected $Database;					//for Database connection
-	protected $debugging = false;			//(bool) debugging flag
-	public $Log;							// for Logging connection
+	public $lastId = null;
 
+	/**
+	 * flag is user is admin
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access private
+	 */
+	private $isadmin = false;
+
+	/**
+	 * if admin user is required to connect. Can be overridden
+	 *
+	 * (default value: true)
+	 *
+	 * @var bool
+	 * @access private
+	 */
+	private $admin_required = true;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Result;
+
+	/**
+	 * User
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $User;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $debugging = false;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Log;
 
 
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $database
+	 * @param bool $admin_required (default: true)
 	 */
 	public function __construct (Database_PDO $database, $admin_required = true) {
 		# initialize database object
@@ -78,7 +146,7 @@ class Admin extends Common_functions {
 		# save settings
 		$this->settings = $this->User->settings;
 		# if required die !
-		if($this->User->isadmin!==true && $this->admin_required==true) {
+		if($this->User->is_admin()!==true && $this->admin_required==true) {
 			// popup ?
 			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
 			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }

@@ -20,7 +20,7 @@ $User->check_user_session();
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
 # admin check
-if($User->isadmin!==true) 	                    { $Result->show("danger", _('Admin privileges required'), true, true); }
+if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true, true); }
 
 # domain Id must be int
 if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true, true); }

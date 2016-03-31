@@ -57,9 +57,9 @@ class phpipam_rack extends Tools {
 	 * Logging class
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Log;
+	protected $Log;
 
     /**
      * Rack

@@ -1,9 +1,10 @@
 <?php
 
 /**
- *	phpIPAM class with common functions
+ * phpIPAM class with common functions, used in all other classes
+ *
+ * @author: Miha Petkovsek <miha.petkovsek@gmail.com>
  */
-
 class Common_functions  {
 
 	/**
@@ -20,49 +21,49 @@ class Common_functions  {
 	 * Database
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Database;
+	protected $Database;
 
 	/**
 	 * Result
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Result;
+	protected $Result;
 
 	/**
 	 * Net_IPv4
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Net_IPv4;
+	protected $Net_IPv4;
 
 	/**
 	 * Net_IPv6
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Net_IPv6;
+	protected $Net_IPv6;
 
 	/**
 	 * NET_DNS object
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $DNS2;
+	protected $DNS2;
 
 	/**
 	 * debugging flag
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $debugging;
+	protected $debugging;
 
 
 
@@ -166,11 +167,13 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param array|string $input
-	 * @return void
+	 * @return array|string
 	 */
 	public function strip_input_tags ($input) {
 		if(is_array($input)) {
-			foreach($input as $k=>$v) { $input[$k] = strip_tags($v); }
+			foreach($input as $k=>$v) {
+    			$input[$k] = strip_tags($v);
+            }
 		}
 		else {
 			$input = strip_tags($input);
@@ -183,7 +186,7 @@ class Common_functions  {
 	 * Changes empty array fields to specified character
 	 *
 	 * @access public
-	 * @param array $fields
+	 * @param array|object $fields
 	 * @param string $char (default: "/")
 	 * @return array
 	 */
@@ -205,13 +208,17 @@ class Common_functions  {
 	 * Removes empty array fields
 	 *
 	 * @access public
-	 * @param mixed $fields
-	 * @return void
+	 * @param array $fields
+	 * @return array
 	 */
 	public function remove_empty_array_fields ($fields) {
+    	// init
+    	$out = array();
+    	// loop
 		foreach($fields as $k=>$v) {
 			if(is_null($v) || strlen($v)==0) {
-			} else {
+			}
+			else {
 				$out[$k] = $v;
 			}
 		}
@@ -659,76 +666,6 @@ class Common_functions  {
     	}
 	}
 
-	/**
-	 * Prints pagination
-	 *
-	 * @access public
-	 * @param int $page	//current page number
-	 * @param int $pages	//number of all subpages
-	 * @return mixed
-	 */
-	public function print_powerdns_pagination ($page, $pages) {
-
-		print "<hr>";
-		print "<div class='text-right'>";
-		print "<ul class='pagination pagination-sm'>";
-
-		//previous - disabled?
-		if($page == 1)			{ print "<li class='disabled'><a href='#'>&laquo;</a></li>"; }
-		else					{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",($page-1))."'>&laquo;</a></li>"; }
-
-		# less than 8
-		if($pages<8) {
-			for($m=1; $m<=$pages; $m++) {
-				//active?
-				if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-				else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-			}
-		}
-		# more than seven
-		else {
-			//first page
-			if($page<=3) {
-				for($m=1; $m<=5; $m++) {
-					//active?
-					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-				}
-				print "<li class='disabled'><a href='#'>...</a></li>";
-				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", $pages)."'>$pages</a></li>";
-			}
-			//last pages
-			elseif($page>$pages-4) {
-				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", 1)."'>1</li>";
-				print "<li class='disabled'><a href='#'>...</a></li>";
-				for($m=$pages-4; $m<=$pages; $m++) {
-					//active?
-					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-				}
-			}
-			//page more than 2
-			else {
-				print "<li>				    <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", 1)."'>1</li>";
-				print "<li class='disabled'><a href='#'>...</a></li>";
-				for($m=$page-1; $m<=$page+1; $m++) {
-					//active?
-					if($page==$m)	{ print "<li class='active'><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-					else			{ print "<li>				<a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page",$m)."'>$m</a></li>"; }
-				}
-				print "<li class='disabled'><a href='#'>...</a></li>";
-				print "<li><a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", "$pages")."'>$pages</li>";
-			}
-		}
-
-		//next - disabled?
-		if($page == $pages)		{ print "<li class='disabled'><a href='#'>&raquo;</a></li>"; }
-		else					{ print "<li>				  <a href='".create_link("administration",$_GET['section'],$_GET['subnetId'],"page", ($page+1))."'>&raquo;</a></li>"; }
-
-		print "</ul>";
-		print "</div>";
-	}
-
 
 
 
@@ -750,8 +687,6 @@ class Common_functions  {
 		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs ($Section, $Subnet, $req, $Address); }
 		# folders
 		if($req['page'] == "folder")		{ $this->print_folder_breadcrumbs ($Section, $Subnet, $req); }
-		# admin
-		else if($req['page'] == "admin")	{ $this->print_admin_breadcrumbs (); }
 		# tools
 		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs ($req); }
 	}
@@ -804,18 +739,6 @@ class Common_functions  {
 			print "</ul>";
 		}
 	}
-
-	/**
-	 * Print admin breadcrumbs
-	 *
-	 * @access private
-	 * @return void
-	 */
-	private function print_admin_breadcrumbs () {
-		# nothing here
-		return true;
-	}
-
 
 	/**
 	 * Print folder breadcrumbs

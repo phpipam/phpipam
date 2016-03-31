@@ -28,7 +28,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
     <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
     <?php
     // snmp
-    if($User->isadmin===true && $User->settings->enableSNMP==1) { ?>
+    if($User->is_admin()===true && $User->settings->enableSNMP==1) { ?>
 	<button class="btn btn-sm btn-default" id="snmp-vrf" data-action="add"><i class="fa fa-cogs"></i> <?php print _('Scan for VRFs'); ?></button>
 	<?php } ?>
 

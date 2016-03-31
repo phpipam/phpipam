@@ -27,7 +27,7 @@ if($_GET['page']=="administration") { $csize++; }
 
 
 # set disabled for non-admins
-$disabled = $User->isadmin==true ? "" : "hidden";
+$disabled = $User->is_admin()==true ? "" : "hidden";
 
 
 # title
@@ -45,12 +45,12 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
     ?>
     <?php
     // l2 domains
-    if($User->isadmin===true && sizeof($vlan_domains)==1) { ?>
+    if($User->is_admin()===true && sizeof($vlan_domains)==1) { ?>
 	<button class="btn btn-sm btn-default editVLANdomain" data-action="add" data-domainid="" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add L2 Domain'); ?></button>
 	<?php } ?>
     <?php
     // snmp
-    if($User->isadmin===true && $User->settings->enableSNMP==1) { ?>
+    if($User->is_admin()===true && $User->settings->enableSNMP==1) { ?>
 	<button class="btn btn-sm btn-default" id="snmp-vlan" data-action="add" data-domainid="<?php print $vlan_domain->id; ?>"><i class="fa fa-cogs"></i> <?php print _('Scan for VLANs'); ?></button>
 	<?php } ?>
 	<button class="btn btn-sm btn-default editVLAN" data-action="add" data-domain="<?php print $vlan_domain->id; ?>" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add VLAN'); ?></button>

@@ -39,7 +39,7 @@ $_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
 	</div>
 
 	<!-- settings -->
-	<?php if($User->authenticated) {
+	<?php if($User->is_authenticated()) {
 	if($_SESSION['realipamusername']){
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>

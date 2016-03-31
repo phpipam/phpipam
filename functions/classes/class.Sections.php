@@ -6,25 +6,68 @@
 
 class Sections extends Common_functions {
 
-	/* public variables */
-	public $sections;						//(array of objects) to store sections, section ID is array index
-	public $lastInsertId = null;			//id of last insert
+	/**
+	 * (array of objects) to store sections, section ID is array index
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $sections;
 
-	/* protected variables */
-	protected $user = null;					//(object) for User profile
+	/**
+	 * id of last insert
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $lastInsertId = null;
 
-	/* object holders */
-	public $Result;							//for Result printing
-	protected $Database;					//for Database connection
-	public $Log;							//for Logging connection
+	/**
+	 * (object) for User profile
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $user = null;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Log;
+
 
 
 
 
 	/**
-	 * __construct function
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $database
+	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object

@@ -35,9 +35,9 @@ class phpipam_mail {
 	 * Php_mailer object
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Php_mailer;
+	protected $Php_mailer;
 
 
 

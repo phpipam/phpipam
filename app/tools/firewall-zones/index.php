@@ -30,7 +30,7 @@ if ($firewallZoneMapping!==false) {
 # display a link to the firewall zone management admin site
 print "<h4>"._(' Firewall Zones')."</h4><hr>";
 // manage link for admins
-if($User->isadmin) { print "<a href='".create_link('administration','firewall-zones')."' class='btn btn-sm btn-default'><i class='fa fa-pencil'></i> "._('Manage zones')."</a>"; }
+if($User->is_admin()) { print "<a href='".create_link('administration','firewall-zones')."' class='btn btn-sm btn-default'><i class='fa fa-pencil'></i> "._('Manage zones')."</a>"; }
 
 print "<br><br>";
 

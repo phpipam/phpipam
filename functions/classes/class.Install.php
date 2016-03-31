@@ -6,30 +6,75 @@
 
 class Install extends Common_functions {
 
+
 	/**
-	 * public varibles
+	 * to store DB exceptions
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public	  $exception;					//to store DB exceptions
+	public $exception;
 
 	/**
-	 * protected variables
+	 * Database parameters
+	 *
+	 * @var mixed
+	 * @access protected
 	 */
-	protected $db;							//db parameters
-	protected $debugging = false;			//(bool) debugging flag
+	protected $db;
 
 	/**
-	 * object holders
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
 	 */
-	protected $Result;						//for Result printing
-	protected $Database;					//for Database connection
-	protected $Database_root;				//for Database connection for installation
-	public $Log;							// for Logging connection
+	public $debugging = false;
 
 
 	/**
-	 * __construct method
+	 * Result
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Database_root - for initial installation
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database_root;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Log;
+
+
+
+
+
+	/**
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result

@@ -7,24 +7,52 @@
 
 class DNS extends Common_functions {
 
+
 	/**
-	 * private variables
+	 * settings
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
 	 */
-	public $settings = false;				// settings
-	private $type = "A";					// type of record to fetch
+	public $settings = false;
 
 	/**
-	 * object holders
+	 * type of record to fetch
+	 *
+	 * (default value: "A")
+	 *
+	 * @var string
+	 * @access private
 	 */
-	protected $Result;						//for Result printing
-	protected $Database;					//for Database connection
+	private $type = "A";
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
 
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $Database
+	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $Database, $settings=null) {
 		# initialize Result

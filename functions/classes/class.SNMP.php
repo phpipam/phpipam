@@ -9,7 +9,6 @@
 
 class phpipamSNMP extends Common_functions {
 
-
 	/**
 	 * Settings
 	 *

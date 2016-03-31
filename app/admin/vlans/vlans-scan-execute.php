@@ -23,7 +23,7 @@ print "<div class='alert-danger hidden'></div>";
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true); }
 # admin check
-if($User->isadmin!==true) 	                    { $Result->show("danger", _('Admin privileges required'), true); }
+if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true); }
 
 # set class
 $Snmp = new phpipamSNMP ();

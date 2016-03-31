@@ -19,9 +19,9 @@ class Logging extends Common_functions {
 	 * (default value: false)
 	 *
 	 * @var bool
-	 * @access protected
+	 * @access public
 	 */
-	protected $debugging = false;
+	public $debugging = false;
 
 	/**
 	 * log_type

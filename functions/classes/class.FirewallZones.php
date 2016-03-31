@@ -7,23 +7,73 @@
 
 class FirewallZones extends Common_functions {
 
-	/* variables */
-	public $error = false;				// connection error string
-	public $limit;						// number of results
-	public $orderby;					// order field
-	public $orderdir;					// $order direction
-	public $firewallZoneSettings;		// Settings
-	public $Log;						// for Logging connection
 
-	/* objects */
-	protected $Database;				// Database object - phpipam
+	/**
+	 * connection error string
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $error = false;
+
+	/**
+	 * number of results
+	 *
+	 * @var int
+	 * @access public
+	 */
+	public $limit;
+
+	/**
+	 * orderby
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $orderby;
+
+	/**
+	 * orderdir
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $orderdir;
+
+	/**
+	 * firewallZoneSettings
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $firewallZoneSettings;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
 
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $Database
+	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -926,7 +976,7 @@ class FirewallZones extends Common_functions {
 	public function generate_subnet_object ($id) {
 		# fetch the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
 
@@ -1001,7 +1051,7 @@ class FirewallZones extends Common_functions {
 	public function generate_address_object ($id,$dnsName) {
 		# fetch the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
 
@@ -1035,7 +1085,7 @@ class FirewallZones extends Common_functions {
 			}
 		}
 		return $firewallAddressObject;
-	} 
+	}
 
 	/**
 	 * update a firewall address object
@@ -1108,7 +1158,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		return false;
-	} 
+	}
 
 	/**
 	 * update a firewall address objects for a whole network
@@ -1120,10 +1170,10 @@ class FirewallZones extends Common_functions {
 	public function update_address_objects ($subnetId) {
 		# Addresses object
 		$this->Addresses = new Addresses ($this->Database);
-		
+
 		# fetch the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
 
@@ -1187,5 +1237,5 @@ class FirewallZones extends Common_functions {
 
 	}
 	return true;
-	} 
+	}
 }

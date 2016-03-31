@@ -112,7 +112,7 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
     	print "<tr>";
     	print "	<td></td>";
 
-    	if($User->isadmin) {
+    	if($User->is_admin()) {
     		print "	<td class='actions'>";
     		print "	<div class='btn-group'>";
     		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='".$device['id']."'><i class='fa fa-gray fa-pencil'></i></button>";

@@ -13,9 +13,25 @@
 
 class Result extends Common_functions {
 
-	/* exit methods - to override for api */
-	public $exit_method = "result";			// what to do when failed - result shows result, exception throws exception (for API)
-	public $die = false;					// die or not
+	/**
+	 *  what to do when failed - result shows result, exception throws exception (for API)
+	 *
+	 * (default value: "result")
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $exit_method = "result";
+
+	/**
+	 * Die flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $die = false;
 
 	/**
 	 * Show result

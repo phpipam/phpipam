@@ -100,9 +100,9 @@ class Subnets extends Common_functions {
 	 * for Result printing
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Result;
+	protected $Result;
 
 	/**
 	 * for Database connection
@@ -116,9 +116,9 @@ class Subnets extends Common_functions {
 	 * for Logging connection
 	 *
 	 * @var mixed
-	 * @access public
+	 * @access protected
 	 */
-	public $Log;
+	protected $Log;
 
 
 
@@ -729,10 +729,10 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function get_ipv4_masks () {
+    	$out = array();
 		# loop masks
 		for($mask=32; $mask>=0; $mask--) {
 			// initialize
-			$out = array();
 			$out[$mask] = new StdClass ();
 
 			// fake cidr
@@ -774,11 +774,11 @@ class Subnets extends Common_functions {
 	 * Checks if subnet has any slaves
 	 *
 	 * @access public
-	 * @param mixed $subnetid
+	 * @param mixed $subnetId
 	 * @return void
 	 */
-	public function has_slaves ($subnetid) {
-		try { $count = $this->Database->numObjectsFilter("subnets", "masterSubnetId", $subnetid); }
+	public function has_slaves ($subnetId) {
+		try { $count = $this->Database->numObjectsFilter("subnets", "masterSubnetId", $subnetId); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -791,11 +791,11 @@ class Subnets extends Common_functions {
 	 * Fetches all immediate slave subnets for specified subnetId
 	 *
 	 * @access public
-	 * @param mixed $subnetid
+	 * @param mixed $subnetId
 	 * @return void
 	 */
-	public function fetch_subnet_slaves ($subnetid) {
-		try { $slaves = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `masterSubnetId` = ? order by `subnet` asc;", array($subnetid)); }
+	public function fetch_subnet_slaves ($subnetId) {
+		try { $slaves = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `masterSubnetId` = ? order by `subnet` asc;", array($subnetId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1790,8 +1790,8 @@ class Subnets extends Common_functions {
 		$max_hosts = $this->get_max_hosts ($mask, $this->identify_address($this->transform_to_dotted($subnet_old->subnet)), false);
 
 		# create array of new subnets based on number of subnets (number)
+		$newsubnets = array();
 		for($m=0; $m<$number_of_subnets; $m++) {
-    		$newsubnets = array();
 			$newsubnets[$m] 		 = (array) $subnet_old;
 			$newsubnets[$m]['id']    = $m;
 			$newsubnets[$m]['mask']  = $mask;
@@ -2286,7 +2286,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param object $user
-	 * @param int $subnetid
+	 * @param int $subnetId
 	 * @return void
 	 */
 	public function check_permission ($user, $subnetId) {
@@ -3368,6 +3368,7 @@ class Subnets extends Common_functions {
 			return array("result"=>"error", "error"=>"Error connecting to ripe rest api");
 		}
 		else {
+    		$out = array();
 			// loop
 			if (isset($ripe_result['result']->objects->object[0]->attributes->attribute)) {
 				foreach($ripe_result['result']->objects->object[0]->attributes->attribute as $k=>$v) {
@@ -3531,3 +3532,5 @@ class Subnets extends Common_functions {
 
 
 }
+
+?>

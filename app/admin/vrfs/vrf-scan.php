@@ -20,7 +20,7 @@ $User->check_user_session();
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
 # admin check
-if($User->isadmin!==true) 	                    { $Result->show("danger", _('Admin privileges required'), true, true); }
+if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true, true); }
 
 # fetch devices that use get_routing_table query
 $scan_devices = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_vrf_table%", "id", true, true);
