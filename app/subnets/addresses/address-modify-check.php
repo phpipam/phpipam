@@ -220,7 +220,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 			$Log->object_result = "success";
 			$Log->user 			= $User->user;
 
-			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action", null);
+			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action");
 		}
 	}
 }
