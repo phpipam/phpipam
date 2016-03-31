@@ -34,17 +34,17 @@
  * @version 4.0.4
  * @link http://adldap.sourceforge.net/
  */
-require_once(dirname(__FILE__) . '/../adLDAP.php');
+require_once(dirname(__FILE__).'/../adLDAP.php');
 
 /**
 * MICROSOFT EXCHANGE FUNCTIONS
 */
 class adLDAPExchange {
     /**
-    * The current adLDAP connection via dependency injection
-    * 
-    * @var adLDAP
-    */
+     * The current adLDAP connection via dependency injection
+     * 
+     * @var adLDAP
+     */
     protected $adldap;
     
     public function __construct(adLDAP $adldap) {
@@ -59,14 +59,14 @@ class adLDAPExchange {
     *                            If the storage group has a different base_dn to the adLDAP configuration, set it using $base_dn
     * @param string $emailAddress The primary email address to add to this user
     * @param string $mailNickname The mail nick name.  If mail nickname is blank, the username will be used
-    * @param bool $mdbUseDefaults Indicates whether the store should use the default quota, rather than the per-mailbox quota.
+    * @param bool $useDefaults Indicates whether the store should use the default quota, rather than the per-mailbox quota.
     * @param string $baseDn Specify an alternative base_dn for the Exchange storage group
     * @param bool $isGUID Is the username passed a GUID or a samAccountName
-    * @return bool
+    * @return string|boolean
     */
-    public function createMailbox($username, $storageGroup, $emailAddress, $mailNickname=NULL, $useDefaults=TRUE, $baseDn=NULL, $isGUID=false)
+    public function createMailbox($username, $storageGroup, $emailAddress, $mailNickname = NULL, $useDefaults = TRUE, $baseDn = NULL, $isGUID = false)
     {
-        if ($username === NULL){ return "Missing compulsory field [username]"; }     
+        if ($username === NULL) { return "Missing compulsory field [username]"; }     
         if ($storageGroup === NULL) { return "Missing compulsory array [storagegroup]"; }
         if (!is_array($storageGroup)) { return "[storagegroup] must be an array"; }
         if ($emailAddress === NULL) { return "Missing compulsory field [emailAddress]"; }
@@ -75,7 +75,7 @@ class adLDAPExchange {
             $baseDn = $this->adldap->getBaseDn();   
         }
         
-        $container = "CN=" . implode(",CN=", $storageGroup);
+        $container = "CN=".implode(",CN=", $storageGroup);
         
         if ($mailNickname === NULL) { 
             $mailNickname = $username; 
@@ -84,7 +84,7 @@ class adLDAPExchange {
         
         $attributes = array(
             'exchange_homemdb'=>$container.",".$baseDn,
-            'exchange_proxyaddress'=>'SMTP:' . $emailAddress,
+            'exchange_proxyaddress'=>'SMTP:'.$emailAddress,
             'exchange_mailnickname'=>$mailNickname,
             'exchange_usedefaults'=>$mdbUseDefaults
         );
@@ -108,7 +108,7 @@ class adLDAPExchange {
     * @param string $surname Surname
     * @param string $givenName Given name
     * @param bool $isGUID Is the username passed a GUID or a samAccountName
-    * @return bool
+    * @return string|boolean
     */
     public function addX400($username, $country, $admd, $pdmd, $org, $surname, $givenName, $isGUID=false) 
     {
@@ -147,7 +147,7 @@ class adLDAPExchange {
     * @param string $emailAddress The email address to add to this user
     * @param bool $default Make this email address the default address, this is a bit more intensive as we have to demote any existing default addresses
     * @param bool $isGUID Is the username passed a GUID or a samAccountName
-    * @return bool
+    * @return string|boolean
     */
     public function addAddress($username, $emailAddress, $default = FALSE, $isGUID = false) 
     {
@@ -175,7 +175,7 @@ class adLDAPExchange {
                     $modAddresses['proxyAddresses'][$i] = $user[0]['proxyaddresses'][$i];
                 }
             }
-            $modAddresses['proxyAddresses'][(sizeof($user[0]['proxyaddresses'])-1)] = 'SMTP:' . $emailAddress;
+            $modAddresses['proxyAddresses'][(sizeof($user[0]['proxyaddresses']) - 1)] = 'SMTP:'.$emailAddress;
             
             $result = @ldap_mod_replace($this->adldap->getLdapConnection(), $userDn, $modAddresses);
             if ($result == false) { 
@@ -183,10 +183,9 @@ class adLDAPExchange {
             }
             
             return true;
-        }
-        else {
+        } else {
             // We do not have to demote an email address from the default so we can just add the new proxy address
-            $attributes['exchange_proxyaddress'] = $proxyValue . $emailAddress;
+            $attributes['exchange_proxyaddress'] = $proxyValue.$emailAddress;
             
             // Translate the update to the LDAP schema                
             $add = $this->adldap->adldap_schema($attributes);
@@ -198,7 +197,7 @@ class adLDAPExchange {
             // Do the update
             // Take out the @ to see any errors, usually this error might occur because the address already
             // exists in the list of proxyAddresses
-            $result = @ldap_mod_add($this->adldap->getLdapConnection(), $userDn,$add);
+            $result = @ldap_mod_add($this->adldap->getLdapConnection(), $userDn, $add);
             if ($result == false) { 
                 return false; 
             }
@@ -215,7 +214,7 @@ class adLDAPExchange {
     * @param string $username The username of the user to add the Exchange account to
     * @param string $emailAddress The email address to add to this user
     * @param bool $isGUID Is the username passed a GUID or a samAccountName
-    * @return bool
+    * @return string|boolean
     */
     public function deleteAddress($username, $emailAddress, $isGUID=false) 
     {
@@ -232,8 +231,7 @@ class adLDAPExchange {
             for ($i=0;$i<sizeof($user[0]['proxyaddresses']);$i++) {
                 if (strstr($user[0]['proxyaddresses'][$i], 'SMTP:') !== false && $user[0]['proxyaddresses'][$i] == 'SMTP:' . $emailAddress) {
                     $mod['proxyAddresses'][0] = 'SMTP:' . $emailAddress;
-                }
-                elseif (strstr($user[0]['proxyaddresses'][$i], 'smtp:') !== false && $user[0]['proxyaddresses'][$i] == 'smtp:' . $emailAddress) {
+                } elseif (strstr($user[0]['proxyaddresses'][$i], 'smtp:') !== false && $user[0]['proxyaddresses'][$i] == 'smtp:' . $emailAddress) {
                     $mod['proxyAddresses'][0] = 'smtp:' . $emailAddress;
                 }
             }
@@ -244,19 +242,18 @@ class adLDAPExchange {
             }
             
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
     /**
-    * Change the default address
-    * 
-    * @param string $username The username of the user to add the Exchange account to
-    * @param string $emailAddress The email address to make default
-    * @param bool $isGUID Is the username passed a GUID or a samAccountName
-    * @return bool
-    */
+     * Change the default address
+     * 
+     * @param string $username The username of the user to add the Exchange account to
+     * @param string $emailAddress The email address to make default
+     * @param bool $isGUID Is the username passed a GUID or a samAccountName
+     * @return bool
+     */
     public function primaryAddress($username, $emailAddress, $isGUID = false) 
     {
         if ($username === NULL) { return "Missing compulsory field [username]"; }     
@@ -298,7 +295,7 @@ class adLDAPExchange {
     * @param string $distinguishedName The contact to mail enable
     * @param string $emailAddress The email address to allow emails to be sent through
     * @param string $mailNickname The mailnickname for the contact in Exchange.  If NULL this will be set to the display name
-    * @return bool
+    * @return string|boolean
     */
     public function contactMailEnable($distinguishedName, $emailAddress, $mailNickname = NULL)
     {
@@ -328,11 +325,11 @@ class adLDAPExchange {
     }
     
     /**
-    * Returns a list of Exchange Servers in the ConfigurationNamingContext of the domain
-    * 
-    * @param array $attributes An array of the AD attributes you wish to return
-    * @return array
-    */
+     * Returns a list of Exchange Servers in the ConfigurationNamingContext of the domain
+     * 
+     * @param array $attributes An array of the AD attributes you wish to return
+     * @return array
+     */
     public function servers($attributes = array('cn','distinguishedname','serialnumber')) 
     {
         if (!$this->adldap->getLdapBind()){ return false; }
@@ -344,13 +341,13 @@ class adLDAPExchange {
     }
     
     /**
-    * Returns a list of Storage Groups in Exchange for a given mail server
-    * 
-    * @param string $exchangeServer The full DN of an Exchange server.  You can use exchange_servers() to find the DN for your server
-    * @param array $attributes An array of the AD attributes you wish to return
-    * @param bool $recursive If enabled this will automatically query the databases within a storage group
-    * @return array
-    */
+     * Returns a list of Storage Groups in Exchange for a given mail server
+     * 
+     * @param string $exchangeServer The full DN of an Exchange server.  You can use exchange_servers() to find the DN for your server
+     * @param array $attributes An array of the AD attributes you wish to return
+     * @param bool $recursive If enabled this will automatically query the databases within a storage group
+     * @return array
+     */
     public function storageGroups($exchangeServer, $attributes = array('cn','distinguishedname'), $recursive = NULL) 
     {
         if (!$this->adldap->getLdapBind()){ return false; }
@@ -362,7 +359,7 @@ class adLDAPExchange {
         $entries = @ldap_get_entries($this->adldap->getLdapConnection(), $sr);
 
         if ($recursive === true) {
-            for ($i=0; $i<$entries['count']; $i++) {
+            for ($i = 0; $i < $entries['count']; $i++) {
                 $entries[$i]['msexchprivatemdb'] = $this->storageDatabases($entries[$i]['distinguishedname'][0]);       
             }
         }
@@ -371,12 +368,12 @@ class adLDAPExchange {
     }
     
     /**
-    * Returns a list of Databases within any given storage group in Exchange for a given mail server
-    * 
-    * @param string $storageGroup The full DN of an Storage Group.  You can use exchange_storage_groups() to find the DN 
-    * @param array $attributes An array of the AD attributes you wish to return
-    * @return array
-    */
+     * Returns a list of Databases within any given storage group in Exchange for a given mail server
+     * 
+     * @param string $storageGroup The full DN of an Storage Group.  You can use exchange_storage_groups() to find the DN 
+     * @param array $attributes An array of the AD attributes you wish to return
+     * @return array
+     */
     public function storageDatabases($storageGroup, $attributes = array('cn','distinguishedname','displayname')) {
         if (!$this->adldap->getLdapBind()){ return false; }
         if ($storageGroup === NULL) { return "Missing compulsory field [storageGroup]"; }

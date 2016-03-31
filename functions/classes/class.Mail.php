@@ -77,8 +77,8 @@ class phpipam_mail {
 		//set smtp
 		$this->Php_mailer->isSMTP();
 		//tls, ssl?
-		if($this->mail_settings->msecure!='none')
-		$this->Php_mailer->SMTPSecure = $this->mail_settings->msecure=='ssl' ? 'ssl' : 'tls';
+		if ($this->mail_settings->msecure != 'none')
+		$this->Php_mailer->SMTPSecure = $this->mail_settings->msecure == 'ssl' ? 'ssl' : 'tls';
 		//server
 		$this->Php_mailer->Host = $this->mail_settings->mserver;
 		$this->Php_mailer->Port = $this->mail_settings->mport;
@@ -94,13 +94,12 @@ class phpipam_mail {
 	 * @access private
 	 * @return void
 	 */
-	private function set_smtp_auth () {
-		if($this->mail_settings->mauth=="yes") {
+	private function set_smtp_auth() {
+		if ($this->mail_settings->mauth == "yes") {
 			$this->Php_mailer->SMTPAuth = true;
 			$this->Php_mailer->Username = $this->mail_settings->muser;
 			$this->Php_mailer->Password = $this->mail_settings->mpass;
-		}
-		else {
+		} else {
 			$this->Php_mailer->SMTPAuth = false;
 		}
 	}
@@ -112,8 +111,8 @@ class phpipam_mail {
 	 * @param mixed $override_settings
 	 * @return void
 	 */
-	public function override_settings ($override_settings) {
-		foreach($override_settings as $k=>$s) {
+	public function override_settings($override_settings) {
+		foreach ($override_settings as $k=>$s) {
 			$this->mail_settings->$k = $s;
 		}
 	}
@@ -142,8 +141,8 @@ class phpipam_mail {
 	 * Generates mail message
 	 *
 	 * @access public
-	 * @param mixed $body
-	 * @return void
+	 * @param string $body
+	 * @return string
 	 */
 	public function generate_message ($body) {
 		$html[] = $this->set_header ();			//set header
@@ -171,7 +170,7 @@ class phpipam_mail {
 	 * set_header function.
 	 *
 	 * @access private
-	 * @return void
+	 * @return string
 	 */
 	private function set_header () {
 		$html[] = "<!DOCTYPE HTML PUBLIC '-//W3C//DTD HTML 4.01 Transitional//EN' 'http://www.w3.org/TR/html4/loose.dtd'>";
@@ -187,7 +186,7 @@ class phpipam_mail {
 	 * Begins message body
 	 *
 	 * @access private
-	 * @return void
+	 * @return string
 	 */
 	private function set_body_start () {
 		return "<body style='margin:0px;padding:0px;background:#f9f9f9;border-collapse:collapse;'>";
@@ -208,7 +207,7 @@ class phpipam_mail {
 	 * ends message body and html
 	 *
 	 * @access private
-	 * @return void
+	 * @return string
 	 */
 	private function set_body_end () {
 		return "</body></html>";
@@ -218,7 +217,7 @@ class phpipam_mail {
 	 * Sets footer
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
 	public function set_footer () {
 		$html[] = "<table style='margin-left:10px;margin-top:25px;width:auto;padding:0px;border-collapse:collapse;'>";
@@ -239,7 +238,7 @@ class phpipam_mail {
 	 * Sets plain footer
 	 *
 	 * @access public
-	 * @return void
+	 * @return string
 	 */
 	public function set_footer_plain () {
 		return "\r\n------------------------------\r\n".$this->settings->siteAdminName." (".$this->settings->siteAdminMail.") :: ".$this->settings->siteURL;

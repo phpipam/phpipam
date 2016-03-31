@@ -252,7 +252,7 @@ class Radius
         $this->_attributes_info[11] = array('Filter-Id', 'T');
         $this->_attributes_info[12] = array('Framed-MTU', 'I');
         $this->_attributes_info[13] = array('Framed-Compression', 'I');
-        $this->_attributes_info[14] = array( 'Login-IP-Host', 'A');
+        $this->_attributes_info[14] = array('Login-IP-Host', 'A');
         $this->_attributes_info[15] = array('Login-service', 'I');
         $this->_attributes_info[16] = array('Login-TCP-Port', 'I');
         $this->_attributes_info[17] = array('(unassigned)', '');
@@ -285,7 +285,7 @@ class Radius
         $this->_attributes_info[76] = array('Prompt', 'I');
 
         $this->_identifier_to_send = 0;
-        $this->_user_ip_address = (isset($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:'0.0.0.0');
+        $this->_user_ip_address = (isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '0.0.0.0');
 
         $this->GenerateRequestAuthenticator();
         $this->SetIpRadiusServer($ip_radius_server);
@@ -333,8 +333,7 @@ class Radius
         if (0 < $this->_last_error_code)
         {
             return $this->_last_error_message.' ('.$this->_last_error_code.')';
-        }
-        else
+        } else
         {
             return '';
         }
@@ -404,14 +403,14 @@ class Radius
         $encrypted_password = '';
         $padded_password = $password;
 
-        if (0 != (strlen($password)%16))
+        if (0 != (strlen($password) % 16))
         {
-            $padded_password .= str_repeat(chr(0),(16-strlen($password)%16));
+            $padded_password .= str_repeat(chr(0), (16 - strlen($password) % 16));
         }
 
         $previous_result = $this->_request_authenticator;
 
-        for ($full_loop = 0; $full_loop < (strlen($padded_password)/16); $full_loop++)
+        for ($full_loop = 0; $full_loop < (strlen($padded_password) / 16); $full_loop++)
         {
             $xor_value = md5($this->_shared_secret.$previous_result);
 
@@ -419,8 +418,8 @@ class Radius
             for ($xor_loop = 0; $xor_loop <= 15; $xor_loop++)
             {
                 $value1 = ord(substr($padded_password, ($full_loop * 16) + $xor_loop, 1));
-                $value2 = hexdec(substr($xor_value, 2*$xor_loop, 2));
-                $xor_result = $value1 ^ $value2;
+                $value2 = hexdec(substr($xor_value, 2 * $xor_loop, 2));
+                $xor_result = $value1^$value2;
                 $previous_result .= chr($xor_result);
             }
             $encrypted_password .= $previous_result;
@@ -436,10 +435,9 @@ class Radius
         if (0 < strlen($nas_ip_address))
         {
             $this->_nas_ip_address = gethostbyname($nas_ip_address);
-        }
-        else
+        } else
         {
-            $this->_nas_ip_address = gethostbyname(isset($_SERVER['SERVER_ADDR'])?$_SERVER['SERVER_ADDR']:'0.0.0.0');
+            $this->_nas_ip_address = gethostbyname(isset($_SERVER['SERVER_ADDR']) ? $_SERVER['SERVER_ADDR'] : '0.0.0.0');
         }
         $this->SetAttribute(4, $this->_nas_ip_address);
     }
@@ -503,19 +501,18 @@ class Radius
         $readable_attributes = '';
         if (isset($this->_attributes_received))
         {
-            foreach($this->_attributes_received as $one_received_attribute)
+            foreach ($this->_attributes_received as $one_received_attribute)
             {
                 $attributes_info = $this->GetAttributesInfo($one_received_attribute[0]);
                 $readable_attributes .= $attributes_info[0].": ";
                 if (26 == $one_received_attribute[0])
                 {
                     $vendor_array = $this->DecodeVendorSpecificContent($one_received_attribute[1]);
-                    foreach($vendor_array as $vendor_one)
+                    foreach ($vendor_array as $vendor_one)
                     {
                         $readable_attributes .= 'Vendor-Id: '.$vendor_one[0].", Vendor-type: ".$vendor_one[1].",  Attribute-specific: ".$vendor_one[2];
                     }
-                }
-                else
+                } else
                 {
                     $readable_attributes .= $one_received_attribute[1];
                 }
@@ -529,7 +526,7 @@ class Radius
     function GetAttribute($attribute_type)
     {
         $attribute_value = NULL;
-        foreach($this->_attributes_received as $one_received_attribute)
+        foreach ($this->_attributes_received as $one_received_attribute)
         {
             if (intval($attribute_type) == $one_received_attribute[0])
             {
@@ -546,8 +543,7 @@ class Radius
         if (isset($this->_radius_packet_info[intval($info_index)]))
         {
             return $this->_radius_packet_info[intval($info_index)];
-        }
-        else
+        } else
         {
             return '';
         }
@@ -559,10 +555,9 @@ class Radius
         if (isset($this->_attributes_info[intval($info_index)]))
         {
             return $this->_attributes_info[intval($info_index)];
-        }
-        else
+        } else
         {
-            return array('','');
+            return array('', '');
         }
     }
 
@@ -596,17 +591,17 @@ class Radius
             switch ($this->_attributes_info[$type][1])
             {
                 case 'T': // Text, 1-253 octets containing UTF-8 encoded ISO 10646 characters (RFC 2279).
-                    $temp_attribute = chr($type).chr(2+strlen($value)).$value;
+                    $temp_attribute = chr($type).chr(2 + strlen($value)).$value;
                     break;
                 case 'S': // String, 1-253 octets containing binary data (values 0 through 255 decimal, inclusive).
-                    $temp_attribute = chr($type).chr(2+strlen($value)).$value;
+                    $temp_attribute = chr($type).chr(2 + strlen($value)).$value;
                     break;
                 case 'A': // Address, 32 bit value, most significant octet first.
                     $ip_array = explode(".", $value);
                     $temp_attribute = chr($type).chr(6).chr($ip_array[0]).chr($ip_array[1]).chr($ip_array[2]).chr($ip_array[3]);
                     break;
                 case 'I': // Integer, 32 bit unsigned value, most significant octet first.
-                    $temp_attribute = chr($type).chr(6).chr(($value/(256*256*256))%256).chr(($value/(256*256))%256).chr(($value/(256))%256).chr($value%256);
+                    $temp_attribute = chr($type).chr(6).chr(($value / (256 * 256 * 256)) % 256).chr(($value / (256 * 256)) % 256).chr(($value / (256)) % 256).chr($value % 256);
                     break;
                 case 'D': // Time, 32 bit unsigned value, most significant octet first -- seconds since 00:00:00 UTC, January 1, 1970. (not used in this RFC)
                     $temp_attribute = NULL;
@@ -620,8 +615,7 @@ class Radius
         {
             $this->_attributes_to_send[$attribute_index] = $temp_attribute;
             $additional_debug = 'Modified';
-        }
-        else
+        } else
         {
             $this->_attributes_to_send[] = $temp_attribute;
             $additional_debug = 'Added';
@@ -649,7 +643,7 @@ class Radius
                     $attribute_value = ord(substr($attribute_raw_value, 0, 1)).'.'.ord(substr($attribute_raw_value, 1, 1)).'.'.ord(substr($attribute_raw_value, 2, 1)).'.'.ord(substr($attribute_raw_value, 3, 1));
                     break;
                 case 'I': // Integer, 32 bit unsigned value, most significant octet first.
-                    $attribute_value = (ord(substr($attribute_raw_value, 0, 1))*256*256*256)+(ord(substr($attribute_raw_value, 1, 1))*256*256)+(ord(substr($attribute_raw_value, 2, 1))*256)+ord(substr($attribute_raw_value, 3, 1));
+                    $attribute_value = (ord(substr($attribute_raw_value, 0, 1)) * 256 * 256 * 256) + (ord(substr($attribute_raw_value, 1, 1)) * 256 * 256) + (ord(substr($attribute_raw_value, 2, 1)) * 256) + ord(substr($attribute_raw_value, 3, 1));
                     break;
                 case 'D': // Time, 32 bit unsigned value, most significant octet first -- seconds since 00:00:00 UTC, January 1, 1970. (not used in this RFC)
                     $attribute_value = NULL;
@@ -669,13 +663,13 @@ class Radius
     {
         $result = array();
         $offset_in_raw = 0;
-        $vendor_id = (ord(substr($vendor_specific_raw_value, 0, 1))*256*256*256)+(ord(substr($vendor_specific_raw_value, 1, 1))*256*256)+(ord(substr($vendor_specific_raw_value, 2, 1))*256)+ord(substr($vendor_specific_raw_value, 3, 1));
+        $vendor_id = (ord(substr($vendor_specific_raw_value, 0, 1)) * 256 * 256 * 256) + (ord(substr($vendor_specific_raw_value, 1, 1)) * 256 * 256) + (ord(substr($vendor_specific_raw_value, 2, 1)) * 256) + ord(substr($vendor_specific_raw_value, 3, 1));
         $offset_in_raw += 4;
         while ($offset_in_raw < strlen($vendor_specific_raw_value))
         {
-            $vendor_type = (ord(substr($vendor_specific_raw_value, 0+$offset_in_raw, 1)));
-            $vendor_length = (ord(substr($vendor_specific_raw_value, 1+$offset_in_raw, 1)));
-            $attribute_specific = substr($vendor_specific_raw_value, 2+$offset_in_raw, $vendor_length);
+            $vendor_type = (ord(substr($vendor_specific_raw_value, 0 + $offset_in_raw, 1)));
+            $vendor_length = (ord(substr($vendor_specific_raw_value, 1 + $offset_in_raw, 1)));
+            $attribute_specific = substr($vendor_specific_raw_value, 2 + $offset_in_raw, $vendor_length);
             $result[] = array($vendor_id, $vendor_type, $attribute_specific);
             $offset_in_raw += ($vendor_length);
         }
@@ -706,11 +700,10 @@ class Radius
             $this->SetPassword($password);
         }
 
-        if ($state!==NULL)
+        if ($state !== NULL)
         {
             $this->SetAttribute(24, $state);
-        }
-        else
+        } else
         {
             $this->SetAttribute(6, 1); // 1=Login
         }
@@ -732,8 +725,8 @@ class Radius
 
         $packet_data  = chr($this->_radius_packet_to_send);
         $packet_data .= chr($this->GetNextIdentifier());
-        $packet_data .= chr(intval($packet_length/256));
-        $packet_data .= chr(intval($packet_length%256));
+        $packet_data .= chr(intval($packet_length / 256));
+        $packet_data .= chr(intval($packet_length % 256));
         $packet_data .= $this->_request_authenticator;
         $packet_data .= $attributes_content;
 
@@ -743,27 +736,24 @@ class Radius
         {
             $this->_last_error_code    = socket_last_error();
             $this->_last_error_message = socket_strerror($this->_last_error_code);
-        }
-        elseif (FALSE === socket_connect($_socket_to_server, $this->_ip_radius_server, $this->_authentication_port))
+        } elseif (FALSE === socket_connect($_socket_to_server, $this->_ip_radius_server, $this->_authentication_port))
         {
             $this->_last_error_code    = socket_last_error();
             $this->_last_error_message = socket_strerror($this->_last_error_code);
-        }
-        elseif (FALSE === socket_write($_socket_to_server, $packet_data, $packet_length))
+        } elseif (FALSE === socket_write($_socket_to_server, $packet_data, $packet_length))
         {
             $this->_last_error_code    = socket_last_error();
             $this->_last_error_message = socket_strerror($this->_last_error_code);
-        }
-        else
+        } else
         {
             $this->DebugInfo('<b>Packet type '.$this->_radius_packet_to_send.' ('.$this->GetRadiusPacketInfo($this->_radius_packet_to_send).')'.' sent</b>');
             if ($this->_debug_mode)
             {
                 $readable_attributes = '';
-                foreach($this->_attributes_to_send as $one_attribute_to_send)
+                foreach ($this->_attributes_to_send as $one_attribute_to_send)
                 {
-                    $attribute_info = $this->GetAttributesInfo(ord(substr($one_attribute_to_send,0,1)));
-                    $this->DebugInfo('Attribute '.ord(substr($one_attribute_to_send,0,1)).' ('.$attribute_info[0].'), length '.(ord(substr($one_attribute_to_send,1,1))-2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr($one_attribute_to_send,2), ord(substr($one_attribute_to_send,0,1))).'</em>');
+                    $attribute_info = $this->GetAttributesInfo(ord(substr($one_attribute_to_send, 0, 1)));
+                    $this->DebugInfo('Attribute '.ord(substr($one_attribute_to_send, 0, 1)).' ('.$attribute_info[0].'), length '.(ord(substr($one_attribute_to_send, 1, 1)) - 2).', format '.$attribute_info[1].', value <em>'.$this->DecodeAttribute(substr($one_attribute_to_send, 2), ord(substr($one_attribute_to_send, 0, 1))).'</em>');
                 }
             }
             $read_socket_array   = array($_socket_to_server);
@@ -776,19 +766,19 @@ class Radius
             {
                 if (in_array($_socket_to_server, $read_socket_array))
                 {
-                    if (FALSE === ($received_packet = @socket_read($_socket_to_server, 1024))) // @ used, than no error is displayed if the connection is closed by the remote host
+                    if (FALSE === ($received_packet = @socket_read($_socket_to_server, 1024))) {
+                        // @ used, than no error is displayed if the connection is closed by the remote host
                     {
                         $received_packet = chr(0);
+                    }
                         $this->_last_error_code    = socket_last_error();
                         $this->_last_error_message = socket_strerror($this->_last_error_code);
-                    }
-                    else
+                    } else
                     {
                         socket_close($_socket_to_server);
                     }
                 }
-            }
-            else
+            } else
             {
                 socket_close($_socket_to_server);
             }
@@ -806,9 +796,9 @@ class Radius
             $attributes_content = substr($received_packet, 20, ($packet_length - 4 - 16));
             while (strlen($attributes_content) > 2)
             {
-                $attribute_type = intval(ord(substr($attributes_content,0,1)));
-                $attribute_length = intval(ord(substr($attributes_content,1,1)));
-                $attribute_raw_value = substr($attributes_content,2,$attribute_length-2);
+                $attribute_type = intval(ord(substr($attributes_content, 0, 1)));
+                $attribute_length = intval(ord(substr($attributes_content, 1, 1)));
+                $attribute_raw_value = substr($attributes_content, 2, $attribute_length - 2);
                 $attributes_content = substr($attributes_content, $attribute_length);
 
                 $attribute_value = $this->DecodeAttribute($attribute_raw_value, $attribute_type);
@@ -817,14 +807,13 @@ class Radius
                 if (26 == $attribute_type)
                 {
                     $vendor_array = $this->DecodeVendorSpecificContent($attribute_value);
-                    foreach($vendor_array as $vendor_one)
+                    foreach ($vendor_array as $vendor_one)
                     {
-                        $this->DebugInfo('Attribute '.$attribute_type.' ('.$attribute_info[0].'), length '.($attribute_length-2).', format '.$attribute_info[1].', Vendor-Id: '.$vendor_one[0].", Vendor-type: ".$vendor_one[1].",  Attribute-specific: ".$vendor_one[2]);
+                        $this->DebugInfo('Attribute '.$attribute_type.' ('.$attribute_info[0].'), length '.($attribute_length - 2).', format '.$attribute_info[1].', Vendor-Id: '.$vendor_one[0].", Vendor-type: ".$vendor_one[1].",  Attribute-specific: ".$vendor_one[2]);
                     }
-                }
-                else
+                } else
                 {
-                    $this->DebugInfo('Attribute '.$attribute_type.' ('.$attribute_info[0].'), length '.($attribute_length-2).', format '.$attribute_info[1].', value <em>'.$attribute_value.'</em>');
+                    $this->DebugInfo('Attribute '.$attribute_type.' ('.$attribute_info[0].'), length '.($attribute_length - 2).', format '.$attribute_info[1].', value <em>'.$attribute_value.'</em>');
                 }
 
                 $this->_attributes_received[] = array($attribute_type, $attribute_value);
