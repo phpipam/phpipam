@@ -1116,7 +1116,6 @@ class User extends Common_functions {
         # initialize radius class
         require( dirname(__FILE__) . '/class.Radius.php' );
         $Radius = new Radius ($params->hostname, $params->secret, $params->suffix, $params->timeout, $params->port);
-        $Radius->SetNasIpAddress($params->hostname);
         //debugging
         $this->debugging!==true ? : $Radius->SetDebugMode(TRUE);
 
