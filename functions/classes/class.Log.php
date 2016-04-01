@@ -145,9 +145,9 @@ class Logging extends Common_functions {
 	 * user details
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $user;
+	public $user;
 
 	/**
 	 * id of user
