@@ -1180,8 +1180,9 @@ $(document).on("click", ".groupselect", function() {
 	var gdescription = $(this).attr("data-gdescription");
 	var gmembers = $(this).attr("data-members");
 	var gid = $(this).attr("data-gid");
+	var csrf_cookie = $(this).attr("data-csrf_cookie");
 
-	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers}, function(data) {
+	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers, csrf_cookie:csrf_cookie}, function(data) {
 		$('div.adgroup-'+gid).html(data)
 		hideSpinner();
 	});

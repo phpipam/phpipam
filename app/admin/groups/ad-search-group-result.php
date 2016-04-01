@@ -22,7 +22,7 @@ $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->create_csrf_cookie (2);
 
 
 //parse parameters
