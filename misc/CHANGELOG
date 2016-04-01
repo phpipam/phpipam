@@ -23,6 +23,8 @@
     + Widgets:
         + New threshold widget;
         + New inactive hosts widget;
+    + PowerDNS:
+        + Default domain for PTR records (if hostname is not set)
     + jQuery tables;
 
 

@@ -22,9 +22,9 @@ class PowerDNS extends Common_functions {
      * Database settings
      *
      * @var array|object
-     * @access protected
+     * @access public
      */
-    protected $db_settings;
+    public $db_settings;
 
     /**
      * Default settings

@@ -36,6 +36,7 @@ $old_values = json_decode($User->settings->powerDNS);
 
 $values->ns			= $old_values->ns;
 $values->hostmaster	= $old_values->hostmaster;
+$values->def_ptr_domain	= $old_values->def_ptr_domain;
 $values->refresh 	= $old_values->refresh;
 $values->retry 		= $old_values->retry;
 $values->expire 	= $old_values->expire;

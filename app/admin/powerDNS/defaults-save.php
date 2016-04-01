@@ -38,6 +38,7 @@ $values->autoserial = @$old_values->autoserial;
 // defaults
 $values->ns 		= $_POST['ns'];
 $values->hostmaster = $_POST['hostmaster'];
+$values->def_ptr_domain = $_POST['def_ptr_domain'];
 $values->refresh 	= $_POST['refresh'];
 $values->retry 		= $_POST['retry'];
 $values->expire 	= $_POST['expire'];

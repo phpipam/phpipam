@@ -855,12 +855,19 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	public function ptr_add ($address, $print_error = true, $id = null) {
+		// decode values
+		$values = json_decode($this->settings->powerDNS);
+
+    	// set default hostname for PTR if set
+    	if (strlen($address->dns_name)==0) {
+        	if (strlen($values->def_ptr_domain)>0) {
+            	$address->dns_name = $values->def_ptr_domain;
+        	}
+    	}
 		// validate hostname
 		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
 		// fetch domain
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
-		// decode values
-		$values = json_decode($this->settings->powerDNS);
 
 		// formulate new record
 		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->dns_name, $values->ttl);
