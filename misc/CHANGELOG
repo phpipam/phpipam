@@ -1,3 +1,11 @@
+== 1.2.2
+
+    Bugfixes:
+    --------
+    + Fixed issue with adding domain groups;
+    + Fixed sorting and pagination issue on address table;
+    + Fixed incorrect top subnets percentage graph;
+
 == 1.2.1
 
 	Enhancements:

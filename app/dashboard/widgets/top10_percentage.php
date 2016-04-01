@@ -62,7 +62,6 @@ foreach($top_subnets as $subnet) {
 # set maximum for graph
 $max = str_replace(",", ".", $top_subnets[0]->percentage);
 
-
 # only print if some hosts exist
 if(sizeof($top_subnets)>0) {
 ?>
@@ -88,11 +87,11 @@ $(function () {
 
 				# odd/even if more than 5 items
 				if(sizeof($top_subnets) > 5) {
-					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 				}
 				else {
-								{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+								{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 				}
 				$m++;
 			}

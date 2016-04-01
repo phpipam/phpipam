@@ -61,6 +61,10 @@ else {
 
 	# set permissions
 	$subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);
+
+	# add section and subnetid
+	$_GET['section']  = $subnet['sectionId'];
+	$_GET['subnetId'] = $subnet['id'];
 }
 
 
