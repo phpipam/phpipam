@@ -2324,7 +2324,7 @@ class Tools extends Common_functions {
 						as `usage` from `subnets` as `s`
 						where `mask` < 31 and cast(`subnet` as UNSIGNED) < '4294967295'
 						order by `usage` desc
-						) as `d` where `usage` > 0 order by `usage` desc $limit;";
+						) as `d` where `usage` > 0 order by `percentage` desc $limit;";
 	    }
 		# ipv4 stats
 		elseif($type == "IPv4") {
