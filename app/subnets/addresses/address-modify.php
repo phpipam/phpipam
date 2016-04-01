@@ -116,8 +116,16 @@ var switch_options = {
     offColor: 'default',
     size: "mini"
 };
+var switch_options_danger = {
+	onText: "Yes",
+	offText: "No",
+    onColor: 'danger',
+    offColor: 'default',
+    size: "mini"
+};
 
 $(".input-switch").bootstrapSwitch(switch_options);
+$(".input-switch-danger").bootstrapSwitch(switch_options_danger);
 
 
 <?php if (($act=="add"||$act=="edit") && $User->settings->enableMulticast==1) { ?>
@@ -363,7 +371,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	<tr>
 		<td><?php print _("Is gateway"); ?></td>
 		<td>
-			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?>>
+			<input type="checkbox" name="is_gateway" class="input-switch" value="1" <?php if(@$address['is_gateway']==1) print "checked"; ?> <?php print $delete; ?>>
 		</td>
 	</tr>
 
@@ -395,6 +403,81 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print ' 	<input type="checkbox" class="ip_addr input-switch" name="PTRignore" value="1" '.$checked.' '.$delete.'> <span class="text-muted">'. _('Dont create PTR records').'</span>';
 	 	print '</td>';
 	 	print '</tr>';
+
+		//remove all associated queries if delete
+		if ($_POST['action']=="delete") {
+    		// check
+    		$PowerDNS = new PowerDNS ($Database);
+    		$records  = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
+    		$records2 = $PowerDNS->search_records ("content", $address['ip'], 'content', true);
+
+    		if ($records!==false || $records2!==false) {
+        		// form
+        		print '<tr>';
+        	 	print '<td>'._("Remove DNS records").'</td>';
+        	 	print '<td>';
+        		print ' 	<input type="checkbox" class="ip_addr input-switch-danger alert-danger" data-on-color="danger" name="remove_all_dns_records" value="1" checked> <span class="text-muted">'. _('Remove all associated DNS records:').'</span>';
+        	 	print '</td>';
+        	 	print '</tr>';
+        	 	// records
+        		print '<tr>';
+        	 	print '<td></td>';
+        	 	print '<td>';
+        	 	print "<hr>";
+
+        	 	// hostname records
+        	 	if ($records!==false) {
+            	 	print " <div style='margin-left:60px'>";
+            	 	$dns_records[] = $address['dns_name'];
+            	 	$dns_records[] = "<ul class='submenu-dns'>";
+            	 	foreach ($records as $r) {
+    					if($r->type!="SOA" && $r->type!="NS")
+                        $dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$r->type</span> $r->content </li>";
+
+            	 	}
+            	 	$dns_records[] = "</ul>";
+            	 	print implode("\n", $dns_records);
+            	 	print " </div>";
+                     unset($dns_records);
+        	 	}
+
+        	 	// IP records
+        	 	if ($records2!==false) {
+            	 	print " <div style='margin-left:60px'>";
+            	 	$dns_records[] = $address['ip'];
+            	 	$dns_records[] = "<ul class='submenu-dns'>";
+            	 	foreach ($records2 as $r) {
+    					if($r->type!="SOA" && $r->type!="NS")
+                        $dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2'>$r->type</span> $r->name </li>";
+
+            	 	}
+                    //search also for CNAME records
+                    $dns_cname_unique = array();
+                    $dns_records_cname = $PowerDNS->seach_aliases ($r->name);
+                    if($dns_records_cname!==false) {
+                        foreach ($dns_records_cname as $cn) {
+                            if (!in_array($cn->name, $dns_cname_unique)) {
+                                $cname[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$cn->id' data-domain_id='$cn->domain_id'>$cn->type</span> $cn->name </li>";
+                                $dns_cname_unique[] = $cn->name;
+                            }
+                        }
+                    }
+                    // merge cnames
+                    if (isset($cname)) {
+                        foreach ($cname as $cna) {
+                            $dns_records[] = $cna;
+                        }
+                    }
+
+            	 	$dns_records[] = "</ul>";
+            	 	print implode("\n", $dns_records);
+            	 	print " </div>";
+        	 	}
+
+        	 	print '</td>';
+        	 	print '</tr>';
+    	 	}
+	 	}
 	}
 	?>
 

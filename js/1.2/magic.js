@@ -455,7 +455,7 @@ $(document).on("click", "button#editIPAddressSubmit, .editIPSubmitDelete", funct
     //replace delete if from visual
     if($(this).attr('data-action') == "all-delete" ) { postdata += '&action-visual=delete';}
 
-    $.post('app/subnets/addresses/address-modify-check.php', postdata, function(data) {
+    $.post('app/subnets/addresses/address-modify-submit.php', postdata, function(data) {
         $('div.addnew_check').html(data);
         $('div.addnew_check').slideDown('fast');
         //reload after 2 seconds if succeeded!

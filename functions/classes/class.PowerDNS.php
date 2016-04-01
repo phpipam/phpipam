@@ -936,6 +936,27 @@ class PowerDNS extends Common_functions {
     }
 
     /**
+     * Remove all records for IP address and hostname.
+     *
+     * @access public
+     * @param mixed $hostname
+     * @param mixed $ip
+     * @return void
+     */
+    public function pdns_remove_ip_and_hostname_records ($hostname, $ip) {
+         // set query
+        $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+        // run
+		try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		#result
+		return true;
+    }
+
+    /**
      * Updates content of specific record
      *
      * @access public

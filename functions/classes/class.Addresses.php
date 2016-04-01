@@ -501,6 +501,10 @@ class Addresses extends Common_functions {
 		# edit DNS PTR record
 		$this->ptr_modify ("delete", $address);
 
+		# remove all referenced records
+		if(@$address['remove_all_dns_records']=="1") {
+    		$this->pdns_remove_ip_and_hostname_records ($address);
+        }
 		# ok
 		return true;
 	}
@@ -807,6 +811,26 @@ class Addresses extends Common_functions {
     		elseif($action=="delete")		{ return $this->ptr_delete ($address, $print_error); }						//delete PTR
     		else							{ return $this->Result->show("danger", _("Invalid PDNS action"), true); }
         }
+	}
+
+	/**
+	 * This function removes all records - ip and hostname referenced by address.
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function pdns_remove_ip_and_hostname_records ($address) {
+        // fetch settings
+        $this->settings ();
+        //check if powerdns enabled
+        if ($this->settings->enablePowerDNS!=1) {
+            return false;
+        }
+		// validate db
+		$this->pdns_validate_connection ();
+		// execute
+		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['dns_name'], $address['ip_addr']);
 	}
 
 	/**
