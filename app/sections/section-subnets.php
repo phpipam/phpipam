@@ -25,6 +25,7 @@ print "<h4>"._('Available subnets')."</h4>";
 # check permission
 $permission = $Sections->check_permission ($User->user, $_GET['section']);
 
+
 # permitted
 if($permission != 0) {
 

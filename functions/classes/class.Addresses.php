@@ -1240,11 +1240,13 @@ class Addresses extends Common_functions {
 		$order[0] = $this->Database->escape ($order[0]);
 		$order[1] = $this->Database->escape ($order[1]);
 
+		$ids = array();
+		$ids[] = $subnetId;
+
 	    # set query to fetch all ip addresses for specified subnets or just count
-		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = "" '; }
-		else	 	{ $query = 'select * from `ipaddresses` where `subnetId` = "" '; }
+		if($count) 	{ $query = 'select count(*) as cnt from `ipaddresses` where `subnetId` = ? '; }
+		else	 	{ $query = 'select * from `ipaddresses` where `subnetId` = ? '; }
 	    foreach($this->Subnets->slaves as $subnetId2) {
-    	    $ids = array();
 		    # ignore orphaned
 	    	if($subnetId2 != $subnetId) {
 				$query  .= " or `subnetId` = ? ";

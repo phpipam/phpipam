@@ -2763,9 +2763,9 @@ class Subnets extends Common_functions {
 
 		# create loop array
 		if(sizeof($subnets) > 0) {
+        $children_subnets = array();
 		foreach ( $subnets as $item ) {
 			$item = (array) $item;
-			$children_subnets = array();
 			$children_subnets[$item['masterSubnetId']][] = $item;
 		}
 		}
