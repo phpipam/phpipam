@@ -1,4 +1,4 @@
-<?php
+1<?php
 
 /**
  *	phpIPAM Subnets class
@@ -1508,7 +1508,7 @@ class Subnets extends Common_functions {
 		            # ignore folders!
 		            if($existing_subnet->isFolder!=1) {
 	                	# check if it is nested properly - inside its own parent, otherwise check for overlapping
-	                	$allParents = $this->$this->fetch_parents_recursive($masterSubnetId);
+	                	$allParents = $this->fetch_parents_recursive($masterSubnetId);
 	                	//loop
 	                	$ignore = false;
 	                	foreach($allParents as $kp=>$p) {

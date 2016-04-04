@@ -7,6 +7,9 @@
 # filter ip value
 $_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
 
+# verify that user is logged in
+$User->check_user_session();
+
 ?>
 
 <div class="container-fluid">
@@ -39,7 +42,7 @@ $_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
 	</div>
 
 	<!-- settings -->
-	<?php if($User->is_authenticated()) {
+	<?php
 	if($_SESSION['realipamusername']){
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>
@@ -58,5 +61,5 @@ $_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
 
 	<!-- logout -->
 	<a  href="<?php print create_link("login"); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
-	<?php }} ?>
+	<?php } ?>
 </div>

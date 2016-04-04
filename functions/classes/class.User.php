@@ -294,10 +294,10 @@ class User extends Common_functions {
     /**
      * Checks if user is authenticated - session is set
      *
-     * @access public
+     * @access private
      * @return void
      */
-    public function is_authenticated () {
+    private function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
             if( isset( $_SESSION['ipamusername'] ) && strlen( @$_SESSION['ipamusername'] )>0 ) {
@@ -322,8 +322,6 @@ class User extends Common_functions {
                 $this->authenticated = false;
             }
         }
-        # return
-        return $this->authenticated;
     }
 
     /**
@@ -350,7 +348,7 @@ class User extends Common_functions {
      */
     public function check_user_session ($redirect = true) {
         # not authenticated
-        if($this->authenticated===false && $redirect) {
+        if($this->authenticated===false) {
             # set url
             $url = $this->createURL();
 
@@ -368,15 +366,22 @@ class User extends Common_functions {
             elseif ($this->timeout) {
                 # set redirect cookie
                 $this->set_redirect_cookie ();
+                # redirect
+                if ($redirect)
                 header("Location:".$url.create_link ("login","timeout"));
                 die();
             }
             else {
                 # set redirect cookie
                 $this->set_redirect_cookie ();
+                # redirect
+                if ($redirect)
                 header("Location:".$url.create_link ("login"));
                 die();
             }
+        }
+        else {
+            return true;
         }
     }
 

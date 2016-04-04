@@ -17,7 +17,7 @@ $uwidgets = explode(";",$User->user->widgets);	//selected
 $uwidgets = array_filter((array) $uwidgets);
 
 # fetch all widgets
-$widgets = $Tools->fetch_widgets ($User->is_admin(), false);
+$widgets = $Tools->fetch_widgets ($User->is_admin(false), false);
 $widgets = (array) $widgets;
 
 ?>

@@ -74,6 +74,7 @@ $(function () {
     var data = [
     <?php
 	$m=0;
+	$unique_descriptions = array();
 	// loop
 	foreach ($top_subnets as $subnet) {
 		# cast
@@ -83,10 +84,22 @@ $(function () {
 			$sp = $Subnets-> check_permission ($User->user, $subnet['id']);
 			if($sp != "0") {
 				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
+				// save description - full
+				$subnet['descriptionLong'] = $subnet['description'];
                 //length check
-                $subnet['description'] = strlen($subnet['description'])>10 ? substr($subnet['description'], 0,10)."_$m..." : $subnet['description'];
+                $subnet['description'] = strlen($subnet['description'])>20 ? substr($subnet['description'], 0,20)."..." : $subnet['description'];
 
-				//$subnet['descriptionLong'] = $subnet['description'];
+                // if desc already exists append index
+                if (in_array($subnet['description'], $unique_descriptions)) {
+                    while (in_array($subnet['description']."_$n", $unique_descriptions)) {
+                        $n++;
+                    }
+                    $subnet['description'] = $subnet['description']."_$n";
+                }
+
+                // save unique description
+                $unique_descriptions[] = $subnet['description'];
+
 				# odd/even if more than 5 items
 				if(sizeof($top_subnets) > 5) {
 					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
