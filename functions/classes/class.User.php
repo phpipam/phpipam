@@ -322,6 +322,8 @@ class User extends Common_functions {
                 $this->authenticated = false;
             }
         }
+        # return
+        return $this->authenticated;
     }
 
     /**
