@@ -89,18 +89,6 @@ class Common_functions  {
 	protected $debugging;
 
 
-    /**
-     * __construct function.
-     *
-     * @access public
-     * @return void
-     */
-    public function __construct () {
-        // Set Result
-        $this->Result = new Result ();
-    }
-
-
 
 
 

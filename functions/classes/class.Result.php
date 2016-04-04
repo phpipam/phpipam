@@ -11,7 +11,7 @@
  *
  */
 
-class Result {
+class Result extends Common_functions {
 
 	/**
 	 *  what to do when failed - result shows result, exception throws exception (for API)

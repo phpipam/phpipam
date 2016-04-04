@@ -111,9 +111,9 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 */
-	public function __construct (Database_PDO $database) {
+	public function __construct (Database_PDO $Database) {
 		# Save database object
-		$this->Database = $database;
+		$this->Database = $Database;
 		# initialize Result
 		$this->Result = new Result ();
 		# debugging
