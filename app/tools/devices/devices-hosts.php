@@ -15,7 +15,7 @@ $device = (array) $Tools->fetch_object ("devices", "id", $_GET['sPage']);
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # fetch all addresses on switch
-$addresses     = $Tools->fetch_objects("ipaddresses", "switch", $device['id']);
+$addresses     = $Tools->fetch_all_objects("ipaddresses", "switch", $device['id']);
 if ($addresses===false) { $addresses = array(); }
 
 # print

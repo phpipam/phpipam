@@ -91,9 +91,9 @@ class Admin extends Common_functions {
 	 * Log
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Log;
+	public $Log;
 
 
 

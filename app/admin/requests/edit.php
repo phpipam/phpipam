@@ -175,7 +175,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 				<option disabled><?php print _('Select device'); ?>:</option>
 				<option value="" selected><?php print _('None'); ?></option>
 				<?php
-				$devices = $Tools->fetch_objects("devices", "hostname");
+				$devices = $Tools->fetch_all_objects("devices", "hostname");
 				//loop
 				if ($devices!==false) {
     				foreach($devices as $device) {

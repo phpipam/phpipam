@@ -144,9 +144,9 @@ class PowerDNS extends Common_functions {
      * Log
      *
      * @var resource
-     * @access protected
+     * @access public
      */
-    protected $Log;
+    public $Log;
 
 
 

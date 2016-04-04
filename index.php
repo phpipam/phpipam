@@ -29,7 +29,7 @@ if($_GET['page']!="install" ) {
 	$Log 		= new Logging ($Database);
 
 	# reset url for base
-	$url = $Result->createURL ();
+	$url = $User->createURL ();
 }
 
 /** include proper subpage **/

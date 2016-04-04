@@ -72,14 +72,6 @@ class Addresses extends Common_functions {
 	protected $Net_IPv6;
 
 	/**
-	 * Result printing
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Database conenction
 	 *
 	 * @var mixed
@@ -99,9 +91,9 @@ class Addresses extends Common_functions {
 	 * Logging object
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Log;
+	public $Log;
 
 	/**
 	 * PowerDNS object

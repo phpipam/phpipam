@@ -84,7 +84,7 @@ else {
 		<td>
 		<?php
 
-		// Only show nameservers if defined for subnet
+		// Only show device if defined for subnet
 		if(!empty($subnet['device'])) {
 			# fetch recursive nameserver details
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
@@ -121,12 +121,10 @@ else {
 		// Only show nameservers if defined for subnet
 		if(!empty($subnet['nameserverId'])) {
 			# fetch recursive nameserver details
-			$nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
-
-			print str_replace(";", ", ", $nameservers['namesrv1']);
-
+			$nameservers = $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+			print str_replace(";", ", ", $nameservers->namesrv1);
 			//Print name of nameserver group
-			print ' ('.$nameservers['name'].')';
+			print ' ('.$nameservers->name.')';
 		}
 
 		else {

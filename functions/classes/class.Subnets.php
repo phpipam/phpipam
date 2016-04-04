@@ -106,9 +106,9 @@ class Subnets extends Common_functions {
 	 * for Logging connection
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Log;
+	public $Log;
 
 
 

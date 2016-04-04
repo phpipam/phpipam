@@ -163,9 +163,9 @@ class User extends Common_functions {
      * for Logging connection
      *
      * @var resource
-     * @access protected
+     * @access public
      */
-    protected $Log;
+    public $Log;
 
 
 

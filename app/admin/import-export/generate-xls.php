@@ -34,7 +34,7 @@ $sections = $Sections->fetch_sections();
 //we need to reformat state!
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
-$devices = $Tools->fetch_objects("devices", "hostname");
+$devices = $Tools->fetch_all_objects("devices", "hostname");
 $devices_indexed = array();
 if ($devices!==false) {
     foreach($devices as $d) {

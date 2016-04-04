@@ -49,6 +49,14 @@ class Common_functions  {
 	public $Result;
 
 	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
+	/**
 	 * Net_IPv4
 	 *
 	 * @var mixed
@@ -81,7 +89,16 @@ class Common_functions  {
 	protected $debugging;
 
 
-
+    /**
+     * __construct function.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct () {
+        // Set Result
+        $this->Result = new Result ();
+    }
 
 
 
@@ -153,7 +170,8 @@ class Common_functions  {
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
 		# check cache
-		if($cached_item = $this->cache_check($table, $method, $value)!==false)	{
+		$cached_item = $this->cache_check($table, $method, $value);
+		if($cached_item!==false)	{
 			return $cached_item;
 		}
 		else {

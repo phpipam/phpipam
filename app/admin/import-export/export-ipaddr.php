@@ -104,7 +104,7 @@ if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('Device') ,$format_header);
 	$rowCount++;
 	# get Devices and reorder
-	$devices = $Tools->fetch_objects("devices", "hostname");
+	$devices = $Tools->fetch_all_objects ("devices", "hostname");
 	$devices_indexed = array();
 	if ($devices!==false) {
 	foreach($devices as $d) {

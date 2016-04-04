@@ -40,7 +40,7 @@ $subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
 
 # Fetch all devices
-$devices = $Tools->fetch_objects("devices", "hostname");
+$devices = $Tools->fetch_all_objects("devices", "hostname");
 
 # cnt
 $edit = 0;

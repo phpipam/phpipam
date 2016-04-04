@@ -13,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # filter devices or fetch print all?
-$devices = $Tools->fetch_objects("devices", "hostname");
+$devices = $Tools->fetch_all_objects("devices", "hostname");
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 
 # get custom fields

@@ -302,7 +302,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print '<option value="0" selected>'._('None').'</option>'. "\n";
 
 		// fetch devices
-		$devices = $Tools->fetch_objects("devices", "hostname");
+		$devices = $Tools->fetch_all_objects("devices", "hostname");
         if ($devices!==false) {
     		foreach($devices as $device) {
     			$device = (array) $device;
