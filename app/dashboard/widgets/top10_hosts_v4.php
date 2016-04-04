@@ -74,6 +74,7 @@ $(function () {
     var data = [
     <?php
 	$m=0;
+	// loop
 	foreach ($top_subnets as $subnet) {
 		# cast
 		$subnet = (array) $subnet;
@@ -82,8 +83,8 @@ $(function () {
 			$sp = $Subnets-> check_permission ($User->user, $subnet['id']);
 			if($sp != "0") {
 				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
-                //length
-                $subnet['description'] = strlen($subnet['description'])>10 ? substr($subnet['description'], 0,10)."..." : $subnet['description'];
+                //length check
+                $subnet['description'] = strlen($subnet['description'])>10 ? substr($subnet['description'], 0,10)."_$m..." : $subnet['description'];
 
 				//$subnet['descriptionLong'] = $subnet['description'];
 				# odd/even if more than 5 items

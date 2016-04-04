@@ -50,7 +50,7 @@ $User->check_user_session ();
 	<!-- All users - only for admin! -->
 	<tr>
 		<td class="title"><?php print _('Number of users'); ?></td>
-		<td><?php print $Database->numObjects ("users");; ?></td>
+		<td><?php print $Database->numObjects ("users"); ?></td>
 	</tr>
 
 </table>

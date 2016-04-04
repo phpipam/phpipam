@@ -704,28 +704,6 @@ CREATE TABLE `racks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-# Dump of table snmp
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `snmp`;
-
-CREATE TABLE `snmp` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `oid` varchar(128) DEFAULT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `method` set('info','arp','route') DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `oid` (`oid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/* add snmp queries */
-INSERT INTO `snmp` (`id`, `oid`, `name`, `method`, `description`)
-VALUES
-	(1, '.1.3.6.1.2.1.1.1.0', 'SNMPv2-MIB::sysDescr.1', 'info', 'Displays system info'),
-	(2, '.1.3.6.1.2.1.4.22.1', 'IP-MIB::ipNetToMedia', 'arp', 'Fetches ARP table from device\n.1 = Index\n.2 = mac\n.3 = ip'),
-	(3, '.1.3.6.1.2.1.4.20.1', 'RFC1213-MIB::ipAdEnt', 'arp', 'Fetches interfaces\n.1 = IP\n.3 = mask'),
-	(4, '.1.3.6.1.2.1.4.24.4.1', 'IP-FORWARD-MIB::ipCidrRoute', 'route', 'Fetches routing table\n.1 = destination\n.2 = mask\n.4 = nexhop');
-
-
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
@@ -733,4 +711,4 @@ VALUES
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.21';
+UPDATE `settings` set `version` = '1.22';

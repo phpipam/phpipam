@@ -145,11 +145,3 @@ else {
     print "</div>";
 }
 ?>
-
-<script type="text/javascript">
-$(document).ready(function() {
-	$("#IPv4top10Hosts").fadeOut('fast');
-	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-});
-</script>
-

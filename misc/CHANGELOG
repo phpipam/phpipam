@@ -24,7 +24,8 @@
         + New threshold widget;
         + New inactive hosts widget;
     + PowerDNS:
-        + Default domain for PTR records (if hostname is not set)
+        + Default domain for PTR records (if hostname is not set);
+        + When removing IP address additional option that removes all associated PDNS records (ip and hostname);
     + jQuery tables;
 
 

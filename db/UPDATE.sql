@@ -499,25 +499,6 @@ CREATE TABLE `nat` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-/* snmp table */
-CREATE TABLE `snmp` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `oid` varchar(128) DEFAULT NULL,
-  `name` varchar(64) DEFAULT NULL,
-  `method` set('info','arp','route') DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `oid` (`oid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-/* default oids */
-INSERT INTO `snmp` (`id`, `oid`, `name`, `method`, `description`)
-VALUES
-	(1, '.1.3.6.1.2.1.1.1.0', 'SNMPv2-MIB::sysDescr.1', 'info', 'Displays system info'),
-	(2, '.1.3.6.1.2.1.4.22.1', 'IP-MIB::ipNetToMedia', 'arp', 'Fetches ARP table from device\n.1 = Index\n.2 = mac\n.3 = ip'),
-	(3, '.1.3.6.1.2.1.4.20.1', 'RFC1213-MIB::ipAdEnt', 'arp', 'Fetches interfaces\n.1 = IP\n.3 = mask'),
-	(4, '.1.3.6.1.2.1.4.24.4.1', 'IP-FORWARD-MIB::ipCidrRoute', 'route', 'Fetches routing table\n.1 = destination\n.2 = mask\n.4 = nexhop');
-
 /* snmp to devices */
 ALTER TABLE `devices` ADD `snmp_community` VARCHAR(100)  NULL  DEFAULT NULL  AFTER `sections`;
 ALTER TABLE `devices` ADD `snmp_version` SET('0','1','2')  NULL  DEFAULT '0'  AFTER `snmp_community`;
@@ -545,6 +526,20 @@ ALTER TABLE `subnets` ADD `threshold` int(3)  NULL  DEFAULT 0  AFTER `NAT`;
 /* threshold and inactive hosts widget */
 INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes');
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+
+
+
+/* VERSION 1.22 */
+UPDATE `settings` set `version` = '1.22';
+
+/* drop unused snmp table */
+DROP TABLE IF EXISTS `snmp`;
+
 
 /* reset db check field and donation */
 UPDATE `settings` set `dbverified` = 0;
