@@ -120,9 +120,9 @@ class PowerDNS extends Common_functions {
      * Result
      *
      * @var resource
-     * @access protected
+     * @access public
      */
-    protected $Result;
+    public $Result;
 
     /**
      * Net_IPv4 object

@@ -147,9 +147,9 @@ class User extends Common_functions {
      * Result object
      *
      * @var resource
-     * @access protected
+     * @access public
      */
-    protected $Result;
+    public $Result;
 
     /**
      * for Database connection
@@ -277,7 +277,7 @@ class User extends Common_functions {
     }
 
     /**
-     * Uodate users language
+     * Update users language
      *
      * @access public
      * @return void

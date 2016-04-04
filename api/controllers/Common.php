@@ -97,19 +97,20 @@ class Common_api_functions {
 	 * Initializes new Object.
 	 *
 	 * @access protected
-	 * @param mixed $Object		// object name
-	 * @param mixed $Database	// Database object
+	 * @param mixed $Object_name		// object name
+	 * @param mixed $Database	       // Database object
 	 */
-	protected function init_object ($Object, $Database) {
+	protected function init_object ($Object_name, $Database) {
 		// admin fix
-		if($Object=="Admin")	{ $this->$Object	= new $Object ($Database, false); }
+		if($Object_name=="Admin")	    { $this->$Object_name	= new $Object_name ($Database, false); }
 		// User fix
-		elseif($Object=="User")	{ $this->$Object	= new $Object ($Database, true); $this->$Object->user = null; }
-		else					{ $this->$Object	= new $Object ($Database); }
+		elseif($Object_name=="User")	{ $this->$Object_name	= new $Object_name ($Database, true); $this->$Object_name->user = null; }
+		// default
+		else					        { $this->$Object_name	= new $Object_name ($Database); }
 		// set exit method
-		$this->$Object->Result->exit_method = "exception";
+		$this->$Object_name->Result->exit_method = "exception";
 		// set API flag
-		$this->$Object->api = true;
+		$this->$Object_name->api = true;
 	}
 
 	/**

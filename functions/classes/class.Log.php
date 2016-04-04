@@ -171,9 +171,9 @@ class Logging extends Common_functions {
 	 * Result object
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 	/**
 	 * Addresses object

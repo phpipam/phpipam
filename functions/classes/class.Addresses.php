@@ -75,9 +75,9 @@ class Addresses extends Common_functions {
 	 * Result printing
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 	/**
 	 * Database conenction

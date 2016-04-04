@@ -33,14 +33,13 @@ class Install extends Common_functions {
 	 */
 	public $debugging = false;
 
-
 	/**
 	 * Result
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 	/**
 	 * Database

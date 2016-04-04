@@ -38,9 +38,9 @@ class Sections extends Common_functions {
 	 * Result
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 	/**
 	 * Database

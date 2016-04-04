@@ -57,9 +57,9 @@ class Admin extends Common_functions {
 	 * Result
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 	/**
 	 * User
@@ -145,7 +145,7 @@ class Admin extends Common_functions {
     		# save settings
     		$this->settings = $this->User->settings;
     		# if required die !
-    		if($this->User->is_admin()!==true && $this->admin_required==true) {
+    		if($this->User->is_admin(false)!==true && $this->admin_required==true) {
     			// popup ?
     			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
     			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }

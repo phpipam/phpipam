@@ -95,9 +95,9 @@ class User_controller extends Common_api_functions {
 	 * requested parameters
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $_params;
+	public $_params;
 
 
 
@@ -299,7 +299,7 @@ class User_controller extends Common_api_functions {
 	 */
 	private function authenticate () {
 		# try to authenticate user, it it fails it will fail by itself
-		$this->User-> authenticate ($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+		$this->User->authenticate ($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 
 		# if token is valid and set extend it, otherwise generate new
 		if ($this->validate_user_token ()) {

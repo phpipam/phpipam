@@ -90,9 +90,9 @@ class Subnets extends Common_functions {
 	 * for Result printing
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 	/**
 	 * for Database connection

@@ -113,9 +113,9 @@ class phpipamSNMP extends Common_functions {
 	 * Result object - for result printing
 	 *
 	 * @var mixed
-	 * @access protected
+	 * @access public
 	 */
-	protected $Result;
+	public $Result;
 
 
 
