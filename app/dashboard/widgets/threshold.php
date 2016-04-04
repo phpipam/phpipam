@@ -36,7 +36,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	if(!$widget = $Tools->fetch_widget ("wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
-	$slimit = 30;
+	$slimit = 100;
 	# and print title
 	print "<div class='container'>";
 	print "<h4 style='margin-top:40px;'>$widget[wtitle]</h4><hr>";
@@ -45,7 +45,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 
 if ($User->settings->enableThreshold=="1") {
     # get thresholded subnets
-    $threshold_subnets = $Subnets->fetch_threshold_subnets ($slimit);
+    $threshold_subnets = $Subnets->fetch_threshold_subnets (100);
 
     # any found ?
     if ($threshold_subnets !== false) {
@@ -98,13 +98,43 @@ else {
 
     // count usage
     foreach ($out as $k=>$s) {
-        # fetch addresses in subnet
-        $addresses_cnt = $Addresses->count_subnet_addresses ($s->id);
-        # calculate usage
-        $subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );
-        # set free
+        //check if subnet has slaves and set slaves flag true/false
+        $slaves = $Subnets->has_slaves ($s->id) ? true : false;
+
+        # fetch all addresses and calculate usage
+        if($slaves) {
+            $addresses = $Addresses->fetch_subnet_addresses_recursive ($s->id, false);
+        	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($s->id);
+        	// save count
+        	$addresses_cnt = gmp_strval(sizeof($addresses));
+
+        	# full ?
+        	if (sizeof($slave_subnets)>0) {
+            	foreach ($slave_subnets as $ss) {
+                	if ($ss->isFull==1) {
+                    	# calculate max
+                    	$max_hosts = $Subnets->get_max_hosts ($ss->mask, $Subnets->identify_address($ss->subnet), true);
+                    	# count
+                    	$count_hosts = $Addresses->count_subnet_addresses ($ss->id);
+                    	# add
+                    	$addresses_cnt = gmp_strval(gmp_add($addresses_cnt, gmp_sub($max_hosts, $count_hosts)));
+                	}
+            	}
+        	}
+
+        	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );		//Calculate free/used etc
+        }
+        else {
+            # fetch addresses in subnet
+            $addresses_cnt = $Addresses->count_subnet_addresses ($s->id);
+            # calculate usage
+            $subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );
+        }
+
+        # set additional threshold parameters
         $subnet_usage['usedhosts_percent'] = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
         $subnet_usage['until_threshold']   = gmp_strval(gmp_sub($s->threshold, $subnet_usage['usedhosts_percent']));
+
         # save
         $out[$k]->usage = (object) $subnet_usage;
     }
@@ -115,30 +145,34 @@ else {
     }
     array_multisort($used, SORT_DESC, $out);
 
-
     // table
     print "<table class='table table-threshold table-noborder'>";
 
     // print
+    $m=0;
     foreach ($out as $s) {
-        # set class
-        $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
-        # limit description
-        $s->description = strlen($s->description)>10 ? substr($s->description, 0,10)."..." : $s->description;
-        $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
-        # limit class
-        $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
+        if ($m<$slimit) {
+            # set class
+            $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
+            # limit description
+            $s->description = strlen($s->description)>10 ? substr($s->description, 0,10)."..." : $s->description;
+            $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
+            # limit class
+            $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
 
-        print "<tr>";
-        print " <td><i class='fa fa-sfolder fa-sitemap' style='border-right: 1px solid #ccc;padding-right:4px;'></i> <a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a> ".$s->description."</td>";
-        print " <td>";
-        print "     <div class='progress'>";
-        print "     <div class='progress-bar $aclass' role='progressbar' rel='tooltip' title='"._('Current usage').": ".$s->usage->usedhosts_percent."%' aria-valuenow='".$s->usage->usedhosts_percent."' aria-valuemin='0' style='width: ".$s->usage->usedhosts_percent."%;'>".$s->usage->usedhosts_percent."%</div>";
-        print "     <div class='$limit_class' rel='tooltip'  title='"._('Threshold').": ".$s->threshold."%' style='margin-left:".$s->usage->until_threshold."%;'>&nbsp;</div>";
-        print "     </div>";
-        print " </td>";
-        print "</tr>";
+            print "<tr>";
+            print " <td><i class='fa fa-sfolder fa-sitemap' style='border-right: 1px solid #ccc;padding-right:4px;'></i> <a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a> ".$s->description."</td>";
+            print " <td>";
+            print "     <div class='progress'>";
+            print "     <div class='progress-bar $aclass' role='progressbar' rel='tooltip' title='"._('Current usage').": ".$s->usage->usedhosts_percent."%' aria-valuenow='".$s->usage->usedhosts_percent."' aria-valuemin='0' style='width: ".$s->usage->usedhosts_percent."%;'>".$s->usage->usedhosts_percent."%</div>";
+            print "     <div class='$limit_class' rel='tooltip'  title='"._('Threshold').": ".$s->threshold."%' style='margin-left:".$s->usage->until_threshold."%;'>&nbsp;</div>";
+            print "     </div>";
+            print " </td>";
+            print "</tr>";
 
+            // next index
+            $m++;
+        }
     }
 
     print "</table>";
