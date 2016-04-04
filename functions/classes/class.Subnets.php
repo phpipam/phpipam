@@ -1,4 +1,4 @@
-1<?php
+<?php
 
 /**
  *	phpIPAM Subnets class
@@ -49,16 +49,6 @@ class Subnets extends Common_functions {
 	 * @access public
 	 */
 	public $lastInsertId = null;
-
-	/**
-	 * (object) for User profile
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $user = null;
 
 	/**
 	 * array of /8 ripe subnets
@@ -176,10 +166,6 @@ class Subnets extends Common_functions {
 	public function modify_subnet ($action, $values) {
 		# strip tags
 		$values = $this->strip_input_tags ($values);
-
-		# fetch user
-		$User = new User ($this->Database);
-		$this->user = $User->user;
 
 		# execute based on action
 		if($action=="add")			{ return $this->subnet_add ($values); }
