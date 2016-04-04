@@ -155,8 +155,9 @@ $lineCount++;
 //we need to reformat state!
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
-$devices = $Tools->fetch_devices ();
-if (sizeof($devices)>0) {
+$devices = $Tools->fetch_objects("devices", "hostname");
+$devices_indexed = array();
+if ($devices!==false) {
 	foreach($devices as $d) {
 		$devices_indexed[$d->id] = (object) $d;
 	}

@@ -175,14 +175,16 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 				<option disabled><?php print _('Select device'); ?>:</option>
 				<option value="" selected><?php print _('None'); ?></option>
 				<?php
-				$devices = $Tools->fetch_devices();
+				$devices = $Tools->fetch_objects("devices", "hostname");
 				//loop
-				foreach($devices as $device) {
-					//cast
-					$device = (array) $device;
+				if ($devices!==false) {
+    				foreach($devices as $device) {
+    					//cast
+    					$device = (array) $device;
 
-					if($device['id'] == @$request['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }
-					else 									 { print '<option value="'. $device['id'] .'">'. 		 $device['hostname'] .'</option>'. "\n"; }
+    					if($device['id'] == @$request['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }
+    					else 									 { print '<option value="'. $device['id'] .'">'. 		 $device['hostname'] .'</option>'. "\n"; }
+    				}
 				}
 				?>
 			</select>

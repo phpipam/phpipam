@@ -115,7 +115,7 @@ if ($_POST['operation'] == 'checkMapping') {
 		$firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 
 		# fetch all devices
-		$devices = $Tools->fetch_devices('type',$firewallZoneSettings['deviceType']);
+		$devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSettings['deviceType']);
 
 		?>
 		<table class="table table-noborder table-condensed">
@@ -133,13 +133,15 @@ if ($_POST['operation'] == 'checkMapping') {
 					<select name="deviceId" class="form-control input-sm input-w-auto input-max-200" <?php print $readonly; ?>>
 					<option value="0"><?php print _('Select firewall'); ?></option>
 					<?php
-					foreach ($devices as $device) {
-						if ($device->id == $mapping->deviceId) 	{ 
-							if($device->description) 	{	print '<option value="'.$device->id.'" selected>'.	$device->hostname.' ('.$device->description.')</option>'; }
-							else 						{ 	print '<option value="'.$device->id.'" selected>'.	$device->hostname.'</option>'; }}
-						else { 
-							if($device->description)	{	print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
-							else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
+					if ($devices!==false) {
+    					foreach ($devices as $device) {
+    						if ($device->id == $mapping->deviceId) 	{
+    							if($device->description) 	{	print '<option value="'.$device->id.'" selected>'.	$device->hostname.' ('.$device->description.')</option>'; }
+    							else 						{ 	print '<option value="'.$device->id.'" selected>'.	$device->hostname.'</option>'; }}
+    						else {
+    							if($device->description)	{	print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
+    							else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
+    					}
 					}
 					?>
 					</select>

@@ -5,7 +5,7 @@
  **********************************************/
 
 /* fetch instructions and print them in instructions div */
-$instructions = $Tools->fetch_instructions();
+$instructions = $Tools->fetch_object("instructions", "id", 1);
 $instructions = $instructions->instructions;
 
 /* format line breaks */

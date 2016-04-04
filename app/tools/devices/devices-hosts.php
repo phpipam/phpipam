@@ -11,17 +11,18 @@ $User->check_user_session();
 is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch device
-$device = (array) $Tools->fetch_device (null,$_GET['sPage']);
+$device = (array) $Tools->fetch_object ("devices", "id", $_GET['sPage']);
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # fetch all addresses on switch
-$addresses     = $Tools->fetch_device_addresses($device['id']);
+$addresses     = $Tools->fetch_objects("ipaddresses", "switch", $device['id']);
+if ($addresses===false) { $addresses = array(); }
 
 # print
 if($_GET['sPage']!=0 && sizeof($device)>0) {
 
 	# set type
-	$device_type = $Tools->fetch_device_type(null, $device['type']);
+	$device_type = $Tools->fetch_object("devices", "id", $device['type']);
 
     print "<table class='table'>";
     print "<tr>";

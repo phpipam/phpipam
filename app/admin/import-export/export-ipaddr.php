@@ -104,9 +104,12 @@ if( (isset($_GET['device'])) && ($_GET['device'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('Device') ,$format_header);
 	$rowCount++;
 	# get Devices and reorder
-	$devices = $Tools->fetch_devices ();
+	$devices = $Tools->fetch_objects("devices", "hostname");
+	$devices_indexed = array();
+	if ($devices!==false) {
 	foreach($devices as $d) {
-		$devices_indexed[$d->id] = $d;
+    		$devices_indexed[$d->id] = $d;
+    	}
 	}
 }
 if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
@@ -155,7 +158,7 @@ if($all_sections!==false) {
 			foreach ($section_subnets as $subnet) {
 
 				$subnet = (array) $subnet;
-				
+
 				// ignore folders
 				if($subnet['isFolder']) { continue; }
 
@@ -163,7 +166,7 @@ if($all_sections!==false) {
 				$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 
 				if (sizeof($ipaddresses)==0) { continue; }
-				
+
 				foreach ($ipaddresses as $ip) {
 
 					//cast
@@ -174,7 +177,7 @@ if($all_sections!==false) {
 						$worksheet->write($lineCount, $rowCount, $section['name'], $format_text);
 						$rowCount++;
 					}
-					
+
 					if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 						$worksheet->write($lineCount, $rowCount, $Subnets->transform_to_dotted($ip['ip_addr']), $format_text);
 						$rowCount++;

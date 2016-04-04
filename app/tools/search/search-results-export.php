@@ -197,7 +197,7 @@ if(sizeof($result_addresses)>0) {
 			# switch
 			if(in_array('switch', $selected_ip_fields)) {
 				if(strlen($ip['switch'])>0 && $ip['switch']!=0) {
-					$device = (array) $Tools->fetch_device(null, $ip['switch']);
+					$device = (array) $Tools->fetch_object("devices", "id", $ip['switch']);
 					$ip['switch'] = $device!=0 ? $device['hostname'] : "";
 				}
 				else {

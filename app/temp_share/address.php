@@ -125,7 +125,7 @@ if(sizeof($address)>1) {
 	print "	<th>"._('Device')."</th>";
 	if(strlen($address['switch'])>0) {
 		# get device
-		$device = $Tools->fetch_device(null, $address['switch']);
+		$device = $Tools->fetch_object("devices", "id", $address['switch']);
 		if($device!==false) {
 			$device = (array) $device;
 			$device = $Addresses->reformat_empty_array_fields($device, "");

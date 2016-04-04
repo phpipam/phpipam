@@ -150,7 +150,7 @@ if($all_sections!==false) {
 				if( (isset($_GET['subnet'])) && ($_GET['subnet'] == "on") ) {
 					$subnet_text = '';
                                         if ($subnet['isFolder']) {
-						$subnet_text = $subnet['description']." (folder)";	
+						$subnet_text = $subnet['description']." (folder)";
 					} else {
 						$subnet_text = $subnet['ip']."/".$subnet['mask'];
 					}
@@ -180,7 +180,7 @@ if($all_sections!==false) {
 				if( (isset($_GET['VRF'])) && ($_GET['VRF'] == "on") ) {
 					// get vrf
 					if (!empty($subnet['vrfId'])) {
-						$vrf = (array) $Tools->fetch_vrf(null, $subnet['vrfId']);
+						$vrf = (array) $Tools->fetch_object("vrf", "vrfId", $subnet['vrfId']);
 						$worksheet->write($lineCount, $rowCount, $vrf['name'], $format_text);
 					} else {
 						$worksheet->write($lineCount, $rowCount, '', $format_text);

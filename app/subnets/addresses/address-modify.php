@@ -300,17 +300,20 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print '<select name="switch" class="ip_addr form-control input-sm input-w-auto" '.$delete.'>'. "\n";
 		print '<option disabled>'._('Select device').':</option>'. "\n";
 		print '<option value="0" selected>'._('None').'</option>'. "\n";
-		$devices = $Tools->fetch_devices();
 
-		foreach($devices as $device) {
-			$device = (array) $device;
-			//check if permitted in this section!
-			$sections=explode(";", $device['sections']);
-			if(in_array($subnet['sectionId'], $sections)) {
-			//if same
-			if($device['id'] == $address['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }
-			else 									{ print '<option value="'. $device['id'] .'">'. $device['hostname'] .'</option>'. "\n";			 }
-			}
+		// fetch devices
+		$devices = $Tools->fetch_objects("devices", "hostname");
+        if ($devices!==false) {
+    		foreach($devices as $device) {
+    			$device = (array) $device;
+    			//check if permitted in this section!
+    			$sections=explode(";", $device['sections']);
+    			if(in_array($subnet['sectionId'], $sections)) {
+    			//if same
+    			if($device['id'] == $address['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }
+    			else 									{ print '<option value="'. $device['id'] .'">'. $device['hostname'] .'</option>'. "\n";			 }
+    			}
+    		}
 		}
 		print '</select>'. "\n";
 		print '	</td>'. "\n";

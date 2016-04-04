@@ -18,6 +18,21 @@ class Common_functions  {
 	public $settings = null;
 
 	/**
+	 * Cache file to store all results from queries to
+	 *
+	 *  structure:
+	 *
+	 *      [table][index] = (object) $content
+	 *
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $cache = array();
+
+	/**
 	 * Database
 	 *
 	 * @var mixed
@@ -68,6 +83,153 @@ class Common_functions  {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 *	@general fetch methods
+	 *	--------------------------------
+	 */
+
+
+	/**
+	 * Fetch all objects from specified table in database
+	 *
+	 * @access public
+	 * @param mixed $table
+	 * @param mixed $sortField (default:id)
+	 * @return void
+	 */
+	public function fetch_all_objects ($table=null, $sortField="id") {
+		# null table
+		if(is_null($table)||strlen($table)==0) return false;
+		# fetch
+		try { $res = $this->Database->getObjects($table, $sortField); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# save
+		if (sizeof($res)>0) {
+    		foreach ($res as $r) {
+        		$this->cache_write ($table, $sortField, $r->$sortField, $r);
+    		}
+		}
+		# result
+		return sizeof($res)>0 ? $res : false;
+	}
+
+	/**
+	 * Fetches specified object specified table in database
+	 *
+	 * @access public
+	 * @param mixed $table
+	 * @param mixed $method (default: null)
+	 * @param mixed $value
+	 * @return void
+	 */
+	public function fetch_object ($table=null, $method=null, $value) {
+		# null table
+		if(is_null($table)||strlen($table)==0) return false;
+
+		// checks
+		if(is_null($table))		return false;
+		if(strlen($table)==0)   return false;
+		if(is_null($method))	return false;
+		if(is_null($value))		return false;
+		if($value==0)		    return false;
+
+		# null method
+		$method = is_null($method) ? "id" : $this->Database->escape($method);
+
+		# check cache
+		if($cached_item = $this->cache_check($table, $method, $value)!==false)	{
+			return $cached_item;
+		}
+		else {
+			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage());
+				return false;
+			}
+			# save to cache array
+			if(sizeof($res)>0) {
+    			$this->cache_write ($table, $method, $value, $res);
+				return $res;
+			}
+			else {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Fetches multiple objects in specified table in database
+	 *
+	 *	doesnt cache
+	 *
+	 * @access public
+	 * @param mixed $table
+	 * @param mixed $field
+	 * @param mixed $value
+	 * @param string $sortField (default: 'id')
+	 * @param bool $sortAsc (default: true)
+	 * @param bool $like (default: false)
+	 * @return void
+	 */
+	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false) {
+		# null table
+		if(is_null($table)||strlen($table)==0) return false;
+		else {
+			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage());
+				return false;
+			}
+			# save to cach
+			if (sizeof($res)>0) {
+    			foreach ($res as $r) {
+        			$this->cache_write ($table, $field, $r->$field, $r);
+    			}
+			}
+			# result
+			return sizeof($res)>0 ? $res : false;
+		}
+	}
+
+	/**
+	 * Count objects in database.
+	 *
+	 * @access public
+	 * @param mixed $table
+	 * @param mixed $field
+	 * @param mixed $val (default: null)
+	 * @param bool $like (default: false)
+	 * @return void
+	 */
+	public function count_database_objects ($table, $field, $val=null, $like = false) {
+		# if null
+		try { $cnt = $this->Database->numObjectsFilter($table, $field, $val, $like); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return $cnt;
+	}
+
+
+
+
 	/**
 	 * fetches settings from database
 	 *
@@ -103,6 +265,57 @@ class Common_functions  {
 	public function settings () {
 		return $this->get_settings();
 	}
+
+
+    /**
+     * Write result to cache.
+     *
+     * @access protected
+     * @param mixed $table
+     * @param string $method (default: "id")
+     * @param mixed $id
+     * @param mixed $object
+     * @return void
+     */
+    protected function cache_write ($table, $method = "id", $id, $object) {
+        // check if cache is already set, otherwise save
+        if ($this->cache_check_exceptions!==false) {
+            if (!isset($this->cache[$table][$method][$id])) {
+                $this->cache[$table][$method][$id] = (object) $object;
+            }
+        }
+    }
+
+    /**
+     * Check if caching is not needed
+     *
+     * @access protected
+     * @param mixed $table
+     * @return void
+     */
+    protected function cache_check_exceptions ($table) {
+        // define
+        $exceptions = array("deviceTypes");
+        // check
+        return in_array($table, $exceptions) ? true : false;
+    }
+
+    /**
+     * Checks if object alreay exists in cache..
+     *
+     * @access protected
+     * @param mixed $table
+     * @param string $method (default: "id")
+     * @param mixed $id
+     * @return void
+     */
+    protected function cache_check ($table, $method = "id", $id) {
+        // check if cache is already set, otherwise return false
+        if (isset($this->cache[$table][$method][$id]))  { return (object) $this->cache[$table][$method][$id]; }
+        else                                            { return false; }
+    }
+
+
 
 
 	/**
@@ -795,5 +1008,4 @@ class Common_functions  {
 		}
 	}
 }
-
 ?>

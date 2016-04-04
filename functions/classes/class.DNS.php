@@ -94,38 +94,6 @@ class DNS extends Common_functions {
 		}
 	}
 
-	/**
-	 * Fetches object from database
-	 *
-	 * @access private
-	 * @param mixed $table (default: null)
-	 * @param mixed $field (default: null)
-	 * @param mixed $value (default: null)
-	 * @return void
-	 */
-	private function fetch_object ($table = null, $field = null, $value = null) {
-		// checks
-		if(is_null($table))		return false;
-		if(is_null($field))		return false;
-		if(is_null($value))		return false;
-		if($value=="0")			return false;
-		// escape
-		$table = $this->Database->escape($table);
-		$field = $this->Database->escape($field);
-
-		// fetch
-		try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$field` = ? limit 1;", array($value)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save to cache array
-		if(sizeof($res)==0) { return false; }
-		else {
-			return $res;
-		}
-	}
-
  	/**
  	 * Resolves hostname from IP or IP from hostname
  	 *

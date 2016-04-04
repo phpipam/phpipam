@@ -172,7 +172,7 @@ else {
 	# VRF
 	if(!empty($subnet['vrfId']) && $User->settings->enableVRF==1) {
 		# get vrf details
-		$vrf = (array) $Tools->fetch_vrf(null,$subnet['vrfId']);
+		$vrf = (array) $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
 		# set text
 		$vrfText = $vrf['name'];
 		if(!empty($vrf['description'])) { $vrfText .= " [$vrf[description]]";}

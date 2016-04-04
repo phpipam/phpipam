@@ -7,7 +7,7 @@
 $User->check_user_session();
 
 # get VLAN details
-$vrf = $Tools->fetch_vrf ($method="vrfId", $_GET['subnetId']);
+$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['subnetId']);
 
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }

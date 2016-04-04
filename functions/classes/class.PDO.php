@@ -261,14 +261,17 @@ abstract class DB {
 	 * @access public
 	 * @param mixed $tableName
 	 * @param mixed $method
+	 * @param boolean $like (default: false)
 	 * @param mixed $value
 	 * @return void
 	 */
-	public function numObjectsFilter($tableName, $method, $value) {
+	public function numObjectsFilter($tableName, $method, $value, $like = false) {
 		if (!$this->isConnected()) $this->connect();
 
+		$like === true ? $operator = "LIKE" : $operator = "=";
+
 		$tableName = $this->escape($tableName);
-		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'`=?;');
+		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
 
 		//debuq
 		$this->log_query ($statement);

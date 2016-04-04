@@ -327,11 +327,11 @@ class Sections extends Common_functions {
 	 * Fetch subsections for specified sectionid
 	 *
 	 * @access public
-	 * @param mixed $sectionid
+	 * @param mixed $sectionId
 	 * @return void
 	 */
-	public function fetch_subsections ($sectionid) {
-		try { $subsections = $this->Database->getObjectsQuery("SELECT * FROM `sections` where `masterSection` = ?;", array($sectionid)); }
+	public function fetch_subsections ($sectionId) {
+		try { $subsections = $this->Database->getObjectsQuery("SELECT * FROM `sections` where `masterSection` = ?;", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

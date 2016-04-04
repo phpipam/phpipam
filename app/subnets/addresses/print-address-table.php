@@ -367,7 +367,7 @@ else {
 	        	# print device
 	        	if(in_array('switch', $selected_ip_fields)) {
 		        	# get device details
-		        	$device = (array) $Tools->fetch_device(null, $addresses[$n]->switch);
+		        	$device = (array) $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
 		        	# set rack
 		        	if ($User->settings->enableRACK=="1")
 		        	$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";

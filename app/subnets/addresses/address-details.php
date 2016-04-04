@@ -50,7 +50,6 @@ $resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], fals
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
 
-
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
 
@@ -163,7 +162,7 @@ if(sizeof($address)>1) {
     	print "	<th>"._('Device')."</th>";
     	if(strlen($address['switch'])>0) {
     		# get device
-    		$device = (array) $Tools->fetch_device(null, $address['switch']);
+    		$device = (array) $Tools->fetch_object("devices", "id", $address['switch']);
     		$device = $Addresses->reformat_empty_array_fields($device, "");
     		print "	<td><a href='".create_link("tools","devices","hosts",$device['id'])."'>".@$device['hostname']."</a> ".@$device['description']."</td>";
     	} else {

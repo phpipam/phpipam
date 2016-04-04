@@ -121,6 +121,16 @@ class Admin extends Common_functions {
 	}
 
 	/**
+	 * Saves last insert ID on object modification.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function save_last_insert_id () {
+		$this->lastId = $this->Database->lastInsertId();
+	}
+
+	/**
 	 * Sets admin required flag if needed
 	 *
 	 * @access public
@@ -165,130 +175,6 @@ class Admin extends Common_functions {
 
 
 
-
-
-	/**
-	 *	@general fetch methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * Fetch all objects from specified table in database
-	 *
-	 * @access public
-	 * @param string $table
-	 * @param string $sortField (default:id)
-	 * @return void
-	 */
-	public function fetch_all_objects ($table=null, $sortField="id") {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		# fetch
-		try { $res = $this->Database->getObjects($table, $sortField); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# result
-		return sizeof($res)>0 ? $res : false;
-	}
-
-	/**
-	 * Fetches specified object specified table in database
-	 *
-	 * @access public
-	 * @param string $table
-	 * @param string $method (default: null)
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_object ($table=null, $method=null, $id) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
-		# ignore 0
-		if($id===0 || is_null($id)) {
-			return false;
-		}
-		# check cache
-		elseif(isset($this->table[$table][$method][$id]))	{
-			return $this->table[$table][$method][$id];
-		}
-		else {
-			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to cache array
-			if(sizeof($res)>0) {
-				$this->table[$table][$method][$id] = (object) $res;
-				return $res;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Fetches multiple objects in specified table in database
-	 *
-	 *	doesnt cache
-	 *
-	 * @access public
-	 * @param mixed $table (default: null)
-	 * @return void
-	 */
-	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		else {
-			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# result
-			return sizeof($res)>0 ? $res : false;
-		}
-	}
-
-	/**
-	 * Empties table
-	 *
-	 * @access public
-	 * @param mixed $table (default: null)
-	 * @return boolean
-	 */
-	public function truncate_table ($table = null) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		else {
-			try { $res = $this->Database->emptyTable($table); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# result
-			return true;
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
 	/**
 	 *	@general update methods
 	 *	--------------------------------
@@ -297,15 +183,9 @@ class Admin extends Common_functions {
 	/**
 	 * Modify database object
 	 *
-	 * @access public
-<<<<<<< HEAD
-	 * @param mixed $table
-	 * @param mixed $action
-	 * @param mixed $field
-=======
 	 * @param string $table
 	 * @param string $action
->>>>>>> 5c93bd7e6c7e83c51e80444a45d9c808b76a2a4e
+	 * @param string $id
 	 * @param mixed $values
 	 * @return void
 	 */
@@ -468,20 +348,25 @@ class Admin extends Common_functions {
 	}
 
 	/**
-	 * Saves last insert ID on object modification.
+	 * Empties table
 	 *
 	 * @access public
-	 * @return void
+	 * @param mixed $table (default: null)
+	 * @return boolean
 	 */
-	public function save_last_insert_id () {
-		$this->lastId = $this->Database->lastInsertId();
+	public function truncate_table ($table = null) {
+		# null table
+		if(is_null($table)||strlen($table)==0) return false;
+		else {
+			try { $res = $this->Database->emptyTable($table); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage());
+				return false;
+			}
+			# result
+			return true;
+		}
 	}
-
-
-
-
-
-
 
 
 
@@ -734,11 +619,12 @@ class Admin extends Common_functions {
 	 */
 	public function replace_fields ($field, $search, $replace) {
 		# check number of items
-		$count = $this->count_records ($field, $search, $replace);
+		$count = $this->count_database_objects ("ipaddresses", $field, "%$search%", true);
+		var_dump($count);
 		# if some exist update
 		if($count>0) {
 			# update
-		    try { $cnt = $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, '$search', ?);", array($replace)); }
+		    try { $cnt = $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", array($search, $replace)); }
 		    catch (Exception $e) {
 			    $this->Result->show("danger alert-absolute", _("Error: ").$e->getMessage(), true);
 		    }
@@ -749,25 +635,6 @@ class Admin extends Common_functions {
 			$this->Result->show("info alert-absolute", _("No records found to replace"), false);
 		}
 	}
-
-	/**
-	 * Count number of records in database
-	 *
-	 * @access private
-	 * @param mixed $field
-	 * @param mixed $search
-	 * @param mixed $replace
-	 * @return void
-	 */
-	private function count_records ($field, $search, $replace) {
-	    try { $cnt = $this->Database->numObjectsFilter("ipaddresses", $field, $search); }
-	    catch (Exception $e) {
-		    $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
-	    }
-	    # ok
-		return $cnt;
-	}
-
 
 
 

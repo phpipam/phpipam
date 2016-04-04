@@ -2870,7 +2870,7 @@ class Subnets extends Common_functions {
 				//vrf
 				if($this->settings->enableVRF == 1) {
 					# fetch vrf
-					$vrf = $Tools->fetch_vrf(null, $option['value']['vrfId']);
+					$vrf = $Tools->fetch_object("vrf", "vrfId", $option['value']['vrfId']);
 					$html[] = !$vrf ? "<td></td>" : "<td>$vrf->name</td>";
 				}
 

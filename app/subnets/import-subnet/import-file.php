@@ -40,7 +40,7 @@ $subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
 
 # Fetch all devices
-$devices = $Tools->fetch_devices ();
+$devices = $Tools->fetch_objects("devices", "hostname");
 
 # cnt
 $edit = 0;
@@ -58,8 +58,10 @@ foreach($outFile as $k=>$line) {
 		$line[1] = $Addresses->address_type_type_to_index($line[1]);
 
 		// reformat device from name to id
-		foreach($devices as $d) {
-			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
+		if ($devices!==false) {
+    		foreach($devices as $d) {
+    			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
+    		}
 		}
 
 		// set action

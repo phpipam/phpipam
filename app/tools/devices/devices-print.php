@@ -13,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # filter devices or fetch print all?
-$devices = $Tools->fetch_devices ($_POST['ffield'], false, "hostname", "asc");
+$devices = $Tools->fetch_objects("devices", "hostname");
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 
 # get custom fields
@@ -65,7 +65,7 @@ else {
 	$device = (array) $device;
 
 	//count items
-	$cnt = $Tools->count_device_addresses($device['id']);
+	$cnt = $Tools->count_database_objects("ipaddresses", "switch", $device['id']);
 
 	// reindex types
 	if (isset($device_types)) {
@@ -102,8 +102,8 @@ else {
 	# print for unspecified
 	print '<tr class="unspecified">'. "\n";
 
-	//$cnt = countIPaddressesBySwitchId(NULL);
-	$cnt = $Tools->count_device_addresses(0);
+    // count empty
+	$cnt = $Tools->count_database_objects("ipaddresses", "switch", 0);
 
 
 	print '	<td>'._('Device not specified').'</td>'. "\n";
