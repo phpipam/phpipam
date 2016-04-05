@@ -24,7 +24,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :               $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 # section
 $section = $Sections->fetch_section("id", $_POST['sectionId-0']);
 if ($section===false)                                           { $Result->show("danger", _("Invalid section Id"), true, true, false, true); }
@@ -70,8 +70,8 @@ if (isset($subnets_all)) {
     foreach ($subnets_all as $s) {
         # set new POST
         $_POST = $s;
-        # new cookie
-        $_POST['csrf_cookie'] = $User->create_csrf_cookie ();
+        # create csrf token
+        $csrf = $User->csrf_cookie ("create", "subnet");
         # permissions
         $subnet['permissions'] = $section->permissions;
         # check for master

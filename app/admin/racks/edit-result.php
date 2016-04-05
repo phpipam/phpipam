@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie_2'] ? :                    $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "rack", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
 $rack = $Tools->strip_input_tags($_POST);

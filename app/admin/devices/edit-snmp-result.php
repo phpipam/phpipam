@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :           $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);

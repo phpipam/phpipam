@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->csrf_cookie ("create", "scan");
+
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
 
@@ -171,6 +174,7 @@ else {
     		print "	<input type='text' class='form-control input-sm' name='description$m'>";
     		print "	<input type='hidden' name='ip$m' value='$ip[ip]'>";
     		print "	<input type='hidden' name='device$m' value='$deviceid'>";
+    		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
     		print "</td>";
     		// mac
     		print "<td>";

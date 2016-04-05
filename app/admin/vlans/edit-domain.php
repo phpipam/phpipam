@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "vlan_domain");
 
 # fetch vlan details
 $l2_domain = $Admin->fetch_object ("vlanDomains", "id", @$_POST['id']);

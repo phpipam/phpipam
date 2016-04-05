@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "ns");
 
 # get Nameserver sets
 if($_POST['action']!="add") {

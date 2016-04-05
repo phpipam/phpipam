@@ -20,25 +20,25 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :             $Result->show("danger", _("Invalid CSRF cookie"), true, false, false, true);
+$User->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);
 
 # ID, port snd community must be numeric
-if(!is_numeric($_POST['device_id']))			              { $Result->show("danger", _("Invalid ID"), true, false, false, true); }
-if(!is_numeric($_POST['snmp_version']))			              { $Result->show("danger", _("Invalid version"), true, false, false, true); }
+if(!is_numeric($_POST['device_id']))			              { $Result->show("danger", _("Invalid ID"), true, true, false, true); }
+if(!is_numeric($_POST['snmp_version']))			              { $Result->show("danger", _("Invalid version"), true, true, false, true); }
 if($_POST['snmp_version']!=0) {
-if(!is_numeric($_POST['snmp_port']))			              { $Result->show("danger", _("Invalid port"), true, false, false, true); }
-if(!is_numeric($_POST['snmp_timeout']))			              { $Result->show("danger", _("Invalid timeout"), true, false, false, true); }
+if(!is_numeric($_POST['snmp_port']))			              { $Result->show("danger", _("Invalid port"), true, true, false, true); }
+if(!is_numeric($_POST['snmp_timeout']))			              { $Result->show("danger", _("Invalid timeout"), true, true, false, true); }
 }
 
 # version can be 0, 1 or 2
-if ($_POST['snmp_version']<0 || $_POST['snmp_version']>2)     { $Result->show("danger", _("Invalid version"), true, false, false, true); }
+if ($_POST['snmp_version']<0 || $_POST['snmp_version']>2)     { $Result->show("danger", _("Invalid version"), true, true, false, true); }
 
 # validate device
 $device = $Admin->fetch_object ("devices", "id", $_POST['device_id']);
-if($device===false)                                           { $Result->show("danger", _("Invalid device"), true, false, false, true); }
+if($device===false)                                           { $Result->show("danger", _("Invalid device"), true, true, false, true); }
 
 # set new snmp variables
 $device->snmp_community = $_POST['snmp_community'];

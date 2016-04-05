@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->csrf_cookie ("create", "scan");
+
 # invoke CLI with threading support
 $cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'discovery' ".$_POST['subnetId'];
 
@@ -95,6 +98,7 @@ else {
 		print "<td>";
 		print "	<input type='text' class='form-control input-sm' name='description$m'>";
 		print "	<input type='hidden' name='ip$m' value=".$Subnets->transform_to_dotted($ip).">";
+		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
 		print "</td>";
 		//hostname
 		print "<td>";

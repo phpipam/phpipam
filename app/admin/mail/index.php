@@ -11,7 +11,7 @@ $User->check_user_session();
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "mail");
 ?>
 
 <!-- title -->

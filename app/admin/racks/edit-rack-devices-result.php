@@ -20,7 +20,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie_3'] ? :                    $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "rack_devices", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
 if(!is_numeric($_POST['rackid']))			                           { $Result->show("danger", _("Invalid ID"), true); }

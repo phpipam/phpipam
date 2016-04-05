@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie (2);
+$csrf = $User->csrf_cookie ("create", "truncate");
 
 
 # id must be numeric

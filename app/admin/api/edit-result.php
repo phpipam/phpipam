@@ -20,7 +20,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "apiedit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 /* checks */
 $error = array();

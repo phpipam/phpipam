@@ -427,22 +427,6 @@ class User extends Common_functions {
     }
 
     /**
-     * Cerates cookie to prevent csrf
-     *
-     * @access private
-     * @param mixed $index (default: null)
-     * @return void
-     */
-    public function create_csrf_cookie ($index = null) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // save cookie
-        $_SESSION[$name] = md5(uniqid(mt_rand(), true));
-        // return
-        return $_SESSION[$name];
-    }
-
-    /**
      * Sets translation for logged in user
      *
      * @access private
@@ -456,6 +440,59 @@ class User extends Common_functions {
             textdomain("phpipam");                                // Choose domain
         }
     }
+
+
+
+
+
+
+    /**
+     * CSRF cookie creation / validation.
+     *
+     * @access public
+     * @param string $action (default: "create")
+     * @param mixed $index (default: null)
+     * @param mixed $value (default: null)
+     * @return void
+     */
+    public function csrf_cookie ($action = "create", $index = null, $value = null) {
+        return $action == "create" ? $this->csrf_cookie_create ($index) : $this->csrf_cookie_validate ($index, $value);
+    }
+
+    /**
+     * Creates cookie to prevent csrf
+     *
+     * @access private
+     * @param mixed $index
+     * @return void
+     */
+    private function csrf_cookie_create ($index) {
+        // set cookie suffix
+        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
+        // save cookie
+        $_SESSION[$name] = md5(uniqid(mt_rand(), true));
+        // return
+        return $_SESSION[$name];
+    }
+
+    /**
+     * Validate provided csrf cookie
+     *
+     * @access private
+     * @param mixed $index
+     * @return void
+     */
+    private function csrf_cookie_validate ($index, $value) {
+        // set cookie suffix
+        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
+        // check and return
+        return $_SESSION[$name] == $value ? true : false;
+    }
+
+
+
+
+
 
     /**
      *    Check if migration of AD settings is required

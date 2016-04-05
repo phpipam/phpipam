@@ -27,7 +27,7 @@ if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("d
 # remove or add ?
 if ($_POST['action']=="remove") {
     # validate csrf cookie
-    $_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :               $Result->show("danger", _("Invalid CSRF cookie"), true, true);
+    $User->csrf_cookie ("validate", "rack_devices", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
     # set values
     $values = array("id"=>$_POST['deviceid'],
                     "rack"=>"",
@@ -55,7 +55,7 @@ if ($_POST['action']=="remove") {
 # add to rack
 else {
     # create csrf token
-    $csrf = $User->create_csrf_cookie (3);
+    $csrf = $User->csrf_cookie ("create", "rack_devices");
     # fetch rack details
     $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
     # check

@@ -21,8 +21,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
-
+$User->csrf_cookie ("validate", "languages", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify that description is present if action != delete
 if($_POST['action'] != "delete" && strlen($_POST['l_code']) < 2)		{ $Result->show("danger", _('Code must be at least 2 characters long'), true); }

@@ -23,7 +23,7 @@ $Ping		= new Scan ($Database);
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "address", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # validate action
 $Tools->validate_action ($_POST['action']);

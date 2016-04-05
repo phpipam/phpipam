@@ -18,18 +18,18 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie_2'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "truncate", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # id must be numeric
-if(!is_numeric($_POST['subnetId']))			{ $Result->show("danger", _("Invalid ID"), true, true); }
+if(!is_numeric($_POST['subnetId']))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # get subnet details
 $subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
 
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);
-if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true, true); }
+if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true); }
 
 # truncate network
 if(!$Subnets->subnet_truncate($subnet->id))	{ $Result->show("danger",  _("Failed to truncate subnet"), false); }

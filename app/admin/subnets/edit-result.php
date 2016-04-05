@@ -27,7 +27,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :               $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "subnet", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # ID must be numeric
@@ -42,11 +42,11 @@ if(@$_POST['showName']==1 && strlen($_POST['description'])==0) 	{ $Result->show(
 
 # verify that user has permissions to add subnet
 if($_POST['action']=="add") {
-	if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
+	if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
 }
 # otherwise check subnet permission
 else {
-	if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true, true); }
+	if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true); }
 }
 
 # we need old values for mailing
@@ -105,7 +105,7 @@ if ( ($_POST['sectionId'] != @$_POST['sectionIdNew']) && $_POST['action']=="edit
  *	If VRF changes then do checks!
  */
 if ( ($_POST['vrfId'] != @$_POST['vrfIdOld']) && $_POST['action']=="edit" ) {
-	
+
 	if($section['strictMode']==1 && !$parent_is_folder) {
     	/* verify that no overlapping occurs if we are adding root subnet
 	       only check for overlapping if vrf is empty or not exists!
@@ -403,7 +403,7 @@ else {
 		if (!isset($_POST['DNSrecursive']) && @$subnet_old_details['DNSrecursive']==0) { $_POST['DNSrecursive'] = 0; }
 
 		// recreate csrf cookie
-		$csrf = $User->create_csrf_cookie ();
+        $csrf = $User->csrf_cookie ("create", "domain");
 
 		//delete
 		if ($_POST['action']=="delete") {

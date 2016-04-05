@@ -1099,19 +1099,21 @@ class Subnets extends Common_functions {
 
 		# go through each and calculate used hosts
 		# add +2 for subnet and broadcast if required
-		foreach($this->slaves_full as $s) {
-    		# full?
-    		if ($s->isFull==1) {
-        		# get max
-        		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, false);
-    		}
-    		else {
-    			# fetch all addresses
-    			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
-    			# mask fix
-    			if($address_type=="IPv4" && $netmask<31) {
-    				$used = $used+1;
-    			}
+        if(isset($this->slaves_full)) {
+    		foreach($this->slaves_full as $s) {
+        		# full?
+        		if ($s->isFull==1) {
+            		# get max
+            		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, false);
+        		}
+        		else {
+        			# fetch all addresses
+        			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
+        			# mask fix
+        			if($address_type=="IPv4" && $netmask<31) {
+        				$used = $used+1;
+        			}
+        		}
     		}
 		}
 		# we counted, now lets calculate and return result
