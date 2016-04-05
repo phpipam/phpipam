@@ -113,13 +113,14 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $table
 	 * @param mixed $sortField (default:id)
+	 * @param mixed bool (default:true)
 	 * @return void
 	 */
-	public function fetch_all_objects ($table=null, $sortField="id") {
+	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
 		# fetch
-		try { $res = $this->Database->getObjects($table, $sortField); }
+		try { $res = $this->Database->getObjects($table, $sortField, $sortAsc); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -127,7 +128,7 @@ class Common_functions  {
 		# save
 		if (sizeof($res)>0) {
     		foreach ($res as $r) {
-        		$this->cache_write ($table, $sortField, $r->$sortField, $r);
+        		$this->cache_write ($table, $r->id, $r);
     		}
 		}
 		# result
@@ -158,8 +159,8 @@ class Common_functions  {
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
 
 		# check cache
-		$cached_item = $this->cache_check($table, $method, $value);
-		if($cached_item!==false)	{
+		$cached_item = $this->cache_check($table, $value);
+		if($cached_item!==false) {
 			return $cached_item;
 		}
 		else {
@@ -170,7 +171,10 @@ class Common_functions  {
 			}
 			# save to cache array
 			if(sizeof($res)>0) {
-    			$this->cache_write ($table, $method, $value, $res);
+    			// set identifier
+    			$method = $this->cache_set_identifier ($table);
+    			// save
+    			$this->cache_write ($table, $res->$method, $res);
 				return $res;
 			}
 			else {
@@ -205,7 +209,7 @@ class Common_functions  {
 			# save to cach
 			if (sizeof($res)>0) {
     			foreach ($res as $r) {
-        			$this->cache_write ($table, $field, $r->$field, $r);
+        			$this->cache_write ($table, $r->id, $r);
     			}
 			}
 			# result
@@ -278,16 +282,22 @@ class Common_functions  {
      *
      * @access protected
      * @param mixed $table
-     * @param string $method (default: "id")
      * @param mixed $id
      * @param mixed $object
      * @return void
      */
-    protected function cache_write ($table, $method = "id", $id, $object) {
+    protected function cache_write ($table, $id, $object) {
+        // get method
+        $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
         if ($this->cache_check_exceptions!==false) {
             if (!isset($this->cache[$table][$method][$id])) {
                 $this->cache[$table][$method][$id] = (object) $object;
+                // add ip ?
+                $ip_check = $this->cache_check_add_ip($table);
+                if ($ip_check!==false) {
+                    $this->cache[$table][$method][$id]->ip = $this->transform_address ($object->$ip_check, "dotted");
+                }
             }
         }
     }
@@ -307,15 +317,44 @@ class Common_functions  {
     }
 
     /**
+     * Cehck if ip is to be added to result
+     *
+     * @access protected
+     * @param mixed $table
+     * @return void
+     */
+    protected function cache_check_add_ip ($table) {
+        // define
+        $ip_tables = array("subnets"=>"subnet", "ipaddresses"=>"ip_addr");
+        // check
+        return array_key_exists ($table, $ip_tables) ? $ip_tables[$table] : false;
+    }
+
+    /**
+     * Set identifier for table - exceptions.
+     *
+     * @access protected
+     * @param mixed $table
+     * @return void
+     */
+    protected function cache_set_identifier ($table) {
+        // vlan and subnets have different identifiers
+        if ($table=="vlans")        { return "vlanId"; }
+        elseif ($table=="vrf")      { return "vrfId"; }
+        else                        { return "id"; }
+    }
+
+    /**
      * Checks if object alreay exists in cache..
      *
      * @access protected
      * @param mixed $table
-     * @param string $method (default: "id")
      * @param mixed $id
      * @return void
      */
-    protected function cache_check ($table, $method = "id", $id) {
+    protected function cache_check ($table, $id) {
+        // get method
+        $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise return false
         if (isset($this->cache[$table][$method][$id]))  { return (object) $this->cache[$table][$method][$id]; }
         else                                            { return false; }

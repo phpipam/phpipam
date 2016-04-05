@@ -7,25 +7,26 @@
  */
 abstract class DB {
 
-	/**
-	 * username
-	 *
-	 * (default value: 'root')
-	 *
-	 * @var string
-	 * @access protected
-	 */
-	protected $username = 'root';
 
 	/**
-	 * password
+	 * Default db username
 	 *
-	 * (default value: '')
+	 * (default value: null)
 	 *
-	 * @var string
+	 * @var mixed
 	 * @access protected
 	 */
-	protected $password = '';
+	protected $username = null;
+
+	/**
+	 * Default db password
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $password = null;
 
 	/**
 	 * charset
@@ -46,6 +47,36 @@ abstract class DB {
 	 * @access protected
 	 */
 	protected $pdo = null;
+
+	/**
+	 * Database name - needed for check
+	 *
+	 * (default value: '')
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $dbname 	= '';		// needed for DB check
+
+	/**
+	 * hosnamr
+	 *
+	 * (default value: 'localhost')
+	 *
+	 * @var string
+	 * @access protected
+	 */
+	protected $host 	= 'localhost';
+
+	/**
+	 * Default port number
+	 *
+	 * (default value: '3306')
+	 *
+	 * @var string
+	 * @access protected
+	 */
+	protected $port 	= '3306';
 
 
 
@@ -760,66 +791,6 @@ class Database_PDO extends DB {
 
 
 	/**
-	 * Database name - needed for check
-	 *
-	 * (default value: '')
-	 *
-	 * @var string
-	 * @access public
-	 */
-	public $dbname 	= '';		// needed for DB check
-
-	/**
-	 * hosnamr
-	 *
-	 * (default value: 'localhost')
-	 *
-	 * @var string
-	 * @access protected
-	 */
-	protected $host 	= 'localhost';
-
-	/**
-	 * Default port number
-	 *
-	 * (default value: '3306')
-	 *
-	 * @var string
-	 * @access protected
-	 */
-	protected $port 	= '3306';
-
-	/**
-	 * Defaut charset
-	 *
-	 * (default value: 'utf8')
-	 *
-	 * @var string
-	 * @access protected
-	 */
-	protected $charset  = 'utf8';
-
-	/**
-	 * Default db username
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $username = null;
-
-	/**
-	 * Default db password
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $password = null;
-
-	/**
 	 * SSL options for db connection
 	 *
 	 * (default value: array ())
@@ -927,7 +898,7 @@ class Database_PDO extends DB {
 	 */
 	public function connect() {
 		parent::connect();
-		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+		//@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
 	}
 
 	/**

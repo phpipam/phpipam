@@ -797,8 +797,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	private function requests_fetch_num () {
-		try { return $this->Database->numObjectsFilter("requests", "processed", "0"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+    	return $this->count_database_objects ("requests", "processed", 0);
 	}
 
 	/**
@@ -808,8 +807,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	private function requests_fetch_objects () {
-		try { return $this->Database->getObjectsQuery("SELECT * FROM `requests` where `processed`=0;"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+    	return $this->fetch_multiple_objects ("requests", "processed", 0);
 	}
 
 	/**

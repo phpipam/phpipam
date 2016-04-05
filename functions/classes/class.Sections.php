@@ -268,20 +268,7 @@ class Sections extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_all_sections ($order_by="order", $sort_asc=true) {
-		# fetch all
-		try { $sections = $this->Database->getObjects("sections", $order_by, $sort_asc); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save them to array
-		if(sizeof($sections)>0)	{
-			foreach($sections as $s) {
-				$this->sections[$s->id] = $s;
-			}
-		}
-		# response
-		return sizeof($sections)>0 ? $sections : false;
+    	return $this->fetch_all_objects ("sections", $order_by, $sort_asc);
 	}
 
 	/**
@@ -292,7 +279,7 @@ class Sections extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_sections ($order_by="order", $sort_asc=true) {
-		return $this->fetch_all_sections ();
+		return $this->fetch_all_objects ("sections", $order_by, $sort_asc);
 	}
 
 	/**
@@ -300,27 +287,11 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param string $method (default: "id")
-	 * @param mixed $id
+	 * @param mixed $value
 	 * @return void
 	 */
-	public function fetch_section ($method, $id) {
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-		# check cache first
-		if(isset($this->sections[$id]))	{
-			return $this->sections[$id];
-		}
-		else {
-			try { $section = $this->Database->getObjectQuery("SELECT * FROM `sections` where `$method` = ?;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to sections
-			$this->sections[$id] = $section;
-			#result
-			return $section;
-		}
+	public function fetch_section ($method = "id", $value) {
+        return $this->fetch_object ("sections", $method, $value);
 	}
 
 	/**

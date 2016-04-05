@@ -394,32 +394,14 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param string $method (default: "id")
-	 * @param mixed $id
+	 * @param mixed $value
 	 * @return void
 	 */
-	public function fetch_subnet ($method=null, $id) {
+	public function fetch_subnet ($method="id", $value) {
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
-		# check cache first
-		if(isset($this->subnets[$id]))	{
-			return $this->subnets[$id];
-		}
-		else {
-			try { $subnet = $this->Database->getObjectQuery("SELECT * FROM `subnets` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to subnets cache
-			if(sizeof($subnet)>0) {
-				# add decimal format
-				$subnet->ip = $this->transform_to_dotted ($subnet->subnet);
-				# save to subnets
-				$this->subnets[$subnet->id] = (object) $subnet;
-			}
-			#result
-			return $subnet;
-		}
+		# fetch
+		return $this->fetch_object ("subnets", $method, $value);
 	}
 
 	/**
@@ -533,8 +515,7 @@ class Subnets extends Common_functions {
 	    $order = $this->get_subnet_order ();
 
 	    # fetch section and set section ordering
-		$Sections = new Sections ($this->Database);
-	    $section  = $Sections->fetch_section ("id", $sectionId);
+	    $section  = $this->fetch_object ("sections", "id", $sectionId);
 
 	    # section ordering - overrides network
 	    if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(",", $section->subnetOrdering); }
@@ -601,8 +582,7 @@ class Subnets extends Common_functions {
 	    $order = $this->get_subnet_order ();
 
 	    # fetch section and set section ordering
-		$Sections = new Sections ($this->Database);
-	    $section  = $Sections->fetch_section ("id", $sectionId);
+	    $section  = $this->fetch_object ("sections","id", $sectionId);
 
 	    # section ordering - overrides network
 	    if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(",", $section->subnetOrdering); }
@@ -764,13 +744,8 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function has_slaves ($subnetId) {
-		try { $count = $this->Database->numObjectsFilter("subnets", "masterSubnetId", $subnetId); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# result
-		return $count>0 ? true : false;
+    	// NULL subnetId cannot have slaves
+    	return is_null($subnetId) ? false : $this->count_database_objects ("subnets", "masterSubnetId", $subnetId);
 	}
 
 	/**
@@ -1635,8 +1610,7 @@ class Subnets extends Common_functions {
 	 */
 	public function verify_subnet_resize ($subnet, $mask, $subnetId, $vrfId, $masterSubnetId, $mask_old, $sectionId=0) {
 	    # fetch section and set section ordering
-		$Sections = new Sections ($this->Database);
-	    $section  = $Sections->fetch_section ("id", $sectionId);
+	    $section  = $this->fetch_object ("sections", "id", $sectionId);
 
 		# new mask must be > 8
 		if($mask < 8) 											{ $this->Result->show("danger", _('New mask must be at least /8').'!', true); }
@@ -2173,8 +2147,7 @@ class Subnets extends Common_functions {
     private function multicast_address_exists ($mac, $sectionId, $vlanId, $unique_required = "vlan", $address_id = 0) {
         // if vlan fetch l2 domainid
         if ($unique_required=="vlan") {
-            $Tools = new Tools ($this->Database);
-            $vlan_details = $Tools->fetch_object("vlans", "vlanId", $vlanId);
+            $vlan_details = $this->fetch_object("vlans", "vlanId", $vlanId);
 
             // set query
             $query = "select
@@ -2549,8 +2522,6 @@ class Subnets extends Common_functions {
 	public function print_vlan_menu( $user, $vlans, $sectionId ) {
 		# initialize html array
 		$html = array();
-		# tools
-		$Tools = new Tools($this->Database);
 		# must be numeric
 		if(isset($_GET['section']))		if(!is_numeric($_GET['section']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
 		if(isset($_GET['subnetId']))	if(!is_numeric($_GET['subnetId']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
@@ -2580,7 +2551,7 @@ class Subnets extends Common_functions {
 			# domain
 			$item['l2domain'] = "";
 			if($item['domainId']!=1) {
-    			$domain = $Tools->fetch_object("vlanDomains", "id", $item['domainId']);
+    			$domain = $this->fetch_object("vlanDomains", "id", $item['domainId']);
     			if ($domain!==false) {
         			$item['l2domain'] = " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $domain->name'>$domain->name</span>";
     			}
@@ -2729,6 +2700,7 @@ class Subnets extends Common_functions {
 	 * @return none - print
 	 */
 	public function print_subnets_tools( $user, $subnets, $custom_fields ) {
+
 		# tools object
 		$Tools = new Tools ($this->Database);
 		# set hidden fields
@@ -2872,7 +2844,7 @@ class Subnets extends Common_functions {
 				//vrf
 				if($this->settings->enableVRF == 1) {
 					# fetch vrf
-					$vrf = $Tools->fetch_object("vrf", "vrfId", $option['value']['vrfId']);
+					$vrf = $this->fetch_object("vrf", "vrfId", $option['value']['vrfId']);
 					$html[] = !$vrf ? "<td></td>" : "<td>$vrf->name</td>";
 				}
 
@@ -2894,7 +2866,7 @@ class Subnets extends Common_functions {
 
 				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
 				else {
-					$device = $Tools->fetch_object ("devices", "id", $option['value']['device']);
+					$device = $this->fetch_object ("devices", "id", $option['value']['device']);
 					if ($device!==false) {
 						$html[] = "	<td><a href='".create_link("tools","devices","hosts",$option['value']['device'])."'>".$device->hostname .'</a></td>' . "\n";
 					}

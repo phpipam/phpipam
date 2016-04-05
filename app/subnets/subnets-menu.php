@@ -68,7 +68,7 @@ else {
     else 										{ $iconClass='fa-expand';  	$action = 'close';}
 
     # Check if it has parent, and if so print back link
-    if($section['masterSection']!=0)	{
+    if($section['masterSection']!=0 && $section['masterSection']!=NULL)	{
     	# get details
     	$master_section = (array) $Sections->fetch_section ("id", $section['masterSection']);
 
@@ -139,3 +139,5 @@ if($section_permission == 3) {
 	print "	</span>";
 	print "</div>";
 }
+
+?>
