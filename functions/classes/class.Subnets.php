@@ -2516,10 +2516,11 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $user
 	 * @param mixed $vlans
+	 * @param mixed $section_subnets
 	 * @param mixed $sectionId
 	 * @return void
 	 */
-	public function print_vlan_menu( $user, $vlans, $sectionId ) {
+	public function print_vlan_menu( $user, $vlans, $section_subnets, $sectionId ) {
 		# initialize html array
 		$html = array();
 		# must be numeric
@@ -2561,8 +2562,12 @@ class Subnets extends Common_functions {
 			$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('VLAN contains subnets').'.<br>'._('Click on folder to open/close').'"></i>';
 			$html[] = '<a href="'.create_link("vlan",$sectionId,$item['vlanId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['number'].' ('.$item['name'].') '.$item['l2domain'].'</a>';
 
-			# fetch all subnets in VLAN
-			$subnets = $this->fetch_vlan_subnets ($item['vlanId'], $sectionId);
+            # set all subnets in this vlan
+            foreach ($section_subnets as $s) {
+                if ($s->vlanId==$item['vlanId']) {
+                    $subnets[] = $s;
+                }
+            }
 
 			# if some exist print next ul
 			if($subnets) {
@@ -2609,10 +2614,11 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $user
 	 * @param mixed $vrfs
+	 * @param mixed $section_subnets
 	 * @param mixed $sectionId
 	 * @return void
 	 */
-	public function print_vrf_menu( $user, $vrfs, $sectionId ) {
+	public function print_vrf_menu( $user, $vrfs, $section_subnets, $sectionId ) {
 	 	# initialize html array
 		$html = array();
 
@@ -2648,8 +2654,13 @@ class Subnets extends Common_functions {
 			$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('VRF contains subnets').'.<br>'._('Click on folder to open/close').'"></i>';
 			$html[] = '<a href="'.create_link("vrf",$sectionId,$item['vrfId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['name'].'</a>';
 
-			# fetch all subnets in VLAN
-			$subnets = $this->fetch_vrf_subnets ($item['vrfId'], $sectionId);
+            # set all subnets in this vrf
+            $subnets = array();
+            foreach ($section_subnets as $s) {
+                if ($s->vrfId==$item['vrfId']) {
+                    $subnets[] = $s;
+                }
+            }
 
 			# if some exist print next ul
 			if($subnets) {

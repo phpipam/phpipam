@@ -99,7 +99,7 @@ else {
 				# title
 				print "<hr><h4>"._('Available VLANs')."</h4><hr>";
 				# create and print menu
-				print $Subnets->print_vlan_menu($User->user, $vlans, $_GET['section']);
+				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $_GET['section']);
 			print "</div>";
 		}
 	}
@@ -115,7 +115,7 @@ else {
 				# title
 				print "<hr><h4>"._('Available VRFs')."</h4><hr>";
 				# create and print menu
-				print $Subnets->print_vrf_menu($User->user, $vrfs, $_GET['section']);
+				print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $_GET['section']);
 			print "</div>";
 		}
 	}
