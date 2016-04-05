@@ -7,14 +7,6 @@
 class Subnets extends Common_functions {
 
 	/**
-	 * (array of objects) to store subnets, subnet ID is array index
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $subnets;
-
-	/**
 	 * (array of ids) to store id's of all recursively slaves
 	 *
 	 * @var mixed
@@ -424,10 +416,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-				# add decimal format
-				$subnet->ip = $this->transform_to_dotted ($subnet->subnet);
-				# save to subnets
-				$this->subnets[$subnet->id] = (object) $subnet;
+				 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
 		# result
@@ -540,10 +529,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-				# add decimal format
-				$subnet->ip = $this->transform_to_dotted ($subnet->subnet);
-				# save to subnets
-				$this->subnets[$subnet->id] = (object) $subnet;
+                $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
 		# result
@@ -607,10 +593,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-				# add decimal format
-				$subnet->ip = $this->transform_to_dotted ($subnet->subnet);
-				# save to subnets
-				$this->subnets[$subnet->id] = (object) $subnet;
+                $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
 		# result
@@ -764,10 +747,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($slaves)>0) {
 			foreach($slaves as $slave) {
-				# add decimal format
-				$slave->ip = $this->transform_to_dotted ($slave->subnet);
-				# save to subnets
-				$this->subnets[$slave->id] = (object) $slave;
+                $this->cache_write ("subnets", $slave->id, $slave);
 			}
 			return $slaves;
 		}
@@ -1027,10 +1007,16 @@ class Subnets extends Common_functions {
 	public function get_addresses_types () {
 		# from cache
 		if($this->address_types == null) {
-			# addresses class
-			$Addresses = new Addresses ($this->Database);
-			# fetch
-			$this->address_types = $Addresses->addresses_types_fetch();
+        	# fetch
+        	$types = $this->fetch_all_objects ("ipTags", "id");
+
+            # save to array
+			$types_out = array();
+			foreach($types as $t) {
+				$types_out[$t->id] = (array) $t;
+			}
+			# save to cache
+			$this->address_types = $types_out;
 		}
 	}
 

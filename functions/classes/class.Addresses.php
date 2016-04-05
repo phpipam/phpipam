@@ -143,26 +143,16 @@ class Addresses extends Common_functions {
 	 * @return array of address types and parameters
 	 */
 	public function addresses_types_fetch () {
-		# check cache
-		if($this->address_types!=null) {
-			return $this->address_types;
+    	# fetch
+    	$types = $this->fetch_all_objects ("ipTags", "id");
+
+		# save to array
+		$types_out = array();
+		foreach($types as $t) {
+			$types_out[$t->id] = (array) $t;
 		}
-		else {
-			try { $types = $this->Database->getObjects("ipTags", 'id', true); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-				return false;
-			}
-			# save to array
-			$types_out = array();
-			foreach($types as $t) {
-				$types_out[$t->id] = (array) $t;
-			}
-			# save to cache
-			$this->address_types = $types_out;
-			# return
-			return $types_out;
-		}
+		# return
+		return $types_out;
 	}
 
 	/**
