@@ -60,6 +60,7 @@ else {
 			}
 		}
 	}
+    print "<th></th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -131,6 +132,17 @@ else {
 				}
 	    	}
 	    }
+
+        // actions
+		print "	<td class='actions'>";
+		print "	<div class='btn-group'>";
+		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan->id'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$vlan->id'><i class='fa fa-external-link'></i></button>";
+		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan->id'><i class='fa fa-times'></i></button>";
+		print "	</div>";
+		print "	</td>";
+
+        print "</tr>";
 
 		# show free vlans - last
 		if($User->user->hideFreeRange!=1 && !isset($_GET['sPage'])) {
