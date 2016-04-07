@@ -85,7 +85,8 @@ foreach($outFile as $k=>$line) {
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
         // custom fields
-        $currIndex = 10;
+        // Incorrect Value for $currIndex = 10;
+        $currIndex = 9;
         if(sizeof($custom_address_fields) > 0) {
         	foreach($custom_address_fields as $field) {
             	$currIndex++;
