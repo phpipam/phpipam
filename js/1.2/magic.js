@@ -15,8 +15,13 @@ function hideSpinner() { $('div.loading').fadeOut('fast'); }
 /* escape hide popups */
 $(document).keydown(function(e) {
     if(e.keyCode === 27) {
-	 hidePopups();
+        hidePopups();
     }
+});
+
+// no enter in sortfields
+$(document).on("submit", ".searchFormClass", function() {
+    return false;
 });
 
 
@@ -213,12 +218,12 @@ else                                    { def_size = readCookie('table-page-size
 // table
 $('table.sorted').bdt({
    pageRowCount: def_size,
-   searchFormClass: 'form-inline pull-right',
+   searchFormClass: 'form-inline pull-right searchFormClass',
    divClass: 'text-right'
 });
 $('table.sorted-left').bdt({
    pageRowCount: def_size,
-   searchFormClass: 'form-inline pull-left clearfix',
+   searchFormClass: 'form-inline pull-left searchFormClass clearfix',
    divClass: 'text-left clearfix'
 });
 $('table.sorted').stickyTableHeaders();
