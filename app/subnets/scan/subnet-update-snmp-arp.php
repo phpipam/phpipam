@@ -35,7 +35,7 @@ if (sizeof($all_subnet_hosts)>0) {
     }
 
     # fetch devices that use get_routing_table query
-    $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_routing_table%", "id", true, true);
+    $devices_used = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_arp_table%", "id", true, true);
 
     # filter out not in this section
     if ($devices_used !== false) {
