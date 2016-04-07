@@ -456,7 +456,23 @@ class User extends Common_functions {
      * @return void
      */
     public function csrf_cookie ($action = "create", $index = null, $value = null) {
+        // validate action
+        $this->csrf_validate_action ($action);
+        // execute
         return $action == "create" ? $this->csrf_cookie_create ($index) : $this->csrf_cookie_validate ($index, $value);
+    }
+
+
+    /**
+     * Validates csrf cookie action..
+     *
+     * @access private
+     * @param mixed $action
+     * @return void
+     */
+    private function csrf_validate_action ($action) {
+        if ($action=="create" || $action=="validate") { return true; }
+        else                                          { $this->Result->show("danger", "Invalid CSRF cookie action", true); }
     }
 
     /**

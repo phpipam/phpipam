@@ -739,13 +739,11 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_subnet_slaves ($subnetId) {
-		try { $slaves = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `masterSubnetId` = ? order by `subnet` asc;", array($subnetId)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
+    	// fetch
+		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet", true);
+
 		# save to subnets cache
-		if(sizeof($slaves)>0) {
+        if ($slaves!==false) {
 			foreach($slaves as $slave) {
                 $this->cache_write ("subnets", $slave->id, $slave);
 			}

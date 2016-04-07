@@ -151,6 +151,8 @@ class Addresses extends Common_functions {
 		foreach($types as $t) {
 			$types_out[$t->id] = (array) $t;
 		}
+		# save
+		$this->address_types = $types_out;
 		# return
 		return $types_out;
 	}
@@ -167,7 +169,7 @@ class Addresses extends Common_functions {
 		$this->addresses_types_fetch();
 		# result
 		if(!isset($this->address_types[$state]))	{
-			return $state;
+			return "";
 		}
 		else {
 			if($this->address_types[$state]['showtag']==1) {

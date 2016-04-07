@@ -33,6 +33,16 @@ class Common_functions  {
 	public $cache = array();
 
 	/**
+	 * cache_check_exceptions
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access private
+	 */
+	private $cache_check_exceptions = array();
+
+	/**
 	 * Database
 	 *
 	 * @var mixed
@@ -288,15 +298,15 @@ class Common_functions  {
      */
     protected function cache_write ($table, $id, $object) {
         // get method
-        $method = $this->cache_set_identifier ($table);
+        $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
         if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$table][$method][$id])) {
-                $this->cache[$table][$method][$id] = (object) $object;
+            if (!isset($this->cache[$identifier][$method][$id])) {
+                $this->cache[$table][$identifier][$id] = (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
-                    $this->cache[$table][$method][$id]->ip = $this->transform_address ($object->$ip_check, "dotted");
+                    $this->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->$ip_check, "dotted");
                 }
             }
         }
