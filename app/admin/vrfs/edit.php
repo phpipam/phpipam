@@ -86,7 +86,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		$vrf_sections = is_array($vrf_sections) ? $vrf_sections : array();
 		// loop
 		if($sections!==false) {
-			foreach($Sections->sections as $section) {
+			foreach($sections as $section) {
 				if(in_array($section->id, @$vrf_sections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
 				else 										{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
 			}
