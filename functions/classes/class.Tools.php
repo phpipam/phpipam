@@ -1697,7 +1697,7 @@ class Tools extends Common_functions {
 	 */
 	private function parse_import_file_xls ($subnet, $custom_address_fields) {
      	# get excel object
-    	require_once('../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
+    	require_once(dirname(__FILE__).'/../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
     	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.xls', false);
 
     	//get number of rows

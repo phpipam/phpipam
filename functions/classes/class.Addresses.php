@@ -253,7 +253,7 @@ class Addresses extends Common_functions {
 	 */
 	public function fetch_address ($method, $id) {
 		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
+		$method = is_null($method) ? "id" : $method;
 		# check cache first
 		if(isset($this->addresses[$id]))	{
 			return $this->addresses[$id];

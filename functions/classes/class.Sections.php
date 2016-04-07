@@ -291,6 +291,7 @@ class Sections extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_section ($method = "id", $value) {
+    	$method = is_null($method) ? "id" : $method;
         return $this->fetch_object ("sections", $method, $value);
 	}
 

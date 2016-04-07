@@ -954,9 +954,9 @@ class Common_functions  {
 		# subnets
 		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs ($Section, $Subnet, $req, $Address); }
 		# folders
-		if($req['page'] == "folder")		{ $this->print_folder_breadcrumbs ($Section, $Subnet, $req); }
+		elseif($req['page'] == "folder")	{ $this->print_folder_breadcrumbs ($Section, $Subnet, $req); }
 		# tools
-		else if ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs ($req); }
+		elseif ($req['page'] == "tools") 	{ $this->print_tools_breadcrumbs ($req); }
 	}
 
 	/**
@@ -978,14 +978,14 @@ class Common_functions  {
 			array_shift($parents);
 
 			# section details
-			$section = (array) $Section->fetch_section(null, $req['section']);
+			$section = (array) $this->fetch_object ("sections", "id", $req['section']);
 
 			# section name
 			print "	<li><a href='".create_link("subnets",$section['id'])."'>$section[name]</a> <span class='divider'></span></li>";
 
 			# all parents
 			foreach($parents as $parent) {
-				$subnet = (array) $Subnet->fetch_subnet(null,$parent);
+				$subnet = (array) $Subnet->fetch_subnet("id",$parent);
 				if($subnet['isFolder']==1) {
 					print "	<li><a href='".create_link("folder",$section['id'],$parent)."'><i class='icon-folder-open icon-gray'></i> $subnet[description]</a> <span class='divider'></span></li>";
 				} else {
@@ -993,10 +993,10 @@ class Common_functions  {
 				}
 			}
 			# parent subnet
-			$subnet = (array) $Subnet->fetch_subnet(null,$req['subnetId']);
+			$subnet = (array) $Subnet->fetch_subnet("id",$req['subnetId']);
 			# ip set
 			if(isset($req['ipaddrid'])) {
-				$ip = (array) $Address->fetch_address (null, $req['ipaddrid']);
+				$ip = (array) $Address->fetch_address ("id", $req['ipaddrid']);
 				print "	<li><a href='".create_link("subnets",$section['id'],$subnet['id'])."'>$subnet[description] ($subnet[ip]/$subnet[mask])</a> <span class='divider'></span></li>";
 				print "	<li class='active'>$ip[ip]</li>";			//IP address
 			}

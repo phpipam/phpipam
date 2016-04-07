@@ -391,7 +391,7 @@ class Subnets extends Common_functions {
 	 */
 	public function fetch_subnet ($method="id", $value) {
 		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
+		$method = is_null($method) ? "id" : $method;
 		# fetch
 		return $this->fetch_object ("subnets", $method, $value);
 	}
