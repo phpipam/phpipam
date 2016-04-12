@@ -232,10 +232,15 @@ class Logging extends Common_functions {
 		# Result
 		$this->Result = new Result ();
 		# User
-  		$this->log_username = @$_SESSION['ipamusername'];
+		$this->log_username = @$_SESSION['ipamusername'];
 
 		# settings
-		$this->settings = $settings===null || $settings===false ? $this->get_settings () : (object) $settings;
+		if ($settings===null || $settings===false) {
+			$this->get_settings(); #assigns $this->settings internally
+		}
+		else {
+			$this->settings = (object) $settings;
+		}
 		# debugging
 		$this->set_debugging();
 		# set log type
