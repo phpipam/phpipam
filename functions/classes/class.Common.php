@@ -163,7 +163,7 @@ class Common_functions  {
 		if(strlen($table)==0)   return false;
 		if(is_null($method))	return false;
 		if(is_null($value))		return false;
-		if($value==0)		    return false;
+		if($value===0)		    return false;
 
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
