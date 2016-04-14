@@ -741,7 +741,6 @@ class Subnets extends Common_functions {
 	public function fetch_subnet_slaves ($subnetId) {
     	// fetch
 		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet", true);
-
 		# save to subnets cache
         if ($slaves!==false) {
 			foreach($slaves as $slave) {
@@ -839,8 +838,9 @@ class Subnets extends Common_functions {
 		$root = false;
 
 		while($root === false) {
-			$subd = (array) $this->fetch_subnet("id", $subnetId);		# get subnet details
-			if(sizeof($subd)>0) {
+			$subd = $this->fetch_object("subnets", "id", $subnetId);		# get subnet details
+			if($subd!==false) {
+    			$subd = (array) $subd;
 				# not root yet
 				if(@$subd['masterSubnetId']!=0) {
 					array_unshift($parents, $subd['masterSubnetId']);
@@ -856,6 +856,8 @@ class Subnets extends Common_functions {
 				$root = true;
 			}
 		}
+		# remove 0
+		unset($parents[0]);
 		# return array
 		return $parents;
 	}
@@ -1459,6 +1461,7 @@ class Subnets extends Common_functions {
 	                	//loop
 	                	$ignore = false;
 	                	foreach($allParents as $kp=>$p) {
+    	                	//ignore self
 		                	if($existing_subnet->id == $kp) {
 			                	$ignore = true;
 		                	}

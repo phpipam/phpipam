@@ -317,7 +317,7 @@ else {
 				// add button
 				if ($User->settings->enablePowerDNS==1) {
 				// add new button
-				if ($Subnets->validate_hostname($addresses[$n]->dns_name, false) && ($User->is_admin() || @$User->user->pdns=="Yes"))
+				if ($Subnets->validate_hostname($addresses[$n]->dns_name, false) && ($User->is_admin(false) || @$User->user->pdns=="Yes"))
 				$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
 				else
 				$button = "";

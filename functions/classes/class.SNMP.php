@@ -110,6 +110,16 @@ class phpipamSNMP extends Common_functions {
 	public $snmp_queries = false;
 
 	/**
+	 * VLAN number for MAC address fetching
+	 *
+	 * (default value: 1)
+	 *
+	 * @var int
+	 * @access public
+	 */
+	public $vlan_number = 1;
+
+	/**
 	 * Result object - for result printing
 	 *
 	 * @var mixed
@@ -153,27 +163,33 @@ class phpipamSNMP extends Common_functions {
     	$this->snmp_queries['get_arp_table']->oid = ".1.3.6.1.2.1.4.22.1";
     	$this->snmp_queries['get_arp_table']->description = "Fetches ARP table";
 
+    	// mac address table
+    	$this->snmp_queries['get_mac_table'] = new StdClass();
+    	$this->snmp_queries['get_mac_table']->id  = 3;
+    	$this->snmp_queries['get_mac_table']->oid = ".1.3.6.1.2.1.17.4.3.1";
+    	$this->snmp_queries['get_mac_table']->description = "Fetches MAC address table";
+
     	// interface ip addresses
     	$this->snmp_queries['get_interfaces_ip'] = new StdClass();
-    	$this->snmp_queries['get_interfaces_ip']->id  = 3;
+    	$this->snmp_queries['get_interfaces_ip']->id  = 4;
     	$this->snmp_queries['get_interfaces_ip']->oid = ".1.3.6.1.2.1.4.20.1";
     	$this->snmp_queries['get_interfaces_ip']->description = "Fetches interface ip addresses";
 
     	// get_routing_table
     	$this->snmp_queries['get_routing_table'] = new StdClass();
-    	$this->snmp_queries['get_routing_table']->id  = 4;
+    	$this->snmp_queries['get_routing_table']->id  = 5;
     	$this->snmp_queries['get_routing_table']->oid = ".1.3.6.1.2.1.4.24.4.1";
     	$this->snmp_queries['get_routing_table']->description = "Fetches routing table";
 
     	// get vlans
     	$this->snmp_queries['get_vlan_table'] = new StdClass();
-    	$this->snmp_queries['get_vlan_table']->id  = 5;
+    	$this->snmp_queries['get_vlan_table']->id  = 6;
     	$this->snmp_queries['get_vlan_table']->oid = ".1.3.6.1.4.1.9.9.46.1.3.1.1.4";
     	$this->snmp_queries['get_vlan_table']->description = "Fetches VLAN table";
 
     	// get vrfs
     	$this->snmp_queries['get_vrf_table'] = new StdClass();
-    	$this->snmp_queries['get_vrf_table']->id  = 6;
+    	$this->snmp_queries['get_vrf_table']->id  = 7;
 //     	$this->snmp_queries['get_vrf_table']->oid = ".1.3.6.1.3.118.1.2.2.1";
     	$this->snmp_queries['get_vrf_table']->oid = "MPLS-VPN-MIB::mplsVpnVrfDescription";
     	$this->snmp_queries['get_vrf_table']->description = "Fetches VRF table";
@@ -203,9 +219,10 @@ class phpipamSNMP extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $device (default: false)
+	 * @param int $vlan_number (default: false)
 	 * @return void
 	 */
-	public function set_snmp_device ($device = false) {
+	public function set_snmp_device ($device = false, $vlan_number = false) {
     	# clear connection if it exists
     	$this->connection_close ();
     	# if false exit
@@ -219,7 +236,7 @@ class phpipamSNMP extends Common_functions {
         # hostname = za debugging
         $this->set_snmp_hostname ($device->hostname);
     	# set community
-    	$this->set_snmp_community ($device->snmp_community);
+    	$this->set_snmp_community ($device->snmp_community, $vlan_number);
     	# set version
     	$this->set_snmp_version ($device->snmp_version);
     	# set port
@@ -262,11 +279,19 @@ class phpipamSNMP extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $community
+	 * @param mixed $vlan_number
 	 * @return void
 	 */
-	private function set_snmp_community ($community) {
+	private function set_snmp_community ($community, $vlan_number) {
     	if (strlen($community)>0) {
-        	$this->snmp_community = $community;
+        	// vlan ?
+        	if ($vlan_number!==false && is_numeric($vlan_number)) {
+                $this->snmp_community = $community."@".$vlan_number;
+                $this->vlan_number = $vlan_number;
+        	}
+        	else {
+                $this->snmp_community = $community;
+        	}
         }
 	}
 
@@ -385,7 +410,7 @@ class phpipamSNMP extends Common_functions {
     }
 
     /**
-     * Fetch es system info
+     * Fetches system info
      *
      * @access private
      * @return void
@@ -434,7 +459,7 @@ class phpipamSNMP extends Common_functions {
         // parse IP
         $n=0;
         foreach ($res1 as $r) {
-            $res[$n]['ip']  = trim(substr($r, strpos($r, ":")+2));
+            $res[$n]['ip']  = $this->parse_snmp_result_value ($r);
             $n++;
         }
         // parse MAC
@@ -450,20 +475,24 @@ class phpipamSNMP extends Common_functions {
         // fetch interface name
         $n=0;
         foreach ($res3 as $r) {
-            $index = trim(substr($r, strpos($r, ":")+2));
+            $index = $this->parse_snmp_result_value ($r);
             // if already fetched
             if (array_key_exists($index, $interface_indexes)) {
                 $res[$n]['port'] = $interface_indexes[$index];
             }
             else {
                 try {
-                    $res1 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.1.".$index );
+                    $res1 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.1.".$index );  // if description
+                    $res2 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$index );     // if port
+
                     //parse and save
-                    $res[$n]['port'] = trim(substr($res1, strpos($res1, ":")+2));
+                    $res[$n]['port'] = $this->parse_snmp_result_value ($res1);
+                    $res[$n]['portname'] = $this->parse_snmp_result_value ($res2);
                     $interface_indexes[$index] = $res[$n]['port'];
                 }
                 catch (Exception $e) {
                     $res[$n]['port'] = "";
+                    $res[$n]['portname'] = "";
                 }
             }
             $n++;
@@ -476,6 +505,74 @@ class phpipamSNMP extends Common_functions {
         return isset($res) ? $res : false;
     }
 
+    /**
+     * Fetch MAC address table from device for specified VLAN.
+     *
+     *
+     *  First we fetch MAC address and bridgeport
+     *  Than we fetch interface index from bridgeport index
+     *  Than we fetch interface description
+     *
+     *
+     * @access private
+     * @return void
+     */
+    private function get_mac_table () {
+        // init
+        $this->connection_open ();
+
+        // fetch
+        try {
+            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_mac_table"]->oid.".1" );    // mac
+            $res2 = $this->snmp_session->walk( $this->snmp_queries["get_mac_table"]->oid.".2" );    // bridge port index
+		}
+		catch (Exception $e) {
+    		throw new Exception ($e->getMessage());
+		}
+
+        // check for errors
+        $this->connection_error_check ();
+
+        // parse MAC
+        $n=0;
+        foreach ($res1 as $r) {
+            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
+            // validate mac
+            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
+            $n++;
+        };
+
+        // parse bridgeport index and fetch if description
+        $n=0;
+        foreach ($res2 as $r) {
+            $res[$n]['bridgeportindex'] = $this->parse_snmp_result_value ($r);
+            // fetch interface
+            try {
+                $res3 = $this->snmp_session->get( ".1.3.6.1.2.1.17.1.4.1.2.".$res[$n]['bridgeportindex'] );         // bridge port to interface index
+                $res4 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$this->parse_snmp_result_value ($res3));  // interface description
+                $res5 = $this->snmp_session->get( "1.3.6.1.2.1.31.1.1.1.18.".$this->parse_snmp_result_value ($res3) );
+
+                //parse and save
+                $res[$n]['vlan_number'] = $this->vlan_number;
+                //$res[$n]['portindex'] = $this->parse_snmp_result_value ($res3);
+                $res[$n]['port'] = $this->parse_snmp_result_value ($res4);
+                $res[$n]['port_alias'] = $this->parse_snmp_result_value ($res5);
+            }
+            catch (Exception $e) {
+                $res[$n]['port'] = "";
+                $res[$n]['error'] = $e->getMessage();
+            }
+
+
+            $n++;
+        }
+
+        // save result
+        $this->save_last_result ($res);
+
+        // return response
+        return isset($res) ? $res : false;
+    }
 
     /**
      * Fetch ARP table from device.
@@ -501,7 +598,7 @@ class phpipamSNMP extends Common_functions {
         // parse result
         $n=0;
         foreach ($res1 as $r) {
-            $res[$n]['ip']  = trim(substr($r, strpos($r, ":")+2));
+            $res[$n]['ip']  = $this->parse_snmp_result_value ($r);
             $n++;
         }
         $n=0;
@@ -543,12 +640,12 @@ class phpipamSNMP extends Common_functions {
         // parse result
         $n=0;
         foreach ($res1 as $r) {
-            $res[$n]['subnet']  = trim(substr($r, strpos($r, ":")+2));
+            $res[$n]['subnet']  = $this->parse_snmp_result_value ($r);
             $n++;
         }
         $n=0;
         foreach ($res2 as $r) {
-            $res[$n]['mask']  = trim(substr($r, strpos($r, ":")+2));
+            $res[$n]['mask']  = $this->parse_snmp_result_value ($r);
             $n++;
         }
 
@@ -624,7 +721,7 @@ class phpipamSNMP extends Common_functions {
             $k = str_replace($this->snmp_queries["get_vrf_table"]->oid.".", "", $k);
             $k = str_replace("\"", "", $k);
             // set rd
-            $r  = trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
+            $r  = $this->parse_snmp_result_value ($r);
             $res[$k] = $r;
         }
 
@@ -652,6 +749,17 @@ class phpipamSNMP extends Common_functions {
         }
         // return
         return implode(":", $mac);
+	}
+
+	/**
+	 * Parses result - removes STRING:
+	 *
+	 * @access private
+	 * @param mixed $r
+	 * @return void
+	 */
+	private function parse_snmp_result_value ($r) {
+    	return trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
 	}
 
 }

@@ -6,11 +6,12 @@
 	+ Threshold module for subnets;
 	+ Racks module (Rack drawing) for devices;
 	+ SNMP module:
-	    + Subnet discovery scans via ARP check/interface check;
-	    + Status update scans via ARP check;
-	    + Subnet discovery from route table;
+	    + Subnets discovery from route table (all subnets, nested subnets, add new subnet);
+	    + Hosts discovery scans via ARP check/interface check;
+	    + Hosts discovery scans via ARP + MAC address check (detects interface);
 	    + VLAN discovery;
 	    + VRF discovery;
+	    + Status update scans via ARP check;
 
 	Enhancements, changes:
 	----------------------------

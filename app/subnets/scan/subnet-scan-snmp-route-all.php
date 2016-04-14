@@ -1,36 +1,52 @@
 <?php
 
 /*
- * Discover newsubnetshosts with snmp
+ * Discover new subnets with snmp
+ *
+ * Discover new slave subnets with snmp
+ *
  *******************************/
 
-/* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+# flag for ajax-loaded
+$ajax_loaded = false;
 
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Tools	 	= new Tools ($Database);
-$Sections	= new Sections ($Database);
-$Subnets	= new Subnets ($Database);
-$Snmp       = new phpipamSNMP ();
-$Result 	= new Result ();
+# ajax check
+if (!function_exists("create_link")) {
+    /* functions */
+    require( dirname(__FILE__) . '/../../../functions/functions.php');
+
+    # initialize user object
+    $Database 	= new Database_PDO;
+    $User 		= new User ($Database);
+    $Tools	 	= new Tools ($Database);
+    $Sections	= new Sections ($Database);
+    $Subnets	= new Subnets ($Database);
+    $Snmp       = new phpipamSNMP ();
+    $Result 	= new Result ();
+
+    # set ajax
+    $ajax_loaded = true;
+}
+
 
 # verify that user is logged in
 $User->check_user_session();
 
+# snmp class
+$Snmp       = new phpipamSNMP ();
+
 # scan disabled
-if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, true); }
+if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, $ajax_loaded); }
 
 # section check
-if (!is_numeric($_POST['sectionId']))           { $Result->show("danger", "Invalid section Id", true, true); }
-if (!is_numeric($_POST['subnetId']))            { $Result->show("danger", "Invalid subnet Id", true, true); }
+if (!is_numeric($_POST['sectionId']))           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
+if (!is_numeric($_POST['subnetId']))            { $Result->show("danger", "Invalid subnet Id", true, $ajax_loaded); }
 
-$section = $Sections->fetch_section("id", $_POST['sectionId']);
-if ($section===false)                           { $Result->show("danger", "Invalid section Id", true, true); }
+$section = $Subnets->fetch_object("sections", "id", $_POST['sectionId']);
+if ($section===false)                           { $Result->show("danger", "Invalid section Id", true, $ajax_loaded); }
 
 # check section permissions
-if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
+if($Subnets->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, $ajax_loaded); }
 
 // no errors
 error_reporting(E_ERROR);
@@ -44,7 +60,7 @@ foreach ($devices_used as $d) {
 }
 
 // if none set die
-if ($devices_used===false)                      { $Result->show("danger", "No devices for SNMP route table query available"."!", true, true); }
+if ($devices_used===false)                      { $Result->show("danger", "No devices for SNMP route table query available"."!", true, $ajax_loaded); }
 
 // ok, we have devices, connect to each device and do query
 foreach ($devices_used as $d) {
@@ -69,9 +85,9 @@ foreach ($devices_used as $d) {
 	}
 }
 # none and errors
-if(sizeof($found)==0 && isset($errors))          { $Result->show("info", _("No new subnets found")."</div><hr><div class='alert alert-warning'>".implode("<hr>", $errors)."</div>", true, true); }
+if(sizeof($found)==0 && isset($errors))          { $Result->show("info", _("No new subnets found")."</div><hr><div class='alert alert-warning'>".implode("<hr>", $errors)."</div>", true, $ajax_loaded); }
 # none
-elseif(sizeof($found)==0) 	                     { $Result->show("info", _("No new subnets found")."!", true, true); }
+elseif(sizeof($found)==0) 	                     { $Result->show("info", _("No new subnets found")."!", true, $ajax_loaded); }
 # ok
 else {
     # fetch all permitted domains
@@ -122,14 +138,18 @@ else {
     $vrfs  = $Tools->fetch_all_objects("vrf", "name");
 
     # create csrf token
-    $csrf = $User->csrf_cookie ("create", "scan");
+    $csrf = $User->csrf_cookie ("create", "scan_all");
 ?>
 
 <!-- header -->
+<?php if ($ajax_loaded) { ?>
 <div class="pHeader"><?php print _('Scan results'); ?></div>
+<?php } ?>
 
 <!-- content -->
+<?php if ($ajax_loaded) { ?>
 <div class="pContent">
+<?php } ?>
         <?php
 
     	//table
@@ -185,7 +205,12 @@ else {
                     	// check for overlapping
                     	if (isset($subnet)) {
                         	if ($subnet->isFolder!="1") {
+                            	// check
                             	if ( $Subnets->is_subnet_inside_subnet ("$ip[subnet]/$ip[bitmask]", $Subnets->transform_address($subnet->subnet,"dotted")."/".$subnet->mask) === false ) {
+                                	$overlap = true;
+                            	}
+                            	// same mask
+                            	if ($ip['subnet']==$Subnets->transform_address($subnet->subnet,"dotted") && $ip['bitmask']==$subnet->mask) {
                                 	$overlap = true;
                             	}
                         	}
@@ -336,6 +361,7 @@ else {
     <!-- result -->
     <div class="add-subnets-to-section-snmp-result"></div>
 
+<?php if ($ajax_loaded) { ?>
 </div>
 
 
@@ -343,3 +369,4 @@ else {
 <div class="pFooter">
     <button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 </div>
+<?php }  ?>

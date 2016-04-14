@@ -29,6 +29,8 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"n
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server", "name"=>"Sections", 				"href"=>"sections", 				"description"=>"Section management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 				"href"=>"subnets", 					"description"=>"Subnet management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-desktop","name"=>"Devices", 				"href"=>"devices", 					"description"=>"Device management");
+if($User->settings->enableSNMP == 1)
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cogs","name"=>"SNMP", 				          "href"=>"snmp", 					"description"=>"SNMP management");
 if($User->settings->enableRACK == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-bars",  "name"=>"Racks", 			       "href"=>"racks", 			        "description"=>"Rack management");
 if($User->settings->enableFirewallZones == 1)

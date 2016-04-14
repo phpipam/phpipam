@@ -294,10 +294,10 @@ class User extends Common_functions {
     /**
      * Checks if user is authenticated - session is set
      *
-     * @access private
+     * @access public
      * @return void
      */
-    private function is_authenticated () {
+    public function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
             if( isset( $_SESSION['ipamusername'] ) && strlen( @$_SESSION['ipamusername'] )>0 ) {
@@ -322,6 +322,9 @@ class User extends Common_functions {
                 $this->authenticated = false;
             }
         }
+
+        # return
+        return $this->authenticated;
     }
 
     /**

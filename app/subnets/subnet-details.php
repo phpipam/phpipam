@@ -485,8 +485,6 @@ else {
 		# add nested subnet
 		if($section_permission == 3) {
 		print "<a class='edit_subnet btn btn-xs btn-default '	href='' data-container='body' rel='tooltip' title='"._('Add new nested subnet')."' 		data-subnetId='$subnet[id]' data-action='add' data-id='' data-sectionId='$subnet[sectionId]'> <i class='fa fa-plus-circle'></i></a> ";
-        if($subnet_permission>1 && $User->settings->enableSNMP=="1")
-        print "<button class='btn btn-xs btn-success' id='snmp-routing-section' rel='tooltip' data-container='body' title='"._('Search for subnets through SNMP')."' data-subnetId='$subnet[id]' data-sectionId='$subnet[sectionId]'><i class='fa fa-cogs'></i></button>";
 		} else {
 		print "<a class='btn btn-xs btn-default disabled' 		href=''> 																																											  <i class='fa fa-plus-circle'></i></a> ";
 		}

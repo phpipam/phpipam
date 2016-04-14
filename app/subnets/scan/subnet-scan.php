@@ -56,7 +56,9 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 	    		<optgroup label="<?php print _('Discovery scans');?>">
 		    		<option value="scan-icmp"   <?php if(@$_COOKIE['scantype']=="scan-icmp") print "selected"; ?>><?php print _('Discovery scans');?>: Ping <?php print _('scan');?></option>
 		    		<option value="scan-telnet" <?php if(@$_COOKIE['scantype']=="scan-telnet") print "selected"; ?>><?php print _('Discovery scans');?>: Telnet <?php print _('scan');?></option>
+		    		<option value="snmp-route-all"    <?php if(@$_COOKIE['scantype']=="snmp-route-all") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP nested subnets <?php print _('scan');?></option>
 		    		<option value="snmp-arp"    <?php if(@$_COOKIE['scantype']=="snmp-arp") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP ARP <?php print _('scan');?></option>
+		    		<option value="snmp-mac"    <?php if(@$_COOKIE['scantype']=="snmp-mac") print "selected"; ?>><?php print _('Discovery scans');?>: SNMP MAC address <?php print _('scan');?></option>
 	    		</optgroup>
     			<!-- Status update scans -->
 	    		<optgroup label="<?php print _('Status update scans');?>">

@@ -3,7 +3,7 @@
 /*
  * This script finds slave subnets via snmp
  *
- * Used in creating new subnet
+ * Used when creating new subnet
  *
  ******************************************/
 

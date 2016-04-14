@@ -21,7 +21,7 @@ foreach($admin_menu as $k=>$tool) {
 		$active = $_GET['section']==$t['href'] ? "active" : "";
 		# exception
 		if ($t['href']=="devices") {
-    		if ($_GET['section']=="device-types" || $_GET['section']=="snmp") {
+    		if ($_GET['section']=="device-types") {
         		$active = "active";
     		}
         }

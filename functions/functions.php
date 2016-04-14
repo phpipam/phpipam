@@ -55,7 +55,6 @@ if($_GET['page']!="install" ) {
 	}
 }
 
-
 /**
  * create links function
  *

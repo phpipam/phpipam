@@ -24,16 +24,22 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->csrf_cookie ("validate", "scan_all", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 # section
-$section = $Sections->fetch_section("id", $_POST['sectionId-0']);
-if ($section===false)                                           { $Result->show("danger", _("Invalid section Id"), true, true, false, true); }
+$section_search = false;
+foreach ($_POST as $k=>$p) {
+    if (strpos($k, "sectionId")!==false) {
+        $section = $Sections->fetch_section("id", $p);
+        if ($section===false)                                           { $Result->show("danger", _("Invalid section Id"), true, false, false, true); }
+    }
+}
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disbled"), true); }
 
 # check section permissions
-if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
+if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
 
 # loop
 foreach ($_POST as $k=>$p) {
@@ -71,7 +77,7 @@ if (isset($subnets_all)) {
         # set new POST
         $_POST = $s;
         # create csrf token
-        $csrf = $User->csrf_cookie ("create", "subnet");
+        $_POST['csrf_cookie'] = $User->csrf_cookie ("create", "subnet");
         # permissions
         $subnet['permissions'] = $section->permissions;
         # check for master

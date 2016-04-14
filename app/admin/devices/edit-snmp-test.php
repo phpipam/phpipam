@@ -69,7 +69,33 @@ if (isset($queries)) {
     // loop
     foreach($queries as $query) {
         try {
-            $Snmp->get_query ($query);
+            // overrides for MAC table query - we need to test with some vlan number, so we need vlan first
+            if ($query=="get_mac_table") {
+                $Snmp->get_query ("get_vlan_table");
+                if (is_array($Snmp->last_result)) {
+                    foreach ($Snmp->last_result as $k=>$r) {
+                        if (is_numeric($k)) {
+                            // ok, we have vlan, set query
+                            $Snmp->set_snmp_device ($device, $k);
+                            try {
+                                $Snmp->get_query ($query);
+                                $vlan_set = true;
+                                break;
+                            }
+                            catch (Exception $e) {}
+                        }
+                    }
+                }
+            }
+            else {
+                // reset vlan
+                if (isset($vlan_set)) {
+                    unserialize($vlan_set);
+                    $Snmp->set_snmp_device ($device);
+                }
+                $Snmp->get_query ($query);
+            }
+
             // ok
             $debug[$query]['oid']    = $Snmp->snmp_queries[$query]->oid;
             $debug[$query]['result'] = $Snmp->last_result;
