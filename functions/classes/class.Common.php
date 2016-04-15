@@ -301,7 +301,7 @@ class Common_functions  {
         $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
         if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$$table][$identifier][$id])) {
+            if (!isset($this->cache[$table][$identifier][$id])) {
                 $this->cache[$table][$identifier][$id] = (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
