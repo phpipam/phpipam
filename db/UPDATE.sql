@@ -529,8 +529,12 @@ INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whr
 
 /* reset db check field and donation */
 UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
+UPDATE `settings` set `donate` = 1;
 
+/* fix logins */
+INSERT INTO `usersAuthMethod` (`id`, `type`, `params`, `protected`, `description`)
+VALUES
+(3, 'AD', '{"domain_controllers":"mipdc1.innova.local;lcpdc1.innova.local","csrf_cookie":"87324616a8f7a6b704ec0c3c245545b4","base_dn":"DC=innova,DC=local","account_suffix":"@innova.local","use_ssl":"1","use_tls":"0","ad_port":"636","adminUsername":"ipam_ldap@innova.local","adminPassword":"!$vW2VUw5v6mr3O"}', 'No', 'INNOVA');
 
 
 
