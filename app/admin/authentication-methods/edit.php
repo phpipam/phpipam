@@ -14,7 +14,7 @@ $Log 		= new Logging ($Database, $User->settings);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "authmethods");
 
 # if edit check if protected?
 if($_POST['action']!="add") {

@@ -7,10 +7,46 @@
  */
 class Responses {
 
-	/* public variables */
-	public $errors;				// error code handler
-	public $result = null;		// result handler
-	public $exception = false;	// is exception set?
+
+	/**
+	 * error code handler
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $errors;
+
+	/**
+	 * result handler
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $result = null;
+
+	/**
+	 * Sets result type
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $result_type;
+
+	/**
+	 * is exception set?
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $exception = false;
+
+
+
+
 
 	/**
 	 * __construct function
@@ -233,6 +269,7 @@ class Responses {
 		$this->result['success'] = $tmp['success'];
 		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
 		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
+		if(isset($tmp['ip']))	    { $this->result['ip'] = $tmp['ip']; }
 	}
 
 	/**

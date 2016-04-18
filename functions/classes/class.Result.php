@@ -13,9 +13,25 @@
 
 class Result extends Common_functions {
 
-	/* exit methods - to override for api */
-	public $exit_method = "result";			// what to do when failed - result shows result, exception throws exception (for API)
-	public $die = false;					// die or not
+	/**
+	 *  what to do when failed - result shows result, exception throws exception (for API)
+	 *
+	 * (default value: "result")
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $exit_method = "result";
+
+	/**
+	 * Die flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $die = false;
 
 	/**
 	 * Show result
@@ -44,7 +60,7 @@ class Result extends Common_functions {
 			# cli or GUI
 			if (php_sapi_name()=="cli") { print $this->show_cli_message ($text); }
 			else {
-				# return or ptint
+				# return or print
 				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2); }
 				else					{ print  $this->show_message ($class, $text, $popup, $popup2); }
 			}
@@ -102,6 +118,8 @@ class Result extends Common_functions {
 	 * @return void
 	 */
 	public function show_message ($class, $text, $popup, $popup2) {
+    	// to array if object
+    	if (is_object($text))   { $text = (array) $text; }
 		// format if array
 		if(is_array($text)) {
 			// single value
@@ -110,7 +128,6 @@ class Result extends Common_functions {
 			}
 			// multiple values
 			else {
-				$out[] = "Errors:";
 				$out[] = "<ul>";
 				foreach( $text as $l ) { $out[] = "<li>$l</li>"; }
 				$out[] = "</ul>";
@@ -149,7 +166,7 @@ class Result extends Common_functions {
 	 */
 	public function throw_exception ($content) {
 		// include Exceptions class for API
-		include_once( dirname(__FILE__) . '../../../api/v2/controllers/Responses.php' );
+		include_once( dirname(__FILE__) . '../../../api/controllers/Responses.php' );
 		// initialize exceptions
 		$Exceptions = new Responses ();
 		// throw error

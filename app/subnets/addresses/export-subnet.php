@@ -21,10 +21,10 @@ $User->check_user_session();
 
 # we dont need any errors!
 ini_set('display_errors', 1);
-error_reporting(E_ALL);
+error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 
 # fetch subnet details
-$subnet = (array) $Subnets->fetch_subnet (null, $_GET['subnetId']);
+$subnet = (array) $Tools->fetch_object ("subnets", "id", $_GET['subnetId']);
 # fetch all IP addresses in subnet
 $addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc");
 # get all custom fields
@@ -32,7 +32,7 @@ $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
 
 # Create a workbook
-$filename = "phpipam_subnet_export.xls";
+$filename = isset($_GET['filename'])&&strlen(@$_GET['filename'])>0 ? $_GET['filename'] : "phpipam_subnet_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -155,8 +155,9 @@ $lineCount++;
 //we need to reformat state!
 $ip_types = $Addresses->addresses_types_fetch();
 //fetch devices and reorder
-$devices = $Tools->fetch_devices ();
-if (sizeof($devices)>0) {
+$devices = $Tools->fetch_all_objects("devices", "hostname");
+$devices_indexed = array();
+if ($devices!==false) {
 	foreach($devices as $d) {
 		$devices_indexed[$d->id] = (object) $d;
 	}

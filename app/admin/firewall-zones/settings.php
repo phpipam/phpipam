@@ -57,8 +57,11 @@ if (!$firewallZoneSettings['subnetPatternValues']) {
 	$firewallZoneSettings['subnetPatternValues'][1] = 'description';
 }
 
-# fetch device types
-$deviceTypes = $Tools->fetch_device_types();
+# fetch device types and rekey
+$types = $Tools->fetch_all_objects("deviceTypes");
+foreach($types as $t) {
+	$deviceTypes[$t->tid] = $t;
+}
 
 # build the array for name pattern
 $namePattern = array (	'patternIndicator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternIndicator">Indicator</span>',

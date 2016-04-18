@@ -8,14 +8,54 @@
 
 class Vrfs_controller extends Common_api_functions {
 
-	/* public variables */
+
+	/**
+	 * _params [provided
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $_params;
 
-	/* object holders */
-	protected $Database;			// Database object
-	protected $Sections;			// Sections object
-	protected $Tools;				// Tools object
-	protected $Admin;				// Admin object
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Master Sections object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Sections;
+
+	/**
+	 * Master Subnets object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
+
+	/**
+	 * Master Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
+
+	/**
+	 * Master  Admin object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Admin;
 
 
 	/**
@@ -25,6 +65,7 @@ class Vrfs_controller extends Common_api_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
+	 * @param class $Response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -217,6 +258,7 @@ class Vrfs_controller extends Common_api_functions {
 		$this->validate_vrf ();
 
 		# set variables for update
+		$values = array();
 		$values["vrfId"] = $this->_params->id;
 
 		# execute delete

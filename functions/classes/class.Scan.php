@@ -7,28 +7,112 @@
 class Scan extends Common_functions {
 
 	/**
-	 * public variables
+	 * (array of objects) to store addresses, address ID is array index
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public $addresses;						//(array of objects) to store addresses, address ID is array index
-	public $php_exec = null;				//(int) php executable file
-	public $debugging = false;				//(bool) debugging flag
-	public $icmp_type = "ping";				//(varchar) default icmp type
+	public $addresses;
 
 	/**
-	 * protected variables
+	 * php executable file
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	protected $icmp_timeout = 1;			//(int) icmp timeout
-	protected $icmp_count = 1;				//(int) icmp retries
-	protected $icmp_exit = false;			//(boolean) exit or return icmp status
+	public $php_exec = null;
 
 	/**
-	 * object holders
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
 	 */
-	protected $Result;						//for Result printing
-	protected $Database;					//for Database connection
-	protected $Subnets;						//for Subnets object
-	protected $Addresses;					//for Addresses object
-	public $Log;							//for Logging connection
+	public $debugging = false;
+
+	/**
+	 * default icmp type
+	 *
+	 * (default value: "ping")
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $icmp_type = "ping";
+
+	/**
+	 * icmp timeout
+	 *
+	 * (default value: 1)
+	 *
+	 * @var int
+	 * @access protected
+	 */
+	protected $icmp_timeout = 1;
+
+	/**
+	 * icmp retries
+	 *
+	 * (default value: 1)
+	 *
+	 * @var int
+	 * @access protected
+	 */
+	protected $icmp_count = 1;
+
+	/**
+	 *  exit or return icmp status
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $icmp_exit = false;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Subnets
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
+
+	/**
+	 * Addresses
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Addresses;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
 
 
 

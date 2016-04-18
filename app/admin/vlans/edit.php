@@ -18,8 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-if(@$_POST['fromSubnet']=="true")   { $csrf = $_SESSION['csrf_cookie']; }
-else                                { $csrf = $User->create_csrf_cookie (); }
+$csrf = $User->csrf_cookie ("create", "vlan");
 
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanId", @$_POST['vlanId']);

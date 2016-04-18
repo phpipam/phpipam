@@ -24,6 +24,7 @@ if($firewallZones) {
 	print '<table id="zonesPrint" class="table table-top table-td-top table-condensed">';
 
 	# table headers
+	print "<thead>";
 	print '<tr style="background:white">';
 	print '<th>'._('Type').'</th>';
 	print '<th>'._('Zone').'</th>';
@@ -32,7 +33,9 @@ if($firewallZones) {
 	print '<th>'._('VLAN').'</th>';
 	print '<th style="width:60px;"></th>';
 	print '</tr>';
+	print "</thead>";
 
+    print "<tbody>";
 	# display all firewall zones and network information
 	foreach ($firewallZones as $zoneObject ) {
 		# set rowspan in case if there are more than one networks bound to the zone
@@ -111,6 +114,7 @@ if($firewallZones) {
 			print '</tr>';
 		}
 	}
+	print "</tbody>";
 	print '</table>';
 } else {
 	# print an info if there are no zones in the database

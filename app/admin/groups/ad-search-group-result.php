@@ -21,7 +21,8 @@ $User->check_user_session();
 $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
 $server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
 
-
+# create csrf token
+$csrf = $User->csrf_cookie ("create", "group");
 
 //parse parameters
 $params = json_decode($server->params);
@@ -95,7 +96,7 @@ if(sizeof($groups)==0) {
 		print "	<td>$g</td>";
 		//actions
 		print " <td style='width:10px;'>";
-		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k'>"._('Add group')."</a>";
+		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
 		print "	</td>";
 		print "</tr>";
 
@@ -111,6 +112,7 @@ if(sizeof($groups)==0) {
 				print "<span class='muted'>$m</span><br>";
 				$members[] = $m;
 			}
+			if(isset($members))
 			$members = implode(";", $members);
 		}
 		else {

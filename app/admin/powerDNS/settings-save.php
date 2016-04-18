@@ -16,6 +16,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$User->csrf_cookie ("validate", "pdns_settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 // validations
 if(strlen($_POST['name'])==0)			{ $Result->show("danger", "Invalid database name", true); }
 if(strlen($_POST['port'])==0)			{ $_POST['port'] = 3306; }
@@ -36,6 +39,7 @@ $old_values = json_decode($User->settings->powerDNS);
 
 $values->ns			= $old_values->ns;
 $values->hostmaster	= $old_values->hostmaster;
+$values->def_ptr_domain	= $old_values->def_ptr_domain;
 $values->refresh 	= $old_values->refresh;
 $values->retry 		= $old_values->retry;
 $values->expire 	= $old_values->expire;

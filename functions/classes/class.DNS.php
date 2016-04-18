@@ -7,24 +7,52 @@
 
 class DNS extends Common_functions {
 
+
 	/**
-	 * private variables
+	 * settings
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
 	 */
-	public $settings = false;				// settings
-	private $type = "A";					// type of record to fetch
+	public $settings = false;
 
 	/**
-	 * object holders
+	 * type of record to fetch
+	 *
+	 * (default value: "A")
+	 *
+	 * @var string
+	 * @access private
 	 */
-	protected $Result;						//for Result printing
-	protected $Database;					//for Database connection
+	private $type = "A";
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
 
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $Database
+	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $Database, $settings=null) {
 		# initialize Result
@@ -63,38 +91,6 @@ class DNS extends Common_functions {
 					$this->ns = explode(";", $nameservers->namesrv1);
 				}
 			}
-		}
-	}
-
-	/**
-	 * Fetches object from database
-	 *
-	 * @access private
-	 * @param mixed $table (default: null)
-	 * @param mixed $field (default: null)
-	 * @param mixed $value (default: null)
-	 * @return void
-	 */
-	private function fetch_object ($table = null, $field = null, $value = null) {
-		// checks
-		if(is_null($table))		return false;
-		if(is_null($field))		return false;
-		if(is_null($value))		return false;
-		if($value=="0")			return false;
-		// escape
-		$table = $this->Database->escape($table);
-		$field = $this->Database->escape($field);
-
-		// fetch
-		try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$field` = ? limit 1;", array($value)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save to cache array
-		if(sizeof($res)==0) { return false; }
-		else {
-			return $res;
 		}
 	}
 

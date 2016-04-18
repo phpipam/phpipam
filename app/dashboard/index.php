@@ -86,14 +86,14 @@ $(document).ready(function() {
 <?php
 
 # fetch all widgets
-$widgets = $Tools->fetch_widgets ($User->isadmin, false);
+$widgets = $Tools->fetch_widgets ($User->is_admin(false), false);
 $widgets = (array) $widgets;
 
 # show user-selected widgets
 $uwidgets = array_filter(explode(";",$User->user->widgets));
 
 # if user has no groups and is not admin print warning
-if ($User->isadmin!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) {
+if ($User->is_admin(false)!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) {
 	print '<div class="row-fluid">';
 	print "	<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='min-height:10px'>";
 	print "	<div class='inner' style='min-height:10px'>";

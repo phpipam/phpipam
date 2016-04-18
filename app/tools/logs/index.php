@@ -11,7 +11,7 @@ $User->check_user_session();
 $Admin = new Admin($Database, false);
 
 # only for admin
-if ($User->isadmin) {
+if ($User->is_admin()) {
 ?>
 
 <h4><?php print _('Log files'); ?>:</h4>

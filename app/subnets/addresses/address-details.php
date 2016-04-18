@@ -50,334 +50,361 @@ $resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], fals
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
 
-#header
-print "<h4>"._('IP address details')."</h4><hr>";
-
-# back
-print "<a class='btn btn-default btn-sm btn-default' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
-
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
 
-	# table - details
-	print "<table class='ipaddress_subnet table table-noborder table-condensed' style='margin-top:10px;'>";
+    print "<table class='table'>";
+    print "<tr>";
 
-	# ip
-	print "<tr>";
-	print "	<th>"._('IP address')."</th>";
-	print "	<td><strong>$address[ip]</strong></td>";
-	print "</tr>";
+    # device
+    print "<td>";
 
-	# description
-	print "<tr>";
-	print "	<th>"._('Description')."</th>";
-	print "	<td>$address[description]</td>";
-	print "</tr>";
+    #header
+    print "<h4>"._('IP address details')."</h4><hr>";
 
-	# hierarchy
-	print "<tr>";
-	print "	<th>"._('Hierarchy')."</th>";
-	print "	<td>";
-	$Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
-	print "</td>";
-	print "</tr>";
+    # back
+    print "<a class='btn btn-default btn-sm btn-default' style='margin-bottom:10px;' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
 
-	# subnet
-	print "<tr>";
-	print "	<th>"._('Subnet')."</th>";
-	print "	<td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
-	print "</tr>";
+	print "<table class='ipaddress_subnet table-condensed table-auto'>";
+    	# ip
+    	print "<tr>";
+    	print "	<th>"._('IP address')."</th>";
+    	print "	<td><strong>$address[ip]</strong></td>";
+    	print "</tr>";
 
-	# state
-	print "<tr>";
-	print "	<th>"._('IP status')."</th>";
-	print "	<td>";
+    	# description
+    	print "<tr>";
+    	print "	<th>"._('Description')."</th>";
+    	print "	<td>$address[description]</td>";
+    	print "</tr>";
 
-	if ($address['state'] == "0") 	  { $stateClass = _("Offline"); }
-	else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-	else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
-	else						  { $stateClass = _("Online"); }
+    	# hierarchy
+    	print "<tr>";
+    	print "	<th>"._('Hierarchy')."</th>";
+    	print "	<td>";
+    	$Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+    	print "</td>";
+    	print "</tr>";
 
-	print $Addresses->address_type_index_to_type ($address['state']);
-	print $Addresses->address_type_format_tag ($address['state']);
+    	# subnet
+    	print "<tr>";
+    	print "	<th>"._('Subnet')."</th>";
+    	print "	<td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
+    	print "</tr>";
 
-	print "	</td>";
-	print "</tr>";
+    	# state
+    	print "<tr>";
+    	print "	<th>"._('IP status')."</th>";
+    	print "	<td>";
 
-	# hostname
-	$resolve1['name'] = strlen($resolve['name'])==0 ? "<span class='text-muted'>/</span>" : $resolve['name'];
+    	if ($address['state'] == "0") 	  { $stateClass = _("Offline"); }
+    	else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
+    	else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+    	else						  { $stateClass = _("Online"); }
 
-	print "<tr>";
-	print "	<th>"._('Hostname')."</th>";
-	print "	<td>$resolve1[name]</td>";
-	print "</tr>";
+    	print $Addresses->address_type_index_to_type ($address['state']);
+    	print $Addresses->address_type_format_tag ($address['state']);
 
-	# firewall address object
-	if(in_array('firewallAddressObject', $selected_ip_fields)) {
-		if($User->settings->enableFirewallZones == 1) {
-			# class
-			$Zones = new FirewallZones ($Database);
-			$zone = $Zones->get_zone_subnet_info ($address['subnetId']);
+    	print "	</td>";
+    	print "</tr>";
 
-			if($zone) {
-				print "<tr>";
-				print "	<th>"._('Firewall address object')."</th>";
-				print "	<td>$address[firewallAddressObject]</td>";
-				print "</tr>";
-			}
-		}
-	}
+    	# hostname
+    	$resolve1['name'] = strlen($resolve['name'])==0 ? "<span class='text-muted'>/</span>" : $resolve['name'];
 
-	# mac
-	if(in_array('owner', $selected_ip_fields)) {
-	print "<tr>";
-	print "	<th>"._('Owner')."</th>";
-	print "	<td>$address[owner]</td>";
-	print "</tr>";
-	}
+    	print "<tr>";
+    	print "	<th>"._('Hostname')."</th>";
+    	print "	<td>$resolve1[name]</td>";
+    	print "</tr>";
 
-	# mac
-	if(in_array('mac', $selected_ip_fields)) {
-	print "<tr>";
-	print "	<th>"._('MAC address')."</th>";
-	print "	<td>$address[mac]</td>";
-	print "</tr>";
-	}
+    	# firewall address object
+    	if(in_array('firewallAddressObject', $selected_ip_fields)) {
+    		if($User->settings->enableFirewallZones == 1) {
+    			# class
+    			$Zones = new FirewallZones ($Database);
+    			$zone = $Zones->get_zone_subnet_info ($address['subnetId']);
 
-	# note
-	if(in_array('note', $selected_ip_fields)) {
-	print "<tr>";
-	print "	<th>"._('Note')."</th>";
-	print "	<td>$address[note]</td>";
-	print "</tr>";
-	}
+    			if($zone) {
+    				print "<tr>";
+    				print "	<th>"._('Firewall address object')."</th>";
+    				print "	<td>$address[firewallAddressObject]</td>";
+    				print "</tr>";
+    			}
+    		}
+    	}
 
-	# switch
-	if(in_array('switch', $selected_ip_fields)) {
-	print "<tr>";
-	print "	<th>"._('Device')."</th>";
-	if(strlen($address['switch'])>0) {
-		# get device
-		$device = (array) $Tools->fetch_device(null, $address['switch']);
-		$device = $Addresses->reformat_empty_array_fields($device, "");
-		print "	<td>".@$device['hostname']." ".@$device['description']."</td>";
-	} else {
-		print "	<td>$address[switch]</td>";
-	}
-	print "</tr>";
-	}
+    	# mac
+    	if(in_array('owner', $selected_ip_fields)) {
+    	print "<tr>";
+    	print "	<th>"._('Owner')."</th>";
+    	print "	<td>$address[owner]</td>";
+    	print "</tr>";
+    	}
 
-	# port
-	if(in_array('port', $selected_ip_fields)) {
-	print "<tr>";
-	print "	<th>"._('Port')."</th>";
-	print "	<td>$address[port]</td>";
-	print "</tr>";
-	}
+    	# mac
+    	if(in_array('mac', $selected_ip_fields)) {
+    	print "<tr>";
+    	print "	<th>"._('MAC address')."</th>";
+    	print "	<td>$address[mac]</td>";
+    	print "</tr>";
+    	}
 
-	# last edited
-	print "<tr>";
-	print "	<th>"._('Last edited')."</th>";
-	if(strlen($address['editDate'])>1) {
-		print "	<td>$address[editDate]</td>";
-	} else {
-		print "	<td>"._('Never')."</td>";
-	}
-	print "</tr>";
+    	# note
+    	if(in_array('note', $selected_ip_fields)) {
+    	print "<tr>";
+    	print "	<th>"._('Note')."</th>";
+    	print "	<td>$address[note]</td>";
+    	print "</tr>";
+    	}
 
+    	# switch
+    	if(in_array('switch', $selected_ip_fields)) {
+    	print "<tr>";
+    	print "	<th>"._('Device')."</th>";
+    	if(strlen($address['switch'])>0) {
+    		# get device
+    		$device = (array) $Tools->fetch_object("devices", "id", $address['switch']);
+    		$device = $Addresses->reformat_empty_array_fields($device, "");
+    		print "	<td><a href='".create_link("tools","devices","hosts",$device['id'])."'>".@$device['hostname']."</a> ".@$device['description']."</td>";
+    	} else {
+    		print "	<td>$address[switch]</td>";
+    	}
+    	print "</tr>";
+    	}
 
-	# availability
-	print "<tr>";
-	print "	<td colspan='2'><hr></td>";
-	print "</tr>";
-	print "<tr>";
+    	# port
+    	if(in_array('port', $selected_ip_fields)) {
+    	print "<tr>";
+    	print "	<th>"._('Port')."</th>";
+    	print "	<td>$address[port]</td>";
+    	print "</tr>";
+    	}
 
-	# calculate
-	$tDiff = time() - strtotime($address['lastSeen']);
-	if($address['excludePing']==1)		 					{ $seen_status = ""; 			$seen_text = ""; }
-	elseif($tDiff < $statuses[0])							{ $seen_status = "success";		$seen_text = _("Device is alive")."<br>"._("Last seen").": ".$address['lastSeen']; }
-	elseif($tDiff < $statuses[1])							{ $seen_status = "warning"; 	$seen_text = _("Device warning")."<br>"._("Last seen").": ".$address['lastSeen']; }
-	elseif($tDiff > $statuses[1])							{ $seen_status = "error"; 		$seen_text = _("Device is offline")."<br>"._("Last seen").": ".$address['lastSeen'];}
-	elseif($address['lastSeen'] == "0000-00-00 00:00:00") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
-	else													{ $seen_status = "neutral"; 	$seen_text = _("Device status unknown");}
-
-	print "	<th>"._('Availability')."<br><span class='status status-ip status-$seen_status' style='pull-right'></span></th>";
-	print "	<td>";
-	print "$seen_text";
-
-	print "	</td>";
-	print "</tr>";
+    	# last edited
+    	print "<tr>";
+    	print "	<th>"._('Last edited')."</th>";
+    	if(strlen($address['editDate'])>1) {
+    		print "	<td>$address[editDate]</td>";
+    	} else {
+    		print "	<td>"._('Never')."</td>";
+    	}
+    	print "</tr>";
 
 
-	# search for DNS records
-	if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
-		$records = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
-		$ptr	 = $PowerDNS->fetch_record ($address['PTR']);
-		if ($records !== false || $ptr!==false) {
+    	# availability
+    	print "<tr>";
+    	print "	<td colspan='2'><hr></td>";
+    	print "</tr>";
+    	print "<tr>";
 
-			print "<tr><td colspan='2'><hr></tr>";
-			print "<tr>";
-			print "<th>"._('DNS records')."</th>";
-			print "<td>";
-			if($records!==false) {
-				foreach ($records as $r) {
-					print "<span class='badge badge1 badge3'>$r->type</span> $r->content <br>";
-				}
-			}
-			if($ptr!==false) {
-					print "<span class='badge badge1 badge3'>$ptr->type</span> $ptr->name <br>";
-			}
-			print "</td>";
-			print "</tr>";
-			print "<tr><td colspan='2'><hr></tr>";
-		}
-	}
+    	# calculate
+    	$tDiff = time() - strtotime($address['lastSeen']);
+    	if($address['excludePing']==1)		 					{ $seen_status = ""; 			$seen_text = ""; }
+    	elseif($tDiff < $statuses[0])							{ $seen_status = "success";		$seen_text = _("Device is alive")."<br>"._("Last seen").": ".$address['lastSeen']; }
+    	elseif($tDiff < $statuses[1])							{ $seen_status = "warning"; 	$seen_text = _("Device warning")."<br>"._("Last seen").": ".$address['lastSeen']; }
+    	elseif($tDiff > $statuses[1])							{ $seen_status = "error"; 		$seen_text = _("Device is offline")."<br>"._("Last seen").": ".$address['lastSeen'];}
+    	elseif($address['lastSeen'] == "0000-00-00 00:00:00") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
+    	else													{ $seen_status = "neutral"; 	$seen_text = _("Device status unknown");}
+
+    	print "	<th>"._('Availability')."<br><span class='status status-ip status-$seen_status' style='pull-right'></span></th>";
+    	print "	<td>";
+    	print "$seen_text";
+
+    	print "	</td>";
+    	print "</tr>";
 
 
-	# custom device fields
-	if(sizeof($custom_fields) > 0) {
-		foreach($custom_fields as $key=>$field) {
-			if(strlen($address[$key])>0) {
-			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
-			print "<tr>";
-			print "	<th>$key</th>";
-			print "	<td>";
-			#booleans
-			if($field['type']=="tinyint(1)")	{
-				if($address[$key] == 0)		{ print _("No"); }
-				elseif($address[$key] == 1)	{ print _("Yes"); }
-			}
-			else {
-				print $Result->create_links($address[$key]);
-			}
-			print "	</td>";
-			print "</tr>";
-			}
-		}
-	}
+    	# search for DNS records
+    	if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
+    		$records = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
+    		$ptr	 = $PowerDNS->fetch_record ($address['PTR']);
+    		if ($records !== false || $ptr!==false) {
 
-	# check for temporary shares!
-	if($User->settings->tempShare==1) {
-		if (strlen($User->settings->tempAccess)>0) {
-			foreach(json_decode($User->settings->tempAccess) as $s) {
-				if($s->type=="ipaddresses" && $s->id==$address['id']) {
-					if(time()<$s->validity) {
-						$active_shares[] = $s;
-					}
-					else {
-						$expired_shares[] = $s;
-					}
-				}
-			}
-		}
-		if(sizeof(@$active_shares)>0) {
-			# divider
-			print "<tr>";
-			print "	<th colspan='2'><hr></th>";
-			print "</tr>";
-			# print
-			print "<tr>";
-			print "<th>"._("Active shares").":</th>";
-			print "<td>";
-			$m=1;
-			foreach($active_shares as $s) {
-				print "<button class='btn btn-xs btn-default removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expires")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
-				$m++;
-			}
-			print "<td>";
-			print "</tr>";
-		}
-		if(sizeof(@$expired_shares)>0) {
-			# divider
-			print "<tr>";
-			print "	<th><hr></th>";
-			print "	<td></td>";
-			print "</tr>";
-			# print
-			print "<tr>";
-			print "<th>"._("Expired shares").":</th>";
-			print "<td>";
-			$m=1;
-			foreach($expired_shares as $s) {
-				print "<button class='btn btn-xs btn-danger removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expired")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
-				$m++;
-			}
-			print "<td>";
-			print "</tr>";
-		}
-	}
+    			print "<tr><td colspan='2'><hr></tr>";
+    			print "<tr>";
+    			print "<th>"._('DNS records')."</th>";
+    			print "<td>";
+    			if($records!==false) {
+    				foreach ($records as $r) {
+    					print "<span class='badge badge1 badge3'>$r->type</span> $r->content <br>";
+    				}
+    			}
+    			if($ptr!==false) {
+    					print "<span class='badge badge1 badge3'>$ptr->type</span> $ptr->name <br>";
+    			}
+    			print "</td>";
+    			print "</tr>";
+    			print "<tr><td colspan='2'><hr></tr>";
+    		}
+    	}
 
 
-	# actions
-	print "<tr>";
-	print "	<td colspan='2'><hr></td>";
-	print "</tr>";
-	print "<tr>";
-	print "	<th>"._('Actions')."</th>";
+    	# custom device fields
+    	if(sizeof($custom_fields) > 0) {
+    		foreach($custom_fields as $key=>$field) {
+    			if(strlen($address[$key])>0) {
+    			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
+    			print "<tr>";
+    			print "	<th>$key</th>";
+    			print "	<td>";
+    			#booleans
+    			if($field['type']=="tinyint(1)")	{
+    				if($address[$key] == 0)		{ print _("No"); }
+    				elseif($address[$key] == 1)	{ print _("Yes"); }
+    			}
+    			else {
+    				print $Result->create_links($address[$key]);
+    			}
+    			print "	</td>";
+    			print "</tr>";
+    			}
+    		}
+    	}
 
-	print "<td class='btn-actions'>";
-	print "	<div class='btn-toolbar'>";
-	print "	<div class='btn-group'>";
-	# write permitted
-	if( $subnet_permission > 1) {
-		if(@$address['class']=="range-dhcp")
-		{
-			print "		<a class='edit_ipaddress   btn btn-default btn-xs modIPaddr' data-action='edit'   data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' data-stopIP='".$address['stopIP']."' href='#' 		   rel='tooltip' data-container='body' title='"._('Edit IP address details')."'>	<i class='fa fa-gray fa-pencil'>  </i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																																													<i class='fa fa-gray fa-cogs'> </i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																																													<i class='fa fa-gray fa-search'></i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																																													<i class='fa fa-gray fa-envelope-o'></i></a>";
-			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>		<i class='fa fa-gray fa-times'>  </i></a>";
-		}
-		else
-		{
-			print "		<a class='edit_ipaddress   btn btn-default btn-xs modIPaddr' data-action='edit'   data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 											   rel='tooltip' data-container='body' title='"._('Edit IP address details')."'>				<i class='fa fa-gray fa-pencil'></i></a>";
-			print "		<a class='ping_ipaddress   btn btn-default btn-xs' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 						   													rel='tooltip' data-container='body' title='"._('Check availability')."'>							<i class='fa fa-gray fa-cogs'></i></a>";
-			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
-			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
-			if($zone) {
-			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['dns_name'])) ? '':$address['dns_name'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>";
-			}
-			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
-			//share
-			if($User->settings->tempShare==1) {
-			print "		<a class='shareTemp btn btn-xs btn-default'  data-container='body' rel='tooltip' title='"._('Temporary share address')."' data-id='$address[id]' data-type='ipaddresses'>		<i class='fa fa-share-alt'></i></a>";
-			}
-		}
-	}
-	# write not permitted
-	else {
-		if(@$address['class']=="range-dhcp")
-		{
-			print "		<a class='edit_ipaddress   btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>	<i class='fa fa-gray fa-pencil'>  </i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																<i class='fa fa-gray fa-retweet'> </i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																<i class='fa fa-gray fa-search'></i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																<i class='fa fa-gray fa-envelope'></i></a>";
-			print "		<a class='delete_ipaddress btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>			<i class='fa fa-gray fa-times'>  </i></a>";
-		}
-		else
-		{
-			print "		<a class='edit_ipaddress   btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>							<i class='fa fa-gray fa-pencil'>  </i></a>";
-			print "		<a class='				   btn btn-default btn-xs disabled'  data-id='".$address['id']."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>		<i class='fa fa-gray fa-retweet'>  </i></a>";
-			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
-			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>		<i class='fa fa-gray fa-envelope'></i></a>";
-			print "		<a class='delete_ipaddress btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>				<i class='fa fa-gray fa-times'>  </i></a>";
-		}
-	}
-
-	print "	</div>";
-	print "	</div>";
-	print "</td>";
-
-	print "</tr>";
+    	# check for temporary shares!
+    	if($User->settings->tempShare==1) {
+    		if (strlen($User->settings->tempAccess)>0) {
+    			foreach(json_decode($User->settings->tempAccess) as $s) {
+    				if($s->type=="ipaddresses" && $s->id==$address['id']) {
+    					if(time()<$s->validity) {
+    						$active_shares[] = $s;
+    					}
+    					else {
+    						$expired_shares[] = $s;
+    					}
+    				}
+    			}
+    		}
+    		if(sizeof(@$active_shares)>0) {
+    			# divider
+    			print "<tr>";
+    			print "	<th colspan='2'><hr></th>";
+    			print "</tr>";
+    			# print
+    			print "<tr>";
+    			print "<th>"._("Active shares").":</th>";
+    			print "<td>";
+    			$m=1;
+    			foreach($active_shares as $s) {
+    				print "<button class='btn btn-xs btn-default removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expires")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
+    				$m++;
+    			}
+    			print "<td>";
+    			print "</tr>";
+    		}
+    		if(sizeof(@$expired_shares)>0) {
+    			# divider
+    			print "<tr>";
+    			print "	<th><hr></th>";
+    			print "	<td></td>";
+    			print "</tr>";
+    			# print
+    			print "<tr>";
+    			print "<th>"._("Expired shares").":</th>";
+    			print "<td>";
+    			$m=1;
+    			foreach($expired_shares as $s) {
+    				print "<button class='btn btn-xs btn-danger removeSharedTemp' data-code='$s->code' ><i class='fa fa-times'></i></button> <a href='".create_link("temp_share",$s->code)."'>Share $m</a> ("._("Expired")." ".date("Y-m-d H:i:s", $s->validity).")<br>";
+    				$m++;
+    			}
+    			print "<td>";
+    			print "</tr>";
+    		}
+    	}
 
 
-	print "</table>";
+    	# actions
+    	print "<tr>";
+    	print "	<td colspan='2'><hr></td>";
+    	print "</tr>";
+    	print "<tr>";
+    	print "	<th>"._('Actions')."</th>";
 
-	# changelog
+    	print "<td class='btn-actions'>";
+    	print "	<div class='btn-toolbar'>";
+    	print "	<div class='btn-group'>";
+    	# write permitted
+    	if( $subnet_permission > 1) {
+    		if(@$address['class']=="range-dhcp")
+    		{
+    			print "		<a class='edit_ipaddress   btn btn-default btn-xs modIPaddr' data-action='edit'   data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' data-stopIP='".$address['stopIP']."' href='#' 		   rel='tooltip' data-container='body' title='"._('Edit IP address details')."'>	<i class='fa fa-gray fa-pencil'>  </i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																																													<i class='fa fa-gray fa-cogs'> </i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																																													<i class='fa fa-gray fa-search'></i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																																													<i class='fa fa-gray fa-envelope-o'></i></a>";
+    			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>		<i class='fa fa-gray fa-times'>  </i></a>";
+    		}
+    		else
+    		{
+    			print "		<a class='edit_ipaddress   btn btn-default btn-xs modIPaddr' data-action='edit'   data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 											   rel='tooltip' data-container='body' title='"._('Edit IP address details')."'>				<i class='fa fa-gray fa-pencil'></i></a>";
+    			print "		<a class='ping_ipaddress   btn btn-default btn-xs' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' 						   													rel='tooltip' data-container='body' title='"._('Check availability')."'>							<i class='fa fa-gray fa-cogs'></i></a>";
+    			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+    			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
+    			if($zone) {
+    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['dns_name'])) ? '':$address['dns_name'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>";
+    			}
+    			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
+    			//share
+    			if($User->settings->tempShare==1) {
+    			print "		<a class='shareTemp btn btn-xs btn-default'  data-container='body' rel='tooltip' title='"._('Temporary share address')."' data-id='$address[id]' data-type='ipaddresses'>		<i class='fa fa-share-alt'></i></a>";
+    			}
+    		}
+    	}
+    	# write not permitted
+    	else {
+    		if(@$address['class']=="range-dhcp")
+    		{
+    			print "		<a class='edit_ipaddress   btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>	<i class='fa fa-gray fa-pencil'>  </i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																<i class='fa fa-gray fa-retweet'> </i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																<i class='fa fa-gray fa-search'></i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled' href='#'>																<i class='fa fa-gray fa-envelope'></i></a>";
+    			print "		<a class='delete_ipaddress btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>			<i class='fa fa-gray fa-times'>  </i></a>";
+    		}
+    		else
+    		{
+    			print "		<a class='edit_ipaddress   btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>							<i class='fa fa-gray fa-pencil'>  </i></a>";
+    			print "		<a class='				   btn btn-default btn-xs disabled'  data-id='".$address['id']."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>		<i class='fa fa-gray fa-retweet'>  </i></a>";
+    			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0) { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
+    			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>		<i class='fa fa-gray fa-envelope'></i></a>";
+    			print "		<a class='delete_ipaddress btn btn-default btn-xs disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>				<i class='fa fa-gray fa-times'>  </i></a>";
+    		}
+    	}
+
+    	print "	</div>";
+    	print "	</div>";
+    	print "</td>";
+
+    print "</table>";
+
+ 	# changelog
 	include("address-changelog.php");
+
+    print "</td>";
+
+	# rack
+	if ($User->settings->enableRACK=="1") {
+
+        // validate rack
+        $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
+        if ($rack!==false) {
+
+        print " <td style='width:200px;vertical-align:top !important'>";
+            # title
+        	print "<h4>"._('Rack details')."</h4>";
+        	print "<hr>";
+            print "     <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:200px;'>";
+        print " </td>";
+        }
+    }
+
+    print "</table>";
 }
 # not exisitng
 else {
+    #header
+    print "<h4>"._('IP address details')."</h4><hr>";
+
+    # back
+    print "<a class='btn btn-default btn-sm btn-default' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
+
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
 ?>

@@ -17,8 +17,11 @@ $PowerDNS 	= new PowerDNS ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# strip input tags
+$_POST = $Admin->strip_input_tags($_POST);
+
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                   $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # checks / validation
@@ -90,9 +93,6 @@ if ($_POST['action']=="delete") 									{ $PowerDNS->remove_all_records ($value
 # update
 if(!$PowerDNS->domain_edit($_POST['action'], $values))				{ $Result->show("danger",  _("Failed to $_POST[action] domain").'!', true); }
 else																{ $Result->show("success", _("Domain $_POST[action] successfull").'!', false); }
-
-# update all references if edit
-if ($_POST['action']=="edit" && $old_domain->name!=$values['name'])	{ $PowerDNS->update_all_records ($values['id'], $values['name']); }
 
 # create default records
 if ($_POST['action']=="add" && !isset($_POST['manual']))			{ $PowerDNS->create_default_records ($_POST); }

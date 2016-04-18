@@ -7,15 +7,94 @@
  */
 class Addresses_controller extends Common_api_functions  {
 
-	/* public variables */
+
+	/**
+	 * Input parameters
+	 *
+	 * @var mixed
+	 * @access public
+	 */
 	public $_params;
 
-	/* object holders */
-	protected $Database;			// Database object
-	protected $Sections;			// Sections object
-	protected $Response;			// Response handler
-	protected $Tools;				// Tools object
-	protected $Subnets;				// Subnets object
+	/**
+	 * Custom address fields
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $custom_fields;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Sections object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Sections;
+
+	/**
+	 * Response handler
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Response;
+
+	/**
+	 * Tools object from master Tools class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
+
+	/**
+	 * Subnets object from master Subnets class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	public $Subnets;
+
+	/**
+	 * Addresses object from master Addresses class
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Addresses;
+
+	/**
+	 * Admin class form master Admin class
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Admin;
+
+	/**
+	 * Saves details of currnt subnet
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $subnet_details;
+
+	/**
+	 * Old address values
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $old_address;
 
 
 	/**
@@ -53,6 +132,7 @@ class Addresses_controller extends Common_api_functions  {
 		$this->validate_options_request ();
 
 		// methods
+		$result = array();
 		$result['methods'] = array(
 								array("href"=>"/api/".$this->_params->app_id."/addresses/", 	"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
 								array("href"=>"/api/".$this->_params->app_id."/addresses/{id}/","methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
@@ -153,6 +233,7 @@ class Addresses_controller extends Common_api_functions  {
 				$this->validate_address_id ();
 
 				// set result
+				$result = array();
 				$result['scan_type'] = $Scan->icmp_type;
 				$result['exit_code'] = $Scan->ping_address ($this->old_address->ip_addr);
 
@@ -206,12 +287,22 @@ class Addresses_controller extends Common_api_functions  {
 	 *
 	 *	required parameters: ip, subnetId
 	 *
+	 *   {subnetId}/first_free/     will search for first free address in subnet, creating ip_addr
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function POST () {
 		// remap keys
 		$this->remap_keys ();
+
+		// first free
+		if($this->_params->id=="first_free")   {
+    		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($this->_params->subnetId, $this->Subnets);
+    		// null
+    		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
+            else                                         { $this->_params->ip_addr = $this->Addresses->transform_address ($this->_params->ip_addr, "dotted"); }
+		}
 
 		// validate ip address - format, proper subnet, subnet/broadcast check
 		$this->validate_create_parameters ();
@@ -229,10 +320,16 @@ class Addresses_controller extends Common_api_functions  {
 			$this->Response->throw_exception(500, "Failed to create address");
 		}
 		else {
-			//set result
-			return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+    		//set result
+    		if($this->_params->id=="first_free")   {
+        	    return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "ip"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
+    		}
+    		else {
+        	    return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+    		}
 		}
 	}
+
 
 
 
@@ -293,6 +390,7 @@ class Addresses_controller extends Common_api_functions  {
 		$this->validate_address_id ();
 
 		// set variables for delete
+		$values = array();
 		$values["id"] 	  = $this->_params->id;
 		$values["action"] = "delete";
 

@@ -8,17 +8,78 @@
 
 class Tools_controller extends Common_api_functions {
 
-	/* public variables */
-	public $_params;					// parameters
 
-	/* protected variables */
+	/**
+	 * _params provided
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $_params;
+
+	/**
+	 * subcontrollers
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $subcontrollers;
+
+	/**
+	 * sort_key for database sorting
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $sort_key;
+
+	/**
+	 * identifiers
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $identifiers;
 
-	/* object holders */
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Database;
+
+	/**
+	 * Response
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Response;
+
+	/**
+	 * Master Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Tools;
+
+	/**
+	 * Main Admin class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Admin;
+
+	/**
+	 * Main Subnets class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
 
 	/**
 	 * __construct function
@@ -27,6 +88,7 @@ class Tools_controller extends Common_api_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
+	 * @param class $Response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -182,10 +244,16 @@ class Tools_controller extends Common_api_functions {
                 // add gateway
     			if($result!=false) {
     				foreach ($result as $k=>$r) {
+        				//gateway
                 		$gateway = $this->read_subnet_gateway ($r->id);
                 		if ( $gateway!== false) {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
+                    	//nameservers
+                		$ns = $this->read_subnet_nameserver ();
+                        if ($ns!==false) {
+                            $result[$k]->nameservers = $ns;
+                        }
     				}
     			}
 			}
@@ -204,6 +272,7 @@ class Tools_controller extends Common_api_functions {
     			}
 			}
 			else {
+    			$field = string;
 				// id3 can only be addresses
 				if ($this->_params->id3 != "addresses")	{ $this->Response->throw_exception(400, 'Invalid parameter'); }
 				// define identifier
@@ -344,6 +413,7 @@ class Tools_controller extends Common_api_functions {
 		$this->validate_tools_object ();
 
 		# set variables for delete
+		$values = array();
 		$values[$this->sort_key] = $this->_params->id2;
 
 		# execute delete
@@ -475,6 +545,17 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function read_subnet_gateway ($subnetId) {
     	return $this->Subnets->find_gateway ($subnetId);
+	}
+
+	/**
+	 * Returns nameserver details
+	 *
+	 * @access private
+	 * @param mixed $nsid
+	 * @return void
+	 */
+	private function read_subnet_nameserver ($nsid) {
+    	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
 	}
 }
 

@@ -29,7 +29,7 @@ if($_GET['page']!="install" ) {
 	$Log 		= new Logging ($Database);
 
 	# reset url for base
-	$url = $Result->createURL ();
+	$url = $User->createURL ();
 }
 
 /** include proper subpage **/
@@ -74,11 +74,12 @@ else {
 	<title><?php print $User->settings->siteTitle; ?></title>
 
 	<!-- css -->
+	<link rel="shortcut icon" type="image/png" href="css/1.2/images/favicon.png">
 	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
 	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" type="image/png" href="css/1.2/images/favicon.png">
 	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-switch.min.css">
+
 	<!-- js -->
 	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
 	<script type="text/javascript" src="js/1.2/jclock.jquery.js"></script>
@@ -89,11 +90,18 @@ else {
 	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/1.2/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/1.2/bootstrap-switch.min.js"></script>
+	<script type="text/javascript" src="js/1.2/bdt/jquery.sortelements.js"></script>
+	<script type="text/javascript" src="js/1.2/bdt/jquery.bdt.js"></script>
+	<script type="text/javascript" src="js/1.2/stickytableheaders/jquery.stickytableheaders.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
+	<?php if ($User->settings->enableThreshold=="1") { ?>
+	<link rel="stylesheet" type="text/css" href="css/1.2/slider.css">
+	<script type="text/javascript" src="js/1.2/bootstrap-slider.js"></script>
+    <?php }	?>
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->

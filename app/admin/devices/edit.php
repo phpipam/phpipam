@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "device");
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
@@ -29,15 +29,29 @@ if($_POST['action']!="add" && !is_numeric($_POST['switchId']))		{ $Result->show(
 # fetch device details
 if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 	$device = (array) $Admin->fetch_object("devices", "id", $_POST['switchId']);
+	// false
+	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
 
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
+
+// set show for rack
+if (is_null($device['rack']))   { $display='display:none'; }
+else                            { $display=''; }
 ?>
 
 <script type="text/javascript">
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+});
+// form change
+$('#switchManagementEdit').change(function() {
+   //change id
+   $('.showRackPopup').attr("data-rackid",$('#switchManagementEdit select[name=rack]').val());
+   //toggle show
+   if($('#switchManagementEdit select[name=rack]').val().length == 0) { $('tbody#rack').hide(); }
+   else                                                               { $('tbody#rack').show(); }
 });
 </script>
 
@@ -84,21 +98,51 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
-	<!-- Vendor -->
+    <!-- Rack -->
+    <?php if($User->settings->enableRACK=="1") { ?>
 	<tr>
-		<td><?php print _('Vendor'); ?></td>
-		<td>
-			<input type="text" name="vendor" class="form-control input-sm" placeholder="<?php print _('Vendor'); ?>" value="<?php if(isset($device['vendor'])) print $device['vendor']; ?>" <?php print $readonly; ?>>
-		</td>
-	</tr>
+	   	<td colspan="2"><hr></td>
+    </tr>
+    <tr>
+        <?php
+        $Racks = new phpipam_rack ($Database);
+        $Racks->fetch_all_racks();
+        ?>
+        <td><?php print _('Rack'); ?></td>
+        <td>
+            <select name="rack" class="form-control">
+                <option value=""><?php print _("None"); ?></option>
+                <?php
+                foreach ($Racks->all_racks as $r) {
+     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' selected='selected'>$r->name</option>"; }
+    				else							{ print "<option value='$r->id' >$r->name</option>"; }
+                }
+                ?>
+            </select>
+        </td>
+    </tr>
 
-	<!-- Model -->
+    <tbody id="rack" style="<?php print $display; ?>">
+    <tr>
+        <td><?php print _('Start position'); ?></td>
+        <td>
+            <div class="input-group" style="width:100px;">
+                <input type="text" name="rack_start" size="2" class="form-control input-w-auto input-sm" placeholder="1" value="<?php print @$device['rack_start']; ?>">
+                <a href="" class="input-group-addon showRackPopup" rel='tooltip' data-placement='right' data-rackid="<?php print @$device['rack']; ?>" data-deviceid='<?php print @$device['id']; ?>' title='<?php print _("Show rack"); ?>'><i class='fa fa-server'></i></a>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td><?php print _('Size'); ?> (U)</td>
+        <td>
+            <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
+        </td>
+    </tr>
+    </tbody>
 	<tr>
-		<td><?php print _('Model'); ?></td>
-		<td>
-			<input type="text" name="model" class="form-control input-sm" placeholder="<?php print _('Model'); ?>" value="<?php if(isset($device['model'])) print $device['model']; ?>" <?php print $readonly; ?>>
-		</td>
-	</tr>
+	   	<td colspan="2"><hr></td>
+    </tr>
+    <?php } ?>
 
 	<!-- Version -->
 	<tr>
@@ -146,7 +190,7 @@ $(document).ready(function(){
 			if ($_POST['action']=="add")	{ $device[$field['name']] = $field['Default']; }
 
 			print '<tr>'. "\n";
-			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. ucwords($field['name']) .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type
@@ -254,7 +298,6 @@ $(document).ready(function(){
 	</table>
 	</form>
 </div>
-
 
 <!-- footer -->
 <div class="pFooter">

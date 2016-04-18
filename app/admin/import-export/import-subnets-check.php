@@ -142,7 +142,7 @@ foreach ($data as &$cdata) {
 		$msg.= "Invalid VLAN domain."; $action = "error";
 	} else {
 		if (!empty($cdata['vlan'])) {
-			if (in_array(strtolower($cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
+		        if (in_array(strtolower($cdata['vlan']),array("na","n/a","nan"))) { $cdata['vlan'] = ""; }
 			if ((!empty($cdata['vlan'])) && (strtolower($cdata['vlan']) != "na")) {
 				if (!isset($vlan_data[$cdom][$cdata['vlan']])) {
 					$msg.= "VLAN not found in provided domain."; $action = "error";

@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 //check for http/https
@@ -38,6 +38,14 @@ if(filter_var($_POST['siteAdminMail'], FILTER_VALIDATE_EMAIL) === false)	{ $Resu
 //verify numbers
 if(!is_numeric($_POST['vlanMax']))											{ $Result->show("danger", _("Invalid value for Max VLAN number"), true); }
 
+//verify snmp support
+if ($Admin->verify_checkbox(@$_POST['enableSNMP'])==1)
+if (!in_array("snmp", get_loaded_extensions()))                             { $Result->show("danger", _("Missing snmp support in php"), true); }
+
+//verify racktables gd support
+if ($Admin->verify_checkbox(@$_POST['enableRACK'])==1)
+if (!in_array("gd", get_loaded_extensions()))                               { $Result->show("danger", _("Missing gd support in php"), true); }
+
 # set update values
 $values = array("id"=>1,
 				//site settings
@@ -54,6 +62,10 @@ $values = array("id"=>1,
 				//features
 				"api"=>$Admin->verify_checkbox(@$_POST['api']),
 				"enableIPrequests"=>$Admin->verify_checkbox(@$_POST['enableIPrequests']),
+				"enableMulticast"=>$Admin->verify_checkbox(@$_POST['enableMulticast']),
+				"enableRACK"=>$Admin->verify_checkbox(@$_POST['enableRACK']),
+				"enableSNMP"=>$Admin->verify_checkbox(@$_POST['enableSNMP']),
+				"enableThreshold"=>$Admin->verify_checkbox(@$_POST['enableThreshold']),
 				"enableVRF"=>$Admin->verify_checkbox(@$_POST['enableVRF']),
 				"enableDNSresolving"=>$Admin->verify_checkbox(@$_POST['enableDNSresolving']),
 				"vlanDuplicate"=>$Admin->verify_checkbox(@$_POST['vlanDuplicate']),

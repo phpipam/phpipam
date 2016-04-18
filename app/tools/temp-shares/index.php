@@ -25,8 +25,9 @@ elseif(!is_object($temp_shares)) {
 }
 else {
 ?>
-<table class="table table-striped table-hover table-top">
+<table class="table sorted table-striped table-hover table-top">
 
+<thead>
 <tr>
 	<th><?php print _("Share type"); ?></th>
 	<th><?php print _("Details"); ?></th>
@@ -36,7 +37,9 @@ else {
 	<th><?php print _("Access log"); ?></th>
 	<th></th>
 </tr>
+</thead>
 
+<tbody>
 <?php
 $cnt = 0;
 // loop
@@ -103,6 +106,6 @@ if($cnt===0) {
 }
 
 ?>
-
+</tbody>
 </table>
 <?php } ?>

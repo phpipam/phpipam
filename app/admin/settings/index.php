@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "settings");
 
 # fetch all languages
 $languages = $Admin->fetch_all_objects("lang", "l_id");
@@ -267,6 +267,50 @@ $(document).ready(function() {
 	</td>
 	<td class="info2">
 		<?php print _('Enable changelog module'); ?>
+	</td>
+</tr>
+
+<!-- Multicast -->
+<tr>
+	<td class="title"><?php print _('Multicast module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableMulticast" <?php if($settings['enableMulticast'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable multicast module'); ?>
+	</td>
+</tr>
+
+<!-- threshold -->
+<tr>
+	<td class="title"><?php print _('Threshold module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableThreshold" <?php if($settings['enableThreshold'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable threshold module'); ?>
+	</td>
+</tr>
+
+<!-- Rack -->
+<tr>
+	<td class="title"><?php print _('Rack module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableRACK" <?php if($settings['enableRACK'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable rack drawing module'); ?>
+	</td>
+</tr>
+
+<!-- Rack -->
+<tr>
+	<td class="title"><?php print _('SNMP module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableSNMP" <?php if($settings['enableSNMP'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable SNMP module for devices'); ?>
 	</td>
 </tr>
 

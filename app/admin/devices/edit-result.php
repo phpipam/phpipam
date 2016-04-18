@@ -12,18 +12,17 @@ $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
+$Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
-
+$User->csrf_cookie ("validate", "device", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
-$device = $_POST;
-
+$device = $Admin->strip_input_tags($_POST);
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['switchId']))			{ $Result->show("danger", _("Invalid ID"), true); }
@@ -43,6 +42,21 @@ $device['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 # Hostname must be present
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
+# rack checks
+if (strlen(@$device['rack']>0)) {
+    if ($User->settings->enableRACK!="1") {
+        unset($device['rack']);
+    }
+    else {
+        # validate position and size
+        if (!is_numeric($device['rack']))                               { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+        if (!is_numeric($device['rack_start']))                         { $Result->show("danger", _('Invalid rack start position').'!', true); }
+        if (!is_numeric($device['rack_size']))                          { $Result->show("danger", _('Invalid rack size').'!', true); }
+        # validate rack
+        $rack = $Racks->fetch_rack_details ($device['rack']);
+        if ($rack===false)                                              { $Result->show("danger", _('Rack does not exist').'!', true); }
+    }
+}
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
@@ -68,14 +82,19 @@ $values = array("id"=>@$device['switchId'],
 				"hostname"=>@$device['hostname'],
 				"ip_addr"=>@$device['ip_addr'],
 				"type"=>@$device['type'],
-				"vendor"=>@$device['vendor'],
-				"model"=>@$device['model'],
 				"description"=>@$device['description'],
 				"sections"=>@$device['sections']
 				);
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
+}
+# rack
+if (strlen(@$device['rack']>0)) {
+    $values['rack'] = $device['rack'];
+    $values['rack_start'] = $device['rack_start'];
+    $values['rack_size']  = $device['rack_size'];
+
 }
 
 # update device

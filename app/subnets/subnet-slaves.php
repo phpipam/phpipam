@@ -8,7 +8,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 # set visible fields
 foreach ($custom_fields as $k=>$f) {
-    if (isset($hidden_fields)) {
+    if (isset($hidden_fields['subnets'])) {
         if (!in_array($k, $hidden_fields['subnets'])) {
             $visible_fields[$k] = $f;
         }
@@ -72,8 +72,21 @@ foreach ($slave_subnets as $slave_subnet) {
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);
 	if(!$slave_vlan) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
 
+
+	# calculate free / used / percentage
+	if(!$has_slaves) {
+		$slave_addresses = (int) $Addresses->count_subnet_addresses ($slave_subnet['id']);
+		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet'], $slave_subnet['isFull']);
+	} else {
+		$calculate = $Subnets->calculate_subnet_usage_recursive( $slave_subnet['id'], $slave_subnet['subnet'], $slave_subnet['mask'], $Addresses, $slave_subnet['isFull']);
+	}
+
 	# add full information
 	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+    if ($slave_subnet['isFull']!==1) {
+        # if usage is 100%, fake usFull to true!
+        if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
+    }
 
 	# slaves info
 	$has_slaves = $Subnets->has_slaves ($slave_subnet['id']) ? true : false;
@@ -103,14 +116,6 @@ foreach ($slave_subnets as $slave_subnet) {
         print "<td>".$html_custom."</td>";
     }
     }
-
-	# calculate free / used / percentage
-	if(!$has_slaves) {
-		$slave_addresses = (int) $Addresses->count_subnet_addresses ($slave_subnet['id']);
-		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet'], $slave_subnet['isFull']);
-	} else {
-		$calculate = $Subnets->calculate_subnet_usage_recursive( $slave_subnet['id'], $slave_subnet['subnet'], $slave_subnet['mask'], $Addresses, $slave_subnet['isFull']);
-	}
 
     print ' <td class="small hidden-xs hidden-sm hidden-md">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
     print '	<td class="small hidden-xs hidden-sm hidden-md">'. $calculate['freehosts_percent'] .'</td>';

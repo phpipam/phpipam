@@ -6,30 +6,74 @@
 
 class Install extends Common_functions {
 
+
 	/**
-	 * public varibles
+	 * to store DB exceptions
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public	  $exception;					//to store DB exceptions
+	public $exception;
 
 	/**
-	 * protected variables
+	 * Database parameters
+	 *
+	 * @var mixed
+	 * @access protected
 	 */
-	protected $db;							//db parameters
-	protected $debugging = false;			//(bool) debugging flag
+	protected $db;
 
 	/**
-	 * object holders
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
 	 */
-	protected $Result;						//for Result printing
-	protected $Database;					//for Database connection
-	protected $Database_root;				//for Database connection for installation
-	public $Log;							// for Logging connection
+	public $debugging = false;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Database_root - for initial installation
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database_root;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
+
+
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -373,27 +417,29 @@ class Install extends Common_functions {
 
 		// replace CRLF
 		$subversion_queries = str_replace("\r\n", "\n", $subversion_queries);
-		$queries = explode(";\n", $subversion_queries);
+		$queries = array_filter(explode(";\n", $subversion_queries));
 
 	    # execute all queries
 	    foreach($queries as $query) {
-			try { $this->Database->runQuery($query); }
-			catch (Exception $e) {
-				$this->Log = new Logging ($this->Database);
-				# write log
-				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
-				# fail
-				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
-				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
-				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
-				# revert version
-				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
-				//catch (Exception $e) { var_dump($e); }
-				// false
-				return false;
+    	    if (strlen($query)>5) {
+    			try { $this->Database->runQuery($query); }
+    			catch (Exception $e) {
+    				$this->Log = new Logging ($this->Database);
+    				# write log
+    				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
+    				# fail
+    				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
+    				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
+    				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
+    				# revert version
+    				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
+    				//catch (Exception $e) { var_dump($e); }
+    				// false
+    				return false;
+    			}
+    			// save ok
+    			$queries_ok[] = $query;
 			}
-			// save ok
-			$queries_ok[] = $query;
 	    }
 
 

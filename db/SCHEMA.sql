@@ -34,6 +34,7 @@ CREATE TABLE `ipaddresses` (
   `excludePing` BINARY  NULL  DEFAULT '0',
   `PTRignore` BINARY  NULL  DEFAULT '0',
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
+  `NAT` VARCHAR(64)  NULL  DEFAULT NULL,
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -140,6 +141,12 @@ CREATE TABLE `settings` (
   `firewallZoneSettings` VARCHAR(1024) NOT NULL DEFAULT '{"zoneLength":3,"ipType":{"0":"v4","1":"v6"},"separator":"_","indicator":{"0":"own","1":"customer"},"zoneGenerator":"2","zoneGeneratorType":{"0":"decimal","1":"hex","2":"text"},"deviceType":"3","padding":"on","strictMode":"on","pattern":{"0":"patternFQDN"}}',
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
   `powerDNS` TEXT  NULL,
+  `enableMulticast` TINYINT(1)  NULL  DEFAULT '0',
+  `enableNAT` TINYINT(1)  NULL  DEFAULT '0',
+  `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
+  `enableThreshold` TINYINT(1)  NULL  DEFAULT '0',
+  `enableRACK` TINYINT(1)  NULL  DEFAULT '0',
+  `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
   `donate` tinyint(1) DEFAULT '0',
@@ -249,6 +256,8 @@ CREATE TABLE `subnets` (
   `isFolder` BOOL NULL  DEFAULT '0',
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
+  `threshold` int(3)  NULL  DEFAULT 0,
+  `NAT` VARCHAR(64)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -272,19 +281,20 @@ CREATE TABLE `devices` (
   `hostname` varchar(32) DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `type` int(2) DEFAULT '0',
-  `vendor` varchar(156) DEFAULT NULL,
-  `model` varchar(124) DEFAULT NULL,
   `description` varchar(256) DEFAULT NULL,
   `sections` varchar(128) DEFAULT NULL,
-  `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `snmp_community` varchar(100) DEFAULT NULL,
+  `snmp_version` set('0','1','2') DEFAULT '0',
+  `snmp_port` mediumint(5) unsigned DEFAULT '161',
+  `snmp_timeout` mediumint(5) unsigned DEFAULT '1000000',
+  `snmp_queries` VARCHAR(128)  NULL  DEFAULT NULL,
+  `rack` int(11) unsigned NULL DEFAULT null,
+  `rack_start` int(11) unsigned DEFAULT null,
+  `rack_size` int(11) unsigned DEFAULT null,
+  `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/* insert default values */
-INSERT INTO `devices` (`id`, `hostname`, `ip_addr`, `type`, `vendor`, `model`, `sections`)
-VALUES
-	(1,'CoreSwitch','10.10.10.254',0,'Cisco','c6500','1;2;3'),
-	(2,'Wifi-1','10.10.20.245',4,'Cisco','','1');
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 
 # Dump of table userGroups
@@ -503,7 +513,10 @@ VALUES
 	(9, 'Last 5 warning / error logs', 'Shows list of last 5 warning and error logs', 'error_logs', NULL, 'yes', '6', 'yes', 'yes'),
 	(10,'Tools menu', 'Shows quick access to tools menu', 'tools', NULL, 'yes', '6', 'no', 'yes'),
 	(11,'IP Calculator', 'Shows IP calculator as widget', 'ipcalc', NULL, 'yes', '6', 'no', 'yes'),
-	(12,'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes');
+	(12,'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes'),
+	(13,'Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes'),
+	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');
+
 
 
 # Dump of table deviceTypes
@@ -662,10 +675,40 @@ VALUES
 	(1, 'locahost', 'Scanning from local machine', 'direct');
 
 
+# Dump of table nat
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `nat`;
+
+CREATE TABLE `nat` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `type` set('source','static','destination') DEFAULT 'source',
+  `src` text,
+  `dst` text,
+  `port` int(5) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+
+# Dump of table racks
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `racks`;
+
+CREATE TABLE `racks` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `size` int(2) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.2';
+UPDATE `settings` set `version` = '1.22';

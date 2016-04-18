@@ -34,7 +34,7 @@ if ($User->settings->enableIPrequests==1) {
 	# remove
 	if ($requests==0) { unset($requests); }
 	# parse
-	if ($User->isAdmin==false && isset($requests)) {
+	if ($User->is_admin(false)==false && isset($requests)) {
 		# fetch all Active requests
 		$requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
 		foreach ($requests as $k=>$r) {
@@ -223,7 +223,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 	<ul class="nav navbar-nav navbar-right hidden-xs hidden-sm icon-ul">
 
 		<!-- Dash lock/unlock -->
-		<?php if($_GET['page']=="dashboard" && !($User->isadmin!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) ) { ?>
+		<?php if($_GET['page']=="dashboard" && !($User->is_admin(false)!==true && (strlen($User->user->groups)==0 || $User->user->groups==="null") ) ) { ?>
 			<li class="w-lock">
 				<a href="#" rel='tooltip' class="icon-li" data-placement='bottom' title="<?php print _('Click to reorder widgets'); ?>"><i class='fa fa-dashboard'></i></a>
 			</li>
@@ -285,7 +285,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 
     	<!-- DB verification -->
 		<?php
-		if($User->isadmin && $User->settings->dbverified==0) {
+		if($User->is_admin(false) && $User->settings->dbverified==0) {
 			//check
 			if(sizeof($dberrsize = $Tools->verify_database())>0) {
 				$esize = sizeof($dberrsize['tableError']) + sizeof($dberrsize['fieldError']);
@@ -312,7 +312,7 @@ require( dirname(__FILE__) . '/../admin/admin-menu-config.php' );
 		}
 
 		# check for new version periodically, 1x/week
-		if( $User->isadmin && (strtotime(date("Y-m-d H:i:s")) - strtotime($User->settings->vcheckDate)) > 604800 ) {
+		if( $User->is_admin(false) && (strtotime(date("Y-m-d H:i:s")) - strtotime($User->settings->vcheckDate)) > 604800 ) {
 			# check for new version
 			if(!$version = $Tools->check_latest_phpipam_version ()) {
 				# we failed, so NW is not ok. update time anyway to avoid future failures

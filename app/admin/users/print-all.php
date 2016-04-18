@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all APIs
-$users = $Admin->fetch_all_objects("users");
+$users = $Admin->fetch_all_objects("users", "username");
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('users');
 
@@ -25,9 +25,10 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 <button class='btn btn-sm btn-default editUser' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create user'); ?></button>
 
 <!-- table -->
-<table id="userPrint" class="table table-striped table-top table-auto">
+<table id="userPrint1" class="table sorted table-striped table-top">
 
 <!-- Headers -->
+<thead>
 <tr>
 	<th></th>
     <th><?php print _('Real Name'); ?></th>
@@ -50,7 +51,9 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 	?>
     <th></th>
 </tr>
+</thead>
 
+<tbody>
 <?php
 /* print existing sections */
 foreach ($users as $user) {
@@ -154,6 +157,7 @@ foreach ($users as $user) {
 	print '</tr>' . "\n";
 }
 ?>
+</tbody>
 </table>
 
 <div class="alert alert-info alert-absolute">

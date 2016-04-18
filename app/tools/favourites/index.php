@@ -22,9 +22,10 @@ if(sizeof($favourite_subnets) == 0 || !isset($favourite_subnets[0])) {
 	print "</blockquote>";
 }
 else {
-	print "<table class='table table-condensed table-striped table-hover table-top favs'>";
+	print "<table class='table sorted table-condensed table-striped table-hover table-top'>";
 
 	# headers
+	print "<thead>";
 	print "<tr>";
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Description')."</th>";
@@ -33,7 +34,9 @@ else {
 	print "	<th class='hidden-xs hidden-sm'>"._('Used')."</th>";
 	print "	<th></th>";
 	print "</tr>";
+	print "</thead>";
 
+	print "<tbody>";
 	# logs
 	foreach($favourite_subnets as $f) {
 		# if subnet already removed (doesnt exist) dont print it!
@@ -90,7 +93,7 @@ else {
 			print "</tr>";
 		}
 	}
-
+	print "</tbody>";
 	print "</table>";
 }
 ?>

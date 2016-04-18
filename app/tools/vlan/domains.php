@@ -2,7 +2,7 @@
 <hr>
 
 <!-- Manage link -->
-<?php if($User->isadmin===true) { ?>
+<?php if($User->is_admin()===true) { ?>
 <?php if($_GET['page']=="administration") { ?>
 <div class="btn-group" style="margin-bottom:10px;">
 	<button class="btn btn-sm btn-default editVLANdomain" data-action="add" data-domainid="" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add L2 Domain'); ?></button>
@@ -29,7 +29,7 @@
 <tr>
 	<th style="padding: 10px;"><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>" class="btn btn-sm btn-default"><i class='fa fa-list'></i> <?php print _('All domains'); ?></a></th>
 	<th style="padding: 10px;padding-top: 13px;" colspan="<?php print $_GET['page']=="administration" ? 3 : 2; ?>"><?php print _('List of all VLANs in all domains'); ?></th>
-	<?php if($User->isadmin===true) { ?><th></th><?php } ?>
+	<?php if($User->is_admin()===true) { ?><th></th><?php } ?>
 </tr>
 
 <!-- content -->

@@ -208,7 +208,7 @@ else {
         	# print device
         	if(in_array('switch', $selected_ip_fields)) {
 	        	# get device details
-	        	$device = (array) $Tools->fetch_device(null, $addresses[$n]->switch);
+	        	$device = (array) $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
 																	  print "<td class='hidden-xs hidden-sm hidden-md'>".@$device['hostname']."</td>";
 			}
 

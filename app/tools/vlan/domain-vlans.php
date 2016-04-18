@@ -23,10 +23,11 @@ $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : 
 
 # size of custom fields
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);
+if($_GET['page']=="administration") { $csize++; }
 
 
 # set disabled for non-admins
-$disabled = $User->isadmin==true ? "" : "hidden";
+$disabled = $User->is_admin()==true ? "" : "hidden";
 
 
 # title
@@ -44,8 +45,13 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
     ?>
     <?php
     // l2 domains
-    if($User->isadmin===true && sizeof($vlan_domains)==1) { ?>
+    if($User->is_admin()===true && sizeof($vlan_domains)==1) { ?>
 	<button class="btn btn-sm btn-default editVLANdomain" data-action="add" data-domainid="" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add L2 Domain'); ?></button>
+	<?php } ?>
+    <?php
+    // snmp
+    if($User->is_admin()===true && $User->settings->enableSNMP==1) { ?>
+	<button class="btn btn-sm btn-default" id="snmp-vlan" data-action="add" data-domainid="<?php print $vlan_domain->id; ?>"><i class="fa fa-cogs"></i> <?php print _('Scan for VLANs'); ?></button>
 	<?php } ?>
 	<button class="btn btn-sm btn-default editVLAN" data-action="add" data-domain="<?php print $vlan_domain->id; ?>" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add VLAN'); ?></button>
 
@@ -58,7 +64,7 @@ if($vlans===false) {
 }
 else {
 	# table
-	print "<table class='table vlans table-condensed table-top'>";
+	print "<table class='table sorted vlans table-condensed table-top'>";
 
 	# headers
 	print "<thead>";
@@ -75,10 +81,7 @@ else {
 	}
 	print ' <th>'._('Belonging subnets').'</th>' . "\n";
 	print ' <th>'._('Section').'</th>' . "\n";
-	// administration
-	if ($_GET['page']=="administration") {
-		print "<th></th>";
-	}
+    print "<th></th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -159,7 +162,7 @@ else {
 								}
 								//text
 								elseif($field['type']=="text") {
-									if(strlen($v->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlan[$field['name']])."'>"; }
+									if(strlen($v->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $v->$field['name'])."'>"; }
 									else									{ print ""; }
 								}
 								else {
@@ -176,6 +179,14 @@ else {
 					print "<td></td>";
 					print "<td></td>";
 					print "<td></td>";
+			        if(sizeof(@$custom_fields) > 0) {
+				   		foreach($custom_fields as $field) {
+					   		# hidden
+					   		if(!in_array($field['name'], $hidden_fields)) {
+    					   		print "<td></td>";
+    					    }
+                        }
+                    }
 				}
 				//subnet?
 				if ($v->subnetId!=null) {
@@ -214,7 +225,8 @@ else {
 						print "	</td>";
 					}
 					else {
-						print "<td></td>";
+    					print "	<td>/</td>";
+
 					}
 
 					print "</tr>";

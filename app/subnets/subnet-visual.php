@@ -6,8 +6,15 @@ print "<br><h4>"._('Visual subnet display')." <i class='icon-gray icon-info-sign
 print "<div class='ip_vis'>";
 
 # set limits - general
-$start_visual = gmp_strval(gmp_and("0xffffffff", (int) $Subnets->transform_to_decimal($subnet_detailed['network'])));
-$stop_visual  = gmp_strval(gmp_and("0xffffffff", (int) $Subnets->transform_to_decimal($subnet_detailed['broadcast'])));
+if (PHP_INT_SIZE === 8) {
+    $start_visual = gmp_strval(gmp_and("0xffffffff", (int) $Subnets->transform_to_decimal($subnet_detailed['network'])));
+    $stop_visual  = gmp_strval(gmp_and("0xffffffff", (int) $Subnets->transform_to_decimal($subnet_detailed['broadcast'])));
+}
+else {
+    $start_visual = gmp_strval(gmp_and("0xffffffff", $Subnets->transform_to_decimal($subnet_detailed['network'])));
+    $stop_visual  = gmp_strval(gmp_and("0xffffffff", $Subnets->transform_to_decimal($subnet_detailed['broadcast'])));
+
+}
 
 # remove subnet and bcast if mask < 31
 if($subnet['mask'] > 30) {}
@@ -35,8 +42,8 @@ for($m=$start_visual; $m<=$stop_visual; $m=gmp_strval(gmp_add($m,1))) {
 
 		# to edit
 		$class = $visual_addresses[$m]['state'];
-		$id = (int) $visual_addresses[$m]['id'];
 		$action = 'all-edit';
+		$id = (int) $visual_addresses[$m]['id'];
 
 		# tooltip
 		$title = $Subnets->transform_to_dotted($m);

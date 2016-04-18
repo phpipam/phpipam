@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "pdns_defaults");
 
 ?>
 <!-- database settings -->
@@ -43,6 +43,18 @@ $csrf = $User->create_csrf_cookie ();
 		<span class="text-muted"><?php print _("Enter default hostmaster for domain"); ?></span>
 	</td>
 </tr>
+
+<!-- default PTR domain -->
+<tr>
+	<td><?php print _('Default PTR domain'); ?></th>
+	<td>
+		<input type="text" class="form-control input-sm" name="def_ptr_domain" placeholder="Not used" value="<?php print $pdns->def_ptr_domain; ?>">
+	</td>
+	<td>
+		<span class="text-muted"><?php print _("Default PTR domain if no valid hostname for PTR is provided"); ?></span>
+	</td>
+</tr>
+
 <!-- refresh -->
 <tr>
 	<td><?php print _('Refresh'); ?></th>

@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :              $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "pdns_defaults", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 // validations
 if(strlen($_POST['ttl'])==0)	{ $_POST['ttl'] = $PowerDNS->defaults->ttl; }
@@ -38,6 +38,7 @@ $values->autoserial = @$old_values->autoserial;
 // defaults
 $values->ns 		= $_POST['ns'];
 $values->hostmaster = $_POST['hostmaster'];
+$values->def_ptr_domain = $_POST['def_ptr_domain'];
 $values->refresh 	= $_POST['refresh'];
 $values->retry 		= $_POST['retry'];
 $values->expire 	= $_POST['expire'];

@@ -30,7 +30,7 @@ $slimit = 10;			//we dont need this, we will recalculate
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_widget ("wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 20;
@@ -40,7 +40,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	print '<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/1.2/flot/excanvas.min.js"></script><![endif]-->';
 	# and print title
 	print "<div class='container'>";
-	print "<h4 style='margin-top:40px;'>$widget[wtitle]</h4><hr>";
+	print "<h4 style='margin-top:40px;'>$widget->wtitle</h4><hr>";
 	print "</div>";
 }
 
@@ -74,6 +74,8 @@ $(function () {
     var data = [
     <?php
 	$m=0;
+	$unique_descriptions = array();
+	// loop
 	foreach ($top_subnets as $subnet) {
 		# cast
 		$subnet = (array) $subnet;
@@ -82,7 +84,22 @@ $(function () {
 			$sp = $Subnets-> check_permission ($User->user, $subnet['id']);
 			if($sp != "0") {
 				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
+				// save description - full
 				$subnet['descriptionLong'] = $subnet['description'];
+                //length check
+                $subnet['description'] = strlen($subnet['description'])>20 ? substr($subnet['description'], 0,20)."..." : $subnet['description'];
+
+                // if desc already exists append index
+                if (in_array($subnet['description'], $unique_descriptions)) {
+                    while (in_array($subnet['description']."_$n", $unique_descriptions)) {
+                        $n++;
+                    }
+                    $subnet['description'] = $subnet['description']."_$n";
+                }
+
+                // save unique description
+                $unique_descriptions[] = $subnet['description'];
+
 				# odd/even if more than 5 items
 				if(sizeof($top_subnets) > 5) {
 					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}

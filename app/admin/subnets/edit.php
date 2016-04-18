@@ -21,7 +21,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "subnet");
 
 
 # verify that user has permissions to add subnet
@@ -77,6 +77,7 @@ else {
 # fetch custom fields
 $custom_fields = $Tools->fetch_custom_fields('subnets');
 # fetch vrfs
+if($User->settings->enableVRF==1)
 $vrfs  = $Tools->fetch_all_objects("vrf", "name");
 # check if it has slaves - if yes it cannot be splitted!
 $slaves = $Subnets->has_slaves($_POST['subnetId']);
@@ -117,7 +118,11 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	if 		(ping==true || scan==true)		{ $("tr#scanAgentDropdown").removeClass("hidden"); }
 	else if (ping==false && scan==false)	{ $("tr#scanAgentDropdown").addClass("hidden"); }
 });
-
+<?php if ($User->settings->enableThreshold=="1") { ?>
+$('.slider').slider().on('slide', function(ev){
+    $('.slider-text span').html(ev.value);
+});
+<?php } ?>
 
 });
 </script>
@@ -174,8 +179,13 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 
         </td>
         <td class="info2">
-        	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopup2"><i class="fa fa-th-large"></i></button>
-        	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
+            <div class="btn-group">
+            	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopup2"><i class="fa fa-th-large"></i></button>
+            	<?php if($User->settings->enableSNMP == "1" && $_POST['action']=="add") { ?>
+            	<button type="button" class="btn btn-xs btn-default"  id='snmp-routing' rel='tooltip' data-placement="bottom" title='<?php print _('Search for subnets through SNMP'); ?>'><i class="fa fa-cogs"></i></button>
+            	<?php } ?>
+            	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
+            </div>
         	<?php print _('Enter subnet in CIDR format'); ?>
         </td>
     </tr>
@@ -328,6 +338,16 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
         </td>
         <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
     </tr>
+    <?php if ($User->settings->enableThreshold=="1") { ?>
+	<tr>
+        <td class="middle"><?php print _('Threshold'); ?></td>
+        <td>
+            <?php $svalue = !is_null($subnet_old_details['threshold']) ? $subnet_old_details['threshold'] : 0; ?>
+            <input type="text" style="width:200px;" class="slider" name="threshold" value="<?php print $svalue; ?>" data-slider-handle="square" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="<?php print $svalue; ?>" data-slider-orientation="horizontal" data-slider-selection="after">
+        </td>
+        <td class="info2"><?php print _('Set subnet alert threshold'); ?> <span class='badge badge1 badge5 slider-text'><span><?php print $svalue; ?></span>%</span></td>
+    </tr>
+    <?php } ?>
 
 	<?php } ?>
 

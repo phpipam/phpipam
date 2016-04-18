@@ -20,8 +20,11 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# strip input tags
+$_POST = $Admin->strip_input_tags($_POST);
+
 # validate csrf cookie
-$_POST['csrf_cookie']==$_SESSION['csrf_cookie'] ? :                      $Result->show("danger", _("Invalid CSRF cookie"), true);
+$User->csrf_cookie ("validate", "folder", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # ID must be numeric
 if($_POST['action']=="add") {
@@ -32,11 +35,11 @@ if($_POST['action']=="add") {
 
 # verify that user has permissions to add subnet
 if($_POST['action']=="add") {
-	if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true, true); }
+	if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) { $Result->show("danger", _('You do not have permissions to add new subnet in this section')."!", true); }
 }
 # otherwise check subnet permission
 else {
-	if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true, true); }
+	if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true); }
 }
 
 # we need old values for mailing
@@ -80,7 +83,7 @@ if($_POST['action']=="add") {
 //check for name length - 2 is minimum!
 if(strlen($_POST['description'])<2 && $_POST['action']!="delete") { $Result->show("danger", _('Folder name must have at least 2 characters')."!", true); }
 //custom fields
-if(sizeof($custom) > 0) {
+if(sizeof($custom) > 0 && $_POST['action']!="delete") {
 	foreach($custom as $myField) {
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
@@ -162,7 +165,9 @@ else {
 				}
 			}
 			//not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			if ($_POST['action']!="delete") {
+    			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+            }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];

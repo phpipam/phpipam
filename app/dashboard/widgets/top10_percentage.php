@@ -24,7 +24,7 @@ $slimit = 10;
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_widget ("wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 20;
@@ -34,7 +34,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	print '<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/1.2/flot/excanvas.min.js"></script><![endif]-->';
 	# and print title
 	print "<div class='container'>";
-	print "<h4 style='margin-top:40px;'>$widget[wtitle]</h4><hr>";
+	print "<h4 style='margin-top:40px;'>$widget->wtitle</h4><hr>";
 	print "</div>";
 }
 
@@ -62,7 +62,6 @@ foreach($top_subnets as $subnet) {
 # set maximum for graph
 $max = str_replace(",", ".", $top_subnets[0]->percentage);
 
-
 # only print if some hosts exist
 if(sizeof($top_subnets)>0) {
 ?>
@@ -88,11 +87,11 @@ $(function () {
 
 				# odd/even if more than 5 items
 				if(sizeof($top_subnets) > 5) {
-					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 				}
 				else {
-								{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+								{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 				}
 				$m++;
 			}

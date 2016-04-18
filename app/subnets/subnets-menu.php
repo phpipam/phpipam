@@ -15,7 +15,7 @@ if(!is_numeric($_GET['section'])) { $Result->show("danger",_('Invalid ID'), true
 
 # Admin check, otherwise load requested subnets
 if ($_GET['section'] == 'Administration') {
-    if (!$User->isadmin) 	{ $Result->show("danger",_('Sorry, must be admin'), true); }
+    if (!$User->is_admin()) { $Result->show("danger",_('Sorry, must be admin'), true); }
     else 					{ include('admin/admin-menu.php'); }
 }
 # load subnets
@@ -68,7 +68,7 @@ else {
     else 										{ $iconClass='fa-expand';  	$action = 'close';}
 
     # Check if it has parent, and if so print back link
-    if($section['masterSection']!=0)	{
+    if($section['masterSection']!=0 && $section['masterSection']!=NULL)	{
     	# get details
     	$master_section = (array) $Sections->fetch_section ("id", $section['masterSection']);
 
@@ -99,7 +99,7 @@ else {
 				# title
 				print "<hr><h4>"._('Available VLANs')."</h4><hr>";
 				# create and print menu
-				print $Subnets->print_vlan_menu($User->user, $vlans, $_GET['section']);
+				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $_GET['section']);
 			print "</div>";
 		}
 	}
@@ -115,7 +115,7 @@ else {
 				# title
 				print "<hr><h4>"._('Available VRFs')."</h4><hr>";
 				# create and print menu
-				print $Subnets->print_vrf_menu($User->user, $vrfs, $_GET['section']);
+				print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $_GET['section']);
 			print "</div>";
 		}
 	}
@@ -131,8 +131,13 @@ if($section_permission == 3) {
 	print "	<span>"._('Add new');
 	print "	<div class='btn-group'>";
 	print "	 <button id='add_subnet' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new subnet to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-plus'></i></button>";
+	# snmp
+	if($User->settings->enableSNMP==1)
+	print "	 <button class='btn btn-xs btn-default btn-success' id='snmp-routing-section'  rel='tooltip' data-container='body' data-sectionId='$section[id]' data-subnetId='0'  data-placement='top' title='"._('Search for subnets through SNMP')."'><i class='fa fa-sm fa-cogs'></i></button>";
 	print "	 <button id='add_folder' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new folder to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-folder'></i></button>";
 	print "	</div>";
 	print "	</span>";
 	print "</div>";
 }
+
+?>

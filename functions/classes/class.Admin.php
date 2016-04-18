@@ -6,36 +6,104 @@
 
 class Admin extends Common_functions {
 
+
 	/**
-	 * public variables
+	 * (array of objects) to store users, user id is array index
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public $users;							//(array of objects) to store users, user id is array index
-	public $groups;							//(array of objects) to store groups, group id is array index
-	public $lastId = null;					//id of last edited/added table
+	public $users;
 
 	/**
-	 * private variables
+	 * (array of objects) to store groups, group id is array index
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	private $isadmin = false;				//flag is user is admin
-	private $admin_required = true;			//if admin user is required to connect. Can be overridden
+	public $groups;
 
 	/**
-	 * object holders
+	 * id of last edited/added table
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
 	 */
-	public	  $Result;						//for Result printing
-	protected $User;						//User object
-	protected $Database;					//for Database connection
-	protected $debugging = false;			//(bool) debugging flag
-	public $Log;							// for Logging connection
+	public $lastId = null;
 
+	/**
+	 * flag is user is admin
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access private
+	 */
+	private $isadmin = false;
+
+	/**
+	 * if admin user is required to connect. Can be overridden
+	 *
+	 * (default value: true)
+	 *
+	 * @var bool
+	 * @access private
+	 */
+	private $admin_required = true;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * User
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $User;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $debugging = false;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
 
 
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $database
+	 * @param bool $admin_required (default: true)
 	 */
 	public function __construct (Database_PDO $database, $admin_required = true) {
 		# initialize database object
@@ -53,10 +121,20 @@ class Admin extends Common_functions {
 	}
 
 	/**
+	 * Saves last insert ID on object modification.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function save_last_insert_id () {
+		$this->lastId = $this->Database->lastInsertId();
+	}
+
+	/**
 	 * Sets admin required flag if needed
 	 *
 	 * @access public
-	 * @param mixed $bool
+	 * @param boolean $bool
 	 * @return void
 	 */
 	public function set_admin_required ($bool) {
@@ -74,140 +152,14 @@ class Admin extends Common_functions {
 		if (php_sapi_name()!="cli") {
 			# initialize user class
 			$this->User = new User ($this->Database);
-		}
-		# save settings
-		$this->settings = $this->User->settings;
-		# if required die !
-		if($this->User->isadmin!==true && $this->admin_required==true) {
-			// popup ?
-			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
-			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@general fetch methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * Fetch all objects from specified table in database
-	 *
-	 * @access public
-	 * @param mixed $table
-	 * @param mixed $sortField (default:id)
-	 * @return void
-	 */
-	public function fetch_all_objects ($table=null, $sortField="id") {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		# fetch
-		try { $res = $this->Database->getObjects($table, $sortField); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# result
-		return sizeof($res)>0 ? $res : false;
-	}
-
-	/**
-	 * Fetches specified object specified table in database
-	 *
-	 * @access public
-	 * @param mixed $table
-	 * @param mixed $method (default: null)
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_object ($table=null, $method=null, $id) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
-		# ignore 0
-		if($id===0 || is_null($id)) {
-			return false;
-		}
-		# check cache
-		elseif(isset($this->table[$table][$method][$id]))	{
-			return $this->table[$table][$method][$id];
-		}
-		else {
-			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to cache array
-			if(sizeof($res)>0) {
-				$this->table[$table][$method][$id] = (object) $res;
-				return $res;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Fetches multiple objects in specified table in database
-	 *
-	 *	doesnt cache
-	 *
-	 * @access public
-	 * @param mixed $table (default: null)
-	 * @param mixed $method (default: null)
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		else {
-			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# result
-			return sizeof($res)>0 ? $res : false;
-		}
-	}
-
-	/**
-	 * Empties table
-	 *
-	 * @access public
-	 * @param mixed $table (default: null)
-	 * @return void
-	 */
-	public function truncate_table ($table = null) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		else {
-			try { $res = $this->Database->emptyTable($table); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# result
-			return true;
+    		# save settings
+    		$this->settings = $this->User->settings;
+    		# if required die !
+    		if($this->User->is_admin(false)!==true && $this->admin_required==true) {
+    			// popup ?
+    			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
+    			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }
+    		}
 		}
 	}
 
@@ -231,9 +183,9 @@ class Admin extends Common_functions {
 	/**
 	 * Modify database object
 	 *
-	 * @access public
-	 * @param mixed $table
-	 * @param mixed $action
+	 * @param string $table
+	 * @param string $action
+	 * @param string $id
 	 * @param mixed $values
 	 * @return void
 	 */
@@ -257,7 +209,7 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table
 	 * @param mixed $values
-	 * @return void
+	 * @return boolean
 	 */
 	private function object_add ($table, $values) {
 		# null empty values
@@ -286,8 +238,7 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param array $values			//update variables
-	 * @param mixed $primary_key	//key to update on
-	 * @return void
+	 * @return boolean
 	 */
 	private function object_edit ($table, $key="id", $values) {
 		# null empty values
@@ -316,8 +267,8 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param array $values			//update variables
-	 * @param mixed $primary_key	//key to update on
-	 * @return void
+	 * @param string $ids
+	 * @return boolean
 	 */
 	private function object_edit_multiple ($table, $ids, $values) {
 		# null empty values
@@ -342,9 +293,9 @@ class Admin extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $table		//table to update
-	 * @param mixed $field		//field selection (where $field = $id)
+	 * @param string $field		//field selection (where $field = $id)
 	 * @param mixed $id			//field identifier
-	 * @return void
+	 * @return boolean
 	 */
 	private function object_delete ($table, $field="id", $id) {
 		# execute
@@ -368,8 +319,7 @@ class Admin extends Common_functions {
 	 * @param mixed $table
 	 * @param mixed $field
 	 * @param mixed $old_value
-	 * @param mixed $new_value
-	 * @return void
+	 * @return null|false
 	 */
 	public function remove_object_references ($table, $field, $old_value) {
 		try { $this->Database->runQuery("update `$table` set `$field` = NULL where `$field` = ?;", array($old_value)); }
@@ -387,7 +337,7 @@ class Admin extends Common_functions {
 	 * @param mixed $field
 	 * @param mixed $old_value
 	 * @param mixed $new_value
-	 * @return void
+	 * @return null|false
 	 */
 	public function update_object_references ($table, $field, $old_value, $new_value) {
 		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
@@ -398,20 +348,25 @@ class Admin extends Common_functions {
 	}
 
 	/**
-	 * Saves last insert ID on object modification.
+	 * Empties table
 	 *
 	 * @access public
-	 * @return void
+	 * @param mixed $table (default: null)
+	 * @return boolean
 	 */
-	public function save_last_insert_id () {
-		$this->lastId = $this->Database->lastInsertId();
+	public function truncate_table ($table = null) {
+		# null table
+		if(is_null($table)||strlen($table)==0) return false;
+		else {
+			try { $res = $this->Database->emptyTable($table); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage());
+				return false;
+			}
+			# result
+			return true;
+		}
 	}
-
-
-
-
-
-
 
 
 
@@ -470,8 +425,6 @@ class Admin extends Common_functions {
 	 * Fetches all users that are in group
 	 *
 	 * @access public
-	 * @param int $gid
-	 * @param bool $reverse
 	 * @return array of user ids
 	 */
 	public function group_fetch_users ($group_id) {
@@ -522,7 +475,7 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $gid
 	 * @param mixed $uid
-	 * @return void
+	 * @return boolean
 	 */
 	public function add_group_to_user ($gid, $uid) {
 		# get old groups
@@ -544,7 +497,7 @@ class Admin extends Common_functions {
 	 * @access public
 	 * @param mixed $gid
 	 * @param mixed $uid
-	 * @return void
+	 * @return boolean
 	 */
 	public function remove_group_from_user($gid, $uid) {
 		# get old groups
@@ -566,7 +519,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $uid
-	 * @param mixed $groups
+	 * @param string $groups
 	 * @return void
 	 */
 	public function update_user_groups ($uid, $groups) {
@@ -578,7 +531,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sid
-	 * @param mixed $groups
+	 * @param string $groups
 	 * @return void
 	 */
 	public function update_section_groups($sid, $groups) {
@@ -590,7 +543,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $gid	//group id
-	 * @return void
+	 * @return boolean
 	 */
 	public function remove_group_from_users($gid) {
 		# get all users
@@ -619,7 +572,7 @@ class Admin extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $gid
-	 * @return void
+	 * @return boolean
 	 */
 	public function remove_group_from_sections ($gid) {
 		# get all sections
@@ -666,11 +619,12 @@ class Admin extends Common_functions {
 	 */
 	public function replace_fields ($field, $search, $replace) {
 		# check number of items
-		$count = $this->count_records ($field, $search, $replace);
+		$count = $this->count_database_objects ("ipaddresses", $field, "%$search%", true);
+		var_dump($count);
 		# if some exist update
 		if($count>0) {
 			# update
-		    try { $cnt = $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, '$search', ?);", array($replace)); }
+		    try { $cnt = $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", array($search, $replace)); }
 		    catch (Exception $e) {
 			    $this->Result->show("danger alert-absolute", _("Error: ").$e->getMessage(), true);
 		    }
@@ -681,25 +635,6 @@ class Admin extends Common_functions {
 			$this->Result->show("info alert-absolute", _("No records found to replace"), false);
 		}
 	}
-
-	/**
-	 * Count number of records in database
-	 *
-	 * @access private
-	 * @param mixed $field
-	 * @param mixed $search
-	 * @param mixed $replace
-	 * @return void
-	 */
-	private function count_records ($field, $search, $replace) {
-	    try { $cnt = $this->Database->numObjectsFilter("ipaddresses", $field, $search); }
-	    catch (Exception $e) {
-		    $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
-	    }
-	    # ok
-		return $cnt;
-	}
-
 
 
 
@@ -789,7 +724,7 @@ class Admin extends Common_functions {
 	 * @access public
 	 * @param mixed $table				//name of custom fields table
 	 * @param mixed $filtered_fields	//array of field to hide for this table
-	 * @return void
+	 * @return boolean
 	 */
 	public function save_custom_fields_filter ($table, $filtered_fields) {
 		# old custom fields, save them to array
@@ -818,7 +753,7 @@ class Admin extends Common_functions {
 	 * @param mixed $table
 	 * @param mixed $next
 	 * @param mixed $current
-	 * @return void
+	 * @return boolean
 	 */
 	public function reorder_custom_fields ($table, $next, $current) {
 	    # get current field details

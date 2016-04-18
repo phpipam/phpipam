@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all vrfs
-$all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
+$all_vrfs = $Admin->fetch_all_objects("vrf", "name");
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vrf');
@@ -24,7 +24,15 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 <h4><?php print _('Manage VRF'); ?></h4>
 <hr><br>
 
-<button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+<div class="btn-group">
+    <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+    <?php
+    // snmp
+    if($User->is_admin()===true && $User->settings->enableSNMP==1) { ?>
+	<button class="btn btn-sm btn-default" id="snmp-vrf" data-action="add"><i class="fa fa-cogs"></i> <?php print _('Scan for VRFs'); ?></button>
+	<?php } ?>
+
+</div>
 
 <!-- vrfs -->
 <?php
@@ -32,9 +40,10 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 # first check if they exist!
 if($all_vrfs===false) { $Result->show("info", _("No VRFs configured")."!", false);}
 else {
-	print '<table id="vrfManagement" class="table table-striped table-top table-hover table-auto">'. "\n";
+	print '<table id="vrfManagement" class="table sorted table-striped table-top table-hover">'. "\n";
 
 	# headers
+	print "<thead>";
 	print '<tr>'. "\n";
 	print '	<th>'._('Name').'</th>'. "\n";
 	print '	<th>'._('RD').'</th>'. "\n";
@@ -49,7 +58,9 @@ else {
 	}
 	print '	<th></th>'. "\n";
 	print '</tr>'. "\n";
+	print "</thead>";
 
+    print "<tbody>";
 	# loop
 	foreach ($all_vrfs as $vrf) {
 		//cast
@@ -116,6 +127,7 @@ else {
 		print "	</td>";
 		print '</tr>'. "\n";
 	}
+	print "</tbody>";
 	print '</table>'. "\n";
 }
 ?>

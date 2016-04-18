@@ -45,8 +45,11 @@ if ($domain===false) {
 	$PowerDNS->create_default_records ($values);
 }
 
+// fetch PTR records for current domain
+$ptr_indexes = $Addresses->ptr_get_subnet_indexes ($subnet->id);
+
 // remove existing records and links
-$PowerDNS->remove_all_ptr_records ($domain->id);
+$PowerDNS->remove_all_ptr_records ($domain->id, $ptr_indexes);
 $Addresses->ptr_unlink_subnet_addresses ($subnet->id);
 
 // fetch all hosts
@@ -55,6 +58,12 @@ $hosts   = $Addresses->fetch_subnet_addresses ($subnet->id, "ip_addr", "asc");
 // create PTR records
 if (sizeof($hosts)>0) {
 	foreach ($hosts as $h) {
+    	// set default hostname for PTR if set
+    	if (strlen($h->dns_name)==0) {
+        	if (strlen($values['def_ptr_domain'])>0) {
+            	$h->dns_name = $values['def_ptr_domain'];
+        	}
+    	}
 		// ignore PTR
 		if ($h->PTRignore == "1") {
 			$ignored[] = $h;

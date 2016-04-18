@@ -18,10 +18,6 @@ class Folders_controller extends Common_api_functions {
 	 * @param mixed $Response
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
-		$this->Database = $Database;
-		$this->Tools 	= $Tools;
-		$this->_params 	= $params;
-		$this->Response = $Response;
 		// include
 		require("Subnets.php");
 		// subnets

@@ -16,14 +16,55 @@
  */
 class Tools_controller extends Common_api_functions {
 
-	/* public variables */
-	public $result_type;				// sets output - JSON or XML
-	public $result;						// result
 
-	/* object holders */
+	/**
+	 * sets output - JSON or XML
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $result_type;
+
+	/**
+	 * result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $result;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Database;
+
+	/**
+	 * Response object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Response;
+
+	/**
+	 * Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
 	protected $Tools;
+
+	/**
+	 * Parameters
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $_params;
+
 
 	/**
 	 * __construct function
@@ -32,7 +73,6 @@ class Tools_controller extends Common_api_functions {
 	 * @param class $Database
 	 * @param class $Tools
 	 * @param mixed $params		// post/get values
-	 * @return void
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		$this->Database = $Database;
@@ -74,7 +114,7 @@ class Tools_controller extends Common_api_functions {
 		// remap keys if needed
 		$this->remap_keys ();
 		// check for valid keys
-		$values = $this->validate_keys ();
+		$this->validate_keys ();
 	}
 
 
@@ -119,7 +159,7 @@ class Tools_controller extends Common_api_functions {
 		// remap keys if needed
 		$this->remap_keys ();
 		// check for valid keys
-		$values = $this->validate_keys ();
+		$this->validate_keys ();
 	}
 
 

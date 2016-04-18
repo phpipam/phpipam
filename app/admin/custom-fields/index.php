@@ -14,7 +14,8 @@ $custom_tables = array( "ipaddresses"=>"IP address",
 						"vlans"=>"VLAN",
 						"vrf"=>"VRF",
 						"users"=>"User",
-						"devices"=>"devices");
+						"devices"=>"Device",
+						"racks"=>"Rack");
 
 # create array
 foreach($custom_tables as $k=>$f) {

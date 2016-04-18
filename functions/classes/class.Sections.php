@@ -6,25 +6,68 @@
 
 class Sections extends Common_functions {
 
-	/* public variables */
-	public $sections;						//(array of objects) to store sections, section ID is array index
-	public $lastInsertId = null;			//id of last insert
+	/**
+	 * (array of objects) to store sections, section ID is array index
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $sections;
 
-	/* protected variables */
-	protected $user = null;					//(object) for User profile
+	/**
+	 * id of last insert
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $lastInsertId = null;
 
-	/* object holders */
-	public $Result;							//for Result printing
-	protected $Database;					//for Database connection
-	public $Log;							//for Logging connection
+	/**
+	 * (object) for User profile
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $user = null;
+
+	/**
+	 * Result
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
 
 
 
 
 	/**
-	 * __construct function
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $database
+	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -225,20 +268,7 @@ class Sections extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_all_sections ($order_by="order", $sort_asc=true) {
-		# fetch all
-		try { $sections = $this->Database->getObjects("sections", $order_by, $sort_asc); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save them to array
-		if(sizeof($sections)>0)	{
-			foreach($sections as $s) {
-				$this->sections[$s->id] = $s;
-			}
-		}
-		# response
-		return sizeof($sections)>0 ? $sections : false;
+    	return $this->fetch_all_objects ("sections", $order_by, $sort_asc);
 	}
 
 	/**
@@ -249,7 +279,7 @@ class Sections extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_sections ($order_by="order", $sort_asc=true) {
-		return $this->fetch_all_sections ();
+		return $this->fetch_all_objects ("sections", $order_by, $sort_asc);
 	}
 
 	/**
@@ -257,38 +287,23 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param string $method (default: "id")
-	 * @param mixed $id
+	 * @param mixed $value
 	 * @return void
 	 */
-	public function fetch_section ($method, $id) {
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-		# check cache first
-		if(isset($this->sections[$id]))	{
-			return $this->sections[$id];
-		}
-		else {
-			try { $section = $this->Database->getObjectQuery("SELECT * FROM `sections` where `$method` = ?;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to sections
-			$this->sections[$id] = $section;
-			#result
-			return $section;
-		}
+	public function fetch_section ($method = "id", $value) {
+    	if (is_null($method))   $method = "id";
+        return $this->fetch_object ("sections", $method, $value);
 	}
 
 	/**
 	 * Fetch subsections for specified sectionid
 	 *
 	 * @access public
-	 * @param mixed $sectionid
+	 * @param mixed $sectionId
 	 * @return void
 	 */
-	public function fetch_subsections ($sectionid) {
-		try { $subsections = $this->Database->getObjectsQuery("SELECT * FROM `sections` where `masterSection` = ?;", array($sectionid)); }
+	public function fetch_subsections ($sectionId) {
+		try { $subsections = $this->Database->getObjectsQuery("SELECT * FROM `sections` where `masterSection` = ?;", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

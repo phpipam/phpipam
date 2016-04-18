@@ -11,6 +11,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Tools	 	= new Tools ($Database);
+$Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Result 	= new Result;
 
@@ -24,49 +25,11 @@ $filetype = end($filetype);
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
+# fetch subnet
+$subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
 
-# CSV
-if (strtolower($filetype) == "csv") {
-	/* get file to string */
-	$outFile = file_get_contents(dirname(__FILE__) . '/upload/import.csv') or die ($Result->show("danger", _('Cannot open upload/import.csv'), true));
-
-	/* format file */
-	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
-	$outFile = explode("\n", $outFile);
-}
-# XLS
-elseif(strtolower($filetype) == "xls") {
-	# get excel object
-	require_once('../../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
-	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/upload/import.xls', false);
-
-	//get number of rows
-	$numRows = $data->rowcount(0);
-	$numRows++;
-
-	//get all to array!
-	for($m=0; $m < $numRows; $m++) {
-
-		//IP must be present!
-		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
-
-			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
-			$outFile[$m] .= $data->val($m,'E').','.$data->val($m,'F').','.$data->val($m,'G').','.$data->val($m,'H').',';
-			$outFile[$m] .= $data->val($m,'I');
-			//add custom fields
-			if(sizeof($custom_address_fields) > 0) {
-				$currLett = "J";
-				foreach($custom_address_fields as $field) {
-					$outFile[$m] .= ",".$data->val($m,$currLett++);
-				}
-			}
-		}
-	}
-}
-# die
-else {
-	$Result->show('danger', _("Invalid file type"), true);
-}
+# Parse file
+$outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
 
 
 /*
@@ -80,9 +43,10 @@ print '	<th>'._('IP').'</th>';
 print '	<th>'._('Status').'</th>';
 print '	<th>'._('Description').'</th>';
 print '	<th>'._('Hostname').'</th>';
+print '	<th>'._('FW object').'</th>';
 print '	<th>'._('MAC').'</th>';
 print '	<th>'._('Owner').'</th>';
-print '	<th>'._('Switch').'</th>';
+print '	<th>'._('Device').'</th>';
 print '	<th>'._('Port').'</th>';
 print '	<th>'._('Note').'</th>';
 // Add custom fields
@@ -97,18 +61,15 @@ print '</tr>';
 // values - $outFile is provided by showscripts
 $errors = 0;
 foreach($outFile as $line) {
-
-	//put it to array
-	$field = explode(",", $line);
-
-	//verify IP address
-	if(!filter_var($field[0], FILTER_VALIDATE_IP)) 	{ $class = "danger";	$errors++; }
-	else											{ $class = ""; }
-
+    // errors
+    if($line['class']=="danger") $errors++;
 	//print
-	print '<tr class="'.$class.'">';
-	foreach ($field as $value) {
-		if (!empty($field[0])) {			//IP address must be present otherwise ignore field
+	print '<tr class="'.$line['class'].'">';
+	// remove class
+	unset($line['class']);
+
+	foreach ($line as $value) {
+		if (!empty($line[0])) {			//IP address must be present otherwise ignore field
 			print '<td>'. $value .'</td>';
 		}
 	}
@@ -123,7 +84,10 @@ print '</table>';
 <?php
 // errors?
 if($errors>0) {
-	print "<div class='alert alert alert-danger'>"._("Errors marked with red will be ignored from importing")."!</div>";
+    print "<div class='alert alert-danger alert-block'>";
+	print _("Errors marked with red will be ignored from importing")."! <hr>";
+	print "<input type='checkbox' name='ignoreErrors'> "._("Ignore errors")."?";
+	print "</div>";
 }
 ?>
 <br><?php print _('Should I import values to database'); ?>?

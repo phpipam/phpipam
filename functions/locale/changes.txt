@@ -3006,3 +3006,172 @@ msgstr ""
 
 msgid "Apply changes to underlying subnets"
 msgstr ""
+
+
+
+### 1.21.001
+
+msgid "SNMP module"
+msgstr ""
+
+msgid "Enable or disable multicast module"
+msgstr ""
+
+msgid "Multicast module"
+msgstr ""
+
+msgid "Enable or disable SNMP module for devices"
+msgstr ""
+
+msgid "Threshold module"
+msgstr ""
+
+msgid "Enable or disable threshold module"
+msgstr ""
+
+msgid "Rack module"
+msgstr ""
+
+msgid "Enable or disable rack drawing module"
+msgstr ""
+
+msgid "Rack management"
+msgstr ""
+
+msgid "Community"
+msgstr ""
+
+msgid "Timeout"
+msgstr ""
+
+msgid "Queries"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Invalid version"
+msgstr ""
+
+msgid "Invalid port"
+msgstr ""
+
+msgid "Invalid timeout"
+msgstr ""
+
+msgid "Invalid device"
+msgstr ""
+
+msgid "Invalid method"
+msgstr ""
+
+msgid "No queries"
+msgstr ""
+
+msgid "SNMP edit failed"
+msgstr ""
+
+msgid "SNMP edit successfull"
+msgstr ""
+
+msgid "Invalid device IP address"
+msgstr ""
+
+msgid "rack"
+msgstr ""
+
+msgid "Size"
+msgstr ""
+
+msgid "Name is mandatory"
+msgstr ""
+
+msgid "Invalid rack size"
+msgstr ""
+
+msgid "Invalid rack identifier"
+msgstr ""
+
+msgid "Rack does not exist"
+msgstr ""
+
+msgid "Rack add successfull"
+msgstr ""
+
+msgid "Rack edit successfull"
+msgstr ""
+
+msgid "Rack delete successfull"
+msgstr ""
+
+msgid "Failed to remove device from rack"
+msgstr ""
+
+msgid "Device removed from rack"
+msgstr ""
+
+msgid "device to rack"
+msgstr ""
+
+msgid "No devices available"
+msgstr ""
+
+msgid "Position"
+msgstr ""
+
+msgid "Start position"
+msgstr ""
+
+msgid "Rack size in U"
+msgstr ""
+
+msgid "Invalid start value"
+msgstr ""
+
+msgid "Invalid size value"
+msgstr ""
+
+msgid "Invalid rack position (overflow)"
+msgstr ""
+
+msgid "Failed to add device to rack"
+msgstr ""
+
+msgid "Device added to rack"
+msgstr ""
+
+msgid "SNMP queries"
+msgstr ""
+
+msgid "Create SNMP query"
+msgstr ""
+
+msgid "Method"
+msgstr ""
+
+msgid "No SNMP queries available"
+msgstr ""
+
+msgid "edit snmp details"
+msgstr ""
+
+msgid "remove snmp"
+msgstr ""
+
+msgid "No devices for SNMP route table query available"
+msgstr ""
+
+msgid "No new subnets found"
+msgstr ""
+
+msgid "SNMP module disbled"
+msgstr ""
+
+msgid "No devices for SNMP ARP query available"
+msgstr ""
+
+msgid "Failed to import entry"
+msgstr ""
+
+msgid "No entries available"
+msgstr ""

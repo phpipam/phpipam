@@ -50,6 +50,13 @@ $phpsessname = "phpipam";
 if(!defined('BASE'))
 define('BASE', "/");
 
+/**
+ * Multicast unique mac requirement - section or vlan
+ */
+if(!defined('MCUNIQUE'))
+define('MCUNIQUE', "section");
+
+
 /*  proxy connection details
  ******************************/
 $proxy_enabled  = false;                                  # Enable/Disable usage of the Proxy server

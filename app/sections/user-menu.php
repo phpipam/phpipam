@@ -3,6 +3,13 @@
 /**
  * Display usermenu on top right
  */
+
+# filter ip value
+$_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
+
+# verify that user is logged in
+$User->check_user_session();
+
 ?>
 
 <div class="container-fluid">
@@ -35,7 +42,7 @@
 	</div>
 
 	<!-- settings -->
-	<?php if($User->authenticated) {
+	<?php
 	if($_SESSION['realipamusername']){
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>
@@ -53,7 +60,6 @@
 	<span class="info"><?php print _('Logged in as'); ?>  <?php print "&nbsp;"._($User->user->role); ?></span><br>
 
 	<!-- logout -->
-	<?php if(!isset($_SERVER['REMOTE_USER'])) { ?>
 	<a  href="<?php print create_link("login"); ?>"><?php print _('Logout'); ?>  <i class="fa fa-pad-left fa-sign-out"></i></a>
-	<?php }}} ?>
+	<?php } ?>
 </div>

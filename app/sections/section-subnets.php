@@ -25,24 +25,25 @@ print "<h4>"._('Available subnets')."</h4>";
 # check permission
 $permission = $Sections->check_permission ($User->user, $_GET['section']);
 
+
 # permitted
 if($permission != 0) {
 
 	# print  table structure
-	print "<table id='manageSubnets' class='table table-striped table-condensed table-top table-absolute'>";
+	print "<table id='manageSubnets' class='table sorted table-striped table-condensed table-top'>";
 
 		# set colcount
 		if($User->settings->enableVRF == 1)		{ $colCount = 10; }
 		else									{ $colCount = 9; }
 
-		# get Available subnets in section
-		$subnets = $Subnets->fetch_section_subnets($_GET['section']);
+		# get Available subnets in section - already provided in subnets_menu.php
+		//$section_subnets = $Subnets->fetch_section_subnets($_GET['section']);
 
 		# remove custom fields if all empty! */
 		foreach($custom as $field) {
 			$sizeMyFields[$field['name']] = 0;				// default value
 			# check against each IP address
-			foreach($subnets as $subn) {
+			foreach($section_subnets as $subn) {
 				if(strlen($subn->$field['name']) > 0) {
 					$sizeMyFields[$field['name']]++;		// +1
 				}
@@ -57,8 +58,7 @@ if($permission != 0) {
 		}
 
 		# collapsed div with details
-		print "<tbody>";
-
+		print "<thead>";
 		# headers
 		print "<tr>";
 		print "	<th>"._('Subnet')."</th>";
@@ -79,6 +79,10 @@ if($permission != 0) {
 		}
 		print "	<th class='actions' style='width:140px;white-space:nowrap;'></th>";
 		print "</tr>";
+		print "</thead>";
+
+        # body
+        print "<tbody>";
 
 		# add new link
 		if ($permission>2) {
@@ -90,7 +94,7 @@ if($permission != 0) {
 		}
 
 		# no subnets
-		if(sizeof($subnets) == 0) {
+		if(sizeof($section_subnets) == 0) {
 			print "<tr><td colspan='$colCount'><div class='alert alert-info'>"._('Section has no subnets')."!</div></td></tr>";
 
 			# check Available subnets for subsection
@@ -98,7 +102,7 @@ if($permission != 0) {
 		}
 		else {
 			// print subnets
-			if($Subnets->print_subnets_tools($User->user, $subnets, $custom)===false) {
+			if($Subnets->print_subnets_tools($User->user, $section_subnets, $custom)===false) {
 				print "<tr>";
 				print "	<td colspan='$colspan'><div class='alert alert-info'>"._('No subnets available')."</div></td>";
 				print "</tr>";

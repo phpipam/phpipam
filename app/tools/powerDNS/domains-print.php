@@ -96,36 +96,10 @@ if (isset($_POST['domain-filter'])) { $domains_split = array($domains); }
 ?>
 
 <!-- table -->
-<table id="zonesPrint" class="table table-striped table-top table-auto">
-
-<!-- search -->
-<tbody id="search">
-<tr>
-	<td colspan="6">
-		<!-- search -->
-		<form method="post" action="<?php print create_link ("tools", "powerDNS", $_GET['subnetId'], "search"); ?>">
-		<div class="input-group pull-right">
-				<input type="text" class="form-control input-sm" name='domain-filter' placeholder="<?php print _("Filter"); ?>" value="<?php print $_POST['domain-filter'] ?>">
-				<span class="input-group-btn">
-					<button class="btn btn-default btn-sm" type="submit">Go!</button>
-				</span>
-		</div>
-		</form>
-	</td>
-</tr>
-</tbody>
-
-<!-- filter info -->
-<?php if(isset($_POST['domain-filter'])) { ?>
-<tbody>
-<tr>
-	<td colspan="6"><div class="alert alert-warning"><?php print _("Filter applied: ").$_POST['domain-filter']; ?></div></td>
-</tr>
-</tbody>
-<?php } ?>
+<table id="zonesPrint" class="table sorted table-striped table-top">
 
 <!-- Headers -->
-<tbody id="headers">
+<thead>
 <tr>
     <th><?php print _('Domain'); ?></th>
     <th><?php print _('Type'); ?></th>
@@ -133,9 +107,10 @@ if (isset($_POST['domain-filter'])) { $domains_split = array($domains); }
     <th><?php print _('Records'); ?></th>
     <th><?php print _('Serial number'); ?></th>
 </tr>
-</tbody>
+</thead>
 
 <!-- domains -->
+<tbody>
 <?php
 
 // default page
@@ -155,8 +130,6 @@ foreach ($domains_split as $k=>$split) {
 	}
 	// match
 	elseif ($_GET['ipaddrid']==$k2) {
-		// table bodies
-		print "<body id='records-$k2'>";
 		/* prints domain records */
 		foreach ($split as $d) {
 			// nulls
@@ -180,23 +153,9 @@ foreach ($domains_split as $k=>$split) {
 
 			print "</tr>";
 		}
-		print "</body>";
 	}
 }
 ?>
-
-<tbody id="pagination">
-	<tr>
-	<td colspan="6" class="text-right">
-	<?php
-	// print pagination
-	if(!isset($_POST['domain-filter']) && sizeof($domains_split)>1) {
-		$Tools->print_powerdns_pagination ($_GET['ipaddrid'], sizeof($domains_split));
-	}
-	?>
-	</td>
-	</tr>
 </tbody>
-
 </table>
 <?php } ?>

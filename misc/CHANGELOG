@@ -1,18 +1,61 @@
-== 1.20.005
+== 1.21.003
 
 	New features:
 	------------
+	+ Multicast module (RFC1112, RFC2464) with IP to MAC mapping and multicast networks overview;
+	+ Threshold module for subnets;
+	+ Racks module (Rack drawing) for devices;
+	+ SNMP module:
+	    + Subnets discovery from route table (all subnets, nested subnets, add new subnet);
+	    + Hosts discovery scans via ARP check/interface check;
+	    + Hosts discovery scans via ARP + MAC address check (detects interface);
+	    + VLAN discovery;
+	    + VRF discovery;
+	    + Status update scans via ARP check;
 
-
-	Enhancements:
+	Enhancements, changes:
 	----------------------------
+	+ Folders can now contain addresses;
 	+ API:
 	    - Api v1 removed;
 	    + If subnet gateway defined gatewayId is returned in subnet details;
+	    + Automatically add nameservers to subnet results;
+	    + Creating address with POST /api/appid/{subnetId}/first_free/ will automatically give first available IP;
+    + Widgets:
+        + New threshold widget;
+        + New inactive hosts widget;
+    + PowerDNS:
+        + Default domain for PTR records (if hostname is not set);
+        + When removing IP address additional option that removes all associated PDNS records (ip and hostname);
+    + jQuery tables;
+
 
 	Bugfixes:
 	----------------------------
-	+ Fixed powerDNS delimiter for multiple slave servers on domain;
+	+ PowerDNS regenerate PTR records now only updates current subnet (before whole zone);
+	+ Fixed visual bug on 32-bit systems;
+
+== 1.20.1
+
+	Translations:
+	----------------------------
+    + French translation updated to verson 1.2;
+    + German translation updated to verson 1.2;
+
+	Bugfixes:
+	----------------------------
+    + Fixed upgrade bug that selected invalid auth method for AD/LDAP users;
+    + Fixed LDAP problems after 1.2 upgrade;
+    + Fixed PowerDNS Slave with multiple masters delimiter error;
+    + Fixed owerDNS PTR records not being updated automatically;
+    + Fixed csrf cookie bug when editing folder;
+    + Fixed csrf cookie bug when truncationg subnet;
+    + Fixed invalid code for API crypt method;
+    + Fixed strange headings font display in Firefox;
+    + Fixed invalid proxy settings in config.dist.php;
+    + Fixed search same hostnames in db link form address table;
+    + Fixed import subnet bug caused by fw object;
+    + Fixed Subnet Import (Preview button > no action);
 
 == 1.20
 

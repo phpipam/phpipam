@@ -473,4 +473,74 @@ ALTER TABLE `vrf` ADD `sections` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `descri
 
 
 /* VERSION 1.21 */
+UPDATE `settings` set `version` = '1.21';
 
+/* New modules */
+ALTER TABLE `settings` ADD `enableMulticast` TINYINT(1)  NULL  DEFAULT '0'  AFTER `powerDNS`;
+ALTER TABLE `settings` ADD `enableNAT` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableMulticast`;
+ALTER TABLE `settings` ADD `enableSNMP` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableNAT`;
+ALTER TABLE `settings` ADD `enableThreshold` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableSNMP`;
+ALTER TABLE `settings` ADD `enableRACK` TINYINT(1)  NULL  DEFAULT '0'  AFTER `enableThreshold`;
+ALTER TABLE `settings` ADD `link_field` VARCHAR(32)  NULL  DEFAULT '0'  AFTER `enableRACK`;
+
+/* add nat link */
+ALTER TABLE `ipaddresses` ADD `NAT` VARCHAR(64)  NULL  DEFAULT NULL  AFTER `PTR`;
+ALTER TABLE `subnets` ADD `NAT` VARCHAR(64)  NULL  DEFAULT NULL  AFTER `state`;
+
+/* NAT table */
+CREATE TABLE `nat` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `type` set('source','static','destination') DEFAULT 'source',
+  `src` text,
+  `dst` text,
+  `port` int(5) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/* snmp to devices */
+ALTER TABLE `devices` ADD `snmp_community` VARCHAR(100)  NULL  DEFAULT NULL  AFTER `sections`;
+ALTER TABLE `devices` ADD `snmp_version` SET('0','1','2')  NULL  DEFAULT '0'  AFTER `snmp_community`;
+ALTER TABLE `devices` ADD `snmp_port` mediumint(5) unsigned DEFAULT '161' AFTER `snmp_version`;
+ALTER TABLE `devices` ADD `snmp_timeout` mediumint(5) unsigned DEFAULT '1000000' AFTER `snmp_port`;
+ALTER TABLE `devices` ADD `snmp_queries` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `snmp_timeout`;
+
+/* racks */
+CREATE TABLE `racks` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `size` int(2) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* rack info to devices */
+ALTER TABLE `devices` ADD `rack` int(11) unsigned DEFAULT null AFTER `snmp_timeout`;
+ALTER TABLE `devices` ADD `rack_start` int(11) unsigned DEFAULT null AFTER `rack`;
+ALTER TABLE `devices` ADD `rack_size` int(11) unsigned DEFAULT null AFTER `rack_start`;
+
+/* add threshold module to subnets */
+ALTER TABLE `subnets` ADD `threshold` int(3)  NULL  DEFAULT 0  AFTER `NAT`;
+
+/* threshold and inactive hosts widget */
+INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes');
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+
+
+
+/* VERSION 1.22 */
+UPDATE `settings` set `version` = '1.22';
+
+/* drop unused snmp table */
+DROP TABLE IF EXISTS `snmp`;
+
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;

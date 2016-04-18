@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->create_csrf_cookie ();
+$csrf = $User->csrf_cookie ("create", "truncate");
 
 
 # id must be numeric
@@ -31,10 +31,18 @@ $subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);
 if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true, true); }
+
+# set prefix - folder or subnet
+$prefix = $subnet->isFolder=="1" ? "folder" : "subnet";
+
+# reformat description
+$subnet->description = strlen($subnet->description)>0 ? "($subnet->description)" : "";
+# set subnet
+$subnet->description = $subnet->isFolder=="1" ? $subnet->description : $Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask $subnet->description";
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print _('Truncate subnet'); ?></div>
+<div class="pHeader"><?php print _("Truncate $prefix"); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -42,8 +50,8 @@ if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissio
 
     <!-- subnet -->
     <tr>
-        <td class="middle"><?php print _('Subnet'); ?></td>
-        <td><?php print $Subnets->transform_to_dotted($subnet->subnet)."/$subnet->mask ($subnet->description)"; ?></td>
+        <td class="middle"><?php print _(ucwords($prefix)); ?></td>
+        <td><?php print $subnet->description; ?></td>
     </tr>
     <!-- Mask -->
     <tr>

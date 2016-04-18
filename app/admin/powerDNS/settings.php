@@ -6,6 +6,9 @@
 
 # verify that user is logged in
 $User->check_user_session();
+
+# create csrf token
+$csrf = $User->csrf_cookie ("create", "pdns_settings");
 ?>
 
 <script type="text/javascript">
@@ -35,6 +38,7 @@ $(document).ready(function() {
 	<td><?php print _('Host'); ?></th>
 	<td style="width:300px;">
 		<input type="text" class="form-control input-sm" name="host" value="<?php print $pdns->host; ?>">
+		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	</td>
 </tr>
 <!-- db -->

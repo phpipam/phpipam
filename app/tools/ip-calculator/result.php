@@ -29,7 +29,7 @@ $errors = $Subnets->verify_cidr_address ($cidr, false);
 $errors===true ? : $Result->show("danger alert-absolute", _('Invalid input').': '.$errors,true);
 
 # fetch all sections
-$Sections->fetch_sections();
+$all_sections = $Sections->fetch_all_sections();
 
 # calculate results
 $calc_results = $Tools->calculate_ip_calc_results($cidr);
@@ -68,7 +68,7 @@ $calc_results = $Tools->calculate_ip_calc_results($cidr);
 		<select name="selectSectionfromIPCalc" id="selectSectionfromIPCalc" class="form-control" style="width:auto;">
 			<option value=""><?php print _('Please select');?>:</option>
 			<?php
-			foreach($Sections->sections as $section) {
+			foreach($all_sections as $section) {
 				print '<option value="'.$section->id.'">'.$section->name.'</option>';
 			}
 			?>

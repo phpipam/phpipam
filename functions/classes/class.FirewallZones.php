@@ -7,23 +7,73 @@
 
 class FirewallZones extends Common_functions {
 
-	/* variables */
-	public $error = false;				// connection error string
-	public $limit;						// number of results
-	public $orderby;					// order field
-	public $orderdir;					// $order direction
-	public $firewallZoneSettings;		// Settings
-	public $Log;						// for Logging connection
 
-	/* objects */
-	protected $Database;				// Database object - phpipam
+	/**
+	 * connection error string
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $error = false;
+
+	/**
+	 * number of results
+	 *
+	 * @var int
+	 * @access public
+	 */
+	public $limit;
+
+	/**
+	 * orderby
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $orderby;
+
+	/**
+	 * orderdir
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $orderdir;
+
+	/**
+	 * firewallZoneSettings
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $firewallZoneSettings;
+
+	/**
+	 * Log
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Log;
+
+	/**
+	 * Database
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
 
 
 
 	/**
-	 * __construct method
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $Database
+	 * @return void
 	 */
 	public function __construct (Database_PDO $Database) {
 		# initialize Result
@@ -44,7 +94,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $zone
-	 * @return void
+	 * @return string
 	 */
 	public function zone2hex ($zone) {
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
@@ -545,8 +595,7 @@ class FirewallZones extends Common_functions {
 
 				if (!$network->subnetIsFolder) {
 					print '<td>'.$this->Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</td>';
-				}
-				else{
+				} else{
 					print '<td>Folder '.$network->subnetDescription.'</td>';
 				}
 				print '<td>'.$network->vlan.$network->vlanName.'</td>';
@@ -642,7 +691,7 @@ class FirewallZones extends Common_functions {
 	 * @access public
 	 * @param mixed $zoneId
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return false|string
 	 */
 	public function add_zone_network ($zoneId,$subnetId) {
 		# check if the subnet is already bound to this or any other zone
@@ -675,7 +724,7 @@ class FirewallZones extends Common_functions {
 	 * @access public
 	 * @param mixed $zoneId
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return string|false
 	 */
 	public function delete_zone_network ($zoneId,$subnetId) {
 		# try to fetch all subnet and vlan informations for this zone
@@ -729,7 +778,7 @@ class FirewallZones extends Common_functions {
 	 * @access private
 	 * @param mixed $values
 	 * @param mixed $network
-	 * @return void
+	 * @return boolean
 	 */
 	private function zone_add ($values,$network) {
 		# get the settings
@@ -776,7 +825,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return boolean
 	 */
 	private function zone_edit ($values) {
 		# execute
@@ -796,8 +845,8 @@ class FirewallZones extends Common_functions {
 	 * Deletes zone and all corresponding mappings
 	 *
 	 * @access private
-	 * @param mixed $id
-	 * @return void
+	 * @param string $id
+	 * @return boolean
 	 */
 	private function zone_delete ($id) {
 		# save old values
@@ -853,7 +902,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return boolean
 	 */
 	private function mapping_add ($values) {
 		# get the settings
@@ -877,7 +926,7 @@ class FirewallZones extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return boolean
 	 */
 	private function mapping_edit ($values) {
 		# execute
@@ -897,8 +946,8 @@ class FirewallZones extends Common_functions {
 	 * Deletes single mapping
 	 *
 	 * @access private
-	 * @param mixed $id
-	 * @return void
+	 * @param string $id
+	 * @return boolean
 	 */
 	private function mapping_delete ($id) {
 		# save old values
@@ -927,7 +976,7 @@ class FirewallZones extends Common_functions {
 	public function generate_subnet_object ($id) {
 		# fetch the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
 
@@ -997,12 +1046,12 @@ class FirewallZones extends Common_functions {
 	 * @access public
 	 * @param mixed $id
 	 * @param mixed $dnsName
-	 * @return void
+	 * @return string
 	 */
 	public function generate_address_object ($id,$dnsName) {
 		# fetch the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($id);
 
@@ -1036,7 +1085,7 @@ class FirewallZones extends Common_functions {
 			}
 		}
 		return $firewallAddressObject;
-	} 
+	}
 
 	/**
 	 * update a firewall address object
@@ -1109,22 +1158,22 @@ class FirewallZones extends Common_functions {
 		}
 
 		return false;
-	} 
+	}
 
 	/**
 	 * update a firewall address objects for a whole network
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return boolean
 	 */
 	public function update_address_objects ($subnetId) {
 		# Addresses object
 		$this->Addresses = new Addresses ($this->Database);
-		
+
 		# fetch the settings
 		$firewallZoneSettings = json_decode($this->settings->firewallZoneSettings,true);
-		
+
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
 
@@ -1188,5 +1237,5 @@ class FirewallZones extends Common_functions {
 
 	}
 	return true;
-	} 
+	}
 }

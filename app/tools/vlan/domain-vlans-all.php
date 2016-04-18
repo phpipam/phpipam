@@ -11,14 +11,7 @@ $User->check_user_session();
 $vlan_domain = new StdClass();
 
 # get all VLANs and subnet descriptions
-if (isset($_GET['sPage'])) {
-	// fetch filtered
-	$vlans = $Tools->fetch_all_domains_and_vlans ($_GET['sPage']);
-}
-else {
-	$vlans = $Tools->fetch_all_domains_and_vlans ();
-}
-
+$vlans = $Tools->fetch_all_domains_and_vlans ();
 
 # get custom VLAN fields
 $custom_fields = (array) $Tools->fetch_custom_fields('vlans');
@@ -32,7 +25,7 @@ $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 
 # set disabled for non-admins
-$disabled = $User->isadmin==true ? "" : "hidden";
+$disabled = $User->is_admin()==true ? "" : "hidden";
 
 
 # title
@@ -44,33 +37,15 @@ print "<div class='btn-group' style='margin-bottom:10px;'>";
 print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
 print "</div>";
 
-// filter
-if(isset($_GET['sPage'])) { $Result->show("warning", _('Filter applied: ')."VLAN number like ".$_GET['sPage'], false); }
-
-// search
-
-// serach location
-print "<div class='row'>";
-print "<div class='input-group col-xs-6 col-md-4 col-xs-offset-6 col-md-offset-8' id='vlansearchForm'>";
-print "	<input type='text' class='form-control input-sm vlanfilter' name='vlanfilter' placeholder='"._('filter string')."' value='".$_GET['sPage']."' data-location='".create_link($_GET['page'], $_GET['section'], "all")."'>";
-print "	<span class='input-group-btn'>";
-print "		<button class='btn btn-default btn-sm vlansearchsubmit' type='button'>"._("Filter")."</button>";
-print "	</span>";
-print "</div><hr>";
-print "</div>";
 
 # no VLANS?
 if($vlans===false) {
 	print "<hr>";
-	if (isset($_GET['sPage'])) {
-		$Result->show("info", _("No VLANS found"), false);
-	} else {
-		$Result->show("info", _("No VLANS configured"), false);
-	}
+	$Result->show("info", _("No VLANS configured"), false);
 }
 else {
 	# table
-	print "<table class='table vlans table-condensed table-top'>";
+	print "<table class='table sorted vlans table-condensed table-top'>";
 
 	# headers
 	print "<thead>";
@@ -85,6 +60,7 @@ else {
 			}
 		}
 	}
+    print "<th></th>";
 	print "</tr>";
 	print "</thead>";
 
@@ -145,7 +121,7 @@ else {
 					}
 					//text
 					elseif($field['type']=="text") {
-						if(strlen($vlan->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlans[$field['name']])."'>"; }
+						if(strlen($vlan->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlan->$field['name'])."'>"; }
 						else									{ print ""; }
 					}
 					else {
@@ -156,6 +132,17 @@ else {
 				}
 	    	}
 	    }
+
+        // actions
+		print "	<td class='actions'>";
+		print "	<div class='btn-group'>";
+		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan->id'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$vlan->id'><i class='fa fa-external-link'></i></button>";
+		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan->id'><i class='fa fa-times'></i></button>";
+		print "	</div>";
+		print "	</td>";
+
+        print "</tr>";
 
 		# show free vlans - last
 		if($User->user->hideFreeRange!=1 && !isset($_GET['sPage'])) {

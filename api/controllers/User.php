@@ -8,20 +8,96 @@
 
 class User_controller extends Common_api_functions {
 
-	/* vars */
-	public $token;					// users token
-	public $token_expires;			// time when token expires
-	private $token_valid_time;		// for how many seconds token is valid
-	private $token_length;			// number of chars for token
-	private $max_failures;			// max number of failures before IP is blocked
-	private $block_ip = true;		// controls if IP should be blocked for 5 minutes on invalid requests
 
-	/* object holders */
-	protected $Database;			// Database object
-	protected $Tools;				// Tools object
-	protected $Admin;				// Admin object
-	protected $User;				// User object
-	protected $params;				// requested parameters
+	/**
+	 * users token
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $token;
+
+	/**
+	 * time when token expires
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $token_expires;
+
+	/**
+	 * for how many seconds token is valid
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $token_valid_time;
+
+	/**
+	 * number of chars for token
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $token_length;
+
+	/**
+	 * max number of failures before IP is blocked
+	 *
+	 * @var mixed
+	 * @access private
+	 */
+	private $max_failures;
+
+	/**
+	 * controls if IP should be blocked for 5 minutes on invalid requests
+	 *
+	 * (default value: true)
+	 *
+	 * @var bool
+	 * @access private
+	 */
+	private $block_ip = true;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Master Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
+
+	/**
+	 * Master Admin object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Admin;
+
+	/**
+	 * Master User object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $User;
+
+	/**
+	 * requested parameters
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $_params;
 
 
 
@@ -30,6 +106,8 @@ class User_controller extends Common_api_functions {
 	 *
 	 * @access public
 	 * @param mixed $Database
+	 * @param mixed $Tools
+	 * @param mixed $params
 	 * @param mixed $Response
 	 */
 	public function __construct ($Database, $Tools=null, $params=null, $Response) {
@@ -68,6 +146,7 @@ class User_controller extends Common_api_functions {
 		$this->validate_options_request ();
 
 		// methods
+		$result = array();
 		$result['methods'] = array(
 								array("href"=>"/api/".$this->_params->app_id."/user/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
 																										 array("rel"=>"create", "method"=>"POST"),
@@ -220,7 +299,7 @@ class User_controller extends Common_api_functions {
 	 */
 	private function authenticate () {
 		# try to authenticate user, it it fails it will fail by itself
-		$this->User-> authenticate ($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+		$this->User->authenticate ($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 
 		# if token is valid and set extend it, otherwise generate new
 		if ($this->validate_user_token ()) {
@@ -259,8 +338,8 @@ class User_controller extends Common_api_functions {
 	 */
 	public function set_token_valid_time ($token_valid_time = null) {
 		// validate integer
-		if ($length!=null) {
-			if (!is_numeric($length))				{ $this->Response->throw_exception(500, "token valid time must be an integer"); }
+		if ($this->token_length!=null) {
+			if (!is_numeric($this->token_length))	{ $this->Response->throw_exception(500, "token valid time must be an integer"); }
 		}
 		// save
 		$this->token_valid_time = is_null($token_valid_time) ? 21600 : $token_valid_time;
@@ -275,17 +354,24 @@ class User_controller extends Common_api_functions {
 	 */
 	public function set_max_failures ($failures=null) {
 		// validate integer
-		if ($length!=null) {
-			if (!is_numeric($length))				{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
+		if ($this->token_length!=null) {
+			if (!is_numeric($this->token_length))	{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
 		}
 		// save
 		$this->max_failures = $failures==null ? 10 : $failures;
 	}
 
+	/**
+	 * Block IP address.
+	 *
+	 * @access public
+	 * @param bool $block (default: true)
+	 * @return void
+	 */
 	public function block_ip ($block = true) {
 		// validate integer
 		if (!is_bool($block)) {
-			if (!is_numeric($length))				{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
+			if (!is_numeric($this->token_length))	{ $this->Response->throw_exception(500, "Max failures must be an integer"); }
 		}
 		// save
 		$this->block_ip = $$block;

@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all APIs
-$groups = $Admin->fetch_all_objects("userGroups", "g_id");
+$groups = $Admin->fetch_all_objects("userGroups", "g_name");
 
 # fetch all admin users
 $admins = $Admin->fetch_multiple_objects("users", "role", "Administrator");
@@ -28,6 +28,7 @@ if ($auth_methods!==false) {
 }
 ?>
 
+
 <!-- display existing groups -->
 <h4><?php print _('Group management'); ?></h4>
 <hr><br>
@@ -41,9 +42,10 @@ if ($auth_methods!==false) {
 </div>
 
 <!-- table -->
-<table id="userPrint" class="table table-striped table-top table-auto">
+<table id="userPrint1" class="table sorted table-striped table-top">
 
 <!-- Headers -->
+<thead>
 <tr>
     <th><?php print _('Group name'); ?></th>
     <th><?php print _('Group description'); ?></th>
@@ -51,10 +53,12 @@ if ($auth_methods!==false) {
     <th><?php print _('Section permissions'); ?></th>
     <th colspan="2"></th>
 </tr>
+</thead>
 
+<tbody>
 <!-- admins -->
 <tr>
-	<td><?php print _('Administrators'); ?></td>
+	<td><strong><?php print _('Administrators'); ?></strong></td>
 	<td><?php print _('Administrator level users'); ?></td>
 	<td>
 	<?php
@@ -63,7 +67,7 @@ if ($auth_methods!==false) {
 	}
 	?>
 	</td>
-	<td><?php print _('All sections : Read / Write'); ?></td>
+	<td><?php print _('All sections :'); ?> <span class="badge badge1 badge5">Read / Write</span></td>
 	<td colspan="2"></td>
 </tr>
 
@@ -75,7 +79,7 @@ if($groups) {
 		$g = (array) $g;
 
 		print '<tr>' . "\n";
-		print '	<td>' . $g['g_name'] . '</td>'. "\n";
+		print '	<td><strong>' . $g['g_name'] . '</strong></td>'. "\n";
 		print '	<td>' . $g['g_desc'] . '</td>'. "\n";
 		# users in group
 		print "	<td>";
@@ -98,7 +102,7 @@ if($groups) {
 			foreach($permissions as $sec=>$perm) {
 				# reformat permissions
 				$perm = $Subnets->parse_permissions($perm);
-				print $sec." : ".$perm."<br>";
+				print $sec." : <span class='badge badge1 badge5'>".$perm."</span><br>";
 			}
 		}
 		print "</td>";
@@ -125,5 +129,5 @@ if($groups) {
 }
 
 ?>
-
+</tbody>
 </table>

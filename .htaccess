@@ -15,7 +15,8 @@ RewriteEngine on
 RewriteRule ^api/.$ - [L]
 RewriteRule ^index.php$ - [L]
 RewriteRule ^(css|js|site|test)/.*$ - [L]
-RewriteRule site/login/captcha/captchashow.php - [L]
+RewriteRule app/login/captcha/captchashow.php - [L]
+
 
 # redirect errors
 ErrorDocument 400 /error/400/

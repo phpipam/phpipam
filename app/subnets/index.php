@@ -10,8 +10,9 @@ if(!is_numeric($_GET['subnetId'])) 	{ $Result->show("danger", _('Invalid ID'), t
 
 # fetch subnet related stuff
 $custom_fields = $Tools->fetch_custom_fields ('subnets');											//custom fields
-$subnet  = (array) $Subnets->fetch_subnet(null, $_GET['subnetId']);									//subnet details
-if(sizeof($subnet)==0) 				{ header("Location: ".create_link("subnets", $_GET['section'])); }	//redirect if false
+$subnet  = $Subnets->fetch_subnet(null, $_GET['subnetId']);									//subnet details
+if($subnet===false) 				{ header("Location: ".create_link("subnets", $_GET['section'])); die(); }	//redirect if false
+else { $subnet = (array) $subnet; }
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);			//set network boundaries
 $slaves = $Subnets->has_slaves ($subnet['id']) ? true : false;										//check if subnet has slaves and set slaves flag true/false
 
@@ -60,6 +61,9 @@ if($subnet['sectionId']!=$_GET['section'])	{
 	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
 	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
+
+# set title
+$location = "subnets";
 ?>
 
 <!-- content print! -->

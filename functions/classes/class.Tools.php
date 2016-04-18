@@ -7,21 +7,56 @@
 class Tools extends Common_functions {
 
 	/**
-	 * public variables
+	 * settings
+	 *
+	 * (default value: null)
+	 *
+	 * @var object
+	 * @access public
 	 */
-	public $vlans;							//to store vlans, vlanId is array index (array of objects)
-	public $vrfs;							//to store vrfs, vrfId is array index (array of objects)
-	public $devices;						//to store devices, id is array index (array of objects)
-	public $settings = null;				//settings
+	public $settings = null;
 
 	/**
-	 * object holders
+	 * PEAR NET IPv4 object
+	 *
+	 * @var mixed
+	 * @access protected
 	 */
-	protected $Net_IPv4;					//PEAR NET IPv4 object
-	protected $Net_IPv6;					//PEAR NET IPv6 object
-	protected $Result;						//for Result printing
-	protected $debugging = false;			//debugging flag (bool)
-	protected $Database;					//for Database connection
+	protected $Net_IPv4;
+
+	/**
+	 * PEAR NET IPv6 object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Net_IPv6;
+
+	/**
+	 * for Result printing
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $debugging = false;
+
+	/**
+	 * Database connection
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
 
 
 
@@ -39,105 +74,6 @@ class Tools extends Common_functions {
 		$this->Result = new Result ();
 		# set debugging
 		$this->set_debugging ();
-	}
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@general fetch methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * Fetch all objects from specified table in database
-	 *
-	 * @access public
-	 * @param mixed $table
-	 * @param mixed $sortField (default:id)
-	 * @return void
-	 */
-	public function fetch_all_objects ($table=null, $sortField="id") {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		# fetch
-		try { $res = $this->Database->getObjects($table, $sortField); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# result
-		return sizeof($res)>0 ? $res : false;
-	}
-
-	/**
-	 * Fetches specified object specified table in database
-	 *
-	 * @access public
-	 * @param mixed $table
-	 * @param mixed $method (default: null)
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_object ($table=null, $method=null, $id) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
-		# ignore 0
-		if($id===0 || is_null($id)) {
-			return false;
-		}
-		# check cache
-		elseif(isset($this->table[$table][$method][$id]))	{
-			return $this->table[$table][$method][$id];
-		}
-		else {
-			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to cache array
-			if(sizeof($res)>0) {
-				$this->table[$table][$method][$id] = (object) $res;
-				return $res;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Fetches multiple objects in specified table in database
-	 *
-	 *	doesnt cache
-	 *
-	 * @access public
-	 * @param mixed $table (default: null)
-	 * @param mixed $method (default: null)
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-		else {
-			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# result
-			return sizeof($res)>0 ? $res : false;
-		}
 	}
 
 
@@ -205,303 +141,9 @@ class Tools extends Common_functions {
 
 		if(empty($number)) 							{ return true; }
 		elseif(!is_numeric($number)) 				{ return _('VLAN must be numeric value!'); }
-		elseif ($number > $settings['vlanMax']) 	{ return _('Vlan number can be max 4094'); }
+		elseif ($number > $settings['vlanMax']) 	{ return _('Vlan number can be max '.$settings['vlanMax']); }
 		else 										{ return true; }
 	}
-
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@VRF specific methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * Fetches all VRFs.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function fetch_vrfs () {
-		try { $vrfs = $this->Database->getObjectsQuery("SELECT * FROM `vrf`;"); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save to vrfs array
-		if(sizeof($vrfs)>0) {
-			foreach($vrfs as $vrf) {
-				$this->vrfs[$id] = (object) $vrf;
-			}
-		}
-		# result
-		return $vrfs;
-	}
-
-	/**
-	 * Fetches VRF by specified method
-	 *
-	 * @access public
-	 * @param string $method (default: "null")
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_vrf ($method=null, $id) {
-		# null method
-		$method = is_null($method) ? "vrfId" : $this->Database->escape($method);
-		# check cache first
-		if(isset($this->vrfs[$id]))	{
-			return $this->vrfs[$id];
-		}
-		# ignore 0
-		elseif($id==0 || is_null($id)) {
-			return false;
-		}
-		else {
-			try { $vrf = $this->Database->getObjectQuery("SELECT * FROM `vrf` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to vlans array
-			if(sizeof($vrf)>0) {
-				$this->vrfs[$id] = (object) $vrf;
-				return $vrf;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-	/**
-	 *	@device methods
-	 *	--------------------------------
-	 */
-
-	/**
-	 * Fetches all available devices
-	 *
-	 * @access public
-	 * @param mixed $field
-	 * @param mixed $val
-	 * @param mixed $order_field (default: "id")
-	 * @param mixed $order_direction (default: "asc")
-	 * @return array
-	 */
-	public function fetch_devices ($field=null, $val=null, $order_field="id", $order_direction="asc") {
-		# escape sorts
-		$order_field 	 = $this->Database->escape ($order_field);
-		$order_direction = $this->Database->escape ($order_direction);
-
-		# set query
-		if(!is_null($field)) {
-			// validate field
-			$permitted_fields = $this->get_permitted_fields ("devices");
-			if (!in_array($field, $permitted_fields)) {
-				$this->Result->show("danger", _('Invalid field '.$field), false);
-				return false;
-			}
-
-			$query  = "SELECT * FROM `devices` where `$field` like ? order by $order_field $order_direction;";
-			$params = array("%$val%");
-		}
-		else {
-			$query  = "SELECT * FROM `devices` order by $order_field $order_direction;";
-			$params = array();
-		}
-		# fetch
-		try { $devices = $this->Database->getObjectsQuery($query, $params); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# save to devices array
-		if(sizeof($devices)>0) {
-			foreach($devices as $device) {
-				$this->devices[$device->id] = (object) $device;
-			}
-		}
-		# return
-		return sizeof($devices)>0 ? $devices : array();
-	}
-
-	/**
-	 * Fetches device by specified method
-	 *
-	 * @access public
-	 * @param string $method (default: "vrfId")
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_device ($method=null, $id) {
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-		# check cache first
-		if(isset($this->devices[$id]))	{
-			return $this->devices[$id];
-		}
-		# ignore 0
-		elseif($id==0 || is_null($id)) {
-			return false;
-		}
-		else {
-			try { $device = $this->Database->getObjectQuery("SELECT * FROM `devices` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to vlans array
-			if(sizeof($device)>0) {
-				$this->devices[$id] = (object) $device;
-				return $device;
-			}
-			else {
-				return false;
-			}
-		}
-	}
-
-	/**
-	 * Get permitted fields from database
-	 *
-	 * @access private
-	 * @param mixed $table
-	 * @return void
-	 */
-	private function get_permitted_fields ($table) {
-		try { $fields = $this->Database->getObjectsQuery("describe `$table`;", array($table)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		// loop and return array of permitted
-		foreach ($fields as $f) {
-			$out[] = $f->Field;
-		}
-		// return fields
-		return $out;
-	}
-
-	/**
-	 * Fetch number of addresses associated with device id
-	 *
-	 * @access public
-	 * @param int $id
-	 * @return int (count)
-	 */
-	public function count_device_addresses ($id=null) {
-		# if null
-		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "switch", $id); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		return $cnt;
-	}
-
-	/**
-	 * Fetch all addresses assigned to some device
-	 *
-	 * @access public
-	 * @param int $id (device id)
-	 * @return array
-	 */
-	public function fetch_device_addresses ($id) {
-		# fetch
-		try { $addresses = $this->Database->getObjectsQuery("select * from `ipaddresses` where `switch` = ?;", array($id)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# return
-		return $addresses;
-	}
-
-	/**
-	 * Fetch all device types
-	 *
-	 * @access public
-	 * @return array
-	 */
-	public function fetch_device_types () {
-		# fetch
-		try { $device_types = $this->Database->getObjectsQuery("SELECT * FROM `deviceTypes`;", $params); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# reindex
-		$device_types = $this->rekey_device_types ($device_types);
-		# return
-		return $device_types;
-	}
-
-	/**
-	 * Reindexes device types
-	 *
-	 * @access private
-	 * @param array $device_types
-	 * @return array
-	 */
-	private function rekey_device_types ($device_types) {
-		foreach($device_types as $t) {
-			$out[$t->tid] = $t;
-		}
-		# return
-		return $out;
-	}
-
-	/**
-	 * Fetch specific device type
-	 *
-	 * @access public
-	 * @param mixed $method
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_device_type ($method, $id) {
-		# null method
-		$method = is_null($method) ? "tid" : $this->Database->escape($method);
-		# ignore 0
-		if($id==0 || is_null($id)) {
-			return false;
-		}
-		else {
-			try { $device_type = $this->Database->getObjectQuery("SELECT * FROM `deviceTypes` where `$method` = ? limit 1;", array($id)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-		}
-		# return
-		return $device_type;
-	}
-
-
-
-
-
-
-
-
 
 
 
@@ -1009,7 +651,7 @@ class Tools extends Common_functions {
 
 		# get definition
 		$definition = strstr($schema, "CREATE TABLE `$table` (");
-		$definition = trim(strstr($definition, ";\n", true));
+		$definition = trim(strstr($definition, ";" . PHP_EOL, true));
 
 		# get each line to array
 		$definition = explode(PHP_EOL, $definition);
@@ -1115,28 +757,6 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 * Fetches widget by specified method
-	 *
-	 * @access public
-	 * @param string $method (default: "wid")
-	 * @param mixed $id
-	 * @return void
-	 */
-	public function fetch_widget ($method, $id) {
-		# null method
-		$method = is_null($method) ? "wid" : $this->Database->escape($method);
-		# fetch
-		try { $widget = $this->Database->getObjectQuery("SELECT * FROM `widgets` where `$method` = ? limit 1;", array($id)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-
-		# return result
-		return sizeof($widget)>0 ? (array) $widget : NULL;
-	}
-
-	/**
 	 * Verify that widget file exists
 	 *
 	 * @access public
@@ -1177,8 +797,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	private function requests_fetch_num () {
-		try { return $this->Database->numObjectsFilter("requests", "processed", "0"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+    	return $this->count_database_objects ("requests", "processed", 0);
 	}
 
 	/**
@@ -1188,8 +807,7 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	private function requests_fetch_objects () {
-		try { return $this->Database->getObjectsQuery("SELECT * FROM `requests` where `processed`=0;"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+    	return $this->fetch_multiple_objects ("requests", "processed", 0);
 	}
 
 	/**
@@ -2045,18 +1663,163 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 * Fetches instructions from database
+	 * Parses import file
 	 *
 	 * @access public
+	 * @param string $filetype (default: "xls")
+	 * @param object $subnet
+	 * @param array $custom_address_fields
 	 * @return void
 	 */
-	public function fetch_instructions () {
-		try { $instructions = $this->Database->getObject("instructions", 1); }
-		catch (Exception $e) {
-			$this->Result->show("danger", $e->getMessage(), false);
-			return false;
-		}
-		return $instructions;
+	public function parse_import_file ($filetype = "xls", $subnet = object, $custom_address_fields) {
+    	# start object and get settings
+    	$this->settings ();
+    	$this->Subnets = new Subnets ($this->Database);
+
+        # CSV
+        if (strtolower($filetype) == "csv")     { $outFile = $this->parse_import_file_csv ($subnet, $custom_address_fields); }
+        # XLS
+        elseif(strtolower($filetype) == "xls")  { $outFile = $this->parse_import_file_xls ($subnet, $custom_address_fields); }
+        # error
+        else                                    { $this->Result->show("danger", _('Invalid filetype'), true); }
+
+        # validate
+        return $this->parse_validate_file ($outFile, $subnet);
+	}
+
+	/**
+	 * Parses xls import file
+	 *
+	 * @access private
+	 * @param object $subnet
+	 * @param array $custom_address_fields
+	 * @return void
+	 */
+	private function parse_import_file_xls ($subnet, $custom_address_fields) {
+     	# get excel object
+    	require_once(dirname(__FILE__).'/../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
+    	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.xls', false);
+
+    	//get number of rows
+    	$numRows = $data->rowcount(0);
+    	$numRows++;
+
+    	//get all to array!
+    	for($m=0; $m < $numRows; $m++) {
+
+    		//IP must be present!
+    		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
+        		//for multicast
+        		if ($this->settings-enableMulticast=="1") {
+            		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
+                		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
+                    }
+                    else {
+                        $mac = $data->val($m,'F');
+                    }
+                }
+
+    			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
+    			$outFile[$m] .= $data->val($m,'E').','.$mac.','.$data->val($m,'G').','.$data->val($m,'H').',';
+    			$outFile[$m] .= $data->val($m,'I').','.$data->val($m,'J');
+    			//add custom fields
+    			if(sizeof($custom_address_fields) > 0) {
+    				$currLett = "K";
+    				foreach($custom_address_fields as $field) {
+    					$outFile[$m] .= ",".$data->val($m,$currLett++);
+    				}
+    			}
+    		}
+    	}
+    	// return
+    	return $outFile;
+	}
+
+	/**
+	 * Parses CSV import file
+	 *
+	 * @access private
+	 * @param object $subnet
+	 * @param array $custom_address_fields
+	 * @return void
+	 */
+	private function parse_import_file_csv ($subnet, $custom_address_fields) {
+    	/* get file to string */
+    	$outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
+
+    	/* format file */
+    	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
+    	$outFile = explode("\n", $outFile);
+
+    	/* validate IP */
+    	foreach($outFile as $k=>$v) {
+        	if(!filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
+            	unset($outFile[$k]);
+        	}
+        	else {
+            	# mac
+        		if ($this->settings-enableMulticast=="1") {
+            		if (strlen($v[6])==0 && $this->Subnets->is_multicast($v[1]))  {
+                		$mac = $this->Subnets->create_multicast_mac ($v[1]);
+                    }
+                    else {
+                        $mac = $v[6];
+                    }
+        		}
+        	}
+    	}
+
+    	# return
+    	return $outFile;
+	}
+
+	/**
+	 * Validates each import line from provided array
+	 *
+	 *      append class to array
+	 *
+	 * @access private
+	 * @param mixed $outFile
+	 * @param object $subnet
+	 * @return void
+	 */
+	private function parse_validate_file ($outFile = array(), $subnet = object) {
+    	# present ?
+    	if (sizeof($outFile)>0) {
+            foreach($outFile as $k=>$line) {
+            	//put it to array
+            	$field = explode(",", $line);
+
+            	//verify IP address
+            	if(!filter_var($field[0], FILTER_VALIDATE_IP)) 	{ $class = "danger";	$errors++; }
+            	else											{ $class = ""; }
+
+            	// verify that address is in subnet for subnets
+            	if($subnet->isFolder!="1") {
+            	    if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/32", $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
+                }
+            	// make sure mac does not exist
+                if ($this->settings-enableMulticast=="1" && strlen($class)==0) {
+                    if (strlen($field[5])>0 && $this->Subnets->is_multicast($field[0])) {
+                        if($this->Subnets->validate_multicast_mac ($field[5], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
+                            $errors++; $class = "danger";
+                        }
+                    }
+                }
+
+                // set class
+                $field['class'] = $class;
+
+                // save outfile
+                $result[] = $field;
+            }
+        }
+        else {
+            $result = array();
+        }
+
+        # return
+        return $result;
 	}
 
 	/**
@@ -2087,8 +1850,7 @@ class Tools extends Common_functions {
 	 * @param bool $perc (default: false)
 	 * @return void
 	 */
-	public function fetch_top_subnets ($type, $limit = "10", $perc = false)
-	{
+	public function fetch_top_subnets ($type, $limit = "10", $perc = false) {
 	    # set limit
 	    $limit = $limit==0 ? "" : "limit $limit";
 
@@ -2101,7 +1863,7 @@ class Tools extends Common_functions {
 						as `usage` from `subnets` as `s`
 						where `mask` < 31 and cast(`subnet` as UNSIGNED) < '4294967295'
 						order by `usage` desc
-						) as `d` where `usage` > 0 order by `usage` desc $limit;";
+						) as `d` where `usage` > 0 order by `percentage` desc $limit;";
 	    }
 		# ipv4 stats
 		elseif($type == "IPv4") {

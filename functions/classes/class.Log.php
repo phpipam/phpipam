@@ -12,30 +12,219 @@
 
 class Logging extends Common_functions {
 
+
 	/**
-	 * protected variables
+	 * debugging flag
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
 	 */
-	protected $debugging = false;			//(bool) debugging flag
-	protected $log_type;					//(varchar) log type
-
-	protected $log_command 	= null;			//(varchar) log command
-	protected $log_details 	= null;			//(varchar) log details
-	protected $log_severity = 0;			//(int) log severity : 0: informational, 1: warning, 2: error
-	protected $log_username	= null;			//username
-	protected $user_id	= null;				//users id
+	public $debugging = false;
 
 	/**
-	 * object holders
+	 * log_type
+	 *
+	 * @var mixed
+	 * @access protected
 	 */
-	protected $Database;					//for Database connection
+	protected $log_type;
+
+	/**
+	 * log_command
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $log_command = null;
+
+	/**
+	 * log_details
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $log_details = null;
+
+	/**
+	 * Syslog facility
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $syslog_facility;
+
+	/**
+	 * syslog_priority
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $syslog_priority;
+
+	/**
+	 * log severity
+	 *
+	 *  0: informational
+	 *  1: warning
+	 *  2: error
+	 *
+	 * (default value: 0)
+	 *
+	 * @var int
+	 * @access protected
+	 */
+	protected $log_severity = 0;
+
+	/**
+	 * New object (changed)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $object_new;
+
+	/**
+	 * Old object (before change)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $object_old;
+
+	/**
+	 * object_type
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $object_type;
+
+	/**
+	 * Object action
+	 *
+	 *  add, edit, delete
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $object_action;
+
+	/**
+	 * Result - success, failure
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $object_result;
+
+	/**
+	 * mail_changelog
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $mail_changelog;
+
+	/**
+	 * log_username
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $log_username	= null;
+
+	/**
+	 * user details
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $user;
+
+	/**
+	 * id of user
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $user_id	= null;
+
+	/**
+	 * Database object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Database;
+
+	/**
+	 * Result object
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $Result;
+
+	/**
+	 * Addresses object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Addresses;
+
+	/**
+	 * Sections object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Sections;
+
+	/**
+	 * Subnets object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Subnets;
+
+	/**
+	 * Tools object
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $Tools;
+
+	/**
+	 * settings
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $settings;
+
 
 
 
 
 	/**
-	 * __construct function
+	 * __construct function.
 	 *
 	 * @access public
+	 * @param Database_PDO $database
+	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
 		# Save database object
@@ -93,10 +282,12 @@ class Logging extends Common_functions {
 					$token = $admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN']);
 					if ($token === False) {
 						$this->user_id = null;
-					} else {
+					}
+					else {
 						$user_id = $token;
 					}
-				} else {
+				}
+				else {
 					$this->user_id = null;
 				}
 			}
@@ -128,8 +319,8 @@ class Logging extends Common_functions {
 	 */
 	public function write ($command, $details = NULL, $severity = 0, $username = null) {
 		// save provided values
-		$this->log_command 	= $command;
-		$this->log_details 	= $details;
+		$this->log_command = $command;
+		$this->log_details = $details;
 		$this->log_severity = $severity;
 		$this->log_username	= $username===null ? $this->log_username : $username;
 
@@ -224,6 +415,8 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	private function syslog_set_priority () {
+    	// init
+    	$priorities = array();
 		# definitions
 		$priorities[] = "LOG_EMERG";
 		$priorities[] = "LOG_ALERT";
@@ -274,6 +467,7 @@ class Logging extends Common_functions {
 		$changelog = str_replace("<hr>", ",",$changelog);
 
 		# formulate
+		$log = array();
 		foreach($changelog as $k=>$l) {
 			$log[] = "$k: $l";
 		}
@@ -304,7 +498,7 @@ class Logging extends Common_functions {
 	 * Writes log to local database
 	 *
 	 * @access private
-	 * @return void
+	 * @return boolean
 	 */
 	private function database_write_log () {
 	    # set values
@@ -317,8 +511,8 @@ class Logging extends Common_functions {
 	    			"details"=>$this->log_details
 					);
 		# null empty values
-		$values = $this->reformat_empty_array_fields ($values, null);
-		$values = $this->strip_input_tags ($values);
+		$values = $this->reformat_empty_array_fields($values, null);
+		$values = $this->strip_input_tags($values);
 
 		# execute
 		try { $this->Database->insertObject("logs", $values); }
@@ -407,13 +601,13 @@ class Logging extends Common_functions {
 	 * Write new changelog to db or send to syslog
 	 *
 	 * @access public
-	 * @param mixed $object_type
-	 * @param mixed $action
-	 * @param mixed $result
+	 * @param string $object_type
+	 * @param string $action
+	 * @param string $result
 	 * @param array $old (default: array())
 	 * @param array $new (default: array())
 	 * @param bool $mail_changelog (default: true)
-	 * @return void
+	 * @return boolean|null
 	 */
 	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array(), $mail_changelog = true) {
 		//set values
@@ -436,13 +630,16 @@ class Logging extends Common_functions {
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
-		    $this->Addresses 	= new Addresses ($this->Database);
+		    $this->Addresses = new Addresses ($this->Database);
 		    $this->Subnets 		= new Subnets ($this->Database);
-		    $this->Sections 	= new Sections ($this->Database);
-		    $this->Tools	 	= new Tools ($this->Database);
+		    $this->Sections = new Sections ($this->Database);
+		    $this->Tools	 = new Tools ($this->Database);
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
+
+		    # default log
+		    $log = array();
 
 		    # calculate diff
 		    if($action == "edit") {
@@ -530,7 +727,7 @@ class Logging extends Common_functions {
 		}
 		# mail
 		if ($this->mail_changelog)
-		$this->changelog_send_mail ($changelog, $obj_id);
+		$this->changelog_send_mail ($changelog);
 		# ok
 		return true;
 	}
@@ -539,7 +736,7 @@ class Logging extends Common_functions {
 	 * Checks if object should write changelog
 	 *
 	 * @access private
-	 * @return void
+	 * @return boolean
 	 */
 	private function changelog_validate_object () {
 		# set valid objects
@@ -692,12 +889,12 @@ class Logging extends Common_functions {
 	 * Formats tag from int to nam.
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
 	private function changelog_format_tag_diff ($k, $v) {
-		$this->object_old[$k] 	= $this->Addresses->address_type_index_to_type($this->object_old[$k]);
+		$this->object_old[$k] = $this->Addresses->address_type_index_to_type($this->object_old[$k]);
 		$v 						= $this->Addresses->address_type_index_to_type($v);
 		//result
 		return $v;
@@ -707,7 +904,7 @@ class Logging extends Common_functions {
 	 * Formats section if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -729,22 +926,24 @@ class Logging extends Common_functions {
 	 * Formats master subnet if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return string
 	 */
 	private function changelog_format_master_subnet_diff ($k, $v) {
 		//Old root or not
 		if($this->object_old[$k]==0){
 			$this->object_old[$k] = "Root";
-		} else {
+		}
+		else {
 			$subnet = $this->Subnets->fetch_subnet("id", $this->object_old[$k]);
 			$this->object_old[$k] = $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]";
 		}
 		//New root or not
 		if($v==0) {
 			$v = "Root";
-		} else {
+		}
+		else {
 			$subnet = $this->Subnets->fetch_subnet("id", $v);
 			$v  = $this->Subnets->transform_address($subnet->subnet, "dotted")."/$subnet->mask [$subnet->description]";
 		}
@@ -756,7 +955,7 @@ class Logging extends Common_functions {
 	 * Format device if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -785,7 +984,7 @@ class Logging extends Common_functions {
 	 * Format vlan if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -814,7 +1013,7 @@ class Logging extends Common_functions {
 	 * Format vrf if change
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -843,7 +1042,7 @@ class Logging extends Common_functions {
 	 * Format master section ifchange
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
 	 * @return void
 	 */
@@ -872,9 +1071,9 @@ class Logging extends Common_functions {
 	 * Format permissions on change - EDIT
 	 *
 	 * @access private
-	 * @param mixed $k
+	 * @param string $k
 	 * @param mixed $v
-	 * @return void
+	 * @return string
 	 */
 	private function changelog_format_permission_diff ($k, $v) {
 		// get old and compare
@@ -884,12 +1083,14 @@ class Logging extends Common_functions {
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
 		// rekey
+		$out = array();
 		foreach($groups as $g) {
 			$out[$g->g_id]['g_name'] = $g->g_name;
 		}
 		$groups = $out;
 
 		// loop
+		$val = array();
 		foreach($this->object_new['permissions'] as $group_id=>$p) {
 			$val[] = $groups[$group_id]['g_name'] ." : ".$this->Subnets->parse_permissions($p);
 		}
@@ -908,6 +1109,8 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	private function changelog_make_booleans ($k, $v) {
+    	// init
+    	$keys = array();
 		// list of keys to be changed per object
 		$keys['section'] = array("strictMode", "showVLAN", "showVRF");
 		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "DNSrecursive", "DNSrecords", "isFolder", "isFull");
@@ -941,6 +1144,9 @@ class Logging extends Common_functions {
 		# Get all groups:
 		$groups = (array) $this->Tools->fetch_all_objects("userGroups", "g_id");
 		// rekey
+		$out = array();
+		$log = array();
+
 		foreach($groups as $k=>$g) {
 			// save
 			$out[$g->g_id]['g_name'] = $g->g_name;
@@ -1005,12 +1211,12 @@ class Logging extends Common_functions {
 						from `changelog` as `c`, `users` as `u`,`sections` as `su`
 						where `c`.`ctype` = 'section' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
 					) as `ips`
-					where `coid`='$expr' or `ctype`='$expr' or `real_name` like '$expr' or `cdate` like '$expr' or `cdiff` like '$expr' or INET_NTOA(`ip_addr`) like '$expr'
+					where `coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr
 					order by `cid` desc limit $limit;";
 		}
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
+	    try { $logs = $this->Database->getObjectsQuery($query, array("expr"=>$expr)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -1039,6 +1245,8 @@ class Logging extends Common_functions {
 						from `changelog` as `c`, `users` as `u`, `ipaddresses` as `o`
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and (";
+
+            $args = array();
 			foreach($ips as $ip) {
 			$query .= "`c`.`coid` = ? or ";
 			$args[] = $ip->id;
@@ -1047,7 +1255,7 @@ class Logging extends Common_functions {
 			$query .= ") and `c`.`ctype` = 'ip_addr' order by `c`.`cid` desc limit $limit;";
 
 			# fetch
-		    try { $logs = $this->Database->getObjectsQuery($query, $args); }
+		    try { $logs = $this->Database->getObjectsQuery($query, array_filter($args)); }
 			catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		    # return result
@@ -1078,7 +1286,8 @@ class Logging extends Common_functions {
 						from `changelog` as `c`, `users` as `u`, `$object_typeTable` as `o`
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and `c`.`coid` = ? and `c`.`ctype` = ? order by `c`.`cid` desc limit $limit;";
-		} else {
+		}
+		else {
 		    $query = "select *
 						from `changelog` as `c`, `users` as `u`
 						where `c`.`cuser` = `u`.`id`
@@ -1086,7 +1295,7 @@ class Logging extends Common_functions {
 		}
 	    # fetch
 	    try { $logs = $this->Database->getObjectsQuery($query, array($coid, $object_type)); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false); return false; }
 
 	    # return result
 	    return $logs;
@@ -1118,6 +1327,7 @@ class Logging extends Common_functions {
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and (";
 			foreach($Subnets->slaves as $slaveId) {
+			if(!isset($args)) $args = array();
 			$query .= "`c`.`coid` = ? or ";
 			$args[] = $slaveId;							//set keys
 			}
@@ -1156,11 +1366,10 @@ class Logging extends Common_functions {
 	 * Send mail on new changelog
 	 *
 	 * @access public
-	 * @param mixed $changelog
-	 * @param int $obj_id
-	 * @return void
+	 * @param string $changelog
+	 * @return boolean
 	 */
-	public function changelog_send_mail ($changelog, $obj_id) {
+	public function changelog_send_mail ($changelog) {
 
 		# initialize tools class
 		$this->Tools = new Tools ($this->Database);
@@ -1176,14 +1385,17 @@ class Logging extends Common_functions {
 		if ( $this->object_new['isFolder']=="1"	||$this->object_old['isFolder']=="1")	{ $this->object_type = "folder"; }
 
 		# set subject
+		$subject = string;
 		if($this->object_action == "add") 		{ $subject = ucwords($this->object_type)." create notification"; }
 		elseif($this->object_action == "edit") 	{ $subject = ucwords($this->object_type)." change notification"; }
 		elseif($this->object_action == "delete"){ $subject = ucwords($this->object_type)." delete notification"; }
 
 		// if address we need subnet details !
+		$address_subnet = array();
 		if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $obj_details['subnetId']); }
 
 		# set object details
+		$details = string;
 		if ($this->object_type=="section") 		{ $details = "<a href='".$this->createURL().create_link("subnets",$obj_details['id'])."'>".$obj_details['name'] . "(".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="subnet")	{ $details = "<a href='".$this->createURL().create_link("subnets",$obj_details['sectionId'],$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['subnet'], "dotted")."/".$obj_details['mask']." (".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="folder")	{ $details = "<a href='".$this->createURL().create_link("folder",$obj_details['sectionId'],$obj_details['id'])."'>".$obj_details['description']." - id ".$obj_details['id']."</a>"; }
@@ -1192,6 +1404,7 @@ class Logging extends Common_functions {
 
 		# set content
 		$style = "face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'";
+		$content = array();
 		$content[] = "<div style='padding:10px;'>";
 		$content[] = "<table>";
 		$content[] = "<tr><td><font $style>Object type:</font><td><font $style>".$this->object_type."</font></td></tr>";
@@ -1208,6 +1421,7 @@ class Logging extends Common_functions {
 		$content[] = "</div>";
 
 		# set plain content
+		$content_plain = array();
 		$content_plain[] = "Object type: ".$this->object_type;
 		$content_plain[] = "Object details: ".$details;
 		$content_plain[] = "User: ".$this->user->real_name." (".$this->user->username.")";
@@ -1230,7 +1444,7 @@ class Logging extends Common_functions {
 
 		// set content
 		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-		$content_plain 	= implode("\r\n",$content_plain);
+		$content_plain = implode("\r\n",$content_plain);
 
 		# try to send
 		try {
@@ -1270,7 +1484,8 @@ class Logging extends Common_functions {
 			foreach($recipients as $k=>$r) {
 				if($r->mailChangelog!="Yes") {
 					unset($recipients[$k]);
-				} else {
+				}
+				else {
 					$m++;
 				}
 			}

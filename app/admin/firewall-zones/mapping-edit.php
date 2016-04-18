@@ -38,7 +38,7 @@ $firewallZones = $Zones->get_zones();
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 
 # fetch all devices
-$devices = $Tools->fetch_devices('type',$firewallZoneSettings['deviceType']);
+$devices = $Tools->fetch_multiple_objects ("devices", "type", $firewallZoneSettings['deviceType']);
 
 # fetch old mapping
 if ($_POST['action'] != 'add') {
@@ -64,7 +64,7 @@ if ($_POST['action'] != 'add') {
 			<option value="0"><?php print _('Select a firewall zone'); ?></option>
 			<?php
 			foreach ($firewallZones as $zone) {
-				if ($zone->id == $mapping->id) 	{ 
+				if ($zone->id == $mapping->id) 	{
 					if($zone->description) 	{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.' ('.$zone->description.')</option>'; }
 					else 					{ print '<option value="'.$zone->id.'" selected>'.$zone->zone.'</option>'; }}
 				else {
@@ -99,13 +99,15 @@ if ($_POST['action'] != 'add') {
 			<select name="deviceId" class="form-control input-sm input-w-auto input-max-200" <?php print $readonly; ?>>
 			<option value="0"><?php print _('Select firewall'); ?></option>
 			<?php
-			foreach ($devices as $device) {
-				if ($device->id == $mapping->deviceId) 	{ 
-					if($device->description) 	{	print '<option value="'.$device->id.'" selected>'.	$device->hostname.' ('.$device->description.')</option>'; }
-					else 						{ 	print '<option value="'.$device->id.'" selected>'.	$device->hostname.'</option>'; }}
-				else { 
-					if($device->description)	{	print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
-					else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
+            if ($devices !==false) {
+    			foreach ($devices as $device) {
+    				if ($device->id == $mapping->deviceId) 	{
+    					if($device->description) 	{	print '<option value="'.$device->id.'" selected>'.	$device->hostname.' ('.$device->description.')</option>'; }
+    					else 						{ 	print '<option value="'.$device->id.'" selected>'.	$device->hostname.'</option>'; }}
+    				else {
+    					if($device->description)	{	print '<option value="'.$device->id.'">'.			$device->hostname.' ('.$device->description.')</option>'; }
+    					else 						{	print '<option value="'.$device->id.'">'.			$device->hostname.'</option>'; }}
+    			}
 			}
 			?>
 			</select>

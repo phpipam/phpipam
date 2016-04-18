@@ -19,9 +19,6 @@ $folderId = $_GET['subnetId'];
 # get section details
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
 
-# get all slaves
-$slaves = $Subnets->fetch_subnet_slaves ($folderId);
-
 if($slaves) {
 	# sort slaves by folder / subnet
 	foreach($slaves as $s) {
@@ -101,21 +98,25 @@ if($slaves) {
 				# reformat empty VLAN
 				if(sizeof($vlan)==1) { $vlan['number'] = "/"; }
 
+				# calculate free / used / percentage
+				if(!$Subnets->has_slaves ($slave['id']))	{
+					$ipCount = $Addresses->count_subnet_addresses ($slave['id']);
+					$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'], $slave['isFull'] );
+				} else {
+					$calculate = $Subnets->calculate_subnet_usage_recursive( $slave['id'], $slave['subnet'], $slave['mask'], $Addresses, $slave['isFull']);
+				}
+
 				# add full information
                 $fullinfo = $slave['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
+                if ($slave['isFull']!==1) {
+                    # if usage is 100%, fake usFull to true!
+                    if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
+                }
 
 				print "<tr>";
 			    print "	<td class='small'>".$vlan['number']."</td>";
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
 			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask] $fullinfo</a></td>";
-
-				# calculate free / used / percentage
-				if(!$Subnets->has_slaves ($slave['id']))	{ 
-					$ipCount = $Addresses->count_subnet_addresses ($slave['id']); 
-					$calculate = $Subnets->calculate_subnet_usage ( (int) $ipCount, $slave['mask'], $slave['subnet'], $slave['isFull'] );
-				} else {
-					$calculate = $Subnets->calculate_subnet_usage_recursive( $slave['id'], $slave['subnet'], $slave['mask'], $Addresses, $slave['isFull']);
-				}
 
 				# print usage
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";

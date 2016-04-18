@@ -22,9 +22,10 @@ $all_nameservers = $Admin->fetch_all_objects("nameservers", "id");
 # first check if they exist!
 if($all_nameservers===false) { $Result->show("danger", _("No nameserver sets defined")."!", true);}
 else {
-	print '<table id="nameserverManagement" class="table table-striped table-top table-hover table-auto table-td-top">'. "\n";
+	print '<table id="nameserverManagement" class="table sorted table-striped table-top table-hover table-td-top">'. "\n";
 
 	# headers
+	print "<thead>";
 	print '<tr>'. "\n";
 	print '	<th>'._('Nameserver set').'</th>'. "\n";
 	print '	<th>'._('Nameservers').'</th>'. "\n";
@@ -32,7 +33,9 @@ else {
 	print '	<th>'._('Description').'</th>'. "\n";
 	print '	<th></th>'. "\n";
 	print '</tr>'. "\n";
+	print "</thead>";
 
+    print "<tbody>";
 	# loop
 	foreach ($all_nameservers as $nameservers) {
 		//cast
@@ -50,7 +53,7 @@ else {
 					$sect = $Admin->fetch_object ("sections", "id", $id);
 					// exists
 					if ($sect!==false) {
-						$permitted_sections[] = $sect->name;
+						$permitted_sections[] = "<span class='badge badge1 badge5'>".$sect->name."</span>";
 					}
 				}
 			}
@@ -68,7 +71,7 @@ else {
 
 		//print details
 		print '<tr>'. "\n";
-		print '	<td class="name">'. $nameservers['name'] .'</td>'. "\n";
+		print '	<td class="name"><strong>'. $nameservers['name'] .'</strong></td>'. "\n";
 		print '	<td class="namesrv1">'. implode("<br>", $all_nameservers) .'</td>'. "\n";
 		print '	<td class="sections">'. implode("<br>", $permitted_sections).'</td>'. "\n";
 		print '	<td class="description">'. $nameservers['description'] .'</td>'. "\n";
@@ -80,6 +83,7 @@ else {
 		print "	</td>";
 		print '</tr>'. "\n";
 	}
+	print "</tbody>";
 	print '</table>'. "\n";
 }
 ?>
