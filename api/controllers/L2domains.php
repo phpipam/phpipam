@@ -23,7 +23,7 @@ class L2domains_controller extends Common_api_functions {
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $custom_fields;
+	public $custom_fields;
 
 	/**
 	 * Database object
