@@ -22,7 +22,7 @@ class Subnets_controller extends Common_api_functions {
 	 * @var mixed
 	 * @access protected
 	 */
-	protected $custom_fields;
+	public $custom_fields;
 
 	/**
 	 * settings
@@ -518,7 +518,7 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function read_subnet ($subnetId = null) {
 		// null
-		$subnetId = !is_null($subnetId) ? $this->_params->id : $subnetId;
+		$subnetId = is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
 		$result = $this->Subnets->fetch_subnet ("id", $subnetId);
         // add nameservers

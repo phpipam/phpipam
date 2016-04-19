@@ -655,10 +655,12 @@ class Common_api_functions {
 		}
 		# array
 		else {
+			// create a new array for the remapped data
+			$result_remapped = array();
+
 			// loop
 			foreach ($result as $m=>$r) {
 				// start object
-				$result_remapped = array();
 				$result_remapped[$m] = new StdClass ();
 
 				// search and replace
