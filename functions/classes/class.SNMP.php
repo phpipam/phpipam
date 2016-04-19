@@ -426,7 +426,7 @@ class phpipamSNMP extends Common_functions {
         $this->connection_open ();
         // try
         try {
-            $sysdescr = $this->snmp_session->get( $this->snmp_queries['get_system_info']->oid );
+            $sysdescr = $this->snmp_session->get( "SNMPv2-MIB::sysDescr.0" );
         }
 		catch (Exception $e) {
     		throw new Exception ($e->getMessage());
@@ -451,9 +451,9 @@ class phpipamSNMP extends Common_functions {
         $this->connection_open ();
         // fetch
         try {
-            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_arp_table"]->oid.".3" );    // ip
-            $res2 = $this->snmp_session->walk( $this->snmp_queries["get_arp_table"]->oid.".2" );    // mac
-            $res3 = $this->snmp_session->walk( $this->snmp_queries["get_arp_table"]->oid.".1" );    // interface index
+            $res1 = $this->snmp_session->walk( "IP-MIB::ipNetToMediaNetAddress" );      // ip
+            $res2 = $this->snmp_session->walk( "IP-MIB::ipNetToMediaPhysAddress" );     // mac
+            $res3 = $this->snmp_session->walk( "IP-MIB::ipNetToMediaIfIndex" );         // interface index
 		}
 		catch (Exception $e) {
     		throw new Exception ($e->getMessage());
@@ -532,8 +532,8 @@ class phpipamSNMP extends Common_functions {
 
         // fetch
         try {
-            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_mac_table"]->oid.".1" );    // mac
-            $res2 = $this->snmp_session->walk( $this->snmp_queries["get_mac_table"]->oid.".2" );    // bridge port index
+            $res1 = $this->snmp_session->walk( "BRIDGE-MIB::dot1dTpFdbAddress" );    // mac
+            $res2 = $this->snmp_session->walk( "BRIDGE-MIB::dot1dTpFdbPort" );       // bridge port index
 		}
 		catch (Exception $e) {
     		throw new Exception ($e->getMessage());
@@ -598,8 +598,8 @@ class phpipamSNMP extends Common_functions {
         $this->connection_open ();
         // fetch
         try {
-            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_interfaces_ip"]->oid.".1" );
-            $res2 = $this->snmp_session->walk( $this->snmp_queries["get_interfaces_ip"]->oid.".3" );
+            $res1 = $this->snmp_session->walk( "IP-MIB::ipAdEntAddr" );
+            $res2 = $this->snmp_session->walk( "IP-MIB::ipAdEntNetMask" );
 		}
 		catch (Exception $e) {
     		throw new Exception ($e->getMessage());
@@ -640,8 +640,8 @@ class phpipamSNMP extends Common_functions {
         $this->connection_open ();
         // fetch
         try {
-            $res1 = $this->snmp_session->walk( $this->snmp_queries["get_routing_table"]->oid.".1" );
-            $res2 = $this->snmp_session->walk( $this->snmp_queries["get_routing_table"]->oid.".2" );
+            $res1 = $this->snmp_session->walk( "IP-FORWARD-MIB::ipCidrRouteDest" );
+            $res2 = $this->snmp_session->walk( "IP-FORWARD-MIB::ipCidrRouteMask" );
 		}
 		catch (Exception $e) {
     		throw new Exception ("<strong>$device->hostname</strong>: ".$e->getMessage(). "<br> oid: ".$this->snmp_queries["get_routing_table"]->oid);
