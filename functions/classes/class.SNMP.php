@@ -155,42 +155,48 @@ class phpipamSNMP extends Common_functions {
     	$this->snmp_queries['get_system_info'] = new StdClass();
     	$this->snmp_queries['get_system_info']->id  = 1;
     	$this->snmp_queries['get_system_info']->oid = ".1.3.6.1.2.1.1.1.0";
+    	$this->snmp_queries['get_system_info']->oid = "SNMPv2-MIB::sysDescr.0";
     	$this->snmp_queries['get_system_info']->description = "Displays device system info";
 
     	// arp table
     	$this->snmp_queries['get_arp_table'] = new StdClass();
     	$this->snmp_queries['get_arp_table']->id  = 2;
     	$this->snmp_queries['get_arp_table']->oid = ".1.3.6.1.2.1.4.22.1";
+    	$this->snmp_queries['get_arp_table']->oid = "IP-MIB::ipNetToMediaEntry";
     	$this->snmp_queries['get_arp_table']->description = "Fetches ARP table";
 
     	// mac address table
     	$this->snmp_queries['get_mac_table'] = new StdClass();
     	$this->snmp_queries['get_mac_table']->id  = 3;
     	$this->snmp_queries['get_mac_table']->oid = ".1.3.6.1.2.1.17.4.3.1";
+    	$this->snmp_queries['get_mac_table']->oid = "BRIDGE-MIB::dot1dTpFdbEntry";
     	$this->snmp_queries['get_mac_table']->description = "Fetches MAC address table";
 
     	// interface ip addresses
     	$this->snmp_queries['get_interfaces_ip'] = new StdClass();
     	$this->snmp_queries['get_interfaces_ip']->id  = 4;
     	$this->snmp_queries['get_interfaces_ip']->oid = ".1.3.6.1.2.1.4.20.1";
+    	$this->snmp_queries['get_interfaces_ip']->oid = "IP-MIB::ipAddrEntry";
     	$this->snmp_queries['get_interfaces_ip']->description = "Fetches interface ip addresses";
 
     	// get_routing_table
     	$this->snmp_queries['get_routing_table'] = new StdClass();
     	$this->snmp_queries['get_routing_table']->id  = 5;
     	$this->snmp_queries['get_routing_table']->oid = ".1.3.6.1.2.1.4.24.4.1";
+    	$this->snmp_queries['get_routing_table']->oid = "IP-FORWARD-MIB::ipCidrRouteEntry";
     	$this->snmp_queries['get_routing_table']->description = "Fetches routing table";
 
     	// get vlans
     	$this->snmp_queries['get_vlan_table'] = new StdClass();
     	$this->snmp_queries['get_vlan_table']->id  = 6;
     	$this->snmp_queries['get_vlan_table']->oid = ".1.3.6.1.4.1.9.9.46.1.3.1.1.4";
+    	$this->snmp_queries['get_vlan_table']->oid = "CISCO-VTP-MIB::vtpVlanName";
     	$this->snmp_queries['get_vlan_table']->description = "Fetches VLAN table";
 
     	// get vrfs
     	$this->snmp_queries['get_vrf_table'] = new StdClass();
     	$this->snmp_queries['get_vrf_table']->id  = 7;
-//     	$this->snmp_queries['get_vrf_table']->oid = ".1.3.6.1.3.118.1.2.2.1";
+    	$this->snmp_queries['get_vrf_table']->oid = ".1.3.6.1.3.118.1.2.2.1";
     	$this->snmp_queries['get_vrf_table']->oid = "MPLS-VPN-MIB::mplsVpnVrfDescription";
     	$this->snmp_queries['get_vrf_table']->description = "Fetches VRF table";
 	}
@@ -482,8 +488,11 @@ class phpipamSNMP extends Common_functions {
             }
             else {
                 try {
-                    $res1 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.1.".$index );  // if description
-                    $res2 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$index );     // if port
+                    //$res1 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.1.".$index );  // if description
+                    //$res2 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$index );     // if port
+
+                    $res1 = $this->snmp_session->get( "IF-MIB::ifName.".$index );  // if description
+                    $res2 = $this->snmp_session->get( "IF-MIB::ifDescr.".$index );     // if port
 
                     //parse and save
                     $res[$n]['port'] = $this->parse_snmp_result_value ($res1);
@@ -548,9 +557,13 @@ class phpipamSNMP extends Common_functions {
             $res[$n]['bridgeportindex'] = $this->parse_snmp_result_value ($r);
             // fetch interface
             try {
-                $res3 = $this->snmp_session->get( ".1.3.6.1.2.1.17.1.4.1.2.".$res[$n]['bridgeportindex'] );         // bridge port to interface index
-                $res4 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$this->parse_snmp_result_value ($res3));  // interface description
-                $res5 = $this->snmp_session->get( "1.3.6.1.2.1.31.1.1.1.18.".$this->parse_snmp_result_value ($res3) );
+                //$res3 = $this->snmp_session->get( ".1.3.6.1.2.1.17.1.4.1.2.".$res[$n]['bridgeportindex'] );         // bridge port to interface index
+                //$res4 = $this->snmp_session->get( ".1.3.6.1.2.1.2.2.1.2.".$this->parse_snmp_result_value ($res3));  // interface description
+                //$res5 = $this->snmp_session->get( ".1.3.6.1.2.1.31.1.1.1.18.".$this->parse_snmp_result_value ($res3) );
+
+                $res3 = $this->snmp_session->get( "BRIDGE-MIB::dot1dBasePortIfIndex.".$res[$n]['bridgeportindex'] );         // bridge port to interface index
+                $res4 = $this->snmp_session->get( "IF-MIB::ifDescr.".$this->parse_snmp_result_value ($res3));  // interface description
+                $res5 = $this->snmp_session->get( "IF-MIB::ifAlias.".$this->parse_snmp_result_value ($res3) );
 
                 //parse and save
                 $res[$n]['vlan_number'] = $this->vlan_number;
