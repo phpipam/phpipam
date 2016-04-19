@@ -254,7 +254,7 @@ class Common_functions  {
 	 * fetches settings from database
 	 *
 	 * @access private
-	 * @return none
+	 * @return void
 	 */
 	public function get_settings () {
 		# constant defined
