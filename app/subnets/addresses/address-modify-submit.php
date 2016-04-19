@@ -137,8 +137,8 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 	# start cannot be higher than stop!
 	if($start>$stop)									{ $Result->show("danger", _("Invalid address range")."!", true); }
 
-	# we can manage only 255 IP's at once!
-	if(gmp_strval(gmp_sub($stop,$start)) > 255) 		{ $Result->show("danger", _("Only 255 IP addresses at once")."!", true); }
+	# we can manage only 4096 IP's at once!
+	if(gmp_strval(gmp_sub($stop,$start)) > 4096) 		{ $Result->show("danger", _("Only 4096 IP addresses at once")."!", true); }
 
 	# set limits
 	$m = gmp_strval($start);
