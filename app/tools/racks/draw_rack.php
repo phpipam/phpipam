@@ -18,8 +18,8 @@ $User->check_user_session();
 # init racks object
 $Racks = new phpipam_rack ($Database);
 
-# deviceId not set - set to 0
-if (!isset($_GET['deviceId']))      { $_GET['deviceId'] = 0; }
+# deviceId not set or empty - set to 0
+if (empty($_GET['deviceId']))      { $_GET['deviceId'] = 0; }
 
 # validate rackId
 if (!is_numeric($_GET['rackId']))     { die(); }
