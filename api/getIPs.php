@@ -23,7 +23,7 @@ if ($validate !== true) {
   exit();
 }
 
-$data = new mysqli("localhost", $db['user'], $db['pass'], $db['name']);
+$data = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
 
 if ($data->connect_errno) {
   printf("Connect failed: %s\n", $data->connect_error);

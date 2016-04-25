@@ -21,7 +21,7 @@ if (strlen($name) < 1) {
   print "ERROR!! no host specified\n";
   exit();
 }
-if (preg_match('/\ |\;|\'|&/', $name)) {
+if (preg_match('/\ |\;|\'|\_|\"|&/', $name)) {
   print "ERROR!! There are illegal charaters in your hostname\n";
   exit();
 }
@@ -34,7 +34,7 @@ if ($validate !== true) {
 }
 
 # Set up a db connection
-$data = new mysqli("localhost", $db['user'], $db['pass'], $db['name']);
+$data = new mysqli($db['host'], $db['user'], $db['pass'], $db['name']);
 
 # Check and make sure we are connected
 if ($data->connect_errno) {

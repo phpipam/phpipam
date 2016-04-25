@@ -33,6 +33,11 @@ if(!$valid_subnet) {
   exit();
 }
 
+if (preg_match('/\ |\;|\'|&|\_|\"/', $name)) {
+    print "ERROR!! There are illegal charaters in your hostname\n";
+    exit();
+}
+
 # Check the api_app name and token passed to us
 $validate = ValidateToken($api_app, $api_token);
 if ($validate !== true) {
