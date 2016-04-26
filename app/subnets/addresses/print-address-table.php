@@ -253,6 +253,14 @@ else {
                     // search for hostname records
 					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
+					$ptr_name = $PowerDNS->get_ip_ptr_name(long2ip($addresses[$n]->ip_addr));
+					if(! $ptr || $ptr_name != $ptr->name) {
+					        $ptr = $PowerDNS->search_records("name", $ptr_name);
+					        if($ptr) {
+					                $ptr = array_pop($ptr);
+					                $Addresses->ptr_link($addresses[$n]->id, $ptr->id);
+					        } else { $Addresses->ptr_link($addresses[$n]->id, 0); }
+					}
 					unset($dns_records);
 					if ($records !== false || $ptr!==false) {
 						$dns_records[] = "<hr>";
