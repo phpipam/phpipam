@@ -9,6 +9,7 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	// Redirect user where he came from, if unknown go to dashboard.
 	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
 	else                                        { header("Location: ".create_link("dashboard")); }
+	exit();
 }
 ?>
 
