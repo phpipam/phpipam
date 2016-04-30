@@ -8,6 +8,14 @@
  */
 class Folders_controller extends Common_api_functions {
 
+    /**
+     * Subnets_controller
+     *
+     * @var mixed
+     * @access protected
+     */
+    protected $Subnets_controller;
+
 	/**
 	 * __construct function
 	 *

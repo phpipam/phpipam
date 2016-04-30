@@ -728,7 +728,12 @@ class Subnets extends Common_functions {
 	 */
 	public function has_slaves ($subnetId) {
     	// NULL subnetId cannot have slaves
-    	return is_null($subnetId) ? false : $this->count_database_objects ("subnets", "masterSubnetId", $subnetId);
+    	if (is_null($subnetId))     { return false; }
+    	else {
+        	$cnt = $this->count_database_objects ("subnets", "masterSubnetId", $subnetId);
+        	if ($cnt==0) { return false; }
+        	else         { return true; }
+    	}
 	}
 
 	/**

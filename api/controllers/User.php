@@ -513,6 +513,17 @@ class User_controller extends Common_api_functions {
 	private function refresh_token_expiration () {
 		# reset values
 		$this->token = $this->User->user->token;
+        
+		// convert existing expiry date string to a timestamp
+		$expire_time = strtotime($this->token_expires);
+
+		// Write Throttling from token updates
+		// In order to keep the DB writes from token updates to a minimum, only update the expire time
+		// if the expire time was set more than 60 seconds ago.
+		if ( ((time()+$this->token_valid_time) - $expire_time) < 60) {
+				return;
+		}
+
 		$this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
 		# set token values
 		$values = array(

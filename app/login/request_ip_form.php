@@ -143,3 +143,20 @@ if(in_array('owner', $setFields)) {
 
 </form>
 </div>
+
+
+
+<?php
+# check for requests guide
+$instructions = $Database->getObject("instructions", 2);
+
+if(is_object($instructions)) {
+    if(strlen($instructions->instructions)>0) {
+        print "<div id='login' class='request'>";
+        print "<div class='requestIP'>";
+        print $instructions->instructions;
+        print "</div>";
+        print "</div>";
+    }
+}
+?>

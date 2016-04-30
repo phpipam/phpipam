@@ -99,7 +99,7 @@ foreach ($slave_subnets as $slave_subnet) {
 	print "<tr>";
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
-    print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[ip]/$slave_subnet[mask]</a> $fullinfo</td>";
+    print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>".$Subnets->transform_address($slave_subnet['subnet'],"dotted")."/$slave_subnet[mask]</a> $fullinfo</td>";
 
     # custom
     if(isset($visible_fields)) {

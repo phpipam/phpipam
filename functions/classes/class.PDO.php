@@ -408,16 +408,17 @@ abstract class DB {
 	 * @param object|array $obj
 	 * @param bool $raw (default: false)
 	 * @param bool $replace (default: false)
+	 * @param bool $ignoreId (default: true)
 	 * @return void
 	 */
-	public function insertObject($tableName, $obj, $raw = false, $replace = false) {
+	public function insertObject($tableName, $obj, $raw = false, $replace = false, $ignoreId = true) {
 		if (!$this->isConnected()) $this->connect();
 
 		$obj = (array)$obj;
 
 		$tableName = $this->escape($tableName);
 
-		if (!$raw && array_key_exists('id', $obj)) {
+		if (!$raw && array_key_exists('id', $obj) && $ignoreId) {
 			unset($obj['id']);
 		}
 
@@ -465,7 +466,7 @@ abstract class DB {
 	 * @return void
 	 */
 	public function objectExists($tableName, $query = null, $values = array(), $id = null) {
-		return is_object($this->getObject($tableName, $query, $values, $id));
+		return is_object($this->getObject($tableName, $id));
 	}
 
 	/**

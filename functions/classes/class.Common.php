@@ -163,7 +163,7 @@ class Common_functions  {
 		if(strlen($table)==0)   return false;
 		if(is_null($method))	return false;
 		if(is_null($value))		return false;
-		if($value==0)		    return false;
+		if($value===0)		    return false;
 
 		# null method
 		$method = is_null($method) ? "id" : $this->Database->escape($method);
@@ -254,7 +254,7 @@ class Common_functions  {
 	 * fetches settings from database
 	 *
 	 * @access private
-	 * @return none
+	 * @return void
 	 */
 	public function get_settings () {
 		# constant defined
@@ -301,7 +301,7 @@ class Common_functions  {
         $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
         if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$$table][$identifier][$id])) {
+            if (!isset($this->cache[$table][$identifier][$id])) {
                 $this->cache[$table][$identifier][$id] = (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);

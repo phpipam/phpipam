@@ -1327,11 +1327,12 @@ $('.checkAuthMethod').click(function () {
 ***********************/
 $('#instructionsForm').submit(function () {
     var csrf_cookie = $("#instructionsForm input[name=csrf_cookie]").val();
+    var id = $("#instructionsForm input[name=id]").val();
 	var instructions = CKEDITOR.instances.instructions.getData();
 	$('div.instructionsPreview').hide('fast');
 
     showSpinner();
-    $.post('app/admin/instructions/edit-result.php', {instructions:instructions, csrf_cookie:csrf_cookie}, function(data) {
+    $.post('app/admin/instructions/edit-result.php', {instructions:instructions, csrf_cookie:csrf_cookie, id:id}, function(data) {
         $('div.instructionsResult').html(data).fadeIn('fast');
         if(data.search("alert-danger")==-1 && data.search("error")==-1)     	{ $('div.instructionsResult').delay(2000).fadeOut('slow'); hideSpinner(); }
         else                             	{ hideSpinner(); }
