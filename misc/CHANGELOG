@@ -5,6 +5,7 @@
     + Fixed issue with adding domain groups;
     + Fixed sorting and pagination issue on address table;
     + Fixed incorrect top subnets percentage graph;
+    + Fixed folder can nest behind itself causing loop;
 
 == 1.2.1
 

@@ -76,6 +76,12 @@ if($_POST['action']=="add") {
 		$_POST['permissions'] = $parent->permissions;
 	}
 }
+elseif ($_POST['action']=="edit") {
+    /* for nesting - MasterId cannot be the same as subnetId! */
+    if ( $_POST['masterSubnetId']==$_POST['subnetId'] ) {
+    	$Result->show("danger", _('Folder cannot nest behind itself!'), true);
+    }
+}
 
 //check for name length - 2 is minimum!
 if(strlen($_POST['description'])<2 && $_POST['action']!="delete") { $Result->show("danger", _('Folder name must have at least 2 characters')."!", true); }
