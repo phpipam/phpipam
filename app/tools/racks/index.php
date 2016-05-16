@@ -15,7 +15,7 @@ $hidden_custom_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['racks']) ? $hidden_custom_fields['racks'] : array();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "racks");
+$csrf = $User->csrf_cookie ("create", "rack_devices");
 
 # all racks or one ?
 if (isset($_GET['subnetId']))   { include("print-single-rack.php"); }
