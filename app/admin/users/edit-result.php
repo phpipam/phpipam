@@ -36,7 +36,8 @@ if($_POST['action']=="edit"||$_POST['action']=="delete") {
 }
 
 # if password changes check and hash passwords
-if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->type=="local")) {
+if($auth_method->type != "local") { $_POST['password1'] = ""; $_POST['password2'] = ""; }
+if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method->type=="local")) {
 	//checks
 	if($_POST['password1']!=$_POST['password2'])						{ $Result->show("danger", _("Passwords do not match"), true); }
 	if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
