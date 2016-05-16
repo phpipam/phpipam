@@ -379,8 +379,8 @@ class Securimage {
   function Securimage()
   {
     if ( session_id() == '' ) { // no session has been started yet, which is needed for validation
-		require_once( dirname(__FILE__) . '/../../../config.php' ); 
-		if(strlen($phpsessname)>0) { session_name($phpsessname); }      
+		require_once( dirname(__FILE__) . '/../../../config.php' );
+		if(strlen(@$phpsessname)>0) { session_name($phpsessname); }
 		session_start();
     }
   }
