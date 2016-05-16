@@ -473,15 +473,19 @@ class Logging extends Common_functions {
 
 		# formulate
 		$log = array();
-		foreach($changelog as $k=>$l) {
-			$log[] = "$k: $l";
-		}
+        if(isset($changelog)) {
+            if (is_array($changelog)) {
+        		foreach($changelog as $k=>$l) {
+    	    		$log[] = "$k: $l";
+    		    }
+		    }
 
-		# open syslog and write log
-		openlog('phpipam-changelog', LOG_NDELAY | LOG_PID, LOG_USER);
-		syslog(LOG_DEBUG, "changelog | $this->log_username | $this->object_type | $obj_id | $this->object_action | ".date("Y-m-d H:i:s")." | ".implode(", ",$log));
-		# close
-		closelog();
+    		# open syslog and write log
+    		openlog('phpipam-changelog', LOG_NDELAY | LOG_PID, LOG_USER);
+    		syslog(LOG_DEBUG, "changelog | $this->log_username | $this->object_type | $obj_id | $this->object_action | ".date("Y-m-d H:i:s")." | ".implode(", ",$log));
+    		# close
+    		closelog();
+        }
 	}
 
 
@@ -676,7 +680,7 @@ class Logging extends Common_functions {
 			}
 
 			# reformat null values
-			$log =str_replace(": <br>", ": / <br>", $log);
+			$log = str_replace(": <br>", ": / <br>", $log);
 
 			//if change happened write it!
 			if(isset($log) && sizeof($log)>0) {

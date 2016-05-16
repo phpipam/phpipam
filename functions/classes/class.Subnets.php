@@ -844,6 +844,7 @@ class Subnets extends Common_functions {
 
 		while($root === false) {
 			$subd = $this->fetch_object("subnets", "id", $subnetId);		# get subnet details
+
 			if($subd!==false) {
     			$subd = (array) $subd;
 				# not root yet
@@ -1371,16 +1372,10 @@ class Subnets extends Common_functions {
 		            # ignore folders!
 		            if($existing_subnet->isFolder!=1) {
 			            # check overlapping
-						if($this->identify_address($new_subnet)=="IPv4") {
-							if($this->verify_IPv4_subnet_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-								 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-							}
+						if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+							 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
 						}
-						else {
-							if($this->verify_IPv6_subnet_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-								 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-							}
-						}
+
 					}
 	            }
 	        }
@@ -1414,16 +1409,9 @@ class Subnets extends Common_functions {
 			            # ignore folders!
 			            if($existing_subnet->isFolder!=1) {
 				            # check overlapping
-							if($this->identify_address($new_subnet)=="IPv4") {
-								if($this->verify_IPv4_subnet_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-									 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-								}
-							}
-							else {
-								if($this->verify_IPv6_subnet_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-									 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-								}
-							}
+				            if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+								 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+				            }
 						}
 		            }
 	            }
@@ -1450,46 +1438,27 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function verify_nested_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0) {
-		# fetch section subnets
-		$section_subnets = $this->fetch_section_subnets ($sectionId);
+    	# fetch all slave subnets
+    	$slave_subnets = $this->fetch_subnet_slaves ($masterSubnetId);
 		# fix null vrfid
 		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
-		# check
-		if(sizeof($section_subnets)>0) {
-			foreach ($section_subnets as $existing_subnet) {
-	            //only check if vrfId's match
-	            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
-		            # ignore folders!
-		            if($existing_subnet->isFolder!=1) {
-	                	# check if it is nested properly - inside its own parent, otherwise check for overlapping
-	                	$allParents = $this->fetch_parents_recursive($masterSubnetId);
-	                	//loop
-	                	$ignore = false;
-	                	foreach($allParents as $kp=>$p) {
-    	                	//ignore self
-		                	if($existing_subnet->id == $kp) {
-			                	$ignore = true;
-		                	}
-	                	}
-	                	if($ignore === false)  {
-				            # check overlapping
-							if($this->identify_address($new_subnet)=="IPv4") {
-								if($this->verify_IPv4_subnet_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-									 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-								}
-							}
-							else {
-								if($this->verify_IPv6_subnet_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-									 return _("Subnet $new_subnet overlapps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-								}
-							}
-	                    }
-		            }
-	            }
+
+		// loop
+		if ($slave_subnets!==false) {
+			foreach ($slave_subnets as $ss) {
+    			// no folders
+    			if($ss->isFolder!=1) {
+        			if($ss->vrfId==$vrfId || $ss->vrfId==null) {
+        				if($this->verify_overlapping ( $new_subnet, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
+        					return _("Subnet overlapps with")." ".$this->transform_to_dotted($ss->subnet).'/'.$ss->mask;
+        				}
+        			}
+
+    			}
 			}
 		}
-	    # default false - does not overlap
-	    return false;
+        # default false - does not overlap
+		return false;
 	}
 
 	/**
@@ -1581,10 +1550,16 @@ class Subnets extends Common_functions {
 	    $type_nested = $this->identify_address( $cidr );
 
 	    //both must be IPv4 or IPv6
-		if($type_master != $type_nested) { return false; }
+        if($type_master != $type_nested) { return false; }
 
-		//check
-		return $this->is_subnet_inside_subnet ($cidr, $this->transform_to_dotted ($master_details->subnet)."/".$master_details->mask);
+		// if child same as parent return error
+		if ($cidr == $this->transform_address($master_details->subnet)."/".$master_details->mask) {
+    		return false;
+		}
+		else {
+    		//check
+    		return $this->is_subnet_inside_subnet ($cidr, $this->transform_to_dotted ($master_details->subnet)."/".$master_details->mask);
+		}
 	}
 
 	/**
@@ -3218,8 +3193,7 @@ class Subnets extends Common_functions {
 					$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
 				}
 				foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
-					if ($type == 'IPv4') { $overlap = $this->verify_IPv4_subnet_overlapping($cidr_subnet,$unavailable_sub);} //overlap function
-					else {$overlap = $this->verify_IPv6_subnet_overlapping ($cidr_subnet,$unavailable_sub);}
+    				$overlap = $this->verify_overlapping ($cidr_subnet,$unavailable_sub);
 					if ($overlap!==false){
 						$match = 1;
 						break;
