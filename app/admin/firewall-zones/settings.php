@@ -58,7 +58,7 @@ if (!$firewallZoneSettings['subnetPatternValues']) {
 }
 
 # fetch device types and rekey
-$types = $Tools->fetch_all_objects("deviceTypes");
+$types = $Tools->fetch_all_objects("deviceTypes", "tid");
 foreach($types as $t) {
 	$deviceTypes[$t->tid] = $t;
 }
