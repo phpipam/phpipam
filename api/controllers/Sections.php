@@ -140,9 +140,10 @@ class Sections_controller extends Common_api_functions {
 			$this->GET ();
 			// init required objects
 			$this->init_object ("Subnets", $this->Database);
+			$this->init_object ("Addresses", $this->Database);
 			//fetch
 			$result = $this->Subnets->fetch_section_subnets ($this->_params->id);
-            // add gateway
+            		// add gateway
 			if($result!=false) {
 				foreach ($result as $k=>$r) {
     					//gw
@@ -159,6 +160,12 @@ class Sections_controller extends Common_api_functions {
 		                        
 		                        // get usage
 		                        $result[$k]->usage = $this->subnet_usage($r->id);
+		                        
+		                        // fetch addresses
+                    			if(@$this->_params->id3=="addresses") {
+                        			// fetch
+                        			$result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
+                    			}
 				}
 			}
 			// check result
