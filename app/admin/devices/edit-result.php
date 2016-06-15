@@ -83,7 +83,8 @@ $values = array("id"=>@$device['switchId'],
 				"ip_addr"=>@$device['ip_addr'],
 				"type"=>@$device['type'],
 				"description"=>@$device['description'],
-				"sections"=>@$device['sections']
+				"sections"=>@$device['sections'],
+				"sw_version"=>@$device['sw_version']
 				);
 # custom fields
 if(isset($update)) {
