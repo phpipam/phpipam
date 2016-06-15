@@ -241,8 +241,32 @@ else {
 				elseif ($_GET['page']=="tools") {
 					if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
 					else {
-						if(!file_exists("app/tools/$_GET[section]/index.php")) 			{ header("Location: ".create_link("error","404")); }
-						else 															{ include("app/tools/$_GET[section]/index.php"); }
+						$toolSections = array(
+							'changelog',
+							'devices',
+							'favourites',
+							'firewall-zones',
+							'instructions',
+							'ip-calculator',
+							'logs',
+							'pass-change',
+							'powerDNS',
+							'request-ip',
+							'requests',
+							'scanned-networks',
+							'search',
+							'subnet-masks',
+							'subnets',
+							'temp-shares',
+							'user-menu',
+							'vlan',
+							'vrf'
+						);
+						if(!in_array($_GET['section'], $toolSections)) {
+							header("Location: ".create_link("error","404"));
+						}else {
+							include("app/tools/$_GET[section]/index.php");
+						}
 					}
 				}
 				# admin
@@ -253,8 +277,42 @@ else {
 					if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 					elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
 					else {
-						if(!file_exists("app/admin/$_GET[section]/index.php")) 			{ header("Location: ".create_link("error","404")); }
-						else 															{ include("app/admin/$_GET[section]/index.php"); }
+						$adminSections = array(
+							'api',
+							'authentication-methods',
+							'custom-fields',
+							'device',
+							'device-types',
+							'filter-fields',
+							'firewall-zones',
+							'groups',
+							'import-export',
+							'instructions',
+							'languages',
+							'mail',
+							'nameservers',
+							'powerDNS',
+							'replace-fields',
+							'requests',
+							'ripe-import',
+							'scan-agents',
+							'sections',
+							'settings',
+							'subnets',
+							'tags',
+							'users',
+							'verify-database',
+							'version-check',
+							'vlans',
+							'vrfs',
+							'widgets'
+						);
+
+						if(!in_array($_GET['section'], $adminSections)) {
+							header("Location: ".create_link("error","404"));
+						}else {
+							include("app/admin/$_GET[section]/index.php");
+						}
 					}
 				}
 				# default - error
