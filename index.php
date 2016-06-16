@@ -38,6 +38,7 @@ elseif($_GET['page']=="upgrade")	{ require("app/upgrade/index.php"); }
 elseif($_GET['page']=="login")		{ require("app/login/index.php"); }
 elseif($_GET['page']=="temp_share")	{ require("app/temp_share/index.php"); }
 elseif($_GET['page']=="request_ip")	{ require("app/login/index.php"); }
+elseif($_GET['page']=="opensearch")	{ require("app/tools/search/opensearch.php"); }
 else {
 	# verify that user is logged in
 	$User->check_user_session();
@@ -72,6 +73,9 @@ else {
 
 	<!-- title -->
 	<title><?php print $User->settings->siteTitle; ?></title>
+	
+	<!-- OpenSearch -->
+	<link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="Search <?php print $User->settings->siteTitle; ?>">
 
 	<!-- css -->
 	<link rel="shortcut icon" type="image/png" href="css/1.2/images/favicon.png">

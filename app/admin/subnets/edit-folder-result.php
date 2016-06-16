@@ -65,7 +65,6 @@ if(sizeof($custom) > 0) {
 unset ($_POST['subnet'],$_POST['allowRequests'],$_POST['showName'],$_POST['pingSubnet'],$_POST['discoverSubnet']);
 unset ($subnet_old_details['subnet'],$subnet_old_details['allowRequests'],$subnet_old_details['showName'],$subnet_old_details['pingSubnet'],$subnet_old_details['discoverSubnet']);
 
-
 # Set permissions if adding new subnet
 if($_POST['action']=="add") {
 	# root
@@ -78,6 +77,12 @@ if($_POST['action']=="add") {
 		$parent = $Subnets->fetch_subnet(null, $_POST['masterSubnetId']);
 		$_POST['permissions'] = $parent->permissions;
 	}
+}
+elseif ($_POST['action']=="edit") {
+    /* for nesting - MasterId cannot be the same as subnetId! */
+    if ( $_POST['masterSubnetId']==$_POST['subnetId'] ) {
+    	$Result->show("danger", _('Folder cannot nest behind itself!'), true);
+    }
 }
 
 //check for name length - 2 is minimum!
