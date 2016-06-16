@@ -73,7 +73,7 @@ else {
 
 	<!-- title -->
 	<title><?php print $User->settings->siteTitle; ?></title>
-	
+
 	<!-- OpenSearch -->
 	<link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="Search <?php print $User->settings->siteTitle; ?>">
 
@@ -241,7 +241,8 @@ else {
 				elseif ($_GET['page']=="tools") {
 					if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
 					else {
-						if(!file_exists("app/tools/$_GET[section]/index.php")) 			{ header("Location: ".create_link("error","404")); }
+                        if (!in_array($_GET['section'], $tools_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+						elseif (!file_exists("app/tools/$_GET[section]/index.php")) 	{ header("Location: ".create_link("error","404")); die(); }
 						else 															{ include("app/tools/$_GET[section]/index.php"); }
 					}
 				}
@@ -253,13 +254,14 @@ else {
 					if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 					elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
 					else {
-						if(!file_exists("app/admin/$_GET[section]/index.php")) 			{ header("Location: ".create_link("error","404")); }
+                        if (!in_array($_GET['section'], $admin_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+						elseif(!file_exists("app/admin/$_GET[section]/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
 						else 															{ include("app/admin/$_GET[section]/index.php"); }
 					}
 				}
 				# default - error
 				else {
-																						{ header("Location: ".create_link("error","404")); }
+																						{ header("Location: ".create_link("error","400")); die(); }
 				}
 			print "</div>";
 			print "</td>";

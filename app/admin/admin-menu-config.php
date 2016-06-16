@@ -56,4 +56,41 @@ $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-check", 				"name"=>"Ve
 $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-magic", 				"name"=>"Verify database", 			"href"=>"verify-database", 			"description"=>"Verify that database files are installed ok");
 $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search-plus", 			"name"=>"Replace fields", 			"href"=>"replace-fields", 			"description"=>"Search and replace content in database");
 
+
+# inclusion check
+$admin_menu_items = array(
+                        'api',
+                		'authentication-methods',
+                		'custom-fields',
+                		'dhcp',
+                		'devices',
+                		'device-types',
+                		'filter-fields',
+                		'firewall-zones',
+                		'groups',
+                		'import-export',
+                		'instructions',
+                		'languages',
+                		'mail',
+                		'nameservers',
+                		'powerDNS',
+                		'racks',
+                		'replace-fields',
+                		'requests',
+                		'ripe-import',
+                		'scan-agents',
+                		'sections',
+                		'settings',
+                		'snmp',
+                		'subnets',
+                		'tags',
+                		'users',
+                		'verify-database',
+                		'version-check',
+                		'vlans',
+                		'vrfs',
+                		'widgets'
+                    );
+
+
 ?>

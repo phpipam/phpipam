@@ -46,4 +46,31 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-share-alt",  "name"=
 
 # user menu
 $tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
+
+
+# inclusion check
+$tools_menu_items = array(
+						'changelog',
+						'dhcp',
+						'devices',
+						'favourites',
+						'firewall-zones',
+						'instructions',
+						'ip-calculator',
+						'logs',
+						'multicast-networks',
+						'pass-change',
+						'powerDNS',
+						'request-ip',
+						'requests',
+						'racks',
+						'scanned-networks',
+						'search',
+						'subnet-masks',
+						'subnets',
+						'temp-shares',
+						'user-menu',
+						'vlan',
+						'vrf'
+                    );
 ?>
