@@ -143,29 +143,29 @@ class Sections_controller extends Common_api_functions {
 			$this->init_object ("Addresses", $this->Database);
 			//fetch
 			$result = $this->Subnets->fetch_section_subnets ($this->_params->id);
-            		// add gateway
+            // add gateway
 			if($result!=false) {
 				foreach ($result as $k=>$r) {
     					//gw
-            				$gateway = $this->read_subnet_gateway ($r->id);
-		            		if ( $gateway!== false) {
-		                		$result[$k]->gatewayId = $gateway->id;
-		            		}
-		            		
-		            		//nameservers
-		            		$ns = $this->read_subnet_nameserver ($r->nameserverId);
-		                        if ($ns!==false) {
-		                                $result[$k]->nameservers = $ns;
-		                        }
-		                        
-		                        // get usage
-		                        $result[$k]->usage = $this->subnet_usage($r->id);
-		                        
-		                        // fetch addresses
-                    			if(@$this->_params->id3=="addresses") {
-                        			// fetch
-                        			$result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
-                    			}
+        				$gateway = $this->read_subnet_gateway ($r->id);
+	            		if ( $gateway!== false) {
+	                		$result[$k]->gatewayId = $gateway->id;
+	            		}
+
+	            		//nameservers
+	            		$ns = $this->read_subnet_nameserver ($r->nameserverId);
+                        if ($ns!==false) {
+                                $result[$k]->nameservers = $ns;
+                        }
+
+                        // get usage
+                        $result[$k]->usage = $this->read_subnet_usage($r->id);
+
+                        // fetch addresses
+            			if(@$this->_params->id3=="addresses") {
+                			// fetch
+                			$result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
+            			}
 				}
 			}
 			// check result
@@ -335,32 +335,33 @@ class Sections_controller extends Common_api_functions {
 	private function read_subnet_nameserver ($nsid) {
     	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
-	
+
 	/**
-     	 * Calculates subnet usage
-         *
-     	 * @access private
-     	 * @return void
-     	 */
-	private function subnet_usage ($subnetId) {
-	        # check that section exists
-	        if(sizeof($subnet = $this->Subnets->fetch_subnet ("id", $subnetId))==0)
-	           { $this->Response->throw_exception(400, "Subnet does not exist"); }
-	
-	        # set slaves
-	        $slaves = $this->Subnets->has_slaves ($subnetId) ? true : false;
-	
-	        # fetch all addresses and calculate usage
-	        if($slaves) {
-	            $addresses = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
-	        } else {
-	            $addresses = $this->Addresses->fetch_subnet_addresses ($subnetId);
-	        }
-	        // calculate
-	        $subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet, $subnet->isFull );     //Calculate free/used etc
-	
-	        # return
-	        return $subnet_usage;
+ 	 * Calculates subnet usage
+	 *
+	 * @access private
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	private function read_subnet_usage ($subnetId) {
+        # check that section exists
+        if(sizeof($subnet = $this->Subnets->fetch_subnet ("id", $subnetId))==0)
+           { $this->Response->throw_exception(400, "Subnet does not exist"); }
+
+        # set slaves
+        $slaves = $this->Subnets->has_slaves ($subnetId) ? true : false;
+
+        # fetch all addresses and calculate usage
+        if($slaves) {
+            $addresses = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
+        } else {
+            $addresses = $this->Addresses->fetch_subnet_addresses ($subnetId);
+        }
+        // calculate
+        $subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet, $subnet->isFull );     //Calculate free/used etc
+
+        # return
+        return $subnet_usage;
 	 }
 }
 
