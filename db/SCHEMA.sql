@@ -142,7 +142,7 @@ CREATE TABLE `settings` (
   `enablePowerDNS` TINYINT(1)  NULL  DEFAULT '0',
   `powerDNS` TEXT  NULL,
   `enableDHCP` TINYINT(1)  NULL  DEFAULT '0',
-  `DHCP` TEXT  NULL default '{"type":"kea","settings":{"file":"\/etc\/kea\/kea.conf"}}',
+  `DHCP` VARCHAR(256) NULL default '{"type":"kea","settings":{"file":"\/etc\/kea\/kea.conf"}}',
   `enableMulticast` TINYINT(1)  NULL  DEFAULT '0',
   `enableNAT` TINYINT(1)  NULL  DEFAULT '0',
   `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
