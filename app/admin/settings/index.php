@@ -226,6 +226,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- dHCP -->
+<tr>
+	<td class="title"><?php print _('Enable DHCP'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableDHCP" <?php if($settings['enableDHCP'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable DHCP module'); ?>
+	</td>
+</tr>
+
 <!-- firewall zone management -->
 <tr>
 	<td class="title"><?php print _('Enable Firewall Zones'); ?></td>

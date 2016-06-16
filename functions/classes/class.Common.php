@@ -18,6 +18,16 @@ class Common_functions  {
 	public $settings = null;
 
 	/**
+	 * If Jdon validation error occurs it will be saved here
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $json_error = false;
+
+	/**
 	 * Cache file to store all results from queries to
 	 *
 	 *  structure:
@@ -462,11 +472,16 @@ class Common_functions  {
     	$out = array();
     	// loop
 		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-				$out[$k] = 	$char;
-			} else {
-				$out[$k] = $v;
-			}
+    		if(is_array($v)) {
+        		$out[$k] = $v;
+    		}
+    		else {
+    			if(is_null($v) || strlen($v)==0) {
+    				$out[$k] = 	$char;
+    			} else {
+    				$out[$k] = $v;
+    			}
+    		}
 		}
 		# result
 		return $out;
@@ -778,6 +793,43 @@ class Common_functions  {
     	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1)   { return false; }
     	else                                                                            { return true; }
 	}
+
+    /**
+     * Validates json from provided string.
+     *
+     * @access public
+     * @param mixed $string
+     * @return void
+     */
+    public function validate_json_string($string) {
+        // for older php versions make sure that function "json_last_error_msg" exist and create it if not
+        if (!function_exists('json_last_error_msg')) {
+            function json_last_error_msg() {
+                static $ERRORS = array(
+                    JSON_ERROR_NONE => 'No error',
+                    JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
+                    JSON_ERROR_STATE_MISMATCH => 'State mismatch (invalid or malformed JSON)',
+                    JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
+                    JSON_ERROR_SYNTAX => 'Syntax error',
+                    JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded'
+                );
+
+                $error = json_last_error();
+                return isset($ERRORS[$error]) ? $ERRORS[$error] : 'Unknown error';
+            }
+        }
+
+        // try to decode
+        json_decode($string);
+        // check for error
+        $parse_result = json_last_error_msg();
+        // save possible error
+        if($parse_result!=="No error") {
+            $this->json_error = $parse_result;
+        }
+        // return true / false
+        return (json_last_error() == JSON_ERROR_NONE);
+    }
 
 	/**
 	 * Transforms ipv6 to nt

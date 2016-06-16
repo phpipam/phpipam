@@ -54,7 +54,7 @@ else {
 	print "	<th>"._('Type')."</th>";
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Date')."</th>";
-	print "	<th>"._('Change')."</th>";
+	print "	<th class='hidden-xs'>"._('Change')."</th>";
 	print "</tr>";
 
 	# logs
@@ -105,7 +105,7 @@ else {
 					print "	<td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
 				}
 				print "	<td>$l[cdate]</td>";
-				print "	<td>$l[cdiff]</td>";
+				print "	<td class='hidden-xs'>$l[cdiff]</td>";
 				print "</tr>";
 
 				// next item

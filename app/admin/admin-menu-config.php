@@ -10,6 +10,7 @@ $admin_menu_icons['Server management'] 		= "fa-cogs";
 $admin_menu_icons['IP related management'] 	= "fa-sitemap";
 $admin_menu_icons['Tools'] 					= "fa-wrench";
 
+
 # Server management
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"name"=>"phpIPAM settings", 		"href"=>"settings", 				"description"=>"phpIPAM server settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-user",		"name"=>"Users", 					"href"=>"users",					"description"=>"User management");
@@ -19,7 +20,9 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-envelope-o"
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"name"=>"API", 						"href"=>"api", 						"description"=>"API settings");
 if($User->settings->enablePowerDNS==1)
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-database", 	"name"=>"PowerDNS", 				"href"=>"powerDNS", 				"description"=>"PowerDNS settings");
-$admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-user-secret", 	"name"=>"Scan agents", 				"href"=>"scan-agents", 				"description"=>"phpipam Scan agents");
+if($User->settings->enableDHCP==1)
+$admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"DHCP",  		        "href"=>"dhcp",                     "description"=>"DHCP settings");
+$admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-user-secret", 	"name"=>"Scan agents", 			"href"=>"scan-agents", 			"description"=>"phpipam Scan agents");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-language", 	"name"=>"Languages", 				"href"=>"languages", 				"description"=>"Manage languages");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-tachometer","name"=>"Widgets", 					"href"=>"widgets", 					"description"=>"Manage widget settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-tag", 		"name"=>"Tags", 					"href"=>"tags", 					"description"=>"Manage tags");

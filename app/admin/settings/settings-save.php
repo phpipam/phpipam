@@ -73,6 +73,7 @@ $values = array("id"=>1,
 				"enableChangelog"=>$Admin->verify_checkbox(@$_POST['enableChangelog']),
 				"tempShare"=>$Admin->verify_checkbox(@$_POST['tempShare']),
 				"enablePowerDNS"=>$Admin->verify_checkbox(@$_POST['enablePowerDNS']),
+				"enableDHCP"=>$Admin->verify_checkbox(@$_POST['enableDHCP']),
 				"enableFirewallZones"=>$Admin->verify_checkbox(@$_POST['enableFirewallZones']),
 				"log"=>@$_POST['log'],
 				//display

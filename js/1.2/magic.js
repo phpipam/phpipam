@@ -215,6 +215,8 @@ $(function() {
 //default row count
 if(readCookie('table-page-size')==null) { def_size = 25; }
 else                                    { def_size = readCookie('table-page-size'); }
+
+
 // table
 $('table.sorted').bdt({
    pageRowCount: def_size,

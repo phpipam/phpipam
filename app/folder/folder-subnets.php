@@ -116,7 +116,7 @@ if($slaves) {
 				print "<tr>";
 			    print "	<td class='small'>".$vlan['number']."</td>";
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
-			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[ip]/$slave[mask] $fullinfo</a></td>";
+			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>".$Subnets->transform_address($slave['subnet'], "dotted")."/$slave[mask] $fullinfo</a></td>";
 
 				# print usage
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
