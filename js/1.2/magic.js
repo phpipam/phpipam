@@ -695,9 +695,9 @@ $(document).on("click", "#subnetstemplate", function() {
 
 
 //download ip address template
-$(document).on("click", "#ipaddresstemplate", function() {
+$(document).on("click", "#ipaddrtemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=ipaddress'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=ipaddr'></iframe></div>");
 
 
 	return false;
@@ -2693,8 +2693,8 @@ $('button#hostfileDump').click(function () {
 });
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets"]; var popsize = {};
-	popsize["subnets"] = "w700";
+	var implemented = ["vrf","vlan","subnets","ipaddr"]; var popsize = {};
+	popsize["subnets"] = "w700"; popsize["ipaddr"] = "w700";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2740,6 +2740,12 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			var exportSections = $('form#selectExportSections').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-subnets.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'ipaddr':
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-ipaddr.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
 	}
@@ -2807,8 +2813,8 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
-	popsize["subnets"] = "max";
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
+	popsize["subnets"] = "max";popsize["ipaddr"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window, if implemented
@@ -2835,8 +2841,8 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
-	popsize["subnets"] = "max"; popsize["recompute"] = "max";
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
+	popsize["subnets"] = "max"; popsize["recompute"] = "max"; popsize["ipaddr"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
 	hidePopups();
@@ -2863,8 +2869,8 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute"]; var popsize = {};
-	popsize["subnets"] = "max";	popsize["recompute"] = "max";
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
+	popsize["subnets"] = "max";	popsize["recompute"] = "max"; popsize["ipaddr"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
 	hidePopups();
