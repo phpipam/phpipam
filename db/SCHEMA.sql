@@ -294,6 +294,7 @@ CREATE TABLE `devices` (
   `rack_start` int(11) unsigned DEFAULT null,
   `rack_size` int(11) unsigned DEFAULT null,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `sw_version` VARCHAR(32) DEFAULT NULL
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
