@@ -93,7 +93,7 @@ foreach($scan_subnets as $s) {
 			$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
 		}
 		//save addresses
-		if(sizeof($subnet_addresses)>1) {
+		if(sizeof($subnet_addresses)>0) {
 			foreach($subnet_addresses as $a) {
 				//ignore excludePing
 				if($a->excludePing!=1) {
