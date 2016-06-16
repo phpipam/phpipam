@@ -172,6 +172,7 @@ if(sizeof($address)>1) {
 	elseif($tDiff < $statuses[1])							{ $seen_status = "warning"; 	$seen_text = _("Device warning")."<br>"._("Last seen").": ".$address['lastSeen']; }
 	elseif($tDiff > $statuses[1])							{ $seen_status = "error"; 		$seen_text = _("Device is offline")."<br>"._("Last seen").": ".$address['lastSeen'];}
 	elseif($address['lastSeen'] == "0000-00-00 00:00:00") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
+	elseif($address['lastSeen'] == "1970-01-01 00:00:01") 	{ $seen_status = "neutral"; 	$seen_text = _("Device is offline")."<br>"._("Last seen").": "._("Never");}
 	else													{ $seen_status = "neutral"; 	$seen_text = _("Device status unknown");}
 
 	print "	<th>"._('Availability')."<br><span class='status status-ip status-$seen_status' style='pull-right'></span></th>";

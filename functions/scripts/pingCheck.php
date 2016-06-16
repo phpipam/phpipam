@@ -365,7 +365,7 @@ if(sizeof($address_change)>0 && $send_mail) {
 		//set section
 		$section 	 = $Tools->fetch_object("sections", "id", $subnet->sectionId);
 		//ago
-		if(is_null($change['lastSeen']) || $change['lastSeen']=="0000-00-00 00:00:00") {
+		if(is_null($change['lastSeen']) || $change['lastSeen']=="1970-01-01 00:00:01" || $change['lastSeen']=="0000-00-00 00:00:00") {
 			$ago	  = "never";
 		} else {
 			$timeDiff = $now - strtotime($change['lastSeen']);

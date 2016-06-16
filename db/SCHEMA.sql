@@ -30,7 +30,7 @@ CREATE TABLE `ipaddresses` (
   `switch` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `port` varchar(32) DEFAULT NULL,
   `note` text,
-  `lastSeen` DATETIME  NULL  DEFAULT '0000-00-00 00:00:00',
+  `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01',
   `excludePing` BINARY  NULL  DEFAULT '0',
   `PTRignore` BINARY  NULL  DEFAULT '0',
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
