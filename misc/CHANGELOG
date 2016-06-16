@@ -21,6 +21,7 @@
 	    + If subnet gateway defined gatewayId is returned in subnet details;
 	    + Automatically add nameservers to subnet results;
 	    + Creating address with POST /api/appid/{subnetId}/first_free/ will automatically give first available IP;
+	    + Search by hostname /app/appid/search/search_hostname/;
     + Widgets:
         + New threshold widget;
         + New inactive hosts widget;

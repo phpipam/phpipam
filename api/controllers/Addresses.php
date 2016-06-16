@@ -260,6 +260,13 @@ class Addresses_controller extends Common_api_functions  {
 			if($result===false)							{ $this->Response->throw_exception(404, 'Address not found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)); }
 		}
+        // search host ?
+        elseif (@$this->_params->id=="search_hostname") {
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "dns_name", $this->_params->id2);
+            // check result
+            if($result===false)                         { $this->Response->throw_exception(404, 'Host name not found'); }
+            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+    }
 		// false
 		else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
