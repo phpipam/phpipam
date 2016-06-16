@@ -213,7 +213,7 @@ class adLDAPUsers {
     * @param bool $isGUID Is the username passed a GUID or a samAccountName
     * @return array
     */
-    public function info($username, $fields = NULL, $isGUID = false)
+    public function info($username, $fields = NULL, $isGUID = false, $type = NULL)
     {
         if ($username === NULL) { return false; }
         if (!$this->adldap->getLdapBind()) { return false; }
@@ -226,9 +226,15 @@ class adLDAPUsers {
              $filter = "userPrincipalName=" . $username;
         }
         else {
-             $filter = ($type == "NetIQ")? "cn=" . $username:"samaccountname=" . $username;
+             if ($type == "NetIQ") {
+                $filter = "cn=" . $username;
+             } elseif ($type == "LDAP") {
+                $filter = "uid=" . $username;
+             } else {
+                $filter = "samaccountname=" . $username;
+             }
         }
-        $filter = ($type == "NetIQ")? "(&(objectClass=person)({$filter}))":"(&(objectCategory=person)({$filter}))";
+        $filter = ($type == "NetIQ" or $type == "LDAP") ? "(&(objectClass=person)({$filter}))":"(&(objectCategory=person)({$filter}))";
         if ($fields === NULL) { 
             $fields = array("samaccountname","mail","memberof","department","displayname","telephonenumber","primarygroupid","objectsid"); 
         }
