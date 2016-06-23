@@ -461,7 +461,7 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function subnet_usage () {
 		# check that section exists
-		if(sizeof($subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id))==0)
+		if($subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id)===false)
 														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
 
 		# set slaves
@@ -702,7 +702,7 @@ class Subnets_controller extends Common_api_functions {
 		if(!isset($this->_params->masterSubnetId) || $this->_params->masterSubnetId=="0") 			{ $this->_params->masterSubnetId = 0; }
 		else {
 			// validate subnet
-			if(sizeof($this->Subnets->fetch_subnet ("id", $this->_params->masterSubnetId))==0)		{ $this->Response->throw_exception(400, "Master Subnet does not exist (id=".$this->_params->masterSubnetId.")"); }
+			if($this->Subnets->fetch_subnet ("id", $this->_params->masterSubnetId)===false)		     { $this->Response->throw_exception(400, "Master Subnet does not exist (id=".$this->_params->masterSubnetId.")"); }
 			// check that it is inside subnet
 			else {
 				// not fr folders

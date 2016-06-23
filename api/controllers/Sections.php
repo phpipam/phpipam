@@ -178,7 +178,7 @@ class Sections_controller extends Common_api_functions {
 			if(is_numeric($this->_params->id)) {
 				$result = $this->Sections->fetch_section ("id", $this->_params->id);
 				// check result
-				if(sizeof($result)==0) 					{ $this->Response->throw_exception(404, NULL); }
+				if($result===false) 					{ $this->Response->throw_exception(404, "Section does not exist"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			# return custom fields
@@ -269,7 +269,7 @@ class Sections_controller extends Common_api_functions {
 		# Check for id
 		if(!isset($this->_params->id))					{ $this->Response->throw_exception(400, "Section Id required"); }
 		# check that section exists
-		if(sizeof($this->Sections->fetch_section ("id", $this->_params->id))==0)
+		if($this->Sections->fetch_section ("id", $this->_params->id)===false)
 														{ $this->Response->throw_exception(404, "Section does not exist"); }
 
 		# validate and prepare keys
@@ -298,7 +298,7 @@ class Sections_controller extends Common_api_functions {
 		# Check for id
 		if(!isset($this->_params->id))					{ $this->Response->throw_exception(400, "Section Id required"); }
 		# check that section exists
-		if(sizeof($this->Sections->fetch_section ("id", $this->_params->id))==0)
+		if($this->Sections->fetch_section ("id", $this->_params->id)===false)
 														{ $this->Response->throw_exception(404, "Section does not exist"); }
 
 		# set variables for update
@@ -345,7 +345,7 @@ class Sections_controller extends Common_api_functions {
 	 */
 	private function read_subnet_usage ($subnetId) {
         # check that section exists
-        if(sizeof($subnet = $this->Subnets->fetch_subnet ("id", $subnetId))==0)
+        if($subnet = $this->Subnets->fetch_subnet ("id", $subnetId)===false)
            { $this->Response->throw_exception(400, "Subnet does not exist"); }
 
         # set slaves
