@@ -267,12 +267,20 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Select to which groups the user belongs to'); ?></td>
 	</tr>
 
-	<!-- pdns -->
-    <?php if ($User->settings->enablePowerDNS==1) { ?>
-	<tbody>
+	<!-- vlans -->
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
+	<tr>
+    	<td><?php print _("VLANs"); ?></td>
+    	<td>
+            <input type="checkbox" class="input-switch" value="Yes" name="editVlan" <?php if(@$user->editVlan == "Yes") print 'checked'; ?>>
+    	</td>
+		<td class="info2"><?php print _('Select to allow user to manage VLANs'); ?></td>
+	</tr>
+
+	<!-- pdns -->
+    <?php if ($User->settings->enablePowerDNS==1) { ?>
 	<tr>
     	<td><?php print _("PowerDNS"); ?></td>
     	<td>

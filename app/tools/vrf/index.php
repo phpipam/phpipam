@@ -15,7 +15,7 @@ $vrfs = $Tools->fetch_all_objects("vrf", "vrfId");
 # title
 print "<h4>"._('Available VRFs and belonging subnets')."</h4>";
 print "<hr>";
-if($User->is_admin()) {
+if($User->is_admin(false)) {
 	print "<a class='btn btn-sm btn-default' href='".create_link("administration","vrfs")."' data-action='add'  data-switchid=''><i class='fa fa-pencil'></i> ". _('Manage')."</a>";
 }
 

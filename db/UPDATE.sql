@@ -548,3 +548,6 @@ UPDATE `settings` set `donate` = 0;
 /* add DHCP to settings */
 ALTER TABLE `settings` ADD `enableDHCP` TINYINT(1)  NULL  DEFAULT '0'  AFTER `powerDNS`;
 ALTER TABLE `settings` ADD `DHCP` VARCHAR(256) NULL default '{"type":"kea","settings":{"file":"\/etc\/kea\/kea.conf"}}'  AFTER `enableDHCP`;
+
+/* permit normal users to manage VLANs */
+ALTER TABLE `users` ADD `editVlan` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `pdns`;

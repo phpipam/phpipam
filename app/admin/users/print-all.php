@@ -37,7 +37,10 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
     <th><?php print _('Role'); ?></th>
     <th><?php print _('Language'); ?></th>
     <th><?php print _('Authentication'); ?></th>
+    <?php if ($User->settings->enablePowerDNS==1) { ?>
     <th><?php print _('PowerDNS'); ?></th>
+    <?php } ?>
+    <th><?php print _('Manage VLANs'); ?></th>
     <th><?php print _('Groups'); ?></th>
     <th><?php print _('Last login'); ?></th>
 	<?php
@@ -89,9 +92,23 @@ foreach ($users as $user) {
 	print "</span></td>";
 
 	# powerDNS
-	print "<td>";
-	print $user['pdns'];
-	print "</td>";
+	if($user['role']=="Administrator") {
+     	print "<td>"._("Yes")."</td>";
+     	print "<td>"._("Yes")."</td>";
+	}
+	else {
+    	if ($User->settings->enablePowerDNS==1) {
+    	if(strlen($user['pdns'])==0) $user['pdns'] = "No";
+    	print "<td>";
+    	print $user['pdns'];
+    	print "</td>";
+    	}
+
+    	if(strlen($user['editVlan'])==0) $user['editVlan'] = "No";
+    	print "<td>";
+    	print $user['editVlan'];
+    	print "</td>";
+	}
 
 	# groups
 	if($user['role'] == "Administrator") {
