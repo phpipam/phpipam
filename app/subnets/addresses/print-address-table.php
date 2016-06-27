@@ -183,8 +183,8 @@ else {
 	       	else {
 	       		// compressed and dhcp?
 	       		if($addresses[$n-1]->class=="compressed-range") 	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->stopIP, $addresses[$n]->ip_addr, $subnet['mask'] );  }
-	       		//uncompressed
-	       		else 												{ $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr, $subnet['mask'] );  }
+	       		// ignore /31 networks
+	       		elseif($subnet['mask']!=31)                         { $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr, $subnet['mask'] );  }
 	       	}
 
 	       	# if there is some result for unused print it - if sort == ip_addr
