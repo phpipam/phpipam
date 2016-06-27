@@ -170,6 +170,11 @@ foreach ($found as $k1=>$f) {
             }
         }
     }
+
+    // remove Port-channel
+    if(strpos(strtolower($f['port']), "port-channel")!==false) {
+        unset($found[$k1]);
+    }
 }
 
 
