@@ -551,3 +551,6 @@ ALTER TABLE `settings` ADD `DHCP` VARCHAR(256) NULL default '{"type":"kea","sett
 
 /* permit normal users to manage VLANs */
 ALTER TABLE `users` ADD `editVlan` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `pdns`;
+
+/* remove permitUserVlanCreate - not needed */
+ALTER TABLE `settings` DROP `permitUserVlanCreate`;

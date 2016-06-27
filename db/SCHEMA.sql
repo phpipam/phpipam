@@ -158,7 +158,6 @@ CREATE TABLE `settings` (
   `subnetOrdering` varchar(16) DEFAULT 'subnet,asc',
   `visualLimit` int(2) NOT NULL DEFAULT '0',
   `autoSuggestNetwork` TINYINT(1)  NOT NULL  DEFAULT '0',
-  `permitUserVlanCreate` TINYINT(1)  NOT NULL  DEFAULT '0',
   `pingStatus` VARCHAR(12)  NOT NULL  DEFAULT '1800;3600',
   `defaultLang` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
