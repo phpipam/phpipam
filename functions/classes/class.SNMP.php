@@ -189,7 +189,7 @@ class phpipamSNMP extends Common_functions {
     	// get vlans
     	$this->snmp_queries['get_vlan_table'] = new StdClass();
     	$this->snmp_queries['get_vlan_table']->id  = 6;
-    	$this->snmp_queries['get_vlan_table']->oid = ".1.3.6.1.4.1.9.9.46.1.3.1.1.4";
+    	$this->snmp_queries['get_vlan_table']->oid_num = ".1.3.6.1.4.1.9.9.46.1.3.1.1.4";
     	$this->snmp_queries['get_vlan_table']->oid = "CISCO-VTP-MIB::vtpVlanName";
     	$this->snmp_queries['get_vlan_table']->description = "Fetches VLAN table";
 
@@ -693,6 +693,7 @@ class phpipamSNMP extends Common_functions {
         foreach ($res1 as $k=>$r) {
             // set number
             $k = str_replace($this->snmp_queries["get_vlan_table"]->oid.".1.", "", $k);
+            $k = array_pop(explode(".", $k));
             // set value
             $r  = trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
             $res[$k] = $r;
