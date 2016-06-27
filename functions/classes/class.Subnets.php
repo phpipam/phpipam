@@ -2101,6 +2101,26 @@ class Subnets extends Common_functions {
     	return $mac;
 	}
 
+	/**
+	 * Finds duplicate mac address
+	 *
+	 * @access public
+	 * @param mixed $address_id
+	 * @return void
+	 */
+	public function find_duplicate_multicast_mac ($address_id, $mac) {
+    	// query
+    	$query = "select i.ip_addr,i.subnetId,s.sectionId,s.description,s.isFolder,se.name from `ipaddresses` as `i`, `subnets` as `s`, `sections` as `se` where `i`.`mac` = ? and `i`.`id` != ? and `se`.`id`=`s`.`sectionId` and `i`.`subnetId`=`s`.`id`";
+		// fetch
+		try { $res = $this->Database->getObjectsQuery($query, array($mac, $address_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		// return
+		return sizeof($res)>0 ? $res : false;
+	}
+
     /**
      * Checks if address exists in database
      *

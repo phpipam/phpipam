@@ -178,7 +178,7 @@ else {
 	       	#
 
 	       	# check gap between network address and first IP address
-	       	if ( $n == 0 ) 											{ $unused = $Addresses->find_unused_addresses ( $Subnets->transform_to_decimal($subnet_detailed['network']), $addresses[$n]->ip_addr, $subnet['mask']); }
+	       	if ( $n == 0) 											{ $unused = $Addresses->find_unused_addresses ( $Subnets->transform_to_decimal($subnet_detailed['network']), $addresses[$n]->ip_addr, $subnet['mask']); }
 	       	# check unused space between IP addresses
 	       	else {
 	       		// compressed and dhcp?
@@ -364,11 +364,33 @@ else {
             	    # multicast check
             	    if ($User->settings->enableMulticast==1 && $Subnets->is_multicast ($addresses[$n]->ip_addr)) {
                 	    $mtest = $Subnets->validate_multicast_mac ($addresses[$n]->mac, $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE, $addresses[$n]->id);
-                	    if ($mtest !== true) { $mclass = "text-danger"; $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>"; }
-                	    else                 { $mclass = ""; $minfo = ""; }
+                	    // if duplicate
+                	    if ($mtest !== true) {
+                            // find duplicate
+                            $duplicates = $Subnets->find_duplicate_multicast_mac ($addresses[$n]->id, $addresses[$n]->mac);
+
+                            $mclass = "text-danger";
+                            $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>";
+                            // formulate object
+                            if ($duplicates!==false) {
+                                $mobjects = "<hr><p class='muted'>Duplicated addresses:</p>";
+                                foreach ($duplicates as $d) {
+                                    $type = $d->isFolder==1 ? "folder" : "subnets";
+                                    $mobjects .= "<span class='muted' style='padding-left:15px;'><i class='fa fa-angle-right'></i> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
+                                }
+                            }
+                            else {
+                                $mobjects = "";
+                            }
+                	    }
+                	    else {
+                    	    $mclass = "";
+                    	    $minfo = "";
+                    	    $mobjects = "";
+                	    }
                     }
 					// multicast ?
-					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($addresses[$n]->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$addresses[$n]->mac." $minfo</td>"; }
+					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($addresses[$n]->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$addresses[$n]->mac." $minfo $mobjects</td>"; }
 					elseif(!empty($addresses[$n]->mac)) 				{ print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' title='"._('MAC').": ".$addresses[$n]->mac."'></i></td>"; }
 					else 												{ print "<td class='narrow'></td>"; }
 				}

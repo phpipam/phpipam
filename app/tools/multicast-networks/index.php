@@ -160,11 +160,34 @@ if ($subnets!==false) {
                 	    # multicast check
                 	    if ($User->settings->enableMulticast==1 && $Subnets->is_multicast ($address->ip_addr)) {
                     	    $mtest = $Subnets->validate_multicast_mac ($address->mac, $subnet->sectionId, $subnet->vlanId, MCUNIQUE, $address->id);
-                    	    if ($mtest !== true) { $mclass = "text-danger"; $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>"; }
-                    	    else                 { $mclass = ""; $minfo = ""; }
+                    	    // if duplicate
+                    	    if ($mtest !== true) {
+                                // find duplicate
+                                $duplicates = $Subnets->find_duplicate_multicast_mac ($address->id, $address->mac);
+
+                                $mclass = "text-danger";
+                                $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>";
+                                // formulate object
+                                if ($duplicates!==false) {
+                                    $mobjects = "<hr><p class='muted'>Duplicated addresses:</p>";
+                                    foreach ($duplicates as $d) {
+                                        $type = $d->isFolder==1 ? "folder" : "subnets";
+                                        $mobjects .= "<span class='muted' style='padding-left:15px;'><i class='fa fa-angle-right'></i> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
+                                    }
+                                }
+                                else {
+                                    $mobjects = "";
+                                }
+                    	    }
+                    	    else {
+                        	    $mclass = "";
+                        	    $minfo = "";
+                        	    $mobjects = "";
+                    	    }
+
                         }
     					// multicast ?
-    					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($address->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$address->mac." $minfo</td>"; }
+    					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($address->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$address->mac." $minfo $mobjects</td>"; }
 						elseif(!empty($address->mac)) 				{ print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' title='"._('MAC').": ".$address->mac."'></i></td>"; }
 						else 												{ print "<td class='narrow'></td>"; }
 					}
