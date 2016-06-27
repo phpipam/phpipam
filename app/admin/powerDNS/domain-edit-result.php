@@ -49,7 +49,7 @@ if ($_POST['action']!="delete") {
 	# new domain
 	if ($_POST['action']=="add" && !isset($_POST['manual'])) {
 		// admin
-		if ($Result->validate_email($_POST['hostmaster'])===false)	{ $Result->show("danger", "Invalid domain admin", true); }
+		if ($Result->validate_email($_POST['hostmaster'])===false)	{ $Result->show("danger", "Invalid domain hostmaster", true); }
 	}
 
 	// if slave master must be present

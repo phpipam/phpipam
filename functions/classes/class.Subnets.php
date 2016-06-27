@@ -2530,6 +2530,7 @@ class Subnets extends Common_functions {
 			$html[] = '<a href="'.create_link("vlan",$sectionId,$item['vlanId']).'" rel="tooltip" data-placement="right" title="'.$item['description'].'">'.$item['number'].' ('.$item['name'].') '.$item['l2domain'].'</a>';
 
             # set all subnets in this vlan
+            $subnets = array();
             foreach ($section_subnets as $s) {
                 if ($s->vlanId==$item['vlanId']) {
                     $subnets[] = $s;
