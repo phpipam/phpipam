@@ -30,6 +30,7 @@
         + Default domain for PTR records (if hostname is not set);
         + When removing IP address additional option that removes all associated PDNS records (ip and hostname);
     + Permit normal users to manage VLANs;
+    + MAC address normalization;
     + jQuery tables;
 
 

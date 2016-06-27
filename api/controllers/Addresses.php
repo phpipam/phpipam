@@ -479,6 +479,15 @@ class Addresses_controller extends Common_api_functions  {
 		// validate address, that it is inside subnet, not subnet/broadcast
 		$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
 
+    	//validate and normalize MAC address
+    	if(strlen($this->_params->mac)>0) {
+        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
+        	// normalize
+        	else {
+            	$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
+        	}
+    	}
+
 		// validate device
 		if(isset($this->_params->switch)) {
 		if($this->Tools->fetch_object("devices", "vlanId", $this->_params->switch)===false)	{ $this->Response->throw_exception(400, "Device does not exist"); } }
@@ -498,9 +507,19 @@ class Addresses_controller extends Common_api_functions  {
 		// make sure address exists
 		$this->validate_address_id ();
 
+    	//validate and normalize MAC address
+    	if(strlen($this->_params->mac)>0) {
+        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
+        	// normalize
+        	else {
+            	$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
+        	}
+    	}
+
 		// validate device
 		if(isset($this->_params->switch)) {
 		if($this->Tools->fetch_object("devices", "vlanId", $this->_params->switch)===false)	{ $this->Response->throw_exception(400, "Device does not exist"); } }
+
 		// validate state
 		if(isset($this->_params->state)) {
 		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(400, "Tag does not exist"); } }

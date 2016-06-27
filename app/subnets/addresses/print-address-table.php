@@ -354,6 +354,13 @@ else {
 	        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
 				# Print mac address icon!
 				if(in_array('mac', $selected_ip_fields)) {
+                    # normalize MAC address
+                	if(strlen(@$addresses[$n]->mac)>0) {
+                    	if($User->validate_mac ($addresses[$n]->mac)!==false) {
+                        	$addresses[$n]->mac = $User->reformat_mac_address ($addresses[$n]->mac, 1);
+                    	}
+                	}
+
             	    # multicast check
             	    if ($User->settings->enableMulticast==1 && $Subnets->is_multicast ($addresses[$n]->ip_addr)) {
                 	    $mtest = $Subnets->validate_multicast_mac ($addresses[$n]->mac, $subnet['sectionId'], $subnet['vlanId'], MCUNIQUE, $addresses[$n]->id);

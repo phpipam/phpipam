@@ -189,6 +189,17 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
         	    }
     	    }
 
+        	# validate and normalize MAC address
+        	if(strlen(@$address['mac'])>0) {
+            	if($User->validate_mac ($address['mac'])===false) {
+                	$errors[] = _('Invalid MAC address')."!";
+            	}
+            	// normalize
+            	else {
+                	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
+            	}
+        	}
+
 			# modify action - if delete ok, dynamically reset add / edit -> if IP already exists set edit
 			if($action != "delete") {
 				$address['action'] = $Addresses->address_exists ($m, $address['subnetId'])===true ? "edit" : "add";
@@ -233,6 +244,17 @@ else {
 			# check if unique
 			if(!$Addresses->is_hostname_unique($address['dns_name'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
 		}
+	}
+
+	# validate and normalize MAC address
+	if(strlen(@$address['mac'])>0) {
+    	if($User->validate_mac ($address['mac'])===false) {
+        	$Result->show("danger", _('Invalid MAC address')."!", true);
+    	}
+    	// normalize
+    	else {
+        	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
+    	}
 	}
 
 	# reset subnet if move
