@@ -68,6 +68,36 @@ table.multicast tr.subnets-title td {
     border-bottom: medium double #ddd !important;
 }
 
+table tr.similar td {
+    font-size: 11px;
+    color: #999;
+    background: white;
+    border: none !important;
+}
+table tr.similar-last td  {
+    border-bottom: 1px solid #eee !important;
+}
+table tr.similar td a {
+    color: #999;
+}
+table tr.similar td:nth-child(1) {
+    font-size: 11px;
+    padding-left: 35px !important;
+}
+table tr.similar-title td:nth-child(1) {
+    font-size: 11px;
+    padding-left: 12px !important;
+}
+table tr.similar td:nth-child(1) {
+    background: white url("../../1.2/images/li-dns.png") no-repeat 17px -5px !important;
+}
+table tr.similar-last td:nth-child(1) {
+    background: white url("../../1.2/images/li-dns-last.png") no-repeat 17px -5px !important;
+}
+table tr.similar-title td:nth-child(1) {
+    background: white !important;
+}
+
 
 hr {
   margin: 5px;
@@ -368,6 +398,15 @@ table.ipaddresses hr {
 }
 table.ipaddresses td {
     vertical-align: top !important;
+}
+table.ipaddresses td.unused {
+    background: rgba(223, 240, 216, 0.35) !important;
+    text-shadow: 1px 1px 1px white;
+    color: #aaa;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+
+    text-shadow: 1px 1px 0px white;
 }
 
 
@@ -1213,7 +1252,14 @@ ul.dropdown-subnets li a {
 	background: rgba(225,225,225,0.01);
 }
 table.ipaddresses {
-	border-bottom: 1px solid #ddd;
+	border-bottom: 1px solid #eee;
+}
+table.ipaddresses td {
+    border-bottom: 1px solid #eee !important;
+}
+table.ipaddresses tr.th td {
+    border-top: 1px solid #eee !important;
+    border-bottom: 1px solid #eee !important;;
 }
 
 /* vlans */

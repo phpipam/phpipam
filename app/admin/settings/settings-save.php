@@ -46,6 +46,9 @@ if (!in_array("snmp", get_loaded_extensions()))                             { $R
 if ($Admin->verify_checkbox(@$_POST['enableRACK'])==1)
 if (!in_array("gd", get_loaded_extensions()))                               { $Result->show("danger", _("Missing gd support in php"), true); }
 
+//remove link_field if None
+if ($_POST['link_field']=="None") $_POST['link_field'] = "";
+
 # set update values
 $values = array("id"=>1,
 				//site settings
@@ -75,6 +78,7 @@ $values = array("id"=>1,
 				"enablePowerDNS"=>$Admin->verify_checkbox(@$_POST['enablePowerDNS']),
 				"enableDHCP"=>$Admin->verify_checkbox(@$_POST['enableDHCP']),
 				"enableFirewallZones"=>$Admin->verify_checkbox(@$_POST['enableFirewallZones']),
+				"link_field"=>@$_POST['link_field'],
 				"log"=>@$_POST['log'],
 				//display
 				"donate"=>$Admin->verify_checkbox(@$_POST['donate']),

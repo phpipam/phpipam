@@ -12,6 +12,7 @@
 	    + VLAN discovery;
 	    + VRF discovery;
 	    + Status update scans via ARP check;
+    + Address linking by selected field;
 
 	Enhancements, changes:
 	----------------------------

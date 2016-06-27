@@ -160,7 +160,7 @@ if ($subnets!==false) {
                 	    # multicast check
                 	    if ($User->settings->enableMulticast==1 && $Subnets->is_multicast ($address->ip_addr)) {
                     	    $mtest = $Subnets->validate_multicast_mac ($address->mac, $subnet->sectionId, $subnet->vlanId, MCUNIQUE, $address->id);
-                    	    // if duplicate
+                            // if duplicate
                     	    if ($mtest !== true) {
                                 // find duplicate
                                 $duplicates = $Subnets->find_duplicate_multicast_mac ($address->id, $address->mac);
@@ -169,11 +169,14 @@ if ($subnets!==false) {
                                 $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>";
                                 // formulate object
                                 if ($duplicates!==false) {
-                                    $mobjects = "<hr><p class='muted'>Duplicated addresses:</p>";
+                                    $mobjects = array();
+                                    $mobjects[] = "<hr><p class='muted' style='font-size:11px'>Duplicated addresses:</p>";
+                                    $mobjects[] = "<ul class='submenu-dns'> ";
                                     foreach ($duplicates as $d) {
                                         $type = $d->isFolder==1 ? "folder" : "subnets";
-                                        $mobjects .= "<span class='muted' style='padding-left:15px;'><i class='fa fa-angle-right'></i> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
+                                        $mobjects[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i><span style='color:#999'> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
                                     }
+                                    $mobjects = implode("\n", $mobjects);
                                 }
                                 else {
                                     $mobjects = "";
@@ -184,7 +187,6 @@ if ($subnets!==false) {
                         	    $minfo = "";
                         	    $mobjects = "";
                     	    }
-
                         }
     					// multicast ?
     					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($address->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$address->mac." $minfo $mobjects</td>"; }

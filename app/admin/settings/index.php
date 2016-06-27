@@ -325,6 +325,36 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Link fields -->
+<tr>
+	<td class="title"><?php print _('Link addresses'); ?></td>
+	<td>
+		<select name="link_field" class="form-control input-sm input-w-auto">
+		<?php
+        # fetch all custom IP fields
+        $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
+        $custom_fields2[]['name'] = "None";
+        $custom_fields2[]['name'] = "ip_addr";
+        $custom_fields2[]['name'] = "dns_name";
+        $custom_fields2[]['name'] = "mac";
+        $custom_fields2[]['name'] = "owner";
+        // merge
+        $custom_fields = array_merge($custom_fields2, $custom_fields);
+
+		//default
+		foreach($custom_fields as $k=>$d) {
+			if($d['name']==$settings['link_field'])     { print "<option value='$d[name]' selected='selected'>$d[name]</option>"; }
+			else						                { print "<option value='$d[name]' 				     >$d[name]</option>"; }
+		}
+		?>
+		</select>
+
+	</td>
+	<td class="info2">
+		<?php print _('Display linked addresses from another subnet if it matches selected field'); ?>
+	</td>
+</tr>
+
 <!-- Log location -->
 <tr>
 	<td class="title"><?php print _('Syslog'); ?></td>

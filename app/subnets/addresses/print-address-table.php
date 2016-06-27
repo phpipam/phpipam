@@ -105,7 +105,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 </h4>
 
 <!-- table -->
-<table class="ipaddresses sorted normalTable table table-striped table-condensed table-hover table-full table-top">
+<table class="ipaddresses sorted normalTable table table-condensed table-full table-top">
 
 <!-- headers -->
 <thead>
@@ -191,7 +191,7 @@ else {
 	       	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 			    if ( $unused) {
 	        		print "<tr class='th'>";
-	        		print "	<td></td>";
+	        		print "	<td class='unused'></td>";
 	        		print "	<td colspan='$colspan[unused]' class='unused'>$unused[ip] ($unused[hosts])</td>";
 	        		print "</tr>";
 	        	}
@@ -373,11 +373,14 @@ else {
                             $minfo = "<i class='fa fa-exclamation-triangle' rel='tooltip' title='"._('Duplicate MAC')."'></i>";
                             // formulate object
                             if ($duplicates!==false) {
-                                $mobjects = "<hr><p class='muted'>Duplicated addresses:</p>";
+                                $mobjects = array();
+                                $mobjects[] = "<hr><p class='muted' style='font-size:11px'>Duplicated addresses:</p>";
+                                $mobjects[] = "<ul class='submenu-dns'> ";
                                 foreach ($duplicates as $d) {
                                     $type = $d->isFolder==1 ? "folder" : "subnets";
-                                    $mobjects .= "<span class='muted' style='padding-left:15px;'><i class='fa fa-angle-right'></i> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
+                                    $mobjects[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i><span style='color:#999'> $d->name / $d->description: </span> <a href='".create_link($type,$d->sectionId,$d->subnetId)."'>".$Subnets->transform_address($d->ip_addr, "dotted")."</a><br>";
                                 }
+                                $mobjects = implode("\n", $mobjects);
                             }
                             else {
                                 $mobjects = "";
@@ -499,6 +502,97 @@ else {
 
 			print '</tr>'. "\n";
 
+			// now search for similar addresses if chosen
+			if (strlen($User->settings->link_field)>0) {
+    			// search
+    			$similar = $Addresses->search_similar_addresses ($User->settings->link_field, $addresses[$n]->{$User->settings->link_field}, $addresses[$n]->id);
+
+    			if($similar!==false) {
+
+        			print "<tr class='similar similar-title'>";
+        			print " <td colspan='$colspan[unused]'>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$addresses[$n]->{$User->settings->link_field}."</strong>:</td>";
+        			print "</tr>";
+
+                    foreach ($similar as $k=>$s) {
+
+                        $last = sizeof($similar)-1 == $k ? "similar-last" : "";
+
+                        // fetch subnet
+                        $sn = $Subnets->fetch_subnet("id", $s->subnetId);
+
+        		 		print "<tr class='similar $last'>";
+        			    print "	<td class='ipaddress'><i class='fa fa-angle-right'></i> <a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_to_dotted( $s->ip_addr)."</a>";
+        			    print $Addresses->address_type_format_tag($s->state);
+        			    print "</td>";
+
+        			    # resolve dns name
+        			    $resolve = $DNS->resolve_address($s->ip_addr, $s->dns_name, false, $sn->nameserverId);
+        																		{ print "<td class='$resolve[class] hostname'>$resolve[name]</td>"; }
+        				# print firewall address object - mandatory if enabled
+        				if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {
+        					                                                    { print "<td class='fwzone'>".$s->firewallAddressObject."</td>"; }
+        				}
+        				# print description - mandatory
+        	        													  		  print "<td class='description'>".$s->description."</td>";
+        				# Print mac address icon!
+        				if(in_array('mac', $selected_ip_fields)) {
+                            if(!empty($s->mac)) 				                { print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' title='"._('MAC').": ".$s->mac."'></i></td>"; }
+        					else 												{ print "<td class='narrow'></td>"; }
+        				}
+        	       		# print info button for hover
+        	       		if(in_array('note', $selected_ip_fields)) {
+        	        		if(!empty($s->note)) 					            { print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",$s->note)."'></td>"; }
+        	        		else 												{ print "<td class='narrow'></td>"; }
+        	        	}
+        	        	# print device
+        	        	if(in_array('switch', $selected_ip_fields)) {
+        		        	# get device details
+        		        	$device = (array) $Tools->fetch_object("devices", "id", $s->switch);
+        		        	# set rack
+        		        	if ($User->settings->enableRACK=="1")
+        		        	$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";
+        																		  print "<td class='hidden-xs hidden-sm hidden-md'>$rack <a href='".create_link("tools","devices","hosts",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
+        				}
+        				# print port
+        				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->port."</td>"; }
+        				# print owner
+        				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$s->owner."</td>"; }
+        				# print custom fields
+        				if(sizeof($custom_fields) > 0) {
+        					foreach($custom_fields as $myField) {
+        						if(!in_array($myField['name'], $hidden_cfields)) 	{
+        							print "<td class='customField hidden-xs hidden-sm hidden-md'>";
+
+        							// create html links
+        							$s->$myField['name'] = $Result->create_links($s->$myField['name'], $myField['type']);
+
+        							//booleans
+        							if($myField['type']=="tinyint(1)")	{
+        								if($s->$myField['name'] == "0")		{ print _("No"); }
+        								elseif($s->$myField['name'] == "1")	{ print _("Yes"); }
+        							}
+        							//text
+        							elseif($myField['type']=="text") {
+        								if(strlen($s->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $s->$myField['name'])."'>"; }
+        								else											{ print ""; }
+        							}
+        							else {
+        								print $s->$myField['name'];
+
+        							}
+        							print "</td>";
+        						}
+        				    }
+                        }
+        				# actions
+        				print " <td></td>";
+                        print "</tr>";
+
+
+                    }
+    			}
+			}
+
 			/*	if last one return ip address and broadcast IP
 			****************************************************/
 			if ( $n == $m )
@@ -510,8 +604,8 @@ else {
 
 	            	if ( $unused  ) {
 		        		print "<tr class='th'>";
-		        		print "	<td></td>";
-		        		print "	<td colspan='$colspan[unused]' class='unused'>$unused[ip] ($unused[hosts])</td>";
+		        		print "	<td class='unused success'></td>";
+		        		print "	<td colspan='$colspan[unused]' class='unused success'>$unused[ip] ($unused[hosts])</td>";
 		        		print "</tr>";
 	            	}
             	}

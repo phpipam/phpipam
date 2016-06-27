@@ -302,6 +302,32 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Searches database for similar addresses
+	 *
+	 * @access public
+	 * @param mixed $linked_field
+	 * @param mixed $value
+	 * @param mixed $address_id
+	 * @return void
+	 */
+	public function search_similar_addresses ($linked_field, $value, $address_id) {
+    	// checks
+    	if(strlen($linked_field)>0 && strlen($value)>0 && is_numeric($address_id)) {
+        	// search
+     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ?;", array($value, $address_id)); }
+    		catch (Exception $e) {
+    			$this->Result->show("danger", _("Error: ").$e->getMessage());
+    			return false;
+    		}
+    		#result
+    		return sizeof($addresses)>0 ? $addresses : false;
+        }
+        else {
+            return false;
+        }
+	}
+
+	/**
 	 * Address modification
 	 *
 	 * @access public
