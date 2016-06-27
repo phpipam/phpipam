@@ -43,8 +43,8 @@ $_POST['id']   = $_POST['subnetId'];
 
 # get mask and subnet
 $temp = explode("/", $_POST['subnet']);
-$_POST['mask']   = $temp[1];
-$_POST['subnet'] = $temp[0];
+$_POST['mask']   = trim($temp[1]);
+$_POST['subnet'] = trim($temp[0]);
 
 
 

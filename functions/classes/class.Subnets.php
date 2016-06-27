@@ -407,8 +407,10 @@ class Subnets extends Common_functions {
 		# check order
 		$this->get_settings ();
 		$order = $this->get_subnet_order ();
+		// subnet fix
+		if($order[0]=="subnet") $order[0] = "subnet1";
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]", array($sectionId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT *,LPAD(subnet, 32, 0) as `subnet1` FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -416,6 +418,9 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
+    			// remove fake subnet1 field
+    			unset($subnet->subnet1);
+    			// save
 				 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
