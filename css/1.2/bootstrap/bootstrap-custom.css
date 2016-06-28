@@ -519,6 +519,11 @@ td.info2 {
 	text-shadow: black 2px 2px 2px;
 /* 	white-space: nowrap;	 */
 }
+.hero-unit p.muted {
+    text-shadow: none;
+    text-align: center;
+    font-size: 14px;
+}
 
 /* @usermenu top */
 div#user_menu {

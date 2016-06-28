@@ -61,6 +61,7 @@ $settings = $Tools->fetch_object("settings", "id", 1);
 	<div class="col-xs-12">
 		<div class="hero-unit" style="padding:20px;margin-bottom:10px;">
 			<a href="<?php print create_link($_GET['page'], $_GET['section']); ?>"><?php print $settings->siteTitle;?></a>
+            <p class="muted"><?php print _("Temporary share"); ?></p>
 		</div>
 	</div>
 </div>

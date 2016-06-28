@@ -184,7 +184,6 @@ if(sizeof($address)>1) {
     			}
     			print "</td>";
     			print "</tr>";
-    			print "<tr><td colspan='2'><hr></tr>";
     		}
     	}
 

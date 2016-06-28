@@ -23,7 +23,7 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 
 	<meta name="Description" content="">
-	<meta name="title" content="<?php print $User->settings->siteTitle; ?>">
+	<meta name="title" content="<?php print $User->settings->siteTitle; ?> :: login">
 	<meta name="robots" content="noindex, nofollow">
 	<meta http-equiv="X-UA-Compatible" content="IE=9" >
 
@@ -33,7 +33,7 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 
 	<!-- title -->
-	<title><?php print $User->settings->siteTitle; ?></title>
+	<title><?php print $User->settings->siteTitle; ?> :: login</title>
 
 	<!-- css -->
 	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
@@ -81,7 +81,8 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 <div class="row header-install" id="header">
 	<div class="col-xs-12">
 		<div class="hero-unit" style="padding:20px;margin-bottom:10px;">
-			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle." | "._('login');?></a>
+			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle;?></a>
+            <p class="muted"><?php print _("Login"); ?></p>
 		</div>
 	</div>
 </div>

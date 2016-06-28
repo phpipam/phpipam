@@ -3,7 +3,8 @@ features for next releases:
 
     + todo:
         - change pagination (datatables);
-        -
+        - PowerDNS API;
+        - KEA manage;
 
 
     + Modules:
@@ -43,7 +44,5 @@ features for next releases:
 	+ Mail subnet details;
 
 	+ Notificaitons;
-
-	+ Add subtitle and page title;
 
 	+ Map/Link MPLS VRF to VLAN;

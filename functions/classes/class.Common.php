@@ -1114,5 +1114,70 @@ class Common_functions  {
 			print "</ul>";
 		}
 	}
+
+	/**
+	 * Prints site title
+	 *
+	 * @access public
+	 * @param mixed $get
+	 * @return void
+	 */
+	public function get_site_title ($get) {
+    	// remove html tags
+    	$get = $this->strip_input_tags ($get);
+    	// init
+    	$title[] = $this->settings->siteTitle;
+
+    	// page
+    	if (isset($get['page'])) {
+        	// install, upgrade
+        	if ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
+            	$title[] = $get['page'];
+        	}
+        	// sections, subnets
+        	elseif ($get['page']=="subnets" || $get['page']=="folder") {
+            	// section
+            	if (isset($get['section'])) {
+                 	$se = $this->fetch_object ("sections", "id", $get['section']);
+                	if($se!==false) {
+                    	$title[] = $se->name;
+                	}
+            	}
+            	// ip address
+            	if (isset($get['ipaddrid'])) {
+                    $ip = $this->fetch_object ("ipaddresses", "id", $get['ipaddrid']);
+                    if($ip!==false) {
+                        $title[] = "address ".$this->transform_address($ip->ip_addr, "dotted");
+                    }
+            	}
+            	// subnet
+            	elseif (isset($get['subnetId'])) {
+                 	$sn = $this->fetch_object ("subnets", "id", $get['subnetId']);
+                	if($sn!==false) {
+                    	if($sn->isFolder) {
+                        	$title[] = "folder ".$sn->description;
+                    	}
+                    	else {
+                        	$sn->description = strlen($sn->description)>0 ? " (".$sn->description.")" : "";
+                        	$title[] = "subnet ". $this->transform_address($sn->subnet, "dotted")."/".$sn->mask.$sn->description;
+                        }
+                	}
+            	}
+        	}
+        	// tools, admin
+        	elseif ($get['page']=="tools" || $get['page']=="administration") {
+            	$title[] = $get['page'];
+            	// subpage
+            	if (isset($get['section'])) {
+                	$title[] = $get['section'];
+            	}
+        	}
+        	else {
+            	$title[] = $get['page'];
+            }
+    	}
+        // print title
+    	return implode(" / ", $title);
+	}
 }
 ?>

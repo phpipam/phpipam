@@ -62,7 +62,7 @@ else {
 	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
 
 	<meta name="Description" content="">
-	<meta name="title" content="<?php print $User->settings->siteTitle; ?>">
+	<meta name="title" content="<?php print $title = $User->get_site_title ($_GET); ?>">
 	<meta name="robots" content="noindex, nofollow">
 	<meta http-equiv="X-UA-Compatible" content="IE=9" >
 
@@ -72,7 +72,7 @@ else {
 	<meta http-equiv="X-UA-Compatible" content="chrome=1">
 
 	<!-- title -->
-	<title><?php print $User->settings->siteTitle; ?></title>
+	<title><?php print $title; ?></title>
 
 	<!-- OpenSearch -->
 	<link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="Search <?php print $User->settings->siteTitle; ?>">
@@ -154,6 +154,7 @@ else {
 		<div class="hero-pusher hidden-xs hidden-sm"></div>
 		<div class="hero-unit">
 			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
+			<p class="muted"><?php print str_replace($User->settings->siteTitle, "", $title); ?></p>
 		</div>
 	</div>
 </div>
