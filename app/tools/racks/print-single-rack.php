@@ -16,7 +16,7 @@ if ($User->settings->enableRACK!="1") {
 }
 else {
     # validate integer
-    if(!is_numeric($_GET['subnetId']))      { $error = _("Invalid rack Id"); }
+    if(!is_numeric($_GET['subnetId']))      { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
     # init racks object
     $Racks = new phpipam_rack ($Database);
     # fetch all racks
@@ -24,7 +24,7 @@ else {
     $rack_devices = $Racks->fetch_rack_devices ($_GET['subnetId']);
 
     // rack check
-    if($rack===false)                       { $error =_("Invalid rack Id"); }
+    if($rack===false)                       { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
 
     // get custom fields
     $cfields = $Tools->fetch_custom_fields ('racks');

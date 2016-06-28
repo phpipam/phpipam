@@ -33,6 +33,7 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 }
 else {
     $rack = new StdClass ();
+    $rack->size = 42;
 }
 
 # set readonly flag
