@@ -206,11 +206,16 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 			<td><?php print _('Delegate'); ?></td>
 			<td colspan="2">
 			<div class="checkbox">
-				<input type="checkbox" name="delegate" value="1">
-				<span class="info2 help-inline"><?php print _('Check to delegate permissions to all subnets in section'); ?></span>
+				<input type="checkbox" name="delegate" class="input-switch" value="1" checked="checked">
 			</div>
 			</td>
 		</tr>
+        <tr class="warning2">
+            <td></td>
+            <td colspan="2">
+            <?php $Result->show("info", _('Permission changes will be propagated to all nested subnets')."!", false); ?>
+            </td>
+        </tr>
 		<?php } ?>
 
 		</table>	<!-- end table -->
@@ -234,3 +239,27 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 	<!-- result holder -->
 	<div class="sectionEditResult"></div>
 </div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+/* bootstrap switch */
+var switch_options = {
+	onText: "Yes",
+	offText: "No",
+    onColor: 'default',
+    offColor: 'default',
+    size: "mini"
+};
+
+$(".input-switch").bootstrapSwitch(switch_options);
+
+$('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
+	// get state from both
+	var state = ($(".input-switch").bootstrapSwitch('state'));
+	// change
+	if (state==true)	{ $("tr.warning2").removeClass("hidden"); }
+	else            	{ $("tr.warning2").addClass("hidden"); }
+});
+});
+</script>

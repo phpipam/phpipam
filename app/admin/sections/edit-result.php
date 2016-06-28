@@ -84,6 +84,19 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 }
 # ok, update section
 else {
+
+    // init permission parameters
+    $new_permissions = array();             // permissions posted
+    $old_permissions = array();             // existing subnet permissions
+    $removed_permissions = array();         // removed permissions
+    $changed_permissions = array();         // changed permissions
+
+
+    # fetch old section
+    $section_old = $Sections->fetch_section ("id", $_POST['id']);
+    // parse old permissions
+    $old_permissions = json_decode($section_old->permissions, true);
+
 	# set variables for update
 	$values = array("id"=>@$_POST['id'],
 					"name"=>@$_POST['name'],
@@ -92,27 +105,50 @@ else {
 					"subnetOrdering"=>@$_POST['subnetOrdering'],
 					"showVLAN"=>@$_POST['showVLAN'],
 					"showVRF"=>@$_POST['showVRF'],
-					"masterSection"=>@$_POST['masterSection'],
+					"masterSection"=>@$_POST['masterSection']
 					);
 
-	# set permissions
+	# set new posted permissions
 	foreach($_POST as $key=>$val) {
 		if(substr($key, 0,5) == "group") {
 			if($val != "0") {
-				$perm[substr($key,5)] = $val;
+				$new_permissions[substr($key,5)] = $val;
 			}
 		}
 	}
-	$values['permissions'] = isset($perm) ? json_encode($perm) : "";
 
-	# delegate to all subnets?
-	if(isset($_POST['delegate'])) {
-		if($_POST['delegate']==1) { $values['delegate']=1; }
-		else					  { $values['delegate']=0; }
-	}
+    // calculate diff
+    if(is_array($old_permissions)) {
+        foreach ($old_permissions as $k1=>$p1) {
+            // if there is not permisison in new that remove old
+            if (!array_key_exists($k1, $new_permissions)) {
+                $removed_permissions[$k1] = 0;
+            }
+            // if change than save
+            elseif ($old_permissions[$k1]!==$new_permissions[$k1]) {
+                $changed_permissions[$k1] = $new_permissions[$k1];
+            }
+        }
+    }
+    // add also new groups if available
+    if(is_array($new_permissions)) {
+        foreach ($new_permissions as $k1=>$p1) {
+            if(!array_key_exists($k1, $old_permissions)) {
+                $changed_permissions[$k1] = $new_permissions[$k1];
+            }
+        }
+    }
+
+	// permissions for self
+	$values['permissions'] = json_encode($new_permissions);
 
 	# execute update
-	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger",  _("Section $_POST[action] failed"), true); }
-	else																		{ $Result->show("success", _("Section $_POST[action] successful"), true); }
+	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger",  _("Section $_POST[action] failed"), false); }
+	else																		{ $Result->show("success", _("Section $_POST[action] successful"), false); }
+
+	# delegate
+	if (@$_POST['delegate']==1) {
+        $Sections->delegate_section_permissions ($_POST['id'], $removed_permissions, $changed_permissions);
+	}
 }
 ?>

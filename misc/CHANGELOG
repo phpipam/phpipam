@@ -1,4 +1,4 @@
-== 1.21.033
+== 1.21.037
 
 	New features:
 	------------
@@ -33,6 +33,7 @@
     + Permit normal users to manage VLANs;
     + MAC address normalization;
     + jQuery tables;
+    + Permission delegation now only delegates changes not whole permission set;
 
 
 	Bugfixes:

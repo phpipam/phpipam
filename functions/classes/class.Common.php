@@ -1177,7 +1177,7 @@ class Common_functions  {
             	$title[] = $get['page'];
             }
     	}
-        // print title
+        // return title
     	return implode(" / ", $title);
 	}
 }

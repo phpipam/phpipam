@@ -119,12 +119,12 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
     <tr>
         <td><?php print _('Propagate changes'); ?></td>
         <td>
-            <input type="checkbox" name="set_inheritance" class="input-switch" value="Yes" checked="checked">
+            <input type="checkbox" style="margin-left: 0px; padding-left: 0px;" name="set_inheritance" class="input-switch" value="Yes" checked="checked">
         </td>
     </tr>
     <tr class="warning2">
         <td colspan="2">
-        <?php $Result->show("info", _('Permissions for all nested subnets will be overridden')."!", false); ?>
+        <?php $Result->show("info", _('Permission changes will be propagated to all nested subnets')."!", false); ?>
         </td>
     </tr>
     <tr>

@@ -21,6 +21,9 @@ input,
 select {
 	font-weight: 300;
 }
+div.checkbox {
+    padding-left: 0px;
+}
 table.table-full {
 	width: 100%;
 }
