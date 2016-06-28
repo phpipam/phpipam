@@ -16,10 +16,6 @@ else {
 }
 ?>
 
-<!-- subnet details upper table -->
-<h4><?php print _('Subnet details'); ?></h4>
-<hr>
-
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
 		<th><?php print _('Subnet details'); ?></th>

@@ -76,7 +76,31 @@ $location = "subnets";
 	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
 		<!-- for adding IP address! -->
 		<div id="subnetId" style="display:none;"><?php print $subnet['id']; ?></div>
-		<?php include('subnet-details.php'); ?>
+
+        <!-- subnet details upper table -->
+        <h4><?php print _('Subnet details'); ?></h4>
+        <hr>
+
+        <!-- tabs -->
+        <ul class='nav nav-tabs ip-det-switcher' style='margin-bottom:20px;'>
+            <li role='presentation' class='active' data-target='div_details'><a href=''><?php print _("Subnet details"); ?></a></li>
+            <?php if($User->is_admin(false)) { ?>
+            <li role='presentation' data-target='div_permissions'><a href=''><?php print _("Permissions"); ?></a></li>
+            <?php } ?>
+            <li role='presentation'><a href='<?php print create_link("subnets",$subnet['sectionId'],$subnet['id'],"changelog"); ?>'><?php print _("Changelog"); ?></a></li>
+        </ul>
+
+        <!-- details -->
+        <div class='div_det_common div_details'>
+    	<?php include("subnet-details.php"); ?>
+        </div>
+
+        <!-- details -->
+        <?php if($User->is_admin(false)) { ?>
+        <div class='div_det_common div_permissions' style='display:none'>
+    	<?php include("subnet-permissions.php"); ?>
+        </div>
+        <?php } ?>
 	</div>
 
 	<!-- subnet graph -->
@@ -123,3 +147,22 @@ $location = "subnets";
 	</div>
 
 </div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+$('ul.ip-det-switcher li a').click(function() {
+   var target = $(this).parent().attr("data-target");
+   if(target!==undefined) {
+       // class
+       $('ul.ip-det-switcher li').removeClass('active');
+       $(this).parent().addClass('active');
+       // hide old
+       $('div.div_det_common').hide();
+       $('div.'+target).show();
+
+       return false;
+   }
+});
+});
+</script>
