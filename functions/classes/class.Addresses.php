@@ -314,7 +314,7 @@ class Addresses extends Common_functions {
     	// checks
     	if(strlen($linked_field)>0 && strlen($value)>0 && is_numeric($address_id)) {
         	// search
-     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ?;", array($value, $address_id)); }
+     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ? and state != 4;", array($value, $address_id)); }
     		catch (Exception $e) {
     			$this->Result->show("danger", _("Error: ").$e->getMessage());
     			return false;
