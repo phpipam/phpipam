@@ -1025,9 +1025,10 @@ class Common_functions  {
 		if(isset($req['subnetId'])) {
 			# get all parents
 			$parents = $Subnet->fetch_parents_recursive ($req['subnetId']);
+
 			print "<ul class='breadcrumb'>";
 			# remove root - 0
-			array_shift($parents);
+			//array_shift($parents);
 
 			# section details
 			$section = (array) $this->fetch_object ("sections", "id", $req['section']);
