@@ -648,13 +648,14 @@ class Tools extends Common_functions {
 		# get SCHEMA.SQL file
 		$schema = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
 		$schema = fread($schema, 100000);
+		$schema = str_replace("\r\n", "\n", $schema);
 
 		# get definition
 		$definition = strstr($schema, "CREATE TABLE `$table` (");
-		$definition = trim(strstr($definition, ";" . PHP_EOL, true));
+		$definition = trim(strstr($definition, ";" . "\n", true));
 
 		# get each line to array
-		$definition = explode(PHP_EOL, $definition);
+		$definition = explode("\n", $definition);
 
 		# go through,if it begins with ` use it !
 		foreach($definition as $d) {
@@ -1184,13 +1185,14 @@ class Tools extends Common_functions {
 	public function get_field_fix ($table, $field) {
 		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
 		$file = fread($res, 100000);
+		$file = str_replace("\r\n", "\n", $file);
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
 		$file = trim(strstr($file, "# Dump of table", true));
 
 		//get proper line
-		$file = explode(PHP_EOL, $file);
+		$file = explode("\n", $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
 				//get previous
