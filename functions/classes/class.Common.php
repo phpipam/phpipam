@@ -1131,8 +1131,12 @@ class Common_functions  {
 
     	// page
     	if (isset($get['page'])) {
+        	// dashboard
+        	if ($get['page']=="dashboard") {
+            	return $this->settings->siteTitle." Dashboard";
+        	}
         	// install, upgrade
-        	if ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
+        	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
             	$title[] = $get['page'];
         	}
         	// sections, subnets
@@ -1144,25 +1148,25 @@ class Common_functions  {
                     	$title[] = $se->name;
                 	}
             	}
+            	// subnet
+            	if (isset($get['subnetId'])) {
+                 	$sn = $this->fetch_object ("subnets", "id", $get['subnetId']);
+                	if($sn!==false) {
+                    	if($sn->isFolder) {
+                        	$title[] = $sn->description;
+                    	}
+                    	else {
+                        	$sn->description = strlen($sn->description)>0 ? " (".$sn->description.")" : "";
+                        	$title[] = $this->transform_address($sn->subnet, "dotted")."/".$sn->mask.$sn->description;
+                        }
+                	}
+            	}
             	// ip address
             	if (isset($get['ipaddrid'])) {
                     $ip = $this->fetch_object ("ipaddresses", "id", $get['ipaddrid']);
                     if($ip!==false) {
-                        $title[] = "address ".$this->transform_address($ip->ip_addr, "dotted");
+                        $title[] = $this->transform_address($ip->ip_addr, "dotted");
                     }
-            	}
-            	// subnet
-            	elseif (isset($get['subnetId'])) {
-                 	$sn = $this->fetch_object ("subnets", "id", $get['subnetId']);
-                	if($sn!==false) {
-                    	if($sn->isFolder) {
-                        	$title[] = "folder ".$sn->description;
-                    	}
-                    	else {
-                        	$sn->description = strlen($sn->description)>0 ? " (".$sn->description.")" : "";
-                        	$title[] = "subnet ". $this->transform_address($sn->subnet, "dotted")."/".$sn->mask.$sn->description;
-                        }
-                	}
             	}
         	}
         	// tools, admin
@@ -1178,7 +1182,7 @@ class Common_functions  {
             }
     	}
         // return title
-    	return implode(" / ", $title);
+    	return implode("<span class='divider'>/</span>", $title);
 	}
 }
 ?>
