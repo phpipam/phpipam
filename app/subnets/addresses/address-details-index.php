@@ -50,11 +50,16 @@ $resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], fals
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
 
+# multicast
+$mcast = $User->settings->enableMulticast=="1" && $Subnets->is_multicast ($Subnets->transform_address($address['ip_addr'], "dotted")) ? true : false;
 
 
 // header
-print "<h4>"._('IP address details')."</h4><hr>";
+print "<h4>"._('IP address details')." ".$Subnets->transform_to_dotted( $address['ip_addr'])."</h4><hr>";
 // back
+if($subnet['isFolder']==1)
+print "<a class='btn btn-default btn-sm btn-default' href='".create_link("folder",$subnet['sectionId'],$subnet['id'])."' style='margin-bottom:20px;'><i class='fa fa-chevron-left'></i> "._('Back to folder')."</a>";
+else
 print "<a class='btn btn-default btn-sm btn-default' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."' style='margin-bottom:20px;'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
 
 
@@ -65,23 +70,42 @@ if(sizeof($address)>1) {
     // print tabs
     print "<ul class='nav nav-tabs ip-det-switcher' style='margin-bottom:20px;'>";
     print " <li role='presentation' class='active' data-target='div_details'><a href='#'>"._("IP address details")."</a></li>";
+    if($User->is_admin(false))
+    print " <li role='presentation' data-target='div_permissions'><a href='#'>"._("Permissions")."</a></li>";
+
     print " <li role='presentation' data-target='div_linked'><a href='#'>"._("Linked addresses")."</a></li>";
+    if($mcast)
+    print " <li role='presentation' data-target='div_multicast'><a href='#'>"._("Multicast")."</a></li>";
     print " <li role='presentation' data-target='div_changelog'><a href='#'>"._("Changelog")."</a></li>";
     print "</ul>";
 
     // address details
     print "<div class='div_det_common div_details'>";
-	include("address-details.php");
+	include("address-details/address-details.php");
     print "</div>";
 
     // address details
-    print "<div class='div_det_common div_linked' style='display:none'>";
-	include("address-details-linked.php");
+    if($User->is_admin(false)) {
+    print "<div class='div_det_common div_permissions' style='display:none'>";
+	include("address-details/address-details-permissions.php");
     print "</div>";
+    }
+
+    // Linked addresses
+    print "<div class='div_det_common div_linked' style='display:none'>";
+	include("address-details/address-details-linked.php");
+    print "</div>";
+
+    // Multicast addresses
+    if($mcast) {
+    print "<div class='div_det_common div_multicast' style='display:none'>";
+	include("address-details/address-details-multicast.php");
+    print "</div>";
+    }
 
     // changelog
     print "<div class='div_det_common div_changelog' style='display:none'>";
-	include("address-changelog.php");
+	include("address-details/address-changelog.php");
 	print "</div>";
 }
 # not exisitng

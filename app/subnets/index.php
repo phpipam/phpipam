@@ -16,6 +16,9 @@ else { $subnet = (array) $subnet; }
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);			//set network boundaries
 $slaves = $Subnets->has_slaves ($subnet['id']) ? true : false;										//check if subnet has slaves and set slaves flag true/false
 
+# if subnet is requested but is folder redirect
+if ($subnet['isFolder']==1) { header("Location: ".create_link("folder", $_GET['section'], $_GET['subnetId'])); }
+
 # permissions
 $subnet_permission  = $Subnets->check_permission($User->user, $subnet['id']);						//subnet permission
 $section_permission = $Sections->check_permission($User->user, $subnet['sectionId']);				//section permission

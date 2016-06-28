@@ -26,7 +26,7 @@ $csrf = $User->csrf_cookie ("create", "permissions");
 if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # get all groups
-$groups = $Admin->fetch_all_objects ("userGroups", "g_id");
+$groups = $Admin->fetch_all_objects ("userGroups", "g_name");
 # get subnet details
 $subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
 ?>

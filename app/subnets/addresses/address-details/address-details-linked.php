@@ -1,4 +1,7 @@
 <?php
+# verify that user is logged in
+$User->check_user_session();
+
 // now search for similar addresses if chosen
 if (strlen($User->settings->link_field)>0) {
 	// search
@@ -14,6 +17,9 @@ if (strlen($User->settings->link_field)>0) {
             // fetch subnet and section
             $sn = $Subnets->fetch_subnet("id", $s->subnetId);
             $se = $Sections->fetch_section ("id", $sn->sectionId);
+
+            $se_description = strlen($se->description)>0 ? "(".$se->description.")" : "";
+            $sn_description = strlen($sn->description)>0 ? "(".$sn->description.")" : "";
 
             // address
             print "<tr>";
@@ -31,14 +37,14 @@ if (strlen($User->settings->link_field)>0) {
             $se->description = strlen($se->description)>0 ? "(".$se->description.")" : "";
             print "<tr>";
             print " <th>"._("Section")."</th>";
-            print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se->description</td>";
+            print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_description</td>";
             print "</tr>";
 
             // subnet
             $sn->description = strlen($sn->description)>0 ? "(".$sn->description.")" : "";
             print "<tr>";
             print " <th>"._("Subnet")."</th>";
-            print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_address($sn->subnet, "dotted")."/".$sn->mask."</a> ".$sn->description."</td>";
+            print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_address($sn->subnet, "dotted")."/".$sn->mask."</a> ".$sn_description."</td>";
             print "</tr>";
 
             // divider
