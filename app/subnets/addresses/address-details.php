@@ -7,48 +7,6 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# powerdns class
-$PowerDNS = new PowerDNS ($Database);
-
-# checks
-if(!is_numeric($_GET['subnetId']))		{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['section']))		{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($_GET['ipaddrid']))		{ $Result->show("danger", _("Invalid ID"), true); }
-
-# get IP a nd subnet details
-$address = (array) $Addresses-> fetch_address(null, $_GET['ipaddrid']);
-$subnet  = (array) $Subnets->fetch_subnet(null, $address['subnetId']);
-
-# fetch all custom fields
-$custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
-# set hidden custom fields
-$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
-$hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
-
-# set selected address fields array
-$selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
-$selected_ip_fields_size = in_array('state', $selected_ip_fields) ? (sizeof($selected_ip_fields)-1) : sizeof($selected_ip_fields);	//set size of selected fields
-if($selected_ip_fields_size==1 && strlen($selected_ip_fields[0])==0) { $selected_ip_fields_size = 0; }								//fix for 0
-
-
-# set ping statuses
-$statuses = explode(";", $User->settings->pingStatus);
-
-# permissions
-$subnet_permission  = $Subnets->check_permission($User->user, $subnet['id']);
-$section_permission = $Sections->check_permission ($User->user, $subnet['sectionId']);
-
-# checks
-if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
-if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
-
- # resolve dns name
-$DNS = new DNS ($Database);
-$resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], false, $subnet['nameserverId']);
-
-# reformat empty fields
-$address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
 
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
@@ -59,13 +17,8 @@ if(sizeof($address)>1) {
     # device
     print "<td>";
 
-    #header
-    print "<h4>"._('IP address details')."</h4><hr>";
-
-    # back
-    print "<a class='btn btn-default btn-sm btn-default' style='margin-bottom:10px;' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
-
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
+	    print "<tr><td colspan='2'><h4>"._('General')."</h4></tr>";
     	# ip
     	print "<tr>";
     	print "	<th>"._('IP address')."</th>";
@@ -191,9 +144,7 @@ if(sizeof($address)>1) {
 
 
     	# availability
-    	print "<tr>";
-    	print "	<td colspan='2'><hr></td>";
-    	print "</tr>";
+        print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Avalibility')."</h4></tr>";
     	print "<tr>";
 
     	# calculate
@@ -213,14 +164,13 @@ if(sizeof($address)>1) {
     	print "	</td>";
     	print "</tr>";
 
-
     	# search for DNS records
     	if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
     		$records = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
     		$ptr	 = $PowerDNS->fetch_record ($address['PTR']);
     		if ($records !== false || $ptr!==false) {
 
-    			print "<tr><td colspan='2'><hr></tr>";
+        	    print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('DNS info')."</h4></tr>";
     			print "<tr>";
     			print "<th>"._('DNS records')."</th>";
     			print "<td>";
@@ -241,6 +191,8 @@ if(sizeof($address)>1) {
 
     	# custom device fields
     	if(sizeof($custom_fields) > 0) {
+        	print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Custom fields')."</h4></tr>";
+
     		foreach($custom_fields as $key=>$field) {
     			if(strlen($address[$key])>0) {
     			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
@@ -277,9 +229,8 @@ if(sizeof($address)>1) {
     		}
     		if(sizeof(@$active_shares)>0) {
     			# divider
-    			print "<tr>";
-    			print "	<th colspan='2'><hr></th>";
-    			print "</tr>";
+                print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Temporary shares')."</h4></tr>";
+
     			# print
     			print "<tr>";
     			print "<th>"._("Active shares").":</th>";
@@ -314,11 +265,10 @@ if(sizeof($address)>1) {
 
 
     	# actions
+        print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Actions')."</h4></tr>";
+
     	print "<tr>";
-    	print "	<td colspan='2'><hr></td>";
-    	print "</tr>";
-    	print "<tr>";
-    	print "	<th>"._('Actions')."</th>";
+    	print "	<th></th>";
 
     	print "<td class='btn-actions'>";
     	print "	<div class='btn-toolbar'>";
@@ -374,15 +324,10 @@ if(sizeof($address)>1) {
     	print "</td>";
 
     print "</table>";
-
- 	# changelog
-	include("address-changelog.php");
-
     print "</td>";
 
 	# rack
 	if ($User->settings->enableRACK=="1") {
-
         // validate rack
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
@@ -400,12 +345,6 @@ if(sizeof($address)>1) {
 }
 # not exisitng
 else {
-    #header
-    print "<h4>"._('IP address details')."</h4><hr>";
-
-    # back
-    print "<a class='btn btn-default btn-sm btn-default' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
-
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
 ?>
