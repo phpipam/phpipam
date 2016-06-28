@@ -678,7 +678,13 @@ abstract class DB {
 		$like === true ? $operator = "LIKE" : $operator = "=";
 		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+        // subnets
+        if ($table=="subnets" && $sortField=="subnet_int") {
+    		return $this->getObjectsQuery('SELECT *,subnet*1 as subnet_int FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+        }
+        else {
+    		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+        }
 	}
 
 	/**

@@ -51,7 +51,7 @@ else {
 
 			print "<tr>";
 		    print "	<td class='small description'><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[description]</a></td>";
-		    print "	<td><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[ip]/$subnet[mask] $fullinfo</a></td>";
+		    print "	<td><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
 
 			# host check
 			if($subnet['pingSubnet'] == 1) 				{ print '<td class="allowRequests small hidden-xs hidden-sm">'._('enabled').'</td>'; }

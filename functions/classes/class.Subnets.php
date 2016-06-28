@@ -408,9 +408,9 @@ class Subnets extends Common_functions {
 		$this->get_settings ();
 		$order = $this->get_subnet_order ();
 		// subnet fix
-		if($order[0]=="subnet") $order[0] = "subnet1";
+		if($order[0]=="subnet") $order[0] = "subnet_int";
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT *,LPAD(subnet, 32, 0) as `subnet1` FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]", array($sectionId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT *,LPAD(subnet, 32, 0) as `subnet_int` FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]", array($sectionId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -418,8 +418,8 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-    			// remove fake subnet1 field
-    			unset($subnet->subnet1);
+    			// remove fake subnet_int field
+    			unset($subnet->subnet_int);
     			// save
 				 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
@@ -515,13 +515,16 @@ class Subnets extends Common_functions {
 	    if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(",", $section->subnetOrdering); }
 	    else 																				{ $order = $this->get_subnet_order (); }
 
+		// subnet fix
+		if($order[0]=="subnet") $order[0] = "subnet_int";
+
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select *,subnet*1 as subnet_int from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vlanId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select *,subnet*1 as subnet_int from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vlanId);
 		}
 
@@ -534,6 +537,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
+    			unset($subnet->subnet_int);
                 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
@@ -579,13 +583,16 @@ class Subnets extends Common_functions {
 	    if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(",", $section->subnetOrdering); }
 	    else 																				{ $order = $this->get_subnet_order (); }
 
+		// subnet fix
+		if($order[0]=="subnet") $order[0] = "subnet_int";
+
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select *,subnet*1 as subnet_int from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vrfId, $sectionId);
 		}
 		else {
-			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select *,subnet*1 as subnet_int from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vrfId);
 		}
 
@@ -598,6 +605,7 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
+    			unset($subnet->subnet_int);
                 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
@@ -750,10 +758,11 @@ class Subnets extends Common_functions {
 	 */
 	public function fetch_subnet_slaves ($subnetId) {
     	// fetch
-		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet", true);
+		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet_int", true);
 		# save to subnets cache
         if ($slaves!==false) {
 			foreach($slaves as $slave) {
+    			unset($slave->subnet_int);
                 $this->cache_write ("subnets", $slave->id, $slave);
 			}
 			return $slaves;
