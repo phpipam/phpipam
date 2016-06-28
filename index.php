@@ -154,7 +154,13 @@ else {
 		<div class="hero-pusher hidden-xs hidden-sm"></div>
 		<div class="hero-unit">
 			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
-			<p class="muted"><?php print str_replace($User->settings->siteTitle, "", $title); ?></p>
+			<p class="muted">
+            <?php
+            $tmp = explode($User->settings->siteTitle, $title);
+            unset($tmp[0]);
+            print implode($User->settings->siteTitle, $tmp);
+            ?>
+            </p>
 		</div>
 	</div>
 </div>
