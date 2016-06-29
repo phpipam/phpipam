@@ -1176,13 +1176,25 @@ class Common_functions  {
             	if (isset($get['section'])) {
                 	$title[] = $get['section'];
             	}
+            	if (isset($get['subnetId'])) {
+                	// vland domain
+                	if($get['section']=="vlan") {
+                     	$se = $this->fetch_object ("vlanDomains", "id", $get['subnetId']);
+                    	if($se!==false) {
+                        	$title[] = $se->name." domain";
+                    	}
+                	}
+                	else {
+                    	$title[] = $get['subnetId'];
+                    }
+            	}
         	}
         	else {
             	$title[] = $get['page'];
             }
     	}
         // return title
-    	return implode("<span class='divider'>/</span>", $title);
+    	return implode(" / ", $title);
 	}
 }
 ?>

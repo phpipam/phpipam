@@ -156,6 +156,7 @@ else {
 			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
 			<p class="muted">
             <?php
+            $title = str_replace(" / ", "<span class='divider'>/</span>", $title);
             $tmp = explode($User->settings->siteTitle, $title);
             unset($tmp[0]);
             print implode($User->settings->siteTitle, $tmp);
