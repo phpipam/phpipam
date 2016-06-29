@@ -43,6 +43,7 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-th-large", 	 "name"=
 // temp shares
 if($User->settings->tempShare==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-share-alt",  "name"=>"Temporary shares", 	"href"=>"temp-shares",	"description"=>"List of temporary shared objects");
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-thumbs-down",  "name"=>"Inactive Hosts", 	"href"=>"inactive-hosts",	"description"=>"List of inactive hosts");
 
 # user menu
 $tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
@@ -71,6 +72,7 @@ $tools_menu_items = array(
 						'temp-shares',
 						'user-menu',
 						'vlan',
-						'vrf'
+						'vrf',
+						"inactive-hosts"
                     );
 ?>

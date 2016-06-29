@@ -1,4 +1,4 @@
-== 1.21.037
+== 1.22.01
 
 	New features:
 	------------
@@ -31,10 +31,10 @@
         + Default domain for PTR records (if hostname is not set);
         + When removing IP address additional option that removes all associated PDNS records (ip and hostname);
     + Permit normal users to manage VLANs;
+    + Inactive (offline) hosts tools page;
     + MAC address normalization;
     + jQuery tables;
     + Permission delegation now only delegates changes not whole permission set;
-
 
 	Bugfixes:
 	----------------------------

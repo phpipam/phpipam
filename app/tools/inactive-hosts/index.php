@@ -3,49 +3,11 @@
  * Print list of inactive hosts
  **********************************************/
 
-# required functions
-if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
-	# classes
-	$Database	= new Database_PDO;
-	$User 		= new User ($Database);
-	$Tools 		= new Tools ($Database);
-	$Subnets 	= new Subnets ($Database);
-	$Addresses 	= new Addresses ($Database);
-	$Result		= new Result ();
-}
-else {
-    header("Location: ".create_link('tools', 'inactive-hosts'));
-}
-
 # user must be authenticated
 $User->check_user_session ();
 
-# no errors!
-//ini_set('display_errors', 0);
-
-# set size parameters
-$height = 200;
-$slimit = 5;			//we dont need this, we will recalculate
-
-# count
-$m = 0;
-
-// fetch widget
-$widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
-
-# if direct request include plot JS
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
-	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
-	# reset size and limit
-	$height = 350;
-	$slimit = 100;
-	# and print title
-	print "<div class='container'>";
-	print "<h4 style='margin-top:40px;'>$widget->wtitle</h4><hr>";
-	print "</div>";
-}
+// limit
+$slimit = 100;
 
 // time_range - 30 days
 $seconds = 86400 * 30;
@@ -76,6 +38,8 @@ if ($inactive_hosts!==false) {
     }
 }
 
+print "<h4>"._('Inactive hosts')."</h4><hr>";
+
 # error - none found but not permitted
 if ($inactive_hosts===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
@@ -91,7 +55,7 @@ elseif (!isset($out)) {
 # found
 else {
     // table
-    print "<table class='table table-top table-threshold'>";
+    print "<table class='table table-striped table-top'>";
 
     print "<tr>";
     print " <th></th>";
@@ -113,7 +77,6 @@ else {
         print "</tr>";
 
     }
-
     print "</table>";
 }
 ?>

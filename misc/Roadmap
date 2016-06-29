@@ -1,21 +1,30 @@
-features for next releases:
----------------------------
+features for 1.3 releases:
 
     + todo:
         - change pagination (datatables);
         - PowerDNS API;
-        - KEA manage;
+        - KEA management;
+        - RWA users can manage IP requests;
 
-
-    + Modules:
-        + BGP support;
+    + Modules
         + DHCP integration;
-        + Inventory management;
     	+ NAT module
     		- Link individual ip addresses (eg public <> private) - static NAT, destination NAT
     		- Ability to create NAT pools and link subnet / address to that pool - source NAT
     		- Show bindings under tools and next to IP address
         + Customers module;
+
+    + Dropdown enhancement (jQuery scripts)
+
+ 	+ Mail subnet details;
+
+
+features for next releases:
+---------------------------
+
+    + Modules:
+        + BGP support;
+        + Inventory management;
 
     + User
     	+ LDAP auth without local user;
@@ -39,9 +48,6 @@ features for next releases:
     + Subnet, addresses
         + Multiple levels of sections;
     	+ assign a state to a subnet, vlan;
-        + pagination for available subnets;
-
-	+ Mail subnet details;
 
 	+ Notificaitons;
 

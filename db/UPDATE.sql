@@ -557,3 +557,17 @@ ALTER TABLE `settings` DROP `permitUserVlanCreate`;
 
 /* add menu type */
 ALTER TABLE `users` ADD `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic';
+
+
+
+/* VERSION 1.23 */
+UPDATE `settings` set `version` = '1.23';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* change default datetime */
+ALTER TABLE `ipaddresses` CHANGE `lastSeen` `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01';
+
+
