@@ -1327,7 +1327,8 @@ class User extends Common_functions {
                         //display
                         "compressOverride"=>$post['compressOverride'],
                         "hideFreeRange"=>$this->verify_checkbox(@$post['hideFreeRange']),
-                        "printLimit"=>@$post['printLimit']
+                        "printLimit"=>@$post['printLimit'],
+                        "menuType"=>$post['menuType'],
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);

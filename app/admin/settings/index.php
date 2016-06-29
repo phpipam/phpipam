@@ -554,7 +554,6 @@ $(document).ready(function() {
 	</td>
 </tr>
 
-
 <!-- result -->
 <tr class="th">
 	<td colspan="2">

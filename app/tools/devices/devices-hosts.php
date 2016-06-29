@@ -19,6 +19,18 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 $addresses     = $Tools->fetch_multiple_objects("ipaddresses", "switch", $device['id']);
 if ($addresses===false) { $addresses = array(); }
 
+# title
+print "<h4>"._('Device details')."</h4>";
+print "<hr>";
+
+# print link to manage
+print "<div class='btn-group'>";
+	//back button
+	if(isset($_GET['sPage'])) { print "<a class='btn btn-sm btn-default' href='javascript:history.back()' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('Back')."</a>"; }
+	//administer
+	elseif($User->is_admin(false)) { print "<a class='btn btn-sm btn-default' href='".create_link("administration","devices")."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> ". _('Manage')."</a>"; }
+print "</div>";
+
 # print
 if($_GET['sPage']!=0 && sizeof($device)>0) {
 
@@ -31,10 +43,6 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
     # device
     print "<td>";
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
-
-    	# title
-    	print "<h4>"._('Device details')."</h4>";
-    	print "<hr>";
 
     	print '<tr>';
     	print "	<th>". _('Name').'</a></th>';

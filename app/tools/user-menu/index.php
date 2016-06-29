@@ -176,6 +176,28 @@ if($User->user->authMethod == 1) {
 	</td>
 </tr>
 
+<!-- Menu type -->
+<tr>
+	<td class="title"><?php print _('Menu Type'); ?></td>
+	<td>
+		<select name="menuType" class="form-control input-sm input-w-auto">
+			<?php
+			$opts = array(
+				"Static"=>_("Static"),
+				"Dynamic"=>_("Dynamic")
+			);
+			foreach($opts as $key=>$line) {
+				if($User->user->menuType == $key) { print "<option value='$key' selected>$line</option>"; }
+				else 								{ print "<option value='$key'>$line</option>"; }
+			}
+			?>
+		</select>
+	</td>
+	<td class="info2">
+		<?php print _('Select menu type to display'); ?>
+	</td>
+</tr>
+
 
 
 <!-- Submit and hidden values -->

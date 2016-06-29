@@ -554,3 +554,6 @@ ALTER TABLE `users` ADD `editVlan` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `p
 
 /* remove permitUserVlanCreate - not needed */
 ALTER TABLE `settings` DROP `permitUserVlanCreate`;
+
+/* add menu type */
+ALTER TABLE `users` ADD `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic';

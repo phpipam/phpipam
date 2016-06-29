@@ -204,13 +204,19 @@ else {
 			include_once("app/dashboard/widgets/index.php");
 			print "</div>";
 		}
+		/* all sections */
+		elseif($_GET['page']=="subnets" && strlen($_GET['section'])==0) {
+			print "<div id='dashboard' class='container'>";
+			include_once("app/sections/all-sections.php");
+			print "</div>";
+		}
 		/* content */
 		else {
 			print "<table id='subnetsMenu'>";
 			print "<tr>";
 
 			# fix for empty section
-			if( isset($_GET['section']) && (strlen($_GET['section']) == 0) )			{ unset($_GET['section']); }
+			if( isset($_GET['section']) && (strlen(@$_GET['section']) == 0) )			{ unset($_GET['section']); }
 
 			# hide left menu
 			if( ($_GET['page']=="tools"||$_GET['page']=="administration") && !isset($_GET['section'])) {
@@ -228,7 +234,6 @@ else {
 				print "</td>";
 
 			}
-
 			# content
 			print "<td id='subnetsContent'>";
 			print "<div class='row menu-$_GET[page]' id='content'>";

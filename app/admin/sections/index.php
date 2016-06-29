@@ -78,16 +78,16 @@ if(isset($sections_sorted)) {
 		    print "	<td>/</td>";
 	    }
 	    //strictMode
-	    $mode = $section['strictMode']==0 ? _("No") : _("Yes");
-	    print '	<td>'. $mode .'</td>'. "\n";
+	    $mode = $section['strictMode']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5'>"._("Yes");
+	    print '	<td>'. $mode .'</span></td>'. "\n";
 	    //Show VLANs
 	    print " <td>";
-	    print @$section['showVLAN']==1 ? _("Yes") : _("No");
-	    print "	</td>";
+	    print @$section['showVLAN']==1 ? "<span class='badge badge1 badge5'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
+	    print "	</span></td>";
 	    //Show VRFs
 	    print " <td>";
-	    print @$section['showVRF']==1 ? _("Yes") : _("No");
-	    print "	</td>";
+	    print @$section['showVRF']==1 ? "<span class='badge badge1 badge5'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
+	    print "	</span></td>";
 		//permissions
 		print "<td>";
 	    if(strlen($section['permissions'])>1 && !is_null($section['permissions'])) {

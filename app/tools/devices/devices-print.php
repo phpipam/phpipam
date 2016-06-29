@@ -21,9 +21,18 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 # get hidden fields */
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
+
 # title
 print "<h4>"._('List of network devices')."</h4>";
 print "<hr>";
+
+# print link to manage
+print "<div class='btn-group'>";
+	//back button
+	if(isset($_GET['sPage'])) { print "<a class='btn btn-sm btn-default' href='javascript:history.back()' style='margin-bottom:10px;'><i class='fa fa-chevron-left'></i> ". _('Back')."</a>"; }
+	//administer
+	elseif($User->is_admin()) { print "<a class='btn btn-sm btn-default' href='".create_link("administration","devices")."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> ". _('Manage')."</a>"; }
+print "</div>";
 
 # table
 print '<table id="switchManagement" class="table sorted table-striped table-top">';

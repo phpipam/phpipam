@@ -344,6 +344,7 @@ CREATE TABLE `users` (
   `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
   `printLimit` int(4) unsigned DEFAULT '30',
+  `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
   PRIMARY KEY (`username`),

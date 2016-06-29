@@ -1137,10 +1137,13 @@ class Common_functions  {
         	}
         	// install, upgrade
         	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
-            	$title[] = $get['page'];
+            	$title[] = ucwords($get['page']);
         	}
         	// sections, subnets
         	elseif ($get['page']=="subnets" || $get['page']=="folder") {
+            	// subnets
+            	$title[] = "Subnets";
+
             	// section
             	if (isset($get['section'])) {
                  	$se = $this->fetch_object ("sections", "id", $get['section']);
@@ -1171,10 +1174,10 @@ class Common_functions  {
         	}
         	// tools, admin
         	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = $get['page'];
+            	$title[] = ucwords($get['page']);
             	// subpage
             	if (isset($get['section'])) {
-                	$title[] = $get['section'];
+                	$title[] = ucwords($get['section']);
             	}
             	if (isset($get['subnetId'])) {
                 	// vland domain
@@ -1185,12 +1188,12 @@ class Common_functions  {
                     	}
                 	}
                 	else {
-                    	$title[] = $get['subnetId'];
+                    	$title[] = ucwords($get['subnetId']);
                     }
             	}
         	}
         	else {
-            	$title[] = $get['page'];
+            	$title[] = ucwords($get['page']);
             }
     	}
         // return title
