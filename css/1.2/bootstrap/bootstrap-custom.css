@@ -1407,6 +1407,13 @@ table.ipaddress_subnet .alert {
 table.ipaddress_subnet i.pull-left {
     padding-top: 3px;
 }
+table.ipaddress_subnet span.badge.badge1 {
+    border-color: #ddd;
+}
+table.ipaddress_subnet span.alert-success {
+    color: #3c763d;
+    border-color: #d6e9c6;
+}
 a.createfromfree {
 	padding: 1px 4px;
 	margin-top: -2px;
@@ -2505,6 +2512,7 @@ div.jqueryError a {
 }
 .navbar .navbar-nav.icon-ul li {
     min-width: 0px;
+    white-space: nowrap;
 }
 .navbar .navbar-nav.icon-ul li i {
     padding-left: 7px;
@@ -2548,6 +2556,9 @@ div.jqueryError a {
 }
 .navbar i {
     margin-right: 8px;
+}
+.navbar .icon-ul i  {
+    margin-right: 0px;
 }
 .dropdown-header {
     font-size: 14px;

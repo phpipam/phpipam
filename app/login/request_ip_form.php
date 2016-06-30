@@ -14,7 +14,7 @@
 $subnets = $Tools->requests_fetch_available_subnets ();
 
 # die if no subnets are available for requests!
-if($subnets===false) { ?>
+if($subnets===NULL) { ?>
 <tr>
 	<td colspan="2"><div class="alert alert-warning" style="white-space:nowrap;"><?php print _('No subnets available for requests'); ?></div></td>
 </tr>

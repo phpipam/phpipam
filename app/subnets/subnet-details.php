@@ -233,9 +233,9 @@ else {
 
 			print "<tr>";
 			print "	<th>"._('IP requests')."</th>";
-			if(@$subnet['isFull'] == 1) 		    { print "	<td class='info2'>"._('disabled - marked as full')."</td>"; }		# yes
-			elseif($subnet['allowRequests'] == 1) 	{ print "	<td>"._('enabled')."</td>"; }		# yes
-			else 									{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+			if(@$subnet['isFull'] == 1) 		    { print "	<td>"._('disabled - marked as full')."</td>"; }		# yes
+			elseif($subnet['allowRequests'] == 1) 	{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+			else 									{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 			print "</tr>";
 		}
 
@@ -263,14 +263,14 @@ else {
 		# ping-check hosts inside subnet
 		print "<tr>";
 		print "	<th>"._('Hosts check')."</th>";
-		if($subnet['pingSubnet'] == 1) 				{ print "	<td>"._('enabled')."</td>"; }		# yes
-		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+		if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 		# scan subnet for new hosts *
 		print "<tr>";
 		print "	<th>"._('Discover new hosts')."</th>";
-		if($subnet['discoverSubnet'] == 1) 			{ print "	<td>"._('enabled')."</td>"; }		# yes
-		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+		if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 	}
 
@@ -300,7 +300,7 @@ else {
 				$btns = "";
 				}
 
-				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
+				$zone = "<span class='text-muted'>(domain $zone)</span> <span class='badge badge1 badge5'>".$PowerDNS->count_domain_records_by_type ($domain->id, "PTR")." records</span>";
 			}
 			else {
 				if ($User->is_admin () || $User->user->pdns=="Yes") {
@@ -324,13 +324,13 @@ else {
 
 		print "<tr>";
 		print "	<th>"._('Autocreate reverse records')."</th>";
-		if($subnet['DNSrecursive'] == 1) 			{ print "	<td>"._('enabled')." $btns $zone</td>"; }		# yes
-		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+		if($subnet['DNSrecursive'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $btns $zone</td>"; }		# yes
+		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 		print "<tr>";
 		print "	<th>"._('Show DNS records')."</th>";
-		if($subnet['DNSrecords'] == 1) 				{ print "	<td>"._('enabled')."</td>"; }		# yes
-		else 										{ print "	<td class='info2'>"._('disabled')."</td>";}		# no
+		if($subnet['DNSrecords'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 	}
 

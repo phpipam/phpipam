@@ -69,7 +69,7 @@ if ($_GET['sPage']=="search" && strlen(@$_POST['domain-filter'])>0) {
     <?php if ($domains===false && isset($_POST['domain-filter'])) { ?>
     <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link ("tools", "powerDNS", $_GET['subnetId']); ?>"><i class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
     <?php } ?>
-    <?php if ($User->is_admin()) { ?>
+    <?php if ($User->is_admin(false)) { ?>
     <!-- Add new -->
     <a class='btn btn-sm btn-default btn-default btn-success'  href="<?php print create_link ("administration", "powerDNS"); ?>"><i class='fa fa-pencil'></i> <?php print _('Manage domains'); ?></a>
    <?php } ?>

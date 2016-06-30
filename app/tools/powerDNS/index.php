@@ -1,15 +1,17 @@
 <?php
 # verify that user is logged in
 $User->check_user_session();
+?>
 
+<!-- display existing groups -->
+<h4><?php print _('PowerDNS management'); ?></h4>
+<hr><br>
+
+<?php
 # check permissions
-if ($User->is_admin() || $User->user->pdns=="Yes") {
+if ($User->is_admin(false) || $User->user->pdns=="Yes") {
 ?>
     <div class="powerDNS">
-
-    <!-- display existing groups -->
-    <h4><?php print _('PowerDNS management'); ?></h4>
-    <hr><br>
 
     <?php if($User->settings->enablePowerDNS==1) { ?>
 
@@ -79,6 +81,6 @@ if ($User->is_admin() || $User->user->pdns=="Yes") {
     <?php
 }
 else {
-    $Result->show("info", _('You do nothave permission to manage DNS. Please contact administrator!'), false);
+    $Result->show("danger alert-absolute", _('You do not have permission to manage DNS. Please contact administrator!'), false);
 }
 ?>

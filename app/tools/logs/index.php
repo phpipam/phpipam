@@ -11,7 +11,7 @@ $User->check_user_session();
 $Admin = new Admin($Database, false);
 
 # only for admin
-if ($User->is_admin()) {
+if ($User->is_admin(false)) {
 ?>
 
 <h4><?php print _('Log files'); ?>:</h4>
@@ -58,7 +58,7 @@ else {
 # for non admins
 else {
 	print "<h4>"._('Log files').":</h4><hr>";
-	$Result->show("danger", _("Administrative privileges required!"), false);
+	$Result->show("danger alert-absolute", _("Administrative privileges required!"), false);
 }
 
 ?>

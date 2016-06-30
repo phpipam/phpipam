@@ -192,7 +192,7 @@ else {
 					print " <td><a href='".create_link("subnets",$section->id)."'>$section->name</a></td>";
 
 					// actions
-					if ($k==0 && $_GET['page']=="administration") {
+					if ($k==0) {
 						print "	<td class='actions'>";
 						print "	<div class='btn-group'>";
 						print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$v->vlanId'><i class='fa fa-pencil'></i></button>";
@@ -211,7 +211,7 @@ else {
 					print "	<td>/</td>";
 					print "	<td>/</td>";
 					// actions
-					if ($k==0 && $_GET['page']=="administration") {
+					if ($k==0) {
 						print "	<td class='actions'>";
 						print "	<div class='btn-group'>";
 						print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$v->vlanId'><i class='fa fa-pencil'></i></button>";

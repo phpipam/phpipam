@@ -58,7 +58,7 @@ function print_leases ($s) {
 <h4><?php print _("Reservations"); ?></h4><hr>
 
 <!-- Manage -->
-<?php if ($User->is_admin()) { ?>
+<?php if ($User->is_admin(false)) { ?>
 <?php if ($_GET['page']=="administration") { ?>
     <a class='btn btn-sm btn-default btn-default btn-success dhcp-leases' data-action='add' data-id=''><i class='fa fa-plus'></i> <?php print _('Add'); ?></a>
 <?php } else { ?>

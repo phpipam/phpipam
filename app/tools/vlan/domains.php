@@ -27,9 +27,15 @@
 
 <!-- all domains -->
 <tr>
-	<th style="padding: 10px;"><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>" class="btn btn-sm btn-default"><i class='fa fa-list'></i> <?php print _('All domains'); ?></a></th>
-	<th style="padding: 10px;padding-top: 13px;" colspan="<?php print $_GET['page']=="administration" ? 3 : 2; ?>"><?php print _('List of all VLANs in all domains'); ?></th>
-	<?php if($User->is_admin(false)===true) { ?><th></th><?php } ?>
+	<td><strong><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>"> <?php print _('All domains'); ?></a></strong></td>
+	<td><?php print _('List of all VLANs in all domains'); ?></td>
+	<td><span class='text-muted'><?php print _('All sections'); ?></span></td>
+	<td><a class='btn btn-sm btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
+	<?php if($_GET['page']=="administration") { ?><td></td><?php } ?>
+</tr>
+
+<tr>
+    <td colspan="<?php if($_GET['page']=="administration") print 5; else print 4; ?>"><hr></td>
 </tr>
 
 <!-- content -->
@@ -57,7 +63,7 @@ foreach($vlan_domains as $domain) {
 
 	// print
 	print "<tr class='text-top'>";
-	print "	<td><strong><a href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'><span class='btn btn-xs btn-default'><i class='fa fa-list'></i></span> $domain->name</a></strong></td>";
+	print "	<td><strong><a href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>$domain->name</a></strong></td>";
 	print "	<td>$domain->description</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
 	print "	<td><a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
