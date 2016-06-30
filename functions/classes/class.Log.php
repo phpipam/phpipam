@@ -1391,7 +1391,7 @@ class Logging extends Common_functions {
 		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
 
 		# folder
-		if ( $this->object_new['isFolder']=="1"	||$this->object_old['isFolder']=="1")	{ $this->object_type = "folder"; }
+		if ( $this->object_new['isFolder']=="1"	|| $this->object_old['isFolder']=="1")	{ $this->object_type = "folder"; }
 
 		# set subject
 		$subject = string;
@@ -1441,8 +1441,21 @@ class Logging extends Common_functions {
 
 
 		# get all admins and check who to end mail to
-		$recipients = $this->changelog_mail_get_recipients ();
-		if($recipients ===false) 				{ return true; }
+		//subnets, addresses - send mail to normal users also
+		if ($this->object_type=="subnet" || $this->object_type=="address") {
+    		if($this->object_type=="subnet") {
+        		$recipients = $this->changelog_mail_get_recipients ($obj_details['id']);
+    		}
+    		else {
+        		$recipients = $this->changelog_mail_get_recipients ($obj_details['subnetId']);
+    		}
+		}
+		else {
+    		$recipients = $this->changelog_mail_get_recipients (false);
+		}
+		if($recipients ===false) {
+    		return true;
+        }
 
 		# fetch mailer settings
 		$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
@@ -1481,29 +1494,40 @@ class Logging extends Common_functions {
 	 * Get all admins that are set to receive changelog
 	 *
 	 * @access private
+	 * @param bool|mixed $subnetId
 	 * @return void
 	 */
-	private function changelog_mail_get_recipients () {
-		// get all admins and check who to end mail to
-		$recipients = $this->Tools->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
-		//check recipients
-		if ($recipients!==false) {
-			// check
-			$m = 0;
-			foreach($recipients as $k=>$r) {
-				if($r->mailChangelog!="Yes") {
-					unset($recipients[$k]);
-				}
-				else {
-					$m++;
-				}
-			}
-			// if none return false
-			if ($m==0) 	{ return false; }
-			else 		{ return $recipients; }
-		}
-		else {
-			return false;
-		}
+	private function changelog_mail_get_recipients ($subnetId = false) {
+    	// fetch all users with mailNotify
+        $notification_users = $this->fetch_multiple_objects ("users", "mailChangelog", "Yes", "id", true);
+        // recipients array
+        $recipients = array();
+        // any ?
+        if ($notification_users!==false) {
+         	// if subnetId is set check who has permissions
+        	if (isset($subnetId)) {
+             	foreach ($notification_users as $u) {
+                	// inti object
+                	$Subnets = new Subnets ($this->Database);
+                	//check permissions
+                	$subnet_permission = $Subnets->check_permission($u, $subnetId);
+                	// if 3 than add
+                	if ($subnet_permission==3) {
+                    	$recipients[] = $u;
+                	}
+            	}
+        	}
+        	else {
+            	foreach ($notification_users as $u) {
+                	if($u->role=="Administrator") {
+                    	$recipients[] = $u;
+                	}
+            	}
+        	}
+        	return sizeof($recipients)>0 ? $recipients : false;
+        }
+        else {
+            return false;
+        }
 	}
 }

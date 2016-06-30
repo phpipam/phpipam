@@ -105,7 +105,6 @@ if($User->user->authMethod == 1) {
 	<td class="info2"><?php print _('Select yes to receive mail notifications for IP requests'); ?></td>
     <?php } ?>
 </tr>
-<?php if($User->user->role=="Administrator") { ?>
 <!-- weather to receive mails for changelog -->
 <tr>
 	<td><?php print _('Mail Changelog'); ?></td>
@@ -115,9 +114,13 @@ if($User->user->authMethod == 1) {
 			<option value="Yes" <?php if($User->user->mailChangelog=="Yes") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
 		</select>
 	</td>
+	<?php if($User->user->role=="Administrator") { ?>
 	<td class="info2"><?php print _('Select yes to receive notification change mail for changelog'); ?></td>
+    <?php } else { ?>
+	<td class="info2"><?php print _('Select yes to receive notification change mail for changelog'); ?></td>
+    <?php } ?>
 </tr>
-<?php } ?>
+
 
 
 <!-- display settings -->

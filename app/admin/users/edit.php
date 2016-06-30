@@ -203,7 +203,7 @@ $(document).ready(function(){
 	</tbody>
 
 	<!-- mailNotify -->
-	<tbody id="user_notifications" <?php if(@$user['role']!="Administrator") print "style='display:none'"; ?>>
+	<tbody id="user_notifications">
 	<tr>
     	<td><?php print _('Mail State changes'); ?></td>
     	<td>

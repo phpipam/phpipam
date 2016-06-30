@@ -1407,10 +1407,10 @@ table.ipaddress_subnet .alert {
 table.ipaddress_subnet i.pull-left {
     padding-top: 3px;
 }
-table.ipaddress_subnet span.badge.badge1 {
+span.badge.badge1 {
     border-color: #ddd;
 }
-table.ipaddress_subnet span.alert-success {
+span.alert-success {
     color: #3c763d;
     border-color: #d6e9c6;
 }

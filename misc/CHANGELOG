@@ -1,4 +1,4 @@
-== 1.22.01
+== 1.22.05
 
 	New features:
 	------------
@@ -35,6 +35,7 @@
     + MAC address normalization;
     + jQuery tables;
     + Permission delegation now only delegates changes not whole permission set;
+    + Users with RWA permission can manage IP requests and receive IP request mails + changelog mails for subnet;
 
 	Bugfixes:
 	----------------------------

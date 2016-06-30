@@ -836,7 +836,7 @@ class Tools extends Common_functions {
 	public function ip_request_send_mail ($action="new", $values) {
 
 		# get all admins and check who to end mail to
-		$recipients = $this->ip_request_get_mail_recipients ();
+		$recipients = $this->ip_request_get_mail_recipients ($values['subnetId']);
 
 		# add requester to cc
 		$recipients_requester = $values['requester'];
@@ -922,29 +922,41 @@ class Tools extends Common_functions {
 	 * Returns list of recipients to get new
 	 *
 	 * @access private
+	 * @param bool|mixed $subnetId
 	 * @return void
 	 */
-	private function ip_request_get_mail_recipients () {
-		// get all admins and check who to end mail to
-		$recipients = $this->fetch_multiple_objects ("users", "role", "Administrator", "id", true);
-		//check recepients
-		if ($recipients!==false) {
-			// check
-			$m = 0;
-			foreach($recipients as $k=>$r) {
-				if($r->mailNotify!="Yes") {
-					unset($recipients[$k]);
-				} else {
-					$m++;
-				}
-			}
-			// if none return false
-			if ($m==0) 	{ return false; }
-			else 		{ return $recipients; }
-		}
-		else {
-			return false;
-		}
+	private function ip_request_get_mail_recipients ($subnetId = false) {
+    	// fetch all users with mailNotify
+        $notification_users = $this->fetch_multiple_objects ("users", "mailNotify", "Yes", "id", true);
+        // recipients array
+        $recipients = array();
+        // any ?
+        if ($notification_users!==false) {
+         	// if subnetId is set check who has permissions
+        	if (isset($subnetId)) {
+             	foreach ($notification_users as $u) {
+                	// inti object
+                	$Subnets = new Subnets ($this->Database);
+                	//check permissions
+                	$subnet_permission = $Subnets->check_permission($u, $subnetId);
+                	// if 3 than add
+                	if ($subnet_permission==3) {
+                    	$recipients[] = $u;
+                	}
+            	}
+        	}
+        	else {
+            	foreach ($notification_users as $u) {
+                	if($u->role=="Administrator") {
+                    	$recipients[] = $u;
+                	}
+            	}
+        	}
+        	return sizeof($recipients)>0 ? $recipients : false;
+        }
+        else {
+            return false;
+        }
 	}
 
 	/**

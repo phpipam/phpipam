@@ -93,18 +93,26 @@ foreach ($users as $user) {
 
 	# powerDNS
 	if($user['role']=="Administrator") {
-     	print "<td>"._("Yes")."</td>";
-     	print "<td>"._("Yes")."</td>";
+     	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
+     	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
 	}
 	else {
     	if ($User->settings->enablePowerDNS==1) {
     	if(strlen($user['pdns'])==0) $user['pdns'] = "No";
+
+        // append badge
+    	$user['pdns'] = $user['pdns']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pdns'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['pdns'])."</span>";
+
     	print "<td>";
     	print $user['pdns'];
     	print "</td>";
     	}
 
     	if(strlen($user['editVlan'])==0) $user['editVlan'] = "No";
+
+        // append badge
+    	$user['editVlan'] = $user['editVlan']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editVlan'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editVlan'])."</span>";
+
     	print "<td>";
     	print $user['editVlan'];
     	print "</td>";
