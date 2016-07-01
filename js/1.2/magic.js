@@ -512,6 +512,31 @@ $(document).on("click", "#mailIPAddressSubmit", function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
+/*    send notification mail - subnet
+********************************/
+//show form
+$(document).on("click", "a.mail_subnet", function() {
+    //get IP address id
+    var id = $(this).attr('data-id');
+    $.post('app/subnets/mail-notify-subnet.php', { id:id }, function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+//send mail with IP details!
+$(document).on("click", "#mailSubnetSubmit", function() {
+    showSpinner();
+    var mailData = $('form#mailNotifySubnet').serialize();
+    //post to check script
+    $.post('app/subnets/mail-notify-subnet-check.php', mailData, function(data) {
+        $('div.sendmail_check').html(data).slideDown('fast');
+        //reload after 2 seconds if succeeded!
+        reload_window (data);
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
 
 
 

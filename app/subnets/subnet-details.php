@@ -521,7 +521,7 @@ else {
 		print "<a class='btn btn-xs btn-default disabled'				href='' data-container='body' rel='tooltip' title='"._('Scan subnet for new hosts')."'> 													<i class='fa fa-cogs'></i></a> ";
 	print "</div>";
 
-	# export / import
+	# export / import / shares / mail
 	print "<div class='btn-group'>";
 		//import
 		if($sp['import'])
@@ -534,6 +534,7 @@ else {
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
 		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";
 		}
+        print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='Send mail notification'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
 	print "</div>";
 
 		# firewall address object actions

@@ -41,11 +41,11 @@ $subject	= $_POST['subject'];
 
 // set html content
 $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-$content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
+$content[] = "<tr><td style='padding:5px;margin:0px;border-bottom:1px solid #eeeeee;'>$User->mail_font_style<strong>$subject</strong></font></td></tr>";
 foreach(explode("\r\n", $_POST['content']) as $c) {
-$content[] = "<tr><td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$c</font></td></tr>";
+$content[] = "<tr><td style='padding-left:15px;margin:0px;'>$User->mail_font_style $c</font></td></tr>";
 }
-$content[] = "<tr><td style='padding:5px;padding-left:15px;margin:0px;font-style:italic;padding-bottom:3px;text-align:right;color:#ccc;text-shadow:1px 1px 1px white;border-top:1px solid white;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;'>Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
+$content[] = "<tr><td style='padding-left:15px;padding-top:20px;margin:0px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
 //set al content
 $content_plain[] = "$subject"."\r\n------------------------------\r\n";
 $content_plain[] = str_replace("&middot;", "\t - ", $_POST['content']);

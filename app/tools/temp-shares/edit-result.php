@@ -86,17 +86,14 @@ if(strlen($_POST['email'])>0) {
 	// generate url
 	$url = $Result->createURL().create_link("temp_share",$_POST['code']);
 
-	// set subject
-	$subject	= "New ipam share created";
-
 	// set html content
 	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-	$content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
+	$content[] = "<tr><td>$User->mail_font_style<strong>New ipam share created</strong></font><br><br></td></tr>";
 
-	$content[] = "<tr><td colspan='2'>Hi, new share was created on ".$User->settings->siteTitle.", available on following address:</td></tr>";
-	$content[] = "<tr><td colspan='2'><a href='$url'><xmp>$url</xmp></a></td></tr>";
-	$content[] = "<tr><td colsapn='2'><br>Details:<br>".implode("<br>", $tmp)."<br></td></tr>";
-	$content[] = "<tr><td style='padding:5px;padding-left:15px;margin:0px;font-style:italic;padding-bottom:3px;text-align:right;color:#ccc;text-shadow:1px 1px 1px white;border-top:1px solid white;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;'>Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
+	$content[] = "<tr><td colspan='2'>$User->mail_font_style Hi, new share was created on ".$User->settings->siteTitle.", available on following address:</font></td></tr>";
+	$content[] = "<tr><td colspan='2'><a href='$url'>$User->mail_font_style_href <xmp>$url</xmp></font></a></td></tr>";
+	$content[] = "<tr><td colsapn='2' style='line-height:18px;'>$User->mail_font_style <strong>Details:</strong><br>".implode("<br> - ", $tmp)."</font><br></td></tr>";
+	$content[] = "<tr><td style='padding:5px;padding-left:15px;padding-top:20px;font-style:italic;'>$User->mail_font_style_light Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
 	//set al content
 	$content_plain[] = "$subject"."\r\n------------------------------\r\n";
 	$content_plain[] = "Hi, new share was created on ".$User->settings->siteTitle.", available on following address:\r\n ".$url;
@@ -115,7 +112,7 @@ if(strlen($_POST['email'])>0) {
 		foreach(explode(",", $_POST['email']) as $r) {
 		$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r)));
 		}
-		$phpipam_mail->Php_mailer->Subject = $subject;
+		$phpipam_mail->Php_mailer->Subject = "New ipam share created";
 		$phpipam_mail->Php_mailer->msgHTML($content);
 		$phpipam_mail->Php_mailer->AltBody = $content_plain;
 		//send

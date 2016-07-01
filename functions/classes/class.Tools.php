@@ -835,7 +835,16 @@ class Tools extends Common_functions {
 	 */
 	public function ip_request_send_mail ($action="new", $values) {
 
-		# get all admins and check who to end mail to
+		# fetch mailer settings
+		$mail_settings = $this->fetch_object("settingsMail", "id", 1);
+
+		# initialize mailer
+		$this->get_settings ();
+		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail->initialize_mailer();
+
+
+		# get all users and check who to end mail to
 		$recipients = $this->ip_request_get_mail_recipients ($values['subnetId']);
 
 		# add requester to cc
@@ -853,22 +862,22 @@ class Tools extends Common_functions {
 		else						{ $this->Result->show("danger", _("Invalid request action"), true); }
 
 		// set html content
-		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$subject</font></td></tr>";
+		$content[] = "<table style='margin-left:10px;margin-top:20px;width:auto;padding:0px;border-collapse:collapse;'>";
+		$content[] = "<tr><td colspan='2' style='margin:0px;>$this->mail_font_style <strong>$subject</strong></font></td></tr>";
 		foreach($values as $k=>$v) {
 		// title search
 		if (preg_match("/s_title_/", $k)) {
-		$content[] = "<tr><td colspan='2' style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:16px;'>$v</font></td></tr>";
+		$content[] = "<tr><td colspan='2' style='margin:0px;border-bottom:1px solid #eeeeee;'>$this->mail_font_style<strong>$v</strong></font></td></tr>";
 		}
 		else {
 		//content
 		$content[] = "<tr>";
-		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$k</font></td>";
-		$content[] = "<td style='padding:3px;padding-left:15px;margin:0px;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:13px;'>$v</font></td>";
+		$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $k</font></td>";
+		$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $v</font></td>";
 		$content[] = "</tr>";
 		}
 		}
-		$content[] = "<tr><td style='padding:5px;padding-left:15px;margin:0px;font-style:italic;padding-bottom:3px;text-align:right;color:#ccc;text-shadow:1px 1px 1px white;border-top:1px solid white;'><font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;'>Sent by user ".$User->user->real_name." at ".date('Y/m/d H:i')."</font></td></tr>";
+		$content[] = "<tr><td style='padding-top:15px;padding-bottom:3px;text-align:right;color:#ccc;'>$this->mail_font_style Sent at ".date('Y/m/d H:i')."</font></td></tr>";
 		//set alt content
 		$content_plain[] = "$subject"."\r\n------------------------------\r\n";
 		foreach($values as $k=>$v) {
@@ -876,15 +885,6 @@ class Tools extends Common_functions {
 		}
 		$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
 		$content[] = "</table>";
-
-
-		# fetch mailer settings
-		$mail_settings = $this->fetch_object("settingsMail", "id", 1);
-
-		# initialize mailer
-		$this->get_settings ();
-		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
-		$phpipam_mail->initialize_mailer();
 
 		// set content
 		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));

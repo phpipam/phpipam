@@ -52,6 +52,36 @@ class Common_functions  {
 	 */
 	private $cache_check_exceptions = array();
 
+    /**
+     * Default font
+     *
+     * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
+     *
+     * @var string
+     * @access public
+     */
+    public $mail_font_style = "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px;color:#333;'>";
+
+    /**
+     * Default font
+     *
+     * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
+     *
+     * @var string
+     * @access public
+     */
+    public $mail_font_style_light = "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:11px;color:#777;'>";
+
+    /**
+     * Default font for links
+     *
+     * (default value: "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px)
+     *
+     * @var string
+     * @access public
+     */
+    public $mail_font_style_href = "<font face='Helvetica, Verdana, Arial, sans-serif' style='font-size:12px;color:#a0ce4e;'>";
+
 	/**
 	 * Database
 	 *
@@ -255,6 +285,48 @@ class Common_functions  {
 			return false;
 		}
 		return $cnt;
+	}
+
+
+	/**
+	 * Get all admins that are set to receive changelog
+	 *
+	 * @access public
+	 * @param bool|mixed $subnetId
+	 * @return void
+	 */
+	public function changelog_mail_get_recipients ($subnetId = false) {
+    	// fetch all users with mailNotify
+        $notification_users = $this->fetch_multiple_objects ("users", "mailChangelog", "Yes", "id", true);
+        // recipients array
+        $recipients = array();
+        // any ?
+        if ($notification_users!==false) {
+         	// if subnetId is set check who has permissions
+        	if (isset($subnetId)) {
+             	foreach ($notification_users as $u) {
+                	// inti object
+                	$Subnets = new Subnets ($this->Database);
+                	//check permissions
+                	$subnet_permission = $Subnets->check_permission($u, $subnetId);
+                	// if 3 than add
+                	if ($subnet_permission==3) {
+                    	$recipients[] = $u;
+                	}
+            	}
+        	}
+        	else {
+            	foreach ($notification_users as $u) {
+                	if($u->role=="Administrator") {
+                    	$recipients[] = $u;
+                	}
+            	}
+        	}
+        	return sizeof($recipients)>0 ? $recipients : false;
+        }
+        else {
+            return false;
+        }
 	}
 
 
