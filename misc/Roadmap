@@ -4,7 +4,6 @@ features for 1.3 releases:
         - change pagination (datatables);
         - PowerDNS API;
         - KEA management;
-        - RWA users can manage IP requests;
 
     + Modules
         + DHCP integration;
@@ -13,10 +12,6 @@ features for 1.3 releases:
     		- Ability to create NAT pools and link subnet / address to that pool - source NAT
     		- Show bindings under tools and next to IP address
         + Customers module;
-
-    + Dropdown enhancement (jQuery scripts)
-
- 	+ Mail subnet details;
 
 
 features for next releases:
@@ -48,7 +43,5 @@ features for next releases:
     + Subnet, addresses
         + Multiple levels of sections;
     	+ assign a state to a subnet, vlan;
-
-	+ Notificaitons;
 
 	+ Map/Link MPLS VRF to VLAN;

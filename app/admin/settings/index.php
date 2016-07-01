@@ -554,6 +554,18 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Logo -->
+<tr>
+	<td class="title"><?php print _('Upload logo'); ?></td>
+	<td>
+	    <a class="btn btn-sm btn-default" id="upload-logo"><i class="fa fa-upload"></i> <?php print _("Upload"); ?></a>
+	</td>
+	<td class="info2">
+		<?php print _('Upload custom logo'); ?>
+	</td>
+</tr>
+
+
 <!-- result -->
 <tr class="th">
 	<td colspan="2">

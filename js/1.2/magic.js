@@ -1063,6 +1063,21 @@ $('#settings').submit(function() {
     return false;
 });
 
+/* show logo uploader */
+$('#upload-logo').click(function () {
+    csrf_cookie = $('form#settings input[name=csrf_cookie]').val();
+    open_popup ("500", 'app/admin/settings/logo/logo-uploader.php',  {csrf_cookie:csrf_cookie}, false)
+    return false;
+});
+// clear logo
+$(document).on("click", ".logo-clear", function() {
+     $.post('app/admin/settings/logo/logo-clear.php', "", function(data) {
+        $('div.logo-current').html(data).slideDown('fast');
+        //reload after 1 second if all is ok!
+        reload_window (data);
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+});
+
 /* save mail settings */
 $('#mailsettings').submit(function() {
     showSpinner();
