@@ -145,18 +145,15 @@ else {
 
 <!-- header -->
 <div class="row" id="header">
-	<!-- logo -->
-	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding-left:0px;">
-		<?php
-    	if(file_exists( dirname(__FILE__)."/css/1.2/images/logo/logo.png")) {
-        	print "<img style='width:220px;' src='css/1.2/images/logo/logo.png'>";
-    	}
-        ?>
-	</div>
 	<!-- title -->
-	<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+	<div class="col-lg-6 log-lg-offset-3 col-md-6 col-md-offset-3 col-sm-12 col-xs-12">
 		<div class="hero-pusher hidden-xs hidden-sm"></div>
 		<div class="hero-unit">
+    		<?php
+        	if(file_exists( dirname(__FILE__)."/css/1.2/images/logo/logo.png")) {
+            	print "<img style='width:220px;margin-right:20px' src='css/1.2/images/logo/logo.png'>";
+        	}
+            ?>
 			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle; ?></a>
 			<p class="muted">
             <?php
@@ -169,7 +166,7 @@ else {
 		</div>
 	</div>
 	<!-- usermenu -->
-	<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 " id="user_menu">
+	<div class="col-lg-3 col-lg-offset-0 col-md-3 col-md-offset-0 col-sm-6 col-sm-offset-6 col-xs-12 " id="user_menu">
 		<?php include('app/sections/user-menu.php'); ?>
 	</div>
 </div>
