@@ -81,6 +81,12 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 <div class="row header-install" id="header">
 	<div class="col-xs-12">
 		<div class="hero-unit" style="padding:20px;margin-bottom:10px;">
+    		<?php
+        	if(file_exists( "css/1.2/images/logo/logo.png")) {
+            	print "<img style='width:220px;margin-right:20px' src='css/1.2/images/logo/logo.png'>";
+        	}
+            ?>
+
 			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle;?></a>
             <p class="muted"><?php print _("Login"); ?></p>
 		</div>

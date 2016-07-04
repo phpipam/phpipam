@@ -1054,7 +1054,7 @@ $('#settings').submit(function() {
 /* show logo uploader */
 $('#upload-logo').click(function () {
     csrf_cookie = $('form#settings input[name=csrf_cookie]').val();
-    open_popup ("500", 'app/admin/settings/logo/logo-uploader.php',  {csrf_cookie:csrf_cookie}, false)
+    open_popup ("700", 'app/admin/settings/logo/logo-uploader.php',  {csrf_cookie:csrf_cookie}, false)
     return false;
 });
 // clear logo
