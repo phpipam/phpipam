@@ -393,9 +393,24 @@ ul.submenu-dns li:last-child {
 }
 ul.submenu-dns li i {
 	color: #e1e1e1 !important;
-	padding-top:8px !important;
+	padding-top: 9px !important;
 	padding-left: 3px !important;
 }
+
+ul.submenu-linked li {
+	list-style: none;
+	background: url("../../1.2/images/li-dns.png") no-repeat 4px -1px !important;
+}
+ul.submenu-linked li:last-child {
+	list-style: none;
+	background: url("../../1.2/images/li-dns-last.png") no-repeat 4px -1px !important;
+}
+ul.submenu-linked li i {
+	color: #e1e1e1 !important;
+	padding-top: 9px !important;
+	padding-left: 3px !important;
+}
+
 table.ipaddresses tr:hover ul.submenu-dns li i {
 /* 	color: #ffffff !important; */
 	text-shadow: 1px 1px 0px white;
@@ -2508,7 +2523,7 @@ div.jqueryError a {
 
 .navbar .navbar-nav li {
 /*     text-align: center; */
-    min-width: 85px;
+/*     min-width: 85px; */
 }
 .navbar .navbar-nav.icon-ul li {
     min-width: 0px;

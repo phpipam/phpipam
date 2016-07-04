@@ -570,4 +570,6 @@ UPDATE `settings` set `donate` = 0;
 /* change default datetime */
 ALTER TABLE `ipaddresses` CHANGE `lastSeen` `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01';
 
+/* add linked subnet field */
+ALTER TABLE `subnets` ADD `linked_subnet` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `description`;
 

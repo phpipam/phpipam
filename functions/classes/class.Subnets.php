@@ -561,6 +561,36 @@ class Subnets extends Common_functions {
 		return @$subnet->vlanId==$vlanId ? true : false;
 	}
 
+	/**
+	 * Checks if subnet is linked.
+	 *
+	 * @access public
+	 * @param mixed $subnetId
+	 * @return void
+	 */
+	public function is_linked ($subnetId) {
+    	if(!is_numeric($subnetId)) {
+        	return false;
+    	}
+    	else {
+    		try { $subnets = $this->Database->getObjectsQuery("select * from subnets where `linked_subnet` = ?", array($subnetId)); }
+    		catch (Exception $e) {
+    			$this->Result->show("danger", _("Error: ").$e->getMessage());
+    			return false;
+    		}
+    		// check
+    		if (sizeof($subnets)>0) {
+        		foreach ($subnets as $s) {
+                    $this->cache_write ("subnets", $s->id, $s);
+        		}
+        		return $subnets;
+    		}
+    		else {
+        		return false;
+    		}
+    	}
+	}
+
 
 	/**
 	 * Fetches all subnets within section with specified vrf ID

@@ -240,6 +240,7 @@ CREATE TABLE `subnets` (
   `mask` VARCHAR(3) NULL DEFAULT NULL,
   `sectionId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
+  `linked_subnet` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `vrfId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `masterSubnetId` INT(11)  UNSIGNED  NOT NULL default 0,

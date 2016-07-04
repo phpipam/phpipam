@@ -18,9 +18,63 @@ else {
 
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
-		<th><?php print _('Subnet details'); ?></th>
-		<td><?php print "<b>$subnet[ip]/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?> <?php print $multicast_badge; ?></td>
+		<th style='padding-top:4px !important;'><?php print _('Subnet details'); ?></th>
+		<td style='font-size:18px;'><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?> <?php print $multicast_badge; ?></td>
 	</tr>
+    <?php
+        // if subnet is IPv4 search for linked IPv6 subnet, else show linked ipv4
+        $type = $Subnets->identify_address($subnet['subnet']);
+
+        if ($type=="IPv4" && $subnet['linked_subnet']!==null && $subnet['linked_subnet']!==0) {
+            $linked_subnet = $Subnets->fetch_subnet ("id", $subnet['linked_subnet']);
+
+            if ($linked_subnet !== false) {
+                // desc fix
+                $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+
+                print "<tr>";
+                print " <th style='font-weight:normal'>";
+                print " <p class='text-muted' style='margin-top:5px;'>"._("Linked IPv6 subnet")."</p>";
+                print " </th>";
+                print " <td>";
+                print " <ul class='submenu-linked'>";
+                print "<li style='font-size:13px;'>";
+                print "<i class='icon-gray fa fa-gray fa-angle-right'></i> ";
+                print "<a href='".create_link("subnets", $linked_subnet->sectionId, $linked_subnet->id)."'>".$Subnets->transform_address($linked_subnet->subnet,"dotted")."/$linked_subnet->mask</a> $linked_subnet->description";
+                print "</li>";
+                print " </ul>";
+                print " </td>";
+                print "</tr>";
+            }
+        }
+        # IPv6 - search if any subnet is linked to it
+        else {
+            // linked search
+            $is_linked_subnets = $Subnets->is_linked($subnet['id']);
+
+            if ($is_linked_subnets !==false) {
+                print "<tr>";
+                print " <th style='font-weight:normal'>";
+                print "  <p class='text-muted' style='margin-top:5px;'>"._("Linked IPv4 subnets")."</p>";
+                print " </th>";
+                print " <td>";
+                print " <ul class='submenu-linked'>";
+                foreach ($is_linked_subnets as $k=>$linked_subnet) {
+                    // desc fix
+                    $linked_subnet->description = strlen($linked_subnet->description)>0 ? "($linked_subnet->description)" : "";
+
+                    print "<li style='font-size:13px;'>";
+                    print "<i class='icon-gray fa fa-gray fa-angle-right'></i> ";
+                    print "<a href='".create_link("subnets", $linked_subnet->sectionId, $linked_subnet->id)."'>".$Subnets->transform_address($linked_subnet->subnet,"dotted")."/$linked_subnet->mask</a> $linked_subnet->description";
+                    print "</li>";
+                }
+                print " </ul>";
+                print " </td>";
+                print "</tr>";
+            }
+        }
+        ?>
+
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
 		<td>
@@ -473,17 +527,22 @@ else {
 		print "<a class='edit_subnet btn btn-xs btn-default' 	href='' data-container='body' rel='tooltip' title='"._('Edit subnet properties')."'	data-subnetId='$subnet[id]' data-sectionId='$subnet[sectionId]' data-action='edit'>	<i class='fa fa-pencil'></i></a>";
 		else
 		print "<a class='btn btn-xs btn-default disabled' 		href='' data-container='body' rel='tooltip' title='"._('Edit subnet properties')."'>																					<i class='fa fa-pencil'></i></a>";
-		# permissions
-		if($sp['editperm'])
-		print "<a class='showSubnetPerm btn btn-xs btn-default' href='' data-container='body' rel='tooltip' title='"._('Manage subnet permissions')."'	data-subnetId='$subnet[id]' data-sectionId='$subnet[sectionId]' data-action='show'>	<i class='fa fa-tasks'></i></a>";
-		else
-		print "<a class='btn btn-xs btn-default disabled' 		href='' data-container='body' rel='tooltip' title='"._('Manage subnet permissions')."'>																						<i class='fa fa-tasks'></i></a>";
 		# add nested subnet
 		if($section_permission == 3) {
 		print "<a class='edit_subnet btn btn-xs btn-default '	href='' data-container='body' rel='tooltip' title='"._('Add new nested subnet')."' 		data-subnetId='$subnet[id]' data-action='add' data-id='' data-sectionId='$subnet[sectionId]'> <i class='fa fa-plus-circle'></i></a> ";
 		} else {
 		print "<a class='btn btn-xs btn-default disabled' 		href=''> 																																											  <i class='fa fa-plus-circle'></i></a> ";
 		}
+		# permissions
+		if($sp['editperm'])
+		print "<a class='showSubnetPerm btn btn-xs btn-default' href='' data-container='body' rel='tooltip' title='"._('Manage subnet permissions')."'	data-subnetId='$subnet[id]' data-sectionId='$subnet[sectionId]' data-action='show'>	<i class='fa fa-tasks'></i></a>";
+		else
+		print "<a class='btn btn-xs btn-default disabled' 		href='' data-container='body' rel='tooltip' title='"._('Manage subnet permissions')."'>																						<i class='fa fa-tasks'></i></a>";
+		# linked
+		if($sp['editperm'] && $type=="IPv4")
+		print "<a class='editSubnetLink btn btn-xs btn-default' href='' data-container='body' rel='tooltip' title='"._('Manage linked IPv6 subnet')."'	data-subnetId='$subnet[id]' data-action='show'>	<i class='fa fa-link'></i></a>";
+		else
+		print "<a class='btn btn-xs btn-default disabled' 		href='' data-container='body' rel='tooltip' title='"._('Manage linked IPv6 subnet')."'>																						<i class='fa fa-link'></i></a>";
 	print "</div>";
 
 	# favourites / changelog

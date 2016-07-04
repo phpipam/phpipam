@@ -2026,6 +2026,27 @@ $(document).on("click", ".dropdown-subnets li a", function() {
 	return false;
 });
 
+// linked subnets
+$('.editSubnetLink').click(function() {
+    showSpinner();
+	$.post("app/admin/subnets/linked-subnet.php", {subnetId:$(this).attr('data-subnetId')}, function(data) {
+        $('#popupOverlay div.popup_w500').html(data);
+        showPopup('popup_w500');
+		hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+
+   return false;
+});
+$(document).on('click', '.linkSubnetSave', function() {
+    showSpinner();
+	$.post('app/admin/subnets/linked-subnet-submit.php', $('form#editLinkedSubnet').serialize(), function(data) {
+		$('.linkSubnetSaveResult').html(data);
+        //reload after 2 seconds if succeeded!
+        reload_window (data);
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+	return false;
+});
+
 
 /*    Add subnet from IPCalc result
 *********************************/
