@@ -4,20 +4,8 @@
  * Script to display search results
  **********************************/
 
-# for ajax-loaded pages
-if(!isset($Subnets)) {
-	# include required scripts
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
-
-	# initialize required objects
-	$Database 	= new Database_PDO;
-	$Result		= new Result;
-	$User		= new User ($Database);
-	$Subnets	= new Subnets ($Database);
-	$Sections	= new Sections ($Database);
-	$Tools	    = new Tools ($Database);
-	$Addresses	= new Addresses ($Database);
-}
+# verify that user is logged in
+$User->check_user_session();
 
 # set searchterm
 if(isset($_REQUEST['ip'])) {
@@ -29,43 +17,26 @@ if(isset($_REQUEST['ip'])) {
 	$search_term = @$search_term=="search" ? "" : $_REQUEST['ip'];
 }
 
-# verify that user is logged in
-$User->check_user_session();
-
 # change * to % for database wildchar
 $search_term = trim($search_term);
 $search_term = str_replace("*", "%", $search_term);
 
 
-//initialize Pear IPv6 object
-require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv6.php' );
-$Net_IPv6 = new Net_IPv6();
-
-// ipv6 ?
-if ($Net_IPv6->checkIPv6($search_term)!=false) {
-	$type = "IPv6";
-}
-// check if mac address or ip address
-elseif(strlen($search_term)==17 && substr_count($search_term, ":") == 5) {
-    $type = "mac"; //count : -> must be 5
-}
-else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0)){
-    $type = "mac"; //no dots or : -> mac without :
-}
-else {
+// IP address low/high reformat
+if ($Tools->validate_mac ($search_term)===false) {
+    // identify
     $type = $Addresses->identify_address( $search_term ); //identify address type
+
+    # reformat if IP address for search
+    if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
+    elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_search ($search_term); }	//reformat the IPv4 address!
 }
-
-# reformat if IP address for search
-if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
-elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_search ($search_term); }	//reformat the IPv4 address!
-
 
 # get all custom fields
-$custom_address_fields = $Tools->fetch_custom_fields ("ipaddresses");
-$custom_subnet_fields  = $Tools->fetch_custom_fields ("subnets");
-$custom_vlan_fields    = $Tools->fetch_custom_fields ("vlans");
-$custom_vrf_fields     = $Tools->fetch_custom_fields ("vrf");
+$custom_address_fields = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
+$custom_subnet_fields  = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
+$custom_vlan_fields    = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
+$custom_vrf_fields     = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
 
 # set hidden custom fields
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
@@ -74,7 +45,6 @@ $hidden_address_fields = is_array(@$hidden_fields['ipaddresses']) ? $hidden_fiel
 $hidden_subnet_fields  = is_array(@$hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 $hidden_vlan_fields    = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 $hidden_vrf_fields     = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
-
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
@@ -90,37 +60,30 @@ $colSpan 	= $fieldSize + $mySize + 4;
 /** search **/
 
 # search addresses
-if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low']); }
+if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], $custom_address_fields); }
 # search subnets
-if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
+if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], $hidden_subnet_fields); }
 # search vlans
-if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($search_term); }
+if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($search_term, $custom_vlan_fields); }
 # search vrf
-if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vrf       = $Tools->search_vrfs($search_term); }
+if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vrf       = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
 
 
-# all are off?
-if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) ) 	 { include("search-tips.php"); }
-elseif(strlen($_REQUEST['ip'])==0) 																	                             { include("search-tips.php"); }
+// all are off?
+if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) ) {
+    include("search-tips.php");
+}
+// empty request
+elseif(strlen($_REQUEST['ip'])==0)  {
+    include("search-tips.php");
+}
+// ok, search results print
 else {
 if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_vlans)!=0 || sizeof($result_vrf)!=0) {
-	# formulate for results
-	$export_input = "search_term=$search_term";
-	sizeof($result_subnets)==0 	 ? : $export_input .= "&subnets=on";
-	sizeof($result_addresses)==0 ? : $export_input .= "&addresses=on";
-	sizeof($result_vlans)==0 	 ? : $export_input .= "&vlans=on";
-	sizeof($result_vrf)==0 	     ? : $export_input .= "&vrf=on";
-
-	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$export_input.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
+    // export
+	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$search_term.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
 }
 ?>
-
-
-<script type="text/javascript">
-/* fix for ajax-loading tooltips */
-$('body').tooltip({ selector: '[rel=tooltip]' });
-</script>
-
 
 <!-- search result subnet -->
 <?php if(@$_REQUEST['subnets']=="on") { ?>

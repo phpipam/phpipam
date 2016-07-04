@@ -33,7 +33,6 @@ features for next releases:
     + Tools enhancements
         + Devices permissions;
         + custom fields for IP requests;
-        + IP request section dropdown;
         + Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
 
     + DNS enhancements

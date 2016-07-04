@@ -2514,9 +2514,6 @@ div.jqueryError a {
     min-width: 0px;
     white-space: nowrap;
 }
-.navbar .navbar-nav.icon-ul li i {
-    padding-left: 7px;
-}
 .navbar-nav.navbar-right:last-child {
     margin-right: 0px;
 }

@@ -891,20 +891,28 @@ $('form#ipCalc input.reset').click(function () {
     $('div.ipCalcResult').fadeOut('fast');
 });
 
-/* search */
-//submit form - topmenu
-$('.searchSubmit').click(function () {
+/* search function */
+function search_execute (loc) {
     showSpinner();
-    var ip = $('.searchInput').val();
+    // location based params
+    if (loc=="topmenu") {
+        var ip = $('.searchInput').val();
+        var form_name = "searchSelect";
+    }
+    else {
+        var ip = $('form#search .search').val();
+        var form_name = "search";
+    }
     ip = ip.replace(/\//g, "%252F");
-    if($('#searchSelect input[name=addresses]').is(":checked"))	{ var addresses = "on"; }
-    else														{ var addresses = "off"; }
-    if($('#searchSelect input[name=subnets]').is(":checked"))	{ var subnets = "on"; }
-    else														{ var subnets = "off"; }
-    if($('#searchSelect input[name=vlans]').is(":checked"))		{ var vlans = "on"; }
-    else														{ var vlans = "off"; }
-    if($('#searchSelect input[name=vrf]').is(":checked"))		{ var vrf = "on"; }
-    else														{ var vrf = "off"; }
+    // parameters
+    var addresses = $('#'+form_name+' input[name=addresses]').is(":checked") ? "on" : "off";
+    var subnets   = $('#'+form_name+' input[name=subnets]').is(":checked") ? "on" : "off";
+    var vlans     = $('#'+form_name+' input[name=vlans]').is(":checked") ? "on" : "off";
+    var vrf       = $('#'+form_name+' input[name=vrf]').is(":checked") ? "on" : "off";
+
+    // set cookie json-encoded with parameters
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'"}',365);
+
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
@@ -914,36 +922,28 @@ $('.searchSubmit').click(function () {
     else 																{ var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
-	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+addresses+"/"+subnets+"/"+vlans+"/"+vrf+"/"+ip; }
-	else					{ window.location = base + "?page=tools&section=search&addresses="+addresses+"&subnets="+subnets+"&vlans="+vlans+"&vrf="+vrf+"&ip="+ip; }
+	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+ip; }
+	else					{ window.location = base + "?page=tools&section=search&ip="+ip; }
+}
+//submit form - topmenu
+$('.searchSubmit').click(function () {
+    search_execute ("topmenu");
     return false;
 });
 //submit form - topmenu
 $('form#userMenuSearch').submit(function () {
-    showSpinner();
-    var ip = $('.searchInput').val();
-	ip = ip.replace(/\//g, "%252F");
-    if($('#searchSelect input[name=addresses]').is(":checked"))	{ var addresses = "on"; }
-    else														{ var addresses = "off"; }
-    if($('#searchSelect input[name=addresses]').is(":checked"))	{ var subnets = "on"; }
-    else														{ var subnets = "off"; }
-    if($('#searchSelect input[name=addresses]').is(":checked"))	{ var vlans = "on"; }
-    else														{ var vlans = "off"; }
-    if($('#searchSelect input[name=vrf]').is(":checked"))		{ var vrf = "on"; }
-    else														{ var vrf = "off"; }
-    //lets try to detect IEto set location
-    var ua = window.navigator.userAgent;
-    var msie = ua.indexOf("MSIE ");
-
-    //IE
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
-    else 																{ var base = ""; }
-    //go to search page
-    var prettyLinks = $('#prettyLinks').html();
-	if(prettyLinks=="Yes")	{ window.location = base + "tools/search/"+addresses+"/"+subnets+"/"+vlans+"/"+vrf+"/"+ip; }
-	else					{ window.location = base + "?page=tools&section=search&addresses="+addresses+"&subnets="+subnets+"&vlans="+vlans+"&vrf="+vrf+"&ip="+ip; }
+    search_execute ("topmenu");
     return false;
-
+});
+//submit search form
+$('form#search').submit(function () {
+    search_execute ("search");
+    return false;
+});
+// search ipaddress override
+$('a.search_ipaddress').click(function() {
+    // set cookie json-encoded with parameters
+    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off"}',365);
 });
 
 //show/hide search select fields
@@ -956,25 +956,13 @@ $(document).on("mouseleave", '#user_menu', function(event){
     var object1 = $("#searchSelect");
     object1.slideUp();
 });
-//submit form
-$('form#search').submit(function () {
-    showSpinner();
-    var ip 		 = $('form#search .search').val();
-	var postData = $(this).serialize();
 
-	//update search page
-	$.post('app/tools/search/search-results.php', postData, function(data) {
-		$('div.searchResult').html(data).fadeIn('fast');
-		hideSpinner();
-	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 
-    return false;
-});
 //search export
 $(document).on("click", "#exportSearch", function(event){
     var searchTerm = $(this).attr('data-post');
     $("div.dl").remove();                                                //remove old innerDiv
-    $('div.exportDIVSearch').append("<div style='display:none' class='dl'><iframe src='app/tools/search/search-results-export.php?" + searchTerm + "'></iframe></div>");
+    $('div.exportDIVSearch').append("<div style='display:none' class='dl'><iframe src='app/tools/search/search-results-export.php?ip=" + searchTerm + "'></iframe></div>");
     return false;
 });
 

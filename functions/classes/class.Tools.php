@@ -156,19 +156,18 @@ class Tools extends Common_functions {
 	 *	--------------------------------
 	 */
 
+
 	/**
 	 * Search database for addresses
 	 *
 	 * @access public
 	 * @param mixed $search_term
-	 * @param mixed $high
-	 * @param mixed $low
+	 * @param string $high (default: "")
+	 * @param string $low (default: "")
+	 * @param array $custom_fields (default: array())
 	 * @return void
 	 */
-	public function search_addresses($search_term, $high, $low) {
-		# fetch custom fields
-		$custom_fields = $this->fetch_custom_fields ("ipaddresses");
-
+	public function search_addresses($search_term, $high = "", $low = "", $custom_fields = array()) {
 		# set search query
 		$query[] = "select * from `ipaddresses` ";
 		$query[] = "where `ip_addr` between :low and :high ";	//ip range
@@ -209,13 +208,15 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $search_term
-	 * @param number $high
-	 * @param number $low
-	 * @return array
+	 * @param string $high (default: "")
+	 * @param string $low (default: "")
+	 * @param mixed $search_req
+	 * @param mixed $custom_fields (default: array())
+	 * @return void
 	 */
-	public function search_subnets($search_term, $high, $low, $search_req) {
+	public function search_subnets($search_term, $high = "", $low = "", $search_req, $custom_fields = array()) {
 		# first search if range provided
-		$result1 = $this->search_subnets_range  ($search_term, $high, $low);
+		$result1 = $this->search_subnets_range  ($search_term, $high, $low, $custom_fields);
 		# search inside subnets even if IP does not exist!
 		$result2 = $this->search_subnets_inside ($high, $low);
 		# search inside subnets even if IP does not exist - IPv6
@@ -235,10 +236,7 @@ class Tools extends Common_functions {
 	 * @param number $low
 	 * @return array
 	 */
-	private function search_subnets_range ($search_term, $high, $low) {
-		# fetch custom fields
-		$custom_fields = $this->fetch_custom_fields ("subnets");
-
+	private function search_subnets_range ($search_term, $high, $low, $custom_subnet_fields = array()) {
 		# reformat low/high
 		if($high==0 && $low==0)	{ $high = "1"; $low="1"; }
 
@@ -381,11 +379,10 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $search_term
+	 * @param array $custom_fields (default: array())
 	 * @return void
 	 */
-	public function search_vlans($search_term) {
-		# fetch custom fields
-		$custom_fields = $this->fetch_custom_fields ("vlans");
+	public function search_vlans($search_term, $custom_fields = array()) {
 		# query
 		$query[] = "select * from `vlans` where `name` like :search_term or `description` like :search_term or `number` like :search_term ";
 		# custom
@@ -416,11 +413,10 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $search_term
+	 * @param array $custom_fields (default: array())
 	 * @return void
 	 */
-	public function search_vrfs ($search_term) {
-		# fetch custom fields
-		$custom_fields = $this->fetch_custom_fields ("vrf");
+	public function search_vrfs ($search_term, $custom_fields = array()) {
 		# query
 		$query[] = "select * from `vrf` where `name` like :search_term or `description` like :search_term or `rd` like :search_term ";
 		# custom

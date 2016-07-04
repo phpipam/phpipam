@@ -82,6 +82,11 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 		elseif(!is_null($l1))	{ $link = "$l0/$l1/"; }
 		elseif(!is_null($l0))	{ $link = "$l0/"; }
 		else					{ $link = ""; }
+
+		# IP search fix
+		if ($l0=="tools" && $l1=="search" && substr($link,-1)=="/") {
+    		$link = substr($link, 0, -1);
+		}
 	}
 	# normal
 	else {

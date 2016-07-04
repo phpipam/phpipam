@@ -20,38 +20,47 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
-# fetch search term
-$search_term = $_REQUEST['search_term'];
-
-//initialize Pear IPv6 object
-require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv6.php' );
-$Net_IPv6 = new Net_IPv6();
-
-// ipv6 ?
-if ($Net_IPv6->checkIPv6($search_term)!=false) {
-	$type = "IPv6";
-}
-// check if mac address or ip address
-elseif(strlen($search_term)==17 && substr_count($search_term, ":") == 5) {
-    $type = "mac"; //count : -> must be 5
-}
-else if(strlen($search_term) == 12 && (substr_count($search_term, ":") == 0) && (substr_count($search_term, ".") == 0)){
-    $type = "mac"; //no dots or : -> mac without :
+# get requested params
+if(isset($_GET['ip'])) {
+    // remove chars
+    $search_term =  htmlspecialchars(trim($_GET['ip']));
 }
 else {
-    $type = $Addresses->identify_address( $search_term ); //identify address type
+    $search_term = "";
 }
 
-# reformat if IP address for search
-if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
-elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_search ($search_term); }	//reformat the IPv4 address!
+# change * to % for database wildchar
+$search_term = trim($search_term);
+$search_term = str_replace("*", "%", $search_term);
 
+# parse parameters from cookie
+if (isset($_COOKIE['search_parameters'])) {
+    $params = json_decode($_COOKIE['search_parameters'], true);
+    if($params) {
+        foreach ($params as $k=>$p) {
+            if ($p=="on") {
+                $_REQUEST[$k] = $p;
+            }
+        }
+    }
+}
+
+// IP address low/high reformat
+if ($Tools->validate_mac ($search_term)===false) {
+    // identify
+    $type = $Addresses->identify_address( $search_term ); //identify address type
+
+    # reformat if IP address for search
+    if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
+    elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_search ($search_term); }	//reformat the IPv4 address!
+}
 
 # get all custom fields
-$custom_address_fields = $Tools->fetch_custom_fields ("ipaddresses");
-$custom_subnet_fields  = $Tools->fetch_custom_fields ("subnets");
-$custom_vlan_fields    = $Tools->fetch_custom_fields ("vlans");
-$custom_vrf_fields     = $Tools->fetch_custom_fields ("vrf");
+$custom_address_fields = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
+$custom_subnet_fields  = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
+$custom_vlan_fields    = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
+$custom_vrf_fields     = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
+
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
@@ -64,13 +73,13 @@ $colSpan 	= $fieldSize + $mySize + 3;
 
 
 # search addresses
-if(@$_REQUEST['addresses']=="on") 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low']); }
+if(@$_REQUEST['addresses']=="on") 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], $custom_address_fields); }
 # search subnets
-if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
+if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], $custom_subnet_fields); }
 # search vlans
-if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term); }
+if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term, $custom_vlan_fields); }
 # search vrf
-if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_term); }
+if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
 
 
 /*

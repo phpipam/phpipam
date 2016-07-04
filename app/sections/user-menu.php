@@ -10,6 +10,25 @@ $_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
 # verify that user is logged in
 $User->check_user_session();
 
+// set parameters form cookie
+if (isset($_COOKIE['search_parameters'])) {
+    $params = json_decode($_COOKIE['search_parameters'], true);
+    if($params) {
+        foreach ($params as $k=>$p) {
+            if ($p=="on") {
+                $_REQUEST[$k] = $p;
+            }
+        }
+    }
+}
+
+# if all are off print all on!
+if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on") {
+	$_REQUEST['subnets']="on";
+	$_REQUEST['addresses']="on";
+	$_REQUEST['vlans']="on";
+	$_REQUEST['vrf']="on";
+}
 ?>
 
 <div class="container-fluid">
@@ -23,21 +42,12 @@ $User->check_user_session();
 		</span>
 	</div>
 
-	<div id="searchSelect">
-		<?php
-		# if all are off print all on!
-		if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on") {
-			$_REQUEST['subnets']="on";
-			$_REQUEST['addresses']="on";
-			$_REQUEST['vlans']="on";
-			$_REQUEST['vrf']="on";
-		}
-		?>
-		<input type="checkbox" name="subnets" 	value="on" <?php if($_REQUEST['subnets']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?>
-		<input type="checkbox" name="addresses" value="on" <?php if($_REQUEST['addresses']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?>
-		<input type="checkbox" name="vlans" 	value="on" <?php if($_REQUEST['vlans']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?>
+	<div id="searchSelect" style="text-align: left">
+		<input type="checkbox" name="subnets" 	value="on" <?php if($_REQUEST['subnets']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?><br>
+		<input type="checkbox" name="addresses" value="on" <?php if($_REQUEST['addresses']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?><br>
+		<input type="checkbox" name="vlans" 	value="on" <?php if($_REQUEST['vlans']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?><br>
 		<?php if($User->settings->enableVRF==1) { ?>
-		<input type="checkbox" name="vrf" 	    value="on" <?php if($_REQUEST['vrf']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?>
+		<input type="checkbox" name="vrf" 	    value="on" <?php if($_REQUEST['vrf']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?><br>
 		<?php } ?>
 	</div>
 

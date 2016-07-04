@@ -6,9 +6,25 @@
 $User->check_user_session();
 
 # get posted search term
-if(@$_GET['ip']) { $searchTerm = htmlspecialchars($_GET['ip']); }
-else			 { $searchTerm = ""; }
+if(isset($_GET['ip'])) {
+    // remove chars
+    $searchTerm =  htmlspecialchars(trim($_GET['ip']));
+}
+else {
+    $searchTerm = "";
+}
 
+// set parameters
+if (isset($_COOKIE['search_parameters'])) {
+    $params = json_decode($_COOKIE['search_parameters'], true);
+    if($params) {
+        foreach ($params as $k=>$p) {
+            if ($p=="on") {
+                $_REQUEST[$k] = $p;
+            }
+        }
+    }
+}
 ?>
 
 <h4><?php print _('Search IP database');?></h4>
@@ -26,15 +42,6 @@ else			 { $searchTerm = ""; }
 	</div>
 
 	<div style="margin:5px;">
-		<?php
-		# if all are off print all on!
-		if($_REQUEST['subnets']!="on" && $_REQUEST['addresses']!="on" && $_REQUEST['vlans']!="on"  && $_REQUEST['vrf']!="on") {
-			$_REQUEST['subnets']="on";
-			$_REQUEST['addresses']="on";
-			$_REQUEST['vlans']="on";
-			$_REQUEST['vrf']="on";
-		}
-		?>
 		<input type="checkbox" name="subnets" 	value="on" <?php if($_REQUEST['subnets']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Subnets'); ?>
 		<input type="checkbox" name="addresses" value="on" <?php if($_REQUEST['addresses']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('IP addresses'); ?>
 		<input type="checkbox" name="vlans" 	value="on" <?php if($_REQUEST['vlans']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?>
