@@ -79,17 +79,22 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 
 <!-- header -->
 <div class="row header-install" id="header">
-	<div class="col-xs-12">
-		<div class="hero-unit" style="padding:20px;margin-bottom:10px;">
-    		<?php
-        	if(file_exists( "css/1.2/images/logo/logo.png")) {
-            	print "<img style='width:220px;margin-right:20px' src='css/1.2/images/logo/logo.png'>";
-        	}
-            ?>
-
+    <!-- logo -->
+	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+    <?php
+	if(file_exists( "css/1.2/images/logo/logo.png")) {
+    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/1.2/images/logo/logo.png'>";
+	}
+    ?>
+	</div>
+	<!-- title -->
+	<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+		<div class="hero-unit" style="padding:20px;margin-bottom:10px;margin-top: 10px;">
 			<a href="<?php print create_link(null); ?>"><?php print $User->settings->siteTitle;?></a>
             <p class="muted"><?php print _("Login"); ?></p>
 		</div>
+	</div>
+	<div class="col-lg-3 col-md-3 hidden-sm hidden-xs">
 	</div>
 </div>
 
