@@ -52,6 +52,15 @@ $admin_items["devices"] = array (
                         "title"=>"Show all configured devices",
                         "icon"=>"fa-desktop"
                         );
+// nat
+if($User->settings->enableNat==1) {
+$admin_items["nat"] = array (
+                        "name"=>"NAT",
+                        "href"=>array("administration", "nat"),
+                        "title"=>"NAT management",
+                        "icon"=>"fa-exchange"
+                        );
+}
 // pdns
 if($User->settings->enablePowerDNS==1) {
 $admin_items["powerDNS"] = array (
@@ -136,7 +145,7 @@ $admin_items["racks"] = array (
         $active = $_GET['section']==$k ? "active" : "";
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-        print " <a href='".create_link(implode('/', $t['href']))."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
+        print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
         print "</li>";
     }
     ?>

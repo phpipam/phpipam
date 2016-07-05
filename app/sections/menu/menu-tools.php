@@ -30,6 +30,16 @@ $tool_items["devices"] = array (
                         "title"=>"Show all configured devices",
                         "icon"=>"fa-desktop"
                         );
+// nat
+if($User->settings->enableNat==1) {
+$tool_items["nat"] = array (
+                        "name"=>"NAT",
+                        "href"=>array("tools", "nat"),
+                        "title"=>"Nat translations",
+                        "icon"=>"fa-exchange"
+                        );
+}
+
 // pdns
 if($User->settings->enablePowerDNS==1) {
 $tool_items["powerDNS"] = array (
@@ -139,7 +149,7 @@ $tool_items["search"] = array (
         $active = $_GET['section']==$k ? "active" : "";
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-        print " <a href='".create_link(implode('/', $t['href']))."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
+        print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
         print "</li>";
     }
     ?>
