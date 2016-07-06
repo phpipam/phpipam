@@ -20,7 +20,7 @@ if($User->settings->enableIPrequests==1) {
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-plus", 			"name"=>"IP requests", 			"href"=>"requests", 	"description"=>"Manage IP requests");
 }
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-info", 	  		"name"=>"Instructions",  		"href"=>"instructions", "description"=>"Instructions for managing IP addresses");
-if($User->settings->enableNat==1)
+if($User->settings->enableNAT==1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"NAT", 				"href"=>"nat", 				  "description"=>"NAT translations");
 
 if($User->settings->enablePowerDNS==1)

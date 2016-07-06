@@ -14,7 +14,7 @@ $admin = $User->is_admin(false);
 <h4><?php print _('NAT translations'); ?></h4>
 <hr>
 
-<?php if($admin && $User->settings->enableNat=="1") { ?>
+<?php if($admin && $User->settings->enableNAT=="1") { ?>
 <div class="btn-group">
     <?php if($_GET['page']=="administration") { ?>
 	<a href="" class='btn btn-sm btn-default editNat' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
@@ -28,7 +28,7 @@ $admin = $User->is_admin(false);
 <?php
 
 # check that nat support isenabled
-if ($User->settings->enableNat!="1") {
+if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
 }
 else {

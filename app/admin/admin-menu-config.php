@@ -18,7 +18,7 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-users", 	"n
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-server", 	"name"=>"Authentication methods", 	"href"=>"authentication-methods", 	"description"=>"Manage user authentication methods and servers");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-envelope-o", "name"=>"Mail settings", 			"href"=>"mail", 					"description"=>"Set mail parameters and mail server settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"name"=>"API", 						"href"=>"api", 						"description"=>"API settings");
-if($User->settings->enableNat==1)
+if($User->settings->enableNAT==1)
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"NAT", 				         "href"=>"nat", 				  "description"=>"NAT settings");
 if($User->settings->enablePowerDNS==1)
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-database", 	"name"=>"PowerDNS", 				"href"=>"powerDNS", 				"description"=>"PowerDNS settings");

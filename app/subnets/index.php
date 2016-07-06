@@ -72,7 +72,7 @@ $location = "subnets";
 $all_nats = array();
 $all_nats_per_object = array();
 
-if ($User->settings->enableNat==1) {
+if ($User->settings->enableNAT==1) {
     # fetch all object
     $all_nats = $Tools->fetch_all_objects ("nat");
 

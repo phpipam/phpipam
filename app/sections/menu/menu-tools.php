@@ -31,7 +31,7 @@ $tool_items["devices"] = array (
                         "icon"=>"fa-desktop"
                         );
 // nat
-if($User->settings->enableNat==1) {
+if($User->settings->enableNAT==1) {
 $tool_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("tools", "nat"),

@@ -53,7 +53,7 @@ $admin_items["devices"] = array (
                         "icon"=>"fa-desktop"
                         );
 // nat
-if($User->settings->enableNat==1) {
+if($User->settings->enableNAT==1) {
 $admin_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("administration", "nat"),
