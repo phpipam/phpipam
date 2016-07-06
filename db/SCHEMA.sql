@@ -688,7 +688,7 @@ CREATE TABLE `nat` (
   `src` text,
   `dst` text,
   `port` int(5) DEFAULT NULL,
-  `nat` ADD `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
