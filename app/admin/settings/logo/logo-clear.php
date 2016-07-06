@@ -14,17 +14,21 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+// define file
+$file = dirname(__FILE__)."/../../../../css/1.2/images/logo/logo.png";
+
 # try to remove logo
-@unlink(dirname(__FILE__)."/../../../../css/1.2/images/logo/logo.png");
-
-$err = error_get_last();
-
-# check
-if ($err === NULL) {
+try {
+    if(!is_writable($file)) {
+        throw new Exception("File $file not writable");
+    }
+    // remove
+    unlink($file);
+    // ok
     $Result->show("success", "Logo removed");
 }
-else {
-    $Result->show("danger", "Cannot remove logo file ".$err['file']." - error ".$err['message']);
+catch(Exception $e) {
+    $Result->show("danger", "Cannot remove logo file ".$file." - error ".$e->getMessage());
 }
 
 ?>
