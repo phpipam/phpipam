@@ -555,6 +555,9 @@ td.info2 {
 .hero-unit span {
     color: #636e74;
 }
+span.strong {
+    font-weight: bold;
+}
 
 /* @usermenu top */
 div#user_menu {

@@ -1633,9 +1633,11 @@ class Tools extends Common_functions {
      * @param json $json_objects
      * @param int|bool $nat_id (default: false)
      * @param bool $json_objects (default: false)
+     * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)
+     * @param int|bool object_id (default: false) - to bold it
      * @return void
      */
-    public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false) {
+    public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // to array "subnets"=>array(1,2,3)
         $objects = json_decode($json_objects, true);
         // init out array
@@ -1652,11 +1654,13 @@ class Tools extends Common_functions {
                             // fetch
                             $item = $this->fetch_object($ot, "id", $id);
                             if($item!==false) {
+                                // bold
+                                $bold = $item->id==$object_id && $ot==$object_type ? "<span class='strong'>" : "<span>";
                                 // remove
                                 $remove = $admin&&$nat_id ? "<span class='remove-nat-item-wrapper_".$ot."_".$item->id."'><a class='btn btn-xs btn-danger removeNatItem' data-id='$nat_id' data-type='$ot' data-item-id='$item->id' rel='tooltip' title='"._('Remove')."'><i class='fa fa-times'></i></a>" : "<span>";
                                 // subnets
                                 if ($ot=="subnets") {
-                                    $out[] = "$remove <a href='".create_link("subnets", $item->sectionId, $item->id)."'>".$this->transform_address($item->subnet, "dotted")."/".$item->mask."</a></span>";
+                                    $out[] = "$remove $bold<a href='".create_link("subnets", $item->sectionId, $item->id)."'>".$this->transform_address($item->subnet, "dotted")."/".$item->mask."</a></span></span>";
                                 }
                                 // addresses
                                 else {
@@ -1683,7 +1687,7 @@ class Tools extends Common_functions {
                                         $remove .= "<span class='status status-$hStatus' $hTooltip></span>";
                                     }
 
-                                    $out[] = "$remove <a href='".create_link("subnets", $snet->sectionId, $item->subnetId, "address-details", $item->id)."'>".$this->transform_address($item->ip_addr, "dotted")."</a></span>";
+                                    $out[] = "$remove $bold <a href='".create_link("subnets", $snet->sectionId, $item->subnetId, "address-details", $item->id)."'>".$this->transform_address($item->ip_addr, "dotted")."</a></span>";
                                 }
                             }
                         }
@@ -1693,6 +1697,67 @@ class Tools extends Common_functions {
         }
         // result
         return sizeof($out)>0 ? $out : false;
+    }
+
+
+    /**
+     * This function will reindex all nat object to following structure:
+     *
+     *  ipaddresses => array (
+     *                  [address_id] => array (nat_id1, nat_id2)
+     *              )
+     *  subnets => array (
+     *                  [subnet_id] => array (nat_id1, nat_id2)
+     *              )
+     *
+     * @access public
+     * @param array $all_nats (default: array())
+     * @return void
+     */
+    public function reindex_nat_objects ($all_nats = array()) {
+        // out array
+        $out = array(
+            "ipaddresses"=>array(),
+            "subnets"=>array()
+        );
+        // loop
+        if(is_array($all_nats)) {
+            if (sizeof($all_nats)>0) {
+                foreach ($all_nats as $n) {
+                    $src = json_decode($n->src, true);
+                    $dst = json_decode($n->dst, true);
+
+                    // src
+                    if(is_array($src)) {
+                        if(is_array(@$src['subnets'])) {
+                            foreach ($src['subnets'] as $s) {
+                                $out['subnets'][$s][] = $n->id;
+                            }
+                        }
+                        if(is_array(@$src['ipaddresses'])) {
+                            foreach ($src['ipaddresses'] as $s) {
+                                $out['ipaddresses'][$s][] = $n->id;
+                            }
+                        }
+                    }
+                    // dst
+                    if(is_array($dst)) {
+                        if(is_array(@$dst['subnets'])) {
+                            foreach ($dst['subnets'] as $s) {
+                                $out['subnets'][$s][] = $n->id;
+                            }
+                        }
+                        if(is_array(@$dst['ipaddresses'])) {
+                            foreach ($dst['ipaddresses'] as $s) {
+                                $out['ipaddresses'][$s][] = $n->id;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // return
+        return $out;
     }
 
 

@@ -248,7 +248,6 @@ else {
 				# subnets
 				if ($_GET['page']=="subnets") {
 					if(@$_GET['sPage'] == "address-details")							{ include("app/subnets/addresses/address-details-index.php"); }
-					elseif(@$_GET['sPage'] == "changelog")								{ include("app/subnets/subnet-changelog.php"); }
 					elseif(!isset($_GET['subnetId']))									{ include("app/sections/section-subnets.php"); }
 					else																{ include("app/subnets/index.php"); }
 				}

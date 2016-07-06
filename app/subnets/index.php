@@ -67,13 +67,32 @@ if($subnet['sectionId']!=$_GET['section'])	{
 
 # set title
 $location = "subnets";
+
+# NAT search
+$all_nats = array();
+$all_nats_per_object = array();
+
+if ($User->settings->enableNat==1) {
+    # fetch all object
+    $all_nats = $Tools->fetch_all_objects ("nat");
+
+    if ($all_nats!==false) {
+        foreach ($all_nats as $n) {
+            $out[$n->id] = $n;
+        }
+        $all_nats = $out;
+
+        # reindex
+        $all_nats_per_object = $Tools->reindex_nat_objects ($all_nats);
+    }
+}
 ?>
 
 <!-- content print! -->
 <div class="row" style="margin-bottom: 40px;">
 
 	<!-- subnet details -->
-	<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+	<div class="col-sm-12 col-xs-12 <?php if(@$_GET['sPage']=="changelog") { print "col-lg-12 col-md-12";} else { print "col-lg-8 col-md-8"; } ?>">
 		<!-- for adding IP address! -->
 		<div id="subnetId" style="display:none;"><?php print $subnet['id']; ?></div>
 
@@ -83,25 +102,35 @@ $location = "subnets";
 
         <!-- tabs -->
         <ul class='nav nav-tabs ip-det-switcher' style='margin-bottom:20px;'>
-            <li role='presentation' class='active' data-target='div_details'><a href=''><?php print _("Subnet details"); ?></a></li>
+            <li role='presentation' <?php if(!isset($_GET['sPage'])) print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id']); ?>'><?php print _("Subnet details"); ?></a></li>
             <?php if($User->is_admin(false)) { ?>
-            <li role='presentation' data-target='div_permissions'><a href=''><?php print _("Permissions"); ?></a></li>
+            <li role='presentation' <?php if(@$_GET['sPage']=="permissions") print "class='active'"; ?>><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "permissions"); ?>'><?php print _("Permissions"); ?></a></li>
             <?php } ?>
-            <li role='presentation'><a href='<?php print create_link("subnets",$subnet['sectionId'],$subnet['id'],"changelog"); ?>'><?php print _("Changelog"); ?></a></li>
+            <?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+            <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?></a></li>
+            <?php } ?>
+            <li role='presentation' <?php if(@$_GET['sPage']=="changelog") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "changelog"); ?>'><?php print _("Changelog"); ?></a></li>
         </ul>
 
         <!-- details -->
-        <div class='div_det_common div_details'>
-    	<?php include("subnet-details.php"); ?>
-        </div>
+        <?php
+        if(!isset($_GET['sPage'])) {
+        	include("subnet-details.php");
+        }
+        if(@$_GET['sPage']=="permissions") {
+            include("subnet-permissions.php");
+        }
+        if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets']) && @$_GET['sPage']=="nat") {
+            include("subnet-nat.php");
+        }
+        if(@$_GET['sPage']=="changelog") {
+            include("subnet-changelog.php");
+        }
+    	?>
 
-        <!-- details -->
-        <?php if($User->is_admin(false)) { ?>
-        <div class='div_det_common div_permissions' style='display:none'>
-    	<?php include("subnet-permissions.php"); ?>
-        </div>
-        <?php } ?>
 	</div>
+
+    <?php if(@$_GET['sPage']!="changelog") { ?>
 
 	<!-- subnet graph -->
 	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
@@ -145,24 +174,8 @@ $location = "subnets";
 		}
 		?>
 	</div>
+	<?php } ?>
 
 </div>
 
 
-<script type="text/javascript">
-$(document).ready(function() {
-$('ul.ip-det-switcher li a').click(function() {
-   var target = $(this).parent().attr("data-target");
-   if(target!==undefined) {
-       // class
-       $('ul.ip-det-switcher li').removeClass('active');
-       $(this).parent().addClass('active');
-       // hide old
-       $('div.div_det_common').hide();
-       $('div.'+target).show();
-
-       return false;
-   }
-});
-});
-</script>

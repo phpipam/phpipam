@@ -42,8 +42,7 @@ else {
     print "<tr>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Type')."</th>";
-    print " <th>"._('Sources')."</th>";
-    print " <th>"._('Destinations')."</th>";
+    print " <th colspan='3'>"._('Translation')."</th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Port')."</th>";
     print " <th>"._('Description')."</th>";
@@ -67,7 +66,7 @@ else {
     # loop
     foreach ($nats_reordered as $k=>$nats) {
         # header
-        $colspan = $admin ? 8 : 7;
+        $colspan = $admin ? 9 : 8;
         print "<tr>";
         print " <th colspan='$colspan'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</th>";
         print "</tr>";
@@ -101,6 +100,9 @@ else {
                     $n->device = "/";
                 }
 
+                // icon
+                $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
+
                 // port
                 if(strlen($n->port)==0)
                 $n->port = "/";
@@ -110,6 +112,7 @@ else {
                 print " <td><strong>$n->name</strong></td>";
                 print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
+                print " <td style='width:10px;'><i class='fa $icon'></i></td>";
                 print " <td>".implode("<br>", $destinations)."</td>";
                 print " <td>$n->device</td>";
                 print " <td>$n->port</td>";

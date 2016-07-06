@@ -1,3 +1,6 @@
+<h4><?php print _('Permissions'); ?></h4>
+<hr>
+
 <?php
 # verify that user is logged in
 $User->check_user_session();

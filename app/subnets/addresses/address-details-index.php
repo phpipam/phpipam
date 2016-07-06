@@ -63,69 +63,83 @@ else
 print "<a class='btn btn-default btn-sm btn-default' href='".create_link("subnets",$subnet['sectionId'],$subnet['id'])."' style='margin-bottom:20px;'><i class='fa fa-chevron-left'></i> "._('Back to subnet')."</a>";
 
 
-
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
 
+    # NAT search
+    $all_nats = array();
+    $all_nats_per_object = array();
+
+    if ($User->settings->enableNat==1) {
+        # fetch all object
+        $all_nats = $Tools->fetch_all_objects ("nat");
+
+        if ($all_nats!==false) {
+            foreach ($all_nats as $n) {
+                $out[$n->id] = $n;
+            }
+            $all_nats = $out;
+
+            # reindex
+            $all_nats_per_object = $Tools->reindex_nat_objects ($all_nats);
+        }
+    }
+
+
     // print tabs
     print "<ul class='nav nav-tabs ip-det-switcher' style='margin-bottom:20px;'>";
-    print " <li role='presentation' class='active' data-target='div_details'><a href='#'>"._("IP address details")."</a></li>";
-    if($User->is_admin(false))
-    print " <li role='presentation' data-target='div_permissions'><a href='#'>"._("Permissions")."</a></li>";
-
-    print " <li role='presentation' data-target='div_linked'><a href='#'>"._("Linked addresses")."</a></li>";
-    if($mcast)
-    print " <li role='presentation' data-target='div_multicast'><a href='#'>"._("Multicast")."</a></li>";
-    print " <li role='presentation' data-target='div_changelog'><a href='#'>"._("Changelog")."</a></li>";
+    $active = !isset($_GET['tab']) ? "active" : "";
+    print " <li role='presentation' class='$active' data-target='div_details'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'])."'>"._("IP address details")."</a></li>";
+    if($User->is_admin(false)) {
+    $active = @$_GET['tab']=="permissions" ? "active" : "";
+    print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "permissions")."'>"._("Permissions")."</a></li>";
+    }
+    if(@array_key_exists($address['id'], $all_nats_per_object['ipaddresses'])) {
+    $active = @$_GET['tab']=="nat" ? "active" : "";
+    print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "nat")."'>"._("NAT")."</a></li>";
+    }
+    $active = @$_GET['tab']=="linked" ? "active" : "";
+    print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "linked")."'>"._("Linked addresses")."</a></li>";
+    if($mcast) {
+    $active = @$_GET['tab']=="multicast" ? "active" : "";
+    print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "multicast")."'>"._("Multicast")."</a></li>";
+    }
+    $active = @$_GET['tab']=="changelog" ? "active" : "";
+    print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "changelog")."'>"._("Changelog")."</a></li>";
     print "</ul>";
 
     // address details
-    print "<div class='div_det_common div_details'>";
+    if(!isset($_GET['tab']))
 	include("address-details/address-details.php");
-    print "</div>";
 
     // address details
     if($User->is_admin(false)) {
-    print "<div class='div_det_common div_permissions' style='display:none'>";
+    if(@$_GET['tab']=="permissions")
 	include("address-details/address-details-permissions.php");
-    print "</div>";
+    }
+
+    //nat
+    if(@array_key_exists($address['id'], $all_nats_per_object['ipaddresses'])) {
+    if(@$_GET['tab']=="nat")
+	include("address-details/address-details-nat.php");
     }
 
     // Linked addresses
-    print "<div class='div_det_common div_linked' style='display:none'>";
+    if(@$_GET['tab']=="linked")
 	include("address-details/address-details-linked.php");
-    print "</div>";
 
     // Multicast addresses
     if($mcast) {
-    print "<div class='div_det_common div_multicast' style='display:none'>";
+    if(@$_GET['tab']=="multicast")
 	include("address-details/address-details-multicast.php");
-    print "</div>";
     }
 
     // changelog
-    print "<div class='div_det_common div_changelog' style='display:none'>";
+    if(@$_GET['tab']=="changelog")
 	include("address-details/address-changelog.php");
-	print "</div>";
 }
 # not exisitng
 else {
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
 ?>
-
-<script type="text/javascript">
-$(document).ready(function() {
-$('ul.ip-det-switcher li a').click(function() {
-   var target = $(this).parent().attr("data-target");
-   // class
-   $('ul.ip-det-switcher li').removeClass('active');
-   $(this).parent().addClass('active');
-   // hide old
-   $('div.div_det_common').hide();
-   $('div.'+target).show();
-
-   return false;
-});
-});
-</script>
