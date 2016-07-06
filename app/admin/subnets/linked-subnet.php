@@ -51,9 +51,10 @@ $subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
     	# print each group
     	if($ipv6_subnets !==false) {
     		foreach($ipv6_subnets as $s) {
-        		$selected = $s->id == $subnet->linked_subnet ? "selected" : "";
-
-        		print "<option value='$s->id' $selected>".$Subnets->transform_address($s->subnet, "dotted")."/$s->mask</option>";
+        		if($Subnets->has_slaves ($s->id)===false) {
+            		$selected = $s->id == $subnet->linked_subnet ? "selected" : "";
+            		print "<option value='$s->id' $selected>".$Subnets->transform_address($s->subnet, "dotted")."/$s->mask</option>";
+        		}
     		}
         }
     	?>
