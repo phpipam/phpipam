@@ -47,6 +47,9 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-th-large", 	 "name"=
 if($User->settings->tempShare==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-share-alt",  "name"=>"Temporary shares", 	"href"=>"temp-shares",	"description"=>"List of temporary shared objects");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-thumbs-down",  "name"=>"Inactive Hosts", 	"href"=>"inactive-hosts",	"description"=>"List of inactive hosts");
+if($User->settings->enableThreshold==1)
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>"Threshold", 	"href"=>"threshold",	"description"=>"List of thresholded subnets");
+
 
 # user menu
 $tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
@@ -77,6 +80,7 @@ $tools_menu_items = array(
 						'vlan',
 						'vrf',
 						"inactive-hosts",
+						"threshold",
 						'nat'
                     );
 ?>

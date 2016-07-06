@@ -1,24 +1,10 @@
 <?php
 /*
- * Print top 5 threshold subnets
+ * Print threshold subnets
  *
  * 		Inout must be IPv4 or IPv6!
  **********************************************/
 
-# required functions
-if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
-	# classes
-	$Database	= new Database_PDO;
-	$User 		= new User ($Database);
-	$Tools 		= new Tools ($Database);
-	$Subnets 	= new Subnets ($Database);
-	$Addresses 	= new Addresses ($Database);
-	$Result		= new Result ();
-}
-else {
-    header("Location: ".create_link('tools', 'threshold'));
-}
 
 # user must be authenticated
 $User->check_user_session ();
@@ -26,22 +12,9 @@ $User->check_user_session ();
 # no errors!
 //ini_set('display_errors', 0);
 
-# set size parameters
-$height = 200;
-$slimit = 5;			//we dont need this, we will recalculate
+# header
+print "<h4>"._("Threshold")."</h4><hr>";
 
-# if direct request include plot JS
-if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
-	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
-	# reset size and limit
-	$height = 350;
-	$slimit = 5;
-	# and print title
-	print "<div class='container'>";
-	print "<h4 style='margin-top:40px;'>$widget->wtitle</h4><hr>";
-	print "</div>";
-}
 
 if ($User->settings->enableThreshold=="1") {
     # get thresholded subnets
@@ -62,8 +35,6 @@ if ($User->settings->enableThreshold=="1") {
 
 # disabled
 if ($User->settings->enableThreshold!="1") {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("Threshold module disabled")."</p>";
 	print "<small>"._("You can enable threshold module under settings")."</small>";
@@ -71,8 +42,6 @@ if ($User->settings->enableThreshold!="1") {
 }
 # error - none found but not permitted
 elseif ($threshold_subnets===false) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet is selected for threshold check")."</p>";
 	print "<small>"._("You can set threshold for subnets under subnet settings")."</small>";
@@ -80,8 +49,6 @@ elseif ($threshold_subnets===false) {
 }
 # error - found but not permitted
 elseif (!isset($out)) {
-	print "<hr>";
-
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No subnet selected for threshold check available")."</p>";
 	print "<small>"._("No subnet with threshold check available")."</small>";
@@ -89,8 +56,6 @@ elseif (!isset($out)) {
 }
 # found
 else {
-    print "<div class='hContent' style='padding:10px;'>";
-
     // count usage
     foreach ($out as $k=>$s) {
         //check if subnet has slaves and set slaves flag true/false
@@ -141,36 +106,34 @@ else {
     array_multisort($used, SORT_DESC, $out);
 
     // table
-    print "<table class='table table-threshold table-noborder'>";
+    print "<table class='table table-threshold table-top sorted table-noborder'>";
+
+    // headers
+    print "<tr>";
+    print " <th>"._('Subnet')."</th>";
+    print " <th>"._('Usage')."</th>";
+    print "</tr>";
 
     // print
-    $m=0;
     foreach ($out as $s) {
-        if ($m<$slimit) {
-            # set class
-            $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
-            # limit description
-            $s->description = strlen($s->description)>10 ? substr($s->description, 0,10)."..." : $s->description;
-            $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
-            # limit class
-            $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
+        # set class
+        $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
+        # limit description
+        $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
+        # limit class
+        $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
 
-            print "<tr>";
-            print " <td><i class='fa fa-sfolder fa-sitemap' style='border-right: 1px solid #ccc;padding-right:4px;'></i> <a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a> ".$s->description."</td>";
-            print " <td>";
-            print "     <div class='progress'>";
-            print "     <div class='progress-bar $aclass' role='progressbar' rel='tooltip' title='"._('Current usage').": ".$s->usage->usedhosts_percent."%' aria-valuenow='".$s->usage->usedhosts_percent."' aria-valuemin='0' style='width: ".$s->usage->usedhosts_percent."%;'>".$s->usage->usedhosts_percent."%</div>";
-            print "     <div class='$limit_class' rel='tooltip'  title='"._('Threshold').": ".$s->threshold."%' style='margin-left:".$s->usage->until_threshold."%;'>&nbsp;</div>";
-            print "     </div>";
-            print " </td>";
-            print "</tr>";
-
-            // next index
-            $m++;
-        }
+        print "<tr>";
+        print " <td><a href='".create_link("subnets", $s->sectionId, $s->id)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a> ".$s->description."</td>";
+        print " <td>";
+        print "     <div class='progress'>";
+        print "     <div class='progress-bar $aclass' role='progressbar' rel='tooltip' title='"._('Current usage').": ".$s->usage->usedhosts_percent."%' aria-valuenow='".$s->usage->usedhosts_percent."' aria-valuemin='0' style='width: ".$s->usage->usedhosts_percent."%;'>".$s->usage->usedhosts_percent."%</div>";
+        print "     <div class='$limit_class' rel='tooltip'  title='"._('Threshold').": ".$s->threshold."%' style='margin-left:".$s->usage->until_threshold."%;'>&nbsp;</div>";
+        print "     </div>";
+        print " </td>";
+        print "</tr>";
     }
 
     print "</table>";
-    print "</div>";
 }
 ?>
