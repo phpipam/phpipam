@@ -1,4 +1,4 @@
-== 1.22.10
+== 1.22.20
 
 	New features:
 	------------
@@ -12,7 +12,11 @@
 	    + VLAN discovery;
 	    + VRF discovery;
 	    + Status update scans via ARP check;
+    + NAT module:
+        + Source / static / destination NAT;
     + Address linking by selected field;
+    + Custom logo for site and mails;
+
 
 	Enhancements, changes:
 	----------------------------
@@ -36,7 +40,6 @@
     + jQuery tables;
     + Permission delegation now only delegates changes not whole permission set;
     + Users with RWA permission can manage IP requests and receive IP request mails + changelog mails for subnet;
-    + Custom logo for site and mails;
     + IPv4 subnet link to IPv6 for dual-stack info;
 
 	Bugfixes:

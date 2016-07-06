@@ -215,6 +215,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- nat -->
+<tr>
+	<td class="title"><?php print _('Enable NAT'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableNat" <?php if($settings['enableNat'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable NAT module'); ?>
+	</td>
+</tr>
+
 <!-- powerdns -->
 <tr>
 	<td class="title"><?php print _('Enable PowerDNS'); ?></td>

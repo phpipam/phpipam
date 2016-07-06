@@ -20,6 +20,9 @@ if($User->settings->enableIPrequests==1) {
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-plus", 			"name"=>"IP requests", 			"href"=>"requests", 	"description"=>"Manage IP requests");
 }
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-info", 	  		"name"=>"Instructions",  		"href"=>"instructions", "description"=>"Instructions for managing IP addresses");
+if($User->settings->enableNat==1)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"NAT", 				"href"=>"nat", 				  "description"=>"NAT translations");
+
 if($User->settings->enablePowerDNS==1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"PowerDNS",  		    "href"=>"powerDNS", "description"=>"PowerDNS");
 if($User->settings->enableDHCP==1)
@@ -73,6 +76,7 @@ $tools_menu_items = array(
 						'user-menu',
 						'vlan',
 						'vrf',
-						"inactive-hosts"
+						"inactive-hosts",
+						'nat'
                     );
 ?>

@@ -41,7 +41,7 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 
 <!-- content -->
 <div class="pContent">
-	<table class="table table-noborder table-condensed">
+	<table class="table table-noborder table-condensed table-scan">
     <!-- subnet -->
     <tr>
         <td class="middle"><?php print _('Subnet'); ?></td>

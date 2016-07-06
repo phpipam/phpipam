@@ -11,7 +11,6 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
-$Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);
 $Result 	= new Result ();
 
@@ -24,6 +23,9 @@ $_POST = $Admin->strip_input_tags($_POST);
 # validate csrf cookie
 $User->csrf_cookie ("validate", "linkedsubnet", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# check subnet permissions
+if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true); }
+
 # ID must be numeric
 if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true); }
 if(!is_numeric($_POST['linked_subnet']))	{ $Result->show("danger", _("Invalid ID"), true); }
@@ -35,7 +37,7 @@ $values = array(
 );
 
 # verify that user has write permissions for subnet
-if($Admin->object_modify ("subnets", "edit", "id", $values)!==false) {
+if($Subnets->modify_subnet ("edit", $values)!==false) {
     $Result->show("success", _("Subnet linked"), false);
 }
 ?>

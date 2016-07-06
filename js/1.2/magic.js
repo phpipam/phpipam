@@ -562,13 +562,13 @@ $('a.scan_subnet').click(function() {
 	return false;
 });
 //show telnet port
-$(document).on('change', "select#type", function() {
+$(document).on('change', "table.table-scan select#type", function() {
 	var pingType = $('select[name=type]').find(":selected").val();
 	if(pingType=="scan-telnet") { $('tbody#telnetPorts').show(); }
 	else 						{ $('tbody#telnetPorts').hide(); }
 });
 //save value to cookie
-$(document).on ('change', "select#type", function() {
+$(document).on('change', "table.table-scan select#type", function() {
     var sel = ($(this).find(":selected").val());
     createCookie("scantype",sel,32);
 });
@@ -2344,6 +2344,64 @@ $(document).on("click", ".showRackPopup", function() {
 	open_popup("400", "app/tools/racks/show-rack-popup.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid')}, true );
 	return false;
 });
+
+/* ---- NAT ----- */
+//load edit form
+$(document).on("click", ".editNat", function() {
+	open_popup("700", "app/admin/nat/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
+});
+//submit form
+$(document).on("click", "#editNatSubmit", function() {
+    submit_popup_data (".editNatResult", "app/admin/nat/edit-result.php", $('form#editNat').serialize());
+});
+// remove item
+$(document).on("click", ".removeNatItem", function() {
+    var id = $(this).attr('data-id');
+    showSpinner();
+
+    $.post("app/admin/nat/item-remove.php", {id:$(this).attr('data-id'), type:$(this).attr('data-type'), item_id:$(this).attr('data-item-id'), csrf_cookie:$('form#editNat input[name=csrf_cookie]').val()}, function(data) {
+        $('#popupOverlay2 div.popup_w500').html(data);
+        showPopup('popup_w700', data, true);
+
+        if(data.search("alert-danger")==-1 && data.search("error")==-1) {
+            setTimeout(function (){ open_popup("700", "app/admin/nat/edit.php", {id:id, action:"edit"} ); hidePopup2(); parameter = null;}, 1000);
+        }
+        else {
+            hideSpinner();
+        }
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
+// add item popup
+$(document).on("click", ".addNatItem", function() {
+	open_popup("700", "app/admin/nat/item-add.php", {id:$(this).attr('data-id'), type:$(this).attr('data-type'), object_type:$(this).attr('data-object-type'), object_id:$(this).attr('data-object-id')}, true);
+    return false;
+});
+// search item
+$(document).on("submit", "form#search_nats", function() {
+    showSpinner();
+    $.post("app/admin/nat/item-add-search.php", $(this).serialize(), function(data) {
+        $('#nat_search_results').html(data);
+        hideSpinner();
+    });
+    return false;
+})
+// search result item select
+$(document).on("click", "a.addNatObjectFromSearch", function() {
+    var id = $(this).attr('data-id');
+    showSpinner();
+    $.post("app/admin/nat/item-add-submit.php", {id:$(this).attr('data-id'), type:$(this).attr('data-type'), object_type:$(this).attr('data-object-type'), object_id:$(this).attr('data-object-id')}, function(data) {
+        $('#nat_search_results_commit').html(data);
+        if(data.search("alert-danger")==-1 && data.search("error")==-1) {
+            setTimeout(function (){ open_popup("700", "app/admin/nat/edit.php", {id:id, action:"edit"} ); hidePopup2(); parameter = null;}, 1000);
+        }
+        else {
+            hideSpinner();
+        }
+    });
+    return false;
+})
 
 
 

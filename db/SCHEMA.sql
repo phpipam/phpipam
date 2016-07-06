@@ -34,7 +34,6 @@ CREATE TABLE `ipaddresses` (
   `excludePing` BINARY  NULL  DEFAULT '0',
   `PTRignore` BINARY  NULL  DEFAULT '0',
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
-  `NAT` VARCHAR(64)  NULL  DEFAULT NULL,
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -259,7 +258,6 @@ CREATE TABLE `subnets` (
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
   `threshold` int(3)  NULL  DEFAULT 0,
-  `NAT` VARCHAR(64)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -296,7 +294,7 @@ CREATE TABLE `devices` (
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table userGroups
@@ -690,9 +688,10 @@ CREATE TABLE `nat` (
   `src` text,
   `dst` text,
   `port` int(5) DEFAULT NULL,
+  `nat` ADD `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table racks

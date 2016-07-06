@@ -200,7 +200,8 @@ class Logging extends Common_functions {
                         "isFull" => "Subnet is marked as full",
                         "state" => "Address state index",
                         "NAT" => "NAT object index",
-                        "threshold" => "Sunbet usage alert threshold"
+                        "threshold" => "Sunbet usage alert threshold",
+                        "linked_subnet" => "Linked IPv6 subnet"
     	            ),
         "address" => array(
                         "id" => "Address id",
@@ -220,7 +221,8 @@ class Logging extends Common_functions {
                         "PTRignore" => "Dont create PTR records",
                         "PTR" => "PTR object index",
                         "NAT" => "NAT object index",
-                        "firewallAddressObject" => "Firewall object index"
+                        "firewallAddressObject" => "Firewall object index",
+                        "is_gateway" => "Address is subnet gateway"
                     )
 	);
 

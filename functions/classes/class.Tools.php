@@ -1622,6 +1622,90 @@ class Tools extends Common_functions {
 
 
 	/**
+	 *	@nat methods
+	 *	------------------------------
+	 */
+
+    /**
+     * Translates NAT objects to be shown on page
+     *
+     * @access public
+     * @param json $json_objects
+     * @param int|bool $nat_id (default: false)
+     * @param bool $json_objects (default: false)
+     * @return void
+     */
+    public function translate_nat_objects_for_display ($json_objects, $nat_id = false, $admin = false) {
+        // to array "subnets"=>array(1,2,3)
+        $objects = json_decode($json_objects, true);
+        // init out array
+        $out = array();
+        // set ping statuses for warning and offline
+        $this->get_settings();
+        $statuses = explode(";", $this->settings->pingStatus);
+        // check
+        if(is_array($objects)) {
+            if(sizeof($objects)>0) {
+                foreach ($objects as $ot=>$ids) {
+                    if (sizeof($ids)>0) {
+                        foreach ($ids as $id) {
+                            // fetch
+                            $item = $this->fetch_object($ot, "id", $id);
+                            if($item!==false) {
+                                // remove
+                                $remove = $admin&&$nat_id ? "<span class='remove-nat-item-wrapper_".$ot."_".$item->id."'><a class='btn btn-xs btn-danger removeNatItem' data-id='$nat_id' data-type='$ot' data-item-id='$item->id' rel='tooltip' title='"._('Remove')."'><i class='fa fa-times'></i></a>" : "<span>";
+                                // subnets
+                                if ($ot=="subnets") {
+                                    $out[] = "$remove <a href='".create_link("subnets", $item->sectionId, $item->id)."'>".$this->transform_address($item->subnet, "dotted")."/".$item->mask."</a></span>";
+                                }
+                                // addresses
+                                else {
+                                    // subnet
+                                    $snet = $this->fetch_object("subnets", "id", $item->subnetId);
+                                    // append status
+                                    if ($snet->pingSubnet=="1") {
+                                        //calculate
+                                        $tDiff = time() - strtotime($item->lastSeen);
+                                        if($item->excludePing=="1" )    { $hStatus = "padded"; $hTooltip = ""; }
+                                        elseif(is_null($item->lastSeen)) { $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address was never online")."'"; }
+                                        elseif($tDiff < $statuses[0])	{ $hStatus = "success";	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is alive")."<hr>"._("Last seen").": ".$item->lastSeen."'"; }
+                                        elseif($tDiff < $statuses[1])	{ $hStatus = "warning"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address warning")."<hr>"._("Last seen").": ".$item->lastSeen."'"; }
+                                        elseif($tDiff > $statuses[1])	{ $hStatus = "error"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": ".$item->lastSeen."'";}
+                                        elseif($item->lastSeen == "0000-00-00 00:00:00") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": "._("Never")."'";}
+                                        elseif($item->lastSeen == "1970-01-01 00:00:01") { $hStatus = "neutral"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": "._("Never")."'";}
+                                        else							{ $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address status unknown")."'";}
+                                    }
+                                    else {
+                                        $hStatus = "hidden";
+                                        $hTooltip = "";
+                                    }
+                                    if($remove=="<span>") {
+                                        $remove .= "<span class='status status-$hStatus' $hTooltip></span>";
+                                    }
+
+                                    $out[] = "$remove <a href='".create_link("subnets", $snet->sectionId, $item->subnetId, "address-details", $item->id)."'>".$this->transform_address($item->ip_addr, "dotted")."</a></span>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // result
+        return sizeof($out)>0 ? $out : false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+	/**
 	 *	@misc methods
 	 *	------------------------------
 	 */

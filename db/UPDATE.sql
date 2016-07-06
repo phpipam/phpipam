@@ -573,3 +573,12 @@ ALTER TABLE `ipaddresses` CHANGE `lastSeen` `lastSeen` DATETIME  NULL  DEFAULT '
 /* add linked subnet field */
 ALTER TABLE `subnets` ADD `linked_subnet` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `description`;
 
+/* add device to table */
+ALTER TABLE `nat` ADD `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `port`;
+
+/* drop NAT fields */
+ALTER TABLE `subnets` DROP `NAT`;
+ALTER TABLE `ipaddresses` DROP `NAT`;
+
+
+
