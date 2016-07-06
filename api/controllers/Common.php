@@ -527,6 +527,60 @@ class Common_api_functions {
 	}
 
 	/**
+	 * Validates MAC address
+	 *
+	 * @access public
+	 * @param mixed $mac
+	 * @return void
+	 */
+	public function validate_mac ($mac) {
+    	// first put it to common format (1)
+    	$mac = $this->reformat_mac_address ($mac);
+    	// we permit empty
+        if (strlen($mac)==0)                                                            { return true; }
+    	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1)   { return false; }
+    	else                                                                            { return true; }
+	}
+
+	/**
+	 * Reformats MAC address to requested format
+	 *
+	 * @access public
+	 * @param mixed $mac
+	 * @param string $format (default: 1)
+	 *      1 : 00:66:23:33:55:66
+	 *      2 : 00-66-23-33-55-66
+	 *      3 : 0066.2333.5566
+	 *      4 : 006623335566
+	 * @return void
+	 */
+	public function reformat_mac_address ($mac, $format = 1) {
+    	// strip al tags first
+    	$mac = strtolower(str_replace(array(":",".","-"), "", $mac));
+    	// format 4
+    	if ($format==4) {
+        	return $mac;
+    	}
+    	// format 3
+    	if ($format==3) {
+        	$mac = str_split($mac, 4);
+        	$mac = implode(".", $mac);
+    	}
+    	// format 2
+    	elseif ($format==2) {
+        	$mac = str_split($mac, 2);
+        	$mac = implode("-", $mac);
+    	}
+    	// format 1
+    	else {
+        	$mac = str_split($mac, 2);
+        	$mac = implode(":", $mac);
+    	}
+    	// return
+    	return $mac;
+	}
+
+	/**
 	 * This method removes all folders if controller is subnets
 	 *
 	 * @access protected
