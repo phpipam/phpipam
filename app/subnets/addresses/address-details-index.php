@@ -94,7 +94,7 @@ if(sizeof($address)>1) {
     $active = @$_GET['tab']=="permissions" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "permissions")."'>"._("Permissions")."</a></li>";
     }
-    if(@array_key_exists($address['id'], $all_nats_per_object['ipaddresses'])) {
+    if($User->settings->enableNAT==1) {
     $active = @$_GET['tab']=="nat" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "nat")."'>"._("NAT")."</a></li>";
     }
@@ -119,7 +119,7 @@ if(sizeof($address)>1) {
     }
 
     //nat
-    if(@array_key_exists($address['id'], $all_nats_per_object['ipaddresses'])) {
+    if($User->settings->enableNAT==1) {
     if(@$_GET['tab']=="nat")
 	include("address-details/address-details-nat.php");
     }

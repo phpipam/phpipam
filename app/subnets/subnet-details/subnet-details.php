@@ -85,6 +85,7 @@ else {
 		<th><?php print _('Subnet description'); ?></th>
 		<td><?php print html_entity_decode($subnet['description']); ?></td>
 	</tr>
+
 	<tr>
 		<th><?php print _('Permission'); ?></th>
 		<td><?php print $Subnets->parse_permissions($subnet_permission); ?></td>
@@ -112,6 +113,14 @@ else {
 	<?php } ?>
 
 	<?php } ?>
+
+	<?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+	<tr>
+		<th><?php print _('NAT'); ?></th>
+		<td><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat") ?>'><i class='btn btn-xs btn-info fa fa-exchange'></i> <?php print _("Subnet is natted"); ?></a></td>
+	</tr>
+	<?php } ?>
+
 	<tr>
 		<th><?php print _('VLAN'); ?></th>
 		<td>

@@ -93,6 +93,8 @@ $colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp co
 
 # set ping statuses for warning and offline
 $statuses = explode(";", $User->settings->pingStatus);
+
+
 ?>
 
 <!-- print title and pagenum -->
@@ -340,6 +342,11 @@ else {
 			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_REQUEST['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
 			    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
 			    print $Addresses->address_type_format_tag($addresses[$n]->state);
+
+                # set subnet nat
+                if(isset($all_nats_per_object['subnets'][$subnet['id']]) || isset($all_nats_per_object['ipaddresses'][$addresses[$n]->id])) { print  " <a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $addresses[$n]->id, "nat")."' class='btn btn-xs btn-info fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' rel='tooltip' title='"._('Address is Natted')."'></i>"; }
+
+
 			    print $dns_records2."</td>";
 
 			    # resolve dns name

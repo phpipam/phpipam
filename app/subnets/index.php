@@ -106,7 +106,7 @@ if ($User->settings->enableNAT==1) {
             <?php if($User->is_admin(false)) { ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="permissions") print "class='active'"; ?>><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "permissions"); ?>'><?php print _("Permissions"); ?></a></li>
             <?php } ?>
-            <?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
+            <?php if($User->settings->enableNAT==1) { ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?></a></li>
             <?php } ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="changelog") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "changelog"); ?>'><?php print _("Changelog"); ?></a></li>
@@ -115,16 +115,16 @@ if ($User->settings->enableNAT==1) {
         <!-- details -->
         <?php
         if(!isset($_GET['sPage'])) {
-        	include("subnet-details.php");
+        	include("subnet-details/subnet-details.php");
         }
         if(@$_GET['sPage']=="permissions") {
-            include("subnet-permissions.php");
+            include("subnet-details/subnet-permissions.php");
         }
-        if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets']) && @$_GET['sPage']=="nat") {
-            include("subnet-nat.php");
+        if($User->settings->enableNAT==1 && @$_GET['sPage']=="nat") {
+            include("subnet-details/subnet-nat.php");
         }
         if(@$_GET['sPage']=="changelog") {
-            include("subnet-changelog.php");
+            include("subnet-details/subnet-changelog.php");
         }
     	?>
 
@@ -134,7 +134,7 @@ if ($User->settings->enableNAT==1) {
 
 	<!-- subnet graph -->
 	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-		<?php include('subnet-graph.php'); ?>
+		<?php include('subnet-details/subnet-graph.php'); ?>
 	</div>
 
 	<!-- subnet slaves list -->

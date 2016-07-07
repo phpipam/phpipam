@@ -817,7 +817,7 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $hostname
 	 * @param bool $permit_root_domain
-	 * @return void
+	 * @return bool
 	 */
 	public function validate_hostname($hostname, $permit_root_domain=true) {
     	// first validate hostname

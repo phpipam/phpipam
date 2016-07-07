@@ -2351,9 +2351,31 @@ $(document).on("click", ".editNat", function() {
 	open_popup("700", "app/admin/nat/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
     return false;
 });
+//load edit form from subnets/addresses
+$(document).on("click", ".mapNat", function() {
+	open_popup("700", "app/admin/nat/edit-map.php", {id:$(this).attr('data-id'), object_type:$(this).attr('data-object-type'), object_id:$(this).attr('data-object-id')} );
+    return false;
+});
 //submit form
 $(document).on("click", "#editNatSubmit", function() {
-    submit_popup_data (".editNatResult", "app/admin/nat/edit-result.php", $('form#editNat').serialize());
+    // action
+    var action = $('form#editNat input[name=action]').val();
+
+    if (action!=="add") {
+        submit_popup_data (".editNatResult", "app/admin/nat/edit-result.php", $('form#editNat').serialize());
+    }
+    else {
+        $.post("app/admin/nat/edit-result.php", $('form#editNat').serialize(), function(data) {
+            $('.editNatResult').html(data);
+            if(data.search("alert-danger")==-1 && data.search("error")==-1) {
+                setTimeout(function (){ open_popup("700", "app/admin/nat/edit.php", {id:$('div.new_nat_id').html(), action:"edit"} ); hidePopup2(); parameter = null;}, 1000);
+            }
+            else {
+                hideSpinner();
+            }
+        }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+        return false;
+    }
 });
 // remove item
 $(document).on("click", ".removeNatItem", function() {
@@ -2390,11 +2412,17 @@ $(document).on("submit", "form#search_nats", function() {
 // search result item select
 $(document).on("click", "a.addNatObjectFromSearch", function() {
     var id = $(this).attr('data-id');
+    var reload = $(this).attr('data-reload');
     showSpinner();
     $.post("app/admin/nat/item-add-submit.php", {id:$(this).attr('data-id'), type:$(this).attr('data-type'), object_type:$(this).attr('data-object-type'), object_id:$(this).attr('data-object-id')}, function(data) {
         $('#nat_search_results_commit').html(data);
         if(data.search("alert-danger")==-1 && data.search("error")==-1) {
-            setTimeout(function (){ open_popup("700", "app/admin/nat/edit.php", {id:id, action:"edit"} ); hidePopup2(); parameter = null;}, 1000);
+            if(reload == "true") {
+                reload_window (data);
+            }
+            else {
+                setTimeout(function (){ open_popup("700", "app/admin/nat/edit.php", {id:id, action:"edit"} ); hidePopup2(); parameter = null;}, 1000);
+            }
         }
         else {
             hideSpinner();
