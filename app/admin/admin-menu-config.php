@@ -38,6 +38,9 @@ if($User->settings->enableSNMP == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cogs","name"=>"SNMP", 				          "href"=>"snmp", 					"description"=>"SNMP management");
 if($User->settings->enableRACK == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-bars",  "name"=>"Racks", 			       "href"=>"racks", 			        "description"=>"Rack management");
+if($User->settings->enableLocations == 1)
+$admin_menu['IP related management'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
+
 if($User->settings->enableFirewallZones == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-fire","name"=>"Firewall Zones", 		    "href"=>"firewall-zones", 			"description"=>"Firewall zone management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
@@ -92,7 +95,8 @@ $admin_menu_items = array(
                 		'vlans',
                 		'vrfs',
                 		'widgets',
-                		'nat'
+                		'nat',
+                		'locations'
                     );
 
 

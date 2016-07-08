@@ -58,6 +58,15 @@ $tool_items["dhcp"] = array (
                         "icon"=>"fa-database"
                         );
 }
+// locations
+if($User->settings->enableLocations == 1) {
+$tool_items["locations"] = array (
+                        "name"=>"Locations",
+                        "href"=>array("tools", "locations"),
+                        "title"=>"Show locations",
+                        "icon"=>"fa-map"
+                        );
+}
 // rack
 if($User->settings->enableRACK == 1) {
 $tool_items["racks"] = array (

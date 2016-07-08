@@ -36,6 +36,10 @@ else {
     $rack->size = 42;
 }
 
+# all locations
+if($User->settings->enableLocations=="1")
+$locations = $Tools->fetch_all_objects ("locations");
+
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
@@ -79,6 +83,26 @@ $(document).ready(function(){
 			</select>
 		</td>
 	</tr>
+
+	<!-- Location -->
+	<?php if($User->settings->enableLocations=="1") { ?>
+	<tr>
+		<td><?php print _('Location'); ?></td>
+		<td>
+			<select name="location" class="form-control input-sm input-w-auto">
+    			<option value="0"><?php print _("None"); ?></option>
+    			<?php
+                if($locations!==false) {
+        			foreach($locations as $l) {
+        				if($rack->location == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
+        				else					{ print "<option value='$l->id'>$l->name</option>"; }
+        			}
+    			}
+    			?>
+			</select>
+		</td>
+	</tr>
+	<?php } ?>
 
 	<!-- Description -->
 	<tr>

@@ -89,6 +89,10 @@ if(isset($_POST['vlanId'])) {
 	$subnet_old_details['vlanId'] = $_POST['vlanId'];
 }
 
+# all locations
+if($User->settings->enableLocations=="1")
+$locations = $Tools->fetch_all_objects ("locations");
+
 # set readonly flag
 $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : false;
 ?>
@@ -324,6 +328,26 @@ $('.slider').slider().on('slide', function(ev){
 	}
 
 	?>
+
+	<!-- Location -->
+	<?php if($User->settings->enableLocations=="1") { ?>
+	<tr>
+		<td><?php print _('Location'); ?></td>
+		<td>
+			<select name="location_item" class="form-control input-sm input-w-auto">
+    			<option value="0"><?php print _("None"); ?></option>
+    			<?php
+                if($locations!==false) {
+        			foreach($locations as $l) {
+        				if($subnet_old_details['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
+        				else					{ print "<option value='$l->id'>$l->name</option>"; }
+        			}
+    			}
+    			?>
+			</select>
+		</td>
+	</tr>
+	<?php } ?>
 
 	<?php if($_POST['action']!="delete") { ?>
 	<!-- mark full -->

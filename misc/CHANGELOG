@@ -1,4 +1,4 @@
-== 1.22.20
+== 1.23.01
 
 	New features:
 	------------
@@ -12,8 +12,13 @@
 	    + VLAN discovery;
 	    + VRF discovery;
 	    + Status update scans via ARP check;
-    + NAT module:
+	+ NAT module
         + Source / static / destination NAT;
+		+ Linking subnet to NAT
+		+ Show bindings under tools and next to IP address / subnet
+    + Locations module
+        + Map devices / racks / subnets to location;
+        + Google maps integration;
     + Address linking by selected field;
     + Custom logo for site and mails;
 

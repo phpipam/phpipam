@@ -261,6 +261,7 @@ else {
 					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
 					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"=>$_POST['nameserverId'],
+					"location"=>@$_POST['location_item'],
 					"device"=>$_POST['device'],
                     "isFull"=>$Admin->verify_checkbox($_POST['isFull'])
 					);

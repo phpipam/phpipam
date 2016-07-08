@@ -325,7 +325,18 @@ $(document).ready(function() {
 	</td>
 </tr>
 
-<!-- Rack -->
+<!-- Locations -->
+<tr>
+	<td class="title"><?php print _('Locations module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableLocations" <?php if($settings['enableLocations'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable locations module'); ?>
+	</td>
+</tr>
+
+<!-- SNMP -->
 <tr>
 	<td class="title"><?php print _('SNMP module'); ?></td>
 	<td>

@@ -36,6 +36,11 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
+
+# all locations
+if($User->settings->enableLocations=="1")
+$locations = $Tools->fetch_all_objects ("locations");
+
 // set show for rack
 if (is_null($device['rack']))   { $display='display:none'; }
 else                            { $display=''; }
@@ -97,6 +102,26 @@ $('#switchManagementEdit').change(function() {
 			</select>
 		</td>
 	</tr>
+
+	<!-- Location -->
+	<?php if($User->settings->enableLocations=="1") { ?>
+	<tr>
+		<td><?php print _('Location'); ?></td>
+		<td>
+			<select name="location_item" class="form-control input-sm input-w-auto">
+    			<option value="0"><?php print _("None"); ?></option>
+    			<?php
+                if($locations!==false) {
+        			foreach($locations as $l) {
+        				if($device['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
+        				else					{ print "<option value='$l->id'>$l->name</option>"; }
+        			}
+    			}
+    			?>
+			</select>
+		</td>
+	</tr>
+	<?php } ?>
 
     <!-- Rack -->
     <?php if($User->settings->enableRACK=="1") { ?>

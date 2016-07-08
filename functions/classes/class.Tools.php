@@ -1770,6 +1770,70 @@ class Tools extends Common_functions {
 
 
 
+
+
+	/**
+	 *	@location methods
+	 *	------------------------------
+	 *
+	 *  !location
+	 */
+
+    /**
+     * Fetches all location objects.
+     *
+     * @access public
+     * @param bool|int $id (default: false)
+     * @param bool count (default: false)
+     * @return void
+     */
+    public function fetch_location_objects ($id = false, $count = false) {
+        // check
+        if(is_numeric($id)) {
+            // count ?
+            $select = $count ? "count(*) as cnt " : "*";
+            // query
+            $query = "select $select from
+                        (
+                        SELECT d.id, d.hostname as name, '' as mask, 'devices' as type, '' as sectionId, d.location, d.description
+                        FROM devices d
+                        JOIN locations l
+                        ON d.location = l.id
+                        UNION ALL
+                        SELECT r.id, r.name, '' as mask, 'racks' as type, '' as sectionId, r.location, r.description
+                        FROM racks r
+                        JOIN locations l
+                        ON r.location = l.id
+                        UNION ALL
+                        SELECT s.id, s.subnet as name, s.mask, 'subnets' as type, s.sectionId, s.location, s.description
+                        FROM subnets s
+                        JOIN locations l
+                        ON s.location = l.id
+                        )
+                        as linked where location = ?;";
+
+     		// fetch
+    		try { $objects = $this->Database->getObjectsQuery($query, array($id)); }
+    		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
+
+    		// return
+    		return sizeof($objects)>0 ? $objects : false;
+        }
+        else {
+            return false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 	/**
 	 *	@misc methods
 	 *	------------------------------

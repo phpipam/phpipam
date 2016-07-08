@@ -143,10 +143,11 @@ CREATE TABLE `settings` (
   `enableDHCP` TINYINT(1)  NULL  DEFAULT '0',
   `DHCP` VARCHAR(256) NULL default '{"type":"kea","settings":{"file":"\/etc\/kea\/kea.conf"}}',
   `enableMulticast` TINYINT(1)  NULL  DEFAULT '0',
-  `enableNAT` TINYINT(1)  NULL  DEFAULT '0',
+  `enableNAT` TINYINT(1)  NULL  DEFAULT '1',
   `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
-  `enableThreshold` TINYINT(1)  NULL  DEFAULT '0',
-  `enableRACK` TINYINT(1)  NULL  DEFAULT '0',
+  `enableThreshold` TINYINT(1)  NULL  DEFAULT '1',
+  `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
+  `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
@@ -258,6 +259,7 @@ CREATE TABLE `subnets` (
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
   `threshold` int(3)  NULL  DEFAULT 0,
+  `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -291,6 +293,7 @@ CREATE TABLE `devices` (
   `rack` int(11) unsigned NULL DEFAULT null,
   `rack_start` int(11) unsigned DEFAULT null,
   `rack_size` int(11) unsigned DEFAULT null,
+  `location` INT(11)  unsigned  NULL  DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`)
@@ -702,7 +705,23 @@ CREATE TABLE `racks` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
+  `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table locations
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `locations`;
+
+CREATE TABLE `locations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL DEFAULT '',
+  `description` text,
+  `lat` varchar(12) DEFAULT NULL,
+  `long` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

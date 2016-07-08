@@ -66,6 +66,7 @@ if(sizeof($custom) > 0) {
 $values = array("id"=>@$rack['rackid'],
 				"name"=>@$rack['name'],
 				"size"=>@$rack['size'],
+				"location"=>@$rack['location'],
 				"description"=>@$rack['description']
 				);
 # custom fields

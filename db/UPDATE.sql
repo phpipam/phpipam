@@ -584,4 +584,18 @@ ALTER TABLE `ipaddresses` DROP `NAT`;
 ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
 ALTER TABLE `users` CHANGE `username` `username` VARCHAR(64)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
 
+/* locations */
+ALTER TABLE `settings` ADD `enableLocations` TINYINT(1)  NULL  DEFAULT '1'  AFTER `enableRACK`;
+ALTER TABLE `devices` ADD `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `rack_size`;
+ALTER TABLE `racks` ADD `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `size`;
+ALTER TABLE `subnets` ADD `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `threshold`;
 
+
+CREATE TABLE `locations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL DEFAULT '',
+  `description` text,
+  `lat` varchar(12) DEFAULT NULL,
+  `long` varchar(12) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

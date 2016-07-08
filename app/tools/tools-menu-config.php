@@ -36,6 +36,8 @@ if($User->settings->enableVRF == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"VRFs and belonging networks");
 if($User->settings->enableRACK == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bars", 	     "name"=>"Racks",  				"href"=>"racks", 		"description"=>"Rack information");
+if($User->settings->enableLocations == 1)
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 		"description"=>"All configured devices");
 if($User->settings->enableMulticast == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map-o",		"name"=>"Multicast networks", 	"href"=>"multicast-networks", "description"=>"Multicast subnets and mapping");
@@ -79,8 +81,9 @@ $tools_menu_items = array(
 						'user-menu',
 						'vlan',
 						'vrf',
-						"inactive-hosts",
+						'inactive-hosts',
 						"threshold",
-						'nat'
+						'nat',
+						'locations'
                     );
 ?>

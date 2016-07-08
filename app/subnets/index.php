@@ -109,6 +109,10 @@ if ($User->settings->enableNAT==1) {
             <?php if($User->settings->enableNAT==1) { ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?></a></li>
             <?php } ?>
+            <?php if($User->settings->enableLocations==1) { ?>
+            <li role='presentation' <?php if(@$_GET['sPage']=="location") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "location"); ?>'><?php print _("Location"); ?></a></li>
+            <?php } ?>
+
             <li role='presentation' <?php if(@$_GET['sPage']=="changelog") print " class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "changelog"); ?>'><?php print _("Changelog"); ?></a></li>
         </ul>
 
@@ -125,6 +129,9 @@ if ($User->settings->enableNAT==1) {
         }
         if(@$_GET['sPage']=="changelog") {
             include("subnet-details/subnet-changelog.php");
+        }
+        if(@$_GET['sPage']=="location") {
+            include("subnet-details/subnet-location.php");
         }
     	?>
 

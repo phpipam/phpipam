@@ -893,6 +893,10 @@ table#subnetsMenu td#subnetsLeft .menu-tools {
     margin: 0px !important;
 }
 
+#gmap {
+    border: 5px solid white;
+}
+
 
 
 

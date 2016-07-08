@@ -58,24 +58,40 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
     	print "</tr>";
     	print '<tr>';
     	print "	<th>". _('Number of hosts').'</th>';
-    	print "	<td>".sizeof($addresses)."</td>";
+    	print "	<td><span class='badge badge1 badge5'>".sizeof($addresses)." hosts</span></td>";
     	print "</tr>";
     	print '<tr>';
     	print "	<th>". _('Type').'</th>';
     	print "	<td>$device_type->tname</td>";
     	print "</tr>";
-    	print '<tr>';
-    	print "	<th>". _('Vendor').'</th>';
-    	print "	<td>$device[vendor]</td>";
+
+        if($User->settings->enableLocations=="1") { ?>
+    	<tr>
+    		<th><?php print _('Location'); ?></th>
+    		<td>
+    		<?php
+
+    		// Only show nameservers if defined for subnet
+    		if(!empty($device['location']) && $device['location']!=0) {
+    			# fetch recursive nameserver details
+    			$location2 = $Tools->fetch_object("locations", "id", $device['location']);
+                if($location2!==false) {
+                    print "<a href='".create_link("tools", "locations", $device['location'])."'>$location2->name</a>";
+                }
+    		}
+
+    		else {
+    			print "<span class='text-muted'>/</span>";
+    		}
+    		?>
+    		</td>
+    	</tr>
+        <?php }
+
+    	print "<tr>";
+    	print "	<td colspan='2'><hr></td>";
     	print "</tr>";
-    	print '<tr>';
-    	print "	<th>". _('Model').'</th>';
-    	print "	<td>$device[model]</td>";
-    	print "</tr>";
-    	print '<tr>';
-    	print "	<th>". _('SW version').'</th>';
-    	print "	<td>$device[version]</td>";
-    	print "</tr>";
+
     	print '<tr>';
     	print "	<th>". _('Sections').':</th>';
     	print "	<td>";
@@ -278,8 +294,6 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
     }
 
     print "</table>";			# end table
-
-
 	print "</td>";
 
 	# rack
@@ -299,5 +313,28 @@ if($_GET['sPage']!=0 && sizeof($device)>0) {
     }
 
 	print "</tr>";
+
+	# location
+	if ($User->settings->enableRACK=="1") {
+        // fake data
+        $loc_old = $location;
+        unset($location);
+        $location_index = $device['location'];
+        $resize = false;
+        $height = "500px;float:right";
+
+
+        print "<tr>";
+        print " <td colspan='2'><h4 style='padding-top:30px;'>"._('Location')."</h4><hr></td>";
+        print "</tr>";
+        print "<tr>";
+        print " <td colspan='2'>";
+        include(dirname(__FILE__).'/../../tools/locations/single-location-map.php');
+        print " </td>";
+        print "</tr>";
+
+        $location = $loc_old;
+    }
+
     print "</table>";
 ?>
