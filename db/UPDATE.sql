@@ -580,5 +580,8 @@ ALTER TABLE `nat` ADD `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL  AFTER `por
 ALTER TABLE `subnets` DROP `NAT`;
 ALTER TABLE `ipaddresses` DROP `NAT`;
 
+/* extend username field to 64 chars */
+ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+ALTER TABLE `users` CHANGE `username` `username` VARCHAR(64)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
 
 

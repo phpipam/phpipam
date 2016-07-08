@@ -63,7 +63,7 @@ CREATE TABLE `logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `severity` int(11) DEFAULT NULL,
   `date` varchar(32) DEFAULT NULL,
-  `username` varchar(32) DEFAULT NULL,
+  `username` varchar(64) DEFAULT NULL,
   `ipaddr` varchar(64) DEFAULT NULL,
   `command` varchar(128) DEFAULT '0',
   `details` varchar(1024) DEFAULT NULL,
@@ -321,7 +321,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(25) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
   `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL,
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
