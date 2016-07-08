@@ -77,11 +77,11 @@ else {
 
 		try { $Database->runQuery($query, array($_POST['id'])); }
 		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			$Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 		// references removed
-		$this->Result->show("info", _("Scan agent references removed"));
+		$Result->show("info", _("Scan agent references removed"));
 	}
 }
 
