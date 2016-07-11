@@ -43,7 +43,8 @@ else {
     print " <th>"._('Type')."</th>";
     print " <th colspan='3'>"._('Translation')."</th>";
     print " <th>"._('Device')."</th>";
-    print " <th>"._('Port')."</th>";
+    print " <th>"._('Src Port')."</th>";
+    print " <th>"._('Dst Port')."</th>";
     if($admin && $_GET['page']=="administration")
     print " <th>"._('Description')."</th>";
     if($admin)
@@ -66,7 +67,7 @@ else {
     # loop
     foreach ($nats_reordered as $k=>$nats) {
         # header
-        $colspan = $admin ? 9 : 8;
+        $colspan = $admin ? 10 : 9;
         print "<tr>";
         print " <th colspan='$colspan'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</th>";
         print "</tr>";
@@ -107,8 +108,8 @@ else {
                 $n->description = str_replace("\n", "<br>", $n->description);
 
                 // port
-                if(strlen($n->port)==0)
-                $n->port = "/";
+                if(strlen($n->src_port)==0) $n->src_port = "/";
+                if(strlen($n->dst_port)==0) $n->dst_port = "/";
 
                 // print
                 print "<tr>";
@@ -118,7 +119,8 @@ else {
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";
                 print " <td>".implode("<br>", $destinations)."</td>";
                 print " <td>$n->device</td>";
-                print " <td>$n->port</td>";
+                print " <td>$n->src_port</td>";
+                print " <td>$n->dst_port</td>";
                 if($admin && $_GET['page']=="administration")
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // actions

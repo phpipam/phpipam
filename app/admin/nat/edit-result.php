@@ -38,7 +38,8 @@ $values = array(
     "id"=>@$_POST['id'],
     "name"=>$_POST['name'],
     "type"=>$_POST['type'],
-    "port"=>$_POST['port'],
+    "src_port"=>$_POST['src_port'],
+    "dst_port"=>$_POST['dst_port'],
     "device"=>$_POST['device'],
     "description"=>$_POST['description']
     );

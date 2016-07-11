@@ -181,12 +181,21 @@ $link = $readonly ? false : true;
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr class='port'>
-        	<th><?php print _('Port'); ?></th>
+        	<th><?php print _('Src Port'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="port" value="<?php print $nat->port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="src_port" value="<?php print $nat->src_port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
-            	<span class="text-muted"><?php print _("Write ports"); ?></span>
+            	<span class="text-muted"><?php print _("Source port"); ?></span>
+        	</td>
+        </tr>
+    	<tr class='port'>
+        	<th><?php print _('Dst Port'); ?></th>
+        	<td>
+            	<input type="text" class="form-control input-sm" name="dst_port" value="<?php print $nat->dst_port; ?>" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>>
+        	</td>
+        	<td>
+            	<span class="text-muted"><?php print _("Destination port"); ?></span>
         	</td>
         </tr>
         <?php } ?>

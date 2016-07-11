@@ -602,4 +602,6 @@ CREATE TABLE `locations` (
 
 ALTER TABLE `locations` ADD `address` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `description`;
 
-
+/* nat changes */
+ALTER TABLE `nat` CHANGE `port` `src_port` INT(5)  NULL  DEFAULT NULL;
+ALTER TABLE `nat` ADD `dst_port` INT(5)  NULL  DEFAULT NULL  AFTER `src_port`;

@@ -690,7 +690,8 @@ CREATE TABLE `nat` (
   `type` set('source','static','destination') DEFAULT 'source',
   `src` text,
   `dst` text,
-  `port` int(5) DEFAULT NULL,
+  `src_port` int(5) DEFAULT NULL,
+  `dst_port` INT(5) DEFAULT NULL,
   `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `description` text,
   PRIMARY KEY (`id`)

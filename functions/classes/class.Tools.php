@@ -1760,6 +1760,97 @@ class Tools extends Common_functions {
         return $out;
     }
 
+    /**
+     * Prints single NAT for display in devices, subnets, addresses.
+     *
+     * @access public
+     * @param mixed $n
+     * @param bool $is_admin (default: false)
+     * @param bool|int $nat_id (default: false)
+     * @param bool $admin (default: false) > shows remove links
+     * @param bool|mixed $object_type (default: false)
+     * @param bool $object_id (default: false)
+     * @return void
+     */
+    public function print_nat_table ($n, $is_admin = false, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
+        // cast to object to be sure if array provided
+        $n = (object) $n;
+
+        // translate json to array, links etc
+        $sources      = $this->translate_nat_objects_for_display ($n->src, $nat_id, $admin, $object_type, $object_id);
+        $destinations = $this->translate_nat_objects_for_display ($n->dst, $nat_id, $admin, $object_type, $object_id);
+
+        // no src/dst
+        if ($sources===false)
+            $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+        if ($destinations===false)
+            $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+
+        // description
+        $n->description = str_replace("\n", "<br>", $n->description);
+        $n->description = strlen($n->description)>0 ? "($n->description)" : "";
+
+        // device
+        if (strlen($n->device)) {
+            if($n->device !== 0) {
+                $device = $this->fetch_object ("devices", "id", $n->device);
+                $description = strlen($device->description)>0 ? " ($device->description)" : "";
+                $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a> ($device->ip_addr) <span class='text-muted'>$description</span>";
+            }
+        }
+        else {
+            $n->device = "/";
+        }
+
+        // icon
+        $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
+
+        // to html
+        $html = array();
+        $html[] = "<tr>";
+        $html[] = "<td colspan='4'>";
+        $html[] = "<span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
+        $html[] = "	<div class='btn-group pull-right'>";
+        $html[] = "		<a href='' class='btn btn-xs btn-default editNat' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";
+        $html[] = "		<a href='' class='btn btn-xs btn-default editNat' data-action='delete' data-id='$n->id'><i class='fa fa-times'></i></a>";
+        $html[] = "	</div>";
+        $html[] = "</td>";
+        $html[] = "</tr>";
+
+        // append ports
+        if(($n->type=="static" || $n->type=="destination") && (strlen($n->src_port)>0 && strlen($n->dst_port)>0)) {
+            $sources      = implode("<br>", $sources)." /".$n->src_port;
+            $destinations = implode("<br>", $destinations)." /".$n->dst_port;
+        }
+        else {
+            $sources      = implode("<br>", $sources);
+            $destinations = implode("<br>", $destinations);
+        }
+
+        $html[] = "<tr>";
+        $html[] = "<td style='width:80px;'></td>";
+        $html[] = "<td>$sources</td>";
+        $html[] = "<td><i class='fa $icon'></i></td>";
+        $html[] = "<td>$destinations</td>";
+        $html[] = "</tr>";
+
+        $html[] = "<tr>";
+        $html[] = "<td></td>";
+        $html[] = "<td colspan='3'><span class='text-muted'>";
+        $html[] = _('Device').": $n->device";
+        $html[] = "</span></td>";
+        $html[] = "</tr>";
+
+        // actions
+        if($is_admin) {
+        $html[] = "<tr>";
+        $html[] = "<td colspan='4'><hr></td>";
+        $html[] = "</tr>";
+        }
+        // return
+        return implode("\n", $html);
+    }
+
 
 
 
