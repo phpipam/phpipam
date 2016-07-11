@@ -45,6 +45,10 @@ $values = array(
 
 # execute update
 if(!$Admin->object_modify ("nat", $_POST['action'], "id", $values))  { $Result->show("danger",  _("NAT $_POST[action] failed"), false); }
-else																	{ $Result->show("success", _("NAT $_POST[action] successful"), false); }
+else																 { $Result->show("success", _("NAT $_POST[action] successful"), false); }
 
+# add
+if($_POST['action']=="add") {
+    print "<div class='new_nat_id hidden'>$Admin->lastId</div>";
+}
 ?>
