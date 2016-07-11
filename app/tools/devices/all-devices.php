@@ -45,10 +45,8 @@ print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by IP add
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by description')."'>"._('Description').'</span></th>';
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
 print "	<th class='hidden-sm'>          <span rel='tooltip' data-container='body' title='"._('Sort by type')."'>". _('Type').'</span></th>';
-print "	<th class='hidden-sm hidden-xs'><span rel='tooltip' data-container='body' title='"._('Sort by vendor')."'>"._('Vendor').'</span></th>';
-print "	<th class='hidden-sm hidden-xs'><span rel='tooltip' data-container='body' title='"._('Sort by model')."'>"._('Model').'</span></th>';
 
-if(sizeof(@$custom) > 0) {
+if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
 			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
@@ -74,7 +72,9 @@ else {
 	$device = (array) $device;
 
 	//count items
-	$cnt = $Tools->count_database_objects("ipaddresses", "switch", $device['id']);
+	$cnt1 = $Tools->count_database_objects("ipaddresses", "switch", $device['id']);
+	$cnt2 = $Tools->count_database_objects("subnets", "device",  $device['id']);
+	$cnt = $cnt1 + $cnt2;
 
 	// reindex types
 	if (isset($device_types)) {
@@ -86,16 +86,14 @@ else {
 	//print details
 	print '<tr>'. "\n";
 
-	print "	<td><a href='".create_link("tools","devices","hosts",$device['id'])."'>". $device['hostname'] .'</a></td>'. "\n";
+	print "	<td><a href='".create_link("tools","devices",$device['id'])."'><i class='fa fa-desktop'></i> ". $device['hostname'] .'</a></td>'. "\n";
 	print "	<td>". $device['ip_addr'] .'</td>'. "\n";
 	print '	<td class="description">'. $device['description'] .'</td>'. "\n";
-	print '	<td><strong>'. $cnt .'</strong> '._('Hosts').'</td>'. "\n";
+	print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
 	print '	<td class="hidden-sm">'. $device_types_indexed[$device['type']]->tname .'</td>'. "\n";
-	print '	<td class="hidden-sm hidden-xs">'. $device['vendor'] .'</td>'. "\n";
-	print '	<td class="hidden-sm hidden-xs">'. $device['model'] .'</td>'. "\n";
 
 	//custom
-	if(sizeof(@$custom) > 0) {
+	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
 				print "<td class='hidden-sm hidden-xs hidden-md'>".$device[$field['name']]."</td>";
@@ -103,7 +101,7 @@ else {
 		}
 	}
 
-	print '	<td class="actions"><a href="'.create_link("tools","devices","hosts",$device['id']).'" class="btn btn-sm btn-default"><i class="fa fa-angle-right"></i> '._('Show all hosts').'</a></td>';
+	print '	<td class="actions"><a href="'.create_link("tools","devices",$device['id']).'" class="btn btn-sm btn-default"><i class="fa fa-angle-right"></i> '._('Show details').'</a></td>';
 	print '</tr>'. "\n";
 
 	}
@@ -112,26 +110,26 @@ else {
 	print '<tr class="unspecified">'. "\n";
 
     // count empty
-	$cnt = $Tools->count_database_objects("ipaddresses", "switch", 0);
+	$cnt1 = $Tools->count_database_objects("ipaddresses", "switch", 0);
+	$cnt2 = $Tools->count_database_objects("subnets", "device", 0);
+	$cnt = $cnt1 + $cnt2;
 
 
 	print '	<td>'._('Device not specified').'</td>'. "\n";
 	print '	<td></td>'. "\n";
 	print '	<td></td>'. "\n";
-	print '	<td><strong>'. $cnt .'</strong> '._('Hosts').'</td>'. "\n";
+	print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
 	print '	<td class="hidden-sm"></td>'. "\n";
-	print '	<td class="hidden-sm hidden-xs"></td>'. "\n";
-	print '	<td class="hidden-sm hidden-xs"></td>'. "\n";
 
 	//custom
-	if(sizeof(@$custom) > 0) {
+	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
 				print "<td class='hidden-sm hidden-xs hidden-md'></td>";
 			}
 		}
 	}
-	print '	<td class="actions"><a href="'.create_link("tools","devices","hosts","0").'" class="btn btn-sm btn-default"><i class="fa fa-angle-right"></i> '._('Show all hosts').'</a></td>';
+	print '	<td class="actions"></td>';
 	print '</tr>'. "\n";
 }
 
