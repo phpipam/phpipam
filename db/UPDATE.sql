@@ -599,3 +599,7 @@ CREATE TABLE `locations` (
   `long` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+ALTER TABLE `locations` ADD `address` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `description`;
+
+

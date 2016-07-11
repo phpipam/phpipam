@@ -103,6 +103,9 @@ else {
                 // icon
                 $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
 
+                // description
+                $n->description = str_replace("\n", "<br>", $n->description);
+
                 // port
                 if(strlen($n->port)==0)
                 $n->port = "/";

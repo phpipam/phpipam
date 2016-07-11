@@ -58,6 +58,7 @@ if(isset($all_nats_per_object['subnets'][$subnet['id']])) {
             $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
 
         // description
+        $n->description = str_replace("\n", "<br>", $n->description);
         $n->description = strlen($n->description)>0 ? "($n->description)" : "";
 
         // device

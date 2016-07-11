@@ -11,6 +11,8 @@ $User->check_user_session();
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
 
+    $address['description'] = str_replace("\n", "<br>", $address['description']);
+
     print "<table class='table'>";
     print "<tr>";
 

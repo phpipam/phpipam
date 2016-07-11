@@ -7,6 +7,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
@@ -40,14 +41,40 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
     }
 }
 
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('locations');
+if(sizeof($custom) > 0) {
+	foreach($custom as $myField) {
+		//booleans can be only 0 and 1!
+		if($myField['type']=="tinyint(1)") {
+			if($_POST[$myField['name']]>1) {
+				$_POST[$myField['name']] = 0;
+			}
+		}
+		//not null!
+		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
+																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		}
+		# save to update array
+		$update[$myField['name']] = $_POST[$myField['name']];
+	}
+}
+
+
 // set values
 $values = array(
     "id"=>@$_POST['id'],
     "name"=>$_POST['name'],
+    "address"=>$_POST['address'],
     "lat"=>$_POST['lat'],
     "long"=>$_POST['long'],
     "description"=>$_POST['description']
     );
+
+# custom fields
+if(isset($update)) {
+	$values = array_merge($values, $update);
+}
 
 # execute update
 if(!$Admin->object_modify ("locations", $_POST['action'], "id", $values))   { $Result->show("danger",  _("Location $_POST[action] failed"), false); }

@@ -720,6 +720,7 @@ CREATE TABLE `locations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(128) NOT NULL DEFAULT '',
   `description` text,
+  `address` VARCHAR(128)  NULL  DEFAULT NULL,
   `lat` varchar(12) DEFAULT NULL,
   `long` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -733,4 +734,4 @@ CREATE TABLE `locations` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.22';
+UPDATE `settings` set `version` = '1.23';

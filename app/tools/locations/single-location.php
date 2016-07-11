@@ -22,6 +22,9 @@ else {
         # fetch all locations
         $location = $Tools->fetch_object("locations", "id", $_GET['subnetId']);
 
+        // get custom fields
+        $cfields = $Tools->fetch_custom_fields ('locations');
+
         if($location===false) {
              $Result->show("danger", _("Location not found"), false);
         }
@@ -48,14 +51,8 @@ else {
 
             	# lat
             	print "<tr>";
-            	print "	<th>"._('Latitude')."</th>";
-            	print "	<td>$location->lat</td>";
-            	print "</tr>";
-
-            	# long
-            	print "<tr>";
-            	print "	<th>"._('Longitude')."</th>";
-            	print "	<td>$location->long</td>";
+            	print "	<th>"._('Address')."</th>";
+            	print "	<td>$location->address</td>";
             	print "</tr>";
 
             	# description
@@ -64,6 +61,21 @@ else {
             	print "	<td>$location->description</td>";
             	print "</tr>";
 
+            	# print custom subnet fields if any
+            	if(sizeof($cfields) > 0) {
+            		// divider
+            		print "<tr><td colspan='2'><hr></td></tr>";
+            		// fields
+            		foreach($cfields as $key=>$field) {
+            			$location->$key = str_replace("\n", "<br>",$location->$key);
+            			// create links
+            			$location->$key = $Result->create_links($location->$key);
+            			print "<tr>";
+            			print "	<th>$key</th>";
+            			print "	<td style='vertical-align:top;align:left;'>".$location->$key."</td>";
+            			print "</tr>";
+            		}
+            	}
 
             	# actions
             	print "<tr>";
