@@ -119,7 +119,7 @@ if(sizeof($address)>1) {
     		# get device
     		$device = (array) $Tools->fetch_object("devices", "id", $address['switch']);
     		$device = $Addresses->reformat_empty_array_fields($device, "");
-    		print "	<td><a href='".create_link("tools","devices","hosts",$device['id'])."'>".@$device['hostname']."</a> ".@$device['description']."</td>";
+    		print "	<td><a href='".create_link("tools","devices",$device['id'])."'>".@$device['hostname']."</a> ".@$device['description']."</td>";
     	} else {
     		print "	<td>$address[switch]</td>";
     	}

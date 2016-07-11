@@ -205,7 +205,7 @@ if ($subnets!==false) {
 		        	if(in_array('switch', $selected_ip_fields)) {
 			        	# get device details
 			        	$device = (array) $Tools->fetch_object("devices", "id", $address->switch);
-																	 { print "<td class='hidden-xs hidden-sm hidden-md'><a href='".create_link("tools","devices","hosts",@$device['id'])."'>". @$device['hostname'] ."</a></td>"; }
+																	 { print "<td class='hidden-xs hidden-sm hidden-md'><a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>"; }
 					}
 
 					# print port

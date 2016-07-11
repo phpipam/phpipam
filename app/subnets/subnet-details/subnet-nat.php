@@ -66,7 +66,7 @@ if(isset($all_nats_per_object['subnets'][$subnet['id']])) {
             if($n->device !== 0) {
                 $device = $Tools->fetch_object ("devices", "id", $n->device);
                 $description = strlen($device->description)>0 ? "($device->description)" : "";
-                $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", "hosts", $device->id)."'>$device->hostname</a> ($device->ip_addr), <span class='text-muted'>$description</span>";
+                $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a> ($device->ip_addr), <span class='text-muted'>$description</span>";
             }
         }
         else {

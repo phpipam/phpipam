@@ -2911,7 +2911,7 @@ class Subnets extends Common_functions {
 				else {
 					$device = $this->fetch_object ("devices", "id", $option['value']['device']);
 					if ($device!==false) {
-						$html[] = "	<td><a href='".create_link("tools","devices","hosts",$option['value']['device'])."'>".$device->hostname .'</a></td>' . "\n";
+						$html[] = "	<td><a href='".create_link("tools","devices",$option['value']['device'])."'>".$device->hostname .'</a></td>' . "\n";
 					}
 					else {
 						$html[] ='	<td>/</td>' . "\n";

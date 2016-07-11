@@ -153,7 +153,7 @@ else {
         			$rack = $Tools->fetch_object("racks", "id", $device->rack);
         			$rack_text = $rack===false ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
     			}
-				print "<a href='".create_link("tools","devices","hosts",$device->id)."'>".$device->hostname."</a>";
+				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
 				if (strlen($device->description)>0) {
 					print ' ('.$device->description.')';
 				}

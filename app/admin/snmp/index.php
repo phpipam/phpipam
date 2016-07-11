@@ -74,7 +74,7 @@ else {
         }
         else {
             foreach ($devices_used as $d) {
-                print "<a href='".create_link("tools","devices", "hosts", $d->id)."'>".$d->hostname."</a><br>";
+                print "<a href='".create_link("tools","devices", $d->id)."'>".$d->hostname."</a><br>";
             }
         }
         print " </td>";

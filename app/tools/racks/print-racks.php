@@ -104,11 +104,11 @@ else {
                     if($admin) {
                         print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$r->id' data-deviceid='$d->id' data-csrf='$csrf'><i class='fa fa-times'></i></a> ";
                         print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start, "._("Size").": $d->rack_size U</span>";
-                        print " <a href='".create_link("tools", "devices", "hosts", $d->id)."'>$d->hostname</a><br>";
+                        print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
                     }
                     else {
                         print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start, "._("Size").": $d->rack_size U</span>";
-                        print " <a href='".create_link("tools", "devices", "hosts", $d->id)."'>$d->hostname</a><br>";
+                        print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
 
                     }
 

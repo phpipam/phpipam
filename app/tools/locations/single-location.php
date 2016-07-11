@@ -121,7 +121,7 @@ else {
                     	if(sizeof($ob)>0) {
                         	foreach ($ob as $o) {
                             	// link
-                            	if($o->type=="devices")     { $href = create_link("tools", "devices", "hosts", $o->id); }
+                            	if($o->type=="devices")     { $href = create_link("tools", "devices", $o->id); }
                             	elseif($o->type=="subnets") { $href = create_link("subnets", $o->sectionId, $o->id); }
                             	else                        { $href = create_link("tools", "racks", $o->id); }
 

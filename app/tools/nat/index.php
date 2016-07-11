@@ -26,7 +26,6 @@ $admin = $User->is_admin(false);
 <?php } ?>
 
 <?php
-
 # check that nat support isenabled
 if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
@@ -45,6 +44,7 @@ else {
     print " <th colspan='3'>"._('Translation')."</th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Port')."</th>";
+    if($admin && $_GET['page']=="administration")
     print " <th>"._('Description')."</th>";
     if($admin)
     print " <th style='width:80px'></th>";
@@ -93,7 +93,7 @@ else {
                 if (strlen($n->device)) {
                     if($n->device !== 0) {
                         $device = $Tools->fetch_object ("devices", "id", $n->device);
-                        $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", "hosts", $device->id)."'>$device->hostname</a> ($device->ip_addr), $device->description";
+                        $n->device = $device===false ? "/" : "<a href='".create_link("tools", "devices", $device->id)."'>$device->hostname</a> ($device->ip_addr), $device->description";
                     }
                 }
                 else {
@@ -119,6 +119,7 @@ else {
                 print " <td>".implode("<br>", $destinations)."</td>";
                 print " <td>$n->device</td>";
                 print " <td>$n->port</td>";
+                if($admin && $_GET['page']=="administration")
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // actions
                 if($admin) {
