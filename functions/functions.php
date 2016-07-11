@@ -3,6 +3,9 @@
 /* @config file ------------------ */
 require( dirname(__FILE__) . '/../config.php' );
 
+/* @http only cookies ------------------- */
+ini_set('session.cookie_httponly', 1);
+
 /* @debugging functions ------------------- */
 ini_set('display_errors', 1);
 if (!$debugging) { error_reporting(E_ERROR ^ E_WARNING); }
