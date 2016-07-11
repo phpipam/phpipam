@@ -73,9 +73,48 @@ else {
 
 			# if 0 ignore
 			if($permission > 0)	{
+
 				# format diff
-				$l['cdiff'] = str_replace("\n\n", "", trim($l['cdiff']));
-				$l['cdiff'] = str_replace("\n", "; ", $l['cdiff']);
+        		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
+        		$changelog = str_replace("\n", "<br>",$changelog);
+        		$changelog = array_filter(explode("<br>", $changelog));
+
+                $diff = array();
+
+        		foreach ($changelog as $c) {
+            		// type
+            		switch ($l['ctype']) {
+                		case "ip_addr" :
+                		    $type = "address";
+                		    break;
+                		case "ip_range" :
+                		    $type = "address";
+                		    break;
+                		case "folder" :
+                		    $type = "subnet";
+                		    break;
+                        default :
+                            $type = $l['ctype'];
+            		}
+
+            		// field
+            		$field = explode(":", $c);
+            	    $value = explode("=>", $field[1]);
+
+            	    $field = trim(str_replace(array("[","]"), "", $field[0]));
+            	    if(is_array(@$Log->changelog_keys[$type])) {
+                	    if (array_key_exists($field, $Log->changelog_keys[$type])) {
+                    	    $field = $Log->changelog_keys[$type][$field];
+                	    }
+            	    }
+
+            		$diff_1  = "<strong>$field</strong>: ".trim($value[0]);
+            		if($l['caction']=="edit")
+            		$diff_1 .= "  => ".trim($value[1]);
+
+            		$diff[] = $diff_1;
+        		}
+
 
 				# format type
 				switch($l['ctype']) {
@@ -105,7 +144,7 @@ else {
 					print "	<td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
 				}
 				print "	<td>$l[cdate]</td>";
-				print "	<td class='hidden-xs'>$l[cdiff]</td>";
+				print "	<td class='hidden-xs'>".implode("<br>",$diff)."</td>";
 				print "</tr>";
 
 				// next item
