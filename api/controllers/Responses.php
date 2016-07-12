@@ -162,6 +162,9 @@ class Responses {
 	 * @return void
 	 */
 	public function validate_content_type () {
+    	// remove charset if provided
+    	if(isset($_SERVER['CONTENT_TYPE']))
+    	$_SERVER['CONTENT_TYPE'] = array_shift(explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
 		if( !isset($_SERVER['CONTENT_TYPE']) ) {}
 		// post
