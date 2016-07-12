@@ -319,10 +319,10 @@ class RackDrawer extends Common_functions {
      * @access private
      */
     private $context_options = array(
-        'ssl' => [
+        'ssl' => array(
             'verify_peer' => false,
             'verify_peer_name' => false,
-        ]
+        )
     );
 
 
