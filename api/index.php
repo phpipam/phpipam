@@ -118,7 +118,7 @@ try {
 
 	/* Authentication ---------- */
 
-	# authenticate user if required
+	// authenticate user if required
 	if (@$params->controller != "user" && $enable_authentication) {
 		if($app->app_security=="ssl" || $app->app_security=="none") {
 			// start auth class and validate connection
@@ -150,34 +150,35 @@ try {
 
 	/* Initialize controller ---------- */
 
-	//get the controller and format it correctly
+	// get the controller and format it correctly
 	$controller 	 = ucfirst(strtolower($params->controller))."_controller";
 	$controller_file = ucfirst(strtolower($params->controller));
 
-	//check if the controller exists. if not, throw an exception
+	// check if the controller exists. if not, throw an exception
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
 		require( dirname(__FILE__) . "/controllers/$controller_file.php");
-	} else {
-		$Response->throw_exception(400, 'invalid controller');
+	}
+	else {
+		$Response->throw_exception(400, 'Invalid controller');
 	}
 
-	//create a new instance of the controller, and pass
-	//it the parameters from the request and Database object
+	// create a new instance of the controller, and pass
+	// it the parameters from the request and Database object
 	$controller = new $controller($Database, $Tools, $params, $Response);
 
-	//check if the action exists in the controller. if not, throw an exception.
+	// check if the action exists in the controller. if not, throw an exception.
 	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
-	//execute the action
+	// execute the action
 	$result = $controller->$_SERVER['REQUEST_METHOD'] ();
 
 } catch ( Exception $e ) {
-	//catch any exceptions and report the problem
+	// catch any exceptions and report the problem
 	$result = $e->getMessage();
 
-	//set flag if it came from Result, just to be sure
+	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {
 		$Response->exception = true;
 		$Response->result['success'] = false;

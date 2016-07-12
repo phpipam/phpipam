@@ -152,13 +152,14 @@ class Addresses_controller extends Common_api_functions  {
 	 * Read address functions
 	 *
 	 *	identifiers can be:
-	 *		- {id}
-	 *		- {id}/ping/					// pings address
-	 *		- /search/{ip_address}/			// searches for addresses in database, returns multiple if found
-	 *		- custom_fields
-	 *		- tags							// all tags
-	 *		- tags/{id}/					// specific tag
-	 *		- tags/{id}/addresses			// returns all addresses that are tagged with this tag ***if subnetId is provided it will be filtered to specific subnet
+	 *		- /{id}/
+	 *		- /{id}/ping/					   // pings address
+	 *		- /search/{ip_address}/			   // searches for addresses in database, returns multiple if found
+	 *		- /search_hostname/{hostname}/      //searches for addresses in database by hostname, returns multiple if found
+	 *		- /custom_fields/
+	 *		- /tags/						   // all tags
+	 *		- /tags/{id}/					   // specific tag
+	 *		- /tags/{id}/addresses/			   // returns all addresses that are tagged with this tag ***if subnetId is provided it will be filtered to specific subnet
 	 *
 	 * @access public
 	 * @return void

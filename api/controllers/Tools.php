@@ -107,11 +107,13 @@ class Tools_controller extends Common_api_functions {
 		// rewrite subcontroller
 		$this->rewrite_subcontroller ();
 
-		// set valid keys
-		$this->set_valid_keys ($this->_params->id);
-
-		// set sort key
-		$this->define_sort_key ();
+        // set keys if options are not provided
+		if($_SERVER['REQUEST_METHOD']!="OPTIONS" && isset($this->_params->controller)) {
+            // set valid keys
+    		$this->set_valid_keys ($this->_params->id);
+            // set sort key
+            $this->define_sort_key ();
+        }
 	}
 
 	/**
@@ -129,7 +131,10 @@ class Tools_controller extends Common_api_functions {
 									  "vlans"=>"vlans",
 									  "vrf"=>"vrfs",
 									  "nameservers"=>"nameservers",
-									  "scanAgents"=>"scanagents"
+									  "scanAgents"=>"scanagents",
+									  "locations"=>"locations",
+									  "racks"=>"racks",
+									  "nat"=>"nat"
 									  );
 	}
 
@@ -147,7 +152,10 @@ class Tools_controller extends Common_api_functions {
 								"vlans"=>array("id2", "id3"),
 								"vrf"=>array("id2", "id3"),
 								"nameservers"=>array("id2"),
-								"scanAgents"=>array("id2")
+								"scanAgents"=>array("id2"),
+								"locations"=>array("id2", "id3"),
+								"racks"=>array("id2", "id3"),
+								"nat"=>array("id2", "id3")
 								);
 	}
 
@@ -190,10 +198,13 @@ class Tools_controller extends Common_api_functions {
 						array("rel"=>"subnets",		"href"=>"/api/".$_GET['app_id']."/subnets/"),
 						array("rel"=>"folders",		"href"=>"/api/".$_GET['app_id']."/folders/"),
 						array("rel"=>"addresses",	"href"=>"/api/".$_GET['app_id']."/addresses/"),
-						array("rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlans/"),
-						array("rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrfs/"),
-						array("rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/nameservers/"),
-						array("rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/scanagents/"),
+						array("rel"=>"vlans",		"href"=>"/api/".$_GET['app_id']."/vlan/"),
+						array("rel"=>"vrfs",		"href"=>"/api/".$_GET['app_id']."/vrf/"),
+						array("rel"=>"nameservers",	"href"=>"/api/".$_GET['app_id']."/tools/nameservers/"),
+						array("rel"=>"scanAgents",	"href"=>"/api/".$_GET['app_id']."/tools/scanagents/"),
+						array("rel"=>"locations",	"href"=>"/api/".$_GET['app_id']."/tools/locations/"),
+						array("rel"=>"racks",	    "href"=>"/api/".$_GET['app_id']."/tools/racks/"),
+						array("rel"=>"nat",	        "href"=>"/api/".$_GET['app_id']."/tools/nat/"),
 						array("rel"=>"tools",		"href"=>"/api/".$_GET['app_id']."/tools/")
 					);
 		# Response
@@ -210,11 +221,27 @@ class Tools_controller extends Common_api_functions {
 	 *	structure:
 	 *		/tools/{subcontroller}/{identifier}/{parameter}/
 	 *
-	 *		/{tools}/id/id2/id3/
+	 *		/tools/id/id2/id3/
 	 *
 	 *		- {subcontroller}	- defines which tools object to work on
 	 *		- {identifier}		- defines id for that object (optional)
 	 *		- {parameter}		- additional parameter (optional)
+	 *
+	 *  Special options:
+	 *      - /tools/deviceTypes/{id}/devices/
+	 *
+	 *      - /tools/vlans/{id}/subnets/
+	 *
+	 *      - /tools/vrf/{id}/subnets/
+	 *
+	 *      - /tools/locations/{id}/subnets/
+	 *      - /tools/locations/{id}/devices/
+	 *      - /tools/locations/{id}/racks/
+	 *
+	 *      - /tools/racks/{id}/devices/
+	 *
+	 *      - /tools/nat/{id}/objects/
+	 *      - /tools/nat/{id}/objects_full/
 	 *
 	 * @access public
 	 * @return void
@@ -268,6 +295,46 @@ class Tools_controller extends Common_api_functions {
                 		if ( $gateway!== false) {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
+    				}
+    			}
+			}
+			// locations
+			elseif ($this->_params->id == "locations" && ($this->_params->id3=="subnets" || $this->_params->id3=="racks" || $this->_params->id3=="devices")) {
+				// fetch
+				$result = $this->Tools->fetch_multiple_objects ($this->_params->id3, "location", $this->_params->id2, "id", true);
+			}
+			// racks
+			elseif ($this->_params->id == "racks" && $this->_params->id3=="devices") {
+				// fetch
+				$result = $this->Tools->fetch_multiple_objects ($this->_params->id3, "rack", $this->_params->id2, "id", true);
+			}
+			// nat
+			elseif ($this->_params->id == "nat" && ($this->_params->id3=="objects" || $this->_params->id3=="objects_full")) {
+    			// fetch nat first
+    			$result = $this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2);
+                // add objects
+    			if($result!=false) {
+    				// parse result
+    				$result->src = $this->parse_nat_objects ($result->src);
+    				$result->dst = $this->parse_nat_objects ($result->dst);
+    				// full ?
+    				if ($this->_params->id3=="objects_full") {
+        				if(sizeof($result->src)>0) {
+            				foreach ($result->src as $type=>$arr) {
+                				foreach ($arr as $k=>$id) {
+                    				unset($result->src[$type][$k]);
+                    				$result->src[$type][] = $this->Tools->fetch_object ($type, "id", $id);
+                                }
+            				}
+        				}
+        				if(sizeof($result->dst)>0) {
+            				foreach ($result->dst as $type=>$arr) {
+                				foreach ($arr as $k=>$id) {
+                    				unset($result->dst[$type][$k]);
+                    				$result->dst[$type][] = $this->Tools->fetch_object ($type, "id", $id);
+                                }
+            				}
+        				}
     				}
     			}
 			}
@@ -452,8 +519,9 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function validate_subcontroller () {
 		// not options
-		if($this->_params->controller !== "options")
-		if (!in_array($this->_params->id, @$this->subcontrollers))			{ $this->Response->throw_exception(400, "Invalid subcontroller"); }
+		if($_SERVER['REQUEST_METHOD']!=="OPTIONS") {
+    		if (!in_array($this->_params->id, @$this->subcontrollers))			{ $this->Response->throw_exception(400, "Invalid subcontroller"); }
+		}
 	}
 
 	/**
@@ -556,6 +624,22 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function read_subnet_nameserver ($nsid) {
     	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
+	}
+
+	/**
+	 * Parses NAT objects into array.
+	 *
+	 * @access private
+	 * @param json $obj
+	 * @return void
+	 */
+	private function parse_nat_objects ($obj) {
+    	if($this->Tools->validate_json_string($obj)!==false) {
+        	return(json_decode($obj, true));
+    	}
+    	else {
+        	return false;
+    	}
 	}
 }
 

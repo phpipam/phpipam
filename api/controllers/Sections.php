@@ -121,10 +121,11 @@ class Sections_controller extends Common_api_functions {
 	 * GET sections functions
 	 *
 	 *	ID can be:
-	 *		- {id}
-	 *		- {id}/subnets/		// returns all subnets in this section
-	 *		- name 				// section name
-	 *		- custom_fields		// returns custom fields
+	 *      - /                     // returns all sections
+	 *		- /{id}/                // returns section details
+	 *		- /{id}/subnets/		// returns all subnets in this section
+	 *		- /name/ 				// section name
+	 *		- /custom_fields/		// returns custom fields
 	 *
 	 *	If no ID is provided all sections are returned
 	 *

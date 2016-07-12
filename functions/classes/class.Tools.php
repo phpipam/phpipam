@@ -1699,7 +1699,6 @@ class Tools extends Common_functions {
         return sizeof($out)>0 ? $out : false;
     }
 
-
     /**
      * This function will reindex all nat object to following structure:
      *

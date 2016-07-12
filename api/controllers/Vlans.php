@@ -122,18 +122,26 @@ class Vlans_controller extends Common_api_functions {
 	 * Read vlan/domain functions
 	 *
 	 * parameters:
-	 *		- {id}
-	 *		- {id}/subnets/				returns subnets belonging to this VLAN
-	 *		- {id}/subnets/{sectionId}/	returns subnets belonging to this VLAN inside one section
-	 *		- custom_fields				returns custom fields
-	 *		- search/{number}/			returns all vlans with specified number
+	 *      - /                             returns all vlans
+	 *		- /{id}/                        returns vlan details
+	 *		- /{id}/subnets/				returns subnets belonging to this VLAN
+	 *		- /{id}/subnets/{sectionId}/	returns subnets belonging to this VLAN inside one section
+	 *		- /custom_fields/			    returns custom fields
+	 *		- /search/{number}/			    returns all vlans with specified number
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
+		// all
+		if (!isset($this->_params->id)) {
+			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
+			// check result
+			if($result===false)						{ $this->Response->throw_exception(404, 'No vlans configured'); }
+			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
+		}
 		// check weather to read belonging subnets
-		if(@$this->_params->id2=="subnets") {
+		elseif(@$this->_params->id2=="subnets") {
 			// first validate
 			$this->validate_vlan ();
 			// save result

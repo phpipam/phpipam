@@ -1,4 +1,4 @@
-== 1.23.01
+== 1.23.10
 
 	New features:
 	------------
@@ -36,6 +36,11 @@
 	    + Creating subnet with POST /api/appid/subnets/{subnetId}/search/29 will automatically create first available /29 subnet;
 	    + Added Search by hostname /app/appid/search/search_hostname/;
 	    + Added subnet usage result for each subnet in section;
+	    + Added custom fields for all controllers;
+	    + New subcontrollers:
+	        /tools/nat/
+	        /tools/racks/
+	        /tools/locations/
     + Widgets:
         + New threshold widget;
         + New inactive hosts widget;

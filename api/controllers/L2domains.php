@@ -114,10 +114,10 @@ class L2domains_controller extends Common_api_functions {
 	 * Read domain functions
 	 *
 	 *	identifier can be:
-	 *		- NONE 				// will return all domains
-	 *		- {id}
-	 *		- {id}/vlans/
-	 *		- custom_fields
+	 *		- / 				// will return all domains
+	 *		- /{id}/
+	 *		- /{id}/vlans/
+	 *		- /custom_fields/
 	 *
 	 * @access public
 	 * @return void
