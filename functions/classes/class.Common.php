@@ -821,7 +821,7 @@ class Common_functions  {
 	 */
 	public function validate_hostname($hostname, $permit_root_domain=true) {
     	// first validate hostname
-    	$valid =  (preg_match("/^([a-z\d](-*[a-z\d])*)(\.([a-z\d](-*[a-z\d])*))*$/i", $hostname) 	//valid chars check
+    	$valid =  (preg_match("/^([a-z_\d](-*[a-z_\d])*)(\.([a-z_\d](-*[a-z_\d])*))*$/i", $hostname) 	//valid chars check
 	            && preg_match("/^.{1,253}$/", $hostname) 										//overall length check
 	            && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $hostname)   ); 				//length of each label
 	    // if it fails return immediately
