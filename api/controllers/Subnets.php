@@ -750,12 +750,13 @@ class Subnets_controller extends Common_api_functions {
 		// set 0 if not set
 		if(!isset($this->_params->masterSubnetId) || $this->_params->masterSubnetId=="0") 			{ $this->_params->masterSubnetId = 0; }
 		else {
-			// validate subnet
-			if($this->Subnets->fetch_subnet ("id", $this->_params->masterSubnetId)===false)		     { $this->Response->throw_exception(400, "Master Subnet does not exist (id=".$this->_params->masterSubnetId.")"); }
+			// validate master subnet
+			$master_subnet = $this->Subnets->fetch_subnet ("id", $this->_params->masterSubnetId);
+			if($master_subnet===false)		                                                        { $this->Response->throw_exception(400, "Master Subnet does not exist (id=".$this->_params->masterSubnetId.")"); }
 			// check that it is inside subnet
 			else {
-				// not fr folders
-				if(@$this->_params->isFolder!=1) {
+				// not for folders
+				if(@$this->_params->isFolder!=1 && $master_subnet->isFolder!=1) {
 					if(!$this->Subnets->verify_subnet_nesting ($this->_params->masterSubnetId, $this->_params->subnet."/".$this->_params->mask))
 																									{ $this->Response->throw_exception(400, "Subnet is not within boundaries of its master subnet"); }
 				}
