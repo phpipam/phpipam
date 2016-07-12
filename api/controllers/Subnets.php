@@ -129,6 +129,8 @@ class Subnets_controller extends Common_api_functions {
 	 *	required params : subnet, mask, name
 	 *	optional params : all subnet values
 	 *
+	 *      - /subnets/{id}/first_subnet/{mask}/       // creates first free subnet under master with specified mask
+	 *
 	 *
 	 * @access public
 	 * @return void
@@ -137,6 +139,22 @@ class Subnets_controller extends Common_api_functions {
 		# add required parameters
 		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
+
+		// first free
+		if($this->_params->id2=="first_subnet")   {
+    		$subnet_tmp = explode("/", $this->subnet_first_free (false));
+
+    		// get master subnet
+    		$master = $this->read_subnet ();
+
+    		$this->_params->subnet = $subnet_tmp[0];
+    		$this->_params->mask = $subnet_tmp[1];
+    		$this->_params->sectionId = $master->sectionId;
+    		$this->_params->masterSubnetId = $master->id;
+    		unset($this->_params->id2, $this->_params->id3);
+            // description
+            if(!isset($this->_params->description))    { $this->_params->description = "API autocreated"; }
+		}
 
 		# validate parameters
 		$this->validate_create_parameters ();
@@ -166,13 +184,16 @@ class Subnets_controller extends Common_api_functions {
 	 *
 	 *	Identifier can be:
 	 *		- {id}
-	 *		- custom_fields				// returns custom fields
-	 *		- {subnet}					// subnets in CIDR format
-	 *		- {id}/usage/				// returns subnet usage
-	 *		- {id}/first_free/			// returns first available address in subnet
-	 *		- {id}/slaves/ 				// returns all immediate slave subnets
-	 *		- {id}/slaves_recursive/ 	// returns all slave subnets recursively
-	 *		- {id}/addresses/			// returns all IP addresses in subnet
+	 *		- custom_fields				    // returns custom fields
+	 *		- {subnet}					    // subnets in CIDR format
+	 *		- {id}/usage/				    // returns subnet usage
+	 *		- {id}/first_free/			    // returns first available address in subnet
+	 *		- {id}/slaves/ 				    // returns all immediate slave subnets
+	 *		- {id}/slaves_recursive/ 	    // returns all slave subnets recursively
+	 *		- {id}/addresses/			    // returns all IP addresses in subnet
+	 *		- {id}/first_free/			    // returns first free address in subnet
+	 *      - {id}/first_subnet/{mask}/     // returns first available subnets with specified mask
+	 *      - {id}/all_subnets/{mask}/      // returns all available subnets with specified mask
 	 *
 	 * @access public
 	 * @return void
@@ -217,7 +238,11 @@ class Subnets_controller extends Common_api_functions {
 			// usage
 			elseif ($this->_params->id2=="usage") 		{ return array("code"=>200, "data"=>$this->subnet_usage ()); }
 			// first available address
-			elseif ($this->_params->id2=="first_free") 	{ return array("code"=>200, "data"=>$this->subnet_first_free ());  }
+			elseif ($this->_params->id2=="first_free") 	{ return array("code"=>200, "data"=>$this->subnet_first_free_address ());  }
+			// search for new free subnet
+			elseif ($this->_params->id2=="all_subnets") { return array("code"=>200, "data"=>$this->subnet_first_free (true));  }
+			// search for new free subnet
+			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_first_free (false));  }
 			// fail
 			else										{ $this->Response->throw_exception(400, 'Invalid request'); }
 		}
@@ -490,19 +515,44 @@ class Subnets_controller extends Common_api_functions {
 	 * @access public
 	 * @return void
 	 */
-	public function subnet_first_free () {
+	public function subnet_first_free_address () {
 		// Check for id
 		$this->validate_subnet_id ();
 		// fetch
 		$first = $this->Addresses->get_first_available_address ($this->_params->id, $this->Subnets);
 		// available?
-		if($first===false)	{ $first = null; }
+		if($first===false)	{ $this->Response->throw_exception(404, "No free addresses found"); }
 		else				{ $first = $this->Addresses->transform_to_dotted($first); }
 
 		# return
 		return $first;
 	}
 
+	/**
+	 * Returns first available subnet with specified mask
+	 *
+	 * @access public
+	 * @param bool $all (default: false)
+	 * @return void
+	 */
+	public function subnet_first_free ($all = false) {
+		// Check for id
+		$this->validate_subnet_id ();
+		// fetch
+		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3);
+		# return
+		if ($first===false) {
+    		$this->Response->throw_exception(404, "No subnets found");
+		}
+		else {
+    		if($all) {
+        		return $first;
+    		}
+    		else {
+        		return $first[0];
+    		}
+		}
+	}
 
 
 

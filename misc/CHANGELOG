@@ -29,10 +29,13 @@
 	+ API:
 	    - Api v1 removed;
 	    + If subnet gateway defined gatewayId is returned in subnet details;
-	    + Automatically add nameservers to subnet results;
+	    + Automatically added nameservers to subnet results;
 	    + Creating address with POST /api/appid/{subnetId}/first_free/ will automatically give first available IP;
+	    + Searching subnet with GET /api/appid/subnets/{subnetId}/search_all/29 will automatically give all available /29 subnets;
+	    + Searching subnet with GET /api/appid/subnets/{subnetId}/search/29 will automatically give first available /29 subnet;
+	    + Creating subnet with POST /api/appid/subnets/{subnetId}/search/29 will automatically create first available /29 subnet;
 	    + Added Search by hostname /app/appid/search/search_hostname/;
-	    + Added subnet usage result for each subnet in section ;
+	    + Added subnet usage result for each subnet in section;
     + Widgets:
         + New threshold widget;
         + New inactive hosts widget;

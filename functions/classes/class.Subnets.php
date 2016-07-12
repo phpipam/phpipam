@@ -3190,7 +3190,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnetMasterId
 	 * @return void
 	 */
-	public function subnet_dropdown_print_available($sectionId, $subnetMasterId ) {
+	public function subnet_dropdown_print_available($sectionId, $subnetMasterId) {
 
 		/* Remove STRICT Error reporting for ParseAddress fuction */
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
@@ -3281,6 +3281,110 @@ class Subnets extends Common_functions {
 		// return html
 		return implode( "\n", $html );
 	 }
+
+
+	/**
+	 * Returns allfree subnets for master subnet for specified mask
+	 *
+	 * @access public
+	 * @param mixed $subnetMasterId
+	 * @param bool $mask (default: false)
+	 * @return void
+	 */
+	public function search_available_subnets ($subnetMasterId, $mask = false) {
+
+		/* Remove STRICT Error reporting for ParseAddress fuction */
+		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+		$mask_drill_down = 8;
+
+		# mask check
+		if(!is_numeric($mask))               { $this->Result->show("danger", _("Invalid Mask"), true); }
+		if($mask>128 || $mask<1)             { $this->Result->show("danger", _("Invalid Mask"), true); }
+
+		# must be integer
+		if(!is_numeric(@$subnetMasterId))    { $this->Result->show("danger", _("Invalid ID"), true); }
+
+		// result array
+		$html = array();
+		$history_subnet = array ();
+
+		// Get Current and Previous subnets
+		$subnets 			= $this->fetch_subnet_slaves($subnetMasterId);
+		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
+		$parent_subnet 		= $taken_subnet->subnet;
+		$parent_subnetmask 	= $taken_subnet->mask;
+
+		// folder
+		if ($taken_subnet->isFolder=="1") 	return "";
+
+		// detect type
+		$type = $this->identify_address( $parent_subnet );
+
+		// initialize pear objet
+		if ($type == 'IPv4') 	{ $this->initialize_pear_net_IPv4 (); }
+		else 					{ $this->initialize_pear_net_IPv6 (); }
+
+		// if it has slaves
+		if($subnets) {
+			foreach ($subnets as $row ) {
+				$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
+			}
+		}
+
+		# prepare the entry into for loop
+		$subnetmask_start = $parent_subnetmask + 1;
+		$subnetmask_final = $parent_subnetmask + $mask_drill_down; // plus 'X' numbers, default 8, gives you /16 -> /24, /24 -> /32 etc..
+		if ($subnetmask_final > 32 && $type == 'IPv4'){
+			$subnetmask_final = 32; // Cant be larger then /32
+		}
+		elseif ($subnetmask_final > 128 && $type == 'IPv6'){
+			$subnetmask_final = 128; // Cant be larger then /128
+		}
+
+		$dec_subnet = $parent_subnet ;
+		$square_count = 1;
+
+		# Outer for loop, start with mask one more then current, increment up to X more, or 32, which ever is first
+		for ($i = $subnetmask_start; $i <= $subnetmask_final; $i++){
+			$showmask = 1; // Set so only show subnet masks that are available
+			$dec_subnet = $parent_subnet; // have to reset each time though the loop
+			$isquare = pow(2,$square_count); // 2^nth power, that's how many subnets there are per this unique mask
+			for ($ii = 0; $ii < $isquare; $ii++ ){
+				$cidr_subnet = $this->transform_to_dotted($dec_subnet).'/'.$i;
+				if ($type == 'IPv4'){
+					// Get broadcast, which is one decimal away from next subnet, and increment
+					$net1 = $this->Net_IPv4->parseAddress($cidr_subnet);
+					$bc1  = $net1->broadcast;
+					$dec_subnet = $this->transform_to_decimal ($bc1);
+					$dec_subnet++;
+				}
+				else {
+					// Get broadcast, which is one decimal away from next subnet, and increment
+					$net1 = $this->Net_IPv6->parseAddress($cidr_subnet);
+					$bc1  = $net1['end'];
+					$dec_subnet = $this->transform_to_decimal ($bc1);
+					$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
+				}
+				foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
+    				$overlap = $this->verify_overlapping ($cidr_subnet,$unavailable_sub);
+					if ($overlap!==false){
+						$match = 1;
+						break;
+					}
+				}
+				if ($match != 1) {
+    				if ($i==$mask) {
+        				$html[] = "$cidr_subnet";
+    				}
+				}
+				$match = 0; //Reset
+			}
+			$square_count++;
+		}
+		// return html
+		return sizeof($html)>0 ? $html : false;
+	 }
+
 
 	/**
 	 * Take in decimal from IPv6 address and add one to it
