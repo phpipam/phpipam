@@ -59,7 +59,7 @@ print '</tr>';
 print "</thead>";
 
 // no devices
-if(sizeof(@$devices) == 0) {
+if($devices===false) {
 	$colspan = 8 + $colspanCustom;
 	print "<tr>";
 	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
