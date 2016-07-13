@@ -74,7 +74,7 @@ $all_nats_per_object = array();
 
 if ($User->settings->enableNAT==1) {
     # fetch all object
-    $all_nats = $Tools->fetch_all_objects ("nat");
+    $all_nats = $Tools->fetch_all_objects ("nat", "name");
 
     if ($all_nats!==false) {
         foreach ($all_nats as $n) {

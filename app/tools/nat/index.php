@@ -32,7 +32,7 @@ if ($User->settings->enableNAT!="1") {
 }
 else {
     # fetch all nats
-    $all_nats = $Tools->fetch_all_objects("nat", "id");
+    $all_nats = $Tools->fetch_all_objects("nat", "name");
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top'>";

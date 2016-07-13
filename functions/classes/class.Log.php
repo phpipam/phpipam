@@ -779,6 +779,11 @@ class Logging extends Common_functions {
 		# null and from cli, set admin user
 		if ($this->user===null && php_sapi_name()=="cli") { $this->user_id = 1; }
 
+        # if user is not specify dont write changelog
+        if (!isset($this->user) || $this->user == false || $this->user == null) {
+            return true;
+        }
+
 		# set update id based on action
 		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
 		else								{ $obj_id = $this->object_old['id']; }
@@ -1513,8 +1518,13 @@ class Logging extends Common_functions {
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));
-    	    if (array_key_exists($field, $this->changelog_keys[$this->object_type])) {
-        	    $field = $this->changelog_keys[$this->object_type][$field];
+    	    if(is_array($this->changelog_keys[$this->object_type])) {
+        	    if (array_key_exists($field, $this->changelog_keys[$this->object_type])) {
+            	    $field = $this->changelog_keys[$this->object_type][$field];
+        	    }
+    	    }
+    	    else {
+        	    $field = $field;
     	    }
 
     		$content[] = "<tr>";
