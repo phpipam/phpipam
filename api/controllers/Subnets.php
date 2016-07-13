@@ -131,7 +131,6 @@ class Subnets_controller extends Common_api_functions {
 	 *
 	 *      - /subnets/{id}/first_subnet/{mask}/       // creates first free subnet under master with specified mask
 	 *
-	 *
 	 * @access public
 	 * @return void
 	 */
@@ -517,6 +516,9 @@ class Subnets_controller extends Common_api_functions {
 	public function subnet_first_free_address () {
 		// Check for id
 		$this->validate_subnet_id ();
+		// check for isFull
+		$subnet = $this->read_subnet ();
+		if($subnet->isFull==1)  { $this->Response->throw_exception(404, "No free addresses found"); }
 		// fetch
 		$first = $this->Addresses->get_first_available_address ($this->_params->id, $this->Subnets);
 		// available?
