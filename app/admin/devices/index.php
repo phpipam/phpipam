@@ -39,7 +39,7 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 <?php
 /* first check if they exist! */
 if($devices===false) {
-	$Result->show("warn alert-absolute", _('No devices configured').'!', false);
+	$Result->show("warning", _('No devices configured').'!', false);
 }
 /* Print them out */
 else {

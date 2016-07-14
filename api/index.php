@@ -172,7 +172,7 @@ try {
 	}
 
 	// execute the action
-	$result = $controller->$_SERVER['REQUEST_METHOD'] ();
+	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
 
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem

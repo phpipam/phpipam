@@ -93,7 +93,9 @@ foreach ($users as $user) {
 
 	# powerDNS
 	if($user['role']=="Administrator") {
+    	if ($User->settings->enablePowerDNS==1) {
      	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
+     	}
      	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
 	}
 	else {
