@@ -33,7 +33,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     print "<td style='vertical-align:top !important;'>";
 
 	# set type
-	$device_type = $Tools->fetch_object("devices", "id", $device['type']);
+	$device_type = $Tools->fetch_object("deviceTypes", "tid", $device['type']);
 
     # device
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
