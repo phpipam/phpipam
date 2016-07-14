@@ -515,7 +515,7 @@ td.info2 {
 
 	padding: 0px;
 	padding-top: 0px;
-	padding-bottom: 10px;
+	padding-bottom: 0px;
 	padding-right: 50px;
 
 	margin-bottom: 0px;
@@ -529,7 +529,7 @@ td.info2 {
 	padding-right: 0px;
 }
 .hero-pusher {
-	height: 30px;
+	height: 10px;
 	color: white;
 }
 .hero-unit,
