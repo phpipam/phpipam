@@ -11,6 +11,7 @@ $cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-
 exec($cmd, $output, $retval);
 
 # format result back to object
+$output = array_values(array_filter($output));
 $script_result = json_decode($output[0]);
 
 # set blank values
