@@ -189,6 +189,7 @@ class Subnets_controller extends Common_api_functions {
 	 *		- {id}/slaves/ 				    // returns all immediate slave subnets
 	 *		- {id}/slaves_recursive/ 	    // returns all slave subnets recursively
 	 *		- {id}/addresses/			    // returns all IP addresses in subnet
+	 *      - {id}/addresses/{ip}/          // returns IP address from subnet
 	 *		- {id}/first_free/			    // returns first free address in subnet
 	 *      - {id}/first_subnet/{mask}/     // returns first available subnets with specified mask
 	 *      - {id}/all_subnets/{mask}/      // returns all available subnets with specified mask
@@ -215,6 +216,15 @@ class Subnets_controller extends Common_api_functions {
 			// addresses in subnet
 			if($this->_params->id2=="addresses") {
 				$result = $this->read_subnet_addresses ();
+				// if {ip} is set filter it out
+				if(isset($this->_params->id3)) {
+    				foreach ($result as $k=>$r) {
+        				if ($r->ip !== $this->_params->id3) {
+            				unset($result[$k]);
+        				}
+    				}
+                    if(sizeof($result)==0) { $result = false; }
+				}
 				// check result
 				if($result===false)						{ $this->Response->throw_exception(404, "No addresses found"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, true)); }

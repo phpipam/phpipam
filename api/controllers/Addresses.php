@@ -154,6 +154,7 @@ class Addresses_controller extends Common_api_functions  {
 	 *	identifiers can be:
 	 *		- /addresses/{id}/
 	 *		- /addresses/{id}/ping/					     // pings address
+	 *      - /addresses/{ip}/{subnetId}/                // Returns address from subnet
 	 *		- /addresses/search/{ip_address}/			 // searches for addresses in database, returns multiple if found
 	 *		- /addresses/search_hostname/{hostname}/     // searches for addresses in database by hostname, returns multiple if found
 	 *      - /addresses/first_free/{subnetId}/          // returns first available address (subnetId can be provided with parameters)
@@ -186,6 +187,21 @@ class Addresses_controller extends Common_api_functions  {
     		// null
     		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
             else                                         { return array("code"=>200, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted")); }
+		}
+		// address search
+		elseif($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
+            // eftch all in subnet
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "subnetId", $this->_params->id2);
+            if($result!==false) {
+                foreach ($result as $k=>$r) {
+                    if($r->ip !== $this->_params->id) {
+                        unset($result[$k]);
+                    }
+                }
+                if(sizeof($result)==0)  {$result = false;  }
+            }
+    		if ($result==false)                          { $this->Response->throw_exception(404, 'No addresses found'); }
+            else                                         { return array("code"=>200, "data"=>$result); }
 		}
 		// tags
 		elseif($this->_params->id=="tags") {
@@ -311,7 +327,7 @@ class Addresses_controller extends Common_api_functions  {
 	 *
 	 *	required parameters: ip, subnetId
 	 *
-	 *   /addresses/first_free/{subnetId}/     will search for first free address in subnet, creating ip_addr
+	 *   /addresses/first_free/{subnetId}/      // will search for first free address in subnet, creating ip_addr
 	 *
 	 * @access public
 	 * @return void
@@ -420,10 +436,35 @@ class Addresses_controller extends Common_api_functions  {
 	 *
 	 *	required parameters: id
 	 *
+ 	 *	identifiers can be:
+     *
+     *      /addresses/{id}                            // Returns address by id
+     *      /addresses/{ip}/{subnetId}/                // Deletes address from subnet by ip
+	 *
 	 * @access public
 	 * @return void
 	 */
 	public function DELETE () {
+    	// delete by ip
+    	if ($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
+        	// find
+        	$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Tools->transform_address($this->_params->id, "decimal"));
+        	if($result!==false) {
+            	foreach ($result as $k=>$r) {
+                	if($r->subnetId !== $this->_params->id2) {
+                    	unset($result[$k]);
+                	}
+            	}
+        	}
+        	if (sizeof($result)==0 || $result===false)   { $this->Response->throw_exception(404, "No addresses found"); }
+        	else {
+            	// rekey
+            	$result = array_values($result);
+            	// replace parameters
+            	$this->_params->id = $result[0]->id;
+        	}
+    	}
+
 		// Check for id
 		$this->validate_address_id ();
 
