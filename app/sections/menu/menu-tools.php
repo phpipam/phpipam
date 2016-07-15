@@ -39,7 +39,6 @@ $tool_items["nat"] = array (
                         "icon"=>"fa-exchange"
                         );
 }
-
 // pdns
 if($User->settings->enablePowerDNS==1) {
 $tool_items["powerDNS"] = array (
@@ -76,6 +75,16 @@ $tool_items["racks"] = array (
                         "icon"=>"fa-bars"
                         );
 }
+// pstn
+if($User->settings->enablePSTN==1) {
+$tool_items["pstn-prefixes"] = array (
+                        "name"=>"PSTN",
+                        "href"=>array("tools", "pstn-prefixes"),
+                        "title"=>"PSTN prefixes",
+                        "icon"=>"fa-phone"
+                        );
+}
+
 // multicast
 if($User->settings->enableMulticast == 1) {
 $tool_items["multicast-networks"] = array (

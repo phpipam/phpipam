@@ -1,10 +1,13 @@
-== 1.23.12
+== 1.24.00
 
     New features:
     ------------
     + Multicast module (RFC1112, RFC2464) with IP to MAC mapping and multicast networks overview;
     + Threshold module for subnets;
     + Racks module (Rack drawing) for devices;
+    + Address linking by selected field;
+    + Custom logo for site and mails;
+    + PSTN number management module;
     + SNMP module:
         + Subnets discovery from route table (all subnets, nested subnets, add new subnet);
         + Hosts discovery scans via ARP check/interface check;
@@ -19,8 +22,6 @@
     + Locations module
         + Map devices / racks / subnets to location;
         + Google maps integration;
-    + Address linking by selected field;
-    + Custom logo for site and mails;
 
 
     Enhancements, changes:

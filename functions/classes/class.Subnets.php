@@ -2832,7 +2832,7 @@ class Subnets extends Common_functions {
 			if(strlen($option['value']['subnet']) > 0 || $option['value']['isFolder']==1) {
 
     			# count change?
-//     			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
+    			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
 
     			$last_item = $count < $old_count ? "last_item" : "";
 

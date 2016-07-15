@@ -1180,12 +1180,30 @@ class Common_functions  {
 	 * @return void
 	 */
 	private function print_tools_breadcrumbs ($req) {
-		if(isset($req['tpage'])) {
-			print "<ul class='breadcrumb'>";
-			print "	<li><a href='".create_link("tools")."'>"._('Tools')."</a> <span class='divider'></span></li>";
-			print "	<li class='active'>$req[tpage]></li>";
-			print "</ul>";
+		print "<ul class='breadcrumb'>";
+		print "	<li><a href='".create_link("tools")."'>"._('Tools')."</a> <span class='divider'></span></li>";
+		if(!isset($req['subnetId'])) {
+		    print "	<li class='active'>$req[section]</li>";
 		}
+		else {
+		    print "	<li class='active'><a href='".create_link("tools", $req['section'])."'>$req[section]</a> <span class='divider'></span></li>";
+
+		    # pstn
+		    if ($_GET['section']=="pstn-prefixes") {
+    			# get all parents
+    			$Tools = new Tools ($this->Database);
+    			$parents = $Tools->fetch_prefix_parents_recursive ($req['subnetId']);
+    			# all parents
+    			foreach($parents as $parent) {
+    				$prefix = $this->fetch_object("pstnPrefixes", "id", $parent[0]);
+    				print "	<li><a href='".create_link("tools",$req['section'],$parent[0])."'><i class='icon-folder-open icon-gray'></i> $prefix->name</a> <span class='divider'></span></li>";
+    			}
+
+		    }
+		    $prefix = $this->fetch_object("pstnPrefixes", "id", $req['subnetId']);
+		    print "	<li class='active'>$prefix->name</li>";
+		}
+		print "</ul>";
 	}
 
 	/**

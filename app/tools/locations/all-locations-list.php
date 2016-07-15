@@ -28,6 +28,8 @@ else {
     # fetch all locations
     $all_locations = $Tools->fetch_all_objects("locations", "id");
 
+    $colspan = $admin ? 5 : 4;
+
     // table
     print "<table class='table sorted table-striped table-top table-td-top'>";
     // headers
@@ -41,6 +43,7 @@ else {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_custom_fields)) {
 				print "<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
+				$colspan++;
 			}
 		}
 	}
@@ -50,8 +53,6 @@ else {
     print "</thead>";
 
     print "<tbody>";
-
-    $colspan = $admin ? 5 : 4;
 
     # if none than print
     if($all_locations===false) {
@@ -72,7 +73,7 @@ else {
 
             // print
             print "<tr>";
-            print " <td><strong><a href='".create_link("tools", "locations", $l->id)."'>$l->name</strong></td>";
+            print " <td><strong><a href='".create_link("tools", "locations", $l->id)."'>$l->name</strong></a></td>";
             print " <td><span class='badge badge1 badge5'>$cnt "._('objects')."</span></td>";
             print " <td><span class='text-muted'>$l->description</span></td>";
             print " <td>$l->address</td>";

@@ -14,13 +14,6 @@ $admin_items["users"] = array (
                         "title"=>"User management",
                         "icon"=>"fa-user"
                         );
-// groups
-$admin_items["groups"] = array(
-                        "name"=>"Groups",
-                        "href"=>array("administration", "groups"),
-                        "title"=>"User group management",
-                        "icon"=>"fa-users"
-                       );
 // sections
 $admin_items["sections"] = array(
                         "name"=>"Sections",

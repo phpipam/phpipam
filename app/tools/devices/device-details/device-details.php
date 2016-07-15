@@ -51,10 +51,6 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "	<td>$device[description]</td>";
     	print "</tr>";
     	print '<tr>';
-    	print "	<th>". _('Number of hosts').'</th>';
-    	print "	<td><span class='badge badge1 badge5'>".sizeof($addresses)." hosts</span></td>";
-    	print "</tr>";
-    	print '<tr>';
     	print "	<th>". _('Type').'</th>';
     	print "	<td>$device_type->tname</td>";
     	print "</tr>";

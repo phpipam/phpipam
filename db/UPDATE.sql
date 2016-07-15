@@ -605,3 +605,46 @@ ALTER TABLE `locations` ADD `address` VARCHAR(128)  NULL  DEFAULT NULL  AFTER `d
 /* nat changes */
 ALTER TABLE `nat` CHANGE `port` `src_port` INT(5)  NULL  DEFAULT NULL;
 ALTER TABLE `nat` ADD `dst_port` INT(5)  NULL  DEFAULT NULL  AFTER `src_port`;
+
+
+
+/* VERSION 1.24 */
+UPDATE `settings` set `version` = '1.24';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* PSTN */
+ALTER TABLE `settings` ADD `enablePSTN` TINYINT(1)  NULL  DEFAULT '1'  AFTER `enableLocations`;
+
+/* pstnPrefixes */
+CREATE TABLE `pstnPrefixes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `prefix` varchar(32) DEFAULT NULL,
+  `start` varchar(32) DEFAULT NULL,
+  `stop` varchar(32) DEFAULT NULL,
+  `master` int(11) DEFAULT '0',
+  `deviceId` int(11) unsigned DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* pstnNumbers */
+CREATE TABLE `pstnNumbers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `prefix` int(11) unsigned DEFAULT NULL,
+  `number` varchar(32) DEFAULT NULL,
+  `name` varchar(128) DEFAULT NULL,
+  `owner` varchar(128) DEFAULT NULL,
+  `state` int(11) unsigned DEFAULT NULL,
+  `deviceId` int(11) unsigned DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* use permissions for pstn */
+ALTER TABLE `users` ADD `pstn` INT(1)  NULL  DEFAULT '1'  AFTER `editVlan`;
+
+

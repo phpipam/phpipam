@@ -26,6 +26,8 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-user-secret
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-language", 	"name"=>"Languages", 				"href"=>"languages", 				"description"=>"Manage languages");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-tachometer","name"=>"Widgets", 					"href"=>"widgets", 					"description"=>"Manage widget settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-tag", 		"name"=>"Tags", 					"href"=>"tags", 					"description"=>"Manage tags");
+if($User->settings->enablePSTN==1)
+$admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-phone", 		"name"=>"PSTN prefixes", 			"href"=>"pstn-prefixes", 			"description"=>"PSTN prefixes");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"name"=>"Edit instructions", 		"href"=>"instructions", 			"description"=>"Set phpipam instructions for end users");
 
 # IP related management
@@ -36,7 +38,7 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",
 if($User->settings->enableVRF==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VRF", 					"href"=>"vrfs", 					"description"=>"VRF management");
 if($User->settings->enableNAT==1)
-$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"NAT", 				         "href"=>"nat", 				  "description"=>"NAT settings");
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"NAT", 				    "href"=>"nat", 				        "description"=>"NAT settings");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"Nameservers", 			"href"=>"nameservers", 				"description"=>"Recursive nameserver sets for subnets");
 if($User->settings->enableSNMP == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cogs","name"=>"SNMP", 				          "href"=>"snmp", 					"description"=>"SNMP management");
@@ -96,7 +98,8 @@ $admin_menu_items = array(
                 		'vrfs',
                 		'widgets',
                 		'nat',
-                		'locations'
+                		'locations',
+                		'pstn-prefixes'
                     );
 
 

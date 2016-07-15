@@ -117,17 +117,17 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	# IP address - mandatory
 												  print "<th class='s_ipaddr'><span rel='tooltip' title='"._('Sort by IP address')."'>"._('IP address')."</span></th>";
 	# hostname - mandatory
-												  print "<th><span rel='tooltip' title='"._('Sort by hostname')."'>"._('Hostname')."</span</th>";
+												  print "<th><span rel='tooltip' title='"._('Sort by hostname')."'>"._('Hostname')."</span></th>";
 	# firewall address object - mandatory if enabled
 	if(in_array('firewallAddressObject', $selected_ip_fields)) {
 			# class
 			$Zones = new FirewallZones ($Database);
 			$zone = $Zones->get_zone_subnet_info ($subnet['id']);
 
-			if($zone) {							  print "<th><span rel='tooltip' title='"._('Sort by firewall address object')."'>"._('FW object')."</span</th>"; }
+			if($zone) {							  print "<th><span rel='tooltip' title='"._('Sort by firewall address object')."'>"._('FW object')."</span></th>"; }
 	}
 	# Description - mandatory
-												  print "<th><span rel='tooltip' title='"._('Sort by description')."'			>"._('Description')."</span</th>";
+												  print "<th><span rel='tooltip' title='"._('Sort by description')."'			>"._('Description')."</span></th>";
 	# MAC address
 	if(in_array('mac', $selected_ip_fields)) 	{
     	$mac_title = $User->settings->enableMulticast=="1" ? "<th><span rel='tooltip' title='"._('Sort by MAC')."'>MAC</th>" : "<th></th>";
@@ -136,16 +136,16 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	# note
 	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
 	# switch
-	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' title='"._('Sort by device')."'>"._('Device')."</span</th>"; }
+	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' title='"._('Sort by device')."'>"._('Device')."</span></th>"; }
 	# port
-	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' title='"._('Sort by port')."'>"._('Port')."</span</th>"; }
+	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' title='"._('Sort by port')."'>"._('Port')."</span></th>"; }
 	# owner
-	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'><span rel='tooltip' title='"._('Sort by owner')."'>"._('Owner')."</span</th>"; }
+	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'><span rel='tooltip' title='"._('Sort by owner')."'>"._('Owner')."</span></th>"; }
 
 	# custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
-			print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name]</span</th>";
+			print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name]</span></th>";
 		}
 	}
 	?>

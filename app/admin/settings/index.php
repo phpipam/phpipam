@@ -347,6 +347,18 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+
+<!-- pstn -->
+<tr>
+	<td class="title"><?php print _('PSTN module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enablePSTN" <?php if($settings['enablePSTN'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable PSTN module to manage phone numbers'); ?>
+	</td>
+</tr>
+
 <!-- Link fields -->
 <tr>
 	<td class="title"><?php print _('Link addresses'); ?></td>

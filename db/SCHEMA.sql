@@ -148,6 +148,7 @@ CREATE TABLE `settings` (
   `enableThreshold` TINYINT(1)  NULL  DEFAULT '1',
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
   `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
+  `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
@@ -333,6 +334,7 @@ CREATE TABLE `users` (
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
   `editVlan` SET('Yes','No')  NULL  DEFAULT 'No',
+  `pstn` INT(1)  NULL  DEFAULT '1',
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
@@ -729,10 +731,48 @@ CREATE TABLE `locations` (
 
 
 
+    # Dump of table pstnPrefixes
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `pstnPrefixes`;
+
+CREATE TABLE `pstnPrefixes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL,
+  `prefix` varchar(32) DEFAULT NULL,
+  `start` varchar(32) DEFAULT NULL,
+  `stop` varchar(32) DEFAULT NULL,
+  `master` int(11) DEFAULT '0',
+  `deviceId` int(11) unsigned DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table pstnNumbers
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `pstnNumbers`;
+
+CREATE TABLE `pstnNumbers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `prefix` int(11) unsigned DEFAULT NULL,
+  `number` varchar(32) DEFAULT NULL,
+  `name` varchar(128) DEFAULT NULL,
+  `owner` varchar(128) DEFAULT NULL,
+  `state` int(11) unsigned DEFAULT NULL,
+  `deviceId` int(11) unsigned DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.23';
+UPDATE `settings` set `version` = '1.24';

@@ -24,6 +24,8 @@ if($User->settings->enablePowerDNS==1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"PowerDNS",  		    "href"=>"powerDNS", "description"=>"PowerDNS");
 if($User->settings->enableDHCP==1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"DHCP",  		        "href"=>"dhcp", "description"=>"DHCP information");
+if($User->settings->enablePSTN==1)
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-phone", 	  	"name"=>"PSTN prefixes",  		 "href"=>"pstn-prefixes", "description"=>"PSTN prefixes");
 
 # Subnets
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-star", 	  	"name"=>"Favourite networks",  	"href"=>"favourites", 	"description"=>"Favourite networks");
@@ -84,6 +86,7 @@ $tools_menu_items = array(
 						'inactive-hosts',
 						"threshold",
 						'nat',
-						'locations'
+						'locations',
+						'pstn-prefixes'
                     );
 ?>

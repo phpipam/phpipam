@@ -2358,6 +2358,33 @@ $(document).on("click", "#editLocationSubmit", function() {
     return false;
 });
 
+
+
+/* ---- PSTN ---- */
+//load edit form
+$(document).on("click", ".editPSTN", function() {
+	open_popup("700", "app/tools/pstn-prefixes/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
+});
+//submit form
+$(document).on("click", "#editPSTNSubmit", function() {
+    submit_popup_data (".editPSTNResult", "app/tools/pstn-prefixes/edit-result.php", $('form#editPSTN').serialize());
+    return false;
+});
+//load edit form
+$(document).on("click", ".editPSTNnumber", function() {
+	open_popup("700", "app/tools/pstn-prefixes/edit-number.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
+    return false;
+});
+//submit form
+$(document).on("click", "#editPSTNnumberSubmit", function() {
+    submit_popup_data (".editPSTNnumberResult", "app/tools/pstn-prefixes/edit-number-result.php", $('form#editPSTNnumber').serialize());
+    return false;
+});
+
+
+
+
 /* ---- NAT ----- */
 //load edit form
 $(document).on("click", ".editNat", function() {
