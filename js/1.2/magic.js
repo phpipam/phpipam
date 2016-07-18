@@ -909,9 +909,10 @@ function search_execute (loc) {
     var subnets   = $('#'+form_name+' input[name=subnets]').is(":checked") ? "on" : "off";
     var vlans     = $('#'+form_name+' input[name=vlans]').is(":checked") ? "on" : "off";
     var vrf       = $('#'+form_name+' input[name=vrf]').is(":checked") ? "on" : "off";
+    var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;

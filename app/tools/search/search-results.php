@@ -37,6 +37,8 @@ $custom_address_fields = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fie
 $custom_subnet_fields  = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
 $custom_vlan_fields    = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
 $custom_vrf_fields     = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
+$custom_pstn_fields    = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnPrefixes") : array();
+$custom_pstnM_fields   = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
 
 # set hidden custom fields
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
@@ -45,6 +47,8 @@ $hidden_address_fields = is_array(@$hidden_fields['ipaddresses']) ? $hidden_fiel
 $hidden_subnet_fields  = is_array(@$hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 $hidden_vlan_fields    = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : array();
 $hidden_vrf_fields     = is_array(@$hidden_fields['vrf']) ? $hidden_fields['vrf'] : array();
+$hidden_pstn_fields    = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
+$hidden_pstnn_fields   = is_array(@$hidden_fields['pstnNumbers']) ? $hidden_fields['pstnNumbers'] : array();
 
 # set selected address fields array
 $selected_ip_fields = $User->settings->IPfilter;
@@ -67,10 +71,13 @@ if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets 
 if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($search_term, $custom_vlan_fields); }
 # search vrf
 if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vrf       = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
-
+# search pstn prefixes
+if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_pstn      = $Tools->search_pstn_refixes($search_term, $custom_pstn_fields); }
+# search pstn numbers
+if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_pstnn     = $Tools->search_pstn_numbers($search_term, $custom_pstnn_fields); }
 
 // all are off?
-if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) ) {
+if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) && !isset($_REQUEST['pstn']) ) {
     include("search-tips.php");
 }
 // empty request
@@ -79,13 +86,13 @@ elseif(strlen($_REQUEST['ip'])==0)  {
 }
 // ok, search results print
 else {
-if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_vlans)!=0 || sizeof($result_vrf)!=0) {
+if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_vlans)!=0 || sizeof($result_vrf)!=0 || sizeof($result_pstn)!=0) {
     // export
 	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$search_term.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
 }
 ?>
 
-<!-- search result subnet -->
+<!-- !subnets -->
 <?php if(@$_REQUEST['subnets']=="on") { ?>
 <br>
 <h4><?php print _('Search results (Subnet list)');?>:</h4>
@@ -196,7 +203,7 @@ if($m==0) { $Result->show("info", _("No results"), false); }
 
 
 
-<!-- search result addresses -->
+<!-- !addresses -->
 <?php if(@$_REQUEST['addresses']=="on") { ?>
 <br>
 <h4> <?php print _('Search results (IP address list)');?>:</h4>
@@ -364,6 +371,7 @@ if($n == 0) {
 ?>
 
 
+<!-- !vlan -->
 <?php if(@$_REQUEST['vlans']=="on") { ?>
 <!-- search result table -->
 <br>
@@ -378,12 +386,10 @@ if($n == 0) {
 	<th><?php print _('Number');?></th>
 	<th><?php print _('Description');?></th>
 	<?php
-	$mf=3;
 	if(sizeof($custom_vlan_fields) > 0) {
 		foreach($custom_vlan_fields as $field) {
 			if(!in_array($field['name'], $hidden_vlan_fields)) {
 				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
-				$mf++;
 			}
 		}
 	}
@@ -435,8 +441,8 @@ if(sizeof($result_vlans) == 0) {
 <?php } ?>
 
 
+<!-- !vrf -->
 <?php if(@$_REQUEST['vrf']=="on") { ?>
-<!-- search result table -->
 <br>
 <h4><?php print _('Search results (VRFs)');?>:</h4>
 <hr>
@@ -449,12 +455,10 @@ if(sizeof($result_vlans) == 0) {
 	<th><?php print _('RD');?></th>
 	<th><?php print _('Description');?></th>
 	<?php
-	$mf=3;
 	if(sizeof($custom_vrf_fields) > 0) {
 		foreach($custom_vrf_fields as $field) {
 			if(!in_array($field['name'], $hidden_vrf_fields)) {
 				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
-				$mf++;
 			}
 		}
 	}
@@ -475,9 +479,9 @@ if(sizeof($result_vrf) > 0) {
 		print ' <td><dd>'. $vrf['rd']     .'</dd></td>' . "\n";
 		print ' <td><dd>'. $vrf['description'] .'</dd></td>' . "\n";
 		# custom fields
-		if(sizeof($custom_vlan_fields) > 0) {
-			foreach($custom_vlan_fields as $field) {
-				if(!in_array($field['name'], $hidden_vlan_fields)) {
+		if(sizeof($custom_vrf_fields) > 0) {
+			foreach($custom_vrf_fields as $field) {
+				if(!in_array($field['name'], $hidden_vrf_fields)) {
 					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
 					print "	<td class='hidden-xs hidden-sm'>".$vrf[$field['name']]."</td>";
 				}
@@ -504,6 +508,165 @@ if(sizeof($result_vrf) == 0) {
 }
 ?>
 <?php } ?>
+
+
+
+<!-- !pstn prefixes -->
+<?php if(@$_REQUEST['pstn']=="on") { ?>
+<!-- search result table -->
+<br>
+<h4><?php print _('Search results (PSTN Prefixes)');?>:</h4>
+<hr>
+
+<table class="searchTable table table-striped table-condensed table-top">
+
+<!-- headers -->
+<tr id="searchHeader">
+	<th><?php print _('Name');?></th>
+	<th><?php print _('Prefix');?></th>
+	<th><?php print _('Range');?></th>
+	<th><?php print _('Device');?></th>
+	<?php
+	if(sizeof($custom_pstn_fields) > 0) {
+		foreach($custom_pstn_fields as $field) {
+			if(!in_array($field['name'], $hidden_pstn_fields)) {
+				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+			}
+		}
+	}
+	?>
+	<th></th>
+</tr>
+<?php
+if(sizeof($result_pstn) > 0) {
+	# print vlans
+	foreach($result_pstn as $pstn) {
+		print "<tr class='nolink'>";
+		print " <td><dd>$pstn->name</dd></td>";
+		print " <td><dd><a href='".create_link("tools","pstn-prefixes",$pstn->id)."'>$pstn->prefix</a></dd></td>";
+		print " <td><dd>".$pstn->prefix.$pstn->start." - ".$pstn->prefix.$pstn->stop."</dd></td>";
+		//device										{
+		if(strlen($pstn->deviceId)>0 && $pstn->deviceId!="0") {
+			$switch = $Tools->fetch_object("devices", "id", $pstn->deviceId);
+			$pstn->deviceId = $switch===false ? "/" : "<a href='".create_link("tools", "devices", $switch->id)."'>".$switch->hostname."</a>";
+		}
+		else {
+			$pstn->deviceId = "/";
+		}
+
+		print ' <td class="hidden-sm hidden-xs">'. $pstn->deviceId  .'</td>' . "\n";
+
+		# custom fields
+		if(sizeof($custom_pstn_fields) > 0) {
+			foreach($custom_pstn_fields as $field) {
+				if(!in_array($field['name'], $hidden_pstn_fields)) {
+					$pstn->{$field['name']} = $Result->create_links ($pstn->{$field['name']}, $field['type']);
+					print "	<td class='hidden-xs hidden-sm'>".$pstn->{$field['name']}."</td>";
+				}
+			}
+		}
+		# for admins print link
+		print " <td class='actions'>";
+		if($User->is_admin(false)) {
+		print '<div class="btn-group">';
+		print '	<a class="btn btn-xs btn-default editPSTN" data-action="edit"   data-id="'.$pstn->id.'"><i class="fa fa-gray fa-pencil"></i></a>';
+		print '	<a class="btn btn-xs btn-default editPSTN" data-action="delete" data-id="'.$pstn->id.'"><i class="fa fa-gray fa-times"></i></a>';
+		print '</div>';
+		}
+		print "</td>";
+		print '</tr>'. "\n";
+    }
+}
+?>
+
+</table>
+<?php
+if(sizeof($result_pstn) == 0) {
+	$Result->show("info", _("No results"), false);
+}
+?>
+<?php } ?>
+
+
+
+
+
+
+<!-- !pstn numbers -->
+<?php if(@$_REQUEST['pstn']=="on") { ?>
+<!-- search result table -->
+<br>
+<h4><?php print _('Search results (PSTN Numbers)');?>:</h4>
+<hr>
+
+<table class="searchTable table table-striped table-condensed table-top">
+
+<!-- headers -->
+<tr id="searchHeader">
+	<th><?php print _('Name');?></th>
+	<th><?php print _('Number');?></th>
+	<th><?php print _('Owner');?></th>
+	<th><?php print _('Device');?></th>
+	<?php
+	if(sizeof($custom_pstnn_fields) > 0) {
+		foreach($custom_pstnn_fields as $field) {
+			if(!in_array($field['name'], $hidden_pstnn_fields)) {
+				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+			}
+		}
+	}
+	?>
+	<th></th>
+</tr>
+<?php
+if(sizeof($result_pstnn) > 0) {
+	# print vlans
+	foreach($result_pstnn as $pstnn) {
+		print "<tr class='nolink'>";
+		print " <td><dd>$pstnn->name</dd></td>";
+		print " <td><dd><a href='".create_link("tools","pstn-prefixes",$pstnn->prefix)."'>$pstnn->number</a></dd></td>";
+		print " <td><dd>$pstnn->owner</dd></td>";
+		//device										{
+		if(strlen($pstnn->deviceId)>0 && $pstnn->deviceId!="0") {
+			$switch = $Tools->fetch_object("devices", "id", $pstnn->deviceId);
+			$pstnn->deviceId = $switch===false ? "/" : "<a href='".create_link("tools", "devices", $switch->id)."'>".$switch->hostname."</a>";
+		}
+		else {
+			$pstnn->deviceId = "/";
+		}
+		print ' <td class="hidden-sm hidden-xs">'. $pstnn->deviceId  .'</td>' . "\n";
+
+		# custom fields
+		if(sizeof($custom_pstnn_fields) > 0) {
+			foreach($custom_pstnn_fields as $field) {
+				if(!in_array($field['name'], $hidden_pstnn_fields)) {
+					$pstnn->{$field['name']} = $Result->create_links ($pstnn->{$field['name']}, $field['type']);
+					print "	<td class='hidden-xs hidden-sm'>".$pstnn->{$field['name']}."</td>";
+				}
+			}
+		}
+		# for admins print link
+		print " <td class='actions'>";
+		if($User->is_admin(false)) {
+		print '<div class="btn-group">';
+		print '	<a class="btn btn-xs btn-default editPSTNnumber" data-action="edit"   data-id="'.$pstnn->id.'"><i class="fa fa-gray fa-pencil"></i></a>';
+		print '	<a class="btn btn-xs btn-default editPSTNnumber" data-action="delete" data-id="'.$pstnn->id.'"><i class="fa fa-gray fa-times"></i></a>';
+		print '</div>';
+		}
+		print "</td>";
+		print '</tr>'. "\n";
+    }
+}
+?>
+
+</table>
+<?php
+if(sizeof($result_pstnn) == 0) {
+	$Result->show("info", _("No results"), false);
+}
+?>
+<?php } ?>
+
 
 <?php } ?>
 

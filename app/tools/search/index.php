@@ -48,7 +48,9 @@ if (isset($_COOKIE['search_parameters'])) {
 		<?php if($User->settings->enableVRF==1) { ?>
 		<input type="checkbox" name="vrf" 	    value="on" <?php if($_REQUEST['vrf']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?>
 		<?php } ?>
-
+		<?php if($User->settings->enablePSTN==1) { ?>
+		<input type="checkbox" name="pstn" 	    value="on" <?php if($_REQUEST['pstn']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?>
+		<?php } ?>
 	</div>
 </form>
 

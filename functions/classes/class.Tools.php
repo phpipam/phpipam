@@ -452,6 +452,73 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Search for PSTN prefixes.
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_prefix_fields (default: array())
+	 * @return void
+	 */
+	public function search_pstn_refixes ($search_term, $custom_prefix_fields = array()) {
+		# query
+		$query[] = "select *,concat(prefix,start) as raw from `pstnPrefixes` where `prefix` like :search_term or `name` like :search_term or `description` like :search_term ";
+		# custom
+	    if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+		$query[] = "order by  raw asc;";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
+	}
+
+	/**
+	 * Search for PSTN numbers.
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_prefix_fields (default: array())
+	 * @return void
+	 */
+	public function search_pstn_numbers ($search_term, $custom_prefix_fields = array()) {
+		# query
+		$query[] = "select * from `pstnNumbers` where `number` like :search_term or `name` like :search_term or `description` like :search_term or `owner` like :search_term ";
+		# custom
+	    if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+		$query[] = "order by number asc;";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
+
+	}
+
+	/**
 	 * Reformat possible nun-full IPv4 address for search
 	 *
 	 *	e.g. 10.10.10 -> 10.10.10.0 - 10.10.10.255

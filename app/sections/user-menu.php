@@ -23,11 +23,12 @@ if (isset($_COOKIE['search_parameters'])) {
 }
 
 # if all are off print all on!
-if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on") {
+if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on" && @$_REQUEST['pstn']!="on") {
 	$_REQUEST['subnets']="on";
 	$_REQUEST['addresses']="on";
 	$_REQUEST['vlans']="on";
 	$_REQUEST['vrf']="on";
+	$_REQUEST['pstn']="on";
 }
 ?>
 
@@ -48,6 +49,9 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 		<input type="checkbox" name="vlans" 	value="on" <?php if($_REQUEST['vlans']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VLANs'); ?><br>
 		<?php if($User->settings->enableVRF==1) { ?>
 		<input type="checkbox" name="vrf" 	    value="on" <?php if($_REQUEST['vrf']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('VRFs'); ?><br>
+		<?php } ?>
+		<?php if($User->settings->enablePSTN==1) { ?>
+		<input type="checkbox" name="pstn" 	    value="on" <?php if($_REQUEST['pstn']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?><br>
 		<?php } ?>
 	</div>
 
