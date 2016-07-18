@@ -10,9 +10,6 @@ $User->check_user_session();
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
 
-# get custom fields
-$custom_fields = $Tools->fetch_custom_fields('devices');
-
 # cast
 $device = (array) $device;
 

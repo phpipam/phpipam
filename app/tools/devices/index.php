@@ -20,6 +20,7 @@ if(isset($_GET['subnetId'])) {
     $cnt_subnets   = $Tools->count_database_objects ("subnets", "device", $device->id);
     $cnt_addresses = $Tools->count_database_objects ("ipaddresses", "switch", $device->id);
     $cnt_nat       = $Tools->count_database_objects ("nat", "device", $device->id);
+    $cnt_pstn      = $Tools->count_database_objects ("pstnPrefixes", "deviceId", $device->id);
 
     ?>
     <!-- tabs -->
@@ -33,6 +34,10 @@ if(isset($_GET['subnetId'])) {
         <?php if($User->settings->enableLocations==1) { ?>
         <li role='presentation' <?php if(@$_GET['sPage']=="location") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "location"); ?>'><?php print _("Location"); ?></a></li>
         <?php } ?>
+        <?php if($User->settings->enablePSTN==1) { ?>
+        <li role='presentation' <?php if(@$_GET['sPage']=="pstn-prefixes") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "pstn-prefixes"); ?>'><?php print _("PSTN prefixes"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_pstn; ?></span></a></li>
+        <?php } ?>
+
     </ul>
 
     <!-- details -->
@@ -40,19 +45,21 @@ if(isset($_GET['subnetId'])) {
     if(!isset($_GET['sPage'])) {
     	include("device-details/device-details.php");
     }
-    if(@$_GET['sPage']=="subnets") {
+    elseif(@$_GET['sPage']=="subnets") {
         include("device-details/device-subnets.php");
     }
-    if(@$_GET['sPage']=="addresses") {
+    elseif(@$_GET['sPage']=="addresses") {
         include("device-details/device-addresses.php");
     }
-    if($User->settings->enableNAT==1 && @$_GET['sPage']=="nat") {
+    elseif($User->settings->enableNAT==1 && @$_GET['sPage']=="nat") {
         include("device-details/device-nat.php");
     }
-    if(@$_GET['sPage']=="location") {
+    elseif(@$_GET['sPage']=="location") {
         include("device-details/device-location.php");
     }
-
+    elseif(@$_GET['sPage']=="pstn-prefixes") {
+        include("device-details/device-pstn.php");
+    }
 } else {
 	include('all-devices.php');
 }
