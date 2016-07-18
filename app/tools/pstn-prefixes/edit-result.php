@@ -134,9 +134,10 @@ else																	        { $Result->show("success", _("Prefix $_POST[action]
 
 # if delete remove all slaves
 if ($_POST['action']=="delete") {
+    $values['master'] =  $values['id'];
 	# remove all references from prefixes and remove all numbers
 	$Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
-    $Admin->object_modify ("pstnNumbers", "delete", "prefix", $values['id']);
+    $Admin->object_modify ("pstnNumbers", "delete", "prefix", $values);
 }
 
 ?>
