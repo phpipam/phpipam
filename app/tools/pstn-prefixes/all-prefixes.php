@@ -25,7 +25,7 @@ else {
     # fetch all locations
     $all_prefixes = $Tools->fetch_all_prefixes();
 
-    $colspan = $admin ? 6 : 5;
+    $colspan = $admin ? 8 : 7;
 
     // table
     print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top'>";
