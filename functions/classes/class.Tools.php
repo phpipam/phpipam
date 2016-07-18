@@ -178,6 +178,16 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	public function search_addresses($search_term, $high = "", $low = "", $custom_fields = array()) {
+
+    	$tags = $this->fetch_all_objects ("ipTags", "id");
+    	foreach ($tags as $t) {
+        	if(strtolower($t->type)==strtolower($search_term)) {
+            	$tags = $t->id;
+            	break;
+        	}
+        	$tags = false;
+    	}
+
 		# set search query
 		$query[] = "select * from `ipaddresses` ";
 		$query[] = "where `ip_addr` between :low and :high ";	//ip range
@@ -195,13 +205,16 @@ class Tools extends Common_functions {
 		$query[] = "or `description` like :search_term ";		//descriptions
 		$query[] = "or `note` like :search_term ";				//note
 		$query[] = "or `mac` like :search_term ";				//mac
+		//tag
+		if($tags!==false)
+		$query[] = "or `state` like :tags ";				//tag
 		$query[] = "order by `ip_addr` asc;";
 
 		# join query
 		$query = implode("\n", $query);
 
 		# fetch
-		try { $result = $this->Database->getObjectsQuery($query, array("low"=>$low, "high"=>$high, "search_term"=>"%$search_term%")); }
+		try { $result = $this->Database->getObjectsQuery($query, array("low"=>$low, "high"=>$high, "search_term"=>"%$search_term%", "tags"=>$tags)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
