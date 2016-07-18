@@ -65,6 +65,7 @@ $values = array("id"=>1,
 				//features
 				"api"=>$Admin->verify_checkbox(@$_POST['api']),
 				"enableIPrequests"=>$Admin->verify_checkbox(@$_POST['enableIPrequests']),
+				"enablePublicIPrequests"=>$Admin->verify_checkbox(@$_POST['enablePublicIPrequests']),
 				"enableMulticast"=>$Admin->verify_checkbox(@$_POST['enableMulticast']),
 				"enableRACK"=>$Admin->verify_checkbox(@$_POST['enableRACK']),
 				"enableLocations"=>$Admin->verify_checkbox(@$_POST['enableLocations']),

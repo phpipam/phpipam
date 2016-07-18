@@ -647,4 +647,5 @@ CREATE TABLE `pstnNumbers` (
 /* use permissions for pstn */
 ALTER TABLE `users` ADD `pstn` INT(1)  NULL  DEFAULT '1'  AFTER `editVlan`;
 
-
+/* add Public IP Request Setting */
+ALTER TABLE `settings` ADD COLUMN `enablePublicIPrequests` TINYINT NOT NULL DEFAULT '0' AFTER `enableIPrequests`;

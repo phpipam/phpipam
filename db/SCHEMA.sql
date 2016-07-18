@@ -134,6 +134,7 @@ CREATE TABLE `settings` (
   `siteLoginText` varchar(128) DEFAULT NULL,
   `domainAuth` tinyint(1) DEFAULT NULL,
   `enableIPrequests` tinyint(1) DEFAULT NULL,
+  `enablePublicIPrequests` tinyint(1) DEFAULT NULL,
   `enableVRF` tinyint(1) DEFAULT '1',
   `enableDNSresolving` tinyint(1) DEFAULT NULL,
   `enableFirewallZones` TINYINT(1) NOT NULL DEFAULT '0',
@@ -182,7 +183,7 @@ CREATE TABLE `settings` (
 /* insert default values */
 INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
 VALUES
-	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
+	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
 
 
 # Dump of table settingsDomain
