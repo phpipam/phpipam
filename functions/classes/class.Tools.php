@@ -1990,7 +1990,7 @@ class Tools extends Common_functions {
             $prefixes = $out;
         }
 		# result
-		return is_array($prefixes) ? array_values($prefixes) : false;
+		return sizeof($prefixes)>0 ? array_values($prefixes) : false;
     }
 
     /**
