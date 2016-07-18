@@ -114,7 +114,7 @@ else {
     	    }
 
     		# set permission
-    		$permission = $Tools->check_prefix_permission ($User->user, $sp->id);
+    		$permission = $Tools->check_prefix_permission ($User->user);
 
     		print "	<td class='actions' style='padding:0px;'>";
     		print "	<div class='btn-group'>";

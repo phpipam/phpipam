@@ -101,6 +101,7 @@ $values = array("id"=>@$_POST['userId'],
 				"mailNotify"=>$_POST['mailNotify'],
 				"mailChangelog"=>$_POST['mailChangelog'],
 				"editVlan"=>$_POST['editVlan'],
+				"pstn"=>$_POST['pstn'],
 				"pdns"=>$_POST['pdns']
 				);
 # update pass ?

@@ -25,7 +25,7 @@ else {
     # fetch all locations
     $all_prefixes = $Tools->fetch_all_prefixes();
 
-    $colspan = $admin ? 8 : 7;
+    $colspan = $admin||$User->user->pstn==3 ? 9 : 8;
 
     // table
     print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top'>";
@@ -47,7 +47,6 @@ else {
 			}
 		}
 	}
-    if($admin)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -63,7 +62,14 @@ else {
     else {
 
         $html = $Tools->print_menu_prefixes ( $User->user, $all_prefixes, $custom );
+        if($html!==false)
         print implode("\n", $html);
+
+        else {
+            print "<tr>";
+            print " <td colspan='$colspan'>".$Result->show("info","No PSTN prefixes available", false, false, true)."</td>";
+            print "</tr>";
+        }
     }
     print "</tbody>";
     print "</table>";

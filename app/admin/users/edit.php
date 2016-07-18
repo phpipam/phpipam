@@ -11,6 +11,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$Subnets	= new Subnets ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -274,7 +275,7 @@ $(document).ready(function(){
 	<tr>
     	<td><?php print _("VLANs"); ?></td>
     	<td>
-            <input type="checkbox" class="input-switch" value="Yes" name="editVlan" <?php if(@$user->editVlan == "Yes") print 'checked'; ?>>
+            <input type="checkbox" class="input-switch" value="Yes" name="editVlan" <?php if($user['editVlan'] == "Yes") print 'checked'; ?>>
     	</td>
 		<td class="info2"><?php print _('Select to allow user to manage VLANs'); ?></td>
 	</tr>
@@ -284,9 +285,27 @@ $(document).ready(function(){
 	<tr>
     	<td><?php print _("PowerDNS"); ?></td>
     	<td>
-            <input type="checkbox" class="input-switch" value="Yes" name="pdns" <?php if(@$user->pdns == "Yes") print 'checked'; ?>>
+            <input type="checkbox" class="input-switch" value="Yes" name="pdns" <?php if($user['pdns'] == "Yes") print 'checked'; ?>>
     	</td>
 		<td class="info2"><?php print _('Select to allow user to create DNS records'); ?></td>
+	</tr>
+    <?php } ?>
+
+	<!-- pstn -->
+    <?php if ($User->settings->enablePSTN==1) { ?>
+	<tr>
+    	<td><?php print _("PSTN");?></td>
+    	<td>
+        	<select class="form-control input-sm input-w-auto" name="pstn">
+            <?php
+            foreach (array(0,1,2,3) as $p) {
+                $selected = $p==$user['pstn'] ? "selected" : "";
+                print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
+            }
+            ?>
+        	</select>
+    	</td>
+		<td class="info2"><?php print _('Select to allow user to manage PSTN numbers'); ?></td>
 	</tr>
     <?php } ?>
 

@@ -35,7 +35,7 @@ else {
         }
         else {
             # set permission
-            $permission = $Tools->check_prefix_permission ($User->user, $prefix->id);
+            $permission = $Tools->check_prefix_permission ($User->user);
 
             # raw prefix number
             $prefix->prefix_raw = $Tools->prefix_normalize ($prefix->prefix);

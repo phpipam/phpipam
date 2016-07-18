@@ -6,7 +6,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -15,6 +15,9 @@ $User->check_user_session();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
+
+# check permissions
+if($Tools->check_prefix_permission ($User->user) <2)   { $Result->show("danger", _('You do not have permission to manage PSTN numbers'), true, true); }
 
 # validate csrf cookie
 $User->csrf_cookie ("validate", "pstn_number", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -37,6 +40,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
     if($prefix===false)                                                 { $Result->show("danger",  _("Invalid prefix"), true); }
 
     // duplicate check
+    if($_POST['action']=="add")
     if ($Tools->check_number_duplicates ($prefix->id, $_POST['number'])){ $Result->show("danger",  _("Duplicate number"), true); }
 
     // ranges

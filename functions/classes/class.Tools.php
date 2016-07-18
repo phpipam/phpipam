@@ -2089,47 +2089,8 @@ class Tools extends Common_functions {
 	 * @param int $subnetId
 	 * @return void
 	 */
-	public function check_prefix_permission ($user, $prefix_id) {
-
-		# get all user groups
-		$groups = json_decode($user->groups, true);
-
-		# if user is admin then return 3, otherwise check
-		if($user->role == "Administrator")	{ return 3; }
-
-		# set subnet permissions
-		$prefix  = $this->fetch_object ("pstnPrefixes", "id", $prefix_id);
-		if($prefix===false)	return 0;
-		//null?
-		if(is_null($prefix->permissions) || $prefix->permissions=="null")	return 0;
-		$subnetP = json_decode(@$prefix->permissions);
-
-		# set section permissions
-		$Section = new Sections ($this->Database);
-		$section = $Section->fetch_section ("id", $subnet->sectionId);
-		$sectionP = json_decode($section->permissions);
-
-		# if section permission == 0 then return 0
-		if($out == 0) {
-			return 0;
-		}
-		else {
-			$out = 0;
-			# ok, user has section access, check also for any higher access from subnet
-			if(sizeof($subnetP) > 0) {
-				foreach($subnetP as $sk=>$sp) {
-					# check each group if user is in it and if so check for permissions for that group
-					foreach($groups as $uk=>$up) {
-						if($uk == $sk) {
-							if($sp > $out) { $out = $sp; }
-						}
-					}
-				}
-			}
-		}
-
-		# return result
-		return $out;
+	public function check_prefix_permission ($user) {
+        return $user->role=="Administrator" ? 3 : $user->pstn;
 	}
 
 	/**
@@ -2156,7 +2117,7 @@ class Tools extends Common_functions {
 		# remove all not permitted!
 		if(sizeof($prefixes)>0) {
 		foreach($prefixes as $k=>$s) {
-			$permission = $this->check_prefix_permission ($user, $s->id);
+			$permission = $this->check_prefix_permission ($user);
 			if($permission == 0) { unset($prefixes[$k]); }
 		}
 		}
@@ -2296,12 +2257,12 @@ class Tools extends Common_functions {
 			    }
 
 				# set permission
-				$permission = $this->check_prefix_permission ($user, $option['value']['id']);
+				$permission = $this->check_prefix_permission ($user);
 
 				$html[] = "	<td class='actions' style='padding:0px;'>";
 				$html[] = "	<div class='btn-group'>";
 
-				if($permission>1) {
+				if($permission>2) {
 					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['value']['id']."'><i class='fa fa-pencil'></i></button>";
 					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['value']['id']."'><i class='fa fa-times'></i></button>";
 				}

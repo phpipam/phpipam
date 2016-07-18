@@ -10,7 +10,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Addresses	= new Addresses ($Database);
 $Result 	= new Result ();
@@ -20,6 +20,9 @@ $User->check_user_session();
 
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "pstn_number");
+
+# check permissions
+if($Tools->check_prefix_permission ($User->user) < 2)   { $Result->show("danger", _('You do not have permission to manage PSTN numbers'), true, true); }
 
 # get Location object
 if($_POST['action']!="add") {

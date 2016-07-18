@@ -41,6 +41,9 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
     <th><?php print _('PowerDNS'); ?></th>
     <?php } ?>
     <th><?php print _('Manage VLANs'); ?></th>
+    <?php if ($User->settings->enablePSTN==1) { ?>
+    <th><?php print _('PSTN'); ?></th>
+    <?php } ?>
     <th><?php print _('Groups'); ?></th>
     <th><?php print _('Last login'); ?></th>
 	<?php
@@ -97,6 +100,9 @@ foreach ($users as $user) {
      	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
      	}
      	print "<td><span class='badge badge1 badge5 alert-success'>"._("Yes")."</span></td>";
+    	if ($User->settings->enablePSTN==1) {
+     	print "<td><span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions (3))."</span></td>";
+     	}
 	}
 	else {
     	if ($User->settings->enablePowerDNS==1) {
@@ -118,6 +124,16 @@ foreach ($users as $user) {
     	print "<td>";
     	print $user['editVlan'];
     	print "</td>";
+
+        // pstn
+    	if ($User->settings->enablePSTN==1) {
+         // append badge
+    	$user['pstn'] = $user['pstn']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
+
+    	print "<td>";
+    	print $user['pstn'];
+    	print "</td>";
+    	}
 	}
 
 	# groups
