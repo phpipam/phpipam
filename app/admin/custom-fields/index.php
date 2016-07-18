@@ -16,7 +16,9 @@ $custom_tables = array( "ipaddresses"=>"IP address",
 						"users"=>"User",
 						"devices"=>"Device",
 						"racks"=>"Rack",
-						"locations"=>"Locations"
+						"locations"=>"Locations",
+						"pstnPrefixes"=>"PSTN Prefixes",
+						"pstnNumbers"=>"PSTN Numbers"
 						);
 
 # create array
