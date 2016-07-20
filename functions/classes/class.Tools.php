@@ -1293,13 +1293,8 @@ class Tools extends Common_functions {
 		$file = explode("\n", $file);
 		foreach($file as $k=>$l) {
 			if(strpos(trim($l), "$field`")==1) {
-				//get previous
-				$prev = trim($file[$k-1]);
-				$prev = explode("`", $prev);
-				$prev = "`$prev[1]`";
-
 				$res = trim($l, ",");
-				$res .= " after $prev;";
+				$res .= ";";
 
 				return $res;
 			}
