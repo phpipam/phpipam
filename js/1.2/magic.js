@@ -24,6 +24,8 @@ $(document).on("submit", ".searchFormClass", function() {
     return false;
 });
 
+$('.show_popover').popover();
+
 
 /* this functions opens popup */
 /* -------------------------- */

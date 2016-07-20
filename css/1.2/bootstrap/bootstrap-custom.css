@@ -10,8 +10,6 @@
   src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url("../fonts/source_sans_pro/SourceSansPro-Light.woff2") format('woff2');
 }
 
-
-
 /* @general ---------- */
 body {
 	font-size: 13px;
@@ -104,7 +102,6 @@ table td.stats-badge {
     text-align: right !important;
     border-radius: 3px;
 }
-
 
 hr {
   margin: 5px;
@@ -2606,4 +2603,16 @@ ul.dropdown-menu li a {
 .navbar ul li.first-item i {
     color: white;
     margin-right: 2px;
+}
+
+
+
+.table.ipaddresses tbody tr:hover td table.popover_table tbody td {
+    background: white !important;
+}
+table.popover_table {
+    margin: 0px;
+}
+table.popover_table td {
+    border: none !important;
 }

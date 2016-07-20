@@ -1850,4 +1850,180 @@ class Addresses extends Common_functions {
 		}
 		return $number;
 	}
+
+
+
+
+
+
+
+
+
+
+	/**
+	* @nat methods
+	* -------------------------------
+	*/
+	/**
+	 * Prints nat link
+	 *
+	 * @access public
+	 * @param array $all_nats
+	 * @param array $all_nats_per_object
+	 * @param object $subnet
+	 * @param object $address
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function print_nat_link ($all_nats, $all_nats_per_object, $subnet, $address, $type="ipaddress") {
+    	// cast
+    	$subnet = (object) $subnet;
+    	$address = (object) $address;
+
+    	// cnt
+    	$html = array();
+    	$html[] = '<table class="popover_table">';
+
+    	$cnt = 0;
+
+    	// subnets
+        if(isset($all_nats_per_object['subnets'][$subnet->id])) {
+            foreach ($all_nats_per_object['subnets'][$subnet->id] as $nat) {
+                // set object
+                $n = $all_nats[$nat];
+                // print
+                $html[] = str_replace("'", "\"", $this->print_nat_link_line ($n, false, "subnets", $subnet->id));
+            }
+            $cnt++;
+        }
+
+    	// addresses
+    	if(isset($all_nats_per_object['ipaddresses'][$address->id])) {
+            foreach ($all_nats_per_object['ipaddresses'][$address->id] as $nat) {
+                // set object
+                $n = $all_nats[$nat];
+                // print
+                $html[] = str_replace("'", "\"", $this->print_nat_link_line ($n, false, "ipaddresses", $address->id));
+                $cnt++;
+            }
+    	}
+
+        // print if some
+        if ($cnt>0) {
+            $html[] = "</table>";
+            if($type=="subnet") {
+                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is Natted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
+            }
+            else {
+                print  " <a href='".create_link("subnets",$subnet->sectionId, $subnet->id, "address-details", $address->id, "nat")."' class='btn btn-xs btn-default show_popover fa fa-exchange' style='font-size:11px;margin-top:-3px;padding:1px 3px;' data-toggle='popover' title='"._('Object is Natted')."' data-trigger='hover' data-html='true' data-content='".implode("\n", $html)."'></a>";
+            }
+        }
+	}
+
+    /**
+     * Prints single NAT for display in devices, subnets, addresses.
+     *
+     * @access public
+     * @param mixed $n
+     * @param bool|int $nat_id (default: false)
+     * @param bool|mixed $object_type (default: false)
+     * @param bool $object_id (default: false)
+     * @return void
+     */
+    public function print_nat_link_line ($n, $nat_id = false, $object_type = false, $object_id=false) {
+        // cast to object to be sure if array provided
+        $n = (object) $n;
+
+        // translate json to array, links etc
+        $sources      = $this->translate_nat_objects_for_popup ($n->src, $nat_id, false, $object_type, $object_id);
+        $destinations = $this->translate_nat_objects_for_popup ($n->dst, $nat_id, false, $object_type, $object_id);
+
+        // no src/dst
+        if ($sources===false)
+            $sources = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+        if ($destinations===false)
+            $destinations = array("<span class='badge badge1 badge5 alert-danger'>"._("None")."</span>");
+
+
+        // icon
+        $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
+
+        // to html
+        $html = array();
+        $html[] = "<tr>";
+        $html[] = "<td colspan='3'>";
+        $html[] = "<strong>$n->name</strong> <span class='badge badge1 badge5'>".ucwords($n->type)."</span>";
+        $html[] = "</td>";
+        $html[] = "</tr>";
+
+        // append ports
+        if(($n->type=="static" || $n->type=="destination") && (strlen($n->src_port)>0 && strlen($n->dst_port)>0)) {
+            $sources      = implode("<br>", $sources)." /".$n->src_port;
+            $destinations = implode("<br>", $destinations)." /".$n->dst_port;
+        }
+        else {
+            $sources      = implode("<br>", $sources);
+            $destinations = implode("<br>", $destinations);
+        }
+
+        $html[] = "<tr>";
+        $html[] = "<td>$sources</td>";
+        $html[] = "<td><i class='fa $icon'></i></td>";
+        $html[] = "<td>$destinations</td>";
+        $html[] = "</tr>";
+        $html[] = "<tr><td colspan='3' style='padding-top:20px;'></td></tr>";
+
+        $html[] = "<tr>";
+        $html[] = "<td colspan='3'><hr></td>";
+        $html[] = "</tr>";
+
+        // return
+        return implode("\n", $html);
+    }
+
+    /**
+     * Translates NAT objects to be shown on page
+     *
+     * @access public
+     * @param json $json_objects
+     * @param int|bool $nat_id (default: false)
+     * @param bool $json_objects (default: false)
+     * @param bool $object_type (default: false) - to bold it (ipaddresses / subnets)
+     * @param int|bool object_id (default: false) - to bold it
+     * @return void
+     */
+    public function translate_nat_objects_for_popup ($json_objects, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
+        // to array "subnets"=>array(1,2,3)
+        $objects = json_decode($json_objects, true);
+        // init out array
+        $out = array();
+        // check
+        if(is_array($objects)) {
+            if(sizeof($objects)>0) {
+                foreach ($objects as $ot=>$ids) {
+                    if (sizeof($ids)>0) {
+                        foreach ($ids as $id) {
+                            // fetch
+                            $item = $this->fetch_object($ot, "id", $id);
+                            if($item!==false) {
+                                // bold
+                                $bold = $item->id==$object_id && $ot==$object_type ? "<span class='strong'>" : "<span>";
+                                // subnets
+                                if ($ot=="subnets") {
+                                    $out[] = "$bold".$this->transform_address($item->subnet, "dotted")."/".$item->mask."</span></span>";
+                                }
+                                // addresses
+                                else {
+                                    $out[] = "$bold".$this->transform_address($item->ip_addr, "dotted")."</span>";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        // result
+        return sizeof($out)>0 ? $out : false;
+    }
+
 }

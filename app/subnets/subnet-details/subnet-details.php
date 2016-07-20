@@ -117,7 +117,7 @@ else {
 	<?php if(@array_key_exists($subnet['id'], $all_nats_per_object['subnets'])) { ?>
 	<tr>
 		<th><?php print _('NAT'); ?></th>
-		<td><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat") ?>'><i class='btn btn-xs btn-info fa fa-exchange'></i> <?php print _("Subnet is natted"); ?></a></td>
+		<td><?php $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, false, "subnet"); ?> <?php print _("Subnet is natted"); ?></a></td>
 	</tr>
 	<?php } ?>
 
