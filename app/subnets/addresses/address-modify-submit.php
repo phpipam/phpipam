@@ -190,13 +190,15 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
     	    }
 
         	# validate and normalize MAC address
-        	if(strlen(@$address['mac'])>0) {
-            	if($User->validate_mac ($address['mac'])===false) {
-                	$errors[] = _('Invalid MAC address')."!";
-            	}
-            	// normalize
-            	else {
-                	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
+        	if($action!=="delete") {
+            	if(strlen(@$address['mac'])>0) {
+                	if($User->validate_mac ($address['mac'])===false) {
+                    	$errors[] = _('Invalid MAC address')."!";
+                	}
+                	// normalize
+                	else {
+                    	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
+                	}
             	}
         	}
 
@@ -247,13 +249,15 @@ else {
 	}
 
 	# validate and normalize MAC address
-	if(strlen(@$address['mac'])>0) {
-    	if($User->validate_mac ($address['mac'])===false) {
-        	$Result->show("danger", _('Invalid MAC address')."!", true);
-    	}
-    	// normalize
-    	else {
-        	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
+	if($action!=="delete") {
+    	if(strlen(@$address['mac'])>0) {
+        	if($User->validate_mac ($address['mac'])===false) {
+            	$Result->show("danger", _('Invalid MAC address')."!", true);
+        	}
+        	// normalize
+        	else {
+            	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
+        	}
     	}
 	}
 
