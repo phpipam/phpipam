@@ -117,7 +117,7 @@ foreach ($data as &$cdata) {
 		<td>".$cdata['domain']."</td>
 		".$cfieldtds."
 		<td>"._($cdata['msg'])."</td></tr>";
-
 }
 
 ?>
+
