@@ -193,6 +193,7 @@ class Subnets_controller extends Common_api_functions {
 	 *		- {id}/first_free/			    // returns first free address in subnet
 	 *      - {id}/first_subnet/{mask}/     // returns first available subnets with specified mask
 	 *      - {id}/all_subnets/{mask}/      // returns all available subnets with specified mask
+	 *		- all							// returns all subnets in all sections
 	 *
 	 * @access public
 	 * @return void
@@ -266,6 +267,13 @@ class Subnets_controller extends Common_api_functions {
 			// check result
 			if($result==NULL)							{ $this->Response->throw_exception(404, "Invalid Id"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
+		}
+		// all
+		elseif ($this->_params->id=="all") {
+			$result = $this->read_all_subnets();
+			// check result
+			if ($result===false)						{ $this->Response->throw_exception(404, "Unable to read subnets"); }
+			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
 		}
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }
@@ -598,6 +606,17 @@ class Subnets_controller extends Common_api_functions {
 		}
 		# result
 		return sizeof($result)==0 ? false : $result;
+	}
+
+	/**
+	 * Fetches all subnets in database
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function read_all_subnets() {
+		// fetch and return
+		return $this->Subnets->fetch_all_subnets();
 	}
 
 	/**

@@ -458,6 +458,27 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * This function fetches everything for all subnets
+	 *
+	 *      needed for API get all subnets
+	 *
+	 * @access public
+	 * @return subnets or false
+	 */
+	public function fetch_all_subnets() {
+	    $query = "SELECT * FROM `subnets`;";
+	    try {
+			$subnets = $this->Database->getObjectsQuery($query);
+	    }
+	    catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+	    }
+	    # result
+	    return $subnets;
+	}
+
+	/**
 	 * This function fetches id, subnet and mask for all subnets
 	 *
 	 *	Needed for pingCheck script
