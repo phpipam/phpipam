@@ -96,7 +96,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Longitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="long" value="<?php print $location->lat; ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="long" value="<?php print $location->long; ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Longitude"); ?></span>
