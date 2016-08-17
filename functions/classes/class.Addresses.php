@@ -1312,15 +1312,17 @@ class Addresses extends Common_functions {
 	 * @param int $address1
 	 * @param int $address2
 	 * @param int $netmask
-	 * @param bool $empty
+	 * @param bool $empty (default: false)
+	 * @param bool $is_subnet (default: false)
+	 * @param bool $is_broadcast (default: false)
 	 * @return void
 	 */
-	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false) {
+	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false, $is_subnet=false, $is_broadcast=false) {
 		# make sure addresses are in decimal format
 		$address1 = $this->transform_address ($address1, "decimal");
 		$address2 = $this->transform_address ($address2, "decimal");
 		# check for space
-		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
+		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty, $is_subnet, $is_broadcast) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
 	}
 
 	/**
@@ -1393,42 +1395,81 @@ class Addresses extends Common_functions {
 	 * @param int $address1
 	 * @param int $address2
 	 * @param int $netmask
+	 * @param bool $empty (default: false)
+	 * @param bool $is_subnet (default: false)
+	 * @param bool $is_broadcast (default: false)
 	 * @return void
 	 */
-	protected function find_unused_addresses_IPv6 ($address1, $address2, $netmask) {
-		# calculate diff
-		$diff = $this->calculate_address_diff ($address1, $address2);
+	protected function find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty = false, $is_subnet = false, $is_broadcast = false) {
+		# Initialize PEAR NET object
+		$this->initialize_pear_net_IPv6 ();
 
-		# /128
-		if($netmask == 128) {
-				return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
+		if($empty) {
+    		$Subnets = new Subnets ($this->Database);
+    		return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$Subnets->get_max_hosts ($netmask, "IPv6"));
+		}
+        else {
+    		# calculate diff
+    		$diff = $this->calculate_address_diff ($address1, $address2);
+
+    		# /128
+    		if($netmask == 128) {
+        		if($diff>1) {
+                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
+                }
+        	}
+    		# /127
+    	    elseif($netmask == 127) {
+        	    if($diff==1 && $this->is_network($address1, $netmask)) {
+    				return array("ip"=>$this->transform_to_dotted($address2), "hosts"=>1);
+    			}
+    			elseif($diff==1 && $this->is_broadcast($address2, $netmask)) {
+    				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
+    			}
+    			elseif($diff==0) {
+        			return false;
+    			}
+    			else {
+    				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>2);
+    			}
+    	    }
+    	    # null
+    	    elseif ($diff==0) {
+        	    return false;
+    	    }
+    	    # diff 1
+    	    elseif ($diff==1) {
+         		if($is_subnet) {
+                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
+        		}
+        		elseif($is_broadcast) {
+                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>1);
+        		}
+        		else {
+            		return false;
+                }
+    	    }
+    	    # diff 2
+    	    elseif ($diff==2 && !$is_subnet && !$is_broadcast) {
+        	    var_dump($is_broadcast);
+                return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1))), "hosts"=>1);
+    	    }
+    	    # default
+    	    else {
+        		if($is_subnet) {
+                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval(gmp_sub($address2,1))), "hosts"=>$this->reformat_number(gmp_strval(gmp_sub($diff,0))));
+        		}
+        		elseif($is_broadcast) {
+                    return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1)))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$this->reformat_number(gmp_strval(gmp_sub($diff,0))));
+        		}
+        		else {
+                    return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1)))." - ".$this->transform_to_dotted(gmp_strval(gmp_sub($address2,1))), "hosts"=>$this->reformat_number(gmp_strval(gmp_strval(gmp_sub($diff,1)))));
+                }
+        	}
+
+        	# default false
+        	return false;
     	}
-		# /127
-	    elseif($netmask == 127) {
-			if($diff==1 && $this->is_network($address1, $netmask)) {
-				return array("ip"=>$this->transform_to_dotted($address2), "hosts"=>1);
-			}
-			elseif($diff==1 && $this->is_broadcast($address2, $netmask)) {
-				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-			}
-			else {
-				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>2);
-			}
-	    }
-	    # if diff is less than 2 return false */
-	    elseif ($diff < 2) {
-	        	return false;
-	    }
-	    # if diff is 2 return 1 IP address in the middle */
-	    elseif ($diff == 2) {
-	            return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
-	    }
-		# if diff is more than 2 return pool */
-		else {
-            	return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$this->reformat_number(gmp_strval($diff)));
-    	}
-    	# default false
-    	return false;
 	}
 
 
