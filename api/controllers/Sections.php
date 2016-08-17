@@ -124,7 +124,8 @@ class Sections_controller extends Common_api_functions {
 	 *      - /                     // returns all sections
 	 *		- /{id}/                // returns section details
 	 *		- /{id}/subnets/		// returns all subnets in this section
-	 *		- /name/ 				// section name
+	 *		- /{name}/subnets/		// returns all subnets in this named section
+	 *		- /{name}/ 				// section name
 	 *		- /custom_fields/		// returns custom fields
 	 *
 	 *	If no ID is provided all sections are returned
@@ -134,7 +135,7 @@ class Sections_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// fetch subnets in section
-		if(@$this->_params->id2=="subnets" && is_numeric($this->_params->id)) {
+		if(@$this->_params->id2=="subnets") {	// && is_numeric($this->_params->id)) { // allow non-numeric for search by name
 			// we dont need id2 anymore
 			unset($this->_params->id2);
 			//validate section
