@@ -27,7 +27,7 @@ else {
     $resize = @$resize === false ? false : true;
 
     # no long/lat
-    if(strlen($location->long)>0 && strlen($location->lat)) {
+    if( (strlen($location->long)>0 && strlen($location->lat)) || strlen($location->address)>0) {
     ?>
 
     <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>

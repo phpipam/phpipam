@@ -334,8 +334,7 @@ class Addresses_controller extends Common_api_functions  {
 	/**
 	 * Creates new address
 	 *
-	 *	required parameters: ip, subnetId
-	 *
+	 *   /addresses/                            // create ip_addr in subnet (required parameters: ip, subnetId)
 	 *   /addresses/first_free/{subnetId}/      // will search for first free address in subnet, creating ip_addr
 	 *
 	 * @access public
