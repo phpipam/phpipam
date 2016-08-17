@@ -23,7 +23,7 @@ $search_term = str_replace("*", "%", $search_term);
 
 
 // IP address low/high reformat
-if ($Tools->validate_mac ($search_term)===false) {
+if ($Tools->validate_ip($search_term)) {
     // identify
     $type = $Addresses->identify_address( $search_term ); //identify address type
 
