@@ -852,7 +852,7 @@ class PHPMailer
         }
         if ($kind != 'Reply-To') {
             if (!isset($this->all_recipients[strtolower($address)])) {
-                array_push($this->$kind, array($address, $name));
+                array_push($this->{$kind}, array($address, $name));
                 $this->all_recipients[strtolower($address)] = true;
                 return true;
             }
@@ -1171,7 +1171,7 @@ class PHPMailer
                 default:
                     $sendMethod = $this->Mailer.'Send';
                     if (method_exists($this, $sendMethod)) {
-                        return $this->$sendMethod($this->MIMEHeader, $this->MIMEBody);
+                        return $this->{$sendMethod}($this->MIMEHeader, $this->MIMEBody);
                     }
 
                     return $this->mailSend($this->MIMEHeader, $this->MIMEBody);
@@ -3411,7 +3411,7 @@ class PHPMailer
     public function set($name, $value = '')
     {
         if (property_exists($this, $name)) {
-            $this->$name = $value;
+            $this->{$name} = $value;
             return true;
         } else {
             $this->setError($this->lang('variable_set') . $name);

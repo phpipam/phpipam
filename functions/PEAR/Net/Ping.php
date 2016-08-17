@@ -1046,7 +1046,7 @@ exit;
     */
     function getValue($name)
     {
-        return isset($this->$name)?$this->$name:'';
+        return isset($this->{$name})?$this->{$name}:'';
     } /* function getValue() */
 
     /**

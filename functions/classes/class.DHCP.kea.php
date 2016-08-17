@@ -296,7 +296,7 @@ class DHCP_kea extends Common_functions {
 
         // get leases
         $lease_type = "get_leases_".$lease_database_type;
-        $this->$lease_type ($lease_database, $type);
+        $this->{$lease_type} ($lease_database, $type);
     }
 
     /**
@@ -477,7 +477,7 @@ class DHCP_kea extends Common_functions {
             else {
                 // get leases
                 $type_l = "get_reservations_".$reservations_database_type;
-                $this->$type_l ($reservations_database, $type);
+                $this->{$type_l} ($reservations_database, $type);
             }
         }
     }

@@ -67,12 +67,12 @@ else {
             		print "<tr><td colspan='2'><hr></td></tr>";
             		// fields
             		foreach($cfields as $key=>$field) {
-            			$location->$key = str_replace("\n", "<br>",$location->$key);
+            			$location->{$key} = str_replace("\n", "<br>",$location->{$key});
             			// create links
-            			$location->$key = $Result->create_links($location->$key);
+            			$location->{$key} = $Result->create_links($location->{$key});
             			print "<tr>";
             			print "	<th>$key</th>";
-            			print "	<td style='vertical-align:top;align:left;'>".$location->$key."</td>";
+            			print "	<td style='vertical-align:top;align:left;'>".$location->{$key}."</td>";
             			print "</tr>";
             		}
             	}

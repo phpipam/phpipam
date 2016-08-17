@@ -221,20 +221,20 @@ if ($subnets!==false) {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$address->$myField['name'] = $Result->create_links($address->$myField['name'], $myField['type']);
+								$address->{$myField['name']} = $Result->create_links($address->{$myField['name']}, $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
-									if($address->$myField['name'] == "0")		{ print _("No"); }
-									elseif($address->$myField['name'] == "1")	{ print _("Yes"); }
+									if($address->{$myField['name']} == "0")		{ print _("No"); }
+									elseif($address->{$myField['name']} == "1")	{ print _("Yes"); }
 								}
 								//text
 								elseif($myField['type']=="text") {
-									if(strlen($address->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $address->$myField['name'])."'>"; }
+									if(strlen($address->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $address->{$myField['name']})."'>"; }
 									else											{ print ""; }
 								}
 								else {
-									print $address->$myField['name'];
+									print $address->{$myField['name']};
 
 								}
 								print "</td>";

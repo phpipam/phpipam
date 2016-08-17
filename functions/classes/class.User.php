@@ -846,7 +846,7 @@ class User extends Common_functions {
             # set method name variable
             $authmethodtype = $this->authmethodtype;
             # authenticate
-            $this->$authmethodtype ($username, $password);
+            $this->{$authmethodtype} ($username, $password);
         }
     }
 

@@ -148,21 +148,21 @@ else {
 					   		if(!in_array($field['name'], $hidden_fields)) {
 
 								// create links
-								$v->$field['name'] = $Result->create_links ($v->$field['name'],$field['type']);
+								$v->{$field['name']} = $Result->create_links ($v->{$field['name']},$field['type']);
 
 								print "<td class='hidden-xs hidden-sm hidden-md'>";
 								//booleans
 								if($field['type']=="tinyint(1)")	{
-									if($v->$field['name'] == "0")		{ print _("No"); }
-									elseif($v->$field['name'] == "1")	{ print _("Yes"); }
+									if($v->{$field['name']} == "0")		{ print _("No"); }
+									elseif($v->{$field['name']} == "1")	{ print _("Yes"); }
 								}
 								//text
 								elseif($field['type']=="text") {
-									if(strlen($v->$field['name'])>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $v->$field['name'])."'>"; }
+									if(strlen($v->{$field['name']})>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $v->{$field['name']})."'>"; }
 									else									{ print ""; }
 								}
 								else {
-									print $v->$field['name'];
+									print $v->{$field['name']};
 
 								}
 								print "</td>";

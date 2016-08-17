@@ -44,7 +44,7 @@ if($permission != 0) {
 			$sizeMyFields[$field['name']] = 0;				// default value
 			# check against each IP address
 			foreach($section_subnets as $subn) {
-				if(strlen($subn->$field['name']) > 0) {
+				if(strlen($subn->{$field['name']}) > 0) {
 					$sizeMyFields[$field['name']]++;		// +1
 				}
 			}

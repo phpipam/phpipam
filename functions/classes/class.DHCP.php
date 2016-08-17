@@ -216,7 +216,7 @@ class DHCP extends Common_functions {
     public function read_subnets ($type = "IPv4") {
         // check if version used
         $flag = strtolower($type)."_used";
-        if ($this->DHCP_server->$flag==false)    { return false; }
+        if ($this->DHCP_server->{$flag}==false)    { return false; }
 
         // return subnets
         if($type=="IPv6")     { return $this->DHCP_server->subnets6; }
@@ -254,7 +254,7 @@ class DHCP extends Common_functions {
 
         // check if version used
         $flag = strtolower($type)."_used";
-        if ($this->DHCP_server->$flag==false)    { return false; }
+        if ($this->DHCP_server->{$flag}==false)    { return false; }
 
         // get leases
         try {
@@ -297,7 +297,7 @@ class DHCP extends Common_functions {
 
         // check if version used
         $flag = strtolower($type)."_used";
-        if ($this->DHCP_server->$flag==false)    { return false; }
+        if ($this->DHCP_server->{$flag}==false)    { return false; }
 
         // get leases
         $this->DHCP_server->get_reservations ($type);

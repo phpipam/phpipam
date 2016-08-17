@@ -178,21 +178,21 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 # custom subnet fields
 if(sizeof($custom_fields) > 0) {
 	foreach($custom_fields as $key=>$field) {
-		$user->$key = str_replace("\n", "<br>",$user->$key);
+		$user->{$key} = str_replace("\n", "<br>",$user->{$key});
 		print "<tr>";
 		print "	<td>$key</td>";
 		print "	<td>";
 		//no length
-		if(strlen($user->$key)==0) {
+		if(strlen($user->{$key})==0) {
 			print "/";
 		}
 		//booleans
 		elseif($field['type']=="tinyint(1)")	{
-			if($user->$key == "0")		{ print _("No"); }
-			elseif($user->$key == "1")	{ print _("Yes"); }
+			if($user->{$key} == "0")		{ print _("No"); }
+			elseif($user->{$key} == "1")	{ print _("Yes"); }
 		}
 		else {
-			print $user->$key;
+			print $user->{$key};
 		}
 		print "	</td>";
 		print "</tr>";

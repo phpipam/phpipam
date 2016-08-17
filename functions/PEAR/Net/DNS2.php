@@ -298,7 +298,7 @@ class Net_DNS2
                     $this->setServers($value);
                 } else {
 
-                    $this->$key = $value;
+                    $this->{$key} = $value;
                 }
             }
         }

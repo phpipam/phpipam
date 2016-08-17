@@ -101,12 +101,12 @@ if (isset($error)) { ?>
         		print "<tr><td colspan='2'><hr></td></tr>";
         		// fields
         		foreach($cfields as $key=>$field) {
-        			$rack->$key = str_replace("\n", "<br>",$rack->$key);
+        			$rack->{$key} = str_replace("\n", "<br>",$rack->{$key});
         			// create links
-        			$rack->$key = $Result->create_links($rack->$key);
+        			$rack->{$key} = $Result->create_links($rack->{$key});
         			print "<tr>";
         			print "	<th>$key</th>";
-        			print "	<td style='vertical-align:top;align:left;'>".$rack->$key."</td>";
+        			print "	<td style='vertical-align:top;align:left;'>".$rack->{$key}."</td>";
         			print "</tr>";
         		}
         		// divider

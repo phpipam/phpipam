@@ -134,7 +134,7 @@ foreach ($domains_split as $k=>$split) {
 		foreach ($split as $d) {
 			// nulls
 			foreach($d as $k=>$v) {
-				if (strlen($v)==0)	$d->$k = "<span class='muted'>/</span>";
+				if (strlen($v)==0)	$d->{$k} = "<span class='muted'>/</span>";
 			}
 			// cont records
 			$cnt = $PowerDNS->count_domain_records ($d->id);

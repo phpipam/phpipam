@@ -226,16 +226,16 @@ else {
 
 						//booleans
 						if($myField['type']=="tinyint(1)")	{
-							if($addresses[$n]->$myField['name'] == "0")		{ print _("No"); }
-							elseif($addresses[$n]->$myField['name'] == "1")	{ print _("Yes"); }
+							if($addresses[$n]->{$myField['name']} == "0")		{ print _("No"); }
+							elseif($addresses[$n]->{$myField['name']} == "1")	{ print _("Yes"); }
 						}
 						//text
 						elseif($myField['type']=="text") {
-							if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+							if(strlen($addresses[$n]->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
 							else											{ print ""; }
 						}
 						else {
-							print $addresses[$n]->$myField['name'];
+							print $addresses[$n]->{$myField['name']};
 
 						}
 						print "</td>";

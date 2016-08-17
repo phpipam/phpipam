@@ -119,28 +119,26 @@ $colspan_dhcp = 4;
 			# print custom fields
 			if(sizeof($custom_fields) > 0) {
 				foreach($custom_fields as $myField) 					{
-					if(!in_array($myField['name'], $hidden_cfields)) 	{
-						print "<td class='customField hidden-xs hidden-sm hidden-md'>";
+					print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
-						// create html links
-						$n->{$myField['name']} = $Result->create_links($n->{$myField['name']}, $myField['type']);
+					// create html links
+					$n->{$myField['name']} = $Result->create_links($n->{$myField['name']}, $myField['type']);
 
-						//booleans
-						if($myField['type']=="tinyint(1)")	{
-							if($n->{$myField['name']} == "0")		{ print _("No"); }
-							elseif($n->{$myField['name']} == "1")	{ print _("Yes"); }
-						}
-						//text
-						elseif($myField['type']=="text") {
-							if(strlen($n->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
-							else									{ print ""; }
-						}
-						else {
-							print $n->{$myField['name']};
-
-						}
-						print "</td>";
+					//booleans
+					if($myField['type']=="tinyint(1)")	{
+						if($n->{$myField['name']} == "0")		{ print _("No"); }
+						elseif($n->{$myField['name']} == "1")	{ print _("Yes"); }
 					}
+					//text
+					elseif($myField['type']=="text") {
+						if(strlen($n->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $n->{$myField['name']})."'>"; }
+						else									{ print ""; }
+					}
+					else {
+						print $n->{$myField['name']};
+
+					}
+					print "</td>";
 				}
 			}
 

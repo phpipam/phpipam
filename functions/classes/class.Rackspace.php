@@ -157,8 +157,8 @@ class phpipam_rack extends Tools {
      */
     public function fetch_rack_details ($id) {
         // first check all_racks
-        if (isset($this->all_racks->$id)) {
-            return $this->all_racks->$id;
+        if (isset($this->all_racks->{$id})) {
+            return $this->all_racks->{$id};
         }
         else {
             return $this->fetch_object("racks", "id", $id);
@@ -447,7 +447,7 @@ class Model {
         {
             $setter = 'set' . ucfirst($field);
             if (method_exists($this, $setter)) {
-                $this->$setter($value);
+                $this->{$setter}($value);
             }
         }
     }

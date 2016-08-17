@@ -571,20 +571,20 @@ else {
         							print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
         							// create html links
-        							$s->$myField['name'] = $Result->create_links($s->$myField['name'], $myField['type']);
+        							$s->{$myField['name']} = $Result->create_links($s->{$myField['name']}, $myField['type']);
 
         							//booleans
         							if($myField['type']=="tinyint(1)")	{
-        								if($s->$myField['name'] == "0")		{ print _("No"); }
-        								elseif($s->$myField['name'] == "1")	{ print _("Yes"); }
+        								if($s->{$myField['name']} == "0")		{ print _("No"); }
+        								elseif($s->{$myField['name']} == "1")	{ print _("Yes"); }
         							}
         							//text
         							elseif($myField['type']=="text") {
-        								if(strlen($s->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $s->$myField['name'])."'>"; }
+        								if(strlen($s->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $s->{$myField['name']})."'>"; }
         								else											{ print ""; }
         							}
         							else {
-        								print $s->$myField['name'];
+        								print $s->{$myField['name']};
 
         							}
         							print "</td>";

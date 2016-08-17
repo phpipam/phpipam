@@ -79,7 +79,7 @@ if(sizeof($myFields) > 0) {
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
 			if($_POST[$myField['name']]>1) {
-				$$_POST[$myField['name']] = "";
+				$_POST[$myField['name']] = "";
 			}
 		}
 		//not null!
@@ -104,6 +104,15 @@ $values = array("id"=>@$_POST['userId'],
 				"pstn"=>$_POST['pstn'],
 				"pdns"=>$_POST['pdns']
 				);
+# custom fields
+if (sizeof($myFields)>0) {
+    foreach($myFields as $myField) {
+		# replace possible ___ back to spaces!
+		$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
+
+		if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = $_POST[$myField['nameTest']];}
+    }
+}
 # update pass ?
 if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->type=="local")) {
 	$values['password'] = $_POST['password1'];

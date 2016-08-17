@@ -171,8 +171,8 @@ class DNS extends Common_functions {
 			$search = $this->type=="PTR" ? "ptrdname" : "address";
 
 			foreach($result->answer as $mxrr) {
-				if ($mxrr->$search) {
-					return $mxrr->$search;
+				if ($mxrr->{$search}) {
+					return $mxrr->{$search};
 				}
 			}
 		}

@@ -252,7 +252,7 @@ class Scan extends Common_functions {
 		# set method name variable
 		$ping_method = "ping_address_method_".$this->icmp_type;
 		# ping with selected method
-		return $this->$ping_method ($address);
+		return $this->{$ping_method} ($address);
 	}
 
 	/**

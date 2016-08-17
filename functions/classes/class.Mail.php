@@ -129,7 +129,7 @@ class phpipam_mail extends Common_functions {
 	 */
 	public function override_settings($override_settings) {
 		foreach ($override_settings as $k=>$s) {
-			$this->mail_settings->$k = $s;
+			$this->mail_settings->{$k} = $s;
 		}
 	}
 

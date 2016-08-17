@@ -150,12 +150,12 @@ else {
         		print "<tr><td colspan='2'><hr></td></tr>";
         		// fields
         		foreach($cfields as $key=>$field) {
-        			$prefix->$key = str_replace("\n", "<br>",$prefix->$key);
+        			$prefix->{$key} = str_replace("\n", "<br>",$prefix->{$key});
         			// create links
-        			$prefix->$key = $Result->create_links($prefix->$key);
+        			$prefix->{$key} = $Result->create_links($prefix->{$key});
         			print "<tr>";
         			print "	<th>$key</th>";
-        			print "	<td style='vertical-align:top;align:left;'>".$prefix->$key."</td>";
+        			print "	<td style='vertical-align:top;align:left;'>".$prefix->{$key}."</td>";
         			print "</tr>";
         		}
         	}

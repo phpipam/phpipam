@@ -300,7 +300,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         {
             if (method_exists($this, 'set'.ucwords($property))) {
                 $method_name = 'set'.ucwords($property);
-                $this->$method_name($value);
+                $this->{$method_name}($value);
             }
         }
     }
@@ -651,9 +651,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-    
+
         $location = strtolower($location);
-    
+
         if ($location == 'left') {
             $this->_text_h_align = 1;
         }
@@ -691,9 +691,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-    
+
         $location = strtolower($location);
- 
+
         if ($location == 'top') {
             $this->_text_v_align = 0;
         }

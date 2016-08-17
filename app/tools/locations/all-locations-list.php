@@ -84,20 +84,20 @@ else {
     					print "<td class='hidden-xs hidden-sm hidden-md'>";
 
     					// create links
-    					$l->$field['name'] = $Result->create_links ($l->$field['name'], $field['type']);
+    					$l->{$field['name']} = $Result->create_links ($l->{$field['name']}, $field['type']);
 
     					//booleans
     					if($field['type']=="tinyint(1)")	{
-    						if($l->$field['name'] == "0")		{ print _("No"); }
-    						elseif($l->$field['name'] == "1")	{ print _("Yes"); }
+    						if($l->{$field['name']} == "0")		{ print _("No"); }
+    						elseif($l->{$field['name']} == "1")	{ print _("Yes"); }
     					}
     					//text
     					elseif($field['type']=="text") {
-    						if(strlen($l->$field['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $l->$field['name'])."'>"; }
+    						if(strlen($l->{$field['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $l->{$field['name']})."'>"; }
     						else								{ print ""; }
     					}
     					else {
-    						print $l->$field['name'];
+    						print $l->{$field['name']};
 
     					}
     					print "</td>";
