@@ -648,3 +648,22 @@ CREATE TABLE `pstnNumbers` (
 ALTER TABLE `users` ADD `pstn` INT(1)  NULL  DEFAULT '1';
 
 
+
+
+/* VERSION 1.25 */
+UPDATE `settings` set `version` = '1.25';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* update languges */
+UPDATE `lang` SET `l_code` = 'en_GB.UTF8' WHERE `l_code` = 'en';
+UPDATE `lang` SET `l_code` = 'sl_SI.UTF8' WHERE `l_code` = 'sl_SI';
+UPDATE `lang` SET `l_code` = 'fr_FR.UTF8' WHERE `l_code` = 'fr_FR';
+UPDATE `lang` SET `l_code` = 'nl_NL.UTF8' WHERE `l_code` = 'nl_NL';
+UPDATE `lang` SET `l_code` = 'de_DE.UTF8' WHERE `l_code` = 'de_DE';
+UPDATE `lang` SET `l_code` = 'pt_BR.UTF8' WHERE `l_code` = 'pt_BR';
+UPDATE `lang` SET `l_code` = 'es_ES.UTF8' WHERE `l_code` = 'es_ES';
+UPDATE `lang` SET `l_code` = 'cs_CZ.UTF8' WHERE `l_code` = 'cs_CZ';
+UPDATE `lang` SET `l_code` = 'en_US.UTF8' WHERE `l_code` = 'en_US';

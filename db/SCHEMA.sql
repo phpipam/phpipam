@@ -374,15 +374,15 @@ CREATE TABLE `lang` (
 /* insert default values */
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`)
 VALUES
-	(1, 'en', 'English'),
-	(2, 'sl_SI', 'Slovenščina'),
-	(3, 'fr_FR', 'Français'),
-	(4, 'nl_NL','Nederlands'),
-	(5, 'de_DE','Deutsch'),
-	(6, 'pt_BR', 'Brazil'),
-	(7,	'es_ES'	,'Español'),
-	(8, 'cs_CZ', 'Czech'),
-	(9, 'en_US', 'English (US)');
+	(1, 'en_GB.UTF8', 'English'),
+	(2, 'sl_SI.UTF8', 'Slovenščina'),
+	(3, 'fr_FR.UTF8', 'Français'),
+	(4, 'nl_NL.UTF8','Nederlands'),
+	(5, 'de_DE.UTF8','Deutsch'),
+	(6, 'pt_BR.UTF8', 'Brazil'),
+	(7,	'es_ES.UTF8'	,'Español'),
+	(8, 'cs_CZ.UTF8', 'Czech'),
+	(9, 'en_US.UTF8', 'English (US)');
 
 
 # Dump of table vlans
@@ -775,4 +775,4 @@ CREATE TABLE `pstnNumbers` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.24';
+UPDATE `settings` set `version` = '1.25';
