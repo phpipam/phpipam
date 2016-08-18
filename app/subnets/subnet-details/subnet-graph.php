@@ -4,6 +4,7 @@
  * Script to print pie graph for subnet usage
  ********************************************/
 
+
 # get details
 if($slaves) {
     $addresses_slaves = $addresses;
@@ -14,7 +15,7 @@ if($slaves) {
     // loop
     if (isset($Subnets->slaves_full)) {
         // set initial count
-        $cnt_tmp = 0;
+        $cnt_tmp = sizeof($addresses_slaves);
         // loop
         foreach ($Subnets->slaves_full as $ss) {
             if ($ss->isFull==1) {
