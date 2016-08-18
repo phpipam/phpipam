@@ -3041,9 +3041,6 @@ msgstr ""
 msgid "Community"
 msgstr ""
 
-msgid "Timeout"
-msgstr ""
-
 msgid "Queries"
 msgstr ""
 
@@ -3051,9 +3048,6 @@ msgid "Test"
 msgstr ""
 
 msgid "Invalid version"
-msgstr ""
-
-msgid "Invalid port"
 msgstr ""
 
 msgid "Invalid timeout"
@@ -3081,9 +3075,6 @@ msgid "rack"
 msgstr ""
 
 msgid "Size"
-msgstr ""
-
-msgid "Name is mandatory"
 msgstr ""
 
 msgid "Invalid rack size"
@@ -3173,5 +3164,122 @@ msgstr ""
 msgid "Failed to import entry"
 msgstr ""
 
-msgid "No entries available"
+
+### 1.24.001
+
+msgid "Manage your account"
+msgstr ""
+
+msgid "Number of VRFs"
+msgstr ""
+
+msgid "Inactive hosts"
+msgstr ""
+
+msgid "Inactive Hosts"
+msgstr ""
+
+msgid "List of inactive hosts"
+msgstr ""
+
+msgid "No inactive hosts found"
+msgstr ""
+
+msgid "Threshold"
+msgstr ""
+
+msgid "Usage"
+msgstr ""
+
+msgid "List of thresholded subnets"
+msgstr ""
+
+msgid "All configured devices"
+msgstr ""
+
+msgid "Scanned networks"
+msgstr ""
+
+msgid "List of subnets to be scanned for online hosts and detect new hosts"
+msgstr ""
+
+msgid "Table of all subnet masks with different representations"
+msgstr ""
+
+msgid "Racks"
+msgstr ""
+
+msgid "Rack information"
+msgstr ""
+
+msgid "All tools"
+msgstr ""
+
+msgid "PSTN prefixes"
+msgstr ""
+
+msgid "Add prefix"
+msgstr ""
+
+msgid "NAT translations"
+msgstr ""
+
+msgid Source objects"
+msgstr ""
+
+msgid "Add new object"
+msgstr ""
+
+msgid "Destination objects"
+msgstr ""
+
+msgid "Src Port"
+msgstr ""
+
+msgid "Source Port"
+msgstr ""
+
+msgid "Dst Port"
+msgstr ""
+
+msgid "Destination Port"
+msgstr ""
+
+msgid "Location"
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "List of all locations"
+msgstr ""
+
+msgid "Map"
+msgstr ""
+
+msgid "Objects"
+msgstr ""
+
+msgid "Address"
+msgstr ""
+
+msgid "Set Location name"
+msgstr ""
+
+msgid "Location address"
+msgstr ""
+
+msgid "Latitude"
+msgstr ""
+
+msgid "Longitude"
+msgstr
+
+msgid "Utilization"
+msgstr ""
+
+msgid "Belonging prefixes"
+msgstr ""
+
+msgid "Belonging Numbers"
 msgstr ""

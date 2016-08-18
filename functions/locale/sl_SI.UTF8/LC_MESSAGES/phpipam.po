@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.2.000\n"
+# "Project-Id-Version: 1.25.001\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2015-10-07 14:33+0200\n"
@@ -1200,7 +1200,7 @@ msgstr "Ne morem"
 
 #: site/ipaddr/modifyIpAddressCheck.php:149
 msgid "Range"
-msgstr "razpona"
+msgstr "Razpon"
 
 #: site/ipaddr/modifyIpAddressCheck.php:149
 msgid "updated successfully"
@@ -6117,7 +6117,7 @@ msgid "No agents available"
 msgstr "Ni razpoložjivih agentov"
 
 msgid "phpipam Scan agents"
-msgstr "phpipam scan agenti"
+msgstr "phpipam agenti za skeniranje omrežij"
 
 msgid "Create new agent"
 msgstr "Ustvari novega agenta"
@@ -6219,4 +6219,280 @@ msgid "Please select fields to populate:"
 msgstr ""
 
 msgid "fill"
-msgstr ""
+msgstr "napolni"
+
+msgid "Propagate changes"
+msgstr "Propagiraj spremembe"
+
+msgid "Apply changes to underlying subnets"
+msgstr "Uvedi spremembe v podležnih omrežjih"
+
+msgid "SNMP module"
+msgstr "SNMP modul"
+
+msgid "Enable or disable multicast module"
+msgstr "Omogoči multicast modul"
+
+msgid "Multicast module"
+msgstr "Multicast modul"
+
+msgid "Enable or disable SNMP module for devices"
+msgstr "Omogoči SNMP modul za naprave"
+
+msgid "Threshold module"
+msgstr "Threshold modul"
+
+msgid "Enable or disable threshold module"
+msgstr "Omogoči threshold modul"
+
+msgid "Rack module"
+msgstr "Rack modul"
+
+msgid "Enable or disable rack drawing module"
+msgstr "Omogoči rack modul za izris omrežnih omar"
+
+msgid "Rack management"
+msgstr "Upravljanje Rackov"
+
+msgid "Community"
+msgstr "Community"
+
+msgid "Queries"
+msgstr "Poizvedbe"
+
+msgid "Test"
+msgstr "Test"
+
+msgid "Invalid version"
+msgstr "Neveljavna verzija"
+
+msgid "Invalid timeout"
+msgstr "Neveljaven timeout"
+
+msgid "Invalid device"
+msgstr "Neveljavna naprava"
+
+msgid "Invalid method"
+msgstr "Neveljavna metoda"
+
+msgid "No queries"
+msgstr "Ni querijev"
+
+msgid "SNMP edit failed"
+msgstr "SNMP urejanje ni uspelo"
+
+msgid "SNMP edit successfull"
+msgstr "SNMP urejanje uspešno"
+
+msgid "Invalid device IP address"
+msgstr "Neveljaven IP naslov naprave"
+
+msgid "rack"
+msgstr "omara"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "Invalid rack size"
+msgstr "Neveljavna velikost"
+
+msgid "Invalid rack identifier"
+msgstr "Neveljaven ID"
+
+msgid "Rack does not exist"
+msgstr "Omara ne obstaja"
+
+msgid "Rack add successfull"
+msgstr "Omara dodana"
+
+msgid "Rack edit successfull"
+msgstr "Omara urejena"
+
+msgid "Rack delete successfull"
+msgstr "Omara izbrisana"
+
+msgid "Failed to remove device from rack"
+msgstr "Naprave ni bilo mogoče odstraniti iz omare"
+
+msgid "Device removed from rack"
+msgstr "Naprava odstranjena iz omare"
+
+msgid "device to rack"
+msgstr "napravo v omaro"
+
+msgid "No devices available"
+msgstr "Ni razpoložljivih naprav"
+
+msgid "Position"
+msgstr "Pozicija"
+
+msgid "Start position"
+msgstr "Začetna pozicija"
+
+msgid "Rack size in U"
+msgstr "Velikost omare v U"
+
+msgid "Invalid start value"
+msgstr "Neveljavna vrednost začetka"
+
+msgid "Invalid size value"
+msgstr "Neveljavna velikost"
+
+msgid "Invalid rack position (overflow)"
+msgstr "Neveljavna pozicija omare (overflow)"
+
+msgid "Failed to add device to rack"
+msgstr "Napaka pri dodajanju naprave v omaro"
+
+msgid "Device added to rack"
+msgstr "Naprava dodana v omaro"
+
+msgid "SNMP queries"
+msgstr "SNMP poizvedbe"
+
+msgid "Create SNMP query"
+msgstr "Ustvari SNMP poizvedbo"
+
+msgid "Method"
+msgstr "Metoda"
+
+msgid "No SNMP queries available"
+msgstr "No voljo ni nov=bene SNMP poizvedbe"
+
+msgid "edit snmp details"
+msgstr "uredi snmp detajle"
+
+msgid "remove snmp"
+msgstr "odstrani snmp"
+
+msgid "No devices for SNMP route table query available"
+msgstr "Ni naprav za snmp poizvedbe"
+
+msgid "No new subnets found"
+msgstr "Ni novih omrežij"
+
+msgid "SNMP module disbled"
+msgstr "SNMP modul onemogočen"
+
+msgid "No devices for SNMP ARP query available"
+msgstr "Ni naprav za SNMP poizvedbo"
+
+msgid "Failed to import entry"
+msgstr "Napaka pri uvozu"
+
+msgid "Manage your account"
+msgstr "Upravljaj s svojim uporabniškim računom"
+
+msgid "Number of VRFs"
+msgstr "Število VRF"
+
+msgid "Inactive hosts"
+msgstr "Neaktivni IPji"
+
+msgid "Inactive Hosts"
+msgstr "Neaktivni IPji"
+
+msgid "List of inactive hosts"
+msgstr "Seznam neaktivnih IPjev"
+
+msgid "No inactive hosts found"
+msgstr "Ni neaktivnih IPjev"
+
+msgid "Threshold"
+msgstr "Threshold"
+
+msgid "Usage"
+msgstr "Poraba"
+
+msgid "List of thresholded subnets"
+msgstr "Seznam omrežij ki imajo določen prag porabe"
+
+msgid "All configured devices"
+msgstr "Vse naprave"
+
+msgid "Scanned networks"
+msgstr "Skenirana Omrežja"
+
+msgid "List of subnets to be scanned for online hosts and detect new hosts"
+msgstr "Seznam omrežjij, označenih za preverbo novih naprav in preverbo statusa"
+
+msgid "Table of all subnet masks with different representations"
+msgstr "Tabela vseh omrežnih mask"
+
+msgid "Racks"
+msgstr "Omare"
+
+msgid "Rack information"
+msgstr "Podatki o omrežni omari"
+
+msgid "All tools"
+msgstr "Vsa orodja"
+
+msgid "PSTN prefixes"
+msgstr "PSTN prefiksi"
+
+msgid "Add prefix"
+msgstr "Ustvari prefiks"
+
+msgid "NAT translations"
+msgstr "NAT translacije"
+
+msgid "Source objects"
+msgstr "Izvorni objekti"
+
+msgid "Add new object"
+msgstr "Dodaj nov objekt"
+
+msgid "Destination objects"
+msgstr "Ponorni objekti"
+
+msgid "Src Port"
+msgstr "Izvorna vrata"
+
+msgid "Source Port"
+msgstr "Izvorna vrata"
+
+msgid "Dst Port"
+msgstr "Ponorna vrata"
+
+msgid "Destination Port"
+msgstr "Ponorna vrata"
+
+msgid "Location"
+msgstr "Lokacija"
+
+msgid "Locations"
+msgstr "Lokacije"
+
+msgid "List of all locations"
+msgstr "Seznam vseh lokacij"
+
+msgid "Map"
+msgstr "Zemljevid"
+
+msgid "Objects"
+msgstr "Objekti"
+
+msgid "Address"
+msgstr "Naslov"
+
+msgid "Set Location name"
+msgstr "Ime lokacije"
+
+msgid "Location address"
+msgstr "Naslov lokacije"
+
+msgid "Latitude"
+msgstr "Širina"
+
+msgid "Longitude"
+msgstr "Dolžina"
+
+msgid "Utilization"
+msgstr "Utilizacija"
+
+msgid "Belonging prefixes"
+msgstr "Pripadajoči prefiksi"
+
+msgid "Belonging Numbers"
+msgstr "Pripadajoče številke"
