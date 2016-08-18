@@ -3283,3 +3283,62 @@ msgstr ""
 
 msgid "Belonging Numbers"
 msgstr ""
+
+
+
+msgid "Manage user authentication methods and servers"
+msgstr ""
+
+msgid "Set mail parameters and mail server settings"
+msgstr ""
+
+msgid "PowerDNS settings"
+msgstr ""
+
+msgid "DHCP settings"
+msgstr ""
+
+msgid "Manage languages"
+msgstr ""
+
+msgid "Manage widget settings"
+msgstr ""
+
+msgid "Tags"
+msgstr ""
+
+msgid "Manage tags"
+msgstr ""
+
+msgid "Set phpipam instructions for end users"
+msgstr ""
+
+msgid "NAT settings"
+msgstr ""
+
+msgid "Firewall zone management"
+msgstr ""
+
+msgid "RIPE import"
+msgstr ""
+
+msgid "Import subnets from RIPE"
+msgstr ""
+
+msgid "Select which default address fields to display"
+msgstr ""
+
+msgid "Manage custom fields"
+msgstr ""
+
+msgid "Check for latest version of phpipam"
+msgstr ""
+
+msgid "Verify that database files are installed ok"
+msgstr ""
+
+msgid "Search and replace content in database"
+msgstr ""
+
+
+

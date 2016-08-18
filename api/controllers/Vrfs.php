@@ -221,7 +221,7 @@ class Vrfs_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "VRF creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "data"=>"VRF created", "location"=>"/api/".$this->_params->app_id."/vrfs/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"VRF created", "location"=>"/api/".$this->_params->app_id."/vrfs/".$this->Admin->lastId."/");
 		}
 	}
 
@@ -253,7 +253,7 @@ class Vrfs_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Vrf edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>"VRF updated");
+			return array("code"=>200, "message"=>"VRF updated");
 		}
 	}
 
@@ -284,7 +284,7 @@ class Vrfs_controller extends Common_api_functions {
 			$this->Admin->remove_object_references ("subnets", "vrfId", $this->_params->id);
 
 			// set result
-			return array("code"=>200, "data"=>"VRF deleted");
+			return array("code"=>200, "message"=>"VRF deleted");
 		}
 	}
 

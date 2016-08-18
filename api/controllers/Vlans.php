@@ -232,7 +232,7 @@ class Vlans_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Vlan creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "data"=>"Vlan created", "location"=>"/api/".$this->_params->app_id."/vlans/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"Vlan created", "location"=>"/api/".$this->_params->app_id."/vlans/".$this->Admin->lastId."/");
 		}
 	}
 
@@ -264,7 +264,7 @@ class Vlans_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Vlan edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>"Vlan updated");
+			return array("code"=>200, "message"=>"Vlan updated");
 		}
 	}
 
@@ -296,7 +296,7 @@ class Vlans_controller extends Common_api_functions {
 			$this->Admin->remove_object_references ("subnets", "vlanId", $this->_params->id);
 
 			// set result
-			return array("code"=>200, "data"=>"Vlan deleted");
+			return array("code"=>200, "message"=>"Vlan deleted");
 		}
 	}
 

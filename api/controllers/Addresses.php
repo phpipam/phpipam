@@ -384,10 +384,10 @@ class Addresses_controller extends Common_api_functions  {
 		else {
     		//set result
     		if($this->_params->id=="first_free")   {
-        	    return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "ip"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
+        	    return array("code"=>201, "message"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "ip"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
     		}
     		else {
-        	    return array("code"=>201, "data"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+        	    return array("code"=>201, "message"=>"Address created", "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
     		}
 		}
 	}
@@ -430,7 +430,7 @@ class Addresses_controller extends Common_api_functions  {
 		}
 		else {
 			//set result
-			return array("code"=>200, "data"=>"Address updated");
+			return array("code"=>200, "message"=>"Address updated");
 		}
 
 	}
@@ -486,7 +486,7 @@ class Addresses_controller extends Common_api_functions  {
 													{ $this->Response->throw_exception(500, "Failed to delete address"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>"Address deleted");
+			return array("code"=>200, "message"=>"Address deleted");
 		}
 
 	}

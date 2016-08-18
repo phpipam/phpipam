@@ -1,4 +1,4 @@
-== 1.24.11
+== 1.24.20
 
     New features:
     ------------
@@ -33,6 +33,7 @@
         + Automatically added nameservers to subnet results;
         + Added subnet usage result for each subnet in section;
         + Added custom fields for all controllers;
+        + New subnets automatically get parent permissions;
         + New methods:
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)
@@ -46,6 +47,8 @@
                 GET    /subnets/{id}/first_subnet/{mask}/     // returns first available subnets with specified mask
                 GET    /subnets/{id}/all_subnets/{mask}/      // returns all available subnets with specified mask
                 POST   /subnets/{id}/first_subnet/{mask}/     // creates first free subnet under master with specified mask
+                DELETE /subnets/{id}/permissions/             // removes permissions
+                PATCH  /subnets/{id}/permissions/             // sets subnet permissions (?grouname1=ro&groupname2=3&43=1)
         + New subcontrollers:
             + /tools/nat/
             + /tools/racks/

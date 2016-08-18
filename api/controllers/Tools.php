@@ -457,7 +457,7 @@ class Tools_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, $table_name." object edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>$table_name." object updated");
+			return array("code"=>200, "message"=>$table_name." object updated");
 		}
 	}
 
@@ -496,7 +496,7 @@ class Tools_controller extends Common_api_functions {
 			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->id2);
 
 			// set result
-			return array("code"=>200, "data"=>$this->_params->id." object deleted");
+			return array("code"=>200, "message"=>$this->_params->id." object deleted");
 		}
 	}
 

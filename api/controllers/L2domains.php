@@ -197,7 +197,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "data"=>"L2 domain created", "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"L2 domain created", "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
 		}
 	}
 
@@ -225,7 +225,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>"L2 domain updated");
+			return array("code"=>200, "message"=>"L2 domain updated");
 		}
 	}
 
@@ -257,7 +257,7 @@ class L2domains_controller extends Common_api_functions {
 			$this->Admin->update_object_references ("vlans", "domainId", $this->_params->id, 1);
 
 			// set result
-			return array("code"=>200, "data"=>"L2 domain deleted and vlans migrated to default domain");
+			return array("code"=>200, "message"=>"L2 domain deleted and vlans migrated to default domain");
 		}
 	}
 

@@ -581,6 +581,24 @@ class Common_api_functions {
 	}
 
 	/**
+	 * Returns array of possible permissions
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_possible_permissions () {
+		// set
+		$permissions = array(
+    		            "na"=>0,
+    		            "ro"=>1,
+    		            "rw"=>2,
+    		            "rwa"=>3
+                        );
+        // return
+		return $permissions;
+	}
+
+	/**
 	 * This method removes all folders if controller is subnets
 	 *
 	 * @access protected
@@ -730,7 +748,6 @@ class Common_api_functions {
 				}
 			}
 		}
-
 
 		# result
 		return $result_remapped;
