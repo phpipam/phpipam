@@ -150,6 +150,7 @@ class Subnets_controller extends Common_api_functions {
     		$this->_params->mask = $subnet_tmp[1];
     		$this->_params->sectionId = $master->sectionId;
     		$this->_params->masterSubnetId = $master->id;
+    		$this->_params->permissions = $master->permissions;
     		unset($this->_params->id2, $this->_params->id3);
             // description
             if(!isset($this->_params->description))    { $this->_params->description = "API autocreated"; }
@@ -791,6 +792,8 @@ class Subnets_controller extends Common_api_functions {
 					if(!$this->Subnets->verify_subnet_nesting ($this->_params->masterSubnetId, $this->_params->subnet."/".$this->_params->mask))
 																									{ $this->Response->throw_exception(400, "Subnet is not within boundaries of its master subnet"); }
 				}
+				// set permissions
+				$this->_params->permissions = $master_subnet->permissions;
 			}
 		}
 	}
@@ -806,7 +809,14 @@ class Subnets_controller extends Common_api_functions {
 		if(!isset($this->_params->sectionId))														{ $this->Response->throw_exception(400, "Invalid Section (".$this->_params->sectionId.")"); }
 		elseif(!is_numeric($this->_params->sectionId))												{ $this->Response->throw_exception(400, "Section Id must be numeric (".$this->_params->sectionId.")"); }
 		else {
-			if($this->Tools->fetch_object("sections", "id", $this->_params->sectionId)===false)		{ $this->Response->throw_exception(400, "Section id (".$this->_params->sectionId.") does not exist"); }
+    		$master = $this->Tools->fetch_object("sections", "id", $this->_params->sectionId);
+			if($master===false)		{ $this->Response->throw_exception(400, "Section id (".$this->_params->sectionId.") does not exist"); }
+			else {
+    			// inherit permissions from section
+    			if($this->_params->masterSubnetId == 0) {
+        			$this->_params->permissions = $master->permissions;
+    			}
+			}
 		}
 	}
 
