@@ -39,6 +39,7 @@ else {
     print " <th>"._('Objects')."</th>";
     print " <th>"._('Description')."</th>";
     print " <th>"._('Address')."</th>";
+    print " <th>"._('Coordinates')."</th>";
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_custom_fields)) {
@@ -67,16 +68,19 @@ else {
             $cnt = $Tools->fetch_location_objects ($l->id, true);
             $cnt = $cnt[0]->cnt;
 
-            // fix
-            $l->lat = strlen($l->lat)>0 ? $l->lat : "<span class='text-muted'>/</span>";
-            $l->long = strlen($l->long)>0 ? $l->long : "<span class='text-muted'>/</span>";
-
             // print
             print "<tr>";
             print " <td><strong><a href='".create_link("tools", "locations", $l->id)."'>$l->name</strong></a></td>";
             print " <td><span class='badge badge1 badge5'>$cnt "._('objects')."</span></td>";
+            // description
+            $l->description = strlen($l->description)==0 ? "/" : $l->description;
             print " <td><span class='text-muted'>$l->description</span></td>";
-            print " <td>$l->address</td>";
+            // address
+            $l->address = strlen($l->address)==0 ? "/" : $l->address;
+            print "<td>$l->address</td>";
+            // coordinates
+            if(strlen($l->lat)>0 || strlen($l->long)==0) { print "<td><span class='text-muted'>$l->lat / $l->long</span></td>"; }
+            else                                         { print "<td>".$Result->show("warning", _("Location not set"), false, false, true)."</td>"; }
     		//custom
     		if(sizeof($custom) > 0) {
     			foreach($custom as $field) {

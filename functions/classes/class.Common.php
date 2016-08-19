@@ -1035,6 +1035,41 @@ class Common_functions  {
 		else							{ return "JSON_ERROR_UNKNOWN"; }
 	}
 
+	/**
+	 * Fetches latlng from googlemaps by provided address
+	 *
+	 * @access public
+	 * @param mixed $address
+	 * @return void
+	 */
+	public function get_latlng_from_address ($address) {
+        // replace spaces
+        $address = str_replace(' ','+',$address);
+        // get grocode
+        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+        $output= json_decode($geocode);
+        // return result
+        return array("lat"=>$output->results[0]->geometry->location->lat, "lng"=>$output->results[0]->geometry->location->lng);
+	}
+
+    /**
+     * Updates location to latlng from address
+     *
+     * @access public
+     * @param mixed $id
+     * @param mixed $lat
+     * @param mixed $lng
+     * @return void
+     */
+    public function update_latlng ($id, $lat, $lng) {
+		# execute
+		try { $this->Database->updateObject("locations", array("id"=>$id, "lat"=>$lat, "long"=>$lng), "id"); }
+		catch (Exception $e) {
+			return false;
+		}
+		return true;
+    }
+
     /**
      * Creates form input field for custom fields.
      *

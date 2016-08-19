@@ -64,7 +64,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Description'); ?></th>
         	<td colspan="2">
-            	<textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $location->description; ?></textarea>
+            	<textarea class="form-control input-sm" name="description" placeholder='<?php print _('Description'); ?>' <?php print $readonly; ?>><?php print $location->description; ?></textarea>
         	</td>
         </tr>
 

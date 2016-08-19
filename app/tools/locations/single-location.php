@@ -49,11 +49,27 @@ else {
             	print "	<td><strong>$location->name</strong></td>";
             	print "</tr>";
 
-            	# lat
+            	# address
             	print "<tr>";
             	print "	<th>"._('Address')."</th>";
-            	print "	<td>$location->address</td>";
+            	print "	<td>";
+            	print strlen($location->address)>0 ? $location->address : "/";
+            	print "</td>";
             	print "</tr>";
+
+            	print "<tr>";
+            	print "	<th>"._('Coordinates')."</th>";
+            	print "	<td>";
+            	print strlen($location->lat)>0 && strlen($location->long)>0 ? "<span class='text-muted'>".$location->lat." / ".$location->long."</span>" : "/";
+            	print "</td>";
+            	print "</tr>";
+
+            	if(strlen($location->lat)==0 || strlen($location->long)==0) {
+                	print "<tr>";
+                	print "	<th></th>";
+                	print "	<td>".$Result->show("warning", _('Location not set'), false, false, true)."</td>";
+                	print "</tr>";
+            	}
 
             	# description
             	print "<tr>";
