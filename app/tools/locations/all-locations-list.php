@@ -26,7 +26,7 @@ if ($User->settings->enableLocations!="1") {
 }
 else {
     # fetch all locations
-    $all_locations = $Tools->fetch_all_objects("locations", "id");
+    $all_locations = $Tools->fetch_all_objects("locations", "name");
 
     $colspan = $admin ? 5 : 4;
 
