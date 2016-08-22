@@ -670,3 +670,6 @@ UPDATE `lang` SET `l_code` = 'en_US.UTF8' WHERE `l_code` = 'en_US';
 
 /* location to addresses */
 ALTER TABLE `ipaddresses` ADD `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL;
+
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Locations', 'Shows map of locations', 'locations', NULL, 'no', '6', 'no', 'yes');
+
