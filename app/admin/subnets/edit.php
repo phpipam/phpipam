@@ -91,7 +91,7 @@ if(isset($_POST['vlanId'])) {
 
 # all locations
 if($User->settings->enableLocations=="1")
-$locations = $Tools->fetch_all_objects ("locations");
+$locations = $Tools->fetch_all_objects ("locations", "name");
 
 # set readonly flag
 $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : false;

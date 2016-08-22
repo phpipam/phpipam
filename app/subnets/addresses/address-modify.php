@@ -106,7 +106,7 @@ if ($act=="add" && $User->settings->enableMulticast==1) {
 
 # all locations
 if($User->settings->enableLocations=="1")
-$locations = $Tools->fetch_all_objects ("locations");
+$locations = $Tools->fetch_all_objects ("locations", "name");
 
 ?>
 
