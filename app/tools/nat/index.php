@@ -41,7 +41,8 @@ else {
     print "<tr>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Type')."</th>";
-    print " <th colspan='3'>"._('Translation')."</th>";
+    print " <th colspan='2'>"._('Translation')."</th>";
+    print " <th></th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
