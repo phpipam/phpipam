@@ -28,6 +28,7 @@ CREATE TABLE `ipaddresses` (
   `owner` varchar(32) DEFAULT NULL,
   `state`  INT(3)  NULL  DEFAULT '2',
   `switch` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `port` varchar(32) DEFAULT NULL,
   `note` text,
   `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01',

@@ -126,6 +126,30 @@ if(sizeof($address)>1) {
     	print "</tr>";
     	}
 
+
+    	if($User->settings->enableLocations=="1") { ?>
+    	<tr>
+    		<th><?php print _('Location'); ?></th>
+    		<td>
+    		<?php
+
+    		// Only show nameservers if defined for subnet
+    		if(!empty($address['location']) && $address['location']!=0) {
+    			# fetch recursive nameserver details
+    			$location2 = $Tools->fetch_object("locations", "id", $address['location']);
+                if($location2!==false) {
+                    print "<a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "location")."'>$location2->name</a>";
+                }
+    		}
+
+    		else {
+    			print "<span class='text-muted'>/</span>";
+    		}
+    		?>
+    		</td>
+    	</tr>
+        <?php }
+
     	# port
     	if(in_array('port', $selected_ip_fields)) {
     	print "<tr>";

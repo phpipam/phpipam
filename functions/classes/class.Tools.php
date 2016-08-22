@@ -2571,6 +2571,11 @@ class Tools extends Common_functions {
                         FROM subnets s
                         JOIN locations l
                         ON s.location = l.id
+                        UNION ALL
+                        SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.dns_name as description
+                        FROM ipaddresses a
+                        JOIN locations l
+                        ON a.location = l.id
                         )
                         as linked where location = ?;";
 

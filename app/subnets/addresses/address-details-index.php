@@ -104,6 +104,10 @@ if(sizeof($address)>1) {
     $active = @$_GET['tab']=="multicast" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "multicast")."'>"._("Multicast")."</a></li>";
     }
+    if($User->settings->enableLocations==1) {
+    $active = @$_GET['tab']=="location" ? "active" : "";
+    print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "location")."'>"._("Location")."</a></li>";
+    }
     $active = @$_GET['tab']=="changelog" ? "active" : "";
     print " <li role='presentation' class='$active'><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "changelog")."'>"._("Changelog")."</a></li>";
     print "</ul>";
@@ -133,6 +137,9 @@ if(sizeof($address)>1) {
     if(@$_GET['tab']=="multicast")
 	include("address-details/address-details-multicast.php");
     }
+
+    if(@$_GET['tab']=="location")
+    include("address-details/address-details-location.php");
 
     // changelog
     if(@$_GET['tab']=="changelog")

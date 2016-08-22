@@ -1,5 +1,7 @@
+<?php if(!isset($hide_title)) { ?>
 <h4><?php print _('Location details'); ?></h4>
 <hr>
+<?php } ?>
 <?php
 
 /**
@@ -36,7 +38,10 @@ else {
             print "<div class='col-xs-12 col-sm-12 col-md-6 col-lg-5'>";
 
                 print "<div class='btn-group'>";
+                if(!isset($hide_title))
                 print "<a href='".create_link("tools", "locations")."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('Locations')."</a>";
+                else
+                print "<a href='".create_link("tools", "locations")."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-map'></i> ". _('Locations')."</a>";
                 print "</div>";
                 print "<br>";
 
@@ -136,9 +141,14 @@ else {
                     	// print objects
                     	if(sizeof($ob)>0) {
                         	foreach ($ob as $o) {
+                            	// fetch subnet
+                            	if($o->type=="addresses") {
+                                	$subnet = $Tools->fetch_object ("subnets", "id", $o->sectionId);
+                            	}
                             	// link
                             	if($o->type=="devices")     { $href = create_link("tools", "devices", $o->id); }
                             	elseif($o->type=="subnets") { $href = create_link("subnets", $o->sectionId, $o->id); }
+                            	elseif($o->type=="addresses") { $href = create_link("subnets", $subnet->sectionId, $subnet->id, "address-details", $o->id); }
                             	else                        { $href = create_link("tools", "racks", $o->id); }
 
                             	// description
@@ -146,6 +156,10 @@ else {
 
                             	// subnet name
                             	if ($o->type=="subnets")    $o->name = $Tools->transform_address ($o->name,"dotted").".".$o->mask;
+
+                            	// to ip
+                            	if($o->type=="addresses")
+                            	$o->name = $Tools->transform_address ($o->name, "dotted");
 
                                 print "<a class='btn btn-xs btn-danger removeLocationObject' data-object-id='$o->id' rel='tooltip' title='"._("Remove")."'><i class='fa fa-times'></i></a> ";
                                 print "<a href='$href'>$o->name</a> $o->description";
