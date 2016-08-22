@@ -40,9 +40,6 @@ else {
     # no long/lat
     if( (strlen($location->long)>0 && strlen($location->lat))) {
     ?>
-
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
-    <script type="text/javascript" src="js/1.2/gmaps.js"></script>
     <script type="text/javascript">
         $(document).ready(function() {
 

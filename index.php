@@ -109,6 +109,10 @@ else {
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->
+    <?php if ($User->settings->enableLocations=="1") { ?>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
+    <script type="text/javascript" src="js/1.2/gmaps.js"></script>
+    <?php }	?>
 </head>
 
 <!-- body -->

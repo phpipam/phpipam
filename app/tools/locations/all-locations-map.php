@@ -1,5 +1,7 @@
+<?php if(@$title!==false) { ?>
 <h4><?php print _('Locations Map'); ?></h4>
 <hr>
+<?php } ?>
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
 <div class="btn-group">
@@ -28,7 +30,7 @@ if ($User->settings->enableLocations!="1") {
 }
 else {
     # fetch all locations
-    $all_locations = $Tools->fetch_all_objects("locations", "id");
+    $all_locations = $Tools->fetch_all_objects("locations", "name");
 
     # if none than print
     if($all_locations===false) {
@@ -68,9 +70,6 @@ else {
 
         // calculate
         if (sizeof($all_locations)>0) { ?>
-
-            <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
-            <script type="text/javascript" src="js/1.2/gmaps.js"></script>
             <script type="text/javascript">
                 $(document).ready(function() {
                     // init gmaps
@@ -100,8 +99,11 @@ else {
                     ?>
 
                     // fit zoom
+                    <?php if(sizeof($all_locations)>1) { ?>
                     map.fitZoom();
+                    <?php } ?>
                     // resize map function
+                    <?php if(!isset($height)) { ?>
                     function resize_map () {
                         var heights = window.innerHeight - 320;
                         $('#map_overlay').css("height", heights+"px");
@@ -111,10 +113,11 @@ else {
                     window.onresize = function() {
                         resize_map();
                     };
+                    <?php } ?>
                 });
             </script>
 
-            <div style="width:100%; height:1000px;" id="map_overlay">
+            <div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
             	<div id="gmap" style="width:100%; height:100%;"></div>
             </div>
 
