@@ -37,12 +37,6 @@ else {
         $Result->show("info","No Locations configured", false);
     }
     else {
-
-        # sensor check
-        if(isset($gmaps_api_key)) {
-            $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
-        }
-
         // get all
         foreach ($all_locations as $k=>$l) {
             // map used
@@ -107,7 +101,6 @@ else {
                     function resize_map () {
                         var heights = window.innerHeight - 320;
                         $('#map_overlay').css("height", heights+"px");
-
                     }
                     resize_map();
                     window.onresize = function() {

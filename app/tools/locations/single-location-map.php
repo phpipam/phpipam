@@ -17,12 +17,6 @@ if($location===false) {
     $Result->show("info","Invalid location", false);
 }
 else {
-
-    # sensor check
-    if(isset($gmaps_api_key)) {
-        $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
-    }
-
     // recode
     if (strlen($location->long)==0 && strlen($location->lat)==0 && strlen($location->address)>0) {
         $latlng = $Tools->get_latlng_from_address ($location->address);

@@ -110,6 +110,12 @@ else {
 	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->
     <?php if ($User->settings->enableLocations=="1") { ?>
+    <?php
+    # API key check
+    if(isset($gmaps_api_key)) {
+        $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
+    }
+    ?>
     <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
     <script type="text/javascript" src="js/1.2/gmaps.js"></script>
     <?php }	?>
