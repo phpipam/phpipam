@@ -74,7 +74,6 @@ if ($domains === false) {$Result->show("info alert-absolute", _("No domains conf
 <!-- domains -->
 <?php
 /* prints domain records */
-<<<<<<< HEAD
 foreach ($domains as $d) {
 	// nulls
 	foreach($d as $k=>$v) {
@@ -89,12 +88,15 @@ foreach ($domains as $d) {
 
 	print "<tr>";
 	// actions
-	print "	<td>";
-	print "	<div class='btn-group'>";
-	print "		<button class='btn btn-default btn-xs editDomain' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-	print "		<button class='btn btn-default btn-xs editDomain' data-action='delete' data-id='$d->id'><i class='fa fa-remove'></i></button>";
-	print "	</div>";
-	print "	</td>";
+    if ($User->is_admin(false)) {
+        // actions
+        print "	<td>";
+        print "	<div class='btn-group'>";
+        print "		<button class='btn btn-default btn-xs editDomain' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
+        print "		<button class='btn btn-default btn-xs editDomain' data-action='delete' data-id='$d->id'><i class='fa fa-remove'></i></button>";
+        print "	</div>";
+        print "	</td>";
+    }
 
 	// content
 	print "	<td><a href='".create_link("administration", "powerDNS", $_GET['subnetId'], "records", $d->name)."'>$d->name</a></td>";
@@ -105,45 +107,8 @@ foreach ($domains as $d) {
 
 	print "</tr>";
 }
+
 ?>
-=======
-    foreach ($domains as $d) {
-        // nulls
-        foreach ($d as $k => $v) {
-            if (strlen($v) == 0) {
-                $d->$k = "<span class='muted'>/</span>";
-            }
-
-        }
-        // cont records
-        $cnt = $PowerDNS->count_domain_records($d->id);
-        // get SOA record
-        $soa = $PowerDNS->fetch_domain_records_by_type($d->id, "SOA");
-        $serial = explode(" ", $soa[0]->content);
-        $serial = $serial[2];
-
-        print "<tr>";
-        if ($User->is_admin(false)) {
-            // actions
-            print "	<td>";
-            print "	<div class='btn-group'>";
-            print "		<button class='btn btn-default btn-xs editDomain' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-            print "		<button class='btn btn-default btn-xs editDomain' data-action='delete' data-id='$d->id'><i class='fa fa-remove'></i></button>";
-            print "	</div>";
-            print "	</td>";
-        }
-
-        // content
-        print "	<td><a href='" . create_link("administration", "powerDNS", $_GET['subnetId'], "records", $d->name) . "'>$d->name</a></td>";
-        print "	<td><span class='badge badge1'>$d->type</span></td>";
-        print "	<td>$d->master</td>";
-        print "	<td><span class='badge'>$cnt</span></td>";
-        print "	<td>$serial</td>";
-
-        print "</tr>";
-    }
-    ?>
->>>>>>> 70042276c0b281e70546cf3ff06d2fef7a78a73b
 </tbody>
 </table>
 <?php }?>
