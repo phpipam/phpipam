@@ -80,12 +80,15 @@ else {
                     <?php
                     $html = array();
                     foreach ($all_locations as $location) {
+                        // description fix
+                        $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>$location->description</span>" : "";
+
                         $html[] = "map.addMarker({";
                         $html[] = " title: '$location->name',";
                         $html[] = " lat: '$location->lat',";
                         $html[] = " lng: '$location->long',";
                         $html[] = " infoWindow: {";
-                        $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>$location->name</a></h5>, <span class=\'text-muted\'>$location->description</span>'";
+                        $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>$location->name</a></h5>$location->description'";
                         $html[] = "}";
                         $html[] = "});";
                     }
