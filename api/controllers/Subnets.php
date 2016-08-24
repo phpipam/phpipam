@@ -614,7 +614,8 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function subnet_usage () {
 		# check that section exists
-		if($subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id)===false)
+		$subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id);
+		if($subnet===false)
 														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
 
 		# set slaves
