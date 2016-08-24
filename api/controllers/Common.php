@@ -243,6 +243,8 @@ class Common_api_functions {
 	/**
 	 * Validates filter_by
 	 *
+	 *  Takes first result, checks all keys against provided filter_by value
+	 *
 	 * @access protected
 	 * @param mixed $result
 	 * @return void
@@ -253,11 +255,17 @@ class Common_api_functions {
 		else					{ $result_tmp = $result; }
 
 		$error = true;
-		foreach ($result_tmp as $k=>$v) {
-			if ($k==$this->_params->filter_by) {
-				$error = false;
-			}
+		if(is_array($result_tmp)) {
+    		foreach ($result_tmp as $k=>$v) {
+    			if ($k==$this->_params->filter_by) {
+    				$error = false;
+    			}
+    		}
 		}
+		else {
+    		$error = false;
+		}
+
 		// die
 		if ($error)							{ $this->Response->throw_exception(400, 'Invalid filter value'); }
 	}
