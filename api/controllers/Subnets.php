@@ -867,7 +867,7 @@ class Subnets_controller extends Common_api_functions {
 		if($this->_params->isFolder!=1) {
 			// check
 			if(strlen($err = $this->Subnets->verify_cidr_address($this->_params->subnet."/".$this->_params->mask))>1)
-																									{ $this->Response->throw_exception(400, $err); }
+																									{ $this->Response->throw_exception(409, $err); }
 		}
 	}
 
@@ -880,7 +880,7 @@ class Subnets_controller extends Common_api_functions {
 	private function validate_network () {
 		// not for folder
 		if($this->_params->isFolder!=1) {
-			if(!$this->Addresses->is_network ($this->_params->subnet, $this->_params->mask))		{ $this->Response->throw_exception(400, "Address is not subnet"); }
+			if(!$this->Addresses->is_network ($this->_params->subnet, $this->_params->mask))		{ $this->Response->throw_exception(409, "Address is not subnet"); }
 		}
 	}
 
@@ -896,13 +896,13 @@ class Subnets_controller extends Common_api_functions {
 		else {
 			// validate master subnet
 			$master_subnet = $this->Subnets->fetch_subnet ("id", $this->_params->masterSubnetId);
-			if($master_subnet===false)		                                                        { $this->Response->throw_exception(400, "Master Subnet does not exist (id=".$this->_params->masterSubnetId.")"); }
+			if($master_subnet===false)		                                                        { $this->Response->throw_exception(404, "Master Subnet does not exist (id=".$this->_params->masterSubnetId.")"); }
 			// check that it is inside subnet
 			else {
 				// not for folders
 				if(@$this->_params->isFolder!=1 && $master_subnet->isFolder!=1) {
 					if(!$this->Subnets->verify_subnet_nesting ($this->_params->masterSubnetId, $this->_params->subnet."/".$this->_params->mask))
-																									{ $this->Response->throw_exception(400, "Subnet is not within boundaries of its master subnet"); }
+																									{ $this->Response->throw_exception(409, "Subnet is not within boundaries of its master subnet"); }
 				}
 				// set permissions
 				$this->_params->permissions = $master_subnet->permissions;
@@ -918,8 +918,8 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function validate_section () {
 		// Section Id must be present and numeric
-		if(!isset($this->_params->sectionId))														{ $this->Response->throw_exception(400, "Invalid Section (".$this->_params->sectionId.")"); }
-		elseif(!is_numeric($this->_params->sectionId))												{ $this->Response->throw_exception(400, "Section Id must be numeric (".$this->_params->sectionId.")"); }
+		if(!isset($this->_params->sectionId))														{ $this->Response->throw_exception(404, "Invalid Section (".$this->_params->sectionId.")"); }
+		elseif(!is_numeric($this->_params->sectionId))												{ $this->Response->throw_exception(409, "Section Id must be numeric (".$this->_params->sectionId.")"); }
 		else {
     		$master = $this->Tools->fetch_object("sections", "id", $this->_params->sectionId);
 			if($master===false)		{ $this->Response->throw_exception(400, "Section id (".$this->_params->sectionId.") does not exist"); }
@@ -940,9 +940,9 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function validate_subnet_id () {
 		// numberic
-		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(400, "Subnet Id must be numeric (".$this->_params->id.")"); }
+		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(409, "Subnet Id must be numeric (".$this->_params->id.")"); }
 		// check subnet
-		if(is_null($this->Subnets->fetch_subnet ("id", $this->_params->id)))						{ $this->Response->throw_exception(400, "Invalid subnet Id (".$this->_params->id.")"); }
+		if(is_null($this->Subnets->fetch_subnet ("id", $this->_params->id)))						{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
 	}
 
 	/**
@@ -957,7 +957,7 @@ class Subnets_controller extends Common_api_functions {
 			// if parent is set it must be a folder!
 			if($this->_params->masterSubnetId!=0) {
 				$parent = $this->Subnets->fetch_subnet ("id", $this->_params->masterSubnetId);
-				if($parent->isFolder!=1) 															{ $this->Response->throw_exception(400, "Parent is not a folder"); }
+				if($parent->isFolder!=1) 															{ $this->Response->throw_exception(409, "Parent is not a folder"); }
 			}
 		}
 	}
@@ -971,7 +971,7 @@ class Subnets_controller extends Common_api_functions {
 	private function validate_overlapping () {
 		// section details
 		$section = $this->Tools->fetch_object ("sections", "id", $this->_params->sectionId);
-		if($section===false)																		{ $this->Response->throw_exception(400, "Invalid section Id"); }
+		if($section===false)																		{ $this->Response->throw_exception(404, "Invalid section Id"); }
 		// settings
 		$this->settings = $this->Tools->fetch_object ("settings", "id", 1);
 
@@ -992,7 +992,7 @@ class Subnets_controller extends Common_api_functions {
 			if($section->strictMode==1 && !$parent_is_folder) {
 		    	/* verify that no overlapping occurs if we are adding root subnet only check for overlapping if vrf is empty or not exists! */
 		    	$overlap = $this->Subnets->verify_subnet_overlapping ($this->_params->sectionId, $cidr, $this->_params->vrfId);
-		    	if($overlap!==false) 																{ $this->Response->throw_exception(400, $overlap); }
+		    	if($overlap!==false) 																{ $this->Response->throw_exception(409, $overlap); }
 			}
 		}
 		// not root
@@ -1000,11 +1000,11 @@ class Subnets_controller extends Common_api_functions {
 		    //disable checks for folders and if strict check enabled
 		    if($section->strictMode==1 && !$parent_is_folder ) {
 			    //verify that nested subnet is inside root subnet
-		        if (!$this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $cidr)) 	{ $this->Response->throw_exception(400, "Nested subnet not in root subnet"); }
+		        if (!$this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $cidr)) 	{ $this->Response->throw_exception(409, "Nested subnet not in root subnet"); }
 
 			    //nested?
 		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($this->_params->sectionId, $cidr, $this->_params->vrfId, $this->_params->masterSubnetId);
-				if($overlap!==false) 																{ $this->Response->throw_exception(400, $overlap); }
+				if($overlap!==false) 																{ $this->Response->throw_exception(409, $overlap); }
 		    }
 		}
 	}
@@ -1017,7 +1017,7 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function validate_vlan () {
 		if(isset($this->_params->vlanId)) {
-			if($this->Tools->fetch_object("vlans", "vlanId", $this->_params->vlanId)===false)		{ $this->Response->throw_exception(400, "Vlan does not exist"); }
+			if($this->Tools->fetch_object("vlans", "vlanId", $this->_params->vlanId)===false)		{ $this->Response->throw_exception(404, "Vlan does not exist"); }
 		}
 	}
 
@@ -1029,7 +1029,7 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function validate_vrf () {
 		if(isset($this->_params->vrfId)) {
-			if($this->Tools->fetch_object("vrf", "vrfId", $this->_params->vrfId)===false)			{ $this->Response->throw_exception(400, "VRF does not exist"); }
+			if($this->Tools->fetch_object("vrf", "vrfId", $this->_params->vrfId)===false)			{ $this->Response->throw_exception(404, "VRF does not exist"); }
 		}
 	}
 

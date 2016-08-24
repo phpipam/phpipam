@@ -559,7 +559,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function validate_tools_object () {
 		if ($this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2)===false)
-																			{ $this->Response->throw_exception(400, "Invalid identifier"); }
+																			{ $this->Response->throw_exception(404, "Invalid identifier"); }
 	}
 
 	/**
@@ -582,10 +582,10 @@ class Tools_controller extends Common_api_functions {
 	private function validate_device_type () {
 		if ($this->_params->id == "devices" && isset($this->_params->type)) {
 			// numeric
-			if (!is_numeric($this->_params->type))							{ $this->Response->throw_exception(400, "Invalid devicetype identifier"); }
+			if (!is_numeric($this->_params->type))							{ $this->Response->throw_exception(409, "Invalid devicetype identifier"); }
 			// check
 			if ($this->Tools->fetch_object ("deviceTypes", "tid", $this->_params->type)===false)
-																			{ $this->Response->throw_exception(400, "Device type does not exist"); }
+																			{ $this->Response->throw_exception(404, "Device type does not exist"); }
 		}
 	}
 
