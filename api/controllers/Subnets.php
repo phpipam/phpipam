@@ -337,8 +337,8 @@ class Subnets_controller extends Common_api_functions {
 			$this->validate_vrf ();
 
 			// if subnet is provided die
-			if(isset($this->_params->subnet))			{ $this->Response->throw_exception(400, 'Subnet cannot be changed'); }
-			if(isset($this->_params->mask))				{ $this->Response->throw_exception(400, 'To change mask use resize method'); }
+			if(isset($this->_params->subnet))			{ $this->Response->throw_exception(409, 'Subnet cannot be changed'); }
+			if(isset($this->_params->mask))				{ $this->Response->throw_exception(409, 'To change mask use resize method'); }
 
 			# check for valid keys
 			$values = $this->validate_keys ();
