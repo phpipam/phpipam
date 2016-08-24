@@ -51,6 +51,11 @@ else {
 		unset($_SESSION['realipamusername']);
 		print	'<script>window.location.href = "'.create_link(null).'";</script>';
 	}
+
+	# set default pagesize
+	if(!isset($_COOKIE['table-page-size'])) {
+        setcookie("table-page-size", 50, time()+2592000, "/", false, false, false);
+	}
 ?>
 <!DOCTYPE HTML>
 <html lang="en">

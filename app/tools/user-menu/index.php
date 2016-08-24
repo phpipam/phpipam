@@ -154,35 +154,6 @@ if($User->user->authMethod == 1) {
 	</td>
 </tr>
 
-<!-- Output limit -->
-<tr>
-	<td class="title"><?php print _('IP address print limit'); ?></td>
-	<td>
-		<select name="printLimit" class="form-control input-sm input-w-auto">
-			<?php
-			$opts = array(
-				"0"=>_("Show all"),
-				"10"=>"10",
-				"30"=>"30",
-				"62"=>"62",
-				"100"=>"100",
-				"126"=>"126",
-				"254"=>"254"
-			);
-
-			foreach($opts as $key=>$line) {
-				if($User->user->printLimit == $key) { print "<option value='$key' selected>$line</option>"; }
-				else 								{ print "<option value='$key'>$line</option>"; }
-			}
-
-			?>
-		</select>
-	</td>
-	<td class="info2">
-		<?php print _('Number of IP addresses per page'); ?>
-	</td>
-</tr>
-
 <!-- Menu type -->
 <tr>
 	<td class="title"><?php print _('Menu Type'); ?></td>
