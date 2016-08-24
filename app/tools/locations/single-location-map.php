@@ -33,6 +33,9 @@ else {
 
     # no long/lat
     if( (strlen($location->long)>0 && strlen($location->lat))) {
+
+    // description fix
+    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>$location->description</span>" : "";
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
@@ -50,7 +53,7 @@ else {
              lat: '<?php print $location->lat; ?>',
              lng: '<?php print $location->long; ?>',
              infoWindow: {
-                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print $location->name; ?></a></h5>, <span class=\'text-muted\'><?php print $location->description; ?></span>'
+                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print $location->name; ?></a></h5><?php print $location->description; ?>'
              }
             });
 
