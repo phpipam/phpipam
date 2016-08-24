@@ -181,6 +181,26 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		</select>
 		</td>
 	</tr>
+
+    <!-- expire -->
+    <tr>
+            <td><?php print _('Expire'); ?></th>
+            <td>
+            <select name="expire" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
+            <?php
+            // loop
+            foreach($PowerDNS->ttl as $k=>$ttl) {
+                    // active
+                    if ($k == @$pdns->expire)       { $selected = "selected"; }
+                    else                                                    { $selected = ""; }
+                    // print
+                    print "<option value='$k' $selected>$ttl ($k)</option>";
+            }
+            ?>
+            </select>
+            </td>
+    </tr>
+
 	</tbody>
 	<!-- records -->
 	<tr>
