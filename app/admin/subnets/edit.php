@@ -67,7 +67,8 @@ else {
     	$subnet_old_details['pingSubnet'] 	    = @$subnet_old_temp['pingSubnet'];        // inherit pingSubnet
     	$subnet_old_details['discoverSubnet']   = @$subnet_old_temp['discoverSubnet'];    // inherit discovery
     	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
-
+    	if($User->settings->enableLocations=="1")
+    	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
