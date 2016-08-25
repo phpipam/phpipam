@@ -649,7 +649,9 @@ class Subnets_controller extends Common_api_functions {
 		$this->validate_subnet_id ();
 		// check for isFull
 		$subnet = $this->read_subnet ();
-		if($subnet->isFull==1)  { $this->Response->throw_exception(404, "No free addresses found"); }
+		if($subnet->isFull==1)                              { $this->Response->throw_exception(404, "No free addresses found"); }
+        // slaves
+        if($this->Subnets->has_slaves ($this->_params->id)) { $this->Response->throw_exception(409, "Subnet contains subnets"); }
 		// fetch
 		$first = $this->Addresses->get_first_available_address ($this->_params->id, $this->Subnets);
 		// available?
