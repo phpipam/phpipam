@@ -671,7 +671,7 @@ class Subnets_controller extends Common_api_functions {
 		// Check for id
 		$this->validate_subnet_id ();
 		// fetch
-		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3);
+		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 32);
 		# return
 		if ($first===false) {
     		$this->Response->throw_exception(404, "No subnets found");

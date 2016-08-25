@@ -3321,13 +3321,13 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $subnetMasterId
 	 * @param bool $mask (default: false)
+	 * @param int $mask_drill_down (default: 8)
 	 * @return void
 	 */
-	public function search_available_subnets ($subnetMasterId, $mask = false) {
+	public function search_available_subnets ($subnetMasterId, $mask = false, $mask_drill_down = 8) {
 
 		/* Remove STRICT Error reporting for ParseAddress fuction */
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
-		$mask_drill_down = 8;
 
 		# mask check
 		if(!is_numeric($mask))               { $this->Result->show("danger", _("Invalid Mask"), true); }
