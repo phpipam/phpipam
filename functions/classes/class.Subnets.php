@@ -987,7 +987,7 @@ class Subnets extends Common_functions {
 	 *
 	 *	used, maximum, free, free_percentage
 	 *
-	 * @access public
+	 * @access publi
 	 * @param mixed $used_hosts (int)
 	 * @param mixed $netmask (int)
 	 * @param mixed $subnet	(int)
@@ -3322,6 +3322,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnetMasterId
 	 * @param bool $mask (default: false)
 	 * @param int $mask_drill_down (default: 8)
+	 * @param bool|int $mask_drill_down (default: 8)
 	 * @return void
 	 */
 	public function search_available_subnets ($subnetMasterId, $mask = false, $mask_drill_down = 8) {
@@ -3382,34 +3383,36 @@ class Subnets extends Common_functions {
 			$dec_subnet = $parent_subnet; // have to reset each time though the loop
 			$isquare = pow(2,$square_count); // 2^nth power, that's how many subnets there are per this unique mask
 			for ($ii = 0; $ii < $isquare; $ii++ ){
-				$cidr_subnet = $this->transform_to_dotted($dec_subnet).'/'.$i;
-				if ($type == 'IPv4'){
-					// Get broadcast, which is one decimal away from next subnet, and increment
-					$net1 = $this->Net_IPv4->parseAddress($cidr_subnet);
-					$bc1  = $net1->broadcast;
-					$dec_subnet = $this->transform_to_decimal ($bc1);
-					$dec_subnet++;
-				}
-				else {
-					// Get broadcast, which is one decimal away from next subnet, and increment
-					$net1 = $this->Net_IPv6->parseAddress($cidr_subnet);
-					$bc1  = $net1['end'];
-					$dec_subnet = $this->transform_to_decimal ($bc1);
-					$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
-				}
-				foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
-    				$overlap = $this->verify_overlapping ($cidr_subnet,$unavailable_sub);
-					if ($overlap!==false){
-						$match = 1;
-						break;
-					}
-				}
-				if ($match != 1) {
-    				if ($i==$mask) {
-        				$html[] = "$cidr_subnet";
+        		if($i==$mask) {
+    				$cidr_subnet = $this->transform_to_dotted($dec_subnet).'/'.$i;
+    				if ($type == 'IPv4'){
+    					// Get broadcast, which is one decimal away from next subnet, and increment
+    					$net1 = $this->Net_IPv4->parseAddress($cidr_subnet);
+    					$bc1  = $net1->broadcast;
+    					$dec_subnet = $this->transform_to_decimal ($bc1);
+    					$dec_subnet++;
     				}
-				}
-				$match = 0; //Reset
+    				else {
+    					// Get broadcast, which is one decimal away from next subnet, and increment
+    					$net1 = $this->Net_IPv6->parseAddress($cidr_subnet);
+    					$bc1  = $net1['end'];
+    					$dec_subnet = $this->transform_to_decimal ($bc1);
+    					$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
+    				}
+    				foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
+        				$overlap = $this->verify_overlapping ($cidr_subnet,$unavailable_sub);
+    					if ($overlap!==false){
+    						$match = 1;
+    						break;
+    					}
+    				}
+    				if ($match != 1) {
+        				if ($i==$mask) {
+            				$html[] = "$cidr_subnet";
+        				}
+    				}
+    				$match = 0; //Reset
+    			}
 			}
 			$square_count++;
 		}
