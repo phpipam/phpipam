@@ -22,6 +22,7 @@ if (is_numeric($subnet['location'])) {
         // back
         $_GET['subnetId'] = $sid_orig;
         $location = $loc_old;
+        $subnet = (array) $subnet;
     }
     else {
         $Result->show('info', _('Location not set !'), false);
