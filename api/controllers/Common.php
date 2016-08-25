@@ -365,13 +365,16 @@ class Common_api_functions {
 		elseif($controller=="subnets") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
 			$result["addresses"]        = array ("GET");
+			$result["addresses/{ip}"]   = array ("GET");
 			$result["usage"]            = array ("GET");
 			$result["first_free"]       = array ("GET");
 			$result["slaves"]           = array ("GET");
 			$result["slaves_recursive"] = array ("GET");
 			$result["truncate"]         = array ("DELETE");
+			$result["permissions"]      = array ("DELETE");
 			$result["resize"]           = array ("PATCH");
 			$result["split"]            = array ("PATCH");
+			$result["permissions"]      = array ("PATCH");
 			// return
 			return $result;
 		}

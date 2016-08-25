@@ -703,20 +703,21 @@ class Subnets_controller extends Common_api_functions {
 		$subnetId = is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
 		$result = $this->Subnets->fetch_subnet ("id", $subnetId);
-        // add nameservers
+        // add nameservers, GW and calculation
         if($result!==false) {
             $ns = $this->read_subnet_nameserver($result->nameserverId);
             if ($ns!==false) {
                 $result->nameservers = $ns;
             }
-        }
-		// fetch gateway
-		if(sizeof($result)>0) {
+
     		$gateway = $this->read_subnet_gateway ();
     		if ( $gateway!== false) {
         		$result->gatewayId = $gateway->id;
     		}
+
+    		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
 		}
+
 		# result
 		return sizeof($result)==0 ? false : $result;
 	}
