@@ -243,6 +243,8 @@ class Common_api_functions {
 	/**
 	 * Validates filter_by
 	 *
+	 *  Takes first result, checks all keys against provided filter_by value
+	 *
 	 * @access protected
 	 * @param mixed $result
 	 * @return void
@@ -253,11 +255,17 @@ class Common_api_functions {
 		else					{ $result_tmp = $result; }
 
 		$error = true;
-		foreach ($result_tmp as $k=>$v) {
-			if ($k==$this->_params->filter_by) {
-				$error = false;
-			}
+		if(is_array($result_tmp)) {
+    		foreach ($result_tmp as $k=>$v) {
+    			if ($k==$this->_params->filter_by) {
+    				$error = false;
+    			}
+    		}
 		}
+		else {
+    		$error = false;
+		}
+
 		// die
 		if ($error)							{ $this->Response->throw_exception(400, 'Invalid filter value'); }
 	}
@@ -357,13 +365,16 @@ class Common_api_functions {
 		elseif($controller=="subnets") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
 			$result["addresses"]        = array ("GET");
+			$result["addresses/{ip}"]   = array ("GET");
 			$result["usage"]            = array ("GET");
 			$result["first_free"]       = array ("GET");
 			$result["slaves"]           = array ("GET");
 			$result["slaves_recursive"] = array ("GET");
 			$result["truncate"]         = array ("DELETE");
+			$result["permissions"]      = array ("DELETE");
 			$result["resize"]           = array ("PATCH");
 			$result["split"]            = array ("PATCH");
+			$result["permissions"]      = array ("PATCH");
 			// return
 			return $result;
 		}

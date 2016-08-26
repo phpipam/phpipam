@@ -17,12 +17,6 @@ if($location===false) {
     $Result->show("info","Invalid location", false);
 }
 else {
-
-    # sensor check
-    if(isset($gmaps_api_key)) {
-        $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
-    }
-
     // recode
     if (strlen($location->long)==0 && strlen($location->lat)==0 && strlen($location->address)>0) {
         $latlng = $Tools->get_latlng_from_address ($location->address);
@@ -39,10 +33,10 @@ else {
 
     # no long/lat
     if( (strlen($location->long)>0 && strlen($location->lat))) {
-    ?>
 
-    <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
-    <script type="text/javascript" src="js/1.2/gmaps.js"></script>
+    // description fix
+    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>$location->description</span>" : "";
+    ?>
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -59,7 +53,7 @@ else {
              lat: '<?php print $location->lat; ?>',
              lng: '<?php print $location->long; ?>',
              infoWindow: {
-                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print $location->name; ?></a></h5>, <span class=\'text-muted\'><?php print $location->description; ?></span>'
+                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print $location->name; ?></a></h5><?php print $location->description; ?>'
              }
             });
 

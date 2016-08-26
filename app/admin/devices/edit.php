@@ -39,7 +39,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 # all locations
 if($User->settings->enableLocations=="1")
-$locations = $Tools->fetch_all_objects ("locations");
+$locations = $Tools->fetch_all_objects ("locations", "name");
 
 // set show for rack
 if (is_null($device['rack']))   { $display='display:none'; }

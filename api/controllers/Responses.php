@@ -78,6 +78,7 @@ class Responses {
 		$this->errors[403] = "Forbidden";
 		$this->errors[404] = "Not Found";
 		$this->errors[405] = "Method Not Allowed";
+		$this->errors[409] = "Conflict";
 		$this->errors[415] = "Unsupported Media Type";
 		// Server errors
 		$this->errors[500] = "Internal Server Error";

@@ -92,7 +92,7 @@ if ($User->settings->enableNAT==1) {
 <div class="row" style="margin-bottom: 40px;">
 
 	<!-- subnet details -->
-	<div class="col-sm-12 col-xs-12 <?php if(@$_GET['sPage']=="changelog") { print "col-lg-12 col-md-12";} else { print "col-lg-8 col-md-8"; } ?>">
+	<div class="col-sm-12 col-xs-12 <?php if(@$_GET['sPage']=="changelog" || @$_GET['sPage']=="location") { print "col-lg-12 col-md-12";} else { print "col-lg-8 col-md-8"; } ?>">
 		<!-- for adding IP address! -->
 		<div id="subnetId" style="display:none;"><?php print $subnet['id']; ?></div>
 
@@ -140,9 +140,11 @@ if ($User->settings->enableNAT==1) {
     <?php if(@$_GET['sPage']!="changelog") { ?>
 
 	<!-- subnet graph -->
+	<?php if(@$_GET['sPage']!="location") { ?>
 	<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 		<?php include('subnet-details/subnet-graph.php'); ?>
 	</div>
+	<?php } ?>
 
 	<!-- subnet slaves list -->
 	<div class="col-xs-12 subnetSlaves">

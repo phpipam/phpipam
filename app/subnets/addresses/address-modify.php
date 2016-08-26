@@ -104,6 +104,10 @@ if ($act=="add" && $User->settings->enableMulticast==1) {
     }
 }
 
+# all locations
+if($User->settings->enableLocations=="1")
+$locations = $Tools->fetch_all_objects ("locations", "name");
+
 ?>
 
 <script type="text/javascript">
@@ -319,6 +323,28 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print '	</td>'. "\n";
 		print '</tr>'. "\n";
 	}
+
+    // location
+    if($User->settings->enableLocations=="1") { ?>
+	<tr>
+		<td><?php print _('Location'); ?></td>
+		<td>
+			<select name="location_item" class="form-control input-sm input-w-auto">
+    			<option value="0"><?php print _("None"); ?></option>
+    			<?php
+                if($locations!==false) {
+        			foreach($locations as $l) {
+        				if($address['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
+        				else					            { print "<option value='$l->id'>$l->name</option>"; }
+        			}
+    			}
+    			?>
+			</select>
+		</td>
+	</tr>
+	<?php
+    }
+
 	# Port
 	if(in_array('port', $selected_ip_fields)) {
 

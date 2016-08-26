@@ -28,6 +28,7 @@ CREATE TABLE `ipaddresses` (
   `owner` varchar(32) DEFAULT NULL,
   `state`  INT(3)  NULL  DEFAULT '2',
   `switch` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `port` varchar(32) DEFAULT NULL,
   `note` text,
   `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01',
@@ -347,7 +348,6 @@ CREATE TABLE `users` (
   `lastActivity` TIMESTAMP  NULL,
   `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
-  `printLimit` int(4) unsigned DEFAULT '30',
   `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
@@ -522,7 +522,9 @@ VALUES
 	(11,'IP Calculator', 'Shows IP calculator as widget', 'ipcalc', NULL, 'yes', '6', 'no', 'yes'),
 	(12,'IP Request', 'IP Request widget', 'iprequest', NULL, 'no', '6', 'no', 'yes'),
 	(13,'Threshold', 'Shows threshold usage for top 5 subnets', 'threshold', NULL, 'yes', '6', 'no', 'yes'),
-	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');
+	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes'),
+	(15, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes');
+
 
 
 

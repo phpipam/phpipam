@@ -261,10 +261,16 @@ else {
 					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
 					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"=>$_POST['nameserverId'],
-					"location"=>@$_POST['location_item'],
 					"device"=>$_POST['device'],
                     "isFull"=>$Admin->verify_checkbox($_POST['isFull'])
 					);
+    # location
+    if (isset($_POST['location_item'])) {
+        if (!is_numeric($_POST['location_item'])) {
+            $Result->show("danger", _("Invalid location value"), true);
+        }
+        $values['location'] = $_POST['location_item'];
+    }
     # threshold
     if (isset($_POST['threshold'])) {
         if (!is_numeric($_POST['threshold'])) {

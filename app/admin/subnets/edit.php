@@ -67,7 +67,8 @@ else {
     	$subnet_old_details['pingSubnet'] 	    = @$subnet_old_temp['pingSubnet'];        // inherit pingSubnet
     	$subnet_old_details['discoverSubnet']   = @$subnet_old_temp['discoverSubnet'];    // inherit discovery
     	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
-
+    	if($User->settings->enableLocations=="1")
+    	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
@@ -91,7 +92,7 @@ if(isset($_POST['vlanId'])) {
 
 # all locations
 if($User->settings->enableLocations=="1")
-$locations = $Tools->fetch_all_objects ("locations");
+$locations = $Tools->fetch_all_objects ("locations", "name");
 
 # set readonly flag
 $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : false;
@@ -241,7 +242,7 @@ $('.slider').slider().on('slide', function(ev){
 				<option value="0"><?php print _('None'); ?></option>
 				<?php
 				// fetch all devices
-				$devices = $Admin->fetch_all_objects("devices");
+				$devices = $Admin->fetch_all_objects("devices", "hostname");
 				// loop
 				if ($devices!==false) {
 					foreach($devices as $device) {

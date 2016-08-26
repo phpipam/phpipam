@@ -51,6 +51,11 @@ else {
 		unset($_SESSION['realipamusername']);
 		print	'<script>window.location.href = "'.create_link(null).'";</script>';
 	}
+
+	# set default pagesize
+	if(!isset($_COOKIE['table-page-size'])) {
+        setcookie("table-page-size", 50, time()+2592000, "/", false, false, false);
+	}
 ?>
 <!DOCTYPE HTML>
 <html lang="en">
@@ -109,6 +114,16 @@ else {
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
 	<![endif]-->
+    <?php if ($User->settings->enableLocations=="1") { ?>
+    <?php
+    # API key check
+    if(isset($gmaps_api_key)) {
+        $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
+    }
+    ?>
+    <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
+    <script type="text/javascript" src="js/1.2/gmaps.js"></script>
+    <?php }	?>
 </head>
 
 <!-- body -->

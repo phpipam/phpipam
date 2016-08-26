@@ -171,7 +171,7 @@ class Sections_controller extends Common_api_functions {
 				}
 			}
 			// check result
-			if(sizeof($result)==0) 						{ return array("code"=>200, "data"=>NULL); }
+			if(sizeof($result)==0) 						{ $this->Response->throw_exception(404, "No subnets found"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
 		// verify ID
@@ -193,7 +193,7 @@ class Sections_controller extends Common_api_functions {
 			else {
 				$result = $this->Sections->fetch_section ("name", $this->_params->id);
 				// check result
-				if(sizeof($result)==0) 					{ $this->Response->throw_exception(404, $this->Response->errors[404]); }
+				if($result==false) 					    { $this->Response->throw_exception(404, $this->Response->errors[404]); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 		}

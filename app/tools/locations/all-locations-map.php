@@ -1,5 +1,7 @@
+<?php if(@$title!==false) { ?>
 <h4><?php print _('Locations Map'); ?></h4>
 <hr>
+<?php } ?>
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
 <div class="btn-group">
@@ -28,19 +30,13 @@ if ($User->settings->enableLocations!="1") {
 }
 else {
     # fetch all locations
-    $all_locations = $Tools->fetch_all_objects("locations", "id");
+    $all_locations = $Tools->fetch_all_objects("locations", "name");
 
     # if none than print
     if($all_locations===false) {
         $Result->show("info","No Locations configured", false);
     }
     else {
-
-        # sensor check
-        if(isset($gmaps_api_key)) {
-            $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
-        }
-
         // get all
         foreach ($all_locations as $k=>$l) {
             // map used
@@ -68,9 +64,6 @@ else {
 
         // calculate
         if (sizeof($all_locations)>0) { ?>
-
-            <script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
-            <script type="text/javascript" src="js/1.2/gmaps.js"></script>
             <script type="text/javascript">
                 $(document).ready(function() {
                     // init gmaps
@@ -87,12 +80,15 @@ else {
                     <?php
                     $html = array();
                     foreach ($all_locations as $location) {
+                        // description fix
+                        $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>$location->description</span>" : "";
+
                         $html[] = "map.addMarker({";
                         $html[] = " title: '$location->name',";
                         $html[] = " lat: '$location->lat',";
                         $html[] = " lng: '$location->long',";
                         $html[] = " infoWindow: {";
-                        $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>$location->name</a></h5>, <span class=\'text-muted\'>$location->description</span>'";
+                        $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>$location->name</a></h5>$location->description'";
                         $html[] = "}";
                         $html[] = "});";
                     }
@@ -100,21 +96,24 @@ else {
                     ?>
 
                     // fit zoom
+                    <?php if(sizeof($all_locations)>1) { ?>
                     map.fitZoom();
+                    <?php } ?>
                     // resize map function
+                    <?php if(!isset($height)) { ?>
                     function resize_map () {
                         var heights = window.innerHeight - 320;
                         $('#map_overlay').css("height", heights+"px");
-
                     }
                     resize_map();
                     window.onresize = function() {
                         resize_map();
                     };
+                    <?php } ?>
                 });
             </script>
 
-            <div style="width:100%; height:1000px;" id="map_overlay">
+            <div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
             	<div id="gmap" style="width:100%; height:100%;"></div>
             </div>
 

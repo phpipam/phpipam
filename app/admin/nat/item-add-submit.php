@@ -33,6 +33,22 @@ if($nat->type=="static") {
     $nat_src = json_decode($nat->src, true);
     $nat_dst = json_decode($nat->dst, true);
 
+    // validate all objects
+    if(sizeof(@$nat_src['ipaddresses'])>0) {
+        foreach ($nat_src['ipaddresses'] as $ik=>$iv) {
+            if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
+                unset($nat_src['ipaddresses'][$ik]);
+            }
+        }
+    }
+    if(sizeof(@$nat_dst['ipaddresses'])>0) {
+        foreach ($nat_dst['ipaddresses'] as $ik=>$iv) {
+            if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
+                unset($nat_dst['ipaddresses'][$ik]);
+            }
+        }
+    }
+
     // check
     if(is_array($nat_src) && $_POST['type']=="src") {
         $nat_src = array_filter($nat_src);

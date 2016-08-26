@@ -17,6 +17,8 @@ foreach ($custom_fields as $k=>$f) {
 # set colspan
 $colspan_subnets = 5 + sizeof($visible_fields);
 
+$subnet = (array) $subnet;
+
 
 /**
  * Script to display all slave IP addresses and subnets in content div of subnets table!

@@ -146,10 +146,6 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td><?php print $user->hideFreeRange==1 ? _("Yes") : _("No") ?></td>
 </tr>
 <tr>
-	<td><?php print _('IP address print limit'); ?></td>
-	<td><?php print $user->printLimit; ?></td>
-</tr>
-<tr>
 	<td><?php print _('Menu type'); ?></td>
 	<td><?php print $user->menuType; ?></td>
 </tr>

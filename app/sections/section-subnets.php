@@ -85,7 +85,7 @@ if($permission != 0) {
         print "<tbody>";
 
 		# add new link
-		if ($permission>2) {
+		if ($permission>1) {
 		print "<tr>";
 		print "	<td colspan='$colCount'>";
 		print "		<button class='btn btn-sm btn-default editSubnet' data-action='add' data-sectionid='$section[id]' data-subnetId='' rel='tooltip' data-placement='right' title='"._('Add new subnet to section')." $section[name]'><i class='fa fa-plus'></i> "._('Add subnet')."</button>";

@@ -375,6 +375,13 @@ class Addresses extends Common_functions {
 						"firewallAddressObject"=>@$address['firewallAddressObject'],
 						"lastSeen"=>@$address['lastSeen']
 						);
+        # location
+        if (isset($address['location_item'])) {
+            if (!is_numeric($address['location_item'])) {
+                $Result->show("danger", _("Invalid location value"), true);
+            }
+            $insert['location'] = $address['location_item'];
+        }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
@@ -437,6 +444,13 @@ class Addresses extends Common_functions {
 						"excludePing"=>@$address['excludePing'],
 						"PTRignore"=>@$address['PTRignore']
 						);
+        # location
+        if (isset($address['location_item'])) {
+            if (!is_numeric($address['location_item'])) {
+                $Result->show("danger", _("Invalid location value"), true);
+            }
+            $insert['location'] = $address['location_item'];
+        }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;

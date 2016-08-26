@@ -309,11 +309,11 @@ class Vrfs_controller extends Common_api_functions {
 	 */
 	private function validate_vrf () {
 		// validate id
-		if(!isset($this->_params->id))														{ $this->Response->throw_exception(400, "Vrf Id is required");  }
+		if(!isset($this->_params->id))														{ $this->Response->throw_exception(409, "Vrf Id is required");  }
 		// validate number
-		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(400, "Vrf Id must be numeric"); }
+		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(409, "Vrf Id must be numeric"); }
 		// check that it exists
-		if($this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id) === false )		{ $this->Response->throw_exception(400, "Invalid VRF id"); }
+		if($this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id) === false )		{ $this->Response->throw_exception(404, "Invalid VRF id"); }
 	}
 
 
@@ -327,9 +327,9 @@ class Vrfs_controller extends Common_api_functions {
 		// check for POST method
 		if($_SERVER['REQUEST_METHOD']=="POST") {
 			// check name
-			if(strlen($this->_params->name)==0)												{ $this->Response->throw_exception(400, "VRF name is required"); }
+			if(strlen($this->_params->name)==0)												{ $this->Response->throw_exception(409, "VRF name is required"); }
 			// check that it exists
-			if($this->Tools->fetch_object ("vrf", "name", $this->_params->name) !== false )	{ $this->Response->throw_exception(400, "VRF with that name already exists"); }
+			if($this->Tools->fetch_object ("vrf", "name", $this->_params->name) !== false )	{ $this->Response->throw_exception(409, "VRF with that name already exists"); }
 		}
 		// update check
 		else {
@@ -338,7 +338,7 @@ class Vrfs_controller extends Common_api_functions {
 
 			if(isset($this->_params->name)) {
 				if ($this->_params->name != $vrf_old->name) {
-					if($this->Tools->fetch_object ("vrf", "name", $this->_params->name))	{ $this->Response->throw_exception(400, "VRF with that name already exists"); }
+					if($this->Tools->fetch_object ("vrf", "name", $this->_params->name))	{ $this->Response->throw_exception(409, "VRF with that name already exists"); }
 				}
 			}
 		}

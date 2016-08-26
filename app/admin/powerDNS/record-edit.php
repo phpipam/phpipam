@@ -67,7 +67,7 @@ else {
 		}
 		else {
 			$record = new StdClass ();
-			$record->ttl = 3600;
+			$record->ttl = @$pdns->ttl;
 			$record->name = $post['domain_id'];
 			$record->content = $_POST['id'];
 		}

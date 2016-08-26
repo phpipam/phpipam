@@ -1,4 +1,4 @@
-== 1.24.20
+== 1.25.01
 
     New features:
     ------------
@@ -34,6 +34,8 @@
         + Added subnet usage result for each subnet in section;
         + Added custom fields for all controllers;
         + New subnets automatically get parent permissions;
+        + Added IP calculation to subnet;
+        + Changed all not_found when searching objects to 404 and all invalid parameters to 409 (conflict)
         + New methods:
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)
@@ -56,6 +58,7 @@
     + Widgets:
         + New threshold widget;
         + New inactive hosts widget;
+        + New Locations widget;
     + PowerDNS:
         + Default domain for PTR records (if hostname is not set);
         + When removing IP address additional option that removes all associated PDNS records (ip and hostname);

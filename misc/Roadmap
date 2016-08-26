@@ -1,10 +1,13 @@
-features for 1.3 releases:
+Feature candidates for 1.4:
 
-    + todo:
-        - change pagination (datatables);
+    + Custom Field type: Password
+    + Bulk/range edit non-contiguous IP addresses
+    + Bulk/range edit non-contiguous IP addresses
 
     + Modules
         + Customers module;
+
+    + CSV import tab with fields;
 
 
 features for next releases:

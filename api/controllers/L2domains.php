@@ -281,10 +281,10 @@ class L2domains_controller extends Common_api_functions {
 		// validate id
 		if(!isset($this->_params->id))														{ $this->_params->id = 1; }
 		// validate number
-		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(400, "Domain id must be numeric"); }
+		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(409, "Domain id must be numeric"); }
 		// check that it exists
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->id) === false )
-																							{ $this->Response->throw_exception(400, "Invalid domain id"); }
+																							{ $this->Response->throw_exception(404, "Invalid domain id"); }
 	}
 
 
@@ -298,21 +298,21 @@ class L2domains_controller extends Common_api_functions {
 		// delete checks
 		if($_SERVER['REQUEST_METHOD']=="DELETE") {
 			// we cannot delete default domain
-			if(@$this->_params->id==1 && $_SERVER['REQUEST_METHOD']=="DELETE")				{ $this->Response->throw_exception(400, "Default domain cannot be deleted"); }
+			if(@$this->_params->id==1 && $_SERVER['REQUEST_METHOD']=="DELETE")				{ $this->Response->throw_exception(409, "Default domain cannot be deleted"); }
 			// ID must be numeric
-			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid domain id"); }
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(404, "Invalid domain id"); }
 		}
 		// create checks
 		elseif ($_SERVER['REQUEST_METHOD']=="POST") {
 			// name must be present
-			if(@$this->_params->name == "" || !isset($this->_params->name)) 				{ $this->Response->throw_exception(400, "Domain name is mandatory"); }
+			if(@$this->_params->name == "" || !isset($this->_params->name)) 				{ $this->Response->throw_exception(409, "Domain name is mandatory"); }
 		}
 		// update checks
 		elseif ($_SERVER['REQUEST_METHOD']=="PATCH") {
 			// ID must be numeric
-			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid domain id"); }
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(409, "Invalid domain id"); }
 			// name must be present
-			if(@$this->_params->name == "" && isset($this->_params->name)) 					{ $this->Response->throw_exception(400, "Domain name is mandatory"); }
+			if(@$this->_params->name == "" && isset($this->_params->name)) 					{ $this->Response->throw_exception(409, "Domain name is mandatory"); }
 		}
 
 	}
