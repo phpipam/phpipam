@@ -2744,17 +2744,20 @@ class Tools extends Common_functions {
 
     	/* validate IP */
     	foreach($outFile as $k=>$v) {
-        	if(!filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
+        	//put it to array
+        	$field = explode(",", $v);
+
+        	if(!filter_var($field[0], FILTER_VALIDATE_IP)) {
             	unset($outFile[$k]);
         	}
         	else {
             	# mac
         		if ($this->settings-enableMulticast=="1") {
-            		if (strlen($v[6])==0 && $this->Subnets->is_multicast($v[1]))  {
-                		$mac = $this->Subnets->create_multicast_mac ($v[1]);
+            		if (strlen($field[5])==0 && $this->Subnets->is_multicast($field[0]))  {
+                		$mac = $this->Subnets->create_multicast_mac ($field[0]);
                     }
                     else {
-                        $mac = $v[6];
+                        $mac = $field[5];
                     }
         		}
         	}

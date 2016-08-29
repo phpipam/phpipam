@@ -58,11 +58,18 @@ foreach($outFile as $k=>$line) {
 		$line[1] = $Addresses->address_type_type_to_index($line[1]);
 
 		// reformat device from name to id
-        $line[7] = 0;                       // default null
-		if ($devices!==false) {
-    		foreach($devices as $d) {
-    			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
+		if(strlen($line[7])>0) {
+    		if ($devices!==false) {
+        		foreach($devices as $d) {
+        			if($d->hostname==$line[7])	{ $line[7] = $d->id; }
+        		}
     		}
+    		else {
+        		$line[7] = 0;
+    		}
+		}
+		else {
+    		$line[7] = 0;
 		}
 
 		// set action
