@@ -52,6 +52,10 @@ if ($_POST['action'] != "add") {
 }
 # we are adding new subnet
 else {
+    # fake freespaceMSID
+    if($_POST['freespaceMSID']) {
+        $_POST['subnetId'] = $_POST['freespaceMSID'];
+    }
 	# for selecting master subnet if added from subnet details and slave inheritance!
 	if(strlen($_POST['subnetId']) > 0) {
     	$subnet_old_temp = (array) $Subnets->fetch_subnet(null, $_POST['subnetId']);
@@ -148,7 +152,7 @@ $('.slider').slider().on('slide', function(ev){
         <td class="middle"><?php print _('Subnet'); ?></td>
         <td>
         	<?php
-            if ($_POST['subnetId'] && $_POST['action'] == "add"){ $showDropMenuFull = 1; }
+            if (($_POST['subnetId']||$_POST['subnet']) && $_POST['action'] == "add"){ $showDropMenuFull = 1; }
         	# set CIDR
         	if (isset($subnet_old_temp['subnet'])&&$subnet_old_temp['isFolder']!="1")	{ $cidr = $Subnets->transform_to_dotted($subnet_old_temp['subnet']).'/'.($subnet_old_temp['mask']+1);} 		//for nested
         	if (isset($subnet_old_temp['subnet']) && ($showDropMenuFull)) 				{ $dropdown_menu = $Subnets->subnet_dropdown_print_available($_POST['sectionId'], $_POST['subnetId']);  }
