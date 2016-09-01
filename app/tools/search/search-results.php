@@ -491,8 +491,8 @@ if(sizeof($result_vrf) > 0) {
 		print " <td class='actions'>";
 		if($User->is_admin(false)) {
 		print '<div class="btn-group">';
-		print '	<a class="btn btn-xs btn-default editVRF" data-action="edit"   data-vlanid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-pencil"></i></a>';
-		print '	<a class="btn btn-xs btn-default editVRF" data-action="delete" data-vlanid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-times"></i></a>';
+		print '	<a class="btn btn-xs btn-default vrfManagement" data-action="edit"   data-vrfid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-pencil"></i></a>';
+		print '	<a class="btn btn-xs btn-default vrfManagement" data-action="delete" data-vrfid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-times"></i></a>';
 		print '</div>';
 		}
 		print "</td>";
