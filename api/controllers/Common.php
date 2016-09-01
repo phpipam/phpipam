@@ -235,6 +235,11 @@ class Common_api_functions {
 
 		# null?
 		if (sizeof($result)==0)				{ $this->Response->throw_exception(404, 'No results (filter applied)'); }
+        # reindex filtered result
+        else {
+            $result = array_values($result);
+        }
+
 
 		# result
 		return $result;
