@@ -615,6 +615,16 @@ class Logging extends Common_functions {
 	 */
 	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational, $notice, $warning) {
 
+    	# check for lastId - must be numeric
+    	if(!is_numeric($lastId))        { $this->Result->show("danger", "Invalid last id", true);	return false; }
+    	if(!is_numeric($highestId))     { $this->Result->show("danger", "Invalid highest id", true);	return false; }
+    	if(!is_numeric($logCount))      { $this->Result->show("danger", "Invalid logcount value", true);	return false; }
+    	if($direction!==NULL) {
+            if($direction!="next" && $direction!="prev" && $direction!="") {
+                                        { $this->Result->show("danger", "Invalid direction", true);	return false; }
+            }
+    	}
+
 		# query start
 		$query  = 'select * from ('. "\n";
 		$query .= 'select * from logs '. "\n";
