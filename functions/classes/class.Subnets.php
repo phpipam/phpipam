@@ -3357,6 +3357,10 @@ class Subnets extends Common_functions {
 		if ($type == 'IPv4') 	{ $this->initialize_pear_net_IPv4 (); }
 		else 					{ $this->initialize_pear_net_IPv6 (); }
 
+		// reset levels for IPv6 !
+		if ($type == "IPv6")    { $mask_drill_down = 8; }
+		else                    { $mask_drill_down = 32 - $taken_subnet->mask; }
+
 		// if it has slaves
 		if($subnets) {
 			foreach ($subnets as $row ) {

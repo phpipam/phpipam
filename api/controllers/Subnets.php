@@ -673,7 +673,7 @@ class Subnets_controller extends Common_api_functions {
 		// Check for id
 		$this->validate_subnet_id ();
 		// fetch
-		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 32);
+		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 30);
 		# return
 		if ($first===false) {
     		$this->Response->throw_exception(404, "No subnets found");
@@ -715,6 +715,8 @@ class Subnets_controller extends Common_api_functions {
     		$gateway = $this->read_subnet_gateway ();
     		if ( $gateway!== false) {
         		$result->gatewayId = $gateway->id;
+        		$gateway = $this->transform_address ($gateway);
+        		$result->gateway = $gateway;
     		}
 
     		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
