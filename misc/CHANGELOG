@@ -1,4 +1,4 @@
-== 1.25.01
+== 1.26.000
 
     New features:
     ------------
@@ -22,6 +22,7 @@
     + Locations module
         + Map devices / racks / subnets to location;
         + Google maps integration;
+    + SAML2 authentication (SSO)
 
 
     Enhancements, changes:

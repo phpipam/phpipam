@@ -676,3 +676,16 @@ INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whr
 
 /* remove print limit */
 ALTER TABLE `users` DROP `printLimit`;
+
+
+
+/* VERSION 1.26 */
+UPDATE `settings` set `version` = '1.26';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* add http saml2 method */
+ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','SAML2')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';
+
