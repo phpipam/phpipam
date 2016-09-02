@@ -11,12 +11,13 @@ $User->check_user_session();
 if($_POST['action']!="add") {
 	if(!is_numeric($_POST['id']))	{ $Result->show("danger", _("Invalid ID"), true, true); }
 
-	# feth method settings
+	# fetch method settings
 	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
 	$method_settings->params = json_decode($method_settings->params);
 }
 else {
 	$method_settings = new StdClass ();
+	$method_settings->params = new StdClass ();
 	# set default values
     $method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
@@ -24,7 +25,6 @@ else {
 	$method_settings->params->idpcertfingerprint = "";
 	$method_settings->params->idpcertalgorithm = "sha1";
 	//$method_settings->params->timeout = 2;
-
 }
 
 # set delete flag
@@ -71,7 +71,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
-	
+
 	<!-- Idp issuer -->
 	<tr>
 		<td><?php print _('IDP issuer'); ?></td>
@@ -140,7 +140,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	</form>
 
 	<?php
-	# check for support 
+	# check for support
 	if(!in_array("xml", get_loaded_extensions())) {
 		$Log->write( "SAML2 login", "php xml extension missing!", 2 );
 		$Result->show("danger", _("php XML extension missing!"), false);
