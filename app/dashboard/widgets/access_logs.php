@@ -25,7 +25,7 @@ if ($User->settings->log=="syslog") {
 }
 else {
 	# print last 5 access logs
-	$logs = $Log->fetch_logs(5, NULL, NULL, NULL, 0, 0, 0);
+	$logs = $Log->fetch_logs(5, NULL, NULL, NULL, "on", "off", "off");
 
 	print "<table class='table table-condensed table-hover table-top'>";
 

@@ -34,9 +34,9 @@ if(!is_object($User)) {
 
 # if nothing is provided display all
 if ( empty($_POST['Informational']) && empty($_POST['Notice']) && empty($_POST['Warning']) ) {
-    $_POST['Informational'] = _("Informational");
-    $_POST['Notice']        = _("Notice");
-    $_POST['Warning']       = _("Warning");
+    $_POST['Informational'] = "Informational";
+    $_POST['Notice']        = "Notice";
+    $_POST['Warning']       = "Warning";
 }
 ?>
 
@@ -56,9 +56,9 @@ if ( empty($_POST['Informational']) && empty($_POST['Notice']) && empty($_POST['
 $logCount = 40;
 
 //set severity queries
-$_POST['InformationalQuery'] = @$_POST['Informational']==_("Informational") ? 0 : 10;
-$_POST['NoticeQuery'] 		 = @$_POST['Notice']==_("Notice") ? 1 : 10;
-$_POST['WarningQuery'] 		 = @$_POST['Warning']==_("Warning") ? 1 : 10;
+$informational = @$_POST['Informational']=="Informational" ? "on" : "off";
+$notice 	   = @$_POST['Notice']=="Notice" ? "on" : "off";
+$warning 	   = @$_POST['Warning']=="Warning" ? "on" : "off";
 
 //get highest lastId */
 $highestId = $Log->log_fetch_highest_id();
@@ -68,47 +68,45 @@ if(empty($_POST['lastId']) || ($_POST['lastId'] == "undefined")) 	{ $_POST['last
 if(!isset($_POST['direction'])) 									{ $_POST['direction'] = ""; }
 
 /* get requested logs */
-$logs = $Log->fetch_logs($logCount, $_POST['direction'], $_POST['lastId'], $highestId, $_POST['InformationalQuery'], $_POST['NoticeQuery'], $_POST['WarningQuery']);
+$logs = $Log->fetch_logs($logCount, $_POST['direction'], $_POST['lastId'], $highestId, $informational, $notice, $warning);
 
 $x = 0;
 foreach ($logs as $log) {
 	//cast
 	$log = (array) $log;
 
-	if($x < $logCount) {
+    //set classes based on severity
+    if ($log['severity'] == 0) {
+        $log['severityText'] = _("Informational");
+        $color = "success";
+    }
+    elseif ($log['severity'] == 1) {
+        $log['severityText'] = _("Notice");
+        $color = "warning";
+    }
+    elseif ($log['severity'] == 2) {
+        $log['severityText'] = _("Warning");
+        $color = "danger";
+    }
+    else {
+        $log['severityText'] = _("Unknown");
+        $color = "info";
+    }
 
-	    //set classes based on severity
-	    if ($log['severity'] == 0) {
-	        $log['severityText'] = _("Informational");
-	        $color = "success";
-	    }
-	    else if ($log['severity'] == 1) {
-	        $log['severityText'] = _("Notice");
-	        $color = "warning";
-	    }
-	    else {
-	        $log['severityText'] = _("Warning");
-	        $color = "danger";
-	    }
+	/* reformat details */
+	$log['details'] = str_replace("\"", "'", $log['details']);
 
-    	if (in_array($log['severityText'], $_POST)) {
-			/* reformat details */
-			$log['details'] = str_replace("\"", "'", $log['details']);
-
-   	    	print '<tr class="'.$color.' '. $log['severityText'] .'" id="'. $log['id'] .'">'. "\n";
-         	print '	<td class="date">'. $log['date']     .'</td>'. "\n";
-   	    	print '	<td class="severity"><span>'. $log['severity'] .'</span>'. $log['severityText'] .'</td>'. "\n";
-        	print '	<td class="username">'. $log['username'] .'</td>'. "\n";
-        	print '	<td class="ipaddr">'. $log['ipaddr'] .'</td>'. "\n";
-            print '	<td class="command"><a href="" class="openLogDetail" data-logid="'.$log['id'].'">'. $log['command']  .'</a></td>'. "\n";
-            print '	<td class="detailed">';
-            /* details */
-            if(!empty($log['details'])) { print '	<i class="fa fa-comment fa-gray" rel="tooltip" data-html="true" data-placement="left" title="<b>'._('Event details').'</b>:<hr>'. $log['details'] .'"></i></td>'. "\n"; }
-            print '	</td>'. "\n";
-        	print '</tr>'. "\n";
-    	}
-	}
-	$x++;
+    print '<tr class="'.$color.' '. $log['severityText'] .'" id="'. $log['id'] .'">'. "\n";
+ 	print '	<td class="date">'. $log['date']     .'</td>'. "\n";
+    print '	<td class="severity"><span>'. $log['severity'] .'</span>'. $log['severityText'] .'</td>'. "\n";
+	print '	<td class="username">'. $log['username'] .'</td>'. "\n";
+	print '	<td class="ipaddr">'. $log['ipaddr'] .'</td>'. "\n";
+    print '	<td class="command"><a href="" class="openLogDetail" data-logid="'.$log['id'].'">'. $log['command']  .'</a></td>'. "\n";
+    print '	<td class="detailed">';
+    /* details */
+    if(!empty($log['details'])) { print '	<i class="fa fa-comment fa-gray" rel="tooltip" data-html="true" data-placement="left" title="<b>'._('Event details').'</b>:<hr>'. $log['details'] .'"></i></td>'. "\n"; }
+    print '	</td>'. "\n";
+	print '</tr>'. "\n";
 }
 ?>
 

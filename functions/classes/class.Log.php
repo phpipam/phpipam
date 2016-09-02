@@ -608,16 +608,14 @@ class Logging extends Common_functions {
 	 * @param mixed $direction (default: NULL)
 	 * @param mixed $lastId (default: NULL)
 	 * @param mixed $highestId (default: NULL)
-	 * @param mixed $informational
-	 * @param mixed $notice
-	 * @param mixed $warning
+	 * @param mixed $informational (default: Off)
+	 * @param mixed $notice (default: Off)
+	 * @param mixed $warning (default: Off)
 	 * @return void
 	 */
-	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational, $notice, $warning) {
+	public function fetch_logs ($logCount, $direction = NULL, $lastId = NULL, $highestId = NULL, $informational = "off", $notice = "off", $warning = "off") {
 
     	# check for lastId - must be numeric
-    	if(!is_numeric($lastId))        { $this->Result->show("danger", "Invalid last id", true);	return false; }
-    	if(!is_numeric($highestId))     { $this->Result->show("danger", "Invalid highest id", true);	return false; }
     	if(!is_numeric($logCount))      { $this->Result->show("danger", "Invalid logcount value", true);	return false; }
     	if($direction!==NULL) {
             if($direction!="next" && $direction!="prev" && $direction!="") {
@@ -625,30 +623,44 @@ class Logging extends Common_functions {
             }
     	}
 
-		# query start
-		$query  = 'select * from ('. "\n";
-		$query .= 'select * from logs '. "\n";
-		# append severities
-		$query .= 'where (`severity` = "'. $informational .'" or `severity` = "'. $notice .'" or `severity` = "'. $warning .'" )'. "\n";
-		# set query based on direction */
-		if( ($direction == "next") && ($lastId != $highestId) ) {
-			$query .= 'and `id` < '. $lastId .' '. "\n";
-			$query .= 'order by `id` desc limit '. $logCount . "\n";
+		# query
+		$query = array();               // query
+		$query_severities = array();    // severities
+		$params = array();              // sql bind parameters
+
+        $query[] = "select * from (";
+		$query[] = "select * from logs ";
+		$query[] = "where (";
+		// severities
+		if($informational=="on")
+		$query_severities[] = "`severity` = 0";
+		if($notice=="on")
+		$query_severities[] = "`severity` = 1";
+		if($warning=="on")
+		$query_severities[] = "`severity` = 2";
+        // join severities
+        $query[] = implode(" or ", $query_severities);
+        $query[] = ")";
+
+		// direction
+		if( ($direction=="next") && ($lastId!=$highestId) ) {
+			$query[] = "and `id` < :lastId";
+			$query[] = "order by `id` desc limit $logCount";
+			$params['lastId'] = $lastId;
 		}
-		elseif( ($direction == "prev") && ($lastId != $highestId)) {
-			$query .= 'and `id` > '. $lastId .' '. "\n";
-			$query .= 'order by `id` asc limit '. $logCount . "\n";
+		elseif( $direction=="prev" && $lastId!=$highestId) {
+			$query[] = "and `id` > :lastId";
+			$query[] = "order by `id` asc limit $logCount";
+			$params['lastId'] = $lastId;
 		}
 		else {
-			$query .= 'order by `id` desc limit '. $logCount . "\n";
+			$query[] = "order by `id` desc limit $logCount";
 		}
-		# append limit and order
-		$query .= ') as test '. "\n";
-		$query .= 'order by `id` desc limit '. $logCount .';'. "\n";
-
+        $query[] = ") as test ";
+        $query[] = "order by `id` desc limit $logCount ;";
 
 	    # fetch
-	    try { $logs = $this->Database->getObjectsQuery($query); }
+	    try { $logs = $this->Database->getObjectsQuery(implode("\n", $query), $params); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # return results
@@ -1275,6 +1287,9 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_all_changelogs ($filter = false, $expr, $limit = 100) {
+    	# limit check
+    	if(!is_numeric($limit))        { $this->Result->show("danger", "Invalid limit", true);	return false; }
+
 	    # set query
 		if(!$filter) {
 		    $query = "select * from (
@@ -1376,10 +1391,27 @@ class Logging extends Common_functions {
 	 * @param $limit (default: 50)
 	 */
 	public function fetch_changlog_entries($object_type, $coid, $long = false, $limit = 50) {
+    	# limit check
+    	if(!is_numeric($limit))        { $this->Result->show("danger", "Invalid limit", true);	return false; }
+
 	    # change ctype to match table
-		if($object_type=="ip_addr")	$object_typeTable = "ipaddresses";
-		elseif($object_type=="subnet")$object_typeTable = "subnets";
-		else					$object_typeTable = $object_type;
+	    switch ($object_type) {
+    	    // ip
+    	    case "ip_addr":
+    	        $object_typeTable = "ipaddresses";
+    	        break;
+    	    // section
+     	    case "section":
+    	        $object_typeTable = "sections";
+    	        break;
+    	    // subnet
+     	    case "subnet":
+    	        $object_typeTable = "subnets";
+    	        break;
+    	    // error
+    	    default:
+    	        $this->Result->show("danger", "Invalid object type", true);	return false;
+	    }
 
 	    # query
 	    if($long) {
@@ -1411,6 +1443,11 @@ class Logging extends Common_functions {
 	 * @return void
 	 */
 	public function fetch_subnet_slaves_changlog_entries_recursive($subnetId, $limit = 50) {
+    	# limit check
+    	if(!is_numeric($limit))        { $this->Result->show("danger", "Invalid limit", true);	return false; }
+    	# $subnetId check
+    	if(!is_numeric($subnetId))     { $this->Result->show("danger", "Invalid subnet Id", true);	return false; }
+
 		# fetch all slave subnet ids
 		$Subnets = new Subnets ($this->Database);
 		$Subnets->reset_subnet_slaves_recursive ();

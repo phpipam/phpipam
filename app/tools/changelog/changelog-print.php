@@ -9,15 +9,24 @@ $User->check_user_session();
 
 # change parameters - search string provided
 if(isset($_GET['sPage'])) {
+    // validate $_REQUEST['subnetId']
+    if(!is_numeric($_REQUEST['subnetId']))  { $Result->show("danger", _("Invalid subnet Id")."!", true); }
+
 	$_REQUEST['cfilter']  = $_REQUEST['subnetId'];
 	$_REQUEST['climit']  = $_REQUEST['sPage'];
 }
 elseif(isset($_GET['subnetId'])) {
+    // validate $_REQUEST['subnetId']
+    if(!is_numeric($_REQUEST['subnetId']))  { $Result->show("danger", _("Invalid subnet Id")."!", true); }
+
 	$_REQUEST['climit']  = $_REQUEST['subnetId'];
 }
 else {
 	$_REQUEST['climit']  = 50;
 }
+
+# numeric check
+if(!is_numeric($_REQUEST['climit']))  { $Result->show("danger", _("Invalid limit")."!", true); }
 
 # get clog entries
 if(!isset($_REQUEST['cfilter'])) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $_REQUEST['climit']); }
