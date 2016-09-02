@@ -336,7 +336,7 @@ class PowerDNS extends Common_functions {
         $ttl[1800]     = "30 minutes";
         $ttl[2700]    = "45 minutes";
         $ttl[3600]     = "1 hour";
-        $ttl[7400]    = "2 hours";
+        $ttl[7200]    = "2 hours";
         $ttl[21600] = "6 hours";
         $ttl[43200]    = "12 hours";
         $ttl[86400]    = "24 hours";
