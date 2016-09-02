@@ -137,13 +137,13 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 			# destroy session
 			$User->destroy_session();
 		}
-		
+
 		//check if SAML2 login is possible
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
 		if($saml2settings!=false){
-			$Result->show("success", _('You can login with SAML2 <a href="'.$Tools->createURL().'/saml2">here</a>'));
+			$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
 		}
-		
+
 		?>
 	</div>
 

@@ -1,10 +1,10 @@
 <?php
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
-define("TOOLKIT_PATH", '/var/www/html/phpipam/functions/php-saml/');
+define("TOOLKIT_PATH", dirname(__FILE__).'/../../functions/php-saml/');
 require_once(TOOLKIT_PATH . '_toolkit_loader.php');   // We load the SAML2 lib
 
-//get SAML2 settings from db 
+//get SAML2 settings from db
 $dbobj=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
 if(!$dbobj){
 echo "SAML settings not found in database";
@@ -14,14 +14,14 @@ die();
 $params=json_decode($dbobj->params);
 //if using advanced settings, instantiate without db settings
 if($params->advanced=="1"){
-	$auth = new OneLogin_Saml2_Auth(); 
+	$auth = new OneLogin_Saml2_Auth();
 }else{
 
 	$settings = array (
         'sp' => array (
             'entityId' => $Tools->createURL(),
             'assertionConsumerService' => array (
-                'url' => $Tools->createURL()."/saml2",
+                'url' => create_link('saml2'),
             ),
             'singleLogoutService' => array (
                 'url' => $Tools->createURL(),
@@ -39,8 +39,8 @@ if($params->advanced=="1"){
             'certFingerprint' => $params->idpcertfingerprint,
 	        'certFingerprintAlgorithm' => $params->idpcertalgorithm,
         ),
-    );	
-	$auth = new OneLogin_Saml2_Auth($settings); 
+    );
+	$auth = new OneLogin_Saml2_Auth($settings);
 }
 //if SAMLResponse is not in the request, create an authnrequest and send it to the idp
 if(!isset($_POST["SAMLResponse"])){
@@ -57,21 +57,21 @@ if(!isset($_POST["SAMLResponse"])){
 	} else {
 	    $requestID = null;
 	}
-	
+
 	$auth->processResponse($requestID);
 
 	$errors = $auth->getErrors();
-	
+
 	if (!empty($errors)) {
 	    print_r('<p>'.implode(', ', $errors).'</p>');
 	    exit();
 	}
-	
+
 	if (!$auth->isAuthenticated()) {
 	    echo "<p>Not authenticated</p>";
 	    exit();
 	}
-	
+
 	// try to authenticate in phpipam
 	$User->authenticate ($auth->getNameId(), '');
 	// Redirect user where he came from, if unknown go to dashboard.
