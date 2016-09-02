@@ -825,9 +825,10 @@ class User extends Common_functions {
      * @access public
      * @param mixed $username
      * @param mixed $password
+     * @param bool $saml
      * @return void
      */
-    public function authenticate ($username, $password) {
+    public function authenticate ($username, $password, $saml = false) {
 
         # first we need to check if username exists
         $this->fetch_user_details ($username);
@@ -845,8 +846,14 @@ class User extends Common_functions {
         else {
             # set method name variable
             $authmethodtype = $this->authmethodtype;
-            # authenticate
-            $this->{$authmethodtype} ($username, $password);
+            # is auth_SAML and $saml == false throw error
+            if ($authmethodtype=="auth_SAML2" && $saml===false) {
+                $this->Result->show("danger", "Please use <a href='".create_link('saml2')."'>login</a>!", true);
+            }
+            else {
+                # authenticate
+                $this->{$authmethodtype} ($username, $password);
+            }
         }
     }
 
@@ -1210,6 +1217,27 @@ class User extends Common_functions {
             $this->Log->write( "Radius login", "Failed to authenticate user on radius server", 2, $username );
             $this->Result->show("danger", _("Invalid username or password"), true);
         }
+    }
+
+    /**
+     * SAML2 auth
+     *
+     * @access private
+     * @param mixed $username
+     * @param mixed $password (default: null)
+     * @return void
+     */
+    private function auth_SAML2 ($username, $password = null) {
+        # save to session
+        $this->write_session_parameters ();
+
+        $this->Log->write( "SAML2 login", "User ".$this->user->real_name." logged in via SAML2", 0, $username );
+        $this->Result->show("success", _("SAML2 login successful"));
+
+        # write last logintime
+        $this->update_login_time ();
+        # remove possible blocked IP
+        $this->block_remove_entry ();
     }
 
 
