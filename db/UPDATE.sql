@@ -676,3 +676,8 @@ INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whr
 
 /* remove print limit */
 ALTER TABLE `users` DROP `printLimit`;
+
+/* add http saml2 method */
+ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','SAML2')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';
+
+
