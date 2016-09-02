@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # header
-print "<h4>"._('Changelog')."</h4><hr>";
+print "<h4>"._('Changelog')."</h4>";
 
 # if enabled
 if($User->settings->enableChangelog == 1) {

@@ -7,18 +7,18 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# validate subnetId parameter - meaning cfilter
+if(isset($_REQUEST['subnetId'])) {
+    // validate $_REQUEST['subnetId']
+    if(!!preg_match('/[^A-Za-z0-9.#*% <>_ \\-$]/', $_REQUEST['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
+}
+
 # change parameters - search string provided
 if(isset($_GET['sPage'])) {
-    // validate $_REQUEST['subnetId']
-    if(!is_numeric($_REQUEST['subnetId']))  { $Result->show("danger", _("Invalid subnet Id")."!", true); }
-
 	$_REQUEST['cfilter']  = $_REQUEST['subnetId'];
 	$_REQUEST['climit']  = $_REQUEST['sPage'];
 }
 elseif(isset($_GET['subnetId'])) {
-    // validate $_REQUEST['subnetId']
-    if(!is_numeric($_REQUEST['subnetId']))  { $Result->show("danger", _("Invalid subnet Id")."!", true); }
-
 	$_REQUEST['climit']  = $_REQUEST['subnetId'];
 }
 else {
