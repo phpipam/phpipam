@@ -1,13 +1,12 @@
 Feature candidates for 1.4:
 
-    + Custom Field type: Password
-    + Bulk/range edit non-contiguous IP addresses
-    + Bulk/range edit non-contiguous IP addresses
-
     + Modules
         + Customers module;
 
     + CSV import tab with fields;
+
+    GitHub enhancement requests:
+        https://github.com/phpipam/phpipam/milestone/2
 
 
 features for next releases:

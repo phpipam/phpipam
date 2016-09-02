@@ -265,7 +265,7 @@ class Subnets_controller extends Common_api_functions {
 		elseif (is_numeric($this->_params->id)) {
 			$result = $this->read_subnet ();
 			// check result
-			if($result==NULL)							{ $this->Response->throw_exception(404, "Invalid Id"); }
+			if($result==NULL)							{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
 		// all
@@ -947,7 +947,7 @@ class Subnets_controller extends Common_api_functions {
 		// numberic
 		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(409, "Subnet Id must be numeric (".$this->_params->id.")"); }
 		// check subnet
-		if(is_null($this->Subnets->fetch_subnet ("id", $this->_params->id)))						{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
+		if($this->Subnets->fetch_subnet ("id", $this->_params->id)===false) 						{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
 	}
 
 	/**
