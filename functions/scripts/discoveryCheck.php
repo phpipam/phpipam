@@ -77,10 +77,12 @@ if ($scan_subnets!==false) {
     // initial array
     $addresses_tmp = array();
     // loop
-    foreach($scan_subnets as $s) {
+    foreach($scan_subnets as $i => $s) {
     	// if subnet has slaves dont check it
     	if ($Subnets->has_slaves ($s->id) === false) {
     		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
+        } else {
+            unset( $scan_subnets[$i] );
     	}
     }
 
@@ -96,7 +98,7 @@ if ($scan_subnets!==false) {
 
 
 if($Scan->debugging)							{ print_r($scan_subnets); }
-if($scan_subnets===false) 						{ die("No subnets are marked for new hosts checking"); }
+if($scan_subnets===false || !count($scan_subnets)) { die("No subnets are marked for new hosts checking\n"); }
 
 
 //scan
@@ -105,7 +107,9 @@ if($Scan->debugging)							{ print "Using $Scan->icmp_type\n--------------------
 
 $z = 0;			//addresses array index
 
-$size_subnets = max(array_keys($scan_subnets));
+// let's just reindex the subnets array to save future issues
+$scan_subnets   = array_values($scan_subnets);
+$size_subnets   = count($scan_subnets);
 $size_addresses = max(array_keys($addresses));
 
 //different scan for fping
