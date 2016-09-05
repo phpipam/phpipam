@@ -14,12 +14,18 @@ $all_method_types = $User->fetch_available_auth_method_types();
 <hr>
 
 <!-- Add new -->
-<div class="btn-group" style="margin-bottom: 20px;">
+<div class="dropdown" style="margin-bottom: 20px;">
+    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><?php print _("Create new:"); ?> <span class="caret"></span>
+</button>
+
+<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 <?php
 foreach($all_method_types as $type) {
-	print "<button class='btn btn-sm btn-default editAuthMethod' style='margin-bottom:10px;' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new $type authentication")."</button>";
+	print "<li><a href='' class='editAuthMethod' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new $type authentication")."</a></li>";
 }
 ?>
+</ul>
+
 </div>
 
 <!-- table -->
