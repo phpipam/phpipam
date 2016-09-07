@@ -7,6 +7,10 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# strip tags - XSS
+$_GET  = $User->strip_input_tags ($_GET);
+$_REQUEST = $User->strip_input_tags ($_REQUEST);
+
 # validate subnetId parameter - meaning cfilter
 if(isset($_REQUEST['subnetId'])) {
     // validate $_REQUEST['subnetId']

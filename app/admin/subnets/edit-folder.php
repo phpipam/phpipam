@@ -22,6 +22,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "folder");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # ID must be numeric
 if($_POST['action']!="add") {
 	if(!is_numeric($_POST['subnetId']))										{ $Result->show("danger", _("Invalid ID"), true, true); }

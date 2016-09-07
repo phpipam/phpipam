@@ -23,6 +23,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "subnet");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 
 # verify that user has permissions to add subnet
 if($_POST['action'] == "add") {

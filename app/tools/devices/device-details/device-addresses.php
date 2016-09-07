@@ -13,6 +13,9 @@ is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true)
 # fetch device
 $device = (array) $Tools->fetch_object ("devices", "id", $_GET['subnetId']);
 
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
+
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # fetch all addresses on switch

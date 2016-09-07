@@ -19,6 +19,8 @@ $User->check_user_session();
 # validate csrf cookie
 $User->csrf_cookie ("validate", "replace_fields", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
 
 //verify post
 if(empty($_POST['search'])) { $Result->show("danger", _('Please enter something in search field').'!', true); }

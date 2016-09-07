@@ -7,6 +7,10 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# strip tags - XSS
+$_REQUEST = $User->strip_input_tags ($_REQUEST);
+$_GET = $User->strip_input_tags ($_GET);
+
 # header
 print "<h4>"._('Changelog')."</h4>";
 

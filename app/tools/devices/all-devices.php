@@ -16,6 +16,9 @@ $User->check_user_session();
 $devices = $Tools->fetch_all_objects("devices", "hostname");
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
+
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # get hidden fields */

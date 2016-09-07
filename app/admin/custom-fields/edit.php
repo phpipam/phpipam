@@ -29,6 +29,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "custom_field");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 
 /* reset field name for add! */
 if($_POST['action'] == "add") 	{ $_POST['fieldName'] = ""; }

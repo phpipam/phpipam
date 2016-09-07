@@ -16,6 +16,9 @@ $Subnets	= new Subnets ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
 ?>
 
 <!-- header -->

@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
+
 # get clog entries for current subnet
 $clogs = $Log->fetch_changlog_entries("subnet", $_GET['subnetId'], true);
 # subnet changelog for all slave subnets

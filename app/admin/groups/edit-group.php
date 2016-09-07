@@ -19,6 +19,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "group");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # fetch group and set title
 if($_POST['action']=="add") {
 	$title = _('Add new group');

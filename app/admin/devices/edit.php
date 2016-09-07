@@ -20,6 +20,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "device");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
 

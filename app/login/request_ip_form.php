@@ -152,6 +152,14 @@ $instructions = $Database->getObject("instructions", 2);
 
 if(is_object($instructions)) {
     if(strlen($instructions->instructions)>0) {
+
+        /* format line breaks */
+        $instructions->instructions = stripslashes($instructions->instructions);		//show html
+
+        /* prevent <script> */
+        $instructions->instructions = str_replace("<script", "<div class='error'><xmp><script", $instructions->instructions);
+        $instructions->instructions = str_replace("</script>", "</script></xmp></div>", $instructions->instructions);
+
         print "<div id='login' class='request'>";
         print "<div class='requestIP'>";
         print $instructions->instructions;

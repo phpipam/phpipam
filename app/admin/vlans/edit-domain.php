@@ -21,6 +21,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "vlan_domain");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # fetch vlan details
 $l2_domain = $Admin->fetch_object ("vlanDomains", "id", @$_POST['id']);
 $l2_domain = $l2_domain!==false ? (array) $l2_domain : array();

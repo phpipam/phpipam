@@ -19,6 +19,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "languages");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # get lang details
 if($_POST['action']=="edit" || $_POST['action']=="delete")
 $lang = (array) $Admin->fetch_object ("lang", "l_id", $_POST['langid']);

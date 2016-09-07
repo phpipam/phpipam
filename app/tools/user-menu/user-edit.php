@@ -21,6 +21,9 @@ $User->check_user_session();
 # verify email
 if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))							{ $Result->show("danger alert-absolute",  _('Email not valid!'), true); }
 
+# verify lang
+if(!is_numeric($_POST['lang']))                                                 { $Result->show("danger alert-absolute",  _('Invalid language!'), true); }
+
 # verify password if changed (not empty)
 if (strlen($_POST['password1']) != 0) {
 	if ( (strlen($_POST['password1']) < 8) && (!empty($_POST['password1'])) ) 	{ $Result->show("danger alert-absolute", _('Password must be at least 8 characters long!'), true); }

@@ -19,6 +19,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "device_types");
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['tid'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 # set delete flag

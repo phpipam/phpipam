@@ -23,6 +23,9 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
 # get hidden custom fields from settings
 $filters = json_decode($User->settings->hiddenCustomFields, true);
 isset($filters[$_POST['table']]) ? : $filters[$_POST['table']] = array();
