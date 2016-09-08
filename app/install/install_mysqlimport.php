@@ -17,17 +17,14 @@
 Enter password:</pre>
 				</li>
 				
-				<li>Create database
+				<li>Create database and set permissions for phpipam user
 					<pre>CREATE DATABASE `<?php print $db['name']; ?>`;
+GRANT ALL on `<?php print $db['name'];?>`.* to <?php print $db['user'];?>@localhost identified by '<?php print $db['pass'];?>';
 exit</pre>
 				</li>
 				
 				<li>Import SQL file
-					<pre>mysql -u root -p < db/SCHEMA.sql</pre>
-				</li>
-				
-				<li>Set permissions for phpipam user
-				<pre>GRANT ALL on `<?php print $db['name'];?>`.* to <?php print $db['user'];?>@localhost identified by '<?php print $db['pass'];?>';</pre>
+					<pre>mysql -u root -p <?php print $db['name']; ?> < db/SCHEMA.sql</pre>
 				</li>
 				
 				<li>Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage<br>
