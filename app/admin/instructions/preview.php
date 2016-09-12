@@ -3,7 +3,7 @@
 /**
  *	Preview instructions
  ***************************/
-header('X-XSS-Protection "1; mode=block"');
+header('X-XSS-Protection:1; mode=block');
 ?>
 
 <div class="normalTable" style="padding: 5px;">

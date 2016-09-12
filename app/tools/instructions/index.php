@@ -16,7 +16,7 @@ $instructions = str_replace("<script", "<div class='error'><xmp><script", $instr
 $instructions = str_replace("</script>", "</script></xmp></div>", $instructions);
 
 // HSS header
-header('X-XSS-Protection "1; mode=block"');
+header('X-XSS-Protection:1; mode=block');
 ?>
 
 <h4><?php print _('Instructions for managing IP addresses');?></h4>

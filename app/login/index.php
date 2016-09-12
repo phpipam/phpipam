@@ -1,5 +1,5 @@
 <?php
-header('X-XSS-Protection "1; mode=block"');
+header('X-XSS-Protection:1; mode=block');
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
