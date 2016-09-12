@@ -570,7 +570,7 @@ class Addresses_controller extends Common_api_functions  {
 
 		// validate device
 		if(isset($this->_params->switch)) {
-		if($this->Tools->fetch_object("devices", "vlanId", $this->_params->switch)===false)	{ $this->Response->throw_exception(404, "Device does not exist"); } }
+		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(404, "Device does not exist"); } }
 		// validate state
 		if(isset($this->_params->state)) {
 		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(404, "Tag does not exist"); } }
@@ -598,7 +598,7 @@ class Addresses_controller extends Common_api_functions  {
 
 		// validate device
 		if(isset($this->_params->switch)) {
-		if($this->Tools->fetch_object("devices", "vlanId", $this->_params->switch)===false)	{ $this->Response->throw_exception(404, "Device does not exist"); } }
+		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(404, "Device does not exist"); } }
 
 		// validate state
 		if(isset($this->_params->state)) {
