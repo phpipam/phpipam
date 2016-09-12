@@ -21,9 +21,8 @@ if(isset($_REQUEST['ip'])) {
 $search_term = trim($search_term);
 $search_term = str_replace("*", "%", $search_term);
 
-
 // IP address low/high reformat
-if ($Tools->validate_ip($search_term)) {
+if(is_numeric(str_replace(array(":","."), "", $search_term))) {
     // identify
     $type = $Addresses->identify_address( $search_term ); //identify address type
 
