@@ -4,8 +4,11 @@
  * Discover new hosts with telnet scan
  *******************************/
 
+# verify that user is logged in
+$User->check_user_session();
+
 # get ports
-if(strlen($_POST['port'])==0) 	{ $Result->show("danger", _('Please enter ports to scan').'!', true); }
+if(strlen($_POST['port'])==0) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
 
 //verify ports
 $pcheck = explode(";", str_replace(",",";",$_POST['port']));
@@ -15,6 +18,9 @@ foreach($pcheck as $p) {
 	}
 }
 $_POST['port'] = str_replace(";",",",$_POST['port']);
+
+// verify subnetId
+if(!is_numeric($_POST['subnetId'])) { $Result->show("danger", _('Invalid subnet Identifier').'!', true); }
 
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "scan");
