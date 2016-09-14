@@ -116,6 +116,10 @@ else {
 	//check if subnetId == configure than already installed
 	if(@$_GET['subnetId']=="configure")								{ include(dirname(__FILE__)."/postinstall_configure.php"); }
 	else {
+    	// validate install type
+    	$install_types = array("install_automatic", "install_manual", "install_mysqlimport");
+        if(!in_array($_GET['section'], $install_types)) 	        { $Result->show("danger", "Invalid request", true); }
+
 		// verify that page exists
 		if(!file_exists(dirname(__FILE__)."/$_GET[section].php"))	{ include("invalid_install_type.php"); }
 		else														{ include(dirname(__FILE__)."/$_GET[section].php"); }
