@@ -271,6 +271,7 @@ class Responses {
 		// reset
 		$this->result['code'] = $tmp['code'];
 		$this->result['success'] = $tmp['success'];
+		if(isset($tmp['id']))	    { $this->result['id'] = $tmp['id']; }
 		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
 		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
 		if(isset($tmp['ip']))	    { $this->result['ip'] = $tmp['ip']; }

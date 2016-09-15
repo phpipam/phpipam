@@ -232,7 +232,7 @@ class Vlans_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Vlan creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"Vlan created", "location"=>"/api/".$this->_params->app_id."/vlans/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"Vlan created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/vlans/".$this->Admin->lastId."/");
 		}
 	}
 

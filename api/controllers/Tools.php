@@ -400,7 +400,7 @@ class Tools_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, $this->_params->id." object creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "data"=>$this->_params->id." object created", "location"=>"/api/".$this->_params->app_id."/tools/".$this->_params->id."/".$this->Admin->lastId."/");
+			return array("code"=>201, "data"=>$this->_params->id." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$this->_params->id."/".$this->Admin->lastId."/");
 		}
 
 	}

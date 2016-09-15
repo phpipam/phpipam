@@ -197,7 +197,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"L2 domain created", "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"L2 domain created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
 		}
 	}
 

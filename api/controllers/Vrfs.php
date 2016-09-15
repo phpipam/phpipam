@@ -221,7 +221,7 @@ class Vrfs_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "VRF creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"VRF created", "location"=>"/api/".$this->_params->app_id."/vrfs/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"VRF created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/vrfs/".$this->Admin->lastId."/");
 		}
 	}
 

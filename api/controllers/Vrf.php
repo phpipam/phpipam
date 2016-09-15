@@ -27,7 +27,7 @@ class Vrf_controller extends Common_api_functions {
 	 */
 	public function __construct($Database, $Tools, $params, $Response) {
 		// include
-		require("Vlans.php");
+		require("Vrfs.php");
 		// subnets
 		$this->vrf_controller = new Vrfs_controller ($Database, $Tools, $params, $Response);
 	}

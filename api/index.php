@@ -190,11 +190,12 @@ try {
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
 	$result = $e->getMessage();
+	$Response->result['success'] = 0;
 
 	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {
 		$Response->exception = true;
-		$Response->result['success'] = false;
+		$Response->result['success'] = 0;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
 	}

@@ -170,7 +170,7 @@ class Subnets_controller extends Common_api_functions {
 		}
 		else {
 			//set result
-			return array("code"=>201, "message"=>"Subnet created", "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/");
+			return array("code"=>201, "message"=>"Subnet created", "id"=>$this->Subnets->lastInsertId, "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/");
 		}
 	}
 

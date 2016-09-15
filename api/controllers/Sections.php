@@ -253,7 +253,7 @@ class Sections_controller extends Common_api_functions {
 														{ $this->Response->throw_exception(500, "Section create failed"); }
 		else {
 			//set result
-			return array("code"=>201, "message"=>"Section created", "location"=>"/api/".$this->_params->app_id."/sections/".$this->Sections->lastInsertId."/");
+			return array("code"=>201, "message"=>"Section created", "id"=>$this->Sections->lastInsertId, "location"=>"/api/".$this->_params->app_id."/sections/".$this->Sections->lastInsertId."/");
 		}
 	}
 
