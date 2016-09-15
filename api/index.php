@@ -167,6 +167,10 @@ try {
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
 		require( dirname(__FILE__) . "/controllers/$controller_file.php");
 	}
+	// check custom controllers
+	elseif( file_exists( dirname(__FILE__) . "/controllers/custom/$controller_file.php") ) {
+		require( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
+	}
 	else {
 		$Response->throw_exception(400, 'Invalid controller');
 	}
