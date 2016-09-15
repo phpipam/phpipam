@@ -206,7 +206,7 @@ class Subnets_controller extends Common_api_functions {
 			if($this->_params->id=="cidr") {
 				$result = $this->read_search_subnet ();
 				// check result
-				if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
+				if($result==false)						{ $this->Response->throw_exception(404, "No subnets found"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			else {
@@ -265,7 +265,7 @@ class Subnets_controller extends Common_api_functions {
 		elseif (is_numeric($this->_params->id)) {
 			$result = $this->read_subnet ();
 			// check result
-			if($result==NULL)							{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
+			if($result==false)							{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
 		// all
