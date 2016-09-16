@@ -223,14 +223,14 @@ class Common_api_functions {
 		}
 		// filter - single
 		else {
-				foreach ($result as $k=>$v) {
-					if ($k == $this->_params->filter_by) {
-						if ($v != $this->_params->filter_value) {
-							unset($result);
-							break;
-						}
+			foreach ($result as $k=>$v) {
+				if ($k == $this->_params->filter_by) {
+					if ($v != $this->_params->filter_value) {
+						unset($result);
+						break;
 					}
 				}
+			}
 		}
 
 		# null?
@@ -259,6 +259,15 @@ class Common_api_functions {
 		if (is_array($result))	{ $result_tmp = $result[0]; }
 		else					{ $result_tmp = $result; }
 
+        // validate filter_value
+        if(!isset($this->_params->filter_value)) {
+            $this->Response->throw_exception(400, 'Missing filter_value');
+        }
+        elseif (strlen($this->_params->filter_value)==0) {
+            $this->Response->throw_exception(400, 'Empty filter_value');
+        }
+
+        // validate filter_by
 		$error = true;
 		if(is_array($result_tmp)) {
     		foreach ($result_tmp as $k=>$v) {
@@ -272,7 +281,9 @@ class Common_api_functions {
 		}
 
 		// die
-		if ($error)							{ $this->Response->throw_exception(400, 'Invalid filter value'); }
+		if ($error)	{
+    		$this->Response->throw_exception(400, 'Invalid filter_by');
+        }
 	}
 
 	/**

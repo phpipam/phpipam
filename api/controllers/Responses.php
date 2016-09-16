@@ -44,6 +44,16 @@ class Responses {
 	 */
 	public $exception = false;
 
+	/**
+	 * Execution time
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $time = false;
+
 
 
 
@@ -136,9 +146,10 @@ class Responses {
 	 *
 	 * @access public
 	 * @param mixed $result
+	 * @param bool|int $result
 	 * @return void
 	 */
-	public function formulate_result ($result) {
+	public function formulate_result ($result, $time = false) {
 		// make sure result is array
 		$this->result = is_null($this->result) ? (array) $result : $this->result;
 
@@ -151,6 +162,11 @@ class Responses {
 		$this->set_cache_header ();
 		// set result header if not already set with $result['success']=false
 		$this->exception===true ? : $this->set_success_header ();
+
+		// time
+		if($time!==false) {
+    		$this->time = $time;
+		}
 
 		// return result
 		return $this->create_result ();
@@ -275,6 +291,7 @@ class Responses {
 		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
 		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
 		if(isset($tmp['ip']))	    { $this->result['ip'] = $tmp['ip']; }
+		if($this->time!==false)	    { $this->result['time'] = $this->time; }
 	}
 
 	/**

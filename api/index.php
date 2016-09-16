@@ -24,6 +24,7 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
+$time_response = false;
 
 # database object
 $Database 	= new Database_PDO;
@@ -42,6 +43,12 @@ if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
 
 /* wrap in a try-catch block to catch exceptions */
 try {
+
+	// start measuring
+	if($time_response) {
+	    $start = microtime(true);
+	}
+
 
 	/* Validate application ---------- */
 
@@ -201,9 +208,15 @@ try {
 	}
 }
 
+// add stop time
+if($time_response) {
+    $stop = microtime(true);
+    $time = $stop - $start;
+}
+
 
 //output result
-echo $Response->formulate_result ($result);
+echo $Response->formulate_result ($result, $time);
 
 // exit
 exit();

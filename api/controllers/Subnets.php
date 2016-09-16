@@ -836,10 +836,10 @@ class Subnets_controller extends Common_api_functions {
 	 *
 	 *	checks and validations - cidr check, issubnet, mastersubnet, sectionId
 	 *
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function validate_create_parameters () {
+	public function validate_create_parameters () {
 		# make sure subnet is in dotted format for checks
 		$this->_params->subnet = $this->Addresses->transform_address($this->_params->subnet ,"dotted");
 
