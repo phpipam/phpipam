@@ -130,6 +130,10 @@ else {
             }
         }
     }
+    // fix for adding
+    else {
+        $old_permissions = array();
+    }
     // add also new groups if available
     if(is_array($new_permissions)) {
         foreach ($new_permissions as $k1=>$p1) {
