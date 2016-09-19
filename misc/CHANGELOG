@@ -1,4 +1,4 @@
-== 1.26.000
+== 1.26.030
 
     New features:
     ------------
@@ -36,7 +36,10 @@
         + Added custom fields for all controllers;
         + New subnets automatically get parent permissions;
         + Added IP calculation to subnet;
-        + Changed all not_found when searching objects to 404 and all invalid parameters to 409 (conflict)
+        + Changed all not_found when searching objects to 404 and all invalid parameters to 409 (conflict);
+        + If new item is created id will be available in response field “id”;
+        + New parameter $time_response in api/index.php that will return execution time in field “time";
+        + Extensive first_free subnet calls search speedup;
         + New methods:
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)

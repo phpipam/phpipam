@@ -291,7 +291,7 @@ class Responses {
 		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
 		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
 		if(isset($tmp['ip']))	    { $this->result['ip'] = $tmp['ip']; }
-		if($this->time!==false)	    { $this->result['time'] = $this->time; }
+		if($this->time!==false)	    { $this->result['time'] = round($this->time,3); }
 	}
 
 	/**

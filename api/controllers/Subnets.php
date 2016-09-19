@@ -170,7 +170,7 @@ class Subnets_controller extends Common_api_functions {
 		}
 		else {
 			//set result
-			return array("code"=>201, "message"=>"Subnet created", "id"=>$this->Subnets->lastInsertId, "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/");
+			return array("code"=>201, "message"=>"Subnet created", "id"=>$this->Subnets->lastInsertId, "data"=>$this->Addresses->transform_address($values['subnet'] ,"dotted")."/".$values['mask'], "location"=>"/api/".$this->_params->app_id."/subnets/".$this->Subnets->lastInsertId."/");
 		}
 	}
 
@@ -182,18 +182,19 @@ class Subnets_controller extends Common_api_functions {
 	 * Reads subnet functions
 	 *
 	 *	Identifier can be:
-	 *		- {id}
-	 *		- custom_fields				    // returns custom fields
-	 *		- {subnet}					    // subnets in CIDR format
-	 *		- {id}/usage/				    // returns subnet usage
-	 *		- {id}/slaves/ 				    // returns all immediate slave subnets
-	 *		- {id}/slaves_recursive/ 	    // returns all slave subnets recursively
-	 *		- {id}/addresses/			    // returns all IP addresses in subnet
-	 *      - {id}/addresses/{ip}/          // returns IP address from subnet
-	 *		- {id}/first_free/			    // returns first free address in subnet
-	 *      - {id}/first_subnet/{mask}/     // returns first available subnets with specified mask
-	 *      - {id}/all_subnets/{mask}/      // returns all available subnets with specified mask
-	 *		- all							// returns all subnets in all sections
+	 *		- /{id}/
+	 *		- /custom_fields/				// returns custom fields
+	 *		- /cidr/{subnet}/				// subnets in CIDR format
+	 *		- /search/{subnet}/				// subnets in CIDR format (same as above)
+	 *		- /{id}/usage//				    // returns subnet usage
+	 *		- /{id}/slaves/ 			    // returns all immediate slave subnets
+	 *		- /{id}/slaves_recursive/ 	    // returns all slave subnets recursively
+	 *		- /{id}/addresses/			    // returns all IP addresses in subnet
+	 *      - /{id}/addresses/{ip}/         // returns IP address from subnet
+	 *		- /{id}/first_free/			    // returns first free address in subnet
+	 *      - /{id}/first_subnet/{mask}/    // returns first available subnets with specified mask
+	 *      - /{id}/all_subnets/{mask}/     // returns all available subnets with specified mask
+	 *		- /all/							// returns all subnets in all sections
 	 *
 	 * @access public
 	 * @return void
@@ -672,8 +673,15 @@ class Subnets_controller extends Common_api_functions {
 	public function subnet_first_free ($all = false) {
 		// Check for id
 		$this->validate_subnet_id ();
-		// fetch
-		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 30);
+		// single or all ?
+		if ($all) {
+    		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 30);
+
+		}
+		else {
+    		$first = $this->Subnets->search_available_single_subnet ($this->_params->id, $this->_params->id3);
+		}
+
 		# return
 		if ($first===false) {
     		$this->Response->throw_exception(404, "No subnets found");

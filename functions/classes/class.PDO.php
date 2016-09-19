@@ -671,19 +671,29 @@ abstract class DB {
 	 * @param bool $negate (default: false)
 	 * @return void
 	 */
-	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false) {
+	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
 		$sortField = $this->escape($sortField);
 		$like === true ? $operator = "LIKE" : $operator = "=";
 		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
+		// set fields
+		if($result_fields!="*") {
+    		$result_fields_arr = array();
+    		foreach ($result_fields as $f) {
+        		$result_fields_arr[] = "`$f`";
+    		}
+    		// implode
+    		$result_fields = implode(",", $result_fields);
+		}
+
         // subnets
         if ($table=="subnets" && $sortField=="subnet_int") {
-    		return $this->getObjectsQuery('SELECT *,subnet*1 as subnet_int FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+    		return $this->getObjectsQuery('SELECT '.$result_fields.',subnet*1 as subnet_int FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
         }
         else {
-    		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+    		return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
         }
 	}
 

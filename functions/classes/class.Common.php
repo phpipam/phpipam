@@ -245,13 +245,14 @@ class Common_functions  {
 	 * @param string $sortField (default: 'id')
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
+	 * @param array|mixed $result_fields (default: *)
 	 * @return void
 	 */
-	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false) {
+	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $result_fields = "*") {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
 		else {
-			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like); }
+			try { $res = $this->Database->findObjects($table, $field, $value, $sortField, $sortAsc, $like, false, $result_fields); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
@@ -1419,5 +1420,6 @@ class Common_functions  {
         // return title
     	return implode(" / ", $title);
 	}
+
 }
 ?>

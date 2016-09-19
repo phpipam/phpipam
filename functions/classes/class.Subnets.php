@@ -812,11 +812,12 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
+	 * @param string|array $result_fields (default: "*")
 	 * @return void
 	 */
-	public function fetch_subnet_slaves ($subnetId) {
+	public function fetch_subnet_slaves ($subnetId, $result_fields = "*") {
     	// fetch
-		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet_int", true);
+		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet_int", true, false, $result_fields);
 		# save to subnets cache
         if ($slaves!==false) {
 			foreach($slaves as $slave) {
@@ -2772,9 +2773,10 @@ class Subnets extends Common_functions {
 	 * @param array $user
 	 * @param array $subnets
 	 * @param array $custom_fields
+	 * @param bool $print
 	 * @return none - print
 	 */
-	public function print_subnets_tools( $user, $subnets, $custom_fields ) {
+	public function print_subnets_tools( $user, $subnets, $custom_fields, $print = true ) {
 
 		# tools object
 		$Tools = new Tools ($this->Database);
@@ -3025,8 +3027,11 @@ class Subnets extends Common_functions {
 			# Last items
 			else { }
 		}
-		# print
+		# print or return
+		if($print)
 		print implode( "\n", $html );
+		else
+		return $html;
 	}
 
 	/**
@@ -3316,16 +3321,16 @@ class Subnets extends Common_functions {
 
 
 	/**
-	 * Returns allfree subnets for master subnet for specified mask
+	 * Returns all free subnets for master subnet for specified mask
 	 *
 	 * @access public
 	 * @param mixed $subnetMasterId
 	 * @param bool $mask (default: false)
 	 * @param int $mask_drill_down (default: 8)
-	 * @param bool|int $mask_drill_down (default: 8)
+	 * @param bool $first_result (default: false)
 	 * @return void
 	 */
-	public function search_available_subnets ($subnetMasterId, $mask = false, $mask_drill_down = 8) {
+	public function search_available_subnets ($subnetMasterId, $mask = false, $mask_drill_down = 8, $first_result = false) {
 
 		/* Remove STRICT Error reporting for ParseAddress fuction */
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
@@ -3342,7 +3347,7 @@ class Subnets extends Common_functions {
 		$history_subnet = array ();
 
 		// Get Current and Previous subnets
-		$subnets 			= $this->fetch_subnet_slaves($subnetMasterId);
+		$subnets 			= $this->fetch_subnet_slaves($subnetMasterId, $result_fields = array("subnet", "mask"));
 		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
 		$parent_subnet 		= $taken_subnet->subnet;
 		$parent_subnetmask 	= $taken_subnet->mask;
@@ -3413,6 +3418,9 @@ class Subnets extends Common_functions {
     				if ($match != 1) {
         				if ($i==$mask) {
             				$html[] = "$cidr_subnet";
+            				if($first_result) {
+                				return $html;
+            				}
         				}
     				}
     				$match = 0; //Reset
@@ -3422,8 +3430,115 @@ class Subnets extends Common_functions {
 		}
 		// return html
 		return sizeof($html)>0 ? $html : false;
-	 }
+    }
 
+
+
+	/**
+	 * Returns first free subnet for master subnet for requested mask
+	 *
+	 * @access public
+	 * @param mixed $subnetMasterId
+	 * @param bool $mask (default: false)
+	 * @return void
+	 */
+	public function search_available_single_subnet ($subnetMasterId, $mask = false) {
+
+		/* Remove STRICT Error reporting for ParseAddress fuction */
+		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
+
+		# mask check
+		if(!is_numeric($mask))               { $this->Result->show("danger", _("Invalid Mask"), true); }
+		if($mask>128 || $mask<1)             { $this->Result->show("danger", _("Invalid Mask"), true); }
+
+		# must be integer
+		if(!is_numeric(@$subnetMasterId))    { $this->Result->show("danger", _("Invalid ID"), true); }
+
+		// result array and existing subnets array
+		$html = array();
+		$history_subnet = array ();
+
+		// Get Current and Previous subnets
+		$slave_subnets 		= $this->fetch_subnet_slaves($subnetMasterId, $result_fields = array("subnet", "mask"));
+		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
+		$parent_subnet 		= $taken_subnet->subnet;
+		$parent_subnetmask 	= $taken_subnet->mask;
+
+		// folder
+		if ($taken_subnet->isFolder=="1") 	return "";
+
+		// detect type
+		$type = $this->identify_address( $parent_subnet );
+
+		// initialize pear objet
+		if ($type == 'IPv4') 	{ $this->initialize_pear_net_IPv4 (); }
+		else 					{ $this->initialize_pear_net_IPv6 (); }
+
+		// reset levels for IPv6 !
+		if ($type == "IPv6")    { $mask_drill_down = 8; }
+		else                    { $mask_drill_down = 32 - $taken_subnet->mask; }
+
+		// if it has slaves
+		if($slave_subnets) {
+			foreach ($slave_subnets as $row ) {
+				$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
+			}
+		}
+
+		$dec_subnet = $parent_subnet;
+
+		// number of possible masks
+        $square_count = $mask - $taken_subnet->mask;
+
+		# Outer for loop, start with mask one more then current, increment up to X more, or 32, which ever is first
+		$dec_subnet = $parent_subnet; // have to reset each time though the loop
+		$isquare = pow(2,$square_count); // 2^nth power, that's how many subnets there are per this unique mask
+		for ($ii = 0; $ii < $isquare; $ii++ ){
+			$cidr_subnet = $this->transform_to_dotted($dec_subnet).'/'.$mask;
+			if ($type == 'IPv4'){
+				// Get broadcast, which is one decimal away from next subnet, and increment
+				$net1 = $this->Net_IPv4->parseAddress($cidr_subnet);
+				$bc1  = $net1->broadcast;
+				$dec_subnet = $this->transform_to_decimal ($bc1);
+				$dec_subnet++;
+			}
+			else {
+				// Get broadcast, which is one decimal away from next subnet, and increment
+				$net1 = $this->Net_IPv6->parseAddress($cidr_subnet);
+				$bc1  = $net1['end'];
+				$dec_subnet = $this->transform_to_decimal ($bc1);
+				$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
+			}
+			// ignore if it same is in array to speed up !
+			if (!in_array($cidr_subnet, $history_subnet)) {
+    			// overlap check
+    			foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
+        			// if subnet and mask are equal match fails, otherwise chck
+        			if ($cidr_subnet == $unavailable_sub) {
+                        $match = 1;
+                        break;
+        			}
+        			// check
+        			else {
+        				$overlap = $this->verify_overlapping ($cidr_subnet,$unavailable_sub);
+        				if ($overlap!==false){
+        					$match = 1;
+        					break;
+        				}
+        			}
+    			}
+			}
+			else {
+    			$match = 1;
+			}
+			if ($match != 1) {
+				return array($cidr_subnet);
+			}
+			$match = 0; //Reset
+		}
+		// return html
+		return sizeof($html)>0 ? $html : false;
+    }
 
 	/**
 	 * Take in decimal from IPv6 address and add one to it
@@ -3437,8 +3552,8 @@ class Subnets extends Common_functions {
 		$singledigit = array_reverse(str_split($decimalIpv6));
 		$start = 1;
 		# Foreach array of individual digits and add the first one, until it doesn't carry over, prepend output from there on out
-		foreach ($singledigit as $digit){
-			if ($start && $digit == '9'){
+		foreach ($singledigit as $digit) {
+			if ($start && $digit == '9') {
 				$digit++;
 				$output = $output.'0';
 			}
