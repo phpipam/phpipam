@@ -24,7 +24,7 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
-$time_response = false;
+$time_response = true;
 
 # database object
 $Database 	= new Database_PDO;
@@ -34,6 +34,7 @@ $Tools	    = new Tools ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
+if(SETTINGS===null)
 $settings 	= $Tools->fetch_object ("settings", "id", 1);
 
 # set empty controller for options
