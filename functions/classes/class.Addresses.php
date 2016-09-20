@@ -732,6 +732,10 @@ class Addresses extends Common_functions {
 		# if folder return false
 		if ($subnet['isFolder']=="1")                                                                   { return false; }
 
+		# false if slaves
+		$this->Subnets = new Subnets ($this->Database);
+		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
+
 	    # get max hosts
 	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']));
 

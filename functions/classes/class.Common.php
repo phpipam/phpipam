@@ -354,6 +354,7 @@ class Common_functions  {
 				# save
 				if ($settings!==false)	 {
 					$this->settings = $settings;
+					define(SETTINGS, json_encode($settings));
 				}
 			}
 		}

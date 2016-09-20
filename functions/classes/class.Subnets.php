@@ -3464,8 +3464,11 @@ class Subnets extends Common_functions {
 		$parent_subnet 		= $taken_subnet->subnet;
 		$parent_subnetmask 	= $taken_subnet->mask;
 
+		# mask must be smaller than parent !
+		if ($taken_subnet->mask > $mask)    { return false; }
+
 		// folder
-		if ($taken_subnet->isFolder=="1") 	return "";
+		if ($taken_subnet->isFolder=="1") 	{ return false; }
 
 		// detect type
 		$type = $this->identify_address( $parent_subnet );

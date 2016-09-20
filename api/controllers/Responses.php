@@ -133,6 +133,7 @@ class Responses {
 	private function set_header () {
 		// wrong code
 		if(!isset($this->exception))		{ header("HTTP/1.1 500 Invalid result code"); }
+		// ok
 		else								{ header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
 
 		// 401 - add location
@@ -287,8 +288,9 @@ class Responses {
 		// reset
 		$this->result['code'] = $tmp['code'];
 		$this->result['success'] = $tmp['success'];
-		if(isset($tmp['id']))	    { $this->result['id'] = $tmp['id']; }
 		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
+		if(isset($tmp['id']))	    { $this->result['id'] = $tmp['id']; }
+		if(isset($tmp['subnetId']))	{ $this->result['subnetId'] = $tmp['subnetId']; }
 		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
 		if(isset($tmp['ip']))	    { $this->result['ip'] = $tmp['ip']; }
 		if($this->time!==false)	    { $this->result['time'] = round($this->time,3); }

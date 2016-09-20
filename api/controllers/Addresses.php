@@ -541,10 +541,10 @@ class Addresses_controller extends Common_api_functions  {
 	/**
 	 * Validates address on creation
 	 *
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function validate_create_parameters () {
+	public function validate_create_parameters () {
 		// validate subnet
 		$this->validate_subnet ();
 

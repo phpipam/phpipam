@@ -174,14 +174,22 @@ abstract class DB {
 	 *
 	 * @access private
 	 * @param mixed $query
+	 * @param array $values
 	 * @return void
 	 */
-	private function log_query ($query) {
+	private function log_query ($query, $values = false) {
 		if($this->debug) {
 
 			$myFile = "/tmp/queries.txt";
 			$fh = fopen($myFile, 'a') or die("can't open file");
-			fwrite($fh, $query->queryString."\n");
+			// query
+			fwrite($fh, $query->queryString);
+			// values
+			if(is_array($values)) {
+            fwrite($fh, " Params: ".implode(", ", $values));
+			}
+			// break
+            fwrite($fh, "\n");
 			fclose($fh);
 		}
 	}
@@ -248,7 +256,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		return $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 	}
 
@@ -305,7 +313,7 @@ abstract class DB {
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, (array) $value);
 		$statement->execute(array($value));
 
 		return $statement->fetchColumn();
@@ -368,7 +376,7 @@ abstract class DB {
 		$paramValues = array_merge(array_values($obj), $objId);
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $paramValues);
 		//run the update on the object
 		return $statement->execute($paramValues);
 	}
@@ -528,7 +536,7 @@ abstract class DB {
 		$statement = $this->pdo->prepare($query);
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
 		if (is_object($statement)) {
@@ -560,7 +568,7 @@ abstract class DB {
 		$statement = $this->pdo->prepare($query);
 
 		//debug
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
 		$results = array();
@@ -599,7 +607,7 @@ abstract class DB {
 		}
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, array($id));
 		$statement->execute();
 
 		//we can then extract the single object (if we have a result)
@@ -626,7 +634,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
 		$resultObj = $statement->fetchObject($class);
