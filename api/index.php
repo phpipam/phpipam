@@ -26,7 +26,7 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 $enable_authentication = true;
 $time_response = true;          // adds [time] to response
 $lock_file = "";                // (optional) file to write lock to
-$lock_wait = 1;                 // number of seconds to wait if lock clears
+$lock_wait = 5;                 // number of seconds to wait if lock clears
 
 # database object
 $Database 	= new Database_PDO;
