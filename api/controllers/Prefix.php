@@ -314,7 +314,7 @@ class Prefix_controller extends Common_api_functions {
      */
     private function init_subnets_controller () {
         // file
-        require( dirname(__FILE__) . "/../Subnets.php");
+        require( dirname(__FILE__) . "/Subnets.php");
 		// validate parameters on Subnets_controller
 		$this->Subnets_controller = new Subnets_controller ($this->Database, $this->Tools, $this->_params, $this->Response);
     }
@@ -327,7 +327,7 @@ class Prefix_controller extends Common_api_functions {
      */
     private function init_addresses_controller () {
         // file
-        require( dirname(__FILE__) . "/../Addresses.php");
+        require( dirname(__FILE__) . "/Addresses.php");
 		// validate parameters on Subnets_controller
 		$this->Addresses_controller = new Addresses_controller ($this->Database, $this->Tools, $this->_params, $this->Response);
     }
@@ -657,7 +657,13 @@ class Prefix_controller extends Common_api_functions {
      * @return void
      */
     private function validate_request_parameters_custom_field () {
-        if($this->query_type!="address") {
+        if($this->query_type=="address") {
+            $this->set_valid_keys ("subnets");
+            if (!array_key_exists($this->custom_field_name, $this->custom_fields)) { $this->Response->throw_exception(400, "Invalid custom field ".$this->custom_field_name); }
+            // reset keys
+            $this->set_valid_keys ("ipaddresses");
+        }
+        else {
             if (!array_key_exists($this->custom_field_name, $this->custom_fields)) { $this->Response->throw_exception(400, "Invalid custom field ".$this->custom_field_name); }
         }
     }
