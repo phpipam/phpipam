@@ -104,6 +104,23 @@ if($_POST['action']!="add") {
        	<td class="info2"><?php print _('Application security'); ?></td>
     </tr>
 
+	<!-- lock -->
+	<tr>
+	    <td><?php print _('Transaction lock'); ?></td>
+	    <td>
+	    	<select name="app_lock" class="form-control input-sm input-w-auto">
+	    	<?php
+	    	$perms = array(0=>"No",1=>"Yes");
+	    	foreach($perms as $k=>$p) {
+		    	if($k==$api->app_lock)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
+		    	else					{ print "<option value='$k' 				   >"._($p)."</option>"; }
+	    	}
+	    	?>
+	    	</select>
+       	<td class="info2"><?php print _('Lock POST transactions'); ?></td>
+    </tr>
+
+
     <!-- description -->
     <tr>
     	<td><?php print _('Description'); ?></td>

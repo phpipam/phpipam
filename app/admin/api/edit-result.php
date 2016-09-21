@@ -49,6 +49,7 @@ else {
 					"app_code"=>@$_POST['app_code'],
 					"app_permissions"=>@$_POST['app_permissions'],
 					"app_security"=>@$_POST['app_security'],
+					"app_lock"=>@$_POST['app_lock'],
 					"app_comment"=>@$_POST['app_comment']);
 
 	# execute

@@ -689,3 +689,6 @@ UPDATE `settings` set `donate` = 0;
 /* add http saml2 method */
 ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','SAML2')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';
 
+/* add transaction locking */
+ALTER TABLE `api` ADD `app_lock` INT(1)  NOT NULL  DEFAULT '0';
+

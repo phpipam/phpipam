@@ -24,6 +24,26 @@ class Common_api_functions {
 	 */
 	public $_params;
 
+	/**
+	 * Lock transaction to avoid duplicate entries or errors
+	 *
+	 * (default value: 0)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $lock = 0;
+
+	/**
+	 * File to write lock to
+	 *
+	 * (default value: "_lock.txt")
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $lock_file_name = "_lock.txt";
+
     /**
      * Custom fields
      *
@@ -778,6 +798,84 @@ class Common_api_functions {
 
 		# result
 		return $result_remapped;
+	}
+
+
+
+
+
+
+    /* ! @transaction_locking --------------- */
+
+	/**
+	 * Set transaction lock
+	 *
+	 * @access public
+	 * @param bool $lock (default: 0)
+	 * @param mixed $file (default: "")
+	 * @return void
+	 */
+	public function set_transaction_lock ($lock = 0, $file = "") {
+        if($lock==0 || $lock==1) {
+            // save
+            $this->lock = $lock;
+            if(strlen($file)>0) {
+                $this->lock_file_name = $file;
+            }
+            // execute
+            $this->set_transaction_lock_write ();
+        }
+        else {
+            $this->lock = 0;
+            $this->set_transaction_lock_write ();
+        }
+	}
+
+	/**
+	 * Writes translaction lock to file
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function set_transaction_lock_write () {
+        // save to file
+        try {
+            $myfile = fopen(dirname(__FILE__)."/../".$this->lock_file_name, "w");
+            // add or remoe
+            if($this->lock==1) {
+                fwrite($myfile, "1");
+            }
+            else {
+                fwrite($myfile, "0");
+            }
+            fclose($myfile);
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot execute transaction lock on file $this->lock_file_name - ".$e->getMessage());
+        }
+	}
+
+	/**
+	 * Checks for lock
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function is_transaction_locked () {
+        // save to load
+        try {
+            $myfileContent = file_get_contents(dirname(__FILE__)."/../".$this->lock_file_name);
+            // check
+            if(trim($myfileContent)=="1") {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot check transaction lock on file $this->lock_file_name - ".$e->getMessage());
+        }
 	}
 
 }
