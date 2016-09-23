@@ -1,4 +1,4 @@
-== 1.26.030
+== 1.26.032
 
     New features:
     ------------
@@ -40,6 +40,7 @@
         + If new item is created id will be available in response field “id”;
         + New parameter $time_response in api/index.php that will return execution time in field “time";
         + Extensive first_free subnet calls search speedup;
+        + POST transaction locking;
         + New methods:
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)
@@ -55,6 +56,7 @@
                 POST   /subnets/{id}/first_subnet/{mask}/     // creates first free subnet under master with specified mask
                 DELETE /subnets/{id}/permissions/             // removes permissions
                 PATCH  /subnets/{id}/permissions/             // sets subnet permissions (?grouname1=ro&groupname2=3&43=1)
+        + New controller Prefix;
         + New subcontrollers:
             + /tools/nat/
             + /tools/racks/

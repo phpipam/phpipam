@@ -467,6 +467,7 @@ CREATE TABLE `api` (
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
   `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
+  `app_lock` INT(1)  NOT NULL  DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -777,4 +778,4 @@ CREATE TABLE `pstnNumbers` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.25';
+UPDATE `settings` set `version` = '1.26';

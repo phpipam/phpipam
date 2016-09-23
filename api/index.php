@@ -24,7 +24,9 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
-$time_response = true;
+$time_response = true;          // adds [time] to response
+$lock_file = "";                // (optional) file to write lock to
+$lock_wait = 5;                 // number of seconds to wait if lock clears
 
 # database object
 $Database 	= new Database_PDO;
@@ -46,9 +48,7 @@ if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
 try {
 
 	// start measuring
-	if($time_response) {
-	    $start = microtime(true);
-	}
+	$start = microtime(true);
 
 
 	/* Validate application ---------- */
@@ -192,9 +192,26 @@ try {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
-	// execute the action
-	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
-
+	// if lock is enabled wait until it clears
+	if( $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+    	// check if locked form previous process
+    	while ($controller->is_transaction_locked ()) {
+        	// max ?
+        	if ((microtime(true) - $start) > $lock_wait) {
+            	$Response->throw_exception(503, "Transaction timed out after $lock_wait seconds because of transaction lock");
+        	}
+        	// add 0.25 sec delay
+        	usleep(rand(50000,250000));
+    	}
+    	// set transaction lock
+    	$controller->set_transaction_lock (1, $lock_file);
+    	// execute the action
+    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
+    }
+    else {
+    	// execute the action
+    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
+    }
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
 	$result = $e->getMessage();
@@ -209,15 +226,21 @@ try {
 	}
 }
 
+// stop measuring
+$stop = microtime(true);
+
 // add stop time
 if($time_response) {
-    $stop = microtime(true);
     $time = $stop - $start;
 }
 
-
 //output result
 echo $Response->formulate_result ($result, $time);
+
+// remove transaction lock
+if(is_object($controller)) {
+    $controller->set_transaction_lock (0);
+}
 
 // exit
 exit();
