@@ -561,6 +561,9 @@ class Prefix_controller extends Common_api_functions {
         // find first subnet
         $available = $this->find_first_available_address ($subnets);
 
+		// remap keys
+		$this->remap_keys ();
+
         // found any
         if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
         else {
