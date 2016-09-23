@@ -253,6 +253,7 @@ class Prefix_controller extends Common_api_functions {
      * @access protected
      */
     protected $Addresses_controller;
+
     /**
      * Master Subnets object
      *
@@ -721,8 +722,33 @@ class Prefix_controller extends Common_api_functions {
         // search
         try { $subnets = $this->Database->getObjectsQuery($query, $params); }
         catch (Exception $e) { $this->Response->throw_exception(500, "Error: ".$e->getMessage()); }
+        // remove if they have slaves for addresses query
+        if ($this->query_type=="address") {
+            $subnets = $this->remove_if_has_slaves ($subnets);
+        }
         // return
         return sizeof($subnets)>0 ? $subnets : false;
+    }
+
+    /**
+     * Check if subnet has slaves and remove it from result array if yes
+     *
+     * @access private
+     * @param mixed $subnets
+     * @return void
+     */
+    private function remove_if_has_slaves ($subnets) {
+        if(sizeof($subnets)>0) {
+            foreach ($subnets as $k=>$s) {
+                if($this->Subnets->has_slaves ($s->id)) {
+                    unset($subnets[$k]);
+                }
+            }
+            return $subnets;
+        }
+        else {
+            return $subnets;
+        }
     }
 
     /**
