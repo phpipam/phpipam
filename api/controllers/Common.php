@@ -42,7 +42,7 @@ class Common_api_functions {
 	 * @var string
 	 * @access public
 	 */
-	public $lock_file_name = "_lock.txt";
+	public $lock_file_name = "/tmp/phpipam_api_lock.txt";
 
     /**
      * Custom fields
@@ -840,7 +840,7 @@ class Common_api_functions {
 	private function set_transaction_lock_write () {
         // save to file
         try {
-            $myfile = fopen(dirname(__FILE__)."/../".$this->lock_file_name, "w");
+            $myfile = fopen($this->lock_file_name, "w");
             // add or remoe
             if($this->lock==1) {
                 fwrite($myfile, "1");
@@ -864,7 +864,7 @@ class Common_api_functions {
 	public function is_transaction_locked () {
         // save to load
         try {
-            $myfileContent = file_get_contents(dirname(__FILE__)."/../".$this->lock_file_name);
+            $myfileContent = file_get_contents($this->lock_file_name);
             // check
             if(trim($myfileContent)=="1") {
                 return true;

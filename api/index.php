@@ -238,7 +238,9 @@ if($time_response) {
 echo $Response->formulate_result ($result, $time);
 
 // remove transaction lock
-$controller->set_transaction_lock (0);
+if(is_object($controller)) {
+    $controller->set_transaction_lock (0);
+}
 
 // exit
 exit();
