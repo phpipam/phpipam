@@ -565,7 +565,7 @@ class Prefix_controller extends Common_api_functions {
 		$this->remap_keys ();
 
         // found any
-        if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
+        if($available===false)          { $this->Response->throw_exception(404, "No addresses found"); }
         else {
             // set params
     		$this->_params->ip_addr         = $this->Tools->transform_address ($available, "dotted");
