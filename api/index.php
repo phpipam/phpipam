@@ -238,7 +238,7 @@ if($time_response) {
 echo $Response->formulate_result ($result, $time);
 
 // remove transaction lock
-if(is_object($controller)) {
+if(is_object($controller) && $app->app_lock==1) {
     $controller->set_transaction_lock (0);
 }
 
