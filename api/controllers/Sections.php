@@ -126,7 +126,6 @@ class Sections_controller extends Common_api_functions {
 	 *		- /{id}/subnets/		// returns all subnets in this section
 	 *		- /{name}/subnets/		// returns all subnets in this named section
 	 *		- /{name}/ 				// section name
-	 *		- /custom_fields/		// returns custom fields
 	 *
 	 *	If no ID is provided all sections are returned
 	 *
@@ -181,11 +180,9 @@ class Sections_controller extends Common_api_functions {
 				if($result===false) 					{ $this->Response->throw_exception(404, "Section does not exist"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
-			# return custom fields
+			# Custom fields not supported
 			elseif($this->_params->id=="custom_fields") {
-				// check result
-				if(sizeof($this->custom_fields)==0)		{ $this->Response->throw_exception(404, 'No custom fields defined'); }
-				else									{ return array("code"=>200, "data"=>$result); }
+				$this->Response->throw_exception(409, 'Custom fields not supported');
 			}
 			# fetch by name
 			else {
