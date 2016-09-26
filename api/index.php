@@ -213,7 +213,6 @@ try {
     	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
     }
     else {
-        die();
     	// execute the action
     	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
     }
