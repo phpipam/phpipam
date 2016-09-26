@@ -45,6 +45,16 @@ class Common_api_functions {
 	public $lock_file_name = "/tmp/phpipam_api_lock.txt";
 
     /**
+     * File handler
+     *
+     * (default value: false)
+     *
+     * @var bool
+     * @access private
+     */
+    private $lock_file_handler = false;
+
+    /**
      * Custom fields
      *
      * @var mixed
@@ -807,52 +817,104 @@ class Common_api_functions {
 
     /* ! @transaction_locking --------------- */
 
+    /**
+     * Open file handler to manage lock file
+     *
+     * @access private
+     * @return void
+     */
+    private function file_init_handler () {
+        try {
+            $this->lock_file_handler = fopen($this->lock_file_name, 'w');
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot init file handler for $this->lock_file_name ".$e->getMessage());
+        }
+    }
+
+    /**
+     * Adds Exclusive lock and writes 1 to file
+     *
+     * @access private
+     * @return void
+     */
+    private function file_add_lock () {
+        try {
+            // add lock
+            flock($this->lock_file_handler, LOCK_EX);
+            // write content
+            $this->file_write_content ("1");
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot add LOCK_UN to $this->lock_file_name ".$e->getMessage());
+        }
+    }
+    /**
+     * Removes exclusive lock
+     *
+     * @access private
+     * @return void
+     */
+    private function file_remove_lock () {
+        try {
+            // write content
+            $this->file_write_content ("0");
+            // close handler
+            fclose($this->lock_file_handler);
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot remove LOCK_UN from $this->lock_file_name ".$e->getMessage());
+        }
+    }
+
+    /**
+     * Write content to file.
+     *
+     * @access private
+     * @param string $content (default: "")
+     * @return void
+     */
+    private function file_write_content ($content = "") {
+        try {
+            fwrite($this->lock_file_handler, $content);
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot write content to $this->lock_file_name ".$e->getMessage());
+        }
+    }
+
 	/**
-	 * Set transaction lock
+	 * Resets lock file name
 	 *
 	 * @access public
-	 * @param bool $lock (default: 0)
-	 * @param mixed $file (default: "")
+	 * @param string $file (default: "")
 	 * @return void
 	 */
-	public function set_transaction_lock ($lock = 0, $file = "") {
-        if($lock==0 || $lock==1) {
-            // save
-            $this->lock = $lock;
-            if(strlen($file)>0) {
-                $this->lock_file_name = $file;
-            }
-            // execute
-            $this->set_transaction_lock_write ();
-        }
-        else {
-            $this->lock = 0;
-            $this->set_transaction_lock_write ();
+	public function set_transaction_lock_file ($file = "") {
+        if(strlen($file)>0) {
+            $this->lock_file_name = $file;
         }
 	}
 
 	/**
-	 * Writes translaction lock to file
+	 * Sets translaction lock
 	 *
-	 * @access private
+	 * @access public
 	 * @return void
 	 */
-	private function set_transaction_lock_write () {
-        // save to file
-        try {
-            $myfile = fopen($this->lock_file_name, "w");
-            // add or remoe
-            if($this->lock==1) {
-                fwrite($myfile, "1");
-            }
-            else {
-                fwrite($myfile, "0");
-            }
-            fclose($myfile);
-        }
-        catch ( Exception $e ) {
-            $this->Response->throw_exception(500, "Cannot execute transaction lock on file $this->lock_file_name - ".$e->getMessage());
-        }
+	public function add_transaction_lock () {
+    	$this->file_init_handler ();
+        $this->file_add_lock ();
+	}
+
+	/**
+	 * Removes transaction lock
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function remove_transaction_lock () {
+    	$this->file_remove_lock();
 	}
 
 	/**
@@ -862,20 +924,32 @@ class Common_api_functions {
 	 * @return void
 	 */
 	public function is_transaction_locked () {
-        // save to load
-        try {
-            $myfileContent = file_get_contents($this->lock_file_name);
-            // check
-            if(trim($myfileContent)=="1") {
-                return true;
-            }
-            else {
-                return false;
-            }
+        // check for stalled lock file
+        $this->check_stalled_file ();
+        // response
+        if(file_exists($this->lock_file_name)) {
+            return file_get_contents($this->lock_file_name) == "1" ? true : false;
         }
-        catch ( Exception $e ) {
-            $this->Response->throw_exception(500, "Cannot check transaction lock on file $this->lock_file_name - ".$e->getMessage());
+        else {
+            return false;
         }
+
+	}
+
+	/**
+	 * Removes stalled lock file if needed
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function check_stalled_file () {
+    	if(file_exists($this->lock_file_name)) {
+        	// if more that 60 seconds remove it
+        	if((time() - filemtime($this->lock_file_name)) > 60) {
+            	$this->file_init_handler ();
+            	$this->remove_transaction_lock ();
+        	}
+    	}
 	}
 
 }

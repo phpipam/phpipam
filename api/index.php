@@ -26,7 +26,7 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 $enable_authentication = true;
 $time_response = true;          // adds [time] to response
 $lock_file = "";                // (optional) file to write lock to
-$lock_wait = 5;                 // number of seconds to wait if lock clears
+$lock_wait = 30;                // number of seconds to wait if lock clears
 
 # database object
 $Database 	= new Database_PDO;
@@ -194,23 +194,35 @@ try {
 
 	// if lock is enabled wait until it clears
 	if( $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+    	// set transaction lock file name
+    	$controller->set_transaction_lock_file ($lock_file);
+
     	// check if locked form previous process
     	while ($controller->is_transaction_locked ()) {
         	// max ?
         	if ((microtime(true) - $start) > $lock_wait) {
             	$Response->throw_exception(503, "Transaction timed out after $lock_wait seconds because of transaction lock");
         	}
-        	// add 0.25 sec delay
-        	usleep(rand(50000,250000));
+        	// add random delay
+        	usleep(rand(250000,500000));
     	}
-    	// set transaction lock
-    	$controller->set_transaction_lock (1, $lock_file);
+
+    	// add new lock
+    	$controller->add_transaction_lock ();
     	// execute the action
     	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
     }
     else {
+        die();
     	// execute the action
     	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
+    }
+
+    // remove transaction lock
+    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+        if($controller->is_transaction_locked ()) {
+            $controller->remove_transaction_lock ();
+        }
     }
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
@@ -236,11 +248,6 @@ if($time_response) {
 
 //output result
 echo $Response->formulate_result ($result, $time);
-
-// remove transaction lock
-if(is_object($controller) && $app->app_lock==1) {
-    $controller->set_transaction_lock (0);
-}
 
 // exit
 exit();
