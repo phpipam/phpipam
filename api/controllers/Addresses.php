@@ -189,17 +189,21 @@ class Addresses_controller extends Common_api_functions  {
     		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
             else                                         { return array("code"=>200, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted")); }
 		}
-		// address search
+		// address search inside predefined subnet
 		elseif($this->Tools->validate_ip ($this->_params->id)!==false && isset($this->_params->id2)) {
-            // eftch all in subnet
+            // fetch all in subnet
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "subnetId", $this->_params->id2);
             if($result!==false) {
                 foreach ($result as $k=>$r) {
                     if($r->ip !== $this->_params->id) {
                         unset($result[$k]);
                     }
+                    else {
+                        $result_filtered = $r;
+                    }
                 }
-                if(sizeof($result)==0)  {$result = false;  }
+                if(sizeof($result)==0)  { $result = false;  }
+                else                    { $result = $result_filtered; }
             }
     		if ($result==false)                          { $this->Response->throw_exception(404, 'No addresses found'); }
             else                                         { return array("code"=>200, "data"=>$result); }
