@@ -235,6 +235,13 @@ try {
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
 	}
+
+    // remove transaction lock
+    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+        if($controller->is_transaction_locked ()) {
+            $controller->remove_transaction_lock ();
+        }
+    }
 }
 
 // stop measuring
