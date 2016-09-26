@@ -341,9 +341,10 @@ class Sections_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function read_subnet_usage ($subnetId) {
-        # check that section exists
-        if($subnet = $this->Subnets->fetch_subnet ("id", $subnetId)===false)
-           { $this->Response->throw_exception(400, "Subnet does not exist"); }
+		# check that section exists
+		$subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id);
+		if($subnet===false)
+														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
 
         # set slaves
         $slaves = $this->Subnets->has_slaves ($subnetId) ? true : false;
