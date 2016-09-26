@@ -731,6 +731,7 @@ class Common_api_functions {
 		// exceptions
 		if($controller=="vlans") 	{ $this->keys['vlanId'] = "id"; }
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
+		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
 

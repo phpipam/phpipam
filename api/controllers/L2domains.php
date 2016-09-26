@@ -186,6 +186,9 @@ class L2domains_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function POST () {
+		# remap keys
+		$this->remap_keys ();
+
 		# check for valid keys
 		$values = $this->validate_keys ();
 
@@ -212,6 +215,9 @@ class L2domains_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function PATCH () {
+		# remap keys
+		$this->remap_keys ();
+
 		# verify
 		$this->validate_domain_edit ();
 		# check that it exists
