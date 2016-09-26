@@ -732,6 +732,7 @@ class Common_api_functions {
 		if($controller=="vlans") 	{ $this->keys['vlanId'] = "id"; }
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
+		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
 
 		// POST / PATCH
 		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH")		{ return $this->remap_update_keys (); }

@@ -386,6 +386,9 @@ class Tools_controller extends Common_api_functions {
 		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
 													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
 
+		// remap keys
+		$this->remap_keys ();
+
 		# check for valid keys
 		$values = $this->validate_keys ();
 
