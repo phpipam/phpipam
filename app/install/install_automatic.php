@@ -74,7 +74,7 @@
 				<hr>
 				<div class="btn-block">
 					<!-- Back -->
-					<a class="btn btn-sm btn-default" href="<?php print create_link("install",null,null,null,null,true); ?>" ><i class='fa fa-angle-left'></i> Back</a>
+					<a class="btn btn-sm btn-default" href="<?php print create_link("install"); ?>" ><i class='fa fa-angle-left'></i> Back</a>
 					<a class="install btn btn-sm btn-info" version="0">Install phpipam database</a>
 				</div>
 			</div>
