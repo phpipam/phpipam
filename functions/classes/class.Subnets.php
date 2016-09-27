@@ -428,7 +428,7 @@ class Subnets extends Common_functions {
     			// remove fake subnet_int field
     			unset($subnet->subnet_int);
     			// save
-				 $this->cache_write ("subnets", $subnet->id, $subnet);
+				$this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
 		# result
