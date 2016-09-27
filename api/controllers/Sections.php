@@ -124,6 +124,7 @@ class Sections_controller extends Common_api_functions {
 	 *      - /                     // returns all sections
 	 *		- /{id}/                // returns section details
 	 *		- /{id}/subnets/		// returns all subnets in this section
+	 *		- /{id}/subnets/addresses/ // returns all subnets in this section + addresses
 	 *		- /{name}/subnets/		// returns all subnets in this named section
 	 *		- /{name}/ 				// section name
 	 *
@@ -134,7 +135,7 @@ class Sections_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// fetch subnets in section
-		if(@$this->_params->id2=="subnets") {	// && is_numeric($this->_params->id)) { // allow non-numeric for search by name
+		if(@$this->_params->id2=="subnets" && is_numeric($this->_params->id)) {
 			// we dont need id2 anymore
 			unset($this->_params->id2);
 			// init required objects
@@ -143,7 +144,7 @@ class Sections_controller extends Common_api_functions {
 			//fetch
 			$result = $this->Subnets->fetch_section_subnets ($this->_params->id);
             // add gateway
-			if($result!=false) {
+			if(sizeof($result)>0) {
 				foreach ($result as $k=>$r) {
 					//gw
     				$gateway = $this->read_subnet_gateway ($r->id);
@@ -342,7 +343,7 @@ class Sections_controller extends Common_api_functions {
 	 */
 	private function read_subnet_usage ($subnetId) {
 		# check that section exists
-		$subnet = $this->Subnets->fetch_subnet ("id", $this->_params->id);
+		$subnet = $this->Subnets->fetch_subnet ("id", $subnetId);
 		if($subnet===false)
 														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
 
