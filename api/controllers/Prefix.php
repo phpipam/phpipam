@@ -8,8 +8,11 @@
  *          GET /api/{app_id}/prefix/{customer_type}/{address_type}/
  *          GET /api/{app_id}/prefix/{customer_type}/{address_type}/{mask}/
  *
- *          GET /api/{app_id}/prefix/{customer_type}/
+ *          GET /api/{app_id}/prefix/{customer_type}/address/
+ *          GET /api/{app_id}/prefix/{customer_type}/address/{address_type}/
  *          GET /api/{app_id}/prefix/{customer_type}/{address_type}/address/
+ *
+ *          GET /api/{app_id}/prefix/external_id/{external_identifier_field}/
  *
  *  Parameters are:
  *          customer_type : customer type custom field for subnet - variable can be set
@@ -23,7 +26,7 @@
  *          - Go through subnets, on first match return result.
  *          - On no match return http/404
  *
- *  @version: 0.4
+ *  @version: 0.5
  *  @author: Miha Petkovsek <miha.petkovsek@gmail.com>
  *
  */
@@ -100,6 +103,16 @@ class Prefix_controller extends Common_api_functions {
     private $custom_field_name_addr = "customer_address_type";
 
     /**
+     * External identifier to link subnets and addresses with
+     *
+     * (default value: "csid")
+     *
+     * @var string
+     * @access private
+     */
+    private $external_identifier_field = "csid";
+
+    /**
      * This selector will be used to order found subnets
      *
      * (default value: "subnet")
@@ -130,7 +143,7 @@ class Prefix_controller extends Common_api_functions {
     private $valid_address_types = array("IPv4", "IPv6", "v4", "v6", "4", "6");
 
     /**
-     * List of ignored fields
+     * List of ignored subnet fields
      *
      *  If this field will be provided in response it will be stripped out
      *
@@ -159,6 +172,30 @@ class Prefix_controller extends Common_api_functions {
                                         "vlanId",
                                         "location",
                                         "isFolder",
+                                        "editDate"
+                                    );
+
+    /**
+     * List of ignored addresses fields
+     *
+     *  If this field will be provided in response it will be stripped out
+     *
+     * (default value: array())
+     *
+     * @var array
+     * @access private
+     */
+    private $ignored_addresses_fields = array(
+                                        "state",
+                                        "deviceId",
+                                        "switch",
+                                        "port",
+                                        "note",
+                                        "lastSeen",
+                                        "excludePing",
+                                        "PTRignore",
+                                        "PTR",
+                                        "firewallAddressObject",
                                         "editDate"
                                     );
 
@@ -415,13 +452,41 @@ class Prefix_controller extends Common_api_functions {
      *  /api/{app_id}/prefix/{customer_type}/
      *  /api/{app_id}/prefix/{customer_type}/{address_type}/
      *  /api/{app_id}/prefix/{customer_type}/{address_type}/{mask}/
+     *  /api/{app_id}/prefix/external_id/{external_identifier_field}/
      *
      * @access public
      * @return void
      */
     public function GET () {
+        // external identifier
+        if($this->_params->id == "external_id") {
+            // search subnets and addresses
+            $subnets   = $this->find_external_id_subnets_addresses ("subnets");
+            $addresses = $this->find_external_id_subnets_addresses ("ipaddresses");
+            // filter result
+            if($subnets!==false) {
+                foreach ($subnets as $k=>$s) {
+                    $subnets[$k] = $this->filter_prefix_result ($s);
+                }
+                // prepare result
+                $subnets = $this->prepare_result ($subnets, "subnets", $this->use_links, true);
+            }
+            // filter result
+            if($addresses!==false) {
+                foreach ($addresses as $k=>$s) {
+                    $addresses[$k] = $this->filter_addresses_result ($s);
+                }
+                // prepare result
+                $addresses = $this->prepare_result ($addresses, "addresses", $this->use_links, true);
+            }
+            // result
+            if($subnets===false && $addresses===false)  { $this->Response->throw_exception(404, "No objects found"); }
+            elseif($addresses===false)                  { return array("code"=>200, "data"=>array("subnets"=>$subnets)); }
+            elseif($subnets===false)                    { return array("code"=>200, "data"=>array("addresses"=>$addresses)); }
+            else                                        { return array("code"=>200, "data"=>array("subnets"=>$subnets, "addresses"=>$addresses)); }
+        }
         // get all subnets involved in querying
-        if(!isset($this->_params->id3)) {
+        elseif(!isset($this->_params->id3)) {
             // validate requested custom field
             $this->validate_request_parameters_custom_field ();
             // set address type
@@ -439,6 +504,10 @@ class Prefix_controller extends Common_api_functions {
                 // filter
                 foreach ($subnets as $k=>$s) {
                     $subnets[$k] = $this->filter_prefix_result ($s);
+                    // append usage
+                    if(@$this->_params->usage=="true") {
+                        $subnets[$k]->usage = $this->calculate_subnet_usage ($s->id);
+                    }
                 }
                 return array("code"=>200, "data"=>$this->prepare_result ($subnets, "subnets", $this->use_links, true));
             }
@@ -706,6 +775,23 @@ class Prefix_controller extends Common_api_functions {
     }
 
     /**
+     * Strips outunwanted values from addresses
+     *
+     * @access private
+     * @param mixed $result
+     * @return void
+     */
+    private function filter_addresses_result ($result) {
+        // loop through fields
+        foreach ($result as $k=>$r) {
+            if (in_array($k, $this->ignored_addresses_fields)) {
+                unset($result->$k);
+            }
+        }
+        // return
+        return $result;
+    }
+    /**
      * Searches for avaialble master subnets
      *
      * @access private
@@ -750,6 +836,37 @@ class Prefix_controller extends Common_api_functions {
             return $subnets;
         }
     }
+
+	/**
+	 * Calculates subnet usage
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function calculate_subnet_usage ($id) {
+		# check that section exists
+		$subnet = $this->Subnets->fetch_subnet ("id", $id);
+		if($subnet===false)
+														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
+
+		# set slaves
+		$slaves = $this->Subnets->has_slaves ($id) ? true : false;
+
+		# init controller
+		$this->init_object ("Addresses", $this->Database);
+
+		# fetch all addresses and calculate usage
+		if($slaves) {
+			$addresses = $this->Addresses->fetch_subnet_addresses_recursive ($id, false);
+		} else {
+			$addresses = $this->Addresses->fetch_subnet_addresses ($id);
+		}
+		// calculate
+		$subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet, $subnet->isFull );		//Calculate free/used etc
+
+		# return
+		return $subnet_usage;
+	}
 
     /**
      * Searches for first available subnet from array of master subnets
@@ -827,6 +944,21 @@ class Prefix_controller extends Common_api_functions {
         $first = $this->Addresses->get_first_available_address ($master_subnet_id, $this->Subnets);
         // return result
         return $first===false ? false : $this->Tools->transform_address ($first, "dotted");
+    }
+
+    /**
+     * Searches for external identifier
+     *
+     * @access private
+     * @param string $type (default: "subnets")
+     * @return void
+     */
+    private function find_external_id_subnets_addresses ($type = "subnets") {
+        // search
+        try { $objects = $this->Database->findObjects($type, $this->external_identifier_field, $this->_params->id2, 'id'); }
+        catch (Exception $e) { $this->Response->throw_exception(500, "Error: ".$e->getMessage()); }
+        // result
+        return sizeof($objects)>0 ? $objects : false;
     }
 }
 
