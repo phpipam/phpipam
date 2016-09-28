@@ -164,7 +164,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $sortField (default:id)
 	 * @param mixed bool (default:true)
-	 * @return void
+	 * @return bool|object
 	 */
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
@@ -192,7 +192,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $method (default: null)
 	 * @param mixed $value
-	 * @return void
+	 * @return bool|object
 	 */
 	public function fetch_object ($table=null, $method=null, $value) {
 		# null table
@@ -246,7 +246,7 @@ class Common_functions  {
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
 	 * @param array|mixed $result_fields (default: *)
-	 * @return void
+	 * @return bool|array
 	 */
 	public function fetch_multiple_objects ($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $result_fields = "*") {
 		# null table
@@ -276,7 +276,7 @@ class Common_functions  {
 	 * @param mixed $field
 	 * @param mixed $val (default: null)
 	 * @param bool $like (default: false)
-	 * @return void
+	 * @return int
 	 */
 	public function count_database_objects ($table, $field, $val=null, $like = false) {
 		# if null
@@ -294,7 +294,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param bool|mixed $subnetId
-	 * @return void
+	 * @return bool|array
 	 */
 	public function changelog_mail_get_recipients ($subnetId = false) {
     	// fetch all users with mailNotify
@@ -401,7 +401,7 @@ class Common_functions  {
      *
      * @access protected
      * @param mixed $table
-     * @return void
+     * @return bool
      */
     protected function cache_check_exceptions ($table) {
         // define
@@ -415,7 +415,7 @@ class Common_functions  {
      *
      * @access protected
      * @param mixed $table
-     * @return void
+     * @return bool|mixed
      */
     protected function cache_check_add_ip ($table) {
         // define
@@ -429,7 +429,7 @@ class Common_functions  {
      *
      * @access protected
      * @param mixed $table
-     * @return void
+     * @return mixed
      */
     protected function cache_set_identifier ($table) {
         // vlan and subnets have different identifiers
@@ -444,7 +444,7 @@ class Common_functions  {
      * @access protected
      * @param mixed $table
      * @param mixed $id
-     * @return void
+     * @return bool|array
      */
     protected function cache_check ($table, $id) {
         // get method
@@ -588,7 +588,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $field
-	 * @return void
+	 * @return int|mixed
 	 */
 	public function verify_checkbox ($field) {
 		return @$field==""||strlen(@$field)==0 ? 0 : $field;
@@ -619,7 +619,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return mixed
 	 */
 	public function get_ip_version ($address) {
 		return $this->identify_address ($address);
@@ -631,7 +631,7 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $logs
 	 * @param bool $changelog
-	 * @return void
+	 * @return mixed
 	 */
 	public function array_to_log ($logs, $changelog = false) {
 		$result = "";
@@ -663,7 +663,7 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $sec
 	 * @param bool $padHours (default: false)
-	 * @return void
+	 * @return mixed
 	 */
 	public function sec2hms($sec, $padHours = false) {
 	    // holds formatted string
@@ -699,7 +699,7 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $text
 	 * @param int $chars (default: 25)
-	 * @return void
+	 * @return mixed
 	 */
 	public function shorten_text($text, $chars = 25) {
 		//count input text size
@@ -727,7 +727,7 @@ class Common_functions  {
 	 *      2 : 00-66-23-33-55-66
 	 *      3 : 0066.2333.5566
 	 *      4 : 006623335566
-	 * @return void
+	 * @return mixed
 	 */
 	public function reformat_mac_address ($mac, $format = 1) {
     	// strip al tags first
@@ -759,7 +759,7 @@ class Common_functions  {
 	 * Create URL for base
 	 *
 	 * @access public
-	 * @return void
+	 * @return mixed
 	 */
 	public function createURL () {
 		# reset url for base
@@ -784,7 +784,7 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $field_type
 	 * @param mixed $text
-	 * @return void
+	 * @return mixed
 	 */
 	public function create_links ($text, $field_type = "varchar") {
         // create links only for varchar fields
@@ -807,7 +807,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $email
-	 * @return void
+	 * @return bool
 	 */
 	public function validate_email($email) {
 	    return preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email) ? true : false;
@@ -819,7 +819,7 @@ class Common_functions  {
 	 * @access public
 	 * @param mixed $hostname
 	 * @param bool $permit_root_domain
-	 * @return bool
+	 * @return bool|mixed
 	 */
 	public function validate_hostname($hostname, $permit_root_domain=true) {
     	// first validate hostname
@@ -845,7 +845,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $ip
-	 * @return void
+	 * @return bool
 	 */
 	public function validate_ip ($ip) {
     	if(filter_var($ip, FILTER_VALIDATE_IP)===false) { return false; }
@@ -857,7 +857,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $mac
-	 * @return void
+	 * @return bool
 	 */
 	public function validate_mac ($mac) {
     	// first put it to common format (1)
@@ -873,7 +873,7 @@ class Common_functions  {
      *
      * @access public
      * @param mixed $string
-     * @return void
+     * @return mixed
      */
     public function validate_json_string($string) {
         // for older php versions make sure that function "json_last_error_msg" exist and create it if not
@@ -910,7 +910,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $ipv6
-	 * @return void
+	 * @return mixed
 	 */
 	public function ip2long6 ($ipv6) {
 		if($ipv6 == ".255.255.255") {
@@ -934,7 +934,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $ipv6long
-	 * @return void
+	 * @return mixed
 	 */
 	public function long2ip6($ipv6long) {
 	    $bin = gmp_strval(gmp_init($ipv6long,10),2);
@@ -1020,7 +1020,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $error_int
-	 * @return void
+	 * @return mixed
 	 */
 	public function json_error_decode ($error_int) {
     	// init
@@ -1042,7 +1042,7 @@ class Common_functions  {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return array
 	 */
 	public function get_latlng_from_address ($address) {
         // replace spaces
@@ -1061,7 +1061,7 @@ class Common_functions  {
      * @param mixed $id
      * @param mixed $lat
      * @param mixed $lng
-     * @return void
+     * @return bool
      */
     public function update_latlng ($id, $lat, $lng) {
 		# execute
@@ -1080,7 +1080,7 @@ class Common_functions  {
      * @param mixed $object
      * @param mixed $action
      * @param mixed $timepicker_index
-     * @return void
+     * @return array
      */
     public function create_custom_field_input ($field, $object, $action, $timepicker_index) {
         # make sure it is array
@@ -1173,7 +1173,7 @@ class Common_functions  {
 	 * @access public
 	 * @param bool $rackId (default: false)
 	 * @param bool $deviceId (default: false)
-	 * @return void
+	 * @return mixed|bool
 	 */
 	public function create_rack_link ($rackId = false, $deviceId = false) {
     	if($rackId===false) {
@@ -1204,11 +1204,18 @@ class Common_functions  {
 	 */
 
 	/**
-	 *	print breadcrumbs
+	 * print_breadcrumbs function.
+	 *
+	 * @access public
+	 * @param mixed $Section
+	 * @param mixed $Subnet
+	 * @param mixed $req
+	 * @param mixed $Address (default: null)
+	 * @return void
 	 */
 	public function print_breadcrumbs ($Section, $Subnet, $req, $Address=null) {
 		# subnets
-		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs ($Section, $Subnet, $req, $Address); }
+		if($req['page'] == "subnets")		{ $this->print_subnet_breadcrumbs ($Subnet, $req, $Address); }
 		# folders
 		elseif($req['page'] == "folder")	{ $this->print_folder_breadcrumbs ($Section, $Subnet, $req); }
 		# tools
@@ -1219,13 +1226,12 @@ class Common_functions  {
 	 * Print address breadcrumbs
 	 *
 	 * @access private
-	 * @param obj $Section
-	 * @param obj $Subnet
+	 * @param mixed $Subnet
 	 * @param mixed $req
-	 * @param obj $Address
+	 * @param mixed $Address
 	 * @return void
 	 */
-	private function print_subnet_breadcrumbs ($Section, $Subnet, $req, $Address) {
+	private function print_subnet_breadcrumbs ($Subnet, $req, $Address) {
 		if(isset($req['subnetId'])) {
 			# get all parents
 			$parents = $Subnet->fetch_parents_recursive ($req['subnetId']);

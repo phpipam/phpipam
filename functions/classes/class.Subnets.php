@@ -401,7 +401,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array
 	 */
 	public function fetch_section_subnets ($sectionId) {
 		# check order
@@ -441,7 +441,7 @@ class Subnets extends Common_functions {
 	 *	Needed for search > search_subnets_inside
 	 *
 	 * @access public
-	 * @return void
+	 * @return bool|array
 	 */
 	public function fetch_all_subnets_search ($type = "IPv4") {
 		# set query (4294967295 = 255.255.255.255)
@@ -2312,7 +2312,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param object $user
 	 * @param int $subnetId
-	 * @return void
+	 * @return int
 	 */
 	public function check_permission ($user, $subnetId) {
 
@@ -3462,7 +3462,6 @@ class Subnets extends Common_functions {
 		$slave_subnets 		= $this->fetch_subnet_slaves($subnetMasterId, $result_fields = array("subnet", "mask"));
 		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
 		$parent_subnet 		= $taken_subnet->subnet;
-		$parent_subnetmask 	= $taken_subnet->mask;
 
 		# mask must be smaller than parent !
 		if ($taken_subnet->mask > $mask)    { return false; }
@@ -3477,18 +3476,12 @@ class Subnets extends Common_functions {
 		if ($type == 'IPv4') 	{ $this->initialize_pear_net_IPv4 (); }
 		else 					{ $this->initialize_pear_net_IPv6 (); }
 
-		// reset levels for IPv6 !
-		if ($type == "IPv6")    { $mask_drill_down = 8; }
-		else                    { $mask_drill_down = 32 - $taken_subnet->mask; }
-
 		// if it has slaves
 		if($slave_subnets) {
 			foreach ($slave_subnets as $row ) {
 				$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
 			}
 		}
-
-		$dec_subnet = $parent_subnet;
 
 		// number of possible masks
         $square_count = $mask - $taken_subnet->mask;

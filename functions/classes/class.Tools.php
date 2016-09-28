@@ -43,6 +43,16 @@ class Tools extends Common_functions {
 	protected $Net_IPv6;
 
 	/**
+	 * Addresses object
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool
+	 * @access protected
+	 */
+	protected $Addresses = false;
+
+	/**
 	 * for Result printing
 	 *
 	 * @var mixed
@@ -327,9 +337,11 @@ class Tools extends Common_functions {
 			}
 			# filter
 			$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
+
+			$result = array();
+
 			# search
 			if(sizeof($ids)>0) {
-    			$result = array();
 				foreach($ids as $id) {
 					$result[] = $Subnets->fetch_subnet(null, $id);
 				}
@@ -879,7 +891,7 @@ class Tools extends Common_functions {
 	 * fetches all IP requests and saves them to $requests
 	 *
 	 * @access public
-	 * @return int
+	 * @return int|array
 	 */
 	public function requests_fetch ($num = true) {
 		return $num ? $this->requests_fetch_num () : $this->requests_fetch_objects ();
@@ -899,7 +911,7 @@ class Tools extends Common_functions {
 	 * Fetches all requests and saves them to $requests
 	 *
 	 * @access private
-	 * @return int
+	 * @return array
 	 */
 	private function requests_fetch_objects () {
     	return $this->fetch_multiple_objects ("requests", "processed", 0);

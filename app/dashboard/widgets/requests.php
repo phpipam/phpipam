@@ -25,7 +25,7 @@ $requests = $Tools->requests_fetch (false);
 
 
 <?php
-if(!$requests) {
+if($requests===false) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<small>"._("No IP address requests available")."!</small><br>";
 	print "</blockquote>";
