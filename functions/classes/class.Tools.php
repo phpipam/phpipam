@@ -112,6 +112,7 @@ class Tools extends Common_functions {
 	    # custom fields
 	    $custom_fields = $this->fetch_custom_fields("vlans");
 		# if set add to query
+		$custom_fields_query = "";
 	    if(sizeof($custom_fields)>0) {
 			foreach($custom_fields as $myField) {
 				$custom_fields_query  .= ',`vlans`.`'.$myField['name'].'`';
@@ -127,6 +128,7 @@ class Tools extends Common_functions {
 		}
 
 		# reorder
+		$out = array();
 		foreach ($vlans as $vlan) {
 			$out[$vlan->vlanId][] = $vlan;
 		}
@@ -293,7 +295,6 @@ class Tools extends Common_functions {
 	 * Search inside subnets if host address is provided!
 	 *
 	 * @access private
-	 * @param mixed $search_term
 	 * @param number $high
 	 * @param number $low
 	 * @return array
@@ -305,6 +306,7 @@ class Tools extends Common_functions {
 			# fetch all subnets
 			$subnets = $Subnets->fetch_all_subnets_search();
 			# loop and search
+			$ids = array();
 			foreach($subnets as $s) {
 				# cast
 				$s = (array) $s;
@@ -327,6 +329,7 @@ class Tools extends Common_functions {
 			$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
 			# search
 			if(sizeof($ids)>0) {
+    			$result = array();
 				foreach($ids as $id) {
 					$result[] = $Subnets->fetch_subnet(null, $id);
 				}
@@ -344,7 +347,6 @@ class Tools extends Common_functions {
 	 * Search inside subnets if host address is provided! ipv6
 	 *
 	 * @access private
-	 * @param mixed $search_term
 	 * @param number $high
 	 * @param number $low
 	 * @return array
@@ -366,6 +368,7 @@ class Tools extends Common_functions {
 				# fetch all subnets
 				$subnets = $Subnets->fetch_all_subnets_search("IPv6");
 				# loop and search
+				$ids = array();
 				foreach($subnets as $s) {
 					# cast
 					$s = (array) $s;
@@ -381,6 +384,7 @@ class Tools extends Common_functions {
 				$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
 				# search
 				if(sizeof($ids)>0) {
+    				$result = array();
 					foreach($ids as $id) {
 						$result[] = $Subnets->fetch_subnet(null, $id);
 					}
@@ -477,8 +481,8 @@ class Tools extends Common_functions {
 		# query
 		$query[] = "select *,concat(prefix,start) as raw from `pstnPrefixes` where `prefix` like :search_term or `name` like :search_term or `description` like :search_term ";
 		# custom
-	    if(sizeof($custom_fields) > 0) {
-			foreach($custom_fields as $myField) {
+	    if(sizeof($custom_prefix_fields) > 0) {
+			foreach($custom_prefix_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
 				$query[] = " or `$myField[name]` like :search_term ";
 			}
@@ -510,8 +514,8 @@ class Tools extends Common_functions {
 		# query
 		$query[] = "select * from `pstnNumbers` where `number` like :search_term or `name` like :search_term or `description` like :search_term or `owner` like :search_term ";
 		# custom
-	    if(sizeof($custom_fields) > 0) {
-			foreach($custom_fields as $myField) {
+	    if(sizeof($custom_prefix_fields) > 0) {
+			foreach($custom_prefix_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
 				$query[] = " or `$myField[name]` like :search_term ";
 			}
@@ -551,7 +555,7 @@ class Tools extends Common_functions {
 		if(strpos($address, "/")>0) {
 			# Initialize PEAR NET object
 			$this->initialize_pear_net_IPv4 ();
-			$net = $this->Net_IPv4->parseAddress($ip);
+			$net = $this->Net_IPv4->parseAddress($address);
 
 			$result['low']   = $Addresses->transform_to_decimal($net->network);
 			$result['high']	 = $Addresses->transform_to_decimal($net->broadcast);
@@ -659,6 +663,8 @@ class Tools extends Common_functions {
     	# fetch columns
 		$fields = $this->fetch_columns ($table);
 
+		$res = array();
+
 		# save Field values only
 		foreach($fields as $field) {
 			# cast
@@ -745,6 +751,7 @@ class Tools extends Common_functions {
 		$definition = explode("\n", $definition);
 
 		# go through,if it begins with ` use it !
+		$out = array();
 		foreach($definition as $d) {
 			$d = trim($d);
 			if(strpos(trim($d), "`")==0) {
@@ -770,6 +777,7 @@ class Tools extends Common_functions {
 		# get definitions to array, explode with CREATE TABLE `
 		$creates = explode("CREATE TABLE `", $schema);
 		# fill tables array
+		$tables = array();
 		foreach($creates as $k=>$c) {
 			if($k>0)	{ $tables[] = strstr($c, "`", true); }	//we exclude first !
 		}
@@ -836,6 +844,7 @@ class Tools extends Common_functions {
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 	    # reindex
+	    $wout = array();
 	    foreach($widgets as $w) {
 			$wout[$w->wfile] = $w;
 	    }
@@ -970,7 +979,7 @@ class Tools extends Common_functions {
 		foreach($values as $k=>$v) {
 		$content_plain[] = $k." => ".$v;
 		}
-		$content_plain[] = "\r\n\r\n"._("Sent by user")." ".$User->user->real_name." at ".date('Y/m/d H:i');
+		$content_plain[] = "\r\n\r\nSent at ".date('Y/m/d H:i');
 		$content[] = "</table>";
 
 		// set content
@@ -995,9 +1004,9 @@ class Tools extends Common_functions {
 			//send
 			$phpipam_mail->Php_mailer->send();
 		} catch (phpmailerException $e) {
-			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		} catch (Exception $e) {
-			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		}
 
 		# ok
@@ -2082,7 +2091,6 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param object $user
-	 * @param int $subnetId
 	 * @return void
 	 */
 	public function check_prefix_permission ($user) {
@@ -2464,7 +2472,7 @@ class Tools extends Common_functions {
 	 * Calculates number usage per host type
 	 *
 	 * @access public
-	 * @param mixed $addresses
+	 * @param mixed $numbers
 	 * @return void
 	 */
 	public function calculate_prefix_usage_sort_numbers ($numbers) {
@@ -2829,7 +2837,7 @@ class Tools extends Common_functions {
 		elseif($type=="IPv6")	{ $query = 'select count(cast(`ip_addr` as UNSIGNED)) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) > "4294967295";'; }
 
 		try { $count = $this->Database->getObjectQuery($query); }
-		catch (Exception $e) { !$quit ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 
 		/* return true if it exists */
 		return $count->count;
@@ -2884,7 +2892,7 @@ class Tools extends Common_functions {
 
 		# fetch
 		try { $stats = $this->Database->getObjectsQuery($query); }
-		catch (Exception $e) { !$debugging ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
+		catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
 
 	    # return subnets array
 	    return (array) $stats;
