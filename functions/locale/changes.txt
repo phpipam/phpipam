@@ -2569,7 +2569,7 @@ msgstr ""
 msgid "Invalid Network!"
 msgstr ""
 
-msgid "Subnet $new_subnet overlapps with"
+msgid "Subnet $new_subnet overlaps with"
 msgstr ""
 
 msgid "Mask must be an integer"

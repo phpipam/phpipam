@@ -287,7 +287,7 @@ msgstr "Die h&ouml;chste VLAN Nummer ist 4094"
 
 #: functions/functions-network.php:825 functions/functions-network.php:842
 #: functions/functions-network.php:904 functions/functions-network.php:930
-msgid "Subnet overlapps with"
+msgid "Subnet overlaps with"
 msgstr "Subnetz &uuml;berschneidet sich mit"
 
 #: functions/functions-network.php:1199
@@ -6300,7 +6300,7 @@ msgstr "IP Adresse verschieben fehlgeschlagen"
 msgid "Invalid Network!"
 msgstr "Ung&uuml;ltiges Netzwerk!"
 
-msgid "Subnet $new_subnet overlapps with"
+msgid "Subnet $new_subnet overlaps with"
 msgstr "Subnetz $new_subnet &uuml;berschneidet sich mit"
 
 msgid "Mask must be an integer"
