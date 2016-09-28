@@ -267,8 +267,8 @@ class Tools extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $search_term
-	 * @param number $high
-	 * @param number $low
+	 * @param string $high
+	 * @param string $low
 	 * @param mixed $custom_fields (default: array())
 	 * @return array
 	 */
@@ -305,8 +305,8 @@ class Tools extends Common_functions {
 	 * Search inside subnets if host address is provided!
 	 *
 	 * @access private
-	 * @param number $high
-	 * @param number $low
+	 * @param string $high
+	 * @param string $low
 	 * @return array
 	 */
 	private function search_subnets_inside ($high, $low) {
@@ -359,8 +359,8 @@ class Tools extends Common_functions {
 	 * Search inside subnets if host address is provided! ipv6
 	 *
 	 * @access private
-	 * @param number $high
-	 * @param number $low
+	 * @param string $high
+	 * @param string $low
 	 * @return array
 	 */
 	private function search_subnets_inside_v6 ($high, $low, $search_req) {
@@ -1277,7 +1277,7 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $table
-	 * @return mixed|bool
+	 * @return false|string
 	 */
 	public function get_table_fix ($table) {
 		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
@@ -1298,7 +1298,7 @@ class Tools extends Common_functions {
 	 * @access public
 	 * @param mixed $table
 	 * @param mixed $field
-	 * @return mixed|bool
+	 * @return string|false
 	 */
 	public function get_field_fix ($table, $field) {
 		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
@@ -1396,7 +1396,7 @@ class Tools extends Common_functions {
 	 * Checks for latest phpipam version from phpipam webpage
 	 *
 	 * @access public
-	 * @return mixed|bool
+	 * @return string|false
 	 */
 	public function check_latest_phpipam_version_phpipamnet () {
 		# fetch webpage
@@ -1543,7 +1543,7 @@ class Tools extends Common_functions {
 	 * @access private
 	 * @param $network
 	 * @param $broadcast
-	 * @return mixed|bool
+	 * @return string|false
 	 */
 	private function get_ipv4_address_type ($network, $broadcast) {
 		# get all possible classes
@@ -1648,7 +1648,7 @@ class Tools extends Common_functions {
 	 * @access public
 	 * @param mixed $addresses
 	 * @param int $pflen (default: 128)
-	 * @return mixed
+	 * @return string
 	 */
 	public function reverse_IPv6 ($addresses, $pflen=128) {
 		# Initialize PEAR NET object
@@ -1673,7 +1673,7 @@ class Tools extends Common_functions {
 	 *
 	 * @access private
 	 * @param CIDR $cidr
-	 * @return array|bool
+	 * @return string|false
 	 */
 	private function get_ipv6_address_type ($cidr) {
 		# Initialize PEAR NET object
@@ -1690,7 +1690,7 @@ class Tools extends Common_functions {
 	 * Defines all IPv6 address types
 	 *
 	 * @access private
-	 * @return array
+	 * @return string[]
 	 */
 	private function define_ipv6_address_types () {
         $all_types[10] = "NET_IPV6_NO_NETMASK";
@@ -1872,7 +1872,7 @@ class Tools extends Common_functions {
      * @param bool $admin (default: false) > shows remove links
      * @param bool|mixed $object_type (default: false)
      * @param bool $object_id (default: false)
-     * @return mixed
+     * @return string
      */
     public function print_nat_table ($n, $is_admin = false, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
         // cast to object to be sure if array provided
@@ -2073,7 +2073,7 @@ class Tools extends Common_functions {
 	 * @access public
 	 * @param bool $prefix (default: false)
 	 * @param bool $number (default: false)
-	 * @return bool
+	 * @return null|boolean
 	 */
 	public function check_number_duplicates ($prefix = false, $number = false) {
     	if($prefix===false && $number===false) {
@@ -2910,7 +2910,7 @@ class Tools extends Common_functions {
 	 * Sets valid actions
 	 *
 	 * @access private
-	 * @return array
+	 * @return string[]
 	 */
 	private function get_valid_actions () {
 		return array(
@@ -2957,7 +2957,7 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $code		//lang code
-	 * @return mixed
+	 * @return string
 	 */
 	public function get_translation_version ($code) {
 		//check for version
