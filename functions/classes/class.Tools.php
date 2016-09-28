@@ -1240,7 +1240,6 @@ class Tools extends Common_functions {
 	public function field_exists ($tablename, $fieldname) {
 	    # escape
 	    $tableName = $this->Database->escape($tablename);
-	    $tableName = $this->Database->escape($tablename);
 		# check
 	    $query = "DESCRIBE `$tablename` `$fieldname`;";
 		try { $count = $this->Database->getObjectQuery($query); }
@@ -1432,7 +1431,6 @@ class Tools extends Common_functions {
 					$this->phpipam_latest_release = $e;
 					// return
 					return str_replace("Version", "", $e->title);
-					break;
 				}
 			}
 			// none
@@ -1477,8 +1475,6 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	public function calculate_ip_calc_results ($cidr) {
-		# addresses class
-		$Addresses = new Addresses ($this->Database);
 		# detect address and calculate
 		return $this->identify_address($cidr)=="IPv6" ? $this->calculate_IPv6_calc_results($cidr) : $this->calculate_IPv4_calc_results($cidr);
 	}
@@ -2151,9 +2147,6 @@ class Tools extends Common_functions {
 		# return table content (tr and td's)
 		while ( $loop && ( ( $option = each( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
-			# repeat
-			$repeat  = str_repeat( " - ", ( count($parent_stack)) );
-
 			if(count($parent_stack) == 0) {
 				$margin = "0px";
 				$padding = "0px";
@@ -2176,8 +2169,6 @@ class Tools extends Common_functions {
 
 			# print table line
 			if(strlen($option['value']['prefix']) > 0) {
-    			$last_item = $count < $old_count ? "last_item" : "";
-
     			# count change?
     			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
 
@@ -2289,8 +2280,6 @@ class Tools extends Common_functions {
 				array_push( $parent_stack, $option['value']['master'] );
 				$parent = $option['value']['id'];
 			}
-			# Last items
-			else { }
 		}
 		# print
 		return $html;
@@ -2306,7 +2295,7 @@ class Tools extends Common_functions {
 	 * @param bool $prefixId (default: false)
 	 * @return void
 	 */
-	public function print_masterprefix_dropdown_menu($prefixId = false) {
+	public function print_masterprefix_dropdown_menu ($prefixId = false) {
 
 		# initialize vars
 		$children_prefixes = array();
@@ -2337,8 +2326,6 @@ class Tools extends Common_functions {
 		{
 			# repeat
 			$repeat  = str_repeat( " &nbsp;&nbsp; ", ( count($parent_stack_prefixes)) );
-			# count levels
-			$count = count($parent_stack_prefixes)+1;
 
 			# selected
 			$selected = $option['value']['id'] == $prefixId ? "selected='selected'" : "";
@@ -2350,10 +2337,7 @@ class Tools extends Common_functions {
 			elseif ( !empty( $children_prefixes[$option['value']['id']] ) ) {
 				array_push( $parent_stack_prefixes, $option['value']['master'] );
 				$parent = $option['value']['id'];
-			}
-			# Last items
-			else { }
-		}
+			}		}
 		}
 		$html[] = "</select>";
 		# join and print
@@ -2676,7 +2660,7 @@ class Tools extends Common_functions {
     	$this->Subnets = new Subnets ($this->Database);
 
         # CSV
-        if (strtolower($filetype) == "csv")     { $outFile = $this->parse_import_file_csv ($subnet, $custom_address_fields); }
+        if (strtolower($filetype) == "csv")     { $outFile = $this->parse_import_file_csv (); }
         # XLS
         elseif(strtolower($filetype) == "xls")  { $outFile = $this->parse_import_file_xls ($subnet, $custom_address_fields); }
         # error
@@ -2738,11 +2722,9 @@ class Tools extends Common_functions {
 	 * Parses CSV import file
 	 *
 	 * @access private
-	 * @param object $subnet
-	 * @param array $custom_address_fields
 	 * @return void
 	 */
-	private function parse_import_file_csv ($subnet, $custom_address_fields) {
+	private function parse_import_file_csv () {
     	/* get file to string */
     	$outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
 
@@ -2762,13 +2744,13 @@ class Tools extends Common_functions {
             	# mac
         		if ($this->settings-enableMulticast=="1") {
             		if (strlen($field[5])==0 && $this->Subnets->is_multicast($field[0]))  {
-                		$mac = $this->Subnets->create_multicast_mac ($field[0]);
-                    }
-                    else {
-                        $mac = $field[5];
+                		$field[5] = $this->Subnets->create_multicast_mac ($field[0]);
                     }
         		}
         	}
+
+        	# save
+        	$outFile[$k] = implode(",", $field);
     	}
 
     	# return
