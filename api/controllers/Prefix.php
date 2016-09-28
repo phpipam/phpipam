@@ -240,26 +240,6 @@ class Prefix_controller extends Common_api_functions {
     private $master_subnet = false;
 
     /**
-     * start time
-     *
-     * (default value: false)
-     *
-     * @var bool
-     * @access private
-     */
-    private $start = false;
-
-    /**
-     * end time
-     *
-     * (default value: false)
-     *
-     * @var bool
-     * @access private
-     */
-    private $end = false;
-
-    /**
      * Database object
      *
      * @var mixed
@@ -298,6 +278,14 @@ class Prefix_controller extends Common_api_functions {
      * @access protected
      */
     protected $Subnets;
+
+    /**
+     * Master Addresses object
+     *
+     * @var mixed
+     * @access protected
+     */
+    protected $Addresses;
 
     /**
      * Master Sections object
@@ -348,7 +336,6 @@ class Prefix_controller extends Common_api_functions {
      * Init Subnets controller object - for POST
      *
      * @access private
-     * @return void
      */
     private function init_subnets_controller () {
         // file
@@ -361,7 +348,6 @@ class Prefix_controller extends Common_api_functions {
      * Init Addresses controller object - for POST
      *
      * @access private
-     * @return void
      */
     private function init_addresses_controller () {
         // file
@@ -376,7 +362,6 @@ class Prefix_controller extends Common_api_functions {
      *  GET /prefix/{customer_address_type}/address/4/
      *
      * @access private
-     * @return void
      */
     private function set_query_type () {
         // get subnets in address selection query
@@ -409,7 +394,6 @@ class Prefix_controller extends Common_api_functions {
      * override_custom_fields for address
      *
      * @access private
-     * @return void
      */
     private function override_custom_fields () {
         $this->custom_field_name = $this->custom_field_name_addr;
@@ -425,7 +409,7 @@ class Prefix_controller extends Common_api_functions {
      * Returns json encoded options and version
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function OPTIONS () {
         // validate
@@ -455,7 +439,7 @@ class Prefix_controller extends Common_api_functions {
      *  /api/{app_id}/prefix/external_id/{external_identifier_field}/
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function GET () {
         // external identifier
@@ -560,7 +544,7 @@ class Prefix_controller extends Common_api_functions {
      *  /api/{app_id}/prefix/{customer_type}/{address_type}/address/?description=customer1
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function POST () {
         // validate parameters
@@ -580,7 +564,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param mixed $subnets
-     * @return void
+     * @return array
      */
     private function POST_SUBNET ($subnets) {
         // find first subnet
@@ -627,7 +611,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param mixed $subnets
-     * @return void
+     * @return array
      */
     private function POST_ADDRESS ($subnets) {
         // find first subnet
@@ -714,7 +698,7 @@ class Prefix_controller extends Common_api_functions {
         // validate requested custom field
         $this->validate_request_parameters_custom_field ();
         // validate address type
-        if(!in_array($this->_params->id2, $this->valid_address_types))         { $this->Response->throw_exception(400, "Invalid address type"); }
+        if(!in_array($this->_params->id2, $this->valid_address_types))             { $this->Response->throw_exception(400, "Invalid address type"); }
         // validate mask or address
         if($this->query_type!=="address") {
             // validate mask
@@ -763,7 +747,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param mixed $result
-     * @return void
+     * @return object
      */
     private function filter_prefix_result ($result) {
         // loop through fields
@@ -781,7 +765,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param mixed $result
-     * @return void
+     * @return object
      */
     private function filter_addresses_result ($result) {
         // loop through fields
@@ -797,7 +781,7 @@ class Prefix_controller extends Common_api_functions {
      * Searches for avaialble master subnets
      *
      * @access private
-     * @return void
+     * @return array|false
      */
     private function search_custom_field_name_subnets () {
         // set limit base on type
@@ -822,8 +806,8 @@ class Prefix_controller extends Common_api_functions {
      * Check if subnet has slaves and remove it from result array if yes
      *
      * @access private
-     * @param mixed $subnets
-     * @return void
+     * @param array $subnets
+     * @return array
      */
     private function remove_if_has_slaves ($subnets) {
         if(sizeof($subnets)>0) {
@@ -843,7 +827,8 @@ class Prefix_controller extends Common_api_functions {
 	 * Calculates subnet usage
 	 *
 	 * @access private
-	 * @return void
+	 * @param int $id
+	 * @return array
 	 */
 	private function calculate_subnet_usage ($id) {
 		# check that section exists
@@ -875,9 +860,10 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param mixed $subnets
-     * @return void
+     * @return bool|array
      */
     private function find_first_available_subnet ($subnets) {
+        $available = false;
         // check result
         if($subnets===false)        { return false; }
         // search first available prefix on found addresses
@@ -900,7 +886,7 @@ class Prefix_controller extends Common_api_functions {
      * @access public
      * @param mixed $master_subnet_id
      * @param mixed $bitmask
-     * @return void
+     * @return bool|mixed
      */
     public function search_first_available_subnet ($master_subnet_id, $bitmask) {
         // fetch
@@ -914,9 +900,10 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param mixed $subnets
-     * @return void
+     * @return bool|mixed
      */
     private function find_first_available_address ($subnets) {
+        $available = false;
         // check result
         if($subnets===false)        { return false; }
         // search first available prefix on found addresses
@@ -939,7 +926,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access public
      * @param mixed $master_subnet_id
-     * @return void
+     * @return bool|mixed
      */
     public function search_first_available_address ($master_subnet_id) {
         // fetch
@@ -953,7 +940,7 @@ class Prefix_controller extends Common_api_functions {
      *
      * @access private
      * @param string $type (default: "subnets")
-     * @return void
+     * @return bool|mixed
      */
     private function find_external_id_subnets_addresses ($type = "subnets") {
         // search
