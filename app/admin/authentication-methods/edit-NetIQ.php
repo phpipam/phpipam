@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # ID must be numeric */
 if($_POST['action']!="add") {
 	if(!is_numeric($_POST['id']))	{ $Result->show("danger", _("Invalid ID"), true, true); }

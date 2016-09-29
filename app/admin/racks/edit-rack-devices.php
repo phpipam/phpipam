@@ -21,6 +21,9 @@ $User->check_user_session();
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 

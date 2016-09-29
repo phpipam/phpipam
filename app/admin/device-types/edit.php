@@ -22,6 +22,9 @@ $csrf = $User->csrf_cookie ("create", "device_types");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['tid'])) { $Result->show("danger", _("Invalid ID"), true, true); }
 # set delete flag

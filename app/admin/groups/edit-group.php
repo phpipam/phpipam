@@ -19,8 +19,14 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "group");
 
+# validate action
+$Admin->validate_action ($_POST['action']);
+
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
+
+# ID
+if(!is_numeric($_POST['id']))   $Result->show("danger", _("Invalid Id"), true, true);
 
 # fetch group and set title
 if($_POST['action']=="add") {

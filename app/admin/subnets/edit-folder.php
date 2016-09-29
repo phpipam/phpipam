@@ -25,6 +25,9 @@ $csrf = $User->csrf_cookie ("create", "folder");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # ID must be numeric
 if($_POST['action']!="add") {
 	if(!is_numeric($_POST['subnetId']))										{ $Result->show("danger", _("Invalid ID"), true, true); }

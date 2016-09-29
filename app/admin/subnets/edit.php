@@ -26,6 +26,8 @@ $csrf = $User->csrf_cookie ("create", "subnet");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 # verify that user has permissions to add subnet
 if($_POST['action'] == "add") {

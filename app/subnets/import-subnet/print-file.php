@@ -22,11 +22,16 @@ $User->check_user_session();
 $filetype = explode(".", $_POST['filetype']);
 $filetype = end($filetype);
 
+# check integer
+is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
+
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
+
+if($subnet===false)                $Result->show("danger", _("Invalid subnet ID") ,true);
 
 # Parse file
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);

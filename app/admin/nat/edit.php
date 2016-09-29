@@ -20,6 +20,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "nat");
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # get NAT object
 if($_POST['action']!="add") {
 	$nat = $Admin->fetch_object ("nat", "id", $_POST['id']);

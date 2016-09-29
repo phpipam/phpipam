@@ -32,6 +32,8 @@ $csrf = $User->csrf_cookie ("create", "custom_field");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 /* reset field name for add! */
 if($_POST['action'] == "add") 	{ $_POST['fieldName'] = ""; }

@@ -21,6 +21,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "domain");
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
 

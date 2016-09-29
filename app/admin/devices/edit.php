@@ -23,6 +23,9 @@ $csrf = $User->csrf_cookie ("create", "device");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
 

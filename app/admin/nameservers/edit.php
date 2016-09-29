@@ -24,6 +24,9 @@ $csrf = $User->csrf_cookie ("create", "ns");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # get Nameserver sets
 if($_POST['action']!="add") {
 	$nameservers = $Admin->fetch_object ("nameservers", "id", $_POST['nameserverId']);

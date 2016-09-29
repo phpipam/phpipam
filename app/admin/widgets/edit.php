@@ -23,6 +23,9 @@ $csrf = $User->csrf_cookie ("create", "widget");
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # fetch widget
 if($_POST['action']!="add") {
 	$w = $Admin->fetch_object ("widgets", "wid", $_POST['wid']);

@@ -132,9 +132,11 @@ class Responses {
 	 */
 	private function set_header () {
 		// wrong code
-		if(!isset($this->exception))		{ header("HTTP/1.1 500 Invalid result code"); }
+		if(!isset($this->exception))		                 { $this->throw_exception (500, "Invalid result code"); }
+		// wrong code
+		elseif(!isset($this->errors[$this->result['code']])) { $this->throw_exception (500, "Invalid result code"); }
 		// ok
-		else								{ header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
+		else								                 { header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
 
 		// 401 - add location
 		if ($this->result['code']==401) {
@@ -260,6 +262,11 @@ class Responses {
 	 * @return void
 	 */
 	private function set_location_header ($location) {
+    	# validate location header
+    	if(!preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i',$location)) {
+        	$this->throw_exception (500, "Invalid location header");
+    	}
+    	# set
 		header("Location: ".$location);
 	}
 

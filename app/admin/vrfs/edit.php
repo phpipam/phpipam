@@ -21,6 +21,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "vrf");
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # get VRF
 if($_POST['action']!="add") {
 	$vrf = $Admin->fetch_object ("vrf", "vrfId", $_POST['vrfId']);

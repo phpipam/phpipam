@@ -224,7 +224,7 @@ class phpipamSNMP extends Common_functions {
 	 * Sets snmp device details
 	 *
 	 * @access public
-	 * @param int $device (default: false)
+	 * @param array|object|bool $device (default: false)
 	 * @param int $vlan_number (default: false)
 	 * @return void
 	 */

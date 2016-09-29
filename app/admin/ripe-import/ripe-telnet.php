@@ -23,6 +23,9 @@ if(substr($_POST['as'], 0,2)=="AS" || substr($_POST['as'], 0,2)=="as") {
 	$_POST['as'] = substr($_POST['as'], 2);
 };
 
+// numberic
+if(!is_numeric($_POST['as']))       { $Result->show("danger", _("Invalid AS"), true); }
+
 
 # fetch subnets form ripe
 $subnet   = $Subnets->ripe_fetch_subnets ($_POST['as']);

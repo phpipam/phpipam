@@ -20,6 +20,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "location");
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # get Location object
 if($_POST['action']!="add") {
 	$location = $Admin->fetch_object ("locations", "id", $_POST['id']);

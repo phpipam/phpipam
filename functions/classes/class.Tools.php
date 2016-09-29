@@ -47,7 +47,7 @@ class Tools extends Common_functions {
 	 *
 	 * (default value: false)
 	 *
-	 * @var bool
+	 * @var bool|object
 	 * @access protected
 	 */
 	protected $Addresses = false;
@@ -2890,40 +2890,6 @@ class Tools extends Common_functions {
 
 	    # return subnets array
 	    return (array) $stats;
-	}
-
-	/**
-	 * Validate posted action on scripts
-	 *
-	 * @access public
-	 * @param mixed $action
-	 * @return mixed|bool
-	 */
-	public function validate_action ($action) {
-		# get valid actions
-		$valid_actions = $this->get_valid_actions ();
-		# check
-		in_array($action, $valid_actions) ?: $this->Result->show("danger", _("Invalid action!"), true);
-	}
-
-	/**
-	 * Sets valid actions
-	 *
-	 * @access private
-	 * @return string[]
-	 */
-	private function get_valid_actions () {
-		return array(
-		        "add",
-		        "all-add",
-		        "edit",
-		        "all-edit",
-		        "delete",
-		        "truncate",
-		        "split",
-		        "resize",
-		        "move"
-		      );
 	}
 
 	/**

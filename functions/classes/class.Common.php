@@ -803,6 +803,41 @@ class Common_functions  {
 	}
 
 	/**
+	 * Sets valid actions
+	 *
+	 * @access private
+	 * @return string[]
+	 */
+	private function get_valid_actions () {
+		return array(
+		        "add",
+		        "all-add",
+		        "edit",
+		        "all-edit",
+		        "delete",
+		        "truncate",
+		        "split",
+		        "resize",
+		        "move"
+		      );
+	}
+
+	/**
+	 * Validate posted action on scripts
+	 *
+	 * @access public
+	 * @param mixed $action
+	 * @param bool $popup
+	 * @return mixed|bool
+	 */
+	public function validate_action ($action, $popup = false) {
+		# get valid actions
+		$valid_actions = $this->get_valid_actions ();
+		# check
+		in_array($action, $valid_actions) ?: $this->Result->show("danger", _("Invalid action!"), true, $popup);
+	}
+
+	/**
 	 * Validates email address.
 	 *
 	 * @access public

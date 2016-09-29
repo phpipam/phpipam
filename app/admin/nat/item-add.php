@@ -17,6 +17,10 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate id
+if(!is_numeric($_POST['id']))                           { $Result->show("danger", _("Invalid ID"), true, true); }
+# validate type
+if(!in_array($_POST['type'], array("src", "dst")))      { $Result->show("danger", _("Invalid NAT direction"), true, true); }
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);

@@ -21,6 +21,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->csrf_cookie ("create", "rack");
 
+# validate action
+$Admin->validate_action ($_POST['action'], true);
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('racks');
 
