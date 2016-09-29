@@ -33,6 +33,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 	    print "<th>"._('App permissions').'</th>';
 	    print "<th>"._('App security').'</th>';
 	    print "<th>"._('Transaction locking').'</th>';
+	    print "<th>"._('Lock timeout').'</th>';
 	    print "<th>"._('Comment').'</th>';
 	    print '<th></th>';
 		print '</tr>';
@@ -57,6 +58,9 @@ $all_apis = $Admin->fetch_all_objects("api");
 			elseif($a['app_permissions']==2)	{ $a['app_permissions'] = _("Read / Write"); }
 			elseif($a['app_permissions']==3)	{ $a['app_permissions'] = _("Read / Write / Admin"); }
 
+			# wait update
+			$a['app_lock_wait'] = $a['app_lock']==1 ? $a['app_lock_wait']." sec" : "/";
+
 			# reformat lock
 			$a['app_lock'] = $a['app_lock']==1 ? _("Yes") : _("No");
 
@@ -66,6 +70,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 			print '	<td>' . $a['app_permissions'] . '</td>'. "\n";
 			print '	<td>' . ucwords($a['app_security']) . '</td>'. "\n";
 			print '	<td>' . $a['app_lock'] . '</td>'. "\n";
+			print '	<td>' . $a['app_lock_wait'] . '</td>'. "\n";
 			print '	<td>' . $a['app_comment'] . '</td>'. "\n";
 
 			# add/remove APIs

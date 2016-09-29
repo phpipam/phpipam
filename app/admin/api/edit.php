@@ -84,6 +84,7 @@ if($_POST['action']!="add") {
 	    	}
 	    	?>
 	    	</select>
+	    </td>
        	<td class="info2"><?php print _('Application permissions'); ?></td>
     </tr>
 
@@ -104,6 +105,7 @@ if($_POST['action']!="add") {
 	    	}
 	    	?>
 	    	</select>
+	    </td>
        	<td class="info2"><?php print _('Application security'); ?></td>
     </tr>
 
@@ -120,9 +122,19 @@ if($_POST['action']!="add") {
 	    	}
 	    	?>
 	    	</select>
+	    </td>
        	<td class="info2"><?php print _('Lock POST transactions'); ?></td>
     </tr>
 
+
+	<!-- lock wait -->
+	<tr>
+	    <td><?php print _('Lock timeout'); ?></td>
+	    <td>
+	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $api->app_lock_wait; ?>">
+	    </td>
+       	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
+    </tr>
 
     <!-- description -->
     <tr>

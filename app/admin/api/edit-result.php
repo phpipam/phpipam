@@ -36,6 +36,11 @@ if($_POST['action']!="delete") {
 	if($_POST['app_security']!="user") {
 	if(!($_POST['app_permissions']==0 || $_POST['app_permissions']==1 || $_POST['app_permissions'] ==2 || $_POST['app_permissions'] ==3 ))	{ $error[] = "Invalid permissions"; }
 	}
+	# locak check
+	if($_POST['app_lock']=="1") {
+    	if(!is_numeric($_POST['app_lock_wait']))                                                            { $error[] = "Invalid wait value"; }
+    	elseif ($_POST['app_lock_wait']<1)                                                                  { $error[] = "Invalid wait value"; }
+	}
 }
 
 # die if errors
@@ -50,6 +55,7 @@ else {
 					"app_permissions"=>@$_POST['app_permissions'],
 					"app_security"=>@$_POST['app_security'],
 					"app_lock"=>@$_POST['app_lock'],
+					"app_lock_wait"=>@$_POST['app_lock_wait'],
 					"app_comment"=>@$_POST['app_comment']);
 
 	# execute

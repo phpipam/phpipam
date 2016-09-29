@@ -468,6 +468,7 @@ CREATE TABLE `api` (
   `app_comment` TEXT  NULL,
   `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
   `app_lock` INT(1)  NOT NULL  DEFAULT '0',
+  `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

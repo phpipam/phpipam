@@ -26,7 +26,6 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 $enable_authentication = true;
 $time_response = true;          // adds [time] to response
 $lock_file = "";                // (optional) file to write lock to
-$lock_wait = 30;                // number of seconds to wait if lock clears
 
 # database object
 $Database 	= new Database_PDO;
@@ -200,8 +199,8 @@ try {
     	// check if locked form previous process
     	while ($controller->is_transaction_locked ()) {
         	// max ?
-        	if ((microtime(true) - $start) > $lock_wait) {
-            	$Response->throw_exception(503, "Transaction timed out after $lock_wait seconds because of transaction lock");
+        	if ((microtime(true) - $start) > $app->app_lock_wait) {
+            	$Response->throw_exception(503, "Transaction timed out after $app->app_lock_wait seconds because of transaction lock");
         	}
         	// add random delay
         	usleep(rand(250000,500000));

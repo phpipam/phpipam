@@ -691,4 +691,5 @@ ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetI
 
 /* add transaction locking */
 ALTER TABLE `api` ADD `app_lock` INT(1)  NOT NULL  DEFAULT '0';
+ALTER TABLE `api` ADD `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30';
 
