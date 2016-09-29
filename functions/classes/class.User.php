@@ -295,7 +295,7 @@ class User extends Common_functions {
      * Checks if user is authenticated - session is set
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function is_authenticated () {
         # if checked for subpages first check if $user is array
@@ -318,9 +318,6 @@ class User extends Common_functions {
                     $this->set_ui_language();
                 }
             }
-            else {
-                $this->authenticated = false;
-            }
         }
 
         # return
@@ -332,7 +329,7 @@ class User extends Common_functions {
      *
      * @access public
      * @param bool $die (default: true)
-     * @return void
+     * @return string|bool
      */
     public function is_admin ($die = true) {
         if($this->isadmin)      { return true; }
@@ -347,7 +344,7 @@ class User extends Common_functions {
      *
      * @access public
      * @param bool $redirect (default: true)
-     * @return void
+     * @return string|false
      */
     public function check_user_session ($redirect = true) {
         # not authenticated
@@ -456,7 +453,7 @@ class User extends Common_functions {
      * @param string $action (default: "create")
      * @param mixed $index (default: null)
      * @param mixed $value (default: null)
-     * @return void
+     * @return string
      */
     public function csrf_cookie ($action = "create", $index = null, $value = null) {
         // validate action
@@ -471,7 +468,7 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $action
-     * @return void
+     * @return bool
      */
     private function csrf_validate_action ($action) {
         if ($action=="create" || $action=="validate") { return true; }
@@ -483,7 +480,7 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $index
-     * @return void
+     * @return string
      */
     private function csrf_cookie_create ($index) {
         // set cookie suffix
@@ -499,7 +496,7 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $index
-     * @return void
+     * @return bool
      */
     private function csrf_cookie_validate ($index, $value) {
         // set cookie suffix
@@ -571,29 +568,23 @@ class User extends Common_functions {
      * @return void
      */
     public function migrate_ldap_settings () {
-
         # fetch LDAP settings
         $ldaps = $this->Database->getObjectsQuery("select * from usersAuthMethod where type = 'LDAP'");
 
         foreach ($ldaps as $ldapobj) {
-
             $ldap = json_decode($ldapobj->params);
-
             if (!property_exists($ldap, 'ldap_security')) {
                 $ldap->ldap_security = 'none';
             }
 
             if (property_exists($ldap, 'use_ssl')) {
-
                 if ($ldap->use_ssl == '1') {
                     $ldap->ldap_security = 'ssl';
                 }
                 unset($ldap->use_ssl);
-
             }
 
             if (property_exists($ldap, 'use_tls')) {
-
                 if ($ldap->use_tls == '1') {
                     $ldap->ldap_security = 'tls';
                 }
@@ -607,7 +598,6 @@ class User extends Common_functions {
             $ldapobj->params = json_encode($ldap);
 
             $this->Database->updateObject("usersAuthMethod", $ldapobj);
-
         }
     }
 
@@ -641,7 +631,7 @@ class User extends Common_functions {
      * fetches default language
      *
      * @access public
-     * @return void
+     * @return object
      */
     public function get_default_lang () {
         try { $lang = $this->Database->findObject("lang","l_id",$this->settings->defaultLang); }
@@ -656,7 +646,7 @@ class User extends Common_functions {
      *    Can be extended by reading set properties from set field options
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function fetch_available_auth_method_types () {
 		return array("AD", "LDAP", "NetIQ", "Radius", "SAML2");
@@ -680,7 +670,7 @@ class User extends Common_functions {
      * Fetches details for users favourite subnets
      *
      * @access public
-     * @return void
+     * @return array|false
      */
     public function fetch_favourite_subnets () {
         # none
@@ -723,7 +713,7 @@ class User extends Common_functions {
      * @access public
      * @param mixed $action
      * @param mixed $subnetId
-     * @return void
+     * @return bool
      */
     public function edit_favourite($action, $subnetId) {
         # execute
@@ -737,7 +727,7 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $subnetId
-     * @return void
+     * @return bool
      */
     private function remove_favourite ($subnetId) {
         # set old favourite subnets
@@ -757,7 +747,7 @@ class User extends Common_functions {
      *
      * @access private
      * @param int $subnetId
-     * @return boolena
+     * @return bool
      */
     private function add_favourite ($subnetId) {
         # set old favourite subnets
@@ -794,7 +784,7 @@ class User extends Common_functions {
      *
      * @access public
      * @param mixed $subnetId
-     * @return void
+     * @return bool
      */
     public function is_folder_favourite ($subnetId) {
         return $this->is_subnet_favourite ($subnetId);
@@ -829,7 +819,6 @@ class User extends Common_functions {
      * @return void
      */
     public function authenticate ($username, $password, $saml = false) {
-
         # first we need to check if username exists
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
@@ -885,7 +874,7 @@ class User extends Common_functions {
      * Fetch all languages from database.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function fetch_langs () {
         try { $langs = $this->Database->getObjects("lang", "l_id"); }
@@ -901,7 +890,7 @@ class User extends Common_functions {
      * fetches language details from database
      *
      * @access private
-     * @return void
+     * @return string
      */
     private function fetch_lang_details () {
         // fetch from db
@@ -1021,7 +1010,6 @@ class User extends Common_functions {
      * @return adLDAP object
      */
     private function directory_connect ($authparams) {
-
         # adLDAP script
         require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
 
@@ -1266,7 +1254,7 @@ class User extends Common_functions {
      *
      * @access public
      * @param mixed $input
-     * @return void
+     * @return string
      */
     public function crypt_user_pass ($input) {
         # initialize salt
@@ -1285,28 +1273,28 @@ class User extends Common_functions {
      *    this function will detect highest crypt type to use for system
      *
      * @access public
-     * @return void
+     * @return string
      */
     private function detect_crypt_type () {
         if(CRYPT_SHA512 == 1)        { return '$6$rounds=3000$'; }
         elseif(CRYPT_SHA256 == 1)    { return '$5$rounds=3000$'; }
-        elseif(CRYPT_BLOWFISH == 1)    { return '$2y$'.str_pad(rand(4,31),2,0, STR_PAD_LEFT).'$'; }
-        elseif(CRYPT_MD5 == 1)        { return '$5$rounds=3000$'; }
-        else                        { $this->Result->show("danger", _("No crypt types supported"), true); }
+        elseif(CRYPT_BLOWFISH == 1)  { return '$2y$'.str_pad(rand(4,31),2,0, STR_PAD_LEFT).'$'; }
+        elseif(CRYPT_MD5 == 1)       { return '$5$rounds=3000$'; }
+        else                         { $this->Result->show("danger", _("No crypt types supported"), true); }
     }
 
     /**
      * Returns crypt type used to encrypt password
      *
      * @access public
-     * @return void
+     * @return string
      */
     public function return_crypt_type () {
         if(CRYPT_SHA512 == 1)        { return 'CRYPT_SHA512'; }
         elseif(CRYPT_SHA256 == 1)    { return 'CRYPT_SHA256'; }
-        elseif(CRYPT_BLOWFISH == 1)    { return 'CRYPT_BLOWFISH'; }
-        elseif(CRYPT_MD5 == 1)        { return 'CRYPT_MD5'; }
-        else                        { return "No crypt types supported"; }
+        elseif(CRYPT_BLOWFISH == 1)  { return 'CRYPT_BLOWFISH'; }
+        elseif(CRYPT_MD5 == 1)       { return 'CRYPT_MD5'; }
+        else                         { return "No crypt types supported"; }
     }
 
     /**
@@ -1341,8 +1329,8 @@ class User extends Common_functions {
      * User self update method
      *
      * @access public
-     * @param mixed $post //posted user details
-     * @return void
+     * @param array|object $post //posted user details
+     * @return bool
      */
     public function self_update($post) {
         # set items to update
@@ -1384,7 +1372,7 @@ class User extends Common_functions {
      *
      * @access public
      * @param mixed $widgets
-     * @return void
+     * @return bool
      */
     public function self_update_widgets ($widgets) {
         # update
@@ -1401,7 +1389,7 @@ class User extends Common_functions {
      * Updates last users login time
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function update_login_time () {
         # fix for older versions
@@ -1456,7 +1444,7 @@ class User extends Common_functions {
      *
      * @access public
      * @param none
-     * @return int on match, false on no result
+     * @return int|false
      */
     public function block_check_ip () {
         # first purge
@@ -1477,7 +1465,7 @@ class User extends Common_functions {
      * adds new IP to block or updates count if already present
      *
      * @access private
-     * @return void
+     * @return bool
      */
     private function block_ip () {
         # validate IP

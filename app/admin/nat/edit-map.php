@@ -31,8 +31,8 @@ if($object===false)             { $Result->show("danger", _("Invalid object Id")
 $n = $nat;
 
 // translate json to array, links etc
-$sources      = $Tools->translate_nat_objects_for_display ($n->src, NULL, NULL, "subnets", $subnet['id']);
-$destinations = $Tools->translate_nat_objects_for_display ($n->dst, NULL, NULL, "subnets", $subnet['id']);
+$sources      = $Tools->translate_nat_objects_for_display ($n->src, false, false, "subnets", $subnet['id']);
+$destinations = $Tools->translate_nat_objects_for_display ($n->dst, false, false, "subnets", $subnet['id']);
 
 // no src/dst
 if ($sources===false)

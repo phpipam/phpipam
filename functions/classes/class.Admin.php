@@ -621,7 +621,6 @@ class Admin extends Common_functions {
 	public function replace_fields ($field, $search, $replace) {
 		# check number of items
 		$count = $this->count_database_objects ("ipaddresses", $field, "%$search%", true);
-		var_dump($count);
 		# if some exist update
 		if($count>0) {
 			# update

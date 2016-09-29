@@ -49,7 +49,7 @@ class Common_api_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var bool|resource
      * @access private
      */
     private $lock_file_handler = false;

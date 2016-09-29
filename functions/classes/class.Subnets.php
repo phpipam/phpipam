@@ -153,7 +153,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	public function modify_subnet ($action, $values) {
 		# strip tags
@@ -173,7 +173,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	private function subnet_add ($values) {
 		# null empty values
@@ -201,7 +201,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	private function subnet_edit ($values) {
 		# save old values
@@ -230,7 +230,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $id
-	 * @return void
+	 * @return bool
 	 */
 	private function subnet_delete ($id) {
 		# save old values
@@ -258,7 +258,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $subnetId
-	 * @return void
+	 * @return bool
 	 */
 	public function subnet_truncate ($subnetId) {
 		# save old values
@@ -280,7 +280,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnetId
 	 * @param int $subnet
 	 * @param int $mask
-	 * @return void
+	 * @return bool
 	 */
 	private function subnet_resize ($subnetId, $subnet, $mask) {
 		# save old values
@@ -306,7 +306,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $prefix
 	 * @param string $group (default: "yes")
 	 * @param string $strict (default: "yes")
-	 * @return void
+	 * @return bool
 	 */
 	public function subnet_split ($subnet_old, $number, $prefix, $group="yes", $strict="yes") {
 
@@ -387,7 +387,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param string $method (default: "id")
 	 * @param mixed $value
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_subnet ($method="id", $value) {
 		# null method
@@ -463,7 +463,7 @@ class Subnets extends Common_functions {
 	 *      needed for API get all subnets
 	 *
 	 * @access public
-	 * @return subnets or false
+	 * @return subnets|false
 	 */
 	public function fetch_all_subnets() {
 	    $query = "SELECT * FROM `subnets`;";
@@ -485,7 +485,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $agentId (default:null)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_all_subnets_for_pingCheck ($agentId=null) {
 		# null
@@ -507,7 +507,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $agentId (default:null)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_all_subnets_for_discoveryCheck ($agentId=null) {
 		# null
@@ -528,7 +528,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $vlanId
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_vlan_subnets ($vlanId, $sectionId=null) {
 	    # fetch settings and set subnet ordering
@@ -580,7 +580,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param mixed $subnetId
 	 * @param mixed $vlanId
-	 * @return void
+	 * @return bool
 	 */
 	private function is_subnet_in_vlan ($subnetId, $vlanId) {
 		# fetch subnet details
@@ -594,7 +594,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return array|false
 	 */
 	public function is_linked ($subnetId) {
     	if(!is_numeric($subnetId)) {
@@ -626,7 +626,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $vrfId
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_vrf_subnets ($vrfId, $sectionId=null) {
 	    # fetch settings and set subnet ordering
@@ -677,7 +677,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param mixed $subnetId
 	 * @param mixed $vrfId
-	 * @return void
+	 * @return bool
 	 */
 	private function is_subnet_in_vrf ($subnetId, $vrfId) {
 		# fetch subnet details
@@ -690,7 +690,7 @@ class Subnets extends Common_functions {
 	 * Fetches all scanning agents
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_scanning_agents () {
 		# fetch
@@ -707,7 +707,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $agentId (default: null)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_scanned_subnets ($agentId=null) {
 		// agent not set false
@@ -728,7 +728,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $subnetId
-	 * @return void
+	 * @return object|false
 	 */
 	public function find_gateway ($subnetId) {
 		// set query
@@ -746,7 +746,7 @@ class Subnets extends Common_functions {
 	 * Returns all IPv4 subnet masks with different presentations
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function get_ipv4_masks () {
     	$out = array();
@@ -795,7 +795,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return bool
 	 */
 	public function has_slaves ($subnetId) {
     	// NULL subnetId cannot have slaves
@@ -813,7 +813,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $subnetId
 	 * @param string|array $result_fields (default: "*")
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_subnet_slaves ($subnetId, $result_fields = "*") {
     	// fetch
@@ -909,7 +909,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnetId
-	 * @return void
+	 * @return array
 	 */
 	public function fetch_parents_recursive ($subnetId) {
 		$parents = array();
@@ -947,7 +947,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param bool $sectionId (default: false)
 	 * @param bool $cidr (default: false)
-	 * @return void
+	 * @return array|false
 	 */
 	public function find_subnet ($sectionId = false, $cidr = false) {
     	// check
@@ -993,7 +993,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $netmask (int)
 	 * @param mixed $subnet	(int)
 	 * @param bin $isFull	(default: 0)
-	 * @return void
+	 * @return array
 	 */
 	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0) {
 		# set IP version
@@ -1026,7 +1026,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $bitmask	//netmask in decimal format
 	 * @param mixed $addresses	//all addresses to be calculated, either all slave or per subnet
 	 * @param bin $isFull       //if subnet is marked as full
-	 * @return void
+	 * @return array
 	 */
 	public function calculate_subnet_usage_detailed ($subnet, $bitmask, $addresses, $isFull=0) {
 		# get IP address count per address type
@@ -1055,7 +1055,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $addresses
-	 * @return void
+	 * @return array
 	 */
 	public function calculate_subnet_usage_sort_addresses ($addresses) {
 		$count = array();
@@ -1106,7 +1106,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $index
-	 * @return void
+	 * @return mixed
 	 */
 	public function translate_address_type ($index) {
 		# fetch
@@ -1124,7 +1124,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $netmask
 	 * @param mixed $Addresses
 	 * @param bin isFull (default: 0)
-	 * @return void
+	 * @return mixed
 	 */
 	public function calculate_subnet_usage_recursive ($subnetId, $subnet, $netmask, $Addresses, $isFull=0) {
 		# identify address
@@ -1165,7 +1165,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $number
-	 * @return void
+	 * @return mixed
 	 */
 	public function reformat_number ($number) {
 		$length = strlen($number);
@@ -1184,7 +1184,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $netmask
 	 * @param mixed $ipversion
 	 * @param bool $strict (default: true)
-	 * @return void
+	 * @return int
 	 */
 	public function get_max_hosts ($netmask, $ipversion, $strict=true) {
 		if($ipversion == "IPv4")	{ return $this->get_max_IPv4_hosts ($netmask, $strict); }
@@ -1196,7 +1196,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $netmask
-	 * @return void
+	 * @return int
 	 */
 	public function get_max_IPv4_hosts ($netmask, $strict) {
 		if($netmask==31)			{ return 2; }
@@ -1210,7 +1210,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $netmask
-	 * @return void
+	 * @return int
 	 */
 	public function get_max_IPv6_hosts ($netmask) {
 		return gmp_strval(gmp_pow(2, 128 - $netmask));
@@ -1221,7 +1221,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return int
 	 */
 	private function get_max_netmask ($address) {
 		return $this->identify_address($address)=="IPv6" ? 128 : 32;
@@ -1233,7 +1233,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $address
 	 * @param mixed $netmask
-	 * @return void
+	 * @return array
 	 */
 	public function get_network_boundaries ($address, $netmask) {
 		# make sure we have dotted format
@@ -1253,7 +1253,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param mixed $address
 	 * @param mixed $netmask
-	 * @return void
+	 * @return array
 	 */
 	private function get_IPv4_network_boundaries ($address, $netmask) {
 		# Initialize PEAR NET object
@@ -1272,7 +1272,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param mixed $address
 	 * @param mixed $netmask
-	 * @return void
+	 * @return array
 	 */
 	private function get_IPv6_network_boundaries ($address, $netmask) {
 		# Initialize PEAR NET object
@@ -1297,7 +1297,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $address
 	 * @param mixed $free
 	 * @param bool $print (default: true)
-	 * @return void
+	 * @return mixed|false
 	 */
 	public function get_first_possible_subnet ($address, $free, $print = true) {
 		# set max possible mask for IP range
@@ -1350,7 +1350,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $cidr
 	 * @param bool $issubnet (default: true)
-	 * @return void
+	 * @return string|true
 	 */
 	public function verify_cidr_address ($cidr, $issubnet = true) {
 		# first verify address and mask format
@@ -1365,7 +1365,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $cidr
 	 * @param bool $issubnet (default: true)
-	 * @return void
+	 * @return string|true
 	 */
 	public function verify_cidr_address_IPv4 ($cidr, $issubnet = true) {
 		# Initialize PEAR NET object
@@ -1386,7 +1386,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $cidr (cidr)
 	 * @param bool $issubnet (default: true)
-	 * @return void
+	 * @return string|true
 	 */
 	public function verify_cidr_address_IPv6 ($cidr, $issubnet = true) {
 		# to lower
@@ -1410,7 +1410,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $cidr (cidr)
-	 * @return void
+	 * @return string
 	 */
 	public function verify_cidr ($cidr) {
 		$cidr =  explode("/", $cidr);
@@ -1430,7 +1430,7 @@ class Subnets extends Common_functions {
 	 * @param int $sectionId
 	 * @param mixed $new_subnet (cidr)
 	 * @param int $vrfId (default: 0)
-	 * @return void
+	 * @return string|false
 	 */
 	public function verify_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0) {
 	    # fetch section subnets
@@ -1465,7 +1465,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $new_subnet
 	 * @param int $old_subnet_id
 	 * @param int $vrfId (default: 0)
-	 * @return void
+	 * @return string|false
 	 */
 	public function verify_subnet_resize_overlapping ($sectionId, $new_subnet, $old_subnet_id, $vrfId = 0) {
 	    # fetch section subnets
@@ -1508,7 +1508,7 @@ class Subnets extends Common_functions {
 	 * @param CIDR $new_subnet
 	 * @param int $vrfId (default: 0)
 	 * @param int $masterSubnetId (default: 0)
-	 * @return void
+	 * @return string|false
 	 */
 	public function verify_nested_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0) {
     	# fetch all slave subnets
@@ -1540,7 +1540,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param CIDR $subnet1
 	 * @param CIDR $subnet2
-	 * @return void
+	 * @return bool
 	 */
 	public function verify_overlapping ($subnet1, $subnet2) {
 		return $this->identify_address ($subnet1)=="IPv4" ? $this->verify_IPv4_subnet_overlapping ($subnet1, $subnet2) : $this->verify_IPv6_subnet_overlapping ($subnet1, $subnet2);
@@ -1554,7 +1554,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param CIDR $subnet1
 	 * @param CIDR $subnet2
-	 * @return boolean
+	 * @return bool
 	 */
 	private function verify_IPv4_subnet_overlapping ($subnet1, $subnet2) {
 		# Initialize PEAR NET object
@@ -1612,7 +1612,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $masterSubnetId
 	 * @param mixed $cidr
-	 * @return void
+	 * @return bool
 	 */
 	public function verify_subnet_nesting ($masterSubnetId, $cidr) {
 		//first get details for root subnet
@@ -1764,7 +1764,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $number
 	 * @param string $group
 	 * @param string $strict
-	 * @return void
+	 * @return array
 	 */
 	private function verify_subnet_split ($subnet_old, $number, $group, $strict) {
 		# addresses class
@@ -1878,7 +1878,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $cidr1
 	 * @param mixed $cidr2
-	 * @return void
+	 * @return bool
 	 */
 	public function is_subnet_inside_subnet ($cidr1, $cidr2) {
 		$type = $this->identify_address ($cidr1);
@@ -1892,7 +1892,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param mixed $cidr1
 	 * @param mixed $cidr2
-	 * @return void
+	 * @return bool
 	 */
 	private function is_IPv4_subnet_inside_subnet ($cidr1, $cidr2) {
 		# Initialize PEAR NET object
@@ -1912,7 +1912,7 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param mixed $cidr1
 	 * @param mixed $cidr2
-	 * @return void
+	 * @return bool
 	 */
 	private function is_IPv6_subnet_inside_subnet ($cidr1, $cidr2) {
     	//mask 2 must be bigger than mask 1
@@ -1937,7 +1937,7 @@ class Subnets extends Common_functions {
 	 * Finds invalid subnets - that have masterSubnetId that does not exist
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|false
 	 */
 	public function find_invalid_subnets () {
 		// find unique ids
@@ -1958,7 +1958,7 @@ class Subnets extends Common_functions {
 	 * Finds all unique master subnet ids
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function find_unique_mastersubnetids () {
 		try { $res = $this->Database->getObjectsQuery("select distinct(`masterSubnetId`) from `subnets` where `masterSubnetId` != '0' order by `masterSubnetId` asc;"); }
@@ -1975,7 +1975,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $id
-	 * @return void
+	 * @return int
 	 */
 	private function verify_subnet_id ($id) {
 		try { $res = $this->Database->getObjectQuery("select count(*) as `cnt` from `subnets` where `id` = ?;", array($id)); }
@@ -1992,7 +1992,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param int $limit (default: 10)
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_threshold_subnets ($limit = 10) {
  		try { $res = $this->Database->getObjectsQuery("select * from `subnets` where `threshold` != 0 and `threshold` is not null limit $limit;"); }
@@ -2010,7 +2010,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $timelimit
 	 * @param int $limit (default: 100)
-	 * @return void
+	 * @return array|false
 	 */
 	public function find_inactive_hosts ($timelimit = 86400, $limit = 100) {
     	// fetch settings
@@ -2043,7 +2043,7 @@ class Subnets extends Common_functions {
 	 * Fetches all multicast networks from database
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_multicast_subnets () {
     	// set query
@@ -2073,7 +2073,7 @@ class Subnets extends Common_functions {
 	 * Fetch all ids for multicast folders
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|false
 	 */
 	public function fetch_distinct_multicast_folders () {
     	// set query
@@ -2111,7 +2111,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return bool
 	 */
 	public function is_multicast ($address) {
     	# IPv4
@@ -2140,7 +2140,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return string|false
 	 */
 	public function create_multicast_mac ($address) {
     	// first verify that it is multicast
@@ -2178,7 +2178,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address_id
-	 * @return void
+	 * @return array|false
 	 */
 	public function find_duplicate_multicast_mac ($address_id, $mac) {
     	// query
@@ -2206,7 +2206,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $vlanId
      * @param string $unique_required (default: "vlan")
      * @param int $address_id (dafault: 0)
-     * @return void
+     * @return bool
      */
     private function multicast_address_exists ($mac, $sectionId, $vlanId, $unique_required = "vlan", $address_id = 0) {
         // if vlan fetch l2 domainid
@@ -2261,7 +2261,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $vlanId
 	 * @param mixed $unique_required
 	 * @param int $address_id (defaut: 0)
-	 * @return true if ok, else error text to be displayed
+	 * @return string|true true if ok, else error text to be displayed
 	 */
 	public function validate_multicast_mac ($mac, $sectionId, $vlanId, $unique_required="vlan", $address_id = 0) {
     	// first put it to common format (1)
@@ -2382,7 +2382,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $permissions
-	 * @return void
+	 * @return string
 	 */
 	public function parse_permissions ($permissions) {
 		switch($permissions) {
@@ -2420,7 +2420,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $user
 	 * @param mixed $section_subnets	//array of all subnets in section
 	 * @param int $rootId (default: 0)
-	 * @return void
+	 * @return string
 	 */
 	public function print_subnets_menu( $user, $section_subnets, $rootId = 0 ) {
 		# open / close via cookie
@@ -2582,7 +2582,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $vlans
 	 * @param mixed $section_subnets
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return string
 	 */
 	public function print_vlan_menu( $user, $vlans, $section_subnets, $sectionId ) {
 		# initialize html array
@@ -2681,7 +2681,7 @@ class Subnets extends Common_functions {
 	 * @param mixed $vrfs
 	 * @param mixed $section_subnets
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return string
 	 */
 	public function print_vrf_menu( $user, $vrfs, $section_subnets, $sectionId ) {
 	 	# initialize html array
@@ -2774,7 +2774,7 @@ class Subnets extends Common_functions {
 	 * @param array $subnets
 	 * @param array $custom_fields
 	 * @param bool $print
-	 * @return none - print
+	 * @return string
 	 */
 	public function print_subnets_tools( $user, $subnets, $custom_fields, $print = true ) {
 
@@ -3328,7 +3328,7 @@ class Subnets extends Common_functions {
 	 * @param bool $mask (default: false)
 	 * @param int $mask_drill_down (default: 8)
 	 * @param bool $first_result (default: false)
-	 * @return void
+	 * @return array|false
 	 */
 	public function search_available_subnets ($subnetMasterId, $mask = false, $mask_drill_down = 8, $first_result = false) {
 
@@ -3440,7 +3440,7 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $subnetMasterId
 	 * @param bool $mask (default: false)
-	 * @return void
+	 * @return array|false
 	 */
 	public function search_available_single_subnet ($subnetMasterId, $mask = false) {
 
@@ -3541,7 +3541,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $decimalIpv6
-	 * @return void
+	 * @return int
 	 */
 	public  function subnet_dropdown_ipv6_decimal_add_one ($decimalIpv6) {
 		# Take digit, make array of earch number and reverse it
@@ -3589,7 +3589,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $subnet
-	 * @return void
+	 * @return array
 	 */
 	public function resolve_ripe_arin ($subnet) {
 		// set subnet allocations
@@ -3611,7 +3611,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnet
-	 * @return void
+	 * @return array
 	 */
 	private function query_ripe ($subnet) {
 		// fetch
@@ -3644,7 +3644,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnet
-	 * @return void
+	 * @return array
 	 */
 	private function query_arin ($subnet) {
 		// remove netmask
@@ -3698,7 +3698,7 @@ class Subnets extends Common_functions {
 	 * @param string $network (default: "ripe")
 	 * @param string $type (default: "inetnum")
 	 * @param mixed $subnet
-	 * @return void
+	 * @return array
 	 */
 	private function curl_fetch ($network = "ripe", $type = "inetnum", $subnet) {
 		// set url
@@ -3725,7 +3725,7 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $as
-	 * @return void
+	 * @return array
 	 */
 	public function ripe_fetch_subnets ($as) {
 		//open connection
@@ -3767,6 +3767,7 @@ class Subnets extends Common_functions {
 	 * Defines master (/8) subnets for arin and ripe allocations
 	 *
 	 * @access private
+	 * @return: void
 	 */
 	private function define_ripe_arin_subnets () {
 		// ripe

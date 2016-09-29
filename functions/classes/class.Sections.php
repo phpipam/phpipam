@@ -67,7 +67,6 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param Database_PDO $database
-	 * @return void
 	 */
 	public function __construct (Database_PDO $database) {
 		# Save database object
@@ -98,7 +97,7 @@ class Sections extends Common_functions {
 	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	public function modify_section ($action, $values) {
 		# strip tags
@@ -117,7 +116,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	private function section_add ($values) {
 		# null empty values
@@ -149,7 +148,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	private function section_edit ($values) {
 		# null empty values
@@ -178,7 +177,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @return void
+	 * @return bool
 	 */
 	private function section_delete ($values) {
 		# subnets class
@@ -220,7 +219,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $order
-	 * @return void
+	 * @return bool
 	 */
 	private function section_reorder ($order) {
 		# update each section
@@ -255,7 +254,7 @@ class Sections extends Common_functions {
 	 * @access public
 	 * @param string $order_by (default: "order")
 	 * @param bool $sort_asc (default: true)
-	 * @return void
+	 * @return array|bool
 	 */
 	public function fetch_all_sections ($order_by="order", $sort_asc=true) {
     	return $this->fetch_all_objects ("sections", $order_by, $sort_asc);
@@ -266,7 +265,7 @@ class Sections extends Common_functions {
 	 *
 	 * @param string $order_by (default: "order")
 	 * @param bool $sort_asc (default: true)
-	 * @return void
+	 * @return array|bool
 	 */
 	public function fetch_sections ($order_by="order", $sort_asc=true) {
 		return $this->fetch_all_objects ("sections", $order_by, $sort_asc);
@@ -278,7 +277,7 @@ class Sections extends Common_functions {
 	 * @access public
 	 * @param string $method (default: "id")
 	 * @param mixed $value
-	 * @return void
+	 * @return object|bool
 	 */
 	public function fetch_section ($method = "id", $value) {
     	if (is_null($method))   $method = "id";
@@ -290,7 +289,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array
 	 */
 	public function fetch_subsections ($sectionId) {
 		try { $subsections = $this->Database->getObjectsQuery("SELECT * FROM `sections` where `masterSection` = ?;", array($sectionId)); }
@@ -307,7 +306,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access private
 	 * @param int $id
-	 * @return void
+	 * @return array
 	 */
 	private function get_all_section_and_subsection_ids ($id) {
 		# check for subsections and store all ids
@@ -329,7 +328,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array|bool
 	 */
 	public function fetch_section_vlans ($sectionId) {
 		# set query
@@ -349,7 +348,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array|bool
 	 */
 	public function fetch_section_vrfs ($sectionId) {
 		# set query
@@ -370,13 +369,14 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array
 	 */
 	public function fetch_section_domains ($sectionId) {
 		# first fetch all domains
 		$Admin = new Admin ($this->Database, false);
 		$domains = $Admin->fetch_all_objects ("vlanDomains");
 		# loop and check
+		$permitted = array();
 		foreach($domains as $d) {
 			//default
 			if($d->id==1) {
@@ -398,7 +398,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId
-	 * @return void
+	 * @return array|bool
 	 */
 	public function fetch_section_nameserver_sets ($sectionId) {
 		# first fetch all nameserver sets
@@ -406,6 +406,7 @@ class Sections extends Common_functions {
 		$nameservers = $Admin->fetch_all_objects ("nameservers");
 		# loop and check
 		if ($nameservers!==false) {
+    		$permitted = array();
 			foreach($nameservers as $n) {
 				//default
 				if($n->id==1) {
@@ -440,7 +441,7 @@ class Sections extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $permissions
-	 * @return void
+	 * @return array
 	 */
 	public function parse_section_permissions($permissions) {
 		# save to array
@@ -468,7 +469,7 @@ class Sections extends Common_functions {
 	 * @access public
 	 * @param obj $user
 	 * @param int $sectionid
-	 * @return void
+	 * @return int
 	 */
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
@@ -536,6 +537,9 @@ class Sections extends Common_functions {
     			}
     		}
 		}
+		else {
+    		$out = array();
+		}
 		# return
 		return $out;
 	}
@@ -547,7 +551,7 @@ class Sections extends Common_functions {
 	 * @param mixed $sectionId
 	 * @param array $removed_permissions
 	 * @param array $changed_permissions
-	 * @return void
+	 * @return bool
 	 */
 	public function delegate_section_permissions ($sectionId, $removed_permissions, $changed_permissions) {
     	// init subnets class

@@ -1474,7 +1474,6 @@ class Addresses extends Common_functions {
     	    }
     	    # diff 2
     	    elseif ($diff==2 && !$is_subnet && !$is_broadcast) {
-        	    var_dump($is_broadcast);
                 return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1))), "hosts"=>1);
     	    }
     	    # default

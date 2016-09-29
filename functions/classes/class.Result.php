@@ -38,7 +38,7 @@ class Result extends Common_functions {
 	 *
 	 * @access public
 	 * @param string $class (default: "muted")				result class - danger, success, warning, info
-	 * @param string $text (default: "No value provided")	text to display
+	 * @param string|array|object $text (default: "No value provided")	text to display
 	 * @param bool $die (default: false)					controls stop of php execution
 	 * @param bool $popup (default: false)					print result as popup
 	 * @param bool $inline (default: false)					return, not print
@@ -74,7 +74,7 @@ class Result extends Common_functions {
 	 * Alias for show method for backwards compatibility
 	 *
 	 * @access public
-	 * @param string $text (default: "No value provided")
+	 * @param string|array|object $text (default: "No value provided")
 	 * @param bool $die (default: false)
 	 * @return void
 	 */
@@ -112,7 +112,7 @@ class Result extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $class
-	 * @param mixed $text
+	 * @param string|array|object $text
 	 * @param mixed $popup
 	 * @param mixed $popup2
 	 * @return void

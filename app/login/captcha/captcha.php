@@ -866,7 +866,8 @@ class Securimage {
     }
 
     $out_data = '';
-    for($i = 0; $i < sizeof($files); ++$i) {
+    $size_files = sizeof($files);
+    for($i = 0; $i < $size_files; ++$i) {
       if ($i == 0) { // output header
         $out_data .= pack('C4VC8', ord('R'), ord('I'), ord('F'), ord('F'), $data_len + 36, ord('W'), ord('A'), ord('V'), ord('E'), ord('f'), ord('m'), ord('t'), ord(' '));
 

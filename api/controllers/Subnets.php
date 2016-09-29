@@ -101,7 +101,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Returns json encoded options
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function OPTIONS () {
 		// validate
@@ -132,7 +132,7 @@ class Subnets_controller extends Common_api_functions {
 	 *      - /subnets/{id}/first_subnet/{mask}/       // creates first free subnet under master with specified mask
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function POST () {
 		# add required parameters
@@ -197,7 +197,7 @@ class Subnets_controller extends Common_api_functions {
 	 *		- /all/							// returns all subnets in all sections
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function GET () {
 		// cidr check
@@ -288,7 +288,7 @@ class Subnets_controller extends Common_api_functions {
 	 * HEAD, no response
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function HEAD () {
 		return $this->GET ();
@@ -311,7 +311,7 @@ class Subnets_controller extends Common_api_functions {
 	 *      - {id}/permissions/               // changes permissions (?3=2&41=1 || ?groupname1=3&groupname2=1) 0=na, 1=ro, 2=rw, 3=rwa
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function PATCH () {
 		// Check for id
@@ -369,7 +369,7 @@ class Subnets_controller extends Common_api_functions {
 	 *		- {id}/permissions/
 	 *
 	 * @access public
-	 * @return void
+	 * @return array
 	 */
 	public function DELETE () {
 		// Check for id
@@ -410,7 +410,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	required params : id
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function subnet_truncate () {
 		// Check for id
@@ -430,7 +430,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	required params : id, mask
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function subnet_resize () {
 		// Check for id
@@ -476,7 +476,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	optional params : group (default yes), strict (default yes), prefix
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function subnet_split () {
 		// Check for id
@@ -508,7 +508,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	optional params : group (default yes), strict (default yes), prefix
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function subnet_change_permissions () {
 		// Check for id
@@ -591,7 +591,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	required params : id
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function subnet_remove_permissions () {
 		// Check for id
@@ -611,7 +611,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Calculates subnet usage
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function subnet_usage () {
 		# check that section exists
@@ -643,7 +643,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Returns first available address in subnet
 	 *
 	 * @access public
-	 * @return void
+	 * @return array|string
 	 */
 	public function subnet_first_free_address () {
 		// Check for id
@@ -668,7 +668,7 @@ class Subnets_controller extends Common_api_functions {
 	 *
 	 * @access public
 	 * @param bool $all (default: false)
-	 * @return void
+	 * @return array|string
 	 */
 	public function subnet_first_free ($all = false) {
 		// Check for id
@@ -706,7 +706,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Fetches subnet by id
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function read_subnet ($subnetId = null) {
 		// null
@@ -738,7 +738,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Fetches all subnets in database
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function read_all_subnets() {
 		// fetch and return
@@ -749,7 +749,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Fetches all addresses in subnet
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function read_subnet_addresses () {
 		// fetch
@@ -762,7 +762,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Returns id of subnet gateay
 	 *
 	 * @access private
-	 * @return void
+	 * @return int|bool
 	 */
 	private function read_subnet_gateway () {
     	return $this->Subnets->find_gateway ($this->_params->id);
@@ -773,7 +773,7 @@ class Subnets_controller extends Common_api_functions {
 	 *
 	 * @access private
 	 * @param mixed $nsid
-	 * @return void
+	 * @return array|false
 	 */
 	private function read_subnet_nameserver ($nsid) {
     	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
@@ -783,7 +783,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Returns all immediate subnet slaves
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function read_subnet_slaves () {
 		// fetch
@@ -796,7 +796,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Returns all subnet slaves (recursive)
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|NULL
 	 */
 	private function read_subnet_slaves_recursive () {
 		// get array of ids
@@ -813,7 +813,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Searches for subnet in database
 	 *
 	 * @access private
-	 * @return void
+	 * @return array|false
 	 */
 	private function read_search_subnet () {
 		// transform

@@ -222,7 +222,7 @@ class Vlans_controller extends Common_api_functions {
 		$values = $this->validate_keys ();
 
 		# verify or set domain
-		$this->validate_domain ($this->_params->domainId);
+		$this->validate_domain ();
 
 		# validate input
 		$this->validate_vlan_edit ();

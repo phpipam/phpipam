@@ -149,7 +149,7 @@ class Responses {
 	 *
 	 * @access public
 	 * @param mixed $result
-	 * @param bool|int $result
+	 * @param bool|int|double $time
 	 * @return void
 	 */
 	public function formulate_result ($result, $time = false) {

@@ -624,10 +624,9 @@ class Tools_controller extends Common_api_functions {
 	 * Returns nameserver details
 	 *
 	 * @access private
-	 * @param mixed $nsid
 	 * @return void
 	 */
-	private function read_subnet_nameserver ($nsid) {
+	private function read_subnet_nameserver () {
     	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
 	}
 
