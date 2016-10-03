@@ -73,7 +73,7 @@ class Tools extends Common_functions {
 	/**
 	 * Database connection
 	 *
-	 * @var resource
+	 * @var object
 	 * @access protected
 	 */
 	protected $Database;

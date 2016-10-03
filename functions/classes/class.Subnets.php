@@ -89,7 +89,7 @@ class Subnets extends Common_functions {
 	/**
 	 * for Database connection
 	 *
-	 * @var resource
+	 * @var object
 	 * @access protected
 	 */
 	protected $Database;
