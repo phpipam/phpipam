@@ -49,7 +49,7 @@ class Responses {
 	 *
 	 * (default value: false)
 	 *
-	 * @var bool
+	 * @var bool|int|double
 	 * @access public
 	 */
 	public $time = false;

@@ -4,6 +4,9 @@
  * Update alive status of all hosts in subnet
  ***************************/
 
+# validate subnetId and type
+if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
+
 # invoke CLI with threading support
 $cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'update' ".$_POST['subnetId'];
 

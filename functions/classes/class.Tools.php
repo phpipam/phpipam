@@ -55,7 +55,7 @@ class Tools extends Common_functions {
 	/**
 	 * for Result printing
 	 *
-	 * @var mixed
+	 * @var object
 	 * @access public
 	 */
 	public $Result;
@@ -73,7 +73,7 @@ class Tools extends Common_functions {
 	/**
 	 * Database connection
 	 *
-	 * @var mixed
+	 * @var resource
 	 * @access protected
 	 */
 	protected $Database;

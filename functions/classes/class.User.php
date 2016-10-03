@@ -146,7 +146,7 @@ class User extends Common_functions {
     /**
      * Result object
      *
-     * @var resource
+     * @var object
      * @access public
      */
     public $Result;
@@ -162,7 +162,7 @@ class User extends Common_functions {
     /**
      * for Logging connection
      *
-     * @var resource
+     * @var object
      * @access public
      */
     public $Log;

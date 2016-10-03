@@ -81,7 +81,7 @@ class Subnets extends Common_functions {
 	/**
 	 * for Result printing
 	 *
-	 * @var mixed
+	 * @var object
 	 * @access public
 	 */
 	public $Result;
@@ -89,7 +89,7 @@ class Subnets extends Common_functions {
 	/**
 	 * for Database connection
 	 *
-	 * @var mixed
+	 * @var resource
 	 * @access protected
 	 */
 	protected $Database;
@@ -97,7 +97,7 @@ class Subnets extends Common_functions {
 	/**
 	 * for Logging connection
 	 *
-	 * @var mixed
+	 * @var object
 	 * @access public
 	 */
 	public $Log;

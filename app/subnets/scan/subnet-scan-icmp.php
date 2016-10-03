@@ -11,8 +11,8 @@ $User->check_user_session();
 $csrf = $User->csrf_cookie ("create", "scan");
 
 # validate subnetId and type
-if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); }
-if(!preg_match('/[^A-Za-z0-9-]*$/', $_POST['type']))       { $Result->show("danger", "Invalid scan type", true); }
+if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
+if(!preg_match('/[^A-Za-z0-9-]*$/', $_POST['type']))       { $Result->show("danger", "Invalid scan type", true); die(); }
 
 
 # invoke CLI with threading support
