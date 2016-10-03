@@ -249,7 +249,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $index the XF index for the format.
     * @param array   $properties array with properties to be set on initialization.
     */
-    function Spreadsheet_Excel_Writer_Format($BIFF_version, $index = 0, $properties =  array())
+    function __construct($BIFF_version, $index = 0, $properties =  array())
     {
         $this->_xf_index       = $index;
         $this->_BIFF_version   = $BIFF_version;
@@ -303,6 +303,10 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
                 $this->{$method_name}($value);
             }
         }
+    }
+
+    public function  Spreadsheet_Excel_Writer_Format($BIFF_version, $index = 0, $properties =  array()) {
+        self::__construct($BIFF_version, $index, $properties);
     }
 
 

@@ -171,7 +171,7 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
     * @param string filename for storing the workbook. "-" for writing to stdout.
     * @access public
     */
-    function Spreadsheet_Excel_Writer_Workbook($filename)
+    function __construct($filename)
     {
         // It needs to call its parent's constructor explicitly
         $this->Spreadsheet_Excel_Writer_BIFFwriter();
@@ -201,6 +201,10 @@ class Spreadsheet_Excel_Writer_Workbook extends Spreadsheet_Excel_Writer_BIFFwri
         $this->_str_unique      = 0;
         $this->_str_table       = array();
         $this->_setPaletteXl97();
+    }
+    public function Spreadsheet_Excel_Writer_Workbook($filename)
+    {
+        self::__construct($filename);
     }
 
     /**

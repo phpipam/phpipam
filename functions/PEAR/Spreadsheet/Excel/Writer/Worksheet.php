@@ -367,7 +367,7 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
     * @param string  $tmp_dir      The path to the directory for temporary files
     * @access private
     */
-    function Spreadsheet_Excel_Writer_Worksheet($BIFF_version, $name,
+    function __construct($BIFF_version, $name,
                                                 $index, &$activesheet,
                                                 &$firstsheet, &$str_total,
                                                 &$str_unique, &$str_table,
@@ -467,6 +467,17 @@ class Spreadsheet_Excel_Writer_Worksheet extends Spreadsheet_Excel_Writer_BIFFwr
 
         $this->_initialize();
     }
+
+    public function Spreadsheet_Excel_Writer_Worksheet($BIFF_version, $name,
+                                                $index, &$activesheet,
+                                                &$firstsheet, &$str_total,
+                                                &$str_unique, &$str_table,
+                                                &$url_format, &$parser,
+                                                $tmp_dir)
+    {
+        self::__construct($BIFF_version, $name, $index, $activesheet, $firstsheet, $str_total, $str_unique, $str_table, $url_format, $parser, $tmp_dir);
+    }
+
 
     /**
     * Open a tmp file to store the majority of the Worksheet data. If this fails,

@@ -95,7 +95,7 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
     *
     * @access public
     */
-    function Spreadsheet_Excel_Writer_BIFFwriter()
+    function __construct()
     {
         $this->_byte_order = '';
         $this->_data       = '';
@@ -104,6 +104,10 @@ class Spreadsheet_Excel_Writer_BIFFwriter extends PEAR
         $this->_tmp_dir    = '';
         // Set the byte order
         $this->_setByteOrder();
+    }
+    function Spreadsheet_Excel_Writer_BIFFwriter()
+    {
+        self::__construct();
     }
 
     /**
