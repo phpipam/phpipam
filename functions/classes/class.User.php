@@ -232,6 +232,8 @@ class User extends Common_functions {
             $this->set_session_name();
             //set debugging
             $this->set_debugging();
+            // set default params
+            $this->set_session_ini_params ();
             //register session
             session_name($this->sessname);
             if(@$_SESSION===NULL) {
@@ -259,6 +261,20 @@ class User extends Common_functions {
     private function set_session_name () {
         include( dirname(__FILE__).'/../../config.php' );
         $this->sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+    }
+
+    /**
+     * Default session parameters for phpipam - MAX
+     *
+     *  gc_maxlifetime  : time for server to keep data parameters for (at least 24 hours)
+     *  cookie_lifetime : time for client browser to keep cookies
+     *
+     * @access private
+     * @return void
+     */
+    private function set_session_ini_params () {
+        ini_set('session.gc_maxlifetime', 86400);
+        ini_set('session.cookie_lifetime', 86400);
     }
 
     /**
