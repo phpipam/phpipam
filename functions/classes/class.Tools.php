@@ -1890,7 +1890,7 @@ class Tools extends Common_functions {
 
         // description
         $n->description = str_replace("\n", "<br>", $n->description);
-        $n->description = strlen($n->description)>0 ? "($n->description)" : "";
+        $n->description = strlen($n->description)>0 ? "<br>$n->description" : "";
 
         // device
         if (strlen($n->device)) {
