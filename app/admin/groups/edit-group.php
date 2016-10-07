@@ -25,13 +25,13 @@ $Admin->validate_action ($_POST['action']);
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
 
-# ID
-if(!is_numeric($_POST['id']))   $Result->show("danger", _("Invalid Id"), true, true);
-
 # fetch group and set title
 if($_POST['action']=="add") {
 	$title = _('Add new group');
 } else {
+    # ID
+    if(!is_numeric($_POST['id']))   $Result->show("danger", _("Invalid Id"), true, true);
+
 	//fetch all group details
     $group = (array) $Admin->fetch_object("userGroups", "g_id", $_POST['id']);
     //false die
