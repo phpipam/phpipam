@@ -7,6 +7,12 @@
 $filename = $_FILES['file']['name'];
 $filename = end(explode(".", $filename));
 
+// no / in filename !
+if(strpos($_FILES['file']['name'], "/")!==false) {
+	echo '{"status":"error", "error":"Invalid file name"}';
+    exit;
+}
+
 /* list of permitted file extensions */
 $allowed = array('xls','csv');
 

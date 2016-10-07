@@ -99,7 +99,7 @@ if ($subnets!==false) {
         	$addresses = $Addresses->fetch_subnet_addresses ($subnet->id);
         	// save count
         	$addresses_cnt = gmp_strval(sizeof($addresses));
-        	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $subnet->mask, $subnet->subnet, $subnet->isFull );		//Calculate free/used etc
+        	$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet);		//Calculate free/used etc
 
             // description
             if($subnet->isFolder=="1")

@@ -984,70 +984,116 @@ class Subnets extends Common_functions {
 	*/
 
 	/**
-	 * Calculate subnet usage
+	 * Calculates subnet usage for subnet, including slave
 	 *
-	 *	used, maximum, free, free_percentage
+	 *  If detailed = true it will group addresses in subnet by tag for drawing graph
 	 *
-	 * @access publi
-	 * @param mixed $used_hosts (int)
-	 * @param mixed $netmask (int)
-	 * @param mixed $subnet	(int)
-	 * @param bin $isFull	(default: 0)
+	 * @access public
+	 * @param array|object $subnet
+	 * @param bool $detailed (default: false)
 	 * @return array
 	 */
-	public function calculate_subnet_usage ($used_hosts, $netmask, $subnet, $isFull=0) {
-		# set IP version
-		$ipversion = $this->get_ip_version ($subnet);
-		# marked as full
-		if ($isFull!=1) {
-    		# set initial vars
-    		$out = array();
-    		$out['used'] = (int) $used_hosts;														//set used hosts
-    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);					//get maximum hosts
-    		$out['freehosts'] = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));			//free hosts
-    		$out['freehosts_percent'] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);	//free percentage
+	public function calculate_subnet_usage ($subnet, $detailed = false) {
+		// cast to object
+		if(is_array($subnet)) {
+    		$subnet = (object) $subnet;
 		}
-		else {
-    		$out = array();
-    		$out['maxhosts'] = (int) $this->get_max_hosts ($netmask,$ipversion);
-    		$out['used']     = $out['maxhosts'];
-    		$out['freehosts']= 0;
-    		$out['freehosts_percent'] = 0;
-		}
-		# result
-		return $out;
+
+		// init addresses object
+		$this->Addresses = new Addresses ($this->Database);
+
+    	// is slaves
+    	if ($this->has_slaves ($subnet->id)) {
+            // if we have slaves we need to check against every slave
+            $this->reset_subnet_slaves_recursive ();
+            $this->fetch_subnet_slaves_recursive ($subnet->id);
+            $this->remove_subnet_slaves_master ($subnet->id);
+
+            // set master details
+            $subnet_usage = $this->calculate_single_subnet_details ($subnet, false, false);
+
+        	// loop and add results
+            foreach ($this->slaves_full as $ss) {
+                // calculate for specific subnet
+                $slave_usage = $this->calculate_single_subnet_details ($ss, true, false);
+                // append slave values to its master
+                $subnet_usage['used']      = $subnet_usage['used'] + $slave_usage['used'];
+                $subnet_usage['freehosts'] = $subnet_usage['freehosts'] - $slave_usage['used'];
+            }
+            // recalculate percentge
+            $subnet_usage["freehosts_percent"] = round((($subnet_usage['freehosts'] * 100) / $subnet_usage['maxhosts']),2);
+            $subnet_usage["Used_percent"]      = 100 - $subnet_usage["freehosts_percent"];
+    	}
+    	// no slaves
+    	else {
+            $subnet_usage = $this->calculate_single_subnet_details ($subnet, false, $detailed);
+    	}
+    	// return usage
+    	return $subnet_usage;
 	}
 
 	/**
-	 * Calculates detailed network usage - dhcp, active, ...
+	 * Calculate usage for single subnet
 	 *
-	 * @access public
-	 * @param mixed $subnet		//subnet in decimal format
-	 * @param mixed $bitmask	//netmask in decimal format
-	 * @param mixed $addresses	//all addresses to be calculated, either all slave or per subnet
-	 * @param bin $isFull       //if subnet is marked as full
-	 * @return array
+	 * @access private
+	 * @param mixed $subnet
+	 * @param bool $is_slave (default: false)
+	 * @param bool $detailed (default: false)
+	 * @return void
 	 */
-	public function calculate_subnet_usage_detailed ($subnet, $bitmask, $addresses, $isFull=0) {
-		# get IP address count per address type
-		$details = $this->calculate_subnet_usage_sort_addresses ($addresses);
+	private function calculate_single_subnet_details ($subnet, $is_slave = false, $detailed = false) {
+ 		// set IP version
+		$ip_version = $this->get_ip_version ($subnet->subnet);
+    	// no strict mode if it is_slave
+    	$strict_mode = $is_slave ? false : true;
+    	// count hosts
+    	$address_count = $this->Addresses->count_subnet_addresses ($subnet->id);
 
-	    # calculate max number of hosts
-	    $details['maxhosts'] = $this->get_max_hosts($bitmask, $this->identify_address($subnet));
-	    # calculate free hosts
-	    $details['freehosts']         = gmp_strval( gmp_sub ($details['maxhosts'] , $details['used']) );
-	    # calculate use percentage for each type
-	    $details['freehosts_percent'] = round( ( ($details['freehosts'] * 100) / $details['maxhosts']), 2 );
-	    foreach($this->address_types as $t) {
-		    $details[$t['type']."_percent"] = round( ( ($details[$t['type']] * 100) / $details['maxhosts']), 2 );
-	    }
-	    # if marked as full override
-	    if ($isFull==1) {
-    	    $details['Used_percent'] = $details['Used_percent'] + $details['freehosts_percent'];
-    	    $details['freehosts_percent'] = 0;
-	    }
-	    # result
-	    return $details;
+		// marked as full ?
+		if ($subnet->isFull==1) {
+     		// set values
+            $out["used"]              = (int) $this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode);
+            $out["maxhosts"]          = $out['used'];
+            $out["freehosts"]         = 0;
+            $out["freehosts_percent"] = 0;
+            $out["Used_percent"]      = 100;
+		}
+		else {
+    		// set values
+            $out["used"]              = (int) $address_count;
+            $out["maxhosts"]          = (int) $this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode);
+            // slaves fix for reducing subnet and broadcast address
+            if($ip_version=="IPv4" && $is_slave) {
+                if($subnet->mask==32 && $out["used"]==0) {
+                     $out["used"]++;
+                }
+                elseif($subnet->mask==31 &&  $out["used"]==0) {
+                    $out["used"] = $out["used"]+2;
+                }
+                elseif($subnet->mask==31 &&  $out["used"]==1) {
+                    $out["used"]++;
+                }
+                else {
+                    $out["used"] = $out["used"]+2;
+                }
+            }
+            // percentage
+            $out["freehosts"]         = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
+            $out["freehosts_percent"] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);
+            // detailed results ?
+            if ($detailed) {
+                // fetch full addresses
+                $addresses = $this->Addresses->fetch_subnet_addresses ($subnet->id);
+                // order - group by tag type
+                $tag_addresses = $this->calculate_subnet_usage_sort_addresses ($addresses);
+        	    // calculate use percentage for each address tag
+        	    foreach($this->address_types as $t) {
+        		    $out[$t['type']."_percent"] = round( ( ($tag_addresses[$t['type']] * 100) / $out['maxhosts']), 2 );
+        	    }
+            }
+		}
+		# result
+		return $out;
 	}
 
 	/**
@@ -1113,51 +1159,6 @@ class Subnets extends Common_functions {
 		$this->get_addresses_types();
 		# return
 		return $this->address_types[$index]["type"];
-	}
-
-	/**
-	 * Calculates subnet usage recursive for underlaying hosts
-	 *
-	 * @access public
-	 * @param mixed $subnetId
-	 * @param mixed $subnet
-	 * @param mixed $netmask
-	 * @param mixed $Addresses
-	 * @param bin isFull (default: 0)
-	 * @return mixed
-	 */
-	public function calculate_subnet_usage_recursive ($subnetId, $subnet, $netmask, $Addresses, $isFull=0) {
-		# identify address
-		$address_type = $this->get_ip_version ($subnet);
-		# fetch all slave subnets recursive
-		$this->reset_subnet_slaves_recursive ();
-		$this->fetch_subnet_slaves_recursive ($subnetId);
-		$this->remove_subnet_slaves_master ($subnetId);
-
-		# initial used value
-		$used = 0;
-
-		# go through each and calculate used hosts
-		# add +2 for subnet and broadcast if required
-        if(isset($this->slaves_full)) {
-    		foreach($this->slaves_full as $s) {
-        		# full?
-        		if ($s->isFull==1) {
-            		# get max
-            		$used = (int) $used + $this->get_max_hosts ($s->mask, $address_type, false);
-        		}
-        		else {
-        			# fetch all addresses
-        			$used = (int) $used + $Addresses->count_subnet_addresses ($s->id);					//add to used hosts calculation
-        			# mask fix
-        			if($address_type=="IPv4" && $netmask<31) {
-        				$used = $used+1;
-        			}
-        		}
-    		}
-		}
-		# we counted, now lets calculate and return result
-		return $this->calculate_subnet_usage ($used, $netmask, $subnet, $isFull);
 	}
 
 	/**
