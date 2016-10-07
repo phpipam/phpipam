@@ -1383,22 +1383,24 @@ class Tools extends Common_functions {
 	 * Check for latest version
 	 *
 	 * @access public
+	 * @param bool $print_error (default: false)
 	 * @return mixed|bool
 	 */
-	public function check_latest_phpipam_version () {
+	public function check_latest_phpipam_version ($print_error = false) {
 		# fetch settings
 		$this->get_settings ();
 		# check for release
-		return $this->settings->version >= "1.2" ? $this->check_latest_phpipam_version_github () : $this->check_latest_phpipam_version_phpipamnet ();
+		return $this->settings->version >= "1.2" ? $this->check_latest_phpipam_version_github ($print_error) : $this->check_latest_phpipam_version_phpipamnet ($print_error);
 	}
 
 	/**
 	 * Checks for latest phpipam version from phpipam webpage
 	 *
-	 * @access public
+	 * @access private
+	 * @param bool $print_error (default: false)
 	 * @return string|false
 	 */
-	public function check_latest_phpipam_version_phpipamnet () {
+	private function check_latest_phpipam_version_phpipamnet ($print_error = false) {
 		# fetch webpage
 		$handle = @fopen("http://phpipam.net/phpipamversion.php", "r");
 		if($handle) {
@@ -1406,6 +1408,12 @@ class Tools extends Common_functions {
 				$version = fgets($handle);
 			}
 			fclose($handle);
+		}
+		else {
+        	if($print_error) {
+            	$this->Result->show("danger", "http://phpipam.net/phpipamversion.php", false);
+            }
+            return false;
 		}
 
 		# replace dots for check
@@ -1418,12 +1426,22 @@ class Tools extends Common_functions {
 	/**
 	 * Fetch latest version form Github for phpipam > 1.2
 	 *
-	 * @access public
+	 * @access private
+	 * @param bool $print_error (default: false)
 	 * @return mixed|bool
 	 */
-	public function check_latest_phpipam_version_github () {
+	private function check_latest_phpipam_version_github ($print_error = false) {
+    	# try to fetch
+    	$release_gh = @file('https://github.com/phpipam/phpipam/releases.atom');
+    	# check
+    	if ($release_gh===false) {
+        	if($print_error) {
+            	$this->Result->show("danger", "Cannot fetch https://github.com/phpipam/phpipam/releases.atom", false);
+            }
+        	return false;
+    	}
 		# set releases href
-		$feed = implode(file('https://github.com/phpipam/phpipam/releases.atom'));
+		$feed = implode($release_gh);
 		// fetch
 		$xml = simplexml_load_string($feed);
 

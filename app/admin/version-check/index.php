@@ -9,7 +9,7 @@ $User->check_user_session();
 print "<h4>phpIPAM version check</h4><hr>";
 
 # get latest version */
-if(!$version = $Tools->check_latest_phpipam_version()) { $Result->show("danger", _("Version check failed").'!', false); }
+if(!$version = $Tools->check_latest_phpipam_version(true)) { $Result->show("danger", _("Version check failed").'!', false); }
 else {
 	//print result
 	if($User->settings->version == $version) 		{ $Result->show("success", _('Latest version').' ('. $User->settings->version .') '._('already installed').'!', false); }
