@@ -52,5 +52,5 @@ $widgets = (array) $widgets;
 
 <!-- footer -->
 <div class="pFooter">
-	<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
+	<button class="btn btn-sm btn-default hidePopups"><?php print _('Close'); ?></button>
 </div>
