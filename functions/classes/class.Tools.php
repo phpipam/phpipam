@@ -1401,6 +1401,8 @@ class Tools extends Common_functions {
 	 * @return string|false
 	 */
 	private function check_latest_phpipam_version_phpipamnet ($print_error = false) {
+    	# default false
+    	$version = false;
 		# fetch webpage
 		$handle = @fopen("http://phpipam.net/phpipamversion.php", "r");
 		if($handle) {

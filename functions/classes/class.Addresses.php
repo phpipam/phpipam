@@ -876,7 +876,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnet_id
-	 * @return void
+	 * @return array|false
 	 */
 	private function pdns_fetch_domain ($subnet_id) {
 		# initialize subnets

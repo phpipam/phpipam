@@ -87,6 +87,26 @@ class Subnets extends Common_functions {
 	public $Result;
 
 	/**
+	 * Addresses class
+	 *
+	 * (default value: false)
+	 *
+	 * @var object
+	 * @access protected
+	 */
+	protected $Addresses = false;
+
+	/**
+	 * Subnets class
+	 *
+	 * (default value: false)
+	 *
+	 * @var object
+	 * @access protected
+	 */
+	protected $Subnets  = false;
+
+	/**
 	 * for Database connection
 	 *
 	 * @var object
@@ -1048,6 +1068,9 @@ class Subnets extends Common_functions {
     	$strict_mode = $is_slave ? false : true;
     	// count hosts
     	$address_count = $this->Addresses->count_subnet_addresses ($subnet->id);
+
+    	// init result
+    	$out = array();
 
 		// marked as full ?
 		if ($subnet->isFull==1) {

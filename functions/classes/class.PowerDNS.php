@@ -585,7 +585,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $name
-     * @return void
+     * @return array|false
      */
     public function fetch_domain_by_name ($name) {
         # fetch
