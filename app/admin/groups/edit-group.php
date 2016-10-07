@@ -26,7 +26,7 @@ $Admin->validate_action ($_POST['action']);
 $_POST = $User->strip_input_tags ($_POST);
 
 # ID
-if(!is_numeric($_POST['id']))   $Result->show("danger", _("Invalid Id"), true, true);
+if(!is_numeric($User->user->id))   $Result->show("danger", _("Invalid Id"), true, true);
 
 # fetch group and set title
 if($_POST['action']=="add") {
