@@ -273,11 +273,13 @@ class Addresses_controller extends Common_api_functions  {
 				// set result
 				$result = array();
 				$result['scan_type'] = $Scan->icmp_type;
-				$result['exit_code'] = $Scan->ping_address ($this->old_address->ip_addr);
+				$result['exit_code'] = $Scan->ping_address ($this->old_address->ip);
+				$result['result_code'] = $Scan->ping_exit_explain ($result['exit_code']);
+				$result['message'] = $result['exit_code']==0 ? "Address online" : "Address offline";
 
 				// success
-				if($result['exit_code']==0) 			{ $Scan->ping_update_lastseen ($this->_params->id); return array("code"=>200, "data"=>$result); }
-				else									{ $this->Response->throw_exception(404, "Address offline. Exit code: ".$result['exit_code']."( ".$Scan->ping_exit_explain ($result['exit_code'])." )"); }
+				if($result['exit_code']==0) 			{ $Scan->ping_update_lastseen ($this->_params->id); }
+				return array("code"=>200, "data"=>$result);
 			}
 			else {
 				// fetch
@@ -512,7 +514,10 @@ class Addresses_controller extends Common_api_functions  {
 	 * @return void
 	 */
 	private function validate_address_id () {
-		if(!$this->old_address = $this->Addresses->fetch_address ("id", $this->_params->id)){ $this->Response->throw_exception(404, "Address does not exist"); }
+    	// fetch
+    	$this->old_address = $this->Addresses->fetch_address ("id", $this->_params->id);
+    	// check
+		if($this->old_address===false) { $this->Response->throw_exception(404, "Address does not exist"); }
 	}
 
 	/**
@@ -523,9 +528,9 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	private function validate_tag () {
 		// numeric
-		if(!is_numeric(@$this->_params->id2))												{ $this->Response->throw_exception(409, 'Invalid tag identifier'); }
+		if(!is_numeric(@$this->_params->id2))									{ $this->Response->throw_exception(409, 'Invalid tag identifier'); }
 		// check db
-		if (!$this->Tools->fetch_object ("ipTags", "id", $this->_params->id2))				{ $this->Response->throw_exception(404, "Address tag does not exist"); }
+		if (!$this->Tools->fetch_object ("ipTags", "id", $this->_params->id2))	{ $this->Response->throw_exception(404, "Address tag does not exist"); }
 	}
 
 	/**
