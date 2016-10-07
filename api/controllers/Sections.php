@@ -346,18 +346,8 @@ class Sections_controller extends Common_api_functions {
 		$subnet = $this->Subnets->fetch_subnet ("id", $subnetId);
 		if($subnet===false)
 														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
-
-        # set slaves
-        $slaves = $this->Subnets->has_slaves ($subnetId) ? true : false;
-
-        # fetch all addresses and calculate usage
-        if($slaves) {
-            $addresses = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
-        } else {
-            $addresses = $this->Addresses->fetch_subnet_addresses ($subnetId);
-        }
-        // calculate
-        $subnet_usage  = $this->Subnets->calculate_subnet_usage (gmp_strval(sizeof($addresses)), $subnet->mask, $subnet->subnet, $subnet->isFull );     //Calculate free/used etc
+        # calculate
+        $subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);     //Calculate free/used etc
 
         # return
         return $subnet_usage;

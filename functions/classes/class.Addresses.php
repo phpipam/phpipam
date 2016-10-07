@@ -575,10 +575,8 @@ class Addresses extends Common_functions {
         	$subnet = $this->Subnets->fetch_subnet("id", $address->subnetId);
         	# threshold set ?
         	if ($subnet->threshold>0) {
-            	# count number of hosts in subnet
-            	$used_hosts = $this->count_subnet_addresses ($address->subnetId);
             	# calculate subnet usage
-            	$subnet_usage = $this->Subnets->calculate_subnet_usage ($used_hosts, $subnet->mask, $subnet->subnet, $subnet->isFull);
+            	$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet);
             	# if over send mail
             	if (gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) > $subnet->threshold) {
                 	// fetch mail settings

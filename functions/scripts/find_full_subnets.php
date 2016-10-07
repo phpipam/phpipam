@@ -22,10 +22,8 @@ foreach ($all_subnets as $k=>$s) {
     if ($s->isFull!=1) {
         // parent check
         if (!$Subnets-> has_slaves ($s->id)) {
-            // count number of addresses
-            $cnt = $Addresses->count_subnet_addresses ($s->id);
             // calculate usage
-            $usage = $Subnets->calculate_subnet_usage ($cnt, $s->mask, $s->subnet, $s->isFull);
+            $usage = $Subnets->calculate_subnet_usage ($s);
             // if more than $threshold report
             if ($usage['freehosts_percent']<(100-$limit)) {
                 // this subnet has high usage, save it to array

@@ -69,8 +69,7 @@ else {
 				print  '<td class="hidden-xs hidden-sm"></td>';
 			}
 			elseif(!$master) {
-	    		$address_count = $Addresses->count_subnet_addresses ($f['subnetId']);
-	    		$subnet_usage = $Subnets->calculate_subnet_usage (gmp_strval($address_count), $f['mask'], $f['subnet'], $f['isFull']);
+	    		$subnet_usage = $Subnets->calculate_subnet_usage ($f, true);
 
 	    		print ' <td class="used hidden-xs hidden-sm">'.$Subnets->reformat_number($subnet_usage['used']) .'/'. $Subnets->reformat_number($subnet_usage['maxhosts']) .' ('.$Subnets->reformat_number(100-$subnet_usage['freehosts_percent']) .' %)</td>';
 	    	}

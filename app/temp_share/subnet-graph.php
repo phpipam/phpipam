@@ -5,7 +5,7 @@
  ********************************************/
 
 # get details
-$details = $Subnets->calculate_subnet_usage_detailed( $subnet['subnet'], $subnet['mask'], $addresses, $subnet['isFull']);
+$details = $Subnets->calculate_subnet_usage ($subnet, true);
 
 ?>
 

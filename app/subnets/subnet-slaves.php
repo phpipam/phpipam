@@ -76,12 +76,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 
 	# calculate free / used / percentage
-	if(!$has_slaves) {
-		$slave_addresses = (int) $Addresses->count_subnet_addresses ($slave_subnet['id']);
-		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet'], $slave_subnet['isFull']);
-	} else {
-		$calculate = $Subnets->calculate_subnet_usage_recursive( $slave_subnet['id'], $slave_subnet['subnet'], $slave_subnet['mask'], $Addresses, $slave_subnet['isFull']);
-	}
+	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
 
 	# add full information
 	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
