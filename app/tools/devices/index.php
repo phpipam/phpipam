@@ -26,10 +26,10 @@ if(isset($_GET['subnetId'])) {
     <!-- tabs -->
     <ul class='nav nav-tabs' style='margin-bottom:20px;'>
         <li role='presentation' <?php if(!isset($_GET['sPage'])) print " class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id); ?>'><?php print _("Device details"); ?></a></li>
-        <li role='presentation' <?php if(@$_GET['sPage']=="subnets") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, $subnet['id'], "subnets"); ?>'><?php print _("Subnets"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_subnets; ?></span></a></li>
-        <li role='presentation' <?php if(@$_GET['sPage']=="addresses") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, $subnet['id'], "addresses"); ?>'><?php print _("Addresses"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_addresses; ?></span></a></li>
+        <li role='presentation' <?php if(@$_GET['sPage']=="subnets") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "subnets", $subnet['id']); ?>'><?php print _("Subnets"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_subnets; ?></span></a></li>
+        <li role='presentation' <?php if(@$_GET['sPage']=="addresses") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "addresses", $subnet['id']); ?>'><?php print _("Addresses"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_addresses; ?></span></a></li>
         <?php if($User->settings->enableNAT==1) { ?>
-        <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_nat; ?></span></a></li>
+        <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "nat", $subnet['id']); ?>'><?php print _("NAT"); ?> <span class='badge' style="margin-left: 5px;"><?php print $cnt_nat; ?></span></a></li>
         <?php } ?>
         <?php if($User->settings->enableLocations==1) { ?>
         <li role='presentation' <?php if(@$_GET['sPage']=="location") print "class='active'"; ?>> <a href='<?php print create_link("tools", "devices", $device->id, "location"); ?>'><?php print _("Location"); ?></a></li>
