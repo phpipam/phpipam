@@ -72,7 +72,7 @@ if($_POST['action']=="add" && $_POST['master']==0) {
     if($all_prefixes!==false) {
         foreach ($all_prefixes as $master_prefix) {
 
-            $overlap_text = _("Prefix overlapps with prefix ".$master_prefix->name." (".$master_prefix->prefix.")");
+            $overlap_text = _("Prefix overlaps with prefix ".$master_prefix->name." (".$master_prefix->prefix.")");
 
             // ranges
             $master_prefix->prefix_raw = $Tools->prefix_normalize ($master_prefix->prefix);

@@ -284,7 +284,7 @@ msgstr "Het VLAN-nummer kan maximaal 4094 zijn"
 
 #: functions/functions-network.php:825 functions/functions-network.php:842
 #: functions/functions-network.php:904 functions/functions-network.php:930
-msgid "Subnet overlapps with"
+msgid "Subnet overlaps with"
 msgstr "Subnet overlapt met"
 
 #: functions/functions-network.php:1199
@@ -6103,7 +6103,7 @@ msgstr "Fout bij het verplaatsen van IP-adres"
 msgid "Invalid Network!"
 msgstr "Ongeldig netwerk!"
 
-msgid "Subnet $new_subnet overlapps with"
+msgid "Subnet $new_subnet overlaps with"
 msgstr "Subnet $new_subnet overlapt met"
 
 msgid "Mask must be an integer"
