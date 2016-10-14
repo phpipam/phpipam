@@ -24,7 +24,7 @@ else{
         'sp' => array (
             'entityId' => $Tools->createURL(),
             'assertionConsumerService' => array (
-                'url' => create_link('saml2'),
+                'url' => $Tools->createURL().create_link('saml2'),
             ),
             'singleLogoutService' => array (
                 'url' => $Tools->createURL(),
