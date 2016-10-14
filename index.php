@@ -39,8 +39,8 @@ elseif($_GET['page']=="login")		{ require("app/login/index.php"); }
 elseif($_GET['page']=="temp_share")	{ require("app/temp_share/index.php"); }
 elseif($_GET['page']=="request_ip")	{ require("app/login/index.php"); }
 elseif($_GET['page']=="opensearch")	{ require("app/tools/search/opensearch.php"); }
-elseif($_GET['page']=="saml2")         { require("app/saml2/index.php"); }
-elseif($_GET['page']=="saml2-idp")         { require("app/saml2/idp.php"); }
+elseif($_GET['page']=="saml2")          { require("app/saml2/index.php"); }
+elseif($_GET['page']=="saml2-idp")      { require("app/saml2/idp.php"); }
 else {
 	# verify that user is logged in
 	$User->check_user_session();
