@@ -851,6 +851,9 @@ class User extends Common_functions {
         else {
             # set method name variable
             $authmethodtype = $this->authmethodtype;
+            if($saml != false) {
+            $authmethodtype = 'auth_SAML2';
+            }    
             # is auth_SAML and $saml == false throw error
             if ($authmethodtype=="auth_SAML2" && $saml===false) {
                 $this->Result->show("danger", "Please use <a href='".create_link('saml2')."'>login</a>!", true);
