@@ -186,12 +186,12 @@ class Subnets_controller extends Common_api_functions {
 	 *		- /cidr/{subnet}/				// subnets in CIDR format
 	 *		- /search/{subnet}/				// subnets in CIDR format (same as above)
 	 *		- /{id}/usage//				    // returns subnet usage
-	 *		- /{id}/slaves/ 			    // returns all immediate slave subnets
+	 *			- /{id}/slaves/ 			    // returns all immediate slave subnets
 	 *		- /{id}/slaves_recursive/ 	    // returns all slave subnets recursively
 	 *		- /{id}/addresses/			    // returns all IP addresses in subnet
-	 *              - /{id}/addresses/{ip}/         // returns IP address from subnet
+         *              - /allocate/{clientid}/        // Return first UNALLOCATED Subnet
+         *      - /{id}/addresses/{ip}/         // returns IP address from subnet
 	 *		- /{id}/first_free/			    // returns first free address in subnet
-	 *              - /allocate/{clientid}/        // Return first UNALLOCATED Subnet 
 	 *      - /{id}/first_subnet/{mask}/    // returns first available subnets with specified mask
 	 *      - /{id}/all_subnets/{mask}/     // returns all available subnets with specified mask
 	 *		- /all/							// returns all subnets in all sections
@@ -210,6 +210,15 @@ class Subnets_controller extends Common_api_functions {
 				if($result==false)						{ $this->Response->throw_exception(404, "No subnets found"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
+                        // search for new free subnet
+                        elseif ($this->_params->id=="allocate") {
+                          $limit  = 1;
+                          if(isset($this->_params->id3)) $limit = $this->_params->id3;  
+                          $result = $this->fetch_and_allocate($this->_params->id2, $limit);
+                          // check result
+                          if ($result===false)                                            { $this->Response->throw_exception(404, "Unable to read subnets"); }
+                        else                                                              { return array("code"=>200, "data"=>$result); }
+                        } 
 			else {
 				// validate id
 				$this->validate_subnet_id ();
@@ -251,7 +260,6 @@ class Subnets_controller extends Common_api_functions {
 			elseif ($this->_params->id2=="first_free") 	{ return array("code"=>200, "data"=>$this->subnet_first_free_address ());  }
 			// search for new free subnet
 			elseif ($this->_params->id2=="all_subnets") { return array("code"=>200, "data"=>$this->subnet_first_free (true));  }
-			// search for new free subnet
 			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_first_free (false));  }
 			// fail
 			else										{ $this->Response->throw_exception(400, 'Invalid request'); }
@@ -276,12 +284,6 @@ class Subnets_controller extends Common_api_functions {
 			if ($result===false)						{ $this->Response->throw_exception(404, "Unable to read subnets"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
 		}
-                elseif ($this->_params->id=="allocate") {
-                        $result = $this->fetch_and_allocate($this->_params->id2);
-                        // check result
-                        if ($result===false)                                            { $this->Response->throw_exception(404, "Unable to read subnets"); }
-                        else                                                                            { return array("code"=>200, "data"=>$this->prepare_result($result, "allocation", true, true)); }
-                }
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }
 	}
@@ -691,19 +693,38 @@ class Subnets_controller extends Common_api_functions {
 		}
 	}
 
-       /***
+
+      /***
         * Find the first subnet available and allocate it to client
         * @access public
         * @param string Client ID
         * @param int Number of subnets to fetch
         * @return array
-        * @TODO Kill the SQL injection
         */
-        public function fetch_and_allocate($clientid, $limit=1, $search='UNALLOCATED') {
+        public function fetch_and_allocate($clientid, $limit=1, $search='Unallocated') {
               $limit = (int)$limit;
-              $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull` != 1 AND name='$search' LIMIT $limit;");
+              $clientid = $this->Database->escape($clientid);
+              $search = $this->Database->escape($search);
+              $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where description='$search' AND subnet IS NOT NULL ORDER by id LIMIT $limit;");
+              if($limit == 1) {
+              $subnet = $this->Addresses->transform_address($subnets[0]->subnet ,"dotted");      
+              $return[0]['subnet'] = $subnet;
+              $return[0]['mask'] = $subnets[0]->mask;
+              $return[0]['clientid'] = $clientid;
+              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[0]->id));
+              }
+              else
+              {
+              for($i = 0; $i < sizeof($subnets); ++$i) {
+              $return[$i]['subnet'] = $this->Addresses->transform_address($subnets[$i]->subnet ,"dotted");
+              $return[$i]['mask'] = $subnets[$i]->mask;
+              $return[$i]['clientid'] = $clientid;
+              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[$i]->id));
+              }
+              }
+              return $return;
         }
-        
+
 
 	/* @helper methods ---------- */
 
