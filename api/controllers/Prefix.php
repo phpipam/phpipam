@@ -507,16 +507,14 @@ class Prefix_controller extends Common_api_functions {
             // find first subnet or address
             if($this->query_type == "address") {
                 $available = $this->find_first_available_address ($subnets);
-                $data_type = "ip";
             }
             else {
                 $available = $this->find_first_available_subnet ($subnets);
-                $data_type = "data";
             }
 
             // response
             if($available===false)      { $this->Response->throw_exception(404, "No $this->query_type found"); }
-            else                        { return array("code"=>200, $data_type=>$available); }
+            else                        { return array("code"=>200, "data"=>$available); }
         }
     }
 
@@ -647,7 +645,7 @@ class Prefix_controller extends Common_api_functions {
 		}
 		else {
     		//set result
-            return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "subnetId"=>$this->master_subnet->id, "ip"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"), "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
+            return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "subnetId"=>$this->master_subnet->id, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"), "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
 		}
     }
 

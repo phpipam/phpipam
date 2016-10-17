@@ -1,4 +1,4 @@
-== 1.26.032
+== 1.26.035
 
     New features:
     ------------
@@ -41,6 +41,7 @@
         + New parameter $time_response in api/index.php that will return execution time in field “time";
         + Extensive first_free subnet calls search speedup;
         + POST transaction locking;
+        + All first_free and first_address responses are now "data" instead of "ip" and "subnet" for consistency;
         + New methods:
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)

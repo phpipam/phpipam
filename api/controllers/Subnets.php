@@ -185,7 +185,7 @@ class Subnets_controller extends Common_api_functions {
 	 *		- /custom_fields/				// returns custom fields
 	 *		- /cidr/{subnet}/				// subnets in CIDR format
 	 *		- /search/{subnet}/				// subnets in CIDR format (same as above)
-	 *		- /{id}/usage//				    // returns subnet usage
+	 *		- /{id}/usage/				    // returns subnet usage
 	 *		- /{id}/slaves/ 			    // returns all immediate slave subnets
 	 *		- /{id}/slaves_recursive/ 	    // returns all slave subnets recursively
 	 *		- /{id}/addresses/			    // returns all IP addresses in subnet

@@ -390,7 +390,7 @@ class Addresses_controller extends Common_api_functions  {
 		else {
     		//set result
     		if($this->_params->id=="first_free")   {
-        	    return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "ip"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
+        	    return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/", "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted"));
     		}
     		else {
         	    return array("code"=>201, "message"=>"Address created", "id"=>$this->Addresses->lastId, "location"=>"/api/".$this->_params->app_id."/addresses/".$this->Addresses->lastId."/");
