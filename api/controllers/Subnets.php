@@ -703,6 +703,7 @@ class Subnets_controller extends Common_api_functions {
         */
         public function fetch_and_allocate($clientid, $limit=1, $masterid=1, $search='Unallocated') {
               $limit = (int)$limit;
+              $masterid = (int)$masterid;
               $clientid = $this->Database->escape($clientid);
               $search = $this->Database->escape($search);
               $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where description='$search' AND masterSubnetId = $masterid AND subnet IS NOT NULL and vlanId is NOT NULL ORDER by id LIMIT $limit;");
