@@ -1021,6 +1021,8 @@ class Subnets extends Common_functions {
 
 		// init addresses object
 		$this->Addresses = new Addresses ($this->Database);
+		// fetch address types
+		$this->get_addresses_types();
 
     	// is slaves
     	if ($this->has_slaves ($subnet->id)) {
