@@ -705,7 +705,7 @@ class Subnets_controller extends Common_api_functions {
               $limit = (int)$limit;
               $clientid = $this->Database->escape($clientid);
               $search = $this->Database->escape($search);
-              $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where description='$search' AND subnet IS NOT NULL and vlanId is NOT NULL ORDER by id LIMIT $limit;");
+              $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where description='$search' AND masterSubnetId = $masterid AND subnet IS NOT NULL and vlanId is NOT NULL ORDER by id LIMIT $limit;");
               if($limit == 1) { 
               $subnet = $this->Addresses->transform_address($subnets[0]->subnet ,"dotted");     
               $return[0]['subnet'] = $subnet;
