@@ -835,7 +835,7 @@ class User extends Common_functions {
      * @return void
      */
     public function authenticate ($username, $password, $saml = false) {
-        if($saml != false && defined(MAP_SAML_USER) {
+        if(($saml != false ) && (defined('MAP_SAML_USER'))) {
                 $username = SAML_USERNAME;
         } 
         # first we need to check if username exists
