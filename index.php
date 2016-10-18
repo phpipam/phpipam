@@ -233,6 +233,10 @@ else {
 			include_once("app/sections/all-sections.php");
 			print "</div>";
 		}
+		/* custom apps */
+		elseif (@in_array($_GET['page'], $private_subpages) && file_exists("app/custom/$_GET[page]/index.php")) {
+			include_once("app/custom/$_GET[page]/index.php");
+		}
 		/* content */
 		else {
 			print "<table id='subnetsMenu'>";

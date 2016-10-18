@@ -964,6 +964,23 @@ class Database_PDO extends DB {
 	}
 
 	/**
+	 * Returns field info.
+	 *
+	 * @access public
+	 * @param bool $tableName (default: false)
+	 * @param bool $field (default: false)
+	 * @return void|object
+	 */
+	public function getFieldInfo ($tableName = false, $field = false) {
+    	//escape
+    	$tableName = $this->escape($tableName);
+    	$field = $this->escape($field);
+    	// fetch and return
+    	return $this->getObjectQuery("SHOW FIELDS FROM `$tableName` where Field = ?", array($field));
+
+	}
+
+	/**
 	 * getForeignKeyInfo function.
 	 *
 	 * @access public

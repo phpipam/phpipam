@@ -57,6 +57,15 @@ define('BASE', "/");
 if(!defined('MCUNIQUE'))
 define('MCUNIQUE', "section");
 
+/**
+ * Permit private subpages - private apps under /app/custon/<custom_app_name>/index.php
+ *
+ * (default value: false)
+ *
+ * @var bool
+ * @access public
+ */
+$private_subpages = array();
 
 /**
  * Google MAPs API key for locations to display map

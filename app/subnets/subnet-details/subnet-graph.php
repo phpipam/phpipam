@@ -28,7 +28,7 @@ $(function () {
 		# first free hosts
      	if($details['freehosts_percent']>0)  {
     		$details['freehosts_percent'] = str_replace(",", ".", $details['freehosts_percent']);
-    		print "{ label: '"._('Free')."',     data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
+    		print "{ label: '"._('Free')."', data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
     	}
     	# than all other percentages
     	foreach($Subnets->address_types as $t) {

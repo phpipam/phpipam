@@ -361,9 +361,9 @@ class Prefix_controller extends Common_api_functions {
      *  GET /prefix/{customer_address_type}/address/
      *  GET /prefix/{customer_address_type}/address/4/
      *
-     * @access private
+     * @access public
      */
-    private function set_query_type () {
+    public function set_query_type () {
         // get subnets in address selection query
         if ( $this->_params->id2 == "address" || $this->_params->id2 == "addresses" || $this->_params->id2 == "ip") {
             // set query type
@@ -933,6 +933,31 @@ class Prefix_controller extends Common_api_functions {
         catch (Exception $e) { $this->Response->throw_exception(500, "Error: ".$e->getMessage()); }
         // result
         return sizeof($objects)>0 ? $objects : false;
+    }
+
+    /**
+     * Returns subnet select parameters.
+     *
+     * @access public
+     * @param string $type (default: "subnets")
+     * @return void
+     */
+    public function get_subnet_select_parameters ($type = "subnets") {
+        // subnets or addresses
+        if($type=="subnets") {
+            return array(
+                        "name"=>$this->custom_field_name,
+                        "order"=>$this->custom_field_orderby,
+                        "direction"=>$this->custom_field_order_direction
+                        );
+        }
+        else {
+            return array(
+                        "name"=>$this->custom_field_name_addr,
+                        "order"=>$this->custom_field_orderby_addr,
+                        "direction"=>$this->custom_field_order_direction_addr
+                        );
+        }
     }
 }
 
