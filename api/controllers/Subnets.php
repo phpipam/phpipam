@@ -713,7 +713,7 @@ class Subnets_controller extends Common_api_functions {
               $subnet = $this->Addresses->transform_address($subnets[0]->subnet ,"dotted");      
               $return[0]['subnet'] = $subnet;
               $return[0]['mask'] = $subnets[0]->mask;
-              $return[0]['vlanId'] =$subnets[0]->vlanId;
+              $return[0]['vlanId'] =$subnets[0]->number;
               $return[0]['clientid'] = $clientid;
               $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[0]->masterSubnetId));
               $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[0]->id));
@@ -724,7 +724,7 @@ class Subnets_controller extends Common_api_functions {
               for($i = 0; $i < sizeof($subnets); ++$i) {
               $return[$i]['subnet'] = $this->Addresses->transform_address($subnets[$i]->subnet ,"dotted");
               $return[$i]['mask'] = $subnets[$i]->mask;
-              $return[$i]['vlanId'] = $subnets[$i]->vlanId;
+              $return[$i]['vlanId'] = $subnets[$i]->number;
               $return[$i]['clientid'] = $clientid;
               $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[$i]->masterSubnetId));
               $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[$i]->id));
