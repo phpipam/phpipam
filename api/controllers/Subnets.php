@@ -111,9 +111,9 @@ class Subnets_controller extends Common_api_functions {
 		$result['methods'] = array(
 								array("href"=>"/api/".$this->_params->app_id."/subnets/", 		"methods"=>array(array("rel"=>"options", "method"=>"OPTIONS"))),
 								array("href"=>"/api/".$this->_params->app_id."/subnets/{id}/", 	"methods"=>array(array("rel"=>"read", 	"method"=>"GET"),
-																												 array("rel"=>"create", "method"=>"POST"),
-																												 array("rel"=>"update", "method"=>"PATCH"),
-																												 array("rel"=>"delete", "method"=>"DELETE"))),
+																										 array("rel"=>"create", "method"=>"POST"),
+																										 array("rel"=>"update", "method"=>"PATCH"),
+																										 array("rel"=>"delete", "method"=>"DELETE"))),
 							);
 		# result
 		return array("code"=>200, "data"=>$result);
@@ -186,10 +186,10 @@ class Subnets_controller extends Common_api_functions {
 	 *		- /cidr/{subnet}/				// subnets in CIDR format
 	 *		- /search/{subnet}/				// subnets in CIDR format (same as above)
 	 *		- /{id}/usage//				    // returns subnet usage
-	 *			- /{id}/slaves/ 			    // returns all immediate slave subnets
+	 *		- /{id}/slaves/ 			    // returns all immediate slave subnets
 	 *		- /{id}/slaves_recursive/ 	    // returns all slave subnets recursively
 	 *		- /{id}/addresses/			    // returns all IP addresses in subnet
-         *              - /allocate/{clientid}/        // Return first UNALLOCATED Subnet
+         *              - /allocate/{clientid}/{search}        // Return first UNALLOCATED Subnet
          *      - /{id}/addresses/{ip}/         // returns IP address from subnet
 	 *		- /{id}/first_free/			    // returns first free address in subnet
 	 *      - /{id}/first_subnet/{mask}/    // returns first available subnets with specified mask
@@ -213,7 +213,7 @@ class Subnets_controller extends Common_api_functions {
                         // search for new free subnet
                         elseif ($this->_params->id=="allocate") {
                           $limit  = 1;
-                          if(isset($this->_params->id3)) $limit = $this->_params->id3;  
+                          if(isset($this->_params->id4)) $limit = $this->_params->id4;  
                           $result = $this->fetch_and_allocate($this->_params->id2, $limit, $this->_params->id3);
                           // check result
                           if ($result===false)                                            { $this->Response->throw_exception(404, "Unable to read subnets"); }
@@ -694,41 +694,46 @@ class Subnets_controller extends Common_api_functions {
 	}
 
 
-      /*** 
+      /***
         * Find the first subnet available and allocate it to client
         * @access public
         * @param string Client ID
         * @param int Number of subnets to fetch
+        * @param string Master subnet to search in text
+        * @param string The subnet description to lookup
         * @return array
         */
-        public function fetch_and_allocate($clientid, $limit=1, $masterid=1, $search='Unallocated') {
+        public function fetch_and_allocate($clientid, $limit=1, $master=NULL, $search='Unallocated') {
               $limit = (int)$limit;
-              $masterid = (int)$masterid;
+              $master = $this->Database->escape($master);
               $clientid = $this->Database->escape($clientid);
               $search = $this->Database->escape($search);
-              $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where description='$search' AND masterSubnetId = $masterid AND subnet IS NOT NULL and vlanId is NOT NULL ORDER by id LIMIT $limit;");
-              if($limit == 1) { 
-              $subnet = $this->Addresses->transform_address($subnets[0]->subnet ,"dotted");     
+              $subnets = $this->Database->getObjectsQuery('CALL fetch_and_allocate("'.$clientid.'", "'.$search.'", "'.$master.'")');
+              if($limit == 1) {
+              $subnet = $this->Addresses->transform_address($subnets[0]->subnet ,"dotted");      
               $return[0]['subnet'] = $subnet;
               $return[0]['mask'] = $subnets[0]->mask;
               $return[0]['vlanId'] =$subnets[0]->vlanId;
               $return[0]['clientid'] = $clientid;
-              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[0]->id, "masterSubnetId"=>$masterid));
+              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[0]->masterSubnetId));
+              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[0]->id));
               $this->Database->updateObject("vlans", array("description"=>$clientid, "vlanId"=>$subnets[0]->vlanId), "vlanId");
-              }    
-              else 
-              {    
+              }
+              else
+              {
               for($i = 0; $i < sizeof($subnets); ++$i) {
               $return[$i]['subnet'] = $this->Addresses->transform_address($subnets[$i]->subnet ,"dotted");
               $return[$i]['mask'] = $subnets[$i]->mask;
               $return[$i]['vlanId'] = $subnets[$i]->vlanId;
               $return[$i]['clientid'] = $clientid;
-              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[$i]->id, "masterSubnetId"=>$masterid));
+              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[$i]->masterSubnetId));
+              $this->Database->updateObject("subnets", array("description"=>$clientid, "id"=>$subnets[$i]->id));
               $this->Database->updateObject("vlans", array("description"=>$clientid, "vlanId"=>$subnets[$i]->vlanId), "vlanId");
-              }    
-              }    
+              }
+              }
               return $return;
-        }  
+        }
+
 
 	/* @helper methods ---------- */
 
