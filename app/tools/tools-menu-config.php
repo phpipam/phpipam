@@ -5,10 +5,68 @@
  *
  */
 
+# default
+$tools_menu = array();
+
 # icons
 $tools_menu_icons['Tools'] 		= "fa-wrench";
 $tools_menu_icons['Subnets'] 	= "fa-sitemap";
 $tools_menu_icons['User Menu'] 	= "fa-user";
+
+# inclusion check
+$tools_menu_items = array(
+						'changelog',
+						'dhcp',
+						'devices',
+						'favourites',
+						'firewall-zones',
+						'instructions',
+						'ip-calculator',
+						'logs',
+						'multicast-networks',
+						'pass-change',
+						'powerDNS',
+						'request-ip',
+						'requests',
+						'racks',
+						'scanned-networks',
+						'search',
+						'subnet-masks',
+						'subnets',
+						'temp-shares',
+						'user-menu',
+						'vlan',
+						'vrf',
+						'inactive-hosts',
+						"threshold",
+						'nat',
+						'locations',
+						'pstn-prefixes'
+                    );
+
+
+#custom
+if (isset($private_subpages)) {
+    if(is_array($private_subpages)) {
+        if (sizeof($private_subpages)>0) {
+            # array and icon
+            $tools_menu['Custom tools'] = array();
+            $tools_menu_icons['Custom tools'] = "fa-star";
+            // loop
+            foreach ($private_subpages as $s) {
+                // title
+                $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
+                // add to inclusion check
+                $tools_menu_items[] = $s;
+            }
+        }
+    }
+}
+
+# arrays
+$tools_menu['Tools']     = array();
+$tools_menu['Subnets']   = array();
+$tools_menu['User Menu'] = array();
 
 # Tools
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search", 		"name"=>"Search", 		 		"href"=>"search", 		"description"=>"Search database Addresses, subnets and VLANs");
@@ -58,35 +116,4 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>
 # user menu
 $tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
 
-
-# inclusion check
-$tools_menu_items = array(
-						'changelog',
-						'dhcp',
-						'devices',
-						'favourites',
-						'firewall-zones',
-						'instructions',
-						'ip-calculator',
-						'logs',
-						'multicast-networks',
-						'pass-change',
-						'powerDNS',
-						'request-ip',
-						'requests',
-						'racks',
-						'scanned-networks',
-						'search',
-						'subnet-masks',
-						'subnets',
-						'temp-shares',
-						'user-menu',
-						'vlan',
-						'vrf',
-						'inactive-hosts',
-						"threshold",
-						'nat',
-						'locations',
-						'pstn-prefixes'
-                    );
 ?>
