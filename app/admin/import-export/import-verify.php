@@ -17,7 +17,8 @@ $User->check_user_session();
 /* get extension */
 $filename = $_FILES['file']['name'];
 $expfields = explode("|",$_POST['expfields']);
-$filetype = strtolower(end(explode(".", $filename)));
+$file_exp = explode(".", $filename);
+$filetype = strtolower(end($file_exp));
 
 /* list of permitted file extensions */
 $allowed = array('xls','csv');
@@ -87,3 +88,4 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 echo '{"status":"error","error":"Empty file"}';
 exit;
 ?>
+
