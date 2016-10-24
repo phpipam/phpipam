@@ -3,6 +3,4 @@ app/subnets/import-subnet/upload/
 config.php
 css/1.2/images/logo/logo.png
 functions/scripts/custom/
-api/controllers/custom/
 api/_lock.txt
-app/tools/custom/
