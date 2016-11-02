@@ -785,8 +785,12 @@ class Subnets_controller extends Common_api_functions {
 	 * @access private
 	 * @return int|bool
 	 */
-	private function read_subnet_gateway () {
-    	return $this->Subnets->find_gateway ($this->_params->id);
+	private function read_subnet_gateway ($id=NULL) {
+    		if($id === NULL) {
+    			return $this->Subnets->find_gateway ($this->_params->id);
+		} else {
+			return $this->Subnets->find_gateway ($id);
+		}
 	}
 
 	/**
