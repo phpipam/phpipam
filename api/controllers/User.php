@@ -167,16 +167,27 @@ class User_controller extends Common_api_functions {
 	/**
 	 * Authenticates user and returns token
 	 *
-	 * @access public
-	 * @return void
+	 *	Identifier can be:
+	 *		- /token_expires/				// returns token expiration date
+	 *		- /ipam_admins/					// returns ipam admins
 	 */
 	public function GET () {
-		// block IP
-		$this->validate_block ();
-		// validate token
-		$this->validate_requested_token ();
-		// ok
-		return array("code"=>200, "data"=>array("expires"=>$this->token_expires));
+		// token_expires
+		if ($this->_params->id=="token_expires") {
+			// block IP
+			$this->validate_block ();
+			// validate token
+			$this->validate_requested_token ();
+			// ok
+			return array("code"=>200, "data"=>array("expires"=>$this->token_expires));
+		}
+		// id
+		elseif ($this->_params->id=="ipam_admins") {
+			// ok
+			return array("code"=>200, "data"=>$this->User->get_ipam_admins());
+		}
+		// false
+		else { $this->Response->throw_exception(404, 'Invalid Id'); }
 	}
 
 
