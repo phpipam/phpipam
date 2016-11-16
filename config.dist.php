@@ -58,7 +58,7 @@ if(!defined('MCUNIQUE'))
 define('MCUNIQUE', "section");
 
 /**
- * Permit private subpages - private apps under /app/custon/<custom_app_name>/index.php
+ * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
  *
  * (default value: false)
  *
