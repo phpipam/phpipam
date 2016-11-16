@@ -183,16 +183,30 @@ else {
 	if(!$Subnets->modify_subnet ($_POST['action'], $values))	{ $Result->show("danger", _('Error editing folder'), true); }
 	else {
 		# update also all slave subnets!
-		if(isset($values['sectionId'])&&$_POST['action']!="add") {
+		if(isset($values['sectionId']) && $_POST['action']=="edit") {
 			$Subnets->reset_subnet_slaves_recursive();
 			$Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
 			$Subnets->remove_subnet_slaves_master($_POST['subnetId']);
+
 			if(sizeof($Subnets->slaves)>0) {
 				foreach($Subnets->slaves as $slaveId) {
-					$Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$_POST['sectionIdNew']));
+					$Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$values['sectionId']));
 				}
 			}
 		}
+		# delete
+		elseif ($_POST['action']=="delete") {
+			$Subnets->reset_subnet_slaves_recursive();
+			$Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
+			$Subnets->remove_subnet_slaves_master($_POST['subnetId']);
+
+			if(sizeof($Subnets->slaves)>0) {
+				foreach($Subnets->slaves as $slaveId) {
+					$Admin->object_modify ("subnets", "delete", "id", array("id"=>$slaveId));
+				}
+			}
+		}
+
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		else							{ $Result->show("success", _("Folder $_POST[action] successfull").'!', true); }

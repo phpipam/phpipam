@@ -14,8 +14,11 @@ $folderId = $_GET['subnetId'];
 $cfields = $Tools->fetch_custom_fields ('subnets');
 
 # fetch subnet details!
-$folder	= (array) $Subnets->fetch_subnet ("id", $folderId);
-if(sizeof($folder)==0) 				{ header("Location: ".create_link("subnets", $_GET['section'])); die(); }	//redirect if false
+$folder	= $Subnets->fetch_subnet ("id", $folderId);
+if($folder==false) 				{ header("Location: ".create_link("subnets", $_GET['section'])); die(); }	//redirect if false
+
+// to array
+$folder = (array) $folder;
 
 # permissions
 $folder_permission  = $Subnets->check_permission($User->user, $folder['id']);						//subnet permission
