@@ -45,9 +45,8 @@ class OLE_PPS_Root extends OLE_PPS
     * @param integer $time_1st A timestamp
     * @param integer $time_2nd A timestamp
     */
-    function OLE_PPS_Root($time_1st, $time_2nd, $raChild)
-    {
-    	$tempDir = new System();
+    public function __construct ($time_1st, $time_2nd, $raChild) {
+        $tempDir = new System();
         $this->_tmp_dir = $tempDir->tmpdir();
         $this->OLE_PPS(
            null,
@@ -61,6 +60,30 @@ class OLE_PPS_Root extends OLE_PPS
            null,
            $raChild);
     }
+
+    /**
+    * Constructor
+    *
+    * @access public
+    * @param integer $time_1st A timestamp
+    * @param integer $time_2nd A timestamp
+    */
+    // function OLE_PPS_Root ($time_1st, $time_2nd, $raChild)
+    // {
+    // 	$tempDir = new System();
+    //     $this->_tmp_dir = $tempDir->tmpdir();
+    //     $this->OLE_PPS(
+    //        null,
+    //        OLE::Asc2Ucs('Root Entry'),
+    //        OLE_PPS_TYPE_ROOT,
+    //        null,
+    //        null,
+    //        null,
+    //        $time_1st,
+    //        $time_2nd,
+    //        null,
+    //        $raChild);
+    // }
 
     /**
     * Sets the temp dir used for storing the OLE file

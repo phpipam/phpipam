@@ -92,14 +92,23 @@ class OLE extends PEAR
     */
     var $smallBlockSize;
 
+
     /**
     * Creates a new OLE object
     * @access public
     */
-    function OLE()
-    {
+    public function __construct() {
         $this->_list = array();
     }
+
+    /**
+    * Creates a new OLE object
+    * @access public
+    */
+    // function OLE()
+    // {
+    //     $this->_list = array();
+    // }
 
     /**
     * Destructor (using PEAR)
@@ -381,7 +390,7 @@ class OLE extends PEAR
                 $this->_ppsTreeComplete($pps->DirPps));
     }
 
-    /** 
+    /**
     * Checks whether a PPS is a File PPS or not.
     * If there is no PPS for the index given, it will return false.
     * @param integer $index The index for the PPS
@@ -396,7 +405,7 @@ class OLE extends PEAR
         return false;
     }
 
-    /** 
+    /**
     * Checks whether a PPS is a Root PPS or not.
     * If there is no PPS for the index given, it will return false.
     * @param integer $index The index for the PPS.
@@ -411,7 +420,7 @@ class OLE extends PEAR
         return false;
     }
 
-    /** 
+    /**
     * Gives the total number of PPS's found in the OLE container.
     * @return integer The total number of PPS's found in the OLE container
     * @access public
@@ -485,7 +494,7 @@ class OLE extends PEAR
     *
     * @access public
     * @static
-    * @param integer $date A timestamp 
+    * @param integer $date A timestamp
     * @return string The string for the OLE container
     */
     public static function LocalDate2OLE($date = null)
@@ -558,10 +567,10 @@ class OLE extends PEAR
         $big_date = ($high_part * $factor) + $low_part;
         // translate to seconds
         $big_date /= 10000000;
-        
+
         // days from 1-1-1601 until the beggining of UNIX era
         $days = 134774;
-        
+
         // translate to seconds from beggining of UNIX era
         $big_date -= $days * 24 * 3600;
         return floor($big_date);
