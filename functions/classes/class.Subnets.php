@@ -875,6 +875,7 @@ class Subnets extends Common_functions {
 				foreach($slaves2 as $slave) {
 					# save to full array of slaves
 					$this->slaves_full[$slave->id] = $slave;
+					$this->slaves[] = $slave->id;
 					# fetch possible new slaves
 					$this->fetch_subnet_slaves_recursive ($slave->id);
 					$end = true;
@@ -1077,7 +1078,7 @@ class Subnets extends Common_functions {
 		// marked as full ?
 		if ($subnet->isFull==1) {
      		// set values
-            $out["used"]              = (int) $this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode);
+            $out["used"]              = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
             $out["maxhosts"]          = $out['used'];
             $out["freehosts"]         = 0;
             $out["freehosts_percent"] = 0;
@@ -1085,8 +1086,8 @@ class Subnets extends Common_functions {
 		}
 		else {
     		// set values
-            $out["used"]              = (int) $address_count;
-            $out["maxhosts"]          = (int) $this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode);
+            $out["used"]              = gmp_strval($address_count);
+            $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
             // slaves fix for reducing subnet and broadcast address
             if($ip_version=="IPv4" && $is_slave) {
                 if($subnet->mask==32 && $out["used"]==0) {
@@ -1103,7 +1104,7 @@ class Subnets extends Common_functions {
                 }
             }
             // percentage
-            $out["freehosts"]         = (int) gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
+            $out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
             $out["freehosts_percent"] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);
             // detailed results ?
             if ($detailed) {
@@ -1468,8 +1469,16 @@ class Subnets extends Common_functions {
 	        foreach ($sections_subnets as $existing_subnet) {
 	            //only check if vrfId's match
 	            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+	            	# check if parent is folder and ignore
+	            	if($existing_subnet->masterSubnetId!=0) {
+		            	$parent = $this->fetch_subnet (null, $existing_subnet->masterSubnetId);
+					}
+					else {
+						$parent = new StdClass ();
+						$parent->isFolder = 0;
+					}
 		            # ignore folders!
-		            if($existing_subnet->isFolder!=1) {
+		            if($existing_subnet->isFolder!=1 && $parent->isFolder!=1) {
 			            # check overlapping
 						if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
 							 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
