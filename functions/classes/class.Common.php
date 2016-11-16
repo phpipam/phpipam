@@ -818,7 +818,8 @@ class Common_functions  {
 		        "truncate",
 		        "split",
 		        "resize",
-		        "move"
+		        "move",
+		        "remove"
 		      );
 	}
 
