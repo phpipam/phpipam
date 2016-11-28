@@ -41,7 +41,7 @@ foreach ($data as &$cdata) {
 
 	# check data format
 	if ($action != "error") {
-		if (!preg_match("/^[a-zA-Z0-9-]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
+		if (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['name'])) { $msg.="Invalid name format."; $action = "error"; }
 		if (!preg_match("/^[0-9:]+$/", $cdata['rd'])) { $msg.="Invalid RD format."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 	}
