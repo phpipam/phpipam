@@ -239,7 +239,7 @@ class Net_IPv4
             /*
              *  a CIDR bitmask type was entered
              */
-            } else if (ctype_digit($parts[1]) && $parts[1] >= 0 && $parts[1] <= 32) {
+            } else if (is_numeric($parts[1]) && $parts[1] >= 0 && $parts[1] <= 32) {
                 // bitmask was entered
                 $myself->bitmask = $parts[1];
 
