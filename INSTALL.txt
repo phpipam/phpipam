@@ -4,3 +4,14 @@
 please follow this instructions:
 
 http://phpipam.net/documents/installation/
+
+## Docker
+
+If you would like to run PHPIPAM inside of docker you must fist setup a mysql database. After you
+have finished setting one up you can run the following two commands to build your docker image and
+then pass it the following variabled according to your setup.
+
+```
+$ docker build -t phpipam .
+$ docker run -p 8888:80 -e IPAM_HOST='192.168.1.5' -e IPAM_PASS='password' -e IPAM_USER='root' phpipam
+```

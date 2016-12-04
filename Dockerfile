@@ -7,7 +7,7 @@ RUN apk add --no-cache php \
   php-openssl php-gmp php-ldap \
   php-gettext php-pcntl php-cli \
   php-pdo_mysql php-mcrypt php-pear \
-  php-xml apache2 php-apache2
+  php-ctype php-xml apache2 php-apache2
 
 ADD . .
 
