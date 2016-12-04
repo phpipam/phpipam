@@ -2,11 +2,11 @@
 
 /* database connection details
  ******************************/
-$db['host'] = "localhost";
-$db['user'] = "phpipam";
-$db['pass'] = "phpipamadmin";
-$db['name'] = "phpipam";
-$db['port'] = 3306;
+$db['host'] = getenv('IPAM_HOST') ? getenv('IPAM_HOST') : "localhost";
+$db['user'] = getenv('IPAM_USER') ? getenv('IPAM_USER') : "phpipam";
+$db['pass'] = getenv('IPAM_PASS') ? getenv('IPAM_PASS') : "phpipamadmin";
+$db['name'] = getenv('IPAM_NAME') ? getenv('IPAM_NAME') : "phpipam";
+$db['port'] = getenv('IPAM_PORT') ? getenv('IPAM_PORT') : 3306;
 
 /* SSL options for MySQL
  ******************************
