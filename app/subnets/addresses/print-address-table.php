@@ -17,7 +17,7 @@ if(!isset($_POST['direction'])) {
 }
 
 # We need DNS object
-$DNS = new DNS ($Database, $User->settings);
+$DNS = new DNS ($Database, $User->settings, true);
 
 /* verifications */
 # checks

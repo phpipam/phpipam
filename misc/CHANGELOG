@@ -1,4 +1,4 @@
-== 1.26.035
+== 1.26.050
 
     New features:
     ------------
@@ -76,6 +76,7 @@
     + Permission delegation now only delegates changes not whole permission set;
     + Users with RWA permission can manage IP requests and receive IP request mails + changelog mails for subnet;
     + IPv4 subnet link to IPv6 for dual-stack info;
+    + Removed inacessible DNS servers if timeout to prevent page load timeouts;
 
     Bugfixes:
     ----------------------------
@@ -96,7 +97,7 @@
     + Fixed upgrade bug that selected invalid auth method for AD/LDAP users;
     + Fixed LDAP problems after 1.2 upgrade;
     + Fixed PowerDNS Slave with multiple masters delimiter error;
-    + Fixed owerDNS PTR records not being updated automatically;
+    + Fixed PowerDNS PTR records not being updated automatically;
     + Fixed csrf cookie bug when editing folder;
     + Fixed csrf cookie bug when truncationg subnet;
     + Fixed invalid code for API crypt method;
