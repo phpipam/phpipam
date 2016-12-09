@@ -166,12 +166,12 @@ $('.slider').slider().on('slide', function(ev){
             if ($_POST['action'] != "add") 			{ $cidr = $Subnets->transform_to_dotted($subnet_old_details['subnet']).'/'.$subnet_old_details['mask']; } 	//editing existing
 
         	# reset CIDR if $showDropMenuFull
-        	if ($showDropMenuFull && strlen(@$dropdown_menu)>2) {
-	        	$cidr = explode("\n",$dropdown_menu);
-	        	$cidr = substr(strip_tags($cidr[1]), 2);
-	        	//validate
-	        	if ($Subnets->verify_cidr_address($cidr)===false) { unset($cidr); };
-	        }
+        	// if ($showDropMenuFull && strlen(@$dropdown_menu)>2) {
+	        // 	$cidr = explode("\n",$dropdown_menu);
+	        // 	$cidr = substr(strip_tags($cidr[1]), 2);
+	        // 	//validate
+	        // 	if ($Subnets->verify_cidr_address($cidr)===false) { unset($cidr); };
+	        // }
         	?>
 
 
