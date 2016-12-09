@@ -106,7 +106,7 @@ class DNS extends Common_functions {
 		// settings
 		$this->settings = !is_null($settings) ? (object) $settings : $this->get_settings ();
 		// initialize resolver
-		$this->initialize_pear_net_DNS2 (array("timeout"=>1));
+		$this->initialize_pear_net_DNS2 ();
 		// set print error flg
 		$this->print_error = $print_error;
 	}

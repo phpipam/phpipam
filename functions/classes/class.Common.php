@@ -510,7 +510,7 @@ class Common_functions  {
 		if(!is_object($this->DNS2)) {
 			require_once( dirname(__FILE__) . '/../../functions/PEAR/Net/DNS2.php' );
 			//initialize object
-			$this->DNS2 = new Net_DNS2_Resolver();
+			$this->DNS2 = new Net_DNS2_Resolver(array("timeout"=>2));
 		}
 	}
 
