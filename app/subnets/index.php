@@ -135,7 +135,11 @@ if ($User->settings->enableNAT==1) {
 
 	<!-- addresses -->
 	<div class="col-xs-12 ipaddresses_overlay">
-		<?php include('addresses/print-address-table.php'); ?>
+		<?php
+		if(!$slaves) {
+			include('addresses/print-address-table.php');
+		}
+		?>
 	</div>
 
 	<!-- visual subnet display -->
