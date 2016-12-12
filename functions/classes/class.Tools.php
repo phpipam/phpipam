@@ -776,10 +776,9 @@ class Tools extends Common_functions {
 	/**
 	 * Fetches standard tables from SCHEMA.sql file
 	 *
-	 * @access private
 	 * @return array
 	 */
-	private function fetch_standard_tables () {
+	public function fetch_standard_tables () {
 		# get SCHEMA.SQL file
 		$schema = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
 		$schema = fread($schema, 100000);

@@ -23,6 +23,10 @@ if($Install->upgrade_database()===true) {
 	# print success
 	$Result->show("success", _("Database upgraded successfully! <a class='btn btn-sm btn-default' href='".create_link('dashboard')."'>Dashboard</a>"), false);
 
+	# migrate settings
+	$User->migrate_domain_settings ();
+    $User->migrate_ldap_settings ();
+
 	# check for possible errors
 	if(sizeof($errors = $Tools->verify_database())>0) {
 		$esize = sizeof($errors['tableError']) + sizeof($errors['fieldError']);

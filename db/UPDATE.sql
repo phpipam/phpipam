@@ -226,6 +226,7 @@ ALTER TABLE `vlanDomains` ENGINE = InnoDB;
 ALTER TABLE `vlans` ENGINE = InnoDB;
 ALTER TABLE `vrf` ENGINE = InnoDB;
 ALTER TABLE `widgets` ENGINE = InnoDB;
+ALTER TABLE `settingsDomain` ENGINE = InnoDB;
 
 /* add new widgets */
 INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
