@@ -186,29 +186,6 @@ VALUES
 	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
 
 
-# Dump of table settingsDomain
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `settingsDomain`;
-
-CREATE TABLE `settingsDomain` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `account_suffix` varchar(256) DEFAULT '@domain.local',
-  `base_dn` varchar(256) DEFAULT 'CN=Users,CN=Company,DC=domain,DC=local',
-  `domain_controllers` varchar(256) DEFAULT 'dc1.domain.local;dc2.domain.local',
-  `use_ssl` tinyint(1) DEFAULT '0',
-  `use_tls` tinyint(1) DEFAULT '0',
-  `ad_port` int(5) DEFAULT '389',
-  `adminUsername` VARCHAR(64)  NULL  DEFAULT NULL ,
-  `adminPassword` VARCHAR(64)  NULL  DEFAULT NULL ,
-  `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/* insert default values */
-INSERT INTO `settingsDomain` (`id`, `account_suffix`, `base_dn`, `domain_controllers`)
-VALUES
-	(1,'@domain.local','CN=Users,CN=Company,DC=domain,DC=local','dc1.domain.local;dc2.domain.local');
-
-
 # Dump of table settingsMail
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `settingsMail`;
@@ -587,7 +564,7 @@ VALUES
 	(2, 'http', NULL, 'Yes', 'Apache authentication');
 
 
-# Dump of table usersAuthMethod
+# Dump of table ipTags
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `ipTags`;
 

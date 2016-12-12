@@ -216,7 +216,6 @@ ALTER TABLE `logs` ENGINE = InnoDB;
 ALTER TABLE `requests` ENGINE = InnoDB;
 ALTER TABLE `sections` ENGINE = InnoDB;
 ALTER TABLE `settings` ENGINE = InnoDB;
-ALTER TABLE `settingsDomain` ENGINE = InnoDB;
 ALTER TABLE `settingsMail` ENGINE = InnoDB;
 ALTER TABLE `subnets` ENGINE = InnoDB;
 ALTER TABLE `userGroups` ENGINE = InnoDB;
