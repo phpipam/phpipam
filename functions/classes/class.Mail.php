@@ -100,6 +100,8 @@ class phpipam_mail extends Common_functions {
 		$this->Php_mailer->Port = $this->mail_settings->mport;
 		//permit self-signed certs and dont verify certs
 		$this->Php_mailer->SMTPOptions = array("ssl"=>array("verify_peer"=>false, "verify_peer_name"=>false, "allow_self_signed"=>true));
+		// uncomment this to disable AUTOTLS if security is set to none
+		$this->Php_mailer->SMTPAutoTLS = false;
 		//set smtp auth
 		$this->set_smtp_auth();
 	}
