@@ -1,3 +1,4 @@
+/* VERSION 1.1 */
 /* VERSION 1.11 */
 UPDATE `settings` set `version` = '1.11';
 
