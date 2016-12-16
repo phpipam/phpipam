@@ -80,7 +80,7 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
 if($Scan->debugging)							{ print_r($scan_subnets); }
-if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates"); }
+if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates\n"); }
 //fetch all addresses that need to be checked
 foreach($scan_subnets as $s) {
 
