@@ -45,6 +45,7 @@ require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
+//require( dirname(__FILE__) . '/classes/class.Table.php' );	    //Class for Table pagination
 
 # save settings to constant
 if($_GET['page']!="install" ) {
@@ -73,7 +74,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");
 	// override for search
 	if ($l0=="tools" && $l1=="search")
-    $el = array("page", "section", "addresses", "subnets", "vlans", "ip");
+    $el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
 
 	# set rewrite
 	if($User->settings->prettyLinks=="Yes") {
