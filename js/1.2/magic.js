@@ -128,6 +128,7 @@ function hidePopup(pClass, secondary) {
     $(oclass+' .'+pClass).fadeOut('fast');
 	// IMPORTANT: also empty loaded content to avoid issues on popup reopening
 	$(oclass+' > div').empty();
+    $('body').removeClass('stop-scrolling');        //enable scrolling back
 }
 function hidePopups() {
     $('#popupOverlay').fadeOut('fast');
@@ -147,6 +148,7 @@ function hidePopup2() {
 	// IMPORTANT: also empty loaded content to avoid issues on popup reopening
 	$('#popupOverlay2 > div').empty();
     hideSpinner();
+    $('body').removeClass('stop-scrolling');        //enable scrolling back
 }
 function hidePopupMasks() {
     $('.popup_wmasks').fadeOut('fast');
