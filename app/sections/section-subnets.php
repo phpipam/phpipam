@@ -120,7 +120,7 @@ if($permission != 0) {
 			foreach($subsections as $ss) {
 				# case
 				$ss = (array) $ss;
-				$slavesubnets = $Subnets->fetch_section_subnets($ss['id']);
+				$slavesubnets = $Subnets->fetch_section_supernets($ss['id']);
 
 				if(sizeof($slavesubnets)>0) {
 					# headers
