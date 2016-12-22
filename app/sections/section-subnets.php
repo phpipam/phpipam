@@ -37,7 +37,7 @@ if($permission != 0) {
 		else									{ $colCount = 9; }
 
 		# get Available subnets in section - already provided in subnets_menu.php
-		//$section_subnets = $Subnets->fetch_section_subnets($_GET['section']);
+		$section_subnets = $Subnets->fetch_section_supernets($_GET['section']);
 
 		# remove custom fields if all empty! */
 		foreach($custom as $field) {
