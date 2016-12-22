@@ -454,7 +454,46 @@ class Subnets extends Common_functions {
 		# result
 		return sizeof($subnets)>0 ? (array) $subnets : array();
 	}
-
+	
+        /**
+         * Fetches all supernets in specified section
+         *
+         * @access public
+         * @param mixed $sectionId
+         * @return array
+         */
+        public function fetch_section_supernets ($sectionId) {
+                # check order
+                $this->get_settings ();
+                $order = $this->get_subnet_order ();
+                // subnet fix
+                if($order[0]=="subnet") $order[0] = "subnet_int";
+                # fetch
+                // if sectionId is not numeric, assume it is section name rather than id, set query appropriately
+                if (is_numeric($sectionId)) {
+                        $query = "SELECT *,LPAD(subnet, 32, 0) as `subnet_int` FROM `subnets` where `sectionId` = ? and `masterSubnetId` = 0 order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+                }
+                else {
+                        $query = "SELECT *,LPAD(subnet, 32, 0) as `subnet_int` FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) and `masterSubnetId` = 0 order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+                }
+                try { $supernets = $this->Database->getObjectsQuery($query, array($sectionId)); }
+                catch (Exception $e) {
+                        $this->Result->show("danger", _("Error: ").$e->getMessage());
+                        return false;
+                }
+                # save to subnets cache
+                if(sizeof($supernets)>0) {
+                        foreach($supernets as $supernet) {
+                        // remove fake subnet_int field
+                        unset($supernet->subnet_int);
+                        // save
+                                $this->cache_write ("supernets", $supernet->id, $supernet);
+                        }
+                }
+                # result
+                return sizeof($supernets)>0 ? (array) $supernets : array();
+        }
+	
 	/**
 	 * This function fetches id, subnet and mask for all subnets
 	 *
