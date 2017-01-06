@@ -236,6 +236,31 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	* Private usort() value compare function
+	*
+	*	Sort return values of search_subnets
+	*
+	* @access private
+	* @param array $a
+	* @param array $b
+	* @return int
+	*/
+	static private function fn_compare_subnets($a, $b) {
+		# Sort by sectionId
+		if ($a->sectionId != $b->sectionId) {
+			return $a->sectionId > $b->sectionId ? 1 : -1;
+		}
+		# Then sort by IP
+		if ($a->ip != $b->ip) {
+			return strcmp($a->ip, $b->ip);
+		}
+		# Then sort by decreasing mask length
+		if ( $a->mask == $b->mask) {
+			return 0;
+		}
+		return $a->mask < $b->mask ? 1 : -1;
+	}
+	/**
 	 * Search subnets for provided range
 	 *
 	 *	First search range
@@ -259,6 +284,7 @@ class Tools extends Common_functions {
 		# merge arrays
 		$result = array_merge($result1, $result2, $result3);
 	    # result
+	    usort($result, array($this, "fn_compare_subnets"));
 	    return array_filter($result);
 	}
 
