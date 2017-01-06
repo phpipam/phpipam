@@ -106,6 +106,7 @@ if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_
 	<th><?php print _('Description');?></th>
 	<th><?php print _('Master subnet');?></th>
 	<th><?php print _('VLAN');?></th>
+	<th><?php print _('VRF');?></th>
 	<th><?php print _('Requests');?></th>
 	<?php
 	if(sizeof($custom_subnet_fields) > 0) {
@@ -137,7 +138,8 @@ if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_
 				$section = (array) $Sections->fetch_section(null, $line['sectionId']);
 				//get vlan number
 				$vlan 	 = (array) $Tools->fetch_object("vlans", "vlanId", $line['vlanId']);
-
+				//get vrf name
+				$vrf     = (array) $Tools->fetch_object("vrf", "vrfId", $line['vrfId']);
 				//format requests
 				$line['allowRequests'] = $line['allowRequests']==1 ? "enabled" : "disabled";
 
@@ -166,6 +168,8 @@ if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_
 				print ' <td>'. $master_text .'</td>' . "\n";
 				//vlan
 				print ' <td>'. @$vlan['number'] .'</td>' . "\n";
+				//vrf
+				print ' <td>'. @$vrf['name'] .'</td>' . "\n";
 				//requests
 				print ' <td>'. _($line['allowRequests']) .'</td>' . "\n";
 
