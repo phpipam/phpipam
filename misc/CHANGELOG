@@ -43,6 +43,11 @@
         + POST transaction locking;
         + All first_free and first_address responses are now "data" instead of "ip" and "subnet" for consistency;
         + New methods:
+            + users:
+                GET    /user/expires/                         // returns token expiration date
+                GET    /user/token-expires/                   // returns token expiration date
+                GET    /user/users/                           // returns all users (rwa app permissions required)
+                GET    /user/admins/                          // returns all admin users (rwa app permissions required)
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)
                 GET    /addresses/{ip}/{subnetId}/            // returns IP address from subnet
