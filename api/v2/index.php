@@ -165,13 +165,15 @@ try {
 	//it the parameters from the request and Database object
 	$controller = new $controller($Database, $Tools, $params, $Response);
 
+	$rqm = strtolower($_SERVER['REQUEST_METHOD']);
+
 	//check if the action exists in the controller. if not, throw an exception.
-	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
+	if( method_exists($controller, $rqm) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
 	//execute the action
-	$result = $controller->$_SERVER['REQUEST_METHOD'] ();
+	$result = $controller->$rqm ();
 
 } catch ( Exception $e ) {
 	//catch any exceptions and report the problem
