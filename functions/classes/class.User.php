@@ -1558,50 +1558,45 @@ class User extends Common_functions {
         catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
     }
 
-	
-	
+
+
 	/* @users and groups -------------------- */
-	
-	/**
-	 * From json {"2":"2","3":"1"}, get user list + perm
-	 * 
-	 */
-	public function get_user_permissions_from_json ($json) {
-		$groups = array();
-		foreach(json_decode($json, true) as $group_id => $perm) {
-			$group_details = $this->groups_parse(array($group_id));
-			
-			$tmp = array();
-			$tmp['group_id'] = $group_id;
-			$tmp['permission'] = $perm;
-			$tmp['name'] = $group_details[$group_id]['g_name'];
-			$tmp['desc'] = $group_details[$group_id]['g_desc'];
-			$tmp['members'] = $group_details[$group_id]['members'];
-			
-			$groups[] = $tmp;
-		}
-		return $groups;
-	}
-	
-	/**
-	 * Get accounts details of all IPAM admins
-	 * 
-	 */
-	public function get_ipam_admins () {
-		return $this->fetch_multiple_objects("users", "role", "Administrator", "real_name", true, false, array("username"));;
-	}
-	
+
+    /**
+     * From json {"2":"2","3":"1"}, get user list + perm
+     *
+     * @method get_user_permissions_from_json
+     * @param  json     $json
+     * @return array
+     */
+    public function get_user_permissions_from_json ($json) {
+        $groups = array();
+        foreach(json_decode($json, true) as $group_id => $perm) {
+            $group_details = $this->groups_parse (array($group_id));
+
+            $tmp = array();
+            $tmp['group_id'] = $group_id;
+            $tmp['permission'] = $perm;
+            $tmp['name'] = $group_details[$group_id]['g_name'];
+            $tmp['desc'] = $group_details[$group_id]['g_desc'];
+            $tmp['members'] = $group_details[$group_id]['members'];
+
+            $groups[] = $tmp;
+        }
+        return $groups;
+    }
+
 	/**
 	 * Parse user groups
 	 *
 	 *	input:  array of group ids
 	 *	output: array of groups ( "id"=>array($group) )
 	 *
-	 * @access public
-	 * @param mixed $group_ids
-	 * @return void
+     * @method groups_parse
+	 * @param array  $group_ids
+	 * @return array
 	 */
-	public function groups_parse ($group_ids) {
+	private function groups_parse ($group_ids) {
 		if(sizeof($group_ids)>0) {
 	    	foreach($group_ids as $g_id) {
 	    		// group details
