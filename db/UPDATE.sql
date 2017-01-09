@@ -707,3 +707,8 @@ UPDATE `settings` set `donate` = 0;
 /* ad show supernet only */
 ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';
 
+/* add scan and discovery check time to database */
+ALTER TABLE `subnets` ADD `lastScan` TIMESTAMP  NULL;
+ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;
+
+

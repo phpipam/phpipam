@@ -241,6 +241,8 @@ CREATE TABLE `subnets` (
   `threshold` int(3)  NULL  DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `lastScan` TIMESTAMP  NULL,
+  `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
