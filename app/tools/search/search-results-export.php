@@ -64,13 +64,73 @@ $colSpan 	= $fieldSize + $mySize + 3;
 
 
 # search addresses
-if(@$_REQUEST['addresses']=="on") 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low']); }
+if(@$_REQUEST['addresses']=="on") {
+	$result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low']);
+} else {
+	# search addresses by fields
+	foreach($custom_address_fields as $custom_field) {
+		$html_custom_field = "ipaddresses:" . str_replace(' ', '|', $custom_field['name']);
+		if(@$_REQUEST[$html_custom_field]=="on") {
+			$custom_addresses_fields[] = $custom_field['name'];
+		}
+	}
+	if(sizeof($custom_addresses_fields) > 0) {
+		$result_addresses = $Tools->search_by_fields($search_term, $custom_addresses_fields, "ipaddresses");
+		$addresses_by_fields = true;
+	}
+}
+
 # search subnets
-if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']); }
+if(@$_REQUEST['subnets']=="on") {
+	$result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']);
+} else {
+	# search subnets by fields
+	foreach($custom_subnet_fields as $custom_field) {
+		$html_custom_field = "subnets:" . str_replace(' ', '|', $custom_field['name']);
+		if(@$_REQUEST[$html_custom_field]=="on") {
+			$custom_subnets_fields[] = $custom_field['name'];
+		}
+	}
+	if(sizeof($custom_subnets_fields) > 0) {
+		$result_subnets = $Tools->search_by_fields($search_term, $custom_subnets_fields, "subnets");
+		$subnets_by_fields = true;
+	}
+}
+
 # search vlans
-if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term); }
+if(@$_REQUEST['vlans']=="on") {
+	$result_vlans     = $Tools->search_vlans($search_term);
+} else {
+	# search vlans by fields
+	foreach($custom_vlan_fields as $custom_field) {
+		$html_custom_field = "vlans:" . str_replace(' ', '|', $custom_field['name']);
+		if(@$_REQUEST[$html_custom_field]=="on") {
+			$custom_vlans_fields[] = $custom_field['name'];
+		}
+	}
+	if(sizeof($custom_vlans_fields) > 0) {
+		$result_vlans = $Tools->search_by_fields($search_term, $custom_vlans_fields, "vlans");
+		$vlans_by_fields = true;
+	}
+}
+
 # search vrf
-if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_term); }
+if(@$_REQUEST['vrf']=="on") {
+	$result_vrf       = $Tools->search_vrfs($search_term);
+} else {
+	# search vrfs by fields
+	foreach($custom_vrf_fields as $custom_field) {
+		$html_custom_field = "vrf:" . str_replace(' ', '|', $custom_field['name']);
+		if(@$_REQUEST[$html_custom_field]=="on") {
+			$custom_vrf_fields[] = $custom_field['name'];
+		}
+	}
+	if(sizeof($custom_vrf_fields) > 0) {
+		$result_vrf = $Tools->search_by_fields($search_term, $custom_vrf_fields, "vrf");
+		$vrf_by_fields = true;
+	}
+}
+
 
 
 /*
