@@ -560,6 +560,48 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Search database for item matching a specific custom field
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param mixed $fields
+	 * @param mixed $item_type
+	 * @return void
+	 */
+	public function search_by_fields($search_term, $fields, $item_type) {
+		# also handle wildcard like percent
+		$search_term = str_replace('*', '%', $search_term);
+		# set search query
+		$query[] = "select * from " . $item_type . " where ";
+                foreach($fields as $field) {
+			$field_name = $this->Database->escape($field);
+			$query[] = "`" . $field_name . "` like \"" . $search_term . "\"";
+			$query[] = " or ";
+		}
+		# Trailing or
+		array_pop($query);
+
+		# Order depending on item type
+                if($item_type=="ipaddresses") {
+  			$query[] = "order by `ip_addr` asc;";
+		}
+
+		# join query
+		$query = implode("\n", $query);
+
+
+		# fetch
+		try { $result = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# result
+		return $result;
+	}
+
+
+	/**
 	 * Search subnets for provided range
 	 *
 	 *	First search range
