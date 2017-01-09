@@ -762,15 +762,25 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function createURL () {
-		# reset url for base
-		if($_SERVER['SERVER_PORT'] == "443") 		{ $url = "https://$_SERVER[HTTP_HOST]"; }
+		// SSL on standard port
+		if(($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
+			$url = "https://$_SERVER[HTTP_HOST]";
+		}
 		// reverse proxy doing SSL offloading
-        elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')  { $url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]"; }
-		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') 	{ $url = "https://$_SERVER[SERVER_NAME]"; }
+        elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+        	$url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]";
+        }
+		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
+			$url = "https://$_SERVER[SERVER_NAME]";
+		}
 		// custom port
-		elseif($_SERVER['SERVER_PORT']!="80")  		{ $url = "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]"; }
+		elseif($_SERVER['SERVER_PORT']!="80") {
+			$url = "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
+		}
 		// normal http
-		else								 		{ $url = "http://$_SERVER[HTTP_HOST]"; }
+		else {
+			$url = "http://$_SERVER[HTTP_HOST]";
+		}
 
 		//result
 		return $url;
