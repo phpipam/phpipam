@@ -763,7 +763,9 @@ class Common_functions  {
 	 */
 	public function createURL () {
 		# reset url for base
-		if($_SERVER['SERVER_PORT'] == "443") 		{ $url = "https://$_SERVER[HTTP_HOST]"; }
+		 if (($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
+			 $url = "https://$_SERVER[HTTP_HOST]";
+		 }
 		// reverse proxy doing SSL offloading
         elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')  { $url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]"; }
 		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') 	{ $url = "https://$_SERVER[SERVER_NAME]"; }
