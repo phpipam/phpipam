@@ -694,3 +694,16 @@ ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetI
 ALTER TABLE `api` ADD `app_lock` INT(1)  NOT NULL  DEFAULT '0';
 ALTER TABLE `api` ADD `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30';
 
+
+
+
+/* VERSION 1.27 */
+UPDATE `settings` set `version` = '1.27';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* ad show supernet only */
+ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';
+

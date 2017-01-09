@@ -2809,9 +2809,10 @@ class Subnets extends Common_functions {
 	 * @param array $subnets
 	 * @param array $custom_fields
 	 * @param bool $print
+	 * @param bool $showSupernetOnly
 	 * @return string
 	 */
-	public function print_subnets_tools( $user, $subnets, $custom_fields, $print = true ) {
+	public function print_subnets_tools( $user, $subnets, $custom_fields, $print = true, $showSupernetOnly = 0 ) {
 
 		# tools object
 		$Tools = new Tools ($this->Database);
@@ -2905,6 +2906,7 @@ class Subnets extends Common_functions {
 
     			$last_item = $count < $old_count ? "last_item" : "";
 
+    			if ($showSupernetOnly==0 || $count==1) {
 
 				$html[] = "<tr class='level$count'>";
 
@@ -2925,8 +2927,8 @@ class Subnets extends Common_functions {
 							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
 							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
 						} else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-12 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
+							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-12 fa-angle-right'></i> $description</td>";
 						}
 				    }
 				}
@@ -3048,6 +3050,7 @@ class Subnets extends Common_functions {
 				$html[] = "	</td>";
 
 				$html[] = "</tr>";
+			}
 
                 # save old level count
                 $old_count = $count;

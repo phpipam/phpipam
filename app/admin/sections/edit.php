@@ -123,6 +123,18 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 			</td>
 		</tr>
 
+		<!-- Show only supernets -->
+		<tr>
+			<td><?php print _('Show only supernets'); ?></td>
+			<td colspan="2">
+				<select name="showSupernetOnly" class="input-small form-control input-sm input-w-auto  pull-left" <?php if($_POST['action']=="delete") print 'disabled="disabled"'; ?>>
+					<option value="1"><?php print _('Yes'); ?></option>
+					<option value="0" <?php if(@$section['showSupernetOnly'] == "0") print "selected='selected'"; ?>><?php print _('No'); ?></option>
+				</select>
+				<span class="help-inline info2"><?php print _('Show only supernets in list of subnets in section'); ?></span>
+			</td>
+		</tr>
+
 		<!-- Subnet ordering -->
 		<tr>
 			<td class="title"><?php print _('Subnet ordering'); ?></td>

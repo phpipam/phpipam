@@ -105,6 +105,7 @@ else {
 					"subnetOrdering"=>@$_POST['subnetOrdering'],
 					"showVLAN"=>@$_POST['showVLAN'],
 					"showVRF"=>@$_POST['showVRF'],
+					"showSupernetOnly"=>@$_POST['showSupernetOnly'],
 					"masterSection"=>@$_POST['masterSection']
 					);
 
