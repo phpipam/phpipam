@@ -977,8 +977,8 @@ class User extends Common_functions {
             $this->Log->write( "User login", "Invalid username or password", 2, $username );
 
             # apache
-            if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
-            else                                 { $this->Result->show("danger", _("Invalid username or password"), true); }
+            if (!empty($_SERVER['PHP_AUTH_USER']) && $this->api!==true) { $this->show_http_login(); }
+            else                                                        { $this->Result->show("danger", _("Invalid username or password"), true); }
         }
     }
 
