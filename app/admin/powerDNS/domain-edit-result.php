@@ -89,6 +89,8 @@ $values['name'] = $_POST['name'];
 # remove all references if delete
 if ($_POST['action']=="delete") 									{ $PowerDNS->remove_all_records ($values['id']); }
 
+# for creation validate default records before creating them ! => true means check only
+if ($_POST['action']=="add" && !isset($_POST['manual']))            { $PowerDNS->create_default_records ($_POST, true); }
 
 # update
 if(!$PowerDNS->domain_edit($_POST['action'], $values))				{ $Result->show("danger",  _("Failed to $_POST[action] domain").'!', true); }

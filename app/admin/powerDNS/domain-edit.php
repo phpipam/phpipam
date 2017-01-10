@@ -174,11 +174,14 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<?php
 		// loop
 		foreach($PowerDNS->ttl as $k=>$ttl) {
-			// active
-			if ($k == @$pdns->nxdomain_ttl)	{ $selected = "selected"; }
-			else							{ $selected = ""; }
-			// print
-			print "<option value='$k' $selected>$ttl ($k)</option>";
+			// max 10800
+			if ($k <= 10800) {
+				// active
+				if ($k == @$pdns->nxdomain_ttl)	{ $selected = "selected"; }
+				else							{ $selected = ""; }
+				// print
+				print "<option value='$k' $selected>$ttl ($k)</option>";
+			}
 		}
 		?>
 		</select>
