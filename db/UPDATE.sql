@@ -712,3 +712,23 @@ ALTER TABLE `subnets` ADD `lastScan` TIMESTAMP  NULL;
 ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;
 
 
+
+/* VERSION 1.28 */
+UPDATE `settings` set `version` = '1.28';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Extend username to 255 chars for LDAP logins */
+ALTER TABLE `users` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
+ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* expand hostname valude in IP requests to match ipaddresses table */
+ALTER TABLE `requests` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+
+
+
+

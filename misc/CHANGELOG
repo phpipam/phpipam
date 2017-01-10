@@ -92,6 +92,7 @@
     + Normal users with RWA permissions can scan subnets;
     + Changed default timestamp from 0000-00-00 00:00:00 to 1970-01-01 00:00:01 to avoid SQL install errors if strict mode;
     + Fixed https access on non-standard ports;
+    + Extended username to 255 chars for LDAP logins;
 
 == 1.20.1
 

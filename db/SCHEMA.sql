@@ -64,7 +64,7 @@ CREATE TABLE `logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `severity` int(11) DEFAULT NULL,
   `date` varchar(32) DEFAULT NULL,
-  `username` varchar(64) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
   `ipaddr` varchar(64) DEFAULT NULL,
   `command` varchar(128) DEFAULT '0',
   `details` varchar(1024) DEFAULT NULL,
@@ -80,8 +80,8 @@ CREATE TABLE `requests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
-  `description` varchar(32) DEFAULT NULL,
-  `dns_name` varchar(32) DEFAULT NULL,
+  `description` varchar(64) DEFAULT NULL,
+  `dns_name` varchar(100) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
   `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
@@ -306,7 +306,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
   `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL,
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
