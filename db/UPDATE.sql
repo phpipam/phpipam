@@ -731,4 +731,5 @@ ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER
 
 
 
-
+/* add Public IP Request Setting */
+ALTER TABLE `settings` ADD COLUMN `enablePublicIPrequests` TINYINT NOT NULL DEFAULT '0' AFTER `enableIPrequests`;
