@@ -703,11 +703,11 @@ class Common_functions  {
 	 */
 	public function shorten_text($text, $chars = 25) {
 		//count input text size
-		$startLen = strlen($text);
+		$startLen = mb_strlen($text);
 		//cut onwanted chars
-	    $text = substr($text,0,$chars);
+	    $text = mb_substr($text,0,$chars);
 		//count output text size
-		$endLen = strlen($text);
+		$endLen = mb_strlen($text);
 
 		//append dots if it was cut
 		if($endLen != $startLen) {
