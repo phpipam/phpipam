@@ -13,7 +13,7 @@ $slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
 # no subnets
 if(!$slaves) {
 	print "<hr>";
-	print "<h4>"._('VLAN')." $vlan->number (".$vlan->name.") "._('has no belonging subnets')."</h4>";
+	print "<h4>"._('VLAN')." $vlan[number] (".$vlan[name].") "._('has no belonging subnets')."</h4>";
 }
 else {
 	# cast
