@@ -542,6 +542,38 @@ class Scan extends Common_functions {
 	}
 
 	/**
+	 * Updates last time that subnet was scanned
+	 *
+	 * @method update_subnet_scantime
+	 * @param  int $subnet_id
+	 * @param  false|datetime $datetime
+	 * @return void
+	 */
+	public function update_subnet_scantime ($subnet_id, $datetime = false) {
+		// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
+		// update
+		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastScan"=>$datetime), "id"); }
+		catch (Exception $e) {}
+	}
+
+	/**
+	 * Updates last time discovery check was run on subnet
+	 *
+	 * @method update_subnet_discoverytime
+	 * @param  int $subnet_id
+	 * @param  false|datetime $datetime
+	 * @return void
+	 */
+	public function update_subnet_discoverytime ($subnet_id, $datetime = false) {
+		// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
+		// update
+		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastDiscovery"=>$datetime), "id"); }
+		catch (Exception $e) {}
+	}
+
+	/**
 	 * Opens socket connection on specified TCP ports, if at least one is available host is alive
 	 *
 	 * @access public

@@ -108,7 +108,8 @@ foreach($scan_subnets as $s) {
 				}
 			}
 		}
-
+		// save update time
+		$Scan->update_subnet_scantime ($s->id, $nowdate);
 	}
 }
 

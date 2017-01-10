@@ -81,6 +81,8 @@ if ($scan_subnets!==false) {
     	// if subnet has slaves dont check it
     	if ($Subnets->has_slaves ($s->id) === false) {
     		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
+			// save discovery time
+			$Scan->update_subnet_discoverytime ($s->id, $nowdate);
         } else {
             unset( $scan_subnets[$i] );
     	}

@@ -1,4 +1,4 @@
-== 1.27.001
+== 1.27.002
 
     New features:
     ------------
@@ -83,6 +83,7 @@
     + IPv4 subnet link to IPv6 for dual-stack info;
     + Removed inacessible DNS servers if timeout to prevent page load timeouts;
     + Added option to only show supernets to limit pageload;
+    + Added last scan info to subnet details;
 
     Bugfixes:
     ----------------------------
