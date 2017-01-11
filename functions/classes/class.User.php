@@ -1571,7 +1571,7 @@ class User extends Common_functions {
      */
     public function get_user_permissions_from_json ($json) {
         $groups = array();
-        foreach(json_decode($json, true) as $group_id => $perm) {
+        foreach((array) json_decode($json, true) as $group_id => $perm) {
             $group_details = $this->groups_parse (array($group_id));
 
             $tmp = array();
