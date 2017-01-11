@@ -328,6 +328,10 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function authenticate () {
+		# if no user/pass are provided die with error
+		if(!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+			$this->Response->throw_exception(400, "Please provide username and password");
+		}
 		# try to authenticate user, it it fails it will fail by itself
 		$this->User->authenticate ($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 
