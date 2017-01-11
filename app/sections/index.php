@@ -34,7 +34,7 @@ if ($User->settings->enableIPrequests==1) {
 	# remove
 	if ($requests==0) { unset($requests); }
 	# parse
-	if ($User->isAdmin==false && isset($requests)) {
+	if ($User->is_admin(false)==false && isset($requests)) {
 		# fetch all Active requests
 		$requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
 		foreach ($requests as $k=>$r) {

@@ -1331,9 +1331,9 @@ class Tools extends Common_functions {
 			//send
 			$phpipam_mail->Php_mailer->send();
 		} catch (phpmailerException $e) {
-			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		} catch (Exception $e) {
-			$Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		}
 
 		# ok
