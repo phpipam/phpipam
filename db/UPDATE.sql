@@ -727,8 +727,3 @@ ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8
 /* expand hostname valude in IP requests to match ipaddresses table */
 ALTER TABLE `requests` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
 ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
-
-
-
-
-

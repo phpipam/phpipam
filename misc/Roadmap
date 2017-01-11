@@ -1,37 +1,65 @@
 Feature candidates for 1.4:
-
-    + Modules
-        + Customers module;
-
-    + CSV import tab with fields;
-
-    GitHub enhancement requests:
-        https://github.com/phpipam/phpipam/milestone/2
-
-
-features for next releases:
 ---------------------------
 
-    + PowerDNS API;
+    Enhancements
+        #33   2FA
+        #30   DNS Update to Active Directory DNS
+        #149  LDAP login requires a local user of same name
+        #762  Auto Updation to Latest Stable version
+        #849  Move to ADLDAP2 as submodule (#791)
+              + CSV import tab with fields;
+        #829  Provide Dockerfile (#311)
+        #684  Bulk/range edit non-contiguous IP addresses
+        #516  PHP sessions in database
+        #728  "X.in-addr.arpa" reverse zone support
+        #598  Section for vlans domain (Layer2)
+        #800  Changelog Doesn't Track Changes Made Via API
+        #858  swagger for clients/api docs
+        #518  use PowerDNS API rather than modifying the backend DB
+        #576  API: Get last_available_address
+        #448  API: allow full text search like in frontend
 
-    + KEA management (DHCP integration);
+    User interface:
+        #770  Show usage graph for whole section
+        #700  Enhance changelog information in changelog and mail
+        #798  Move orphaned hosts to new master subnet
+        #785  Show expandable tree structure for section subnets full view
+        #768  Add search by sections into search field :: Search enhancements
+        #735  Subnet Percent Usage Round Down
+        #405  Display free subnet ranges joined for each section
 
-    + Modules:
-        + BGP support;
-        + Inventory management;
+    IP requests
+        #820  Expand fields for IP requests (#791)
+        #771  Subnet request
+
+    New modules
+        #694  Customers module;
+        #777  KEA management (DHCP integration);
+        #335  BGP support
+                #344  VRF RD/RT confusion; update display and perhaps track separately
+        #769  Enhancement in Inventory management
+                #653  interactive racks and DCIM improvements
+                #731  Circuits module
+        #696  Password management
+        #545  Wirelless LAN list
+
+
+
+Ideas for next releases:
+---------------------------
+
+    #702  custom field relations
 
     + User
     	+ LDAP auth without local user;
         + IP address owner (from internal users - suggestions);
         + L2 domain permissions for groups ?
-        + 2FA;
         + Autocomplete mail addresses and owners from users table;
 
     + Configurable cron from UI;
 
     + Tools enhancements
         + Devices permissions;
-        + custom fields for IP requests;
         + Changelog for VLANs, l2-domains, devices or vrf's, nameservers and firewallzones;
 
     + DNS enhancements
