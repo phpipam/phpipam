@@ -82,9 +82,9 @@
     + Users with RWA permission can manage IP requests and receive IP request mails + changelog mails for subnet;
     + IPv4 subnet link to IPv6 for dual-stack info;
     + Removed inacessible DNS servers if timeout to prevent page load timeouts;
-    + Added option to only show supernets to limit pageload;
+    + Added option to only show supernets to limit pageload [#844 #816 #736];
     + Added last scan info to subnet details;
-    + Added option to update address tags when address state change occurs (pingCheck);
+    + Added option to update address tags when address state change occurs (pingCheck) [#840];
 
     Bugfixes:
     ----------------------------
