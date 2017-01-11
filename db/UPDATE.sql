@@ -727,3 +727,14 @@ ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8
 /* expand hostname valude in IP requests to match ipaddresses table */
 ALTER TABLE `requests` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
 ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* update Tags when state change occurs */
+ALTER TABLE `settings` ADD `updateTags` TINYINT(1)  NULL  DEFAULT '0';
+ALTER TABLE `ipTags` ADD `updateTag` TINYINT(1)  NULL  DEFAULT '0';
+
+UPDATE `ipTags` set `updateTag`=1 where `id`=1;
+UPDATE `ipTags` set `updateTag`=1 where `id`=2;
+UPDATE `ipTags` set `updateTag`=1 where `id`=3;
+UPDATE `ipTags` set `updateTag`=1 where `id`=4;
+
+

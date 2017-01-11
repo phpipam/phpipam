@@ -19,6 +19,11 @@ $Ping		= new Scan ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# set address types array
+$Tools->get_addresses_types ();
+// set tagChange
+$tagChange = false;
+
 # validate post
 is_numeric($_POST['subnetId']) ?:							$Result->show("danger", _("Invalid ID"), true, true, false, true);
 if(is_numeric($_POST['id'])) {
@@ -43,6 +48,21 @@ $pingRes = $Ping->ping_address($address['ip']);
 
 # update last seen if success
 if($pingRes==0 && is_numeric($_POST['id'])) { @$Ping->ping_update_lastseen($address['id']); }
+
+# update ipTag
+if ($Ping->settings->updateTags==1 && $Tools->address_types[$address['state']]['updateTag']==1) {
+	// online
+	if ($pingRes==0 && $address['state']!=2) {
+		$Ping->update_address_tag ($address['id'], 2, $address['state'], date("Y-m-d H:i:s"));
+		$tagChange = "Online";
+	}
+	// offline
+	elseif( ($pingRes==1 || $pingRes==2) && $address['state']!=1) {
+		$Ping->update_address_tag ($address['id'], 1, $address['state'], $address['lastSeen']);
+		$tagChange = "Offline";
+	}
+}
+
 ?>
 
 <!-- header -->
@@ -60,6 +80,11 @@ if($pingRes==0 && is_numeric($_POST['id'])) { @$Ping->ping_update_lastseen($addr
 		# fetch error code
 		$ecode = $Ping->ping_exit_explain($pingRes);
 										{ $Result->show("danger",  _("Error").": $ecode ($pingRes)", false); }
+	}
+
+	# tag change
+	if($tagChange!==false) {
+		$Result->show("info",  _("Address state changed to $tagChange"), false);
 	}
 
 	# hr

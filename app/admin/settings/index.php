@@ -412,6 +412,16 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Update Tags -->
+<tr>
+	<td class="title"><?php print _("Update Tags"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="updateTags" <?php if($settings['updateTags'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Update address tags when addrss state change occurs'); ?>
+	</td>
+</tr>
 
 
 <!-- ICPM -->

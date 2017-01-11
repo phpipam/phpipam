@@ -21,6 +21,9 @@ $script_result = json_decode($output[0]);
 if (!isset($script_result->values->alive) || is_null($script_result->values->alive) )	{ $script_result->values->alive = array(); }
 if (!isset($script_result->values->dead)  || is_null($script_result->values->dead) )	{ $script_result->values->dead = array(); }
 
+# set address types array
+$Tools->get_addresses_types ();
+
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
 	// fetch all hosts to be scanned
@@ -66,9 +69,12 @@ if($script_result->status==0) {
 				$ipdet = (array) $Addresses->fetch_address_multiple_criteria ($ip, $_POST['subnetId']);
 
 				# format output
-				$res[$ip]['ip_addr'] 	 = $ip;
+				$res[$ip]['id']          = $ipdet['id'];;
+				$res[$ip]['ip_addr']     = $ip;
 				$res[$ip]['description'] = $ipdet['description'];
-				$res[$ip]['dns_name'] 	 = $ipdet['dns_name'];
+				$res[$ip]['dns_name']    = $ipdet['dns_name'];
+				$res[$ip]['state']       = $ipdet['state'];
+				$res[$ip]['lastSeen']    = $ipdet['lastSeen'];
 
 				//online
 				if($k=="alive")	{
@@ -141,6 +147,19 @@ else {
 		print "	<td>".$r['dns_name']."</td>";
 
 		print "</tr>";
+
+		# update ipTag
+		if ($User->settings->updateTags==1 && $Tools->address_types[$r['state']]['updateTag']==1) {
+			// online
+			if ($r['code']==0 && $r['state']!=2) {
+				$Scan->update_address_tag ($r['id'], 2, $r['state'], date("Y-m-d H:i:s"));
+			}
+			// offline
+			elseif( ($r['code']==1 || $r['code']==2) && $r['state']!=1) {
+				$Scan->update_address_tag ($r['id'], 1, $r['state'], $r['lastSeen']);
+			}
+		}
+
 	}
 	print "</table>";
 }

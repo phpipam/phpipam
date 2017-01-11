@@ -1,4 +1,4 @@
-== 1.27.002
+== 1.28.001
 
     New features:
     ------------
@@ -84,6 +84,7 @@
     + Removed inacessible DNS servers if timeout to prevent page load timeouts;
     + Added option to only show supernets to limit pageload;
     + Added last scan info to subnet details;
+    + Added option to update address tags when address state change occurs (pingCheck);
 
     Bugfixes:
     ----------------------------

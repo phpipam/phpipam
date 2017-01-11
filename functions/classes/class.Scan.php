@@ -574,6 +574,29 @@ class Scan extends Common_functions {
 	}
 
 	/**
+	 * Updates address tag if state changes
+	 *
+	 * @method update_address_tag
+	 * @param  int$address_id
+	 * @param  int $tag_id (default: 2)
+	 * @param  int $old_tag_id (default: null)
+	 * @param  dadtetime $last_seen_date (default: false)
+	 * @return void
+	 */
+	public function update_address_tag ($address_id, $tag_id = 2, $old_tag_id = null, $last_seen_date = false) {
+		if (is_numeric($address_id)) {
+			// don't update statuses for never seen addresses !
+			if ($last_seen_date!==false && !is_null($last_seen_date) && strlen($last_seen_date)>2 && $last_seen_date!="0000-00-00 00:00:00" && $last_seen_date!="1970-01-01 00:00:01" && $last_seen_date!="1970-01-01 01:00:00") {
+				// dont update reserved to offline
+				if (!($tag_id==1 && $old_tag_id==3)) {
+					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
+					catch (Exception $e) {}
+				}
+			}
+		}
+	}
+
+	/**
 	 * Opens socket connection on specified TCP ports, if at least one is available host is alive
 	 *
 	 * @access public

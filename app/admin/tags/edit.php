@@ -74,7 +74,7 @@ $(function(){
 	<tr>
 	    <td style="white-space: nowrap;"><?php print _('Show tag'); ?></td>
 	    <td>
-		    <select name="showtag" class="form-control input-w-auto">
+		    <select name="showtag" class="form-control input-sm input-w-auto">
 			    <option value="0"><?php print _("No"); ?></option>
 			    <option value="1" <?php if(@$tag->showtag==1) { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
 		    </select>
@@ -105,10 +105,27 @@ $(function(){
 	<tr>
 	    <td><?php print _('Compress range'); ?></td>
 	    <td>
-		    <select name="compress" class="form-control input-w-auto">
+		    <select name="compress" class="form-control input-sm input-w-auto">
 			    <option value="No"><?php print _("No"); ?></option>
 			    <option value="Yes" <?php if(@$tag->compress=="Yes") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
 		    </select>
+		</td>
+    </tr>
+
+	<!-- Update Tag -->
+	<tr>
+	    <td><?php print _('Update Tags'); ?></td>
+	    <td>
+		    <select name="updateTag" class="form-control input-sm input-w-auto">
+			    <option value="0"><?php print _("No"); ?></option>
+			    <option value="1" <?php if(@$tag->updateTag=="1") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
+		    </select>
+		</td>
+    </tr>
+	<tr>
+	    <td></td>
+	    <td>
+		    <span class="text-muted"><?php print _("Update address tag to online/offline if state change occurs. Combine with settings > Update Tags"); ?></span>
 		</td>
     </tr>
 

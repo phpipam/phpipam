@@ -174,6 +174,7 @@ CREATE TABLE `settings` (
   `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
   `hiddenCustomFields` VARCHAR(1024)  NULL  DEFAULT NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
+  `updateTags` TINYINT(1)  NULL  DEFAULT '0',
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
@@ -579,15 +580,16 @@ CREATE TABLE `ipTags` (
   `fgcolor` varchar(7) DEFAULT '#fff',
   `compress` SET('No','Yes')  NOT NULL  DEFAULT 'No',
   `locked` set('No','Yes') NOT NULL DEFAULT 'No',
+  `updateTag` TINYINT(1)  NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
-INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `compress`, `locked`)
+INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `compress`, `locked`, `updateTag`)
 VALUES
-	(1, 'Offline', 1, '#f59c99', '#ffffff', 'No', 'Yes'),
-	(2, 'Used', 0, '#a9c9a4', '#ffffff', 'No', 'Yes'),
-	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'No', 'Yes'),
-	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');
+	(1, 'Offline', 1, '#f59c99', '#ffffff', 'No', 'Yes', 1),
+	(2, 'Used', 0, '#a9c9a4', '#ffffff', 'No', 'Yes', 1),
+	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'No', 'Yes', 1),
+	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes', 1);
 
 
 # Dump of table firewallZones

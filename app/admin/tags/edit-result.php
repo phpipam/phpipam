@@ -44,7 +44,8 @@ $values = array("id"=>@$_POST['id'],
 				"bgcolor"=>@$_POST['bgcolor'],
 				"fgcolor"=>@$_POST['fgcolor'],
 				"showtag"=>@$_POST['showtag'],
-				"compress"=>@$_POST['compress']
+				"compress"=>@$_POST['compress'],
+				"updateTag"=>@$_POST['updateTag']
 				);
 
 # execute
