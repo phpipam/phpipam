@@ -40,8 +40,9 @@ if ($sections!==false) {
 	}
 	print "	<th>"._('Master Subnet')."</th>";
 	print "	<th>"._('Device')."</th>";
+	if($User->settings->enableIPrequests == 1) {
 	print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
-
+	}
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			# hidden?

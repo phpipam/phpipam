@@ -69,7 +69,9 @@ if($permission != 0) {
 		}
 		print "	<th>"._('Master Subnet')."</th>";
 		print "	<th>"._('Device')."</th>";
-		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
+		if($User->settings->enableIPrequests == 1) {
+			print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
+		}
 		if(sizeof($custom) > 0) {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {

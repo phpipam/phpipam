@@ -2993,9 +2993,10 @@ class Subnets extends Common_functions {
 				}
 
 				//requests
-				$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "/";
-				$html[] = "	<td class='hidden-xs hidden-sm'>$requests</td>";
-
+				if($this->settings->enableIPrequests == 1) {
+					$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "/";
+					$html[] = "	<td class='hidden-xs hidden-sm'>$requests</td>";
+				}
 				//custom
 				if(sizeof($custom_fields) > 0) {
 			   		foreach($custom_fields as $field) {
