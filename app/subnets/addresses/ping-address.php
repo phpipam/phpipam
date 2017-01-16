@@ -53,13 +53,15 @@ if($pingRes==0 && is_numeric($_POST['id'])) { @$Ping->ping_update_lastseen($addr
 if ($Ping->settings->updateTags==1 && $Tools->address_types[$address['state']]['updateTag']==1) {
 	// online
 	if ($pingRes==0 && $address['state']!=2) {
-		$Ping->update_address_tag ($address['id'], 2, $address['state'], date("Y-m-d H:i:s"));
-		$tagChange = "Online";
+		if($Ping->update_address_tag ($address['id'], 2, $address['state'], date("Y-m-d H:i:s"))) {
+			$tagChange = "Online";
+		}
 	}
 	// offline
 	elseif( ($pingRes==1 || $pingRes==2) && $address['state']!=1) {
-		$Ping->update_address_tag ($address['id'], 1, $address['state'], $address['lastSeen']);
-		$tagChange = "Offline";
+		if($Ping->update_address_tag ($address['id'], 1, $address['state'], $address['lastSeen'])) {
+			$tagChange = "Offline";
+		}
 	}
 }
 

@@ -581,7 +581,7 @@ class Scan extends Common_functions {
 	 * @param  int $tag_id (default: 2)
 	 * @param  int $old_tag_id (default: null)
 	 * @param  dadtetime $last_seen_date (default: false)
-	 * @return void
+	 * @return bool
 	 */
 	public function update_address_tag ($address_id, $tag_id = 2, $old_tag_id = null, $last_seen_date = false) {
 		if (is_numeric($address_id)) {
@@ -590,10 +590,23 @@ class Scan extends Common_functions {
 				// dont update reserved to offline
 				if (!($tag_id==1 && $old_tag_id==3)) {
 					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
-					catch (Exception $e) {}
+					catch (Exception $e) {
+						return false;
+					}
+				}
+				else {
+					return false;
 				}
 			}
+			else {
+				return false;
+			}
 		}
+		else {
+			return false;
+		}
+		// ok
+		return true;
 	}
 
 	/**
