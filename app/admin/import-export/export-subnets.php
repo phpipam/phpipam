@@ -52,6 +52,7 @@ $custom_fields = $Tools->fetch_custom_fields('subnets');
 $today = date("Ymd");
 $filename = $today."_phpipam_subnets_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //formatting headers
 $format_header =& $workbook->addFormat();
