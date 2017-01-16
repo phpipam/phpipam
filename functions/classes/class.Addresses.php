@@ -1752,7 +1752,7 @@ class Addresses extends Common_functions {
 		if ($ids===false)										{ return false; }
 		// validate
 		foreach ($ids as $id) {
-			if ($this->verify_subnet_id ($id->subnetId)===0) {
+			if ($this->verify_subnet_id ($id->subnetId)===false) {
 				$false[] = $this->fetch_subnet_addresses ($id->subnetId);
 			}
 		}

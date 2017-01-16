@@ -16,6 +16,7 @@ Feature candidates for 1.4:
         #800  Changelog Doesn't Track Changes Made Via API
         #858  swagger for clients/api docs
         #518  use PowerDNS API rather than modifying the backend DB
+        #198  Enhancement: Multiple PowerDNS
         #576  API: Get last_available_address
         #448  API: allow full text search like in frontend
 
