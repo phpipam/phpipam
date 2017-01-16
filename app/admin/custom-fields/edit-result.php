@@ -32,18 +32,18 @@ else {
 	$_POST['name'] = trim($_POST['name']);
 
 	# length > 4 and < 12
-	if( (strlen($_POST['name']) < 2) || (strlen($_POST['name']) > 24) ) 	{ $errors[] = _('Name must be between 4 and 24 characters'); }
+	if( (mb_strlen($_POST['name']) < 2) || (mb_strlen($_POST['name']) > 24) ) 	{ $errors[] = _('Name must be between 4 and 24 characters'); }
 
 	/* validate HTML */
 
 	# must not start with number
-	if(is_numeric(substr($_POST['name'], 0, 1))) 							{ $errors[] = _('Name must not start with number'); }
+	if(is_numeric(substr($_POST['name'], 0, 1))) 								{ $errors[] = _('Name must not start with number'); }
 
 	# only alphanumeric and _ are allowed
-	if(!preg_match('/^[a-zA-Z0-9 \_]+$/i', $_POST['name'])) 				{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
+	if(!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $_POST['name'])) 	{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
 
 	# required must have default value
-	if($_POST['NULL']=="NO" && strlen($_POST['fieldDefault'])==0)			{ $errors[] = _('Required fields must have default values'); }
+	if($_POST['NULL']=="NO" && mb_strlen($_POST['fieldDefault'])==0)			{ $errors[] = _('Required fields must have default values'); }
 
 	# db type validations
 
