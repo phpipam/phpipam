@@ -8,6 +8,7 @@ ini_set('session.cookie_httponly', 1);
 
 /* @debugging functions ------------------- */
 ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 if (!$debugging) { error_reporting(E_ERROR ^ E_WARNING); }
 else			 { error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT); }
 
@@ -47,7 +48,7 @@ require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP q
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
 
 # save settings to constant
-if($_GET['page']!="install" ) {
+if(@$_GET['page']!="install" ) {
 	# database object
 	$Database 	= new Database_PDO;
 	# try to fetch settings
