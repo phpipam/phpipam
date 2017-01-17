@@ -278,11 +278,11 @@ $(document).ready(function(){
 		<td colspan="3"><hr></td>
 	</tr>
 	<tr>
-    	<td><?php print _("VLANs"); ?></td>
+    	<td><?php print _("VLANs / VRFs"); ?></td>
     	<td>
             <input type="checkbox" class="input-switch" value="Yes" name="editVlan" <?php if($user['editVlan'] == "Yes") print 'checked'; ?>>
     	</td>
-		<td class="info2"><?php print _('Select to allow user to manage VLANs'); ?></td>
+		<td class="info2"><?php print _('Select to allow user to manage VLANs and VRFs'); ?></td>
 	</tr>
 
 	<!-- pdns -->
