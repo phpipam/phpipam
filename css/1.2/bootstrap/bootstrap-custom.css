@@ -534,7 +534,7 @@ td.info2 {
 }
 .hero-unit,
 .hero-unit a {
-	font-family: Georgia,Times,'Times New Roman',serif;
+	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
 	font-size: 36px;
 
 	color: white;
