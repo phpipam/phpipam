@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # fetch server
 $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);

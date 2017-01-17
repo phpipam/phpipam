@@ -189,6 +189,11 @@ else {
 	</div>
 </div>
 
+<!-- maintaneance mode -->
+<?php
+$text_append_maint = $User->is_admin(false) ? " <btn class='removeMaintaneance btn btn-xs btn-default'>"._("Remove")."</btn>" : "";
+if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintaneance mode")." !".$text_append_maint, false); }
+?>
 
 <!-- page sections / menu -->
 <div class="content">

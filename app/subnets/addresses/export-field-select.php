@@ -16,6 +16,8 @@ $Tools	    = new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # set and check permissions
 $subnet_permission = $Subnets->check_permission($User->user, $_POST['subnetId']);

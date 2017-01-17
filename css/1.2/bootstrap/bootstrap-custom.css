@@ -1935,6 +1935,9 @@ td.groups input[type=checkbox] {
 	padding: 0px !important;
 	margin: 0px;
 }
+.nomargin {
+	margin: 0px;
+}
 .noborder input {
 	margin: 0px;
 }

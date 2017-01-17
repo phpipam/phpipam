@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 // checks
 if(!is_numeric($_POST['newDomainId']))			$Result->show("danger", _("Invalid ID"), true);

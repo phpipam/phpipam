@@ -457,6 +457,38 @@ class User extends Common_functions {
         }
     }
 
+    /**
+     * Checks if system is in maintaneance mode and exits if it is
+     *
+     * @method check_maintaneance_mode
+     * @param  bool    $is_popup (default: false)
+     * @return void
+     */
+    public function check_maintaneance_mode ($is_popup = false) {
+        if($this->settings->maintaneanceMode == "1" && $this->user->username!="Admin") {
+            if($is_popup) {
+                $this->Result->show("warning", "<i class='fa fa-info'></i> "._("System is running in maintaneance mode")." !", true, true);
+            }
+            else {
+                $this->Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintaneance mode")." !", true);
+            }
+        }
+    }
+
+    /**
+     * Sets maintaneance mode
+     *
+     * @method set_maintaneance_mode
+     * @param  bool $on (default: false)
+     */
+    public function set_maintaneance_mode ($on = false) {
+        # set mode status
+        $maintaneance_mode = $on ? "1" : "0";
+        # execute
+        try { $this->Database->updateObject("settings", array("id"=>1, "maintaneanceMode"=>$maintaneance_mode), "id"); }
+        catch (Exception $e) {}
+    }
+
 
 
 

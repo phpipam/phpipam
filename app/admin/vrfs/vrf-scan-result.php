@@ -17,6 +17,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # check for number of input values
 $max = ini_get("max_input_vars");

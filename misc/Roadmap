@@ -5,6 +5,7 @@ Feature candidates for 1.4:
         #33   2FA
         #30   DNS Update to Active Directory DNS
         #149  LDAP login requires a local user of same name
+        #442  Efficiency
         #762  Auto Updation to Latest Stable version
         #849  Move to ADLDAP2 as submodule (#791)
               + CSV import tab with fields;
@@ -19,6 +20,7 @@ Feature candidates for 1.4:
         #198  Enhancement: Multiple PowerDNS
         #576  API: Get last_available_address
         #448  API: allow full text search like in frontend
+        #109  IP deletion request for non administrative users
 
     User interface:
         #770  Show usage graph for whole section
@@ -43,6 +45,7 @@ Feature candidates for 1.4:
                 #731  Circuits module
         #696  Password management
         #545  Wirelless LAN list
+        #880  webhooks or similar mechanism to send data to external URL / script
 
 
 

@@ -18,6 +18,9 @@ $User->check_user_session();
 # admin user is required
 $User->is_admin(true);
 
+# set maintaneance mode
+$User->set_maintaneance_mode (true);
+
 # try to upgrade database
 if($Install->upgrade_database()===true) {
 	# print success
@@ -53,6 +56,10 @@ if($Install->upgrade_database()===true) {
 			print '</ul>'. "\n";
 		}
 		print "</div>";
+	}
+	else {
+		# remove maintaneance mode
+		$User->set_maintaneance_mode (false);
 	}
 }
 else {

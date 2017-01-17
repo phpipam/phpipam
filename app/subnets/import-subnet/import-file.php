@@ -17,6 +17,8 @@ $Result 	= new Result;
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # permissions
 $permission = $Subnets->check_permission ($User->user, $_POST['subnetId']);

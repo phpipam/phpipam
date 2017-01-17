@@ -738,3 +738,14 @@ UPDATE `ipTags` set `updateTag`=1 where `id`=3;
 UPDATE `ipTags` set `updateTag`=1 where `id`=4;
 
 
+
+/* VERSION 1.29 */
+UPDATE `settings` set `version` = '1.29';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Add maintaneanceMode identifier */
+ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';
+

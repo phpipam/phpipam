@@ -176,6 +176,7 @@ CREATE TABLE `settings` (
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
   `updateTags` TINYINT(1)  NULL  DEFAULT '0',
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
+  `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
@@ -761,4 +762,4 @@ CREATE TABLE `pstnNumbers` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.27';
+UPDATE `settings` set `version` = '1.29';

@@ -1,4 +1,4 @@
-== 1.28.001
+== 1.29.001
 
     New features:
     ------------
@@ -85,6 +85,7 @@
     + Added option to only show supernets to limit pageload [#844 #816 #736];
     + Added last scan info to subnet details;
     + Added option to update address tags when address state change occurs (pingCheck) [#840];
+    + Added mantaneance mode;
 
     Bugfixes:
     ----------------------------
@@ -94,6 +95,7 @@
     + Changed default timestamp from 0000-00-00 00:00:00 to 1970-01-01 00:00:01 to avoid SQL install errors if strict mode;
     + Fixed https access on non-standard ports;
     + Extended username to 255 chars for LDAP logins;
+    + Fixed search export invalid encoding and data may have been lost XLS file error;
 
 == 1.20.1
 

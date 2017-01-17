@@ -19,6 +19,8 @@ $PowerDNS 	= new PowerDNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
