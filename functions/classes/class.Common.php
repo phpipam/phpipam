@@ -354,7 +354,7 @@ class Common_functions  {
 				# save
 				if ($settings!==false)	 {
 					$this->settings = $settings;
-					define(SETTINGS, json_encode($settings));
+					define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
 				}
 			}
 		}
@@ -702,12 +702,6 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function shorten_text($text, $chars = 25) {
-		// define function
-		if(!function_exists('mb_strlen')) {
-			function mb_strlen ($str) {
-				return strlen($str);
-			}
-		}
 		//count input text size
 		$startLen = mb_strlen($text);
 		//cut onwanted chars

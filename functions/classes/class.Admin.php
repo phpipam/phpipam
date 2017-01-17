@@ -735,7 +735,7 @@ class Admin extends Common_functions {
 		else							{ $hidden_array[$table]=$filtered_fields; }
 
 		# encode to json
-		$hidden_json = json_encode($hidden_array);
+		$hidden_json = json_encode($hidden_array, JSON_UNESCAPED_UNICODE);
 
 		# update database
 	    try { $this->object_edit ("settings", $key="id", array("id"=>1,"hiddenCustomFields"=>$hidden_json)); }

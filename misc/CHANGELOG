@@ -1,4 +1,4 @@
-== 1.29.001
+== 1.29.010
 
     New features:
     ------------
@@ -96,6 +96,7 @@
     + Fixed https access on non-standard ports;
     + Extended username to 255 chars for LDAP logins;
     + Fixed search export invalid encoding and data may have been lost XLS file error;
+    + Fixed invalid character encoding in API responses;
 
 == 1.20.1
 
