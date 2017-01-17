@@ -2623,25 +2623,19 @@ table.popover_table td {
     border: none !important;
 }
 
-
-
-.btn-group {
+.btn-group.nowrap {
     white-space: nowrap; // prevent buttons from wrapping when in tight spaces (e.g., the table on the tests page)
     > .btn {
-        float: inherit;
-    }
-    > a {
         float: inherit;
     }
     > .btn + .btn {
         margin-left: -4px;
     }
 }
-
-.btn-group .btn,
-.btn-group a {
+.btn-group.nowrap .btn,
+.btn-group.nowrap a {
     float: inherit;
 }
-.btn-group .btn + .btn  {
+.btn-group.nowrap .btn + .btn  {
         margin-left: -4px;
 }
