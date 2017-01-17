@@ -22,12 +22,14 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_template_". date("Y-m-d") .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //get all custom fields!
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
+$worksheet->setInputEncoding("utf-8");
 
 $lineCount = 1;
 
