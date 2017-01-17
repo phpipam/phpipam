@@ -172,7 +172,7 @@ CREATE TABLE `settings` (
   `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
   `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
-  `hiddenCustomFields` VARCHAR(1024)  NULL  DEFAULT NULL,
+  `hiddenCustomFields` text NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
   `updateTags` TINYINT(1)  NULL  DEFAULT '0',
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
