@@ -467,10 +467,10 @@ class User extends Common_functions {
     public function check_maintaneance_mode ($is_popup = false) {
         if($this->settings->maintaneanceMode == "1" && $this->user->username!="Admin") {
             if($is_popup) {
-                $this->Result->show("warning", "<i class='fa fa-info'></i> "._("System is running in maintaneance mode")." !", true, true);
+                $this->Result->show("warning", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !", true, true);
             }
             else {
-                $this->Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintaneance mode")." !", true);
+                $this->Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !", true);
             }
         }
     }

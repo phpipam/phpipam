@@ -149,12 +149,12 @@ $(document).ready(function() {
 
 <!-- maintaneanceMode -->
 <tr>
-	<td class="title"><?php print _('Maintaneance mode'); ?></td>
+	<td class="title"><?php print _('Maintenance mode'); ?></td>
 	<td>
 		<input type="checkbox" class="input-switch" value="1" name="maintaneanceMode" <?php if($settings['maintaneanceMode'] == 1) print 'checked'; ?>>
 	</td>
 	<td class="info2">
-		<?php print _('Put phpipam to maintaneance mode'); ?>
+		<?php print _('Put phpipam to maintenance mode'); ?>
 	</td>
 </tr>
 

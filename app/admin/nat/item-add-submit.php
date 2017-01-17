@@ -18,11 +18,8 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-
 # check maintaneance mode
-if($User->settings->maintaneanceMode == "1" && $User->user->username!="Admin") {
-    $Result->show("warning text-center nomargin", _("System is running in maintaneance mode")." !", true);
-}
+$User->check_maintaneance_mode ();
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
