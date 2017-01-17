@@ -1,5 +1,11 @@
 <?php
 
+/* Global configuration
+******************************/
+$config['discovery_check_send_mail'] = true # true/false, send or not mail on discovery check
+$config['ping_check_send_mail'] = true # true/false, send or not mail on ping check
+
+
 /* database connection details
  ******************************/
 $db['host'] = "localhost";
