@@ -748,4 +748,6 @@ UPDATE `settings` set `donate` = 0;
 
 /* Add maintaneanceMode identifier */
 ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';
+/* extend pingStatus intervals */
+ALTER TABLE `settings` CHANGE `pingStatus` `pingStatus` VARCHAR(32)  CHARACTER SET utf8  NOT NULL  DEFAULT '1800;3600';
 

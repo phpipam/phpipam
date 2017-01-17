@@ -295,7 +295,7 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
 
 // remove maintaneance mode
 $('.removeMaintaneance').click(function() {
-    open_popup ("400", "app/admin/settings/remove-popup.php", "", false);
+    open_popup ("400", "app/admin/settings/remove-maintaneance.php", "", false);
 })
 
 
