@@ -302,7 +302,7 @@ class User extends Common_functions {
         // not for api
         if ($this->api !== true) {
             # update user object
-            $this->fetch_user_details ($this->username);
+            $this->fetch_user_details ($this->username, true);
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
         }
     }
@@ -901,11 +901,12 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $username
+     * @param bool $force
      * @return void
      */
-    private function fetch_user_details ($username) {
+    private function fetch_user_details ($username, $force = false) {
         # only if not already active
-        if(!is_object($this->user)) {
+        if(!is_object($this->user) || $force) {
             try { $user = $this->Database->findObject("users", "username", $username); }
             catch (Exception $e)     { $this->Result->show("danger", _("Error: ").$e->getMessage(), true);}
 
