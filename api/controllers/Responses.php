@@ -315,7 +315,7 @@ class Responses {
 		$this->result = $this->object_to_array($this->result);
 
 		// new SimpleXMLElement object
-		$xml = new SimpleXMLElement('<'.$_GET['controller'].'/>');
+		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><'.$_GET['controller'].'/>');
 		// generate xml from result
 		$this->array_to_xml($xml, $this->result);
 
