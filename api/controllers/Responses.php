@@ -214,7 +214,7 @@ class Responses {
 	 */
 	private function set_content_type_header () {
 		// content_type
-		$this->result_type == "xml" ? header('Content-Type: application/xml') : header('Content-Type: application/json');
+		$this->result_type == "xml" ? header('Content-Type: application/xml; charset=utf-8') : header('Content-Type: application/json; charset=utf-8');
 	}
 
 	/**
@@ -401,7 +401,7 @@ class Responses {
 	 * @return void
 	 */
 	private function create_json () {
-		return json_encode((array) $this->result);
+		return json_encode((array) $this->result, JSON_UNESCAPED_UNICODE);
 	}
 
 

@@ -27,4 +27,3 @@ if (!is_numeric($_GET['deviceId']))   { die(); }
 
 # draw
 $Racks->draw_rack ($_GET['rackId'],$_GET['deviceId']);
-?>
