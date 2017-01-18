@@ -1204,8 +1204,14 @@ class PowerDNS extends Common_functions {
         // certain record types allow forbidden characters in record name
         // when using reserved words
         if ($type == "TXT") {
-           if (preg_match("/^_dmarc.*$/", $name)) { return $name; }
-           if (preg_match("/^.*_domainkey.*$/", $name)) { return $name; }
+            if (preg_match("/^_dmarc.*$/", $name)
+                && preg_match("/^.{1,253}$/", $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label) 
+            { return $name; }
+            if (preg_match("/^.*_domainkey.*$/", $name)
+                && preg_match("/^.{1,253}$/", $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
+            { return $name; }
         }
 
         // for all other record types null is ok, otherwise URI is required
