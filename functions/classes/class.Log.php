@@ -201,7 +201,8 @@ class Logging extends Common_functions {
                         "state" => "Address state index",
                         "NAT" => "NAT object index",
                         "threshold" => "Sunbet usage alert threshold",
-                        "linked_subnet" => "Linked IPv6 subnet"
+                        "linked_subnet" => "Linked IPv6 subnet",
+                        "location" => "Subnet location"
     	            ),
         "address" => array(
                         "id" => "Address id",
@@ -222,7 +223,8 @@ class Logging extends Common_functions {
                         "PTR" => "PTR object index",
                         "NAT" => "NAT object index",
                         "firewallAddressObject" => "Firewall object index",
-                        "is_gateway" => "Address is subnet gateway"
+                        "is_gateway" => "Address is subnet gateway",
+                        "location" => "Address location"
                     )
 	);
 
@@ -728,10 +730,10 @@ class Logging extends Common_functions {
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
-		    $this->Addresses = new Addresses ($this->Database);
-		    $this->Subnets 		= new Subnets ($this->Database);
-		    $this->Sections = new Sections ($this->Database);
-		    $this->Tools	 = new Tools ($this->Database);
+			$this->Addresses = new Addresses ($this->Database);
+			$this->Subnets   = new Subnets ($this->Database);
+			$this->Sections  = new Sections ($this->Database);
+			$this->Tools     = new Tools ($this->Database);
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
@@ -829,7 +831,7 @@ class Logging extends Common_functions {
 			return false;
 		}
 		# mail
-		if ($this->mail_changelog)
+		if ($this->mail_changelog && sizeof($changelog)>0)
 		$this->changelog_send_mail ($changelog);
 		# ok
 		return true;
@@ -894,6 +896,8 @@ class Logging extends Common_functions {
 				elseif($k == 'vlanId') 			{ $v = $this->changelog_format_vlan_diff ($k, $v); }
 				//vrf
 				elseif($k == 'vrfId') 			{ $v = $this->changelog_format_vrf_diff ($k, $v); }
+				//location
+				elseif($k == 'location') 	    { $v = $this->changelog_format_location_diff ($k, $v); }
 				//master section change
 				elseif($k == 'masterSection') 	{ $v = $this->changelog_format_master_section_diff ($k, $v); }
 				//permission change
@@ -957,7 +961,6 @@ class Logging extends Common_functions {
 					$this->object_new['vrfIdOld'],
 					$this->object_new['permissions'],
 					$this->object_new['state'],
-					$this->object_new['sectionId'],
 					$this->object_new['ip']
 				);
 			unset(	$this->object_old['subnetId'],
@@ -965,15 +968,12 @@ class Logging extends Common_functions {
 					$this->object_old['vrfIdOld'],
 					$this->object_old['permissions'],
 					$this->object_old['state'],
-					$this->object_old['sectionId'],
 					$this->object_old['ip']
 				);
 
 			# if section does not change
 			if($this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
-				unset(	$this->object_new['sectionIdNew'],
-						$this->object_new['sectionId'],
-						$this->object_old['sectionId']);
+				unset(	$this->object_new['sectionIdNew']);
 			}
 			else {
 				$this->object_old['sectionIdNew'] = $this->object_old['sectionId'];
@@ -1146,6 +1146,35 @@ class Logging extends Common_functions {
 		elseif($v != "NULL") {
 			$vrf = $this->Tools->fetch_object("vrf", "vrfId", $v);
 			$v = $vrf->name." [$vrf->description]";
+		}
+		//result
+		return $v;
+	}
+
+	/**
+	 * Format location change
+	 *
+	 * @access private
+	 * @param string $k
+	 * @param mixed $v
+	 * @return void
+	 */
+	private function changelog_format_location_diff ($k, $v) {
+		//old none
+		if($this->object_old[$k] == 0)	{
+			$this->object_old[$k] = "None";
+		}
+		elseif($this->object_old[$k] != "NULL") {
+			$location = $this->Tools->fetch_object("locations", "id", $this->object_old[$k]);
+			$this->object_old[$k] = $location->name." [$location->description]";
+		}
+		// new none
+		if($v == 0)	{
+			$v = "None";
+		}
+		elseif($v != "NULL") {
+			$location = $this->Tools->fetch_object("locations", "id", $v);
+			$v = $location->name." [$location->description]";
 		}
 		//result
 		return $v;
@@ -1334,6 +1363,42 @@ class Logging extends Common_functions {
 	    # fetch
 	    try { $logs = $this->Database->getObjectsQuery($query, array("expr"=>$expr)); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+
+	    # return results
+	    return $logs;
+	}
+
+	/**
+	 * fetches all changelogs
+	 *
+	 * @access public
+	 * @param int $id
+	 * @return void
+	 */
+	public function fetch_changelog ($id) {
+    	# limit check
+    	if(!is_numeric($id))        { $this->Result->show("danger", "Invalid ID", true);	return false; }
+
+	    # set query
+	    $query = "select * from (
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
+					from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
+					where `c`.`cid` = :id and `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
+					union all
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
+					from `changelog` as `c`, `users` as `u`,`subnets` as `su`
+					where `c`.`cid` = :id and `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
+					union all
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`su`.`id` as `tid`,`u`.`id` as `userid`,'empty',`su`.`description` as `sDescription`
+					from `changelog` as `c`, `users` as `u`,`sections` as `su`
+					where `c`.`cid` = :id and `c`.`ctype` = 'section' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
+				) as `ips`  order by `cid` desc limit 1;";
+	    # fetch
+	    try { $logs = $this->Database->getObjectQuery($query, array("id"=>$id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), false);
+			return false;
+		}
 
 	    # return results
 	    return $logs;
@@ -1540,6 +1605,11 @@ class Logging extends Common_functions {
 		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$obj_details['subnetId'],"address-details",$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['dns_name'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="address range")	{ $details = $changelog; }
 
+		# remove subnet sectionId
+		if($this->object_type=="subnet" && $this->object_action == "edit") {
+			unset($obj_details['sectionId']);
+		}
+
 		# set content
 		$content = array();
 		$content[] = "<div style='padding:10px;'>";
@@ -1558,6 +1628,7 @@ class Logging extends Common_functions {
 		$changelog = str_replace("\r\n", "<br>",$changelog);
 		$changelog = array_filter(explode("<br>", $changelog));
 		$content[] = "<table>";
+
 		foreach ($changelog as $c) {
     		// field
     		$field = explode(":", $c);
@@ -1568,6 +1639,9 @@ class Logging extends Common_functions {
     	    if(is_array($this->changelog_keys[$this->object_type])) {
         	    if (array_key_exists($field, $this->changelog_keys[$this->object_type])) {
             	    $field = $this->changelog_keys[$this->object_type][$field];
+        	    }
+        	    else {
+        	    	$field = $field;
         	    }
     	    }
     	    else {

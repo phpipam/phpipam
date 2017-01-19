@@ -1425,6 +1425,10 @@ $('.log-tabs li a').click(function() {
 	$('div.'+$(this).attr("data-target")).show();	return false;
 });
 
+// show changelog details popup
+$(document).on("click", ".openChangelogDetail", function() {
+    open_popup("700", "app/tools/changelog/show-popup.php", {cid:$(this).attr('data-cid')})
+})
 
 
 /*    Sections

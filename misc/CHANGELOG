@@ -1,4 +1,4 @@
-== 1.29.010
+== 1.29.011
 
     New features:
     ------------
@@ -97,6 +97,7 @@
     + Extended username to 255 chars for LDAP logins;
     + Fixed search export invalid encoding and data may have been lost XLS file error;
     + Fixed invalid character encoding in API responses;
+    + PowerDNS records cannot be created on slave zone;
 
 == 1.20.1
 
