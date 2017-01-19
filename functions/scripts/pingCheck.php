@@ -29,7 +29,6 @@
  *
  */
 
-
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
