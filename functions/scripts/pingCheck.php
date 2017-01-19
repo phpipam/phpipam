@@ -29,6 +29,9 @@
  *
  */
 
+/* config */
+require( dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php' );
+include( dirname(__FILE__) . DIRECTORY_SEPARATOR . 'config.php');
 
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
