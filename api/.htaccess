@@ -1,4 +1,18 @@
 RewriteEngine On
+Options +FollowSymLinks
+
+# redirect errors
+ErrorDocument 400 '{"code":409,"success":0,"message":"Bad Request"}'
+ErrorDocument 401 '{"code":401,"success":0,"message":"Unauthorized"}'
+ErrorDocument 403 '{"code":403,"success":0,"message":"Forbidden"}'
+ErrorDocument 404 '{"code":404,"success":0,"message":"Invalid URL"}'
+ErrorDocument 405 '{"code":404,"success":0,"message":"Method Not Allowed"}'
+ErrorDocument 500 '{"code":500,"success":0,"message":"Internal server error"}'
+ErrorDocument 501 '{"code":501,"success":0,"message":"Not Implemented"}'
+ErrorDocument 503 '{"code":503,"success":0,"message":"Service Unavailable"}'
+ErrorDocument 505 '{"code":505,"success":0,"message":"HTTP Version Not Supported"}'
+ErrorDocument 511 '{"code":511,"success":0,"message":"Network Authentication Required"}'
+
 # exceptions
 RewriteRule ^(.*)/addresses/search_hostname/(.*)/$ ?app_id=$1&controller=addresses&id=search_hostname&id2=$2 [L,QSA]
 RewriteRule ^(.*)/prefix/external_id/(.*)/$ ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
