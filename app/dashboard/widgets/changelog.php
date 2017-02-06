@@ -144,7 +144,7 @@ else {
 					print "	<td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
 				}
 				print "	<td>$l[cdate]</td>";
-				print "	<td class='hidden-xs'>".implode("<br>",$diff)."</td>";
+				print "	<td class='hidden-xs'><btn class='btn btn-xs btn-default openChangelogDetail' data-cid='$l[cid]' rel='tooltip' data-html='true' title='".implode("<br>",$diff)."'>View</a></td>";
 				print "</tr>";
 
 				// next item

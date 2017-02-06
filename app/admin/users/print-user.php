@@ -60,7 +60,7 @@ $custom_fields = $Tools->fetch_custom_fields('users');
     <?php
     $user->editVlan = $user->editVlan=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
     ?>
-	<td><?php print _('Manage VLANs'); ?></td>
+	<td><?php print _('Manage VLANs / VRFs'); ?></td>
 	<td><?php print $user->editVlan; ?></td>
 </tr>
 <?php if ($User->settings->enablePSTN==1) { ?>

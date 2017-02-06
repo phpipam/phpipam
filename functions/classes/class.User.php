@@ -302,7 +302,7 @@ class User extends Common_functions {
         // not for api
         if ($this->api !== true) {
             # update user object
-            $this->fetch_user_details ($this->username);
+            $this->fetch_user_details ($this->username, true);
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
         }
     }
@@ -455,6 +455,38 @@ class User extends Common_functions {
             bindtextdomain("phpipam", "./functions/locale");    // Specify location of translation tables
             textdomain("phpipam");                                // Choose domain
         }
+    }
+
+    /**
+     * Checks if system is in maintaneance mode and exits if it is
+     *
+     * @method check_maintaneance_mode
+     * @param  bool    $is_popup (default: false)
+     * @return void
+     */
+    public function check_maintaneance_mode ($is_popup = false) {
+        if($this->settings->maintaneanceMode == "1" && $this->user->username!="Admin") {
+            if($is_popup) {
+                $this->Result->show("warning", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !", true, true);
+            }
+            else {
+                $this->Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !", true);
+            }
+        }
+    }
+
+    /**
+     * Sets maintaneance mode
+     *
+     * @method set_maintaneance_mode
+     * @param  bool $on (default: false)
+     */
+    public function set_maintaneance_mode ($on = false) {
+        # set mode status
+        $maintaneance_mode = $on ? "1" : "0";
+        # execute
+        try { $this->Database->updateObject("settings", array("id"=>1, "maintaneanceMode"=>$maintaneance_mode), "id"); }
+        catch (Exception $e) {}
     }
 
 
@@ -869,11 +901,12 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $username
+     * @param bool $force
      * @return void
      */
-    private function fetch_user_details ($username) {
+    private function fetch_user_details ($username, $force = false) {
         # only if not already active
-        if(!is_object($this->user)) {
+        if(!is_object($this->user) || $force) {
             try { $user = $this->Database->findObject("users", "username", $username); }
             catch (Exception $e)     { $this->Result->show("danger", _("Error: ").$e->getMessage(), true);}
 
@@ -977,8 +1010,8 @@ class User extends Common_functions {
             $this->Log->write( "User login", "Invalid username or password", 2, $username );
 
             # apache
-            if (!empty($_SERVER['PHP_AUTH_USER'])) { $this->show_http_login(); }
-            else                                 { $this->Result->show("danger", _("Invalid username or password"), true); }
+            if (!empty($_SERVER['PHP_AUTH_USER']) && $this->api!==true) { $this->show_http_login(); }
+            else                                                        { $this->Result->show("danger", _("Invalid username or password"), true); }
         }
     }
 
@@ -1557,6 +1590,57 @@ class User extends Common_functions {
         try { $this->Database->deleteRow("loginAttempts", "ip", $this->ip); }
         catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
     }
+
+
+
+	/* @users and groups -------------------- */
+
+    /**
+     * From json {"2":"2","3":"1"}, get user list + perm
+     *
+     * @method get_user_permissions_from_json
+     * @param  json     $json
+     * @return array
+     */
+    public function get_user_permissions_from_json ($json) {
+        $groups = array();
+        foreach((array) json_decode($json, true) as $group_id => $perm) {
+            $group_details = $this->groups_parse (array($group_id));
+
+            $tmp = array();
+            $tmp['group_id'] = $group_id;
+            $tmp['permission'] = $perm;
+            $tmp['name'] = $group_details[$group_id]['g_name'];
+            $tmp['desc'] = $group_details[$group_id]['g_desc'];
+            $tmp['members'] = $group_details[$group_id]['members'];
+
+            $groups[] = $tmp;
+        }
+        return $groups;
+    }
+
+	/**
+	 * Parse user groups
+	 *
+	 *	input:  array of group ids
+	 *	output: array of groups ( "id"=>array($group) )
+	 *
+     * @method groups_parse
+	 * @param array  $group_ids
+	 * @return array
+	 */
+	private function groups_parse ($group_ids) {
+		if(sizeof($group_ids)>0) {
+	    	foreach($group_ids as $g_id) {
+	    		// group details
+	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
+	    		$out[$group->g_id] = (array) $group;
+	    		$out[$group->g_id]['members'] = $this->fetch_multiple_objects("users", "groups", "%\"$g_id\"%", "real_name", true, true, array("username"));
+	    	}
+	    }
+	    # return array of groups
+	    return isset($out) ? $out : array();
+	}
 }
 
 ?>

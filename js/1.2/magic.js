@@ -91,12 +91,10 @@ function hideError() {
 }
 //hide error popup
 $(document).on("click", "#hideError", function() {
-	hideError();
-	return false;
+	hideError();	return false;
 });
 //disabled links
-$('.disabled a').click(function() {
-	return false;
+$('.disabled a').click(function() {	return false;
 });
 
 /* tooltip hiding fix */
@@ -267,9 +265,7 @@ $(document).on('click','.add-new-widget',function() {
 	    $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //remove item
 $(document).on('click', "i.remove-widget", function() {
@@ -291,15 +287,16 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
 		$("#"+wid+' .hContent').html('<blockquote style="margin-top:20px;margin-left:20px;">File not found!</blockquote>');
 	});
 	//remove item
-	$(this).parent().fadeOut('fast');
-
-	return false;
+	$(this).parent().fadeOut('fast');	return false;
 });
 
 
 
 
-
+// remove maintaneance mode
+$('.removeMaintaneance').click(function() {
+    open_popup ("400", "app/admin/settings/remove-maintaneance.php", "", false);
+})
 
 
 
@@ -486,8 +483,7 @@ $(document).on("click", ".ping_ipaddress", function() {
         $('#popupOverlay2 div.popup_w400').html(data);
         showPopup('popup_w400', false, true);
 		hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -562,8 +558,7 @@ $('a.scan_subnet').click(function() {
         $('#popupOverlay div.popup_wmasks').html(data);
         showPopup('popup_wmasks');
 		hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //show telnet port
 $(document).on('change', "table.table-scan select#type", function() {
@@ -590,8 +585,7 @@ $(document).on('click','#subnetScanSubmit', function() {
 	$.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port}, function(data) {
         $('#subnetScanResult').html(data).slideDown('fast');
 		hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //remove result
 $(document).on('click', '.resultRemove', function() {
@@ -608,9 +602,7 @@ $(document).on('click', '.resultRemove', function() {
 	}
     // get target
 	var target = $(this).attr('data-target');
-	$('tr.'+target).remove();
-
-	return false;
+	$('tr.'+target).remove();	return false;
 });
 //submit scanning result
 $(document).on('click', 'a#saveScanResults', function() {
@@ -624,8 +616,7 @@ $(document).on('click', 'a#saveScanResults', function() {
         //hide if success!
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -680,16 +671,12 @@ $(document).on("click", "input#csvImportYes", function() {
 $(document).on("click", "#csvtemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/subnets/import-subnet/import-template.php'></iframe></div>");
-
-
 	return false;
 });
 //download vrf template
 $(document).on("click", "#vrftemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vrf'></iframe></div>");
-
-
 	return false;
 });
 
@@ -697,8 +684,6 @@ $(document).on("click", "#vrftemplate", function() {
 $(document).on("click", "#vlanstemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlans'></iframe></div>");
-
-
 	return false;
 });
 
@@ -707,8 +692,6 @@ $(document).on("click", "#vlanstemplate", function() {
 $(document).on("click", "#vlandomaintemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlandomain'></iframe></div>");
-
-
 	return false;
 });
 
@@ -717,8 +700,6 @@ $(document).on("click", "#vlandomaintemplate", function() {
 $(document).on("click", "#subnetstemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=subnets'></iframe></div>");
-
-
 	return false;
 });
 
@@ -727,8 +708,6 @@ $(document).on("click", "#subnetstemplate", function() {
 $(document).on("click", "#ipaddrtemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=ipaddr'></iframe></div>");
-
-
 	return false;
 });
 
@@ -736,10 +715,7 @@ $(document).on("click", "#ipaddrtemplate", function() {
 //download device template
 $(document).on("click", "#devicestemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");
-
-
-	return false;
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devices'></iframe></div>");	return false;
 });
 
 
@@ -747,8 +723,6 @@ $(document).on("click", "#devicestemplate", function() {
 $(document).on("click", "#devicetypestemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devicetypes'></iframe></div>");
-
-
 	return false;
 });
 
@@ -816,8 +790,7 @@ $(document).on('click', 'a.editFavourite', function() {
 	        showPopup('popup_w500');
 	        hideSpinner();
 		}
-	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -1032,8 +1005,7 @@ $('form#changePassRequiredForm').submit(function() {
 });
 // show subnet masks popup
 $(document).on("click", '.show-masks', function() {
-	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')}, true);
-	return false;
+	open_popup("masks", "app/tools/subnet-masks/popup.php", {closeClass:$(this).attr('data-closeClass')}, true);	return false;
 });
 
 
@@ -1201,9 +1173,7 @@ $(document).on("click", ".userselect", function() {
 			}
 		});
 	}
-	hidePopup2();
-
-	return false;
+	hidePopup2();	return false;
 });
 
 
@@ -1239,8 +1209,7 @@ $(document).on("click", ".groupselect", function() {
 	$.post('app/admin/groups/edit-group-result.php', {action:"add", g_name:gname, g_desc:gdescription, gmembers:gmembers, csrf_cookie:csrf_cookie}, function(data) {
 		$('div.adgroup-'+gid).html(data)
 		hideSpinner();
-	});
-	return false;
+	});	return false;
 });
 //open form
 $('.editGroup').click(function () {
@@ -1276,8 +1245,7 @@ $('.addToGroup').click(function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //add users to group
 $(document).on("click", "#groupAddUsersSubmit", function() {
@@ -1288,8 +1256,7 @@ $(document).on("click", "#groupAddUsersSubmit", function() {
         $('div.groupAddUsersResult').html(data).show();
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //remove users frmo group - show form
 $('.removeFromGroup').click(function() {
@@ -1300,8 +1267,7 @@ $('.removeFromGroup').click(function() {
         $('#popupOverlay div.popup_w700').html(data);
         showPopup('popup_w700');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //add users to group
 $(document).on("click", "#groupRemoveUsersSubmit", function() {
@@ -1312,8 +1278,7 @@ $(document).on("click", "#groupRemoveUsersSubmit", function() {
         $('div.groupRemoveUsersResult').html(data).show();
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -1457,11 +1422,13 @@ $('.log-tabs li a').click(function() {
 	$(this).parent('li').addClass("active");
 	// load
 	$('div.log-print').hide();
-	$('div.'+$(this).attr("data-target")).show();
-
-	return false;
+	$('div.'+$(this).attr("data-target")).show();	return false;
 });
 
+// show changelog details popup
+$(document).on("click", ".openChangelogDetail", function() {
+    open_popup("700", "app/tools/changelog/show-popup.php", {cid:$(this).attr('data-cid')})
+})
 
 
 /*    Sections
@@ -1501,8 +1468,7 @@ $('button.sectionOrder').click(function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //section ordering save
 $(document).on("click", "#sectionOrderSubmit", function() {
@@ -1520,8 +1486,7 @@ $(document).on("click", "#sectionOrderSubmit", function() {
         //reload after 2 seconds if succeeded!
         reload_window (data);
 
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -1594,17 +1559,14 @@ $(document).on("click", "#editDomainSubmit", function() {
 
 // refresh subnet PTR records
 $('.refreshPTRsubnet').click(function() {
-	open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );
-	return false;
+	open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );	return false;
 });
 $(document).on("click", ".refreshPTRsubnetSubmit", function() {
-	submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );
-	return false;
+	submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );	return false;
 });
 //edit record
 $(".editRecord").click(function() {
-	open_popup("700", "app/admin/powerDNS/record-edit.php", {id:$(this).attr('data-id'),domain_id:$(this).attr('data-domain_id'), action:$(this).attr('data-action')} );
-	return false;
+	open_popup("700", "app/admin/powerDNS/record-edit.php", {id:$(this).attr('data-id'),domain_id:$(this).attr('data-domain_id'), action:$(this).attr('data-action')} );	return false;
 });
 $(document).on("click", "#editRecordSubmit", function() {
     submit_popup_data (".record-edit-result", "app/admin/powerDNS/record-edit-result.php", $('form#recordEdit').serialize());
@@ -1853,8 +1815,7 @@ $(document).on("click", "#resize, #split, #truncate", function() {
     $.post("app/admin/subnets/"+action+".php", {action:action, subnetId:subnetId}, function(data) {
         showPopup('popup_w500', data, true);
         hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //resize save
 $(document).on("click", "button#subnetResizeSubmit", function() {
@@ -1864,8 +1825,7 @@ $(document).on("click", "button#subnetResizeSubmit", function() {
 		$('div.subnetResizeResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //split save
 $(document).on("click", "button#subnetSplitSubmit", function() {
@@ -1875,8 +1835,7 @@ $(document).on("click", "button#subnetSplitSubmit", function() {
 		$('div.subnetSplitResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //truncate save
 $(document).on("click", "button#subnetTruncateSubmit", function() {
@@ -1887,11 +1846,9 @@ $(document).on("click", "button#subnetTruncateSubmit", function() {
 		$('div.subnetTruncateResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
-$(document).on("submit", "#editSubnetDetails", function() {
-	return false;
+$(document).on("submit", "#editSubnetDetails", function() {	return false;
 });
 //save edit subnet changes
 $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function() {
@@ -1975,8 +1932,7 @@ $(document).on("click", "#get-ripe", function() {
 	$.post("app/admin/subnets/ripe-query.php", {subnet: subnet}, function(data) {
         showPopup('popup_w500', data, true);
 		hideSpinner();
-	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 // fill ripe fields
 $(document).on('click', "#ripeMatchSubmit", function() {
@@ -2006,8 +1962,7 @@ $('.showSubnetPerm').click(function() {
         $('#popupOverlay div.popup_w500').html(data);
         showPopup('popup_w500');
 		hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //submit permission change
 $(document).on("click", ".editSubnetPermissionsSubmit", function() {
@@ -2017,8 +1972,7 @@ $(document).on("click", ".editSubnetPermissionsSubmit", function() {
 		$('.editSubnetPermissionsResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //auto-suggest possible slaves select
 $(document).on("click", ".dropdown-subnets li a", function() {
@@ -2027,8 +1981,7 @@ $(document).on("click", ".dropdown-subnets li a", function() {
 	// fill
 	$(inputfield).val(subnet);
 	// hide
-	$('.dropdown-subnets').parent().removeClass("open");
-	return false;
+	$('.dropdown-subnets').parent().removeClass("open");	return false;
 });
 
 // linked subnets
@@ -2048,8 +2001,7 @@ $(document).on('click', '.linkSubnetSave', function() {
 		$('.linkSubnetSaveResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -2165,9 +2117,7 @@ $('.vlansearchsubmit').click(function() {
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
 	if(prettyLinks=="Yes")	{ setTimeout(function (){window.location = base + "subnets/"+section_id_new+"/"+subnet_id_new+"/";}, 1500); }
-	else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }
-
-	return false;
+	else					{ setTimeout(function (){window.location = base + "?page=subnets&section="+section_id_new+"&subnetId="+subnet_id_new;}, 1500); }	return false;
 });
 
 
@@ -2202,8 +2152,7 @@ $(document).on("click", ".editFolderSubmit", function() {
 		$('.manageFolderEditResult').html("").html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //delete folder
 $(document).on("click", ".editFolderSubmitDelete", function() {
@@ -2219,8 +2168,7 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
 		$('.manageFolderEditResult').html(data);
         //reload after 2 seconds if succeeded!
         reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-	return false;
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 
 
@@ -2245,8 +2193,7 @@ $(document).on("click", "#editSwitchSNMPsubmit", function() {
 });
 //snmp test
 $(document).on("click", "#test-snmp", function() {
-	open_popup ("700", "app/admin/devices/edit-snmp-test.php", $('form#switchSNMPManagementEdit').serialize(), true);
-	return false;
+	open_popup ("700", "app/admin/devices/edit-snmp-test.php", $('form#switchSNMPManagementEdit').serialize(), true);	return false;
 });
 //snmp route query popup
 $(document).on("click", "#snmp-routing", function() {
@@ -2328,8 +2275,7 @@ $(document).on("click", "#editDevTypeSubmit", function() {
 /* ---- RACKS ----- */
 //load edit form
 $(document).on("click", ".editRack", function() {
-	open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );
-	return false;
+	open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );	return false;
 });
 //submit form
 $(document).on("click", "#editRacksubmit", function() {
@@ -2337,8 +2283,7 @@ $(document).on("click", "#editRacksubmit", function() {
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
-	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );
-	return false;
+	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
 });
 //submit edit rack devices form
 $(document).on("click", "#editRackDevicesubmit", function() {
@@ -2346,8 +2291,7 @@ $(document).on("click", "#editRackDevicesubmit", function() {
 });
 //show popup image
 $(document).on("click", ".showRackPopup", function() {
-	open_popup("400", "app/tools/racks/show-rack-popup.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid')}, true );
-	return false;
+	open_popup("400", "app/tools/racks/show-rack-popup.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid')}, true );	return false;
 });
 
 
@@ -2546,8 +2490,7 @@ $(document).on("click", "#add_nameserver", function() {
 	num++;
 	$(this).attr("data-id", num);
 
-	hideSpinner();
-	return false;
+	hideSpinner();	return false;
 });
 // remove
 $(document).on("click", "#remove_nameserver", function() {
@@ -2558,8 +2501,7 @@ $(document).on("click", "#remove_nameserver", function() {
 	var el = document.getElementById(id);
 	el.parentNode.removeChild(el);
 
-	hideSpinner();
-	return false;
+	hideSpinner();	return false;
 });
 //submit form
 $(document).on("click", "#editNameservers", function() {
@@ -2585,8 +2527,7 @@ $(document).on("click", "button.manageRequest", function() {
 /* ---- Share subnet ----- */
 //load edit form
 $('.shareTemp').click(function() {
-	open_popup("700", "app/tools/temp-shares/edit.php", {type:$(this).attr('data-type'), id:$(this).attr('data-id')} );
-	return false;
+	open_popup("700", "app/tools/temp-shares/edit.php", {type:$(this).attr('data-type'), id:$(this).attr('data-id')} );	return false;
 });
 //submit form
 $(document).on("click", "#shareTempSubmit", function() {

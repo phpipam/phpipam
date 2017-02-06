@@ -17,7 +17,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 //get size of subnets - $_POST/4
 $size = sizeof($_POST) / 4;

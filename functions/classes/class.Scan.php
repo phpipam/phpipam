@@ -542,6 +542,74 @@ class Scan extends Common_functions {
 	}
 
 	/**
+	 * Updates last time that subnet was scanned
+	 *
+	 * @method update_subnet_scantime
+	 * @param  int $subnet_id
+	 * @param  false|datetime $datetime
+	 * @return void
+	 */
+	public function update_subnet_scantime ($subnet_id, $datetime = false) {
+		// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
+		// update
+		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastScan"=>$datetime), "id"); }
+		catch (Exception $e) {}
+	}
+
+	/**
+	 * Updates last time discovery check was run on subnet
+	 *
+	 * @method update_subnet_discoverytime
+	 * @param  int $subnet_id
+	 * @param  false|datetime $datetime
+	 * @return void
+	 */
+	public function update_subnet_discoverytime ($subnet_id, $datetime = false) {
+		// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
+		// update
+		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastDiscovery"=>$datetime), "id"); }
+		catch (Exception $e) {}
+	}
+
+	/**
+	 * Updates address tag if state changes
+	 *
+	 * @method update_address_tag
+	 * @param  int$address_id
+	 * @param  int $tag_id (default: 2)
+	 * @param  int $old_tag_id (default: null)
+	 * @param  dadtetime $last_seen_date (default: false)
+	 * @return bool
+	 */
+	public function update_address_tag ($address_id, $tag_id = 2, $old_tag_id = null, $last_seen_date = false) {
+		if (is_numeric($address_id)) {
+			// don't update statuses for never seen addresses !
+			if ($last_seen_date!==false && !is_null($last_seen_date) && strlen($last_seen_date)>2 && $last_seen_date!="0000-00-00 00:00:00" && $last_seen_date!="1970-01-01 00:00:01" && $last_seen_date!="1970-01-01 01:00:00") {
+				// dont update reserved to offline
+				if (!($tag_id==1 && $old_tag_id==3)) {
+					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
+					catch (Exception $e) {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+		// ok
+		return true;
+	}
+
+	/**
 	 * Opens socket connection on specified TCP ports, if at least one is available host is alive
 	 *
 	 * @access public

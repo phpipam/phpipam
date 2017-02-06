@@ -10,12 +10,19 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
+
+# make sue user can edit
+if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
+    $Result->show("danger", _("Not allowed to change VRFs"), true, true);
+}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);

@@ -211,6 +211,13 @@ class Net_IPv4
     {
         $myself = new Net_IPv4;
 
+        // ctype fix
+        if(!function_exists('ctype_digit')) {
+            function ctype_digit ($int) {
+                return is_numeric($int);
+            }
+        }
+
         if (strchr($address, "/")) {
             $parts = explode("/", $address);
             if (! $myself->validateIP($parts[0])) {

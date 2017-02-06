@@ -15,11 +15,19 @@ $vrfs = $Tools->fetch_all_objects("vrf", "vrfId");
 # title
 print "<h4>"._('Available VRFs and belonging subnets')."</h4>";
 print "<hr>";
-if($User->is_admin(false)) {
-	print "<a class='btn btn-sm btn-default' href='".create_link("administration","vrfs")."' data-action='add'  data-switchid=''><i class='fa fa-pencil'></i> ". _('Manage')."</a>";
-}
 
+?>
+<div class="btn-group">
+    <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+    <?php
+	if($User->is_admin(false)) {
+		print "<a class='btn btn-sm btn-default' href='".create_link("administration","vrfs")."' data-action='add'  data-switchid=''><i class='fa fa-pencil'></i> ". _('Manage')."</a>";
+	}
+	?>
 
+</div>
+
+<?php
 /* for each VRF check which subnet has it configured */
 if($vrfs===false) {
 	$Result->show("info", _('No VRFs configured'), false);
@@ -52,7 +60,9 @@ else {
             else {
                 foreach ($vrf_sections as $s) {
                     $tmp_section = $Sections->fetch_section(null, $s);
-                    print "<span class='badge badge1'><a href='".create_link("subnets",$tmp_section->id)."'>".$tmp_section->name."</a></span> ";
+                    if($tmp_section!==false) {
+	                    print "<span class='badge badge1'><a href='".create_link("subnets",$tmp_section->id)."'>".$tmp_section->name."</a></span> ";
+    				}
                 }
             }
 	    print " </td>";
@@ -68,7 +78,9 @@ else {
 		print "	<th>"._('Section')."</td>";
 		print "	<th>"._('Subnet')."</td>";
 		print "	<th>"._('Master Subnet')."</td>";
+		if($User->settings->enableIPrequests=="1")
 		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
+		print "	<th></th>";
 		print "</tr>";
 
 		# subnets
@@ -126,8 +138,18 @@ else {
 					}
 
 					# allow requests
-					if($subnet['allowRequests'] == 1) 	{ print '<td class="allowRequests requests hidden-xs hidden-sm">'._('enabled').'</td>'; }
-					else 								{ print '<td class="allowRequests hidden-xs hidden-sm"></td>'; }
+					if($User->settings->enableIPrequests=="1") {
+						if($subnet['allowRequests'] == 1) 	{ print '<td class="allowRequests requests hidden-xs hidden-sm">'._('enabled').'</td>'; }
+						else 								{ print '<td class="allowRequests hidden-xs hidden-sm"></td>'; }
+					}
+
+					# edit, delete
+					print "	<td class='actions'>";
+					print "	<div class='btn-group'>";
+					print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
+					print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
+					print "	</div>";
+					print "	</td>";
 
 					print '</tr>' . "\n";
 				}

@@ -63,7 +63,7 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/1.2/install.js"></script>
 	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript">

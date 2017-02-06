@@ -694,3 +694,61 @@ ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetI
 ALTER TABLE `api` ADD `app_lock` INT(1)  NOT NULL  DEFAULT '0';
 ALTER TABLE `api` ADD `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30';
 
+
+
+
+/* VERSION 1.27 */
+UPDATE `settings` set `version` = '1.27';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* ad show supernet only */
+ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';
+
+/* add scan and discovery check time to database */
+ALTER TABLE `subnets` ADD `lastScan` TIMESTAMP  NULL;
+ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;
+
+
+
+/* VERSION 1.28 */
+UPDATE `settings` set `version` = '1.28';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Extend username to 255 chars for LDAP logins */
+ALTER TABLE `users` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
+ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* expand hostname valude in IP requests to match ipaddresses table */
+ALTER TABLE `requests` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* update Tags when state change occurs */
+ALTER TABLE `settings` ADD `updateTags` TINYINT(1)  NULL  DEFAULT '0';
+ALTER TABLE `ipTags` ADD `updateTag` TINYINT(1)  NULL  DEFAULT '0';
+
+UPDATE `ipTags` set `updateTag`=1 where `id`=1;
+UPDATE `ipTags` set `updateTag`=1 where `id`=2;
+UPDATE `ipTags` set `updateTag`=1 where `id`=3;
+UPDATE `ipTags` set `updateTag`=1 where `id`=4;
+
+
+
+/* VERSION 1.29 */
+UPDATE `settings` set `version` = '1.29';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Add maintaneanceMode identifier */
+ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';
+/* extend pingStatus intervals */
+ALTER TABLE `settings` CHANGE `pingStatus` `pingStatus` VARCHAR(32)  CHARACTER SET utf8  NOT NULL  DEFAULT '1800;3600';
+ALTER TABLE `settings` CHANGE `hiddenCustomFields` `hiddenCustomFields` TEXT  CHARACTER SET utf8  NULL;
+

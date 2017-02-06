@@ -64,7 +64,7 @@ CREATE TABLE `logs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `severity` int(11) DEFAULT NULL,
   `date` varchar(32) DEFAULT NULL,
-  `username` varchar(64) DEFAULT NULL,
+  `username` varchar(255) DEFAULT NULL,
   `ipaddr` varchar(64) DEFAULT NULL,
   `command` varchar(128) DEFAULT '0',
   `details` varchar(1024) DEFAULT NULL,
@@ -80,8 +80,8 @@ CREATE TABLE `requests` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
-  `description` varchar(32) DEFAULT NULL,
-  `dns_name` varchar(32) DEFAULT NULL,
+  `description` varchar(64) DEFAULT NULL,
+  `dns_name` varchar(100) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
   `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
@@ -109,6 +109,7 @@ CREATE TABLE `sections` (
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `showVLAN` BOOL  NOT NULL  DEFAULT '0',
   `showVRF` BOOL  NOT NULL  DEFAULT '0',
+  `showSupernetOnly` BOOL  NOT NULL  DEFAULT '0',
   `DNS` VARCHAR(128)  NULL  DEFAULT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `id_2` (`id`),
@@ -160,7 +161,7 @@ CREATE TABLE `settings` (
   `subnetOrdering` varchar(16) DEFAULT 'subnet,asc',
   `visualLimit` int(2) NOT NULL DEFAULT '0',
   `autoSuggestNetwork` TINYINT(1)  NOT NULL  DEFAULT '0',
-  `pingStatus` VARCHAR(12)  NOT NULL  DEFAULT '1800;3600',
+  `pingStatus` VARCHAR(32)  NOT NULL  DEFAULT '1800;3600',
   `defaultLang` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `vcheckDate` DATETIME  NULL  DEFAULT NULL ,
@@ -171,9 +172,11 @@ CREATE TABLE `settings` (
   `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
   `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
-  `hiddenCustomFields` VARCHAR(1024)  NULL  DEFAULT NULL,
+  `hiddenCustomFields` text NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
+  `updateTags` TINYINT(1)  NULL  DEFAULT '0',
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
+  `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
@@ -240,6 +243,8 @@ CREATE TABLE `subnets` (
   `threshold` int(3)  NULL  DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `lastScan` TIMESTAMP  NULL,
+  `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -303,7 +308,7 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(64) CHARACTER SET utf8 NOT NULL DEFAULT '',
+  `username` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '',
   `authMethod` INT(2)  NULL  DEFAULT 1,
   `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL,
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
@@ -576,15 +581,16 @@ CREATE TABLE `ipTags` (
   `fgcolor` varchar(7) DEFAULT '#fff',
   `compress` SET('No','Yes')  NOT NULL  DEFAULT 'No',
   `locked` set('No','Yes') NOT NULL DEFAULT 'No',
+  `updateTag` TINYINT(1)  NULL  DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
-INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `compress`, `locked`)
+INSERT INTO `ipTags` (`id`, `type`, `showtag`, `bgcolor`, `fgcolor`, `compress`, `locked`, `updateTag`)
 VALUES
-	(1, 'Offline', 1, '#f59c99', '#ffffff', 'No', 'Yes'),
-	(2, 'Used', 0, '#a9c9a4', '#ffffff', 'No', 'Yes'),
-	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'No', 'Yes'),
-	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes');
+	(1, 'Offline', 1, '#f59c99', '#ffffff', 'No', 'Yes', 1),
+	(2, 'Used', 0, '#a9c9a4', '#ffffff', 'No', 'Yes', 1),
+	(3, 'Reserved', 1, '#9ac0cd', '#ffffff', 'No', 'Yes', 1),
+	(4, 'DHCP', 1, '#c9c9c9', '#ffffff', 'Yes', 'Yes', 1);
 
 
 # Dump of table firewallZones
@@ -756,4 +762,4 @@ CREATE TABLE `pstnNumbers` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.26';
+UPDATE `settings` set `version` = '1.29';

@@ -60,7 +60,7 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		fclose($filehdl);
 
 		/* format file */
-		$data = str_replace( array("\r\n","\r") , "" , $data);	//remove line break
+		$data = str_replace( array("\r\n","\r","\n") , "" , $data);	//remove line break
 		$data = preg_split("/[;,]/", $data); //split by comma or semi-colon
 
 		foreach ($data as $col) {

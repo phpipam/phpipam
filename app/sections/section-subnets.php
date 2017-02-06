@@ -69,7 +69,9 @@ if($permission != 0) {
 		}
 		print "	<th>"._('Master Subnet')."</th>";
 		print "	<th>"._('Device')."</th>";
-		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
+		if($User->settings->enableIPrequests == 1) {
+			print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</th>";
+		}
 		if(sizeof($custom) > 0) {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {
@@ -102,7 +104,7 @@ if($permission != 0) {
 		}
 		else {
 			// print subnets
-			if($Subnets->print_subnets_tools($User->user, $section_subnets, $custom)===false) {
+			if($Subnets->print_subnets_tools($User->user, $section_subnets, $custom, true, $section['showSupernetOnly'])===false) {
 				print "<tr>";
 				print "	<td colspan='$colspan'><div class='alert alert-info'>"._('No subnets available')."</div></td>";
 				print "</tr>";
@@ -110,6 +112,14 @@ if($permission != 0) {
 				print "<script type='text/javascript'>";
 				print "$(document).ready(function() { $('td#subnetsLeft').hide(); })";
 				print "</script>";
+			}
+			else {
+				// filtered
+				if($section['showSupernetOnly']==1) {
+				print "<tr>";
+				print "	<td colspan='$colspan'><div class='alert alert-info'><i class='fa fa-info'></i> "._('Only master subnets are shown')."</div></td>";
+				print "</tr>";
+				}
 			}
 		}
 
@@ -129,7 +139,7 @@ if($permission != 0) {
 					print "</tr>";
 
 					// print subnets
-					if($Subnets->print_subnets_tools($User->user, $slavesubnets, $custom)===false) {
+					if($Subnets->print_subnets_tools($User->user, $slavesubnets, $custom, true, $section['showSupernetOnly'])===false) {
 						print "<tr>";
 						print "	<td colspan='$colspan'><div class='alert alert-info'>"._('No subnets available')."</div></td>";
 						print "</tr>";

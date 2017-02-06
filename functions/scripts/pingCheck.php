@@ -47,6 +47,8 @@ $Scan->ping_set_exit(true);
 $Scan->reset_debugging(false);
 // fetch agent
 $agent = $Tools->fetch_object("scanAgents", "id", 1);
+// set address types array
+$Tools->get_addresses_types ();
 // change scan type?
 // $Scan->reset_scan_method ("fping");
 // set ping statuses
@@ -79,7 +81,7 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
 if($Scan->debugging)							{ print_r($scan_subnets); }
-if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates"); }
+if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates\n"); }
 //fetch all addresses that need to be checked
 foreach($scan_subnets as $s) {
 
@@ -98,16 +100,17 @@ foreach($scan_subnets as $s) {
 				if($a->excludePing!=1) {
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
-						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen);	//used for status check
+						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen, "state"=>$a->state);	//used for status check
 						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
 					}
 					else {
-						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen);
+						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen, "state"=>$a->state);
 					}
 				}
 			}
 		}
-
+		// save update time
+		$Scan->update_subnet_scantime ($s->id, $nowdate);
 	}
 }
 
@@ -264,6 +267,11 @@ foreach ($address_change as $k=>$change) {
     if ($change['lastSeenNew']!=NULL && $deviceDiff >= (int) $statuses[1]) {
         $address_change[$k]['oldStatus'] = 2;
         $address_change[$k]['newStatus'] = 0;
+        // update tag if not already online
+        // tags have different indexes than script exit code is - 1=offline, 2=online
+        if($address_change[$k]['state']!=2 && $Scan->settings->updateTags==1 && $Tools->address_types[$address_change[$k]['state']]['updateTag']==1) {
+	        $Scan->update_address_tag ($address_change[$k]['id'], 2, $address_change[$k]['state'], $change['lastSeenOld']);
+    	}
     }
     // now offline, and diff > offline period, do checks
     elseif($change['lastSeenNew']==NULL && $deviceDiff >= (int) $statuses[1]) {
@@ -271,13 +279,39 @@ foreach ($address_change as $k=>$change) {
         if ($deviceDiff <= ((int) $statuses[1] + $agentDiff))  {
             $address_change[$k]['oldStatus'] = 0;
             $address_change[$k]['newStatus'] = 2;
+	        // update tag if not already offline
+	        // tags have different indexes than script exit code is - 1=offline, 2=online
+	        if($address_change[$k]['state']!=1 && $Scan->settings->updateTags==1 && $Tools->address_types[$address_change[$k]['state']]['updateTag']==1) {
+		        $Scan->update_address_tag ($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
+		    }
         }
         else {
+        	// already reported, check tag
+	        if($address_change[$k]['state']!=1 && $Scan->settings->updateTags==1 && $Tools->address_types[$address_change[$k]['state']]['updateTag']==1) {
+		        $Scan->update_address_tag ($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
+		    }
+        	// remove from change array
             unset ($address_change[$k]);
         }
     }
     // remove
     else {
+    	// check tag
+    	if ($change['lastSeenNew']!=NULL) {
+	        // update tag if not already online
+	        // tags have different indexes than script exit code is - 1=offline, 2=online
+	        if($address_change[$k]['state']!=2 && $Scan->settings->updateTags==1 && $Tools->address_types[$address_change[$k]['state']]['updateTag']==1) {
+		        $Scan->update_address_tag ($address_change[$k]['id'], 2, $address_change[$k]['state'], $change['lastSeenOld']);
+	    	}
+    	}
+    	else {
+    		// update tag if not already offline
+	        // tags have different indexes than script exit code is - 1=offline, 2=online
+	        if($address_change[$k]['state']!=1 && $Scan->settings->updateTags==1 && $Tools->address_types[$address_change[$k]['state']]['updateTag']==1) {
+		        $Scan->update_address_tag ($address_change[$k]['id'], 1, $address_change[$k]['state'], $change['lastSeenOld']);
+		    }
+    	}
+
         unset ($address_change[$k]);
     }
 }

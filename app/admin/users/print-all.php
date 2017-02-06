@@ -40,7 +40,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
     <?php if ($User->settings->enablePowerDNS==1) { ?>
     <th><?php print _('PowerDNS'); ?></th>
     <?php } ?>
-    <th><?php print _('Manage VLANs'); ?></th>
+    <th><?php print _('Manage VLANs / VRFs'); ?></th>
     <?php if ($User->settings->enablePSTN==1) { ?>
     <th><?php print _('PSTN'); ?></th>
     <?php } ?>
@@ -55,7 +55,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 		}
 	}
 	?>
-    <th></th>
+    <th class="actions"></th>
 </tr>
 </thead>
 
@@ -187,7 +187,7 @@ foreach ($users as $user) {
 
 	# edit, delete
 	print "	<td class='actions'>";
-	print "	<div class='btn-group'>";
+	print "	<div class='btn-group nowrap'>";
 	print "		<a class='btn btn-xs btn-default' href='".create_link("administration","users",$user['id'])."'><i class='fa fa-eye'></i></a></button>";
 	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='edit'  ><i class='fa fa-pencil'></i></button>";
 	print "		<a class='btn btn-xs btn-default";

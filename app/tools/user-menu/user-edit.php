@@ -36,4 +36,6 @@ $_POST['compressOverride'] = @$_POST['compressOverride']=="Uncompress" ? "Uncomp
 # Update user
 if (!$User->self_update ($_POST)) 												{ $Result->show("danger alert-absolute",  _('Error updating user account!'), true); }
 else 																			{ $Result->show("success alert-absolute", _('Account updated successfully'), false); }
-?>
+
+# update language
+$User->update_session_language ();

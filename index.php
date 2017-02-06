@@ -90,7 +90,7 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-switch.min.css">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/1.2/jclock.jquery.js"></script>
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/1.2/login.js"></script>
@@ -189,6 +189,11 @@ else {
 	</div>
 </div>
 
+<!-- maintaneance mode -->
+<?php
+$text_append_maint = $User->is_admin(false) ? " <btn class='removeMaintaneance btn btn-xs btn-default'>"._("Remove")."</btn>" : "";
+if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !".$text_append_maint, false); }
+?>
 
 <!-- page sections / menu -->
 <div class="content">

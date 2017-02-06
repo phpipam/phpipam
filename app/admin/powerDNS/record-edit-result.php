@@ -16,6 +16,8 @@ $PowerDNS = new PowerDNS($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -33,6 +35,14 @@ if ($_POST['action'] != "add") {
 if ($_POST['action'] != "delete") {
     if (strlen($_POST['name']) < 2) {$Result->show("danger", _("Invalid name"), true);}
     if (strlen($_POST['content']) < 2) {$Result->show("danger", _("Invalid content"), true);}
+}
+
+# dont permit modifications on slave domain
+$domain = $PowerDNS->fetch_domain ($_POST['domain_id']);
+$domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+
+if(strtolower($domain->type) == "slave") {
+	$Result->show("danger", _("Adding domain record on slave zone is not permitted"), true);
 }
 
 # validate and set values

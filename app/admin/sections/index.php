@@ -52,6 +52,7 @@ if ($sections !== false) {
     <th><?php print _('Strict mode'); ?></th>
     <th><?php print _('Show VLANs'); ?></th>
     <th><?php print _('Show VRFs'); ?></th>
+    <th><?php print _('Show only supernets'); ?></th>
     <th><?php print _('Group Permissions'); ?></th>
     <th></th>
 </tr>
@@ -87,6 +88,10 @@ if(isset($sections_sorted)) {
 	    //Show VRFs
 	    print " <td>";
 	    print @$section['showVRF']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
+	    print "	</span></td>";
+	    //Show only supernets
+	    print " <td>";
+	    print @$section['showSupernetOnly']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
 	    print "	</span></td>";
 		//permissions
 		print "<td>";

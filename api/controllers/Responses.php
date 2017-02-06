@@ -214,7 +214,7 @@ class Responses {
 	 */
 	private function set_content_type_header () {
 		// content_type
-		$this->result_type == "xml" ? header('Content-Type: application/xml') : header('Content-Type: application/json');
+		$this->result_type == "xml" ? header('Content-Type: application/xml; charset=utf-8') : header('Content-Type: application/json; charset=utf-8');
 	}
 
 	/**
@@ -315,7 +315,7 @@ class Responses {
 		$this->result = $this->object_to_array($this->result);
 
 		// new SimpleXMLElement object
-		$xml = new SimpleXMLElement('<'.$_GET['controller'].'/>');
+		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><'.$_GET['controller'].'/>');
 		// generate xml from result
 		$this->array_to_xml($xml, $this->result);
 
@@ -401,7 +401,7 @@ class Responses {
 	 * @return void
 	 */
 	private function create_json () {
-		return json_encode((array) $this->result);
+		return json_encode((array) $this->result, JSON_UNESCAPED_UNICODE);
 	}
 
 

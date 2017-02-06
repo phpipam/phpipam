@@ -5,25 +5,7 @@ It is ajax-based using jQuery libraries, it uses php scripts and javascript and 
 to be able to display javascript quickly and correctly.
 
 Features and tools:
-- Section / Subnet separation
-- Subnet nesting
-- IPv4/IPv6 support
-- REST API
-- Subnet ICMP/telnet scanning and automatic status updates
-- Displays free range and number of clients
-- Subnet statistics
-- User management
-- AD/LDAP/OpenLDAP/NetIQ/Radius authentication support (multiple servers)
-- E-Mail notification with IP details
-- Import IP addresses from XLS / CSV file
-- Export IP database to XLS file
-- IPv4/IPv6 calculator
-- Search IP database
-- IP request module
-- Custom IP address fields
-- and much more...
-- PowerDNS integration (3.4+);
-
+- https://phpipam.net/documents/features/
 
 License
 =======
@@ -31,29 +13,19 @@ phpipam is released under the GPL v3 license, see misc/gpl-3.0.txt.
 
 Requirements
 ============
-- Apache2 web server with php and mod_rewrite support
-- Mysql server (5.1+)
-- PHP version 5.2+ with following modules (On windows php 5.3 is required!)
-	+ + pdo, pdo_mysql      : Adds support for mysql connections
-    + + session             : Adds persistent session support
-    + + gmp                 : Adds support for dev-libs/gmp (GNU MP library) -> to calculate IPv6 networks
-    + + ldap                : Adds LDAP support (Lightweight Directory Access Protocol)
-    + + json				: Adds supports for JSON data-interexchange format
-    + + SimpleXML			: Adds SimpleXML support for parsin XML files
-    + + gettext				: Add support for gettext translations
-- PHP PEAR support (dev-php/pear)
+- https://phpipam.net/documents/installation/
 
 Install
 =======
-- http://phpipam.net/documents/installation/
+- https://phpipam.net/documents/installation/
 
 API guide
 =========
-- http://phpipam.net/api-documentation/
+- https://phpipam.net/api-documentation/
 
 Update
 =======
-- http://phpipam.net/documents/upgrade/
+- https://phpipam.net/documents/upgrade/
 
 Demo page
 ============

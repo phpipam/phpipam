@@ -167,16 +167,46 @@ class User_controller extends Common_api_functions {
 	/**
 	 * Authenticates user and returns token
 	 *
-	 * @access public
-	 * @return void
+	 *	Identifier can be:
+	 *		- /token_expires/				// returns token expiration date
+	 *		- /expires/						// returns token expiration date
+	 *		- /all/							// returns all phpipam users
+	 *		- /admins/						// returns ipam admins
 	 */
 	public function GET () {
-		// block IP
-		$this->validate_block ();
-		// validate token
-		$this->validate_requested_token ();
-		// ok
-		return array("code"=>200, "data"=>array("expires"=>$this->token_expires));
+		// token_expires
+		if ($this->_params->id=="token_expires" || $this->_params->id=="expires" || !isset($this->_params->id) || $this->_params->id=="all" || $this->_params->id=="admins") {
+			// block IP
+			$this->validate_block ();
+			// validate token
+			$this->validate_requested_token ();
+			// users fetch
+			if ($this->_params->id=="admins" || $this->_params->id=="all") {
+				// fetch details
+				$app_details = $this->fetch_app_details ();
+				// permissions check - RWA required
+				if ($app_details->app_permissions != 3) {
+					$this->Response->throw_exception(503, 'Invalid app permissions');
+				}
+				// ok
+				else {
+					// admins or all
+					if ($this->_params->id=="admins") {
+						return array("code"=>200, "data"=>$this->User->fetch_multiple_objects ("users", "role", "Administrator", "id", true, false, "*"));
+					}
+					else {
+						return array("code"=>200, "data"=>$this->User->fetch_all_objects ("users", "id", true));
+					}
+				}
+			}
+			else {
+				return array("code"=>200, "data"=>array("expires"=>$this->token_expires));
+			}
+		}
+		// return success for backwards compatibility
+		else {
+			$this->Response->throw_exception(404, 'Invalid identifier');
+		}
 	}
 
 
@@ -298,6 +328,10 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function authenticate () {
+		# if no user/pass are provided die with error
+		if(!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
+			$this->Response->throw_exception(400, "Please provide username and password");
+		}
 		# try to authenticate user, it it fails it will fail by itself
 		$this->User->authenticate ($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
 
@@ -316,6 +350,17 @@ class User_controller extends Common_api_functions {
 	    # result
 	    return array("code"=>200, "data"=>array("token"=>$this->token, "expires"=>$this->token_expires));
 	}
+
+	/**
+	 * Returns app details for validations
+	 *
+	 * @method fetch_app_details
+	 * @return object]            app details
+	 */
+	private function fetch_app_details () {
+		return $this->User->fetch_object ("api", "app_id", $_GET['app_id']);
+	}
+
 
 
 
@@ -492,8 +537,6 @@ class User_controller extends Common_api_functions {
 		}
 	}
 
-
-
 	/**
 	 * Checks if token has expired
 	 *
@@ -513,7 +556,7 @@ class User_controller extends Common_api_functions {
 	private function refresh_token_expiration () {
 		# reset values
 		$this->token = $this->User->user->token;
-        
+
 		// convert existing expiry date string to a timestamp
 		$expire_time = strtotime($this->token_expires);
 

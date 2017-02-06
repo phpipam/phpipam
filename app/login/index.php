@@ -43,7 +43,7 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/1.2/login.js"></script>
 	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
 	<script type="text/javascript">

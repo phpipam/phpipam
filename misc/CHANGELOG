@@ -1,4 +1,4 @@
-== 1.26.050
+== 1.29.011
 
     New features:
     ------------
@@ -43,6 +43,11 @@
         + POST transaction locking;
         + All first_free and first_address responses are now "data" instead of "ip" and "subnet" for consistency;
         + New methods:
+            + users:
+                GET    /user/expires/                         // returns token expiration date
+                GET    /user/token-expires/                   // returns token expiration date
+                GET    /user/users/                           // returns all users (rwa app permissions required)
+                GET    /user/admins/                          // returns all admin users (rwa app permissions required)
             + addresses:
                 GET    /addresses/first_free/{subnetId}/      // returns first available address (subnetId can be provided with parameters)
                 GET    /addresses/{ip}/{subnetId}/            // returns IP address from subnet
@@ -69,7 +74,7 @@
     + PowerDNS:
         + Default domain for PTR records (if hostname is not set);
         + When removing IP address additional option that removes all associated PDNS records (ip and hostname);
-    + Permit normal users to manage VLANs;
+    + Permit normal users to manage VLANs / VRFs;
     + Inactive (offline) hosts tools page;
     + MAC address normalization;
     + jQuery tables;
@@ -77,6 +82,10 @@
     + Users with RWA permission can manage IP requests and receive IP request mails + changelog mails for subnet;
     + IPv4 subnet link to IPv6 for dual-stack info;
     + Removed inacessible DNS servers if timeout to prevent page load timeouts;
+    + Added option to only show supernets to limit pageload [#844 #816 #736];
+    + Added last scan info to subnet details;
+    + Added option to update address tags when address state change occurs (pingCheck) [#840];
+    + Added mantaneance mode;
 
     Bugfixes:
     ----------------------------
@@ -84,6 +93,11 @@
     + Fixed visual bug on 32-bit systems;
     + Normal users with RWA permissions can scan subnets;
     + Changed default timestamp from 0000-00-00 00:00:00 to 1970-01-01 00:00:01 to avoid SQL install errors if strict mode;
+    + Fixed https access on non-standard ports;
+    + Extended username to 255 chars for LDAP logins;
+    + Fixed search export invalid encoding and data may have been lost XLS file error;
+    + Fixed invalid character encoding in API responses;
+    + PowerDNS records cannot be created on slave zone;
 
 == 1.20.1
 

@@ -57,7 +57,7 @@ if (strtolower($filetype) == "csv") {
 	$row = 0;$col = 0;
 	$line = fgets($filehdl);
 	$row++;
-	$line = str_replace( array("\r\n","\r") , "" , $line);	//remove line break
+	$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
 	$cols = preg_split("/[;]/", $line); //split by comma or semi-colon
 	foreach ($cols as $val) {
 		$col++;
@@ -69,7 +69,7 @@ if (strtolower($filetype) == "csv") {
 	# read each remaining row into a dictionary with expected fields as keys
 	while (($line = fgets($filehdl)) !== false) {
 		$row++;$col = 0;
-		$line = str_replace( array("\r\n","\r") , "" , $line);	//remove line break
+		$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
 		$cols = preg_split("/[;]/", $line); //split by comma or semi-colon
 		$record = array();
 		foreach ($cols as $val) {

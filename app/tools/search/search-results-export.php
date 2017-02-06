@@ -20,6 +20,11 @@ $Addresses	= new Addresses ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
+# we dont need any errors!
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+
 # get requested params
 if(isset($_GET['ip'])) {
     // remove chars
@@ -89,7 +94,7 @@ if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_
 // Create a workbook
 $filename = _("phpipam_search_export_"). $search_term .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
-
+$workbook->setVersion(8);
 
 //formatting titles
 $format_title =& $workbook->addFormat();
@@ -108,6 +113,7 @@ $m = 0;				//for section change
 /* -- Create a worksheet for addresses -- */
 if(sizeof($result_addresses)>0) {
 	$worksheet =& $workbook->addWorksheet(_('Addresses'));
+	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
 	$x = 0;
@@ -116,30 +122,30 @@ if(sizeof($result_addresses)>0) {
 	# state
 	if(in_array('state', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('state') ,$format_title);			$x++;
-	}
+	} else { $colSpan--; }
 	# description, note
 	$worksheet->write($lineCount, $x, _('description') ,$format_title);		$x++;
 	$worksheet->write($lineCount, $x, _('hostname') ,$format_title);		$x++;
 	# switch
 	if(in_array('switch', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('device') ,$format_title);			$x++;
-	}
+	} else { $colSpan--; }
 	# port
 	if(in_array('port', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('port') ,$format_title);			$x++;
-	}
+	} else { $colSpan--; }
 	# owner
 	if(in_array('owner', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('owner') ,$format_title);			$x++;
-	}
+	} else { $colSpan--; }
 	# mac
 	if(in_array('mac', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('mac') ,$format_title);				$x++;
-	}
+	}else { $colSpan--; }
 	# note
 	if(in_array('note', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('note') ,$format_title);			$x++;
-	}
+	}else { $colSpan--; }
 	//custom
 	if(sizeof($custom_address_fields) > 0) {
 	foreach($custom_address_fields as $myField) {
@@ -181,14 +187,14 @@ if(sizeof($result_addresses)>0) {
 			}
 
 			//section change
-			if ($result_addresses[$m]->subnetId != $result_addresses[$m-1]->subnetId) {
+			if (@$result_addresses[$m]->subnetId != @$result_addresses[$m-1]->subnetId) {
 
 				//new line
 				$lineCount++;
 
 				//subnet details
-				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($subnet['subnet']) . "/" .$subnet['mask'] . " - " . $subnet['description'] . $vlanText, $format_title );
 				$worksheet->mergeCells($lineCount, 0, $lineCount, $colSpan-1);
+				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($subnet['subnet']) . "/" .$subnet['mask'] . " - " . $subnet['description'] . $vlanText, $format_title );
 
 				//new line
 				$lineCount++;
@@ -252,6 +258,7 @@ if(sizeof($result_subnets)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('Subnets'));
+	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
 	$worksheet->write($lineCount, 0, _('Section') ,$format_title);
@@ -332,6 +339,7 @@ if(sizeof($result_vlans)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('VLAN search results'));
+	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
 	$worksheet->write($lineCount, 0, _('Name') ,$format_title);
@@ -379,6 +387,7 @@ if(sizeof($result_vrf)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('VRF search results'));
+	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
 	$worksheet->write($lineCount, 0, _('Name') ,$format_title);
@@ -417,12 +426,10 @@ if(sizeof($result_vrf)>0) {
 }
 
 
-
+$lineCount++;
 
 // sending HTTP headers
 $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

@@ -93,7 +93,7 @@ foreach($custom_fields as $k=>$cf) {
 		foreach($cf as $f)
 		{
 			# space?
-			$class = !preg_match('/^[a-zA-Z0-9 \_]+$/i', $f['name']) ? "alert-danger" : "";
+			$class = !preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $f['name']) ? "alert-danger" : "";
 
 			print "<tr class='$class'>";
 
@@ -129,7 +129,7 @@ foreach($custom_fields as $k=>$cf) {
 			print "	</div>";
 
 			# warning for older versions
-			if((is_numeric(substr($f['name'], 0, 1))) || (!preg_match('!^[\w_ ]*$!', $f['name'])) ) { print '<span class="alert alert-warning"><strong>Warning</strong>: '._('Invalid field name').'!</span>'; }
+			if((is_numeric(substr($f['name'], 0, 1))) || (!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $f['name'])) ) { print '<span class="alert alert-warning"><strong>Warning</strong>: '._('Invalid field name').'!</span>'; }
 
 			print "</td>";
 			print "</tr>";

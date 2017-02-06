@@ -15,6 +15,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -44,7 +46,8 @@ $values = array("id"=>@$_POST['id'],
 				"bgcolor"=>@$_POST['bgcolor'],
 				"fgcolor"=>@$_POST['fgcolor'],
 				"showtag"=>@$_POST['showtag'],
-				"compress"=>@$_POST['compress']
+				"compress"=>@$_POST['compress'],
+				"updateTag"=>@$_POST['updateTag']
 				);
 
 # execute

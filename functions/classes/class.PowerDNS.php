@@ -329,18 +329,19 @@ class PowerDNS extends Common_functions {
         $ttl = array();
         // set array
         $ttl[60]     = "1 minute";
-        $ttl[180]     = "3 minutes";
+        $ttl[180]    = "3 minutes";
         $ttl[300]    = "5 minutes";
         $ttl[600]    = "10 minutes";
         $ttl[900]    = "15 minutes";
-        $ttl[1800]     = "30 minutes";
-        $ttl[2700]    = "45 minutes";
-        $ttl[3600]     = "1 hour";
-        $ttl[7200]    = "2 hours";
-        $ttl[21600] = "6 hours";
-        $ttl[43200]    = "12 hours";
-        $ttl[86400]    = "24 hours";
-        $ttl[604800]= "1 week";
+        $ttl[1800]   = "30 minutes";
+        $ttl[2700]   = "45 minutes";
+        $ttl[3600]   = "1 hour";
+        $ttl[7200]   = "2 hours";
+        $ttl[10800]  = "3 hours";
+        $ttl[21600]  = "6 hours";
+        $ttl[43200]  = "12 hours";
+        $ttl[86400]  = "24 hours";
+        $ttl[604800] = "1 week";
         // save
         $this->ttl = (object) $ttl;
     }
@@ -1044,12 +1045,12 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param array $values
+     * @param bool $checkOnly
      * @return void
      */
-    public function create_default_records ($values) {
+    public function create_default_records ($values, $checkOnly = false) {
         // get last id
-        $this->lastId = $this->Database_pdns->lastInsertId ();
-
+        $this->lastId = $checkOnly ? 0 : $this->Database_pdns->lastInsertId ();
         // set defaults
         $this->db_set_db_settings ();
 
@@ -1064,7 +1065,7 @@ class PowerDNS extends Common_functions {
         $soa[] = $this->validate_nxdomain_ttl ($values['nxdomain_ttl']);
 
         // formulate SOA value
-        $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "SOA", implode(" ", $soa), $values['ttl']);
+        $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "SOA", implode(" ", $soa), $values['ttl'], null, 0, $checkOnly);
 
         // formulate NS records
         $ns = explode(";", $values['ns']);
@@ -1073,9 +1074,12 @@ class PowerDNS extends Common_functions {
                 // validate
                 if($this->validate_hostname($s)===false)        { $this->Result->show("danger", "Invalid NS". " $s", true); }
                 // save
-                $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl']);
+                $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl'], null, 0, $checkOnly);
             }
         }
+
+        // if only check return true
+        if ($checkOnly) { return true; }
 
         // create records
         foreach($records as $r) {
@@ -1096,20 +1100,21 @@ class PowerDNS extends Common_functions {
      * @param mixed $ttl
      * @param mixed $prio (default: null)
      * @param int|string $disabled (default: 0)
+     * @param bool $dont_validate_domain (default: false)
      * @return array
      */
-    public function formulate_new_record ($domain_id, $name=null, $type, $content, $ttl, $prio=null, $disabled = 0) {
+    public function formulate_new_record ($domain_id, $name=null, $type, $content, $ttl, $prio=null, $disabled = 0, $dont_validate_domain = false) {
         // initiate class
         $record = new StdClass ();
         // set record details
-        $record->domain_id   = $this->validate_record_domain_id ($domain_id);            // sets domain id
-        $record->name        = $this->validate_record_name ($name);                      // record name
-        $record->type        = $this->validate_record_type ($type);                      // record type
-        $record->content     = $content;                                                 // record content
-        $record->ttl         = $this->validate_ttl ($ttl);                               // ttl validation
-        $record->prio        = $this->validate_prio ($prio);                             // priority, default NULL
-        $record->change_date = $this->set_default_change_date ();                        // sets default change date
-        $record->disabled    = $disabled;                                                // enables of disables record
+        $record->domain_id   = $dont_validate_domain ? $domain_id : $this->validate_record_domain_id ($domain_id);      // sets domain id
+        $record->name        = $this->validate_record_name ($name);                                                     // record name
+        $record->type        = $this->validate_record_type ($type);                                                     // record type
+        $record->content     = $content;                                                                                // record content
+        $record->ttl         = $this->validate_ttl ($ttl);                                                              // ttl validation
+        $record->prio        = $this->validate_prio ($prio);                                                            // priority, default NULL
+        $record->change_date = $this->set_default_change_date ();                                                       // sets default change date
+        $record->disabled    = $disabled;                                                                               // enables of disables record
         // return record
         return (array) $record;
     }

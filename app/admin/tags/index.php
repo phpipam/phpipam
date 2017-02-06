@@ -28,6 +28,7 @@ print '	<th>'._('BG color').'</th>'. "\n";
 print '	<th>'._('FG color').'</th>'. "\n";
 print '	<th>'._('Compress range').'</th>'. "\n";
 print '	<th>'._('Locked').'</th>'. "\n";
+print '	<th>'._('Update Tags').'</th>'. "\n";
 print '	<th></th>'. "\n";
 print '</tr>'. "\n";
 
@@ -41,7 +42,8 @@ if ($all_types!==false) {
 		$type = (array) $type;
 
 		//format type
-		$showtag = $type['showtag']==1 ? "Yes" : "No";
+		$showtag   = $type['showtag']==1 ? "Yes" : "No";
+		$updatetag = $type['updateTag']==1 ? "Yes" : "No";
 
 		//print details
 		print '<tr>'. "\n";
@@ -51,6 +53,8 @@ if ($all_types!==false) {
 		print '	<td style="background-color:'.$type['fgcolor'].'">'. $type['fgcolor'] .'</td>'. "\n";
 		print '	<td>'. $type['compress'] .'</td>'. "\n";
 		print '	<td>'. $type['locked'] .'</td>'. "\n";
+		print '	<td>'. $updatetag .'</td>'. "\n";
+
 
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
