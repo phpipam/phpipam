@@ -90,7 +90,7 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-switch.min.css">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
+	<script type="text/javascript" src="js/1.2/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="js/1.2/jclock.jquery.js"></script>
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/1.2/login.js"></script>
