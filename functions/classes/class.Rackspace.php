@@ -356,7 +356,7 @@ class RackDrawer extends Common_functions {
         $nameplate = imagecreate(150, 20);
         imagecolorallocate( $nameplate, 255, 255, 255 ); // Allocate a background color (first color assigned)
         $textColour = imagecolorallocate($nameplate, 0, 0, 0);
-        $this->imageCenterString($nameplate, 3, $this->rack->getName(), $textColour);
+        $this->imageCenterString($nameplate, $this->rack->getName(), $textColour);
         imagecopy($this->template, $nameplate, 52, 1, 0, 0, 150, 20);
     }
 
@@ -364,21 +364,18 @@ class RackDrawer extends Common_functions {
      * Inserts the passed text in fontsize and color into the passed image
      *
      * @param resource $img
-     * @param int $font
      * @param string $text
      * @param int $color
      */
-    private function imageCenterString($img, $font, $text, $color) {
-        if ($font < 0 || $font > 5) {
-            $font = 0;
-        }
-        $num = Array( Array(4.6, 6), Array(4.6, 6), Array(5.6, 12), Array(6.5, 12), Array(7.6, 16), Array(8.5, 16));
-        $width = ceil(strlen($text) * $num[$font][0]);
+    private function imageCenterString($img, $text, $color) {
+        $font = 0;
+        $num = Array( Array(6, -8), Array(4.7, 6), Array(5.6, 12), Array(6.5, 12), Array(7.6, 16), Array(8.5, 16));
+        $width = ceil(mb_strlen($text) * 6.6);
         $x = imagesx($img) - $width - 8;
-        $y = Imagesy($img) - ($num[$font][1] + 2);
-        imagestring($img, $font, $x/2, $y/2, $text, $color);
+        $y = Imagesy($img) +9;
+        // imagestring($img, $font, $x/2, $y/2, $text, $color);
+        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/1.2/fonts/MesloLGS-Regular.ttf", $text );
     }
-
 
     /**
      *  Draws a content slot into the result.
@@ -422,7 +419,7 @@ class RackDrawer extends Common_functions {
             $lineColour = imagecolorallocate($img, 122, 137, 150);
         }
 
-        $this->imageCenterString($img, 3, $name, $textColour);
+        $this->imageCenterString($img, $name, $textColour);
         imageline($img, 0, 0, 200, 0, $lineColour);
         imageline($img, 0, imagesy($img) - 1, 200, imagesy($img) - 1, $lineColour);
     }
