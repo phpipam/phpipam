@@ -15,3 +15,17 @@ then pass it the following variabled according to your setup.
 $ docker build -t phpipam .
 $ docker run -p 8888:80 -e IPAM_HOST='192.168.1.5' -e IPAM_PASS='password' -e IPAM_USER='root' phpipam
 ```
+
+If you are running your DB inside of docker you will need to log in and run the following command since
+access is only setup for localhost via the install script.
+
+```
+GRANT ALL on `database`.* to user@'%' identified by 'password';
+```
+
+For whatever reason the password also is never set properly so running the following script should fix
+everything up for you.
+
+```
+php functions/scripts/reset-admin-password.php
+```
