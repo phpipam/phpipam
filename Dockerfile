@@ -28,6 +28,7 @@ RUN ln -s /phpipam/apache.conf /etc/apache2/conf.d/apache.conf \
 # Hack so apache can run /bin/ping this seems
 # to be an issue with alpine linux will file
 # bug upstream for fix.
+# https://github.com/gliderlabs/docker-alpine/issues/253
 RUN chmod u+s /bin/ping
 
 EXPOSE 80 443
