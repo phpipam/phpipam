@@ -25,5 +25,10 @@ RUN ln -s /phpipam/apache.conf /etc/apache2/conf.d/apache.conf \
   && mkdir -p /run/apache2 \
   && sed -i 's/#LoadModule rewrite_module modules\/mod_rewrite.so/LoadModule rewrite_module modules\/mod_rewrite.so/' /etc/apache2/httpd.conf
 
+# Hack so apache can run /bin/ping this seems
+# to be an issue with alpine linux will file
+# bug upstream for fix.
+RUN chmod u+s /bin/ping
+
 EXPOSE 80 443
 CMD /usr/sbin/httpd -DFOREGROUND
