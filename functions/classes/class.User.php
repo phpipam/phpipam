@@ -699,7 +699,7 @@ class User extends Common_functions {
      * @return array
      */
     public function fetch_available_auth_method_types () {
-		return array("AD", "LDAP", "NetIQ", "Radius", "SAML2");
+		return array("AD", "LDAP", "NetIQ", "Radius", "SAML2", "IMAP");
 	}
 
 
@@ -1279,6 +1279,54 @@ class User extends Common_functions {
         $this->block_remove_entry ();
     }
 
+
+   /**
+     * IMAP authentication
+     *
+     * @access private
+     * @param mixed $username
+     * @param mixed $password
+     * @return void
+     */
+
+    private function auth_imap ($username, $password) {
+		# check for socket support !
+        if(!in_array("imap", get_loaded_extensions())) {
+            $this->Log->write( "IMAP login", "php IMAP extension missing", 2 );
+            $this->Result->show("danger", _("php IMAP extension missing"), true);
+        }
+		# decode imap parameters
+        $params = json_decode($this->authmethodparams);
+        		$authhost= "{".$params->hostname.":".$params->port."/".$params->servertype."/ssl/novalidate-cert}";
+        
+        # auth ok
+        if ($mbox=imap_open( $authhost, $username, $password )) {
+            # save to session
+            $this->write_session_parameters ();
+
+            $this->Result->show("success", _("Login successful"));
+            $this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0, $username );
+
+            # write last logintime
+            $this->update_login_time ();
+
+            # remove possible blocked IP
+            $this->block_remove_entry ();
+            
+            imap_close($mbox);
+        }
+        # auth failed
+        else {
+            # add blocked count
+            $this->block_ip ();
+
+            $this->Log->write( "User login", "Invalid username or password", 2, $username );
+
+            # apache
+            if (!empty($_SERVER['PHP_AUTH_USER']) && $this->api!==true) { $this->show_http_login(); }
+            else                                                        { $this->Result->show("danger", _("Invalid username or password"), true); }
+        }
+    }
 
 
 
