@@ -565,8 +565,8 @@ $('.slider').slider().on('slide', function(ev){
 				elseif($field['type'] == "date" || $field['type'] == "datetime") {
 					// just for first
 					if($timeP==0) {
-						print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
-						print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
+						print '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
+						print '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
 						print '<script type="text/javascript">';
 						print '$(document).ready(function() {';
 						//date only

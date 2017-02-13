@@ -20,15 +20,15 @@
 	<title>phpIPAM upgrade error</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="../css/1.2/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/1.2/bootstrap/bootstrap-custom.css">
-	<link rel="shortcut icon" href="../css/1.2/images/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="../css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
+	<link rel="shortcut icon" href="../css/<?php print SCRIPT_PREFIX; ?>/images/favicon.ico">
 
 	<!--[if IE 6]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
 	<![endif]-->
 	<!--[if IE 7]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
 	<![endif]-->
 </head>
 

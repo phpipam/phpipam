@@ -30,24 +30,24 @@ $User->check_user_session();
 	<title><?php print $User->settings->siteTitle; ?> :: upgrade</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
+	<link rel="shortcut icon" href="css/<?php print SCRIPT_PREFIX; ?>/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="js/1.2/jclock.jquery.js"></script>
-	<script type="text/javascript" src="js/1.2/login.js"></script>
-	<script type="text/javascript" src="js/1.2/install.js"></script>
-	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jclock.jquery.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/install.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
 	<![endif]-->
 </head>
 

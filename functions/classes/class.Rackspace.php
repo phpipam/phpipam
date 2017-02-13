@@ -335,7 +335,7 @@ class RackDrawer extends Common_functions {
      */
     public function draw(Rack $rack) {
         $this->rack = $rack;
-        $response = file_get_contents($this->createURL().BASE."css/1.2/images/blankracks/".$this->rack->getSpace().".png", false, stream_context_create($this->context_options));
+        $response = file_get_contents($this->createURL().BASE."css/".SCRIPT_PREFIX."/images/blankracks/".$this->rack->getSpace().".png", false, stream_context_create($this->context_options));
         $this->template = imagecreatefromstring($response);
 
         $this->drawNameplate();
@@ -374,7 +374,7 @@ class RackDrawer extends Common_functions {
         $x = imagesx($img) - $width - 8;
         $y = Imagesy($img) +9;
         // imagestring($img, $font, $x/2, $y/2, $text, $color);
-        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/1.2/fonts/MesloLGS-Regular.ttf", $text );
+        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/".SCRIPT_PREFIX."/fonts/MesloLGS-Regular.ttf", $text );
     }
 
     /**

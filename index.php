@@ -89,7 +89,7 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-switch.min.css">
 	<?php if ($User->settings->enableThreshold=="1") { ?>
-	<link rel="stylesheet" type="text/css" href="css/1.2/slider.css">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/slider.css">
 	<?php } ?>
 
 </head>
@@ -331,7 +331,7 @@ $(document).ready(function(){
 <script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-slider.js"></script>
 <?php }	?>
 <!--[if lt IE 9]>
-<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
 <![endif]-->
 <?php if ($User->settings->enableLocations=="1") { ?>
 <?php

@@ -90,10 +90,10 @@ table tr.similar-title td:nth-child(1) {
     padding-left: 12px !important;
 }
 table tr.similar td:nth-child(1) {
-    background: white url("../../1.2/images/li-dns.png") no-repeat 17px -5px !important;
+    background: white url("../images/li-dns.png") no-repeat 17px -5px !important;
 }
 table tr.similar-last td:nth-child(1) {
-    background: white url("../../1.2/images/li-dns-last.png") no-repeat 17px -5px !important;
+    background: white url("../images/li-dns-last.png") no-repeat 17px -5px !important;
 }
 table tr.similar-title td:nth-child(1) {
     background: white !important;
@@ -383,13 +383,13 @@ ul.submenu-dns {
 }
 ul.submenu-dns li {
 	list-style: none;
-	background: url("../../1.2/images/li-dns.png") no-repeat 4px -3px !important;
+	background: url("../images/li-dns.png") no-repeat 4px -3px !important;
 
 	font-size: 10px;
 }
 ul.submenu-dns li:last-child {
 	list-style: none;
-	background: url("../../1.2/images/li-dns-last.png") no-repeat 4px -3px !important;
+	background: url("../images/li-dns-last.png") no-repeat 4px -3px !important;
 }
 ul.submenu-dns li i {
 	color: #e1e1e1 !important;
@@ -399,11 +399,11 @@ ul.submenu-dns li i {
 
 ul.submenu-linked li {
 	list-style: none;
-	background: url("../../1.2/images/li-dns.png") no-repeat 4px -1px !important;
+	background: url("../images/li-dns.png") no-repeat 4px -1px !important;
 }
 ul.submenu-linked li:last-child {
 	list-style: none;
-	background: url("../../1.2/images/li-dns-last.png") no-repeat 4px -1px !important;
+	background: url("../images/li-dns-last.png") no-repeat 4px -1px !important;
 }
 ul.submenu-linked li i {
 	color: #e1e1e1 !important;
@@ -1141,7 +1141,7 @@ ul[class*="submenu-"] {
 ul[class*="submenu-"] li {
 	/* horizontal ul lines */
 	padding-left: 20px !important;
-	background: url("../../1.2/images/li.png") no-repeat 4px -3px;
+	background: url("../images/li.png") no-repeat 4px -3px;
 
 	/*
 	barva li: #ced2d2
@@ -1152,22 +1152,22 @@ ul[class*="submenu-"] li {
 }
 ul[class*="submenu-"] li:last-child {
 	/* last child in inactive line  */
-	background: url("../../1.2/images/ul-li-bg.png") no-repeat 3px 0px;
+	background: url("../images/ul-li-bg.png") no-repeat 3px 0px;
 }
 li.active ul[class*="submenu-"] li:last-child {
 	/* last child in active line  */
-	background: url("../../1.2/images/ul-li-bg-active.png") no-repeat 3px 0px !important;
+	background: url("../images/ul-li-bg-active.png") no-repeat 3px 0px !important;
 }
 /* active leaf */
 ul#subnets li.folder li.leaf.active {
-	background: #F1FAFE url("../../1.2/images/li.png") no-repeat 4px -3px !important;
+	background: #F1FAFE url("../images/li.png") no-repeat 4px -3px !important;
 }
 /* active submenu background */
 ul[class*="submenu-"] li.folder.active {
-	background: #F1FAFE url("../../1.2/images/ul-li-bg.png") no-repeat 3px 0px !important;
+	background: #F1FAFE url("../images/ul-li-bg.png") no-repeat 3px 0px !important;
 }
 ul#subnets li.folder li.leaf.active:last-of-type {
-    background: #F1FAFE url("../../1.2/images/ul-li-bg-active.png") no-repeat 3px 0px !important;
+    background: #F1FAFE url("../images/ul-li-bg-active.png") no-repeat 3px 0px !important;
 }
 
 
@@ -1816,18 +1816,18 @@ table#manageSubnets td.level1 {
 	padding-left: 5px;
 }
 table#manageSubnets .structure {
-	background: url("../../1.2/images/sn-bg.png")  0px 7px;
+	background: url("../images/sn-bg.png")  0px 7px;
 	padding-top: 8px;
 	padding-bottom: 8px;
 }
 table#manageSubnets .structure-last {
-    background: url("../../1.2/images/sn-bg-last.png") no-repeat 1px 0px;
+    background: url("../images/sn-bg-last.png") no-repeat 1px 0px;
 	padding-top: 7px;
 	padding-bottom: 8px;
 }
 
 table#manageSubnets>tbody>tr:last-child .structure {
-    background: url("../../1.2/images/sn-bg-last.png") no-repeat 1px 0px !important;
+    background: url("../images/sn-bg-last.png") no-repeat 1px 0px !important;
 	padding-top: 7px;
 	padding-bottom: 8px;
 }

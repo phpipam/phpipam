@@ -37,22 +37,22 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<title><?php print $User->settings->siteTitle; ?> :: login</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
+	<link rel="shortcut icon" href="css/<?php print SCRIPT_PREFIX; ?>/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="js/1.2/login.js"></script>
-	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -83,8 +83,8 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     <!-- logo -->
 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
-	if(file_exists( "css/1.2/images/logo/logo.png")) {
-    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/1.2/images/logo/logo.png'>";
+	if(file_exists( "css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
+    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
 	}
     ?>
 	</div>

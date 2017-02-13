@@ -133,7 +133,6 @@ elseif ($_POST['action']=="edit") {
     if ($_POST['sectionId'] != @$_POST['sectionIdNew']) {
     	//reset masterId - we are putting it to root
     	$_POST['masterSubnetId'] = 0;
-
         //check for overlapping
         $sectionIdNew = (array) $Sections->fetch_section(null, $_POST['sectionIdNew']);
         if($sectionIdNew['strictMode']==1 && !$parent_is_folder) {
@@ -146,12 +145,12 @@ elseif ($_POST['action']=="edit") {
     }
 
     // If VRF changes then do checks!
-    elseif ($_POST['vrfId'] != @$_POST['vrfIdOld']) {
+    if ($_POST['vrfId'] != @$_POST['vrfIdOld']) {
     	if($section['strictMode']==1 && !$parent_is_folder) {
         	/* verify that no overlapping occurs if we are adding root subnet
     	       only check for overlapping if vrf is empty or not exists!
         	*/
-        	$overlap=$Subnets->verify_subnet_overlapping ($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId']);
+        	$overlap=$Subnets->verify_subnet_overlapping ($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
         	if($overlap!==false) {
     	    	$errors[] = $overlap;
     	    }
@@ -159,7 +158,7 @@ elseif ($_POST['action']=="edit") {
     }
 
     // normal edit check
-    else {
+
         if($section['strictMode']==1 && !$parent_is_folder) {
         	/* verify that nested subnet is inside root subnet */
         	if($_POST['masterSubnetId'] != 0) {
@@ -172,7 +171,7 @@ elseif ($_POST['action']=="edit") {
         if ( $_POST['masterSubnetId']==$_POST['subnetId'] ) {
         	$errors[] = _('Subnet cannot nest behind itself!');
         }
-    }
+
 }
 # delete checks
 else {
