@@ -751,4 +751,5 @@ ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';
 /* extend pingStatus intervals */
 ALTER TABLE `settings` CHANGE `pingStatus` `pingStatus` VARCHAR(32)  CHARACTER SET utf8  NOT NULL  DEFAULT '1800;3600';
 ALTER TABLE `settings` CHANGE `hiddenCustomFields` `hiddenCustomFields` TEXT  CHARACTER SET utf8  NULL;
-
+/*add imap auth */
+ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','http','AD','LDAP','NetIQ','Radius','SAML2','IMAP') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'local';
