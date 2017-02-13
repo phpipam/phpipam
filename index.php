@@ -92,6 +92,41 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/slider.css">
 	<?php } ?>
 
+	<!-- js -->
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jclock.jquery.js"></script>
+	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
+	<?php } ?>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.bdt.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/stickytableheaders/jquery.stickytableheaders.min.js"></script>
+	<script type="text/javascript">
+	$(document).ready(function(){
+	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+	});
+	</script>
+	<?php if ($User->settings->enableThreshold=="1") { ?>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-slider.js"></script>
+	<?php }	?>
+	<!--[if lt IE 9]>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
+	<![endif]-->
+	<?php if ($User->settings->enableLocations=="1") { ?>
+	<?php
+	# API key check
+	if(isset($gmaps_api_key)) {
+	    $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
+	}
+	?>
+	<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/gmaps.js"></script>
+	<?php }	?>
+
 </head>
 
 <!-- body -->
@@ -308,41 +343,6 @@ if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-cente
 <!-- export div -->
 <div class="exportDIV"></div>
 
-
-<!-- js -->
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-3.1.1.min.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jclock.jquery.js"></script>
-<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
-<?php } ?>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.bdt.js"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/stickytableheaders/jquery.stickytableheaders.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-});
-</script>
-<?php if ($User->settings->enableThreshold=="1") { ?>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-slider.js"></script>
-<?php }	?>
-<!--[if lt IE 9]>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
-<![endif]-->
-<?php if ($User->settings->enableLocations=="1") { ?>
-<?php
-# API key check
-if(isset($gmaps_api_key)) {
-    $key = strlen($gmaps_api_key)>0 ? "?key=".$gmaps_api_key : "";
-}
-?>
-<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print $key; ?>"></script>
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/gmaps.js"></script>
-<?php }	?>
 
 <!-- end body -->
 </body>
