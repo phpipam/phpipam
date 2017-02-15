@@ -1,4 +1,4 @@
-== 1.29.020
+== 1.29.021
 
     New features:
     ------------
@@ -41,6 +41,7 @@
         + Extensive first_free subnet calls search speedup;
         + POST transaction locking;
         + All first_free and first_address responses are now "data" instead of "ip" and "subnet" for consistency;
+        + Subnet splitting now copies over custom fields values by default (user custom_fields=no to revert);
         + New methods:
             + users:
                 GET    /user/expires/                         // returns token expiration date

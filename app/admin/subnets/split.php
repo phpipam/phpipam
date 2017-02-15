@@ -98,10 +98,7 @@ for($mask=($subnet->mask+1); $mask<=$max_new_mask; $mask++) {
     <tr>
         <td class="middle"><?php print _('Group under current'); ?></td>
         <td>
-	        <select name="group" class="form-control input-sm input-w-auto">
-	        	<option value="yes"><?php print _('Yes'); ?></option>
-	        	<option value="no" ><?php print _('No'); ?></option>
-	        </select>
+            <input type="checkbox" name="group" value="yes" checked="checked">
         </td>
     </tr>
 
@@ -111,6 +108,14 @@ for($mask=($subnet->mask+1); $mask<=$max_new_mask; $mask++) {
     	<td>
 	    	<input type="checkbox" name="strict" value="yes" checked="checked">
     	</td>
+    </tr>
+
+    <!-- Custom fields -->
+    <tr>
+        <td><?php print _('Copy custom field values'); ?></td>
+        <td>
+            <input type="checkbox" name="custom_fields" value="yes" checked="checked">
+        </td>
     </tr>
 
     <!-- Prefix -->

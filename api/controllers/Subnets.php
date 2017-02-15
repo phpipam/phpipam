@@ -473,7 +473,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Splits existing network into new networks
 	 *
 	 *	required params : id, number
-	 *	optional params : group (default yes), strict (default yes), prefix
+	 *	optional params : group (default yes), strict (default yes), prefix, copy_custom (default: yes)
 	 *
 	 * @access private
 	 * @return array
@@ -486,11 +486,12 @@ class Subnets_controller extends Common_api_functions {
 		if(!is_numeric($this->_params->number))			{ $this->Response->throw_exception(400, "Invalid number of new subnets"); }
 		if(!isset($this->_params->group))				{ $this->_params->group = "yes"; }
 		if(!isset($this->_params->strict))				{ $this->_params->strict = "yes"; }
+		if(!isset($this->_params->copy_custom))			{ $this->_params->copy_custom = "yes"; }
 
 		// fetch old subnet
 		$subnet_old = $this->Subnets->fetch_subnet ("id", $this->_params->id);
 		// create new subnets and move addresses
-		$this->Subnets->subnet_split ($subnet_old, $this->_params->number, $this->_params->prefix, $this->_params->group, $this->_params->strict);
+		$this->Subnets->subnet_split ($subnet_old, $this->_params->number, $this->_params->prefix, $this->_params->group, $this->_params->strict, $this->_params->copy_custom);
 
 		//set result
 		return array("code"=>200, "message"=>"Subnet splitted");
@@ -1068,5 +1069,3 @@ class Subnets_controller extends Common_api_functions {
 	}
 
 }
-
-?>
