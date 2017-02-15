@@ -1108,7 +1108,7 @@ class PowerDNS extends Common_functions {
         $record = new StdClass ();
         // set record details
         $record->domain_id   = $dont_validate_domain ? $domain_id : $this->validate_record_domain_id ($domain_id);      // sets domain id
-        $record->name        = $this->validate_record_name ($name);                                                     // record name
+        $record->name        = $this->validate_record_name ($name, $type);                                                     // record name
         $record->type        = $this->validate_record_type ($type);                                                     // record type
         $record->content     = $content;                                                                                // record content
         $record->ttl         = $this->validate_ttl ($ttl);                                                              // ttl validation
@@ -1136,7 +1136,7 @@ class PowerDNS extends Common_functions {
         // initiate class
         $record = new StdClass ();
         // set record details
-        if (!is_null($name))    $record->name        = $this->validate_record_name ($name);               // record name
+        if (!is_null($name))    $record->name        = $this->validate_record_name ($name, $type);               // record name
         if (!is_null($type))    $record->type        = $this->validate_record_type ($type);               // record type
         if (!is_null($content)) $record->content     = $content;                                          // record content
         if (!is_null($ttl))     $record->ttl         = $this->validate_ttl ($ttl);                        // ttl validation
@@ -1200,8 +1200,21 @@ class PowerDNS extends Common_functions {
      * @param mixed $name
      * @return void
      */
-    private function validate_record_name ($name) {
-        // null is ok, otherwise URI is required
+    private function validate_record_name ($name, $type = NULL) {
+        // certain record types allow forbidden characters in record name
+        // when using reserved words
+        if ($type == "TXT") {
+            if (preg_match("/^_dmarc.*$/", $name)
+                && preg_match("/^.{1,253}$/", $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label) 
+            { return $name; }
+            if (preg_match("/^.*_domainkey.*$/", $name)
+                && preg_match("/^.{1,253}$/", $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
+            { return $name; }
+        }
+
+        // for all other record types null is ok, otherwise URI is required
         if (strlen($name)>0 && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
         // ok
         return $name;
