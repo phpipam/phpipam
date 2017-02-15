@@ -1,4 +1,4 @@
-== 1.29.011
+== 1.29.020
 
     New features:
     ------------
@@ -23,7 +23,6 @@
         + Map devices / racks / subnets to location;
         + Google maps integration;
     + SAML2 authentication (SSO)
-
 
     Enhancements, changes:
     ----------------------------
@@ -86,6 +85,7 @@
     + Added last scan info to subnet details;
     + Added option to update address tags when address state change occurs (pingCheck) [#840];
     + Added mantaneance mode;
+    + Added inactive addresses removal script;
 
     Bugfixes:
     ----------------------------
