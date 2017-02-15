@@ -2814,7 +2814,10 @@ class Tools extends Common_functions {
 
             	// verify that address is in subnet for subnets
             	if($subnet->isFolder!="1") {
-            	    if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/32", $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
+			// check if IP is IPv4 or IPv6
+			if (!filter_var($field[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV4) === false) { $ipsm = "32"; }
+                	if (!filter_var($field[0], FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) === false) { $ipsm = "128"; }
+                    	if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/" . $ipsm, $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
                 }
             	// make sure mac does not exist
                 if ($this->settings-enableMulticast=="1" && strlen($class)==0) {
