@@ -340,6 +340,7 @@ class Subnets extends Common_functions {
 
 		# admin object and tools object
 		$Admin = new Admin ($this->Database, false);
+		$custom_fields = array ();
 		if($copy_custom=="yes") {
 			$Tools = new Tools ($this->Database);
 			$custom_fields = $Tools->fetch_custom_fields ("subnets");
@@ -375,7 +376,7 @@ class Subnets extends Common_functions {
 			$this->modify_subnet ("add", $values);
 
 			//get all address ids
-			unset($ids);
+			$ids = array ();
 			foreach($addresses as $ip) {
 				if($ip->subnetId == $m) {
     				if(!isset($ids)) $ids = array();
@@ -384,7 +385,7 @@ class Subnets extends Common_functions {
 			}
 
 			//replace all subnetIds in IP addresses to new subnet
-			if(isset($ids)) {
+			if(sizeof($ids)>0) {
 				if(!$Admin->object_modify("ipaddresses", "edit-multiple", $ids, array("subnetId"=>$this->lastInsertId)))	{ $this->Result->show("danger", _("Failed to move IP address"), true); }
 			}
 
@@ -1486,7 +1487,7 @@ class Subnets extends Common_functions {
 		$sections_subnets = $masterSubnetId==0 ? $this->fetch_section_subnets ($sectionId) : $this->fetch_subnet_slaves ($masterSubnetId);
 
 	    # verify new against each existing
-	    if (sizeof($sections_subnets)>0) {
+	    if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
 	        foreach ($sections_subnets as $existing_subnet) {
 	            //only check if vrfId's match
 	            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {

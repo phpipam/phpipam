@@ -119,7 +119,7 @@ class PowerDNS extends Common_functions {
     /**
      * Result
      *
-     * @var resource
+     * @var object
      * @access public
      */
     public $Result;
@@ -143,7 +143,7 @@ class PowerDNS extends Common_functions {
     /**
      * Log
      *
-     * @var resource
+     * @var object
      * @access public
      */
     public $Log;
@@ -1206,7 +1206,7 @@ class PowerDNS extends Common_functions {
         if ($type == "TXT") {
             if (preg_match("/^_dmarc.*$/", $name)
                 && preg_match("/^.{1,253}$/", $name)                               //overall length check
-                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label) 
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
             { return $name; }
             if (preg_match("/^.*_domainkey.*$/", $name)
                 && preg_match("/^.{1,253}$/", $name)                               //overall length check

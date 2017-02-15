@@ -185,7 +185,7 @@ class Admin extends Common_functions {
 	 *
 	 * @param string $table
 	 * @param string $action
-	 * @param string $id
+	 * @param string|array $id
 	 * @param mixed $values
 	 * @return void
 	 */

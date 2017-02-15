@@ -869,9 +869,9 @@ class User extends Common_functions {
      * @return void
      */
     public function authenticate ($username, $password, $saml = false) {
-        if(($saml != false ) && (defined('MAP_SAML_USER'))) {
-                $username = SAML_USERNAME;
-        } 
+        if(($saml !== false ) && (defined('MAP_SAML_USER'))) {
+            $username = SAML_USERNAME;
+        }
         # first we need to check if username exists
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
@@ -888,9 +888,9 @@ class User extends Common_functions {
         else {
             # set method name variable
             $authmethodtype = $this->authmethodtype;
-            if($saml != false) {
-            $authmethodtype = 'auth_SAML2';
-            }    
+            if($saml !== false) {
+                $authmethodtype = 'auth_SAML2';
+            }
             # is auth_SAML and $saml == false throw error
             if ($authmethodtype=="auth_SAML2" && $saml===false) {
                 $this->Result->show("danger", "Please use <a href='".create_link('saml2')."'>login</a>!", true);
