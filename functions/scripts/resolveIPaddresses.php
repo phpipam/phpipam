@@ -11,15 +11,6 @@
  *
  ***********************************************************************/
 
-
-/* settings */
-$resolve_config['emptyonly'] = true;			# if true it will only update the ones without DNS entry!
-$resolve_config['subnets']	 = array();			# which subnets to check - by id
-												# example -> array(1,3,5)	will only update subnets with id 1,3,5
-												# 	you can get id's and descriptions with following MySQL query:
-												#	select `id`,`description` from `subnets`;
-$resolve_config['verbose']  = true;				# verbose response - prints results, cron will email it to you!
-
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 
@@ -43,7 +34,7 @@ if (isset($argv[1])) {
 	foreach ($req_subnets as $s) {
 		if (!is_numeric($s)) { $Result->show_cli("Invalid subnetId provided - $s\n", true); }
 		else {
-			$resolve_config['subnets'][] = $s;
+			$config['resolve_subnets'][] = $s;
 		}
 	}
 }
@@ -55,9 +46,9 @@ if (isset($argv[1])) {
 #
 
 # check all subnets
-if(sizeof($resolve_config['subnets']) == 0) {
+if(sizeof($config['resolve_subnets']) == 0) {
 	# get ony ip's with empty DNS
-	if($resolve_config['emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where `dns_name` = "" or `dns_name` is NULL order by `ip_addr` ASC;'; }
+	if($config['resolve_emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where `dns_name` = "" or `dns_name` is NULL order by `ip_addr` ASC;'; }
 	else 									{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
 }
 # check selected subnets
@@ -65,14 +56,14 @@ else {
 	$query[] = "select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where ";
 	//go through subnets
 	$m=1;
-	foreach($resolve_config['subnets'] as $k=>$subnetId) {
+	foreach($config['resolve_subnets'] as $k=>$subnetId) {
 		// last
-		if($m==sizeof($resolve_config['subnets']))	{ $query[] = '`subnetId` = "'. $subnetId .'" '; }
+		if($m==sizeof($config['resolve_subnets']))	{ $query[] = '`subnetId` = "'. $subnetId .'" '; }
 		else										{ $query[] = '`subnetId` = "'. $subnetId .'" or '; }
 		$m++;
 	}
 	# get ony ip's with empty DNS
-	if($resolve_config['emptyonly'] == 1) {
+	if($config['resolve_emptyonly'] == 1) {
 		$query[] = ' and (`dns_name` = "" or `dns_name` is NULL ) ';
 	}
 	$query[] = 'order by `ip_addr` ASC;';
@@ -110,7 +101,7 @@ if (sizeof($ipaddresses)>0) {
 
 
 # if verbose print result so it can be emailed via cron!
-if($resolve_config['verbose'] == true && isset($res)) {
+if($config['resolve_verbose'] == true && isset($res)) {
 	print implode("\n", $res);
 }
 ?>

@@ -50,11 +50,15 @@ $agent = $Tools->fetch_object("scanAgents", "id", 1);
 // set address types array
 $Tools->get_addresses_types ();
 // change scan type?
-// $Scan->reset_scan_method ("fping");
+if(@$config['ping_check_method'])
+$Scan->reset_scan_method ($config['ping_check_method']);
+
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
-$send_mail = $config['ping_check_send_mail'];
+if(!isset($config['ping_check_send_mail'])) {
+	$config['ping_check_send_mail'] = true;
+}
 
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
@@ -324,7 +328,7 @@ $Scan->ping_update_scanagent_checktime (1, $nowdate);
 if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
 
 # all done, mail diff?
-if(sizeof($address_change)>0 && $send_mail) {
+if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 
 	# remove old classes
 	unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);

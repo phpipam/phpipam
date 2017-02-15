@@ -43,46 +43,22 @@ else{
 	        'certFingerprintAlgorithm' => $params->idpcertalgorithm,
         ),
     );
-	$auth = new OneLogin_Saml2_Auth($settings);
 }
-
-//if SAMLResponse is not in the request, create an authnrequest and send it to the idp
-if(!isset($_POST["SAMLResponse"])){
-	$ssoBuiltUrl = $auth->login(null, array(), false, false, true);
-	$_SESSION['AuthNRequestID'] = $auth->getLastRequestID();
-	header('Pragma: no-cache');
-	header('Cache-Control: no-cache, must-revalidate');
-	header('Location: ' . $ssoBuiltUrl);
-	exit();
+try {
+    $auth = new OneLogin_Saml2_Auth($settings);
+    $idp_settings = $auth->getSettings();
+    $metadata = $idp_settings->getSPMetadata();
+    $errors = $idp_settings->validateMetadata($metadata);
+    if (empty($errors)) {
+        header('Content-Type: text/xml');
+        echo $metadata;
+    } else {
+        throw new OneLogin_Saml2_Error(
+            'Invalid SP metadata: '.implode(', ', $errors),
+            OneLogin_Saml2_Error::METADATA_SP_INVALID
+        );  
+    }   
+} catch (Exception $e) {
+    echo $e->getMessage();
 }
-else{
-    //process the authentication response
-	if (isset($_SESSION) && isset($_SESSION['AuthNRequestID'])) {
-	    $requestID = $_SESSION['AuthNRequestID'];
-	} else {
-	    $requestID = null;
-	}
-
-    // process errors and check for errors
-	$auth->processResponse($requestID);
-	$errors = $auth->getErrors();
-
-    // check if errors are present
-	if (!empty($errors)) {
-        $Result->show("danger", implode('<br>', $errors), true);
-	    exit();
-	}
-    // is user authenticated
-	if (!$auth->isAuthenticated()) {
-        $Result->show("danger", "Not authenticated", true);
-	    exit();
-	}
-
-	// try to authenticate in phpipam
-	$User->authenticate ( $auth->getNameId(), '', true);
-
-	// Redirect user where he came from, if unknown go to dashboard.
-	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
-	else                                        { header("Location: ".create_link("dashboard")); }
-
-}
+die();

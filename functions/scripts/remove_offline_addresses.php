@@ -14,10 +14,6 @@ if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!");
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
 
-# variables
-$time_limit = 86400 * 7;		// default: 7 days offline
-$send_mail  = true;				// send mail that addresses were removed
-
 # initialize objects
 $Database 	= new Database_PDO;
 $Addresses	= new Addresses ($Database);
@@ -31,7 +27,7 @@ $removed_addresses = array();			// Array with differences, can be used to email 
 // set now for whole script
 $now     = time();
 $nowdate = date ("Y-m-d H:i:s");
-$beforetime = date ("Y-m-d H:i:s", (time()-$time_limit));
+$beforetime = date ("Y-m-d H:i:s", (time()-$config['removed_addresses_timelimit']));
 
 // set query to fetch addresses and belongign subnets
 $query = "select
@@ -70,7 +66,7 @@ else {
 
 
 # all done, mail diff?
-if(sizeof($removed_addresses)>0 && $send_mail) {
+if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 	# settings
 	$Subnets->get_settings ();
 	# check for recipients

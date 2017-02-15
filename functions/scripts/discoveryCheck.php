@@ -40,11 +40,14 @@ $Scan->ping_set_exit(true);
 // set debugging
 $Scan->reset_debugging(false);
 // change scan type?
-//$Scan->reset_scan_method ("pear");
+if(@$config['discovery_check_method'])
+$Scan->reset_scan_method ($config['discovery_check_method']);
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
-$send_mail = $config['discovery_check_send_mail'];
+if(!isset($config['discovery_check_send_mail'])) {
+	$config['discovery_check_send_mail'] = true;
+}
 
 // set now for whole script
 $now     = time();
@@ -263,7 +266,7 @@ $Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 # send mail
-if($discovered>0 && $send_mail) {
+if($discovered>0 && $config['discovery_check_send_mail']) {
 
 	# check for recipients
 	foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
