@@ -379,21 +379,37 @@ else {
 
 		//delete
 		if ($_POST['action']=="delete") {
+
 			// if zone exists
 			if ($domain!==false) {
-				print "<hr><p class='hidden alert-danger'></p>";
-				print "<div class='alert alert-warning'>";
+        if($PowerDNS->count_domain_records($domain-id) > 0) {
+          // Do not delete reverse zone if records already exists
+          // maybe not all records are managed by phpipam
+          print "<hr><p class='hidden alert-info'></p>";
+          print "<div class='alert alert-info'>";
 
-				print "	<div class='btn-group pull-right'>";
-				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
-				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
-				print "	</div>";
+          print "	<div class='btn-group pull-right'>";
+          print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('OK')."</a>";
+          print "	</div>";
 
-				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
-				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
-				print "	<div class='domain-edit-result'></div>";
-				print "</div>";
+          print _('You cannot delete this Zone because it is not empty in PowerDNS')."!<br />";
+          print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+          print "</div>";
+        } else {
+  				print "<hr><p class='hidden alert-danger'></p>";
+  				print "<div class='alert alert-warning'>";
+
+  				print "	<div class='btn-group pull-right'>";
+  				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
+  				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
+  				print "	</div>";
+
+  				print _('Do you wish to delete DNS zone and all records')."?<br>";
+  				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+  				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
+  				print "	<div class='domain-edit-result'></div>";
+  				print "</div>";
+        }
 			}
 		}
 		//create
@@ -471,4 +487,3 @@ else {
 	}
 }
 ?>
-
