@@ -42,6 +42,7 @@ $format_text =& $workbook->addFormat();
 // Create a worksheet
 $worksheet_name = "VLANs";
 $worksheet =& $workbook->addWorksheet($worksheet_name);
+$worksheet->setInputEncoding("utf-8");
 
 $lineCount = 0;
 $rowCount = 0;
