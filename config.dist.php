@@ -1,4 +1,8 @@
 <?php
+/* Enable SAML username mapping */
+define('MAP_SAML_USER', true);
+/* Map SAML to explicit user */
+define('SAML_USERNAME', 'admin');
 
 /**
  * database connection details
