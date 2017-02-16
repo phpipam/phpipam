@@ -221,15 +221,24 @@ else {
     <tr>
         <td colspan="2"><hr></td>
     </tr>
-    <?php if ($subnet['isFull']=="1") { ?>
     <tr>
         <th></th>
         <td class="isFull"><?php print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
     </tr>
     <?php } ?>
 
+    <tr>
+    	<th><?php print _("Last edited"); ?></th>
+    	<td>
+    		<span class="text-muted">
+    		<?php
+    		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
+    		else 								{ print "Never"; }
+    		?>
+    		</span>
+    	</td>
+    </tr>
 
-    <?php } ?>
     <?php if($User->settings->enableThreshold=="1" && $subnet['threshold']>0) { ?>
     <tr>
         <td colspan="2"><hr></td>
