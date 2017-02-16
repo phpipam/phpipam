@@ -55,6 +55,7 @@ $nowdate = date ("Y-m-d H:i:s");
 
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
+$hostnames      = array();			// Array with detected hostnames
 
 
 // script can only be run from cli
@@ -240,6 +241,8 @@ foreach($scan_subnets as $s) {
 			$nsid = $subnet===false ? false : $subnet->nameserverId;
 			// try to resolve hostname
 			$hostname = $DNS->resolve_address ($ip, false, true, $nsid);
+			// save to hostnames
+			$hostnames[$ip] = $hostname['name']==$ip ? "" : $hostname['name'];
 
 			//set update query
 			$values = array("subnetId"=>$s->id,
@@ -297,6 +300,7 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid gray;'>";
 	$content[] = "<tr>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
+	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
 	$content[] = "</tr>";
@@ -313,6 +317,7 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 
 				$content[] = "<tr>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
+				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>".$hostnames[$ip]."</td>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 				$content[] = "</tr>";
