@@ -75,7 +75,6 @@ else {
 	$address['mac_old'] = @$address['mac'];
 }
 
-
 # Set action and button text
 if ($action == "add") 			{ $btnName = _("add");		$act = "add"; }
 else if ($action == "all-add")	{ $btnName = _("add");  	$act = "add"; }

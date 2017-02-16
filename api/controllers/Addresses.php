@@ -432,11 +432,24 @@ class Addresses_controller extends Common_api_functions  {
 		// add action and id
 		$values["id"] = $this->_params->id;
 
-		# we need admin object
+		# we need admin and addresses object
 		$this->init_object ("Admin", $this->Database);
+		$this->init_object ("Addresses", $this->Database);
+
+		# append old address details and fill details if not provided - calidate_update_parameters fetches $this->old_address
+		foreach ($this->old_address as $ok=>$oa) {
+			if (!isset($values[$ok])) {
+				if(!is_null($oa)) {
+					$values[$ok] = $oa;
+				}
+			}
+		}
+
+		# append action
+		$values["action"] = "edit";
 
 		# execute
-		if(!$this->Admin->object_modify ("ipaddresses", "edit", "id", $values)) {
+		if(!$this->Addresses->modify_address ($values)) {
 			$this->Response->throw_exception(500, "Failed to update address");
 		}
 		else {
@@ -491,6 +504,15 @@ class Addresses_controller extends Common_api_functions  {
 		$values = array();
 		$values["id"] 	  = $this->_params->id;
 		$values["action"] = "delete";
+
+		// delete pdns records ?
+		if(isset($this->_params->remove_dns)) {
+			$values['remove_all_dns_records'] = 1;
+			$values['dns_name']				  = $this->old_address->dns_name;
+			$values['ip_addr']				  = $this->Tools->transform_address($this->old_address->ip, "dotted");
+			$values['PTR']				  	  = $this->old_address->PTR;
+			$values['subnetId']				  = $this->old_address->subnetId;
+		}
 
 		# execute update
 		if(!$this->Addresses->modify_address ($values))

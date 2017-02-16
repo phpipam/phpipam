@@ -812,19 +812,20 @@ class Addresses extends Common_functions {
 
     		// ignore if PTRignore set
     		if ($address['PTRignore']=="1")	{
-    				// validate db
-    				$this->pdns_validate_connection ();
-    				// remove if it exists
-    				if ($this->ptr_exists ($address['PTR'])) {
-    					$this->ptr_delete ($address, false);
-    										{ return false; }
-    				}
-    				else {
-    										{ return true; }
-    				}
+				// validate db
+				$this->pdns_validate_connection ();
+				// remove if it exists
+				if ($this->ptr_exists ($address['PTR'])) {
+					$this->ptr_delete ($address, false);
+										{ return false; }
+				}
+				else {
+										{ return true; }
+				}
     		}
     		// validate db
     		$this->pdns_validate_connection ();
+
     		// to object
     		$address = (object) $address;
     		# execute based on action
@@ -865,6 +866,10 @@ class Addresses extends Common_functions {
 	public function pdns_validate_connection ($die = true) {
 		# powerDNS class
 		$this->PowerDNS = new PowerDNS ($this->Database);
+		# add API info
+		if(isset($this->api)) {
+			$this->PowerDNS->api = $this->api;
+		}
 		# check connection
 		if($this->PowerDNS->db_check()===false && $die) { $this->Result->show("danger", _("Cannot connect to powerDNS database"), true); }
 		# get settings
@@ -965,7 +970,7 @@ class Addresses extends Common_functions {
 			$update['id'] = $address->PTR;
 
 			// update
-			$this->PowerDNS->update_domain_record ($domain->id, $update);
+			$this->PowerDNS->update_domain_record ($domain->id, $update, $print_error);
 			// ok
 			if ($print_error && php_sapi_name()!="cli")
 			$this->Result->show("success", "PTR record updated", false);

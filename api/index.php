@@ -96,7 +96,7 @@ try {
 
 
 	// append POST parameters if POST or PATCH
-	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
+	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
         if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
             $rawPostData = file_get_contents('php://input');

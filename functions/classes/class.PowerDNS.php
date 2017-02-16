@@ -847,8 +847,11 @@ class PowerDNS extends Common_functions {
         $this->Log->write( "PowerDNS record create", "New PowerDNS domain record created<hr>".$this->array_to_log((array) $record), 0);
 
         # print ?
-        if ($print_success)
-        $this->Result->show("success", _("Record created"));
+        if ($print_success) {
+            if ($this->api!==true) {
+                $this->Result->show("success", _("Record created"));
+            }
+        }
         // save id
         $this->lastId = $this->Database_pdns->lastInsertId ();
         # soa update
@@ -885,9 +888,11 @@ class PowerDNS extends Common_functions {
         $this->update_soa_serial ($domain_id);
 
         # print ?
-        if ($print_success)
-        $this->Result->show("success", _("Record updated"));
-
+        if ($print_success) {
+            if ($this->api!==true) {
+                $this->Result->show("success", _("Record updated"));
+            }
+        }
         // ok
         return true;
     }
@@ -910,8 +915,11 @@ class PowerDNS extends Common_functions {
         $this->update_soa_serial ($domain_id);
 
         # print ?
-        if ($print_success)
-        $this->Result->show("success", _("Record deleted"));
+        if ($print_success) {
+            if ($this->api!==true) {
+                $this->Result->show("success", _("Record deleted"));
+            }
+        }
 
         // ok
         return true;
@@ -953,6 +961,7 @@ class PowerDNS extends Common_functions {
     public function pdns_remove_ip_and_hostname_records ($hostname, $ip) {
          // set query
         $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+
         // run
 		try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
 		catch (Exception $e) {
