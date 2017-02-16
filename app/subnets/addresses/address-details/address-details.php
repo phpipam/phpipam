@@ -7,6 +7,10 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# get subnet calculation
+$subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);           //set network boundaries
+$gateway         = $Subnets->find_gateway($subnet['id']);
+$gateway_ip      = $gateway===false ? "" : $Subnets->transform_to_dotted($gateway->ip_addr);
 
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
@@ -27,11 +31,25 @@ if(sizeof($address)>1) {
     	print "	<td><strong>$address[ip]</strong></td>";
     	print "</tr>";
 
+        # mask
+        print "<tr>";
+        print " <th>"._('Netmask')."</th>";
+        print " <td>$subnet_detailed[netmask] (/$subnet[mask])</td>";
+        print "</tr>";
+
+        # gateway
+        print "<tr>";
+        print " <th>"._('Gateway')."</th>";
+        print " <td>$gateway_ip</td>";
+        print "</tr>";
+
     	# description
     	print "<tr>";
     	print "	<th>"._('Description')."</th>";
     	print "	<td>$address[description]</td>";
     	print "</tr>";
+
+        print "<tr><td></td><td><hr></td></tr>";
 
     	# hierarchy
     	print "<tr>";
