@@ -58,7 +58,7 @@ if (sizeof($addresses)>0) {
 # empty
 if (sizeof($addresses)==0 && !$slaves) {
     print "<hr>";
-    $Result->show("info alert-absolute", _("Subnet is empty"), false);
+    $Result->show("info alert-absolute", _("Folder is empty"), false);
 }
 
 ?>
