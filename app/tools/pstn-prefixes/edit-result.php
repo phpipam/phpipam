@@ -32,6 +32,9 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
     // name
     if(strlen($_POST['name'])<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
 
+    // prefix
+    if(!$_POST['prefix'])						{ $Result->show("danger", "Prefix can not be empty!", true); }
+	
     // number
     if(!is_numeric($_POST['start']))                                    { $Result->show("danger",  _("Start must be numeric"), true); }
     if(!is_numeric($_POST['stop']))                                     { $Result->show("danger",  _("Stop must be numeric"), true); }
