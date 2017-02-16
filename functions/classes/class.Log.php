@@ -198,11 +198,18 @@ class Logging extends Common_functions {
                         "scanAgent" => "Scan agent index",
                         "isFolder" => "Object is folder",
                         "isFull" => "Subnet is marked as full",
-                        "state" => "Address state index",
+                        "state" => "Subnet state index",
                         "NAT" => "NAT object index",
                         "threshold" => "Sunbet usage alert threshold",
                         "linked_subnet" => "Linked IPv6 subnet",
                         "location" => "Subnet location"
+    	            ),
+    	"folder" => array(
+                        "id" => "Folder id",
+                        "masterSubnetId" => "Master folder index",
+                        "sectionId" => "Section index",
+                        "description" => "Description",
+                        "isFolder" => "Object is folder"
     	            ),
         "address" => array(
                         "id" => "Address id",
@@ -724,6 +731,13 @@ class Logging extends Common_functions {
 			return true;
 		}
 
+		// folder
+		if($this->object_type == "subnet") {
+			if ($this->object_old['isFolder'] || $this->object_new['isFolder']) {
+				$this->object_type = "folder";
+			}
+		}
+
 		// make sure we have settings
 		$this->get_settings ();
 
@@ -811,9 +825,13 @@ class Logging extends Common_functions {
 		# set update id based on action
 		if ($this->object_action=="add")	{ $obj_id = $this->object_new['id']; }
 		else								{ $obj_id = $this->object_old['id']; }
+
+		# set object type
+		$object_type = $this->object_type=="folder" ? "subnet" : $this->object_type;
+
 	    # set values
 	    $values = array(
-	    			"ctype"	 => $this->object_type,
+	    			"ctype"	 => $object_type,
 	    			"coid"	 => $obj_id,
 	    			"cuser"	 => $this->user_id,
 	    			"caction"=> $this->object_action,
@@ -848,6 +866,7 @@ class Logging extends Common_functions {
 		$objects = array(
 						"ip_addr",
 						"subnet",
+						"folder",
 						"section"
 						);
 		# check
@@ -954,7 +973,7 @@ class Logging extends Common_functions {
 
 		}
 		# remove subnet fields
-		elseif($this->object_type == "subnet")	{
+		elseif($this->object_type == "subnet" || $this->object_type == "folder")	{
 			// remove unneeded values
 			unset(	$this->object_new['subnetId'],
 					$this->object_new['location'],
@@ -970,6 +989,48 @@ class Logging extends Common_functions {
 					$this->object_old['state'],
 					$this->object_old['ip']
 				);
+
+			# folder
+			if($this->object_type == "folder") {
+				unset(
+					$this->object_new['linked_subnet'],
+					$this->object_new['firewallAddressObject'],
+					$this->object_new['vrfId'],
+					$this->object_new['allowRequests'],
+					$this->object_new['vlanId'],
+					$this->object_new['showName'],
+					$this->object_new['device'],
+					$this->object_new['pingSubnet'],
+					$this->object_new['discoverSubnet'],
+					$this->object_new['DNSrecursive'],
+					$this->object_new['DNSrecords'],
+					$this->object_new['nameserverId'],
+					$this->object_new['scanAgent'],
+					$this->object_new['isFull'],
+					$this->object_new['threshold'],
+					$this->object_new['lastScan'],
+					$this->object_new['lastDiscovery']
+				);
+				unset(
+					$this->object_old['linked_subnet'],
+					$this->object_old['firewallAddressObject'],
+					$this->object_old['vrfId'],
+					$this->object_old['allowRequests'],
+					$this->object_old['vlanId'],
+					$this->object_old['showName'],
+					$this->object_old['device'],
+					$this->object_old['pingSubnet'],
+					$this->object_old['discoverSubnet'],
+					$this->object_old['DNSrecursive'],
+					$this->object_old['DNSrecords'],
+					$this->object_old['nameserverId'],
+					$this->object_old['scanAgent'],
+					$this->object_old['isFull'],
+					$this->object_old['threshold'],
+					$this->object_old['lastScan'],
+					$this->object_old['lastDiscovery']
+				);
+			}
 
 			# if section does not change
 			if($this->object_new['sectionId']==$this->object_new['sectionIdNew']) {
@@ -1255,7 +1316,7 @@ class Logging extends Common_functions {
     	$keys = array();
 		// list of keys to be changed per object
 		$keys['section'] = array("strictMode", "showVLAN", "showVRF");
-		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "DNSrecursive", "DNSrecords", "isFolder", "isFull");
+		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "DNSrecursive", "DNSrecords", "isFull");
 		$keys['ip_addr'] = array("is_gateway", "excludePing", "PTRignore");
 
 		// check
@@ -1585,7 +1646,7 @@ class Logging extends Common_functions {
 		$this->object_type = str_replace("ip_range", "address range", $this->object_type);
 
 		# folder
-		if ( $this->object_new['isFolder']=="1"	|| $this->object_old['isFolder']=="1")	{ $this->object_type = "folder"; }
+		if ( $this->object_new['isFolder']=="1" || $this->object_old['isFolder']=="1" )	{ $this->object_type = "folder"; }
 
 		# set subject
 		$subject = string;
@@ -1636,26 +1697,30 @@ class Logging extends Common_functions {
 
     	    // format field
     	    $field = trim(str_replace(array("[","]"), "", $field[0]));
-    	    if(is_array($this->changelog_keys[$this->object_type])) {
-        	    if (array_key_exists($field, $this->changelog_keys[$this->object_type])) {
-            	    $field = $this->changelog_keys[$this->object_type][$field];
-        	    }
-        	    else {
-        	    	$field = $field;
-        	    }
-    	    }
-    	    else {
-        	    $field = $field;
-    	    }
 
-    		$content[] = "<tr>";
-    		$content[] = "  <td>$this->mail_font_style<strong> $field</strong>: </font></td>";
-    		$content[] = "  <td>$this->mail_font_style ".trim($value[0])." </font></td>";
-    		if($this->object_action=="edit") {
-    		$content[] = "  <td>$this->mail_font_style => </font></td>";
-    		$content[] = "  <td>$this->mail_font_style ".trim($value[1])." </font></td>";
-    		}
-    		$content[] = "</tr>";
+    	    // no isFolder
+    	    if($field!=="isFolder") {
+	    	    if(is_array($this->changelog_keys[$this->object_type])) {
+	        	    if (array_key_exists($field, $this->changelog_keys[$this->object_type])) {
+	            	    $field = $this->changelog_keys[$this->object_type][$field];
+	        	    }
+	        	    else {
+	        	    	$field = $field;
+	        	    }
+	    	    }
+	    	    else {
+	        	    $field = $field;
+	    	    }
+
+	    		$content[] = "<tr>";
+	    		$content[] = "  <td>$this->mail_font_style<strong> $field</strong>: </font></td>";
+	    		$content[] = "  <td>$this->mail_font_style ".trim($value[0])." </font></td>";
+	    		if($this->object_action=="edit") {
+	    		$content[] = "  <td>$this->mail_font_style => </font></td>";
+	    		$content[] = "  <td>$this->mail_font_style ".trim($value[1])." </font></td>";
+	    		}
+	    		$content[] = "</tr>";
+	    	}
 		}
 		$content[] = "</table>";
 
