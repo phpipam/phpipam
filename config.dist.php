@@ -3,10 +3,10 @@
 /**
  * database connection details
  ******************************/
-$db['host'] = "localhost";
-$db['user'] = "phpipam";
-$db['pass'] = "phpipamadmin";
-$db['name'] = "phpipam";
+$db['host'] = 'localhost';
+$db['user'] = 'phpipam';
+$db['pass'] = 'phpipamadmin';
+$db['name'] = 'phpipam';
 $db['port'] = 3306;
 
 
@@ -22,11 +22,11 @@ $db['port'] = 3306;
      php 5.3.7 required
  ******************************/
 $db['ssl']        = false;                           // true/false, enable or disable SSL as a whole
-$db['ssl_key']    = "/path/to/cert.key";             // path to an SSL key file. Only makes sense combined with ssl_cert
-$db['ssl_cert']   = "/path/to/cert.crt";             // path to an SSL certificate file. Only makes sense combined with ssl_key
-$db['ssl_ca']     = "/path/to/ca.crt";               // path to a file containing SSL CA certs
-$db['ssl_capath'] = "/path/to/ca_certs";             // path to a directory containing CA certs
-$db['ssl_cipher'] = "DHE-RSA-AES256-SHA:AES128-SHA"; // one or more SSL Ciphers
+$db['ssl_key']    = '/path/to/cert.key';             // path to an SSL key file. Only makes sense combined with ssl_cert
+$db['ssl_cert']   = '/path/to/cert.crt';             // path to an SSL certificate file. Only makes sense combined with ssl_key
+$db['ssl_ca']     = '/path/to/ca.crt';               // path to a file containing SSL CA certs
+$db['ssl_capath'] = '/path/to/ca_certs';             // path to a directory containing CA certs
+$db['ssl_cipher'] = '/DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
 
 
 /**
@@ -108,10 +108,10 @@ $gmaps_api_key = "";
  * proxy connection details
  ******************************/
 $proxy_enabled  = false;                                  // Enable/Disable usage of the Proxy server
-$proxy_server   = "myproxy.something.com";                // Proxy server FQDN or IP
-$proxy_port     = "8080";                                 // Proxy server port
-$proxy_user     = "USERNAME";                             // Proxy Username
-$proxy_pass     = "PASSWORD";                             // Proxy Password
+$proxy_server   = 'myproxy.something.com';                // Proxy server FQDN or IP
+$proxy_port     = '8080';                                 // Proxy server port
+$proxy_user     = 'USERNAME';                             // Proxy Username
+$proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
 /**
