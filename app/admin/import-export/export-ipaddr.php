@@ -53,6 +53,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 $today = date("Ymd");
 $filename = $today."_phpipam_ip_address_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //formatting headers
 $format_header =& $workbook->addFormat();

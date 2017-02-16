@@ -25,6 +25,7 @@ if (!$all_vrfs) { $all_vrfs = array(); }
 $today = date("Ymd");
 $filename = $today."_phpipam_VRF_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //formatting headers
 $format_header =& $workbook->addFormat();

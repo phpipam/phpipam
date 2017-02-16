@@ -25,6 +25,7 @@ $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 $today = date("Ymd");
 $filename = $today."_phpipam_L2-Domains_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //formatting headers
 $format_header =& $workbook->addFormat();
