@@ -133,6 +133,7 @@ if($all_sections!==false) {
 	foreach ($all_sections as $section) {
 		//cast
 		$section = (array) $section;
+		$section['name'] = str_replace(" ", "___", $section['name']);
 
 		if( (isset($_GET['exportSection__'.$section['name']])) && ($_GET['exportSection__'.$section['name']] == "on") ) {
 			// get all subnets in section
@@ -145,7 +146,7 @@ if($all_sections!==false) {
 				$subnet = (array) $subnet;
 
 				if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
-					$worksheet->write($lineCount, $rowCount, $section['name'], $format_text);
+					$worksheet->write($lineCount, $rowCount, str_replace("___", " ", $section['name']), $format_text);
 					$rowCount++;
 				}
 
