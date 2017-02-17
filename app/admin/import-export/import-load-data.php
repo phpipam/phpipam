@@ -7,9 +7,10 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object, if not already set
-if (!isset($Database)) { $Database 	= new Database_PDO; }
-if (!isset($User)) { $User = new User ($Database); }
-if (!isset($Result)) { $Result = new Result; }
+if (!isset($Database)) 	{ $Database = new Database_PDO; }
+if (!isset($User)) 		{ $User 	= new User ($Database); }
+if (!isset($Result)) 	{ $Result 	= new Result; }
+if (!isset($Tools)) 	{ $Tools 	= new Tools; }
 
 # verify that user is logged in, to guard against direct access of page and possible exploits
 $User->check_user_session();
@@ -53,12 +54,15 @@ if (strtolower($filetype) == "csv") {
 	# open CSV file
 	$filehdl = fopen('upload/data_import.csv', 'r');
 
+	# set delimiter
+	$Tools->set_csv_delimiter ($filehdl);
+
 	# read header row
 	$row = 0;$col = 0;
 	$line = fgets($filehdl);
 	$row++;
 	$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
-	$cols = preg_split("/[;]/", $line); //split by comma or semi-colon
+	$cols = str_getcsv ($line, $Tools->csv_delimiter);
 	foreach ($cols as $val) {
 		$col++;
 		# map import columns to expected fields as per previous window
@@ -70,7 +74,7 @@ if (strtolower($filetype) == "csv") {
 	while (($line = fgets($filehdl)) !== false) {
 		$row++;$col = 0;
 		$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
-		$cols = preg_split("/[;]/", $line); //split by comma or semi-colon
+		$cols = str_getcsv ($line, $Tools->csv_delimiter);
 		$record = array();
 		foreach ($cols as $val) {
 			$col++;

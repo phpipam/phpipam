@@ -27,6 +27,13 @@ class Tools extends Common_functions {
 	public $address_types = null;
 
 	/**
+	 * CSV delimiter
+	 *
+	 * @var string
+	 */
+	public $csv_delimiter = ",";
+
+	/**
 	 * PEAR NET IPv4 object
 	 *
 	 * @var mixed
@@ -2712,7 +2719,7 @@ class Tools extends Common_functions {
 	private function parse_import_file_xls ($subnet, $custom_address_fields) {
      	# get excel object
     	require_once(dirname(__FILE__).'/../../functions/php-excel-reader/excel_reader2.php');				//excel reader 2.21
-    	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.xls', false);
+    	$data = new Spreadsheet_Excel_Reader(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.xls', false, 'utf-8');
 
     	//get number of rows
     	$numRows = $data->rowcount(0);
@@ -2720,13 +2727,16 @@ class Tools extends Common_functions {
 
     	$outFile = array();
 
+    	// set delimiter
+    	$this->csv_delimiter = ";";
+
     	//get all to array!
     	for($m=0; $m < $numRows; $m++) {
 
     		//IP must be present!
     		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
         		//for multicast
-        		if ($this->settings-enableMulticast=="1") {
+        		if ($this->settings->enableMulticast=="1") {
             		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
                 		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
                     }
@@ -2735,18 +2745,18 @@ class Tools extends Common_functions {
                     }
                 }
 
-    			$outFile[$m]  = $data->val($m,'A').','.$data->val($m,'B').','.$data->val($m,'C').','.$data->val($m,'D').',';
-    			$outFile[$m] .= $data->val($m,'E').','.$mac.','.$data->val($m,'G').','.$data->val($m,'H').',';
-    			$outFile[$m] .= $data->val($m,'I').','.$data->val($m,'J');
+    			$outFile[$m]  = $data->val($m,'A').$this->csv_delimiter.$data->val($m,'B').$this->csv_delimiter.$data->val($m,'C').$this->csv_delimiter.$data->val($m,'D').$this->csv_delimiter;
+    			$outFile[$m] .= $data->val($m,'E').$this->csv_delimiter.$mac.$this->csv_delimiter.$data->val($m,'G').$this->csv_delimiter.$data->val($m,'H').$this->csv_delimiter;
+    			$outFile[$m] .= $data->val($m,'I').$this->csv_delimiter.$data->val($m,'J');
     			//add custom fields
     			if(sizeof($custom_address_fields) > 0) {
     				$currLett = "K";
     				foreach($custom_address_fields as $field) {
-    					$outFile[$m] .= ",".$data->val($m,$currLett++);
+    					$outFile[$m] .= $this->csv_delimiter.$data->val($m,$currLett++);
     				}
     			}
     		}
-    	}
+    	};
     	// return
     	return $outFile;
 	}
@@ -2761,6 +2771,9 @@ class Tools extends Common_functions {
     	/* get file to string */
     	$outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
 
+    	// delimiter
+    	$this->set_csv_delimiter ($outFile);
+
     	/* format file */
     	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
     	$outFile = explode("\n", $outFile);
@@ -2768,14 +2781,15 @@ class Tools extends Common_functions {
     	/* validate IP */
     	foreach($outFile as $k=>$v) {
         	//put it to array
-        	$field = explode(",", $v);
+        	$field = str_getcsv ($v, $this->csv_delimiter);
 
         	if(!filter_var($field[0], FILTER_VALIDATE_IP)) {
             	unset($outFile[$k]);
+            	unset($field);
         	}
         	else {
             	# mac
-        		if ($this->settings-enableMulticast=="1") {
+        		if ($this->settings->enableMulticast=="1") {
             		if (strlen($field[5])==0 && $this->Subnets->is_multicast($field[0]))  {
                 		$field[5] = $this->Subnets->create_multicast_mac ($field[0]);
                     }
@@ -2783,11 +2797,28 @@ class Tools extends Common_functions {
         	}
 
         	# save
-        	$outFile[$k] = implode(",", $field);
+        	if(isset($field)) {
+	        	$outFile[$k] = implode($this->csv_delimiter, $field);
+    		}
     	}
 
     	# return
     	return $outFile;
+	}
+
+	/**
+	 * Detects CSV delimiter
+	 *
+	 * @method set_csv_delimiter
+	 * @param  string $outFile
+	 * @return string
+	 */
+	public function set_csv_delimiter ($outFile) {
+		// count occurences
+		$cnt_coma  = substr_count($outFile, ",");
+		$cnt_colon = substr_count($outFile, ";");
+		// return higher
+		$this->csv_delimiter = $cnt_coma > $cnt_colon ? "," : ";";
 	}
 
 	/**
@@ -2806,7 +2837,7 @@ class Tools extends Common_functions {
     	if (sizeof($outFile)>0) {
             foreach($outFile as $k=>$line) {
             	//put it to array
-            	$field = explode(",", $line);
+            	$field = str_getcsv ($line, $this->csv_delimiter);
 
             	//verify IP address
             	if(!filter_var($field[0], FILTER_VALIDATE_IP)) 	{ $class = "danger";	$errors++; }
@@ -2820,7 +2851,7 @@ class Tools extends Common_functions {
                     if ($this->Subnets->is_subnet_inside_subnet ($field[0]."/" . $ipsm, $this->transform_address($subnet->subnet, "dotted")."/".$subnet->mask)==false)    { $class = "danger"; $errors++; }
                 }
             	// make sure mac does not exist
-                if ($this->settings-enableMulticast=="1" && strlen($class)==0) {
+                if ($this->settings->enableMulticast=="1" && strlen($class)==0) {
                     if (strlen($field[5])>0 && $this->Subnets->is_multicast($field[0])) {
                         if($this->Subnets->validate_multicast_mac ($field[5], $subnet->sectionId, $subnet->vlanId, MCUNIQUE)!==true) {
                             $errors++; $class = "danger";
