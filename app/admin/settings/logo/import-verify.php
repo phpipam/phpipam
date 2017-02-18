@@ -8,7 +8,7 @@ $filename = $_FILES['file']['name'];
 $filename = end(explode(".", $filename));
 
 /* get settings */
-include(dirname(__FILE__)."/../../../../config.php");
+include(dirname(__FILE__)."/../../../../functions/functions.php");
 
 /* list of permitted file extensions */
 $allowed = array('png');
