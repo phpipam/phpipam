@@ -75,6 +75,8 @@ if($slaves) {
 		# headers
 		print "<tr>";
 		print "	<th class='small'>"._('VLAN')."</th>";
+		if($User->settings->enableVRF==1)
+		print "	<th class='small'>"._('VRF')."</th>";
 		print "	<th class='small description'>"._('Subnet description')."</th>";
 		print "	<th>"._('Subnet')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>"._('Used')."</th>";
@@ -98,6 +100,14 @@ if($slaves) {
 				# reformat empty VLAN
 				if(sizeof($vlan)==1) { $vlan['number'] = "/"; }
 
+				# get VRF details
+				if($User->settings->enableVRF==1) {
+					$vrf = $Tools->fetch_object("vrf", "vrfId", $slave['vrfId']);
+					$vrf = (array) $vrf;
+					# reformat empty VLAN
+					if(sizeof($vrf)==1) { $vrf['name'] = "/"; }
+				}
+
 				// calculate usage
                 $calculate  = $Subnets->calculate_subnet_usage ($slave, false);
 
@@ -110,6 +120,9 @@ if($slaves) {
 
 				print "<tr>";
 			    print "	<td class='small'>".$vlan['number']."</td>";
+			    if($User->settings->enableVRF==1)
+			    print "	<td class='small'>".$vrf['name']."</td>";
+
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
 			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>".$Subnets->transform_address($slave['subnet'], "dotted")."/$slave[mask] $fullinfo</a></td>";
 

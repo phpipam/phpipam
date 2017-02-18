@@ -140,20 +140,22 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 else {
 
 	# create array of default update values
-	$values = array("id"=>@$_POST['subnetId'],
-					"isFolder"=>1,
-					"masterSubnetId"=>$_POST['masterSubnetId'],
-					"description"=>@$_POST['description'],
+	$values = array(
+					"id"             => @$_POST['subnetId'],
+					"isFolder"       => 1,
+					"masterSubnetId" => $_POST['masterSubnetId'],
+					"description"    => @$_POST['description'],
+					"isFull"         => @$_POST['isFull']
 					);
 	# for new subnets we add permissions
 	if($_POST['action']=="add") {
-		$values['permissions']=$_POST['permissions'];
-		$values['sectionId']=$_POST['sectionId'];
+		$values['permissions'] = $_POST['permissions'];
+		$values['sectionId']   = $_POST['sectionId'];
 	}
 	else {
 		# if section change
 		if(@$_POST['sectionId'] != @$_POST['sectionIdNew']) {
-			$values['sectionId']=$_POST['sectionIdNew'];
+			$values['sectionId'] = $_POST['sectionIdNew'];
 		}
 	}
 	# append custom fields

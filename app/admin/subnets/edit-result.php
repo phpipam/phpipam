@@ -63,6 +63,8 @@ if($_POST['masterSubnetId']!=0)	{
 }
 else 									{ $parent_is_folder = false; }
 
+# deny overlapping inside folder - additional checks
+$folder_deny_overlapping = $parent_is_folder && $master_section['isFull'] ? true : false;
 
 # If request came from IP address subnet edit and action2 is Delete then change action
 if(@$_POST['action2']=="delete")        { $_POST['action'] = $_POST['action2']; }
@@ -84,7 +86,6 @@ if ($_POST['action']=="add") {
 	}
     //disable checks for folders and if strict check enabled
     if($section['strictMode']==1 && !$parent_is_folder ) {
-
 	    // we are adding nested subnet
 	    if($_POST['masterSubnetId']!=0) {
     	    //verify that nested subnet is inside its parent
@@ -106,6 +107,14 @@ if ($_POST['action']=="add") {
 	            $errors[] = $overlap;
 	        }
 	    }
+    }
+    // parent is folder and folder does not permit overlapping
+    if($folder_deny_overlapping) {
+        //check for overlapping against existing subnets under same master
+        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+		if($overlap!==false) {
+            $errors[] = $overlap;
+        }
     }
 
     # Set permissions if adding new subnet
@@ -158,19 +167,26 @@ elseif ($_POST['action']=="edit") {
     }
 
     // normal edit check
+    if($section['strictMode']==1 && !$parent_is_folder) {
+    	/* verify that nested subnet is inside root subnet */
+    	if($_POST['masterSubnetId'] != 0) {
+	    	if (!$overlap = $Subnets->verify_subnet_nesting($_POST['masterSubnetId'], $_POST['cidr'])) {
+	    		$errors[] = _('Nested subnet not in root subnet!');
+	    	}
+    	}
+    }
+    /* for nesting - MasterId cannot be the same as subnetId! */
+    if ( $_POST['masterSubnetId']==$_POST['subnetId'] ) {
+    	$errors[] = _('Subnet cannot nest behind itself!');
+    }
 
-        if($section['strictMode']==1 && !$parent_is_folder) {
-        	/* verify that nested subnet is inside root subnet */
-        	if($_POST['masterSubnetId'] != 0) {
-    	    	if (!$overlap = $Subnets->verify_subnet_nesting($_POST['masterSubnetId'], $_POST['cidr'])) {
-    	    		$errors[] = _('Nested subnet not in root subnet!');
-    	    	}
-        	}
-        }
-        /* for nesting - MasterId cannot be the same as subnetId! */
-        if ( $_POST['masterSubnetId']==$_POST['subnetId'] ) {
-        	$errors[] = _('Subnet cannot nest behind itself!');
-        }
+	// parent is folder and folder does not permit overlapping
+	if ($_POST['vrfId'] != @$_POST['vrfIdOld'] && $folder_deny_overlapping) {
+    	$overlap=$Subnets->verify_subnet_overlapping ($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId'], true);
+    	if($overlap!==false) {
+	    	$errors[] = $overlap;
+	    }
+    }
 
 }
 # delete checks

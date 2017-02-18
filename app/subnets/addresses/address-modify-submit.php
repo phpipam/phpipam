@@ -269,8 +269,12 @@ else {
 		$address['ip_addr'] = $address_old['ip'];
 	}
 	# verify address
-	if($action!=="delete" && $subnet['isFolder']!="1")
-	$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
+	if($action!=="delete" && $subnet['isFolder']!="1") {
+		$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
+	}
+	elseif ($action!=="delete" && $subnet['isFolder']=="1") {
+		$verify = $Addresses->verify_address( $address['ip_addr'], "0.0.0.0/0", $not_strict );
+	}
 
 	# if errors are present print them, else execute query!
 	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }

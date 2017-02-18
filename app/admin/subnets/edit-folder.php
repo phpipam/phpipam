@@ -121,6 +121,18 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
         <td class="info2"><?php print _('Enter master folder if you want to nest it under existing folder, or select root to create root folder'); ?>!</td>
     </tr>
 
+    <!-- Deny overlapping -->
+    <tr>
+        <td><?php print _('Deny overlapping'); ?></td>
+        <td>
+        	<select name="isFull" class='form-control input-sm input-w-auto'>
+        		<option value="0"><?php print _("No"); ?></option>
+        		<option value="1" <?php if(@$folder_old_details['isFull']=="1") { print "selected='selected'"; } ?>><?php print _("Yes"); ?></option>
+        	</select>
+        </td>
+        <td class="info2"><?php print _("Don't allow overlapping of subnets inside folder"); ?></td>
+    </tr>
+
     <!-- hidden values -->
     <input type="hidden" name="sectionId"       value="<?php print $_POST['sectionId'];    ?>">
     <input type="hidden" name="subnetId"        value="<?php print $_POST['subnetId'];     ?>">
