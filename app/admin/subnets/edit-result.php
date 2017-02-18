@@ -108,14 +108,25 @@ if ($_POST['action']=="add") {
 	        }
 	    }
     }
-    // parent is folder and folder does not permit overlapping
-    if($folder_deny_overlapping) {
-        //check for overlapping against existing subnets under same master
-        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
-		if($overlap!==false) {
-            $errors[] = $overlap;
-        }
-    }
+
+    // folder checks
+    if($parent_is_folder) {
+	    // parent is folder and folder does not permit overlapping
+	    if($folder_deny_overlapping) {
+	        //check for overlapping against existing subnets under same master
+	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+			if($overlap!==false) {
+	            $errors[] = $overlap;
+	        }
+	    }
+	    // strict mode is enforced, so we need to validate against all root subnets inside section
+	    if ($section['strictMode']==1) {
+		    $overlap = $Subnets->verify_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId']);
+	    	if($overlap!==false) {
+	            $errors[] = $overlap;
+	        }
+	    }
+	}
 
     # Set permissions if adding new subnet
 	// root
