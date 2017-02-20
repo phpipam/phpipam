@@ -1519,7 +1519,17 @@ class Subnets extends Common_functions {
 	    return false;
 	}
 
-	public function verify_subnet_interfolder_overlapping ($sectionId, $new_subnet, $vrfId = 0) {
+	/**
+	 * Verifies overlapping between folders
+	 *
+	 * @access public
+	 * @param int $sectionId
+	 * @param mixed $cidr (new subnet)
+	 * @param int $vrfId (default: 0)
+	 * @param int $masterSubnetId (default: 0)
+	 * @return string|false
+	 */
+	public function verify_subnet_interfolder_overlapping ($sectionId, $cidr, $vrfId = 0) {
 		# fix null vrfid
 		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
 		# fetch all folders
@@ -1545,18 +1555,40 @@ class Subnets extends Common_functions {
 					            // ignore folders!
 					            if($existing_subnet->isFolder!=1) {
 						            # check overlapping
-									if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-										 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-									}
-								}
-								if($existing_subnet->isFolder!=1) {
-						            # check overlapping
-									if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-										 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+									if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+										 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
 									}
 								}
 				            }
 						}
+					}
+				}
+			}
+		}
+	    # default false - does not overlap
+	    return false;
+	}
+
+	/**
+	 * Verifies VRF overlapping - globally
+	 *
+	 * @method verify_vrf_overlapping
+	 * @param  [type]                 $cidr
+	 * @param  [type]                 $vrfId
+	 * @param  int                    $subnetId
+	 * @return [type]                           [description]
+	 */
+	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0) {
+		# fetch all subnets in VRF globally
+		$all_subnets = $this->fetch_multiple_objects ("subnets", "vrfId", $vrfId);
+		# check
+		if($all_subnets!==false) {
+			foreach ($all_subnets as $existing_subnet) {
+	            // ignore folders - precaution and ignore self for edits
+	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId) {
+		            # check overlapping
+					if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+						 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
 					}
 				}
 			}

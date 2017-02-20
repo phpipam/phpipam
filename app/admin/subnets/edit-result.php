@@ -36,7 +36,8 @@ if(@$_POST['showName']==1 && strlen($_POST['description'])==0) 	{ $Result->show(
 
 # we need old values for mailing
 if($_POST['action']=="edit" || $_POST['action']=="delete") {
-	$old_subnet_details = (array) $Subnets->fetch_subnet("id", $_POST['subnetId']);
+	$old_subnet_details = $Subnets->fetch_subnet("id", $_POST['subnetId']);
+	if($old_subnet_details===false)								{ $Result->show("danger", _("Invalid subnet Id"), true); }
 }
 
 # modify post parameters
@@ -48,6 +49,12 @@ $temp = explode("/", $_POST['subnet']);
 $_POST['mask']   = trim($temp[1]);
 $_POST['subnet'] = trim($temp[0]);
 
+
+# errors array
+$errors = array ();
+# default vrf
+if(!isset($_POST['vrfId']) || $_POST['vrfId']==null)	{ $_POST['vrfId'] = 0; }
+if(!is_numeric($_POST['vrfId']))						{ $_POST['vrfId'] = 0; }
 
 
 # get section details
@@ -81,6 +88,20 @@ if ($_POST['action']=="add") {
     //verify cidr
     $cidr_check = $Subnets->verify_cidr_address($_POST['cidr']);
     if(strlen($cidr_check)>5) 												{ $errors[] = $cidr_check; }
+
+
+    # Set permissions if adding new subnet
+	// root
+	if($_POST['masterSubnetId']==0) {
+		$_POST['permissions'] = $section['permissions'];
+	}
+	// nested - inherit parent permissions
+	else {
+		# get parent
+		$parent = $Subnets->fetch_subnet(null, $_POST['masterSubnetId']);
+		$_POST['permissions'] = $parent->permissions;
+	}
+
 
     // make subnet checks only if strictmode is true
     if($section['strictMode']==1 && !$parent_is_folder ) {
@@ -125,16 +146,13 @@ if ($_POST['action']=="add") {
         }
 	}
 
-    # Set permissions if adding new subnet
-	// root
-	if($_POST['masterSubnetId']==0) {
-		$_POST['permissions'] = $section['permissions'];
-	}
-	// nested - inherit parent permissions
-	else {
-		# get parent
-		$parent = $Subnets->fetch_subnet(null, $_POST['masterSubnetId']);
-		$_POST['permissions'] = $parent->permissions;
+	# If VRF is defined check for uniqueness globally !
+	if ($_POST['vrfId']>0) {
+		# make vrf overlapping check
+		$overlap = $Subnets->verify_vrf_overlapping ($_POST['cidr'], $_POST['vrfId'], 0);
+		if($overlap!==false) {
+			$errors[] = $overlap;
+		}
 	}
 }
 # edit checks
@@ -186,6 +204,15 @@ elseif ($_POST['action']=="edit") {
 	    	$errors[] = $overlap;
 	    }
     }
+
+	# If VRF is defined check for uniqueness globally !
+	if ($_POST['vrfId']>0) {
+		# make vrf overlapping check
+		$overlap = $Subnets->verify_vrf_overlapping ($_POST['cidr'], $_POST['vrfId'], $old_subnet_details->id);
+		if($overlap!==false) {
+			$errors[] = $overlap;
+		}
+	}
 }
 # delete checks
 else {
@@ -217,7 +244,7 @@ if(sizeof($custom) > 0) {
 
 
 /* If no errors are present execute request */
-if (sizeof(@$errors)>0) {
+if (sizeof($errors)>0) {
     print '<div class="alert alert-danger"><strong>'._('Please fix following problems').'</strong>:';
     foreach ($errors as $error) { print "<br>".$error; }
     print '</div>';
@@ -396,12 +423,12 @@ else {
 		if($PowerDNS->db_check()===false) { $Result->show("danger", _("Cannot connect to powerDNS database"), true); }
 
 		// set zone
-		$zone = $_POST['action']=="add" ? $PowerDNS->get_ptr_zone_name ($_POST['subnet'], $_POST['mask']) : $PowerDNS->get_ptr_zone_name ($old_subnet_details['ip'], $old_subnet_details['mask']);
+		$zone = $_POST['action']=="add" ? $PowerDNS->get_ptr_zone_name ($_POST['subnet'], $_POST['mask']) : $PowerDNS->get_ptr_zone_name ($old_subnet_details->ip, $old_subnet_details->mask);
 		// try to fetch domain
 		$domain = $PowerDNS->fetch_domain_by_name ($zone);
 
 		// POST DNSrecursive not set, fake it if old is also 0
-		if (!isset($_POST['DNSrecursive']) && @$old_subnet_details['DNSrecursive']==0) { $_POST['DNSrecursive'] = 0; }
+		if (!isset($_POST['DNSrecursive']) && @$old_subnet_details->DNSrecursive==0) { $_POST['DNSrecursive'] = 0; }
 
 		// recreate csrf cookie
         $csrf = $User->csrf_cookie ("create", "domain");
@@ -439,7 +466,7 @@ else {
 			}
 		}
 		// update
-		elseif ($_POST['action']=="edit" && $_POST['DNSrecursive']!=$old_subnet_details['DNSrecursive']) {
+		elseif ($_POST['action']=="edit" && $_POST['DNSrecursive']!=$old_subnet_details->DNSrecursive) {
 			// remove domain
 			if (!isset($_POST['DNSrecursive']) && $domain!==false) {
 				print "<hr><p class='hidden alert-danger'></p>";
@@ -470,7 +497,7 @@ else {
 
 				// create PTR records
 				$Addresses->pdns_validate_connection ();
-				$hosts = $Addresses->fetch_subnet_addresses ($old_subnet_details['id'], "ip_addr", "asc");
+				$hosts = $Addresses->fetch_subnet_addresses ($old_subnet_details->id, "ip_addr", "asc");
 				// loop
 				if (sizeof($hosts)>0) {
 					$cnt = 0;

@@ -1,4 +1,4 @@
-== 1.29.031
+== 1.29.041
 
     New features:
     ------------
@@ -87,7 +87,8 @@
     + Added option to update address tags when address state change occurs (pingCheck) [#840];
     + Added mantaneance mode;
     + Added inactive addresses removal script;
-    + Added option to prevent overlapping subnets inside folder;
+    + Subnet overlapping now checked also inside folders to prevernt duplicates;
+    + Subnet overlapping now checked also between sections if VRF defined;
 
     Bugfixes:
     ----------------------------
