@@ -1526,7 +1526,6 @@ class Subnets extends Common_functions {
 	 * @param int $sectionId
 	 * @param mixed $cidr (new subnet)
 	 * @param int $vrfId (default: 0)
-	 * @param int $masterSubnetId (default: 0)
 	 * @return string|false
 	 */
 	public function verify_subnet_interfolder_overlapping ($sectionId, $cidr, $vrfId = 0) {
@@ -1573,16 +1572,16 @@ class Subnets extends Common_functions {
 	 * Verifies VRF overlapping - globally
 	 *
 	 * @method verify_vrf_overlapping
-	 * @param  [type]                 $cidr
-	 * @param  [type]                 $vrfId
-	 * @param  int                    $subnetId
-	 * @return [type]                           [description]
+	 * @param  string $cidr
+	 * @param  int $vrfId
+	 * @param  int $subnetId
+	 * @return false|string
 	 */
 	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0) {
 		# fetch all subnets in VRF globally
 		$all_subnets = $this->fetch_multiple_objects ("subnets", "vrfId", $vrfId);
 		# check
-		if($all_subnets!==false) {
+		if($all_subnets!==false && is_array($all_subnets)) {
 			foreach ($all_subnets as $existing_subnet) {
 	            // ignore folders - precaution and ignore self for edits
 	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId) {
@@ -3169,7 +3168,6 @@ class Subnets extends Common_functions {
 				$parent = $option['value']['id'];
 			}
 			# Last items
-			else { }
 		}
 		# print or return
 		if($print)
@@ -3251,7 +3249,6 @@ class Subnets extends Common_functions {
 					$parent = $option['value']['id'];
 				}
 				# Last items
-				else { }
 			}
 			$html[] = "</optgroup>";
 		}
@@ -3320,7 +3317,6 @@ class Subnets extends Common_functions {
 				$parent = $option['value']['id'];
 			}
 			# Last items
-			else { }
 		}
 		}
 		$html[] = "</optgroup>";

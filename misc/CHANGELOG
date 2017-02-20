@@ -1,4 +1,4 @@
-== 1.29.041
+== 1.3
 
     New features:
     ------------
@@ -89,6 +89,7 @@
     + Added inactive addresses removal script;
     + Subnet overlapping now checked also inside folders to prevernt duplicates;
     + Subnet overlapping now checked also between sections if VRF defined;
+    + Added new settings directive that requires unique subnets accross sections;
 
     Bugfixes:
     ----------------------------

@@ -435,6 +435,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- enforceUnique -->
+<tr>
+	<td class="title"><?php print _("Require uniques subnets"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enforceUnique" <?php if($settings['enforceUnique'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Require unique subnets accross all sections'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">

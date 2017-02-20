@@ -128,7 +128,7 @@ if ($_POST['action']=="add") {
 	    }
     }
 	# parent is folder checks
-	else {
+	elseif($section['strictMode']==1) {
         //check for overlapping against existing subnets under same master
         $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
 		if($overlap!==false) {
@@ -146,8 +146,8 @@ if ($_POST['action']=="add") {
         }
 	}
 
-	# If VRF is defined check for uniqueness globally !
-	if ($_POST['vrfId']>0) {
+	# If VRF is defined check for uniqueness globally or if selected !
+	if ($_POST['vrfId']>0 || $User->settings->enforceUnique=="1" && $section['strictMode']==1) {
 		# make vrf overlapping check
 		$overlap = $Subnets->verify_vrf_overlapping ($_POST['cidr'], $_POST['vrfId'], 0);
 		if($overlap!==false) {
@@ -198,15 +198,15 @@ elseif ($_POST['action']=="edit") {
     }
 
 	// parent is folder and folder does not permit overlapping
-	if ($_POST['vrfId'] != @$_POST['vrfIdOld']) {
+	if (($_POST['vrfId'] != @$_POST['vrfIdOld']) && $section['strictMode']==1) {
     	$overlap=$Subnets->verify_subnet_overlapping ($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
     	if($overlap!==false) {
 	    	$errors[] = $overlap;
 	    }
     }
 
-	# If VRF is defined check for uniqueness globally !
-	if ($_POST['vrfId']>0) {
+	# If VRF is defined check for uniqueness globally or if selected !
+	if ($_POST['vrfId']>0 || $User->settings->enforceUnique=="1" && $section['strictMode']==1) {
 		# make vrf overlapping check
 		$overlap = $Subnets->verify_vrf_overlapping ($_POST['cidr'], $_POST['vrfId'], $old_subnet_details->id);
 		if($overlap!==false) {

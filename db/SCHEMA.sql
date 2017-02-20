@@ -175,6 +175,7 @@ CREATE TABLE `settings` (
   `hiddenCustomFields` text NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
   `updateTags` TINYINT(1)  NULL  DEFAULT '0',
+  `enforceUnique` TINYINT(1)  NULL  DEFAULT '1',
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
