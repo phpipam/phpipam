@@ -21,9 +21,6 @@ $vlan = $Tools->fetch_object("vlans", "vlanId", @$vlanId);
 # set rowspan
 $rowSpan = 10 + sizeof($cfields);
 
-# format overlappging - we will use isFull flag
-$overlapping_enforce = $folder['isFull']==1 ? "Yes" : "No";
-
 # verify that is it displayed in proper section, otherwise warn!
 if($folder['sectionId']!=$_GET['section'])	{
 	$sd = $Sections->fetch_section ("id", $folder['sectionId']);
@@ -50,10 +47,6 @@ if($folder['sectionId']!=$_GET['section'])	{
 	<tr>
 		<th><?php print _('Permission'); ?></th>
 		<td><?php print $Subnets->parse_permissions($folder_permission); ?></td>
-	</tr>
-	<tr>
-		<th><?php print _('Deny overlapping'); ?></th>
-		<td><?php print _($overlapping_enforce); ?></td>
 	</tr>
 
 	<?php

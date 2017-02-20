@@ -1475,10 +1475,9 @@ class Subnets extends Common_functions {
 	 * @param mixed $new_subnet (cidr)
 	 * @param int $vrfId (default: 0)
 	 * @param int $masterSubnetId (default: 0)
-	 * @param bool $folder_deny_overlapping (default: false)
 	 * @return string|false
 	 */
-	public function verify_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0, $folder_deny_overlapping = false) {
+	public function verify_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0) {
 		# fix null vrfid
 		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
 		// fix null masterSubnetId
@@ -1507,7 +1506,7 @@ class Subnets extends Common_functions {
 							 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
 						}
 					}
-					if($existing_subnet->isFolder!=1 && $parent->isFolder==1 && $folder_deny_overlapping) {
+					if($existing_subnet->isFolder!=1 && $parent->isFolder==1) {
 			            # check overlapping
 						if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
 							 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
@@ -1516,6 +1515,52 @@ class Subnets extends Common_functions {
 	            }
 	        }
 	    }
+	    # default false - does not overlap
+	    return false;
+	}
+
+	public function verify_subnet_interfolder_overlapping ($sectionId, $new_subnet, $vrfId = 0) {
+		# fix null vrfid
+		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
+		# fetch all folders
+		$all_folders = $this->fetch_multiple_objects ("subnets", "isFolder", "1");
+		# check
+		if($all_folders!==false) {
+			// remove ones not in same section
+			foreach($all_folders as $k=>$folder) {
+				if ($folder->sectionId!=$sectionId) {
+					unset($all_folders[$k]);
+				}
+			}
+			// do checks
+			if(sizeof($all_folders)>0) {
+				foreach ($all_folders as $folder) {
+					// fetch all subnets
+					$folder_subnets = $this->fetch_subnet_slaves ($folder->id);
+					// only check if VRF Ids match
+					if ($folder_subnets!==false) {
+						foreach ($folder_subnets as $existing_subnet) {
+				            //only check if vrfId's match
+				            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+					            // ignore folders!
+					            if($existing_subnet->isFolder!=1) {
+						            # check overlapping
+									if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+										 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+									}
+								}
+								if($existing_subnet->isFolder!=1) {
+						            # check overlapping
+									if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+										 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+									}
+								}
+				            }
+						}
+					}
+				}
+			}
+		}
 	    # default false - does not overlap
 	    return false;
 	}
