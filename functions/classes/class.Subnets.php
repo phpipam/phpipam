@@ -1574,18 +1574,33 @@ class Subnets extends Common_functions {
 	 * @method verify_vrf_overlapping
 	 * @param  string $cidr
 	 * @param  int $vrfId
-	 * @param  int $subnetId
+	 * @param  int $subnetId (default: 0)
+	 * @param  int $masterSubnetId (default: 0)
 	 * @return false|string
 	 */
-	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0) {
+	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0, $masterSubnetId=0) {
 		# fetch all subnets in VRF globally
 		$all_subnets = $this->fetch_multiple_objects ("subnets", "vrfId", $vrfId);
+		# fetch parent
+		if($masterSubnetId!==0) {
+			$parent = $this->fetch_object ("subnets", "id", $masterSubnetId);
+			var_dump($parent);
+			if($parent->isFolder==1) {
+				unset($parent);
+				$parent = false;
+			}
+		}
+		else {
+			$parent = false;
+		}
+
 		# check
-		if($all_subnets!==false && is_array($all_subnets)) {
+		if($all_subnets!==false && is_array($all_subnets) && $parent==false) {
+			print "a";
 			foreach ($all_subnets as $existing_subnet) {
 	            // ignore folders - precaution and ignore self for edits
 	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId) {
-		            # check overlapping
+		            # check overlapping globally if subnet is not nested
 					if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
 						 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
 					}
