@@ -5254,7 +5254,7 @@ msgid "Domain"
 msgstr "Domena"
 
 msgid "Records"
-msgstr "Zapisis"
+msgstr "Zapisi"
 
 msgid "Serial number"
 msgstr "Serijska številka"
