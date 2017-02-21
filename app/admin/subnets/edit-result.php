@@ -245,6 +245,8 @@ if(sizeof($custom) > 0) {
 
 /* If no errors are present execute request */
 if (sizeof($errors)>0) {
+	//unique
+	$errors = array_unique($errors);
     print '<div class="alert alert-danger"><strong>'._('Please fix following problems').'</strong>:';
     foreach ($errors as $error) { print "<br>".$error; }
     print '</div>';
