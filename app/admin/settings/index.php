@@ -437,7 +437,7 @@ $(document).ready(function() {
 
 <!-- enforceUnique -->
 <tr>
-	<td class="title"><?php print _("Require uniques subnets"); ?></td>
+	<td class="title"><?php print _("Require unique subnets"); ?></td>
 	<td>
 		<input type="checkbox" class="input-switch" value="1" name="enforceUnique" <?php if($settings['enforceUnique'] == 1) print 'checked'; ?>>
 	</td>
