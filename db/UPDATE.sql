@@ -764,3 +764,15 @@ UPDATE `settings` set `donate` = 0;
 /* add option to globally enforce uniqueness */
 ALTER TABLE `settings` ADD `enforceUnique` TINYINT(1)  NULL  DEFAULT '1';
 UPDATE `subnets` set `vrfId` = 0 WHERE `vrfId` IS NULL;
+
+/* update languges */
+UPDATE `lang` SET `l_code` = 'en_GB.UTF-8' WHERE `l_code` = 'en_GB.UTF8';
+UPDATE `lang` SET `l_code` = 'sl_SI.UTF-8' WHERE `l_code` = 'sl_SI.UTF8';
+UPDATE `lang` SET `l_code` = 'fr_FR.UTF-8' WHERE `l_code` = 'fr_FR.UTF8';
+UPDATE `lang` SET `l_code` = 'nl_NL.UTF-8' WHERE `l_code` = 'nl_NL.UTF8';
+UPDATE `lang` SET `l_code` = 'de_DE.UTF-8' WHERE `l_code` = 'de_DE.UTF8';
+UPDATE `lang` SET `l_code` = 'pt_BR.UTF-8' WHERE `l_code` = 'pt_BR.UTF8';
+UPDATE `lang` SET `l_code` = 'es_ES.UTF-8' WHERE `l_code` = 'es_ES.UTF8';
+UPDATE `lang` SET `l_code` = 'cs_CZ.UTF-8' WHERE `l_code` = 'cs_CZ.UTF8';
+UPDATE `lang` SET `l_code` = 'en_US.UTF-8' WHERE `l_code` = 'en_US.UTF8';
+

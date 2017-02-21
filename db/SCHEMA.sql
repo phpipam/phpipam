@@ -357,15 +357,15 @@ CREATE TABLE `lang` (
 /* insert default values */
 INSERT INTO `lang` (`l_id`, `l_code`, `l_name`)
 VALUES
-	(1, 'en_GB.UTF8', 'English'),
-	(2, 'sl_SI.UTF8', 'Slovenščina'),
-	(3, 'fr_FR.UTF8', 'Français'),
-	(4, 'nl_NL.UTF8','Nederlands'),
-	(5, 'de_DE.UTF8','Deutsch'),
-	(6, 'pt_BR.UTF8', 'Brazil'),
-	(7,	'es_ES.UTF8'	,'Español'),
-	(8, 'cs_CZ.UTF8', 'Czech'),
-	(9, 'en_US.UTF8', 'English (US)');
+	(1, 'en_GB.UTF-8', 'English'),
+	(2, 'sl_SI.UTF-8', 'Slovenščina'),
+	(3, 'fr_FR.UTF-8', 'Français'),
+	(4, 'nl_NL.UTF-8', 'Nederlands'),
+	(5, 'de_DE.UTF-8', 'Deutsch'),
+	(6, 'pt_BR.UTF-8', 'Brazil'),
+	(7,	'es_ES.UTF-8', 'Español'),
+	(8, 'cs_CZ.UTF-8', 'Czech'),
+	(9, 'en_US.UTF-8', 'English (US)');
 
 
 # Dump of table vlans

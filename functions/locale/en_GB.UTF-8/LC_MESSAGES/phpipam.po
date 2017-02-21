@@ -8306,5 +8306,3 @@ msgstr ""
 
 msgid "phpIPAM settings"
 msgstr ""
-
-
