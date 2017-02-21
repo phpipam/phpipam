@@ -1097,7 +1097,7 @@ class Common_functions  {
         $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
         $output= json_decode($geocode);
         // return result
-        return array("lat"=>$output->results[0]->geometry->location->lat, "lng"=>$output->results[0]->geometry->location->lng);
+        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng));
 	}
 
     /**
