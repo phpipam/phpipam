@@ -1584,7 +1584,6 @@ class Subnets extends Common_functions {
 		# fetch parent
 		if($masterSubnetId!==0) {
 			$parent = $this->fetch_object ("subnets", "id", $masterSubnetId);
-			var_dump($parent);
 			if($parent->isFolder==1) {
 				unset($parent);
 				$parent = false;
@@ -1596,7 +1595,6 @@ class Subnets extends Common_functions {
 
 		# check
 		if($all_subnets!==false && is_array($all_subnets) && $parent==false) {
-			print "a";
 			foreach ($all_subnets as $existing_subnet) {
 	            // ignore folders - precaution and ignore self for edits
 	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId) {
