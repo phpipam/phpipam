@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 1.2.000\n"
+# "Project-Id-Version: 1.2\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2015-10-07 14:33+0200\n"
@@ -6420,3 +6420,1889 @@ msgstr ""
 msgid "LDAP account does not have enough privileges for search"
 msgstr ""
 
+msgid "Please select fields to populate:"
+msgstr ""
+
+msgid "fill"
+msgstr "napolni"
+
+msgid "Propagate changes"
+msgstr "Propagiraj spremembe"
+
+msgid "Apply changes to underlying subnets"
+msgstr "Uvedi spremembe v podležnih omrežjih"
+
+msgid "SNMP module"
+msgstr "SNMP modul"
+
+msgid "Enable or disable multicast module"
+msgstr "Omogoči multicast modul"
+
+msgid "Multicast module"
+msgstr "Multicast modul"
+
+msgid "Enable or disable SNMP module for devices"
+msgstr "Omogoči SNMP modul za naprave"
+
+msgid "Threshold module"
+msgstr "Threshold modul"
+
+msgid "Enable or disable threshold module"
+msgstr "Omogoči threshold modul"
+
+msgid "Rack module"
+msgstr "Rack modul"
+
+msgid "Enable or disable rack drawing module"
+msgstr "Omogoči rack modul za izris omrežnih omar"
+
+msgid "Rack management"
+msgstr "Upravljanje Rackov"
+
+msgid "Community"
+msgstr "Community"
+
+msgid "Queries"
+msgstr "Poizvedbe"
+
+msgid "Test"
+msgstr "Test"
+
+msgid "Invalid version"
+msgstr "Neveljavna verzija"
+
+msgid "Invalid timeout"
+msgstr "Neveljaven timeout"
+
+msgid "Invalid device"
+msgstr "Neveljavna naprava"
+
+msgid "Invalid method"
+msgstr "Neveljavna metoda"
+
+msgid "No queries"
+msgstr "Ni querijev"
+
+msgid "SNMP edit failed"
+msgstr "SNMP urejanje ni uspelo"
+
+msgid "SNMP edit successfull"
+msgstr "SNMP urejanje uspešno"
+
+msgid "Invalid device IP address"
+msgstr "Neveljaven IP naslov naprave"
+
+msgid "rack"
+msgstr "omara"
+
+msgid "Size"
+msgstr "Velikost"
+
+msgid "Invalid rack size"
+msgstr "Neveljavna velikost"
+
+msgid "Invalid rack identifier"
+msgstr "Neveljaven ID"
+
+msgid "Rack does not exist"
+msgstr "Omara ne obstaja"
+
+msgid "Rack add successfull"
+msgstr "Omara dodana"
+
+msgid "Rack edit successfull"
+msgstr "Omara urejena"
+
+msgid "Rack delete successfull"
+msgstr "Omara izbrisana"
+
+msgid "Failed to remove device from rack"
+msgstr "Naprave ni bilo mogoče odstraniti iz omare"
+
+msgid "Device removed from rack"
+msgstr "Naprava odstranjena iz omare"
+
+msgid "device to rack"
+msgstr "napravo v omaro"
+
+msgid "No devices available"
+msgstr "Ni razpoložljivih naprav"
+
+msgid "Position"
+msgstr "Pozicija"
+
+msgid "Start position"
+msgstr "Začetna pozicija"
+
+msgid "Rack size in U"
+msgstr "Velikost omare v U"
+
+msgid "Invalid start value"
+msgstr "Neveljavna vrednost začetka"
+
+msgid "Invalid size value"
+msgstr "Neveljavna velikost"
+
+msgid "Invalid rack position (overflow)"
+msgstr "Neveljavna pozicija omare (overflow)"
+
+msgid "Failed to add device to rack"
+msgstr "Napaka pri dodajanju naprave v omaro"
+
+msgid "Device added to rack"
+msgstr "Naprava dodana v omaro"
+
+msgid "SNMP queries"
+msgstr "SNMP poizvedbe"
+
+msgid "Create SNMP query"
+msgstr "Ustvari SNMP poizvedbo"
+
+msgid "Method"
+msgstr "Metoda"
+
+msgid "No SNMP queries available"
+msgstr "No voljo ni nobene SNMP poizvedbe"
+
+msgid "edit snmp details"
+msgstr "uredi snmp detajle"
+
+msgid "remove snmp"
+msgstr "odstrani snmp"
+
+msgid "No devices for SNMP route table query available"
+msgstr "Ni naprav za snmp poizvedbe"
+
+msgid "No new subnets found"
+msgstr "Ni novih omrežij"
+
+msgid "SNMP module disbled"
+msgstr "SNMP modul onemogočen"
+
+msgid "No devices for SNMP ARP query available"
+msgstr "Ni naprav za SNMP poizvedbo"
+
+msgid "Failed to import entry"
+msgstr "Napaka pri uvozu"
+
+msgid "Manage your account"
+msgstr "Upravljaj s svojim uporabniškim računom"
+
+msgid "Number of VRFs"
+msgstr "Število VRF"
+
+msgid "Inactive hosts"
+msgstr "Neaktivni IPji"
+
+msgid "Inactive Hosts"
+msgstr "Neaktivni Naslovi"
+
+msgid "List of inactive hosts"
+msgstr "Seznam neaktivnih IPjev"
+
+msgid "No inactive hosts found"
+msgstr "Ni neaktivnih IPjev"
+
+msgid "Threshold"
+msgstr "Limit"
+
+msgid "Usage"
+msgstr "Poraba"
+
+msgid "List of thresholded subnets"
+msgstr "Seznam omrežij ki imajo določen prag porabe"
+
+msgid "All configured devices"
+msgstr "Vse naprave"
+
+msgid "Scanned networks"
+msgstr "Skenirana Omrežja"
+
+msgid "List of subnets to be scanned for online hosts and detect new hosts"
+msgstr "Seznam omrežjij, označenih za preverbo novih naprav in preverbo statusa"
+
+msgid "Table of all subnet masks with different representations"
+msgstr "Tabela vseh omrežnih mask"
+
+msgid "Racks"
+msgstr "Omare"
+
+msgid "Rack information"
+msgstr "Podatki o omrežni omari"
+
+msgid "All tools"
+msgstr "Vsa orodja"
+
+msgid "PSTN prefixes"
+msgstr "PSTN prefiksi"
+
+msgid "Add prefix"
+msgstr "Ustvari prefiks"
+
+msgid "NAT translations"
+msgstr "NAT translacije"
+
+msgid "Source objects"
+msgstr "Izvorni objekti"
+
+msgid "Add new object"
+msgstr "Dodaj nov objekt"
+
+msgid "Destination objects"
+msgstr "Ponorni objekti"
+
+msgid "Src Port"
+msgstr "Izvorna vrata"
+
+msgid "Source Port"
+msgstr "Izvorna vrata"
+
+msgid "Dst Port"
+msgstr "Ponorna vrata"
+
+msgid "Destination Port"
+msgstr "Ponorna vrata"
+
+msgid "Location"
+msgstr "Lokacija"
+
+msgid "Locations"
+msgstr "Lokacije"
+
+msgid "List of all locations"
+msgstr "Seznam vseh lokacij"
+
+msgid "Map"
+msgstr "Zemljevid"
+
+msgid "Objects"
+msgstr "Objekti"
+
+msgid "Address"
+msgstr "Naslov"
+
+msgid "Set Location name"
+msgstr "Ime lokacije"
+
+msgid "Location address"
+msgstr "Naslov lokacije"
+
+msgid "Latitude"
+msgstr "Širina"
+
+msgid "Longitude"
+msgstr "Dolžina"
+
+msgid "Utilization"
+msgstr "Utilizacija"
+
+msgid "Belonging prefixes"
+msgstr "Pripadajoči prefiksi"
+
+msgid "Belonging Numbers"
+msgstr "Pripadajoče številke"
+
+msgid "Manage user authentication methods and servers"
+msgstr "Avtentikacijske metode in strežniki"
+
+msgid "Set mail parameters and mail server settings"
+msgstr "Mail parametri in nastavitve mail strežnika"
+
+msgid "PowerDNS settings"
+msgstr "Nastavitve PowerDNS"
+
+msgid "DHCP settings"
+msgstr "DHCP nastavitve"
+
+msgid "Manage languages"
+msgstr "Upravljanje z jeziki"
+
+msgid "Manage widget settings"
+msgstr "Nastavitve widgetov"
+
+msgid "Tags"
+msgstr "Oznake"
+
+msgid "Manage tags"
+msgstr "Upravljaj z oznakami"
+
+msgid "Set phpipam instructions for end users"
+msgstr "Nastavi navodila za uporabnike"
+
+msgid "NAT settings"
+msgstr "NAT nastavitve"
+
+msgid "Select which default address fields to display"
+msgstr "Izberite polja za prikaz"
+
+msgid "Manage custom fields"
+msgstr "Uprvaljanje s poljubnimi polji"
+
+msgid "Check for latest version of phpipam"
+msgstr "Preveri zadnjo verzijo phpipama"
+
+msgid "Verify that database files are installed ok"
+msgstr "Preveri namestitev podatkovne baze"
+
+msgid "Search and replace content in database"
+msgstr "Iskanje in zamenjava vsebine v bazi"
+
+msgid "Dashboard"
+msgstr "Domov"
+
+msgid "Invalid CSRF cookie"
+msgstr "Neveljaven CSRF piškotek"
+
+msgid "Transaction lock"
+msgstr "Zaklepanje transakcij"
+
+msgid "Lock POST transactions"
+msgstr "Zakleni POST transakcije"
+
+msgid "Lock timeout"
+msgstr "Timeout zaklepa"
+
+msgid "Seconds to wait for transaction lock to clear"
+msgstr "Sekunde čakanja za sprostitev zaklepa transakcije"
+
+msgid "Transaction locking"
+msgstr "Zaklepanje transakcij"
+
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false)"
+msgstr "Uporabi SSL (LDAPS), strežnik mora to možnost podpirati"
+
+msgid "The default port for LDAP non-SSL connections"
+msgstr "Privzeti port za LDAP non-SSL transakcije"
+
+msgid "LDAP hosts, separated by a semicolon (;)"
+msgstr "LDAP gostitelji, ločeni s podpičjem (;)"
+
+msgid "Base DN for your users, if different from the base DN above."
+msgstr "Base DN za uporabnike, če je različen od osnovne base DN zgoraj"
+
+msgid "UID Attribute"
+msgstr "UID Atribut"
+
+msgid "LDAP uid naming attribute for users, e.g. \"uid\" or \"cn\""
+msgstr "LDAP uid imenski atribut za uporabnike, npr. \"uid\" ali \"cn\""
+
+msgid "NetIQ connection settings"
+msgstr "NetIQ nastavitve povezave"
+
+msgid "Create new:"
+msgstr "Ustvari novo:"
+
+msgid "phpIPAM currently supports 7 methods for authentication:"
+msgstr "phpIPAN trenutno podpira 7 metod avtentikacije"
+
+msgid "Apache authentication"
+msgstr "Apache avtentikacija"
+
+msgid "NetIQ authentication"
+msgstr "NetIQ avtentikacija"
+
+msgid "SAMLv2 authentication"
+msgstr "SAMLv2 avtentikacija"
+
+msgid "SAML2 connection settings"
+msgstr "SAMLv2 nastavitve povezave"
+
+msgid "Use advanced settings"
+msgstr "Uporabi napredne možnosti"
+
+msgid "Use Onelogin php-saml settings.php configuration"
+msgstr "Uporabi Onelogin php-saml settings.php konfiguracijo"
+
+msgid "IDP issuer"
+msgstr "IDP izdajalec"
+
+msgid "Enter idp issuer"
+msgstr "Vnesite idp izdajalca"
+
+msgid "IDP login url"
+msgstr "IDP prijavni URL"
+
+msgid "Enter IDP login url"
+msgstr "Vnesi prijavni URL za IDP"
+
+msgid "IDP logout url"
+msgstr "IDP odjavni URL"
+
+msgid "Enter IDP logout url"
+msgstr "Vnesite odjavni URL za IDP"
+
+msgid "IDP cert fingerprint"
+msgstr "fingerprint IDP certifikata"
+
+msgid "Enter IDP X509 certificate fingerprint"
+msgstr "Vnesi IDP X509 odtis certifikata"
+
+msgid "IDP cert algorithm"
+msgstr "IDP algoritem certifikata"
+
+msgid "Enter IDP X509 certificate algorithm"
+msgstr "Vnesi IDP X509 algoritem za certifikat"
+
+msgid "php XML extension missing!"
+msgstr "manjkajoča php XML razširitev"
+
+msgid "php Date extension missing!"
+msgstr "manjkajoča php Date razširitev"
+
+msgid "php zlib extension missing!"
+msgstr "manjkajoča php zlib razširitev"
+
+msgid "php openssl extension missing!"
+msgstr "manjkajoča php openssl razširitev"
+
+msgid "php mcrypt extension missing!"
+msgstr "manjkajoča php mcrypt razširitev"
+
+msgid "php gettext extension missing!"
+msgstr "manjkajoča php gettext razširitev"
+
+msgid "Manage devices"
+msgstr "Upravljaj naprave"
+
+msgid "Invalid rack start position"
+msgstr "Neveljavna start pozicija za str. omaro"
+
+msgid "Rack"
+msgstr "Str. Omara"
+
+msgid "Show rack"
+msgstr "Prikažu omaro"
+
+msgid "Invalid ID."
+msgstr "Neveljaven ID."
+
+msgid "Invalid netZone ID."
+msgstr "Neveljaven ID netZone."
+
+msgid "Delete Network"
+msgstr "Izbriši omrežje"
+
+msgid "Search domains in AD"
+msgstr "Poišči domene v AD"
+
+msgid "Enter search filter"
+msgstr "Vnesi iskalni filter"
+
+msgid "No groups found"
+msgstr "Nisem našel skupin"
+
+msgid " Following groups were found"
+msgstr " Sledeče skupine so bile najdene"
+
+msgid "Members:"
+msgstr "Člani:"
+
+msgid "Invalid Id"
+msgstr "Neveljaven Id"
+
+msgid "All sections :"
+msgstr "Vse sekcije :"
+
+msgid "Select sections and IP address fields to export"
+msgstr "Izberi sekcije in IP naslove za izvoz"
+
+msgid "IP Address"
+msgstr "IP naslov"
+
+msgid "Mandatory"
+msgstr "Obvezno"
+
+msgid "Include the sections in a separate sheet."
+msgstr "Vključi razdelke v posebnem zvezku"
+
+msgid "Export each section in a separate sheet."
+msgstr "Izvozi vsak razdelek v poseben zvezek"
+
+msgid "Select L2 Domain fields to export"
+msgstr "Izberi L2 domenska polja za izvoz"
+
+msgid "Select sections and subnets fields to export"
+msgstr "Izberi sekcije in omrežna polja za izvoz"
+
+msgid "VLAN Domain"
+msgstr "VLAN domene"
+
+msgid "Host check"
+msgstr "Preverba statusa"
+
+msgid "Select VLAN fields to export"
+msgstr "Izberi VLAN polja za izvoz"
+
+msgid "Include the L2 domains in a separate sheet."
+msgstr "Vključi L2 domene v posebne zvezku."
+
+msgid "Select VRF fields to export"
+msgstr "Izberi VRF polja za izvoz"
+
+msgid "Select file"
+msgstr "Izberi datoteko"
+
+msgid "Browse / Drag & Drop"
+msgstr "Prebrskaj / Povleci in vrzi"
+
+msgid "Cancel upload"
+msgstr "Prekliči nalaganje"
+
+msgid "Match fields"
+msgstr ""
+
+msgid "Pick import colum for"
+msgstr ""
+
+msgid "No fields were automatically matched. The import file needs to have a header row!"
+msgstr "Polja niso bila samodejno zaznana, Uvozna datoteka mora imeti vrstico s polji!"
+
+msgid "Not all the fields were automatically matched. Please check manually."
+msgstr "Vsa polja niso bila samodejno zaznana. Prosimo označite jih ročno."
+
+msgid "All the fields were automatically matched. Please check if correct."
+msgstr "Vsa polja so bila samodejno zaznana. Preverite, ali je bila zaznava pravilna."
+
+msgid "No header row found in uploaded file. Please check."
+msgstr "Nisem našel vrstice s polji v datoteki. Prosimo preverite."
+
+msgid "L2 Domain import"
+msgstr "Podpora za L2 domene"
+
+msgid "L2 Domain import data preview"
+msgstr "Predogled uvoza L2 domene"
+
+msgid "Uploaded data"
+msgstr "Naloženi podatki"
+
+msgid "The entries marked with "
+msgstr "Polja označena z "
+
+msgid "will be skipped."
+msgstr "bodo izpuščena"
+
+msgid "Summary: "
+msgstr "Poivzetek: "
+
+msgid "Scroll down for details."
+msgstr ""
+
+msgid "Import"
+msgstr "Uvoz"
+
+msgid "Select L2 Domain file and fields to import"
+msgstr "Izberi datoteko za uvoz L2 domen in polja za uvoz"
+
+msgid "Template"
+msgstr "Predloga"
+
+msgid "The import XLS/CSV should have the following fields and a <b>header row</b> for a succesful import:"
+msgstr "Uvoz XLS/CSV datoteke bi morala imeti sledeča polja in <b>vrstico z glavo</b> za uspešen uvoz:"
+
+msgid "The fields marked with * are mandatory"
+msgstr "Polja označena z * so obvezna"
+
+msgid "Preview"
+msgstr "Predogled"
+
+msgid "Error: could not read the uploaded file type!"
+msgstr "Napaka: ne morem prebrati naložene datoteke"
+
+msgid "Error: missing required field mapping for expected field"
+msgstr "Napaka: manjkajo obvezna polja za mapiranje"
+
+msgid "Internal error: missing import field mapping."
+msgstr "Interna napaka: manjkajoča uvozna polja"
+
+msgid "Extra column found on line "
+msgstr "Dodatno polje najdeno na vrstici "
+
+msgid "Root"
+msgstr "Root"
+
+msgid "No change, skip"
+msgstr "Brez spremembe, preskoči"
+
+msgid "Subnets master/nested recompute data preview"
+msgstr "Predogled preračunanih omrežnih podatkov"
+
+msgid "Recomputed data"
+msgstr "Preračunani podatki"
+
+msgid "didn't change the master."
+msgstr "nisem spremenil glavnega."
+
+msgid "Select Subnet sections, VRFs and IP version to recompute"
+msgstr "Izberi glavna omrežha, VRFe in IP naslove za preračun"
+
+msgid "Sections and IP versions"
+msgstr "Sekcije in IP verzije"
+
+msgid "Please choose which section and IP version to recompute:"
+msgstr "Prosimo izberite razdelek in verzijo IP za prepračun:"
+
+msgid "Subnets master/nested recompute save"
+msgstr "Shrani preračunane omrežne podatke"
+
+msgid "Subnets import data preview"
+msgstr "Predogled uvoza omrežij"
+
+msgid "Select Subnets file and fields to import"
+msgstr "Izberi datoteko za omrežja in polja za uvoz"
+
+msgid "The fields marked with * are mandatory."
+msgstr "Polja, označena z * so obvezna."
+
+msgid "The mask can be provided either as a separate field or with the subnet, sparated by \"/\""
+msgstr "Maska je lahko podana kot posebno polje ali pri omrežju, ločena z \"/\""
+
+msgid "Show PHPIPAM specific columns."
+msgstr "Prikaži phpipam specifična polja"
+
+msgid "Subnets import"
+msgstr "Uvoz omrežij"
+
+msgid "DNS Hostname"
+msgstr "DNS ime"
+
+msgid "Domain name"
+msgstr "Domensko ime"
+
+msgid "VLAN import data preview"
+msgstr "Predogle uvoza VLAN"
+
+msgid "Select VLAN file and fields to import"
+msgstr "Izberi VLAN polja za uvoz"
+
+msgid "Add missing VLAN domains"
+msgstr "Dodaj manjkajoče VLAN domene"
+
+msgid "VLAN import"
+msgstr "Uvoz VLAN"
+
+msgid "VRF import data preview"
+msgstr "Predogled VRF uvoza"
+
+msgid "Select VRF file and fields to import"
+msgstr "Izberi VRF datoteko in polja z uvoz"
+
+msgid "VRF import"
+msgstr "VRF uvoz"
+
+msgid "Import / Export"
+msgstr "Uvoz / Izvoz"
+
+msgid "Pick a data set type, and click on an action"
+msgstr "Izberite tip data seta in kliknite na akcijo"
+
+msgid "Data set"
+msgstr ""
+
+msgid "Pick data set"
+msgstr "Izberi data set"
+
+msgid "Device types"
+msgstr "Tip naprav"
+
+msgid "Not all options are available currently."
+msgstr "Trenutno niso na voljo vse možnosti"
+
+msgid "Import data entries for the selected type"
+msgstr "Uvozi podatke za izberani tip"
+
+msgid "Export data entries for the selected type"
+msgstr "Izvozi podatke za izberani tip"
+
+msgid "Recompute master/nested subnet relations."
+msgstr "Prepračunaj master/slave relacije za omrežja"
+
+msgid "Not implemented"
+msgstr "Ni implementirano"
+
+msgid "Ok"
+msgstr ""
+
+msgid "IP Addresses import data preview"
+msgstr "Predogled uvoza IP naslovov"
+
+msgid "Select IP Addresses file and fields to import"
+msgstr "Izberite datoteko in polja za uvoz IP naslovov"
+
+msgid "Providing a subnet is optional, the system will add the IP to the longest match if no subnet is provided."
+msgstr "Omrežje je opcijsko, sistem bo glede na IP naslov preračunal najdaljši match"
+
+msgid "Search for matching subnet in all VRFs (ignore provided VRF)."
+msgstr "Poišči omrežja v vseh VRF"
+
+msgid "IP Addresses import"
+msgstr "Uvoz IP naslovov"
+
+msgid "Mail settings are missing. Please set admin mail and name!"
+msgstr "Nastavitve e-pošte manjkajo. Prosimo dodajte ime in email naslov administratorja"
+
+msgid "Nameserver"
+msgstr "Imenski strežnik"
+
+msgid "Add nameserver"
+msgstr "Dodaj strežnik"
+
+msgid "Default PTR domain"
+msgstr "Privzeta PTR domena"
+
+msgid "Default PTR domain if no valid hostname for PTR is provided"
+msgstr "Privzeta PTR domena, če omrežno ime za PTR ni podano"
+
+msgid "Default TTL"
+msgstr "Privzet TTL"
+
+msgid "IPv4 reverse domains"
+msgstr "IPv4 reverzne domene"
+
+msgid "Adding domain record on slave zone is not permitted"
+msgstr "Dodajanje domenskih zapisov na slave cono ni dovoljeno"
+
+msgid "Delete"
+msgstr "Izbriši"
+
+msgid "Autoserial"
+msgstr ""
+
+msgid "Automatic"
+msgstr "Samodejno"
+
+msgid "Invalid AS"
+msgstr "Neveljaven AS"
+
+msgid "agent"
+msgstr "agent"
+
+msgid "Agent code"
+msgstr "Koda agenta"
+
+msgid "Agent id"
+msgstr "ID agenta"
+
+msgid "remove agent"
+msgstr "izbriši agenta"
+
+msgid "phpipam-agent documentation"
+msgstr "dokumetacija"
+
+msgid "Show only supernets"
+msgstr "Prikaži samo glavna omrežja"
+
+msgid "Show only supernets in list of subnets in section"
+msgstr "Prikaže samo glavna omrežja v seznamo omrežij v razdelku"
+
+msgid "Permission changes will be propagated to all nested subnets"
+msgstr "Sprememba pravic bo propagirana na vsa podomrežja"
+
+msgid "Invalid object Id"
+msgstr "Neveljaven ID objekta"
+
+msgid "Map object to NAT"
+msgstr "Mapiraj objekt v NAT"
+
+msgid "Existing NAT"
+msgstr "Obstoječi NAT"
+
+msgid "New object"
+msgstr "Nov objekt"
+
+msgid "Add new object to NAT as"
+msgstr "Dodaj nov objekt v NAT kot"
+
+msgid "Source"
+msgstr "Izvor"
+
+msgid "Destination"
+msgstr "Cilj"
+
+msgid "Invalid NAT object identifier"
+msgstr "Neveljaven NAT identifikator"
+
+msgid "Name must have at least 3 characters"
+msgstr "Ime mora vsebovati vsaj 3 znake"
+
+msgid "Invalid NAT type"
+msgstr "Neveljaven NAT tip"
+
+msgid "NAT add failed"
+msgstr "Dodajanje NAT ni uspelo"
+
+msgid "NAT edit failed"
+msgstr "Urejanje NAT ni uspelo"
+
+msgid "NAT delete failed"
+msgstr "Izbris NAT ni uspel"
+
+msgid "NAT add successful"
+msgstr "NAT dodan"
+
+msgid "NAT edit successful"
+msgstr "NAT urejen"
+
+msgid "NAT delete successful"
+msgstr "NAT izbrisan"
+
+msgid "Select NAT name"
+msgstr "Izberite ime"
+
+msgid "Select NAT type"
+msgstr "Izberite tip"
+
+msgid "Select Device"
+msgstr "Izberite napravo"
+
+msgid "Source port"
+msgstr "Izvorni port"
+
+msgid "Destination port"
+msgstr "Ponorni port"
+
+msgid "Please enter IP address"
+msgstr "Vpišite IP naslov"
+
+msgid "Invalid NAT item ID"
+msgstr "Neveljaven ID objekta"
+
+msgid "Invalid NAT direction"
+msgstr "Neveljavna smer"
+
+msgid "No results found"
+msgstr "Nisem našel rezultatov"
+
+msgid "Static NAT can only contain IP address"
+msgstr "Statičen NAT lahko vsebuje samo IP naslove"
+
+msgid "Static NAT can only have 1 source address"
+msgstr "Statičen NAT ima lahko samo 1 izvoren naslov"
+
+msgid "Static NAT can only have 1 destination address"
+msgstr "Statičen NAT ima lahko samo 1 ponoren naslov"
+
+msgid "Invalid object identifier"
+msgstr "Neveljaven identifikator objekta"
+
+msgid "Missing object type or id"
+msgstr "Manjkajoč tip objekta"
+
+msgid "Add NAT item"
+msgstr "Dodaj NAT objekt"
+
+msgid "Search objects"
+msgstr "Poišči objekte"
+
+msgid "Enter subnet/IP"
+msgstr "Vnesite omrežje/IP"
+
+msgid "Remove NAT item"
+msgstr "Odstrani NAT objekt"
+
+msgid "Login text"
+msgstr "Prijavni tekst"
+
+msgid "Show text above 'username' field on login page (default empty)"
+msgstr "Prikaži text nas uporabniškim imenom v prijavni strani"
+
+msgid "Maintenance mode"
+msgstr "Vzdrževalni način"
+
+msgid "Put phpipam to maintenance mode"
+msgstr "vklopi vzdrževalni način"
+
+msgid "Enable NAT"
+msgstr "Omogoči NAT"
+
+msgid "Enable or disable NAT module"
+msgstr "Omogoči NAT modul"
+
+msgid "Enable PowerDNS"
+msgstr "Omogoči PowerDNS"
+
+msgid "Enable or disable PowerDNS module"
+msgstr "Omogoči PowerDNS modul"
+
+msgid "Enable DHCP"
+msgstr "Omogoči DHCP"
+
+msgid "Enable or disable DHCP module"
+msgstr "Omogoči DHCP modul"
+
+msgid "Locations module"
+msgstr "Lokacijski modul"
+
+msgid "Enable or disable locations module"
+msgstr "Omogoči lokacijski modul"
+
+msgid "PSTN module"
+msgstr "PSTN modul"
+
+msgid "Enable or disable PSTN module to manage phone numbers"
+msgstr "Omogoči PSTN modul za upravljanje telefonskih številk"
+
+msgid "Link addresses"
+msgstr "Povezava naslovov"
+
+msgid "Display linked addresses from another subnet if it matches selected field"
+msgstr "Prikaži povezane IP naslove iz drugih omrežij, če imajo enako polje kot izbrano"
+
+msgid "Set where to send system logs"
+msgstr "Nastavi kam pošiljati sistemske loge"
+
+msgid "Update Tags"
+msgstr "Posodobitev oznak"
+
+msgid "Update address tags when address state change occurs"
+msgstr "Posodobitev oznak IP naslovov ko se spremeni sprememba stanja"
+
+msgid "Require unique subnets"
+msgstr "Zahtevaj unikatna omrežja"
+
+msgid "Require unique subnets accross all sections"
+msgstr "Zahtevaj unikatna omrežja tudi med razdelki"
+
+msgid "Set maximum number of concurrent ICMP checks (default 128)"
+msgstr "Največje število hkratnih ICMP preverb (privzeto 128)"
+
+msgid "Subnet Display"
+msgstr "Prikaz omrežja"
+
+msgid "Subnet Network Only"
+msgstr "Samo omrežje"
+
+msgid "Select which view you would prefer on the menu"
+msgstr "Izbira prikaza menija"
+
+msgid "Upload logo"
+msgstr "Naloži logotip"
+
+msgid "Upload custom logo"
+msgstr "Naloži svoj logotip"
+
+msgid "Missing snmp support in php"
+msgstr "Manjkajoča php podpora za snmp"
+
+msgid "Missing gd support in php"
+msgstr "Manjkajoča php podpora za snmp"
+
+msgid "Current"
+msgstr "trenutno"
+
+msgid "New"
+msgstr "Novo"
+
+msgid "Select image"
+msgstr "Izberi sliko"
+
+msgid "Maintaneance mode removed"
+msgstr "Vzdrževalni način odstranjen"
+
+msgid "Folder cannot nest behind itself!"
+msgstr "Mapa ne more biti dodeljena sama sebi!"
+
+msgid "Invalid location value"
+msgstr "Neveljavena vrednost lokacije"
+
+msgid "Invalid threshold value"
+msgstr "Neveljavna vrednost praga"
+
+msgid "Invalid subnetId"
+msgstr "Neveljaven ID omrežja"
+
+msgid "Search for subnets through SNMP"
+msgstr "Poišči omrežja preko SNMP"
+
+msgid "Enter subnet in CIDR format"
+msgstr "Vnesite omrežje v CIDR formatu"
+
+msgid "Mark as full"
+msgstr "Označi kot zasedeno"
+
+msgid "Mark subnet as utilized"
+msgstr "Označi omrežje kot zasedeno"
+
+msgid "Set subnet alert threshold"
+msgstr "Nastavi prag za obvestila o zasedenosti"
+
+msgid "Failed to set subnet permissons for subnet"
+msgstr "Napaka pri nastavitvi pravic za omrežje"
+
+msgid "No result"
+msgstr "Ni rezultatov"
+
+msgid "Subnet splitted successfully"
+msgstr "Omrežje razdeljeno"
+
+msgid "Copy custom field values"
+msgstr "Kopiraj vrednosti poljubnih polj"
+
+msgid "Subnet linked"
+msgstr "Povezano omrežje"
+
+msgid "Link IPv4 subnet to IPv6 subnet"
+msgstr "Poveži IPv4 omrežje z IPv6 omrežjem"
+
+msgid "Select IPv6 subnet to link to current subnet"
+msgstr "Izberi IPv6 omrežje za povezavo s trenutnim omrežjem"
+
+msgid "Not linked"
+msgstr "Ni povezano"
+
+msgid "Link"
+msgstr "Povezava"
+
+msgid "Update address tag to online/offline if state change occurs. Combine with settings > Update Tags"
+msgstr "Posodobi oznako naslova v offline/online če se zgodi sprememba statusa. Kombinacija z nastavitve > Posodobitev oznak"
+
+msgid "Cannot send mail, mail settings are missing. Please set them under administration > Mail Settings !"
+msgstr "Ne morem poslati maila, nastavitve za email manjkajo. Nastavite jih pod nastavitve > Mail nastavitve !"
+
+msgid "Username must be at least 1 character long!"
+msgstr "Uporabniško ime mora vsebovati vsaj 1 znak"
+
+msgid "VLANs / VRFs"
+msgstr "VLANi / VRFi"
+
+msgid "Select to allow user to manage VLANs and VRFs"
+msgstr "Izberite da omogočite upravljanja VRF/VLAN uporabniku"
+
+msgid "Select to allow user to create DNS records"
+msgstr "Izberite da omogočite upravljanje DNS zapisov uporabniku"
+
+msgid "Select to allow user to manage PSTN numbers"
+msgstr "Izberite da omogočite upravljanje PSTN številk uporabniku"
+
+msgid "Manage VLANs / VRFs"
+msgstr "Upravljanje VLAN/ / VRF"
+
+msgid "Menu type"
+msgstr "Tip menija"
+
+msgid "Invalid subnets"
+msgstr "Neveljavna omrežja"
+
+msgid "No invalid subnets detected"
+msgstr "Neveljavna omrežja niso bila zaznana"
+
+msgid "Invalid addresses"
+msgstr "Neveljavni naslovi"
+
+msgid "No invalid addresses detected"
+msgstr "Neveljavni naslovi niso bili zaznani"
+
+msgid "Not allowed to change VLANs"
+msgstr "Nimate pravic za spremembo VLAN zapisov"
+
+msgid "VLAN already exists in another domain!"
+msgstr "VLAN že obstaja v drugi domeni!"
+
+msgid "Unique VLAN"
+msgstr "Unikaten VLAN"
+
+msgid "Require unique vlan accross domains"
+msgstr "Zahtevaj unikaten VLAN po vseh domenah"
+
+msgid "Admin privileges required"
+msgstr "Zahtevane so administrativne pravice"
+
+msgid "Invalid domain Id"
+msgstr "Neveljaven ID domene"
+
+msgid "No devices for SNMP VLAN query available"
+msgstr "Naprave za VLAN SNMP pozivedbe niso bile najdene"
+
+msgid "No VLANS found"
+msgstr "Ni VLAN zapisov"
+
+msgid "Add discovered VLANS"
+msgstr "Dodaj odkrite VLAN zapise"
+
+msgid "Select devices"
+msgstr "Izberite naprave"
+
+msgid "Select devices to query VLAN table from"
+msgstr "Izberite naprave za poizvedbo VLAN zapisov"
+
+msgid "Scan"
+msgstr "Skeniraj"
+
+msgid "Not allowed to change VRFs"
+msgstr "Nimate pravic za urejanje VRF zapisov"
+
+msgid "Scan for VRFs"
+msgstr "Skeniraj VRFe"
+
+msgid "No devices for SNMP VRF query available"
+msgstr "Naprave za VRF SNMP pozivedbe niso bile najdene"
+
+msgid "No vrfs found"
+msgstr "Ni VRF zapisov"
+
+msgid "Add discovered vrfs"
+msgstr "Dodaj odkrite VRF zapise"
+
+msgid "Select devices to query VRF table from"
+msgstr "Izberite naprave za poizvedbo VRF zapisov"
+
+msgid "DHCP management"
+msgstr "DHCP upravljanje"
+
+msgid "Please enable DHCP module under server management"
+msgstr "Prosimo omogočite DCHP modul v nastavitvah"
+
+msgid "Invalid Location object identifier"
+msgstr "Neveljaven ID lokacijskega objekta"
+
+msgid "Invalid Latitude"
+msgstr "Neveljavna pasovna širina"
+
+msgid "Invalid Longitude"
+msgstr "Neveljavna pasovna dolžin"
+
+msgid "Failed to update location lat/lng from google"
+msgstr "Napaka pri posodobitve lat/lng vrednosti iz googla"
+
+msgid "Location add failed"
+msgstr "Napaka pri dodajanju lokacije"
+
+msgid "Location edit failed"
+msgstr "Napaka pri urejanju lokacije"
+
+msgid "Location delete failed"
+msgstr "Napaka pri izbrisu lokacije"
+
+msgid "Location add successful"
+msgstr "Lokacija dodana"
+
+msgid "Location edit successful"
+msgstr "Lokacija urejena"
+
+msgid "Location delete successful"
+msgstr "Lokacija izbrisana"
+
+msgid "or"
+msgstr "ali"
+
+msgid "latitude"
+msgstr "širina"
+
+msgid "Query"
+msgstr "poizvedba"
+
+msgid "No devices"
+msgstr "Ni naprav"
+
+msgid "No groups"
+msgstr "Ni skupin"
+
+msgid "You are not member of any group. Please contact system administrator!"
+msgstr "Niste član nobene skupine. Prosimo kontaktirajte administratorja!"
+
+msgid "Changelog files are sent to syslog"
+msgstr "Logi o spremembah so poslani na syslog"
+
+msgid "Full"
+msgstr "Polno"
+
+msgid "Threshold module disabled"
+msgstr "Pragovni modul onemogočen"
+
+msgid "You can enable threshold module under settings"
+msgstr "Pragovni modul lahko omogočite v nastavitvah"
+
+msgid "No subnet is selected for threshold check"
+msgstr "Nobeno omrežje ni izbrano za preverbo zasedenosti"
+
+msgid "You can set threshold for subnets under subnet settings"
+msgstr "Prag zasedenosti za omrežje lahko nastavite v nastavitvah omrežja"
+
+msgid "No subnet selected for threshold check available"
+msgstr "Nobeno omrežje ni izbrano za preverbo zasedenosti"
+
+msgid "No subnet with threshold check available"
+msgstr "Nobeno omrežje ni izbrano za preverbo zasedenosti"
+
+msgid "Current usage"
+msgstr "Trenutno poraba"
+
+msgid "Folder is empty"
+msgstr "Mapa je prazna"
+
+msgid "Only master subnets are shown"
+msgstr "Samo glavna omrežja so prikazana"
+
+msgid "Switched to"
+msgstr "Zamenjan z"
+
+msgid "Switch back user"
+msgstr "Zamenjaj nazaj"
+
+msgid "Available sections"
+msgstr "Razpoložljivi razdelki"
+
+msgid "No sections available"
+msgstr "Ni razdelkov"
+
+msgid "All sections"
+msgstr "Vsi razdelki"
+
+msgid "Show all sections"
+msgstr "Prikaži vse razdelke"
+
+msgid "All items"
+msgstr "Vse možnosti"
+
+msgid "Cannot add address as subnet is market as used"
+msgstr "Ne morem dodati naslova ker je omrežje označeno kot zasedeno"
+
+msgid "Remove DNS records"
+msgstr "Odstrani DNS zapise"
+
+msgid "Remove all associated DNS records:"
+msgstr "Odstrani vse povezane DNS zapise:"
+
+msgid "Addresses linked with"
+msgstr "IP povezan z"
+
+msgid "No linked addresses found"
+msgstr "Ni povezanih naslovov"
+
+msgid "Address linking disabled"
+msgstr "Povezovanje naslovov onemogočeno"
+
+msgid "Location not set !"
+msgstr "Lokacija ni nastalvjena !"
+
+msgid "Duplicated addresses"
+msgstr "Duplicirani naslovi"
+
+msgid "No duplicated addresses found"
+msgstr "Ni dupliciranih naslovov"
+
+msgid "Address NAT translations"
+msgstr "NAT translacije naslovov"
+
+msgid "Map to existing NAT"
+msgstr "Mapiraj v obstoječ NAT"
+
+msgid "No NAT objects available"
+msgstr "Ni NAT objektov"
+
+msgid "No NAT translations for this address"
+msgstr "Ni NAT translacij za izbrani naslov"
+
+msgid "Address permissions"
+msgstr "Pravice IP naslova"
+
+msgid "General"
+msgstr "Splošni"
+
+msgid "Avalibility"
+msgstr "Razpoložljivost"
+
+msgid "Rack details"
+msgstr "Podatki o str. omari"
+
+msgid "FW Object"
+msgstr "FW objekt"
+
+msgid "Filename"
+msgstr "Ime datoteke"
+
+msgid "fw object"
+msgstr "fw objekt"
+
+msgid "Invalid IP address"
+msgstr "Neveljaven IP naslov"
+
+msgid "Remove all"
+msgstr "Ostrani vse"
+
+msgid "Sort by firewall address object"
+msgstr "Uredi po FW objektu"
+
+msgid "Sort by MAC"
+msgstr "Uredi po MAC naslovu"
+
+msgid "Address was never online"
+msgstr "Naslov ni bil nikoli razpoložljiv"
+
+msgid "Address is alive"
+msgstr "Naslov je razpoložljiv"
+
+msgid "Address warning"
+msgstr "Naslov - opozorilo"
+
+msgid "Address is offline"
+msgstr "Naslov ni razpoložljiv"
+
+msgid "Address status unknown"
+msgstr "Status naslova neznan"
+
+msgid "Duplicate MAC"
+msgstr "Dupliciran MAC"
+
+msgid "Back to folder"
+msgstr "Nazaj v mapo"
+
+msgid "Linked addresses"
+msgstr "Povezani naslovi"
+
+msgid "Only 4096 IP addresses at once"
+msgstr "Samo 4096 naslovov naenkrat"
+
+msgid "Invalid MAC address"
+msgstr "Neveljaven MAC naslov"
+
+msgid "Cannot scan as subnet is market as used"
+msgstr "Ne morem skenirati omrežja ker je označeno kot zasedeno"
+
+msgid "FW object"
+msgstr "FW objekt"
+
+msgid "Ignore errors"
+msgstr "Ignoriraj napake"
+
+msgid "Invalid subnet Identifier"
+msgstr "Neveljeven ID omrežja"
+
+msgid "No new hosts found"
+msgstr "Ni novih naslovov (naprav)"
+
+msgid "Subnet must have VLAN assigned for MAc address query"
+msgstr "Omrežje mora imeti dodeljan VLAN za MAC poizvedbo"
+
+msgid "No devices for SNMP MAC address query available"
+msgstr "Ni naprav za SNMP MAC poizvedbe"
+
+msgid "No new hosts found from ARP scan, MAC address scan will not be performed"
+msgstr "Ni novih naprav za ARP skeniranje, MAC sken ne bo izveden"
+
+msgid "No MAC address found via MAC address scan"
+msgstr "Skeniranje ni našlo MAC naslovov"
+
+msgid "Invalid section Id"
+msgstr "Neveljaven ID razdelka"
+
+msgid "Add subnets to section"
+msgstr "Dodaj omrežje v razdelek"
+
+msgid "Associated VLANs"
+msgstr "Asociirani VLANi"
+
+msgid "Associated VRFs"
+msgstr "Asociirani VRFi"
+
+msgid "Linked IPv6 subnet"
+msgstr "Povezano IPv6 omrežje"
+
+msgid "Linked IPv4 subnets"
+msgstr "Povezano IPv4 omrežje"
+
+msgid "Subnet is natted"
+msgstr "Omrežje je prevedeno (NAT)"
+
+msgid "Subnet is marked as used"
+msgstr "Omrežje je označeno kot uporabljeno"
+
+msgid "Alert threshold"
+msgstr "Prag za alarm"
+
+msgid "Address object"
+msgstr "Naslov"
+
+msgid "disabled - marked as full"
+msgstr "onemogočeno - označeno kot polno"
+
+msgid "Scan agent"
+msgstr "Agent za skeniranje"
+
+msgid "Invalid scan agent"
+msgstr "Neveljaven agent skeniranja"
+
+msgid "Last check"
+msgstr "Zadnja poizvedba"
+
+msgid "Last scan"
+msgstr "Zadnje skeniranje"
+
+msgid "Manage linked IPv6 subnet"
+msgstr "Upravljaj povezano IPv6 omrežje"
+
+msgid "Map subnet to firewall zone"
+msgstr "Mapiraj omrežje v firewall cono"
+
+msgid "Subnet NAT translations"
+msgstr "Omrežne NAT translacije"
+
+msgid "No NAT translations for this subnet"
+msgstr "Ni NAT translacij za to omrežje"
+
+msgid "Temporary share"
+msgstr "Začasno deljenje"
+
+msgid "Invalid search string"
+msgstr "Neveljaven string iskanja"
+
+msgid "Invalid limit"
+msgstr "Neveljaven limit"
+
+msgid "Invalid permission"
+msgstr "Neveljavne pravice"
+
+msgid "Changelog details"
+msgstr "Podatki o spremembi"
+
+msgid "Show details"
+msgstr "Pokaži detajle"
+
+msgid "Belonging addresses"
+msgstr "Pripadajoči naslovi"
+
+msgid "All devices"
+msgstr "Vse naprave"
+
+msgid "Location is not set for this device"
+msgstr "Lokacija za napravo ni nastavljena"
+
+msgid "No NAT translations for this device"
+msgstr "NAT translacije za to napravo ne obstajajo"
+
+msgid "Belonging PSTN prefixes"
+msgstr "Pripadajoči PSTN prefiksi"
+
+msgid "PSTN prefixes module disabled."
+msgstr "Modul za PSTN prefixe onemogočen"
+
+msgid "Prefix"
+msgstr "Prefiks"
+
+msgid "Start"
+msgstr "Začetek"
+
+msgid "Manage zones"
+msgstr "Upravljanje con"
+
+msgid "Administrative privileges required!"
+msgstr "Zahtevane so administrativne pravice!"
+
+msgid "Unknown"
+msgstr "Neznano"
+
+msgid "Domain type:"
+msgstr "Tipi domen:"
+
+msgid "Master servers"
+msgstr "Master strežniki"
+
+msgid "Notified serial:"
+msgstr "Serijska:"
+
+msgid "Last check:"
+msgstr "Zadnja preverba"
+
+msgid "No records found for filter "
+msgstr "Ni zapisov za filter "
+
+msgid "You do not have permission to manage DNS. Please contact administrator!"
+msgstr "Nimate pravi za urejanje DNS zapisov. Prosimo kontaktirajte administratorja"
+
+msgid "No host records available"
+msgstr "Ni zapisov"
+
+msgid "PowerDNS IP records"
+msgstr "PowerDNS IP zapisi"
+
+msgid "List of all DNS records resolving to IP address"
+msgstr "Seznam vse DNS zapisov za IP naslov"
+
+msgid "List of unprocessed IP addresses requests"
+msgstr "Seznam neobdelanih IP naslovov"
+
+msgid "VRF search results"
+msgstr "Rezultati VRF iskanja"
+
+msgid "Search results (VRFs)"
+msgstr "Rezultati VRF iskanja"
+
+msgid "Search results (PSTN Prefixes)"
+msgstr "Rezultati iskanja PSTN prefiksov"
+
+msgid "Search results (PSTN Numbers)"
+msgstr "Rezultati iskanja PSTN številk"
+
+msgid "Wildcard mask"
+msgstr "Wildcard maska"
+
+msgid "Select yes to receive mail notification changes (IP state change, new hosts, requests)"
+msgstr "Izberite da za prejeanje email obvestil o spremembah (spremembe IP statusa, nowvih naprav, IP nahtevkov)"
+
+msgid "Select yes to receive mail notifications for IP requests"
+msgstr "Izberite da za prejemanje obvestil o IP nahtevkih"
+
+msgid "Menu Type"
+msgstr "Tip menija"
+
+msgid "Static"
+msgstr "Statične"
+
+msgid "Dynamic"
+msgstr "Dinamične"
+
+msgid "Select menu type to display"
+msgstr "Izberite tip menija za prikaz"
+
+msgid "Invalid language!"
+msgstr "Neveljaven jezik!"
+
+msgid "VLANs in all domains"
+msgstr "VLANi iz vseh domen"
+
+msgid "List of VLANS in all domains"
+msgstr "Seznam VLANov v vseh domenah"
+
+msgid "L2domain"
+msgstr "L2 domene"
+
+msgid "Scan for VLANs"
+msgstr "Skeniraj za VLANe"
+
+msgid "L2 domains"
+msgstr "L2 domene"
+
+msgid "All domains"
+msgstr "Vse domene"
+
+msgid "List of all VLANs in all domains"
+msgstr "Seznam vseh VLANov v domeni"
+
+msgid "Available in sections"
+msgstr "Razpoložljivo v razdelkih"
+
+msgid "DHCP information"
+msgstr "DHCP informacije"
+
+msgid "IPv4 subnets"
+msgstr "IPv4 omrežja"
+
+msgid "No IPv4 subnets"
+msgstr "Ni IPv4 omrežij"
+
+msgid "IPv6 subnets"
+msgstr "IPv6 omrežja"
+
+msgid "No IPv6 subnets"
+msgstr "Ni IPv6 omrežij"
+
+msgid "Add location"
+msgstr "Dodaj lokacijo"
+
+msgid "Locations module disabled."
+msgstr "Lokacijski modul onemogočen"
+
+msgid "Coordinates"
+msgstr "Koordinate"
+
+msgid "objects"
+msgstr "objekti"
+
+msgid "Location not set"
+msgstr "Lokacija ni nastavljena"
+
+msgid "Locations Map"
+msgstr "Mapa lokacij"
+
+msgid "Locations list"
+msgstr "Seznam lokacij"
+
+msgid "Location details"
+msgstr "Detajli o lokaciji"
+
+msgid "Location not found"
+msgstr "Lokacija ne obstaja"
+
+msgid "Belonging objects"
+msgstr "Pripadajoči objekti"
+
+msgid "Remove"
+msgstr "Odstrani"
+
+msgid "Multicast networks"
+msgstr "Multicast omrežja"
+
+msgid "Subnets has no hosts"
+msgstr "Omrežje nima naslovov"
+
+msgid "Add new address"
+msgstr "Dodaj naslov"
+
+msgid "No multicast subnets available"
+msgstr "Ni multicast razpoložljivih omrežij"
+
+msgid "Add nat"
+msgstr "Dodaj NAT"
+
+msgid "NAT module disabled."
+msgstr "NAT modul onemogočen"
+
+msgid "Translation"
+msgstr "Translacije"
+
+msgid "List of PSTN prefixes"
+msgstr "Seznam PSTN prefiksov"
+
+msgid "Numbers"
+msgstr "Stevilke"
+
+msgid "You do not have permission to manage PSTN numbers"
+msgstr "Nimate pravic za upravljanje PSTN številk"
+
+msgid "Invalid PSTN number identifier"
+msgstr "Neveljaven ID PSTN številke"
+
+msgid "Number must be numeric"
+msgstr "Stevilka mora biti numerična"
+
+msgid "Invalid prefix"
+msgstr "Neveljaven prefix"
+
+msgid "Duplicate number"
+msgstr "Duplicirana številka"
+
+msgid "Number not inside prefix"
+msgstr "Stevilka ni znotraj prefiksa"
+
+msgid "Number add failed"
+msgstr "Napaka pri dodajanju številke"
+
+msgid "Number edit failed"
+msgstr "Napaka pri urejanju številke"
+
+msgid "Number delete failed"
+msgstr "Napaka pri izbrisu številke"
+
+msgid "Number add successful"
+msgstr "Številka dodana"
+
+msgid "Number edit successful"
+msgstr "Številka urejena"
+
+msgid "Number delete successful"
+msgstr "Številka izbrisana"
+
+msgid "Invalid prefix ID"
+msgstr "Neveljaven ID prefiksa"
+
+msgid "PSTN number"
+msgstr "PSTN številka"
+
+msgid "Number Name"
+msgstr "Ime številke"
+
+msgid "Address owner"
+msgstr "Lastnik"
+
+msgid "Select device where prefix is located"
+msgstr "Izberite kje se prefiks nahaja"
+
+msgid "You do not have permission to manage PSTN prefixes"
+msgstr "Nimate pravice za upravljanje PSTN prefiksov"
+
+msgid "Invalid PSTN object identifier"
+msgstr "Neveljaven ID prefiksa"
+
+msgid "Start must be numeric"
+msgstr "Start mora biti numberičen"
+
+msgid "Stop must be numeric"
+msgstr "Stop mora biti numberičen"
+
+msgid "Invalid master prefix"
+msgstr "Neveljaven master prefix"
+
+msgid "Prefix cannot be same as master"
+msgstr "Prefix ne more biti enak kot glavni prefix"
+
+msgid "Prefix not inside its master"
+msgstr "Prefix ni znotraj glavnega prefiksa"
+
+msgid "Prefix overlaps with prefix "
+msgstr "Prefix se prekriva z "
+
+msgid "Prefix add failed"
+msgstr "Napaka pri dodajanju prefiksa"
+
+msgid "Prefix edit failed"
+msgstr "Napaka pri urejanju prefiksa"
+
+msgid "Prefix delete failed"
+msgstr "Napaka pri izbrisu prefiksa"
+
+msgid "Prefix add successful"
+msgstr "Prefiks dodan"
+
+msgid "Prefix edit successful"
+msgstr "Prefiks urejen"
+
+msgid "Prefix delete successful"
+msgstr "Prefiks izbrisan"
+
+msgid "Invalid master ID"
+msgstr "Neveljaven ID glavnega prefiksa"
+
+msgid "PSTN prefix"
+msgstr "PSTN prefix"
+
+msgid "Master prefix"
+msgstr "Glavni prefiks"
+
+msgid "Set Prefix name"
+msgstr "Nastavi ime prefiksa"
+
+msgid "Set start number"
+msgstr "Določi začetek"
+
+msgid "Set stop number"
+msgstr "Določi konec"
+
+msgid "Enter master prefix if you want to nest it under existing subnet, or select root to create root prefix"
+msgstr "Izberite glavni prefix če ga želite dodati v prefix, ali pa root za kreacijo root prefiksa"
+
+msgid "Short"
+msgstr "Kratko"
+
+msgid "No numbers"
+msgstr "Ni številk"
+
+msgid "Unused"
+msgstr "Neuporabljeno"
+
+msgid "PSTN prefix details"
+msgstr "PSTN prefiksi"
+
+msgid "Prefix not found"
+msgstr "Neznan prefiks"
+
+msgid "All prefixes"
+msgstr "Vsi prefiksi"
+
+msgid "Prefix details"
+msgstr "Detajli"
+
+msgid "Edit prefix properties"
+msgstr "Uredi detajle"
+
+msgid "Create new prefix"
+msgstr "Ustvari nov prefix"
+
+msgid "Delete prefix"
+msgstr "Izbriši prefiks"
+
+msgid "You do not have permissions to edit prefix"
+msgstr "Nimate pravic za urejanje prefiksa"
+
+msgid "Add address to prefix"
+msgstr "Dodaj številko v prefiks"
+
+msgid "RACK list"
+msgstr "Seznam strežniških omar"
+
+msgid "Add rack"
+msgstr "Dodaj str. omaro"
+
+msgid "RACK management disabled."
+msgstr "RACK modul ni omogočen"
+
+msgid "No racks available"
+msgstr "Ni str. omar"
+
+msgid "Rack is empty"
+msgstr "Omara je prazna"
+
+msgid "Invalid rack Id"
+msgstr "Neveljaven ID omare"
+
+msgid "RACK details"
+msgstr "Podatki o str. omari"
+
+msgid "Invalid subpage"
+msgstr "Neveljavna podstran"
+
+msgid "Subpage does not exist"
+msgstr "Podstran ne obstaja"
+
+msgid "Add option"
+msgstr "Dodaj opcijo"
+
+msgid "prefix option"
+msgstr "možnost prefiksa"
+
+msgid "Option"
+msgstr "Možnost"
+
+msgid "Invalid location"
+msgstr "Neveljavna lokacija"
+
+msgid "New Option"
+msgstr "Nova možnost"
+
+msgid "Value cannot be empty"
+msgstr "Vrednost ne more biti prazna"
+
+msgid "Options updated"
+msgstr "Možnosti posodobljene"
+
+msgid "Upgrade"
+msgstr "Nadgradnja"
+
+msgid "Object is Natted"
+msgstr "Objekt je natiran"
+
+msgid "Invalid generator ID"
+msgstr "Nevlejaven ID"
+
+msgid "A record must be an IP address"
+msgstr "A zapis mora biti IP naslov"
+
+msgid "AAAA record must be an IP address"
+msgstr "AAAA zapis mora biti IPv6 naslov"
+
+msgid "Subnet permissions recursively set"
+msgstr "Pravice za omrežje rekurzivno nastavljene"
+
+msgid "New subnet cannot be same as master subnet"
+msgstr "Novo omrežje ne more biti enako kot glavno omrežje"
+
+msgid "Invalid Mask"
+msgstr "Neveljavna maska"
+
+msgid "Invalid request action"
+msgstr "Neveljavna akcija"
+
+msgid "Invalid filetype"
+msgstr "Neveljaven tip datoteke"
+
+msgid "System is running in maintenance mode"
+msgstr "Sistem je v vzdrževalnem načinu"
+
+msgid "Invalid username"
+msgstr "Neveljavno uporabniško ime"
+
+msgid "SAML2 login successful"
+msgstr "SAML2 prijava uspešna"
+
+msgid "Missing class file"
+msgstr "Manjka class datoteka"
+
+msgid "User attributes:"
+msgstr "Uporabniški atributi:"
+
+msgid "No attributes found."
+msgstr "Ni atributov"
+
+msgid "Attributes not found"
+msgstr "Ni atributov"
+
+msgid "phpIPAM settings"
+msgstr "phpIPAM nastavitve"
