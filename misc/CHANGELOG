@@ -102,6 +102,7 @@
     + Fixed search export invalid encoding and data may have been lost XLS file error;
     + Fixed invalid character encoding in API responses;
     + PowerDNS records cannot be created on slave zone;
+    + Fixed subnet resizing bug if subnet contained slaves;
 
 == 1.20.1
 

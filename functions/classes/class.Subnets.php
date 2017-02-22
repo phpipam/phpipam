@@ -1621,11 +1621,13 @@ class Subnets extends Common_functions {
 	    $sections_subnets = $this->fetch_section_subnets ($sectionId);
 		# fix null vrfid
 		$vrfId = is_numeric($vrfId) ? $vrfId : 0;
+		# slaves
+		$this->fetch_subnet_slaves_recursive ($old_subnet_id);
 	    # verify new against each existing
 	    if (sizeof($sections_subnets)>0) {
 	        foreach ($sections_subnets as $existing_subnet) {
-		        //ignore same
-		        if($existing_subnet->id!=$old_subnet_id) {
+		        //ignore same and slaves
+		        if($existing_subnet->id!=$old_subnet_id && !in_array($existing_subnet->id, $this->slaves)) {
 		            //only check if vrfId's match
 		            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
 			            # ignore folders!
