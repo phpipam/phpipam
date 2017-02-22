@@ -103,7 +103,7 @@ CREATE TABLE `sections` (
   `description` text,
   `masterSection` INT(11)  NULL  DEFAULT '0',
   `permissions` varchar(1024) DEFAULT NULL,
-  `strictMode` BINARY(1)  NOT NULL  DEFAULT '0',
+  `strictMode` BINARY(1)  NOT NULL  DEFAULT '1',
   `subnetOrdering` VARCHAR(16)  NULL  DEFAULT NULL,
   `order` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
