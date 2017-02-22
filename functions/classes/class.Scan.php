@@ -45,6 +45,13 @@ class Scan extends Common_functions {
 	public $icmp_type = "ping";
 
 	/**
+	 * Sets OS type
+	 *
+	 * @var string
+	 */
+	public $os_type = "default";
+
+	/**
 	 * icmp timeout
 	 *
 	 * (default value: 1)
@@ -136,6 +143,8 @@ class Scan extends Common_functions {
 		is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 		# set type
 		$this->reset_scan_method ($this->settings->scanPingType);
+		# set OS type
+		$this->set_os_type ();
 		# set php exec
 		$this->set_php_exec ();
 		# Log object
@@ -192,7 +201,18 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function set_php_exec () {
-		$this->php_exec = PHP_BINDIR."/php";
+		$this->php_exec = $this->os_type=="Windows" ? PHP_BINARY : PHP_BINDIR."/php";
+	}
+
+	/**
+	 * Sets OS type
+	 *
+	 * @method set_os_type
+	 */
+	private function set_os_type () {
+		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $this->os_type = "FreeBSD"; }
+		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $this->os_type = "Linux"; }
+		elseif(PHP_OS == "WIN32" || PHP_OS == "Windows" || PHP_OS == "WINNT")	{ $this->os_type = "Windows"; }
 	}
 
 	/**
@@ -272,10 +292,10 @@ class Scan extends Common_functions {
 		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath."6"; }
 
 		# set ping command based on OS type
-		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
-		elseif(PHP_OS == "WIN32" || PHP_OS == "Windows" || PHP_OS == "WINNT")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -I ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		else																	{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
+		if ($this->os_type == "FreeBSD")    { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Windows")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
+		else								{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
@@ -451,9 +471,18 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function ping_verify_path ($path) {
-		if(!file_exists($path)) {
-			if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
-			else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
+		// Windows
+		if($this->os_type=="Windows") {
+			if(!file_exists('"'.$path.'"')) {
+				if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
+				else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
+			}
+		}
+		else {
+			if(!file_exists($path)) {
+				if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
+				else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
+			}
 		}
 	}
 

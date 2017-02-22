@@ -28,7 +28,7 @@ $User->check_maintaneance_mode ();
 if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true); }
 
 # verify that user has write permissionss for subnet
-if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true); }
+if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true, true); }
 
 # fetch subnet details
 $subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
@@ -38,11 +38,10 @@ $subnet!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 $_POST['sectionId'] = $subnet->sectionId;
 
 # full
-if ($_POST['type']!="update-icmp" && $subnet->isFull==1)                { $Result->show("warning", _("Cannot scan as subnet is market as used"), true); }
+if ($_POST['type']!="update-icmp" && $subnet->isFull==1)                { $Result->show("warning", _("Cannot scan as subnet is market as used"), true, true); }
 
-# verify ping path
-if(!file_exists($Scan->php_exec))	{ $Result->show("danger", _("Invalid ping path"), true); }
-
+# verify php path
+if(!file_exists($Scan->php_exec))	{ $Result->show("danger", _("Invalid php path"), true, true); }
 
 # scna
 if($_POST['type']=="scan-icmp")			   { include("subnet-scan-icmp.php"); }
@@ -54,5 +53,3 @@ elseif($_POST['type']=="snmp-mac")	       { include("subnet-scan-snmp-mac.php");
 elseif($_POST['type']=="update-icmp")	   { include("subnet-update-icmp.php"); }
 elseif($_POST['type']=="update-snmp-arp")  { include("subnet-update-snmp-arp.php"); }
 else									   { $Result->show("danger", _("Invalid scan type"), true); }
-
-?>

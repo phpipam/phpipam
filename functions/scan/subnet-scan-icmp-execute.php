@@ -38,6 +38,9 @@ $Scan		= new Scan ($Database);
 //set exit flag to true
 $Scan->ping_set_exit(true);
 
+// reformat argv for windows
+if(isset($argv[1]))	{ $argv[1] = str_replace("'", "", $argv[1]); }
+
 /**
  *	Input checks
  */
@@ -47,6 +50,7 @@ if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=
 //check input parameters
 if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
 // test to see if threading is available
+if($Scan->settings->scanPingType!="fping")
 if( !Thread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
 //check script
 if($argv[1]!="update"&&$argv[1]!="discovery")			{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type!"))); }
@@ -172,4 +176,3 @@ $out = json_encode(@$result);
 
 # print result
 print_r($out);
-?>
