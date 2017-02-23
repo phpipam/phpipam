@@ -188,7 +188,7 @@ class Logging extends Common_functions {
                         "vrfId" => "VRF index",
                         "vlanId" => "VLAN index",
                         "showName" => "Show name instead of subnet",
-                        "device" => "Device index",
+                        "device" => "Device",
                         "pingSubnet" => "ICMP check for online hosts",
                         "discoverSubnet" => "Discover new hosts for this subnet",
                         "allowRequests" => "Allow IP requests for subnet",
@@ -221,7 +221,7 @@ class Logging extends Common_functions {
                         "mac" => "MAC address",
                         "owner" => "Address owner",
                         "state" => "Address state index",
-                        "switch" => "Device index",
+                        "switch" => "Device",
                         "port" => "Port",
                         "note" => "Note",
                         "lastSeen" => "Device last online",
@@ -911,6 +911,8 @@ class Logging extends Common_functions {
 				elseif($k == "masterSubnetId") 	{ $v = $this->changelog_format_master_subnet_diff ($k, $v); }
 				//device change
 				elseif($k == 'switch') 			{ $v = $this->changelog_format_device_diff ($k, $v); }
+				//device change
+				elseif($k == 'device') 			{ $v = $this->changelog_format_device_diff ($k, $v); }
 				//vlan
 				elseif($k == 'vlanId') 			{ $v = $this->changelog_format_vlan_diff ($k, $v); }
 				//vrf
