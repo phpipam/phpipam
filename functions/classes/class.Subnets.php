@@ -3121,6 +3121,9 @@ class Subnets extends Common_functions {
 
 				   			$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
 
+							// create html links
+							$option['value'][$field['name']] = $this->create_links($option['value'][$field['name']], $field['type']);
+
 				   			//booleans
 							if($field['type']=="tinyint(1)")	{
 								if($option['value'][$field['name']] == "0")			{ $html[] = _("No"); }

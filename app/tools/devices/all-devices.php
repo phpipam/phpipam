@@ -99,6 +99,9 @@ else {
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
+				// create html links
+				$device[$field['name']] = $User->create_links($device[$field['name']], $field['type']);
+
 				print "<td class='hidden-sm hidden-xs hidden-md'>".$device[$field['name']]."</td>";
 			}
 		}
