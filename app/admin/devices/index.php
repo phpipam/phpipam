@@ -153,10 +153,10 @@ else {
 
 		print '	<td class="actions">'. "\n";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='$device[id]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='$device[id]' rel='tooltip' title='"._('Edit')."'><i class='fa fa-pencil'></i></button>";
 		if($User->settings->enableSNMP=="1")
-		print "		<button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]'><i class='fa fa-cogs'></i></button>";
-		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='$device[id]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
+		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='$device[id]' rel='tooltip' title='"._('Delete')."'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print '	</td>'. "\n";
 

@@ -29,8 +29,7 @@ $hidden_custom_fields = is_array(@$hidden_custom_fields['devices']) ? $hidden_cu
 <h4><?php print _('SNMP management'); ?></h4>
 <hr>
 <div class="btn-group">
-	<button class='btn btn-xs btn-default add-snmp-device' data-action='add'   data-switchid='' style='margin-bottom:10px;' rel="tooltip" title="<?php print _('Add device'); ?>"><i class='fa fa-plus'></i></button>
-	<button class='btn btn-xs btn-default remove-snmp-device' data-action='delete'   data-switchid='' style='margin-bottom:10px;' rel="tooltip" title="<?php print _('Remove device'); ?>"><i class='fa fa-minus'></i></button>
+	<a href="<?php print create_link("administration", "devices"); ?>" class="btn btn-xs btn-default" style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Manage devices'); ?></a>
 </div>
 
 <?php
