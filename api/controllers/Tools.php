@@ -398,6 +398,11 @@ class Tools_controller extends Common_api_functions {
 		# only 1 parameter ?
 		if (sizeof($values)==1)						{ $this->Response->throw_exception(400, 'No parameters'); }
 
+		# Get coordinates if locations
+		if($this->_params->id=="locations") {
+			$this->format_location ();
+		}
+
 		# execute update
 		if(!$this->Admin->object_modify ($this->_params->id, "add", "", $values))
 													{ $this->Response->throw_exception(500, $this->_params->id." object creation failed"); }
@@ -645,6 +650,20 @@ class Tools_controller extends Common_api_functions {
         	return false;
     	}
 	}
-}
 
-?>
+	/**
+	 * Get latlng from Google
+	 *
+	 * @method format_location
+	 * @return [type]          [description]
+	 */
+	private function format_location () {
+		if((strlen(@$this->_params->lat)==0 || strlen(@$this->_params->long)==0) && strlen(@$this->_params->address)>0) {
+            $latlng = $this->Tools->get_latlng_from_address ($this->_params->address);
+            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+                $this->_params->lat  = $latlng['lat'];
+                $this->_params->long = $latlng['lng'];
+            }
+		}
+	}
+}
