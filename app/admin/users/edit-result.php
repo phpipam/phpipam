@@ -20,7 +20,8 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
+$_POST = $Admin->strip_input_tags ($_POST);
+$_POST = $Admin->trim_array_objects ($_POST);
 
 # validate csrf cookie
 $User->csrf_cookie ("validate", "user", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -141,5 +142,3 @@ else																	{ $Result->show("success", _("User $_POST[action] successfu
 
 # mail user
 if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }
-
-?>

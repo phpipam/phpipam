@@ -584,6 +584,29 @@ class Common_functions  {
 	}
 
 	/**
+	 * Trim whitespace form array objects
+	 *
+	 * @method trim_array_objects
+	 * @param  string|array $fields
+	 * @return string|array
+	 */
+	public function trim_array_objects ($fields) {
+		if(is_array($fields)) {
+	    	// init
+	    	$out = array();
+	    	// loop
+			foreach($fields as $k=>$v) {
+				$out[$k] = trim($v);
+			}
+		}
+		else {
+			$out = trim($fields);
+		}
+		# result
+		return $out;
+	}
+
+	/**
 	 * Function to verify checkbox if 0 length
 	 *
 	 * @access public
