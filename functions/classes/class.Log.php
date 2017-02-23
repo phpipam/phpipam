@@ -976,14 +976,12 @@ class Logging extends Common_functions {
 		elseif($this->object_type == "subnet" || $this->object_type == "folder")	{
 			// remove unneeded values
 			unset(	$this->object_new['subnetId'],
-					$this->object_new['location'],
 					$this->object_new['vrfIdOld'],
 					$this->object_new['permissions'],
 					$this->object_new['state'],
 					$this->object_new['ip']
 				);
 			unset(	$this->object_old['subnetId'],
-					$this->object_old['location'],
 					$this->object_old['vrfIdOld'],
 					$this->object_old['permissions'],
 					$this->object_old['state'],
@@ -1227,7 +1225,7 @@ class Logging extends Common_functions {
 		}
 		elseif($this->object_old[$k] != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $this->object_old[$k]);
-			$this->object_old[$k] = $location->name." [$location->description]";
+			$this->object_old[$k] = strlen($location->description>0) ? $location->name." [$location->description]" : $location->name;
 		}
 		// new none
 		if($v == 0)	{
@@ -1235,7 +1233,7 @@ class Logging extends Common_functions {
 		}
 		elseif($v != "NULL") {
 			$location = $this->Tools->fetch_object("locations", "id", $v);
-			$v = $location->name." [$location->description]";
+			$v = strlen($location->description>0) ? $location->name." [$location->description]" : $location->name;
 		}
 		//result
 		return $v;
