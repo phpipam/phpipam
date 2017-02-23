@@ -22,7 +22,7 @@ $search_term = trim($search_term);
 $search_term = str_replace("*", "%", $search_term);
 
 // IP address low/high reformat
-if (preg_match('/^[a-f0-9.:]+$/i', $search_term)) {
+if (preg_match('/^[a-f0-9.:\/]+$/i', $search_term)) {
     // identify
     $type = $Addresses->identify_address( $search_term ); //identify address type
 
