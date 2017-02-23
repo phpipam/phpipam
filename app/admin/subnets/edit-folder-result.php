@@ -26,7 +26,13 @@ $User->check_maintaneance_mode ();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "folder", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+# validate csrf cookie
+if($_POST['action']=="add") {
+	$User->csrf_cookie ("validate", "folder_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
+else {
+	$User->csrf_cookie ("validate", "folder_".$_POST['subnetId'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
 
 # ID must be numeric
 if($_POST['action']=="add") {

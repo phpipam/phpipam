@@ -20,7 +20,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "folder");
+$csrf = $_POST['action']=="add" ? $User->csrf_cookie ("create", "folder_add") : $User->csrf_cookie ("create", "folder_".$_POST['subnetId']);
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);

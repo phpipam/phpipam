@@ -103,6 +103,7 @@
     + Fixed invalid character encoding in API responses;
     + PowerDNS records cannot be created on slave zone;
     + Fixed subnet resizing bug if subnet contained slaves;
+    + Added separate CSRF cookies for each address/subnet/pstn object;
 
 == 1.20.1
 

@@ -22,7 +22,7 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "address");
+$csrf = $_POST['action']=="add"||$_POST['action']=="all-add" ? $User->csrf_cookie ("create", "address_add") : $User->csrf_cookie ("create", "address_".$_POST['id']);
 
 # validate action
 $Tools->validate_action ($_POST['action']);

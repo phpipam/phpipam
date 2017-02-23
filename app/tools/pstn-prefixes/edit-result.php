@@ -20,7 +20,13 @@ $_POST = $Admin->strip_input_tags($_POST);
 if($Tools->check_prefix_permission ($User->user) <3)   { $Result->show("danger", _('You do not have permission to manage PSTN prefixes'), true); }
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "pstn", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+if($_POST['action']=="add") {
+    $User->csrf_cookie ("validate", "pstn_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
+else {
+    $User->csrf_cookie ("validate", "pstn_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
+
 
 # validations
 if($_POST['action']=="delete" || $_POST['action']=="edit") {
@@ -34,7 +40,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
 
     // prefix
     if(!$_POST['prefix'])						{ $Result->show("danger", "Prefix can not be empty!", true); }
-	
+
     // number
     if(!is_numeric($_POST['start']))                                    { $Result->show("danger",  _("Start must be numeric"), true); }
     if(!is_numeric($_POST['stop']))                                     { $Result->show("danger",  _("Stop must be numeric"), true); }
