@@ -64,12 +64,14 @@ else {
 				# fix for subnet and broadcast free space calculation
 				$ipCount = 0;															//initial count
 				$Subnets->reset_subnet_slaves_recursive ();
-				$slaves2 = $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);		//fetch all slaves
-				foreach($Subnets->slaves as $s) {
-					$ipCount = $ipCount + $Addresses->count_subnet_addresses ($s['id']);
-					# subnet and broadcast add used
-					if($Subnets->get_ip_version ($s['subnet'])=="IPv4" && $s['mask']<31) {
-						$ipCount = $ipCount+2;
+				$Subnets->fetch_subnet_slaves_recursive ($subnet['id']);		//fetch all slaves
+				if(is_array($Subnets->slaves)) {
+					foreach($Subnets->slaves as $s) {
+						$ipCount = $ipCount + $Addresses->count_subnet_addresses ($s);
+						# subnet and broadcast add used
+						if($Subnets->get_ip_version ($subnet['subnet'])=="IPv4" && $subnet['mask']<31) {
+							$ipCount = $ipCount+2;
+						}
 					}
 				}
 			}
