@@ -2814,11 +2814,17 @@ class Tools extends Common_functions {
 	 * @return string
 	 */
 	public function set_csv_delimiter ($outFile) {
-		// count occurences
-		$cnt_coma  = substr_count($outFile, ",");
-		$cnt_colon = substr_count($outFile, ";");
-		// return higher
-		$this->csv_delimiter = $cnt_coma > $cnt_colon ? "," : ";";
+		// must be string
+		if(is_string($outFile)) {
+			// count occurences
+			$cnt_coma  = substr_count($outFile, ",");
+			$cnt_colon = substr_count($outFile, ";");
+			// set higher
+			$this->csv_delimiter = $cnt_coma > $cnt_colon ? "," : ";";
+		}
+		else {
+			$this->csv_delimiter = ",";
+		}
 	}
 
 	/**
