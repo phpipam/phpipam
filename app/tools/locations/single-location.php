@@ -161,7 +161,7 @@ else {
                             	if($o->type=="addresses")
                             	$o->name = $Tools->transform_address ($o->name, "dotted");
 
-                                print "<a class='btn btn-xs btn-danger removeLocationObject' data-object-id='$o->id' rel='tooltip' title='"._("Remove")."'><i class='fa fa-times'></i></a> ";
+                                print "<a class='btn btn-xs btn-default removeLocationObject' data-object-id='$o->id' rel='tooltip' title='"._("Remove")."'><i class='fa fa-times'></i></a> ";
                                 print "<a href='$href'>$o->name</a> $o->description";
                                 print "<br>";
                         	}
