@@ -389,6 +389,11 @@ class Tools_controller extends Common_api_functions {
 		# remap keys
 		$this->remap_keys ();
 
+		# Get coordinates if locations
+		if($this->_params->id=="locations") {
+			$values = $this->format_location ();
+		}
+
 		# check for valid keys
 		$values = $this->validate_keys ();
 
@@ -397,11 +402,6 @@ class Tools_controller extends Common_api_functions {
 
 		# only 1 parameter ?
 		if (sizeof($values)==1)						{ $this->Response->throw_exception(400, 'No parameters'); }
-
-		# Get coordinates if locations
-		if($this->_params->id=="locations") {
-			$this->format_location ();
-		}
 
 		# execute update
 		if(!$this->Admin->object_modify ($this->_params->id, "add", "", $values))
