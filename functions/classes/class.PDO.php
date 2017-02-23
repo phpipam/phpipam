@@ -364,6 +364,12 @@ abstract class DB {
 			$preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
 		}
 
+		// exit on no parameters
+		if(sizeof($preparedParamArr)==0) {
+			throw new Exception('No values to update');
+			return false;
+		}
+
 		$preparedParamStr = implode(',', $preparedParamArr);
 
 		//primary key 2?
