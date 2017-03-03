@@ -24,6 +24,9 @@ $Result		= new Result();
 // response for mailing
 $removed_addresses = array();			// Array with differences, can be used to email to admins
 
+// if config is not set die
+if(!isset($config['removed_addresses_timelimit'])) { die("Please set timelimit for address removal!"); }
+
 // set now for whole script
 $now     = time();
 $nowdate = date ("Y-m-d H:i:s");
