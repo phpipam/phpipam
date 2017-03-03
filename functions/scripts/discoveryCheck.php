@@ -246,7 +246,7 @@ foreach($scan_subnets as $s) {
 
 			//set update query
 			$values = array("subnetId"=>$s->id,
-							"ip_addr"=>$Subnets->transform_address($ip, "decimal"),
+							"ip_addr"=>$ip,
 							"dns_name"=>$hostname['name'],
 							"description"=>"-- autodiscovered --",
 							"note"=>"This host was autodiscovered on ".$nowdate,
