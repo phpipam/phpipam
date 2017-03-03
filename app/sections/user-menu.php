@@ -5,7 +5,7 @@
  */
 
 # filter ip value
-$_GET['ip'] = $Subnets->strip_input_tags ($_GET['ip']);
+$_GET['ip'] = $Subnets->strip_input_tags(urldecode(trim($_GET['ip'])));
 
 # verify that user is logged in
 $User->check_user_session();
