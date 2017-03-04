@@ -7,28 +7,18 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# set searchterm
-if(isset($_REQUEST['ip'])) {
-	// trim
-	$_REQUEST['ip'] = trim($_REQUEST['ip']);
-	// escape
-	$_REQUEST['ip'] = htmlspecialchars($_REQUEST['ip']);
-
-	$search_term = @$search_term=="search" ? "" : $_REQUEST['ip'];
-}
-
 # change * to % for database wildchar
-$search_term = trim($search_term);
-$search_term = str_replace("*", "%", $search_term);
+$searchTerm = trim($searchTerm);
+$searchTerm = str_replace("*", "%", $searchTerm);
 
 // IP address low/high reformat
-if (preg_match('/^[a-f0-9.:\/]+$/i', $search_term)) {
+if (preg_match('/^[a-f0-9.:\/]+$/i', $searchTerm)) {
     // identify
-    $type = $Addresses->identify_address( $search_term ); //identify address type
+    $type = $Addresses->identify_address( $searchTerm ); //identify address type
 
     # reformat if IP address for search
-    if ($type == "IPv4") 		{ $search_term_edited = $Tools->reformat_IPv4_for_search ($search_term); }	//reformat the IPv4 address!
-    elseif($type == "IPv6") 	{ $search_term_edited = $Tools->reformat_IPv6_for_search ($search_term); }	//reformat the IPv4 address!
+    if ($type == "IPv4") 		{ $searchTerm_edited = $Tools->reformat_IPv4_for_search ($searchTerm); }	//reformat the IPv4 address!
+    elseif($type == "IPv6") 	{ $searchTerm_edited = $Tools->reformat_IPv6_for_search ($searchTerm); }	//reformat the IPv4 address!
 }
 
 # get all custom fields
@@ -63,17 +53,17 @@ $colSpan 	= $fieldSize + $mySize + 4;
 /** search **/
 
 # search addresses
-if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], $custom_address_fields); }
+if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['high'], $searchTerm_edited['low'], $custom_address_fields); }
 # search subnets
-if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], $custom_subnet_fields); }
+if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0) 	{ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high'], $searchTerm_edited['low'], $_REQUEST['ip'], $custom_subnet_fields); }
 # search vlans
-if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($search_term, $custom_vlan_fields); }
+if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vlans     = $Tools->search_vlans($searchTerm, $custom_vlan_fields); }
 # search vrf
-if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vrf       = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
+if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_vrf       = $Tools->search_vrfs($searchTerm, $custom_vrf_fields); }
 # search pstn prefixes
-if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_pstn      = $Tools->search_pstn_refixes($search_term, $custom_pstn_fields); }
+if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_pstn      = $Tools->search_pstn_refixes($searchTerm, $custom_pstn_fields); }
 # search pstn numbers
-if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_pstnn     = $Tools->search_pstn_numbers($search_term, $custom_pstnn_fields); }
+if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 		{ $result_pstnn     = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields); }
 
 // all are off?
 if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) && !isset($_REQUEST['pstn']) ) {
@@ -87,7 +77,7 @@ elseif(strlen($_REQUEST['ip'])==0)  {
 else {
 if(sizeof($result_subnets)!=0 || sizeof($result_addresses)!=0 || sizeof($result_vlans)!=0 || sizeof($result_vrf)!=0 || sizeof($result_pstn)!=0) {
     // export
-	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$search_term.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
+	print('<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$searchTerm.'" title="'._('Export All results to XLS').'"><button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button></a>');
 }
 ?>
 

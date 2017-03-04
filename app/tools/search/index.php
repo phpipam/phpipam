@@ -6,9 +6,9 @@
 $User->check_user_session();
 
 # get posted search term
-if(isset($_GET['ip'])) {
+if(isset($_REQUEST['ip'])) {
     // remove chars
-    $searchTerm =  htmlspecialchars(trim($_GET['ip']));
+	$searchTerm = $Subnets->strip_input_tags(urldecode(trim($_REQUEST['ip'])));
 }
 else {
     $searchTerm = "";
