@@ -4,64 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a74783b3920e6f26d013111127eeca32",
+    "content-hash": "c8129de4aad3050ae5ca5ee6114a5b7a",
     "packages": [
         {
             "name": "adldap/adldap",
-            "version": "dev-master",
+            "version": "4.0.4",
             "source": {
-                "type": "git",
-                "url": "https://github.com/adldap/adLDAP.git",
-                "reference": "63fd63e4f680e521bdf6cba23e0e524a2c34c0d5"
+                "type": "svn",
+                "url": "https://svn.code.sf.net/p/adldap/code/",
+                "reference": "tags/v4.0.4/"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/adldap/adLDAP/zipball/63fd63e4f680e521bdf6cba23e0e524a2c34c0d5",
-                "reference": "63fd63e4f680e521bdf6cba23e0e524a2c34c0d5",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ldap": "*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.9.*",
-                "phpunit/phpunit": "4.6.*"
+                "url": "http://sourceforge.net/projects/adldap/files/adLDAP/adLDAP_4.0.4/adLDAP_4.0.4r2.zip/download",
+                "reference": null,
+                "shasum": null
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "Adldap\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Scott Barnett",
-                    "email": "scott@wiggumworld.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Richard Hyland",
-                    "email": "adldap@richardhyland.com",
-                    "role": "Developer"
-                },
-                {
-                    "name": "Steve Bauman",
-                    "email": "steven_bauman@outlook.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "A PHP LDAP Library for Active Directory Manipulation",
-            "keywords": [
-                "active directory",
-                "ldap",
-                "windows"
-            ],
-            "time": "2015-06-16 12:41:10"
+                "classmap": [
+                    "src/"
+                ]
+            }
         },
         {
             "name": "nuovo/spreadsheet-reader",
@@ -876,7 +840,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "adldap/adldap": 20,
         "pear/net_ipv4": 20,
         "pear/pear": 20,
         "pear/net_ipv6": 20,
