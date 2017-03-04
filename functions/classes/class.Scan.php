@@ -320,8 +320,6 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	protected function ping_address_method_pear ($address) {
-		# we need pear ping package
-		require_once(dirname(__FILE__) . '/../../functions/PEAR/Net/Ping.php');
 		$ping = Net_Ping::factory();
 
 		# ipv6 not supported

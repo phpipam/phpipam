@@ -1,0 +1,41 @@
+{
+  "name": "phpipam",
+  "license": "GPL-3.0+",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/pear/Net_IPv6"
+    },
+    {
+      "type": "package",
+      "package": {
+        "name" : "adldap/adldap",
+        "version": "4.0.4",
+        "dist": {
+          "url": "http://sourceforge.net/projects/adldap/files/adLDAP/adLDAP_4.0.4/adLDAP_4.0.4r2.zip/download",
+          "type": "zip"
+        },
+        "source": {
+          "url":"https://svn.code.sf.net/p/adldap/code/",
+          "type": "svn",
+          "reference": "tags/v4.0.4/"
+        },
+        "autoload": {
+          "classmap": ["src/"]
+        }
+      }
+    }
+  ],
+  "require": {
+    "adldap/adldap": "4.0.4",
+    "nuovo/spreadsheet-reader": "0.5.11",
+    "onelogin/php-saml": "2.10.4",
+    "pear/net_dns2": "1.4.2",
+    "pear/net_ipv4": "dev-master",
+    "pear/pear": "dev-master",
+    "pear/net_ipv6": "dev-master",
+    "phpmailer/phpmailer": "v6.0.0rc5",
+    "pear/spreadsheet_excel_writer": "dev-master"
+  },
+  "minimum-stability": "dev"
+}

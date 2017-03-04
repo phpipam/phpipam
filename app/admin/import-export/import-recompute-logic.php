@@ -6,8 +6,6 @@
 
 # include required scripts
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv4.php' );
-require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv6.php' );
 
 # initialize user object, if not already set
 if (!isset($Database)) { $Database 	= new Database_PDO; }
