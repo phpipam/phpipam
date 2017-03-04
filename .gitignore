@@ -5,3 +5,4 @@ functions/scripts/custom/
 api/_lock.txt
 .*.swp
 vendor
+composer.phar
