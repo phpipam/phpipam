@@ -1,13 +1,20 @@
 {
   "name": "phpipam",
   "license": "GPL-3.0+",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/pear/Net_IPv6"
+    }
+  ],
   "require": {
     "adldap/adldap": "dev-master",
     "nuovo/spreadsheet-reader": "0.5.11",
     "onelogin/php-saml": "2.10.4",
     "pear/net_dns2": "1.4.2",
-    "pear/net_ipv4": "dev-trunk",
-    "pear/ole": "dev-master",
+    "pear/net_ipv4": "dev-master",
+    "pear/pear": "dev-master",
+    "pear/net_ipv6": "dev-master",
     "phpmailer/phpmailer": "v6.0.0rc5",
     "pear/spreadsheet_excel_writer": "dev-master"
   },
