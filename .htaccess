@@ -10,10 +10,6 @@ AddOutputFilterByType DEFLATE application/javascript
 AddOutputFilterByType DEFLATE application/x-javascript
 </IfModule>
 
-<IfModule mod_headers.c>
-Header set Cache-Control "max-age=86400, public"
-</IfModule>
-
 <IfModule mod_rewrite.c>
 
 # apache auth basic auth example
