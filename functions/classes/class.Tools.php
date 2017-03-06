@@ -2768,15 +2768,24 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	private function parse_import_file_csv () {
-    	/* get file to string */
-    	$outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
+    	// /* get file to string */
+    	// $outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
+
+    	// /* format file */
+    	// $outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
+    	// $outFile = explode("\n", $outFile);
 
     	// delimiter
     	$this->set_csv_delimiter ($outFile);
 
-    	/* format file */
-    	$outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
-    	$outFile = explode("\n", $outFile);
+    	// get file to string
+		$handle = fopen(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv', "r");
+		if ($handle) {
+		    while (($outFile[] = fgets($handle)) !== false) {}
+		    fclose($handle);
+		} else {
+		    $this->Result->show("danger", _('Cannot open upload/import.csv'), true);
+		}
 
     	/* validate IP */
     	foreach($outFile as $k=>$v) {
