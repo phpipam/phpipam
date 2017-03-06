@@ -43,6 +43,9 @@ if(isset($_POST['action-visual'])) {
 # save $_POST to $address
 $address = $_POST;
 
+# remove all spaces in dns_name
+if (strlen($address['dns_name'])>0) { $address['dns_name'] = str_replace(" ", "", $address['dns_name']); }
+
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
 isset($address['subnet']) ?:		$Result->show("danger", _("Missing required fields"). " subnet", true);
