@@ -52,16 +52,22 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 		# remove last |
 		$custFields = substr($custFields, 0,-2);
 	}
+
+	# set standard fields
+	$standard_fields = array ("ip address","ip state","description","hostname","fw_object","mac","owner","device","port","notes");
 	?>
 
 	<!-- notes -->
-	<?php print _('To successfully import data please use the following XLS/CSV structure:<br>( ip | State | Description | hostname | MAC | Owner | Device | Port | Note '); ?> <?php print $custFields; ?> )
-	<br>
-	<img src="css/<?php print SCRIPT_PREFIX; ?>/images/csvuploadexample.jpg" style="border:1px solid #999999">
-	<br><br>
+	<?php print _('To successfully import data please use the following XLS/CSV structure:'); ?><br>
+	<div class="alert alert-info alert-absolute">
+ 	<?php print implode(" | ", $standard_fields).$custFields; ?>
+	</div>
+	<div class="clearfix"></div>
 
 	<!-- Download template -->
-	<a class="csvtemplate btn btn-sm btn-default pull-right" id="csvtemplate">Download template</a>
+	<a class="csvtemplate btn btn-sm btn-default" id="csvtemplate">Download template</a>
+
+	<br><br>
 
 	<!-- Upload file form -->
 	<h4>1.) <?php print _('Upload file'); ?>:</h4>
