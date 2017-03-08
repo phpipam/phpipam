@@ -40,6 +40,10 @@ print '<form id="selectExportFields">';
 # table
 print "	<table class='table table-striped table-condensed'>";
 
+print "	<tr>";
+print "	<td colspan='2'><h4>"._('Standard fields')."</h4></td>";
+print "	</tr>";
+
 # IP addr - mandatory
 print "	<tr>";
 print "	<td>"._('IP address')."</td>";
@@ -109,6 +113,11 @@ print "	</tr>";
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 if(sizeof($custom_fields) > 0) {
+
+	print "	<tr>";
+	print "	<td colspan='2'><h4>"._('Custom fields')."</h4></td>";
+	print "	</tr>";
+
 	foreach($custom_fields as $myField) {
 
 		//change spaces to ___
