@@ -135,6 +135,10 @@ if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('note') ,$format_title);
 	$rowCount++;
 }
+if( (isset($_GET['location'])) && ($_GET['location'] == "on") ) {
+	$worksheet->write($lineCount, $rowCount, _('location') ,$format_title);
+	$rowCount++;
+}
 
 //custom
 if(sizeof($custom_fields) > 0) {
@@ -167,6 +171,18 @@ if ($devices!==false) {
 $devices_indexed[0] = new StdClass ();
 $devices_indexed[0]->hostname = 0;
 
+//fetch locations and reorder
+$locations = $Tools->fetch_all_objects("locations", "id");
+$locations_indexed = array();
+if ($locations!==false) {
+	foreach($locations as $d) {
+		$locations_indexed[$d->id] = (object) $d;
+	}
+}
+//add blank
+$locations_indexed[0] = new StdClass ();
+$locations_indexed[0]->name = 0;
+
 //write all IP addresses
 foreach ($addresses as $ip) {
 	$ip = (array) $ip;
@@ -175,7 +191,8 @@ foreach ($addresses as $ip) {
 	$rowCount = 0;
 
 	//change switch ID to name
-	$ip['switch'] = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['switch']   = is_null($ip['switch'])||strlen($ip['switch'])==0||$ip['switch']==0||!isset($devices_indexed[$ip['switch']]) ? "" : $devices_indexed[$ip['switch']]->hostname;
+	$ip['location'] = is_null($ip['location'])||strlen($ip['location'])==0||$ip['location']==0||!isset($locations_indexed[$ip['location']]) ? "" : $locations_indexed[$ip['location']]->name;
 
 	if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $Subnets->transform_address($ip['ip_addr'],"dotted"), $format_left);
@@ -217,6 +234,10 @@ foreach ($addresses as $ip) {
 	}
 	if( (isset($_GET['note'])) && ($_GET['note'] == "on") ) {
 		$worksheet->write($lineCount, $rowCount, $ip['note']);
+		$rowCount++;
+	}
+	if( (isset($_GET['location'])) && ($_GET['location'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['location']);
 		$rowCount++;
 	}
 

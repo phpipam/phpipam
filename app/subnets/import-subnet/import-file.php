@@ -42,8 +42,9 @@ if($subnet===false)                $Result->show("danger", _("Invalid subnet ID"
 # Parse file
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
 
-# Fetch all devices
-$devices = $Tools->fetch_all_objects("devices", "hostname");
+# Fetch all devices and locations
+$devices   = $Tools->fetch_all_objects("devices", "hostname");
+$locations = $Tools->fetch_all_objects("locations", "id");
 
 # cnt
 $edit = 0;
@@ -75,6 +76,21 @@ foreach($outFile as $k=>$line) {
     		$line[7] = 0;
 		}
 
+		// reformat location from name to id
+		if(strlen($line[10])>0) {
+    		if ($locations!==false) {
+        		foreach($locations as $d) {
+        			if($d->name==$line[10])	{ $line[10] = $d->id; }
+        		}
+    		}
+    		else {
+        		$line[10] = 0;
+    		}
+		}
+		else {
+    		$line[10] = 0;
+		}
+
 		// set action
 		if($id = $Addresses->address_exists ($line[0], $_POST['subnetId'], false))	{ $action = "edit"; }
 		else																		{ $action = "add"; }
@@ -91,13 +107,14 @@ foreach($outFile as $k=>$line) {
 								"owner"=>$line[6],
 								"switch"=>$line[7],
 								"port"=>$line[8],
-								"note"=>$line[9]
+								"note"=>$line[9],
+								"location"=>$line[10]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
         // custom fields
         // Incorrect Value for $currIndex = 10;
-        $currIndex = 9;
+        $currIndex = 10;
         if(sizeof($custom_address_fields) > 0) {
         	foreach($custom_address_fields as $field) {
             	$currIndex++;

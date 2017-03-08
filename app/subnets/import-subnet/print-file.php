@@ -37,6 +37,7 @@ if($subnet===false)                $Result->show("danger", _("Invalid subnet ID"
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
 
 
+
 /*
  *	print table
  *********************/
@@ -54,6 +55,7 @@ print '	<th>'._('Owner').'</th>';
 print '	<th>'._('Device').'</th>';
 print '	<th>'._('Port').'</th>';
 print '	<th>'._('Note').'</th>';
+print '	<th>'._('Location').'</th>';
 // Add custom fields
 if(sizeof($custom_address_fields) > 0) {
 	foreach($custom_address_fields as $field) {

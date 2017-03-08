@@ -2747,10 +2747,10 @@ class Tools extends Common_functions {
 
     			$outFile[$m]  = $data->val($m,'A').$this->csv_delimiter.$data->val($m,'B').$this->csv_delimiter.$data->val($m,'C').$this->csv_delimiter.$data->val($m,'D').$this->csv_delimiter;
     			$outFile[$m] .= $data->val($m,'E').$this->csv_delimiter.$mac.$this->csv_delimiter.$data->val($m,'G').$this->csv_delimiter.$data->val($m,'H').$this->csv_delimiter;
-    			$outFile[$m] .= $data->val($m,'I').$this->csv_delimiter.$data->val($m,'J');
+    			$outFile[$m] .= $data->val($m,'I').$this->csv_delimiter.$data->val($m,'J').$this->csv_delimiter.$data->val($m,'K');
     			//add custom fields
     			if(sizeof($custom_address_fields) > 0) {
-    				$currLett = "K";
+    				$currLett = "L";
     				foreach($custom_address_fields as $field) {
     					$outFile[$m] .= $this->csv_delimiter.$data->val($m,$currLett++);
     				}
@@ -2768,16 +2768,6 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	private function parse_import_file_csv () {
-    	// /* get file to string */
-    	// $outFile = file_get_contents(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv') or die ($this->Result->show("danger", _('Cannot open upload/import.csv'), true));
-
-    	// /* format file */
-    	// $outFile = str_replace( array("\r\n","\r") , "\n" , $outFile);	//replace windows and Mac line break
-    	// $outFile = explode("\n", $outFile);
-
-    	// delimiter
-    	$this->set_csv_delimiter ($outFile);
-
     	// get file to string
 		$handle = fopen(dirname(__FILE__) . '/../../app/subnets/import-subnet/upload/import.csv', "r");
 		if ($handle) {
@@ -2786,6 +2776,10 @@ class Tools extends Common_functions {
 		} else {
 		    $this->Result->show("danger", _('Cannot open upload/import.csv'), true);
 		}
+
+    	// delimiter
+    	if(isset($outFile[0]))
+    	$this->set_csv_delimiter ($outFile[0]);
 
     	/* validate IP */
     	foreach($outFile as $k=>$v) {
