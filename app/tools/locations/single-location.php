@@ -155,7 +155,7 @@ else {
                             	$o->description = strlen($o->description)>0 ? " <span class='text-muted'>($o->description)</span>" : "";
 
                             	// subnet name
-                            	if ($o->type=="subnets")    $o->name = $Tools->transform_address ($o->name,"dotted").".".$o->mask;
+                            	if ($o->type=="subnets")    $o->name = $Tools->transform_address ($o->name,"dotted")."/".$o->mask;
 
                             	// to ip
                             	if($o->type=="addresses")
