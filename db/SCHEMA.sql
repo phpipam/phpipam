@@ -365,7 +365,8 @@ VALUES
 	(6, 'pt_BR.UTF-8', 'Brazil'),
 	(7,	'es_ES.UTF-8', 'Español'),
 	(8, 'cs_CZ.UTF-8', 'Czech'),
-	(9, 'en_US.UTF-8', 'English (US)');
+	(9, 'en_US.UTF-8', 'English (US)'),
+  (10,'ru_RU.UTF-8', 'Russian');
 
 
 # Dump of table vlans
