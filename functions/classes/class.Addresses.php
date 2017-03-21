@@ -1344,10 +1344,10 @@ class Addresses extends Common_functions {
 	 * @param bool $is_broadcast (default: false)
 	 * @return void
 	 */
-	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false, $is_subnet=false, $is_broadcast=false) {
+	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false, $is_subnet=false, $is_broadcast=false, $no_strict = false) {
 		# make sure addresses are in decimal format
 		$address1 = $this->transform_address ($address1, "decimal");
-		$address2 = $this->transform_address ($address2, "decimal");
+		$address2 = $this->transform_address ($address2, "decimal");   
 		# check for space
 		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty, $is_subnet, $is_broadcast) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
 	}
@@ -1364,7 +1364,7 @@ class Addresses extends Common_functions {
 	 * @param bool $empty
 	 * @return void
 	 */
-	protected function find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty) {
+	protected function find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty, $strict = true) {
 		# calculate diff
 		$diff = $this->calculate_address_diff ($address1, $address2);
 		# 32 subnets
@@ -1407,6 +1407,9 @@ class Addresses extends Common_functions {
     	}
 		# if diff is more than 2 return pool */
 		else {
+                if($strict == true) {
+                    return array("ip"=>$this->transform_to_dotted($address1)." - ".$this->transform_to_dotted(($address2)), "hosts"=>gmp_strval(gmp_sub($diff+2, 1)));
+                }
             	return array("ip"=>$this->transform_to_dotted($address1+1)." - ".$this->transform_to_dotted(($address2-1)), "hosts"=>gmp_strval(gmp_sub($diff, 1)));
     	}
     	# default false
