@@ -1085,7 +1085,8 @@ class Subnets extends Common_functions {
  		// set IP version
 		$ip_version = $this->get_ip_version ($subnet->subnet);
     	// no strict mode if it is_slave
-    	$strict_mode = $is_slave ? false : true;
+        $section = $this->fetch_object("sections", "id", $subnet->sectionId);
+    	$strict_mode = $is_slave ? false : (bool)$section->strictMode;
     	// count hosts
     	$address_count = $this->Addresses->count_subnet_addresses ($subnet->id);
 
@@ -3623,6 +3624,11 @@ class Subnets extends Common_functions {
 
 		// folder
 		if ($taken_subnet->isFolder=="1") 	{ return false; }
+        
+		if ($taken_subnet->isFull=="1") 	{ return false; }
+        
+        $usage = $this->calculate_subnet_usage($taken_subnet);
+        if ($usage['freehosts'] == 0)       { return false; }
 
 		// detect type
 		$type = $this->identify_address( $parent_subnet );

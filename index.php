@@ -27,6 +27,8 @@ if($_GET['page']!="install" ) {
 	$Tools	    = new Tools ($Database);
 	$Addresses	= new Addresses ($Database);
 	$Log 		= new Logging ($Database);
+    
+//    $Subnets->search_available_single_subnet (270, 30);
 
 	# reset url for base
 	$url = $User->createURL ();

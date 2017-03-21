@@ -591,9 +591,12 @@ class Addresses_controller extends Common_api_functions  {
 		$subnet = $this->subnet_details;
 		// formulate CIDR
 		$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
+        
+        $section = $this->Tools->fetch_object ("sections", "id", $subnet->sectionId);
 
 		// validate address, that it is inside subnet, not subnet/broadcast
-		$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
+        
+		$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, (bool)!$section->strictMode, true );
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {

@@ -735,10 +735,11 @@ class Addresses extends Common_functions {
 		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
 
 	    # get max hosts
-	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']));
+        $section = $this->fetch_object("sections", "id", $subnet['sectionId']);
+	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']), (bool)$section->strictMode);
 
 		# full subnet?
-		if(sizeof($addresses)>=$max_hosts)																{ return false; } 	//full subnet
+		if(sizeof($addresses)>=$max_hosts || $subnet['isFull'])																{ return false; } 	//full subnet
 
 		# set type
 		$ip_version = $this->identify_address ($subnet['subnet']);
@@ -770,7 +771,7 @@ class Addresses extends Common_functions {
 	    else {
 		    # /32, /31
 		    if($subnet['mask']==32 || $subnet['mask']==31 || $ip_version=="IPv6") 						{ return $subnet['subnet']; }
-		    else																						{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
+		    else																						{ return gmp_strval(gmp_add($subnet['subnet'], (bool)$section->strictMode ? 1 : 0)); }
 	    }
 	}
 

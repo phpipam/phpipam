@@ -100,7 +100,7 @@ class Prefix_controller extends Common_api_functions {
      * @var string
      * @access private
      */
-    private $custom_field_name_addr = "customer_address_type";
+    private $custom_field_name_addr = "customer_type";
 
     /**
      * External identifier to link subnets and addresses with
