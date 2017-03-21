@@ -133,6 +133,8 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$c_subnet['action'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? "skip" : "edit");
 		$c_subnet['msg'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? _("No change, skip") : _("New master, update"));
 
+		if ( $_GET['recomputeHideUnchanged'] == "on" && $c_subnet['masterSubnetId'] == $c_master_id ) { continue; }
+
 		$rows.="<tr class='".$colors[$c_subnet['action']]."'><td><i class='fa ".$icons[$c_subnet['action']]."' rel='tooltip' data-placement='bottom' title='"._($c_subnet['msg'])."'></i></td>";
 		$rows.="<td>".$sect_names[$sect_id]."</td><td>".$c_subnet['ip']."/".$c_subnet['mask']."</td>";
 		$rows.="<td>".$c_subnet['description']."</td><td>".$vrf_name[$c_subnet['vrfId']]."</td><td>";
