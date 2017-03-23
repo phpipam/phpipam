@@ -502,6 +502,9 @@ class Prefix_controller extends Common_api_functions {
             $this->set_address_type ();
             // validate all parameters
             $this->validate_all_request_parameters ();
+            // force ordering in order to give priority to masks
+            $this->custom_field_orderby = 'mask';
+            $this->custom_field_order_direction = 'desc';
             // search for subnets based on custom field
             $subnets = $this->search_custom_field_name_subnets ();
             // find first subnet or address

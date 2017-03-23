@@ -3507,9 +3507,13 @@ class Subnets extends Common_functions {
 		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
 		$parent_subnet 		= $taken_subnet->subnet;
 		$parent_subnetmask 	= $taken_subnet->mask;
-
+        $this->Addresses    = new Addresses ($this->Database);
+        $ip_addresses       = $this->Addresses->fetch_subnet_addresses($taken_subnet->id);
+        
 		// folder
 		if ($taken_subnet->isFolder=="1") 	return "";
+        
+        if ($taken_subnet->isFull=="1") 	{ return ""; }
 
 		// detect type
 		$type = $this->identify_address( $parent_subnet );
@@ -3528,7 +3532,12 @@ class Subnets extends Common_functions {
 				$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
 			}
 		}
-
+        if ($ip_addresses) {
+            foreach ($ip_addresses as $row ) {
+				$history_subnet[] =  $this->transform_to_dotted($row->ip_addr) .'/32';
+			}
+        }
+        
 		# prepare the entry into for loop
 		$subnetmask_start = $parent_subnetmask + 1;
 		$subnetmask_final = $parent_subnetmask + $mask_drill_down; // plus 'X' numbers, default 8, gives you /16 -> /24, /24 -> /32 etc..
@@ -3618,8 +3627,10 @@ class Subnets extends Common_functions {
 		$slave_subnets 		= $this->fetch_subnet_slaves($subnetMasterId, $result_fields = array("subnet", "mask"));
 		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
 		$parent_subnet 		= $taken_subnet->subnet;
+        $this->Addresses = new Addresses ($this->Database);
+        $ip_addresses       = $this->Addresses->fetch_subnet_addresses($taken_subnet->id);
 
-		# mask must be smaller than parent !
+    	# mask must be smaller than parent !
 		if ($taken_subnet->mask > $mask)    { return false; }
 
 		// folder
@@ -3627,8 +3638,8 @@ class Subnets extends Common_functions {
         
 		if ($taken_subnet->isFull=="1") 	{ return false; }
         
-        $usage = $this->calculate_subnet_usage($taken_subnet);
-        if ($usage['freehosts'] == 0)       { return false; }
+//        $usage = $this->calculate_subnet_usage($taken_subnet);
+//        if ($usage['freehosts'] == 0)       { return false; }
 
 		// detect type
 		$type = $this->identify_address( $parent_subnet );
@@ -3643,6 +3654,11 @@ class Subnets extends Common_functions {
 				$history_subnet[] =  $this->transform_to_dotted($row->subnet) .'/'. $row->mask;
 			}
 		}
+        if ($ip_addresses) {
+            foreach ($ip_addresses as $row ) {
+				$history_subnet[] =  $this->transform_to_dotted($row->ip_addr) .'/32';
+			}
+        }
 
 		// number of possible masks
         $square_count = $mask - $taken_subnet->mask;
