@@ -668,7 +668,7 @@ CREATE TABLE `scanAgents` (
 /* insert default values */
 INSERT INTO `scanAgents` (`id`, `name`, `description`, `type`)
 VALUES
-	(1, 'locahost', 'Scanning from local machine', 'direct');
+	(1, 'localhost', 'Scanning from local machine', 'direct');
 
 
 # Dump of table nat
