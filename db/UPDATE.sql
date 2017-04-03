@@ -778,3 +778,6 @@ UPDATE `lang` SET `l_code` = 'en_US.UTF-8' WHERE `l_code` = 'en_US.UTF8';
 
 /* Russian traslation */
 INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Russian', 'ru_RU.UTF-8');
+
+/* fix scanAgents typo */
+update `scanAgents` set `name` = "localhost" WHERE `id` = 1;
