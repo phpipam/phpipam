@@ -423,6 +423,7 @@ class Addresses_controller extends Common_api_functions  {
 		$this->remap_keys ();
 
 		// we dont allow address or subnet change
+		if(isset($this->_params->ip))				{ $this->Response->throw_exception(400, "IP address cannot be changed"); }
 		if(isset($this->_params->ip_addr))			{ $this->Response->throw_exception(400, "IP address cannot be changed"); }
 		if(isset($this->_params->subnetId))			{ $this->Response->throw_exception(400, "Subnet cannot be changed"); }
 
@@ -624,6 +625,12 @@ class Addresses_controller extends Common_api_functions  {
 	private function validate_update_parameters () {
 		// make sure address exists
 		$this->validate_address_id ();
+
+		// if no data is present print it
+		if(sizeof((array) $this->_params)==3) {
+			if(isset($this->_params->app_id) && isset($this->_params->controller) && isset($this->_params->id))
+																							{ $this->Response->throw_exception(409, "No data provided"); }
+		}
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {
