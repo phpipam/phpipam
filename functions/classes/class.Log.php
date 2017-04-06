@@ -1503,46 +1503,46 @@ class Logging extends Common_functions {
     	# limit check
     	if(!is_numeric($limit))        { $this->Result->show("danger", "Invalid limit", true);	return false; }
 
-	    # set query
-		if(!$filter) {
-		    $query = "select * from (
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-						where `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`su`.`id` as `tid`,`u`.`id` as `userid`,'empty',`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`sections` as `su`
-						where `c`.`ctype` = 'section' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
+    	# begin query
+			$query = "
+					select * from (
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `ipaddresses` ON `changelog`.`coid`=`ipaddresses`.`id`
+					LEFT JOIN `subnets` ON `subnets`.`id`=`ipaddresses`.`subnetId`
+					where `changelog`.`ctype` = 'ip_addr'
 
-					) as `ips` order by `cid` desc limit $limit;";
-		}
-		# filter
-		else {
+					union all
+
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`subnets`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `subnets` ON `subnets`.`id`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'subnet'
+
+					union all
+
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`sections`.`id` as `tid`,`users`.`id` as `userid`,'empty',`sections`.`description` as `sDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `sections` ON `sections`.`id`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'section'
+
+					) as `ips`";
+
+	    # append filtered query query
+		if($filter) {
 			/* replace * with % */
 			if(substr($expr, 0, 1)=="*")								{ $expr[0] = "%"; }
 			if(substr($expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
 			if(substr($expr, 0, 1)!="*" && substr($expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
 
-		    $query = "select * from (
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-						where `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-						where `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-						union all
-						select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`su`.`id` as `tid`,`u`.`id` as `userid`,'empty',`su`.`description` as `sDescription`
-						from `changelog` as `c`, `users` as `u`,`sections` as `su`
-						where `c`.`ctype` = 'section' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
-					) as `ips`
-					where `coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr
-					order by `cid` desc limit $limit;";
+			$query .= " where `coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr ";
 		}
+
+		# append limit
+		$query .= " order by `cid` desc limit $limit;";
 
 	    # fetch
 	    try { $logs = $this->Database->getObjectsQuery($query, array("expr"=>$expr)); }
@@ -1553,7 +1553,7 @@ class Logging extends Common_functions {
 	}
 
 	/**
-	 * fetches all changelogs
+	 * fetches single changelog
 	 *
 	 * @access public
 	 * @param int $id
@@ -1565,17 +1565,28 @@ class Logging extends Common_functions {
 
 	    # set query
 	    $query = "select * from (
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ip`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-					from `changelog` as `c`, `users` as `u`,`ipaddresses` as `ip`,`subnets` as `su`
-					where `c`.`cid` = :id and `c`.`ctype` = 'ip_addr' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`ip`.`id` and `ip`.`subnetId` = `su`.`id`
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `ipaddresses` ON `changelog`.`coid`=`ipaddresses`.`id`
+					LEFT JOIN `subnets` ON `subnets`.`id`=`ipaddresses`.`subnetId`
+					where `changelog`.`ctype` = 'ip_addr' and `changelog`.`cid` = :id
+
 					union all
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`su`.`id` as `tid`,`u`.`id` as `userid`,`su`.`isFolder` as `isFolder`,`su`.`description` as `sDescription`
-					from `changelog` as `c`, `users` as `u`,`subnets` as `su`
-					where `c`.`cid` = :id and `c`.`ctype` = 'subnet' and  `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
+
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`subnets`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `subnets` ON `subnets`.`id`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'subnet' and `changelog`.`cid` = :id
+
 					union all
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`su`.`id` as `tid`,`u`.`id` as `userid`,'empty',`su`.`description` as `sDescription`
-					from `changelog` as `c`, `users` as `u`,`sections` as `su`
-					where `c`.`cid` = :id and `c`.`ctype` = 'section' and `c`.`cuser` = `u`.`id` and `c`.`coid`=`su`.`id`
+
+					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`sections`.`id` as `tid`,`users`.`id` as `userid`,'empty',`sections`.`description` as `sDescription`
+					FROM `changelog`
+					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
+					LEFT JOIN `sections` ON `sections`.`id`=`changelog`.`coid`
+					where `changelog`.`ctype` = 'section' and `changelog`.`cid` = :id
 				) as `ips`  order by `cid` desc limit 1;";
 	    # fetch
 	    try { $logs = $this->Database->getObjectQuery($query, array("id"=>$id)); }
@@ -1639,7 +1650,7 @@ class Logging extends Common_functions {
 	 * @param $long (default: false)
 	 * @param $limit (default: 50)
 	 */
-	public function fetch_changlog_entries($object_type, $coid, $long = false, $limit = 50) {
+	public function fetch_changlog_entries ($object_type, $coid, $long = false, $limit = 50) {
     	# limit check
     	if(!is_numeric($limit))        { $this->Result->show("danger", "Invalid limit", true);	return false; }
 

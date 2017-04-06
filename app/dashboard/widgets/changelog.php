@@ -77,6 +77,7 @@ else {
 				# format diff
         		$changelog = str_replace("\r\n", "<br>",$l['cdiff']);
         		$changelog = str_replace("\n", "<br>",$changelog);
+        		$changelog = htmlentities($changelog);
         		$changelog = array_filter(explode("<br>", $changelog));
 
                 $diff = array();
@@ -131,18 +132,22 @@ else {
 				print "	<td>$l[ctype] / $l[caction] $l[cresult]</td>";
 
 				# subnet, section or ip address
-				if($l['ctype']=="IP address")	{
-					print "	<td><a href='".create_link("subnets",$l['sectionId'],$l['subnetId'],"address-details",$l['tid'])."'>".$Subnets->transform_address ($l['ip_addr'], "dotted")."</a></td>";
+				if(strlen($l['tid'])==0) {
+					print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
+				}
+				elseif($l['ctype']=="IP address")	{
+					print " <td><a href='".create_link("subnets",$l['sectionId'],$l['subnetId'],"address-details",$l['tid'])."'>".$Subnets->transform_address ($l['ip_addr'], "dotted")."</a></td>";
 				}
 				elseif($l['ctype']=="Subnet")   {
-					print "	<td><a href='".create_link("subnets",$l['sectionId'],$l['tid'])."'>".$Subnets->transform_address ($l['ip_addr'], "dotted")."/$l[mask]</a></td>";
+					print " <td><a href='".create_link("subnets",$l['sectionId'],$l['tid'])."'>".$Subnets->transform_address ($l['ip_addr'], "dotted")."/$l[mask]</a></td>";
 				}
 				elseif($l['ctype']=="Folder")   {
-					print "	<td><a href='".create_link("folder",$l['sectionId'],$l['tid'])."'>$l[sDescription]</a></td>";
+					print " <td><a href='".create_link("folder",$l['sectionId'],$l['tid'])."'>$l[sDescription]</a></td>";
 				}
 				elseif($l['ctype']=="Section")   {
-					print "	<td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
+					print " <td><a href='".create_link("subnets",$l['tid'])."'>$l[sDescription]</a></td>";
 				}
+
 				print "	<td>$l[cdate]</td>";
 				print "	<td class='hidden-xs'><btn class='btn btn-xs btn-default openChangelogDetail' data-cid='$l[cid]' rel='tooltip' data-html='true' title='".implode("<br>",$diff)."'>View</a></td>";
 				print "</tr>";
