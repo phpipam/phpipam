@@ -57,7 +57,7 @@ $file .= "GRANT ALL on `$db[name]`.* to $db[user]@localhost identified by '$db[p
 
 $file .= "# Select created database\n";
 $file .= "# ------------------------------------------------------------\n";
-$file .= "USE `$db[name]`';\n\n\n";
+$file .= "USE `$db[name]`;\n\n\n";
 
 $file .= "# Create tables and import data\n";
 $file .= "# ------------------------------------------------------------\n\n\n\n";
