@@ -740,6 +740,7 @@ class Common_api_functions {
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
+		if($this->_params->controller=="tools" && $this->_params->id=="devices")  	  { $this->keys['hostname'] = "dns_name"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
 
 		// POST / PATCH

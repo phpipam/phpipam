@@ -229,7 +229,8 @@ class Tools_controller extends Common_api_functions {
 	 *		- {parameter}		- additional parameter (optional)
 	 *
 	 *  Special options:
-	 *      - /tools/deviceTypes/{id}/devices/
+	 *      - /tools/device_types/{id}/
+	 *      - /tools/device_types/{id}/devices/
 	 *
 	 *      - /tools/vlans/{id}/subnets/
 	 *
