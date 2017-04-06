@@ -1223,10 +1223,16 @@ class Common_functions  {
         elseif($field['type'] == "text") {
         	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $object->{$field['name']}. '</textarea>'. "\n";
         }
-        //default - input field
-        else {
-        	$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
-        }
+		//default - input field
+		else {
+            // max length
+            $maxlength = 0;
+            if(strpos($field['type'],"varchar")!==false) {
+                $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+            }
+            // print
+			$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
+		}
 
         # result
         return array(
