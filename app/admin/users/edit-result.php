@@ -58,7 +58,7 @@ if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", 
 if ($_POST['action']=="add") {
 	//username > 8 chars
 	if ($auth_method->type=="local") {
-		if(strlen($_POST['username'])<6)								{ $Result->show("danger", _("Username must be at least 6 characters long!"), true); }
+		if(strlen($_POST['username'])<3)								{ $Result->show("danger", _("Username must be at least 3 characters long!"), true); }
 	} else {
 		if(strlen($_POST['username'])==0)								{ $Result->show("danger", _("Username must be at least 1 character long!"), true); }
 	}

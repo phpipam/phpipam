@@ -28,6 +28,7 @@ https://github.com/phpipam/phpipam/milestone/2
         #576  Get last_available_address
         #448  allow full text search like in frontend
         #953  PSTN prefixes controller
+        #1022 Add timezone to token timestamp output
 
     User interface:
         #770  Show usage graph for whole section
