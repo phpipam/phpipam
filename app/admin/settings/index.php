@@ -446,6 +446,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- vlanDuplicate -->
+<tr>
+	<td class="title"><?php print _("Allow duplicate vlans"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="vlanDuplicate" <?php if($settings['vlanDuplicate'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Allow duplicated vlans inside L2 domain'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">
