@@ -126,7 +126,6 @@ if($_POST['action']!="add") {
        	<td class="info2"><?php print _('Lock POST transactions'); ?></td>
     </tr>
 
-
 	<!-- lock wait -->
 	<tr>
 	    <td><?php print _('Lock timeout'); ?></td>
@@ -134,6 +133,40 @@ if($_POST['action']!="add") {
 	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $api->app_lock_wait; ?>">
 	    </td>
        	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
+    </tr>
+
+	<!-- app_nest_custom_fields -->
+	<tr>
+	    <td><?php print _('Nest custom fields'); ?></td>
+	    <td>
+	    	<select name="app_nest_custom_fields" class="form-control input-sm input-w-auto">
+	    	<?php
+	    	$perms = array(0=>"No",1=>"Yes");
+	    	foreach($perms as $k=>$p) {
+		    	if($k==$api->app_nest_custom_fields)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
+		    	else									{ print "<option value='$k' 				   >"._($p)."</option>"; }
+	    	}
+	    	?>
+	    	</select>
+	    </td>
+       	<td class="info2"><?php print _('Group custom fields to separate item in result'); ?></td>
+    </tr>
+
+	<!-- app_show_links -->
+	<tr>
+	    <td><?php print _('Show links'); ?></td>
+	    <td>
+	    	<select name="app_show_links" class="form-control input-sm input-w-auto">
+	    	<?php
+	    	$perms = array(0=>"No",1=>"Yes");
+	    	foreach($perms as $k=>$p) {
+		    	if($k==$api->app_show_links)	{ print "<option value='$k' selected='selected'>"._($p)."</option>"; }
+		    	else							{ print "<option value='$k' 				   >"._($p)."</option>"; }
+	    	}
+	    	?>
+	    	</select>
+	    </td>
+       	<td class="info2"><?php print _('Show links in result (override with ?links=true)'); ?></td>
     </tr>
 
     <!-- description -->
@@ -149,8 +182,6 @@ if($_POST['action']!="add") {
 </form>
 
 </div>
-
-
 
 
 <!-- footer -->

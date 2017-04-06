@@ -201,9 +201,16 @@ class Common_api_functions {
 
 		// links
 		if($links) {
-			// explicitly set to no
-			if(@$this->_params->links!="false")
+			// if parameter is set obey
+			if(isset($this->_params->links)) {
+				if($this->_params->links!="false")
 								{ $result = $this->add_links ($result, $controller); }
+			}
+			// otherwise take defaults
+			else {
+				if($this->app->app_show_links==1)
+								{ $result = $this->add_links ($result, $controller); }
+			}
 		}
 		// filter
 		if (isset($this->_params->filter_by)) {

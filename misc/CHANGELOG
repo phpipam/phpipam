@@ -42,6 +42,8 @@
         + POST transaction locking;
         + All first_free and first_address responses are now "data" instead of "ip" and "subnet" for consistency;
         + Subnet splitting now copies over custom fields values by default (user custom_fields=no to revert);
+        + Added API option to nest custom_fields to assure correct structure;
+        + Added option to show/hide links in api by default for each app;
         + New methods:
             + users:
                 GET    /user/expires/                         // returns token expiration date
