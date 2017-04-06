@@ -1085,7 +1085,7 @@ class Subnets extends Common_functions {
  		// set IP version
 		$ip_version = $this->get_ip_version ($subnet->subnet);
     	// no strict mode if it is_slave
-        $section  = $this->fetch_object ("sections", "id", $subnet->sectionId);
+        $section  = $this->fetch_object ("sections", "id", $subnet->sectionId);
     	$strict_mode = $is_slave ? false : (bool)$section->strictMode;
     	// count hosts
     	$address_count = $this->Addresses->count_subnet_addresses ($subnet->id);
