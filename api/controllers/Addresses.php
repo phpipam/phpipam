@@ -210,10 +210,10 @@ class Addresses_controller extends Common_api_functions  {
 		}
 		// tags
 		elseif($this->_params->id=="tags") {
-			// validate
-			$this->validate_tag ();
 			// all addresses with tag
 			if (@$this->_params->id3=="addresses") {
+				// validate
+				$this->validate_tag ();
 				// fetch
 				$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "state", $this->_params->id2);
 
@@ -243,6 +243,8 @@ class Addresses_controller extends Common_api_functions  {
 			else {
 				// fetch all by tag
 				if(isset($this->_params->id2)) {
+					// validate
+					$this->validate_tag ();
 					// numeric
 					if(is_numeric($this->_params->id2)) { $result = $this->Tools->fetch_object ("ipTags", "id", $this->_params->id2); }
 					// type
