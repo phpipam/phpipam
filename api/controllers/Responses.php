@@ -151,9 +151,11 @@ class Responses {
 	 * @access public
 	 * @param mixed $result
 	 * @param bool|int|double $time
+	 * @param bool $nest_custom_fields
+	 * @param array $custom_fields
 	 * @return void
 	 */
-	public function formulate_result ($result, $time = false) {
+	public function formulate_result ($result, $time = false, $nest_custom_fields = false, $custom_fields = array()) {
 		// make sure result is array
 		$this->result = is_null($this->result) ? (array) $result : $this->result;
 
@@ -170,6 +172,11 @@ class Responses {
 		// time
 		if($time!==false) {
     		$this->time = $time;
+		}
+
+		// custom fields nesting
+		if($nest_custom_fields==1 && $this->exception!==true) {
+			$this->nest_custom_fields ($custom_fields);
 		}
 
 		// return result
@@ -269,6 +276,46 @@ class Responses {
     	}
     	# set
 		header("Location: ".$location);
+	}
+
+	/**
+	 * Function to formulate custom fields as separate item
+	 *
+	 * @method nest_custom_fields
+	 * @param  array              $custom_fields
+	 * @return void
+	 */
+	private function nest_custom_fields ($custom_fields = array()) {
+		// if result is array (multiple items) than loop
+		if(is_array($this->result['data'])) {
+			foreach ($this->result['data'] as $dk=>$d) {
+				if(sizeof($custom_fields)>0) {
+					foreach($custom_fields as $k=>$cf) {
+						// add to result
+						$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
+						// remove unnested data
+						unset($this->result['data'][$dk]->$k);
+					}
+				}
+				else {
+					$d->custom_fields = NULL;
+				}
+			}
+		}
+		// single result
+		else {
+			if(sizeof($custom_fields)>0) {
+				foreach($custom_fields as $k=>$cf) {
+					// add to result
+					$this->result['data']->custom_fields[$k] = $this->result['data']->$k;
+					// remove unnested data
+					unset($this->result['data']->$k);
+				}
+			}
+			else {
+				$this->result['data']->custom_fields = NULL;
+			}
+		}
 	}
 
 	/**

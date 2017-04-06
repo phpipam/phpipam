@@ -781,3 +781,7 @@ INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Russian', 'ru_RU.UTF-8');
 
 /* fix scanAgents typo */
 update `scanAgents` set `name` = "localhost" WHERE `id` = 1;
+
+/* Add option to show custom field results as nested and show links default */
+ALTER TABLE `api` ADD `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0';
+ALTER TABLE `api` ADD `app_show_links` TINYINT(1)  NULL  DEFAULT '0';

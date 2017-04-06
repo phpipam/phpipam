@@ -30,7 +30,7 @@ exit</pre>
 				</li>
 
 				<li>Import SQL file
-					<pre>mysql -u root -p < db/<?php print $filename;?>.sql</pre>
+					<pre>mysql -u root -p <?php print $db['name']; ?> &lt; db/<?php print $filename;?>.sql</pre>
 				</li>
 
 				<?php

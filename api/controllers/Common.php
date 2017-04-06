@@ -201,9 +201,16 @@ class Common_api_functions {
 
 		// links
 		if($links) {
-			// explicitly set to no
-			if(@$this->_params->links!="false")
+			// if parameter is set obey
+			if(isset($this->_params->links)) {
+				if($this->_params->links!="false")
 								{ $result = $this->add_links ($result, $controller); }
+			}
+			// otherwise take defaults
+			else {
+				if($this->app->app_show_links==1)
+								{ $result = $this->add_links ($result, $controller); }
+			}
 		}
 		// filter
 		if (isset($this->_params->filter_by)) {
@@ -733,6 +740,7 @@ class Common_api_functions {
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
+		if($this->_params->controller=="tools" && $this->_params->id=="devices")  	  { $this->keys['hostname'] = "dns_name"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
 
 		// POST / PATCH

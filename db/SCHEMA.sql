@@ -453,6 +453,8 @@ CREATE TABLE `api` (
   `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
   `app_lock` INT(1)  NOT NULL  DEFAULT '0',
   `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
+  `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0',
+  `app_show_links` TINYINT(1)  NULL  DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -764,4 +766,4 @@ CREATE TABLE `pstnNumbers` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.29';
+UPDATE `settings` set `version` = '1.3';
