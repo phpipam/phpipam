@@ -1506,28 +1506,31 @@ class Logging extends Common_functions {
     	# begin query
 			$query = "
 					select * from (
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
 					FROM `changelog`
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `ipaddresses` ON `changelog`.`coid`=`ipaddresses`.`id`
 					LEFT JOIN `subnets` ON `subnets`.`id`=`ipaddresses`.`subnetId`
 					where `changelog`.`ctype` = 'ip_addr'
+					order by `cid` desc limit $limit)
 
 					union all
 
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`subnets`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`subnets`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
 					FROM `changelog`
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `subnets` ON `subnets`.`id`=`changelog`.`coid`
 					where `changelog`.`ctype` = 'subnet'
+					order by `cid` desc limit $limit)
 
 					union all
 
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`sections`.`id` as `tid`,`users`.`id` as `userid`,'empty',`sections`.`description` as `sDescription`
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`sections`.`id` as `tid`,`users`.`id` as `userid`,'empty',`sections`.`description` as `sDescription`
 					FROM `changelog`
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `sections` ON `sections`.`id`=`changelog`.`coid`
 					where `changelog`.`ctype` = 'section'
+					order by `cid` desc limit $limit)
 
 					) as `ips`";
 
