@@ -1504,40 +1504,51 @@ class Logging extends Common_functions {
     	if(!is_numeric($limit))        { $this->Result->show("danger", "Invalid limit", true);	return false; }
 
     	# begin query
+			$subquery_filter1 = ""; $subquery_filter2 ="";
+			if($filter) {
+				/* replace * with % */
+				if(substr($expr, 0, 1)=="*")								{ $expr[0] = "%"; }
+				if(substr($expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
+				if(substr($expr, 0, 1)!="*" && substr($expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
+
+				$subquery_filter1 = "AND (`coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr)";
+				$subquery_filter2 = "AND (`coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr)";
+			}
 			$query = "
 					select * from (
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`ip_addr`,'mask',`sectionId`,`subnetId`,`ipaddresses`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
 					FROM `changelog`
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `ipaddresses` ON `changelog`.`coid`=`ipaddresses`.`id`
 					LEFT JOIN `subnets` ON `subnets`.`id`=`ipaddresses`.`subnetId`
 					where `changelog`.`ctype` = 'ip_addr'
+					$subquery_filter1
+					order by `cid` desc limit $limit)
 
 					union all
 
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`subnets`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`subnet`,`mask`,`sectionId`,'subnetId',`subnets`.`id` as `tid`,`users`.`id` as `userid`,`subnets`.`isFolder` as `isFolder`,`subnets`.`description` as `sDescription`
 					FROM `changelog`
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `subnets` ON `subnets`.`id`=`changelog`.`coid`
 					where `changelog`.`ctype` = 'subnet'
+					$subquery_filter2
+					order by `cid` desc limit $limit)
 
 					union all
 
-					select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`sections`.`id` as `tid`,`users`.`id` as `userid`,'empty',`sections`.`description` as `sDescription`
+					(select `cid`, `coid`,`ctype`,`real_name`,`caction`,`cresult`,`cdate`,`cdiff`,`name` ,'empty','empty','empty',`sections`.`id` as `tid`,`users`.`id` as `userid`,'empty',`sections`.`description` as `sDescription`
 					FROM `changelog`
 					LEFT JOIN `users` ON `users`.`id`=`changelog`.`cuser`
 					LEFT JOIN `sections` ON `sections`.`id`=`changelog`.`coid`
 					where `changelog`.`ctype` = 'section'
+					$subquery_filter2
+					order by `cid` desc limit $limit)
 
 					) as `ips`";
 
 	    # append filtered query query
 		if($filter) {
-			/* replace * with % */
-			if(substr($expr, 0, 1)=="*")								{ $expr[0] = "%"; }
-			if(substr($expr, -1, 1)=="*")								{ $expr = substr_replace($expr, "%", -1);  }
-			if(substr($expr, 0, 1)!="*" && substr($expr, -1, 1)!="*")	{ $expr = "%".$expr."%"; }
-
 			$query .= " where `coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr ";
 		}
 
