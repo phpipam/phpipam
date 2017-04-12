@@ -1545,15 +1545,7 @@ class Logging extends Common_functions {
 					$subquery_filter2
 					order by `cid` desc limit $limit)
 
-					) as `ips`";
-
-	    # append filtered query query
-		if($filter) {
-			$query .= " where `coid`=:expr or `ctype`=:expr or `real_name` like :expr or `cdate` like :expr or `cdiff` like :expr or INET_NTOA(`ip_addr`) like :expr ";
-		}
-
-		# append limit
-		$query .= " order by `cid` desc limit $limit;";
+					) as `ips` order by `cid` desc limit $limit;";
 
 	    # fetch
 	    try { $logs = $this->Database->getObjectsQuery($query, array("expr"=>$expr)); }
