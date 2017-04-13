@@ -474,7 +474,8 @@ CREATE TABLE `changelog` (
   `cdate` datetime NOT NULL,
   `cdiff` varchar(2048) DEFAULT NULL,
   PRIMARY KEY (`cid`),
-  KEY `coid` (`coid`)
+  KEY `coid` (`coid`),
+  KEY `ctype` (`ctype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
