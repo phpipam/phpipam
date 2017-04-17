@@ -251,7 +251,7 @@ if($time_response) {
 }
 
 //output result
-echo $Response->formulate_result ($result, $time, $app->nest_custom_fields, $controller->custom_fields);
+echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $controller->custom_fields);
 
 // exit
 exit();
