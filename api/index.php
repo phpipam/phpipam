@@ -185,6 +185,14 @@ try {
 	// pass app params for links result
 	$controller->app = $app;
 
+	// Unmarshal the custom_fields JSON object into the main object for
+	// POST and PATCH. This only works for controllers that support custom
+	// fields and if the app has nested custom fields enabled, otherwise
+	// this is skipped.
+	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' || strtoupper($_SERVER['REQUEST_METHOD']) == 'PATCH') {
+		$controller->unmarshal_nested_custom_fields();
+	}
+
 	// check if the action exists in the controller. if not, throw an exception.
 	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
