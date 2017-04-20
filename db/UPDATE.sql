@@ -788,3 +788,6 @@ ALTER TABLE `api` ADD `app_show_links` TINYINT(1)  NULL  DEFAULT '0';
 
 /* Add index to ctype for changelog */
 ALTER TABLE changelog ADD INDEX(ctype);
+
+/* extend  */
+ALTER TABLE `devices` CHANGE `sections` `sections` VARCHAR(1024)  CHARACTER SET utf8  NULL  DEFAULT NULL;
