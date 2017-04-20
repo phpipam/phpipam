@@ -962,6 +962,30 @@ class Common_api_functions {
     	}
 	}
 
+	/**
+	* Unmarshal nested custom field data into the root object, and unset
+	* the custom_fields parameter when done. This function does not have
+	* any effect on requests for controllers that don't have custom fields,
+	* or if the app_nest_custom_fields setting is not enabled.
+	*
+	* @access public
+	* @return void
+	*/
+	public function unmarshal_nested_custom_fields() {
+		if (!$this->app->app_nest_custom_fields) {
+			return;
+		}
+		if (is_array($this->_params->custom_fields) && isset($this->custom_fields)) {
+			foreach ($this->_params->custom_fields as $key => $value) {
+				if (array_key_exists($key, $this->custom_fields)) {
+					$this->_params->$key = $value;
+				} else {
+					$this->Response->throw_exception(400, "${key} is not a valid custom field");
+				}
+			}
+			unset($this->_params->custom_fields);
+		}
+	}
 }
 
 ?>

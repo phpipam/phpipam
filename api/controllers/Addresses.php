@@ -441,7 +441,7 @@ class Addresses_controller extends Common_api_functions  {
 
 		# append old address details and fill details if not provided - calidate_update_parameters fetches $this->old_address
 		foreach ($this->old_address as $ok=>$oa) {
-			if (!isset($values[$ok])) {
+			if (!array_key_exists($ok, $values)) {
 				if(!is_null($oa)) {
 					$values[$ok] = $oa;
 				}
