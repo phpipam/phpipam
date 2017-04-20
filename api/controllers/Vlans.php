@@ -170,7 +170,10 @@ class Vlans_controller extends Common_api_functions {
 
 			// check result
 			if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
-			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
+			else {
+				$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
+				return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
+			}
 		}
 		// custom fields
 		elseif (@$this->_params->id=="custom_fields") {
