@@ -1301,8 +1301,8 @@ class Addresses extends Common_functions {
 		else 					{ $order_addr = array("ip_addr", "asc"); }
 
 		# escape ordering
-		$order[0] = $this->Database->escape ($order[0]);
-		$order[1] = $this->Database->escape ($order[1]);
+		$order_addr[0] = $this->Database->escape ($order_addr[0]);
+		$order_addr[1] = $this->Database->escape ($order_addr[1]);
 
 		$ids = array();
 		$ids[] = $subnetId;
