@@ -892,7 +892,6 @@ class Subnets extends Common_functions {
 				foreach($slaves2 as $slave) {
 					# save to full array of slaves
 					$this->slaves_full[$slave->id] = $slave;
-					$this->slaves[] = $slave->id;
 					# fetch possible new slaves
 					$this->fetch_subnet_slaves_recursive ($slave->id);
 					$end = true;
