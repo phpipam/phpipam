@@ -1,0 +1,8559 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"X-Generator: Poedit 1.8.12\n"
+
+# PHPIPAM translations file - template
+# Copyright (C) phpipam 2013
+# This file is distributed under the same license as the phpipam package.
+# SongWenwen <abc@upc.edu.cn>.
+# "Project-Id-Version: 0.1 \n"
+# "Report-Msgid-Bugs-To: SongWenwen <abc@upc.edu.cn>\n"
+# "Last-Translator: 2017-04-1\n"
+# "Language: zh_CN\n"
+# "MIME-Version: 1.0\n"
+# "Content-Type: text/plain; charset=UTF-8\n"
+# "Content-Transfer-Encoding: 8bit\n"
+#: functions/functions-install.php:85 functions/functions-install.php:133
+#: functions/functions-install.php:150 functions/functions-install.php:182
+#: functions/functions-install.php:199 functions/functions-install.php:236
+#: functions/functions-install.php:272 functions/functions-install.php:379
+#: functions/functions-install.php:453 functions/functions-install.php:495
+#: functions/functions-install.php:524 functions/functions-install.php:549
+#: functions/functions-install.php:576 functions/functions-admin.php:41
+#: functions/functions-admin.php:73 functions/functions-admin.php:147
+#: functions/functions-admin.php:185 functions/functions-admin.php:217
+#: functions/functions-admin.php:241 functions/functions-admin.php:387
+#: functions/functions-admin.php:507 functions/functions-admin.php:533
+#: functions/functions-admin.php:887 functions/functions-admin.php:1124
+#: functions/functions-admin.php:1204 functions/functions-admin.php:1238
+#: functions/functions-admin.php:1283 functions/functions-admin.php:1374
+#: functions/functions-admin.php:1493 functions/functions-admin.php:1633
+#: functions/functions-admin.php:1661 functions/functions-admin.php:1717
+#: functions/functions-admin.php:1750 functions/functions-admin.php:1848
+#: functions/functions-admin.php:1881 functions/functions-admin.php:1980
+#: functions/functions-admin.php:2012 functions/functions-admin.php:2106
+#: functions/functions-admin.php:2138 functions/functions-common.php:105
+#: functions/functions-common.php:154 functions/functions-common.php:177
+#: functions/functions-common.php:200 functions/functions-common.php:223
+#: functions/functions-common.php:246 functions/functions-common.php:396
+#: functions/functions-common.php:420 functions/functions-common.php:453
+#: functions/functions-common.php:709 functions/functions-network.php:90
+#: functions/functions-network.php:116 functions/functions-network.php:142
+#: functions/functions-network.php:197 functions/functions-network.php:231
+#: functions/functions-network.php:255 functions/functions-network.php:289
+#: functions/functions-network.php:313 functions/functions-network.php:337
+#: functions/functions-network.php:361 functions/functions-network.php:396
+#: functions/functions-network.php:420 functions/functions-network.php:454
+#: functions/functions-network.php:478 functions/functions-network.php:502
+#: functions/functions-network.php:526 functions/functions-network.php:550
+#: functions/functions-network.php:586 functions/functions-network.php:610
+#: functions/functions-network.php:641 functions/functions-network.php:670
+#: functions/functions-network.php:694 functions/functions-network.php:802
+#: functions/functions-network.php:873 functions/functions-network.php:956
+#: functions/functions-network.php:1252 functions/functions-network.php:1289
+#: functions/functions-network.php:1313 functions/functions-network.php:1366
+#: functions/functions-network.php:1417 functions/functions-network.php:1460
+#: functions/functions-network.php:1487 functions/functions-network.php:1512
+#: functions/functions-network.php:1536 functions/functions-network.php:1562
+#: functions/functions-network.php:1590 functions/functions-network.php:1620
+#: functions/functions-network.php:1729 functions/functions-network.php:1754
+#: functions/functions-network.php:2072 functions/functions-network.php:2181
+#: functions/functions-network.php:2251 functions/functions-tools.php:220
+#: functions/functions-tools.php:241 functions/functions-tools.php:284
+#: functions/functions-tools.php:311 functions/functions-tools.php:333
+#: functions/functions-tools.php:355 functions/functions-tools.php:398
+#: functions/functions-tools.php:429 functions/functions-tools.php:453
+#: functions/functions-tools.php:478 functions/functions-tools.php:620
+#: functions/functions-tools.php:644 functions/functions-tools.php:666
+#: functions/functions-tools.php:688 functions/functions-tools.php:711
+#: functions/functions-tools.php:740 functions/functions-tools.php:766
+#: functions/functions-tools.php:817 functions/functions-tools.php:856
+#: functions/functions-tools.php:880 functions/functions-tools.php:905
+#: functions/functions-tools.php:941 site/ipaddr/modifyIpAddressCheck.php:102
+#: site/ipaddr/modifyIpAddressCheck.php:103
+#: site/ipaddr/modifyIpAddressCheck.php:179
+msgid "Error"
+msgstr "错误"
+
+#: functions/functions-install.php:252
+msgid "Login successful"
+msgstr "登陆成功"
+
+#: functions/functions-install.php:292
+msgid "AD login successful"
+msgstr "AD登陆成功"
+
+#: functions/functions-install.php:296
+msgid "LDAP login successful"
+msgstr "LDAP登陆成功"
+
+#: functions/functions-install.php:304
+msgid "Failed to connect to AD server"
+msgstr "连接AD服务器失败"
+
+#: functions/functions-install.php:308
+msgid "Failed to connect to LDAP server"
+msgstr "连接LDAP服务器失败"
+
+#: functions/functions-install.php:316
+msgid "Failed to authenticate user against AD"
+msgstr "AD认证失败"
+
+#: functions/functions-install.php:320
+msgid "Failed to authenticate user against LDAP"
+msgstr "LDAP认证失败"
+
+#: functions/functions-install.php:328 functions/functions-install.php:332
+#: functions/functions-install.php:341 functions/functions-install.php:345
+msgid "Wrong username or password"
+msgstr "错误的用户名和密码"
+
+#: functions/functions-install.php:353
+msgid "Failed to log in"
+msgstr "登陆失败"
+
+#: functions/functions-install.php:466
+msgid "Administrator level privileges are required to access this site"
+msgstr "访问此站点需要管理员级别的权限"
+
+#: functions/functions-admin.php:20
+msgid "Real name field is mandatory!"
+msgstr "真实姓名不能为空！"
+
+#: functions/functions-admin.php:22 site/tools/userMenuSelfMod.php:29
+msgid "Passwords do not match!"
+msgstr "两次输入密码不同！"
+
+#: functions/functions-admin.php:25 functions/functions-admin.php:26
+#: site/tools/userMenuSelfMod.php:28
+msgid "Password must be at least 8 characters long!"
+msgstr "密码不得少于8位！"
+
+#: functions/functions-admin.php:29
+msgid "Invalid email address!"
+msgstr "错误的Email地址！"
+
+#: functions/functions-admin.php:45 site/admin/usersEditResult.php:97
+msgid "User"
+msgstr "用户"
+
+#: functions/functions-admin.php:45
+msgid "already exists!"
+msgstr "已经存在"
+
+#: functions/functions-admin.php:73 site/admin/usersEditResult.php:43
+msgid "Cannot delete user"
+msgstr "不能删除用户"
+
+#: functions/functions-admin.php:185
+msgid "Cannot update user"
+msgstr "不能更新用户"
+
+#: functions/functions-admin.php:921 site/admin/manageVRFEditResult.php:23
+msgid "Name is mandatory"
+msgstr "名字不能为空"
+
+#: functions/functions-admin.php:1138 functions/functions-admin.php:1158
+#: site/tools/searchResults.php:114
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:89
+#: site/ipaddr/mailNotifyIP.php:62 site/ipaddr/exportSelectFields.php:74
+#: site/admin/CSVimportShowFile.php:70 site/admin/searchReplaceResult.php:20
+#: site/admin/searchReplaceResult.php:21 site/admin/replaceFields.php:31
+msgid "Switch"
+msgstr "交换机"
+
+#: functions/functions-admin.php:1139 functions/functions-admin.php:1159
+msgid "Router"
+msgstr "路由器"
+
+#: functions/functions-admin.php:1140 functions/functions-admin.php:1160
+msgid "Firewall"
+msgstr "防火墙"
+
+#: functions/functions-admin.php:1141 functions/functions-admin.php:1161
+msgid "Hub"
+msgstr "Hub"
+
+#: functions/functions-admin.php:1142 functions/functions-admin.php:1162
+msgid "Wireless"
+msgstr "无线"
+
+#: functions/functions-admin.php:1143 functions/functions-admin.php:1163
+msgid "Database"
+msgstr "数据库"
+
+#: functions/functions-admin.php:1144 functions/functions-admin.php:1164
+msgid "Workstation"
+msgstr "工作站"
+
+#: functions/functions-admin.php:1145
+msgid "Laptop"
+msgstr "笔记本"
+
+#: functions/functions-admin.php:1146 functions/functions-admin.php:1165
+#: site/admin/adminMenu.php:85
+msgid "Other"
+msgstr "其它"
+
+#: functions/functions-admin.php:1449
+msgid "Update settings error"
+msgstr "更新设置失败"
+
+#: functions/functions-admin.php:1497
+msgid "Replaced"
+msgstr "更换"
+
+#: functions/functions-admin.php:1497
+msgid "items successfully"
+msgstr "更新成功"
+
+#: functions/functions-admin.php:1546
+msgid "Wrong IP address"
+msgstr "错误的IP地址"
+
+#: functions/functions-admin.php:1551
+msgid "IP address already exists"
+msgstr "IP地址已存在"
+
+#: functions/functions-common.php:25
+msgid "Page not referred properly"
+msgstr "页面未正确引用"
+
+#: functions/functions-common.php:46
+msgid "Please login first"
+msgstr "等先登录"
+
+#: functions/functions-common.php:117
+msgid "Administrator level privileges required"
+msgstr "需要管理员权限"
+
+#: functions/functions-common.php:532
+msgid "No access"
+msgstr "没有访问权限"
+
+#: functions/functions-common.php:533
+msgid "Read"
+msgstr "读"
+
+#: functions/functions-common.php:534
+msgid "Read / Write"
+msgstr "读 / 写"
+
+#: functions/functions-common.php:535 site/admin/groupEditResult.php:23
+msgid "error"
+msgstr "错误"
+
+#: functions/functions-common.php:768 site/tools/toolsMenu.php:22
+#: site/sections.php:88
+msgid "Tools"
+msgstr "工具"
+
+#: functions/functions-network.php:67
+msgid "Not in use (Offline)"
+msgstr "不被使用（离线）"
+
+#: functions/functions-network.php:69 site/ipaddr/ipAddressPrintTable.php:240
+#: site/ipaddr/modifyIpAddress.php:246 site/ipaddr/subnetDetailsGraph.php:52
+#: site/admin/manageRequestEdit.php:94 site/admin/exportGenerateXLS.php:119
+#: site/admin/exportSubnet.php:154
+msgid "Reserved"
+msgstr "恢复"
+
+#: functions/functions-network.php:70 site/ipaddr/ipAddressPrintTable.php:241
+#: site/ipaddr/modifyIpAddress.php:248 site/ipaddr/subnetDetailsGraph.php:55
+#: site/admin/manageRequestEdit.php:96
+msgid "DHCP"
+msgstr "DHCP"
+
+#: functions/functions-network.php:177
+msgid "VLAN must be numeric value!"
+msgstr "VLAN必须设定为数字"
+
+#: functions/functions-network.php:178
+msgid "Vlan number can be max 4094"
+msgstr "VLAN号不得大于4094"
+
+#: functions/functions-network.php:825 functions/functions-network.php:842
+#: functions/functions-network.php:904 functions/functions-network.php:930
+msgid "Subnet overlapps with"
+msgstr "子网重叠"
+
+#: functions/functions-network.php:1199
+msgid "Select Master subnet"
+msgstr "选择主子网"
+
+#: functions/functions-network.php:1200
+msgid "Root subnet"
+msgstr "根子网"
+
+#: functions/functions-network.php:1789 functions/functions-network.php:1813
+msgid "IP address not valid"
+msgstr "IP地址不合法"
+
+#: functions/functions-network.php:1791 functions/functions-network.php:1815
+msgid "IP address not in selected subnet"
+msgstr "IP地址不在选择的子网内"
+
+#: functions/functions-network.php:1798 functions/functions-network.php:1819
+msgid "Cannot add subnet as IP address!"
+msgstr "不能将子网添加为IP地址！"
+
+#: functions/functions-network.php:1799
+msgid "Cannot add broadcast as IP address!"
+msgstr "广播地址不能作为IP地址添加"
+
+#: functions/functions-network.php:1843 functions/functions-network.php:1863
+msgid "Invalid CIDR format!"
+msgstr "错误的CIDR格式"
+
+#: functions/functions-network.php:1857
+msgid "Invalid IP address!"
+msgstr "错误的IP地址"
+
+#: functions/functions-network.php:1859 functions/functions-network.php:1883
+msgid "IP address cannot be subnet! (Consider using"
+msgstr "IP地址不能为子网！（考虑使用"
+
+#: functions/functions-network.php:1861
+msgid "Invalid netmask"
+msgstr "错误的子网掩码"
+
+#: functions/functions-network.php:1872
+msgid "Invalid IPv6 address!"
+msgstr "错误的IPv6地址"
+
+#: functions/checkPhpBuild.php:57
+msgid "The following required PHP extensions are missing"
+msgstr "缺少以下所需的PHP扩展"
+
+#: functions/checkPhpBuild.php:63
+msgid "Please recompile PHP to include missing extensions and restart Apache."
+msgstr "请重新编译PHP和启动Apache来启用缺失的扩展模块。"
+
+#: functions/checkPhpBuild.php:82
+msgid "Database connection failed"
+msgstr "数据库链接失败"
+
+#: functions/functions-tools.php:31
+msgid "(closest parent)"
+msgstr ""
+
+#: functions/functions-mail.php:167 functions/functions-mail.php:196
+#: site/tools/searchResults.php:337 site/admin/customIPFieldsEdit.php:29
+#: site/admin/manageVRF.php:34 site/admin/manageVRFEdit.php:36
+#: site/admin/manageVLANEdit.php:42 site/admin/customVLANFieldsEdit.php:29
+#: site/admin/manageSection.php:27 site/admin/manageSectionEdit.php:40
+#: site/admin/manageVLANs.php:34 site/admin/groupAddUsers.php:40
+#: site/admin/groupRemoveUsers.php:40 site/admin/customUserFieldsEdit.php:29
+msgid "Name"
+msgstr "名字"
+
+#: functions/functions-mail.php:170 functions/functions-mail.php:176
+#: functions/functions-mail.php:199 functions/functions-mail.php:205
+#: site/dashboard/error_logs.php:13 site/dashboard/access_logs.php:13
+#: site/admin/users.php:38 site/admin/usersEditPrint.php:65
+#: site/admin/logsExport.php:61 site/admin/logResult.php:26
+#: site/admin/groupAddUsers.php:41 site/admin/groupRemoveUsers.php:41
+#: site/login/loginForm.php:11 site/login/loginForm.php:13
+msgid "Username"
+msgstr "用户名"
+
+#: functions/functions-mail.php:172 functions/functions-mail.php:177
+#: functions/functions-mail.php:201 functions/functions-mail.php:206
+#: site/tools/userMenu.php:51 site/tools/userMenu.php:55
+#: site/tools/userMenu.php:60 site/admin/usersEditPrint.php:114
+#: site/admin/usersEditPrint.php:121 site/login/loginForm.php:19
+#: site/login/loginForm.php:21
+msgid "Password"
+msgstr "密码"
+
+#: functions/functions-mail.php:176
+msgid "your domain username"
+msgstr "域的用户名"
+
+#: functions/functions-mail.php:177
+msgid "your domain password"
+msgstr "域的密码"
+
+#: functions/functions-mail.php:180 functions/functions-mail.php:209
+#: site/admin/groupAddUsers.php:42 site/admin/groupRemoveUsers.php:42
+msgid "Email"
+msgstr "Email"
+
+#: functions/functions-mail.php:181 functions/functions-mail.php:210
+#: site/admin/users.php:40
+msgid "Role"
+msgstr "角色"
+
+#: functions/functions-mail.php:182 functions/functions-mail.php:211
+msgid "WebApp"
+msgstr "WebApp"
+
+#: functions/functions-mail.php:184 functions/functions-mail.php:213
+#: functions/functions-mail.php:395
+msgid "Sent by user"
+msgstr "由用户发送"
+
+#: functions/functions-mail.php:269
+msgid "New IP address request in subnet"
+msgstr "子网内新的IP地址申请"
+
+#: functions/functions-mail.php:282 functions/functions-mail.php:305
+#: functions/functions-mail.php:383 functions/functions-mail.php:411
+#: site/tools/searchResultsExport.php:269 site/tools/vlan.php:29
+#: site/tools/searchResults.php:258 site/tools/searchResults.php:341
+#: site/admin/manageSubnetEdit.php:103 site/admin/manageSectionEdit.php:26
+#: site/admin/manageSectionEditResult.php:46
+#: site/admin/exportGenerateHostDump.php:27
+msgid "Section"
+msgstr "标签"
+
+#: functions/functions-mail.php:283 functions/functions-mail.php:306
+#: functions/functions-mail.php:384 functions/functions-mail.php:412
+#: site/tools/vrf.php:44 site/tools/devices.php:68 site/tools/subnets.php:45
+#: site/tools/searchResults.php:259
+#: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
+#: site/admin/manageSubnetEdit.php:76 site/admin/manageSubnetEditResult.php:169
+#: site/admin/manageRequests.php:24 site/admin/ripeImportTelnet.php:74
+#: site/admin/manageSubnetsplit.php:64 site/admin/manageSubnetresize.php:35
+#: site/admin/manageSubnettruncate.php:37
+msgid "Subnet"
+msgstr "子网"
+
+#: functions/functions-mail.php:284 functions/functions-mail.php:307
+#: functions/functions-mail.php:388 functions/functions-mail.php:416
+#: site/tools/searchResultsExport.php:272 site/tools/vrf.php:43
+#: site/tools/devices.php:69 site/tools/requestIPform.php:29
+#: site/tools/subnets.php:46 site/tools/searchResults.php:109
+#: site/tools/searchResults.php:261 site/tools/searchResults.php:339
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:85
+#: site/ipaddr/mailNotifyIP.php:46 site/ipaddr/moveIpAddress.php:61
+#: site/ipaddr/modifyIpAddress.php:131 site/ipaddr/modifyIpAddress.php:135
+#: site/ipaddr/exportSelectFields.php:49 site/admin/manageRequestEdit.php:74
+#: site/admin/manageSubnet.php:77 site/admin/manageSubnetEdit.php:93
+#: site/admin/CSVimportShowFile.php:66 site/admin/manageVRF.php:36
+#: site/admin/manageDevicesEdit.php:91 site/admin/manageDevicesEdit.php:93
+#: site/admin/manageVRFEdit.php:51 site/admin/manageVRFEdit.php:57
+#: site/admin/manageVLANEdit.php:58 site/admin/manageVLANEdit.php:60
+#: site/admin/manageRequests.php:26 site/admin/replaceFields.php:27
+#: site/admin/ripeImportTelnet.php:90 site/admin/manageSection.php:28
+#: site/admin/manageSectionEdit.php:51 site/admin/manageVLANs.php:36
+#: site/admin/manageDevices.php:37 site/admin/groupEditPrint.php:57
+#: site/login/requestIPform.php:82
+msgid "Description"
+msgstr "描述"
+
+#: functions/functions-mail.php:285 functions/functions-mail.php:308
+#: functions/functions-mail.php:389 functions/functions-mail.php:417
+#: site/tools/devices.php:70 site/tools/searchResults.php:110
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:81
+#: site/ipaddr/mailNotifyIP.php:50 site/ipaddr/modifyIpAddress.php:146
+#: site/ipaddr/exportSelectFields.php:54 site/admin/manageRequestEdit.php:81
+#: site/admin/CSVimportShowFile.php:67 site/admin/manageDevicesEdit.php:35
+#: site/admin/manageDevicesEdit.php:37 site/admin/manageRequests.php:25
+#: site/admin/replaceFields.php:28 site/admin/manageDevices.php:31
+#: site/login/requestIPform.php:89
+msgid "Hostname"
+msgstr "主机名"
+
+#: functions/functions-mail.php:286 functions/functions-mail.php:309
+#: functions/functions-mail.php:390 functions/functions-mail.php:418
+#: site/tools/devices.php:71 site/tools/requestIPform.php:41
+#: site/tools/searchResults.php:118 site/tools/searchResults.php:119
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:93
+#: site/ipaddr/modifyIpAddress.php:171 site/ipaddr/exportSelectFields.php:67
+#: site/admin/CSVimportShowFile.php:69 site/admin/replaceFields.php:29
+#: site/login/requestIPform.php:106
+msgid "Owner"
+msgstr "所有者"
+
+#: functions/functions-mail.php:287 functions/functions-mail.php:310
+#: functions/functions-mail.php:419 site/admin/manageRequests.php:27
+msgid "Requested by"
+msgstr "申请人"
+
+#: functions/functions-mail.php:288 functions/functions-mail.php:311
+#: site/admin/manageRequests.php:28
+msgid "Comment"
+msgstr "注释"
+
+#: functions/functions-mail.php:290 functions/functions-mail.php:313
+msgid "Sent at"
+msgstr "发送在"
+
+#: functions/functions-mail.php:349
+msgid "IP address request"
+msgstr "IP地址申请"
+
+#: functions/functions-mail.php:386
+msgid "assigned IP address"
+msgstr "分配IP地址"
+
+#: functions/functions-mail.php:414
+msgid "Assigned IP address"
+msgstr "分配IP地址"
+
+#: functions/functions-mail.php:391
+msgid "Requested from"
+msgstr "请求"
+
+#: functions/functions-mail.php:392 functions/functions-mail.php:420
+msgid "Comment (request)"
+msgstr "注释（申请）"
+
+#: functions/functions-mail.php:393 functions/functions-mail.php:421
+msgid "Admin accept/reject comment"
+msgstr "管理接受或者拒绝理由"
+
+#: index.php:111
+msgid "Loading"
+msgstr "加载中"
+
+#: index.php:182
+msgid "Please select subnet from left menu"
+msgstr "请从左侧菜单选择子网"
+
+#: index.php:185 site/tools/showAll.php:4
+msgid "Please select tool from left menu!"
+msgstr "请从左侧菜单选择工具！"
+
+#: index.php:188
+msgid "Please select setting from left menu!"
+msgstr "请从左侧菜单选择设置！"
+
+#: site/tools/searchResultsExport.php:95
+msgid "phpipam_search_export_"
+msgstr "phpipam_search_export_"
+
+#: site/tools/searchResultsExport.php:127
+msgid "IP Search results"
+msgstr "IP搜索结果"
+
+#: site/tools/searchResultsExport.php:131 site/admin/exportGenerateXLS.php:91
+#: site/admin/exportSubnet.php:95
+msgid "ip address"
+msgstr "IP地址"
+
+#: site/tools/searchResultsExport.php:135
+msgid "state"
+msgstr "状态"
+
+#: site/tools/searchResultsExport.php:138 site/admin/exportGenerateXLS.php:93
+#: site/admin/exportSubnet.php:103
+msgid "description"
+msgstr "描述"
+
+#: site/tools/searchResultsExport.php:139 site/tools/requestIPform.php:36
+#: site/admin/exportGenerateXLS.php:94 site/admin/exportSubnet.php:107
+msgid "hostname"
+msgstr "主机名"
+
+#: site/tools/searchResultsExport.php:142 site/admin/exportGenerateXLS.php:97
+#: site/admin/exportSubnet.php:119
+msgid "switch"
+msgstr "交换机"
+
+#: site/tools/searchResultsExport.php:146 site/admin/manageRequestEdit.php:115
+#: site/admin/exportGenerateXLS.php:98 site/admin/exportSubnet.php:123
+msgid "port"
+msgstr "端口"
+
+#: site/tools/searchResultsExport.php:150 site/admin/exportGenerateXLS.php:96
+#: site/admin/exportSubnet.php:115
+msgid "owner"
+msgstr "所有者"
+
+#: site/tools/searchResultsExport.php:154 site/admin/exportGenerateXLS.php:95
+#: site/admin/exportSubnet.php:111
+msgid "mac"
+msgstr "MAC"
+
+#: site/tools/searchResultsExport.php:158 site/admin/exportGenerateXLS.php:99
+#: site/admin/exportSubnet.php:127
+msgid "note"
+msgstr ""
+
+#: site/tools/searchResultsExport.php:266
+msgid "Subnet search results"
+msgstr "子网搜索结果"
+
+#: site/tools/searchResultsExport.php:270
+msgid "Subet"
+msgstr "子网"
+
+#: site/tools/searchResultsExport.php:271 site/tools/searchResults.php:260
+msgid "Mask"
+msgstr "掩码"
+
+#: site/tools/searchResultsExport.php:273 site/tools/searchResults.php:262
+msgid "Master subnet"
+msgstr "子网掩码"
+
+#: site/tools/searchResultsExport.php:274 site/tools/vrf.php:42
+#: site/tools/subnets.php:47 site/tools/searchResults.php:107
+#: site/tools/searchResults.php:263
+#: site/ipaddr/ipAddressPrintTableSlaves.php:32 site/ipaddr/mailNotifyIP.php:58
+#: site/ipaddr/subnetDetailsSlaves.php:85 site/ipaddr/subnetDetails.php:96
+#: site/admin/manageSubnet.php:78 site/admin/manageSubnetEdit.php:125
+#: site/admin/manageVLANEdit.php:32 site/admin/ripeImportTelnet.php:95
+#: site/admin/manageVLANEditResult.php:47
+#: site/admin/manageVLANEditResult.php:48
+msgid "VLAN"
+msgstr "VLAN"
+
+#: site/tools/ipCalcResult.php:22
+msgid "Invalid input"
+msgstr "输入错误"
+
+#: site/tools/ipCalcResult.php:29
+msgid "Subnetting details for"
+msgstr "子网划分的细节"
+
+#: site/tools/ipCalcResult.php:53
+msgid "Create subnet from result"
+msgstr "从结果创建子网"
+
+#: site/tools/ipCalcResult.php:59
+msgid "Select Section"
+msgstr "选择标签"
+
+#: site/tools/ipCalcResult.php:63
+msgid "Please select"
+msgstr "请选择"
+
+#: site/tools/ipCalc.php:6
+msgid "IPv4v6 calculator"
+msgstr "IPv4v6计算器"
+
+#: site/tools/ipCalc.php:15 site/tools/devices.php:66
+#: site/tools/requestIPform.php:12 site/tools/searchResults.php:106
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:79
+#: site/ipaddr/mailNotifyIP.php:43 site/ipaddr/modifyIpAddressCheck.php:134
+#: site/ipaddr/modifyIpAddressCheck.php:187
+#: site/ipaddr/modifyIpAddressCheck.php:196 site/ipaddr/moveIpAddress.php:47
+#: site/ipaddr/modifyIpAddress.php:99 site/ipaddr/modifyIpAddress.php:111
+#: site/ipaddr/modifyIpAddress.php:114 site/ipaddr/exportSelectFields.php:36
+#: site/admin/logDetail.php:73 site/admin/manageRequestEdit.php:65
+#: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
+#: site/admin/manageDevicesEdit.php:43 site/admin/manageDevicesEdit.php:45
+#: site/admin/logResult.php:27 site/admin/manageDevices.php:32
+msgid "IP address"
+msgstr "IP地址"
+
+#: site/tools/ipCalc.php:15
+msgid "mask"
+msgstr "掩码"
+
+#: site/tools/ipCalc.php:20
+msgid "Please enter IP address and mask in CIDR format"
+msgstr "请以CIDR格式输入IP地址和掩码"
+
+#: site/tools/ipCalc.php:28
+msgid "Calculate"
+msgstr "计算器"
+
+#: site/tools/ipCalc.php:29
+msgid "Reset"
+msgstr "重置"
+
+#: site/tools/vrf.php:17
+msgid "Available VRFs and belonging subnets"
+msgstr "可用的VRFs和所属子网"
+
+#: site/tools/vrf.php:22 site/admin/manageVRF.php:25
+msgid "No VRFs configured"
+msgstr "没有VRFs配置"
+
+#: site/tools/vrf.php:45 site/tools/subnets.php:48
+#: site/admin/manageSubnetEdit.php:162
+msgid "Master Subnet"
+msgstr "主子网"
+
+#: site/tools/vrf.php:46 site/tools/vlan.php:30 site/tools/subnets.php:49
+#: site/ipaddr/ipAddressPrintTableSlaves.php:35
+#: site/ipaddr/subnetDetails.php:89
+msgid "Used"
+msgstr "已使用"
+
+#: site/tools/vrf.php:47 site/ipaddr/ipAddressPrintTableSlaves.php:36
+#: site/ipaddr/subnetDetails.php:90 site/ipaddr/subnetDetailsGraph.php:43
+msgid "Free"
+msgstr "空余"
+
+#: site/tools/vrf.php:48 site/tools/subnets.php:51
+#: site/tools/searchResults.php:264
+#: site/ipaddr/ipAddressPrintTableSlaves.php:37 site/admin/manageSubnet.php:82
+msgid "Requests"
+msgstr "申请"
+
+#: site/tools/vrf.php:86
+msgid "Master subnet does not exist"
+msgstr "主子网不存在"
+
+#: site/tools/vrf.php:104 site/tools/subnets.php:104
+#: site/ipaddr/subnetDetails.php:126
+msgid "enabled"
+msgstr "启用"
+
+#: site/tools/vrf.php:114
+msgid "No subnets belonging to this VRF"
+msgstr "没有属于此VRF的子网"
+
+#: site/tools/devices.php:23
+msgid "List of network devices"
+msgstr "网络设备列表"
+
+#: site/tools/devices.php:39
+msgid "Device not specified"
+msgstr "设备未指定"
+
+#: site/tools/devices.php:56
+msgid "click to show/hide belonging IP addresses"
+msgstr "点击显示/隐藏所有的IP地址"
+
+#: site/tools/devices.php:67 site/tools/searchResults.php:116
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:91
+#: site/ipaddr/mailNotifyIP.php:66 site/ipaddr/modifyIpAddress.php:213
+#: site/ipaddr/modifyIpAddress.php:215 site/ipaddr/exportSelectFields.php:81
+#: site/admin/manageRequestEdit.php:131 site/admin/CSVimportShowFile.php:71
+#: site/admin/replaceFields.php:32
+msgid "Port"
+msgstr "端口"
+
+#: site/tools/vlan.php:17
+msgid "Available VLANs:"
+msgstr "可用的VLAN号"
+
+#: site/tools/vlan.php:25 site/tools/searchResults.php:338
+#: site/admin/manageVLANEdit.php:50 site/admin/manageVLANs.php:35
+msgid "Number"
+msgstr "数量"
+
+#: site/tools/vlan.php:28 site/tools/searchResults.php:340
+msgid "Belonging subnets"
+msgstr "所属子网"
+
+#: site/tools/vlan.php:31 site/tools/subnets.php:50
+msgid "free"
+msgstr "空余"
+
+#: site/tools/userMenu.php:17
+msgid "here you can change your account details"
+msgstr "你可以在这里更改你的账户信息"
+
+#: site/tools/userMenu.php:29 site/admin/usersEditPrint.php:58
+msgid "Real name"
+msgstr "姓名"
+
+#: site/tools/userMenu.php:33
+msgid "Display name"
+msgstr "显示名称"
+
+#: site/admin/usersEditPrint.php:72
+msgid "e-mail"
+msgstr "e-mail"
+
+#: site/tools/userMenu.php:42
+msgid "Email address"
+msgstr "Email地址"
+
+#: site/tools/userMenu.php:55
+msgid "Random"
+msgstr "随机"
+
+#: site/tools/userMenu.php:60
+msgid "repeat"
+msgstr "重复"
+
+#: site/tools/userMenu.php:64 site/admin/usersEditPrint.php:123
+msgid "Re-type password"
+msgstr "重新输入密码"
+
+#: site/tools/userMenu.php:73 site/admin/settings.php:268
+msgid "Save changes"
+msgstr "保存设置"
+
+#: site/tools/instructions.php:20
+msgid "Instructions for managing IP addresses"
+msgstr "IP地址管理指南"
+
+#: site/tools/requestIPform.php:2 site/login/requestIPform.php:9
+msgid "IP request form"
+msgstr "IP地址申请表"
+
+#: site/tools/requestIPform.php:30 site/admin/groupEditPrint.php:64
+msgid "Enter description"
+msgstr "输入描述"
+
+#: site/tools/requestIPform.php:35 site/ipaddr/moveIpAddress.php:72
+#: site/ipaddr/modifyIpAddress.php:144
+msgid "DNS name"
+msgstr "DNS名称"
+
+#: site/tools/requestIPform.php:44
+msgid "Owner of IP address"
+msgstr "IP address所有者"
+
+#: site/tools/requestIPform.php:49 site/login/requestIPform.php:118
+msgid "Requester"
+msgstr "申请者"
+
+#: site/tools/requestIPform.php:51
+msgid "your email address"
+msgstr "你的Email地址"
+
+#: site/tools/requestIPform.php:57 site/login/requestIPform.php:126
+msgid "Additional comment"
+msgstr "更多的注释"
+
+#: site/tools/requestIPform.php:59
+msgid "Enter additional details for request if they are needed"
+msgstr "如果需要，请输入请求的其他详细信息"
+
+#: site/tools/requestIPform.php:71 site/ipaddr/mailNotifyIP.php:124
+#: site/ipaddr/moveIpAddress.php:113 site/ipaddr/modifyIpAddress.php:33
+#: site/ipaddr/modifyIpAddress.php:327 site/ipaddr/exportSelectFields.php:113
+#: site/admin/manageRequestEdit.php:200 site/admin/usersEditPrint.php:219
+#: site/admin/manageSubnetEdit.php:320 site/admin/manageDevicesEdit.php:135
+#: site/admin/manageVRFEdit.php:73 site/admin/manageVLANEdit.php:104
+#: site/admin/manageSectionEdit.php:144 site/admin/manageSubnetsplit.php:120
+#: site/admin/manageSubnetresize.php:71 site/admin/manageSubnettruncate.php:59
+#: site/admin/groupEditPrint.php:77 site/admin/groupRemoveUsers.php:75
+#: site/admin/manageSubnetShowPermissions.php:82
+msgid "Cancel"
+msgstr "取消"
+
+#: site/tools/requestIPform.php:72
+msgid "Request IP"
+msgstr "IP申请"
+
+#: site/tools/search.php:11
+msgid "Search IP database"
+msgstr "搜索IP地址数据库"
+
+#: site/tools/search.php:17
+msgid "search"
+msgstr "搜索"
+
+#: site/tools/searchTips.php:8
+msgid "Some search tips"
+msgstr "一些搜索提示"
+
+#: site/tools/searchTips.php:15
+msgid "Text search"
+msgstr "文本搜索"
+
+#: site/tools/searchTips.php:17
+msgid "Text searches through description, hostname, switch, port and owner"
+msgstr "通过描述、主机名、交换机、端口和所有者进行搜索"
+
+#: site/tools/searchTips.php:18
+msgid "For wildcard search add * (user*)"
+msgstr "可以通配符添加*进行搜索，例如“用户*”"
+
+#: site/tools/searchTips.php:25
+msgid "IPv4 search tips"
+msgstr "IPv4搜索提示"
+
+#: site/tools/searchTips.php:27
+msgid "You can search through ranges with * (e.g. 10.23.3.*)"
+msgstr "可以使用*来加大搜索范围（例如10.23.3.*）"
+
+#: site/tools/searchTips.php:28
+msgid "* shows ALL IP addresses and subnets"
+msgstr "* 来显示所有IP地址和子网"
+
+#: site/tools/searchTips.php:35
+msgid "IPv6 search tips"
+msgstr "IPv4搜索提示"
+
+#: site/tools/searchTips.php:37
+msgid "You can search through ranges by specifying whole subnet (e.g. 2002:8a10::/32)"
+msgstr "你可以通过搜索指定范围的整个子网（例如2002:8a10：：/ 32）"
+
+#: site/tools/searchTips.php:44
+msgid "Hostname search tips"
+msgstr "主机名搜索提示"
+
+#: site/tools/searchTips.php:46
+msgid "You can get all IP addresses some host uses and all ports it is connected to by entering hostname in search field"
+msgstr "您可以通过在搜索字段中输入主机名来获取主机使用的所有IP地址和所连接的所有端口"
+
+#: site/tools/searchTips.php:53
+msgid "Device search tips"
+msgstr "设备搜索提示"
+
+#: site/tools/searchTips.php:55
+msgid "You can get all used / available ports and connected IP's / hostnames in some device by entering device name in search field"
+msgstr "您可以通过在搜索字段中输入设备名称，在某些设备中获取所有使用的/可用端口和连接的IP /主机名"
+
+#: site/tools/searchTips.php:62
+msgid "MAC search tips"
+msgstr "MAC搜索提示"
+
+#: site/tools/searchTips.php:64
+msgid "You can search by MAC address list entering MAC in 00:1cd:d4:78:ec:46 or 001dd478ec46 format, or search multiple with 00:1c:c4:"
+msgstr "您可以使用类似00:1cd:d4:78:ec:46或001dd478ec46格式输入MAC的MAC地址列表进行搜索，或使用00：1c：c4：搜索多个地址"
+
+#: site/tools/searchTips.php:71
+msgid "Custom field search tips"
+msgstr "自定义搜索提示"
+
+#: site/tools/searchTips.php:73
+msgid "You can search custom fields"
+msgstr "可以搜索自定义区域"
+
+#: site/tools/userMenuSelfMod.php:19
+msgid "Email not valid!"
+msgstr "Email格式错误"
+
+#: site/tools/userMenuSelfMod.php:34
+msgid "Please fix the following error"
+msgstr "请更正一下错误"
+
+#: site/tools/userMenuSelfMod.php:36
+msgid "Error updating"
+msgstr "升级错误"
+
+#: site/tools/userMenuSelfMod.php:37
+msgid "Account updated successfully"
+msgstr "账号更新错误"
+
+#: site/tools/subnets.php:17 site/subnets.php:55
+msgid "Available subnets"
+msgstr "可用的VLAN号"
+
+#: site/tools/toolsMenu.php:25 site/sections.php:97
+msgid "IP calculator"
+msgstr "IP地址计算器"
+
+#: site/tools/toolsMenu.php:28 site/admin/manageAD_AD.php:19
+#: site/admin/manageAD_LDAP.php:19
+msgid "Instructions"
+msgstr "操作指南"
+
+#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/userMenu.php:22 site/sections.php:104
+msgid "Search"
+msgstr "搜索"
+
+#: site/tools/toolsMenu.php:35 site/tools/toolsMenu.php:38 site/sections.php:98
+#: site/sections.php:147
+msgid "Devices"
+msgstr "设备"
+
+#: site/tools/toolsMenu.php:43 site/ipaddr/subnetDetailsSlaves.php:106
+#: site/ipaddr/subnetDetails.php:117 site/admin/manageVRFEditResult.php:26
+#: site/admin/manageVRFEditResult.php:27 site/admin/manageSubnetEdit.php:183
+#: site/admin/manageVRFEdit.php:26 site/sections.php:151
+msgid "VRF"
+msgstr "VRF"
+
+#: site/tools/toolsMenu.php:47 site/sections.php:102 site/sections.php:148
+msgid "VLANs"
+msgstr "VLANs"
+
+#: site/tools/toolsMenu.php:50 site/sections.php:103 site/sections.php:146
+msgid "Subnets"
+msgstr "子网"
+
+#: site/tools/toolsMenu.php:56
+msgid "User menu"
+msgstr "用户菜单"
+
+#: site/tools/toolsMenu.php:59
+msgid "My account"
+msgstr "我的账号"
+
+#: site/tools/searchResults.php:93
+msgid "Search results (IP address list)"
+msgstr "搜索结果（IP地址列表）"
+
+#: site/tools/searchResults.php:93
+msgid "Export All results to XLS"
+msgstr "导出所有结果到XLS中"
+
+#: site/tools/searchResults.php:226 site/ipaddr/ipAddressPrintTable.php:299
+msgid "Edit IP address details"
+msgstr "编辑IP地址细节"
+
+#: site/tools/searchResults.php:227 site/tools/searchResults.php:233
+#: site/ipaddr/ipAddressPrintTable.php:308
+msgid "Send mail notification"
+msgstr "发送邮件通知"
+
+#: site/tools/searchResults.php:228 site/ipaddr/ipAddressPrintTable.php:302
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:172
+msgid "Delete IP address"
+msgstr "删除IP地址"
+
+#: site/tools/searchResults.php:232 site/ipaddr/ipAddressPrintTable.php:306
+msgid "Edit IP address details (disabled)"
+msgstr "编辑IP地址详细信息（禁用）"
+
+#: site/tools/searchResults.php:234 site/ipaddr/ipAddressPrintTable.php:309
+msgid "Delete IP address (disabled)"
+msgstr "删除IP地址（禁用）"
+
+#: site/tools/searchResults.php:251
+msgid "Search results (Subnet list)"
+msgstr "搜索结果（子网列表）"
+
+#: site/tools/searchResults.php:312
+msgid "Edit subnet details"
+msgstr "编辑子网详细信息"
+
+#: site/tools/searchResults.php:315
+msgid "Edit subnet (disabled)"
+msgstr "编辑子网（禁用）"
+
+#: site/tools/searchResults.php:330
+msgid "Search results (VLANs)"
+msgstr "索搜结果（VLANs）"
+
+#: site/tools/showAll.php:1
+msgid "phpIPAM tools"
+msgstr "IP地址管理工具"
+
+#: site/error.php:62
+msgid "Oops! Something went wrong!"
+msgstr "哦！出问题了！"
+
+#: site/error.php:64
+msgid "Provided http error code is"
+msgstr "HTTP错误代码是"
+
+#: site/ipaddr/mailNotifyCheck.php:31
+msgid "Sending mail failed"
+msgstr "发送邮件失败"
+
+#: site/ipaddr/mailNotifyCheck.php:32
+msgid "Sending mail succeeded"
+msgstr "发送邮件成功"
+
+#: site/ipaddr/mailNotifyCheck.php:35
+msgid "Wrong recipients! (separate multiple with ,)"
+msgstr "格式错误！（使用 , 分割）"
+
+#: site/ipaddr/ipAddressPrintTableSlaves.php:25
+msgid "has"
+msgstr "有"
+
+#: site/ipaddr/ipAddressPrintTableSlaves.php:25
+msgid "directly nested subnets"
+msgstr "个直接从属子网"
+
+#: site/ipaddr/ipAddressPrintTableSlaves.php:33
+#: site/ipaddr/subnetDetailsSlaves.php:77 site/ipaddr/subnetDetails.php:79
+msgid "Subnet description"
+msgstr "子网描述"
+
+#: site/ipaddr/ipAddressPrintTableSlaves.php:59
+#: site/ipaddr/ipAddressPrintTableSlaves.php:111
+#: site/ipaddr/ipAddressPrintTableSlaves.php:139
+msgid "Free space"
+msgstr "空余空间"
+
+#: site/ipaddr/ipAddressPrintTable.php:54
+msgid "IP addresses in subnet "
+msgstr "子网中的IP地址"
+
+#: site/ipaddr/ipAddressPrintTable.php:56
+msgid "All IP addresses belonging to ALL nested subnets"
+msgstr "所有IP地址属于所有下一级子网"
+
+#: site/ipaddr/ipAddressPrintTable.php:60
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:39
+#: site/ipaddr/subnetDetailsSlaves.php:24 site/ipaddr/subnetDetails.php:23
+msgid "Subnet does not exist"
+msgstr "子网不存在"
+
+#: site/ipaddr/ipAddressPrintTable.php:106
+#: site/ipaddr/ipAddressPrintTable.php:126
+msgid "Page"
+msgstr "页"
+
+#: site/ipaddr/ipAddressPrintTable.php:113
+#: site/ipaddr/ipAddressPrintTable.php:346 site/admin/logs.php:27
+msgid "Previous page"
+msgstr "前一页"
+
+#: site/ipaddr/ipAddressPrintTable.php:114
+#: site/ipaddr/ipAddressPrintTable.php:347 site/admin/logs.php:28
+msgid "Next page"
+msgstr "后一页"
+
+#: site/ipaddr/ipAddressPrintTable.php:146
+msgid "Sort by IP address"
+msgstr "IP地址排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:148
+msgid "Sort by hostname"
+msgstr "主机名排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:152
+msgid "Sort by description"
+msgstr "描述排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:156
+msgid "Sort by device"
+msgstr "设备排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:158
+msgid "Sort by port"
+msgstr "端口排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:160
+msgid "Sort by owner"
+msgstr "所有者排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:164
+msgid "Sort by"
+msgstr "排序"
+
+#: site/ipaddr/ipAddressPrintTable.php:239 site/ipaddr/modifyIpAddress.php:247
+#: site/ipaddr/subnetDetailsGraph.php:49 site/admin/manageRequestEdit.php:95
+#: site/admin/exportGenerateXLS.php:117 site/admin/exportSubnet.php:152
+msgid "Offline"
+msgstr "离线"
+
+#: site/ipaddr/ipAddressPrintTable.php:262
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:136
+#: site/admin/CSVimportShowFile.php:68
+msgid "MAC"
+msgstr "MAC"
+
+#: site/ipaddr/ipAddressPrintTable.php:300
+#: site/ipaddr/ipAddressPrintTable.php:307
+msgid "Search same hostnames in db"
+msgstr "在数据库中搜索相同的主机名"
+
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:69
+msgid "Orphaned IP addresses for subnet"
+msgstr "子网中的孤立IP地址"
+
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:69
+msgid "This happens if subnet had IP addresses<br>when new nested subnet was added"
+msgstr "当添加新的从属子网时，如果子网具有IP地址<br>，则会发生这种情况"
+
+#: site/ipaddr/ipAddressPrintTableOrphaned.php:171
+msgid "Move to different subnet"
+msgstr "移动到不同的子网"
+
+#: site/ipaddr/mailNotifyIP.php:38
+msgid "IP address details"
+msgstr "IP地址细节"
+
+#: site/ipaddr/mailNotifyIP.php:54
+msgid "Subnet desc"
+msgstr "子网描述"
+
+#: site/ipaddr/mailNotifyIP.php:84
+msgid "Send email notification"
+msgstr "发送邮件通知"
+
+#: site/ipaddr/mailNotifyIP.php:95
+msgid "Recipients"
+msgstr "收件人"
+
+#: site/ipaddr/mailNotifyIP.php:98
+msgid "Separate multiple recepients with ,"
+msgstr "使用“，”分割"
+
+#: site/ipaddr/mailNotifyIP.php:104
+msgid "Title"
+msgstr "标题"
+
+#: site/ipaddr/mailNotifyIP.php:112
+msgid "Content"
+msgstr "内容"
+
+#: site/ipaddr/mailNotifyIP.php:125
+msgid "Send Mail"
+msgstr "发送邮件"
+
+#: site/ipaddr/modifyIpAddressCheck.php:19
+msgid "Cannot edit IP address"
+msgstr "不能编辑IP地址"
+
+#: site/ipaddr/modifyIpAddressCheck.php:73
+msgid "Invalid hostname"
+msgstr "无效的主机名"
+
+#: site/ipaddr/modifyIpAddressCheck.php:114
+msgid "Only 255 IP addresses at once"
+msgstr "仅有255个IP地址"
+
+#: site/ipaddr/modifyIpAddressCheck.php:134
+msgid "Cannot"
+msgstr ""
+
+#: site/ipaddr/modifyIpAddressCheck.php:149
+msgid "Range"
+msgstr "范围"
+
+#: site/ipaddr/modifyIpAddressCheck.php:149
+msgid "updated successfully"
+msgstr "更新成功"
+
+#: site/ipaddr/modifyIpAddressCheck.php:150
+#: site/admin/manageVRFEditResult.php:27
+#: site/admin/manageDevicesEditResult.php:65
+#: site/admin/manageDevicesEditResult.php:69
+#: site/admin/manageSubnetEditResult.php:169 site/admin/usersEditResult.php:97
+#: site/admin/manageVLANEditResult.php:48
+msgid "successfull"
+msgstr "成功"
+
+#: site/ipaddr/modifyIpAddressCheck.php:161
+msgid "Hostname is not unique"
+msgstr "主机名不唯一"
+
+#: site/ipaddr/modifyIpAddressCheck.php:187
+#: site/ipaddr/modifyIpAddressCheck.php:196
+msgid "already existing in database"
+msgstr "数据库已存在"
+
+#: site/ipaddr/modifyIpAddressCheck.php:204
+msgid "Duplicate IP address"
+msgstr "重复的IP地址"
+
+#: site/ipaddr/modifyIpAddressCheck.php:204
+msgid "already existing in selected network"
+msgstr "选择的网络已存在"
+
+#: site/ipaddr/modifyIpAddressCheck.php:210
+msgid "Error inserting IP address"
+msgstr "插入IP地址错误"
+
+#: site/ipaddr/subnetDetailsSlaves.php:49 site/ipaddr/subnetDetails.php:50
+msgid "You do not have permission to access this network"
+msgstr "您没有访问此网络的权限"
+
+#: site/ipaddr/subnetDetailsSlaves.php:58
+#: site/ipaddr/subnetDetailsSlaves.php:63 site/ipaddr/subnetDetails.php:59
+#: site/ipaddr/subnetDetails.php:64
+msgid "Subnet details"
+msgstr "子网细节"
+
+#: site/ipaddr/subnetDetailsSlaves.php:71 site/ipaddr/subnetDetails.php:73
+msgid "Hierarchy"
+msgstr "分层"
+
+#: site/ipaddr/subnetDetailsSlaves.php:81 site/ipaddr/subnetDetails.php:83
+msgid "Permission"
+msgstr "许可"
+
+#: site/ipaddr/subnetDetailsSlaves.php:126 site/ipaddr/subnetDetails.php:147
+msgid "Actions"
+msgstr "动作"
+
+#: site/ipaddr/subnetDetailsSlaves.php:134
+msgid "You do not have permissions to edit subnet"
+msgstr "您没有编辑子网的权限"
+
+#: site/ipaddr/subnetDetailsSlaves.php:137
+#: site/ipaddr/subnetDetailsSlaves.php:149 site/ipaddr/subnetDetails.php:159
+#: site/ipaddr/subnetDetails.php:177
+msgid "Add new nested subnet"
+msgstr "添加下一级子网"
+
+#: site/ipaddr/subnetDetailsSlaves.php:144 site/ipaddr/subnetDetails.php:172
+msgid "Edit subnet properties"
+msgstr "编辑子网属性"
+
+#: site/ipaddr/subnetDetailsSlaves.php:146 site/ipaddr/subnetDetails.php:174
+#: site/admin/manageSubnetShowPermissions.php:26
+msgid "Manage subnet permissions"
+msgstr "管理子网许可"
+
+#: site/ipaddr/moveIpAddress.php:35
+msgid "Move IP address to different subnet"
+msgstr "移动IP地址到不同的子网"
+
+#: site/ipaddr/moveIpAddress.php:85
+msgid "Select new subnet"
+msgstr "选择新的子网"
+
+#: site/ipaddr/moveIpAddress.php:114
+msgid "Move IP address"
+msgstr "移动IP地址"
+
+#: site/ipaddr/modifyIpAddress.php:31
+msgid "Cannot edit IP address details"
+msgstr "不能编辑IP地址细节"
+
+#: site/ipaddr/modifyIpAddress.php:31
+msgid "You do not have write access for this network'"
+msgstr "您没有此网络的写访问权限'"
+
+#: site/ipaddr/modifyIpAddress.php:79 site/ipaddr/modifyIpAddress.php:80
+msgid "add"
+msgstr "添加"
+
+#: site/ipaddr/modifyIpAddress.php:81 site/ipaddr/modifyIpAddress.php:82
+msgid "edit"
+msgstr "编辑"
+
+#: site/ipaddr/modifyIpAddress.php:83
+msgid "delete"
+msgstr "删除"
+
+#: site/ipaddr/modifyIpAddress.php:115
+msgid "You can add,edit or delete multiple IP addresses<br>by specifying IP range (e.g. 10.10.0.0-10.10.0.25)"
+msgstr "您可以添加、编辑或删除多个IP地址<BR>通过指定IP范围（例如10.10.0.0-10.10.0.25）"
+
+#: site/ipaddr/modifyIpAddress.php:147
+msgid "Click to check for hostname"
+msgstr "点击查看主机名"
+
+#: site/ipaddr/modifyIpAddress.php:157 site/ipaddr/modifyIpAddress.php:159
+#: site/ipaddr/exportSelectFields.php:60 site/admin/replaceFields.php:30
+msgid "MAC address"
+msgstr "MAC地址"
+
+#: site/ipaddr/modifyIpAddress.php:173
+msgid "IP address owner"
+msgstr "IP地址所有者"
+
+#: site/ipaddr/modifyIpAddress.php:186 site/admin/manageRequestEdit.php:115
+#: site/admin/manageDevicesEditResult.php:65
+#: site/admin/manageDevicesEditResult.php:69
+msgid "Device"
+msgstr "设备"
+
+#: site/ipaddr/modifyIpAddress.php:190 site/admin/manageRequestEdit.php:118
+msgid "Select device"
+msgstr "选择设备"
+
+#: site/ipaddr/modifyIpAddress.php:191 site/admin/manageRequestEdit.php:119
+msgid "None"
+msgstr "无"
+
+#: site/ipaddr/modifyIpAddress.php:227 site/ipaddr/exportSelectFields.php:88
+#: site/admin/manageRequestEdit.php:145 site/admin/CSVimportShowFile.php:72
+msgid "Note"
+msgstr "记事本"
+
+#: site/ipaddr/modifyIpAddress.php:229
+msgid "Additional notes about IP address"
+msgstr "IP地址的附加说明"
+
+#: site/ipaddr/modifyIpAddress.php:240 site/admin/users.php:41
+#: site/admin/manageDevices.php:33
+msgid "Type"
+msgstr "类型"
+
+#: site/ipaddr/modifyIpAddress.php:245 site/ipaddr/subnetDetailsGraph.php:46
+#: site/admin/manageRequestEdit.php:93 site/admin/exportGenerateXLS.php:118
+#: site/admin/exportSubnet.php:153
+msgid "Active"
+msgstr "激活"
+
+#: site/ipaddr/modifyIpAddress.php:282
+msgid "Unique"
+msgstr "唯一"
+
+#: site/ipaddr/modifyIpAddress.php:285
+msgid "Unique hostname"
+msgstr "唯一的主机名"
+
+#: site/ipaddr/modifyIpAddress.php:296 site/ipaddr/modifyIpAddress.php:308
+msgid "Not strict"
+msgstr "不严格"
+
+#: site/ipaddr/modifyIpAddress.php:299 site/ipaddr/modifyIpAddress.php:311
+msgid "Permit adding network/broadcast as IP"
+msgstr "允许将网络号/广播地址作为IP地址添加"
+
+#: site/ipaddr/modifyIpAddress.php:331
+msgid "Delete IP"
+msgstr "删除IP"
+
+#: site/ipaddr/subnetDetails.php:87
+msgid "Subnet Usage"
+msgstr "子网的使用"
+
+#: site/ipaddr/subnetDetails.php:91
+msgid "Total"
+msgstr "合计"
+
+#: site/ipaddr/subnetDetails.php:125 site/admin/adminMenu.php:73
+#: site/sections.php:133
+msgid "IP requests"
+msgstr "IP地址申请"
+
+#: site/ipaddr/subnetDetails.php:127
+msgid "disabled"
+msgstr "禁用"
+
+#: site/ipaddr/subnetDetails.php:155
+msgid "You do not have permissions to edit subnet or IP addresses"
+msgstr "您没有编辑子网和IP地址的权限"
+
+#: site/ipaddr/subnetDetails.php:165 site/ipaddr/subnetDetails.php:182
+msgid "Export IP addresses"
+msgstr "导出IP地址"
+
+#: site/ipaddr/subnetDetails.php:167 site/login/loginForm.php:46
+msgid "Request new IP address"
+msgstr "申请新的IP地址"
+
+#: site/ipaddr/subnetDetails.php:171
+msgid "Add new IP address"
+msgstr "添加新的IP地址"
+
+#: site/ipaddr/subnetDetails.php:181
+msgid "Import IP addresses"
+msgstr "导入IP地址"
+
+#: site/ipaddr/exportSelectFields.php:2
+msgid "Select fields to export"
+msgstr "选择要导出的字段"
+
+#: site/ipaddr/exportSelectFields.php:26
+msgid "You cannot access this subnet"
+msgstr "你不能访问该子网"
+
+#: site/ipaddr/exportSelectFields.php:43
+msgid "IP state"
+msgstr "IP状态"
+
+#: site/ipaddr/exportSelectFields.php:114
+msgid "Export"
+msgstr "输出"
+
+#: site/ipaddr/ipAddressPrintVisual.php:12
+msgid "Click on IP address box<br>to manage IP address"
+msgstr "点击IP地址框<br>进行IP地址管理"
+
+#: site/footer.php:26
+msgid "phpIPAM is free, open-source project"
+msgstr "phpIPAM是一个免费的，开源的工程"
+
+#: site/footer.php:26
+msgid "If you like the software you can donate by clicking this button to support further development"
+msgstr "如果您喜欢本软件，您点击这个按钮进行捐赠，支持我们进一步发展"
+
+#: site/dashboard/widgets/statistics.php:27
+msgid "Number of Sections"
+msgstr "标签数量"
+
+#: site/dashboard/statistics.php:33
+msgid "Number of Subnets"
+msgstr "子网数量"
+
+#: site/dashboard/statistics.php:39
+msgid "Number of IPv4 addresses"
+msgstr "IPv4地址数"
+
+#: site/dashboard/statistics.php:45
+msgid "Number of IPv6 addresses"
+msgstr "IPv6地址数"
+
+#: site/dashboard/statistics.php:51
+msgid "Number of users"
+msgstr "用户数"
+
+#: site/dashboard/error_logs.php:10 site/dashboard/access_logs.php:10
+#: site/admin/logDetail.php:61 site/admin/logsExport.php:59
+#: site/admin/logResult.php:25
+msgid "Severity"
+msgstr "严重性"
+
+#: site/dashboard/error_logs.php:11 site/dashboard/access_logs.php:11
+#: site/admin/logsExport.php:62
+msgid "Command"
+msgstr "命令"
+
+#: site/dashboard/error_logs.php:12 site/dashboard/access_logs.php:12
+#: site/admin/logDetail.php:65 site/admin/logsExport.php:60
+#: site/admin/logResult.php:24
+msgid "Date"
+msgstr "日期"
+
+#: site/dashboard/error_logs.php:19 site/dashboard/top10_percentage.php:189
+#: site/dashboard/top10_hosts.php:153 site/dashboard/access_logs.php:19
+msgid "Info"
+msgstr "信息"
+
+#: site/dashboard/error_logs.php:20 site/dashboard/access_logs.php:20
+msgid "Warn"
+msgstr "警告"
+
+#: site/dashboard/error_logs.php:21 site/dashboard/access_logs.php:21
+msgid "Err"
+msgstr "错误"
+
+#: site/dashboard/error_logs.php:36
+msgid "No error logs available"
+msgstr "没有可用的错误日志"
+
+#: site/dashboard/top10_percentage.php:189 site/dashboard/top10_hosts.php:153
+#: site/admin/CSVimportShowFile.php:106 site/admin/manageSectionEdit.php:63
+#: site/admin/manageSubnetsplit.php:88
+msgid "No"
+msgstr "否"
+
+#: site/dashboard/top10_percentage.php:189
+msgid "No IPv4 host configured"
+msgstr "没有IPv4主机配置"
+
+#: site/dashboard/top10_hosts.php:153
+msgid "No IPv6 host configured"
+msgstr "没有IPv6主机配置"
+
+#: site/dashboard/access_logs.php:36 site/admin/logResult.php:116
+msgid "No logs available"
+msgstr "没有可用的日志"
+
+#: site/dashboard/index.php:27
+msgid "welcome to your IPAM dashboard"
+msgstr "欢迎使用你的仪表盘"
+
+#: site/dashboard/index.php:34
+msgid "There are"
+msgstr ""
+
+#: site/dashboard/index.php:34
+msgid "requests"
+msgstr "申请"
+
+#: site/dashboard/index.php:34
+msgid "for IP address waiting for your approval"
+msgstr "等待您批准IP地址"
+
+#: site/dashboard/index.php:43
+msgid "Statistics"
+msgstr "统计"
+
+#: site/dashboard/index.php:53
+msgid "Top 10 IPv4 subnets by usage percentage"
+msgstr "使用率排名前10名的IPv4子网"
+
+#: site/dashboard/index.php:66
+msgid "Top 10 IPv4 subnets by number of hosts"
+msgstr "主机数排名前10名的IPv4子网"
+
+#: site/dashboard/index.php:76
+msgid "Top 10 IPv6 subnets by number of hosts"
+msgstr "主机数排名前10名的IPv6子网"
+
+#: site/dashboard/index.php:91
+msgid "Last 5 informational logs"
+msgstr "最新的5个信息日志"
+
+#: site/dashboard/index.php:101
+msgid "Last 5 warning / error logs"
+msgstr "最新的5个警告/错误日志"
+
+#: site/admin/verifyDatabase.php:13
+msgid "Database structure verification"
+msgstr "数据库结构验证"
+
+#: site/admin/verifyDatabase.php:59
+msgid "All tables and fields are installed properly"
+msgstr "所有表和字段已正确安装"
+
+#: site/admin/verifyDatabase.php:63
+msgid "Missing table"
+msgstr "表缺失"
+
+#: site/admin/verifyDatabase.php:75
+msgid "Missing fields"
+msgstr "缺少的字段"
+
+#: site/admin/ripeImport.php:12
+msgid "Import subnets from RIPE"
+msgstr "从RIPE导入子网"
+
+#: site/admin/ripeImport.php:15
+msgid "This script imports subnets from RIPE database for specific AS. Enter desired AS to search for subnets"
+msgstr "此脚本从特定AS的RIPE数据库中导入子网。 输入所需的AS以搜索子网"
+
+#: site/admin/ripeImport.php:19
+msgid "AS number"
+msgstr "AS数量"
+
+#: site/admin/customIPFieldsEditResult.php:22
+#: site/admin/customVLANFieldsEditResult.php:22
+#: site/admin/customSubnetFieldsEditResult.php:22
+#: site/admin/customUserFieldsEditResult.php:22
+msgid "Name must be between 4 and 24 characters"
+msgstr "名称必须在4-24个字符之间"
+
+#: site/admin/customIPFieldsEditResult.php:27
+#: site/admin/customVLANFieldsEditResult.php:27
+#: site/admin/customSubnetFieldsEditResult.php:27
+#: site/admin/customUserFieldsEditResult.php:27
+msgid "Name must not start with number"
+msgstr "名称不能以数字开头"
+
+#: site/admin/customIPFieldsEditResult.php:30
+#: site/admin/customVLANFieldsEditResult.php:30
+#: site/admin/customSubnetFieldsEditResult.php:30
+#: site/admin/customUserFieldsEditResult.php:30
+msgid "Only alphanumeric, spaces and underscore characters are allowed"
+msgstr "只允许字母数字、空格和下划线字符"
+
+#: site/admin/customIPFieldsEditResult.php:36
+#: site/admin/customSubnetFieldsEditResult.php:38
+msgid "Please correct the following errors"
+msgstr "请更新以下错误"
+
+#: site/admin/customIPFieldsEditResult.php:45
+#: site/admin/manageVRFEditResult.php:26
+#: site/admin/customVLANFieldsEditResult.php:46
+#: site/admin/manageDevicesEditResult.php:60
+#: site/admin/manageVLANEditResult.php:47
+#: site/admin/customSubnetFieldsEditResult.php:47
+#: site/admin/customUserFieldsEditResult.php:46
+msgid "Failed to"
+msgstr ""
+
+#: site/admin/customIPFieldsEditResult.php:45
+#: site/admin/customVLANFieldsEditResult.php:46
+#: site/admin/customSubnetFieldsEditResult.php:47
+#: site/admin/customUserFieldsEditResult.php:46
+msgid "field"
+msgstr "字段"
+
+#: site/admin/customIPFieldsEditResult.php:46
+#: site/admin/customVLANFieldsEditResult.php:47
+#: site/admin/customSubnetFieldsEditResult.php:48
+#: site/admin/customUserFieldsEditResult.php:47
+msgid "Field"
+msgstr "字段"
+
+#: site/admin/customIPFieldsEditResult.php:46
+#: site/admin/customVLANFieldsEditResult.php:47
+#: site/admin/groupEditResult.php:24
+#: site/admin/customSubnetFieldsEditResult.php:48
+#: site/admin/customUserFieldsEditResult.php:47
+msgid "success"
+msgstr "成功"
+
+#: site/admin/manageAD_AD.php:13
+msgid "Active Directory connection settings"
+msgstr "AD连接设置"
+
+#: site/admin/manageAD_AD.php:17
+msgid "Here you can set parameters for connecting to AD for authenticating users. phpIPAM uses"
+msgstr "在这里，您可以设置连接到AD的参数，以验证users.phpIPAM的使用"
+
+#: site/admin/manageAD_AD.php:17 site/admin/manageAD_LDAP.php:17
+msgid "to authenticate users. If you need additional settings please take a look at functions/adLDAP or check online documentation!"
+msgstr "为了验证用户。 如果您需要其他设置，请查看功能/ adLDAP或查看在线文档！"
+
+#: site/admin/manageAD_AD.php:20
+msgid "First create new user under user management with <u>same username as on AD</u> and set usertype to domain user. Also set proper permissions - group membership for new user."
+msgstr "首先使用与用户管理相同的用户名创建新用户</ u>，并将usertype设置为域用户。 为新用户设置适当的权限"
+
+#: site/admin/manageAD_AD.php:29 site/admin/manageAD_LDAP.php:29
+msgid "ldap extension not enabled in php"
+msgstr "php的ldap扩展没有启用"
+
+#: site/admin/manageAD_AD.php:38
+msgid "Domain controllers"
+msgstr "域控"
+
+#: site/admin/manageAD_AD.php:43 site/admin/manageAD_LDAP.php:42
+msgid "Enter domain controllers, separated by ; (default: dc1.domain.local;dc2.domain.local)"
+msgstr "数据域控，使用“；”分割 （默认为：dc1.domain.local;dc2.domain.local）"
+
+#: site/admin/manageAD_AD.php:49 site/admin/manageAD_LDAP.php:48
+msgid "Base DN"
+msgstr "Base DN"
+
+#: site/admin/manageAD_AD.php:54
+msgid ""
+"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
+"\t\tIf this is set to null then adLDAP will attempt to obtain this automatically from the rootDSE"
+msgstr ""
+"输入LDAP的基本DN（默认值： (default: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
+"\t\t如果这设置为null，那么adLDAP将尝试从rootDSE自动获取"
+
+#: site/admin/manageAD_AD.php:61
+msgid "Account suffix"
+msgstr "账户后缀"
+
+#: site/admin/manageAD_AD.php:66
+msgid "The account suffix for your domain (default: @domain.local)"
+msgstr "为您的域帐户的后缀（默认：@domain.local）"
+
+#: site/admin/manageAD_AD.php:72 site/admin/manageAD_LDAP.php:61
+msgid "Use SSL"
+msgstr "使用SSL"
+
+#: site/admin/manageAD_AD.php:75 site/admin/manageAD_AD.php:90
+#: site/admin/manageAD_LDAP.php:79
+msgid "false"
+msgstr "假"
+
+#: site/admin/manageAD_AD.php:76 site/admin/manageAD_AD.php:91
+#: site/admin/manageAD_LDAP.php:80
+msgid "true"
+msgstr "真"
+
+#: site/admin/manageAD_AD.php:80 site/admin/manageAD_LDAP.php:69
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false), please see"
+msgstr "使用SSL（LDAPS），您的服务器需要设置（默认值：false），请参阅"
+
+#: site/admin/manageAD_AD.php:87 site/admin/manageAD_LDAP.php:76
+msgid "Use TLS"
+msgstr "使用TLS"
+
+#: site/admin/manageAD_AD.php:95 site/admin/manageAD_LDAP.php:84
+msgid "If you wish to use TLS you should ensure that useSSL is set to false and vice-versa (default: false)"
+msgstr "如果您希望使用TLS，则应确保将useSSL设置为false，反之亦然（默认值为false）"
+
+#: site/admin/manageAD_AD.php:102
+msgid "AD port"
+msgstr "AD端口"
+
+#: site/admin/manageAD_AD.php:107 site/admin/manageAD_LDAP.php:96
+msgid "The default port for LDAP non-SSL connections (default: 389)"
+msgstr "LDAP非SSL连接端口（默认值：389）"
+
+#: site/admin/manageAD_AD.php:115 site/admin/manageAD_LDAP.php:104
+msgid "Test settings"
+msgstr "测试设置"
+
+#: site/admin/manageAD_AD.php:116 site/admin/manageAD_LDAP.php:105
+msgid "Save settings"
+msgstr "保存设置"
+
+#: site/admin/logs.php:11 site/admin/adminMenu.php:41 site/sections.php:141
+msgid "Log files"
+msgstr "日志文件"
+
+#: site/admin/logs.php:16 site/admin/logDetail.php:23
+#: site/admin/logsExport.php:72 site/admin/logResult.php:16
+#: site/admin/logResult.php:40 site/admin/logResult.php:76
+msgid "Informational"
+msgstr "信息"
+
+#: site/admin/logs.php:17 site/admin/logDetail.php:27
+#: site/admin/logResult.php:17 site/admin/logResult.php:45
+#: site/admin/logResult.php:80
+msgid "Notice"
+msgstr "注意"
+
+#: site/admin/logs.php:18 site/admin/logDetail.php:31
+#: site/admin/manageSubnetEdit.php:310 site/admin/customIPFields.php:141
+#: site/admin/customIPFields.php:210 site/admin/customIPFields.php:275
+#: site/admin/manageVLANEdit.php:97 site/admin/manageSectionEdit.php:136
+#: site/admin/manageAD_LDAP.php:29 site/admin/logsExport.php:73
+#: site/admin/logResult.php:18 site/admin/logResult.php:51
+#: site/admin/logResult.php:84
+msgid "Warning"
+msgstr "警告"
+
+#: site/admin/logs.php:21
+msgid "Download logs"
+msgstr "下载日志"
+
+#: site/admin/logs.php:24
+msgid "Clear logs"
+msgstr "清除日志"
+
+#: site/admin/logDetail.php:44
+msgid "Log details"
+msgstr "日志细节"
+
+#: site/admin/logDetail.php:53
+msgid "Log ID"
+msgstr "日志ID"
+
+#: site/admin/logDetail.php:57 site/admin/logResult.php:28
+msgid "Event"
+msgstr "事件"
+
+#: site/admin/logDetail.php:69
+msgid "User details"
+msgstr "用户细节"
+
+#: site/admin/logDetail.php:77 site/admin/logsExport.php:63
+msgid "Details"
+msgstr "细节"
+
+#: site/admin/logDetail.php:88 site/admin/CSVimport.php:94
+msgid "Close window"
+msgstr "关闭窗口"
+
+#: site/admin/filterIPFields.php:33
+msgid "Filter which fields to display in IP list"
+msgstr "过滤要在IP列表中显示的字段"
+
+#: site/admin/filterIPFields.php:36
+msgid "You can select which fields are actually being used for IP management, so you dont show any overhead if not used. IP, hostname and description are mandatory"
+msgstr "您可以选择哪些字段实际上用于IP管理，因此如果不使用，您不显示任何开销。 IP、主机名和描述是必须的"
+
+#: site/admin/filterIPFields.php:44
+msgid "Check which fields to use for IP addresses"
+msgstr "检查用于IP地址的字段"
+
+#: site/admin/filterIPFields.php:70
+msgid "Save"
+msgstr "保存"
+
+#: site/admin/manageRequestEdit.php:20
+msgid "Request does not exist"
+msgstr "请求不存在"
+
+#: site/admin/manageRequestEdit.php:35
+msgid "Manage IP address request"
+msgstr "管理IP地址请求"
+
+#: site/admin/manageRequestEdit.php:46
+msgid "Requested subnet"
+msgstr "申请子网"
+
+#: site/admin/manageRequestEdit.php:76
+msgid "Enter IP description"
+msgstr "输入IP地址描述"
+
+#: site/admin/manageRequestEdit.php:83
+msgid "Enter hostname"
+msgstr "输入主机名"
+
+#: site/admin/manageRequestEdit.php:90
+msgid "State"
+msgstr "状态"
+
+#: site/admin/manageRequestEdit.php:147
+msgid "Write note"
+msgstr "写纸条"
+
+#: site/admin/manageRequestEdit.php:178
+msgid "Requester email"
+msgstr "申请者邮箱"
+
+#: site/admin/manageRequestEdit.php:183
+msgid "Requester comment"
+msgstr "申请者描述"
+
+#: site/admin/manageRequestEdit.php:188
+msgid "Comment approval/reject"
+msgstr "描述批准/拒绝"
+
+#: site/admin/manageRequestEdit.php:190
+msgid "Enter reason for reject/approval to be sent to requester"
+msgstr "输入批准/拒绝的理由"
+
+#: site/admin/manageRequestEdit.php:201
+msgid "Reject"
+msgstr "拒绝"
+
+#: site/admin/manageRequestEdit.php:202
+msgid "Accept"
+msgstr "接受"
+
+#: site/admin/users.php:24 site/admin/adminMenu.php:20
+msgid "User management"
+msgstr "用户管理"
+
+#: site/admin/users.php:28
+msgid "Create user"
+msgstr "创建用户"
+
+#: site/admin/users.php:37
+msgid "Real Name"
+msgstr "姓名"
+
+#: site/admin/users.php:39
+msgid "E-mail"
+msgstr "E-mail"
+
+#: site/admin/users.php:42 site/admin/usersEditPrint.php:157
+#: site/sections.php:140
+msgid "Groups"
+msgstr "组"
+
+#: site/admin/users.php:60 site/admin/usersEditPrint.php:138
+msgid "Administrator"
+msgstr "管理员"
+
+#: site/admin/users.php:69 site/admin/usersEditPrint.php:92
+msgid "Local user"
+msgstr "本地用户"
+
+#: site/admin/users.php:71
+msgid "LDAP user"
+msgstr "LDAP用户"
+
+#: site/admin/users.php:72 site/admin/usersEditPrint.php:95
+msgid "Domain user"
+msgstr "域用户"
+
+#: site/admin/users.php:77
+msgid "All groups"
+msgstr "所有组"
+
+#: site/admin/users.php:116
+msgid "Administrator users will be able to view and edit all all sections and subnets"
+msgstr "管理员可以编辑查看所有章和子网"
+
+#: site/admin/users.php:117
+msgid "Normal users will have permissions set based on group access to sections and subnets"
+msgstr "普通用户需要通过组设置才有访问章及子网的权限"
+
+#: site/admin/manageSubnet.php:11 site/admin/adminMenu.php:53
+msgid "Subnet management"
+msgstr "子网管理"
+
+#: site/admin/manageSubnet.php:45
+msgid "click to show/hide all subnets"
+msgstr "点击查看和隐藏所有子网"
+
+#: site/admin/manageSubnet.php:63
+msgid "click to show/hide belonging subnets"
+msgstr "点击显示/隐藏所属的子网"
+
+#: site/admin/manageSubnet.php:89
+msgid "Add new subnet to section"
+msgstr "在标签内添加新的子网"
+
+#: site/admin/manageSubnet.php:89
+msgid "Add subnet"
+msgstr "添加子网"
+
+#: site/admin/manageSubnet.php:95
+msgid "Section has no subnets"
+msgstr "标签内没有子网"
+
+#: site/admin/adminMenu.php:14
+msgid "Server management"
+msgstr "服务器管理"
+
+#: site/admin/adminMenu.php:17 site/sections.php:138
+msgid "IPAM settings"
+msgstr "IPAM设置"
+
+#: site/admin/adminMenu.php:23 site/admin/groups.php:20
+msgid "Group management"
+msgstr "组管理"
+
+#: site/admin/adminMenu.php:28
+msgid "AD connection settings"
+msgstr "AD连接设置"
+
+#: site/admin/adminMenu.php:34 site/admin/manageAD_LDAP.php:13
+msgid "LDAP connection settings"
+msgstr "LDAP连接设置"
+
+#: site/admin/adminMenu.php:38
+msgid "Edit instructions"
+msgstr "编辑说明"
+
+#: site/admin/adminMenu.php:47
+msgid "IP related management"
+msgstr "IP相关管理"
+
+#: site/admin/adminMenu.php:50 site/admin/manageSection.php:15
+msgid "Section management"
+msgstr "标签管理"
+
+#: site/admin/adminMenu.php:56 site/admin/manageDevices.php:15
+msgid "Device management"
+msgstr "设备管理"
+
+#: site/admin/adminMenu.php:59
+msgid "VLAN management"
+msgstr "VLAN管理"
+
+#: site/admin/adminMenu.php:64
+msgid "VRF management"
+msgstr "VRF管理"
+
+#: site/admin/adminMenu.php:68
+msgid "RIPE import"
+msgstr "RIPE输入"
+
+#: site/admin/adminMenu.php:77
+msgid "Filter IP fields"
+msgstr "IP地址过滤"
+
+#: site/admin/adminMenu.php:80 site/admin/customIPFields.php:33
+msgid "Custom fields"
+msgstr "自定义域"
+
+#: site/admin/adminMenu.php:88
+msgid "Version check"
+msgstr "版本检查"
+
+#: site/admin/adminMenu.php:91
+msgid "Verify database"
+msgstr "验证数据库"
+
+#: site/admin/adminMenu.php:94
+msgid "Replace fields"
+msgstr "替换字段"
+
+#: site/admin/adminMenu.php:97
+msgid "Export database"
+msgstr "导出数据库"
+
+#: site/admin/usersEditPrint.php:34
+msgid "user"
+msgstr "用户"
+
+#: site/admin/usersEditPrint.php:35 site/admin/usersEditPrint.php:44
+msgid "Add new user"
+msgstr "添加新用户"
+
+#: site/admin/usersEditPrint.php:60
+msgid "Enter users real name"
+msgstr "输入用户姓名"
+
+#: site/admin/usersEditPrint.php:67
+msgid "Enter username"
+msgstr "输入用户名"
+
+#: site/admin/usersEditPrint.php:74
+msgid "Enter users email address"
+msgstr "输入用户Email地址"
+
+#: site/admin/usersEditPrint.php:87
+msgid "User Type"
+msgstr "用户类型"
+
+#: site/admin/usersEditPrint.php:98
+msgid "Set user type"
+msgstr "设置用户类型"
+
+#: site/admin/usersEditPrint.php:100
+msgid "Local authenticates here"
+msgstr "本地用户认证"
+
+#: site/admin/usersEditPrint.php:101
+msgid "Domain authenticates on AD, but still needs to be setup here for permissions etc."
+msgstr "域名在AD上进行身份验证，但仍需要在此处设置权限等。"
+
+#: site/admin/usersEditPrint.php:116
+msgid "User's password"
+msgstr "密码"
+
+#: site/admin/usersEditPrint.php:116
+msgid "click to generate random"
+msgstr "点击随机生成"
+
+#: site/admin/usersEditPrint.php:128
+msgid "Notification"
+msgstr "通知"
+
+#: site/admin/usersEditPrint.php:130
+msgid "Send notification email to user with account details"
+msgstr "向用户发送通知电子邮件的帐户详细信息"
+
+#: site/admin/usersEditPrint.php:135
+msgid "User role"
+msgstr "用户角色"
+
+#: site/admin/usersEditPrint.php:139
+msgid "Normal User"
+msgstr "普通用户"
+
+#: site/admin/usersEditPrint.php:147
+msgid "Select user role"
+msgstr "请选择用户角色"
+
+#: site/admin/usersEditPrint.php:149
+msgid "Administrator is almighty"
+msgstr "管理员有所有权限"
+
+#: site/admin/usersEditPrint.php:150
+msgid "Users have access defined based on groups"
+msgstr "用户基于组定义访问权限"
+
+#: site/admin/usersEditPrint.php:177
+msgid "No groups configured"
+msgstr "没有配置组"
+
+#: site/admin/usersEditPrint.php:182
+msgid "Select to which groups the user belongs to"
+msgstr "选择用户所属的组"
+
+#: site/admin/export.php:13
+msgid "phpIPAM database export"
+msgstr "数据库导出"
+
+#: site/admin/export.php:16
+msgid "You can download MySQL dump of database or generate XLS file of IP addresses"
+msgstr "您可以下载数据库的MySQL转储或生成IP地址的XLS文件"
+
+#: site/admin/export.php:19
+msgid "Create MySQL database dump"
+msgstr "创建MySQL数据库转储"
+
+#: site/admin/export.php:20
+msgid "Prepare MySQL dump"
+msgstr "准备MySQL转储"
+
+#: site/admin/export.php:23
+msgid "Create XLS file of IP addresses"
+msgstr "创建IP地址的XLS文件"
+
+#: site/admin/export.php:24
+msgid "Prepare XLS dump"
+msgstr "准备XLS转储"
+
+#: site/admin/export.php:27
+msgid "Create hostfile dump"
+msgstr "创建主机文件转储"
+
+#: site/admin/export.php:28
+msgid "Prepare hostfile dump"
+msgstr "准备主机文件转储"
+
+#: site/admin/manageSubnetEdit.php:14 site/admin/manageSubnetEditResult.php:14
+msgid "You do not have permissions to add new subnet in this section"
+msgstr "你没有权限添加、编辑和删除该标签"
+
+#: site/admin/manageSubnetEdit.php:21 site/admin/manageSubnetEditResult.php:21
+msgid "You do not have permissions to add edit/delete this subnet"
+msgstr "你没有权限添加、编辑和删除该子网"
+
+#: site/admin/manageSubnetEdit.php:65
+msgid "subnet"
+msgstr "子网"
+
+#: site/admin/manageSubnetEdit.php:83
+msgid "subnet in CIDR"
+msgstr "CIDR中的子网"
+
+#: site/admin/manageSubnetEdit.php:86
+msgid "Get information from RIPE database"
+msgstr "通过RIPE数据库获得信息"
+
+#: site/admin/manageSubnetEdit.php:87
+msgid "Enter subnet in CIDR format (e.g. 192.168.1.1/24)"
+msgstr "以CIDR格式输入子网（例如：192.168.1.1/24）"
+
+#: site/admin/manageSubnetEdit.php:95
+msgid "subnet description"
+msgstr "子网描述"
+
+#: site/admin/manageSubnetEdit.php:97
+msgid "Enter subnet description"
+msgstr "输入子网描述"
+
+#: site/admin/manageSubnetEdit.php:119
+msgid "Move to different section"
+msgstr "移到不同标签"
+
+#: site/admin/manageSubnetEdit.php:128 site/admin/manageSubnetEdit.php:157
+#: site/admin/manageVLANdropdownReload.php:16
+msgid "Select VLAN"
+msgstr "选择VLAN"
+
+#: site/admin/manageSubnetEdit.php:135
+#: site/admin/manageVLANdropdownReload.php:23
+msgid "No VLAN"
+msgstr "没有VLAN"
+
+#: site/admin/manageSubnetEdit.php:138
+#: site/admin/manageVLANdropdownReload.php:26
+msgid "Add"
+msgstr "添加"
+
+#: site/admin/manageSubnetEdit.php:139
+#: site/admin/manageVLANdropdownReload.php:27
+msgid "+ Add new VLAN"
+msgstr "+ 添加新的VLAN"
+
+#: site/admin/manageSubnetEdit.php:166
+msgid "Enter master subnet if you want to nest it under existing subnet, or select root to create root subnet"
+msgstr "如果要将其嵌套在现有子网下，请输入主子网，或选择根创建根子网"
+
+#: site/admin/manageSubnetEdit.php:188
+msgid "Select VRF"
+msgstr "选择VRF"
+
+#: site/admin/manageSubnetEdit.php:201
+msgid "Add this subnet to VRF"
+msgstr "将子网添加进VRF"
+
+#: site/admin/manageSubnetEdit.php:213
+msgid "Resize"
+msgstr "调整大小"
+
+#: site/admin/manageSubnetEdit.php:213
+msgid "split"
+msgstr "划分"
+
+#: site/admin/manageSubnetEdit.php:217 site/admin/manageSubnetresize.php:24
+#: site/admin/manageSubnetresize.php:72
+msgid "Resize subnet"
+msgstr "调整子网"
+
+#: site/admin/manageSubnetEdit.php:222 site/admin/manageSubnetsplit.php:53
+#: site/admin/manageSubnetsplit.php:121
+msgid "Split subnet"
+msgstr "分割子网"
+
+#: site/admin/manageSubnetEdit.php:223 site/admin/manageSubnettruncate.php:27
+#: site/admin/manageSubnettruncate.php:60
+msgid "Truncate subnet"
+msgstr "缩小子网"
+
+#: site/admin/manageSubnetEdit.php:227
+msgid "Resize, split or truncate this subnet"
+msgstr "调整、分割或者缩小这个子网"
+
+#: site/admin/manageSubnetEdit.php:239
+msgid "IP Requests"
+msgstr "IP地址申请"
+
+#: site/admin/manageSubnetEdit.php:243
+msgid "Allow or deny IP requests for this subnet"
+msgstr "允许或拒绝此子网的IP请求"
+
+#: site/admin/manageSubnetEdit.php:253
+msgid "Show as name"
+msgstr "显示名称"
+
+#: site/admin/manageSubnetEdit.php:274
+msgid "Show Subnet name instead of subnet IP address"
+msgstr "用子网名称来替代子网IP地址的显示"
+
+#: site/admin/manageSubnetEdit.php:310
+msgid "Removing subnets will delete ALL underlaying subnets and belonging IP addresses"
+msgstr "删除该子网将删除该子网所属IP地址和子网"
+
+#: site/admin/manageSubnetEdit.php:324
+msgid "Delete subnet"
+msgstr "删除子网"
+
+#: site/admin/exportGenerateXLS.php:92 site/admin/exportSubnet.php:99
+msgid "ip state"
+msgstr "ip状态"
+
+#: site/admin/exportGenerateXLS.php:145
+msgid "No hosts"
+msgstr "没有主机"
+
+#: site/admin/CSVimportShowFile.php:16 site/admin/CSVimportSubmit.php:19
+msgid "Cannot open csvupload/import.csv"
+msgstr "不能打开csvupload/import.csv文件"
+
+#: site/admin/CSVimportShowFile.php:64
+msgid "IP"
+msgstr "IP"
+
+#: site/admin/CSVimportShowFile.php:65
+msgid "Status"
+msgstr "状态"
+
+#: site/admin/CSVimportShowFile.php:100 site/admin/ripeImportTelnet.php:108
+msgid "Import to database"
+msgstr "导入数据库"
+
+#: site/admin/CSVimportShowFile.php:102
+msgid "Should I import values to database"
+msgstr "我应该将值导入数据库"
+
+#: site/admin/CSVimportShowFile.php:105 site/admin/manageSectionEdit.php:62
+#: site/admin/manageSubnetsplit.php:89
+msgid "Yes"
+msgstr "是"
+
+#: site/admin/customSubnetFieldsEdit.php:19
+msgid "custom subnet field"
+msgstr "自定义子网域"
+
+#: site/admin/customSubnetFieldsEdit.php:31
+#: site/admin/customIPFieldsEdit.php:31 site/admin/customVLANFieldsEdit.php:31
+#: site/admin/customUserFieldsEdit.php:31
+msgid "Select field name"
+msgstr "选择字段名称"
+
+#: site/admin/customSubnetFieldsEdit.php:45
+#: site/admin/customIPFieldsEdit.php:45 site/admin/customVLANFieldsEdit.php:45
+#: site/admin/customUserFieldsEdit.php:45
+msgid "Close"
+msgstr "关闭"
+
+#: site/admin/customIPFields.php:42
+msgid "Custom IP address fields"
+msgstr "自定义IP地址域"
+
+#: site/admin/customIPFields.php:49
+msgid "No custom fields created yet"
+msgstr "尚未创建自定义字段"
+
+#: site/admin/customIPFields.php:76 site/admin/customIPFields.php:141
+#: site/admin/customIPFields.php:210 site/admin/customIPFields.php:275
+msgid "Invalid field name"
+msgstr "无效的字段名"
+
+#: site/admin/customIPFields.php:89
+msgid "Add new custom IP address field"
+msgstr "添加新的自定义IP地址字段"
+
+#: site/admin/customIPFields.php:107
+msgid "Custom subnet fields"
+msgstr "自定义子领域"
+
+#: site/admin/customIPFields.php:114
+msgid "No custom subnet fields created yet"
+msgstr "尚未创建自定义子网字段"
+
+#: site/admin/customIPFields.php:128 site/admin/customIPFields.php:197
+#: site/admin/customIPFields.php:262
+msgid "Move down"
+msgstr "向下移动"
+
+#: site/admin/customIPFields.php:156
+msgid "Add new custom subnet field"
+msgstr "添加新的自定义子网字段"
+
+#: site/admin/customIPFields.php:176
+msgid "Custom VLAN fields"
+msgstr "自定义VLAN域"
+
+#: site/admin/customIPFields.php:183
+msgid "No custom VLAN fields created yet"
+msgstr "尚未创建自定义VLAN字段"
+
+#: site/admin/customIPFields.php:224
+msgid "Add new custom VLAN field"
+msgstr "添加新的自定义VLAN字段"
+
+#: site/admin/customIPFields.php:241
+msgid "Custom User fields"
+msgstr "用户自定义字段"
+
+#: site/admin/customIPFields.php:248
+msgid "No custom user fields created yet"
+msgstr "尚未创建自定义用户字段"
+
+#: site/admin/customIPFields.php:289
+msgid "Add new custom User field"
+msgstr "添加新的自定义用户字段"
+
+#: site/admin/customIPFields.php:304
+msgid "You can add additional custom fields to IP addresses and subnets (like CustomerId, location, ...)"
+msgstr "您可以添加额外的自定义字段的IP地址和子网（如CustomerId，location，…）"
+
+#: site/admin/searchReplaceResult.php:16
+msgid "Please enter something in search field"
+msgstr "请输入搜索内容"
+
+#: site/admin/searchReplaceResult.php:20 site/admin/searchReplaceResult.php:21
+msgid "does not exist, first create switch under admin menu"
+msgstr "不存在，首先在管理菜单下创建交换机"
+
+#: site/admin/manageRequestResult.php:29
+msgid "Cannot update request"
+msgstr "不能更新申请"
+
+#: site/admin/manageRequestResult.php:33
+msgid "Request has beed rejected"
+msgstr "申请被拒绝"
+
+#: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
+msgid "already in use"
+msgstr "已经被使用"
+
+#: site/admin/manageRequestResult.php:54 site/admin/manageRequestResult.php:58
+msgid "First available IP address is"
+msgstr "第一可用IP地址是"
+
+#: site/admin/manageRequestResult.php:66
+msgid "Cannot confirm IP address"
+msgstr "无法确认IP地址"
+
+#: site/admin/manageRequestResult.php:70
+msgid "IP address request confirmed and added to database"
+msgstr "IP地址请求被确认并添加到数据库中"
+
+#: site/admin/customIPFieldsEdit.php:19
+msgid "custom IP field"
+msgstr "自定义IP地址域"
+
+#: site/admin/filterIPFieldsResult.php:14
+msgid "Update failed"
+msgstr "更新失败"
+
+#: site/admin/filterIPFieldsResult.php:15
+msgid "Update successfull"
+msgstr "升级成功"
+
+#: site/admin/manageVRF.php:15
+msgid "Manage VRF"
+msgstr "管理VRF"
+
+#: site/admin/manageVRF.php:18
+msgid "Add VRF"
+msgstr "添加VRF"
+
+#: site/admin/manageVRF.php:35 site/admin/manageVRFEdit.php:43
+msgid "RD"
+msgstr "RD"
+
+#: site/admin/CSVimportSubmit.php:88
+msgid "Errors occured when importing to database!"
+msgstr "导入数据库时出错！"
+
+#: site/admin/CSVimportSubmit.php:95 site/admin/ripeImportResult.php:72
+msgid "Import successfull"
+msgstr "导入成功"
+
+#: site/admin/CSVimportVerify.php:25
+msgid "Cannot upload - Return Code:"
+msgstr "不能上传 - 代码："
+
+#: site/admin/CSVimportVerify.php:31
+msgid "Cannot move file to upload dir"
+msgstr "不能移动文件到上传文件夹"
+
+#: site/admin/CSVimportVerify.php:35
+msgid "Success"
+msgstr "成功"
+
+#: site/admin/manageDevicesEdit.php:24
+#: site/admin/manageDevicesEditResult.php:60
+msgid "device"
+msgstr "设备"
+
+#: site/admin/manageDevicesEdit.php:51
+msgid "Device type"
+msgstr "设备类型"
+
+#: site/admin/manageDevicesEdit.php:67 site/admin/manageDevicesEdit.php:69
+#: site/admin/manageDevices.php:34
+msgid "Vendor"
+msgstr "供货商"
+
+#: site/admin/manageDevicesEdit.php:75 site/admin/manageDevicesEdit.php:77
+#: site/admin/manageDevices.php:35
+msgid "Model"
+msgstr ""
+
+#: site/admin/manageDevicesEdit.php:83 site/admin/manageDevices.php:36
+msgid "SW version"
+msgstr "SW版本"
+
+#: site/admin/manageDevicesEdit.php:85
+msgid "Software version"
+msgstr "软件版本"
+
+#: site/admin/manageDevicesEdit.php:109
+msgid "Sections to display device in"
+msgstr ""
+
+#: site/admin/manageDevicesEditResult.php:41
+msgid "Hostname is mandatory"
+msgstr "主机名是必须的"
+
+#: site/admin/manageVRFEdit.php:38
+msgid "VRF name"
+msgstr "VRF名称"
+
+#: site/admin/manageVRFEdit.php:45
+msgid "Route distinguisher"
+msgstr "路由标识"
+
+#: site/admin/manageSubnetEditResult.php:87
+#: site/admin/manageSubnetEditResult.php:104
+msgid "Nested subnet not in root subnet!"
+msgstr "下一级子网不在根网络"
+
+#: site/admin/manageSubnetEditResult.php:109
+msgid "Subnet cannot nest behind itself!"
+msgstr "子网不能从属自己"
+
+#: site/admin/manageSubnetEditResult.php:157
+msgid "Please fix following problems"
+msgstr "请解决以下问题"
+
+#: site/admin/manageSubnetEditResult.php:165
+msgid "Error adding new subnet"
+msgstr "添加新子网错误"
+
+#: site/admin/manageSubnetEditResult.php:168
+msgid "Subnet, IP addresses and all belonging subnets deleted successfully"
+msgstr "子网、IP地址和所有归属子网成功删除"
+
+#: site/admin/manageVLANEdit.php:44
+msgid "VLAN name"
+msgstr "VLAN名称"
+
+#: site/admin/manageVLANEdit.php:52
+msgid "VLAN number"
+msgstr "VLAN数量"
+
+#: site/admin/manageVLANEdit.php:97
+msgid "removing VLAN will also remove VLAN reference from belonging subnets"
+msgstr "删除VLAN也将其所属子网移除"
+
+#: site/admin/manageRequests.php:15
+msgid "List of all active IP addresses requests"
+msgstr "所有活动IP地址请求列表"
+
+#: site/admin/manageRequests.php:39
+msgid "Edit"
+msgstr "编辑"
+
+#: site/admin/manageRequests.php:53
+msgid "No IP address requests available"
+msgstr "没有可用的IP地址请求"
+
+#: site/admin/usersEditResult.php:44
+msgid "User deleted successfully"
+msgstr "用户删除成功"
+
+#: site/admin/customVLANFieldsEdit.php:19
+msgid "custom VLAN field"
+msgstr "自定义VLAN域"
+
+#: site/admin/groupEditResult.php:14
+msgid "Name must be at least 4 characters long"
+msgstr "名称至少有4个字符"
+
+#: site/admin/groupEditResult.php:23 site/admin/groupEditResult.php:24
+msgid "Group edit error"
+msgstr "组编辑错误"
+
+msgid "Group add error"
+msgstr "组添加错误"
+
+msgid "Group delete error"
+msgstr "组删除错误"
+
+msgid "Group edit success"
+msgstr "组编辑成功"
+
+msgid "Group add success"
+msgstr "组添加成功"
+
+msgid "Group delete success"
+msgstr "组删除成功"
+
+#: site/admin/manageADresult.php:16
+msgid "Failed to update AD settings"
+msgstr "更新AD设置失败"
+
+#: site/admin/manageADresult.php:17
+msgid "AD settings updated"
+msgstr "AD设置已更新"
+
+#: site/admin/settings.php:15
+msgid "phpIPAM Server settings"
+msgstr "服务器设置"
+
+#: site/admin/settings.php:23
+msgid "Site settings"
+msgstr "网站设置"
+
+#: site/admin/settings.php:28
+msgid "Site title"
+msgstr "网站标题"
+
+#: site/admin/settings.php:32
+msgid "Set site title"
+msgstr "设置网站标题"
+
+#: site/admin/settings.php:37
+msgid "Site domain"
+msgstr "网站域名"
+
+#: site/admin/settings.php:41
+msgid "Set domain for sending mail notifications"
+msgstr "设置发送邮件通知域"
+
+#: site/admin/settings.php:46
+msgid "Site URL"
+msgstr "网站URL"
+
+#: site/admin/settings.php:50
+msgid "Set site URL"
+msgstr "设置网站URL"
+
+#: site/admin/settings.php:56
+msgid "Admin settings"
+msgstr "管理设置"
+
+#: site/admin/settings.php:61
+msgid "Admin name"
+msgstr "管理员名称"
+
+#: site/admin/settings.php:66
+msgid "Set administrator name to display when sending mails and for contact info"
+msgstr "设置发送邮件和联系信息时显示的管理员名称"
+
+#: site/admin/settings.php:72
+msgid "Admin mail"
+msgstr "管理员邮箱"
+
+#: site/admin/settings.php:77
+msgid "Set administrator e-mail to display when sending mails and for contact info"
+msgstr "设置管理员电子邮件在发送邮件和联系信息时显示"
+
+#: site/admin/settings.php:85
+msgid "Feature settings"
+msgstr "功能设置"
+
+#: site/admin/settings.php:90
+msgid "Auth type"
+msgstr "授权类型"
+
+#: site/admin/settings.php:93
+msgid "Local authentication only"
+msgstr "仅本地认证"
+
+#: site/admin/settings.php:94
+msgid "AD authentication"
+msgstr "AD认证"
+
+#: site/admin/settings.php:95
+msgid "OpenLDAP authentication"
+msgstr "OpenLDAP认证"
+
+#: site/admin/settings.php:99
+msgid "Set authentication type for users. Requires php LDAP support. Set connection settings in admin menu"
+msgstr "为用户设置认证类型。 需要php LDAP支持。 在管理菜单中设置连接设置"
+
+#: site/admin/settings.php:105
+msgid "Tooltips"
+msgstr "工具提示"
+
+#: site/admin/settings.php:110
+msgid "Enable or disable tooltips"
+msgstr "启用或关闭工具提示"
+
+#: site/admin/settings.php:116
+msgid "IP request module"
+msgstr "IP地址申请模块"
+
+#: site/admin/settings.php:121
+msgid "Enable or disable IP request module"
+msgstr "打开或者关闭IP地址申请模块"
+
+#: site/admin/settings.php:127
+msgid "Enable VRF support"
+msgstr "打开VRF支持"
+
+#: site/admin/settings.php:132
+msgid "Enable or disable VRF module"
+msgstr "打开和关闭VRF模块"
+
+#: site/admin/settings.php:138
+msgid "Resolve DNS names"
+msgstr "解析DNS名称"
+
+#: site/admin/settings.php:143
+msgid "Check reverse dns lookups for IP addresses that do not have hostname in database. (Activating this feature can significantly increase ip address pages loading time!)"
+msgstr "检查在数据库中没有主机名的IP地址的反向DNS查找。 （激活此功能可以显着增加ip地址页面加载时间！）"
+
+#: site/admin/settings.php:149
+msgid "Duplicate VLANs"
+msgstr "重复的VLAN号"
+
+#: site/admin/settings.php:154
+msgid "Allow duplicate VLAN numbers"
+msgstr "允许重复VLAN号"
+
+#: site/admin/settings.php:160
+msgid "HTML email"
+msgstr "HTML格式的邮件"
+
+#: site/admin/settings.php:165
+msgid "Send html mail instead of plain text"
+msgstr "发送HTML邮件而不是纯文本"
+
+#: site/admin/settings.php:171 site/admin/settings.php:176
+msgid "Hide donation button"
+msgstr "隐藏捐赠按钮"
+
+#: site/admin/settings.php:182
+msgid "IP visual display limit"
+msgstr "IP地址显示限制"
+
+#: site/admin/settings.php:187
+msgid "Don't show visual display"
+msgstr "不要显示可视化显示"
+
+#: site/admin/settings.php:205
+msgid "Select netmask limit for visual display of IP addresses (mask equal or bigger than - more then /22 not recommended)"
+msgstr "选择网络掩码限制显示IP地址（掩码等于或大于 - 不推荐使用大于/22的掩码）"
+
+#: site/admin/settings.php:212
+msgid "IP address print limit"
+msgstr "IP地址打印限制"
+
+#: site/admin/settings.php:217
+msgid "Show all"
+msgstr "查看所有"
+
+#: site/admin/settings.php:233
+msgid "Number of IP addresses per page"
+msgstr "每页IP地址数"
+
+#: site/admin/settings.php:239
+msgid "Subnet ordering"
+msgstr "子网排序"
+
+#: site/admin/settings.php:244
+msgid "Subnet, ascending"
+msgstr "子网，升序"
+
+#: site/admin/settings.php:245
+msgid "Subnet, descending"
+msgstr "子网，降序"
+
+#: site/admin/settings.php:246
+msgid "Description, ascending"
+msgstr "描述，升序"
+
+#: site/admin/settings.php:247
+msgid "Description, descending"
+msgstr "描述，降序"
+
+#: site/admin/settings.php:259
+msgid "How to order display of subnets"
+msgstr "如何排序子网的显示"
+
+#: site/admin/replaceFields.php:16
+msgid "Search and replace fields in IP address list"
+msgstr "搜索并替换IP地址列表中的相应字段"
+
+#: site/admin/replaceFields.php:24
+msgid "Select field to replace"
+msgstr "选择要替换的字段"
+
+#: site/admin/replaceFields.php:49
+msgid "Select search string"
+msgstr "选择搜索字符串"
+
+#: site/admin/replaceFields.php:51
+msgid "search string"
+msgstr "搜索字符串"
+
+#: site/admin/replaceFields.php:56
+msgid "Select replace string"
+msgstr "选择替换字符串"
+
+#: site/admin/replaceFields.php:58
+msgid "replace string"
+msgstr "替换字符串"
+
+#: site/admin/replaceFields.php:65
+msgid "Replace"
+msgstr "替换"
+
+#: site/admin/instructionsResult.php:20
+msgid "Failed to update instructions"
+msgstr "更新架构失败"
+
+#: site/admin/instructionsResult.php:21
+msgid "Instructions updated successfully"
+msgstr "架构更新成功"
+
+#: site/admin/ripeImportTelnet.php:48
+msgid "No subnets found"
+msgstr "没有发现子网"
+
+#: site/admin/ripeImportTelnet.php:56
+msgid "I found the following routes belonging to AS"
+msgstr "发现下属于AS的路由器"
+
+#: site/admin/ripeImportTelnet.php:69
+msgid "Remove this subnet"
+msgstr "移除子网"
+
+#: site/admin/ripeImportTelnet.php:79
+msgid "select section"
+msgstr "选择标签"
+
+#: site/admin/settingsEdit.php:23
+msgid "Cannot update settings"
+msgstr "不能更新设置"
+
+#: site/admin/settingsEdit.php:24
+msgid "Settings updated successfully"
+msgstr "设置更新成功"
+
+#: site/admin/manageSection.php:19
+msgid "Add section"
+msgstr "添加标签"
+
+#: site/admin/manageSection.php:29 site/admin/manageSubnetsplit.php:96
+msgid "Strict mode"
+msgstr "严格模式"
+
+#: site/admin/manageSection.php:30
+msgid "Group Permissions"
+msgstr "组权限"
+
+#: site/admin/manageSection.php:43
+msgid "no"
+msgstr "否"
+
+#: site/admin/manageSection.php:44
+msgid "yes"
+msgstr "是"
+
+#: site/admin/manageSection.php:64
+msgid "All groups: No access"
+msgstr "所有组：没有访问权限"
+
+#: site/admin/manageSection.php:84
+msgid "No sections configured"
+msgstr "没有标签配置"
+
+#: site/admin/manageSection.php:90
+msgid "Permissions info"
+msgstr "权限信息"
+
+#: site/admin/manageSection.php:92
+msgid "If group is not set in permissions then it will not have access to subnet"
+msgstr "如果组没有设置权限，那么它将无法访问子网"
+
+#: site/admin/manageSection.php:93
+msgid "Groups with RO permissions will not be able to create new subnets"
+msgstr "具有RO权限的组将无法创建新的子网"
+
+#: site/admin/manageSection.php:94
+msgid "Subnet permissions must be set separately. By default if group has access to section<br>it will have same permission on subnets"
+msgstr "子网权限必须单独设置。 默认情况下，如果组可以访问部分<br>，它将对子网具有相同的权限"
+
+#: site/admin/manageSection.php:95
+msgid "You can choose to delegate section permissions to all underlying subnets"
+msgstr "您可以选择将部分权限委派给所有底层子网"
+
+#: site/admin/manageSection.php:96
+msgid "If group does not have access to section it will not be able to access subnet, even if<br>subnet permissions are set"
+msgstr "如果组无法访问部分，即使设置了<br>子网权限，它将无法访问子网"
+
+#: site/admin/customSubnetFieldsOrder.php:15
+#: site/admin/customIPFieldsOrder.php:15
+#: site/admin/customVLANFieldsOrder.php:15
+#: site/admin/customUserFieldsOrder.php:15
+msgid "Fileds cannot be empty"
+msgstr "字段不能为空"
+
+#: site/admin/customSubnetFieldsOrder.php:19
+#: site/admin/customIPFieldsOrder.php:19
+#: site/admin/customVLANFieldsOrder.php:19
+#: site/admin/customUserFieldsOrder.php:19
+msgid "Reordering failed"
+msgstr "排序失败"
+
+#: site/admin/customSubnetFieldsOrder.php:20
+msgid "Fields reordered successfully!"
+msgstr "字段排序成功！"
+
+#: site/admin/showAll.php:1
+msgid "phpIPAM server settings"
+msgstr "服务器设置"
+
+#: site/admin/showAll.php:4
+msgid "Please select setting from left menu"
+msgstr "请从左侧菜单选择设置"
+
+#: site/admin/manageVLANEditResult.php:23
+msgid "VLAN already exists"
+msgstr "VLAN已经存在"
+
+#: site/admin/manageVLANEditResult.php:44
+msgid "Number is mandatory"
+msgstr "数量必须填写"
+
+#: site/admin/versionCheck.php:13
+msgid "Version check failed"
+msgstr "版本检查失败"
+
+#: site/admin/versionCheck.php:19
+msgid "Latest version"
+msgstr "最新版本"
+
+#: site/admin/versionCheck.php:19
+msgid "already installed"
+msgstr "已经安装"
+
+#: site/admin/versionCheck.php:22
+msgid "Development version"
+msgstr "开发版"
+
+#: site/admin/versionCheck.php:22
+msgid "installed! Latest production version is"
+msgstr "安装!最新稳定版本是"
+
+#: site/admin/versionCheck.php:25
+msgid "New version of phpipam available"
+msgstr "phpipam可用的新版本"
+
+#: site/admin/versionCheck.php:26
+msgid "Installed version"
+msgstr "安装版本"
+
+#: site/admin/versionCheck.php:27
+msgid "Available version"
+msgstr "可用的版本"
+
+#: site/admin/versionCheck.php:28
+msgid "You can download new version"
+msgstr "你可以下载新版本"
+
+#: site/admin/versionCheck.php:28
+msgid "here"
+msgstr ""
+
+#: site/admin/manageSectionEdit.php:42
+msgid "Section name"
+msgstr "标签名"
+
+#: site/admin/manageSectionEdit.php:53
+msgid "Section description"
+msgstr "标签描述"
+
+#: site/admin/manageSectionEdit.php:59
+msgid "Strict Mode"
+msgstr "严格模式"
+
+#: site/admin/manageSectionEdit.php:65
+msgid "No disables overlapping subnet checks. Subnets can be nested/created randomly. Anarchy."
+msgstr "没有禁止重叠子网检查。 子网可以嵌套/随机创建。 无固定模式"
+
+#: site/admin/manageSectionEdit.php:90
+msgid "Permissions"
+msgstr "权限"
+
+#: site/admin/manageSectionEdit.php:123
+msgid "Delegate"
+msgstr "授权"
+
+#: site/admin/manageSectionEdit.php:125
+msgid "Check to delegate permissions to all subnets in section"
+msgstr "检查以在标签中委托所有子网的权限"
+
+#: site/admin/manageSectionEdit.php:136
+msgid "Deleting Section will delete all belonging subnets and IP addresses"
+msgstr "删除节将删除所有属于子网和IP地址"
+
+#: site/admin/customIPFieldsOrder.php:20
+#: site/admin/customVLANFieldsOrder.php:20
+#: site/admin/customUserFieldsOrder.php:20
+msgid "Fields reordered successfully"
+msgstr "字段排序成功"
+
+#: site/admin/logClear.php:14
+msgid "Error clearing logs"
+msgstr "清除错误日志"
+
+#: site/admin/logClear.php:15
+msgid "Logs cleared successfully"
+msgstr "日志清楚成功"
+
+#: site/admin/ripeImportResult.php:66
+msgid "Failed to import subnet"
+msgstr "导入子网失败"
+
+#: site/admin/ripeImportResult.php:76
+msgid "Please fix the following errors before inserting"
+msgstr "请在插入数据前修复下列错误"
+
+#: site/admin/manageADcheck.php:43
+msgid "AD network connection ok"
+msgstr "AD网络连接成功"
+
+#: site/admin/manageVLANs.php:17
+msgid "Manage VLANs"
+msgstr "VLAN管理"
+
+#: site/admin/manageVLANs.php:21
+msgid "Add VLAN"
+msgstr "添加VLAN"
+
+#: site/admin/manageVLANs.php:26
+msgid "No VLANs configured"
+msgstr "没有VLAN配置"
+
+#: site/admin/manageAD_LDAP.php:17
+msgid "Here you can set parameters for connecting to OpenLDAP for authenticating users. phpIPAM uses"
+msgstr "在这里，您可以设置连接到OpenLDAP的参数，以验证users.phpIPAM使用"
+
+#: site/admin/manageAD_LDAP.php:20
+msgid "First create new user under user management with <u>same username as on LDAP</u> and set usertype to domain user. Also set proper groups (premissions) for this user."
+msgstr "首先在用户管理下使用与用户名相同的用户名创建新用户</ u>，并将用户类型设置为域用户。 还为此用户设置适当的组（权限）。"
+
+#: site/admin/manageAD_LDAP.php:38
+msgid "LDAP servers"
+msgstr "LDAP服务器"
+
+#: site/admin/manageAD_LDAP.php:54
+msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
+msgstr "为LDAP输入基础DN（缺省：CN=Users,CN=Company,DC=domain,DC=local）"
+
+#: site/admin/manageAD_LDAP.php:91
+msgid "Server port"
+msgstr "服务器端口号"
+
+#: site/admin/manageRequestResultMail.php:14 site/login/requestIPresult.php:35
+msgid "Sending mail for new IP request failed"
+msgstr "IP申请发送邮件失败"
+
+#: site/admin/manageRequestResultMail.php:15 site/login/requestIPresult.php:36
+msgid "Sending mail for IP request succeeded"
+msgstr "IP申请发送邮件成功"
+
+#: site/admin/instructions.php:23
+msgid "Edit user instructions"
+msgstr "编辑用户说明"
+
+#: site/admin/instructions.php:43
+msgid "preview"
+msgstr "预览"
+
+#: site/admin/instructions.php:44
+msgid "Save instructions"
+msgstr "保存说明"
+
+#: site/admin/logsExport.php:58
+msgid "id"
+msgstr "ID"
+
+#: site/admin/logsExport.php:74
+msgid "Critical"
+msgstr "严重"
+
+#: site/admin/groups.php:24
+msgid "Create group"
+msgstr "创建组"
+
+#: site/admin/groups.php:32 site/admin/groupEditPrint.php:50
+msgid "Group name"
+msgstr "组名称"
+
+#: site/admin/groups.php:33
+msgid "Group description"
+msgstr "组描述"
+
+#: site/admin/groups.php:34
+msgid "Belonging users"
+msgstr "所属用户"
+
+#: site/admin/groups.php:35
+msgid "Section permissions"
+msgstr "标签许可"
+
+#: site/admin/groups.php:41
+msgid "Administrators"
+msgstr "管理员"
+
+#: site/admin/groups.php:42
+msgid "Administrator level users"
+msgstr "管理员级别的用户"
+
+#: site/admin/groups.php:51
+msgid "All sections : Read / Write"
+msgstr "所有标签：读 / 写"
+
+#: site/admin/groups.php:93
+msgid "add users to this group"
+msgstr "向该组里添加用户"
+
+#: site/admin/groups.php:94
+msgid "remove users from this group"
+msgstr "从该组里移除用户"
+
+#: site/admin/groups.php:101
+msgid "edit group details"
+msgstr "编辑组的细节"
+
+#: site/admin/groups.php:102
+msgid "remove group"
+msgstr "移除组"
+
+#: site/admin/logResult.php:104
+msgid "Event details"
+msgstr "事件详情"
+
+#: site/admin/CSVimport.php:14
+msgid "You cannot write to this subnet"
+msgstr "不能写入此子网"
+
+#: site/admin/CSVimport.php:21
+msgid "XLS / CSV subnet import"
+msgstr "XLS、CSV子网导入"
+
+#: site/admin/CSVimport.php:42
+msgid "To successfully import data please use the following XLS/CSV structure:<br>( ip | State | Description | hostname | MAC | Owner | Device | Port | Note "
+msgstr "请使用XLS / CSV格式导入数据：<BR>（IP |状态|描述|主机名| MAC | 所有者 | 设备 | 端口 | 备注"
+
+#: site/admin/CSVimport.php:48
+msgid "Upload file"
+msgstr "上传文件"
+
+#: site/admin/CSVimport.php:52
+msgid "Select CSV file"
+msgstr "选择CSV文件"
+
+#: site/admin/CSVimport.php:54
+msgid "Clear"
+msgstr "清除"
+
+#: site/admin/CSVimport.php:55
+msgid "Upload"
+msgstr "上传"
+
+#: site/admin/CSVimport.php:81
+msgid "Import file"
+msgstr "导入文件"
+
+#: site/admin/CSVimport.php:85
+msgid "Show uploaded subnets"
+msgstr "显示上传的子网"
+
+#: site/admin/manageSubnetResizeSave.php:12 site/admin/manageSubnetsplit.php:12
+#: site/admin/manageSubnetresize.php:12 site/admin/manageSubnetSplitSave.php:12
+#: site/admin/manageSubnettruncate.php:12
+#: site/admin/manageSubnetTruncateSave.php:12
+msgid "You do not have permissions to resize subnet"
+msgstr "您没有权限来调整子网的大小"
+
+#: site/admin/manageSubnetResizeSave.php:43
+msgid "New mask must be at least /8"
+msgstr "新的子网必须小于 /8"
+
+#: site/admin/manageSubnetResizeSave.php:53
+msgid "New subnet not in master subnet"
+msgstr "新的子网不在主子网内"
+
+#: site/admin/manageSubnetResizeSave.php:66
+msgid "Nested subnet out of new subnet"
+msgstr "包含的子网超出了新子网"
+
+#: site/admin/manageSubnetResizeSave.php:84
+msgid "Error resizing subnet"
+msgstr "调整子网错误"
+
+#: site/admin/manageSubnetResizeSave.php:86
+msgid "Subnet resized successfully"
+msgstr "子网调整成功"
+
+#: site/admin/manageSubnetsplit.php:70
+msgid "Number of subnets"
+msgstr "子网数量"
+
+#: site/admin/manageSubnetsplit.php:85
+msgid "Group under current"
+msgstr "当前组"
+
+#: site/admin/manageSubnetsplit.php:107
+msgid "You can split subnet to smaller subnets by specifying new subnets. Please note:"
+msgstr "您可以通过指定新子网将子网拆分为较小的子网。请注意："
+
+#: site/admin/manageSubnetsplit.php:109
+msgid "Existing IP addresses will be assigned to new subnets"
+msgstr "现有的IP地址将被分配给新的子网"
+
+#: site/admin/manageSubnetsplit.php:110
+msgid "Group under current will create new nested subnets under current one"
+msgstr "当前组将在当前组下创建新的从属子网"
+
+#: site/admin/manageSubnetsplit.php:111
+msgid "If existing IP will fall to subnet/broadcast of new subnets split will fail, except if strict mode is disabled"
+msgstr "如果现有的IP将落入子网/广播新的子网，则分裂将失败，除非严格模式被禁用"
+
+#: site/admin/manageSubnetresize.php:41
+msgid "Current mask"
+msgstr "当前掩码"
+
+#: site/admin/manageSubnetresize.php:47
+msgid "New mask"
+msgstr "新的掩码"
+
+#: site/admin/manageSubnetresize.php:59
+msgid "You can change subnet size by specifying new mask (bigger or smaller). Please note"
+msgstr "您可以通过指定新的掩码（较大或更小）更改子网大小。请注意"
+
+#: site/admin/manageSubnetresize.php:61
+msgid "If subnet has hosts outside of resized subnet resizing will not be possible"
+msgstr "如果子网具有调整大小的子网之外的主机则能调整大小"
+
+#: site/admin/manageSubnetresize.php:62
+msgid "If strict mode is enabled check will be made to ensure it is still inside master subnet"
+msgstr "如果启用严格模式，将检查是否仍然在主子网内"
+
+#: site/admin/manageDevices.php:17
+msgid "Add device"
+msgstr "增加设备"
+
+#: site/admin/manageDevices.php:22
+msgid "No devices configured"
+msgstr "没有设备可被配置"
+
+#: site/admin/manageDevices.php:38
+msgid "Shows in which sections device will be visible for selection"
+msgstr "显示哪些部分设备将可见可供选择"
+
+#: site/admin/manageDevices.php:38 site/sections.php:145
+msgid "Sections"
+msgstr "标签"
+
+#: site/admin/manageSubnetSplitSave.php:111
+#: site/admin/manageSubnetSplitSave.php:147
+msgid "Wrong IP addresses (subnet or broadcast)"
+msgstr "错误的IP地址（网络号或者广播地址）"
+
+#: site/admin/manageSubnetSplitSave.php:157
+#: site/admin/manageSubnetSplitSave.php:162
+msgid "Subnet splitted ok"
+msgstr "子网分割成功"
+
+#: site/admin/manageSubnetSplitSave.php:161
+msgid "Failed to remove old subnet"
+msgstr "移除旧的子网失败"
+
+#: site/admin/manageSubnettruncate.php:43
+msgid "Number of IP addresses"
+msgstr "IP地址数量"
+
+#: site/admin/manageSubnettruncate.php:51
+msgid "Truncating network will remove all IP addresses, that belong to selected subnet!"
+msgstr "分割子网将会移除所选择子网的所有IP地址"
+
+#: site/admin/manageSubnetTruncateSave.php:23
+msgid "Subnet truncated succesfully"
+msgstr "子网分割成功"
+
+#: site/admin/usersEditEmailNotif.php:23
+msgid "New ipam account created"
+msgstr "新的账号建立"
+
+#: site/admin/usersEditEmailNotif.php:24
+msgid "User ipam account updated"
+msgstr "账号更新成功"
+
+#: site/admin/usersEditEmailNotif.php:25
+msgid "IPAM account details"
+msgstr "账号详细信息"
+
+#: site/admin/usersEditEmailNotif.php:28
+msgid "Sending notification mail for new account failed"
+msgstr "为新帐户发送通知邮件失败"
+
+#: site/admin/usersEditEmailNotif.php:29
+msgid "Notification mail for new account sent"
+msgstr "给新帐户发送通知邮件"
+
+#: site/admin/groupEditPrint.php:29
+msgid "group"
+msgstr "组"
+
+#: site/admin/groupEditPrint.php:36
+msgid "Add new group"
+msgstr "增加新组"
+
+#: site/admin/groupEditPrint.php:52
+msgid "Enter group name"
+msgstr "输入组名"
+
+#: site/admin/groupAddUsers.php:25
+msgid "Add users to group"
+msgstr "将用户加入组"
+
+#: site/admin/groupAddUsers.php:67
+msgid "No available users to add to group"
+msgstr "没有可用用户加入组"
+
+#: site/admin/groupAddUsersResult.php:22
+#: site/admin/groupRemoveUsersResult.php:21
+msgid "Error - no group ID"
+msgstr "错误 - 没有组ID"
+
+#: site/admin/groupAddUsersResult.php:35
+msgid "Please select user(s) to add to selected group!"
+msgstr "请选择要加入组的用户"
+
+#: site/admin/groupAddUsersResult.php:41
+msgid "Failed to add users"
+msgstr "添加用户失败"
+
+#: site/admin/groupAddUsersResult.php:50
+msgid "Users added to group"
+msgstr "用户加入组"
+
+#: site/admin/groupRemoveUsers.php:25
+msgid "Remove users from group"
+msgstr "从组内移除用户"
+
+#: site/admin/groupRemoveUsers.php:67
+msgid "No users in this group"
+msgstr "该组没有用户"
+
+#: site/admin/groupRemoveUsers.php:77
+msgid "Remove selected users"
+msgstr "移除选择的用户"
+
+#: site/admin/groupRemoveUsersResult.php:34
+msgid "Please select user(s) to remove from group!"
+msgstr "请选择移除组的用户"
+
+#: site/admin/groupRemoveUsersResult.php:40
+msgid "Failed to remove users"
+msgstr "移除用户失败"
+
+#: site/admin/groupRemoveUsersResult.php:49
+msgid "Users removed from group"
+msgstr "用户已移除出组"
+
+#: site/admin/manageSubnetShowPermissions.php:31
+msgid "Manage permissions for subnet"
+msgstr "子网权限管理"
+
+#: site/admin/manageSubnetShowPermissions.php:74
+msgid "Permissions for all nested subnets will be overridden"
+msgstr "所有从属子网的权限将被覆盖"
+
+#: site/admin/manageSubnetShowPermissions.php:83
+msgid "Set permissions"
+msgstr "设置权限"
+
+#: site/admin/manageSubnetPermissionsSubmit.php:40
+msgid "Subnet permissions set for subnet and underlying subnets"
+msgstr "子网和下层子网的子网权限设置"
+
+#: site/admin/manageSubnetPermissionsSubmit.php:41
+msgid "Subnet permissions set"
+msgstr "子网权限设置"
+
+#: site/admin/customUserFieldsEdit.php:19
+msgid "custom User field"
+msgstr "用户自定义字段"
+
+#: site/login/loginForm.php:7
+msgid "Please login"
+msgstr "请登陆"
+
+#: site/login/loginForm.php:28
+msgid "Login"
+msgstr "登陆"
+
+#: site/index.php:118
+msgid "login"
+msgstr "登陆"
+
+#: site/login/requestIPresult.php:29
+msgid "Please provide valid email address"
+msgstr "请提供有效的电子邮件地址"
+
+#: site/login/requestIPresult.php:29
+msgid "requester"
+msgstr "申请人"
+
+#: site/login/requestIPresult.php:32
+msgid "Request submitted successfully"
+msgstr "申请提交成功"
+
+#: site/login/requestIPresult.php:39
+msgid "Error submitting new IP address request"
+msgstr "提交新的IP地址申请失败"
+
+#: site/login/requestIPform.php:34
+msgid "No subnets available for requests"
+msgstr "没有可申请的子网"
+
+#: site/login/requestIPform.php:43 site/login/requestIPform.php:150
+msgid "Back to login"
+msgstr "重新登录"
+
+#: site/login/requestIPform.php:53
+msgid "Select subnet"
+msgstr "选择子网"
+
+#: site/login/requestIPform.php:84
+msgid "IP description"
+msgstr "IP描述"
+
+#: site/login/requestIPform.php:91
+msgid "device hostname"
+msgstr "设备名"
+
+#: site/login/requestIPform.php:109
+msgid "Responsible person"
+msgstr "负责人"
+
+#: site/login/requestIPform.php:120
+msgid "Your email address"
+msgstr "你的邮箱地址"
+
+#: site/login/requestIPform.php:128
+msgid "If there is anything else you want to say about request write it in this box"
+msgstr "如果还有其他任何要求请写在这个框中"
+
+#: site/login/requestIPform.php:136
+msgid "Submit request"
+msgstr "提交申请"
+
+#: site/login/loginCheck.php:26
+msgid "Please enter your username and password"
+msgstr "请输入你的用户名和密码"
+
+#: site/login/index.php:20
+msgid "You have logged out"
+msgstr "你已登出"
+
+#: site/subnets.php:29
+msgid "Sorry, must be admin"
+msgstr "对不起，必须是管理员"
+
+#: site/subnets.php:43
+msgid "You do not have access to this section"
+msgstr "你没有访问这个标签的权限"
+
+#: site/subnets.php:46
+msgid "Section does not exist"
+msgstr "标签不存在"
+
+#: site/subnets.php:55
+msgid "Expand/compress all folders"
+msgstr "展开/折叠所有文件夹"
+
+#: site/subnets.php:74
+msgid "Hide subnet list"
+msgstr "隐藏子网列表"
+
+#: site/subnets.php:76
+msgid "Add new subnet"
+msgstr "添加新的子网"
+
+#: site/subnets.php:76
+msgid "Add new subnet to"
+msgstr "添加新的子网到"
+
+#: site/userMenu.php:22
+msgid "Search string"
+msgstr "搜索字符串"
+
+#: site/userMenu.php:28
+msgid "Hi"
+msgstr "你好"
+
+#: site/userMenu.php:29
+msgid "Logged in as"
+msgstr "登陆权限"
+
+#: site/userMenu.php:32
+msgid "Logout"
+msgstr "退出"
+
+#: site/sections.php:66
+msgid "Show all subnets in section"
+msgstr "在标签内显示所有子网"
+
+#: site/sections.php:66
+msgid "section"
+msgstr "标签"
+
+#: site/sections.php:79
+msgid "Show IP addressing guide"
+msgstr "显示IP地址向导"
+
+#: site/sections.php:91
+msgid "Available IPAM tools"
+msgstr "可用的IPAM工具"
+
+#: site/sections.php:100
+msgid "VRFs"
+msgstr "VRFs"
+
+#: site/sections.php:106
+msgid "Show all tools"
+msgstr "显示所有工具"
+
+#: site/sections.php:124
+msgid "Show Administration menu"
+msgstr "显示管理员菜单"
+
+#: site/sections.php:124
+msgid "Administration"
+msgstr "管理"
+
+#: site/sections.php:139
+msgid "Users"
+msgstr "用户"
+
+#: site/sections.php:154
+msgid "Show all settings"
+msgstr "显示所有设置"
+
+#: site/admin/usersEditResult.php:97
+msgid "User edit successfull"
+msgstr "用户编辑成功"
+
+#: site/admin/usersEditResult.php:97
+msgid "User delete successfull"
+msgstr "用户删除成功"
+
+#: site/admin/usersEditResult.php:97
+msgid "User add successfull"
+msgstr "用户添加成功"
+
+#: site/admin/manageSectionEditResult.php:46
+msgid "Section edit successful"
+msgstr "标签编辑成功"
+
+#: site/admin/manageSectionEditResult.php:46
+msgid "Section add successful"
+msgstr "标签添加成功"
+
+#: site/admin/manageSectionEditResult.php:46
+msgid "Section delete successful"
+msgstr "标签删除成功"
+
+#: site/sections.php:88
+msgid "Show tools menu"
+msgstr "显示工具菜单"
+
+#: site/sections.php:144
+msgid "IP related settings"
+msgstr "IP地址的相关设置"
+
+#: site/footer.php:20
+msgid "In case of problems please contact"
+msgstr "如果有问题请联系"
+
+#: site/ipaddr/ipAddressPrintVisual.php:12
+msgid "Visual subnet display"
+msgstr "可视化子网显示"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Network"
+msgstr "网络"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Subnet netmask"
+msgstr "子网掩码"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Subnet bitmask"
+msgstr "子网位掩码"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Min host IP"
+msgstr "最小主机IP"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Max host IP"
+msgstr "最大主机IP"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Numbet of hosts"
+msgstr "主机数"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Subnet Class"
+msgstr "子网类型"
+
+#: site/tools/userMenu.php:72
+msgid "Language"
+msgstr "语言"
+
+#: site/tools/userMenu.php:83
+msgid "Select language"
+msgstr "选择语言"
+
+#: site/admin/adminMenu.php
+msgid "Languages"
+msgstr "Language"
+
+#: site/admin/languages.php
+msgid "Manage translations"
+msgstr "管理翻译"
+
+#: site/admin/languages
+msgid "Language code"
+msgstr "语言代码"
+
+#: site/admin/languages
+msgid "Language name"
+msgstr "语言名称"
+
+#: site/admin/languages
+msgid "Validity"
+msgstr "有效性"
+
+#: site/admin/languages
+msgid "Valid"
+msgstr "有效"
+
+#: site/admin/languages
+msgid "Invalid"
+msgstr "无效"
+
+#: site/admin/languages
+msgid "Create new language"
+msgstr "创建新的语言"
+
+#: site/admin/languages
+msgid "You can edit different language translations here"
+msgstr "您可以在这里编辑不同的语言"
+
+#: site/admin/languages
+msgid "Add translation file to directory functions/locale/ in phpipam"
+msgstr "将翻译后的文件放入 functions/locale/ 文件夹内"
+
+#: site/admin/languages
+msgid "Create new language with same code as translation file"
+msgstr "使用相同的代码来创建新的语言"
+
+#: site/admin/lanuguageEdit.php
+msgid "Add new language"
+msgstr "添加新的语言"
+
+#: site/admin/lanuguageEdit.php
+msgid "Edit language"
+msgstr "编辑语言"
+
+#: site/admin/lanuguageEdit.php
+msgid "Delete language"
+msgstr "删除语言"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Code must be at least 2 characters long"
+msgstr "编码最少两个字符长度"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Name must be at least 2 characters long"
+msgstr "名字最少两个字符长度"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Language edit error"
+msgstr "语言编辑失败"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Language edit success"
+msgstr "语言编辑成功"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Language add error"
+msgstr "语言添加失败"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Language add success"
+msgstr "语言添加成功"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Language delete error"
+msgstr "语言删除失败"
+
+#: site/admin/lanuguageEditResult.php
+msgid "Language delete success"
+msgstr "语言删除成功"
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet edit successfull"
+msgstr "子网编辑成功"
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet add successfull"
+msgstr "子网添加成功"
+
+#: site/admin/manageSubnetEditResult.php:169
+msgid "Subnet delete successfull"
+msgstr "子网删除成功"
+
+#: site/functons/functions-common.php
+msgid "Read / Write / Admin"
+msgstr "读 / 写 / 管理"
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP edit successful"
+msgstr "IP编辑成功"
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP add successful"
+msgstr "IP添加成功"
+
+#: site/ipaddr/modifyIpAddressCheck.php
+msgid "IP delete successful"
+msgstr "IP删除成功"
+
+#: site/admin/subnetDetailsSlaves.php
+msgid "You do not have permissions to truncate subnet"
+msgstr "您没有权限截断子网"
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to add device"
+msgstr "添加设备失败"
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to edit device"
+msgstr "编辑设备失败"
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Failed to delete device"
+msgstr "删除设备失败"
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device add successfull"
+msgstr "添加设备成功"
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device edit successfull"
+msgstr "编辑设备成功"
+
+#: site/admin/manageDevicesEditResult.php
+msgid "Device delete successfull"
+msgstr "删除设备成功"
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to add VLAN"
+msgstr "添加VLAN成功"
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to edit VLAN"
+msgstr "编辑VLAN成功"
+
+#: site/admin/manageVLANEditresult.php
+msgid "Failed to delete VLAN"
+msgstr "删除VLAN成功"
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN add successfull"
+msgstr "添加VLAN成功"
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN edit successfull"
+msgstr "编辑VLAN成功"
+
+#: site/admin/manageVLANEditresult.php
+msgid "VLAN delete successfull"
+msgstr "删除VLAN成功"
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to add VRF"
+msgstr "添加VRF失败"
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to edit VRF"
+msgstr "编辑VRF失败"
+
+#: site/admin/manageVRFEditResult.php
+msgid "Failed to delete VRF"
+msgstr "删除VRF失败"
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF add successfull"
+msgstr "添加VRF成功"
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF edit successfull"
+msgstr "编辑VRF成功"
+
+#: site/admin/manageVRFEditResult.php
+msgid "VRF delete successfull"
+msgstr "删除VRF成功"
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to add field"
+msgstr "无法添加字段"
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to edit field"
+msgstr "无法编辑字段"
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Failed to delete field"
+msgstr "无法删除字段"
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field add success"
+msgstr "字段增加成功"
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field edit success"
+msgstr "字段编辑成功"
+
+#: site/admin/customIPFieldsEditResult.php
+#: site/admin/customSubnetFieldsEditResult.php
+#: site/admin/customVLANFieldsEditResult.php
+#: site/admin/customUserFieldsEditResult.php
+msgid "Field delete success"
+msgstr "字段删除成功"
+
+#: site/tools/userMenuSelfMod.php
+msgid "To apply language change please log in again"
+msgstr "使语言更改生效请重新登录"
+
+#: site/dashboard/top10_percentage.php site/dashboard/top10_hosts.php
+msgid "No IPv4 hosts configured"
+msgstr "没有IPv4主机配置"
+
+#: site/dashboard/top10_hosts.php
+msgid "No IPv6 hosts configured"
+msgstr "没有IPv6主机配置"
+
+#: site/dashboard/top10_percentage.php
+msgid "Add some hosts to subnets to calculate usage percentage"
+msgstr "将一些主机添加到子网以计算使用百分比"
+
+#: site/dashboard/top10_hosts.php
+msgid "Add some hosts to subnets to show graph of used hosts per subnet"
+msgstr "将一些主机添加到子网以显示每个子网的已使用主机的图表"
+
+#: site/admin/usersEditPrint.php
+msgid "delete user"
+msgstr "删除用户"
+
+#: site/admin/manageSubnetEdit.php
+msgid "Check hosts status"
+msgstr "检查主机状态"
+
+#: site/admin/manageSubnetEdit.php
+msgid "Ping hosts inside subnet to check availability"
+msgstr "ping子网内主机以检查可用性"
+
+#: site/ipaddr/subnetDetials.php
+msgid "Hosts check"
+msgstr "主机检查"
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Ping exclude"
+msgstr "使用ping来删除主机"
+
+#: site/ipaddr/modifyIpAddress.php
+msgid "Exclude from ping status checks"
+msgstr "使用ping来检查主机的可用性，将无效主机自动删除"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check availability"
+msgstr "检查可用性"
+
+#: site/ipaddr/pingCheck.php
+msgid "Insufficient permissions"
+msgstr "没有足够的权限"
+
+#: site/ipaddr/pingCheck.php
+msgid "is alive"
+msgstr "可用"
+
+#: site/ipaddr/pingCheck.php
+msgid "is not alive"
+msgstr "不可用"
+
+#: site/admin/settings.php
+msgid "Ping status intervals"
+msgstr "Ping的间隔时间"
+
+#: site/admin/settings.php
+msgid "Ping status intervals for IP addresses in seconds - warning;offline (Default: 1800;3600)"
+msgstr "Ping的间隔时间，单位秒 - 警告；离线 （缺省：1800；3600）"
+
+#: site/admin/settingsEdit.php
+msgid "Invalid ping status intervals"
+msgstr "错误的ping间隔时间"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is alive"
+msgstr "设备可用"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device warning"
+msgstr "警告"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device is offline"
+msgstr "离线"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Device status unknown"
+msgstr "状态未知"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Last seen"
+msgstr "最后一次检查"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Never"
+msgstr "从不"
+
+#: site/tools/ipCalcResult.php:40
+msgid "Number of hosts"
+msgstr "主机数量"
+
+#: site/ipaddr/subnetDetails.php
+msgid "Scan subnet for new hosts"
+msgstr "为子网扫描新主机成功"
+
+#: site/ipaddr/subnetScan.php
+msgid "You do not have permissions to modify hosts in this subnet"
+msgstr "您没有权限修改此子网中的主机"
+
+#: site/ipaddr/subnetScan.php
+msgid "Scan subnet"
+msgstr "扫描子网"
+
+#: site/ipaddr/subnetScan.php
+msgid "Select Scan type"
+msgstr "选择扫描类型"
+
+#: site/ipaddr/subnetScan.php
+msgid "scan"
+msgstr "扫描"
+
+#: site/ipaddr/subnetScan.php
+msgid "You can set parameters for scan under functions/scan/config-scan.php"
+msgstr "你可以通过设置functions/scan/config-scan.php文件来设置扫描参数"
+
+#: site/ipaddr/subnetScan.php
+msgid "Discovery scans"
+msgstr "发现扫描"
+
+#: site/ipaddr/subnetScan.php
+msgid "Status update scans"
+msgstr "更新扫描状态"
+
+#: site/ipaddr/subnetScanUpdatePing.php
+msgid "Scan results"
+msgstr "扫描结果"
+
+#: site/admin/settings.php
+msgid "Default language"
+msgstr "缺省语言"
+
+#: site/admin/settings.php
+msgid "Select default language"
+msgstr "选择缺省语言"
+
+#: site/admin/manageSection.php
+msgid "Section order"
+msgstr "标签排序"
+
+#: site/admin/manageSectionOrder.php
+msgid "You can manually set order in which sections are displayed in. Default is creation date."
+msgstr "您可以手动设置显示顺序。默认是创建日期。"
+
+#: site/admin/manageSectionOrder.php
+msgid "Order"
+msgstr "排序"
+
+#: site/admin/manageSectionOrderResult.php
+msgid "Section reordering successful"
+msgstr "标签重新排序成功"
+
+#: site/functions/functions-admin.php
+msgid "Cannot reorder sections"
+msgstr "不能对标签重新排序"
+
+#: site/admin/manageSectionEdit.php
+msgid "Default"
+msgstr "缺省"
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Threading is required for scanning subnets. Please recompile PHP with pcntl extension"
+msgstr "扫描子网需要多线程。请重新编译PHP并启用pcntl扩展"
+
+#: site/ipaddr/subnetDiscoveryPing.php
+msgid "Add discovered hosts"
+msgstr "添加发现主机"
+
+#: site/ipaddr/subnetDiscoveryPingResult.php
+msgid "Scan results added to database"
+msgstr "扫描结果添加进数据库"
+
+#: site/ipaddr/subnetScan.php
+msgid "Invalid ping path"
+msgstr "无效的ping路径"
+
+#: site/admin/settings.php
+msgid "Display settings"
+msgstr "显示设置"
+
+#: site/admin/settings.php
+msgid "Enable or disable API server module"
+msgstr "启用或者禁用API服务模块"
+
+#: site/admin/api.php
+msgid "Please enable API module under server management"
+msgstr "请在服务管理里启用API模块"
+
+#: site/admin/adminMenu.php site/admin/api.php
+msgid "API management"
+msgstr "API管理"
+
+#: site/admin/api.php
+msgid "Create API key"
+msgstr "创建API密钥"
+
+#: site/admin/api.php
+msgid "App id"
+msgstr "App ID"
+
+#: site/admin/api.php
+msgid "App code"
+msgstr "App代码"
+
+#: site/admin/api.php
+msgid "App permissions"
+msgstr "App权限"
+
+#: site/admin/api.php
+msgid "edit app details"
+msgstr "编辑app细节"
+
+#: site/admin/api.php
+msgid "remove app"
+msgstr "移除app"
+
+#: site/admin/api.php
+msgid "No Apps available"
+msgstr "没有可用的app"
+
+#: site/admin/api.php
+msgid "API instructions"
+msgstr "API说明"
+
+#: site/admin/api.php
+msgid "API documentation"
+msgstr "API文档"
+
+#: site/admin/api.php
+msgid "The following PHP extensions for API server are missing"
+msgstr "API服务缺少一下PHP扩展"
+
+#: site/admin/api.php
+msgid "Please recompile PHP to include missing extensions for API server"
+msgstr "请重新编辑PHP来为API服务添加缺少的扩展模块"
+
+#: site/admin/apiEdit.php
+msgid "Add new api key"
+msgstr "添加新的api密钥"
+
+#: site/admin/apiEdit.php
+msgid "Enter application identifier"
+msgstr "输入应用识别码"
+
+#: site/admin/apiEdit.php
+msgid "Application code"
+msgstr "应用代码"
+
+#: site/admin/apiEdit.php
+msgid "Regenerate"
+msgstr "重启启用"
+
+#: site/admin/apiEdit.php
+msgid "Disabled"
+msgstr "禁用"
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application code"
+msgstr "无效的应用code"
+
+#: site/admin/apiEditResult.php
+msgid "Invalid application id"
+msgstr "无效的应用ID"
+
+#: site/admin/apiEditResult.php
+msgid "Invalid permissions"
+msgstr "无效的权限"
+
+#: site/admin/apiEditResult.php
+msgid "API add error"
+msgstr "API添加失败"
+
+#: site/admin/apiEditResult.php
+msgid "API edit error"
+msgstr "API编辑失败"
+
+#: site/admin/apiEditResult.php
+msgid "API delete error"
+msgstr "API删除失败"
+
+#: site/admin/apiEditResult.php
+msgid "API add success"
+msgstr "API添加成功"
+
+#: site/admin/apiEditResult.php
+msgid "API edit success"
+msgstr "API编辑成功"
+
+#: site/admin/apiEditResult.php
+msgid "API delete success"
+msgstr "API删除成功"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "DHCP range"
+msgstr "DHCP范围"
+
+#: site/ipaddr/ipAddressPrintTable.php
+msgid "Check availability (disabled)"
+msgstr "检查可用性（禁用）"
+
+#: site/admin/settings.php
+msgid "DHCP compress"
+msgstr "DHCP压缩"
+
+#: site/admin/settings.php
+msgid "Compress DHCP ranges in IP table"
+msgstr "在IP表中缩小DHCP范围"
+
+#: site/subnets.php
+msgid "Add new"
+msgstr "添加新的"
+
+#: site/subnets.php
+msgid "Add new folder to"
+msgstr "添加新的文件夹到"
+
+# site/subnets.php
+msgid "Available VLANs"
+msgstr "可用的VLANs"
+
+# site/subnets.php
+msgid "Available VRFs"
+msgstr "可用的VRFs"
+
+#: functions/functions-common.php
+msgid "Subnet contains more subnets"
+msgstr "子网包含更多子网"
+
+#: functions/functions-common.php
+msgid "Click on folder to open/close"
+msgstr "点击文件夹来打开/关闭"
+
+#: functions/functions-common.php
+msgid "VLAN contains subnets"
+msgstr "VLAN包含子网"
+
+#: functions/functions-common.php
+msgid "VRF contains subnets"
+msgstr "VRF包含子网"
+
+#: site/admin/manageSection.php
+msgid "Show VLANs"
+msgstr "显示VLANs"
+
+#: site/admin/manageSection.php
+msgid "Show VRFs"
+msgstr "显示VRFs"
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VLANs and belonging subnets in subnet list"
+msgstr "在子网列表内显示所属VLANs和子网"
+
+#: site/admin/manageSectionEdit.php
+msgid "Show list of VRFs and belonging subnets in subnet list"
+msgstr "在子网列表内显示所属VRFs和子网"
+
+#: site/ipaddr/vlanDetails.php
+msgid "VLAN details"
+msgstr "VLAN详细信息"
+
+#: site/ipaddr/vlanSubnets.php
+msgid "has no belonging subnets"
+msgstr "没有包含子网"
+
+#: site/ipaddr/vlanSubnets.php
+msgid "belonging subnets"
+msgstr "所属子网"
+
+#: site/ipaddr/vlanDetails.php
+msgid "VRF details"
+msgstr "VRF详细信息"
+
+#: site/ipaddr/vlanDetails.php
+msgid "Invalid VLAN id"
+msgstr "无效的VLAN ID"
+
+#: site/ipaddr/vrfDetails.php
+msgid "Invalid VRF id"
+msgstr "无效的VRF ID"
+
+#: site/admin/manageSection.php
+msgid "Parent"
+msgstr "位置"
+
+#: site/sections.php
+msgid "SubSections in"
+msgstr "子标签在"
+
+#: site/admin/manageSectionEdit.php
+msgid "Select parent section to create subsection"
+msgstr "选择父标签以创建子标签"
+
+#: site/tools/userMenu.php
+msgid "Widgets"
+msgstr "窗口小部件"
+
+msgid "Select widgets to be displayed on dashboard"
+msgstr "选择要在仪表板上显示的部件"
+
+#: site/dashboard/index.php
+msgid "No widgets selected"
+msgstr "没有部件可选择"
+
+msgid "Please select widgets to be displayed on dashboard on user menu page"
+msgstr "请在用户菜单页上选择要显示在仪表板上的部件"
+
+#: site/admin/customUserFieldsEdit.php
+msgid "Enter comment for users"
+msgstr "为用户输入评论"
+
+msgid "Required field"
+msgstr "必填项目"
+
+#: site/admin/custopmIPFields.php
+msgid "Required"
+msgstr "必填"
+
+#: site/admin/customDeviceFieldsEdit.php
+msgid "Custom device fields"
+msgstr "自定义设备字段"
+
+msgid "Add new custom device field"
+msgstr "添加新的自定义设备字段"
+
+#: site/ipaddr/sectionAllSubnets.php
+msgid "Belonging subsections"
+msgstr "属于子标签"
+
+#: site/subnets.php
+msgid "Back to"
+msgstr "后退"
+
+#: site/admin/manageAD_AD.php
+msgid "Domain account"
+msgstr "域账号"
+
+msgid "Domain account for search operations"
+msgstr "域帐户搜索操作"
+
+#: site/admin/userADsearchResult.php
+msgid "No users found"
+msgstr "没有发现用户"
+
+msgid "Possible reasons"
+msgstr "可能的原因"
+
+msgid "Username not existing"
+msgstr "用户名不存在"
+
+msgid "Invalid baseDN setting for AD"
+msgstr "无效的baseDN"
+
+msgid "AD account does not have enough privileges for search"
+msgstr "AD帐户没有足够的搜索权限"
+
+#: site/admin/usersEditResult.php
+msgid "Admin user cannot be deleted"
+msgstr "管理员用户不能被删除"
+
+#: site/admin/manageFolderSubmit.php
+msgid "Error adding new folder"
+msgstr "添加新的文件夹失败"
+
+msgid "Folder, IP addresses and all belonging subnets deleted successfully"
+msgstr "文件夹，IP地址和所属子网删除成功"
+
+msgid "Folder add successfull"
+msgstr "文件夹添加成功"
+
+msgid "Folder edit successfull"
+msgstr "文件夹编辑成功"
+
+#: site/ipaddr/folderDetails.php
+msgid "Folder does not exist"
+msgstr "文件夹不存在"
+
+msgid "You do not have permission to access this folder"
+msgstr "你没有访问该文件夹的权限"
+
+msgid "Folder details"
+msgstr "文件夹详细信息"
+
+msgid "Folder name"
+msgstr "文件夹名称"
+
+msgid "Add new nested folder"
+msgstr "添加下一级文件夹"
+
+msgid "directly nested folders"
+msgstr "直接从属文件夹"
+
+msgid "Folder has no nested folders or belonging subnets"
+msgstr "文件夹没有嵌套文件夹或归属子网"
+
+msgid "You do not have permissions to edit folder"
+msgstr "你没有权限编辑文件夹"
+
+msgid "Edit folder"
+msgstr "编辑文件夹"
+
+msgid "Manage folder permissions"
+msgstr "管理文件夹权限"
+
+msgid "Delete folder"
+msgstr "删除文件夹"
+
+#: site/admin/userADsearchForm.php
+msgid "Search user in AD"
+msgstr "在AD中搜索用户"
+
+msgid "Following users were found"
+msgstr "下列用户被发现"
+
+msgid "Select"
+msgstr "选择"
+
+#: functions/functions-common.php
+msgid "Favourite subnets"
+msgstr "收藏子网"
+
+msgid "No favourite subnets selected"
+msgstr "没有选择收藏的子网"
+
+msgid "You can add subnets to favourites by clicking star icon in subnet details"
+msgstr "您可以点击子网详细信息旁边的星型图标来将子网添加到收藏夹"
+
+msgid "Click to remove from favourites"
+msgstr "点击从收藏夹内移除"
+
+msgid "Click to add to favourites"
+msgstr "点击加入收藏夹"
+
+#: site/tools/favouriteEdit.php
+msgid "Error editing favourite"
+msgstr "编辑收藏夹失败"
+
+#: site/sections.php
+msgid "Favourite networks"
+msgstr "网络收藏夹"
+
+#: site/ipaddr/ipDetailsChangelog.php
+msgid "Changelog"
+msgstr "更新日志"
+
+msgid "No changelogs available"
+msgstr "没有可用的更新日志"
+
+msgid "No changelog entries are available for this host"
+msgstr "这个主机没有日志信息"
+
+msgid "No changelog entries are available for this subnet"
+msgstr "这个子网没有日志信息"
+
+msgid "No changelog entries are available for this section"
+msgstr "这个标签没有日志信息"
+
+#: site/ipaddr/ipDetails.php
+msgid "Availability"
+msgstr "有效的"
+
+msgid "Last edited"
+msgstr "最后编辑"
+
+msgid "Action"
+msgstr "动作"
+
+msgid "Result"
+msgstr "结果"
+
+msgid "Change"
+msgstr "改变"
+
+#: site/tools/changelogPrint.php
+msgid "Output has been limited to last 50 lines"
+msgstr "输出最后50行"
+
+msgid "Output has been limited to last 100 lines"
+msgstr "输出最后100行"
+
+msgid "Output has been limited to last 250 lines"
+msgstr "输出已被限制到最后250行"
+
+msgid "Output has been limited to last 500 lines"
+msgstr "输出已被限制到最后500行"
+
+#: site/admin/settings.php
+msgid "Enable changelog"
+msgstr "启用更新日志"
+
+#: site/tools/changelog.php
+msgid "Change logging is disabled. You can enable it under administration"
+msgstr "更改日志记录已禁用。您可以在管理下启用"
+
+#: site/admin/settings.php
+msgid "Ping path"
+msgstr "ping路径"
+
+msgid "Set path for ping executable file (default /bin/ping)"
+msgstr "设置可用的ping路径（默认 /bin/ping）"
+
+msgid "Max scan threads"
+msgstr "最大扫描线程"
+
+msgid "Set maximum nubmer of concurrent ICMP checks (default 128)"
+msgstr "设置最大的ICMP并发数（默认为128）"
+
+#: functions/functions-common.php
+msgid "Last 5 change log entries"
+msgstr "最新的5个更新日志"
+
+#: site/admin/widgets.php
+msgid "You can manage widgets here"
+msgstr "您可以在这里管理部件"
+
+msgid "Create new widget"
+msgstr "创建新的部件"
+
+msgid "No widgets created yet"
+msgstr "尚未创建部件"
+
+msgid "Create widget file in directory site/dashboard/widgets/"
+msgstr "创建的部件文件在 site/dashboard/widgets/ 目录中"
+
+#: site/admin/widgetEdit.php
+msgid "Add new widget"
+msgstr "添加新的部件"
+
+msgid "Edit widget"
+msgstr "编辑部件"
+
+msgid "Delete widget"
+msgstr "删除部件"
+
+#: site/admin/widgetEditResult.php
+msgid "Widget add error"
+msgstr "部件添加失败"
+
+msgid "Widget edit error"
+msgstr "部件编辑失败"
+
+msgid "Widget delete error"
+msgstr "部件删除失败"
+
+msgid "Widget add success"
+msgstr "部件添加成功"
+
+msgid "Widget edit success"
+msgstr "部件编辑成功"
+
+msgid "Widget delete success"
+msgstr "部件删除成功"
+
+#: site/dashboard/widgets/requests.php
+msgid "Active IP address requests"
+msgstr "激活IP地址申请"
+
+msgid "Click to save widgets order"
+msgstr "点击保存部件"
+
+#: site/dashboard/widgetPopup.php
+msgid "Add new widget to dashboard"
+msgstr "添加新的部件到仪表盘"
+
+msgid "All available widgets are already on dashboard"
+msgstr "所有可用的部件已经添加到仪表盘"
+
+#: site/tools/userMenu.php
+msgid "Save order"
+msgstr "保存排序"
+
+#: site/admin/widgets.php
+msgid "File"
+msgstr "文件"
+
+msgid "Admin only"
+msgstr "仅限管理员"
+
+msgid "Link to page"
+msgstr "链接到页面"
+
+msgid "Widget size"
+msgstr "部件大小"
+
+#: site/ipaddr/scan/subnetScanDiscoveryPing.php
+msgid "No alive host found"
+msgstr "没有发现可用的主机"
+
+msgid "Errors occured during scan"
+msgstr "扫描期间发生错误"
+
+msgid "Excluded from check"
+msgstr "从检查中排除"
+
+#: site/login/loginCheck.php
+msgid "Invalid characters in username"
+msgstr "用户名中含有非法字符"
+
+msgid "Invalid characters in password"
+msgstr "密码中含有非法字符"
+
+#: site/admin/adminMenu.php
+msgid "Mail settings"
+msgstr "邮箱设置"
+
+msgid "Mail server settings"
+msgstr "邮件服务器设置"
+
+msgid "Server type"
+msgstr "服务器类型"
+
+msgid "Localhost"
+msgstr "Localhost"
+
+msgid "SMTP"
+msgstr "SMTP"
+
+msgid "Select server type for sending mail messages"
+msgstr "选择服务类型来发送邮件"
+
+msgid "Server authentication"
+msgstr "服务器身份验证"
+
+msgid "Select yes if authentication is required"
+msgstr "如果需要身份验证，请选择“是”"
+
+msgid "Set username for SMTP authentication"
+msgstr "SMPT用户名设置"
+
+msgid "Set password for SMTP authentication"
+msgstr "SMTP密码设置"
+
+msgid "Mail sender settings"
+msgstr "邮件发送设置"
+
+msgid "Send test email"
+msgstr "发送邮件测试"
+
+msgid "Mail server type"
+msgstr "邮件服务器类型"
+
+msgid "SMTP settings"
+msgstr "SMTP设置"
+
+msgid "Server address"
+msgstr "服务器地址"
+
+msgid "Sender name"
+msgstr "发件人名称"
+
+msgid "Sender mail"
+msgstr "发送邮件"
+
+#: site/admin/settings.php
+msgid "Set administrator name"
+msgstr "设置管理员名称"
+
+msgid "Set administrator email"
+msgstr "设置管理员邮箱"
+
+#: site/admin/verifyDatabase.php
+msgid "Cannot get fix for table"
+msgstr "不能修复表"
+
+msgid "Fix table"
+msgstr "修复表"
+
+msgid "Fix field"
+msgstr "修复字段"
+
+#: site/admin/verifyDatabaseFix.php
+msgid "Wrong parameters"
+msgstr "错误参数"
+
+msgid "Table fixed"
+msgstr "表已修复"
+
+msgid "Field fixed"
+msgstr "字段已修复"
+
+#: site/sections.php
+msgid "Database errors detected"
+msgstr "发现数据库错误"
+
+#: site/tools/devicesPrint.php
+msgid "Show all hosts"
+msgstr "显示所有主机"
+
+msgid "No hosts belonging to this device"
+msgstr "没有主机属于此设备"
+
+msgid "Sort by vendor"
+msgstr "按供应商排序"
+
+#: site/admin/userEditPrint.php
+msgid "Mail State changes"
+msgstr "邮件状态改变"
+
+msgid "Select yes to receive notification change mail for State change"
+msgstr "选择是接收状态更改的通知的电子邮件"
+
+msgid "Mail Changelog"
+msgstr "邮件日志"
+
+msgid "Select yes to receive notification change mail for changelog"
+msgstr "选择是接收日志通知的电子邮件"
+
+#: site/admin/usersEditPrint.php
+msgid "Require user to change password after initial login"
+msgstr "要求用户在初次登录后更改密码"
+
+#: site/tools/changePasswordRequired.php
+msgid "Password change required"
+msgstr "需要修改密码"
+
+msgid "You are required to change your password before you can access phpipam."
+msgstr "您需要更改您的密码。"
+
+msgid "Password change"
+msgstr "修改密码"
+
+msgid "Save password"
+msgstr "保存密码"
+
+#: site/login/loginCheck.php
+msgid "You have been blocked for 5 minutes due to authentication failures"
+msgstr "由于认证失败，您已被封锁了5分钟"
+
+#: site/admin/settings.php
+msgid "Use nicer URL structure"
+msgstr "使用更好的URL结构"
+
+msgid "Please note that mod_rewrite is required with appropriate settings if pretified links are selected."
+msgstr "请注意，如果选择了预览链接，则需要使用mod_rewrite进行适当的设置。"
+
+#: site/admin/settings.php
+msgid "Hide free range"
+msgstr "隐藏空余范围"
+
+msgid "Do not display free range in IP address and subnets list"
+msgstr "不要在IP地址和子网列表中显示空余范围"
+
+msgid "Highest VLAN number"
+msgstr "最大VLAN数"
+
+msgid "Set highest VLAN number (default 4096)"
+msgstr "设置最大的VLAN数（默认4096）"
+
+#: site/admin/manageVLANresult.php
+msgid "Highest possible VLAN number is "
+msgstr "最大可能的VLAN数是"
+
+msgid "VLAN number cannot be negative"
+msgstr "VLAN编号不能为负值"
+
+msgid "Not number"
+msgstr "不是数字"
+
+#: site/admin/manageSubnetEditResult.php
+msgid "I will delete"
+msgstr "将要删除"
+
+msgid "Are you sure you want to delete above items?"
+msgstr "确实要删除以上项目吗？"
+
+msgid "Are you sure you want to delete IP address"
+msgstr "确实要删除IP地址吗？"
+
+msgid "Inactivity timeout"
+msgstr "闲置超时"
+
+msgid "Select inactive timeout for user sessions. Please note that if default php session settings in php.ini are lower they will override this"
+msgstr "为用户会话选择非活动超时。 请注意，如果php.ini中的默认php会话设置较低，它们将覆盖此"
+
+#: site/login/index.php
+msgid "You session has timed out"
+msgstr "会话超时"
+
+#: site/admin/manageSubnetEdit.php
+msgid "Discover new hosts"
+msgstr "发现新的主机"
+
+msgid "Discover new hosts in this subnet"
+msgstr "在这个子网内发现新的主机"
+
+# # 1.18.00
+# ## 1.18.006 ###
+msgid "Invalid ID"
+msgstr "无效ID"
+
+msgid "Folder contains more subnets"
+msgstr "文件夹内包含更多子网"
+
+msgid "IP address request added"
+msgstr "IP地址申请添加"
+
+msgid "IP address request edited"
+msgstr "IP地址申请编辑"
+
+msgid "IP address request deleted"
+msgstr "IP地址申请删除"
+
+msgid "Online"
+msgstr "离线"
+
+msgid "Folders"
+msgstr "文件夹"
+
+msgid "Select Master folder"
+msgstr "选择主文件夹"
+
+msgid "Root folder"
+msgstr "跟文件夹"
+
+msgid "Discover"
+msgstr "发现"
+
+msgid "Back"
+msgstr "后退"
+
+msgid "l2 domain"
+msgstr "l2域"
+
+msgid "Select l2 domain"
+msgstr "选择l2域"
+
+msgid "Add L2 Domain"
+msgstr "添加l2域"
+
+msgid "Descripton"
+msgstr "描述"
+
+msgid "Available VLANs in domain"
+msgstr "域内可用VLAN"
+
+msgid "L2 Domains"
+msgstr "L2域"
+
+msgid "No VLANS configured"
+msgstr "没有VLAN配置"
+
+msgid "Addresses"
+msgstr "地址"
+
+msgid "Folder"
+msgstr "文件夹"
+
+msgid "VLAN search results"
+msgstr "VLAN搜索结果"
+
+msgid "Edit folder details"
+msgstr "编辑文件夹详细信息"
+
+msgid "No results"
+msgstr "没有结果"
+
+msgid "Search term"
+msgstr "检索项"
+
+msgid "IP addresses"
+msgstr "IP地址"
+
+msgid "Error updating user account!"
+msgstr "更新用户账号失败！"
+
+msgid "Mail notifications"
+msgstr "邮件通知"
+
+msgid "Select yes to receive notification change mail for state change"
+msgstr "选择是接收状态更改的通知的电子邮件"
+
+msgid "Override compression"
+msgstr "重新压缩"
+
+msgid "Uncompress address ranges if compressed"
+msgstr "如果地址压缩则解压缩地址"
+
+msgid "Widgets updated"
+msgstr "部件更新"
+
+msgid "Manage"
+msgstr "管理"
+
+msgid "Password repeat"
+msgstr "重复输入密码"
+
+msgid "Invalid password"
+msgstr "无效密码"
+
+msgid "Passwords do not match"
+msgstr "密码不一致"
+
+msgid "Temporary sharing disabled"
+msgstr "临时共享被禁用"
+
+msgid "Invalid type"
+msgstr "无效类型"
+
+msgid "Invalid code"
+msgstr "无效编码"
+
+msgid "Invalid date"
+msgstr "无效日期"
+
+msgid "1 week is max validity time"
+msgstr "1周是最大有效时间"
+
+msgid "Invalid email address"
+msgstr "无效的邮件地址"
+
+msgid "Temporary share create error"
+msgstr "临时共享创建错误"
+
+msgid "Temporary share created"
+msgstr "临时共享创建"
+
+msgid "Create new temporary access"
+msgstr "创建新的临时访问"
+
+msgid "Share details"
+msgstr "共享详细信息"
+
+msgid "Set validity"
+msgstr "设置有效性"
+
+msgid "Set validity time for created share"
+msgstr "设置创建共享的有效时间"
+
+msgid "Mail invitation"
+msgstr "邮件邀请"
+
+msgid "If you wish to mail share details enter email address (separate multiple with ,)"
+msgstr "如果您希望邮寄分享详细信息，请输入电子邮件地址（用“，”分开）"
+
+msgid "List of temporary shared objects"
+msgstr "临时共享对象列表"
+
+msgid "No temporary shares available"
+msgstr "没有可用临时共享"
+
+msgid "Share type"
+msgstr "共享类型"
+
+msgid "Code"
+msgstr "代码"
+
+msgid "Valid until"
+msgstr "有效期至"
+
+msgid "Created by"
+msgstr ""
+
+msgid "Access log"
+msgstr "访问日志"
+
+msgid "Remove temporary share"
+msgstr "移除临时共享"
+
+msgid "Code does not exist"
+msgstr "代码不存在"
+
+msgid "Temporary share delete error"
+msgstr "临时共享删除失败"
+
+msgid "Temporary share deleted"
+msgstr "删除临时共享"
+
+msgid "Object"
+msgstr "目标"
+
+msgid "Subnet masks"
+msgstr "子网掩码"
+
+msgid "Bitmask"
+msgstr "位掩码（Bitmask）"
+
+msgid "Netmask"
+msgstr "掩码"
+
+msgid "Binary"
+msgstr "二进制"
+
+msgid "Hosts"
+msgstr "主机"
+
+msgid "Subnet bits"
+msgstr "子网位数（Subnet bits）"
+
+msgid "Host bits"
+msgstr "主机位数（Host bits）"
+
+msgid "Scanned subnets summary"
+msgstr "扫描子网的摘要"
+
+msgid "No subnets"
+msgstr "没有子网"
+
+msgid "No changelog entries are available"
+msgstr "没有可用的日志条目"
+
+msgid "Device details"
+msgstr "设备详细信息"
+
+msgid "Filter"
+msgstr "过滤"
+
+msgid "Filter applied:"
+msgstr "应用过滤器："
+
+msgid "Sort by type"
+msgstr "按类型排序"
+
+msgid "Sort by model"
+msgstr "按型号排序"
+
+msgid "VRF has no belonging subnets"
+msgstr "VRF不属于任何子网"
+
+msgid "Invalid request"
+msgstr "无效的申请"
+
+msgid "Database already installed"
+msgstr "数据库已经安装"
+
+msgid "Number of VLANs"
+msgstr "VLAN数量"
+
+msgid "Invalid widget"
+msgstr "无效的部件"
+
+msgid "No $type hosts configured"
+msgstr "没有配置$type主机"
+
+msgid "Loading statistics"
+msgstr "加载统计"
+
+msgid "upgrade"
+msgstr "更新"
+
+msgid "Set SMTP server address"
+msgstr "设置SMTP服务器地址"
+
+msgid "Set SMTP server port"
+msgstr "设置SMTP服务器端口"
+
+msgid "Security"
+msgstr "安全"
+
+msgid "SSL"
+msgstr "SSL"
+
+msgid "TLS"
+msgstr "TLS"
+
+msgid "No languages present created yet"
+msgstr "没有创建任何语言"
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Prettify links"
+msgstr "优化链接"
+
+msgid "API"
+msgstr "API"
+
+msgid "Temporary shares"
+msgstr "临时共享"
+
+msgid "Allow temporary subnet sharing"
+msgstr "允许临时子网共享"
+
+msgid "Enable changelog module"
+msgstr "启用日志模块"
+
+msgid "ICMP settings"
+msgstr "ICMP设置"
+
+msgid "Scan type"
+msgstr "扫描类型"
+
+msgid "Select which utility to use for status checks."
+msgstr "选择要用于状态检查的实用程序。"
+
+msgid "FPing path"
+msgstr "FPing路径"
+
+msgid "Set path for fping executable file (default /bin/fping)"
+msgstr "设置FPing的执行路径（缺省/bin/fping）"
+
+msgid "Invalid email"
+msgstr "无效的邮箱地址"
+
+msgid "Invalid value for Max VLAN number"
+msgstr "无效的最大VLAN数"
+
+msgid "Manage device types"
+msgstr "管理设备类型"
+
+msgid "Cannot delete locked tag"
+msgstr "不能删除锁标志"
+
+msgid "Invalid tag name"
+msgstr "无效的标识名"
+
+msgid "Invalid bg color"
+msgstr "无效的BG颜色"
+
+msgid "Invalid fg color"
+msgstr "无效的FG色"
+
+msgid "Tag add error"
+msgstr "标识添加错误"
+
+msgid "Tag edit error"
+msgstr "标识编辑错误"
+
+msgid "Tag delete error"
+msgstr "标识删除错误"
+
+msgid "Tag add success"
+msgstr "标识添加成功"
+
+msgid "Tag edit success"
+msgstr "标识编辑成功"
+
+msgid "Tag delete success"
+msgstr "标识删除成功"
+
+msgid "Manage Address Tags"
+msgstr "管理地址标识"
+
+msgid "Add Tag"
+msgstr "添加标识"
+
+msgid "type"
+msgstr "类型"
+
+msgid "Show Tag"
+msgstr "显示标识"
+
+msgid "BG color"
+msgstr "BG颜色"
+
+msgid "FG color"
+msgstr "FG颜色"
+
+msgid "Compress range"
+msgstr "压缩范围"
+
+msgid "Locked"
+msgstr "已锁"
+
+msgid "tag"
+msgstr "标识"
+
+msgid "Show tag"
+msgstr "显示标识"
+
+msgid "Bg color"
+msgstr "BG颜色"
+
+msgid "Fg color"
+msgstr "FG颜色"
+
+msgid "Default value settings"
+msgstr "缺省值设置"
+
+msgid "Name servers"
+msgstr "名称服务器"
+
+msgid "Enter name servers, separate multiple with ;"
+msgstr "输入名称服务器，用“；”分割"
+
+msgid "Hostmaster"
+msgstr "主机管理员"
+
+msgid "Enter default hostmaster for domain"
+msgstr "输入域的主机管理员"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "How often a secondary will poll the primary server to see if the serial number for the zone has increased."
+msgstr "辅助服务器多长时间轮询主服务器，查看该区域的序列号是否增加。"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "If a secondary was unable to contact the primary at the last refresh, wait the retry value before trying again."
+msgstr "如果次要上次刷新时无法联系主要用户，请等待重试值再次尝试。"
+
+msgid "Expire"
+msgstr "到期"
+
+msgid "How long a secondary will still treat its copy of the zone data as valid if it can't contact the primary."
+msgstr "如果无法联系主要用户，则辅助站仍然会将其副本的区域数据视为有效。"
+
+msgid "negative caching time - the time a NAME ERROR = NXDOMAIN result may be cached by any resolver"
+msgstr "绝对缓存时间 - 任何解析器可能会缓存NAME ERROR = NXDOMAIN结果的时间"
+
+msgid "Default TTL for domain records"
+msgstr "域记录的缺省TTL值"
+
+msgid "Failed to add domain"
+msgstr "添加域失败"
+
+msgid "Failed to edit domain"
+msgstr "编辑域失败"
+
+msgid "Failed to delete domain"
+msgstr "删除域失败"
+
+msgid "Domain add successfull"
+msgstr "添加域成功"
+
+msgid "Domain edit successfull"
+msgstr "域编辑失败"
+
+msgid "Domain delete successfull"
+msgstr "域删除失败"
+
+msgid "domain"
+msgstr "域"
+
+msgid "FQDN domain name"
+msgstr "FQDN域名"
+
+msgid "Master NS"
+msgstr "主NS"
+
+msgid "NULL"
+msgstr "空"
+
+msgid "Domain type"
+msgstr "域类型"
+
+msgid "Default record values (SOA, NS)"
+msgstr "缺省记录（SOA，NS）"
+
+msgid "Dont create default records (SOA, NS)"
+msgstr "不能创建缺省记录(SOA, NS)"
+
+msgid "removing Domain will also remove all referenced entries!"
+msgstr "移除域也将移除所有引用的条目！"
+
+msgid "Invalid domain"
+msgstr "无效的域"
+
+msgid "Records for domain"
+msgstr "域记录"
+
+msgid "Domains"
+msgstr "域"
+
+msgid "New record"
+msgstr "新的纪录"
+
+msgid "Domain has no records"
+msgstr "域没有记录"
+
+msgid "Prio"
+msgstr "优先级"
+
+msgid "Last update"
+msgstr "最后更新"
+
+msgid "SOA, NS records"
+msgstr "SOA, NS记录"
+
+msgid "Domain records"
+msgstr "域记录"
+
+msgid "No records"
+msgstr "无记录"
+
+msgid "Create domain"
+msgstr "创建域"
+
+msgid "No domains configured"
+msgstr "没有域配置"
+
+msgid "Domain"
+msgstr "域"
+
+msgid "Records"
+msgstr "记录"
+
+msgid "Serial number"
+msgstr "序列号"
+
+msgid "IPv4 reverse domain"
+msgstr "IPv4反向解析域"
+
+msgid "IPv6 reverse domains"
+msgstr "IPv6反向解析域"
+
+msgid "PowerDNS management"
+msgstr "权威DNS管理"
+
+msgid "Please enable powerDNS module under server management"
+msgstr "请在服务管理里启用权威DNS"
+
+msgid "Invalid name"
+msgstr "无效名称"
+
+msgid "Invalid content"
+msgstr "无效内容"
+
+msgid "Domain does not exist"
+msgstr "域不存在"
+
+msgid "DNS record"
+msgstr "DNS记录"
+
+msgid "Record type"
+msgstr "记录类型"
+
+msgid "Priority"
+msgstr "优先"
+
+msgid "Invalid subnet"
+msgstr "无效子网"
+
+msgid "Automatic PTR creation for this subnet is disabled"
+msgstr "此子网的自动PTR创建被禁用"
+
+msgid "PowerDNS not enabled"
+msgstr "权威DNS没有启用"
+
+msgid "PTR zone refresh records"
+msgstr "刷新PTR区域"
+
+msgid "Clicking on regenerate will remove all PTR records for subnet and recreate new."
+msgstr "单击重新生成将删除子网的所有PTR记录并重新创建新的。"
+
+msgid "Database settings"
+msgstr "数据库设置"
+
+msgid "Host"
+msgstr "主机"
+
+msgid "Primary nameserver is mandatory"
+msgstr "主域名服务器是必须的"
+
+msgid "Failed to add nameserver set"
+msgstr "添加域名服务器设置失败"
+
+msgid "Failed to edit nameserver set"
+msgstr "编辑域名服务器设置失败"
+
+msgid "Failed to delete nameserver set"
+msgstr "删除域名服务器设置失败"
+
+msgid "Nameserver set add successfull"
+msgstr "添加域名服务器成功"
+
+msgid "Nameserver set edit successfull"
+msgstr "编辑域名服务器成功"
+
+msgid "Nameserver set delete successfull"
+msgstr "删除域名服务器成功"
+
+msgid "Nameserver set"
+msgstr "域名服务器设置"
+
+msgid "Primary"
+msgstr "主要的"
+
+msgid "Primary nameserver"
+msgstr "主域名服务器"
+
+msgid "Secondary"
+msgstr "次要的"
+
+msgid "Secondary nameserver"
+msgstr "备域名服务器"
+
+msgid "Tertiary"
+msgstr "第三的"
+
+msgid "Tertiary nameserver"
+msgstr "第三个域名服务器"
+
+msgid "Sections to display nameserver set in"
+msgstr "显示名称服务器的标签"
+
+msgid "removing nameserver set will also remove all references from belonging subnets!"
+msgstr "删除域名服务器设置也将从所属的子网删除所有信息！"
+
+msgid "Manage Nameserver sets"
+msgstr "管理域名服务器设置"
+
+msgid "Add nameserver set"
+msgstr "添加域名服务器设置"
+
+msgid "No nameserver sets defined"
+msgstr "没有定义域名服务器设置"
+
+msgid "device type"
+msgstr "设备类型"
+
+msgid "Device type management"
+msgstr "设备类型管理"
+
+msgid "Add device type"
+msgstr "增加设备类型"
+
+msgid "subnets"
+msgstr "子网"
+
+msgid "Confirm"
+msgstr "确认"
+
+msgid "Section add failed"
+msgstr "标签添加失败"
+
+msgid "Section edit failed"
+msgstr "标签编辑失败"
+
+msgid "Section delete failed"
+msgstr "标签删除失败"
+
+msgid "Section reordering failed"
+msgstr "标签排序失败"
+
+msgid "No groups available"
+msgstr "没有可用的组"
+
+msgid "Default domain cannot be deleted"
+msgstr "缺省域不能删除"
+
+msgid "Name is required"
+msgstr "姓名是必填项"
+
+msgid "VLANs in domain"
+msgstr "域中的VLAN"
+
+msgid "domain name"
+msgstr "域名"
+
+msgid "Sections to display domain in"
+msgstr "显示域的标签"
+
+msgid "Current l2 domain"
+msgstr "当前l2域"
+
+msgid "New domain"
+msgstr "新域"
+
+msgid "No domains available!"
+msgstr "没有可用的域"
+
+msgid "Failed to move VLAN to new domain"
+msgstr "无法将VLAN移动到新域"
+
+msgid "VLAN moved to new domain successfully"
+msgstr "VLAN成功移动到新域"
+
+msgid "removing VRF will also remove VRF reference from belonging subnets!"
+msgstr "删除VRF也将从归属子网中删除VRF引用！"
+
+msgid "Show name"
+msgstr "显示名字"
+
+msgid "Failed to reject IP request"
+msgstr "拒绝IP申请失败"
+
+msgid "Failed to create IP address"
+msgstr "未能创建IP地址"
+
+msgid "IP request accepted/rejected"
+msgstr "IP请求接受/拒绝"
+
+msgid "Enter IP owner"
+msgstr "输入IP所有者"
+
+msgid "Process"
+msgstr "进度"
+
+msgid "List of all processes IP addresses requests"
+msgstr "所有进程IP地址请求的列表"
+
+msgid "Admin comment"
+msgstr "管理员评论"
+
+msgid "Accepted"
+msgstr "接受"
+
+msgid "custom field"
+msgstr "自定义字段"
+
+msgid "Size / Length"
+msgstr "大小 / 长度"
+
+msgid "Enter field length"
+msgstr "输入字段长度"
+
+msgid "Default value"
+msgstr "缺省值"
+
+msgid "Enter default value"
+msgstr "输入缺省值"
+
+msgid "Required fields must have default values"
+msgstr "必填字段必须具有默认值"
+
+msgid "Boolean values can only be 0 or 1"
+msgstr "Boolean只能是0或1"
+
+msgid "Default boolean values can only be 0 or 1"
+msgstr "默认boolean值只能是0或1"
+
+msgid "Fieldsize must be numeric"
+msgstr "Fieldsize必须是数字"
+
+msgid "Varchar size limit is 256 characters"
+msgstr "varchar的大小限制为256个字符"
+
+msgid "Integer values must be numeric"
+msgstr "Integer数值必须为数值"
+
+msgid "Filter custom field display"
+msgstr "过滤自定义字段显示"
+
+msgid "Selected fields will not be visible in table view, only in detail view"
+msgstr "所选字段在表视图中将不可见，仅在详细视图中可见"
+
+msgid "Save filter"
+msgstr "保存过滤器"
+
+msgid "Filter saved"
+msgstr "已保存"
+
+msgid "Field type"
+msgstr "字段类型"
+
+msgid "Visible"
+msgstr "可见的"
+
+msgid "Set which field to display in table"
+msgstr "设置要在表中显示的字段"
+
+msgid "Cannot get fix for table field "
+msgstr "无法找到修复的表字段"
+
+msgid "No users"
+msgstr "没有用户"
+
+msgid "App security"
+msgstr "应用安全"
+
+msgid "Not used"
+msgstr "没被使用"
+
+msgid "Per user"
+msgstr "每用户"
+
+msgid "api"
+msgstr "API"
+
+msgid "Application permissions"
+msgstr "应用权限"
+
+msgid "Application security"
+msgstr "应用安全"
+
+msgid "Invalid server ID"
+msgstr "无效服务ID"
+
+msgid "Missing credentials"
+msgstr "凭证缺失"
+
+msgid "Please enter at least 2 characters"
+msgstr "请至少输入两个字符"
+
+msgid "Invalid credentials"
+msgstr "无效凭证"
+
+msgid " Following users were found"
+msgstr "发现下列用户"
+
+msgid "Authentication method"
+msgstr "认证方法"
+
+msgid "Select authentication method for user"
+msgstr "为用户选择身份验证方法"
+
+msgid "Invalid authentication method"
+msgstr "无效的认证方法"
+
+msgid "Username must be at least 6 characters long!"
+msgstr "用户名不得少于6个字符！"
+
+msgid "No servers available"
+msgstr "没有可用的服务器"
+
+msgid "Authentication"
+msgstr "授权"
+
+msgid "Last login"
+msgstr "最后登陆"
+
+msgid "All users"
+msgstr "所有用户"
+
+msgid "Authentication settings"
+msgstr "认证设置"
+
+msgid "Last activity"
+msgstr "最后的活动"
+
+msgid "compress override"
+msgstr "压缩覆盖"
+
+msgid "Changelog notifications"
+msgstr "更新通知"
+
+msgid "Set name for authentication method"
+msgstr "设置身份验证方法的名称"
+
+msgid "Enter domain controllers, separated by ;"
+msgstr "输入域控服务器，使用“；”分割"
+
+msgid "Enter base DN for LDAP"
+msgstr "为LDAP输入基础DN"
+
+msgid "Authentication methods"
+msgstr "认证方法"
+
+msgid "Create new Radius authentication"
+msgstr "创建新的Radius认证"
+
+msgid "Create new AD authentication"
+msgstr "创建新的AD认证"
+
+msgid "Create new LDAP authentication"
+msgstr "创建新的LDAP认证"
+
+msgid "Parameters"
+msgstr "参数"
+
+msgid "Protected"
+msgstr "保护"
+
+msgid "Here you can set different authentication methods for your users."
+msgstr "你可以在这里为用户设置不同的认证方式"
+
+msgid "phpIPAM currently supports 4 methods for authentication:"
+msgstr "本系统支持4中认证方式"
+
+msgid "Local authentication"
+msgstr "本地认证"
+
+msgid "AD (Active Directory) authentication"
+msgstr "AD (Active Directory)认证"
+
+msgid "LDAP authentication"
+msgstr "LDAP认证"
+
+msgid "Radius authentication"
+msgstr "Radius认证"
+
+msgid "For AD/LDAP connection phpipam is using adLDAP, for documentation please check "
+msgstr "正在使用adLDAP来连接AD/LDAP，有关文档请检查"
+
+msgid "First create new user under user management with <u>same username as on AD</u> and set authention type to one of available methods."
+msgstr "首先在用户管理下创建新用户，使用与AD </ u>相同的用户名，并将验证类型设置为可用的方法。"
+
+msgid "Failed to edit authentication method"
+msgstr "编辑认证方式失败"
+
+msgid "Authentication method updated"
+msgstr "认证模式更新成功"
+
+msgid "Method cannot be change as it is protected"
+msgstr "不能更改受保护的方法"
+
+msgid "Invalid method type"
+msgstr "错误的方法类型"
+
+msgid "The account suffix for your domain"
+msgstr "域的帐户后缀"
+
+msgid "Domain account for search operations (optional)"
+msgstr "搜索操作的域帐户（可选）"
+
+msgid "Radius connection settings"
+msgstr "Radius连接设置"
+
+msgid "Radius server"
+msgstr "Radius服务器"
+
+msgid "Enter Radius server"
+msgstr "输入Radius服务器"
+
+msgid "Secret"
+msgstr "密钥"
+
+msgid "Enter radius secret"
+msgstr "输入radius密钥"
+
+msgid "Enter radius port (default 1812)"
+msgstr "输入Radius服务器端口号（默认1812）"
+
+msgid "Suffix"
+msgstr "后缀"
+
+msgid "Enter suffix"
+msgstr "输入后缀"
+
+msgid "Timeout"
+msgstr "超时"
+
+msgid "Set timeout in seconds"
+msgstr "设置超时时间（秒）"
+
+msgid "php Socket extension missing!"
+msgstr "php的Socker扩展缺失！"
+
+msgid "Check for  not implemented"
+msgstr "检查未执行"
+
+msgid "Filename and title are mandatory"
+msgstr "文件名和标题是必须的"
+
+msgid "Admin"
+msgstr "管理"
+
+msgid "Nameservers"
+msgstr "域名服务器"
+
+msgid "Select nameserver set"
+msgstr "选择域名服务器设置"
+
+msgid "Autocreate reverse records"
+msgstr "自动创建反向记录"
+
+msgid "Auto create reverse (PTR) records for this subnet"
+msgstr "自动为本子网创建反向（PTR）的记录"
+
+msgid "Show DNS records"
+msgstr "显示DNS记录"
+
+msgid "Show DNS records for hosts"
+msgstr "显示本主机DNS记录"
+
+msgid "No VLANs"
+msgstr "没有VLAN"
+
+msgid "Please enter subnet description to show as name!"
+msgstr "请输入子网描述用来显示名称！"
+
+msgid "Error editing subnet"
+msgstr "编辑子网失败"
+
+msgid "Cannot connect to powerDNS database"
+msgstr "不能连接权威DNS数据库"
+
+msgid "Do you wish to delete DNS zone and all records"
+msgstr "是否要删除DNS区域和所有记录"
+
+msgid "Failed to set subnet permissons"
+msgstr "未能设置子网的访问权限"
+
+msgid "Manage permissions for folder"
+msgstr "管理文件夹权限"
+
+msgid "Only subnets that have no nested subnets can be splitted"
+msgstr "只有没有从属的子网的子网可以分割"
+
+msgid "Subnet too small to be splitted"
+msgstr "子网太小不能分割"
+
+msgid "Name prefix"
+msgstr "名称前缀"
+
+msgid "Folder name must have at least 2 characters"
+msgstr "文件夹名称至少有2个字符"
+
+msgid "Error editing folder"
+msgstr "编辑文件夹失败"
+
+msgid "Failed to truncate subnet"
+msgstr "截断子网失败"
+
+msgid "folder"
+msgstr "文件夹"
+
+msgid "Enter folder name"
+msgstr "输入文件夹名"
+
+msgid "Master Folder"
+msgstr "主文件夹"
+
+msgid "Enter master folder if you want to nest it under existing folder, or select root to create root folder"
+msgstr "如果要将其嵌套在现有文件夹下，请输入主文件夹，或选择root创建根文件夹"
+
+msgid "No nameservers"
+msgstr "没有域名服务器"
+
+msgid "Error: "
+msgstr "错误："
+
+msgid "Security code"
+msgstr "安全代码"
+
+msgid "Invalid security code"
+msgstr "无效的安全码"
+
+msgid "IP requests disabled"
+msgstr "IP申请模块禁用"
+
+msgid "Invalid share key"
+msgstr "无效的共享密钥"
+
+msgid "Share expired"
+msgstr "共享过期"
+
+msgid "Share expires on "
+msgstr "分享到期"
+
+msgid "Gateway"
+msgstr "网关"
+
+msgid "IP addresses belonging to ALL nested subnets"
+msgstr "属于所有从属子网的IP地址"
+
+msgid "Address is marked as gateway"
+msgstr "地址标记为网关"
+
+msgid "Back to subnet"
+msgstr "返回子网"
+
+msgid "IP status"
+msgstr "IP状态"
+
+msgid "IP address not existing in database"
+msgstr "IP地址在数据库中不存在"
+
+msgid "Usage graph"
+msgstr "使用状态图"
+
+msgid "Subnet is empty"
+msgstr "子网不为空"
+
+msgid "status"
+msgstr "状态"
+
+msgid "Invalid scan type"
+msgstr "无效的扫描类型"
+
+msgid "Please enter ports to scan"
+msgstr "请输入扫描端口"
+
+msgid "Invalid port"
+msgstr "无效端口"
+
+msgid "No entries available"
+msgstr "没有可用的条目"
+
+msgid "IPv6 scanning is not supported"
+msgstr "IPv6扫描不被支持"
+
+msgid "Ports"
+msgstr "端口"
+
+msgid "Separate multiple ports with ;"
+msgstr "使用“；”分割多个端口"
+
+msgid "Debug"
+msgstr "调试"
+
+msgid "Discovery scans discover new hosts"
+msgstr "扫描发现新主机"
+
+msgid "Status update scans update alive status for whole subnet"
+msgstr "状态更新扫描整个子网的更新活动状态"
+
+msgid "Subnet is in section"
+msgstr "子网标签"
+
+msgid "Slave subnets"
+msgstr "从属子网"
+
+msgid "Underlying hosts"
+msgstr "底层的主机"
+
+msgid "Active subnet shares"
+msgstr "激活子网共享"
+
+msgid "Expires"
+msgstr "到期"
+
+msgid "Expired subnet shares"
+msgstr "子网共享过期"
+
+msgid "Expired"
+msgstr "失效"
+
+msgid "Temporary share subnet"
+msgstr "临时共享子网"
+
+msgid "DNS records"
+msgstr "DNS记录"
+
+msgid "Active shares"
+msgstr "激活共享"
+
+msgid "Expired shares"
+msgstr "共享过期"
+
+msgid "Temporary share address"
+msgstr "临时共享地址"
+
+msgid "Missing required fields"
+msgstr "缺少必需的字段"
+
+msgid " can not be empty!"
+msgstr "不能为空！"
+
+msgid "Invalid address range"
+msgstr "无效的地址段"
+
+msgid "Tag"
+msgstr "标签"
+
+msgid "Is gateway"
+msgstr "是否网关"
+
+msgid "PTR exclude"
+msgstr "PTR排除"
+
+msgid "Dont create PTR records"
+msgstr "不能创建PTR记录"
+
+msgid "You do not have access to this network"
+msgstr "您没有访问该网络的权限"
+
+msgid "VLAN ID"
+msgstr "VLAN ID"
+
+msgid "Mac address"
+msgstr "Mac地址"
+
+msgid "Owners"
+msgstr "所有者"
+
+msgid "Separate multiple recepients with "
+msgstr ""
+
+msgid "Ping check result"
+msgstr "ping检查结果"
+
+msgid "Repeat"
+msgstr "重复"
+
+msgid "range"
+msgstr "范围"
+
+msgid "Cannot open upload/import.csv"
+msgstr "不能打开upload/import.csv"
+
+msgid "Invalid file type"
+msgstr "无效的文件类型"
+
+msgid "Errors marked with red will be ignored from importing"
+msgstr "带红色标记的错误将被忽略导入"
+
+msgid "Invalid subnet ID"
+msgstr "无效的子网ID"
+
+msgid "Import failed"
+msgstr "导入错误"
+
+msgid "Import file and show addresses"
+msgstr "导入文件并显示地址"
+
+msgid "VLAN has no belonging subnets"
+msgstr "VLAN没有归属子网"
+
+msgid "Folder has no subfolders"
+msgstr "文件夹不含有子文件夹"
+
+msgid "Folder has no belonging subnets"
+msgstr "文件夹不属于子网"
+
+msgid "Folder has no subfolders or belonging subnets"
+msgstr "文件夹没有子文件夹或者不属于子网"
+
+msgid "Subnets menu"
+msgstr "子网菜单"
+
+msgid "No sections available!"
+msgstr "没有可用标签"
+
+msgid "Click to reorder widgets"
+msgstr "点击以重新排序窗口小部件"
+
+msgid "Database verified"
+msgstr "数据库验证"
+
+msgid "New version available"
+msgstr "有新的版本"
+
+msgid "Back to section"
+msgstr "返回标签"
+
+msgid "Available subnets in subsection"
+msgstr "子标签内可用的子网"
+
+msgid "Invalid action"
+msgstr "无效动作"
+
+msgid "Database error: "
+msgstr "数据库错误："
+
+msgid "Error: Invalid authentication method"
+msgstr "错误：无效的认证模式"
+
+msgid "Invalid username or password"
+msgstr "错误的用户名和密码"
+
+msgid "php Socket extension missing"
+msgstr "php的Socket扩展缺失"
+
+msgid "Radius login successful"
+msgstr "Radius登陆成功"
+
+msgid "No crypt types supported"
+msgstr "没有crypt类型支持"
+
+msgid "your password was updated"
+msgstr "密码已经更新"
+
+msgid "Administrative privileges required"
+msgstr "需要管理员权限"
+
+msgid "No records found to replace"
+msgstr "没有找到替换的记录"
+
+msgid "Update: "
+msgstr "更新："
+
+msgid "Invalid action!"
+msgstr "无效的动作！"
+
+msgid "Failed to update address status"
+msgstr "更新地址状态失败"
+
+msgid "Failed to delegate permissions"
+msgstr "授权失败"
+
+msgid "Invalid PDNS action"
+msgstr "无效的PDNS记录"
+
+msgid "Invalid subnet Id"
+msgstr "无效的子网ID"
+
+msgid "Failed to move IP address"
+msgstr "移动IP地址失败"
+
+msgid "Invalid Network!"
+msgstr "无效的网络！"
+
+msgid "Subnet $new_subnet overlapps with"
+msgstr "子网 $new_subnet 与"
+
+msgid "Mask must be an integer"
+msgstr "掩码必须是一个整数"
+
+msgid "New network is same as old network"
+msgstr "新的网络和旧的网络一样"
+
+msgid "Subnet it same as "
+msgstr ""
+
+msgid "Invalid number of subnets"
+msgstr "无效的子网数量"
+
+msgid "Subnet overlapping - "
+msgstr "子网重叠 - "
+
+msgid "Record created"
+msgstr "创建记录"
+
+msgid "Record updated"
+msgstr "更新记录"
+
+msgid "Record deleted"
+msgstr "删除记录"
+
+msgid "Domain id must be an integer"
+msgstr "域ID必须是整数"
+
+msgid "Invalid record name"
+msgstr "无效的记录名"
+
+msgid "Invalid record type"
+msgstr "无效的记录类型"
+
+msgid "All records for domain removed"
+msgstr "所有域的记录被移除"
+
+msgid "Select device where subnet is located"
+msgstr "选择子网所在的设备"
+
+msgid "Belonging hosts"
+msgstr "归属主机"
+
+msgid "No subnets belong to this device"
+msgstr "没有属于该设备的子网"
+
+# 1.19
+msgid "Log files are sent to syslog"
+msgstr "日志文件被发送到syslog"
+
+msgid "Syslog files are sent to syslog"
+msgstr "Syslog文件被发送到syslog"
+
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+msgstr "发现的主机数超过了php.ini定义的最大可能值 - 设置为"
+
+msgid "Please adjust your php.ini settings for value `max_input_vars`"
+msgstr "请调整您的php.ini设置值“max_input_vars”"
+
+msgid "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check "
+msgstr "正在使用adLDAP连接AD/LDAP/NetIQ，有关文档请检查"
+
+msgid "Search domain groups"
+msgstr "搜索域组"
+
+msgid "Add group"
+msgstr "添加组"
+
+msgid "No members"
+msgstr "没有成员"
+
+msgid "Group already exists"
+msgstr "组已经存在"
+
+msgid "You do not have permissions to process this request"
+msgstr "您没有处理此请求的权限"
+
+msgid "Select agent"
+msgstr "选择代理"
+
+msgid "Select which scanagent to use"
+msgstr "选择要使用的扫描代理"
+
+msgid "No agents available"
+msgstr "没有可用代理"
+
+msgid "phpipam Scan agents"
+msgstr "扫描代理"
+
+msgid "Create new agent"
+msgstr "创建新的代理"
+
+msgid "Last access"
+msgstr "最后访问"
+
+msgid "edit agent details"
+msgstr "编辑代理详细信息"
+
+msgid "Create new scan agent"
+msgstr "创建新的代理"
+
+msgid "Enter scan agent name"
+msgstr "输入扫描代理名称"
+
+msgid "Agent description'"
+msgstr "代理描述‘"
+
+msgid "Agent type"
+msgstr "代理类型"
+
+msgid "Invalid agent code"
+msgstr "无效的代理码"
+
+msgid "Invalid agent name"
+msgstr "无效的代理名称"
+
+msgid "Invalid agent Id"
+msgstr "无效的代理ID"
+
+msgid "Agent add error"
+msgstr "代理添加错误"
+
+msgid "Agent edit error"
+msgstr "代理编辑错误"
+
+msgid "Agent delete error"
+msgstr "代理删除错误"
+
+msgid "Agent add success"
+msgstr "代理添加成功"
+
+msgid "Agent edit success"
+msgstr "代理编辑成功"
+
+msgid "Agent delete success"
+msgstr "代理删除成功"
+
+msgid "Cannot remove localhost scan agent"
+msgstr "不能移除localhost的扫描代理"
+
+msgid "Scan agent references removed"
+msgstr "移除扫描代理"
+
+# ## 1.19.002 ###
+msgid "Enable Firewall Zones"
+msgstr "启用防火墙区域"
+
+msgid "Enable or disable firewall zone management module"
+msgstr "启用或者禁用防火墙管理模块"
+
+msgid "Firewall zone management"
+msgstr "防火墙区域管理"
+
+msgid "Invalid zone alias value."
+msgstr "无效的区域别名值。"
+
+msgid "Invalid interface."
+msgstr "无效的接口"
+
+msgid "Invalid zone ID."
+msgstr "无效的区域ID"
+
+msgid "Invalid mapping ID."
+msgstr "无效的映射的ID。"
+
+msgid "Cannot add mapping"
+msgstr "不能添加映射"
+
+msgid "Mapping modified successfully"
+msgstr "映射修改成功"
+
+msgid "Invalid ID. Do not manipulate the POST values!"
+msgstr "无效ID。不处理POST值！"
+
+msgid "Invalid action. Do not manipulate the POST values!"
+msgstr "无效的动作。不要处理POST值！"
+
+msgid "Add a mapping between a firewall device and a firewall zone"
+msgstr "在防火墙设备和防火墙区域之间添加映射"
+
+msgid "Zone to map"
+msgstr "区域映射"
+
+msgid "Select a firewall zone"
+msgstr "选择防火墙区域"
+
+msgid "Firewall to map"
+msgstr "防火墙映射"
+
+msgid "Select firewall"
+msgstr "选择放火墙"
+
+msgid "Interface"
+msgstr "接口"
+
+msgid "Create Firewall zone mapping"
+msgstr "创建防火墙区域映射"
+
+msgid "Firewall interface"
+msgstr "防火墙接口"
+
+msgid "Zone alias"
+msgstr "区域别名"
+
+msgid "Local zone alias"
+msgstr "本地区域别名"
+
+msgid "You are about to remove the firewall to zone mapping!"
+msgstr "您即将删除防火墙进行区域映射！"
+
+msgid "Zone"
+msgstr "区域"
+
+msgid "Alias"
+msgstr "别名"
+
+msgid "Devicename"
+msgstr "设备名"
+
+msgid "No firewall zones configured"
+msgstr "没有防火墙区域配置"
+
+msgid "Invalid zone name length parameter. A valid valid value is between 3 and 31"
+msgstr "无效的区域名称长度参数。有效的有效值介于3和31之间"
+
+msgid "Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr "无效的IPv4地址类型别名。只有字母数字字符，&quot;-&quot;, &quot;_&quot; and &quot;.&quot;是允许的。"
+
+msgid "Invalid separator. Only &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr "无效的分隔符。只有&quot;-&quot;, &quot;_&quot; and &quot;.&quot; 是被允许的"
+
+msgid "Invalid zone indicator. Only alphanumeric characters, &quot;-&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
+msgstr "区域指示器无效 只有字母数字字符，“ - ”，“_” 和“。” 被允许。"
+
+msgid "Invalid zone generator method. Do not manipulate the POST values!"
+msgstr "区域生成方法无效。 不要操纵POST值！"
+
+msgid "Invalid zone generator types [decimal]. Do not manipulate the POST values!"
+msgstr "区域生成器类型无效[decimal]。 不要操纵POST值！"
+
+msgid "Invalid zone generator types [hex]. Do not manipulate the POST values!"
+msgstr "区域生成器类型无效[hex]。 不要操纵POST值！"
+
+msgid "Invalid zone generator types [text]. Do not manipulate the POST values!"
+msgstr "区域生成器类型无效[text]。 不要操纵POST值！"
+
+msgid "Invalid padding value. Use the checkbox to set the padding value to on or off."
+msgstr "填充值无效。使用复选框将填充值设置为开或关。"
+
+msgid "Invalid device type."
+msgstr "无效的设备类型"
+
+msgid "Maximum zone name length"
+msgstr "最大区域名称长度"
+
+msgid "Choose a maximum lenght of the zone name.<br>The default length is 3, the maximum is 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr "选择区域名称的最大长度。<br>默认长度为3，最多为31个字符。<br>（请注意，防火墙可能对区域名称或地址对象的长度有限制）"
+
+msgid "IPv4 address type alias"
+msgstr "IPv4地址类型别名"
+
+msgid "IPv6 address type alias"
+msgstr "IPv6地址类型别名"
+
+msgid "Address type aliases are used to indicate a IPv4 or IPv6 address object."
+msgstr "地址类型别名用于指示IPv4或IPv6地址对象。"
+
+msgid "The separator is used to keep the name of address objects tidy."
+msgstr "分隔符用于保持地址对象的名称整齐。"
+
+msgid "Own zone indicator"
+msgstr "所有者区域指示器"
+
+msgid "The indicator is used to indicate a zone wether is owned by the company or by a customer.<br>It is the leading character of the zone name but will be separated from the zone name in the database."
+msgstr "该指示器用于指示公司或客户拥有的区域。<br>区域名称的主要角色，但将与数据库中的区域名称分隔。"
+
+msgid "Customer zone indicator"
+msgstr "自定义区域指示器"
+
+msgid "Zone generator method"
+msgstr "区域生成方法"
+
+msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgstr "使用设置“十进制”自动生成区域名称 或“十六进制”。<br>要使用您自己的唯一区域名称，您可以选择“文本”选项。"
+
+msgid "Zone name padding"
+msgstr "区域名称填充"
+
+msgid "Insert leading zeros into the zone name if you want to have a constant length of your zone name.<br>This setting will be ignored if you use the \"text\" zone name generator."
+msgstr "如果要保持区域名称的长度，请将前导零插入到区域名称。<br>如果使用“文本”区域名称生成器，则此设置将被忽略。"
+
+msgid "Zone name strict mode"
+msgstr "区域名称严格模式"
+
+msgid "Zone name strict mode is enabled by default.<br>If you like to use your own zone names with the &quot;text&quot; mode you may uncheck this to have not unique zone names."
+msgstr "默认情况下启用区域名称严格模式。<br>如果您希望使用自己的区域名称与“文本” 模式，您可以取消选中此项，不具有唯一的区域名称。"
+
+msgid "Firewall device Type"
+msgstr "防火墙设备类型"
+
+msgid "Select the appropriate device type to match firewall devices."
+msgstr "选择相应的设备类型以匹配防火墙设备。"
+
+msgid "Invalid zone name value."
+msgstr "无效的区域名称。"
+
+msgid "Invalid indicator ID."
+msgstr "无效的生成ID"
+
+msgid "Invalid section ID."
+msgstr "无效的标签ID"
+
+msgid "Invalid subnet ID."
+msgstr "无效的子网ID"
+
+msgid "Invalid L2 domain ID."
+msgstr "无效的L2域ID。"
+
+msgid "Invalid VLAN ID."
+msgstr "无效的VLAN ID"
+
+msgid "Invalid generator ID."
+msgstr "生成ID无效。"
+
+msgid "Invalid padding setting."
+msgstr "无效的填充设置。"
+
+msgid "Cannot generate zone name"
+msgstr "不能生成区域名称"
+
+msgid "Cannot validate zone name"
+msgstr "无法验证区域名称"
+
+msgid "Cannot add zone"
+msgstr "不能添加区域"
+
+msgid "Zone modified successfully"
+msgstr "区域修改成功"
+
+msgid "Add a firewall zone"
+msgstr "添加防火墙区域"
+
+msgid "Zone name (Only alphanumeric and special characters like .-_ and space.)"
+msgstr "区域名称（只有字母数字和特殊字符，如-_和空格。）"
+
+msgid "The zone name will be automatically generated"
+msgstr "区域名将自动生成"
+
+msgid "Zone name"
+msgstr "区域名称"
+
+msgid "Own zone"
+msgstr "本域"
+
+msgid "Customer zone"
+msgstr "自定义区域"
+
+msgid "Removing this firewall zone will also remove all referenced mappings!"
+msgstr "删除此防火墙区域也将删除所有引用的映射！"
+
+msgid "Create Firewall zone"
+msgstr "创建防火墙区域"
+
+msgid "Firewall zone and device mappings"
+msgstr "防火墙区域和设备映射"
+
+msgid "Base DN for your directory"
+msgstr "目录的基本DN"
+
+msgid "Users DN"
+msgstr "用户DN"
+
+msgid "Base DN for your users, if different from the base DN above"
+msgstr "如果不同于上面的基本DN，输入用户的基本DN"
+
+msgid "LDAP Security Type"
+msgstr "LDAP安全类型"
+
+msgid "SSL, TLS, or None (default: TLS)"
+msgstr "SSL, TLS, 或者None (缺省: TLS)"
+
+msgid "LDAP port"
+msgstr "LDAP端口"
+
+msgid "Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL Default: 636"
+msgstr "你的LDAP服务的侦听端口。TLS/未加密的缺省：389 <br /> SSL缺省636"
+
+msgid "Bind user"
+msgstr "绑定用户"
+
+msgid "User DN to bind as for search operations (optional). "
+msgstr "用户DN绑定搜索操作（可选）。"
+
+msgid "Bind password"
+msgstr "绑定密码"
+
+msgid "Password for the bind account (only required if bind user is set)."
+msgstr "绑定帐户的密码（仅当绑定用户设置时需要）。"
+
+msgid "Only AD group search is supported right now. Sorry."
+msgstr "对不起，现在只支持AD组搜索"
+
+msgid "Invalid baseDN setting for LDAP"
+msgstr "无效的baseDN设置"
+
+msgid "LDAP account does not have enough privileges for search"
+msgstr "LDAP帐户没有足够的搜索权限"
+
+# ## 1.19.021
+msgid "Please select fields to populate:"
+msgstr "请选择要填充的字段："
+
+msgid "fill"
+msgstr ""
+
+# ## 1.19.040
+msgid "Propagate changes"
+msgstr "传播变化"
+
+msgid "Apply changes to underlying subnets"
+msgstr "对基础子网应用更改"
+
+# ## 1.21.001
+msgid "SNMP module"
+msgstr "SNMP模块"
+
+msgid "Enable or disable multicast module"
+msgstr "启用或禁用组播模块"
+
+msgid "Multicast module"
+msgstr "组播模块"
+
+msgid "Enable or disable SNMP module for devices"
+msgstr "启用或禁用设备的SNMP模块"
+
+msgid "Threshold module"
+msgstr "阈值模块"
+
+msgid "Enable or disable threshold module"
+msgstr "启用或禁用阈值模块"
+
+msgid "Rack module"
+msgstr "机架模块"
+
+msgid "Enable or disable rack drawing module"
+msgstr "启用或禁用机架图纸模块"
+
+msgid "Rack management"
+msgstr "机架管理"
+
+msgid "Community"
+msgstr "社区"
+
+msgid "Queries"
+msgstr "查询"
+
+msgid "Test"
+msgstr "测试"
+
+msgid "Invalid version"
+msgstr "无效版本"
+
+msgid "Invalid timeout"
+msgstr "超时无效"
+
+msgid "Invalid device"
+msgstr "无效设备"
+
+msgid "Invalid method"
+msgstr "无效方法"
+
+msgid "No queries"
+msgstr "没有查询"
+
+msgid "SNMP edit failed"
+msgstr "SNMP编辑失败"
+
+msgid "SNMP edit successfull"
+msgstr "SNMP编辑成功"
+
+msgid "Invalid device IP address"
+msgstr "设备IP地址无效"
+
+msgid "rack"
+msgstr "机架"
+
+msgid "Size"
+msgstr "大小"
+
+msgid "Invalid rack size"
+msgstr "机架尺寸无效"
+
+msgid "Invalid rack identifier"
+msgstr "机架标识符无效"
+
+msgid "Rack does not exist"
+msgstr "机架不存在"
+
+msgid "Rack add successfull"
+msgstr "机架添加成功"
+
+msgid "Rack edit successfull"
+msgstr "机架编辑成功"
+
+msgid "Rack delete successfull"
+msgstr "机架删除成功"
+
+msgid "Failed to remove device from rack"
+msgstr "机架中移除设备失败"
+
+msgid "Device removed from rack"
+msgstr "设备从机架上移除"
+
+msgid "device to rack"
+msgstr "设备到机架"
+
+msgid "No devices available"
+msgstr "没有设备可用"
+
+msgid "Position"
+msgstr "位置"
+
+msgid "Start position"
+msgstr "开始位置"
+
+msgid "Rack size in U"
+msgstr "机架尺寸（单位U）"
+
+msgid "Invalid start value"
+msgstr "起始值无效"
+
+msgid "Invalid size value"
+msgstr "大小值无效"
+
+msgid "Invalid rack position (overflow)"
+msgstr "机架位置无效（溢出）"
+
+msgid "Failed to add device to rack"
+msgstr "将设备添加到机架失败"
+
+msgid "Device added to rack"
+msgstr "设备添加到机架"
+
+msgid "SNMP queries"
+msgstr "SNMP查询"
+
+msgid "Create SNMP query"
+msgstr "创建SNMP查询"
+
+msgid "Method"
+msgstr "方法"
+
+msgid "No SNMP queries available"
+msgstr "没有SNMP查询可用"
+
+msgid "edit snmp details"
+msgstr "编辑snmp详细信息"
+
+msgid "remove snmp"
+msgstr "删除snmp"
+
+msgid "No devices for SNMP route table query available"
+msgstr "没有用于SNMP路由表查询的设备可用"
+
+msgid "No new subnets found"
+msgstr "没有找到新的子网"
+
+msgid "SNMP module disbled"
+msgstr "SNMP模块已禁用"
+
+msgid "No devices for SNMP ARP query available"
+msgstr "没有用于SNMP ARP查询设备"
+
+msgid "Failed to import entry"
+msgstr "无法导入条目"
+
+# ## 1.24.001
+msgid "Manage your account"
+msgstr "管理您的帐户"
+
+msgid "Number of VRFs"
+msgstr "VRFs数量"
+
+msgid "Inactive hosts"
+msgstr "非活动主机"
+
+msgid "Inactive Hosts"
+msgstr "非活动主机"
+
+msgid "List of inactive hosts"
+msgstr "非活动主机列表"
+
+msgid "No inactive hosts found"
+msgstr "找不到不活动的主机"
+
+msgid "Threshold"
+msgstr "阈值"
+
+msgid "Usage"
+msgstr "用法"
+
+msgid "List of thresholded subnets"
+msgstr "阈值子网列表"
+
+msgid "All configured devices"
+msgstr "所有配置的设备"
+
+msgid "Scanned networks"
+msgstr "扫描网络"
+
+msgid "List of subnets to be scanned for online hosts and detect new hosts"
+msgstr "要扫描在线主机并检测新主机的子网"
+
+msgid "Table of all subnet masks with different representations"
+msgstr "具有不同表示形式的所有子网掩码的表"
+
+msgid "Racks"
+msgstr "机架"
+
+msgid "Rack information"
+msgstr "机架信息"
+
+msgid "All tools"
+msgstr "所有工具"
+
+msgid "PSTN prefixes"
+msgstr "PSTN前缀"
+
+msgid "Add prefix"
+msgstr "添加前缀"
+
+msgid "NAT translations"
+msgstr "NAT翻译"
+
+msgid "Add new object"
+msgstr "添加新对象"
+
+msgid "Destination objects"
+msgstr "目标对象"
+
+msgid "Src Port"
+msgstr "源端口"
+
+msgid "Source Port"
+msgstr "Src Port"
+
+msgid "Dst Port"
+msgstr "目标端口"
+
+msgid "Destination Port"
+msgstr "目标端口"
+
+msgid "Location"
+msgstr "位置"
+
+msgid "Locations"
+msgstr "位置"
+
+msgid "List of all locations"
+msgstr "所有位置的列表"
+
+msgid "Map"
+msgstr "地图"
+
+msgid "Objects"
+msgstr "对象"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Set Location name"
+msgstr "设置位置名称"
+
+msgid "Location address"
+msgstr "位置地址"
+
+msgid "Latitude"
+msgstr "纬度"
+
+msgid "Utilization"
+msgstr "利用率"
+
+msgid "Belonging prefixes"
+msgstr "所属前缀"
+
+msgid "Belonging Numbers"
+msgstr "所属数字"
+
+msgid "Manage user authentication methods and servers"
+msgstr "管理用户身份验证方法及服务器"
+
+msgid "Set mail parameters and mail server settings"
+msgstr "设置邮件参数和邮件服务器"
+
+msgid "PowerDNS settings"
+msgstr "PowerDNS设置"
+
+msgid "DHCP settings"
+msgstr "DHCP设置"
+
+msgid "Manage languages"
+msgstr "管理语言"
+
+msgid "Manage widget settings"
+msgstr "管理小部件设置"
+
+msgid "Tags"
+msgstr "标签"
+
+msgid "Manage tags"
+msgstr "管理标签"
+
+msgid "Set phpipam instructions for end users"
+msgstr "为最终用户设置phpipam命令"
+
+msgid "NAT settings"
+msgstr "NAT设置"
+
+msgid "Select which default address fields to display"
+msgstr "选择要显示的默认地址字段"
+
+msgid "Manage custom fields"
+msgstr "管理自定义字段"
+
+msgid "Check for latest version of phpipam"
+msgstr "检查phpipam的最新版本"
+
+msgid "Verify that database files are installed ok"
+msgstr "验证数据库文件是否安装好"
+
+msgid "Search and replace content in database"
+msgstr "搜索和替换数据库中的内容"
+
+msgid "Invalid CSRF cookie"
+msgstr "CSRF Cookie无效"
+
+msgid "Transaction lock"
+msgstr "事务锁定"
+
+msgid "Lock POST transactions"
+msgstr "锁定POST事务"
+
+msgid "Lock timeout"
+msgstr "锁定超时"
+
+msgid "Seconds to wait for transaction lock to clear"
+msgstr "秒等待事务锁清除"
+
+msgid "Transaction locking"
+msgstr "事务锁定中"
+
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false)"
+msgstr "您的服务器需要设置才能使用SSL（LDAPS）（默认值：false）"
+
+msgid "The default port for LDAP non-SSL connections"
+msgstr "LDAP连接的默认端口是非SSL连接方式"
+
+msgid "LDAP hosts, separated by a semicolon (;)"
+msgstr "输入LDAP主机，以分号（;）分隔"
+
+msgid "Base DN for your users, if different from the base DN above."
+msgstr "如果不同于上面的基本DN，输入用户的基本DN。"
+
+msgid "UID Attribute"
+msgstr "UID属性"
+
+msgid "LDAP uid naming attribute for users, e.g. \"uid\" or \"cn\""
+msgstr "用户的LDAP uid命名属性，例如 “uid”或“cn”"
+
+msgid "NetIQ connection settings"
+msgstr "NetIQ连接设置"
+
+msgid "Create new:"
+msgstr "创建新的："
+
+msgid "phpIPAM currently supports 7 methods for authentication:"
+msgstr "目前支持7种身份验证方法："
+
+msgid "Apache authentication"
+msgstr "Apache认证"
+
+msgid "NetIQ authentication"
+msgstr "NetIQ认证"
+
+msgid "SAMLv2 authentication"
+msgstr "SAMLv2认证"
+
+msgid "SAML2 connection settings"
+msgstr "SAML2连接设置"
+
+msgid "Use advanced settings"
+msgstr "使用高级设置"
+
+msgid "Use Onelogin php-saml settings.php configuration"
+msgstr "使用Onelogin php-saml settings.php配置"
+
+msgid "IDP issuer"
+msgstr "IDP发行人"
+
+msgid "Enter idp issuer"
+msgstr "输入idp发行者"
+
+msgid "IDP login url"
+msgstr "IDP登陆网址"
+
+msgid "Enter IDP login url"
+msgstr "输入IDP登录网址"
+
+msgid "IDP logout url"
+msgstr "IDP注销网址"
+
+msgid "Enter IDP logout url"
+msgstr "输入IDP注销网址"
+
+msgid "IDP cert fingerprint"
+msgstr "IDP证书指纹"
+
+msgid "Enter IDP X509 certificate fingerprint"
+msgstr "输入IDP X509证书指纹"
+
+msgid "IDP cert algorithm"
+msgstr "IDP证书算法"
+
+msgid "Enter IDP X509 certificate algorithm"
+msgstr "输入IDP X509证书算法"
+
+msgid "php XML extension missing!"
+msgstr "php XML扩展丢失！"
+
+msgid "php Date extension missing!"
+msgstr "php日期扩展名丢失！"
+
+msgid "php zlib extension missing!"
+msgstr "php zlib扩展丢失！"
+
+msgid "php openssl extension missing!"
+msgstr "php openssl扩展丢失！"
+
+msgid "php mcrypt extension missing!"
+msgstr "php mcrypt扩展丢失！"
+
+msgid "php gettext extension missing!"
+msgstr "php gettext扩展丢失！"
+
+msgid "Manage devices"
+msgstr "设备管理"
+
+msgid "Invalid rack start position"
+msgstr "机架起始位置无效"
+
+msgid "Rack"
+msgstr "机架"
+
+msgid "Show rack"
+msgstr "显示机架"
+
+msgid "SNMP"
+msgstr "SNMP"
+
+msgid "Invalid ID."
+msgstr "ID无效"
+
+msgid "Invalid netZone ID."
+msgstr "netZone ID无效。"
+
+msgid "Delete Network"
+msgstr "删除网络"
+
+msgid "Please enable the firewall zone module under server management"
+msgstr "请在服务器管理下启用防火墙区域模块"
+
+msgid "Invalid action."
+msgstr "无效的动作。"
+
+msgid "Invalid device ID."
+msgstr "设备ID无效。"
+
+msgid "Please select a device."
+msgstr "请选择一个设备。"
+
+msgid "Invalid zone name length parameter. A valid valid value is between 1 and 31."
+msgstr "区域名称长度参数无效。 有效的有效值介于1到31之间。"
+
+msgid "Invalid autogen value. Use the checkbox to set the autogen value to on or off."
+msgstr "autogen值无效。 使用复选框将autogen值设置为开或关。"
+
+msgid "Invalid pattern value."
+msgstr "模式值无效。"
+
+msgid "Please select at least one item to generate a valid name pattern."
+msgstr "请选择至少一个项目以生成有效的名称模式。"
+
+msgid "Invalid subnet name type [network]. Do not manipulate the POST values!"
+msgstr "子网名称类型[network]无效。 不要操纵POST值！"
+
+msgid "Invalid subnet name type [description]. Do not manipulate the POST values!"
+msgstr "子网名称类型[description]无效。 不要操纵POST值！"
+
+msgid "Invalid subnet name. Do not manipulate the POST values!"
+msgstr "子网名称无效。 不要操纵POST值！"
+
+msgid "Zone settings"
+msgstr "区域设置"
+
+msgid "Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 characters.<br>(keep in mind that your firewall may have a limit for the length of zone names or address objects )"
+msgstr "选择区域名称的最大长度。<br>默认值：3，最大值：31个字符。<br>（请记住，防火墙可能对区域名称或地址对象的长度有限制）"
+
+msgid "Generate zone names automaticaly with the setting &quot;decimal&quot; or &quot;hex&quot;.<br>The maximum value for a zone in hex mode would be ffffffff (4294967295 zones).<br>To use your own unique zone names you can choose the option &quot;text&quot."
+msgstr "使用设置“十进制”自动生成区域名称 或“十六进制”。<br>十六进制模式中区域的最大值将为ffffffff（4294967295区域）。<br>要使用您自己的唯一区域名称，您可以选择“文本”选项。"
+
+msgid "Firewall address object settings"
+msgstr "防火墙地址设置"
+
+msgid "Autogenerate address objects"
+msgstr "自动生成地址对象"
+
+msgid "Automaticaly generate firewall address objects as an additional information of an IP address.<br>(Works only for subnets which are bound to a firewall zone.)"
+msgstr "自动生成防火墙地址对象作为IP地址的附加信息。<br>（仅适用于绑定到防火墙区域的子网）。"
+
+msgid "Separator"
+msgstr "分隔"
+
+msgid "Available items"
+msgstr "可用项目"
+
+msgid "Name pattern"
+msgstr "名称模式"
+
+msgid "Subnet name"
+msgstr "子网名称"
+
+msgid "Firewall address objects for subnets will contain this information instead of FQDN or hostname.<br>By choosing \"description\" spaces and other characters but hiven or underline will be replaced by the separator value."
+msgstr "子网的防火墙地址对象将包含此信息，而不是FQDN或主机名。<br>通过选择“描述”空格和其他字符，但是hiven或underline将被分隔符值替换。"
+
+msgid "Invalid subnet ID. Do not manipulate the POST values!"
+msgstr "子网ID无效 不要操纵POST值！"
+
+msgid "Invalid or no zone ID. "
+msgstr "无效或无区域ID。"
+
+msgid "Invalid device ID. Do not manipulate the POST values!"
+msgstr "设备ID无效。 不要操纵POST值！"
+
+msgid "Cannot add this network to a zone."
+msgstr "无法将此网络添加到区域。"
+
+msgid "Invalid operation. Do not manipulate the POST values!"
+msgstr "操作无效 不要操纵POST值！"
+
+msgid "No zones available"
+msgstr "没有区域可用"
+
+msgid "Add this subnet to a firewall zone"
+msgstr "将此子网添加到防火墙区域"
+
+msgid "Select a Zone"
+msgstr "选择一个区域"
+
+msgid "Please choose a appropriate network to bind to the firewall zone."
+msgstr "请选择适当的网络绑定到防火墙区域。"
+
+msgid "Invalid network ID."
+msgstr "网络ID无效"
+
+msgid "Cannot add the network to the zone."
+msgstr "无法将网络添加到区域。"
+
+msgid "Network successfully added."
+msgstr "网络已成功添加。"
+
+msgid "Cannot delete the network mapping."
+msgstr "无法删除网络映射。"
+
+msgid "Successfully deleted the networt mapping."
+msgstr "成功删除网络映射。"
+
+msgid "First select a section to choose a subnet afterwards."
+msgstr "首先选择一个部分以选择一个子网。"
+
+msgid "No section selected"
+msgstr "未选择标签"
+
+msgid "Invalid zone name length."
+msgstr "区域名称长度无效。"
+
+msgid "Indicator"
+msgstr "指示符"
+
+msgid "Padding"
+msgstr "填充"
+
+msgid "Zone description"
+msgstr "区域描述"
+
+msgid "Add a network to the Zone"
+msgstr "将一个网络添加到该区域"
+
+msgid "Search domains in AD"
+msgstr "在AD中搜索域"
+
+msgid "Enter search filter"
+msgstr "输入搜索过滤器"
+
+msgid "No groups found"
+msgstr "找不到组"
+
+msgid " Following groups were found"
+msgstr "发现以下组"
+
+msgid "Members:"
+msgstr "成员："
+
+msgid "Group $_POST[action] error"
+msgstr "组$ _POST [action]错误"
+
+msgid "Group $_POST[action] success"
+msgstr "组$ _POST [action]成功"
+
+msgid "Invalid Id"
+msgstr "ID无效"
+
+msgid "All sections :"
+msgstr "所有标签："
+
+msgid "Select sections and IP address fields to export"
+msgstr "选择要导出的部分和IP地址字段"
+
+msgid "IP Address"
+msgstr "IP地址"
+
+msgid "Mandatory"
+msgstr "必须的"
+
+msgid "Include the sections in a separate sheet."
+msgstr "将标签包含在单独的工作表中。"
+
+msgid "Export each section in a separate sheet."
+msgstr "在单独的工作表中导出每个标签。"
+
+msgid "Select L2 Domain fields to export"
+msgstr "选择要导出的L2域字段"
+
+msgid "Select sections and subnets fields to export"
+msgstr "选择要导出的部分和子网字段"
+
+msgid "VLAN Domain"
+msgstr "VLAN域"
+
+msgid "Host check"
+msgstr "主机检查"
+
+msgid "Select VLAN fields to export"
+msgstr "选择要导出的VLAN字段"
+
+msgid "Include the L2 domains in a separate sheet."
+msgstr "将L2域包含在单独的工作表中。"
+
+msgid "Select VRF fields to export"
+msgstr "选择要导出的VRF字段"
+
+msgid "Select file"
+msgstr "选择文件"
+
+msgid "Browse / Drag & Drop"
+msgstr "浏览/拖放"
+
+msgid "Cancel upload"
+msgstr "取消上传"
+
+msgid "Match fields"
+msgstr "匹配字段"
+
+msgid "Pick import colum for"
+msgstr "选择导入列"
+
+msgid "No fields were automatically matched. The import file needs to have a header row!"
+msgstr "没有字段自动匹配。 导入文件需要有一个标题行！"
+
+msgid "Not all the fields were automatically matched. Please check manually."
+msgstr "并非所有字段都自动匹配。 请手动检查。"
+
+msgid "All the fields were automatically matched. Please check if correct."
+msgstr "所有字段都自动匹配。 请检查是否正确。"
+
+msgid "No header row found in uploaded file. Please check."
+msgstr "在上传的文件中找不到标题行。 请检查。"
+
+msgid "L2 Domain import"
+msgstr "L2域导入"
+
+msgid "L2 Domain import data preview"
+msgstr "L2域导入数据预览"
+
+msgid "Uploaded data"
+msgstr "上传数据"
+
+msgid "The entries marked with "
+msgstr "标记的条目"
+
+msgid "will be skipped."
+msgstr "将被跳过。"
+
+msgid "Summary: "
+msgstr "概要："
+
+msgid "Scroll down for details."
+msgstr "向下滚动以获取详细信息。"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Select L2 Domain file and fields to import"
+msgstr "选择要导入的L2域文件和字段"
+
+msgid "Template"
+msgstr "模板"
+
+msgid "The import XLS/CSV should have the following fields and a <b>header row</b> for a succesful import:"
+msgstr "导入XLS / CSV应具有以下字段和<b>标题行</ b>才能成功导入："
+
+msgid "The fields marked with * are mandatory"
+msgstr "标有*的字段是必填字段"
+
+msgid "Preview"
+msgstr "预览"
+
+msgid "Error: could not read the uploaded file type!"
+msgstr "错误：无法读取上传的文件类型！"
+
+msgid "Error: missing required field mapping for expected field"
+msgstr "错误：预期字段缺少必填字段映射"
+
+msgid "Internal error: missing import field mapping."
+msgstr "内部错误：缺少导入字段映射。"
+
+msgid "Extra column found on line "
+msgstr "发现额外的列"
+
+msgid "Root"
+msgstr "根"
+
+msgid "No change, skip"
+msgstr "没有变化，跳过"
+
+msgid "Subnets master/nested recompute data preview"
+msgstr "子网主/从属重新计算数据预览"
+
+msgid "Recomputed data"
+msgstr "重新计算数据"
+
+msgid "didn't change the master."
+msgstr "没有改变所有者。"
+
+msgid "Select Subnet sections, VRFs and IP version to recompute"
+msgstr "选择子网部分，VRF和IP版本重新计算"
+
+msgid "Sections and IP versions"
+msgstr "标签和IP版本"
+
+msgid "Please choose which section and IP version to recompute:"
+msgstr "请选择哪个标签或者IP版本重新计算："
+
+msgid "Subnets master/nested recompute save"
+msgstr "子网主/从属重新计算保存"
+
+msgid "Subnets import data preview"
+msgstr "子网导入数据预览"
+
+msgid "Select Subnets file and fields to import"
+msgstr "选择要导入的子网文件和字段"
+
+msgid "The fields marked with * are mandatory."
+msgstr "标有*的字段是必填字段。"
+
+msgid "The mask can be provided either as a separate field or with the subnet, sparated by \"/\""
+msgstr "掩码可以作为单独的字段或子网提供，用“/”分隔"
+
+msgid "Show PHPIPAM specific columns."
+msgstr "显示具体列。"
+
+msgid "Subnets import"
+msgstr "子网导入"
+
+msgid "After the import you should perform an automatic recomputation of the master/nested relations using the Recompute button after you close this window."
+msgstr "导入后，您应该在关闭此窗口后，使用重新计算按钮对主/从属关系进行自动重新计算。"
+
+msgid "DNS Hostname"
+msgstr "DNS主机名"
+
+msgid "Domain name"
+msgstr "域名"
+
+msgid "VLAN import data preview"
+msgstr "VLAN导入数据预览"
+
+msgid "Select VLAN file and fields to import"
+msgstr "选择要导入的VLAN文件和字段"
+
+msgid "Add missing VLAN domains"
+msgstr "添加缺少的VLAN域"
+
+msgid "VLAN import"
+msgstr "VLAN导入"
+
+msgid "VRF import data preview"
+msgstr "VRF导入数据预览"
+
+msgid "Select VRF file and fields to import"
+msgstr "选择要导入的VRF文件和字段"
+
+msgid "VRF import"
+msgstr "VRF导入"
+
+msgid "Import / Export"
+msgstr "导入导出"
+
+msgid "Pick a data set type, and click on an action"
+msgstr "选择数据类型，然后单击操作"
+
+msgid "Data set"
+msgstr "数据集"
+
+msgid "Pick data set"
+msgstr "选择数据集"
+
+msgid "Device types"
+msgstr "设备类型"
+
+msgid "Not all options are available currently."
+msgstr "并非所有选项都可用。"
+
+msgid "Import data entries for the selected type"
+msgstr "导入所选类型的数据条目"
+
+msgid "Export data entries for the selected type"
+msgstr "导出所选类型的数据条目"
+
+msgid "Recompute master/nested subnet relations."
+msgstr "重新计算主/从属子网关系。"
+
+msgid "Not implemented"
+msgstr "未实现"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "IP Addresses import data preview"
+msgstr "IP地址导入数据预览"
+
+msgid "Select IP Addresses file and fields to import"
+msgstr "选择要导入的IP地址文件和字段"
+
+msgid "Providing a subnet is optional, the system will add the IP to the longest match if no subnet is provided."
+msgstr "提供子网是可选的，如果没有提供子网，系统会将IP添加到最长的匹配项。"
+
+msgid "Search for matching subnet in all VRFs (ignore provided VRF)."
+msgstr "在所有VRF中搜索匹配的子网（忽略提供的VRF）。"
+
+msgid "IP Addresses import"
+msgstr "IP地址导入"
+
+msgid "Mail settings are missing. Please set admin mail and name!"
+msgstr "邮件设置丢失。 请设置管理员邮件和名称！"
+
+msgid "Failed to $_POST[action] nameserver set"
+msgstr "失败的$ _POST [action]名称服务器设置"
+
+msgid "Nameserver"
+msgstr "名称服务器"
+
+msgid "Add nameserver"
+msgstr "添加名称服务器"
+
+msgid "Default PTR domain"
+msgstr "默认PTR域"
+
+msgid "Default PTR domain if no valid hostname for PTR is provided"
+msgstr "如果没有提供PTR的有效主机名，则为默认PTR域"
+
+msgid "NXDOMAIN TTL"
+msgstr "NXDOMAIN TTL"
+
+msgid "Default TTL"
+msgstr "默认TTL"
+
+msgid "TTL"
+msgstr "TTL"
+
+msgid "NXDOMAIN ttl"
+msgstr "NXDOMAIN TTL"
+
+msgid "IPv4 reverse domains"
+msgstr "IPv4反向域"
+
+msgid "Adding domain record on slave zone is not permitted"
+msgstr "不允许在从属区域添加域记录"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Autoserial"
+msgstr "自动排序"
+
+msgid "Automatic"
+msgstr "自动"
+
+msgid "Invalid AS"
+msgstr "AS无效"
+
+msgid "agent"
+msgstr "代理"
+
+msgid "Agent code"
+msgstr "代理代码"
+
+msgid "Agent id"
+msgstr "代理ID"
+
+msgid "remove agent"
+msgstr "删除代理"
+
+msgid "phpipam-agent documentation"
+msgstr "phpipam代理文档"
+
+msgid "Show only supernets"
+msgstr "只显示大网络"
+
+msgid "Show only supernets in list of subnets in section"
+msgstr "只在标签内显示大网络列表"
+
+msgid "Permission changes will be propagated to all nested subnets"
+msgstr "权限更改将传播到所有从属子网"
+
+msgid "Invalid object Id"
+msgstr "无效的对象ID"
+
+msgid "Map object to NAT"
+msgstr "将对象映射到NAT"
+
+msgid "Existing NAT"
+msgstr "现有的NAT"
+
+msgid "New object"
+msgstr "新对象"
+
+msgid "Add new object to NAT as"
+msgstr "将新对象添加到NAT"
+
+msgid "Source"
+msgstr "源"
+
+msgid "Destination"
+msgstr "目标"
+
+msgid "Invalid NAT object identifier"
+msgstr "无效的NAT对象标识符"
+
+msgid "Name must have at least 3 characters"
+msgstr "名称必须至少有3个字符"
+
+msgid "Invalid NAT type"
+msgstr "无效的NAT类型"
+
+msgid "NAT add failed"
+msgstr "NAT添加失败"
+
+msgid "NAT edit failed"
+msgstr "NAT编辑失败"
+
+msgid "NAT delete failed"
+msgstr "NAT删除失败"
+
+msgid "NAT add successful"
+msgstr "NAT添加成功"
+
+msgid "NAT edit successful"
+msgstr "NAT编辑成功"
+
+msgid "NAT delete successful"
+msgstr "NAT删除成功"
+
+msgid "NAT"
+msgstr "NAT"
+
+msgid "Select NAT name"
+msgstr "选择NAT名称"
+
+msgid "Select NAT type"
+msgstr "选择NAT类型"
+
+msgid "Select Device"
+msgstr "选择设备"
+
+msgid "Source port"
+msgstr "源端口"
+
+msgid "Destination port"
+msgstr "目标端口"
+
+msgid "Please enter IP address"
+msgstr "请输入IP地址"
+
+msgid "Invalid NAT item ID"
+msgstr "无效的NAT ID"
+
+msgid "Invalid NAT direction"
+msgstr "无效的NAT方向"
+
+msgid "No results found"
+msgstr "未找到结果"
+
+msgid "Static NAT can only contain IP address"
+msgstr "静态NAT只能包含IP地址"
+
+msgid "Static NAT can only have 1 source address"
+msgstr "静态NAT只能有1个源地址"
+
+msgid "Static NAT can only have 1 destination address"
+msgstr "静态NAT只能有1个目的地址"
+
+msgid "Invalid object identifier"
+msgstr "无效的对象标识符"
+
+msgid "Missing object type or id"
+msgstr "缺少对象类型或ID"
+
+msgid "Add NAT item"
+msgstr "添加NAT项目"
+
+msgid "Search objects"
+msgstr "搜索对象"
+
+msgid "Enter subnet/IP"
+msgstr "输入子网/ IP"
+
+msgid "Remove NAT item"
+msgstr "删除NAT"
+
+msgid "Login text"
+msgstr "登录文字"
+
+msgid "Show text above 'username' field on login page (default empty)"
+msgstr "在登录页面上显示“username”字段上方的文本（默认为空）"
+
+msgid "Maintenance mode"
+msgstr "维护模式"
+
+msgid "Put phpipam to maintenance mode"
+msgstr "将服务置于维护模式"
+
+msgid "Enable NAT"
+msgstr "启用NAT"
+
+msgid "Enable or disable NAT module"
+msgstr "启用或禁用NAT模块"
+
+msgid "Enable PowerDNS"
+msgstr "启用PowerDNS"
+
+msgid "Enable or disable PowerDNS module"
+msgstr "启用或禁用PowerDNS模块"
+
+msgid "Enable DHCP"
+msgstr "启用DHCP"
+
+msgid "Enable or disable DHCP module"
+msgstr "启用或禁用DHCP模块"
+
+msgid "Locations module"
+msgstr "位置模块"
+
+msgid "Enable or disable locations module"
+msgstr "启用或禁用位置模块"
+
+msgid "PSTN module"
+msgstr "PSTN模块"
+
+msgid "Enable or disable PSTN module to manage phone numbers"
+msgstr "启用或禁用PSTN模块管理电话号码"
+
+msgid "Link addresses"
+msgstr "链接地址"
+
+msgid "Display linked addresses from another subnet if it matches selected field"
+msgstr "如果与所选字段匹配，则显示来自其他子网的链接地址"
+
+msgid "Syslog"
+msgstr "系统日志"
+
+msgid "Set where to send system logs"
+msgstr "设置发送系统日志的位置"
+
+msgid "Update Tags"
+msgstr "更新标签"
+
+msgid "Update address tags when address state change occurs"
+msgstr "发生地址状态更改时更新地址标签"
+
+msgid "Require uniques subnets"
+msgstr "需要唯一子网"
+
+msgid "Require unique subnets accross all sections"
+msgstr "需要跨所有部分的唯一子网"
+
+msgid "Set maximum number of concurrent ICMP checks (default 128)"
+msgstr "设置最大并发ICMP检查次数（默认为128）"
+
+msgid "Subnet Display"
+msgstr "显示子网"
+
+msgid "Subnet Network Only"
+msgstr "仅限子网网络"
+
+msgid "Select which view you would prefer on the menu"
+msgstr "选择您希望在菜单视图"
+
+msgid "Upload logo"
+msgstr "上传logo"
+
+msgid "Upload custom logo"
+msgstr "上传自定义logo"
+
+msgid "Missing snmp support in php"
+msgstr "在php中缺少snmp支持"
+
+msgid "Missing gd support in php"
+msgstr "在php中缺少gd支持"
+
+msgid "Current"
+msgstr "当前"
+
+msgid "New"
+msgstr "新的"
+
+msgid "Select image"
+msgstr "选择图像"
+
+msgid "Maintaneance mode removed"
+msgstr "删除维护模式"
+
+msgid "Folder cannot nest behind itself!"
+msgstr "文件夹本身不能嵌套！"
+
+msgid "Folder $_POST[action] successfull"
+msgstr "文件夹$ _POST [action]成功"
+
+msgid "Invalid location value"
+msgstr "位置值无效"
+
+msgid "Invalid threshold value"
+msgstr "无效的阈值"
+
+msgid "Invalid subnetId"
+msgstr "无效的子网ID"
+
+msgid "Search for subnets through SNMP"
+msgstr "通过SNMP搜索子网"
+
+msgid "Enter subnet in CIDR format"
+msgstr "以CIDR格式输入子网"
+
+msgid "Mark as full"
+msgstr "标记为满"
+
+msgid "Mark subnet as utilized"
+msgstr "标记子网被使用"
+
+msgid "Set subnet alert threshold"
+msgstr "设置子网警报阈值"
+
+msgid "Failed to set subnet permissons for subnet"
+msgstr "无法设置子网的子网权限"
+
+msgid "No result"
+msgstr "没有结果"
+
+msgid "Subnet splitted successfully"
+msgstr "子网分裂成功"
+
+msgid "Copy custom field values"
+msgstr "复制自定义字段值"
+
+msgid "Subnet linked"
+msgstr "子网连接"
+
+msgid "Link IPv4 subnet to IPv6 subnet"
+msgstr "将IPv4子网链接到IPv6子网"
+
+msgid "Select IPv6 subnet to link to current subnet"
+msgstr "选择IPv6子网链接到当前子网"
+
+msgid "Not linked"
+msgstr "没有链接"
+
+msgid "Link"
+msgstr "链接"
+
+msgid "Update address tag to online/offline if state change occurs. Combine with settings > Update Tags"
+msgstr "如果发生状态更改，请将地址标记更新为联机/离线。 设置>更新标签"
+
+msgid "Cannot send mail, mail settings are missing. Please set them under administration > Mail Settings !"
+msgstr "无法发送邮件，邮件设置丢失。 请在“管理>邮件”里设置！"
+
+msgid "Username must be at least 1 character long!"
+msgstr "用户名必须至少为1个字符长！"
+
+msgid "VLANs / VRFs"
+msgstr "VLANs / VRFs"
+
+msgid "Select to allow user to manage VLANs and VRFs"
+msgstr "选择允许用户管理VLAN和VRF"
+
+msgid "PowerDNS"
+msgstr "PowerDNS"
+
+msgid "Select to allow user to create DNS records"
+msgstr "选择允许用户创建DNS记录"
+
+msgid "PSTN"
+msgstr "PSTN"
+
+msgid "Select to allow user to manage PSTN numbers"
+msgstr "选择允许用户管理PSTN号码"
+
+msgid "Manage VLANs / VRFs"
+msgstr "管理VLAN / VRF"
+
+msgid "Menu type"
+msgstr "菜单类型"
+
+msgid "Invalid subnets"
+msgstr "无效的子网"
+
+msgid "No invalid subnets detected"
+msgstr "没有检测到无效的子网"
+
+msgid "Invalid addresses"
+msgstr "地址无效"
+
+msgid "No invalid addresses detected"
+msgstr "未检测到无效地址"
+
+msgid "Not allowed to change VLANs"
+msgstr "不允许更改VLAN"
+
+msgid "VLAN already exists in another domain!"
+msgstr "VLAN已经存在于另一个域中！"
+
+msgid "Unique VLAN"
+msgstr "唯一VLAN"
+
+msgid "Require unique vlan accross domains"
+msgstr "需要跨域的唯一vlan"
+
+msgid "Admin privileges required"
+msgstr "需要管理员权限"
+
+msgid "Invalid domain Id"
+msgstr "无效域名ID"
+
+msgid "No devices for SNMP VLAN query available"
+msgstr "没有用于SNMP VLAN查询的设备"
+
+msgid "No VLANS found"
+msgstr "没有找到VLAN"
+
+msgid "Add discovered VLANS"
+msgstr "添加发现的VLAN"
+
+msgid "Select devices"
+msgstr "选择设备"
+
+msgid "Select devices to query VLAN table from"
+msgstr "选择设备查询VLAN表"
+
+msgid "Scan"
+msgstr "扫描"
+
+msgid "Not allowed to change VRFs"
+msgstr "不允许更改VRF"
+
+msgid "Failed to $_POST[action] VRF"
+msgstr "VRF $ _POST [action] 失败"
+
+msgid "VRF $_POST[action] successfull"
+msgstr "VRF $ _POST [action]成功"
+
+msgid "Scan for VRFs"
+msgstr "扫描VRF"
+
+msgid "No devices for SNMP VRF query available"
+msgstr "没有用于SNMP VRF查询的设备可用"
+
+msgid "No vrfs found"
+msgstr "找不到vrfs"
+
+msgid "Add discovered vrfs"
+msgstr "添加发现的vrfs"
+
+msgid "Select devices to query VRF table from"
+msgstr "选择设备查询VRF表"
+
+msgid "Widget $_POST[action] error"
+msgstr "小部件 $ _POST [action]错误"
+
+msgid "Widget $_POST[action] success"
+msgstr "小部件$ _POST [action]成功"
+
+msgid "DHCP management"
+msgstr "DHCP管理"
+
+msgid "Please enable DHCP module under server management"
+msgstr "请在服务管理下启用DHCP模块"
+
+msgid "Invalid Location object identifier"
+msgstr "位置对象标识符无效"
+
+msgid "Invalid Latitude"
+msgstr "纬度无效"
+
+msgid "Invalid Longitude"
+msgstr "经度无效"
+
+msgid "Failed to update location lat/lng from google"
+msgstr "无法从google更新位置经度/纬度"
+
+msgid "Location add failed"
+msgstr "位置添加失败"
+
+msgid "Location edit failed"
+msgstr "位置编辑失败"
+
+msgid "Location delete failed"
+msgstr "位置删除失败"
+
+msgid "Location add successful"
+msgstr "位置添加成功"
+
+msgid "Location edit successful"
+msgstr "位置编辑成功"
+
+msgid "Location delete successful"
+msgstr "位置删除成功"
+
+msgid "or"
+msgstr "或者"
+
+msgid "latitude"
+msgstr "纬度"
+
+msgid "Query"
+msgstr "查询"
+
+msgid "OID"
+msgstr "OID"
+
+msgid "No devices"
+msgstr "没有设备"
+
+msgid "No groups"
+msgstr "没有组"
+
+msgid "You are not member of any group. Please contact system administrator!"
+msgstr "您不是任何组的成员。 请联系系统管理员！"
+
+msgid "Changelog files are sent to syslog"
+msgstr "Changelog文件被发送到syslog"
+
+msgid "Full"
+msgstr "满"
+
+msgid "Threshold module disabled"
+msgstr "阈值模块已禁用"
+
+msgid "You can enable threshold module under settings"
+msgstr "您可以在设置下启用阈值模块"
+
+msgid "No subnet is selected for threshold check"
+msgstr "没有选择子网进行阈值检查"
+
+msgid "You can set threshold for subnets under subnet settings"
+msgstr "您可以在子网设置下设置子网的阈值"
+
+msgid "No subnet selected for threshold check available"
+msgstr "没有选择用于阈值检查的子网"
+
+msgid "No subnet with threshold check available"
+msgstr "没有可用阈值检查的子网"
+
+msgid "Current usage"
+msgstr "当前用量"
+
+msgid "Folder is empty"
+msgstr "文件夹为空"
+
+msgid "Only master subnets are shown"
+msgstr "只显示主子网"
+
+msgid "Switched to"
+msgstr "切换到"
+
+msgid "Switch back user"
+msgstr "切换回用户"
+
+msgid "Available sections"
+msgstr "可用标签"
+
+msgid "No sections available"
+msgstr "没有可用的标签"
+
+msgid "All sections"
+msgstr "所有标签"
+
+msgid "Show all sections"
+msgstr "显示所有标签"
+
+msgid "All items"
+msgstr "所有项目"
+
+msgid "Cannot add address as subnet is market as used"
+msgstr "无法添加地址，因为子网被标识为使用状态"
+
+msgid "Remove DNS records"
+msgstr "删除DNS记录"
+
+msgid "Remove all associated DNS records:"
+msgstr "删除所有关联的DNS记录："
+
+msgid "Addresses linked with"
+msgstr "地址与"
+
+msgid "No linked addresses found"
+msgstr "找不到链接地址"
+
+msgid "Address linking disabled"
+msgstr "地址链接被禁用"
+
+msgid "Location not set !"
+msgstr "位置没有设置！"
+
+msgid "Duplicated addresses"
+msgstr "重复地址"
+
+msgid "Mac"
+msgstr "Mac"
+
+msgid "No duplicated addresses found"
+msgstr "找不到重复地址"
+
+msgid "Address NAT translations"
+msgstr "地址转换"
+
+msgid "Map to existing NAT"
+msgstr "映射到现有的NAT"
+
+msgid "No NAT objects available"
+msgstr "没有NAT对象可用"
+
+msgid "No NAT translations for this address"
+msgstr "没有这个地址的NAT转换"
+
+msgid "Address permissions"
+msgstr "地址权限"
+
+msgid "General"
+msgstr "一般"
+
+msgid "Firewall address object"
+msgstr "防火墙地址对象"
+
+msgid "Avalibility"
+msgstr "可用性"
+
+msgid "DNS info"
+msgstr "DNS信息"
+
+msgid "Regenerate firewall addres object."
+msgstr "重新生成防火墙地址对象。"
+
+msgid "Rack details"
+msgstr "机架细节"
+
+msgid "FW Object"
+msgstr "防火墙对象"
+
+msgid "Filename"
+msgstr "文件名"
+
+msgid "fw object"
+msgstr "防火墙对象"
+
+msgid "Invalid IP address"
+msgstr "IP地址无效"
+
+msgid "IP addresses in $location "
+msgstr "在 $location 的IP位址"
+
+msgid "Remove all"
+msgstr "移除所有"
+
+msgid "Sort by firewall address object"
+msgstr "按防火墙地址对象排序"
+
+msgid "Sort by MAC"
+msgstr "按MAC排序"
+
+msgid "Address was never online"
+msgstr "地址从不在线"
+
+msgid "Address is alive"
+msgstr "地址在线"
+
+msgid "Address warning"
+msgstr "地址警告"
+
+msgid "Address is offline"
+msgstr "地址离线"
+
+msgid "Address status unknown"
+msgstr "地址状态未知"
+
+msgid "Duplicate MAC"
+msgstr "重复MAC"
+
+msgid "Gegenerate or regenerate a firewall addres object of this ip address."
+msgstr "生成或重新生成此IP地址的防火墙地址对象。"
+
+msgid "Back to folder"
+msgstr "回到文件夹"
+
+msgid "Linked addresses"
+msgstr "链接地址"
+
+msgid "Multicast"
+msgstr "组播"
+
+msgid "Only 4096 IP addresses at once"
+msgstr "一次只能有4096个IP地址"
+
+msgid "Invalid MAC address"
+msgstr "MAC地址无效"
+
+msgid "IP $action successful"
+msgstr "IP $action 成功"
+
+msgid "fw_object"
+msgstr "fw_object"
+
+msgid "Cannot scan as subnet is market as used"
+msgstr "当子网被标识为已用时不能扫描"
+
+msgid "FW object"
+msgstr "防火墙对象"
+
+msgid "Ignore errors"
+msgstr "忽略错误"
+
+msgid "Invalid subnet Identifier"
+msgstr "无效的子网标识符"
+
+msgid "No new hosts found"
+msgstr "没有找到新的主机"
+
+msgid "Subnet must have VLAN assigned for MAc address query"
+msgstr "子网必须为MAC地址查询分配VLAN"
+
+msgid "No devices for SNMP MAC address query available"
+msgstr "没有用于SNMP MAC地址查询的设备"
+
+msgid "No new hosts found from ARP scan, MAC address scan will not be performed"
+msgstr "从ARP扫描中找不到新的主机，MAC地址扫描将不会被执行"
+
+msgid "No MAC address found via MAC address scan"
+msgstr "没有通过MAC地址扫描找到MAC地址"
+
+msgid "Invalid section Id"
+msgstr "标签ID无效"
+
+msgid "Add subnets to section"
+msgstr "将子网添加到标签"
+
+msgid "Associated VLANs"
+msgstr "关联的VLAN"
+
+msgid "Associated VRFs"
+msgstr "相关VRF"
+
+msgid "Linked IPv6 subnet"
+msgstr "链接的IPv6子网"
+
+msgid "Linked IPv4 subnets"
+msgstr "链接的IPv4子网"
+
+msgid "Subnet is natted"
+msgstr "从属的子网"
+
+msgid "Subnet is marked as used"
+msgstr "子网被标记为已用"
+
+msgid "Alert threshold"
+msgstr "警报阈值"
+
+msgid "Firewall zone"
+msgstr "防火墙区域"
+
+msgid "Address object"
+msgstr "地址对象"
+
+msgid "Generate or regenerate the subnets firewall address object name."
+msgstr "生成或重新生成子网防火墙地址对象名称。"
+
+msgid "disabled - marked as full"
+msgstr "禁用 - 标记为已满"
+
+msgid "Scan agent"
+msgstr "扫描代理"
+
+msgid "Invalid scan agent"
+msgstr "扫描代理无效"
+
+msgid "Last check"
+msgstr "最后一次检查"
+
+msgid "Last scan"
+msgstr "上次扫描"
+
+msgid "Manage linked IPv6 subnet"
+msgstr "管理链接的IPv6子网"
+
+msgid "Map subnet to firewall zone"
+msgstr "将子网映射到防火墙区域"
+
+msgid "Generate or regenerate firewall address objects for all ip addresses within this subnet."
+msgstr "为此子网中的所有IP地址生成或重新生成防火墙地址对象。"
+
+msgid "Subnet NAT translations"
+msgstr "子网NAT转换"
+
+msgid "No NAT translations for this subnet"
+msgstr "没有这个子网的NAT转换"
+
+msgid "Temporary share"
+msgstr "临时共享"
+
+msgid "Invalid search string"
+msgstr "搜索字符串无效"
+
+msgid "Invalid limit"
+msgstr "无效限制"
+
+msgid "Output has been limited to last $_REQUEST[climit] lines"
+msgstr "输出限制为最后 $_REQUEST[climit] 行"
+
+msgid "Invalid permission"
+msgstr "无效的权限"
+
+msgid "Changelog details"
+msgstr "更新日志的详细信息"
+
+msgid "Show details"
+msgstr "显示详细资料"
+
+msgid "Belonging addresses"
+msgstr "归属地址"
+
+msgid "All devices"
+msgstr "所有设备"
+
+msgid "Location is not set for this device"
+msgstr "该设备未设置位置"
+
+msgid "No NAT translations for this device"
+msgstr "此设备没有NAT转换"
+
+msgid "Belonging PSTN prefixes"
+msgstr "属于PSTN前缀"
+
+msgid "PSTN prefixes module disabled."
+msgstr "PSTN前缀模块已禁用。"
+
+msgid "Prefix"
+msgstr "前缀"
+
+msgid "Start"
+msgstr "开始"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid " Firewall Zones"
+msgstr "防火墙区域"
+
+msgid "Manage zones"
+msgstr "管理区域"
+
+msgid "Administrative privileges required!"
+msgstr "要求管理权限！"
+
+msgid "Unknown"
+msgstr "未知"
+
+msgid "Domain type:"
+msgstr "域类型："
+
+msgid "Master servers"
+msgstr "主服务器"
+
+msgid "Notified serial:"
+msgstr "通知系列："
+
+msgid "Last check:"
+msgstr "最后检查："
+
+msgid "No records found for filter "
+msgstr "找不到过滤器的记录"
+
+msgid "You do not have permission to manage DNS. Please contact administrator!"
+msgstr "您没有管理DNS的权限。 请联系管理员！"
+
+msgid "No host records available"
+msgstr "没有主机记录"
+
+msgid "PowerDNS IP records"
+msgstr "PowerDNS IP记录"
+
+msgid "List of all DNS records resolving to IP address"
+msgstr "列出所有解析为IP地址的DNS记录"
+
+msgid "List of unprocessed IP addresses requests"
+msgstr "未处理IP地址请求的列表"
+
+msgid "VRF search results"
+msgstr "VRF搜索结果"
+
+msgid "Search results (VRFs)"
+msgstr "搜索结果（VRF）"
+
+msgid "Search results (PSTN Prefixes)"
+msgstr "搜索结果（PSTN前缀）"
+
+msgid "Search results (PSTN Numbers)"
+msgstr "搜索结果（PSTN号码）"
+
+msgid "Wildcard mask"
+msgstr "通配掩码"
+
+msgid "custom tool"
+msgstr "自定义工具"
+
+msgid "Select yes to receive mail notification changes (IP state change, new hosts, requests)"
+msgstr "选择是接收邮件通知更改（IP状态更改，新主机，请求）"
+
+msgid "Select yes to receive mail notifications for IP requests"
+msgstr "选择是接收IP请求的邮件通知"
+
+msgid "Menu Type"
+msgstr "菜单类型"
+
+msgid "Static"
+msgstr "静态的"
+
+msgid "Dynamic"
+msgstr "动态的"
+
+msgid "Select menu type to display"
+msgstr "选择要显示的菜单类型"
+
+msgid "Invalid language!"
+msgstr "语言无效！"
+
+msgid "VLANs in all domains"
+msgstr "所有域中的VLAN"
+
+msgid "List of VLANS in all domains"
+msgstr "所有域中的VLAN列表"
+
+msgid "L2domain"
+msgstr "L2域名"
+
+msgid "Scan for VLANs"
+msgstr "扫描VLAN"
+
+msgid "L2 domains"
+msgstr "L2域名"
+
+msgid "All domains"
+msgstr "所有域"
+
+msgid "List of all VLANs in all domains"
+msgstr "所有域中的所有VLAN的列表"
+
+msgid "Available in sections"
+msgstr "标签可用"
+
+msgid "DHCP information"
+msgstr "DHCP信息"
+
+msgid "Active leases"
+msgstr "主动租赁"
+
+msgid "Subnet id"
+msgstr "子网号"
+
+msgid "Client_id"
+msgstr "客户端ID"
+
+msgid "Lifetime"
+msgstr "寿命"
+
+msgid "IPv4 leases"
+msgstr "IPv4租约"
+
+msgid "IPv4 not configured on DHCP server"
+msgstr "DHCP未在DHCP服务器上配置"
+
+msgid "No IPv4 leases"
+msgstr "没有IPv4租期"
+
+msgid "IPv6 leases"
+msgstr "IPv6租约"
+
+msgid "IPv6 not configured on DHCP server"
+msgstr "IPv6 not configured on DHCP server"
+
+msgid "No IPv6 leases"
+msgstr "没有IPv6租期"
+
+msgid "Reservations"
+msgstr "保留"
+
+msgid "Reserved in"
+msgstr "保留在"
+
+msgid "Options"
+msgstr "选项"
+
+msgid "Classes"
+msgstr "类型"
+
+msgid "Subnets and pools"
+msgstr "子网和池"
+
+msgid "Pools"
+msgstr "池"
+
+msgid "IPv4 subnets"
+msgstr "IPv4子网"
+
+msgid "No IPv4 subnets"
+msgstr "没有IPv4子网"
+
+msgid "IPv6 subnets"
+msgstr "IPv6子网"
+
+msgid "No IPv6 subnets"
+msgstr "没有IPv6子网"
+
+msgid "Add location"
+msgstr "添加位置"
+
+msgid "Locations module disabled."
+msgstr "位置模块已禁用。"
+
+msgid "Coordinates"
+msgstr "坐标"
+
+msgid "objects"
+msgstr "目标"
+
+msgid "Location not set"
+msgstr "位置未设定"
+
+msgid "Locations Map"
+msgstr "地点地图"
+
+msgid "Locations list"
+msgstr "位置列表"
+
+msgid "Location details"
+msgstr "位置详情"
+
+msgid "Location not found"
+msgstr "找不到位置"
+
+msgid "Belonging objects"
+msgstr "归属对象"
+
+msgid "Remove"
+msgstr "移除"
+
+msgid "Multicast networks"
+msgstr "组播网络"
+
+msgid "Subnets has no hosts"
+msgstr "子网没有主机"
+
+msgid "Add new address"
+msgstr "添加新地址"
+
+msgid "No multicast subnets available"
+msgstr "没有组播子网可用"
+
+msgid "Add nat"
+msgstr "添加nat"
+
+msgid "NAT module disabled."
+msgstr "NAT模块禁用状态"
+
+msgid "Translation"
+msgstr "翻译"
+
+msgid "List of PSTN prefixes"
+msgstr "PSTN前缀列表"
+
+msgid "Numbers"
+msgstr "数量"
+
+msgid "You do not have permission to manage PSTN numbers"
+msgstr "您没有管理PSTN号码的权限"
+
+msgid "Invalid PSTN number identifier"
+msgstr "无效的PSTN号码识别码"
+
+msgid "Number must be numeric"
+msgstr "数字必须是数字型"
+
+msgid "Invalid prefix"
+msgstr "前缀无效"
+
+msgid "Duplicate number"
+msgstr "重复的数字"
+
+msgid "Number not inside prefix"
+msgstr "前缀内没有包含数字"
+
+msgid "Number add failed"
+msgstr "号码添加失败"
+
+msgid "Number edit failed"
+msgstr "号码编辑失败"
+
+msgid "Number delete failed"
+msgstr "号码删除失败"
+
+msgid "Number add successful"
+msgstr "添加号码成功"
+
+msgid "Number edit successful"
+msgstr "编辑号码成功"
+
+msgid "Number delete successful"
+msgstr "删除号码成功"
+
+msgid "Invalid prefix ID"
+msgstr "前缀ID无效"
+
+msgid "PSTN number"
+msgstr "PSTN号码"
+
+msgid "Number Name"
+msgstr "号码名称"
+
+msgid "Address owner"
+msgstr "地址所有者"
+
+msgid "Select device where prefix is located"
+msgstr "选择前缀所在的设备"
+
+msgid "You do not have permission to manage PSTN prefixes"
+msgstr "您没有管理PSTN前缀的权限"
+
+msgid "Invalid PSTN object identifier"
+msgstr "无效的PSTN对象标识符"
+
+msgid "Start must be numeric"
+msgstr "开始必须是数字"
+
+msgid "Stop must be numeric"
+msgstr "停止必须是数字"
+
+msgid "Invalid master prefix"
+msgstr "主前缀无效"
+
+msgid "Prefix cannot be same as master"
+msgstr "前缀不能与主前缀相同"
+
+msgid "Prefix not inside its master"
+msgstr "前缀不在其主前缀之内"
+
+msgid "Prefix overlaps with prefix "
+msgstr "前缀与前缀重叠"
+
+msgid "Prefix add failed"
+msgstr "前缀添加失败"
+
+msgid "Prefix edit failed"
+msgstr "前缀编辑失败"
+
+msgid "Prefix delete failed"
+msgstr "前缀删除失败"
+
+msgid "Prefix add successful"
+msgstr "前缀添加成功"
+
+msgid "Prefix edit successful"
+msgstr "前缀编辑成功"
+
+msgid "Prefix delete successful"
+msgstr "前缀删除成功"
+
+msgid "Invalid master ID"
+msgstr "主ID无效"
+
+msgid "PSTN prefix"
+msgstr "PSTN前缀"
+
+msgid "Master prefix"
+msgstr "主前缀"
+
+msgid "Set Prefix name"
+msgstr "设置前缀名称"
+
+msgid "Set start number"
+msgstr "设置起始号码"
+
+msgid "Set stop number"
+msgstr "设置停止号码"
+
+msgid "Enter master prefix if you want to nest it under existing subnet, or select root to create root prefix"
+msgstr "如果要将其嵌套在现有子网下，请输入主前缀，或者选择根创建根前缀"
+
+msgid "Short"
+msgstr "短的"
+
+msgid "No numbers"
+msgstr "没有号码"
+
+msgid "Unused"
+msgstr "没有使用"
+
+msgid "PSTN prefix details"
+msgstr "PSTN前缀详细信息"
+
+msgid "Prefix not found"
+msgstr "前缀未找到"
+
+msgid "All prefixes"
+msgstr "所有前缀"
+
+msgid "Prefix details"
+msgstr "前缀详细信息"
+
+msgid "Edit prefix properties"
+msgstr "编辑前缀属性"
+
+msgid "Create new prefix"
+msgstr "创建新的前缀"
+
+msgid "Delete prefix"
+msgstr "删除前缀"
+
+msgid "You do not have permissions to edit prefix"
+msgstr "您没有编辑前缀的权限"
+
+msgid "Add address to prefix"
+msgstr "添加地址到前缀"
+
+msgid "RACK list"
+msgstr "机架列表"
+
+msgid "Add rack"
+msgstr "添加机架"
+
+msgid "RACK management disabled."
+msgstr "禁用机架管理"
+
+msgid "No racks available"
+msgstr "没有可用机架"
+
+msgid "Rack is empty"
+msgstr "机架为空"
+
+msgid "Invalid rack Id"
+msgstr "无效机架ID"
+
+msgid "RACK details"
+msgstr "机架详细信息"
+
+msgid "Invalid subpage"
+msgstr "子页面无效"
+
+msgid "Subpage does not exist"
+msgstr "子页面不存在"
+
+msgid "Add option"
+msgstr "添加选项"
+
+msgid "prefix option"
+msgstr "前缀选项"
+
+msgid "Option"
+msgstr "选项"
+
+msgid "New Option"
+msgstr "新选项"
+
+msgid "Value cannot be empty"
+msgstr "值不能为空"
+
+msgid "Options updated"
+msgstr "选项已更新"
+
+msgid "Upgrade"
+msgstr "升级"
+
+msgid "Object is Natted"
+msgstr "对象已经被NAT"
+
+msgid "Invalid generator ID"
+msgstr "生成器ID无效"
+
+msgid "Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."
+msgstr "达到最大区域名称长度！ 考虑更改您的设置以生成更大的区域名称。"
+
+msgid "The maximum convertable vlaue is reached. Consider to switch to decimal or text mode and change the zone name length value."
+msgstr "达到最大输入值。 考虑切换到十进制或文本模式并更改区域名称长度值。"
+
+msgid "Zone Name"
+msgstr "区域名"
+
+msgid "This network is already bound to this or another zone.<br>The binding must be unique."
+msgstr "该网络已经绑定到此或另一个区域。<br>绑定必须是唯一的。"
+
+msgid "Invalid log command"
+msgstr "无效的日志命令"
+
+msgid "A record must be an IP address"
+msgstr "A记录必须是IP地址"
+
+msgid "AAAA record must be an IP address"
+msgstr "AAAA记录必须是IP地址"
+
+msgid "Subnet permissions recursively set"
+msgstr "子网权限递归设置"
+
+msgid "Subnet $cidr overlaps with"
+msgstr "子网 $cidr 与"
+
+msgid "New subnet cannot be same as master subnet"
+msgstr "新的子网不能与主子网相同"
+
+msgid "Invalid Mask"
+msgstr "掩码无效"
+
+msgid "Invalid request action"
+msgstr "无效的请求动作"
+
+msgid "Invalid filetype"
+msgstr "文件类型无效"
+
+msgid "System is running in maintenance mode"
+msgstr "系统正在维护模式下运行"
+
+msgid "Invalid username"
+msgstr "无效的用户名"
+
+msgid "SAML2 login successful"
+msgstr "SAML2登录成功"
+
+msgid "Invalid server type $server_type"
+msgstr "服务器类型 $server_type 无效"
+
+msgid "Missing class file"
+msgstr "缺少类文件"
+
+msgid "User attributes:"
+msgstr "用户属性："
+
+msgid "No attributes found."
+msgstr "找不到属性。"
+
+msgid "Attributes not found"
+msgstr "找不到属性"
