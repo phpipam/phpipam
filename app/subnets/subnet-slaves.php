@@ -62,7 +62,7 @@ foreach ($slave_subnets as $slave_subnet) {
 			# calculate diff between subnet and slave
 			# 64 bits
 			if (PHP_INT_SIZE === 8) {
-				$diff = gmp_strval(gmp_sub(gmp_and("0xffffffff", (int) $slave_subnet['subnet']), gmp_and("0xffffffff", (int) $subnet['subnet'])));
+				$diff = gmp_strval(gmp_sub($slave_subnet['subnet'], $subnet['subnet']));
 			}
 			else {
 				$diff = gmp_strval(gmp_sub(gmp_and("0xffffffff", $slave_subnet['subnet']), gmp_and("0xffffffff", $subnet['subnet'])));
@@ -163,8 +163,9 @@ foreach ($slave_subnets as $slave_subnet) {
 		# calculate diff
 		# 64 bits
 		if (PHP_INT_SIZE === 8) {
-			$diff = gmp_strval(gmp_sub(gmp_and("0xffffffff", (int) $next_slave_subnet), gmp_and("0xffffffff", (int) $current_slave_bcast)));
+			$diff = gmp_strval(gmp_sub($next_slave_subnet, $current_slave_bcast));
 		}
+		# 32 bits
 		else {
 			$diff = gmp_strval(gmp_sub(gmp_and("0xffffffff", $next_slave_subnet), gmp_and("0xffffffff", $current_slave_bcast)));
 		}
