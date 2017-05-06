@@ -4,7 +4,7 @@
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 #
-# "Project-Id-Version: 1.2.000\n"
+# "Project-Id-Version: 1.3.000\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2015-10-07 14:33+0200\n"
@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Last-Translator: Andrey Kolbasenko <av.kolbasenko@gmail.com>\n"
-"PO-Revision-Date: 2017-03-13 20:06+0300\n"
+"Last-Translator: Andrey Kolbasenko <Andrey.Kolbasenko@south.rt.ru>\n"
+"PO-Revision-Date: 2017-03-19 09:52+0300\n"
 "Project-Id-Version: \n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 "Language: ru_RU\n"
@@ -329,7 +329,8 @@ msgstr "Неверный IP адрес!"
 
 #: functions/functions-network.php:1859 functions/functions-network.php:1883
 msgid "IP address cannot be subnet! (Consider using"
-msgstr "IP адрес не может быть подсетью! (Рассмотреть возможность использования"
+msgstr ""
+"IP адрес не может быть подсетью! (Рассмотреть возможность использования"
 
 #: functions/functions-network.php:1861
 msgid "Invalid netmask"
@@ -429,11 +430,12 @@ msgstr "Секция"
 #: functions/functions-mail.php:283 functions/functions-mail.php:306
 #: functions/functions-mail.php:384 functions/functions-mail.php:412
 #: site/tools/vrf.php:44 site/tools/devices.php:68 site/tools/subnets.php:45
-#: site/tools/searchResults.php:259 site/ipaddr/ipAddressPrintTableSlaves.php:34
-#: site/admin/manageSubnet.php:76 site/admin/manageSubnetEdit.php:76
-#: site/admin/manageSubnetEditResult.php:169 site/admin/manageRequests.php:24
-#: site/admin/ripeImportTelnet.php:74 site/admin/manageSubnetsplit.php:64
-#: site/admin/manageSubnetresize.php:35 site/admin/manageSubnettruncate.php:37
+#: site/tools/searchResults.php:259
+#: site/ipaddr/ipAddressPrintTableSlaves.php:34 site/admin/manageSubnet.php:76
+#: site/admin/manageSubnetEdit.php:76 site/admin/manageSubnetEditResult.php:169
+#: site/admin/manageRequests.php:24 site/admin/ripeImportTelnet.php:74
+#: site/admin/manageSubnetsplit.php:64 site/admin/manageSubnetresize.php:35
+#: site/admin/manageSubnettruncate.php:37
 msgid "Subnet"
 msgstr "Подсеть"
 
@@ -608,11 +610,12 @@ msgstr "Главная подсеть"
 
 #: site/tools/searchResultsExport.php:274 site/tools/vrf.php:42
 #: site/tools/subnets.php:47 site/tools/searchResults.php:107
-#: site/tools/searchResults.php:263 site/ipaddr/ipAddressPrintTableSlaves.php:32
-#: site/ipaddr/mailNotifyIP.php:58 site/ipaddr/subnetDetailsSlaves.php:85
-#: site/ipaddr/subnetDetails.php:96 site/admin/manageSubnet.php:78
-#: site/admin/manageSubnetEdit.php:125 site/admin/manageVLANEdit.php:32
-#: site/admin/ripeImportTelnet.php:95 site/admin/manageVLANEditResult.php:47
+#: site/tools/searchResults.php:263
+#: site/ipaddr/ipAddressPrintTableSlaves.php:32 site/ipaddr/mailNotifyIP.php:58
+#: site/ipaddr/subnetDetailsSlaves.php:85 site/ipaddr/subnetDetails.php:96
+#: site/admin/manageSubnet.php:78 site/admin/manageSubnetEdit.php:125
+#: site/admin/manageVLANEdit.php:32 site/admin/ripeImportTelnet.php:95
+#: site/admin/manageVLANEditResult.php:47
 #: site/admin/manageVLANEditResult.php:48
 msgid "VLAN"
 msgstr "VLAN"
@@ -686,7 +689,8 @@ msgid "Master Subnet"
 msgstr "Главная подсеть"
 
 #: site/tools/vrf.php:46 site/tools/vlan.php:30 site/tools/subnets.php:49
-#: site/ipaddr/ipAddressPrintTableSlaves.php:35 site/ipaddr/subnetDetails.php:89
+#: site/ipaddr/ipAddressPrintTableSlaves.php:35
+#: site/ipaddr/subnetDetails.php:89
 msgid "Used"
 msgstr "Используется"
 
@@ -696,8 +700,8 @@ msgid "Free"
 msgstr "Свободно"
 
 #: site/tools/vrf.php:48 site/tools/subnets.php:51
-#: site/tools/searchResults.php:264 site/ipaddr/ipAddressPrintTableSlaves.php:37
-#: site/admin/manageSubnet.php:82
+#: site/tools/searchResults.php:264
+#: site/ipaddr/ipAddressPrintTableSlaves.php:37 site/admin/manageSubnet.php:82
 msgid "Requests"
 msgstr "Запросы"
 
@@ -885,7 +889,8 @@ msgstr "Советы по поиску в IPv6"
 
 #: site/tools/searchTips.php:37
 msgid ""
-"You can search through ranges by specifying whole subnet (e.g. 2002:8a10::/32)"
+"You can search through ranges by specifying whole subnet (e.g. "
+"2002:8a10::/32)"
 msgstr ""
 "Вы можете искать в диапазонах, указав всю подсеть (например 2002:8a10::/32)"
 
@@ -907,8 +912,8 @@ msgstr "Советы по поиску устройста"
 
 #: site/tools/searchTips.php:55
 msgid ""
-"You can get all used / available ports and connected IP's / hostnames in some "
-"device by entering device name in search field"
+"You can get all used / available ports and connected IP's / hostnames in "
+"some device by entering device name in search field"
 msgstr ""
 "Вы можете получить все используемые / доступные порты и подключённые IP / "
 "имена хостов к какому-то устройству, введя имя устройства в поле поиска"
@@ -962,8 +967,8 @@ msgstr "IP калькулятор"
 msgid "Instructions"
 msgstr "Инструкции"
 
-#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19 site/userMenu.php:22
-#: site/sections.php:104
+#: site/tools/toolsMenu.php:31 site/admin/ripeImport.php:19
+#: site/userMenu.php:22 site/sections.php:104
 msgid "Search"
 msgstr "Поиск"
 
@@ -1263,8 +1268,9 @@ msgstr "Ошибка вставки IP адреса"
 msgid "You do not have permission to access this network"
 msgstr "У вас нет прав для доступа в эту подсеть"
 
-#: site/ipaddr/subnetDetailsSlaves.php:58 site/ipaddr/subnetDetailsSlaves.php:63
-#: site/ipaddr/subnetDetails.php:59 site/ipaddr/subnetDetails.php:64
+#: site/ipaddr/subnetDetailsSlaves.php:58
+#: site/ipaddr/subnetDetailsSlaves.php:63 site/ipaddr/subnetDetails.php:59
+#: site/ipaddr/subnetDetails.php:64
 msgid "Subnet details"
 msgstr "Детали подсети"
 
@@ -1333,8 +1339,8 @@ msgstr "удалить"
 
 #: site/ipaddr/modifyIpAddress.php:115
 msgid ""
-"You can add,edit or delete multiple IP addresses<br>by specifying IP range (e."
-"g. 10.10.0.0-10.10.0.25)"
+"You can add,edit or delete multiple IP addresses<br>by specifying IP range "
+"(e.g. 10.10.0.0-10.10.0.25)"
 msgstr ""
 "Вы можете добавить,редактировать или удалить несколько<br>IP адресов, указав "
 "диапазон (напр. 10.10.0.0-10.10.0.25)"
@@ -1472,8 +1478,8 @@ msgid ""
 "If you like the software you can donate by clicking this button to support "
 "further development"
 msgstr ""
-"Если вам нравится программа, вы можете внести пожертвование нажав эту кнопку, "
-"для поддержки будущих разработок"
+"Если вам нравится программа, вы можете внести пожертвование нажав эту "
+"кнопку, для поддержки будущих разработок"
 
 #: site/dashboard/widgets/statistics.php:27
 msgid "Number of Sections"
@@ -1609,8 +1615,8 @@ msgstr "Импорт подсетей из RIPE"
 
 #: site/admin/ripeImport.php:15
 msgid ""
-"This script imports subnets from RIPE database for specific AS. Enter desired "
-"AS to search for subnets"
+"This script imports subnets from RIPE database for specific AS. Enter "
+"desired AS to search for subnets"
 msgstr ""
 "Этот скрипт импортирует подсети из базы RIPE для конкретной AS. Введите "
 "нужную AS для поиска подсетей"
@@ -1721,8 +1727,8 @@ msgid ""
 "Enter domain controllers, separated by ; (default: dc1.domain.local;dc2."
 "domain.local)"
 msgstr ""
-"Введите настройки домена, разделённые знаком ; (default: dc1.domain.local;dc2."
-"domain.local)"
+"Введите настройки домена, разделённые знаком ; (default: dc1.domain.local;"
+"dc2.domain.local)"
 
 #: site/admin/manageAD_AD.php:49 site/admin/manageAD_LDAP.php:48
 msgid "Base DN"
@@ -1730,7 +1736,8 @@ msgstr "Базовый DN"
 
 #: site/admin/manageAD_AD.php:54
 msgid ""
-"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)<br>\n"
+"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,"
+"DC=local)<br>\n"
 "\t\tIf this is set to null then adLDAP will attempt to obtain this "
 "automatically from the rootDSE"
 msgstr ""
@@ -1774,8 +1781,8 @@ msgstr "Использовать TLS"
 
 #: site/admin/manageAD_AD.php:95 site/admin/manageAD_LDAP.php:84
 msgid ""
-"If you wish to use TLS you should ensure that useSSL is set to false and vice-"
-"versa (default: false)"
+"If you wish to use TLS you should ensure that useSSL is set to false and "
+"vice-versa (default: false)"
 msgstr ""
 "Если вы будете использовать TLS, вы должны выключить useSSL и т.д. (по-"
 "умолчанию: отключено)"
@@ -1860,8 +1867,9 @@ msgstr "Настроить поля фильтра для показа в спи
 
 #: site/admin/filterIPFields.php:36
 msgid ""
-"You can select which fields are actually being used for IP management, so you "
-"dont show any overhead if not used. IP, hostname and description are mandatory"
+"You can select which fields are actually being used for IP management, so "
+"you dont show any overhead if not used. IP, hostname and description are "
+"mandatory"
 msgstr ""
 "Вы можете выбрать какие поля актуальны и будут использованы для управления "
 "IP, так вы не увидите лишнее, которое не будет выбрано. IP, имя хоста и "
@@ -1970,7 +1978,8 @@ msgstr "Все группы"
 
 #: site/admin/users.php:116
 msgid ""
-"Administrator users will be able to view and edit all all sections and subnets"
+"Administrator users will be able to view and edit all all sections and "
+"subnets"
 msgstr ""
 "Администраторам доступны просмотр и редактирование всех секций и подсетей"
 
@@ -2362,13 +2371,15 @@ msgstr "Да"
 msgid "custom subnet field"
 msgstr "настраиваемое поле подсети"
 
-#: site/admin/customSubnetFieldsEdit.php:31 site/admin/customIPFieldsEdit.php:31
-#: site/admin/customVLANFieldsEdit.php:31 site/admin/customUserFieldsEdit.php:31
+#: site/admin/customSubnetFieldsEdit.php:31
+#: site/admin/customIPFieldsEdit.php:31 site/admin/customVLANFieldsEdit.php:31
+#: site/admin/customUserFieldsEdit.php:31
 msgid "Select field name"
 msgstr "Выбрать название поля"
 
-#: site/admin/customSubnetFieldsEdit.php:45 site/admin/customIPFieldsEdit.php:45
-#: site/admin/customVLANFieldsEdit.php:45 site/admin/customUserFieldsEdit.php:45
+#: site/admin/customSubnetFieldsEdit.php:45
+#: site/admin/customIPFieldsEdit.php:45 site/admin/customVLANFieldsEdit.php:45
+#: site/admin/customUserFieldsEdit.php:45
 msgid "Close"
 msgstr "Закрыть"
 
@@ -2514,7 +2525,8 @@ msgstr "Не могу перенести файл в директорию заг
 msgid "Success"
 msgstr "Успешно"
 
-#: site/admin/manageDevicesEdit.php:24 site/admin/manageDevicesEditResult.php:60
+#: site/admin/manageDevicesEdit.php:24
+#: site/admin/manageDevicesEditResult.php:60
 msgid "device"
 msgstr "устройство"
 
@@ -2587,7 +2599,8 @@ msgstr "Номер VLANа"
 
 #: site/admin/manageVLANEdit.php:97
 msgid "removing VLAN will also remove VLAN reference from belonging subnets"
-msgstr "удаление VLANа также удалит все ссылки на него в принадлежащих подсетях"
+msgstr ""
+"удаление VLANа также удалит все ссылки на него в принадлежащих подсетях"
 
 #: site/admin/manageRequests.php:15
 msgid "List of all active IP addresses requests"
@@ -2794,8 +2807,8 @@ msgstr "Не показывать визуальный дисплей"
 
 #: site/admin/settings.php:205
 msgid ""
-"Select netmask limit for visual display of IP addresses (mask equal or bigger "
-"than - more then /22 not recommended)"
+"Select netmask limit for visual display of IP addresses (mask equal or "
+"bigger than - more then /22 not recommended)"
 msgstr ""
 "Выберите ограничение размера маски для визуального отображения IP адресов "
 "(маска равная или более /22 не рекомендуется)"
@@ -2936,7 +2949,8 @@ msgstr ""
 
 #: site/admin/manageSection.php:93
 msgid "Groups with RO permissions will not be able to create new subnets"
-msgstr "Группа с RO (только чтение) разрешением не сможет создать новую подсеть"
+msgstr ""
+"Группа с RO (только чтение) разрешением не сможет создать новую подсеть"
 
 #: site/admin/manageSection.php:94
 msgid ""
@@ -2947,7 +2961,8 @@ msgstr ""
 "группа имеет доступ в секцию<br>она имеет такие же разрешения в подсетях"
 
 #: site/admin/manageSection.php:95
-msgid "You can choose to delegate section permissions to all underlying subnets"
+msgid ""
+"You can choose to delegate section permissions to all underlying subnets"
 msgstr ""
 "Вы можете выбрать пункт делегирования разрешений секции ко всем нижестоящим "
 "подсетям"
@@ -2961,13 +2976,15 @@ msgstr ""
 "даже если <br>были установлены разрешения подсети"
 
 #: site/admin/customSubnetFieldsOrder.php:15
-#: site/admin/customIPFieldsOrder.php:15 site/admin/customVLANFieldsOrder.php:15
+#: site/admin/customIPFieldsOrder.php:15
+#: site/admin/customVLANFieldsOrder.php:15
 #: site/admin/customUserFieldsOrder.php:15
 msgid "Fileds cannot be empty"
 msgstr "Поля не могут быть пустыми"
 
 #: site/admin/customSubnetFieldsOrder.php:19
-#: site/admin/customIPFieldsOrder.php:19 site/admin/customVLANFieldsOrder.php:19
+#: site/admin/customIPFieldsOrder.php:19
+#: site/admin/customVLANFieldsOrder.php:19
 #: site/admin/customUserFieldsOrder.php:19
 msgid "Reordering failed"
 msgstr "Изменение порядка не получилось"
@@ -3070,7 +3087,8 @@ msgstr ""
 "Удаление Секции повлечёт за собой удаление всех принадлежащих ей подсетей и "
 "IP адресов"
 
-#: site/admin/customIPFieldsOrder.php:20 site/admin/customVLANFieldsOrder.php:20
+#: site/admin/customIPFieldsOrder.php:20
+#: site/admin/customVLANFieldsOrder.php:20
 #: site/admin/customUserFieldsOrder.php:20
 msgid "Fields reordered successfully"
 msgstr "Поля успешно переопределены"
@@ -3117,9 +3135,9 @@ msgstr ""
 
 #: site/admin/manageAD_LDAP.php:20
 msgid ""
-"First create new user under user management with <u>same username as on LDAP</"
-"u> and set usertype to domain user. Also set proper groups (premissions) for "
-"this user."
+"First create new user under user management with <u>same username as on "
+"LDAP</u> and set usertype to domain user. Also set proper groups "
+"(premissions) for this user."
 msgstr ""
 "Сперва создайте нового пользователя в разделе управления пользователями с "
 "<u>таким же именем пользователя, как и доменный пользователь. Также "
@@ -3130,7 +3148,8 @@ msgid "LDAP servers"
 msgstr "LDAP сервера"
 
 #: site/admin/manageAD_LDAP.php:54
-msgid "Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
+msgid ""
+"Enter base DN for LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
 msgstr ""
 "Введите базовый DN для LDAP (default: CN=Users,CN=Company,DC=domain,DC=local)"
 
@@ -3329,8 +3348,8 @@ msgstr "Новая маска"
 
 #: site/admin/manageSubnetresize.php:59
 msgid ""
-"You can change subnet size by specifying new mask (bigger or smaller). Please "
-"note"
+"You can change subnet size by specifying new mask (bigger or smaller). "
+"Please note"
 msgstr ""
 "Вы можете изменить размер подсети указав новую маску (больше или меньше). "
 "Пожалуйста учтите"
@@ -4044,11 +4063,11 @@ msgstr "Интервалы между пингами"
 
 #: site/admin/settings.php
 msgid ""
-"Ping status intervals for IP addresses in seconds - warning;offline (Default: "
-"1800;3600)"
+"Ping status intervals for IP addresses in seconds - warning;offline "
+"(Default: 1800;3600)"
 msgstr ""
-"Интервалы пинга для IP адресов в секундах - внимание;не в сети (по-умолчанию: "
-"1800;3600)"
+"Интервалы пинга для IP адресов в секундах - внимание;не в сети (по-"
+"умолчанию: 1800;3600)"
 
 #: site/admin/settingsEdit.php
 msgid "Invalid ping status intervals"
@@ -4889,7 +4908,8 @@ msgid ""
 "session settings in php.ini are lower they will override this"
 msgstr ""
 "Выберите таймаут неактивности для сессий пользователя. Пожалуйста, учтите, "
-"если дефолтная установка сессии в php.ini ниже, то она будет приоритетнее этой"
+"если дефолтная установка сессии в php.ini ниже, то она будет приоритетнее "
+"этой"
 
 #: site/login/index.php
 msgid "You session has timed out"
@@ -5332,8 +5352,8 @@ msgstr ""
 "может соединиться с первичным."
 
 msgid ""
-"negative caching time - the time a NAME ERROR = NXDOMAIN result may be cached "
-"by any resolver"
+"negative caching time - the time a NAME ERROR = NXDOMAIN result may be "
+"cached by any resolver"
 msgstr ""
 "Отрицательное время кэширования - время, когда результат NAME ERROR = "
 "NXDOMAIN может быть кэширован любым резольвером"
@@ -5674,8 +5694,8 @@ msgstr "Фильтрация показа настраиваемых полей"
 
 msgid "Selected fields will not be visible in table view, only in detail view"
 msgstr ""
-"Выбранные поля не будут видны в таблице просмотра, будут только при детальном "
-"обзоре"
+"Выбранные поля не будут видны в таблице просмотра, будут только при "
+"детальном обзоре"
 
 msgid "Save filter"
 msgstr "Сохранить фильтр"
@@ -6285,7 +6305,8 @@ msgid "Syslog files are sent to syslog"
 msgstr "Сислог файлы отосланы сислогу"
 
 msgid ""
-"Number of discovered hosts exceed maximum possible defined by php.ini - set to"
+"Number of discovered hosts exceed maximum possible defined by php.ini - set "
+"to"
 msgstr ""
 "Количество обнаруженных хостов превысило максимум, определенный в php.ini - "
 "установлено в"
@@ -6297,7 +6318,8 @@ msgid ""
 "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation "
 "please check "
 msgstr ""
-"Для AD/LDAP/NetIQ соединений, phpipam использует adLDAP, проверьтедокументацию"
+"Для AD/LDAP/NetIQ соединений, phpipam использует adLDAP, "
+"проверьтедокументацию"
 
 msgid "Search domain groups"
 msgstr "Поиск доменных групп"
@@ -6464,8 +6486,8 @@ msgid ""
 msgstr "Неверный размер имени зоны. Верное значение в пределах от 3 до 31"
 
 msgid ""
-"Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-&quot;, "
-"&quot;_&quot; and &quot;.&quot; are allowed."
+"Invalid IPv4 address type alias. Only alphanumeric characters, &quot;-"
+"&quot;, &quot;_&quot; and &quot;.&quot; are allowed."
 msgstr ""
 "Недопустимый псевдоним IPv4-адреса. Допустимы только буквенно-цифровые "
 "символы, &quot;-&quot;, &quot;_&quot; и &quot;.&quot;"
@@ -6500,7 +6522,8 @@ msgstr ""
 "Недопустимый тип генератора зоны [текст]. Не пользуйтесь POST значенями!"
 
 msgid ""
-"Invalid padding value. Use the checkbox to set the padding value to on or off."
+"Invalid padding value. Use the checkbox to set the padding value to on or "
+"off."
 msgstr ""
 "Недопустимое значение padding. Используйте чекбокс для установки значения "
 "padding во вкл. или выкл."
@@ -6517,8 +6540,8 @@ msgid ""
 "limit for the length of zone names or address objects )"
 msgstr ""
 "Выберите максимальную длину имени зоны.<br>Дефолтная длина 3, максимальная - "
-"31 символ.<br>(учтите, что ваш фаервол может иметь лимит длины имени зоны или "
-"объекта адреса )"
+"31 символ.<br>(учтите, что ваш фаервол может иметь лимит длины имени зоны "
+"или объекта адреса )"
 
 msgid "IPv4 address type alias"
 msgstr "Псевдоним IPv4-адресов"
@@ -6526,7 +6549,8 @@ msgstr "Псевдоним IPv4-адресов"
 msgid "IPv6 address type alias"
 msgstr "Псевдоним IPv6-адресов"
 
-msgid "Address type aliases are used to indicate a IPv4 or IPv6 address object."
+msgid ""
+"Address type aliases are used to indicate a IPv4 or IPv6 address object."
 msgstr ""
 "Псевдонимы адресов используются для обозначения объектов адресов IPv4 или "
 "IPv6 "
@@ -6539,8 +6563,8 @@ msgid "Own zone indicator"
 msgstr "Индикатор собственной зоны"
 
 msgid ""
-"The indicator is used to indicate a zone wether is owned by the company or by "
-"a customer.<br>It is the leading character of the zone name but will be "
+"The indicator is used to indicate a zone wether is owned by the company or "
+"by a customer.<br>It is the leading character of the zone name but will be "
 "separated from the zone name in the database."
 msgstr ""
 "Индикатор используется для указания, что владельцем зоны является компания "
@@ -6566,9 +6590,9 @@ msgid "Zone name padding"
 msgstr "Заполнение имени зоны"
 
 msgid ""
-"Insert leading zeros into the zone name if you want to have a constant length "
-"of your zone name.<br>This setting will be ignored if you use the \"text\" "
-"zone name generator."
+"Insert leading zeros into the zone name if you want to have a constant "
+"length of your zone name.<br>This setting will be ignored if you use the "
+"\"text\" zone name generator."
 msgstr ""
 "Вставьте нули вначале имени зоны, если хотите иметь постоянную длину имени "
 "вашей зоны.<br>Эта установка будет игнорирована при выборе генератора имени "
@@ -6590,7 +6614,8 @@ msgid "Firewall device Type"
 msgstr "Тип устройств фаервола"
 
 msgid "Select the appropriate device type to match firewall devices."
-msgstr "Выберите подходящее устройство соответствующее устройству типа фаервол."
+msgstr ""
+"Выберите подходящее устройство соответствующее устройству типа фаервол."
 
 msgid "Invalid zone name value."
 msgstr "Недопустимое значение имени зоны."
@@ -6631,8 +6656,10 @@ msgstr "Зона исправлена успешно"
 msgid "Add a firewall zone"
 msgstr "Добавить фаервол зону"
 
-msgid "Zone name (Only alphanumeric and special characters like .-_ and space.)"
-msgstr "Имя зоны (Только буквенно-цифровые и спец символы типа .-_ и пробелы.) "
+msgid ""
+"Zone name (Only alphanumeric and special characters like .-_ and space.)"
+msgstr ""
+"Имя зоны (Только буквенно-цифровые и спец символы типа .-_ и пробелы.) "
 
 msgid "The zone name will be automatically generated"
 msgstr "Имя зоны будет сгенерировано автоматически"
@@ -6676,8 +6703,8 @@ msgid "LDAP port"
 msgstr "LDAP порт"
 
 msgid ""
-"Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> SSL "
-"Default: 636"
+"Listening port for your LDAP service. TLS/unencrypted Default: 389 <br /> "
+"SSL Default: 636"
 msgstr ""
 "Открытый порт вашего LDAP сервиса.  TLS/нешифрованный - по-умолчанию: 389 "
 "<br /> SSL по-умолчанию: 636"
@@ -6704,3 +6731,2291 @@ msgstr "Недопустимая настройка baseDN для LDAP"
 
 msgid "LDAP account does not have enough privileges for search"
 msgstr "LDAP аккаунт не имеет достаточного уровня доступа для поиска"
+
+# ## 1.19.021
+msgid "Please select fields to populate:"
+msgstr "Выберите поля для заполнения:"
+
+msgid "fill"
+msgstr "заполните"
+
+# ## 1.19.040
+msgid "Propagate changes"
+msgstr "Передать изменения"
+
+msgid "Apply changes to underlying subnets"
+msgstr "Применить изменения для нижестоящих подсетей"
+
+# ## 1.21.001
+msgid "SNMP module"
+msgstr "SNMP модуль"
+
+msgid "Enable or disable multicast module"
+msgstr "Включить или выключить multicast модуль"
+
+msgid "Multicast module"
+msgstr "Multicast модуль"
+
+msgid "Enable or disable SNMP module for devices"
+msgstr "Включить или выключить SNMP модуль для устройств"
+
+msgid "Threshold module"
+msgstr "Пороговый модуль"
+
+msgid "Enable or disable threshold module"
+msgstr "Включить или выключить пороговый модуль"
+
+msgid "Rack module"
+msgstr "Модуль стойки"
+
+msgid "Enable or disable rack drawing module"
+msgstr "Включить или выключить модуль рисования стойки"
+
+msgid "Rack management"
+msgstr "Управление стойкой"
+
+msgid "Community"
+msgstr "Сообщество"
+
+msgid "Queries"
+msgstr "Запросы"
+
+msgid "Test"
+msgstr "Тест"
+
+msgid "Invalid version"
+msgstr "Неверная версия"
+
+msgid "Invalid timeout"
+msgstr "Неверный таймаут"
+
+msgid "Invalid device"
+msgstr "Неверное устройство"
+
+msgid "Invalid method"
+msgstr "Неверный метод"
+
+msgid "No queries"
+msgstr "Нет запросов"
+
+msgid "SNMP edit failed"
+msgstr "Ошибка редактирования SNMP"
+
+msgid "SNMP edit successfull"
+msgstr "Успешное редактирование SNMP"
+
+msgid "Invalid device IP address"
+msgstr "Неверный IP адрес устройства"
+
+msgid "rack"
+msgstr "стойка"
+
+msgid "Size"
+msgstr "Размер"
+
+msgid "Invalid rack size"
+msgstr "Неверный размер стойки"
+
+msgid "Invalid rack identifier"
+msgstr "Неверный идентификатор стойки"
+
+msgid "Rack does not exist"
+msgstr "Стойка не существует"
+
+msgid "Rack add successfull"
+msgstr "Стойка успешно добавлена"
+
+msgid "Rack edit successfull"
+msgstr "Стойка успешно отредактирована"
+
+msgid "Rack delete successfull"
+msgstr "Стойка успешно удалена"
+
+msgid "Failed to remove device from rack"
+msgstr "Ошибка удаления устройства из стойки"
+
+msgid "Device removed from rack"
+msgstr "Устройство удалено из стойки"
+
+msgid "device to rack"
+msgstr "устройство в стойку"
+
+msgid "No devices available"
+msgstr "Устройства не найдены"
+
+msgid "Position"
+msgstr "Позиция"
+
+msgid "Start position"
+msgstr "Начальная позиция"
+
+msgid "Rack size in U"
+msgstr "Размер стойки в U"
+
+msgid "Invalid start value"
+msgstr "Неверное стартовое значение"
+
+msgid "Invalid size value"
+msgstr "Неверный размер"
+
+msgid "Invalid rack position (overflow)"
+msgstr "Неверная позиция стойки (переполнение)"
+
+msgid "Failed to add device to rack"
+msgstr "Ошибка добавления устройства в стойку"
+
+msgid "Device added to rack"
+msgstr "Устройство добавлено в стойку"
+
+msgid "SNMP queries"
+msgstr "SNMP запросы"
+
+msgid "Create SNMP query"
+msgstr "Создать SNMP запрос"
+
+msgid "Method"
+msgstr "Метод"
+
+msgid "No SNMP queries available"
+msgstr "Нет SNMP запросов"
+
+msgid "edit snmp details"
+msgstr "изменить детали snmp"
+
+msgid "remove snmp"
+msgstr "удалить snmp"
+
+msgid "No devices for SNMP route table query available"
+msgstr "Нет устройств для запроса таблицы маршрутов по SNMP"
+
+msgid "No new subnets found"
+msgstr "Новые подсети не найдены"
+
+msgid "SNMP module disabled"
+msgstr "SNMP модуль отключен"
+
+msgid "No devices for SNMP ARP query available"
+msgstr "Не найдено устройств для ARP запросов по SNMP"
+
+msgid "Failed to import entry"
+msgstr "Ошибка импорта записи"
+
+# ## 1.24.001
+msgid "Manage your account"
+msgstr "Управление вашим аккаунтом"
+
+msgid "Number of VRFs"
+msgstr "Количество VRFов"
+
+msgid "Inactive hosts"
+msgstr "Неактивные хосты"
+
+msgid "Inactive Hosts"
+msgstr "Неактивные Хосты"
+
+msgid "List of inactive hosts"
+msgstr "Список неактивных хостов"
+
+msgid "No inactive hosts found"
+msgstr "Неактивные хосты не найдены"
+
+msgid "Threshold"
+msgstr "Порог"
+
+msgid "Usage"
+msgstr "Использование"
+
+msgid "List of thresholded subnets"
+msgstr "Список сетей с превышением порога"
+
+msgid "All configured devices"
+msgstr "Все сконфигурированные устройства"
+
+msgid "Scanned networks"
+msgstr "Просканированные сети"
+
+msgid "List of subnets to be scanned for online hosts and detect new hosts"
+msgstr ""
+"Список подсетей, которые будут просканированы на наличие активных хостов и "
+"обнаружение новых хостов"
+
+msgid "Table of all subnet masks with different representations"
+msgstr "Таблица сетевых масок в различных представлениях"
+
+msgid "Racks"
+msgstr "Стойки"
+
+msgid "Rack information"
+msgstr "Иснформация о стойке"
+
+msgid "All tools"
+msgstr "Все инструменты"
+
+msgid "PSTN prefixes"
+msgstr "Префиксы PSTN"
+
+msgid "Add prefix"
+msgstr "Добавить префикс"
+
+msgid "NAT translations"
+msgstr "NAT трансляции"
+
+msgid "Source objects"
+msgstr "Исходные объекты"
+
+msgid "Add new object"
+msgstr "Добавить новый объект"
+
+msgid "Destination objects"
+msgstr "Целевые объекты"
+
+msgid "Src Port"
+msgstr "Src порт"
+
+msgid "Source Port"
+msgstr "Порт отправителя"
+
+msgid "Dst Port"
+msgstr "Dst Порт"
+
+msgid "Destination Port"
+msgstr "Порт получателя"
+
+msgid "Location"
+msgstr "Местоположение"
+
+msgid "Locations"
+msgstr "Местоположения"
+
+msgid "List of all locations"
+msgstr "Список всех местоположений"
+
+msgid "Map"
+msgstr "Карта"
+
+msgid "Objects"
+msgstr "Объекты"
+
+msgid "Address"
+msgstr "Адрес"
+
+msgid "Set Location name"
+msgstr "Указать название места"
+
+msgid "Location address"
+msgstr "Адрес места"
+
+msgid "Latitude"
+msgstr "Широта"
+
+msgid "Longitude"
+msgstr "Долгота"
+
+msgid "Utilization"
+msgstr "Утилизация"
+
+msgid "Belonging prefixes"
+msgstr "Принадлежащие префиксы"
+
+msgid "Belonging Numbers"
+msgstr "Принадлежащие Номера"
+
+msgid "Manage user authentication methods and servers"
+msgstr "Управление методами аутентификации пользователя и серверов"
+
+msgid "Set mail parameters and mail server settings"
+msgstr "Установить параметры почты и почтового сервера"
+
+msgid "PowerDNS settings"
+msgstr "Настройки PowerDNS"
+
+msgid "DHCP settings"
+msgstr "Настройки DHCP"
+
+msgid "Manage languages"
+msgstr "Управление языками"
+
+msgid "Manage widget settings"
+msgstr "Управление настройками виджетов "
+
+msgid "Tags"
+msgstr "Тэги"
+
+msgid "Manage tags"
+msgstr "Управление тэгами"
+
+msgid "Set phpipam instructions for end users"
+msgstr ""
+"Написать инструкции по использованию phpipam для конечного пользователя"
+
+msgid "NAT settings"
+msgstr "Настройки NAT"
+
+msgid "Select which default address fields to display"
+msgstr "Выберите, какое поле адреса показывать по-умолчанию"
+
+msgid "Manage custom fields"
+msgstr "Управление настраиваемыми полями"
+
+msgid "Check for latest version of phpipam"
+msgstr "Проверить последнюю версию phpipam"
+
+msgid "Verify that database files are installed ok"
+msgstr "Проверить, что все файлы базы данных установлены правильно"
+
+msgid "Search and replace content in database"
+msgstr "Найти и заменить содержимое в базе"
+
+msgid "Invalid CSRF cookie"
+msgstr "Неверный CSRF cookie"
+
+msgid "Transaction lock"
+msgstr "Блокировка транзакции"
+
+msgid "Lock POST transactions"
+msgstr "Блокировка POST транзакции"
+
+msgid "Lock timeout"
+msgstr "Время блокировки"
+
+msgid "Seconds to wait for transaction lock to clear"
+msgstr "Количество секунд до очистки блокировки транзакции"
+
+msgid "Transaction locking"
+msgstr "Блокировка транзакции"
+
+msgid "Use SSL (LDAPS), your server needs to be setup (default: false)"
+msgstr ""
+"Использовать SSL (LDAPS). Ваш сервер должен быть настроен (по-умолчанию:не "
+"включено)"
+
+msgid "The default port for LDAP non-SSL connections"
+msgstr "Порт по-умолчанию для LDAP и SSL соединений"
+
+msgid "LDAP hosts, separated by a semicolon (;)"
+msgstr "LDAP хосты, разделённые точкой с запятой (;)"
+
+msgid "Base DN for your users, if different from the base DN above."
+msgstr "Base DN ваших пользователей, если отличается от base DN выше."
+
+msgid "UID Attribute"
+msgstr "UID Атрибуты"
+
+msgid "LDAP uid naming attribute for users, e.g. \"uid\" or \"cn\""
+msgstr ""
+"Название LDAP uid атрибутов для пользователей, например \"uid\" или \"cn\""
+
+msgid "NetIQ connection settings"
+msgstr "Настройка NetIQ соединений"
+
+msgid "Create new:"
+msgstr "Создать новый:"
+
+msgid "phpIPAM currently supports 7 methods for authentication:"
+msgstr "phpIPAM на данный момент поддерживает 7 методов аутентификации:"
+
+msgid "Apache authentication"
+msgstr "Apache аутентификация"
+
+msgid "NetIQ authentication"
+msgstr "NetIQ аутентификация"
+
+msgid "SAMLv2 authentication"
+msgstr "SAMLv2 аутентификация"
+
+msgid "SAML2 connection settings"
+msgstr "Настройки SAML2 соединения"
+
+msgid "Use advanced settings"
+msgstr "Используйте расширенные настройки"
+
+msgid "Use Onelogin php-saml settings.php configuration"
+msgstr "Используйте конфигурацию Onelogin php-saml settings.php"
+
+msgid "IDP issuer"
+msgstr "IDP издатель"
+
+msgid "Enter idp issuer"
+msgstr "Введите IDP издателя"
+
+msgid "IDP login url"
+msgstr "IDP url входа"
+
+msgid "Enter IDP login url"
+msgstr "Введите IDP url входа"
+
+msgid "IDP logout url"
+msgstr "IDP url выхода"
+
+msgid "Enter IDP logout url"
+msgstr "Введите IDP url выхода"
+
+msgid "IDP cert fingerprint"
+msgstr "Отпечаток IDP cert"
+
+msgid "Enter IDP X509 certificate fingerprint"
+msgstr "Введите IDP X509 сертификат"
+
+msgid "IDP cert algorithm"
+msgstr "Алгоритм IDP cert"
+
+msgid "Enter IDP X509 certificate algorithm"
+msgstr "Введите IDP X509 алгоритм сертификата"
+
+msgid "php XML extension missing!"
+msgstr "Отсутствует php XML расширение!"
+
+msgid "php Date extension missing!"
+msgstr "Отсутствует php Date расширение!"
+
+msgid "php zlib extension missing!"
+msgstr "Отсутствует php zlib расширение!"
+
+msgid "php openssl extension missing!"
+msgstr "Отсутствует php openssl расширение!"
+
+msgid "php mcrypt extension missing!"
+msgstr "Отсутствует php mcrypt расширение!"
+
+msgid "php gettext extension missing!"
+msgstr "Отсутствует php gettext расширение!"
+
+msgid "Manage devices"
+msgstr "Управление устройствами"
+
+msgid "Invalid rack start position"
+msgstr "Неверная начальная позиция стойки"
+
+msgid "Rack"
+msgstr "Стойка"
+
+msgid "Show rack"
+msgstr "Просмотр стойки"
+
+msgid "SNMP"
+msgstr "SNMP"
+
+msgid "Invalid ID."
+msgstr "Неверный ID."
+
+msgid "Invalid netZone ID."
+msgstr "Неверный netZone ID."
+
+msgid "Delete Network"
+msgstr "Удалить Сеть"
+
+msgid "Please enable the firewall zone module under server management"
+msgstr "Пожалуйста, включите модуль фаервол зоны в меню управления сервером"
+
+msgid "Invalid action."
+msgstr "Неверное действие."
+
+msgid "Invalid device ID."
+msgstr "Неверный ID устройства."
+
+msgid "Please select a device."
+msgstr "Пожалуйста,выберите устройство"
+
+msgid ""
+"Invalid zone name length parameter. A valid valid value is between 1 and 31."
+msgstr ""
+"Неверный параметр длины имени зоны. Правильное значение в пределах от 1 до "
+"31."
+
+msgid ""
+"Invalid autogen value. Use the checkbox to set the autogen value to on or "
+"off."
+msgstr ""
+"Неверное значение автогенерации. Используйте чекбокс для установки значения "
+"автогенерации во вкл. или выкл."
+
+msgid "Invalid pattern value."
+msgstr "Недопустимое значение шаблона."
+
+msgid "Please select at least one item to generate a valid name pattern."
+msgstr ""
+"Пожалуйста, выберите хотя бы один пункт для генерации правильного шаблона "
+"имени."
+
+msgid "Invalid subnet name type [network]. Do not manipulate the POST values!"
+msgstr "Неверный тип имени подсети [сеть]. Не пользуйтесь POST значениями!"
+
+msgid ""
+"Invalid subnet name type [description]. Do not manipulate the POST values!"
+msgstr "Неверный тип имени подсети [описание]. Не пользуйтесь POST значениями!"
+
+msgid "Invalid subnet name. Do not manipulate the POST values!"
+msgstr "Неверное имя подсети. Не пользуйтесь POST значениями!"
+
+msgid "Zone settings"
+msgstr "Установки Зоны"
+
+msgid ""
+"Choose a maximum lenght of the zone name.<br>The default: 3, maximum: 31 "
+"characters.<br>(keep in mind that your firewall may have a limit for the "
+"length of zone names or address objects )"
+msgstr ""
+"Выберите  максимальную длину имени зоны.<br>По-умолчанию:3, максимум:31 "
+"символ. <br>(учтите, что ваш фаервол может иметь ограничение на длину имени "
+"зоны или объектов адреса)"
+
+msgid ""
+"Generate zone names automaticaly with the setting &quot;decimal&quot; or "
+"&quot;hex&quot;.<br>The maximum value for a zone in hex mode would be "
+"ffffffff (4294967295 zones).<br>To use your own unique zone names you can "
+"choose the option &quot;text&quot."
+msgstr ""
+"Сгенерировать имя зоны автоматически с установками &quot;decimal&quot; или "
+"&quot;hex&quot;.<br>Максимальное значение зоны в hex режиме может быть "
+"ffffffff (4294967295 зон).<br>Для использования вашего личного уникального "
+"имени зоны, вы можете выбрать опцию &quot;text&quot."
+
+msgid "Firewall address object settings"
+msgstr "Установки объекта адреса фаервола"
+
+msgid "Autogenerate address objects"
+msgstr "Автогенерация объектов адреса"
+
+msgid ""
+"Automaticaly generate firewall address objects as an additional information "
+"of an IP address.<br>(Works only for subnets which are bound to a firewall "
+"zone.)"
+msgstr ""
+"Автоматическая генерация объектов адреса фаервола в качестве дополнительной "
+"информации об IP-адресе.<br>(Работает только для подсетей, которые связаны с "
+"зоной фаервола.)"
+
+msgid "Separator"
+msgstr "Разделитель"
+
+msgid "Available items"
+msgstr "Доступные пункты"
+
+msgid "Name pattern"
+msgstr "Шаблон имени"
+
+msgid "Subnet name"
+msgstr "Имя подсети"
+
+msgid ""
+"Firewall address objects for subnets will contain this information instead "
+"of FQDN or hostname.<br>By choosing \"description\" spaces and other "
+"characters but hiven or underline will be replaced by the separator value."
+msgstr ""
+"Объекты адреса фаервола для подсетей будут содержать эту информацию вместо "
+"FQDN или имени хоста. <br>Выбирая \"описание\" и другие символы но "
+"подчеркивание будет заменено на значение разделителя."
+
+msgid "Invalid subnet ID. Do not manipulate the POST values!"
+msgstr "Неверный ID подсети. Не пользуйтесь POST значениями!"
+
+msgid "Invalid or no zone ID. "
+msgstr "Неверный или отсутствует ID зоны."
+
+msgid "Invalid device ID. Do not manipulate the POST values!"
+msgstr "Неверный ID устройства. Не пользуйтесь POST значениями!"
+
+msgid "Cannot add this network to a zone."
+msgstr "Не могу добавить эту сеть в зону."
+
+msgid "Invalid operation. Do not manipulate the POST values!"
+msgstr "Неверная операция. Не пользуйтесь POST значениями!"
+
+msgid "No zones available"
+msgstr "Зоны отсутсвуют"
+
+msgid "Add this subnet to a firewall zone"
+msgstr "Добавить эту подсеть в зону фаервола"
+
+msgid "Select a Zone"
+msgstr "Выберите Зону"
+
+msgid "Please choose a appropriate network to bind to the firewall zone."
+msgstr "Пожалуйста выберите соответствующую сеть для привязки к зоне фаервола."
+
+msgid "Invalid network ID."
+msgstr "Неверный ID сети."
+
+msgid "Cannot add the network to the zone."
+msgstr "Не могу добавить сеть в зону."
+
+msgid "Network successfully added."
+msgstr "Сеть успешно добавлена."
+
+msgid "Cannot delete the network mapping."
+msgstr "Не могу удалить отображение сети."
+
+msgid "Successfully deleted the networt mapping."
+msgstr "Отображение сети успешно удалено."
+
+msgid "First select a section to choose a subnet afterwards."
+msgstr "Сперва выберите секцию для дальнейшего выбора подсети."
+
+msgid "No section selected"
+msgstr "Секция не выбрана"
+
+msgid "Invalid zone name length."
+msgstr "Неверная длина имени зоны"
+
+msgid "Indicator"
+msgstr "Индикатор"
+
+msgid "Padding"
+msgstr "Отступы"
+
+msgid "Zone description"
+msgstr "Описание зоны"
+
+msgid "Add a network to the Zone"
+msgstr "Добавить сеть в Зону"
+
+msgid "Search domains in AD"
+msgstr "Выбрать домены в AD"
+
+msgid "Enter search filter"
+msgstr "Выберите фильтр поиска"
+
+msgid "No groups found"
+msgstr "Группы не найдены"
+
+msgid " Following groups were found"
+msgstr "Следующие группы были найдены"
+
+msgid "Members:"
+msgstr "Участники:"
+
+msgid "Group $_POST[action] error"
+msgstr " $_POST[action] ошибка группы"
+
+msgid "Group $_POST[action] success"
+msgstr "Групповое $_POST[action] успешно"
+
+msgid "Invalid Id"
+msgstr "Неверный Id"
+
+msgid "All sections :"
+msgstr "Все секции :"
+
+msgid "Select sections and IP address fields to export"
+msgstr "Выберите секции и поля IP адреса для экспорта"
+
+msgid "IP Address"
+msgstr "IP адрес"
+
+msgid "Mandatory"
+msgstr "Постоянный"
+
+msgid "Include the sections in a separate sheet."
+msgstr "Включить секции в отдельном листе."
+
+msgid "Export each section in a separate sheet."
+msgstr "Экспортировать каждую секцию в отдельный лист."
+
+msgid "Select L2 Domain fields to export"
+msgstr "Выберите поля L2 домена для экспорта"
+
+msgid "Select sections and subnets fields to export"
+msgstr "Выберите секции и поля подсети для экспорта"
+
+msgid "VLAN Domain"
+msgstr "VLAN домен"
+
+msgid "Host check"
+msgstr "Выбор хоста"
+
+msgid "Select VLAN fields to export"
+msgstr "Выберите поля VLANа для экспорта"
+
+msgid "Include the L2 domains in a separate sheet."
+msgstr "Включить L2 домены в отдельный лист."
+
+msgid "Select VRF fields to export"
+msgstr "Выберите поля VRFа для экспорта"
+
+msgid "Select file"
+msgstr "Выберите файл"
+
+msgid "Browse / Drag & Drop"
+msgstr "Просмотр / Перенос"
+
+msgid "Cancel upload"
+msgstr "Отмена передачи"
+
+msgid "Match fields"
+msgstr "Соответствующие поля"
+
+msgid "Pick import colum for"
+msgstr "Выберите столбец импорта для"
+
+msgid ""
+"No fields were automatically matched. The import file needs to have a header "
+"row!"
+msgstr ""
+"Поля автоматически не соотнеслись. Импортируемый файл должен иметь строку "
+"заголовка."
+
+msgid "Not all the fields were automatically matched. Please check manually."
+msgstr "Не все поля соотнеслись автоматически. Пожалуйста, проверьте вручную."
+
+msgid "All the fields were automatically matched. Please check if correct."
+msgstr ""
+"Все поля автоматически соотнеслись. Пожалуйста проверьте, что правильно."
+
+msgid "No header row found in uploaded file. Please check."
+msgstr ""
+"В загруженном файле не найдено строки заголовка. Пожалуйста, проверьте."
+
+msgid "L2 Domain import"
+msgstr "Импорт L2 Домена"
+
+msgid "L2 Domain import data preview"
+msgstr "Просмотр данных импорта L2 домена"
+
+msgid "Uploaded data"
+msgstr "Загруженные данные"
+
+msgid "The entries marked with "
+msgstr "Записи, отмеченные значком"
+
+msgid "will be skipped."
+msgstr "будут пропущены."
+
+msgid "Summary: "
+msgstr "В итоге:"
+
+msgid "Scroll down for details."
+msgstr "Промотайте вниз для понимания."
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "Select L2 Domain file and fields to import"
+msgstr "Выберите файл L2 Домена и полей для импорта"
+
+msgid "Template"
+msgstr "Шаблон"
+
+msgid ""
+"The import XLS/CSV should have the following fields and a <b>header row</b> "
+"for a succesful import:"
+msgstr ""
+"Импортируемый XLS/CSV должен иметь следующие поля и <b>строку заголовка</b> "
+"для успешного импортирования:"
+
+msgid "The fields marked with * are mandatory"
+msgstr "Поля, обозначенные * обязательны"
+
+msgid "Preview"
+msgstr "Просмотр"
+
+msgid "Error: could not read the uploaded file type!"
+msgstr "Ошибка: не могу прочитать загруженный тип файла!"
+
+msgid "Error: missing required field mapping for expected field"
+msgstr "Ошибка: отсутствует требуемое сопоставление для ожидаемого поля"
+
+msgid "Internal error: missing import field mapping."
+msgstr "Внутренняя ошибка: отсутствует сопоставление импортируемого поля."
+
+msgid "Extra column found on line "
+msgstr "В строке найден лишний столбец"
+
+msgid "Root"
+msgstr "Root"
+
+msgid "No change, skip"
+msgstr "Нет изменений, пропустить"
+
+msgid "Subnets master/nested recompute data preview"
+msgstr "Предпросмотр пересчета главных/вложенных подсетей"
+
+msgid "Recomputed data"
+msgstr "Пересчитанные данные"
+
+msgid "didn't change the master."
+msgstr "не могу изменить главную."
+
+msgid "Select Subnet sections, VRFs and IP version to recompute"
+msgstr "Выберите секцию Подсети, VRFы и версию IP для пересчета"
+
+msgid "Sections and IP versions"
+msgstr "Секции и IP версии"
+
+msgid "Please choose which section and IP version to recompute:"
+msgstr "Пожалуйста, выберите, какую секцию и IP версию пересчитать:"
+
+msgid "Subnets master/nested recompute save"
+msgstr "Пересчет главной/нижестоящих подсетей сохранен"
+
+msgid "Subnets import data preview"
+msgstr "Предпросмотр импортируемых данных подсетей"
+
+msgid "Select Subnets file and fields to import"
+msgstr "Выберите файл Подсетей и поля для импортирования"
+
+msgid "The fields marked with * are mandatory."
+msgstr "Поля, обозначенные * обязательны"
+
+msgid ""
+"The mask can be provided either as a separate field or with the subnet, "
+"sparated by \"/\""
+msgstr ""
+"Маска может быть указана как как отдельное поле или вместе с подсетью через "
+"\"/\""
+
+msgid "Show PHPIPAM specific columns."
+msgstr "Показать особые поля PHPIPAM."
+
+msgid "Subnets import"
+msgstr "Импорт подсетей"
+
+msgid ""
+"After the import you should perform an automatic recomputation of the master/"
+"nested relations using the Recompute button after you close this window."
+msgstr ""
+"После импортирования вы должны сделать автоматический пересчёт главной/"
+"нижестоящих связей используя кнопку Пересчёт после закрытия этого окна."
+
+msgid "DNS Hostname"
+msgstr "Имя хоста DNS"
+
+msgid "Domain name"
+msgstr "Доменное имя"
+
+msgid "VLAN import data preview"
+msgstr "Предпросмотр импортируемых данных VLAN"
+
+msgid "Select VLAN file and fields to import"
+msgstr "Выберите файл с VLANами и поля для импорта"
+
+msgid "Add missing VLAN domains"
+msgstr "Добавить отсутствующие домены VLAN"
+
+msgid "VLAN import"
+msgstr "Импорт VLAN"
+
+msgid "VRF import data preview"
+msgstr "Предпросмотр импорта данных VRFов"
+
+msgid "Select VRF file and fields to import"
+msgstr "Выберите файл с VRFами и поля для импорта"
+
+msgid "VRF import"
+msgstr "Импорт VRF"
+
+msgid "Import / Export"
+msgstr "Импорт / Экспорт"
+
+msgid "Pick a data set type, and click on an action"
+msgstr "Выберите тип набора данных и нажмите на действие"
+
+msgid "Data set"
+msgstr "Набор данных"
+
+msgid "Pick data set"
+msgstr "Выбор набора данных"
+
+msgid "Device types"
+msgstr "Типы устройств"
+
+msgid "Not all options are available currently."
+msgstr "В данный момент доступны не все опции."
+
+msgid "Import data entries for the selected type"
+msgstr "Импорт данных для выбранного типа"
+
+msgid "Export data entries for the selected type"
+msgstr "Экспорт данных для выбранного типа"
+
+msgid "Recompute master/nested subnet relations."
+msgstr "Пересчёт отношений главной / вложенной подсети."
+
+msgid "Not implemented"
+msgstr "Не реализовано"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "IP Addresses import data preview"
+msgstr "Предпросмотр импортируемых данных IP адресов"
+
+msgid "Select IP Addresses file and fields to import"
+msgstr "Выберите файл с IP адресами и поля для импорта"
+
+msgid ""
+"Providing a subnet is optional, the system will add the IP to the longest "
+"match if no subnet is provided."
+msgstr ""
+"Предоставление подсети необязательно, система добавит IP к самому длинному "
+"совпадению, если не будет предоставлена подсеть."
+
+msgid "Search for matching subnet in all VRFs (ignore provided VRF)."
+msgstr "Поиск соответствующей подсети во всех VRFах (игнорируя указанный VRF)."
+
+msgid "IP Addresses import"
+msgstr "Импорт IP Адресов"
+
+msgid "Mail settings are missing. Please set admin mail and name!"
+msgstr "Отсутствуют настройки почты. Укажите почту админа и имя!"
+
+msgid "Failed to $_POST[action] nameserver set"
+msgstr "Ошибка $_POST[action] установки сервера имён"
+
+msgid "Nameserver"
+msgstr "DNS сервер"
+
+msgid "Add nameserver"
+msgstr "Добавить DNS сервер"
+
+msgid "Default PTR domain"
+msgstr "Дефолтный домен PTR"
+
+msgid "Default PTR domain if no valid hostname for PTR is provided"
+msgstr "Дефолтный PTR домен, если не указано правильное имя хоста для PTR"
+
+msgid "NXDOMAIN TTL"
+msgstr "NXDOMAIN TTL"
+
+msgid "Default TTL"
+msgstr "Дефолтный TTL"
+
+msgid "TTL"
+msgstr "TTL"
+
+msgid "NXDOMAIN ttl"
+msgstr "NXDOMAIN ttl"
+
+msgid "IPv4 reverse domains"
+msgstr "Реверсивные домены IPv4"
+
+msgid "Adding domain record on slave zone is not permitted"
+msgstr "Добавление доменной записи в подчинённую зону не разрешено"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "Autoserial"
+msgstr "Автосерия"
+
+msgid "Automatic"
+msgstr "Автоматически"
+
+msgid "Invalid AS"
+msgstr "Неверная AS"
+
+msgid "agent"
+msgstr "агент"
+
+msgid "Agent code"
+msgstr "Код агента"
+
+msgid "Agent id"
+msgstr "ID агента"
+
+msgid "remove agent"
+msgstr "Удалить агента"
+
+msgid "phpipam-agent documentation"
+msgstr "документация по phpipam-agent"
+
+msgid "Show only supernets"
+msgstr "Показать только суперсети"
+
+msgid "Show only supernets in list of subnets in section"
+msgstr "Показать только суперсети в списке подсетей в секции"
+
+msgid "Permission changes will be propagated to all nested subnets"
+msgstr "Изменения доступа будут распространены на все вложенные подсети"
+
+msgid "Invalid object Id"
+msgstr "Неверный id объекта"
+
+msgid "Map object to NAT"
+msgstr "Преобразовать объект в NAT"
+
+msgid "Existing NAT"
+msgstr "Существующий NAT"
+
+msgid "New object"
+msgstr "Новый объект"
+
+msgid "Add new object to NAT as"
+msgstr "Добавить новый объект в NAT как"
+
+msgid "Source"
+msgstr "Источник"
+
+msgid "Destination"
+msgstr "Получатель"
+
+msgid "Invalid NAT object identifier"
+msgstr "Неверный идентификатор NAT объекта"
+
+msgid "Name must have at least 3 characters"
+msgstr "Имя должно состоять хотя бы из 3 символов"
+
+msgid "Invalid NAT type"
+msgstr "Неверный тип NAT"
+
+msgid "NAT add failed"
+msgstr "Ошибка добавления NAT"
+
+msgid "NAT edit failed"
+msgstr "Ошибка редактирования NAT"
+
+msgid "NAT delete failed"
+msgstr "Ошибка удаления NAT"
+
+msgid "NAT add successful"
+msgstr "Успешное добавление NAT"
+
+msgid "NAT edit successful"
+msgstr "Успешное редактирование NAT"
+
+msgid "NAT delete successful"
+msgstr "Успешное удаление NAT"
+
+msgid "NAT"
+msgstr "NAT"
+
+msgid "Select NAT name"
+msgstr "Выберите название NAT"
+
+msgid "Select NAT type"
+msgstr "Выберите тип NAT"
+
+msgid "Select Device"
+msgstr "Выберите устройство"
+
+msgid "Source port"
+msgstr "Исходящий порт"
+
+msgid "Destination port"
+msgstr "Порт назначения"
+
+msgid "Please enter IP address"
+msgstr "Пожалуйста, введите IP адрес"
+
+msgid "Invalid NAT item ID"
+msgstr "Недействительный ID элемента NAT"
+
+msgid "Invalid NAT direction"
+msgstr "Неверное направление NAT"
+
+msgid "No results found"
+msgstr "Результатов не найдено"
+
+msgid "Static NAT can only contain IP address"
+msgstr "Статический NAT может содержать только IP адрес"
+
+msgid "Static NAT can only have 1 source address"
+msgstr "Статический NAT может иметь только 1 адрес источника"
+
+msgid "Static NAT can only have 1 destination address"
+msgstr "Статический NAT может иметь только 1 адрес назначения"
+
+msgid "Invalid object identifier"
+msgstr "Неверный идентификатор объекта"
+
+msgid "Missing object type or id"
+msgstr "Отсутствующий тип объекта или id"
+
+msgid "Add NAT item"
+msgstr "Добавить элемент NAT"
+
+msgid "Search objects"
+msgstr "Поиск объектов"
+
+msgid "Enter subnet/IP"
+msgstr "Введите подсеть/IP"
+
+msgid "Remove NAT item"
+msgstr "Удалить элемент NAT"
+
+msgid "Login text"
+msgstr "Текст входа"
+
+msgid "Show text above 'username' field on login page (default empty)"
+msgstr ""
+"Показать текст выше поля  'имя пользователя' на странице входа (по-умолчанию "
+"пусто)"
+
+msgid "Maintenance mode"
+msgstr "Режим отладки"
+
+msgid "Put phpipam to maintenance mode"
+msgstr "Перевести phpipam в режим отладки"
+
+msgid "Enable NAT"
+msgstr "Включить NAT"
+
+msgid "Enable or disable NAT module"
+msgstr "Включить или выключить режим NAT"
+
+msgid "Enable PowerDNS"
+msgstr "Включить PowerDNS"
+
+msgid "Enable or disable PowerDNS module"
+msgstr "Включить или выключить PowerDNS модуль"
+
+msgid "Enable DHCP"
+msgstr "Включить DHCP"
+
+msgid "Enable or disable DHCP module"
+msgstr "Включить или выключить DHCP модуль"
+
+msgid "Locations module"
+msgstr "Модуль местоположения"
+
+msgid "Enable or disable locations module"
+msgstr "Включить или выключить модуль местоположения"
+
+msgid "PSTN module"
+msgstr "PSTN модуль"
+
+msgid "Enable or disable PSTN module to manage phone numbers"
+msgstr "Включить или выключить PSTN модуль для управления телефонными номерами"
+
+msgid "Link addresses"
+msgstr "Линковые адреса"
+
+msgid ""
+"Display linked addresses from another subnet if it matches selected field"
+msgstr ""
+"Отображать связанные адреса из другой подсети, если они соответствуют "
+"выбранному полю"
+
+msgid "Syslog"
+msgstr "Сислог"
+
+msgid "Set where to send system logs"
+msgstr "Укажите куда отправлять системные логи"
+
+msgid "Update Tags"
+msgstr "Обновить тэги"
+
+msgid "Update address tags when address state change occurs"
+msgstr "Произошло обновление тэга адреса во время изменения его состояния"
+
+msgid "Require uniques subnets"
+msgstr "Требуются уникальные подсети"
+
+msgid "Require unique subnets accross all sections"
+msgstr "Требуются уникальные подсети во всех секциях"
+
+msgid "Set maximum number of concurrent ICMP checks (default 128)"
+msgstr ""
+"Установите максимальное количество одновременных ICMP проверок (по-умолчанию "
+"128)"
+
+msgid "Subnet Display"
+msgstr "Отображение подсети"
+
+msgid "Subnet Network Only"
+msgstr "Только сеть Подсети"
+
+msgid "Select which view you would prefer on the menu"
+msgstr "Выберите желаемый тип просмотра в меню"
+
+msgid "Upload logo"
+msgstr "Залить логотип"
+
+msgid "Upload custom logo"
+msgstr "Залить свой логотип"
+
+msgid "Missing snmp support in php"
+msgstr "Отсутствует поддержка snmp в php"
+
+msgid "Missing gd support in php"
+msgstr "Отсутствует поддержка gd в php"
+
+msgid "Current"
+msgstr "Текущий"
+
+msgid "New"
+msgstr "Новый"
+
+msgid "Select image"
+msgstr "Выберите картинку"
+
+msgid "Maintaneance mode removed"
+msgstr "Режим отладки отключен"
+
+msgid "Folder cannot nest behind itself!"
+msgstr "Папка не может находиться ниже себя!"
+
+msgid "Folder $_POST[action] successfull"
+msgstr "Папка $_POST[action] успешно"
+
+msgid "Invalid location value"
+msgstr "Неверное значение местоположения"
+
+msgid "Invalid threshold value"
+msgstr "Неверное значение порога"
+
+msgid "Invalid subnetId"
+msgstr "Неверный Id подсети"
+
+msgid "Search for subnets through SNMP"
+msgstr "Поиск подсетей через SNMP"
+
+msgid "Enter subnet in CIDR format"
+msgstr "Введите подсеть в формате CIDR"
+
+msgid "Mark as full"
+msgstr "Отметить как полную"
+
+msgid "Mark subnet as utilized"
+msgstr "Отметить подсеть как использованную"
+
+msgid "Set subnet alert threshold"
+msgstr "Установить порог предупреждения подсети"
+
+msgid "Failed to set subnet permissons for subnet"
+msgstr "Ошибка установки разрешений для подсети"
+
+msgid "No result"
+msgstr "Результата нет"
+
+msgid "Subnet splitted successfully"
+msgstr "Подсеть разбита успешно"
+
+msgid "Copy custom field values"
+msgstr "Копировать настраиваемые значения полей"
+
+msgid "Subnet linked"
+msgstr "Подсеть присоединена"
+
+msgid "Link IPv4 subnet to IPv6 subnet"
+msgstr "Присоединить IPv4 подсеть к IPv6 подсети"
+
+msgid "Select IPv6 subnet to link to current subnet"
+msgstr "Выберите IPv6 подсеть для соединения с текущей подсетью"
+
+msgid "Not linked"
+msgstr "Не соединено"
+
+msgid "Link"
+msgstr "Соединено"
+
+msgid ""
+"Update address tag to online/offline if state change occurs. Combine with "
+"settings > Update Tags"
+msgstr ""
+"Обновить тэг адреса в значение в сети/не в сети, если произойдёт изменение "
+"состояния. Комбинируйте с установкой > Обновление Тэга"
+
+msgid ""
+"Cannot send mail, mail settings are missing. Please set them under "
+"administration > Mail Settings !"
+msgstr ""
+"Не могу отослать почту, отсутствуют почтовые настройки. Установите их в меню "
+"администратора > Почтовые настройки !"
+
+msgid "Username must be at least 1 character long!"
+msgstr "Имя пользователя должно быть хотя бы 1 символ длиной!"
+
+msgid "VLANs / VRFs"
+msgstr "VLANы / VRFы"
+
+msgid "Select to allow user to manage VLANs and VRFs"
+msgstr "Выберите, чтобы разрешить пользователям управлять VLANами и VRFами"
+
+msgid "PowerDNS"
+msgstr "PowerDNS"
+
+msgid "Select to allow user to create DNS records"
+msgstr "Выберите, чтобы разрешить пользователям создавать DNS записи"
+
+msgid "PSTN"
+msgstr "PSTN"
+
+msgid "Select to allow user to manage PSTN numbers"
+msgstr "Выберите, чтобы разрешить пользователям управлять PSTN номерами"
+
+msgid "Manage VLANs / VRFs"
+msgstr "Управлять VLANами / VRFами"
+
+msgid "Menu type"
+msgstr "Тип меню"
+
+msgid "Invalid subnets"
+msgstr "Неправильная подсеть"
+
+msgid "No invalid subnets detected"
+msgstr "Не найдено неправильных подсетей"
+
+msgid "Invalid addresses"
+msgstr "Неверные адреса"
+
+msgid "No invalid addresses detected"
+msgstr "Не найдено неправильных адресов"
+
+msgid "Not allowed to change VLANs"
+msgstr "Нет доступа для изменения VLANов"
+
+msgid "VLAN already exists in another domain!"
+msgstr "VLAN уже существует в другом домене!"
+
+msgid "Unique VLAN"
+msgstr "Уникальный VLAN"
+
+msgid "Require unique vlan accross domains"
+msgstr "Требуется уникальный vlan во всех доменах"
+
+msgid "Admin privileges required"
+msgstr "Требуются админские привилегии"
+
+msgid "Invalid domain Id"
+msgstr "Неправильный id домена"
+
+msgid "No devices for SNMP VLAN query available"
+msgstr "Не найдено устройств для запроса VLANа по SNMP"
+
+msgid "No VLANS found"
+msgstr "VLANы не найдены"
+
+msgid "Add discovered VLANS"
+msgstr "Добавить обнаруженные VLANы"
+
+msgid "Select devices"
+msgstr "Выбор устройств"
+
+msgid "Select devices to query VLAN table from"
+msgstr "Выбор устройств для запроса таблицы VLANов"
+
+msgid "Scan"
+msgstr "Сканировать"
+
+msgid "Not allowed to change VRFs"
+msgstr "Не разрешено изменять VRFы"
+
+msgid "Failed to $_POST[action] VRF"
+msgstr "Обшибка $_POST[action] VRF"
+
+msgid "VRF $_POST[action] successfull"
+msgstr "VRF $_POST[action] успешно"
+
+msgid "Scan for VRFs"
+msgstr "Сканирование для VRFов"
+
+msgid "No devices for SNMP VRF query available"
+msgstr "Нет устройств для запроса VRFов по SNMP"
+
+msgid "No vrfs found"
+msgstr "vrfы не найдены"
+
+msgid "Add discovered vrfs"
+msgstr "Добавить найденные vrfы"
+
+msgid "Select devices to query VRF table from"
+msgstr "Выберите устройства для запроса списка VRFов"
+
+msgid "Widget $_POST[action] error"
+msgstr "Ошибка $_POST[action] виджета"
+
+msgid "Widget $_POST[action] success"
+msgstr "Успешно $_POST[action] виджет "
+
+msgid "DHCP management"
+msgstr "Управление DHCP"
+
+msgid "Please enable DHCP module under server management"
+msgstr "Пожалуйста, включите DHCP модуль в меню управления сервером"
+
+msgid "Invalid Location object identifier"
+msgstr "Неверный идентификатор расположения объекта"
+
+msgid "Invalid Latitude"
+msgstr "Неправильная широта"
+
+msgid "Invalid Longitude"
+msgstr "Неправильная долгота"
+
+msgid "Failed to update location lat/lng from google"
+msgstr "Ошибка обновления меcтоположения шир/долг из google"
+
+msgid "Location add failed"
+msgstr "Ошибка добавления метоположения"
+
+msgid "Location edit failed"
+msgstr "Ошибка редактирования местоположения"
+
+msgid "Location delete failed"
+msgstr "Ошибка удаления местоположения"
+
+msgid "Location add successful"
+msgstr "Успешное добавление местоположения"
+
+msgid "Location edit successful"
+msgstr "Успешное редактирование местоположения"
+
+msgid "Location delete successful"
+msgstr "Успешное удаление местоположения"
+
+msgid "or"
+msgstr "или"
+
+msgid "latitude"
+msgstr "долгота"
+
+msgid "Query"
+msgstr "Запрос"
+
+msgid "OID"
+msgstr "OID"
+
+msgid "No devices"
+msgstr "Нет устройств"
+
+msgid "No groups"
+msgstr "Нет групп"
+
+msgid "You are not member of any group. Please contact system administrator!"
+msgstr "Вы не входите ни в одну группу. Пожалуйста сообщите сисадмину!"
+
+msgid "Changelog files are sent to syslog"
+msgstr "Файл списка изменений отослан сислогу"
+
+msgid "Full"
+msgstr "Полон"
+
+msgid "Threshold module disabled"
+msgstr "Пороговый модуль отключен"
+
+msgid "You can enable threshold module under settings"
+msgstr "Вы можете включить пороговый модуль в настройках"
+
+msgid "No subnet is selected for threshold check"
+msgstr "Подсети не выбраны для пороговой проверки"
+
+msgid "You can set threshold for subnets under subnet settings"
+msgstr "Вы можете установить порог для подсетей в настройках подсети"
+
+msgid "No subnet selected for threshold check available"
+msgstr "Не найдены подсети выбранные для пороговой проверки"
+
+msgid "No subnet with threshold check available"
+msgstr "Не найдены подсети с пороговой проверкой"
+
+msgid "Current usage"
+msgstr "Текущее использование"
+
+msgid "Folder is empty"
+msgstr "Папка пуста"
+
+msgid "Only master subnets are shown"
+msgstr "Только главные подсети показаны"
+
+msgid "Switched to"
+msgstr "Переключиться в "
+
+msgid "Switch back user"
+msgstr "Переключить назад пользователя"
+
+msgid "Available sections"
+msgstr "Доступные секции"
+
+msgid "No sections available"
+msgstr "Секций нет"
+
+msgid "All sections"
+msgstr "Все секции"
+
+msgid "Show all sections"
+msgstr "Показать все секции"
+
+msgid "All items"
+msgstr "Все детали"
+
+msgid "Cannot add address as subnet is market as used"
+msgstr "Не могу добавить адрес, так как подсеть обозначена как использованная"
+
+msgid "Remove DNS records"
+msgstr "Удалить DNS записи"
+
+msgid "Remove all associated DNS records:"
+msgstr "Удалить все связанные DNS записи:"
+
+msgid "Addresses linked with"
+msgstr "Адреса соединённые с"
+
+msgid "No linked addresses found"
+msgstr "Не найдено соединённых адресов"
+
+msgid "Address linking disabled"
+msgstr "Соединение адресов отключено"
+
+msgid "Location not set !"
+msgstr "Местоположение не установлено !"
+
+msgid "Duplicated addresses"
+msgstr "Дублированные адреса"
+
+msgid "Mac"
+msgstr "Mac"
+
+msgid "No duplicated addresses found"
+msgstr "Дублированных адресов не найдено"
+
+msgid "Address NAT translations"
+msgstr "Адреса для NAT трансляций"
+
+msgid "Map to existing NAT"
+msgstr "Переместить на существующий NAT"
+
+msgid "No NAT objects available"
+msgstr "NAT объекты не найдены"
+
+msgid "No NAT translations for this address"
+msgstr "Нет NAT трансляций для этого адреса"
+
+msgid "Address permissions"
+msgstr "Разрешения адреса"
+
+msgid "General"
+msgstr "Основной"
+
+msgid "Firewall address object"
+msgstr "Объект адреса фаервола"
+
+msgid "Avalibility"
+msgstr "Доступность"
+
+msgid "DNS info"
+msgstr "DNS инфо"
+
+msgid "Regenerate firewall addres object."
+msgstr "Пересоздать адресный объект фаервола."
+
+msgid "Rack details"
+msgstr "Детали стойки"
+
+msgid "FW Object"
+msgstr "FW Объект"
+
+msgid "Filename"
+msgstr "Имя файла"
+
+msgid "fw object"
+msgstr "fw объект"
+
+msgid "Invalid IP address"
+msgstr "Неправильный IP адрес"
+
+msgid "IP addresses in $location "
+msgstr "IP адрес в $location"
+
+msgid "Remove all"
+msgstr "Удалить все"
+
+msgid "Sort by firewall address object"
+msgstr "Сортировать по объекту адреса фаервола"
+
+msgid "Sort by MAC"
+msgstr "Сортировать по MAC"
+
+msgid "Address was never online"
+msgstr "Адес никогда не был в сети"
+
+msgid "Address is alive"
+msgstr "Адрес жив"
+
+msgid "Address warning"
+msgstr "Предупреждения Адреса"
+
+msgid "Address is offline"
+msgstr "Адрес не в сети"
+
+msgid "Address status unknown"
+msgstr "Неизвестный статус адреса"
+
+msgid "Duplicate MAC"
+msgstr "Дублированный MAC"
+
+msgid "Gegenerate or regenerate a firewall addres object of this ip address."
+msgstr "Генерировать или обновить объект адреса фаервола этого ip адреса."
+
+msgid "Back to folder"
+msgstr "Назад в папку"
+
+msgid "Linked addresses"
+msgstr "Соединённые адреса"
+
+msgid "Multicast"
+msgstr "Мультикаст"
+
+msgid "Only 4096 IP addresses at once"
+msgstr "Только 4096 одновременных IP адресов"
+
+msgid "Invalid MAC address"
+msgstr "Неверный MAC адрес"
+
+msgid "IP $action successful"
+msgstr "IP $action успешно"
+
+msgid "fw_object"
+msgstr "fw_object"
+
+msgid "Cannot scan as subnet is market as used"
+msgstr "Не могу просканировать, так как подсеть обозначена как использованная"
+
+msgid "FW object"
+msgstr "FW объект"
+
+msgid "Ignore errors"
+msgstr "Игнорировать ошибки"
+
+msgid "Invalid subnet Identifier"
+msgstr "Неправильный Идентификатор подсети"
+
+msgid "No new hosts found"
+msgstr "Новые хосты не найдены"
+
+msgid "Subnet must have VLAN assigned for MAc address query"
+msgstr "Подсеть должна иметь VLAN, назначенный для запроса MAC адреса"
+
+msgid "No devices for SNMP MAC address query available"
+msgstr "Нет устройств для запроса MAC адресов по SNMP"
+
+msgid ""
+"No new hosts found from ARP scan, MAC address scan will not be performed"
+msgstr ""
+"Не найдено новых хостов из ARP сканирования, Сканирование MAC адресов не "
+"будет выполнено"
+
+msgid "No MAC address found via MAC address scan"
+msgstr "MAC адресов не найдено с помощью сканирования"
+
+msgid "Invalid section Id"
+msgstr "Неправильный Id секции"
+
+msgid "Add subnets to section"
+msgstr "Добавить подсети для сканирования"
+
+msgid "Associated VLANs"
+msgstr "Связанные VLANы"
+
+msgid "Associated VRFs"
+msgstr "Связанные VRFы"
+
+msgid "Linked IPv6 subnet"
+msgstr "Соединённые IPv6 подсети"
+
+msgid "Linked IPv4 subnets"
+msgstr "Соединённые IPv4 подсети"
+
+msgid "Subnet is natted"
+msgstr "Подсеть используется для NAT"
+
+msgid "Subnet is marked as used"
+msgstr "Подсеть обозначена как использованная"
+
+msgid "Alert threshold"
+msgstr "Порог предупреждений"
+
+msgid "Firewall zone"
+msgstr "Зона фаервола"
+
+msgid "Address object"
+msgstr "Объект адреса"
+
+msgid "Generate or regenerate the subnets firewall address object name."
+msgstr "Сгенерировать или пересоздать название объекта адреса сетей фаервола"
+
+msgid "disabled - marked as full"
+msgstr "отключено - отмечена как полная"
+
+msgid "Scan agent"
+msgstr "Агент сканирования"
+
+msgid "Invalid scan agent"
+msgstr "Неправильный агент сканирования"
+
+msgid "Last check"
+msgstr "Последняя проверка"
+
+msgid "Last scan"
+msgstr "Последнее сканирование"
+
+msgid "Manage linked IPv6 subnet"
+msgstr "Управление соединёнными IPv6 сетями"
+
+msgid "Map subnet to firewall zone"
+msgstr "Назначить подсеть как зону фаервола"
+
+msgid ""
+"Generate or regenerate firewall address objects for all ip addresses within "
+"this subnet."
+msgstr ""
+"Сгенерировать или пересоздать объект адреса фаервола для всех ip адресов в "
+"этой подсести"
+
+msgid "Subnet NAT translations"
+msgstr "NAT трансляции подсети"
+
+msgid "No NAT translations for this subnet"
+msgstr "Нет NAT трансляций для этой подсети"
+
+msgid "Temporary share"
+msgstr "Временная раздача"
+
+msgid "Invalid search string"
+msgstr "Неправильная строка поиска"
+
+msgid "Invalid limit"
+msgstr "Неправильное ограничение"
+
+msgid "Output has been limited to last $_REQUEST[climit] lines"
+msgstr "Вывод был ограничен последними $_REQUEST[climit] строками"
+
+msgid "Invalid permission"
+msgstr "Неверные права"
+
+msgid "Changelog details"
+msgstr "Детали списка изменений"
+
+msgid "Show details"
+msgstr "Показать детали"
+
+msgid "Belonging addresses"
+msgstr "Принадлежащие адреса"
+
+msgid "All devices"
+msgstr "Все устройства"
+
+msgid "Location is not set for this device"
+msgstr "Местоположение не установлено для этого устройства"
+
+msgid "No NAT translations for this device"
+msgstr "Нет NAT трансляций для этого устройства"
+
+msgid "Belonging PSTN prefixes"
+msgstr "Принадлежащие PSTN префиксы"
+
+msgid "PSTN prefixes module disabled."
+msgstr "Модуль PSTN префиксов отключён."
+
+msgid "Prefix"
+msgstr "Префикс"
+
+msgid "Start"
+msgstr "Старт"
+
+msgid "Stop"
+msgstr "Стоп"
+
+msgid " Firewall Zones"
+msgstr "Зона фаервола"
+
+msgid "Manage zones"
+msgstr "Управление зонами"
+
+msgid "Administrative privileges required!"
+msgstr "Требуются привилегии администратора"
+
+msgid "Unknown"
+msgstr "Неизвестный"
+
+msgid "Domain type:"
+msgstr "Тип домена:"
+
+msgid "Master servers"
+msgstr "Главные сервера"
+
+msgid "Notified serial:"
+msgstr "Объявленный серийный номер:"
+
+msgid "Last check:"
+msgstr "Последняя проверка:"
+
+msgid "No records found for filter "
+msgstr "Не найдены записи для фильтра"
+
+msgid "You do not have permission to manage DNS. Please contact administrator!"
+msgstr "У вас нет прав для управления DNS. Обратитесь к администратору!"
+
+msgid "No host records available"
+msgstr "Нет записей о хостах"
+
+msgid "PowerDNS IP records"
+msgstr "IP записи PowerDNS"
+
+msgid "List of all DNS records resolving to IP address"
+msgstr "Список всех DNS записей разрешённых на IP адреса"
+
+msgid "List of unprocessed IP addresses requests"
+msgstr "Список не завершённых  запросов IP адресов"
+
+msgid "VRF search results"
+msgstr "Результат поиска VRF"
+
+msgid "Search results (VRFs)"
+msgstr "Результат поиска (VRFы)"
+
+msgid "Search results (PSTN Prefixes)"
+msgstr "Результат поиска  (PSTN Префиксы)"
+
+msgid "Search results (PSTN Numbers)"
+msgstr "Результат поиска  (PSTN Номера)"
+
+msgid "Wildcard mask"
+msgstr "Инверсная маска"
+
+msgid "custom tool"
+msgstr "пользовательский инструмент"
+
+msgid ""
+"Select yes to receive mail notification changes (IP state change, new hosts, "
+"requests)"
+msgstr ""
+"Выберите да для получения почтовых уведомлений об изменениях (состояния IP, "
+"новых хостах, запросах)"
+
+msgid "Select yes to receive mail notifications for IP requests"
+msgstr "Выберите да для получения почтовых уведомлений о запросах IP"
+
+msgid "Menu Type"
+msgstr "Тип меню"
+
+msgid "Static"
+msgstr "Статический"
+
+msgid "Dynamic"
+msgstr "Динамический"
+
+msgid "Select menu type to display"
+msgstr "Выберите тип меню для отображения"
+
+msgid "Invalid language!"
+msgstr "Неправильный язык!"
+
+msgid "VLANs in all domains"
+msgstr "VLANы для всех доменов"
+
+msgid "List of VLANS in all domains"
+msgstr "Список VLANов для всех доменов"
+
+msgid "L2domain"
+msgstr "L2домен"
+
+msgid "Scan for VLANs"
+msgstr "Сканирование VLANов"
+
+msgid "L2 domains"
+msgstr "L2 домены"
+
+msgid "All domains"
+msgstr "Все домены"
+
+msgid "List of all VLANs in all domains"
+msgstr "Список всех VLANов во всех доменах"
+
+msgid "Available in sections"
+msgstr "Доступные в секциях"
+
+msgid "DHCP information"
+msgstr "Информация DHCP"
+
+msgid "Active leases"
+msgstr "Активные аренды"
+
+msgid "Subnet id"
+msgstr "id подсети"
+
+msgid "Client_id"
+msgstr "Клиент_id"
+
+msgid "Lifetime"
+msgstr "Время жизни"
+
+msgid "IPv4 leases"
+msgstr "IPv4 аренды"
+
+msgid "IPv4 not configured on DHCP server"
+msgstr "IPv4 не настроен на DHCP сервере"
+
+msgid "No IPv4 leases"
+msgstr "IPv4 аренды отсутствуют"
+
+msgid "IPv6 leases"
+msgstr "IPv6 аренды"
+
+msgid "IPv6 not configured on DHCP server"
+msgstr "IPv6 не настроен на DHCP сервере"
+
+msgid "No IPv6 leases"
+msgstr "IPv6 аренды отсутствуют"
+
+msgid "Reservations"
+msgstr "Бронирование"
+
+msgid "Reserved in"
+msgstr "Забронировано в"
+
+msgid "Options"
+msgstr "Опции"
+
+msgid "Classes"
+msgstr "Классы"
+
+msgid "Subnets and pools"
+msgstr "Подсети и пулы"
+
+msgid "Pools"
+msgstr "Пулы"
+
+msgid "IPv4 subnets"
+msgstr "IPv4 подсети"
+
+msgid "No IPv4 subnets"
+msgstr "Нет IPv4 подсетей"
+
+msgid "IPv6 subnets"
+msgstr "IPv6 подсети"
+
+msgid "No IPv6 subnets"
+msgstr "Нет IPv6 подсетей"
+
+msgid "Add location"
+msgstr "Добавить местоположение"
+
+msgid "Locations module disabled."
+msgstr "Модуль местоположения отключён."
+
+msgid "Coordinates"
+msgstr "Координаты"
+
+msgid "objects"
+msgstr "объекты"
+
+msgid "Location not set"
+msgstr "Местоположение не установлено"
+
+msgid "Locations Map"
+msgstr "Карта местоположений"
+
+msgid "Locations list"
+msgstr "Список местоположений"
+
+msgid "Location details"
+msgstr "Детали местоположения"
+
+msgid "Location not found"
+msgstr "Местоположение не найдено"
+
+msgid "Belonging objects"
+msgstr "Принадлежащие объекты"
+
+msgid "Remove"
+msgstr "Удалить"
+
+msgid "Multicast networks"
+msgstr "Мультикаст сети"
+
+msgid "Subnets has no hosts"
+msgstr "Подсеть не имеет хостов"
+
+msgid "Add new address"
+msgstr "Добавить новые адреса"
+
+msgid "No multicast subnets available"
+msgstr "Нет мультикаст сетей"
+
+msgid "Add nat"
+msgstr "Добавить nat"
+
+msgid "NAT module disabled."
+msgstr "NAT модуль отключен."
+
+msgid "Translation"
+msgstr "Трансляция"
+
+msgid "List of PSTN prefixes"
+msgstr "Список PSTN префиксов"
+
+msgid "Numbers"
+msgstr "Номера"
+
+msgid "You do not have permission to manage PSTN numbers"
+msgstr "У вас нет разрешений для управления PSTN номерами"
+
+msgid "Invalid PSTN number identifier"
+msgstr "Неправильный идентификатор PSTN номера"
+
+msgid "Number must be numeric"
+msgstr "Номер должен состоять из цифр"
+
+msgid "Invalid prefix"
+msgstr "Неправильный префикс"
+
+msgid "Duplicate number"
+msgstr "Дублированный номер"
+
+msgid "Number not inside prefix"
+msgstr "Номер не внутри префикса"
+
+msgid "Number add failed"
+msgstr "Ошибка добавления номера"
+
+msgid "Number edit failed"
+msgstr "Ошибка редактирования номера"
+
+msgid "Number delete failed"
+msgstr "Ошибка удаления номера"
+
+msgid "Number add successful"
+msgstr "Успешное добавление номера"
+
+msgid "Number edit successful"
+msgstr "Успешное редактирование номера"
+
+msgid "Number delete successful"
+msgstr "Успешное удаление номера"
+
+msgid "Invalid prefix ID"
+msgstr "Неправильный ID префикса"
+
+msgid "PSTN number"
+msgstr "PSTN номер"
+
+msgid "Number Name"
+msgstr "Имя номера"
+
+msgid "Address owner"
+msgstr "Владелец адреса"
+
+msgid "Select device where prefix is located"
+msgstr "Выберите устройство, где находится префикс"
+
+msgid "You do not have permission to manage PSTN prefixes"
+msgstr "У вас нет доступа для управления PSTN префиксами"
+
+msgid "Invalid PSTN object identifier"
+msgstr "Неверный идентификатор объекта PSTN "
+
+msgid "Start must be numeric"
+msgstr "Начальное должно быть цифровым"
+
+msgid "Stop must be numeric"
+msgstr "Конечное должно быть цифровым"
+
+msgid "Invalid master prefix"
+msgstr "Неправильный главный префикс"
+
+msgid "Prefix cannot be same as master"
+msgstr "Префикс не может быть таким же как мастер"
+
+msgid "Prefix not inside its master"
+msgstr "Префикс не принадлежит главному"
+
+msgid "Prefix overlaps with prefix "
+msgstr "Префикс пересекается с префиксом"
+
+msgid "Prefix add failed"
+msgstr "Ошибка добавления префикса"
+
+msgid "Prefix edit failed"
+msgstr "Ошибка редактирования префикса"
+
+msgid "Prefix delete failed"
+msgstr "Ошибка удаления префикса"
+
+msgid "Prefix add successful"
+msgstr "Успешное добавление префикса"
+
+msgid "Prefix edit successful"
+msgstr "Успешное редактирование префикса"
+
+msgid "Prefix delete successful"
+msgstr "Успешное удаление префикса"
+
+msgid "Invalid master ID"
+msgstr "Неправильный ID главного"
+
+msgid "PSTN prefix"
+msgstr "PSTN префикс"
+
+msgid "Master prefix"
+msgstr "Главный префикс"
+
+msgid "Set Prefix name"
+msgstr "Установить название префикса"
+
+msgid "Set start number"
+msgstr "Установить начальный номер"
+
+msgid "Set stop number"
+msgstr "Установить конечный номер"
+
+msgid ""
+"Enter master prefix if you want to nest it under existing subnet, or select "
+"root to create root prefix"
+msgstr ""
+"Введите главный префикс, если вы хотите вложить его под существующую "
+"подсеть, или выберите корень для создания корневого префикса"
+
+msgid "Short"
+msgstr "Короткий"
+
+msgid "No numbers"
+msgstr "Нет номеров"
+
+msgid "Unused"
+msgstr "Неиспользуемый"
+
+msgid "PSTN prefix details"
+msgstr "Детали PSTN префикса"
+
+msgid "Prefix not found"
+msgstr "Префикс не найден"
+
+msgid "All prefixes"
+msgstr "Все префиксы"
+
+msgid "Prefix details"
+msgstr "Детали префикса"
+
+msgid "Edit prefix properties"
+msgstr "Редактировать свойства префикса"
+
+msgid "Create new prefix"
+msgstr "Создать новый префикс"
+
+msgid "Delete prefix"
+msgstr "Удалить префикс"
+
+msgid "You do not have permissions to edit prefix"
+msgstr "У вас нет прав для редактирования префикса"
+
+msgid "Add address to prefix"
+msgstr "Добавить адрес к префиксу"
+
+msgid "RACK list"
+msgstr "Список СТОЕК"
+
+msgid "Add rack"
+msgstr "Добавить стойку"
+
+msgid "RACK management disabled."
+msgstr "Управление стойками отключено."
+
+msgid "No racks available"
+msgstr "Стойки не найдены"
+
+msgid "Rack is empty"
+msgstr "Стойка пуста"
+
+msgid "Invalid rack Id"
+msgstr "Неправильный id стойки"
+
+msgid "RACK details"
+msgstr "Детали СТОЙКИ"
+
+msgid "Invalid subpage"
+msgstr "Недопустимая подстраница"
+
+msgid "Subpage does not exist"
+msgstr "Подстраница не существует"
+
+msgid "Add option"
+msgstr "Добавить опцию"
+
+msgid "prefix option"
+msgstr "опция префикса"
+
+msgid "Option"
+msgstr "Опция"
+
+msgid "New Option"
+msgstr "Новая Опция"
+
+msgid "Value cannot be empty"
+msgstr "Значение не может быть пустым"
+
+msgid "Options updated"
+msgstr "Опции обновлены"
+
+msgid "Upgrade"
+msgstr "Обновление"
+
+msgid "Object is Natted"
+msgstr "Объект включён в NAT"
+
+msgid "Invalid generator ID"
+msgstr "Неправильный ID генератора"
+
+msgid ""
+"Maximum zone name length reached! Consider to change your settings in order "
+"to generate larger zone names."
+msgstr ""
+"Превышена максимальная длина имени зоны! Возможно надо изменить ваши "
+"настройки для генерации более длинных имён зон."
+
+msgid ""
+"The maximum convertable vlaue is reached. Consider to switch to decimal or "
+"text mode and change the zone name length value."
+msgstr ""
+"Максимально конвертируемое значение превышено. Возможно надо переключится в "
+"текстовый или десятичный режим и изменить размер имени зоны."
+
+msgid "Zone Name"
+msgstr "Имя Зоны"
+
+msgid ""
+"This network is already bound to this or another zone.<br>The binding must "
+"be unique."
+msgstr ""
+"Эта сеть уже связана с этой или другой зоной.<br>Связка должна быть "
+"уникальной."
+
+msgid "Invalid log command"
+msgstr "Неправильная команда лога"
+
+msgid "A record must be an IP address"
+msgstr "Запись должны быть IP адресом"
+
+msgid "AAAA record must be an IP address"
+msgstr "AAAA запись должна быть IP адресом"
+
+msgid "Subnet permissions recursively set"
+msgstr "Права подсети установлены рекурсивно"
+
+msgid "Subnet $cidr overlaps with"
+msgstr "Подсеть $cidr пересекается с"
+
+msgid "New subnet cannot be same as master subnet"
+msgstr "Новая подсеть не должна быть такой же как и главная подсеть"
+
+msgid "Invalid Mask"
+msgstr "Неправильная маска"
+
+msgid "Invalid request action"
+msgstr "Неправильный запрос"
+
+msgid "Invalid filetype"
+msgstr "Неверный тип файла"
+
+msgid "System is running in maintenance mode"
+msgstr "Система работает в режиме отладки"
+
+msgid "Invalid username"
+msgstr "Неверное имя пользователя"
+
+msgid "SAML2 login successful"
+msgstr "Успешный SAML2 вход"
+
+msgid "Invalid server type $server_type"
+msgstr "Неверный тип сервера $server_type"
+
+msgid "Missing class file"
+msgstr "Отсутствует файл класса"
+
+msgid "User attributes:"
+msgstr "Пользовательские атрибуты"
+
+msgid "No attributes found."
+msgstr "Атрибуты не найдены."
+
+msgid "Attributes not found"
+msgstr "Атрибуты не найдены"
