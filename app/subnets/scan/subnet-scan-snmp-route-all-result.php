@@ -77,7 +77,7 @@ if (isset($subnets_all)) {
         # set new POST
         $_POST = $s;
         # create csrf token
-        $_POST['csrf_cookie'] = $User->csrf_cookie ("create", "subnet");
+        $_POST['csrf_cookie'] = $User->csrf_cookie ("create", "subnet_add");
         # permissions
         $subnet['permissions'] = $section->permissions;
         # check for master
@@ -93,5 +93,3 @@ if (isset($subnets_all)) {
     }
 }
 else { $Result->show("danger", "No subnets selected", true); }
-
-?>
