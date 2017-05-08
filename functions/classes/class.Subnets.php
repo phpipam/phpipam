@@ -892,7 +892,6 @@ class Subnets extends Common_functions {
 				foreach($slaves2 as $slave) {
 					# save to full array of slaves
 					$this->slaves_full[$slave->id] = $slave;
-					$this->slaves[] = $slave->id;
 					# fetch possible new slaves
 					$this->fetch_subnet_slaves_recursive ($slave->id);
 					$end = true;
@@ -1108,14 +1107,11 @@ class Subnets extends Common_functions {
             $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
             // slaves fix for reducing subnet and broadcast address
             if($ip_version=="IPv4" && $is_slave) {
-                if($subnet->mask==32 && $out["used"]==0) {
-                     $out["used"]++;
+                if($subnet->mask==32) {
+                     $out["used"] = 1;
                 }
-                elseif($subnet->mask==31 &&  $out["used"]==0) {
-                    $out["used"] = $out["used"]+2;
-                }
-                elseif($subnet->mask==31 &&  $out["used"]==1) {
-                    $out["used"]++;
+                elseif($subnet->mask==31) {
+                    $out["used"] = 2;
                 }
                 else {
                     $out["used"] = $out["used"]+2;
