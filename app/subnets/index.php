@@ -36,6 +36,9 @@ if($subnet['sectionId']!=$_GET['section'])	{
 	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
 
+// get usage
+$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet, true);
+
 # set title
 $location = "subnets";
 
