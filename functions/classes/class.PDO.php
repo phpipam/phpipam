@@ -251,13 +251,20 @@ abstract class DB {
 	 * @param array $values (default: array())
 	 * @return void
 	 */
-	public function runQuery($query, $values = array()) {
+	public function runQuery($query, $values = array(), &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
 
-		$statement = $this->pdo->prepare($query);
 		//debuq
-		$this->log_query ($statement, $values);
-		return $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
+		$this->log_query($statement, $values);
+
+		$result = null;
+
+		$statement = $this->pdo->prepare($query);
+		if (is_object($statement)) {
+			$result = $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
+			$rowCount = $statement->rowCount();
+		}
+		return $result;
 	}
 
 	/**
