@@ -336,6 +336,11 @@ abstract class DB {
 
 		$obj = (array)$obj;
 
+                // block XSS
+                array_walk_recursive($obj, function (&$value) {
+                    $value = htmlentities($value);
+                });
+
 		//we cannot update an object without an id specified so quit
 		if (!isset($obj[$primarykey])) {
 			throw new Exception('Missing primary key');
