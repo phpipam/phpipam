@@ -338,7 +338,9 @@ abstract class DB {
 
                 // block XSS
                 array_walk_recursive($obj, function (&$value) {
-                    $value = htmlentities($value);
+                    if (!is_null($value)) {
+                        $value = htmlentities($value);
+                    }
                 });
 
 		//we cannot update an object without an id specified so quit
