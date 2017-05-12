@@ -149,7 +149,7 @@ CREATE TABLE `settings` (
   `enableSNMP` TINYINT(1)  NULL  DEFAULT '0',
   `enableThreshold` TINYINT(1)  NULL  DEFAULT '1',
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
-  `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
+  `enableLocations` TINYINT(1)  NULL  DEFAULT '0',
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
