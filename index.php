@@ -118,11 +118,9 @@ else {
 	<!--[if lt IE 9]>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
 	<![endif]-->
-	<?php if ($User->settings->enableLocations=="1") { ?>
-	<?php	if(isset($gmaps_api_key) && strlen($gmaps_api_key)>0) { ?>
+	<?php if ($User->settings->enableLocations=="1" && isset($gmaps_api_key) && strlen($gmaps_api_key)>0) { ?>
 	<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".$gmaps_api_key; ?>"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/gmaps.js"></script>
-	<?php } else { $Result->show("warning text-center nomargin", _("Location module API key is unset. Please configure config.php \$gmaps_api_key")); }	?>
 	<?php }	?>
 
 </head>
