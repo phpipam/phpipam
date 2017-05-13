@@ -29,7 +29,7 @@ if ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
 elseif ($User->settings->enableLocations=="1" && (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0)) {
-    $Result->show("warning text-center nomargin", _("Location module Google Maps API key is unset. Please configure config.php \$gmaps_api_key."));
+    $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 else {
     # fetch all locations
