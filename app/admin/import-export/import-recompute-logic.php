@@ -47,16 +47,6 @@ function my_ip2Bin($pi6,$ip)
 	return $binstr;
 }
 
-# Sort each edata subnet bucket by subnet lo->hi then by Id lo->hi.
-function fn_sort_cmp_subnets($a, $b)
-{
-	if ($a['subnet'] == $b['subnet']) {
-		if ($a['id'] == $b['id'] ) { return 0; }
-		return $a['id'] > $b['id'] ? 1 : -1;
-	}
-	return $a['subnet'] > $b['subnet'] ? 1 : -1;
-}
-
 # Read selected fields and pass them to the save form
 foreach($_GET as $key => $value) {
 	if (preg_match("/recomputeSection_(\d+)$/",$key,$matches) && ($value == "on")) {
@@ -87,30 +77,24 @@ foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[$vrf['vrfId']] = $v
 
 # Precompute masks values, to avoid too much CPU load
 $masks = array();
-for ($i = 0; $i <= 32; $i++) { $masks["IPv4"][$i] = 0xffffffff >> (32 - $i) << (32 - $i); }				# IPv4 masks, long
-for ($i = 0; $i <= 128; $i++) { $masks["IPv6"][$i] = str_repeat('1', $i).str_repeat('0', 128 - $i); }	# IPv6 masks, bin str
+for ($i = 0; $i <= 32; $i++) {
+	$pwr = gmp_pow(2,32-$i);
+	$masks["IPv4"][$i] = gmp_mul(gmp_div("0xffffffff",$pwr),$pwr);
+}
+for ($i = 0; $i <= 128; $i++) {
+	$pwr = gmp_pow(2,128-$i);
+	$masks["IPv6"][$i] = gmp_mul(gmp_div("0xffffffffffffffffffffffffffffffff",$pwr),$pwr);
+}
 
 $rows = ""; $counters = array(); $subnetbyid = array();
 
 /**
- * Fetch the section subnets and save references into multi-dimentional array edata (subnet buckets)
- * edata[subnet_section][subnet_type][subnet_mask] = &subnet
+ * The multi-dimentional array candidates stores subnet objects into buckets with identical section,
+ * type, mask and andip values. (Duplicate subnets/masks are allowed, eg different VRFs)
  *
- * Each bucket contains subnets with identical section, type and mask values.
- * Each bucket is sorted by subnet address lo->hi, then by id lo->hi.
- * [section 1 IPv4 /24's], [section 1 IPv4 /16's], [section 1 IPv4 /8's], [section 2 IPv6 /64's] ....
- *
- * When selecting a master subnet for a child we can minimise the search tree:
- *  - Only search buckets belonging to the same section as the child.
- *  - Only search buckets of the same type as the child (IPv4/IPv6).
- *  - Only search buckets with a smaller mask than the child (Master > Child)
- *
- * We can further optimise the search:
- *  - Find the most specific master candidates by decrementing search_mask to search the buckets with
- *    the largest masks first (23,22,21...0). If we find one or more master candidates stop searching
- *    as the remaining buckets contain less specific subnets.
- *  - Each bucket is sorted by subnet lo->hi. If we encounter an subnet > than the child the remaining
- *    items are guaranteed to also not match. Decrement the search_mask and skip to the next bucket.
+ * When searching for a new master we calculate the andip of the current subnet using the currrent
+ * $search_mask and use a hash lookup of $candidates to find subnets with matching attributes.
+ * If no matches exists we decrement the $search_mask and repeat.
  *
  * If cross-vrf searching is enabled or strict mode is disabled; multiple master candidates may exist.
  * Select the master from the available candidates based on the selection rules below.
@@ -133,22 +117,14 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$subnet = (array) $subnet;
 		$subnet['ip'] = $Subnets->transform_to_dotted($subnet['subnet']);
 		$subnet['type'] = $Subnets->identify_address($subnet['ip']);
-		# Precompute subnet in AND format (long for IPv4 and bin str for IPv6)
-		$subnet['andip'] = ($subnet['type'] == "IPv4") ? $subnet['subnet'] : my_ip2Bin($pi6,$subnet['ip']);
-		# Add to array
-		$type = $subnet['type'];
-		$mask = $subnet['mask'];
-		$edata[$sect_id][$type][$mask][] = &$subnet;
+		$type   = $subnet['type'];
+		$mask   = $subnet['mask'];
+		$andip  = gmp_strval(gmp_and($subnet['subnet'],$masks[$type][$mask]));
+		$edata[$sect_id][] = &$subnet;
+		$candidates[$sect_id][$type][$mask][$andip][] = &$subnet;
 		$subnetbyid[$subnet['id']] = &$subnet;
 	}
 	unset($subnet);
-
-	# Sort edata subnet buckets
-	foreach($edata[$sect_id] as $e_type => $a) {
-		foreach($edata[$sect_id][$e_type] as $e_mask => $b) {
-			usort($edata[$sect_id][$e_type][$e_mask], "fn_sort_cmp_subnets");
-		}
-	}
 
 	# Recompute master/nested relations for the selected sections and address families
 	# Grab a subnet and find its closest master
@@ -157,26 +133,18 @@ foreach ($rlist as $sect_id => $sect_check) {
 		if ($c_subnet['isFolder']) { continue; } # Skip folders
 		if ($subnetbyid[$c_subnet['masterSubnetId']]['isFolder']) { continue; } # Skip changing subnet with folder masters
 
-		# Search subnets in the same section, of the same type and with smaller masks.
-		$m_candidate = array();
-		$search_mask = $c_subnet['mask'];
-		$search_type  = $c_subnet['type'];
+		# Search for matching candidates in the same section, of the same type and with smaller masks.
+		$m_candidate   = array();
+		$search_mask   = $c_subnet['mask'];
+		$search_type   = $c_subnet['type'];
 
 		while (--$search_mask >= 0) {
-			if (sizeof($edata[$sect_id][$search_type][$search_mask]) == 0) { continue; }
-			# We found candidates in the previous round.
-			if (sizeof($m_candidate) > 0) { break; }
+			$search_subnet = gmp_strval(gmp_and($c_subnet['subnet'], $masks[$search_type][$search_mask]));
 
-			foreach ($edata[$sect_id][$search_type][$search_mask] as $m_subnet) {
-				# buckets are sorted lo->hi. If current m_subnet is > c_subnet then remaining enries will be too.
-				if ($m_subnet['subnet'] > $c_subnet['subnet']) { break; }
-
-				# Skip subnets from other VRFs if cross VRF reordering is not wanted (default is on)
-				if ((!$sect_check["CVRF"]) && ($c_subnet['vrfId'] != $m_subnet['vrfId'])) { continue; }
-
-				# Main logic here - check if subnet within subnet
-				if (($c_subnet['andip'] & $masks[$c_subnet['type']][$m_subnet['mask']]) == $m_subnet['andip']) { $m_candidate[] = $m_subnet; }
-			}
+			if (isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) {
+				$m_candidate = $candidates[$sect_id][$search_type][$search_mask][$search_subnet];
+				break;
+			};
 		}
 
 		$c_master_id = "0"; $c_master_ip = ""; $c_master_mask = ""; $search_child_vrf_only = 0;
