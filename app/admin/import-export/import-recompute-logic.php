@@ -142,8 +142,19 @@ foreach ($rlist as $sect_id => $sect_check) {
 			$search_subnet = gmp_strval(gmp_and($c_subnet['subnet'], $masks[$search_type][$search_mask]));
 
 			if (isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) {
-				$m_candidate = $candidates[$sect_id][$search_type][$search_mask][$search_subnet];
-				break;
+				$t_candidate = $candidates[$sect_id][$search_type][$search_mask][$search_subnet];
+
+				# Skip subnets from other VRFs if cross VRF reordering is not wanted (default is on)
+				if (!$sect_check["CVRF"]) {
+					foreach($t_candidate as $i => $t_subnet) {
+						if ($t_subnet['vrfId'] != $c_subnet['vrfId']) { unset($t_candidate[$i]);}
+					}
+				}
+
+				if (sizeof($t_candidate) > 0) {
+					$m_candidate = $t_candidate;
+					break;
+				}
 			};
 		}
 
