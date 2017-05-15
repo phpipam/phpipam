@@ -117,12 +117,14 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$subnet = (array) $subnet;
 		$subnet['ip'] = $Subnets->transform_to_dotted($subnet['subnet']);
 		$subnet['type'] = $Subnets->identify_address($subnet['ip']);
-		$type   = $subnet['type'];
-		$mask   = $subnet['mask'];
-		$andip  = gmp_strval(gmp_and($subnet['subnet'],$masks[$type][$mask]));
+		$type = $subnet['type'];
+		$mask = $subnet['mask'];
 		$edata[$sect_id][] = &$subnet;
-		$candidates[$sect_id][$type][$mask][$andip][] = &$subnet;
 		$subnetbyid[$subnet['id']] = &$subnet;
+		if (!$subnet['isFolder']) {
+			$andip = gmp_strval(gmp_and($subnet['subnet'], $masks[$type][$mask]));
+			$candidates[$sect_id][$type][$mask][$andip][] = &$subnet;
+		}
 	}
 	unset($subnet);
 
@@ -134,28 +136,27 @@ foreach ($rlist as $sect_id => $sect_check) {
 		if ($subnetbyid[$c_subnet['masterSubnetId']]['isFolder']) { continue; } # Skip changing subnet with folder masters
 
 		# Search for matching candidates in the same section, of the same type and with smaller masks.
-		$m_candidate   = array();
-		$search_mask   = $c_subnet['mask'];
-		$search_type   = $c_subnet['type'];
+		$m_candidate = array();
+		$search_mask = $c_subnet['mask'];
+		$search_type = $c_subnet['type'];
 
 		while (--$search_mask >= 0) {
 			$search_subnet = gmp_strval(gmp_and($c_subnet['subnet'], $masks[$search_type][$search_mask]));
 
-			if (isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) {
-				$t_candidate = $candidates[$sect_id][$search_type][$search_mask][$search_subnet];
+			if (!isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) { continue; }
 
-				# Skip subnets from other VRFs if cross VRF reordering is not wanted (default is on)
-				if (!$sect_check["CVRF"]) {
-					foreach($t_candidate as $i => $t_subnet) {
-						if ($t_subnet['vrfId'] != $c_subnet['vrfId']) { unset($t_candidate[$i]);}
-					}
-				}
+			$t_candidate = $candidates[$sect_id][$search_type][$search_mask][$search_subnet];
 
-				if (sizeof($t_candidate) > 0) {
-					$m_candidate = $t_candidate;
-					break;
+			# Skip subnets from other VRFs if cross VRF reordering is not wanted (default is on)
+			if (!$sect_check["CVRF"]) {
+				foreach($t_candidate as $i => $t_subnet) {
+					if ($t_subnet['vrfId'] != $c_subnet['vrfId']) { unset($t_candidate[$i]); }
 				}
-			};
+				if (sizeof($t_candidate)==0) { continue; }
+			}
+
+			$m_candidate = $t_candidate;
+			break;
 		}
 
 		$c_master_id = "0"; $c_master_ip = ""; $c_master_mask = ""; $search_child_vrf_only = 0;
