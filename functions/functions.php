@@ -1,7 +1,7 @@
 <?php
 
 /* @config file ------------------ */
-require( dirname(__FILE__) . '/../config.php' );
+require_once( dirname(__FILE__) . '/../config.php' );
 
 /* @http only cookies ------------------- */
 ini_set('session.cookie_httponly', 1);

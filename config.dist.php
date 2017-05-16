@@ -85,7 +85,10 @@ define('MCUNIQUE', "section");
 /**
  * SAML mappings
  ******************************/
+if(!defined('MAP_SAML_USER'))
 define('MAP_SAML_USER', true);    // Enable SAML username mapping
+
+if(!defined('SAML_USERNAME'))
 define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
 
 
