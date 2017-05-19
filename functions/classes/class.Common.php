@@ -1226,9 +1226,12 @@ class Common_functions  {
 		//default - input field
 		else {
             // max length
-            $maxlength = 0;
+            $maxlength = 100;
             if(strpos($field['type'],"varchar")!==false) {
                 $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+            }
+            if(strpos($field['type'],"int")!==false) {
+                $maxlength = str_replace(array("int","(",")"),"", $field['type']);
             }
             // print
 			$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
