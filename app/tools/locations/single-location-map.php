@@ -16,7 +16,9 @@ if(!$location) {
 if($location===false) {
     $Result->show("info","Invalid location", false);
 }
-else {
+elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
+      $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
+}else {
     // recode
     if (strlen($location->long)==0 && strlen($location->lat)==0 && strlen($location->address)>0) {
         $latlng = $Tools->get_latlng_from_address ($location->address);
