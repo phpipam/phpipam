@@ -25,10 +25,11 @@ $filename = "phpipam_MySQL_dump_". date("Y-m-d") .".sql";
 
 //set content
 /* $command = "mysqldump --opt -h $db['host'] -u $db['user'] -p $db['pass'] $db['name'] | gzip > $backupFile"; */
-$command = "mysqldump --opt -h '". $db['host'] ."' -u '". $db['user'] ."' -p'". $db['pass'] ."' '". $db['name'] ."'";
+$command      = "mysqldump --opt -h '". $db['host'] ."' -u '". $db['user'] ."' -p'". $db['pass'] ."' '". $db['name'] ."'";
+$command_safe = "mysqldump --opt -h '". $db['host'] ."' -u '". "<REDACTED>" ."' -p'". "<REDACTED>" ."' '". $db['name'] ."'";
 
 $content  = "# phpipam Database dump \n";
-$content .= "#    command executed: $command \n";
+$content .= "#    command executed: $command_safe \n";
 $content .= "# --------------------- \n\n";
 $content .= shell_exec($command);
 

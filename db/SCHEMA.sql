@@ -265,11 +265,11 @@ DROP TABLE IF EXISTS `devices`;
 
 CREATE TABLE `devices` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `hostname` varchar(32) DEFAULT NULL,
+  `hostname` varchar(100) DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `type` int(2) DEFAULT '0',
   `description` varchar(256) DEFAULT NULL,
-  `sections` varchar(128) DEFAULT NULL,
+  `sections` varchar(1024) DEFAULT NULL,
   `snmp_community` varchar(100) DEFAULT NULL,
   `snmp_version` set('0','1','2') DEFAULT '0',
   `snmp_port` mediumint(5) unsigned DEFAULT '161',
@@ -366,7 +366,8 @@ VALUES
 	(7,	'es_ES.UTF-8', 'Español'),
 	(8, 'cs_CZ.UTF-8', 'Czech'),
 	(9, 'en_US.UTF-8', 'English (US)'),
-  (10,'ru_RU.UTF-8', 'Russian');
+  (10,'ru_RU.UTF-8', 'Russian'),
+  (11,'zh_CN.UTF-8', 'Chinese');
 
 
 # Dump of table vlans

@@ -788,3 +788,12 @@ ALTER TABLE `api` ADD `app_show_links` TINYINT(1)  NULL  DEFAULT '0';
 
 /* Add index to ctype for changelog */
 ALTER TABLE changelog ADD INDEX(ctype);
+
+/* extend sections for devices */
+ALTER TABLE `devices` CHANGE `sections` `sections` VARCHAR(1024)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* chinese translation */
+INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('zh_CN.UTF-8', 'Chinese');
+
+/* hostname extend */
+ALTER TABLE `devices` CHANGE `hostname` `hostname` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;

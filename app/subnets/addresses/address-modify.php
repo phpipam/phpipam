@@ -599,8 +599,10 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
                 if(strpos($field['type'],"varchar")!==false) {
                     $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
                 }
+                // fix maxlength=0
+                $maxlength = $maxlength==0 ? "" : $maxlength;
                 // print
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $subnet_old_details[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
+				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $address[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
 			}
 
 			print '	</td>'. "\n";

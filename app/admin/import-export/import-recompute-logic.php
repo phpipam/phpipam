@@ -77,8 +77,35 @@ foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[$vrf['vrfId']] = $v
 
 # Precompute masks values, to avoid too much CPU load
 $masks = array();
-for ($i = 0; $i <= 32; $i++) { $masks["IPv4"][$i] = 0xffffffff >> (32 - $i) << (32 - $i); }				# IPv4 masks, long
-for ($i = 0; $i <= 128; $i++) { $masks["IPv6"][$i] = str_repeat('1', $i).str_repeat('0', 128 - $i); }	# IPv6 masks, bin str
+for ($i = 0; $i <= 32; $i++) {
+	$pwr = gmp_pow(2,32-$i);
+	$masks["IPv4"][$i] = gmp_mul(gmp_div("0xffffffff",$pwr),$pwr);
+}
+for ($i = 0; $i <= 128; $i++) {
+	$pwr = gmp_pow(2,128-$i);
+	$masks["IPv6"][$i] = gmp_mul(gmp_div("0xffffffffffffffffffffffffffffffff",$pwr),$pwr);
+}
+
+$rows = ""; $counters = array(); $subnetbyid = array();
+
+/**
+ * The multi-dimentional array candidates stores subnet objects into buckets with identical section,
+ * type, mask and andip values. (Duplicate subnets/masks are allowed, eg different VRFs)
+ *
+ * When searching for a new master we calculate the andip of the current subnet using the currrent
+ * $search_mask and use a hash lookup of $candidates to find subnets with matching attributes.
+ * If no matches exists we decrement the $search_mask and repeat.
+ *
+ * If cross-vrf searching is enabled or strict mode is disabled; multiple master candidates may exist.
+ * Select the master from the available candidates based on the selection rules below.
+ * First matching rule wins.
+ *  - Prefer master subnets in the same VRF as the child.
+ *  - Prefer the currently set master subnet.
+ *  - Prefer the master subnet with the lowest id value.
+ *
+ **/
+
+$rows = ""; $counters = array();
 
 # Read IPs for the sections we need to order
 foreach ($rlist as $sect_id => $sect_check) {
@@ -86,44 +113,73 @@ foreach ($rlist as $sect_id => $sect_check) {
 	# skip empty sections
 	if (sizeof($section_subnets)==0) { continue; }
 
-	$isFolder[$sect_id] = array();
-	
 	foreach ($section_subnets as &$subnet) {
 		$subnet = (array) $subnet;
 		$subnet['ip'] = $Subnets->transform_to_dotted($subnet['subnet']);
 		$subnet['type'] = $Subnets->identify_address($subnet['ip']);
-		# Precompute subnet in AND format (long for IPv4 and bin str for IPv6)
-		$subnet['andip'] = ($subnet['type'] == "IPv4") ? $subnet['subnet'] : my_ip2Bin($pi6,$subnet['ip']);
-		# Add to array
-		$edata[$sect_id][] = $subnet;
-		$isFolder[$sect_id][$subnet['id']] = $subnet['isFolder'];
+		$type = $subnet['type'];
+		$mask = $subnet['mask'];
+		$edata[$sect_id][] = &$subnet;
+		$subnetbyid[$subnet['id']] = &$subnet;
+		if (!$subnet['isFolder']) {
+			$andip = gmp_strval(gmp_and($subnet['subnet'], $masks[$type][$mask]));
+			$candidates[$sect_id][$type][$mask][$andip][] = &$subnet;
+		}
 	}
-}
+	unset($subnet);
 
-$rows = ""; $counters = array();
-
-# Recompute master/nested relations for the selected sections and address families
-foreach ($rlist as $sect_id => $sect_check) {
-	# Skip empty sections
-	if (!$edata[$sect_id]) { continue; }
-
+	# Recompute master/nested relations for the selected sections and address families
 	# Grab a subnet and find its closest master
-	foreach ($edata[$sect_id] as &$c_subnet) {
+	foreach ($section_subnets as &$c_subnet) {
 		if (!$sect_check[$c_subnet['type']]) { continue; }	# Skip the IP version we don't want to reorder
 		if ($c_subnet['isFolder']) { continue; } # Skip folders
-		if ($isFolder[$sect_id][$c_subnet['masterSubnetId']]) { continue; } # Skip changing subne with folder masters
+		if ($subnetbyid[$c_subnet['masterSubnetId']]['isFolder']) { continue; } # Skip changing subnet with folder masters
 
-		$c_master_id = "0"; $c_master_ip = ""; $c_master_mask = "";
+		# Search for matching candidates in the same section, of the same type and with smaller masks.
+		$m_candidate = array();
+		$search_mask = $c_subnet['mask'];
+		$search_type = $c_subnet['type'];
 
-		# Check against all other subnets in section
-		foreach ($edata[$sect_id] as $m_subnet) {
-			if ($c_subnet['type'] != $m_subnet['type']) { continue; }	# Skip if current IP version doesn't match master IP version
-			if ((!$sect_check["CVRF"]) && ($c_subnet['vrfId'] != $m_subnet['vrfId'])) { continue; }	# Skip IPs from other VRFs if cross VRF reordering is not wanted (default is on)
-			# Main logic here - check if subnet within subnet
-			if ((($c_subnet['andip'] & $masks[$c_subnet['type']][$m_subnet['mask']]) == $m_subnet['andip']) && ($c_subnet['mask'] > $m_subnet['mask'])) {	# We have a match
-				if ($m_subnet['mask'] > $c_master_mask) {	# If new master is more specific than old master, record the data
-					$c_master_id = $m_subnet['id']; $c_master_mask = $m_subnet['mask']; $c_master_ip = $m_subnet['ip'];
+		while (--$search_mask >= 0) {
+			$search_subnet = gmp_strval(gmp_and($c_subnet['subnet'], $masks[$search_type][$search_mask]));
+
+			if (!isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) { continue; }
+
+			$t_candidate = $candidates[$sect_id][$search_type][$search_mask][$search_subnet];
+
+			# Skip subnets from other VRFs if cross VRF reordering is not wanted (default is on)
+			if (!$sect_check["CVRF"]) {
+				foreach($t_candidate as $i => $t_subnet) {
+					if ($t_subnet['vrfId'] != $c_subnet['vrfId']) { unset($t_candidate[$i]); }
 				}
+				if (sizeof($t_candidate)==0) { continue; }
+			}
+
+			$m_candidate = $t_candidate;
+			break;
+		}
+
+		$c_master_id = "0"; $c_master_ip = ""; $c_master_mask = ""; $search_child_vrf_only = 0;
+
+		# Choose from the availale master candidates
+		foreach($m_candidate as $m_subnet) {
+			# Candidate is in same VRF as child, select it and only consider candidates from this VRF from now on.
+			if ($m_subnet['vrfId'] == $c_subnet['vrfId']) {
+				$c_master_id = $m_subnet['id']; $c_master_mask = $m_subnet['mask']; $c_master_ip = $m_subnet['ip'];
+				$search_child_vrf_only = 1;
+			}
+
+			# Previous candidate found in child VRF. Ignore candidates from other VRFs
+			if ($search_child_vrf_only == 1 && $m_subnet['vrfId'] != $c_subnet['vrfId']) { continue; }
+
+			# Candidate is our existing master subnet, keep it
+			if ($m_subnet['id'] == $c_subnet['masterSubnetId']) {
+				$c_master_id = $m_subnet['id']; $c_master_mask = $m_subnet['mask']; $c_master_ip = $m_subnet['ip'];
+			}
+
+			# Candidate is more specific than current selection.
+			if ($m_subnet['mask'] > $c_master_mask) {
+				$c_master_id = $m_subnet['id']; $c_master_mask = $m_subnet['mask']; $c_master_ip = $m_subnet['ip'];
 			}
 		}
 
@@ -133,15 +189,16 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$c_subnet['action'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? "skip" : "edit");
 		$c_subnet['msg'] = ($c_subnet['masterSubnetId'] == $c_subnet['new_masterSubnetId'] ? _("No change, skip") : _("New master, update"));
 
+		$counters[$c_subnet['action']]++;
+
 		if ( $_GET['recomputeHideUnchanged'] == "on" && $c_subnet['masterSubnetId'] == $c_master_id ) { continue; }
 
 		$rows.="<tr class='".$colors[$c_subnet['action']]."'><td><i class='fa ".$icons[$c_subnet['action']]."' rel='tooltip' data-placement='bottom' title='"._($c_subnet['msg'])."'></i></td>";
 		$rows.="<td>".$sect_names[$sect_id]."</td><td>".$c_subnet['ip']."/".$c_subnet['mask']."</td>";
 		$rows.="<td>".$c_subnet['description']."</td><td>".$vrf_name[$c_subnet['vrfId']]."</td><td>";
 		$rows.=$c_subnet['new_master']."</td><td>".$c_subnet['msg']."</td></tr>\n";
-
-		$counters[$c_subnet['action']]++;
 	}
+	unset($c_subnet);
 }
 
 ?>

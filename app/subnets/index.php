@@ -30,22 +30,14 @@ $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
 # fetch recursive nameserver details
 $nameservers = (array) $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
 
-# fetch all addresses and calculate usage
-if($slaves) {
-	$addresses = $Addresses->fetch_subnet_addresses_recursive ($subnet['id'], false);
-	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
-} else {
-	$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
-}
-
-// get usage
-$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet, true);
-
 # verify that is it displayed in proper section, otherwise warn!
 if($subnet['sectionId']!=$_GET['section'])	{
 	$sd = (array) $Sections->fetch_section(null,$subnet['sectionId']);
 	$Result->show("warning", _("Subnet is in section")." <a href='".create_link("subnets",$sd['id'],$subnet['id'])."'>$sd[name]</a>!", false);
 }
+
+// get usage
+$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet, true);
 
 # set title
 $location = "subnets";
@@ -130,13 +122,19 @@ if ($User->settings->enableNAT==1) {
 
 	<!-- subnet slaves list -->
 	<div class="col-xs-12 subnetSlaves">
-		<?php if($slaves) include('subnet-slaves.php'); ?>
+		<?php
+		if($slaves) {
+			$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
+			include('subnet-slaves.php');
+		}
+		?>
 	</div>
 
 	<!-- addresses -->
 	<div class="col-xs-12 ipaddresses_overlay">
 		<?php
 		if(!$slaves) {
+			$addresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 			include('addresses/print-address-table.php');
 		}
 		?>

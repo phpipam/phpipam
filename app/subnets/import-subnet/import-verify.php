@@ -35,8 +35,12 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 	exit;
 	}
 }
+// error
+elseif (isset($_FILES['file']['error'])) {
+	echo '{"status":"error","error":"'.$_FILES['file']['error'].'"}';
+	exit;
+}
 
 /* default - error */
-echo '{"status":"error","error":"Empty file"}';
+echo '{"status":"error","error":"Empty or too big file (limit '.ini_get('post_max_size').')"}';
 exit;
-?>

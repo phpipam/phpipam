@@ -1458,23 +1458,20 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function get_ptr_zone_name_v6 ($ip, $mask) {
-        // PEAR for IPv6
-        $this->initialize_pear_net_IPv6 ();
-
-        // remove netmask and ::
-        $subnet = $this->Net_IPv6->removeNetmaskSpec($ip."/".$mask);
-        $subnet = rtrim($subnet, "::");
-
-        // to array
-        $ip = explode(":", $subnet);
-
-        // if 0 than add 4 nulls
-        foreach ($ip as $k=>$i) {
-            $ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
+        $ipp = inet_pton($ip);
+        $maskbin = str_repeat('1', $mask) . str_repeat('0', 128 - $mask);
+        $maskhex = '';
+        foreach (str_split($maskbin, 4) as $chunk) {
+    	    $maskhex .= base_convert($chunk, 2, 16);
         }
+        $maskp = inet_pton(substr(chunk_split($maskhex, 4, ':'), 0, -1));
 
-        // to array and reverse
-        $zone = array_reverse(str_split(implode("", $ip)));
+        $networkp = $ipp & $maskp;
+        $ipt = '';
+        foreach(str_split($networkp) as $char) $ipt .= str_pad(dechex(ord($char)), 2, '0', STR_PAD_LEFT);
+        $prefixnibbles = floor($mask / 4);
+        $network = substr($ipt, 0, $prefixnibbles);
+        $zone = array_reverse(str_split($network));
 
         return implode(".", $zone).".ip6.arpa";
     }

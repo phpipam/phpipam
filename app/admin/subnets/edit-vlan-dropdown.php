@@ -55,7 +55,14 @@ $permitted_domains = array_filter($out);
 				foreach($d['vlans'] as $v) {
 					// set print
 					$printVLAN = $v->number;
-					if(!empty($v->name)) { $printVLAN .= " ($v->name)"; }
+					if(!empty($v->name)) {
+						if(strlen($v->name)>25)	{
+							$printVLAN .= " (".substr($v->name,0,25)."...)";
+						}
+						else {
+							$printVLAN .= " ($v->name)";
+						}
+					}
 
 					/* selected? */
 					if(@$subnet_old_details['vlanId']==$v->vlanId) 	{ print '<option value="'. $v->vlanId .'" selected>'. $printVLAN .'</option>'. "\n"; }
