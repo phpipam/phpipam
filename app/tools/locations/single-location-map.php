@@ -36,8 +36,8 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
     # no long/lat
     if( (strlen($location->long)>0 && strlen($location->lat))) {
 
-    // description fix
-    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>$location->description</span>" : "";
+    // description and apostrophe fix
+    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
     ?>
     <script type="text/javascript">
         $(document).ready(function() {

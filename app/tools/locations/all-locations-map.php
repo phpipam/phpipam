@@ -83,8 +83,8 @@ else {
                     <?php
                     $html = array();
                     foreach ($all_locations as $location) {
-                        // description fix
-                        $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>$location->description</span>" : "";
+                        // description and apostrophe fix
+                        $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
 
                         $html[] = "map.addMarker({";
                         $html[] = " title: '$location->name',";
