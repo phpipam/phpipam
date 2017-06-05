@@ -503,10 +503,7 @@ class Subnets extends Common_functions {
 	 * @return subnets|false
 	 */
 	public function fetch_all_subnets() {
-	    $query = "SELECT * FROM `subnets`;";
-	    try {
-			$subnets = $this->Database->getObjectsQuery($query);
-	    }
+	    try { $subnets = $this->Database->getObjects("subnets"); }
 	    catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

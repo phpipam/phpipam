@@ -256,7 +256,7 @@ class Tools_controller extends Common_api_functions {
 		if (!isset($this->_params->id2)) {
 			$result = $this->Tools->fetch_all_objects ($this->_params->id,  $this->sort_key);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 		# by parameter
@@ -352,18 +352,18 @@ class Tools_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $field, $this->_params->id2, $this->sort_key, true);
 			}
 			// result
-			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, true)); }
 
 		}
 		# by id
 		else {
 			// numeric
-			if(!is_numeric($this->_params->id2)) 		{ $this->Response->throw_exception(404, 'Identifier must be numeric'); }
+			if(!is_numeric($this->_params->id2)) 		{ $this->Response->throw_exception(400, 'Identifier must be numeric'); }
 
 			$result = $this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 	}
@@ -571,7 +571,7 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function validate_tools_object () {
 		if ($this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2)===false)
-																			{ $this->Response->throw_exception(404, "Invalid identifier"); }
+																			{ $this->Response->throw_exception(400, "Invalid identifier"); }
 	}
 
 	/**
@@ -594,10 +594,10 @@ class Tools_controller extends Common_api_functions {
 	private function validate_device_type () {
 		if ($this->_params->id == "devices" && isset($this->_params->type)) {
 			// numeric
-			if (!is_numeric($this->_params->type))							{ $this->Response->throw_exception(409, "Invalid devicetype identifier"); }
+			if (!is_numeric($this->_params->type))							{ $this->Response->throw_exception(400, "Invalid devicetype identifier"); }
 			// check
 			if ($this->Tools->fetch_object ("deviceTypes", "tid", $this->_params->type)===false)
-																			{ $this->Response->throw_exception(404, "Device type does not exist"); }
+																			{ $this->Response->throw_exception(400, "Device type does not exist"); }
 		}
 	}
 

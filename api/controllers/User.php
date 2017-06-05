@@ -205,7 +205,7 @@ class User_controller extends Common_api_functions {
 		}
 		// return success for backwards compatibility
 		else {
-			$this->Response->throw_exception(404, 'Invalid identifier');
+			$this->Response->throw_exception(400, 'Invalid identifier');
 		}
 	}
 

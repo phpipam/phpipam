@@ -127,14 +127,14 @@ class L2domains_controller extends Common_api_functions {
 		if(!isset($this->_params->id)) {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(404, 'No domains configured'); }
+			if($result===false)						{ $this->Response->throw_exception(200, 'No domains configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// set
 		else {
 			// custom fields
 			if($this->_params->id=="custom_fields") {
-				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(404, 'No custom fields defined'); }
+				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(200, 'No custom fields defined'); }
 				else								{ return array("code"=>200, "data"=>$this->custom_fields); }
 			}
 			// vlans
@@ -144,7 +144,7 @@ class L2domains_controller extends Common_api_functions {
 				// save result
 				$result = $this->Tools->fetch_multiple_objects ("vlans", "domainId", $this->_params->id, 'vlanId', true);
 				// check result
-				if($result==NULL)					{ $this->Response->throw_exception(404, "No vlans belonging to this domain"); }
+				if($result==NULL)					{ $this->Response->throw_exception(200, "No vlans belonging to this domain"); }
 				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// id
@@ -287,7 +287,7 @@ class L2domains_controller extends Common_api_functions {
 		// validate id
 		if(!isset($this->_params->id))														{ $this->_params->id = 1; }
 		// validate number
-		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(409, "Domain id must be numeric"); }
+		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(400, "Domain id must be numeric"); }
 		// check that it exists
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->id) === false )
 																							{ $this->Response->throw_exception(404, "Invalid domain id"); }
@@ -311,14 +311,14 @@ class L2domains_controller extends Common_api_functions {
 		// create checks
 		elseif ($_SERVER['REQUEST_METHOD']=="POST") {
 			// name must be present
-			if(@$this->_params->name == "" || !isset($this->_params->name)) 				{ $this->Response->throw_exception(409, "Domain name is mandatory"); }
+			if(@$this->_params->name == "" || !isset($this->_params->name)) 				{ $this->Response->throw_exception(400, "Domain name is mandatory"); }
 		}
 		// update checks
 		elseif ($_SERVER['REQUEST_METHOD']=="PATCH") {
 			// ID must be numeric
-			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(409, "Invalid domain id"); }
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid domain id"); }
 			// name must be present
-			if(@$this->_params->name == "" && isset($this->_params->name)) 					{ $this->Response->throw_exception(409, "Domain name is mandatory"); }
+			if(@$this->_params->name == "" && isset($this->_params->name)) 					{ $this->Response->throw_exception(400, "Domain name is mandatory"); }
 		}
 
 	}

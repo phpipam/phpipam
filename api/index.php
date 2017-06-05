@@ -232,7 +232,6 @@ try {
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
 	$result = $e->getMessage();
-	$Response->result['success'] = 0;
 
 	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {

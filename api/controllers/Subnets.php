@@ -207,7 +207,7 @@ class Subnets_controller extends Common_api_functions {
 			if($this->_params->id=="cidr") {
 				$result = $this->read_search_subnet ();
 				// check result
-				if($result==false)						{ $this->Response->throw_exception(404, "No subnets found"); }
+				if($result==false)						{ $this->Response->throw_exception(200, "No subnets found"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			else {
@@ -228,7 +228,7 @@ class Subnets_controller extends Common_api_functions {
                     if(sizeof($result)==0) { $result = false; }
 				}
 				// check result
-				if($result===false)						{ $this->Response->throw_exception(404, "No addresses found"); }
+				if($result===false)						{ $this->Response->throw_exception(200, "No addresses found"); }
 				else {
 					$this->custom_fields = $this->Tools->fetch_custom_fields('ipaddresses');
 					return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, true));
@@ -238,14 +238,14 @@ class Subnets_controller extends Common_api_functions {
 			elseif($this->_params->id2=="slaves") {
 				$result = $this->read_subnet_slaves ();
 				// check result
-				if($result==NULL)						{ $this->Response->throw_exception(404, "No slaves"); }
+				if($result==NULL)						{ $this->Response->throw_exception(200, "No slaves"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// slaves-recursive
 			elseif ($this->_params->id2=="slaves_recursive") {
 				$result = $this->read_subnet_slaves_recursive ();
 				// check result
-				if($result==NULL)						{ $this->Response->throw_exception(404, "No slaves"); }
+				if($result==NULL)						{ $this->Response->throw_exception(200, "No slaves"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// usage
@@ -262,21 +262,21 @@ class Subnets_controller extends Common_api_functions {
 		// custom fields
 		elseif ($this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
+			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(200, 'No custom fields defined'); }
 			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// id
 		elseif (is_numeric($this->_params->id)) {
 			$result = $this->read_subnet ();
 			// check result
-			if($result==false)							{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
+			if($result==false)							{ $this->Response->throw_exception(400, "Invalid subnet Id (".$this->_params->id.")"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
 		}
 		// all
 		elseif ($this->_params->id=="all") {
 			$result = $this->read_all_subnets();
 			// check result
-			if ($result===false)						{ $this->Response->throw_exception(404, "Unable to read subnets"); }
+			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read subnets"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
 		}
 		// false
@@ -341,8 +341,8 @@ class Subnets_controller extends Common_api_functions {
 			$this->validate_vrf ();
 
 			// if subnet is provided die
-			if(isset($this->_params->subnet))			{ $this->Response->throw_exception(409, 'Subnet cannot be changed'); }
-			if(isset($this->_params->mask))				{ $this->Response->throw_exception(409, 'To change mask use resize method'); }
+			if(isset($this->_params->subnet))			{ $this->Response->throw_exception(400, 'Subnet cannot be changed'); }
+			if(isset($this->_params->mask))				{ $this->Response->throw_exception(400, 'To change mask use resize method'); }
 
 			# check for valid keys
 			$values = $this->validate_keys ();
@@ -643,13 +643,13 @@ class Subnets_controller extends Common_api_functions {
 		$this->validate_subnet_id ();
 		// check for isFull
 		$subnet = $this->read_subnet ();
-		if($subnet->isFull==1)                              { $this->Response->throw_exception(404, "No free addresses found"); }
+		if($subnet->isFull==1)                              { $this->Response->throw_exception(200, "No free addresses found"); }
         // slaves
         if($this->Subnets->has_slaves ($this->_params->id)) { $this->Response->throw_exception(409, "Subnet contains subnets"); }
 		// fetch
 		$first = $this->Addresses->get_first_available_address ($this->_params->id, $this->Subnets);
 		// available?
-		if($first===false)	{ $this->Response->throw_exception(404, "No free addresses found"); }
+		if($first===false)	{ $this->Response->throw_exception(200, "No free addresses found"); }
 		else				{ $first = $this->Addresses->transform_to_dotted($first); }
 
 		# return
@@ -677,7 +677,7 @@ class Subnets_controller extends Common_api_functions {
 
 		# return
 		if ($first===false) {
-    		$this->Response->throw_exception(404, "No subnets found");
+    		$this->Response->throw_exception(200, "No subnets found");
 		}
 		else {
     		if($all) {
@@ -905,7 +905,7 @@ class Subnets_controller extends Common_api_functions {
 		if($this->_params->isFolder!=1) {
 			// check
 			if(strlen($err = $this->Subnets->verify_cidr_address($this->_params->subnet."/".$this->_params->mask))>1)
-																									{ $this->Response->throw_exception(409, $err); }
+																									{ $this->Response->throw_exception(400, $err); }
 		}
 	}
 
@@ -918,7 +918,7 @@ class Subnets_controller extends Common_api_functions {
 	private function validate_network () {
 		// not for folder
 		if($this->_params->isFolder!=1) {
-			if(!$this->Addresses->is_network ($this->_params->subnet, $this->_params->mask))		{ $this->Response->throw_exception(409, "Address is not subnet"); }
+			if(!$this->Addresses->is_network ($this->_params->subnet, $this->_params->mask))		{ $this->Response->throw_exception(400, "Address is not subnet"); }
 		}
 	}
 
@@ -956,8 +956,8 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function validate_section () {
 		// Section Id must be present and numeric
-		if(!isset($this->_params->sectionId))														{ $this->Response->throw_exception(404, "Invalid Section (".$this->_params->sectionId.")"); }
-		elseif(!is_numeric($this->_params->sectionId))												{ $this->Response->throw_exception(409, "Section Id must be numeric (".$this->_params->sectionId.")"); }
+		if(!isset($this->_params->sectionId))														{ $this->Response->throw_exception(400, "Invalid Section (".$this->_params->sectionId.")"); }
+		elseif(!is_numeric($this->_params->sectionId))												{ $this->Response->throw_exception(400, "Section Id must be numeric (".$this->_params->sectionId.")"); }
 		else {
     		$master = $this->Tools->fetch_object("sections", "id", $this->_params->sectionId);
 			if($master===false)		{ $this->Response->throw_exception(400, "Section id (".$this->_params->sectionId.") does not exist"); }
@@ -978,7 +978,7 @@ class Subnets_controller extends Common_api_functions {
 	 */
 	private function validate_subnet_id () {
 		// numberic
-		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(409, "Subnet Id must be numeric (".$this->_params->id.")"); }
+		if(!is_numeric($this->_params->id))															{ $this->Response->throw_exception(400, "Subnet Id must be numeric (".$this->_params->id.")"); }
 		// check subnet
 		if($this->Subnets->fetch_subnet ("id", $this->_params->id)===false) 						{ $this->Response->throw_exception(404, "Invalid subnet Id (".$this->_params->id.")"); }
 	}
@@ -1009,7 +1009,7 @@ class Subnets_controller extends Common_api_functions {
 	private function validate_overlapping () {
 		// section details
 		$section = $this->Tools->fetch_object ("sections", "id", $this->_params->sectionId);
-		if($section===false)																		{ $this->Response->throw_exception(404, "Invalid section Id"); }
+		if($section===false)																		{ $this->Response->throw_exception(400, "Invalid section Id"); }
 		// settings
 		$this->settings = $this->Tools->fetch_object ("settings", "id", 1);
 

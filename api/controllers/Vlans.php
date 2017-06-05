@@ -137,7 +137,7 @@ class Vlans_controller extends Common_api_functions {
 		if (!isset($this->_params->id)) {
 			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(404, 'No vlans configured'); }
+			if($result===false)						{ $this->Response->throw_exception(200, 'No vlans configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// check weather to read belonging subnets
@@ -169,7 +169,7 @@ class Vlans_controller extends Common_api_functions {
 			}
 
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(404, "No subnets found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(200, "No subnets found"); }
 			else {
 				$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
 				return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
@@ -178,21 +178,21 @@ class Vlans_controller extends Common_api_functions {
 		// custom fields
 		elseif (@$this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)		{ $this->Response->throw_exception(404, 'No custom fields defined'); }
+			if(sizeof($this->custom_fields)==0)		{ $this->Response->throw_exception(200, 'No custom fields defined'); }
 			else									{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// search
 		elseif (@$this->_params->id=="search") {
 			$result = $this->Tools->fetch_multiple_objects ("vlans", "number", $this->_params->id2, "vlanId");
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(404, "Vlans not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(200, "Vlans not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// read vlan details
 		else {
 			$result = $this->Tools->fetch_object ("vlans", "vlanId", $this->_params->id);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(404, "Vlan not found"); }
+			if($result==NULL)						{ $this->Response->throw_exception(200, "Vlan not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 	}
@@ -322,9 +322,9 @@ class Vlans_controller extends Common_api_functions {
 	 */
 	private function validate_vlan () {
 		// validate id
-		if(!isset($this->_params->id))														{ $this->Response->throw_exception(409, "Vlan Id is required");  }
+		if(!isset($this->_params->id))														{ $this->Response->throw_exception(400, "Vlan Id is required");  }
 		// validate number
-		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(409, "Vlan Id must be numeric"); }
+		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(400, "Vlan Id must be numeric"); }
 		// check that it exists
 		if($this->Tools->fetch_object ("vlans", "vlanId", $this->_params->id) === false )	{ $this->Response->throw_exception(404, "Invalid Vlan id"); }
 	}
@@ -356,10 +356,10 @@ class Vlans_controller extends Common_api_functions {
 		if($this->_params->number>$this->settings->vlanMax && $_SERVER['REQUEST_METHOD']!="DELETE")
 																							{ $this->Response->throw_exception(409, 'Highest possible VLAN number is '.$this->settings->vlanMax.'!'); }
 		if($_SERVER['REQUEST_METHOD']=="POST") {
-			if($this->_params->number<0)													{ $this->Response->throw_exception(409, "Vlan number cannot be negative"); }
-			elseif(!is_numeric($this->_params->number))										{ $this->Response->throw_exception(409, "Vlan number must be number"); }
+			if($this->_params->number<0)													{ $this->Response->throw_exception(400, "Vlan number cannot be negative"); }
+			elseif(!is_numeric($this->_params->number))										{ $this->Response->throw_exception(400, "Vlan number must be number"); }
 		}
-		if(strlen($this->_params->name)==0)													{ $this->Response->throw_exception(409, "Vlan name is required"); }
+		if(strlen($this->_params->name)==0)													{ $this->Response->throw_exception(400, "Vlan name is required"); }
 	}
 
 	/**
@@ -372,10 +372,10 @@ class Vlans_controller extends Common_api_functions {
 		// validate id
 		if(!isset($this->_params->domainId))												{ $this->_params->domainId = 1; }
 		// validate number
-		if(!is_numeric($this->_params->domainId))											{ $this->Response->throw_exception(409, "Domain id must be numeric"); }
+		if(!is_numeric($this->_params->domainId))											{ $this->Response->throw_exception(400, "Domain id must be numeric"); }
 		// check that it exists
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->domainId) === false )
-																							{ $this->Response->throw_exception(404, "Invalid domain id"); }
+																							{ $this->Response->throw_exception(400, "Invalid domain id"); }
 	}
 
 	/**

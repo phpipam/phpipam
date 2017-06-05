@@ -464,7 +464,7 @@ class Prefix_controller extends Common_api_functions {
                 $addresses = $this->prepare_result ($addresses, "addresses", $this->use_links, true);
             }
             // result
-            if($subnets===false && $addresses===false)  { $this->Response->throw_exception(404, "No objects found"); }
+            if($subnets===false && $addresses===false)  { $this->Response->throw_exception(200, "No objects found"); }
             elseif($addresses===false)                  { return array("code"=>200, "data"=>array("subnets"=>$subnets)); }
             elseif($subnets===false)                    { return array("code"=>200, "data"=>array("addresses"=>$addresses)); }
             else                                        { return array("code"=>200, "data"=>array("subnets"=>$subnets, "addresses"=>$addresses)); }
@@ -483,7 +483,7 @@ class Prefix_controller extends Common_api_functions {
             $subnets = $this->search_custom_field_name_subnets ();
 
             // check result
-            if($subnets===false)        { $this->Response->throw_exception(404, "No master subnets found"); }
+            if($subnets===false)        { $this->Response->throw_exception(200, "No master subnets found"); }
             else {
                 // filter
                 foreach ($subnets as $k=>$s) {
@@ -513,7 +513,7 @@ class Prefix_controller extends Common_api_functions {
             }
 
             // response
-            if($available===false)      { $this->Response->throw_exception(404, "No $this->query_type found"); }
+            if($available===false)      { $this->Response->throw_exception(200, "No $this->query_type found"); }
             else                        { return array("code"=>200, "data"=>$available); }
         }
     }
@@ -569,7 +569,7 @@ class Prefix_controller extends Common_api_functions {
         $available = $this->find_first_available_subnet ($subnets);
 
         // found any
-        if($available===false)          { $this->Response->throw_exception(404, "No subnets found"); }
+        if($available===false)          { $this->Response->throw_exception(200, "No subnets found"); }
         else {
             // parse avilable
     		$subnet_tmp = explode("/", $available);
@@ -619,7 +619,7 @@ class Prefix_controller extends Common_api_functions {
 		$this->remap_keys ();
 
         // found any
-        if($available===false)          { $this->Response->throw_exception(404, "No addresses found"); }
+        if($available===false)          { $this->Response->throw_exception(200, "No addresses found"); }
         else {
             // set params
     		$this->_params->ip_addr         = $this->Tools->transform_address ($available, "dotted");
@@ -737,7 +737,7 @@ class Prefix_controller extends Common_api_functions {
         // ipv6
         elseif ( strpos($this->_params->id2, "4")!==false )  { $this->address_type = "IPv4"; }
         // both
-        else                                                 { $this->Response->throw_exception(404, "Invalid address type");  }
+        else                                                 { $this->Response->throw_exception(400, "Invalid address type");  }
     }
 
     /**
@@ -832,7 +832,7 @@ class Prefix_controller extends Common_api_functions {
 		# check that section exists
 		$subnet = $this->Subnets->fetch_subnet ("id", $id);
 		if($subnet===false)
-														{ $this->Response->throw_exception(400, "Subnet does not exist"); }
+														{ $this->Response->throw_exception(404, "Subnet does not exist"); }
         # get usage
 		$subnet_usage = $this->Subnets->calculate_subnet_usage ($subnet, true);
 

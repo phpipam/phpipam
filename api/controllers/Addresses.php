@@ -171,7 +171,7 @@ class Addresses_controller extends Common_api_functions  {
 		// subnet Id > read all addresses in subnet
 		if($this->_params->id=="custom_fields") {
 			// check result
-			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(404, 'No custom fields defined'); }
+			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(200, 'No custom fields defined'); }
 			else										{ return array("code"=>200, "data"=>$this->custom_fields); }
 		}
 		// first free
@@ -182,11 +182,11 @@ class Addresses_controller extends Common_api_functions  {
             } else {
         		$subnet = $this->Tools->fetch_object ("subnets", "id", $this->_params->id2);
             }
-    		if($subnet->isFull==1)                       { $this->Response->throw_exception(404, "No free addresses found"); }
+    		if($subnet->isFull==1)                       { $this->Response->throw_exception(200, 'No free addresses found'); }
 
     		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($subnet->id, $this->Subnets);
     		// null
-    		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
+    		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(200, 'No free addresses found'); }
             else                                         { return array("code"=>200, "data"=>$this->Addresses->transform_address ($this->_params->ip_addr, "dotted")); }
 		}
 		// address search inside predefined subnet
@@ -205,7 +205,7 @@ class Addresses_controller extends Common_api_functions  {
                 if(sizeof($result)==0)  { $result = false;  }
                 else                    { $result = $result_filtered; }
             }
-    		if ($result==false)                          { $this->Response->throw_exception(404, 'No addresses found'); }
+    		if ($result==false)                          { $this->Response->throw_exception(200, 'No addresses found'); }
             else                                         { return array("code"=>200, "data"=>$result); }
 		}
 		// tags
@@ -236,7 +236,7 @@ class Addresses_controller extends Common_api_functions  {
 				}
 
 				// result
-				if($result===false)						{ $this->Response->throw_exception(404, 'No addresses found'); }
+				if($result===false)						{ $this->Response->throw_exception(200, 'No addresses found'); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)); }
 			}
 			// tags
@@ -295,18 +295,18 @@ class Addresses_controller extends Common_api_functions  {
 		elseif (@$this->_params->id=="search") {
 			// validate
 			if(!$this->Addresses->validate_address ($this->_params->id2))
-														{ $this->Response->throw_exception(404, 'Invalid address'); }
+														{ $this->Response->throw_exception(400, 'Invalid address'); }
 			// search
 			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", "ip_addr", $this->Subnets->transform_address ($this->_params->id2, "decimal"));
 			// check result
-			if($result===false)							{ $this->Response->throw_exception(404, 'Address not found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'Address not found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, true, true)); }
 		}
         // search host ?
         elseif (@$this->_params->id=="search_hostname") {
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "dns_name", $this->_params->id2);
             // check result
-            if($result===false)                         { $this->Response->throw_exception(404, 'Host name not found'); }
+            if($result===false)                         { $this->Response->throw_exception(200, 'Hostname not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
         }
         // search host base (initial substring), return sorted by name
@@ -314,7 +314,7 @@ class Addresses_controller extends Common_api_functions  {
             $target = $this->_params->id2."%";
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "dns_name", $target, "dns_name", true, true);
             // check result
-            if($result===false)                         { $this->Response->throw_exception(404, 'Host name not found'); }
+            if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
         }
 		// false
@@ -361,12 +361,12 @@ class Addresses_controller extends Common_api_functions  {
         		$subnet = $this->Tools->fetch_object ("subnets", "id", $this->_params->id2);
         		unset($this->_params->id2);
             }
-    		if($subnet===false)                          { $this->Response->throw_exception(404, "Invalid subnet identifier"); }
-    		if($subnet->isFull==1)                       { $this->Response->throw_exception(404, "No free addresses found"); }
+    		if($subnet===false)                          { $this->Response->throw_exception(400, "Invalid subnet identifier"); }
+    		if($subnet->isFull==1)                       { $this->Response->throw_exception(200, "No free addresses found (subnet is full)"); }
 
     		$this->_params->ip_addr = $this->Addresses->get_first_available_address ($subnet->id, $this->Subnets);
     		// null
-    		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(404, 'No free addresses found'); }
+    		if ($this->_params->ip_addr==false)          { $this->Response->throw_exception(200, 'No free addresses found'); }
             else {
                 $this->_params->ip_addr = $this->Addresses->transform_address ($this->_params->ip_addr, "dotted");
                 $this->_params->subnetId = $subnet->id;
@@ -491,7 +491,7 @@ class Addresses_controller extends Common_api_functions  {
                 	}
             	}
         	}
-        	if (sizeof($result)==0 || $result===false)   { $this->Response->throw_exception(404, "No addresses found"); }
+        	if (sizeof($result)==0 || $result===false)   { $this->Response->throw_exception(200, "No addresses found"); }
         	else {
             	// rekey
             	$result = array_values($result);
@@ -558,7 +558,7 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	private function validate_tag () {
 		// numeric
-		if(!is_numeric(@$this->_params->id2))									{ $this->Response->throw_exception(409, 'Invalid tag identifier'); }
+		if(!is_numeric(@$this->_params->id2))									{ $this->Response->throw_exception(400, 'Invalid tag identifier'); }
 		// check db
 		if (!$this->Tools->fetch_object ("ipTags", "id", $this->_params->id2))	{ $this->Response->throw_exception(404, "Address tag does not exist"); }
 	}
@@ -571,7 +571,7 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	private function validate_subnet () {
 		// numberic
-		if(!is_numeric($this->_params->subnetId))											{ $this->Response->throw_exception(409, "Subnet Id must be numeric"); }
+		if(!is_numeric($this->_params->subnetId))											{ $this->Response->throw_exception(400, "Subnet Id must be numeric"); }
 		// check subnet
 		if(is_null($res = $this->Subnets->fetch_subnet ("id", $this->_params->subnetId)))	{ $this->Response->throw_exception(404, "Invalid subnet Id"); }
 		else																				{ $this->subnet_details = $res; }
@@ -600,7 +600,7 @@ class Addresses_controller extends Common_api_functions  {
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {
-        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(409, "Invalid MAC address"); }
+        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
         	// normalize
         	else {
             	$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
@@ -609,10 +609,10 @@ class Addresses_controller extends Common_api_functions  {
 
 		// validate device
 		if(isset($this->_params->switch)) {
-		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(404, "Device does not exist"); } }
+		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(400, "Device does not exist"); } }
 		// validate state
 		if(isset($this->_params->state)) {
-		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(404, "Tag does not exist"); } }
+		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(400, "Tag does not exist"); } }
 		else { $this->_params->state = 2; }
 	}
 
@@ -629,12 +629,12 @@ class Addresses_controller extends Common_api_functions  {
 		// if no data is present print it
 		if(sizeof((array) $this->_params)==3) {
 			if(isset($this->_params->app_id) && isset($this->_params->controller) && isset($this->_params->id))
-																							{ $this->Response->throw_exception(409, "No data provided"); }
+																							{ $this->Response->throw_exception(400, "No data provided"); }
 		}
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {
-        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(409, "Invalid MAC address"); }
+        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
         	// normalize
         	else {
             	$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
@@ -643,11 +643,11 @@ class Addresses_controller extends Common_api_functions  {
 
 		// validate device
 		if(isset($this->_params->switch)) {
-		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(404, "Device does not exist"); } }
+		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(400, "Device does not exist"); } }
 
 		// validate state
 		if(isset($this->_params->state)) {
-		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(404, "Tag does not exist"); } }
+		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(400, "Tag does not exist"); } }
 		else { $this->_params->state = 2; }
 	}
 }

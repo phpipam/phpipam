@@ -111,9 +111,9 @@ class Responses {
 		$this->exception = true;
 
 		// set success
-		$this->result['success'] = false;
+		$this->result['success'] = 0;
 		// set exit code
-		$this->result['code'] = $code;
+		$this->result['code'] 	 = $code;
 		// set message
 		$this->result['message'] = $exception;
 
