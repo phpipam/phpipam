@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: zh_CN\n"
-"X-Generator: Poedit 1.8.12\n"
+"X-Generator: Poedit 2.0.2\n"
 
 # PHPIPAM translations file - template
 # Copyright (C) phpipam 2013
@@ -345,7 +345,7 @@ msgstr "数据库链接失败"
 
 #: functions/functions-tools.php:31
 msgid "(closest parent)"
-msgstr ""
+msgstr "(最近的父节点)"
 
 #: functions/functions-mail.php:167 functions/functions-mail.php:196
 #: site/tools/searchResults.php:337 site/admin/customIPFieldsEdit.php:29
@@ -580,7 +580,7 @@ msgstr "MAC"
 #: site/tools/searchResultsExport.php:158 site/admin/exportGenerateXLS.php:99
 #: site/admin/exportSubnet.php:127
 msgid "note"
-msgstr ""
+msgstr "备注"
 
 #: site/tools/searchResultsExport.php:266
 msgid "Subnet search results"
@@ -1195,7 +1195,7 @@ msgstr "仅有255个IP地址"
 
 #: site/ipaddr/modifyIpAddressCheck.php:134
 msgid "Cannot"
-msgstr ""
+msgstr "无法"
 
 #: site/ipaddr/modifyIpAddressCheck.php:149
 msgid "Range"
@@ -1522,7 +1522,7 @@ msgstr "欢迎使用你的仪表盘"
 
 #: site/dashboard/index.php:34
 msgid "There are"
-msgstr ""
+msgstr "有"
 
 #: site/dashboard/index.php:34
 msgid "requests"
@@ -1618,7 +1618,7 @@ msgstr "请更新以下错误"
 #: site/admin/customSubnetFieldsEditResult.php:47
 #: site/admin/customUserFieldsEditResult.php:46
 msgid "Failed to"
-msgstr ""
+msgstr "失败于"
 
 #: site/admin/customIPFieldsEditResult.php:45
 #: site/admin/customVLANFieldsEditResult.php:46
@@ -2438,7 +2438,7 @@ msgstr "供货商"
 #: site/admin/manageDevicesEdit.php:75 site/admin/manageDevicesEdit.php:77
 #: site/admin/manageDevices.php:35
 msgid "Model"
-msgstr ""
+msgstr "型号"
 
 #: site/admin/manageDevicesEdit.php:83 site/admin/manageDevices.php:36
 msgid "SW version"
@@ -2450,7 +2450,7 @@ msgstr "软件版本"
 
 #: site/admin/manageDevicesEdit.php:109
 msgid "Sections to display device in"
-msgstr ""
+msgstr "用于显示设备的标签"
 
 #: site/admin/manageDevicesEditResult.php:41
 msgid "Hostname is mandatory"
@@ -2908,7 +2908,7 @@ msgstr "你可以下载新版本"
 
 #: site/admin/versionCheck.php:28
 msgid "here"
-msgstr ""
+msgstr "这里"
 
 #: site/admin/manageSectionEdit.php:42
 msgid "Section name"
@@ -4857,7 +4857,7 @@ msgid "Valid until"
 msgstr "有效期至"
 
 msgid "Created by"
-msgstr ""
+msgstr "创建人"
 
 msgid "Access log"
 msgstr "访问日志"
@@ -5856,7 +5856,7 @@ msgid "Owners"
 msgstr "所有者"
 
 msgid "Separate multiple recepients with "
-msgstr ""
+msgstr "分割多个收件人"
 
 msgid "Ping check result"
 msgstr "ping检查结果"
@@ -5982,7 +5982,7 @@ msgid "New network is same as old network"
 msgstr "新的网络和旧的网络一样"
 
 msgid "Subnet it same as "
-msgstr ""
+msgstr "子网相同与"
 
 msgid "Invalid number of subnets"
 msgstr "无效的子网数量"
@@ -6387,7 +6387,7 @@ msgid "Please select fields to populate:"
 msgstr "请选择要填充的字段："
 
 msgid "fill"
-msgstr ""
+msgstr "填充"
 
 # ## 1.19.040
 msgid "Propagate changes"
@@ -8557,3 +8557,45 @@ msgstr "找不到属性。"
 
 msgid "Attributes not found"
 msgstr "找不到属性"
+
+msgid "Location: Google Maps API key is unset. Please configure config.php $gmaps_api_key to enable."
+msgstr "位置：未设置地图API key。请配置config.php中的$gmaps_api_key来启用地图功能。"
+
+msgid "Search database Addresses, subnets and VLANs"
+msgstr "在数据库中搜索IP地址、子网和VLAN"
+
+msgid "IPv4v6 calculator for subnet calculations"
+msgstr "自动计算IPv4v6子网"
+
+msgid "Changelog for all network objects"
+msgstr "所有网络对象的变更日志"
+
+msgid "Browse phpipam log files"
+msgstr "浏览系统日志文件"
+
+msgid "Manage IP requests"
+msgstr "处理IP地址申请"
+
+msgid "VLANs and belonging subnets"
+msgstr "VLAN及其所属子网"
+
+msgid "All subnets"
+msgstr "所有子网（树状）"
+
+msgid "Multicast subnets and mapping"
+msgstr "组播子网及其映射信息"
+
+msgid "User group management"
+msgstr "用户组管理"
+
+msgid "API settings"
+msgstr "API设置"
+
+msgid "Recursive nameserver sets for subnets"
+msgstr "为子网设置域名服务器"
+
+msgid "SNMP management"
+msgstr "配置SNMP(简单网管协议)功能"
+
+msgid "Import/Export IP related data (VRF, VLAN, Subnets, IP, Devices)"
+msgstr "导入/导出IP相关数据（包括VRF、VLAN、子网、IP和设备）"
