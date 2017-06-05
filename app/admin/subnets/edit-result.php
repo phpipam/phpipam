@@ -211,11 +211,13 @@ elseif ($_POST['action']=="edit") {
     }
 
 	# If VRF is defined check for uniqueness globally or if selected !
-	if ($_POST['vrfId']>0 || $User->settings->enforceUnique=="1" && $section['strictMode']==1) {
-		# make vrf overlapping check
-		$overlap = $Subnets->verify_vrf_overlapping ($_POST['cidr'], $_POST['vrfId'], $old_subnet_details->id, $_POST['masterSubnetId']);
-		if($overlap!==false) {
-			$errors[] = $overlap;
+	if ($_POST['vrfId']>0 || ($User->settings->enforceUnique=="1" && $section['strictMode']==1)) {
+		# make vrf overlapping check only if vrfId changes
+		if($_POST['vrfId']!=$old_subnet_details->vrfId) {
+			$overlap = $Subnets->verify_vrf_overlapping ($_POST['cidr'], $_POST['vrfId'], $old_subnet_details->id, $_POST['masterSubnetId']);
+			if($overlap!==false) {
+				$errors[] = $overlap;
+			}
 		}
 	}
 }

@@ -1084,8 +1084,8 @@ class Subnets extends Common_functions {
  		// set IP version
 		$ip_version = $this->get_ip_version ($subnet->subnet);
     	// no strict mode if it is_slave
-        $section  = $this->fetch_object ("sections", "id", $subnet->sectionId);
-    	$strict_mode = $is_slave ? false : (bool)$section->strictMode;
+		$section     = $this->fetch_object ("sections", "id", $subnet->sectionId);
+		$strict_mode = $is_slave ? false : (bool) $section->strictMode;
     	// count hosts
     	$address_count = $this->Addresses->count_subnet_addresses ($subnet->id);
 
@@ -1578,7 +1578,6 @@ class Subnets extends Common_functions {
 	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0, $masterSubnetId=0) {
 		# fetch all subnets in VRF globally
 		$all_subnets = $this->fetch_multiple_objects ("subnets", "vrfId", $vrfId);
-
 		# fetch all parents
 		$allParents = $subnetId!=0 ? $this->fetch_parents_recursive($subnetId) : $this->fetch_parents_recursive($masterSubnetId);
 		# add self
@@ -1591,7 +1590,7 @@ class Subnets extends Common_functions {
 		if($all_subnets!==false && is_array($all_subnets)) {
 			foreach ($all_subnets as $existing_subnet) {
 	            // ignore folders - precaution and ignore self for edits
-	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId && !in_array($existing_subnet->id, $allParents) && !in_array($existing_subnet->id, $this->slaves)) {
+	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId && !in_array($existing_subnet->id, $allParents)) {
 		            # check overlapping globally if subnet is not nested
 					if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
 						 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
