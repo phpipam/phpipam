@@ -448,22 +448,33 @@ class Subnets extends Common_functions {
 	 * Fetches all subnets in specified section
 	 *
 	 * @access public
-	 * @param mixed $sectionId
+	 * @param mixed $sectionId 			// section identifier
+	 * @param array $fields 			// fields to fetch
 	 * @return array
 	 */
-	public function fetch_section_subnets ($sectionId) {
+	public function fetch_section_subnets ($sectionId, $fields = array()) {
 		# check order
 		$this->get_settings ();
 		$order = $this->get_subnet_order ();
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = "subnet_int";
+		// fields
+		if(sizeof($fields)>0) {
+			$fields_q = "";
+			foreach ($fields as $f) {
+				$fields_q .= "$f,";
+			}
+		}
+		else {
+			$fields_q = "*,";
+		}
 		# fetch
 		// if sectionId is not numeric, assume it is section name rather than id, set query appropriately
 		if (is_numeric($sectionId)) {
-			$query = "SELECT *,CAST(subnet AS DECIMAL(39,0)) as `subnet_int` FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $fields_q CAST(subnet AS DECIMAL(39,0)) as `subnet_int` FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		else {
-			$query = "SELECT *,CAST(subnet AS DECIMAL(39,0)) as `subnet_int` FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $fields_q CAST(subnet AS DECIMAL(39,0)) as `subnet_int` FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		try { $subnets = $this->Database->getObjectsQuery($query, array($sectionId)); }
 		catch (Exception $e) {
@@ -3233,7 +3244,7 @@ class Subnets extends Common_functions {
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
 		# fetch all subnets in section
-		$section_subnets = $this->fetch_section_subnets ($sectionId);
+		$section_subnets = $this->fetch_section_subnets ($sectionId, array("id", "isFolder", "masterSubnetId", "description", "subnet", "mask"));
 		# folder or subnet?
 		foreach($section_subnets as $s) {
 			// folders array
