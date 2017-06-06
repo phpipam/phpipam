@@ -375,14 +375,13 @@ else {
 		# if add save id !
 		if ($_POST['action']=="add") { $new_subnet_id = $Subnets->lastInsertId; }
 		# update also all slave subnets if section changes!
-		if( (isset($values['sectionId']) && $_POST['action']=="edit") || ($_POST['action']=="delete")) {
+		if( (isset($values['sectionId']) && $_POST['action']=="edit")) {
 			$Subnets->reset_subnet_slaves_recursive();
 			$Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
 			$Subnets->remove_subnet_slaves_master($_POST['subnetId']);
 			if(sizeof($Subnets->slaves)>0) {
 				foreach($Subnets->slaves as $slaveId) {
-					if ($_POST['action']=="edit") 	{ $Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$_POST['sectionIdNew'])); }
-					else							{ $Admin->object_modify ("subnets", "delete", "id", array("id"=>$slaveId)); }
+					$Admin->object_modify ("subnets", "edit", "id", array("id"=>$slaveId, "sectionId"=>$_POST['sectionIdNew']));
 				}
 			}
 		}

@@ -1755,6 +1755,7 @@ class Addresses extends Common_functions {
 		// find unique ids
 		$ids = $this->find_unique_subnetids ();
 		if ($ids===false)										{ return false; }
+
 		// validate
 		foreach ($ids as $id) {
 			if ($this->verify_subnet_id ($id->subnetId)===false) {
@@ -1762,7 +1763,7 @@ class Addresses extends Common_functions {
 			}
 		}
 		// return
-		return isset($false) ? $false : false;
+		return sizeof($false)>0 ? $false : false;
 	}
 
 	/**

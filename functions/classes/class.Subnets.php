@@ -256,7 +256,18 @@ class Subnets extends Common_functions {
 		# save old values
 		$old_subnet = $this->fetch_subnet (null, $id);
 
-		# first truncate it
+		# delete and truncate all slave subnets
+		$this->reset_subnet_slaves_recursive();
+		$this->fetch_subnet_slaves_recursive($id);
+		$this->remove_subnet_slaves_master($id);
+		if(sizeof($this->slaves)>0) {
+			foreach($this->slaves as $slaveId) {
+				$this->subnet_truncate ($id);
+				$this->subnet_delete ($slaveId);
+			}
+		}
+
+		# truncate own subnet
 		$this->subnet_truncate ($id);
 
 		# delete subnet

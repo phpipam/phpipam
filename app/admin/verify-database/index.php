@@ -92,7 +92,7 @@ else {
 print "<h4>"._('Invalid addresses').'</h4><hr>';
 
 $invalid_subnets = $Addresses->find_invalid_addresses();
-if ($invalid_subnets===false || sizeof($invalid_subnets)==0) {
+if ($invalid_subnets===false) {
 	$Result->show ("success", _("No invalid addresses detected"), false);
 }
 else {
