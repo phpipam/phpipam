@@ -60,13 +60,7 @@ foreach ($slave_subnets as $slave_subnet) {
 		# if master start != first slave start print free space
 		if($subnet['subnet'] != $slave_subnet['subnet']) {
 			# calculate diff between subnet and slave
-			# 64 bits
-			if (PHP_INT_SIZE === 8) {
-				$diff = gmp_strval(gmp_sub($slave_subnet['subnet'], $subnet['subnet']));
-			}
-			else {
-				$diff = gmp_strval(gmp_sub(gmp_and("0xffffffff", $slave_subnet['subnet']), gmp_and("0xffffffff", $subnet['subnet'])));
-			}
+			$diff = gmp_strval(gmp_sub($slave_subnet['subnet'], $subnet['subnet']));
 
 			print "<tr class='success'>";
 			print "	<td></td>";
@@ -161,14 +155,7 @@ foreach ($slave_subnets as $slave_subnet) {
 		# calculate next slave
 		$next_slave_subnet  = $slave_subnets[$m+1]->subnet;
 		# calculate diff
-		# 64 bits
-		if (PHP_INT_SIZE === 8) {
-			$diff = gmp_strval(gmp_sub($next_slave_subnet, $current_slave_bcast));
-		}
-		# 32 bits
-		else {
-			$diff = gmp_strval(gmp_sub(gmp_and("0xffffffff", $next_slave_subnet), gmp_and("0xffffffff", $current_slave_bcast)));
-		}
+		$diff = gmp_strval(gmp_sub($next_slave_subnet, $current_slave_bcast));
 
 		# if diff print free space
 		if($diff>1) {
