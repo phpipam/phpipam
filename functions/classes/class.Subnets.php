@@ -1480,6 +1480,20 @@ class Subnets extends Common_functions {
 	    # fetch section subnets
 		$sections_subnets = $masterSubnetId==0 ? $this->fetch_section_subnets ($sectionId) : $this->fetch_subnet_slaves ($masterSubnetId);
 
+		# unset by type
+		if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
+			foreach ($sections_subnets as $k=>$existing_subnet) {
+				// remove IPv6 subnets
+				if($this->identify_address($new_subnet)=="IPv4" && $this->identify_address($existing_subnet->subnet)=="IPv6") {
+					unset($sections_subnets[$k]);
+				}
+				// remove IPv4 subnets
+				if($this->identify_address($new_subnet)=="IPv6" && $this->identify_address($existing_subnet->subnet)=="IPv4") {
+					unset($sections_subnets[$k]);
+				}
+			}
+		}
+
 	    # verify new against each existing
 	    if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
 	        foreach ($sections_subnets as $existing_subnet) {
@@ -1704,6 +1718,11 @@ class Subnets extends Common_functions {
 		# Initialize PEAR NET object
 		$this->initialize_pear_net_IPv4 ();
 
+		// both must be IPv6
+		if($this->identify_address ($subnet2)=="IPv6") {
+			return false;
+		}
+
 		# parse subnets to get subnet and broadcast
 		$net1 = $this->Net_IPv4->parseAddress( $subnet1 );
 		$net2 = $this->Net_IPv4->parseAddress( $subnet2 );
@@ -1738,6 +1757,11 @@ class Subnets extends Common_functions {
 	private function verify_IPv6_subnet_overlapping ($subnet1, $subnet2) {
 		# Initialize PEAR NET object
 		$this->initialize_pear_net_IPv6 ();
+
+		// both must be IPv6
+		if($this->identify_address ($subnet2)=="IPv4") {
+			return false;
+		}
 
 	    //remove netmask from subnet1 */
 	    $subnet1 = $this->Net_IPv6->removeNetmaskSpec ($subnet1);
