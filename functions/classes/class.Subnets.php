@@ -2157,13 +2157,13 @@ class Subnets extends Common_functions {
 	 * @return int
 	 */
 	private function verify_subnet_id ($id) {
-		try { $res = $this->Database->getObjectQuery("select count(*) as `cnt` from `subnets` where `id` = ?;", array($id)); }
+		try { $res = $this->Database->numObjectsFilter("subnets", "id", $id ); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 		# return
-		return (int) $res->cnt;
+		return $res==0 ? false : true;
 	}
 
 	/**

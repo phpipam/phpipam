@@ -101,7 +101,11 @@ else {
 	foreach ($invalid_subnets as $subnet) {
 		// print each subnet
 		foreach ($subnet as $s) {
-			print " <a class='btn btn-xs btn-danger modIPaddr' data-action='delete' data-id='$s->id' data-subnetId='$s->subnetId'><i class='fa fa-remove'></i></a> $s->ip $s->dns_name (database id: $s->id)"."<br>";
+			print "<div class='btn-group'>";
+			print " <a class='btn btn-xs btn-danger modIPaddr' data-action='delete' data-id='$s->id' data-subnetId='$s->subnetId'><i class='fa fa-remove'></i></a> ";
+			print " <a class='btn btn-xs btn-default subnet-truncate' id='truncate' data-action='truncate' data-subnetId='$s->subnetId'><i class='fa fa-trash-o'></i></a>";
+			print "</div>";
+			print " $s->ip $s->dns_name (database id: $s->id)<br>";
 		}
 	}
 }

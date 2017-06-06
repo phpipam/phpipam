@@ -1807,7 +1807,7 @@ $('button.editSubnet').click(function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
 //resize / split subnet
-$(document).on("click", "#resize, #split, #truncate", function() {
+$(document).on("click", "#resize, #split, #truncate, .subnet-truncate", function() {
 	showSpinner();
 	var action = $(this).attr('id');
 	var subnetId = $(this).attr('data-subnetId');

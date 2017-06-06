@@ -1762,6 +1762,8 @@ class Addresses extends Common_functions {
 				$false[] = $this->fetch_subnet_addresses ($id->subnetId);
 			}
 		}
+		// filter
+		$false = array_filter($false);
 		// return
 		return sizeof($false)>0 ? $false : false;
 	}
@@ -1790,13 +1792,13 @@ class Addresses extends Common_functions {
 	 * @return void
 	 */
 	private function verify_subnet_id ($id) {
-		try { $res = $this->Database->getObjectQuery("select count(*) as `cnt` from `subnets` where `id` = ?;", array($id)); }
+		try { $res = $this->Database->numObjectsFilter("subnets", "id", $id ); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 		# return
-		return (int) $res->cnt;
+		return $res==0 ? false : true;
 	}
 
 
