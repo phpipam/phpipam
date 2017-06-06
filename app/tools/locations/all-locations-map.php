@@ -85,6 +85,7 @@ else {
                     foreach ($all_locations as $location) {
                         // description and apostrophe fix
                         $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
+                        $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
 
                         $html[] = "map.addMarker({";
                         $html[] = " title: '$location->name',";

@@ -38,6 +38,7 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
 
     // description and apostrophe fix
     $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
+    $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
