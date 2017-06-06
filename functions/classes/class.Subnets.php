@@ -43,6 +43,15 @@ class Subnets extends Common_functions {
 	public $lastInsertId = null;
 
 	/**
+	 * engine type
+	 *
+	 * 	MEMORY, InnoDB
+	 *
+	 * @var string
+	 */
+	protected $tmptable_engine_type = "MEMORY";
+
+	/**
 	 * array of /8 ripe subnets
 	 *
 	 * (default value: array())
@@ -847,19 +856,37 @@ class Subnets extends Common_functions {
 	*/
 
 	/**
+	 * Reset engine type if set in config.php (MEMORY or InnoDB)
+	 *
+	 * @method set_tmptable_engine_type
+	 */
+	private function set_tmptable_engine_type () {
+		// read config.php
+		include(dirname(__FILE__)."/../../config.php");
+		// if set check array
+		if(isset($db['tmptable_engine_type'])) {
+			if($db['tmptable_engine_type']=="MEMORY" || $db['tmptable_engine_type']=="InnoDB") {
+				$this->tmptable_engine_type = $db['tmptable_engine_type'];
+			}
+		}
+	}
+
+	/**
 	 * Deletes temporary table containing slave ids for a given subnetId
 	 *
-	 * @access public
+	 * @access private
 	 * @param int $subnetId
+	 * @param int $level ()default: null
 	 * @return void
 	 */
-	public function reset_subnet_familytree(int $subnetId) {
-	  try {
-	    $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId};");
-	  }
-	  catch (Exception $e) {
-	    $this->Result->show("danger", _("Error: ").$e->getMessage());
-	  }
+	private function reset_subnet_familytree_table (int $subnetId, int $level = null) {
+		// set table name
+		$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
+		// execute
+		try { $this->Database->runQuery("DROP TABLE IF EXISTS $table_name;");}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+		}
 	}
 
 	/**
@@ -869,7 +896,7 @@ class Subnets extends Common_functions {
 	 * @param int $subnetId
 	 * @return void
 	 */
-	public function create_subnet_familytree(int $subnetId) {
+	public function create_subnet_familytree (int $subnetId) {
 
 	  // MySQL does not support multiple references to a temporary table in the same query.
 	  // Ideally we would populate temp_table with our initial subnetId and then run the query below until
@@ -880,43 +907,48 @@ class Subnets extends Common_functions {
 	  // Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
 
 	  try {
-	    $this->reset_subnet_familytree($subnetId);
+	  	// set engine type
+	  	$this->set_tmptable_engine_type ();
+		// remove old temporary table
+		$this->reset_subnet_familytree_table ($subnetId);
 
-	    $rowCount = 0; $level = 0;
+		// set default count
+		$rowCount = 0;
+		$level = 0;
 
-	    $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId}_${level};");
+		// remove old temp table with level
+		$this->reset_subnet_familytree_table ($subnetId, $level);
+		// create new temp table
+		$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
+		$result = $this->Database->runQuery($query, null, $rowCount);
 
-	    $query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = MEMORY
-	      SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
-	    $result = $this->Database->runQuery($query, null, $rowCount);
+		// Fetch next level of slaves.
+		while ($result == 1 && $rowCount > 0){
+			$lastlevel = $level++;
 
-	    // Fetch next level of slaves.
-	    while ($result == 1 && $rowCount > 0){
-	      $lastlevel = $level++;
+			// remove old
+			$this->reset_subnet_familytree_table ($subnetId, $level);
 
-	      $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId}_${level};");
+			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+			$result = $this->Database->runQuery($query, null, $rowCount);
+		}
 
-	      $query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = MEMORY
-	        SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
-	      $result = $this->Database->runQuery($query, null, $rowCount);
-	    }
+		// Consolidate results into single temporary table.
+		$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type.";";
+		$this->Database->runQuery($query);
 
-	    // Consolidate results into single temporary table.
-	    $query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = MEMORY;";
-	    $this->Database->runQuery($query);
+		while (--$level >= 0) {
+			$query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId} SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+			$this->Database->runQuery($query);
 
-	    while (--$level >= 0) {
-	      $query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId}
-	        SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
-	      $this->Database->runQuery($query);
-
-	      $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId}_${level};");
-	    }
-	  }
-	  catch (Exception $e) {
-	    $this->Result->show("danger", _("Error: ").$e->getMessage());
-	    throw $e;
-	  }
+			// remove old
+			$this->reset_subnet_familytree_table ($subnetId, $level);
+		}
+		}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			throw $e;
+		}
 	}
 
 	/**
@@ -995,7 +1027,7 @@ class Subnets extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 		}
 
-		$this->reset_subnet_familytree($subnetId);
+		$this->reset_subnet_familytree_table($subnetId);
 	}
 
 	/**
@@ -4061,5 +4093,3 @@ class Subnets extends Common_functions {
 
 
 }
-
-?>
