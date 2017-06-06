@@ -847,6 +847,79 @@ class Subnets extends Common_functions {
 	*/
 
 	/**
+	 * Deletes temporary table containing slave ids for a given subnetId
+	 *
+	 * @access public
+	 * @param int $subnetId
+	 * @return void
+	 */
+	public function reset_subnet_familytree(int $subnetId) {
+	  try {
+	    $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId};");
+	  }
+	  catch (Exception $e) {
+	    $this->Result->show("danger", _("Error: ").$e->getMessage());
+	  }
+	}
+
+	/**
+	 * Generates temporary table containing slave ids for a given subnetId
+	 *
+	 * @access public
+	 * @param int $subnetId
+	 * @return void
+	 */
+	public function create_subnet_familytree(int $subnetId) {
+
+	  // MySQL does not support multiple references to a temporary table in the same query.
+	  // Ideally we would populate temp_table with our initial subnetId and then run the query below until
+	  // the inserted record count is zero (no more slaves ids found).
+	  //
+	  //  INSERT INTO temp_table SELECT id FROM subnets WHERE id NOT IN (temp_table) AND masterSubnetId IN (temp_table)
+	  //
+	  // Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
+
+	  try {
+	    $this->reset_subnet_familytree($subnetId);
+
+	    $rowCount = 0; $level = 0;
+
+	    $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId}_${level};");
+
+	    $query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = MEMORY
+	      SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
+	    $result = $this->Database->runQuery($query, null, $rowCount);
+
+	    // Fetch next level of slaves.
+	    while ($result == 1 && $rowCount > 0){
+	      $lastlevel = $level++;
+
+	      $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId}_${level};");
+
+	      $query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = MEMORY
+	        SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+	      $result = $this->Database->runQuery($query, null, $rowCount);
+	    }
+
+	    // Consolidate results into single temporary table.
+	    $query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = MEMORY;";
+	    $this->Database->runQuery($query);
+
+	    while (--$level >= 0) {
+	      $query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId}
+	        SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+	      $this->Database->runQuery($query);
+
+	      $this->Database->runQuery("DROP TABLE IF EXISTS tmp_subnet_familytree_${subnetId}_${level};");
+	    }
+	  }
+	  catch (Exception $e) {
+	    $this->Result->show("danger", _("Error: ").$e->getMessage());
+	    throw $e;
+	  }
+	}
+
+	/**
 	 * Checks if subnet has any slaves
 	 *
 	 * @access public
@@ -892,35 +965,37 @@ class Subnets extends Common_functions {
 	 * Recursively fetches all slaves
 	 *
 	 * @access public
-	 * @param mixed $subnetId
+	 * @param int $subnetId
 	 * @return void
 	 */
-	public function fetch_subnet_slaves_recursive ($subnetId) {
-		$end = false;							//loop break flag
-		# slaves array of id's, add current
-		$this->slaves[] = (int) $subnetId;		//id
+	public function fetch_subnet_slaves_recursive (int $subnetId) {
 
-		# loop
-		while($end == false) {
-			# fetch all immediate slaves
-			$slaves2 = $this->fetch_subnet_slaves ($subnetId);
+		try {
+			// Create temporary table 'tmp_subnet_familytree_${subnetId}' containing all slave ids.
+			$this->create_subnet_familytree($subnetId);
 
-			# we have more slaves
-			if($slaves2) {
-				# recursive
-				foreach($slaves2 as $slave) {
-					# save to full array of slaves
-					$this->slaves_full[$slave->id] = $slave;
-					# fetch possible new slaves
-					$this->fetch_subnet_slaves_recursive ($slave->id);
-					$end = true;
-				}
-			}
-			# no more slaves
-			else {
-				$end = true;
+			// Fetch all slaves
+			$slaves = $this->Database->getObjectsQuery("SELECT * FROM subnets AS slaves WHERE slaves.id IN (SELECT id FROM tmp_subnet_familytree_${subnetId});");
+
+			$this->slaves[] = $subnetId;
+
+			if (!$slaves) { return; }
+
+			foreach($slaves as $slave) {
+				# save to subnets cache
+				unset($slave->subnet_int);
+				$this->cache_write("subnets", $slave->id, $slave);
+
+				# save to full array of slaves
+				$this->slaves_full[$slave->id] = $slave;
+				$this->slaves[] = (int) $slave->id;
 			}
 		}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+		}
+
+		$this->reset_subnet_familytree($subnetId);
 	}
 
 	/**
@@ -1126,11 +1201,14 @@ class Subnets extends Common_functions {
             $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
             // slaves fix for reducing subnet and broadcast address
             if($ip_version=="IPv4" && $is_slave) {
-                if($subnet->mask==32) {
-                     $out["used"] = 1;
+                if($subnet->mask==32 && $out["used"]==0) {
+                     $out["used"]++;
                 }
-                elseif($subnet->mask==31) {
-                    $out["used"] = 2;
+                elseif($subnet->mask==31 &&  $out["used"]==0) {
+                    $out["used"] = $out["used"]+2;
+                }
+                elseif($subnet->mask==31 &&  $out["used"]==1) {
+                    $out["used"]++;
                 }
                 else {
                     $out["used"] = $out["used"]+2;
