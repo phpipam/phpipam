@@ -45,6 +45,9 @@ if($_POST['action']!="delete") {
 	}
 }
 
+# default lock_wait
+if($_POST['app_lock_wait']=="") { $_POST['app_lock_wait']=0; }
+
 # die if errors
 if(sizeof($error) > 0) {
 	$Result->show("danger", $error, true);
