@@ -630,8 +630,8 @@ class Common_functions  {
 	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
 	    # numeric representation
 	    elseif (is_numeric($address)) {
-	    	if(gmp_cmp(gmp_strval(4294967295), gmp_strval($address))==1)	{ return 'IPv4'; }
-	    	else 															{ return 'IPv6'; }
+	    	if(4294967295 > $address)	{ return 'IPv4'; }
+	    	else 						{ return 'IPv6'; }
 	    }
 	    # decimal representation
 	    else  {
