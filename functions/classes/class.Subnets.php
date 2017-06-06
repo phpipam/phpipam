@@ -892,11 +892,11 @@ class Subnets extends Common_functions {
 	/**
 	 * Generates temporary table containing slave ids for a given subnetId
 	 *
-	 * @access public
+	 * @access private
 	 * @param int $subnetId
 	 * @return void
 	 */
-	public function create_subnet_familytree (int $subnetId) {
+	private function create_subnet_familytree (int $subnetId) {
 
 	  // MySQL does not support multiple references to a temporary table in the same query.
 	  // Ideally we would populate temp_table with our initial subnetId and then run the query below until
