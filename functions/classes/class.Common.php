@@ -628,6 +628,11 @@ class Common_functions  {
 	    # dotted representation
 	    if (strpos($address, ":")) 		{ return 'IPv6'; }
 	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
+	    # numeric representation
+	    elseif (is_numeric($address)) {
+	    	if(gmp_cmp(gmp_strval(4294967295), gmp_strval($address))==1)	{ return 'IPv4'; }
+	    	else 															{ return 'IPv6'; }
+	    }
 	    # decimal representation
 	    else  {
 	        # IPv4 address
