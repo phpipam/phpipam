@@ -268,7 +268,7 @@ elseif ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 
 	# print what will be deleted
 	//fetch all slave subnets
-	$Subnets->fetch_subnet_slaves_recursive ((int) $_POST['subnetId']);
+	$Subnets->fetch_subnet_slaves_recursive ($_POST['subnetId']);
 	$subcnt = sizeof($Subnets->slaves);
 	foreach($Subnets->slaves as $s) {
 		$slave_array[$s] = $s;

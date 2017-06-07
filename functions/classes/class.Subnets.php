@@ -1002,7 +1002,7 @@ class Subnets extends Common_functions {
 	 * @param int $subnetId
 	 * @return void
 	 */
-	public function fetch_subnet_slaves_recursive (int $subnetId) {
+	public function fetch_subnet_slaves_recursive ($subnetId) {
 
 		try {
 			// Create temporary table 'tmp_subnet_familytree_${subnetId}' containing all slave ids.
