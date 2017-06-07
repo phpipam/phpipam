@@ -1337,7 +1337,7 @@ class Subnets extends Common_functions {
 		# fetch
 		$this->get_addresses_types();
 		# return
-		return $this->address_types[$index]["type"];
+		return isset($this->address_types[$index]["type"]) ? $this->address_types[$index]["type"] : "Unknown";
 	}
 
 	/**
