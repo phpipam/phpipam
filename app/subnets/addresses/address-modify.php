@@ -433,7 +433,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	 	print '</tr>';
 
 		//remove all associated queries if delete
-		if ($_POST['action']=="delete") {
+		if ($_POST['action']=="delete" || $_POST['action']=="all-edit") {
     		// check
     		$PowerDNS = new PowerDNS ($Database);
     		$records  = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
