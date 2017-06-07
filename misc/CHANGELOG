@@ -94,6 +94,7 @@
     + Subnet overlapping now checked also between sections if VRF defined;
     + Added new settings directive that requires unique subnets accross sections;
     + Added index check in verify database to detect and fix possible missing DB indexes;
+    + Added MAC address vendor display option;
 
     Bugfixes:
     ----------------------------

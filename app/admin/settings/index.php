@@ -457,6 +457,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- decode MAC -->
+<tr>
+	<td class="title"><?php print _("Decode MAC vendor"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="decodeMAC" <?php if($settings['decodeMAC'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Decode MAC address vendor for addresses'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">

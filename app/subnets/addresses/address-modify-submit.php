@@ -262,6 +262,7 @@ else {
 	# validate and normalize MAC address
 	if($action!=="delete") {
     	if(strlen(@$address['mac'])>0) {
+    		$address['mac'] = trim($address['mac']);
         	if($User->validate_mac ($address['mac'])===false) {
             	$Result->show("danger", _('Invalid MAC address')."!", true);
         	}

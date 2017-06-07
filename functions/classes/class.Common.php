@@ -1273,6 +1273,40 @@ class Common_functions  {
     	}
 	}
 
+	/**
+	 * Get MAC address vendor details
+	 *
+	 * https://www.macvendorlookup.com/vendormacs-xml-download
+	 *
+	 * @method get_mac_address_vendor
+	 * @param  mixed $mac
+	 * @return string
+	 */
+	public function get_mac_address_vendor_details ($mac) {
+		// set default arrays
+		$matches = array();
+		// validate mac
+		if(!$this->validate_mac ($mac))	{ return ""; }
+		// reformat mac address
+		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
+		$mac_partial = explode(":", $mac);
+		// get mac XML database
+        $data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
+        // check
+        if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
+            foreach ($matches as $match) {
+            	//check for provided mac
+                if(strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]) == strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])) {
+                	return $match[4];
+                }
+            }
+            // not matched
+            return false;
+        } else {
+            return "";
+        }
+	}
+
 
 
 

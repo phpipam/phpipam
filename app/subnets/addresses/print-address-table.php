@@ -399,9 +399,17 @@ else {
                     	    $mobjects = "";
                 	    }
                     }
+                    // get MAC vendor
+                    if($User->settings->decodeMAC=="1") {
+	                    $mac_vendor = $User->get_mac_address_vendor_details ($addresses[$n]->mac);
+	                    $mac_vendor = $mac_vendor=="" ? : "<hr>"._("Vendor").": ".$mac_vendor;
+	                }
+	                else {
+	                	$mac_vendor = "";
+	                }
 					// multicast ?
 					if ($User->settings->enableMulticast=="1" && $Subnets->is_multicast ($addresses[$n]->ip_addr))          { print "<td class='$mclass' style='white-space:nowrap;'>".$addresses[$n]->mac." $minfo $mobjects</td>"; }
-					elseif(!empty($addresses[$n]->mac)) 				{ print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' title='"._('MAC').": ".$addresses[$n]->mac."'></i></td>"; }
+					elseif(!empty($addresses[$n]->mac)) 				{ print "<td class='narrow'><i class='info fa fa-gray fa-sitemap' rel='tooltip' data-container='body' data-html='true' title='"._('MAC').": ".$addresses[$n]->mac.$mac_vendor."'></i></td>"; }
 					else 												{ print "<td class='narrow'></td>"; }
 				}
 

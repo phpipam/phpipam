@@ -41,7 +41,8 @@ $tools_menu_items = array(
 						"threshold",
 						'nat',
 						'locations',
-						'pstn-prefixes'
+						'pstn-prefixes',
+						'mac-lookup'
                     );
 
 
@@ -84,6 +85,8 @@ if($User->settings->enableDHCP==1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"DHCP",  		        "href"=>"dhcp", "description"=>"DHCP information");
 if($User->settings->enablePSTN==1)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-phone", 	  	"name"=>"PSTN prefixes",  		 "href"=>"pstn-prefixes", "description"=>"PSTN prefixes");
+$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"MAC lookup",  		 	 "href"=>"mac-lookup", "description"=>"Lookup MAC address vendor");
+
 
 # Subnets
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-star", 	  	"name"=>"Favourite networks",  	"href"=>"favourites", 	"description"=>"Favourite networks");

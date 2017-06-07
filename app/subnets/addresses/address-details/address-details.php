@@ -115,9 +115,19 @@ if(sizeof($address)>1) {
 
     	# mac
     	if(in_array('mac', $selected_ip_fields)) {
+
+        // get MAC vendor
+        if($User->settings->decodeMAC=="1") {
+            $mac_vendor = $User->get_mac_address_vendor_details ($address['mac']);
+            $mac_vendor = $mac_vendor=="" ? : " <span class='text-muted'>(".$mac_vendor.")</span>";
+        }
+        else {
+            $mac_vendor = "";
+        }
+
     	print "<tr>";
     	print "	<th>"._('MAC address')."</th>";
-    	print "	<td>$address[mac]</td>";
+    	print "	<td>$address[mac]${mac_vendor}</td>";
     	print "</tr>";
     	}
 

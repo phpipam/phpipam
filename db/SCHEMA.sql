@@ -178,6 +178,7 @@ CREATE TABLE `settings` (
   `enforceUnique` TINYINT(1)  NULL  DEFAULT '1',
   `authmigrated` TINYINT  NOT NULL  DEFAULT '0',
   `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0',
+  `decodeMAC` TINYINT(1)  NULL  DEFAULT '1',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
