@@ -1184,12 +1184,19 @@ class Subnets extends Common_functions {
                 // calculate for specific subnet
                 $slave_usage = $this->calculate_single_subnet_details ($ss, true, false);
                 // append slave values to its master
-                $subnet_usage['used']      = $subnet_usage['used'] + $slave_usage['used'];
-                $subnet_usage['freehosts'] = $subnet_usage['freehosts'] - $slave_usage['used'];
+                $subnet_usage['used']      = gmp_strval(gmp_add($subnet_usage['used'],$slave_usage['used']));
+                $subnet_usage['freehosts'] = gmp_strval(gmp_sub($subnet_usage['freehosts'],$slave_usage['used']));
+
+                if (gmp_cmp($subnet_usage['used'],$subnet_usage['maxhosts']) > 0 ) {
+                    $subnet_usage['used'] = $subnet_usage['maxhosts'];
+                }
+                if (gmp_cmp($subnet_usage['freehosts'],0) < 0 ) {
+                    $subnet_usage['freehosts'] = 0;
+                }
             }
             // recalculate percentge
-            $subnet_usage["freehosts_percent"] = round((($subnet_usage['freehosts'] * 100) / $subnet_usage['maxhosts']),2);
-            $subnet_usage["Used_percent"]      = 100 - $subnet_usage["freehosts_percent"];
+            $subnet_usage["freehosts_percent"] = round((($subnet_usage['freehosts'] * 100.0) / $subnet_usage['maxhosts']),2);
+            $subnet_usage["Used_percent"]      = 100.0 - $subnet_usage["freehosts_percent"];
     	}
     	// no slaves
     	else {
@@ -1214,8 +1221,6 @@ class Subnets extends Common_functions {
     	// no strict mode if it is_slave
 		$section     = $this->fetch_object ("sections", "id", $subnet->sectionId);
 		$strict_mode = $is_slave ? false : (bool) $section->strictMode;
-    	// count hosts
-    	$address_count = $this->Addresses->count_subnet_addresses ($subnet->id);
 
     	// init result
     	$out = array();
@@ -1231,20 +1236,17 @@ class Subnets extends Common_functions {
 		}
 		else {
     		// set values
-            $out["used"]              = gmp_strval($address_count);
+            $out["used"]              = gmp_strval($this->Addresses->count_subnet_addresses ($subnet->id));
             $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
+
             // slaves fix for reducing subnet and broadcast address
-            if($ip_version=="IPv4" && $is_slave) {
-                if($subnet->mask==32) {
-                     $out["used"] = 1;
-                }
-                elseif($subnet->mask==31) {
-                    $out["used"] = 2;
-                }
-                else {
-                    $out["used"] = $out["used"]+2;
-                }
-            }
+			if($ip_version=="IPv4" && !$has_slaves && !$strict_mode) {
+				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
+			}
+			if($ip_version=="IPv6" && !$has_slaves && !$strict_mode) {
+				if($subnet->mask<=126) { $$out["used"] = gmp_strval(gmp_add($out["used"],2)); }
+			}
+
             // percentage
             $out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
             $out["freehosts_percent"] = round((($out['freehosts'] * 100) / $out['maxhosts']),2);
@@ -1253,7 +1255,7 @@ class Subnets extends Common_functions {
                 // fetch full addresses
                 $addresses = $this->Addresses->fetch_subnet_addresses ($subnet->id);
                 // order - group by tag type
-                $tag_addresses = $this->calculate_subnet_usage_sort_addresses ($addresses);
+                $tag_addresses = $this->calculate_subnet_usage_sort_addresses ($subnet, $addresses, $strict_mode);
         	    // calculate use percentage for each address tag
         	    foreach($this->address_types as $t) {
         		    $out[$t['type']."_percent"] = round( ( ($tag_addresses[$t['type']] * 100) / $out['maxhosts']), 2 );
@@ -1267,13 +1269,15 @@ class Subnets extends Common_functions {
 	/**
 	 * Calculates subnet usage per host type
 	 *
-	 * @access public
-	 * @param mixed $addresses
+	 * @access private
+	 * @param obj $subnet
+	 * @param false|array $addresses (default:false)
+	 * @param bool $strict_mode
 	 * @return array
 	 */
-	public function calculate_subnet_usage_sort_addresses ($addresses) {
+	private function calculate_subnet_usage_sort_addresses ($subnet, $addresses = false, $strict_mode = true) {
 		$count = array();
-		$count['used'] = 0;				//initial sum count
+		$count['Reserved'] = 0;
 		# fetch address types
 		$this->get_addresses_types();
 		# create array of keys with initial value of 0
@@ -1283,9 +1287,16 @@ class Subnets extends Common_functions {
 		# count
 		if($addresses) {
 			foreach($addresses as $ip) {
-				$count[$this->translate_address_type($ip->state)]++;
-				$count['used'] = gmp_strval(gmp_add($count['used'], 1));
+				$type = $this->translate_address_type($ip->state);
+				$count[$type] = gmp_strval(gmp_add($count[$type],1));
 			}
+		}
+		if (!$strict_mode) {
+			$ip_version  = $this->get_ip_version ($subnet->subnet);
+			$subnet_broadcast = 2;
+			if($ip_version=="IPv4" && $subnet->mask>=31)  { $subnet_broadcast=0; }
+			if($ip_version=="IPv6" && $subnet->mask>=127) { $subnet_broadcast=0; }
+			$count['Reserved'] = gmp_strval(gmp_add($count['Reserved'],$subnet_broadcast));
 		}
 		# result
 		return $count;
