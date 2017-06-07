@@ -304,27 +304,6 @@ class RackDrawer extends Common_functions {
      */
     private $template;
 
-    /**
-     * Set to true to verify
-     *
-     *   $context_options=array(
-     *       "ssl"=> array(
-     *           "cafile" => "/path/to/bundle/cacert.pem",
-     *           "verify_peer"=> true,
-     *           "verify_peer_name"=> true,
-     *       )
-     *   );
-     *
-     * @var mixed
-     * @access private
-     */
-    private $context_options = array(
-        'ssl' => array(
-            'verify_peer' => false,
-            'verify_peer_name' => false,
-        )
-    );
-
 
     /**
      * Draws rack
@@ -335,7 +314,7 @@ class RackDrawer extends Common_functions {
      */
     public function draw(Rack $rack) {
         $this->rack = $rack;
-        $response = file_get_contents($this->createURL().BASE."css/".SCRIPT_PREFIX."/images/blankracks/".$this->rack->getSpace().".png", false, stream_context_create($this->context_options));
+        $response = file_get_contents($_SERVER['DOCUMENT_ROOT'].BASE.'css/'.SCRIPT_PREFIX.'/images/blankracks/'.$this->rack->getSpace().'.png', false);
         $this->template = imagecreatefromstring($response);
 
         $this->drawNameplate();
