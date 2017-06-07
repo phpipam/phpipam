@@ -129,6 +129,7 @@ $values = array(
     "id"=>@$_POST['id'],
     "name"=>$_POST['name'],
     "prefix"=>$_POST['prefix'],
+    "master"=>$_POST['master'],
     "start"=>$_POST['start'],
     "stop"=>$_POST['stop'],
     "deviceId"=>$_POST['deviceId'],
