@@ -836,6 +836,9 @@ class Logging extends Common_functions {
 		# set object type
 		$object_type = $this->object_type=="folder" ? "subnet" : $this->object_type;
 
+		# if required values are missing dont save changelog
+		if(is_null($obj_id) || $obj_id=="NULL")	{ return false; }
+
 	    # set values
 	    $values = array(
 	    			"ctype"	 => $object_type,

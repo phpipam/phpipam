@@ -212,14 +212,15 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
             	}
         	}
 
-			# modify action - if delete ok, dynamically reset add / edit -> if IP already exists set edit
-			if($action != "delete") {
-				$address['action'] = $Addresses->address_exists ($m, $address['subnetId'])===true ? "edit" : "add";
+
+			# if it already exist for add skip it !
+			if($Addresses->address_exists ($m, $address['subnetId']) && $action=="add") {}
+			else {
+				# if it fails set error log
+				if (!$Addresses->modify_address($address, false)) {
+			        $errors[] = _('Cannot').' '. $address['action']. ' '._('IP address').' '. $Addresses->transform_to_dotted($m);
+			    }
 			}
-			# if it fails set error log
-			if (!$Addresses->modify_address($address, false)) {
-		        $errors[] = _('Cannot').' '. $address['action']. ' '._('IP address').' '. $Addresses->transform_to_dotted($m);
-		    }
 			# next IP
 			$m = gmp_strval(gmp_add($m,1));
 		}
