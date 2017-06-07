@@ -30,6 +30,13 @@ $db['ssl_cipher'] = '/DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
 
 
 /**
+ * temporary table type to create slave subnets table
+ * (MEMORY, InnoDB)
+ ******************************/
+$db['tmptable_engine_type'] = "MEMORY";
+
+
+/**
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts
  ******************************/
 # pingCheck.php script parameters

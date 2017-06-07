@@ -43,6 +43,15 @@ class Subnets extends Common_functions {
 	public $lastInsertId = null;
 
 	/**
+	 * engine type
+	 *
+	 * 	MEMORY, InnoDB
+	 *
+	 * @var string
+	 */
+	protected $tmptable_engine_type = "MEMORY";
+
+	/**
 	 * array of /8 ripe subnets
 	 *
 	 * (default value: array())
@@ -847,6 +856,102 @@ class Subnets extends Common_functions {
 	*/
 
 	/**
+	 * Reset engine type if set in config.php (MEMORY or InnoDB)
+	 *
+	 * @method set_tmptable_engine_type
+	 */
+	private function set_tmptable_engine_type () {
+		// read config.php
+		include(dirname(__FILE__)."/../../config.php");
+		// if set check array
+		if(isset($db['tmptable_engine_type'])) {
+			if($db['tmptable_engine_type']=="MEMORY" || $db['tmptable_engine_type']=="InnoDB") {
+				$this->tmptable_engine_type = $db['tmptable_engine_type'];
+			}
+		}
+	}
+
+	/**
+	 * Deletes temporary table containing slave ids for a given subnetId
+	 *
+	 * @access private
+	 * @param int $subnetId
+	 * @param int $level ()default: null
+	 * @return void
+	 */
+	private function reset_subnet_familytree_table (int $subnetId, int $level = null) {
+		// set table name
+		$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
+		// execute
+		try { $this->Database->runQuery("DROP TABLE IF EXISTS $table_name;");}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+		}
+	}
+
+	/**
+	 * Generates temporary table containing slave ids for a given subnetId
+	 *
+	 * @access private
+	 * @param int $subnetId
+	 * @return void
+	 */
+	private function create_subnet_familytree (int $subnetId) {
+
+		// MySQL does not support multiple references to a temporary table in the same query.
+		// Ideally we would populate temp_table with our initial subnetId and then run the query below until
+		// the inserted record count is zero (no more slaves ids found).
+		//
+		//  INSERT INTO temp_table SELECT id FROM subnets WHERE id NOT IN (temp_table) AND masterSubnetId IN (temp_table)
+		//
+		// Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
+
+		try {
+			// set engine type
+			$this->set_tmptable_engine_type ();
+			// remove old temporary table
+			$this->reset_subnet_familytree_table ($subnetId);
+
+			// set default count
+			$rowCount = 0;
+			$level = 0;
+
+			// remove old temp table with level
+			$this->reset_subnet_familytree_table ($subnetId, $level);
+			// create new temp table
+			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
+			$result = $this->Database->runQuery($query, null, $rowCount);
+
+			// Fetch next level of slaves.
+			while ($result == 1 && $rowCount > 0) {
+				$lastlevel = $level++;
+
+				// remove old
+				$this->reset_subnet_familytree_table ($subnetId, $level);
+
+				$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+				$result = $this->Database->runQuery($query, null, $rowCount);
+			}
+
+			// Consolidate results into single temporary table.
+			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type.";";
+			$this->Database->runQuery($query);
+
+			while (--$level >= 0) {
+				$query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId} SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+				$this->Database->runQuery($query);
+
+				// remove old
+				$this->reset_subnet_familytree_table ($subnetId, $level);
+			}
+		}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			throw $e;
+		}
+	}
+
+	/**
 	 * Checks if subnet has any slaves
 	 *
 	 * @access public
@@ -891,36 +996,40 @@ class Subnets extends Common_functions {
 	/**
 	 * Recursively fetches all slaves
 	 *
+	 * Updated in https://github.com/phpipam/phpipam/pull/1098/files
+	 *
 	 * @access public
-	 * @param mixed $subnetId
+	 * @param int $subnetId
 	 * @return void
 	 */
-	public function fetch_subnet_slaves_recursive ($subnetId) {
-		$end = false;							//loop break flag
-		# slaves array of id's, add current
-		$this->slaves[] = (int) $subnetId;		//id
+	public function fetch_subnet_slaves_recursive (int $subnetId) {
 
-		# loop
-		while($end == false) {
-			# fetch all immediate slaves
-			$slaves2 = $this->fetch_subnet_slaves ($subnetId);
+		try {
+			// Create temporary table 'tmp_subnet_familytree_${subnetId}' containing all slave ids.
+			$this->create_subnet_familytree($subnetId);
 
-			# we have more slaves
-			if($slaves2) {
-				# recursive
-				foreach($slaves2 as $slave) {
-					# save to full array of slaves
-					$this->slaves_full[$slave->id] = $slave;
-					# fetch possible new slaves
-					$this->fetch_subnet_slaves_recursive ($slave->id);
-					$end = true;
-				}
-			}
-			# no more slaves
-			else {
-				$end = true;
+			// Fetch all slaves
+			$slaves = $this->Database->getObjectsQuery("SELECT * FROM subnets AS slaves WHERE slaves.id IN (SELECT id FROM tmp_subnet_familytree_${subnetId});");
+
+			$this->slaves[] = $subnetId;
+
+			if (!$slaves) { return; }
+
+			foreach($slaves as $slave) {
+				# save to subnets cache
+				unset($slave->subnet_int);
+				$this->cache_write("subnets", $slave->id, $slave);
+
+				# save to full array of slaves
+				$this->slaves_full[$slave->id] = $slave;
+				$this->slaves[] = (int) $slave->id;
 			}
 		}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+		}
+
+		$this->reset_subnet_familytree_table($subnetId);
 	}
 
 	/**
@@ -3986,5 +4095,3 @@ class Subnets extends Common_functions {
 
 
 }
-
-?>
