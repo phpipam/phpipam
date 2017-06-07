@@ -1286,6 +1286,7 @@ class Common_functions  {
 		// set default arrays
 		$matches = array();
 		// validate mac
+		if(strlen($mac)<4)				{ return ""; }
 		if(!$this->validate_mac ($mac))	{ return ""; }
 		// reformat mac address
 		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
