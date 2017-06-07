@@ -214,7 +214,10 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 
 			# if it already exist for add skip it !
-			if($Addresses->address_exists ($m, $address['subnetId']) && $action=="add") {}
+			if($Addresses->address_exists ($m, $address['subnetId']) && $action=="add") {
+				# Add Warnings if it exists
+				$Result->show("warning", _('IP address')." ".$Addresses->transform_address($m, "dotted")." "._('already existing in selected network').'!', false);
+			}
 			else {
 				# if it fails set error log
 				if (!$Addresses->modify_address($address, false)) {
