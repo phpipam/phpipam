@@ -408,7 +408,9 @@ else {
 					"vrfId"=>$_POST['vrfId'],
 					"nameserverId"=>$_POST['nameserverId'],
 					"scanAgent"=>@$_POST['scanAgent'],
-					"device"=>$_POST['device']);
+					"device"=>$_POST['device'],
+					"isFull"=>$_POST['isFull']
+					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);
         if(isset($_POST['showName']))       $values['showName']       = $Admin->verify_checkbox(@$_POST['showName']);
