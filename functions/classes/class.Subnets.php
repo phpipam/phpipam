@@ -898,52 +898,52 @@ class Subnets extends Common_functions {
 	 */
 	private function create_subnet_familytree (int $subnetId) {
 
-	  // MySQL does not support multiple references to a temporary table in the same query.
-	  // Ideally we would populate temp_table with our initial subnetId and then run the query below until
-	  // the inserted record count is zero (no more slaves ids found).
-	  //
-	  //  INSERT INTO temp_table SELECT id FROM subnets WHERE id NOT IN (temp_table) AND masterSubnetId IN (temp_table)
-	  //
-	  // Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
+		// MySQL does not support multiple references to a temporary table in the same query.
+		// Ideally we would populate temp_table with our initial subnetId and then run the query below until
+		// the inserted record count is zero (no more slaves ids found).
+		//
+		//  INSERT INTO temp_table SELECT id FROM subnets WHERE id NOT IN (temp_table) AND masterSubnetId IN (temp_table)
+		//
+		// Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
 
-	  try {
-	  	// set engine type
-	  	$this->set_tmptable_engine_type ();
-		// remove old temporary table
-		$this->reset_subnet_familytree_table ($subnetId);
+		try {
+			// set engine type
+			$this->set_tmptable_engine_type ();
+			// remove old temporary table
+			$this->reset_subnet_familytree_table ($subnetId);
 
-		// set default count
-		$rowCount = 0;
-		$level = 0;
+			// set default count
+			$rowCount = 0;
+			$level = 0;
 
-		// remove old temp table with level
-		$this->reset_subnet_familytree_table ($subnetId, $level);
-		// create new temp table
-		$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
-		$result = $this->Database->runQuery($query, null, $rowCount);
-
-		// Fetch next level of slaves.
-		while ($result == 1 && $rowCount > 0){
-			$lastlevel = $level++;
-
-			// remove old
+			// remove old temp table with level
 			$this->reset_subnet_familytree_table ($subnetId, $level);
-
-			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+			// create new temp table
+			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
 			$result = $this->Database->runQuery($query, null, $rowCount);
-		}
 
-		// Consolidate results into single temporary table.
-		$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type.";";
-		$this->Database->runQuery($query);
+			// Fetch next level of slaves.
+			while ($result == 1 && $rowCount > 0) {
+				$lastlevel = $level++;
 
-		while (--$level >= 0) {
-			$query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId} SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+				// remove old
+				$this->reset_subnet_familytree_table ($subnetId, $level);
+
+				$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+				$result = $this->Database->runQuery($query, null, $rowCount);
+			}
+
+			// Consolidate results into single temporary table.
+			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type.";";
 			$this->Database->runQuery($query);
 
-			// remove old
-			$this->reset_subnet_familytree_table ($subnetId, $level);
-		}
+			while (--$level >= 0) {
+				$query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId} SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+				$this->Database->runQuery($query);
+
+				// remove old
+				$this->reset_subnet_familytree_table ($subnetId, $level);
+			}
 		}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
