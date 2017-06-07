@@ -996,6 +996,8 @@ class Subnets extends Common_functions {
 	/**
 	 * Recursively fetches all slaves
 	 *
+	 * Updated in https://github.com/phpipam/phpipam/pull/1098/files
+	 *
 	 * @access public
 	 * @param int $subnetId
 	 * @return void
