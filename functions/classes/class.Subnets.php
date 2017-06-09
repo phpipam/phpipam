@@ -879,11 +879,14 @@ class Subnets extends Common_functions {
 	 * @param int $level ()default: null
 	 * @return void
 	 */
-	private function reset_subnet_familytree_table (int $subnetId, int $level = null) {
-		// set table name
-		$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
-		// execute
-		try { $this->Database->runQuery("DROP TABLE IF EXISTS $table_name;");}
+	private function reset_subnet_familytree_table ($subnetId, $level = null) {
+		try {
+				if (!is_numeric($subnetId)) { throw new Exception(_P('Invalid subnetId')); }
+				// set table name
+				$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
+				// execute
+			$this->Database->runQuery("DROP TABLE IF EXISTS $table_name;");
+		}
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 		}
@@ -896,7 +899,7 @@ class Subnets extends Common_functions {
 	 * @param int $subnetId
 	 * @return void
 	 */
-	private function create_subnet_familytree (int $subnetId) {
+	private function create_subnet_familytree ($subnetId) {
 
 		// MySQL does not support multiple references to a temporary table in the same query.
 		// Ideally we would populate temp_table with our initial subnetId and then run the query below until
@@ -907,6 +910,8 @@ class Subnets extends Common_functions {
 		// Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
 
 		try {
+			if (!is_numeric($subnetId)) { throw new Exception(_P('Invalid subnetId')); }
+
 			// set engine type
 			$this->set_tmptable_engine_type ();
 			// remove old temporary table
