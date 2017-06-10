@@ -881,7 +881,7 @@ class Subnets extends Common_functions {
 	 */
 	private function reset_subnet_familytree_table ($subnetId, $level = null) {
 		try {
-				if (!is_numeric($subnetId)) { throw new Exception(_P('Invalid subnetId')); }
+				if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
 				// set table name
 				$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
 				// execute
@@ -910,7 +910,7 @@ class Subnets extends Common_functions {
 		// Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
 
 		try {
-			if (!is_numeric($subnetId)) { throw new Exception(_P('Invalid subnetId')); }
+			if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
 
 			// set engine type
 			$this->set_tmptable_engine_type ();
