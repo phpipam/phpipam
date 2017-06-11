@@ -1217,13 +1217,13 @@ class Subnets extends Common_functions {
 
 			// Count network and broadcast addresses
 			if (!$strict_mode) {
-				$query = "SELECT nodes.mask FROM subnets AS nodes LEFT JOIN subnets as child  ON child.masterSubnetId = nodes.id WHERE nodes.id IN (SELECT id FROM ${slaveid_table}) AND nodes.isFull = 0 AND child.id IS NULL;";
+				$query = "SELECT parent.mask,COUNT(*) as cnt FROM subnets AS parent LEFT JOIN subnets as child  ON child.masterSubnetId = parent.id WHERE parent.id IN (SELECT id FROM ${slaveid_table}) AND parent.isFull = 0 AND child.id IS NULL GROUP BY parent.mask;";
 				$result = $this->Database->getObjectsQuery($query);
 
-				foreach($result as $ss) {
-					if($ip_version=="IPv4" && $ss->mask>=31)  { continue; }
-					if($ip_version=="IPv6" && $ss->mask>=127) { continue; }
-					$subnet_detailed['Used'] = gmp_strval(gmp_add($subnet_detailed['Used'],2));
+				foreach($result as $r) {
+					if($ip_version=="IPv4" && $r->mask>=31)  { continue; }
+					if($ip_version=="IPv6" && $r->mask>=127) { continue; }
+					$subnet_detailed['Used'] = gmp_strval(gmp_add($subnet_detailed['Used'],$r->cnt * 2));
 				}
 			}
 
@@ -1233,13 +1233,13 @@ class Subnets extends Common_functions {
 			foreach($subnet_detailed as $type => $cnt) {
 				$subnet_usage["used"] = gmp_strval(gmp_add($subnet_usage['used'],$cnt));
 				if ($detailed) {
-					$subnet_usage[$type."_percent"] = round((($cnt * 100) / $subnet_usage['maxhosts']),2);
+					$subnet_usage[$type."_percent"] = round((($cnt * 100.0) / $subnet_usage['maxhosts']),2);
 					$subnet_usage["freehosts_percent"] = $subnet_usage["freehosts_percent"] - $subnet_usage[$type."_percent"];
 				}
 			}
 			$subnet_usage["freehosts"] = gmp_strval(gmp_sub($subnet_usage["maxhosts"],$subnet_usage["used"]));
 			if (!$detailed) {
-				$subnet_usage["Used_percent"] = round((($subnet_usage["used"] * 100) / $subnet_usage['maxhosts']),2);
+				$subnet_usage["Used_percent"] = round((($subnet_usage["used"] * 100.0) / $subnet_usage['maxhosts']),2);
 				$subnet_usage["freehosts_percent"] = 100.0 - $subnet_usage["Used_percent"];
 			}
 
