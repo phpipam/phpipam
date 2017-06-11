@@ -1181,7 +1181,7 @@ class Subnets extends Common_functions {
 
 		// init result
 		$subnet_usage    = array("maxhosts" => 0, "used" => 0, "freehosts" => 0, "Used_percent" => 0, "freehosts_percent" => 100.0);
-		$subnet_detailed = array("Used" => 0);
+		$subnet_detailed = array("Used" => 0, "Reserved" => 0);
 
 		try {
 			// Build temporary table containing list of slave ids.
@@ -1215,15 +1215,15 @@ class Subnets extends Common_functions {
 				$subnet_detailed[$r->type] = gmp_strval(gmp_add($subnet_detailed[$r->type],$r->cnt));
 			}
 
-			// Count network and broadcast addresses
+			// Count network and broadcast addresses as 'Reserved' IPs (Exclude counting full subnets and subnets with slaves.)
 			if (!$strict_mode) {
-				$query = "SELECT parent.mask,COUNT(*) as cnt FROM subnets AS parent LEFT JOIN subnets as child  ON child.masterSubnetId = parent.id WHERE parent.id IN (SELECT id FROM ${slaveid_table}) AND parent.isFull = 0 AND child.id IS NULL GROUP BY parent.mask;";
+				$query = "SELECT parent.mask,COUNT(*) as cnt FROM subnets AS parent LEFT JOIN subnets as child ON child.masterSubnetId = parent.id WHERE parent.id IN (SELECT id FROM ${slaveid_table}) AND parent.isFull = 0 AND child.id IS NULL GROUP BY parent.mask;";
 				$result = $this->Database->getObjectsQuery($query);
 
 				foreach($result as $r) {
 					if($ip_version=="IPv4" && $r->mask>=31)  { continue; }
 					if($ip_version=="IPv6" && $r->mask>=127) { continue; }
-					$subnet_detailed['Used'] = gmp_strval(gmp_add($subnet_detailed['Used'],$r->cnt * 2));
+					$subnet_detailed['Reserved'] = gmp_strval(gmp_add($subnet_detailed['Reserved'],$r->cnt * 2));
 				}
 			}
 
