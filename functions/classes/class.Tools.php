@@ -1408,13 +1408,16 @@ class Tools extends Common_functions {
 		// indexes required for phpipam
 		$indexes = array ();
 		$indexes['ipaddresses']   = array ("sid_ip_unique", "subnetid");
-		$indexes['sections']      = array ("id_2");
+		$indexes['sections']      = array ("id_2", "id");
+		$indexes['subnets']       = array ("masterSubnetId");
 		$indexes['devices']       = array ("hostname");
-		$indexes['users']         = array ("id_2");
+		$indexes['users']         = array ("id_2", "id");
 		$indexes['api']           = array ("app_id");
 		$indexes['changelog']     = array ("coid", "ctype");
 		$indexes['loginAttempts'] = array ("ip");
+		$indexes['firewallZoneMapping'] = array ("devId_idx");
 		$indexes['scanAgents']    = array ("code");
+
 		// return
 		return $indexes;
 	}

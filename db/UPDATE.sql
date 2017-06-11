@@ -799,3 +799,14 @@ INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('zh_CN.UTF-8', 'Chinese');
 ALTER TABLE `devices` CHANGE `hostname` `hostname` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
 /* decode mac addresses */
 ALTER TABLE `settings` ADD `decodeMAC` TINYINT(1)  NULL  DEFAULT '1';
+
+
+/* VERSION 1.31 */
+UPDATE `settings` set `version` = '1.31';
+
+/* Add index to coid for changelog */
+ALTER TABLE changelog ADD INDEX(coid);
+
+/* Add index to masterSubnetId for subnets */
+ALTER TABLE subnets ADD INDEX(masterSubnetId);
+
