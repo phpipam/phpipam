@@ -876,15 +876,16 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param int $subnetId
-	 * @param int $level ()default: null
+	 * @param int $level ()default: 0
 	 * @return void
 	 */
-	private function reset_subnet_familytree_table ($subnetId, $level = null) {
+	private function reset_subnet_familytree_table ($subnetId, $level = 0) {
 		try {
-				if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
-				// set table name
-				$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
-				// execute
+			if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
+			if (!is_numeric($level)) { throw new Exception(_('Invalid level')); }
+			// set table name
+			$table_name = "tmp_subnet_familytree_${subnetId}_${level}";
+			// execute
 			$this->Database->runQuery("DROP TABLE IF EXISTS $table_name;");
 		}
 		catch (Exception $e) {
@@ -899,23 +900,18 @@ class Subnets extends Common_functions {
 	 * @param int $subnetId
 	 * @return void
 	 */
-	private function create_subnet_familytree ($subnetId) {
+	private function create_subnet_familytree_table ($subnetId, $prune_isFull = false) {
 
 		// MySQL does not support multiple references to a temporary table in the same query.
-		// Ideally we would populate temp_table with our initial subnetId and then run the query below until
-		// the inserted record count is zero (no more slaves ids found).
-		//
-		//  INSERT INTO temp_table SELECT id FROM subnets WHERE id NOT IN (temp_table) AND masterSubnetId IN (temp_table)
-		//
 		// Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
 
 		try {
 			if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
 
+			// Generated table name
+			$base_tbl_name = "tmp_subnet_familytree_${subnetId}";
 			// set engine type
 			$this->set_tmptable_engine_type ();
-			// remove old temporary table
-			$this->reset_subnet_familytree_table ($subnetId);
 
 			// set default count
 			$rowCount = 0;
@@ -924,7 +920,11 @@ class Subnets extends Common_functions {
 			// remove old temp table with level
 			$this->reset_subnet_familytree_table ($subnetId, $level);
 			// create new temp table
-			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
+			if ($prune_isFull) {
+				$query = "CREATE TEMPORARY TABLE ${base_tbl_name}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT slaves.id FROM subnets AS slaves LEFT JOIN subnets AS master ON master.id = slaves.masterSubnetId WHERE master.isFull = 0 AND slaves.masterSubnetId = $subnetId;";
+			} else{
+				$query = "CREATE TEMPORARY TABLE ${base_tbl_name}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT slaves.id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
+			}
 			$result = $this->Database->runQuery($query, null, $rowCount);
 
 			// Fetch next level of slaves.
@@ -934,16 +934,17 @@ class Subnets extends Common_functions {
 				// remove old
 				$this->reset_subnet_familytree_table ($subnetId, $level);
 
-				$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+				if ($prune_isFull) {
+					$query = "CREATE TEMPORARY TABLE ${base_tbl_name}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT slaves.id FROM subnets AS slaves LEFT JOIN subnets AS master ON master.id = slaves.masterSubnetId WHERE master.isFull = 0 AND slaves.masterSubnetId IN (SELECT id FROM ${base_tbl_name}_${lastlevel});";
+				} else{
+					$query = "CREATE TEMPORARY TABLE ${base_tbl_name}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT slaves.id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM ${base_tbl_name}_${lastlevel});";
+				}
 				$result = $this->Database->runQuery($query, null, $rowCount);
 			}
 
 			// Consolidate results into single temporary table.
-			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type.";";
-			$this->Database->runQuery($query);
-
-			while (--$level >= 0) {
-				$query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId} SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+			while (--$level >= 1) {
+				$query = "INSERT IGNORE INTO ${base_tbl_name}_0 SELECT id FROM ${base_tbl_name}_${level};";
 				$this->Database->runQuery($query);
 
 				// remove old
@@ -954,6 +955,8 @@ class Subnets extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			throw $e;
 		}
+
+		return "${base_tbl_name}_0";
 	}
 
 	/**
@@ -1010,11 +1013,11 @@ class Subnets extends Common_functions {
 	public function fetch_subnet_slaves_recursive ($subnetId) {
 
 		try {
-			// Create temporary table 'tmp_subnet_familytree_${subnetId}' containing all slave ids.
-			$this->create_subnet_familytree($subnetId);
+			// Build temporary table containing list of slave ids.
+			$slaveid_table = $this->create_subnet_familytree_table($subnetId);
 
 			// Fetch all slaves
-			$slaves = $this->Database->getObjectsQuery("SELECT * FROM subnets AS slaves WHERE slaves.id IN (SELECT id FROM tmp_subnet_familytree_${subnetId});");
+			$slaves = $this->Database->getObjectsQuery("SELECT * FROM subnets AS slaves WHERE slaves.id IN (SELECT id FROM ${slaveid_table});");
 
 			$this->slaves[] = $subnetId;
 
@@ -1164,52 +1167,90 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	public function calculate_subnet_usage ($subnet, $detailed = false) {
-		// cast to object
-		if(is_array($subnet)) {
-    		$subnet = (object) $subnet;
-		}
+		if(is_array($subnet)) { $subnet = (object) $subnet; }
 
 		// init addresses object
 		$this->Addresses = new Addresses ($this->Database);
 		// fetch address types
 		$this->get_addresses_types();
 
-    	// is slaves
-    	if ($this->has_slaves ($subnet->id)) {
-            // if we have slaves we need to check against every slave
-            $this->reset_subnet_slaves_recursive ();
-            $this->fetch_subnet_slaves_recursive ($subnet->id);
-            $this->remove_subnet_slaves_master ($subnet->id);
+		$section  = $this->fetch_object ("sections", "id", $subnet->sectionId);
+		$strict_mode = $this->has_slaves ($subnet->id) ? false : (bool)$section->strictMode;
+		$ip_version = $this->get_ip_version ($subnet->subnet);
+		$subnetId = $subnet->id;
 
-            // set master details
-            $subnet_usage = $this->calculate_single_subnet_details ($subnet, true, false);
+		// init result
+		$subnet_usage    = array("maxhosts" => 0, "used" => 0, "freehosts" => 0, "Used_percent" => 0, "freehosts_percent" => 100.0);
+		$subnet_detailed = array("Used" => 0);
 
-        	// loop and add results
-            foreach ($this->slaves_full as $ss) {
-                // calculate for specific subnet
-                $slave_usage = $this->calculate_single_subnet_details ($ss, true, false);
-                // append slave values to its master
-                $subnet_usage['used']      = gmp_strval(gmp_add($subnet_usage['used'],$slave_usage['used']));
-                $subnet_usage['freehosts'] = gmp_strval(gmp_sub($subnet_usage['freehosts'],$slave_usage['used']));
+		try {
+			// Build temporary table containing list of slave ids.
+			$slaveid_table = $this->create_subnet_familytree_table ($subnetId, true);
 
-                if (gmp_cmp($subnet_usage['used'],$subnet_usage['maxhosts']) > 0 ) {
-                    $subnet_usage['used'] = $subnet_usage['maxhosts'];
-                }
-                if (gmp_cmp($subnet_usage['freehosts'],0) < 0 ) {
-                    $subnet_usage['freehosts'] = 0;
-                }
-            }
-            // recalculate percentge
-            $subnet_usage["freehosts_percent"] = round((($subnet_usage['freehosts'] * 100.0) / $subnet_usage['maxhosts']),2);
-            $subnet_usage["Used_percent"]      = 100.0 - $subnet_usage["freehosts_percent"];
-    	}
-    	// no slaves
-    	else {
-            $subnet_usage = $this->calculate_single_subnet_details ($subnet, false, $detailed);
-    	}
-    	// return usage
-    	return $subnet_usage;
-	}
+			// Add master subnetId to list of slave ids.
+			$this->Database->runQuery("INSERT INTO $slaveid_table VALUES ($subnetId);");
+
+			// Count full subnets.
+			$query = "SELECT subnet,mask FROM subnets WHERE id IN (SELECT id FROM ${slaveid_table}) AND isFull = 1;";
+			$result = $this->Database->getObjectsQuery($query);
+
+			foreach($result as $ss) {
+				$subnet_detailed['Used'] = gmp_strval(gmp_add($subnet_detailed['Used'],$this->get_max_hosts($ss->mask, $ip_version, $strict_mode)));
+			}
+
+			// Count IP Addresses from non-full subnets (Excludes orphaned IPs and IPs belonging to full subnets)
+			$query = "SELECT tag.type,COUNT(*) AS cnt FROM ipaddresses AS ip
+				LEFT JOIN ipTags AS tag ON  tag.id = ip.state
+				LEFT JOIN subnets AS subnet ON subnet.id = ip.subnetId
+				LEFT JOIN subnets AS child ON child.masterSubnetId = ip.subnetId
+				WHERE ip.subnetId IN (SELECT id FROM ${slaveid_table})
+				AND subnet.isFull = 0
+				AND child.id IS NULL
+				GROUP BY tag.type";
+			$result = $this->Database->getObjectsQuery($query);
+
+			foreach($result as $r) {
+				if (is_null($r->type)) { $r->type = "Used"; }
+				if (is_null($subnet_detailed[$r->type])) { $subnet_detailed[$r->type] = 0; }
+				$subnet_detailed[$r->type] = gmp_strval(gmp_add($subnet_detailed[$r->type],$r->cnt));
+			}
+
+			// Count network and broadcast addresses
+			if (!$strict_mode) {
+				$query = "SELECT nodes.mask FROM subnets AS nodes LEFT JOIN subnets as child  ON child.masterSubnetId = nodes.id WHERE nodes.id IN (SELECT id FROM ${slaveid_table}) AND nodes.isFull = 0 AND child.id IS NULL;";
+				$result = $this->Database->getObjectsQuery($query);
+
+				foreach($result as $ss) {
+					if($ip_version=="IPv4" && $ss->mask>=31)  { continue; }
+					if($ip_version=="IPv6" && $ss->mask>=127) { continue; }
+					$subnet_detailed['Used'] = gmp_strval(gmp_add($subnet_detailed['Used'],2));
+				}
+			}
+
+			// set values
+			$subnet_usage["maxhosts"] = $this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode);
+
+			foreach($subnet_detailed as $type => $cnt) {
+				$subnet_usage["used"] = gmp_strval(gmp_add($subnet_usage['used'],$cnt));
+				if ($detailed) {
+					$subnet_usage[$type."_percent"] = round((($cnt * 100) / $subnet_usage['maxhosts']),2);
+					$subnet_usage["freehosts_percent"] = $subnet_usage["freehosts_percent"] - $subnet_usage[$type."_percent"];
+				}
+			}
+			$subnet_usage["freehosts"] = gmp_strval(gmp_sub($subnet_usage["maxhosts"],$subnet_usage["used"]));
+			if (!$detailed) {
+				$subnet_usage["Used_percent"] = round((($subnet_usage["used"] * 100) / $subnet_usage['maxhosts']),2);
+				$subnet_usage["freehosts_percent"] = 100.0 - $subnet_usage["Used_percent"];
+			}
+
+		}
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+		}
+		$this->reset_subnet_familytree_table($subnetId);
+
+		return $subnet_usage;
+	 }
 
 	/**
 	 * Calculate usage for single subnet
@@ -1373,32 +1414,35 @@ class Subnets extends Common_functions {
 	 */
 	public function get_max_hosts ($netmask, $ipversion, $strict=true) {
 		if($ipversion == "IPv4")	{ return $this->get_max_IPv4_hosts ($netmask, $strict); }
-		else						{ return $this->get_max_IPv6_hosts ($netmask); }
+		return $this->get_max_IPv6_hosts ($netmask, $strict);
 	}
 
 	/**
 	 * Get max number of IPv4 hosts
 	 *
-	 * @access public
+	 * @access private
 	 * @param mixed $netmask
 	 * @return int
 	 */
-	public function get_max_IPv4_hosts ($netmask, $strict) {
-		if($netmask==31)			{ return 2; }
-		elseif($netmask==32)		{ return 1; }
-		elseif($strict===false)		{ return (int) pow(2, (32 - $netmask)); }
-		else						{ return (int) pow(2, (32 - $netmask)) -2; }
+	private function get_max_IPv4_hosts ($netmask, $strict) {
+		if($netmask==32) { return "1"; }
+		if($netmask==31) { return "2"; }
+		if($strict===false) { return gmp_strval(gmp_pow(2, 32 - $netmask)); }
+		return gmp_strval(gmp_sub(gmp_pow(2, 32 - $netmask),2));
 	}
 
 	/**
 	 * Get max number of IPv6 hosts
 	 *
-	 * @access public
+	 * @access private
 	 * @param mixed $netmask
 	 * @return int
 	 */
-	public function get_max_IPv6_hosts ($netmask) {
-		return gmp_strval(gmp_pow(2, 128 - $netmask));
+	private function get_max_IPv6_hosts ($netmask, $strict) {
+		if($netmask==128) { return "1"; }
+		if($netmask==127) { return "2"; }
+		if($strict===false) { return gmp_strval(gmp_pow(2, 128 - $netmask)); }
+		return gmp_strval(gmp_sub(gmp_pow(2, 128 - $netmask),2));
 	}
 
 	/**
