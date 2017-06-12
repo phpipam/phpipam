@@ -90,7 +90,6 @@ else {
 		<th><?php print _('Permission'); ?></th>
 		<td><?php print $Subnets->parse_permissions($subnet_permission); ?></td>
 	</tr>
-	<?php if(!$slaves) { ?>
 	<tr>
 		<th><?php print _('Subnet Usage'); ?></th>
 		<td>
@@ -101,6 +100,7 @@ else {
 			?>
 		</td>
 	</tr>
+	<?php if(!$slaves) { ?>
 
 	<!-- gateway -->
 	<?php
