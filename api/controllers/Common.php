@@ -745,6 +745,7 @@ class Common_api_functions {
 		// special keys for POST / PATCH
 		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
 		if($this->_params->controller=="tools" && $this->_params->id=="devices")  	  { $this->keys['hostname'] = "dns_name"; }
+		if($this->_params->controller=="devices" )  	  							  { $this->keys['hostname'] = "dns_name"; }
 		}
 
 		// POST / PATCH

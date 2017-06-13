@@ -66,6 +66,7 @@
                 DELETE /subnets/{id}/permissions/             // removes permissions
                 PATCH  /subnets/{id}/permissions/             // sets subnet permissions (?grouname1=ro&groupname2=3&43=1)
         + New controller Prefix;
+        + New controller Devices;
         + New subcontrollers:
             + /tools/nat/
             + /tools/racks/
