@@ -220,9 +220,11 @@ class Subnets_controller extends Common_api_functions {
 				$result = $this->read_subnet_addresses ();
 				// if {ip} is set filter it out
 				if(isset($this->_params->id3)) {
-    				foreach ($result as $k=>$r) {
-        				if ($r->ip !== $this->_params->id3) {
-            				unset($result[$k]);
+						$addresses = $result;
+    				foreach ($addresses as $k=>$r) {
+        				if ($r->ip === $this->_params->id3) {
+                    $result = $r;
+                    break;
         				}
     				}
                     if(sizeof($result)==0) { $result = false; }
