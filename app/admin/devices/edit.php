@@ -141,11 +141,11 @@ $('#switchManagementEdit').change(function() {
         ?>
         <td><?php print _('Rack'); ?></td>
         <td>
-            <select name="rack" class="form-control">
-                <option value=""><?php print _("None"); ?></option>
+            <select name="rack" class="form-control input-sm">
+                <option value="0"><?php print _("None"); ?></option>
                 <?php
                 foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' selected='selected'>$r->name</option>"; }
+     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' selected>$r->name</option>"; }
     				else							{ print "<option value='$r->id' >$r->name</option>"; }
                 }
                 ?>

@@ -20,5 +20,3 @@ $csrf = $User->csrf_cookie ("create", "rack_devices");
 # all racks or one ?
 if (isset($_GET['subnetId']))   { include("print-single-rack.php"); }
 else                            { include("print-racks.php"); }
-
-?>

@@ -29,8 +29,10 @@ if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("d
 
 # remove or add ?
 if ($_POST['action']=="remove") {
+    # fetch rack details
+    $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
     # validate csrf cookie
-    $User->csrf_cookie ("validate", "rack_devices", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+    $User->csrf_cookie ("validate", "rack_devices_".$rack->id, $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
     # set values
     $values = array("id"=>$_POST['deviceid'],
                     "rack"=>"",
@@ -65,7 +67,6 @@ else {
     if ($rack===false)                                              { $Result->show("danger", _("Invalid ID"), true, true); }
     # fetch existing devices
     $rack_devices = $Racks->fetch_rack_devices($rack->id);
-
 
     # all devices
 	$devices = $Admin->fetch_all_objects("devices", "id");
@@ -152,6 +153,16 @@ $(document).ready(function(){
         			<input type="hidden" name="rackid" value="<?php print $_POST['rackid']; ?>">
         		</td>
         	</tr>
+
+            <!-- Location override -->
+            <?php if($User->settings->enableLocations=="1" && ($rack->location!="0" && !is_null($rack->location))) { ?>
+            <tr>
+                <td colspan="2">
+                <hr>
+                    <input type="checkbox" class="input-switch" value="1" name="no_location"> <span class="text-muted"><?php print _("Don't update device location from rack"); ?></span>
+                </td>
+            </tr>
+            <?php } ?>
 
     	</table>
         </form>

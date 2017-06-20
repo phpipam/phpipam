@@ -1,9 +1,10 @@
-== 1.3.002
+== 1.3.003
 
     Enhancements, changes:
     ----------------------------
+    + Automatic location assignment when device added to rack (#1230);
     + API:
-        + Encrypyted requests can now also be form-encoded;
+        + Encrypyted requests can now also be form-encoded (#1191);
 
     Translations:
     ----------------------------
@@ -11,7 +12,7 @@
 
     Bugfixes:
     ----------------------------
-    + Fixed RACK images not displayed if not root location (Fixed in PR #1204)
+    + Fixed RACK images not displayed if not root location (#1204)
 
 == 1.3
 

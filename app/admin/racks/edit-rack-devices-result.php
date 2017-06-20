@@ -34,8 +34,12 @@ if(!is_numeric($_POST['rack_size']))			                       { $Result->show("d
 $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
 if ($rack===false)                                                     { $Result->show("danger", _("Invalid ID"), true); }
 
+# validate device
+$device = $Admin->fetch_object("devices", "id", $_POST['deviceid']);
+if ($device===false)                                                   { $Result->show("danger", _("Invalid Device ID"), true); }
+
 # check size
-if($_POST['rack_start']+($_POST['rack_size']-1)>$rack->size)            { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+if($_POST['rack_start']+($_POST['rack_size']-1)>$rack->size)           { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
 
 # set update values
 $values = array("id"=>@$_POST['deviceid'],
@@ -44,8 +48,13 @@ $values = array("id"=>@$_POST['deviceid'],
 				"rack_size"=>@$_POST['rack_size'],
 				);
 
+# inherit location if it is not already set
+if ($User->settings->enableLocations=="1" && @$_POST['no_location']!="1") {
+	if (($device->location=="0" || is_null($device->location)) && ($rack->location!="0" && !is_null($rack->location))) {
+		$values['location'] = $rack->location;
+	}
+}
+
 # update rack
 if(!$Admin->object_modify("devices", "edit", "id", $values))	        { $Result->show("success", _("Failed to add device to rack").'!', false); }
 else																	{ $Result->show("success", _("Device added to rack").'!', false); }
-
-?>
