@@ -3,6 +3,7 @@
     Enhancements, changes:
     ----------------------------
     + Automatic location assignment when device added to rack (#1230);
+    + Rack map showing map of all racks in location;
     + API:
         + Encrypyted requests can now also be form-encoded (#1191);
 

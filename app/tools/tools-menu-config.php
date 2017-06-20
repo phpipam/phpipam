@@ -118,5 +118,3 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>
 
 # user menu
 $tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
-
-?>

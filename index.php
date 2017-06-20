@@ -206,7 +206,6 @@ if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-cente
 <div class="content_overlay">
 <div class="container-fluid" id="mainContainer">
 		<?php
-
 		/* error */
 		if($_GET['page'] == "error") {
 			print "<div id='error' class='container'>";
