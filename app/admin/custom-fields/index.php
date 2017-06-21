@@ -9,16 +9,19 @@ $User->check_user_session();
 
 
 /* fetch all custom fields */
-$custom_tables = array( "ipaddresses"=>"IP address",
-						"subnets"=>"subnet",
-						"vlans"=>"VLAN",
-						"vrf"=>"VRF",
-						"users"=>"User",
-						"devices"=>"Device",
-						"racks"=>"Rack",
-						"locations"=>"Locations",
-						"pstnPrefixes"=>"PSTN Prefixes",
-						"pstnNumbers"=>"PSTN Numbers"
+$custom_tables = array(
+						"ipaddresses"      => "IP address",
+						"subnets"          => "subnet",
+						"vlans"            => "VLAN",
+						"vrf"              => "VRF",
+						"users"            => "User",
+						"devices"          => "Device",
+						"racks"            => "Rack",
+						"locations"        => "Locations",
+						"pstnPrefixes"     => "PSTN Prefixes",
+						"pstnNumbers"      => "PSTN Numbers",
+						"circuitProviders" => "Circuit providers",
+						"circuits" 		   => "Circuits"
 						);
 
 # create array
@@ -163,7 +166,6 @@ foreach($custom_fields as $k=>$cf) {
 
 	print "</tbody>";
 }
-
 ?>
 
 </table>
