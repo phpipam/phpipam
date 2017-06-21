@@ -38,6 +38,11 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
+// defaults
+else {
+	$device = array ();
+	$device['type'] = 9;
+}
 
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
@@ -57,12 +62,16 @@ $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
 // form change
-$('#switchManagementEdit').change(function() {
+$('#switchManagementEdit select[name=rack]').change(function() {
    //change id
    $('.showRackPopup').attr("data-rackid",$('#switchManagementEdit select[name=rack]').val());
    //toggle show
    if($('#switchManagementEdit select[name=rack]').val().length == 0) { $('tbody#rack').hide(); }
    else                                                               { $('tbody#rack').show(); }
+   // select location
+   var loc = $('#switchManagementEdit select[name=rack] :selected').attr('data-location');
+   $('select[name=location_item] option:selected').prop("selected",null)
+   $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
 });
 </script>
 
@@ -120,7 +129,7 @@ $('#switchManagementEdit').change(function() {
                 if($locations!==false) {
         			foreach($locations as $l) {
         				if($device['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
-        				else					{ print "<option value='$l->id'>$l->name</option>"; }
+        				else								{ print "<option value='$l->id'>$l->name</option>"; }
         			}
     			}
     			?>
@@ -145,8 +154,8 @@ $('#switchManagementEdit').change(function() {
                 <option value="0"><?php print _("None"); ?></option>
                 <?php
                 foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' selected>$r->name</option>"; }
-    				else							{ print "<option value='$r->id' >$r->name</option>"; }
+     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
+    				else							{ print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
                 }
                 ?>
             </select>
