@@ -1391,16 +1391,17 @@ class User extends Common_functions {
      */
     public function self_update($post) {
         # set items to update
-        $items  = array("real_name"=>$post['real_name'],
-                        "mailNotify"=>$post['mailNotify'],
-                        "mailChangelog"=>$post['mailChangelog'],
-                        "email"=>$post['email'],
-                        "lang"=>$post['lang'],
-                        "id"=>$this->user->id,
+        $items  = array("real_name"        => $post['real_name'],
+                        "mailNotify"       => $post['mailNotify'],
+                        "mailChangelog"    => $post['mailChangelog'],
+                        "email"            => $post['email'],
+                        "lang"             => $post['lang'],
+                        "id"               => $this->user->id,
                         //display
-                        "compressOverride"=>$post['compressOverride'],
-                        "hideFreeRange"=>$this->verify_checkbox(@$post['hideFreeRange']),
-                        "menuType"=>$post['menuType'],
+                        "compressOverride" => $post['compressOverride'],
+                        "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
+                        "menuType"         => $this->verify_checkbox(@$post['menuType']),
+                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
