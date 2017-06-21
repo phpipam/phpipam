@@ -6,7 +6,6 @@
 
 # include required scripts
 require( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize user object
 $Database 	= new Database_PDO;

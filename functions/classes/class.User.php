@@ -1067,9 +1067,6 @@ class User extends Common_functions {
      * @return adLDAP object
      */
     private function directory_connect ($authparams) {
-        # adLDAP script
-        require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
-
         $dirparams = Array();
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];

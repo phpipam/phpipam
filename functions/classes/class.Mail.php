@@ -66,10 +66,9 @@ class phpipam_mail extends Common_functions {
 	 */
 	public function initialize_mailer () {
 		# we need phpmailer
-		require_once( dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php');
 
 		# initialize object
-		$this->Php_mailer = new PHPMailer(true);			//localhost by default
+		$this->Php_mailer = new PHPMailer\PHPMailer\PHPMailer(true);			//localhost by default
 		$this->Php_mailer->CharSet="UTF-8";					//set utf8
 		$this->Php_mailer->SMTPDebug = 0;					//default no debugging
 

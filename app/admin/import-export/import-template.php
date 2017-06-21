@@ -4,7 +4,7 @@
  *********************************/
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+
 # classes
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
