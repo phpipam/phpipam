@@ -41,7 +41,9 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 // defaults
 else {
 	$device = array ();
-	$device['type'] = 9;
+	$device['type']       = 9;
+	$device['rack_start'] = 1;
+	$device['rack_size']  = 1;
 }
 
 # set readonly flag
