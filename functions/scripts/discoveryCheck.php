@@ -61,7 +61,7 @@ $hostnames      = array();			// Array with detected hostnames
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!Thread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
+if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -127,7 +127,7 @@ if($Scan->icmp_type=="fping") {
 	    	//only if index exists!
 	    	if(isset($scan_subnets[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( 'fping_subnet' );
+	            $threads[$z] = new PingThread( 'fping_subnet' );
 				$threads[$z]->start_fping( $Subnets->transform_to_dotted($scan_subnets[$z]->subnet)."/".$scan_subnets[$z]->mask );
 	            $z++;				//next index
 			}
@@ -181,7 +181,7 @@ else {
         	//only if index exists!
         	if(isset($addresses[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( 'ping_address' );
+	            $threads[$z] = new PingThread( 'ping_address' );
 	            $threads[$z]->start( $Subnets->transform_to_dotted($addresses[$z]['ip_addr']) );
 				$z++;			//next index
 			}
