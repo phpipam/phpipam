@@ -462,28 +462,27 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_section_subnets ($sectionId, $fields = array()) {
-		# check order
-		$this->get_settings ();
+		# fetch settings and set subnet ordering
+		$this->get_settings();
+
 		$order = $this->get_subnet_order ();
+
+		# section ordering - overrides network
+		$section  = $this->fetch_object ("sections", "id", $sectionId);
+		if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(',', $section->subnetOrdering); }
+
 		// subnet fix
-		if($order[0]=="subnet") $order[0] = "subnet_int";
+		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
+
 		// fields
-		if(sizeof($fields)>0) {
-			$fields_q = "";
-			foreach ($fields as $f) {
-				$fields_q .= "$f,";
-			}
-		}
-		else {
-			$fields_q = "*,";
-		}
+		$fields_q = sizeof($fields)>0 ? implode (',', $fields) : '*';
 		# fetch
 		// if sectionId is not numeric, assume it is section name rather than id, set query appropriately
 		if (is_numeric($sectionId)) {
-			$query = "SELECT $fields_q CAST(subnet AS DECIMAL(39,0)) as `subnet_int` FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $fields_q FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		else {
-			$query = "SELECT $fields_q CAST(subnet AS DECIMAL(39,0)) as `subnet_int` FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $fields_q FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		try { $subnets = $this->Database->getObjectsQuery($query, array($sectionId)); }
 		catch (Exception $e) {
@@ -493,8 +492,6 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-    			// remove fake subnet_int field
-    			unset($subnet->subnet_int);
     			// save
 				$this->cache_write ("subnets", $subnet->id, $subnet);
 			}
@@ -596,28 +593,25 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_vlan_subnets ($vlanId, $sectionId=null) {
-	    # fetch settings and set subnet ordering
-	    $this->get_settings();
-	    $order = array();
-	    $order = $this->get_subnet_order ();
+		# fetch settings and set subnet ordering
+		$this->get_settings();
 
-	    # fetch section and set section ordering
-	    $section  = $this->fetch_object ("sections", "id", $sectionId);
+		$order = $this->get_subnet_order ();
 
-	    # section ordering - overrides network
-	    if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(",", $section->subnetOrdering); }
-	    else 																				{ $order = $this->get_subnet_order (); }
+		# section ordering - overrides network
+		$section  = $this->fetch_object ("sections", "id", $sectionId);
+		if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(',', $section->subnetOrdering); }
 
 		// subnet fix
-		if($order[0]=="subnet") $order[0] = "subnet_int";
+		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select *,CAST(subnet AS DECIMAL(39,0)) as subnet_int from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select * from `subnets` where `vlanId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vlanId, $sectionId);
 		}
 		else {
-			$query  = "select *,CAST(subnet AS DECIMAL(39,0)) as subnet_int from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select * from `subnets` where `vlanId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vlanId);
 		}
 
@@ -630,7 +624,6 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-    			unset($subnet->subnet_int);
                 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
@@ -694,28 +687,25 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_vrf_subnets ($vrfId, $sectionId=null) {
-	    # fetch settings and set subnet ordering
-	    $this->get_settings();
-	    $order = array();
-	    $order = $this->get_subnet_order ();
+		# fetch settings and set subnet ordering
+		$this->get_settings();
 
-	    # fetch section and set section ordering
-	    $section  = $this->fetch_object ("sections","id", $sectionId);
+		$order = $this->get_subnet_order ();
 
-	    # section ordering - overrides network
-	    if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(",", $section->subnetOrdering); }
-	    else 																				{ $order = $this->get_subnet_order (); }
+		# section ordering - overrides network
+		$section  = $this->fetch_object ("sections", "id", $sectionId);
+		if(@$section->subnetOrdering!="default" && strlen(@$section->subnetOrdering)>0 ) 	{ $order = explode(',', $section->subnetOrdering); }
 
 		// subnet fix
-		if($order[0]=="subnet") $order[0] = "subnet_int";
+		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
 
 		# set query
 		if(!is_null($sectionId)) {
-			$query  = "select *,CAST(subnet AS DECIMAL(39,0)) as subnet_int from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select * from `subnets` where `vrfId` = ? and `sectionId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vrfId, $sectionId);
 		}
 		else {
-			$query  = "select *,CAST(subnet AS DECIMAL(39,0)) as subnet_int from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
+			$query  = "select * from `subnets` where `vrfId` = ? ORDER BY isFolder desc, $order[0] $order[1];";
 			$params = array($vrfId);
 		}
 
@@ -728,7 +718,6 @@ class Subnets extends Common_functions {
 		# save to subnets cache
 		if(sizeof($subnets)>0) {
 			foreach($subnets as $subnet) {
-    			unset($subnet->subnet_int);
                 $this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
@@ -983,11 +972,10 @@ class Subnets extends Common_functions {
 	 */
 	public function fetch_subnet_slaves ($subnetId, $result_fields = "*") {
     	// fetch
-		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet_int", true, false, $result_fields);
+		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet", true, false, $result_fields);
 		# save to subnets cache
         if ($slaves!==false) {
 			foreach($slaves as $slave) {
-    			unset($slave->subnet_int);
                 $this->cache_write ("subnets", $slave->id, $slave);
 			}
 			return $slaves;
@@ -1022,7 +1010,6 @@ class Subnets extends Common_functions {
 
 			foreach($slaves as $slave) {
 				# save to subnets cache
-				unset($slave->subnet_int);
 				$this->cache_write("subnets", $slave->id, $slave);
 
 				# save to full array of slaves
