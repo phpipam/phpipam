@@ -2732,6 +2732,16 @@ class Tools extends Common_functions {
                         FROM ipaddresses a
                         JOIN locations l
                         ON a.location = l.id
+                        UNION ALL
+                        SELECT c.id, c.cid as name, 'mask', 'circuit' as type, 'none' as sectionId, c.location2, 'none' as description
+                        FROM circuits c
+                        JOIN locations l
+                        ON c.location1 = l.id
+                        UNION ALL
+                        SELECT c.id, c.cid as name, 'mask', 'circuit' as type, 'none' as sectionId, c.location2, '' as description
+                        FROM circuits c
+                        JOIN locations l
+                        ON c.location2 = l.id
                         )
                         as linked where location = ?;";
 
