@@ -257,12 +257,12 @@ class DNS extends Common_functions {
 			try {
 			    $result = $this->DNS2->query($address, $this->type);
 			} catch(Net_DNS2_Exception $e) {
-				// set flag
-				$this->local_failed = true;
 				// log error
 				$this->resolve_error = $e->getMessage();
 				// if server inaccessible remove it from array of ns
 				if(strpos($this->resolve_error, "timeout")!==false) {
+					//·set·flag
+					$this->local_failed·=·true;
 					// check which DNS caused problems
 					$dns_exception_list = $this->DNS2->last_exception_list;
 					// loop
