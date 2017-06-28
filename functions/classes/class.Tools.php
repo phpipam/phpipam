@@ -2763,6 +2763,125 @@ class Tools extends Common_functions {
 	 */
 
 	/**
+	 * Fetches all circuits from database
+	 *
+	 * @method fetch_all_circuits
+	 *
+	 * @return false|array
+	 */
+	public function fetch_all_circuits () {
+		// set query
+		$query = "select
+					c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status
+					from circuits as c, circuitProviders as p where c.provider = p.id
+					order by c.cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery($query, array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	/**
+	 * Fetches all circuits for specific provider
+	 *
+	 * @method fetch_all_circuits
+	 *
+	 * @param  int $provider_id
+	 *
+	 * @return false|array
+	 */
+	public function fetch_all_provider_circuits ($provider_id) {
+		// set query
+		$query = "select
+					c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status
+					from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?
+					order by c.cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery($query, array($provider_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	/**
+	 * Reformat circuit location
+	 *
+	 * If device is provided return device
+	 * If location return location
+	 *
+	 * result will be false or array of:
+	 * 	- type => "devices" / "locations"
+	 *  - icon => "fa-desktop / fa-map"
+	 *  - id => $id
+	 *  - name => "location or device name"
+	 *  - location => "location index or NULL"
+	 *  - rack => "NULL if location, rack_id if device is set with rack otherwise NULL"
+	 *
+	 * @method reformat_circuit_location
+	 *
+	 * @param  int $deviceId
+	 * @param  int $locationId
+	 *
+	 * @return false|array
+	 */
+	public function reformat_circuit_location ($deviceId = null, $locationId = null) {
+		// check device
+		if(is_numeric($deviceId) && $deviceId!=0) {
+			// fetch device
+			$device = $this->fetch_object ("devices", "id", $deviceId);
+			// check
+			if ($device === false) {
+				return false;
+			}
+			else {
+				$array = array (
+								"type"     => "devices",
+								"id"       => $device->id,
+								"name"     => $device->hostname,
+								"icon" 	   => "",
+								"location" => is_null($device->location)||$device->location==0 ? NULL : $device->location,
+								"rack"     => is_null($device->rack)||$device->rack==0 ? NULL : $device->rack
+				                );
+				// check rack location if not configured
+				if ($array['location']==NULL && $array['rack']!=NULL) {
+					$rack_location = $this->fetch_object ("racks", "id", $array['rack']);
+					$array['location'] = $rack_location!==false ? $rack_location->location : NULL;
+				}
+				// result
+				return $array;
+			}
+		}
+		// check location
+		elseif (is_numeric($locationId) && $locationId!=0) {
+			// fetch location
+			$location = $this->fetch_object ("locations", "id", $locationId);
+			// check
+			if ($device === false) {
+				return false;
+			}
+			else {
+				$array = array (
+								"type"     => "locations",
+								"id"       => $location->id,
+								"name"     => $location->name,
+								"icon" 	   => "fa-map",
+								"location" => $location->id,
+								"rack"     => NULL
+				                );
+				return $array;
+			}
+		}
+		else {
+			return false;
+		}
+	}
+
+	/**
 	 * Fetch all l2 domans and vlans
 	 *
 	 * @access public

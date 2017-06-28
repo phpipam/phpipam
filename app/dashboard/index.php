@@ -135,7 +135,7 @@ foreach($uwidgets as $uk=>$uv) {
 
 # print
 print "<div class='add-widgets' style='display:none;padding-left:20px;'>";
-print "	<a href='' class='btn btn-sm btn-default btn-success add-new-widget'><i class='fa fa-plus'></i> Add new widget</a>";
+print "	<a class='btn btn-xs btn-default open_popup' data-script='app/dashboard/widget-popup.php' data-class='700'>"._('Add new widget')."</a>";
 print "</div>";
 
 if(sizeof($uwidgets)>1) {

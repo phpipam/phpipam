@@ -1,11 +1,17 @@
-== 1.3.003
+== 1.3.010
+
+    New features:
+    ------------
+    + Circuits module (circuits, providers, map, ...);
 
     Enhancements, changes:
     ----------------------------
     + Automatic location assignment when device added to rack (#1230);
     + Rack map showing map of all racks in location;
+    + Compact menu layout (per-user setting, showing only icons)
     + API:
         + Encrypyted requests can now also be form-encoded (#1191);
+        +
 
     Translations:
     ----------------------------
@@ -13,7 +19,10 @@
 
     Bugfixes:
     ----------------------------
-    + Fixed RACK images not displayed if not root location (#1204)
+    + Fixed RACK images not displayed if not root location (#1204);
+    + Fixed import gateway ip (#1240);
+    + Fixed JSON_UNESCAPED_UNICODE for PHP 5.3 (#1135, #1245);
+    + Rename class Thread to PingThread to avoid naming conflict with pthreads Thread class (##1254);
 
 == 1.3
 

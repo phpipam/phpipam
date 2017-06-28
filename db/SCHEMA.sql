@@ -183,6 +183,7 @@ CREATE TABLE `settings` (
   `tempAccess` TEXT  NULL,
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
+  `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -333,6 +334,7 @@ CREATE TABLE `users` (
   `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
   `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
+  `menuCompact` TINYINT  NULL  DEFAULT '1',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
   PRIMARY KEY (`username`),
@@ -703,6 +705,8 @@ CREATE TABLE `racks` (
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
+  `line` INT(11)  NOT NULL  DEFAULT '1',
+  `front` INT(11)  NOT NULL  DEFAULT '0',
   `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -761,6 +765,35 @@ CREATE TABLE `pstnNumbers` (
 
 
 
+# Dump of table circuitProviders
+# ------------------------------------------------------------
+CREATE TABLE `circuitProviders` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `description` text,
+  `contact` varchar(128) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
+# Dump of table circuits
+# ------------------------------------------------------------
+CREATE TABLE `circuits` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cid` varchar(128) DEFAULT NULL,
+  `provider` int(11) unsigned NOT NULL,
+  `type` enum('Default') NOT NULL DEFAULT 'Default',
+  `capacity` varchar(128) DEFAULT NULL,
+  `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
+  `device1` int(11) unsigned DEFAULT NULL,
+  `location1` int(11) unsigned DEFAULT NULL,
+  `device2` int(11) unsigned DEFAULT NULL,
+  `location2` int(11) unsigned DEFAULT NULL,
+  `comment` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 
 # Dump of table -- for autofix comment, leave as it is
@@ -769,4 +802,4 @@ CREATE TABLE `pstnNumbers` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.3';
+UPDATE `settings` set `version` = '1.3.1';
