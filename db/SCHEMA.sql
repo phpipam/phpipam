@@ -320,6 +320,7 @@ CREATE TABLE `users` (
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
   `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
   `editVlan` SET('Yes','No')  NULL  DEFAULT 'No',
+  `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No',
   `pstn` INT(1)  NULL  DEFAULT '1',
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',

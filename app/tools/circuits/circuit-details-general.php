@@ -62,7 +62,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	}
 
 	// edit, delete
-	if($User->is_admin(false)) {
+	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";

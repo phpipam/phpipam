@@ -846,3 +846,6 @@ ALTER TABLE `users` ADD `menuCompact` TINYINT  NULL  DEFAULT '1';
 /* Add line for rack displayin and back side */
 ALTER TABLE `racks` ADD `line` INT(11)  NOT NULL  DEFAULT '1';
 ALTER TABLE `racks` ADD `front` INT(11)  NOT NULL  DEFAULT '0';
+
+/* add circuit permissions for normal users */
+ALTER TABLE `users` ADD `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No';

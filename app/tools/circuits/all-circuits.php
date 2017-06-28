@@ -110,7 +110,7 @@ else {
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."''><i class='fa fa-eye'></i></a>";
-		if($User->is_admin(false)) {
+		if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
 		}
