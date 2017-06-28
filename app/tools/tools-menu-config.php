@@ -66,9 +66,9 @@ if (isset($private_subpages)) {
 }
 
 # arrays
-$tools_menu['Tools']     = array();
 $tools_menu['Subnets']   = array();
 $tools_menu['Devices']   = array();
+$tools_menu['Tools']     = array();
 $tools_menu['User Menu'] = array();
 
 # Tools

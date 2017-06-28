@@ -2818,6 +2818,31 @@ class Tools extends Common_functions {
 		return sizeof($circuits)>0 ? $circuits : false;
 	}
 
+
+	/**
+	 * Fetches all circuits for specific device
+	 *
+	 * @method fetch_all_circuits
+	 *
+	 * @param  int $device_id
+	 *
+	 * @return false|array
+	 */
+	public function fetch_all_device_circuits ($device_id) {
+		// set query
+		$query = "select
+					c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status
+					from circuits as c, circuitProviders as p where c.provider = p.id and (c.device1 = :deviceid or c.device2 = :deviceid)
+					order by c.cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery($query, array("deviceid"=>$device_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
 	/**
 	 * Reformat circuit location
 	 *
