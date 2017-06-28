@@ -1249,7 +1249,7 @@ class Subnets extends Common_functions {
 				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 			if($ip_version=="IPv6" && !$has_slaves && !$strict_mode) {
-				if($subnet->mask<=126) { $$out["used"] = gmp_strval(gmp_add($out["used"],2)); }
+				if($subnet->mask<=126) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 
             // percentage
