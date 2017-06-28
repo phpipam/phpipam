@@ -37,6 +37,10 @@ else {
 	elseif ($_GET['subnetId']=="circuit_map") {
 		include('all-circuits-map.php');
 	}
+	// settings
+	elseif ($_GET['subnetId']=="options") {
+		include('options.php');
+	}
 	// specific circuit
 	else {
 		include("circuit-details.php");

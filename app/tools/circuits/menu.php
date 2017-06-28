@@ -10,4 +10,9 @@
         <a href='<?php print create_link($_GET['page'], "circuits", "circuit_map"); ?>'><?php print _("Circuit map"); ?></a>
     </li>
 	<?php } ?>
+    <?php if($User->is_admin(false)) { ?>
+    <li role='presentation' <?php if(@$_GET['subnetId']=="options") print " class='active'"; ?>>
+        <a href='<?php print create_link($_GET['page'], "circuits", "options"); ?>'><?php print _("Options"); ?></a>
+    </li>
+    <?php } ?>
 </ul>
