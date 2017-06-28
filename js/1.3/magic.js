@@ -1,3 +1,4 @@
+
 /**
  *
  * Javascript / jQuery functions
@@ -981,9 +982,10 @@ function search_execute (loc) {
     var vlans     = $('#'+form_name+' input[name=vlans]').is(":checked") ? "on" : "off";
     var vrf       = $('#'+form_name+' input[name=vrf]').is(":checked") ? "on" : "off";
     var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
+    var circuits  = $('#'+form_name+' input[name=circuits]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
@@ -1015,7 +1017,7 @@ $('form#search').submit(function () {
 // search ipaddress override
 $('a.search_ipaddress').click(function() {
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off"}',365);
+    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off"}',365);
 });
 
 //show/hide search select fields

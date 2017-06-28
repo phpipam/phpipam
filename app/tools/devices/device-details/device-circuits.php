@@ -68,7 +68,7 @@ else {
                 $locationA_html = "<a href='".create_link($_GET['page'],$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
             }
 
-            $locationB = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location2);
+            $locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
             $locationB_html = "<span class='text-muted'>Not set</span>";
             if($locationB!==false) {
                 $locationB_html = "<a href='".create_link($_GET['page'],$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
