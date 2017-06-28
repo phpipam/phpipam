@@ -784,7 +784,7 @@ CREATE TABLE `circuits` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` varchar(128) DEFAULT NULL,
   `provider` int(11) unsigned NOT NULL,
-  `type` enum('Default') NOT NULL DEFAULT 'Default',
+  `type` enum('Default','Bandwidth') DEFAULT NULL,
   `capacity` varchar(128) DEFAULT NULL,
   `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
   `device1` int(11) unsigned DEFAULT NULL,
@@ -792,7 +792,8 @@ CREATE TABLE `circuits` (
   `device2` int(11) unsigned DEFAULT NULL,
   `location2` int(11) unsigned DEFAULT NULL,
   `comment` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cid` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
