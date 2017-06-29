@@ -339,6 +339,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Circuits -->
+<tr>
+	<td class="title"><?php print _('Circuits module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableCircuits" <?php if($settings['enableCircuits'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Circuits module'); ?>
+	</td>
+</tr>
+
 <!-- Locations -->
 <tr>
 	<td class="title"><?php print _('Locations module'); ?></td>

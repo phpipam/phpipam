@@ -51,6 +51,9 @@ if (isset($_COOKIE['search_parameters'])) {
 		<?php if($User->settings->enablePSTN==1) { ?>
 		<input type="checkbox" name="pstn" 	    value="on" <?php if($_REQUEST['pstn']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?>
 		<?php } ?>
+		<?php if($User->settings->enableCircuits==1) { ?>
+		<input type="checkbox" name="circuits" 	    value="on" <?php if($_REQUEST['circuits']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?>
+		<?php } ?>
 	</div>
 </form>
 

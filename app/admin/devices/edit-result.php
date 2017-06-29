@@ -111,9 +111,10 @@ else																	{ $Result->show("success", _("Device $device[action] succes
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("subnets", "device", $values["id"]);
+	$Admin->remove_object_references ("nat", "device", $values["id"]);
 	$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
 	$Admin->remove_object_references ("pstnPrefixes", "deviceId", $values["id"]);
 	$Admin->remove_object_references ("pstnNumbers", "deviceId", $values["id"]);
+	$Admin->remove_object_references ("circuits", "device1", $values["id"]);
+	$Admin->remove_object_references ("circuits", "device2", $values["id"]);
 }
-
-?>

@@ -799,3 +799,58 @@ INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('zh_CN.UTF-8', 'Chinese');
 ALTER TABLE `devices` CHANGE `hostname` `hostname` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
 /* decode mac addresses */
 ALTER TABLE `settings` ADD `decodeMAC` TINYINT(1)  NULL  DEFAULT '1';
+
+
+
+
+
+
+/* VERSION 1.31 */
+UPDATE `settings` set `version` = '1.31';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Circuits flag */
+ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1'  AFTER `decodeMAC`;
+
+/* circuit providers */
+CREATE TABLE `circuitProviders` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `description` text,
+  `contact` varchar(128) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* circuits */
+CREATE TABLE `circuits` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cid` varchar(128) DEFAULT NULL,
+  `provider` int(11) unsigned NOT NULL,
+  `type` enum('Default','Bandwidth') DEFAULT NULL,
+  `capacity` varchar(128) DEFAULT NULL,
+  `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
+  `device1` int(11) unsigned DEFAULT NULL,
+  `location1` int(11) unsigned DEFAULT NULL,
+  `device2` int(11) unsigned DEFAULT NULL,
+  `location2` int(11) unsigned DEFAULT NULL,
+  `comment` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cid` (`cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Compact menu */
+ALTER TABLE `users` ADD `menuCompact` TINYINT  NULL  DEFAULT '1';
+
+/* Add line for rack displayin and back side */
+ALTER TABLE `racks` ADD `line` INT(11)  NOT NULL  DEFAULT '1';
+ALTER TABLE `racks` ADD `front` INT(11)  NOT NULL  DEFAULT '0';
+
+/* add circuit permissions for normal users */
+ALTER TABLE `users` ADD `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No';
+
+/* Add option for DNS resolving host in subnet */
+ALTER TABLE `subnets` ADD `resolveDNS` TINYINT(1)  NULL  DEFAULT '0';
+
