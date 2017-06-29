@@ -612,6 +612,9 @@ $('.slider').slider().on('slide', function(ev){
                     if(strpos($field['type'],"varchar")!==false) {
                         $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
                     }
+                    if(strpos($field['type'],"int")!==false) {
+                        $maxlength = str_replace(array("int","(",")"),"", $field['type']);
+                    }
                     // print
 					print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $subnet_old_details[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
 				}
