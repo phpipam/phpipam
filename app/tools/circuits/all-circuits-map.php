@@ -37,23 +37,25 @@ if ($User->settings->enableLocations=="1" && (!isset($gmaps_api_key) || strlen($
 }
 elseif ($locA->name!=="/" && $locB->name!=="/") {
     // get all
-    foreach ($all_locations as $k=>$l) {
-        // map used
-        if(strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)==0 ) {
-            // map not used
-            unset($all_locations[$k]);
-        }
-        // recode
-        elseif (strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)>0) {
-            $latlng = $Tools->get_latlng_from_address ($l->address);
-            if($latlng['lat']==NULL || $latlng['lng']==NULL) {
+    if(sizeof($all_locations)>0) {
+        foreach ($all_locations as $k=>$l) {
+            // map used
+            if(strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)==0 ) {
+                // map not used
                 unset($all_locations[$k]);
             }
-            else {
-                // save
-                $Tools->update_latlng ($l->id, $latlng['lat'], $latlng['lng']);
-                $all_locations[$k]->lat = $latlng['lat'];
-                $all_locations[$k]->long = $latlng['lng'];
+            // recode
+            elseif (strlen($l->long)==0 && strlen($l->lat)==0 && strlen($l->address)>0) {
+                $latlng = $Tools->get_latlng_from_address ($l->address);
+                if($latlng['lat']==NULL || $latlng['lng']==NULL) {
+                    unset($all_locations[$k]);
+                }
+                else {
+                    // save
+                    $Tools->update_latlng ($l->id, $latlng['lat'], $latlng['lng']);
+                    $all_locations[$k]->lat = $latlng['lat'];
+                    $all_locations[$k]->long = $latlng['lng'];
+                }
             }
         }
     }
