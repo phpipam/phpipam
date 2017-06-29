@@ -51,7 +51,6 @@ https://github.com/phpipam/phpipam/milestone/2
                 #344  VRF RD/RT confusion; update display and perhaps track separately
         #769  Enhancement in Inventory management
                 #653  interactive racks and DCIM improvements
-                #731  Circuits module
         #696  Password management
         #545  Wirelless LAN list
         #880  webhooks or similar mechanism to send data to external URL / script
