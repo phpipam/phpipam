@@ -22,6 +22,9 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 $addresses     = $Tools->fetch_multiple_objects("ipaddresses", "switch", $device['id']);
 if ($addresses===false) { $addresses = array(); }
 
+# set selected address fields array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);
+
 # title - hosts
 print "<h4>"._("Belonging addresses")."</h4><hr>";
 
@@ -31,7 +34,9 @@ print "<table id='switchMainTable' class='devices table table-striped table-top 
 # headers
 print "<tr>";
 print "	<th>"._('IP address')."</th>";
+if(in_array("port", $selected_ip_fields)) {
 print "	<th>"._('Port')."</th>";
+}
 print "	<th>"._('Subnet')."</th>";
 print "	<th colspan='2'>"._('Description')."</th>";
 print "	<th class='hidden-xs'>"._('Hostname')."</th>";
@@ -56,7 +61,9 @@ if(sizeof($addresses) > 0) {
 			# print
 			print "<tr>";
 			print "	<td class='ip'><a href='".create_link("subnets",$section['id'],$subnet['id'],"address-details",$ip['id'])."'>".$Subnets->transform_to_dotted($ip['ip_addr'])."</a></td>";
+			if(in_array("port", $selected_ip_fields)) {
 			print "	<td class='port'>$ip[port]</td>";
+			}
 			print "	<td class='subnet'><a href='".create_link("subnets",$section['id'],$subnet['id'])."'>$subnet[ip]/$subnet[mask]</a> <span class='text-muted'>($subnet[description])</span></td>";
 			print "	<td class='description'>$ip[description]</td>";
 
