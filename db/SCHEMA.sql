@@ -236,6 +236,7 @@ CREATE TABLE `subnets` (
   `permissions` varchar(1024) DEFAULT NULL,
   `pingSubnet` BOOL NULL  DEFAULT '0',
   `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
+  `resolveDNS` TINYINT(1)  NULL  DEFAULT '0',
   `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
   `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
