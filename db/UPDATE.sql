@@ -813,7 +813,7 @@ UPDATE `settings` set `dbverified` = 0;
 UPDATE `settings` set `donate` = 0;
 
 /* Circuits flag */
-ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1'  AFTER `decodeMAC`;
+ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1';
 
 /* circuit providers */
 CREATE TABLE `circuitProviders` (
