@@ -1163,8 +1163,10 @@ class Common_functions  {
         $object = (object) $object;
         $html = array();
 
+		file_put_contents("/tmp/cc.log", print_r($field, true));
+
         # disabled
-        $disabled = $disable===true ? "readolny" : "";
+        $disabled = $disable===true ? "readonly" : "";
 
         # replace spaces with |
         $field['nameNew'] = str_replace(" ", "___", $field['name']);

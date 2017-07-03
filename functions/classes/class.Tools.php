@@ -739,6 +739,33 @@ class Tools extends Common_functions {
 	 *	--------------------------------
 	 */
 
+	 /**
+	 *	Fetches all registered BigEnums and number of items per key
+	 *	
+	 *	@access public
+	 *  @param mixed $table
+	 *  @return array
+	 */
+	 public function fetch_bigenum_keys(){
+		 $query = "SELECT enumname, count(1) as cnt FROM bigenum WHERE active=1 GROUP BY enumname";
+		 $keys = $this->Database->getObjectsQuery($query);
+
+		 return $keys;
+	 }
+
+	/**
+	*	Fetches all values for specific key. Used to extract into a select the user can 
+	*	choose from. 
+	*	@param mixed $key
+	*	@return array
+	*/
+	 public function fetch_bigenum_values($key){
+		 $query = "SELECT enumname, val FROM bigenum WHERE active = 1 and enumname = ? order by val + 0";
+		 $values = $this->Database->getObjectsQuery($query, array($key));
+
+		 return $values;
+	 }
+
 	/**
 	 * Fetches all custom fields
 	 *
@@ -749,6 +776,7 @@ class Tools extends Common_functions {
 	public function fetch_custom_fields ($table) {
     	# fetch columns
 		$fields = $this->fetch_columns ($table);
+		$bigenum = $this->fetch_bigenum_keys();
 
 		$res = array();
 
@@ -762,6 +790,14 @@ class Tools extends Common_functions {
 			$res[$field['Field']]['Comment'] = $field['Comment'];
 			$res[$field['Field']]['Null'] 	 = $field['Null'];
 			$res[$field['Field']]['Default'] = $field['Default'];
+			$res[$field['Field']]['BigEnumCount'] = 0;
+
+			for($i=0; $i<count($bigenum); $i++){
+				if ($field['Field'] == $bigenum[$i]->enumname){
+					$res[$field['Field']]['BigEnumCount'] = $bigenum[$i]->cnt;
+					break;
+				}
+			}
 		}
 
 		# fetch standard fields
