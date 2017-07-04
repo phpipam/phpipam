@@ -7,6 +7,11 @@
 $filename = $_FILES['file']['name'];
 $filename = end(explode(".", $filename));
 
+/* No errors */
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
+
 /* get settings */
 include(dirname(__FILE__)."/../../../../functions/functions.php");
 
@@ -22,9 +27,10 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
     }
     elseif ($_FILES["file"]["size"] > 1024000) {
         echo '{"status":"error","error":"Sorry, file limit is 1Mb"}';
+        exit;
     }
 	//if cannot move
-	else if(!move_uploaded_file($_FILES["file"]["tmp_name"], $_SERVER['DOCUMENT_ROOT'].BASE."css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
+	else if(!move_uploaded_file($_FILES["file"]["tmp_name"], str_replace("//", "/", $_SERVER['DOCUMENT_ROOT'].BASE."css/".SCRIPT_PREFIX."/images/logo/logo.png"))) {
 		echo '{"status":"error", "error":"Cannot move file to upload dir. You can upload file manually to '.$_SERVER['DOCUMENT_ROOT'].BASE.'css/'.SCRIPT_PREFIX.'/images/logo/logo.png"}';
 		exit;
 	}
