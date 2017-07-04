@@ -40,11 +40,11 @@
 	?>
 	<!-- captcha -->
 	<div class="col-xs-12"><strong><?php print _('Security code'); ?></strong></div>
-	<div class="col-xs-6">
+	<div class="col-xs-12">
 		<input id="validate_captcha" type="text" name="captcha" class="login form-control input-sm col-xs-12">
 	</div>
-	<div class="col-xs-6">
-		<img src="<?php print $url.BASE; ?>app/login/captcha/captchashow.php" class="imgcaptcha" align="captcha">
+	<div class="col-xs-12">
+		<img src="<?php print $url.BASE; ?>app/login/captchashow.php" class="imgcaptcha" align="captcha">
 	</div>
 	<?php } ?>
 
