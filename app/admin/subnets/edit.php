@@ -450,6 +450,16 @@ $('.slider').slider().on('slide', function(ev){
     print '	</td>' . "\n";
     print '	<td class="info2">'._('Discover new hosts in this subnet').'</td>' . "\n";
     print '</tr>';
+
+    //resolve hostname
+    $checked = @$subnet_old_details['resolveDNS']==1 ? "checked": "";
+    print '<tr>' . "\n";
+    print ' <td>'._('Resolve DNS names').'</td>' . "\n";
+    print ' <td>' . "\n";
+    print '     <input type="checkbox" name="resolveDNS" class="input-switch-agents-scan" value="1" '.$checked.'>'. "\n";
+    print ' </td>' . "\n";
+    print ' <td class="info2">'._('Resolve hostnames in this subnet').'</td>' . "\n";
+    print '</tr>';
 	?>
 
     <tr>

@@ -51,10 +51,6 @@ $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seco
 # resolveIPaddresses.php script parameters
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
 $config['resolve_verbose']             = true;       // verbose response - prints results, cron will email it to you!
-$config['resolve_subnets']             = array();    // which subnets to check - by id
-                                                     //  example -> array(1,3,5) will only update subnets with id 1,3,5
-                                                     //  you can get id's and descriptions with following MySQL query:
-                                                     //  select `id`,`description` from `subnets`;
 
 
 /**

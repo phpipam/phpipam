@@ -12,6 +12,11 @@
     + Network to network static nat;
     + API:
         + Encrypyted requests can now also be form-encoded (#1191);
+    + New resolve hostnames option for subnet (#1222):
+        + Updates hostnames via pingCheck.php script (if parameter set for subnet);
+        + Updates hostnames via resolveIPaddresses.php script (if parameter set for subnet);
+        + On-the-fly empty hostname update if resolved (if parameter set for subnet and enabled globally);
+        + Added this infor to tools > scanned networks;
 
     Translations:
     ----------------------------

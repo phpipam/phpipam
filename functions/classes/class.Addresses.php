@@ -553,6 +553,29 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Updates hostname for IP addresses
+	 *
+	 * @method update_address_hostname
+	 *
+	 * @param  mixed $ip
+	 * @param  int $id
+	 * @param  string $hostname
+	 *
+	 * @return void
+	 */
+	public function update_address_hostname ($ip, $id, $hostname = "") {
+		if(is_numeric($id) && strlen($hostname)>0) {
+			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "dns_name"=>$hostname)); }
+			catch (Exception $e) {
+				return false;
+			}
+			// save log
+			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $address_old), 0);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "dns_name"=>""), array("id"=>$id, "dns_name"=>$hostname), $this->mail_changelog);
+		}
+	}
+
+	/**
 	 * Checks if subnet usage is over threshold and sends alert
 	 *
 	 * @access private
