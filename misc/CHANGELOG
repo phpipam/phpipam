@@ -16,6 +16,7 @@
     Translations:
     ----------------------------
     + French translation updated to verson 1.3;
+    + German translation updated to verson 1.3;
 
     Bugfixes:
     ----------------------------
@@ -24,6 +25,7 @@
     + Fixed JSON_UNESCAPED_UNICODE for PHP 5.3 (#1135, #1245);
     + Rename class Thread to PingThread to avoid naming conflict with pthreads Thread class (#1254);
     + Fix custom fields integer on subnet (#1266);
+    + Fixed Import Ip-adress doesnt update location (#1284);
 
 == 1.3
 

@@ -359,21 +359,22 @@ class Addresses extends Common_functions {
 	 */
 	protected function modify_address_add ($address) {
 		# set insert array
-		$insert = array("ip_addr"=>$this->transform_address($address['ip_addr'],"decimal"),
-						"subnetId"=>$address['subnetId'],
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore'],
-						"firewallAddressObject"=>@$address['firewallAddressObject'],
-						"lastSeen"=>@$address['lastSeen']
+		$insert = array(
+						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
+						"subnetId"              => $address['subnetId'],
+						"description"           => @$address['description'],
+						"dns_name"              => @$address['dns_name'],
+						"mac"                   => @$address['mac'],
+						"owner"                 => @$address['owner'],
+						"state"                 => @$address['state'],
+						"switch"                => @$address['switch'],
+						"port"                  => @$address['port'],
+						"note"                  => @$address['note'],
+						"is_gateway"            => @$address['is_gateway'],
+						"excludePing"           => @$address['excludePing'],
+						"PTRignore"             => @$address['PTRignore'],
+						"firewallAddressObject" => @$address['firewallAddressObject'],
+						"lastSeen"              => @$address['lastSeen']
 						);
         # location
         if (isset($address['location_item'])) {
