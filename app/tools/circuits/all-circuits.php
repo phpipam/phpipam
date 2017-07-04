@@ -20,9 +20,6 @@ $_GET = $User->strip_input_tags ($_GET);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('circuits');
-# get hidden fields */
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['circuits']) ? $hidden_fields['circuits'] : array();
 
 # title
 print "<h4>"._('List of circuits')."</h4>";
@@ -51,7 +48,7 @@ print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by locati
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location B')."' class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
-		if(!in_array($field['name'], $hidden_fields)) {
+		if(!in_array($field['name'], $hidden_circuit_fields)) {
 			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
 			$colspanCustom++;
 		}
@@ -96,7 +93,7 @@ else {
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {
-				if(!in_array($field['name'], $hidden_fields)) {
+				if(!in_array($field['name'], $hidden_circuit_fields)) {
 					// create html links
 					$circuit->{$field['name']} = $User->create_links($circuit->{$field['name']}, $field['type']);
 

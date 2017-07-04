@@ -14,6 +14,13 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# get hidden fields
+$hidden_circuit_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_circuit_fields = is_array(@$hidden_circuit_fields['circuits']) ? $hidden_circuit_fields['circuits'] : array();
+
+$hidden_provider_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_provider_fields = is_array(@$hidden_provider_fields['circuitProviders']) ? $hidden_provider_fields['circuitProviders'] : array();
+
 # menu
 include("app/tools/circuits/menu.php");
 
