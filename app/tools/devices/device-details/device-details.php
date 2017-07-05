@@ -20,11 +20,6 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 print "<h4>"._('Device details')."</h4>";
 print "<hr>";
 
-# print link to manage
-print "<div class='btn-group'>";
-print "<a class='btn btn-sm btn-default' href='".create_link("tools","devices")."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('All devices')."</a>";
-print "</div>";
-
 # print
 if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
@@ -111,9 +106,21 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print " <td><span class='badge badge1 badge5'>$cnt_addresses "._('Addresses')."</span></td>";
     	print "</tr>";
     	print "<tr>";
+        if($User->settings->enableNAT=="1") {
     	print " <th>"._('NAT')."</th>";
     	print " <td><span class='badge badge1 badge5'>$cnt_nat "._('NAT')."</span></td>";
     	print "</tr>";
+        }
+        if($User->settings->enablePSTN=="1") {
+        print " <th>"._('PSTN')."</th>";
+        print " <td><span class='badge badge1 badge5'>$cnt_pstn "._('PSTN')."</span></td>";
+        print "</tr>";
+        }
+        if($User->settings->enableCircuits=="1") {
+        print " <th>"._('Circuits')."</th>";
+        print " <td><span class='badge badge1 badge5'>$cnt_circuits "._('Circuits')."</span></td>";
+        print "</tr>";
+        }
 
     	print "<tr>";
     	print "	<td colspan='2'><hr></td>";

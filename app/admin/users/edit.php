@@ -296,6 +296,17 @@ $(document).ready(function(){
 	</tr>
     <?php } ?>
 
+	<!-- circuits -->
+    <?php if ($User->settings->enableCircuits==1) { ?>
+	<tr>
+    	<td><?php print _("Manage Circuits"); ?></td>
+    	<td>
+            <input type="checkbox" class="input-switch" value="Yes" name="editCircuits" <?php if($user['editCircuits'] == "Yes") print 'checked'; ?>>
+    	</td>
+		<td class="info2"><?php print _('Select to allow user to manage circuits'); ?></td>
+	</tr>
+    <?php } ?>
+
 	<!-- pstn -->
     <?php if ($User->settings->enablePSTN==1) { ?>
 	<tr>

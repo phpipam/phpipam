@@ -134,4 +134,3 @@ else {
     </script>
     <?php
 }
-?>

@@ -1154,13 +1154,17 @@ class Common_functions  {
      * @param mixed $object
      * @param mixed $action
      * @param mixed $timepicker_index
+     * @param bool $disabled
      * @return array
      */
-    public function create_custom_field_input ($field, $object, $action, $timepicker_index) {
+    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false) {
         # make sure it is array
         $field = (array) $field;
         $object = (object) $object;
         $html = array();
+
+        # disabled
+        $disabled = $disable===true ? "readolny" : "";
 
         # replace spaces with |
         $field['nameNew'] = str_replace(" ", "___", $field['name']);
@@ -1179,7 +1183,7 @@ class Common_functions  {
         	//null
         	if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
-        	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
+        	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled>";
         	foreach($tmp as $v) {
             $html[] = $v==$object->{$field['name']} ? "<option value='$v' selected='selected'>$v</option>" : "<option value='$v'>$v</option>";
         	}
@@ -1207,12 +1211,12 @@ class Common_functions  {
         	else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
 
         	//field
-        	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-        	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+        	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled.'>>'. "\n"; }
+        	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled.'>'. "\n"; }
         }
         //boolean
         elseif($field['type'] == "tinyint(1)") {
-        	$html[] =  "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
+        	$html[] =  "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled>";
         	$tmp = array(0=>"No",1=>"Yes");
         	//null
         	if($field['Null']!="NO") { $tmp[2] = ""; }
@@ -1226,7 +1230,7 @@ class Common_functions  {
         }
         //text
         elseif($field['type'] == "text") {
-        	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $object->{$field['name']}. '</textarea>'. "\n";
+        	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled.'>'. $object->{$field['name']}. '</textarea>'. "\n";
         }
 		//default - input field
 		else {
@@ -1239,7 +1243,7 @@ class Common_functions  {
                 $maxlength = str_replace(array("int","(",")"),"", $field['type']);
             }
             // print
-			$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
+			$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled.'>'. "\n";
 		}
 
         # result

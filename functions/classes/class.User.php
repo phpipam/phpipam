@@ -651,6 +651,38 @@ class User extends Common_functions {
         }
     }
 
+    /**
+     * Migrate resolve_subnets from config.php to database
+     * for versions older than 1.31
+     *
+     * @method migrate_resolve_subnets
+     *
+     * @return void
+     */
+    public function migrate_resolve_subnets () {
+        // read config.php
+        include( dirname(__FILE__).'/../../config.php' );
+        // check for array and values
+        if(isset($config['resolve_subnets'])) {
+            if(is_array($config['resolve_subnets'])) {
+                if (sizeof($config['resolve_subnets'])>0) {
+                    foreach ($config['resolve_subnets'] as $subnetId) {
+                        $update = array (
+                                         "id"         => $subnetId,
+                                         "resolveDNS" => 1
+                                         );
+                        // update
+                        try {
+                            $this->Database->updateObject("subnets", $update);
+                        } catch (Exception $e) {}
+                    }
+                    // print that is can be deleted
+                    $this->Result->show ("warning", '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
+                }
+            }
+        }
+    }
+
 
 
 
@@ -1391,16 +1423,17 @@ class User extends Common_functions {
      */
     public function self_update($post) {
         # set items to update
-        $items  = array("real_name"=>$post['real_name'],
-                        "mailNotify"=>$post['mailNotify'],
-                        "mailChangelog"=>$post['mailChangelog'],
-                        "email"=>$post['email'],
-                        "lang"=>$post['lang'],
-                        "id"=>$this->user->id,
+        $items  = array("real_name"        => $post['real_name'],
+                        "mailNotify"       => $post['mailNotify'],
+                        "mailChangelog"    => $post['mailChangelog'],
+                        "email"            => $post['email'],
+                        "lang"             => $post['lang'],
+                        "id"               => $this->user->id,
                         //display
-                        "compressOverride"=>$post['compressOverride'],
-                        "hideFreeRange"=>$this->verify_checkbox(@$post['hideFreeRange']),
-                        "menuType"=>$post['menuType'],
+                        "compressOverride" => $post['compressOverride'],
+                        "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
+                        "menuType"         => $this->verify_checkbox(@$post['menuType']),
+                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);

@@ -2127,10 +2127,10 @@ table#userPrint h4 {
 }
 .popup_w700,
 .popup_wmasks {
-	width: 700px;
+	width: 800px;
 
 	left: 50%;
-	margin-left: -350px;
+	margin-left: -400px;
 
 	z-index: 104;
 }

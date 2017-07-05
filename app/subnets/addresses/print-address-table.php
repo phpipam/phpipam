@@ -350,6 +350,11 @@ else {
 
 			    # resolve dns name
 			    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+				# update database
+				if($subnet['resolveDNS']=="1" && $resolve['class']=="resolved") {
+					$Addresses->update_address_hostname ($addresses[$n]->ip_addr, $addresses[$n]->id, $resolve['name']);
+					$addresses[$n]->dns_name = $resolve['name'];
+				}
 																		{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
 				# print firewall address object - mandatory if enabled

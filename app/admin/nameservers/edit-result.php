@@ -79,5 +79,4 @@ else																		{ $Result->show("success", _("Nameserver set $_POST[action
 
 
 # remove all references if delete
-if($_POST['action']=="delete") { $Admin->remove_object_references ("nameservers", "id", $_POST['nameserverId']); }
-?>
+if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "nameserverId", $_POST['nameserverId']); }

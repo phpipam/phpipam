@@ -28,17 +28,13 @@ error_reporting(E_ERROR);
 # cli required
 if( php_sapi_name()!="cli" ) { $Result->show_cli("cli only\n", true); }
 
-# set subnet
-if (isset($argv[1])) {
-	$req_subnets = explode(",", $argv[1]);
-	foreach ($req_subnets as $s) {
-		if (!is_numeric($s)) { $Result->show_cli("Invalid subnetId provided - $s\n", true); }
-		else {
-			$config['resolve_subnets'][] = $s;
-		}
+# set all subnet ids
+$resolved_subnets = $Database->findObjects("subnets", "resolveDNS", "1", 'id', true);
+if(sizeof($resolved_subnets)>0) {
+	foreach ($resolved_subnets as $s) {
+		$config['resolve_subnets'][] = $s->id;
 	}
 }
-
 
 #
 # If id is provided via STDIN resolve hosts for 1 subnet only,

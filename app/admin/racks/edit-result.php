@@ -84,5 +84,3 @@ if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("devices", "rack", $values["id"]);
 }
-
-?>
