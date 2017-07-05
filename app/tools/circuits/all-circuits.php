@@ -12,14 +12,14 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 
 # verify that user is logged in
 $User->check_user_session();
-# filter circuits or fetch print all?
-$circuits = $Tools->fetch_all_circuits();
-
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('circuits');
+# filter circuits or fetch print all?
+$circuits = $Tools->fetch_all_circuits($custom_fields);
+
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
 
 # title
 print "<h4>"._('List of circuits')."</h4>";
