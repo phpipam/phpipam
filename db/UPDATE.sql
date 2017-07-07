@@ -854,3 +854,12 @@ ALTER TABLE `users` ADD `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No';
 /* Add option for DNS resolving host in subnet */
 ALTER TABLE `subnets` ADD `resolveDNS` TINYINT(1)  NULL  DEFAULT '0';
 
+/* Bigenum */
+CREATE TABLE `bigenum` (
+	`id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+	`enumname` varchar(256) NOT NULL,
+	`val` varchar(256),
+	`active` tinyint(1) DEFAULT 1,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+

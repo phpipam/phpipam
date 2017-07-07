@@ -546,6 +546,7 @@ abstract class DB {
 	public function getObjectsQueryIncremental($query = null, $values = array(), $callback = null) {
 		if (!$this->isConnected()) $this->connect();
 
+		
 		$statement = $this->pdo->prepare($query);
 
 		//debuq
@@ -577,9 +578,8 @@ abstract class DB {
 	 */
 	public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
-
+		
 		$statement = $this->pdo->prepare($query);
-
 		//debug
 		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
@@ -856,7 +856,7 @@ class Database_PDO extends DB {
 	 * @var bool
 	 * @access protected
 	 */
-	protected $debug = false;
+	protected $debug = true;
 
 
 

@@ -31,6 +31,7 @@ foreach($custom_tables as $k=>$f) {
 	$custom_fields[$k]['title'] 	= "Custom $f fields";
 	$custom_fields[$k]['tooltip']	= "Add new custom $f field";
 }
+
 ?>
 
 <h4><?php print _('Custom fields'); ?></h4>
@@ -50,6 +51,7 @@ foreach($custom_tables as $k=>$f) {
 	<td><?php print _('Default'); ?></td>
 	<td><?php print _('Required'); ?></td>
 	<td><?php print _('Visible'); ?></td>
+	<td><?php print _('BigEnum count'); ?></td>
 	<td></td>
 </tr>
 
@@ -123,6 +125,9 @@ foreach($custom_fields as $k=>$cf) {
 			# visible
 			if(in_array($f['name'], $ffields))	{ print "<td><span class='text-danger'>"._('No')."</span></td>"; }
 			else								{ print "<td><span class='text-success'>"._('Yes')."</span></td>"; }
+
+			if ($f['BigEnumCount'] == 0)		{ print "<td>N/A</td>"; }
+			else 						{ print "<td>" . $f['BigEnumCount'] . "</td>"; }
 
 			#actions
 			print "<td class='actions'>";

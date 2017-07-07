@@ -520,6 +520,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 		# all my fields
 		foreach($custom_fields as $field) {
+
 			# replace spaces with |
 			$field['nameNew'] = str_replace(" ", "___", $field['name']);
 
@@ -589,8 +590,30 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 				print "</select>";
 			}
 			//text
-			elseif($field['type'] == "text") {
+			elseif($field['type'] == "text" && $field['BigEnumCount'] == 0) {
 				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" '.$delete.' rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $address[$field['name']]. '</textarea>'. "\n";
+			}
+			elseif($field['type'] == "text" && $field['BigEnumCount'] > 0) {
+				$values = $Tools->fetch_bigenum_values($field['name']);
+
+				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
+				$selectedState = false;
+				$selectedFlag = ' selected="selected"';
+
+				foreach($values as $v) {
+					if($v->val == @$address[$field['name']]) { 
+						print "<option $selectedFlag value=\"$v->val\">" . $v->val . "</option>"; 
+						$selectedState = true;
+					}
+					else {
+						print "<option value=\"$v->val\">" . $v->val . "</option>";
+					}
+				}
+
+				if (!$selectedState) 		{ print "<option value=\"\" $selectedFlag>Please select an item</option>";}
+				else 						{ print "<option value=\"\">Please select an item</option>";}
+
+				print "</select>";
 			}
 			//default - input field
 			else {
