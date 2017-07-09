@@ -37,12 +37,12 @@ if($rack['name'] == "") 											    { $Result->show("danger", _('Name is mand
 if (!is_numeric($rack['size']))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 # validate rack
 if ($rack['action']=="edit") {
-    if (!is_numeric($rack['rackid']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
     $rack_details = $Racks->fetch_rack_details ($rack['rackid']);
     if ($rack_details===false)                                          { $Result->show("danger", _('Rack does not exist').'!', true); }
 }
 elseif($rack['action']=="delete") {
-    if (!is_numeric($rack['rackid']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
 }
 
 # fetch custom fields
@@ -65,11 +65,13 @@ if(sizeof($custom) > 0) {
 }
 
 # set update values
-$values = array("id"=>@$rack['rackid'],
-				"name"=>@$rack['name'],
-				"size"=>@$rack['size'],
-				"location"=>@$rack['location'],
-				"description"=>@$rack['description']
+$values = array(
+				"id"          => @$rack['rackid'],
+				"name"        => @$rack['name'],
+				"size"        => @$rack['size'],
+				"location"    => @$rack['location'],
+				"hasBack"     => $Admin->verify_checkbox(@$rack['hasBack']),
+				"description" => @$rack['description']
 				);
 # custom fields
 if(isset($update)) {
@@ -82,5 +84,10 @@ else																	{ $Result->show("success", _("Rack $rack[action] successful
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
-	$Admin->remove_object_references ("devices", "rack", $values["id"]);
+	$Admin->remove_object_references ("devices", "rack", $values["id"], NULL);
+}
+# remove all devices if back is removed
+if($_POST['action']=="edit" && @$rack['hasBack']!="1") {
+	try { $this->Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+	catch (Exception $e) {}
 }

@@ -126,18 +126,48 @@ $(document).ready(function(){
                     for($m=1; $m<=$rack->size; $m++) {
                         $available[] = $m;
                     }
+                    // available back
+                    if($rack->hasBack!="0") {
+                    for($m=1; $m<=$rack->size; $m++) {
+                        $available_back[$m+$rack->size] = $m;
+                    }
+                    }
 
                     if($rack_devices!==false) {
+                        // front side
                         foreach ($rack_devices as $d) {
                             for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
                                 $pos = array_search($m, $available);
                                 unset($available[$pos]);
                             }
                         }
+                        // back side
+                        foreach ($rack_devices as $d) {
+                            for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
+                                $pos = array_search($m, $available_back);
+                                unset($available_back[$pos]);
+                            }
+                        }
                     }
+
                     // print available spaces
-                    foreach ($available as $a) {
-                        print "<option value='$a'>$a</option>";
+                    if($rack->hasBack!="0") {
+                        print "<optgroup label='"._("Front")."'>";
+                        foreach ($available as $a) {
+                            print "<option value='$a'>$a</option>";
+                        }
+                        print "</optgroup>";
+
+                        print "<optgroup label='"._("Back")."'>";
+                        foreach ($available_back as $k=>$a) {
+                            print "<option value='$k'>$a</option>";
+                        }
+                        print "</optgroup>";
+                    }
+                    else {
+                        foreach ($available as $a) {
+                            print "<option value='$a'>$a</option>";
+                        }
                     }
                     ?>
                     </select>
@@ -148,7 +178,7 @@ $(document).ready(function(){
         	<tr>
         		<td><?php print _('Size'); ?></td>
         		<td>
-        			<input type="text" name="rack_size" class="form-control input-sm" placeholder="<?php print _('Rack size in U'); ?>">
+        			<input type="text" name="rack_size" class="form-control input-sm" placeholder="<?php print _('Device size in U'); ?>">
         			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         			<input type="hidden" name="rackid" value="<?php print $_POST['rackid']; ?>">
         		</td>

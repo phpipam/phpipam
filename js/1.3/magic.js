@@ -2373,10 +2373,6 @@ $(document).on("click", "#editDevTypeSubmit", function() {
 $(document).on("click", ".editRack", function() {
 	open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );	return false;
 });
-//submit form
-$(document).on("click", "#editRacksubmit", function() {
-    submit_popup_data (".rackManagementEditResult", "app/admin/racks/edit-result.php", $('form#rackManagementEdit').serialize());
-});
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
 	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;

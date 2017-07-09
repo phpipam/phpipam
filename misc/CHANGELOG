@@ -6,8 +6,10 @@
 
     Enhancements, changes:
     ----------------------------
-    + Automatic location assignment when device added to rack (#1230);
-    + Rack map showing map of all racks in location;
+    + Racks:
+        + Automatic location assignment when device added to rack (#1230);
+        + Rack map showing map of all racks in location;
+        + Rack back side;
     + Compact menu layout (per-user setting, showing only icons);
     + Network to network static nat;
     + API:

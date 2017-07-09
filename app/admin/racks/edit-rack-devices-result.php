@@ -39,7 +39,12 @@ $device = $Admin->fetch_object("devices", "id", $_POST['deviceid']);
 if ($device===false)                                                   { $Result->show("danger", _("Invalid Device ID"), true); }
 
 # check size
-if($_POST['rack_start']+($_POST['rack_size']-1)>$rack->size)           { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+if($rack->hasBack!="0") {
+	if($_POST['rack_start']+($_POST['rack_size']-1)>(2*$rack->size))   { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+}
+else {
+	if($_POST['rack_start']+($_POST['rack_size']-1)>$rack->size)       { $Result->show("danger", _("Invalid rack position (overflow)"), true); }
+}
 
 # set update values
 $values = array("id"=>@$_POST['deviceid'],
