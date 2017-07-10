@@ -1309,7 +1309,7 @@ class Common_functions  {
                 }
             }
             // not matched
-            return false;
+            return "";
         } else {
             return "";
         }

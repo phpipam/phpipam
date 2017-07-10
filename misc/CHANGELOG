@@ -35,6 +35,7 @@
     + Fixed Import Ip-adress doesnt update location (#1284);
     + Fixed json_error for logo upload (#1256);
     + Fixed CSRF error when moving orphaned addresses (#1303);
+    + Fixed VRF fetching via API by Id;
 
 == 1.3
 
