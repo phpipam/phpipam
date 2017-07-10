@@ -32,7 +32,7 @@ if ($_POST['action']=="remove") {
     # fetch rack details
     $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
     # validate csrf cookie
-    $User->csrf_cookie ("validate", "rack_devices_".$rack->id, $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+    $User->csrf_cookie ("validate", "rack_devices_".$rack->id."_device_".$_POST['deviceid'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
     # set values
     $values = array("id"=>$_POST['deviceid'],
                     "rack"=>"",
