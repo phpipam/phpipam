@@ -1045,7 +1045,7 @@ class Subnets_controller extends Common_api_functions {
 		        if (!$this->Subnets->verify_subnet_nesting($this->_params->masterSubnetId, $cidr)) 	{ $this->Response->throw_exception(409, "Nested subnet not in root subnet"); }
 
 			    //nested?
-		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($this->_params->sectionId, $cidr, $this->_params->vrfId, $this->_params->masterSubnetId);
+		        $overlap = $this->Subnets->verify_nested_subnet_overlapping($cidr, $this->_params->vrfId, $this->_params->masterSubnetId);
 				if($overlap!==false) 																{ $this->Response->throw_exception(409, $overlap); }
 		    }
 		}
