@@ -220,11 +220,13 @@ class Subnets_controller extends Common_api_functions {
 				$result = $this->read_subnet_addresses ();
 				// if {ip} is set filter it out
 				if(isset($this->_params->id3)) {
-    				foreach ($result as $k=>$r) {
-        				if ($r->ip !== $this->_params->id3) {
-            				unset($result[$k]);
-        				}
-    				}
+					if(is_array($result)) {
+	    				foreach ($result as $k=>$r) {
+	        				if ($r->ip !== $this->_params->id3) {
+	            				unset($result[$k]);
+	        				}
+	    				}
+	    			}
                     if(sizeof($result)==0) { $result = false; }
 				}
 				// check result
@@ -826,12 +828,14 @@ class Subnets_controller extends Common_api_functions {
 	private function read_subnet_slaves_recursive () {
 		// get array of ids
 		$this->Subnets->fetch_subnet_slaves_recursive ($this->_params->id);
+		// init result
+		$result = array ();
 		// fetch all;
 		foreach($this->Subnets->slaves as $s) {
 			$result[] = $this->read_subnet ($s);
 		}
 		# result
-		return $result===false ? NULL : $result;
+		return sizeof($result)==0 ? NULL : $result;
 	}
 
 	/**

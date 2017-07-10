@@ -127,7 +127,6 @@ class Responses {
 	 * Sets header based on provided HTTP code
 	 *
 	 * @access private
-	 * @param mixed $code
 	 * @return void
 	 */
 	private function set_header () {
