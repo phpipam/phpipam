@@ -1257,22 +1257,25 @@ class Common_functions  {
 	/**
 	 * Creates image link to rack.
 	 *
-	 * @access public
-	 * @param bool $rackId (default: false)
-	 * @param bool $deviceId (default: false)
-	 * @return mixed|bool
+	 * @method create_rack_link
+	 *
+	 * @param  bool|int $rackId
+	 * @param  bool|int $deviceId
+	 * @param  bool $is_back
+	 *
+	 * @return [type]
 	 */
-	public function create_rack_link ($rackId = false, $deviceId = false) {
+	public function create_rack_link ($rackId = false, $deviceId = false, $is_back = false) {
     	if($rackId===false) {
         	    return false;
     	}
     	else {
         	//device ?
         	if ($deviceId!==false) {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId";
+            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
         	}
         	else {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId";
+            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
         	}
     	}
 	}

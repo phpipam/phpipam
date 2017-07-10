@@ -2847,16 +2847,26 @@ class Tools extends Common_functions {
 	 *
 	 * @method fetch_all_circuits
 	 *
+	 * @param  array $custom_circuit_fields
+	 *
 	 * @return false|array
 	 */
-	public function fetch_all_circuits () {
+	public function fetch_all_circuits ($custom_circuit_fields = array ()) {
 		// set query
-		$query = "select
-					c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status
-					from circuits as c, circuitProviders as p where c.provider = p.id
-					order by c.cid asc;";
+		$query[] = "select";
+		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",c.".$f['name'];
+				}
+			}
+		}
+		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id";
+		$query[] = "order by c.cid asc;";
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery($query, array()); }
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
@@ -2870,17 +2880,27 @@ class Tools extends Common_functions {
 	 * @method fetch_all_circuits
 	 *
 	 * @param  int $provider_id
+	 * @param  array $custom_circuit_fields
 	 *
 	 * @return false|array
 	 */
-	public function fetch_all_provider_circuits ($provider_id) {
+	public function fetch_all_provider_circuits ($provider_id, $custom_circuit_fields = array ()) {
 		// set query
-		$query = "select
-					c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status
-					from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?
-					order by c.cid asc;";
+		$query[] = "select";
+		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",c.".$f['name'];
+				}
+			}
+		}
+		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?";
+		$query[] = "order by c.cid asc;";
+
 		// fetch
-		try { $circuits = $this->Database->getObjectsQuery($query, array($provider_id)); }
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array($provider_id)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}

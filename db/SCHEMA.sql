@@ -707,8 +707,8 @@ CREATE TABLE `racks` (
   `name` varchar(64) NOT NULL DEFAULT '',
   `size` int(2) DEFAULT NULL,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `line` INT(11)  NOT NULL  DEFAULT '1',
-  `front` INT(11)  NOT NULL  DEFAULT '0',
+  `row` INT(11)  NOT NULL  DEFAULT '1',
+  `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
   `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

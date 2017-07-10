@@ -103,7 +103,7 @@ if($provider!==false) {
 	print "<hr>";
 
 	// fetch circuits
-	$provider_circuits = $Tools->fetch_all_provider_circuits ($provider->id);
+	$provider_circuits = $Tools->fetch_all_provider_circuits ($provider->id, $custom_fields_circuits);
 
 	// print
 	if($provider_circuits===false) {

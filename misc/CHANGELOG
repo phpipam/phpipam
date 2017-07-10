@@ -6,8 +6,10 @@
 
     Enhancements, changes:
     ----------------------------
-    + Automatic location assignment when device added to rack (#1230);
-    + Rack map showing map of all racks in location;
+    + Racks:
+        + Automatic location assignment when device added to rack (#1230);
+        + Rack map showing map of all racks in location;
+        + Rack back side;
     + Compact menu layout (per-user setting, showing only icons);
     + Network to network static nat;
     + API:
@@ -32,6 +34,7 @@
     + Fix custom fields integer on subnet (#1266);
     + Fixed Import Ip-adress doesnt update location (#1284);
     + Fixed json_error for logo upload (#1256);
+    + Fixed CSRF error when moving orphaned addresses (#1303);
 
 == 1.3
 

@@ -187,18 +187,17 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 	# rack
 	if ($User->settings->enableRACK=="1") {
 
-    	print "<td>";
-
+    	print "<td vertical-align:top !important;' class='text-right'>";
         // validate rack
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
-
-        print " <td style='width:200px; vertical-align:top !important;'>";
-            # title
-            print "     <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:200px;'>";
-        print " </td>";
+            // front
+            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pul1l-right' style='width:180px;'>";
+            // back
+            if($rack->hasBack!="0") {
+            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-r1ight' style='width:180px;margin-left:5px;'>";
+            }
         }
-
         print "</td>";
     }
 

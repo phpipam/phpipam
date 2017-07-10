@@ -25,5 +25,14 @@ if (empty($_GET['deviceId']))      { $_GET['deviceId'] = 0; }
 if (!is_numeric($_GET['rackId']))     { die(); }
 if (!is_numeric($_GET['deviceId']))   { die(); }
 
-# draw
-$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId']);
+# fetch rack
+$rack = $User->fetch_object("racks", "id", $_GET['rackId']);
+if ($rack===false)     				  { die(); }
+
+# back
+if(@$_GET['is_back']=="1") {
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true);
+}
+else {
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId']);
+}
