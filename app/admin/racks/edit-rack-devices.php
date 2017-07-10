@@ -124,7 +124,7 @@ $(document).ready(function(){
                     // available spaces
                     $available = array();
                     for($m=1; $m<=$rack->size; $m++) {
-                        $available[] = $m;
+                        $available[$m] = $m;
                     }
                     // available back
                     if($rack->hasBack!="0") {
@@ -137,15 +137,17 @@ $(document).ready(function(){
                         // front side
                         foreach ($rack_devices as $d) {
                             for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                $pos = array_search($m, $available);
-                                unset($available[$pos]);
+                                if(array_key_exists($m, $available)) {
+                                    unset($available[$m]);
+                                }
                             }
                         }
                         // back side
                         foreach ($rack_devices as $d) {
                             for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                $pos = array_search($m, $available_back);
-                                unset($available_back[$pos]);
+                                if(array_key_exists($m, $available_back)) {
+                                    unset($available_back[$m]);
+                                }
                             }
                         }
                     }
