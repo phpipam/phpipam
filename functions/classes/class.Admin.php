@@ -423,6 +423,7 @@ class Admin extends Common_functions {
 	 * @return array of user ids
 	 */
 	public function group_fetch_users ($group_id) {
+		$out = array ();
 		# get all users
 		$users = $this->fetch_all_objects("users");
 		# check if $gid in array
@@ -452,6 +453,7 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function group_fetch_missing_users ($group_id) {
+		$out = array ();
 		# get all users
 		$users = $this->fetch_all_objects("users");
 

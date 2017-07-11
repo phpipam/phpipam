@@ -164,7 +164,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $sortField (default:id)
 	 * @param mixed bool (default:true)
-	 * @return bool|object
+	 * @return false|array
 	 */
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
@@ -192,7 +192,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $method (default: null)
 	 * @param mixed $value
-	 * @return bool|object
+	 * @return false|object
 	 */
 	public function fetch_object ($table=null, $method=null, $value) {
 		# null table

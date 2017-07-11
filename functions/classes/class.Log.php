@@ -1846,12 +1846,6 @@ class Logging extends Common_functions {
 	        	    if (array_key_exists($field, $this->changelog_keys[$this->object_type])) {
 	            	    $field = $this->changelog_keys[$this->object_type][$field];
 	        	    }
-	        	    else {
-	        	    	$field = $field;
-	        	    }
-	    	    }
-	    	    else {
-	        	    $field = $field;
 	    	    }
 
 	    		$content[] = "<tr>";
