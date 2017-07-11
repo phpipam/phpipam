@@ -88,6 +88,21 @@ if($_POST['action']=="delete"){
 }
 # remove all devices if back is removed
 if($_POST['action']=="edit" && @$rack['hasBack']!="1") {
-	try { $this->Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+	try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+	catch (Exception $e) {}
+}
+# update positions of rack devices when rack size changes
+if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$rack['size'] ) {
+	// set values
+	$values = array (
+						"rackid"   => $rack_details->id,
+						"new_size" => $rack['size'],
+						"old_size" => $rack_details->size
+	                 );
+	// set query based on shrink / expand
+	$query = "UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size";
+
+	// execute
+	try { $Database->runQuery($query, $values); }
 	catch (Exception $e) {}
 }
