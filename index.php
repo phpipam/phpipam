@@ -163,7 +163,9 @@ else {
 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
 	if(file_exists( dirname(__FILE__)."/css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
-    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
+		// set width
+		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+    	print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
 	}
     ?>
 	</div>
