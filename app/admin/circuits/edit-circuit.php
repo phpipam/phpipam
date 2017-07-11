@@ -53,7 +53,6 @@ $all_devices       = $Tools->fetch_all_objects("devices", "hostname");
 $all_locations     = $Tools->fetch_all_objects("locations", "name");
 
 # no providers
-$circuit_providers = false;
 if($circuit_providers===false) 	{
 	$btn = $User->is_admin(false) ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
 	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
