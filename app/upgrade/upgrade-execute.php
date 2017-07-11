@@ -26,11 +26,6 @@ if($Install->upgrade_database()===true) {
 	# print success
 	$Result->show("success", _("Database upgraded successfully! <a class='btn btn-sm btn-default' href='".create_link('dashboard')."'>Dashboard</a>"), false);
 
-	// migrate settings
-    if(VERSION <= "1.2") {
-		$User->migrate_domain_settings ();
-	    $User->migrate_ldap_settings ();
-	}
     // migrate resolve_subnets
     if(VERSION <= "1.32") {
 	    $User->migrate_resolve_subnets ();
