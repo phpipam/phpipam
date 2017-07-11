@@ -13,7 +13,6 @@ class User extends Common_functions {
      * Current username
      *
      * @var string
-     * @access public
      */
     public $username;
 
@@ -23,7 +22,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access public
      */
     public $api = false;
 
@@ -33,7 +31,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $authenticated = false;
 
@@ -43,7 +40,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $timeout = false;
 
@@ -53,7 +49,6 @@ class User extends Common_functions {
      * (default value: null)
      *
      * @var object
-     * @access public
      */
     public $user = null;
 
@@ -63,7 +58,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $isadmin = false;
 
@@ -73,7 +67,6 @@ class User extends Common_functions {
      * (default value: 5)
      *
      * @var int
-     * @access public
      */
     public $blocklimit = 5;
 
@@ -83,7 +76,6 @@ class User extends Common_functions {
      * (default value: 1)
      *
      * @var int
-     * @access private
      */
     private $authmethodid = 1;
 
@@ -93,7 +85,6 @@ class User extends Common_functions {
      * (default value: "local")
      *
      * @var string
-     * @access private
      */
     private $authmethodtype = "local";
 
@@ -103,7 +94,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access private
      */
     private $ldap = false;
 
@@ -111,7 +101,6 @@ class User extends Common_functions {
      * Users IP address
      *
      * @var mixed
-     * @access private
      */
     private $ip;
 
@@ -121,7 +110,6 @@ class User extends Common_functions {
      * (default value: "phpipam")
      *
      * @var string
-     * @access protected
      */
     protected $sessname = "phpipam";
 
@@ -129,7 +117,6 @@ class User extends Common_functions {
      * (json) parameters for authentication
      *
      * @var mixed
-     * @access protected
      */
     protected $authmethodparams;
 
@@ -139,7 +126,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $debugging = false;
 
@@ -147,15 +133,13 @@ class User extends Common_functions {
      * Result object
      *
      * @var object
-     * @access public
      */
     public $Result;
 
     /**
      * for Database connection
      *
-     * @var resource
-     * @access protected
+     * @var mixed
      */
     protected $Database;
 
@@ -163,7 +147,6 @@ class User extends Common_functions {
      * for Logging connection
      *
      * @var object
-     * @access public
      */
     public $Log;
 
@@ -320,7 +303,7 @@ class User extends Common_functions {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout
-                if($this->timeout == true) {
+                if($this->timeout === true) {
                     $this->authenticated = false;
                 }
                 else {
@@ -797,8 +780,8 @@ class User extends Common_functions {
      *    > authenticates
      *
      * @access public
-     * @param mixed $username
-     * @param mixed $password
+     * @param string $username
+     * @param string $password
      * @param bool $saml
      * @return void
      */
@@ -840,7 +823,7 @@ class User extends Common_functions {
      * tries to fetch user datails from database by username if not already existing locally
      *
      * @access private
-     * @param mixed $username
+     * @param string $username
      * @param bool $force
      * @return void
      */
@@ -997,50 +980,36 @@ class User extends Common_functions {
      *Connect using adLDAP
      *
      * @access private
-     * @param mixed $authparams
+     * @param array $authparams
      * @return adLDAP object
      */
     private function directory_connect ($authparams) {
-        # adLDAP script
+        // include adLDAP
         require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
+        // set dc
+        $authparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
 
-        $dirparams = Array();
-        $dirparams['base_dn'] = @$authparams['base_dn'];
-        $dirparams['ad_port'] = @$authparams['ad_port'];
-        $dirparams['account_suffix'] = @$authparams['account_suffix'];
-        $dirparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
-
-        // set ssl and tls separate for ldap and AD
-        if ($this->ldap) {
-            // set ssl and tls
-            $dirparams['use_ssl'] = false;
-            $dirparams['use_tls'] = false;
-
-            // Support the pre-1.2 auth settings as well as the current version
-            // TODO: remove legacy support at some point
-            if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
-            elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
-
+        // set ldap params
+        if($this->ldap) {
+            // reset ssl and tls
+            $authparams['use_tls'] = ($authparams['ldap_security']=='tls' || $authparams['use_tls']==1) ? true : false;
+            $authparams['use_ssl'] = ($authparams['ldap_security']=='ssl' || $authparams['use_ssl']==1) ? true : false;
+            // reset user / pass object
             if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
-                $dirparams['admin_username'] = $authparams['adminUsername'];
-                $dirparams['admin_password'] = $authparams['adminPassword'];
+                $authparams['admin_username'] = $authparams['adminUsername'];
+                $authparams['admin_password'] = $authparams['adminPassword'];
             }
-        }
-        else {
-            $dirparams['use_ssl'] = @$authparams['use_ssl'];
-            $dirparams['use_tls'] = @$authparams['use_tls'];
         }
 
         # open connection
         try {
             # Initialize adLDAP
-            $dirconn = new adLDAP($dirparams);
-
+            $dirconn = new adLDAP($authparams);
         } catch (adLDAPException $e) {
             $this->Log->write("Directory connection error", "Failed to connect: " . $e->getMessage(), 2, null);
             $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
         }
-
+        // return object
         return $dirconn;
     }
 
@@ -1053,8 +1022,8 @@ class User extends Common_functions {
      *
      * @access private
      * @param array $authparams
-     * @param mixed $username
-     * @param mixed $password
+     * @param string $username
+     * @param string $password
      * @return void
      */
     private function directory_authenticate ($authparams, $username, $password) {
@@ -1088,7 +1057,6 @@ class User extends Common_functions {
             $this->Log->write("Error", "Something went wrong during auth: " . $e->getMessage(), 2, $username);
             $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
         }
-
     }
 
     /**
@@ -1583,5 +1551,3 @@ class User extends Common_functions {
 	    return isset($out) ? $out : array();
 	}
 }
-
-?>
