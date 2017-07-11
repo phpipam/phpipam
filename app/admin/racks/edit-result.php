@@ -45,6 +45,25 @@ elseif($rack['action']=="delete") {
     if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
 }
 
+# check if rack shrinks that no overflow of devices ocur
+if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_details->size ) {
+	// fetch all devices
+	$rack_devices = $Racks->fetch_rack_devices ($rack_details->id);
+	// split to front / back
+	if (is_array($rack_devices)) {
+		foreach ($rack_devices as $d) {
+			// front devices
+			if($d->rack_start <= $rack_details->size) {
+				if (($d->rack_start + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+			}
+			// back devices
+			else {
+				if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+			}
+		}
+	}
+}
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('racks');
 if(sizeof($custom) > 0) {
