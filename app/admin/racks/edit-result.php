@@ -118,8 +118,17 @@ if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$r
 						"new_size" => $rack['size'],
 						"old_size" => $rack_details->size
 	                 );
+	# remove all devices on shrink
+	if($rack['size']<$rack_details->size){
+		// set query based on shrink / expand
+		$query = "UPDATE `devices` set `rack` = 0 where `rack` = :rackid and ((rack_start > :new_size and  rack_start <= :old_size) or (rack_start > (:new_size + :old_size)))";
+
+		// execute
+		try { $Database->runQuery($query, $values); }
+		catch (Exception $e) {}	
+	}
 	// set query based on shrink / expand
-	$query = "UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size";
+	$query = "UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and (rack_start > :old_size or rack_start > :new_size)";
 
 	// execute
 	try { $Database->runQuery($query, $values); }
