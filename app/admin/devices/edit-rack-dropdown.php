@@ -54,6 +54,7 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 	    $available[$m] = $m;
 	}
 	// available back
+	$available_back = array();
 	if($rack->hasBack!="0") {
 	for($m=1; $m<=$rack->size; $m++) {
 	    $available_back[$m+$rack->size] = $m;
