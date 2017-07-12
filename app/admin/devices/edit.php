@@ -74,6 +74,11 @@ $('#switchManagementEdit select[name=rack]').change(function() {
    var loc = $('#switchManagementEdit select[name=rack] :selected').attr('data-location');
    $('select[name=location_item] option:selected').prop("selected",null)
    $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
+
+   // load dropdown
+   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val()}, function(data) {
+   		$('tbody#rack').html(data);
+   });
 });
 </script>
 
@@ -165,21 +170,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
     </tr>
 
     <tbody id="rack" style="<?php print $display; ?>">
-    <tr>
-        <td><?php print _('Start position'); ?></td>
-        <td>
-            <div class="input-group" style="width:100px;">
-                <input type="text" name="rack_start" size="2" class="form-control input-w-auto input-sm" placeholder="1" value="<?php print @$device['rack_start']; ?>">
-                <a href="" class="input-group-addon showRackPopup" rel='tooltip' data-placement='right' data-rackid="<?php print @$device['rack']; ?>" data-deviceid='<?php print @$device['id']; ?>' title='<?php print _("Show rack"); ?>'><i class='fa fa-server'></i></a>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td><?php print _('Size'); ?> (U)</td>
-        <td>
-            <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
-        </td>
-    </tr>
+		<?php include ("edit-rack-dropdown.php"); ?>
     </tbody>
 	<tr>
 	   	<td colspan="2"><hr></td>

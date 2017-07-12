@@ -147,61 +147,61 @@ else {
 
 
 
-            // devices
-            if ($rack_devices===false) {
-                print " <span class='text-muted'>"._("Rack is empty")."</span>";
-                if($admin) {
-                    print " <hr>";
-                    print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0'><i class='fa fa-plus'></i></a> "._("Add device");
-                }
+        // devices
+        if ($rack_devices===false) {
+            print " <span class='text-muted'>"._("Rack is empty")."</span>";
+            if($admin) {
+                print " <hr>";
+                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0'><i class='fa fa-plus'></i></a> "._("Add device");
             }
-            else {
-                $is_back =  false;
-                foreach ($rack_devices as $k=>$d) {
-                    // validate diff
-                    if ($k!=0) {
-                        $error = $d->rack_start < ((int) $rack_devices[$k-1]->rack_start + (int) $rack_devices[$k-1]->rack_size) ? "alert-danger" : "";
-                    }
-
-                    // first
-                    if($k==0 && $rack->hasBack!="0") {
-                        print _("Front side").":<hr>";
-                    }
-                    // first in back
-                    if ($rack->hasBack!="0" && $d->rack_start>$rack->size && !$is_back) {
-                        print "<br>"._("Back side").":<hr>";
-                        $is_back = true;
-                    }
-
-                    // reformat front / back start position
-                    if($rack->hasBack!="0" && $d->rack_start>$rack->size) {
-                        $d->rack_start_print = $d->rack_start - $rack->size;
-                    }
-                    else {
-                        $d->rack_start_print = $d->rack_start;
-                    }
-
-                    if($admin) {
-                        print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$d->id' data-csrf='".$User->csrf_cookie ("create", "rack_devices_$rack->id")."'><i class='fa fa-times'></i></a> ";
-                        print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start_print, "._("Size").": $d->rack_size U</span>";
-                        print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
-                    }
-                    else {
-                        print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start_print, "._("Size").": $d->rack_size U</span>";
-                        print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
-
-                    }
-
+        }
+        else {
+            $is_back =  false;
+            foreach ($rack_devices as $k=>$d) {
+                // validate diff
+                if ($k!=0) {
+                    $error = $d->rack_start < ((int) $rack_devices[$k-1]->rack_start + (int) $rack_devices[$k-1]->rack_size) ? "alert-danger" : "";
                 }
 
-                //add / remove device from rack
+                // first
+                if($k==0 && $rack->hasBack!="0") {
+                    print _("Front side").":<hr>";
+                }
+                // first in back
+                if ($rack->hasBack!="0" && $d->rack_start>$rack->size && !$is_back) {
+                    print "<br>"._("Back side").":<hr>";
+                    $is_back = true;
+                }
+
+                // reformat front / back start position
+                if($rack->hasBack!="0" && $d->rack_start>$rack->size) {
+                    $d->rack_start_print = $d->rack_start - $rack->size;
+                }
+                else {
+                    $d->rack_start_print = $d->rack_start;
+                }
+
                 if($admin) {
-                    print "<hr>";
-                    print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0'><i class='fa fa-plus'></i></a> "._("Add device");
+                    print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$d->id' data-csrf='".$User->csrf_cookie ("create", "rack_devices_".$rack->id."_device_".$d->id)."'><i class='fa fa-times'></i></a> ";
+                    print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start_print, "._("Size").": $d->rack_size U</span>";
+                    print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
                 }
+                else {
+                    print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start_print, "._("Size").": $d->rack_size U</span>";
+                    print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
+
+                }
+
             }
-            print "</td>";
-            print "</tr>";
+
+            //add / remove device from rack
+            if($admin) {
+                print "<hr>";
+                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0'><i class='fa fa-plus'></i></a> "._("Add device");
+            }
+        }
+        print "</td>";
+        print "</tr>";
         ?>
 
         <?php if($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0) { ?>

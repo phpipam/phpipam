@@ -217,7 +217,7 @@ class phpipam_rack extends Tools {
             foreach ($devices as $d) {
                 // back side devices
                 if($is_back) {
-                    if($d->rack_start >= $rack->size) {
+                    if($d->rack_start > $rack->size) {
                         // add initial location
                         $rd = array("id"=>$d->id,
                                     "name"=>$d->hostname,
@@ -233,7 +233,7 @@ class phpipam_rack extends Tools {
                 }
                 // front size devices
                 else {
-                    if($d->rack_start < $rack->size) {
+                    if($d->rack_start <= $rack->size) {
                         // add initial location
                         $rd = array("id"=>$d->id,
                                     "name"=>$d->hostname,

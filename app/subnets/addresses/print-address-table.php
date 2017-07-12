@@ -407,7 +407,7 @@ else {
                     // get MAC vendor
                     if($User->settings->decodeMAC=="1") {
 	                    $mac_vendor = $User->get_mac_address_vendor_details ($addresses[$n]->mac);
-	                    $mac_vendor = $mac_vendor=="" ? : "<hr>"._("Vendor").": ".$mac_vendor;
+	                    $mac_vendor = $mac_vendor==""||is_bool($mac_vendor) ? "" : "<hr>"._("Vendor").": ".$mac_vendor;
 	                }
 	                else {
 	                	$mac_vendor = "";

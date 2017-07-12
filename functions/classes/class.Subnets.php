@@ -397,10 +397,12 @@ class Subnets extends Common_functions {
 
 			//get all address ids
 			$ids = array ();
-			foreach($addresses as $ip) {
-				if($ip->subnetId == $m) {
-    				if(!isset($ids)) $ids = array();
-					$ids[] = $ip->id;
+			if(is_array($addresses)) {
+				foreach($addresses as $ip) {
+					if($ip->subnetId == $m) {
+	    				if(!isset($ids)) $ids = array();
+						$ids[] = $ip->id;
+					}
 				}
 			}
 
@@ -1245,10 +1247,10 @@ class Subnets extends Common_functions {
             $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
 
             // slaves fix for reducing subnet and broadcast address
-			if($ip_version=="IPv4" && !$has_slaves && !$strict_mode) {
+			if($ip_version=="IPv4" && !$strict_mode) {
 				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
-			if($ip_version=="IPv6" && !$has_slaves && !$strict_mode) {
+			if($ip_version=="IPv6" && !$strict_mode) {
 				if($subnet->mask<=126) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 
@@ -1690,30 +1692,32 @@ class Subnets extends Common_functions {
 		$all_folders = $this->fetch_multiple_objects ("subnets", "isFolder", "1");
 		# check
 		if($all_folders!==false) {
-			// remove ones not in same section
-			foreach($all_folders as $k=>$folder) {
-				if ($folder->sectionId!=$sectionId) {
-					unset($all_folders[$k]);
+			if(is_array($all_folders)) {
+				// remove ones not in same section
+				foreach($all_folders as $k=>$folder) {
+					if ($folder->sectionId!=$sectionId) {
+						unset($all_folders[$k]);
+					}
 				}
-			}
-			// do checks
-			if(sizeof($all_folders)>0) {
-				foreach ($all_folders as $folder) {
-					// fetch all subnets
-					$folder_subnets = $this->fetch_subnet_slaves ($folder->id);
-					// only check if VRF Ids match
-					if ($folder_subnets!==false) {
-						foreach ($folder_subnets as $existing_subnet) {
-				            //only check if vrfId's match
-				            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
-					            // ignore folders!
-					            if($existing_subnet->isFolder!=1) {
-						            # check overlapping
-									if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-										 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+				// do checks
+				if(sizeof($all_folders)>0) {
+					foreach ($all_folders as $folder) {
+						// fetch all subnets
+						$folder_subnets = $this->fetch_subnet_slaves ($folder->id);
+						// only check if VRF Ids match
+						if (is_array($folder_subnets)) {
+							foreach ($folder_subnets as $existing_subnet) {
+					            //only check if vrfId's match
+					            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+						            // ignore folders!
+						            if($existing_subnet->isFolder!=1) {
+							            # check overlapping
+										if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+											 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+										}
 									}
-								}
-				            }
+					            }
+							}
 						}
 					}
 				}
@@ -1809,13 +1813,12 @@ class Subnets extends Common_functions {
 	 *		- mastersubnetid we need for new checks to permit overlapping of nested clients
 	 *
 	 * @access public
-	 * @param int $sectionId
 	 * @param CIDR $new_subnet
 	 * @param int $vrfId (default: 0)
 	 * @param int $masterSubnetId (default: 0)
 	 * @return string|false
 	 */
-	public function verify_nested_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0) {
+	public function verify_nested_subnet_overlapping ($new_subnet, $vrfId = 0, $masterSubnetId = 0) {
     	# fetch all slave subnets
     	$slave_subnets = $this->fetch_subnet_slaves ($masterSubnetId);
 		# fix null vrfid
@@ -1823,16 +1826,18 @@ class Subnets extends Common_functions {
 
 		// loop
 		if ($slave_subnets!==false) {
-			foreach ($slave_subnets as $ss) {
-    			// no folders
-    			if($ss->isFolder!=1) {
-        			if($ss->vrfId==$vrfId || $ss->vrfId==null) {
-        				if($this->verify_overlapping ( $new_subnet, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
-        					return _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet).'/'.$ss->mask;
-        				}
-        			}
+			if(is_array ($slave_subnets)) {
+				foreach ($slave_subnets as $ss) {
+	    			// no folders
+	    			if($ss->isFolder!=1) {
+	        			if($ss->vrfId==$vrfId || $ss->vrfId==null) {
+	        				if($this->verify_overlapping ( $new_subnet, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
+	        					return _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet).'/'.$ss->mask;
+	        				}
+	        			}
 
-    			}
+	    			}
+				}
 			}
 		}
         # default false - does not overlap
@@ -2001,11 +2006,13 @@ class Subnets extends Common_functions {
 						//fetch all slave subnets and validate
 						$slave_subnets = $this->fetch_subnet_slaves ($parent_subnet->id);
 						if ($slave_subnets!==false) {
-							foreach ($slave_subnets as $ss) {
-								// not self
-								if ($ss->id != $subnetId) {
-									if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
-										$this->Result->show("danger", _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet)."/".$ss->mask, true);
+							if(is_array($slave_subnets)) {
+								foreach ($slave_subnets as $ss) {
+									// not self
+									if ($ss->id != $subnetId) {
+										if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
+											$this->Result->show("danger", _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet)."/".$ss->mask, true);
+										}
 									}
 								}
 							}
@@ -2172,12 +2179,14 @@ class Subnets extends Common_functions {
 		$nested_subnets = $this->fetch_subnet_slaves ($subnet_old->id);
 		if($nested_subnets!==false) {
 			//loop through all current slaves and check
-			foreach($nested_subnets as $nested_subnet) {
-				//check all new
-				foreach($newsubnets as $new_subnet) {
-					$new_subnet = (object) $new_subnet;
-					if($this->verify_overlapping ($this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask, $this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask)===true) {
-						$this->Result->show("danger", _("Subnet overlapping - ").$this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask." overlaps with ".$this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask, true);
+			if(is_array($nested_subnets)) {
+				foreach($nested_subnets as $nested_subnet) {
+					//check all new
+					foreach($newsubnets as $new_subnet) {
+						$new_subnet = (object) $new_subnet;
+						if($this->verify_overlapping ($this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask, $this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask)===true) {
+							$this->Result->show("danger", _("Subnet overlapping - ").$this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask." overlaps with ".$this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask, true);
+						}
 					}
 				}
 			}
@@ -2536,6 +2545,7 @@ class Subnets extends Common_functions {
                 where `i`.`subnetId`=`s`.`id` and `s`.`vlanId`=`v`.`vlanId` and LOWER(REPLACE(REPLACE(`mac`,\".\",\"\"),\":\", \"\")) = ? and `i`.`id`!= ?;";
         }
         else {
+        	$vlan_details = false;
             // set query
             $query = "select
                 `s`.`sectionId`,`v`.`number`,`i`.`id`,
@@ -3981,7 +3991,8 @@ class Subnets extends Common_functions {
 	 */
 	private function query_arin ($subnet) {
 		// remove netmask
-		$subnet = reset(explode("/", $subnet));
+		$subnet_arr = explode("/", $subnet);
+		$subnet = reset($subnet_arr);
 		// fetch
 		$arin_result = $this->curl_fetch ("arin", null, $subnet);
 
@@ -4061,6 +4072,10 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	public function ripe_fetch_subnets ($as) {
+		// numeric check
+		if(!is_numeric($as)) {
+			$this->Result->show("danger", "Invalid AS", false);
+		}
 		//open connection
 		$ripe_connection = fsockopen("whois.ripe.net", 43, $errno, $errstr, 5);
 		if(!$ripe_connection) {

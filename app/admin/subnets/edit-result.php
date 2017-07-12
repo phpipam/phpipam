@@ -118,7 +118,7 @@ if ($_POST['action']=="add") {
 	        }
 	        else {
     	        //check for overlapping against existing subnets under same master
-    	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+    	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
     			if($overlap!==false) {
     	            $errors[] = $overlap;
     	        }
@@ -135,7 +135,7 @@ if ($_POST['action']=="add") {
 	# parent is folder checks
 	elseif($section['strictMode']==1) {
         //check for overlapping against existing subnets under same master
-        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
 		if($overlap!==false) {
             $errors[] = $overlap;
         }

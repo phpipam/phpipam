@@ -14,7 +14,7 @@ class Vrf_controller extends Common_api_functions {
      * @var mixed
      * @access protected
      */
-    protected $vrf_controller;
+    protected $Vrfs_controller;
 
 	/**
 	 * __construct function
@@ -29,7 +29,7 @@ class Vrf_controller extends Common_api_functions {
 		// include
 		require("Vrfs.php");
 		// subnets
-		$this->vrf_controller = new Vrfs_controller ($Database, $Tools, $params, $Response);
+		$this->Vrfs_controller = new Vrfs_controller ($Database, $Tools, $params, $Response);
 	}
 
 
@@ -42,7 +42,7 @@ class Vrf_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function OPTIONS () {
-		return $this->vrf_controller->OPTIONS ();
+		return $this->Vrfs_controller->OPTIONS ();
 	}
 
 	/**
@@ -52,7 +52,7 @@ class Vrf_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function HEAD () {
-		return $this->vrf_controller->GET ();
+		return $this->Vrfs_controller->GET ();
 	}
 
 
@@ -63,7 +63,7 @@ class Vrf_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function POST () {
-		return $this->vrf_controller->POST ();
+		return $this->Vrfs_controller->POST ();
 	}
 
 
@@ -74,7 +74,7 @@ class Vrf_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function GET () {
-		return $this->vrf_controller->GET ();
+		return $this->Vrfs_controller->GET ();
 	}
 
 
@@ -85,7 +85,7 @@ class Vrf_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function PATCH () {
-		return $this->vrf_controller->PATCH ();
+		return $this->Vrfs_controller->PATCH ();
 	}
 
 
@@ -96,8 +96,6 @@ class Vrf_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function DELETE () {
-		return $this->vrf_controller->DELETE ();
+		return $this->Vrfs_controller->DELETE ();
 	}
 }
-
-?>

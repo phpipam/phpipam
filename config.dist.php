@@ -139,3 +139,9 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
 
 /* for debugging proxy config uncomment next line */
 #var_dump(stream_context_get_options(stream_context_get_default()));
+
+
+/**
+ * General tweaks
+ ******************************/
+$config['logo_width'] = 220;                             // logo width
