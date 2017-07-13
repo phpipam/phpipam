@@ -50,6 +50,8 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 
 	// available spaces
 	$available = array();
+	$available_back = array ();
+
 	for($m=1; $m<=$rack->size; $m++) {
 	    $available[$m] = $m;
 	}
