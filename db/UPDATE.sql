@@ -854,8 +854,21 @@ ALTER TABLE `users` ADD `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No';
 /* Add option for DNS resolving host in subnet */
 ALTER TABLE `subnets` ADD `resolveDNS` TINYINT(1)  NULL  DEFAULT '0';
 
-/* Cahnge name for back side */
+/* Change name for back side */
 ALTER TABLE `racks` CHANGE `front` `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0';
 ALTER TABLE `racks` CHANGE `line` `row` INT(11)  NOT NULL  DEFAULT '1';
 
 
+/* Add topDown flag to racks */
+ALTER TABLE `racks` ADD `topDown` tinyint(1) NOT NULL DEFAULT '1';
+
+/* Create rackContents */
+CREATE TABLE `rackContents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `rack` int(11) unsigned DEFAULT NULL,
+  `rack_start` int(11) unsigned DEFAULT NULL,
+  `rack_size` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rack` (`rack`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -2375,7 +2375,7 @@ $(document).on("click", ".editRack", function() {
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
-	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
+	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), devicetype:$(this).attr('data-devicetype'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
 });
 //submit edit rack devices form
 $(document).on("click", "#editRackDevicesubmit", function() {

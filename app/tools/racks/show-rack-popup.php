@@ -30,7 +30,6 @@ else {
     $Racks = new phpipam_rack ($Database);
     # fetch all racks
     $rack = $Racks->fetch_rack_details ($_POST['rackid']);
-    $rack_devices = $Racks->fetch_rack_devices ($_POST['rackid']);
 
     // rack check
     if($rack===false)                       { $error =_("Invalid rack Id"); }
