@@ -2,10 +2,9 @@
 
 /**
 *
-*    User class to work with current user, authentication etc
+*  User class to work with current user, authentication etc
 *
 */
-
 class User extends Common_functions {
 
 
@@ -980,36 +979,43 @@ class User extends Common_functions {
      *Connect using adLDAP
      *
      * @access private
-     * @param array $authparams
+     * @param mixed $authparams
      * @return adLDAP object
      */
     private function directory_connect ($authparams) {
-        // include adLDAP
+        # adLDAP script
         require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
-        // set dc
-        $authparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
-
-        // set ldap params
-        if($this->ldap) {
-            // reset ssl and tls
-            $authparams['use_tls'] = ($authparams['ldap_security']=='tls' || $authparams['use_tls']==1) ? true : false;
-            $authparams['use_ssl'] = ($authparams['ldap_security']=='ssl' || $authparams['use_ssl']==1) ? true : false;
-            // reset user / pass object
+        $dirparams = Array();
+        $dirparams['base_dn'] = @$authparams['base_dn'];
+        $dirparams['ad_port'] = @$authparams['ad_port'];
+        $dirparams['account_suffix'] = @$authparams['account_suffix'];
+        $dirparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
+        // set ssl and tls separate for ldap and AD
+        if ($this->ldap) {
+            // set ssl and tls
+            $dirparams['use_ssl'] = false;
+            $dirparams['use_tls'] = false;
+            // Support the pre-1.2 auth settings as well as the current version
+            // TODO: remove legacy support at some point
+            if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
+            elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
             if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
-                $authparams['admin_username'] = $authparams['adminUsername'];
-                $authparams['admin_password'] = $authparams['adminPassword'];
+                $dirparams['admin_username'] = $authparams['adminUsername'];
+                $dirparams['admin_password'] = $authparams['adminPassword'];
             }
         }
-
+        else {
+            $dirparams['use_ssl'] = @$authparams['use_ssl'];
+            $dirparams['use_tls'] = @$authparams['use_tls'];
+        }
         # open connection
         try {
             # Initialize adLDAP
-            $dirconn = new adLDAP($authparams);
+            $dirconn = new adLDAP($dirparams);
         } catch (adLDAPException $e) {
             $this->Log->write("Directory connection error", "Failed to connect: " . $e->getMessage(), 2, null);
             $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
         }
-        // return object
         return $dirconn;
     }
 
