@@ -164,7 +164,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $sortField (default:id)
 	 * @param mixed bool (default:true)
-	 * @return bool|object
+	 * @return false|array
 	 */
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
@@ -192,7 +192,7 @@ class Common_functions  {
 	 * @param mixed $table
 	 * @param mixed $method (default: null)
 	 * @param mixed $value
-	 * @return bool|object
+	 * @return false|object
 	 */
 	public function fetch_object ($table=null, $method=null, $value) {
 		# null table
@@ -302,27 +302,29 @@ class Common_functions  {
         // recipients array
         $recipients = array();
         // any ?
-        if ($notification_users!==false) {
-         	// if subnetId is set check who has permissions
-        	if (isset($subnetId)) {
-             	foreach ($notification_users as $u) {
-                	// inti object
-                	$Subnets = new Subnets ($this->Database);
-                	//check permissions
-                	$subnet_permission = $Subnets->check_permission($u, $subnetId);
-                	// if 3 than add
-                	if ($subnet_permission==3) {
-                    	$recipients[] = $u;
-                	}
-            	}
-        	}
-        	else {
-            	foreach ($notification_users as $u) {
-                	if($u->role=="Administrator") {
-                    	$recipients[] = $u;
-                	}
-            	}
-        	}
+        if (is_array($notification_users)) {
+        	if(sizeof($notification_users)>0) {
+	         	// if subnetId is set check who has permissions
+	        	if (isset($subnetId)) {
+	             	foreach ($notification_users as $u) {
+	                	// inti object
+	                	$Subnets = new Subnets ($this->Database);
+	                	//check permissions
+	                	$subnet_permission = $Subnets->check_permission($u, $subnetId);
+	                	// if 3 than add
+	                	if ($subnet_permission==3) {
+	                    	$recipients[] = $u;
+	                	}
+	            	}
+	        	}
+	        	else {
+	            	foreach ($notification_users as $u) {
+	                	if($u->role=="Administrator") {
+	                    	$recipients[] = $u;
+	                	}
+	            	}
+	        	}
+	        }
         	return sizeof($recipients)>0 ? $recipients : false;
         }
         else {
@@ -1152,123 +1154,213 @@ class Common_functions  {
      * @access public
      * @param mixed $field
      * @param mixed $object
-     * @param mixed $action
+     * @param string $action
      * @param mixed $timepicker_index
+     * @param bool $disabled
      * @return array
      */
-    public function create_custom_field_input ($field, $object, $action, $timepicker_index) {
+    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false) {
         # make sure it is array
-        $field = (array) $field;
-        $object = (object) $object;
-        $html = array();
+		$field  = (array) $field;
+		$object = (object) $object;
 
-        # replace spaces with |
+        // disabled
+        $disabled_text = $disabled ? "readonly" : "";
+        // replace spaces with |
         $field['nameNew'] = str_replace(" ", "___", $field['name']);
-
-        # required
+        // required
         $required = $field['Null']=="NO" ? "*" : "";
-
-        # set default value if adding new object
+        // set default value if adding new object
         if ($action=="add")	{ $object->{$field['name']} = $field['Default']; }
-
 
         //set, enum
         if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-        	//parse values
-        	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
-        	//null
-        	if($field['Null']!="NO") { array_unshift($tmp, ""); }
-
-        	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-        	foreach($tmp as $v) {
-            $html[] = $v==$object->{$field['name']} ? "<option value='$v' selected='selected'>$v</option>" : "<option value='$v'>$v</option>";
-        	}
-        	$html[] = "</select>";
+        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text);
         }
         //date and time picker
         elseif($field['type'] == "date" || $field['type'] == "datetime") {
-        	// just for first
-        	if($timepicker_index==0) {
-        		$html[] =  '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
-        		$html[] =  '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
-        		$html[] =  '<script type="text/javascript">';
-        		$html[] =  '$(document).ready(function() {';
-        		//date only
-        		$html[] =  '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
-        		//date + time
-        		$html[] =  '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
-        		$html[] =  '})';
-        		$html[] =  '</script>';
-        	}
-        	$timepicker_index++;
-
-        	//set size
-        	if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
-        	else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
-
-        	//field
-        	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-        	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
+        	$res = $this->create_custom_field_input_date ($field, $object, $timepicker_index, $disabled_text);
+			$timepicker_index = $res['timepicker_index'];
+			$html             = $res ['html'];
         }
         //boolean
         elseif($field['type'] == "tinyint(1)") {
-        	$html[] =  "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-        	$tmp = array(0=>"No",1=>"Yes");
-        	//null
-        	if($field['Null']!="NO") { $tmp[2] = ""; }
-
-        	foreach($tmp as $k=>$v) {
-        		if(strlen($object->{$field['name']})==0 && $k==2)	{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
-        		elseif($k==$object->{$field['name']})				{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
-        		else											    { $html[] = "<option value='$k'>"._($v)."</option>"; }
-        	}
-        	$html[] = "</select>";
+        	$html = $this->create_custom_field_input_boolean ($field, $object, $disabled_text);
         }
         //text
         elseif($field['type'] == "text") {
-        	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $object->{$field['name']}. '</textarea>'. "\n";
+        	$html = $this->create_custom_field_input_textarea ($field, $object, $disabled_text);
         }
 		//default - input field
 		else {
-            // max length
-            $maxlength = 100;
-            if(strpos($field['type'],"varchar")!==false) {
-                $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
-            }
-            if(strpos($field['type'],"int")!==false) {
-                $maxlength = str_replace(array("int","(",")"),"", $field['type']);
-            }
-            // print
-			$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
+            $html = $this->create_custom_field_input_input ($field, $object, $disabled_text);
 		}
 
         # result
         return array(
-            "required" => $required,
-            "field" => implode("\n", $html),
-            "timepicker_index" => $timepicker_index
+			"required"         => $required,
+			"field"            => implode("\n", $html),
+			"timepicker_index" => $timepicker_index
         );
+	}
+
+    /**
+     * Creates form input field for set and enum values
+     *
+     * @access public
+     * @param mixed $field
+     * @param mixed $object
+     * @param string $disabled_text
+     * @return array
+     */
+    public function create_custom_field_input_set_enum ($field, $object, $disabled_text) {
+		$html = array();
+    	//parse values
+    	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
+    	//null
+    	if($field['Null']!="NO") { array_unshift($tmp, ""); }
+
+    	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
+    	foreach($tmp as $v) {
+        $html[] = $v==$object->{$field['name']} ? "<option value='$v' selected='selected'>$v</option>" : "<option value='$v'>$v</option>";
+    	}
+    	$html[] = "</select>";
+
+    	// result
+    	return $html;
+	}
+
+    /**
+     * Creates form input field for date fields.
+     *
+     * @access public
+     * @param mixed $field
+     * @param mixed $object
+     * @param mixed $timepicker_index
+     * @param string $disabled_text
+     * @return array
+     */
+    public function create_custom_field_input_date ($field, $object, $timepicker_index, $disabled_text) {
+   		$html = array ();
+    	// just for first
+    	if($timepicker_index==0) {
+    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
+    		$html[] =  '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
+    		$html[] =  '<script type="text/javascript">';
+    		$html[] =  '$(document).ready(function() {';
+    		//date only
+    		$html[] =  '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
+    		//date + time
+    		$html[] =  '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
+    		$html[] =  '})';
+    		$html[] =  '</script>';
+    	}
+    	$timepicker_index++;
+
+    	//set size
+    	if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
+    	else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
+
+    	//field
+    	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+
+    	// result
+    	return array (
+					"html"             => $html,
+					"timepicker_index" => $timepicker_index
+    	              );
+	}
+
+    /**
+     * Creates form input field for boolean fields.
+     *
+     * @access public
+     * @param mixed $field
+     * @param mixed $object
+     * @param string $disabled_text
+     * @return array
+     */
+    public function create_custom_field_input_boolean ($field, $object, $disabled_text) {
+    	$html = array ();
+    	$html[] =  "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
+    	$tmp = array(0=>"No",1=>"Yes");
+    	//null
+    	if($field['Null']!="NO") { $tmp[2] = ""; }
+
+    	foreach($tmp as $k=>$v) {
+    		if(strlen($object->{$field['name']})==0 && $k==2)	{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
+    		elseif($k==$object->{$field['name']})				{ $html[] = "<option value='$k' selected='selected'>"._($v)."</option>"; }
+    		else											    { $html[] = "<option value='$k'>"._($v)."</option>"; }
+    	}
+    	$html[] = "</select>";
+    	// result
+    	return $html;
+	}
+
+    /**
+     * Creates form input field for text fields.
+     *
+     * @access public
+     * @param mixed $field
+     * @param mixed $object
+     * @param string $disabled_text
+     * @return array
+     */
+    public function create_custom_field_input_textarea ($field, $object, $disabled_text) {
+    	$html = array ();
+    	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
+    	// result
+    	return $html;
+	}
+
+    /**
+     * Creates form input field for date fields.
+     *
+     * @access public
+     * @param mixed $field
+     * @param mixed $object
+     * @param string $disabled_text
+     * @return array
+     */
+    public function create_custom_field_input_input ($field, $object, $disabled_text) {
+        $html = array ();
+        // max length
+        $maxlength = 100;
+        if(strpos($field['type'],"varchar")!==false) {
+            $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+        }
+        if(strpos($field['type'],"int")!==false) {
+            $maxlength = str_replace(array("int","(",")"),"", $field['type']);
+        }
+        // print
+		$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+    	// result
+    	return $html;
 	}
 
 	/**
 	 * Creates image link to rack.
 	 *
-	 * @access public
-	 * @param bool $rackId (default: false)
-	 * @param bool $deviceId (default: false)
-	 * @return mixed|bool
+	 * @method create_rack_link
+	 *
+	 * @param  bool|int $rackId
+	 * @param  bool|int $deviceId
+	 * @param  bool $is_back
+	 *
+	 * @return [type]
 	 */
-	public function create_rack_link ($rackId = false, $deviceId = false) {
+	public function create_rack_link ($rackId = false, $deviceId = false, $is_back = false) {
     	if($rackId===false) {
         	    return false;
     	}
     	else {
         	//device ?
         	if ($deviceId!==false) {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId";
+            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
         	}
         	else {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId";
+            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
         	}
     	}
 	}
@@ -1302,7 +1394,7 @@ class Common_functions  {
                 }
             }
             // not matched
-            return false;
+            return "";
         } else {
             return "";
         }
@@ -1473,6 +1565,7 @@ class Common_functions  {
     	// remove html tags
     	$get = $this->strip_input_tags ($get);
     	// init
+    	$title = array ();
     	$title[] = $this->settings->siteTitle;
 
     	// page

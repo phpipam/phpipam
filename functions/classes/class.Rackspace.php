@@ -129,11 +129,16 @@ class phpipam_rack extends Tools {
     /**
      * Fetches and returns all racks from database
      *
-     * @access public
+     * @method fetch_all_racks
+     *
+     * @param  bool $locations
+     *
      * @return void
      */
-    public function fetch_all_racks () {
-        $all_racks = $this->fetch_all_objects("racks", "name", true);
+    public function fetch_all_racks ($locations = false) {
+        // set query and fetch racks
+        $query = $locations ? "select * from `racks` order by `location` asc, `name` asc;" : "select * from `racks` order by `name` asc;";
+        $all_racks = $this->Database->getObjectsQuery($query);
         // reorder
         if ($all_racks==false) {
             $this->all_racks = false;
@@ -189,34 +194,59 @@ class phpipam_rack extends Tools {
     /**
      * Prepare rack object and content
      *
-     * @access public
-     * @param int $id       // rack id
-     * @return void
+     * @method draw_rack
+     *
+     * @param  int $id
+     * @param  bool|int $deviceId   // active device id
+     * @param  bool $is_back        // we are drwaing back side
+     *
+     * @return [type]
      */
-    public function draw_rack ($id, $deviceId = false) {
+    public function draw_rack ($id, $deviceId = false, $is_back = false) {
         // fetch rack details
         $rack = $this->fetch_rack_details ($id);
         // fetch rack devices
         $devices = $this->fetch_rack_devices ($id);
-
-        // set name
-        $this->rack_name = $rack->name;
+        // set size
         $this->rack_size = $rack->size;
+        // set name
+        $this->rack_name = $is_back ? "["._("Back")."] ".$rack->name : "["._("Front")."] ".$rack->name;
 
         // set content
         if ($devices!==false) {
             foreach ($devices as $d) {
-                // add initial location
-                $rd = array("id"=>$d->id,
-                            "name"=>$d->hostname,
-                            "startLocation"=>$d->rack_start,
-                            "size"=>$d->rack_size,
-                            "rackName"=>$rack->name
-                            );
-                // if startlocation is not set
-                $rd['startLocation'] -= 1;
-                // save content
-                $this->rack_content[] = new RackContent ($rd);
+                // back side devices
+                if($is_back) {
+                    if($d->rack_start > $rack->size) {
+                        // add initial location
+                        $rd = array("id"=>$d->id,
+                                    "name"=>$d->hostname,
+                                    "startLocation"=>$d->rack_start-$rack->size,
+                                    "size"=>$d->rack_size,
+                                    "rackName"=>$rack->name
+                                    );
+                        // if startlocation is not set
+                        $rd['startLocation'] -= 1;
+                        // save content
+                        $this->rack_content[] = new RackContent ($rd);
+                    }
+                }
+                // front size devices
+                else {
+                    if($d->rack_start <= $rack->size) {
+                        // add initial location
+                        $rd = array("id"=>$d->id,
+                                    "name"=>$d->hostname,
+                                    "startLocation"=>$d->rack_start,
+                                    "size"=>$d->rack_size,
+                                    "rackName"=>$rack->name
+                                    );
+                        // if startlocation is not set
+                        $rd['startLocation'] -= 1;
+                        // save content
+                        $this->rack_content[] = new RackContent ($rd);
+                    }
+                }
             }
         }
 

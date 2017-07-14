@@ -100,7 +100,7 @@ else {
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
 	<?php } ?>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
@@ -163,7 +163,9 @@ else {
 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
 	if(file_exists( dirname(__FILE__)."/css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
-    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
+		// set width
+		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+    	print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
 	}
     ?>
 	</div>

@@ -96,19 +96,20 @@ foreach($outFile as $k=>$line) {
 		else																		{ $action = "add"; }
 
 		// set insert / update values
-		$address_insert = array("action"=>$action,
-								"subnetId"=>$_POST['subnetId'],
-								"ip_addr"=>$line[0],
-								"state"=>$Addresses->address_type_type_to_index($line[1]),
-								"description"=>$line[2],
-								"dns_name"=>$line[3],
-								"firewallAddressObject"=>$line[4],
-								"mac"=>$line[5],
-								"owner"=>$line[6],
-								"switch"=>$line[7],
-								"port"=>$line[8],
-								"note"=>$line[9],
-								"location"=>$line[10]
+		$address_insert = array(
+								"action"                => $action,
+								"subnetId"              => $_POST['subnetId'],
+								"ip_addr"               => $line[0],
+								"state"                 => $Addresses->address_type_type_to_index($line[1]),
+								"description"           => $line[2],
+								"dns_name"              => $line[3],
+								"firewallAddressObject" => $line[4],
+								"mac"                   => $line[5],
+								"owner"                 => $line[6],
+								"switch"                => $line[7],
+								"port"                  => $line[8],
+								"note"                  => $line[9],
+								"location_item"         => $line[10]
 								);
 		// add id
 		if ($action=="edit")	{ $address_insert["id"] = $id; }
@@ -145,4 +146,3 @@ if($errors==0)	{
 $Result->show("success", _("Created $add addresses, skipped ".sizeof($invalid_lines)." entries and edited $edit addresses"), false);
 
 print "<br><br>";
-?>

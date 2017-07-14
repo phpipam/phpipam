@@ -450,6 +450,16 @@ $('.slider').slider().on('slide', function(ev){
     print '	</td>' . "\n";
     print '	<td class="info2">'._('Discover new hosts in this subnet').'</td>' . "\n";
     print '</tr>';
+
+    //resolve hostname
+    $checked = @$subnet_old_details['resolveDNS']==1 ? "checked": "";
+    print '<tr>' . "\n";
+    print ' <td>'._('Resolve DNS names').'</td>' . "\n";
+    print ' <td>' . "\n";
+    print '     <input type="checkbox" name="resolveDNS" class="input-switch-agents-scan" value="1" '.$checked.'>'. "\n";
+    print ' </td>' . "\n";
+    print ' <td class="info2">'._('Resolve hostnames in this subnet').'</td>' . "\n";
+    print '</tr>';
 	?>
 
     <tr>
@@ -611,6 +621,9 @@ $('.slider').slider().on('slide', function(ev){
                     $maxlength = 0;
                     if(strpos($field['type'],"varchar")!==false) {
                         $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+                    }
+                    if(strpos($field['type'],"int")!==false) {
+                        $maxlength = str_replace(array("int","(",")"),"", $field['type']);
                     }
                     // print
 					print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $subnet_old_details[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";

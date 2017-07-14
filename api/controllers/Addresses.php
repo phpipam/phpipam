@@ -194,6 +194,7 @@ class Addresses_controller extends Common_api_functions  {
             // fetch all in subnet
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "subnetId", $this->_params->id2);
             if($result!==false) {
+            	$result_filtered = "";
                 foreach ($result as $k=>$r) {
                     if($r->ip !== $this->_params->id) {
                         unset($result[$k]);

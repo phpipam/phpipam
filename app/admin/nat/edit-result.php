@@ -54,4 +54,3 @@ else																 { $Result->show("success", _("NAT $_POST[action] successful
 if($_POST['action']=="add") {
     print "<div class='new_nat_id hidden'>$Admin->lastId</div>";
 }
-?>

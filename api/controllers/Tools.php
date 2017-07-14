@@ -279,7 +279,7 @@ class Tools_controller extends Common_api_functions {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
                     	//nameservers
-                		$ns = $this->read_subnet_nameserver ();
+                		$ns = $this->read_subnet_nameserver ($r);
                         if ($ns!==false) {
                             $result[$k]->nameservers = $ns;
                         }
@@ -630,10 +630,10 @@ class Tools_controller extends Common_api_functions {
 	/**
 	 * Returns nameserver details
 	 *
-	 * @access private
+	 * @param result $obj
 	 * @return void
 	 */
-	private function read_subnet_nameserver () {
+	private function read_subnet_nameserver ($result) {
     	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
 	}
 
@@ -642,14 +642,14 @@ class Tools_controller extends Common_api_functions {
 	 *
 	 * @access private
 	 * @param json $obj
-	 * @return void
+	 * @return array
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
         	return(json_decode($obj, true));
     	}
     	else {
-        	return false;
+        	return array ();
     	}
 	}
 

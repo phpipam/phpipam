@@ -350,6 +350,11 @@ else {
 
 			    # resolve dns name
 			    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+				# update database
+				if($subnet['resolveDNS']=="1" && $resolve['class']=="resolved") {
+					$Addresses->update_address_hostname ($addresses[$n]->ip_addr, $addresses[$n]->id, $resolve['name']);
+					$addresses[$n]->dns_name = $resolve['name'];
+				}
 																		{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
 				# print firewall address object - mandatory if enabled
@@ -402,7 +407,7 @@ else {
                     // get MAC vendor
                     if($User->settings->decodeMAC=="1") {
 	                    $mac_vendor = $User->get_mac_address_vendor_details ($addresses[$n]->mac);
-	                    $mac_vendor = $mac_vendor=="" ? : "<hr>"._("Vendor").": ".$mac_vendor;
+	                    $mac_vendor = $mac_vendor==""||is_bool($mac_vendor) ? "" : "<hr>"._("Vendor").": ".$mac_vendor;
 	                }
 	                else {
 	                	$mac_vendor = "";

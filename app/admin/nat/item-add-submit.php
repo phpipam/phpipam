@@ -29,7 +29,7 @@ $nat!==false ? : $Result->show("danger", _("Invalid ID"), true);
 if($nat->type=="static") {
     // static NAT can only have IP address
     if($_POST['object_type']!="ipaddresses") {
-        $Result->show("danger", _("Static NAT can only contain IP address"), true);
+        //$Result->show("danger", _("Static NAT can only contain IP address"), true);
     }
 
     // decode

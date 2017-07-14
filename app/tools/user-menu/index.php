@@ -154,6 +154,17 @@ if($User->user->authMethod == 1) {
 	</td>
 </tr>
 
+<!-- Compress text in menu -->
+<tr>
+	<td class="title"><?php print _('Compress text in top menu'); ?></td>
+	<td>
+		<input type="checkbox" value="1" class="input-switch" name="menuCompact" <?php if($User->user->menuCompact == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Do not show text next to menu items in dynamic menu'); ?>
+	</td>
+</tr>
+
 <!-- Menu type -->
 <tr>
 	<td class="title"><?php print _('Menu Type'); ?></td>

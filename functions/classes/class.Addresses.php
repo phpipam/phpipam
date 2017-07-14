@@ -359,21 +359,22 @@ class Addresses extends Common_functions {
 	 */
 	protected function modify_address_add ($address) {
 		# set insert array
-		$insert = array("ip_addr"=>$this->transform_address($address['ip_addr'],"decimal"),
-						"subnetId"=>$address['subnetId'],
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore'],
-						"firewallAddressObject"=>@$address['firewallAddressObject'],
-						"lastSeen"=>@$address['lastSeen']
+		$insert = array(
+						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
+						"subnetId"              => $address['subnetId'],
+						"description"           => @$address['description'],
+						"dns_name"              => @$address['dns_name'],
+						"mac"                   => @$address['mac'],
+						"owner"                 => @$address['owner'],
+						"state"                 => @$address['state'],
+						"switch"                => @$address['switch'],
+						"port"                  => @$address['port'],
+						"note"                  => @$address['note'],
+						"is_gateway"            => @$address['is_gateway'],
+						"excludePing"           => @$address['excludePing'],
+						"PTRignore"             => @$address['PTRignore'],
+						"firewallAddressObject" => @$address['firewallAddressObject'],
+						"lastSeen"              => @$address['lastSeen']
 						);
         # location
         if (isset($address['location_item'])) {
@@ -549,6 +550,29 @@ class Addresses extends Common_functions {
 		}
 		# ok
 		return true;
+	}
+
+	/**
+	 * Updates hostname for IP addresses
+	 *
+	 * @method update_address_hostname
+	 *
+	 * @param  mixed $ip
+	 * @param  int $id
+	 * @param  string $hostname
+	 *
+	 * @return void
+	 */
+	public function update_address_hostname ($ip, $id, $hostname = "") {
+		if(is_numeric($id) && strlen($hostname)>0) {
+			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "dns_name"=>$hostname)); }
+			catch (Exception $e) {
+				return false;
+			}
+			// save log
+			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $address_old), 0);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "dns_name"=>""), array("id"=>$id, "dns_name"=>$hostname), $this->mail_changelog);
+		}
 	}
 
 	/**

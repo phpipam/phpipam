@@ -1,19 +1,42 @@
-== 1.3.003
+== 1.31.001
+
+    New features:
+    ------------
+    + Circuits module (circuits, providers, map, ...) (#731);
 
     Enhancements, changes:
     ----------------------------
-    + Automatic location assignment when device added to rack (#1230);
-    + Rack map showing map of all racks in location;
+    + Racks:
+        + Automatic location assignment when device added to rack (#1230);
+        + Rack map showing map of all racks in location;
+        + Rack back side;
+    + Compact menu layout (per-user setting, showing only icons);
+    + Network to network static nat;
+    + Selectable logo size (from config.php) (#952);
     + API:
         + Encrypyted requests can now also be form-encoded (#1191);
+    + New resolve hostnames option for subnet (#1222):
+        + Updates hostnames via pingCheck.php script (if parameter set for subnet);
+        + Updates hostnames via resolveIPaddresses.php script (if parameter set for subnet);
+        + On-the-fly empty hostname update if resolved (if parameter set for subnet and enabled globally);
+        + Added this infor to tools > scanned networks;
 
     Translations:
     ----------------------------
     + French translation updated to verson 1.3;
+    + German translation updated to verson 1.3;
 
     Bugfixes:
     ----------------------------
-    + Fixed RACK images not displayed if not root location (#1204)
+    + Fixed RACK images not displayed if not root location (#1204);
+    + Fixed import gateway ip (#1240);
+    + Fixed JSON_UNESCAPED_UNICODE for PHP 5.3 (#1135, #1245);
+    + Rename class Thread to PingThread to avoid naming conflict with pthreads Thread class (#1254);
+    + Fix custom fields integer on subnet (#1266);
+    + Fixed Import Ip-adress doesnt update location (#1284);
+    + Fixed json_error for logo upload (#1256);
+    + Fixed CSRF error when moving orphaned addresses (#1303);
+    + Fixed VRF fetching via API by Id;
 
 == 1.3
 
