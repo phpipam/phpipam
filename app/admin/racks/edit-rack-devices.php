@@ -86,7 +86,7 @@ else {
 	    $devices = $Admin->fetch_all_objects("devices", "id");
 	    if ($devices!==false) {
 		    foreach($devices as $k=>$d) {
-			    if (strlen($d->rack)!=0) {
+			    if ((strlen($d->rack)!=0) && ($d->rack != 0)) {
 				    unset($devices[$k]);
 			    }
 		    }

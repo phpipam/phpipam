@@ -174,12 +174,12 @@ else {
                     next($rack_devices);
                     $ctype = 'device';
                 } else {
-                    if ($cd['rack_start'] < $cc['rack_start']) {
+                    if ($cd->rack_start < $cc->rack_start) {
                         $cur = $cd;
                         $ctype = 'device';
                         next($rack_devices);
                     } else {
-                        $cur = current($cc);
+                        $cur = $cc;
                         next($rack_contents);
                         $ctype = 'content';
                     }
