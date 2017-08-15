@@ -32,11 +32,12 @@
     + Fixed import gateway ip (#1240);
     + Fixed JSON_UNESCAPED_UNICODE for PHP 5.3 (#1135, #1245);
     + Rename class Thread to PingThread to avoid naming conflict with pthreads Thread class (#1254);
-    + Fix custom fields integer on subnet (#1266);
+    + Fixed custom fields integer on subnet (#1266);
     + Fixed Import Ip-adress doesnt update location (#1284);
     + Fixed json_error for logo upload (#1256);
     + Fixed CSRF error when moving orphaned addresses (#1303);
     + Fixed VRF fetching via API by Id;
+    + Fixed map issues when quotes are in name/description (#1384);
 
 == 1.3
 
