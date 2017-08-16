@@ -96,7 +96,7 @@ foreach($custom_fields as $k=>$cf) {
 		foreach($cf as $f)
 		{
 			# space?
-			$class = !preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $f['name']) ? "alert-danger" : "";
+			$class = strpos($f['name'], " ")===false ? "" : "danger";
 
 			print "<tr class='$class'>";
 

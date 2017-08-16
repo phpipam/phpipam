@@ -43,6 +43,27 @@ else 							{ $_POST['oldname'] = $_POST['fieldName'];}
 $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST['fieldName']);
 ?>
 
+<script type='text/javascript'>
+$(document).ready (function () {
+// check spce
+check_name_whitespace ();
+// on focusout
+$("input[name='name']").focusout(function () {
+check_name_whitespace ();
+});
+// check space function
+function check_name_whitespace () {
+	var namefieldval = $("input[name='name']").val();
+	if (namefieldval.indexOf(' ') >= 0) {
+		$('tr.spacewarning td').html("<div class='alert alert-warning'><i class='fa fa-exclamation'></i> Please consider using Name without spaces!</div>");
+		$('tr.spacewarning').show();
+	}
+	else {
+		$('tr.spacewarning').hide();
+	}
+}
+});
+</script>
 
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('custom field'); ?></div>
 
@@ -63,6 +84,9 @@ $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST[
 			<input type="hidden" name="table" value="<?php print $_POST['table']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
+	</tr>
+	<tr class='spacewarning'>
+		<td colspan="2"></td>
 	</tr>
 
 	<!-- Description -->
