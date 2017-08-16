@@ -530,6 +530,8 @@ class Addresses extends Common_functions {
 		if(@$address['remove_all_dns_records']=="1") {
     		$this->pdns_remove_ip_and_hostname_records ($address);
         }
+        # remove from NAT
+        $this->remove_address_nat_items ($address['id'], true);
 		# ok
 		return true;
 	}
@@ -550,6 +552,51 @@ class Addresses extends Common_functions {
 		}
 		# ok
 		return true;
+	}
+
+	/**
+	 * Remove item from nat when item is removed
+	 *
+	 * @method remove_nat_item
+	 *
+	 * @param  int $obj_id
+	 * @param  bool $print
+	 *
+	 * @return void
+	 */
+	public function remove_address_nat_items ($obj_id = 0, $print = true) {
+		# fetch all nats
+		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# loop and check for object ids
+		if(sizeof($all_nats)>0) {
+			# init admin object
+			$Admin = new Admin ($this->Database, false);
+			# loop
+			foreach ($all_nats as $nat) {
+			    # remove item from nat
+			    $s = json_decode($nat->src, true);
+			    $d = json_decode($nat->dst, true);
+
+			    if(is_array($s['ipaddresses']))
+			    $s['ipaddresses'] = array_diff($s['ipaddresses'], array($obj_id));
+			    if(is_array($d['ipaddresses']))
+			    $d['ipaddresses'] = array_diff($d['ipaddresses'], array($obj_id));
+
+			    # save back and update
+			    $src_new = json_encode(array_filter($s));
+			    $dst_new = json_encode(array_filter($d));
+
+			    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+			    	if($print) {
+				        $this->Result->show("success", "Address removed from NAT", false);
+					}
+			    }
+			}
+		}
 	}
 
 	/**
