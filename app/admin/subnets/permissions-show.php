@@ -119,7 +119,8 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
     <tr>
         <td><?php print _('Propagate changes'); ?></td>
         <td>
-            <input type="checkbox" style="margin-left: 0px; padding-left: 0px;" name="set_inheritance" class="input-switch" value="Yes" checked="checked">
+        	<?php $checked = $User->settings->permissionPropagate=="1" ? "checked" : ""; ?>
+            <input type="checkbox" style="margin-left: 0px; padding-left: 0px;" name="set_inheritance" class="input-switch" value="Yes" <?php print $checked; ?>>
         </td>
     </tr>
     <tr class="warning2">

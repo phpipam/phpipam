@@ -86,6 +86,7 @@ $values = array("id"=>1,
 				//"enableDHCP"        =>$Admin->verify_checkbox(@$_POST['enableDHCP']),
 				"enableFirewallZones" =>$Admin->verify_checkbox(@$_POST['enableFirewallZones']),
 				"maintaneanceMode" 	  =>$Admin->verify_checkbox(@$_POST['maintaneanceMode']),
+				"permissionPropagate" =>$Admin->verify_checkbox(@$_POST['permissionPropagate']),
 				"link_field"          =>@$_POST['link_field'],
 				"log"                 =>@$_POST['log'],
 				//display
