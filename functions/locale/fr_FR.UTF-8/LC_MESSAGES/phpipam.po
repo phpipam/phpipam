@@ -4602,7 +4602,7 @@ msgid "Discover"
 msgstr "Découvrir"
 
 msgid "Back"
-msgstr "Retour"
+msgstr "Back"
 
 msgid "l2 domain"
 msgstr "Domaine l2"
