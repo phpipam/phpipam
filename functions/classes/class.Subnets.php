@@ -438,6 +438,8 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	public function remove_subnet_nat_items ($obj_id = 0, $print = true) {
+		# set found flag for returns
+		$found = 0;
 		# fetch all nats
 		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
 		catch (Exception $e) {
@@ -463,13 +465,20 @@ class Subnets extends Common_functions {
 			    $src_new = json_encode(array_filter($s));
 			    $dst_new = json_encode(array_filter($d));
 
-			    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
-			    	if($print) {
-				        $this->Result->show("success", "Subnet removed from NAT", false);
-					}
-			    }
+			    # update only if diff found
+			    if($s!=$src_new || $d!=$dst_new) {
+			    	$found++;
+
+				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+				    	if($print) {
+					        $this->Result->show("success", "Subnet removed from NAT", false);
+						}
+				    }
+				}
 			}
 		}
+		# return
+		return $found;
 	}
 
 

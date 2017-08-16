@@ -38,6 +38,7 @@
     + Fixed CSRF error when moving orphaned addresses (#1303);
     + Fixed VRF fetching via API by Id;
     + Fixed map issues when quotes are in name/description (#1384);
+    + Fidex item not removed from NAT when deleted (#1378);
 
 == 1.3
 
