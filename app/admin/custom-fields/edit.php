@@ -102,7 +102,16 @@ function check_name_whitespace () {
 		<td><?php print _('Type'); ?></td>
 		<?php
 		// define supported types
-		$mTypes = array("varchar"=>"varchar", "integer"=>"int", "boolean"=>"bool", "text"=>"text", "date"=>"date", "datetime"=>"datetime", "set"=>"set", "enum"=>"enum");
+		$mTypes = array(
+						"varchar"  =>"varchar",
+						"integer"  =>"int",
+						"boolean"  =>"bool",
+						"text"     =>"text",
+						"date"     =>"date",
+						"datetime" =>"datetime",
+						"set"      =>"set",
+						"enum"     =>"enum"
+		                );
 		//reformat old type
 		$oldMType = strstr(@$fieldval['Type'], "(", true);
 		$oldMSize = str_replace(array("(",")"), "",strstr(@$fieldval['Type'], "(", false));
@@ -127,7 +136,7 @@ function check_name_whitespace () {
 	<tr>
 		<td><?php print _('Size / Length'); ?></td>
 		<td>
-			<input type="text" name="fieldSize" class="form-control input-sm input-w-100" value="<?php print @$oldMSize; ?>" placeholder="<?php print _('Enter field length'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
+			<input type="text" name="fieldSize" class="form-control input-sm" value="<?php print htmlentities(@$oldMSize); ?>" placeholder="<?php print _('Enter field length'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
 		</td>
 	</tr>
 
