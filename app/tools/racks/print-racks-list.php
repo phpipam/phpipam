@@ -102,24 +102,7 @@ else {
     			foreach($custom as $field) {
     				if(!in_array($field['name'], $hidden_custom_fields)) {
     					print "<td class='hidden-xs hidden-sm hidden-md'>";
-
-    					// create links
-    					$r->{$field['name']} = $Result->create_links ($r->{$field['name']}, $field['type']);
-
-    					//booleans
-    					if($field['type']=="tinyint(1)")	{
-    						if($r->{$field['name']} == "0")		{ print _("No"); }
-    						elseif($r->{$field['name']} == "1")	{ print _("Yes"); }
-    					}
-    					//text
-    					elseif($field['type']=="text") {
-    						if(strlen($r->{$field['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $r->{$field['name']})."'>"; }
-    						else								{ print ""; }
-    					}
-    					else {
-    						print $r->{$field['name']};
-
-    					}
+                        $Tools->print_custom_field ($field['type'], $r->{$field['name']});
     					print "</td>";
     				}
     			}

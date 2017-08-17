@@ -195,5 +195,3 @@ else {
 
 	print '</table>'. "\n";
 }
-
-?>

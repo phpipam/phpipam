@@ -1340,6 +1340,37 @@ class Common_functions  {
 	}
 
 	/**
+	 * Prints custom field
+	 *
+	 * @method print_custom_field
+	 *
+	 * @param  string $type
+	 * @param  string $value
+	 *
+	 * @return void
+	 */
+	public function print_custom_field ($type, $value) {
+		// create links
+		$value = $this->create_links ($value, $type);
+		// escape
+		$value = str_replace("'", "&#39;", $value);
+
+		//booleans
+		if($type=="tinyint(1)")	{
+			if($value)				{ print _("No"); }
+			elseif($value == "1")	{ print _("Yes"); }
+		}
+		//text
+		elseif($type=="text") {
+			if(strlen($value)>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
+			else					{ print ""; }
+		}
+		else {
+			print $value;
+		}
+	}
+
+	/**
 	 * Creates image link to rack.
 	 *
 	 * @method create_rack_link

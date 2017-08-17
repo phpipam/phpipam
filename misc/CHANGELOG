@@ -41,6 +41,7 @@
     + Fixed map issues when quotes are in name/description (#1384);
     + Fixed item not removed from NAT when deleted (#1378);
     + Fixed Error when error_reporting = E_ALL about strict standards when importing IP addresses (#1372);
+    + Fixed Apostrophe errors in text custom fields (#1375);
 
 == 1.3
 
