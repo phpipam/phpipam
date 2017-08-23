@@ -143,10 +143,12 @@ $(document).ready(function(){
                             }
                         }
                         // back side
-                        foreach ($rack_devices as $d) {
-                            for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                if(array_key_exists($m, $available_back)) {
-                                    unset($available_back[$m]);
+                        if($rack->hasBack!="0") {
+                            foreach ($rack_devices as $d) {
+                                for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
+                                    if(array_key_exists($m, $available_back)) {
+                                        unset($available_back[$m]);
+                                    }
                                 }
                             }
                         }
