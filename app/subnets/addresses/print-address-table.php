@@ -145,7 +145,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	# custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
-			print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>$myField[name]</span></th>";
+			print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>".$Tools->print_custom_field_name ($myField['name'])."</span></th>";
 		}
 	}
 	?>

@@ -37,7 +37,7 @@ $result_pstnn = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields);
 	if(sizeof($custom_pstn_fields) > 0) {
 		foreach($custom_pstn_fields as $field) {
 			if(!in_array($field['name'], $hidden_pstn_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -112,7 +112,7 @@ if(sizeof($result_pstn) == 0) {
 	if(sizeof($custom_pstnn_fields) > 0) {
 		foreach($custom_pstnn_fields as $field) {
 			if(!in_array($field['name'], $hidden_pstnn_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}

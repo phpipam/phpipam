@@ -40,7 +40,7 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	# custom fields
 	if(sizeof($custom_address_fields) > 0) {
 		foreach($custom_address_fields as $field) {
-			if(!in_array($field['name'], $hidden_address_fields)) 					{ print "<th class='hidden-xs hidden-sm'>".$field['name']."</th>"; $address_span++; }
+			if(!in_array($field['name'], $hidden_address_fields)) 					{ print "<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>"; $address_span++; }
 		}
 	}
 

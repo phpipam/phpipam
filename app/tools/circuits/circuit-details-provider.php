@@ -41,7 +41,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']});
 
 			print "<tr>";
-			print "<th>$field[name]</th>";
+			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			print "<td>".$provider->{$field['name']}."</d>";
 			print "</tr>";
 		}

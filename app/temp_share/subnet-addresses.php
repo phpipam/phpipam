@@ -103,7 +103,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
 			if(!in_array($myField['name'], $hidden_cfields)) {
-				print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+				print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
 			}
 		}
 	}

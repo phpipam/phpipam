@@ -31,7 +31,7 @@ $result_vrf = $Tools->search_vrfs($searchTerm, $custom_vrf_fields);
 	if(sizeof($custom_vrf_fields) > 0) {
 		foreach($custom_vrf_fields as $field) {
 			if(!in_array($field['name'], $hidden_vrf_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -56,7 +56,9 @@ if(sizeof($result_vrf) > 0) {
 			foreach($custom_vrf_fields as $field) {
 				if(!in_array($field['name'], $hidden_vrf_fields)) {
 					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
-					print "	<td class='hidden-xs hidden-sm'>".$vrf[$field['name']]."</td>";
+					print "	<td class='hidden-xs hidden-sm'>";
+					$Tools->print_custom_field ($field['type'], $vrf[$field['name']]);
+					print "	</td>";
 				}
 			}
 		}

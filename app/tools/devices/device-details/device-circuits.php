@@ -49,14 +49,6 @@ else {
         print " <th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
         print " <th><span rel='tooltip' data-container='body' title='"._('Sort by location A')."' class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
         print " <th><span rel='tooltip' data-container='body' title='"._('Sort by location B')."' class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
-        if(sizeof(@$custom_fields_circuits) > 0) {
-            foreach($custom_fields_circuits as $field) {
-                if(!in_array($field['name'], $hidden_fields)) {
-                    print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
-                    $colspanCustom++;
-                }
-            }
-        }
         print '</tr>';
         print "</thead>";
 
@@ -83,22 +75,9 @@ else {
             print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
             print " <td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";
-            //custom
-            if(sizeof(@$custom_fields_circuits) > 0) {
-                foreach($custom_fields_circuits as $field) {
-                    if(!in_array($field['name'], $hidden_fields)) {
-                        // create html links
-                        $circuit->{$field['name']} = $User->create_links($circuit->{$field['name']}, $field['type']);
-
-                        print "<td class='hidden-xs hidden-sm hidden-md'>".$circuit->{$field['name']}."</td>";
-                    }
-                }
-            }
-
             print '</tr>'. "\n";
         }
 
         print '</table>';
     }
-
 }

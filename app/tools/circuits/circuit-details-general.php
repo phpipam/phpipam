@@ -55,7 +55,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			$circuit->{$field['name']} = $Result->create_links ($circuit->{$field['name']});
 
 			print "<tr>";
-			print "<th>$field[name]</th>";
+			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			print "<td>".$circuit->{$field['name']}."</d>";
 			print "</tr>";
 		}

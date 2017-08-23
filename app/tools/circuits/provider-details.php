@@ -68,7 +68,7 @@ if($provider!==false) {
     			$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']});
 
     			print "<tr>";
-    			print "<th>$field[name]</th>";
+    			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
     			print "<td>".$provider->{$field['name']}."</d>";
     			print "</tr>";
     		}
@@ -126,7 +126,7 @@ if($provider!==false) {
 		if(sizeof(@$custom_fields_circuits) > 0) {
 			foreach($custom_fields_circuits as $field) {
 				if(!in_array($field['name'], $hidden_circuit_fields)) {
-					print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
+					print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 					$colspanCustom++;
 				}
 			}

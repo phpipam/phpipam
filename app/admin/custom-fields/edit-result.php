@@ -80,4 +80,3 @@ else {
 	if(!$Admin->update_custom_field_definition($_POST)) { $Result->show("danger",  _("Failed to $_POST[action] field"), true); }
 	else 												{ $Result->show("success", _("Field $_POST[action] success"), true); }
 }
-?>

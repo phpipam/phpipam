@@ -21,6 +21,7 @@
         + Updates hostnames via resolveIPaddresses.php script (if parameter set for subnet);
         + On-the-fly empty hostname update if resolved (if parameter set for subnet and enabled globally);
         + Added this infor to tools > scanned networks;
+    + Added custom_ prefix to custom field names to avoid duplication with custom fields (#1387);
 
     Translations:
     ----------------------------

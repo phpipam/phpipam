@@ -38,7 +38,7 @@ print "	<th>"._('Subnet')."</th>";
 # custom
 if(isset($visible_fields)) {
 foreach ($visible_fields as $f) {
-print "	<th class='hidden-xs hidden-sm hidden-md'>$f[name]</th>";
+print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($f['name'])."</th>";
 }
 }
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Used')."</th>";

@@ -38,7 +38,7 @@ $result_circuits_p = $Tools->search_circuit_providers ($searchTerm, $custom_circ
 	if(sizeof($custom_circuit_fields) > 0) {
 		foreach($custom_circuit_fields as $field) {
 			if(!in_array($field['name'], $hidden_circuit_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -103,7 +103,7 @@ if(sizeof($result_circuits) == 0) {
 	if(sizeof($custom_circuit_p_fields) > 0) {
 		foreach($custom_circuit_p_fields as $field) {
 			if(!in_array($field['name'], $hidden_circuit_p_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}

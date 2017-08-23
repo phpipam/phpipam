@@ -27,7 +27,7 @@ RewriteEngine on
 # passthroughs
 RewriteRule ^api/.$ - [L]
 RewriteRule ^index.php$ - [L]
-RewriteRule ^(css|js|site|test)/.*$ - [L]
+RewriteRule ^(css|js|app|test)/.*$ - [L,QSA]
 RewriteRule app/login/captcha/captchashow.php - [L]
 
 # redirect errors

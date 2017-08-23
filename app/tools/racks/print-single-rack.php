@@ -109,7 +109,7 @@ else {
                 // create links
                 $rack->{$key} = $Result->create_links($rack->{$key});
                 print "<tr>";
-                print " <th>$key</th>";
+                print " <th>".$Tools->print_custom_field_name ($key)."</th>";
                 print " <td style='vertical-align:top;align:left;'>".$rack->{$key}."</td>";
                 print "</tr>";
             }
