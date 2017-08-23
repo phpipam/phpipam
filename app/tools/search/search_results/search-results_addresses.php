@@ -64,7 +64,7 @@ if(sizeof($result_addresses) > 0) {
 
 		# check permission
 		$subnet_permission  = $Subnets->check_permission($User->user, $line['subnetId']);
-		if($subnet_permission > 0) {
+		if($subnet_permission > 0 && $Addresses->validate_address($line['ip_addr'])) {
 			$n++;
 
 			//get the Subnet details

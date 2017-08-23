@@ -1677,6 +1677,10 @@ class Addresses extends Common_functions {
 		$this->initialize_pear_net_IPv4 ();
 		$this->initialize_pear_net_IPv6 ();
 
+		// no null
+		if($this->transform_address ($address, "decimal")==0) {
+			return false;
+		}
 		// transform
 		$address = $this->transform_address ($address, "dotted");
 		// ipv6
