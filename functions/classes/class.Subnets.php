@@ -286,6 +286,9 @@ class Subnets extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
+		# remove from NAT
+		$this->remove_subnet_nat_items ($id, true);
+
 		# write changelog
 		$this->Log->write_changelog('subnet', "delete", 'success', $old_subnet, array());
 		# ok
@@ -397,10 +400,12 @@ class Subnets extends Common_functions {
 
 			//get all address ids
 			$ids = array ();
-			foreach($addresses as $ip) {
-				if($ip->subnetId == $m) {
-    				if(!isset($ids)) $ids = array();
-					$ids[] = $ip->id;
+			if(is_array($addresses)) {
+				foreach($addresses as $ip) {
+					if($ip->subnetId == $m) {
+	    				if(!isset($ids)) $ids = array();
+						$ids[] = $ip->id;
+					}
 				}
 			}
 
@@ -420,6 +425,60 @@ class Subnets extends Common_functions {
 
 		# result
 		return true;
+	}
+
+	/**
+	 * Remove item from nat when item is removed
+	 *
+	 * @method remove_nat_item
+	 *
+	 * @param  int $obj_id
+	 * @param  bool $print
+	 *
+	 * @return void
+	 */
+	public function remove_subnet_nat_items ($obj_id = 0, $print = true) {
+		# set found flag for returns
+		$found = 0;
+		# fetch all nats
+		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# loop and check for object ids
+		if(sizeof($all_nats)>0) {
+			# init admin object
+			$Admin = new Admin ($this->Database, false);
+			# loop
+			foreach ($all_nats as $nat) {
+			    # remove item from nat
+			    $s = json_decode($nat->src, true);
+			    $d = json_decode($nat->dst, true);
+
+			    if(is_array($s['subnets']))
+			    $s['subnets'] = array_diff($s['subnets'], array($obj_id));
+			    if(is_array($d['subnets']))
+			    $d['subnets'] = array_diff($d['subnets'], array($obj_id));
+
+			    # save back and update
+			    $src_new = json_encode(array_filter($s));
+			    $dst_new = json_encode(array_filter($d));
+
+			    # update only if diff found
+			    if($s!=$src_new || $d!=$dst_new) {
+			    	$found++;
+
+				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+				    	if($print) {
+					        $this->Result->show("success", "Subnet removed from NAT", false);
+						}
+				    }
+				}
+			}
+		}
+		# return
+		return $found;
 	}
 
 
@@ -553,7 +612,7 @@ class Subnets extends Common_functions {
 		# null
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
 		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `pingSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009;", array($agentId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` where `scanAgent` = ? and `pingSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -767,7 +826,7 @@ class Subnets extends Common_functions {
 		// agent not set false
 		if (is_null($agentId) || !is_numeric($agentId)) { return false; }
 		// set query
-		$query = "select * from `subnets` where `scanAgent` = ? and ( `pingSubnet`=1 or `discoverSubnet`=1 );";
+		$query = "select * from `subnets` where `scanAgent` = ? and ( `pingSubnet`=1 or `discoverSubnet`=1 or `resolveDNS`=1 );";
 		# fetch
 		try { $subnets = $this->Database->getObjectsQuery($query, array($agentId)); }
 		catch (Exception $e) {
@@ -1232,10 +1291,10 @@ class Subnets extends Common_functions {
             $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
 
             // slaves fix for reducing subnet and broadcast address
-			if($ip_version=="IPv4" && !$has_slaves && !$strict_mode) {
+			if($ip_version=="IPv4" && !$strict_mode) {
 				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
-			if($ip_version=="IPv6" && !$has_slaves && !$strict_mode) {
+			if($ip_version=="IPv6" && !$strict_mode) {
 				if($subnet->mask<=126) { $$out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 
@@ -1677,30 +1736,32 @@ class Subnets extends Common_functions {
 		$all_folders = $this->fetch_multiple_objects ("subnets", "isFolder", "1");
 		# check
 		if($all_folders!==false) {
-			// remove ones not in same section
-			foreach($all_folders as $k=>$folder) {
-				if ($folder->sectionId!=$sectionId) {
-					unset($all_folders[$k]);
+			if(is_array($all_folders)) {
+				// remove ones not in same section
+				foreach($all_folders as $k=>$folder) {
+					if ($folder->sectionId!=$sectionId) {
+						unset($all_folders[$k]);
+					}
 				}
-			}
-			// do checks
-			if(sizeof($all_folders)>0) {
-				foreach ($all_folders as $folder) {
-					// fetch all subnets
-					$folder_subnets = $this->fetch_subnet_slaves ($folder->id);
-					// only check if VRF Ids match
-					if ($folder_subnets!==false) {
-						foreach ($folder_subnets as $existing_subnet) {
-				            //only check if vrfId's match
-				            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
-					            // ignore folders!
-					            if($existing_subnet->isFolder!=1) {
-						            # check overlapping
-									if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-										 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+				// do checks
+				if(sizeof($all_folders)>0) {
+					foreach ($all_folders as $folder) {
+						// fetch all subnets
+						$folder_subnets = $this->fetch_subnet_slaves ($folder->id);
+						// only check if VRF Ids match
+						if (is_array($folder_subnets)) {
+							foreach ($folder_subnets as $existing_subnet) {
+					            //only check if vrfId's match
+					            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+						            // ignore folders!
+						            if($existing_subnet->isFolder!=1) {
+							            # check overlapping
+										if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
+											 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+										}
 									}
-								}
-				            }
+					            }
+							}
 						}
 					}
 				}
@@ -1796,13 +1857,12 @@ class Subnets extends Common_functions {
 	 *		- mastersubnetid we need for new checks to permit overlapping of nested clients
 	 *
 	 * @access public
-	 * @param int $sectionId
 	 * @param CIDR $new_subnet
 	 * @param int $vrfId (default: 0)
 	 * @param int $masterSubnetId (default: 0)
 	 * @return string|false
 	 */
-	public function verify_nested_subnet_overlapping ($sectionId, $new_subnet, $vrfId = 0, $masterSubnetId = 0) {
+	public function verify_nested_subnet_overlapping ($new_subnet, $vrfId = 0, $masterSubnetId = 0) {
     	# fetch all slave subnets
     	$slave_subnets = $this->fetch_subnet_slaves ($masterSubnetId);
 		# fix null vrfid
@@ -1810,16 +1870,18 @@ class Subnets extends Common_functions {
 
 		// loop
 		if ($slave_subnets!==false) {
-			foreach ($slave_subnets as $ss) {
-    			// no folders
-    			if($ss->isFolder!=1) {
-        			if($ss->vrfId==$vrfId || $ss->vrfId==null) {
-        				if($this->verify_overlapping ( $new_subnet, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
-        					return _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet).'/'.$ss->mask;
-        				}
-        			}
+			if(is_array ($slave_subnets)) {
+				foreach ($slave_subnets as $ss) {
+	    			// no folders
+	    			if($ss->isFolder!=1) {
+	        			if($ss->vrfId==$vrfId || $ss->vrfId==null) {
+	        				if($this->verify_overlapping ( $new_subnet, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
+	        					return _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet).'/'.$ss->mask;
+	        				}
+	        			}
 
-    			}
+	    			}
+				}
 			}
 		}
         # default false - does not overlap
@@ -1988,11 +2050,13 @@ class Subnets extends Common_functions {
 						//fetch all slave subnets and validate
 						$slave_subnets = $this->fetch_subnet_slaves ($parent_subnet->id);
 						if ($slave_subnets!==false) {
-							foreach ($slave_subnets as $ss) {
-								// not self
-								if ($ss->id != $subnetId) {
-									if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
-										$this->Result->show("danger", _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet)."/".$ss->mask, true);
+							if(is_array($slave_subnets)) {
+								foreach ($slave_subnets as $ss) {
+									// not self
+									if ($ss->id != $subnetId) {
+										if($this->verify_overlapping ( $this->transform_to_dotted($subnet)."/".$mask, $this->transform_to_dotted($ss->subnet)."/".$ss->mask)) {
+											$this->Result->show("danger", _("Subnet overlaps with")." ".$this->transform_to_dotted($ss->subnet)."/".$ss->mask, true);
+										}
 									}
 								}
 							}
@@ -2159,12 +2223,14 @@ class Subnets extends Common_functions {
 		$nested_subnets = $this->fetch_subnet_slaves ($subnet_old->id);
 		if($nested_subnets!==false) {
 			//loop through all current slaves and check
-			foreach($nested_subnets as $nested_subnet) {
-				//check all new
-				foreach($newsubnets as $new_subnet) {
-					$new_subnet = (object) $new_subnet;
-					if($this->verify_overlapping ($this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask, $this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask)===true) {
-						$this->Result->show("danger", _("Subnet overlapping - ").$this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask." overlaps with ".$this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask, true);
+			if(is_array($nested_subnets)) {
+				foreach($nested_subnets as $nested_subnet) {
+					//check all new
+					foreach($newsubnets as $new_subnet) {
+						$new_subnet = (object) $new_subnet;
+						if($this->verify_overlapping ($this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask, $this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask)===true) {
+							$this->Result->show("danger", _("Subnet overlapping - ").$this->transform_to_dotted($new_subnet->subnet)."/".$new_subnet->mask." overlaps with ".$this->transform_to_dotted($nested_subnet->subnet)."/".$nested_subnet->mask, true);
+						}
 					}
 				}
 			}
@@ -2523,6 +2589,7 @@ class Subnets extends Common_functions {
                 where `i`.`subnetId`=`s`.`id` and `s`.`vlanId`=`v`.`vlanId` and LOWER(REPLACE(REPLACE(`mac`,\".\",\"\"),\":\", \"\")) = ? and `i`.`id`!= ?;";
         }
         else {
+        	$vlan_details = false;
             // set query
             $query = "select
                 `s`.`sectionId`,`v`.`number`,`i`.`id`,
@@ -3954,7 +4021,8 @@ class Subnets extends Common_functions {
 	 */
 	private function query_arin ($subnet) {
 		// remove netmask
-		$subnet = reset(explode("/", $subnet));
+		$subnet_arr = explode("/", $subnet);
+		$subnet = reset($subnet_arr);
 		// fetch
 		$arin_result = $this->curl_fetch ("arin", null, $subnet);
 
@@ -4034,6 +4102,10 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	public function ripe_fetch_subnets ($as) {
+		// numeric check
+		if(!is_numeric($as)) {
+			$this->Result->show("danger", "Invalid AS", false);
+		}
 		//open connection
 		$ripe_connection = fsockopen("whois.ripe.net", 43, $errno, $errstr, 5);
 		if(!$ripe_connection) {

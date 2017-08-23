@@ -531,7 +531,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			if ($_POST['action']=="add")	{ $address[$field['name']] = $field['Default']; }
 
 			print '<tr>'. "\n";
-			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. $Tools->print_custom_field_name ($field['name']) .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type

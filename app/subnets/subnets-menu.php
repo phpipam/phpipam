@@ -139,5 +139,3 @@ if($section_permission == 3) {
 	print "	</span>";
 	print "</div>";
 }
-
-?>

@@ -60,5 +60,3 @@ if (sizeof($addresses)==0 && !$slaves) {
     print "<hr>";
     $Result->show("info alert-absolute", _("Folder is empty"), false);
 }
-
-?>

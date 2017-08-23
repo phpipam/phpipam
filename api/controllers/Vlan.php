@@ -14,7 +14,7 @@ class Vlan_controller extends Common_api_functions {
      * @var mixed
      * @access protected
      */
-    protected $vlans_controller;
+    protected $Vlans_controller;
 
 	/**
 	 * __construct function
@@ -29,7 +29,7 @@ class Vlan_controller extends Common_api_functions {
 		// include
 		require("Vlans.php");
 		// subnets
-		$this->Vlans_controller = new vlans_controller ($Database, $Tools, $params, $Response);
+		$this->Vlans_controller = new Vlans_controller ($Database, $Tools, $params, $Response);
 	}
 
 

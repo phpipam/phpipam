@@ -56,7 +56,7 @@ else {
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
-				print "	<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -109,25 +109,8 @@ else {
 	   		foreach($custom_fields as $field) {
 		   		# hidden
 		   		if(!in_array($field['name'], $hidden_fields)) {
-
-					// create links
-					$vlan->{$field['name']} = $Result->create_links ($vlan->{$field['name']}, $field['type']);
-
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
-					//booleans
-					if($field['type']=="tinyint(1)")	{
-						if($vlan->{$field['name']} == "0")		{ print _("No"); }
-						elseif($vlan->{$field['name']} == "1")	{ print _("Yes"); }
-					}
-					//text
-					elseif($field['type']=="text") {
-						if(strlen($vlan->{$field['name']})>0)		{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vlan->{$field['name']})."'>"; }
-						else									{ print ""; }
-					}
-					else {
-						print $vlan->{$field['name']};
-
-					}
+					$Tools->print_custom_field ($field['type'], $vlan->{$field['name']});
 					print "</td>";
 				}
 	    	}

@@ -118,6 +118,19 @@ $(document).ready(function() {
 	<td class="info2"><?php print _('Select default language'); ?></td>
 </tr>
 
+
+<!-- Policy propagation -->
+<tr>
+	<td class="title"><?php print _('Default permission propagation'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="permissionPropagate" <?php if($settings['permissionPropagate'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Set subnet / section permission propagate button to on by default'); ?>
+	</td>
+</tr>
+
+
 <!-- Mex session duration -->
 <tr>
 	<td class="title"><?php print _('Inactivity timeout'); ?></td>
@@ -336,6 +349,17 @@ $(document).ready(function() {
 	</td>
 	<td class="info2">
 		<?php print _('Enable or disable rack drawing module'); ?>
+	</td>
+</tr>
+
+<!-- Circuits -->
+<tr>
+	<td class="title"><?php print _('Circuits module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableCircuits" <?php if($settings['enableCircuits'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Circuits module'); ?>
 	</td>
 </tr>
 

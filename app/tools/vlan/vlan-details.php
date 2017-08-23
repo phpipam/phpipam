@@ -71,7 +71,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 			$vlan[$key] = $Result->create_links($vlan[$key]);
 
 			print "<tr>";
-			print "	<th>$key</th>";
+			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 			print "	<td style='vertical-align:top;align:left;'>$vlan[$key]</td>";
 			print "</tr>";
 		}
@@ -195,5 +195,3 @@ else {
 
 	print '</table>'. "\n";
 }
-
-?>

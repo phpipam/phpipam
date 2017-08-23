@@ -55,7 +55,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 		foreach($cfields as $key=>$field) {
 			if(strlen($folder[$key]) > 0) {
 			print "<tr>";
-			print "	<th>$key</th>";
+			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 			print "	<td>";
 				# booleans
 				if($field['type']=="tinyint(1)")	{

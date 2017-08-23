@@ -42,7 +42,7 @@ if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
 	# captcha check
 	else {
 		# check captcha
-		if(strtolower($_POST['captcha'])!=strtolower($_SESSION['securimage_code_value'])) {
+		if(strtolower($_POST['captcha'])!=strtolower($_SESSION['securimage_code_value']['default'])) {
 			$Result->show("danger", _("Invalid security code"), true);
 		}
 	}

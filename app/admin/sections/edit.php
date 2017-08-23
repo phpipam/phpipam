@@ -224,7 +224,8 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 			<td><?php print _('Delegate'); ?></td>
 			<td colspan="2">
 			<div class="checkbox">
-				<input type="checkbox" name="delegate" class="input-switch" value="1" checked="checked">
+	        	<?php $checked = $User->settings->permissionPropagate=="1" ? "checked" : ""; ?>
+				<input type="checkbox" name="delegate" class="input-switch" value="1" <?php print $checked; ?>>
 			</div>
 			</td>
 		</tr>

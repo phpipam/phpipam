@@ -122,7 +122,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
     		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
-			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 			print "	<td>".$custom_input['field']."</td>";
 			print "</tr>";
 		}

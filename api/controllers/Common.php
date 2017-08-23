@@ -118,6 +118,14 @@ class Common_api_functions {
 	 */
 	protected $Subnets;
 
+	/**
+	 * App object - will be passed by index.php
+	 * to provide app detauls
+	 *
+	 * @var false|object
+	 */
+	public $app = false;
+
 
 
 
@@ -236,10 +244,10 @@ class Common_api_functions {
 	 *	parameters: filter_by, filter_value
 	 *
 	 * @access protected
-	 * @param mixed $result
+	 * @param array $result
 	 * @return void
 	 */
-	protected function filter_result ($result) {
+	protected function filter_result ($result = array ()) {
     	// remap keys before applying filter
     	$result = $this->remap_keys ($result, false);
 		// validate
@@ -348,12 +356,15 @@ class Common_api_functions {
 				// custom links
 				$custom_links = $this->define_links ($controller);
 				if($custom_links!==false) {
-					foreach($this->define_links ($controller) as $link=>$method) {
-						// self only !
-						if ($link=="self") {
-						$result[$k]->links[$m] = new stdClass ();
-						$result[$k]->links[$m]->rel  	= $link;
-						$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
+					$links_arr = $this->define_links ($controller);
+					if(is_array($links_arr)) {
+						foreach($this->define_links ($controller) as $link=>$method) {
+							// self only !
+							if ($link=="self") {
+							$result[$k]->links[$m] = new stdClass ();
+							$result[$k]->links[$m]->rel  	= $link;
+							$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
+							}
 						}
 					}
 				}
@@ -375,17 +386,20 @@ class Common_api_functions {
 				// custom links
 				$custom_links = $this->define_links ($controller);
 				if($custom_links!==false) {
-					foreach($this->define_links ($controller) as $link=>$method) {
-						$result->links[$m] = new stdClass ();
-						$result->links[$m]->rel  	= $link;
-						// self ?
-						if ($link=="self")
-						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
-						else
-						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
-						$result->links[$m]->methods = $method;
-						// next
-						$m++;
+					$links_arr = $this->define_links ($controller);
+					if(is_array($links_arr)) {
+						foreach($this->define_links ($controller) as $link=>$method) {
+							$result->links[$m] = new stdClass ();
+							$result->links[$m]->rel  	= $link;
+							// self ?
+							if ($link=="self")
+							$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
+							else
+							$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
+							$result->links[$m]->methods = $method;
+							// next
+							$m++;
+						}
 					}
 				}
 
@@ -600,10 +614,10 @@ class Common_api_functions {
 	public function validate_mac ($mac) {
     	// first put it to common format (1)
     	$mac = $this->reformat_mac_address ($mac);
-    	// we permit empty
-        if (strlen($mac)==0)                                                            { return true; }
-    	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1)   { return false; }
-    	else                                                                            { return true; }
+    	// init common class
+    	$Common = new Common_functions;
+    	// check
+    	return $Common->validate_mac ($mac);
 	}
 
 	/**
@@ -786,14 +800,16 @@ class Common_api_functions {
 			// params
 			$result_remapped = new StdClass ();
 			// search and replace
-			foreach($result as $k=>$v) {
-				if(array_key_exists($k, $this->keys)) {
-					// replace
-					$key = $this->keys[$k];
-					$result_remapped->{$key} = $v;
-				}
-				else {
-					$result_remapped->{$k} = $v;
+			if(is_array($result) || is_object($result)) {
+				foreach($result as $k=>$v) {
+					if(array_key_exists($k, $this->keys)) {
+						// replace
+						$key = $this->keys[$k];
+						$result_remapped->{$key} = $v;
+					}
+					else {
+						$result_remapped->{$k} = $v;
+					}
 				}
 			}
 		}
@@ -992,5 +1008,3 @@ class Common_api_functions {
 		}
 	}
 }
-
-?>

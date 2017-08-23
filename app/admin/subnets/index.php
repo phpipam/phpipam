@@ -44,7 +44,7 @@ if(sizeof($sections) > 0) {
 		foreach($custom_fields as $field) {
 			# hidden?
 			if(!in_array($field['name'], $hidden_custom_fields)) {
-				print "	<th class='hidden-xs hidden-sm hidden-md'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -107,4 +107,3 @@ if(sizeof($sections) > 0) {
 	# end master table
 	print "</table>";
 }
-?>

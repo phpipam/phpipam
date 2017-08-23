@@ -34,16 +34,6 @@ class Admin extends Common_functions {
 	public $lastId = null;
 
 	/**
-	 * flag is user is admin
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access private
-	 */
-	private $isadmin = false;
-
-	/**
 	 * if admin user is required to connect. Can be overridden
 	 *
 	 * (default value: true)
@@ -155,7 +145,7 @@ class Admin extends Common_functions {
     		# save settings
     		$this->settings = $this->User->settings;
     		# if required die !
-    		if($this->User->is_admin(false)!==true && $this->admin_required==true) {
+    		if($this->User->is_admin(false)!==true && $this->admin_required===true) {
     			// popup ?
     			if(@$_SERVER['HTTP_X_REQUESTED_WITH'] == "XMLHttpRequest") 	{ $this->Result->show("danger", _("Administrative privileges required"),true, true); }
     			else 														{ $this->Result->show("danger", _("Administrative privileges required"),true); }
@@ -185,11 +175,11 @@ class Admin extends Common_functions {
 	 *
 	 * @param string $table
 	 * @param string $action
-	 * @param string|array $id
-	 * @param mixed $values
+	 * @param string|array $field
+	 * @param array $values
 	 * @return void
 	 */
-	public function object_modify ($table, $action=null, $field="id", $values) {
+	public function object_modify ($table, $action=null, $field="id", $values = array ()) {
 		# strip tags
 		$values = $this->strip_input_tags ($values);
 
@@ -301,7 +291,7 @@ class Admin extends Common_functions {
 		# execute
 		try { $this->Database->deleteRow($table, $field, $id); }
 		catch (Exception $e) {
-			$this->Log->write( "$table object $values[$id] delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2);
+			$this->Log->write( "$table object $id delete", "Failed to delete object $field=$id in $table<hr>".$e->getMessage(), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -359,7 +349,7 @@ class Admin extends Common_functions {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
 		else {
-			try { $res = $this->Database->emptyTable($table); }
+			try { $this->Database->emptyTable($table); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
@@ -390,6 +380,8 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function groups_parse ($group_ids) {
+		$out = array ();
+		// check
 		if(sizeof($group_ids)>0) {
 	    	foreach($group_ids as $g_id) {
 	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
@@ -397,7 +389,7 @@ class Admin extends Common_functions {
 	    	}
 	    }
 	    # return array of groups
-	    return isset($out) ? $out : array();
+	    return $out;
 	}
 
 
@@ -412,6 +404,8 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function groups_parse_ids ($group_ids) {
+		$out = array ();
+		// check
 		if(sizeof($group_ids) >0) {
 		    foreach($group_ids as $g_id) {
 	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
@@ -419,7 +413,7 @@ class Admin extends Common_functions {
 	    	}
 	    }
 	    # return array of group ids
-	    return isset($out) ? $out : array();
+	    return $out;
 	}
 
 	/**
@@ -429,17 +423,20 @@ class Admin extends Common_functions {
 	 * @return array of user ids
 	 */
 	public function group_fetch_users ($group_id) {
+		$out = array ();
 		# get all users
 		$users = $this->fetch_all_objects("users");
 		# check if $gid in array
-		foreach($users as $u) {
-			$group_array = json_decode($u->groups, true);
-			$group_array = $this->groups_parse($group_array);
+		if($users!==false) {
+			foreach($users as $u) {
+				$group_array = json_decode($u->groups, true);
+				$group_array = $this->groups_parse($group_array);
 
-			if(sizeof($group_array)>0) {
-				foreach($group_array as $group) {
-					if(in_array($group_id, $group)) {
-						$out[] = $u->id;
+				if(sizeof($group_array)>0) {
+					foreach($group_array as $group) {
+						if(in_array($group_id, $group)) {
+							$out[] = $u->id;
+						}
 					}
 				}
 			}
@@ -456,14 +453,17 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function group_fetch_missing_users ($group_id) {
+		$out = array ();
 		# get all users
 		$users = $this->fetch_all_objects("users");
 
 		# check if $gid in array
-		foreach($users as $u) {
-			if($u->role != "Administrator") {
-				$g = json_decode($u->groups, true);
-				if(!@in_array($group_id, $g)) { $out[] = $u->id; }
+		if($users!==false) {
+			foreach($users as $u) {
+				if($u->role != "Administrator") {
+					$g = json_decode($u->groups, true);
+					if(!@in_array($group_id, $g)) { $out[] = $u->id; }
+				}
 			}
 		}
 		# return
@@ -550,17 +550,19 @@ class Admin extends Common_functions {
 		# get all users
 		$users = $this->fetch_all_objects("users");
 		# check if $gid in array
-		foreach($users as $u) {
-			$g  = json_decode($u->groups, true);
-			$go = $g;
-			$g  = $this->groups_parse($g);
-			# check
-			if(sizeof($g)>0) {
-				foreach($g as $gr) {
-					if(in_array($gid, $gr)) {
-						unset($go[$gid]);
-						$ng = json_encode($go);
-						$this->update_user_groups($u->id,$ng);
+		if($users!==false) {
+			foreach($users as $u) {
+				$g  = json_decode($u->groups, true);
+				$go = $g;
+				$g  = $this->groups_parse($g);
+				# check
+				if(sizeof($g)>0) {
+					foreach($g as $gr) {
+						if(in_array($gid, $gr)) {
+							unset($go[$gid]);
+							$ng = json_encode($go);
+							$this->update_user_groups($u->id,$ng);
+						}
 					}
 				}
 			}
@@ -624,7 +626,7 @@ class Admin extends Common_functions {
 		# if some exist update
 		if($count>0) {
 			# update
-		    try { $cnt = $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", array($search, $replace)); }
+		    try { $this->Database->runQuery("update `ipaddresses` set `$field` = replace(`$field`, ?, ?);", array($search, $replace)); }
 		    catch (Exception $e) {
 			    $this->Result->show("danger alert-absolute", _("Error: ").$e->getMessage(), true);
 		    }
@@ -680,16 +682,10 @@ class Admin extends Common_functions {
 	    $field['action'] 		= $this->strip_input_tags($field['action']);
 	    $field['Comment'] 		= $this->strip_input_tags($field['Comment']);
 
-	    # set update query
-	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[name]`;"; }
-	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER IGNORE TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT $field[fieldDefault] NOT NULL COMMENT '$field[Comment]';"; }
-	    else if ($field['action']=="edit") 							{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT $field[fieldDefault] COMMENT '$field[Comment]';"; }
-	    else if ($field['action']=="add"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT $field[fieldDefault] NOT NULL COMMENT '$field[Comment]';"; }
-	    else if ($field['action']=="add")							{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT $field[fieldDefault] NULL COMMENT '$field[Comment]';"; }
-	    else {
-		    return false;
-	    }
-
+	    # add name prefix to distinguish custom fields
+	    if($field['action']=="edit" || $field['action']=="add") {
+		    if(strpos($field['name'], "custom_")!==0) { $field['name'] = "custom_".$field['name']; }
+		}
 
 	    # set update query
 	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[name]`;"; }

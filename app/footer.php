@@ -1,11 +1,7 @@
 <table class="donate">
 <tr>
 	<td>
-		<?php
-		// set href
-		$href = REVISION=="000" ? "http://phpipam.net" : "http://phpipam.net";
-		?>
-		<a href="<?php print $href; ?>">phpIPAM IP address management <?php print '[v'. VERSION. ']'; ?><?php if(REVISION > 0) { print " rev".REVISION; } ?></a>
+		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?><?php if(REVISION > 0) { print " rev".REVISION; } ?></a>
 	</td>
 
 	<?php

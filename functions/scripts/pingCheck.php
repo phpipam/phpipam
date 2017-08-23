@@ -38,7 +38,9 @@ $Database 	= new Database_PDO;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
+$Admin		= new Admin ($Database, false);
 $Scan		= new Scan ($Database);
+$DNS		= new DNS ($Database);
 $Result		= new Result();
 
 // set exit flag to true
@@ -71,7 +73,7 @@ $nowdate = date ("Y-m-d H:i:s");
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
+if(!PingThread::available()) 					{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -95,7 +97,12 @@ foreach($scan_subnets as $s) {
 		$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
 		//set array for fping
 		if($Scan->icmp_type=="fping")	{
-			$subnets[] = array("id"=>$s->id, "cidr"=>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask);
+			$subnets[] = array(
+								"id"         =>$s->id,
+								"cidr"       =>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask,
+								"nsid"       =>$s->nameserverId,
+								"resolveDNS" =>$s->resolveDNS
+			                   );
 		}
 		//save addresses
 		if(sizeof($subnet_addresses)>0) {
@@ -104,11 +111,33 @@ foreach($scan_subnets as $s) {
 				if($a->excludePing!=1) {
 					//create different array for fping
 					if($Scan->icmp_type=="fping")	{
-						$addresses2[$s->id][$a->id] = array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen, "state"=>$a->state);	//used for status check
-						$addresses[$s->id][$a->id]  = $a->ip_addr;																												//used for alive check
+						$addresses2[$s->id][$a->id] = array(
+															"id"          =>$a->id,
+															"ip_addr"     =>$a->ip_addr,
+															"description" =>$a->description,
+															"dns_name"    =>$a->dns_name,
+															"subnetId"    =>$a->subnetId,
+															"lastSeenOld" =>$a->lastSeen,
+															"lastSeen"    =>$a->lastSeen,
+															"state"       =>$a->state,
+															"resolveDNS"  =>$s->resolveDNS,
+															"nsid"        =>$s->nsid
+															);
+						$addresses[$s->id][$a->id]  = $a->ip_addr;
 					}
 					else {
-						$addresses[] 		 		= array("id"=>$a->id, "ip_addr"=>$a->ip_addr, "description"=>$a->description, "dns_name"=>$a->dns_name, "subnetId"=>$a->subnetId, "lastSeenOld"=>$a->lastSeen, "lastSeen"=>$a->lastSeen, "state"=>$a->state);
+						$addresses[] 		 		= array(
+															"id"          =>$a->id,
+															"ip_addr"     =>$a->ip_addr,
+															"description" =>$a->description,
+															"dns_name"    =>$a->dns_name,
+															"subnetId"    =>$a->subnetId,
+															"lastSeenOld" =>$a->lastSeen,
+															"lastSeen"    =>$a->lastSeen,
+															"state"       =>$a->state,
+															"resolveDNS"  =>$s->resolveDNS,
+															"nsid"        =>$s->nsid
+						                          			);
 					}
 				}
 			}
@@ -171,7 +200,7 @@ if($Scan->icmp_type=="fping") {
 
 	//now we must remove all non-existing hosts
 	foreach($subnets as $sk=>$s) {
-		if(sizeof(@$s['result'])>0 && isset($addresses[$s['id']])) {
+		if(sizeof(@$s['result'])>0 && sizeof($addresses[$s['id']])>0) {
 			//loop addresses
 			foreach($addresses[$s['id']] as $ak=>$a) {
 				//offline host
@@ -189,6 +218,18 @@ if($Scan->icmp_type=="fping") {
                     $address_change[] = $addresses2[$s['id']][$ak];
                     //update status
                     $Scan->ping_update_lastseen ($addresses2[$s['id']][$ak]['id'], $nowdate);
+				}
+
+		        //resolve hostnames
+				if($subnets[$sk]['resolveDNS']=="1") {
+					$old_hostname_save = $a['dns_name'];	// save old hostname to detect change
+					$old_hostname = $config['resolve_emptyonly']===false ? false : $addresses2[$s['id']][$ak]['dns_name'];
+			        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($addresses2[$s['id']][$ak]['ip_addr']), $old_hostname, true, $subnets[$sk]['nsid']);
+					if($hostname['class']=="resolved") {
+						if ($hostname['name']!=$old_hostname_save) {
+							$Addresses->update_address_hostname ($Subnets->transform_to_dotted($addresses2[$s['id']][$ak]['ip_addr']), $addresses2[$s['id']][$ak]['id'], $hostname['name']);
+						}
+					}
 				}
 			}
 		}
@@ -239,8 +280,10 @@ else {
 	//update statuses for online
 
 	# re-initialize classes
-	$Database = new Database_PDO;
-	$Scan = new Scan ($Database, $Subnets->settings);
+	$Database  = new Database_PDO;
+	$Scan      = new Scan ($Database, $Subnets->settings);
+	$Addresses = new Addresses ($Database);
+
 	// reset debugging
 	$Scan->reset_debugging(false);
 
@@ -248,6 +291,18 @@ else {
 	foreach($addresses as $k=>$a) {
 		if($a['newStatus']==0) {
 			$Scan->ping_update_lastseen ($a['id'], $nowdate);
+		}
+
+        //resolve hostnames
+		if($a['resolveDNS']=="1") {
+			$old_hostname_save = $a['dns_name'];	// save old hostname to detect change
+			$old_hostname = $config['resolve_emptyonly']===false ? false : $a['dns_name'];
+	        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($a['ip_addr']), $old_hostname, true, $a['nsid']);
+			if($hostname['class']=="resolved") {
+				if ($hostname['name']!=$old_hostname_save) {
+					$Addresses->update_address_hostname ($Subnets->transform_to_dotted($a['ip_addr']), $a['id'], $hostname['name']);
+				}
+			}
 		}
 	}
 }

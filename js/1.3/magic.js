@@ -1,3 +1,4 @@
+
 /**
  *
  * Javascript / jQuery functions
@@ -241,6 +242,110 @@ $('form.search-form').submit(function() {
 
 
 
+
+/**
+ * Generic open popup scripts
+ *
+ * Generic function to open popup and provide data via POST attributes
+ *
+ * Attributes are:
+ *     - data-script: script to load in popup
+ *     - data-class: popup class/size (400, 700, ...)
+ *     - data-secondary: open secondary popup
+ *     - data-* : all data- parameters will be passed as POST params to requested script
+ *
+ * @return void
+ */
+$(document).on("click", ".open_popup", function () {
+    // defaults
+    var post_data     = {};
+    var secondary     = false;
+    var popup_class   = "400";
+    var target_script = "";
+    // get all data- attributes
+    $.each(this.attributes, function() {
+        // script
+        if(this.name == "data-script") {
+            target_script = this.value;
+        }
+        // class
+        else if(this.name == "data-class") {
+            popup_class = this.value;
+        }
+        // secondary
+        else if(this.name == "data-secondary") {
+            secondary = true;
+        }
+        // parameters
+        else if(this.name.indexOf("data-") !== -1) {
+            post_data[this.name.replace("data-", "")] = this.value;
+        }
+    });
+    // checks
+    if(target_script == "") {
+        showError("Error: Missing target_script");
+    }
+    // load popup
+    else {
+        open_popup (popup_class, target_script, post_data, secondary);
+    }
+    // no reload
+    return false;
+});
+
+
+/**
+ * Generic submit popup script
+ *
+ * It will POST data from provided script and attributes to target
+ * script and display it in target div
+ *
+ *
+ */
+$(document).on("click", ".submit_popup", function () {
+    // defaults
+    var post_data     = {};
+    var reload        = true;
+    var result_div    = "";
+    var target_script = "";
+   // get all data- attributes
+    $.each(this.attributes, function() {
+        // script
+        if(this.name == "data-script") {
+            target_script = this.value;
+        }
+        // class
+        else if(this.name == "data-result_div") {
+            result_div = "#"+this.value;
+        }
+        // secondary
+        else if(this.name == "data-noreload") {
+            reload = false;
+        }
+        // get form parameters
+        else if(this.name == "data-form") {
+            post_data = $('form#'+this.value).serialize ();
+        }
+    });
+    // checks
+    if(target_script == "") {
+        showError("Error: Missing target_script");
+    }
+    else if (result_div == "") {
+        showError("Error: Missing result div parameter");
+    }
+    // load popup
+    else {
+        submit_popup_data (result_div, target_script, post_data, reload)
+    }
+    // no reload
+    return false;
+});
+
+
+
+
+
 /* @dashboard widgets ----------  */
 
 //if dashboard show widgets
@@ -257,16 +362,6 @@ if($('#dashboard').length>0) {
 		});
 	});
 }
-//show add widget pupup
-$(document).on('click','.add-new-widget',function() {
-    showSpinner();
-
-    $.post('app/dashboard/widget-popup.php', function(data) {
-	    $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
-});
 //remove item
 $(document).on('click', "i.remove-widget", function() {
 	$(this).parent().parent().fadeOut('fast').remove();
@@ -887,9 +982,10 @@ function search_execute (loc) {
     var vlans     = $('#'+form_name+' input[name=vlans]').is(":checked") ? "on" : "off";
     var vrf       = $('#'+form_name+' input[name=vrf]').is(":checked") ? "on" : "off";
     var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
+    var circuits  = $('#'+form_name+' input[name=circuits]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
@@ -921,7 +1017,7 @@ $('form#search').submit(function () {
 // search ipaddress override
 $('a.search_ipaddress').click(function() {
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off"}',365);
+    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off"}',365);
 });
 
 //show/hide search select fields
@@ -2276,10 +2372,6 @@ $(document).on("click", "#editDevTypeSubmit", function() {
 //load edit form
 $(document).on("click", ".editRack", function() {
 	open_popup("400", "app/admin/racks/edit.php", {rackid:$(this).attr('data-rackid'), action:$(this).attr('data-action')} );	return false;
-});
-//submit form
-$(document).on("click", "#editRacksubmit", function() {
-    submit_popup_data (".rackManagementEditResult", "app/admin/racks/edit-result.php", $('form#rackManagementEdit').serialize());
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
