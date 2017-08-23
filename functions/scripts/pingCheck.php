@@ -200,7 +200,7 @@ if($Scan->icmp_type=="fping") {
 
 	//now we must remove all non-existing hosts
 	foreach($subnets as $sk=>$s) {
-		if(sizeof(@$s['result'])>0) {
+		if(sizeof(@$s['result'])>0 && sizeof($addresses[$s['id']])>0) {
 			//loop addresses
 			foreach($addresses[$s['id']] as $ak=>$a) {
 				//offline host
