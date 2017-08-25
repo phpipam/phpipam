@@ -145,3 +145,4 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
  * General tweaks
  ******************************/
 $config['logo_width'] = 220;                             // logo width
+$config['requests_public'] = true;                       // Show IP request module on login page

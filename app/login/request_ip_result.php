@@ -13,6 +13,11 @@ $Result 	= new Result ();
 # fetch settings, user is not authenticated !
 $Tools->get_settings();
 
+# disable requests module for public
+if(@$config['requests_public']===false) {
+	$Tools->settings->enableIPrequests = 0;
+}
+
 # requests must be enabled!
 if($Tools->settings->enableIPrequests==1) {
 	# verify email

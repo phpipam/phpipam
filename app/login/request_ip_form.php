@@ -1,3 +1,13 @@
+<?php
+// disable requests module for public
+if(@$config['requests_public']===false) {
+	print "<div id='login' style='padding:20px;padding-bottom:0px;'>";
+	$Result->show("danger", _("Public IP requests are disabled"), false);
+	print "</div>";
+}
+else {
+?>
+
 <div id="login" class="request">
 <form name="requestIP" id="requestIP">
 
@@ -166,5 +176,6 @@ if(is_object($instructions)) {
         print "</div>";
         print "</div>";
     }
+}
 }
 ?>

@@ -12,6 +12,10 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	else                                        { header("Location: ".create_link("dashboard")); }
 	exit();
 }
+// disable requests module for public
+if(@$config['requests_public']===false) {
+	$User->settings->enableIPrequests = 0;
+}
 ?>
 
 <!DOCTYPE HTML>
