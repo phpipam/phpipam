@@ -1370,8 +1370,9 @@ class Common_functions  {
 
 		//booleans
 		if($type=="tinyint(1)")	{
-			if($value)				{ print _("No"); }
-			elseif($value == "1")	{ print _("Yes"); }
+			if($value == "1")			{ print _("Yes"); }
+			elseif(strlen($value)==0) 	{ print "/"; }
+			else						{ print _("No"); }
 		}
 		//text
 		elseif($type=="text") {
