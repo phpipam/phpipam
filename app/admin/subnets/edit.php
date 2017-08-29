@@ -208,7 +208,7 @@ $('.slider').slider().on('slide', function(ev){
     <tr>
         <td class="middle"><?php print _('Description'); ?></td>
         <td>
-            <input type="text" class="form-control input-sm input-w-200" id="field-description" name="description"  placeholder="<?php print _('subnet description'); ?>" value="<?php print @$subnet_old_details['description']; ?>">
+            <input type="text" class="form-control input-sm input-w-200" id="field-description" name="description"  placeholder="<?php print _('subnet description'); ?>" value="<?php print $Tools->strip_xss(@$subnet_old_details['description']); ?>">
         </td>
         <td class="info2"><?php print _('Enter subnet description'); ?></td>
     </tr>

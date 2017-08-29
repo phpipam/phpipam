@@ -51,7 +51,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 		<tr>
 			<td><?php print _('Name'); ?></td>
 			<td colspan="2">
-				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print @$section['name']; ?>" size="30" <?php if ($_POST['action'] == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
+				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($_POST['action'] == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
 				<!-- hidden -->
 				<input type="hidden" name="action" 	value="<?php print $_POST['action']; ?>">
 				<input type="hidden" name="id" 		value="<?php print $_POST['sectionId']; ?>">
@@ -62,7 +62,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 		<tr>
 			<td><?php print _('Description'); ?></td>
 			<td colspan="2">
-				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="description" value="<?php print @$section['description']; ?>" size="30" <?php if ($_POST['action'] == "delete") { print " readonly ";}?> placeholder="<?php print _('Section description'); ?>">
+				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="description" value="<?php print $Admin->strip_xss(@$section['description']); ?>" size="30" <?php if ($_POST['action'] == "delete") { print " readonly ";}?> placeholder="<?php print _('Section description'); ?>">
 			</td>
 		</tr>
 		<!-- Master Subnet -->

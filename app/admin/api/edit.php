@@ -56,7 +56,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('App id'); ?></td>
 	    <td>
-	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print @$api->app_id; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+	    	<input type="text" name="app_id" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_id); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 	        <input type="hidden" name="id" value="<?php print $api->id; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
     		<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -67,7 +67,7 @@ if($_POST['action']!="add") {
 	<!-- code -->
 	<tr>
 	    <td><?php print _('App code'); ?></td>
-	    <td><input type="text" id="appcode" name="app_code" class="form-control input-sm"  value="<?php print @$api->app_code; ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input type="text" id="appcode" name="app_code" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$api->app_code); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
        	<td class="info2"><?php print _('Application code'); ?> <button class="btn btn-xs btn-default" id="regApiKey"><i class="fa fa-random"></i> <?php print _('Regenerate'); ?></button></td>
     </tr>
 
@@ -130,7 +130,7 @@ if($_POST['action']!="add") {
 	<tr>
 	    <td><?php print _('Lock timeout'); ?></td>
 	    <td>
-	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $api->app_lock_wait; ?>">
+	    	<input name="app_lock_wait" class="form-control input-sm input-w-auto" value="<?php print $Admin->strip_xss($api->app_lock_wait); ?>">
 	    </td>
        	<td class="info2"><?php print _('Seconds to wait for transaction lock to clear'); ?></td>
     </tr>
@@ -173,7 +173,7 @@ if($_POST['action']!="add") {
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input type="text" name="app_comment" class="form-control input-sm" value="<?php print @$api->app_comment; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+    		<input type="text" name="app_comment" class="form-control input-sm" value="<?php print $Admin->strip_xss(@$api->app_comment); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>

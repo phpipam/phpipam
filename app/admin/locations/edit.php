@@ -53,7 +53,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $location->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
@@ -78,7 +78,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Address'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="address" value="<?php print $location->address; ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="address" value="<?php print $Tools->strip_xss($location->address); ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
             	<?php print _('or'); ?>
         	</td>
         	<td>
@@ -89,7 +89,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Latitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $location->lat; ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $Tools->strip_xss($location->lat); ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("latitude"); ?></span>
@@ -99,7 +99,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Longitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="long" value="<?php print $location->long; ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="long" value="<?php print $Tools->strip_xss($location->long); ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Longitude"); ?></span>

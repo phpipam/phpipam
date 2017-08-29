@@ -86,7 +86,6 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 <!-- header -->
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('device'); ?></div>
 
-
 <!-- content -->
 <div class="pContent">
 
@@ -97,7 +96,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $device['hostname']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $Tools->strip_xss($device['hostname']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -105,7 +104,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('IP address'); ?></td>
 		<td>
-			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $device['ip_addr']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $Tools->strip_xss($device['ip_addr']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 

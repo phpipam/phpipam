@@ -22,6 +22,7 @@
         + On-the-fly empty hostname update if resolved (if parameter set for subnet and enabled globally);
         + Added this infor to tools > scanned networks;
     + Added custom_ prefix to custom field names to avoid duplication with custom fields (#1387);
+    + Added option to hide IP requests for unauthenticated users on login page (#1394);
 
     Translations:
     ----------------------------
@@ -43,6 +44,10 @@
     + Fixed item not removed from NAT when deleted (#1378);
     + Fixed Error when error_reporting = E_ALL about strict standards when importing IP addresses (#1372);
     + Fixed Apostrophe errors in text custom fields (#1375);
+
+    Security Fixes:
+    ----------------------------
+    + Fixed XSS issues (#1403);
 
 == 1.3
 
