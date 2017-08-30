@@ -108,7 +108,7 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 
 				#locked for writing
 				if($subnet_permission > 1) {
-					if(@$master_subnet['isFolder']==1) {
+					if(@$line['isFolder']=="1") {
 						print "	<td><button class='btn btn-xs btn-default add_folder' data-action='edit'  data-subnetId='$line[id]' data-sectionId='$line[sectionId]' href='#' rel='tooltip' data-container='body'  title='"._('Edit folder details')."'>		<i class='fa fa-gray fa fa-pencil'>  </i></a>";
 					} else {
 						print "	<td><button class='btn btn-xs btn-default edit_subnet' data-action='edit' data-subnetId='$line[id]' data-sectionId='$line[sectionId]' href='#' rel='tooltip' data-container='body'  title='"._('Edit subnet details')."'>		<i class='fa fa-gray fa fa-pencil'>  </i></a>";
