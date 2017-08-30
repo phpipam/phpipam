@@ -1363,10 +1363,10 @@ class Common_functions  {
 	 * @return void
 	 */
 	public function print_custom_field ($type, $value) {
-		// create links
-		$value = $this->create_links ($value, $type);
 		// escape
 		$value = str_replace("'", "&#39;", $value);
+		// create links
+		$value = $this->create_links ($value, $type);
 
 		//booleans
 		if($type=="tinyint(1)")	{
