@@ -42,7 +42,7 @@ $query = "select
 		 where
 			`ip`.`subnetId` = `su`.`id`
 			and `su`.`pingSubnet` = 1
-			and `ip`.`excludePing` != 1
+			and (`ip`.`excludePing` IS NULL or `ip`.`excludePing`!=1 )
 			and
 			(`ip`.`lastSeen` < '$beforetime' and `ip`.`lastSeen` != '0000-00-00 00:00:00' and `ip`.`lastSeen` is not NULL);";
 
