@@ -9,11 +9,10 @@ $User->check_user_session();
 
 # get all custom fields
 $custom_pstn_fields  = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnPrefixes") : array();
-$custom_pstnM_fields = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
+$custom_pstnn_fields = $_REQUEST['pstn']=="on"      ? $Tools->fetch_custom_fields ("pstnNumbers") : array();
 
 $hidden_pstn_fields  = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 $hidden_pstnn_fields = is_array(@$hidden_fields['pstnNumbers']) ? $hidden_fields['pstnNumbers'] : array();
-
 
 # search pstn prefixes
 $result_pstn  = $Tools->search_pstn_refixes($searchTerm, $custom_pstn_fields);
