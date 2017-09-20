@@ -153,7 +153,7 @@ foreach ($data as &$cdata) {
 	# Check if Subnet is provided and valid and link it if it is
 	if ((!empty($cdata['subnet'])) and (!empty($cdata['mask']))) {
 		if (!isset($subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
-			$msg.= "Invalid Subnet."; $action = "error";
+			$msg.= "Invalid Subnet. Confirm that the subnet exists before importing into it."; $action = "error";
 		} else {
 			$cdata['subnetId'] = $subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']]['id'];
 		}
