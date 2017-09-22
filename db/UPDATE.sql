@@ -1,4 +1,9 @@
 /* VERSION 1.1 */
+
+/* Old version only had a VARCHAR(32) password */
+
+ALTER TABLE `users` MODIFY COLUMN `password` CHAR(128) COLLATE utf8_bin DEFAULT NULL ;
+
 /* VERSION 1.11 */
 UPDATE `settings` set `version` = '1.11';
 
