@@ -872,7 +872,8 @@ class Common_functions  {
 		        "split",
 		        "resize",
 		        "move",
-		        "remove"
+		        "remove",
+		        "assign"
 		      );
 	}
 
@@ -1134,13 +1135,20 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function get_latlng_from_address ($address) {
+		// get config
+		include(dirname(__FILE__)."/../../config.php");
         // replace spaces
         $address = str_replace(' ','+',$address);
-        // get grocode
-        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+        // get geocode
+        if(isset($gmaps_api_geocode_key)) {
+	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false&key='.$gmaps_api_geocode_key);
+    	}
+    	else {
+	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+    	}
         $output= json_decode($geocode);
         // return result
-        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng));
+        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng), "error"=>$output->error_message);
 	}
 
     /**

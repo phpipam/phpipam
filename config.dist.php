@@ -107,8 +107,8 @@ $private_subpages = array();
  *  Obtain key: Go to your Google Console (https://console.developers.google.com) and enable "Google Maps JavaScript API"
  *  from overview tab, so go to Credentials tab and make an API key for your project.
  ******************************/
-$gmaps_api_key = "";
-
+$gmaps_api_key         = "";
+$gmaps_api_geocode_key = "";
 
 /**
  * proxy connection details
