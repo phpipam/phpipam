@@ -2289,6 +2289,50 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Fetch parents recursive - generic function
+	 *
+	 * Fetches all parents for specific table in id / parent relations
+	 *
+	 * It will return array, keys will be id's and values as defined in return_field
+	 *
+	 * @param string $table
+	 * @param string $parent_field
+	 * @param string $return_field
+	 * @param int $false
+	 * @param bool $reverse (default: true)
+	 *
+	 * @return array
+	 */
+	public function fetch_parents_recursive ($table, $parent_field, $return_field, $id, $reverse = false) {
+		$parents = array();
+		$root = false;
+
+		while($root === false) {
+			$subd = $this->fetch_object($table, "id", $id);
+
+			if($subd!==false) {
+    			$subd = (array) $subd;
+				# not root yet
+				if(@$subd[$parent_field]!=0) {
+					// array_unshift($parents, $subd[$parent_field]);
+					$parents[$subd['id']] = $subd[$return_field];
+					$id  = $subd[$parent_field];
+				}
+				# root
+				else {
+					$parents[$subd['id']] = $subd[$return_field];
+					$root = true;
+				}
+			}
+			else {
+				$root = true;
+			}
+		}
+		# return array
+		return $reverse ? array_reverse($parents, truetrue) :$parents;
+	}
+
+	/**
 	 * Checks for duplicate number.
 	 *
 	 * @access public
