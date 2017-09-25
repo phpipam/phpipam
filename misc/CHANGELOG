@@ -23,6 +23,7 @@
         + Added this infor to tools > scanned networks;
     + Added custom_ prefix to custom field names to avoid duplication with custom fields (#1387);
     + Added option to hide IP requests for unauthenticated users on login page (#1394);
+    + Added user groups custom fields;
 
     Translations:
     ----------------------------

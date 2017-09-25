@@ -15,6 +15,7 @@ $custom_tables = array(
 						"vlans"            => "VLAN",
 						"vrf"              => "VRF",
 						"users"            => "User",
+						"userGroups"       => "User Group",
 						"devices"          => "Device",
 						"racks"            => "Rack",
 						"locations"        => "Locations",

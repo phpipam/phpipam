@@ -26,6 +26,15 @@ if ($auth_methods!==false) {
 		$auth_methods = false;
 	}
 }
+
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('userGroups');
+
+/* check customfields */
+$ffields = json_decode($User->settings->hiddenCustomFields, true);
+$ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
+
+$colspanCustom = 0;
 ?>
 
 
@@ -51,6 +60,16 @@ if ($auth_methods!==false) {
     <th><?php print _('Group description'); ?></th>
     <th><?php print _('Belonging users'); ?></th>
     <th><?php print _('Section permissions'); ?></th>
+	<?php
+	if(sizeof(@$custom) > 0) {
+		foreach($custom as $field) {
+			if(!in_array($field['name'], $ffields)) {
+				$colspanCustom++;
+				print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			}
+		}
+	}
+	?>
     <th colspan="2"></th>
 </tr>
 </thead>
@@ -68,7 +87,7 @@ if ($auth_methods!==false) {
 	?>
 	</td>
 	<td><?php print _('All sections :'); ?> <span class="badge badge1 badge5">Read / Write</span></td>
-	<td colspan="2"></td>
+	<td colspan="<?php print 2+$colspanCustom; ?>"></td>
 </tr>
 
 <?php
@@ -107,6 +126,16 @@ if($groups) {
 		}
 		print "</td>";
 
+		# custom
+		if(sizeof($custom) > 0) {
+			foreach($custom as $field) {
+				if(!in_array($field['name'], $ffields)) {
+					print "<td class='hidden-xs hidden-sm hidden-md'>";
+					$Tools->print_custom_field ($field['type'], $g[$field['name']]);
+					print "</td>";
+				}
+			}
+		}
 
 		# add/remove users
 		print "	<td class='actions'>";
