@@ -28,6 +28,8 @@ $User->csrf_cookie ("validate", "custom_field", $_POST['csrf_cookie']) === false
 /* checks */
 if($_POST['action'] == "delete") {
 	# no cecks
+	# set name to oldname so custom field can be dropped
+	$_POST['name'] = $_POST['oldname'];
 }
 else {
 	# remove spaces
