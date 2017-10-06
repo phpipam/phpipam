@@ -379,7 +379,7 @@ class Addresses extends Common_functions {
         # location
         if (isset($address['location_item'])) {
             if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
+                $this->Result->show("danger", _("Invalid location value"), true);
             }
             $insert['location'] = $address['location_item'];
         }
