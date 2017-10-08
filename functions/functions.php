@@ -59,9 +59,9 @@ if(@$_GET['page']!="install" ) {
 	catch (Exception $e) { $settings = false; }
 	if ($settings!==false) {
 		if (phpversion() < "5.4") {
-			define(SETTINGS, json_encode($settings));
+			define('SETTINGS', json_encode($settings));
 		}else{
-			define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
+			define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 		}
 	}
 }
