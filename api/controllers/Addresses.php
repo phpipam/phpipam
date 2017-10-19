@@ -618,6 +618,9 @@ class Addresses_controller extends Common_api_functions  {
 			// validate address, that it is inside subnet, not subnet/broadcast
 			$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
 		}
+		else {
+			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)		{ $this->Response->throw_exception(400, "Invalid address"); }
+		}
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {
