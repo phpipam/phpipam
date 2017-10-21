@@ -45,8 +45,8 @@ RewriteRule ^tools/search/(.*)$ index.php?page=tools&section=search&ip=$1 [L]
 
 # Rewrites
 RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5&tab=$6 [L]
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L]
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4 [L]
+RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L,QSA]
+RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4 [L,QSA]
 RewriteRule ^(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3 [L,QSA]
 RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L,QSA]
 RewriteRule ^(.*)/$ index.php?page=$1 [L]

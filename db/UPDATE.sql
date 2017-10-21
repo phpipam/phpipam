@@ -860,3 +860,6 @@ ALTER TABLE `racks` CHANGE `line` `row` INT(11)  NOT NULL  DEFAULT '1';
 
 /* add permission propagation policy */
 ALTER TABLE `settings` ADD `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1';
+
+/* extend log details */
+ALTER TABLE `logs` CHANGE `details` `details` TEXT  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL;

@@ -2650,3 +2650,7 @@ table.popover_table td {
 .btn-group.nowrap .btn + .btn  {
         margin-left: -4px;
 }
+
+table.sorted-new th {
+	background: white !important;
+}

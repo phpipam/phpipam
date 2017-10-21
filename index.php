@@ -90,6 +90,7 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-switch.min.css">
+	<link rel="stylesheet" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.css">
 	<?php if ($User->settings->enableThreshold=="1") { ?>
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/slider.css">
 	<?php } ?>
@@ -104,9 +105,15 @@ else {
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
+
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.bdt.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/stickytableheaders/jquery.stickytableheaders.min.js"></script>
+
+	<!-- bootstrap table -->
+	<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table-cookie.js"></script>
+
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }

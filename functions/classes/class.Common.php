@@ -1237,7 +1237,8 @@ class Common_functions  {
     public function create_custom_field_input_set_enum ($field, $object, $disabled_text) {
 		$html = array();
     	//parse values
-    	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
+    	$field['type'] = trim(substr($field['type'],0,-1));
+    	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", "'"), "", $field['type']));
     	//null
     	if($field['Null']!="NO") { array_unshift($tmp, ""); }
 

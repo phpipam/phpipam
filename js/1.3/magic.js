@@ -220,7 +220,7 @@ if(readCookie('table-page-size')==null) { def_size = 25; }
 else                                    { def_size = readCookie('table-page-size'); }
 
 
-// table
+//table
 $('table.sorted').bdt({
    pageRowCount: def_size,
    searchFormClass: 'form-inline pull-right searchFormClass',
@@ -232,6 +232,29 @@ $('table.sorted-left').bdt({
    divClass: 'text-left clearfix'
 });
 $('table.sorted').stickyTableHeaders();
+
+
+$('table.sorted-new')
+                 .attr("data-toggle", "table")
+                 .attr('data-pagination', 'true')
+                 .attr('data-page-list', '[25, 50, 100, 250, 500]')
+                 .attr('data-search','true')
+                 .attr('data-classes','table-no-bordered')
+                 .attr('data-icon-size','sm')
+                 .attr('data-show-footer','false')
+                 .attr('data-show-columns','true')
+                 .attr('data-icons-prefix','fa')
+                 .attr('data-show-toggle','true')
+                 .attr('data-icons','icons')
+                 .attr('data-cookie','true')
+// icons
+window.icons = {
+    refresh : 'fa-refresh',
+    toggle  : 'fa-toggle-on',
+    columns : 'fa-th-list'
+};
+
+
 $("li.disabled a").click(function () {
    return false;
 });
