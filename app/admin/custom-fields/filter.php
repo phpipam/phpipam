@@ -69,8 +69,10 @@ $(".input-switch").bootstrapSwitch(switch_options);
 		if(in_array($k, $filters[$_POST['table']]))	{ print "<input type='checkbox' class='input-switch' name='$k' checked>"; }
 		else										{ print "<input type='checkbox' class='input-switch' name='$k'>"; }
 		print "	</td>";
+		# remove custom_
+		$k1 = $Tools->print_custom_field_name ($k);
 		# name and comment
-		print "	<td>".$k." (".$c['Comment'].")</td>";
+		print "	<td>".$k1." (".$c['Comment'].")</td>";
 		print "</tr>";
 	}
 
