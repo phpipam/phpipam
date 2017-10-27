@@ -11,7 +11,6 @@ ErrorDocument 500 '{"code":500,"success":0,"message":"Internal server error"}'
 ErrorDocument 501 '{"code":501,"success":0,"message":"Not Implemented"}'
 ErrorDocument 503 '{"code":503,"success":0,"message":"Service Unavailable"}'
 ErrorDocument 505 '{"code":505,"success":0,"message":"HTTP Version Not Supported"}'
-ErrorDocument 511 '{"code":511,"success":0,"message":"Network Authentication Required"}'
 
 # exceptions
 RewriteRule ^(.*)/addresses/search_hostname/(.*)/$ ?app_id=$1&controller=addresses&id=search_hostname&id2=$2 [L,QSA]

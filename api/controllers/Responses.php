@@ -95,7 +95,7 @@ class Responses {
 		$this->errors[501] = "Not Implemented";
 		$this->errors[503] = "Service Unavailable";
 		$this->errors[505] = "HTTP Version Not Supported";
-		$this->errors[511] = "Network Authentication Required";
+		//$this->errors[511] = "Network Authentication Required";
 	}
 
 	/**
