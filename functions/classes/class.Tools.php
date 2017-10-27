@@ -2903,7 +2903,7 @@ class Tools extends Common_functions {
 		if(is_array($custom_circuit_fields)) {
 			if(sizeof($custom_circuit_fields)>0) {
 				foreach ($custom_circuit_fields as $f) {
-					$query[] = ",c.".$f['name'];
+					$query[] = ",c.`".$f['name']."`";
 				}
 			}
 		}
