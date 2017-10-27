@@ -29,6 +29,9 @@ $request = $Admin->fetch_object("requests", "id", $_POST['requestId']);
 if($request===false) { $Result->show("danger", _("Request does not exist"), true, true); }
 else				 { $request = (array) $request; }
 
+# strip
+$_POST = $Admin->strip_input_tags($request);
+
 # verify permissions
 if($Subnets->check_permission($User->user, $request['subnetId']) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true, true); }
 
@@ -305,15 +308,15 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('Requester email'); ?></th>
 		<td>
-			<input type="text" disabled="disabled" class="form-control" value="<?php print @$request['requester']; ?>">
+			<input type="text" disabled="disabled" class="form-control" value="<?php print $Tools->strip_xss(@$request['requester']); ?>">
 		</td>
 	</tr>
 	<!-- comment -->
 	<tr>
 		<th><?php print _('Requester comment'); ?></th>
 		<td>
-			<input type="text" disabled="disabled" class="form-control" value="<?php print @$request['comment']; ?>">
-			<?php print "<input type='hidden' name='comment' value='".@$request['comment']."'>"; ?></i></td>
+			<input type="text" disabled="disabled" class="form-control" value="<?php print $Tools->strip_xss(@$request['comment']); ?>">
+			<?php print "<input type='hidden' name='comment' value='".$Tools->strip_xss(@$request['comment'])."'>"; ?></i></td>
 	</tr>
 	<!-- Admin comment -->
 	<tr>

@@ -900,7 +900,7 @@ class Common_functions  {
 	 * @return bool
 	 */
 	public function validate_email($email) {
-	    return preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email) ? true : false;
+		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
 	/**
