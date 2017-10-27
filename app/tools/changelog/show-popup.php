@@ -109,7 +109,7 @@ print "	<td>";
 
 	foreach ($changelog as $c) {
 		// field
-		$field = explode(":", $c);
+		$field = explode(": ", $c);
 	    $value = explode("=>", $field[1]);
 
 	    $field = trim(str_replace(array("[","]"), "", $field[0]));
@@ -121,7 +121,7 @@ print "	<td>";
 
 		$diff_1  = "<strong>$field</strong>: ".trim($value[0]);
 		if($clog->caction=="edit")
-		$diff_1 .= "  => ".trim($value[1]);
+		$diff_1 .= "  => ".trim(implode(":",$field));
 
 		$diff[] = $diff_1;
 	}
