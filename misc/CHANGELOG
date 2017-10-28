@@ -46,6 +46,7 @@
     + Fixed Error when error_reporting = E_ALL about strict standards when importing IP addresses (#1372);
     + Fixed Apostrophe errors in text custom fields (#1375);
     + Fixed API error when creating address under folder (#1507);
+    + Fixed SNMPv3 (#1119);
 
     Security Fixes:
     ----------------------------

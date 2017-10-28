@@ -863,3 +863,12 @@ ALTER TABLE `settings` ADD `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1';
 
 /* extend log details */
 ALTER TABLE `logs` CHANGE `details` `details` TEXT  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL;
+
+/* snmpv3 */
+ALTER TABLE `devices` ADD `snmp_v3_sec_level` SET('none','noAuthNoPriv','authNoPriv','authPriv')  NULL  DEFAULT 'none';
+ALTER TABLE `devices` ADD `snmp_v3_auth_protocol` SET('none','MD5','SHA')  NULL  DEFAULT 'none';
+ALTER TABLE `devices` ADD `snmp_v3_auth_pass` VARCHAR(64)  NULL  DEFAULT NULL;
+ALTER TABLE `devices` ADD `snmp_v3_priv_protocol` SET('none','DES','AES')  NULL  DEFAULT 'none';
+ALTER TABLE `devices` ADD `snmp_v3_priv_pass` VARCHAR(64)  NULL  DEFAULT NULL;
+ALTER TABLE `devices` ADD `snmp_v3_ctx_name` VARCHAR(64)  NULL  DEFAULT NULL;
+ALTER TABLE `devices` ADD `snmp_v3_ctx_engine_id` VARCHAR(64)  NULL  DEFAULT NULL;

@@ -52,16 +52,22 @@ foreach($_POST as $key=>$line) {
 $_POST['snmp_queries'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 
 # set update values
-$values = array("id"=>$_POST['device_id'],
-				"snmp_version"=>$_POST['snmp_version'],
-				"snmp_community"=>$_POST['snmp_community'],
-				"snmp_port"=>$_POST['snmp_port'],
-				"snmp_timeout"=>$_POST['snmp_timeout'],
-				"snmp_queries"=>$_POST['snmp_queries']
+$values = array(
+				"id"                      => $_POST['device_id'],
+				"snmp_version"            => $_POST['snmp_version'],
+				"snmp_community"          => $_POST['snmp_community'],
+				"snmp_port"               => $_POST['snmp_port'],
+				"snmp_timeout"            => $_POST['snmp_timeout'],
+				"snmp_queries"            => $_POST['snmp_queries'],
+				"snmp_v3_sec_level"       => $_POST['snmp_v3_sec_level'],
+				"snmp_v3_auth_protocol"   => $_POST['snmp_v3_auth_protocol'],
+				"snmp_v3_auth_pass" 	  => $_POST['snmp_v3_auth_pass'],
+				"snmp_v3_priv_protocol"   => $_POST['snmp_v3_priv_protocol'],
+				"snmp_v3_priv_pass"       => $_POST['snmp_v3_priv_pass'],
+				"snmp_v3_ctx_name"        => $_POST['snmp_v3_ctx_name'],
+				"snmp_v3_ctx_engine_id"   => $_POST['snmp_v3_ctx_engine_id']
 				);
 
 # update device
 if(!$Admin->object_modify("devices", "edit", "id", $values))    { $Result->show("danger",  _("SNMP edit failed").'!', false); }
 else														    { $Result->show("success", _("SNMP edit successfull").'!', false); }
-
-?>
