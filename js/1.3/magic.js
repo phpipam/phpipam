@@ -237,7 +237,8 @@ $('table.sorted').stickyTableHeaders();
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
-                 .attr('data-page-list', '[25, 50, 100, 250, 500]')
+                 .attr('data-page-size', '50')
+                 .attr('data-page-list', '[25,50,100,250,500]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')
                  .attr('data-icon-size','sm')
@@ -246,7 +247,14 @@ $('table.sorted-new')
                  .attr('data-icons-prefix','fa')
                  .attr('data-show-toggle','true')
                  .attr('data-icons','icons')
-                 .attr('data-cookie','true')
+                 .attr('data-cookie','true');
+
+$('table.sorted-new-notoggle')
+                 .attr('data-show-toggle','false')
+
+$('table.sorted-new-nocolumns')
+                 .attr('data-show-columns','false')
+
 // icons
 window.icons = {
     refresh : 'fa-refresh',
@@ -381,7 +389,11 @@ if($('#dashboard').length>0) {
 		$.post('app/dashboard/widgets/'+w+'.php', function(data) {
 			$("#w-"+w+' .hContent').html(data);
 		}).fail(function(xhr, textStatus, errorThrown) {
-			$("#w-"+w+' .hContent').html('<blockquote style="margin-top:20px;margin-left:20px;">File not found!</blockquote>');
+            $.post('app/dashboard/widgets/custom/'+w+'.php', function(data) {
+                $("#w-"+w+' .hContent').html(data);
+            }).fail(function(xhr, textStatus, errorThrown) {
+    			$("#w-"+w+' .hContent').html('<blockquote style="margin-top:20px;margin-left:20px;">File not found!</blockquote>');
+            })
 		});
 	});
 }

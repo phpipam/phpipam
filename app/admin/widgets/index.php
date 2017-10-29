@@ -56,8 +56,8 @@ print "</p>";
 			# verify validity
 			$valid = $Tools->verify_widget($w['wfile']);
 
-			if($valid)  { $vPrint = "<span class='alert alert-success'>"._('Valid')."</span>"; }
-			else		{ $vPrint = "<span class='alert alert-danger'>"._('Invalid')."</span>"; }
+			if($valid)  { $vPrint = "<span class='badge badge1 badge5 alert-success'>"._('Valid')."</span>"; }
+			else		{ $vPrint = "<span class='badge badge1 badge5 alert-danger'>"._('Invalid')."</span>"; }
 
 			print "<tr>";
 			print "	<td>"._($w['wtitle'])."</td>";
@@ -78,8 +78,6 @@ print "</p>";
 		print "</tbody>";
 	}
 	?>
-
-
 </table>
 
 <hr>

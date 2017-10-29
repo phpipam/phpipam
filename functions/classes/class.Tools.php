@@ -946,7 +946,7 @@ class Tools extends Common_functions {
 	 * @return bool
 	 */
 	public function verify_widget ($file) {
-		return file_exists("app/dashboard/widgets/$file.php")==false ? false : true;
+		return file_exists(dirname(__FILE__)."/../../app/dashboard/widgets/$file.php")||file_exists(dirname(__FILE__)."/../../app/dashboard/widgets/custom/$file.php") ? true : false;
 	}
 
 
