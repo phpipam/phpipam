@@ -1333,7 +1333,7 @@ class Tools extends Common_functions {
 		try { $count = $this->Database->getObjectQuery($query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true);	return false; }
 		# return true if it exists
-		return sizeof($count)>0 ? true : false;
+		return ($count !== null && sizeof($count) > 0 ? true : false);
 	}
 
 	/**
