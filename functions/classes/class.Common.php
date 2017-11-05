@@ -817,7 +817,7 @@ class Common_functions  {
 			$url = "https://$_SERVER[SERVER_NAME]";
 		}
 		// custom port
-		elseif($_SERVER['SERVER_PORT']!="80") {
+		elseif($_SERVER['SERVER_PORT']!="80" && (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT']!="80")) {
 			$url = "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
 		}
 		// normal http
