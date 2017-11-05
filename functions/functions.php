@@ -27,7 +27,7 @@ if(!defined('BASE')) {
 }
 
 // Fix JSON_UNESCAPED_UNICODE for PHP 5.3
-defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);	
+defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
@@ -60,7 +60,8 @@ if(@$_GET['page']!="install" ) {
 	if ($settings!==false) {
 		if (phpversion() < "5.4") {
 			define('SETTINGS', json_encode($settings));
-		}else{
+		}
+		else{
 			define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 		}
 	}
