@@ -39,7 +39,8 @@ CREATE TABLE `ipaddresses` (
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
-  KEY `subnetid` (`subnetId`)
+  KEY `subnetid` (`subnetId`),
+  KEY `location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `dns_name`, `state`)
@@ -250,7 +251,8 @@ CREATE TABLE `subnets` (
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)
@@ -296,7 +298,8 @@ CREATE TABLE `devices` (
   `custom_device field` varchar(32) DEFAULT NULL COMMENT 'aaaaaaa',
   `custom_test4` varchar(4) DEFAULT NULL COMMENT '4 max',
   PRIMARY KEY (`id`),
-  KEY `hostname` (`hostname`)
+  KEY `hostname` (`hostname`),
+  KEY `location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -722,7 +725,8 @@ CREATE TABLE `racks` (
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
   `description` text,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
@@ -806,6 +810,8 @@ CREATE TABLE `circuits` (
   `location2` int(11) unsigned DEFAULT NULL,
   `comment` text,
   PRIMARY KEY (`id`),
+  KEY `location1` (`location1`),
+  KEY `location2` (`location2`),
   UNIQUE KEY `cid` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

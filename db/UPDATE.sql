@@ -872,3 +872,11 @@ ALTER TABLE `devices` ADD `snmp_v3_priv_protocol` SET('none','DES','AES')  NULL 
 ALTER TABLE `devices` ADD `snmp_v3_priv_pass` VARCHAR(64)  NULL  DEFAULT NULL;
 ALTER TABLE `devices` ADD `snmp_v3_ctx_name` VARCHAR(64)  NULL  DEFAULT NULL;
 ALTER TABLE `devices` ADD `snmp_v3_ctx_engine_id` VARCHAR(64)  NULL  DEFAULT NULL;
+
+/* add indexes to locations */
+ALTER TABLE `devices` ADD INDEX (`location`);
+ALTER TABLE `racks` ADD INDEX (`location`);
+ALTER TABLE `subnets` ADD INDEX (`location`);
+ALTER TABLE `ipaddresses` ADD INDEX (`location`);
+ALTER TABLE `circuits` ADD INDEX (`location1`);
+ALTER TABLE `circuits` ADD INDEX (`location2`);
