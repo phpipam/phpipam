@@ -17,6 +17,7 @@
     + API:
         + Encrypyted requests can now also be form-encoded (#1191);
         + Introduce mcrypt AES compatibility (#1516);
+        + Added Circuits controller;
     + New resolve hostnames option for subnet (#1222):
         + Updates hostnames via pingCheck.php script (if parameter set for subnet);
         + Updates hostnames via resolveIPaddresses.php script (if parameter set for subnet);
