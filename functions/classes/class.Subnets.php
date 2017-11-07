@@ -1233,6 +1233,11 @@ class Subnets extends Common_functions {
 		// fetch address types
 		$this->get_addresses_types();
 
+		$cached_item = $this->cache_check("subnet_usage", "$subnet->id d=$detailed");
+		if($cached_item!==false) {
+			return (array)$cached_item;
+		}
+
     	// is slaves
     	if ($this->has_slaves ($subnet->id)) {
             // if we have slaves we need to check against every slave
@@ -1267,6 +1272,7 @@ class Subnets extends Common_functions {
             $subnet_usage = $this->calculate_single_subnet_details ($subnet, false, $detailed);
     	}
     	// return usage
+    	$this->cache_write("subnet_usage", "$subnet->id d=$detailed", (object)$subnet_usage);
     	return $subnet_usage;
 	}
 
@@ -1285,6 +1291,11 @@ class Subnets extends Common_functions {
     	// no strict mode if it is_slave
 		$section     = $this->fetch_object ("sections", "id", $subnet->sectionId);
 		$strict_mode = $no_strict ? false : (bool)$section->strictMode;
+
+		$cached_item = $this->cache_check("single_subnet_details", "$subnet->id n=$no_strict d=$detailed");
+		if($cached_item!==false) {
+			return (array)$cached_item;
+		}
 
     	// init result
     	$out = array();
@@ -1327,6 +1338,7 @@ class Subnets extends Common_functions {
             }
 		}
 		# result
+		$this->cache_write("single_subnet_details", "$subnet->id n=$no_strict d=$detailed", (object)$out);
 		return $out;
 	}
 
