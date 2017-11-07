@@ -45,16 +45,18 @@ if(sizeof($errors = $Tools->verify_database())>0) {
 		print '<ul class="fix-field">'. "\n";
 
 		foreach ($errors['fieldError'] as $table=>$field) {
-			print '<li>';
-			print 'Table `'. $table .'`: missing field `'. $field .'`;';
-			//get fix
-			if(!$fix = $Tools->get_field_fix($table, $field)) {
-				$Result->show("danger", _("Cannot get fix for table field ")." `$table` `$field`!", true);
-			} else {
-				print "<a class='btn btn-xs btn-default btn-tablefix' style='margin-left:8px;'  href='' data-tableid='$table' data-fieldid='$field' data-type='field'><i class='fa fa-magic fa-pad-right'></i>"._("Fix field")."</a>";
-				print "<div id='fix-result-$table$field' style='display:none'></div>";
+			foreach ($field as $f) {
+				print '<li>';
+				print 'Table `'. $table .'`: missing field `'. $f .'`;';
+				//get fix
+				if(!$fix = $Tools->get_field_fix($table, $f)) {
+					$Result->show("danger", _("Cannot get fix for table field ")." `$table` `$f`!", true);
+				} else {
+					print "<a class='btn btn-xs btn-default btn-tablefix' style='margin-left:8px;'  href='' data-tableid='$table' data-fieldid='$f' data-type='field'><i class='fa fa-magic fa-pad-right'></i>"._("Fix field")."</a>";
+					print "<div id='fix-result-$table$f' style='display:none'></div>";
+				}
+				print '</li>'. "\n";
 			}
-			print '</li>'. "\n";
 		}
 
 		print '</ul>'. "\n";
