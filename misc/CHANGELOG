@@ -15,9 +15,10 @@
     + Selectable logo size (from config.php) (#952);
     + Added default option for permissions propagations (#1351);
     + API:
+        + Added Circuits controller;
         + Encrypyted requests can now also be form-encoded (#1191);
         + Introduce mcrypt AES compatibility (#1516);
-        + Added Circuits controller;
+        + Fixed field ip not displayed when filters applied (#1529);
     + New resolve hostnames option for subnet (#1222):
         + Updates hostnames via pingCheck.php script (if parameter set for subnet);
         + Updates hostnames via resolveIPaddresses.php script (if parameter set for subnet);
