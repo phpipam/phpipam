@@ -295,8 +295,6 @@ CREATE TABLE `devices` (
   `rack_size` int(11) unsigned DEFAULT NULL,
   `location` int(11) unsigned DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
-  `custom_device field` varchar(32) DEFAULT NULL COMMENT 'aaaaaaa',
-  `custom_test4` varchar(4) DEFAULT NULL COMMENT '4 max',
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`),
   KEY `location` (`location`)
