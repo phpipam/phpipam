@@ -8,4 +8,4 @@ define("REVISION", "000");									//revision always changes, verision only if d
 /* set last possible upgrade */
 define("LAST_POSSIBLE", "1.1");								//minimum required version to be able to upgrade
 /* prefix for css/js */
-define("SCRIPT_PREFIX", "1.3");								//css and js folder prefix to prevent caching
+define("SCRIPT_PREFIX", "1.3.1");							//css and js folder prefix to prevent caching
