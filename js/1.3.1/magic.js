@@ -118,6 +118,8 @@ function showPopup(pClass, data, secondary) {
     $(oclass+' .'+pClass).fadeIn('fast');
     //disable page scrolling on bottom
     $('body').addClass('stop-scrolling');
+    // resize
+    resize_pContent ()
 }
 function hidePopup(pClass, secondary) {
 	// secondary - load secondary popupoverlay
@@ -175,6 +177,20 @@ function randomPass() {
         pass += chars.charAt(i);
     }
     return pass;
+}
+
+// on load
+resize_pContent ()
+// on resize
+$(window).resize(function () {
+    resize_pContent ()
+});
+
+function resize_pContent () {
+    if($(".popup .pContent").is(":visible")) {
+        var myheight = $(window).height() - 250;
+        $(".popup .pContent").css('max-height', myheight);
+    }
 }
 
 /* remove self on click */

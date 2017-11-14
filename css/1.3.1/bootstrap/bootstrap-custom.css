@@ -2295,7 +2295,6 @@ table#userPrint h4 {
 	height: auto;
 	position: relative;
 	height: auto !important;
-	max-height: 100% !important;
 }
 .popup .pFooter {
 	position: relative;
