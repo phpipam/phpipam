@@ -1581,59 +1581,16 @@ class Tools extends Common_functions {
 	 */
 
 	/**
-	 * Check for latest version
+	 * Check for latest version on gitHub
 	 *
 	 * @access public
 	 * @param bool $print_error (default: false)
-	 * @return mixed|bool
+	 * @return string|bool
 	 */
 	public function check_latest_phpipam_version ($print_error = false) {
 		# fetch settings
 		$this->get_settings ();
 		# check for release
-		return $this->settings->version >= "1.2" ? $this->check_latest_phpipam_version_github ($print_error) : $this->check_latest_phpipam_version_phpipamnet ($print_error);
-	}
-
-	/**
-	 * Checks for latest phpipam version from phpipam webpage
-	 *
-	 * @access private
-	 * @param bool $print_error (default: false)
-	 * @return string|false
-	 */
-	private function check_latest_phpipam_version_phpipamnet ($print_error = false) {
-    	# default false
-    	$version = false;
-		# fetch webpage
-		$handle = @fopen("http://phpipam.net/phpipamversion.php", "r");
-		if($handle) {
-			while (!feof($handle)) {
-				$version = fgets($handle);
-			}
-			fclose($handle);
-		}
-		else {
-        	if($print_error) {
-            	$this->Result->show("danger", "http://phpipam.net/phpipamversion.php", false);
-            }
-            return false;
-		}
-
-		# replace dots for check
-		$versionT = str_replace(".", "", $version);
-
-		# return version or false
-		return is_numeric($versionT) ? $version : false;
-	}
-
-	/**
-	 * Fetch latest version form Github for phpipam > 1.2
-	 *
-	 * @access private
-	 * @param bool $print_error (default: false)
-	 * @return mixed|bool
-	 */
-	private function check_latest_phpipam_version_github ($print_error = false) {
     	# try to fetch
     	$release_gh = @file('https://github.com/phpipam/phpipam/releases.atom');
     	# check
@@ -1657,7 +1614,7 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric(str_replace("Version", "", $e->title))) {
+				if (is_numeric(str_replace(["Version", "."], "", $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
