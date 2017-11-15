@@ -52,7 +52,7 @@ else {
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
-				print "<th class='customField hidden-xs hidden-sm'>$field[name]</th>";
+				print "<th class='customField hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -94,26 +94,8 @@ else {
 		if(sizeof($custom) > 0) {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {
-
 					print "<td class='customField hidden-xs hidden-sm'>";
-
-					// create links
-					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
-
-					//booleans
-					if($field['type']=="tinyint(1)")	{
-						if($vrf[$field['name']] == "0")		{ print _("No"); }
-						elseif($vrf[$field['name']] == "1")	{ print _("Yes"); }
-					}
-					//text
-					elseif($field['type']=="text") {
-						if(strlen($vrf[$field['name']])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vrf[$field['name']])."'>"; }
-						else											{ print ""; }
-					}
-					else {
-						print $vrf[$field['name']];
-
-					}
+					$Tools->print_custom_field ($field['type'], $vrf[$field['name']]);
 					print "</td>";
 				}
 			}

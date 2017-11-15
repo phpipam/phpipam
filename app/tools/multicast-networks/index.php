@@ -65,7 +65,7 @@ if ($subnets!==false) {
     	# custom fields
     	if(sizeof($custom_fields) > 0) {
     		foreach($custom_fields as $myField) 	{
-    			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+    			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
     		}
     	}
     	# actions

@@ -37,14 +37,6 @@ $admin_items["vrfs"] = array(
                         "icon"=>"fa-cloud"
                        );
 }
-
-// devices
-$admin_items["devices"] = array (
-                        "name"=>"Devices",
-                        "href"=>array("administration", "devices"),
-                        "title"=>"Show all configured devices",
-                        "icon"=>"fa-desktop"
-                        );
 // nat
 if($User->settings->enableNAT==1) {
 $admin_items["nat"] = array (
@@ -72,15 +64,13 @@ $admin_items["dhcp"] = array (
                         "icon"=>"fa-database"
                         );
 }
-// locations
-if($User->settings->enableLocations == 1) {
-$admin_items["locations"] = array (
-                        "name"=>"Locations",
-                        "href"=>array("tools", "locations"),
-                        "title"=>"Show locations",
-                        "icon"=>"fa-map"
+// devices
+$admin_items["devices"] = array (
+                        "name"=>"Devices",
+                        "href"=>array("administration", "devices"),
+                        "title"=>"Show all configured devices",
+                        "icon"=>"fa-desktop"
                         );
-}
 // rack
 if($User->settings->enableRACK == 1) {
 $admin_items["racks"] = array (
@@ -88,6 +78,24 @@ $admin_items["racks"] = array (
                         "href"=>array("administration", "racks"),
                         "title"=>"Show racks",
                         "icon"=>"fa-bars"
+                        );
+}
+// circuits
+if($User->settings->enableCircuits == 1) {
+$admin_items["circuits"] = array (
+                        "name"=>"Circuits",
+                        "href"=>array("administration", "circuits"),
+                        "title"=>"Show circuits",
+                        "icon"=>"fa-random"
+                        );
+}
+// locations
+if($User->settings->enableLocations == 1) {
+$admin_items["locations"] = array (
+                        "name"=>"Locations",
+                        "href"=>array("tools", "locations"),
+                        "title"=>"Show locations",
+                        "icon"=>"fa-map"
                         );
 }
 ?>
@@ -145,6 +153,11 @@ $admin_items["racks"] = array (
     foreach ($admin_items as $k=>$t) {
         // active
         $active = $_GET['section']==$k ? "active" : "";
+
+        // clear name if set
+        if($User->user->menuCompact=="1") {
+            $t['name'] = "";
+        }
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
         print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";

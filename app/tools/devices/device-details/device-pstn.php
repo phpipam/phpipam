@@ -11,7 +11,7 @@ $User->check_user_session();
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 # get hidden fields */
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
+$hidden_fields = is_array(@$hidden_fields['pstnPrefixes']) ? $hidden_fields['pstnPrefixes'] : array();
 
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -31,6 +31,7 @@ if ($User->settings->enablePSTN!="1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
 }
 else {
+    $colspan = 6;
     // table
     print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top'>";
     // headers

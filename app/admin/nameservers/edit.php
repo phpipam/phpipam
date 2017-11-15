@@ -100,7 +100,7 @@ $nameservers['namesrv1'] = !isset($nameservers) ? array(" ") : explode(";", $nam
 			?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
-			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print @$nameservers['description']; ?>" <?php print $readonly; ?>>
+			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$nameservers['description']); ?>" <?php print $readonly; ?>>
 		</td>
 		<td></td>
 	</tr>

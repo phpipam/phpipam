@@ -52,11 +52,11 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
             });
 
             map.addMarker({
-             title: '<?php print $location->name; ?>',
+             title: "'<?php print $location->name; ?>'",
              lat: '<?php print $location->lat; ?>',
              lng: '<?php print $location->long; ?>',
              infoWindow: {
-                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print $location->name; ?></a></h5><?php print $location->description; ?>'
+                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print addslashes($location->name); ?></a></h5><?php print $location->description; ?>'
              }
             });
 

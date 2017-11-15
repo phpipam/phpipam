@@ -14,65 +14,6 @@
 # "Content-Type: text/plain; charset=UTF-8\n"
 # "Content-Transfer-Encoding: 8bit\n"
 
-#: functions/functions-install.php:85 functions/functions-install.php:133
-#: functions/functions-install.php:150 functions/functions-install.php:182
-#: functions/functions-install.php:199 functions/functions-install.php:236
-#: functions/functions-install.php:272 functions/functions-install.php:379
-#: functions/functions-install.php:453 functions/functions-install.php:495
-#: functions/functions-install.php:524 functions/functions-install.php:549
-#: functions/functions-install.php:576 functions/functions-admin.php:41
-#: functions/functions-admin.php:73 functions/functions-admin.php:147
-#: functions/functions-admin.php:185 functions/functions-admin.php:217
-#: functions/functions-admin.php:241 functions/functions-admin.php:387
-#: functions/functions-admin.php:507 functions/functions-admin.php:533
-#: functions/functions-admin.php:887 functions/functions-admin.php:1124
-#: functions/functions-admin.php:1204 functions/functions-admin.php:1238
-#: functions/functions-admin.php:1283 functions/functions-admin.php:1374
-#: functions/functions-admin.php:1493 functions/functions-admin.php:1633
-#: functions/functions-admin.php:1661 functions/functions-admin.php:1717
-#: functions/functions-admin.php:1750 functions/functions-admin.php:1848
-#: functions/functions-admin.php:1881 functions/functions-admin.php:1980
-#: functions/functions-admin.php:2012 functions/functions-admin.php:2106
-#: functions/functions-admin.php:2138 functions/functions-common.php:105
-#: functions/functions-common.php:154 functions/functions-common.php:177
-#: functions/functions-common.php:200 functions/functions-common.php:223
-#: functions/functions-common.php:246 functions/functions-common.php:396
-#: functions/functions-common.php:420 functions/functions-common.php:453
-#: functions/functions-common.php:709 functions/functions-network.php:90
-#: functions/functions-network.php:116 functions/functions-network.php:142
-#: functions/functions-network.php:197 functions/functions-network.php:231
-#: functions/functions-network.php:255 functions/functions-network.php:289
-#: functions/functions-network.php:313 functions/functions-network.php:337
-#: functions/functions-network.php:361 functions/functions-network.php:396
-#: functions/functions-network.php:420 functions/functions-network.php:454
-#: functions/functions-network.php:478 functions/functions-network.php:502
-#: functions/functions-network.php:526 functions/functions-network.php:550
-#: functions/functions-network.php:586 functions/functions-network.php:610
-#: functions/functions-network.php:641 functions/functions-network.php:670
-#: functions/functions-network.php:694 functions/functions-network.php:802
-#: functions/functions-network.php:873 functions/functions-network.php:956
-#: functions/functions-network.php:1252 functions/functions-network.php:1289
-#: functions/functions-network.php:1313 functions/functions-network.php:1366
-#: functions/functions-network.php:1417 functions/functions-network.php:1460
-#: functions/functions-network.php:1487 functions/functions-network.php:1512
-#: functions/functions-network.php:1536 functions/functions-network.php:1562
-#: functions/functions-network.php:1590 functions/functions-network.php:1620
-#: functions/functions-network.php:1729 functions/functions-network.php:1754
-#: functions/functions-network.php:2072 functions/functions-network.php:2181
-#: functions/functions-network.php:2251 functions/functions-tools.php:220
-#: functions/functions-tools.php:241 functions/functions-tools.php:284
-#: functions/functions-tools.php:311 functions/functions-tools.php:333
-#: functions/functions-tools.php:355 functions/functions-tools.php:398
-#: functions/functions-tools.php:429 functions/functions-tools.php:453
-#: functions/functions-tools.php:478 functions/functions-tools.php:620
-#: functions/functions-tools.php:644 functions/functions-tools.php:666
-#: functions/functions-tools.php:688 functions/functions-tools.php:711
-#: functions/functions-tools.php:740 functions/functions-tools.php:766
-#: functions/functions-tools.php:817 functions/functions-tools.php:856
-#: functions/functions-tools.php:880 functions/functions-tools.php:905
-#: functions/functions-tools.php:941 site/ipaddr/modifyIpAddressCheck.php:102
-#: site/ipaddr/modifyIpAddressCheck.php:103
-#: site/ipaddr/modifyIpAddressCheck.php:179
 msgid "Error"
 msgstr "Napaka"
 

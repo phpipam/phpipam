@@ -51,10 +51,6 @@ $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seco
 # resolveIPaddresses.php script parameters
 $config['resolve_emptyonly']           = true;       // if true it will only update the ones without DNS entry!
 $config['resolve_verbose']             = true;       // verbose response - prints results, cron will email it to you!
-$config['resolve_subnets']             = array();    // which subnets to check - by id
-                                                     //  example -> array(1,3,5) will only update subnets with id 1,3,5
-                                                     //  you can get id's and descriptions with following MySQL query:
-                                                     //  select `id`,`description` from `subnets`;
 
 
 /**
@@ -111,8 +107,8 @@ $private_subpages = array();
  *  Obtain key: Go to your Google Console (https://console.developers.google.com) and enable "Google Maps JavaScript API"
  *  from overview tab, so go to Credentials tab and make an API key for your project.
  ******************************/
-$gmaps_api_key = "";
-
+$gmaps_api_key         = "";
+$gmaps_api_geocode_key = "";
 
 /**
  * proxy connection details
@@ -143,3 +139,10 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
 
 /* for debugging proxy config uncomment next line */
 #var_dump(stream_context_get_options(stream_context_get_default()));
+
+
+/**
+ * General tweaks
+ ******************************/
+$config['logo_width'] = 220;                             // logo width
+$config['requests_public'] = true;                       // Show IP request module on login page

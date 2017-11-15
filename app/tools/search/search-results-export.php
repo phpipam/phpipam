@@ -61,10 +61,12 @@ if ($Tools->validate_mac ($search_term)===false) {
 }
 
 # get all custom fields
-$custom_address_fields = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
-$custom_subnet_fields  = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
-$custom_vlan_fields    = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
-$custom_vrf_fields     = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
+$custom_address_fields   = $_REQUEST['addresses']=="on" ? $Tools->fetch_custom_fields ("ipaddresses") : array();
+$custom_subnet_fields    = $_REQUEST['subnets']=="on"   ? $Tools->fetch_custom_fields ("subnets") : array();
+$custom_vlan_fields      = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_fields ("vlans") : array();
+$custom_vrf_fields       = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
+$custom_circuit_fields   = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuits") : array();
+$custom_circuit_p_fields = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : array();
 
 
 # set selected address fields array
@@ -85,7 +87,9 @@ if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($s
 if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term, $custom_vlan_fields); }
 # search vrf
 if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
-
+# search circuits
+if(@$_REQUEST['circuits']=="on") 	{ $result_circuits   = $Tools->search_circuits($search_term, $custom_circuit_fields); }
+if(@$_REQUEST['circuits']=="on") 	{ $result_circuits_p = $Tools->search_circuit_providers($search_term, $custom_circuit_p_fields); }
 
 /*
  *	Write xls
@@ -106,8 +110,6 @@ $format_title->setAlign('left');
 
 $lineCount = 0;		//for line change
 $m = 0;				//for section change
-
-
 
 
 /* -- Create a worksheet for addresses -- */
@@ -338,7 +340,7 @@ if(sizeof($result_subnets)>0) {
 if(sizeof($result_vlans)>0) {
 	$lineCount = 0;
 
-	$worksheet =& $workbook->addWorksheet(_('VLAN search results'));
+	$worksheet =& $workbook->addWorksheet(_('VLANs'));
 	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
@@ -386,7 +388,7 @@ if(sizeof($result_vlans)>0) {
 if(sizeof($result_vrf)>0) {
 	$lineCount = 0;
 
-	$worksheet =& $workbook->addWorksheet(_('VRF search results'));
+	$worksheet =& $workbook->addWorksheet(_('VRFs'));
 	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
@@ -424,6 +426,113 @@ if(sizeof($result_vrf)>0) {
 		$lineCount++;
 	}
 }
+
+
+
+
+
+
+/* -- Create a worksheet for Circuits -- */
+if(sizeof($result_circuits)>0) {
+	$lineCount = 0;
+
+	$worksheet =& $workbook->addWorksheet(_('Circuits'));
+	$worksheet->setInputEncoding("utf-8");
+
+	//write headers
+	$worksheet->write($lineCount, 0, _('Circuit Id') ,$format_title);
+	$worksheet->write($lineCount, 1, _('Provider') ,$format_title);
+	$worksheet->write($lineCount, 2, _('Type') ,$format_title);
+	$worksheet->write($lineCount, 3, _('Capacity') ,$format_title);
+	$worksheet->write($lineCount, 4, _('Status') ,$format_title);
+
+	$c=5;
+	if(sizeof($custom_circuit_fields) > 0) {
+		foreach($custom_circuit_fields as $field) {
+			$worksheet->write($lineCount, $c, $field['name'], $format_title);
+			$c++;
+		}
+	}
+
+	//new line
+	$lineCount++;
+
+	foreach($result_circuits as $line) {
+		//cast
+		$line = (array) $line;
+
+		//print subnet
+		$worksheet->write($lineCount, 0, $line['cid'], $format_left);
+		$worksheet->write($lineCount, 1, $line['name']);
+		$worksheet->write($lineCount, 2, $line['type']);
+		$worksheet->write($lineCount, 3, $line['Capacity']);
+		$worksheet->write($lineCount, 4, $line['status']);
+
+		//custom
+		$c=5;
+		if(sizeof($custom_circuit_fields) > 0) {
+			foreach($custom_circuit_fields as $field) {
+				$worksheet->write($lineCount, $c, $line[$field['name']]);
+				$c++;
+			}
+		}
+		//new line
+		$lineCount++;
+	}
+}
+
+
+
+
+
+
+/* -- Create a worksheet for Circuit providers -- */
+if(sizeof($result_circuits_p)>0) {
+	$lineCount = 0;
+
+	$worksheet =& $workbook->addWorksheet(_('Circuit providers'));
+	$worksheet->setInputEncoding("utf-8");
+
+	//write headers
+	$worksheet->write($lineCount, 0, _('Name') ,$format_title);
+	$worksheet->write($lineCount, 1, _('Description') ,$format_title);
+	$worksheet->write($lineCount, 2, _('Contact') ,$format_title);
+
+	$c=3;
+	if(sizeof($custom_circuit_p_fields) > 0) {
+		foreach($custom_circuit_p_fields as $field) {
+			$worksheet->write($lineCount, $c, $field['name'], $format_title);
+			$c++;
+		}
+	}
+
+	//new line
+	$lineCount++;
+
+	foreach($result_circuits_p as $line) {
+		//cast
+		$line = (array) $line;
+
+		//print subnet
+		$worksheet->write($lineCount, 0, $line['name'], $format_left);
+		$worksheet->write($lineCount, 1, $line['description']);
+		$worksheet->write($lineCount, 2, $line['contact']);
+
+		//custom
+		$c=3;
+		if(sizeof($custom_circuit_p_fields) > 0) {
+			foreach($custom_circuit_p_fields as $field) {
+				$worksheet->write($lineCount, $c, $line[$field['name']]);
+				$c++;
+			}
+		}
+		//new line
+		$lineCount++;
+	}
+}
+
+
+
 
 
 $lineCount++;

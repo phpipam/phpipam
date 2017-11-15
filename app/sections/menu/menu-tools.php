@@ -23,13 +23,6 @@ $tool_items["vrf"] = array(
                         "icon"=>"fa-cloud"
                        );
 }
-// devices
-$tool_items["devices"] = array (
-                        "name"=>"Devices",
-                        "href"=>array("tools", "devices"),
-                        "title"=>"Show all configured devices",
-                        "icon"=>"fa-desktop"
-                        );
 // nat
 if($User->settings->enableNAT==1) {
 $tool_items["nat"] = array (
@@ -66,6 +59,13 @@ $tool_items["locations"] = array (
                         "icon"=>"fa-map"
                         );
 }
+// devices
+$tool_items["devices"] = array (
+                        "name"=>"Devices",
+                        "href"=>array("tools", "devices"),
+                        "title"=>"Show all configured devices",
+                        "icon"=>"fa-desktop"
+                        );
 // rack
 if($User->settings->enableRACK == 1) {
 $tool_items["racks"] = array (
@@ -73,6 +73,15 @@ $tool_items["racks"] = array (
                         "href"=>array("tools", "racks"),
                         "title"=>"Show racks",
                         "icon"=>"fa-bars"
+                        );
+}
+// circuits
+if($User->settings->enableCircuits == 1) {
+$tool_items["circuits"] = array (
+                        "name"=>"Circuits",
+                        "href"=>array("tools", "circuits"),
+                        "title"=>"Show circuits",
+                        "icon"=>"fa-random"
                         );
 }
 // pstn
@@ -165,6 +174,11 @@ $tool_items["search"] = array (
     foreach ($tool_items as $k=>$t) {
         // active
         $active = $_GET['section']==$k ? "active" : "";
+
+        // clear name if set
+        if($User->user->menuCompact=="1") {
+            $t['name'] = "";
+        }
 
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
         print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";

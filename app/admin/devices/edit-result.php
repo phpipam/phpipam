@@ -84,24 +84,24 @@ if(sizeof($custom) > 0) {
 }
 
 # set update values
-$values = array("id"=>@$device['switchId'],
-				"hostname"=>@$device['hostname'],
-				"ip_addr"=>@$device['ip_addr'],
-				"type"=>@$device['type'],
-				"description"=>@$device['description'],
-				"sections"=>@$device['sections'],
-				"location"=>@$device['location_item']
+$values = array(
+				"id"          =>$device['switchId'],
+				"hostname"    =>$device['hostname'],
+				"ip_addr"     =>$device['ip_addr'],
+				"type"        =>$device['type'],
+				"description" =>$device['description'],
+				"sections"    =>$device['sections'],
+				"location"    =>@$device['location_item']
 				);
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack']>0)) {
-    $values['rack'] = $device['rack'];
-    $values['rack_start'] = $device['rack_start'];
-    $values['rack_size']  = $device['rack_size'];
-
+if (strlen(@$device['rack'])>0) {
+	$values['rack']       = $device['rack'];
+	$values['rack_start'] = $device['rack_start'];
+	$values['rack_size']  = $device['rack_size'];
 }
 
 # update device
@@ -111,9 +111,10 @@ else																	{ $Result->show("success", _("Device $device[action] succes
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("subnets", "device", $values["id"]);
+	$Admin->remove_object_references ("nat", "device", $values["id"]);
 	$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
 	$Admin->remove_object_references ("pstnPrefixes", "deviceId", $values["id"]);
 	$Admin->remove_object_references ("pstnNumbers", "deviceId", $values["id"]);
+	$Admin->remove_object_references ("circuits", "device1", $values["id"]);
+	$Admin->remove_object_references ("circuits", "device2", $values["id"]);
 }
-
-?>

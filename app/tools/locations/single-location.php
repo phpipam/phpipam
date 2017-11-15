@@ -92,7 +92,7 @@ else {
             			// create links
             			$location->{$key} = $Result->create_links($location->{$key});
             			print "<tr>";
-            			print "	<th>$key</th>";
+            			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
             			print "	<td style='vertical-align:top;align:left;'>".$location->{$key}."</td>";
             			print "</tr>";
             		}
@@ -149,6 +149,7 @@ else {
                             	if($o->type=="devices")     { $href = create_link("tools", "devices", $o->id); }
                             	elseif($o->type=="subnets") { $href = create_link("subnets", $o->sectionId, $o->id); }
                             	elseif($o->type=="addresses") { $href = create_link("subnets", $subnet->sectionId, $subnet->id, "address-details", $o->id); }
+                                elseif($o->type=="circuit") { $href = create_link("tools", "circuits", $o->id); }
                             	else                        { $href = create_link("tools", "racks", $o->id); }
 
                             	// description

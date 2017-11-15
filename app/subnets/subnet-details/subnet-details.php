@@ -379,6 +379,12 @@ else {
 		if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_d</td>"; }		# yes
 		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
+		# resolve DNS names
+		print "<tr>";
+		print "	<th>"._('Resolve DNS names')."</th>";
+		if($subnet['resolveDNS'] == 1) 			    { print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+		print "</tr>";
 	}
 
 	# autocreate PTR records
@@ -398,7 +404,12 @@ else {
 			if ($domain!==false) {
 				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
-				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+            if (preg_match("/^.*ip6.arpa$/", $domain->name)) {
+				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v6", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+            }
+            else {
+				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+            }
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
 				$btns = implode("\n", $btns);
@@ -450,7 +461,7 @@ else {
 			if(strlen($subnet[$key])>0) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
-				$html_custom[] = "	<th>$key</th>";
+				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 				$html_custom[] = "	<td>";
 				#booleans
 				if($field['type']=="tinyint(1)")	{

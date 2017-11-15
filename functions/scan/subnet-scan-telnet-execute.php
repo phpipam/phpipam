@@ -42,7 +42,7 @@ if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=
 //check input parameters
 if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
 // test to see if threading is available
-if( !Thread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
+if( !PingThread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
 
 /**
  *	Create array of addresses to scan
@@ -76,7 +76,7 @@ for ($m=0; $m<=sizeof($addresses); $m += $Scan->settings->scanMaxThreads) {
     	//only if index exists!
     	if(isset($addresses[$z])) {
 			//start new thread
-            $threads[$z] = new Thread( 'telnet_address' );
+            $threads[$z] = new PingThread( 'telnet_address' );
             $threads[$z]->start( $Subnets->transform_to_dotted($addresses[$z]['ip']), $addresses[$z]['port'], 2);
             $z++;				//next index
 		}

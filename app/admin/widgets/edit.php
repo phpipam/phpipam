@@ -46,14 +46,14 @@ if($_POST['action']!="add") {
 	<!-- name -->
 	<tr>
 	    <td><?php print _('Title'); ?></td>
-	    <td><input class="form-control input-sm input-w-250" type="text" name="wtitle" value="<?php print @$w['wtitle']; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input class="form-control input-sm input-w-250" type="text" name="wtitle" value="<?php print $Admin->strip_xss(@$w['wtitle']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
     </tr>
 
     <!-- description -->
     <tr>
     	<td><?php print _('Description'); ?></td>
     	<td>
-    		<input class="form-control input-sm input-w-250" type="text" name="wdescription" value="<?php print @$w['wdescription']; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+    		<input class="form-control input-sm input-w-250" type="text" name="wdescription" value="<?php print $Admin->strip_xss(@$w['wdescription']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 
     		<input type="hidden" name="wid" value="<?php print $_POST['wid']; ?>">
     		<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
@@ -64,13 +64,13 @@ if($_POST['action']!="add") {
 	<!-- File -->
 	<tr>
 	    <td><?php print _('File'); ?></td>
-	    <td><input class="form-control input-sm input-w-250" type="text" name="wfile" value="<?php print @$w['wfile']; ?>.php" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input class="form-control input-sm input-w-250" type="text" name="wfile" value="<?php print $Admin->strip_xss(@$w['wfile']); ?>.php" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
     </tr>
 
 	<!-- params -->
 	<tr>
 	    <td><?php print _('Parameters'); ?></td>
-	    <td><input class="form-control input-sm input-w-250" type="text" name="wparams" value="<?php print @$w['wparams']; ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
+	    <td><input class="form-control input-sm input-w-250" type="text" name="wparams" value="<?php print $Admin->strip_xss(@$w['wparams']); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?>></td>
     </tr>
 
 	<!-- Admin -->

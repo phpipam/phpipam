@@ -23,12 +23,13 @@ if (isset($_COOKIE['search_parameters'])) {
 }
 
 # if all are off print all on!
-if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on" && @$_REQUEST['pstn']!="on") {
+if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['vlans']!="on" && @$_REQUEST['vrf']!="on" && @$_REQUEST['pstn']!="on" && @$_REQUEST['circuits']!="on") {
 	$_REQUEST['subnets']="on";
 	$_REQUEST['addresses']="on";
 	$_REQUEST['vlans']="on";
 	$_REQUEST['vrf']="on";
 	$_REQUEST['pstn']="on";
+	$_REQUEST['circuits']="on";
 }
 ?>
 
@@ -36,7 +37,7 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 
 	<div class="input-group" id="searchForm">
 		<form id="userMenuSearch">
-		<input type="text" class="form-control searchInput input-sm" name='ip' placeholder='<?php print _('Search string'); ?>' type='text' value='<?php print @$_GET['ip']; ?>'>
+		<input type="text" class="form-control searchInput input-sm" name='ip' placeholder='<?php print _('Search string'); ?>' type='text' value='<?php print $Subnets->strip_xss(@$_GET['ip']); ?>'>
 		</form>
 		<span class="input-group-btn">
         	<button class="btn btn-default btn-sm searchSubmit" type="button"><?php print _('Search'); ?></button>
@@ -52,6 +53,9 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 		<?php } ?>
 		<?php if($User->settings->enablePSTN==1) { ?>
 		<input type="checkbox" name="pstn" 	    value="on" <?php if($_REQUEST['pstn']=="on") 		{ print "checked='checked'"; } ?>> <?php print _('PSTN'); ?><br>
+		<?php } ?>
+		<?php if($User->settings->enableCircuits==1) { ?>
+		<input type="checkbox" name="circuits" 	    value="on" <?php if($_REQUEST['circuits']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?><br>
 		<?php } ?>
 	</div>
 

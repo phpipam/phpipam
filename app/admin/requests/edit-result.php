@@ -67,17 +67,18 @@ else {
 	if ($Addresses->address_exists($Addresses->transform_address($_POST['ip_addr'], "decimal"), $subnet['id'])) { $Result->show("danger", _('IP address already exists'), true); }
 
 	//insert to ipaddresses table
-	$values = array("action"=>"add",
-					"ip_addr"=>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
-					"subnetId"=>$_POST['subnetId'],
-					"description"=>@$_POST['description'],
-					"dns_name"=>@$_POST['dns_name'],
-					"mac"=>@$_POST['mac'],
-					"owner"=>@$_POST['owner'],
-					"state"=>@$_POST['state'],
-					"switch"=>@$_POST['switch'],
-					"port"=>@$_POST['port'],
-					"note"=>@$_POST['note']
+	$values = array(
+					"action"      =>"add",
+					"ip_addr"     =>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
+					"subnetId"    =>$_POST['subnetId'],
+					"description" =>@$_POST['description'],
+					"dns_name"    =>@$_POST['dns_name'],
+					"mac"         =>@$_POST['mac'],
+					"owner"       =>@$_POST['owner'],
+					"state"       =>@$_POST['state'],
+					"switch"      =>@$_POST['switch'],
+					"port"        =>@$_POST['port'],
+					"note"        =>@$_POST['note']
 					);
 	if(!$Addresses->modify_address($values))	{ $Result->show("danger",  _("Failed to create IP address"), true); }
 
@@ -110,5 +111,3 @@ else {
 
 	$Tools->ip_request_send_mail ("accept", $_POST);
 }
-
-?>

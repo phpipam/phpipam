@@ -8,6 +8,10 @@ else 							{ require('config.php'); }
 /* site functions */
 require('functions/functions.php');
 
+header("Cache-Control: no-cache, must-revalidate"); //HTTP 1.1
+header("Pragma: no-cache");                         //HTTP 1.0
+header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
+
 # set default page
 if(!isset($_GET['page'])) { $_GET['page'] = "dashboard"; }
 
@@ -90,6 +94,7 @@ else {
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-switch.min.css">
+	<link rel="stylesheet" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.css">
 	<?php if ($User->settings->enableThreshold=="1") { ?>
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/slider.css">
 	<?php } ?>
@@ -100,13 +105,19 @@ else {
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
 	<?php } ?>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.min.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
+
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.bdt.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/stickytableheaders/jquery.stickytableheaders.min.js"></script>
+
+	<!-- bootstrap table -->
+	<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table-cookie.js"></script>
+
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
@@ -163,7 +174,9 @@ else {
 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
 	if(file_exists( dirname(__FILE__)."/css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
-    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
+		// set width
+		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+    	print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
 	}
     ?>
 	</div>
@@ -206,7 +219,6 @@ if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-cente
 <div class="content_overlay">
 <div class="container-fluid" id="mainContainer">
 		<?php
-
 		/* error */
 		if($_GET['page'] == "error") {
 			print "<div id='error' class='container'>";

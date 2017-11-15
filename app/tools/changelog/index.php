@@ -34,8 +34,9 @@ if($User->settings->enableChangelog == 1) {
 ?>
 
 	<!-- filter -->
+	<div class="text-right">
 	<form name='cform' id='cform' class='form-inline'>
-		<div class='input-group pull-right' style='margin-bottom:20px;'>
+		<div class='input-group' style='margin-bottom:20px;'>
 
 		<div class='form-group'>
 			<select name='climit' class='input-sm climit form-control'>
@@ -58,6 +59,7 @@ if($User->settings->enableChangelog == 1) {
 
 		</div>
 	</form>
+	</div>
 
 	<?php
 	# printout

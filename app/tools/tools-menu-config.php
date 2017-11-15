@@ -42,7 +42,8 @@ $tools_menu_items = array(
 						'nat',
 						'locations',
 						'pstn-prefixes',
-						'mac-lookup'
+						'mac-lookup',
+						'circuits'
                     );
 
 
@@ -65,8 +66,9 @@ if (isset($private_subpages)) {
 }
 
 # arrays
-$tools_menu['Tools']     = array();
 $tools_menu['Subnets']   = array();
+$tools_menu['Devices']   = array();
+$tools_menu['Tools']     = array();
 $tools_menu['User Menu'] = array();
 
 # Tools
@@ -96,12 +98,6 @@ if($User->settings->enableVRF == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"VRFs and belonging networks");
 if($User->settings->enableNAT==1)
 $tools_menu['Subnets'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"NAT", 				"href"=>"nat", 				  "description"=>"NAT translations");
-
-if($User->settings->enableRACK == 1)
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bars", 	     "name"=>"Racks",  				"href"=>"racks", 		"description"=>"Rack information");
-if($User->settings->enableLocations == 1)
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 		"description"=>"All configured devices");
 if($User->settings->enableMulticast == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map-o",		"name"=>"Multicast networks", 	"href"=>"multicast-networks", "description"=>"Multicast subnets and mapping");
 if($User->settings->enableFirewallZones == 1)
@@ -116,7 +112,15 @@ if($User->settings->enableThreshold==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>"Threshold", 	"href"=>"threshold",	"description"=>"List of thresholded subnets");
 
 
+# devices
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 		"description"=>"All configured devices");
+if($User->settings->enableRACK == 1)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-bars", 	     "name"=>"Racks",  				"href"=>"racks", 		"description"=>"Rack information");
+if($User->settings->enableCircuits == 1)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-random", 	 "name"=>"Circuits",  			"href"=>"circuits", 		"description"=>"Circuit information");
+if($User->settings->enableLocations == 1)
+$tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
+
+
 # user menu
 $tools_menu['User Menu'][] = array("show"=>true,	"icon"=>"fa-user", 		"name"=>"My account",  			"href"=>"user-menu", 	"description"=>"Manage your account");
-
-?>
