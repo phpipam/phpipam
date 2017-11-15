@@ -107,7 +107,7 @@ $(function () {
 	$('#<?php print $type; ?>top10Hosts').bind('plotclick', function(event, pos, item) {
 		//set prettylinks of not
 		if ($('#prettyLinks').html()=="Yes")	{ var plink = $("div.iebase").html()+"subnets/"+all_links[item.datapoint[0]]['sectionId']+"/"+ all_links[item.datapoint[0]]['id']+"/"; }
-		else									{ var plink = $("div.iebase").html()+"?page=subnets&section="+all_links[item.datapoint[0]]['sectionId']+"&subnetId="+all_links[item.datapoint[0]]['id'] + ""; }
+		else									{ var plink = $("div.iebase").html()+"index.php?page=subnets&section="+all_links[item.datapoint[0]]['sectionId']+"&subnetId="+all_links[item.datapoint[0]]['id'] + ""; }
 		//open
 		document.location = plink;
 	});
