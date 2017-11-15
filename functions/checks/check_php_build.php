@@ -17,7 +17,7 @@
 
 
 # Required extensions
-$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd");
+$requiredExt  = array("session1", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd");
 
 # Available extensions
 $availableExt = get_loaded_extensions();
@@ -61,7 +61,7 @@ if (sizeof($missingExt) != 1) {
     /* headers */
     $error   = "<html>";
     $error  .= "<head>";
-    $error  .= "<base href='$url' />";
+    $error  .= "<base href='$url".BASE."' />";
     $error  .= '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap.min.css">';
 	$error  .= '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-custom.css">';
 	$error  .= "</head>";
