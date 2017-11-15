@@ -8,9 +8,9 @@ else 							{ require('config.php'); }
 /* site functions */
 require('functions/functions.php');
 
-header("Cache-Control: no-cache, must-revalidate"); //HTTP 1.1
-header("Pragma: no-cache");                         //HTTP 1.0
-header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
+// header("Cache-Control: no-cache, must-revalidate"); //HTTP 1.1
+// header("Pragma: no-cache");                         //HTTP 1.0
+// header("Expires: Sat, 26 Jul 2016 05:00:00 GMT");   //Date in the past
 
 # set default page
 if(!isset($_GET['page'])) { $_GET['page'] = "dashboard"; }
