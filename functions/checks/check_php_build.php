@@ -61,7 +61,7 @@ if (sizeof($missingExt) != 1) {
     /* headers */
     $error   = "<html>";
     $error  .= "<head>";
-    $error  .= "<base href='$url' />";
+    $error  .= "<base href='$url".BASE."' />";
     $error  .= '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap.min.css">';
 	$error  .= '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-custom.css">';
 	$error  .= "</head>";

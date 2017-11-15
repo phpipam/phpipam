@@ -274,8 +274,6 @@ CREATE TABLE `devices` (
   `hostname` varchar(100) DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `type` int(2) DEFAULT '0',
-  `custom_vendor` varchar(156) DEFAULT NULL,
-  `custom_model` varchar(124) DEFAULT NULL,
   `description` varchar(256) DEFAULT NULL,
   `sections` varchar(1024) DEFAULT NULL,
   `snmp_community` varchar(100) DEFAULT NULL,
