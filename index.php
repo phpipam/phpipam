@@ -91,7 +91,7 @@ else {
 	<!-- css -->
 	<link rel="shortcut icon" type="image/png" href="css/<?php print SCRIPT_PREFIX; ?>/images/favicon.png">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
+	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.min.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/font-awesome/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-switch.min.css">
 	<link rel="stylesheet" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.css">
@@ -105,7 +105,7 @@ else {
 	<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
 	<?php } ?>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
+	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
 	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
