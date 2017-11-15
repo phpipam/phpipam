@@ -21,6 +21,7 @@ $admin = $User->is_admin(false);
 	<?php } else { ?>
 	<a href="<?php print create_link("administration", "nat") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
 	<?php } ?>
+    <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>
 </div>
 <br>
 <?php } ?>

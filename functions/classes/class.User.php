@@ -2,10 +2,9 @@
 
 /**
 *
-*    User class to work with current user, authentication etc
+*  User class to work with current user, authentication etc
 *
 */
-
 class User extends Common_functions {
 
 
@@ -13,7 +12,6 @@ class User extends Common_functions {
      * Current username
      *
      * @var string
-     * @access public
      */
     public $username;
 
@@ -23,7 +21,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access public
      */
     public $api = false;
 
@@ -33,7 +30,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $authenticated = false;
 
@@ -43,7 +39,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $timeout = false;
 
@@ -53,7 +48,6 @@ class User extends Common_functions {
      * (default value: null)
      *
      * @var object
-     * @access public
      */
     public $user = null;
 
@@ -63,7 +57,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $isadmin = false;
 
@@ -73,7 +66,6 @@ class User extends Common_functions {
      * (default value: 5)
      *
      * @var int
-     * @access public
      */
     public $blocklimit = 5;
 
@@ -83,7 +75,6 @@ class User extends Common_functions {
      * (default value: 1)
      *
      * @var int
-     * @access private
      */
     private $authmethodid = 1;
 
@@ -93,7 +84,6 @@ class User extends Common_functions {
      * (default value: "local")
      *
      * @var string
-     * @access private
      */
     private $authmethodtype = "local";
 
@@ -103,7 +93,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access private
      */
     private $ldap = false;
 
@@ -111,7 +100,6 @@ class User extends Common_functions {
      * Users IP address
      *
      * @var mixed
-     * @access private
      */
     private $ip;
 
@@ -121,7 +109,6 @@ class User extends Common_functions {
      * (default value: "phpipam")
      *
      * @var string
-     * @access protected
      */
     protected $sessname = "phpipam";
 
@@ -129,7 +116,6 @@ class User extends Common_functions {
      * (json) parameters for authentication
      *
      * @var mixed
-     * @access protected
      */
     protected $authmethodparams;
 
@@ -139,7 +125,6 @@ class User extends Common_functions {
      * (default value: false)
      *
      * @var bool
-     * @access protected
      */
     protected $debugging = false;
 
@@ -147,15 +132,13 @@ class User extends Common_functions {
      * Result object
      *
      * @var object
-     * @access public
      */
     public $Result;
 
     /**
      * for Database connection
      *
-     * @var resource
-     * @access protected
+     * @var mixed
      */
     protected $Database;
 
@@ -163,7 +146,6 @@ class User extends Common_functions {
      * for Logging connection
      *
      * @var object
-     * @access public
      */
     public $Log;
 
@@ -320,7 +302,7 @@ class User extends Common_functions {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout
-                if($this->timeout == true) {
+                if($this->timeout === true) {
                     $this->authenticated = false;
                 }
                 else {
@@ -553,101 +535,35 @@ class User extends Common_functions {
         return $_SESSION[$name] == $value ? true : false;
     }
 
-
-
-
-
-
-
-
-   /**
-     *    Check if migration of AD settings is required
-     *
-     *    must be deleted after 1.2 release
-     *    along with:
-     *        > `settings`.`authmigrated`
-     *        > `settings`.`domainAuth`
-     *        > `settingsDomain`
-     *        > `users`.`domainUser`
-     *
-     * @access public
-     * @return void
-     */
-    public function migrate_domain_settings () {
-        # if not already migrated migrate settings!
-        if($this->settings->authmigrated==0) {
-            # only if AD used
-            if($this->settings->domainAuth!=0) {
-                # fetch AD settings
-                $err = false;
-                try { $ad = $this->Database->getObject("settingsDomain",1); }
-                catch (Exception $e) { $err = true; }
-
-                if($err === false) {
-                    # remove editDate
-                    unset($ad->editDate);
-                    # save to json array
-                    $ad = json_encode($ad);
-                    # update usersAuthMethod
-                    $type = $this->settings->domainAuth==1 ? "AD" : "LDAP";
-                    # update
-                    try {
-                        $this->Database->insertObject("usersAuthMethod", array("type"=>$type, "params"=>$ad, "description"=>$type." authentication", "protected"=>"No"));
-                    }
-                    catch (Exception $e) {
-                        $err = true;
-                    }
-                    # set migrated flag
-                    if($err === false) {
-                        try {
-                            $this->Database->updateObject("settings", array("id"=>1,"authmigrated"=>1), 'id');
-                        }
-                        catch (Exception $e) {
-                            // no response on failure
-                        }
-                    }
-                }
-            }
-        }
-    }
-
     /**
-     * Check if migration of LDAP settings is required
+     * Migrate resolve_subnets from config.php to database
+     * for versions older than 1.31
      *
-     * @access public
+     * @method migrate_resolve_subnets
+     *
      * @return void
      */
-    public function migrate_ldap_settings () {
-        # fetch LDAP settings
-        $ldaps = $this->Database->getObjectsQuery("select * from usersAuthMethod where type = 'LDAP'");
-
-        foreach ($ldaps as $ldapobj) {
-            $ldap = json_decode($ldapobj->params);
-            if (!property_exists($ldap, 'ldap_security')) {
-                $ldap->ldap_security = 'none';
-            }
-
-            if (property_exists($ldap, 'use_ssl')) {
-                if ($ldap->use_ssl == '1') {
-                    $ldap->ldap_security = 'ssl';
+    public function migrate_resolve_subnets () {
+        // read config.php
+        include( dirname(__FILE__).'/../../config.php' );
+        // check for array and values
+        if(isset($config['resolve_subnets'])) {
+            if(is_array($config['resolve_subnets'])) {
+                if (sizeof($config['resolve_subnets'])>0) {
+                    foreach ($config['resolve_subnets'] as $subnetId) {
+                        $update = array (
+                                         "id"         => $subnetId,
+                                         "resolveDNS" => 1
+                                         );
+                        // update
+                        try {
+                            $this->Database->updateObject("subnets", $update);
+                        } catch (Exception $e) {}
+                    }
+                    // print that is can be deleted
+                    $this->Result->show ("warning", '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
                 }
-                unset($ldap->use_ssl);
             }
-
-            if (property_exists($ldap, 'use_tls')) {
-                if ($ldap->use_tls == '1') {
-                    $ldap->ldap_security = 'tls';
-                }
-                unset($ldap->use_tls);
-            }
-
-            if (!property_exists($ldap, 'uid_attr')) {
-                $ldap->uid_attr = 'uid';
-            }
-
-            $ldapobj->params = json_encode($ldap);
-
-            $this->Database->updateObject("usersAuthMethod", $ldapobj);
         }
     }
 
@@ -863,8 +779,8 @@ class User extends Common_functions {
      *    > authenticates
      *
      * @access public
-     * @param mixed $username
-     * @param mixed $password
+     * @param string $username
+     * @param string $password
      * @param bool $saml
      * @return void
      */
@@ -906,7 +822,7 @@ class User extends Common_functions {
      * tries to fetch user datails from database by username if not already existing locally
      *
      * @access private
-     * @param mixed $username
+     * @param string $username
      * @param bool $force
      * @return void
      */
@@ -1069,24 +985,20 @@ class User extends Common_functions {
     private function directory_connect ($authparams) {
         # adLDAP script
         require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
-
         $dirparams = Array();
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
         $dirparams['account_suffix'] = @$authparams['account_suffix'];
         $dirparams['domain_controllers'] = explode(";", str_replace(" ", "", $authparams['domain_controllers']));
-
         // set ssl and tls separate for ldap and AD
         if ($this->ldap) {
             // set ssl and tls
             $dirparams['use_ssl'] = false;
             $dirparams['use_tls'] = false;
-
             // Support the pre-1.2 auth settings as well as the current version
             // TODO: remove legacy support at some point
             if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
             elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
-
             if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
@@ -1096,17 +1008,14 @@ class User extends Common_functions {
             $dirparams['use_ssl'] = @$authparams['use_ssl'];
             $dirparams['use_tls'] = @$authparams['use_tls'];
         }
-
         # open connection
         try {
             # Initialize adLDAP
             $dirconn = new adLDAP($dirparams);
-
         } catch (adLDAPException $e) {
             $this->Log->write("Directory connection error", "Failed to connect: " . $e->getMessage(), 2, null);
             $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
         }
-
         return $dirconn;
     }
 
@@ -1119,8 +1028,8 @@ class User extends Common_functions {
      *
      * @access private
      * @param array $authparams
-     * @param mixed $username
-     * @param mixed $password
+     * @param string $username
+     * @param string $password
      * @return void
      */
     private function directory_authenticate ($authparams, $username, $password) {
@@ -1154,7 +1063,6 @@ class User extends Common_functions {
             $this->Log->write("Error", "Something went wrong during auth: " . $e->getMessage(), 2, $username);
             $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
         }
-
     }
 
     /**
@@ -1391,16 +1299,17 @@ class User extends Common_functions {
      */
     public function self_update($post) {
         # set items to update
-        $items  = array("real_name"=>$post['real_name'],
-                        "mailNotify"=>$post['mailNotify'],
-                        "mailChangelog"=>$post['mailChangelog'],
-                        "email"=>$post['email'],
-                        "lang"=>$post['lang'],
-                        "id"=>$this->user->id,
+        $items  = array("real_name"        => $post['real_name'],
+                        "mailNotify"       => $post['mailNotify'],
+                        "mailChangelog"    => $post['mailChangelog'],
+                        "email"            => $post['email'],
+                        "lang"             => $post['lang'],
+                        "id"               => $this->user->id,
                         //display
-                        "compressOverride"=>$post['compressOverride'],
-                        "hideFreeRange"=>$this->verify_checkbox(@$post['hideFreeRange']),
-                        "menuType"=>$post['menuType'],
+                        "compressOverride" => $post['compressOverride'],
+                        "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
+                        "menuType"         => $this->verify_checkbox(@$post['menuType']),
+                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
@@ -1648,5 +1557,3 @@ class User extends Common_functions {
 	    return isset($out) ? $out : array();
 	}
 }
-
-?>

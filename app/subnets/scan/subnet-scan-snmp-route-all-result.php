@@ -35,6 +35,8 @@ foreach ($_POST as $k=>$p) {
     }
 }
 
+if(sizeof($_POST)>=ini_get("max_input_vars"))                           { $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true, false, false, true); }
+
 # scan disabled
 if ($User->settings->enableSNMP!="1")                           { $Result->show("danger", _("SNMP module disbled"), true); }
 

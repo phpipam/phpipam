@@ -63,7 +63,7 @@ $(function(){
 	<tr>
 	    <td style="width:120px;"><?php print _('Type'); ?></td>
 	    <td>
-		    <input type="text" name="type" class="form-control input-sm"  value="<?php print @$tag->type; ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>>
+		    <input type="text" name="type" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$tag->type); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>>
 			<input type="hidden" name="id" value="<?php print @$tag->id; ?>">
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -86,7 +86,7 @@ $(function(){
 	    <td><?php print _('Bg color'); ?></td>
 	    <td>
 		    <div class="input-group select-bgcolor">
-				<input type="text" name="bgcolor" class="form-control input-xs"  value="<?php print @$tag->bgcolor; ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
+				<input type="text" name="bgcolor" class="form-control input-xs"  value="<?php print $Admin->strip_xss(@$tag->bgcolor); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
 		    </div>
 		</td>
     </tr>
@@ -96,7 +96,7 @@ $(function(){
 	    <td><?php print _('Fg color'); ?></td>
 	    <td>
 		    <div class="input-group select-fgcolor">
-			    <input type="text" name="fgcolor" class="form-control input-sm"  value="<?php print @$tag->fgcolor; ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
+			    <input type="text" name="fgcolor" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$tag->fgcolor); ?>"  maxlength='32' <?php if($_POST['action'] == "delete") print "readonly"; ?>><span class="input-group-addon"><i></i></span>
 		    </div>
 		</td>
     </tr>

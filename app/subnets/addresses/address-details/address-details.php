@@ -119,7 +119,7 @@ if(sizeof($address)>1) {
         // get MAC vendor
         if($User->settings->decodeMAC=="1") {
             $mac_vendor = $User->get_mac_address_vendor_details ($address['mac']);
-            $mac_vendor = $mac_vendor=="" ? : " <span class='text-muted'>(".$mac_vendor.")</span>";
+            $mac_vendor = $mac_vendor==""||is_bool($mac_vendor) ? "" : " <span class='text-muted'>(".$mac_vendor.")</span>";
         }
         else {
             $mac_vendor = "";
@@ -250,7 +250,7 @@ if(sizeof($address)>1) {
     			if(strlen($address[$key])>0) {
     			$address[$key] = str_replace(array("\n", "\r\n"), "<br>",$address[$key]);
     			print "<tr>";
-    			print "	<th>$key</th>";
+    			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
     			print "	<td>";
     			#booleans
     			if($field['type']=="tinyint(1)")	{

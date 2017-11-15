@@ -180,8 +180,10 @@ class Vrfs_controller extends Common_api_functions {
 		else {
 			// validate
 			$this->validate_vrf ();
+			// fetch
+			$result = $this->Tools->fetch_object ("vrf", "vrfId", $this->_params->id);
 			// check result
-			if($result==NULL)						{ $this->Response->throw_exception(404, "VRF not found"); }
+			if($result===false)						{ $this->Response->throw_exception(404, "VRF not found"); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 	}
@@ -357,5 +359,3 @@ class Vrfs_controller extends Common_api_functions {
 	}
 
 }
-
-?>

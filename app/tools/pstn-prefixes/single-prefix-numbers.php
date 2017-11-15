@@ -26,7 +26,7 @@ $colspan_dhcp = 4;
     	# custom fields
     	if(sizeof($custom_fields) > 0) {
     		foreach($custom_fields as $myField) 	{
-    			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</span></th>";
+    			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</span></th>";
     			$colspan++;
     			$colspan_dhcp++;
     		}

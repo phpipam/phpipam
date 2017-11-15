@@ -39,6 +39,9 @@ else {
     $rack->size = 42;
 }
 
+# fetch all racks
+$Racks->fetch_all_racks();
+
 # all locations
 if($User->settings->enableLocations=="1")
 $locations = $Tools->fetch_all_objects ("locations", "name");
@@ -50,6 +53,16 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <script type="text/javascript">
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    onText: 'Yes',
+	    offText: 'No',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
 });
 </script>
 
@@ -68,11 +81,11 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($rack->name)) print $rack->name; ?>" <?php print $readonly; ?>>
+			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($rack->name)) print $Tools->strip_xss($rack->name); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
-	<!-- Type -->
+	<!-- Size -->
 	<tr>
 		<td><?php print _('Size'); ?></td>
 		<td>
@@ -84,6 +97,15 @@ $(document).ready(function(){
 			}
 			?>
 			</select>
+		</td>
+	</tr>
+
+	<!-- Front -->
+	<tr>
+		<td><?php print _('Back side'); ?></td>
+		<td>
+			<?php $checked = @$rack->hasBack=="1" ? "checked" : ""; ?>
+			<input type="checkbox" name="hasBack" class="input-switch" value="1" <?php print $checked; ?>>
 		</td>
 	</tr>
 
@@ -140,7 +162,7 @@ $(document).ready(function(){
     		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
-			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 			print "	<td>".$custom_input['field']."</td>";
 			print "</tr>";
 		}
@@ -157,9 +179,12 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRacksubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<a class='btn btn-sm btn-default submit_popup' data-script="app/admin/racks/edit-result.php" data-result_div="rackManagementEditResult" data-form='rackManagementEdit'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</a>
+
 	</div>
 
 	<!-- result -->
-	<div class="rackManagementEditResult"></div>
+	<div id="rackManagementEditResult"></div>
 </div>

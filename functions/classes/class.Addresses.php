@@ -359,26 +359,27 @@ class Addresses extends Common_functions {
 	 */
 	protected function modify_address_add ($address) {
 		# set insert array
-		$insert = array("ip_addr"=>$this->transform_address($address['ip_addr'],"decimal"),
-						"subnetId"=>$address['subnetId'],
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore'],
-						"firewallAddressObject"=>@$address['firewallAddressObject'],
-						"lastSeen"=>@$address['lastSeen']
+		$insert = array(
+						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
+						"subnetId"              => $address['subnetId'],
+						"description"           => @$address['description'],
+						"dns_name"              => @$address['dns_name'],
+						"mac"                   => @$address['mac'],
+						"owner"                 => @$address['owner'],
+						"state"                 => @$address['state'],
+						"switch"                => @$address['switch'],
+						"port"                  => @$address['port'],
+						"note"                  => @$address['note'],
+						"is_gateway"            => @$address['is_gateway'],
+						"excludePing"           => @$address['excludePing'],
+						"PTRignore"             => @$address['PTRignore'],
+						"firewallAddressObject" => @$address['firewallAddressObject'],
+						"lastSeen"              => @$address['lastSeen']
 						);
         # location
         if (isset($address['location_item'])) {
             if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
+                $this->Result->show("danger", _("Invalid location value"), true);
             }
             $insert['location'] = $address['location_item'];
         }
@@ -529,6 +530,8 @@ class Addresses extends Common_functions {
 		if(@$address['remove_all_dns_records']=="1") {
     		$this->pdns_remove_ip_and_hostname_records ($address);
         }
+        # remove from NAT
+        $this->remove_address_nat_items ($address['id'], true);
 		# ok
 		return true;
 	}
@@ -549,6 +552,83 @@ class Addresses extends Common_functions {
 		}
 		# ok
 		return true;
+	}
+
+	/**
+	 * Remove item from nat when item is removed
+	 *
+	 * @method remove_nat_item
+	 *
+	 * @param  int $obj_id
+	 * @param  bool $print
+	 *
+	 * @return int
+	 */
+	public function remove_address_nat_items ($obj_id = 0, $print = true) {
+		# set found flag for returns
+		$found = 0;
+		# fetch all nats
+		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# loop and check for object ids
+		if(sizeof($all_nats)>0) {
+			# init admin object
+			$Admin = new Admin ($this->Database, false);
+			# loop
+			foreach ($all_nats as $nat) {
+			    # remove item from nat
+			    $s = json_decode($nat->src, true);
+			    $d = json_decode($nat->dst, true);
+
+			    if(is_array($s['ipaddresses']))
+			    $s['ipaddresses'] = array_diff($s['ipaddresses'], array($obj_id));
+			    if(is_array($d['ipaddresses']))
+			    $d['ipaddresses'] = array_diff($d['ipaddresses'], array($obj_id));
+
+			    # save back and update
+			    $src_new = json_encode(array_filter($s));
+			    $dst_new = json_encode(array_filter($d));
+
+			    # update only if diff found
+			    if($s!=$src_new || $d!=$dst_new) {
+			    	$found++;
+
+				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+				    	if($print) {
+					        $this->Result->show("success", "Address removed from NAT", false);
+						}
+				    }
+			    }
+			}
+		}
+		# return
+		return $found;
+	}
+
+	/**
+	 * Updates hostname for IP addresses
+	 *
+	 * @method update_address_hostname
+	 *
+	 * @param  mixed $ip
+	 * @param  int $id
+	 * @param  string $hostname
+	 *
+	 * @return void
+	 */
+	public function update_address_hostname ($ip, $id, $hostname = "") {
+		if(is_numeric($id) && strlen($hostname)>0) {
+			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "dns_name"=>$hostname)); }
+			catch (Exception $e) {
+				return false;
+			}
+			// save log
+			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $address_old), 0);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "dns_name"=>""), array("id"=>$id, "dns_name"=>$hostname), $this->mail_changelog);
+		}
 	}
 
 	/**
@@ -1597,6 +1677,10 @@ class Addresses extends Common_functions {
 		$this->initialize_pear_net_IPv4 ();
 		$this->initialize_pear_net_IPv6 ();
 
+		// no null
+		if($this->transform_address ($address, "decimal")==0) {
+			return false;
+		}
 		// transform
 		$address = $this->transform_address ($address, "dotted");
 		// ipv6

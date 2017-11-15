@@ -7,7 +7,7 @@
 * @author Tudor Barbu <miau@motane.lu>
 * @copyright MIT
 */
-class Thread {
+class PingThread {
     const FUNCTION_NOT_CALLABLE = 10;
     const COULD_NOT_FORK = 15;
 
@@ -17,8 +17,8 @@ class Thread {
 	* @var array
 	*/
     private $errors = array(
-        Thread::FUNCTION_NOT_CALLABLE => 'You must specify a valid function name that can be called from the current scope.',
-        Thread::COULD_NOT_FORK => 'pcntl_fork() returned a status of -1. No new process was created',
+        PingThread::FUNCTION_NOT_CALLABLE => 'You must specify a valid function name that can be called from the current scope.',
+        PingThread::COULD_NOT_FORK => 'pcntl_fork() returned a status of -1. No new process was created',
     );
 
 	/**
@@ -89,7 +89,7 @@ class Thread {
             $this->runnable = $_runnable;
         }
         else {
-            throw new Exception( $this->getError( Thread::FUNCTION_NOT_CALLABLE ), Thread::FUNCTION_NOT_CALLABLE );
+            throw new Exception( $this->getError( PingThread::FUNCTION_NOT_CALLABLE ), PingThread::FUNCTION_NOT_CALLABLE );
         }
     }
 
@@ -162,7 +162,7 @@ class Thread {
     public function start() {
         $pid = @ pcntl_fork();
         if( $pid == -1 ) {
-            throw new Exception( $this->getError( Thread::COULD_NOT_FORK ), Thread::COULD_NOT_FORK );
+            throw new Exception( $this->getError( PingThread::COULD_NOT_FORK ), PingThread::COULD_NOT_FORK );
         }
         if( $pid ) {
             // parent
@@ -197,7 +197,7 @@ class Thread {
 		$pid = pcntl_fork();
 
 		if( $pid == -1 ) { //error forking, no child is created
-			throw new Exception( $this->getError( Thread::COULD_NOT_FORK ), Thread::COULD_NOT_FORK );
+			throw new Exception( $this->getError( PingThread::COULD_NOT_FORK ), PingThread::COULD_NOT_FORK );
 		}else if ( $pid ) {// parent
 			$this->pid = $pid;
 

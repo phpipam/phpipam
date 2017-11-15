@@ -9,4 +9,3 @@ $User->check_user_session();
 
 # include tools rack
 include(dirname(__FILE__) . "/../../tools/racks/index.php");
-?>

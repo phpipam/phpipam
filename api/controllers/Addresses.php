@@ -194,6 +194,7 @@ class Addresses_controller extends Common_api_functions  {
             // fetch all in subnet
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "subnetId", $this->_params->id2);
             if($result!==false) {
+            	$result_filtered = "";
                 foreach ($result as $k=>$r) {
                     if($r->ip !== $this->_params->id) {
                         unset($result[$k]);
@@ -578,6 +579,23 @@ class Addresses_controller extends Common_api_functions  {
 	}
 
 	/**
+	 * This method will be used if subnetId is not present and will try to
+	 * find it in system itself.
+	 *
+	 * It will only take into consideration subnets that do not have underlying
+	 * slave subnets.
+	 *
+	 * In case more than 1 subnet is found error will be thrown.
+	 *
+	 * @method autosearch_subnet_id
+	 *
+	 * @return void
+	 */
+	private function autosearch_subnet_id () {
+
+	}
+
+	/**
 	 * Validates address on creation
 	 *
 	 * @access public
@@ -592,11 +610,17 @@ class Addresses_controller extends Common_api_functions  {
 
 		// fetch subnet
 		$subnet = $this->subnet_details;
-		// formulate CIDR
-		$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
+		// check if it is not folder
+		if($subnet->isFolder!="1") {
+			// formulate CIDR
+			$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
 
-		// validate address, that it is inside subnet, not subnet/broadcast
-		$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
+			// validate address, that it is inside subnet, not subnet/broadcast
+			$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
+		}
+		else {
+			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)		{ $this->Response->throw_exception(400, "Invalid address"); }
+		}
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {

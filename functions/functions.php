@@ -26,6 +26,9 @@ if(!defined('BASE')) {
 	define('BASE', substr(str_replace($root, "", dirname(__FILE__)),0,-9));
 }
 
+// Fix JSON_UNESCAPED_UNICODE for PHP 5.3
+defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
+
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
 require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
@@ -56,9 +59,10 @@ if(@$_GET['page']!="install" ) {
 	catch (Exception $e) { $settings = false; }
 	if ($settings!==false) {
 		if (phpversion() < "5.4") {
-			define(SETTINGS, json_encode($settings));
-		}else{
-			define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
+			define('SETTINGS', json_encode($settings));
+		}
+		else{
+			define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 		}
 	}
 }
@@ -116,5 +120,3 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 
 /* get version */
 include('version.php');
-
-?>

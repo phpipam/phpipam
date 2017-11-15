@@ -29,8 +29,10 @@ if($_POST['action']!="add" && !is_numeric($_POST['rackid']))		{ $Result->show("d
 
 # remove or add ?
 if ($_POST['action']=="remove") {
+    # fetch rack details
+    $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
     # validate csrf cookie
-    $User->csrf_cookie ("validate", "rack_devices", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+    $User->csrf_cookie ("validate", "rack_devices_".$rack->id."_device_".$_POST['deviceid'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
     # set values
     $values = array("id"=>$_POST['deviceid'],
                     "rack"=>"",
@@ -65,7 +67,6 @@ else {
     if ($rack===false)                                              { $Result->show("danger", _("Invalid ID"), true, true); }
     # fetch existing devices
     $rack_devices = $Racks->fetch_rack_devices($rack->id);
-
 
     # all devices
 	$devices = $Admin->fetch_all_objects("devices", "id");
@@ -123,20 +124,54 @@ $(document).ready(function(){
                     // available spaces
                     $available = array();
                     for($m=1; $m<=$rack->size; $m++) {
-                        $available[] = $m;
+                        $available[$m] = $m;
+                    }
+                    // available back
+                    if($rack->hasBack!="0") {
+                    for($m=1; $m<=$rack->size; $m++) {
+                        $available_back[$m+$rack->size] = $m;
+                    }
                     }
 
                     if($rack_devices!==false) {
+                        // front side
                         foreach ($rack_devices as $d) {
                             for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
-                                $pos = array_search($m, $available);
-                                unset($available[$pos]);
+                                if(array_key_exists($m, $available)) {
+                                    unset($available[$m]);
+                                }
+                            }
+                        }
+                        // back side
+                        if($rack->hasBack!="0") {
+                            foreach ($rack_devices as $d) {
+                                for($m=$d->rack_start; $m<=($d->rack_start+($d->rack_size-1)); $m++) {
+                                    if(array_key_exists($m, $available_back)) {
+                                        unset($available_back[$m]);
+                                    }
+                                }
                             }
                         }
                     }
+
                     // print available spaces
-                    foreach ($available as $a) {
-                        print "<option value='$a'>$a</option>";
+                    if($rack->hasBack!="0") {
+                        print "<optgroup label='"._("Front")."'>";
+                        foreach ($available as $a) {
+                            print "<option value='$a'>$a</option>";
+                        }
+                        print "</optgroup>";
+
+                        print "<optgroup label='"._("Back")."'>";
+                        foreach ($available_back as $k=>$a) {
+                            print "<option value='$k'>$a</option>";
+                        }
+                        print "</optgroup>";
+                    }
+                    else {
+                        foreach ($available as $a) {
+                            print "<option value='$a'>$a</option>";
+                        }
                     }
                     ?>
                     </select>
@@ -147,11 +182,21 @@ $(document).ready(function(){
         	<tr>
         		<td><?php print _('Size'); ?></td>
         		<td>
-        			<input type="text" name="rack_size" class="form-control input-sm" placeholder="<?php print _('Rack size in U'); ?>">
+        			<input type="text" name="rack_size" class="form-control input-sm" placeholder="<?php print _('Device size in U'); ?>">
         			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         			<input type="hidden" name="rackid" value="<?php print $_POST['rackid']; ?>">
         		</td>
         	</tr>
+
+            <!-- Location override -->
+            <?php if($User->settings->enableLocations=="1" && ($rack->location!="0" && !is_null($rack->location))) { ?>
+            <tr>
+                <td colspan="2">
+                <hr>
+                    <input type="checkbox" class="input-switch" value="1" name="no_location"> <span class="text-muted"><?php print _("Don't update device location from rack"); ?></span>
+                </td>
+            </tr>
+            <?php } ?>
 
     	</table>
         </form>

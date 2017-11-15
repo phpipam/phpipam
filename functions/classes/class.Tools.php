@@ -548,7 +548,77 @@ class Tools extends Common_functions {
 
 	    # return result
 	    return $search;
+	}
 
+	/**
+	 * Search for circuits.
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_circuit_fields (default: array())
+	 * @return array
+	 */
+	public function search_circuits ($search_term, $custom_circuit_fields = array()) {
+		# query
+		$query[] = "select c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status ";
+		$query[] = "from circuits as c, circuitProviders as p ";
+		$query[] = "where c.provider = p.id";
+		$query[] = "and `cid` like :search_term or `type` like :search_term or `capacity` like :search_term or `comment` like :search_term or `name` like :search_term";
+		# custom
+	    if(sizeof($custom_circuit_fields) > 0) {
+			foreach($custom_circuit_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+
+		$query[] = "order by c.cid asc;";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
+	}
+
+
+	/**
+	 * Search for circuit providers
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_circuit_fields (default: array())
+	 * @return array
+	 */
+	public function search_circuit_providers ($search_term, $custom_circuit_fields = array()) {
+		# query
+		$query[] = "select * from `circuitProviders` where `name` like :search_term or `description` like :search_term or `contact` like :search_term ";
+		# custom
+	    if(sizeof($custom_circuit_fields) > 0) {
+			foreach($custom_circuit_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+		$query[] = "order by name asc;";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
 	}
 
 	/**
@@ -876,7 +946,7 @@ class Tools extends Common_functions {
 	 * @return bool
 	 */
 	public function verify_widget ($file) {
-		return file_exists("app/dashboard/widgets/$file.php")==false ? false : true;
+		return file_exists(dirname(__FILE__)."/../../app/dashboard/widgets/$file.php")||file_exists(dirname(__FILE__)."/../../app/dashboard/widgets/custom/$file.php") ? true : false;
 	}
 
 
@@ -1208,7 +1278,7 @@ class Tools extends Common_functions {
 				foreach($fields[$table] as $field) {
 					//if it doesnt exist store error
 					if(!$this->field_exists($table, $field)) {
-						$error['fieldError'][$table] = $field;
+						$error['fieldError'][$table][] = $field;
 					}
 				}
 			}
@@ -1263,7 +1333,7 @@ class Tools extends Common_functions {
 		try { $count = $this->Database->getObjectQuery($query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true);	return false; }
 		# return true if it exists
-		return sizeof($count)>0 ? true : false;
+		return ($count !== null && sizeof($count) > 0 ? true : false);
 	}
 
 	/**
@@ -2219,6 +2289,50 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Fetch parents recursive - generic function
+	 *
+	 * Fetches all parents for specific table in id / parent relations
+	 *
+	 * It will return array, keys will be id's and values as defined in return_field
+	 *
+	 * @param string $table
+	 * @param string $parent_field
+	 * @param string $return_field
+	 * @param int $false
+	 * @param bool $reverse (default: true)
+	 *
+	 * @return array
+	 */
+	public function fetch_parents_recursive ($table, $parent_field, $return_field, $id, $reverse = false) {
+		$parents = array();
+		$root = false;
+
+		while($root === false) {
+			$subd = $this->fetch_object($table, "id", $id);
+
+			if($subd!==false) {
+    			$subd = (array) $subd;
+				# not root yet
+				if(@$subd[$parent_field]!=0) {
+					// array_unshift($parents, $subd[$parent_field]);
+					$parents[$subd['id']] = $subd[$return_field];
+					$id  = $subd[$parent_field];
+				}
+				# root
+				else {
+					$parents[$subd['id']] = $subd[$return_field];
+					$root = true;
+				}
+			}
+			else {
+				$root = true;
+			}
+		}
+		# return array
+		return $reverse ? array_reverse($parents, truetrue) :$parents;
+	}
+
+	/**
 	 * Checks for duplicate number.
 	 *
 	 * @access public
@@ -2708,6 +2822,7 @@ class Tools extends Common_functions {
     public function fetch_location_objects ($id = false, $count = false) {
         // check
         if(is_numeric($id)) {
+            $id = $this->Database->escape ($id);
             // count ?
             $select = $count ? "count(*) as cnt " : "*";
             // query
@@ -2717,26 +2832,47 @@ class Tools extends Common_functions {
                         FROM devices d
                         JOIN locations l
                         ON d.location = l.id
+                        WHERE l.id = $id
+
                         UNION ALL
                         SELECT r.id, r.name, '' as mask, 'racks' as type, '' as sectionId, r.location, r.description
                         FROM racks r
                         JOIN locations l
                         ON r.location = l.id
+                        WHERE l.id = $id
+
                         UNION ALL
                         SELECT s.id, s.subnet as name, s.mask, 'subnets' as type, s.sectionId, s.location, s.description
                         FROM subnets s
                         JOIN locations l
                         ON s.location = l.id
+                        WHERE l.id = $id
+
                         UNION ALL
                         SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.dns_name as description
                         FROM ipaddresses a
                         JOIN locations l
                         ON a.location = l.id
+                        WHERE l.id = $id
+
+                        UNION ALL
+                        SELECT c.id, c.cid as name, 'mask', 'circuit' as type, 'none' as sectionId, c.location2, 'none' as description
+                        FROM circuits c
+                        JOIN locations l
+                        ON c.location1 = l.id
+                        WHERE l.id = $id
+
+                        UNION ALL
+                        SELECT c.id, c.cid as name, 'mask', 'circuit' as type, 'none' as sectionId, c.location2, '' as description
+                        FROM circuits c
+                        JOIN locations l
+                        ON c.location2 = l.id
+                        WHERE l.id = $id
                         )
-                        as linked where location = ?;";
+                        as linked;";
 
      		// fetch
-    		try { $objects = $this->Database->getObjectsQuery($query, array($id)); }
+    		try { $objects = $this->Database->getObjectsQuery($query); }
     		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
 
     		// return
@@ -2761,6 +2897,170 @@ class Tools extends Common_functions {
 	 *	@misc methods
 	 *	------------------------------
 	 */
+
+	/**
+	 * Fetches all circuits from database
+	 *
+	 * @method fetch_all_circuits
+	 *
+	 * @param  array $custom_circuit_fields
+	 *
+	 * @return false|array
+	 */
+	public function fetch_all_circuits ($custom_circuit_fields = array ()) {
+		// set query
+		$query[] = "select";
+		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",c.`".$f['name']."`";
+				}
+			}
+		}
+		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id";
+		$query[] = "order by c.cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	/**
+	 * Fetches all circuits for specific provider
+	 *
+	 * @method fetch_all_circuits
+	 *
+	 * @param  int $provider_id
+	 * @param  array $custom_circuit_fields
+	 *
+	 * @return false|array
+	 */
+	public function fetch_all_provider_circuits ($provider_id, $custom_circuit_fields = array ()) {
+		// set query
+		$query[] = "select";
+		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",c.".$f['name'];
+				}
+			}
+		}
+		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?";
+		$query[] = "order by c.cid asc;";
+
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array($provider_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+
+	/**
+	 * Fetches all circuits for specific device
+	 *
+	 * @method fetch_all_circuits
+	 *
+	 * @param  int $device_id
+	 *
+	 * @return false|array
+	 */
+	public function fetch_all_device_circuits ($device_id) {
+		// set query
+		$query = "select
+					c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status
+					from circuits as c, circuitProviders as p where c.provider = p.id and (c.device1 = :deviceid or c.device2 = :deviceid)
+					order by c.cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery($query, array("deviceid"=>$device_id)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	/**
+	 * Reformat circuit location
+	 *
+	 * If device is provided return device
+	 * If location return location
+	 *
+	 * result will be false or array of:
+	 * 	- type => "devices" / "locations"
+	 *  - icon => "fa-desktop / fa-map"
+	 *  - id => $id
+	 *  - name => "location or device name"
+	 *  - location => "location index or NULL"
+	 *  - rack => "NULL if location, rack_id if device is set with rack otherwise NULL"
+	 *
+	 * @method reformat_circuit_location
+	 *
+	 * @param  int $deviceId
+	 * @param  int $locationId
+	 *
+	 * @return false|array
+	 */
+	public function reformat_circuit_location ($deviceId = null, $locationId = null) {
+		// check device
+		if(is_numeric($deviceId) && $deviceId!=0) {
+			// fetch device
+			$device = $this->fetch_object ("devices", "id", $deviceId);
+			// check
+			if ($device === false) {
+				return false;
+			}
+			else {
+				$array = array (
+								"type"     => "devices",
+								"id"       => $device->id,
+								"name"     => $device->hostname,
+								"icon" 	   => "",
+								"location" => is_null($device->location)||$device->location==0 ? NULL : $device->location,
+								"rack"     => is_null($device->rack)||$device->rack==0 ? NULL : $device->rack
+				                );
+				// check rack location if not configured
+				if ($array['location']==NULL && $array['rack']!=NULL) {
+					$rack_location = $this->fetch_object ("racks", "id", $array['rack']);
+					$array['location'] = $rack_location!==false ? $rack_location->location : NULL;
+				}
+				// result
+				return $array;
+			}
+		}
+		// check location
+		elseif (is_numeric($locationId) && $locationId!=0) {
+			// fetch location
+			$location = $this->fetch_object ("locations", "id", $locationId);
+			// check
+			if ($device === false) {
+				return false;
+			}
+			else {
+				$array = array (
+								"type"     => "locations",
+								"id"       => $location->id,
+								"name"     => $location->name,
+								"icon" 	   => "fa-map",
+								"location" => $location->id,
+								"rack"     => NULL
+				                );
+				return $array;
+			}
+		}
+		else {
+			return false;
+		}
+	}
 
 	/**
 	 * Fetch all l2 domans and vlans

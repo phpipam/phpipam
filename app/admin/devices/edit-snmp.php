@@ -32,8 +32,9 @@ $device = $Admin->fetch_object("devices", "id", $_POST['switchId']);
 if ($device===false)                         { $Result->show("danger", _("Invalid ID"), true, true);  }
 
 // set show
-if ($device->snmp_version=="1" || $device->snmp_version=="2")   { $display=''; }
-else                                                            { $display='display:none'; }
+if ($device->snmp_version=="1" || $device->snmp_version=="2")   { $display=''; $display_v3 = 'display:none'; }
+elseif ($device->snmp_version=="3")                             { $display=''; $display_v3 = ''; }
+else                                                            { $display=''; $display_v3 = ''; }
 
 // default values
 if (strlen($device->snmp_timeout)==0)   { $device->snmp_timeout = 1000000; }
@@ -47,6 +48,10 @@ $(document).ready(function(){
 $('#switchSNMPManagementEdit').change(function() {
    if($('#switchSNMPManagementEdit select[name=snmp_version]').val() == "0") { $('tbody#details').hide(); }
    else                                                                      { $('tbody#details').show(); }
+});
+$('#switchSNMPManagementEdit').change(function() {
+   if($('#switchSNMPManagementEdit select[name=snmp_version]').val() == "3") { $('tr.details3').show(); }
+   else                                                                      { $('tr.details3').hide(); }
 });
 </script>
 
@@ -96,11 +101,92 @@ $('#switchSNMPManagementEdit').change(function() {
 		</td>
 	</tr>
 
+	<tr class="details3" style="<?php print $display_v3; ?>">
+    	<th colspan="2">
+    	    <hr><?php print _("SNMP v3 details"); ?>
+    	</th>
+	</tr>
+
+	<!-- v3 -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Security level'); ?></td>
+		<td>
+    		<select name="snmp_v3_sec_level" class="form-control input-w-auto" >
+        		<option value="none"><?php print _("Not used"); ?></option>
+        		<option value="noAuthNoPriv" <?php if($device->snmp_v3_sec_level=="noAuthNoPriv") print "selected"; ?>>noAuthNoPriv</option>
+        		<option value="authNoPriv" <?php if($device->snmp_v3_sec_level=="authNoPriv") print "selected"; ?>>authNoPriv</option>
+        		<option value="authPriv" <?php if($device->snmp_v3_sec_level=="authPriv") print "selected"; ?>>authPriv</option>
+    		</select>
+		</td>
+	</tr>
+
+	<!-- v3  -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Auth Protocol'); ?></td>
+		<td>
+    		<select name="snmp_v3_auth_protocol" class="form-control input-w-auto">
+        		<option value="none"><?php print _("Not used"); ?></option>
+        		<option value="MD5" <?php if($device->snmp_v3_auth_protocol=="MD5") print "selected"; ?>>MD5</option>
+        		<option value="SHA" <?php if($device->snmp_v3_auth_protocol=="SHA") print "selected"; ?>>SHA</option>
+    		</select>
+		</td>
+	</tr>
+
+	<!-- v3 -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Password'); ?></td>
+		<td>
+    		<input type='password' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_auth_pass); ?>'>
+		</td>
+	</tr>
+
+	<!-- v3  -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Privacy Protocol'); ?></td>
+		<td>
+    		<select name="snmp_v3_priv_protocol" class="form-control input-w-auto">
+        		<option value="none"><?php print _("Not used"); ?></option>
+        		<option value="DES" <?php if($device->snmp_v3_priv_protocol=="DES") print "selected"; ?>>DES</option>
+        		<option value="AES" <?php if($device->snmp_v3_priv_protocol=="AES") print "selected"; ?>>AES</option>
+    		</select>
+		</td>
+	</tr>
+
+	<!-- v3 -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Privacy passphrase'); ?></td>
+		<td>
+    		<input type='text' name="snmp_v3_priv_pass" class="form-control" placeholder="SNMP <?php print _('Privacy passphrase'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_priv_pass); ?>'>
+		</td>
+	</tr>
+
+	<!-- v3 -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Context name'); ?></td>
+		<td>
+    		<input type='text' name="snmp_v3_ctx_name" class="form-control" placeholder="SNMP <?php print _('Context name'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_ctx_name); ?>'>
+		</td>
+	</tr>
+
+	<!-- v3 -->
+	<tr class="details3" style="<?php print $display_v3; ?>">
+		<td><?php print _('Context engind ID'); ?></td>
+		<td>
+    		<input type='text' name="snmp_v3_ctx_engine_id" class="form-control" placeholder="SNMP <?php print _('Context engind ID'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_ctx_engine_id); ?>'>
+		</td>
+	</tr>
+
+	<tr class="details3" style="<?php print $display_v3; ?>">
+    	<td colspan="2">
+    	    <hr>
+    	</td>
+	</tr>
+
 	<!-- port -->
 	<tr>
 		<td><?php print _('Port'); ?></td>
 		<td>
-    		<input type="number" name="snmp_port" class="form-control" placeholder="161" value='<?php print $device->snmp_port; ?>'>
+    		<input type="number" name="snmp_port" class="form-control" placeholder="161" value='<?php print $Tools->strip_xss($device->snmp_port); ?>'>
 		</td>
 	</tr>
 
@@ -108,7 +194,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr>
 		<td><?php print _('Timeout'); ?> [ms]</td>
 		<td>
-    		<input type="number" name="snmp_timeout" class="form-control" placeholder="500000" value='<?php print $device->snmp_timeout; ?>'>
+    		<input type="number" name="snmp_timeout" class="form-control" placeholder="500000" value='<?php print $Tools->strip_xss($device->snmp_timeout); ?>'>
 		</td>
 	</tr>
 
@@ -128,7 +214,7 @@ $('#switchSNMPManagementEdit').change(function() {
         // loop
 		foreach($Snmp->snmp_queries as $k=>$m) {
 			if(in_array($k, $queries)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $k .'" value="on" checked> '. $k .'</div>'. "\n"; }
-			else 							{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $k .'" value="on">'. $k .'</span></div>'. "\n"; }
+			else 						{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="query-'. $k .'" value="on">'. $k .'</span></div>'. "\n"; }
 		}
 		?>
 		</td>

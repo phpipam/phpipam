@@ -24,6 +24,7 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
+$aes_compliant_crypt   = false;         // Default to false for backward compatibility. Use true to use AES-256 compliant RIJNDAEL algorythm (rijndael-128)
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
 
@@ -69,8 +70,17 @@ try {
 	    	if (!in_array($extension, get_loaded_extensions()))
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
-		// decrypt request - to JSON
-		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+		// decrypt request - form_encoded
+        if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+        	$decoded = trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB));
+        	$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
+			parse_str($decoded, $params);
+			$params = (object) $params;
+        }
+        // json_encoded
+		else {
+			$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+		}
 	}
 	// SSL checks
 	elseif($app->app_security=="ssl") {

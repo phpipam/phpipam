@@ -29,7 +29,7 @@ if($_POST['action']=="delete" || $_POST['action']=="edit") {
 }
 if($_POST['action']=="add" || $_POST['action']=="edit") {
     // name
-    if(strlen($_POST['name'])<3)                                            {  $Result->show("danger",  _("Name must have at least 3 characters"), true); }
+    if(strlen($_POST['name'])<2)                                            {  $Result->show("danger",  _("Name must have at least 2 characters"), true); }
     // lat, long
     if($_POST['action']!=="delete") {
         // lat
@@ -94,4 +94,11 @@ if(isset($update)) {
 if(!$Admin->object_modify ("locations", $_POST['action'], "id", $values))   { $Result->show("danger",  _("Location $_POST[action] failed"), false); }
 else																	    { $Result->show("success", _("Location $_POST[action] successful"), false); }
 
-?>
+// remove all references
+if($_POST['action']=="delete"){
+    $Admin->remove_object_references ("circuits", "location1", $values["id"]);
+    $Admin->remove_object_references ("circuits", "location2", $values["id"]);
+    $Admin->remove_object_references ("subnets", "location", $values["id"]);
+    $Admin->remove_object_references ("devices", "location", $values["id"]);
+    $Admin->remove_object_references ("racks", "location", $values["id"]);
+}

@@ -118,7 +118,7 @@ if ($_POST['action']=="add") {
 	        }
 	        else {
     	        //check for overlapping against existing subnets under same master
-    	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+    	        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
     			if($overlap!==false) {
     	            $errors[] = $overlap;
     	        }
@@ -135,7 +135,7 @@ if ($_POST['action']=="add") {
 	# parent is folder checks
 	elseif($section['strictMode']==1) {
         //check for overlapping against existing subnets under same master
-        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['sectionId'], $_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
+        $overlap = $Subnets->verify_nested_subnet_overlapping($_POST['cidr'], $_POST['vrfId'], $_POST['masterSubnetId']);
 		if($overlap!==false) {
             $errors[] = $overlap;
         }
@@ -294,26 +294,28 @@ elseif ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 else {
 
 	# remove scanagent if not needed
-	if (!isset($_POST['pingSubnet'])&&!isset($_POST['discoverSubnet']))	{ $_POST['scanAgent']=0; }
+	if (!isset($_POST['pingSubnet'])&&!isset($_POST['discoverSubnet'])&&!isset($_POST['resolveDNS']))	{ $_POST['scanAgent']=0; }
 
 	# create array of default update values
-	$values = array("id"=>@$_POST['subnetId'],
-					"isFolder"=>0,
-					"masterSubnetId"=>$_POST['masterSubnetId'],
-					"subnet"=>$Subnets->transform_to_decimal($_POST['subnet']),
-					"mask"=>$_POST['mask'],
-					"description"=>@$_POST['description'],
-					"vlanId"=>$_POST['vlanId'],
-					"allowRequests"=>$Admin->verify_checkbox(@$_POST['allowRequests']),
-					"showName"=>$Admin->verify_checkbox(@$_POST['showName']),
-					"discoverSubnet"=>$Admin->verify_checkbox(@$_POST['discoverSubnet']),
-					"pingSubnet"=>$Admin->verify_checkbox(@$_POST['pingSubnet']),
-					"scanAgent"=>@$_POST['scanAgent'],
-					"DNSrecursive"=>$Admin->verify_checkbox(@$_POST['DNSrecursive']),
-					"DNSrecords"=>$Admin->verify_checkbox(@$_POST['DNSrecords']),
-					"nameserverId"=>$_POST['nameserverId'],
-					"device"=>$_POST['device'],
-                    "isFull"=>$Admin->verify_checkbox($_POST['isFull'])
+	$values = array(
+					"id"             => @$_POST['subnetId'],
+					"isFolder"       => 0,
+					"masterSubnetId" => $_POST['masterSubnetId'],
+					"subnet"         => $Subnets->transform_to_decimal($_POST['subnet']),
+					"mask"           => $_POST['mask'],
+					"description"    => @$_POST['description'],
+					"vlanId"         => $_POST['vlanId'],
+					"allowRequests"  => $Admin->verify_checkbox(@$_POST['allowRequests']),
+					"showName"       => $Admin->verify_checkbox(@$_POST['showName']),
+					"discoverSubnet" => $Admin->verify_checkbox(@$_POST['discoverSubnet']),
+					"pingSubnet"     => $Admin->verify_checkbox(@$_POST['pingSubnet']),
+					"resolveDNS"     => $Admin->verify_checkbox(@$_POST['resolveDNS']),
+					"scanAgent"      => @$_POST['scanAgent'],
+					"DNSrecursive"   => $Admin->verify_checkbox(@$_POST['DNSrecursive']),
+					"DNSrecords"     => $Admin->verify_checkbox(@$_POST['DNSrecords']),
+					"nameserverId"   => $_POST['nameserverId'],
+					"device"         => $_POST['device'],
+					"isFull"         => $Admin->verify_checkbox($_POST['isFull'])
 					);
     # location
     if (isset($_POST['location_item'])) {
