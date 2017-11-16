@@ -1319,7 +1319,7 @@ class Subnets extends Common_functions {
 				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 			if($ip_version=="IPv6" && !$strict_mode) {
-				if($subnet->mask<=126) { $$out["used"] = gmp_strval(gmp_add($out["used"],2)); }
+				if($subnet->mask<=126) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 
             // percentage
@@ -3661,58 +3661,72 @@ class Subnets extends Common_functions {
 			}
 		}
 
-		# prepare the entry into for loop
-		$subnetmask_start = $parent_subnetmask + 1;
-		$subnetmask_final = $parent_subnetmask + $mask_drill_down; // plus 'X' numbers, default 8, gives you /16 -> /24, /24 -> /32 etc..
-		if ($subnetmask_final > 32 && $type == 'IPv4'){
-			$subnetmask_final = 32; // Cant be larger then /32
-		}
-		elseif ($subnetmask_final > 128 && $type == 'IPv6'){
-			$subnetmask_final = 128; // Cant be larger then /128
-		}
+		# set some parameters
+		$address_length = ($type == 'IPv4') ? 32 : 128;
+		$prefix_nets_limit = 64; # output 64 possible candidates per prefix, so we do not output too much candidates hammering browser and user
 
-		$dec_subnet = $parent_subnet ;
-		$square_count = 1;
-
-		# Outer for loop, start with mask one more then current, increment up to X more, or 32, which ever is first
-		for ($i = $subnetmask_start; $i <= $subnetmask_final; $i++){
-			$showmask = 1; // Set so only show subnet masks that are available
-			$dec_subnet = $parent_subnet; // have to reset each time though the loop
-			$isquare = pow(2,$square_count); // 2^nth power, that's how many subnets there are per this unique mask
-			for ($ii = 0; $ii < $isquare; $ii++ ){
-				$cidr_subnet = $this->transform_to_dotted($dec_subnet).'/'.$i;
-				if ($type == 'IPv4'){
-					// Get broadcast, which is one decimal away from next subnet, and increment
-					$net1 = $this->Net_IPv4->parseAddress($cidr_subnet);
-					$bc1  = $net1->broadcast;
-					$dec_subnet = $this->transform_to_decimal ($bc1);
-					$dec_subnet++;
-				}
-				else {
-					// Get broadcast, which is one decimal away from next subnet, and increment
-					$net1 = $this->Net_IPv6->parseAddress($cidr_subnet);
-					$bc1  = $net1['end'];
-					$dec_subnet = $this->transform_to_decimal ($bc1);
-					$dec_subnet = $this->subnet_dropdown_ipv6_decimal_add_one($dec_subnet);
-				}
-				foreach ($history_subnet as $unavailable_sub){ // Go through each subnet and check for over las->transform_to_dotted(p
-    				$overlap = $this->verify_overlapping ($cidr_subnet,$unavailable_sub);
-					if ($overlap!==false){
-						$match = 1;
-						break;
-					}
-				}
-				if ($match != 1){
-					if ($showmask){ // Highlight Change in Masks
-					$html[] = "<li class='disabled'>Subnet Mask: $i</li>";
-						$showmask = 0;
-					}
-					$html[] = "<li><a href='' data-cidr='$cidr_subnet'>- $cidr_subnet</a></li>";
-				}
-				$match = 0; //Reset
+		# here we use range split/exclusion algorithm to find final list of networks a whole lot of times faster
+		$ranges = [['start' => $taken_subnet->subnet, 'end' => gmp_add($taken_subnet->subnet, gmp_sub(gmp_pow(2, $address_length - $taken_subnet->mask), 1))]];
+		foreach ($subnets as $excl) {
+		    $estart = $excl->subnet;
+		    $eend = gmp_add($excl->subnet, gmp_sub(gmp_pow(2, $address_length - $excl->mask), 1));
+		    foreach ($ranges as $rid => $range) {
+			if ((gmp_cmp($estart, $range['end']) <= 0) && (gmp_cmp($range['start'], $eend) <= 0)) {
+			    # range overlaps, now we check what to do
+			    unset($ranges[$rid]); # remove existing range
+			    if (gmp_cmp($range['start'], $estart) < 0) $ranges[] = ['start' => $range['start'], 'end' => gmp_sub($estart, 1)];
+			    if (gmp_cmp($range['end'], $eend) > 0) $ranges[] = ['start' => gmp_add($eend, 1), 'end' => $range['end']];
 			}
-			$square_count++;
+		    }
 		}
+
+		# after we find all the available ranges, we just align and split every range available by mask and that is all
+		$nets = []; $more = [];
+		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
+		foreach ($ranges as $range) 
+		{
+		    $max_prefix = $address_length - (strlen(trim(gmp_strval(gmp_add(gmp_sub($range['end'], $range['start']), 1), 2))) - 1); # yeah I know that's bad, but that's the easiest way
+		    for ($i = $max_prefix; $i <= $address_length; $i++) {
+			if (!isset($nets[$i])) $nets[$i] = [];
+			if (($ncount = count($nets[$i])) >= $prefix_nets_limit) continue;
+
+			# get mask and network length for prefix
+			$mask = gmp_sub(gmp_pow(2, $address_length - $i), 1);
+			$plen = gmp_add($mask, 1);
+
+			# align and verify
+			$astart = $range['start']; $aend = $range['end'];
+			if (gmp_cmp(gmp_and($astart, $mask), 0) != 0) $astart = gmp_add(gmp_sub($astart, gmp_and($astart, $mask)), $plen); # align start to the next nearest network
+			if (gmp_cmp(gmp_and($aend, $mask), $mask) != 0) $aend = gmp_sub(gmp_or($aend, $mask), $plen); # align end to the previous nearest network end
+			if (gmp_cmp(gmp_add(gmp_sub($aend, $astart), 1), $plen) < 0) continue; # do not consider too small networks
+
+			# walk in the park
+			while (gmp_cmp($astart, $aend) <= 0) {
+			    $nets[$i][] = $astart;
+			    $astart = gmp_add($astart, $plen);
+			    $ncount++;
+			    if ($ncount >= $prefix_nets_limit) {
+				$more[$i] = true;
+				break;
+			    }
+			}
+		    }
+		}
+		unset($ranges);
+
+		# finally, output
+		ksort($nets);
+		foreach ($nets as $prefix => $subnets) {
+		    if (count($subnets) == 0) continue;
+		    $html[] = "<li class='disabled'>Subnet Mask: $prefix</li>";
+		    foreach ($subnets as $start) {
+			$cidr_subnet = ($type == 'IPv4') ? long2ip(gmp_intval($start)).'/'.$prefix : $this->long2ip6(gmp_strval($start, 10)).'/'.$prefix;
+			$html[] = "<li><a href='' data-cidr='$cidr_subnet'>- $cidr_subnet</a></li>";
+		    }
+		    if (isset($more[$prefix])) $html[] = "<li><center>...</center></li>";
+		}
+		unset($nets);
+
 		// return html
 		return implode( "\n", $html );
 	 }
