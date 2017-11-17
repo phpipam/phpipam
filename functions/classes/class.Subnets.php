@@ -3640,6 +3640,7 @@ class Subnets extends Common_functions {
 
 		// Get Current and Previous subnets
 		$subnets 			= $this->fetch_subnet_slaves($subnetMasterId);
+		$subnets 			= is_array($subnets) ? $subnets : array();
 		$taken_subnet 		= $this->fetch_subnet (null, $subnetMasterId);
 		$parent_subnet 		= $taken_subnet->subnet;
 		$parent_subnetmask 	= $taken_subnet->mask;
@@ -3720,7 +3721,7 @@ class Subnets extends Common_functions {
 		    if (count($subnets) == 0) continue;
 		    $html[] = "<li class='disabled'>Subnet Mask: $prefix</li>";
 		    foreach ($subnets as $start) {
-			$cidr_subnet = ($type == 'IPv4') ? long2ip(gmp_intval($start)).'/'.$prefix : $this->long2ip6(gmp_strval($start, 10)).'/'.$prefix;
+			$cidr_subnet = $this->transform_to_dotted(gmp_strval($start)) . '/' . $prefix;
 			$html[] = "<li><a href='' data-cidr='$cidr_subnet'>- $cidr_subnet</a></li>";
 		    }
 		    if (isset($more[$prefix])) $html[] = "<li><center>...</center></li>";
