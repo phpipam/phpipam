@@ -3681,7 +3681,7 @@ class Subnets extends Common_functions {
 		}
 		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
 
-		$mask_drill_down   = $parent->mask + 4; # Display all availble subnets for 4 sections,
+		$mask_drill_down   = $parent->mask + 8; # Display all availble subnets for 8 sections,
 		$prefix_nets_limit = 8;                 # then display the first 8 availble subnets from the remaining sections
 
 		# after we find all the available ranges, we just align and split every range available by mask and that is all
