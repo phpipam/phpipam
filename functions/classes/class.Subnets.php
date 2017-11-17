@@ -3607,21 +3607,21 @@ class Subnets extends Common_functions {
 			if ((gmp_cmp($estart, $range['end']) <= 0) && (gmp_cmp($range['start'], $eend) <= 0)) {
 			    # range overlaps, now we check what to do
 			    unset($ranges[$rid]); # remove existing range
-			    if (gmp_cmp($range['start'], $estart) < 0) $ranges[] = ['start' => $range['start'], 'end' => gmp_sub($estart, 1)];
-			    if (gmp_cmp($range['end'], $eend) > 0) $ranges[] = ['start' => gmp_add($eend, 1), 'end' => $range['end']];
+			    if (gmp_cmp($range['start'], $estart) < 0) $ranges[] = array('start' => $range['start'], 'end' => gmp_sub($estart, 1));
+			    if (gmp_cmp($range['end'], $eend) > 0) $ranges[] = array('start' => gmp_add($eend, 1), 'end' => $range['end']);
 			}
 		    }
 		}
 
 		# after we find all the available ranges, we just align and split every range available by mask and that is all
-		$nets = []; $more = [];
+		$nets = array(); $more = array();
 		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
 		foreach ($ranges as $range)
 		{
 		    $max_prefix = $address_length - (strlen(trim(gmp_strval(gmp_add(gmp_sub($range['end'], $range['start']), 1), 2))) - 1); # yeah I know that's bad, but that's the easiest way
 		    for ($i = $max_prefix; $i <= $address_length; $i++) {
 			if ($i <= $parent_subnetmask) { continue; }
-			if (!isset($nets[$i])) $nets[$i] = [];
+			if (!isset($nets[$i])) $nets[$i] = array();
 			if (($ncount = count($nets[$i])) >= (($i > $mask_drill_down) ? $prefix_lower_limit : $prefix_drilldown_limit)) continue;
 
 			# get mask and network length for prefix
