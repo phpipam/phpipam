@@ -3629,7 +3629,6 @@ class Subnets extends Common_functions {
 
 		/* Remove STRICT Error reporting for ParseAddress fuction */
 		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
-		$mask_drill_down = 8;
 
 		# must be integer
 		if(isset($_GET['subnetId'])) { if(!is_numeric($_GET['subnetId']))    { $this->Result->show("danger", _("Invalid ID"), true); } }
@@ -3664,7 +3663,9 @@ class Subnets extends Common_functions {
 
 		# set some parameters
 		$address_length = ($type == 'IPv4') ? 32 : 128;
-		$prefix_nets_limit = 64; # output 64 possible candidates per prefix, so we do not output too much candidates hammering browser and user
+
+		$mask_drill_down = $parent_subnetmask + 8;  # Display all availble subnets for next 8 divisions
+		$prefix_nets_limit = 8; # Then display the first 8 availble subnets from the remaining divisions
 
 		# here we use range split/exclusion algorithm to find final list of networks a whole lot of times faster
 		$ranges = [['start' => $taken_subnet->subnet, 'end' => gmp_add($taken_subnet->subnet, gmp_sub(gmp_pow(2, $address_length - $taken_subnet->mask), 1))]];
@@ -3706,7 +3707,7 @@ class Subnets extends Common_functions {
 			    $nets[$i][] = $astart;
 			    $astart = gmp_add($astart, $plen);
 			    $ncount++;
-			    if ($ncount >= $prefix_nets_limit) {
+			    if ($i > $mask_drill_down && $ncount >= $prefix_nets_limit) {
 				$more[$i] = true;
 				break;
 			    }
