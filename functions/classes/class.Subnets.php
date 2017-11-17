@@ -3583,14 +3583,26 @@ class Subnets extends Common_functions {
 		# set some parameters
 		$address_length = ($type == 'IPv4') ? 32 : 128;
 
-		$mask_drill_down = $parent_subnetmask + 8;  # Display all availble subnets for next 8 divisions
-		$prefix_nets_limit = 8; # Then display the first 8 availble subnets from the remaining divisions
+		$mask_drill_down = $parent_subnetmask + 8;  # display more availble subnets for next 8 divisions
+		$prefix_drilldown_limit = 256; # how much subnets to display for drilldown (8 levels = 256 = all)
+		$prefix_lower_limit = 8; # then display only the first 8 availble subnets from the remaining divisions
+
+		# to fix signed integer overflows on 32-bit systems, we have to use a trick here
+		if ($type == 'IPv4') $int2pow32 = gmp_pow(2, 32);
 
 		# here we use range split/exclusion algorithm to find final list of networks a whole lot of times faster
-		$ranges = [['start' => $taken_subnet->subnet, 'end' => gmp_add($taken_subnet->subnet, gmp_sub(gmp_pow(2, $address_length - $taken_subnet->mask), 1))]];
+		$our_subnet = gmp_init($taken_subnet->subnet);
+		if (($type == 'IPv4') && (gmp_cmp($our_subnet, 0) < 0)) $our_subnet = gmp_add($int2pow32, $our_subnet);
+		$ranges = array(
+		    array(
+			'start' => $our_subnet,
+			'end' => gmp_add($our_subnet, gmp_sub(gmp_pow(2, $address_length - $taken_subnet->mask), 1))
+		    )
+		);
 		foreach ($subnets as $excl) {
-		    $estart = $excl->subnet;
-		    $eend = gmp_add($excl->subnet, gmp_sub(gmp_pow(2, $address_length - $excl->mask), 1));
+		    $estart = gmp_init($excl->subnet);
+		    if (($type == 'IPv4') && (gmp_cmp($estart, 0) < 0)) $estart = gmp_add($int2pow32, $estart);
+		    $eend = gmp_add($estart, gmp_sub(gmp_pow(2, $address_length - $excl->mask), 1));
 		    foreach ($ranges as $rid => $range) {
 			if ((gmp_cmp($estart, $range['end']) <= 0) && (gmp_cmp($range['start'], $eend) <= 0)) {
 			    # range overlaps, now we check what to do
@@ -3610,7 +3622,7 @@ class Subnets extends Common_functions {
 		    for ($i = $max_prefix; $i <= $address_length; $i++) {
 			if ($i <= $parent_subnetmask) { continue; }
 			if (!isset($nets[$i])) $nets[$i] = [];
-			if ($i > $mask_drill_down && ($ncount = count($nets[$i])) >= $prefix_nets_limit) continue;
+			if (($ncount = count($nets[$i])) >= (($i > $mask_drill_down) ? $prefix_lower_limit : $prefix_drilldown_limit)) continue;
 
 			# get mask and network length for prefix
 			$mask = gmp_sub(gmp_pow(2, $address_length - $i), 1);
@@ -3627,7 +3639,7 @@ class Subnets extends Common_functions {
 			    $nets[$i][] = $astart;
 			    $astart = gmp_add($astart, $plen);
 			    $ncount++;
-			    if ($i > $mask_drill_down && $ncount >= $prefix_nets_limit) {
+			    if ($ncount >= (($i > $mask_drill_down) ? $prefix_lower_limit : $prefix_drilldown_limit)) {
 				$more[$i] = true;
 				break;
 			    }
