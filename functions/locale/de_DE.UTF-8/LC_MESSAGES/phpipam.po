@@ -82,7 +82,6 @@ msgid "AD login successful"
 msgstr "AD Anmeldung erfolgreich"
 
 #: functions/functions-install.php:296
-#, fuzzy
 msgid "LDAP login successful"
 msgstr "LDAP Anmeldung erfolgreich"
 
@@ -1311,7 +1310,7 @@ msgstr "Kann IP Adress Details nicht bearbeiten"
 
 #: site/ipaddr/modifyIpAddress.php:31
 msgid "You do not have write access for this network'"
-msgstr "NimaÅ¡ pravic za pisanje v tem omreÅ¾ju"
+msgstr "Sie verf&uuml;gen über keine Schreibrechte f&uuml;r dieses Netzwerk"
 
 #: site/ipaddr/modifyIpAddress.php:79 site/ipaddr/modifyIpAddress.php:80
 msgid "add"
@@ -1930,7 +1929,7 @@ msgstr "Benutzermanagement"
 
 #: site/admin/users.php:28
 msgid "Create user"
-msgstr "Erstelle Benutzer"
+msgstr "Benutzer erstellen"
 
 #: site/admin/users.php:37
 msgid "Real Name"
@@ -1994,7 +1993,7 @@ msgstr "Klick um zugeh&ouml;rige Subnetze anzuzeigen"
 
 #: site/admin/manageSubnet.php:89
 msgid "Add new subnet to section"
-msgstr "Hinzuf&uuml;gen eines neuen Subnetz zu Sektion"
+msgstr "Hinzuf&uuml;gen eines neuen Subnetz zur Sektion"
 
 #: site/admin/manageSubnet.php:89
 msgid "Add subnet"
@@ -2082,7 +2081,7 @@ msgstr "Benutzer"
 
 #: site/admin/usersEditPrint.php:35 site/admin/usersEditPrint.php:44
 msgid "Add new user"
-msgstr "Hinzuf&uuml;gen neuer Benutzer"
+msgstr "neuer Benutzer hinzuf&uuml;gen"
 
 #: site/admin/usersEditPrint.php:60
 msgid "Enter users real name"
@@ -2488,7 +2487,7 @@ msgstr "Verwalte VRF"
 
 #: site/admin/manageVRF.php:18
 msgid "Add VRF"
-msgstr "Hinzuf&uuml;gen VRF"
+msgstr "VRF hinzuf&uuml;gen"
 
 #: site/admin/manageVRF.php:35 site/admin/manageVRFEdit.php:43
 msgid "RD"
@@ -2903,7 +2902,7 @@ msgstr "Einstellungen erfolgreich aktualisiert"
 
 #: site/admin/manageSection.php:19
 msgid "Add section"
-msgstr "Hinzuf&uuml;gen einer Sektion"
+msgstr "Sektion hinzuf&uuml;gen "
 
 #: site/admin/manageSection.php:29 site/admin/manageSubnetsplit.php:96
 msgid "Strict mode"
@@ -3117,7 +3116,7 @@ msgstr "Verwalte VLANs"
 
 #: site/admin/manageVLANs.php:21
 msgid "Add VLAN"
-msgstr "Hinzuf&uuml;gen VLAN"
+msgstr "VLAN hinzuf&uuml;gen"
 
 #: site/admin/manageVLANs.php:26
 msgid "No VLANs configured"
@@ -3185,7 +3184,7 @@ msgstr "Kritisch"
 
 #: site/admin/groups.php:24
 msgid "Create group"
-msgstr "Erstelle Gruppe"
+msgstr "Gruppe erstellen"
 
 #: site/admin/groups.php:32 site/admin/groupEditPrint.php:50
 msgid "Group name"
@@ -3217,7 +3216,7 @@ msgstr "Alle Sektionen : Lesen / Schreiben (RW)"
 
 #: site/admin/groups.php:93
 msgid "add users to this group"
-msgstr "Hinzuf&uuml;gen von Benutzern zur Gruppe"
+msgstr "Benutzern zur Gruppe hinzuf&uuml;gen"
 
 #: site/admin/groups.php:94
 msgid "remove users from this group"
@@ -3374,7 +3373,7 @@ msgstr ""
 
 #: site/admin/manageDevices.php:17
 msgid "Add device"
-msgstr "Hinzuf&uuml;gen Ger&auml;t"
+msgstr "Ger&auml;t hinzuf&uuml;gen"
 
 #: site/admin/manageDevices.php:22
 msgid "No devices configured"
@@ -3625,11 +3624,11 @@ msgstr "Verberge Subnetz Liste"
 
 #: site/subnets.php:76
 msgid "Add new subnet"
-msgstr "Hinzuf&uuml;gen Subnetz"
+msgstr "Subnetz hinzuf&uuml;gen "
 
 #: site/subnets.php:76
 msgid "Add new subnet to"
-msgstr "Hinzuf&uuml;gen neues Subnetz zu"
+msgstr "Hinzuf&uuml;gen eines neuen Subnetzes zu"
 
 #: site/userMenu.php:22
 msgid "Search string"
@@ -3813,7 +3812,7 @@ msgstr ""
 
 #: site/admin/lanuguageEdit.php
 msgid "Add new language"
-msgstr "Hinzuf&uuml;gen einer neuen Sprache"
+msgstr "Neue Sprache hinzuf&uuml;gen "
 
 #: site/admin/lanuguageEdit.php
 msgid "Edit language"
@@ -5535,25 +5534,25 @@ msgid "Primary nameserver is mandatory"
 msgstr "Prim&auml;rer Nameserver ist verpflichtend"
 
 msgid "Failed to add nameserver set"
-msgstr "Nameserversatz hinzuf&uuml;gen fehlgeschlagen"
+msgstr "Nameserver hinzuf&uuml;gen fehlgeschlagen"
 
 msgid "Failed to edit nameserver set"
-msgstr "Nameserversatz bearbeiten fehlgeschlagen"
+msgstr "Nameserver bearbeiten fehlgeschlagen"
 
 msgid "Failed to delete nameserver set"
-msgstr "Nameserversatz l&ouml;schen fehlgeschlagen"
+msgstr "Nameserver l&ouml;schen fehlgeschlagen"
 
 msgid "Nameserver set add successfull"
-msgstr "Nameserversatz erfolgreich hinzugef&uuml;gt"
+msgstr "Nameserver erfolgreich hinzugef&uuml;gt"
 
 msgid "Nameserver set edit successfull"
-msgstr "Nameserversatz erfolgreich bearbeitet"
+msgstr "Nameserver erfolgreich bearbeitet"
 
 msgid "Nameserver set delete successfull"
-msgstr "Nameserversatz erfolgreich gel&ouml;scht"
+msgstr "Nameserver erfolgreich gel&ouml;scht"
 
 msgid "Nameserver set"
-msgstr "Nameserversatz"
+msgstr "Nameserver"
 
 msgid "Primary"
 msgstr "Prim&auml;r"
@@ -5574,20 +5573,20 @@ msgid "Tertiary nameserver"
 msgstr "Terti&auml;rer DNS"
 
 msgid "Sections to display nameserver set in"
-msgstr "Sektionen in denen Nameserversatz angezeigt werden"
+msgstr "Sektionen in denen Nameserver angezeigt werden"
 
 msgid ""
 "removing nameserver set will also remove all references from belonging "
 "subnets!"
 msgstr ""
-"L&ouml;schen des Nameserversatzes wird auch die Referenz aus zugeordneten "
+"L&ouml;schen des Nameservers wird auch die Referenz aus zugeordneten "
 "Subnetzen l&ouml;schen."
 
 msgid "Manage Nameserver sets"
 msgstr "Verwalte Nameservers&auml;tze"
 
 msgid "Add nameserver set"
-msgstr "Nameserversatz hinzuf&uuml;gen"
+msgstr "Nameserver hinzuf&uuml;gen"
 
 msgid "No nameserver sets defined"
 msgstr "Keine Nameservers&auml;tze definiert"
@@ -5944,7 +5943,7 @@ msgid "Nameservers"
 msgstr "Nameserver"
 
 msgid "Select nameserver set"
-msgstr "Nameserversatz ausw&auml;hlen"
+msgstr "Nameserver ausw&auml;hlen"
 
 msgid "Autocreate reverse records"
 msgstr "Reverse Eintr&auml;ge automatisch erzeugen"
@@ -6783,3 +6782,123 @@ msgid "LDAP account does not have enough privileges for search"
 msgstr ""
 "LDAP-Konto verf&uuml;gt nicht &uuml;ber gen&uuml;gend Berechtigungen f&uuml;"
 "r die Suche"
+
+msgid "phpIPAM settings"
+msgstr "phpIPAM Einstellungen"
+
+msgid "All tools"
+msgstr "Alle Tools"
+
+msgid "All items"
+msgstr "Alle Einstellungen"
+
+msgid "Number of VRFs"
+msgstr "Anzahl an VRFs"
+
+msgid "Map"
+msgstr "Karte"
+
+msgid "Coordinates"
+msgstr "Koordinaten"
+
+msgid "Address"
+msgstr "Adresse"
+
+msgid "Objects"
+msgstr "Objekte"
+
+msgid "List of all locations"
+msgstr "Liste aller Standorte"
+
+msgid "Locations"
+msgstr "Standorte"
+
+msgid "Inactive Hosts"
+msgstr "Inaktive Hosts"
+
+msgid "Circuits"
+msgstr "Schaltungen"
+
+msgid "Circuit ID"
+msgstr "Schaltung ID"
+
+msgid "No inactive hosts found"
+msgstr "Keine inaktiven Hosts gefunden"
+
+msgid "Available sections"
+msgstr "Verf&uuml;gbare Sektionen"
+
+msgid "User group management"
+msgstr "Gruppenmanagement"
+
+msgid "API settings"
+msgstr "API Einstellungen"
+
+msgid "Manage languages"
+msgstr "Sprachen verwalten"
+
+msgid "Set mail parameters and mail server settings"
+msgstr "Mailing Einstellungen"
+
+msgid "Manage user authentication methods and servers"
+msgstr "Berechtigungen anpassen und verwalten"
+
+msgid "Manage tags"
+msgstr "Tags verwalten"
+
+msgid "Set phpipam instructions for end users"
+msgstr "phpIPAM hinweise für Enduser anpassen"
+
+msgid "NAT settings"
+msgstr "NAT Einstellungen"
+
+msgid "Rack management"
+msgstr "Rack verwaltung"
+
+msgid "Check for latest version of phpipam"
+msgstr "Pr&uuml;ft die neuset phpIPAM Version"
+
+msgid "Search and replace content in database"
+msgstr "Suchen und Ersetzen von Daten in der Datenbank"
+
+msgid "All subnets"
+msgstr "Alle Subnetze"
+
+msgid "NAT translations"
+msgstr "NAT &Uuml;bersetzung"
+
+msgid "VLANs and belonging subnets"
+msgstr "VLANs und ihre dazugeh&ouml;rigen Subnetze"
+
+msgid "Rack information"
+msgstr "Rack Information"
+
+msgid "All configured devices"
+msgstr "Alle konfigurierten Ger&auml;te"
+
+msgid "IPv4v6 calculator for subnet calculations"
+msgstr "IPv4v6 Rechner"
+
+msgid "Browse phpipam log files"
+msgstr "phpIPAM log Dateien durchsuchen"
+
+msgid "Manage your account"
+msgstr "Accountverwaltung"
+
+msgid "Create new NetIQ authentication"
+msgstr "Erzeuge neue NetIQ Authentifizierung"
+
+msgid "Create new SAML2 authentication"
+msgstr "Erzeuge neue SAML2 Authentifizierung"
+
+msgid "Add nat"
+msgstr "Nat hinzuf&uuml;gen"
+
+msgid "Add rack"
+msgstr "Rack hinzuf&uuml;gen"
+
+msgid "Add circuit"
+msgstr "Schaltung hinzuf&uuml;gen"
+
+msgid "Add location"
+msgstr "Standort hinzuf&uuml;gen"
