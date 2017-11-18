@@ -343,6 +343,13 @@ abstract class DB {
 
 		$obj = (array)$obj;
 
+                // block XSS
+                array_walk_recursive($obj, function (&$value) {
+                    if (!is_null($value) and !$this->isJson($value)) {
+                        $value = htmlentities($value);
+                    }
+                });
+
 		//we cannot update an object without an id specified so quit
 		if (!isset($obj[$primarykey])) {
 			throw new Exception('Missing primary key');
@@ -815,6 +822,14 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
+	}
+
+	/**
+	 * Detect JSON
+	 */
+	private function isJson($string) {
+		json_decode($string);
+		return (json_last_error() == JSON_ERROR_NONE);
 	}
 }
 
