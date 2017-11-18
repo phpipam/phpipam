@@ -47,13 +47,13 @@ $extfields["tag"]["pname"] = "tag";
 ## using the extra fields as a trick to display some nicer names for these regular fields
 $extfields["ip_addr"]["table"] = "ipaddresses";
 $extfields["ip_addr"]["field"] = "ip_addr";
-$extfields["ip_addr"]["pname"] = "IP address";
+$extfields["ip_addr"]["pname"] = "ip address";
 $extfields["dns_name"]["table"] = "ipaddresses";
 $extfields["dns_name"]["field"] = "dns_name";
-$extfields["dns_name"]["pname"] = "Hostname";
+$extfields["dns_name"]["pname"] = "hostname";
 $extfields["gateway"]["table"] = "ipaddresses";
 $extfields["gateway"]["field"] = "is_gateway";
-$extfields["gateway"]["pname"] = "Gateway";
+$extfields["gateway"]["pname"] = "gateway";
 
 # required fields without which we will not continue
 $reqfields = array("section","ip_addr","subnet");
