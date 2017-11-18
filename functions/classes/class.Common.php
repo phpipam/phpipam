@@ -811,7 +811,12 @@ class Common_functions  {
 		}
 		// reverse proxy doing SSL offloading
         elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-        	$url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]";
+            if (isset($_SERVER[HTTP_X_FORWARDED_HOST])) {
+                $url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]";
+            }
+            else {
+                $url = "https://$_SERVER[HTTP_HOST]";
+            }
         }
 		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
 			$url = "https://$_SERVER[SERVER_NAME]";
