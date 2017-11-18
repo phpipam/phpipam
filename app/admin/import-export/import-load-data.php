@@ -54,12 +54,11 @@ if (strtolower($filetype) == "csv") {
 	# open CSV file
 	$filehdl = fopen('upload/data_import.csv', 'r');
 
-	# set delimiter
-	$Tools->set_csv_delimiter ($filehdl);
-
 	# read header row
 	$row = 0;$col = 0;
 	$line = fgets($filehdl);
+	# set delimiter
+	$Tools->set_csv_delimiter ($line);
 	$row++;
 	$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
 	$cols = str_getcsv ($line, $Tools->csv_delimiter);

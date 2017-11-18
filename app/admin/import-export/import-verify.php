@@ -60,7 +60,8 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		fclose($filehdl);
 
 		# set delimiter
-		$Tools->set_csv_delimiter ($filehdl);
+		#$Tools->set_csv_delimiter ($filehdl);
+		$Tools->set_csv_delimiter ($data);
 
 		/* format file */
 		$data = str_replace( array("\r\n","\r","\n") , "" , $data);	//remove line break
