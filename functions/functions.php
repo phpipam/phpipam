@@ -148,10 +148,6 @@ function create_get_params () {
 			}
 		}
 	}
-
-	// var_dump($_SERVER['REQUEST_URI']);
-	// print_r($uri_parts);
-	// die();
 }
 
 /**
