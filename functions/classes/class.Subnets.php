@@ -116,6 +116,16 @@ class Subnets extends Common_functions {
 	protected $Subnets  = false;
 
 	/**
+	 * Subnets network bit masking array
+	 *
+	 * (default value: false)
+	 *
+	 * @var array
+	 * @access protected
+	 */
+	protected $bmask = false;
+
+	/**
 	 * for Database connection
 	 *
 	 * @var object
@@ -1586,6 +1596,167 @@ class Subnets extends Common_functions {
 		}
 	}
 
+	/**
+	 * Pre-calculate gmp_math function network bitmasks and cache to save CPU
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_network_bitmasks () {
+		// Check cache
+		if ($this->bmask) { return $this->bmask; }
+
+		// Build masks values and save
+		$bmask = array();
+		for ($x=0; $x <= 32; $x++) {
+			$pwr = gmp_pow(2, 32-$x);
+			$bmask['IPv4'][$x]['plen'] = $pwr;
+			$bmask['IPv4'][$x]['lo']   = gmp_mul(gmp_div('0xffffffff', $pwr), $pwr);
+			$bmask['IPv4'][$x]['hi']   = gmp_sub($pwr, 1);
+		}
+		for ($y=0; $y <= 128; $y++) {
+			$pwr = gmp_pow(2, 128-$y);
+			$bmask['IPv6'][$y]['plen'] = $pwr;
+			$bmask['IPv6'][$y]['lo']   = gmp_mul(gmp_div('0xffffffffffffffffffffffffffffffff', $pwr), $pwr);
+			$bmask['IPv6'][$y]['hi']   = gmp_sub($pwr, 1);
+		}
+		// Save array into cache
+		$this->bmask = $bmask;
+		return $bmask;
+	}
+
+	/**
+	 * Calculates freespacemap array for a given subnet
+	 *
+	 * @access public
+	 * @param mixed $masterSubnet
+	 * @return array
+	 */
+	public function get_subnet_freespacemap ($masterSubnet) {
+		// Get Current and Previous subnets
+		$subnets = $this->fetch_subnet_slaves($masterSubnet->id);
+		$subnets = is_array($subnets) ? $subnets : array();
+
+		// detect type
+		$type     = $this->identify_address($masterSubnet->subnet);
+		$max_mask = ($type == 'IPv4') ? 32 : 128;
+
+		// pre-caclulate bitwise masks to save CPU
+		$bmask = $this->get_network_bitmasks();
+
+		# here we use range split/exclusion algorithm to find final list of networks a whole lot of times faster
+		$ranges = array( array(
+			'start' => gmp_and($masterSubnet->subnet, $bmask[$type][$masterSubnet->mask]['lo']),
+			'end'   => gmp_or ($masterSubnet->subnet, $bmask[$type][$masterSubnet->mask]['hi']) ));
+		foreach ($subnets as $excl) {
+			$estart = gmp_and($excl->subnet, $bmask[$type][$excl->mask]['lo']);
+			$eend   = gmp_or ($excl->subnet, $bmask[$type][$excl->mask]['hi']);
+			foreach ($ranges as $rid => $range) {
+				if ((gmp_cmp($estart, $range['end']) > 0) || (gmp_cmp($eend, $range['start']) < 0)) { continue; }
+
+				# range overlaps, now we check what to do
+				unset($ranges[$rid]); # remove existing range
+				if (gmp_cmp($range['start'], $estart) < 0) { $ranges[] = ['start' => $range['start'], 'end' => gmp_sub($estart, 1)]; };
+				if (gmp_cmp($range['end'], $eend) > 0) { $ranges[] = ['start' => gmp_add($eend, 1), 'end' => $range['end']]; };
+			}
+		}
+		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
+
+		return array(
+			subnet => $masterSubnet->subnet,
+			mask => $masterSubnet->mask,
+			type => $type,
+			max_search_mask => $max_mask,
+			freeranges => $ranges);
+	}
+
+	/**
+	 * Calculates the first $count available free subnets of size $mask within a freespacemap array.
+	 *
+	 * @access public
+	 * @param array $fsm
+	 * @param integer $mask
+	 * @param integer $count
+	 * @return array
+	 */
+	public function get_freespacemap_first_available ($fsm, $mask, $count) {
+		if ($mask < 0 || $mask > $fsm['max_search_mask']) {
+			return array (subnets => array(), truncated => false);
+		}
+
+		$subnets = array();
+		$ranges = $fsm['freeranges'];
+		$type   = $fsm['type'];
+
+		$bmask = $this->get_network_bitmasks();
+		$size   = $bmask[$type][$mask]['plen'];
+
+		$discovered = 0;
+
+		foreach ($ranges as $range) {
+			$candidate_start = gmp_and($range['start'], $bmask[$type][$mask]['lo']);
+			$candidate_end   = gmp_or($candidate_start, $bmask[$type][$mask]['hi']);
+
+			while (gmp_cmp($candidate_end, $range['end']) <= 0) {
+
+				if (gmp_cmp($candidate_start, $range['start']) >= 0) {
+					$discovered++;
+					if ($count > 0 && $discovered > $count) {
+						return array (subnets => $subnets, truncated => true);
+					}
+					$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
+				}
+				$candidate_start = gmp_add($candidate_start, $size);
+				$candidate_end   = gmp_add($candidate_end, $size);
+			}
+		}
+
+		return array (subnets => $subnets, truncated => false);
+	}
+
+	/**
+	 * Calculates the last $count available free subnets of size $mask within a freespacemap array.
+	 *
+	 * @access public
+	 * @param array $fsm
+	 * @param integer $mask
+	 * @param integer $count
+	 * @return array
+	 */
+	public function get_freespacemap_last_available ($fsm, $mask, $count) {
+		if ($mask < 0 || $mask > $fsm['max_search_mask']) {
+			return array (subnets => array(), truncated => false);
+		}
+
+		$subnets = array();
+		$ranges  = array_reverse($fsm['freeranges']);
+		$type    = $fsm['type'];
+
+		$bmask = $this->get_network_bitmasks();
+		$size   = $bmask[$type][$mask]['plen'];
+
+		$discovered = 0;
+
+		foreach ($ranges as $range) {
+			$candidate_start = gmp_and($range['end'], $bmask[$type][$mask]['lo']);
+			$candidate_end   = gmp_or($candidate_start, $bmask[$type][$mask]['hi']);
+
+			while (gmp_cmp($candidate_start, $range['start']) >= 0) {
+
+				if (gmp_cmp($candidate_end, $range['end']) <= 0) {
+					$discovered++;
+					if ($count > 0 && $discovered > $count) {
+					return array (subnets => $subnets, truncated => true);
+					}
+					$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
+				}
+				$candidate_start = gmp_sub($candidate_start, $size);
+				$candidate_end   = gmp_sub($candidate_end, $size);
+			}
+		}
+
+		return array (subnets => $subnets, truncated => false);
+	}
 
 
 
@@ -3627,112 +3798,44 @@ class Subnets extends Common_functions {
 	 */
 	public function subnet_dropdown_print_available($sectionId, $subnetMasterId) {
 
-		/* Remove STRICT Error reporting for ParseAddress fuction */
-		error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT);
-
 		# must be integer
 		if(isset($_GET['subnetId']) && !is_numeric($_GET['subnetId'])) { $this->Result->show("danger", _("Invalid ID"), true); }
 
-		// result array
+		$parent   = $this->fetch_subnet(null, $subnetMasterId);
+
+		// Ignore invalid id's and folders
+		if (!is_object($parent) || $parent->isFolder == "1") { return ""; };
+
+		# Get freespacemap array from subnet using split/exclusion algorithm
+		$fsm      = $this->get_subnet_freespacemap($parent);
+		$type     = $fsm['type'];
+		$max_mask = $fsm['max_search_mask'];
+
+		# Find the first|last $count available free subnets of size $mask inside the freespacemap array.
+		#   return values =  array (subnets => $available_subnets, truncated => false);
+		$nets = array();
+		$levels_full = 8; # Display all availble subnets for n sections,
+		$level_trunc = 8; # then display the first y availble subnets in the remaining sections
+
+		for ($mask = $parent->mask + 1; $mask <= $max_mask; $mask++) {
+			// Calculate number of subnets to find at each level
+			$count = ($mask <= $parent->mask + $levels_full) ? (1<<$levels_full) :  $level_trunc;
+			$nets[$mask] = $this->get_freespacemap_first_available($fsm, $mask, $count);
+		}
+
+		# finally, output menu
 		$html = array();
+		foreach ($nets as $prefix => $net) {
+			$subnets   = $net['subnets'];
+			$truncated = $net['truncated'];
 
-		// Get Current and Previous subnets
-		$subnets = $this->fetch_subnet_slaves($subnetMasterId);
-		$subnets = is_array($subnets) ? $subnets : array();
-		$parent  = $this->fetch_subnet(null, $subnetMasterId);
-
-		// folder
-		if ($parent->isFolder == "1") { return ""; };
-
-		// pre-caclulate bitwise masks to save CPU
-		$bmask = array();
-		for ($x=0; $x <= 32; $x++) {
-			$pwr = gmp_pow(2, 32-$x);
-			$bmask['IPv4'][$x]['plen'] = $pwr;
-			$bmask['IPv4'][$x]['lo']   = gmp_mul(gmp_div('0xffffffff', $pwr), $pwr);
-			$bmask['IPv4'][$x]['hi']   = gmp_sub($pwr, 1);
-			}
-		for ($y=0; $y <= 128; $y++) {
-			$pwr = gmp_pow(2, 128-$y);
-			$bmask['IPv6'][$y]['plen'] = $pwr;
-			$bmask['IPv6'][$y]['lo']   = gmp_mul(gmp_div('0xffffffffffffffffffffffffffffffff', $pwr), $pwr);
-			$bmask['IPv6'][$y]['hi']   = gmp_sub($pwr, 1);
-		}
-
-		// detect type
-		$type = $this->identify_address($parent->subnet);
-
-		# set some parameters
-		$address_length = ($type == 'IPv4') ? 32 : 128;
-
-		# here we use range split/exclusion algorithm to find final list of networks a whole lot of times faster
-		$ranges = [['start' => gmp_and($parent->subnet,$bmask[$type][$parent->mask]['lo']), 'end' => gmp_or($parent->subnet,$bmask[$type][$parent->mask]['hi'])]];
-		foreach ($subnets as $excl) {
-			$estart = gmp_and($excl->subnet, $bmask[$type][$excl->mask]['lo']);
-			$eend   = gmp_or ($excl->subnet, $bmask[$type][$excl->mask]['hi']);
-			foreach ($ranges as $rid => $range) {
-				if ((gmp_cmp($estart, $range['end']) <= 0) && (gmp_cmp($range['start'], $eend) <= 0)) {
-					# range overlaps, now we check what to do
-					unset($ranges[$rid]); # remove existing range
-					if (gmp_cmp($range['start'], $estart) < 0) { $ranges[] = ['start' => $range['start'], 'end' => gmp_sub($estart, 1)]; };
-					if (gmp_cmp($range['end'], $eend) > 0) { $ranges[] = ['start' => gmp_add($eend, 1), 'end' => $range['end']]; };
-				}
-			}
-		}
-		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
-
-		$mask_drill_down   = $parent->mask + 8; # Display all availble subnets for 8 sections,
-		$prefix_nets_limit = 8;                 # then display the first 8 availble subnets from the remaining sections
-
-		# after we find all the available ranges, we just align and split every range available by mask and that is all
-		$nets = []; $more = [];
-
-		foreach ($ranges as $range) {
-			$max_prefix = $address_length - (strlen(trim(gmp_strval(gmp_add(gmp_sub($range['end'], $range['start']), 1), 2))) - 1); # yeah I know that's bad, but that's the easiest way
-			if ($max_prefix <= $parent->mask) { $max_prefix = $parent->mask + 1; }
-
-			for ($i = $max_prefix; $i <= $address_length; $i++) {
-				if (!isset($nets[$i])) $nets[$i] = [];
-				$ncount = count($nets[$i]);
-				if ($i > $mask_drill_down && $ncount >= $prefix_nets_limit) { continue; }
-
-				# get mask and network length for prefix
-				$plen = $bmask[$type][$i]['plen'];
-				$mask = $bmask[$type][$i]['hi'];
-
-				# align and verify
-				$astart = $range['start']; $aend = $range['end'];
-				if (gmp_cmp(gmp_and($astart, $mask), 0) != 0) $astart = gmp_add(gmp_sub($astart, gmp_and($astart, $mask)), $plen); # align start to the next nearest network
-				if (gmp_cmp(gmp_and($aend, $mask), $mask) != 0) $aend = gmp_sub(gmp_or($aend, $mask), $plen); # align end to the previous nearest network end
-				if (gmp_cmp(gmp_add(gmp_sub($aend, $astart), 1), $plen) < 0) { continue; } # do not consider too small networks
-
-				# walk in the park
-				while (gmp_cmp($astart, $aend) <= 0) {
-					$nets[$i][] = $astart;
-					$astart = gmp_add($astart, $plen);
-					$ncount++;
-					if ($i > $mask_drill_down && $ncount >= $prefix_nets_limit) {
-						$more[$i] = true;
-						break;
-					}
-				}
-
-			}
-		}
-		unset($ranges);
-
-		# finally, output
-		ksort($nets);
-		foreach ($nets as $prefix => $subnets) {
 			if (count($subnets) == 0) continue;
 			$html[] = "<li class='disabled'>Subnet Mask: $prefix</li>";
-			foreach ($subnets as $start) {
-				$cidr_subnet = $this->transform_to_dotted(gmp_strval($start)) . '/' . $prefix;
-				$html[] = "<li><a href='' data-cidr='$cidr_subnet'>- $cidr_subnet</a></li>";
+			foreach ($subnets as $cidr) {
+				$html[] = "<li><a href='' data-cidr='$cidr'>- $cidr</a></li>";
 			}
-			if (isset($more[$prefix])) $html[] = "<li><center>...</center></li>";
+			if ($truncated) $html[] = "<li><center>...</center></li>";
 		}
-		unset($nets);
 
 		// return html
 		return implode( "\n", $html );
