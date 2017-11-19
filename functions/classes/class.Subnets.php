@@ -123,7 +123,7 @@ class Subnets extends Common_functions {
 	 * @var array
 	 * @access protected
 	 */
-	protected $bmask = false;
+	protected $bmask = array();
 
 	/**
 	 * for Database connection
@@ -1604,7 +1604,7 @@ class Subnets extends Common_functions {
 	 */
 	public function get_network_bitmasks () {
 		// Check cache
-		if ($this->bmask) { return $this->bmask; }
+		if (!empty($this->bmask)) { return $this->bmask; }
 
 		// Build masks values and save
 		$bmask = array();
@@ -3808,7 +3808,6 @@ class Subnets extends Common_functions {
 
 		# Get freespacemap array from subnet using split/exclusion algorithm
 		$fsm      = $this->get_subnet_freespacemap($parent);
-		$type     = $fsm['type'];
 		$max_mask = $fsm['max_search_mask'];
 
 		# Find the first|last $count available free subnets of size $mask inside the freespacemap array.
