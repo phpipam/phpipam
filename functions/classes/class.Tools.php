@@ -818,6 +818,18 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Read the SCHEMA.sql file and enforce UNIX LF
+	 *
+	 * @access private
+	 * @return array
+	 */
+	private function read_db_schema() {
+		$fh = fopen(dirname(__FILE__) . '/../../db/SCHEMA.sql', 'r');
+		$schema = str_replace("\r\n", "\n", fread($fh, 100000));
+		return $schema;
+	}
+
+	/**
 	 * Fetches standard database fields from SCHEMA.sql file
 	 *
 	 * @access public
@@ -826,9 +838,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_standard_fields ($table) {
 		# get SCHEMA.SQL file
-		$schema = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$schema = fread($schema, 100000);
-		$schema = str_replace("\r\n", "\n", $schema);
+		$schema = $this->read_db_schema();
 
 		# get definition
 		$definition = strstr($schema, "CREATE TABLE `$table` (");
@@ -857,8 +867,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_standard_tables () {
 		# get SCHEMA.SQL file
-		$schema = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$schema = fread($schema, 100000);
+		$schema = $this->read_db_schema();
 
 		# get definitions to array, explode with CREATE TABLE `
 		$creates = explode("CREATE TABLE `", $schema);
@@ -1356,8 +1365,7 @@ class Tools extends Common_functions {
 	 * @return false|string
 	 */
 	public function get_table_fix ($table) {
-		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$file = fread($res, 100000);
+		$file = $this->read_db_schema();
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
@@ -1377,9 +1385,7 @@ class Tools extends Common_functions {
 	 * @return string|false
 	 */
 	public function get_field_fix ($table, $field) {
-		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$file = fread($res, 100000);
-		$file = str_replace("\r\n", "\n", $file);
+		$file = $this->read_db_schema();
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
@@ -1531,9 +1537,7 @@ class Tools extends Common_functions {
 	 */
 	private function fix_missing_index ($table, $index_name) {
 		// get definition
-		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$file = fread($res, 100000);
-		$file = str_replace("\r\n", "\n", $file);
+		$file = $this->read_db_schema();
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
