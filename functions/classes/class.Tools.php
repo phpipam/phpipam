@@ -1481,17 +1481,26 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	private function get_schema_indexes () {
-		// indexes required for phpipam
+		// Discover indexes required for phpipam
+		$schema = $this->read_db_schema();
+
+		# get definitions to array, explode with CREATE TABLE `
+		$creates = explode("CREATE TABLE `", $schema);
+
 		$indexes = array ();
-		$indexes['ipaddresses']   = array ("sid_ip_unique", "subnetid");
-		$indexes['sections']      = array ("id_2");
-		$indexes['devices']       = array ("hostname");
-		$indexes['users']         = array ("id_2");
-		$indexes['api']           = array ("app_id");
-		$indexes['changelog']     = array ("coid", "ctype");
-		$indexes['loginAttempts'] = array ("ip");
-		$indexes['scanAgents']    = array ("code");
-		// return
+		foreach($creates as $k=>$c) {
+			if($k == 0) continue;
+			$c = trim(strstr($c, ";" . "\n", true));
+
+			$table = strstr($c, "`", true);
+
+			$definitions = explode("\n", $c);
+			foreach($definitions as $definition) {
+				if (preg_match('/(KEY|UNIQUE KEY) +`(.*)` +\(/', $definition, $matches)) {
+					$indexes[$table][] = $matches[2];
+				}
+			}
+		}
 		return $indexes;
 	}
 
