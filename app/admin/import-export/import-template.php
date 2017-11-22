@@ -57,8 +57,8 @@ elseif ($type == 'ipaddr'){
 	$worksheet->write($lineCount, 8, _('Device'));
 	$worksheet->write($lineCount, 9, _('Note'));
 	$worksheet->write($lineCount, 10, _('Tag'));
-	$worksheet->write($lineCount, 11, _('Gateway'));
-	$fc =7 ;
+	$worksheet->write($lineCount, 11, _('Is_Gateway'));
+	$fc =12 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;
