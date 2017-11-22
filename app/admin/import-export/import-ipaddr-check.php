@@ -200,6 +200,14 @@ foreach ($data as &$cdata) {
 		if (preg_match("/[;'\"]/", $cdata['note'])) { $msg.="Invalid characters in note."; $action = "error"; }
 	}
 
+	// Check IP belongs to subnet
+	if ($action != "error") {
+		$subnet_cidr = $cdata['subnet'] . '/' . $cdata['mask'];
+		$ip_mask     = $cdata['type'] == "IPv4" ? '32' : '128';
+		$ip_cidr     = $cdata['ip_addr'] . '/' . $ip_mask;
+		if (!$Subnets->verify_overlapping($subnet_cidr, $ip_cidr)) { $msg.="Invalid IP address, not inside subnet."; $action = "error"; }
+	}
+
 	# check if duplicate in the import data
 	if ($action != "error") {
 		if (isset($ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']][$cdata['ip_addr']])) { $msg.="Duplicate entry in imported data."; $action = "error"; }
