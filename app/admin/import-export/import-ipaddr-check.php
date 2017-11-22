@@ -205,7 +205,7 @@ foreach ($data as &$cdata) {
 		$subnet_cidr = $cdata['subnet'] . '/' . $cdata['mask'];
 		$ip_mask     = $cdata['type'] == "IPv4" ? '32' : '128';
 		$ip_cidr     = $cdata['ip_addr'] . '/' . $ip_mask;
-		if (!$Subnets->verify_overlapping($subnet_cidr, $ip_cidr)) { $msg.="Invalid IP address, not inside subnet."; $action = "error"; }
+		if (!$Subnets->verify_overlapping($ip_cidr, $subnet_cidr)) { $msg.="Invalid IP address, not inside subnet."; $action = "error"; }
 	}
 
 	# check if duplicate in the import data
