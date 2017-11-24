@@ -67,6 +67,89 @@ if(@$_GET['page']!="install" ) {
 	}
 }
 
+# create default GET parameters
+create_get_params ();
+
+/**
+ * This function will emulate GET paramters to simplify .htaccess
+ *
+ * Old rules:
+ *
+ * 	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5&tab=$6 [L]
+ *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L,QSA]
+ *	RewriteRule ^(.*)/$ index.php?page=$1 [L]
+ *
+ *
+ * # IE login dashboard fix
+ *	RewriteRule ^login/dashboard/$ dashboard/ [R]
+ * 	RewriteRule ^logout/dashboard/$ dashboard/ [R]
+ *  # search override
+ *  RewriteRule ^tools/search/(.*)$ index.php?page=tools&section=search&ip=$1 [L]
+ *
+ *
+ * @method create_get_params
+ *
+ * @return [type]
+ */
+function create_get_params () {
+	// parse and create GET params - only for pretty_link enabled !
+	if(strpos($_SERVER['REQUEST_URI'], "index.php")===false) {
+		if(BASE!="/") {
+			$uri_parts = array_values(array_filter(explode("/", str_replace(BASE, "", $_SERVER['REQUEST_URI']))));
+		}
+		else {
+			$uri_parts = array_values(array_filter(explode("/", $_SERVER['REQUEST_URI'])));
+		}
+		// if some exist process it
+		if(sizeof($uri_parts)>0) {
+			# passthroughs
+			if($uri_parts[0]!="app") {
+				foreach ($uri_parts as $k=>$l) {
+					switch ($k) {
+						case 0  : $_GET['page'] 	= $l;	break;
+						case 1  : $_GET['section']  = $l;	break;
+						case 2  : $_GET['subnetId'] = $l;	break;
+						case 3  : $_GET['sPage']    = $l;	break;
+						case 4  : $_GET['ipaddrid'] = $l;	break;
+						case 5  : $_GET['tab']      = $l;	break;
+						default : $_GET[$k]         = $l;	break;
+					}
+				}
+			}
+		}
+		else {
+			# set default page
+			$_GET['page'] = "dashboard";
+		}
+
+
+		// fixes
+		if(isset($_GET['page'])) {
+			// dashboard fix
+			if($_GET['page']=="login" || $_GET['page']=="logout") {
+				if(isset($_GET['section'])) {
+					if ($_GET['section']=="dashboard") {
+						$_GET['page'] = "dashboard";
+					}
+				}
+			}
+			// search fix
+			elseif ($_GET['page']=="tools") {
+				if(isset($_GET['section']) && isset($_GET['subnetId'])) {
+					if ($_GET['section']=="search") {
+						$_GET['ip']     = $_GET['subnetId'];
+						$_REQUEST['ip'] = $_GET['ip'];
+						unset($_GET['subnetId']);
+					}
+				}
+			}
+		}
+	}
+}
+
 /**
  * create links function
  *
@@ -102,13 +185,13 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	}
 	# normal
 	else {
-		if(!is_null($l6))		{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
-		elseif(!is_null($l5))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
-		elseif(!is_null($l4))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
-		elseif(!is_null($l3))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
-		elseif(!is_null($l2))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }
-		elseif(!is_null($l1))	{ $link = "?$el[0]=$l0&$el[1]=$l1"; }
-		elseif(!is_null($l0))	{ $link = "?$el[0]=$l0"; }
+		if(!is_null($l6))		{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
+		elseif(!is_null($l5))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
+		elseif(!is_null($l4))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
+		elseif(!is_null($l3))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
+		elseif(!is_null($l2))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }
+		elseif(!is_null($l1))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1"; }
+		elseif(!is_null($l0))	{ $link = "index.php?$el[0]=$l0"; }
 		else					{ $link = ""; }
 	}
 	# prepend base

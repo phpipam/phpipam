@@ -23,7 +23,7 @@ $DNS = new DNS ($Database, $User->settings, true);
 # checks
 if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
 if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
-if(!is_numeric($_REQUEST['subnetId'])) 	{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
+if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
 
 /* selected and hidden fields */
 
@@ -339,7 +339,7 @@ else {
 			    // gateway
 			    $gw = $addresses[$n]->is_gateway==1 ? "gateway" : "";
 
-			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_REQUEST['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
+			    print "	<td class='ipaddress $gw'><span class='status status-$hStatus' $hTooltip></span><a href='".create_link("subnets",$subnet['sectionId'],$_GET['subnetId'],"address-details",$addresses[$n]->id)."'>".$Subnets->transform_to_dotted( $addresses[$n]->ip_addr)."</a>";
 			    if($addresses[$n]->is_gateway==1)						{ print " <i class='fa fa-info-circle fa-gateway' rel='tooltip' title='"._('Address is marked as gateway')."'></i>"; }
 			    print $Addresses->address_type_format_tag($addresses[$n]->state);
 
