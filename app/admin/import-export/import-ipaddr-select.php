@@ -126,7 +126,7 @@ print "<div id='bottommsg'>"._("The fields marked with * are mandatory.")."
 	<br>"._("Providing a subnet is optional, the system will add the IP to the longest match if no subnet is provided.")."
 	<br>"._("The mask can be provided either as a separate field or with the subnet, sparated by \"/\"")."
 	</div>";
-print "<div class='checkbox'><label><input name='searchallvrfs' id='searchallvrfs' type='checkbox' unchecked>"._("Search for matching subnet in all VRFs (ignore provided VRF).")."</label></div>";
+print "<div class='checkbox'><label><input name='searchallvrfs' id='searchallvrfs' type='checkbox' unchecked>"._("Search for matching subnet in all VRFs.")."</label></div>";
 #TODO# add option to hide php fields
 #print "<div class='checkbox'><label><input name='showspecific' id='showspecific' type='checkbox' unchecked>"._("Show PHPIPAM specific columns.")."</label></div>";
 print "</form>";
