@@ -193,7 +193,7 @@ class Responses {
     	if(isset($_SERVER['CONTENT_TYPE']))
     	$_SERVER['CONTENT_TYPE'] = array_shift(explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
-		if( !isset($_SERVER['CONTENT_TYPE']) ) {}
+		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE']==0) ) {}
 		// post
 		elseif($_SERVER['CONTENT_TYPE']=="application/x-www-form-urlencoded") {}
 		// set, verify
