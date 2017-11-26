@@ -90,6 +90,22 @@ create_get_params ();
  *  RewriteRule ^tools/search/(.*)$ index.php?page=tools&section=search&ip=$1 [L]
  *
  *
+ * API
+ * 	# exceptions
+ *	RewriteRule ^(.*)/addresses/search_hostname/(.*)/$ ?app_id=$1&controller=addresses&id=search_hostname&id2=$2 [L,QSA]
+ *	RewriteRule ^(.*)/prefix/external_id/(.*)/$ ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
+ *	RewriteRule ^(.*)/prefix/external_id/(.*) ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/cidr/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=cidr&id2=$3&id3=$4 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/cidr/(.*)/(.*) ?app_id=$1&controller=$2&id=cidr&id2=$3&id3=$4 [L,QSA]
+ *	# controller rewrites
+ *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4&id3=$5&id4=$6 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4&id3=$5 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3 [L,QSA]
+ *	RewriteRule ^(.*)/(.*)/$ ?app_id=$1&controller=$2 [L,QSA]
+ *	RewriteRule ^(.*)/$ ?app_id=$1 [L,QSA]
+ *
+ *
  * @method create_get_params
  *
  * @return [type]
@@ -103,10 +119,26 @@ function create_get_params () {
 		else {
 			$uri_parts = array_values(array_filter(explode("/", $_SERVER['REQUEST_URI'])));
 		}
+
 		// if some exist process it
 		if(sizeof($uri_parts)>0) {
+			# API
+			if ($uri_parts[0]=="api") {
+				unset($uri_parts[0]);
+				foreach ($uri_parts as $k=>$l) {
+					switch ($k) {
+						case 1  : $_GET['app_id']     = $l;	break;
+						case 2  : $_GET['controller'] = $l;	break;
+						case 3  : $_GET['id']    	  = $l;	break;
+						case 4  : $_GET['id2'] 		  = $l;	break;
+						case 5  : $_GET['id3']        = $l;	break;
+						case 5  : $_GET['id4']        = $l;	break;
+						default : $_GET[$k]           = $l;	break;
+					}
+				}
+			}
 			# passthroughs
-			if($uri_parts[0]!="app") {
+			elseif($uri_parts[0]!="app") {
 				foreach ($uri_parts as $k=>$l) {
 					switch ($k) {
 						case 0  : $_GET['page'] 	= $l;	break;

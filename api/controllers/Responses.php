@@ -293,9 +293,11 @@ class Responses {
 				if(sizeof($custom_fields)>0) {
 					foreach($custom_fields as $k=>$cf) {
 						// add to result
-						$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
-						// remove unnested data
-						unset($this->result['data'][$dk]->$k);
+						if(isset($d->$k)) {
+							$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
+							// remove unnested data
+							unset($this->result['data'][$dk]->$k);
+						}
 					}
 				}
 				else {

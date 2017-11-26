@@ -675,5 +675,3 @@ class Addresses_controller extends Common_api_functions  {
 		else { $this->_params->state = 2; }
 	}
 }
-
-?>

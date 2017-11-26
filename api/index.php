@@ -272,5 +272,3 @@ echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, 
 
 // exit
 exit();
-
-?>

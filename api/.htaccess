@@ -12,16 +12,8 @@ ErrorDocument 501 '{"code":501,"success":0,"message":"Not Implemented"}'
 ErrorDocument 503 '{"code":503,"success":0,"message":"Service Unavailable"}'
 ErrorDocument 505 '{"code":505,"success":0,"message":"HTTP Version Not Supported"}'
 
-# exceptions
-RewriteRule ^(.*)/addresses/search_hostname/(.*)/$ ?app_id=$1&controller=addresses&id=search_hostname&id2=$2 [L,QSA]
-RewriteRule ^(.*)/prefix/external_id/(.*)/$ ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
-RewriteRule ^(.*)/prefix/external_id/(.*) ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
-RewriteRule ^(.*)/(.*)/cidr/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=cidr&id2=$3&id3=$4 [L,QSA]
-RewriteRule ^(.*)/(.*)/cidr/(.*)/(.*) ?app_id=$1&controller=$2&id=cidr&id2=$3&id3=$4 [L,QSA]
-# controller rewrites
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4&id3=$5&id4=$6 [L,QSA]
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4&id3=$5 [L,QSA]
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4 [L,QSA]
-RewriteRule ^(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3 [L,QSA]
-RewriteRule ^(.*)/(.*)/$ ?app_id=$1&controller=$2 [L,QSA]
-RewriteRule ^(.*)/$ ?app_id=$1 [L,QSA]
+# Rewrites
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
