@@ -222,7 +222,7 @@ if($Scan->icmp_type=="fping") {
 
 		        //resolve hostnames
 				if($subnets[$sk]['resolveDNS']=="1") {
-					$old_hostname_save = $a['dns_name'];	// save old hostname to detect change
+					$old_hostname_save = $addresses2[$s['id']][$ak]['dns_name'];	// save old hostname to detect change
 					$old_hostname = $config['resolve_emptyonly']===false ? false : $addresses2[$s['id']][$ak]['dns_name'];
 			        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($addresses2[$s['id']][$ak]['ip_addr']), $old_hostname, true, $subnets[$sk]['nsid']);
 					if($hostname['class']=="resolved") {
