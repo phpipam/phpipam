@@ -3,6 +3,7 @@
     Enhancements, changes:
     ----------------------------
     + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
+    + Search for matching subnet in all VRFs feature enabled when importing addresses.
 
     Translations:
     ----------------------------
@@ -11,7 +12,7 @@
     Bugfixes:
     ----------------------------
     + Fixed uncaught error if vlan number exceeds max permitted (#1455);
-    + Fixed off-by-one and index lookup errors in discoveryCheck.php and pingCheck.php (#1585);
+    + Fixed Illegal string offset 'dns_name' in pingCheck.php errors (#1461);
     + Performance fix for subnet_dropdown_print_available (#1562);
     + Fixed logo updater for apache v2.4 (#1582);
 
