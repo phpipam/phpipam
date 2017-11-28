@@ -49,6 +49,7 @@ require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
+require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {
@@ -68,119 +69,8 @@ if(@$_GET['page']!="install" ) {
 }
 
 # create default GET parameters
-create_get_params ();
-
-/**
- * This function will emulate GET paramters to simplify .htaccess
- *
- * Old rules:
- *
- * 	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5&tab=$6 [L]
- *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L,QSA]
- *	RewriteRule ^(.*)/$ index.php?page=$1 [L]
- *
- *
- * # IE login dashboard fix
- *	RewriteRule ^login/dashboard/$ dashboard/ [R]
- * 	RewriteRule ^logout/dashboard/$ dashboard/ [R]
- *  # search override
- *  RewriteRule ^tools/search/(.*)$ index.php?page=tools&section=search&ip=$1 [L]
- *
- *
- * API
- * 	# exceptions
- *	RewriteRule ^(.*)/addresses/search_hostname/(.*)/$ ?app_id=$1&controller=addresses&id=search_hostname&id2=$2 [L,QSA]
- *	RewriteRule ^(.*)/prefix/external_id/(.*)/$ ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
- *	RewriteRule ^(.*)/prefix/external_id/(.*) ?app_id=$1&controller=prefix&id=external_id&id2=$2 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/cidr/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=cidr&id2=$3&id3=$4 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/cidr/(.*)/(.*) ?app_id=$1&controller=$2&id=cidr&id2=$3&id3=$4 [L,QSA]
- *	# controller rewrites
- *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4&id3=$5&id4=$6 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4&id3=$5 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3&id2=$4 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/(.*)/$ ?app_id=$1&controller=$2&id=$3 [L,QSA]
- *	RewriteRule ^(.*)/(.*)/$ ?app_id=$1&controller=$2 [L,QSA]
- *	RewriteRule ^(.*)/$ ?app_id=$1 [L,QSA]
- *
- *
- * @method create_get_params
- *
- * @return [type]
- */
-function create_get_params () {
-	// parse and create GET params - only for pretty_link enabled !
-	if(strpos($_SERVER['REQUEST_URI'], "index.php")===false) {
-		if(BASE!="/") {
-			$uri_parts = array_values(array_filter(explode("/", str_replace(BASE, "", $_SERVER['REQUEST_URI']))));
-		}
-		else {
-			$uri_parts = array_values(array_filter(explode("/", $_SERVER['REQUEST_URI'])));
-		}
-
-		// if some exist process it
-		if(sizeof($uri_parts)>0) {
-			# API
-			if ($uri_parts[0]=="api") {
-				unset($uri_parts[0]);
-				foreach ($uri_parts as $k=>$l) {
-					switch ($k) {
-						case 1  : $_GET['app_id']     = $l;	break;
-						case 2  : $_GET['controller'] = $l;	break;
-						case 3  : $_GET['id']    	  = $l;	break;
-						case 4  : $_GET['id2'] 		  = $l;	break;
-						case 5  : $_GET['id3']        = $l;	break;
-						case 5  : $_GET['id4']        = $l;	break;
-						default : $_GET[$k]           = $l;	break;
-					}
-				}
-			}
-			# passthroughs
-			elseif($uri_parts[0]!="app") {
-				foreach ($uri_parts as $k=>$l) {
-					switch ($k) {
-						case 0  : $_GET['page'] 	= $l;	break;
-						case 1  : $_GET['section']  = $l;	break;
-						case 2  : $_GET['subnetId'] = $l;	break;
-						case 3  : $_GET['sPage']    = $l;	break;
-						case 4  : $_GET['ipaddrid'] = $l;	break;
-						case 5  : $_GET['tab']      = $l;	break;
-						default : $_GET[$k]         = $l;	break;
-					}
-				}
-			}
-		}
-		else {
-			# set default page
-			$_GET['page'] = "dashboard";
-		}
-
-
-		// fixes
-		if(isset($_GET['page'])) {
-			// dashboard fix
-			if($_GET['page']=="login" || $_GET['page']=="logout") {
-				if(isset($_GET['section'])) {
-					if ($_GET['section']=="dashboard") {
-						$_GET['page'] = "dashboard";
-					}
-				}
-			}
-			// search fix
-			elseif ($_GET['page']=="tools") {
-				if(isset($_GET['section']) && isset($_GET['subnetId'])) {
-					if ($_GET['section']=="search") {
-						$_GET['ip']     = $_GET['subnetId'];
-						$_REQUEST['ip'] = $_GET['ip'];
-						unset($_GET['subnetId']);
-					}
-				}
-			}
-		}
-	}
-}
+$Rewrite = new Rewrite ();
+$_GET = $Rewrite->get_url_params ();
 
 /**
  * create links function

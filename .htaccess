@@ -3,7 +3,7 @@
 # Enable rewrite engine
 RewriteEngine on
 # Passthroughs
-RewriteRule ^(css|js|app|test|api)/.*$ - [L,QSA]
+RewriteRule ^(css|js|app|test)/.*$ - [L,QSA]
 
 # Rewrites
 RewriteRule ^index\.php$ - [L]

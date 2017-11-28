@@ -1,5 +1,9 @@
 == 1.3.2
 
+    Enhancements, changes:
+    ----------------------------
+    + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
+
     Translations:
     ----------------------------
     + German translation updated to verson 1.3.1;
@@ -7,6 +11,9 @@
     Bugfixes:
     ----------------------------
     + Fixed uncaught error if vlan number exceeds max permitted (#1455);
+    + Fixed off-by-one and index lookup errors in discoveryCheck.php and pingCheck.php (#1585);
+    + Performance fix for subnet_dropdown_print_available (#1562);
+    + Fixed logo updater for apache v2.4 (#1582);
 
 == 1.3.1
 
