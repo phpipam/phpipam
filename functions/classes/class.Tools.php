@@ -1614,7 +1614,7 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric(str_replace(["Version", "."], "", $e->title))) {
+				if (is_numeric(str_replace(array("Version", "."), "", $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
