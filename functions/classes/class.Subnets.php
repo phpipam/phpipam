@@ -1656,8 +1656,8 @@ class Subnets extends Common_functions {
 
 				# range overlaps, now we check what to do
 				unset($ranges[$rid]); # remove existing range
-				if (gmp_cmp($range['start'], $estart) < 0) { $ranges[] = ['start' => $range['start'], 'end' => gmp_sub($estart, 1)]; };
-				if (gmp_cmp($range['end'], $eend) > 0) { $ranges[] = ['start' => gmp_add($eend, 1), 'end' => $range['end']]; };
+				if (gmp_cmp($range['start'], $estart) < 0) { $ranges[] = array('start' => $range['start'], 'end' => gmp_sub($estart, 1)); };
+				if (gmp_cmp($range['end'], $eend) > 0) { $ranges[] = array('start' => gmp_add($eend, 1), 'end' => $range['end']); };
 			}
 		}
 		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
