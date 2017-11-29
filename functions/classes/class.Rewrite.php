@@ -50,7 +50,7 @@ class Rewrite {
 	 *
 	 * @var array
 	 */
-	private $uri_passthroughs = ["app"];
+	private $uri_passthroughs = array("app");
 
 	/**
 	 * URI parts from $_SERVER['REQUEST_URI']
@@ -59,14 +59,14 @@ class Rewrite {
 	 *
 	 * @var array
 	 */
-	private $uri_parts = [];
+	private $uri_parts = array();
 
 	/**
 	 * Final GET params to be returned
 	 *
 	 * @var array
 	 */
-	private $get_params = [];
+	private $get_params = array();
 
 
 
