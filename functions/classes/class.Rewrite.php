@@ -166,7 +166,9 @@ class Rewrite {
 	private function create_get_params_ui () {
 		// process uti parts
 		if(sizeof($this->uri_parts)>0) {
-			if(!in_array($this->uri_parts[0], $this->uri_passthroughs)) {
+			if(in_array($this->uri_parts[0], $this->uri_passthroughs)) {
+				$this->get_params = $_GET;
+			} else {
 				foreach ($this->uri_parts as $k=>$l) {
 					switch ($k) {
 						case 0  : $this->get_params['page'] 	= $l;	break;
