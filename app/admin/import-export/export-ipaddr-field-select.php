@@ -125,10 +125,11 @@ if($all_sections!==false) {
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
+		$section['url_name'] = urlencode($section['name']);
 
 		print '<tr>';
-		print '	<td><div class="checkbox"><label><input type="checkbox" id="exportCheck" name="exportSection__'.str_replace(" ", "_", $section['name']).'" checked>'.str_replace("_", " ", $section['name']).'</label></div></td>';
-		print '	<td>'. $section['description'] .'</td>'. "\n";
+		print '	<td><div class="checkbox"><label><input type="checkbox" id="exportCheck" name="exportSection__'.$section['url_name'].'" checked>'.$section['name'].'</label></div></td>';
+		print '	<td>'. htmlentities($section['description']) .'</td>'. "\n";
 		//master Section
 		if($section['masterSection']!=0) {
 			# get section details

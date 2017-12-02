@@ -133,9 +133,9 @@ if($all_sections!==false) {
 	foreach ($all_sections as $section) {
 		//cast
 		$section = (array) $section;
-		$section['name'] = str_replace(" ", "___", $section['name']);
+		$section['url_name'] = urlencode($section['name']);
 
-		if( (isset($_GET['exportSection__'.$section['name']])) && ($_GET['exportSection__'.$section['name']] == "on") ) {
+		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
 			// get all subnets in section
 			$section_subnets = $Subnets->fetch_section_subnets($section['id']);
 
@@ -146,7 +146,7 @@ if($all_sections!==false) {
 				$subnet = (array) $subnet;
 
 				if( (isset($_GET['section'])) && ($_GET['section'] == "on") ) {
-					$worksheet->write($lineCount, $rowCount, str_replace("___", " ", $section['name']), $format_text);
+					$worksheet->write($lineCount, $rowCount, $section['name'], $format_text);
 					$rowCount++;
 				}
 
@@ -269,8 +269,9 @@ if( (isset($_GET['exportSections'])) && ($_GET['exportSections'] == "on") ) {
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
+		$section['url_name'] = urlencode($section['name']);
 
-		if( (isset($_GET['exportSection__'.str_replace(" ", "_", $section['name'])])) && ($_GET['exportSection__'.str_replace(" ", "_", $section['name'])] == "on") ) {
+		if( (isset($_GET['exportSection__'.$section['url_name']])) && ($_GET['exportSection__'.$section['url_name']] == "on") ) {
 			$worksheet_sections->write($lineCount, $rowCount, $section['name'], $format_text);
 			$rowCount++;
 			$worksheet_sections->write($lineCount, $rowCount, $section['description'], $format_text);
@@ -297,5 +298,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>
