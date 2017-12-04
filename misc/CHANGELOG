@@ -15,6 +15,7 @@
     + Fixed Illegal string offset 'dns_name' in pingCheck.php errors (#1461);
     + Performance fix for subnet_dropdown_print_available (#1562);
     + Fixed logo updater for apache v2.4 (#1582);
+    + Fixed section names containing spaces are not included in exports (#1566);
 
 == 1.3.1
 
