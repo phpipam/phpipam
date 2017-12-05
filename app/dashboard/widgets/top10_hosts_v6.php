@@ -47,21 +47,31 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 $type = 'IPv6';
 $top_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
 
-/* detect duplicates */
+# Remove subnets with no user access, find duplicates and re-index the array
 $unique = array();
-$numbering = array();
-$m = 0;
-foreach($top_subnets as $subnet) {
-	# cast
+$i = 0;
+foreach($top_subnets as $m => $subnet) {
 	$subnet = (array) $subnet;
-	# check if already in array
-	if(in_array($subnet['description'], $unique)) {
-		$numbering[$subnet['description']]++;
-		$top_subnets[$m]->description = $subnet['description'].' #'.$numbering[$subnet['description']];
+	if ($Subnets->check_permission($User->user, $subnet['id']) == "0") {
+		unset($top_subnets[$m]);
+		continue;
 	}
-	$unique[] = $top_subnets[$m]->description;
-	$m++;
+	/* We've found $slimit entries */
+	if ($i++ >= $slimit) { break; }
+
+	/* Make fields human readable */
+	$top_subnets[$m]->subnet = $Subnets->transform_to_dotted($subnet['subnet']);
+	$top_subnets[$m]->descriptionLong = $top_subnets[$m]->description;
+	/* length check */
+	$top_subnets[$m]->description = strlen($subnet['description'])>20 ? substr($subnet['description'], 0,20)."..." : $subnet['description'];
+
+	/* detect and rename duplicates */
+	if(isset($unique[$subnet['description']])) {
+		$top_subnets[$m]->description = $top_subnets[$m]->description.' #'.sizeof($unique[$subnet['description']]);
+	}
+	$unique[$subnet['description']][] = 1;
 }
+$top_subnets = array_splice(array_values($top_subnets), 0, $slimit);
 
 # only print if some hosts exist
 if(sizeof($top_subnets)>0) {
@@ -71,27 +81,17 @@ $(function () {
 
     var data = [
     <?php
-	$m=0;
-	foreach ($top_subnets as $subnet) {
-		if($m < $slimit) {
-			# cast
-			$subnet = (array) $subnet;
-			# verify user access
-			$sp = $Subnets-> check_permission ($User->user, $subnet['id']);
-			if($sp != "0") {
-				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
-				$subnet['descriptionLong'] = $subnet['description'];
-				# odd/even if more than 5 items
-				if(sizeof($top_subnets) > 5) {
-					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-				}
-				else {
-								{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-				}
-				# next
-				$m++;
-			}
+	foreach ($top_subnets as $m => $subnet) {
+		# cast
+		$subnet = (array) $subnet;
+
+		# odd/even if more than 5 items
+		if(sizeof($top_subnets) > 5) {
+			if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+			else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+		}
+		else {
+			print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";
 		}
 	}
 	?>
@@ -214,7 +214,7 @@ $(function () {
     };
 
 	<?php
-	if($m!=0) {
+	if(sizeof($top_subnets)!=0) {
 	?>
     $.plot($("#<?php print $type; ?>top10Hosts"), [ data ], options);
     <?php } else { ?>
@@ -224,7 +224,7 @@ $(function () {
 </script>
 
 <?php
-if($m==0) {
+if(sizeof($top_subnets)==0) {
 	print "<hr>";
 
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
