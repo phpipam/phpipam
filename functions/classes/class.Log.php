@@ -595,7 +595,7 @@ class Logging extends Common_functions {
 	    			"severity"=>$this->log_severity,
 	    			"date"=>$this->Database->toDate(),
 	    			"username"=>$this->log_username,
-	    			"ipaddr"=>@$_SERVER['REMOTE_ADDR'],
+	    			"ipaddr"=> array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
 	    			"details"=>$this->log_details
 					);
 		# null empty values
