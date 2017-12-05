@@ -3291,49 +3291,33 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_top_subnets ($type, $limit = "10", $perc = false) {
-	    # set limit
-	    $limit = $limit==0 ? "" : "limit $limit";
+		# set limit & IPv4/IPv6 selector
+		$limit = $limit<=0 ? '' : 'LIMIT '. (int) $limit;
+		$type_operator = ($type === 'IPv6') ? '>' : '<=';
+		$type_max_mask = ($type === 'IPv6') ? '128' : '32';
+		$strict_mode   = ($type === 'IPv6') ? '0' : '2';
 
-	    # set query
-	    if($perc) {
-			$query = "select SQL_CACHE *,round(`usage`/(pow(2,32-`mask`)-2)*100,2) as `percentage` from (
-						select `sectionId`,`id`,`subnet`,cast(`subnet` as UNSIGNED) as cmp,`mask`,IF(char_length(`description`)>0, `description`, 'No description') as description, (
-							SELECT COUNT(*) FROM `ipaddresses` as `i` where `i`.`subnetId` = `s`.`id`
-						)
-						as `usage` from `subnets` as `s`
-						where `mask` < 31 and cast(`subnet` as UNSIGNED) < '4294967295'
-						order by `usage` desc
-						) as `d` where `usage` > 0 order by `percentage` desc $limit;";
-	    }
-		# ipv4 stats
-		elseif($type == "IPv4") {
-			$query = "select SQL_CACHE * from (
-					select `sectionId`,`id`,`subnet`,cast(`subnet` as UNSIGNED) as cmp,`mask`,IF(char_length(`description`)>0, `description`, 'No description') as description, (
-						SELECT COUNT(*) FROM `ipaddresses` as `i` where `i`.`subnetId` = `s`.`id`
-					)
-					as `usage` from `subnets` as `s`
-					where cast(`subnet` as UNSIGNED) < '4294967295'
-					order by `usage` desc $limit
-					) as `d` where `d`.`usage` > 0;";
-		}
-		# IPv6 stats
-		else {
-			$query = "select SQL_CACHE * from (
-					select `sectionId`,`id`,`subnet`,cast(`subnet` as UNSIGNED) as cmp,`mask`, IF(char_length(`description`)>0, `description`, 'No description') as description, (
-						SELECT COUNT(*) FROM `ipaddresses` as `i` where `i`.`subnetId` = `s`.`id`
-					)
-					as `usage` from `subnets` as `s`
-					where cast(`subnet` as UNSIGNED) > '4294967295'
-					order by `usage` desc $limit
-					) as `d` where `d`.`usage` > 0;";
+		if($perc) {
+			$query = "SELECT SQL_CACHE s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
+					COUNT(*) AS `usage`,ROUND(COUNT(*)/(POW(2,$type_max_mask-`mask`)-$strict_mode)*100,2) AS `percentage` FROM `ipaddresses` AS `i`
+					LEFT JOIN `subnets` AS `s` ON i.subnetId = s.id
+					WHERE s.mask < ($type_max_mask-1) AND CAST(s.subnet AS DECIMAL(39)) $type_operator '4294967295'
+					GROUP BY i.subnetId
+					ORDER BY `percentage` DESC $limit;";
+		} else {
+			$query = "SELECT SQL_CACHE s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
+					COUNT(*) AS `usage` FROM `ipaddresses` AS `i`
+					LEFT JOIN `subnets` AS `s` ON i.subnetId = s.id
+					WHERE CAST(s.subnet AS DECIMAL(39)) $type_operator '4294967295'
+					GROUP BY i.subnetId
+					ORDER BY `usage` DESC $limit;";
 		}
 
-		# fetch
 		try { $stats = $this->Database->getObjectsQuery($query); }
 		catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
 
-	    # return subnets array
-	    return (array) $stats;
+		# return subnets array
+		return (array) $stats;
 	}
 
 	/**
