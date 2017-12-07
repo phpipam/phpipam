@@ -905,3 +905,7 @@ ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;
 ALTER TABLE `ipaddresses` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
 ALTER TABLE `requests` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
 
+/* Subnet table indexes: has_slaves(), fetch_section_subnets(), subnet_familytree_*(), verify_subnet_overlapping(), verify_vrf_overlapping()... */
+ALTER TABLE `subnets` ADD INDEX (`masterSubnetId`);
+ALTER TABLE `subnets` ADD INDEX (`sectionId`);
+ALTER TABLE `subnets` ADD INDEX (`vrfId`);
