@@ -173,29 +173,17 @@ if($Scan->icmp_type=="fping") {
 	            $z++;				//next index
 			}
 	    }
-	    // wait for all the threads to finish
-	    while( !empty( $threads ) ) {
-			foreach($threads as $index => $thread) {
-				$child_pipe = "/tmp/pipe_".$thread->getPid();
+		// wait for all the threads to finish
+		foreach($threads as $index => $thread) {
+			fclose($thread->sockets[0]);
 
-				if (file_exists($child_pipe)) {
-					$file_descriptor = fopen( $child_pipe, "r");
-					$child_response = "";
-					while (!feof($file_descriptor)) {
-						$child_response .= fread($file_descriptor, 8192);
-					}
-					//we have the child data in the parent, but serialized:
-					$child_response = unserialize( $child_response );
-					//store
-					$subnets[$index]['result'] = $child_response;
-
-					//now, child is dead, and parent close the pipe
-					unlink( $child_pipe );
-					unset($threads[$index]);
-				}
+			$child_response = fgets($thread->sockets[1]);
+			if ($child_response !== false) {
+				$subnets[$index]['result'] = json_decode($child_response);
 			}
-	        usleep(200000);
-	    }
+			fclose($thread->sockets[1]);
+			unset($threads[$index]);
+		}
 	}
 
 	//now we must remove all non-existing hosts

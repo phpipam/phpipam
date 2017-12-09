@@ -10,6 +10,7 @@
 class PingThread {
     const FUNCTION_NOT_CALLABLE = 10;
     const COULD_NOT_FORK = 15;
+    const IPC_SOCKET_FAILED = 20;
 
 	/**
 	* possible errors
@@ -19,6 +20,7 @@ class PingThread {
     private $errors = array(
         PingThread::FUNCTION_NOT_CALLABLE => 'You must specify a valid function name that can be called from the current scope.',
         PingThread::COULD_NOT_FORK => 'pcntl_fork() returned a status of -1. No new process was created',
+        PingThread::IPC_SOCKET_FAILED => 'socket_create_pair() returned a status of -1. No new process was created',
     );
 
 	/**
@@ -45,6 +47,11 @@ class PingThread {
 	* holds type - needed for fping
 	*/
 	public $stype = "ping";
+
+	/**
+	* holds sockets for IPC
+	*/
+	public $sockets = array();
 
 	/**
 	* checks if threading is supported by the current
@@ -75,6 +82,14 @@ class PingThread {
     public function __construct( $_runnable = null ) {
 		if( $_runnable !== null ) {
 			$this->setRunnable( $_runnable );
+		}
+
+		/* On Windows we need to use AF_INET */
+		$domain = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ?  STREAM_PF_INET : STREAM_PF_UNIX;
+		$this->sockets = stream_socket_pair($domain, STREAM_SOCK_STREAM, 0);
+
+		if ($this->sockets === false) {
+			throw new Exception( $this->getError( PingThread::IPC_SOCKET_FAILED ), PingThread::IPC_SOCKET_FAILED );
 		}
     }
 
@@ -180,6 +195,9 @@ class PingThread {
         }
         else {
             // child
+            $this->pid = posix_getpid();//pid (child)
+            $this->ppid = posix_getppid();//pid (parent)
+
             pcntl_signal( SIGTERM, array( $this, 'signalHandler' ) );
             $arguments = func_get_args();
             if ( !empty( $arguments ) ) {
@@ -223,15 +241,10 @@ class PingThread {
 				$results = call_user_func( $this->runnable );
 			}
 
-			$pipe = "/tmp/pipe_".$this->pid;//pid is known by parent
-
-			if(!file_exists($pipe)) {//child talks to parent using this pipe
-				umask(0);
-				posix_mkfifo($pipe, 0600);
-			}
-			//we have to open the pipe and send the data serialized
-			$pipe_descriptor = fopen($pipe, 'w');
-			fwrite($pipe_descriptor, serialize( $results ) );
+			fclose($this->sockets[1]);
+			// Send results
+			fwrite($this->sockets[0], json_encode($results) . "\n");
+			fclose($this->sockets[0]);
 
 			//and kill the child using posix_kill ( exit(0) duplicates headers!! )
 			posix_kill( $this->pid , SIGKILL);
