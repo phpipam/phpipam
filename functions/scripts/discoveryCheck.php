@@ -113,24 +113,23 @@ $z = 0;			//addresses array index
 
 // let's just reindex the subnets array to save future issues
 $scan_subnets   = array_values($scan_subnets);
-$size_subnets   = count($scan_subnets);
-$size_addresses = max(array_keys($addresses));
 
 //different scan for fping
 if($Scan->icmp_type=="fping") {
 	//run per MAX_THREADS
-	for ($m=0; $m<=$size_subnets; $m += $Scan->settings->scanMaxThreads) {
+	$size_subnets = sizeof($scan_subnets);
+	for ($m=0; $m < $size_subnets; $m += $Scan->settings->scanMaxThreads) {
 	    // create threads
 	    $threads = array();
 	    //fork processes
-	    for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= $size_subnets; $i++) {
+	    for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
 	    	//only if index exists!
 	    	if(isset($scan_subnets[$z])) {
 				//start new thread
 	            $threads[$z] = new PingThread( 'fping_subnet' );
 				$threads[$z]->start_fping( $Subnets->transform_to_dotted($scan_subnets[$z]->subnet)."/".$scan_subnets[$z]->mask );
-	            $z++;				//next index
 			}
+			$z++;				//next index
 	    }
 		// wait for all the threads to finish
 		foreach($threads as $index => $thread) {
@@ -161,19 +160,20 @@ if($Scan->icmp_type=="fping") {
 //ping, pear
 else {
 	//run per MAX_THREADS
-    for ($m=0; $m<=$size_addresses; $m += $Scan->settings->scanMaxThreads) {
+    $size_addresses = sizeof($addresses);
+    for ($m=0; $m < $size_addresses; $m += $Scan->settings->scanMaxThreads) {
         // create threads
         $threads = array();
 
         //fork processes
-        for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= $size_addresses; $i++) {
+        for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
         	//only if index exists!
         	if(isset($addresses[$z])) {
 				//start new thread
 	            $threads[$z] = new PingThread( 'ping_address' );
 	            $threads[$z]->start( $Subnets->transform_to_dotted($addresses[$z]['ip_addr']) );
-				$z++;			//next index
 			}
+			$z++;			//next index
         }
 
         // wait for all the threads to finish
@@ -185,7 +185,7 @@ else {
 						unset($addresses[$index]);
 					}
                     //remove thread
-                    unset( $threads[$index]);
+                    unset($threads[$index]);
                 }
             }
             usleep(200000);
