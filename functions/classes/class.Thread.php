@@ -79,6 +79,16 @@ class PingThread {
     }
 
 	/**
+	* class destructor
+	*/
+	public function __destruct() {
+		if ( $this->isAlive() ) {
+			//and kill the child using posix_kill ( exit(0) duplicates headers!! )
+			posix_kill($this->pid, SIGKILL);
+		}
+	}
+
+	/**
 	* sets the callback
 	*
 	* @param callback $_runnable
