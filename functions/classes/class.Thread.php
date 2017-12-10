@@ -86,11 +86,13 @@ class PingThread {
 
 		/* On Windows we need to use AF_INET */
 		$domain = (strtoupper(substr(PHP_OS, 0, 3)) == 'WIN') ?  STREAM_PF_INET : STREAM_PF_UNIX;
-		$this->sockets = stream_socket_pair($domain, STREAM_SOCK_STREAM, 0);
+		$this->sockets = stream_socket_pair($domain, STREAM_SOCK_STREAM, STREAM_IPPROTO_IP);
 
 		if ($this->sockets === false) {
 			throw new Exception( $this->getError( PingThread::IPC_SOCKET_FAILED ), PingThread::IPC_SOCKET_FAILED );
 		}
+		stream_set_blocking($this->sockets[0], 1);
+		stream_set_blocking($this->sockets[1], 1);
     }
 
 	/**
@@ -197,6 +199,7 @@ class PingThread {
             // child
             $this->pid = posix_getpid();//pid (child)
             $this->ppid = posix_getppid();//pid (parent)
+            proc_nice(9);
 
             pcntl_signal( SIGTERM, array( $this, 'signalHandler' ) );
             $arguments = func_get_args();
@@ -232,6 +235,7 @@ class PingThread {
 		} else { // child
 			$this->pid = posix_getpid();//pid (child)
 			$this->ppid = posix_getppid();//pid (parent)
+			proc_nice(9);
 
 			pcntl_signal( SIGTERM, array( $this, 'signalHandler' ) );
 			$array_args = func_get_args();
