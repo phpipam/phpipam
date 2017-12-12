@@ -448,7 +448,7 @@ class Addresses extends Common_functions {
         # location
         if (isset($address['location_item'])) {
             if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
+                $this->Result->show("danger", _("Invalid location value"), true);
             }
             $insert['location'] = $address['location_item'];
         }
@@ -626,7 +626,7 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			// save log
-			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $address_old), 0);
+			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $hostname), 0);
 			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "dns_name"=>""), array("id"=>$id, "dns_name"=>$hostname), $this->mail_changelog);
 		}
 	}
