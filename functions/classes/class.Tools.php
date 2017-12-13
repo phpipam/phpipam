@@ -398,8 +398,8 @@ class Tools extends Common_functions {
 				# filter
 				$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
 				# search
+				$result = array();
 				if(sizeof($ids)>0) {
-    				$result = array();
 					foreach($ids as $id) {
 						$result[] = $Subnets->fetch_subnet(null, $id);
 					}
@@ -1327,7 +1327,7 @@ class Tools extends Common_functions {
 	 */
 	public function field_exists ($tablename, $fieldname) {
 	    # escape
-	    $tableName = $this->Database->escape($tablename);
+	    $tablename = $this->Database->escape($tablename);
 		# check
 	    $query = "DESCRIBE `$tablename` `$fieldname`;";
 		try { $count = $this->Database->getObjectQuery($query); }
@@ -3118,12 +3118,10 @@ class Tools extends Common_functions {
     		//IP must be present!
     		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
         		//for multicast
+        		$mac = $data->val($m,'F');
         		if ($this->settings->enableMulticast=="1") {
             		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
                 		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
-                    }
-                    else {
-                        $mac = $data->val($m,'F');
                     }
                 }
 
