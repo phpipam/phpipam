@@ -172,6 +172,15 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 	<!-- IP address modify form -->
 	<form class="editipaddress" role="form" name="editipaddress">
+
+	<?php
+	if($config['split_ip_custom_fields']===true) {
+		print "<div class='row'>";
+		print "<div class='col-xs-12 col-md-6' style='border-right:1px solid #eee'>";
+		print "<h4>"._("Standard fields")."</h4><hr>";
+	}
+	?>
+
 	<!-- edit IP address table -->
 	<table id="editipaddress" class="table table-noborder table-condensed">
 
@@ -515,6 +524,24 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	<!-- Custom fields -->
 	<?php
 	if(sizeof($custom_fields) > 0) {
+
+		if($config['split_ip_custom_fields']===true) { ?>
+
+			<style type='text/css'>
+			.popup_w500 {
+				width: 900px;
+				margin-left: -450px;
+			}
+			</style>
+
+				</table>
+			</div>
+			<div class='col-xs-12 col-md-6'>
+				<h4><?php print _("Custom fields"); ?></h4><hr>
+				<table id='editipaddress' class='table table-noborder table-condensed'>
+		<?php
+		}
+
 		# count datepickers
 		$timeP = 0;
 
@@ -657,6 +684,10 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
 </table>	<!-- end edit ip address table -->
+<?php if($config['split_ip_custom_fields']===true) {
+	print "</div>";
+	print "</div>";
+}?>
 </form>		<!-- end IP address edit form -->
 
 
