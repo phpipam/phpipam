@@ -4,6 +4,8 @@
     ----------------------------
     + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
     + Search for matching subnet in all VRFs feature enabled when importing addresses.
+    + Added new config option to show custom fields separated from standard fields when editing IP address.
+    + Added Required fields subpage to define IP address fields that must be filled in;
 
     Translations:
     ----------------------------

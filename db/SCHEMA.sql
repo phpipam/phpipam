@@ -157,6 +157,7 @@ CREATE TABLE `settings` (
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
   `donate` tinyint(1) DEFAULT '0',
   `IPfilter` varchar(128) DEFAULT NULL,
+  `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL,
   `vlanDuplicate` int(1) DEFAULT '0',
   `vlanMax` INT(8)  NULL  DEFAULT '4096',
   `subnetOrdering` varchar(16) DEFAULT 'subnet,asc',

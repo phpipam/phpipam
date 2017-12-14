@@ -885,3 +885,18 @@ ALTER TABLE `subnets` ADD INDEX (`location`);
 ALTER TABLE `ipaddresses` ADD INDEX (`location`);
 ALTER TABLE `circuits` ADD INDEX (`location1`);
 ALTER TABLE `circuits` ADD INDEX (`location2`);
+
+
+
+
+
+
+/* VERSION 1.32 */
+UPDATE `settings` set `version` = '1.32';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Required IP fieldsg */
+ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;
