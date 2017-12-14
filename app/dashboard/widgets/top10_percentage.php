@@ -17,9 +17,12 @@ if(!is_object(@$User)) {
 # user must be authenticated
 $User->check_user_session ();
 
+# no errors!
+//ini_set('display_errors', 0);
+
 # set size parameters
 $height = 200;
-$slimit = 10;
+$slimit = 10;			//we dont need this, we will recalculate
 
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
@@ -38,26 +41,35 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	print "</div>";
 }
 
-$type = "IPv4";
-
 # get subnets statistic
+$type = 'IPv4';
 $top_subnets = $Tools->fetch_top_subnets($type, 1000000, true);
 
-/* detect duplicates */
+# Remove subnets with no user access, find duplicates and re-index the array
 $unique = array();
-$numbering = array();
-$m = 0;
-foreach($top_subnets as $subnet) {
-	# cast
+$i = 0;
+foreach($top_subnets as $m => $subnet) {
 	$subnet = (array) $subnet;
-	# check if already in array
-	if(in_array($subnet['description'], $unique)) {
-		$numbering[$subnet['description']]++;
-		$top_subnets[$m]->description = $subnet['description'].' #'.$numbering[$subnet['description']];
+	if ($Subnets->check_permission($User->user, $subnet['id']) == "0") {
+		unset($top_subnets[$m]);
+		continue;
 	}
-	$unique[] = $top_subnets[$m]->description;
-	$m++;
+	/* We've found $slimit entries */
+	if ($i++ >= $slimit) { break; }
+
+	/* Make fields human readable */
+	$top_subnets[$m]->subnet = $Subnets->transform_to_dotted($subnet['subnet']);
+	$top_subnets[$m]->descriptionLong = $top_subnets[$m]->description;
+	/* length check */
+	$top_subnets[$m]->description = strlen($subnet['description'])>20 ? substr($subnet['description'], 0,20)."..." : $subnet['description'];
+
+	/* detect and rename duplicates */
+	if(isset($unique[$subnet['description']])) {
+		$top_subnets[$m]->description = $top_subnets[$m]->description.' #'.sizeof($unique[$subnet['description']]);
+	}
+	$unique[$subnet['description']][] = 1;
 }
+$top_subnets = array_splice(array_values($top_subnets), 0, $slimit);
 
 # set maximum for graph
 $max = str_replace(",", ".", $top_subnets[0]->percentage);
@@ -70,31 +82,20 @@ $(function () {
 
     var data = [
     <?php
-	$m=0;
-	foreach ($top_subnets as $subnet) {
+	foreach ($top_subnets as $m => $subnet) {
 		# cast
 		$subnet = (array) $subnet;
-		if($m < $slimit) {
-			# verify user access
-			$sp = $Subnets->check_permission($User->user, $subnet['id']);
-			if($sp != 0) {
-				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
-				$subnet['descriptionLong'] = $subnet['description'];
 
-				# set percentage because of localisation
-				$subnet['percentage'] = str_replace(",", ".", $subnet['percentage']);
-				$subnet['percentage'] = $subnet['percentage'];
+		# set percentage because of localisation
+		$subnet['percentage'] = str_replace(",", ".", $subnet['percentage']);
 
-				# odd/even if more than 5 items
-				if(sizeof($top_subnets) > 5) {
-					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-				}
-				else {
-								{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-				}
-				$m++;
-			}
+		# odd/even if more than 5 items
+		if(sizeof($top_subnets) > 5) {
+			if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+			else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+		}
+		else {
+		    print "['" . addslashes($subnet['description']) . "', $subnet[percentage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";
 		}
 	}
 	?>
@@ -217,7 +218,7 @@ $(function () {
     };
 
 	<?php
-	if($m!=0) {
+	if(sizeof($top_subnets)!=0) {
 	?>
     $.plot($("#<?php print $type; ?>top10"), [ data ], options);
     <?php } else { ?>
@@ -227,7 +228,7 @@ $(function () {
 </script>
 
 <?php
-if($m==0) {
+if(sizeof($top_subnets)==0) {
 	print "<hr>";
 
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";

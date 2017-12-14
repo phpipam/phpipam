@@ -200,7 +200,7 @@ class FirewallZones extends Common_functions {
 
 		if ($uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
 
-			$this->Result->show("danger", _("Error: The zone name ".$zone." is not unique!"), false);
+			$this->Result->show("danger", _("Error: The zone name ".$uniqueZone[0]->zone." is not unique!"), false);
 
 		} else {
 			# set the initial zone name to "1"

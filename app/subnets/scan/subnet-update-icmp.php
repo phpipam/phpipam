@@ -81,7 +81,9 @@ if($script_result->status==0) {
 					$res[$ip]['status'] = "Online";
 					$res[$ip]['code']=0;
 					//update alive time
-					@$Scan->ping_update_lastseen($ipdet['id']);
+					if(isset($ipdet['id'])) {
+						$Scan->ping_update_lastseen($ipdet['id']);
+					}
 				}
 				//offline
 				elseif($k=="dead")	{

@@ -583,7 +583,7 @@ class Sections extends Common_functions {
                             );
 
                 // update
-                if($Subnets->modify_subnet ("edit", $values)===false)       { $Result->show("danger",  _("Failed to set subnet permissons for subnet")." $s->name!", true); }
+                if($Subnets->modify_subnet ("edit", $values)===false)       { $this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $s->name!", true); }
         	}
         	// ok
         	$this->Result->show("success", _("Subnet permissions recursively set")."!", true);
