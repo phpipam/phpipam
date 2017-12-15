@@ -45,36 +45,35 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 
 # get subnets statistic
 $type = 'IPv6';
-$top_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
+$top_subnets = array();
+$all_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
 
-# Remove subnets with no user access, find duplicates and re-index the array
+# Find subnets with user access, label duplicates.
 $unique = array();
-$i = 0;
-foreach($top_subnets as $m => $subnet) {
-	$subnet = (array) $subnet;
-	if ($Subnets->check_permission($User->user, $subnet['id']) == "0") {
-		unset($top_subnets[$m]);
-		continue;
-	}
+$valid_subnets = 0;
+foreach($all_subnets as $subnet) {
+	if ($Subnets->check_permission($User->user, $subnet->id) == "0") { continue; }
+
 	/* We've found $slimit entries */
-	if ($i++ >= $slimit) { break; }
+	if ($valid_subnets >= $slimit) { break; }
 
 	/* Make fields human readable */
-	$top_subnets[$m]->subnet = $Subnets->transform_to_dotted($subnet['subnet']);
-	$top_subnets[$m]->descriptionLong = $top_subnets[$m]->description;
-	/* length check */
-	$top_subnets[$m]->description = strlen($subnet['description'])>20 ? substr($subnet['description'], 0,20)."..." : $subnet['description'];
+	$subnet->subnet = $Subnets->transform_to_dotted($subnet->subnet);
+	$subnet->descriptionLong = $subnet->description;
+	$subnet->description = strlen($subnet->description) > 20 ? substr($subnet->description,0,17).'...' : $subnet->description;
 
 	/* detect and rename duplicates */
-	if(isset($unique[$subnet['description']])) {
-		$top_subnets[$m]->description = $top_subnets[$m]->description.' #'.sizeof($unique[$subnet['description']]);
+	if(isset($unique[$subnet->description])) {
+		$subnet->description = $subnet->description.' #'.sizeof($unique[$subnet->description]);
 	}
-	$unique[$subnet['description']][] = 1;
+	$unique[$subnet->description][] = $valid_subnets++;
+
+	/* Save */
+	$top_subnets[] = $subnet;
 }
-$top_subnets = array_splice(array_values($top_subnets), 0, $slimit);
 
 # only print if some hosts exist
-if(sizeof($top_subnets)>0) {
+if($valid_subnets>0) {
 ?>
 <script type="text/javascript">
 $(function () {
@@ -86,7 +85,7 @@ $(function () {
 		$subnet = (array) $subnet;
 
 		# odd/even if more than 5 items
-		if(sizeof($top_subnets) > 5) {
+		if($valid_subnets > 5) {
 			if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 			else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
 		}
@@ -214,7 +213,7 @@ $(function () {
     };
 
 	<?php
-	if(sizeof($top_subnets)!=0) {
+	if($valid_subnets!=0) {
 	?>
     $.plot($("#<?php print $type; ?>top10Hosts"), [ data ], options);
     <?php } else { ?>
@@ -224,7 +223,7 @@ $(function () {
 </script>
 
 <?php
-if(sizeof($top_subnets)==0) {
+if($valid_subnets==0) {
 	print "<hr>";
 
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
