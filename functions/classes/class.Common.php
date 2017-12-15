@@ -645,7 +645,7 @@ class Common_functions  {
 	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
 	    # numeric representation
 	    elseif (is_numeric($address)) {
-	    	if(4294967295 > $address)	{ return 'IPv4'; }
+	    	if($address <= 4294967295)	{ return 'IPv4'; }
 	    	else 						{ return 'IPv6'; }
 	    }
 	    # decimal representation

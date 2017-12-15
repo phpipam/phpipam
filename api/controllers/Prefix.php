@@ -783,8 +783,8 @@ class Prefix_controller extends Common_api_functions {
      */
     private function search_custom_field_name_subnets () {
         // set limit base on type
-        if($this->address_type=="IPv4")     { $limit = " and `subnet` < 4294967296"; }
-        elseif($this->address_type=="IPv6") { $limit = " and `subnet` > 4294967296"; }
+        if($this->address_type=="IPv4")     { $limit = " and CAST(`subnet` AS UNSIGNED) <= 4294967295"; }
+        elseif($this->address_type=="IPv6") { $limit = " and CAST(`subnet` AS UNSIGNED) >  4294967295"; }
         else                                { $limit = ""; }
         // set query and params
         $query = "select * from `subnets` where `".$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby."` ".$this->custom_field_order_direction.";";
