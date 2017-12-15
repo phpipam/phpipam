@@ -50,7 +50,7 @@ class Rewrite {
 	 *
 	 * @var array
 	 */
-	private $uri_passthroughs = array("app");
+	private $uri_passthroughs = array('app', '?switch=back');
 
 	/**
 	 * URI parts from $_SERVER['REQUEST_URI']
