@@ -255,7 +255,7 @@ else {
 					if(!isset($PowerDNS)) { $PowerDNS = new PowerDNS ($Database); }
 
                     // search for hostname records
-					$records = $PowerDNS->search_records ("name", $addresses[$n]->dns_name, 'name', true);
+					$records = $PowerDNS->search_records ("name", $addresses[$n]->hostname, 'name', true);
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
 					$ptr_name = $PowerDNS->get_ip_ptr_name(long2ip($addresses[$n]->ip_addr));
 					if(! $ptr || $ptr_name != $ptr->name) {
@@ -329,8 +329,8 @@ else {
 				// add button
 				if ($User->settings->enablePowerDNS==1) {
 				// add new button
-				if ($Subnets->validate_hostname($addresses[$n]->dns_name, false) && ($User->is_admin(false) || @$User->user->pdns=="Yes"))
-				$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->dns_name."'></i>";
+				if ($Subnets->validate_hostname($addresses[$n]->hostname, false) && ($User->is_admin(false) || @$User->user->pdns=="Yes"))
+				$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->hostname."'></i>";
 				else
 				$button = "";
 				}
@@ -349,11 +349,11 @@ else {
 			    print $dns_records2."</td>";
 
 			    # resolve dns name
-			    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+			    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->hostname, false, $subnet['nameserverId']);
 				# update database
 				if($subnet['resolveDNS']=="1" && $resolve['class']=="resolved") {
 					$Addresses->update_address_hostname ($addresses[$n]->ip_addr, $addresses[$n]->id, $resolve['name']);
-					$addresses[$n]->dns_name = $resolve['name'];
+					$addresses[$n]->hostname = $resolve['name'];
 				}
 																		{ print "<td class='$resolve[class] hostname'>$resolve[name] $button $dns_records</td>"; }
 
@@ -497,7 +497,7 @@ else {
 					print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 					print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search", $resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 					print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$addresses[$n]->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
-					if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$addresses[$n]->subnetId."' data-action='adr' data-ipid='".$addresses[$n]->id."' data-dnsname='".$addresses[$n]->dns_name."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
+					if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$addresses[$n]->subnetId."' data-action='adr' data-ipid='".$addresses[$n]->id."' data-dnsname='".$addresses[$n]->hostname."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
 					print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
 				}
 			}
@@ -549,7 +549,7 @@ else {
         			    print "</td>";
 
         			    # resolve dns name
-        			    $resolve = $DNS->resolve_address($s->ip_addr, $s->dns_name, false, $sn->nameserverId);
+        			    $resolve = $DNS->resolve_address($s->ip_addr, $s->hostname, false, $sn->nameserverId);
         																		{ print "<td class='$resolve[class] hostname'>$resolve[name]</td>"; }
         				# print firewall address object - mandatory if enabled
         				if(in_array('firewallAddressObject', $selected_ip_fields) && $zone) {

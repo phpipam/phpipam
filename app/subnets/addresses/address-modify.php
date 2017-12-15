@@ -224,15 +224,15 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 	<!-- DNS name -->
 	<?php
-	if(!isset($address['dns_name'])) {$address['dns_name'] = "";}
+	if(!isset($address['hostname'])) {$address['hostname'] = "";}
 		// set star if field is required
-		$required = in_array("dns_name", $required_ip_fields) ? " *" : "";
+		$required = in_array("hostname", $required_ip_fields) ? " *" : "";
 
 		print '<tr>'. "\n";
 		print '	<td>'._('Hostname').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
 		print '	<div class="input-group">';
-		print ' <input type="text" name="dns_name" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['dns_name']. '" '.$delete.'>'. "\n";
+		print ' <input type="text" name="hostname" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['hostname']. '" '.$delete.'>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
 		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='right' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
@@ -479,7 +479,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		if ($_POST['action']=="delete" || $_POST['action']=="all-edit") {
     		// check
     		$PowerDNS = new PowerDNS ($Database);
-    		$records  = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
+    		$records  = $PowerDNS->search_records ("name", $address['hostname'], 'name', true);
     		$records2 = $PowerDNS->search_records ("content", $address['ip'], 'content', true);
 
     		if ($records!==false || $records2!==false) {
@@ -499,7 +499,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
         	 	// hostname records
         	 	if ($records!==false) {
             	 	print " <div style='margin-left:60px'>";
-            	 	$dns_records[] = $address['dns_name'];
+            	 	$dns_records[] = $address['hostname'];
             	 	$dns_records[] = "<ul class='submenu-dns'>";
             	 	foreach ($records as $r) {
     					if($r->type!="SOA" && $r->type!="NS")

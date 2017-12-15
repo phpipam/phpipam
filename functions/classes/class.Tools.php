@@ -210,7 +210,7 @@ class Tools extends Common_functions {
 		# set search query
 		$query[] = "select * from `ipaddresses` ";
 		$query[] = "where `ip_addr` between :low and :high ";	//ip range
-		$query[] = "or `dns_name` like :search_term ";			//hostname
+		$query[] = "or `hostname` like :search_term ";			//hostname
 		$query[] = "or `owner` like :search_term ";				//owner
 		# custom fields
 		if(sizeof($custom_fields) > 0) {
@@ -1187,8 +1187,8 @@ class Tools extends Common_functions {
 			elseif ($k=="descriotion") {
 				$mail['Description'] = $v;
 			}
-			// dns_name
-			elseif ($k=="dns_name") {
+			// hostname
+			elseif ($k=="hostname") {
 				$mail['Hostname'] = $v;
 			}
 			// owner
@@ -2806,7 +2806,7 @@ class Tools extends Common_functions {
                         WHERE l.id = $id
 
                         UNION ALL
-                        SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.dns_name as description
+                        SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.hostname as description
                         FROM ipaddresses a
                         JOIN locations l
                         ON a.location = l.id
@@ -3326,7 +3326,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_addresses_for_export () {
 		# fetch
-	    try { $addresses = $this->Database->getObjectsQuery("select `id`,`subnetId`,`ip_addr`,`dns_name` from `ipaddresses` where length(`dns_name`)>1 order by `subnetId` asc;"); }
+	    try { $addresses = $this->Database->getObjectsQuery("select `id`,`subnetId`,`ip_addr`,`hostname` from `ipaddresses` where length(`hostname`)>1 order by `subnetId` asc;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# return result
 		return $addresses;

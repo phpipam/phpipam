@@ -82,7 +82,7 @@ if( (isset($_GET['ip_addr'])) && ($_GET['ip_addr'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('IP Address') ,$format_header);
 	$rowCount++;
 }
-if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
+if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('Hostname') ,$format_header);
 	$rowCount++;
 }
@@ -196,8 +196,8 @@ if($all_sections!==false) {
 						$rowCount++;
 					}
 
-					if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
-						$worksheet->write($lineCount, $rowCount, $ip['dns_name'], $format_text);
+					if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+						$worksheet->write($lineCount, $rowCount, $ip['hostname'], $format_text);
 						$rowCount++;
 					}
 

@@ -92,7 +92,7 @@ print "	</tr>";
 print "	<tr>";
 print "	<td><input type='checkbox' name='section' checked></td>";
 print "	<td><input type='checkbox' name='ip_addr' checked title='"._('Mandatory')."'> </td>";
-print "	<td><input type='checkbox' name='dns_name' checked title='"._('Mandatory')."'></td>";
+print "	<td><input type='checkbox' name='hostname' checked title='"._('Mandatory')."'></td>";
 print "	<td><input type='checkbox' name='description' checked> </td>";
 print "	<td><input type='checkbox' name='vrf' checked></td>";
 print "	<td><input type='checkbox' name='subnet' checked></td>";

@@ -276,7 +276,7 @@ else {
     		print "<td>$ip[device_name]</td>";
     		//hostname
     		print "<td>";
-    		print "	<input type='text' class='form-control input-sm' name='dns_name$m' value='".@$hostname['name']."'>";
+    		print "	<input type='text' class='form-control input-sm' name='hostname$m' value='".@$hostname['name']."'>";
     		print "</td>";
     		// port
     		print "<td>";

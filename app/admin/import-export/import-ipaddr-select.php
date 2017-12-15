@@ -20,7 +20,7 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("section","ip_addr","dns_name","description","vrf","subnet","mac","owner","device","note","tag","is_gateway");
+$expfields = array ("section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","is_gateway");
 //$disfields = array ("Section","IP Address","Hostname","Description","VRF","Subnet","MAC","owner","device","note","TAG");
 $mtable = "ipaddresses"; # main table where to check the fields
 
@@ -48,9 +48,9 @@ $extfields["tag"]["pname"] = "tag";
 $extfields["ip_addr"]["table"] = "ipaddresses";
 $extfields["ip_addr"]["field"] = "ip_addr";
 $extfields["ip_addr"]["pname"] = "ip address";
-$extfields["dns_name"]["table"] = "ipaddresses";
-$extfields["dns_name"]["field"] = "dns_name";
-$extfields["dns_name"]["pname"] = "hostname";
+$extfields["hostname"]["table"] = "ipaddresses";
+$extfields["hostname"]["field"] = "hostname";
+$extfields["hostname"]["pname"] = "hostname";
 $extfields["gateway"]["table"] = "ipaddresses";
 $extfields["gateway"]["field"] = "is_gateway";
 $extfields["gateway"]["pname"] = "gateway";

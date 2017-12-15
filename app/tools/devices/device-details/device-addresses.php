@@ -75,7 +75,7 @@ if(sizeof($addresses) > 0) {
 			}
 			print "</td>";
 
-			print "	<td class='dns hidden-xs'>$ip[dns_name]</td>";
+			print "	<td class='dns hidden-xs'>$ip[hostname]</td>";
 			print "	<td class='owner hidden-xs hidden-sm'>$ip[owner]</td>";
 			print "</tr>";
 
@@ -96,4 +96,3 @@ print "</td>";
 
 print "</tr>";
 print "</table>";
-?>

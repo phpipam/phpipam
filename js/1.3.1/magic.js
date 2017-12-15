@@ -593,7 +593,7 @@ $(document).on("click", "#refreshHostname", function() {
     var subnetId  = $(this).attr('data-subnetId');;
     $.post('app/subnets/addresses/address-resolve.php', {ipaddress:ipaddress, subnetId: subnetId}, function(data) {
         if(data.length !== 0) {
-            $('input[name=dns_name]').val(data);
+            $('input[name=hostname]').val(data);
         }
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });

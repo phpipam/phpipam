@@ -22,7 +22,7 @@ $csrf = $User->csrf_cookie ("create", "replace_fields");
 		<td>
 		<select name="field" class="form-control input-sm input-w-auto">
 			<option value="description"><?php print _('Description'); ?></option>
-			<option value="dns_name"><?php print _('Hostname'); ?></option>
+			<option value="hostname"><?php print _('Hostname'); ?></option>
 			<option value="owner"><?php print _('Owner'); ?></option>
 			<option value="mac"><?php print _('MAC address'); ?></option>
 			<option value="switch"><?php print _('Device'); ?></option>

@@ -38,4 +38,3 @@ if($_POST['field'] == "switch") {
 
 # update
 $Admin->replace_fields ($_POST['field'], $_POST['search'], $_POST['replace']);
-?>

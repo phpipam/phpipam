@@ -245,14 +245,15 @@ foreach($scan_subnets as $s) {
 			$hostnames[$ip] = $hostname['name']==$ip ? "" : $hostname['name'];
 
 			//set update query
-			$values = array("subnetId"=>$s->id,
-							"ip_addr"=>$ip,
-							"dns_name"=>$hostname['name'],
-							"description"=>"-- autodiscovered --",
-							"note"=>"This host was autodiscovered on ".$nowdate,
-							"lastSeen"=>$nowdate,
-							"state"=>"2",
-							"action"=>"add"
+			$values = array(
+							"subnetId"    =>$s->id,
+							"ip_addr"     =>$ip,
+							"hostname"    =>$hostname['name'],
+							"description" =>"-- autodiscovered --",
+							"note"        =>"This host was autodiscovered on ".$nowdate,
+							"lastSeen"    =>$nowdate,
+							"state"       =>"2",
+							"action"      =>"add"
 							);
 			//insert
 			$Addresses->modify_address($values);
@@ -352,5 +353,3 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	}
 }
-
-?>

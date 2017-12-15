@@ -45,7 +45,7 @@ elseif ($type == 'ipaddr'){
 	//get all custom fields!
 	$custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	// set headers
-	// "section","ip_addr","dns_name","description","vrf","subnet","mac","owner","device","note","tag","gateway"
+	// "section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","gateway"
 	$worksheet->write($lineCount, 0, _('Section'));
 	$worksheet->write($lineCount, 1, _('IP address'));
 	$worksheet->write($lineCount, 2, _('Hostname'));

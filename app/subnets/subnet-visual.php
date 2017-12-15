@@ -47,7 +47,7 @@ for($m=$start_visual; $m<=$stop_visual; $m=gmp_strval(gmp_add($m,1))) {
 
 		# tooltip
 		$title = $Subnets->transform_to_dotted($m);
-		if(strlen($visual_addresses[$m]['dns_name'])>0)		{ $title .= "<br>".$visual_addresses[$m]['dns_name']; }
+		if(strlen($visual_addresses[$m]['hostname'])>0)		{ $title .= "<br>".$visual_addresses[$m]['hostname']; }
 		if(strlen($visual_addresses[$m]['description'])>0)	{ $title .= "<br>".$visual_addresses[$m]['description']; }
 
 		# set colors
@@ -72,4 +72,3 @@ for($m=$start_visual; $m<=$stop_visual; $m=gmp_strval(gmp_add($m,1))) {
 }
 print "</div>";
 print "<div class='clearfix' style='padding-bottom:20px;'></div>";	# clear float
-?>

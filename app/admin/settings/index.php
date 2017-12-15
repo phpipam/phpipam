@@ -407,7 +407,7 @@ $(document).ready(function() {
         $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
         $custom_fields2[]['name'] = "None";
         $custom_fields2[]['name'] = "ip_addr";
-        $custom_fields2[]['name'] = "dns_name";
+        $custom_fields2[]['name'] = "hostname";
         $custom_fields2[]['name'] = "mac";
         $custom_fields2[]['name'] = "owner";
         // merge

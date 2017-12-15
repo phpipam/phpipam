@@ -46,9 +46,9 @@ foreach ($all_vrfs as $vrf) {
 # fetch all sections and load all subnets
 $all_sections = $Sections->fetch_all_sections();
 
-# get all addresses in all subnets in all sections 
-$edata = array(); 
-$section_names = array(); 
+# get all addresses in all subnets in all sections
+$edata = array();
+$section_names = array();
 $subnet_data = array();
 $subnet_search = array();
 
@@ -63,7 +63,7 @@ foreach ($all_sections as $section) {
 
 	# skip empty sections
 	if (sizeof($section_subnets)==0) { continue; }
-	
+
 	foreach ($section_subnets as $subnet) {
 		$subnet = (array) $subnet;
 
@@ -73,7 +73,7 @@ foreach ($all_sections as $section) {
 		# store needed subnet information
 		$subnet_data[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']] = $subnet;
 		$subnet_data[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']]['type'] = $Subnets->identify_address($subnet['ip']);
-		
+
 		$subnet_search[$section['id']][$subnet['ip']][$subnet['mask']][] = $subnet['vrfId'];
 
 		# grab IP addresses
@@ -127,7 +127,7 @@ foreach ($data as &$cdata) {
 			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
-		} 
+		}
 		else { $msg.= "The subnet needs to have the mask defined as /BM (Bit Mask)"; $action = "error"; }
 		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
 			$msg.="Invalid network mask format."; $action = "error";
@@ -210,13 +210,13 @@ foreach ($data as &$cdata) {
 		$cdata['state'] = 2;
 	}
 
-	
+
 	# Verify gateway
 	if (in_array(strtolower($cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
-	
+
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
-		if ((!empty($cdata['dns_name'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['dns_name']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
 			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
@@ -246,7 +246,7 @@ foreach ($data as &$cdata) {
 
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['dns_name'] != $cedata['dns_name']) { $msg.= "Address DNS name will be updated."; $action = "edit"; }
+			if ($cdata['hostname'] != $cedata['hostname']) { $msg.= "Address DNS name will be updated."; $action = "edit"; }
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Address description will be updated."; $action = "edit"; }
 			if ($cdata['mac'] != $cedata['mac']) { $msg.= "Address MAC address will be updated."; $action = "edit"; }
 			if ($cdata['owner'] != $cedata['owner']) { $msg.= "Address owner will be updated."; $action = "edit"; }

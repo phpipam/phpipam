@@ -56,7 +56,7 @@ else {
 		print '<tr>'. "\n";
 		print "	<td><button class='btn btn-xs btn-default' data-requestid='$request[id]'><i class='fa fa-pencil'></i></button></td>";
 		print '	<td>'. $subnet->ip .'/'. $subnet->mask .' ('. $subnet->description .')</td>'. "\n";
-		print '	<td>'. $request['dns_name'] .'</td>'. "\n";
+		print '	<td>'. $request['hostname'] .'</td>'. "\n";
 		print '	<td>'. $request['description'] .'</td>'. "\n";
 		print '	<td>'. $request['requester'] .'</td>'. "\n";
 		print '</tr>'. "\n";

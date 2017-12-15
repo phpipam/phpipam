@@ -78,7 +78,7 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 	<!-- DNS name -->
 	<tr>
 		<td><?php print _('DNS name'); ?></td>
-		<td><?php print strlen(@$address['dns_name'])>0 ? $address['dns_name'] : "/"; ?></td>
+		<td><?php print strlen(@$address['hostname'])>0 ? $address['hostname'] : "/"; ?></td>
 	</tr>
 
 	<!-- divider -->
