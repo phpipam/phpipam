@@ -164,7 +164,7 @@ class Rewrite {
 	 * @return void
 	 */
 	private function create_get_params_ui () {
-		// process uti parts
+		// process uri parts
 		if(sizeof($this->uri_parts)>0) {
 			if(in_array($this->uri_parts[0], $this->uri_passthroughs)) {
 				$this->get_params = $_GET;
@@ -185,8 +185,27 @@ class Rewrite {
 		elseif(sizeof($this->get_params)==0) {
 			$this->get_params['page'] = "dashboard";
 		}
+		// apppend QSA
+		$this->append_qsa();
 		// apply fixes
 		$this->fix_ui_params ();
+	}
+
+	/**
+	 * Check if some additional parameters were passed and add them to uri_parts
+	 *
+	 * @method append_qsa
+	 * @return void
+	 */
+	private function append_qsa () {
+		if(strpos($_SERVER['REQUEST_URI'], "?")!==false) {
+			$parts = explode("?", $_SERVER['REQUEST_URI']);
+			$parts = $parts[1];
+			// parse
+			parse_str ($parts, $out);
+			// append
+			$this->get_params = (array_merge($this->get_params, $out));
+		}
 	}
 
 	/**
