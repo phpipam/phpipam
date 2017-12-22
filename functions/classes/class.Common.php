@@ -258,7 +258,7 @@ class Common_functions  {
 				return false;
 			}
 			# save to cach
-			if (sizeof($res)>0) {
+			if ($result_fields==="*" && is_array($res)) {
     			foreach ($res as $r) {
         			$this->cache_write ($table, $r->id, $r);
     			}
