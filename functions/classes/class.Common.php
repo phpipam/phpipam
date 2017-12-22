@@ -257,7 +257,7 @@ class Common_functions  {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
 			}
-			# save to cach
+			# save to cache
 			if ($result_fields==="*" && is_array($res)) {
     			foreach ($res as $r) {
         			$this->cache_write ($table, $r->id, $r);
