@@ -2905,13 +2905,12 @@ class Tools extends Common_functions {
 		if(is_array($custom_circuit_fields)) {
 			if(sizeof($custom_circuit_fields)>0) {
 				foreach ($custom_circuit_fields as $f) {
-					$query[] = ",c.".$f['name'];
+					$query[] = ",c.`".$f['name']."`";
 				}
 			}
 		}
 		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?";
 		$query[] = "order by c.cid asc;";
-
 		// fetch
 		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array($provider_id)); }
 		catch (Exception $e) {
