@@ -560,7 +560,7 @@ class Subnets extends Common_functions {
 			return false;
 		}
 		# save to subnets cache
-		if(sizeof($subnets)>0) {
+		if(empty($fields) && is_array($subnets)) {
 			foreach($subnets as $subnet) {
     			// remove fake subnet_int field
     			unset($subnet->subnet_int);
@@ -1053,18 +1053,7 @@ class Subnets extends Common_functions {
 	public function fetch_subnet_slaves ($subnetId, $result_fields = "*") {
     	// fetch
 		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet_int", true, false, $result_fields);
-		# save to subnets cache
-        if ($slaves!==false) {
-			foreach($slaves as $slave) {
-    			unset($slave->subnet_int);
-                $this->cache_write ("subnets", $slave->id, $slave);
-			}
-			return $slaves;
-		}
-		else {
-    		# no subnets
-    		return false;
-		}
+		return $slaves;
 	}
 
 	/**
