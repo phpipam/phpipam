@@ -670,10 +670,11 @@ class Subnets_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns first available subnet with specified mask
+	 * Returns first|last $count available subnets with specified mask
 	 *
 	 * @access public
-	 * @param bool $all (default: false)
+	 * @param integer $count (default: Subnets::SEARCH_FIND_ALL)
+	 * @param integer $direction (default: Subnets::SEARCH_FIND_FIRST)
 	 * @return array|string
 	 */
 	public function subnet_find_free ($count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST) {
