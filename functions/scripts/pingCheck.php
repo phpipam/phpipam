@@ -155,22 +155,21 @@ if(!isset($addresses))							{ die("No addresses to check"); }
 
 /* scan */
 
-$z = 0;			//addresses array index
-
 //different scan for fping
 if($Scan->icmp_type=="fping") {
 	//run per MAX_THREADS
-	for ($m=0; $m<=sizeof($subnets); $m += $Scan->settings->scanMaxThreads) {
+	$size_subnets = sizeof($subnets);
+	for ($m=0; $m<$size_subnets; $m += $Scan->settings->scanMaxThreads) {
 	    // create threads
 	    $threads = array();
 	    //fork processes
-	    for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= sizeof($subnets); $i++) {
+	    for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
+			$z = $m + $i;
 	    	//only if index exists!
 	    	if(isset($subnets[$z])) {
 				//start new thread
 	            $threads[$z] = new PingThread( 'fping_subnet' );
 	            $threads[$z]->start_fping( $subnets[$z]['cidr'] );
-	            $z++;				//next index
 			}
 	    }
 	    // wait for all the threads to finish
@@ -238,17 +237,18 @@ if($Scan->icmp_type=="fping") {
 //ping, pear
 else {
 	//run per MAX_THREADS
-	for ($m=0; $m<=sizeof($addresses); $m += $Scan->settings->scanMaxThreads) {
+	$size_addresses = max(array_keys($addresses));
+	for ($m=0; $m<=$size_addresses; $m += $Scan->settings->scanMaxThreads) {
 	    // create threads
 	    $threads = array();
 	    //fork processes
-	    for ($i = 0; $i <= $Scan->settings->scanMaxThreads && $i <= sizeof($addresses); $i++) {
+	    for ($i = 0; $i < $Scan->settings->scanMaxThreads; $i++) {
+			$z = $m + $i;
 	    	//only if index exists!
 	    	if(isset($addresses[$z])) {
 				//start new thread
 	            $threads[$z] = new PingThread( 'ping_address' );
 	            $threads[$z]->start($Subnets->transform_to_dotted($addresses[$z]['ip_addr']));
-	            $z++;				//next index
 			}
 	    }
 	    // wait for all the threads to finish
