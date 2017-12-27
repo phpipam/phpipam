@@ -257,8 +257,8 @@ class Common_functions  {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
 			}
-			# save to cach
-			if (sizeof($res)>0) {
+			# save to cache
+			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
     			foreach ($res as $r) {
         			$this->cache_write ($table, $r->id, $r);
     			}
@@ -645,7 +645,7 @@ class Common_functions  {
 	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
 	    # numeric representation
 	    elseif (is_numeric($address)) {
-	    	if(4294967295 > $address)	{ return 'IPv4'; }
+	    	if($address <= 4294967295)	{ return 'IPv4'; }	// 4294967295 = '255.255.255.255'
 	    	else 						{ return 'IPv6'; }
 	    }
 	    # decimal representation

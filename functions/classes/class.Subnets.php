@@ -1040,19 +1040,10 @@ class Subnets extends Common_functions {
 	 * @return array|false
 	 */
 	public function fetch_subnet_slaves ($subnetId, $result_fields = "*") {
-    	// fetch
+		// fetch
 		$slaves = $this->fetch_multiple_objects ("subnets", "masterSubnetId", $subnetId, "subnet", true, false, $result_fields);
-		# save to subnets cache
-        if ($slaves!==false) {
-			foreach($slaves as $slave) {
-                $this->cache_write ("subnets", $slave->id, $slave);
-			}
-			return $slaves;
-		}
-		else {
-    		# no subnets
-    		return false;
-		}
+		//$slaves are saved to cache by Common_functions::fetch_multiple_objects()
+		return $slaves;
 	}
 
 	/**
