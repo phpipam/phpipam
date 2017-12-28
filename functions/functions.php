@@ -50,6 +50,7 @@ require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
+require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for generating HTML menus
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {

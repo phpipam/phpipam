@@ -3596,141 +3596,34 @@ class Subnets extends Common_functions {
 		# must be integer
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
-		# fetch all subnets in section
-		$section_subnets = $this->fetch_section_subnets ($sectionId, array("id", "isFolder", "masterSubnetId", "description", "subnet", "mask"));
-		# folder or subnet?
-		foreach($section_subnets as $s) {
-			// folders array
-			if($s->isFolder==1)	{ $children_folders[$s->masterSubnetId][] = (array) $s; }
-			// all subnets, including folders
-			$children_subnets[$s->masterSubnetId][] = (array) $s;
-		}
+		$folders = array();
+		$section_subnets = $this->fetch_section_subnets ($sectionId, array("id", "masterSubnetId", "isFolder", "subnet", "mask", "description"));
 
-		//initialize html
-		$html = array();
-
-		$rootId = 0;			//root is 0
-
-		# loop will be false if the root has no children (i.e., an empty menu!)
-		$loopF = !empty( $children_folders[$rootId] );
-		$loop  = !empty( $children_subnets[$rootId] );
-
-		# initializing $parent as the root
-		$parent = $rootId;
-
-		$parent_stack_folder = array();
-		$parent_stack_subnet = array();
-
-		# structure
-		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
-
-		# folders
-		if(sizeof(@$children_folders)>0 || $isFolder) {
-			$html[] = "<optgroup label='"._("Folders")."'>";
-
-    		# root subnet
-    		if(!isset($current_master) || $current_master==0) {
-    			$html[] = "<option value='0' selected='selected'>"._("Root folder")."</option>";
-    		} else {
-    			$html[] = "<option value='0'>"._("Root folder")."</option>";
-    		}
-
-			# return table content (tr and td's) - folders
-			while ( $loopF && ( ( $option = each( $children_folders[$parent] ) ) || ( $parent > $rootId ) ) )
-			{
-				# repeat
-				$repeat  = str_repeat( " - ", ( count($parent_stack_folder)) );
-
-				# count levels
-				$count = count($parent_stack_folder)+1;
-
-				# selected
-				if(strlen($option['value']['description'])>0) {
-					if($option['value']['id'] == $current_master) 	{ $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$option['value']['description']."</option>"; }
-					else 											{ $html[] = "<option value='".$option['value']['id']."'					   >$repeat ".$option['value']['description']."</option>"; }
-				}
-				if ( $option === false ) { $parent = array_pop( $parent_stack_folder ); }
-				# Has slave subnets
-				elseif ( !empty( $children_folders[$option['value']['id']] ) ) {
-					array_push( $parent_stack_folder, $option['value']['masterSubnetId'] );
-					$parent = $option['value']['id'];
-				}
-				# Last items
+		foreach($section_subnets as $subnet) {
+			if ($subnet->isFolder) {
+				$folders[] = clone $subnet;
+				$subnet->disabled = 1;
+			} else {
+				break;
 			}
-			$html[] = "</optgroup>";
 		}
 
-		# if not folder
-        if ($isFolder===false) {
+		// Generate HTML <options> dropdown menu
+		$dropdown = new MasterSubnetDropDown($this, $current_master);
 
-		# subnets
-		$html[] = "<optgroup label='"._("Subnets")."'>";
+		$dropdown->optgroup_open(_("Folders"));
+		foreach($folders as $folder) { $dropdown->subnets_tree_add($folder); }
+		$dropdown->subnets_tree_render(true);
 
-		# root subnet
-		if(!isset($current_master) || $current_master==0) {
-			$html[] = "<option value='0' selected='selected'>"._("Root subnet")."</option>";
-		} else {
-			$html[] = "<option value='0'>"._("Root subnet")."</option>";
+		if ($isFolder === false) {
+			$dropdown->optgroup_open(_("Subnets"));
+			foreach($section_subnets as $subnet) { $dropdown->subnets_tree_add($subnet); }
+			$dropdown->subnets_tree_render(false);
 		}
 
-		# return table content (tr and td's) - subnets
-		if(sizeof(@$children_subnets)>0) {
-		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
-		{
-			# repeat
-			$repeat  = str_repeat( " - ", ( count($parent_stack_subnet)) );
-
-			# count levels
-			$count = count($parent_stack_subnet)+1;
-
-			# print table line if it exists and it is not folder
-			if(strlen($option['value']['subnet']) > 0 && $option['value']['isFolder']!=1) {
-				# selected
-				if($option['value']['id'] == $current_master) 	{
-					if($option['value']['description']) {
-                        if(strlen($option['value']['description'])>34) {
-                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
-    				    }
-                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
-				    }
-                    else {
-                        $html[] = "<option value='".$option['value']['id']."' selected='selected'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
-                    }
-                }
-				else {
-					if($option['value']['description']) {
-                        if(strlen($option['value']['description'])>34) {
-                            $option['value']['description'] = substr($option['value']['description'],0,31) . "...";
-                        }
-                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']." (".$option['value']['description'].")</option>";
-                    }
-					else {
-                        $html[] = "<option value='".$option['value']['id']."'>$repeat ".$this->transform_to_dotted($option['value']['subnet'])."/".$option['value']['mask']."</option>";
-                    }
-                }
-			}
-			// folder - disabled
-			elseif ($option['value']['isFolder']==1) {
-					 if(strlen($option['value']['description'])>34) { $option['value']['description'] = substr($option['value']['description'],0,31) . "..."; }
-                     $html[] = "<option value=''	 disabled>$repeat ".$option['value']['description']."</option>";
-				//if($option['value']['id'] == $current_master) { $html[] = "<option value='' selected='selected' disabled>$repeat ".$option['value']['description']."</option>"; }
-				//else 											{ $html[] = "<option value=''					    disabled>$repeat ".$option['value']['description']."</option>"; }
-			}
-
-			if ( $option === false ) { $parent = array_pop( $parent_stack_subnet ); }
-			# Has slave subnets
-			elseif ( !empty( $children_subnets[$option['value']['id']] ) ) {
-				array_push( $parent_stack_subnet, $option['value']['masterSubnetId'] );
-				$parent = $option['value']['id'];
-			}
-			# Last items
-		}
-		}
-		$html[] = "</optgroup>";
-		}
-		$html[] = "</select>";
-		# join and print
-		print implode( "\n", $html );
+		print "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
+		print $dropdown->html();
+		print "</select>";
 	}
 
 	/**
@@ -3740,30 +3633,17 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnetMasterId
 	 * @return void
 	 */
-	public  function subnet_dropdown_master_only($subnetMasterId ) {
-		$subnet = $this->fetch_subnet (null, $subnetMasterId);
+	public function subnet_dropdown_master_only($subnetMasterId) {
+		$subnet = $this->fetch_subnet(null, $subnetMasterId);
 
-		$html = array();
+		// Generate HTML <options> dropdown menu
+		$dropdown = new MasterSubnetDropDown($this, $subnetMasterId);
 
-		$html[] = "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
+		if (is_object($subnet)) $dropdown->subnets_add_object($subnet);
 
-		// false subnet
-		if($subnet===false) {
-			$html[] = "</select>";
-		}
-		else {
-			// foder
-			if ($subnet->isFolder==1) {
-				$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$subnet->description."</option> </select>";
-			}
-			else {
-				$html[] = "<option value='".$subnetMasterId."' selected='selected'>".$this->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</option> </select>";
-			}
-		}
-		$html[] = "</select>";
-
-		// result
-		print implode( "\n", $html );
+		print "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
+		print $dropdown->html();
+		print "</select>";
 	}
 
 	/**

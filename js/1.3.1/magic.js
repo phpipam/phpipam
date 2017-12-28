@@ -2127,6 +2127,7 @@ $(document).on("click", ".dropdown-subnets li a", function() {
 	var inputfield = $('form#editSubnetDetails input[name=subnet]');
 	// fill
 	$(inputfield).val(subnet);
+	$(inputfield).change();
 	// hide
 	$('.dropdown-subnets').parent().removeClass("open");	return false;
 });
