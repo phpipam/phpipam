@@ -3598,6 +3598,7 @@ class Subnets extends Common_functions {
 
 		$folders = array();
 		$section_subnets = $this->fetch_section_subnets ($sectionId, array("id", "masterSubnetId", "isFolder", "subnet", "mask", "description"));
+		if (!is_array($section_subnets)) $section_subnets = array();
 
 		foreach($section_subnets as $subnet) {
 			if ($subnet->isFolder) {

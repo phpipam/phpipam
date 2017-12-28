@@ -42,7 +42,7 @@ class MasterSubnetDropDown {
 
 	/**
 	 * Class Constructor
-	 * @param stdObject $Subnets
+	 * @param Subnets $Subnets
 	 * @param integer $previously_selected
 	 */
 	public function __construct($Subnets, $previously_selected = -1) {

@@ -61,6 +61,7 @@ if (!is_object($section)) { return ''; }
 $folders = array();
 $search = array();
 $all_subnets = $Subnets->fetch_section_subnets ($sectionId, array('id','masterSubnetId','isFolder','subnet','mask','description'));
+if (!is_array($all_subnets)) $all_subnets = array();
 
 foreach($all_subnets as $subnet) {
 	if ($subnet->isFolder) {
@@ -71,6 +72,7 @@ foreach($all_subnets as $subnet) {
 		$search[$subnet->type][$subnet->mask][$subnet->subnet][] = $subnet;
 	}
 }
+
 
 $strict_subnets = get_strict_subnets($Subnets, $search, $cidr);
 
