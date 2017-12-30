@@ -1910,46 +1910,20 @@ class Subnets extends Common_functions {
 		$masterSubnetId = is_numeric($masterSubnetId) ? $masterSubnetId : 0;
 
 	    # fetch section subnets
-		$sections_subnets = $masterSubnetId==0 ? $this->fetch_section_subnets ($sectionId) : $this->fetch_subnet_slaves ($masterSubnetId);
-
-		# unset by type
-		if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
-			foreach ($sections_subnets as $k=>$existing_subnet) {
-				// remove IPv6 subnets
-				if($this->identify_address($new_subnet)=="IPv4" && $this->identify_address($existing_subnet->subnet)=="IPv6") {
-					unset($sections_subnets[$k]);
-				}
-				// remove IPv4 subnets
-				if($this->identify_address($new_subnet)=="IPv6" && $this->identify_address($existing_subnet->subnet)=="IPv4") {
-					unset($sections_subnets[$k]);
-				}
-			}
-		}
+		$sections_subnets = $masterSubnetId==0 ? $this->fetch_overlapping_subnets($new_subnet, 'sectionId', $sectionId) : $this->fetch_subnet_slaves($masterSubnetId);
 
 	    # verify new against each existing
 	    if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
 	        foreach ($sections_subnets as $existing_subnet) {
 	            //only check if vrfId's match
 	            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
-	            	# check if parent is folder and ignore
-	            	if($existing_subnet->masterSubnetId!=0) {
-		            	$parent = $this->fetch_subnet (null, $existing_subnet->masterSubnetId);
-					}
-					else {
-						$parent = new StdClass ();
-						$parent->isFolder = 0;
-					}
 		            # ignore folders!
-		            if($existing_subnet->isFolder!=1 && $parent->isFolder!=1) {
+		            if($existing_subnet->isFolder!=1) {
 			            # check overlapping
 						if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-							 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
-						}
-					}
-					if($existing_subnet->isFolder!=1 && $parent->isFolder==1) {
-			            # check overlapping
-						if($this->verify_overlapping ($new_subnet,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-							 return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+							$Section = new Sections($this->Database);
+							$section = $Section->fetch_section('id', $existing_subnet->sectionId);
+							return _("Subnet $new_subnet overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.") "._("in section")." ".$section->name;
 						}
 					}
 	            }
