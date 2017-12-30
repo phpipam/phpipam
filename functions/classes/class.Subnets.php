@@ -2021,24 +2021,22 @@ class Subnets extends Common_functions {
 	 * @return false|string
 	 */
 	public function verify_vrf_overlapping ($cidr, $vrfId, $subnetId=0, $masterSubnetId=0) {
-		# fetch all subnets in VRF globally
-		$all_subnets = $this->fetch_multiple_objects ("subnets", "vrfId", $vrfId);
+		# fetch all overlapping subnets in VRF globally
+		$all_subnets = $this->fetch_overlapping_subnets($cidr, 'vrfId', $vrfId);
 		# fetch all parents
 		$allParents = $subnetId!=0 ? $this->fetch_parents_recursive($subnetId) : $this->fetch_parents_recursive($masterSubnetId);
 		# add self
 		$allParents[] = $masterSubnetId;
 
-		# fetch all slaves
-		$this->fetch_subnet_slaves_recursive($subnetId);
-
-		# check
 		if($all_subnets!==false && is_array($all_subnets)) {
 			foreach ($all_subnets as $existing_subnet) {
 	            // ignore folders - precaution and ignore self for edits
 	            if($existing_subnet->isFolder!=1 && $existing_subnet->id!==$subnetId && !in_array($existing_subnet->id, $allParents)) {
 		            # check overlapping globally if subnet is not nested
 					if($this->verify_overlapping ($cidr,  $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask)!==false) {
-						 return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.")";
+						$Section = new Sections($this->Database);
+						$section = $Section->fetch_section('id', $existing_subnet->sectionId);
+						return _("Subnet $cidr overlaps with").' '. $this->transform_to_dotted($existing_subnet->subnet).'/'.$existing_subnet->mask." (".$existing_subnet->description.") "._("in section")." ".$section->name;
 					}
 				}
 			}
