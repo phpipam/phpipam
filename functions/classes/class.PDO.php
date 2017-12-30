@@ -249,6 +249,7 @@ abstract class DB {
 	 * @access public
 	 * @param mixed $query
 	 * @param array $values (default: array())
+	 * @param integer|null &$rowCount (default: null)
 	 * @return void
 	 */
 	public function runQuery($query, $values = array(), &$rowCount = null) {
