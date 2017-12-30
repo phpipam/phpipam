@@ -121,9 +121,9 @@ class Subnets extends Common_functions {
 	 * (default value: false)
 	 *
 	 * @var array
-	 * @access protected
+	 * @access private
 	 */
-	protected $bmask = array();
+	private $gmp_bitmasks;
 
 	/**
 	 * for Database connection
@@ -157,6 +157,8 @@ class Subnets extends Common_functions {
 		$this->Result = new Result ();
 		# Log object
 		$this->Log = new Logging ($this->Database);
+		# pre-generate GMP math bitmask values to manipulate subnets/addresses
+		$this->gmp_bitmasks = $this->generate_network_bitmasks();
 	}
 
 	/**
@@ -1428,36 +1430,19 @@ class Subnets extends Common_functions {
 	 * @param mixed $netmask
 	 * @param mixed $ipversion
 	 * @param bool $strict (default: true)
-	 * @return int
+	 * @return string
 	 */
 	public function get_max_hosts ($netmask, $ipversion, $strict=true) {
-		if($ipversion == "IPv4")	{ return $this->get_max_IPv4_hosts ($netmask, $strict); }
-		else						{ return $this->get_max_IPv6_hosts ($netmask); }
-	}
+		$max_mask = ($ipversion === 'IPv4') ? 32 : 128;
+		if ($netmask<0) $netmask = 0;
+		if ($netmask>$max_mask) $netmask = $max_mask;
 
-	/**
-	 * Get max number of IPv4 hosts
-	 *
-	 * @access public
-	 * @param mixed $netmask
-	 * @return int
-	 */
-	public function get_max_IPv4_hosts ($netmask, $strict) {
-		if($netmask==31)			{ return 2; }
-		elseif($netmask==32)		{ return 1; }
-		elseif($strict===false)		{ return (int) pow(2, (32 - $netmask)); }
-		else						{ return (int) pow(2, (32 - $netmask)) -2; }
-	}
+		$max_hosts = $this->gmp_bitmasks[$ipversion][$netmask]['size'];
 
-	/**
-	 * Get max number of IPv6 hosts
-	 *
-	 * @access public
-	 * @param mixed $netmask
-	 * @return int
-	 */
-	public function get_max_IPv6_hosts ($netmask) {
-		return gmp_strval(gmp_pow(2, 128 - $netmask));
+		if ($ipversion === 'IPv4') {
+			if ($strict && $netmask<31) $max_hosts = gmp_sub($max_hosts, 2);
+		}
+		return gmp_strval($max_hosts);
 	}
 
 	/**
@@ -1575,32 +1560,59 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Pre-calculate gmp_math function network bitmasks and cache to save CPU
+	 * pre-generate GMP math bitmask values to manipulate subnets/addresses to save CPU
 	 *
-	 * @access public
+	 * @access private
 	 * @return array
 	 */
-	public function get_network_bitmasks () {
-		// Check cache
-		if (!empty($this->bmask)) { return $this->bmask; }
-
-		// Build masks values and save
+	private function generate_network_bitmasks () {
+		// Pre-calculate values to manipulate subnets (IPv4 & IPv6) in decimal format using GMP math functions
+		//   [size]      = 2^(mask bits) subnet size
+		//   [broadcast] = OR bitmask to set subnet /mask bits to calculate broadcast addresses
+		//   [network]   = AND bitmask to clear subnet /mask bits to calculate network addresses
 		$bmask = array();
+		for ($x=0; $x <= 128; $x++) {
+			$pwr = gmp_pow(2, 128-$x);
+			$bmask['IPv6'][$x]['size']      = $pwr;
+			$bmask['IPv6'][$x]['broadcast'] = gmp_sub($pwr, 1);
+			$bmask['IPv6'][$x]['network']   = gmp_xor($bmask['IPv6'][0]['broadcast'], $bmask['IPv6'][$x]['broadcast']);
+		}
 		for ($x=0; $x <= 32; $x++) {
-			$pwr = gmp_pow(2, 32-$x);
-			$bmask['IPv4'][$x]['plen'] = $pwr;
-			$bmask['IPv4'][$x]['lo']   = gmp_mul(gmp_div('0xffffffff', $pwr), $pwr);
-			$bmask['IPv4'][$x]['hi']   = gmp_sub($pwr, 1);
+			$bmask['IPv4'][$x]['size']      = $bmask['IPv6'][96+$x]['size'];
+			$bmask['IPv4'][$x]['broadcast'] = $bmask['IPv6'][96+$x]['broadcast'];
+			$bmask['IPv4'][$x]['network']   = gmp_xor($bmask['IPv4'][0]['broadcast'], $bmask['IPv4'][$x]['broadcast']);
 		}
-		for ($y=0; $y <= 128; $y++) {
-			$pwr = gmp_pow(2, 128-$y);
-			$bmask['IPv6'][$y]['plen'] = $pwr;
-			$bmask['IPv6'][$y]['lo']   = gmp_mul(gmp_div('0xffffffffffffffffffffffffffffffff', $pwr), $pwr);
-			$bmask['IPv6'][$y]['hi']   = gmp_sub($pwr, 1);
-		}
-		// Save array into cache
-		$this->bmask = $bmask;
 		return $bmask;
+	}
+
+	/**
+	 * Calculate network address for provided decimal IP and mask (supports IPv4 & IPv6 decimals).
+	 *
+	 * @access public
+	 * @param string $decimalIP	[Decimal format, IPv4/IPv6]
+	 * @param integer $mask     [IPv4 0-32, IPv6 0-128]
+	 * @return string           [Decimal format, IPv4/IPv6]
+	 */
+	public function decimal_network_address($decimalIP, $mask) {
+		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		// Calculate network address (decimal) by clearing the /mask bits
+		$network_address = gmp_and($decimalIP, $this->gmp_bitmasks[$type][$mask]['network']);
+		return gmp_strval($network_address);
+	}
+
+	/**
+	 * Calculate broadcast address for provided decimal IP and mask (supports IPv4 & IPv6 decimals).
+	 *
+	 * @access public
+	 * @param string $decimalIP [Decimal format, IPv4/IPv6]
+	 * @param integer $mask     [IPv4 0-32, IPv6 0-128]
+	 * @return string           [Decimal format, IPv4/IPv6]
+	 */
+	public function decimal_broadcast_address($decimalIP, $mask) {
+		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		// Calculate broadcast address (decimal) by setting the /mask bits
+		$network_broadcast = gmp_or($decimalIP, $this->gmp_bitmasks[$type][$mask]['broadcast']);
+		return gmp_strval($network_broadcast);
 	}
 
 	/**
@@ -1619,23 +1631,20 @@ class Subnets extends Common_functions {
 		$type     = $this->identify_address($masterSubnet->subnet);
 		$max_mask = ($type == 'IPv4') ? 32 : 128;
 
-		// pre-caclulate bitwise masks to save CPU
-		$bmask = $this->get_network_bitmasks();
-
 		# here we use range split/exclusion algorithm to find final list of networks a whole lot of times faster
 		$ranges = array( array(
-			'start' => gmp_and($masterSubnet->subnet, $bmask[$type][$masterSubnet->mask]['lo']),
-			'end'   => gmp_or ($masterSubnet->subnet, $bmask[$type][$masterSubnet->mask]['hi']) ));
+			'start' => $this->decimal_network_address($masterSubnet->subnet, $masterSubnet->mask),
+			'end'   => $this->decimal_broadcast_address($masterSubnet->subnet, $masterSubnet->mask) ));
 		foreach ($subnets as $excl) {
-			$estart = gmp_and($excl->subnet, $bmask[$type][$excl->mask]['lo']);
-			$eend   = gmp_or ($excl->subnet, $bmask[$type][$excl->mask]['hi']);
+			$estart = $this->decimal_network_address($excl->subnet, $excl->mask);
+			$eend   = $this->decimal_broadcast_address($excl->subnet, $excl->mask);
 			foreach ($ranges as $rid => $range) {
 				if ((gmp_cmp($estart, $range['end']) > 0) || (gmp_cmp($eend, $range['start']) < 0)) { continue; }
 
 				# range overlaps, now we check what to do
 				unset($ranges[$rid]); # remove existing range
-				if (gmp_cmp($range['start'], $estart) < 0) { $ranges[] = array('start' => $range['start'], 'end' => gmp_sub($estart, 1)); };
-				if (gmp_cmp($range['end'], $eend) > 0) { $ranges[] = array('start' => gmp_add($eend, 1), 'end' => $range['end']); };
+				if (gmp_cmp($range['start'], $estart) < 0) { $ranges[] = array('start' => $range['start'], 'end' => gmp_strval(gmp_sub($estart, 1))); };
+				if (gmp_cmp($range['end'], $eend) > 0) { $ranges[] = array('start' => gmp_strval(gmp_add($eend, 1)), 'end' => $range['end']); };
 			}
 		}
 		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
@@ -1664,26 +1673,28 @@ class Subnets extends Common_functions {
 
 		$subnets = array();
 		$ranges = $fsm['freeranges'];
-		$type   = $fsm['type'];
 
-		$bmask = $this->get_network_bitmasks();
-		$size   = $bmask[$type][$mask]['plen'];
-
+		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], false));
 		$discovered = 0;
-
+		// For each range; Calculate the candidate network and broadcast addresses for size $mask and check
+		// that both are inside the current range. Increment candidate by $size=2^(mask bits) and repeat.
+		// Stop when we have discovered $count subnets. ($count<=0 for all)
 		foreach ($ranges as $range) {
-			$candidate_start = gmp_and($range['start'], $bmask[$type][$mask]['lo']);
-			$candidate_end   = gmp_or($candidate_start, $bmask[$type][$mask]['hi']);
+			$candidate_start = $this->decimal_network_address($range['start'], $mask);
+			$candidate_end   = $this->decimal_broadcast_address($range['start'], $mask);
+
+			// $candidate_start and $candidate_end can be at most $size-1 away from $range['start'].
+			if (gmp_cmp($candidate_start, $range['start']) < 0) {
+				$candidate_start = gmp_add($candidate_start, $size);
+				$candidate_end   = gmp_add($candidate_end, $size);
+			}
 
 			while (gmp_cmp($candidate_end, $range['end']) <= 0) {
-
-				if (gmp_cmp($candidate_start, $range['start']) >= 0) {
-					$discovered++;
-					if ($count > 0 && $discovered > $count) {
-						return array (subnets => $subnets, truncated => true);
-					}
-					$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
+				if ($count > 0 && ++$discovered > $count) {
+					return array (subnets => $subnets, truncated => true);
 				}
+				$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
+
 				$candidate_start = gmp_add($candidate_start, $size);
 				$candidate_end   = gmp_add($candidate_end, $size);
 			}
@@ -1708,26 +1719,28 @@ class Subnets extends Common_functions {
 
 		$subnets = array();
 		$ranges  = array_reverse($fsm['freeranges']);
-		$type    = $fsm['type'];
 
-		$bmask = $this->get_network_bitmasks();
-		$size   = $bmask[$type][$mask]['plen'];
-
+		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], false));
 		$discovered = 0;
-
+		// For each range; Calculate the candidate network and broadcast addresses for size $mask and check
+		// that both are inside the current range. Decrement candidate by $size=2^(mask bits) and repeat.
+		// Stop when we have discovered $count subnets. ($count<=0 for all)
 		foreach ($ranges as $range) {
-			$candidate_start = gmp_and($range['end'], $bmask[$type][$mask]['lo']);
-			$candidate_end   = gmp_or($candidate_start, $bmask[$type][$mask]['hi']);
+			$candidate_start = $this->decimal_network_address($range['end'], $mask);
+			$candidate_end   = $this->decimal_broadcast_address($range['end'], $mask);
+
+			// $candidate_start and $candidate_end can be at most $size-1 away from $range['end'].
+			if (gmp_cmp($candidate_end, $range['end']) > 0) {
+				$candidate_start = gmp_sub($candidate_start, $size);
+				$candidate_end   = gmp_sub($candidate_end, $size);
+			}
 
 			while (gmp_cmp($candidate_start, $range['start']) >= 0) {
-
-				if (gmp_cmp($candidate_end, $range['end']) <= 0) {
-					$discovered++;
-					if ($count > 0 && $discovered > $count) {
+				if ($count > 0 && ++$discovered > $count) {
 					return array (subnets => $subnets, truncated => true);
-					}
-					$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
 				}
+				$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
+
 				$candidate_start = gmp_sub($candidate_start, $size);
 				$candidate_end   = gmp_sub($candidate_end, $size);
 			}
@@ -3856,36 +3869,6 @@ class Subnets extends Common_functions {
 		return sizeof($nets['subnets']) > 0 ? $nets['subnets'] : false;
 	}
 
-	/**
-	 * Take in decimal from IPv6 address and add one to it
-	 *
-	 * @access public
-	 * @param mixed $decimalIpv6
-	 * @return int
-	 */
-	public  function subnet_dropdown_ipv6_decimal_add_one ($decimalIpv6) {
-		# Take digit, make array of earch number and reverse it
-		$singledigit = array_reverse(str_split($decimalIpv6));
-		$start = 1;
-		# Foreach array of individual digits and add the first one, until it doesn't carry over, prepend output from there on out
-		foreach ($singledigit as $digit) {
-			if ($start && $digit == '9') {
-				$digit++;
-				$output = $output.'0';
-			}
-			elseif ($start){
-				$digit++;
-				$output = $digit.$output;
-				$start = 0;
-			}
-			else {
-				$output = $digit.$output;
-			}
-		}
-		$decimalIpv6 = $output;
-		// return result
-		return $decimalIpv6;
-	}
 
 
 
