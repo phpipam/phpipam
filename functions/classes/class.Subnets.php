@@ -612,6 +612,58 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * Fetches all subnets averlapping with CIDR
+	 *
+	 * @access public
+	 * @param  string       $cidr
+	 * @param  string|null  $method
+	 * @param  string|null  $value
+	 * @param  string|array $result_fields
+	 * @return array|false
+	 */
+	public function fetch_overlapping_subnets ($cidr, $method=null, $value=null, $result_fields = '*') {
+		$err = $this->verify_cidr_address($cidr);
+		if ($err !== true) {
+			$this->Result->show("danger", _("Error: ").$err);
+			return false;
+		}
+
+		// set fields
+		if($result_fields!=='*') {
+			$result_fields_arr = array();
+			foreach ($result_fields as $f) $result_fields_arr[] = "`$f`";
+			$result_fields = implode(',', $result_fields_arr);
+		}
+
+		list($cidr, $cidr_mask) = explode('/', $cidr);
+		$cidr_decimal = $this->transform_to_decimal($cidr);
+		$cidr_network = $this->decimal_network_address($cidr_decimal, $cidr_mask);
+		$cidr_broadcast = $this->decimal_broadcast_address($cidr_decimal, $cidr_mask);
+
+		$possible_parents = array();
+		for ($mask=0; $mask<=$cidr_mask; $mask++) {
+			$parent = $this->decimal_network_address($cidr_decimal, $mask);
+			$possible_parents[] = "('$parent','$mask')";
+		}
+		$possible_parents = implode(',', $possible_parents);
+
+		$query = "SELECT $result_fields FROM `subnets` WHERE isFolder = 0 AND ";
+		if (!is_null($method)) $query .= " `$method` = '".$this->Database->escape($value)."' AND ";
+		$query .= " (   ( LPAD(`subnet`,39,0) >= LPAD('$cidr_network',39,0) AND LPAD(`subnet`,39,0) <= LPAD('$cidr_broadcast',39,0) )";
+		$query .= "  OR (`subnet`,`mask`) IN ($possible_parents)  ) ";
+		$query .= "ORDER BY CAST(`mask` AS UNSIGNED) DESC, LPAD(`subnet`,39,0);";
+
+		try {
+			$overlaping_subnets = $this->Database->getObjectsQuery($query);
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		return $overlaping_subnets;
+	}
+
+	/**
 	 * This function fetches id, subnet and mask for all subnets
 	 *
 	 *	Needed for pingCheck script
