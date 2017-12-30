@@ -706,7 +706,7 @@ abstract class DB {
         		$result_fields_arr[] = "`$f`";
     		}
     		// implode
-    		$result_fields = implode(",", $result_fields);
+    		$result_fields = implode(",", $result_fields_arr);
 		}
 
     // subnets
