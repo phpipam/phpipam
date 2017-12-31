@@ -640,21 +640,18 @@ class Common_functions  {
 	 * @return mixed IP version
 	 */
 	public function identify_address ($address) {
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # numeric representation
-	    elseif (is_numeric($address)) {
-	    	if($address <= 4294967295)	{ return 'IPv4'; }	// 4294967295 = '255.255.255.255'
-	    	else 						{ return 'IPv6'; }
-	    }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
+		# dotted representation
+		if (strpos($address, ':') !== false) return 'IPv6';
+		if (strpos($address, '.') !== false) return 'IPv4';
+		# numeric representation
+		if (is_numeric($address)) {
+			if($address <= 4294967295) return 'IPv4'; // 4294967295 = '255.255.255.255'
+			return 'IPv6';
+		} else {
+			# decimal representation
+			if(strlen($address) < 12) return 'IPv4';
+			return 'IPv6';
+		}
 	}
 
 	/**
