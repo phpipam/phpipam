@@ -528,11 +528,11 @@ class Subnets extends Common_functions {
 	 * Fetches all subnets in specified section
 	 *
 	 * @access public
-	 * @param mixed $sectionId 			// section identifier
-	 * @param array $fields 			// fields to fetch
+	 * @param mixed $sectionId              // section identifier
+	 * @param array|string $result_fields   // fields to fetch
 	 * @return array
 	 */
-	public function fetch_section_subnets ($sectionId, $fields = array()) {
+	public function fetch_section_subnets ($sectionId, $result_fields = "*") {
 		# fetch settings and set subnet ordering
 		$this->get_settings();
 
@@ -545,15 +545,14 @@ class Subnets extends Common_functions {
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
 
-		// fields
-		$fields_q = sizeof($fields)>0 ? implode (',', $fields) : '*';
+		$result_fields = $this->Database->escape_result_fields($result_fields);
 		# fetch
 		// if sectionId is not numeric, assume it is section name rather than id, set query appropriately
 		if (is_numeric($sectionId)) {
-			$query = "SELECT $fields_q FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $result_fields FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		else {
-			$query = "SELECT $fields_q FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $result_fields FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		try { $subnets = $this->Database->getObjectsQuery($query, array($sectionId)); }
 		catch (Exception $e) {
@@ -561,9 +560,8 @@ class Subnets extends Common_functions {
 			return false;
 		}
 		# save to subnets cache
-		if(empty($fields) && is_array($subnets)) {
+		if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
 			foreach($subnets as $subnet) {
-    			// save
 				$this->cache_write ("subnets", $subnet->id, $subnet);
 			}
 		}
@@ -618,22 +616,13 @@ class Subnets extends Common_functions {
 	 * @param  string       $cidr
 	 * @param  string|null  $method
 	 * @param  string|null  $value
-	 * @param  string|array $result_fields
+	 * @param  string|array $result_fields (default: "*")
 	 * @return array|false
 	 */
-	public function fetch_overlapping_subnets ($cidr, $method=null, $value=null, $result_fields = '*') {
-		$err = $this->verify_cidr_address($cidr);
-		if ($err !== true) {
-			$this->Result->show("danger", _("Error: ").$err);
-			return false;
-		}
+	public function fetch_overlapping_subnets ($cidr, $method=null, $value=null, $result_fields = "*") {
+		if ($this->verify_cidr_address($cidr)!==true) return false;
 
-		// set fields
-		if(is_array($result_fields)) {
-			$result_fields_arr = array();
-			foreach ($result_fields as $f) $result_fields_arr[] = "`$f`";
-			$result_fields = implode(',', $result_fields_arr);
-		}
+		$result_fields = $this->Database->escape_result_fields($result_fields);
 
 		list($cidr, $cidr_mask) = explode('/', $cidr);
 		$cidr_decimal = $this->transform_to_decimal($cidr);
