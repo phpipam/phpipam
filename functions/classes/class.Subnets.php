@@ -629,7 +629,7 @@ class Subnets extends Common_functions {
 		}
 
 		// set fields
-		if($result_fields!=='*') {
+		if(is_array($result_fields)) {
 			$result_fields_arr = array();
 			foreach ($result_fields as $f) $result_fields_arr[] = "`$f`";
 			$result_fields = implode(',', $result_fields_arr);
@@ -1641,11 +1641,12 @@ class Subnets extends Common_functions {
 	 * Calculate network address for provided decimal IP and mask (supports IPv4 & IPv6 decimals).
 	 *
 	 * @access public
-	 * @param string $decimalIP	[Decimal format, IPv4/IPv6]
-	 * @param integer $mask     [IPv4 0-32, IPv6 0-128]
-	 * @return string           [Decimal format, IPv4/IPv6]
+	 * @param string|false  $decimalIP  [Decimal format, IPv4/IPv6]
+	 * @param integer       $mask       [IPv4 0-32, IPv6 0-128]
+	 * @return string|false             [Decimal format, IPv4/IPv6]
 	 */
 	public function decimal_network_address($decimalIP, $mask) {
+		if ($decimalIP === false) return false;
 		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
 		// Calculate network address (decimal) by clearing the /mask bits
 		$network_address = gmp_and($decimalIP, $this->gmp_bitmasks[$type][$mask]['network']);
@@ -1656,11 +1657,12 @@ class Subnets extends Common_functions {
 	 * Calculate broadcast address for provided decimal IP and mask (supports IPv4 & IPv6 decimals).
 	 *
 	 * @access public
-	 * @param string $decimalIP [Decimal format, IPv4/IPv6]
-	 * @param integer $mask     [IPv4 0-32, IPv6 0-128]
-	 * @return string           [Decimal format, IPv4/IPv6]
+	 * @param string|false  $decimalIP  [Decimal format, IPv4/IPv6]
+	 * @param integer       $mask       [IPv4 0-32, IPv6 0-128]
+	 * @return string|false             [Decimal format, IPv4/IPv6]
 	 */
 	public function decimal_broadcast_address($decimalIP, $mask) {
+		if ($decimalIP === false) return false;
 		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
 		// Calculate broadcast address (decimal) by setting the /mask bits
 		$network_broadcast = gmp_or($decimalIP, $this->gmp_bitmasks[$type][$mask]['broadcast']);
