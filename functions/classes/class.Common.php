@@ -1029,25 +1029,10 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function long2ip6($ipv6long) {
-	    $bin = gmp_strval(gmp_init($ipv6long,10),2);
-	    $ipv6 = "";
-
-	    if (strlen($bin) < 128) {
-	        $pad = 128 - strlen($bin);
-	        for ($i = 1; $i <= $pad; $i++) {
-	            $bin = "0".$bin;
-	        }
-	    }
-
-	    $bits = 0;
-	    while ($bits <= 7)
-	    {
-	        $bin_part = substr($bin,($bits*16),16);
-	        $ipv6 .= dechex(bindec($bin_part)).":";
-	        $bits++;
-	    }
-	    // compress result
-	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
+		$hex = sprintf('%032s', gmp_strval(gmp_init($ipv6long, 10), 16));
+		$ipv6 = implode(':', str_split($hex, 4));
+		// compress result
+		return inet_ntop(inet_pton($ipv6));
 	}
 
 	/**

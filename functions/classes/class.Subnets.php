@@ -610,7 +610,7 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Fetches all subnets averlapping with CIDR
+	 * Fetches all subnets overlapping with CIDR
 	 *
 	 * @access public
 	 * @param  string       $cidr
