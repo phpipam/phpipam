@@ -2094,80 +2094,50 @@ class Subnets extends Common_functions {
 	 * Verifies overlapping of 2 subnets
 	 *
 	 * @access public
-	 * @param CIDR $subnet1
-	 * @param CIDR $subnet2
+	 * @param CIDR $cidr1
+	 * @param CIDR $cidr2
+	 * @param bool $check_if_nested (default: false)
 	 * @return bool
 	 */
-	public function verify_overlapping ($subnet1, $subnet2) {
-		return $this->identify_address ($subnet1)=="IPv4" ? $this->verify_IPv4_subnet_overlapping ($subnet1, $subnet2) : $this->verify_IPv6_subnet_overlapping ($subnet1, $subnet2);
-	}
+	public function verify_overlapping ($cidr1, $cidr2, $check_if_nested = false) {
+		if (empty($cidr1) || empty($cidr2)) return false;
 
-	/**
-	 * Verifies overlapping of 2 IPv4 subnets
-	 *
-	 *	does subnet 1 overlapp with subnet 2 ?
-	 *
-	 * @access private
-	 * @param CIDR $subnet1
-	 * @param CIDR $subnet2
-	 * @return bool
-	 */
-	private function verify_IPv4_subnet_overlapping ($subnet1, $subnet2) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv4 ();
+		$c1 = explode('/', $cidr1);
+		$c2 = explode('/', $cidr2);
 
-		// both must be IPv6
-		if($this->identify_address ($subnet2)=="IPv6") {
+		if (filter_var($c1[0], FILTER_VALIDATE_IP)===false) return false;
+		if (filter_var($c2[0], FILTER_VALIDATE_IP)===false) return false;
+
+		if ($this->identify_address($c1[0]) != $this->identify_address($c2[0])) return false;
+
+		$max_mask = $this->get_max_netmask($c1[0]);
+		$c1_mask = empty($c1[1]) ? $max_mask : $c1[1];
+		$c2_mask = empty($c2[1]) ? $max_mask : $c2[1];
+
+		if ($c1_mask < 0 || $c1_mask > $max_mask) return false;
+		if ($c2_mask < 0 || $c2_mask > $max_mask) return false;
+
+		$c1_decimal = $this->transform_to_decimal($c1[0]);
+		$c2_decimal = $this->transform_to_decimal($c2[0]);
+		$c1_network = $this->decimal_network_address($c1_decimal, $c1_mask);
+		$c2_network = $this->decimal_network_address($c2_decimal, $c2_mask);
+		$c1_broadcast = $this->decimal_broadcast_address($c1_decimal, $c1_mask);
+		$c2_broadcast = $this->decimal_broadcast_address($c2_decimal, $c2_mask);
+
+		if ($c1_mask >= $c2_mask) {
+			// cidr1 is smaller than (or=) cidr2. Does cidr1 overlap cidr2?
+			if (gmp_cmp($c1_broadcast, $c2_network) < 0) return false; //cidr1 ends before cidr2 starts
+			if (gmp_cmp($c1_network ,$c2_broadcast) > 0) return false; //cidr1 starts after cidr2 ends
+			return true;
+		} elseif ($check_if_nested === true) {
+			// cidr1 doesn't fit inside cidr2.
 			return false;
+		} else {
+			// cidr1 is bigger than cidr2. Does cidr2 overlap cidr1?
+			if (gmp_cmp($c2_broadcast, $c1_network) < 0) return false; //cidr2 ends before cidr1 starts
+			if (gmp_cmp($c2_network, $c1_broadcast) > 0) return false; //cidr2 starts after cidr1 ends
+			return true;
 		}
-
-		# parse subnets to get subnet and broadcast
-		$net1 = $this->Net_IPv4->parseAddress( $subnet1 );
-		$net2 = $this->Net_IPv4->parseAddress( $subnet2 );
-
-	    # calculate delta
-	    $delta1 = $this->transform_to_decimal( @$net1->broadcast) - $this->transform_to_decimal( @$net1->network);
-	    $delta2 = $this->transform_to_decimal( @$net2->broadcast) - $this->transform_to_decimal( @$net2->network);
-
-	    # calculate if smaller is inside bigger
-	    if ($delta1 < $delta2) {
-	        //check smaller nw and bc against bigger network
-	        if ( $this->Net_IPv4->ipInNetwork(@$net1->network, $subnet2) || $this->Net_IPv4->ipInNetwork(@$net1->broadcast, $subnet2) ) 	{ return true; }
-	    }
-	    else {
-	        //check smaller nw and bc against bigger network
-	        if ( $this->Net_IPv4->ipInNetwork(@$net2->network, $subnet1) || $this->Net_IPv4->ipInNetwork(@$net2->broadcast, $subnet1) ) 	{ return true; }
-	    }
-	    # do notoverlap
-	    return false;
-	}
-
-	/**
-	 * Verifies overlapping of 2 IPv6 subnets
-	 *
-	 *	does subnet 1 overlapp with subnet 2 ?
-	 *
-	 * @access private
-	 * @param CIDR $subnet1
-	 * @param CIDR $subnet2
-	 * @return boolean
-	 */
-	private function verify_IPv6_subnet_overlapping ($subnet1, $subnet2) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-		// both must be IPv6
-		if($this->identify_address ($subnet2)=="IPv4") {
-			return false;
-		}
-
-	    //remove netmask from subnet1 */
-	    $subnet1 = $this->Net_IPv6->removeNetmaskSpec ($subnet1);
-	    //verify
-	    if ($this->Net_IPv6->isInNetmask ( $subnet1 , $subnet2 ) ) { return true; }
-
-		# do notoverlap
-	    return false;
 	}
 
 	/**
@@ -2451,56 +2421,7 @@ class Subnets extends Common_functions {
 	 * @return bool
 	 */
 	public function is_subnet_inside_subnet ($cidr1, $cidr2) {
-		$type = $this->identify_address ($cidr1);
-		# check based on type
-		return $type=="IPv4" ? $this->is_IPv4_subnet_inside_subnet($cidr1, $cidr2) : $this->is_IPv6_subnet_inside_subnet($cidr1, $cidr2);
-	}
-
-	/**
-	 * Checks if IPv4 subnet 1 is inside subnet 2
-	 *
-	 * @access private
-	 * @param mixed $cidr1
-	 * @param mixed $cidr2
-	 * @return bool
-	 */
-	private function is_IPv4_subnet_inside_subnet ($cidr1, $cidr2) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv4 ();
-
-    	//subnet 1 needs to be parsed to get subnet and broadcast
-    	$cidr1 = $this->Net_IPv4->parseAddress($cidr1);
-
-		//both network and broadcast must be inside root subnet!
-		if( ($this->Net_IPv4->ipInNetwork($cidr1->network, $cidr2)) && ($this->Net_IPv4->ipInNetwork($cidr1->broadcast, $cidr2)) )  { return true; }
-		else 																														{ return false; }
-	}
-
-	/**
-	 * Checks if IPv6 subnet 1 is inside subnet 2
-	 *
-	 * @access private
-	 * @param mixed $cidr1
-	 * @param mixed $cidr2
-	 * @return bool
-	 */
-	private function is_IPv6_subnet_inside_subnet ($cidr1, $cidr2) {
-    	//mask 2 must be bigger than mask 1
-    	$mask1 = end(explode("/", $cidr1));
-    	$mask2 = end(explode("/", $cidr2));
-
-        //check mask
-        if ($mask1 < $mask2)                                    { return false; }
-
-		// Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-    	//remove netmask from subnet1
-    	$cidr1 = $this->Net_IPv6->removeNetmaskSpec ($cidr1);
-
-	    //check
-    	if ($this->Net_IPv6->isInNetmask ( $cidr1, $cidr2 ) ) 	{ return true; }
-    	else 													{ return false; }
+		return $this->verify_overlapping($cidr1, $cidr2, true);
 	}
 
 	/**
