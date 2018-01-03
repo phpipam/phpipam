@@ -249,6 +249,7 @@ abstract class DB {
 	 * @access public
 	 * @param mixed $query
 	 * @param array $values (default: array())
+	 * @param integer|null &$rowCount (default: null)
 	 * @return void
 	 */
 	public function runQuery($query, $values = array(), &$rowCount = null) {
@@ -680,6 +681,23 @@ abstract class DB {
 	}
 
 	/**
+	 * Escape $result_fields parameter
+	 *
+	 * @access public
+	 * @param string|array $result_fields
+	 * @return string
+	 */
+	public function escape_result_fields($result_fields) {
+		if (empty($result_fields)) return "*";
+
+		if (is_array($result_fields)) {
+			foreach ($result_fields as $i => $f) $result_fields[$i] = "`$f`";
+			$result_fields = implode(',', $result_fields);
+		}
+		return $result_fields;
+	}
+
+	/**
 	 * Searches for object in database
 	 *
 	 * @access public
@@ -690,6 +708,7 @@ abstract class DB {
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
 	 * @param bool $negate (default: false)
+	 * @param string|array $result_fields (default: "*")
 	 * @return void
 	 */
 	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
@@ -699,15 +718,7 @@ abstract class DB {
 		$like === true ? $operator = "LIKE" : $operator = "=";
 		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-		// set fields
-		if($result_fields!="*") {
-    		$result_fields_arr = array();
-    		foreach ($result_fields as $f) {
-        		$result_fields_arr[] = "`$f`";
-    		}
-    		// implode
-    		$result_fields = implode(",", $result_fields);
-		}
+		$result_fields = $this->escape_result_fields($result_fields);
 
     // subnets
     if ($table=='subnets' && $sortField=='subnet') {

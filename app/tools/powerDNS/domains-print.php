@@ -96,9 +96,9 @@ elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains 
 <!-- Headers -->
 <thead>
 <tr>
-	<?if ($admin): ?>
+	<?php if ($admin): ?>
 	<th style="width:80px;"></th>
-	<?endif;?>
+	<?php endif;?>
     <th><?php print _('Domain');?></th>
     <th><?php print _('Type');?></th>
     <th><?php print _('Master NS');?></th>

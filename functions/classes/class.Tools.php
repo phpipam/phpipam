@@ -3224,6 +3224,10 @@ class Tools extends Common_functions {
     	# present ?
     	if (sizeof($outFile)>0) {
             foreach($outFile as $k=>$line) {
+
+            	//convert encoding if necessary
+            	$line = $this->convert_encoding_to_UTF8($line);
+
             	//put it to array
             	$field = str_getcsv ($line, $this->csv_delimiter);
 
