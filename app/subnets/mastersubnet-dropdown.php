@@ -28,6 +28,8 @@ function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*") {
 	$strict_subnets = $Subnets->fetch_overlapping_subnets($cidr, 'sectionId', $sectionId, $result_fields);
 	if (!is_array($strict_subnets)) return array();
 
+	list(,$cidr_mask) = explode('/', $cidr);
+
 	foreach ($strict_subnets as $i => $subnet) {
 		if ($subnet->mask >= $cidr_mask) unset($strict_subnets[$i]); else break;
 	}
