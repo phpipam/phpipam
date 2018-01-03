@@ -255,12 +255,13 @@ abstract class DB {
 	public function runQuery($query, $values = array(), &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
 
-		//debuq
-		$this->log_query($statement, $values);
-
 		$result = null;
 
 		$statement = $this->pdo->prepare($query);
+
+		//debuq
+		$this->log_query($statement, $values);
+
 		if (is_object($statement)) {
 			$result = $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 			$rowCount = $statement->rowCount();

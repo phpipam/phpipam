@@ -76,7 +76,7 @@ $rows = ""; $counters = array();
 foreach ($rlist as $sect_id => $sect_check) {
 	$section_subnets = $Subnets->fetch_section_subnets($sect_id);
 	# skip empty sections
-	if (sizeof($section_subnets)==0) { continue; }
+	if (!is_array($section_subnets) || sizeof($section_subnets)==0) { continue; }
 
 	foreach ($section_subnets as &$subnet) {
 		$subnet = (array) $subnet;
