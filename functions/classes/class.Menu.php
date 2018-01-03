@@ -65,6 +65,8 @@ class MasterSubnetDropDown {
 	 * @param string $name
 	 */
 	public function optgroup_open($name) {
+		if (empty($name)) return;
+
 		$this->optgroup_close();
 		$this->options_group = $name;
 		$this->html[] = '<optgroup label="'.$name.'">';
@@ -74,27 +76,26 @@ class MasterSubnetDropDown {
 	 *  Close an open html </optgroup>
 	 */
 	public function optgroup_close() {
-		if ($this->options_group) { $this->html[] = '</optgroup>'; }
+		if (!empty($this->options_group)) $this->html[] = '</optgroup>';
 		$this->options_group = null;
 	}
 
 	/**
 	 * Return <option> customisations
-	 * @param  stdObject|null $subnet
+	 * @param  stdObject $subnet
 	 * @return string
 	 */
 	private function get_subnet_options($subnet) {
 		$options = array();
 
 		// selected="selected"
-		$id = is_object($subnet) ? $subnet->id : 0;
-		if ($id == $this->previously_selected) {
+		if ($subnet->id == $this->previously_selected) {
 			$this->previously_selected = -1;
 			$options[] = 'selected="selected"';
 		}
 
 		// disabled
-		if (is_object($subnet) && isset($subnet->disabled) && $subnet->disabled == 1) {
+		if (isset($subnet->disabled) && $subnet->disabled == 1) {
 			$options[] = 'disabled';
 		}
 
@@ -103,33 +104,30 @@ class MasterSubnetDropDown {
 
 	/**
 	 * Generate menu item from subnet object
-	 * @param stdObject|null $subnet
-	 * @param integer $level (de)
+	 * @param stdObject $subnet
+	 * @param integer $level
 	 */
-	 public function subnets_add_object($subnet, $level = 0) {
-		 $options = $this->get_subnet_options($subnet);
+	public function subnets_add_object($subnet, $level = 0) {
+		if (!is_object($subnet)) return;
 
- 		if (!is_object($subnet)) {
- 			$this->html[] = "<option $options value='0'>"._("Root folder")."</option>";
-			return;
- 		}
+		$options = $this->get_subnet_options($subnet);
 
- 		if (strlen($subnet->description)>34) $subnet->description = substr($subnet->description, 0, 31) . '...';
+		if (strlen($subnet->description)>34) $subnet->description = substr($subnet->description, 0, 31) . '...';
 		$prefix = str_repeat(' - ', $level);
 
- 		if ($subnet->isFolder) {
- 			$this->html[] = "<option $options value='$subnet->id'>$prefix $subnet->description</option>";
- 			return;
- 		}
+		if ($subnet->isFolder) {
+			$this->html[] = "<option $options value='$subnet->id'>$prefix $subnet->description</option>";
+			return;
+		}
 
- 		$ip = $this->Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;
+		$ip = $this->Subnets->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;
 
- 		if (empty($subnet->description)) {
- 			$this->html[] = "<option $options value='$subnet->id'>$prefix $ip</option>";
- 		} else {
- 			$this->html[] = "<option $options value='$subnet->id'>$prefix $ip ($subnet->description)</option>";
- 		}
- 	}
+		if (empty($subnet->description)) {
+			$this->html[] = "<option $options value='$subnet->id'>$prefix $ip</option>";
+		} else {
+			$this->html[] = "<option $options value='$subnet->id'>$prefix $ip ($subnet->description)</option>";
+		}
+	}
 
 	/* options-menu Subnets tree-view functions */
 
@@ -149,7 +147,11 @@ class MasterSubnetDropDown {
 	 */
 	public function subnets_tree_reset() {
 		$this->children_by_parent_id = array();
-		$this->subnets_by_id = array(null);
+		$root = new stdClass ();
+		$root->id = 0;
+		$root->isFolder = 1;
+		$root->description = _("Root folder");
+		$this->subnets_by_id = array(0 => $root);
 	}
 
 	/**
