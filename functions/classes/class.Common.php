@@ -138,6 +138,11 @@ class Common_functions  {
 	 */
 	protected $debugging;
 
+	/**
+	 * Cache mac vendor objects
+	 * @var array|null
+	 */
+	private $mac_address_vendors = null;
 
 
 
@@ -1440,7 +1445,6 @@ class Common_functions  {
 	 * @param  mixed $mac
 	 * @return string
 	 */
-	private $mac_address_vendors = NULL;
 	public function get_mac_address_vendor_details ($mac) {
 		// set default arrays
 		$matches = array();
@@ -1452,27 +1456,29 @@ class Common_functions  {
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
 
-	if ($this->mac_address_vendors === NULL)
-	{
-		//populate mac vendors array
+		if (is_null($this->mac_address_vendors)) {
+			//populate mac vendors array
+			$this->mac_address_vendors = array();
 
-		$this->mac_address_vendors = array();
+			$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
 
-		$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-
-		if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-			foreach ($matches as $match) {
-				$this->mac_address_vendors[strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])] = $match[4];
+			if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
+				if (is_array($matches)) {
+					foreach ($matches as $match) {
+						$mac_vendor = strtoupper($match[1] . ':' . $match[2] . ':' . $match[3]);
+						$this->mac_address_vendors[$mac_vendor] = $match[4];
+					}
+				}
 			}
-                }
-        }
+		}
 
-	if (isset($this->mac_address_vendors[strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2])]))
-	{
-            return $this->mac_address_vendors[strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2])];
-        } else {
-            return "";
-        }
+		$mac_vendor = strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]);
+
+		if (isset($this->mac_address_vendors[$mac_vendor])) {
+			return $this->mac_address_vendors[$mac_vendor];
+		} else {
+			return "";
+		}
 	}
 
 
