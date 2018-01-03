@@ -622,6 +622,18 @@ class Common_functions  {
 	}
 
 	/**
+	 * Detect the encoding used for a string and convert to UTF-8
+	 *
+	 * @method convert_encoding_to_UTF8
+	 * @param  string $string
+	 * @return string
+	 */
+	public function convert_encoding_to_UTF8($string) {
+		//convert encoding if necessary
+		return mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string, 'ASCII, UTF-8, ISO-8859-1, auto', true));
+	}
+
+	/**
 	 * Function to verify checkbox if 0 length
 	 *
 	 * @access public
