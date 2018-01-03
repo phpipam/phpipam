@@ -25,12 +25,8 @@ $User->check_user_session();
  * @return array
  */
 function get_strict_subnets($Subnets, $sectionId, $cidr, $result_fields="*") {
-	if ( $Subnets->verify_cidr_address($cidr) !== true) { return array(); }
-
-	list($cidr_addr, $cidr_mask) = explode('/', $cidr);
-
 	$strict_subnets = $Subnets->fetch_overlapping_subnets($cidr, 'sectionId', $sectionId, $result_fields);
-	if (!array($strict_subnets)) return array();
+	if (!is_array($strict_subnets)) return array();
 
 	foreach ($strict_subnets as $i => $subnet) {
 		if ($subnet->mask >= $cidr_mask) unset($strict_subnets[$i]); else break;
@@ -51,7 +47,7 @@ $fields = array('id','masterSubnetId','isFolder','subnet','mask','description');
 
 $strict_subnets = get_strict_subnets($Subnets, $sectionId, $cidr, $fields);
 
-$folders = $Subnets->fetch_multiple_objects('subnets', 'isFolder', '1', 'id', true, null, $fields);
+$folders = $Subnets->fetch_multiple_objects('subnets', 'isFolder', '1', 'id', true, false, $fields);
 if (!is_array($folders)) $folders = array();
 
 // Generate HTML <options> dropdown menu

@@ -560,7 +560,7 @@ class Subnets extends Common_functions {
 			return false;
 		}
 		# save to subnets cache
-		if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
+		if ($result_fields==="*" && is_array($subnets)) { // Only cache objects containing all fields
 			foreach($subnets as $subnet) {
 				$this->cache_write ("subnets", $subnet->id, $subnet);
 			}

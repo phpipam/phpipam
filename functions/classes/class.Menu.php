@@ -166,7 +166,7 @@ class MasterSubnetDropDown {
 	/**
 	 * Recursively walk subnets tree structures and generate html[]
 	 * @param  integer $id
-	 * @param  string $prefix
+	 * @param  integer $level
 	 * @param  bool $show_root
 	 */
 	private function subnets_tree_recursive_render($id, $level, $show_root) {
