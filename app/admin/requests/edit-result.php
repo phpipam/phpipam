@@ -72,7 +72,7 @@ else {
 					"ip_addr"     =>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
 					"subnetId"    =>$_POST['subnetId'],
 					"description" =>@$_POST['description'],
-					"dns_name"    =>@$_POST['dns_name'],
+					"hostname"    =>@$_POST['hostname'],
 					"mac"         =>@$_POST['mac'],
 					"owner"       =>@$_POST['owner'],
 					"state"       =>@$_POST['state'],

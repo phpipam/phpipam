@@ -20,32 +20,8 @@ if (!isset($Subnets)) { $Subnets	= new Subnets ($Database); }
 # Load colors and icons
 include 'import-constants.php';
 
-$p=array();
-$pi4 = new Net_IPv4();	# Pear IPv4
-$pi6 = new Net_IPv6();	# Pear IPv6
-
 $rlist = array();
 $pass_inputs = ""; # Pass fields from one page to another
-
-# Pear IPv6 ip2Bin, local copy
-function my_ip2Bin($pi6,$ip)
-{
-	$binstr = '';
-
-	$ip = $pi6->removeNetmaskSpec($ip);
-	$ip = $pi6->Uncompress($ip);
-
-	$parts = explode(':', $ip);
-
-	foreach ( $parts as $v ) {
-
-		$str     = base_convert($v, 16, 2);
-		$binstr .= str_pad($str, 16, '0', STR_PAD_LEFT);
-
-	}
-
-	return $binstr;
-}
 
 # Read selected fields and pass them to the save form
 foreach($_GET as $key => $value) {
@@ -74,17 +50,6 @@ if (!$all_vrfs) { $all_vrfs = array(); }
 # insert default VRF in the list
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[$vrf['vrfId']] = $vrf['name']; }
-
-# Precompute masks values, to avoid too much CPU load
-$masks = array();
-for ($i = 0; $i <= 32; $i++) {
-	$pwr = gmp_pow(2,32-$i);
-	$masks["IPv4"][$i] = gmp_mul(gmp_div("0xffffffff",$pwr),$pwr);
-}
-for ($i = 0; $i <= 128; $i++) {
-	$pwr = gmp_pow(2,128-$i);
-	$masks["IPv6"][$i] = gmp_mul(gmp_div("0xffffffffffffffffffffffffffffffff",$pwr),$pwr);
-}
 
 $rows = ""; $counters = array(); $subnetbyid = array();
 
@@ -122,7 +87,7 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$edata[$sect_id][] = &$subnet;
 		$subnetbyid[$subnet['id']] = &$subnet;
 		if (!$subnet['isFolder']) {
-			$andip = gmp_strval(gmp_and($subnet['subnet'], $masks[$type][$mask]));
+			$andip = $Subnets->decimal_network_address($subnet['subnet'], $mask);
 			$candidates[$sect_id][$type][$mask][$andip][] = &$subnet;
 		}
 	}
@@ -141,7 +106,7 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$search_type = $c_subnet['type'];
 
 		while (--$search_mask >= 0) {
-			$search_subnet = gmp_strval(gmp_and($c_subnet['subnet'], $masks[$search_type][$search_mask]));
+			$search_subnet = $Subnets->decimal_network_address($c_subnet['subnet'], $search_mask);
 
 			if (!isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) { continue; }
 

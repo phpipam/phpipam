@@ -30,11 +30,11 @@ $selected_ip_fields = explode(";", $selected_ip_fields);
 
 
 // all are off?
-if(!isset($_REQUEST['addresses']) && !isset($_REQUEST['subnets']) && !isset($_REQUEST['vlans']) && !isset($_REQUEST['vrf']) && !isset($_REQUEST['pstn']) && !isset($_REQUEST['circuits']) ) {
+if(!isset($_GET['addresses']) && !isset($_GET['subnets']) && !isset($_GET['vlans']) && !isset($_GET['vrf']) && !isset($_GET['pstn']) && !isset($_GET['circuits']) ) {
     include("search-tips.php");
 }
 // empty request
-elseif (strlen($_REQUEST['ip'])==0)  {
+elseif (strlen($_GET['ip'])==0)  {
     include("search-tips.php");
 }
 // ok, search results print
@@ -50,20 +50,19 @@ else {
 	#
 
 	// subnets
-	if(@$_REQUEST['subnets']=="on" && strlen($_REQUEST['ip'])>0 ) 	{ include(dirname(__FILE__).'/search_results/search-results_subnets.php'); }
+	if(@$_GET['subnets']=="on" && strlen($_GET['ip'])>0 ) 	{ include(dirname(__FILE__).'/search_results/search-results_subnets.php'); }
 	// addresses
-	if(@$_REQUEST['addresses']=="on" && strlen($_REQUEST['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_addresses.php'); }
+	if(@$_GET['addresses']=="on" && strlen($_GET['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_addresses.php'); }
 	// vlan
-	if(@$_REQUEST['vlans']=="on" && strlen($_REQUEST['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_vlans.php'); }
+	if(@$_GET['vlans']=="on" && strlen($_GET['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_vlans.php'); }
 	// vrf
-	if(@$_REQUEST['vrf']=="on" && strlen($_REQUEST['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_vrfs.php'); }
+	if(@$_GET['vrf']=="on" && strlen($_GET['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_vrfs.php'); }
 	// pstn
-	if(@$_REQUEST['pstn']=="on" && strlen($_REQUEST['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_pstn.php'); }
+	if(@$_GET['pstn']=="on" && strlen($_GET['ip'])>0) 	    { include(dirname(__FILE__).'/search_results/search-results_pstn.php'); }
 	// circuits
-	if(@$_REQUEST['circuits']=="on" && strlen($_REQUEST['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_circuits.php'); }
+	if(@$_GET['circuits']=="on" && strlen($_GET['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_circuits.php'); }
 
 
 	// export holder
 	print '<div class="exportDIVSearch"></div>';
 }
-?>

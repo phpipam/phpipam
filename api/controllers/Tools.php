@@ -239,6 +239,7 @@ class Tools_controller extends Common_api_functions {
 	 *      - /tools/locations/{id}/subnets/
 	 *      - /tools/locations/{id}/devices/
 	 *      - /tools/locations/{id}/racks/
+	 *      - /tools/locations/{id}/ipaddresses/
 	 *
 	 *      - /tools/racks/{id}/devices/
 	 *
@@ -301,7 +302,7 @@ class Tools_controller extends Common_api_functions {
     			}
 			}
 			// locations
-			elseif ($this->_params->id == "locations" && ($this->_params->id3=="subnets" || $this->_params->id3=="racks" || $this->_params->id3=="devices")) {
+			elseif ($this->_params->id == "locations" && ($this->_params->id3=="subnets" || $this->_params->id3=="racks" || $this->_params->id3=="devices" || $this->_params->id3=="ipaddresses")) {
 				// fetch
 				$result = $this->Tools->fetch_multiple_objects ($this->_params->id3, "location", $this->_params->id2, "id", true);
 			}

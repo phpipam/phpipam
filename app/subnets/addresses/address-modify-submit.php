@@ -43,8 +43,42 @@ if(isset($_POST['action-visual'])) {
 # save $_POST to $address
 $address = $_POST;
 
-# remove all spaces in dns_name
-if (strlen($address['dns_name'])>0) { $address['dns_name'] = str_replace(" ", "", $address['dns_name']); }
+
+// set selected address and required addresses fields array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);
+$required_ip_fields = explode(";", $User->settings->IPrequired);
+// append one missing from selected
+$selected_ip_fields[] = "description";
+$selected_ip_fields[] = "hostname";
+// if field is present in required fields but not in selected remove it !
+foreach ($required_ip_fields as $k=>$f) {
+	if (!in_array($f, $selected_ip_fields)) {
+		unset ($required_ip_fields[$k]);
+	}
+}
+// checks
+if(is_array($required_ip_fields)) {
+	// remove modules not enabled from required fields
+	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
+
+	// set default array
+	$required_field_errors = [];
+	// Check that all required fields are present
+	foreach ($required_ip_fields as $required_field) {
+		if (!isset($address[$required_field]) || strlen($address[$required_field])==0) {
+			$required_field_errors[] = ucwords($required_field)." "._("is required");
+		}
+	}
+	// check
+	if(sizeof($required_field_errors)>0) {
+		array_unshift($required_field_errors, "Please fix following errors:");
+		$Result->show("danger", implode("<br> - ", $required_field_errors), true);
+	}
+}
+
+
+# remove all spaces in hostname
+if (strlen($address['hostname'])>0) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
 
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
@@ -59,7 +93,7 @@ if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 if ($firewallZoneSettings->autogen == 'on') {
 	if ($address['action'] == 'add' ) {
-		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['dns_name']);
+		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['hostname']);
 	} else {
 		if ($_POST['firewallAddressObject']) {
 			$address['firewallAddressObject'] = $_POST['firewallAddressObject'];
@@ -256,9 +290,9 @@ else {
 
 	# unique hostname requested?
 	if(isset($address['unique'])) {
-		if($address['unique'] == 1 && strlen($address['dns_name'])>0) {
+		if($address['unique'] == 1 && strlen($address['hostname'])>0) {
 			# check if unique
-			if(!$Addresses->is_hostname_unique($address['dns_name'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
+			if(!$Addresses->is_hostname_unique($address['hostname'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
 		}
 	}
 

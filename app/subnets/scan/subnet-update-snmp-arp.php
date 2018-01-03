@@ -120,7 +120,7 @@ else {
 		print "	<td>".$Subnets->transform_to_dotted($r['ip_addr'])."</td>";
 		print "	<td>".$r['description']."</td>";
 		print "	<td>"._("$r[status]")."</td>";
-		print "	<td>".$r['dns_name']."</td>";
+		print "	<td>".$r['hostname']."</td>";
 
 		print "</tr>";
 	}
@@ -139,4 +139,3 @@ print "</div>";
 
 # show debug?
 if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
-?>

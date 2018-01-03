@@ -80,7 +80,7 @@ else {
 		print "</td>";
 		//hostname
 		print "<td>";
-		print "	<input type='text' class='form-control input-sm' name='dns_name$m' value='".@$hostname['name']."'>";
+		print "	<input type='text' class='form-control input-sm' name='hostname$m' value='".@$hostname['name']."'>";
 		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
 		print "</td>";
 		//remove button
@@ -113,5 +113,3 @@ print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan 
 
 # show debug?
 if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
-
-?>

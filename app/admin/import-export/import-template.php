@@ -45,20 +45,20 @@ elseif ($type == 'ipaddr'){
 	//get all custom fields!
 	$custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	// set headers
-	// "section","ip_addr","dns_name","description","vrf","subnet","mac","owner","device","note","tag","gateway"
+	// "section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","gateway"
 	$worksheet->write($lineCount, 0, _('Section'));
 	$worksheet->write($lineCount, 1, _('IP address'));
-	$worksheet->write($lineCount, 2, _('DNS Hostname'));
+	$worksheet->write($lineCount, 2, _('Hostname'));
 	$worksheet->write($lineCount, 3, _('Description'));
 	$worksheet->write($lineCount, 4, _('VRF'));
-	$worksheet->write($lineCount, 4, _('Subnet'));
-	$worksheet->write($lineCount, 5, _('MAC'));
-	$worksheet->write($lineCount, 6, _('Owner'));
-	$worksheet->write($lineCount, 7, _('Device'));
-	$worksheet->write($lineCount, 8, _('Note'));
-	$worksheet->write($lineCount, 9, _('Tag'));
-	$worksheet->write($lineCount, 10, _('Gateway'));
-	$fc =7 ;
+	$worksheet->write($lineCount, 5, _('Subnet'));
+	$worksheet->write($lineCount, 6, _('MAC'));
+	$worksheet->write($lineCount, 7, _('Owner'));
+	$worksheet->write($lineCount, 8, _('Device'));
+	$worksheet->write($lineCount, 9, _('Note'));
+	$worksheet->write($lineCount, 10, _('Tag'));
+	$worksheet->write($lineCount, 11, _('Is_Gateway'));
+	$fc =12 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);
 		$fc++;

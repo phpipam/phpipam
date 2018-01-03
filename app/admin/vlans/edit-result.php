@@ -55,7 +55,7 @@ if (isset($_POST['unique'])) {
 }
 
 //if number too high
-if($_POST['number']>$User->settings->vlanMax && $_POST['action']!="delete")	{ $Result->show("danger", _('Highest possible VLAN number is ').$settings['vlanMax'].'!', true); }
+if($_POST['number']>$User->settings->vlanMax && $_POST['action']!="delete")	{ $Result->show("danger", _('Highest possible VLAN number is ').$User->settings->vlanMax.'!', true); }
 if($_POST['action']=="add") {
 	if($_POST['number']<0)													{ $Result->show("danger", _('VLAN number cannot be negative').'!', true); }
 	elseif(!is_numeric($_POST['number']))									{ $Result->show("danger", _('Not number').'!', true); }

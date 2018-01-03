@@ -17,8 +17,11 @@
  *
  */
 
-# include funtions
+# include functions
+if(!function_exists("create_link"))
 require( dirname(__FILE__) . '/../functions/functions.php');		// functions and objects from phpipam
+
+# include common API controllers
 require( dirname(__FILE__) . '/controllers/Common.php');			// common methods
 require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
@@ -272,5 +275,3 @@ echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, 
 
 // exit
 exit();
-
-?>
