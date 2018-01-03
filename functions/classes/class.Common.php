@@ -1440,6 +1440,7 @@ class Common_functions  {
 	 * @param  mixed $mac
 	 * @return string
 	 */
+	private $mac_address_vendors = NULL;
 	public function get_mac_address_vendor_details ($mac) {
 		// set default arrays
 		$matches = array();
@@ -1450,17 +1451,25 @@ class Common_functions  {
 		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
-        $data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-        // check
-        if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-            	//check for provided mac
-                if(strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]) == strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])) {
-                	return $match[4];
+
+	if ($this->mac_address_vendors === NULL)
+	{
+		//populate mac vendors array
+
+		$this->mac_address_vendors = array();
+
+		$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
+
+		if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
+			foreach ($matches as $match) {
+				$this->mac_address_vendors[strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])] = $match[4];
+			}
                 }
-            }
-            // not matched
-            return "";
+        }
+
+	if (isset($this->mac_address_vendors[strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2])]))
+	{
+            return $this->mac_address_vendors[strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2])];
         } else {
             return "";
         }
