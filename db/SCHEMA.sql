@@ -782,6 +782,8 @@ CREATE TABLE `pstnNumbers` (
 
 # Dump of table circuitProviders
 # ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitProviders`;
+
 CREATE TABLE `circuitProviders` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(256) DEFAULT NULL,
@@ -794,6 +796,8 @@ CREATE TABLE `circuitProviders` (
 
 # Dump of table circuits
 # ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuits`;
+
 CREATE TABLE `circuits` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` varchar(128) DEFAULT NULL,
