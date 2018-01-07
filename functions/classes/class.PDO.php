@@ -827,6 +827,36 @@ abstract class DB {
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
 	}
+
+	/**
+	 * Begin SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function beginTransaction() {
+		return $this->pdo->beginTransaction();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function commit() {
+		return $this->pdo->commit();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function rollBack() {
+		return $this->pdo->rollBack();
+	}
 }
 
 
