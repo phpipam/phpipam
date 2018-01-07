@@ -747,10 +747,10 @@ class Logging extends Common_functions {
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
-			$this->Addresses = new Addresses ($this->Database);
-			$this->Subnets   = new Subnets ($this->Database);
-			$this->Sections  = new Sections ($this->Database);
-			$this->Tools     = new Tools ($this->Database);
+		    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
+		    if (!is_object($this->Subnets))   $this->Subnets   = new Subnets ($this->Database);
+		    if (!is_object($this->Sections))  $this->Sections  = new Sections ($this->Database);
+		    if (!is_object($this->Tools))     $this->Tools     = new Tools ($this->Database);
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
@@ -1618,8 +1618,8 @@ class Logging extends Common_functions {
 	public function fetch_subnet_addresses_changelog_recursive ($subnetId, $limit = 50) {
 	    # get all addresses ids
 	    $ips  = array();
-		$Addresses = new Addresses ($this->Database);
-	    $ips = $Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
+	    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
+	    $ips = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
 
 	    # fetch changelog for IPs
 	    if(sizeof($ips) > 0) {
@@ -1717,22 +1717,22 @@ class Logging extends Common_functions {
     	if(!is_numeric($subnetId))     { $this->Result->show("danger", "Invalid subnet Id", true);	return false; }
 
 		# fetch all slave subnet ids
-		$Subnets = new Subnets ($this->Database);
-		$Subnets->reset_subnet_slaves_recursive ();
-		$Subnets->fetch_subnet_slaves_recursive ($subnetId);
+		if (!is_object($this->Subnets)) $this->Subnets = new Subnets ($this->Database);
+		$this->Subnets->reset_subnet_slaves_recursive ();
+		$this->Subnets->fetch_subnet_slaves_recursive ($subnetId);
 		# remove master subnet ID
-		$key = array_search($subnetId, $Subnets->slaves);
-		unset($Subnets->slaves[$key]);
-		$Subnets->slaves = array_unique($Subnets->slaves);
+		$key = array_search($subnetId, $this->Subnets->slaves);
+		unset($this->Subnets->slaves[$key]);
+		$this->Subnets->slaves = array_unique($this->Subnets->slaves);
 
 	    # if some slaves are present get changelog
-	    if(sizeof($Subnets->slaves) > 0) {
+	    if(sizeof($this->Subnets->slaves) > 0) {
 		    # set query
 		    $query  = "select
 						`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and (";
-			foreach($Subnets->slaves as $slaveId) {
+			foreach($this->Subnets->slaves as $slaveId) {
 			if(!isset($args)) $args = array();
 			$query .= "`c`.`coid` = ? or ";
 			$args[] = $slaveId;							//set keys
@@ -1778,7 +1778,7 @@ class Logging extends Common_functions {
 	public function changelog_send_mail ($changelog) {
 
 		# initialize tools class
-		$this->Tools = new Tools ($this->Database);
+		if (!is_object($this->Tools)) $this->Tools = new Tools ($this->Database);
 
 		# set object
 		$obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
