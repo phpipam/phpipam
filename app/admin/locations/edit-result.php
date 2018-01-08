@@ -29,7 +29,7 @@ if($_POST['action']=="delete" || $_POST['action']=="edit") {
 }
 if($_POST['action']=="add" || $_POST['action']=="edit") {
     // name
-    if(strlen($_POST['name'])<2)                                            {  $Result->show("danger",  _("Name must have at least 2 characters"), true); }
+    if(strlen($_POST['name'])<1)                                            {  $Result->show("danger",  _("Name must have at least 1 character"), true); }
     // lat, long
     if($_POST['action']!=="delete") {
         // lat
