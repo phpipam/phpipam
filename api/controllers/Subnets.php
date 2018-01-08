@@ -721,7 +721,10 @@ class Subnets_controller extends Common_api_functions {
         		$result->gateway = $gateway;
     		}
 
-    		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
+    		if (!$result->isFolder)
+		    {
+			    $result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet, "dotted") . "/" . $result->mask);
+		    }
 		}
 
 		# result
