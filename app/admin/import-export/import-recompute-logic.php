@@ -51,9 +51,6 @@ if (!$all_vrfs) { $all_vrfs = array(); }
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 foreach ($all_vrfs as $vrf) { $vrf = (array) $vrf; $vrf_name[$vrf['vrfId']] = $vrf['name']; }
 
-# Precompute masks values, to avoid too much CPU load
-$bmask = $Subnets->get_network_bitmasks();
-
 $rows = ""; $counters = array(); $subnetbyid = array();
 
 /**
@@ -79,7 +76,7 @@ $rows = ""; $counters = array();
 foreach ($rlist as $sect_id => $sect_check) {
 	$section_subnets = $Subnets->fetch_section_subnets($sect_id);
 	# skip empty sections
-	if (sizeof($section_subnets)==0) { continue; }
+	if (!is_array($section_subnets) || sizeof($section_subnets)==0) { continue; }
 
 	foreach ($section_subnets as &$subnet) {
 		$subnet = (array) $subnet;
@@ -90,7 +87,7 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$edata[$sect_id][] = &$subnet;
 		$subnetbyid[$subnet['id']] = &$subnet;
 		if (!$subnet['isFolder']) {
-			$andip = gmp_strval(gmp_and($subnet['subnet'], $bmask[$type][$mask]['lo']));
+			$andip = $Subnets->decimal_network_address($subnet['subnet'], $mask);
 			$candidates[$sect_id][$type][$mask][$andip][] = &$subnet;
 		}
 	}
@@ -109,7 +106,7 @@ foreach ($rlist as $sect_id => $sect_check) {
 		$search_type = $c_subnet['type'];
 
 		while (--$search_mask >= 0) {
-			$search_subnet = gmp_strval(gmp_and($c_subnet['subnet'], $bmask[$search_type][$search_mask]['lo']));
+			$search_subnet = $Subnets->decimal_network_address($c_subnet['subnet'], $search_mask);
 
 			if (!isset($candidates[$sect_id][$search_type][$search_mask][$search_subnet])) { continue; }
 
