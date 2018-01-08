@@ -554,47 +554,53 @@ class Sections extends Common_functions {
 	 * @return bool
 	 */
 	public function delegate_section_permissions ($sectionId, $removed_permissions, $changed_permissions) {
-    	// init subnets class
-    	$Subnets = new Subnets ($this->Database);
-    	// fetch section subnets
-    	$section_subnets = $this->fetch_multiple_objects ("subnets", "sectionId", $sectionId);
-    	// loop
-    	if ($section_subnets!==false) {
-        	foreach ($section_subnets as $s) {
-                // to array
-                $s_old_perm = json_decode($s->permissions, true);
-                // removed
-                if (sizeof($removed_permissions)>0) {
-                    foreach ($removed_permissions as $k=>$p) {
-                        unset($s_old_perm[$k]);
-                    }
-                }
-                // added
-                if (sizeof($changed_permissions)>0) {
-                    foreach ($changed_permissions as $k=>$p) {
-                        $s_old_perm[$k] = $p;
-                    }
-                }
+		// init subnets class
+		$Subnets = new Subnets ($this->Database);
 
-                // set values
-                $values = array(
-                            "id" => $s->id,
-                            "permissions" => json_encode($s_old_perm)
-                            );
+		// fetch section subnets (use $subnets object to prime its cache)
+		$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $sectionId);
+		if (!is_array($section_subnets)) $section_subnets = array();
 
-                // update
-                if($Subnets->modify_subnet ("edit", $values)===false)       { $this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $s->name!", true); }
-        	}
-        	// ok
-        	$this->Result->show("success", _("Subnet permissions recursively set")."!", true);
-    	}
+		try {
+			// Begin Transaction
+			$this->Database->beginTransaction();
+			// loop
+			foreach ($section_subnets as $s) {
+				// to array
+				$s_old_perm = json_decode($s->permissions, true);
+				// removed
+				if (is_array($removed_permissions)) {
+					foreach ($removed_permissions as $k=>$p) unset($s_old_perm[$k]);
+				}
+				// added
+				if (is_array($changed_permissions)) {
+					foreach ($changed_permissions as $k=>$p) $s_old_perm[$k] = $p;
+				}
 
+				// set values
+				$values = array("id" => $s->id, "permissions" => json_encode($s_old_perm));
 
-		try { $this->Database->updateObject("subnets", array("permissions"=>$permissions, "sectionId"=>$sectionId), "sectionId"); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
+				// update
+				if($Subnets->modify_subnet ("edit", $values)===false) {
+					$this->Database->rollBack();
+					if (!$s->isFolder) {
+						$name = $this->transform_to_dotted($s->subnet) . '/' . $s->mask . ' ('.$s->description.')';
+					} else {
+						$name = $s->description;
+					}
+					$this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $name!", true);
+					return false;
+				}
+			}
+		} catch (Exception $e) {
+			$this->Database->rollBack();
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
 			return false;
 		}
+
+		// ok
+		$this->Database->commit();
+		$this->Result->show("success", _("Subnet permissions recursively set")."!");
 		return true;
 	}
 }
