@@ -218,7 +218,7 @@ class Logging extends Common_functions {
 						"ip_addr"               => "IP address",
 						"is_gayeway"            => "Gateway",
 						"description"           => "Description",
-						"dns_name"              => "Hostname",
+						"hostname"              => "Hostname",
 						"mac"                   => "MAC address",
 						"owner"                 => "Address owner",
 						"state"                 => "Address state index",
@@ -595,7 +595,7 @@ class Logging extends Common_functions {
 	    			"severity"=>$this->log_severity,
 	    			"date"=>$this->Database->toDate(),
 	    			"username"=>$this->log_username,
-	    			"ipaddr"=>@$_SERVER['REMOTE_ADDR'],
+	    			"ipaddr"=> array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
 	    			"details"=>$this->log_details
 					);
 		# null empty values
@@ -747,10 +747,10 @@ class Logging extends Common_functions {
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
-			$this->Addresses = new Addresses ($this->Database);
-			$this->Subnets   = new Subnets ($this->Database);
-			$this->Sections  = new Sections ($this->Database);
-			$this->Tools     = new Tools ($this->Database);
+		    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
+		    if (!is_object($this->Subnets))   $this->Subnets   = new Subnets ($this->Database);
+		    if (!is_object($this->Sections))  $this->Sections  = new Sections ($this->Database);
+		    if (!is_object($this->Tools))     $this->Tools     = new Tools ($this->Database);
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
@@ -1618,8 +1618,8 @@ class Logging extends Common_functions {
 	public function fetch_subnet_addresses_changelog_recursive ($subnetId, $limit = 50) {
 	    # get all addresses ids
 	    $ips  = array();
-		$Addresses = new Addresses ($this->Database);
-	    $ips = $Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
+	    if (!is_object($this->Addresses)) $this->Addresses = new Addresses ($this->Database);
+	    $ips = $this->Addresses->fetch_subnet_addresses_recursive ($subnetId, false);
 
 	    # fetch changelog for IPs
 	    if(sizeof($ips) > 0) {
@@ -1717,22 +1717,22 @@ class Logging extends Common_functions {
     	if(!is_numeric($subnetId))     { $this->Result->show("danger", "Invalid subnet Id", true);	return false; }
 
 		# fetch all slave subnet ids
-		$Subnets = new Subnets ($this->Database);
-		$Subnets->reset_subnet_slaves_recursive ();
-		$Subnets->fetch_subnet_slaves_recursive ($subnetId);
+		if (!is_object($this->Subnets)) $this->Subnets = new Subnets ($this->Database);
+		$this->Subnets->reset_subnet_slaves_recursive ();
+		$this->Subnets->fetch_subnet_slaves_recursive ($subnetId);
 		# remove master subnet ID
-		$key = array_search($subnetId, $Subnets->slaves);
-		unset($Subnets->slaves[$key]);
-		$Subnets->slaves = array_unique($Subnets->slaves);
+		$key = array_search($subnetId, $this->Subnets->slaves);
+		unset($this->Subnets->slaves[$key]);
+		$this->Subnets->slaves = array_unique($this->Subnets->slaves);
 
 	    # if some slaves are present get changelog
-	    if(sizeof($Subnets->slaves) > 0) {
+	    if(sizeof($this->Subnets->slaves) > 0) {
 		    # set query
 		    $query  = "select
 						`u`.`real_name`,`o`.`sectionId`,`o`.`subnet`,`o`.`mask`,`o`.`isFolder`,`o`.`description`,`o`.`id`,`c`.`caction`,`c`.`cresult`,`c`.`cdate`,`c`.`cdiff`  from `changelog` as `c`, `users` as `u`, `subnets` as `o`
 						where `c`.`cuser` = `u`.`id` and `c`.`coid`=`o`.`id`
 						and (";
-			foreach($Subnets->slaves as $slaveId) {
+			foreach($this->Subnets->slaves as $slaveId) {
 			if(!isset($args)) $args = array();
 			$query .= "`c`.`coid` = ? or ";
 			$args[] = $slaveId;							//set keys
@@ -1778,7 +1778,7 @@ class Logging extends Common_functions {
 	public function changelog_send_mail ($changelog) {
 
 		# initialize tools class
-		$this->Tools = new Tools ($this->Database);
+		if (!is_object($this->Tools)) $this->Tools = new Tools ($this->Database);
 
 		# set object
 		$obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
@@ -1805,7 +1805,7 @@ class Logging extends Common_functions {
 		if ($this->object_type=="section") 		{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$obj_details['id'])."'>".$obj_details['name'] . "(".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="subnet")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$obj_details['sectionId'],$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['subnet'], "dotted")."/".$obj_details['mask']." (".$obj_details['description'].") - id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="folder")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("folder",$obj_details['sectionId'],$obj_details['id'])."'>".$obj_details['description']." - id ".$obj_details['id']."</a>"; }
-		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$obj_details['subnetId'],"address-details",$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['dns_name'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
+		elseif ($this->object_type=="address")	{ $details = "<a style='font-family:Helvetica, Verdana, Arial, sans-serif; font-size:12px;color:#a0ce4e;' href='".$this->createURL().create_link("subnets",$address_subnet['sectionId'],$obj_details['subnetId'],"address-details",$obj_details['id'])."'>".$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")." ( hostname ".$obj_details['hostname'].", subnet: ".$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")."/".$address_subnet['mask'].")- id ".$obj_details['id']."</a>"; }
 		elseif ($this->object_type=="address range")	{ $details = $changelog; }
 
 		# remove subnet sectionId

@@ -125,7 +125,7 @@ class Net_Ping
     *
     * @access private
     */
-    function Net_Ping($ping_path, $sysname)
+    function __construct($ping_path, $sysname)
     {
         $this->_ping_path = $ping_path;
         $this->_sysname   = $sysname;
@@ -661,7 +661,7 @@ class Net_Ping_Result
     *
     * @access private
     */
-    function Net_Ping_Result($result, $sysname)
+    function __construct($result, $sysname)
     {
         $this->_raw_data = $result;
 

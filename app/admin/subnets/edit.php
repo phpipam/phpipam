@@ -138,6 +138,12 @@ $('.slider').slider().on('slide', function(ev){
 });
 <?php } ?>
 
+// mastersubnet Ajax
+$("input[name='subnet']").change(function() {
+	var $masterdopdown = $("select[name='masterSubnetId']");
+	$masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
+});
+
 });
 </script>
 
@@ -541,12 +547,11 @@ $('.slider').slider().on('slide', function(ev){
 	    	print "<tr>";
 	    	print "	<td colspan='3' class='hr'><hr></td>";
 	    	print "</tr>";
+
 		    foreach($custom_fields as $field) {
 
 		    	# replace spaces
 		    	$field['nameNew'] = str_replace(" ", "___", $field['name']);
-		    	# retain newlines
-		    	$subnet_old_details[$field['name']] = str_replace("\n", "\\n", @$subnet_old_details[$field['name']]);
 
 				# set default value !
 				if ($_POST['action']=="add")	{ $subnet_old_details[$field['name']] = $field['Default']; }

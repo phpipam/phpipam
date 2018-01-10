@@ -249,17 +249,19 @@ abstract class DB {
 	 * @access public
 	 * @param mixed $query
 	 * @param array $values (default: array())
+	 * @param integer|null &$rowCount (default: null)
 	 * @return void
 	 */
 	public function runQuery($query, $values = array(), &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
 
-		//debuq
-		$this->log_query($statement, $values);
-
 		$result = null;
 
 		$statement = $this->pdo->prepare($query);
+
+		//debuq
+		$this->log_query($statement, $values);
+
 		if (is_object($statement)) {
 			$result = $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
 			$rowCount = $statement->rowCount();
@@ -680,6 +682,23 @@ abstract class DB {
 	}
 
 	/**
+	 * Escape $result_fields parameter
+	 *
+	 * @access public
+	 * @param string|array $result_fields
+	 * @return string
+	 */
+	public function escape_result_fields($result_fields) {
+		if (empty($result_fields)) return "*";
+
+		if (is_array($result_fields)) {
+			foreach ($result_fields as $i => $f) $result_fields[$i] = "`$f`";
+			$result_fields = implode(',', $result_fields);
+		}
+		return $result_fields;
+	}
+
+	/**
 	 * Searches for object in database
 	 *
 	 * @access public
@@ -690,6 +709,7 @@ abstract class DB {
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
 	 * @param bool $negate (default: false)
+	 * @param string|array $result_fields (default: "*")
 	 * @return void
 	 */
 	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
@@ -699,23 +719,14 @@ abstract class DB {
 		$like === true ? $operator = "LIKE" : $operator = "=";
 		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-		// set fields
-		if($result_fields!="*") {
-    		$result_fields_arr = array();
-    		foreach ($result_fields as $f) {
-        		$result_fields_arr[] = "`$f`";
-    		}
-    		// implode
-    		$result_fields = implode(",", $result_fields);
-		}
+		$result_fields = $this->escape_result_fields($result_fields);
 
-        // subnets
-        if ($table=="subnets" && $sortField=="subnet_int") {
-    		return $this->getObjectsQuery('SELECT '.$result_fields.',CAST(subnet AS DECIMAL(39,0)) as subnet_int FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-        }
-        else {
-    		return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-        }
+    // subnets
+    if ($table=='subnets' && $sortField=='subnet') {
+        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+    } else {
+        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+    }
 	}
 
 	/**
@@ -815,6 +826,36 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
+	}
+
+	/**
+	 * Begin SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function beginTransaction() {
+		return $this->pdo->beginTransaction();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function commit() {
+		return $this->pdo->commit();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function rollBack() {
+		return $this->pdo->rollBack();
 	}
 }
 

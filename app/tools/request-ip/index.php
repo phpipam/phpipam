@@ -55,7 +55,7 @@ $User->check_user_session();
 	<!-- DNS name -->
 	<tr>
 		<td><?php print _('DNS name');?></td>
-		<td><input type="text" class="form-control" name="dns_name" size="30" placeholder="<?php print _('hostname');?>"></td>
+		<td><input type="text" class="form-control" name="hostname" size="30" placeholder="<?php print _('hostname');?>"></td>
 	</tr>
 
 	<!-- state -->

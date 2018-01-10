@@ -29,7 +29,7 @@ $slimit = 10;			//we dont need this, we will recalculate
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 20;
@@ -45,53 +45,52 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 
 # get subnets statistic
 $type = 'IPv6';
-$top_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
+$top_subnets = array();
+$all_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
 
-/* detect duplicates */
+# Find subnets with user access, label duplicates.
 $unique = array();
-$numbering = array();
-$m = 0;
-foreach($top_subnets as $subnet) {
-	# cast
-	$subnet = (array) $subnet;
-	# check if already in array
-	if(in_array($subnet['description'], $unique)) {
-		$numbering[$subnet['description']]++;
-		$top_subnets[$m]->description = $subnet['description'].' #'.$numbering[$subnet['description']];
+$valid_subnets = 0;
+foreach($all_subnets as $subnet) {
+	if ($Subnets->check_permission($User->user, $subnet->id) == "0") { continue; }
+
+	/* We've found $slimit entries */
+	if ($valid_subnets >= $slimit) { break; }
+
+	/* Make fields human readable */
+	$subnet->subnet = $Subnets->transform_to_dotted($subnet->subnet);
+	$subnet->descriptionLong = $subnet->description;
+	$subnet->description = strlen($subnet->description) > 20 ? substr($subnet->description,0,17).'...' : $subnet->description;
+
+	/* detect and rename duplicates */
+	if(isset($unique[$subnet->description])) {
+		$subnet->description = $subnet->description.' #'.sizeof($unique[$subnet->description]);
 	}
-	$unique[] = $top_subnets[$m]->description;
-	$m++;
+	$unique[$subnet->description][] = $valid_subnets++;
+
+	/* Save */
+	$top_subnets[] = $subnet;
 }
 
 # only print if some hosts exist
-if(sizeof($top_subnets)>0) {
+if($valid_subnets>0) {
 ?>
 <script type="text/javascript">
 $(function () {
 
     var data = [
     <?php
-	$m=0;
-	foreach ($top_subnets as $subnet) {
-		if($m < $slimit) {
-			# cast
-			$subnet = (array) $subnet;
-			# verify user access
-			$sp = $Subnets-> check_permission ($User->user, $subnet['id']);
-			if($sp != "0") {
-				$subnet['subnet'] = $Subnets->transform_to_dotted($subnet['subnet']);
-				$subnet['descriptionLong'] = $subnet['description'];
-				# odd/even if more than 5 items
-				if(sizeof($top_subnets) > 5) {
-					if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-					else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-				}
-				else {
-								{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
-				}
-				# next
-				$m++;
-			}
+	foreach ($top_subnets as $m => $subnet) {
+		# cast
+		$subnet = (array) $subnet;
+
+		# odd/even if more than 5 items
+		if($valid_subnets > 5) {
+			if ($m&1) 	{ print "['|<br>" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+			else	 	{ print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";	}
+		}
+		else {
+			print "['" . addslashes($subnet['description']) . "', $subnet[usage], '" . addslashes($subnet['descriptionLong']) . " ($subnet[subnet]/$subnet[mask])'],";
 		}
 	}
 	?>
@@ -107,7 +106,7 @@ $(function () {
 	$('#<?php print $type; ?>top10Hosts').bind('plotclick', function(event, pos, item) {
 		//set prettylinks of not
 		if ($('#prettyLinks').html()=="Yes")	{ var plink = $("div.iebase").html()+"subnets/"+all_links[item.datapoint[0]]['sectionId']+"/"+ all_links[item.datapoint[0]]['id']+"/"; }
-		else									{ var plink = $("div.iebase").html()+"?page=subnets&section="+all_links[item.datapoint[0]]['sectionId']+"&subnetId="+all_links[item.datapoint[0]]['id'] + ""; }
+		else									{ var plink = $("div.iebase").html()+"index.php?page=subnets&section="+all_links[item.datapoint[0]]['sectionId']+"&subnetId="+all_links[item.datapoint[0]]['id'] + ""; }
 		//open
 		document.location = plink;
 	});
@@ -214,7 +213,7 @@ $(function () {
     };
 
 	<?php
-	if($m!=0) {
+	if($valid_subnets!=0) {
 	?>
     $.plot($("#<?php print $type; ?>top10Hosts"), [ data ], options);
     <?php } else { ?>
@@ -224,7 +223,7 @@ $(function () {
 </script>
 
 <?php
-if($m==0) {
+if($valid_subnets==0) {
 	print "<hr>";
 
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";

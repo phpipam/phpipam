@@ -12,3 +12,7 @@
 	path = app/login/captcha
 	url = https://github.com/dapphp/securimage.git
 	ignore = all
+[submodule "css/assets/bootstrap-select"]
+	path = css/assets/bootstrap-select
+	url = https://github.com/silviomoreto/bootstrap-select.git
+	ignore = all

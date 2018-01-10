@@ -154,7 +154,7 @@ foreach ($sections as $section) {
 				$worksheet->write($lineCount, 0, $Subnets->transform_to_dotted($ip['ip_addr']), $format_left);
 				$worksheet->write($lineCount, 1, $ip['state']);
 				$worksheet->write($lineCount, 2, $ip['description']);
-				$worksheet->write($lineCount, 3, $ip['dns_name']);
+				$worksheet->write($lineCount, 3, $ip['hostname']);
 				$worksheet->write($lineCount, 4, $ip['mac']);
 				$worksheet->write($lineCount, 5, $ip['owner']);
 				$worksheet->write($lineCount, 6, $ip['switch']);
@@ -189,5 +189,3 @@ $workbook->send($filename);
 
 // Let's send the file
 $workbook->close();
-
-?>

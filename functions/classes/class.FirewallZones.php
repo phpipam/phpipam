@@ -200,7 +200,7 @@ class FirewallZones extends Common_functions {
 
 		if ($uniqueZone[0]->zone && $firewallZoneSettings['strictMode'] == 'on') {
 
-			$this->Result->show("danger", _("Error: The zone name ".$zone." is not unique!"), false);
+			$this->Result->show("danger", _("Error: The zone name ".$uniqueZone[0]->zone." is not unique!"), false);
 
 		} else {
 			# set the initial zone name to "1"
@@ -1177,7 +1177,7 @@ class FirewallZones extends Common_functions {
 		# fetch zone informations
 		$zone = $this->get_zone_subnet_info($subnetId);
 
-		try { $ipaddresses = $this->Database->getObjectsQuery('SELECT id, dns_name FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
+		try { $ipaddresses = $this->Database->getObjectsQuery('SELECT id, hostname FROM ipaddresses WHERE subnetId = ? ',$subnetId); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
@@ -1204,11 +1204,11 @@ class FirewallZones extends Common_functions {
 						}
 						break;
 					case 'patternHost':
-							$hostName = explode('.', $ipaddress->dns_name);
+							$hostName = explode('.', $ipaddress->hostname);
 							$firewallAddressObject = $firewallAddressObject.$hostName[0];
 						break;
 					case 'patternFQDN':
-							$firewallAddressObject = $firewallAddressObject.$ipaddress->dns_name;
+							$firewallAddressObject = $firewallAddressObject.$ipaddress->hostname;
 						break;
 					case 'patternSeparator':
 							$firewallAddressObject = $firewallAddressObject.$firewallZoneSettings['separator'];

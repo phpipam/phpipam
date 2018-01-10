@@ -37,7 +37,7 @@ $widget = $Tools->fetch_object ("widgets", "wfile", "inactive-hosts");
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 100;
@@ -108,7 +108,7 @@ else {
         print " <td><span class='status status-error'></span></td>";
         print " <td><a href='".create_link("subnets", $s->sectionId, $s->subnetId, "address-details", $s->id)."'>".$Subnets->transform_address($s->ip_addr)."</a></td>";
         print " <td><a href='".create_link("subnets", $s->sectionId, $s->subnetId)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a></td>";
-        print " <td>$s->dns_name</td>";
+        print " <td>$s->hostname</td>";
         print " <td>$s->lastSeen</td>";
         print "</tr>";
 
@@ -116,4 +116,3 @@ else {
 
     print "</table>";
 }
-?>

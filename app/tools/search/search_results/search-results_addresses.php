@@ -90,7 +90,7 @@ if(sizeof($result_addresses) > 0) {
 			//description
 			print ' <td>'. $Result->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
 			//dns
-			print ' <td>'. $line['dns_name']  .'</td>' . "\n";
+			print ' <td>'. $line['hostname']  .'</td>' . "\n";
 			//mac
 			if(in_array('mac', $selected_ip_fields)) {
 				print '	<td>'. "\n";

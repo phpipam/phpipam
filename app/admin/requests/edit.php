@@ -135,7 +135,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<tr>
 		<th><?php print _('Hostname'); ?></th>
 		<td>
-			<input type="text" name="dns_name" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['dns_name']); ?>" size="30" placeholder="<?php print _('Enter hostname'); ?>">
+			<input type="text" name="hostname" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['hostname']); ?>" size="30" placeholder="<?php print _('Enter hostname'); ?>">
 		</td>
 	</tr>
 

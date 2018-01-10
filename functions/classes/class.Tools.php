@@ -210,7 +210,7 @@ class Tools extends Common_functions {
 		# set search query
 		$query[] = "select * from `ipaddresses` ";
 		$query[] = "where `ip_addr` between :low and :high ";	//ip range
-		$query[] = "or `dns_name` like :search_term ";			//hostname
+		$query[] = "or `hostname` like :search_term ";			//hostname
 		$query[] = "or `owner` like :search_term ";				//owner
 		# custom fields
 		if(sizeof($custom_fields) > 0) {
@@ -398,8 +398,8 @@ class Tools extends Common_functions {
 				# filter
 				$ids = sizeof(@$ids)>0 ? array_filter($ids) : array();
 				# search
+				$result = array();
 				if(sizeof($ids)>0) {
-    				$result = array();
 					foreach($ids as $id) {
 						$result[] = $Subnets->fetch_subnet(null, $id);
 					}
@@ -818,6 +818,18 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Read the SCHEMA.sql file and enforce UNIX LF
+	 *
+	 * @access private
+	 * @return array
+	 */
+	private function read_db_schema() {
+		$fh = fopen(dirname(__FILE__) . '/../../db/SCHEMA.sql', 'r');
+		$schema = str_replace("\r\n", "\n", fread($fh, 100000));
+		return $schema;
+	}
+
+	/**
 	 * Fetches standard database fields from SCHEMA.sql file
 	 *
 	 * @access public
@@ -826,9 +838,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_standard_fields ($table) {
 		# get SCHEMA.SQL file
-		$schema = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$schema = fread($schema, 100000);
-		$schema = str_replace("\r\n", "\n", $schema);
+		$schema = $this->read_db_schema();
 
 		# get definition
 		$definition = strstr($schema, "CREATE TABLE `$table` (");
@@ -857,8 +867,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_standard_tables () {
 		# get SCHEMA.SQL file
-		$schema = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$schema = fread($schema, 100000);
+		$schema = $this->read_db_schema();
 
 		# get definitions to array, explode with CREATE TABLE `
 		$creates = explode("CREATE TABLE `", $schema);
@@ -1187,8 +1196,8 @@ class Tools extends Common_functions {
 			elseif ($k=="descriotion") {
 				$mail['Description'] = $v;
 			}
-			// dns_name
-			elseif ($k=="dns_name") {
+			// hostname
+			elseif ($k=="hostname") {
 				$mail['Hostname'] = $v;
 			}
 			// owner
@@ -1327,7 +1336,7 @@ class Tools extends Common_functions {
 	 */
 	public function field_exists ($tablename, $fieldname) {
 	    # escape
-	    $tableName = $this->Database->escape($tablename);
+	    $tablename = $this->Database->escape($tablename);
 		# check
 	    $query = "DESCRIBE `$tablename` `$fieldname`;";
 		try { $count = $this->Database->getObjectQuery($query); }
@@ -1356,8 +1365,7 @@ class Tools extends Common_functions {
 	 * @return false|string
 	 */
 	public function get_table_fix ($table) {
-		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$file = fread($res, 100000);
+		$file = $this->read_db_schema();
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
@@ -1377,9 +1385,7 @@ class Tools extends Common_functions {
 	 * @return string|false
 	 */
 	public function get_field_fix ($table, $field) {
-		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$file = fread($res, 100000);
-		$file = str_replace("\r\n", "\n", $file);
+		$file = $this->read_db_schema();
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
@@ -1475,17 +1481,26 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	private function get_schema_indexes () {
-		// indexes required for phpipam
+		// Discover indexes required for phpipam
+		$schema = $this->read_db_schema();
+
+		# get definitions to array, explode with CREATE TABLE `
+		$creates = explode("CREATE TABLE `", $schema);
+
 		$indexes = array ();
-		$indexes['ipaddresses']   = array ("sid_ip_unique", "subnetid");
-		$indexes['sections']      = array ("id_2");
-		$indexes['devices']       = array ("hostname");
-		$indexes['users']         = array ("id_2");
-		$indexes['api']           = array ("app_id");
-		$indexes['changelog']     = array ("coid", "ctype");
-		$indexes['loginAttempts'] = array ("ip");
-		$indexes['scanAgents']    = array ("code");
-		// return
+		foreach($creates as $k=>$c) {
+			if($k == 0) continue;
+			$c = trim(strstr($c, ";" . "\n", true));
+
+			$table = strstr($c, "`", true);
+
+			$definitions = explode("\n", $c);
+			foreach($definitions as $definition) {
+				if (preg_match('/(KEY|UNIQUE KEY) +`(.*)` +\(/', $definition, $matches)) {
+					$indexes[$table][] = $matches[2];
+				}
+			}
+		}
 		return $indexes;
 	}
 
@@ -1531,9 +1546,7 @@ class Tools extends Common_functions {
 	 */
 	private function fix_missing_index ($table, $index_name) {
 		// get definition
-		$res = fopen(dirname(__FILE__) . "/../../db/SCHEMA.sql", "r");
-		$file = fread($res, 100000);
-		$file = str_replace("\r\n", "\n", $file);
+		$file = $this->read_db_schema();
 
 		//go from delimiter on
 		$file = strstr($file, "DROP TABLE IF EXISTS `$table`;");
@@ -1614,7 +1627,7 @@ class Tools extends Common_functions {
 			// check for latest release
 			foreach ($json->entry as $e) {
 				// releases will be named with numberic values
-				if (is_numeric(str_replace(["Version", "."], "", $e->title))) {
+				if (is_numeric(str_replace(array("Version", "."), "", $e->title))) {
 					// save
 					$this->phpipam_latest_release = $e;
 					// return
@@ -2806,7 +2819,7 @@ class Tools extends Common_functions {
                         WHERE l.id = $id
 
                         UNION ALL
-                        SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.dns_name as description
+                        SELECT a.id, a.ip_addr as name, 'mask', 'addresses' as type, a.subnetId as sectionId, a.location, a.hostname as description
                         FROM ipaddresses a
                         JOIN locations l
                         ON a.location = l.id
@@ -2905,13 +2918,12 @@ class Tools extends Common_functions {
 		if(is_array($custom_circuit_fields)) {
 			if(sizeof($custom_circuit_fields)>0) {
 				foreach ($custom_circuit_fields as $f) {
-					$query[] = ",c.".$f['name'];
+					$query[] = ",c.`".$f['name']."`";
 				}
 			}
 		}
 		$query[] = "from circuits as c, circuitProviders as p where c.provider = p.id and c.provider = ?";
 		$query[] = "order by c.cid asc;";
-
 		// fetch
 		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array($provider_id)); }
 		catch (Exception $e) {
@@ -3118,12 +3130,10 @@ class Tools extends Common_functions {
     		//IP must be present!
     		if(filter_var($data->val($m,'A'), FILTER_VALIDATE_IP)) {
         		//for multicast
+        		$mac = $data->val($m,'F');
         		if ($this->settings->enableMulticast=="1") {
             		if (strlen($data->val($m,'F'))==0 && $this->Subnets->is_multicast($data->val($m,'A')))    {
                 		$mac = $this->Subnets->create_multicast_mac ($data->val($m,'A'));
-                    }
-                    else {
-                        $mac = $data->val($m,'F');
                     }
                 }
 
@@ -3227,6 +3237,10 @@ class Tools extends Common_functions {
     	# present ?
     	if (sizeof($outFile)>0) {
             foreach($outFile as $k=>$line) {
+
+            	//convert encoding if necessary
+            	$line = $this->convert_encoding_to_UTF8($line);
+
             	//put it to array
             	$field = str_getcsv ($line, $this->csv_delimiter);
 
@@ -3271,8 +3285,8 @@ class Tools extends Common_functions {
 	 */
 	public function count_subnets ($type="IPv4") {
 		# set proper query
-		if($type=="IPv4")		{ $query = 'select count(cast(`ip_addr` as UNSIGNED)) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) < "4294967295";'; }
-		elseif($type=="IPv6")	{ $query = 'select count(cast(`ip_addr` as UNSIGNED)) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) > "4294967295";'; }
+		if($type=="IPv4")		{ $query = 'select count(*) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) <= 4294967295;'; }
+		elseif($type=="IPv6")	{ $query = 'select count(*) as count from `ipaddresses` where cast(`ip_addr` as UNSIGNED) >  4294967295;'; }
 
 		try { $count = $this->Database->getObjectQuery($query); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), true); }
@@ -3291,49 +3305,33 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_top_subnets ($type, $limit = "10", $perc = false) {
-	    # set limit
-	    $limit = $limit==0 ? "" : "limit $limit";
+		# set limit & IPv4/IPv6 selector
+		$limit = $limit<=0 ? '' : 'LIMIT '. (int) $limit;
+		$type_operator = ($type === 'IPv6') ? '>' : '<=';
+		$type_max_mask = ($type === 'IPv6') ? '128' : '32';
+		$strict_mode   = ($type === 'IPv6') ? '0' : '2';
 
-	    # set query
-	    if($perc) {
-			$query = "select SQL_CACHE *,round(`usage`/(pow(2,32-`mask`)-2)*100,2) as `percentage` from (
-						select `sectionId`,`id`,`subnet`,cast(`subnet` as UNSIGNED) as cmp,`mask`,IF(char_length(`description`)>0, `description`, 'No description') as description, (
-							SELECT COUNT(*) FROM `ipaddresses` as `i` where `i`.`subnetId` = `s`.`id`
-						)
-						as `usage` from `subnets` as `s`
-						where `mask` < 31 and cast(`subnet` as UNSIGNED) < '4294967295'
-						order by `usage` desc
-						) as `d` where `usage` > 0 order by `percentage` desc $limit;";
-	    }
-		# ipv4 stats
-		elseif($type == "IPv4") {
-			$query = "select SQL_CACHE * from (
-					select `sectionId`,`id`,`subnet`,cast(`subnet` as UNSIGNED) as cmp,`mask`,IF(char_length(`description`)>0, `description`, 'No description') as description, (
-						SELECT COUNT(*) FROM `ipaddresses` as `i` where `i`.`subnetId` = `s`.`id`
-					)
-					as `usage` from `subnets` as `s`
-					where cast(`subnet` as UNSIGNED) < '4294967295'
-					order by `usage` desc $limit
-					) as `d` where `d`.`usage` > 0;";
-		}
-		# IPv6 stats
-		else {
-			$query = "select SQL_CACHE * from (
-					select `sectionId`,`id`,`subnet`,cast(`subnet` as UNSIGNED) as cmp,`mask`, IF(char_length(`description`)>0, `description`, 'No description') as description, (
-						SELECT COUNT(*) FROM `ipaddresses` as `i` where `i`.`subnetId` = `s`.`id`
-					)
-					as `usage` from `subnets` as `s`
-					where cast(`subnet` as UNSIGNED) > '4294967295'
-					order by `usage` desc $limit
-					) as `d` where `d`.`usage` > 0;";
+		if($perc) {
+			$query = "SELECT SQL_CACHE s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
+					COUNT(*) AS `usage`,ROUND(COUNT(*)/(POW(2,$type_max_mask-`mask`)-$strict_mode)*100,2) AS `percentage` FROM `ipaddresses` AS `i`
+					LEFT JOIN `subnets` AS `s` ON i.subnetId = s.id
+					WHERE s.mask < ($type_max_mask-1) AND CAST(s.subnet AS UNSIGNED) $type_operator 4294967295
+					GROUP BY i.subnetId
+					ORDER BY `percentage` DESC $limit;";
+		} else {
+			$query = "SELECT SQL_CACHE s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
+					COUNT(*) AS `usage` FROM `ipaddresses` AS `i`
+					LEFT JOIN `subnets` AS `s` ON i.subnetId = s.id
+					WHERE CAST(s.subnet AS UNSIGNED) $type_operator 4294967295
+					GROUP BY i.subnetId
+					ORDER BY `usage` DESC $limit;";
 		}
 
-		# fetch
 		try { $stats = $this->Database->getObjectsQuery($query); }
 		catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), true);	return false; }
 
-	    # return subnets array
-	    return (array) $stats;
+		# return subnets array
+		return (array) $stats;
 	}
 
 	/**
@@ -3344,7 +3342,7 @@ class Tools extends Common_functions {
 	 */
 	public function fetch_addresses_for_export () {
 		# fetch
-	    try { $addresses = $this->Database->getObjectsQuery("select `id`,`subnetId`,`ip_addr`,`dns_name` from `ipaddresses` where length(`dns_name`)>1 order by `subnetId` asc;"); }
+	    try { $addresses = $this->Database->getObjectsQuery("select `id`,`subnetId`,`ip_addr`,`hostname` from `ipaddresses` where length(`hostname`)>1 order by `subnetId` asc;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 		# return result
 		return $addresses;

@@ -144,5 +144,6 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
 /**
  * General tweaks
  ******************************/
-$config['logo_width'] = 220;                             // logo width
-$config['requests_public'] = true;                       // Show IP request module on login page
+$config['logo_width']             = 220;                    // logo width
+$config['requests_public']        = true;                   // Show IP request module on login page
+$config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address

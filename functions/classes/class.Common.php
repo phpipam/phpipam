@@ -138,6 +138,11 @@ class Common_functions  {
 	 */
 	protected $debugging;
 
+	/**
+	 * Cache mac vendor objects
+	 * @var array|null
+	 */
+	private $mac_address_vendors = null;
 
 
 
@@ -257,8 +262,8 @@ class Common_functions  {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
 			}
-			# save to cach
-			if (sizeof($res)>0) {
+			# save to cache
+			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
     			foreach ($res as $r) {
         			$this->cache_write ($table, $r->id, $r);
     			}
@@ -622,6 +627,18 @@ class Common_functions  {
 	}
 
 	/**
+	 * Detect the encoding used for a string and convert to UTF-8
+	 *
+	 * @method convert_encoding_to_UTF8
+	 * @param  string $string
+	 * @return string
+	 */
+	public function convert_encoding_to_UTF8($string) {
+		//convert encoding if necessary
+		return mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string, 'ASCII, UTF-8, ISO-8859-1, auto', true));
+	}
+
+	/**
 	 * Function to verify checkbox if 0 length
 	 *
 	 * @access public
@@ -640,21 +657,18 @@ class Common_functions  {
 	 * @return mixed IP version
 	 */
 	public function identify_address ($address) {
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # numeric representation
-	    elseif (is_numeric($address)) {
-	    	if(4294967295 > $address)	{ return 'IPv4'; }
-	    	else 						{ return 'IPv6'; }
-	    }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
+		# dotted representation
+		if (strpos($address, ':') !== false) return 'IPv6';
+		if (strpos($address, '.') !== false) return 'IPv4';
+		# numeric representation
+		if (is_numeric($address)) {
+			if($address <= 4294967295) return 'IPv4'; // 4294967295 = '255.255.255.255'
+			return 'IPv6';
+		} else {
+			# decimal representation
+			if(strlen($address) < 12) return 'IPv4';
+			return 'IPv6';
+		}
 	}
 
 	/**
@@ -1032,25 +1046,10 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function long2ip6($ipv6long) {
-	    $bin = gmp_strval(gmp_init($ipv6long,10),2);
-	    $ipv6 = "";
-
-	    if (strlen($bin) < 128) {
-	        $pad = 128 - strlen($bin);
-	        for ($i = 1; $i <= $pad; $i++) {
-	            $bin = "0".$bin;
-	        }
-	    }
-
-	    $bits = 0;
-	    while ($bits <= 7)
-	    {
-	        $bin_part = substr($bin,($bits*16),16);
-	        $ipv6 .= dechex(bindec($bin_part)).":";
-	        $bits++;
-	    }
-	    // compress result
-	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
+		$hex = sprintf('%032s', gmp_strval(gmp_init($ipv6long, 10), 16));
+		$ipv6 = implode(':', str_split($hex, 4));
+		// compress result
+		return inet_ntop(inet_pton($ipv6));
 	}
 
 	/**
@@ -1456,20 +1455,30 @@ class Common_functions  {
 		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
-        $data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-        // check
-        if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-            	//check for provided mac
-                if(strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]) == strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])) {
-                	return $match[4];
-                }
-            }
-            // not matched
-            return "";
-        } else {
-            return "";
-        }
+
+		if (is_null($this->mac_address_vendors)) {
+			//populate mac vendors array
+			$this->mac_address_vendors = array();
+
+			$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
+
+			if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
+				if (is_array($matches)) {
+					foreach ($matches as $match) {
+						$mac_vendor = strtoupper($match[1] . ':' . $match[2] . ':' . $match[3]);
+						$this->mac_address_vendors[$mac_vendor] = $match[4];
+					}
+				}
+			}
+		}
+
+		$mac_vendor = strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]);
+
+		if (isset($this->mac_address_vendors[$mac_vendor])) {
+			return $this->mac_address_vendors[$mac_vendor];
+		} else {
+			return "";
+		}
 	}
 
 

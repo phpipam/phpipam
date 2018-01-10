@@ -885,3 +885,27 @@ ALTER TABLE `subnets` ADD INDEX (`location`);
 ALTER TABLE `ipaddresses` ADD INDEX (`location`);
 ALTER TABLE `circuits` ADD INDEX (`location1`);
 ALTER TABLE `circuits` ADD INDEX (`location2`);
+
+
+
+
+
+
+/* VERSION 1.32 */
+UPDATE `settings` set `version` = '1.32';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Required IP fieldsg */
+ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;
+
+/* Change dns_name to hostname */
+ALTER TABLE `ipaddresses` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
+
+/* Subnet table indexes: has_slaves(), fetch_section_subnets(), subnet_familytree_*(), verify_subnet_overlapping(), verify_vrf_overlapping()... */
+ALTER TABLE `subnets` ADD INDEX (`masterSubnetId`);
+ALTER TABLE `subnets` ADD INDEX (`sectionId`);
+ALTER TABLE `subnets` ADD INDEX (`vrfId`);

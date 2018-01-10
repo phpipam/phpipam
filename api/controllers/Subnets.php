@@ -670,11 +670,10 @@ class Subnets_controller extends Common_api_functions {
 		$this->validate_subnet_id ();
 		// single or all ?
 		if ($all) {
-    		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 30);
-
+			$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, Subnets::SEARCH_FIND_ALL, Subnets::SEARCH_FIND_FIRST);
 		}
 		else {
-    		$first = $this->Subnets->search_available_single_subnet ($this->_params->id, $this->_params->id3);
+			$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 1, Subnets::SEARCH_FIND_FIRST);
 		}
 
 		# return
@@ -722,7 +721,10 @@ class Subnets_controller extends Common_api_functions {
         		$result->gateway = $gateway;
     		}
 
-    		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
+    		if (!$result->isFolder)
+		    {
+			    $result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet, "dotted") . "/" . $result->mask);
+		    }
 		}
 
 		# result

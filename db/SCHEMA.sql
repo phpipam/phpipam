@@ -23,7 +23,7 @@ CREATE TABLE `ipaddresses` (
   `ip_addr` varchar(100) NOT NULL,
   `is_gateway` TINYINT(1)  NULL  DEFAULT '0',
   `description` varchar(64) DEFAULT NULL,
-  `dns_name` varchar(100) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
   `mac` varchar(20) DEFAULT NULL,
   `owner` varchar(32) DEFAULT NULL,
   `state`  INT(3)  NULL  DEFAULT '2',
@@ -43,7 +43,7 @@ CREATE TABLE `ipaddresses` (
   KEY `location` (`location`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
-INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `dns_name`, `state`)
+INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `hostname`, `state`)
 VALUES
 	(1,3,'168427779','Server1','server1.cust1.local',2),
 	(2,3,'168427780','Server2','server2.cust1.local',2),
@@ -82,7 +82,7 @@ CREATE TABLE `requests` (
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(64) DEFAULT NULL,
-  `dns_name` varchar(100) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
   `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
@@ -157,6 +157,7 @@ CREATE TABLE `settings` (
   `dbverified` BINARY(1)  NOT NULL  DEFAULT '0',
   `donate` tinyint(1) DEFAULT '0',
   `IPfilter` varchar(128) DEFAULT NULL,
+  `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL,
   `vlanDuplicate` int(1) DEFAULT '0',
   `vlanMax` INT(8)  NULL  DEFAULT '4096',
   `subnetOrdering` varchar(16) DEFAULT 'subnet,asc',
@@ -252,7 +253,10 @@ CREATE TABLE `subnets` (
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`),
-  KEY `location` (`location`)
+  KEY `location` (`location`),
+  KEY `masterSubnetId` (`masterSubnetId`),
+  KEY `sectionId` (`sectionId`),
+  KEY `vrfId` (`vrfId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)
@@ -781,6 +785,8 @@ CREATE TABLE `pstnNumbers` (
 
 # Dump of table circuitProviders
 # ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitProviders`;
+
 CREATE TABLE `circuitProviders` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(256) DEFAULT NULL,
@@ -793,6 +799,8 @@ CREATE TABLE `circuitProviders` (
 
 # Dump of table circuits
 # ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuits`;
+
 CREATE TABLE `circuits` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` varchar(128) DEFAULT NULL,
@@ -819,4 +827,4 @@ CREATE TABLE `circuits` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.31';
+UPDATE `settings` set `version` = '1.32';

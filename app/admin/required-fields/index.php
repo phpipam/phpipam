@@ -14,37 +14,38 @@ foreach($Tools->fetch_standard_fields("ipaddresses") as $s) {
 }
 
 // get all selected fields and put them to array
-$selected_fields = explode(";", $User->settings->IPfilter);
+$selected_fields = explode(";", $User->settings->IPrequired);
 
-// unset mandatory fields -> id,subnetid,ip_addr
+// unset fields that are excluded
 unset($standard_fields['id'],
       $standard_fields['subnetId'],
-      $standard_fields['ip_addr'],
-      $standard_fields['description'],
-      $standard_fields['hostname'],
       $standard_fields['lastSeen'],
+      $standard_fields['ip_addr'],
       $standard_fields['excludePing'],
       $standard_fields['editDate'],
       $standard_fields['is_gateway'],
       $standard_fields['PTR'],
       $standard_fields['PTRignore'],
       $standard_fields['state'],
-      $standard_fields['firewallAddressObject']
+      $standard_fields['firewallAddressObject'],
+      $standard_fields['location']
       );
+// append extra
+$standard_fields['location'] = "location_item";
 ?>
 
 
-<h4><?php print _('Filter which fields to display in IP list'); ?></h4>
+<h4><?php print _('Set required IP address fields'); ?></h4>
 <hr>
 
-<div class="alert alert-info alert-absolute"><?php print _('You can select which fields are actually being used for IP management, so you dont show any overhead if not used. IP, hostname and description are mandatory'); ?>.</div>
+<div class="alert alert-info alert-absolute"><?php print _('Select which fields are mandatory to be filled in when creating IP address.'); ?></div>
 
 <div>
-<form id="filterIP" style="margin-top:50px;clear:both;">
-<table class="filterIP table table-auto table-top" style='width:auto'>
+<form id="required_ip" name="required_ip" style="margin-top:50px;clear:both;">
+<table class="required_ip table table-auto table-top" style='width:auto'>
 
 	<tr>
-		<th colspan="2"><?php print _('Check which fields to use for IP addresses'); ?>:</th>
+		<th colspan="2"><?php print _('Check all fields that are required'); ?>:</th>
 	</tr>
 
 	<?php
@@ -66,7 +67,7 @@ unset($standard_fields['id'],
 	<tr>
 		<td></td>
 		<td>
-			<a class='btn btn-xs btn-success submit_popup' data-script="app/admin/filter-fields/filter-result.php" data-result_div="filterIPResult" data-form='filterIP'>
+			<a class='btn btn-xs btn-success submit_popup' data-script="app/admin/required-fields/submit.php" data-result_div="required_ip_result" data-form='required_ip'>
 				<i class="fa fa-check"></i> <?php print _('Save'); ?>
 			</a>
 		</td>
@@ -76,4 +77,4 @@ unset($standard_fields['id'],
 </table>
 </form>
 
-<div id="filterIPResult" style="display:none"></div>
+<div id="required_ip_result">
