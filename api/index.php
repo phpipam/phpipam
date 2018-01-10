@@ -24,7 +24,7 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
-$aes_compliant_crypt   = false;         // Default to false for backward compatibility. Use true to use AES-256 compliant RIJNDAEL algorythm (rijndael-128)
+$aes_compliant_crypt   = true;         // Default to false for backward compatibility. Use true to use AES-256 compliant RIJNDAEL algorythm (rijndael-128)
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
 
@@ -70,12 +70,25 @@ try {
 	    	if (!in_array($extension, get_loaded_extensions()))
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
+		//decrypt request with openssl
+		if(!is_null(getallheaders()['CIPHER']) AND getallheaders()['CIPHER'] === "openssl") {
+			$method = 'AES-256-CBC';
+			$size = openssl_cipher_iv_length($method);
+			$decoded = base64_decode($_GET['enc_request']);
+//			$iv = substr($decoded, 0, $size);
+//			file_put_contents('type.txt', base64_encode($decoded));
+//			$enc = substr($decoded, $size);
+			$decoded = trim(openssl_decrypt($decoded, 'aes-256-cbc', $app->app_code, OPENSSL_RAW_DATA));
+			$params = json_decode($decoded);
+		}
 		// decrypt request - form_encoded
-        if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
-        	$decoded = trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB));
-        	$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
-			parse_str($decoded, $params);
-			$params = (object) $params;
+        elseif(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+	        $decoded = trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB), "\x01\x12");
+//	        $decoded = preg_replace('/[\x00-\x1F\x7F]/', '', $decoded);
+	        file_put_contents('enc1.txt', ord($decoded[strlen($decoded)-1]));
+	        $decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
+	        parse_str($decoded, $params);
+	        $params = (object) $params;
         }
         // json_encoded
 		else {
