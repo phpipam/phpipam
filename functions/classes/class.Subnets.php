@@ -2887,6 +2887,62 @@ class Subnets extends Common_functions {
 		return $r;
 	}
 
+	/**
+	 * Apply  permission changes to array of subnets
+	 *
+	 * @access public
+	 * @param array $subnets
+	 * @param array $removed_permissions
+	 * @param array $changed_permissions
+	 * @return bool
+	 */
+	public function set_permissions ($subnets, $removed_permissions, $changed_permissions) {
+		try {
+			// Begin Transaction
+			$this->Database->beginTransaction();
+			// loop
+			foreach ($subnets as $s) {
+				// to array
+				$s_old_perm = json_decode($s->permissions, true);
+				// removed
+				if (is_array($removed_permissions)) {
+					foreach ($removed_permissions as $k=>$p) unset($s_old_perm[$k]);
+				}
+				// added
+				if (is_array($changed_permissions)) {
+					foreach ($changed_permissions as $k=>$p) $s_old_perm[$k] = $p;
+				}
+
+				// set values
+				$values = array("id" => $s->id, "permissions" => json_encode($s_old_perm));
+
+				// update
+				if($this->modify_subnet ("edit", $values)===false) {
+					$this->Database->rollBack();
+					if (!$s->isFolder) {
+						$name = $this->transform_to_dotted($s->subnet) . '/' . $s->mask . ' ('.$s->description.')';
+					} else {
+						$name = $s->description;
+					}
+					$this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $name!", true);
+					return false;
+				}
+			}
+		} catch (Exception $e) {
+			$this->Database->rollBack();
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+			return false;
+		}
+
+		// ok
+		$this->Database->commit();
+		if (sizeof($subnets)>1) {
+			$this->Result->show("success", _("Subnet permissions recursively set")."!");
+		} else {
+			$this->Result->show("success", _("Subnet permissions set")."!");
+		}
+		return true;
+	}
 
 
 

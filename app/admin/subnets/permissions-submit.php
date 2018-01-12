@@ -71,46 +71,18 @@ if(is_array($new_permissions)) {
 # set permissions for self
 $permissions_self = array("permissions"=>json_encode($new_permissions));
 
+$subnet_list = array();
 # propagate ?
 if (@$_POST['set_inheritance']=="Yes") {
     // fetch all possible slaves + master
     $Subnets->fetch_subnet_slaves_recursive($_POST['subnetId']);
 
-    // append self
-    $Subnets->slaves_full[$subnet_old->id] = $subnet_old;
-
-    // calculate diff
-    foreach ($Subnets->slaves_full as $s) {
-        // to array
-        $s_old_perm = json_decode($s->permissions, true);
-        // removed
-        if (sizeof($removed_permissions)>0) {
-            foreach ($removed_permissions as $k=>$p) {
-                unset($s_old_perm[$k]);
-            }
-        }
-        // added
-        if (sizeof($changed_permissions)>0) {
-            foreach ($changed_permissions as $k=>$p) {
-                $s_old_perm[$k] = $p;
-            }
-        }
-
-        // set values
-        $values = array(
-                    "id" => $s->id,
-                    "permissions" => json_encode($s_old_perm)
-                    );
-
-        // update
-        if($Subnets->modify_subnet ("edit", $values)===false)       { $Result->show("danger",  _("Failed to set subnet permissons for subnet")." $s->name!", true); }
-    }
-    // all ok
-    $Result->show("success", _("Subnet permissions set")."!", true);
+	if (is_array($Subnets->slaves_full))
+		$subnet_list = $Subnets->slaves_full;
 }
-else {
-    if(!$Admin->object_modify("subnets", "edit", "id", array_merge(array("id"=>$_POST['subnetId']), $permissions_self)))	{ $Result->show("danger",  _("Failed to set subnet permissons")."!", true); }
-    else																					                                { $Result->show("success", _("Subnet permissions set")."!", true); }
-}
+// append self
+$subnet_list[] = $subnet_old;
 
+// apply permission changes
+$Subnets->set_permissions($subnet_list, $removed_permissions, $changed_permissions);
 ?>

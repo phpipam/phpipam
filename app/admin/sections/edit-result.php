@@ -155,7 +155,12 @@ else {
 
 	# delegate
 	if (@$_POST['delegate']==1) {
-        $Sections->delegate_section_permissions ($_POST['id'], $removed_permissions, $changed_permissions);
+		// fetch section subnets (use $subnets object to prime its cache)
+		$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $sectionId);
+		if (!is_array($section_subnets)) $section_subnets = array();
+
+		// apply permission changes
+		$Subnets->set_permissions ($section_subnets, $removed_permissions, $changed_permissions);
 	}
 }
 ?>
