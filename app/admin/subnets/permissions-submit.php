@@ -24,52 +24,12 @@ $User->check_maintaneance_mode ();
 $User->csrf_cookie ("validate", "permissions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
-// init
-$new_permissions = array();             // permissions posted
-$old_permissions = array();             // existing subnet permissions
-$removed_permissions = array();         // removed permissions
-$changed_permissions = array();         // changed permissions
-
 # fetch old subnet
 $subnet_old = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 // parse old permissions
 $old_permissions = json_decode($subnet_old->permissions, true);
 
-
-# get new permissions
-foreach($_POST as $key=>$val) {
-	if(substr($key, 0,5) == "group") {
-		if($val != 0) {
-			$new_permissions[substr($key,5)] = $val;
-		}
-	}
-}
-
-
-// calculate diff
-if(is_array($old_permissions)) {
-    foreach ($old_permissions as $k1=>$p1) {
-        // if there is not permisison in new that remove old
-        if (!array_key_exists($k1, $new_permissions)) {
-            $removed_permissions[$k1] = 0;
-        }
-        // if change than save
-        elseif ($old_permissions[$k1]!==$new_permissions[$k1]) {
-            $changed_permissions[$k1] = $new_permissions[$k1];
-        }
-    }
-}
-// add also new groups if available
-if(is_array($new_permissions)) {
-    foreach ($new_permissions as $k1=>$p1) {
-        if(!array_key_exists($k1, $old_permissions)) {
-            $changed_permissions[$k1] = $new_permissions[$k1];
-        }
-    }
-}
-
-# set permissions for self
-$permissions_self = array("permissions"=>json_encode($new_permissions));
+list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ($_POST, $old_permissions);
 
 $subnet_list = array();
 # propagate ?
