@@ -29,7 +29,7 @@ $subnet_old = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 // parse old permissions
 $old_permissions = json_decode($subnet_old->permissions, true);
 
-list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ($_POST, $old_permissions);
+list($removed_permissions, $changed_permissions) = $Subnets->get_permission_changes ((array) $_POST, $old_permissions);
 
 $subnet_list = array();
 # propagate ?

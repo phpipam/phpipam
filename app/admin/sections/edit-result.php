@@ -92,7 +92,7 @@ else {
     // parse old permissions
     $old_permissions = json_decode($section_old->permissions, true);
 
-	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ($_POST, $old_permissions);
+	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ((array) $_POST, $old_permissions);
 
 	# set variables for update
 	$values = array("id"=>@$_POST['id'],
