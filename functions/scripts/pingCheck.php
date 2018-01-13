@@ -43,6 +43,13 @@ $Scan		= new Scan ($Database);
 $DNS		= new DNS ($Database);
 $Result		= new Result();
 
+// Check if we are already running
+$fp = fopen(sys_get_temp_dir().'/phpipam-'.hash('sha256',__FILE__).'.lock', 'c');
+if ($fp === false || !flock($fp, LOCK_EX | LOCK_NB)) {
+	die("Another instance of this script is running.\n");
+}
+
+
 // set exit flag to true
 $Scan->ping_set_exit(true);
 // set debugging
