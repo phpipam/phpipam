@@ -1481,6 +1481,51 @@ class Common_functions  {
 		}
 	}
 
+	/**
+	 * Read user supplied permissions ($_POST) and calculate deltas from old_permissions
+	 *
+	 * @access public
+	 * @param  array $post_permissions
+	 * @param  array $old_permissions
+	 * @return array
+	 */
+	public function get_permission_changes ($post_permissions, $old_permissions) {
+		$new_permissions = array();
+		$removed_permissions = array();
+		$changed_permissions = array();
+
+		# set new posted permissions
+		foreach($post_permissions as $key=>$val) {
+			if(substr($key, 0,5) == "group") {
+				if($val != "0") $new_permissions[substr($key,5)] = $val;
+			}
+		}
+
+		// calculate diff
+		if(is_array($old_permissions)) {
+			foreach ($old_permissions as $k1=>$p1) {
+				// if there is not permisison in new that remove old
+				// if change than save
+				if (!array_key_exists($k1, $new_permissions)) {
+					$removed_permissions[$k1] = 0;
+				} elseif ($old_permissions[$k1]!==$new_permissions[$k1]) {
+					$changed_permissions[$k1] = $new_permissions[$k1];
+				}
+			}
+		} else {
+			$old_permissions = array();  // fix for adding
+		}
+		// add also new groups if available
+		if(is_array($new_permissions)) {
+			foreach ($new_permissions as $k1=>$p1) {
+				if(!array_key_exists($k1, $old_permissions)) {
+					$changed_permissions[$k1] = $new_permissions[$k1];
+				}
+			}
+		}
+
+		return array($removed_permissions, $changed_permissions, $new_permissions);
+	}
 
 
 
