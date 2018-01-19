@@ -5,9 +5,6 @@ phpipam is an open-source web IP address management application. Its goal is to 
 It is ajax-based using jQuery libraries, it uses php scripts and javascript and some HTML5/CSS3 features, so some modern browser is preferred
 to be able to display javascript quickly and correctly.
 
-## License
-phpipam is released under the GPL v3 license, see misc/gpl-3.0.txt.
-
 ## Links
  - [Features & Tools](https://phpipam.net/documents/features/)
  - [Requirements & Installation](https://phpipam.net/documents/installation/)
@@ -31,3 +28,6 @@ Special thanks are going also to the Hosterdam team (http://www.hosterdam.com) f
 that is used for development of phpIPAM and for demo site.
 
 And also to all users that filed a bug report / feature report and helped with feature testing!
+
+## License
+phpipam is released under the GPL v3 license, see misc/gpl-3.0.txt.
