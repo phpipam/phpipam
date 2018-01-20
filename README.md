@@ -1,5 +1,6 @@
 # php{ip}am
 Website: https://phpipam.net/
+
 ## Description
 phpipam is an open-source web IP address management application. Its goal is to provide light and simple IP address management application.
 It is ajax-based using jQuery libraries, it uses php scripts and javascript and some HTML5/CSS3 features, so some modern browser is preferred
@@ -10,10 +11,14 @@ to be able to display javascript quickly and correctly.
  - [Requirements & Installation](https://phpipam.net/documents/installation/)
  - [API guide](https://phpipam.net/api-documentation/)
  - [Update](https://phpipam.net/documents/upgrade/)
- - [Demo page](http://demo.phpipam.net) (Default user: `Admin / ipamadmin`)
+ - [Demo page](http://demo.phpipam.net) (Login: `Admin / ipamadmin`)
 
 ## I forgot my Admin password!?
-Just run `php functions/scripts/reset-admin-password.php` in the cli and enter your new password
+Just run `php functions/scripts/reset-admin-password.php` in the cliandand enter your new password
+
+## What are the credentials for a fresh install?
+The Default redentials for a new instance of phpipam are the same as the credentils for
+the demo page: `Admin / ipamadmin`
 
 ## Changelog
 See misc/CHANGELOG
