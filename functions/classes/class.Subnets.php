@@ -529,10 +529,12 @@ class Subnets extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $sectionId              // section identifier
+	 * @param string|false $field
+	 * @param mixed|false $value
 	 * @param array|string $result_fields   // fields to fetch
 	 * @return array
 	 */
-	public function fetch_section_subnets ($sectionId, $result_fields = "*") {
+	public function fetch_section_subnets ($sectionId, $field = false, $value = false, $result_fields = "*") {
 		# fetch settings and set subnet ordering
 		$this->get_settings();
 
@@ -545,14 +547,21 @@ class Subnets extends Common_functions {
 		// subnet fix
 		if($order[0]=="subnet") $order[0] = 'LPAD(subnet,39,0)';
 
-		$result_fields = $this->Database->escape_result_fields($result_fields);
+		$safe_result_fields = $this->Database->escape_result_fields($result_fields);
 		# fetch
+		if ($field!==false) {
+			$field = $this->Database->escape($field);
+			$value = $this->Database->escape($value);
+			$field_query = "AND `$field` = '$value'";
+		} else {
+			$field_query = '';
+		}
 		// if sectionId is not numeric, assume it is section name rather than id, set query appropriately
 		if (is_numeric($sectionId)) {
-			$query = "SELECT $result_fields FROM `subnets` where `sectionId` = ? order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $safe_result_fields FROM `subnets` where `sectionId` = ? $field_query order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		else {
-			$query = "SELECT $result_fields FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
+			$query = "SELECT $safe_result_fields FROM `subnets` where `sectionId` in (SELECT id from sections where name = ?) $field_query order by `isFolder` desc, case `isFolder` when 1 then description else $order[0] end $order[1]";
 		}
 		try { $subnets = $this->Database->getObjectsQuery($query, array($sectionId)); }
 		catch (Exception $e) {
@@ -3328,7 +3337,7 @@ class Subnets extends Common_functions {
 		if(!is_numeric($sectionId))		{ $this->Result->show("danger", _("Invalid ID"), true); }
 
 		$folders = array();
-		$section_subnets = $this->fetch_section_subnets ($sectionId, array("id", "masterSubnetId", "isFolder", "subnet", "mask", "description"));
+		$section_subnets = $this->fetch_section_subnets ($sectionId, false, false, array('id', 'masterSubnetId', 'isFolder', 'subnet', 'mask', 'description'));
 		if (!is_array($section_subnets)) $section_subnets = array();
 
 		foreach($section_subnets as $subnet) {
