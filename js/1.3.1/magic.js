@@ -3171,6 +3171,49 @@ $(document).on('click', '.btn-tablefix', function() {
 });
 
 
+/* Bootstap table
+***********************/
+$('table#manageSubnets').on('click','button.editSubnet', function() {
+    showSpinner();
+    var sectionId   = $(this).attr('data-sectionid');
+    var subnetId    = $(this).attr('data-subnetid');
+    var action         = $(this).attr('data-action');
+    //format posted values
+    var postdata    = "sectionId=" + sectionId + "&subnetId=" + subnetId + "&action=" + action;
+
+    //load edit data
+    $.post("app/admin/subnets/edit.php", postdata, function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+});
+//change subnet permissions
+$('table#manageSubnets').on('click','button.showSubnetPerm', function() {
+	showSpinner();
+	var subnetId  = $(this).attr('data-subnetId');
+	var sectionId = $(this).attr('data-sectionId');
+
+	$.post("app/admin/subnets/permissions-show.php", {subnetId:subnetId, sectionId:sectionId}, function(data) {
+        $('#popupOverlay div.popup_w500').html(data);
+        showPopup('popup_w500');
+		hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+});
+$('table#manageSubnets').on('click','button.add_folder', function() {
+	showSpinner();
+    var subnetId  = $(this).attr('data-subnetId');
+    var sectionId = $(this).attr('data-sectionId');
+    var action    = $(this).attr('data-action');
+    //format posted values
+    var postdata     = "sectionId="+sectionId+"&subnetId="+subnetId+"&action="+action+"&location=IPaddresses";
+
+    $.post('app/admin/subnets/edit-folder.php', postdata, function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+});
 
 return false;
 });

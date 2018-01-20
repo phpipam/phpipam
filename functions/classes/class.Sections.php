@@ -597,5 +597,75 @@ class Sections extends Common_functions {
 		}
 		return true;
 	}
+
+	/*
+	 *	@Section Subnet menu & table functions
+	 *	--------------------------------
+	 */
+
+	/**
+	 * Output subnet bootstrap-table html, JSON populated.
+	 *
+	 * @param  User $User
+	 * @param  integer $sectionId
+	 * @param  boolean $showSupernetOnly (default: false)
+	 * @return string
+	 */
+	public function print_section_subnets_table($User, $sectionId, $showSupernetOnly = false) {
+		$html = array();
+
+		# set custom fields
+		$Tools = new Tools ($this->Database);
+		$custom = $Tools->fetch_custom_fields ("subnets");
+
+		# set hidden fields
+		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
+
+		# check permission
+		$permission = $this->check_permission($User->user, $sectionId);
+
+		$showSupernetOnly = $showSupernetOnly==true ? '1' : '0';
+
+		# permitted
+		if ($permission != 0) {
+			$html[] = '<table id="manageSubnets" class="table table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-side-pagination="server" data-search="true" data-toggle="table" data-url="/app/json/section/subnets.php?section='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
+			$html[] = '<thead><tr>';
+
+			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
+			$html[] = '<th data-field="description">'._('Description').'</th>';
+			$html[] = '<th data-field="vlan">'._('VLAN').'</th>';
+			if($User->settings->enableVRF == 1) {
+				$html[] = '<th data-field="vrf">'._('VRF').'</th>';
+			}
+			$html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
+			$html[] = '<th data-field="device">'._('Device').'</th>';
+			if($User->settings->enableIPrequests == 1) {
+				$html[] = '<th data-field="requests" class="hidden-xs hidden-sm">'._('Requests').'</th>';
+			}
+			if(is_array($custom)) {
+				foreach($custom as $field) {
+					if(!in_array($field['name'], $hidden_fields)) {
+						$html[] = '<th data-field="'.urlencode($field['name']).'" class="hidden-xs hidden-sm">'.$Tools->print_custom_field_name($field['name']).'</th>';
+					}
+				}
+			}
+
+			$html[] = '<th data-field="buttons" class="actions" data-width="140">';
+			if ($permission>1) {
+				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i>'._('Add subnet').'</button>';
+			}
+			$html[] = '</th>';
+			$html[] = '</tr></thead></table>';
+
+			if ($showSupernetOnly==='1') {
+				$html[] = "<div class='alert alert-info'><i class='fa fa-info'></i> "._('Only master subnets are shown').'</div>';
+			}
+		} else {
+			$html[] = "<div class='alert alert-danger'>"._('You do not have permission to access this network').'!</div>';
+		}
+
+		return implode("\n", $html);
+	}
 }
 ?>

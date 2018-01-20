@@ -3259,280 +3259,6 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Print all subnets in section
-	 *
-	 * @access public
-	 * @param array $user
-	 * @param array $subnets
-	 * @param array $custom_fields
-	 * @param bool $print
-	 * @param bool $showSupernetOnly
-	 * @return string
-	 */
-	public function print_subnets_tools( $user, $subnets, $custom_fields, $print = true, $showSupernetOnly = 0 ) {
-
-		# tools object
-		$Tools = new Tools ($this->Database);
-		# set hidden fields
-		$this->get_settings ();
-		$hidden_fields = json_decode($this->settings->hiddenCustomFields, true);
-		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
-
-		# set html array
-		$html = array();
-		# root is 0
-		$rootId = 0;
-
-		# remove all not permitted!
-		if(sizeof($subnets)>0) {
-		foreach($subnets as $k=>$s) {
-			$permission = $this->check_permission ($user, $s->id);
-			if($permission == 0) { unset($subnets[$k]); }
-		}
-		}
-
-		# create loop array
-		if(sizeof($subnets) > 0) {
-        $children_subnets = array();
-		foreach ( $subnets as $item ) {
-			$item = (array) $item;
-			$children_subnets[$item['masterSubnetId']][] = $item;
-		}
-		}
-		else {
-			return false;
-		}
-
-		# loop will be false if the root has no children (i.e., an empty menu!)
-		$loop = !empty( $children_subnets[$rootId] );
-
-		# initializing $parent as the root
-		$parent = $rootId;
-		$parent_stack = array();
-
-		# old count
-		$old_count = 0;
-
-		# fetch all vlans and domains and reindex
-		$vlans_and_domains = $Tools->fetch_all_domains_and_vlans ();
-		$all_vlans = array();
-		if ($vlans_and_domains) {
-    		foreach ($vlans_and_domains as $vd) {
-        		$all_vlans[$vd->id] = $vd;
-    		}
-		}
-
-		# return table content (tr and td's)
-		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
-		{
-			# repeat
-			$repeat  = str_repeat( " - ", ( count($parent_stack)) );
-
-			if(count($parent_stack) == 0) {
-				$margin = "0px";
-				$padding = "0px";
-			}
-			else {
-				# padding
-				$padding = "10px";
-
-				# margin
-				$margin  = (count($parent_stack) * 10) -10;
-				$margin  = $margin *1.5;
-				$margin  = $margin."px";
-			}
-
-			# count levels
-			$count = count( $parent_stack ) + 1;
-
-			# vlan
-			if (!array_key_exists ($option['value']['vlanId'], $all_vlans)) { $vlan['number'] = ""; }
-			else {
-    			$vlan['number'] = $all_vlans[$option['value']['vlanId']]->domainId==1 ? $all_vlans[$option['value']['vlanId']]->number : $all_vlans[$option['value']['vlanId']]->number." <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain ".$all_vlans[$option['value']['vlanId']]->domainName."'>".$all_vlans[$option['value']['vlanId']]->domainName."</span>";
-            }
-
-			# description
-			$description = strlen($option['value']['description'])==0 ? "/" : $option['value']['description'];
-
-
-			# print table line
-			if(strlen($option['value']['subnet']) > 0 || $option['value']['isFolder']==1) {
-
-    			# count change?
-    			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
-
-    			$last_item = $count < $old_count ? "last_item" : "";
-
-    			if ($showSupernetOnly==0 || $count==1) {
-
-				$html[] = "<tr class='level$count'>";
-
-				//which level?
-				if($count==1) {
-					# is folder?
-					if($option['value']['isFolder']==1) {
-					$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-sfolder fa-pad-right-3 fa-folder-open'></i> <a href='".create_link("folder",$option['value']['sectionId'],$option['value']['id'])."'> $description</a></td>";
-					$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-sfolder fa-pad-right-3 fa-folder-open'></i>  $description</td>";
-
-					}
-					else {
-                        # add full information
-                        $fullinfo = $option['value']['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
-
-						# last?
-						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
-						} else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-12 fa-angle-right'></i><a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-12 fa-angle-right'></i> $description</td>";
-						}
-				    }
-				}
-				else {
-					# is folder?
-					if($option['value']['isFolder']==1) {
-						# last?
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open'></i> <a href='".create_link("folder",$option['value']['sectionId'],$option['value']['id'])."'> $description</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open'></i> $description</td>";
-					}
-					else {
-                        # add full information
-                        $fullinfo = $option['value']['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
-
-						# last?
-						if(!empty( $children_subnets[$option['value']['id']])) {
-							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description</td>";
-						}
-						else {
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link("subnets",$option['value']['sectionId'],$option['value']['id'])."'>  ".$this->transform_to_dotted($option['value']['subnet']) ."/".$option['value']['mask']." $fullinfo</a></td>";
-							$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> $description</td>";
-						}
-					}
-				}
-
-				//vlan
-				$html[] = "	<td>$vlan[number]</td>";
-
-				//vrf
-				if($this->settings->enableVRF == 1) {
-					# fetch vrf
-					$vrf = $this->fetch_object("vrf", "vrfId", $option['value']['vrfId']);
-					$html[] = !$vrf ? "<td></td>" : "<td>$vrf->name</td>";
-				}
-
-				//masterSubnet
-				$masterSubnet = ( $option['value']['masterSubnetId']==0 || empty($option['value']['masterSubnetId']) ) ? true : false;
-
-				if($masterSubnet) { $html[] ='	<td>/</td>' . "\n"; }
-				else {
-					$master = (array) $this->fetch_subnet (null, $option['value']['masterSubnetId']);
-					if($master['isFolder']==1)
-						$html[] = "	<td><i class='fa fa-sfolde fa-gray fa-folder-open'></i> <a href='".create_link("folder",$option['value']['sectionId'],$master['id'])."'>$master[description]</a></td>" . "\n";
-					else {
-						$html[] = "	<td><a href='".create_link("subnets",$option['value']['sectionId'],$master['id'])."'>".$this->transform_to_dotted($master['subnet']) .'/'. $master['mask'] .'</a></td>' . "\n";
-					}
-				}
-
-				//device
-				$device = ( $option['value']['device']==0 || empty($option['value']['device']) ) ? false : true;
-
-				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
-				else {
-					$device = $this->fetch_object ("devices", "id", $option['value']['device']);
-					if ($device!==false) {
-						$html[] = "	<td><a href='".create_link("tools","devices",$option['value']['device'])."'>".$device->hostname .'</a></td>' . "\n";
-					}
-					else {
-						$html[] ='	<td>/</td>' . "\n";
-					}
-				}
-
-				//requests
-				if($this->settings->enableIPrequests == 1) {
-					$requests = $option['value']['allowRequests']==1 ? "<i class='fa fa-gray fa-check'></i>" : "/";
-					$html[] = "	<td class='hidden-xs hidden-sm'>$requests</td>";
-				}
-				//custom
-				if(sizeof($custom_fields) > 0) {
-			   		foreach($custom_fields as $field) {
-				   		# hidden?
-				   		if(!in_array($field['name'], $hidden_fields)) {
-
-				   			$html[] =  "<td class='hidden-xs hidden-sm hidden-md'>";
-
-							// create html links
-							$option['value'][$field['name']] = $this->create_links($option['value'][$field['name']], $field['type']);
-
-				   			//booleans
-							if($field['type']=="tinyint(1)")	{
-								if($option['value'][$field['name']] == "0")			{ $html[] = _("No"); }
-								elseif($option['value'][$field['name']] == "1")		{ $html[] = _("Yes"); }
-							}
-							//text
-							elseif($field['type']=="text") {
-								if(strlen($option['value'][$field['name']])>0)		{ $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $option['value'][$field['name']])."'>"; }
-								else												{ $html[] = ""; }
-							}
-							else {
-								$html[] = $option['value'][$field['name']];
-
-							}
-
-				   			$html[] =  "</td>";
-			   			}
-			    	}
-			    }
-
-				# set permission
-				$permission = $this->check_permission ($user, $option['value']['id']);
-
-				$html[] = "	<td class='actions' style='padding:0px;'>";
-				$html[] = "	<div class='btn-group'>";
-
-				if($permission>1) {
-					if($option['value']['isFolder']==1) {
-						$html[] = "		<button class='btn btn-xs btn-default add_folder'     data-action='edit'   data-subnetid='".$option['value']['id']."'  data-sectionid='".$option['value']['sectionId']."'><i class='fa fa-gray fa-pencil'></i></button>";
-						$html[] = "		<button class='btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$option['value']['id']."'  data-sectionid='".$option['value']['sectionId']."'><i class='fa fa-gray fa-tasks'></i></button>";
-						$html[] = "		<button class='btn btn-xs btn-default add_folder'     data-action='delete' data-subnetid='".$option['value']['id']."'  data-sectionid='".$option['value']['sectionId']."'><i class='fa fa-gray fa-times'></i></button>";
-					} else {
-						$html[] = "		<button class='btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$option['value']['id']."'  data-sectionid='".$option['value']['sectionId']."'><i class='fa fa-gray fa-pencil'></i></button>";
-						$html[] = "		<button class='btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$option['value']['id']."'  data-sectionid='".$option['value']['sectionId']."'><i class='fa fa-gray fa-tasks'></i></button>";
-						$html[] = "		<button class='btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$option['value']['id']."'  data-sectionid='".$option['value']['sectionId']."'><i class='fa fa-gray fa-times'></i></button>";
-					}
-				}
-				else {
-						$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
-						$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-tasks'></i></button>";
-						$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
-				}
-				$html[] = "	</div>";
-				$html[] = "	</td>";
-
-				$html[] = "</tr>";
-			}
-
-                # save old level count
-                $old_count = $count;
-			}
-
-			if ( $option === false ) { $parent = array_pop( $parent_stack ); }
-			# Has slave subnets
-			elseif ( !empty( $children_subnets[$option['value']['id']] ) ) {
-				array_push( $parent_stack, $option['value']['masterSubnetId'] );
-				$parent = $option['value']['id'];
-			}
-			# Last items
-		}
-		# print or return
-		if($print)
-		print implode( "\n", $html );
-		else
-		return $html;
-	}
-
-	/**
 	 * Prints dropdown menu for master subnet selection in subnet editing
 	 *
 	 * @access public
@@ -3559,16 +3285,21 @@ class Subnets extends Common_functions {
 		}
 
 		// Generate HTML <options> dropdown menu
-		$dropdown = new MasterSubnetDropDown($this, $current_master);
+		$User = new User ($this->Database);
+		$foldersTree = new SubnetsTree($this, $User->user);
+		$subnetsTree = new SubnetsTree($this, $User->user);
+		$dropdown = new SubnetsMasterDropDown($this, $current_master);
 
 		$dropdown->optgroup_open(_("Folders"));
-		foreach($folders as $folder) { $dropdown->subnets_tree_add($folder); }
-		$dropdown->subnets_tree_render(true);
+		foreach($folders as $folder) { $foldersTree->add($folder); }
+		$foldersTree->walk(true);
+		$dropdown->subnetsTree($foldersTree);
 
 		if ($isFolder === false) {
 			$dropdown->optgroup_open(_("Subnets"));
-			foreach($section_subnets as $subnet) { $dropdown->subnets_tree_add($subnet); }
-			$dropdown->subnets_tree_render(false);
+			foreach($section_subnets as $subnet) { $subnetsTree->add($subnet); }
+			$subnetsTree->walk(false);
+			$dropdown->subnetsTree($subnetsTree);
 		}
 
 		print "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
@@ -3587,9 +3318,9 @@ class Subnets extends Common_functions {
 		$subnet = $this->fetch_subnet(null, $subnetMasterId);
 
 		// Generate HTML <options> dropdown menu
-		$dropdown = new MasterSubnetDropDown($this, $subnetMasterId);
+		$dropdown = new SubnetsMasterDropDown($this, $subnetMasterId);
 
-		if (is_object($subnet)) $dropdown->subnets_add_object($subnet);
+		if (is_object($subnet)) $dropdown->add_option($subnet);
 
 		print "<select name='masterSubnetId' class='form-control input-sm input-w-auto input-max-200'>";
 		print $dropdown->html();
