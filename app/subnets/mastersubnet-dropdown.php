@@ -49,7 +49,7 @@ $fields = array('id','masterSubnetId','isFolder','subnet','mask','description');
 
 $strict_subnets = get_strict_subnets($Subnets, $sectionId, $cidr, $fields);
 
-$folders = $Subnets->fetch_multiple_objects('subnets', 'isFolder', '1', 'id', true, false, $fields);
+$folders = $Subnets->fetch_section_subnets($sectionId, 'isFolder', '1', $fields);
 if (!is_array($folders)) $folders = array();
 
 // Generate HTML <options> dropdown menu
@@ -69,7 +69,7 @@ $dropdown->subnets_tree_render(true);
 
 if ($section->strictMode == 0) {
 	// Strict mode is disabled, allow nested chaos....
-	$all_subnets = $Subnets->fetch_section_subnets($sectionId, $fields);
+	$all_subnets = $Subnets->fetch_section_subnets($sectionId, false, false, $fields);
 	if (!is_array($all_subnets)) $all_subnets = array();
 
 	foreach($all_subnets as $subnet) {
