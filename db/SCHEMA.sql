@@ -253,7 +253,10 @@ CREATE TABLE `subnets` (
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`),
-  KEY `location` (`location`)
+  KEY `location` (`location`),
+  KEY `masterSubnetId` (`masterSubnetId`),
+  KEY `sectionId` (`sectionId`),
+  KEY `vrfId` (`vrfId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)

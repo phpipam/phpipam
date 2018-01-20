@@ -976,19 +976,17 @@ class Subnets extends Common_functions {
 	 * Deletes temporary table containing slave ids for a given subnetId
 	 *
 	 * @access private
-	 * @param int $subnetId
-	 * @param int $level ()default: null
+	 * @param integer $subnetId
+	 * @param integer $level (default: 0)
 	 * @return void
 	 */
-	private function reset_subnet_familytree_table ($subnetId, $level = null) {
+	private function reset_subnet_familytree_table ($subnetId, $level = 0) {
 		try {
-				if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
-				// set table name
-				$table_name = is_null($level) ? "`tmp_subnet_familytree_$subnetId`" : "`tmp_subnet_familytree_${subnetId}_${level}`";
-				// execute
-			$this->Database->runQuery("DROP TABLE IF EXISTS $table_name;");
-		}
-		catch (Exception $e) {
+			$subnetId = filter_var($subnetId, FILTER_VALIDATE_INT);
+			if ($subnetId === false) { throw new Exception(_('Invalid subnetId')); }
+			// execute
+			$this->Database->runQuery('DROP TABLE IF EXISTS tmp_subnet_familytree_' . (int) $subnetId . '_' . (int) $level);
+		} catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 		}
 	}
@@ -997,8 +995,8 @@ class Subnets extends Common_functions {
 	 * Generates temporary table containing slave ids for a given subnetId
 	 *
 	 * @access private
-	 * @param int $subnetId
-	 * @return void
+	 * @param integer $subnetId
+	 * @return string
 	 */
 	private function create_subnet_familytree ($subnetId) {
 
@@ -1011,12 +1009,14 @@ class Subnets extends Common_functions {
 		// Work around the 'wont-fix' limitation by using a temporary table per iteration and consolidate the results.
 
 		try {
-			if (!is_numeric($subnetId)) { throw new Exception(_('Invalid subnetId')); }
+			$subnetId = filter_var($subnetId, FILTER_VALIDATE_INT);
+			if ($subnetId === false) { throw new Exception(_('Invalid subnetId')); }
 
 			// set engine type
 			$this->set_tmptable_engine_type ();
-			// remove old temporary table
-			$this->reset_subnet_familytree_table ($subnetId);
+
+			// tmp table name
+			$base_table_name = 'tmp_subnet_familytree_'.$subnetId;
 
 			// set default count
 			$rowCount = 0;
@@ -1025,7 +1025,8 @@ class Subnets extends Common_functions {
 			// remove old temp table with level
 			$this->reset_subnet_familytree_table ($subnetId, $level);
 			// create new temp table
-			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId = $subnetId;";
+			$query = 'CREATE TEMPORARY TABLE '.$base_table_name.'_'.$level.' (id int(11) PRIMARY KEY) ENGINE = '.$this->tmptable_engine_type.
+				' SELECT subnets.id FROM subnets WHERE subnets.masterSubnetId = '."'$subnetId'";
 			$result = $this->Database->runQuery($query, null, $rowCount);
 
 			// Fetch next level of slaves.
@@ -1034,20 +1035,17 @@ class Subnets extends Common_functions {
 
 				// remove old
 				$this->reset_subnet_familytree_table ($subnetId, $level);
-
-				$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId}_${level} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type." SELECT id FROM subnets AS slaves WHERE slaves.masterSubnetId IN (SELECT id FROM tmp_subnet_familytree_${subnetId}_${lastlevel});";
+				$query = 'CREATE TEMPORARY TABLE '.$base_table_name.'_'.$level.' (id int(11) PRIMARY KEY) ENGINE = '.$this->tmptable_engine_type.
+					' SELECT subnets.id FROM subnets INNER JOIN '.$base_table_name.'_'.$lastlevel.' AS parents ON subnets.masterSubnetId = parents.id';
 				$result = $this->Database->runQuery($query, null, $rowCount);
 			}
 
 			// Consolidate results into single temporary table.
-			$query = "CREATE TEMPORARY TABLE tmp_subnet_familytree_${subnetId} (id int(11) PRIMARY KEY) ENGINE = ".$this->tmptable_engine_type.";";
-			$this->Database->runQuery($query);
-
-			while (--$level >= 0) {
-				$query = "INSERT IGNORE INTO tmp_subnet_familytree_${subnetId} SELECT id FROM tmp_subnet_familytree_${subnetId}_${level};";
+			while (--$level >= 1) {
+				$query = 'INSERT IGNORE INTO '.$base_table_name.'_0 SELECT id FROM '.$base_table_name.'_'.$level;
 				$this->Database->runQuery($query);
 
-				// remove old
+				// remove old table
 				$this->reset_subnet_familytree_table ($subnetId, $level);
 			}
 		}
@@ -1055,6 +1053,7 @@ class Subnets extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			throw $e;
 		}
+		return $base_table_name.'_0';
 	}
 
 	/**
@@ -1102,10 +1101,11 @@ class Subnets extends Common_functions {
 
 		try {
 			// Create temporary table 'tmp_subnet_familytree_${subnetId}' containing all slave ids.
-			$this->create_subnet_familytree($subnetId);
+			$tmp_table_name = $this->create_subnet_familytree($subnetId);
 
 			// Fetch all slaves
-			$slaves = $this->Database->getObjectsQuery("SELECT * FROM subnets AS slaves WHERE slaves.id IN (SELECT id FROM tmp_subnet_familytree_${subnetId});");
+			$query = 'SELECT subnets.* FROM subnets INNER JOIN `'.$tmp_table_name.'` AS slaves ON subnets.id = slaves.id';
+			$slaves = $this->Database->getObjectsQuery($query);
 
 			$this->slaves[] = $subnetId;
 
@@ -2887,6 +2887,62 @@ class Subnets extends Common_functions {
 		return $r;
 	}
 
+	/**
+	 * Apply  permission changes to array of subnets
+	 *
+	 * @access public
+	 * @param array $subnets
+	 * @param array $removed_permissions
+	 * @param array $changed_permissions
+	 * @return bool
+	 */
+	public function set_permissions ($subnets, $removed_permissions, $changed_permissions) {
+		try {
+			// Begin Transaction
+			$this->Database->beginTransaction();
+			// loop
+			foreach ($subnets as $s) {
+				// to array
+				$s_old_perm = json_decode($s->permissions, true);
+				// removed
+				if (is_array($removed_permissions)) {
+					foreach ($removed_permissions as $k=>$p) unset($s_old_perm[$k]);
+				}
+				// added
+				if (is_array($changed_permissions)) {
+					foreach ($changed_permissions as $k=>$p) $s_old_perm[$k] = $p;
+				}
+
+				// set values
+				$values = array("id" => $s->id, "permissions" => json_encode($s_old_perm));
+
+				// update
+				if($this->modify_subnet ("edit", $values)===false) {
+					$this->Database->rollBack();
+					if (!$s->isFolder) {
+						$name = $this->transform_to_dotted($s->subnet) . '/' . $s->mask . ' ('.$s->description.')';
+					} else {
+						$name = $s->description;
+					}
+					$this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $name!", true);
+					return false;
+				}
+			}
+		} catch (Exception $e) {
+			$this->Database->rollBack();
+			$this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+			return false;
+		}
+
+		// ok
+		$this->Database->commit();
+		if (sizeof($subnets)>1) {
+			$this->Result->show("success", _("Subnet permissions recursively set")."!");
+		} else {
+			$this->Result->show("success", _("Subnet permissions set")."!");
+		}
+		return true;
+	}
 
 
 

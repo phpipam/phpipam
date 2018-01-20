@@ -6,6 +6,7 @@
     + Search for matching subnet in all VRFs feature enabled when importing addresses.
     + Added new config option to show custom fields separated from standard fields when editing IP address.
     + Added Required fields subpage to define IP address fields that must be filled in;
+    + Performance + bug fixes (#1660, #1657);
     + MasterSubnet dropdown list is dynamically generated via AJAX call.
 
     Translations:
@@ -19,6 +20,8 @@
     + Performance fix for subnet_dropdown_print_available (#1562);
     + Fixed logo updater for apache v2.4 (#1582);
     + Fixed section names containing spaces are not included in exports (#1566);
+    + Allow DNS wildcard records (#1571);
+    + Fixed slow mac address vendor decoding for subnet detail view (#1658);
     + Performance fix for detecting overlapping subnets. (#1052, #1426, #1533)
     + Performance fix for slow mac address vendor decoding (#1658)
     + Performance fix for subnet API first_subnet & all_subnets calls.
