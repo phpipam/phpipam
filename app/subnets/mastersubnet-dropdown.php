@@ -69,7 +69,7 @@ $dropdown->subnets_tree_render(true);
 
 if ($section->strictMode == 0) {
 	// Strict mode is disabled, allow nested chaos....
-	$all_subnets = $Subnets->fetch_section_subnets($sectionId, $fields);
+	$all_subnets = $Subnets->fetch_section_subnets($sectionId, false, false, $fields);
 	if (!is_array($all_subnets)) $all_subnets = array();
 
 	foreach($all_subnets as $subnet) {
