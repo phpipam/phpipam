@@ -49,7 +49,7 @@ $fields = array('id','masterSubnetId','isFolder','subnet','mask','description');
 
 $strict_subnets = get_strict_subnets($Subnets, $sectionId, $cidr, $fields);
 
-$folders = $Subnets->fetch_multiple_objects('subnets', 'isFolder', '1', 'id', true, false, $fields);
+$folders = $Subnets->fetch_section_subnets($sectionId, 'isFolder', '1', $fields);
 if (!is_array($folders)) $folders = array();
 
 // Generate HTML <options> dropdown menu
