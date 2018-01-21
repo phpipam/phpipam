@@ -693,7 +693,7 @@ class Common_api_functions {
 			if (is_array($result)) {
 				foreach($result as $k=>$r) {
 					// remove
-					if($r->isFolder=="1")				{ unset($r); }
+					if($r->isFolder=="1")				{ unset($result[$k]); }
 			}	}
 			// single item
 			else {
@@ -701,10 +701,9 @@ class Common_api_functions {
 					if($result->isFolder=="1")			{ unset($result); }
 			}
 			# return
-			if($result===false)	{ $this->Response->throw_exception(404, "No subnets found"); }
+			if(is_null($result))	{ $this->Response->throw_exception(404, "No subnets found"); }
 			else				{ return $result; }
 	}	}
-
 	/**
 	 * This method removes all subnets if controller is subnets
 	 *
