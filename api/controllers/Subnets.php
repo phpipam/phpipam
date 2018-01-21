@@ -707,21 +707,36 @@ class Subnets_controller extends Common_api_functions {
 		$subnetId = is_null($subnetId) ? $this->_params->id : $subnetId;
 		// fetch
 		$result = $this->Subnets->fetch_subnet ("id", $subnetId);
-        // add nameservers, GW and calculation
-        if($result!==false) {
-            $ns = $this->read_subnet_nameserver($result->nameserverId);
-            if ($ns!==false) {
-                $result->nameservers = $ns;
-            }
+		
+		// add nameservers, GW and calculation
+		if($result!==false) {
+			$ns = $this->read_subnet_nameserver($result->nameserverId);
+			if ($ns!==false) {
+				$result->nameservers = $ns;
+			}
+			
+			$gateway = $this->read_subnet_gateway ();
+			if ( $gateway!== false) {
+				$result->gatewayId = $gateway->id;
+				$gateway = $this->transform_address ($gateway);
+				$result->gateway = $gateway;
+			}
+			
+			$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
 
-    		$gateway = $this->read_subnet_gateway ();
-    		if ( $gateway!== false) {
-        		$result->gatewayId = $gateway->id;
-        		$gateway = $this->transform_address ($gateway);
-        		$result->gateway = $gateway;
-    		}
+			// location details
+			if(!empty($result->location)) {
+				$result->location = $this->Tools->fetch_object ("locations", "id", $result->location);
+			} else {
+				$result->location = array();
+			}
 
-    		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
+			// vlan details
+			if(!empty($result->vlanId)) {
+				$result->vlan = $this->Tools->fetch_object ("vlans", "vlanId", $result->vlanId);
+			} else {
+				$result->vlan = array();
+			}
 		}
 
 		# result
@@ -761,9 +776,16 @@ class Subnets_controller extends Common_api_functions {
 				} else {
 					$result->location = array();
 				}
-
-    			// erase old values
-    			$results[$key] = $result;
+				
+				// vlan details
+				if(!empty($result->vlanId)) {
+					$result->vlan = $this->Tools->fetch_object ("vlans", "vlanId", $result->vlanId);
+				} else {
+					$result->vlan = array();
+				}
+				
+				// erase old values
+				$results[$key] = $result;
 			}
 		}
 
