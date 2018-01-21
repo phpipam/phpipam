@@ -21,7 +21,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # Validate inputs
-$sectionId = filter_var($_GET['section'], FILTER_VALIDATE_INT);
+$sectionId = filter_var($_GET['sectionId'], FILTER_VALIDATE_INT);
 $showSupernetOnly = filter_var($_GET['showSupernetOnly'], FILTER_VALIDATE_BOOLEAN);
 $offset = filter_var($_GET['offset'], FILTER_VALIDATE_INT);
 $limit  = filter_var($_GET['limit'], FILTER_VALIDATE_INT);

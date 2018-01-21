@@ -629,7 +629,7 @@ class Sections extends Common_functions {
 
 		# permitted
 		if ($permission != 0) {
-			$html[] = '<table id="manageSubnets" class="table table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-side-pagination="server" data-search="true" data-toggle="table" data-url="/app/json/section/subnets.php?section='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
+			$html[] = '<table id="manageSubnets" class="table table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
 			$html[] = '<thead><tr>';
 
 			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
