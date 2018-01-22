@@ -701,7 +701,7 @@ class Common_api_functions {
 					if($result->isFolder=="1")			{ unset($result); }
 			}
 			# return
-			if(is_null($result))	{ $this->Response->throw_exception(404, "No subnets found"); }
+			if(empty($result))	{ $this->Response->throw_exception(404, "No subnets found"); }
 			else				{ return $result; }
 	}	}
 	/**
