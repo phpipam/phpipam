@@ -7,3 +7,4 @@ functions/scripts/custom/
 functions/assets/
 api/_lock.txt
 app/dashboard/widgets/custom/
+.idea

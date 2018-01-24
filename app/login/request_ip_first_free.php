@@ -5,7 +5,7 @@
 
 require( dirname(__FILE__) . '/../../functions/functions.php' );
 # classes
-$Database	= new Database_PDO;
+$Database	= new Database;
 $Addresses  = new Addresses ($Database);
 $Subnets 	= new Subnets ($Database);
 

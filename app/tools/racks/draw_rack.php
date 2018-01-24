@@ -8,7 +8,7 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Result 	= new Result ();
 
@@ -16,7 +16,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # init racks object
-$Racks = new phpipam_rack ($Database);
+$Racks = new RackSpace ($Database);
 
 # deviceId not set or empty - set to 0
 if (empty($_GET['deviceId']))      { $_GET['deviceId'] = 0; }

@@ -9,10 +9,10 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Result 	= new Result ();
-$Log 		= new Logging ($Database, $User->settings);
+$Log 		= new Logger ($Database, $User->settings);
 
 # verify that user is logged in
 $User->check_user_session();

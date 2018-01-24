@@ -13,10 +13,10 @@
 require( dirname(__FILE__) . '/../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Result 	= new Result ();
-$Log 		= new Logging ($Database);
+$Log 		= new Logger ($Database);
 
 # strip input tags form username only - password stip later because od LDAP
 $_POST['ipamusername'] = $User->strip_input_tags ($_POST['ipamusername']);

@@ -7,7 +7,7 @@
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
 # initialize install class
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Result		= new Result;
 $Tools	    = new Tools ($Database);
 $Install 	= new Install ($Database);

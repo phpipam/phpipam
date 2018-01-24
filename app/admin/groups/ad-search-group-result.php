@@ -9,7 +9,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 require( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Result 	= new Result ();

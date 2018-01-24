@@ -159,4 +159,3 @@ class Table extends Common_functions {
 
 }
 
-?>

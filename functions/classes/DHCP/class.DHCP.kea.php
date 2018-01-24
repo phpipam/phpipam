@@ -196,7 +196,7 @@ class DHCP_kea extends Common_functions {
      */
     private function init_database_conection ($username, $password, $host, $port, $dbname) {
         // open
-        $this->Database_kea = new Database_PDO ($username, $password, $host, $port, $dbname);
+        $this->Database_kea = new Database ($username, $password, $host, $port, $dbname);
     }
 
 

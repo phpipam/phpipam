@@ -31,10 +31,10 @@
 
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
-require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
+require(dirname(__FILE__) . '/../../functions/classes/class.PingThread.php');
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
@@ -280,7 +280,7 @@ else {
 	//update statuses for online
 
 	# re-initialize classes
-	$Database  = new Database_PDO;
+	$Database  = new Database;
 	$Scan      = new Scan ($Database, $Subnets->settings);
 	$Addresses = new Addresses ($Database);
 
@@ -388,7 +388,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	# remove old classes
 	unset($Database, $Subnets, $Addresses, $Tools, $Scan, $Result);
 
-	$Database 	= new Database_PDO;
+	$Database 	= new Database;
 	$Subnets	= new Subnets ($Database);
 	$Addresses	= new Addresses ($Database);
 	$Tools		= new Tools ($Database);
@@ -417,7 +417,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
 
 	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
+	$phpipam_mail = new Mail($Scan->settings, $mail_settings);
 	$phpipam_mail->initialize_mailer();
 
 	// set subject

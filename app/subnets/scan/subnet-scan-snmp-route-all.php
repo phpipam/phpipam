@@ -16,7 +16,7 @@ if (!function_exists("create_link")) {
     require( dirname(__FILE__) . '/../../../functions/functions.php');
 
     # initialize user object
-    $Database 	= new Database_PDO;
+    $Database 	= new Database;
     $User 		= new User ($Database);
     $Tools	 	= new Tools ($Database);
     $Sections	= new Sections ($Database);

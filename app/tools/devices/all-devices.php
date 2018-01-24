@@ -12,7 +12,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 
 # rack object
 if($User->settings->enableRACK=="1") {
-	$Racks      = new phpipam_rack ($Database);
+	$Racks      = new RackSpace ($Database);
 }
 
 # verify that user is logged in

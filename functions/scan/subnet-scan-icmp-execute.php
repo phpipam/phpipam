@@ -28,10 +28,10 @@
 
 /* functions */
 require( dirname(__FILE__) . '/../../functions/functions.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
+require(dirname(__FILE__) . '/../../functions/classes/class.PingThread.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets	= new Subnets ($Database);
 $Scan		= new Scan ($Database);
 

@@ -45,7 +45,7 @@ $User->check_user_session();
 # }
 
 # initialize classes
-$Database = new Database_PDO;
+$Database = new Database;
 $Tools = new Tools($Database);
 
 # fetch module settings

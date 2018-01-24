@@ -86,7 +86,7 @@ class DNS extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $Database
+	 * @param Database $Database
 	 * @param mixed $settings (default: null)
 	 */
 
@@ -94,11 +94,11 @@ class DNS extends Common_functions {
 	 * __construct function
 	 *
 	 * @method __construct
-	 * @param  Database_PDO $Database
+	 * @param  Database $Database
 	 * @param  object|array $settings
 	 * @param  bool         $print_error
 	 */
-	public function __construct (Database_PDO $Database, $settings=null, $print_error = false) {
+	public function __construct (Database $Database, $settings=null, $print_error = false) {
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object

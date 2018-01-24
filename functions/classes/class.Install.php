@@ -73,9 +73,9 @@ class Install extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $Database
+	 * @param Database $Database
 	 */
-	public function __construct (Database_PDO $Database) {
+	public function __construct (Database $Database) {
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object
@@ -117,7 +117,7 @@ class Install extends Common_functions {
 	public function install_database ($rootuser, $rootpass, $drop_database = false, $create_database = false, $create_grants = false, $migrate = false) {
 
 		# open new connection
-		$this->Database_root = new Database_PDO ($rootuser, $rootpass);
+		$this->Database_root = new Database ($rootuser, $rootpass);
 
 		# set install flag to make sure DB is not trying to be selected via DSN
 		$this->Database_root->install = true;
@@ -138,7 +138,7 @@ class Install extends Common_functions {
 		if($this->install_database_execute ($migrate) !== false) {
 		    # return true, if some errors occured script already died! */
 			sleep(1);
-			$this->Log = new Logging ($this->Database);
+			$this->Log = new Logger ($this->Database);
 			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
 			return true;
 		}
@@ -431,7 +431,7 @@ class Install extends Common_functions {
     	    if (strlen($query)>5) {
     			try { $this->Database->runQuery($query); }
     			catch (Exception $e) {
-    				$this->Log = new Logging ($this->Database);
+    				$this->Log = new Logger ($this->Database);
     				# write log
     				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
     				# fail
@@ -452,7 +452,7 @@ class Install extends Common_functions {
 
 		# all good, print it
 		sleep(1);
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
 		return true;
 	}

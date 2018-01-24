@@ -8,7 +8,7 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object, if not already set
-if (!isset($Database)) { $Database 	= new Database_PDO; }
+if (!isset($Database)) { $Database 	= new Database; }
 if (!isset($User)) { $User = new User ($Database); }
 if (!isset($Admin)) { $Admin = new Admin ($Database); }
 

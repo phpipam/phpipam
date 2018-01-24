@@ -94,7 +94,7 @@ class Tools extends Common_functions {
 	 *
 	 * @access public
 	 */
-	public function __construct (Database_PDO $database) {
+	public function __construct (Database $database) {
 		# set database object
 		$this->Database = $database;
 		# initialize Result
@@ -1031,7 +1031,7 @@ class Tools extends Common_functions {
 
 		# initialize mailer
 		$this->get_settings ();
-		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail = new Mail($this->settings, $mail_settings);
 		$phpipam_mail->initialize_mailer();
 
 

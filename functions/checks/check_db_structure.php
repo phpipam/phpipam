@@ -11,7 +11,7 @@
 require_once( dirname(__FILE__) . '/../functions.php' );
 
 # Classes
-$Database = new Database_PDO;
+$Database = new Database;
 $Tools = new Tools ($Database);
 
 # title

@@ -9,7 +9,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Result		= new Result;
 $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);

@@ -8,7 +8,7 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Subnets 	= new Subnets ($Database);
 $Admin	 	= new Admin ($Database, false);
@@ -80,7 +80,7 @@ if(strlen($_POST['email'])>0) {
 	$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
 	# initialize mailer
-	$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
+	$phpipam_mail = new Mail($User->settings, $mail_settings);
 	$phpipam_mail->initialize_mailer();
 
 	// generate url

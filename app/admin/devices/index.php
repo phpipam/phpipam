@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # rack object
-$Racks      = new phpipam_rack ($Database);
+$Racks      = new RackSpace ($Database);
 
 # fetch all Devices
 $devices = $Admin->fetch_all_objects("devices", "hostname");

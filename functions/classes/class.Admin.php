@@ -92,10 +92,10 @@ class Admin extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $database
+	 * @param Database $database
 	 * @param bool $admin_required (default: true)
 	 */
-	public function __construct (Database_PDO $database, $admin_required = true) {
+	public function __construct (Database $database, $admin_required = true) {
 		# initialize database object
 		$this->Database = $database;
 		# initialize Result
@@ -107,7 +107,7 @@ class Admin extends Common_functions {
 		# verify that user is admin
 		$this->is_admin ();
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 	}
 
 	/**

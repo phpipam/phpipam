@@ -4,12 +4,12 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database = new Database_PDO;
+$Database = new Database;
 $User     = new User ($Database);
 $Subnets  = new Subnets ($Database);
 $Sections = new Sections ($Database);
 $Tools    = new Tools ($Database);
-$Log 	  = new Logging ($Database);
+$Log 	  = new Logger ($Database);
 $Result   = new Result ();
 
 # verify tdat user is logged in

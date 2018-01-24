@@ -5,7 +5,7 @@
  **********************************/
 
 //# initialize required objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User		= new User ($Database);
 
 $site_title = $User->settings->siteTitle;

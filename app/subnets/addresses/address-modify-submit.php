@@ -9,13 +9,13 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Result		= new Result;
 $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);
 $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
-$Log 		= new Logging ($Database, $User->settings);
+$Log 		= new Logger ($Database, $User->settings);
 $Zones 		= new FirewallZones($Database);
 $Ping		= new Scan ($Database);
 

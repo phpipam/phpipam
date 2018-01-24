@@ -283,5 +283,3 @@ class PingThread {
         }
     }
 }
-
-// EOF

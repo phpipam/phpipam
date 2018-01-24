@@ -42,13 +42,13 @@ $db_old['port'] = 3306;
 
 
 # initialize new objects
-$Database     = new Database_PDO ($db_new['user'], $db_new['pass'], $db_new['host'], $db_new['port'], $db_new['name']);
+$Database     = new Database ($db_new['user'], $db_new['pass'], $db_new['host'], $db_new['port'], $db_new['name']);
 $Tools        = new Tools ($Database);
 $Admin        = new Admin ($Database, false);
 $Result		  = new Result ();
 
 # initialize objects from merging (old) database
-$Database_old = new Database_PDO ($db_old['user'], $db_old['pass'], $db_old['host'], $db_old['port'], $db_old['name']);
+$Database_old = new Database ($db_old['user'], $db_old['pass'], $db_old['host'], $db_old['port'], $db_old['name']);
 $Tools_old    = new Tools ($Database_old);
 
 

@@ -24,10 +24,10 @@
 
 # include required scripts
 require( dirname(__FILE__) . '/../functions.php' );
-require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
+require(dirname(__FILE__) . '/../../functions/classes/class.PingThread.php');
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
@@ -222,7 +222,7 @@ if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($s
 
 
 # reinitialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Admin		= new Admin ($Database, false);
 $Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
@@ -288,7 +288,7 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
 
 	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
+	$phpipam_mail = new Mail($Scan->settings, $mail_settings);
 	$phpipam_mail->initialize_mailer();
 
 

@@ -11,7 +11,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 error_reporting(E_ERROR);
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Result 	= new Result ();

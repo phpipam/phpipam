@@ -8,7 +8,7 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
@@ -151,7 +151,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
     </tr>
     <tr>
         <?php
-        $Racks = new phpipam_rack ($Database);
+        $Racks = new RackSpace ($Database);
         $Racks->fetch_all_racks();
         ?>
         <td><?php print _('Rack'); ?></td>

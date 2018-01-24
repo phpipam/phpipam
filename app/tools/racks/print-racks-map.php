@@ -16,7 +16,7 @@ if ($User->settings->enableRACK!="1") {
 }
 else {
     # init racks object
-    $Racks = new phpipam_rack ($Database);
+    $Racks = new RackSpace ($Database);
     # fetch all racks
     $User->settings->enableLocations=="1" ? $Racks->fetch_all_racks(true) : $Racks->fetch_all_racks(false);
 

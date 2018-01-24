@@ -8,12 +8,12 @@
 if(!is_object(@$User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
-	$Database	= new Database_PDO;
+	$Database	= new Database;
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 	$Subnets 	= new Subnets ($Database);
 	$Sections 	= new Sections ($Database);
-	$Log		= new Logging ($Database);
+	$Log		= new Logger ($Database);
 	$Result 	= new Result ();
 }
 

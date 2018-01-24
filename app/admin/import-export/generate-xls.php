@@ -10,7 +10,7 @@ require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.
 
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 		= new User ($Database);
 $Sections	= new Sections ($Database);
 $Subnets	= new Subnets ($Database);

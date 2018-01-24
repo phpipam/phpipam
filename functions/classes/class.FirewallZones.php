@@ -72,16 +72,16 @@ class FirewallZones extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $Database
+	 * @param Database $Database
 	 * @return void
 	 */
-	public function __construct (Database_PDO $Database) {
+	public function __construct (Database $Database) {
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 		# get settings
 		$this->get_settings();
 		# subnet object

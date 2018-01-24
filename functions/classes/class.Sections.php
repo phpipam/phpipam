@@ -66,15 +66,15 @@ class Sections extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $database
+	 * @param Database $database
 	 */
-	public function __construct (Database_PDO $database) {
+	public function __construct (Database $database) {
 		# Save database object
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 	}
 
 
@@ -544,4 +544,4 @@ class Sections extends Common_functions {
 		return $out;
 	}
 }
-?>
+

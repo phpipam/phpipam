@@ -10,7 +10,7 @@
  *		* syslog;
  */
 
-class Logging extends Common_functions {
+class Logger extends Common_functions {
 
 
 	/**
@@ -302,10 +302,10 @@ class Logging extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $database
+	 * @param Database $database
 	 * @param mixed $settings (default: null)
 	 */
-	public function __construct (Database_PDO $database, $settings = null) {
+	public function __construct (Database $database, $settings = null) {
 		# Save database object
 		$this->Database = $database;
 		# Result
@@ -1896,7 +1896,7 @@ class Logging extends Common_functions {
 		$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
 
 		# initialize mailer
-		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail = new Mail($this->settings, $mail_settings);
 		$phpipam_mail->initialize_mailer();
 
 		// set content

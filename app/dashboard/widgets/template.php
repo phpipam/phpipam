@@ -10,7 +10,7 @@ This is a template for creating new widgets
 if(!is_object(@$User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
-	$Database	= new Database_PDO;
+	$Database	= new Database;
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
 }

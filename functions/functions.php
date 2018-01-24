@@ -30,32 +30,32 @@ if(!defined('BASE')) {
 defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
-require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
-require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
-require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
-require( dirname(__FILE__) . '/classes/class.Log.php' );		//Class for log saving
-require( dirname(__FILE__) . '/classes/class.Result.php' );		//Class for result printing
-require( dirname(__FILE__) . '/classes/class.Install.php' );	//Class for Install
-require( dirname(__FILE__) . '/classes/class.Sections.php' );	//Class for sections
-require( dirname(__FILE__) . '/classes/class.Subnets.php' );	//Class for subnets
-require( dirname(__FILE__) . '/classes/class.Tools.php' );		//Class for tools
-require( dirname(__FILE__) . '/classes/class.Addresses.php' );	//Class for addresses
-require( dirname(__FILE__) . '/classes/class.Scan.php' );		//Class for Scanning and pinging
-require( dirname(__FILE__) . '/classes/class.DNS.php' );		//Class for DNS management
-require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerDNS management
-require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
-require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
-require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
-require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
-require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
-require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
-require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
-require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for generating HTML menus
+require(dirname(__FILE__) . '/classes/class.Common.php');               //Class common - common functions
+require(dirname(__FILE__) . '/classes/Database/class.Database.php');    //Class PDO - wrapper for database
+require(dirname(__FILE__) . '/classes/class.User.php');                 //Class for active user management
+require(dirname(__FILE__) . '/classes/class.Logger.php');               //Class for log saving
+require(dirname(__FILE__) . '/classes/class.Result.php');               //Class for result printing
+require(dirname(__FILE__) . '/classes/class.Install.php');              //Class for Install
+require(dirname(__FILE__) . '/classes/class.Sections.php');             //Class for sections
+require(dirname(__FILE__) . '/classes/class.Subnets.php');              //Class for subnets
+require(dirname(__FILE__) . '/classes/class.Tools.php');                //Class for tools
+require(dirname(__FILE__) . '/classes/class.Addresses.php');            //Class for addresses
+require(dirname(__FILE__) . '/classes/class.Scan.php');                 //Class for Scanning and pinging
+require(dirname(__FILE__) . '/classes/class.DNS.php');                  //Class for DNS management
+require(dirname(__FILE__) . '/classes/class.PowerDNS.php');             //Class for PowerDNS management
+require(dirname(__FILE__) . '/classes/class.FirewallZones.php');        //Class for firewall zone management
+require(dirname(__FILE__) . '/classes/class.Admin.php');                //Class for Administration
+require(dirname(__FILE__) . '/classes/class.Mail.php');                 //Class for Mailing
+require(dirname(__FILE__) . '/classes/Rackspace/class.Rackspace.php');  //Class for Racks
+require(dirname(__FILE__) . '/classes/class.SNMP.php');                 //Class for SNMP queries
+require(dirname(__FILE__) . '/classes/DHCP/class.DHCP.php');            //Class for DHCP
+require(dirname(__FILE__) . '/classes/class.Rewrite.php');              //Class for DHCP
+require(dirname(__FILE__) . '/classes/class.MasterSubnetDropdown.php'); //Class for generating HTML menus
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {
 	# database object
-	$Database 	= new Database_PDO;
+	$Database 	= new Database;
 	# try to fetch settings
 	try { $settings = $Database->getObject("settings", 1); }
 	catch (Exception $e) { $settings = false; }

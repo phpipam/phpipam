@@ -159,10 +159,10 @@ class User extends Common_functions {
      * __construct function.
      *
      * @access public
-     * @param Database_PDO $database
+     * @param Database $database
      * @param bool $api (default: false)
      */
-    public function __construct (Database_PDO $database, $api = false) {
+    public function __construct (Database $database, $api = false) {
 
         # Save database object
         $this->Database = $database;
@@ -175,7 +175,7 @@ class User extends Common_functions {
         $this->get_settings ();
 
         # Log object
-        $this->Log = new Logging ($this->Database, $this->settings);
+        $this->Log = new Logger ($this->Database, $this->settings);
 
         # register new session
         $this->register_session ();

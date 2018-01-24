@@ -4,7 +4,7 @@
 require_once('../../../functions/functions.php');
 
 # Classes
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $User 	= new User ($Database);
 $Result = new Result;
 

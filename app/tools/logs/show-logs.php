@@ -22,11 +22,11 @@ if(!is_object($User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 	# initialize user object
-	$Database 	= new Database_PDO;
+	$Database 	= new Database;
 	$User 		= new User ($Database);
 	$Tools	 	= new Tools ($Database);
 	$Result 	= new Result ();
-	$Log		= new Logging ($Database);
+	$Log		= new Logger ($Database);
 
 	# verify that user is logged in
 	$User->check_user_session();
