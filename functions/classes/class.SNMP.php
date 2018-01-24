@@ -143,7 +143,7 @@ class phpipamSNMP extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $Database
+	 * @param Database $Database
 	 * @param bool $device (default: false)
 	 * @return void
 	 */

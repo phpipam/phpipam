@@ -15,7 +15,7 @@ $debugging = false;
 $fail	   = false;
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Admin		= new Admin ($Database, false);
 $User		= new User ($Database, true);
 $Result		= new Result();

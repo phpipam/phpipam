@@ -32,7 +32,7 @@ $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
 
 # database and exceptions/result object
-$Database = new Database_PDO;
+$Database = new Database;
 $Tools    = new Tools ($Database);
 $Response = new Responses ();
 

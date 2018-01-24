@@ -76,7 +76,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Database conenction
 	 *
-	 * @var Database_PDO
+	 * @var Database
 	 * @access protected
 	 */
 	protected $Database;
@@ -109,9 +109,9 @@ class Addresses extends Common_functions {
      * Constructor
      *
      * @access public
-     * @param Database_PDO $Database
+     * @param Database $Database
      */
-	public function __construct (Database_PDO $Database) {
+	public function __construct (Database $Database) {
 		# Save database object
 		$this->Database = $Database;
 		# initialize Result

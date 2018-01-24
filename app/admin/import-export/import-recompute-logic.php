@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv4.php' );
 require_once( dirname(__FILE__) . '/../../../functions/PEAR/Net/IPv6.php' );
 
 # initialize user object, if not already set
-if (!isset($Database)) { $Database 	= new Database_PDO; }
+if (!isset($Database)) { $Database 	= new Database; }
 if (!isset($User)) { $User = new User ($Database); }
 if (!isset($Admin)) { $Admin = new Admin ($Database); }
 if (!isset($Tools)) { $Tools = new Tools ($Database); }

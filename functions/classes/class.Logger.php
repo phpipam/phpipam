@@ -302,10 +302,10 @@ class Logger extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $database
+	 * @param Database $database
 	 * @param mixed $settings (default: null)
 	 */
-	public function __construct (Database_PDO $database, $settings = null) {
+	public function __construct (Database $database, $settings = null) {
 		# Save database object
 		$this->Database = $database;
 		# Result

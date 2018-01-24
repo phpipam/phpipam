@@ -6,7 +6,7 @@
  ***************************************/
 
 # initialize classes
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets 	= new Subnets ($Database);
 $Result 	= new Result ();
 $Zones 		= new FirewallZones($Database);

@@ -29,7 +29,7 @@ if ($Rewrite->is_api()) {
     } else {
 
         # database object
-        $Database = new Database_PDO;
+        $Database = new Database;
 
         # check if this is a new installation
         require('functions/checks/check_db_install.php');

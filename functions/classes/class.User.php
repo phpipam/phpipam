@@ -159,10 +159,10 @@ class User extends Common_functions {
      * __construct function.
      *
      * @access public
-     * @param Database_PDO $database
+     * @param Database $database
      * @param bool $api (default: false)
      */
-    public function __construct (Database_PDO $database, $api = false) {
+    public function __construct (Database $database, $api = false) {
 
         # Save database object
         $this->Database = $database;

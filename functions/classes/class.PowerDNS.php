@@ -154,9 +154,9 @@ class PowerDNS extends Common_functions {
      * __construct function.
      *
      * @access public
-     * @param Database_PDO $Database
+     * @param Database $Database
      */
-    public function __construct (Database_PDO $Database) {
+    public function __construct (Database $Database) {
         # initialize Result
         $this->Result = new Result ();
         # initialize object
@@ -200,7 +200,7 @@ class PowerDNS extends Common_functions {
         // decode values form powerDNS
         $this->db_settings = strlen($this->settings->powerDNS)>10 ? json_decode($this->settings->powerDNS) : json_decode($this->db_set_db_settings ());
         // set connection
-        $this->Database_pdns = new Database_PDO ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host, $this->db_settings->port, $this->db_settings->name);
+        $this->Database_pdns = new Database ($this->db_settings->username, $this->db_settings->password, $this->db_settings->host, $this->db_settings->port, $this->db_settings->name);
     }
 
     /**

@@ -92,7 +92,7 @@ class phpipam_rack extends Tools {
 	 *
 	 * @access public
 	 */
-	public function __construct (Database_PDO $database) {
+	public function __construct (Database $database) {
 		# Save database object
 		$this->Database = $database;
 		# initialize Result

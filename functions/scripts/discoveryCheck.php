@@ -27,7 +27,7 @@ require( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);
@@ -222,7 +222,7 @@ if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($s
 
 
 # reinitialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Admin		= new Admin ($Database, false);
 $Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);

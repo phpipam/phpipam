@@ -15,7 +15,7 @@ if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!");
 require( dirname(__FILE__) . '/../functions.php' );
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Addresses	= new Addresses ($Database);
 $Subnets	= new Subnets ($Database);
 $Result		= new Result();

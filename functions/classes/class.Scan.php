@@ -129,10 +129,10 @@ class Scan extends Common_functions {
 	 * __construct function
 	 *
 	 * @access public
-	 * @param Database_PDO $database
+	 * @param Database $database
 	 * @param mixed $settings (default: null)
 	 */
-	public function __construct (Database_PDO $database, $settings = null) {
+	public function __construct (Database $database, $settings = null) {
 		# Save database object
 		$this->Database = $database;
 		# initialize Result
@@ -864,7 +864,7 @@ class Scan extends Common_functions {
  *		- icmp discovery (cli)
  */
 function ping_address ($address) {
-//	$Database = new Database_PDO;
+//	$Database = new Database;
 //	$Scan = new Scan ($Database);
  	global $Scan;
 	//scan

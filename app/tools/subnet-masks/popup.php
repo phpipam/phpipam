@@ -8,7 +8,7 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
 # database object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 # initialize objects
 $Result		= new Result;
 $User		= new User ($Database);

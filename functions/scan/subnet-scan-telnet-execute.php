@@ -25,7 +25,7 @@ require( dirname(__FILE__) . '/../../functions/functions.php');
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Scan		= new Scan ($Database);

@@ -15,7 +15,7 @@
 require( dirname(__FILE__) . '/../functions.php' );
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Admin		= new Admin ($Database, false);
 $Subnets	= new Subnets ($Database);
 $DNS		= new DNS ($Database);

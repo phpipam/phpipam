@@ -7,7 +7,7 @@ require( dirname(__FILE__) . '/../functions.php' );
 $limit = 80;    // 80 percent threshold
 
 # initialize objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools		= new Tools ($Database);

@@ -73,9 +73,9 @@ class Install extends Common_functions {
 	 * __construct function.
 	 *
 	 * @access public
-	 * @param Database_PDO $Database
+	 * @param Database $Database
 	 */
-	public function __construct (Database_PDO $Database) {
+	public function __construct (Database $Database) {
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object
@@ -117,7 +117,7 @@ class Install extends Common_functions {
 	public function install_database ($rootuser, $rootpass, $drop_database = false, $create_database = false, $create_grants = false, $migrate = false) {
 
 		# open new connection
-		$this->Database_root = new Database_PDO ($rootuser, $rootpass);
+		$this->Database_root = new Database ($rootuser, $rootpass);
 
 		# set install flag to make sure DB is not trying to be selected via DSN
 		$this->Database_root->install = true;

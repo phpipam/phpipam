@@ -11,7 +11,7 @@
 require( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
-$Database 	= new Database_PDO;
+$Database 	= new Database;
 $Result		= new Result;
 $User		= new User ($Database);
 

@@ -31,7 +31,7 @@ defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
-require( dirname(__FILE__) . '/classes/class.PDO.php' );		//Class PDO - wrapper for database
+require(dirname(__FILE__) . '/classes/class.PDO.php');		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
 require(dirname(__FILE__) . '/classes/class.Logger.php');		//Class for log saving
 require( dirname(__FILE__) . '/classes/class.Result.php' );		//Class for result printing
@@ -55,7 +55,7 @@ require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for genera
 # save settings to constant
 if(@$_GET['page']!="install" ) {
 	# database object
-	$Database 	= new Database_PDO;
+	$Database 	= new Database;
 	# try to fetch settings
 	try { $settings = $Database->getObject("settings", 1); }
 	catch (Exception $e) { $settings = false; }
