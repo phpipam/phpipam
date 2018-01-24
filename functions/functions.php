@@ -48,7 +48,7 @@ require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administ
 require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 require(dirname(__FILE__) . '/classes/Rackspace/class.Rackspace.php');	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
-require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
+require(dirname(__FILE__) . '/classes/DHCP/class.DHCP.php');	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for generating HTML menus
 
