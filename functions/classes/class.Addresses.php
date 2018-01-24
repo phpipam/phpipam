@@ -2,6 +2,8 @@
 
 /**
  *	phpIPAM IP addresses class
+ *
+ * TODO: Refactoring & simplifying
  */
 
 class Addresses extends Common_functions {
@@ -74,7 +76,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Database conenction
 	 *
-	 * @var mixed
+	 * @var Database_PDO
 	 * @access protected
 	 */
 	protected $Database;
@@ -82,7 +84,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Subnets object
 	 *
-	 * @var mixed
+	 * @var Subnets
 	 * @access protected
 	 */
 	protected $Subnets;
@@ -90,7 +92,7 @@ class Addresses extends Common_functions {
 	/**
 	 * Logging object
 	 *
-	 * @var mixed
+	 * @var Logger
 	 * @access public
 	 */
 	public $Log;
@@ -98,19 +100,17 @@ class Addresses extends Common_functions {
 	/**
 	 * PowerDNS object
 	 *
-	 * @var mixed
+	 * @var PowerDNS
 	 * @access private
 	 */
 	private $PowerDNS;
 
-
-
-
-	/**
-	 * __construct function
-	 *
-	 * @access public
-	 */
+    /**
+     * Constructor
+     *
+     * @access public
+     * @param Database_PDO $Database
+     */
 	public function __construct (Database_PDO $Database) {
 		# Save database object
 		$this->Database = $Database;
@@ -122,14 +122,6 @@ class Addresses extends Common_functions {
 		# Log object
 		$this->Log = new Logger ($this->Database);
 	}
-
-
-
-
-
-
-
-
 
 	/**
 	* @address tag methods
@@ -171,11 +163,11 @@ class Addresses extends Common_functions {
 		if(!isset($this->address_types[$state]))	{
 			return "";
 		}
-		else {
-			if($this->address_types[$state]['showtag']==1) {
-				return "<i class='fa fa-".$this->address_types[$state]['type']." fa-tag state' rel='tooltip' style='color:".$this->address_types[$state]['bgcolor']."' title='"._($this->address_types[$state]['type'])."'></i>";
-			}
-		}
+        if ($this->address_types[$state]['showtag'] == 1) {
+            return "<i class='fa fa-" . $this->address_types[$state]['type'] . " fa-tag state' rel='tooltip'
+                    style='color:" . $this->address_types[$state]['bgcolor'] . "'
+                    title='" . _($this->address_types[$state]['type']) . "'></i>";
+        }
 	}
 
 	/**
@@ -191,12 +183,7 @@ class Addresses extends Common_functions {
 		# fetch address states
 		$this->addresses_types_fetch();
 		# return
-		if(isset($this->address_types[$index])) {
-			return $this->address_types[$index]['type'];
-		}
-		else {
-			return $index;
-		}
+        return isset($this->address_types[$index]) ? $this->address_types[$index]['type'] : $index;
 	}
 
 	/**
@@ -219,24 +206,8 @@ class Addresses extends Common_functions {
 			$states_assoc[$s['type']] = $s;
 		}
 		# return
-		if(isset($states_assoc[$type])) {
-			return $states_assoc[$type]['id'];
-		}
-		else {
-			return $type;
-		}
+        return isset($states_assoc[$type]) ? $states_assoc[$type]['id'] : $type;
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 	/**
 	* @address methods
@@ -1659,11 +1630,16 @@ class Addresses extends Common_functions {
 		$this->initialize_pear_net_IPv6 ();
 
 		# is it valid?
-		if (!$this->Net_IPv6->checkIPv6($address)) 							{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# it must be in provided subnet
-		elseif (!$this->Net_IPv6->isInNetmask($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# default
-		return false;
+        if (!$this->Net_IPv6->checkIPv6($address)) {
+            $this->Result->show("danger", _("IP address not valid") . "! ($address)", $die);
+            return true;
+        } # it must be in provided subnet
+        if (!$this->Net_IPv6->isInNetmask($address, $subnet)) {
+            $this->Result->show("danger", _("IP address not in selected subnet") . "! ($address)", $die);
+            return true;
+        }
+        # default
+        return false;
 	}
 
 	/**
@@ -1671,7 +1647,7 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @return void
+	 * @return boolean
 	 */
 	public function validate_address ($address) {
 		# Initialize PEAR NET object
@@ -1679,19 +1655,18 @@ class Addresses extends Common_functions {
 		$this->initialize_pear_net_IPv6 ();
 
 		// no null
-		if($this->transform_address ($address, "decimal")==0) {
+		if($this->transform_address ($address, "decimal")==0)
 			return false;
-		}
+
 		// transform
 		$address = $this->transform_address ($address, "dotted");
+
 		// ipv6
-		if($this->identify_address ($address)=="IPv6") {
+		if($this->identify_address ($address)=="IPv6")
 			return $this->Net_IPv6->checkIPv6($address) ?  true : false;
-		}
+
 		// ipv4
-		else {
-			return $this->Net_IPv4->validateIP($address) ? true : false;
-		}
+        return $this->Net_IPv4->validateIP($address) ? true : false;
 	}
 
 	/**
