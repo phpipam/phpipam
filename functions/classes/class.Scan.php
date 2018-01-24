@@ -148,7 +148,7 @@ class Scan extends Common_functions {
 		# set php exec
 		$this->set_php_exec ();
 		# Log object
-		$this->Log = new Logging ($this->Database, $this->settings);
+		$this->Log = new Logger ($this->Database, $this->settings);
 	}
 
 	/**

@@ -7,7 +7,7 @@ if(!is_object(@$User)) {
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
 	$Tools 		= new Tools ($Database);
-	$Log		= new Logging ($Database);
+	$Log		= new Logger ($Database);
 	$Result		= new Result ();
 }
 

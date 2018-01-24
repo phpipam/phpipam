@@ -13,7 +13,7 @@ if(!is_object(@$User)) {
 	$Tools 		= new Tools ($Database);
 	$Subnets 	= new Subnets ($Database);
 	$Sections 	= new Sections ($Database);
-	$Log		= new Logging ($Database);
+	$Log		= new Logger ($Database);
 	$Result 	= new Result ();
 }
 

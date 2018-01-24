@@ -98,7 +98,7 @@ class phpipam_rack extends Tools {
 		# initialize Result
 		$this->Result = new Result ();
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 
 		# set racksizes
 		$this->define_rack_sizes ();

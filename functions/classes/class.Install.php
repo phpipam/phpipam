@@ -138,7 +138,7 @@ class Install extends Common_functions {
 		if($this->install_database_execute ($migrate) !== false) {
 		    # return true, if some errors occured script already died! */
 			sleep(1);
-			$this->Log = new Logging ($this->Database);
+			$this->Log = new Logger ($this->Database);
 			$this->Log->write( "Database installation", "Database installed successfully. Version ".VERSION.".".REVISION." installed", 1 );
 			return true;
 		}
@@ -431,7 +431,7 @@ class Install extends Common_functions {
     	    if (strlen($query)>5) {
     			try { $this->Database->runQuery($query); }
     			catch (Exception $e) {
-    				$this->Log = new Logging ($this->Database);
+    				$this->Log = new Logger ($this->Database);
     				# write log
     				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
     				# fail
@@ -452,7 +452,7 @@ class Install extends Common_functions {
 
 		# all good, print it
 		sleep(1);
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
 		return true;
 	}

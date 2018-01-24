@@ -175,7 +175,7 @@ class User extends Common_functions {
         $this->get_settings ();
 
         # Log object
-        $this->Log = new Logging ($this->Database, $this->settings);
+        $this->Log = new Logger ($this->Database, $this->settings);
 
         # register new session
         $this->register_session ();

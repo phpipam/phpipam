@@ -120,7 +120,7 @@ class Addresses extends Common_functions {
 		$this->set_debugging();
 
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 	}
 
 

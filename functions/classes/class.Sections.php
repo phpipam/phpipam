@@ -74,7 +74,7 @@ class Sections extends Common_functions {
 		# initialize Result
 		$this->Result = new Result ();
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 	}
 
 

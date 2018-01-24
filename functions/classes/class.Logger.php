@@ -10,7 +10,7 @@
  *		* syslog;
  */
 
-class Logging extends Common_functions {
+class Logger extends Common_functions {
 
 
 	/**

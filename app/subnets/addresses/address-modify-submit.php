@@ -15,7 +15,7 @@ $User		= new User ($Database);
 $Subnets	= new Subnets ($Database);
 $Tools	    = new Tools ($Database);
 $Addresses	= new Addresses ($Database);
-$Log 		= new Logging ($Database, $User->settings);
+$Log 		= new Logger ($Database, $User->settings);
 $Zones 		= new FirewallZones($Database);
 $Ping		= new Scan ($Database);
 

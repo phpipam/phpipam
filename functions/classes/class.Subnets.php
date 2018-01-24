@@ -156,7 +156,7 @@ class Subnets extends Common_functions {
 		# initialize Result
 		$this->Result = new Result ();
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 		# pre-generate GMP math bitmask values to manipulate subnets/addresses
 		$this->gmp_bitmasks = $this->generate_network_bitmasks();
 	}

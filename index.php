@@ -41,7 +41,7 @@ if ($Rewrite->is_api()) {
         $Subnets = new Subnets ($Database);
         $Tools = new Tools ($Database);
         $Addresses = new Addresses ($Database);
-        $Log = new Logging ($Database);
+        $Log = new Logger ($Database);
 
         # reset url for base
         $url = $User->createURL();

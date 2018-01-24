@@ -107,7 +107,7 @@ class Admin extends Common_functions {
 		# verify that user is admin
 		$this->is_admin ();
 		# Log object
-		$this->Log = new Logging ($this->Database);
+		$this->Log = new Logger ($this->Database);
 	}
 
 	/**

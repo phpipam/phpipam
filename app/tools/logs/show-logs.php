@@ -26,7 +26,7 @@ if(!is_object($User)) {
 	$User 		= new User ($Database);
 	$Tools	 	= new Tools ($Database);
 	$Result 	= new Result ();
-	$Log		= new Logging ($Database);
+	$Log		= new Logger ($Database);
 
 	# verify that user is logged in
 	$User->check_user_session();
