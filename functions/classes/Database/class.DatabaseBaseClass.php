@@ -59,7 +59,7 @@ abstract class DatabaseBaseClass {
     public $dbname 	= '';		// needed for DB check
 
     /**
-     * hosnamr
+     * Hostname for DB Connection
      *
      * (default value: 'localhost')
      *
@@ -79,9 +79,6 @@ abstract class DatabaseBaseClass {
     protected $port 	= '3306';
 
 
-
-
-
     /**
      * __construct function.
      *
@@ -89,7 +86,7 @@ abstract class DatabaseBaseClass {
      * @param string|null $username (default: null)
      * @param string|null $password (default: null)
      * @param string|null $charset (default: null)
-     * @param string|null $ssl (default: null)
+     * @param mixed $ssl (default: null)
      * @return void
      */
     public function __construct($username = null, $password = null, $charset = null, $ssl = null) {
@@ -108,7 +105,7 @@ abstract class DatabaseBaseClass {
      * @access public
      * @static
      * @param mixed $date (default: null)
-     * @return void
+     * @return string
      */
     public static function toDate($date = null) {
         if (is_int($date)) {
@@ -126,18 +123,16 @@ abstract class DatabaseBaseClass {
      *
      * @access public
      * @return void
+     * @throws Exception
      */
     public function connect() {
         $dsn = $this->makeDsn();
 
         try {
-            # ssl?
-            if ($this->ssl) {
+            if ($this->ssl)
                 $this->pdo = new \PDO($dsn, $this->username, $this->password, $this->ssl);
-            }
-            else {
+            else
                 $this->pdo = new \PDO($dsn, $this->username, $this->password);
-            }
 
             $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
@@ -152,7 +147,7 @@ abstract class DatabaseBaseClass {
      * makeDsn function.
      *
      * @access protected
-     * @return void
+     * @return string
      */
     protected function makeDsn() {
         return ':charset=' . $this->charset;
@@ -234,7 +229,8 @@ abstract class DatabaseBaseClass {
      * @param mixed $query
      * @param array $values (default: array())
      * @param integer|null &$rowCount (default: null)
-     * @return void
+     * @return bool|null
+     * @throws Exception
      */
     public function runQuery($query, $values = array(), &$rowCount = null) {
         if (!$this->isConnected()) $this->connect();
@@ -259,7 +255,8 @@ abstract class DatabaseBaseClass {
      *
      * @access public
      * @param mixed $str
-     * @return void
+     * @return string
+     * @throws Exception
      */
     public function escape($str) {
         if (!$this->isConnected()) $this->connect();
@@ -271,8 +268,9 @@ abstract class DatabaseBaseClass {
      * Get a quick number of objects in a table
      *
      * @access public
-     * @param mixed $tableName
-     * @return void
+     * @param string $tableName
+     * @return mixed
+     * @throws Exception
      */
     public function numObjects($tableName) {
         if (!$this->isConnected()) $this->connect();
@@ -291,19 +289,20 @@ abstract class DatabaseBaseClass {
      * Get a quick number of objects in a table for filtered field
      *
      * @access public
-     * @param mixed $tableName
-     * @param mixed $method
-     * @param boolean $like (default: false)
+     * @param string $tableName
+     * @param string $field
      * @param mixed $value
-     * @return void
+     * @param boolean $like (default: false)
+     * @return mixed
+     * @throws Exception
      */
-    public function numObjectsFilter($tableName, $method, $value, $like = false) {
+    public function numObjectsFilter($tableName, $field, $value, $like = false) {
         if (!$this->isConnected()) $this->connect();
 
-        $like === true ? $operator = "LIKE" : $operator = "=";
+        $operator = $like === true ? "LIKE" : "=";
 
         $tableName = $this->escape($tableName);
-        $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
+        $statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$field.'` '.$operator.' ?;');
 
         //debuq
         $this->log_query ($statement, (array) $value);
@@ -318,11 +317,12 @@ abstract class DatabaseBaseClass {
      * Note: the id of the object is assumed to be in.
      *
      * @access public
-     * @param mixed $tableName
+     * @param string $tableName
      * @param mixed $obj
      * @param string $primarykey (default: 'id')
      * @param mixed $primarykey2 (default: null)
-     * @return void
+     * @return bool
+     * @throws Exception
      */
     public function updateObject($tableName, $obj, $primarykey = 'id', $primarykey2 = null) {
         if (!$this->isConnected()) $this->connect();
