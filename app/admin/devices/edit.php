@@ -151,7 +151,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
     </tr>
     <tr>
         <?php
-        $Racks = new phpipam_rack ($Database);
+        $Racks = new RackSpace ($Database);
         $Racks->fetch_all_racks();
         ?>
         <td><?php print _('Rack'); ?></td>

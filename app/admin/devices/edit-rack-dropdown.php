@@ -19,7 +19,7 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 		# initialize user object
 		$Database 	= new Database;
 		$User 		= new User ($Database);
-		$Racks 		= new phpipam_rack ($Database);
+		$Racks 		= new RackSpace ($Database);
 		$Result 	= new Result ();
 
 		# verify that user is logged in

@@ -12,7 +12,7 @@ $Database 	= new Database;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
-$Racks      = new phpipam_rack ($Database);
+$Racks      = new RackSpace ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in

@@ -31,7 +31,7 @@ defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
-require(dirname(__FILE__) . '/classes/class.PDO.php');		//Class PDO - wrapper for database
+require(dirname(__FILE__) . '/classes/Database/class.Database.php');		//Class PDO - wrapper for database
 require( dirname(__FILE__) . '/classes/class.User.php' );		//Class for active user management
 require(dirname(__FILE__) . '/classes/class.Logger.php');		//Class for log saving
 require( dirname(__FILE__) . '/classes/class.Result.php' );		//Class for result printing

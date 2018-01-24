@@ -11,7 +11,7 @@ require( dirname(__FILE__) . '/../../../functions/functions.php');
 $Database 	= new Database;
 $User 		= new User ($Database);
 $Tools 		= new Tools ($Database);
-$Racks      = new phpipam_rack ($Database);
+$Racks      = new RackSpace ($Database);
 $Result 	= new Result ();
 
 
@@ -27,7 +27,7 @@ else {
     # validate integer
     if(!is_numeric($_POST['rackid']))      { $error = _("Invalid rack Id"); }
     # init racks object
-    $Racks = new phpipam_rack ($Database);
+    $Racks = new RackSpace ($Database);
     # fetch all racks
     $rack = $Racks->fetch_rack_details ($_POST['rackid']);
     $rack_devices = $Racks->fetch_rack_devices ($_POST['rackid']);

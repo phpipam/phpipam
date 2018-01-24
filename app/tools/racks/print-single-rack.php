@@ -18,7 +18,7 @@ else {
     # validate integer
     if(!is_numeric($_GET['subnetId']))      { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
     # init racks object
-    $Racks = new phpipam_rack ($Database);
+    $Racks = new RackSpace ($Database);
     # fetch all racks
     $rack = $Racks->fetch_rack_details ($_GET['subnetId']);
     $rack_devices = $Racks->fetch_rack_devices ($_GET['subnetId']);
