@@ -46,7 +46,7 @@ require( dirname(__FILE__) . '/classes/class.PowerDNS.php' );	//Class for PowerD
 require( dirname(__FILE__) . '/classes/class.FirewallZones.php' );	//Class for firewall zone management
 require( dirname(__FILE__) . '/classes/class.Admin.php' );		//Class for Administration
 require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
-require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
+require(dirname(__FILE__) . '/classes/Rackspace/class.Rackspace.php');	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
