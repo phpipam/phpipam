@@ -1,13 +1,12 @@
 <?php
 
 /**
+ * Class for printing outputs and saving logs to database
  *
- *	Class for printing outputs and saving logs to database
- *
- *	Severity indexes:
- *		0 = success
- *		1 = warning
- *		2 = error
+ * Severity indexes:
+ *     0 = success
+ *     1 = warning
+ *     2 = error
  *
  */
 
@@ -174,7 +173,7 @@ class Result extends Common_functions {
 		// include Exceptions class for API
 		include_once( dirname(__FILE__) . '../../../api/controllers/Responses.php' );
 		// initialize exceptions
-		$Exceptions = new Responses ();
+		$Exceptions = new Responses();
 		// throw error
 		$Exceptions->throw_exception(500, $content);
 	}
@@ -190,5 +189,3 @@ class Result extends Common_functions {
 		if ($this->die === true)	{ die(); }
 	}
 }
-
-?>

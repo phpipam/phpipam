@@ -32,7 +32,7 @@ $_POST = $Tools->strip_input_tags($_POST);
 $mail_settings = $Tools->fetch_object("settingsMail", "id", 1);
 
 # initialize mailer
-$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
+$phpipam_mail = new Mail($User->settings, $mail_settings);
 $phpipam_mail->initialize_mailer();
 
 

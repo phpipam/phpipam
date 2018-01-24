@@ -544,4 +544,4 @@ class Sections extends Common_functions {
 		return $out;
 	}
 }
-?>
+

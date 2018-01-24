@@ -84,7 +84,7 @@ $settings = $Admin->fetch_object("settings", "id", 1);
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
 # initialize mailer
-$phpipam_mail = new phpipam_mail($settings, $mail_settings);
+$phpipam_mail = new Mail($settings, $mail_settings);
 $phpipam_mail->initialize_mailer();
 
 // set subject

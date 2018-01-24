@@ -26,7 +26,7 @@ if (strlen($mail_settings->mAdminMail)==0 || strlen($mail_settings->mAdminName)=
 
 
 # initialize mailer
-$phpipam_mail = new phpipam_mail($User->settings, $mail_settings);
+$phpipam_mail = new Mail($User->settings, $mail_settings);
 //override settings
 $phpipam_mail->override_settings($_POST);
 //create object

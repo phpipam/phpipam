@@ -8,7 +8,7 @@
 *
 */
 
-class phpipam_mail extends Common_functions {
+class Mail extends Common_functions {
 
 
 	/**
@@ -39,11 +39,6 @@ class phpipam_mail extends Common_functions {
 	 */
 	public $Php_mailer;
 
-
-
-
-
-
 	/**
 	 * __construct function.
 	 *
@@ -55,8 +50,6 @@ class phpipam_mail extends Common_functions {
 		$this->settings = $settings;
 		$this->mail_settings = $mail_settings;
 	}
-
-
 
 	/**
 	 * Initializes mailer object.

@@ -22,7 +22,7 @@
 
 /* functions */
 require( dirname(__FILE__) . '/../../functions/functions.php');
-require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
+require(dirname(__FILE__) . '/../../functions/classes/class.PingThread.php');
 
 # initialize user object
 $Database 	= new Database;

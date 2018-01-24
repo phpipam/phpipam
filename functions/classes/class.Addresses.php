@@ -639,7 +639,7 @@ class Addresses extends Common_functions {
                     	// mail settings
                         $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
                     	// mail class
-                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
+                    	$phpipam_mail = new Mail ($this->settings, $mail_settings);
 
                         // send
                         $phpipam_mail->initialize_mailer();

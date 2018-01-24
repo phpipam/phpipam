@@ -1031,7 +1031,7 @@ class Tools extends Common_functions {
 
 		# initialize mailer
 		$this->get_settings ();
-		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail = new Mail($this->settings, $mail_settings);
 		$phpipam_mail->initialize_mailer();
 
 

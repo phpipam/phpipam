@@ -585,10 +585,11 @@ abstract class DatabaseBaseClass {
      * Get a single object from the database
      *
      * @access public
-     * @param mixed $tableName
+     * @param string $tableName
      * @param mixed $id (default: null)
      * @param string $class (default: 'stdClass')
      * @return void
+     * @throws Exception
      */
     public function getObject($tableName, $id = null, $class = 'stdClass') {
         if (!$this->isConnected()) $this->connect();
@@ -612,11 +613,9 @@ abstract class DatabaseBaseClass {
         //we can then extract the single object (if we have a result)
         $resultObj = $statement->fetchObject($class);
 
-        if ($resultObj === false) {
+        if ($resultObj === false)
             return null;
-        } else {
-            return $resultObj;
-        }
+        return $resultObj;
     }
 
     /**

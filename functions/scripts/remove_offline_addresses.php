@@ -87,7 +87,7 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 	$User = new StdClass();
 
 	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Subnets->settings, $mail_settings);
+	$phpipam_mail = new Mail($Subnets->settings, $mail_settings);
 	$phpipam_mail->initialize_mailer();
 
 	// set subject
