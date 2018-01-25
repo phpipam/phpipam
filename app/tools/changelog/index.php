@@ -22,11 +22,11 @@ if($User->settings->enableChangelog == 1) {
 
 	# change parameters - search string provided
 	if(isset($_GET['sPage'])) {
-		$_REQUEST['cfilter']  = $_REQUEST['subnetId'];
-		$_REQUEST['climit']  = $_REQUEST['sPage'];
+		$_REQUEST['cfilter']  = htmlentities($_REQUEST['subnetId'], ENT_QUOTES);
+		$_REQUEST['climit']  = htmlentities($_REQUEST['sPage'], ENT_QUOTES);
 	}
 	elseif(isset($_GET['subnetId'])) {
-		$_REQUEST['climit']  = $_REQUEST['subnetId'];
+		$_REQUEST['climit']  = htmlentities($_REQUEST['subnetId'], ENT_QUOTES);
 	}
 	else {
 		$_REQUEST['climit']  = 50;
@@ -51,7 +51,7 @@ if($User->settings->enableChangelog == 1) {
 		</div>
 
 		<div class='form-group'>
-			<input class='span2 cfilter input-sm form-control' name='cfilter' value='<?php print @$_REQUEST['cfilter'];?>' type='text' style='width:150px;'>
+			<input class='span2 cfilter input-sm form-control' name='cfilter' value='<?php print @htmlentities($_REQUEST['cfilter'], ENT_QUOTES);?>' type='text' style='width:150px;'>
 			<span class="input-group-btn">
 				<input type='submit' class='btn btn-sm btn-default' value='<?php print _('Search');?>'>
 			</span>
