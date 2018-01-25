@@ -1867,12 +1867,12 @@ class Logging extends Common_functions {
 		# set plain content
 		$content_plain = array();
 		$content_plain[] = "Object type: ".$this->object_type;
-		$content_plain[] = "Object details: ".$details;
+		$content_plain[] = "Object details: ".strip_tags($details);
 		$content_plain[] = "User: ".$this->user->real_name." (".$this->user->username.")";
 		$content_plain[] = "Action: ".$this->object_action;
 		$content_plain[] = "Date: ".date("Y-m-d H:i:s");
 		$content_plain[] = "\r\n--------------------\r\n";
-		$content_plain[] = str_replace("<br>", "\r\n",$changelog);
+		$content_plain[] = implode("\r\n", (array) $changelog);
 
 
 		# get all admins and check who to end mail to
