@@ -235,7 +235,7 @@ class Common_api_functions {
 		$result = $this->remap_keys ($result, $controller);
 
 		// Reindex results to start at index 0.
-		$result = array_values($result);
+		if (is_array($result)) { $result = array_values($result); }
 
 		# return
 		return $result;
