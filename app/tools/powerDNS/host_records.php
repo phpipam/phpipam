@@ -21,7 +21,7 @@ else {
     # fetch records for each IP address
     foreach ($unique_ips as $k=>$ip) {
         $records = $PowerDNS->search_records ("content", $ip->content, 'content', true);
-        unset($cname);
+        $cname = array();
         // loop
         foreach ($records as $r) {
             $out[$k][] = $r;

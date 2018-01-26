@@ -914,7 +914,7 @@ class Subnets extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
-		return sizeof($gateway)>0 ? $gateway : false;
+		return !is_null($gateway) ? $gateway : false;
 	}
 
 	/**
