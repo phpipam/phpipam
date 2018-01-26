@@ -8,6 +8,8 @@
     + Added Required fields subpage to define IP address fields that must be filled in;
     + Performance + bug fixes (#1660, #1657);
     + MasterSubnet dropdown list is dynamically generated via AJAX call.
+    + API:
+        + New last_subnet API calls (#1655);
 
     Translations:
     ----------------------------
@@ -25,7 +27,7 @@
     + Performance fix for detecting overlapping subnets. (#1052, #1426, #1533)
     + Performance fix for slow mac address vendor decoding (#1658)
     + Performance fix for subnet API first_subnet & all_subnets calls.
-    + fix import encoding if necessary (#1659)
+    + Convert to UTF-8 encoding on import to preserve dialectics (#1659, #1700)
     + Importing IPs loose Mac Addresses (#1607)
     + Section names containing spaces are not included in exports. (#1566)
     + Bug with section and dashboard (#1593)

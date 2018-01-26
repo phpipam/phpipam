@@ -225,7 +225,7 @@ class Common_functions  {
 				return false;
 			}
 			# save to cache array
-			if($res !== null && sizeof($res)>0) {
+			if($res !== null && is_object($res)) {
 				// set identifier
 				$method = $this->cache_set_identifier ($table);
 				// save

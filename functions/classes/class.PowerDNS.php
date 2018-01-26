@@ -578,7 +578,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain)>0 ? $domain : false;
+        return !is_null($domain) ? $domain : false;
     }
 
     /**
@@ -600,7 +600,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain[0])>0 ? $domain[0] : false;
+        return is_object(($domain[0])) ? $domain[0] : false;
     }
 
     /**
@@ -709,7 +709,7 @@ class PowerDNS extends Common_functions {
             return false;
         }
         # result
-        return sizeof($record)>0 ? $record : false;
+        return !is_null($record) ? $record : false;
     }
 
     /**

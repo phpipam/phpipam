@@ -217,7 +217,6 @@ class User extends Common_functions {
             // set default params
             $this->set_session_ini_params ();
             //register session
-            session_name($this->sessname);
             if(@$_SESSION===NULL) {
                 session_start();
             }
@@ -241,8 +240,10 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_name () {
-        include( dirname(__FILE__).'/../../config.php' );
-        $this->sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        if(!isset($_SESSION)) {
+            include( dirname(__FILE__).'/../../config.php' );
+            $this->sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        }
     }
 
     /**
@@ -255,8 +256,10 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_ini_params () {
-        ini_set('session.gc_maxlifetime', 86400);
-        ini_set('session.cookie_lifetime', 86400);
+        if(!isset($_SESSION)) {
+            ini_set('session.gc_maxlifetime', 86400);
+            ini_set('session.cookie_lifetime', 86400);
+        }
     }
 
     /**
@@ -421,7 +424,7 @@ class User extends Common_functions {
     private function set_redirect_cookie () {
         # save current redirect vaule
         if($_SERVER['SCRIPT_URL']!="/login/" && $_SERVER['SCRIPT_URL']!="logout" && $_SERVER['SCRIPT_URL']!="?page=login" && $_SERVER['SCRIPT_URL']!="?page=logout" && $_SERVER['SCRIPT_URL']!="index.php?page=login" && $_SERVER['SCRIPT_URL']!="index.php?page=logout" && $_SERVER['SCRIPT_URL']!="/" && $_SERVER['SCRIPT_URL']!="%2f");
-        setcookie("phpipamredirect", $_SERVER['REQUEST_URI'], time()+10, "/", null, null, true);
+        setcookie("phpipamredirect", preg_replace('/^\/+/', '/', $_SERVER['REQUEST_URI']), time()+10, "/", null, null, true);
     }
 
     /**
