@@ -85,7 +85,7 @@ else {
 		<meta http-equiv="X-UA-Compatible" content="chrome=1">
 
 		<!-- title -->
-		<title><?php print htmlentities($title, ENT_QUOTES); ?></title>
+		<title><?php print $title; ?></title>
 
 		<!-- OpenSearch -->
 		<link rel="search" type="application/opensearchdescription+xml" href="/?page=opensearch" title="Search <?php print $User->settings->siteTitle; ?>">
