@@ -9,32 +9,31 @@ $User->check_user_session();
 
 # strip tags - XSS
 $_GET  = $User->strip_input_tags ($_GET);
-$_REQUEST = $User->strip_input_tags ($_REQUEST);
 
 # validate subnetId parameter - meaning cfilter
-if(isset($_REQUEST['subnetId'])) {
-    // validate $_REQUEST['subnetId']
-    if(!!preg_match('/[^A-Za-z0-9.#*% <>_ \\-$]/', $_REQUEST['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
+if(isset($_GET['subnetId'])) {
+    // validate $_GET['subnetId']
+    if(!!preg_match('/[^A-Za-z0-9.#*% <>_ \\-$]/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
 }
 
 # change parameters - search string provided
 if(isset($_GET['sPage'])) {
-	$_REQUEST['cfilter']  = $_REQUEST['subnetId'];
-	$_REQUEST['climit']  = $_REQUEST['sPage'];
+	$_GET['cfilter']  = $_GET['subnetId'];
+	$_GET['climit']  = $_GET['sPage'];
 }
 elseif(isset($_GET['subnetId'])) {
-	$_REQUEST['climit']  = $_REQUEST['subnetId'];
+	$_GET['climit']  = $_GET['subnetId'];
 }
 else {
-	$_REQUEST['climit']  = 50;
+	$_GET['climit']  = 50;
 }
 
 # numeric check
-if(!is_numeric($_REQUEST['climit']))  { $Result->show("danger", _("Invalid limit")."!", true); }
+if(!is_numeric($_GET['climit']))  { $Result->show("danger", _("Invalid limit")."!", true); }
 
 # get clog entries
-if(!isset($_REQUEST['cfilter'])) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $_REQUEST['climit']); }
-else								{ $clogs = $Log->fetch_all_changelogs (true, $_REQUEST['cfilter'], $_REQUEST['climit']); }
+if(!isset($_GET['cfilter'])) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $_GET['climit']); }
+else								{ $clogs = $Log->fetch_all_changelogs (true, $_GET['cfilter'], $_GET['climit']); }
 
 # empty
 if(sizeof($clogs)==0) {
@@ -46,7 +45,7 @@ if(sizeof($clogs)==0) {
 # result
 else {
 	# if more that configured print it!
-	if(sizeof($clogs)==$_REQUEST['climit']) { $Result->show("warning alert-absolute", _("Output has been limited to last $_REQUEST[climit] lines")."!", false); }
+	if(sizeof($clogs)==$_GET['climit']) { $Result->show("warning alert-absolute", _("Output has been limited to last $_GET[climit] lines")."!", false); }
 
 	# printout
 	print "<table class='table table-striped table-top table-condensed'>";
