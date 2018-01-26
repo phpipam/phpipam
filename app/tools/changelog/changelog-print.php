@@ -17,23 +17,24 @@ if(isset($_GET['subnetId'])) {
 }
 
 # change parameters - search string provided
+$input_cfilter = '';
 if(isset($_GET['sPage'])) {
-	$_GET['cfilter']  = $_GET['subnetId'];
-	$_GET['climit']  = $_GET['sPage'];
+    $input_cfilter = escape_input(urldecode($_GET['subnetId']));
+    $input_climit  = (int) $_GET['sPage'];
 }
 elseif(isset($_GET['subnetId'])) {
-	$_GET['climit']  = $_GET['subnetId'];
+    $input_climit  = (int) $_GET['subnetId'];
 }
 else {
-	$_GET['climit']  = 50;
+    $input_climit  = 50;
 }
 
 # numeric check
-if(!is_numeric($_GET['climit']))  { $Result->show("danger", _("Invalid limit")."!", true); }
+if(!is_numeric($input_climit) || $input_climit<1)  { $Result->show("danger", _("Invalid limit")."!", true); }
 
 # get clog entries
-if(!isset($_GET['cfilter'])) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $_GET['climit']); }
-else								{ $clogs = $Log->fetch_all_changelogs (true, $_GET['cfilter'], $_GET['climit']); }
+if(empty($input_cfilter)) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $input_climit); }
+else						{ $clogs = $Log->fetch_all_changelogs (true, $input_cfilter, $input_climit); }
 
 # empty
 if(sizeof($clogs)==0) {
@@ -45,7 +46,7 @@ if(sizeof($clogs)==0) {
 # result
 else {
 	# if more that configured print it!
-	if(sizeof($clogs)==$_GET['climit']) { $Result->show("warning alert-absolute", _("Output has been limited to last $_GET[climit] lines")."!", false); }
+	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last $input_climit lines")."!", false); }
 
 	# printout
 	print "<table class='table table-striped table-top table-condensed'>";

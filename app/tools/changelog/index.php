@@ -16,19 +16,20 @@ print "<h4>"._('Changelog')."</h4>";
 # if enabled
 if($User->settings->enableChangelog == 1) {
 	# set default size
-	if(!isset($_GET['subnetId']))	{ $_GET['climit'] = 50; }
-	else								{ $_GET['climit'] = $_GET['subnetId']; }
+	if(!isset($_GET['subnetId']))	{$input_climit = 50; }
+	else							{$input_climit = (int) $_GET['subnetId']; }
 
 	# change parameters - search string provided
+	$input_cfilter = '';
 	if(isset($_GET['sPage'])) {
-		$_GET['cfilter']  = $_GET['subnetId'];
-		$_GET['climit']  = $_GET['sPage'];
+		$input_cfilter = escape_input(urldecode($_GET['subnetId']));
+		$input_climit  = (int) $_GET['sPage'];
 	}
 	elseif(isset($_GET['subnetId'])) {
-		$_GET['climit']  = $_GET['subnetId'];
+		$input_climit  = (int) $_GET['subnetId'];
 	}
 	else {
-		$_GET['climit']  = 50;
+		$input_climit  = 50;
 	}
 ?>
 
@@ -42,7 +43,7 @@ if($User->settings->enableChangelog == 1) {
 			<?php
 			$printLimits = array(50,100,250,500);
 			foreach($printLimits as $l) {
-				if($l == $_GET['climit'])	{ print "<option value='$l' selected='selected'>$l</option>"; }
+				if($l ==$input_climit)	{ print "<option value='$l' selected='selected'>$l</option>"; }
 				else							{ print "<option value='$l'>$l</option>"; }
 			}
 			?>
@@ -50,7 +51,7 @@ if($User->settings->enableChangelog == 1) {
 		</div>
 
 		<div class='form-group'>
-			<input class='span2 cfilter input-sm form-control' name='cfilter' value='<?php print @$_GET['cfilter'];?>' type='text' style='width:150px;'>
+			<input class='span2 cfilter input-sm form-control' name='cfilter' value='<?php print $input_cfilter;?>' type='text' style='width:150px;'>
 			<span class="input-group-btn">
 				<input type='submit' class='btn btn-sm btn-default' value='<?php print _('Search');?>'>
 			</span>
