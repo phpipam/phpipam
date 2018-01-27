@@ -2,7 +2,7 @@
 /* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * DNS Library for handling lookups and updates.
+ * DNS Library for handling lookups and updates. 
  *
  * PHP Version 5
  *
@@ -21,8 +21,8 @@
  *     the documentation and/or other materials provided with the
  *     distribution.
  *
- *   * Neither the name of Mike Pultz nor the names of his contributors
- *     may be used to endorse or promote products derived from this
+ *   * Neither the name of Mike Pultz nor the names of his contributors 
+ *     may be used to endorse or promote products derived from this 
  *     software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
@@ -72,7 +72,7 @@ class Net_DNS2
     /*
      * the current version of this library
      */
-    const VERSION = '1.4.2';
+    const VERSION = '1.4.3';
 
     /*
      * the default path to a resolv.conf file
@@ -142,8 +142,8 @@ class Net_DNS2
     /*
      * the method to use for storing cache data; either "serialize" or "json"
      *
-     * json is faster, but can't remember the class names (everything comes back
-     * as a "stdClass Object"; all the data is the same though. serialize is
+     * json is faster, but can't remember the class names (everything comes back 
+     * as a "stdClass Object"; all the data is the same though. serialize is 
      * slower, but will have all the class info.
      *
      * defaults to 'serialize'
@@ -166,8 +166,8 @@ class Net_DNS2
      * actually exist.
      *
      * strict_query_mode means that if the hostname that was looked up isn't
-     * actually in the answer section of the response, Net_DNS2 will return an
-     * empty answer section, instead of an answer section that could contain
+     * actually in the answer section of the response, Net_DNS2 will return an 
+     * empty answer section, instead of an answer section that could contain 
      * CNAME records.
      *
      */
@@ -177,7 +177,7 @@ class Net_DNS2
      * if we should set the recursion desired bit to 1 or 0.
      *
      * by default this is set to true, we want the DNS server to perform a recursive
-     * request. If set to false, the RD bit will be set to 0, and the server will
+     * request. If set to false, the RD bit will be set to 0, and the server will 
      * not perform recursion on the request.
      */
     public $recurse = true;
@@ -191,8 +191,8 @@ class Net_DNS2
     public $dnssec = false;
 
     /*
-     * set the DNSSEC AD (Authentic Data) bit on/off; the AD bit on the request
-     * side was previously undefined, and resolvers we instructed to always clear
+     * set the DNSSEC AD (Authentic Data) bit on/off; the AD bit on the request 
+     * side was previously undefined, and resolvers we instructed to always clear 
      * the AD bit when sending a request.
      *
      * RFC6840 section 5.7 defines setting the AD bit in the query as a signal to
@@ -240,7 +240,7 @@ class Net_DNS2
     /*
      * local sockets
      */
-    protected $sock = array('udp' => array(), 'tcp' => array());
+    protected $sock = array(Net_DNS2_Socket::SOCK_DGRAM => array(), Net_DNS2_Socket::SOCK_STREAM => array());
 
     /*
      * if the socket extension is loaded
@@ -274,11 +274,11 @@ class Net_DNS2
     public function __construct(array $options = null)
     {
         //
-        // check for the sockets extension; we no longer support the sockets library under
-        // windows- there have been too many errors related to sockets under windows-
-        // specifically inconsistent socket defines between versions of windows-
+        // check for the sockets extension; we no longer support the sockets library under 
+        // windows- there have been too many errors related to sockets under windows- 
+        // specifically inconsistent socket defines between versions of windows- 
         //
-        // and since I can't seem to find a way to get the actual windows version, it
+        // and since I can't seem to find a way to get the actual windows version, it 
         // doesn't seem fixable in the code.
         //
         if ( (extension_loaded('sockets') == true) && (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') ) {
@@ -298,7 +298,7 @@ class Net_DNS2
                     $this->setServers($value);
                 } else {
 
-                    $this->{$key} = $value;
+                    $this->$key = $value;
                 }
             }
         }
@@ -326,7 +326,7 @@ class Net_DNS2
             $this->cache = new Net_DNS2_Cache_File;
             $this->use_cache = true;
 
-            break;
+            break;  
         case 'none':
             $this->use_cache = false;
             break;
@@ -355,7 +355,7 @@ class Net_DNS2
         //
         if (strncmp($name, 'Net_DNS2', 8) == 0) {
 
-            include dirname(__FILE__) . "/../".str_replace('_', '/', $name) . '.php';
+            include str_replace('_', '/', $name) . '.php';
         }
 
         return;
@@ -364,7 +364,7 @@ class Net_DNS2
     /**
      * sets the name servers to be used
      *
-     * @param mixed $nameservers either an array of name servers, or a file name
+     * @param mixed $nameservers either an array of name servers, or a file name 
      *                           to parse, assuming it's in the resolv.conf format
      *
      * @return boolean
@@ -386,9 +386,9 @@ class Net_DNS2
         } else {
 
             //
-            // temporary list of name servers; do it this way rather than just
-            // resetting the local nameservers value, just incase an exception
-            // is thrown here; this way we might avoid ending up with an empty
+            // temporary list of name servers; do it this way rather than just 
+            // resetting the local nameservers value, just incase an exception 
+            // is thrown here; this way we might avoid ending up with an empty 
             // namservers list.
             //
             $ns = array();
@@ -397,7 +397,7 @@ class Net_DNS2
             // check to see if the file is readable
             //
             if (is_readable($nameservers) === true) {
-
+    
                 $data = file_get_contents($nameservers);
                 if ($data === false) {
                     throw new Net_DNS2_Exception(
@@ -409,14 +409,14 @@ class Net_DNS2
                 $lines = explode("\n", $data);
 
                 foreach ($lines as $line) {
-
+                    
                     $line = trim($line);
 
                     //
                     // ignore empty lines, and lines that are commented out
                     //
-                    if ( (strlen($line) == 0)
-                        || ($line[0] == '#')
+                    if ( (strlen($line) == 0) 
+                        || ($line[0] == '#') 
                         || ($line[0] == ';')
                     ) {
                         continue;
@@ -440,7 +440,7 @@ class Net_DNS2
                         //
                         // nameserver can be a IPv4 or IPv6 address
                         //
-                        if ( (self::isIPv4($value) == true)
+                        if ( (self::isIPv4($value) == true) 
                             || (self::isIPv6($value) == true)
                         ) {
 
@@ -475,8 +475,8 @@ class Net_DNS2
                 // if we don't have a domain, but we have a search list, then
                 // take the first entry on the search list as the domain
                 //
-                if ( (strlen($this->domain) == 0)
-                    && (count($this->search_list) > 0)
+                if ( (strlen($this->domain) == 0) 
+                    && (count($this->search_list) > 0) 
                 ) {
                     $this->domain = $this->search_list[0];
                 }
@@ -557,7 +557,7 @@ class Net_DNS2
         }
 
         return true;
-    }
+    }    
 
     /**
      * checks the list of name servers to make sure they're set
@@ -585,7 +585,7 @@ class Net_DNS2
                 );
             }
         }
-
+    
         return true;
     }
 
@@ -595,7 +595,7 @@ class Net_DNS2
      * @param string $keyname   the key name to use for the TSIG RR
      * @param string $signature the key to sign the request.
      * @param string $algorithm the algorithm to use
-     *
+     * 
      * @return boolean
      * @access public
      * @since  function available since release 1.1.0
@@ -605,7 +605,7 @@ class Net_DNS2
         $keyname, $signature = '', $algorithm = Net_DNS2_RR_TSIG::HMAC_MD5
     ) {
         //
-        // if the TSIG was pre-created and passed in, then we can just used
+        // if the TSIG was pre-created and passed in, then we can just used 
         // it as provided.
         //
         if ($keyname instanceof Net_DNS2_RR_TSIG) {
@@ -615,8 +615,8 @@ class Net_DNS2
         } else {
 
             //
-            // otherwise create the TSIG RR, but don't add it just yet; TSIG needs
-            // to be added as the last additional entry- so we'll add it just
+            // otherwise create the TSIG RR, but don't add it just yet; TSIG needs 
+            // to be added as the last additional entry- so we'll add it just 
             // before we send.
             //
             $this->auth_signature = Net_DNS2_RR::fromString(
@@ -629,7 +629,7 @@ class Net_DNS2
             //
             $this->auth_signature->algorithm = $algorithm;
         }
-
+          
         return true;
     }
 
@@ -637,7 +637,7 @@ class Net_DNS2
      * adds a SIG RR object for authentication
      *
      * @param string $filename the name of a file to load the signature from.
-     *
+     * 
      * @return boolean
      * @throws Net_DNS2_Exception
      * @access public
@@ -650,7 +650,7 @@ class Net_DNS2
         // check for OpenSSL
         //
         if (extension_loaded('openssl') === false) {
-
+            
             throw new Net_DNS2_Exception(
                 'the OpenSSL extension is required to use SIG(0).',
                 Net_DNS2_Lookups::E_OPENSSL_UNAVAIL
@@ -665,7 +665,7 @@ class Net_DNS2
             $this->auth_signature = $filename;
 
         } else {
-
+        
             //
             // otherwise, it's filename which needs to be parsed and processed.
             //
@@ -748,13 +748,13 @@ class Net_DNS2
             return false;
         }
 
-        return true;
+        return true;   
     }
 
     /**
      * PHP doesn't support unsigned integers, but many of the RR's return
      * unsigned values (like SOA), so there is the possibility that the
-     * value will overrun on 32bit systems, and you'll end up with a
+     * value will overrun on 32bit systems, and you'll end up with a 
      * negative value.
      *
      * 64bit systems are not affected, as their PHP_IN_MAX value should
@@ -816,7 +816,7 @@ class Net_DNS2
 
         return true;
     }
-
+    
     /**
      * returns true/false if the given address is a valid IPv6 address
      *
@@ -866,43 +866,9 @@ class Net_DNS2
      */
     public static function expandIPv6($_address)
     {
-        if (strpos($_address, '::') !== false) {
-
-            $part       = explode('::', $_address);
-            $part[0]    = explode(':', $part[0]);
-            $part[1]    = explode(':', $part[1]);
-
-            $missing = array();
-
-            $x = (8 - (count($part[0]) + count($part[1])));
-            for ($i = 0; $i < $x; $i++) {
-
-                array_push($missing, '0000');
-            }
-
-            $missing    = array_merge($part[0], $missing);
-            $part       = array_merge($missing, $part[1]);
-
-        } else {
-
-            $part = explode(':', $_address);
-        }
-
-        foreach ($part as &$p) {
-            while (strlen($p) < 4) {
-                $p = '0' . $p;
-            }
-        }
-
-        unset($p);
-
-        $result = implode(':', $part);
-
-        if (strlen($result) == 39) {
-            return $result;
-        } else {
-            return false;
-        }
+        $hex = unpack('H*hex', inet_pton($_address));
+    
+        return substr(preg_replace('/([A-f0-9]{4})/', "$1:", $hex['hex']), 0, -1);
     }
 
     /**
@@ -934,7 +900,7 @@ class Net_DNS2
         }
 
         reset($this->nameservers);
-
+        
         //
         // randomize the name server list if it's asked for
         //
@@ -972,7 +938,7 @@ class Net_DNS2
             $ns = $ns[1];
 
             //
-            // if the use TCP flag (force TCP) is set, or the packet is bigger than our
+            // if the use TCP flag (force TCP) is set, or the packet is bigger than our 
             // max allowed UDP size- which is either 512, or if this is DNSSEC request,
             // then whatever the configured dnssec_payload_size is.
             //
@@ -1043,11 +1009,11 @@ class Net_DNS2
 
             //
             // make sure the response is actually a response
-            //
+            // 
             // 0 = query, 1 = response
             //
             if ($response->header->qr != Net_DNS2_Lookups::QR_RESPONSE) {
-
+            
                 $this->last_exception = new Net_DNS2_Exception(
 
                     'invalid header: the response provided is not a response packet.',
@@ -1065,10 +1031,10 @@ class Net_DNS2
             // make sure the response code in the header is ok
             //
             if ($response->header->rcode != Net_DNS2_Lookups::RCODE_NOERROR) {
-
+            
                 $this->last_exception = new Net_DNS2_Exception(
-
-                    'DNS request failed: ' .
+                
+                    'DNS request failed: ' . 
                     Net_DNS2_Lookups::$result_code_messages[$response->header->rcode],
                     $response->header->rcode,
                     null,
@@ -1084,6 +1050,45 @@ class Net_DNS2
         }
 
         return $response;
+    }
+
+    /**
+     * cleans up a failed socket and throws the given exception
+     *
+     * @param string  $_proto the protocol of the socket
+     * @param string  $_ns    the name server to use for the request
+     * @param string  $_error the error message to throw at the end of the function
+     *
+     * @throws Net_DNS2_Exception
+     * @access private
+     *
+     */
+    private function generateError($_proto, $_ns, $_error)
+    {
+        if (isset($this->sock[$_proto][$_ns]) == false)
+        {
+            throw new Net_DNS2_Exception('invalid socket referenced', Net_DNS2_Lookups::E_NS_INVALID_SOCKET);
+        }
+        
+        //
+        // grab the last error message off the socket
+        //
+        $last_error = $this->sock[$_proto][$_ns]->last_error;
+        
+        //
+        // close it
+        //
+        $this->sock[$_proto][$_ns]->close();
+
+        //
+        // remove it from the socket cache
+        //
+        unset($this->sock[$_proto][$_ns]);
+
+        //
+        // throw the error provided
+        //
+        throw new Net_DNS2_Exception($last_error, $_error);
     }
 
     /**
@@ -1109,8 +1114,8 @@ class Net_DNS2
         // see if we already have an open socket from a previous request; if so, try to use
         // that instead of opening a new one.
         //
-        if ( (!isset($this->sock['tcp'][$_ns]))
-            || (!($this->sock['tcp'][$_ns] instanceof Net_DNS2_Socket))
+        if ( (!isset($this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]))
+            || (!($this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns] instanceof Net_DNS2_Socket))
         ) {
 
             //
@@ -1118,7 +1123,7 @@ class Net_DNS2
             //
             if ($this->sockets_enabled === true) {
 
-                $this->sock['tcp'][$_ns] = new Net_DNS2_Socket_Sockets(
+                $this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns] = new Net_DNS2_Socket_Sockets(
                     Net_DNS2_Socket::SOCK_STREAM, $_ns, $this->dns_port, $this->timeout
                 );
 
@@ -1127,7 +1132,7 @@ class Net_DNS2
             //
             } else {
 
-                $this->sock['tcp'][$_ns] = new Net_DNS2_Socket_Streams(
+                $this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns] = new Net_DNS2_Socket_Streams(
                     Net_DNS2_Socket::SOCK_STREAM, $_ns, $this->dns_port, $this->timeout
                 );
             }
@@ -1137,7 +1142,7 @@ class Net_DNS2
             //
             if (strlen($this->local_host) > 0) {
 
-                $this->sock['tcp'][$_ns]->bindAddress(
+                $this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]->bindAddress(
                     $this->local_host, $this->local_port
                 );
             }
@@ -1145,11 +1150,9 @@ class Net_DNS2
             //
             // open the socket
             //
-            if ($this->sock['tcp'][$_ns]->open() === false) {
+            if ($this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]->open() === false) {
 
-                throw new Net_DNS2_Exception(
-                    $this->sock['tcp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-                );
+                $this->generateError(Net_DNS2_Socket::SOCK_STREAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
             }
         }
 
@@ -1157,11 +1160,9 @@ class Net_DNS2
         // write the data to the socket; if it fails, continue on
         // the while loop
         //
-        if ($this->sock['tcp'][$_ns]->write($_data) === false) {
+        if ($this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]->write($_data) === false) {
 
-            throw new Net_DNS2_Exception(
-                $this->sock['tcp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-            );
+            $this->generateError(Net_DNS2_Socket::SOCK_STREAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
         }
 
         //
@@ -1183,12 +1184,19 @@ class Net_DNS2
                 //
                 // read the data off the socket
                 //
-                $result = $this->sock['tcp'][$_ns]->read($size, ($this->dnssec == true) ? $this->dnssec_payload_size : Net_DNS2_Lookups::DNS_MAX_UDP_SIZE);
+                $result = $this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]->read($size, ($this->dnssec == true) ? $this->dnssec_payload_size : Net_DNS2_Lookups::DNS_MAX_UDP_SIZE);
                 if ( ($result === false) || ($size < Net_DNS2_Lookups::DNS_HEADER_SIZE) ) {
 
-                    throw new Net_DNS2_Exception(
-                        $this->sock['tcp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-                    );
+                    //
+                    // if we get an error, then keeping this socket around for a future request, could cause
+                    // an error- for example, https://github.com/mikepultz/netdns2/issues/61
+                    //
+                    // in this case, the connection was timing out, which once it did finally respond, left
+                    // data on the socket, which could be captured on a subsequent request.
+                    //
+                    // since there's no way to "reset" a socket, the only thing we can do it close it.
+                    //
+                    $this->generateError(Net_DNS2_Socket::SOCK_STREAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
                 }
 
                 //
@@ -1208,13 +1216,13 @@ class Net_DNS2
                     //
                     // look for a failed response; if the zone transfer
                     // failed, then we don't need to do anything else at this
-                    // point, and we should just break out.
+                    // point, and we should just break out.                 
                     //
                     if ($response->header->rcode != Net_DNS2_Lookups::RCODE_NOERROR) {
                         break;
                     }
 
-                    //
+                    //   
                     // go through each answer
                     //
                     foreach ($response->answer as $index => $rr) {
@@ -1229,7 +1237,7 @@ class Net_DNS2
 
                     //
                     // if we have 2 or more SOA records, then we're done;
-                    // otherwise continue out so we read the rest of the
+                    // otherwise continue out so we read the rest of the 
                     // packets off the socket
                     //
                     if ($soa_count >= 2) {
@@ -1249,13 +1257,13 @@ class Net_DNS2
                         // count the number of SOA records we find
                         //
                         if ($rr->type == 'SOA') {
-                            $soa_count++;
+                            $soa_count++;           
                         }
 
                         //
                         // add the records to a single response object
                         //
-                        $response->answer[] = $rr;
+                        $response->answer[] = $rr;                  
                     }
 
                     //
@@ -1272,12 +1280,10 @@ class Net_DNS2
         //
         } else {
 
-            $result = $this->sock['tcp'][$_ns]->read($size, ($this->dnssec == true) ? $this->dnssec_payload_size : Net_DNS2_Lookups::DNS_MAX_UDP_SIZE);
+            $result = $this->sock[Net_DNS2_Socket::SOCK_STREAM][$_ns]->read($size, ($this->dnssec == true) ? $this->dnssec_payload_size : Net_DNS2_Lookups::DNS_MAX_UDP_SIZE);
             if ( ($result === false) || ($size < Net_DNS2_Lookups::DNS_HEADER_SIZE) ) {
 
-                throw new Net_DNS2_Exception(
-                    $this->sock['tcp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-                );
+                $this->generateError(Net_DNS2_Socket::SOCK_STREAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
             }
 
             //
@@ -1326,8 +1332,8 @@ class Net_DNS2
         // see if we already have an open socket from a previous request; if so, try to use
         // that instead of opening a new one.
         //
-        if ( (!isset($this->sock['udp'][$_ns]))
-            || (!($this->sock['udp'][$_ns] instanceof Net_DNS2_Socket))
+        if ( (!isset($this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns]))
+            || (!($this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns] instanceof Net_DNS2_Socket))
         ) {
 
             //
@@ -1335,7 +1341,7 @@ class Net_DNS2
             //
             if ($this->sockets_enabled === true) {
 
-                $this->sock['udp'][$_ns] = new Net_DNS2_Socket_Sockets(
+                $this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns] = new Net_DNS2_Socket_Sockets(
                     Net_DNS2_Socket::SOCK_DGRAM, $_ns, $this->dns_port, $this->timeout
                 );
 
@@ -1344,7 +1350,7 @@ class Net_DNS2
             //
             } else {
 
-                $this->sock['udp'][$_ns] = new Net_DNS2_Socket_Streams(
+                $this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns] = new Net_DNS2_Socket_Streams(
                     Net_DNS2_Socket::SOCK_DGRAM, $_ns, $this->dns_port, $this->timeout
                 );
             }
@@ -1354,7 +1360,7 @@ class Net_DNS2
             //
             if (strlen($this->local_host) > 0) {
 
-                $this->sock['udp'][$_ns]->bindAddress(
+                $this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns]->bindAddress(
                     $this->local_host, $this->local_port
                 );
             }
@@ -1362,22 +1368,18 @@ class Net_DNS2
             //
             // open the socket
             //
-            if ($this->sock['udp'][$_ns]->open() === false) {
+            if ($this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns]->open() === false) {
 
-                throw new Net_DNS2_Exception(
-                    $this->sock['udp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-                );
+                $this->generateError(Net_DNS2_Socket::SOCK_DGRAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
             }
         }
 
         //
         // write the data to the socket
         //
-        if ($this->sock['udp'][$_ns]->write($_data) === false) {
+        if ($this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns]->write($_data) === false) {
 
-            throw new Net_DNS2_Exception(
-                $this->sock['udp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-            );
+            $this->generateError(Net_DNS2_Socket::SOCK_DGRAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
         }
 
         //
@@ -1385,12 +1387,10 @@ class Net_DNS2
         //
         $size = 0;
 
-        $result = $this->sock['udp'][$_ns]->read($size, ($this->dnssec == true) ? $this->dnssec_payload_size : Net_DNS2_Lookups::DNS_MAX_UDP_SIZE);
+        $result = $this->sock[Net_DNS2_Socket::SOCK_DGRAM][$_ns]->read($size, ($this->dnssec == true) ? $this->dnssec_payload_size : Net_DNS2_Lookups::DNS_MAX_UDP_SIZE);
         if (( $result === false) || ($size < Net_DNS2_Lookups::DNS_HEADER_SIZE)) {
 
-            throw new Net_DNS2_Exception(
-                $this->sock['udp'][$_ns]->last_error, Net_DNS2_Lookups::E_NS_SOCKET_FAILED
-            );
+            $this->generateError(Net_DNS2_Socket::SOCK_DGRAM, $_ns, Net_DNS2_Lookups::E_NS_SOCKET_FAILED);
         }
 
         //
