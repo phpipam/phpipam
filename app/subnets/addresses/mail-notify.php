@@ -52,7 +52,7 @@ $title = _('IP address details').' :: ' . $address['ip'];
 # description
 empty($address['description']) ? : 		$content[] = "&bull; "._('Description').":\t\t $address[description]";
 # hostname
-empty($address['dns_name']) ? : 		$content[] = "&bull; "._('Hostname').": \t\t $address[dns_name]";
+empty($address['hostname']) ? : 		$content[] = "&bull; "._('Hostname').": \t\t $address[hostname]";
 # subnet desc
 $s_descrip = empty($subnet['description']) ? "" : 	 " (" . $subnet['description']. ")";
 # subnet

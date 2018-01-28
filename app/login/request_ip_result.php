@@ -31,7 +31,7 @@ if($Tools->settings->enableIPrequests==1) {
 					"subnetId"    => $_POST['subnetId'],
 					"ip_addr"     => @$_POST['ip_addr'],
 					"description" => @$_POST['description'],
-					"dns_name"    => @$_POST['dns_name'],
+					"hostname"    => @$_POST['hostname'],
 					"state"       => $_POST['state'],
 					"owner"       => $_POST['owner'],
 					"requester"   => $_POST['requester'],
