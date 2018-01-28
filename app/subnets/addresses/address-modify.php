@@ -32,9 +32,9 @@ is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
-$subnetId= $_POST['subnetId'];
-$action  = $_POST['action'];
-$id      = $_POST['id'];
+$subnetId= escape_input($_POST['subnetId']);
+$action  = escape_input($_POST['action']);
+$id      = escape_input($_POST['id']);
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
