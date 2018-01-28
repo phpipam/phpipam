@@ -114,7 +114,12 @@ $z = 0;			//addresses array index
 // let's just reindex the subnets array to save future issues
 $scan_subnets   = array_values($scan_subnets);
 $size_subnets   = count($scan_subnets);
-$size_addresses = max(array_keys($addresses));
+if ( (array) $addresses !== $addresses ) {
+        $size_addresses = 0;
+        $addresses = [];
+} else {
+        $size_addresses = max(array_keys($addresses));
+}
 
 //different scan for fping
 if($Scan->icmp_type=="fping") {
