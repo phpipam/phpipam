@@ -909,3 +909,7 @@ ALTER TABLE `requests` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET 
 ALTER TABLE `subnets` ADD INDEX (`masterSubnetId`);
 ALTER TABLE `subnets` ADD INDEX (`sectionId`);
 ALTER TABLE `subnets` ADD INDEX (`vrfId`);
+
+/* Expand / equalize ipaddress & request description field size */
+ALTER TABLE `ipaddresses` CHANGE `description` `description` VARCHAR(256)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(256)  CHARACTER SET utf8  NULL  DEFAULT NULL;
