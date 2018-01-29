@@ -914,6 +914,8 @@ class Net_DNS2
         //
         $response = null;
         $ns = false;
+        // php72 compatibility - Reset pointer to start of array
+        reset($this->nameservers);
 
         while (1) {
 
@@ -922,9 +924,7 @@ class Net_DNS2
             //
             // $ns = each($this->nameservers);
 
-            //
             // php72 compatibility - grab the next DNS server
-            //
             $ns = current($this->nameservers);
             next($this->nameservers);
 
@@ -942,7 +942,8 @@ class Net_DNS2
                 }
             }
 
-            $ns = $ns[1];
+            // php72 compatibility - each() returns array(0=>key, 1=>value), current() returns value.
+            // $ns = $ns[1];
 
             //
             // if the use TCP flag (force TCP) is set, or the packet is bigger than our
