@@ -3147,6 +3147,7 @@ class Tools extends Common_functions {
     					$outFile[$m] .= $this->csv_delimiter.$data->val($m,$currLett++);
     				}
     			}
+    			$outFile[$m] = mb_convert_encoding($outFile[$m], 'UTF-8', mb_detect_encoding($outFile[$m], 'UTF-8, ISO-8859-1', true));
     		}
     	};
     	// return
