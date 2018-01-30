@@ -342,7 +342,7 @@ class Tools_controller extends Common_api_functions {
     			}
 			}
 			else {
-    			$field = string;
+    			$field = "";
 				// id3 can only be addresses
 				if ($this->_params->id3 != "addresses")	{ $this->Response->throw_exception(400, 'Invalid parameter'); }
 				// define identifier

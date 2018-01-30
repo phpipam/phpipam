@@ -265,14 +265,14 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to addresses cache
-			if(sizeof($address)>0) {
+			if(!is_null($address)) {
 				# add decimal format
 				$address->ip = $this->transform_to_dotted ($address->ip_addr);
 				# save to subnets
 				$this->addresses[$id] = (object) $address;
 			}
 			#result
-			return sizeof($address)>0 ? $address : false;
+			return !is_null($address) ? $address : false;
 		}
 	}
 
@@ -298,7 +298,7 @@ class Addresses extends Common_functions {
 			$this->addresses[$address->id] = (object) $address;
 		}
 		#result
-		return sizeof($address)>0 ? $address : false;
+		return !is_null($address) ? $address : false;
 	}
 
 	/**
@@ -1770,7 +1770,6 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {

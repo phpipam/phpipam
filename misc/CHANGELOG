@@ -8,6 +8,8 @@
     + Added Required fields subpage to define IP address fields that must be filled in;
     + Performance + bug fixes (#1660, #1657);
     + MasterSubnet dropdown list is dynamically generated via AJAX call.
+    + API:
+        + New last_subnet API calls (#1655);
 
     Translations:
     ----------------------------
@@ -22,14 +24,16 @@
     + Fixed section names containing spaces are not included in exports (#1566);
     + Allow DNS wildcard records (#1571);
     + Fixed slow mac address vendor decoding for subnet detail view (#1658);
-    + Performance fix for detecting overlapping subnets. (#1052, #1426, #1533)
-    + Performance fix for slow mac address vendor decoding (#1658)
+    + Performance fix for detecting overlapping subnets. (#1052, #1426, #1533);
+    + Performance fix for slow mac address vendor decoding (#1658);
     + Performance fix for subnet API first_subnet & all_subnets calls.
-    + fix import encoding if necessary (#1659)
-    + Importing IPs loose Mac Addresses (#1607)
-    + Section names containing spaces are not included in exports. (#1566)
-    + Bug with section and dashboard (#1593)
-    + PHP5.3 compatibility fixes (#1594)
+    + Convert to UTF-8 encoding on import to preserve dialectics (#1659, #1700);
+    + Importing IPs loose Mac Addresses (#1607);
+    + Section names containing spaces are not included in exports. (#1566);
+    + Bug with section and dashboard (#1593);
+    + Fixed improper contents in plain text part of notification e-mails (#1707);
+    + PHP 5.3 compatibility fixes (#1594);
+    + PHP 7.2 compatibility fixes (#1683, #1714);
     + Misc IPv6 fixes.
 
 == 1.3.1

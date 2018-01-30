@@ -225,7 +225,7 @@ class Common_functions  {
 				return false;
 			}
 			# save to cache array
-			if($res !== null && sizeof($res)>0) {
+			if($res !== null && is_object($res)) {
 				// set identifier
 				$method = $this->cache_set_identifier ($table);
 				// save
@@ -1702,23 +1702,23 @@ class Common_functions  {
         	}
         	// install, upgrade
         	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
         	}
         	// sections, subnets
         	elseif ($get['page']=="subnets" || $get['page']=="folder") {
             	// subnets
-            	$title[] = "Subnets";
+            	$title[] = _("Subnets");
 
             	// section
             	if (isset($get['section'])) {
-                 	$se = $this->fetch_object ("sections", "id", $get['section']);
+                 	$se = $this->fetch_object ("sections", "id", escape_input($get['section']));
                 	if($se!==false) {
                     	$title[] = $se->name;
                 	}
             	}
             	// subnet
             	if (isset($get['subnetId'])) {
-                 	$sn = $this->fetch_object ("subnets", "id", $get['subnetId']);
+                 	$sn = $this->fetch_object ("subnets", "id", escape_input($get['subnetId']));
                 	if($sn!==false) {
                     	if($sn->isFolder) {
                         	$title[] = $sn->description;
@@ -1731,7 +1731,7 @@ class Common_functions  {
             	}
             	// ip address
             	if (isset($get['ipaddrid'])) {
-                    $ip = $this->fetch_object ("ipaddresses", "id", $get['ipaddrid']);
+                    $ip = $this->fetch_object ("ipaddresses", "id", escape_input($get['ipaddrid']));
                     if($ip!==false) {
                         $title[] = $this->transform_address($ip->ip_addr, "dotted");
                     }
@@ -1739,26 +1739,26 @@ class Common_functions  {
         	}
         	// tools, admin
         	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
             	// subpage
             	if (isset($get['section'])) {
-                	$title[] = ucwords($get['section']);
+                	$title[] = ucwords(escape_input($get['section']));
             	}
             	if (isset($get['subnetId'])) {
                 	// vland domain
                 	if($get['section']=="vlan") {
-                     	$se = $this->fetch_object ("vlanDomains", "id", $get['subnetId']);
+                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
                     	if($se!==false) {
                         	$title[] = $se->name." domain";
                     	}
                 	}
                 	else {
-                    	$title[] = ucwords($get['subnetId']);
+                    	$title[] = ucwords(escape_input($get['subnetId']));
                     }
             	}
         	}
         	else {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
             }
     	}
         // return title

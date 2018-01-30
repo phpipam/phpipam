@@ -141,6 +141,9 @@ try {
         }
     }
 
+	/* Sanitise input ---------- (user/User/USER) */
+	if (isset($params->controller)) $params->controller = strtolower($params->controller);
+
 	/* Authentication ---------- */
 
 	// authenticate user if required

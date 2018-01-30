@@ -914,7 +914,7 @@ class Subnets extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
-		return sizeof($gateway)>0 ? $gateway : false;
+		return !is_null($gateway) ? $gateway : false;
 	}
 
 	/**
@@ -3044,7 +3044,7 @@ class Subnets extends Common_functions {
 			$permission = $option['value']['id']!="" ? $this->check_permission ($user, $option['value']['id']) : 0;
 
 			# set view
-			$current_description = string;
+			$current_description = "";
 			if ($this->settings->subnetView == 0) {
 				$current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'];
 			}

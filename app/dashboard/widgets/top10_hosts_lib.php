@@ -3,7 +3,19 @@
  * Shared code between top10_hosts_v4.php
  * and top10_hosts_v6.php
  */
+# required functions
+if(!is_object(@$User)) {
+	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	# classes
+	$Database	= new Database_PDO;
+	$User		= new User ($Database);
+	$Tools		= new Tools ($Database);
+	$Subnets	= new Subnets ($Database);
+	$Result		= new Result ();
+}
 
+# user must be authenticated
+$User->check_user_session ();
 
 $top_subnets = array();
 $all_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
@@ -11,25 +23,28 @@ $all_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
 # Find subnets with user access, label duplicates.
 $unique = array();
 $valid_subnets = 0;
-foreach($all_subnets as $subnet) {
-    if ($Subnets->check_permission($User->user, $subnet->id) == "0") { continue; }
 
-    /* We've found $slimit entries */
-    if ($valid_subnets >= $slimit) { break; }
+if (is_array($all_subnets)) {
+    foreach($all_subnets as $subnet) {
+        if ($Subnets->check_permission($User->user, $subnet->id) == "0") { continue; }
 
-    /* Make fields human readable */
-    $subnet->subnet = $Subnets->transform_to_dotted($subnet->subnet);
-    $subnet->descriptionLong = $subnet->description;
-    $subnet->description = strlen($subnet->description) > 20 ? substr($subnet->description,0,17).'...' : $subnet->description;
+        /* We've found $slimit entries */
+        if ($valid_subnets >= $slimit) { break; }
 
-    /* detect and rename duplicates */
-    if(isset($unique[$subnet->description])) {
-        $subnet->description = $subnet->description.' #'.sizeof($unique[$subnet->description]);
+        /* Make fields human readable */
+        $subnet->subnet = $Subnets->transform_to_dotted($subnet->subnet);
+        $subnet->descriptionLong = $subnet->description;
+        $subnet->description = strlen($subnet->description) > 20 ? substr($subnet->description,0,17).'...' : $subnet->description;
+
+        /* detect and rename duplicates */
+        if(isset($unique[$subnet->description])) {
+            $subnet->description = $subnet->description.' #'.sizeof($unique[$subnet->description]);
+        }
+        $unique[$subnet->description][] = $valid_subnets++;
+
+        /* Save */
+        $top_subnets[] = $subnet;
     }
-    $unique[$subnet->description][] = $valid_subnets++;
-
-    /* Save */
-    $top_subnets[] = $subnet;
 }
 
 # only print if some hosts exist

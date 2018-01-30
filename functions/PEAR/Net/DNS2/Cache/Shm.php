@@ -91,6 +91,14 @@ class Net_DNS2_Cache_Shm extends Net_DNS2_Cache
         $this->cache_serializer = $serializer;
 
         //
+        // if we've already loaded the cache data, then just return right away
+        //
+        if ($this->cache_opened == true)
+        {
+            return;
+        }
+
+        //
         // make sure the file exists first
         //
         if (!file_exists($cache_file)) {
@@ -161,6 +169,11 @@ class Net_DNS2_Cache_Shm extends Net_DNS2_Cache
                     // call clean to clean up old entries
                     //
                     $this->clean();
+
+                    //
+                    // mark the cache as loaded, so we don't load it more than once
+                    //
+                    $this->cache_opened = true;
                 }
             }
         }

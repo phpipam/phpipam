@@ -82,6 +82,12 @@ class Net_DNS2_Cache
      */
     protected $cache_serializer;
 
+    /*
+     * an internal flag to make sure we don't load the cache content more
+     * than once per instance.
+     */ 
+    protected $cache_opened = false;
+
     /**
      * returns true/false if the provided key is defined in the cache
      * 
