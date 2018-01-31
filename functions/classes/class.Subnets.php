@@ -2976,159 +2976,21 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $user
 	 * @param mixed $section_subnets	//array of all subnets in section
-	 * @param int $rootId (default: 0)
 	 * @return string
 	 */
-	public function print_subnets_menu( $user, $section_subnets, $rootId = 0 ) {
-		# open / close via cookie
-		if (isset($_COOKIE['sstr'])) { $cookie = array_filter(explode("|", $_COOKIE['sstr'])); }
-		else						 { $cookie= array(); }
 
-		# initialize html array
-		$html = array();
-		# create children array
-		$children_subnets = array();
-		foreach ( $section_subnets as $item )
-			$children_subnets[$item->masterSubnetId][] = (array) $item;
+	public function print_subnets_menu($user, $section_subnets) {
+		$User = new User ($this->Database);
+		$subnetsTree = new SubnetsTree($this, $User->user);
+		$menu = new SubnetsMenu($this, $_COOKIE['sstr'], $_COOKIE['expandfolders'], $_GET['subnetId']);
 
-		# loop will be false if the root has no children (i.e., an empty menu!)
-		$loop = !empty( $children_subnets[$rootId] );
-
-		# initializing $parent as the root
-		$parent = $rootId;
-		$parent_stack = array();
-
-		# must be numeric
-		if(isset($_GET['section']))		if(!is_numeric($_GET['section']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
-		if(isset($_GET['subnetId']))	if(!is_numeric($_GET['subnetId']))	{ $this->Result->show("danger",_("Invalid ID"), true); }
-
-		# display selected subnet as opened
-		$allParents = isset($_GET['subnetId']) ? $this->fetch_parents_recursive($_GET['subnetId']) : array();
-
-		# Menu start
-		$html[] = '<ul id="subnets">';
-
-		# loop through subnets
-		while ( $loop && ( ( $option = each( $children_subnets[$parent] ) ) || ( $parent > $rootId ) ) )
-		{
-			# save id for structure on reloading
-			$curr_id = $option['value']['id'];
-
-			# count levels
-			$count = count( $parent_stack ) + 1;
-
-			# set opened or closed tag for displaying proper folders
-			if(in_array($option['value']['id'], $allParents) ||
-				in_array($option['value']['id'], $cookie))			{ $open = "open";	$openf = "-open"; }
-			else													{ $open = "close";	$openf = ""; }
-
-			# show also child's by default
-			if($option['value']['id']==@$_GET['subnetId']) {
-				if($this->has_slaves(@$_GET['subnetId']))			{ $open = "open";	$openf = "-open"; }
-				else												{ $open = "close";	$openf = ""; }
-			}
-
-			# override if cookie is set
-			if(isset($_COOKIE['expandfolders'])) {
-				if($_COOKIE['expandfolders'] == "1")				{ $open='open';		$openf = "-open"; }
-			}
-
-			# for active class
-			if($_GET['page']=="subnets" && ($option['value']['id'] == @$_GET['subnetId']))			{ $active = "active";	$leafClass=""; }
-			else 																					{ $active = ""; 		$leafClass="icon-gray" ;}
-
-			# override folder
-			if($option['value']['isFolder'] == 1 && ($option['value']['id'] == @$_GET['subnetId']))	{ $open = "open"; $openf = "-open"; $active = "active"; }
-
-			# set permission
-			$permission = $option['value']['id']!="" ? $this->check_permission ($user, $option['value']['id']) : 0;
-
-			# set view
-			$current_description = "";
-			if ($this->settings->subnetView == 0) {
-				$current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'];
-			}
-			elseif ($this->settings->subnetView == 1) {
-				$description_print = strlen($option['value']['description'])>0 ? $option['value']['description'] : $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'];		// fix for empty
-				$current_description = $description_print;
-			}
-			elseif ($this->settings->subnetView == 2) {
-			    if (strlen($option['value']['description'])>0) {
-                    $temp_description = "(".$option['value']['description'].")";
-
-                    if (strlen($temp_description)>34) {
-                        $temp_description = substr($temp_description, 0, 32) . "...)";
-                    }
-                }
-                else {
-                    $temp_description = "";
-                }
-                $description_print = $temp_description;
-                $current_description = $this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].' '.$description_print;
-			}
-
-			if ( $option === false )
-			{
-				$parent = array_pop( $parent_stack );
-
-				# HTML for menu item containing childrens (close)
-				$html[] = '</ul>';
-				$html[] = '</li>';
-			}
-			# Has children
-			elseif ( !empty( $children_subnets[$option['value']['id']] ) )
-			{
-				# if user has access permission
-				if($permission != 0) {
-					# folder
-					if($option['value']['isFolder'] == 1) {
-						$html[] = '<li class="folderF folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder fa-folder'.$openf.'" rel="tooltip" data-placement="right" data-html="true" title="'._('Folder contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-						$html[] = '<a href="'.create_link("folder",$option['value']['sectionId'],$option['value']['id']).'">'.$option['value']['description'].'</a>';
-					}
-					# print name
-					elseif($option['value']['showName'] == 1) {
-						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'">'.$option['value']['description'].'</a>';
-					}
-					# print subnet
-					else {
-						$html[] = '<li class="folder folder-'.$open.' '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-folder-'.$open.'-o" rel="tooltip" data-placement="right" data-html="true" title="'._('Subnet contains more subnets').'<br>'._('Click on folder to open/close').'"></i>';
-						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$option['value']['description'].'">'.$current_description.'</a>';
-					}
-
-					# print submenu
-					if($open == "open") { $html[] = '<ul class="submenu submenu-'.$open.'">'; }							# show if opened
-					else 				{ $html[] = '<ul class="submenu submenu-'.$open.'" style="display:none">'; }	# hide - prevent flickering
-
-					array_push( $parent_stack, $option['value']['masterSubnetId'] );
-					$parent = $option['value']['id'];
-				}
-			}
-			# Leaf items (last)
-			else
-				if($permission != 0) {
-					# folder - opened
-					if($option['value']['isFolder'] == 1) {
-						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="fa fa-gray fa-sfolder fa-folder'.$openf.'"></i>';
-						$html[] = '<a href="'.create_link("folder",$option['value']['sectionId'],$option['value']['id']).'">'.$option['value']['description'].'</a></li>';
-					}
-					# print name
-					elseif($option['value']['showName'] == 1) {
-						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
-						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($option['value']['subnet']).'/'.$option['value']['mask'].'">'.$option['value']['description'].'</a></li>';
-					}
-					# print subnet
-					else {
-						$html[] = '<li class="leaf '.$active.'"><i data-str_id="'.$curr_id.'" class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
-						$html[] = '<a href="'.create_link("subnets",$option['value']['sectionId'],$option['value']['id']).'" rel="tooltip" data-placement="right" title="'.$option['value']['description'].'">'.$current_description.'</a></li>';
-					}
-				}
+		if (is_array($section_subnets)) {
+			foreach($section_subnets as $subnet) { $subnetsTree->add($subnet); }
+			$subnetsTree->walk(false);
 		}
+		$menu->subnetsTree($subnetsTree);
 
-		# Close menu
-		$html[] = '</ul>';
-		# return menu list
-		return implode( "\n", $html );
+		return $menu->html();
 	}
 
 	/**
