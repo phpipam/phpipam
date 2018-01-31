@@ -8,7 +8,19 @@ class SubnetsTree {
 	 * Array to store ordered subnet list
 	 * @var array
 	 */
-	public $subnets = array();
+	public $subnets;
+
+	/**
+	 * Lookup array, subnets by id.
+	 * @var array
+	 */
+	public $subnets_by_id;
+
+	/**
+	 * Lookup array, child subnet id's by parent id.
+	 * @var array
+	 */
+	public $children_by_parent_id;
 
 	/**
 	 * Subnets class object
@@ -21,18 +33,6 @@ class SubnetsTree {
 	 * @var stdClass
 	 */
 	private $user;
-
-	/**
-	 * Lookup array, subnets by id.
-	 * @var array
-	 */
-	private $subnets_by_id;
-
-	/**
-	 * Lookup array, child subnet id's by parent id.
-	 * @var array
-	 */
-	private $children_by_parent_id;
 
 	/**
 	 * Class Constructor
@@ -78,10 +78,13 @@ class SubnetsTree {
 	 * Reset subnets internal tree structures
 	 */
 	public function reset() {
+		$this->subnets = array();
+
 		$root = new stdClass ();
 		$root->id = 0;
 		$root->isFolder = 1;
 		$root->description = _("Root folder");
+
 		$this->subnets_by_id = array(0 => $root);
 		$this->children_by_parent_id = array();
 	}
@@ -91,8 +94,8 @@ class SubnetsTree {
 	 * @param  boolean $show_root
 	 */
 	public function walk($show_root = true) {
+		$this->subnets = array();
 		$this->walk_recursive(0, 0, $show_root);
-		$this->reset();
 	}
 
 	/**
