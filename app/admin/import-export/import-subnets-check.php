@@ -164,7 +164,7 @@ foreach ($data as &$cdata) {
 			if (strlen($cidr_check)>5) { $msg.=$cidr_check; $action = "error"; }
 		} else { $msg.=$net['message']; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
-		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-:]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
+		if ((!empty($cdata['vrf'])) && (!preg_match("/^[a-zA-Z0-9-_]+$/", $cdata['vrf']))) { $msg.="Invalid VRF name format."; $action = "error"; }
 		if ((!empty($cdata['vlan'])) && (!preg_match("/^[0-9]+$/", $cdata['vlan']))) { $msg.="Invalid VLAN number format."; $action = "error"; }
 		if ((!empty($cdata['domain'])) && (!preg_match("/^[a-zA-Z0-9-_ ]+$/", $cdata['domain']))) { $msg.="Invalid VLAN domain format."; $action = "error"; }
 	}

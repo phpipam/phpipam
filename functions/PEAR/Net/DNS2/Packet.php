@@ -422,21 +422,6 @@ class Net_DNS2_Packet
     
         return true;
     }
-
-    /**
-     * formats an IPv6 IP address in the preferred format
-     *
-     * @param string $address The IPv6 IP address to format
-     *
-     * @return string The IPv6 IP address formatted in the new format
-     * @access public
-     * @deprecated function deprecated in 1.1.3
-     *
-     */
-    public static function formatIPv6($address)
-    {
-        return Net_DNS2::expandIPv6($address);
-    }
 }
 
 /*

@@ -133,5 +133,14 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	return $link;
 }
 
+/**
+ * Escape HTML and quotes in user provided input
+ * @param  mixed $data
+ * @return string
+ */
+function escape_input($data) {
+       return empty($data) ? '' : htmlentities($data, ENT_QUOTES);
+}
+
 /* get version */
 include('version.php');

@@ -62,7 +62,7 @@ if(is_array($required_ip_fields)) {
 	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
 
 	// set default array
-	$required_field_errors = [];
+	$required_field_errors = array();
 	// Check that all required fields are present
 	foreach ($required_ip_fields as $required_field) {
 		if (!isset($address[$required_field]) || strlen($address[$required_field])==0) {

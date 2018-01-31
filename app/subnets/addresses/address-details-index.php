@@ -45,7 +45,7 @@ if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have perm
 
  # resolve dns name
 $DNS = new DNS ($Database);
-$resolve = $DNS->resolve_address($address['ip_addr'], $address['dns_name'], false, $subnet['nameserverId']);
+$resolve = $DNS->resolve_address($address['ip_addr'], $address['hostname'], false, $subnet['nameserverId']);
 
 # reformat empty fields
 $address = $Addresses->reformat_empty_array_fields($address, "<span class='text-muted'>/</span>");
