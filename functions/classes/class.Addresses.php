@@ -429,6 +429,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_edit ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# set update array
 		$insert = array(
 						"id"          =>$address['id'],
@@ -504,6 +506,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
