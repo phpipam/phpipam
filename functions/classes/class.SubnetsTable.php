@@ -45,7 +45,7 @@ class SubnetsTable {
 		$this->custom_fields = $custom_fields;
 		$this->showSupernetOnly = $showSupernetOnly;
 
-		$Tools->get_Settings();
+		$this->Tools->get_Settings();
 
 		$hiddenCustomFields = json_decode($this->Tools->settings->hiddenCustomFields, true);
 		$this->hidden_fields = is_array($hiddenCustomFields['subnets']) ? $hiddenCustomFields['subnets'] : array();
