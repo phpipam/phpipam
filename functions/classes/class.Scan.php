@@ -201,7 +201,7 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function set_php_exec () {
-		$this->php_exec = $this->os_type=="Windows" ? PHP_BINARY : PHP_BINDIR."/php";
+		$this->php_exec = PHP_BINARY;
 	}
 
 	/**
