@@ -40,7 +40,7 @@ elseif (strlen($_GET['ip'])==0)  {
 // ok, search results print
 else {
 	# export button
-	print '<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.$searchTerm.'" title="'._('Export All results to XLS').'">';
+	print '<a href="'.create_link(null).'" id="exportSearch" rel="tooltip" data-post="'.escape_input($searchTerm).'" title="'._('Export All results to XLS').'">';
 	print '	<button class="btn btn-xs btn-default"><i class="fa fa-download"></i> '._('Export All results to XLS').'</button>';
 	print '</a>';
 
