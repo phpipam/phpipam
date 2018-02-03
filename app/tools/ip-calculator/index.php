@@ -23,6 +23,7 @@ if($_GET['subnetId']=="ip-calculator") {
     include("ip-calculator.php");
 }
 elseif($_GET['subnetId']=="bw-calculator") {
+    include("bw-calculator-config.php");
     include("bw-calculator.php");
 }
 else {
