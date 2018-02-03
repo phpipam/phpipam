@@ -138,6 +138,11 @@ class Common_functions  {
 	 */
 	protected $debugging;
 
+	/**
+	 * Cache mac vendor objects
+	 * @var array|null
+	 */
+	private $mac_address_vendors = null;
 
 
 
@@ -220,7 +225,7 @@ class Common_functions  {
 				return false;
 			}
 			# save to cache array
-			if($res !== null && sizeof($res)>0) {
+			if($res !== null && is_object($res)) {
 				// set identifier
 				$method = $this->cache_set_identifier ($table);
 				// save
@@ -257,8 +262,8 @@ class Common_functions  {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
 			}
-			# save to cach
-			if (sizeof($res)>0) {
+			# save to cache
+			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
     			foreach ($res as $r) {
         			$this->cache_write ($table, $r->id, $r);
     			}
@@ -622,6 +627,18 @@ class Common_functions  {
 	}
 
 	/**
+	 * Detect the encoding used for a string and convert to UTF-8
+	 *
+	 * @method convert_encoding_to_UTF8
+	 * @param  string $string
+	 * @return string
+	 */
+	public function convert_encoding_to_UTF8($string) {
+		//convert encoding if necessary
+		return mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string, 'ASCII, UTF-8, ISO-8859-1, auto', true));
+	}
+
+	/**
 	 * Function to verify checkbox if 0 length
 	 *
 	 * @access public
@@ -640,21 +657,18 @@ class Common_functions  {
 	 * @return mixed IP version
 	 */
 	public function identify_address ($address) {
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # numeric representation
-	    elseif (is_numeric($address)) {
-	    	if($address <= 4294967295)	{ return 'IPv4'; }
-	    	else 						{ return 'IPv6'; }
-	    }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
+		# dotted representation
+		if (strpos($address, ':') !== false) return 'IPv6';
+		if (strpos($address, '.') !== false) return 'IPv4';
+		# numeric representation
+		if (is_numeric($address)) {
+			if($address <= 4294967295) return 'IPv4'; // 4294967295 = '255.255.255.255'
+			return 'IPv6';
+		} else {
+			# decimal representation
+			if(strlen($address) < 12) return 'IPv4';
+			return 'IPv6';
+		}
 	}
 
 	/**
@@ -1032,25 +1046,10 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function long2ip6($ipv6long) {
-	    $bin = gmp_strval(gmp_init($ipv6long,10),2);
-	    $ipv6 = "";
-
-	    if (strlen($bin) < 128) {
-	        $pad = 128 - strlen($bin);
-	        for ($i = 1; $i <= $pad; $i++) {
-	            $bin = "0".$bin;
-	        }
-	    }
-
-	    $bits = 0;
-	    while ($bits <= 7)
-	    {
-	        $bin_part = substr($bin,($bits*16),16);
-	        $ipv6 .= dechex(bindec($bin_part)).":";
-	        $bits++;
-	    }
-	    // compress result
-	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
+		$hex = sprintf('%032s', gmp_strval(gmp_init($ipv6long, 10), 16));
+		$ipv6 = implode(':', str_split($hex, 4));
+		// compress result
+		return inet_ntop(inet_pton($ipv6));
 	}
 
 	/**
@@ -1456,22 +1455,77 @@ class Common_functions  {
 		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
-        $data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-        // check
-        if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-            	//check for provided mac
-                if(strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]) == strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])) {
-                	return $match[4];
-                }
-            }
-            // not matched
-            return "";
-        } else {
-            return "";
-        }
+
+		if (is_null($this->mac_address_vendors)) {
+			//populate mac vendors array
+			$this->mac_address_vendors = array();
+
+			$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
+
+			if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
+				if (is_array($matches)) {
+					foreach ($matches as $match) {
+						$mac_vendor = strtoupper($match[1] . ':' . $match[2] . ':' . $match[3]);
+						$this->mac_address_vendors[$mac_vendor] = $match[4];
+					}
+				}
+			}
+		}
+
+		$mac_vendor = strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]);
+
+		if (isset($this->mac_address_vendors[$mac_vendor])) {
+			return $this->mac_address_vendors[$mac_vendor];
+		} else {
+			return "";
+		}
 	}
 
+	/**
+	 * Read user supplied permissions ($_POST) and calculate deltas from old_permissions
+	 *
+	 * @access public
+	 * @param  array $post_permissions
+	 * @param  array $old_permissions
+	 * @return array
+	 */
+	public function get_permission_changes ($post_permissions, $old_permissions) {
+		$new_permissions = array();
+		$removed_permissions = array();
+		$changed_permissions = array();
+
+		# set new posted permissions
+		foreach($post_permissions as $key=>$val) {
+			if(substr($key, 0,5) == "group") {
+				if($val != "0") $new_permissions[substr($key,5)] = $val;
+			}
+		}
+
+		// calculate diff
+		if(is_array($old_permissions)) {
+			foreach ($old_permissions as $k1=>$p1) {
+				// if there is not permisison in new that remove old
+				// if change than save
+				if (!array_key_exists($k1, $new_permissions)) {
+					$removed_permissions[$k1] = 0;
+				} elseif ($old_permissions[$k1]!==$new_permissions[$k1]) {
+					$changed_permissions[$k1] = $new_permissions[$k1];
+				}
+			}
+		} else {
+			$old_permissions = array();  // fix for adding
+		}
+		// add also new groups if available
+		if(is_array($new_permissions)) {
+			foreach ($new_permissions as $k1=>$p1) {
+				if(!array_key_exists($k1, $old_permissions)) {
+					$changed_permissions[$k1] = $new_permissions[$k1];
+				}
+			}
+		}
+
+		return array($removed_permissions, $changed_permissions, $new_permissions);
+	}
 
 
 
@@ -1648,23 +1702,23 @@ class Common_functions  {
         	}
         	// install, upgrade
         	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
         	}
         	// sections, subnets
         	elseif ($get['page']=="subnets" || $get['page']=="folder") {
             	// subnets
-            	$title[] = "Subnets";
+            	$title[] = _("Subnets");
 
             	// section
             	if (isset($get['section'])) {
-                 	$se = $this->fetch_object ("sections", "id", $get['section']);
+                 	$se = $this->fetch_object ("sections", "id", escape_input($get['section']));
                 	if($se!==false) {
                     	$title[] = $se->name;
                 	}
             	}
             	// subnet
             	if (isset($get['subnetId'])) {
-                 	$sn = $this->fetch_object ("subnets", "id", $get['subnetId']);
+                 	$sn = $this->fetch_object ("subnets", "id", escape_input($get['subnetId']));
                 	if($sn!==false) {
                     	if($sn->isFolder) {
                         	$title[] = $sn->description;
@@ -1677,7 +1731,7 @@ class Common_functions  {
             	}
             	// ip address
             	if (isset($get['ipaddrid'])) {
-                    $ip = $this->fetch_object ("ipaddresses", "id", $get['ipaddrid']);
+                    $ip = $this->fetch_object ("ipaddresses", "id", escape_input($get['ipaddrid']));
                     if($ip!==false) {
                         $title[] = $this->transform_address($ip->ip_addr, "dotted");
                     }
@@ -1685,26 +1739,26 @@ class Common_functions  {
         	}
         	// tools, admin
         	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
             	// subpage
             	if (isset($get['section'])) {
-                	$title[] = ucwords($get['section']);
+                	$title[] = ucwords(escape_input($get['section']));
             	}
             	if (isset($get['subnetId'])) {
                 	// vland domain
                 	if($get['section']=="vlan") {
-                     	$se = $this->fetch_object ("vlanDomains", "id", $get['subnetId']);
+                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
                     	if($se!==false) {
                         	$title[] = $se->name." domain";
                     	}
                 	}
                 	else {
-                    	$title[] = ucwords($get['subnetId']);
+                    	$title[] = ucwords(escape_input($get['subnetId']));
                     }
             	}
         	}
         	else {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
             }
     	}
         // return title

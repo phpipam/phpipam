@@ -253,7 +253,10 @@ CREATE TABLE `subnets` (
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`),
-  KEY `location` (`location`)
+  KEY `location` (`location`),
+  KEY `masterSubnetId` (`masterSubnetId`),
+  KEY `sectionId` (`sectionId`),
+  KEY `vrfId` (`vrfId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)
@@ -782,6 +785,8 @@ CREATE TABLE `pstnNumbers` (
 
 # Dump of table circuitProviders
 # ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitProviders`;
+
 CREATE TABLE `circuitProviders` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(256) DEFAULT NULL,
@@ -794,6 +799,8 @@ CREATE TABLE `circuitProviders` (
 
 # Dump of table circuits
 # ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuits`;
+
 CREATE TABLE `circuits` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` varchar(128) DEFAULT NULL,

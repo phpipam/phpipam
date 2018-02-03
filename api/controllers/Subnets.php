@@ -130,6 +130,7 @@ class Subnets_controller extends Common_api_functions {
 	 *	optional params : all subnet values
 	 *
 	 *      - /subnets/{id}/first_subnet/{mask}/       // creates first free subnet under master with specified mask
+	 *      - /subnets/{id}/last_subnet/{mask}/        // creates last free subnet under master with specified mask
 	 *
 	 * @access public
 	 * @return array
@@ -139,22 +140,8 @@ class Subnets_controller extends Common_api_functions {
 		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
 
-		// first free
-		if($this->_params->id2=="first_subnet")   {
-    		$subnet_tmp = explode("/", $this->subnet_first_free (false));
-
-    		// get master subnet
-    		$master = $this->read_subnet ();
-
-    		$this->_params->subnet = $subnet_tmp[0];
-    		$this->_params->mask = $subnet_tmp[1];
-    		$this->_params->sectionId = $master->sectionId;
-    		$this->_params->masterSubnetId = $master->id;
-    		$this->_params->permissions = $master->permissions;
-    		unset($this->_params->id2, $this->_params->id3);
-            // description
-            if(!isset($this->_params->description))    { $this->_params->description = "API autocreated"; }
-		}
+		if     ($this->_params->id2=="first_subnet") { $this->post_find_free_subnet(Subnets::SEARCH_FIND_FIRST); }
+		elseif ($this->_params->id2=="last_subnet")  { $this->post_find_free_subnet(Subnets::SEARCH_FIND_LAST); }
 
 		# validate parameters
         $this->validate_create_parameters ();
@@ -174,6 +161,27 @@ class Subnets_controller extends Common_api_functions {
 		}
 	}
 
+	/**
+	 * Populate subnet details from first/last available subnet
+	 * @access private
+	 * @param  integer
+	 * @return void
+	 */
+	private function post_find_free_subnet($direction = Subnets::SEARCH_FIND_FIRST) {
+		$subnet_tmp = explode("/", $this->subnet_find_free (1, $direction));
+
+		// get master subnet
+		$master = $this->read_subnet ();
+
+		$this->_params->subnet = $subnet_tmp[0];
+		$this->_params->mask = $subnet_tmp[1];
+		$this->_params->sectionId = $master->sectionId;
+		$this->_params->masterSubnetId = $master->id;
+		$this->_params->permissions = $master->permissions;
+		unset($this->_params->id2, $this->_params->id3);
+		// description
+		if(!isset($this->_params->description))    { $this->_params->description = "API autocreated"; }
+	}
 
 
 
@@ -193,6 +201,7 @@ class Subnets_controller extends Common_api_functions {
 	 *      - /{id}/addresses/{ip}/         // returns IP address from subnet
 	 *		- /{id}/first_free/			    // returns first free address in subnet
 	 *      - /{id}/first_subnet/{mask}/    // returns first available subnets with specified mask
+	 *      - /{id}/last_subnet/{mask}/     // returns last available subnets with specified mask
 	 *      - /{id}/all_subnets/{mask}/     // returns all available subnets with specified mask
 	 *		- /all/							// returns all subnets in all sections
 	 *
@@ -255,9 +264,11 @@ class Subnets_controller extends Common_api_functions {
 			// first available address
 			elseif ($this->_params->id2=="first_free") 	{ return array("code"=>200, "data"=>$this->subnet_first_free_address ());  }
 			// search for new free subnet
-			elseif ($this->_params->id2=="all_subnets") { return array("code"=>200, "data"=>$this->subnet_first_free (true));  }
+			elseif ($this->_params->id2=="all_subnets") { return array("code"=>200, "data"=>$this->subnet_find_free (Subnets::SEARCH_FIND_ALL, Subnets::SEARCH_FIND_FIRST));  }
 			// search for new free subnet
-			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_first_free (false));  }
+			elseif ($this->_params->id2=="first_subnet"){ return array("code"=>200, "data"=>$this->subnet_find_free (1, Subnets::SEARCH_FIND_FIRST));  }
+			// search for new free subnet
+			elseif ($this->_params->id2=="last_subnet") { return array("code"=>200, "data"=>$this->subnet_find_free (1, Subnets::SEARCH_FIND_LAST));  }
 			// fail
 			else										{ $this->Response->throw_exception(400, 'Invalid request'); }
 		}
@@ -659,36 +670,24 @@ class Subnets_controller extends Common_api_functions {
 	}
 
 	/**
-	 * Returns first available subnet with specified mask
+	 * Returns first|last $count available subnets with specified mask
 	 *
 	 * @access public
-	 * @param bool $all (default: false)
+	 * @param integer $count (default: Subnets::SEARCH_FIND_ALL)
+	 * @param integer $direction (default: Subnets::SEARCH_FIND_FIRST)
 	 * @return array|string
 	 */
-	public function subnet_first_free ($all = false) {
+	public function subnet_find_free ($count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST) {
 		// Check for id
 		$this->validate_subnet_id ();
-		// single or all ?
-		if ($all) {
-    		$first = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, 30);
 
-		}
-		else {
-    		$first = $this->Subnets->search_available_single_subnet ($this->_params->id, $this->_params->id3);
+		$found = $this->Subnets->search_available_subnets ($this->_params->id, $this->_params->id3, $count, $direction);
+
+		if ($found===false) {
+			$this->Response->throw_exception(200, "No subnets found");
 		}
 
-		# return
-		if ($first===false) {
-    		$this->Response->throw_exception(200, "No subnets found");
-		}
-		else {
-    		if($all) {
-        		return $first;
-    		}
-    		else {
-        		return $first[0];
-    		}
-		}
+		return ($count == 1) ?  $found[0] : $found;
 	}
 
 
@@ -722,7 +721,10 @@ class Subnets_controller extends Common_api_functions {
         		$result->gateway = $gateway;
     		}
 
-    		$result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet,"dotted")."/".$result->mask);
+    		if (!$result->isFolder)
+		    {
+			    $result->calculation = $this->Tools->calculate_ip_calc_results($this->Subnets->transform_address($result->subnet, "dotted") . "/" . $result->mask);
+		    }
 		}
 
 		# result

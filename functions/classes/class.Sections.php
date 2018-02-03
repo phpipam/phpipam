@@ -543,59 +543,5 @@ class Sections extends Common_functions {
 		# return
 		return $out;
 	}
-
-	/**
-	 * Delegates section permissions to all belonging subnets
-	 *
-	 * @access public
-	 * @param mixed $sectionId
-	 * @param array $removed_permissions
-	 * @param array $changed_permissions
-	 * @return bool
-	 */
-	public function delegate_section_permissions ($sectionId, $removed_permissions, $changed_permissions) {
-    	// init subnets class
-    	$Subnets = new Subnets ($this->Database);
-    	// fetch section subnets
-    	$section_subnets = $this->fetch_multiple_objects ("subnets", "sectionId", $sectionId);
-    	// loop
-    	if ($section_subnets!==false) {
-        	foreach ($section_subnets as $s) {
-                // to array
-                $s_old_perm = json_decode($s->permissions, true);
-                // removed
-                if (sizeof($removed_permissions)>0) {
-                    foreach ($removed_permissions as $k=>$p) {
-                        unset($s_old_perm[$k]);
-                    }
-                }
-                // added
-                if (sizeof($changed_permissions)>0) {
-                    foreach ($changed_permissions as $k=>$p) {
-                        $s_old_perm[$k] = $p;
-                    }
-                }
-
-                // set values
-                $values = array(
-                            "id" => $s->id,
-                            "permissions" => json_encode($s_old_perm)
-                            );
-
-                // update
-                if($Subnets->modify_subnet ("edit", $values)===false)       { $this->Result->show("danger",  _("Failed to set subnet permissons for subnet")." $s->name!", true); }
-        	}
-        	// ok
-        	$this->Result->show("success", _("Subnet permissions recursively set")."!", true);
-    	}
-
-
-		try { $this->Database->updateObject("subnets", array("permissions"=>$permissions, "sectionId"=>$sectionId), "sectionId"); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		return true;
-	}
 }
 ?>

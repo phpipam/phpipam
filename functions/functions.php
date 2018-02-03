@@ -7,10 +7,16 @@ require_once( dirname(__FILE__) . '/../config.php' );
 ini_set('session.cookie_httponly', 1);
 
 /* @debugging functions ------------------- */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-if (!$debugging) { error_reporting(E_ERROR ^ E_WARNING); }
-else			 { error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT); }
+if($debugging) {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ERROR ^ E_WARNING);
+}
 
 /**
  * detect missing gettext and fake function
@@ -50,6 +56,7 @@ require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
+require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for generating HTML menus
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {
@@ -121,6 +128,15 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 
 	# result
 	return $link;
+}
+
+/**
+ * Escape HTML and quotes in user provided input
+ * @param  mixed $data
+ * @return string
+ */
+function escape_input($data) {
+       return empty($data) ? '' : htmlentities($data, ENT_QUOTES);
 }
 
 /* get version */

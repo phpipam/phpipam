@@ -578,7 +578,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain)>0 ? $domain : false;
+        return !is_null($domain) ? $domain : false;
     }
 
     /**
@@ -600,7 +600,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain[0])>0 ? $domain[0] : false;
+        return is_object(($domain[0])) ? $domain[0] : false;
     }
 
     /**
@@ -709,7 +709,7 @@ class PowerDNS extends Common_functions {
             return false;
         }
         # result
-        return sizeof($record)>0 ? $record : false;
+        return !is_null($record) ? $record : false;
     }
 
     /**
@@ -1221,6 +1221,11 @@ class PowerDNS extends Common_functions {
                 && preg_match("/^.{1,253}$/", $name)                               //overall length check
                 && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
             { return $name; }
+        }
+
+        // DNS wildcard records are OK (https://tools.ietf.org/html/rfc4592#section-2.1.1)
+        if (preg_match("/^\*\..*$/", $name) && $this->validate_hostname(substr($name, 2))) {
+            return $name;
         }
 
         // for all other record types null is ok, otherwise URI is required

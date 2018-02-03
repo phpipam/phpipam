@@ -265,14 +265,14 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to addresses cache
-			if(sizeof($address)>0) {
+			if(!is_null($address)) {
 				# add decimal format
 				$address->ip = $this->transform_to_dotted ($address->ip_addr);
 				# save to subnets
 				$this->addresses[$id] = (object) $address;
 			}
 			#result
-			return sizeof($address)>0 ? $address : false;
+			return !is_null($address) ? $address : false;
 		}
 	}
 
@@ -298,7 +298,7 @@ class Addresses extends Common_functions {
 			$this->addresses[$address->id] = (object) $address;
 		}
 		#result
-		return sizeof($address)>0 ? $address : false;
+		return !is_null($address) ? $address : false;
 	}
 
 	/**
@@ -429,6 +429,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_edit ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# set update array
 		$insert = array(
 						"id"          =>$address['id'],
@@ -504,6 +506,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -1770,7 +1774,6 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {

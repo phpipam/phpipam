@@ -54,7 +54,7 @@ class Devices_controller extends Common_api_functions {
      *
      * @var mixed
      */
-    protected $default_search_fields = ['hostname','ip_addr','description'];
+    protected $default_search_fields = array('hostname','ip_addr','description');
 
 
     /**

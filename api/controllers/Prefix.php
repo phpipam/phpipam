@@ -875,7 +875,7 @@ class Prefix_controller extends Common_api_functions {
      */
     public function search_first_available_subnet ($master_subnet_id, $bitmask) {
         // fetch
-        $first = $this->Subnets->search_available_single_subnet ($master_subnet_id, $bitmask);
+        $first = $this->Subnets->search_available_subnets ($master_subnet_id, $bitmask, 1, Subnets::SEARCH_FIND_FIRST);
         // return result
         return $first===false ? false : $first[0];
     }
