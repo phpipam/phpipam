@@ -1302,14 +1302,14 @@ class User extends Common_functions {
      */
     public function self_update($post) {
         # set items to update
-        $items  = array("real_name"        => $post['real_name'],
-                        "mailNotify"       => $post['mailNotify'],
-                        "mailChangelog"    => $post['mailChangelog'],
-                        "email"            => $post['email'],
-                        "lang"             => $post['lang'],
+        $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
+                        "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
+                        "mailChangelog"    => $post['mailChangelog'] == "Yes" ? "Yes" : "No",
+                        "email"            => filter_var($post['email'], FILTER_VALIDATE_EMAIL, array('options' => array('default'=>''), 'flags'=>FILTER_FLAG_EMAIL_UNICODE)),
+                        "lang"             => escape_input(strip_tags($post['lang'])),
                         "id"               => $this->user->id,
                         //display
-                        "compressOverride" => $post['compressOverride'],
+                        "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
                         "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
