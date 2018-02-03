@@ -3,7 +3,6 @@
  * Shared code between top10_hosts_v4.php
  * and top10_hosts_v6.php
  */
-
 # required functions
 if(!is_object(@$User)) {
 	require( dirname(__FILE__) . '/../../../functions/functions.php' );
@@ -24,6 +23,7 @@ $all_subnets = $Tools->fetch_top_subnets($type, 1000000, false);
 # Find subnets with user access, label duplicates.
 $unique = array();
 $valid_subnets = 0;
+
 if (is_array($all_subnets)) {
     foreach($all_subnets as $subnet) {
         if ($Subnets->check_permission($User->user, $subnet->id) == "0") { continue; }
