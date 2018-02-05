@@ -3,7 +3,7 @@
 /** Show IP request form for non-privileged users - AJAX-loaded **/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;

@@ -12,7 +12,7 @@
  ***********************************************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 
 # initialize objects
 $Database 	= new Database_PDO;
