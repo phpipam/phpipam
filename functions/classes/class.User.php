@@ -1305,7 +1305,7 @@ class User extends Common_functions {
         $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
                         "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
                         "mailChangelog"    => $post['mailChangelog'] == "Yes" ? "Yes" : "No",
-                        "email"            => filter_var($post['email'], FILTER_VALIDATE_EMAIL, array('options' => array('default'=>''), 'flags'=>FILTER_FLAG_EMAIL_UNICODE)),
+                        "email"            => $this->validate_email($post['email']) ? escape_input($post['email']) : '',
                         "lang"             => escape_input(strip_tags($post['lang'])),
                         "id"               => $this->user->id,
                         //display
