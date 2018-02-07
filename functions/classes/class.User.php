@@ -534,7 +534,9 @@ class User extends Common_functions {
     private function csrf_cookie_validate ($index, $value) {
         // set cookie suffix
         $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // check and return
+        // Check CSRF cookie is present
+        if (empty($value)) return false;
+        // Check CSRF cookie is valid and return
         return $_SESSION[$name] == $value ? true : false;
     }
 
