@@ -22,6 +22,8 @@ $User->check_user_session();
 # id must be numeric
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true);
 
+$csrf = $User->csrf_cookie ("create", "mail_notify");
+
 # get IP address id
 $id = $_POST['id'];
 
@@ -135,6 +137,7 @@ if(sizeof($custom_fields) > 0) {
 	</tr>
 
 	</table>
+	<input type="hidden" name='csrf_cookie' value='<?php print $csrf; ?>'>
 	</form>
 </div>
 
