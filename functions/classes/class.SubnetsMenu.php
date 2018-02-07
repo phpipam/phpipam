@@ -224,13 +224,6 @@ class SubnetsMenu {
 		if (isset($SubnetsTree->subnets_by_id[$this->selected])) {
 			$selected = $SubnetsTree->subnets_by_id[$this->selected];
 
-			# Expand children of selected
-			if ($selected->has_children) {
-				foreach($SubnetsTree->children_by_parent_id[$this->selected] as $id) {
-					$this->expanded[$id] = 1;
-				}
-			}
-
 			# Open selected and its parents
 			while ($selected !== false) {
 				$this->expanded[$selected->id] = 1;
