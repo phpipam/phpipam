@@ -534,7 +534,9 @@ class User extends Common_functions {
     private function csrf_cookie_validate ($index, $value) {
         // set cookie suffix
         $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // check and return
+        // Check CSRF cookie is present
+        if (empty($value)) return false;
+        // Check CSRF cookie is valid and return
         return $_SESSION[$name] == $value ? true : false;
     }
 
@@ -1302,14 +1304,14 @@ class User extends Common_functions {
      */
     public function self_update($post) {
         # set items to update
-        $items  = array("real_name"        => $post['real_name'],
-                        "mailNotify"       => $post['mailNotify'],
-                        "mailChangelog"    => $post['mailChangelog'],
-                        "email"            => $post['email'],
-                        "lang"             => $post['lang'],
+        $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
+                        "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
+                        "mailChangelog"    => $post['mailChangelog'] == "Yes" ? "Yes" : "No",
+                        "email"            => $this->validate_email($post['email']) ? escape_input($post['email']) : '',
+                        "lang"             => escape_input(strip_tags($post['lang'])),
                         "id"               => $this->user->id,
                         //display
-                        "compressOverride" => $post['compressOverride'],
+                        "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
                         "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])

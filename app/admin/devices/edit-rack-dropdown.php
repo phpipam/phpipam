@@ -14,7 +14,7 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
 	if(!is_object($User)) {
 		/* functions */
-		require( dirname(__FILE__) . '/../../../functions/functions.php');
+		require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 		# initialize user object
 		$Database 	= new Database_PDO;

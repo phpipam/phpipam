@@ -8,7 +8,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 
 # set debugging
 $debugging = false;

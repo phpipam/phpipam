@@ -1,13 +1,16 @@
-<h4><?php print _('PSTN prefix details'); ?></h4>
-<hr>
 <?php
-
 /**
  * Script to print locations
- ***************************/
+ **/
 
 # verify that user is logged in
 $User->check_user_session();
+?>
+
+<h4><?php print _('PSTN prefix details'); ?></h4>
+<hr>
+
+<?php
 
 // validate
 if(!is_numeric($_GET['subnetId'])) {
@@ -19,7 +22,7 @@ else {
         $Result->show("danger", _("PSTN prefixes module disabled."), false);
     }
     else {
-        # fetch all locations
+        # fetch all prefixes
         $prefix = $Tools->fetch_object("pstnPrefixes", "id", $_GET['subnetId']);
 
         // get custom fields
@@ -29,7 +32,6 @@ else {
              $Result->show("danger", _("Prefix not found"), false);
         }
         else {
-
             # set permission
             $permission = $Tools->check_prefix_permission ($User->user);
 
@@ -38,16 +40,34 @@ else {
             $prefix->prefix_raw_start = $Tools->prefix_normalize ($prefix->prefix.$prefix->start);
             $prefix->prefix_raw_stop  = $Tools->prefix_normalize ($prefix->prefix.$prefix->stop);
 
-            # get objects
-            $numbers = $Tools->fetch_multiple_objects ("pstnNumbers", "prefix", $prefix->id, "number", true);
+
+            if ($isMaster) {
+                # get objects + slaves and parse ids
+                $subprefixes = $Tools->fetch_all_prefixes ($prefix->id);
+                $subprefixes_cnt = $Tools->fetch_all_prefixes ($prefix->id, true);
+
+                if($subprefixes_cnt !== false) {
+                    $numbers = array();
+                    foreach ($subprefixes_cnt as $sp) {
+                        $subprefix_numbers = $Tools->fetch_multiple_objects ("pstnNumbers", "prefix", $sp->id, "number", true);
+                        if ($subprefix_numbers!==false) {
+                            $numbers = array_merge($numbers, $subprefix_numbers);
+                        }
+                    }
+                }
+            } else {
+                # get objects
+                $numbers = $Tools->fetch_multiple_objects ("pstnNumbers", "prefix", $prefix->id, "number", true);
+            }
+
             # get count
             $details = $Tools->calculate_prefix_usege( $prefix, $numbers);
 
             print "<div class='btn-group'>";
-            if($prefix->master>0 )
-            print "<a href='".create_link($_GET['page'], "pstn-prefixes", $prefix->master)."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('Master prefix')."</a>";
+            if($prefix->master > 0)
+                print "<a href='".create_link($_GET['page'], "pstn-prefixes", $isMaster ? $back_link : $prefix->master)."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('Master prefix')."</a>";
             else
-            print "<a href='".create_link($_GET['page'], "pstn-prefixes")."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('All prefixes')."</a>";
+                print "<a href='".create_link($_GET['page'], "pstn-prefixes")."' style='margin-bottom:20px;' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> ". _('All prefixes')."</a>";
             print "</div>";
             print "<br>";
 
@@ -59,8 +79,8 @@ else {
 
         	# name
         	print "<tr>";
-        	print "	<th>"._('Name')."</th>";
-        	print "	<td><strong>$prefix->name</strong></td>";
+        	print " <th>"._('Name')."</th>";
+        	print " <td><strong>$prefix->name</strong></td>";
         	print "</tr>";
 
         	# prefix
@@ -150,26 +170,32 @@ else {
         	print "	<th></th>";
         	print "	<td>";
         	print " <div class='btn-group'>";
-        	if($permission == 3) {
-    		    print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='"._('Add address to prefix')."'><i class='fa fa-plus'></i></a>";
-        		print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='"._('Edit prefix properties')."'><i class='fa fa-pencil'></i></a>";
-        		print "<a class='btn btn-xs btn-default editPSTN' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='"._('Create new prefix')."'><i class='fa fa-plus-circle'></i></a> ";
-        		print "<a class='btn btn-xs btn-danger editPSTN' data-action='delete' data-id='$prefix->id' data-container='body' rel='tooltip' title='"._('Delete prefix')."'><i class='fa fa-remove'></i></a>";
-            }
-        	elseif($permission == 2) {
-     		    print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='"._('Add address to prefix')."'><i class='fa fa-plus'></i></a>";
-        		print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='"._('Edit prefix properties')."'><i class='fa fa-pencil'></i></a>";
-        		print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='"._('Create new prefix')."'><i class='fa fa-plus-circle'></i></a> ";
-        		print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='"._('Delete prefix')."'><i class='fa fa-remove'></i></a>";
 
-        	}
-        	else {
-        		print "<button class='btn btn-xs btn-default btn-danger' data-container='body' rel='tooltip' title='"._('You do not have permissions to edit prefix')."'><i class='fa fa-lock'></i></button> ";
-     		    print "<a class='btn btn-xs btn-success disabled' rel='tooltip' title='"._('Add address to prefix')."'><i class='fa fa-plus'></i></a>";
-        		print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='"._('Edit prefix properties')."'><i class='fa fa-pencil'></i></a>";
-        		print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='"._('Create new prefix')."'><i class='fa fa-plus-circle'></i></a> ";
-        		print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='"._('Delete prefix')."'><i class='fa fa-remove'></i></a>";
+            switch ($permission) {
+                case 3:
+                    if ($isMaster)
+                        print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
+                    print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
+                    print "<a class='btn btn-xs btn-default editPSTN' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
+                    print "<a class='btn btn-xs btn-danger editPSTN' data-action='delete' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
+                    break;
+                case 2:
+                    if ($isMaster)
+                        print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
+                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
+                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
+                    print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
+                    break;
+                default:
+                    print "<button class='btn btn-xs btn-default btn-danger' data-container='body' rel='tooltip' title='" . _('You do not have permissions to edit prefix') . "'><i class='fa fa-lock'></i></button> ";
+                    if ($isMaster)
+                        print "<a class='btn btn-xs btn-success disabled' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
+                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
+                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
+                    print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
+                    break;
             }
+
             print "	</div>";
 
         	print " </td>";
@@ -178,18 +204,21 @@ else {
             print "</table>";
             print "</div>";
 
-
             // graph
             print "<div class='col-xs-12 col-sm-12 col-md-6 col-lg-4'>";
             print "<h4>"._('Utilization')."</h4><hr>";
             include("single-prefix-graph.php");
             print "</div>";
 
-
             # addresses
             print "<div class='col-xs-12 col-sm-12 col-md-12 col-lg-12' style='margin-top:40px;'>";
-            print "<h4>"._('Belonging Numbers')."</h4><hr>";
-            include("single-prefix-numbers.php");
+            if ($isMaster) {
+                print "<h4>"._('Belonging prefixes')."</h4><hr>";
+                include("single-prefix-slaves-list.php");
+            } else {
+                print "<h4>"._('Belonging Numbers')."</h4><hr>";
+                include("single-prefix-numbers.php");
+            }
             print "</div>";
         }
     }

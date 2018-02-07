@@ -1450,7 +1450,7 @@ class Tools extends Common_functions {
 	 * Verify that all required indexes are present in database
 	 *
 	 * @method verify_database_indexes
-	 * @return [type]                  [description]
+	 * @return bool
 	 */
 	public function verify_database_indexes () {
 		// get indexes from schema

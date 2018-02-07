@@ -2103,8 +2103,8 @@ class Subnets extends Common_functions {
 	 * Verifies overlapping of 2 subnets
 	 *
 	 * @access public
-	 * @param CIDR $cidr1
-	 * @param CIDR $cidr2
+	 * @param string $cidr1
+	 * @param string $cidr2
 	 * @param bool $check_if_nested (default: false)
 	 * @return bool
 	 */

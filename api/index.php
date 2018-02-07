@@ -19,7 +19,7 @@
 
 # include functions
 if(!function_exists("create_link"))
-require( dirname(__FILE__) . '/../functions/functions.php');		// functions and objects from phpipam
+require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
 
 # include common API controllers
 require( dirname(__FILE__) . '/controllers/Common.php');			// common methods

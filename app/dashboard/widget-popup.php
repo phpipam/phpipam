@@ -1,7 +1,7 @@
 <?php
 
 # show available widgets
-require(dirname(__FILE__) . '../../../functions/functions.php');
+require_once( dirname(__FILE__) . '../../../functions/functions.php' );
 
 # Classes
 $Database	= new Database_PDO;
