@@ -51,7 +51,7 @@ $subnetsTree = new SubnetsTree($Subnets, $User->user);
 $subnetsTable = new SubnetsTable($Tools, $custom_fields, $showSupernetOnly);
 
 if ($search_cidr === false) {
-    $subnets = $Subnets->fetch_section_subnets($sectionId);
+    $subnets = $Subnets->fetch_section_subnets($sectionId, false, false, array());
 } else {
     $subnets = $Subnets->fetch_overlapping_subnets($search_cidr, 'sectionId', $sectionId);
 }
