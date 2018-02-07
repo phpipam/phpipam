@@ -2813,27 +2813,35 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param object $user
 	 * @param int $subnetId
+	 * @param stdObject|false $subnet
 	 * @return int
 	 */
-	public function check_permission ($user, $subnetId) {
-
-		# get all user groups
-		$groups = json_decode($user->groups, true);
+	public function check_permission ($user, $subnetId, $subnet = false) {
 
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
 		# set subnet permissions
-		$subnet  = $this->fetch_subnet ("id", $subnetId);
+		if($subnet===false) $subnet = $this->fetch_subnet ("id", $subnetId);
 		if($subnet===false)	return 0;
 		//null?
 		if(is_null($subnet->permissions) || $subnet->permissions=="null")	return 0;
+
+		# Check cache
+		$cached_item = $this->cache_check('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId");
+		if($cached_item!==false) {
+			return $cached_item->result;
+		}
+
 		$subnetP = json_decode(@$subnet->permissions);
 
 		# set section permissions
 		$Section = new Sections ($this->Database);
 		$section = $Section->fetch_section ("id", $subnet->sectionId);
 		$sectionP = json_decode($section->permissions);
+
+		# get all user groups
+		$groups = json_decode($user->groups, true);
 
 		# default permission
 		$out = 0;
@@ -2851,15 +2859,9 @@ class Subnets extends Common_functions {
 				}
 			}
 		}
-		else {
-			return 0;
-		}
 
 		# if section permission == 0 then return 0
-		if($out == 0) {
-			return 0;
-		}
-		else {
+		if($out != 0) {
 			$out = 0;
 			# ok, user has section access, check also for any higher access from subnet
 			if(sizeof($subnetP) > 0) {
@@ -2875,6 +2877,7 @@ class Subnets extends Common_functions {
 		}
 
 		# return result
+		$this->cache_write('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId", array('result'=>$out));
 		return $out;
 	}
 
