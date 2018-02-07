@@ -67,7 +67,7 @@ class SubnetsTree {
 	public function add($subnet) {
 		if (!is_object($subnet)) return;
 
-		$subnet->permissions_check = $this->Subnets->check_permission($this->user, $subnet->id);
+		$subnet->permissions_check = $this->Subnets->check_permission($this->user, $subnet->id, $subnet);
 		if ($subnet->permissions_check == 0) return;
 
 		$this->children_by_parent_id[$subnet->masterSubnetId][] = $subnet->id;
