@@ -1489,8 +1489,8 @@ $('#instructionsForm').submit(function () {
 $('#preview').click(function () {
     showSpinner();
     var instructions = CKEDITOR.instances.instructions.getData();
-
-    $.post('app/admin/instructions/preview.php', {instructions:instructions}, function(data) {
+    var csrf_cookie = $('input[name=csrf_cookie]').val();
+    $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:csrf_cookie}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
