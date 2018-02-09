@@ -424,7 +424,7 @@ else {
 
 	       			$addresses[$n]->note = str_replace("'", "&#39;", $addresses[$n]->note);
 
-	        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='false' title='".str_replace("\n", "<br>",addslashes($addresses[$n]->note))."'></td>"; }
+	        		if(!empty($addresses[$n]->note)) 					{ print "<td class='narrow'><i class='fa fa-gray fa-comment-o' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>",addslashes($addresses[$n]->note))."'></td>"; }
 	        		else 												{ print "<td class='narrow'></td>"; }
 	        	}
 
