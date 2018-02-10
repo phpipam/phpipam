@@ -64,7 +64,7 @@ $debugging = false;
 
 
 /**
- * Allow older version
+ * Allow older PHP version
  *
  * allow version < 5.4 with limited functionality
  ******************************/
