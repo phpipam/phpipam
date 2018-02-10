@@ -2821,13 +2821,16 @@ class Subnets extends Common_functions {
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
-		# set subnet permissions
-		if($subnet===false) $subnet = $this->fetch_subnet ("id", $subnetId);
+		# Check supplied $subnet object is valid and contains required properties, otherwise fetch.
+		if(!is_object($subnet) || !property_exists($subnet,'permissions') || !property_exists($subnet,'sectionId')) {
+			$subnet = $this->fetch_subnet ("id", $subnetId);
+		}
 		if($subnet===false)	return 0;
-		//null?
+
+		// null permissions?
 		if(is_null($subnet->permissions) || $subnet->permissions=="null")	return 0;
 
-		# Check cache
+		# Check cached result
 		$cached_item = $this->cache_check('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId");
 		if($cached_item!==false) {
 			return $cached_item->result;
