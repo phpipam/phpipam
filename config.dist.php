@@ -39,6 +39,7 @@ $db['tmptable_engine_type'] = "MEMORY";
 /**
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts
  ******************************/
+
 # pingCheck.php script parameters
 $config['ping_check_send_mail']        = true;       // true/false, send or not mail on ping check
 $config['ping_check_method']           = false;      // false/ping/pear/fping, reset scan method
@@ -60,6 +61,14 @@ $config['resolve_verbose']             = true;       // verbose response - print
  * false = HIDE all php errors
  ******************************/
 $debugging = false;
+
+
+/**
+ * Allow older version
+ *
+ * allow version < 5.4 with limited functionality
+ ******************************/
+$allow_older_version = false;
 
 
 /**
