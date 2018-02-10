@@ -869,8 +869,9 @@ class Logging extends Common_functions {
 			return false;
 		}
 		# mail
-		if ($this->mail_changelog && sizeof($changelog)>0)
-		$this->changelog_send_mail ($changelog);
+		if ($this->mail_changelog && strlen($changelog)>0) {
+			$this->changelog_send_mail ($changelog);
+		}
 		# ok
 		return true;
 	}
