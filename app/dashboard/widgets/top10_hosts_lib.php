@@ -34,7 +34,7 @@ if (is_array($all_subnets)) {
         /* Make fields human readable */
         $subnet->subnet = $Subnets->transform_to_dotted($subnet->subnet);
         $subnet->descriptionLong = $subnet->description;
-        $subnet->description = strlen($subnet->description) > 20 ? substr($subnet->description,0,17).'...' : $subnet->description;
+        $subnet->description = mb_strlen($subnet->description) > 20 ? mb_substr($subnet->description,0,17).'...' : $subnet->description;
 
         /* detect and rename duplicates */
         if(isset($unique[$subnet->description])) {
