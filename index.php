@@ -6,7 +6,7 @@ if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Pleas
 else 							{ require('config.php'); }
 
 /* site functions */
-require('functions/functions.php');
+require_once( 'functions/functions.php' );
 
 /* API check - pricess API if requested */
 if ($Rewrite->is_api ()) {

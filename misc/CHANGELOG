@@ -32,9 +32,12 @@
     + Section names containing spaces are not included in exports. (#1566);
     + Bug with section and dashboard (#1593);
     + Fixed improper contents in plain text part of notification e-mails (#1707);
+    + Reduce size of email notifications (#1643);
     + PHP 5.3 compatibility fixes (#1594, #1730);
     + PHP 7.2 compatibility fixes (#1683, #1714);
     + Fixed notification e-mails contain a broken link. (#1708);
+    + Code injection in Name field. (#1667);
+    + Reflected XSS requiring user interaction on search. (#1705);
     + Misc IPv6 fixes;
 
 == 1.3.1
