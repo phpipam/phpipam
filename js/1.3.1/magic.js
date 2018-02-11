@@ -2943,7 +2943,7 @@ $('button#hostfileDump').click(function () {
 });
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets","ipaddr"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom"]; var popsize = {};
 	popsize["subnets"] = "w700"; popsize["ipaddr"] = "w700";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
@@ -2996,6 +2996,12 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			var exportSections = $('form#selectExportSections').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-ipaddr.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'l2dom':
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-l2dom.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
 	}
