@@ -759,19 +759,15 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function shorten_text($text, $chars = 25) {
-		//count input text size
-		$startLen = mb_strlen($text);
-		//cut onwanted chars
-	    $text = mb_substr($text,0,$chars);
-		//count output text size
-		$endLen = mb_strlen($text);
-
-		//append dots if it was cut
-		if($endLen != $startLen) {
-			$text = $text."...";
+		// minimum length = 8
+		if ($chars < 8) $chars = 8;
+		// count input text size
+		$origLen = mb_strlen($text);
+		// cut unwanted chars
+		if ($origLen > $chars) {
+			$text = mb_substr($text, 0, $chars-3) . '...';
 		}
-
-	    return $text;
+		return $text;
 	}
 
 	/**
