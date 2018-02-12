@@ -8,7 +8,7 @@ if(!isset($_GET['subnetId'])) {
 }
 ?>
 
-<h4><?php print _('IPv4v6 calculator');?></h4>
+<h4><?php print _('IP and bandwidth calculator');?></h4>
 <hr>
 
 <!-- tabs -->
