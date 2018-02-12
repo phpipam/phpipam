@@ -27,6 +27,7 @@
     + Performance fix for detecting overlapping subnets. (#1052, #1426, #1533);
     + Performance fix for slow mac address vendor decoding (#1658);
     + Performance fix for subnet API first_subnet & all_subnets calls;
+    + Performance fix for delegating subnet permissions;
     + Convert to UTF-8 encoding on import/export to preserve dialectics (#1659, #1700, #1728);
     + Importing IPs loose Mac Addresses (#1607);
     + Section names containing spaces are not included in exports. (#1566);
@@ -36,9 +37,18 @@
     + PHP 5.3 compatibility fixes (#1594, #1730);
     + PHP 7.2 compatibility fixes (#1683, #1714);
     + Fixed notification e-mails contain a broken link. (#1708);
-    + Code injection in Name field. (#1667);
-    + Reflected XSS requiring user interaction on search. (#1705);
+    + Allow dots to be used in domain names. (#1747);
+    + Use multi-byte compatible functions when shortening text. (#1753);
+    + Scan subnet reports/selects invalid php path. (#1757);
+    + Small code refactoring (#1699);
     + Misc IPv6 fixes;
+
+    Security Fixes:
+    ----------------------------
+    + Code injection in Name field. (#1667);
+    + CSRF enables open mail relay. (#1703);
+    + Reflected XSS requiring user interaction on search. (#1705);
+    + XSS reflected via CSRF in preview.php. (#1706);
 
 == 1.3.1
 
