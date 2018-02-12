@@ -120,7 +120,7 @@ else {
             # set class
             $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
             # limit description
-            $s->description = strlen($s->description)>10 ? substr($s->description, 0,10)."..." : $s->description;
+            $s->description = $Tools->shorten_text($s->description, 10);
             $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
             # limit class
             $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";
