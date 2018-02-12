@@ -833,6 +833,13 @@ $(document).on("click", "#vlanstemplate", function() {
 	return false;
 });
 
+//download domain template
+$(document).on("click", "#l2domtemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=l2dom'></iframe></div>");
+	return false;
+});
+
 
 //download vlan domain template
 $(document).on("click", "#vlandomaintemplate", function() {
@@ -3069,7 +3076,7 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom"]; var popsize = {};
 	popsize["subnets"] = "max";popsize["ipaddr"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();

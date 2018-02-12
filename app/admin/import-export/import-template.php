@@ -33,7 +33,7 @@ if ($type == 'subnets'){
 	$worksheet->write($lineCount, 2, _('Mask'));
 	$worksheet->write($lineCount, 3, _('Description'));
 	$worksheet->write($lineCount, 4, _('VLAN'));
-	$worksheet->write($lineCount, 5, _('VLAN Domain'));
+	$worksheet->write($lineCount, 5, _('Domain'));
 	$worksheet->write($lineCount, 6, _('VRF'));
 	$fc =7 ;
 	foreach($custom_address_fields as $k=>$f) {
@@ -84,7 +84,7 @@ elseif ($type == 'vlans'){
 	$worksheet->write($lineCount, 0, _('Name'));
 	$worksheet->write($lineCount, 1, _('Number'));
 	$worksheet->write($lineCount, 2, _('Description'));
-	$worksheet->write($lineCount, 3, _('Domain name'));
+	$worksheet->write($lineCount, 3, _('Domain'));
 	$fc =4 ;
 	foreach($custom_address_fields as $k=>$f) {
 		$worksheet->write($lineCount, $fc, $k);

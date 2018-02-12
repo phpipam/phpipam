@@ -122,7 +122,7 @@ $(function(){
 						var s = $('<select name="importFields__' + expfield.replace(/\s/g,"_") + '" class="form-control input-sm input-w-auto" rel="tooltip" data-placement="bottom" title="<?php print _("Pick import colum for"); ?> ' + expfield + ' <?php print _("field"); ?>"/>');
 						$('<option />', {value: "-", text: "-"}).appendTo(s);
 						resp.impfields.forEach(function(impfield) {
-                                                        if (expfield.toUpperCase() === impfield.toUpperCase().replace("IP ADDRESS", "IP_ADDR").replace("HOSTNAME", "DNS_NAME")) {
+                                                        if (expfield.toUpperCase() === impfield.toUpperCase().replace("IP ADDRESS", "IP_ADDR")) {
 								$('<option />', {value: impfield, text: impfield, selected: true}).appendTo(s);
 								matches++;
 							} else {
