@@ -32,10 +32,8 @@ else 				{ $type = "WAN"; }
 <strong>Transfer time (h:m:s):</strong>
 <div class='res_val'><?php print $User->sec2hms($time); ?></div>
 
-
+<?php if(!isset($_POST['widget'])) { ?>
 <div class="clearfix"></div>
-
-
 
 <br><br>
 <strong>Calculation parameters:</strong>
@@ -48,3 +46,4 @@ else 				{ $type = "WAN"; }
 </ul>
 </p>
 <br>
+<?php } ?>

@@ -8,6 +8,7 @@
     + Added Required fields subpage to define IP address fields that must be filled in;
     + Performance + bug fixes (#1660, #1657);
     + MasterSubnet dropdown list is dynamically generated via AJAX call;
+    + Bandwidth calculator;
     + API:
         + New last_subnet API calls (#1655);
 

@@ -33,6 +33,19 @@ p {
 #result .res_val {
 	font-size: 32px;
 }
+<?php if(isset($widget)) { ?>
+#result {
+	position: absolute;
+	right: 10px;
+	top: 20px;
+}
+#result hr {
+	display: none;
+}
+.slider_overlay {
+	width:auto;
+}
+<?php } ?>
 </style>
 
 
@@ -86,7 +99,7 @@ $( function() {
 
 // recalculate delay
 function recalculate_result () {
-	$.post("app/tools/ip-calculator/bw-calculator-result.php", {wsize:wsize, delay:delay, fsize:fsize}, function(data) {
+	$.post("app/tools/ip-calculator/bw-calculator-result.php", {wsize:wsize, delay:delay, fsize:fsize <?php if(isset($widget)) print ", widget:'widget'" ?>}, function(data) {
 		$('#result').html(data)
 	})
 }
@@ -182,12 +195,13 @@ function remap_fsize_text (fsize_index) {
 </script>
 
 
-
+<?php if(!isset($widget)) { ?>
 <h4><?php print _('Bandwidth calculator');?></h4>
 <hr>
 <?php print _("Select TCP window size, delay and Filesize to calculate how long file transfer will take."); ?>
 
 <br><br><br>
+<?php } ?>
 
 <div class="slider_overlay">
 	<p>TCP Window size:</p>
