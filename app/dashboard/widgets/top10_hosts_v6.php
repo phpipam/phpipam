@@ -44,6 +44,5 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 }
 
 # get subnets statistic
-$type = 'IPv6';
-
-include "top10_hosts_lib.php";
+require( "top10_hosts_lib.php" );
+top10_widget('IPv6', false, $height, $slimit);

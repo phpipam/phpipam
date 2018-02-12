@@ -111,7 +111,7 @@ else {
 		<!-- <script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.min.js"></script> -->
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
-		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
+		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.12.1.custom.min.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
 
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>

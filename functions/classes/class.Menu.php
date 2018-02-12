@@ -112,7 +112,7 @@ class MasterSubnetDropDown {
 
 		$options = $this->get_subnet_options($subnet);
 
-		if (strlen($subnet->description)>34) $subnet->description = substr($subnet->description, 0, 31) . '...';
+		$subnet->description = $this->Subnets->shorten_text($subnet->description, 34);
 		$prefix = str_repeat(' - ', $level);
 
 		if ($subnet->isFolder) {

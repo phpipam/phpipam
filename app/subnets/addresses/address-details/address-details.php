@@ -280,7 +280,7 @@ if(sizeof($address)>1) {
     				}
     			}
     		}
-    		if(sizeof(@$active_shares)>0) {
+    		if(isset($active_shares)) {
     			# divider
                 print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Temporary shares')."</h4></tr>";
 
@@ -296,7 +296,7 @@ if(sizeof($address)>1) {
     			print "<td>";
     			print "</tr>";
     		}
-    		if(sizeof(@$expired_shares)>0) {
+    		if(isset($expired_shares)) {
     			# divider
     			print "<tr>";
     			print "	<th><hr></th>";

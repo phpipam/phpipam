@@ -3053,12 +3053,8 @@ class Subnets extends Common_functions {
 				$current_description = $description_print;
 			}
 			elseif ($this->settings->subnetView == 2) {
-			    if (strlen($option['value']['description'])>0) {
-                    $temp_description = "(".$option['value']['description'].")";
-
-                    if (strlen($temp_description)>34) {
-                        $temp_description = substr($temp_description, 0, 32) . "...)";
-                    }
+			    if (!empty($option['value']['description'])) {
+                    $temp_description = "(" . $this->shorten_text($option['value']['description'], 34) . ")";
                 }
                 else {
                     $temp_description = "";

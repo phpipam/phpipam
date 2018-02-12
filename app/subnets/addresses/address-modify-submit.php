@@ -57,7 +57,7 @@ foreach ($required_ip_fields as $k=>$f) {
 	}
 }
 // checks
-if(is_array($required_ip_fields)) {
+if(is_array($required_ip_fields) && $action!="delete") {
 	// remove modules not enabled from required fields
 	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
 
@@ -117,7 +117,7 @@ $address = $Addresses->reformat_empty_array_fields ($address, null);
 
 # custom fields and checks
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
-if(sizeof($custom_fields) > 0) {
+if(sizeof($custom_fields) > 0 && $action!="delete") {
 	foreach($custom_fields as $field) {
 		# replace possible ___ back to spaces!
 		$field['nameTest']      = str_replace(" ", "___", $field['name']);
