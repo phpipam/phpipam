@@ -438,15 +438,6 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
 
 
 
-
-// remove maintaneance mode
-$('.removeMaintaneance').click(function() {
-    open_popup ("400", "app/admin/settings/remove-maintaneance.php", "", false);
-})
-
-
-
-
 /* @subnets list ----------  */
 
 /* leftmenu toggle submenus */
@@ -2786,89 +2777,8 @@ $(document).on("click", "#editcustomFilterSubmit", function() {
 
 
 
-
-
-
-/* Languages
+/* API, agents regenerate code
 *********/
-//Load edit lang form
-$('button.lang').click(function() {
-    showSpinner();
-    var langid    = $(this).attr('data-langid');
-    var action   = $(this).attr('data-action');
-    $.post('app/admin/languages/edit.php', {langid:langid, action:action}, function(data) {
-        $('#popupOverlay div.popup_w400').html(data);
-        showPopup('popup_w400');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//Edit lang details
-$(document).on("click", "#langEditSubmit", function() {
-    showSpinner();
-    var ldata = $('form#langEdit').serialize();
-    $.post('app/admin/languages/edit-result.php', ldata, function(data) {
-        $('div.langEditResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-
-/* Widgets
-*********/
-//Load edit widget form
-$('button.wedit').click(function() {
-    showSpinner();
-    var wid    = $(this).attr('data-wid');
-    var action = $(this).attr('data-action');
-    $.post('app/admin/widgets/edit.php', {wid:wid, action:action}, function(data) {
-        $('#popupOverlay div.popup_w500').html(data);
-        showPopup('popup_w500');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//Edit widgets details
-$(document).on("click", "#widgetEditSubmit", function() {
-    showSpinner();
-    var ldata = $('form#widgetEdit').serialize();
-    $.post('app/admin/widgets/edit-result.php', ldata, function(data) {
-        $('div.widgetEditResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-
-
-/* API
-*********/
-//Load edit API form
-$('button.editAPI').click(function() {
-    showSpinner();
-    var appid    = $(this).attr('data-appid');
-    var action   = $(this).attr('data-action');
-    $.post('app/admin/api/edit.php', {appid:appid, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//Edit API details
-$(document).on("click", "#apiEditSubmit", function() {
-    showSpinner();
-    var apidata = $('form#apiEdit').serialize();
-    $.post('app/admin/api/edit-result.php', apidata, function(data) {
-        $('div.apiEditResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
 //regenerate API key
 $(document).on('click', "#regApiKey", function() {
 	showSpinner();
@@ -2877,20 +2787,6 @@ $(document).on('click', "#regApiKey", function() {
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
-});
-
-
-
-
-/* agents
-*********/
-//load edit form
-$('.editAgent').click(function() {
-	open_popup("700", "app/admin/scan-agents/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
-});
-//submit form
-$(document).on("click", "#agentEditSubmit", function() {
-    submit_popup_data (".agentEditResult", "app/admin/scan-agents/edit-result.php", $('form#agentEdit').serialize());
 });
 //regenerate agent key
 $(document).on('click', "#regAgentKey", function() {
