@@ -1,7 +1,6 @@
 <?php
 # config, objects
 require_once( dirname(__FILE__).'/../../../functions/functions.php' );
-include_once( dirname(__FILE__).'/bw-calculator-config.php' );
 
 # initialize objects
 $Result		= new Result;
@@ -15,7 +14,7 @@ $delay = $_POST['delay'];
 $fsize = $_POST['fsize'];
 
 // get mbps values from config
-$mbps = $values[$tcp][$delay];
+$mbps = round($tcp/($delay/1000)/(1024*1024),2);
 
 // Calculate transfer time
 $time = round(($fsize / $mbps), 2);
