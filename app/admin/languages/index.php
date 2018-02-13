@@ -17,9 +17,10 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 <?php print "<p class='muted'>"._('You can edit different language translations here')."</p>"; ?>
 
 <!-- Add new -->
-<button class="btn btn-sm btn-default lang" data-action='add' style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _("Create new language"); ?></button>
-<table class="table table-striped table-auto table-top" style="min-width:400px;">
+<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/languages/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new language'); ?></button>
 
+
+<table class="table table-striped table-auto table-top" style="min-width:400px;">
 	<!-- Language list -->
 	<?php
 	/* no results */
@@ -58,8 +59,8 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 			print "	<td>$tversion</td>";
 			print "	<td>";
 			print "	<div class='btn-group'>";
-			print "		<button class='btn btn-xs btn-default lang' data-action='edit' data-langid='$lang[l_id]'><i class='fa fa-pencil'></i></button>";
-			print "		<button class='btn btn-xs btn-default lang' data-action='delete' data-langid='$lang[l_id]'><i class='fa fa-times'></i></button>";
+			print "		<button class='btn btn-xs btn-default open_popup' data-langid='$lang[l_id]' data-script='app/admin/languages/edit.php' data-class='700' data-action='edit'><i class='fa fa-pencil'></i></button>";
+			print "		<button class='btn btn-xs btn-default open_popup' data-langid='$lang[l_id]' data-script='app/admin/languages/edit.php' data-class='700' data-action='delete'><i class='fa fa-times'></i></button>";
 			print "	</div>";
 			print "	</td>";
 			print "</tr>";

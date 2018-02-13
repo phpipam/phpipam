@@ -18,8 +18,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 <!-- only IF aPI enabled -->
 <?php if($User->settings->api==1) { ?>
 	<!-- Add new -->
-	<button class='btn btn-sm btn-default editAPI' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create API key'); ?></button>
-
+	<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/api/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create API key'); ?></button>
 
 	<?php
 	/* print existing APIs */
@@ -82,8 +81,8 @@ $all_apis = $Admin->fetch_all_objects("api");
 			# add/remove APIs
 			print "	<td class='actions'>";
 			print "	<div class='btn-group'>";
-			print "		<button class='btn btn-xs btn-default editAPI'  data-container='body' data-appid='$a[id]' data-action='edit'   rel='tooltip' title='"._('edit app details')."'>	<i class='fa fa-pencil'></i></button>";
-			print "		<button class='btn btn-xs btn-default editAPI'  data-container='body' data-appid='$a[id]' data-action='delete' rel='tooltip' title='"._('remove app')."'>		<i class='fa fa-times'></i></button>";
+			print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/api/edit.php' data-class='700' data-action='edit' data-appid='$a[id]' rel='tooltip' title='"._('edit app details')."'><i class='fa fa-pencil'></i></button>";
+			print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/api/edit.php' data-class='700' data-action='delete' data-appid='$a[id]' rel='tooltip' title='"._('remove app')."'><i class='fa fa-times'></i></button>";
 			print "	</div>";
 			print "</td>";
 

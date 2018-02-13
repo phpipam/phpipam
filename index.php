@@ -207,7 +207,7 @@ else {
 
 	<!-- maintaneance mode -->
 	<?php
-	$text_append_maint = $User->is_admin(false) ? " <btn class='removeMaintaneance btn btn-xs btn-default'>"._("Remove")."</btn>" : "";
+	$text_append_maint = $User->is_admin(false) ? "<a class='btn btn-xs btn-default open_popup' data-script='app/admin/settings/remove-maintaneance.php' data-class='400' data-action='edit'>"._("Remove")."</a>" : "";
 	if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !".$text_append_maint, false); }
 	?>
 
