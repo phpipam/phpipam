@@ -806,7 +806,9 @@ $(document).on("click", "input#csvImportYes", function() {
     else                                                { var ignoreError = "0"; }
     // get active subnet ID
     var xlsSubnetId  = $('a.csvImport').attr('data-subnetId');
-    var postData = "subnetId=" + xlsSubnetId + "&filetype=" + filetype + "&ignoreError=" + ignoreError;
+    // Get CSRF cookie
+    var csrf_cookie = $('input[name=csrf_cookie]').val();
+    var postData = "subnetId=" + xlsSubnetId + "&filetype=" + filetype + "&ignoreError=" + ignoreError + "&csrf_cookie=" + csrf_cookie;
 
     $.post('app/subnets/import-subnet/import-file.php', postData, function(data) {
         $('div.csvImportResult').html(data).slideDown('fast');
