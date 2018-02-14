@@ -270,10 +270,8 @@ $('table.sorted')
                  .attr('data-sortable', 'false')
                  .attr('onlyInfoPagination', 'true')
                  .attr('smartDisplay', true)
-                 .attr('data-show-refresh', true)
                  .attr('showPaginationSwitch', true)
                  .attr('minimumCountColumns', true)
-
 
 $('table.nosearch')
                  .attr('data-search','false')
@@ -285,7 +283,14 @@ $('table.nopagination')
 $('table.sortable')
                  .attr('data-sortable', 'true')
 
-// icons
+// tooltips, popovers
+$('table.sorted').on('all.bs.table', function () {
+    if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+    $('.show_popover').popover();
+})
+
+
+// icons - bootstrap table
 window.icons = {
     refresh : 'fa-refresh',
     toggle  : 'fa-toggle-on',
