@@ -2984,7 +2984,6 @@ class Subnets extends Common_functions {
 	 * @param mixed $section_subnets	//array of all subnets in section
 	 * @return string
 	 */
-
 	public function print_subnets_menu($user, $section_subnets) {
 		$User = new User ($this->Database);
 		$subnetsTree = new SubnetsTree($this, $User->user);

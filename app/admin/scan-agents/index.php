@@ -16,7 +16,7 @@ $all_agents = $Admin->fetch_all_objects("scanAgents");
 <hr><br>
 
 <!-- Add new -->
-<button class='btn btn-sm btn-default editAgent' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new agent'); ?></button>
+<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/scan-agents/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new agent'); ?></button>
 
 
 <?php
@@ -56,8 +56,8 @@ if($all_agents!==false) {
 		// add/remove agents
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editAgent'  data-container='body' data-id='$a[id]' data-action='edit'   rel='tooltip' title='"._('edit agent details')."'>	<i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editAgent'  data-container='body' data-id='$a[id]' data-action='delete' rel='tooltip' title='"._('remove agent')."'>		<i class='fa fa-times'></i></button>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/scan-agents/edit.php' data-class='700' data-action='edit' data-id='$a[id]' rel='tooltip' title='"._('edit agent details')."'><i class='fa fa-pencil'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/scan-agents/edit.php' data-class='700' data-action='delete' data-id='$a[id]' rel='tooltip' title='"._('remove agents')."'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print "</td>";
 

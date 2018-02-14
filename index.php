@@ -111,7 +111,6 @@ else {
 		<!-- <script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.min.js"></script> -->
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
-		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
 
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>
@@ -137,6 +136,8 @@ else {
 		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".$gmaps_api_key; ?>"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/gmaps.js"></script>
 		<?php }	?>
+		<!-- jQuery UI -->
+		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.12.1.custom.min.js"></script>
 
 	</head>
 
@@ -207,7 +208,7 @@ else {
 
 	<!-- maintaneance mode -->
 	<?php
-	$text_append_maint = $User->is_admin(false) ? " <btn class='removeMaintaneance btn btn-xs btn-default'>"._("Remove")."</btn>" : "";
+	$text_append_maint = $User->is_admin(false) ? "<a class='btn btn-xs btn-default open_popup' data-script='app/admin/settings/remove-maintaneance.php' data-class='400' data-action='edit'>"._("Remove")."</a>" : "";
 	if($User->settings->maintaneanceMode == "1") { $Result->show("warning text-center nomargin", "<i class='fa fa-info'></i> "._("System is running in maintenance mode")." !".$text_append_maint, false); }
 	?>
 

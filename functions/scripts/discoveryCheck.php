@@ -234,7 +234,7 @@ $Result		= new Result();
 $discovered = 0;				//for mailing
 
 foreach($scan_subnets as $s) {
-	if(sizeof(@$s->discovered)>0) {
+	if(isset($s->discovered)) {
 		foreach($s->discovered as $ip) {
 			// fetch subnet
 			$subnet = $Subnets->fetch_subnet ("id", $s->id);
