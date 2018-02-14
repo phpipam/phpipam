@@ -23,8 +23,9 @@ $all_agents = $Admin->fetch_all_objects("scanAgents");
 /* print existing APIs */
 if($all_agents!==false) {
 
-	print '<table id="userPrint" class="table table-striped table-top table-auto">';
+	print '<table id="userPrint" class="table sorted table-striped table-top table-auto nopagination nosearch" data-cookie-id-table="scanagents">';
 	# headers
+	print "<thead>";
 	print '<tr>';
     print "<th>"._('Agent id').'</th>';
 	print "<th>"._('Name').'</th>';
@@ -34,8 +35,10 @@ if($all_agents!==false) {
     print "<th>"._('Last access').'</th>';
     print '<th></th>';
 	print '</tr>';
+	print "</thead>";
 
 	# loop
+	print "<tbody>";
 	foreach ($all_agents as $a) {
 		//cast
 		$a = (array) $a;
@@ -63,6 +66,7 @@ if($all_agents!==false) {
 
 		print '</tr>' . "\n";
 	}
+	print "</tbody>";
 	print "</table>";
 }
 else {

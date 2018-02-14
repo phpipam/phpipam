@@ -42,7 +42,7 @@ if ($sections !== false) {
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top">
+<table class="table sorted table-striped table-condensed table-top" data-cookie-id-table="admin_sections">
 <!-- headers -->
 <thead>
 <tr>

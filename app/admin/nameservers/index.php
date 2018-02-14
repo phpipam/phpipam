@@ -22,7 +22,7 @@ $all_nameservers = $Admin->fetch_all_objects("nameservers", "id");
 # first check if they exist!
 if($all_nameservers===false) { $Result->show("danger", _("No nameserver sets defined")."!", true);}
 else {
-	print '<table id="nameserverManagement" class="table sorted table-striped table-top table-hover table-td-top">'. "\n";
+	print '<table id="nameserverManagement" class="table sorted table-striped table-top table-hover table-td-top" data-cookie-id-table="admin_ns">'. "\n";
 
 	# headers
 	print "<thead>";

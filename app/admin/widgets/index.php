@@ -23,7 +23,7 @@ print "</p>";
 <!-- Add new -->
 <button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/widgets/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new widget'); ?></button>
 
-<table class="table sorted table-striped table-top" style="min-width:400px;">
+<table class="table sorted table-striped table-top" style="min-width:400px;" data-cookie-id-table="widgets">
 
 	<!-- Language list -->
 	<?php

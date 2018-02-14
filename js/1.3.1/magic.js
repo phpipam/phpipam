@@ -75,6 +75,8 @@ function reload_window (data) {
 	else                               		  	{ hideSpinner(); }
 }
 
+/* tooltips */
+if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 
 /* hide error div if jquery loads ok
 *********************************************/
@@ -237,39 +239,40 @@ else                                    { def_size = readCookie('table-page-size
 
 
 //table
-$('table.sorted').bdt({
-   pageRowCount: def_size,
-   searchFormClass: 'form-inline pull-right searchFormClass',
-   divClass: 'text-right'
-});
-$('table.sorted-left').bdt({
-   pageRowCount: def_size,
-   searchFormClass: 'form-inline pull-left searchFormClass clearfix',
-   divClass: 'text-left clearfix'
-});
-$('table.sorted').stickyTableHeaders();
-
-
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
                  .attr('data-page-size', '50')
-                 .attr('data-page-list', '[20,30,100,250,500,All]')
+                 .attr('data-page-list', '[50,100,250,500,All]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')
                  .attr('data-icon-size','sm')
                  .attr('data-show-footer','false')
                  .attr('data-show-columns','true')
                  .attr('data-icons-prefix','fa')
-                 .attr('data-show-toggle','true')
                  .attr('data-icons','icons')
-                 .attr('data-cookie','true');
+                 .attr('data-cookie','true')
 
-$('table.sorted-new-notoggle')
-                 .attr('data-show-toggle','false')
+$('table.sorted')
+                 .attr("data-toggle", "table")
+                 .attr('data-pagination', 'true')
+                 .attr('data-page-size', '50')
+                 .attr('data-page-list', '[50,100,250,500,All]')
+                 .attr('data-search','true')
+                 .attr('data-classes','table-no-bordered')
+                 .attr('data-icon-size','sm')
+                 .attr('data-show-footer','false')
+                 .attr('data-show-columns','true')
+                 .attr('data-icons-prefix','fa')
+                 .attr('data-icons','icons')
+                 .attr('data-cookie', 'true')
 
-$('table.sorted-new-nocolumns')
+$('table.nosearch')
+                 .attr('data-search','false')
                  .attr('data-show-columns','false')
+
+$('table.nopagination')
+                 .attr('data-pagination', 'false')
 
 // icons
 window.icons = {

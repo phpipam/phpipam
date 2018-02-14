@@ -51,15 +51,13 @@ switch ($type) {
 
 <?php
 // none
-if ($domains === false) {$Result->show("info alert-absolute", _("No domains configured"), false);} else {
-
-    ?>
+if ($domains === false) {$Result->show("info alert-absolute", _("No domains configured"), false);} else { ?>
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top">
+<table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns_domains">
 
 <!-- Headers -->
-<thead id="headers">
+<thead>
 <tr>
 	<th style="width:80px;"></th>
     <th><?php print _('Domain');?></th>

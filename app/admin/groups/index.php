@@ -46,12 +46,12 @@ $colspanCustom = 0;
 <div class="btn-group">
 	<button class='btn btn-sm btn-default editGroup' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
 	<?php if($auth_methods!==false) { ?>
-	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'> <?php print _('Search domain groups'); ?></i></button>
+	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'></i> <?php print _('Search domain groups'); ?></button>
 	<?php } ?>
 </div>
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top">
+<table id="userPrint" class="table sorted table-striped table-top" data-cookie-id-table="admin_groups">
 
 <!-- Headers -->
 <thead>
@@ -70,7 +70,8 @@ $colspanCustom = 0;
 		}
 	}
 	?>
-    <th colspan="2"></th>
+    <th></th>
+    <th></th>
 </tr>
 </thead>
 

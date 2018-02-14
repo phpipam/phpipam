@@ -20,7 +20,7 @@ $inactive_requests = $Admin->fetch_multiple_objects ("requests", "processed", 1,
 if($active_requests===false) { print "<div class='alert alert-info'>"._('No IP address requests available')."!</div>"; }
 else {
 ?>
-<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top" data-cookie-id-table="admin_requests">
 
 <!-- headers -->
 <thead>
@@ -75,7 +75,7 @@ if($inactive_requests!==false) { ?>
 <h4 style="margin-top:50px;"><?php print _('List of all processes IP addresses requests'); ?></h4>
 <hr><br>
 
-<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top table-auto1">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top table-auto1" data-cookie-id-table="admin_requests_2">
 
 <!-- headers -->
 <thead>

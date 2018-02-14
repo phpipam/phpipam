@@ -113,19 +113,10 @@ else {
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
 
-		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.sortelements.js"></script>
-		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bdt/jquery.bdt.js"></script>
-		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/stickytableheaders/jquery.stickytableheaders.min.js"></script>
-
 		<!-- bootstrap table -->
 		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js"></script>
 		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table-cookie.js"></script>
 
-		<script type="text/javascript">
-		$(document).ready(function(){
-		     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
-		});
-		</script>
 		<?php if ($User->settings->enableThreshold=="1") { ?>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-slider.js"></script>
 		<?php }	?>

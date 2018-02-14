@@ -29,9 +29,10 @@ foreach($all_method_types as $type) {
 </div>
 
 <!-- table -->
-<table id="userPrint" class="table table-striped table-top table-auto">
+<table id="userPrint" class="table sorted nosearch table-striped table-top table-auto" data-cookie-id-table="admin_authm">
 
 <!-- Headers -->
+<thead>
 <tr>
     <th><?php print _('Type'); ?></th>
     <th><?php print _('Description'); ?></th>
@@ -40,7 +41,9 @@ foreach($all_method_types as $type) {
     <th><?php print _('Protected'); ?></th>
     <th></th>
 </tr>
+</thead>
 
+<tbody>
 <!-- data -->
 <?php
 //loop
@@ -85,6 +88,7 @@ foreach($all_methods as $method) {
 	print "</tr>";
 }
 ?>
+</tbody>
 </table>
 
 

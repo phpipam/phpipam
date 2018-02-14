@@ -575,7 +575,7 @@ class Sections extends Common_functions {
 
 		# permitted
 		if ($permission != 0) {
-
+			// add
 			if ($permission>1) {
 				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i>'._('Add subnet').'</button>';
 			}

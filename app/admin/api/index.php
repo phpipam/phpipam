@@ -24,8 +24,9 @@ $all_apis = $Admin->fetch_all_objects("api");
 	/* print existing APIs */
 	if($all_apis!==false) {
 
-		print '<table id="userPrint" class="table table-striped table-top table-auto">';
+		print '<table id="userPrint" class="table nosearch sorted table-striped table-top table-auto" data-cookie-id-table="admin_api">';
 		# headers
+		print "<thead>";
 		print '<tr>';
 	    print "<th>"._('App id').'</th>';
 		print "<th>"._('App code').'</th>';
@@ -38,8 +39,10 @@ $all_apis = $Admin->fetch_all_objects("api");
 	    print "<th>"._('Comment').'</th>';
 	    print '<th></th>';
 		print '</tr>';
+		print "</thead>";
 
 		# loop
+		print "<tbody>";
 		foreach ($all_apis as $a) {
 			# cast
 			$a = (array) $a;
@@ -88,6 +91,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 
 			print '</tr>' . "\n";
 		}
+		print "</tbody>";
 		print "</table>";
 	}
 	else {

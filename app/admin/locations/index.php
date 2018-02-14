@@ -8,4 +8,3 @@ $User->is_admin(true);
 
 # show all nat objects
 include(dirname(__FILE__)."/../../tools/locations/index.php");
-?>

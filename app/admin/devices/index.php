@@ -44,7 +44,7 @@ if($devices===false) {
 /* Print them out */
 else {
 
-	print '<table id="switchManagement" class="table table-striped sorted table-td-top">';
+	print '<table id="switchManagement" class="table table-striped sorted table-td-top" data-cookie-id-table="admin_devices">';
 
 	# headers
 	print "<thead>";

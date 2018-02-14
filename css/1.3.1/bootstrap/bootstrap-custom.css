@@ -127,6 +127,7 @@ h5 .label {
 h1, h2, h3, h4, h5, .pHeader {
 	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
+	color: #428bca;
 }
 .row {
 	margin: 0px;
@@ -1700,8 +1701,21 @@ table#vrf tr.vrf-title th,
 table#subnets tr.subnets-title th,
 table#settings tr.settings-title th {
 	border-top: none;
-	padding-top: 20px;
+	padding: 0px;
 	border-bottom-color: silver;
+}
+table#switchMainTable tr.switch-title th h4,
+table#vrf tr.vrf-title th h4,
+table#subnets tr.subnets-title th h4,
+table#settings tr.settings-title th h4 {
+	background: white;
+	padding: 10px;
+	margin: 0px;
+	margin-top: 30px;
+	color: #428bca;;
+}
+table#settings tr.settings-title th {
+	border-bottom: 1px solid #428bca;
 }
 table#switchMainTable tr.switch-title th {
 	border-bottom: 0px;
@@ -2659,6 +2673,9 @@ div.fixed-table-container {
 	border-width: 0px !important;
 }
 .fixed-table-container thead th .th-inner {
+	color: #428bca;
+}
+.fixed-table-container #manageSubnets thead th .th-inner {
 	padding: 0px 3px;
 	color: #428bca;
 }
@@ -2672,4 +2689,7 @@ div.fixed-table-container {
 }
 .card-views  i[class*="fa-pad-"] {
 	display: none;
+}
+.pagination-detail {
+	color: #999;
 }

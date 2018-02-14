@@ -25,7 +25,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 <button class='btn btn-sm btn-default editUser' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create user'); ?></button>
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top">
+<table id="userPrint1" class="table sorted table-striped table-top" data-cookie-id-table="admin_users">
 
 <!-- Headers -->
 <thead>
