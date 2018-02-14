@@ -51,21 +51,21 @@ else {
             	# name
             	print "<tr>";
             	print "	<th>"._('Name')."</th>";
-            	print "	<td><strong>$location->name</strong></td>";
+            	print "	<td><strong>".escape_input($location->name)."</strong></td>";
             	print "</tr>";
 
             	# address
             	print "<tr>";
             	print "	<th>"._('Address')."</th>";
             	print "	<td>";
-            	print strlen($location->address)>0 ? $location->address : "/";
+            	print strlen($location->address)>0 ? escape_input($location->address) : "/";
             	print "</td>";
             	print "</tr>";
 
             	print "<tr>";
             	print "	<th>"._('Coordinates')."</th>";
             	print "	<td>";
-            	print strlen($location->lat)>0 && strlen($location->long)>0 ? "<span class='text-muted'>".$location->lat." / ".$location->long."</span>" : "/";
+            	print strlen($location->lat)>0 && strlen($location->long)>0 ? "<span class='text-muted'>".escape_input($location->lat)." / ".escape_input($location->long)."</span>" : "/";
             	print "</td>";
             	print "</tr>";
 
@@ -79,7 +79,7 @@ else {
             	# description
             	print "<tr>";
             	print "	<th>"._('Description')."</th>";
-            	print "	<td>$location->description</td>";
+            	print "	<td>". escape_input($location->description) ."</td>";
             	print "</tr>";
 
             	# print custom subnet fields if any
