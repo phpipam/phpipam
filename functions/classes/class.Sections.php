@@ -558,7 +558,7 @@ class Sections extends Common_functions {
 	 * @return string
 	 */
 	public function print_section_subnets_table($User, $sectionId, $showSupernetOnly = false) {
-		$html = array();
+		$html = [];
 
 		# set custom fields
 		$Tools = new Tools ($this->Database);
@@ -575,7 +575,12 @@ class Sections extends Common_functions {
 
 		# permitted
 		if ($permission != 0) {
-			$html[] = '<table id="manageSubnets" class="table table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
+
+			if ($permission>1) {
+				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i>'._('Add subnet').'</button>';
+			}
+
+			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
 			$html[] = '<thead><tr>';
 
 			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
@@ -597,11 +602,7 @@ class Sections extends Common_functions {
 				}
 			}
 
-			$html[] = '<th data-field="buttons" class="actions" data-width="140">';
-			if ($permission>1) {
-				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i>'._('Add subnet').'</button>';
-			}
-			$html[] = '</th>';
+			$html[] = '<th data-field="buttons" class="actions" data-width="140"></th>';
 			$html[] = '</tr></thead></table>';
 
 			if ($showSupernetOnly==='1') {
@@ -614,4 +615,3 @@ class Sections extends Common_functions {
 		return implode("\n", $html);
 	}
 }
-?>

@@ -315,7 +315,7 @@ ul.progressUl li {
 	padding-right: 3px;
 }
 .fa-pad-right-12 {
-	padding-right: 12px;
+	padding-right: 0px;
 }
 .fa-pad-left {
 	padding-left: 5px;
@@ -1817,7 +1817,7 @@ table#manageSubnets td {
 	padding-right: 0px;
 	vertical-align: middle;
 
-	padding-top: 6px;
+	padding-top: 4px;
 	padding-bottom: 6px;
 }
 table#manageSubnets td[class*="level"] {
@@ -1852,7 +1852,7 @@ table#manageSubnets td:nth-child(5),
 table#manageSubnets td:nth-child(6),
 table#manageSubnets th:nth-child(5),
 table#manageSubnets th:nth-child(6) {
-	text-align: center;
+	text-align: left;
 	padding: auto 0px;
 }
 table#manageSubnets td:nth-child(1),
@@ -2634,7 +2634,7 @@ table.popover_table td {
 }
 
 .btn-group.nowrap {
-    white-space: nowrap; // prevent buttons from wrapping when in tight spaces (e.g., the table on the tests page)
+    white-space: nowrap;
     > .btn {
         float: inherit;
     }
@@ -2652,4 +2652,18 @@ table.popover_table td {
 
 table.sorted-new th {
 	background: white !important;
+}
+
+/* bootstrap-table UI fixes */
+div.fixed-table-container {
+	border-width: 0px !important;
+}
+.fixed-table-container thead th .th-inner {
+	padding: 0px 3px;
+	color: #428bca;
+}
+.fixed-table-container thead th  {
+	padding: 0px;
+	background: white;
+	border-top: 1px solid #ddd !important;
 }
