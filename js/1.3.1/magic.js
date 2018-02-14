@@ -252,6 +252,7 @@ $('table.sorted-new')
                  .attr('data-icons-prefix','fa')
                  .attr('data-icons','icons')
                  .attr('data-cookie','true')
+                 .attr('data-sortable', 'false')
 
 $('table.sorted')
                  .attr("data-toggle", "table")
@@ -266,6 +267,8 @@ $('table.sorted')
                  .attr('data-icons-prefix','fa')
                  .attr('data-icons','icons')
                  .attr('data-cookie', 'true')
+                 .attr('data-sortable', 'false')
+
 
 $('table.nosearch')
                  .attr('data-search','false')
