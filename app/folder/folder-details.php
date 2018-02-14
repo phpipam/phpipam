@@ -51,7 +51,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 
 	<?php
 	# print custom subnet fields if any
-	if(sizeof(sizeof($cfields)) > 0) {
+	if(!is_null($cfields)) {
 		foreach($cfields as $key=>$field) {
 			if(strlen($folder[$key]) > 0) {
 			print "<tr>";

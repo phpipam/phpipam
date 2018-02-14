@@ -2607,7 +2607,6 @@ class Tools extends Common_functions {
     	$size = sizeof($numbers);
     	// vars
     	$numbers_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {

@@ -27,7 +27,7 @@ if($slaves) {
 	}
 
 	# first print belonging folders
-	if(sizeof(@$folders)>0) {
+	if(isset($folders)) {
 		# print title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ". sizeof($folders)." "._('directly nested folders').":</h4><hr>";
 
