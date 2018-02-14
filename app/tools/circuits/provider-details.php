@@ -111,7 +111,7 @@ if($provider!==false) {
 	}
 	else {
 		# table
-		print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+		print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="circu_prov_details">';
 
 		# headers
 		print "<thead>";

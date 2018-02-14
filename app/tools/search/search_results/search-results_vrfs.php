@@ -20,9 +20,10 @@ $result_vrf = $Tools->search_vrfs($searchTerm, $custom_vrf_fields);
 <h4><?php print _('Search results (VRFs)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_vrf">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Name');?></th>
 	<th><?php print _('RD');?></th>
@@ -38,8 +39,9 @@ $result_vrf = $Tools->search_vrfs($searchTerm, $custom_vrf_fields);
 	?>
 	<th></th>
 </tr>
+</thead>
 
-
+<tbody>
 <?php
 if(sizeof($result_vrf) > 0) {
 	# print vlans
@@ -75,7 +77,7 @@ if(sizeof($result_vrf) > 0) {
     }
 }
 ?>
-
+</tbody>
 </table>
 <?php
 if(sizeof($result_vrf) == 0) {

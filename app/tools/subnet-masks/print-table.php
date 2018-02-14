@@ -14,7 +14,7 @@ if(!$popup) {
 }
 ?>
 
-<table class="<?php if(!$popup) print "subnet-mask-table sorted-left";?> table table-striped <?php if($popup) print 'table-condensed'; ?> table-top <?php if(!$popup) print 'table-auto'; ?>">
+<table class="<?php if(!$popup) print "subnet-mask-table sorted";?> table nosearch nopagination table-striped <?php if($popup) print 'table-condensed'; ?> table-top <?php if(!$popup) print 'table-auto'; ?>" data-cookie-id-table="masks">
 
 <!-- headers -->
 <thead>

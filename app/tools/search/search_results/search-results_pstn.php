@@ -24,9 +24,10 @@ $result_pstnn = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields);
 <h4><?php print _('Search results (PSTN Prefixes)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_pstn">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Name');?></th>
 	<th><?php print _('Prefix');?></th>
@@ -43,6 +44,9 @@ $result_pstnn = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields);
 	?>
 	<th></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 if(sizeof($result_pstn) > 0) {
 	# print vlans
@@ -84,6 +88,7 @@ if(sizeof($result_pstn) > 0) {
     }
 }
 ?>
+</tbody>
 </table>
 
 <?php
@@ -99,9 +104,10 @@ if(sizeof($result_pstn) == 0) {
 <h4><?php print _('Search results (PSTN Numbers)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_pstn_refixes">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Name');?></th>
 	<th><?php print _('Number');?></th>
@@ -118,6 +124,9 @@ if(sizeof($result_pstn) == 0) {
 	?>
 	<th></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 if(sizeof($result_pstnn) > 0) {
 	# print vlans
@@ -158,6 +167,7 @@ if(sizeof($result_pstnn) > 0) {
     }
 }
 ?>
+</tbody>
 </table>
 <?php
 if(sizeof($result_pstnn) == 0) {

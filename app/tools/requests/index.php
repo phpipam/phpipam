@@ -33,7 +33,7 @@ if ($requests !== false) {
 if($requests===false) { print "<div class='alert alert-info'>"._('No IP address requests available')."!</div>"; }
 else {
 ?>
-<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top">
+<table id="requestedIPaddresses" class="table sorted table-striped table-condensed table-hover table-top" data-cookie-id-table="tool_req">
 
 <!-- headers -->
 <thead>

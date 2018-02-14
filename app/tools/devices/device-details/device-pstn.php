@@ -33,7 +33,7 @@ if ($User->settings->enablePSTN!="1") {
 else {
     $colspan = 6;
     // table
-    print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top'>";
+    print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top' data-cookie-id-table='device_pstn'>";
     // headers
     print "<thead>";
     print "<tr>";
@@ -57,6 +57,7 @@ else {
     print "</thead>";
 
 
+    print "<tbody>";
     # if none than print
     if($subprefixes===false) {
         print "<tr>";

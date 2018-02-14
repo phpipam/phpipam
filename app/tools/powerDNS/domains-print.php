@@ -91,7 +91,7 @@ elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains 
     ?>
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top">
+<table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns">
 
 <!-- Headers -->
 <thead>

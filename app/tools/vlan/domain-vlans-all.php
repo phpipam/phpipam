@@ -45,7 +45,7 @@ if($vlans===false) {
 }
 else {
 	# table
-	print "<table class='table sorted vlans table-condensed table-top'>";
+	print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vl_all'>";
 
 	# headers
 	print "<thead>";
@@ -73,7 +73,7 @@ else {
 			if($m==0 && $vlan->number!=1)	{
 				print "<tr class='success'>";
 				print "<td></td>";
-				print "<td colspan='".(4+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN')." 1 - ".($vlan->number -1)." (".($vlan->number -1)." "._('free').")</td>";
+				print "<td colspan='".(1+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN')." 1 - ".($vlan->number -1)." (".($vlan->number -1)." "._('free').")</td>";
 				print "</tr>";
 			}
 			# show free vlans - before vlan
@@ -83,9 +83,9 @@ else {
 				print "<td></td>";
 				# only 1?
 				if( (($vlan->number)-($vlans[$m-1]->number)-1) ==1 ) {
-				print "<td colspan='".(4+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number -1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
+				print "<td colspan='".(2+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number -1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
 				} else {
-				print "<td colspan='".(4+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlans[$m-1]->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlans[$m-1]->number+1)." - ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
+				print "<td colspan='".(1+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlans[$m-1]->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlans[$m-1]->number+1)." - ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
 				}
 				print "</tr>";
 				}
@@ -133,7 +133,7 @@ else {
 				if($User->settings->vlanMax > $vlans[0]->number) {
 					print "<tr class='success'>";
 					print "<td></td>";
-					print "<td colspan='".(4+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number+1)." - ".$User->settings->vlanMax." (".(($User->settings->vlanMax)-($vlan->number))." "._('free').")</td>";
+					print "<td colspan='".(1+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number+1)." - ".$User->settings->vlanMax." (".(($User->settings->vlanMax)-($vlan->number))." "._('free').")</td>";
 					print "</tr>";
 				}
 			}

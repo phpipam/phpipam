@@ -49,7 +49,7 @@ else {
 	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last $input_climit lines")."!", false); }
 
 	# printout
-	print "<table class='table table-striped table-top table-condensed'>";
+	print "<table class='table sorted table-striped table-top table-condensed' data-cookie-id-table='changelog_all'>";
 
 	# headers
 	print "<thead>";

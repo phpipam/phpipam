@@ -22,7 +22,7 @@ if(sizeof($favourite_subnets) == 0 || !isset($favourite_subnets[0])) {
 	print "</blockquote>";
 }
 else {
-	print "<table class='table sorted table-condensed table-striped table-hover table-top'>";
+	print "<table class='table sorted table-condensed table-striped table-hover table-top' data-cookie-id-table='tools_favs'>";
 
 	# headers
 	print "<thead>";

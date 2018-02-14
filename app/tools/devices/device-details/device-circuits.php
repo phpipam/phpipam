@@ -22,8 +22,6 @@ print "<h4>"._("Belonging Circuits")."</h4><hr>";
 //fetch
 $device_circuits = $Tools->fetch_all_device_circuits ($device->id);
 
-# Hosts table
-print "<table id='switchMainTable' class='circuits table table-striped table-top table-condensed'>";
 
 # headers
 if ($User->settings->enableCircuits!="1") {
@@ -37,7 +35,7 @@ else {
     }
     else {
         # table
-        print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+        print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="device_circuits">';
 
         # headers
         print "<thead>";
@@ -52,6 +50,7 @@ else {
         print '</tr>';
         print "</thead>";
 
+        print "<tbody>";
         foreach ($device_circuits as $circuit) {
             // reformat locations
             $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
@@ -77,7 +76,7 @@ else {
             print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";
             print '</tr>'. "\n";
         }
-
+        print "</tbody>";
         print '</table>';
     }
 }

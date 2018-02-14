@@ -22,7 +22,7 @@ else {
     $User->settings->enableLocations=="1" ? $Racks->fetch_all_racks(true) : $Racks->fetch_all_racks(false);
 
     // table
-    print "<table class='table sorted table-striped table-top table-td-top'>";
+    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='rack_list'>";
     // headers
     print "<thead>";
     print "<tr>";
@@ -72,16 +72,16 @@ else {
                 if(!in_array($r->location, $printed_locations)) {
                     // no location
                     if($r->location==0) {
-                        print "<tr><td colspan='$colspan'><h4>"._("No location")."</h4></td></tr>";
+                        print "<tr><td colspan='$colspan' class='th'>"._("No location")."</td></tr>";
                     }
                     else {
                         $location = $Tools->fetch_object("locations", "id", $r->location);
 
                         if($location!==false) {
-                            print "<tr><td colspan='$colspan'><h4><a href='".create_link($_GET['page'], "locations", $location->id)."'> $location->name</a></h4></td></tr>";
+                            print "<tr><td colspan='$colspan' class='th'><a href='".create_link($_GET['page'], "locations", $location->id)."'> $location->name</a></td></tr>";
                         }
                         else {
-                            print "<tr><td colspan='$colspan'><h4>"._("Invalid location")."</h4></td></tr>";
+                            print "<tr><td colspan='$colspan' class='th'>"._("Invalid location")."</td></tr>";
                         }
                     }
                     $printed_locations[] = $r->location;

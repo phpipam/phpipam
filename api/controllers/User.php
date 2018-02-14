@@ -500,8 +500,8 @@ class User_controller extends Common_api_functions {
 			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
 													{ $this->Response->throw_exception(403, "Invalid token"); }
 			// save token
-			$this->User->user = $token;
-			$this->token = $token->token;
+			$this->User->user    = $token;
+			$this->token         = $token->token;
 			$this->token_expires = $token->token_valid_until;
 
 			// expired
@@ -525,8 +525,8 @@ class User_controller extends Common_api_functions {
 			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
 													{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
 			// save token
-			$this->User->user = $token;
-			$this->token = $token->token;
+			$this->User->user    = $token;
+			$this->token         = $token->token;
 			$this->token_expires = $token->token_valid_until;
 
 			// expired
@@ -617,5 +617,3 @@ class User_controller extends Common_api_functions {
 	}
 
 }
-
-?>

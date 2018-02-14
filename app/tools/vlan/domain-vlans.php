@@ -60,7 +60,7 @@ if($vlans===false) {
 }
 else {
 	# table
-	print "<table class='table sorted vlans table-condensed table-top'>";
+	print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vlan_2'>";
 
 	# headers
 	print "<thead>";

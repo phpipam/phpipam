@@ -2417,8 +2417,6 @@ class Tools extends Common_functions {
 			# print table line
 			if(strlen($option['value']['prefix']) > 0) {
     			# count change?
-    			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
-
 				$html[] = "<tr class='level$count'>";
 
 				//which level?

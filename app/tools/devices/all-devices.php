@@ -43,7 +43,7 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="switchManagement" class="table sorted table-striped table-top">';
+print '<table id="switchManagement" class="table sorted table-striped table-top" data-cookie-id-table="devices_all">';
 
 #headers
 print "<thead>";

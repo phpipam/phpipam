@@ -31,7 +31,7 @@ else {
     $colspan = $admin ? 5 : 4;
 
     // table
-    print "<table class='table sorted table-striped table-top table-td-top'>";
+    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
     // headers
     print "<thead>";
     print "<tr>";

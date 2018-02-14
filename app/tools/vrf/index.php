@@ -33,25 +33,38 @@ if($vrfs===false) {
 	$Result->show("info", _('No VRFs configured'), false);
 }
 else {
-	# print table
-	print "<table id='vrf' class='table table-striped table-condensed table-top'>";
-
 	# loop
-	foreach ($vrfs as $vrf) {
+	foreach ($vrfs as $k=>$vrf) {
 		# cast
 		$vrf = (array) $vrf;
 
-		# print table body
-		print "<tbody>";
+		// print name
+		print "<br><br>";
+		print "<h4>".($k+1).".) $vrf[name]</h4>";
 
-		# vrf name and details
-		print "<tr class='vrf-title'>";
-	    print "	<th colspan='8'><h4>$vrf[name]</h4></th>";
+		# print table
+		print "<table id='vrf' class='table sorted table-striped table-condensed table-top' data-cookie-id-table='tools_vrf_$vrf[name]'>";
+
+		# headers
+		print "<thead>";
+		print "	<tr>";
+		print "	<th>"._('VLAN')."</th>";
+		print "	<th>"._('Description')."</td>";
+		print "	<th>"._('Section')."</td>";
+		print "	<th>"._('Subnet')."</td>";
+		print "	<th>"._('Master Subnet')."</td>";
+		if($User->settings->enableIPrequests=="1")
+		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
+		print "	<th></th>";
 		print "</tr>";
+		print "</thead>";
 
 		# sections
+		print "<tbody>";
+
+		# in sections
 		print "<tr class='text-top'>";
-	    print "	<td colspan='8'>";
+	    print "	<td colspan='8' class='th'>";
 	    print _("Available in sections")." ";
             $vrf_sections = array_filter(explode(";", $vrf['sections']));
             if (sizeof($vrf_sections)==0)   {
@@ -70,18 +83,6 @@ else {
 
 		# fetch subnets in vrf
 		$subnets = $Subnets->fetch_vrf_subnets ($vrf['vrfId'], null);
-
-		# headers
-		print "	<tr>";
-		print "	<th>"._('VLAN')."</th>";
-		print "	<th>"._('Description')."</td>";
-		print "	<th>"._('Section')."</td>";
-		print "	<th>"._('Subnet')."</td>";
-		print "	<th>"._('Master Subnet')."</td>";
-		if($User->settings->enableIPrequests=="1")
-		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
-		print "	<th></th>";
-		print "</tr>";
 
 		# subnets
 		if($subnets) {
@@ -174,8 +175,8 @@ else {
 		}
 		# end
 		print '</tbody>';
+		print "</table>";
 	}
 }
-print "</table>";
 
 ?>

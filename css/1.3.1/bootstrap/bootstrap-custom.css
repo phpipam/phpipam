@@ -199,6 +199,11 @@ select, input[type="file"] {
 .table td.al-center {
 	text-align: center;
 }
+.table td.th {
+	padding: 8px 5px;
+	padding-top: 20px;
+	font-weight: bold;
+}
 
 table.customIP tbody {
 	border-top:none;

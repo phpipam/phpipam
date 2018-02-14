@@ -20,18 +20,21 @@ print "<h4>"._("Belonging subnets")."</h4><hr>";
 $subnets = $Tools->fetch_multiple_objects ("subnets", "device", $device['id']);
 
 # Hosts table
-print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";
+print "<table id='switchMainTable' class='devices table sorted table-striped table-top table-condensed' data-cookie-id-table='device_subnets'>";
 
 # headers
+print "<thead>";
 print "<tr>";
 print "	<th>"._('Section')."</th>";
 print "	<th>"._('Subnet')."</th>";
 print "	<th>"._('Description')."</th>";
 print "	<th>"._('VLAN')."</th>";
 print "</tr>";
+print "</thead>";
 
 // loop
 $ipcnt = 0;
+print "<tbody>";
 if ($subnets !== false ) {
 	// loop
 	foreach ($subnets as $s) {
@@ -63,5 +66,5 @@ print "	<td colspan='8'>"._('No subnets belong to this device')."!</td>";
 print "</tr>";
 }
 
+print "</tbody>";
 print "</table>";
-?>

@@ -34,7 +34,7 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_circuits">';
 
 # headers
 print "<thead>";
