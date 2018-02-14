@@ -43,14 +43,14 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="switchManagement" class="table sorted table-striped table-top" data-cookie-id-table="devices_all">';
+print '<table id="switchManagement" class="table sorted sortable table-striped table-top" data-cookie-id-table="devices_all">';
 
 #headers
 print "<thead>";
 print '<tr>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by hostname')."'>"._('Name')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by IP address')."'>"._('IP address')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by description')."'>"._('Description').'</span></th>';
+print "	<th>"._('Name')."</th>";
+print "	<th>"._('IP address')."</th>";
+print "	<th>"._('Description').'</th>';
 if($User->settings->enableRACK=="1") {
 print '	<th>'._('Rack').'</th>';
 $colspanCustom++;
@@ -60,12 +60,12 @@ print "	<th>"._('SNMP info').'</th>';
 $colspanCustom++;
 }
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
-print "	<th class='hidden-sm'>          <span rel='tooltip' data-container='body' title='"._('Sort by type')."'>". _('Type').'</span></th>';
+print "	<th class='hidden-sm'>". _('Type').'</th>';
 
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}

@@ -114,7 +114,7 @@ else {
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
 
 		<!-- bootstrap table -->
-		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js"></script>
+		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js?v<?php print_r(time()); ?>"></script>
 		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table-cookie.js"></script>
 
 		<?php if ($User->settings->enableThreshold=="1") { ?>

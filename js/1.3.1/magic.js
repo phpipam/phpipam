@@ -238,7 +238,7 @@ if(readCookie('table-page-size')==null) { def_size = 25; }
 else                                    { def_size = readCookie('table-page-size'); }
 
 
-//table
+//bootstrap-table
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
@@ -268,6 +268,11 @@ $('table.sorted')
                  .attr('data-icons','icons')
                  .attr('data-cookie', 'true')
                  .attr('data-sortable', 'false')
+                 .attr('onlyInfoPagination', 'true')
+                 .attr('smartDisplay', true)
+                 .attr('data-show-refresh', true)
+                 .attr('showPaginationSwitch', true)
+                 .attr('minimumCountColumns', true)
 
 
 $('table.nosearch')
@@ -276,6 +281,9 @@ $('table.nosearch')
 
 $('table.nopagination')
                  .attr('data-pagination', 'false')
+
+$('table.sortable')
+                 .attr('data-sortable', 'true')
 
 // icons
 window.icons = {

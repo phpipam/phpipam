@@ -28,9 +28,10 @@ $subnet = (array) $subnet;
 print "<h4 style='margin-top:25px;'>$subnet[description] ($subnet[ip]/$subnet[mask]) "._('has')." ".sizeof($slave_subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
 # print HTML table
-print '<table class="slaves table table-striped table-condensed table-hover table-full table-top">'. "\n";
+print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="subnet_slaves">'. "\n";
 
 # headers
+print "<thead>";
 print "<tr>";
 print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
@@ -46,10 +47,12 @@ print "	<th class='small hidden-xs hidden-sm hidden-md'>% "._('Free')."</th>";
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Requests')."</th>";
 print " <th style='width:80px;'></th>";
 print "</tr>";
+print "</thead>";
 
 $m = 0;				//slave index
 
 # loop
+print "<tbody>";
 foreach ($slave_subnets as $slave_subnet) {
 	# cast to array
 	$slave_subnet = (array) $slave_subnet;
@@ -198,6 +201,5 @@ foreach ($slave_subnets as $slave_subnet) {
 	}	}	}
 
 }
+print "</tbody>";
 print '</table>'. "\n";
-
-?>

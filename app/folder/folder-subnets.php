@@ -32,15 +32,18 @@ if($slaves) {
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ". sizeof($folders)." "._('directly nested folders').":</h4><hr>";
 
 		# table
-		print '<table class="slaves table table-striped table-condensed table-hover table-full table-top" style="margin-bottom:50px;">'. "\n";
+		print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" style="margin-bottom:50px;" data-cookie-id-table="folder_subnets">'. "\n";
 		# headers
+		print "<thead>";
 		print "<tr>";
 		print "	<th class='small' style='width:55px;'></th>";
 		print "	<th class='description'>"._('Folder')."</th>";
 		print "</tr>";
+		print "</thead>";
 
 		# folders
 		$m=0;
+		print "<tbody>";
 		foreach($folders as $f) {
 			$f = (array) $f;
 			# check permission
@@ -61,7 +64,7 @@ if($slaves) {
 			print "</td>";
 			print "</tr>";
 		}
-
+		print "</tbody>";
 		print "</table>";
 	}
 	# print subnets
@@ -70,9 +73,10 @@ if($slaves) {
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ".sizeof($subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
 		# print table
-		print '<table class="slaves table table-striped table-condensed table-hover table-full table-top">'. "\n";
+		print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="folder_subnets_sorted">'. "\n";
 
 		# headers
+		print "<thead>";
 		print "<tr>";
 		print "	<th class='small'>"._('VLAN')."</th>";
 		if($User->settings->enableVRF==1)
@@ -84,9 +88,11 @@ if($slaves) {
 		print "	<th class='small hidden-xs hidden-sm'>"._('Requests')."</th>";
 		print " <th class='actions'></th>";
 		print "</tr>";
+		print "</thead>";
 
 		# print slave subnets
 		$m=0;
+		print "<tbody>";
 		foreach ($subnets as $slave) {
 			# cast
 			$slave = (array) $slave;
@@ -167,7 +173,7 @@ if($slaves) {
 			print "</td>";
 			print "</tr>";
 		}
-
+		print "</tbody>";
 		print '</table>'. "\n";
 	}
 }
