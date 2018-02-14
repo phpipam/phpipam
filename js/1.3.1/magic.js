@@ -3120,7 +3120,7 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "devices", "devtype" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
@@ -3152,7 +3152,7 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr",  "devices", "devtype" ]; var popsize = {};
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
 	popsize["subnets"] = "max";
 	popsize["recompute"] = "max";
 	popsize["ipaddr"] = "max";
