@@ -66,9 +66,7 @@ class SubnetsMenu {
 	 * @return string
 	 */
 	private function get_subnet_description($subnet) {
-		if (strlen($subnet->description) > 34) {
-			$subnet->description = substr($subnet->description, 0, 31) . '...';
-		}
+		$subnet->description = $this->Subnets->shorten_text($subnet->description, 34);
 
 		if ($subnet->isFolder == 1) {
 			return $subnet->description;
