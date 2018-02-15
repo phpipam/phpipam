@@ -233,12 +233,7 @@ $(function() {
 	$(".popup").draggable({ handle: ".pHeader" });
 });
 
-//default row count
-if(readCookie('table-page-size')==null) { def_size = 25; }
-else                                    { def_size = readCookie('table-page-size'); }
-
-
-//bootstrap-table
+// bootstrap-table
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
@@ -691,15 +686,6 @@ $(document).on("click", "#mailSubnetSubmit", function() {
         //reload after 2 seconds if succeeded!
         reload_window (data);
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-
-
-
-/*    sort IP address list
-*********************************************************/
-$("table.ipaddresses th a").click( function() {
     return false;
 });
 
@@ -1238,31 +1224,6 @@ $('.sendTestMail').click(function() {
 
 /*    Edit users
 ***************************/
-//open form
-$('.editUser').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-userid');
-    var action = $(this).attr('data-action');
-
-    $.post('app/admin/users/edit.php',{id:id, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//submit form
-$(document).on("click", "#editUserSubmit", function() {
-    showSpinner();
-    var loginData = $('form#usersEdit').serialize();
-
-    $.post('app/admin/users/edit-result.php', loginData, function(data) {
-        $('div.usersEditResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
 //disable pass if domain user
 $(document).on("change", "form#usersEdit select[name=authMethod]", function() {
     //get details - we need Section, network and subnet bitmask
