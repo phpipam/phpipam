@@ -85,7 +85,7 @@ $settings = $Tools->fetch_object("settings", "id", 1);
 # decode objects
 $temp_objects = json_decode($settings->tempAccess);
 # check
-$temp_objects = sizeof($temp_objects)>0 ? (array) $temp_objects : array();
+$temp_objects = !is_null($temp_objects) ? (array) $temp_objects : array();
 # set width
 $max_width = (@$temp_objects[$_GET['section']]->type=="ipaddresses" || isset($_GET['subnetId'])) ? "max-width:700px" : "";
 ?>

@@ -19,6 +19,9 @@ $folderId = $_GET['subnetId'];
 # get section details
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
 
+// init subnets
+$subnets = [];
+
 if($slaves) {
 	# sort slaves by folder / subnet
 	foreach($slaves as $s) {
@@ -68,7 +71,7 @@ if($slaves) {
 		print "</table>";
 	}
 	# print subnets
-	if(sizeof(@$subnets)>0) {
+	if(sizeof($subnets)>0) {
 		# title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ".sizeof($subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
