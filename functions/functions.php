@@ -57,6 +57,8 @@ require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP q
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
 require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for generating HTML menus
+require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {
