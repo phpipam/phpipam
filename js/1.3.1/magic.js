@@ -2688,27 +2688,21 @@ $('button#searchReplaceSave').click(function() {
 
 /*  Data Import / Export
 *************************/
-// XLS exports
-$('button#XLSdump').click(function () {
+// dump database
+$('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
     showSpinner();
+    var script = ""
+    // define script
+    if ($(this).attr('id')=="XLSdump")              { script = "generate-xls.php"; }
+    else if ($(this).attr('id')=="MySQLdump")       { script = "generate-mysql.php"; }
+    else if ($(this).attr('id')=="hostfileDump")    { script = "generate-hosts.php"; }
+
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-xls.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/"+script+"'></iframe></div>");
     hideSpinner();
 });
-// MySQL export
-$('button#MySQLdump').click(function () {
-    showSpinner();
-    $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-mysql.php'></iframe></div>");
-    hideSpinner();
-});
-// Hostfile export
-$('button#hostfileDump').click(function () {
-    showSpinner();
-    $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-hosts.php'></iframe></div>");
-    hideSpinner();
-});
+
+
 //Export Section
 $('button.dataExport').click(function () {
 	var implemented = ["vrf","vlan","subnets","ipaddr"]; var popsize = {};
