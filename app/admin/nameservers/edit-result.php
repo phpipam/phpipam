@@ -67,7 +67,7 @@ foreach($_POST as $key=>$line) {
 $_POST['permissions'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 
 # set update array
-$values = array("id"=>@$_POST['nameserverId'],
+$values = array("id"=>@$_POST['nameserverid'],
 				"name"=>$_POST['name'],
 				"permissions"=>$_POST['permissions'],
 				"namesrv1"=>$_POST['namesrv1'],
@@ -79,4 +79,4 @@ else																		{ $Result->show("success", _("Nameserver set $_POST[action
 
 
 # remove all references if delete
-if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "nameserverId", $_POST['nameserverId']); }
+if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "nameserverid", $_POST['nameserverid']); }

@@ -14,7 +14,7 @@ $all_nameservers = $Admin->fetch_all_objects("nameservers", "id");
 <h4><?php print _('Manage Nameserver sets'); ?></h4>
 <hr><br>
 
-<button class='btn btn-sm btn-default nameserverManagement' data-action='add' data-nameserverid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nameserver set'); ?></button>
+<button class='btn btn-sm btn-default open_popup' data-script='app/admin/nameservers/edit.php' data-class='700' data-action='add' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nameserver set'); ?></button>
 
 <!-- nameserver sets -->
 <?php
@@ -77,8 +77,8 @@ else {
 		print '	<td class="description">'. $nameservers['description'] .'</td>'. "\n";
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default nameserverManagement' data-action='edit'   data-nameserverid='$nameservers[id]'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default nameserverManagement' data-action='delete' data-nameserverid='$nameservers[id]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/nameservers/edit.php' data-class='700' data-action='edit'   data-nameserverid='$nameservers[id]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/nameservers/edit.php' data-class='700' data-action='delete' data-nameserverid='$nameservers[id]'><i class='fa fa-times' ></i></button>";
 		print "	</div>";
 		print "	</td>";
 		print '</tr>'. "\n";

@@ -117,8 +117,8 @@ $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default btn-success" id="shareTempSubmit"><i class="fa fa-plus"></i> <?php print _("Add"); ?></button>
+		<button class='btn btn-sm btn-default submit_popup' data-script="app/tools/temp-shares/edit-result.php" data-result_div="shareTempSubmitResult" data-form='shareTempEdit'><i class="fa fa-plus"></i> <?php print _("Add"); ?></button>
 	</div>
 	<!-- Result -->
-	<div class="shareTempSubmitResult"></div>
+	<div id="shareTempSubmitResult"></div>
 </div>

@@ -655,7 +655,7 @@ else {
 		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
-		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";
+        print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";
 		}
         print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='Send mail notification'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
 	print "</div>";
