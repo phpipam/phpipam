@@ -1298,7 +1298,7 @@ $(document).on("click", ".userselect", function() {
 
 
 
-/*    Edit groups
+/* Groups
 ***************************/
 //search AD group popup
 $(document).on("click", ".adLookup", function() {
@@ -1332,45 +1332,6 @@ $(document).on("click", ".groupselect", function() {
 	});	return false;
 });
 
-/*    Edit auth method
-***************************/
-//open form
-$('.editAuthMethod').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-id');
-    var action = $(this).attr('data-action');
-    var type   = $(this).attr('data-type');
-
-    $.post('app/admin/authentication-methods/edit.php',{id:id, action:action, type:type}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//submit form
-$(document).on("click", "#editAuthMethodSubmit", function() {
-    showSpinner();
-    var loginData = $('form#editAuthMethod').serialize();
-
-    $.post('app/admin/authentication-methods/edit-result.php', loginData, function(data) {
-        $('div.editAuthMethodResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//check connection
-$('.checkAuthMethod').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-id');
-    $.post('app/admin/authentication-methods/check-connection.php',{id:id}, function(data) {
-        $('#popupOverlay div.popup_w500').html(data);
-        showPopup('popup_w500');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
 
 
 /*    instructions

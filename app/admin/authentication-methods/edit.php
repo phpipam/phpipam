@@ -25,4 +25,3 @@ if($_POST['action']!="add") {
 # route to proper auth method editing
 if(!file_exists(dirname(__FILE__)."/edit-$_POST[type].php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
 else															{ include("edit-$_POST[type].php"); }
-?>
