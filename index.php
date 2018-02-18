@@ -97,7 +97,7 @@ else {
 		<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-switch.min.css">
 		<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.css">
 		<!-- <link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.min.css"> -->
-		<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css?v<?php print_r(time()); ?>">
+		<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
 		<?php if ($User->settings->enableThreshold=="1") { ?>
 		<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/slider.css">
 		<?php } ?>
@@ -109,12 +109,12 @@ else {
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/login.js"></script>
 		<?php } ?>
 		<!-- <script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.min.js"></script> -->
-		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js?v<?php print_r(time()); ?>"></script>
+		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/magic.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-switch.min.js"></script>
 
 		<!-- bootstrap table -->
-		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js?v<?php print_r(time()); ?>"></script>
+		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table.min.js"></script>
 		<script src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-table/bootstrap-table-cookie.js"></script>
 
 		<?php if ($User->settings->enableThreshold=="1") { ?>
