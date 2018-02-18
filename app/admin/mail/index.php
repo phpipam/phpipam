@@ -144,8 +144,8 @@ $csrf = $User->csrf_cookie ("create", "mail");
 		<td class="title"></td>
 		<td class="submit" style="padding-top:30px;">
 		<div class="btn-group pull-right">
-			<a class="btn btn-sm btn-default sendTestMail"><i class="icon icon-gray icon-envelope"></i> <?php print _('Send test email'); ?></a>
-			<input type="submit" class="btn btn-sm btn-default btn-success pull-right" value="<?php print _('Save changes'); ?>">
+			<a class='btn btn-sm btn-default submit_popup' data-script="app/admin/mail/test-mail.php" data-result_div="settingsMailEdit" data-form='mailsettings' data-noreload='true'><i class="icon icon-gray icon-envelope"></i> <?php print _('Send test email'); ?></a>
+			<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" data-script="app/admin/mail/edit.php" data-result_div="settingsMailEdit" data-form='mailsettings' value="<?php print _("Save"); ?>">
 		</div>
 		</td>
 		<td></td>
@@ -156,4 +156,4 @@ $csrf = $User->csrf_cookie ("create", "mail");
 
 
 <!-- Result -->
-<div class="settingsMailEdit"></div>
+<div id="settingsMailEdit"></div>

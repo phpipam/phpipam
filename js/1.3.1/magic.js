@@ -1160,25 +1160,6 @@ $(document).on("click", '.show-masks', function() {
 
 /* @administration ---------- */
 
-/* save server settings */
-$('#settings').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/settings/settings-save.php', settings, function(data) {
-        $('div.settingsEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-/* show logo uploader */
-$('#upload-logo').click(function () {
-    csrf_cookie = $('form#settings input[name=csrf_cookie]').val();
-    open_popup ("700", 'app/admin/settings/logo/logo-uploader.php',  {csrf_cookie:csrf_cookie}, false)
-    return false;
-});
 // clear logo
 $(document).on("click", ".logo-clear", function() {
      $.post('app/admin/settings/logo/logo-clear.php', "", function(data) {
@@ -1188,37 +1169,12 @@ $(document).on("click", ".logo-clear", function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
 });
 
-/* save mail settings */
-$('#mailsettings').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/mail/edit.php', settings, function(data) {
-        $('div.settingsMailEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
 /* show/hide smtp body */
 $('select#mtype').change(function() {
 	var type = $(this).find(":selected").val();
 	//if localhost hide, otherwise show
 	if(type === "localhost") 	{ $('#mailsettingstbl tbody#smtp').hide(); }
 	else 						{ $('#mailsettingstbl tbody#smtp').show(); }
-});
-
-/* test mail */
-$('.sendTestMail').click(function() {
-    showSpinner();
-    var settings = $('form#mailsettings').serialize();
-   //send mail
-    $.post('app/admin/mail/test-mail.php', settings, function(data) {
-        $('div.settingsMailEdit').html(data).slideDown('fast');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
 });
 
 
