@@ -163,7 +163,7 @@ $csrf = $User->csrf_cookie ("create", "pdns_defaults");
 <tr>
 	<td></td>
 	<td style="text-align: right">
-		<input type="submit" class="btn btn-success btn-sm" value="<?php print _("Save"); ?>">
+		<input type="submit" class="btn btn-default btn-sm submit_popup" data-script="app/admin/powerDNS/defaults-save.php" data-result_div="settingsEdit" data-form='pdns-defaults' value="<?php print _("Save"); ?>">
 	</td>
 </tr>
 
@@ -172,4 +172,4 @@ $csrf = $User->csrf_cookie ("create", "pdns_defaults");
 
 
 <!-- save holder -->
-<div class="settingsEdit"></div>
+<div id="settingsEdit"></div>

@@ -1504,36 +1504,6 @@ $(document).on("click", "#sectionOrderSubmit", function() {
 /*    powerDNS
 ********************************/
 
-/* powerdns db settings */
-$('#pdns-settings').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/powerDNS/settings-save.php', settings, function(data) {
-        $('div.settingsEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-/* powerdns defaults */
-$('#pdns-defaults').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/powerDNS/defaults-save.php', settings, function(data) {
-        $('div.settingsEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//load edit form
-$(document).on("click", ".editDomain", function() {
-    // editDomain2 > from error in create_record
-    if ($(this).hasClass('editDomain2'))   { open_popup ("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action'), secondary:true}, true); }
-    else                                   { open_popup ("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')}); }
-});
 //hide defaults
 $(document).on("click", ".hideDefaults", function () {
     if ($(this).is(':checked')) { $("tbody.defaults").hide(); }
@@ -1569,14 +1539,14 @@ $(document).on("click", "#editDomainSubmit", function() {
 });
 
 // refresh subnet PTR records
-$('.refreshPTRsubnet').click(function() {
+$(document).on("click", ".refreshPTRsubnet", function() {
 	open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );	return false;
 });
 $(document).on("click", ".refreshPTRsubnetSubmit", function() {
 	submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );	return false;
 });
 //edit record
-$(".editRecord").click(function() {
+$(document).on("click", ".editRecord", function() {
 	open_popup("700", "app/admin/powerDNS/record-edit.php", {id:$(this).attr('data-id'),domain_id:$(this).attr('data-domain_id'), action:$(this).attr('data-action')} );	return false;
 });
 $(document).on("click", "#editRecordSubmit", function() {

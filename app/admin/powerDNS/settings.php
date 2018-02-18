@@ -80,7 +80,7 @@ $(document).ready(function() {
 <tr>
 	<td></td>
 	<td style="text-align: right">
-		<input type="submit" class="btn btn-default btn-sm" value="<?php print _("Save"); ?>">
+		<input type="submit" class="btn btn-default btn-sm submit_popup" data-script="app/admin/powerDNS/settings-save.php" data-result_div="settingsEdit" data-form='pdns-settings' value="<?php print _("Save"); ?>">
 	</td>
 </tr>
 
@@ -89,7 +89,7 @@ $(document).ready(function() {
 
 
 <!-- save holder -->
-<div class="settingsEdit"></div>
+<div id="settingsEdit"></div>
 
 <!-- check -->
 <div class="check" style="height:60px;">

@@ -74,7 +74,7 @@ if ($_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
     <?php if ($admin) {?>
     <!-- Create -->
 	<div class="btn-group" style="margin-bottom:10px;margin-top: 10px;">
-	    <button class='btn btn-sm btn-default btn-success editDomain' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain');?></button>
+        <button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain');?></button>
 	</div>
 
    <?php }?>
@@ -131,8 +131,8 @@ foreach ($domains as $d) {
         // actions
         print "	<td>";
         print "	<div class='btn-group'>";
-        print "		<button class='btn btn-default btn-xs editDomain' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-        print "		<button class='btn btn-default btn-xs editDomain' data-action='delete' data-id='$d->id'><i class='fa fa-remove'></i></button>";
+        print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
+        print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='delete' data-id='$d->id'><i class='fa fa-times'></i></button>";
         print "	</div>";
         print "	</td>";
     }
