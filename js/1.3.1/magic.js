@@ -2396,10 +2396,6 @@ $(document).on("click", "#remove_nameserver", function() {
 });
 
 /* ---- IP requests ----- */
-//load edit form
-$('table#requestedIPaddresses button').click(function() {
-	open_popup("700", "app/admin/requests/edit.php", {requestId:$(this).attr('data-requestid')} );
-});
 //submit form
 $(document).on("click", "button.manageRequest", function() {
     var postValues = $('form.manageRequestEdit').serialize();
