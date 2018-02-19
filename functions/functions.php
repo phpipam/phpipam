@@ -60,6 +60,9 @@ require( dirname(__FILE__) . '/classes/class.SubnetsTree.php' );	    //Class for
 require( dirname(__FILE__) . '/classes/class.SubnetsMenu.php' );	    //Class for generating subnets menu.
 require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class for generating JSON to populate subnet <tables> using boostrap-tables.
 require( dirname(__FILE__) . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
+require( dirname(__FILE__) . '/classes/class.Menu.php' );	    //Class for generating HTML menus
+require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {

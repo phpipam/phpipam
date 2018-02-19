@@ -1061,7 +1061,7 @@ class User extends Common_functions {
                 # add blocked count
                 $this->block_ip();
                 $this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
-                $this->Result->show("danger", _("Invalid username or password for " . $username ), true);
+                $this->Result->show("danger", _("Invalid username or password"), true);
 
             }
         } catch (adLDAPException $e) {

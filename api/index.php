@@ -77,12 +77,15 @@ try {
         if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
         	$decoded = trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB));
         	$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
-			parse_str($decoded, $params);
-			$params = (object) $params;
+			parse_str($decoded, $encrypted_params);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
         }
         // json_encoded
 		else {
-			$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+			$encrypted_params = json_decode(trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)), true); 
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
 		}
 	}
 	// SSL checks
