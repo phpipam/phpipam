@@ -102,6 +102,9 @@ table td.stats-badge {
     text-align: right !important;
     border-radius: 3px;
 }
+td.border-bottom {
+	border-bottom: 1px solid #ddd !important;
+}
 
 hr {
   margin: 5px;

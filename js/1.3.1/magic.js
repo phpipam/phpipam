@@ -2335,7 +2335,7 @@ $(document).on("click", "a.addNatObjectFromSearch", function() {
 
 /* ---- tags ----- */
 //load edit form
-$('.editType').click(function() {
+$(document).on("click", ".editType", function() {
 	open_popup("400", "app/admin/tags/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
 });
 //submit form
@@ -2354,21 +2354,9 @@ $(document).on("click", ".editVLAN", function() {
 $(document).on("click", "#editVLANsubmit", function() {
     submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-result.php", $('form#vlanManagementEdit').serialize());
 });
-//move
-$(".moveVLAN").click(function() {
-	open_popup("400", "app/admin/vlans/move-vlan.php", {vlanId:$(this).attr('data-vlanid')} );
-});
-//submit form
-$(document).on("click", "#moveVLANsubmit", function() {
-    submit_popup_data (".moveVLANSubmitResult", "app/admin/vlans/move-vlan-result.php", $('form#moveVLAN').serialize());
-});
 
 
 /* ---- VLAN domains ----- */
-//load edit form
-$('.editVLANdomain').click(function() {
-	open_popup("400", "app/admin/vlans/edit-domain.php", {id:$(this).attr('data-domainid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editVLANdomainsubmit", function() {
     submit_popup_data (".domainEditResult", "app/admin/vlans/edit-domain-result.php", $('form#editVLANdomain').serialize());

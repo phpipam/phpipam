@@ -45,13 +45,13 @@ if($vlans===false) {
 }
 else {
 	# table
-	print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vl_all'>";
+	print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vl_all_domains'>";
 
 	# headers
 	print "<thead>";
 	print '<tr">' . "\n";
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
-	print ' <th data-field="name" data-sortable="true">'._('Name').'</th>' . "\n";
+	print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('L2domain').'</th>' . "\n";
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
@@ -73,7 +73,7 @@ else {
 			if($m==0 && $vlan->number!=1)	{
 				print "<tr class='success'>";
 				print "<td></td>";
-				print "<td colspan='".(1+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN')." 1 - ".($vlan->number -1)." (".($vlan->number -1)." "._('free').")</td>";
+				print "<td colspan='".(3+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='1'><i class='fa fa-plus'></i></btn> "._('VLAN')." 1 - ".($vlan->number -1)." (".($vlan->number -1)." "._('free').")</td>";
 				print "</tr>";
 			}
 			# show free vlans - before vlan
@@ -83,9 +83,9 @@ else {
 				print "<td></td>";
 				# only 1?
 				if( (($vlan->number)-($vlans[$m-1]->number)-1) ==1 ) {
-				print "<td colspan='".(2+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number -1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
+				print "<td colspan='".(4+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number -1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
 				} else {
-				print "<td colspan='".(1+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlans[$m-1]->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlans[$m-1]->number+1)." - ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
+				print "<td colspan='".(3+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlans[$m-1]->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlans[$m-1]->number+1)." - ".($vlan->number -1)." (".(($vlan->number)-($vlans[$m-1]->number)-1)." "._('free').")</td>";
 				}
 				print "</tr>";
 				}
@@ -96,15 +96,15 @@ else {
 		$vlan->description = strlen($vlan->description)>0 ? " <span class='text-muted'>( ".$vlan->description." )</span>" : "";
 		$vlan->domainDescription = strlen($vlan->domainDescription)>0 ? " <span class='text-muted'>( ".$vlan->domainDescription." )</span>" : "";
 
-		//set odd / even
+		// set odd / even
 		$n = @$n==1 ? 0 : 1;
 		$class = $n==0 ? "odd" : "even";
-		//start - VLAN details
+		// start - VLAN details
 		print "<tr class='$class change'>";
-		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->number."</td>";
+		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->number."</a></td>";
 		print "	<td>".$vlan->name.$vlan->description."</td>";
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
-        //custom fields - no subnets
+        // custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {
 	   		foreach($custom_fields as $field) {
 		   		# hidden
@@ -120,7 +120,7 @@ else {
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan->id'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$vlan->id'><i class='fa fa-external-link'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$vlan->id'><i class='fa fa-external-link'></i></button>";
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan->id'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print "	</td>";
@@ -133,7 +133,7 @@ else {
 				if($User->settings->vlanMax > $vlans[0]->number) {
 					print "<tr class='success'>";
 					print "<td></td>";
-					print "<td colspan='".(1+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number+1)." - ".$User->settings->vlanMax." (".(($User->settings->vlanMax)-($vlan->number))." "._('free').")</td>";
+					print "<td colspan='".(3+$csize)."'><btn class='btn btn-xs btn-default editVLAN $disabled' data-action='add' data-domain='all' data-number='".($vlan->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan->number+1)." - ".$User->settings->vlanMax." (".(($User->settings->vlanMax)-($vlan->number))." "._('free').")</td>";
 					print "</tr>";
 				}
 			}
@@ -145,4 +145,3 @@ else {
 
 	print '</table>';
 }
-?>
