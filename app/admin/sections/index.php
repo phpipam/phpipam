@@ -68,7 +68,7 @@ if(isset($sections_sorted)) {
 
 		print '<tr class="'.$section['class'].'">'. "\n";
 
-	    print '	<td>'. str_replace("_", " ", $section['name']).'</td>'. "\n";
+	    print '	<td><span class="btn btn-xs btn-default"><i class="fa fa-server prefix"></i> '. str_replace("_", " ", $section['name']).'</span></td>'. "\n";
 	    print '	<td>'. $section['description'] .'</td>'. "\n";
 	    //master Section
 	    if($section['masterSection']!=0) {

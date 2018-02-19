@@ -138,8 +138,8 @@ else {
 					$class = $n==0 ? "odd" : "even";
 					//start - VLAN details
 					print "<tr class='$class change'>";
-					print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->number."</td>";
-					print "	<td>".$vlan[0]->name."</td>";
+					print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan[0]->number."</a></td>";
+					print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->name."</a></td>";
 					print "	<td>".$vlan[0]->description."</td>";
 			        //custom fields - no subnets
 			        if(sizeof(@$custom_fields) > 0) {

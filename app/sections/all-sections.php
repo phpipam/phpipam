@@ -68,7 +68,7 @@ if(isset($sections_sorted)) {
 
 			print '<tr class="'.$section['class'].'">'. "\n";
 
-		    print '	<td><a href="'.create_link("subnets", $section['id']).'"><strong>'. str_replace("_", " ", $section['name']).'</strong></a></td>'. "\n";
+		    print '	<td><a class="btn btn-xs btn-default" href="'.create_link("subnets", $section['id']).'"><i class="fa fa-server prefix"></i> '. str_replace("_", " ", $section['name']).'</a></td>'. "\n";
 		    print '	<td>'. $section['description'] .'</td>'. "\n";
 		    //master Section
 		    if($section['masterSection']!=0) {

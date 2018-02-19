@@ -33,7 +33,7 @@
 	<td class='border-bottom'><strong><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>"> <?php print _('All domains'); ?></a></strong></td>
 	<td class='border-bottom'><?php print _('List of all VLANs in all domains'); ?></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
-	<td class='border-bottom'><a class='btn btn-sm btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
+	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
 	<?php if($_GET['page']=="administration") { ?><td class='border-bottom'></td><?php } ?>
 </tr>
 
@@ -62,10 +62,10 @@ foreach($vlan_domains as $domain) {
 
 	// print
 	print "<tr class='text-top'>";
-	print "	<td><strong><a href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>$domain->name</a></strong></td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'><i class='fa fa-cloud prefix'></i> $domain->name</a></strong></td>";
 	print "	<td>$domain->description</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
-	print "	<td><a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
 	//manage
 	if($_GET['page']=="administration") {
 	print "	<td class='actions'>";

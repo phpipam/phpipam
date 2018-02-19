@@ -173,14 +173,14 @@ else {
 
             switch ($permission) {
                 case 3:
-                    if ($isMaster)
+                    if (!$isMaster)
                         print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
                     print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
                     print "<a class='btn btn-xs btn-default editPSTN' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
                     print "<a class='btn btn-xs btn-danger editPSTN' data-action='delete' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
                     break;
                 case 2:
-                    if ($isMaster)
+                    if (!$isMaster)
                         print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
                     print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
                     print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
@@ -188,7 +188,7 @@ else {
                     break;
                 default:
                     print "<button class='btn btn-xs btn-default btn-danger' data-container='body' rel='tooltip' title='" . _('You do not have permissions to edit prefix') . "'><i class='fa fa-lock'></i></button> ";
-                    if ($isMaster)
+                    if (!$isMaster)
                         print "<a class='btn btn-xs btn-success disabled' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
                     print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
                     print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";

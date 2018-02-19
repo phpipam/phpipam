@@ -85,7 +85,7 @@ else {
 
 		//print details
 		print '<tr class="text-top">'. "\n";
-		print '	<td class="name">'. $vrf['name'] .'</td>'. "\n";
+		print '	<td class="name"><span class="btn btn-xs btn-default"><i class="fa fa-cloud prefix"></i>'. $vrf['name'] .'</td>'. "\n";
 		print '	<td class="rd">'. $vrf['rd'] .'</td>'. "\n";
 		print "	<td><span class='text-muted'>$sections</span></td>";
 		print '	<td class="description">'. $vrf['description'] .'</td>'. "\n";

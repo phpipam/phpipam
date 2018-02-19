@@ -91,7 +91,7 @@ else {
             // print
             print "<tr>";
 
-            print " <td><i class='fa fa-bars' style='margin-left:10px;'></i> <a href='".create_link($_GET['page'], "racks", $r->id)."'>$r->name</a></td>";
+            print " <td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], "racks", $r->id)."'><i class='fa fa-bars prefix'></i> $r->name</a></td>";
             print " <td>$r->size U</td>";
             print " <td>"._($r->back)."</td>";
             print " <td>$cnt "._("devices")."</td>";
