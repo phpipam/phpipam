@@ -35,7 +35,7 @@ if ($sections !== false) {
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top" data-cookie-id-table="all_sections">
+<table class="table sorted table-striped table-condensed table-top table-td-top" data-cookie-id-table="all_sections">
 <!-- headers -->
 <thead>
 <tr>

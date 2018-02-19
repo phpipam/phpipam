@@ -213,6 +213,13 @@ select, input[type="file"] {
 	padding: 8px 5px;
 	padding-top: 20px;
 	font-weight: bold;
+	border-bottom: 1px solid #eee !important;
+}
+.table-striped tbody tr:nth-child(even) td.th {
+	background: white !important;
+}
+.table tr:hover td.th {
+	background: transparent !important;
 }
 
 table.customIP tbody {
