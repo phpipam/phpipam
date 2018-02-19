@@ -51,11 +51,12 @@ $_POST['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 
 
 # set update array
-$values = array("vrfId"=>@$_POST['vrfId'],
-				"name"=>$_POST['name'],
-				"rd"=>$_POST['rd'],
-				"sections"=>$_POST['sections'],
-				"description"=>$_POST['description']
+$values = array(
+				"vrfId"       =>@$_POST['vrfId'],
+				"name"        =>$_POST['name'],
+				"rd"          =>$_POST['rd'],
+				"sections"    =>$_POST['sections'],
+				"description" =>$_POST['description']
 				);
 # append custom
 if(sizeof($custom) > 0) {

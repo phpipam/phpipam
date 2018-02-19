@@ -25,7 +25,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 <hr><br>
 
 <div class="btn-group">
-    <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+    <button class='btn btn-sm btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
     <?php
     // snmp
     if($User->is_admin()===true && $User->settings->enableSNMP==1) { ?>
@@ -103,8 +103,8 @@ else {
 
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print "	</td>";
 		print '</tr>'. "\n";

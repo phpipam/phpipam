@@ -96,8 +96,8 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 	# permissions
 	if($User->is_admin (false)) {
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfId='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfId='$vrf->vrfId'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
 	}
 
 	print "	</div>";

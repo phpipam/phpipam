@@ -2364,10 +2364,6 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
 
 
 /* ---- VRF ----- */
-//load edit form
-$('.vrfManagement').click(function() {
-	open_popup("400", "app/admin/vrfs/edit.php", {vrfId:$(this).attr('data-vrfid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editVRF", function() {
     submit_popup_data (".vrfManagementEditResult", "app/admin/vrfs/edit-result.php", $('form#vrfManagementEdit').serialize());
