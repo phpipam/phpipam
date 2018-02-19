@@ -25,12 +25,12 @@ $clear = true;
 // set width
 $logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
 
-if(!file_exists( dirname(__FILE__)."/../../../../css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
+if(!file_exists( dirname(__FILE__)."/../../../../css/images/logo/logo.png")) {
     require( dirname(__FILE__).'/logo-builtin.php' );
     $clear = false;
 }
 else {
-    $img = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
+    $img = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='css/images/logo/logo.png'>";
 }
 ?>
 
@@ -66,9 +66,9 @@ else {
 
 
     <!-- jQuery File Upload Dependencies -->
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.ui.widget.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.iframe-transport.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.fileupload.js"></script>
+    <script src="js/uploader/jquery.ui.widget.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js//uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
     <script type="text/javascript">

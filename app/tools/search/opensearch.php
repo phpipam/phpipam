@@ -17,6 +17,6 @@ print "<OpenSearchDescription xmlns=\"http://a9.com/-/spec/opensearch/1.1/\">
 <ShortName>$site_title search</ShortName>
 <Description>Search for Subnets, IP-Addresses, VLANS, VRFs</Description>
 <Tags>IPAM IP Address Subnet VLAN VRF</Tags>
-<Image height=\"16\" width=\"16\" type=\"image/vnd.microsoft.icon\">{$site_url}/css/".SCRIPT_PREFIX."/images/favicon.png</Image>
+<Image height=\"16\" width=\"16\" type=\"image/vnd.microsoft.icon\">{$site_url}/css/images/favicon.png</Image>
 <Url type=\"text/html\" template=\"{$site_url}index.php?page=tools&amp;section=search&amp;addresses=on&amp;subnets=on&amp;vlans=on&amp;vrf=on&amp;ip={searchTerms}\"/>
 </OpenSearchDescription>";

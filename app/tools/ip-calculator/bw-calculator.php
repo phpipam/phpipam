@@ -4,7 +4,7 @@ $User->check_user_session();
 ?>
 
 <!-- CSS for slider -->
-<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/jquery-ui/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="css/jquery-ui/jquery-ui.css?v=<?php print SCRIPT_PREFIX; ?>">
 
 
 <style type="text/css">
