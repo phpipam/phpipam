@@ -37,7 +37,7 @@ else {
     $prefix->master = 0;
 
     $master_prefix = new StdClass ();
-    $master_prefix->name = root;
+    $master_prefix->name = 'root';
     $master_prefix->prefix = "/";
 
     # if id is set we are adding slave prefix

@@ -19,9 +19,11 @@ is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true)
 # title - subnets
 print "<h4>"._("Belonging PSTN prefixes")."</h4><hr>";
 
-//fetch
+// fetch
 $subprefixes = $Tools->fetch_multiple_objects ("pstnPrefixes", "deviceId", $device->id, 'prefix', true );
 
+// custom fields
+$custom_fields = $Tools->fetch_custom_fields ('pstnPrefixes');
 
 # Hosts table
 print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";

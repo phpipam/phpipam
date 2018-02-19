@@ -46,9 +46,7 @@ foreach($_POST as $key=>$line) {
 	}
 }
 # glue sections together
-$_POST['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
-
-
+$_POST['sections'] = isset($temp) ? implode(";", $temp) : null;
 
 # set update array
 $values = array(
@@ -74,4 +72,3 @@ else																	{ $Result->show("success", _("VRF $_POST[action] successful
 
 # remove all references if delete
 if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vrfId", $_POST['vrfId']); }
-?>
