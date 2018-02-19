@@ -95,16 +95,17 @@ else {
 	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ((array) $_POST, $old_permissions);
 
 	# set variables for update
-	$values = array("id"=>@$_POST['id'],
-					"name"=>@$_POST['name'],
-					"description"=>@$_POST['description'],
-					"strictMode"=>@$_POST['strictMode'],
-					"subnetOrdering"=>@$_POST['subnetOrdering'],
-					"showVLAN"=>@$_POST['showVLAN'],
-					"showVRF"=>@$_POST['showVRF'],
-					"showSupernetOnly"=>@$_POST['showSupernetOnly'],
-					"masterSection"=>@$_POST['masterSection'],
-					"permissions"=>json_encode($new_permissions)
+	$values = array(
+					"id"               => @$_POST['id'],
+					"name"             => @$_POST['name'],
+					"description"      => @$_POST['description'],
+					"strictMode"       => @$_POST['strictMode'],
+					"subnetOrdering"   => @$_POST['subnetOrdering'],
+					"showVLAN"         => @$_POST['showVLAN'],
+					"showVRF"          => @$_POST['showVRF'],
+					"showSupernetOnly" => @$_POST['showSupernetOnly'],
+					"masterSection"    => @$_POST['masterSection'],
+					"permissions"      => json_encode($new_permissions)
 					);
 
 	# execute update
@@ -121,4 +122,3 @@ else {
 		$Subnets->set_permissions ($section_subnets, $removed_permissions, $changed_permissions);
 	}
 }
-?>

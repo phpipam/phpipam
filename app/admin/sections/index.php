@@ -36,8 +36,8 @@ if ($sections !== false) {
 
 <!-- Add new section -->
 <div class="btn-group" style='margin-bottom:20px;margin-top:10px;'>
-	<button class='btn btn-sm btn-default editSection' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add section'); ?></button>
-	<button class='btn btn-sm btn-default sectionOrder' ><i class='fa fa-tasks'></i> <?php print _('Section order'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add section'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/sections/edit-order.php' data-class='700' data-action='add'><i class='fa fa-tasks'></i> <?php print _('Section order'); ?></button>
 </div>
 
 <!-- show sections -->
@@ -118,9 +118,9 @@ if(isset($sections_sorted)) {
 
 	   	print '	<td class="actions">'. "\n";
 	   	print "	<div class='btn-group btn-group-xs'>";
-		print "		<button class='btn btn-default editSection' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
 		print "		<a class='btn btn-default' href='".create_link("administration","sections","section-changelog",$section['id'])."'><i class='fa fa-clock-o'></i></a>";
-		print "		<button class='btn btn-default editSection' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print '	</td>'. "\n";
 

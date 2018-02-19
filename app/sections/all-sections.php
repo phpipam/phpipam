@@ -119,15 +119,14 @@ if(isset($sections_sorted)) {
 
 	    	   	print '	<td class="actions">'. "\n";
 	    	   	print "	<div class='btn-group btn-group-xs'>";
-	    		print "		<button class='btn btn-default editSection' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
-	    		print "		<button class='btn btn-default editSection' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
+				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
+				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
 	    		print "	</div>";
 	    		print '	</td>'. "\n";
 	        }
 			print '</tr>'. "\n";
 		}
 	}
-
 	// none
 	if($count==0) {
 		print "<tr>";

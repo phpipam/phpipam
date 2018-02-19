@@ -79,4 +79,3 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
 else {
     $Result->show("danger", "Invalid ID", false);
 }
-?>

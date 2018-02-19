@@ -22,6 +22,9 @@ $User->check_maintaneance_mode ();
 # validate csrf cookie
 $User->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# strip script
+$_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['instructions']);
+
 # validate ID
 if ($_POST['id']=="1" || $_POST['id']=="2") {
     // update
@@ -51,5 +54,3 @@ if ($_POST['id']=="1" || $_POST['id']=="2") {
 else {
     $Result->show("danger", _("Invalid ID"), false);
 }
-
-?>

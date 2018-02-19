@@ -369,7 +369,7 @@ $(document).on("click", ".submit_popup", function () {
     var reload        = true;
     var result_div    = "";
     var target_script = "";
-   // get all data- attributes
+    // get all data- attributes
     $.each(this.attributes, function() {
         // script
         if(this.name == "data-script") {
@@ -385,15 +385,15 @@ $(document).on("click", ".submit_popup", function () {
         }
         // get form parameters
         else if(this.name == "data-form") {
-            post_data = $('form#'+this.value).serialize ();
+            post_data = $('form#'+this.value).serialize ()
         }
     });
     // checks
     if(target_script == "") {
-        showError("Error: Missing target_script");
+        showError("Error: Missing target_script")
     }
     else if (result_div == "") {
-        showError("Error: Missing result div parameter");
+        showError("Error: Missing result div parameter")
     }
     // load popup
     else {
@@ -1310,7 +1310,7 @@ $('#preview').click(function () {
     showSpinner();
     var instructions = CKEDITOR.instances.instructions.getData();
 
-    $.post('app/admin/instructions/preview.php', {instructions:instructions}, function(data) {
+    $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:$("#instructionsForm input[name=csrf_cookie]").val()}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1400,18 +1400,6 @@ $(document).on("click", ".openChangelogDetail", function() {
 
 /*    Sections
 ********************************/
-//load edit form
-$('button.editSection').click(function() {
-    showSpinner();
-    var sectionId   = $(this).attr('data-sectionid');
-    var action         = $(this).attr('data-action');
-    //load edit data
-    $.post("app/admin/sections/edit.php", {sectionId:sectionId, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-});
 //edit section result
 $(document).on("click", "#editSectionSubmit, .editSectionSubmitDelete", function() {
     showSpinner();
@@ -1426,16 +1414,6 @@ $(document).on("click", "#editSectionSubmit, .editSectionSubmitDelete", function
         reload_window (data);
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
-});
-//section ordering
-$('button.sectionOrder').click(function() {
-    showSpinner();
-    //load edit data
-    $.post("app/admin/sections/edit-order.php", function(data) {
-        $('#popupOverlay div.popup_w500').html(data);
-        showPopup('popup_w500');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //section ordering save
 $(document).on("click", "#sectionOrderSubmit", function() {
