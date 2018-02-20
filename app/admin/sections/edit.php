@@ -229,7 +229,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 			</div>
 			</td>
 		</tr>
-        <tr class="warning2">
+        <tr class="warning2 <?php if (!$checked) print 'hidden'; ?>">
             <td></td>
             <td colspan="2">
             <?php $Result->show("info", _('Permission changes will be propagated to all nested subnets')."!", false); ?>
