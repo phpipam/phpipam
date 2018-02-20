@@ -8,6 +8,7 @@ $color_gray_4    : #999;
 $color_gray_5    : #58606b;
 $color_gray_6    : #272b30;
 $color_gray_7    : #555;
+$color_gray_8    : #40454a;
 
 $color_red       : #a94442;
 $color_red_light : #fff1f1;
@@ -17,6 +18,7 @@ $color_link      : #ff8800;   // orange
 $color_link      : #de0000;   // red
 $color_red       : $color_link;
 $color_red_2     : rgb(155,0,0);
+$color_red_3     : #d43f3a;
 
 $color_blue_1    : #58ACFA;
 $color_blue_2    : #e3eaf2;
@@ -94,21 +96,22 @@ html {
     .alert {
         &.alert-info {
             background: rgba(0,0,0,0.2);
+            border-color: $color_blue_1;
             color: $color_blue_1;
         }
         &.alert-warning {
             background: rgba(0,0,0,0.2);
-            color: $alert_orange_1;
+            color: $alert_orange_3;
             border-color: $alert_orange_2;
         }
         &.alert-success {
             background: rgba(0,0,0,0.2);
-            color: $alert_green_2;
+            color: $alert_green_3;
             border-color: $alert_green_3;
         }
         &.alert-danger {
             background: rgba(0,0,0,0.2);
-            color: $alert_red_3;
+            color: $alert_red_1;
             border-color: $alert_red_2;
         }
     }
@@ -122,6 +125,9 @@ html {
 
     .form-control {
         border: 1px solid $color_gray_5;
+    }
+    .form-inline {
+        border-bottom: 1px solid $color_gray_5;
     }
     input {
         color: $color_gray_5 !important;
@@ -190,9 +196,68 @@ html {
     .navbar .navbar-nav li {
         min-width: 10px;
     }
-    .navbar .navbar-nav li {
-        &:last-child a {
-            border-right: 1px solid rgba(255,255,255,0.1);
+    .navbar#menu-navbar .navbar-nav {
+        // top
+        li {
+            &.administration {
+                a {
+                    background: $alert_red_2 !important;
+                }
+                li {
+                    a {
+                        background: $color_gray_8 !important;
+                    }
+                }
+            }
+            &.tools {
+
+            }
+        }
+        // dropdown
+        ul.dropdown-menu {
+            border: none;
+            border-radius: none;
+            box-shadow: none;
+
+            li {
+                border-left: 1px solid $color_gray_5;
+            }
+            &.admin {
+                li {
+                    border-left: 1px solid $color_gray_5;
+
+                    &:first-child {
+                        border-top: 1px solid $color_gray_5 !important;
+                    }
+                    &:last-child {
+                        border-bottom: 1px solid $color_gray_5 !important;
+                    }
+                    &.active {
+                        border-left: 2px solid $color_red_3 !important;
+                        a {
+                            background: $color_gray_6 !important;
+                        }
+                    }
+                    &.nav-header {
+                        background: $color_gray_8 !important;
+                        border-bottom: 1px solid $color_gray_5;
+                    }
+                    &.nav-header:hover {
+                        background: $color_gray_8 !important;
+                    }
+                }
+            }
+            &.tools_dropdown {
+                li {
+                    border-radius: 0px !important;
+                    a {
+                        border-radius: 0px !important;
+                    }
+                    &.active {
+                        border-left: 2px solid $color_blue_1 !important;
+                    }
+                }
+            }
         }
     }
 
@@ -225,7 +290,28 @@ html {
     }
 
 
+    ul.dropdown-menu {
+        background: url("../images/bg-light.png") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
 
+        // background-position: initial initial;
+        background-repeat: repeat;
+        height: 100% !important;
+        min-height: 100% !important;
+
+        border: 1px solid rgba(0,0,0,0.5);
+
+        li a {
+            color: white !important;
+        }
+
+        li a:hover {
+            background: rgba(0,0,0,0.2);
+        }
+    }
 
     .btn {
         color: $color_blue_1;
@@ -270,7 +356,22 @@ html {
 
     div.btn-group {
         border: 1px solid $color_gray_5;
+        border: none;
         border-radius: 4px;
+
+        &.noborder {
+            border: none;
+
+            .btn-group {
+                border: none;
+            }
+        }
+    }
+    .btn-default.active,
+    .btn-default:active,
+    .open>.dropdown-toggle.btn-default {
+        background: rgba(0,0,0,0.2) !important;
+        color: white !important;
     }
 
 
@@ -498,6 +599,7 @@ html {
 
     // bootstrap-switch
     .bootstrap-switch {
+        border-color: $color_gray_4;
         .bootstrap-switch-label {
             background: transparent;
         }
@@ -648,10 +750,10 @@ html {
                 }
             }
             &.active {
-                background-color: rgba(0,0,0,0.2) !important;
+                background-color: rgba(0,0,0,0.4) !important;
                 text-shadow: none;
-                border-top: 1px solid $color_gray_4;
-                border-bottom: 1px solid $color_gray_4;
+                border-top: 1px solid $color_gray_5;
+                border-bottom: 1px solid $color_gray_5;
 
                 i {
                     background: transparent;
@@ -679,8 +781,12 @@ html {
                     border: none;
                 }
 
+                &.active {
+                    background: rgba(0,0,0,0.6) !important;
+                    border: 1px solid $color_gray_5;
+                }
                 &:hover {
-                background: rgba(0,0,0,0.3) !important;
+                    background: rgba(0,0,0,0.3) !important;
                 }
             }
         }
@@ -716,6 +822,20 @@ html {
             }
         }
     }
+    .adminMenu {
+        ul.list-group {
+            li.active {
+                border-left-color: $alert_red_2 !important;
+            }
+        }
+    }
+    .menu-tools {
+        ul.list-group {
+            li.active {
+                border-left-color: $color_blue_1 !important;
+            }
+        }
+    }
 
     // login
     div#login {
@@ -723,5 +843,33 @@ html {
 
     .footer {
         border-top: 1px solid $color_gray_5;
+    }
+
+
+
+
+
+    table#switchMainTable tr.switch-title,
+    table#vrf tr.vrf-title,
+    table#subnets tr.subnets-title,
+    table#settings tr.settings-title,
+    table#settings {
+        background: transparent !important;
+
+        th {
+            background: transparent !important;
+            border-bottom: none !important;
+
+            h4 {
+                background: transparent !important;
+            }
+        }
+
+        td, th {
+            border: none !important;
+        }
+    }
+    table#settings tr.settings-title {
+        border-bottom: 1px solid $color_gray_5;
     }
 }

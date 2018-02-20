@@ -17,7 +17,7 @@ $csrf = $User->csrf_cookie ("create", "pdns_defaults");
 
 <!-- site settings -->
 <tr class="settings-title">
-	<th colspan="3"><h4><?php print _('Default value settings'); ?></h4><hr></th>
+	<th colspan="3"><h4><?php print _('Default value settings'); ?></h4></th>
 </tr>
 
 <!-- ns -->

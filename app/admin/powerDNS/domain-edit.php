@@ -70,7 +70,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Domain type'); ?></td>
 		<td>
-			<select name="type" class="form-control input-w-auto" <?php print $readonly; ?>>
+			<select name="type" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
 			<?php
 			// loop
 			foreach($PowerDNS->domain_types as $type) {

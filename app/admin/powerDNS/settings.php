@@ -30,7 +30,7 @@ $(document).ready(function() {
 
 <!-- site settings -->
 <tr class="settings-title">
-	<th colspan="3"><h4><?php print _('Database settings'); ?></h4><hr></th>
+	<th colspan="3"><h4><?php print _('Database settings'); ?></h4></th>
 </tr>
 
 <!-- host -->
