@@ -58,6 +58,17 @@ html {
         background-color: rgba(0, 0, 0, 0)
     }
 
+    .hero-unit {
+        a {
+            text-shadow: none;
+
+            &:hover {
+                color: white;
+                text-decoration: none;
+            }
+        }
+    }
+
     .content_overlay {
         padding-bottom: 50px;
     }
@@ -1010,8 +1021,10 @@ html {
     }
 
     ul#sortable {
+        max-width:500px;
         li {
-            background: transparent;;
+            background: rgba(0,0,0,0.2);
+            border-color: $color_gray_4 !important;
         }
     }
 
