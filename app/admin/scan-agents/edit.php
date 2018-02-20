@@ -39,7 +39,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$agent = new StdClass;
-	$agent->code = str_shuffle(md5(microtime()));
+	$agent->code = $User->Crypto->generate_token();
 	# title
 	$title = _('Create new scan agent');
 }

@@ -1,6 +1,17 @@
 <?php
 
+/**
+ * TODO: Migrate functions to OpenSSL
+ */
 class Crypto {
+
+    /**
+     * Generate random tokens for Temp Shares, API & Scan-Agent
+     * @return string
+     */
+    public function generate_token() {
+        return str_shuffle(md5(microtime()));
+    }
 
     /**
      * CSRF cookie creation / validation.
