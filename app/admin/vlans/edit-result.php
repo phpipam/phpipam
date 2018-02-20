@@ -28,7 +28,7 @@ if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "vlan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "vlan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vlans');

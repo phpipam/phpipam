@@ -9,7 +9,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "instructions");
+$csrf = $User->Crypto->csrf_cookie ("create", "instructions");
 
 // default
 if(!isset($_GET['subnetId'])) { $_GET['subnetId'] = 1; }

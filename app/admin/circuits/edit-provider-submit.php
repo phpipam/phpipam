@@ -22,7 +22,7 @@ $User->check_maintaneance_mode ();
 if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit Provider details"), true); }
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "provider", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "provider", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 # validate action
 $Admin->validate_action ($_POST['action'], true);
 # get modified details

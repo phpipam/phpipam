@@ -20,7 +20,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
+$User->Crypto->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);

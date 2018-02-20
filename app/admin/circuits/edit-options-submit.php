@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->is_admin(true);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "circuit_options", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "circuit_options", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # empty
 if(strlen($_POST['option'])==0)                           { $Result->show("danger", _('Value cannot be empty'), true); }

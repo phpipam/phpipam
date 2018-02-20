@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add" ? $User->csrf_cookie ("create", "pstn_add") : $User->csrf_cookie ("create", "pstn_".$_POST['id']);
+$csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$_POST['id']);
 
 
 # check permissions

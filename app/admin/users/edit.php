@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "user");
+$csrf = $User->Crypto->csrf_cookie ("create", "user");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);

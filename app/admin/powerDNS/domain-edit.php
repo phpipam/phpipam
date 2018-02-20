@@ -19,7 +19,7 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "domain");
+$csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);

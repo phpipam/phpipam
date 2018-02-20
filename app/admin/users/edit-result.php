@@ -24,7 +24,7 @@ $_POST = $Admin->strip_input_tags ($_POST);
 $_POST = $Admin->trim_array_objects ($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "user", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "user", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch auth method
 $auth_method = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['authMethod']);

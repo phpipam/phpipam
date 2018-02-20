@@ -20,7 +20,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "nat", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+$User->Crypto->csrf_cookie ("validate", "nat", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
