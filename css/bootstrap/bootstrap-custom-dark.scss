@@ -102,7 +102,7 @@ html {
             border-color: $alert_orange_2;
         }
         &.alert-success {
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.2);
             color: $alert_green_2;
             border-color: $alert_green_3;
         }
@@ -135,6 +135,31 @@ html {
             color: $alert_green_1 !important;
             border-color: $alert_green_2 !important;
         }
+        &.alert-danger {
+            background: rgba(0,0,0,0.2);
+            color: $alert_red_3 !important;
+            border-color: $alert_red_2 !important;
+        }
+    }
+
+    // ip address statuses
+    span.status {
+        border-color: rgba(0,0,0,0.6);
+
+        &.status-neutral {
+            background: rgba(0,0,0,0.1);
+        }
+        &.status-error {
+            background: $alert_red_2;
+        }
+        &.status-success {
+            background: $alert_green_2;
+        }
+    }
+
+    // tags
+    i.fa-Offline {
+        color: $alert_red_2 !important;
     }
 
     // navbar
@@ -210,7 +235,6 @@ html {
             background: $color_blue_1;
             color: white;
         }
-
         &[disabled]:hover {
             color        : $color_blue_1;
             border-color : $color_blue_1;
@@ -224,16 +248,18 @@ html {
             color: white;
         }
     }
-
     .btn {
-        // border-radius: 4px !important;
         background: rgba(0,0,0,0.2);
-
         color: white;
 
         &:hover {
             background: rgba(0,0,0,0.4);
         }
+    }
+    .input-group-addon {
+        background: rgba(0,0,0,0.2);
+        color: white;
+        border: 1px solid $color_gray_5;
     }
 
     .breadcrumb {
@@ -272,17 +298,41 @@ html {
 
     // popover
     .popover {
-        background: rgba(0,0,0,0.9);
-        border: 1px solid $color_gray_4;
-        font-size: 11px;
+        // background-color: black;
+        background: url("../images/bg-light.png") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+
+        // background-position: initial initial;
+        background-repeat: repeat;
+
+        color: $color_gray_2;
+
+        background-color: rgba(0, 0, 0, 0);
+
+        border: 2px solid rgba(0,0,0,0.2);
 
         .popover-title {
-            background: rgba(0,0,0,0.8);
+            background: rgba(0,0,0,0.3);
             border-bottom: 1px solid $color_gray_4;
         }
+        .popover-content table {
+            background: transparent !important;
+        }
 
-        .arrow {
+        &.right>.arrow:after {
+            border-right-color: rgba(0,0,0,0.1) !important;
+        }
+    }
+    .table.ipaddresses tbody tr:hover td table.popover_table tbody td {
+        background: transparent !important;
+    }
 
+    .legend {
+        .legendLabel {
+            color: $color_gray_4;
         }
     }
 
@@ -407,7 +457,56 @@ html {
     }
 
     // popup
+    #popupOverlay {
+        background: rgba(0,0,0,0.6) !important;
+    }
+    #popup {
+        // background-color: black;
+        background: url("../images/bg-light.png") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        background-repeat: repeat;
 
+        color: $color_gray_2;
+
+        background-color: rgba(0, 0, 0, 0);
+
+        border: 2px solid rgba(0,0,0,0.2);
+
+        div.pHeader {
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid $color_gray_4;
+        }
+        div.pFooter {
+            background: rgba(0,0,0,0.3);
+            border-top: 1px solid $color_gray_4 !important;
+
+            -webkit-box-shadow: none;
+            -moz-box-shadow: none;;
+            box-shadow: none;
+
+            .btn {
+                border: none;
+            }
+        }
+        div.col-xs-12.col-md-6 {
+            border-right-color: $color_gray_5 !important;
+        }
+    }
+
+    // bootstrap-switch
+    .bootstrap-switch {
+        .bootstrap-switch-label {
+            background: transparent;
+        }
+        .bootstrap-switch-handle-off,
+        .bootstrap-switch-handle-on {
+            color: white !important;
+            background: rgba(0,0,0,0.2) !important;
+        }
+    }
 
     // table
     .table {
