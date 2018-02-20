@@ -88,7 +88,7 @@ if(sizeof($custom_fields) > 0) {
 $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
 $colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
-$colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
+// $colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
 $colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp colspan negative fix
 
 # set ping statuses for warning and offline
@@ -217,7 +217,7 @@ else {
         		}
         		print "	<td>".$addresses[$n]->description."</td>";
         		if($colspan['dhcp']!=0)
-        		print "	<td colspan='$colspan[dhcp]' class='unused'></td>";
+        		print "	<td colspan='$colspan[dhcp]'></td>";
 			    // tr ends after!
 
 		    }
@@ -621,7 +621,7 @@ else {
 					else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], false, false, true ); }
 
 	            	if ( $unused  ) {
-		        		print "<tr class='th'>";
+		        		print "<tr>";
 		        		print "	<td class='unused success'></td>";
 		        		print "	<td colspan='$colspan[unused]' class='unused success'>$unused[ip] ($unused[hosts])</td>";
 		        		print "</tr>";

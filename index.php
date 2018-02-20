@@ -98,6 +98,8 @@ else {
 		<link rel="stylesheet" type="text/css" href="css/bootstrap-table/bootstrap-table.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.min.css?v=<?php print SCRIPT_PREFIX; ?>"> -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-dark.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+
 		<?php if ($User->settings->enableThreshold=="1") { ?>
 		<link rel="stylesheet" type="text/css" href="css/slider.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php } ?>

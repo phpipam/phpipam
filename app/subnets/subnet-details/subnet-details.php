@@ -19,7 +19,7 @@ else {
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
 		<th style='padding-top:2px !important;'><?php print _('Subnet details'); ?></th>
-		<td><span style="font-size:14px;border:1px solid #ccc;background:white;padding:4px 8px;border-radius:3px;"><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></span> <?php print $multicast_badge; ?></td>
+		<td><span style="font-size:14px;border:1px solid #ccc;background:white;padding:4px 8px;border-radius:3px;" class='subnet_badge'><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></span> <?php print $multicast_badge; ?></td>
 	</tr>
     <?php
         // if subnet is IPv4 search for linked IPv6 subnet, else show linked ipv4

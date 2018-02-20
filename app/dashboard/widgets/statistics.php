@@ -16,7 +16,7 @@ $User->check_user_session ();
 
 <!-- stats table -->
 <div class="container-fluid" style='padding-top:5px'>
-<table class="table1 table-condensed1 table-full table-hover table-noborder">
+<table class="table table-condensed table-hover statistics">
 
 	<!-- sections -->
 	<tr>
