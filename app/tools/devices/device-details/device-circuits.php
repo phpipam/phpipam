@@ -35,18 +35,18 @@ else {
     }
     else {
         # table
-        print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="device_circuits">';
+        print '<table id="circuitManagement" class="table sorted table-condensed table-striped table-top" data-cookie-id-table="device_circuits">';
 
         # headers
         print "<thead>";
         print '<tr>';
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by Id')."'>"._('Circuit ID')."</span></th>";
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by Provider')."'>"._('Provider')."</span></th>";
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by type')."'>"._('Type').'</span></th>';
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by location A')."' class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
-        print " <th><span rel='tooltip' data-container='body' title='"._('Sort by location B')."' class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
+        print " <th>"._('Circuit ID')."</th>";
+        print " <th>"._('Provider')."</th>";
+        print " <th>"._('Type').'</th>';
+        print " <th>"._('Capacity').'</th>';
+        print " <th>"._('Status').'</th>';
+        print " <th>"._('Point A').'</th>';
+        print " <th>"._('Point B').'</th>';
         print '</tr>';
         print "</thead>";
 
@@ -54,20 +54,20 @@ else {
         foreach ($device_circuits as $circuit) {
             // reformat locations
             $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
-            $locationA_html = "<span class='text-muted'>Not set</span>";
+            $locationA_html = "<span class='text-muted'>Not set";
             if($locationA!==false) {
                 $locationA_html = "<a href='".create_link($_GET['page'],$locationA['type'],$locationA['id'])."'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
             }
 
             $locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
-            $locationB_html = "<span class='text-muted'>Not set</span>";
+            $locationB_html = "<span class='text-muted'>Not set";
             if($locationB!==false) {
                 $locationB_html = "<a href='".create_link($_GET['page'],$locationB['type'],$locationB['id'])."'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
             }
 
             //print details
             print '<tr>'. "\n";
-            print " <td><strong><a href='".create_link("tools","circuits",$circuit->id)."'>$circuit->cid</a></strong></td>";
+            print " <td><a class='btn btn-xs btn-default' href='".create_link("tools","circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
             print " <td><a href='".create_link("tools","circuits","providers",$circuit->pid)."'>$circuit->name</a></td>";
             print " <td>$circuit->type</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";

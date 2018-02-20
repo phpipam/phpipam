@@ -8,7 +8,7 @@ $User->check_user_session();
 
 <!-- ipCalc form -->
 <form name="ipCalc" id="ipCalc">
-<table class="ipCalc table">
+<table class="ipCalc table table-noborder">
 
     <!-- IP address input -->
     <tr>

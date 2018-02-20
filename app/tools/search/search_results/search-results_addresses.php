@@ -92,7 +92,7 @@ if(sizeof($result_addresses) > 0) {
 			//print table
 			print '<tr class="ipSearch" id="'. $line['id'] .'" subnetId="'. $line['subnetId'] .'" sectionId="'. $subnet['sectionId'] .'" link="'. $section['name'] .'|'. $subnet['id'] .'">'. "\n";
 			//address
-			print ' <td><a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id'],"address-details",$line['id']).'">'. $Subnets->transform_to_dotted($line['ip_addr'])."</a>";
+			print ' <td class="ip"><a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id'],"address-details",$line['id']).'">'. $Subnets->transform_to_dotted($line['ip_addr'])."</a>";
 			//tag
 			print $Addresses->address_type_format_tag($line['state']);
 			print ' </td>' . "\n";

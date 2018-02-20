@@ -24,8 +24,8 @@ $result_vlans = $Tools->search_vlans($searchTerm, $custom_vlan_fields);
 <!-- headers -->
 <thead>
 <tr id="searchHeader">
-	<th><?php print _('Name');?></th>
 	<th><?php print _('Number');?></th>
+	<th><?php print _('Name');?></th>
 	<th><?php print _('Description');?></th>
 	<?php
 	if(sizeof($custom_vlan_fields) > 0) {
@@ -49,8 +49,8 @@ if(sizeof($result_vlans) > 0) {
 		$vlan = (array) $vlan;
 
 		print '<tr class="nolink">' . "\n";
+		print ' <td><dd><a class="btn btn-xs btn-default" href="'.create_link("tools","vlan",$vlan['domainId'],$vlan['vlanId']).'">'. $vlan['number']     .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vlan['name']      .'</dd></td>' . "\n";
-		print ' <td><dd><a href="'.create_link("tools","vlan",$vlan['domainId'],$vlan['vlanId']).'">'. $vlan['number']     .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vlan['description'] .'</dd></td>' . "\n";
 		# custom fields
 		if(sizeof($custom_vlan_fields) > 0) {

@@ -1702,11 +1702,11 @@ class Subnets extends Common_functions {
 		uasort($ranges, function ($a, $b) { return gmp_cmp($a['start'], $b['start']); });
 
 		return array(
-			subnet => $masterSubnet->subnet,
-			mask => $masterSubnet->mask,
-			type => $type,
-			max_search_mask => $max_mask,
-			freeranges => $ranges);
+			'subnet'          => $masterSubnet->subnet,
+			'mask'            => $masterSubnet->mask,
+			'type'            => $type,
+			'max_search_mask' => $max_mask,
+			'freeranges'      => $ranges);
 	}
 
 	/**
@@ -1720,7 +1720,7 @@ class Subnets extends Common_functions {
 	 */
 	public function get_freespacemap_first_available ($fsm, $mask, $count) {
 		if ($mask < 0 || $mask > $fsm['max_search_mask']) {
-			return array (subnets => array(), truncated => false);
+			return array ('subnets' => array(), 'truncated' => false);
 		}
 
 		$subnets = array();
@@ -1743,7 +1743,7 @@ class Subnets extends Common_functions {
 
 			while (gmp_cmp($candidate_end, $range['end']) <= 0) {
 				if ($count > 0 && ++$discovered > $count) {
-					return array (subnets => $subnets, truncated => true);
+					return array ('subnets' => $subnets, 'truncated' => true);
 				}
 				$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
 
@@ -1752,7 +1752,7 @@ class Subnets extends Common_functions {
 			}
 		}
 
-		return array (subnets => $subnets, truncated => false);
+		return array ('subnets' => $subnets, 'truncated' => false);
 	}
 
 	/**
@@ -1798,7 +1798,7 @@ class Subnets extends Common_functions {
 			}
 		}
 
-		return array (subnets => $subnets, truncated => false);
+		return array ('subnets' => $subnets, 'truncated' => false);
 	}
 
 

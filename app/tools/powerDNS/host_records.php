@@ -49,7 +49,7 @@ else {
 
 
 <!-- table -->
-<table id="zonesPrint" style="margin-top: 30px;" class="table table-striped table-top table-auto">
+<table id="zonesPrint" style="margin-top: 30px;" class="table table-striped table-top">
 
 <!-- Headers -->
 <thead>

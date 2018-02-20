@@ -50,7 +50,7 @@ if(sizeof($result_vrf) > 0) {
 		$vrf = (array) $vrf;
 
 		print '<tr class="nolink">' . "\n";
-		print ' <td><dd>'. $vrf['name']      .'</dd></td>' . "\n";
+		print ' <td><dd><a class="btn btn-xs btn-default" href="'.create_link("tools","vrf",$vrf['vrfId']).'">'. $vrf['name']      .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vrf['rd']     .'</dd></td>' . "\n";
 		print ' <td><dd>'. $vrf['description'] .'</dd></td>' . "\n";
 		# custom fields

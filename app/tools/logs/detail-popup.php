@@ -50,7 +50,7 @@ $log['details'] = str_replace("\n", "<br>", $log['details']);
 <!-- content -->
 <div class="pContent">
 
-	<table class="table table-striped table-condensed">
+	<table class="table table-striped table-condensed table-noborder">
 		<tr>
 			<th><?php print _('Log ID'); ?></th>
 			<td><?php print $log['id']; ?></td>

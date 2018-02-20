@@ -198,7 +198,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 					show: true,
 					aboveData: false,
 					color: "#666",
-					backgroundColor: "white",
+					backgroundColor: "transparent",
 					/*     margin: number or margin object */
 					/*     labelMargin: number */
 					/*     axisMargin: number */

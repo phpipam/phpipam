@@ -58,6 +58,10 @@ html {
         background-color: rgba(0, 0, 0, 0)
     }
 
+    .content_overlay {
+        padding-bottom: 50px;
+    }
+
     h1,h2,h3,h4,h5 {
         color: white !important;
         text-shadow: none;
@@ -113,6 +117,23 @@ html {
             background: rgba(0,0,0,0.2);
             color: $alert_red_1;
             border-color: $alert_red_2;
+        }
+    }
+    span {
+        &.text-success,
+        &.text-danger {
+            border: 1px solid $color_gray_5;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+        &.text-success {
+            color: $alert_green_3;
+            border: 1px solid $alert_green_3;
+        }
+        &.text-danger {
+            color: $alert_red_3;
+            border: 1px solid $alert_red_2;
         }
     }
 
@@ -299,8 +320,6 @@ html {
 
         // background-position: initial initial;
         background-repeat: repeat;
-        height: 100% !important;
-        min-height: 100% !important;
 
         border: 1px solid rgba(0,0,0,0.5);
 
@@ -511,6 +530,10 @@ html {
         background: rgba(0,0,0,0.1) !important;
     }
 
+    .table-striped tbody tr:nth-child(even) td.th {
+        background: transparent !important;
+    }
+
     // ipaddress table
     table.table.ipaddresses {
         .unused, {
@@ -528,7 +551,29 @@ html {
         }
         td {
             border-bottom: none !important;
-            border-top: none !important;
+            border-top: 1px solid $color_gray_5 !important;
+        }
+    }
+
+    table#logs {
+        tr {
+            td.severity {
+                span {
+                    color: $color_gray_6;
+                }
+            }
+        }
+        tr.success {
+            td {
+                a {
+                    border: none;
+                }
+            }
+        }
+        tr.danger {
+            td {
+                background: $alert_red_2 !important;
+            }
         }
     }
 
@@ -611,7 +656,7 @@ html {
     }
 
     // table
-    .table {
+    table.table {
         &.table-top {
             th {
                 background: white;
@@ -638,6 +683,7 @@ html {
             font-size: 13px;
 
             &.th {
+                padding-top: 25px !important;
                 border-bottom: 1px solid $color_gray_4 !important;
             }
             &.border-bottom {
@@ -647,9 +693,32 @@ html {
 
         tr.success {
             td {
-                text-shadow: none;
+                text-shadow: none !important;
                 color: white;
-                border-bottom: 1px solid $alert_green_3 !important;
+                background: rgba(0,255,0,0.1) !important;
+                border-bottom: none !important;
+                // border-bottom: 1px solid $alert_green_3 !important;
+                border-bottom: none !important;
+
+                btn, a {
+                    border: 1px solid $color_gray_4;
+                }
+            }
+        }
+        tr.success:hover td {
+            background: rgba(0,255,0,0.1) !important;
+        }
+    }
+    // vlans table
+    table.vlans {
+        tr {
+            td {
+                border: none !important;
+            }
+        }
+        tr.change {
+            td {
+                border-top: 1px solid $color_gray_5 !important;
             }
         }
     }
@@ -663,6 +732,12 @@ html {
     table.table {
         th, tr, td {
             background: transparent !important;
+        }
+        td.ip,
+        td.ipaddress {
+            a {
+                color: white !important;
+            }
         }
         th {
             background: rgba(0,0,0,0.2) !important;
@@ -813,6 +888,20 @@ html {
         .widget-dash .inner {
             box-shadow: none !important;
         }
+        #w-access_logs a,
+        #w-error_logs a {
+            color: white;
+        }
+        span.severity0 {
+            border: 1px solid $color_gray_5;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        span.severity2 {
+            border: 1px solid $color_gray_5;
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
     }
     .menu-tools,
     .menu-admin {
@@ -845,8 +934,51 @@ html {
         border-top: 1px solid $color_gray_5;
     }
 
+    // pagination
+    .pagination {
+        ul {
+            li {
+                a {
+                    background: transparent;
+                    border: 1px solid $color_gray_4;
+                }
+                a:hover {
+                    background: rgba(0,0,0,0.2);
+                    border: 1px solid $color_gray_4;
+                }
+
+                &.active {
+                    a,
+                    a:hover {
+                        background: rgba(0,0,0,0.5);
+                    }
+                }
+            }
+        }
+    }
+
+    .res_val {
+        background: rgba(0,0,0,0.2) !important;
+    }
+    .ui-slider-handle {
+        background: $color_gray_5 !important;
+    }
+    .ui-slider {
+        background: $color_gray_4;
+    }
 
 
+    // progress
+    .progress {
+        background: rgba(0,0,0,0.1) !important;
+        .progress-limit-negative {
+            background: transparent !important;
+        }
+        .progress-bar-info {
+            background: $alert_green_3;
+            color: $color_gray_5;
+        }
+    }
 
 
     table#switchMainTable tr.switch-title,
@@ -871,5 +1003,20 @@ html {
     }
     table#settings tr.settings-title {
         border-bottom: 1px solid $color_gray_5;
+    }
+
+    #gmap {
+        border-color: rgba(0,0,0,0.2);
+    }
+
+    ul#sortable {
+        li {
+            background: transparent;;
+        }
+    }
+
+    .instructions {
+        background: transparent;
+        border: 1px solid $color_gray_4;
     }
 }
