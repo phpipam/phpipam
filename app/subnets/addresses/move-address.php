@@ -24,7 +24,7 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "address_".$_POST['id']);
+$csrf = $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
 
 # validate action
 $Tools->validate_action ($_POST['action']);

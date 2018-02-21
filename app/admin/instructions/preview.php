@@ -11,7 +11,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 // vaidate cookie
-$User->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 // strip script
 $_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['instructions']);
 

@@ -62,6 +62,7 @@ require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class fo
 require( dirname(__FILE__) . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
 require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
 require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    //
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {

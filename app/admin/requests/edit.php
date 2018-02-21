@@ -20,7 +20,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "requests");
+$csrf = $User->Crypto->csrf_cookie ("create", "requests");
 
 # fetch request
 $request = $Admin->fetch_object("requests", "id", $_POST['requestid']);

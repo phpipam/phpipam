@@ -43,7 +43,7 @@ else {
 $share->details = implode("<br>", $tmp);
 
 //set code and timeframe
-@$share->code = md5(time());
+@$share->code = $User->Crypto->generate_token();
 $share->validity = date("Y-m-d H:i:s", strtotime("+1 day"));
 
 # set url for printing

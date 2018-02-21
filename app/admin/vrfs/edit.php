@@ -24,7 +24,7 @@ if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
 }
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "vrf");
+$csrf = $User->Crypto->csrf_cookie ("create", "vrf");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);

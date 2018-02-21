@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "apiedit");
+$csrf = $User->Crypto->csrf_cookie ("create", "apiedit");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$api = new StdClass;
-	$api->app_code = str_shuffle(md5(microtime()));
+	$api->app_code = $User->Crypto->generate_token();
 	# title
 	$title = _('Add new api key');
 }

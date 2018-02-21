@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "section");
+$csrf = $User->Crypto->csrf_cookie ("create", "section");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -229,7 +229,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 			</div>
 			</td>
 		</tr>
-        <tr class="warning2">
+        <tr class="warning2 <?php if (!$checked) print 'hidden'; ?>">
             <td></td>
             <td colspan="2">
             <?php $Result->show("info", _('Permission changes will be propagated to all nested subnets')."!", false); ?>

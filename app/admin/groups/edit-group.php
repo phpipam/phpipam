@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "group");
+$csrf = $User->Crypto->csrf_cookie ("create", "group");
 # validate action
 $Admin->validate_action ($_POST['action']);
 # strip tags - XSS

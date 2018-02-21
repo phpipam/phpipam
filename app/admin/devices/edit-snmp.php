@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "device_snmp");
+$csrf = $User->Crypto->csrf_cookie ("create", "device_snmp");
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');

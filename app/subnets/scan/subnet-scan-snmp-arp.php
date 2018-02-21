@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "scan");
+$csrf = $User->Crypto->csrf_cookie ("create", "scan");
 
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
