@@ -73,6 +73,10 @@ html {
         }
     }
 
+    blockquote {
+        border-left-color: $color_gray_5;
+    }
+
     .content_overlay {
         padding-bottom: 50px;
     }
@@ -252,6 +256,20 @@ html {
         background: rgba(0,0,0,0.3);
         a {
             font-weight: normal;
+        }
+    }
+    ul.dropdown-menu{
+        background: url("../images/bg-light.png") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+
+        // background-position: initial initial;
+        background-repeat: repeat;
+
+        li.disabled {
+            background: rgba(0,0,0,0.2);
         }
     }
     .navbar#menu-navbar .navbar-nav {
@@ -1038,11 +1056,14 @@ html {
     .res_val {
         background: rgba(0,0,0,0.2) !important;
     }
-    .ui-slider-handle {
+    .ui-slider-handle,
+    .slider-handle {
         background: $color_gray_5 !important;
     }
-    .ui-slider {
-        background: $color_gray_4;
+    .ui-slider,
+    .slider-track,
+    .slider-selection {
+        background: $color_gray_4 !important;
     }
 
 

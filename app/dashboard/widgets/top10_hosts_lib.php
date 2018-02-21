@@ -23,6 +23,11 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 	$unique = array();
 	$valid_subnets = 0;
 
+
+	if($User->user->ui_theme=="dark") 	{ $text_color = "#eee"; }
+	else 								{ $text_color = "#666";}
+
+
 	if (is_array($all_subnets)) {
 		foreach($all_subnets as $subnet) {
 			if ($Subnets->check_permission($User->user, $subnet->id) == "0") continue;
@@ -167,7 +172,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 				xaxis: {
 					mode: "categories",
 					tickLength: 0,
-					color: '#666',
+					color: '<?php print $text_color; ?>',
 					tickLength: 1,
 					show: true
 				},
@@ -197,7 +202,7 @@ function top10_widget($type_ip, $type_percentage, $height, $slimit) {
 				grid: {
 					show: true,
 					aboveData: false,
-					color: "#666",
+					color: "<?php print $text_color; ?>",
 					backgroundColor: "transparent",
 					/*     margin: number or margin object */
 					/*     labelMargin: number */

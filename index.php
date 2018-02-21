@@ -121,9 +121,6 @@ else {
 		<script src="js/bootstrap-table/bootstrap-table.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap-table/bootstrap-table-cookie.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
-		<?php if ($User->settings->enableThreshold=="1") { ?>
-		<script type="text/javascript" src="js/bootstrap-slider.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<?php }	?>
 		<!--[if lt IE 9]>
 		<script type="text/javascript" src="js/dieIE.js"></script>
 		<![endif]-->
