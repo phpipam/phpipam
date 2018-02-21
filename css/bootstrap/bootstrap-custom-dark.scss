@@ -661,6 +661,12 @@ html {
         }
     }
 
+    table.table-threshold {
+        td {
+            border-bottom: none !important;
+        }
+    }
+
     // visual display
     .ip_vis {
         span {
@@ -1009,6 +1015,12 @@ html {
             color: white;
         }
         span.severity0 {
+            border: 1px solid $color_gray_5;
+            background: rgba(0,0,0,0.2);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+        span.severity1 {
             border: 1px solid $color_gray_5;
             background: rgba(0,0,0,0.2);
             padding: 2px 5px;
