@@ -58,6 +58,10 @@ html {
         background-color: rgba(0, 0, 0, 0)
     }
 
+    #header {
+        background: rgba(0,0,0,0.6);
+    }
+
     .hero-unit {
         a {
             text-shadow: none;
@@ -204,6 +208,7 @@ html {
     .navbar {
         // background: rgba(0,0,0,0.3) !important;
         .navbar-nav {
+
             li {
                 a {
                     color       : white;
@@ -222,11 +227,17 @@ html {
     }
 
     .navbar.navbar-default {
-        background: rgba(0,0,0,0.5);
-        border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+        border-top: 1px solid rgba(255, 255, 255, 0.3) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.3) !important;
     }
     .navbar .navbar-nav li {
         min-width: 10px;
+    }
+    .navbar#menu-navbar {
+        background: rgba(0,0,0,0.3);
+        a {
+            font-weight: normal;
+        }
     }
     .navbar#menu-navbar .navbar-nav {
         // top
@@ -251,8 +262,9 @@ html {
             border-radius: none;
             box-shadow: none;
 
-            li {
+            li a {
                 border-left: 1px solid $color_gray_5;
+                border-left: none;
             }
             &.admin {
                 li {
@@ -291,6 +303,7 @@ html {
                 }
             }
         }
+
     }
 
 
@@ -323,14 +336,6 @@ html {
 
 
     ul.dropdown-menu {
-        background: url("../images/bg-light.png") no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-
-        // background-position: initial initial;
-        background-repeat: repeat;
 
         border: 1px solid rgba(0,0,0,0.5);
 
@@ -358,10 +363,12 @@ html {
     }
     .btn.btn-success {
         border: 1px solid transparent !important;
+        background: rgba(0,255,0,0.2) !important;
 
         &:hover {
             background: $alert_green_2;
             color: white;
+            border-color: #adadad !important;
         }
     }
     .btn {
@@ -423,8 +430,13 @@ html {
     .action {
         text-shadow: none;
         background: transparent;
-        border-top: 1px solid $color_gray_4;
-        border-bottom: 1px solid $color_gray_4;
+        border-top: 1px solid $color_gray_5;
+        border-bottom: 1px solid $color_gray_5;
+
+        .btn-success {
+            background: $alert_green_2;
+            border: 1px solid $color_gray_5 !important;
+        }
     }
 
     // popover
@@ -600,11 +612,13 @@ html {
             }
             &.ip-1 {
                 border-color: $alert_red_2;
-                color: $alert_red_3 !important;
+                background-color: rgba(255,0,0,0.05) !important;
+                color: white !important;
             }
             &.ip-2 {
                 border-color: $alert_green_3;
-                color: $alert_green_1 !important;
+                background: rgba(0,255,0,0.05) !important;
+                color: white !important;
             }
             &.ip-4 {
                 border-color: $color_blue_1;
@@ -636,6 +650,9 @@ html {
             background: rgba(0,0,0,0.3);
             border-bottom: 1px solid $color_gray_4;
         }
+        div.pContent {
+            background: transparent url("../images/noise.png");
+        }
         div.pFooter {
             background: rgba(0,0,0,0.3);
             border-top: 1px solid $color_gray_4 !important;
@@ -645,7 +662,7 @@ html {
             box-shadow: none;
 
             .btn {
-                border: none;
+                border: 1px solid $color_gray_5 !important;
             }
         }
         div.col-xs-12.col-md-6 {
@@ -811,6 +828,12 @@ html {
     select {
         background: rgba(255,255,255,0.2) !important;
         color: white !important;
+        &.btn.btn-success {
+            border: 1px solid $color_gray_5 !important;
+        }
+    }
+    input[type=submit] {
+        background: rgba(0,0,0,0.2) !important;
     }
     select {
         line-height: 24px;
@@ -1031,5 +1054,21 @@ html {
     .instructions {
         background: transparent;
         border: 1px solid $color_gray_4;
+    }
+
+    ul.icon-ul {
+        > li {
+            border: 1px solid rgba(0,0,0,0.4) !important;
+        }
+    }
+
+    .ipreqMenu {
+        background: rgba(0,0,0,0.2);
+        border: 1px solid $color_gray_5;
+        right: 5px;
+    }
+
+    .fixed-table-loading {
+        background: rgba(0,0,0,0.3)
     }
 }
