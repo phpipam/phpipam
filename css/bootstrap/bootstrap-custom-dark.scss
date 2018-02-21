@@ -345,7 +345,6 @@ html {
                 }
             }
         }
-
     }
 
 
@@ -481,6 +480,11 @@ html {
         }
     }
 
+    // tooltip
+    .tooltip {
+        font-size: 12px;
+    }
+
     // popover
     .popover {
         // background-color: black;
@@ -514,6 +518,11 @@ html {
     .table.ipaddresses tbody tr:hover td table.popover_table tbody td {
         background: transparent !important;
         border: none !important;
+    }
+    table#userModSelf.table {
+        td {
+            border: none !important;
+        }
     }
 
     .legend {
@@ -1001,11 +1010,13 @@ html {
         }
         span.severity0 {
             border: 1px solid $color_gray_5;
+            background: rgba(0,0,0,0.2);
             padding: 2px 5px;
             border-radius: 4px;
         }
         span.severity2 {
             border: 1px solid $color_gray_5;
+            background: rgba(0,0,0,0.2);
             padding: 2px 5px;
             border-radius: 4px;
         }
@@ -1081,12 +1092,17 @@ html {
     // progress
     .progress {
         background: rgba(0,0,0,0.1) !important;
+
         .progress-limit-negative {
             background: transparent !important;
+            border-color: rgba(0,0,0,0.1) !important;
+
         }
         .progress-bar-info {
-            background: $alert_green_3;
-            color: $color_gray_5;
+            background: rgba(0,255,0,0.15);
+            border-color: rgba(0,0,0,0.1) !important;
+
+            color: white;
         }
     }
 

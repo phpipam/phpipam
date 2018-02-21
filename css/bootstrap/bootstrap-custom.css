@@ -1994,7 +1994,7 @@ td.groups input[type=checkbox] {
 .tooltip {
 	white-space: nowrap;
 	text-shadow: none;
-	font-size: 11px;
+	font-size: 12px;
 
 	position: fixed;
 }

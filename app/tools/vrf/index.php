@@ -106,7 +106,8 @@ else {
 
 					# get VLAN details
 					$subnet['VLAN'] = $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
-					$subnet['VLAN'] = (empty($subnet['VLAN']) || !$subnet['VLAN']) ? "" : $subnet['VLAN']->number;
+					$subnet['VLAN'] = (empty($subnet['VLAN']) || !$subnet['VLAN']) ? "/" : $subnet['VLAN']->number;
+					$subnet['description'] = strlen($subnet['description']==0) ? "/" : $subnet['description'];
 
 					# get section name
 					$section = (array) $Sections->fetch_section(null, $subnet['sectionId']);
