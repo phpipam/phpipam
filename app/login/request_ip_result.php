@@ -24,7 +24,7 @@ if($Tools->settings->enableIPrequests==1) {
 	$_POST = $Admin->strip_input_tags($_POST);
 
 	# verify email
-	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$this->strip_xss($_POST['requester']).')', true); }
+	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$Tools->strip_xss($_POST['requester']).')', true); }
 
 	# formulate insert values
 	$values = array(

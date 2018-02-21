@@ -200,6 +200,23 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Select language'); ?></td>
 	</tr>
 
+	<!-- select theme -->
+	<tr>
+		<td><?php print _('Theme'); ?></td>
+		<td>
+			<select name="theme" class="form-control input-sm input-w-auto">
+				<option value="default"><?php print _("Default"); ?></option>
+				<?php
+				foreach($User->themes as $theme) {
+					if($theme==$user['theme'])	{ print "<option value='$theme' selected>$theme</option>"; }
+					else						{ print "<option value='$theme'		    >$theme</option>"; }
+				}
+				?>
+			</select>
+		</td>
+		<td class="info2"><?php print _('Select UI theme'); ?></td>
+	</tr>
+
     <!-- send notification mail -->
     <tr>
     	<td><?php print _('Notification'); ?></td>

@@ -117,6 +117,22 @@ $(document).ready(function() {
 	</td>
 	<td class="info2"><?php print _('Select default language'); ?></td>
 </tr>
+<!-- Default theme -->
+<tr>
+	<td class="title"><?php print _('Default theme'); ?></td>
+	<td>
+		<select name="theme" class="form-control input-sm input-w-auto">
+		<?php
+		//default
+		foreach($User->themes as $theme) {
+			if($theme==$settings['theme']) 	{ print "<option value='$theme' selected='selected'>$theme</option>"; }
+			else							{ print "<option value='$theme' 				   >$theme</option>"; }
+		}
+		?>
+		</select>
+	</td>
+	<td class="info2"><?php print _('Select default UI theme'); ?></td>
+</tr>
 
 
 <!-- Policy propagation -->

@@ -113,6 +113,13 @@ class User extends Common_functions {
     protected $sessname = "phpipam";
 
     /**
+     * Set allowed themes
+     *
+     * @var array
+     */
+    public $themes = ["white", "dark"];
+
+    /**
      * (json) parameters for authentication
      *
      * @var mixed
@@ -185,6 +192,8 @@ class User extends Common_functions {
         $this->is_authenticated ();
         # get users IP address
         $this->block_get_ip ();
+        # set theme
+        $this->set_user_theme ();
     }
 
 
@@ -387,11 +396,33 @@ class User extends Common_functions {
     }
 
     /**
+     * Sets UI theme for user
+     *
+     * @method set_user_theme
+     * @return void
+     */
+    private function set_user_theme () {
+        if(is_object($this->user)) {
+            // use default theme from general settings
+            if(!isset($this->user->theme) || @$this->user->theme=="") {
+                $this->user->ui_theme = $this->settings->theme;
+            }
+            else {
+                $this->user->ui_theme = $this->user->theme;
+            }
+            // validate
+            if(!in_array($this->user->ui_theme, $this->themes)) {
+                $this->user->ui_theme = "white";
+            }
+        }
+    }
+
+    /**
      * Check if users timeout expired
      *     if yes set timeout flag
      *
      * @access private
-     * @return none
+     * @return void
      */
     private function check_timeout () {
         //session set
@@ -1303,6 +1334,8 @@ class User extends Common_functions {
      * @return bool
      */
     public function self_update($post) {
+        # remove theme
+        if($post['theme'] == "default") { $post['theme'] = ""; }
         # set items to update
         $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
                         "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
@@ -1314,7 +1347,8 @@ class User extends Common_functions {
                         "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
-                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
+                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
+                        "theme"            => $post['theme']
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);

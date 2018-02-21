@@ -92,6 +92,7 @@ $values = array("id"=>1,
 				//display
 				"donate"              =>$Admin->verify_checkbox(@$_POST['donate']),
 				"visualLimit"         =>@$_POST['visualLimit'],
+				"theme"         	  =>@$_POST['theme'],
 				"subnetOrdering"      =>@$_POST['subnetOrdering'],
 				"subnetView"          =>@$_POST['subnetView'],
 				//ping
@@ -103,4 +104,3 @@ $values = array("id"=>1,
 				);
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true); }
 else															{ $Result->show("success", _("Settings updated successfully"), true); }
-?>

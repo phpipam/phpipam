@@ -912,3 +912,7 @@ ALTER TABLE `subnets` ADD INDEX (`vrfId`);
 
 /* bandwidth calculator widget */
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes');
+
+/* add theme */
+ALTER TABLE `settings` ADD `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark';
+ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';

@@ -96,6 +96,11 @@ html {
     }
 
 
+    pre {
+        background: rgba(0,0,0,0.1);
+        border: 1px solid $color_gray_5;
+        color: $color_gray_3;
+    }
 
     .text-muted {
         color: $color_gray_4;
@@ -1103,5 +1108,31 @@ html {
 
     .fixed-table-loading {
         background: rgba(0,0,0,0.3)
+    }
+
+
+    // login
+    div#login {
+        background: rgba(0,0,0,0.2);
+
+        legend {
+            color: white;
+        }
+
+        form {
+            border-bottom: none;
+        }
+
+        .iprequest {
+            background: rgba(0,0,0,0.2);
+            text-shadow: none;
+        }
+    }
+
+    // install, upgrade
+    .install {
+        h4 {
+            border-bottom: none !important;
+        }
     }
 }
