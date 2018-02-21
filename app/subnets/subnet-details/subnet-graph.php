@@ -8,7 +8,7 @@
 $details = $Subnets->calculate_subnet_usage ($subnet, true);
 
 # set free color
-$unused_color = $User->user->theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
+$unused_color = $User->user->ui_theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
 ?>
 
 
