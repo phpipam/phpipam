@@ -59,7 +59,7 @@ html {
     }
 
     #header {
-        background: rgba(0,0,0,0.6);
+        background: rgba(0,0,0,0.4);
     }
 
     .hero-unit {
@@ -132,6 +132,10 @@ html {
             background: rgba(0,0,0,0.2);
             color: $alert_red_1;
             border-color: $alert_red_2;
+        }
+        &.alert-muted {
+            background: transparent;
+            color: $color_gray_4;
         }
     }
     span {
@@ -208,6 +212,12 @@ html {
     .navbar {
         // background: rgba(0,0,0,0.3) !important;
         .navbar-nav {
+
+            &.sections {
+                li.active a {
+                    background: rgba(0,0,0,0.4) !important;
+                }
+            }
 
             li {
                 a {
@@ -505,6 +515,15 @@ html {
         background: #F1FAFE url("../images/ul-li-bg-active-dark.png") no-repeat 3px 0px !important;
     }
 
+    table#manageSubnets {
+        tr {
+            td {
+                &:nth-child(1) a {
+                    color: white;
+                }
+            }
+        }
+    }
     table#manageSubnets .structure {
         background: url("../images/sn-bg-dark.png")  0px 7px;
     }
@@ -848,6 +867,20 @@ html {
     // left menu
     table#subnetsMenu td#subnetsLeft {
         border-right: 1px solid $color_gray_5;
+
+        #leftMenu {
+            margin-top: 0px;
+        }
+
+        h4 {
+            padding: 10px;
+            margin: 0px;
+            background: rgba(0,0,0,0.3);
+            border-bottom: 1px solid $color_gray_5;
+        }
+        hr {
+            display: none;
+        }
 
         a {
             color: white;
