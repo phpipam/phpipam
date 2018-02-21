@@ -638,6 +638,11 @@ html {
             border-top: 1px solid $color_gray_5 !important;
         }
     }
+    table.table.address_details {
+        td {
+            border: none !important;
+        }
+    }
 
     table#logs {
         tr {
