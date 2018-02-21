@@ -406,6 +406,11 @@ class User extends Common_functions {
      * @return void
      */
     private function set_user_theme () {
+        // set defaukt theme if field is missing
+        if(!isset($this->settings->theme)) {
+            $this->settings->theme = "dark";
+        }
+        // set user
         if(is_object($this->user)) {
             // use default theme from general settings
             if(!isset($this->user->theme) || @$this->user->theme=="") {
