@@ -692,6 +692,12 @@ html {
         div.col-xs-12.col-md-6 {
             border-right-color: $color_gray_5 !important;
         }
+        .sortable {
+            li {
+                background: rgba(0,0,0,0.2);
+                border: 1px solid $color_gray_5 !important;
+            }
+        }
     }
 
     // bootstrap-switch
