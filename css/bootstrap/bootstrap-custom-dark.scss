@@ -269,7 +269,8 @@ html {
         background-repeat: repeat;
 
         li.disabled {
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.1);
+            border-color: $color_gray_5;
         }
     }
     .navbar#menu-navbar .navbar-nav {
@@ -295,9 +296,17 @@ html {
             border-radius: none;
             box-shadow: none;
 
+            padding-top: 0px !important;
+            margin-top: 5px;
+
+            li {
+                background: transparent url("../images/noise.png") !important;
+            }
+
             li a {
                 border-left: 1px solid $color_gray_5;
                 border-left: none;
+                background: transparent !important;
             }
             &.admin {
                 li {
@@ -316,11 +325,11 @@ html {
                         }
                     }
                     &.nav-header {
-                        background: $color_gray_8 !important;
+                        background: rgba(0,0,0,0.2) !important;
                         border-bottom: 1px solid $color_gray_5;
                     }
                     &.nav-header:hover {
-                        background: $color_gray_8 !important;
+                        background: rgba(0,0,0,0.2) !important;
                     }
                 }
             }
@@ -504,6 +513,7 @@ html {
     }
     .table.ipaddresses tbody tr:hover td table.popover_table tbody td {
         background: transparent !important;
+        border: none !important;
     }
 
     .legend {
@@ -922,6 +932,7 @@ html {
             }
             &.active {
                 background-color: rgba(0,0,0,0.4) !important;
+                background-color: #4b7387 !important;
                 text-shadow: none;
                 border-top: 1px solid $color_gray_5;
                 border-bottom: 1px solid $color_gray_5;
@@ -1151,7 +1162,8 @@ html {
         }
 
         .iprequest {
-            background: rgba(0,0,0,0.2);
+            background: rgba(0,0,0,0.1);
+            border-color: $color_gray_5;
             text-shadow: none;
         }
     }

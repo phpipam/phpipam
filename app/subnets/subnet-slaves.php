@@ -75,7 +75,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 	# get VLAN details
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);
-	if(!$slave_vlan) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
+	if($slave_vlan[0]==false) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
 
 
 	# calculate free / used / percentage
@@ -122,7 +122,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 	# allow requests
 	if($slave_subnet['allowRequests'] == 1) 	{ print '<td class="allowRequests small hidden-xs hidden-sm hidden-md"><i class="fa fa-gray fa-check"></td>'; }
-	else 										{ print '<td class="allowRequests small hidden-xs hidden-sm hidden-md"></td>'; }
+	else 										{ print '<td class="allowRequests small hidden-xs hidden-sm hidden-md">/</td>'; }
 
 	# edit
 	$slave_subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);

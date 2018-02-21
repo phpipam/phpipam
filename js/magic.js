@@ -2050,7 +2050,7 @@ $('.vlansearchsubmit').click(function() {
 /*	Folders
 ************************************/
 //create new folder popup
-$('#add_folder, .add_folder').click(function() {
+$(document).on("click", "#add_folder, .add_folder", function() {
 	showSpinner();
     var subnetId  = $(this).attr('data-subnetId');
     var sectionId = $(this).attr('data-sectionId');
