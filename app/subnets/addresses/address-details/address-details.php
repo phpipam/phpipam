@@ -17,7 +17,7 @@ if(sizeof($address)>1) {
 
     $address['description'] = str_replace("\n", "<br>", $address['description']);
 
-    print "<table>";
+    print "<table style='width:100%'>";
     print "<tr>";
 
     # device
@@ -270,7 +270,7 @@ if(sizeof($address)>1) {
     				}
     			}
     		}
-    		if(sizeof(@$active_shares)>0) {
+    		if(isset($active_shares)) {
     			# divider
                 print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Temporary shares')."</h4></tr>";
 
@@ -286,7 +286,7 @@ if(sizeof($address)>1) {
     			print "<td>";
     			print "</tr>";
     		}
-    		if(sizeof(@$expired_shares)>0) {
+    		if(isset($expired_shares)) {
     			# divider
     			print "<tr>";
     			print "	<th><hr></th>";
@@ -375,7 +375,7 @@ if(sizeof($address)>1) {
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
 
-        print " <td style='width:200px;vertical-align:top !important'>";
+        print " <td style='width:200px;padding-right:20px;vertical-align:top !important;'>";
             # title
         	print "<h4>"._('Rack details')."</h4>";
         	print "<hr>";
@@ -390,4 +390,3 @@ if(sizeof($address)>1) {
 else {
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
-?>
