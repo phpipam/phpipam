@@ -604,16 +604,9 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function generate_token () {
-	    $chars 		  = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$%!=.';
-	    $chars_length = strlen($chars);
-	    // generate string
-	    $token = '';
-	    for ($i = 0; $i < $this->token_length; $i++) {
-	        $token .= $chars[rand(0, $chars_length - 1)];
-	    }
-	    // save token and valid time
-	    $this->token = $token;
-	    $this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
+		// save token and valid time
+		$this->token = $this->User->Crypto->generate_api_token($this->token_length);
+		$this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
 	}
 
 }

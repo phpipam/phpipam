@@ -27,7 +27,6 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
-$aes_compliant_crypt   = false;         // Default to false for backward compatibility. Use true to use AES-256 compliant RIJNDAEL algorythm (rijndael-128)
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
 
@@ -74,16 +73,19 @@ try {
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
 		// decrypt request - form_encoded
-        if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
-        	$decoded = trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB));
-        	$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
+		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+			$decoded = $this->User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
+			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
 			parse_str($decoded, $encrypted_params);
 			$encrypted_params['app_id'] = $_GET['app_id'];
 			$params = (object) $encrypted_params;
-        }
-        // json_encoded
+		}
+		// json_encoded
 		else {
-			$encrypted_params = json_decode(trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)), true); 
+			$encrypted_params = $this->User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
+			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$encrypted_params = json_decode($encrypted_params);
 			$encrypted_params['app_id'] = $_GET['app_id'];
 			$params = (object) $encrypted_params;
 		}
