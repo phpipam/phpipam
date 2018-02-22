@@ -1713,7 +1713,7 @@ $('#toggleAllSwitches').click(function() {
     hideSpinner();
 });
 //load edit form
-$('button.editSubnet').click(function() {
+$(document).on("click", ".editSubnet", function() {
     showSpinner();
     var sectionId   = $(this).attr('data-sectionid');
     var subnetId    = $(this).attr('data-subnetid');
