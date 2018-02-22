@@ -66,7 +66,7 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                     $html[] = " title: '". addslashes($location->name). "',";
                     $html[] = " lat: '$location->lat',";
                     $html[] = " lng: '$location->long',";
-                    $html[] = $k==0 ? " icon: 'css/".SCRIPT_PREFIX."/images/red-dot.png'," : " icon: 'css/".SCRIPT_PREFIX."/images/blue-dot.png',";
+                    $html[] = $k==0 ? " icon: 'css/images/red-dot.png'," : " icon: 'css/images/blue-dot.png',";
                     $html[] = " infoWindow: {";
                     $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". addslashes($location->name). "</a></h5>$location->description'";
                     $html[] = "}";

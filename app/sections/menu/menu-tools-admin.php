@@ -2,7 +2,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# print admin menu if admin user and don't die!
+# print admin menu for admin users
 if($User->is_admin(false)) {
 	# if section is not set
 	if(!isset($_GET['section'])) { $_GET['section'] = ""; }
@@ -113,7 +113,7 @@ if($User->is_admin(false)) {
 	<!-- tools -->
 	<li class="tools dropdown <?php if(@$_GET['page']=="tools") { print " ac1tive"; } ?>">
 		<a class="dropdown-toggle icon-li" data-toggle="dropdown" href="" rel='tooltip' data-placement='bottom' title='<?php print _('Show tools menu'); ?>'><i class="fa fa-wrench"></i></a>
-		<ul class="dropdown-menu admin">
+		<ul class="dropdown-menu admin tools_dropdown">
 			<!-- public -->
 			<li class="nav-header"><?php print _('Available IPAM tools'); ?> </li>
 			<!-- private -->

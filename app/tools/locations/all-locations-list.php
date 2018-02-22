@@ -31,7 +31,7 @@ else {
     $colspan = $admin ? 5 : 4;
 
     // table
-    print "<table class='table sorted table-striped table-top table-td-top'>";
+    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
     // headers
     print "<thead>";
     print "<tr>";
@@ -70,7 +70,7 @@ else {
 
             // print
             print "<tr>";
-            print " <td><strong><a href='".create_link("tools", "locations", $l->id)."'>$l->name</strong></a></td>";
+            print " <td><a class='btn btn-xs btn-default' href='".create_link("tools", "locations", $l->id)."'><i class='fa fa-map prefix'></i> $l->name</a></td>";
             print " <td><span class='badge badge1 badge5'>$cnt "._('objects')."</span></td>";
             // description
             $l->description = strlen($l->description)==0 ? "/" : $l->description;

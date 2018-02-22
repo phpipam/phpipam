@@ -11,7 +11,7 @@ $colspan_dhcp = 4;
 ?>
 
 
-<table class="table sorted table-striped table-top ipaddresses">
+<table class="table sorted table-striped table-top ipaddresses" data-cookie-id-table="pstn_prefixes">
     <!-- headers -->
     <thead>
     <tr>

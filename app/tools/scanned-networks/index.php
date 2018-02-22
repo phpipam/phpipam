@@ -22,7 +22,7 @@ if ($agents===false) {
 else {
 
 	# table
-	print "<table class='table sorted table-striped table-condensed table-top'>";
+	print "<table class='table sorted table-striped table-condensed table-top' data-cookie-id-table='scanned'>";
 
     print "<thead>";
 	print "<tr>";
@@ -45,7 +45,7 @@ else {
 		$ac++;	// for ids
 
 		print "<tr>";
-		print "	<th colspan='7'>$ac.) $a->name ($a->description) :: $a->type</th>";
+		print "	<td colspan='7' class='th'>$ac.) $a->name ($a->description) :: $a->type</td>";
 		print "</tr>";
 
 		# fetch all scanned subnets

@@ -20,9 +20,10 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 <h4><?php print _('Search results (Subnet list)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable table sorted table-striped table-condensed table-top" data-cookie-id-table="search_addresses">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Section');?></th>
 	<th><?php print _('Subnet');?></th>
@@ -42,6 +43,9 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 	?>
 	<th style="width:5px;"></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 	$m = 0;		//to count success subnets because of permissions
 
@@ -121,6 +125,7 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 			}
 		}
 	}
+print "</tbody>";
 print "</table>";
 
 # show text if no results

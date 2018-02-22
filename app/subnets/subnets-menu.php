@@ -84,7 +84,7 @@ else {
 	/* print subnets menu ---------- */
 	print "<div class='subnets'>";
 	# print links
-	$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section']);
+	$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, array());
 	print $Subnets->print_subnets_menu($User->user, $section_subnets);
 	print "</div>";
 

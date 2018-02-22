@@ -53,18 +53,21 @@ $folders = $Subnets->fetch_section_subnets($sectionId, 'isFolder', '1', $fields)
 if (!is_array($folders)) $folders = array();
 
 // Generate HTML <options> dropdown menu
-$dropdown = new MasterSubnetDropDown($Subnets, $previously_selected);
+$foldersTree = new SubnetsTree($Subnets, $User->user);
+$subnetsTree = new SubnetsTree($Subnets, $User->user);
+$dropdown = new SubnetsMasterDropDown($Subnets, $previously_selected);
 
 // Show overlapping subnets (possible parents)
 if (!empty($strict_subnets)) {
 	$dropdown->optgroup_open(_('Strict Subnets'));
-	foreach($strict_subnets as $subnet) { $dropdown->subnets_add_object($subnet); }
+	foreach($strict_subnets as $subnet) { $dropdown->add_option($subnet); }
 }
 
 // Show folders
 $dropdown->optgroup_open(_('Folders'));
-foreach($folders as $folder) { $dropdown->subnets_tree_add($folder); }
-$dropdown->subnets_tree_render(true);
+foreach($folders as $folder) { $foldersTree->add($folder); }
+$foldersTree->walk(true);
+$dropdown->subnetsTree($foldersTree);
 
 
 if ($section->strictMode == 0) {
@@ -78,8 +81,9 @@ if ($section->strictMode == 0) {
 
 	// Show all subnets
 	$dropdown->optgroup_open(_('Subnets'));
-	foreach($all_subnets as $subnet) { $dropdown->subnets_tree_add($subnet); }
-	$dropdown->subnets_tree_render(false);
+	foreach($all_subnets as $subnet) { $subnetsTree->add($subnet); }
+	$subnetsTree->walk(false);
+	$dropdown->subnetsTree($subnetsTree);
 }
 
 echo $dropdown->html();

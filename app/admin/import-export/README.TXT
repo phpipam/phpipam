@@ -6,12 +6,24 @@
 	- VRF
 	- VLAN (with domain support)
 	- Subnet (with master/nested calculation function)
+	- L2 Domains
+	- IP Address
+	- Devices
+    - DeviceTypes
  - Export
 	- VRF
 	- VLAN (with domain support)
 	- Subnets (with sections, master subnets, VLANs and VLAN domains)
+	- L2 Domains
+	- IP Address
+	- Devices
+    - DeviceTypes
+
  - The import feature can be used as a mass update tool as long as KEY fields
    (see below) are not changed. Mass deletion is not an intended feature.
+
+ - Import/Export templates were all reviewed, and the provided templates field
+   names will all be automatically matched on import.
 
 # Warnings, limitations
  - VRF:
@@ -35,10 +47,21 @@
 	  are supported.
 	- When adding new subnets, the already assigned IP hosts are not changed in any 
 	  way (they are not updated)
+ - Devices
+    - DevicesType is the linked string from DeviceType
+    - Rack is the rack id, not the string name.
+
 	
 # ToDo
+ - This entire module has massively redundant code, copy/pasted, and should
+   be abstracted.  Doing so would likely allow for import/export of all tables.
+ - All format checking should be move to a centralized place within PHPIPAM.
+ - Too much data is passed via GET/POST strings - this data should be passed in
+   objects/sessions.
+ - There is some business logic happens in the javascript/client side, move all
+   to PHP, Javascript should focus on the presentation layer.
  - add variable type checking (char, int, set, etc.)
- - align format check of various fields (e.g. names) between main PHPIPAM code and 
+ - align format check of various fields (e.g. names) between main PHPIPAM code and
    Import/Export code
  - on subnets export, add possibility to have the subnet mask specified as dotted,
    or in the a separate column
@@ -48,4 +71,3 @@
  - add PHPIPAM style logging/audit to for the import/export actions
  - phpipam: improve PHPIMAP Subnets->get_IPv6_network_boundaries function for error
    checking as it currently allows text in IPs, masks, etc.
- - add missing import/export sections for hosts, devices and device types.

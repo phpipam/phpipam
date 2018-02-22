@@ -74,9 +74,9 @@ $(document).ready(function() {
 
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/flot/jquery.flot.categories.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.categories.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script><![endif]-->
 
 
 <div class="welcome" style="text-align:right">
@@ -135,7 +135,7 @@ foreach($uwidgets as $uk=>$uv) {
 
 # print
 print "<div class='add-widgets' style='display:none;padding-left:20px;'>";
-print "	<a class='btn btn-xs btn-default open_popup' data-script='app/dashboard/widget-popup.php' data-class='700'>"._('Add new widget')."</a>";
+print "	<a class='btn btn-sm btn-default btn-success open_popup' data-script='app/dashboard/widget-popup.php' data-class='700'><i class='fa fa-plus'></i> "._('Add new widget')."</a>";
 print "</div>";
 
 if(sizeof($uwidgets)>1) {

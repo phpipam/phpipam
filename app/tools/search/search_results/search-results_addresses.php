@@ -16,9 +16,10 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 <hr>
 
 <!-- search result table -->
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable table sorted table-striped table-condensed table-top" data-cookie-id-table="search_subnets">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 <?php
 	$address_span = 4;
@@ -33,7 +34,7 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	# port
 	if(in_array('port', $selected_ip_fields)) 										{ print '<th>'._('Port').'</th>'. "\n"; $address_span++; }
 	# owner and note
-	if( (in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) { print '<th colspan="2" class="hidden-sm hidden-xs">'._('Owner').'</th>'. "\n"; $address_span=$address_span+2; }
+	if( (in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) { print '<th class="hidden-sm hidden-xs">'._('Owner').'</th><th></th>'. "\n"; $address_span=$address_span+2; }
 	else if (in_array('owner', $selected_ip_fields)) 								{ print '<th class="hidden-sm hidden-xs">'._('Owner').'</th>'. "\n"; $address_span++; }
 	else if (in_array('note', $selected_ip_fields)) 								{ print '<th></th>'. "\n"; $address_span++; }
 
@@ -48,7 +49,10 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	print '<th class="actions"></th>';
 ?>
 </tr>
+</thead>
 
+
+<tbody>
 <!-- IP addresses -->
 <?php
 
@@ -75,7 +79,12 @@ if(sizeof($result_addresses) > 0) {
 			//detect section change and print headers
 			if ($result_addresses[$m]->subnetId != @$result_addresses[$m-1]->subnetId) {
 				print '<tr>' . "\n";
-				print '	<th colspan="'. $address_span .'">'. $section['name'] . ' :: <a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" style="font-weight:300">' . $subnet['description'] .' ('. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .')</a></th>' . "\n";
+				if($subnet['isFolder']) {
+				print '	<td class="th" colspan="'. $address_span .'">'. $section['name'] . ' :: <a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" style="font-weight:300">' . $subnet['description'].'</a></td>';
+				}
+				else {
+				print '	<td class="th" colspan="'. $address_span .'">'. $section['name'] . ' :: <a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" style="font-weight:300">' . $subnet['description'] .' ('. $Subnets->transform_to_dotted($subnet['subnet']) .'/'. $subnet['mask'] .')</a></td>';
+				}
 				print '</tr>';
 			}
 			$m++;
@@ -83,7 +92,7 @@ if(sizeof($result_addresses) > 0) {
 			//print table
 			print '<tr class="ipSearch" id="'. $line['id'] .'" subnetId="'. $line['subnetId'] .'" sectionId="'. $subnet['sectionId'] .'" link="'. $section['name'] .'|'. $subnet['id'] .'">'. "\n";
 			//address
-			print ' <td><a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id'],"address-details",$line['id']).'">'. $Subnets->transform_to_dotted($line['ip_addr'])."</a>";
+			print ' <td class="ip"><a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id'],"address-details",$line['id']).'">'. $Subnets->transform_to_dotted($line['ip_addr'])."</a>";
 			//tag
 			print $Addresses->address_type_format_tag($line['state']);
 			print ' </td>' . "\n";
@@ -168,6 +177,7 @@ if(sizeof($result_addresses) > 0) {
 	}
 }
 ?>
+</tbody>
 </table>
 <?php
 if($n == 0) {

@@ -19,7 +19,7 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "domain");
+$csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -70,7 +70,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Domain type'); ?></td>
 		<td>
-			<select name="type" class="form-control input-w-auto" <?php print $readonly; ?>>
+			<select name="type" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
 			<?php
 			// loop
 			foreach($PowerDNS->domain_types as $type) {

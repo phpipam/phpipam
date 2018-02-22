@@ -84,13 +84,13 @@ else {
                     $html = array();
                     foreach ($all_locations as $location) {
                         // description and apostrophe fix
-                        $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
+                        $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".escape_input($location->description)."</span>" : "";
                         $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
 
                         $html[] = "map.addMarker({";
-                        $html[] = " title: \"$location->name\",";
-                        $html[] = " lat: '$location->lat',";
-                        $html[] = " lng: '$location->long',";
+                        $html[] = " title: \"". addslashes($location->name) ."\",";
+                        $html[] = " lat: '". escape_input($location->lat) ."',";
+                        $html[] = " lng: '". escape_input($location->long) ."',";
                         $html[] = " infoWindow: {";
                         $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". addslashes($location->name) ."</a></h5>$location->description'";
                         $html[] = "}";

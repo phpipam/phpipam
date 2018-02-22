@@ -1,4 +1,4 @@
-# php{ip}am
+# {php}IPAM
 Website: https://phpipam.net/
 
 ## Description
@@ -12,6 +12,12 @@ to be able to display javascript quickly and correctly.
  - [API guide](https://phpipam.net/api-documentation/)
  - [Update](https://phpipam.net/documents/upgrade/)
  - [Demo page](http://demo.phpipam.net) (Login: `Admin / ipamadmin`)
+
+## Branches
+ - MASTER: Current development release
+ - 1.3: Productional branch for 1.3.x release
+ - 1.2: Productional branch for 1.2.x release (obsolete)
+ - Other branches: Feature testing
 
 ## I forgot my Admin password!?
 Just run `php functions/scripts/reset-admin-password.php` in the cli and enter your new password

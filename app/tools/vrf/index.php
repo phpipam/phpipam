@@ -17,8 +17,8 @@ print "<h4>"._('Available VRFs and belonging subnets')."</h4>";
 print "<hr>";
 
 ?>
-<div class="btn-group">
-    <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+<div class="btn-group" style='margin-bottom:10px;'>
+    <button class='btn btn-sm btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
     <?php
 	if($User->is_admin(false)) {
 		print "<a class='btn btn-sm btn-default' href='".create_link("administration","vrfs")."' data-action='add'  data-switchid=''><i class='fa fa-pencil'></i> ". _('Manage')."</a>";
@@ -33,25 +33,37 @@ if($vrfs===false) {
 	$Result->show("info", _('No VRFs configured'), false);
 }
 else {
-	# print table
-	print "<table id='vrf' class='table table-striped table-condensed table-top'>";
-
 	# loop
-	foreach ($vrfs as $vrf) {
+	foreach ($vrfs as $k=>$vrf) {
 		# cast
 		$vrf = (array) $vrf;
 
-		# print table body
-		print "<tbody>";
+		// print name
+		print "<br><br>";
+		print "<h4>".($k+1).".) $vrf[name]</h4>";
 
-		# vrf name and details
-		print "<tr class='vrf-title'>";
-	    print "	<th colspan='8'><h4>$vrf[name]</h4></th>";
+		# print table
+		print "<table id='vrf' class='table sorted table-striped table-condensed table-top' data-cookie-id-table='tools_vrf_$vrf[name]'>";
+
+		# headers
+		print "<thead>";
+		print "	<tr>";
+		print "	<th>"._('VLAN')."</th>";
+		print "	<th>"._('Description')."</td>";
+		print "	<th>"._('Section')."</td>";
+		print "	<th>"._('Subnet')."</td>";
+		print "	<th>"._('Master Subnet')."</td>";
+		if($User->settings->enableIPrequests=="1")
+		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
 		print "</tr>";
+		print "</thead>";
 
 		# sections
+		print "<tbody>";
+
+		# in sections
 		print "<tr class='text-top'>";
-	    print "	<td colspan='8'>";
+	    print "	<td colspan='8' class='th'>";
 	    print _("Available in sections")." ";
             $vrf_sections = array_filter(explode(";", $vrf['sections']));
             if (sizeof($vrf_sections)==0)   {
@@ -70,18 +82,6 @@ else {
 
 		# fetch subnets in vrf
 		$subnets = $Subnets->fetch_vrf_subnets ($vrf['vrfId'], null);
-
-		# headers
-		print "	<tr>";
-		print "	<th>"._('VLAN')."</th>";
-		print "	<th>"._('Description')."</td>";
-		print "	<th>"._('Section')."</td>";
-		print "	<th>"._('Subnet')."</td>";
-		print "	<th>"._('Master Subnet')."</td>";
-		if($User->settings->enableIPrequests=="1")
-		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
-		print "	<th></th>";
-		print "</tr>";
 
 		# subnets
 		if($subnets) {
@@ -106,7 +106,8 @@ else {
 
 					# get VLAN details
 					$subnet['VLAN'] = $Tools->fetch_object("vlans", "vlanId", $subnet['vlanId']);
-					$subnet['VLAN'] = (empty($subnet['VLAN']) || !$subnet['VLAN']) ? "" : $subnet['VLAN']->number;
+					$subnet['VLAN'] = (empty($subnet['VLAN']) || !$subnet['VLAN']) ? "/" : $subnet['VLAN']->number;
+					$subnet['description'] = strlen($subnet['description']==0) ? "/" : $subnet['description'];
 
 					# get section name
 					$section = (array) $Sections->fetch_section(null, $subnet['sectionId']);
@@ -143,14 +144,6 @@ else {
 						else 								{ print '<td class="allowRequests hidden-xs hidden-sm"></td>'; }
 					}
 
-					# edit, delete
-					print "	<td class='actions'>";
-					print "	<div class='btn-group'>";
-					print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
-					print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
-					print "	</div>";
-					print "	</td>";
-
 					print '</tr>' . "\n";
 				}
 			}
@@ -174,8 +167,8 @@ else {
 		}
 		# end
 		print '</tbody>';
+		print "</table>";
 	}
 }
-print "</table>";
 
 ?>

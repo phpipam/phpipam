@@ -25,6 +25,8 @@ $filetype = end($filetype);
 # check integer
 is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
 
+$csrf = $User->Crypto->csrf_cookie ("create", "import_file");
+
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
@@ -103,4 +105,5 @@ if($errors>0) {
 <div class="btn-group" style="margin-bottom:10px;">
 	<input type="button" value="<?php print _('Yes'); ?>" class="btn btn-sm btn-default btn-success" id="csvImportYes">
 	<input type="button" value="<?php print _('No'); ?>"  class="btn btn-sm btn-default" id="csvImportNo">
+	<input type="hidden" name='csrf_cookie' value='<?php print $csrf; ?>'>
 </div>

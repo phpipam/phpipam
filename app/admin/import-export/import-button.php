@@ -32,9 +32,9 @@ $User->check_user_session();
 </form>
 
 <!-- jQuery File Upload Dependencies -->
-<script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.ui.widget.js"></script>
-<script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.iframe-transport.js"></script>
-<script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.fileupload.js"></script>
+<script src="js/uploader/jquery.ui.widget.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 <script type="text/javascript">
 $(function(){
@@ -122,7 +122,7 @@ $(function(){
 						var s = $('<select name="importFields__' + expfield.replace(/\s/g,"_") + '" class="form-control input-sm input-w-auto" rel="tooltip" data-placement="bottom" title="<?php print _("Pick import colum for"); ?> ' + expfield + ' <?php print _("field"); ?>"/>');
 						$('<option />', {value: "-", text: "-"}).appendTo(s);
 						resp.impfields.forEach(function(impfield) {
-                                                        if (expfield.toUpperCase() === impfield.toUpperCase().replace("IP ADDRESS", "IP_ADDR").replace("HOSTNAME", "DNS_NAME")) {
+                                                        if (expfield.toUpperCase() === impfield.toUpperCase().replace("IP ADDRESS", "IP_ADDR")) {
 								$('<option />', {value: impfield, text: impfield, selected: true}).appendTo(s);
 								matches++;
 							} else {

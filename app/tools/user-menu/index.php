@@ -25,7 +25,6 @@ $langs = $User->fetch_langs();
 /* print hello */
 print "<h4>".$User->user->real_name.", "._('here you can change your account details').":</h4>";
 print "<hr><br>";
-
 ?>
 
 
@@ -46,7 +45,7 @@ print "<hr><br>";
 <tr>
     <td><?php print _('E-mail'); ?></td>
     <td>
-        <input type="text" class="form-control input-sm"  name="email" value="<?php print $User->user->email; ?>">
+        <input type="email" class="form-control input-sm"  name="email" value="<?php print $User->user->email; ?>" autocomplete="off">
     </td>
     <td class="info2"><?php print _('Email address'); ?></td>
 </tr>
@@ -73,6 +72,23 @@ if($User->user->authMethod == 1) {
     <td class="info2"><?php print _('Re-type password'); ?></td>
 </tr>
 <?php } ?>
+
+<!-- select theme -->
+<tr>
+	<td><?php print _('Theme'); ?></td>
+	<td>
+		<select name="theme" class="form-control input-sm input-w-auto">
+			<option value="default"><?php print _("Default"); ?></option>
+			<?php
+			foreach($User->themes as $theme) {
+				if($theme==$User->user->theme)	{ print "<option value='$theme' selected>$theme</option>"; }
+				else							{ print "<option value='$theme'		    >$theme</option>"; }
+			}
+			?>
+		</select>
+	</td>
+	<td class="info2"><?php print _('Select UI theme'); ?></td>
+</tr>
 
 <!-- select language -->
 <tr>
@@ -212,7 +228,7 @@ if($User->user->authMethod == 1) {
 <span class="info2"><?php print _("Select widgets to be displayed on dashboard"); ?></span>
 
 
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.4.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 <script>
 $(document).ready(function() {
 	// initialize sortable

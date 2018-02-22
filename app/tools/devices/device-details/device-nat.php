@@ -21,7 +21,7 @@ $device = (array) $device;
 
 
 // table
-print "<table class='table table-condensed table-td-top table-auto'>";
+print "<table class='table table-condensed table-td-top table-auto table-noborder'>";
 
 // add
 if($User->is_admin(false)) {

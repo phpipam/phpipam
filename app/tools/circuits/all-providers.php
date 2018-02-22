@@ -37,7 +37,7 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="circuit_providers">';
 
 #headers
 print "<thead>";
@@ -72,7 +72,7 @@ else {
 		$cnt = $Database->numObjectsFilter("circuits", "provider", $provider->id);
 		//print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a href='".create_link($_GET['page'],"circuits","providers",$provider->id)."'>$provider->name</a></strong></td>";
+		print "	<td><strong><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits","providers",$provider->id)."'>$provider->name</a></strong></td>";
 		print "	<td>$provider->description</td>";
 		print "	<td>$cnt "._("Circuits")."</td>";
 		print " <td>$provider->contact</td>";

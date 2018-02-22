@@ -40,7 +40,7 @@ if($User->settings->enableSNMP===false) {
 /* Print them out */
 else {
 
-	print '<table class="table sorted table-condensed table-striped table-td-top">';
+	print '<table class="table sorted table-condensed table-striped table-td-top" data-cookie-id-table="admin_snmp">';
 
 	# headers
 	print "<thead>";

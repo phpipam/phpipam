@@ -44,7 +44,7 @@ if($devices===false) {
 /* Print them out */
 else {
 
-	print '<table id="switchManagement" class="table table-striped sorted table-td-top">';
+	print '<table id="switchManagement" class="table table-striped sorted table-td-top" data-cookie-id-table="admin_devices">';
 
 	# headers
 	print "<thead>";
@@ -78,7 +78,7 @@ else {
 		//print details
 		print '<tr>'. "\n";
 
-		print '	<td><a href="'.create_link("tools","devices",$device['id']).'">'. $device['hostname'] .'</a></td>'. "\n";
+		print '	<td><a class="btn btn-xs btn-default" href="'.create_link("tools","devices",$device['id']).'"><i class="fa fa-desktop prefix"></i> '. $device['hostname'] .'</a></td>'. "\n";
 		print '	<td>'. $device['ip_addr'] .'</td>'. "\n";
 		print '	<td>'. @$device_types_i[$device['type']]->tname .'</td>'. "\n";
 		print '	<td class="description">'. $device['description'] .'</td>'. "\n";

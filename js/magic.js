@@ -75,6 +75,8 @@ function reload_window (data) {
 	else                               		  	{ hideSpinner(); }
 }
 
+/* tooltips */
+if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 
 /* hide error div if jquery loads ok
 *********************************************/
@@ -231,47 +233,59 @@ $(function() {
 	$(".popup").draggable({ handle: ".pHeader" });
 });
 
-//default row count
-if(readCookie('table-page-size')==null) { def_size = 25; }
-else                                    { def_size = readCookie('table-page-size'); }
-
-
-//table
-$('table.sorted').bdt({
-   pageRowCount: def_size,
-   searchFormClass: 'form-inline pull-right searchFormClass',
-   divClass: 'text-right'
-});
-$('table.sorted-left').bdt({
-   pageRowCount: def_size,
-   searchFormClass: 'form-inline pull-left searchFormClass clearfix',
-   divClass: 'text-left clearfix'
-});
-$('table.sorted').stickyTableHeaders();
-
-
+// bootstrap-table
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
                  .attr('data-page-size', '50')
-                 .attr('data-page-list', '[25,50,100,250,500]')
+                 .attr('data-page-list', '[50,100,250,500,All]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')
                  .attr('data-icon-size','sm')
                  .attr('data-show-footer','false')
                  .attr('data-show-columns','true')
                  .attr('data-icons-prefix','fa')
-                 .attr('data-show-toggle','true')
                  .attr('data-icons','icons')
-                 .attr('data-cookie','true');
+                 .attr('data-cookie','true')
+                 .attr('data-sortable', 'false')
 
-$('table.sorted-new-notoggle')
-                 .attr('data-show-toggle','false')
+$('table.sorted')
+                 .attr("data-toggle", "table")
+                 .attr('data-pagination', 'true')
+                 .attr('data-page-size', '50')
+                 .attr('data-page-list', '[50,100,250,500,All]')
+                 .attr('data-search','true')
+                 .attr('data-classes','table-no-bordered')
+                 .attr('data-icon-size','sm')
+                 .attr('data-show-footer','false')
+                 .attr('data-show-columns','true')
+                 .attr('data-icons-prefix','fa')
+                 .attr('data-icons','icons')
+                 .attr('data-cookie', 'true')
+                 .attr('data-sortable', 'false')
+                 .attr('onlyInfoPagination', 'true')
+                 .attr('smartDisplay', true)
+                 .attr('showPaginationSwitch', true)
+                 .attr('minimumCountColumns', true)
 
-$('table.sorted-new-nocolumns')
+$('table.nosearch')
+                 .attr('data-search','false')
                  .attr('data-show-columns','false')
 
-// icons
+$('table.nopagination')
+                 .attr('data-pagination', 'false')
+
+$('table.sortable')
+                 .attr('data-sortable', 'true')
+
+// tooltips, popovers
+$('table.sorted').on('all.bs.table', function () {
+    if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
+    $('.show_popover').popover();
+})
+
+
+// icons - bootstrap table
 window.icons = {
     refresh : 'fa-refresh',
     toggle  : 'fa-toggle-on',
@@ -355,7 +369,7 @@ $(document).on("click", ".submit_popup", function () {
     var reload        = true;
     var result_div    = "";
     var target_script = "";
-   // get all data- attributes
+    // get all data- attributes
     $.each(this.attributes, function() {
         // script
         if(this.name == "data-script") {
@@ -371,15 +385,15 @@ $(document).on("click", ".submit_popup", function () {
         }
         // get form parameters
         else if(this.name == "data-form") {
-            post_data = $('form#'+this.value).serialize ();
+            post_data = $('form#'+this.value).serialize ()
         }
     });
     // checks
     if(target_script == "") {
-        showError("Error: Missing target_script");
+        showError("Error: Missing target_script")
     }
     else if (result_div == "") {
-        showError("Error: Missing result div parameter");
+        showError("Error: Missing result div parameter")
     }
     // load popup
     else {
@@ -435,15 +449,6 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
 	//remove item
 	$(this).parent().fadeOut('fast');	return false;
 });
-
-
-
-
-// remove maintaneance mode
-$('.removeMaintaneance').click(function() {
-    open_popup ("400", "app/admin/settings/remove-maintaneance.php", "", false);
-})
-
 
 
 
@@ -685,15 +690,6 @@ $(document).on("click", "#mailSubnetSubmit", function() {
 });
 
 
-
-
-/*    sort IP address list
-*********************************************************/
-$("table.ipaddresses th a").click( function() {
-    return false;
-});
-
-
 /*    scan subnet
 *************************/
 //open popup
@@ -806,7 +802,9 @@ $(document).on("click", "input#csvImportYes", function() {
     else                                                { var ignoreError = "0"; }
     // get active subnet ID
     var xlsSubnetId  = $('a.csvImport').attr('data-subnetId');
-    var postData = "subnetId=" + xlsSubnetId + "&filetype=" + filetype + "&ignoreError=" + ignoreError;
+    // Get CSRF cookie
+    var csrf_cookie = $('input[name=csrf_cookie]').val();
+    var postData = "subnetId=" + xlsSubnetId + "&filetype=" + filetype + "&ignoreError=" + ignoreError + "&csrf_cookie=" + csrf_cookie;
 
     $.post('app/subnets/import-subnet/import-file.php', postData, function(data) {
         $('div.csvImportResult').html(data).slideDown('fast');
@@ -830,6 +828,13 @@ $(document).on("click", "#vrftemplate", function() {
 $(document).on("click", "#vlanstemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
     $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=vlans'></iframe></div>");
+	return false;
+});
+
+//download domain template
+$(document).on("click", "#l2domtemplate", function() {
+    $("div.dl").remove();    //remove old innerDiv
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=l2dom'></iframe></div>");
 	return false;
 });
 
@@ -866,9 +871,9 @@ $(document).on("click", "#devicestemplate", function() {
 
 
 //download device types template
-$(document).on("click", "#devicetypestemplate", function() {
+$(document).on("click", "#devtypetemplate", function() {
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devicetypes'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/import-template.php?type=devtype'></iframe></div>");
 	return false;
 });
 
@@ -1162,25 +1167,6 @@ $(document).on("click", '.show-masks', function() {
 
 /* @administration ---------- */
 
-/* save server settings */
-$('#settings').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/settings/settings-save.php', settings, function(data) {
-        $('div.settingsEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-/* show logo uploader */
-$('#upload-logo').click(function () {
-    csrf_cookie = $('form#settings input[name=csrf_cookie]').val();
-    open_popup ("700", 'app/admin/settings/logo/logo-uploader.php',  {csrf_cookie:csrf_cookie}, false)
-    return false;
-});
 // clear logo
 $(document).on("click", ".logo-clear", function() {
      $.post('app/admin/settings/logo/logo-clear.php', "", function(data) {
@@ -1188,19 +1174,6 @@ $(document).on("click", ".logo-clear", function() {
         //reload after 1 second if all is ok!
         reload_window (data);
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-});
-
-/* save mail settings */
-$('#mailsettings').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/mail/edit.php', settings, function(data) {
-        $('div.settingsMailEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
 });
 
 /* show/hide smtp body */
@@ -1211,46 +1184,9 @@ $('select#mtype').change(function() {
 	else 						{ $('#mailsettingstbl tbody#smtp').show(); }
 });
 
-/* test mail */
-$('.sendTestMail').click(function() {
-    showSpinner();
-    var settings = $('form#mailsettings').serialize();
-   //send mail
-    $.post('app/admin/mail/test-mail.php', settings, function(data) {
-        $('div.settingsMailEdit').html(data).slideDown('fast');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
 
 /*    Edit users
 ***************************/
-//open form
-$('.editUser').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-userid');
-    var action = $(this).attr('data-action');
-
-    $.post('app/admin/users/edit.php',{id:id, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//submit form
-$(document).on("click", "#editUserSubmit", function() {
-    showSpinner();
-    var loginData = $('form#usersEdit').serialize();
-
-    $.post('app/admin/users/edit-result.php', loginData, function(data) {
-        $('div.usersEditResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
 //disable pass if domain user
 $(document).on("change", "form#usersEdit select[name=authMethod]", function() {
     //get details - we need Section, network and subnet bitmask
@@ -1325,7 +1261,7 @@ $(document).on("click", ".userselect", function() {
 
 
 
-/*    Edit groups
+/* Groups
 ***************************/
 //search AD group popup
 $(document).on("click", ".adLookup", function() {
@@ -1358,116 +1294,7 @@ $(document).on("click", ".groupselect", function() {
 		hideSpinner();
 	});	return false;
 });
-//open form
-$('.editGroup').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-groupid');
-    var action = $(this).attr('data-action');
 
-    $.post('app/admin/groups/edit-group.php',{id:id, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//submit form
-$(document).on("click", "#editGroupSubmit", function() {
-    showSpinner();
-    var loginData = $('form#groupEdit').serialize();
-
-    $.post('app/admin/groups/edit-group-result.php', loginData, function(data) {
-        $('div.groupEditResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//add users to group - show form
-$('.addToGroup').click(function() {
-    showSpinner();
-	var g_id = $(this).attr('data-groupid');
-
-    $.post('app/admin/groups/add-users.php',{g_id:g_id}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
-});
-//add users to group
-$(document).on("click", "#groupAddUsersSubmit", function() {
-	showSpinner();
-	var users = $('#groupAddUsers').serialize();
-
-    $.post('app/admin/groups/add-users-result.php', users, function(data) {
-        $('div.groupAddUsersResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
-});
-//remove users frmo group - show form
-$('.removeFromGroup').click(function() {
-    showSpinner();
-	var g_id = $(this).attr('data-groupid');
-
-    $.post('app/admin/groups/remove-users.php',{g_id:g_id}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
-});
-//add users to group
-$(document).on("click", "#groupRemoveUsersSubmit", function() {
-	showSpinner();
-	var users = $('#groupRemoveUsers').serialize();
-
-    $.post('app/admin/groups/remove-users-result.php', users, function(data) {
-        $('div.groupRemoveUsersResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
-});
-
-
-/*    Edit auth method
-***************************/
-//open form
-$('.editAuthMethod').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-id');
-    var action = $(this).attr('data-action');
-    var type   = $(this).attr('data-type');
-
-    $.post('app/admin/authentication-methods/edit.php',{id:id, action:action, type:type}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//submit form
-$(document).on("click", "#editAuthMethodSubmit", function() {
-    showSpinner();
-    var loginData = $('form#editAuthMethod').serialize();
-
-    $.post('app/admin/authentication-methods/edit-result.php', loginData, function(data) {
-        $('div.editAuthMethodResult').html(data).show();
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//check connection
-$('.checkAuthMethod').click(function () {
-    showSpinner();
-    var id     = $(this).attr('data-id');
-    $.post('app/admin/authentication-methods/check-connection.php',{id:id}, function(data) {
-        $('#popupOverlay div.popup_w500').html(data);
-        showPopup('popup_w500');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
 
 
 /*    instructions
@@ -1489,8 +1316,8 @@ $('#instructionsForm').submit(function () {
 $('#preview').click(function () {
     showSpinner();
     var instructions = CKEDITOR.instances.instructions.getData();
-    var csrf_cookie = $('input[name=csrf_cookie]').val();
-    $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:csrf_cookie}, function(data) {
+
+    $.post('app/admin/instructions/preview.php', {instructions:instructions, csrf_cookie:$("#instructionsForm input[name=csrf_cookie]").val()}, function(data) {
         $('div.instructionsPreview').html(data).fadeIn('fast');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
@@ -1580,18 +1407,6 @@ $(document).on("click", ".openChangelogDetail", function() {
 
 /*    Sections
 ********************************/
-//load edit form
-$('button.editSection').click(function() {
-    showSpinner();
-    var sectionId   = $(this).attr('data-sectionid');
-    var action         = $(this).attr('data-action');
-    //load edit data
-    $.post("app/admin/sections/edit.php", {sectionId:sectionId, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-});
 //edit section result
 $(document).on("click", "#editSectionSubmit, .editSectionSubmitDelete", function() {
     showSpinner();
@@ -1606,16 +1421,6 @@ $(document).on("click", "#editSectionSubmit, .editSectionSubmitDelete", function
         reload_window (data);
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
-});
-//section ordering
-$('button.sectionOrder').click(function() {
-    showSpinner();
-    //load edit data
-    $.post("app/admin/sections/edit-order.php", function(data) {
-        $('#popupOverlay div.popup_w500').html(data);
-        showPopup('popup_w500');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
 });
 //section ordering save
 $(document).on("click", "#sectionOrderSubmit", function() {
@@ -1640,36 +1445,6 @@ $(document).on("click", "#sectionOrderSubmit", function() {
 /*    powerDNS
 ********************************/
 
-/* powerdns db settings */
-$('#pdns-settings').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/powerDNS/settings-save.php', settings, function(data) {
-        $('div.settingsEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-/* powerdns defaults */
-$('#pdns-defaults').submit(function() {
-    showSpinner();
-    var settings = $(this).serialize();
-    //load submit results
-    $.post('app/admin/powerDNS/defaults-save.php', settings, function(data) {
-        $('div.settingsEdit').html(data).slideDown('fast');
-        //reload after 1 second if all is ok!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//load edit form
-$(document).on("click", ".editDomain", function() {
-    // editDomain2 > from error in create_record
-    if ($(this).hasClass('editDomain2'))   { open_popup ("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action'), secondary:true}, true); }
-    else                                   { open_popup ("700", "app/admin/powerDNS/domain-edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')}); }
-});
 //hide defaults
 $(document).on("click", ".hideDefaults", function () {
     if ($(this).is(':checked')) { $("tbody.defaults").hide(); }
@@ -1705,14 +1480,14 @@ $(document).on("click", "#editDomainSubmit", function() {
 });
 
 // refresh subnet PTR records
-$('.refreshPTRsubnet').click(function() {
+$(document).on("click", ".refreshPTRsubnet", function() {
 	open_popup("700", "app/admin/powerDNS/refresh-ptr-records.php", {subnetId:$(this).attr('data-subnetId')} );	return false;
 });
 $(document).on("click", ".refreshPTRsubnetSubmit", function() {
 	submit_popup_data (".refreshPTRsubnetResult", "app/admin/powerDNS/refresh-ptr-records-submit.php", {subnetId:$(this).attr('data-subnetId')} );	return false;
 });
 //edit record
-$(".editRecord").click(function() {
+$(document).on("click", ".editRecord", function() {
 	open_popup("700", "app/admin/powerDNS/record-edit.php", {id:$(this).attr('data-id'),domain_id:$(this).attr('data-domain_id'), action:$(this).attr('data-action')} );	return false;
 });
 $(document).on("click", "#editRecordSubmit", function() {
@@ -2127,7 +1902,6 @@ $(document).on("click", ".dropdown-subnets li a", function() {
 	var inputfield = $('form#editSubnetDetails input[name=subnet]');
 	// fill
 	$(inputfield).val(subnet);
-	$(inputfield).change();
 	// hide
 	$('.dropdown-subnets').parent().removeClass("open");	return false;
 });
@@ -2276,7 +2050,7 @@ $('.vlansearchsubmit').click(function() {
 /*	Folders
 ************************************/
 //create new folder popup
-$('#add_folder, .add_folder').click(function() {
+$(document).on("click", "#add_folder, .add_folder", function() {
 	showSpinner();
     var subnetId  = $(this).attr('data-subnetId');
     var sectionId = $(this).attr('data-sectionId');
@@ -2568,7 +2342,7 @@ $(document).on("click", "a.addNatObjectFromSearch", function() {
 
 /* ---- tags ----- */
 //load edit form
-$('.editType').click(function() {
+$(document).on("click", ".editType", function() {
 	open_popup("400", "app/admin/tags/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
 });
 //submit form
@@ -2587,21 +2361,9 @@ $(document).on("click", ".editVLAN", function() {
 $(document).on("click", "#editVLANsubmit", function() {
     submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-result.php", $('form#vlanManagementEdit').serialize());
 });
-//move
-$(".moveVLAN").click(function() {
-	open_popup("400", "app/admin/vlans/move-vlan.php", {vlanId:$(this).attr('data-vlanid')} );
-});
-//submit form
-$(document).on("click", "#moveVLANsubmit", function() {
-    submit_popup_data (".moveVLANSubmitResult", "app/admin/vlans/move-vlan-result.php", $('form#moveVLAN').serialize());
-});
 
 
 /* ---- VLAN domains ----- */
-//load edit form
-$('.editVLANdomain').click(function() {
-	open_popup("400", "app/admin/vlans/edit-domain.php", {id:$(this).attr('data-domainid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editVLANdomainsubmit", function() {
     submit_popup_data (".domainEditResult", "app/admin/vlans/edit-domain-result.php", $('form#editVLANdomain').serialize());
@@ -2609,20 +2371,12 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
 
 
 /* ---- VRF ----- */
-//load edit form
-$('.vrfManagement').click(function() {
-	open_popup("400", "app/admin/vrfs/edit.php", {vrfId:$(this).attr('data-vrfid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editVRF", function() {
     submit_popup_data (".vrfManagementEditResult", "app/admin/vrfs/edit-result.php", $('form#vrfManagementEdit').serialize());
 });
 
 /* ---- Nameservers ----- */
-//load edit form
-$('.nameserverManagement').click(function() {
-	open_popup("700", "app/admin/nameservers/edit.php", {nameserverId:$(this).attr('data-nameserverid'), action:$(this).attr('data-action')} );
-});
 // add new
 $(document).on("click", "#add_nameserver", function() {
 	showSpinner();
@@ -2647,17 +2401,8 @@ $(document).on("click", "#remove_nameserver", function() {
 
 	hideSpinner();	return false;
 });
-//submit form
-$(document).on("click", "#editNameservers", function() {
-    submit_popup_data (".nameserverManagementEditResult", "app/admin/nameservers/edit-result.php", $('form#nameserverManagementEdit').serialize());
-});
-
 
 /* ---- IP requests ----- */
-//load edit form
-$('table#requestedIPaddresses button').click(function() {
-	open_popup("700", "app/admin/requests/edit.php", {requestId:$(this).attr('data-requestid')} );
-});
 //submit form
 $(document).on("click", "button.manageRequest", function() {
     var postValues = $('form.manageRequestEdit').serialize();
@@ -2669,16 +2414,8 @@ $(document).on("click", "button.manageRequest", function() {
 
 
 /* ---- Share subnet ----- */
-//load edit form
-$('.shareTemp').click(function() {
-	open_popup("700", "app/tools/temp-shares/edit.php", {type:$(this).attr('data-type'), id:$(this).attr('data-id')} );	return false;
-});
-//submit form
-$(document).on("click", "#shareTempSubmit", function() {
-    submit_popup_data (".shareTempSubmitResult", "app/tools/temp-shares/edit-result.php", $('form#shareTempEdit').serialize());
-});
 //remove temp
-$('.removeSharedTemp').click(function() {
+$(document).on("click", ".removeSharedTemp", function() {
 	showPopup("popup_w400");
     submit_popup_data ("#popupOverlay .popup_w400", "app/tools/temp-shares/delete-result.php", {code:$(this).attr('data-code')});
     hideSpinner();
@@ -2785,89 +2522,8 @@ $(document).on("click", "#editcustomFilterSubmit", function() {
 
 
 
-
-
-
-/* Languages
+/* API, agents regenerate code
 *********/
-//Load edit lang form
-$('button.lang').click(function() {
-    showSpinner();
-    var langid    = $(this).attr('data-langid');
-    var action   = $(this).attr('data-action');
-    $.post('app/admin/languages/edit.php', {langid:langid, action:action}, function(data) {
-        $('#popupOverlay div.popup_w400').html(data);
-        showPopup('popup_w400');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//Edit lang details
-$(document).on("click", "#langEditSubmit", function() {
-    showSpinner();
-    var ldata = $('form#langEdit').serialize();
-    $.post('app/admin/languages/edit-result.php', ldata, function(data) {
-        $('div.langEditResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-
-/* Widgets
-*********/
-//Load edit widget form
-$('button.wedit').click(function() {
-    showSpinner();
-    var wid    = $(this).attr('data-wid');
-    var action = $(this).attr('data-action');
-    $.post('app/admin/widgets/edit.php', {wid:wid, action:action}, function(data) {
-        $('#popupOverlay div.popup_w500').html(data);
-        showPopup('popup_w500');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//Edit widgets details
-$(document).on("click", "#widgetEditSubmit", function() {
-    showSpinner();
-    var ldata = $('form#widgetEdit').serialize();
-    $.post('app/admin/widgets/edit-result.php', ldata, function(data) {
-        $('div.widgetEditResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-
-
-
-/* API
-*********/
-//Load edit API form
-$('button.editAPI').click(function() {
-    showSpinner();
-    var appid    = $(this).attr('data-appid');
-    var action   = $(this).attr('data-action');
-    $.post('app/admin/api/edit.php', {appid:appid, action:action}, function(data) {
-        $('#popupOverlay div.popup_w700').html(data);
-        showPopup('popup_w700');
-        hideSpinner();
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
-//Edit API details
-$(document).on("click", "#apiEditSubmit", function() {
-    showSpinner();
-    var apidata = $('form#apiEdit').serialize();
-    $.post('app/admin/api/edit-result.php', apidata, function(data) {
-        $('div.apiEditResult').html(data).slideDown('fast');
-        //reload after 2 seconds if succeeded!
-        reload_window (data);
-    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
-    return false;
-});
 //regenerate API key
 $(document).on('click', "#regApiKey", function() {
 	showSpinner();
@@ -2876,20 +2532,6 @@ $(document).on('click', "#regApiKey", function() {
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
-});
-
-
-
-
-/* agents
-*********/
-//load edit form
-$('.editAgent').click(function() {
-	open_popup("700", "app/admin/scan-agents/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
-});
-//submit form
-$(document).on("click", "#agentEditSubmit", function() {
-    submit_popup_data (".agentEditResult", "app/admin/scan-agents/edit-result.php", $('form#agentEdit').serialize());
 });
 //regenerate agent key
 $(document).on('click', "#regAgentKey", function() {
@@ -2920,31 +2562,27 @@ $('button#searchReplaceSave').click(function() {
 
 /*  Data Import / Export
 *************************/
-// XLS exports
-$('button#XLSdump').click(function () {
+// dump database
+$('button#XLSdump, button#MySQLdump, button#hostfileDump').click(function () {
     showSpinner();
+    var script = ""
+    // define script
+    if ($(this).attr('id')=="XLSdump")              { script = "generate-xls.php"; }
+    else if ($(this).attr('id')=="MySQLdump")       { script = "generate-mysql.php"; }
+    else if ($(this).attr('id')=="hostfileDump")    { script = "generate-hosts.php"; }
+
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-xls.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/"+script+"'></iframe></div>");
     hideSpinner();
 });
-// MySQL export
-$('button#MySQLdump').click(function () {
-    showSpinner();
-    $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-mysql.php'></iframe></div>");
-    hideSpinner();
-});
-// Hostfile export
-$('button#hostfileDump').click(function () {
-    showSpinner();
-    $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/generate-hosts.php'></iframe></div>");
-    hideSpinner();
-});
+
+
 //Export Section
 $('button.dataExport').click(function () {
-	var implemented = ["vrf","vlan","subnets","ipaddr"]; var popsize = {};
-	popsize["subnets"] = "w700"; popsize["ipaddr"] = "w700";
+	var implemented = ["vrf","vlan","subnets","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+	popsize["subnets"] = "w700";
+	popsize["ipaddr"] = "w700";
+	popsize["devices"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window
@@ -2996,6 +2634,24 @@ $(document).on("click", "button#dataExportSubmit", function() {
 			var exportSections = $('form#selectExportSections').serialize();
 			$("div.dl").remove();    //remove old innerDiv
 			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-ipaddr.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'l2dom':
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-l2dom.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'devices':
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-devices.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
+			setTimeout(function (){hidePopups();}, 1500);
+			break;
+		case 'devtype':
+			var exportSections = $('form#selectExportSections').serialize();
+			$("div.dl").remove();    //remove old innerDiv
+			$('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/import-export/export-devtype.php?" + exportSections + "&" + exportFields + "'></iframe></div>");
 			setTimeout(function (){hidePopups();}, 1500);
 			break;
 	}
@@ -3063,8 +2719,10 @@ $(document).on("click", "input#recomputeCVRFSelectAll", function() {
 });
 //Import Section
 $('button.dataImport').click(function () {
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
-	popsize["subnets"] = "max";popsize["ipaddr"] = "max";
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype"]; var popsize = {};
+	popsize["subnets"] = "max";
+	popsize["ipaddr"] = "max";
+	popsize["devices"] = "max";
 	var dataType = $('select[name=dataType]').find(":selected").val();
 	hidePopups();
     //show popup window, if implemented
@@ -3091,8 +2749,12 @@ $('button.dataImport').click(function () {
 //import buttons
 $(document).on("click", "button#dataImportPreview", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
-	popsize["subnets"] = "max"; popsize["recompute"] = "max"; popsize["ipaddr"] = "max";
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+	popsize["subnets"] = "max";
+	popsize["recompute"] = "max";
+	popsize["ipaddr"] = "max";
+	popsize["devices"] = "max";
+
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
 	hidePopups();
@@ -3119,8 +2781,11 @@ $(document).on("click", "button#dataImportPreview", function() {
 });
 $(document).on("click", "button#dataImportSubmit", function() {
     //get data from previous window
-	var implemented = ["vrf","vlan","subnets","recompute","ipaddr"]; var popsize = {};
-	popsize["subnets"] = "max";	popsize["recompute"] = "max"; popsize["ipaddr"] = "max";
+	var implemented = ["vrf","vlan","subnets","recompute","ipaddr", "l2dom", "devices", "devtype" ]; var popsize = {};
+	popsize["subnets"] = "max";
+	popsize["recompute"] = "max";
+	popsize["ipaddr"] = "max";
+	popsize["devices"] = "max";
 	var dataType = $(this).attr('data-type');
     var importFields = $('form#selectImportFields').serialize();
 	hidePopups();
@@ -3171,6 +2836,49 @@ $(document).on('click', '.btn-tablefix', function() {
 });
 
 
+/* Bootstap table
+***********************/
+$('table#manageSubnets').on('click','button.editSubnet', function() {
+    showSpinner();
+    var sectionId   = $(this).attr('data-sectionid');
+    var subnetId    = $(this).attr('data-subnetid');
+    var action         = $(this).attr('data-action');
+    //format posted values
+    var postdata    = "sectionId=" + sectionId + "&subnetId=" + subnetId + "&action=" + action;
+
+    //load edit data
+    $.post("app/admin/subnets/edit.php", postdata, function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+});
+//change subnet permissions
+$('table#manageSubnets').on('click','button.showSubnetPerm', function() {
+	showSpinner();
+	var subnetId  = $(this).attr('data-subnetId');
+	var sectionId = $(this).attr('data-sectionId');
+
+	$.post("app/admin/subnets/permissions-show.php", {subnetId:subnetId, sectionId:sectionId}, function(data) {
+        $('#popupOverlay div.popup_w500').html(data);
+        showPopup('popup_w500');
+		hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+});
+$('table#manageSubnets').on('click','button.add_folder', function() {
+	showSpinner();
+    var subnetId  = $(this).attr('data-subnetId');
+    var sectionId = $(this).attr('data-sectionId');
+    var action    = $(this).attr('data-action');
+    //format posted values
+    var postdata     = "sectionId="+sectionId+"&subnetId="+subnetId+"&action="+action+"&location=IPaddresses";
+
+    $.post('app/admin/subnets/edit-folder.php', postdata, function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+	}).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); }); return false;
+});
 
 return false;
 });

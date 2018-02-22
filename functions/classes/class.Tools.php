@@ -2392,8 +2392,11 @@ class Tools extends Common_functions {
 		$old_count = 0;
 
 		# return table content (tr and td's)
-		while ( $loop && ( ( $option = each( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
+		reset( $children_prefixes[$parent] );
+		while ( $loop && ( ( $option = current( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
+			next( $children_prefixes[$parent] );
+
 			if(count($parent_stack) == 0) {
 				$margin = "0px";
 				$padding = "0px";
@@ -2412,56 +2415,54 @@ class Tools extends Common_functions {
 			$count = count( $parent_stack ) + 1;
 
 			# description
-			$name = strlen($option['value']['name'])==0 ? "/" : $option['value']['name'];
+			$name = strlen($option['name'])==0 ? "/" : $option['name'];
 
 			# print table line
-			if(strlen($option['value']['prefix']) > 0) {
+			if(strlen($option['prefix']) > 0) {
     			# count change?
-    			if ($count != $old_count) { $html[] = "</tbody><tbody>"; }
-
 				$html[] = "<tr class='level$count'>";
 
 				//which level?
 				if($count==1) {
 					# last?
-					if(!empty( $children_prefixes[$option['value']['id']])) {
-						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link($_GET['page'],"pstn-prefixes",$option['value']['id'])."'>".$option['value']['prefix']." </a></td>";
+					if(!empty( $children_prefixes[$option['id']])) {
+						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>".$option['prefix']." </a></td>";
 						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <strong>$name</strong></td>";
 					} else {
-						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link($_GET['page'],"pstn-prefixes",$option['value']['id'])."'>".$option['value']['prefix']." </a></td>";
+						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i><a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>".$option['prefix']." </a></td>";
 						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <strong>$name</strong></td>";
 					}
 				}
 				else {
 					# last?
-					if(!empty( $children_prefixes[$option['value']['id']])) {
-						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link($_GET['page'],"pstn-prefixes",$option['value']['id'])."'>  ".$option['value']['prefix']."</a></td>";
+					if(!empty( $children_prefixes[$option['id']])) {
+						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>  ".$option['prefix']."</a></td>";
 						$html[] = "	<td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> <strong>$name</strong></td>";
 					}
 					else {
-						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link($_GET['page'],"pstn-prefixes",$option['value']['id'])."'>  ".$option['value']['prefix']."</a></td>";
+						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <a href='".create_link($_GET['page'],"pstn-prefixes",$option['id'])."'>  ".$option['prefix']."</a></td>";
 						$html[] = "	<td class='level$count'><span class='structure' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> <strong>$name</strong></td>";
 					}
 				}
 
 				// range
-				$html[] = " <td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> ".$option['value']['prefix'].$option['value']['start']." ".$option['value']['prefix'].$option['value']['stop']."</td>";
+				$html[] = " <td class='level$count'><span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-angle-right'></i> ".$option['prefix'].$option['start']." ".$option['prefix'].$option['stop']."</td>";
 
 				//start/stop
-				$html[] = "	<td>".$option['value']['start']."</td>";
-				$html[] = "	<td>".$option['value']['stop']."</td>";
+				$html[] = "	<td>".$option['start']."</td>";
+				$html[] = "	<td>".$option['stop']."</td>";
 
 				//count
-                $cnt = $this->count_database_objects("pstnNumbers", "prefix", $option['value']['id']);
+                $cnt = $this->count_database_objects("pstnNumbers", "prefix", $option['id']);
 
                 $html[] = "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
 
 				//device
-				$device = ( $option['value']['deviceId']==0 || empty($option['value']['deviceId']) ) ? false : true;
+				$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
 
 				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
 				else {
-					$device = $this->fetch_object ("devices", "id", $option['value']['deviceId']);
+					$device = $this->fetch_object ("devices", "id", $option['deviceId']);
 					if ($device!==false) {
 						$html[] = "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
 					}
@@ -2480,16 +2481,16 @@ class Tools extends Common_functions {
 
 				   			//booleans
 							if($field['type']=="tinyint(1)")	{
-								if($option['value'][$field['name']] == "0")			{ $html[] = _("No"); }
-								elseif($option['value'][$field['name']] == "1")		{ $html[] = _("Yes"); }
+								if($option[$field['name']] == "0")			{ $html[] = _("No"); }
+								elseif($option[$field['name']] == "1")		{ $html[] = _("Yes"); }
 							}
 							//text
 							elseif($field['type']=="text") {
-								if(strlen($option['value'][$field['name']])>0)		{ $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $option['value'][$field['name']])."'>"; }
+								if(strlen($option[$field['name']])>0)		{ $html[] = "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $option[$field['name']])."'>"; }
 								else												{ $html[] = ""; }
 							}
 							else {
-								$html[] = $option['value'][$field['name']];
+								$html[] = $option[$field['name']];
 
 							}
 
@@ -2505,8 +2506,8 @@ class Tools extends Common_functions {
 				$html[] = "	<div class='btn-group'>";
 
 				if($permission>2) {
-					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['value']['id']."'><i class='fa fa-pencil'></i></button>";
-					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['value']['id']."'><i class='fa fa-times'></i></button>";
+					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['id']."'><i class='fa fa-pencil'></i></button>";
+					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['id']."'><i class='fa fa-times'></i></button>";
 				}
 				else {
 					$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
@@ -2523,9 +2524,9 @@ class Tools extends Common_functions {
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack ); }
 			# Has slave subnets
-			elseif ( !empty( $children_prefixes[$option['value']['id']] ) ) {
-				array_push( $parent_stack, $option['value']['master'] );
-				$parent = $option['value']['id'];
+			elseif ( !empty( $children_prefixes[$option['id']] ) ) {
+				array_push( $parent_stack, $option['master'] );
+				$parent = $option['id'];
 			}
 		}
 		# print
@@ -2569,21 +2570,23 @@ class Tools extends Common_functions {
 
 		# return table content (tr and td's) - subnets
 		if(sizeof($children_prefixes)>0) {
-		while ( $loop && ( ( $option = each( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
+		reset( $children_prefixes[$parent] );
+		while ( $loop && ( ( $option = current( $children_prefixes[$parent] ) ) || ( $parent > $rootId ) ) )
 		{
+			next( $children_prefixes[$parent] );
 			# repeat
 			$repeat  = str_repeat( " &nbsp;&nbsp; ", ( count($parent_stack_prefixes)) );
 
 			# selected
-			$selected = $option['value']['id'] == $prefixId ? "selected='selected'" : "";
-			if($option['value']['id'])
-            $html[] = "<option value='".$option['value']['id']."' $selected>$repeat ".$option['value']['prefix']." (".$option['value']['name'].")</option>";
+			$selected = $option['id'] == $prefixId ? "selected='selected'" : "";
+			if($option['id'])
+            $html[] = "<option value='".$option['id']."' $selected>$repeat ".$option['prefix']." (".$option['name'].")</option>";
 
 			if ( $option === false ) { $parent = array_pop( $parent_stack_prefixes ); }
 			# Has slave subnets
-			elseif ( !empty( $children_prefixes[$option['value']['id']] ) ) {
-				array_push( $parent_stack_prefixes, $option['value']['master'] );
-				$parent = $option['value']['id'];
+			elseif ( !empty( $children_prefixes[$option['id']] ) ) {
+				array_push( $parent_stack_prefixes, $option['master'] );
+				$parent = $option['id'];
 			}		}
 		}
 		$html[] = "</select>";
@@ -2609,7 +2612,6 @@ class Tools extends Common_functions {
     	$size = sizeof($numbers);
     	// vars
     	$numbers_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {

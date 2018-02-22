@@ -56,12 +56,7 @@ $permitted_domains = array_filter($out);
 					// set print
 					$printVLAN = $v->number;
 					if(!empty($v->name)) {
-						if(strlen($v->name)>25)	{
-							$printVLAN .= " (".substr($v->name,0,25)."...)";
-						}
-						else {
-							$printVLAN .= " ($v->name)";
-						}
+						$printVLAN .= " (" . $Tools->shorten_text($v->name, 25) . ")";
 					}
 
 					/* selected? */

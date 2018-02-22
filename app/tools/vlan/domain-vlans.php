@@ -42,7 +42,7 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
     <?php
     // l2 domains
     if($User->is_admin(false)===true && sizeof($vlan_domains)==1) { ?>
-	<button class="btn btn-sm btn-default editVLANdomain" data-action="add" data-domainid="" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add L2 Domain'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add L2 Domain'); ?></button>
 	<?php } ?>
     <?php
     // snmp
@@ -60,7 +60,7 @@ if($vlans===false) {
 }
 else {
 	# table
-	print "<table class='table sorted vlans table-condensed table-top'>";
+	print "<table class='table sorted vlans table-condensed table-top' data-cookie-id-table='tools_vlan_2'>";
 
 	# headers
 	print "<thead>";
@@ -138,8 +138,8 @@ else {
 					$class = $n==0 ? "odd" : "even";
 					//start - VLAN details
 					print "<tr class='$class change'>";
-					print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->number."</td>";
-					print "	<td>".$vlan[0]->name."</td>";
+					print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan[0]->number."</a></td>";
+					print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->name."</a></td>";
 					print "	<td>".$vlan[0]->description."</td>";
 			        //custom fields - no subnets
 			        if(sizeof(@$custom_fields) > 0) {
@@ -179,7 +179,7 @@ else {
 						print "	<td class='actions'>";
 						print "	<div class='btn-group'>";
 						print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$v->vlanId'><i class='fa fa-pencil'></i></button>";
-						print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
+						print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
 						print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$v->vlanId'><i class='fa fa-times'></i></button>";
 						print "	</div>";
 						print "	</td>";
@@ -198,7 +198,7 @@ else {
 						print "	<td class='actions'>";
 						print "	<div class='btn-group'>";
 						print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$v->vlanId'><i class='fa fa-pencil'></i></button>";
-						print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
+						print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
 						print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$v->vlanId'><i class='fa fa-times'></i></button>";
 						print "	</div>";
 						print "	</td>";

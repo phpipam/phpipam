@@ -156,3 +156,11 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
 $config['logo_width']             = 220;                    // logo width
 $config['requests_public']        = true;                   // Show IP request module on login page
 $config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
+
+/**
+ * PHP CLI binary for scanning and network discovery.
+ *
+ * The default behaviour is to use the system wide default php version symlinked to php in PHP_BINDIR (/usr/bin/php).
+ * If multiple php versions are present; overide selection with $php_cli_binary.
+ */
+#$php_cli_binary = '/usr/bin/php7.1';
