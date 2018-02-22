@@ -17,7 +17,7 @@ class Crypto {
      * Change to MCRYPT_RIJNDAEL_128 to use AES-256 compliant RIJNDAEL algorithm (rijndael-128)
      * @var mixed
      */
-    private $legacy_mcrypt_aes_mode = MCRYPT_RIJNDAEL_256;
+    private $legacy_mcrypt_aes_mode = 'MCRYPT_RIJNDAEL_256';
 
     /**
      * Result
