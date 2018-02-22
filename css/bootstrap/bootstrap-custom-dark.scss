@@ -226,6 +226,9 @@ html {
                 li.active a {
                     background: rgba(0,0,0,0.4) !important;
                 }
+                li.dropdown ul.dropdown-menu li:hover active {
+                    background: rgba(0,0,0,0.4) !important;
+                }
             }
 
             li {
@@ -306,7 +309,7 @@ html {
             li a {
                 border-left: 1px solid $color_gray_5;
                 border-left: none;
-                background: transparent !important;
+                // background: transparent !important;
             }
             &.admin {
                 li {
@@ -346,7 +349,6 @@ html {
             }
         }
     }
-
 
     .nav-tabs {
         border-bottom: 1px solid $color_gray_4;
