@@ -188,12 +188,12 @@ class SubnetsMenu {
 	/**
 	 * Generate required <ul> </ul> nested HTML
 	 * @param  integer $level
-	 * @param  stdObject $subnet
+	 * @param  stdObject|null $subnet
 	 */
 	private function menu_nested_level($level, $subnet) {
-		list($style_open) = $this->get_subnet_styles($subnet);
-
 		if (is_object($subnet)) {
+			list($style_open) = $this->get_subnet_styles($subnet);
+
 			# Open required number of new levels
 			while ($this->nestedlevel < $level) {
 				if($style_open == "open") {

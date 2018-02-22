@@ -220,6 +220,7 @@ class phpipam_mail extends Common_functions {
     	$html[] = "<body style='margin:0px;padding:0px;background:#f9f9f9;border-collapse:collapse;'>";
     	# logo
     	if(!file_exists( dirname(__FILE__)."/../../css/images/logo/logo.png")) {
+			$img = ''; // Load built-in image
 			require( dirname(__FILE__).'/../../app/admin/settings/logo/logo-builtin.php' );
 			$html[] = $img;
 		}

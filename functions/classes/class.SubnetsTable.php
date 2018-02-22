@@ -73,8 +73,6 @@ class SubnetsTable {
 			$subnet->masterSubnet->ip = $this->Tools->transform_to_dotted($subnet->masterSubnet->subnet);
 		}
 
-		$prefix = str_repeat(' - ', $subnet->level);
-
 		if($subnet->level==0) {
 			$margin = '0px';
 			$padding = '0px';
@@ -83,6 +81,7 @@ class SubnetsTable {
 			$padding = '10px';
 		}
 
+		$tr = array();
 		# description
 		$description = strlen($subnet->description)==0 ? "/" : $subnet->description;
 

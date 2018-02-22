@@ -558,7 +558,7 @@ class Sections extends Common_functions {
 	 * @return string
 	 */
 	public function print_section_subnets_table($User, $sectionId, $showSupernetOnly = false) {
-		$html = [];
+		$html = array();
 
 		# set custom fields
 		$Tools = new Tools ($this->Database);
@@ -571,7 +571,7 @@ class Sections extends Common_functions {
 		# check permission
 		$permission = $this->check_permission($User->user, $sectionId);
 
-		$showSupernetOnly = $showSupernetOnly==true ? '1' : '0';
+		$showSupernetOnly = $showSupernetOnly===true ? '1' : '0';
 
 		# permitted
 		if ($permission != 0) {
