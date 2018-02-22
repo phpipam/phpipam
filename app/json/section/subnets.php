@@ -1,10 +1,5 @@
 <?php
 
-/*
- * Print section subnets (JSON)
- *************************************************/
-header('Content-Type: application/json');
-
 /* functions */
 require( dirname(__FILE__) . '/../../../functions/functions.php');
 
@@ -17,6 +12,11 @@ $Tools      = new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+/*
+ * Print section subnets (JSON)
+ *************************************************/
+header('Content-Type: application/json');
 
 # Validate inputs
 $sectionId        = filter_var($_GET['sectionId'], FILTER_VALIDATE_INT);

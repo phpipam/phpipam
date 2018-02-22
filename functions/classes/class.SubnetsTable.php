@@ -97,7 +97,7 @@ class SubnetsTable {
 				$tr['subnet'] = "<span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i><a href='".create_link("subnets",$subnet->sectionId,$subnet->id)."'>  ".$subnet->ip."/".$subnet->mask." $fullinfo</a>";
 				$tr['description'] = "<span class='structure-last' style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-3 fa-folder-open-o'></i> $description";
 			} else {
-				$pad_right = $level == 0 ? 12 : 3;
+				$pad_right = $subnet->level == 0 ? 12 : 3;
 				$tr['subnet'] = "<span class='structure'      style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-$pad_right fa-angle-right'></i><a href='".create_link("subnets",$subnet->sectionId,$subnet->id)."'>  ".$subnet->ip."/".$subnet->mask." $fullinfo</a>";
 				$tr['description'] = "<span class='structure'      style='padding-left:$padding; margin-left:$margin;'></span><i class='fa fa-gray fa-pad-right-$pad_right fa-angle-right'></i> $description";
 			}
