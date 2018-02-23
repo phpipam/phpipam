@@ -18,6 +18,40 @@ $User->check_user_session();
  *************************************************/
 header('Content-Type: application/json');
 
+/**
+ * Convert search strings into sensible CIDRs.
+ * @param  string $search_cidr
+ * @return string
+ */
+function complete_search_cidr($search_cidr) {
+    if (!isset($search_cidr))
+        return '';
+
+    $search_cidr = trim($search_cidr);
+
+    # Check if mask is already provided
+    if (strpos($search_cidr, '/') !== false)
+        return $search_cidr;
+
+    # Complete the 'search' cidr by guessing the mask, IPv4 only...
+    $ipv4 = array_filter(explode('.', $search_cidr));
+    $search_cidr = implode('.', $ipv4);
+
+    switch (sizeof($ipv4)) {
+        case 1:
+            return $search_cidr.'.0.0.0/8';
+        case 2:
+            return $search_cidr.'.0.0/16';
+        case 3:
+            return $search_cidr.'.0/24';
+        case 4:
+            return $search_cidr.'/32';
+        default:
+            return '';
+    }
+}
+
+
 # Validate inputs
 $sectionId        = filter_var($_GET['sectionId'], FILTER_VALIDATE_INT);
 $showSupernetOnly = filter_var($_GET['showSupernetOnly'], FILTER_VALIDATE_BOOLEAN);
@@ -26,13 +60,11 @@ $limit            = filter_var($_GET['limit'], FILTER_VALIDATE_INT);
 
 if ($sectionId===false || $offset===false || $limit===false) { return; }
 
+# Try to auto-complete search string.
+$search_cidr = complete_search_cidr($_GET['search']);
 # Ensure search is a valid CIDR address
-$search_cidr = false;
-if (isset($_GET['search'])) {
-    if ($Subnets->verify_cidr_address($_GET['search'])===true) {
-        $search_cidr = htmlentities($_GET['search']);
-    }
-}
+if ($Subnets->verify_cidr_address($search_cidr)!==true)
+    $search_cidr = false;
 
 # check section permission
 $permission = $Sections->check_permission($User->user, $sectionId);
