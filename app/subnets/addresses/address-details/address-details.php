@@ -338,7 +338,7 @@ if(sizeof($address)>1) {
     			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
     			//share
     			if($User->settings->tempShare==1) {
-    			print "		<a class='shareTemp btn btn-xs btn-default'  data-container='body' rel='tooltip' title='"._('Temporary share address')."' data-id='$address[id]' data-type='ipaddresses'>		<i class='fa fa-share-alt'></i></a>";
+    			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='".$address['id']."' data-type='ipaddresses' data-container='body' rel='tooltip' title='' data-original-title='"._('Temporary share address')."'><i class='fa fa-share-alt'></i></a>";
     			}
     		}
     	}
