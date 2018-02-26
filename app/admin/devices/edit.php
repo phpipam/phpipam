@@ -76,7 +76,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
    $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
 
    // load dropdown
-   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val()}, function(data) {
+   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
    		$('tbody#rack').html(data);
    });
 });
