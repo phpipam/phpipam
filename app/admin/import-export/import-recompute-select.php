@@ -80,7 +80,6 @@ if(sizeof($all_sections) > 0) {
 <div class="pContent">
 
 <?php
-if (!is_writeable( dirname(__FILE__) . '/upload' )) $Tools->Result->show("danger", _("'app/admin/import-export/upload' folder is not writeable."), false, false);
 
 print "<form id='selectImportFields'><div id='topmsg'>";
 print '<h4>'._("Sections and IP versions").'</h4><hr>';
