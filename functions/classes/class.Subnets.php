@@ -1869,7 +1869,9 @@ class Subnets extends Common_functions {
             $subnet = $this->Net_IPv6->getNetmask($cidr);			//validate subnet
             $subnet = $this->Net_IPv6->compress($subnet);			//get subnet part
             $subnetParse = explode("/", $cidr);
-			# validate that subnet is subnet
+            # Compress entered IPv4/IPv6 address
+            $subnetParse[0] = inet_ntop(inet_pton($subnetParse[0]));
+            # validate that subnet is subnet
             if ( ($subnetParse[0] != $subnet) && ($issubnet) ) 		{ return _("IP address cannot be subnet! (Consider using")." ". $subnet ."/". $subnetParse[1] .")"; }
             else													{ return true; }
 	   }

@@ -109,6 +109,7 @@ if(sizeof($custom_fields) > 0) {
 <div class="pContent">
 
 <?php
+if (!is_writeable( dirname(__FILE__) . '/upload' )) $Tools->Result->show("danger", _("'app/admin/import-export/upload' folder is not writeable."), false, false);
 
 # print template form
 print "<form id='selectImportFields'><div id='topmsg'>";

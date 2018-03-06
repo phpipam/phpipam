@@ -40,6 +40,8 @@ else {
 <!-- content -->
 <div class="pContent">
 
+    <?php if (!is_writeable( dirname(__FILE__) . '/../../../../css/images/logo' )) $Result->show("danger", _("'css/images/logo' folder is not writeable."), false, false); ?>
+
     <h4><?php print _("Current"); ?><?php if($clear) print "<a class='btn btn-xs btn-danger logo-clear pull-right' style='text-shadow:none'><i class='fa fa-times'></i></a>"; ?></h4>
     <div class='logo-current'>
         <?php print $img; ?>

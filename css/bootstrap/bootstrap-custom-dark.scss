@@ -1063,10 +1063,6 @@ html {
         }
     }
 
-    // login
-    div#login {
-    }
-
     .footer {
         border-top: 1px solid $color_gray_5;
     }
@@ -1187,6 +1183,7 @@ html {
     // login
     div#login {
         background: rgba(0,0,0,0.2);
+        border: 1px solid $color_gray_4 !important;
 
         legend {
             color: white;
