@@ -75,7 +75,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 	# get VLAN details
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);
-	if($slave_vlan[0]==false) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
+	if($slave_vlan===false) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
 
 
 	# calculate free / used / percentage
