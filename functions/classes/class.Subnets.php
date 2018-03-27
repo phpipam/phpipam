@@ -2044,7 +2044,7 @@ class Subnets extends Common_functions {
 		        //ignore same and slaves
 		        if($existing_subnet->id!=$old_subnet_id && !in_array($existing_subnet->id, $this->slaves)) {
 		            //only check if vrfId's match
-		            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+		            if($existing_subnet->vrfId==$vrfId) {
 			            # ignore folders!
 			            if($existing_subnet->isFolder!=1) {
 				            # check overlapping
