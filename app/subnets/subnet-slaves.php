@@ -37,6 +37,9 @@ print "	<th class='small'>"._('VLAN')."</th>";
 # VRF
 if($User->settings->enableVRF==1)
 print " <th>"._('VRF')."</th>";
+# Location
+if($User->settings->enableLocations==1)
+print " <th>"._('Location')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
 # custom
@@ -85,6 +88,12 @@ foreach ($slave_subnets as $slave_subnet) {
 		$slave_vrf = $Tools->fetch_object("vrf", "vrfId" ,$slave_subnet['vrfId']);
 		$vrfText = $slave_vrf->name;
 	}
+	
+	# get location details
+	if($User->settings->enableLocations==1) {
+		$slave_location = $Tools->fetch_object("locations", "id", $slave_subnet['location']);
+		$locationName = $slave_location->name;
+	}
 
 	# calculate free / used / percentage
 	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
@@ -108,6 +117,8 @@ foreach ($slave_subnets as $slave_subnet) {
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     if($User->settings->enableVRF==1)
     print "     <td class='small'>".$vrfText."</td>";
+    if($User->settings->enableLocations==1)
+    print "	<td class='small'>".$locationName."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
     print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>".$Subnets->transform_address($slave_subnet['subnet'],"dotted")."/$slave_subnet[mask]</a> $fullinfo</td>";
 
@@ -176,6 +187,8 @@ foreach ($slave_subnets as $slave_subnet) {
 			print "<tr class='success'>";
 			print "	<td></td>";
 			if($User->settings->enableVRF==1)
+                        print " <td></td>";
+			if($User->settings->enableLocations=="1")
                         print " <td></td>";
 			print "	<td class='small description'><a href='#' data-sectionId='$section[id]' data-masterSubnetId='$subnet[id]' class='btn btn-sm btn-default createfromfree' data-cidr='".$Subnets->get_first_possible_subnet($Subnets->transform_to_dotted(gmp_strval(gmp_add($current_slave_bcast, 1))), $diff, false)."'><i class='fa fa-plus'></i></a> "._('Free space')."</td>";
 			print "	<td colspan='$colspan_subnets'>".$Subnets->transform_to_dotted(gmp_strval(gmp_add($current_slave_bcast, 1))) ." - ".$Subnets->transform_to_dotted(gmp_strval(gmp_sub($next_slave_subnet, 1))) ." ( ".gmp_strval(gmp_sub($diff, 1))." )</td>";
