@@ -244,7 +244,22 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
                     	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
                 	}
             	}
-        	}
+		}
+
+	    	#check for MAC duplicities if set
+		if($User->settings->duplicityMAC==1) {
+			# Editing IP - MAC is already in DB if we edit it
+			$editingSame = false;
+			if($action=="edit") {
+				$query = "SELECT mac FROM ipaddresses WHERE id = :id";
+				$mac_old = (array) $Database->getObjectQuery($query, array('id'=>$address['id']),'stdClass');
+				if($mac_old['mac'] == $address['mac']) { $editingSame = true; }
+			}       
+			# Adding new IP
+			if($Subnets->checkMACduplicity($address['subnetId'],$address['mac']) and !$editingSame and $action=="add"){
+				$Result->show("danger", $field['mac']._(" this MAC is already registered!"), true);
+			}       
+		}
 
 
 			# if it already exist for add skip it !
@@ -308,6 +323,21 @@ else {
             	$address['mac'] = $User->reformat_mac_address ($address['mac'], 1);
         	}
     	}
+	}
+
+  	#check for MAC duplicities if set
+	if($User->settings->duplicityMAC==1) {
+		# Editing IP - MAC is already in DB if we edit it
+		$editingSame = false;
+		if($action=="edit") {
+			$query = "SELECT mac FROM ipaddresses WHERE id = :id";
+			$mac_old = (array) $Database->getObjectQuery($query, array('id'=>$address['id']),'stdClass');
+			if($mac_old['mac'] == $address['mac']) { $editingSame = true; }
+		}       
+		# Adding new IP
+		if($Subnets->checkMACduplicity($address['subnetId'],$address['mac']) and !$editingSame and $action=="add"){
+			$Result->show("danger", $field['mac']._(" this MAC is already registered!"), true);
+		}       
 	}
 
 	# reset subnet if move

@@ -508,6 +508,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- MAC duplicities -->
+<tr>
+        <td class="title"><?php print _("MAC duplicity check"); ?></td>
+        <td>
+                <input type="checkbox" class="input-switch" value="1" name="duplicityMAC" <?php if($settings['duplicityMAC'] == 1) print 'checked'; ?>>
+        </td>
+        <td class="info2">
+                <?php print _('Do not allow MAC address duplicities in the same subnet.'); ?>
+        </td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">

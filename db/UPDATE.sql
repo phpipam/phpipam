@@ -819,6 +819,7 @@ UPDATE `settings` set `donate` = 0;
 
 /* Circuits flag */
 ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1';
+ALTER TABLE `settings` ADD `duplicityMAC` TINYINT(1) NULL DEFAULT '0';
 
 /* circuit providers */
 CREATE TABLE `circuitProviders` (

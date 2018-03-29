@@ -3580,5 +3580,16 @@ class Subnets extends Common_functions {
 		}
 	}
 
+	# check for MAC duplicity in the same subnet
+	# returns true if duplicity is detected
+	public function checkMACduplicity ($subnetID, $mac) {
+		$Database 	= new Database_PDO;
+		$query 		= 'SELECT mac FROM ipaddresses WHERE mac = :mac AND subnetId = :id';
+		if($Database->getObjectQuery($query, array('mac'=>$mac,'id'=>$subnetID),'stdClass') == null ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
 
 }
