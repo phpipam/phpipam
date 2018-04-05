@@ -212,7 +212,7 @@ function createCookie(name,value,days) {
         expires = "; expires="+date.toGMTString();
     }
     else {
-	    var expires = "";
+        var expires = "";
     }
 
     document.cookie = name+"="+encodeURI(value)+expires+"; path=/";
