@@ -206,7 +206,7 @@ function createCookie(name,value,days) {
     var date;
     var expires;
 
-    if (typeof days === 'undefined') {
+    if (typeof days !== 'undefined') {
         date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000));
         expires = "; expires="+date.toGMTString();
