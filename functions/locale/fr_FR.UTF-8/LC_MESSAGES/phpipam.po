@@ -4223,7 +4223,7 @@ msgstr "Réseaux favoris"
 
 #: site/ipaddr/ipDetailsChangelog.php
 msgid "Changelog"
-msgstr "Changelo"
+msgstr "Changelog"
 
 msgid "No changelogs available"
 msgstr "Aucune changelog disponible"
