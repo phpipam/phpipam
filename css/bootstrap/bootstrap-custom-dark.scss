@@ -771,6 +771,9 @@ html {
                 margin: 0px;
             }
         }
+        &.table {
+            background: transparent;
+        }
 
         &.table-noborder {
             th,
