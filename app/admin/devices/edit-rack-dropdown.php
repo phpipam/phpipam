@@ -12,7 +12,7 @@
 # show only for numeric (set) rackid
 if($_POST['rackid']>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
-	if(!is_object($User)) {
+	if(!isset($User) || !is_object($User)) {
 		/* functions */
 		require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
@@ -122,7 +122,8 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 			}
 			else {
 			    foreach ($available as $a) {
-			        print "<option value='$a'>$a</option>";
+                    		$selected = $a==$device['rack_start'] ? "selected" : "";
+			        print "<option value='$a' $selected>$a</option>";
 			    }
 			}
 			?>

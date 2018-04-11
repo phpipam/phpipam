@@ -33,6 +33,7 @@ $lock_file             = "";            // (optional) file to write lock to
 # database and exceptions/result object
 $Database = new Database_PDO;
 $Tools    = new Tools ($Database);
+$User     = new User ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
@@ -74,7 +75,7 @@ try {
 		}
 		// decrypt request - form_encoded
 		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
-			$decoded = $this->User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
+			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
 			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
 			parse_str($decoded, $encrypted_params);
@@ -83,7 +84,7 @@ try {
 		}
 		// json_encoded
 		else {
-			$encrypted_params = $this->User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
+			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$encrypted_params = json_decode($encrypted_params);
 			$encrypted_params['app_id'] = $_GET['app_id'];

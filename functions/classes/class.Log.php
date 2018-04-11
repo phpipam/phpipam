@@ -475,7 +475,7 @@ class Logging extends Common_functions {
 
 		# open syslog and write log
 		openlog('phpipam', LOG_NDELAY | LOG_PID, $this->syslog_facility);
-		syslog($this->syslog_priority, "$_SERVER[REMOTE_ADDR] | ".$username.$this->log_command." | ".$this->log_details);
+		syslog($this->syslog_priority, $_SERVER['REMOTE_ADDR']." | ".$username.$this->log_command." | ".$this->log_details);
 
 		# close
 		closelog();
