@@ -16,12 +16,14 @@ $color_red_light : #fff1f1;
 $color_link      : #ec008c;   // magenta
 $color_link      : #ff8800;   // orange
 $color_link      : #de0000;   // red
+
 $color_red       : $color_link;
 $color_red_2     : rgb(155,0,0);
 $color_red_3     : #d43f3a;
 
 $color_blue_1    : #58ACFA;
 $color_blue_2    : #e3eaf2;
+$color_blue_3    : #436587;
 
 $alert_green_1   : #dff0d8;
 $alert_green_2   : #3c763d;
@@ -194,6 +196,16 @@ html {
             background: rgba(0,0,0,0.2);
             color: $alert_red_3 !important;
             border-color: $alert_red_2 !important;
+        }
+        &.alert-warning {
+            background: rgba(0,0,0,0.2);
+            color: $alert_orange_3 !important;
+            border-color: $alert_orange_2 !important;
+        }
+        &.alert-info {
+            background: rgba(0,0,0,0.2);
+            color: $color_blue_2 !important;
+            border-color: $color_blue_3 !important;
         }
     }
 
@@ -909,11 +921,15 @@ html {
     input,
     textarea,
     select {
-        background: rgba(255,255,255,0.2) !important;
+        background: rgba(0,0,0,0.2) !important;
         color: white !important;
         &.btn.btn-success {
             border: 1px solid $color_gray_5 !important;
         }
+    }
+    select {
+        background: rgba(255,255,255,0.2) !important;
+
     }
     input[type=submit] {
         background: rgba(0,0,0,0.2) !important;

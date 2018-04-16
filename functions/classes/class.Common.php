@@ -531,7 +531,14 @@ class Common_functions  {
 	public function strip_input_tags ($input) {
 		if(is_array($input)) {
 			foreach($input as $k=>$v) {
-    			$input[$k] = strip_tags($v);
+				if(is_array($v)) {
+					foreach ($v as $k1=>$v1) {
+		    			$input[$k][$k1] = strip_tags($v1);
+					}
+				}
+				else {
+	    			$input[$k] = strip_tags($v);
+				}
             }
 		}
 		else {
