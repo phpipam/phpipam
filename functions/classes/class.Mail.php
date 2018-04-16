@@ -219,12 +219,13 @@ class phpipam_mail extends Common_functions {
     	$html = array();
     	$html[] = "<body style='margin:0px;padding:0px;background:#f9f9f9;border-collapse:collapse;'>";
     	# logo
-    	if(!file_exists( dirname(__FILE__)."/../../css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
+    	if(!file_exists( dirname(__FILE__)."/../../css/images/logo/logo.png")) {
+			$img = ''; // Load built-in image
 			require( dirname(__FILE__).'/../../app/admin/settings/logo/logo-builtin.php' );
 			$html[] = $img;
 		}
 		else {
-			$html[] = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='data:image/png;base64,".base64_encode(file_get_contents(dirname(__FILE__)."/../../css/".SCRIPT_PREFIX."/images/logo/logo.png"))."'>";
+			$html[] = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='data:image/png;base64,".base64_encode(file_get_contents(dirname(__FILE__)."/../../css/images/logo/logo.png"))."'>";
 		}
 
 		# return

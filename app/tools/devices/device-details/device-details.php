@@ -23,7 +23,7 @@ print "<hr>";
 # print
 if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
-    print "<table class='table'>";
+    print "<table class='table table-noborder'>";
     print "<tr>";
     print "<td style='vertical-align:top !important;'>";
 

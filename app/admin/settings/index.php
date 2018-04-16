@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "settings");
+$csrf = $User->Crypto->csrf_cookie ("create", "settings");
 
 # fetch all languages
 $languages = $Admin->fetch_all_objects("lang", "l_id");
@@ -116,6 +116,22 @@ $(document).ready(function() {
 		</select>
 	</td>
 	<td class="info2"><?php print _('Select default language'); ?></td>
+</tr>
+<!-- Default theme -->
+<tr>
+	<td class="title"><?php print _('Default theme'); ?></td>
+	<td>
+		<select name="theme" class="form-control input-sm input-w-auto">
+		<?php
+		//default
+		foreach($User->themes as $theme) {
+			if($theme==$settings['theme']) 	{ print "<option value='$theme' selected='selected'>$theme</option>"; }
+			else							{ print "<option value='$theme' 				   >$theme</option>"; }
+		}
+		?>
+		</select>
+	</td>
+	<td class="info2"><?php print _('Select default UI theme'); ?></td>
 </tr>
 
 
@@ -673,7 +689,7 @@ $(document).ready(function() {
 <tr>
 	<td class="title"><?php print _('Upload logo'); ?></td>
 	<td>
-	    <a class="btn btn-sm btn-default" id="upload-logo"><i class="fa fa-upload"></i> <?php print _("Upload"); ?></a>
+		<a class='btn btn-sm btn-default open_popup' data-script='app/admin/settings/logo/logo-uploader.php' data-class='700' data-csrf_cookie='<?php print $csrf; ?>'><i class="fa fa-upload"></i> <?php print _("Upload"); ?></a>
 	</td>
 	<td class="info2">
 		<?php print _('Upload custom logo'); ?>
@@ -684,7 +700,7 @@ $(document).ready(function() {
 <!-- result -->
 <tr class="th">
 	<td colspan="2">
-		<div class="settingsEdit"></div>
+		<div id="settingsEdit"></div>
 	</td>
 	<td></td>
 </tr>
@@ -693,7 +709,7 @@ $(document).ready(function() {
 <tr class="th">
 	<td class="title"></td>
 	<td class="submit">
-		<input type="submit" class="btn btn-sm btn-success pull-right" value="<?php print _('Save changes'); ?>">
+		<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" data-script="app/admin/settings/settings-save.php" data-result_div="settingsEdit" data-form='settings' value="<?php print _("Save"); ?>">
 	</td>
 	<td></td>
 </tr>

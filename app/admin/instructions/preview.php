@@ -10,7 +10,10 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-$User->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+// vaidate cookie
+$User->Crypto->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+// strip script
+$_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['instructions']);
 
 ?>
 <div class="normalTable" style="padding: 5px;">

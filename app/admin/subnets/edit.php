@@ -21,7 +21,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add" ? $User->csrf_cookie ("create", "subnet_add") : $User->csrf_cookie ("create", "subnet_".$_POST['subnetId']);
+$csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "subnet_add") : $User->Crypto->csrf_cookie ("create", "subnet_".$_POST['subnetId']);
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -107,6 +107,9 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : false;
 ?>
 
+<?php if ($User->settings->enableThreshold=="1") { ?>
+<script type="text/javascript" src="js/bootstrap-slider.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<?php } ?>
 <script type="text/javascript">
 $(document).ready(function() {
 /* bootstrap switch */
@@ -146,8 +149,6 @@ $("input[name='subnet']").change(function() {
 
 });
 </script>
-
-
 
 <!-- header -->
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('subnet'); ?></div>

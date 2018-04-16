@@ -113,6 +113,13 @@ class User extends Common_functions {
     protected $sessname = "phpipam";
 
     /**
+     * Set allowed themes
+     *
+     * @var array
+     */
+    public $themes = ["white", "dark"];
+
+    /**
      * (json) parameters for authentication
      *
      * @var mixed
@@ -149,10 +156,11 @@ class User extends Common_functions {
      */
     public $Log;
 
-
-
-
-
+    /**
+     * Cryptographic functions
+     * @var Crypto
+     */
+    public $Crypto;
 
 
     /**
@@ -177,6 +185,9 @@ class User extends Common_functions {
         # Log object
         $this->Log = new Logging ($this->Database, $this->settings);
 
+        # initialize Crypto
+        $this->Crypto = new Crypto ();
+
         # register new session
         $this->register_session ();
         # check timeut
@@ -185,6 +196,8 @@ class User extends Common_functions {
         $this->is_authenticated ();
         # get users IP address
         $this->block_get_ip ();
+        # set theme
+        $this->set_user_theme ();
     }
 
 
@@ -387,11 +400,38 @@ class User extends Common_functions {
     }
 
     /**
+     * Sets UI theme for user
+     *
+     * @method set_user_theme
+     * @return void
+     */
+    private function set_user_theme () {
+        // set defaukt theme if field is missing
+        if(!isset($this->settings->theme)) {
+            $this->settings->theme = "dark";
+        }
+        // set user
+        if(is_object($this->user)) {
+            // use default theme from general settings
+            if(!isset($this->user->theme) || @$this->user->theme=="") {
+                $this->user->ui_theme = $this->settings->theme;
+            }
+            else {
+                $this->user->ui_theme = $this->user->theme;
+            }
+            // validate
+            if(!in_array($this->user->ui_theme, $this->themes)) {
+                $this->user->ui_theme = "white";
+            }
+        }
+    }
+
+    /**
      * Check if users timeout expired
      *     if yes set timeout flag
      *
      * @access private
-     * @return none
+     * @return void
      */
     private function check_timeout () {
         //session set
@@ -472,72 +512,6 @@ class User extends Common_functions {
         # execute
         try { $this->Database->updateObject("settings", array("id"=>1, "maintaneanceMode"=>$maintaneance_mode), "id"); }
         catch (Exception $e) {}
-    }
-
-
-
-
-
-
-    /**
-     * CSRF cookie creation / validation.
-     *
-     * @access public
-     * @param string $action (default: "create")
-     * @param mixed $index (default: null)
-     * @param mixed $value (default: null)
-     * @return string
-     */
-    public function csrf_cookie ($action = "create", $index = null, $value = null) {
-        // validate action
-        $this->csrf_validate_action ($action);
-        // execute
-        return $action == "create" ? $this->csrf_cookie_create ($index) : $this->csrf_cookie_validate ($index, $value);
-    }
-
-
-    /**
-     * Validates csrf cookie action..
-     *
-     * @access private
-     * @param mixed $action
-     * @return bool
-     */
-    private function csrf_validate_action ($action) {
-        if ($action=="create" || $action=="validate") { return true; }
-        else                                          { $this->Result->show("danger", "Invalid CSRF cookie action", true); }
-    }
-
-    /**
-     * Creates cookie to prevent csrf
-     *
-     * @access private
-     * @param mixed $index
-     * @return string
-     */
-    private function csrf_cookie_create ($index) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // save cookie
-        $_SESSION[$name] = md5(uniqid(mt_rand(), true));
-        // return
-        return $_SESSION[$name];
-    }
-
-    /**
-     * Validate provided csrf cookie
-     *
-     * @access private
-     * @param mixed $index
-     * @return bool
-     */
-    private function csrf_cookie_validate ($index, $value) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // Check CSRF cookie is present
-        if (empty($value)) return false;
-        // Check CSRF cookie is valid and return
-        return $_SESSION[$name] == $value ? true : false;
     }
 
     /**
@@ -1303,6 +1277,8 @@ class User extends Common_functions {
      * @return bool
      */
     public function self_update($post) {
+        # remove theme
+        if($post['theme'] == "default") { $post['theme'] = ""; }
         # set items to update
         $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
                         "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
@@ -1314,7 +1290,8 @@ class User extends Common_functions {
                         "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
-                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
+                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
+                        "theme"            => $post['theme']
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);

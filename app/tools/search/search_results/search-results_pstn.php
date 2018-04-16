@@ -24,12 +24,13 @@ $result_pstnn = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields);
 <h4><?php print _('Search results (PSTN Prefixes)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_pstn">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
-	<th><?php print _('Name');?></th>
 	<th><?php print _('Prefix');?></th>
+	<th><?php print _('Name');?></th>
 	<th><?php print _('Range');?></th>
 	<th><?php print _('Device');?></th>
 	<?php
@@ -43,13 +44,16 @@ $result_pstnn = $Tools->search_pstn_numbers($searchTerm, $custom_pstnn_fields);
 	?>
 	<th></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 if(sizeof($result_pstn) > 0) {
 	# print vlans
 	foreach($result_pstn as $pstn) {
 		print "<tr class='nolink'>";
+		print " <td><dd><a class='btn btn-xs btn-default' href='".create_link("tools","pstn-prefixes",$pstn->id)."'>$pstn->prefix</a></dd></td>";
 		print " <td><dd>$pstn->name</dd></td>";
-		print " <td><dd><a href='".create_link("tools","pstn-prefixes",$pstn->id)."'>$pstn->prefix</a></dd></td>";
 		print " <td><dd>".$pstn->prefix.$pstn->start." - ".$pstn->prefix.$pstn->stop."</dd></td>";
 		//device										{
 		if(strlen($pstn->deviceId)>0 && $pstn->deviceId!="0") {
@@ -84,6 +88,7 @@ if(sizeof($result_pstn) > 0) {
     }
 }
 ?>
+</tbody>
 </table>
 
 <?php
@@ -99,12 +104,13 @@ if(sizeof($result_pstn) == 0) {
 <h4><?php print _('Search results (PSTN Numbers)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_pstn_refixes">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
-	<th><?php print _('Name');?></th>
 	<th><?php print _('Number');?></th>
+	<th><?php print _('Name');?></th>
 	<th><?php print _('Owner');?></th>
 	<th><?php print _('Device');?></th>
 	<?php
@@ -118,13 +124,16 @@ if(sizeof($result_pstn) == 0) {
 	?>
 	<th></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 if(sizeof($result_pstnn) > 0) {
 	# print vlans
 	foreach($result_pstnn as $pstnn) {
 		print "<tr class='nolink'>";
+		print " <td><dd><a class='btn btn-xs btn-default' href='".create_link("tools","pstn-prefixes",$pstnn->prefix)."'>$pstnn->number</a></dd></td>";
 		print " <td><dd>$pstnn->name</dd></td>";
-		print " <td><dd><a href='".create_link("tools","pstn-prefixes",$pstnn->prefix)."'>$pstnn->number</a></dd></td>";
 		print " <td><dd>$pstnn->owner</dd></td>";
 		//device										{
 		if(strlen($pstnn->deviceId)>0 && $pstnn->deviceId!="0") {
@@ -158,6 +167,7 @@ if(sizeof($result_pstnn) > 0) {
     }
 }
 ?>
+</tbody>
 </table>
 <?php
 if(sizeof($result_pstnn) == 0) {

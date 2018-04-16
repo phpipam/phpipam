@@ -36,13 +36,14 @@ else {
     $all_nats = $Tools->fetch_all_objects("nat", "name");
 
     // table
-    print "<table class='table sorted table-striped table-top table-td-top'>";
+    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='nat_table'>";
     // headers
     print "<thead>";
     print "<tr>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Type')."</th>";
-    print " <th colspan='2'>"._('Translation')."</th>";
+    print " <th>"._('Translation')."</th>";
+    print " <th></th>";
     print " <th></th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
@@ -71,7 +72,7 @@ else {
         # header
         $colspan = $admin ? 10 : 9;
         print "<tr>";
-        print " <th colspan='$colspan'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</th>";
+        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
         print "</tr>";
 
         # if none than print
@@ -115,7 +116,7 @@ else {
 
                 // print
                 print "<tr>";
-                print " <td><strong>$n->name</strong></td>";
+                print " <td>$n->name</td>";
                 print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";

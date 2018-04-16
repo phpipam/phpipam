@@ -122,8 +122,8 @@ print "<table class='table table-condensed table-top'>";
 	// headers
 	print "<tr>";
 	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'></th>";
-	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/".SCRIPT_PREFIX."/images/red-dot.png' style='height:18px;'> "._("Point A")."</th>";
-	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/".SCRIPT_PREFIX."/images/blue-dot.png' style='height:18px;'> "._("Point B")."</th>";
+	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/red-dot.png' style='height:18px;'> "._("Point A")."</th>";
+	print "	<th style='border-top:none;border-bottom-style:solid;border-bottom-width:1px;'><img src='css/images/blue-dot.png' style='height:18px;'> "._("Point B")."</th>";
 	print "</tr>";
 
 	// type

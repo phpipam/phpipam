@@ -34,7 +34,7 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_circuits">';
 
 # headers
 print "<thead>";
@@ -83,7 +83,7 @@ else {
 
 		//print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a href='".create_link($_GET['page'],"circuits",$circuit->id)."'>$circuit->cid</a></strong></td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 		print "	<td class='description'><a href='".create_link($_GET['page'],"circuits","providers",$circuit->pid)."'>$circuit->name</a></td>";
 		print "	<td>$circuit->type</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";

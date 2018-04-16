@@ -25,9 +25,10 @@ $result_circuits_p = $Tools->search_circuit_providers ($searchTerm, $custom_circ
 <h4><?php print _('Search results (Circuits)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable table sorted table-striped table-condensed table-top" data-cookie-id-table="search_circuits">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Circuit ID');?></th>
 	<th><?php print _('Provider');?></th>
@@ -45,12 +46,15 @@ $result_circuits_p = $Tools->search_circuit_providers ($searchTerm, $custom_circ
 	?>
 	<th></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 if(sizeof($result_circuits) > 0) {
 	# print vlans
 	foreach($result_circuits as $circuit) {
 		print "<tr class='nolink'>";
-		print " <td><dd><a href='".create_link("tools","circuits",$circuit->id)."'>$circuit->cid</a></dd></td>";
+		print " <td><dd><a class='btn btn-xs btn-default' href='".create_link("tools","circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></dd></td>";
 		print " <td><dd><a href='".create_link("tools","circuits","providers",$circuit->pid)."'>$circuit->name</a></dd></td>";
 		print " <td><dd>$circuit->type</dd></td>";
 		print " <td><dd>$circuit->capacity</dd></td>";
@@ -77,6 +81,7 @@ if(sizeof($result_circuits) > 0) {
     }
 }
 ?>
+</tbody>
 </table>
 <?php
 if(sizeof($result_circuits) == 0) {
@@ -92,9 +97,10 @@ if(sizeof($result_circuits) == 0) {
 <h4><?php print _('Search results (Circuit Providers)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_circuit_providers">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Name');?></th>
 	<th><?php print _('Description');?></th>
@@ -109,12 +115,15 @@ if(sizeof($result_circuits) == 0) {
 	}
 	?>
 </tr>
+</thead>
+
+<tbody>
 <?php
 if(sizeof($result_circuits_p) > 0) {
 	# print vlans
 	foreach($result_circuits_p as $provider) {
 		print "<tr class='nolink'>";
-		print " <td><dd><a href='".create_link("tools","circuits","providers",$provider->id)."'>$provider->name</a></dd></td>";
+		print " <td><dd><a class='btn btn-xs btn-default' href='".create_link("tools","circuits","providers",$provider->id)."'>$provider->name</a></dd></td>";
 		print " <td><dd>$provider->description</dd></td>";
 		print " <td><dd>$provider->contact</dd></td>";
 		# custom fields
@@ -130,6 +139,7 @@ if(sizeof($result_circuits_p) > 0) {
     }
 }
 ?>
+</tbody>
 </table>
 <?php
 if(sizeof($result_circuits_p) == 0) {

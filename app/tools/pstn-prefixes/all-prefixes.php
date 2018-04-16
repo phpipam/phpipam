@@ -28,7 +28,7 @@ else {
     $colspan = $admin||$User->user->pstn==3 ? 9 : 8;
 
     // table
-    print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top'>";
+    print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top' data-cookie-id-table='pstn_p'>";
     // headers
     print "<thead>";
     print "<tr>";

@@ -20,9 +20,10 @@ $result_vrf = $Tools->search_vrfs($searchTerm, $custom_vrf_fields);
 <h4><?php print _('Search results (VRFs)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable sorted table table-striped table-condensed table-top" data-cookie-id-table="search_vrf">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Name');?></th>
 	<th><?php print _('RD');?></th>
@@ -38,8 +39,9 @@ $result_vrf = $Tools->search_vrfs($searchTerm, $custom_vrf_fields);
 	?>
 	<th></th>
 </tr>
+</thead>
 
-
+<tbody>
 <?php
 if(sizeof($result_vrf) > 0) {
 	# print vlans
@@ -48,7 +50,7 @@ if(sizeof($result_vrf) > 0) {
 		$vrf = (array) $vrf;
 
 		print '<tr class="nolink">' . "\n";
-		print ' <td><dd>'. $vrf['name']      .'</dd></td>' . "\n";
+		print ' <td><dd><a class="btn btn-xs btn-default" href="'.create_link("tools","vrf",$vrf['vrfId']).'">'. $vrf['name']      .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vrf['rd']     .'</dd></td>' . "\n";
 		print ' <td><dd>'. $vrf['description'] .'</dd></td>' . "\n";
 		# custom fields
@@ -66,8 +68,8 @@ if(sizeof($result_vrf) > 0) {
 		print " <td class='actions'>";
 		if($User->is_admin(false)) {
 		print '<div class="btn-group">';
-		print '	<a class="btn btn-xs btn-default vrfManagement" data-action="edit"   data-vrfid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-pencil"></i></a>';
-		print '	<a class="btn btn-xs btn-default vrfManagement" data-action="delete" data-vrfid="'.$vrf['vrfId'].'"><i class="fa fa-gray fa-times"></i></a>';
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
 		print '</div>';
 		}
 		print "</td>";
@@ -75,7 +77,7 @@ if(sizeof($result_vrf) > 0) {
     }
 }
 ?>
-
+</tbody>
 </table>
 <?php
 if(sizeof($result_vrf) == 0) {

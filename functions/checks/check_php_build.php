@@ -55,8 +55,8 @@ if (sizeof($missingExt) != 1 || (phpversion() < "5.4" && $allow_older_version!==
     $error   = "<html>";
     $error  .= "<head>";
     $error  .= "<base href='$url".BASE."' />";
-    $error  .= '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap.min.css">';
-	$error  .= '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-custom.css">';
+    $error  .= '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">';
+	$error  .= '<link rel="stylesheet" type="text/css" href="css//bootstrap/bootstrap-custom.css">';
 	$error  .= "</head>";
     $error  .= "<body style='margin:0px;'>";
 	$error  .= '<div class="row header-install" id="header"><div class="col-xs-12">';

@@ -123,7 +123,7 @@ if ($domain === false) {
 <!--  -->
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top">
+<table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns_records">
 
 <!-- Headers -->
 <thead>
@@ -170,7 +170,7 @@ function print_record ($r) {
 if (isset($records_default)) {
 
     print "<tr>";
-    print "	<th colspan='7'  style='padding-top:20px;'>" . _("SOA, NS records") . "</th>";
+    print "	<td class='th' colspan='7'  style='padding-top:20px;'>" . _("SOA, NS records") . "</td>";
     print "</tr>";
 
     // defaults
@@ -181,7 +181,7 @@ if (isset($records_default)) {
 
 // host records
 print "<tr>";
-print "	<th colspan='7' style='padding-top:20px;'>" . _("Domain records") . "</th>";
+print "	<td class='th' colspan='7' style='padding-top:20px;'>" . _("Domain records") . "</td>";
 print "</tr>";
 
 // defaults

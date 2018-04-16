@@ -107,49 +107,44 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 </h4>
 
 <!-- table -->
-<table class="ipaddresses sorted normalTable table table-condensed table-full table-top">
+<table class="ipaddresses sortable sorted normalTable table table-condensed table-full table-top" data-cookie-id-table="ipaddresses">
 
 <!-- headers -->
 <thead>
 <tr class="th">
-
 	<?php
-	# IP address - mandatory
-												  print "<th class='s_ipaddr'><span rel='tooltip' title='"._('Sort by IP address')."'>"._('IP address')."</span></th>";
-	# hostname - mandatory
-												  print "<th><span rel='tooltip' title='"._('Sort by hostname')."'>"._('Hostname')."</span></th>";
-	# firewall address object - mandatory if enabled
+	print "<th class='s_ipaddr'>"._('IP address')."</th>";
+	print "<th>"._('Hostname')."</th>";
+	// firewall address object - mandatory if enabled
 	if(in_array('firewallAddressObject', $selected_ip_fields)) {
 			# class
 			$Zones = new FirewallZones ($Database);
 			$zone = $Zones->get_zone_subnet_info ($subnet['id']);
 
-			if($zone) {							  print "<th><span rel='tooltip' title='"._('Sort by firewall address object')."'>"._('FW object')."</span></th>"; }
+			if($zone) {							  print "<th>"._('FW object')."</th>"; }
 	}
-	# Description - mandatory
-												  print "<th><span rel='tooltip' title='"._('Sort by description')."'			>"._('Description')."</span></th>";
-	# MAC address
+	// description
+	print "<th>"._('Description')."</th>";
+	// mac
 	if(in_array('mac', $selected_ip_fields)) 	{
-    	$mac_title = $User->settings->enableMulticast=="1" ? "<th><span rel='tooltip' title='"._('Sort by MAC')."'>MAC</th>" : "<th></th>";
+    	$mac_title = $User->settings->enableMulticast=="1" ? "<th>MAC</th>" : "<th></th>";
     	                                        { print "$mac_title"; }
     }
 	# note
 	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
 	# switch
-	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' title='"._('Sort by device')."'>"._('Device')."</span></th>"; }
+	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	# port
-	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' title='"._('Sort by port')."'>"._('Port')."</span></th>"; }
+	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
 	# owner
-	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'><span rel='tooltip' title='"._('Sort by owner')."'>"._('Owner')."</span></th>"; }
-
-	# custom fields
+	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
+	// custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
-			print "<th class='hidden-xs hidden-sm hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $myField[name]'	>".$Tools->print_custom_field_name ($myField['name'])."</span></th>";
+			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
 		}
 	}
 	?>
-
 	<!-- actions -->
 	<th class="actions"></th>
 </tr>
@@ -192,7 +187,7 @@ else {
 	       	# if there is some result for unused print it - if sort == ip_addr
 	       	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 			    if ( $unused) {
-	        		print "<tr class='th'>";
+	        		print "<tr class='th1'>";
 	        		print "	<td class='unused'></td>";
 	        		print "	<td colspan='$colspan[unused]' class='unused'>$unused[ip] ($unused[hosts])</td>";
 	        		print "</tr>";
@@ -626,7 +621,7 @@ else {
 					else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], false, false, true ); }
 
 	            	if ( $unused  ) {
-		        		print "<tr class='th'>";
+		        		print "<tr>";
 		        		print "	<td class='unused success'></td>";
 		        		print "	<td colspan='$colspan[unused]' class='unused success'>$unused[ip] ($unused[hosts])</td>";
 		        		print "</tr>";

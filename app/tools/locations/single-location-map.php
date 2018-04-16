@@ -37,7 +37,7 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
     if( (strlen($location->long)>0 && strlen($location->lat))) {
 
     // description and apostrophe fix
-    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
+    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".escape_input($location->description)."</span>" : "";
     $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
     ?>
     <script type="text/javascript">
@@ -47,14 +47,14 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
             var map = new GMaps({
               div: '#gmap',
               zoom: 15,
-              lat: '<?php print $location->lat; ?>',
-              lng: '<?php print $location->long; ?>'
+              lat: '<?php print escape_input($location->lat); ?>',
+              lng: '<?php print escape_input($location->long); ?>'
             });
 
             map.addMarker({
-             title: "'<?php print $location->name; ?>'",
-             lat: '<?php print $location->lat; ?>',
-             lng: '<?php print $location->long; ?>',
+             title: "'<?php print addslashes($location->name); ?>'",
+             lat: '<?php print escape_input($location->lat); ?>',
+             lng: '<?php print escape_input($location->long); ?>',
              infoWindow: {
                 content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print addslashes($location->name); ?></a></h5><?php print $location->description; ?>'
              }

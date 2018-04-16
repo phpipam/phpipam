@@ -92,7 +92,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 	# permissions
 	if($User->is_admin(false)==true || $User->user->editVlan=="Yes") {
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan[vlanId]'><i class='fa fa-pencil'></i></button>";
-        print "		<button class='btn btn-xs btn-default moveVLAN' 					 data-vlanid='$vlan[vlanId]'><i class='fa fa-external-link'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$vlan[vlanId]'><i class='fa fa-external-link'></i></button>";
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan[vlanId]'><i class='fa fa-times'></i></button>";
 	}
 

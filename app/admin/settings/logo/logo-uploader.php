@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+$User->Crypto->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
 
 # clear identifier
 $clear = true;
@@ -25,12 +25,12 @@ $clear = true;
 // set width
 $logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
 
-if(!file_exists( dirname(__FILE__)."/../../../../css/".SCRIPT_PREFIX."/images/logo/logo.png")) {
+if(!file_exists( dirname(__FILE__)."/../../../../css/images/logo/logo.png")) {
     require( dirname(__FILE__).'/logo-builtin.php' );
     $clear = false;
 }
 else {
-    $img = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='css/".SCRIPT_PREFIX."/images/logo/logo.png'>";
+    $img = "<img style='max-width:".$logo_width."px;margin-top:15px;margin-bottom:20px;' alt='phpipam' src='css/images/logo/logo.png'>";
 }
 ?>
 
@@ -39,6 +39,8 @@ else {
 
 <!-- content -->
 <div class="pContent">
+
+    <?php if (!is_writeable( dirname(__FILE__) . '/../../../../css/images/logo' )) $Result->show("danger", _("'css/images/logo' folder is not writeable."), false, false); ?>
 
     <h4><?php print _("Current"); ?><?php if($clear) print "<a class='btn btn-xs btn-danger logo-clear pull-right' style='text-shadow:none'><i class='fa fa-times'></i></a>"; ?></h4>
     <div class='logo-current'>
@@ -66,9 +68,9 @@ else {
 
 
     <!-- jQuery File Upload Dependencies -->
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.ui.widget.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.iframe-transport.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.fileupload.js"></script>
+    <script src="js/uploader/jquery.ui.widget.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js//uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
     <script type="text/javascript">

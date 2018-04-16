@@ -102,6 +102,9 @@ table td.stats-badge {
     text-align: right !important;
     border-radius: 3px;
 }
+td.border-bottom {
+	border-bottom: 1px solid #ddd !important;
+}
 
 hr {
   margin: 5px;
@@ -127,6 +130,7 @@ h5 .label {
 h1, h2, h3, h4, h5, .pHeader {
 	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
 	font-weight: 300;
+	color: #428bca;
 }
 .row {
 	margin: 0px;
@@ -169,6 +173,13 @@ blockquote small {
 }
 
 
+i.prefix {
+	color:#ccc;
+	padding-right:3px
+}
+a:hover i.prefix {
+	color: #555;
+}
 
 
 /* @inputs ---------- */
@@ -197,6 +208,18 @@ select, input[type="file"] {
 }
 .table td.al-center {
 	text-align: center;
+}
+.table td.th {
+	padding: 8px 5px;
+	padding-top: 20px;
+	font-weight: bold;
+	border-bottom: 1px solid #eee !important;
+}
+.table-striped tbody tr:nth-child(even) td.th {
+	background: white !important;
+}
+.table tr:hover td.th {
+	background: transparent !important;
 }
 
 table.customIP tbody {
@@ -315,7 +338,7 @@ ul.progressUl li {
 	padding-right: 3px;
 }
 .fa-pad-right-12 {
-	padding-right: 12px;
+	padding-right: 0px;
 }
 .fa-pad-left {
 	padding-left: 5px;
@@ -1641,12 +1664,6 @@ table.slaves tr.success td {
 .adminMenu li.active.list-group-item:hover a {
 	color: white;
 }
-.favs td:nth-child(1) i {
-	margin-right: 1px;
-	padding-right: 5px;
-	border-right: 1px solid #ccc;
-}
-
 
 
 
@@ -1700,8 +1717,21 @@ table#vrf tr.vrf-title th,
 table#subnets tr.subnets-title th,
 table#settings tr.settings-title th {
 	border-top: none;
-	padding-top: 20px;
+	padding: 0px;
 	border-bottom-color: silver;
+}
+table#switchMainTable tr.switch-title th h4,
+table#vrf tr.vrf-title th h4,
+table#subnets tr.subnets-title th h4,
+table#settings tr.settings-title th h4 {
+	background: white;
+	padding: 10px;
+	margin: 0px;
+	margin-top: 30px;
+	color: #428bca;;
+}
+table#settings tr.settings-title th {
+	border-bottom: 1px solid #428bca;
 }
 table#switchMainTable tr.switch-title th {
 	border-bottom: 0px;
@@ -1817,11 +1847,11 @@ table#manageSubnets td {
 	padding-right: 0px;
 	vertical-align: middle;
 
-	padding-top: 6px;
+	padding-top: 4px;
 	padding-bottom: 6px;
 }
 table#manageSubnets td[class*="level"] {
-	padding-left: 10px;
+	padding-left: 28px;
 }
 table#manageSubnets td.level1 {
 	padding-left: 5px;
@@ -1852,7 +1882,7 @@ table#manageSubnets td:nth-child(5),
 table#manageSubnets td:nth-child(6),
 table#manageSubnets th:nth-child(5),
 table#manageSubnets th:nth-child(6) {
-	text-align: center;
+	text-align: left;
 	padding: auto 0px;
 }
 table#manageSubnets td:nth-child(1),
@@ -1964,7 +1994,7 @@ td.groups input[type=checkbox] {
 .tooltip {
 	white-space: nowrap;
 	text-shadow: none;
-	font-size: 11px;
+	font-size: 12px;
 
 	position: fixed;
 }
@@ -2634,7 +2664,7 @@ table.popover_table td {
 }
 
 .btn-group.nowrap {
-    white-space: nowrap; // prevent buttons from wrapping when in tight spaces (e.g., the table on the tests page)
+    white-space: nowrap;
     > .btn {
         float: inherit;
     }
@@ -2652,4 +2682,30 @@ table.popover_table td {
 
 table.sorted-new th {
 	background: white !important;
+}
+
+/* bootstrap-table UI fixes */
+div.fixed-table-container {
+	border-width: 0px !important;
+}
+.fixed-table-container thead th .th-inner {
+	color: #428bca;
+}
+.fixed-table-container #manageSubnets thead th .th-inner {
+	padding: 0px 3px;
+	color: #428bca;
+}
+.fixed-table-container thead th  {
+	padding: 0px;
+	background: white;
+	border-top: 1px solid #ddd !important;
+}
+.card-views span.structure {
+	display: none;
+}
+.card-views  i[class*="fa-pad-"] {
+	display: none;
+}
+.pagination-detail {
+	color: #999;
 }

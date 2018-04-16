@@ -531,7 +531,14 @@ class Common_functions  {
 	public function strip_input_tags ($input) {
 		if(is_array($input)) {
 			foreach($input as $k=>$v) {
-    			$input[$k] = strip_tags($v);
+				if(is_array($v)) {
+					foreach ($v as $k1=>$v1) {
+		    			$input[$k][$k1] = strip_tags($v1);
+					}
+				}
+				else {
+	    			$input[$k] = strip_tags($v);
+				}
             }
 		}
 		else {
@@ -817,27 +824,27 @@ class Common_functions  {
 	public function createURL () {
 		// SSL on standard port
 		if(($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
-			$url = "https://$_SERVER[HTTP_HOST]";
+			$url = "https://".$_SERVER['HTTP_HOST'];
 		}
 		// reverse proxy doing SSL offloading
-        elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-            if (isset($_SERVER[HTTP_X_FORWARDED_HOST])) {
-                $url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]";
-            }
-            else {
-                $url = "https://$_SERVER[HTTP_HOST]";
-            }
-        }
+		elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+			if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+				$url = "https://".$_SERVER['HTTP_X_FORWARDED_HOST'];
+			}
+			else {
+				$url = "https://".$_SERVER['HTTP_HOST'];
+			}
+		}
 		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
-			$url = "https://$_SERVER[SERVER_NAME]";
+			$url = "https://".$_SERVER['SERVER_NAME'];
 		}
 		// custom port
 		elseif($_SERVER['SERVER_PORT']!="80" && (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT']!="80")) {
-			$url = "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
+			$url = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
 		}
 		// normal http
 		else {
-			$url = "http://$_SERVER[HTTP_HOST]";
+			$url = "http://".$_SERVER['HTTP_HOST'];
 		}
 
 		//result
@@ -1266,8 +1273,8 @@ class Common_functions  {
    		$html = array ();
     	// just for first
     	if($timepicker_index==0) {
-    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
-    		$html[] =  '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
+    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
+    		$html[] =  '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
     		$html[] =  '<script type="text/javascript">';
     		$html[] =  '$(document).ready(function() {';
     		//date only

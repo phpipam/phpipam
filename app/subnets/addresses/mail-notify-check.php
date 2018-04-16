@@ -13,7 +13,7 @@ $Result		= new Result;
 $User		= new User ($Database);
 $Tools		= new Tools ($Database);
 
-$User->csrf_cookie ("validate", "mail_notify", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "mail_notify", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify that user is logged in
 $User->check_user_session();

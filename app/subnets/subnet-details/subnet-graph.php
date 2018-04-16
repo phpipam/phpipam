@@ -4,9 +4,11 @@
  * Script to print pie graph for subnet usage
  ********************************************/
 
-
 # get usage
 $details = $Subnets->calculate_subnet_usage ($subnet, true);
+
+# set free color
+$unused_color = $User->user->ui_theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
 ?>
 
 
@@ -15,9 +17,9 @@ $details = $Subnets->calculate_subnet_usage ($subnet, true);
 <div id="pieChart" style="height:220px;width:100%;"></div>
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/flot/jquery.flot.pie.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.js"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->
 
 
 <script type="text/javascript">
@@ -28,7 +30,7 @@ $(function () {
 		# first free hosts
      	if($details['freehosts_percent']>0)  {
     		$details['freehosts_percent'] = str_replace(",", ".", $details['freehosts_percent']);
-    		print "{ label: '"._('Free')."', data: $details[freehosts_percent], color: '#ffffff' }, ";		# free hosts
+    		print "{ label: '"._('Free')."', data: $details[freehosts_percent], color: '$unused_color' }, ";		# free hosts
     	}
     	# than all other percentages
     	foreach($Subnets->address_types as $t) {

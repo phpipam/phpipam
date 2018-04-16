@@ -500,8 +500,8 @@ class User_controller extends Common_api_functions {
 			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
 													{ $this->Response->throw_exception(403, "Invalid token"); }
 			// save token
-			$this->User->user = $token;
-			$this->token = $token->token;
+			$this->User->user    = $token;
+			$this->token         = $token->token;
 			$this->token_expires = $token->token_valid_until;
 
 			// expired
@@ -525,8 +525,8 @@ class User_controller extends Common_api_functions {
 			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
 													{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
 			// save token
-			$this->User->user = $token;
-			$this->token = $token->token;
+			$this->User->user    = $token;
+			$this->token         = $token->token;
 			$this->token_expires = $token->token_valid_until;
 
 			// expired
@@ -604,18 +604,9 @@ class User_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function generate_token () {
-	    $chars 		  = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$%!=.';
-	    $chars_length = strlen($chars);
-	    // generate string
-	    $token = '';
-	    for ($i = 0; $i < $this->token_length; $i++) {
-	        $token .= $chars[rand(0, $chars_length - 1)];
-	    }
-	    // save token and valid time
-	    $this->token = $token;
-	    $this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
+		// save token and valid time
+		$this->token = $this->User->Crypto->generate_api_token($this->token_length);
+		$this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
 	}
 
 }
-
-?>

@@ -475,7 +475,7 @@ class Logging extends Common_functions {
 
 		# open syslog and write log
 		openlog('phpipam', LOG_NDELAY | LOG_PID, $this->syslog_facility);
-		syslog($this->syslog_priority, "$_SERVER[REMOTE_ADDR] | ".$username.$this->log_command." | ".$this->log_details);
+		syslog($this->syslog_priority, $_SERVER['REMOTE_ADDR']." | ".$username.$this->log_command." | ".$this->log_details);
 
 		# close
 		closelog();
@@ -801,11 +801,12 @@ class Logging extends Common_functions {
 				$log = $this->changelog_format_permission_change ();
 			}
 
-			# reformat null values
-			$log = str_replace(": <br>", ": / <br>", $log);
-
-			//if change happened write it!
-			if(isset($log) && sizeof($log)>0) {
+			# if change happened write it!
+			if(sizeof($log)>0) {
+				// reformat null
+				foreach ($log as $k=>$v) {
+					$log[$k] = str_replace(": <br>", ": / <br>", $v);
+				}
 				// execute
 				if ($this->log_type == "syslog")	{ $this->syslog_write_changelog ($log); }
 				elseif ($this->log_type == "both")	{ $this->changelog_write_to_db ($log); $this->syslog_write_changelog ($log); }
@@ -977,7 +978,7 @@ class Logging extends Common_functions {
 	 * Calculate possible chages on edit
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	private function changelog_calculate_edit_diff () {
 		//old object - checkboxes that are not present, set them as 0

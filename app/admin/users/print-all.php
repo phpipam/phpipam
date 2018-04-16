@@ -22,10 +22,11 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 <hr><br>
 
 <!-- Add new -->
-<button class='btn btn-sm btn-default editUser' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create user'); ?></button>
+<button class='btn btn-sm btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create user'); ?></button>
+
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top">
+<table id="userPrint1" class="table sorted table-striped table-top" data-cookie-id-table="admin_users">
 
 <!-- Headers -->
 <thead>
@@ -62,8 +63,8 @@ foreach ($users as $user) {
 	print '<tr>' . "\n";
 
 	# set icon based on normal user or admin
-	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/'.SCRIPT_PREFIX.'/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
-	else 									{ print '	<td><img src="css/'.SCRIPT_PREFIX.'/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
+	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
+	else 									{ print '	<td><img src="css/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
 
 	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a></td>'. "\n";
 	print '	<td>' . $user['username']  . '</td>'. "\n";
@@ -175,11 +176,11 @@ foreach ($users as $user) {
 	print "	<td class='actions'>";
 	print "	<div class='btn-group nowrap'>";
 	print "		<a class='btn btn-xs btn-default' href='".create_link("administration","users",$user['id'])."'><i class='fa fa-eye'></i></a></button>";
-	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='edit'  ><i class='fa fa-pencil'></i></button>";
+	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'><i class='fa fa-pencil'></i></a>";
 	print "		<a class='btn btn-xs btn-default";
-	if($_SESSION['realipamusername']) { print " disabled";}
+	if(isset($_SESSION['realipamusername'])) { print " disabled";}
 	print "' href='".create_link("administration","users","switch","$user[username]")."'><i class='fa fa-exchange'></i></a></button>";
-	print "		<button class='btn btn-xs btn-default editUser' data-userid='$user[id]' data-action='delete'><i class='fa fa-times'></i></button>";
+	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'><i class='fa fa-times'></i></a>";
 	print "	</div>";
 	print "	</td>";
 
