@@ -754,6 +754,9 @@ class Logging extends Common_functions {
 		// make sure we have settings
 		$this->get_settings ();
 
+		# default log
+		$log = array();
+
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
@@ -764,9 +767,6 @@ class Logging extends Common_functions {
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
-
-		    # default log
-		    $log = array();
 
 		    # calculate diff
 		    if($action == "edit") {
@@ -802,7 +802,7 @@ class Logging extends Common_functions {
 			}
 
 			# if change happened write it!
-			if(sizeof($log)>0) {
+			if(is_array($log) && sizeof($log)>0) {
 				// reformat null
 				foreach ($log as $k=>$v) {
 					$log[$k] = str_replace(": <br>", ": / <br>", $v);
