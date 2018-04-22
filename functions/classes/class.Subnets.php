@@ -2852,7 +2852,7 @@ class Subnets extends Common_functions {
 		$out = 0;
 
 		# for each group check permissions, save highest to $out
-		if(sizeof($sectionP) > 0) {
+		if(is_array($sectionP)) {
 			foreach($sectionP as $sk=>$sp) {
 				# check each group if user is in it and if so check for permissions for that group
 				if(is_array($groups)) {

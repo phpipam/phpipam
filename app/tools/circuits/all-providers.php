@@ -31,7 +31,7 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->is_admin(false)) {
+	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
     print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>";
 	}
 print "</div>";
