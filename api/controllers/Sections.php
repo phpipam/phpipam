@@ -146,26 +146,31 @@ class Sections_controller extends Common_api_functions {
             // add gateway
 			if(sizeof($result)>0) {
 				foreach ($result as $k=>$r) {
-					//gw
-    				$gateway = $this->read_subnet_gateway ($r->id);
-            		if ( $gateway!== false) {
-                		$result[$k]->gatewayId = $gateway->id;
-            		}
-
-            		//nameservers
-            		$ns = $this->read_subnet_nameserver ($r->nameserverId);
-                    if ($ns!==false) {
-                            $result[$k]->nameservers = $ns;
+                    if ($result[$k]->isFolder){
+                        unset($result[$k]);
                     }
+                    else {
+                        //gw
+                        $gateway = $this->read_subnet_gateway ($r->id);
+                        if ( $gateway!== false) {
+                            $result[$k]->gatewayId = $gateway->id;
+                        }
 
-                    // get usage
-                    $result[$k]->usage = $this->read_subnet_usage($r->id);
+                        //nameservers
+                        $ns = $this->read_subnet_nameserver ($r->nameserverId);
+                        if ($ns!==false) {
+                                $result[$k]->nameservers = $ns;
+                        }
 
-                    // fetch addresses
-        			if(@$this->_params->id3=="addresses") {
-            			// fetch
-            			$result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
-        			}
+                        // get usage
+                        $result[$k]->usage = $this->read_subnet_usage($r->id);
+
+                        // fetch addresses
+                        if(@$this->_params->id3=="addresses") {
+                            // fetch
+                            $result[$k]->addresses = $this->Addresses->fetch_subnet_addresses ($r->id);
+                        }
+                    }
 				}
 			}
 			// check result
