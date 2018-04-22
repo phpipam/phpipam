@@ -74,7 +74,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "mail");
 				<option value="tls" <?php if($mail_settings->msecure=="tls") print "selected='selected'"; ?>><?php print _('TLS'); ?></option>
 			</select>
 		</td>
-		<td class="info2"><?php print _('Select yes if authentication is required'); ?></td>
+		<td class="info2"><?php print _('Select cryptographic security protocol'); ?></td>
 	</tr>
 
 	<!-- Server auth -->
