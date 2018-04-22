@@ -117,7 +117,7 @@ class User extends Common_functions {
      *
      * @var array
      */
-    public $themes = ["white", "dark"];
+    public $themes = array("white", "dark");
 
     /**
      * (json) parameters for authentication
