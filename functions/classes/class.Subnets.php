@@ -1918,7 +1918,7 @@ class Subnets extends Common_functions {
 	    if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
 	        foreach ($sections_subnets as $existing_subnet) {
 	            //only check if vrfId's match
-	            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+	            if((int) $existing_subnet->vrfId==$vrfId) {
 		            # ignore folders!
 		            if($existing_subnet->isFolder!=1) {
 			            # check overlapping
@@ -1967,7 +1967,7 @@ class Subnets extends Common_functions {
 						if (is_array($folder_subnets)) {
 							foreach ($folder_subnets as $existing_subnet) {
 					            //only check if vrfId's match
-					            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+					            if((int) $existing_subnet->vrfId==$vrfId) {
 						            // ignore folders!
 						            if($existing_subnet->isFolder!=1) {
 							            # check overlapping
@@ -2044,7 +2044,7 @@ class Subnets extends Common_functions {
 		        //ignore same and slaves
 		        if($existing_subnet->id!=$old_subnet_id && !in_array($existing_subnet->id, $this->slaves)) {
 		            //only check if vrfId's match
-		            if($existing_subnet->vrfId==$vrfId || $existing_subnet->vrfId==null) {
+		            if((int) $existing_subnet->vrfId==$vrfId) {
 			            # ignore folders!
 			            if($existing_subnet->isFolder!=1) {
 				            # check overlapping
