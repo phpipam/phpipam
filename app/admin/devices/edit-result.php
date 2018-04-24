@@ -39,7 +39,7 @@ foreach($device as $key=>$line) {
 	}
 }
 # glue sections together
-$device['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
+$device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 
 # Hostname must be present
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }

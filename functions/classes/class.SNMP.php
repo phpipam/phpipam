@@ -363,9 +363,9 @@ class phpipamSNMP extends Common_functions {
         # only for v3
         if($device->snmp_version == "3") {
             $this->snmpv3_security                  = new StdClass();
-            $this->snmpv3_security->sec_level       = $device->snmp_v3_seclevel;
+            $this->snmpv3_security->sec_level       = $device->snmp_v3_sec_level;
             $this->snmpv3_security->auth_proto      = $device->snmp_v3_auth_protocol;
-            $this->snmpv3_security->auth_pass       = $device->snmp_v3_auth_passphrase;
+            $this->snmpv3_security->auth_pass       = $device->snmp_v3_auth_pass;
             $this->snmpv3_security->priv_proto      = $device->snmp_v3_priv_protocol;
             $this->snmpv3_security->priv_pass       = $device->snmp_v3_priv_pass;
             $this->snmpv3_security->contextName     = $device->snmp_v3_ctx_name;

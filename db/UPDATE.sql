@@ -916,3 +916,6 @@ INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whr
 /* add theme */
 ALTER TABLE `settings` ADD `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark';
 ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';
+
+/* Allow SNMPv3 to be selected for devices */
+ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') DEFAULT '0';
