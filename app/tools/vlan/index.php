@@ -10,6 +10,17 @@ $User->check_user_session();
 # fetch all l2 domains
 $vlan_domains = $Tools->fetch_all_objects("vlanDomains", "id");
 
+# get custom fields
+$custom_fields = (array) $Tools->fetch_custom_fields('vlanDomains');
+
+# set hidden fields
+$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = is_array(@$hidden_fields['vlanDomains']) ? $hidden_fields['vlanDomains'] : array();
+
+# size of custom fields
+$csize = sizeof($custom_fields) - sizeof($hidden_fields);
+if($_GET['page']=="administration") { $csize++; }
+
 # set default domain
 if(sizeof($vlan_domains)==1) { $_GET['subnetId'] = 1; }
 

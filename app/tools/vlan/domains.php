@@ -22,6 +22,14 @@
 	<th><?php print _('Name'); ?></th>
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Sections'); ?></th>
+	<?php if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print " <th>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			}
+		}
+	}
+	?>
 	<th></th>
 	<?php if($_GET['page']=="administration") { ?><th></th><?php } ?>
 </tr>
@@ -33,6 +41,14 @@
 	<td class='border-bottom'><strong><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>"> <?php print _('All domains'); ?></a></strong></td>
 	<td class='border-bottom'><?php print _('List of all VLANs in all domains'); ?></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
+	<?php if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "<td class='border-bottom'></td>";
+			}
+		}
+	}
+	?>
 	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
 	<?php if($_GET['page']=="administration") { ?><td class='border-bottom'></td><?php } ?>
 </tr>
@@ -65,6 +81,16 @@ foreach($vlan_domains as $domain) {
 	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'><i class='fa fa-cloud prefix'></i> $domain->name</a></strong></td>";
 	print "	<td>$domain->description</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
+	if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "<td>";
+				$Tools->print_custom_field ($field['type'], $domain->$field['name']);
+				print "</td>";
+			}
+		}
+	}
+
 	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
 	//manage
 	if($_GET['page']=="administration") {
