@@ -28,6 +28,9 @@ $_POST = $User->strip_input_tags ($_POST);
 $l2_domain = $Admin->fetch_object ("vlanDomains", "id", @$_POST['id']);
 $l2_domain = $l2_domain!==false ? (array) $l2_domain : array();
 
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('vlanDomains');
+
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
@@ -89,6 +92,33 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+	<!-- Custom -->
+	<?php
+	if(sizeof($custom) > 0) {
+		
+		print '<tr>';
+		print ' <td colspan="2"><hr></td>';
+		print '</tr>';
+
+                # count datepickers
+                $timepicker_index = 0;
+		
+		# all my fields
+		foreach($custom as $field) {
+                // create input > result is array (required, input(html), timepicker_index)
+		$custom_input = $Tools->create_custom_field_input ($field, $l2_domain, $_POST['action'], $timepicker_index);
+		// add datepicker index
+                $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+		//print
+		print "<tr>";
+		print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+		print " <td>".$custom_input['field']."</td>";
+		print "</tr>";
+
+		}
+	}
+	?>
+	
 	</table>
 	</form>
 
