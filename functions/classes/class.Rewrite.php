@@ -263,6 +263,8 @@ class Rewrite {
 				}
 			}
 		}
+		// apppend QSA
+		$this->append_qsa();
 	}
 
 	/**
