@@ -95,7 +95,7 @@ $('#switchSNMPManagementEdit').change(function() {
     <tbody id="details" style="<?php print $display; ?>">
 	<!-- version -->
 	<tr>
-		<td><?php print _('Community'); ?></td>
+		<td><?php print _('Community/User'); ?></td>
 		<td>
     		<input name="snmp_community" class="form-control" placeholder="SNMP <?php print _('Community'); ?>" value='<?php print $device->snmp_community; ?>'>
 		</td>
