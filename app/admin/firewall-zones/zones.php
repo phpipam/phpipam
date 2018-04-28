@@ -39,7 +39,7 @@ if($firewallZones) {
 	# display all firewall zones and network information
 	foreach ($firewallZones as $zoneObject ) {
 		# set rowspan in case if there are more than one networks bound to the zone
-		$counter = count($zoneObject->network);
+		$counter = property_exists($zoneObject,'network') ? count($zoneObject->network) : 1;
 		if ($counter === 0) {
 			$counter = 1;
 		}
