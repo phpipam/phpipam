@@ -2838,12 +2838,12 @@ class Subnets extends Common_functions {
 			return $cached_item->result;
 		}
 
-		$subnetP = json_decode(@$subnet->permissions);
+		$subnetP = json_decode(@$subnet->permissions, true);
 
 		# set section permissions
 		$Section = new Sections ($this->Database);
 		$section = $Section->fetch_section ("id", $subnet->sectionId);
-		$sectionP = json_decode($section->permissions);
+		$sectionP = json_decode($section->permissions, true);
 
 		# get all user groups
 		$groups = json_decode($user->groups, true);
@@ -2869,7 +2869,7 @@ class Subnets extends Common_functions {
 		if($out != 0) {
 			$out = 0;
 			# ok, user has section access, check also for any higher access from subnet
-			if(sizeof($subnetP) > 0) {
+			if(is_array($subnetP)) {
 				foreach($subnetP as $sk=>$sp) {
 					# check each group if user is in it and if so check for permissions for that group
 					foreach($groups as $uk=>$up) {

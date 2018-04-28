@@ -473,23 +473,23 @@ class Sections extends Common_functions {
 	 */
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
-		$groups = json_decode($user->groups);
+		$groups = json_decode($user->groups, true);
 
 		# admins always has permission rwa
 		if($user->role == "Administrator")		{ return 3; }
 		else {
 			# fetch section details and check permissions
 			$section  = $this->fetch_section ("id", $sectionid);
-			$sectionP = json_decode($section->permissions);
+			$sectionP = json_decode($section->permissions, true);
 
 			# default permission is no access
 			$out = 0;
 
 			# for each group check permissions, save highest to $out
-			if(sizeof($sectionP)>0) {
+			if(is_array($sectionP)) {
 				foreach($sectionP as $sk=>$sp) {
 					# check each group if user is in it and if so check for permissions for that group
-					if(sizeof($groups)>0) {
+					if(is_array($groups)) {
 						foreach($groups as $uk=>$up) {
 							if($uk == $sk) {
 								if($sp > $out) { $out = $sp; }
