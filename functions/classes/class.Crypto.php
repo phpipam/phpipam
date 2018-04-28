@@ -17,7 +17,7 @@ class Crypto {
      * Change to MCRYPT_RIJNDAEL_128 to use AES-256 compliant RIJNDAEL algorithm (rijndael-128)
      * @var mixed
      */
-    private $legacy_mcrypt_aes_mode = 'MCRYPT_RIJNDAEL_256';
+    private $legacy_mcrypt_aes_mode = "rijndael-256"; // Use string value as MCRYPT_RIJNDAEL_256 constant may not be defined.
 
     /**
      * Result
@@ -140,7 +140,8 @@ class Crypto {
      * @return string|false
      */
     private function encrypt_using_legacy_mcrypt($rawdata, $password) {
-        return base64_encode(mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
+        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
+        return base64_encode(@mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
     }
 
     /**
@@ -150,7 +151,8 @@ class Crypto {
      * @return string|false
      */
     private function decrypt_using_legacy_mcrypt($base64data, $password) {
-        return trim(mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
+        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
+        return trim(@mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
     }
 
     /**** Security Tokens ****/

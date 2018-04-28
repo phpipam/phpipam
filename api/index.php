@@ -86,7 +86,7 @@ try {
 		else {
 			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code);
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
-			$encrypted_params = json_decode($encrypted_params);
+			$encrypted_params = json_decode($encrypted_params, true);
 			$encrypted_params['app_id'] = $_GET['app_id'];
 			$params = (object) $encrypted_params;
 		}
