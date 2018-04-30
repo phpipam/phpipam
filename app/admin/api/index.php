@@ -101,7 +101,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 
 	<?php
 	# print error if extensions are not available on server!
-	$requiredExt  = array("mcrypt", "curl");
+	$requiredExt  = array("curl", "openssl");
 	$availableExt = get_loaded_extensions();
 	# check for missing ext
 	$missingExt = array();
