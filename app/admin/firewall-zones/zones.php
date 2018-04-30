@@ -59,12 +59,12 @@ if($firewallZones) {
 				# display subnet informations
 				if ($network->subnetId) {
 					// description fix
-					$network->subnetDescription = strlen($network->subnetDescription)>0 ? " (".$network->subnetDescription.")" : "";
+					$subnetDescription = !empty($network->subnetDescription) ? " (".$network->subnetDescription.")" : "";
 
 					if (!$network->subnetIsFolder) {
-						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</a></td>';
+						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$subnetDescription.'</a></td>';
 					} else {
-						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$network->subnetDescription.'</a></td>';
+						print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$subnetDescription.'</a></td>';
 					}
 				} else {
 					print '<td>/</td>';
