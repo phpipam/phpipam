@@ -53,7 +53,7 @@ foreach ($Tools->phpipam_releases as $r) {
 	print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime($r->updated))."</span> ";
 	print "<div style='padding-top:10px;'>$r->content</div>";
 	// tag
-	print "<a class='btn btn-xs btn-default' href='http://github.com".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
+	print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
 	print "</div>";
 }
 print "</div>";
