@@ -94,8 +94,8 @@ if($firewallZoneMapping) {
 					}
 					# display vlan informations
 					if ($network->vlanId) {
-						$network->vlanName = strlen($network->vlanName)>0 ? " (".$network->vlanName.")" : "";
-						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.$network->vlanName.'</a></td>';
+						$vlanName = !empty($network->vlanName) ? " (".$network->vlanName.")" : "";
+						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.$vlanName.'</a></td>';
 					} else {
 						print '<td>/</td>';
 					}
