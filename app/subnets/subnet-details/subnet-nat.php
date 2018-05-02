@@ -14,7 +14,7 @@ print "<tr>";
 print " <td colspan='4'>";
 print "     <div class='btn-group noborder' role='group' style='margin-bottom:10px;'>";
 print "         <a href='' class='btn btn-sm btn-default editNat' data-action='add' data-id=''><i class='fa fa-plus'></i> Add new nat</a>";
-if(sizeof($all_nats)>0) {
+if(!empty($all_nats)) {
 print "         <div class='btn-group' role='group'>";
 print "             <button type='button' class='btn btn-sm btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>"._("Map to existing NAT")." <span class='caret'></span></button>";
 print "             <ul class='dropdown-menu' style='z-index:50'>";
