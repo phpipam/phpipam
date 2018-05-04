@@ -2858,8 +2858,11 @@ class Tools extends Common_functions {
 
 
 
+  //** Cross connect panels **//
 
+	public function fetch_all_ccpanels(){
 
+	}
 
 
 
@@ -2901,6 +2904,22 @@ class Tools extends Common_functions {
 		// return
 		return sizeof($circuits)>0 ? $circuits : false;
 	}
+
+
+  /**Fetch all circuit types**/
+	public function fetch_all_circuit_types(){
+		// set query
+		$query[] = "select";
+		$query[] = "id,ctname,ctcolor,ctpattern";
+		$query[] = "from circuitTypes";
+		try { $types = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($types)>0 ? $types : false;
+	}
+
 
 	/**
 	 * Fetches all circuits for specific provider
