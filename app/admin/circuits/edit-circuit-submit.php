@@ -42,7 +42,11 @@ if($Tools->fetch_object("circuitProviders","id",$circuit['provider'])===false) {
 # validate type
 $type_desc = $Database->getFieldInfo ("circuits", "type");
 $all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
-if(!in_array($circuit['type'], $all_types))									{ $Result->show("danger", _('Invalid type').'!', true); }
+$all_types = $Tools->fetch_all_circuit_types();
+$type_array = [];
+foreach($all_types as $t){ array_push($type_array, $t->id); }
+
+if(!in_array($circuit['type'], $type_array))									{ $Result->show("danger", _('Invalid type').'!', true); }
 
 # status
 $statuses = array ("Active", "Inactive", "Reserved");

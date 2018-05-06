@@ -61,6 +61,7 @@ if($circuit_providers===false) 	{
 # get types and parse from enum
 $type_desc = $Database->getFieldInfo ("circuits", "type");
 $all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
+$all_types = $Tools->fetch_all_circuit_types();
 
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
@@ -122,7 +123,7 @@ $(document).ready(function(){
 				<?php
 				foreach ($all_types as $type) {
 					$selected = $circuit->type == $type ? "selected" : "";
-					print "<option value='$type' $selected>$type</option>";
+					print "<option value='$type->id' $selected>$type->ctname</option>";
 				}
 				?>
 			</select>
