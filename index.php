@@ -152,7 +152,7 @@ else {
 		<div id="popup" class="popup popup_w500"></div>
 		<div id="popup" class="popup popup_w700"></div>
 		<div id="popup" class="popup popup_wmasks"></div>
-		<div id="popup" class="popup popup_max"></div>
+		<div id="popup" class="popup popup_wmax"></div>
 	</div>
 	<div id="popupOverlay2">
 		<div id="popup" class="popup popup_w400"></div>
