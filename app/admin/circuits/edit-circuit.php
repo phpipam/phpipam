@@ -59,8 +59,8 @@ if($circuit_providers===false) 	{
 }
 
 # get types and parse from enum
-$type_desc = $Database->getFieldInfo ("circuits", "type");
-$all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
+//$type_desc = $Database->getFieldInfo ("circuits", "type");
+//$all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
 $all_types = $Tools->fetch_all_circuit_types();
 
 # set readonly flag

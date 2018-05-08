@@ -25,7 +25,7 @@ foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 $_GET = $User->strip_input_tags ($_GET);
 
 # title
-print "<h4>"._('List of circuits')."</h4>";
+print "<h4>"._('List of physical circuits')."</h4>";
 print "<hr>";
 
 # print link to manage

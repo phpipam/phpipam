@@ -822,6 +822,19 @@ CREATE TABLE `circuits` (
   UNIQUE KEY `cid` (`cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# Dump of table logicalCircuit -- for autofix comment, leave as it is
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `logicalCircuit`;
+
+CREATE TABLE `logicalCircuit` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `logical_cid` varchar(128) NOT NULL,
+  `purpose` varchar(64) DEFAULT NULL,
+  `comments` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4
+
+
 
 
 # Dump of table -- for autofix comment, leave as it is
