@@ -152,6 +152,7 @@ function update_hidden_input(){
  //This is a little nasty, is a result of using jQuery only before using bootstrap tables
  $(document).ready(function(){
 	 addSelectedCircuitsHandlers();
+	 update_hidden_input();
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
  		 $('#all_circuits').bootstrapTable({
  			 pagination:true,
@@ -232,36 +233,38 @@ function update_hidden_input(){
 					if(isset($logical_circuit)){
 						$member_circuits = $Tools->fetch_all_logical_circuit_members($logical_circuit->id);
 						// reformat locations
-						foreach($member_circuits as $circuit){
-							$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
-							$locationA_html = "<span class='text-muted'>Not set</span>";
-							if($locationA!==false) {
-								$locationA_html = "<a href='".create_link('tools',$locationA['type'],$locationA['id'])."' target='_blank'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
-							}
+						if($member_circuits != false){
+							foreach($member_circuits as $circuit){
+								$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
+								$locationA_html = "<span class='text-muted'>Not set</span>";
+								if($locationA!==false) {
+									$locationA_html = "<a href='".create_link('tools',$locationA['type'],$locationA['id'])."' target='_blank'>$locationA[name]</a> <i class='fa fa-gray $locationA[icon]'></i>";
+								}
 
-							$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
-							$locationB_html = "<span class='text-muted'>Not set</span>";
-							if($locationB!==false) {
-								$locationB_html = "<a href='".create_link('tools',$locationB['type'],$locationB['id'])."' target='_blank'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
-							}
+								$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
+								$locationB_html = "<span class='text-muted'>Not set</span>";
+								if($locationB!==false) {
+									$locationB_html = "<a href='".create_link('tools',$locationB['type'],$locationB['id'])."' target='_blank'>$locationB[name]</a> <i class='fa fa-gray $locationB[icon]'></i>";
+								}
 
-							print '<tr>'. "\n";
-							print "	<td><a class='btn btn-xs btn-default' href='".create_link('tools',"circuits",$circuit->id)."' target='_blank'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
-							print "	<td>".$type_hash[$circuit->type]."</td>";
-							print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
-							print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
-							if($_POST['action'] != "delete"){
-							  print "<td><input class='id' type='hidden' value='$circuit->id'></td>
-														 <td>
-															 <a name='mvdnbtn' class='btn btn-xs btn-default'><i class='fa fa-angle-down'></i></a>
-															 <a name='mvupbtn' class='btn btn-xs btn-default'><i class='fa fa-angle-up'></i></a>
-														 </td>
-														 <td>
-															 <a name='rembtn' class='btn btn-xs btn-default'><i class='fa fa-times'></i></a>
-														 </td>";
-							//print "<td><input type='submit' class='btn btn-xs btn-default fa fa-plus'></td>";
-						  }
-							print '</tr>'. "\n";
+								print '<tr>'. "\n";
+								print "	<td><a class='btn btn-xs btn-default' href='".create_link('tools',"circuits",$circuit->id)."' target='_blank'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
+								print "	<td>".$type_hash[$circuit->type]."</td>";
+								print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
+								print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
+								if($_POST['action'] != "delete"){
+								  print "<td><input class='id' type='hidden' value='$circuit->id'></td>
+															 <td>
+																 <a name='mvdnbtn' class='btn btn-xs btn-default'><i class='fa fa-angle-down'></i></a>
+																 <a name='mvupbtn' class='btn btn-xs btn-default'><i class='fa fa-angle-up'></i></a>
+															 </td>
+															 <td>
+																 <a name='rembtn' class='btn btn-xs btn-default'><i class='fa fa-times'></i></a>
+															 </td>";
+								//print "<td><input type='submit' class='btn btn-xs btn-default fa fa-plus'></td>";
+							  }
+								print '</tr>'. "\n";
+							}
 						}
 					}
 				?>
@@ -283,7 +286,7 @@ function update_hidden_input(){
 	<tr>
 		<td><?php print _('Circuit ID'); ?></td>
 		<td>
-			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($logic_circuit->cid)) print $Tools->strip_xss($logic_circuit->cid); ?>" <?php print $readonly; ?>>
+			<input type="text" name="logical_cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($logical_circuit->logical_cid)) print $Tools->strip_xss($logical_circuit->logical_cid); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 				print '<input type="hidden" name="id" value="'. $_POST['circuitid'] .'">'. "\n";
@@ -298,7 +301,7 @@ function update_hidden_input(){
 	<tr>
 		<td><?php print _('Purpose'); ?></td>
 		<td>
-			<input type="text" name="purpose" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Purpose'); ?>" value="<?php if(isset($logic_circuit->purpose)) print $Tools->strip_xss($logic_circuit->purpose); ?>" <?php print $readonly; ?>>
+			<input type="text" name="purpose" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Purpose'); ?>" value="<?php if(isset($logical_circuit->purpose)) print $Tools->strip_xss($logical_circuit->purpose); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -307,9 +310,9 @@ function update_hidden_input(){
 		<td colspan="2"><hr></td>
 	</tr>
 	<tr>
-		<td><?php print _('Comment'); ?></td>
+		<td><?php print _('Comments'); ?></td>
 		<td>
-			<textarea name="comment" class="form-control input-sm" <?php print $readonly; ?>><?php if(isset($circuit->comment)) print $circuit->comment; ?></textarea>
+			<textarea name="comments" class="form-control input-sm" <?php print $readonly; ?>><?php if(isset($logical_circuit->comments)) print $logical_circuit->comments; ?></textarea>
 		</td>
 	</tr>
 
@@ -351,7 +354,7 @@ function update_hidden_input(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-circuit-submit.php" data-result_div="circuitManagementEditResult" data-form='circuitManagementEdit'>
+		<button class="btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" data-script="app/admin/circuits/edit-logical-circuit-submit.php" data-result_div="circuitManagementEditResult" data-form='circuitManagementEdit'>
 			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i>
 			<?php print ucwords(_($_POST['action'])); ?>
 		</button>

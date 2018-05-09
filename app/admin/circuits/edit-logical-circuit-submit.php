@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Edit provider result
+ * Edit logical circuit result
  ***************************/
 
 /* functions */
@@ -22,76 +22,26 @@ $User->check_maintaneance_mode ();
 # check permissions
 if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit details"), true); }
 
+
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "circuit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "logicalCircuit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 # validate action
 $Admin->validate_action ($_POST['action'], true);
 # get modified details
 $circuit = $Admin->strip_input_tags($_POST);
 
 # IDs must be numeric
-if($circuit['action']!="add" && !is_numeric($circuit['id']))					{ $Result->show("danger", _("Invalid ID"), true); }
-if(!is_numeric($circuit['provider']))											{ $Result->show("danger", _("Invalid ID"), true); }
+if($circuit['action']!="add" && !is_numeric($circuit['id'])) { $Result->show("danger", _("Invalid ID"), true); }
 
-# Hostname must be present
-if($circuit['cid'] == "") 													{ $Result->show("danger", _('Circuit ID is mandatory').'!', true); }
+# Logical circuit ID must be present
+if($circuit['logical_cid'] == "") 	{ $Result->show("danger", _('Logical Circuit ID is mandatory').'!', true); }
 
-# validate provider
-if($Tools->fetch_object("circuitProviders","id",$circuit['provider'])===false) { $Result->show("danger", _('Invalid provider').'!', true); }
-
-# validate type
-$type_desc = $Database->getFieldInfo ("circuits", "type");
-$all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
-$all_types = $Tools->fetch_all_circuit_types();
-$type_array = [];
-foreach($all_types as $t){ array_push($type_array, $t->id); }
-
-if(!in_array($circuit['type'], $type_array))									{ $Result->show("danger", _('Invalid type').'!', true); }
-
-# status
-$statuses = array ("Active", "Inactive", "Reserved");
-if(!in_array($circuit['status'], $statuses))									{ $Result->show("danger", _('Invalid status').'!', true); }
-
-# process device / location
-if($circuit['device1']=="0") {
-	$circuit['device1']   = 0;
-	$circuit['location1'] = 0;
-}
-elseif(strpos($circuit['device1'],"device_")!==false) {
-	$deviceId = str_replace("device_", "", $circuit['device1']);
-	if($Tools->fetch_object("devices","id",$deviceId)===false) 			    { $Result->show("danger", _('Invalid device A').'!', true); }
-	// save
-	$circuit['device1']   = $deviceId;
-	$circuit['location1'] = 0;
-}
-else {
-	$locationId = str_replace("location_", "", $circuit['device1']);
-	if($Tools->fetch_object("locations","id",$locationId)===false) 			 { $Result->show("danger", _('Invalid location A').'!', true); }
-	// save
-	$circuit['device1']   = 0;
-	$circuit['location1'] = $locationId;
-}
-
-if($circuit['device2']=="0") {
-	$circuit['device2']   = 0;
-	$circuit['location2'] = 0;
-}
-elseif(strpos($circuit['device2'],"device_")!==false) {
-	$deviceId = str_replace("device_", "", $circuit['device2']);
-	if($Tools->fetch_object("devices","id",$deviceId)===false) 			     { $Result->show("danger", _('Invalid device B').'!', true); }
-	// save
-	$circuit['device2']   = $deviceId;
-	$circuit['location2'] = 0;
-}
-else {
-	$locationId = str_replace("location_", "", $circuit['device2']);
-	if($Tools->fetch_object("locations","id",$locationId)===false) 			 { $Result->show("danger", _('Invalid location B').'!', true); }
-	// save
-	$circuit['device2']   = 0;
-	$circuit['location2'] = $locationId;
-}
+# Validate to make sure there aren't duplicates of the same circuit in the list of circuit ids
+#todo
 
 
+
+/* Commenting this out for now, Custom fields will come soone enough
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');
 if(sizeof($custom) > 0) {
@@ -114,26 +64,72 @@ if(sizeof($custom) > 0) {
 		$update[$myField['name']] = $circuit[$myField['nameTest']];
 	}
 }
+*/
+
+/*General plan for updating existing logical circuits
+Update entry  instead of new entryin logicCircuits table
+DROP from logicCircuitMapping where logical_cid = ?
+continue on the looping through new list of circuits
+
+/*General plan for NEW logical circuits:
+Create new entry in logicalCircuits table
+Grab dat ID of the created row
+Loop through the list of circuits:
+	Add a row into logicCircuitMapping for each circuitTypes
+	use variable i to insert the order of the the $circuits
+Done  */
 
 # set update values
 $values = array(
 				"id"        => $circuit['id'],
-				"cid"       => $circuit['cid'],
-				"provider"  => $circuit['provider'],
-				"type"      => $circuit['type'],
-				"capacity"  => $circuit['capacity'],
-				"status"    => $circuit['status'],
-				"device1"   => $circuit['device1'],
-				"location1" => $circuit['location1'],
-				"device2"   => $circuit['device2'],
-				"location2" => $circuit['location2'],
-				"comment"   => $circuit['comment']
+				"logical_cid"       => $circuit['logical_cid'],
+				"purpose"  => $circuit['purpose'],
+				"comments"      => $circuit['comments']
 				);
+/*
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
 }
-
+*/
 # update device
-if(!$Admin->object_modify("circuits", $circuit['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Circuit $circuit[action] successfull").'!', false); }
+if(!$Admin->object_modify("logicalCircuit", $circuit['action'], "id", $values))	{}
+
+//If this is a new circuit, locate the ID (last_insert_id() would probably be better suited for this)
+if($circuit['id'] == ""){
+	$query[] = "select";
+	$query[] = "id";
+	$query[] = "from logicalCircuit";
+	if($circuit['id'] == "")
+	$query[] = "where logical_cid = '".$_POST['logical_cid']."';";
+
+	//error_log(implode("\n", $query));
+	try{ $db_circuit = $Database->getObjectsQuery(implode("\n", $query), array()); }
+	catch (Exception $e){
+		$Result->show("danger", $e->getMessage(), true);
+	}
+	//Grab the first row circuit ID
+	$circuit['id'] = $db_circuit[0]->id;
+}
+
+if($circuit['id'] == ""){
+	$Result->show("danger", _('Logical circuit added, but failed to create mapping').'!', true);
+}else{
+	$drop_query = "DELETE FROM `logicalCircuitMapping` where `logicalCircuit_id` = ".$circuit['id'].";";
+	try { $Database->runQuery($drop_query); }
+	catch (Exception $e) {
+		$Result->show("danger", _("Error dropping mapping: ").$e->getMessage());
+	}
+	#Grab list of IDs and create list
+	$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
+	$order = 0;
+	foreach($id_list as $member_id){
+		$insert_query = "INSERT INTO logicalCircuitMapping (`logicalCircuit_id`,`circuit_id`,`order`) VALUES ('$circuit[id]','$member_id','$order')";
+		try { $Database->runQuery($insert_query); }
+		catch (Exception $e) {
+			$Result->show("danger", _("Error inserting mapping: ").$e->getMessage());
+		}
+		$order++;
+	}
+	$Result->show("success", _("Logical Circuit $circuit[action] successfull").'!', false);
+}

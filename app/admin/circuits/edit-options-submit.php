@@ -66,7 +66,7 @@ if ($_POST['action']=="delete") {
   # execute
   try { $Database->runQuery($query, array($_POST['option'])); }
   catch (Exception $e) {
-	  $Result->show("danger", _("Error: ").$e->getMessage().$query);
+	  $Result->show("danger", _("Error: ").$e->getMessage());
   }
 }
 
@@ -84,7 +84,7 @@ if($_POST['action']=="add"){
 # execute
 try { $Database->runQuery($query); }
 catch (Exception $e) {
-	$Result->show("danger", _("Error: ").$e->getMessage().$query);
+	$Result->show("danger", _("Error: ").$e->getMessage());
 }
 
 # ok

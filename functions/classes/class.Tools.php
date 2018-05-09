@@ -2857,17 +2857,6 @@ class Tools extends Common_functions {
 
 
 
-
-  //** Cross connect panels **//
-
-	public function fetch_all_ccpanels(){
-
-	}
-
-
-
-
-
 	/**
 	 *	@misc methods
 	 *	------------------------------
@@ -2930,6 +2919,7 @@ class Tools extends Common_functions {
 
   public function fetch_all_logical_circuit_members($logical_circuit_id){
 		// set query
+		/*
 		$query[] = "select";
 		$query[] = "circuit_id";
 		//not interested in custom fields here
@@ -2946,12 +2936,18 @@ class Tools extends Common_functions {
 		foreach($mappings as $mapping){
 			array_push($mapping_ids, $mapping->circuit_id);
 		}
-
+		//If there are no circuits, return false
+		if(sizeof($mapping_ids) == 0){
+			return false;
+		}
 		$mapping_string = implode(',',$mapping_ids);
+		*/
 		$query2[] = "SELECT";
-		$query2[] = "*";
-		$query2[] = "from circuits";
-		$query2[] = "WHERE id in ($mapping_string)";
+		$query2[] = "c.*";
+		$query2[] = "FROM `circuits` c";
+		$query2[] = "join `logicalCircuitMapping` mapping on mapping.circuit_id=c.id";
+		$query2[] = "where mapping.logicalCircuit_id = $logical_circuit_id";
+		$query2[] = "order by mapping.`order`;";
 
 		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query2), array()); }
 		catch (Exception $e) {
