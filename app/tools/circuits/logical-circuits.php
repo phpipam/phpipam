@@ -37,7 +37,7 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_circuits">';
+print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_logical_circuits">';
 
 # headers
 print "<thead>";
@@ -68,7 +68,7 @@ else {
 	foreach ($circuits as $circuit) {
 		//print details
 		print '<tr>'. "\n";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
 		print "	<td>".$circuit->purpose."</td>";
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
