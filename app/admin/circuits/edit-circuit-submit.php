@@ -118,9 +118,16 @@ if(sizeof($custom) > 0) {
 # set update values
 $values = array(
 				"id"        => $circuit['id'],
-				"logical_cid"       => $circuit['logical_cid'],
-				"purpose"  => $circuit['purpose'],
-				"comments"      => $circuit['comments']
+				"cid"       => $circuit['cid'],
+  			"provider"  => $circuit['provider'],
+  			"type"      => $circuit['type'],
+  			"capacity"  => $circuit['capacity'],
+  			"status"    => $circuit['status'],
+  			"device1"   => $circuit['device1'],
+  			"location1" => $circuit['location1'],
+  			"device2"   => $circuit['device2'],
+  			"location2" => $circuit['location2'],
+  			"comment"   => $circuit['comment']
 				);
 # custom fields
 if(isset($update)) {
@@ -128,5 +135,5 @@ if(isset($update)) {
 }
 
 # update device
-if(!$Admin->object_modify("logicalCircuits", $circuit['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Logical circuit $circuit[action] successfull").'!', false); }
+if(!$Admin->object_modify("circuits", $circuit['action'], "id", $values))	{}
+else																	{ $Result->show("success", _("Circuit $circuit[action] successfull").'!', false); }
