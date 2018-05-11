@@ -122,16 +122,18 @@ if($circuit['id'] == ""){
 	catch (Exception $e) {
 		$Result->show("danger", _("Error dropping mapping: ").$e->getMessage());
 	}
-	#Grab list of IDs and create list
-	$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
-	$order = 0;
-	foreach($id_list as $member_id){
-		$insert_query = "INSERT INTO logicalCircuitMapping (`logicalCircuit_id`,`circuit_id`,`order`) VALUES ('$circuit[id]','$member_id','$order')";
-		try { $Database->runQuery($insert_query); }
-		catch (Exception $e) {
-			$Result->show("danger", _("Error inserting mapping: ").$e->getMessage());
+	if($circuit['action'] != 'delete'){
+		#Grab list of IDs and create list
+		$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
+		$order = 0;
+		foreach($id_list as $member_id){
+			$insert_query = "INSERT INTO logicalCircuitMapping (`logicalCircuit_id`,`circuit_id`,`order`) VALUES ('$circuit[id]','$member_id','$order')";
+			try { $Database->runQuery($insert_query); }
+			catch (Exception $e) {
+				$Result->show("danger", _("Error inserting mapping: ").$e->getMessage());
+			}
+			$order++;
 		}
-		$order++;
+		$Result->show("success", _("Logical Circuit $circuit[action] successful").'!', false);
 	}
-	$Result->show("success", _("Logical Circuit $circuit[action] successfull").'!', false);
 }
