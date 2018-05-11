@@ -18,12 +18,23 @@ foreach($circuit_types as $t){
 print implode("\n", $html);
 $locations = $Tools->fetch_all_objects("locations");
 $all_locations = [];
+$device_locations = [];
 foreach($locations as $l){ $all_locations[$l->id] = $l; }
 $location_ids_to_map = array();
+$device_locations = [];
+// Map all the logical circuit locations, and retrieve the location from the device if needed
 if($member_circuits != false){
   foreach($member_circuits as $circuit){
     if(!in_array($circuit->location1, $location_ids_to_map)) { array_push($location_ids_to_map, $circuit->location1); }
     if(!in_array($circuit->location2, $location_ids_to_map)) { array_push($location_ids_to_map, $circuit->location2); }
+    $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
+    $locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
+    if($locationA['location']!="" && $locationB['location']!="") {
+      $locationA['location'] = $Tools->fetch_object ("locations", "id", $locationA['location']);
+      $locationB['location'] = $Tools->fetch_object ("locations", "id", $locationB['location']);
+      if(!in_array($locationA['location']->id, $location_ids_to_map)) { array_push($location_ids_to_map, $locationA['location']->id); }
+      if(!in_array($locationB['location']->id, $location_ids_to_map)) { array_push($location_ids_to_map, $locationB['location']->id); }
+    }
   }
 }
 // check
@@ -92,7 +103,6 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                       // description and apostrophe fix
                       $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
                       $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
-
                       $html[] = "map.addMarker({";
                       $html[] = " title: '". addslashes($location->name). "',";
                       $html[] = " lat: '$location->lat',";
@@ -106,24 +116,35 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                 }
                 print implode("\n", $html);
                 // add lines
-
                 foreach ($member_circuits as $circuit) {
                   //If map_spepcifc is set and its in the array OR it isn't set, map all
-                    $html[] = "path = [[".$all_locations[$circuit->location1]->lat.", ".$all_locations[$circuit->location1]->long."], [".$all_locations[$circuit->location2]->lat.", ".$all_locations[$circuit->location2]->long."]]";
-                    $html[] = "map.drawPolyline({";
-                    $html[] = "  path: path,";
-                    $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
-                    if($type_hash[$circuit->type]->ctpattern == "Dotted") { $html[] = "  strokeOpacity: 0,"; }
-                    else{ $html[] = "  strokeOpacity: 0.6,"; }
-                    if($type_hash[$circuit->type]->ctpattern == "Dotted") {
-                      $html[] = " icons:[{
-                        icon: lineSymbol,
-                        offset: '0',
-                        repeat: '20px'
-                        }],"; }
-                    $html[] = "  strokeWeight: 3";
-                    $html[] = "});";
-                    print implode("\n", $html);
+                    $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
+                    $locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
+                    if($locationA['location']!="" && $locationB['location']!="") {
+                      $valid_circuit = True;
+                      $locationA['location'] = $Tools->fetch_object ("locations", "id", $locationA['location']);
+                      $locationB['location'] = $Tools->fetch_object ("locations", "id", $locationB['location']);
+                    }else{
+                      $valid_circuit = False;
+                    }
+                    if($valid_circuit){
+                      $html[] = "path = [[".$all_locations[$locationA['location']->id]->lat.", ".$all_locations[$locationA['location']->id]->long."], [".$all_locations[$locationB['location']->id]->lat.", ".$all_locations[$locationB['location']->id]->long."]]";
+                      $html[] = "map.drawPolyline({";
+                      $html[] = "  path: path,";
+                      $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
+                      if($type_hash[$circuit->type]->ctpattern == "Dotted") { $html[] = "  strokeOpacity: 0,"; }
+                      else{ $html[] = "  strokeOpacity: 0.6,"; }
+                      if($type_hash[$circuit->type]->ctpattern == "Dotted") {
+                        $html[] = " icons:[{
+                          icon: lineSymbol,
+                          offset: '0',
+                          repeat: '20px'
+                          }],"; }
+                      $html[] = "  strokeWeight: 3";
+                      $html[] = "});";
+                      print implode("\n", $html);
+                    }
+
 
                 }
                 ?>
