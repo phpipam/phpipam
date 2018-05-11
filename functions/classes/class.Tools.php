@@ -2897,7 +2897,7 @@ class Tools extends Common_functions {
 	public function fetch_all_logical_circuits ($custom_circuit_fields = array ()) {
 		// set query
 		$query[] = "select";
-		$query[] = "lc.id, lc.logical_cid, lc.purpose, lc.comments";
+		$query[] = "lc.id, lc.logical_cid, lc.purpose, lc.comments, lc.member_count";
 		// custom fields
 		if(is_array($custom_circuit_fields)) {
 			if(sizeof($custom_circuit_fields)>0) {

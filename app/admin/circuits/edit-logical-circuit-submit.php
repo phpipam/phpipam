@@ -78,13 +78,15 @@ Loop through the list of circuits:
 	Add a row into logicCircuitMapping for each circuitTypes
 	use variable i to insert the order of the the $circuits
 Done  */
-
+#Create list of member circuit IDs for mapping
+$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
 # set update values
 $values = array(
 				"id"        => $circuit['id'],
 				"logical_cid"       => $circuit['logical_cid'],
 				"purpose"  => $circuit['purpose'],
-				"comments"      => $circuit['comments']
+				"comments"      => $circuit['comments'],
+				"member_count" => sizeof($id_list)
 				);
 /*
 # custom fields

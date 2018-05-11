@@ -833,8 +833,10 @@ CREATE TABLE `logicalCircuit` (
   `logical_cid` varchar(128) NOT NULL,
   `purpose` varchar(64) DEFAULT NULL,
   `comments` text,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4
+  `member_count` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `logicalCircuit_UN` (`logical_cid`)
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4
 
 
 # Dump of table logicalCircuitMapping --

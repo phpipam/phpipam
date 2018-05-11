@@ -44,6 +44,7 @@ print "<thead>";
 print '<tr>';
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Id')."'>"._('Circuit ID')."</span></th>";
 print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by purpose')."'>"._('Purpose').'</span></th>';
+print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by count of circuits')."'>"._('Circuit Count').'</span></th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
@@ -70,6 +71,7 @@ else {
 		print '<tr>'. "\n";
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
 		print "	<td>".$circuit->purpose."</td>";
+		print "	<td>".$circuit->member_count."</td>";
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {
