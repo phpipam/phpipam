@@ -70,6 +70,13 @@ $debugging = false;
  ******************************/
 $allow_older_version = false;
 
+/*
+ * API Crypt security provider. "mcrypt" or "openssl"
+ *
+ * default as of 1.3.2 "openssl"
+ ******************************/
+#$api_crypt_encryption_library = "mcrypt";
+
 
 /**
  *  manual set session name for auth
