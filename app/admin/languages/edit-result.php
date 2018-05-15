@@ -6,7 +6,7 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -16,12 +16,14 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "languages", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "languages", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify that description is present if action != delete
 if($_POST['action'] != "delete" && strlen($_POST['l_code']) < 2)		{ $Result->show("danger", _('Code must be at least 2 characters long'), true); }

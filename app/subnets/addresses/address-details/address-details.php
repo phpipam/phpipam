@@ -7,19 +7,23 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# get subnet calculation
+$subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);           //set network boundaries
+$gateway         = $Subnets->find_gateway($subnet['id']);
+$gateway_ip      = $gateway===false ? "" : $Subnets->transform_to_dotted($gateway->ip_addr);
 
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
 
     $address['description'] = str_replace("\n", "<br>", $address['description']);
 
-    print "<table class='table'>";
+    print "<table style='width:100%'>";
     print "<tr>";
 
     # device
     print "<td>";
 
-	print "<table class='ipaddress_subnet table-condensed table-auto'>";
+	print "<table class='ipaddress_subnet table-condensed table-full'>";
 	    print "<tr><td colspan='2'><h4>"._('General')."</h4></tr>";
     	# ip
     	print "<tr>";
@@ -27,11 +31,25 @@ if(sizeof($address)>1) {
     	print "	<td><strong>$address[ip]</strong></td>";
     	print "</tr>";
 
+        # mask
+        print "<tr>";
+        print " <th>"._('Netmask')."</th>";
+        print " <td>$subnet_detailed[netmask] (/$subnet[mask])</td>";
+        print "</tr>";
+
+        # gateway
+        print "<tr>";
+        print " <th>"._('Gateway')."</th>";
+        print " <td>$gateway_ip</td>";
+        print "</tr>";
+
     	# description
     	print "<tr>";
     	print "	<th>"._('Description')."</th>";
     	print "	<td>$address[description]</td>";
     	print "</tr>";
+
+        print "<tr><td></td><td><hr></td></tr>";
 
     	# hierarchy
     	print "<tr>";
@@ -125,6 +143,30 @@ if(sizeof($address)>1) {
     	}
     	print "</tr>";
     	}
+
+
+    	if($User->settings->enableLocations=="1") { ?>
+    	<tr>
+    		<th><?php print _('Location'); ?></th>
+    		<td>
+    		<?php
+
+    		// Only show nameservers if defined for subnet
+    		if(!empty($address['location']) && $address['location']!=0) {
+    			# fetch recursive nameserver details
+    			$location2 = $Tools->fetch_object("locations", "id", $address['location']);
+                if($location2!==false) {
+                    print "<a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'], "address-details", $address['id'], "location")."'>$location2->name</a>";
+                }
+    		}
+
+    		else {
+    			print "<span class='text-muted'>/</span>";
+    		}
+    		?>
+    		</td>
+    	</tr>
+        <?php }
 
     	# port
     	if(in_array('port', $selected_ip_fields)) {
@@ -228,7 +270,7 @@ if(sizeof($address)>1) {
     				}
     			}
     		}
-    		if(sizeof(@$active_shares)>0) {
+    		if(isset($active_shares)) {
     			# divider
                 print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Temporary shares')."</h4></tr>";
 
@@ -244,7 +286,7 @@ if(sizeof($address)>1) {
     			print "<td>";
     			print "</tr>";
     		}
-    		if(sizeof(@$expired_shares)>0) {
+    		if(isset($expired_shares)) {
     			# divider
     			print "<tr>";
     			print "	<th><hr></th>";
@@ -296,7 +338,7 @@ if(sizeof($address)>1) {
     			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
     			//share
     			if($User->settings->tempShare==1) {
-    			print "		<a class='shareTemp btn btn-xs btn-default'  data-container='body' rel='tooltip' title='"._('Temporary share address')."' data-id='$address[id]' data-type='ipaddresses'>		<i class='fa fa-share-alt'></i></a>";
+    			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='".$address['id']."' data-type='ipaddresses' data-container='body' rel='tooltip' title='' data-original-title='"._('Temporary share address')."'><i class='fa fa-share-alt'></i></a>";
     			}
     		}
     	}
@@ -333,7 +375,7 @@ if(sizeof($address)>1) {
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
 
-        print " <td style='width:200px;vertical-align:top !important'>";
+        print " <td style='width:200px;padding-right:20px;vertical-align:top !important;'>";
             # title
         	print "<h4>"._('Rack details')."</h4>";
         	print "<hr>";
@@ -348,4 +390,3 @@ if(sizeof($address)>1) {
 else {
 	$Result->show("danger", _("IP address not existing in database")."!", true);
 }
-?>

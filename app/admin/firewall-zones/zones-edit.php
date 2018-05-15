@@ -6,7 +6,7 @@
  ******************************************/
 
 # functions
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize classes
 $Database = new Database_PDO;
@@ -19,6 +19,8 @@ $Zones    = new FirewallZones($Database);
 # validate session parameters
 $User->check_user_session();
 
+# validate action
+$Admin->validate_action ($_POST['action']);
 
 # validate $_POST['id'] values
 if (!preg_match('/^[0-9]+$/i', $_POST['id'])) 												 { $Result->show("danger", _("Invalid ID. Do not manipulate the POST values!"), true); }

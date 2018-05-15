@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);
@@ -49,19 +49,25 @@ foreach($_POST as $key=>$line) {
 	}
 }
 # glue sections together
-$_POST['snmp_queries'] = sizeof($temp)>0 ? implode(";", $temp) : null;
+$_POST['snmp_queries'] = !empty($temp) ? implode(";", $temp) : null;
 
 # set update values
-$values = array("id"=>$_POST['device_id'],
-				"snmp_version"=>$_POST['snmp_version'],
-				"snmp_community"=>$_POST['snmp_community'],
-				"snmp_port"=>$_POST['snmp_port'],
-				"snmp_timeout"=>$_POST['snmp_timeout'],
-				"snmp_queries"=>$_POST['snmp_queries']
+$values = array(
+				"id"                      => $_POST['device_id'],
+				"snmp_version"            => $_POST['snmp_version'],
+				"snmp_community"          => $_POST['snmp_community'],
+				"snmp_port"               => $_POST['snmp_port'],
+				"snmp_timeout"            => $_POST['snmp_timeout'],
+				"snmp_queries"            => $_POST['snmp_queries'],
+				"snmp_v3_sec_level"       => $_POST['snmp_v3_sec_level'],
+				"snmp_v3_auth_protocol"   => $_POST['snmp_v3_auth_protocol'],
+				"snmp_v3_auth_pass" 	  => $_POST['snmp_v3_auth_pass'],
+				"snmp_v3_priv_protocol"   => $_POST['snmp_v3_priv_protocol'],
+				"snmp_v3_priv_pass"       => $_POST['snmp_v3_priv_pass'],
+				"snmp_v3_ctx_name"        => $_POST['snmp_v3_ctx_name'],
+				"snmp_v3_ctx_engine_id"   => $_POST['snmp_v3_ctx_engine_id']
 				);
 
 # update device
 if(!$Admin->object_modify("devices", "edit", "id", $values))    { $Result->show("danger",  _("SNMP edit failed").'!', false); }
 else														    { $Result->show("success", _("SNMP edit successfull").'!', false); }
-
-?>

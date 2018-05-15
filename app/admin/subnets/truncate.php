@@ -5,7 +5,7 @@
  *********************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "truncate");
+$csrf = $User->Crypto->csrf_cookie ("create", "truncate");
 
 
 # id must be numeric
@@ -31,6 +31,12 @@ $subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);
 if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true, true); }
+
+# on empty subnet it means it came from database validity check, fake id !
+if($subnet===false) {
+    $subnet = new StdClass ();
+    $subnet->id = $_POST['subnetId'];
+}
 
 # set prefix - folder or subnet
 $prefix = $subnet->isFolder=="1" ? "folder" : "subnet";

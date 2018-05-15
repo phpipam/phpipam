@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,7 +18,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "location");
+$csrf = $User->Crypto->csrf_cookie ("create", "location");
+
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 # get Location object
 if($_POST['action']!="add") {
@@ -50,7 +53,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $location->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
@@ -64,7 +67,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Description'); ?></th>
         	<td colspan="2">
-            	<textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $location->description; ?></textarea>
+            	<textarea class="form-control input-sm" name="description" placeholder='<?php print _('Description'); ?>' <?php print $readonly; ?>><?php print $location->description; ?></textarea>
         	</td>
         </tr>
 
@@ -75,7 +78,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Address'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="address" value="<?php print $location->address; ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="address" value="<?php print $Tools->strip_xss($location->address); ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
             	<?php print _('or'); ?>
         	</td>
         	<td>
@@ -86,7 +89,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Latitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $location->lat; ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $Tools->strip_xss($location->lat); ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("latitude"); ?></span>
@@ -96,7 +99,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Longitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="long" value="<?php print $location->lat; ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="long" value="<?php print $Tools->strip_xss($location->long); ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Longitude"); ?></span>
@@ -111,92 +114,22 @@ $custom = $Tools->fetch_custom_fields('locations');
     		print '	<td colspan="2"><hr></td>';
     		print '</tr>';
 
+
     		# count datepickers
-    		$timeP = 0;
+    		$timepicker_index = 0;
 
     		# all my fields
     		foreach($custom as $field) {
-    			# replace spaces with |
-    			$field['nameNew'] = str_replace(" ", "___", $field['name']);
-
-    			# required
-    			if($field['Null']=="NO")	{ $required = "*"; }
-    			else						{ $required = ""; }
-
-    			# set default value !
-    			if ($_POST['action']=="add")	{ $location->$field['name'] = $field['Default']; }
-
-    			print '<tr>'. "\n";
-    			print '	<td>'. ucwords($field['name']) .' '.$required.'</td>'. "\n";
-    			print '	<td>'. "\n";
-
-    			//set type
-    			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-    				//parse values
-    				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
-    				//null
-    				if($field['Null']!="NO") { array_unshift($tmp, ""); }
-
-    				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-    				foreach($tmp as $v) {
-    					if($v==$location->$field['name'])	{ print "<option value='$v' selected='selected'>$v</option>"; }
-    					else							{ print "<option value='$v'>$v</option>"; }
-    				}
-    				print "</select>";
-    			}
-    			//date and time picker
-    			elseif($field['type'] == "date" || $field['type'] == "datetime") {
-    				// just for first
-    				if($timeP==0) {
-    					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
-    					print '<script type="text/javascript">';
-    					print '$(document).ready(function() {';
-    					//date only
-    					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
-    					//date + time
-    					print '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
-
-    					print '})';
-    					print '</script>';
-    				}
-    				$timeP++;
-
-    				//set size
-    				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
-    				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
-
-    				//field
-    				if(!isset($location->$field['name']))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-    				else								{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $location->$field['name']. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-    			}
-    			//boolean
-    			elseif($field['type'] == "tinyint(1)") {
-    				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-    				$tmp = array(0=>"No",1=>"Yes");
-    				//null
-    				if($field['Null']!="NO") { $tmp[2] = ""; }
-
-    				foreach($tmp as $k=>$v) {
-    					if(strlen($location->$field['name'])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-    					elseif($k==$location->$field['name'])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-    					else											{ print "<option value='$k'>"._($v)."</option>"; }
-    				}
-    				print "</select>";
-    			}
-    			//text
-    			elseif($field['type'] == "text") {
-    				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $location->$field['name']. '</textarea>'. "\n";
-    			}
-    			//default - input field
-    			else {
-    				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $location->$field['name']. '" size="30" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
-    			}
-
-    			print '	</td>'. "\n";
-    			print '</tr>'. "\n";
+        		// create input > result is array (required, input(html), timepicker_index)
+        		$custom_input = $Tools->create_custom_field_input ($field, $location, $_POST['action'], $timepicker_index);
+        		// add datepicker index
+        		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+                // print
+    			print "<tr>";
+    			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+    			print "	<td>".$custom_input['field']."</td>";
+    			print "</tr>";
     		}
-
     	}
 
     	?>

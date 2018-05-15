@@ -2,7 +2,7 @@
 
 # required functions
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -53,7 +53,8 @@ if ($sections!==false) {
 }
 ?>
 
-<table class="table table-condensed table-hover">
+<div class="container-fluid">
+<table class="table table-condensed table-hover table-noborder">
 
 
 <?php
@@ -68,7 +69,7 @@ else {
 <tr>
 	<td><?php print _('Select subnet'); ?> *</td>
 	<td>
-		<select name="subnetId" id="subnetId" class="form-control" class="input-sm input-w-auto">
+		<select name="subnetId" id="subnetId" class="form-control btn-sm" class="input-sm input-w-auto">
     	<?php
         foreach ($html as $h) {
             print $h;
@@ -81,7 +82,7 @@ else {
 <tr>
 	<td><?php print _('First IP Address available'); ?></td>
 	<td>
-		<input type="text" name="ip_addr" id="ip_addr_widget" class="form-control ip_addr" size="30" placeholder="<?php print _('IP Address'); ?>">
+		<input type="text" name="ip_addr" id="ip_addr_widget" class="form-control btn-sm ip_addr" size="30" placeholder="<?php print _('IP Address'); ?>">
 	</td>
 </tr>
 <tr>
@@ -90,6 +91,8 @@ else {
 	</td>
 </tr>
 </table>
+</div>
+
 <script type="text/javascript">
 	$(document).ready(function() {
     	if ($('#subnetId').children('option').length>0) {

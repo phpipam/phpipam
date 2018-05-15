@@ -7,21 +7,34 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# change parameters - search string provided
-if(isset($_GET['sPage'])) {
-	$_REQUEST['cfilter']  = $_REQUEST['subnetId'];
-	$_REQUEST['climit']  = $_REQUEST['sPage'];
-}
-elseif(isset($_GET['subnetId'])) {
-	$_REQUEST['climit']  = $_REQUEST['subnetId'];
-}
-else {
-	$_REQUEST['climit']  = 50;
+# strip tags - XSS
+$_GET  = $User->strip_input_tags ($_GET);
+
+# validate subnetId parameter - meaning cfilter
+if(isset($_GET['subnetId'])) {
+    // validate $_GET['subnetId']
+    if(!!preg_match('/[^A-Za-z0-9.#*% <>_ \\-$]/', $_GET['subnetId']))  { $Result->show("danger", _("Invalid search string")."!", true); }
 }
 
+# change parameters - search string provided
+$input_cfilter = '';
+if(isset($_GET['sPage'])) {
+    $input_cfilter = escape_input(urldecode($_GET['subnetId']));
+    $input_climit  = (int) $_GET['sPage'];
+}
+elseif(isset($_GET['subnetId'])) {
+    $input_climit  = (int) $_GET['subnetId'];
+}
+else {
+    $input_climit  = 50;
+}
+
+# numeric check
+if(!is_numeric($input_climit) || $input_climit<1)  { $Result->show("danger", _("Invalid limit")."!", true); }
+
 # get clog entries
-if(!isset($_REQUEST['cfilter'])) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $_REQUEST['climit']); }
-else								{ $clogs = $Log->fetch_all_changelogs (true, $_REQUEST['cfilter'], $_REQUEST['climit']); }
+if(empty($input_cfilter)) 	{ $clogs = $Log->fetch_all_changelogs (false, "", $input_climit); }
+else						{ $clogs = $Log->fetch_all_changelogs (true, $input_cfilter, $input_climit); }
 
 # empty
 if(sizeof($clogs)==0) {
@@ -33,10 +46,10 @@ if(sizeof($clogs)==0) {
 # result
 else {
 	# if more that configured print it!
-	if(sizeof($clogs)==$_REQUEST['climit']) { $Result->show("warning alert-absolute", _("Output has been limited to last $_REQUEST[climit] lines")."!", false); }
+	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last $input_climit lines")."!", false); }
 
 	# printout
-	print "<table class='table table-striped table-top table-condensed'>";
+	print "<table class='table sorted table-striped table-top table-condensed' data-cookie-id-table='changelog_all'>";
 
 	# headers
 	print "<thead>";
@@ -121,7 +134,10 @@ else {
 			print "	<td>$l[ctype]</td>";
 
 			# subnet, section or ip address
-			if($l['ctype']=="IP address")	{
+			if(strlen($l['tid'])==0) {
+				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
+			}
+			elseif($l['ctype']=="IP address")	{
 				print "	<td><a href='".create_link("subnets",$l['sectionId'],$l['subnetId'],"address-details",$l['tid'])."'>".$Subnets->transform_address($l['ip_addr'],"dotted")."</a></td>";
 			}
 			elseif($l['ctype']=="Subnet")   {

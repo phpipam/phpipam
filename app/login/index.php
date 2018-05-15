@@ -1,4 +1,5 @@
 <?php
+header('X-XSS-Protection:1; mode=block');
 # verify php build
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
@@ -10,6 +11,10 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
 	else                                        { header("Location: ".create_link("dashboard")); }
 	exit();
+}
+// disable requests module for public
+if(@$config['requests_public']===false) {
+	$User->settings->enableIPrequests = 0;
 }
 ?>
 
@@ -36,22 +41,25 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 	<title><?php print $User->settings->siteTitle; ?> :: login</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php if ($User->settings->theme!="white") { ?>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+	<?php } ?>
+	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/1.2/login.js"></script>
-	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -82,8 +90,10 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     <!-- logo -->
 	<div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
     <?php
-	if(file_exists( "css/1.2/images/logo/logo.png")) {
-    	print "<img style='width:220px;margin:10px;margin-top:20px;' src='css/1.2/images/logo/logo.png'>";
+	if(file_exists( "css/images/logo/logo.png")) {
+		// set width
+		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;
+    	print "<img style='max-width:".$logo_width."px;margin:10px;margin-top:20px;' src='css/images/logo/logo.png'>";
 	}
     ?>
 	</div>
@@ -137,6 +147,13 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
 			# destroy session
 			$User->destroy_session();
 		}
+
+		//check if SAML2 login is possible
+		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
+		if($saml2settings!=false){
+			$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
+		}
+
 		?>
 	</div>
 

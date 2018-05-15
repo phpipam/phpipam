@@ -54,7 +54,7 @@ function print_leases ($s) {
 <br>
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top table-td-top">
+<table id="zonesPrint" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="dhcp_leases">
 
 <!-- Headers -->
 <thead>
@@ -74,7 +74,7 @@ function print_leases ($s) {
 <?php
 // v4
 $html[] = "<tr>";
-$html[] = "<th colspan='8'>"._("IPv4 leases")."</th>";
+$html[] = "<td class='th' colspan='8'>"._("IPv4 leases")."</td>";
 $html[] = "</tr>";
 
 // IPv4 not configured
@@ -98,7 +98,7 @@ else {
 
 // v6
 $html[] = "<tr>";
-$html[] = "<th colspan='8'>"._("IPv6 leases")."</th>";
+$html[] = "<td class='th' colspan='8'>"._("IPv6 leases")."</td>";
 $html[] = "</tr>";
 
 // IPv4 not configured

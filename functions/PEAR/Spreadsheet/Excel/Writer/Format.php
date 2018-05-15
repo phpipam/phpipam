@@ -249,7 +249,7 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
     * @param integer $index the XF index for the format.
     * @param array   $properties array with properties to be set on initialization.
     */
-    function Spreadsheet_Excel_Writer_Format($BIFF_version, $index = 0, $properties =  array())
+    function __construct($BIFF_version, $index = 0, $properties =  array())
     {
         $this->_xf_index       = $index;
         $this->_BIFF_version   = $BIFF_version;
@@ -300,9 +300,13 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         {
             if (method_exists($this, 'set'.ucwords($property))) {
                 $method_name = 'set'.ucwords($property);
-                $this->$method_name($value);
+                $this->{$method_name}($value);
             }
         }
+    }
+
+    public function  Spreadsheet_Excel_Writer_Format($BIFF_version, $index = 0, $properties =  array()) {
+        self::__construct($BIFF_version, $index, $properties);
     }
 
 
@@ -651,9 +655,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-    
+
         $location = strtolower($location);
-    
+
         if ($location == 'left') {
             $this->_text_h_align = 1;
         }
@@ -691,9 +695,9 @@ class Spreadsheet_Excel_Writer_Format extends PEAR
         if (preg_match("/\d/",$location)) {
             return;                      // Ignore numbers
         }
-    
+
         $location = strtolower($location);
- 
+
         if ($location == 'top') {
             $this->_text_v_align = 0;
         }

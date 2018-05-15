@@ -84,7 +84,7 @@ else {
 	/* print subnets menu ---------- */
 	print "<div class='subnets'>";
 	# print links
-	$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section']);
+	$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, array());
 	print $Subnets->print_subnets_menu($User->user, $section_subnets);
 	print "</div>";
 
@@ -97,7 +97,7 @@ else {
 		if($vlans) {
 			print "<div class='subnets'>";
 				# title
-				print "<hr><h4>"._('Available VLANs')."</h4><hr>";
+				print "<hr><h4>"._('Associated VLANs')."</h4><hr>";
 				# create and print menu
 				print $Subnets->print_vlan_menu($User->user, $vlans, $section_subnets, $_GET['section']);
 			print "</div>";
@@ -113,7 +113,7 @@ else {
 		if($vrfs) {
 			print "<div class='subnets'>";
 				# title
-				print "<hr><h4>"._('Available VRFs')."</h4><hr>";
+				print "<hr><h4>"._('Associated VRFs')."</h4><hr>";
 				# create and print menu
 				print $Subnets->print_vrf_menu($User->user, $vrfs, $section_subnets, $_GET['section']);
 			print "</div>";
@@ -139,5 +139,3 @@ if($section_permission == 3) {
 	print "	</span>";
 	print "</div>";
 }
-
-?>

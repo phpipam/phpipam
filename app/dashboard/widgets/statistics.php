@@ -2,7 +2,7 @@
 
 # required functions
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -15,7 +15,8 @@ $User->check_user_session ();
 
 
 <!-- stats table -->
-<table class="table table-condensed table-hover table-noborder">
+<div class="container-fluid" style='padding-top:5px'>
+<table class="table table-condensed table-hover statistics">
 
 	<!-- sections -->
 	<tr>
@@ -52,6 +53,24 @@ $User->check_user_session ();
 		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Tools->count_subnets ("IPv6"); ?></span></td>
 	</tr>
 
+	<!-- Devices -->
+	<tr>
+		<td class="title"><?php print _('Number of Devices'); ?></td>
+		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("devices"); ?></span></td>
+	</tr>
+
+	<!-- Locations -->
+	<tr>
+		<td class="title"><?php print _('Number of Locations'); ?></td>
+		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("locations"); ?></span></td>
+	</tr>
+
+	<!-- Racks -->
+	<tr>
+		<td class="title"><?php print _('Number of Racks'); ?></td>
+		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("racks"); ?></span></td>
+	</tr>
+
 	<!-- All users - only for admin! -->
 	<tr>
 		<td class="title"><?php print _('Number of users'); ?></td>
@@ -59,3 +78,4 @@ $User->check_user_session ();
 	</tr>
 
 </table>
+</div>

@@ -6,8 +6,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# get VLAN details
-$vlan = $Tools->fetch_object("vlans", "vlanId", $_GET['subnetId']);
+# to array
 $vlan = (array) $vlan;
 
 # not existing

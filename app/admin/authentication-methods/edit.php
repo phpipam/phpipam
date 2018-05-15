@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -14,7 +14,7 @@ $Log 		= new Logging ($Database, $User->settings);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "authmethods");
+$csrf = $User->Crypto->csrf_cookie ("create", "authmethods");
 
 # if edit check if protected?
 if($_POST['action']!="add") {
@@ -25,4 +25,3 @@ if($_POST['action']!="add") {
 # route to proper auth method editing
 if(!file_exists(dirname(__FILE__)."/edit-$_POST[type].php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
 else															{ include("edit-$_POST[type].php"); }
-?>

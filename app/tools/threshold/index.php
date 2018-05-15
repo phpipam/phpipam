@@ -61,35 +61,9 @@ else {
         //check if subnet has slaves and set slaves flag true/false
         $slaves = $Subnets->has_slaves ($s->id) ? true : false;
 
-        # fetch all addresses and calculate usage
-        if($slaves) {
-            $addresses = $Addresses->fetch_subnet_addresses_recursive ($s->id, false);
-        	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($s->id);
-        	// save count
-        	$addresses_cnt = gmp_strval(sizeof($addresses));
+        # calculate usage
+        $subnet_usage  = $Subnets->calculate_subnet_usage ($s);
 
-        	# full ?
-        	if (sizeof($slave_subnets)>0) {
-            	foreach ($slave_subnets as $ss) {
-                	if ($ss->isFull==1) {
-                    	# calculate max
-                    	$max_hosts = $Subnets->get_max_hosts ($ss->mask, $Subnets->identify_address($ss->subnet), true);
-                    	# count
-                    	$count_hosts = $Addresses->count_subnet_addresses ($ss->id);
-                    	# add
-                    	$addresses_cnt = gmp_strval(gmp_add($addresses_cnt, gmp_sub($max_hosts, $count_hosts)));
-                	}
-            	}
-        	}
-
-        	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );		//Calculate free/used etc
-        }
-        else {
-            # fetch addresses in subnet
-            $addresses_cnt = $Addresses->count_subnet_addresses ($s->id);
-            # calculate usage
-            $subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );
-        }
 
         # set additional threshold parameters
         $subnet_usage['usedhosts_percent'] = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));

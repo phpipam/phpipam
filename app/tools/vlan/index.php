@@ -23,5 +23,3 @@ elseif(@$_GET['subnetId']=="all") 								{ include("domain-vlans-all.php"); }
 elseif(sizeof($vlan_domains)>1 && !isset($_GET['subnetId'])) 	{ include("domains.php"); }
 # only 1 domain, print vlans
 else 															{ include("domain-vlans.php"); }
-
-?>

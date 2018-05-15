@@ -127,14 +127,14 @@ class L2domains_controller extends Common_api_functions {
 		if(!isset($this->_params->id)) {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
 			// check result
-			if($result===false)						{ $this->Response->throw_exception(404, 'No domains configured'); }
+			if($result===false)						{ $this->Response->throw_exception(200, 'No domains configured'); }
 			else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 		}
 		// set
 		else {
 			// custom fields
 			if($this->_params->id=="custom_fields") {
-				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(404, 'No custom fields defined'); }
+				if(sizeof($this->custom_fields)==0)	{ $this->Response->throw_exception(200, 'No custom fields defined'); }
 				else								{ return array("code"=>200, "data"=>$this->custom_fields); }
 			}
 			// vlans
@@ -144,7 +144,7 @@ class L2domains_controller extends Common_api_functions {
 				// save result
 				$result = $this->Tools->fetch_multiple_objects ("vlans", "domainId", $this->_params->id, 'vlanId', true);
 				// check result
-				if($result==NULL)					{ $this->Response->throw_exception(404, "No vlans belonging to this domain"); }
+				if($result==NULL)					{ $this->Response->throw_exception(200, "No vlans belonging to this domain"); }
 				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
 			// id
@@ -186,6 +186,9 @@ class L2domains_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function POST () {
+		# remap keys
+		$this->remap_keys ();
+
 		# check for valid keys
 		$values = $this->validate_keys ();
 
@@ -197,7 +200,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "data"=>"L2 domain created", "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
+			return array("code"=>201, "message"=>"L2 domain created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/l2domains/".$this->Admin->lastId."/");
 		}
 	}
 
@@ -212,6 +215,9 @@ class L2domains_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function PATCH () {
+		# remap keys
+		$this->remap_keys ();
+
 		# verify
 		$this->validate_domain_edit ();
 		# check that it exists
@@ -225,7 +231,7 @@ class L2domains_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, "Domain edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>"L2 domain updated");
+			return array("code"=>200, "message"=>"L2 domain updated");
 		}
 	}
 
@@ -257,7 +263,7 @@ class L2domains_controller extends Common_api_functions {
 			$this->Admin->update_object_references ("vlans", "domainId", $this->_params->id, 1);
 
 			// set result
-			return array("code"=>200, "data"=>"L2 domain deleted and vlans migrated to default domain");
+			return array("code"=>200, "message"=>"L2 domain deleted and vlans migrated to default domain");
 		}
 	}
 
@@ -284,7 +290,7 @@ class L2domains_controller extends Common_api_functions {
 		if(!is_numeric($this->_params->id))													{ $this->Response->throw_exception(400, "Domain id must be numeric"); }
 		// check that it exists
 		if($this->Tools->fetch_object ("vlanDomains", "id", $this->_params->id) === false )
-																							{ $this->Response->throw_exception(400, "Invalid domain id"); }
+																							{ $this->Response->throw_exception(404, "Invalid domain id"); }
 	}
 
 
@@ -298,9 +304,9 @@ class L2domains_controller extends Common_api_functions {
 		// delete checks
 		if($_SERVER['REQUEST_METHOD']=="DELETE") {
 			// we cannot delete default domain
-			if(@$this->_params->id==1 && $_SERVER['REQUEST_METHOD']=="DELETE")				{ $this->Response->throw_exception(400, "Default domain cannot be deleted"); }
+			if(@$this->_params->id==1 && $_SERVER['REQUEST_METHOD']=="DELETE")				{ $this->Response->throw_exception(409, "Default domain cannot be deleted"); }
 			// ID must be numeric
-			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(400, "Invalid domain id"); }
+			if(!is_numeric($this->_params->id))												{ $this->Response->throw_exception(404, "Invalid domain id"); }
 		}
 		// create checks
 		elseif ($_SERVER['REQUEST_METHOD']=="POST") {

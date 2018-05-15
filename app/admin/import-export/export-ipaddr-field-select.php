@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database	= new Database_PDO;
@@ -92,7 +92,7 @@ print "	</tr>";
 print "	<tr>";
 print "	<td><input type='checkbox' name='section' checked></td>";
 print "	<td><input type='checkbox' name='ip_addr' checked title='"._('Mandatory')."'> </td>";
-print "	<td><input type='checkbox' name='dns_name' checked title='"._('Mandatory')."'></td>";
+print "	<td><input type='checkbox' name='hostname' checked title='"._('Mandatory')."'></td>";
 print "	<td><input type='checkbox' name='description' checked> </td>";
 print "	<td><input type='checkbox' name='vrf' checked></td>";
 print "	<td><input type='checkbox' name='subnet' checked></td>";
@@ -125,10 +125,11 @@ if($all_sections!==false) {
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
+		$section['url_name'] = urlencode($section['name']);
 
 		print '<tr>';
-		print '	<td><div class="checkbox"><label><input type="checkbox" id="exportCheck" name="exportSection__'.str_replace(" ", "_", $section['name']).'" checked>'.str_replace("_", " ", $section['name']).'</label></div></td>';
-		print '	<td>'. $section['description'] .'</td>'. "\n";
+		print '	<td><div class="checkbox"><label><input type="checkbox" id="exportCheck" name="exportSection__'.$section['url_name'].'" checked>'.$section['name'].'</label></div></td>';
+		print '	<td>'. htmlentities($section['description']) .'</td>'. "\n";
 		//master Section
 		if($section['masterSection']!=0) {
 			# get section details

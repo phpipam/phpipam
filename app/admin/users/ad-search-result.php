@@ -5,7 +5,7 @@
  *************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 
 # initialize user object
@@ -16,6 +16,8 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # fetch server
 $server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);

@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -20,7 +20,7 @@ $_POST = $Admin->strip_input_tags($_POST);
 if($Tools->check_prefix_permission ($User->user) <2)   { $Result->show("danger", _('You do not have permission to manage PSTN numbers'), true, true); }
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "pstn_number", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "pstn_number", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # validations
 if($_POST['action']=="delete" || $_POST['action']=="edit") {

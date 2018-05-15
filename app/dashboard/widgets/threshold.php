@@ -7,7 +7,7 @@
 
 # required functions
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -33,7 +33,7 @@ $slimit = 5;			//we dont need this, we will recalculate
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 5;
@@ -93,38 +93,8 @@ else {
 
     // count usage
     foreach ($out as $k=>$s) {
-        //check if subnet has slaves and set slaves flag true/false
-        $slaves = $Subnets->has_slaves ($s->id) ? true : false;
-
-        # fetch all addresses and calculate usage
-        if($slaves) {
-            $addresses = $Addresses->fetch_subnet_addresses_recursive ($s->id, false);
-        	$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($s->id);
-        	// save count
-        	$addresses_cnt = gmp_strval(sizeof($addresses));
-
-        	# full ?
-        	if (sizeof($slave_subnets)>0) {
-            	foreach ($slave_subnets as $ss) {
-                	if ($ss->isFull==1) {
-                    	# calculate max
-                    	$max_hosts = $Subnets->get_max_hosts ($ss->mask, $Subnets->identify_address($ss->subnet), true);
-                    	# count
-                    	$count_hosts = $Addresses->count_subnet_addresses ($ss->id);
-                    	# add
-                    	$addresses_cnt = gmp_strval(gmp_add($addresses_cnt, gmp_sub($max_hosts, $count_hosts)));
-                	}
-            	}
-        	}
-
-        	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );		//Calculate free/used etc
-        }
-        else {
-            # fetch addresses in subnet
-            $addresses_cnt = $Addresses->count_subnet_addresses ($s->id);
-            # calculate usage
-            $subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $s->mask, $s->subnet, $s->isFull );
-        }
+        // calculate usage
+        $subnet_usage  = $Subnets->calculate_subnet_usage ($s, false);		//Calculate free/used etc
 
         # set additional threshold parameters
         $subnet_usage['usedhosts_percent'] = gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
@@ -150,7 +120,7 @@ else {
             # set class
             $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
             # limit description
-            $s->description = strlen($s->description)>10 ? substr($s->description, 0,10)."..." : $s->description;
+            $s->description = $Tools->shorten_text($s->description, 10);
             $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
             # limit class
             $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";

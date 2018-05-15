@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,9 +17,11 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "rack", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "rack", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
 $rack = $Tools->strip_input_tags($_POST);
@@ -35,12 +37,31 @@ if($rack['name'] == "") 											    { $Result->show("danger", _('Name is mand
 if (!is_numeric($rack['size']))                                         { $Result->show("danger", _('Invalid rack size').'!', true); }
 # validate rack
 if ($rack['action']=="edit") {
-    if (!is_numeric($rack['rackid']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
     $rack_details = $Racks->fetch_rack_details ($rack['rackid']);
     if ($rack_details===false)                                          { $Result->show("danger", _('Rack does not exist').'!', true); }
 }
 elseif($rack['action']=="delete") {
-    if (!is_numeric($rack['rackid']))                                       { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+    if (!is_numeric($rack['rackid']))                                   { $Result->show("danger", _('Invalid rack identifier').'!', true); }
+}
+
+# check if rack shrinks that no overflow of devices ocur
+if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_details->size ) {
+	// fetch all devices
+	$rack_devices = $Racks->fetch_rack_devices ($rack_details->id);
+	// split to front / back
+	if (is_array($rack_devices)) {
+		foreach ($rack_devices as $d) {
+			// front devices
+			if($d->rack_start <= $rack_details->size) {
+				if (($d->rack_start + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+			}
+			// back devices
+			else {
+				if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+			}
+		}
+	}
 }
 
 # fetch custom fields
@@ -63,11 +84,13 @@ if(sizeof($custom) > 0) {
 }
 
 # set update values
-$values = array("id"=>@$rack['rackid'],
-				"name"=>@$rack['name'],
-				"size"=>@$rack['size'],
-				"location"=>@$rack['location'],
-				"description"=>@$rack['description']
+$values = array(
+				"id"          => @$rack['rackid'],
+				"name"        => @$rack['name'],
+				"size"        => @$rack['size'],
+				"location"    => @$rack['location'],
+				"hasBack"     => $Admin->verify_checkbox(@$rack['hasBack']),
+				"description" => @$rack['description']
 				);
 # custom fields
 if(isset($update)) {
@@ -80,7 +103,25 @@ else																	{ $Result->show("success", _("Rack $rack[action] successful
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
-	$Admin->remove_object_references ("devices", "rack", $values["id"]);
+	$Admin->remove_object_references ("devices", "rack", $values["id"], NULL);
 }
+# remove all devices if back is removed
+if($_POST['action']=="edit" && @$rack['hasBack']!="1") {
+	try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+	catch (Exception $e) {}
+}
+# update positions of rack devices when rack size changes
+if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$rack['size'] ) {
+	// set values
+	$values = array (
+						"rackid"   => $rack_details->id,
+						"new_size" => $rack['size'],
+						"old_size" => $rack_details->size
+	                 );
+	// set query based on shrink / expand
+	$query = "UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size";
 
-?>
+	// execute
+	try { $Database->runQuery($query, $values); }
+	catch (Exception $e) {}
+}

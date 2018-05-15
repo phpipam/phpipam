@@ -103,7 +103,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
 			if(!in_array($myField['name'], $hidden_cfields)) {
-				print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+				print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
 			}
 		}
 	}
@@ -187,7 +187,7 @@ else {
 		    print "</td>";
 
 		    # resolve dns name
-		    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+		    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->hostname, false, $subnet['nameserverId']);
 																	{ print "<td class='$resolve[class] hostname'>$resolve[name]</td>"; }
 
 			# print description - mandatory
@@ -226,16 +226,16 @@ else {
 
 						//booleans
 						if($myField['type']=="tinyint(1)")	{
-							if($addresses[$n]->$myField['name'] == "0")		{ print _("No"); }
-							elseif($addresses[$n]->$myField['name'] == "1")	{ print _("Yes"); }
+							if($addresses[$n]->{$myField['name']} == "0")		{ print _("No"); }
+							elseif($addresses[$n]->{$myField['name']} == "1")	{ print _("Yes"); }
 						}
 						//text
 						elseif($myField['type']=="text") {
-							if(strlen($addresses[$n]->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
+							if(strlen($addresses[$n]->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $addresses[$n][$myField['name']])."'>"; }
 							else											{ print ""; }
 						}
 						else {
-							print $addresses[$n]->$myField['name'];
+							print $addresses[$n]->{$myField['name']};
 
 						}
 						print "</td>";

@@ -43,31 +43,31 @@ class OLE_PPS extends PEAR
     * @var string
     */
     var $Name;
- 
+
     /**
     * The PPS type. Dir, Root or File
     * @var integer
     */
     var $Type;
- 
+
     /**
     * The index of the previous PPS
     * @var integer
     */
     var $PrevPps;
- 
+
     /**
     * The index of the next PPS
     * @var integer
     */
     var $NextPps;
- 
+
     /**
     * The index of it's first child if this is a Dir or Root PPS
     * @var integer
     */
     var $DirPps;
- 
+
     /**
     * A timestamp
     * @var integer
@@ -112,6 +112,26 @@ class OLE_PPS extends PEAR
 
     /**
     * The constructor
+    *
+    * @access public
+    * @param integer $No   The PPS index
+    * @param string  $name The PPS name
+    * @param integer $type The PPS type. Dir, Root or File
+    * @param integer $prev The index of the previous PPS
+    * @param integer $next The index of the next PPS
+    * @param integer $dir  The index of it's first child if this is a Dir or Root PPS
+    * @param integer $time_1st A timestamp
+    * @param integer $time_2nd A timestamp
+    * @param string  $data  The (usually binary) source data of the PPS
+    * @param array   $children Array containing children PPS for this PPS
+    */
+    function __construct ($No, $name, $type, $prev, $next, $dir, $time_1st, $time_2nd, $data, $children)
+    {
+        $this->OLE_PPS ($No, $name, $type, $prev, $next, $dir, $time_1st, $time_2nd, $data, $children);
+    }
+
+    /**
+    * OLE_PPS
     *
     * @access public
     * @param integer $No   The PPS index
@@ -189,7 +209,7 @@ class OLE_PPS extends PEAR
               . "\x00\x00\x00\x00"                  // 100
               . OLE::LocalDate2OLE($this->Time1st)       // 108
               . OLE::LocalDate2OLE($this->Time2nd)       // 116
-              . pack("V", isset($this->_StartBlock)? 
+              . pack("V", isset($this->_StartBlock)?
                         $this->_StartBlock:0)        // 120
               . pack("V", $this->Size)               // 124
               . pack("V", 0);                        // 128
@@ -202,10 +222,10 @@ class OLE_PPS extends PEAR
     *
     * @access private
     * @param array &$pps_array Reference to the array of PPS's for the whole OLE
-    *                          container 
+    *                          container
     * @return integer          The index for this PPS
     */
-    function _savePpsSetPnt(&$pps_array) 
+    function _savePpsSetPnt(&$pps_array)
     {
         $pps_array[count($pps_array)] = &$this;
         $this->No = count($pps_array) - 1;

@@ -65,7 +65,7 @@ if ($subnets!==false) {
     	# custom fields
     	if(sizeof($custom_fields) > 0) {
     		foreach($custom_fields as $myField) 	{
-    			print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+    			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
     		}
     	}
     	# actions
@@ -99,7 +99,7 @@ if ($subnets!==false) {
         	$addresses = $Addresses->fetch_subnet_addresses ($subnet->id);
         	// save count
         	$addresses_cnt = gmp_strval(sizeof($addresses));
-        	$subnet_usage  = $Subnets->calculate_subnet_usage ($addresses_cnt, $subnet->mask, $subnet->subnet, $subnet->isFull );		//Calculate free/used etc
+        	$subnet_usage  = $Subnets->calculate_subnet_usage ($subnet);		//Calculate free/used etc
 
             // description
             if($subnet->isFolder=="1")
@@ -151,7 +151,7 @@ if ($subnets!==false) {
 				    print "</td>";
 
 				    # resolve dns name
-																	{ print "<td class='hostname'>$address->dns_name</td>"; }
+																	{ print "<td class='hostname'>$address->hostname</td>"; }
 
 					# print description - mandatory
 		        													{ print "<td class='description'>".$address->description."</td>"; }
@@ -221,20 +221,20 @@ if ($subnets!==false) {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$address->$myField['name'] = $Result->create_links($address->$myField['name'], $myField['type']);
+								$address->{$myField['name']} = $Result->create_links($address->{$myField['name']}, $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{
-									if($address->$myField['name'] == "0")		{ print _("No"); }
-									elseif($address->$myField['name'] == "1")	{ print _("Yes"); }
+									if($address->{$myField['name']} == "0")		{ print _("No"); }
+									elseif($address->{$myField['name']} == "1")	{ print _("Yes"); }
 								}
 								//text
 								elseif($myField['type']=="text") {
-									if(strlen($address->$myField['name'])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $address->$myField['name'])."'>"; }
+									if(strlen($address->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $address->{$myField['name']})."'>"; }
 									else											{ print ""; }
 								}
 								else {
-									print $address->$myField['name'];
+									print $address->{$myField['name']};
 
 								}
 								print "</td>";
@@ -251,7 +251,7 @@ if ($subnets!==false) {
 						print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$address->subnetId."' data-id='".$address->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
 						print "<a class='search_ipaddress btn btn-xs btn-default         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
 						print "<a class='mail_ipaddress   btn btn-xs btn-default          ' href='#' data-id='".$address->id."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																		<i class='fa fa-gray fa-envelope-o'></i></a>";
-						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$address->subnetId."' data-action='adr' data-ipid='".$address->id."' data-dnsname='".$address->dns_name."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
+						if(in_array('firewallAddressObject', $selected_ip_fields)) { if($zone) { print "<a class='fw_autogen	   	  btn btn-default btn-xs          ' href='#' data-subnetid='".$address->subnetId."' data-action='adr' data-ipid='".$address->id."' data-dnsname='".$address->hostname."' rel='tooltip' data-container='body' title='"._('Gegenerate or regenerate a firewall addres object of this ip address.')."'><i class='fa fa-gray fa-repeat'></i></a>"; }}
 						print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' data-action='delete' data-subnetId='".$address->subnetId."' data-id='".$address->id."' href='#' id2='".$Subnets->transform_to_dotted($address->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
     				}
     				# write not permitted

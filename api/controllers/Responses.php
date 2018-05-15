@@ -44,6 +44,16 @@ class Responses {
 	 */
 	public $exception = false;
 
+	/**
+	 * Execution time
+	 *
+	 * (default value: false)
+	 *
+	 * @var bool|int|double
+	 * @access public
+	 */
+	public $time = false;
+
 
 
 
@@ -78,13 +88,14 @@ class Responses {
 		$this->errors[403] = "Forbidden";
 		$this->errors[404] = "Not Found";
 		$this->errors[405] = "Method Not Allowed";
+		$this->errors[409] = "Conflict";
 		$this->errors[415] = "Unsupported Media Type";
 		// Server errors
 		$this->errors[500] = "Internal Server Error";
 		$this->errors[501] = "Not Implemented";
 		$this->errors[503] = "Service Unavailable";
 		$this->errors[505] = "HTTP Version Not Supported";
-		$this->errors[511] = "Network Authentication Required";
+		//$this->errors[511] = "Network Authentication Required";
 	}
 
 	/**
@@ -100,9 +111,9 @@ class Responses {
 		$this->exception = true;
 
 		// set success
-		$this->result['success'] = false;
+		$this->result['success'] = 0;
 		// set exit code
-		$this->result['code'] = $code;
+		$this->result['code'] 	 = $code;
 		// set message
 		$this->result['message'] = $exception;
 
@@ -116,17 +127,20 @@ class Responses {
 	 * Sets header based on provided HTTP code
 	 *
 	 * @access private
-	 * @param mixed $code
 	 * @return void
 	 */
 	private function set_header () {
 		// wrong code
-		if(!isset($this->exception))		{ header("HTTP/1.1 500 Invalid result code"); }
-		else								{ header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
+		if(!isset($this->exception))		                 { $this->throw_exception (500, "Invalid result code"); }
+		// wrong code
+		elseif(!isset($this->errors[$this->result['code']])) { $this->throw_exception (500, "Invalid result code"); }
+		// ok
+		else								                 { header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]); }
 
 		// 401 - add location
 		if ($this->result['code']==401) {
 			$this->set_location_header ("/api/".$_REQUEST['app_id']."/user/");
+			header("HTTP/1.1 ".$this->result['code']." ".$this->errors[$this->result['code']]);
 		}
 	}
 
@@ -135,9 +149,12 @@ class Responses {
 	 *
 	 * @access public
 	 * @param mixed $result
+	 * @param bool|int|double $time
+	 * @param bool $nest_custom_fields
+	 * @param array $custom_fields
 	 * @return void
 	 */
-	public function formulate_result ($result) {
+	public function formulate_result ($result, $time = false, $nest_custom_fields = false, $custom_fields = array()) {
 		// make sure result is array
 		$this->result = is_null($this->result) ? (array) $result : $this->result;
 
@@ -150,6 +167,16 @@ class Responses {
 		$this->set_cache_header ();
 		// set result header if not already set with $result['success']=false
 		$this->exception===true ? : $this->set_success_header ();
+
+		// time
+		if($time!==false) {
+    		$this->time = $time;
+		}
+
+		// custom fields nesting
+		if($nest_custom_fields==1 && $this->exception!==true) {
+			$this->nest_custom_fields ($custom_fields);
+		}
 
 		// return result
 		return $this->create_result ();
@@ -166,7 +193,7 @@ class Responses {
     	if(isset($_SERVER['CONTENT_TYPE']))
     	$_SERVER['CONTENT_TYPE'] = array_shift(explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
-		if( !isset($_SERVER['CONTENT_TYPE']) ) {}
+		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE']==0) ) {}
 		// post
 		elseif($_SERVER['CONTENT_TYPE']=="application/x-www-form-urlencoded") {}
 		// set, verify
@@ -193,7 +220,7 @@ class Responses {
 	 */
 	private function set_content_type_header () {
 		// content_type
-		$this->result_type == "xml" ? header('Content-Type: application/xml') : header('Content-Type: application/json');
+		$this->result_type == "xml" ? header('Content-Type: application/xml; charset=utf-8') : header('Content-Type: application/json; charset=utf-8');
 	}
 
 	/**
@@ -242,7 +269,57 @@ class Responses {
 	 * @return void
 	 */
 	private function set_location_header ($location) {
+    	# validate location header
+    	if(!preg_match('/^[a-zA-Z0-9\-\_\/.]+$/i',$location)) {
+        	$this->throw_exception (500, "Invalid location header");
+    	}
+    	# set
 		header("Location: ".$location);
+	}
+
+	/**
+	 * Function to formulate custom fields as separate item
+	 *
+	 * @method nest_custom_fields
+	 * @param  array              $custom_fields
+	 * @return void
+	 */
+	private function nest_custom_fields ($custom_fields = array()) {
+		// Nest all fields in an array result.  Guard against arrays
+		// with string keys to ensure we don't mistakenly assume a
+		// simple associative array is an array of objects.
+		if (is_array($this->result['data']) && sizeof(array_filter(array_keys($this->result['data']), 'is_string')) == 0) {
+			foreach ($this->result['data'] as $dk=>$d) {
+				if(sizeof($custom_fields)>0) {
+					foreach($custom_fields as $k=>$cf) {
+						// add to result
+						if(isset($d->$k)) {
+							$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
+							// remove unnested data
+							unset($this->result['data'][$dk]->$k);
+						}
+					}
+				}
+				else {
+					$d->custom_fields = NULL;
+				}
+			}
+		}
+		// This is a single element but we need to guard against
+		// non-objects here too.
+		elseif (is_object($this->result['data'])) {
+			if(sizeof($custom_fields)>0) {
+				foreach($custom_fields as $k=>$cf) {
+					// add to result
+					$this->result['data']->custom_fields[$k] = $this->result['data']->$k;
+					// remove unnested data
+					unset($this->result['data']->$k);
+				}
+			}
+			else {
+				$this->result['data']->custom_fields = NULL;
+			}
+		}
 	}
 
 	/**
@@ -271,8 +348,11 @@ class Responses {
 		$this->result['code'] = $tmp['code'];
 		$this->result['success'] = $tmp['success'];
 		if(isset($tmp['message']))	{ $this->result['message'] = $tmp['message']; }
+		if(isset($tmp['id']))	    { $this->result['id'] = $tmp['id']; }
+		if(isset($tmp['subnetId']))	{ $this->result['subnetId'] = $tmp['subnetId']; }
 		if(isset($tmp['data']))		{ $this->result['data'] = $tmp['data']; }
 		if(isset($tmp['ip']))	    { $this->result['ip'] = $tmp['ip']; }
+		if($this->time!==false)	    { $this->result['time'] = round($this->time,3); }
 	}
 
 	/**
@@ -286,7 +366,7 @@ class Responses {
 		$this->result = $this->object_to_array($this->result);
 
 		// new SimpleXMLElement object
-		$xml = new SimpleXMLElement('<'.$_GET['controller'].'/>');
+		$xml = new SimpleXMLElement('<?xml version="1.0" encoding="UTF-8"?><'.$_GET['controller'].'/>');
 		// generate xml from result
 		$this->array_to_xml($xml, $this->result);
 
@@ -372,7 +452,7 @@ class Responses {
 	 * @return void
 	 */
 	private function create_json () {
-		return json_encode((array) $this->result);
+		return json_encode((array) $this->result, JSON_UNESCAPED_UNICODE);
 	}
 
 

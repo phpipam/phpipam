@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 // no errors
 error_reporting(E_ERROR);
@@ -20,7 +20,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
+$User->Crypto->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true, false, true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);
@@ -34,17 +34,24 @@ if(!is_numeric($_POST['snmp_timeout']))			              { $Result->show("danger"
 }
 
 # version can be 0, 1 or 2
-if ($_POST['snmp_version']<0 || $_POST['snmp_version']>2)     { $Result->show("danger", _("Invalid version"), true, true, false, true); }
+if ($_POST['snmp_version']<0 || $_POST['snmp_version']>3)     { $Result->show("danger", _("Invalid version"), true, true, false, true); }
 
 # validate device
 $device = $Admin->fetch_object ("devices", "id", $_POST['device_id']);
 if($device===false)                                           { $Result->show("danger", _("Invalid device"), true, true, false, true); }
 
 # set new snmp variables
-$device->snmp_community = $_POST['snmp_community'];
-$device->snmp_version   = $_POST['snmp_version'];
-$device->snmp_port      = $_POST['snmp_port'];
-$device->snmp_timeout   = $_POST['snmp_timeout'];
+$device->snmp_community          = $_POST['snmp_community'];
+$device->snmp_version            = $_POST['snmp_version'];
+$device->snmp_port               = $_POST['snmp_port'];
+$device->snmp_timeout            = $_POST['snmp_timeout'];
+$device->snmp_v3_sec_level       = $_POST['snmp_v3_sec_level'];
+$device->snmp_v3_auth_protocol   = $_POST['snmp_v3_auth_protocol'];
+$device->snmp_v3_auth_pass       = $_POST['snmp_v3_auth_pass'];
+$device->snmp_v3_priv_protocol   = $_POST['snmp_v3_priv_protocol'];
+$device->snmp_v3_priv_pass       = $_POST['snmp_v3_priv_pass'];
+$device->snmp_v3_ctx_name        = $_POST['snmp_v3_ctx_name'];
+$device->snmp_v3_ctx_engine_id   = $_POST['snmp_v3_ctx_engine_id'];
 
 # init snmp class
 $Snmp = new phpipamSNMP ();

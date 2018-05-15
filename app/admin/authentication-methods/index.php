@@ -14,18 +14,25 @@ $all_method_types = $User->fetch_available_auth_method_types();
 <hr>
 
 <!-- Add new -->
-<div class="btn-group" style="margin-bottom: 20px;">
+<div class="dropdown" style="margin-bottom: 20px;">
+    <button class="btn btn-default btn-sm dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true"><?php print _("Create new:"); ?> <span class="caret"></span>
+</button>
+
+<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 <?php
 foreach($all_method_types as $type) {
-	print "<button class='btn btn-sm btn-default editAuthMethod' style='margin-bottom:10px;' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new $type authentication")."</button>";
+	print "<li><a class='open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new $type authentication")."</a></li>";
 }
 ?>
+</ul>
+
 </div>
 
 <!-- table -->
-<table id="userPrint" class="table table-striped table-top table-auto">
+<table id="userPrint" class="table sorted nosearch table-striped table-top table-auto" data-cookie-id-table="admin_authm">
 
 <!-- Headers -->
+<thead>
 <tr>
     <th><?php print _('Type'); ?></th>
     <th><?php print _('Description'); ?></th>
@@ -34,7 +41,9 @@ foreach($all_method_types as $type) {
     <th><?php print _('Protected'); ?></th>
     <th></th>
 </tr>
+</thead>
 
+<tbody>
 <!-- data -->
 <?php
 //loop
@@ -71,14 +80,15 @@ foreach($all_methods as $method) {
 	$disabled = $method->type=="local" ? "disabled" : "";
 	print "	<td class='actions'>";
 	print "	<div class='btn-group'>";
-	print "		<button class='btn btn-xs btn-default editAuthMethod' data-id='$method->id' data-action='edit'   data-type='$method->type' rel='tooltip' title='Edit'><i class='fa fa-pencil'></i></button>";
-	print "		<button class='btn btn-xs btn-default editAuthMethod' data-id='$method->id' data-action='delete' data-type='$method->type' rel='tooltip' title='Delete'><i class='fa fa-times'></i></button>";
-	print "		<button class='btn btn-xs btn-default checkAuthMethod' data-id='$method->id' data-action='check' data-type='$method->type' rel='tooltip' title='Verify connection' $disabled><i class='fa fa-bolt'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='edit' data-type='$method->type' data-id='$method->id' title='Edit'><i class='fa fa-pencil'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='delete' data-type='$method->type' data-id='$method->id' title='Delete'><i class='fa fa-times'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/check-connection.php' data-class='500' data-id='$method->id' title='Verify connection' $disabled><i class='fa fa-bolt'></i></button>";
 	print "	</div>";
 	print "	</td>";
 	print "</tr>";
 }
 ?>
+</tbody>
 </table>
 
 
@@ -86,7 +96,7 @@ foreach($all_methods as $method) {
 <div class="alert alert-info alert-absolute" style="margin-top:30px;">
 	<?php print _("Here you can set different authentication methods for your users."); ?>
 	<hr>
-	<?php print _("phpIPAM currently supports 6 methods for authentication:"); ?>
+	<?php print _("phpIPAM currently supports 7 methods for authentication:"); ?>
 	<ul>
 		<li><?php print _("Local authentication"); ?></li>
 		<li><?php print _("Apache authentication"); ?></li>
@@ -94,6 +104,7 @@ foreach($all_methods as $method) {
 		<li><?php print _("LDAP authentication"); ?></li>
 		<li><?php print _("NetIQ authentication"); ?></li>
 		<li><?php print _("Radius authentication"); ?></li>
+		<li><?php print _("SAMLv2 authentication"); ?></li>
 	</ul>
 	<br>
 	<?php print _("For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation please check ")."<a href='http://adldap.sourceforge.net/'>adLDAP</a><br><br>"; ?>

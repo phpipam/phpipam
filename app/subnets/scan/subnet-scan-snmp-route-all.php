@@ -13,7 +13,7 @@ $ajax_loaded = false;
 # ajax check
 if (!function_exists("create_link")) {
     /* functions */
-    require( dirname(__FILE__) . '/../../../functions/functions.php');
+    require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
     # initialize user object
     $Database 	= new Database_PDO;
@@ -138,7 +138,7 @@ else {
     $vrfs  = $Tools->fetch_all_objects("vrf", "name");
 
     # create csrf token
-    $csrf = $User->csrf_cookie ("create", "scan_all");
+    $csrf = $User->Crypto->csrf_cookie ("create", "scan_all");
 ?>
 
 <!-- header -->

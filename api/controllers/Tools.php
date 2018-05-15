@@ -125,16 +125,17 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function define_tools_controllers () {
-		$this->subcontrollers = array("ipTags"=>"tags",
-									  "devices"=>"devices",
-									  "deviceTypes"=>"devicetypes",
-									  "vlans"=>"vlans",
-									  "vrf"=>"vrfs",
-									  "nameservers"=>"nameservers",
-									  "scanAgents"=>"scanagents",
-									  "locations"=>"locations",
-									  "racks"=>"racks",
-									  "nat"=>"nat"
+		$this->subcontrollers = array(
+		                              	"ipTags"	  => "tags",
+										"devices"     => "devices",
+										"deviceTypes" => "device_types",
+										"vlans"       => "vlans",
+										"vrf"         => "vrfs",
+										"nameservers" => "nameservers",
+										"scanAgents"  => "scanagents",
+										"locations"   => "locations",
+										"racks"       => "racks",
+										"nat"         => "nat"
 									  );
 	}
 
@@ -146,16 +147,16 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function define_available_identifiers () {
 		$this->identifiers = array(
-								"ipTags"=>array("id2", "id3"),
-								"devices"=>array("id2", "id3"),
-								"deviceTypes"=>array("id2", "id3"),
-								"vlans"=>array("id2", "id3"),
-								"vrf"=>array("id2", "id3"),
-								"nameservers"=>array("id2"),
-								"scanAgents"=>array("id2"),
-								"locations"=>array("id2", "id3"),
-								"racks"=>array("id2", "id3"),
-								"nat"=>array("id2", "id3")
+								"ipTags"      => array("id2", "id3"),
+								"devices"     => array("id2", "id3"),
+								"deviceTypes" => array("id2", "id3"),
+								"vlans"       => array("id2", "id3"),
+								"vrf"         => array("id2", "id3"),
+								"nameservers" => array("id2"),
+								"scanAgents"  => array("id2"),
+								"locations"   => array("id2", "id3"),
+								"racks"       => array("id2", "id3"),
+								"nat"         => array("id2", "id3")
 								);
 	}
 
@@ -228,7 +229,8 @@ class Tools_controller extends Common_api_functions {
 	 *		- {parameter}		- additional parameter (optional)
 	 *
 	 *  Special options:
-	 *      - /tools/deviceTypes/{id}/devices/
+	 *      - /tools/device_types/{id}/
+	 *      - /tools/device_types/{id}/devices/
 	 *
 	 *      - /tools/vlans/{id}/subnets/
 	 *
@@ -237,6 +239,7 @@ class Tools_controller extends Common_api_functions {
 	 *      - /tools/locations/{id}/subnets/
 	 *      - /tools/locations/{id}/devices/
 	 *      - /tools/locations/{id}/racks/
+	 *      - /tools/locations/{id}/ipaddresses/
 	 *
 	 *      - /tools/racks/{id}/devices/
 	 *
@@ -254,7 +257,7 @@ class Tools_controller extends Common_api_functions {
 		if (!isset($this->_params->id2)) {
 			$result = $this->Tools->fetch_all_objects ($this->_params->id,  $this->sort_key);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 		# by parameter
@@ -277,7 +280,7 @@ class Tools_controller extends Common_api_functions {
                     		$result[$k]->gatewayId = $gateway->id;
                 		}
                     	//nameservers
-                		$ns = $this->read_subnet_nameserver ();
+                		$ns = $this->read_subnet_nameserver ($r);
                         if ($ns!==false) {
                             $result[$k]->nameservers = $ns;
                         }
@@ -299,7 +302,7 @@ class Tools_controller extends Common_api_functions {
     			}
 			}
 			// locations
-			elseif ($this->_params->id == "locations" && ($this->_params->id3=="subnets" || $this->_params->id3=="racks" || $this->_params->id3=="devices")) {
+			elseif ($this->_params->id == "locations" && ($this->_params->id3=="subnets" || $this->_params->id3=="racks" || $this->_params->id3=="devices" || $this->_params->id3=="ipaddresses")) {
 				// fetch
 				$result = $this->Tools->fetch_multiple_objects ($this->_params->id3, "location", $this->_params->id2, "id", true);
 			}
@@ -339,7 +342,7 @@ class Tools_controller extends Common_api_functions {
     			}
 			}
 			else {
-    			$field = string;
+    			$field = "";
 				// id3 can only be addresses
 				if ($this->_params->id3 != "addresses")	{ $this->Response->throw_exception(400, 'Invalid parameter'); }
 				// define identifier
@@ -350,18 +353,18 @@ class Tools_controller extends Common_api_functions {
 				$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $field, $this->_params->id2, $this->sort_key, true);
 			}
 			// result
-			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, true)); }
 
 		}
 		# by id
 		else {
 			// numeric
-			if(!is_numeric($this->_params->id2)) 		{ $this->Response->throw_exception(404, 'Identifier must be numeric'); }
+			if(!is_numeric($this->_params->id2)) 		{ $this->Response->throw_exception(400, 'Identifier must be numeric'); }
 
 			$result = $this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2);
 			// result
-			if($result===false)							{ $this->Response->throw_exception(404, 'No objects found'); }
+			if($result===false)							{ $this->Response->throw_exception(200, 'No objects found'); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "tools/".$this->_params->id, true, false)); }
 		}
 	}
@@ -386,6 +389,14 @@ class Tools_controller extends Common_api_functions {
 		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
 													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
 
+		# remap keys
+		$this->remap_keys ();
+
+		# Get coordinates if locations
+		if($this->_params->id=="locations") {
+			$values = $this->format_location ();
+		}
+
 		# check for valid keys
 		$values = $this->validate_keys ();
 
@@ -400,7 +411,7 @@ class Tools_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, $this->_params->id." object creation failed"); }
 		else {
 			//set result
-			return array("code"=>201, "data"=>$this->_params->id." object created", "location"=>"/api/".$this->_params->app_id."/tools/".$this->_params->id."/".$this->Admin->lastId."/");
+			return array("code"=>201, "data"=>$this->_params->id." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$this->_params->id."/".$this->Admin->lastId."/");
 		}
 
 	}
@@ -434,6 +445,8 @@ class Tools_controller extends Common_api_functions {
 		# vlans, vrfs
 		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
 													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
+		# remap keys
+		$this->remap_keys ();
 
 		# verify object
 		$this->validate_tools_object ();
@@ -457,7 +470,7 @@ class Tools_controller extends Common_api_functions {
 													{ $this->Response->throw_exception(500, $table_name." object edit failed"); }
 		else {
 			//set result
-			return array("code"=>200, "data"=>$table_name." object updated");
+			return array("code"=>200, "message"=>$table_name." object updated");
 		}
 	}
 
@@ -496,7 +509,7 @@ class Tools_controller extends Common_api_functions {
 			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->id2);
 
 			// set result
-			return array("code"=>200, "data"=>$this->_params->id." object deleted");
+			return array("code"=>200, "message"=>$this->_params->id." object deleted");
 		}
 	}
 
@@ -618,11 +631,10 @@ class Tools_controller extends Common_api_functions {
 	/**
 	 * Returns nameserver details
 	 *
-	 * @access private
-	 * @param mixed $nsid
+	 * @param result $obj
 	 * @return void
 	 */
-	private function read_subnet_nameserver ($nsid) {
+	private function read_subnet_nameserver ($result) {
     	return $this->Tools->fetch_object ("nameservers", "id", $result->nameserverId);
 	}
 
@@ -631,16 +643,30 @@ class Tools_controller extends Common_api_functions {
 	 *
 	 * @access private
 	 * @param json $obj
-	 * @return void
+	 * @return array
 	 */
 	private function parse_nat_objects ($obj) {
     	if($this->Tools->validate_json_string($obj)!==false) {
         	return(json_decode($obj, true));
     	}
     	else {
-        	return false;
+        	return array ();
     	}
 	}
-}
 
-?>
+	/**
+	 * Get latlng from Google
+	 *
+	 * @method format_location
+	 * @return [type]          [description]
+	 */
+	private function format_location () {
+		if((strlen(@$this->_params->lat)==0 || strlen(@$this->_params->long)==0) && strlen(@$this->_params->address)>0) {
+            $latlng = $this->Tools->get_latlng_from_address ($this->_params->address);
+            if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
+                $this->_params->lat  = $latlng['lat'];
+                $this->_params->long = $latlng['lng'];
+            }
+		}
+	}
+}

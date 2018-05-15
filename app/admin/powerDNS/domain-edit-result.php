@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -16,12 +16,14 @@ $PowerDNS 	= new PowerDNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # checks / validation
@@ -89,6 +91,8 @@ $values['name'] = $_POST['name'];
 # remove all references if delete
 if ($_POST['action']=="delete") 									{ $PowerDNS->remove_all_records ($values['id']); }
 
+# for creation validate default records before creating them ! => true means check only
+if ($_POST['action']=="add" && !isset($_POST['manual']))            { $PowerDNS->create_default_records ($_POST, true); }
 
 # update
 if(!$PowerDNS->domain_edit($_POST['action'], $values))				{ $Result->show("danger",  _("Failed to $_POST[action] domain").'!', true); }

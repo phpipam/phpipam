@@ -38,14 +38,15 @@ class Result extends Common_functions {
 	 *
 	 * @access public
 	 * @param string $class (default: "muted")				result class - danger, success, warning, info
-	 * @param string $text (default: "No value provided")	text to display
+	 * @param string|array|object $text (default: "No value provided")	text to display
 	 * @param bool $die (default: false)					controls stop of php execution
 	 * @param bool $popup (default: false)					print result as popup
 	 * @param bool $inline (default: false)					return, not print
 	 * @param bool $popup2 (default: false)					close for JS for popup2
+	 * @param bool $reload (default: false)					reload
 	 * @return void
 	 */
-	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false) {
+	public function show($class="muted", $text="No value provided", $die=false, $popup=false, $inline = false, $popup2 = false, $reload = false) {
 
 		# set die
 		$this->die = $die;
@@ -61,8 +62,8 @@ class Result extends Common_functions {
 			if (php_sapi_name()=="cli") { print $this->show_cli_message ($text); }
 			else {
 				# return or print
-				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2); }
-				else					{ print  $this->show_message ($class, $text, $popup, $popup2); }
+				if ($inline) 			{ return $this->show_message ($class, $text, $popup, $popup2, $reload); }
+				else					{ print  $this->show_message ($class, $text, $popup, $popup2, $reload); }
 			}
 
 			# die
@@ -74,7 +75,7 @@ class Result extends Common_functions {
 	 * Alias for show method for backwards compatibility
 	 *
 	 * @access public
-	 * @param string $text (default: "No value provided")
+	 * @param string|array|object $text (default: "No value provided")
 	 * @param bool $die (default: false)
 	 * @return void
 	 */
@@ -112,12 +113,13 @@ class Result extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $class
-	 * @param mixed $text
+	 * @param string|array|object $text
 	 * @param mixed $popup
 	 * @param mixed $popup2
+	 * @param bool $reload
 	 * @return void
 	 */
-	public function show_message ($class, $text, $popup, $popup2) {
+	public function show_message ($class, $text, $popup, $popup2, $reload) {
     	// to array if object
     	if (is_object($text))   { $text = (array) $text; }
 		// format if array
@@ -150,6 +152,10 @@ class Result extends Common_functions {
 			$out[] = '<div class="pContent">';
 			$out[] = '<div class="alert alert-'.$class.'">'.$text.'</div>';
 			$out[] = '</div>';
+			// reload
+			if($reload===true)
+			$out[] = '<div class="pFooter"><button class="btn btn-sm btn-default hidePopupsReload '.$pclass.'">'._('Close').'</button></div>';
+			else
 			$out[] = '<div class="pFooter"><button class="btn btn-sm btn-default '.$pclass.'">'._('Close').'</button></div>';
 
 			// return

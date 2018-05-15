@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -15,16 +15,32 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "ns", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "ns", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # Name and primary nameserver must be present!
 if ($_POST['action']!="delete") {
+
+	$m=1;
+	$nservers_reindexed = array ();
+	# reindex
+	foreach($_POST as $k=>$v) {
+		if(strpos($k, "namesrv-")!==false) {
+			$nservers_reindexed["namesrv-".$m] = $v;
+			$m++;
+			unset($_POST[$k]);
+		}
+	}
+	# join
+	$_POST = array_merge($_POST, $nservers_reindexed);
+
 	if($_POST['name'] == "") 				{ $Result->show("danger", _("Name is mandatory"), true); }
 	if(trim($_POST['namesrv-1']) == "") 	{ $Result->show("danger", _("Primary nameserver is mandatory"), true); }
 }
@@ -51,7 +67,7 @@ foreach($_POST as $key=>$line) {
 $_POST['permissions'] = sizeof($temp)>0 ? implode(";", $temp) : null;
 
 # set update array
-$values = array("id"=>@$_POST['nameserverId'],
+$values = array("id"=>@$_POST['nameserverid'],
 				"name"=>$_POST['name'],
 				"permissions"=>$_POST['permissions'],
 				"namesrv1"=>$_POST['namesrv1'],
@@ -63,5 +79,4 @@ else																		{ $Result->show("success", _("Nameserver set $_POST[action
 
 
 # remove all references if delete
-if($_POST['action']=="delete") { $Admin->remove_object_references ("nameservers", "id", $_POST['nameserverId']); }
-?>
+if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "nameserverid", $_POST['nameserverid']); }

@@ -6,9 +6,6 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# get VLAN details
-$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['subnetId']);
-
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
 
@@ -77,12 +74,12 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		print "<tr><td><hr></td><td></td></tr>";
 		// fields
 		foreach($cfields as $key=>$field) {
-			$vrf->$key = str_replace("\n", "<br>",$vrf->$key);
+			$vrf->{$key} = str_replace("\n", "<br>",$vrf->{$key});
 			// create links
-			$vrf->$key = $Result->create_links($vrf->$key);
+			$vrf->{$key} = $Result->create_links($vrf->{$key});
 			print "<tr>";
 			print "	<th>$key</th>";
-			print "	<td style='vertical-align:top;align:left;'>".$vrf->$key."</td>";
+			print "	<td style='vertical-align:top;align:left;'>".$vrf->{$key}."</td>";
 			print "</tr>";
 		}
 		// divider
@@ -99,8 +96,8 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 	# permissions
 	if($User->is_admin (false)) {
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfId='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfId='$vrf->vrfId'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
 	}
 
 	print "	</div>";

@@ -174,14 +174,22 @@ abstract class DB {
 	 *
 	 * @access private
 	 * @param mixed $query
+	 * @param array $values
 	 * @return void
 	 */
-	private function log_query ($query) {
+	private function log_query ($query, $values = false) {
 		if($this->debug) {
 
 			$myFile = "/tmp/queries.txt";
 			$fh = fopen($myFile, 'a') or die("can't open file");
-			fwrite($fh, $query->queryString."\n");
+			// query
+			fwrite($fh, $query->queryString);
+			// values
+			if(is_array($values)) {
+            fwrite($fh, " Params: ".implode(", ", $values));
+			}
+			// break
+            fwrite($fh, "\n");
 			fclose($fh);
 		}
 	}
@@ -241,15 +249,24 @@ abstract class DB {
 	 * @access public
 	 * @param mixed $query
 	 * @param array $values (default: array())
+	 * @param integer|null &$rowCount (default: null)
 	 * @return void
 	 */
-	public function runQuery($query, $values = array()) {
+	public function runQuery($query, $values = array(), &$rowCount = null) {
 		if (!$this->isConnected()) $this->connect();
 
+		$result = null;
+
 		$statement = $this->pdo->prepare($query);
+
 		//debuq
-		$this->log_query ($statement);
-		return $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
+		$this->log_query($statement, $values);
+
+		if (is_object($statement)) {
+			$result = $statement->execute((array)$values); //this array cast allows single values to be used as the parameter
+			$rowCount = $statement->rowCount();
+		}
+		return $result;
 	}
 
 	/**
@@ -305,7 +322,7 @@ abstract class DB {
 		$statement = $this->pdo->prepare('SELECT COUNT(*) as `num` FROM `'.$tableName.'` where `'.$method.'` '.$operator.' ?;');
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, (array) $value);
 		$statement->execute(array($value));
 
 		return $statement->fetchColumn();
@@ -356,6 +373,12 @@ abstract class DB {
 			$preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
 		}
 
+		// exit on no parameters
+		if(sizeof($preparedParamArr)==0) {
+			throw new Exception('No values to update');
+			return false;
+		}
+
 		$preparedParamStr = implode(',', $preparedParamArr);
 
 		//primary key 2?
@@ -368,7 +391,7 @@ abstract class DB {
 		$paramValues = array_merge(array_values($obj), $objId);
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $paramValues);
 		//run the update on the object
 		return $statement->execute($paramValues);
 	}
@@ -528,7 +551,7 @@ abstract class DB {
 		$statement = $this->pdo->prepare($query);
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
 		if (is_object($statement)) {
@@ -560,7 +583,7 @@ abstract class DB {
 		$statement = $this->pdo->prepare($query);
 
 		//debug
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
 		$results = array();
@@ -599,7 +622,7 @@ abstract class DB {
 		}
 
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, array($id));
 		$statement->execute();
 
 		//we can then extract the single object (if we have a result)
@@ -626,7 +649,7 @@ abstract class DB {
 
 		$statement = $this->pdo->prepare($query);
 		//debuq
-		$this->log_query ($statement);
+		$this->log_query ($statement, $values);
 		$statement->execute((array)$values);
 
 		$resultObj = $statement->fetchObject($class);
@@ -659,6 +682,23 @@ abstract class DB {
 	}
 
 	/**
+	 * Escape $result_fields parameter
+	 *
+	 * @access public
+	 * @param string|array $result_fields
+	 * @return string
+	 */
+	public function escape_result_fields($result_fields) {
+		if (empty($result_fields)) return "*";
+
+		if (is_array($result_fields)) {
+			foreach ($result_fields as $i => $f) $result_fields[$i] = "`$f`";
+			$result_fields = implode(',', $result_fields);
+		}
+		return $result_fields;
+	}
+
+	/**
 	 * Searches for object in database
 	 *
 	 * @access public
@@ -669,22 +709,24 @@ abstract class DB {
 	 * @param bool $sortAsc (default: true)
 	 * @param bool $like (default: false)
 	 * @param bool $negate (default: false)
+	 * @param string|array $result_fields (default: "*")
 	 * @return void
 	 */
-	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false) {
+	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
 		$table = $this->escape($table);
 		$field = $this->escape($field);
 		$sortField = $this->escape($sortField);
 		$like === true ? $operator = "LIKE" : $operator = "=";
 		$negate === true ? $negate_operator = "NOT " : $negate_operator = "";
 
-        // subnets
-        if ($table=="subnets" && $sortField=="subnet_int") {
-    		return $this->getObjectsQuery('SELECT *,subnet*1 as subnet_int FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-        }
-        else {
-    		return $this->getObjectsQuery('SELECT * FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-        }
+		$result_fields = $this->escape_result_fields($result_fields);
+
+    // subnets
+    if ($table=='subnets' && $sortField=='subnet') {
+        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+    } else {
+        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+    }
 	}
 
 	/**
@@ -784,6 +826,36 @@ abstract class DB {
 		$tableName = $this->escape($tableName);
 		//execute
 		return $this->runQuery('TRUNCATE TABLE `'.$tableName.'`;');
+	}
+
+	/**
+	 * Begin SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function beginTransaction() {
+		return $this->pdo->beginTransaction();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function commit() {
+		return $this->pdo->commit();
+	}
+
+	/**
+	 * Commit SQL Transaction
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function rollBack() {
+		return $this->pdo->rollBack();
 	}
 }
 
@@ -943,6 +1015,23 @@ class Database_PDO extends DB {
 		}
 
 		return $columnsByTable;
+	}
+
+	/**
+	 * Returns field info.
+	 *
+	 * @access public
+	 * @param bool $tableName (default: false)
+	 * @param bool $field (default: false)
+	 * @return void|object
+	 */
+	public function getFieldInfo ($tableName = false, $field = false) {
+    	//escape
+    	$tableName = $this->escape($tableName);
+    	$field = $this->escape($field);
+    	// fetch and return
+    	return $this->getObjectQuery("SHOW FIELDS FROM `$tableName` where Field = ?", array($field));
+
 	}
 
 	/**

@@ -111,9 +111,10 @@ class Install extends Common_functions {
 	 * @param bool $drop_database (default: false)
 	 * @param bool $create_database (default: false)
 	 * @param bool $create_grants (default: false)
+	 * @param bool $migrate (default: false)
 	 * @return void
 	 */
-	public function install_database ($rootuser, $rootpass, $drop_database = false, $create_database = false, $create_grants = false) {
+	public function install_database ($rootuser, $rootpass, $drop_database = false, $create_database = false, $create_grants = false, $migrate = false) {
 
 		# open new connection
 		$this->Database_root = new Database_PDO ($rootuser, $rootpass);
@@ -134,7 +135,7 @@ class Install extends Common_functions {
 		$this->Database_root->resetConn();
 
 		# install database
-		if($this->install_database_execute () !== false) {
+		if($this->install_database_execute ($migrate) !== false) {
 		    # return true, if some errors occured script already died! */
 			sleep(1);
 			$this->Log = new Logging ($this->Database);
@@ -189,11 +190,17 @@ class Install extends Common_functions {
 	 * Execute files installation
 	 *
 	 * @access private
+	 * @param $migrate (default: false)
 	 * @return void
 	 */
-	private function install_database_execute () {
+	private function install_database_execute ($migrate = false) {
 	    # import SCHEMA file queries
-	    $query  = file_get_contents("../../db/SCHEMA.sql");
+	    if($migrate) {
+		    $query  = file_get_contents("../../db/MIGRATE.sql");
+		}
+		else {
+		    $query  = file_get_contents("../../db/SCHEMA.sql");
+		}
 
 	    # formulate queries
 	    $queries = array_filter(explode(";\n", $query));

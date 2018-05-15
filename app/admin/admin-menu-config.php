@@ -33,20 +33,12 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"n
 # IP related management
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server", "name"=>"Sections", 				"href"=>"sections", 				"description"=>"Section management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 				"href"=>"subnets", 					"description"=>"Subnet management");
-$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-desktop","name"=>"Devices", 				"href"=>"devices", 					"description"=>"Device management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
 if($User->settings->enableVRF==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VRF", 					"href"=>"vrfs", 					"description"=>"VRF management");
 if($User->settings->enableNAT==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"NAT", 				    "href"=>"nat", 				        "description"=>"NAT settings");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"Nameservers", 			"href"=>"nameservers", 				"description"=>"Recursive nameserver sets for subnets");
-if($User->settings->enableSNMP == 1)
-$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cogs","name"=>"SNMP", 				          "href"=>"snmp", 					"description"=>"SNMP management");
-if($User->settings->enableRACK == 1)
-$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-bars",  "name"=>"Racks", 			       "href"=>"racks", 			        "description"=>"Rack management");
-if($User->settings->enableLocations == 1)
-$admin_menu['IP related management'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
-
 if($User->settings->enableFirewallZones == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-fire","name"=>"Firewall Zones", 		    "href"=>"firewall-zones", 			"description"=>"Firewall zone management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-upload", 	"name"=>"Import / Export", 	    "href"=>"import-export", 		    "description"=>"Import/Export IP related data (VRF, VLAN, Subnets, IP, Devices)");
@@ -56,7 +48,21 @@ $request_cnt = $requests>0 ? "<span class='ipreqMenu'>$requests</span>" : "";
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-plus", 	"name"=>"IP requests $request_cnt", "href"=>"requests", 				"description"=>"Manage IP requests");
 }
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-filter", "name"=>"Filter IP fields", 		"href"=>"filter-fields", 			"description"=>"Select which default address fields to display");
+$admin_menu['IP related management'][] = array("show"=>true,    "icon"=>"fa-filter", "name"=>"Required IP fields",      "href"=>"required-fields",          "description"=>"Select which address fields are required to be filled when creating address.");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-magic", 	"name"=>"Custom fields", 		"href"=>"custom-fields", 			"description"=>"Manage custom fields");
+
+
+# device managements
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-desktop","name"=>"Devices",                 "href"=>"devices",                  "description"=>"Device management");
+if($User->settings->enableRACK == 1)
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-bars",  "name"=>"Racks",                   "href"=>"racks",                     "description"=>"Rack management");
+if($User->settings->enableCircuits == 1)
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-random",  "name"=>"Circuits",                   "href"=>"circuits",                     "description"=>"Circuits management");
+if($User->settings->enableSNMP == 1)
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-cogs","name"=>"SNMP",                         "href"=>"snmp",                   "description"=>"SNMP management");
+if($User->settings->enableLocations == 1)
+$admin_menu['Device management'][]  = array("show"=>true,   "icon"=>"fa-map",        "name"=>"Locations",           "href"=>"locations",    "description"=>"Locations");
+
 
 # Tools
 $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-check", 				"name"=>"Version check", 			"href"=>"version-check", 			"description"=>"Check for latest version of phpipam");
@@ -73,6 +79,7 @@ $admin_menu_items = array(
                 		'devices',
                 		'device-types',
                 		'filter-fields',
+                        'required-fields',
                 		'firewall-zones',
                 		'groups',
                 		'import-export',
@@ -99,6 +106,7 @@ $admin_menu_items = array(
                 		'widgets',
                 		'nat',
                 		'locations',
+                        'circuits',
                 		'pstn-prefixes'
                     );
 

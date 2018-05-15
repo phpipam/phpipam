@@ -20,15 +20,10 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 print "<h4>"._('Device details')."</h4>";
 print "<hr>";
 
-# print link to manage
-print "<div class='btn-group'>";
-print "<a class='btn btn-sm btn-default' href='".create_link("tools","devices")."' data-action='add'  data-switchid='' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('All devices')."</a>";
-print "</div>";
-
 # print
 if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
-    print "<table class='table'>";
+    print "<table class='table table-noborder'>";
     print "<tr>";
     print "<td style='vertical-align:top !important;'>";
 
@@ -97,9 +92,87 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "</td>";
     	print "</tr>";
 
-    	print "<tr>";
-    	print "	<td colspan='2'><hr></td>";
-    	print "</tr>";
+
+        if($User->settings->enableSNMP=="1") {
+            // title
+            print '<tr>';
+            print " <td colspan='2'><h4 style='padding-top:20px;'>". _('SNMP data').'</h4><hr></td>';
+            print "</tr>";
+
+            // version
+            $version = $device['snmp_version']=="0" ? "<span class='text-muted'>Disabled</span>" : "Version ".$device['snmp_version'];
+            print '<tr>';
+            print " <th>". _('SNMP version').'</th>';
+            print " <td>$version</td>";
+            print "</tr>";
+
+            // set show
+            if ($device['snmp_version']=="1" || $device['snmp_version']=="2" || $device['snmp_version']=="3") {
+                // version
+                print '<tr>';
+                print " <th>". _('Community').'</th>';
+                print " <td>$device[snmp_community]</td>";
+                print "</tr>";
+                // port
+                print '<tr>';
+                print " <th>". _('Port').'</th>';
+                print " <td>$device[snmp_port]</td>";
+                print "</tr>";
+                // timeout
+                print '<tr>';
+                print " <th>". _('Timeout').'</th>';
+                print " <td>$device[snmp_timeout]</td>";
+                print "</tr>";
+            }
+            // v3 info
+            if ($device['snmp_version']=="3") {
+                print "<tr>";
+                print " <td colspan='2'><hr></td>";
+                print "</tr>";
+                // sec level
+                print '<tr>';
+                print " <th>". _('Security level').'</th>';
+                print " <td>$device[snmp_v3_sec_level]</td>";
+                print "</tr>";
+                // auth proto
+                print '<tr>';
+                print " <th>". _('Auth protocol').'</th>';
+                print " <td>$device[snmp_v3_auth_protocol]</td>";
+                print "</tr>";
+                // pass
+                print '<tr>';
+                print " <th>". _('Password').'</th>';
+                print " <td>$device[snmp_v3_auth_pass]</td>";
+                print "</tr>";
+                // privacy proto
+                print '<tr>';
+                print " <th>". _('Privacy protocol').'</th>';
+                print " <td>$device[snmp_v3_priv_protocol]</td>";
+                print "</tr>";
+                // privacy pass
+                print '<tr>';
+                print " <th>". _('Privacy passphrase').'</th>';
+                print " <td>$device[snmp_v3_priv_pass]</td>";
+                print "</tr>";
+                // context name
+                print '<tr>';
+                print " <th>". _('Context name').'</th>';
+                print " <td>$device[snmp_v3_ctx_name]</td>";
+                print "</tr>";
+                // engine id
+                print '<tr>';
+                print " <th>". _('Context engine ID').'</th>';
+                print " <td>$device[snmp_v3_ctx_engine_id]</td>";
+                print "</tr>";
+            }
+        }
+
+
+        // title
+        print '<tr>';
+        print " <td colspan='2'><h4 style='padding-top:20px;'>". _('Objects').'</h4><hr></td>';
+        print "</tr>";
+
 
 
     	print "<tr>";
@@ -111,9 +184,21 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print " <td><span class='badge badge1 badge5'>$cnt_addresses "._('Addresses')."</span></td>";
     	print "</tr>";
     	print "<tr>";
+        if($User->settings->enableNAT=="1") {
     	print " <th>"._('NAT')."</th>";
     	print " <td><span class='badge badge1 badge5'>$cnt_nat "._('NAT')."</span></td>";
     	print "</tr>";
+        }
+        if($User->settings->enablePSTN=="1") {
+        print " <th>"._('PSTN')."</th>";
+        print " <td><span class='badge badge1 badge5'>$cnt_pstn "._('PSTN')."</span></td>";
+        print "</tr>";
+        }
+        if($User->settings->enableCircuits=="1") {
+        print " <th>"._('Circuits')."</th>";
+        print " <td><span class='badge badge1 badge5'>$cnt_circuits "._('Circuits')."</span></td>";
+        print "</tr>";
+        }
 
     	print "<tr>";
     	print "	<td colspan='2'><hr></td>";
@@ -134,7 +219,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     			$device[$field['name']] = $Result->create_links ($device[$field['name']]);
 
     			print "<tr>";
-    			print "<th>$field[name]</th>";
+    			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
     			print "<td>".$device[$field['name']]."</d>";
     			print "</tr>";
     		}
@@ -150,8 +235,10 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	if($User->is_admin(false)) {
     		print "	<td class='actions'>";
     		print "	<div class='btn-group'>";
-    		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='".$device['id']."'><i class='fa fa-gray fa-pencil'></i></button>";
-    		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='".$device['id']."'><i class='fa fa-gray fa-times'></i></button>";
+    		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='".$device['id']."'><i class='fa fa-pencil'></i></button>";
+            if($User->settings->enableSNMP=="1")
+            print "     <button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
+    		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='".$device['id']."'><i class='fa fa-times'></i></button>";
     		print "	</div>";
     		print " </td>";
     	}
@@ -180,18 +267,17 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 	# rack
 	if ($User->settings->enableRACK=="1") {
 
-    	print "<td>";
-
+    	print "<td vertical-align:top !important;' class='text-right'>";
         // validate rack
         $rack = $Tools->fetch_object ("racks", "id", $device['rack']);
         if ($rack!==false) {
-
-        print " <td style='width:200px; vertical-align:top !important;'>";
-            # title
-            print "     <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pull-right' style='width:200px;'>";
-        print " </td>";
+            // front
+            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'])."' class='pul1l-right' style='width:180px;'>";
+            // back
+            if($rack->hasBack!="0") {
+            print " <img src='".$Tools->create_rack_link ($device['rack'], $device['id'], true)."' class='pull-r1ight' style='width:180px;margin-left:5px;'>";
+            }
         }
-
         print "</td>";
     }
 

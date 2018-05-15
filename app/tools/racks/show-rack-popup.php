@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -41,7 +41,17 @@ else {
 <div class="pHeader"><?php print _("Rack details"); ?></div>
 
 <div class="pContent text-center">
-    <img src="<?php print $Tools->create_rack_link ($rack->id, $_POST['deviceid']); ?>" style='width:200px;'>
+    <?php
+    if(isset($error)) {
+        $Result->show("danger", _($error), true, true, false, true);
+    }
+    else {
+    ?>
+        <img src="<?php print $Tools->create_rack_link ($rack->id, $_POST['deviceid']); ?>" style='width:180px;'>
+        <?php if($rack->hasBack!="0") { ?>
+        <img src="<?php print $Tools->create_rack_link ($rack->id, $_POST['deviceid'], true); ?>" style='width:180px;'>
+        <?php } ?>
+    <?php } ?>
 </div>
 
 <div class="pFooter"><button class="btn btn-sm btn-default hidePopup2">Close</button></div>

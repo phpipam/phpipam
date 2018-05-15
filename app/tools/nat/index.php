@@ -21,6 +21,7 @@ $admin = $User->is_admin(false);
 	<?php } else { ?>
 	<a href="<?php print create_link("administration", "nat") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
 	<?php } ?>
+    <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>
 </div>
 <br>
 <?php } ?>
@@ -35,13 +36,15 @@ else {
     $all_nats = $Tools->fetch_all_objects("nat", "name");
 
     // table
-    print "<table class='table sorted table-striped table-top table-td-top'>";
+    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='nat_table'>";
     // headers
     print "<thead>";
     print "<tr>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Type')."</th>";
-    print " <th colspan='3'>"._('Translation')."</th>";
+    print " <th>"._('Translation')."</th>";
+    print " <th></th>";
+    print " <th></th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
@@ -69,7 +72,7 @@ else {
         # header
         $colspan = $admin ? 10 : 9;
         print "<tr>";
-        print " <th colspan='$colspan'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</th>";
+        print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
         print "</tr>";
 
         # if none than print
@@ -113,7 +116,7 @@ else {
 
                 // print
                 print "<tr>";
-                print " <td><strong>$n->name</strong></td>";
+                print " <td>$n->name</td>";
                 print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";

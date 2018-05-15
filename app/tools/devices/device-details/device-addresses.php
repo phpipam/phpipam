@@ -13,30 +13,42 @@ is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true)
 # fetch device
 $device = (array) $Tools->fetch_object ("devices", "id", $_GET['subnetId']);
 
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
+
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
 # fetch all addresses on switch
 $addresses     = $Tools->fetch_multiple_objects("ipaddresses", "switch", $device['id']);
 if ($addresses===false) { $addresses = array(); }
 
+# set selected address fields array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);
+
 # title - hosts
 print "<h4>"._("Belonging addresses")."</h4><hr>";
 
 # Hosts table
-print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";
+print "<table id='switchMainTable' class='devices table sorted table-striped table-top table-condensed' data-cookie-id-table='device_addresses'>";
 
 # headers
+print "<thead>";
 print "<tr>";
 print "	<th>"._('IP address')."</th>";
+if(in_array("port", $selected_ip_fields)) {
 print "	<th>"._('Port')."</th>";
+}
 print "	<th>"._('Subnet')."</th>";
-print "	<th colspan='2'>"._('Description')."</th>";
+print "	<th>"._('Description')."</th>";
+print "	<th></th>";
 print "	<th class='hidden-xs'>"._('Hostname')."</th>";
 print "	<th class='hidden-xs hidden-sm'>"._('Owner')."</th>";
 print "</tr>";
+print "</thead>";
 
 # IP addresses
 $ipcnt = 0;
+print "<tbody>";
 if(sizeof($addresses) > 0) {
 	foreach ($addresses as $ip) {
 		# cast
@@ -53,7 +65,9 @@ if(sizeof($addresses) > 0) {
 			# print
 			print "<tr>";
 			print "	<td class='ip'><a href='".create_link("subnets",$section['id'],$subnet['id'],"address-details",$ip['id'])."'>".$Subnets->transform_to_dotted($ip['ip_addr'])."</a></td>";
+			if(in_array("port", $selected_ip_fields)) {
 			print "	<td class='port'>$ip[port]</td>";
+			}
 			print "	<td class='subnet'><a href='".create_link("subnets",$section['id'],$subnet['id'])."'>$subnet[ip]/$subnet[mask]</a> <span class='text-muted'>($subnet[description])</span></td>";
 			print "	<td class='description'>$ip[description]</td>";
 
@@ -65,7 +79,7 @@ if(sizeof($addresses) > 0) {
 			}
 			print "</td>";
 
-			print "	<td class='dns hidden-xs'>$ip[dns_name]</td>";
+			print "	<td class='dns hidden-xs'>$ip[hostname]</td>";
 			print "	<td class='owner hidden-xs hidden-sm'>$ip[owner]</td>";
 			print "</tr>";
 
@@ -81,9 +95,9 @@ print "	<td colspan='8'>"._('No hosts belonging to this device')."!</td>";
 print "</tr>";
 }
 
+print "</tbody>";
 print "</table>";			# end table
 print "</td>";
 
 print "</tr>";
 print "</table>";
-?>

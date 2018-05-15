@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -22,6 +22,9 @@ $User->check_user_session();
 if(substr($_POST['as'], 0,2)=="AS" || substr($_POST['as'], 0,2)=="as") {
 	$_POST['as'] = substr($_POST['as'], 2);
 };
+
+// numberic
+if(!is_numeric($_POST['as']))       { $Result->show("danger", _("Invalid AS"), true); }
 
 
 # fetch subnets form ripe

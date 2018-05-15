@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,7 +18,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "nat");
+$csrf = $User->Crypto->csrf_cookie ("create", "nat");
+
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 # get NAT object
 if($_POST['action']!="add") {
@@ -46,7 +49,7 @@ $link = $readonly ? false : true;
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $nat->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($nat->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $nat->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">

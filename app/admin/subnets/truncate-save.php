@@ -4,7 +4,7 @@
  * truncate subnet result
  *********************/
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -16,20 +16,28 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "truncate", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "truncate", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 # id must be numeric
 if(!is_numeric($_POST['subnetId']))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # get subnet details
-$subnet = $Subnets->fetch_subnet (null, $_POST['subnetId']);
+$subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
 
 # verify that user has write permissions for subnet
 $subnetPerm = $Subnets->check_permission ($User->user, $subnet->id);
 if($subnetPerm < 3) 						{ $Result->show("danger", _('You do not have permissions to resize subnet').'!', true); }
+
+# for orphaned
+if($subnet===false) {
+    $subnet = new StdClass ();
+    $subnet->id = $_POST['subnetId'];
+}
 
 # truncate network
 if(!$Subnets->subnet_truncate($subnet->id))	{ $Result->show("danger",  _("Failed to truncate subnet"), false); }

@@ -169,7 +169,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
     * @param integer $byte_order The byte order (Little endian or Big endian) of the architecture
                                  (optional). 1 => big endian, 0 (default) little endian.
     */
-    function Spreadsheet_Excel_Writer_Parser($byte_order, $biff_version)
+    function __construct($byte_order, $biff_version)
     {
         $this->_current_char  = 0;
         $this->_BIFF_version  = $biff_version;
@@ -182,6 +182,12 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $this->_ext_sheets = array();
         $this->_references = array();
     }
+
+    function Spreadsheet_Excel_Writer_Parser($byte_order, $biff_version)
+    {
+        self::__construct($byte_order, $biff_version);
+    }
+
 
     /**
     * Initialize the ptg and function hashes.
@@ -673,9 +679,9 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         // TODO: possible class value 0,1,2 check Formula.pm
         // Split the range into 2 cell refs
         if (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\:([A-Ia-i]?[A-Za-z])(\d+)$/", $range)) {
-            list($cell1, $cell2) = split(':', $range);
+            list($cell1, $cell2) = preg_split('/:/', $range);
         } elseif (preg_match("/^([A-Ia-i]?[A-Za-z])(\d+)\.\.([A-Ia-i]?[A-Za-z])(\d+)$/", $range)) {
-            list($cell1, $cell2) = split('\.\.', $range);
+            list($cell1, $cell2) = preg_split('/\.\./', $range);
 
         } else {
             // TODO: use real error codes
@@ -721,7 +727,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $class = 2; // as far as I know, this is magick.
 
         // Split the ref at the ! symbol
-        list($ext_ref, $range) = split('!', $token);
+        list($ext_ref, $range) = preg_split('/!/', $token);
 
         // Convert the external reference part (different for BIFF8)
         if ($this->_BIFF_version == 0x0500) {
@@ -737,7 +743,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         }
 
         // Split the range into 2 cell refs
-        list($cell1, $cell2) = split(':', $range);
+        list($cell1, $cell2) = preg_split('/:/', $range);
 
         // Convert the cell references
         if (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?(\d+)$/", $cell1)) {
@@ -818,7 +824,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
         $class = 2; // as far as I know, this is magick.
 
         // Split the ref at the ! symbol
-        list($ext_ref, $cell) = split('!', $cell);
+        list($ext_ref, $cell) = preg_split('/!/', $cell);
 
         // Convert the external reference part (different for BIFF8)
         if ($this->_BIFF_version == 0x0500) {
@@ -865,7 +871,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
         if (preg_match("/:/", $ext_ref)) {
-            list($sheet_name1, $sheet_name2) = split(':', $ext_ref);
+            list($sheet_name1, $sheet_name2) = preg_split('/:/', $ext_ref);
 
             $sheet1 = $this->_getSheetIndex($sheet_name1);
             if ($sheet1 == -1) {
@@ -911,7 +917,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
 
         // Check if there is a sheet range eg., Sheet1:Sheet2.
         if (preg_match("/:/", $ext_ref)) {
-            list($sheet_name1, $sheet_name2) = split(':', $ext_ref);
+            list($sheet_name1, $sheet_name2) = preg_split('/:/', $ext_ref);
 
             $sheet1 = $this->_getSheetIndex($sheet_name1);
             if ($sheet1 == -1) {
@@ -1213,7 +1219,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             default:
                 // if it's a reference
                 if (preg_match('/^\$?[A-Ia-i]?[A-Za-z]\$?[0-9]+$/',$token) and
-                   !preg_match("/[0-9]/",$this->_lookahead) and 
+                   !preg_match("/[0-9]/",$this->_lookahead) and
                    ($this->_lookahead != ':') and ($this->_lookahead != '.') and
                    ($this->_lookahead != '!'))
                 {
@@ -1234,13 +1240,13 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                     return $token;
                 }
                 // if it's a range (A1:A2)
-                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and 
+                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and
                        !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
                 }
                 // if it's a range (A1..A2)
-                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and 
+                elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$token) and
                        !preg_match("/[0-9]/",$this->_lookahead))
                 {
                     return $token;
@@ -1258,7 +1264,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
                     return $token;
                 }
                 // If it's a number (check that it's not a sheet name or range)
-                elseif (is_numeric($token) and 
+                elseif (is_numeric($token) and
                         (!is_numeric($token.$this->_lookahead) or ($this->_lookahead == '')) and
                         ($this->_lookahead != '!') and ($this->_lookahead != ':'))
                 {
@@ -1507,7 +1513,7 @@ class Spreadsheet_Excel_Writer_Parser extends PEAR
             return $result;
         }
         // if it's a range
-        elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$this->_current_token) or 
+        elseif (preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+:(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$this->_current_token) or
                 preg_match("/^(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+\.\.(\$)?[A-Ia-i]?[A-Za-z](\$)?[0-9]+$/",$this->_current_token))
         {
             $result = $this->_current_token;

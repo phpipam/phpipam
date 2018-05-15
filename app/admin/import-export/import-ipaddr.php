@@ -4,7 +4,7 @@
  ************************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -36,17 +36,18 @@ foreach ($data as &$cdata) {
 	if (($cdata['action'] == "add") || ($cdata['action'] == "edit")) {
 		// # set update array
 
-		$values = array("id"=>$cdata['id'],
-						"ip_addr"=>$Addresses->transform_address($cdata['ip_addr'],"decimal"),
-						"subnetId"=>$cdata['subnetId'],
-						"dns_name"=>$cdata['dns_name'],
-						"description"=>$cdata['description'],
-						"mac"=>$cdata['mac'],
-						"owner"=>$cdata['owner'],
-						"switch"=>$cdata['switch'],
-						"state"=>$cdata['state'],
-						"note"=>$cdata['note'],
-						"is_gateway"=>$cdata['is_gateway']
+		$values = array(
+						"id"          =>$cdata['id'],
+						"ip_addr"     =>$Addresses->transform_address($cdata['ip_addr'],"decimal"),
+						"subnetId"    =>$cdata['subnetId'],
+						"hostname"    =>$cdata['hostname'],
+						"description" =>$cdata['description'],
+						"mac"         =>$cdata['mac'],
+						"owner"       =>$cdata['owner'],
+						"switch"      =>$cdata['switch'],
+						"state"       =>$cdata['state'],
+						"note"        =>$cdata['note'],
+						"is_gateway"  =>$cdata['is_gateway']
 						);
 
 		# add custom fields

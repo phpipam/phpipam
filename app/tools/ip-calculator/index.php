@@ -1,43 +1,30 @@
 <?php
 # verify that user is logged in
 $User->check_user_session();
+
+# default load ip-calculator
+if(!isset($_GET['subnetId'])) {
+    $_GET['subnetId'] = "ip-calculator";
+}
 ?>
 
-<h4><?php print _('IPv4v6 calculator');?></h4>
+<h4><?php print _('IP and bandwidth calculator');?></h4>
 <hr>
 
-<!-- ipCalc form -->
-<form name="ipCalc" id="ipCalc">
-<table class="ipCalc table">
+<!-- tabs -->
+<ul class='nav nav-tabs' style='margin-bottom:20px;'>
+    <li role='presentation' <?php if($_GET['subnetId']=="ip-calculator") print "class='active'"; ?>> <a href='<?php print create_link("tools", "ip-calculator", "ip-calculator"); ?>'><?php print _("IP calculator"); ?></a></li>
+    <li role='presentation' <?php if($_GET['subnetId']=="bw-calculator") print "class='active'"; ?>> <a href='<?php print create_link("tools", "ip-calculator", "bw-calculator"); ?>'><?php print _("Bandwidth calculator"); ?></a></li>
+</ul>
 
-    <!-- IP address input -->
-    <tr>
-        <td><?php print _('IP address');?> / <?php print _('mask');?></td>
-        <td>
-            <input type="text" class="form-control" name="cidr" size="40" autofocus="autofocus">
-        </td>
-        <td>
-            <div class="info2" style="margin-bottom:0px;"><?php print _('Please enter IP address and mask in CIDR format');?></div>
-        </td>
-    </tr>
-
-    <!-- Submit -->
-    <tr class="th">
-        <td></td>
-        <td>
-        	<div class="btn-group">
-            	<button type="submit" class="btn btn-sm btn-default"><i class="fa fa-check"></i> <?php print _('Calculate');?></button>
-				<input type="button" class="btn btn-sm btn-default reset" value="<?php print _('Reset');?>">
-        	</div>
-        </td>
-        <td></td>
-    </tr>
-
-
-</table>
-</form>
-
-
-<!-- result -->
-<br>
-<div class="ipCalcResult"></div>
+<!-- details -->
+<?php
+if($_GET['subnetId']=="ip-calculator") {
+    include("ip-calculator.php");
+}
+elseif($_GET['subnetId']=="bw-calculator") {
+    include("bw-calculator.php");
+}
+else {
+    $Result->show("danger", _("Invalid request"), false);
+}

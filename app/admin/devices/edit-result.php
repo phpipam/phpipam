@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,9 +17,11 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "device", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "device", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);
@@ -37,7 +39,7 @@ foreach($device as $key=>$line) {
 	}
 }
 # glue sections together
-$device['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
+$device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 
 # Hostname must be present
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
@@ -82,24 +84,24 @@ if(sizeof($custom) > 0) {
 }
 
 # set update values
-$values = array("id"=>@$device['switchId'],
-				"hostname"=>@$device['hostname'],
-				"ip_addr"=>@$device['ip_addr'],
-				"type"=>@$device['type'],
-				"description"=>@$device['description'],
-				"sections"=>@$device['sections'],
-				"location"=>@$device['location_item']
+$values = array(
+				"id"          =>$device['switchId'],
+				"hostname"    =>$device['hostname'],
+				"ip_addr"     =>$device['ip_addr'],
+				"type"        =>$device['type'],
+				"description" =>$device['description'],
+				"sections"    =>$device['sections'],
+				"location"    =>@$device['location_item']
 				);
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack']>0)) {
-    $values['rack'] = $device['rack'];
-    $values['rack_start'] = $device['rack_start'];
-    $values['rack_size']  = $device['rack_size'];
-
+if (strlen(@$device['rack'])>0) {
+	$values['rack']       = $device['rack'];
+	$values['rack_start'] = $device['rack_start'];
+	$values['rack_size']  = $device['rack_size'];
 }
 
 # update device
@@ -109,9 +111,10 @@ else																	{ $Result->show("success", _("Device $device[action] succes
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("subnets", "device", $values["id"]);
+	$Admin->remove_object_references ("nat", "device", $values["id"]);
 	$Admin->remove_object_references ("ipaddresses", "switch", $values["id"]);
 	$Admin->remove_object_references ("pstnPrefixes", "deviceId", $values["id"]);
 	$Admin->remove_object_references ("pstnNumbers", "deviceId", $values["id"]);
+	$Admin->remove_object_references ("circuits", "device1", $values["id"]);
+	$Admin->remove_object_references ("circuits", "device2", $values["id"]);
 }
-
-?>

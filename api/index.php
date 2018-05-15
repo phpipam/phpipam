@@ -17,23 +17,28 @@
  *
  */
 
-# include funtions
-require( dirname(__FILE__) . '/../functions/functions.php');		// functions and objects from phpipam
+# include functions
+if(!function_exists("create_link"))
+require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
+
+# include common API controllers
 require( dirname(__FILE__) . '/controllers/Common.php');			// common methods
 require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
 # settings
 $enable_authentication = true;
+$time_response         = true;          // adds [time] to response
+$lock_file             = "";            // (optional) file to write lock to
 
-# database object
-$Database 	= new Database_PDO;
-$Tools	    = new Tools ($Database);
-
-# exceptions/result object
+# database and exceptions/result object
+$Database = new Database_PDO;
+$Tools    = new Tools ($Database);
+$User     = new User ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
-$settings 	= $Tools->fetch_object ("settings", "id", 1);
+if(SETTINGS===null)
+$settings = $Tools->fetch_object ("settings", "id", 1);
 
 # set empty controller for options
 if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
@@ -42,6 +47,8 @@ if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
 
 /* wrap in a try-catch block to catch exceptions */
 try {
+	// start measuring
+	$start = microtime(true);
 
 	/* Validate application ---------- */
 
@@ -66,8 +73,27 @@ try {
 	    	if (!in_array($extension, get_loaded_extensions()))
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
-		// decrypt request - to JSON
-		$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+		$api_crypt_encryption_library = "openssl";
+		// Override $api_crypt_encryption_library="mcrypt" from config.php if required.
+		include( dirname(__FILE__).'/../config.php' );
+
+		// decrypt request - form_encoded
+		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $api_crypt_encryption_library);
+			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
+			parse_str($decoded, $encrypted_params);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
+		}
+		// json_encoded
+		else {
+			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $api_crypt_encryption_library);
+			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$encrypted_params = json_decode($encrypted_params, true);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
+		}
 	}
 	// SSL checks
 	elseif($app->app_security=="ssl") {
@@ -89,32 +115,44 @@ try {
 
 
 	// append POST parameters if POST or PATCH
-	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH"){
+	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
-        if($_SERVER['CONTENT_TYPE']=="application/json"){
-                $rawPostData = file_get_contents('php://input');
-                $json = json_decode($rawPostData,true);
-                if(is_array($json))
-                $params = array_merge((array) $params, $json);
-                $params = (object) $params;
+        if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
+            $rawPostData = file_get_contents('php://input');
+            $json = json_decode($rawPostData,true);
+            if(is_array($json))
+            $params = array_merge((array) $params, $json);
+            $params = (object) $params;
         }
 		// if application tupe is XML (application/json)
-        elseif($_SERVER['CONTENT_TYPE']=="application/xml"){
-                $rawPostData = file_get_contents('php://input');
-                $xml = $Response->xml_to_array($rawPostData);
-                if(is_array($xml))
-                $params = array_merge((array) $params, $xml);
-                $params = (object) $params;
+        elseif(strpos($_SERVER['CONTENT_TYPE'], "application/xml")!==false){
+            $rawPostData = file_get_contents('php://input');
+            $xml = $Response->xml_to_array($rawPostData);
+            if(is_array($xml))
+            $params = array_merge((array) $params, $xml);
+            $params = (object) $params;
         }
 		//if application type is default (application/x-www-form-urlencoded)
         elseif(sizeof(@$_POST)>0) {
-                $params = array_merge((array) $params, $_POST);
-                $params = (object) $params;
+            $params = array_merge((array) $params, $_POST);
+            $params = (object) $params;
+        }
+        //url encoded input
+        else {
+            // input
+            $input = file_get_contents('php://input');
+            if (strlen($input)>0) {;
+                parse_str($input, $out);
+                if(is_array($out)) {
+                    $params = array_merge((array) $params, $out);
+                    $params = (object) $params;
+                }
+            }
         }
     }
 
-
-
+	/* Sanitise input ---------- (user/User/USER) */
+	if (isset($params->controller)) $params->controller = strtolower($params->controller);
 
 	/* Authentication ---------- */
 
@@ -158,6 +196,10 @@ try {
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
 		require( dirname(__FILE__) . "/controllers/$controller_file.php");
 	}
+	// check custom controllers
+	elseif( file_exists( dirname(__FILE__) . "/controllers/custom/$controller_file.php") ) {
+		require( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
+	}
 	else {
 		$Response->throw_exception(400, 'Invalid controller');
 	}
@@ -166,14 +208,53 @@ try {
 	// it the parameters from the request and Database object
 	$controller = new $controller($Database, $Tools, $params, $Response);
 
+	// pass app params for links result
+	$controller->app = $app;
+
+	// Unmarshal the custom_fields JSON object into the main object for
+	// POST and PATCH. This only works for controllers that support custom
+	// fields and if the app has nested custom fields enabled, otherwise
+	// this is skipped.
+	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' || strtoupper($_SERVER['REQUEST_METHOD']) == 'PATCH') {
+		$controller->unmarshal_nested_custom_fields();
+	}
+
 	// check if the action exists in the controller. if not, throw an exception.
 	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
 	}
 
-	// execute the action
-	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
+	// if lock is enabled wait until it clears
+	if( $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+    	// set transaction lock file name
+    	$controller->set_transaction_lock_file ($lock_file);
 
+    	// check if locked form previous process
+    	while ($controller->is_transaction_locked ()) {
+        	// max ?
+        	if ((microtime(true) - $start) > $app->app_lock_wait) {
+            	$Response->throw_exception(503, "Transaction timed out after $app->app_lock_wait seconds because of transaction lock");
+        	}
+        	// add random delay
+        	usleep(rand(250000,500000));
+    	}
+
+    	// add new lock
+    	$controller->add_transaction_lock ();
+    	// execute the action
+    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
+    }
+    else {
+    	// execute the action
+    	$result = $controller->{$_SERVER['REQUEST_METHOD']} ();
+    }
+
+    // remove transaction lock
+    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+        if($controller->is_transaction_locked ()) {
+            $controller->remove_transaction_lock ();
+        }
+    }
 } catch ( Exception $e ) {
 	// catch any exceptions and report the problem
 	$result = $e->getMessage();
@@ -181,17 +262,29 @@ try {
 	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {
 		$Response->exception = true;
-		$Response->result['success'] = false;
+		$Response->result['success'] = 0;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
 	}
+
+    // remove transaction lock
+    if(is_object($controller) && $app->app_lock==1 && strtoupper($_SERVER['REQUEST_METHOD'])=="POST") {
+        if($controller->is_transaction_locked ()) {
+            $controller->remove_transaction_lock ();
+        }
+    }
 }
 
+// stop measuring
+$stop = microtime(true);
+
+// add stop time
+if($time_response) {
+    $time = $stop - $start;
+}
 
 //output result
-echo $Response->formulate_result ($result);
+echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $controller->custom_fields);
 
 // exit
 exit();
-
-?>

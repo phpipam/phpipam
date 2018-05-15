@@ -16,15 +16,16 @@ $all_agents = $Admin->fetch_all_objects("scanAgents");
 <hr><br>
 
 <!-- Add new -->
-<button class='btn btn-sm btn-default editAgent' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new agent'); ?></button>
+<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/scan-agents/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create new agent'); ?></button>
 
 
 <?php
 /* print existing APIs */
 if($all_agents!==false) {
 
-	print '<table id="userPrint" class="table table-striped table-top table-auto">';
+	print '<table id="userPrint" class="table sorted table-striped table-top table-auto nopagination nosearch" data-cookie-id-table="scanagents">';
 	# headers
+	print "<thead>";
 	print '<tr>';
     print "<th>"._('Agent id').'</th>';
 	print "<th>"._('Name').'</th>';
@@ -34,8 +35,10 @@ if($all_agents!==false) {
     print "<th>"._('Last access').'</th>';
     print '<th></th>';
 	print '</tr>';
+	print "</thead>";
 
 	# loop
+	print "<tbody>";
 	foreach ($all_agents as $a) {
 		//cast
 		$a = (array) $a;
@@ -56,13 +59,14 @@ if($all_agents!==false) {
 		// add/remove agents
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editAgent'  data-container='body' data-id='$a[id]' data-action='edit'   rel='tooltip' title='"._('edit agent details')."'>	<i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editAgent'  data-container='body' data-id='$a[id]' data-action='delete' rel='tooltip' title='"._('remove agent')."'>		<i class='fa fa-times'></i></button>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/scan-agents/edit.php' data-class='700' data-action='edit' data-id='$a[id]' rel='tooltip' title='"._('edit agent details')."'><i class='fa fa-pencil'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/scan-agents/edit.php' data-class='700' data-action='delete' data-id='$a[id]' rel='tooltip' title='"._('remove agents')."'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print "</td>";
 
 		print '</tr>' . "\n";
 	}
+	print "</tbody>";
 	print "</table>";
 }
 else {

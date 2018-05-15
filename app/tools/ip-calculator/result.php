@@ -8,7 +8,7 @@
 
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -39,7 +39,7 @@ $calc_results = $Tools->calculate_ip_calc_results($cidr);
 <h4><?php print _('Subnetting details for');?> <?php print $cidr; ?>:</h4>
 
 <!-- IPcalc result table -->
-<table class="ipCalcResult table table-striped table-condensed">
+<table class="ipCalcResult table table-striped table-condensed table-noborder table-hover">
 
     <!-- IP details -->
     <?php

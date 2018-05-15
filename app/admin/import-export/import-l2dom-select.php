@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database	= new Database_PDO;
@@ -59,6 +59,7 @@ foreach($expfields as $std_field) {
 <div class="pContent">
 
 <?php
+if (!is_writeable( dirname(__FILE__) . '/upload' )) $Tools->Result->show("danger", _("'app/admin/import-export/upload' folder is not writeable."), false, false);
 
 # print template form
 print "<form id='selectImportFields'><div id='topmsg'>";

@@ -1,13 +1,20 @@
+<?php
+// add prefix - install or migrate
+$title_prefix = @$_GET['subnetId']=="migrate" ? "migration" : "installation";
+$text_prefix  = @$_GET['subnetId']=="migrate" ? "migrate" : "install";
+$filename	  = @$_GET['subnetId']=="migrate" ? "MIGRATE" : "SCHEMA";
+?>
+
 <div class="widget-dash col-xs-12 col-md-8 col-md-offset-2">
 <div class="inner install" style="min-height:auto;">
-	<h4>Automatic database installation</h4>
+	<h4>Automatic database <?php print $title_prefix; ?></h4>
 
 	<div class="hContent">
 
 		<div class="text-muted" style="margin:10px;">
-		Please provide required inputs in below form for automatic database installation, once finished click Install database.
+		Please provide required inputs in below form for automatic database <?php print $title_prefix; ?>, once finished click Install database.
 		<br>
-		Before you install please fill in all settings in <strong>config.php</strong> file!
+		Before you <?php print $text_prefix; ?> please fill in all settings in <strong>config.php</strong> file!
 		</div>
 		<hr>
 
@@ -18,6 +25,7 @@
 			<div class="col-xs-12 col-md-4"><strong>MySQL username</strong></div>
 			<div class="col-xs-12 col-md-8">
 				<input type="text" style="width:100%;" name="mysqlrootuser" class="form-control" autofocus="autofocus" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+				<input type="hidden" name="install_type" value="<?php print $text_prefix; ?>">
 			</div>
 
 			<!-- MySQL install password -->
@@ -69,13 +77,22 @@
 			</div>
 			</div>
 
+			<?php
+			// file check
+			if(@$_GET['subnetId']=="migrate") {
+				if(!file_exists(dirname(__FILE__)."/../../db/MIGRATE.sql")) { ?>
+					<div class="col-xs-12"><hr><div class='alert alert-danger'>Cannot access file db/MIGRATE.sql!</div></div>
+			<?php }
+			}
+			?>
+
 			<!-- submit -->
 			<div class="col-xs-12 text-right" style="margin-top:10px;">
 				<hr>
 				<div class="btn-block">
 					<!-- Back -->
-					<a class="btn btn-sm btn-default" href="<?php print create_link("install",null,null,null,null,true); ?>" ><i class='fa fa-angle-left'></i> Back</a>
-					<a class="install btn btn-sm btn-info" version="0">Install phpipam database</a>
+					<a class="btn btn-sm btn-default" href="<?php print create_link("install"); ?>" ><i class='fa fa-angle-left'></i> Back</a>
+					<a class="install btn btn-sm btn-info" version="0"><?php print ucwords($text_prefix); ?> phpipam database</a>
 				</div>
 			</div>
 			<div class="clearfix"></div>

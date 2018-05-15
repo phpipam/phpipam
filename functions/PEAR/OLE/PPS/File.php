@@ -45,9 +45,9 @@ class OLE_PPS_File extends OLE_PPS
     * @param string $name The name of the file (in Unicode)
     * @see OLE::Asc2Ucs()
     */
-    function OLE_PPS_File($name)
+    public function __construct($name)
     {
-    	$tempDir = new System();
+        $tempDir = new System();
         $this->_tmp_dir = $tempDir->tmpdir();
         $this->OLE_PPS(
             null,
@@ -61,6 +61,30 @@ class OLE_PPS_File extends OLE_PPS
             '',
             array());
     }
+
+    /**
+    * The constructor
+    *
+    * @access public
+    * @param string $name The name of the file (in Unicode)
+    * @see OLE::Asc2Ucs()
+    */
+    // function OLE_PPS_File($name)
+    // {
+    // 	$tempDir = new System();
+    //     $this->_tmp_dir = $tempDir->tmpdir();
+    //     $this->OLE_PPS(
+    //         null,
+    //         $name,
+    //         OLE_PPS_TYPE_FILE,
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         null,
+    //         '',
+    //         array());
+    // }
 
     /**
     * Sets the temp dir used for storing the OLE file

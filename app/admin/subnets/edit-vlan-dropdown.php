@@ -7,7 +7,7 @@
 /* required functions */
 if(!isset($User)) {
 	/* functions */
-	require( dirname(__FILE__) . '/../../../functions/functions.php');
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 	# initialize user object
 	$Database 	= new Database_PDO;
@@ -55,7 +55,9 @@ $permitted_domains = array_filter($out);
 				foreach($d['vlans'] as $v) {
 					// set print
 					$printVLAN = $v->number;
-					if(!empty($v->name)) { $printVLAN .= " ($v->name)"; }
+					if(!empty($v->name)) {
+						$printVLAN .= " (" . $Tools->shorten_text($v->name, 25) . ")";
+					}
 
 					/* selected? */
 					if(@$subnet_old_details['vlanId']==$v->vlanId) 	{ print '<option value="'. $v->vlanId .'" selected>'. $printVLAN .'</option>'. "\n"; }

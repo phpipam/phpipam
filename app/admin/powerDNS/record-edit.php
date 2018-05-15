@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -19,13 +19,16 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "record");
+$csrf = $User->Crypto->csrf_cookie ("create", "record");
 
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
 
 # default post
 $post = $_POST;
+
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 # get record
 if($_POST['action']!="add") {
@@ -62,12 +65,16 @@ else {
 		// die if not existing
 		if (!is_numeric($_POST['domain_id'])) {
     		# admin?
-    		if ($User->is_admin())   { $Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong><span class='ip_dns_addr hidden'>".$_POST['id']."</span> "._("does not exist")."!"."<hr><button class='btn btn-sm btn-default editDomain2 editDomain' data-action='add' data-id='0'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true); }
-    		else                     { $Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong> "._("does not exist")."!", true, true); }
+    		if ($User->is_admin()) {
+    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong><span class='ip_dns_addr hidden'>".$_POST['id']."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
+    		}
+    		else {
+    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong> "._("does not exist")."!", true, true);
+    		}
 		}
 		else {
 			$record = new StdClass ();
-			$record->ttl = 3600;
+			$record->ttl = @$pdns->ttl;
 			$record->name = $post['domain_id'];
 			$record->content = $_POST['id'];
 		}

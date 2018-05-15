@@ -6,7 +6,7 @@
  *************************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -21,9 +21,16 @@ $Ping		= new Scan ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "address", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+if($_POST['action']=="add") {
+	$User->Crypto->csrf_cookie ("validate", "address_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
+else {
+	$User->Crypto->csrf_cookie ("validate", "address_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
 
 # validate action
 $Tools->validate_action ($_POST['action']);
@@ -35,6 +42,43 @@ if(isset($_POST['action-visual'])) {
 
 # save $_POST to $address
 $address = $_POST;
+
+
+// set selected address and required addresses fields array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);
+$required_ip_fields = explode(";", $User->settings->IPrequired);
+// append one missing from selected
+$selected_ip_fields[] = "description";
+$selected_ip_fields[] = "hostname";
+// if field is present in required fields but not in selected remove it !
+foreach ($required_ip_fields as $k=>$f) {
+	if (!in_array($f, $selected_ip_fields)) {
+		unset ($required_ip_fields[$k]);
+	}
+}
+// checks
+if(is_array($required_ip_fields) && $action!="delete") {
+	// remove modules not enabled from required fields
+	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
+
+	// set default array
+	$required_field_errors = array();
+	// Check that all required fields are present
+	foreach ($required_ip_fields as $required_field) {
+		if (!isset($address[$required_field]) || strlen($address[$required_field])==0) {
+			$required_field_errors[] = ucwords($required_field)." "._("is required");
+		}
+	}
+	// check
+	if(sizeof($required_field_errors)>0) {
+		array_unshift($required_field_errors, "Please fix following errors:");
+		$Result->show("danger", implode("<br> - ", $required_field_errors), true);
+	}
+}
+
+
+# remove all spaces in hostname
+if (strlen($address['hostname'])>0) { $address['hostname'] = str_replace(" ", "", $address['hostname']); }
 
 # required fields
 isset($address['action']) ?:		$Result->show("danger", _("Missing required fields"). " action", true);
@@ -49,7 +93,7 @@ if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
 if ($firewallZoneSettings->autogen == 'on') {
 	if ($address['action'] == 'add' ) {
-		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['dns_name']);
+		$address['firewallAddressObject'] = $Zones->generate_address_object($address['subnetId'],$address['hostname']);
 	} else {
 		if ($_POST['firewallAddressObject']) {
 			$address['firewallAddressObject'] = $_POST['firewallAddressObject'];
@@ -73,7 +117,7 @@ $address = $Addresses->reformat_empty_array_fields ($address, null);
 
 # custom fields and checks
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
-if(sizeof($custom_fields) > 0) {
+if(sizeof($custom_fields) > 0 && $action!="delete") {
 	foreach($custom_fields as $field) {
 		# replace possible ___ back to spaces!
 		$field['nameTest']      = str_replace(" ", "___", $field['name']);
@@ -202,14 +246,18 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
             	}
         	}
 
-			# modify action - if delete ok, dynamically reset add / edit -> if IP already exists set edit
-			if($action != "delete") {
-				$address['action'] = $Addresses->address_exists ($m, $address['subnetId'])===true ? "edit" : "add";
+
+			# if it already exist for add skip it !
+			if($Addresses->address_exists ($m, $address['subnetId']) && $action=="add") {
+				# Add Warnings if it exists
+				$Result->show("warning", _('IP address')." ".$Addresses->transform_address($m, "dotted")." "._('already existing in selected network').'!', false);
 			}
-			# if it fails set error log
-			if (!$Addresses->modify_address($address, false)) {
-		        $errors[] = _('Cannot').' '. $address['action']. ' '._('IP address').' '. $Addresses->transform_to_dotted($m);
-		    }
+			else {
+				# if it fails set error log
+				if (!$Addresses->modify_address($address, false)) {
+			        $errors[] = _('Cannot').' '. $address['action']. ' '._('IP address').' '. $Addresses->transform_to_dotted($m);
+			    }
+			}
 			# next IP
 			$m = gmp_strval(gmp_add($m,1));
 		}
@@ -242,15 +290,16 @@ else {
 
 	# unique hostname requested?
 	if(isset($address['unique'])) {
-		if($address['unique'] == 1 && strlen($address['dns_name'])>0) {
+		if($address['unique'] == 1 && strlen($address['hostname'])>0) {
 			# check if unique
-			if(!$Addresses->is_hostname_unique($address['dns_name'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
+			if(!$Addresses->is_hostname_unique($address['hostname'])) 						{ $Result->show("danger", _('Hostname is not unique')."!", true); }
 		}
 	}
 
 	# validate and normalize MAC address
 	if($action!=="delete") {
     	if(strlen(@$address['mac'])>0) {
+    		$address['mac'] = trim($address['mac']);
         	if($User->validate_mac ($address['mac'])===false) {
             	$Result->show("danger", _('Invalid MAC address')."!", true);
         	}
@@ -267,8 +316,12 @@ else {
 		$address['ip_addr'] = $address_old['ip'];
 	}
 	# verify address
-	if($action!=="delete" && $subnet['isFolder']!="1")
-	$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
+	if($action!=="delete" && $subnet['isFolder']!="1") {
+		$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
+	}
+	elseif ($action!=="delete" && $subnet['isFolder']=="1") {
+		$verify = $Addresses->verify_address( $address['ip_addr'], "0.0.0.0/0", $not_strict );
+	}
 
 	# if errors are present print them, else execute query!
 	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }
@@ -338,4 +391,3 @@ else {
 		}
 	}
 }
-?>

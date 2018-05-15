@@ -3,6 +3,9 @@
 # user must be authenticated and admin
 $User->is_admin (true);
 
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
+
 # get clog entries
 $clogs = $Log->fetch_changlog_entries("section", $_GET['sPage']);
 

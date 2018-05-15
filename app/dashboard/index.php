@@ -74,9 +74,9 @@ $(document).ready(function() {
 
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/1.2/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/1.2/flot/jquery.flot.categories.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/1.2/flot/excanvas.min.js"></script><![endif]-->
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.categories.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script><![endif]-->
 
 
 <div class="welcome" style="text-align:right">
@@ -135,7 +135,7 @@ foreach($uwidgets as $uk=>$uv) {
 
 # print
 print "<div class='add-widgets' style='display:none;padding-left:20px;'>";
-print "	<a href='' class='btn btn-sm btn-default btn-success add-new-widget'><i class='fa fa-plus'></i> Add new widget</a>";
+print "	<a class='btn btn-sm btn-default btn-success open_popup' data-script='app/dashboard/widget-popup.php' data-class='700'><i class='fa fa-plus'></i> "._('Add new widget')."</a>";
 print "</div>";
 
 if(sizeof($uwidgets)>1) {
@@ -158,7 +158,7 @@ if(sizeof($uwidgets)>1) {
 				if($wdet['whref']=="yes")	{ print "<a href='".create_link("widgets",$wdet['wfile'])."'> <h4>"._($wdet['wtitle'])."<i class='fa fa-external-link fa-gray pull-right'></i></h4></a>"; }
 				else						{ print "<h4>"._($wdet['wtitle'])."</h4>"; }
 				print "		<div class='hContent'>";
-				print "			<div style='text-align:center;padding-top:50px;'><strong>"._('Loading statistics')."</strong><br><i class='fa fa-spinner fa-spin'></i></div>";
+				print "			<div style='text-align:center;padding-top:50px;'><strong>"._('Loading widget')."</strong><br><i class='fa fa-spinner fa-spin'></i></div>";
 				print "		</div>";
 				print "	</div>";
 				print "	</div>";

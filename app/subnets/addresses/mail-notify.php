@@ -5,7 +5,7 @@
  ********************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -22,6 +22,8 @@ $User->check_user_session();
 # id must be numeric
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true);
 
+$csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
+
 # get IP address id
 $id = $_POST['id'];
 
@@ -33,6 +35,9 @@ $nameservers    = (array) $Tools->fetch_object("nameservers", "id", $subnet['nam
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
+
+# get subnet calculation
+$subnet_calculation = $Tools->calculate_ip_calc_results ($subnet['ip']."/".$subnet['mask']);
 
 
 # checks
@@ -49,11 +54,12 @@ $title = _('IP address details').' :: ' . $address['ip'];
 # description
 empty($address['description']) ? : 		$content[] = "&bull; "._('Description').":\t\t $address[description]";
 # hostname
-empty($address['dns_name']) ? : 		$content[] = "&bull; "._('Hostname').": \t $address[dns_name]";
+empty($address['hostname']) ? : 		$content[] = "&bull; "._('Hostname').": \t\t $address[hostname]";
 # subnet desc
 $s_descrip = empty($subnet['description']) ? "" : 	 " (" . $subnet['description']. ")";
 # subnet
 						$content[] = "&bull; "._('Subnet').": \t\t $subnet[ip]/$subnet[mask] $s_descrip";
+						$content[] = "&bull; "._('Netmask').": \t\t ".$subnet_calculation['Subnet netmask'];
 # gateway
 $gateway = $Subnets->find_gateway($subnet['id']);
 if($gateway !==false)
@@ -74,7 +80,7 @@ if ( !empty( $subnet['nameserverId'] ) ) {
 if(!empty($address['switch'])) {
 	# get device by id
 	$device = (array) $Tools->fetch_object("devices", "id", $address['switch']);
-	!sizeof($device)>1 ? : 				$content[] = "&bull; "._('Device').": \t\t $device[hostname]";
+	!sizeof($device)>1 ? : 				$content[] = "&bull; "._('Device').": \t\t\t $device[hostname]";
 }
 # port
 empty($address['port']) ? : 			$content[] = "&bull; "._('Port').": \t\t $address[port]";
@@ -131,6 +137,7 @@ if(sizeof($custom_fields) > 0) {
 	</tr>
 
 	</table>
+	<input type="hidden" name='csrf_cookie' value='<?php print $csrf; ?>'>
 	</form>
 </div>
 

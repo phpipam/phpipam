@@ -6,6 +6,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 
 # set which custom fields to display
 $hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$visible_fields = array();
 # set visible fields
 foreach ($custom_fields as $k=>$f) {
     if (isset($hidden_fields['subnets'])) {
@@ -17,6 +18,8 @@ foreach ($custom_fields as $k=>$f) {
 # set colspan
 $colspan_subnets = 5 + sizeof($visible_fields);
 
+$subnet = (array) $subnet;
+
 
 /**
  * Script to display all slave IP addresses and subnets in content div of subnets table!
@@ -26,9 +29,10 @@ $colspan_subnets = 5 + sizeof($visible_fields);
 print "<h4 style='margin-top:25px;'>$subnet[description] ($subnet[ip]/$subnet[mask]) "._('has')." ".sizeof($slave_subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
 # print HTML table
-print '<table class="slaves table table-striped table-condensed table-hover table-full table-top">'. "\n";
+print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="subnet_slaves">'. "\n";
 
 # headers
+print "<thead>";
 print "<tr>";
 print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
@@ -36,7 +40,7 @@ print "	<th>"._('Subnet')."</th>";
 # custom
 if(isset($visible_fields)) {
 foreach ($visible_fields as $f) {
-print "	<th class='hidden-xs hidden-sm hidden-md'>$f[name]</th>";
+print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($f['name'])."</th>";
 }
 }
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Used')."</th>";
@@ -44,10 +48,12 @@ print "	<th class='small hidden-xs hidden-sm hidden-md'>% "._('Free')."</th>";
 print "	<th class='small hidden-xs hidden-sm hidden-md'>"._('Requests')."</th>";
 print " <th style='width:80px;'></th>";
 print "</tr>";
+print "</thead>";
 
 $m = 0;				//slave index
 
 # loop
+print "<tbody>";
 foreach ($slave_subnets as $slave_subnet) {
 	# cast to array
 	$slave_subnet = (array) $slave_subnet;
@@ -58,7 +64,7 @@ foreach ($slave_subnets as $slave_subnet) {
 		# if master start != first slave start print free space
 		if($subnet['subnet'] != $slave_subnet['subnet']) {
 			# calculate diff between subnet and slave
-			$diff = (int) gmp_strval(gmp_sub($slave_subnet['subnet'], $subnet['subnet']));
+			$diff = gmp_strval(gmp_sub($slave_subnet['subnet'], $subnet['subnet']));
 
 			print "<tr class='success'>";
 			print "	<td></td>";
@@ -70,16 +76,11 @@ foreach ($slave_subnets as $slave_subnet) {
 
 	# get VLAN details
 	$slave_vlan = (array) $Tools->fetch_object("vlans", "vlanId", $slave_subnet['vlanId']);
-	if(!$slave_vlan) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
+	if($slave_vlan===false) 	{ $slave_vlan['number'] = "/"; }				//reformat empty vlan
 
 
 	# calculate free / used / percentage
-	if(!$has_slaves) {
-		$slave_addresses = (int) $Addresses->count_subnet_addresses ($slave_subnet['id']);
-		$calculate = $Subnets->calculate_subnet_usage( $slave_addresses, $slave_subnet['mask'], $slave_subnet['subnet'], $slave_subnet['isFull']);
-	} else {
-		$calculate = $Subnets->calculate_subnet_usage_recursive( $slave_subnet['id'], $slave_subnet['subnet'], $slave_subnet['mask'], $Addresses, $slave_subnet['isFull']);
-	}
+	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
 
 	# add full information
 	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
@@ -122,7 +123,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 	# allow requests
 	if($slave_subnet['allowRequests'] == 1) 	{ print '<td class="allowRequests small hidden-xs hidden-sm hidden-md"><i class="fa fa-gray fa-check"></td>'; }
-	else 										{ print '<td class="allowRequests small hidden-xs hidden-sm hidden-md"></td>'; }
+	else 										{ print '<td class="allowRequests small hidden-xs hidden-sm hidden-md">/</td>'; }
 
 	# edit
 	$slave_subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);
@@ -158,7 +159,8 @@ foreach ($slave_subnets as $slave_subnet) {
 		# calculate next slave
 		$next_slave_subnet  = $slave_subnets[$m+1]->subnet;
 		# calculate diff
-		$diff = (int) gmp_strval(gmp_sub($next_slave_subnet, $current_slave_bcast));
+		$diff = gmp_strval(gmp_sub($next_slave_subnet, $current_slave_bcast));
+
 		# if diff print free space
 		if($diff>1) {
 
@@ -200,6 +202,5 @@ foreach ($slave_subnets as $slave_subnet) {
 	}	}	}
 
 }
+print "</tbody>";
 print '</table>'. "\n";
-
-?>

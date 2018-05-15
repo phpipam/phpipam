@@ -27,7 +27,7 @@
  */
 
 /* functions */
-require( dirname(__FILE__) . '/../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize user object
@@ -38,6 +38,9 @@ $Scan		= new Scan ($Database);
 //set exit flag to true
 $Scan->ping_set_exit(true);
 
+// reformat argv for windows
+if(isset($argv[1]))	{ $argv[1] = str_replace("'", "", $argv[1]); }
+
 /**
  *	Input checks
  */
@@ -47,7 +50,8 @@ if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=
 //check input parameters
 if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
 // test to see if threading is available
-if( !Thread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
+if($Scan->settings->scanPingType!="fping")
+if( !PingThread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
 //check script
 if($argv[1]!="update"&&$argv[1]!="discovery")			{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type!"))); }
 //verify cidr
@@ -138,7 +142,7 @@ else {
 	    	//only if index exists!
 	    	if(isset($scan_addresses[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( "ping_address" );
+	            $threads[$z] = new PingThread( "ping_address" );
 	            $threads[$z]->start( $Subnets->transform_to_dotted($scan_addresses[$z], true) );
 
 	            $z++;				//next index
@@ -172,4 +176,3 @@ $out = json_encode(@$result);
 
 # print result
 print_r($out);
-?>

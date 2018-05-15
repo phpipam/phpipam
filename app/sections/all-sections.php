@@ -35,7 +35,7 @@ if ($sections !== false) {
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top">
+<table class="table sorted table-striped table-condensed table-top table-td-top" data-cookie-id-table="all_sections">
 <!-- headers -->
 <thead>
 <tr>
@@ -58,68 +58,80 @@ if ($sections !== false) {
 <?php
 if(isset($sections_sorted)) {
 	foreach ($sections_sorted as $section) {
-		//cast
-		$section = (array) $section;
+		$count = 0;
+		// check permissions for user
+		$perm = $Sections->check_permission ($User->user, $section->id);
+		if($perm > 0 ) {
+			$count++;
+			//cast
+			$section = (array) $section;
 
-		print '<tr class="'.$section['class'].'">'. "\n";
+			print '<tr class="'.$section['class'].'">'. "\n";
 
-	    print '	<td><a href="'.create_link("subnets", $section['id']).'"><strong>'. str_replace("_", " ", $section['name']).'</strong></a></td>'. "\n";
-	    print '	<td>'. $section['description'] .'</td>'. "\n";
-	    //master Section
-	    if($section['masterSection']!=0) {
-			# get section details
-			$ssec = $Tools->fetch_object("sections", "id", $section['masterSection']);
-		    print "	<td>$ssec->name</td>";
-	    } else {
-		    print "	<td>"._('Root')."</td>";
-	    }
-	    //strictMode
-	    $mode = $section['strictMode']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5 alert-success'>"._("Yes");
-	    print '	<td>'. $mode .'</span></td>'. "\n";
-	    //Show VLANs
-	    print " <td>";
-	    print @$section['showVLAN']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
-	    print "	</span></td>";
-	    //Show VRFs
-	    print " <td>";
-	    print @$section['showVRF']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
-	    print "	</span></td>";
-	    // subnets
-	    $cnt = $Tools->count_database_objects ("subnets", "sectionId", $section['id']);
-	    print " <td><span class='badge badge1 badge5 alert-success'>$cnt</span></td>";
+		    print '	<td><a class="btn btn-xs btn-default" href="'.create_link("subnets", $section['id']).'">'. str_replace("_", " ", $section['name']).'</a></td>'. "\n";
+		    print '	<td>'. $section['description'] .'</td>'. "\n";
+		    //master Section
+		    if($section['masterSection']!=0) {
+				# get section details
+				$ssec = $Tools->fetch_object("sections", "id", $section['masterSection']);
+			    print "	<td>$ssec->name</td>";
+		    } else {
+			    print "	<td>"._('Root')."</td>";
+		    }
+		    //strictMode
+		    $mode = $section['strictMode']==0 ? "<span class='badge badge1 badge5 alert-danger'>"._("No") : "<span class='badge badge1 badge5 alert-success'>"._("Yes");
+		    print '	<td>'. $mode .'</span></td>'. "\n";
+		    //Show VLANs
+		    print " <td>";
+		    print @$section['showVLAN']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
+		    print "	</span></td>";
+		    //Show VRFs
+		    print " <td>";
+		    print @$section['showVRF']==1 ? "<span class='badge badge1 badge5 alert-success'>"._("Yes") : "<span class='badge badge1 badge5 alert-danger'>"._("No");
+		    print "	</span></td>";
+		    // subnets
+		    $cnt = $Tools->count_database_objects ("subnets", "sectionId", $section['id']);
+		    print " <td><span class='badge badge1 badge5 alert-success'>$cnt</span></td>";
 
-		//permissions
-		if($User->is_admin(false)) {
-    		print "<td>";
-    	    if(strlen($section['permissions'])>1 && !is_null($section['permissions'])) {
-    	    	$permissions = $Sections->parse_section_permissions($section['permissions']);
-    	    	# print for each if they exist
-    	    	if(sizeof($permissions) > 0) {
-    	    		foreach($permissions as $key=>$p) {
-    		    		# get subnet name
-    		    		$group = $Tools->fetch_object("userGroups", "g_id", $key);
-    		    		# parse permissions
-    		    		$perm  = $Subnets->parse_permissions($p);
-    		    		print $group->g_name." : ".$perm."<br>";
-    		    	}
-    	    	}
-    	    	else {
-    		    	print _("All groups: No access");
-    	    	}
-    	    }
-    	    else {
-    			print _("All groups: No access");
-    	    }
-    		print "</td>";
+			//permissions
+			if($User->is_admin(false)) {
+	    		print "<td>";
+	    	    if(strlen($section['permissions'])>1 && !is_null($section['permissions'])) {
+	    	    	$permissions = $Sections->parse_section_permissions($section['permissions']);
+	    	    	# print for each if they exist
+	    	    	if(sizeof($permissions) > 0) {
+	    	    		foreach($permissions as $key=>$p) {
+	    		    		# get subnet name
+	    		    		$group = $Tools->fetch_object("userGroups", "g_id", $key);
+	    		    		# parse permissions
+	    		    		$perm  = $Subnets->parse_permissions($p);
+	    		    		print $group->g_name." : ".$perm."<br>";
+	    		    	}
+	    	    	}
+	    	    	else {
+	    		    	print _("All groups: No access");
+	    	    	}
+	    	    }
+	    	    else {
+	    			print _("All groups: No access");
+	    	    }
+	    		print "</td>";
 
-    	   	print '	<td class="actions">'. "\n";
-    	   	print "	<div class='btn-group btn-group-xs'>";
-    		print "		<button class='btn btn-default editSection' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
-    		print "		<button class='btn btn-default editSection' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
-    		print "	</div>";
-    		print '	</td>'. "\n";
-        }
-		print '</tr>'. "\n";;
+	    	   	print '	<td class="actions">'. "\n";
+	    	   	print "	<div class='btn-group btn-group-xs'>";
+				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
+				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
+	    		print "	</div>";
+	    		print '	</td>'. "\n";
+	        }
+			print '</tr>'. "\n";
+		}
+	}
+	// none
+	if($count==0) {
+		print "<tr>";
+		print "	<td colspan='7'>".$Result->show("info", _("No sections available"), false, false, true)."</td>";
+		print "</tr>";
 	}
 }
 ?>

@@ -8,7 +8,7 @@
 
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -20,9 +20,11 @@ $Addresses	= new Addresses ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "address");
+$csrf = $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
 
 # validate action
 $Tools->validate_action ($_POST['action']);
@@ -76,7 +78,7 @@ $Subnets->fetch_subnet_slaves_recursive ($subnet['id']);
 	<!-- DNS name -->
 	<tr>
 		<td><?php print _('DNS name'); ?></td>
-		<td><?php print strlen(@$address['dns_name'])>0 ? $address['dns_name'] : "/"; ?></td>
+		<td><?php print strlen(@$address['hostname'])>0 ? $address['hostname'] : "/"; ?></td>
 	</tr>
 
 	<!-- divider -->

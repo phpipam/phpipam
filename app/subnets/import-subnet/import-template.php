@@ -5,7 +5,7 @@
  *********************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # classes
@@ -22,12 +22,14 @@ $User->check_user_session();
 // Create a workbook
 $filename = "phpipam_template_". date("Y-m-d") .".xls";
 $workbook = new Spreadsheet_Excel_Writer();
+$workbook->setVersion(8);
 
 //get all custom fields!
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 // Create a worksheet
 $worksheet = $workbook->addWorksheet("template");
+$worksheet->setInputEncoding("utf-8");
 
 $lineCount = 1;
 
@@ -43,7 +45,8 @@ $worksheet->write($lineCount, 6, _('owner'));
 $worksheet->write($lineCount, 7, _('device'));
 $worksheet->write($lineCount, 8, _('port'));
 $worksheet->write($lineCount, 9, _('note'));
-$fc = 10;
+$worksheet->write($lineCount, 10, _('location'));
+$fc = 11;
 foreach($custom_address_fields as $k=>$f) {
 	$worksheet->write($lineCount, $fc, $k);
 	$fc++;

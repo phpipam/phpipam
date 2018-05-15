@@ -67,7 +67,7 @@ class Spreadsheet_Excel_Writer_Validator
     */
     var $_parser;
 
-    function Spreadsheet_Excel_Writer_Validator(&$parser)
+    function __construct(&$parser)
     {
         $this->_parser       = $parser;
         $this->_type         = 0x01; // FIXME: add method for setting datatype
@@ -84,6 +84,10 @@ class Spreadsheet_Excel_Writer_Validator
         $this->_operator     = 0x00; // default is equal
         $this->_formula1    = '';
         $this->_formula2    = '';
+    }
+    public function Spreadsheet_Excel_Writer_Validator(&$parser)
+    {
+        self::__construct($parser);
     }
 
    function setPrompt($promptTitle = "\x00", $promptDescription = "\x00", $showPrompt = true)

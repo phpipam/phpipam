@@ -174,7 +174,7 @@ class Net_DNS2_Question
         // validate it
         //
         $type_name  = Net_DNS2_Lookups::$rr_types_by_id[$type];
-        $class_name = Net_DNS2_Lookups::$classes_by_id[$class];        
+        $class_name = Net_DNS2_Lookups::$classes_by_id[$class];
 
         if ( (!isset($type_name)) || (!isset($class_name)) ) {
 
@@ -227,7 +227,7 @@ class Net_DNS2_Question
 
         $data = $packet->compress($this->qname, $packet->offset);
 
-        $data .= chr($type << 8) . chr($type) . chr($class << 8) . chr($class);
+        $data .= chr($type >> 8) . chr($type) . chr($class >> 8) . chr($class);
         $packet->offset += 4;
 
         return $data;

@@ -1,0 +1,18 @@
+# git pull --recurse-submodules
+# git submodule update --recursive --remote
+[submodule "functions/php-saml"]
+	path = functions/php-saml
+	url = https://github.com/onelogin/php-saml.git
+	ignore = all
+[submodule "functions/PHPMailer"]
+	path = functions/PHPMailer
+	url = https://github.com/PHPMailer/PHPMailer.git
+	ignore = all
+[submodule "app/login/captcha"]
+	path = app/login/captcha
+	url = https://github.com/dapphp/securimage.git
+	ignore = all
+[submodule "css/assets/bootstrap-select"]
+	path = css/assets/bootstrap-select
+	url = https://github.com/silviomoreto/bootstrap-select.git
+	ignore = all

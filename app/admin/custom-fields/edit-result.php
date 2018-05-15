@@ -5,7 +5,7 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -15,12 +15,14 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "custom_field", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "custom_field", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 /* checks */
@@ -32,18 +34,18 @@ else {
 	$_POST['name'] = trim($_POST['name']);
 
 	# length > 4 and < 12
-	if( (strlen($_POST['name']) < 2) || (strlen($_POST['name']) > 24) ) 	{ $errors[] = _('Name must be between 4 and 24 characters'); }
+	if( (mb_strlen($_POST['name']) < 2) || (mb_strlen($_POST['name']) > 24) ) 	{ $errors[] = _('Name must be between 4 and 24 characters'); }
 
 	/* validate HTML */
 
 	# must not start with number
-	if(is_numeric(substr($_POST['name'], 0, 1))) 							{ $errors[] = _('Name must not start with number'); }
+	if(is_numeric(substr($_POST['name'], 0, 1))) 								{ $errors[] = _('Name must not start with number'); }
 
 	# only alphanumeric and _ are allowed
-	if(!preg_match('/^[a-zA-Z0-9 \_]+$/i', $_POST['name'])) 				{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
+	if(!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $_POST['name'])) 	{ $errors[] = _('Only alphanumeric, spaces and underscore characters are allowed'); }
 
 	# required must have default value
-	if($_POST['NULL']=="NO" && strlen($_POST['fieldDefault'])==0)			{ $errors[] = _('Required fields must have default values'); }
+	if($_POST['NULL']=="NO" && mb_strlen($_POST['fieldDefault'])==0)			{ $errors[] = _('Required fields must have default values'); }
 
 	# db type validations
 
@@ -78,4 +80,3 @@ else {
 	if(!$Admin->update_custom_field_definition($_POST)) { $Result->show("danger",  _("Failed to $_POST[action] field"), true); }
 	else 												{ $Result->show("success", _("Field $_POST[action] success"), true); }
 }
-?>

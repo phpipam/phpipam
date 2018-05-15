@@ -32,9 +32,9 @@ $User->check_user_session();
 </form>
 
 <!-- jQuery File Upload Dependencies -->
-<script src="js/1.2/uploader/jquery.ui.widget.js"></script>
-<script src="js/1.2/uploader/jquery.iframe-transport.js"></script>
-<script src="js/1.2/uploader/jquery.fileupload.js"></script>
+<script src="js/uploader/jquery.ui.widget.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 <script type="text/javascript">
 $(function(){
@@ -89,10 +89,19 @@ $(function(){
 			$('#uploadResult').addClass('alert alert-danger');
 		},
 		success:function(e, data){
-			// All good, check for response!
-			var resp = jQuery.parseJSON(e);
-			//get status
-			var respStat = resp['status'];
+            // All good, check for response!
+            try {
+                var resp = jQuery.parseJSON(e);
+            } catch (e) {
+                // error
+            	$('ul.progressUl li.alert').addClass('alert alert-danger');		//add error class
+            	$('li.alert p').append("<br><strong>Error: Error parsing json response</strong>");
+
+                return;
+            }
+            //get status
+            var respStat = resp['status'];
+
 			//success
 			if(respStat == "success") {
 				$('#uploadResult').addClass('alert alert-success');		//add success class
@@ -113,7 +122,7 @@ $(function(){
 						var s = $('<select name="importFields__' + expfield.replace(/\s/g,"_") + '" class="form-control input-sm input-w-auto" rel="tooltip" data-placement="bottom" title="<?php print _("Pick import colum for"); ?> ' + expfield + ' <?php print _("field"); ?>"/>');
 						$('<option />', {value: "-", text: "-"}).appendTo(s);
 						resp.impfields.forEach(function(impfield) {
-							if (expfield.toUpperCase() === impfield.toUpperCase()) {
+                                                        if (expfield.toUpperCase() === impfield.toUpperCase().replace("IP ADDRESS", "IP_ADDR")) {
 								$('<option />', {value: impfield, text: impfield, selected: true}).appendTo(s);
 								matches++;
 							} else {

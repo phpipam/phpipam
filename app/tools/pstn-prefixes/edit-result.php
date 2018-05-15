@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -20,7 +20,13 @@ $_POST = $Admin->strip_input_tags($_POST);
 if($Tools->check_prefix_permission ($User->user) <3)   { $Result->show("danger", _('You do not have permission to manage PSTN prefixes'), true); }
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "pstn", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+if($_POST['action']=="add") {
+    $User->Crypto->csrf_cookie ("validate", "pstn_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
+else {
+    $User->Crypto->csrf_cookie ("validate", "pstn_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+}
+
 
 # validations
 if($_POST['action']=="delete" || $_POST['action']=="edit") {
@@ -31,6 +37,9 @@ if($_POST['action']=="delete" || $_POST['action']=="edit") {
 if($_POST['action']=="add" || $_POST['action']=="edit") {
     // name
     if(strlen($_POST['name'])<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
+
+    // prefix
+    if(!$_POST['prefix'])						{ $Result->show("danger", "Prefix can not be empty!", true); }
 
     // number
     if(!is_numeric($_POST['start']))                                    { $Result->show("danger",  _("Start must be numeric"), true); }
@@ -72,7 +81,7 @@ if($_POST['action']=="add" && $_POST['master']==0) {
     if($all_prefixes!==false) {
         foreach ($all_prefixes as $master_prefix) {
 
-            $overlap_text = _("Prefix overlapps with prefix ".$master_prefix->name." (".$master_prefix->prefix.")");
+            $overlap_text = _("Prefix overlaps with prefix ".$master_prefix->name." (".$master_prefix->prefix.")");
 
             // ranges
             $master_prefix->prefix_raw = $Tools->prefix_normalize ($master_prefix->prefix);
@@ -120,6 +129,7 @@ $values = array(
     "id"=>@$_POST['id'],
     "name"=>$_POST['name'],
     "prefix"=>$_POST['prefix'],
+    "master"=>$_POST['master'],
     "start"=>$_POST['start'],
     "stop"=>$_POST['stop'],
     "deviceId"=>$_POST['deviceId'],

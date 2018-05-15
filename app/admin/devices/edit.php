@@ -5,7 +5,7 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,7 +18,13 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "device");
+$csrf = $User->Crypto->csrf_cookie ("create", "device");
+
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
+
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('devices');
@@ -32,6 +38,13 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
+// defaults
+else {
+	$device = array ();
+	$device['type']       = 9;
+	$device['rack_start'] = 1;
+	$device['rack_size']  = 1;
+}
 
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
@@ -39,7 +52,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 # all locations
 if($User->settings->enableLocations=="1")
-$locations = $Tools->fetch_all_objects ("locations");
+$locations = $Tools->fetch_all_objects ("locations", "name");
 
 // set show for rack
 if (is_null($device['rack']))   { $display='display:none'; }
@@ -51,19 +64,27 @@ $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
 // form change
-$('#switchManagementEdit').change(function() {
+$('#switchManagementEdit select[name=rack]').change(function() {
    //change id
    $('.showRackPopup').attr("data-rackid",$('#switchManagementEdit select[name=rack]').val());
    //toggle show
    if($('#switchManagementEdit select[name=rack]').val().length == 0) { $('tbody#rack').hide(); }
    else                                                               { $('tbody#rack').show(); }
+   // select location
+   var loc = $('#switchManagementEdit select[name=rack] :selected').attr('data-location');
+   $('select[name=location_item] option:selected').prop("selected",null)
+   $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
+
+   // load dropdown
+   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
+   		$('tbody#rack').html(data);
+   });
 });
 </script>
 
 
 <!-- header -->
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('device'); ?></div>
-
 
 <!-- content -->
 <div class="pContent">
@@ -75,7 +96,7 @@ $('#switchManagementEdit').change(function() {
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $device['hostname']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $Tools->strip_xss($device['hostname']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -83,7 +104,7 @@ $('#switchManagementEdit').change(function() {
 	<tr>
 		<td><?php print _('IP address'); ?></td>
 		<td>
-			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $device['ip_addr']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $Tools->strip_xss($device['ip_addr']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -114,7 +135,7 @@ $('#switchManagementEdit').change(function() {
                 if($locations!==false) {
         			foreach($locations as $l) {
         				if($device['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
-        				else					{ print "<option value='$l->id'>$l->name</option>"; }
+        				else								{ print "<option value='$l->id'>$l->name</option>"; }
         			}
     			}
     			?>
@@ -135,12 +156,12 @@ $('#switchManagementEdit').change(function() {
         ?>
         <td><?php print _('Rack'); ?></td>
         <td>
-            <select name="rack" class="form-control">
-                <option value=""><?php print _("None"); ?></option>
+            <select name="rack" class="form-control input-sm">
+                <option value="0"><?php print _("None"); ?></option>
                 <?php
                 foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' selected='selected'>$r->name</option>"; }
-    				else							{ print "<option value='$r->id' >$r->name</option>"; }
+     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
+    				else							{ print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
                 }
                 ?>
             </select>
@@ -148,21 +169,7 @@ $('#switchManagementEdit').change(function() {
     </tr>
 
     <tbody id="rack" style="<?php print $display; ?>">
-    <tr>
-        <td><?php print _('Start position'); ?></td>
-        <td>
-            <div class="input-group" style="width:100px;">
-                <input type="text" name="rack_start" size="2" class="form-control input-w-auto input-sm" placeholder="1" value="<?php print @$device['rack_start']; ?>">
-                <a href="" class="input-group-addon showRackPopup" rel='tooltip' data-placement='right' data-rackid="<?php print @$device['rack']; ?>" data-deviceid='<?php print @$device['id']; ?>' title='<?php print _("Show rack"); ?>'><i class='fa fa-server'></i></a>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td><?php print _('Size'); ?> (U)</td>
-        <td>
-            <input type="text" name="rack_size" size="2" class="form-control input-w-auto input-sm" style="width:100px;" placeholder="1" value="<?php print @$device['rack_size']; ?>">
-        </td>
-    </tr>
+		<?php include ("edit-rack-dropdown.php"); ?>
     </tbody>
 	<tr>
 	   	<td colspan="2"><hr></td>
@@ -192,93 +199,21 @@ $('#switchManagementEdit').change(function() {
 		print '</tr>';
 
 		# count datepickers
-		$timeP = 0;
+		$timepicker_index = 0;
 
 		# all my fields
 		foreach($custom as $field) {
-			# replace spaces with |
-			$field['nameNew'] = str_replace(" ", "___", $field['name']);
-
-			# required
-			if($field['Null']=="NO")	{ $required = "*"; }
-			else						{ $required = ""; }
-
-			# set default value !
-			if ($_POST['action']=="add")	{ $device[$field['name']] = $field['Default']; }
-
-			print '<tr>'. "\n";
-			print '	<td>'. ucwords($field['name']) .' '.$required.'</td>'. "\n";
-			print '	<td>'. "\n";
-
-			//set type
-			if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-				//parse values
-				$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
-				//null
-				if($field['Null']!="NO") { array_unshift($tmp, ""); }
-
-				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-				foreach($tmp as $v) {
-					if($v==$device[$field['name']])	{ print "<option value='$v' selected='selected'>$v</option>"; }
-					else							{ print "<option value='$v'>$v</option>"; }
-				}
-				print "</select>";
-			}
-			//date and time picker
-			elseif($field['type'] == "date" || $field['type'] == "datetime") {
-				// just for first
-				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
-					print '<script type="text/javascript">';
-					print '$(document).ready(function() {';
-					//date only
-					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
-					//date + time
-					print '	$(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );';
-
-					print '})';
-					print '</script>';
-				}
-				$timeP++;
-
-				//set size
-				if($field['type'] == "date")	{ $size = 10; $class='datepicker';		$format = "yyyy-MM-dd"; }
-				else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
-
-				//field
-				if(!isset($device[$field['name']]))	{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-				else								{ print ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $device[$field['name']]. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n"; }
-			}
-			//boolean
-			elseif($field['type'] == "tinyint(1)") {
-				print "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]'>";
-				$tmp = array(0=>"No",1=>"Yes");
-				//null
-				if($field['Null']!="NO") { $tmp[2] = ""; }
-
-				foreach($tmp as $k=>$v) {
-					if(strlen($device[$field['name']])==0 && $k==2)	{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					elseif($k==$device[$field['name']])				{ print "<option value='$k' selected='selected'>"._($v)."</option>"; }
-					else											{ print "<option value='$k'>"._($v)."</option>"; }
-				}
-				print "</select>";
-			}
-			//text
-			elseif($field['type'] == "text") {
-				print ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. $device[$field['name']]. '</textarea>'. "\n";
-			}
-			//default - input field
-			else {
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $device[$field['name']]. '" size="30" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
-			}
-
-			print '	</td>'. "\n";
-			print '</tr>'. "\n";
+    		// create input > result is array (required, input(html), timepicker_index)
+    		$custom_input = $Tools->create_custom_field_input ($field, $device, $_POST['action'], $timepicker_index);
+    		// add datepicker index
+    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+            // print
+			print "<tr>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+			print "	<td>".$custom_input['field']."</td>";
+			print "</tr>";
 		}
-
 	}
-
 	?>
 
 	<!-- Sections -->

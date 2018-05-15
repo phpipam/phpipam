@@ -5,7 +5,7 @@
  ***********************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -15,10 +15,14 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "replace_fields", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "replace_fields", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# strip tags - XSS
+$_POST = $User->strip_input_tags ($_POST);
 
 //verify post
 if(empty($_POST['search'])) { $Result->show("danger", _('Please enter something in search field').'!', true); }
@@ -34,4 +38,3 @@ if($_POST['field'] == "switch") {
 
 # update
 $Admin->replace_fields ($_POST['field'], $_POST['search'], $_POST['replace']);
-?>

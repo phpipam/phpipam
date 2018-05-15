@@ -19,6 +19,7 @@ $url = $Result->createURL ();
 if(!is_object(@$User)) {
 	$User = new StdClass ();
 	@$User->settings->prettyLinks = "No";
+	@$User->settings->theme = "dark";
 }
 
 # if already installed than redirect !
@@ -57,22 +58,25 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 	<title>phpipam installation</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php if ($User->settings->theme!="white") { ?>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+	<?php } ?>
+	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/1.2/install.js"></script>
-	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -109,16 +113,27 @@ if($Install->check_db_connection(false) && $Install->check_table("vrf", false)) 
 <div class='container' id='dashboard'>
 
 <?php
+
 # select install type
-if(!isset($_GET['section']))										{ include("select_install_type.php"); }
+if(!isset($_GET['section']))										{ include(dirname(__FILE__)."/welcome.php"); }
 # open subpage
 else {
-	//check if subnetId == configure than already installed
-	if(@$_GET['subnetId']=="configure")								{ include(dirname(__FILE__)."/postinstall_configure.php"); }
+	// open initial installation page
+	if(@$_GET['section']=="select_type")							{ include(dirname(__FILE__)."/select_install_type.php"); }
+	// section error
+	elseif(@$_GET['section']=="sql_error")							{ include(dirname(__FILE__)."/sql_error.php"); }
+	// check if subnetId == configure than already installed
+	elseif(@$_GET['subnetId']=="configure")							{ include(dirname(__FILE__)."/postinstall_configure.php"); }
+	// set installation type
 	else {
-		// verify that page exists
-		if(!file_exists(dirname(__FILE__)."/$_GET[section].php"))	{ include("invalid_install_type.php"); }
-		else														{ include(dirname(__FILE__)."/$_GET[section].php"); }
+    	// validate install type
+    	$install_types = array("install_automatic", "install_manual", "install_mysqlimport");
+        if(!in_array($_GET['section'], $install_types)) 	        { $Result->show("danger", "Invalid request", false); }
+        else {
+			// verify that page exists
+			if(!file_exists(dirname(__FILE__)."/$_GET[section].php"))	{ include("invalid_install_type.php"); }
+			else														{ include(dirname(__FILE__)."/$_GET[section].php"); }
+		}
 	}
 }
 ?>

@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -94,6 +94,7 @@ print "<tr>	<th><input type='checkbox' id='recomputeSectionSelectAll' checked> "
 			<th><input type='checkbox' id='recomputeCVRFSelectAll' checked> Cross VRF</th></tr>";
 print $section_rows;
 print "</tbody></table>";
+print "<input type='checkbox' name='recomputeHideUnchanged' checked>" . _('Hide unchanged subnets');
 print "</form>";
 ?>
 </div>

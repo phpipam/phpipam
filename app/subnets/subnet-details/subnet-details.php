@@ -19,7 +19,7 @@ else {
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
 		<th style='padding-top:2px !important;'><?php print _('Subnet details'); ?></th>
-		<td><span style="font-size:14px;border:1px solid #ccc;background:white;padding:4px 8px;border-radius:3px;"><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></span> <?php print $multicast_badge; ?></td>
+		<td><span style="font-size:14px;border:1px solid #ccc;background:white;padding:4px 8px;border-radius:3px;" class='subnet_badge'><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></span> <?php print $multicast_badge; ?></td>
 	</tr>
     <?php
         // if subnet is IPv4 search for linked IPv6 subnet, else show linked ipv4
@@ -90,7 +90,6 @@ else {
 		<th><?php print _('Permission'); ?></th>
 		<td><?php print $Subnets->parse_permissions($subnet_permission); ?></td>
 	</tr>
-	<?php if(!$slaves) { ?>
 	<tr>
 		<th><?php print _('Subnet Usage'); ?></th>
 		<td>
@@ -101,6 +100,7 @@ else {
 			?>
 		</td>
 	</tr>
+	<?php if(!$slaves) { ?>
 
 	<!-- gateway -->
 	<?php
@@ -221,15 +221,24 @@ else {
     <tr>
         <td colspan="2"><hr></td>
     </tr>
-    <?php if ($subnet['isFull']=="1") { ?>
     <tr>
         <th></th>
         <td class="isFull"><?php print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
     </tr>
     <?php } ?>
 
+    <tr>
+    	<th><?php print _("Last edited"); ?></th>
+    	<td>
+    		<span class="text-muted">
+    		<?php
+    		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
+    		else 								{ print "Never"; }
+    		?>
+    		</span>
+    	</td>
+    </tr>
 
-    <?php } ?>
     <?php if($User->settings->enableThreshold=="1" && $subnet['threshold']>0) { ?>
     <tr>
         <td colspan="2"><hr></td>
@@ -251,12 +260,18 @@ else {
 
 	<?php
 	# VRF
-	if(!empty($subnet['vrfId']) && $User->settings->enableVRF==1) {
+	if($User->settings->enableVRF==1) {
 		# get vrf details
-		$vrf = (array) $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
-		# set text
-		$vrfText = $vrf['name'];
-		if(!empty($vrf['description'])) { $vrfText .= " [$vrf[description]]";}
+		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
+		# null
+		if($vrf===false) {
+			$vrfText = "<span class='text-muted'>"._("None")."</span>";
+		}
+		else {
+			# set text
+			$vrfText = $vrf->name;
+			if(!empty($vrf->description)) { $vrfText .= " [$vrf->description]";}
+		}
 
         print "<tr>";
         print "<td colspan='2'><hr></td>";
@@ -265,6 +280,8 @@ else {
 		print "	<th>"._('VRF')."</th>";
 		print "	<td>$vrfText</td>";
 		print "</tr>";
+
+		$vrf = (array) $vrf;
 	}
 
 	# FW zone info
@@ -302,7 +319,7 @@ else {
 				print $fwZone->firewallAddressObject;
 			}
 			if($subnet_permission > 1) {
-				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet[id].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
+				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet['id'].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
 			}
 			print "	</td>";
 			print "</tr>";
@@ -341,22 +358,31 @@ else {
 		if ($agent===false)		{ print _("Invalid scan agent"); }
 		else					{
 			$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? "Never" : $agent->last_access;
-			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>Last check $last_check</span>";
+			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
 		}
 		print "	</td>";
 		print "</tr>";
 		}
 
 		# ping-check hosts inside subnet
+		$last_check_s = is_null($subnet['lastScan'])||$subnet['lastScan']==""||$subnet['lastScan']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastScan']."</div>";
+		$last_check_d = is_null($subnet['lastDiscovery'])||$subnet['lastDiscovery']==""||$subnet['lastDiscovery']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastDiscovery']."</div>";
+
 		print "<tr>";
 		print "	<th>"._('Hosts check')."</th>";
-		if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_s</td>"; }		# yes
 		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 		# scan subnet for new hosts *
 		print "<tr>";
 		print "	<th>"._('Discover new hosts')."</th>";
-		if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_d</td>"; }		# yes
+		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+		print "</tr>";
+		# resolve DNS names
+		print "<tr>";
+		print "	<th>"._('Resolve DNS names')."</th>";
+		if($subnet['resolveDNS'] == 1) 			    { print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
 		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 	}
@@ -378,7 +404,12 @@ else {
 			if ($domain!==false) {
 				if ($User->is_admin (false) || $User->user->pdns=="Yes") {
 				$btns[] = "<div class='btn-group'>";
-				$btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+            if (preg_match("/^.*ip6.arpa$/", $domain->name)) {
+				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v6", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+            }
+            else {
+				   $btns[] = " <a class='btn btn-default btn-xs' href='". create_link ("tools", "powerDNS", "reverse_v4", "records", $domain->name)."'><i class='fa fa-eye'></i></a>";
+            }
 				$btns[] = "	<a class='btn btn-default btn-xs refreshPTRsubnet' data-subnetid='$subnet[id]'><i class='fa fa-refresh'></i></a>";
 				$btns[] = "</div>";
 				$btns = implode("\n", $btns);
@@ -430,7 +461,7 @@ else {
 			if(strlen($subnet[$key])>0) {
 				$subnet[$key] = str_replace(array("\n", "\r\n"), "<br>",$subnet[$key]);
 				$html_custom[] = "<tr>";
-				$html_custom[] = "	<th>$key</th>";
+				$html_custom[] = "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 				$html_custom[] = "	<td>";
 				#booleans
 				if($field['type']=="tinyint(1)")	{
@@ -624,7 +655,7 @@ else {
 		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
-		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";
+        print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";
 		}
         print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='Send mail notification'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
 	print "</div>";

@@ -296,7 +296,7 @@ class DHCP_kea extends Common_functions {
 
         // get leases
         $lease_type = "get_leases_".$lease_database_type;
-        $this->$lease_type ($lease_database, $type);
+        $this->{$lease_type} ($lease_database, $type);
     }
 
     /**
@@ -312,11 +312,11 @@ class DHCP_kea extends Common_functions {
      */
     private function get_leases_memfile ($lease_database, $type) {
         // read file to array
-        $leases_from_file = file($lease_database['name']);
+        $leases_from_file = @file($lease_database['name']);
         // first item are titles
         unset($leases_from_file[0]);
         // if leases are present format to array
-        if (sizeof($leases_from_file)>0) {
+        if (sizeof($leases_from_file)>0 && $leases_from_file!==false) {
             // init array
             $leases_parsed = array();
             // loop and save leases
@@ -354,6 +354,9 @@ class DHCP_kea extends Common_functions {
                     }
                 }
             }
+        }
+        else {
+            throw new exception("Cannot read leases file ".$lease_database['name']);
         }
 
         // save result
@@ -477,7 +480,7 @@ class DHCP_kea extends Common_functions {
             else {
                 // get leases
                 $type_l = "get_reservations_".$reservations_database_type;
-                $this->$type_l ($reservations_database, $type);
+                $this->{$type_l} ($reservations_database, $type);
             }
         }
     }

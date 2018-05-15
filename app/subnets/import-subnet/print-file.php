@@ -5,7 +5,7 @@
  ********************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # classes
 $Database 	= new Database_PDO;
@@ -22,14 +22,22 @@ $User->check_user_session();
 $filetype = explode(".", $_POST['filetype']);
 $filetype = end($filetype);
 
+# check integer
+is_numeric($_POST['subnetId']) ? : $Result->show("danger", _("Invalid subnet ID") ,true);
+
+$csrf = $User->Crypto->csrf_cookie ("create", "import_file");
+
 # get custom fields
 $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet("id",$_POST['subnetId']);
 
+if($subnet===false)                $Result->show("danger", _("Invalid subnet ID") ,true);
+
 # Parse file
 $outFile = $Tools->parse_import_file ($filetype, $subnet, $custom_address_fields);
+
 
 
 /*
@@ -49,6 +57,7 @@ print '	<th>'._('Owner').'</th>';
 print '	<th>'._('Device').'</th>';
 print '	<th>'._('Port').'</th>';
 print '	<th>'._('Note').'</th>';
+print '	<th>'._('Location').'</th>';
 // Add custom fields
 if(sizeof($custom_address_fields) > 0) {
 	foreach($custom_address_fields as $field) {
@@ -96,4 +105,5 @@ if($errors>0) {
 <div class="btn-group" style="margin-bottom:10px;">
 	<input type="button" value="<?php print _('Yes'); ?>" class="btn btn-sm btn-default btn-success" id="csvImportYes">
 	<input type="button" value="<?php print _('No'); ?>"  class="btn btn-sm btn-default" id="csvImportNo">
+	<input type="hidden" name='csrf_cookie' value='<?php print $csrf; ?>'>
 </div>

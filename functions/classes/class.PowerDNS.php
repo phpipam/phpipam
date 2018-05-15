@@ -119,7 +119,7 @@ class PowerDNS extends Common_functions {
     /**
      * Result
      *
-     * @var resource
+     * @var object
      * @access public
      */
     public $Result;
@@ -143,7 +143,7 @@ class PowerDNS extends Common_functions {
     /**
      * Log
      *
-     * @var resource
+     * @var object
      * @access public
      */
     public $Log;
@@ -329,18 +329,19 @@ class PowerDNS extends Common_functions {
         $ttl = array();
         // set array
         $ttl[60]     = "1 minute";
-        $ttl[180]     = "3 minutes";
+        $ttl[180]    = "3 minutes";
         $ttl[300]    = "5 minutes";
         $ttl[600]    = "10 minutes";
         $ttl[900]    = "15 minutes";
-        $ttl[1800]     = "30 minutes";
-        $ttl[2700]    = "45 minutes";
-        $ttl[3600]     = "1 hour";
-        $ttl[7400]    = "2 hours";
-        $ttl[21600] = "6 hours";
-        $ttl[43200]    = "12 hours";
-        $ttl[86400]    = "24 hours";
-        $ttl[604800]= "1 week";
+        $ttl[1800]   = "30 minutes";
+        $ttl[2700]   = "45 minutes";
+        $ttl[3600]   = "1 hour";
+        $ttl[7200]   = "2 hours";
+        $ttl[10800]  = "3 hours";
+        $ttl[21600]  = "6 hours";
+        $ttl[43200]  = "12 hours";
+        $ttl[86400]  = "24 hours";
+        $ttl[604800] = "1 week";
         // save
         $this->ttl = (object) $ttl;
     }
@@ -577,7 +578,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain)>0 ? $domain : false;
+        return !is_null($domain) ? $domain : false;
     }
 
     /**
@@ -585,7 +586,7 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param mixed $name
-     * @return void
+     * @return array|false
      */
     public function fetch_domain_by_name ($name) {
         # fetch
@@ -599,7 +600,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain[0])>0 ? $domain[0] : false;
+        return is_object(($domain[0])) ? $domain[0] : false;
     }
 
     /**
@@ -708,7 +709,7 @@ class PowerDNS extends Common_functions {
             return false;
         }
         # result
-        return sizeof($record)>0 ? $record : false;
+        return !is_null($record) ? $record : false;
     }
 
     /**
@@ -846,8 +847,11 @@ class PowerDNS extends Common_functions {
         $this->Log->write( "PowerDNS record create", "New PowerDNS domain record created<hr>".$this->array_to_log((array) $record), 0);
 
         # print ?
-        if ($print_success)
-        $this->Result->show("success", _("Record created"));
+        if ($print_success) {
+            if ($this->api!==true) {
+                $this->Result->show("success", _("Record created"));
+            }
+        }
         // save id
         $this->lastId = $this->Database_pdns->lastInsertId ();
         # soa update
@@ -884,9 +888,11 @@ class PowerDNS extends Common_functions {
         $this->update_soa_serial ($domain_id);
 
         # print ?
-        if ($print_success)
-        $this->Result->show("success", _("Record updated"));
-
+        if ($print_success) {
+            if ($this->api!==true) {
+                $this->Result->show("success", _("Record updated"));
+            }
+        }
         // ok
         return true;
     }
@@ -909,8 +915,11 @@ class PowerDNS extends Common_functions {
         $this->update_soa_serial ($domain_id);
 
         # print ?
-        if ($print_success)
-        $this->Result->show("success", _("Record deleted"));
+        if ($print_success) {
+            if ($this->api!==true) {
+                $this->Result->show("success", _("Record deleted"));
+            }
+        }
 
         // ok
         return true;
@@ -952,6 +961,7 @@ class PowerDNS extends Common_functions {
     public function pdns_remove_ip_and_hostname_records ($hostname, $ip) {
          // set query
         $query = "delete from `records` where (`name` = ? or `content` = ?) and `type` != 'NS' and `type` != 'SOA';";
+
         // run
 		try { $this->Database_pdns->runQuery($query, array($hostname, $ip)); }
 		catch (Exception $e) {
@@ -1044,12 +1054,12 @@ class PowerDNS extends Common_functions {
      *
      * @access public
      * @param array $values
+     * @param bool $checkOnly
      * @return void
      */
-    public function create_default_records ($values) {
+    public function create_default_records ($values, $checkOnly = false) {
         // get last id
-        $this->lastId = $this->Database_pdns->lastInsertId ();
-
+        $this->lastId = $checkOnly ? 0 : $this->Database_pdns->lastInsertId ();
         // set defaults
         $this->db_set_db_settings ();
 
@@ -1064,7 +1074,7 @@ class PowerDNS extends Common_functions {
         $soa[] = $this->validate_nxdomain_ttl ($values['nxdomain_ttl']);
 
         // formulate SOA value
-        $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "SOA", implode(" ", $soa), $values['ttl']);
+        $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "SOA", implode(" ", $soa), $values['ttl'], null, 0, $checkOnly);
 
         // formulate NS records
         $ns = explode(";", $values['ns']);
@@ -1073,9 +1083,12 @@ class PowerDNS extends Common_functions {
                 // validate
                 if($this->validate_hostname($s)===false)        { $this->Result->show("danger", "Invalid NS". " $s", true); }
                 // save
-                $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl']);
+                $records[] = $this->formulate_new_record ($this->lastId, $values['name'], "NS", $s, $values['ttl'], null, 0, $checkOnly);
             }
         }
+
+        // if only check return true
+        if ($checkOnly) { return true; }
 
         // create records
         foreach($records as $r) {
@@ -1096,20 +1109,21 @@ class PowerDNS extends Common_functions {
      * @param mixed $ttl
      * @param mixed $prio (default: null)
      * @param int|string $disabled (default: 0)
+     * @param bool $dont_validate_domain (default: false)
      * @return array
      */
-    public function formulate_new_record ($domain_id, $name=null, $type, $content, $ttl, $prio=null, $disabled = 0) {
+    public function formulate_new_record ($domain_id, $name=null, $type, $content, $ttl, $prio=null, $disabled = 0, $dont_validate_domain = false) {
         // initiate class
         $record = new StdClass ();
         // set record details
-        $record->domain_id   = $this->validate_record_domain_id ($domain_id);            // sets domain id
-        $record->name        = $this->validate_record_name ($name);                      // record name
-        $record->type        = $this->validate_record_type ($type);                      // record type
-        $record->content     = $content;                                                 // record content
-        $record->ttl         = $this->validate_ttl ($ttl);                               // ttl validation
-        $record->prio        = $this->validate_prio ($prio);                             // priority, default NULL
-        $record->change_date = $this->set_default_change_date ();                        // sets default change date
-        $record->disabled    = $disabled;                                                // enables of disables record
+        $record->domain_id   = $dont_validate_domain ? $domain_id : $this->validate_record_domain_id ($domain_id);      // sets domain id
+        $record->name        = $this->validate_record_name ($name, $type);                                                     // record name
+        $record->type        = $this->validate_record_type ($type);                                                     // record type
+        $record->content     = $content;                                                                                // record content
+        $record->ttl         = $this->validate_ttl ($ttl);                                                              // ttl validation
+        $record->prio        = $this->validate_prio ($prio);                                                            // priority, default NULL
+        $record->change_date = $this->set_default_change_date ();                                                       // sets default change date
+        $record->disabled    = $disabled;                                                                               // enables of disables record
         // return record
         return (array) $record;
     }
@@ -1131,7 +1145,7 @@ class PowerDNS extends Common_functions {
         // initiate class
         $record = new StdClass ();
         // set record details
-        if (!is_null($name))    $record->name        = $this->validate_record_name ($name);               // record name
+        if (!is_null($name))    $record->name        = $this->validate_record_name ($name, $type);               // record name
         if (!is_null($type))    $record->type        = $this->validate_record_type ($type);               // record type
         if (!is_null($content)) $record->content     = $content;                                          // record content
         if (!is_null($ttl))     $record->ttl         = $this->validate_ttl ($ttl);                        // ttl validation
@@ -1195,8 +1209,26 @@ class PowerDNS extends Common_functions {
      * @param mixed $name
      * @return void
      */
-    private function validate_record_name ($name) {
-        // null is ok, otherwise URI is required
+    private function validate_record_name ($name, $type = NULL) {
+        // certain record types allow forbidden characters in record name
+        // when using reserved words
+        if ($type == "TXT") {
+            if (preg_match("/^_dmarc.*$/", $name)
+                && preg_match("/^.{1,253}$/", $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
+            { return $name; }
+            if (preg_match("/^.*_domainkey.*$/", $name)
+                && preg_match("/^.{1,253}$/", $name)                               //overall length check
+                && preg_match("/^[^\.]{1,63}(\.[^\.]{1,63})*$/", $name))           //length of each label)
+            { return $name; }
+        }
+
+        // DNS wildcard records are OK (https://tools.ietf.org/html/rfc4592#section-2.1.1)
+        if (preg_match("/^\*\..*$/", $name) && $this->validate_hostname(substr($name, 2))) {
+            return $name;
+        }
+
+        // for all other record types null is ok, otherwise URI is required
         if (strlen($name)>0 && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
         // ok
         return $name;
@@ -1431,23 +1463,20 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function get_ptr_zone_name_v6 ($ip, $mask) {
-        // PEAR for IPv6
-        $this->initialize_pear_net_IPv6 ();
-
-        // remove netmask and ::
-        $subnet = $this->Net_IPv6->removeNetmaskSpec($ip."/".$mask);
-        $subnet = rtrim($subnet, "::");
-
-        // to array
-        $ip = explode(":", $subnet);
-
-        // if 0 than add 4 nulls
-        foreach ($ip as $k=>$i) {
-            $ip[$k] = str_pad($i, 4, "0", STR_PAD_LEFT);
+        $ipp = inet_pton($ip);
+        $maskbin = str_repeat('1', $mask) . str_repeat('0', 128 - $mask);
+        $maskhex = '';
+        foreach (str_split($maskbin, 4) as $chunk) {
+    	    $maskhex .= base_convert($chunk, 2, 16);
         }
+        $maskp = inet_pton(substr(chunk_split($maskhex, 4, ':'), 0, -1));
 
-        // to array and reverse
-        $zone = array_reverse(str_split(implode("", $ip)));
+        $networkp = $ipp & $maskp;
+        $ipt = '';
+        foreach(str_split($networkp) as $char) $ipt .= str_pad(dechex(ord($char)), 2, '0', STR_PAD_LEFT);
+        $prefixnibbles = floor($mask / 4);
+        $network = substr($ipt, 0, $prefixnibbles);
+        $zone = array_reverse(str_split($network));
 
         return implode(".", $zone).".ip6.arpa";
     }

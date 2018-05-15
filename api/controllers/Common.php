@@ -24,6 +24,36 @@ class Common_api_functions {
 	 */
 	public $_params;
 
+	/**
+	 * Lock transaction to avoid duplicate entries or errors
+	 *
+	 * (default value: 0)
+	 *
+	 * @var bool
+	 * @access public
+	 */
+	public $lock = 0;
+
+	/**
+	 * File to write lock to
+	 *
+	 * (default value: "_lock.txt")
+	 *
+	 * @var string
+	 * @access public
+	 */
+	public $lock_file_name = "/tmp/phpipam_api_lock.txt";
+
+    /**
+     * File handler
+     *
+     * (default value: false)
+     *
+     * @var bool|resource
+     * @access private
+     */
+    private $lock_file_handler = false;
+
     /**
      * Custom fields
      *
@@ -88,6 +118,14 @@ class Common_api_functions {
 	 */
 	protected $Subnets;
 
+	/**
+	 * App object - will be passed by index.php
+	 * to provide app detauls
+	 *
+	 * @var false|object
+	 */
+	public $app = false;
+
 
 
 
@@ -102,15 +140,15 @@ class Common_api_functions {
 	 */
 	protected function init_object ($Object_name, $Database) {
 		// admin fix
-		if($Object_name=="Admin")	    { $this->$Object_name	= new $Object_name ($Database, false); }
+		if($Object_name=="Admin")	    { $this->{$Object_name}	= new $Object_name ($Database, false); }
 		// User fix
-		elseif($Object_name=="User")	{ $this->$Object_name	= new $Object_name ($Database, true); $this->$Object_name->user = null; }
+		elseif($Object_name=="User")	{ $this->{$Object_name}	= new $Object_name ($Database, true); $this->{$Object_name}->user = null; }
 		// default
-		else					        { $this->$Object_name	= new $Object_name ($Database); }
+		else					        { $this->{$Object_name}	= new $Object_name ($Database); }
 		// set exit method
-		$this->$Object_name->Result->exit_method = "exception";
+		$this->{$Object_name}->Result->exit_method = "exception";
 		// set API flag
-		$this->$Object_name->api = true;
+		$this->{$Object_name}->api = true;
 	}
 
 	/**
@@ -171,9 +209,16 @@ class Common_api_functions {
 
 		// links
 		if($links) {
-			// explicitly set to no
-			if(@$this->_params->links!="false")
+			// if parameter is set obey
+			if(isset($this->_params->links)) {
+				if($this->_params->links!="false")
 								{ $result = $this->add_links ($result, $controller); }
+			}
+			// otherwise take defaults
+			else {
+				if($this->app->app_show_links==1)
+								{ $result = $this->add_links ($result, $controller); }
+			}
 		}
 		// filter
 		if (isset($this->_params->filter_by)) {
@@ -189,6 +234,9 @@ class Common_api_functions {
 		// remap keys
 		$result = $this->remap_keys ($result, $controller);
 
+		// Reindex results to start at index 0.
+		if (is_array($result)) { $result = array_values($result); }
+
 		# return
 		return $result;
 	}
@@ -199,10 +247,10 @@ class Common_api_functions {
 	 *	parameters: filter_by, filter_value
 	 *
 	 * @access protected
-	 * @param mixed $result
+	 * @param array $result
 	 * @return void
 	 */
-	protected function filter_result ($result) {
+	protected function filter_result ($result = array ()) {
     	// remap keys before applying filter
     	$result = $this->remap_keys ($result, false);
 		// validate
@@ -223,18 +271,23 @@ class Common_api_functions {
 		}
 		// filter - single
 		else {
-				foreach ($result as $k=>$v) {
-					if ($k == $this->_params->filter_by) {
-						if ($v != $this->_params->filter_value) {
-							unset($result);
-							break;
-						}
+			foreach ($result as $k=>$v) {
+				if ($k == $this->_params->filter_by) {
+					if ($v != $this->_params->filter_value) {
+						unset($result);
+						break;
 					}
 				}
+			}
 		}
 
 		# null?
 		if (sizeof($result)==0)				{ $this->Response->throw_exception(404, 'No results (filter applied)'); }
+        # reindex filtered result
+        else {
+            $result = array_values($result);
+        }
+
 
 		# result
 		return $result;
@@ -242,6 +295,8 @@ class Common_api_functions {
 
 	/**
 	 * Validates filter_by
+	 *
+	 *  Takes first result, checks all keys against provided filter_by value
 	 *
 	 * @access protected
 	 * @param mixed $result
@@ -252,14 +307,31 @@ class Common_api_functions {
 		if (is_array($result))	{ $result_tmp = $result[0]; }
 		else					{ $result_tmp = $result; }
 
+        // validate filter_value
+        if(!isset($this->_params->filter_value)) {
+            $this->Response->throw_exception(400, 'Missing filter_value');
+        }
+        elseif (strlen($this->_params->filter_value)==0) {
+            $this->Response->throw_exception(400, 'Empty filter_value');
+        }
+
+        // validate filter_by
 		$error = true;
-		foreach ($result_tmp as $k=>$v) {
-			if ($k==$this->_params->filter_by) {
-				$error = false;
-			}
+		if(is_array($result_tmp)) {
+    		foreach ($result_tmp as $k=>$v) {
+    			if ($k==$this->_params->filter_by) {
+    				$error = false;
+    			}
+    		}
 		}
+		else {
+    		$error = false;
+		}
+
 		// die
-		if ($error)							{ $this->Response->throw_exception(400, 'Invalid filter value'); }
+		if ($error)	{
+    		$this->Response->throw_exception(400, 'Invalid filter_by');
+        }
 	}
 
 	/**
@@ -287,12 +359,15 @@ class Common_api_functions {
 				// custom links
 				$custom_links = $this->define_links ($controller);
 				if($custom_links!==false) {
-					foreach($this->define_links ($controller) as $link=>$method) {
-						// self only !
-						if ($link=="self") {
-						$result[$k]->links[$m] = new stdClass ();
-						$result[$k]->links[$m]->rel  	= $link;
-						$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
+					$links_arr = $this->define_links ($controller);
+					if(is_array($links_arr)) {
+						foreach($this->define_links ($controller) as $link=>$method) {
+							// self only !
+							if ($link=="self") {
+							$result[$k]->links[$m] = new stdClass ();
+							$result[$k]->links[$m]->rel  	= $link;
+							$result[$k]->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$r->id."/";
+							}
 						}
 					}
 				}
@@ -314,17 +389,20 @@ class Common_api_functions {
 				// custom links
 				$custom_links = $this->define_links ($controller);
 				if($custom_links!==false) {
-					foreach($this->define_links ($controller) as $link=>$method) {
-						$result->links[$m] = new stdClass ();
-						$result->links[$m]->rel  	= $link;
-						// self ?
-						if ($link=="self")
-						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
-						else
-						$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
-						$result->links[$m]->methods = $method;
-						// next
-						$m++;
+					$links_arr = $this->define_links ($controller);
+					if(is_array($links_arr)) {
+						foreach($this->define_links ($controller) as $link=>$method) {
+							$result->links[$m] = new stdClass ();
+							$result->links[$m]->rel  	= $link;
+							// self ?
+							if ($link=="self")
+							$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/";
+							else
+							$result->links[$m]->href 	= "/api/".$this->_params->app_id."/$controller/".$result->id."/$link/";
+							$result->links[$m]->methods = $method;
+							// next
+							$m++;
+						}
 					}
 				}
 
@@ -357,13 +435,16 @@ class Common_api_functions {
 		elseif($controller=="subnets") {
 			$result["self"]			 	= array ("GET","POST","DELETE","PATCH");
 			$result["addresses"]        = array ("GET");
+			$result["addresses/{ip}"]   = array ("GET");
 			$result["usage"]            = array ("GET");
 			$result["first_free"]       = array ("GET");
 			$result["slaves"]           = array ("GET");
 			$result["slaves_recursive"] = array ("GET");
 			$result["truncate"]         = array ("DELETE");
+			$result["permissions"]      = array ("DELETE");
 			$result["resize"]           = array ("PATCH");
 			$result["split"]            = array ("PATCH");
+			$result["permissions"]      = array ("PATCH");
 			// return
 			return $result;
 		}
@@ -536,10 +617,10 @@ class Common_api_functions {
 	public function validate_mac ($mac) {
     	// first put it to common format (1)
     	$mac = $this->reformat_mac_address ($mac);
-    	// we permit empty
-        if (strlen($mac)==0)                                                            { return true; }
-    	elseif (preg_match('/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/', $mac) != 1)   { return false; }
-    	else                                                                            { return true; }
+    	// init common class
+    	$Common = new Common_functions;
+    	// check
+    	return $Common->validate_mac ($mac);
 	}
 
 	/**
@@ -581,6 +662,24 @@ class Common_api_functions {
 	}
 
 	/**
+	 * Returns array of possible permissions
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function get_possible_permissions () {
+		// set
+		$permissions = array(
+    		            "na"=>0,
+    		            "ro"=>1,
+    		            "rw"=>2,
+    		            "rwa"=>3
+                        );
+        // return
+		return $permissions;
+	}
+
+	/**
 	 * This method removes all folders if controller is subnets
 	 *
 	 * @access protected
@@ -597,7 +696,7 @@ class Common_api_functions {
 			if (is_array($result)) {
 				foreach($result as $k=>$r) {
 					// remove
-					if($r->isFolder=="1")				{ unset($r); }
+					if($r->isFolder=="1")				{ unset($result[$k]); }
 			}	}
 			// single item
 			else {
@@ -605,10 +704,9 @@ class Common_api_functions {
 					if($result->isFolder=="1")			{ unset($result); }
 			}
 			# return
-			if($result===false)	{ $this->Response->throw_exception(404, "No subnets found"); }
+			if(empty($result))	{ $this->Response->throw_exception(404, "No subnets found"); }
 			else				{ return $result; }
 	}	}
-
 	/**
 	 * This method removes all subnets if controller is subnets
 	 *
@@ -651,12 +749,21 @@ class Common_api_functions {
 	 */
 	protected function remap_keys ($result = null, $controller = null) {
 		// define keys array
-		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip", "dns_name"=>"hostname");
+		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip");
 
 		// exceptions
 		if($controller=="vlans") 	{ $this->keys['vlanId'] = "id"; }
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
+		if($controller=="circuits") { $this->keys['cid'] = "circuit_id"; }
+		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
+		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
+		if($this->_params->controller=="subnets" )  								  { $this->keys['ip'] = "ip_addr"; }
+
+		// special keys for POST / PATCH
+		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH") {
+		if($this->_params->controller=="circuits")   								  { $this->keys['cid'] 		= "circuit_id"; }
+		}
 
 		// POST / PATCH
 		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH")		{ return $this->remap_update_keys (); }
@@ -676,9 +783,9 @@ class Common_api_functions {
 			// match
 			if(array_key_exists($v, $this->_params)) {
 				// replace
-				$this->_params->$k = $this->_params->$v;
+				$this->_params->{$k} = $this->_params->{$v};
 				// remove
-				unset($this->_params->$v);
+				unset($this->_params->{$v});
 			}
 		}
 	}
@@ -696,14 +803,16 @@ class Common_api_functions {
 			// params
 			$result_remapped = new StdClass ();
 			// search and replace
-			foreach($result as $k=>$v) {
-				if(array_key_exists($k, $this->keys)) {
-					// replace
-					$key = $this->keys[$k];
-					$result_remapped->$key = $v;
-				}
-				else {
-					$result_remapped->$k = $v;
+			if(is_array($result) || is_object($result)) {
+				foreach($result as $k=>$v) {
+					if(array_key_exists($k, $this->keys)) {
+						// replace
+						$key = $this->keys[$k];
+						$result_remapped->{$key} = $v;
+					}
+					else {
+						$result_remapped->{$k} = $v;
+					}
 				}
 			}
 		}
@@ -722,20 +831,183 @@ class Common_api_functions {
 					if(array_key_exists($k, $this->keys)) {
 						// replace
 						$key_val = $this->keys[$k];
-						$result_remapped[$m]->$key_val = $v;
+						$result_remapped[$m]->{$key_val} = $v;
 					}
 					else {
-						$result_remapped[$m]->$k = $v;
+						$result_remapped[$m]->{$k} = $v;
 					}
 				}
 			}
 		}
 
-
 		# result
 		return $result_remapped;
 	}
 
-}
 
-?>
+
+
+
+
+    /* ! @transaction_locking --------------- */
+
+    /**
+     * Open file handler to manage lock file
+     *
+     * @access private
+     * @return void
+     */
+    private function file_init_handler () {
+        try {
+            $this->lock_file_handler = fopen($this->lock_file_name, 'w');
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot init file handler for $this->lock_file_name ".$e->getMessage());
+        }
+    }
+
+    /**
+     * Adds Exclusive lock and writes 1 to file
+     *
+     * @access private
+     * @return void
+     */
+    private function file_add_lock () {
+        try {
+            // add lock
+            flock($this->lock_file_handler, LOCK_EX);
+            // write content
+            $this->file_write_content ("1");
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot add LOCK_UN to $this->lock_file_name ".$e->getMessage());
+        }
+    }
+    /**
+     * Removes exclusive lock
+     *
+     * @access private
+     * @return void
+     */
+    private function file_remove_lock () {
+        try {
+            // write content
+            $this->file_write_content ("0");
+            // close handler
+            fclose($this->lock_file_handler);
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot remove LOCK_UN from $this->lock_file_name ".$e->getMessage());
+        }
+    }
+
+    /**
+     * Write content to file.
+     *
+     * @access private
+     * @param string $content (default: "")
+     * @return void
+     */
+    private function file_write_content ($content = "") {
+        try {
+            fwrite($this->lock_file_handler, $content);
+        }
+        catch ( Exception $e ) {
+            $this->Response->throw_exception(500, "Cannot write content to $this->lock_file_name ".$e->getMessage());
+        }
+    }
+
+	/**
+	 * Resets lock file name
+	 *
+	 * @access public
+	 * @param string $file (default: "")
+	 * @return void
+	 */
+	public function set_transaction_lock_file ($file = "") {
+        if(strlen($file)>0) {
+            $this->lock_file_name = $file;
+        }
+	}
+
+	/**
+	 * Sets translaction lock
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function add_transaction_lock () {
+    	$this->file_init_handler ();
+        $this->file_add_lock ();
+	}
+
+	/**
+	 * Removes transaction lock
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function remove_transaction_lock () {
+    	$this->file_remove_lock();
+	}
+
+	/**
+	 * Checks for lock
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function is_transaction_locked () {
+        // check for stalled lock file
+        $this->check_stalled_file ();
+        // response
+        if(file_exists($this->lock_file_name)) {
+            return file_get_contents($this->lock_file_name) == "1" ? true : false;
+        }
+        else {
+            return false;
+        }
+
+	}
+
+	/**
+	 * Removes stalled lock file if needed
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function check_stalled_file () {
+    	if(file_exists($this->lock_file_name)) {
+        	// if more that 60 seconds remove it
+        	if((time() - filemtime($this->lock_file_name)) > 60) {
+            	$this->file_init_handler ();
+            	$this->remove_transaction_lock ();
+        	}
+    	}
+	}
+
+	/**
+	* Unmarshal nested custom field data into the root object, and unset
+	* the custom_fields parameter when done. This function does not have
+	* any effect on requests for controllers that don't have custom fields,
+	* or if the app_nest_custom_fields setting is not enabled.
+	*
+	* @access public
+	* @return void
+	*/
+	public function unmarshal_nested_custom_fields() {
+		if (!$this->app->app_nest_custom_fields) {
+			return;
+		}
+		if (is_array($this->_params->custom_fields) && isset($this->custom_fields)) {
+			foreach ($this->_params->custom_fields as $key => $value) {
+				if (array_key_exists($key, $this->custom_fields)) {
+					$this->_params->$key = $value;
+				} else {
+					$this->Response->throw_exception(400, "${key} is not a valid custom field");
+				}
+			}
+			unset($this->_params->custom_fields);
+		}
+	}
+}

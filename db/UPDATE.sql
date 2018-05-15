@@ -1,3 +1,9 @@
+/* VERSION 1.1 */
+
+/* Old version only had a VARCHAR(32) password */
+
+ALTER TABLE `users` MODIFY COLUMN `password` CHAR(128) COLLATE utf8_bin DEFAULT NULL ;
+
 /* VERSION 1.11 */
 UPDATE `settings` set `version` = '1.11';
 
@@ -216,7 +222,6 @@ ALTER TABLE `logs` ENGINE = InnoDB;
 ALTER TABLE `requests` ENGINE = InnoDB;
 ALTER TABLE `sections` ENGINE = InnoDB;
 ALTER TABLE `settings` ENGINE = InnoDB;
-ALTER TABLE `settingsDomain` ENGINE = InnoDB;
 ALTER TABLE `settingsMail` ENGINE = InnoDB;
 ALTER TABLE `subnets` ENGINE = InnoDB;
 ALTER TABLE `userGroups` ENGINE = InnoDB;
@@ -226,6 +231,7 @@ ALTER TABLE `vlanDomains` ENGINE = InnoDB;
 ALTER TABLE `vlans` ENGINE = InnoDB;
 ALTER TABLE `vrf` ENGINE = InnoDB;
 ALTER TABLE `widgets` ENGINE = InnoDB;
+ALTER TABLE `settingsDomain` ENGINE = InnoDB;
 
 /* add new widgets */
 INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
@@ -648,3 +654,268 @@ CREATE TABLE `pstnNumbers` (
 ALTER TABLE `users` ADD `pstn` INT(1)  NULL  DEFAULT '1';
 
 
+
+
+/* VERSION 1.25 */
+UPDATE `settings` set `version` = '1.25';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* update languges */
+UPDATE `lang` SET `l_code` = 'en_GB.UTF8' WHERE `l_code` = 'en';
+UPDATE `lang` SET `l_code` = 'sl_SI.UTF8' WHERE `l_code` = 'sl_SI';
+UPDATE `lang` SET `l_code` = 'fr_FR.UTF8' WHERE `l_code` = 'fr_FR';
+UPDATE `lang` SET `l_code` = 'nl_NL.UTF8' WHERE `l_code` = 'nl_NL';
+UPDATE `lang` SET `l_code` = 'de_DE.UTF8' WHERE `l_code` = 'de_DE';
+UPDATE `lang` SET `l_code` = 'pt_BR.UTF8' WHERE `l_code` = 'pt_BR';
+UPDATE `lang` SET `l_code` = 'es_ES.UTF8' WHERE `l_code` = 'es_ES';
+UPDATE `lang` SET `l_code` = 'cs_CZ.UTF8' WHERE `l_code` = 'cs_CZ';
+UPDATE `lang` SET `l_code` = 'en_US.UTF8' WHERE `l_code` = 'en_US';
+
+/* location to addresses */
+ALTER TABLE `ipaddresses` ADD `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL;
+
+/* location widget */
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes');
+
+/* remove print limit */
+ALTER TABLE `users` DROP `printLimit`;
+
+
+
+/* VERSION 1.26 */
+UPDATE `settings` set `version` = '1.26';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* add http saml2 method */
+ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','SAML2')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';
+
+/* add transaction locking */
+ALTER TABLE `api` ADD `app_lock` INT(1)  NOT NULL  DEFAULT '0';
+ALTER TABLE `api` ADD `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30';
+
+
+
+
+/* VERSION 1.27 */
+UPDATE `settings` set `version` = '1.27';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* ad show supernet only */
+ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';
+
+/* add scan and discovery check time to database */
+ALTER TABLE `subnets` ADD `lastScan` TIMESTAMP  NULL;
+ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;
+
+
+
+/* VERSION 1.28 */
+UPDATE `settings` set `version` = '1.28';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Extend username to 255 chars for LDAP logins */
+ALTER TABLE `users` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
+ALTER TABLE `logs` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* expand hostname valude in IP requests to match ipaddresses table */
+ALTER TABLE `requests` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `description` `description` VARCHAR(64)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* update Tags when state change occurs */
+ALTER TABLE `settings` ADD `updateTags` TINYINT(1)  NULL  DEFAULT '0';
+ALTER TABLE `ipTags` ADD `updateTag` TINYINT(1)  NULL  DEFAULT '0';
+
+UPDATE `ipTags` set `updateTag`=1 where `id`=1;
+UPDATE `ipTags` set `updateTag`=1 where `id`=2;
+UPDATE `ipTags` set `updateTag`=1 where `id`=3;
+UPDATE `ipTags` set `updateTag`=1 where `id`=4;
+
+
+
+/* VERSION 1.29 */
+UPDATE `settings` set `version` = '1.29';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Add maintaneanceMode identifier */
+ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';
+/* extend pingStatus intervals */
+ALTER TABLE `settings` CHANGE `pingStatus` `pingStatus` VARCHAR(32)  CHARACTER SET utf8  NOT NULL  DEFAULT '1800;3600';
+ALTER TABLE `settings` CHANGE `hiddenCustomFields` `hiddenCustomFields` TEXT  CHARACTER SET utf8  NULL;
+
+
+
+/* VERSION 1.30 */
+UPDATE `settings` set `version` = '1.3';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* add option to globally enforce uniqueness */
+ALTER TABLE `settings` ADD `enforceUnique` TINYINT(1)  NULL  DEFAULT '1';
+UPDATE `subnets` set `vrfId` = 0 WHERE `vrfId` IS NULL;
+
+/* update languges */
+UPDATE `lang` SET `l_code` = 'en_GB.UTF-8' WHERE `l_code` = 'en_GB.UTF8';
+UPDATE `lang` SET `l_code` = 'sl_SI.UTF-8' WHERE `l_code` = 'sl_SI.UTF8';
+UPDATE `lang` SET `l_code` = 'fr_FR.UTF-8' WHERE `l_code` = 'fr_FR.UTF8';
+UPDATE `lang` SET `l_code` = 'nl_NL.UTF-8' WHERE `l_code` = 'nl_NL.UTF8';
+UPDATE `lang` SET `l_code` = 'de_DE.UTF-8' WHERE `l_code` = 'de_DE.UTF8';
+UPDATE `lang` SET `l_code` = 'pt_BR.UTF-8' WHERE `l_code` = 'pt_BR.UTF8';
+UPDATE `lang` SET `l_code` = 'es_ES.UTF-8' WHERE `l_code` = 'es_ES.UTF8';
+UPDATE `lang` SET `l_code` = 'cs_CZ.UTF-8' WHERE `l_code` = 'cs_CZ.UTF8';
+UPDATE `lang` SET `l_code` = 'en_US.UTF-8' WHERE `l_code` = 'en_US.UTF8';
+
+/* Russian traslation */
+INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Russian', 'ru_RU.UTF-8');
+
+/* fix scanAgents typo */
+update `scanAgents` set `name` = "localhost" WHERE `id` = 1;
+
+/* Add option to show custom field results as nested and show links default */
+ALTER TABLE `api` ADD `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0';
+ALTER TABLE `api` ADD `app_show_links` TINYINT(1)  NULL  DEFAULT '0';
+
+/* Add index to ctype for changelog */
+ALTER TABLE changelog ADD INDEX(ctype);
+
+/* extend sections for devices */
+ALTER TABLE `devices` CHANGE `sections` `sections` VARCHAR(1024)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+
+/* chinese translation */
+INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('zh_CN.UTF-8', 'Chinese');
+
+/* hostname extend */
+ALTER TABLE `devices` CHANGE `hostname` `hostname` VARCHAR(100)  CHARACTER SET utf8  NULL  DEFAULT NULL;
+/* decode mac addresses */
+ALTER TABLE `settings` ADD `decodeMAC` TINYINT(1)  NULL  DEFAULT '1';
+
+
+
+
+
+
+/* VERSION 1.31 */
+UPDATE `settings` set `version` = '1.31';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Circuits flag */
+ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1';
+
+/* circuit providers */
+CREATE TABLE `circuitProviders` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) DEFAULT NULL,
+  `description` text,
+  `contact` varchar(128) DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* circuits */
+CREATE TABLE `circuits` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `cid` varchar(128) DEFAULT NULL,
+  `provider` int(11) unsigned NOT NULL,
+  `type` enum('Default','Bandwidth') DEFAULT NULL,
+  `capacity` varchar(128) DEFAULT NULL,
+  `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
+  `device1` int(11) unsigned DEFAULT NULL,
+  `location1` int(11) unsigned DEFAULT NULL,
+  `device2` int(11) unsigned DEFAULT NULL,
+  `location2` int(11) unsigned DEFAULT NULL,
+  `comment` text,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `cid` (`cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Compact menu */
+ALTER TABLE `users` ADD `menuCompact` TINYINT  NULL  DEFAULT '1';
+
+/* Add line for rack displayin and back side */
+ALTER TABLE `racks` ADD `line` INT(11)  NOT NULL  DEFAULT '1';
+ALTER TABLE `racks` ADD `front` INT(11)  NOT NULL  DEFAULT '0';
+
+/* add circuit permissions for normal users */
+ALTER TABLE `users` ADD `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No';
+
+/* Add option for DNS resolving host in subnet */
+ALTER TABLE `subnets` ADD `resolveDNS` TINYINT(1)  NULL  DEFAULT '0';
+
+/* Cahnge name for back side */
+ALTER TABLE `racks` CHANGE `front` `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0';
+ALTER TABLE `racks` CHANGE `line` `row` INT(11)  NOT NULL  DEFAULT '1';
+
+/* add permission propagation policy */
+ALTER TABLE `settings` ADD `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1';
+
+/* extend log details */
+ALTER TABLE `logs` CHANGE `details` `details` TEXT  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL;
+
+/* snmpv3 */
+ALTER TABLE `devices` ADD `snmp_v3_sec_level` SET('none','noAuthNoPriv','authNoPriv','authPriv')  NULL  DEFAULT 'none';
+ALTER TABLE `devices` ADD `snmp_v3_auth_protocol` SET('none','MD5','SHA')  NULL  DEFAULT 'none';
+ALTER TABLE `devices` ADD `snmp_v3_auth_pass` VARCHAR(64)  NULL  DEFAULT NULL;
+ALTER TABLE `devices` ADD `snmp_v3_priv_protocol` SET('none','DES','AES')  NULL  DEFAULT 'none';
+ALTER TABLE `devices` ADD `snmp_v3_priv_pass` VARCHAR(64)  NULL  DEFAULT NULL;
+ALTER TABLE `devices` ADD `snmp_v3_ctx_name` VARCHAR(64)  NULL  DEFAULT NULL;
+ALTER TABLE `devices` ADD `snmp_v3_ctx_engine_id` VARCHAR(64)  NULL  DEFAULT NULL;
+
+/* add indexes to locations */
+ALTER TABLE `devices` ADD INDEX (`location`);
+ALTER TABLE `racks` ADD INDEX (`location`);
+ALTER TABLE `subnets` ADD INDEX (`location`);
+ALTER TABLE `ipaddresses` ADD INDEX (`location`);
+ALTER TABLE `circuits` ADD INDEX (`location1`);
+ALTER TABLE `circuits` ADD INDEX (`location2`);
+
+
+
+
+
+
+/* VERSION 1.32 */
+UPDATE `settings` set `version` = '1.32';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Required IP fieldsg */
+ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;
+
+/* Change dns_name to hostname */
+ALTER TABLE `ipaddresses` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
+
+/* Subnet table indexes: has_slaves(), fetch_section_subnets(), subnet_familytree_*(), verify_subnet_overlapping(), verify_vrf_overlapping()... */
+ALTER TABLE `subnets` ADD INDEX (`masterSubnetId`);
+ALTER TABLE `subnets` ADD INDEX (`sectionId`);
+ALTER TABLE `subnets` ADD INDEX (`vrfId`);
+
+/* bandwidth calculator widget */
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes');
+
+/* add theme */
+ALTER TABLE `settings` ADD `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark';
+ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';
+
+/* Allow SNMPv3 to be selected for devices */
+ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') DEFAULT '0';

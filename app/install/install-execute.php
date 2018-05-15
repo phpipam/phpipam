@@ -5,7 +5,7 @@
  **************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -28,8 +28,16 @@ $dropdb 		= @$_POST['dropdb']=="on" ? true : false;
 $createdb 		= @$_POST['createdb']=="on" ? true : false;
 $creategrants 	= @$_POST['creategrants']=="on" ? true : false;
 
+# migration flag - select different sql file
+$migrate = @$_POST['install_type']==="migrate" ? true : false;
+
 # try to install new database */
-if($Install->install_database ($_POST['mysqlrootuser'], $_POST['mysqlrootpass'], $dropdb, $createdb, $creategrants)) {
- 	$Result->show("success alert-block", 'Database installed successfully! <a href="?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">Continue</a>', true);
+if($Install->install_database ($_POST['mysqlrootuser'], $_POST['mysqlrootpass'], $dropdb, $createdb, $creategrants, $migrate)) {
+	if($migrate) {
+	 	$Result->show("success alert-block", 'Database installed successfully! <a href="'.create_link().'" class="btn btn-sm btn-default">Continue</a>', true);
+	}
+	else {
+	 	$Result->show("success alert-block", 'Database installed successfully! <a href="index.php?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">Continue</a>', true);
+	 }
 }
 ?>

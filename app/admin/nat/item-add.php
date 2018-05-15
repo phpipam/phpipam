@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,13 +17,17 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate id
+if(!is_numeric($_POST['id']))                           { $Result->show("danger", _("Invalid ID"), true, true); }
+# validate type
+if(!in_array($_POST['type'], array("src", "dst")))      { $Result->show("danger", _("Invalid NAT direction"), true, true); }
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
 $nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 // new cookie
-$csrf_cookie = $User->csrf_cookie ("create", "nat_add");
+$csrf_cookie = $User->Crypto->csrf_cookie ("create", "nat_add");
 ?>
 
 <!-- header -->

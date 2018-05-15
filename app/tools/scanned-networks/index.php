@@ -22,7 +22,7 @@ if ($agents===false) {
 else {
 
 	# table
-	print "<table class='table sorted table-striped table-condensed table-top'>";
+	print "<table class='table sorted table-striped table-condensed table-top' data-cookie-id-table='scanned'>";
 
     print "<thead>";
 	print "<tr>";
@@ -31,6 +31,7 @@ else {
 	print "	<th>"._('Section')."</th>";
 	print "	<th>"._('Hosts check')."</th>";
 	print "	<th>"._('Discover')."</th>";
+	print "	<th>"._('Resolve DNS names')."</th>";
 	print "	<th></th>";
 	print "</tr>";
 	print "</thead>";
@@ -44,7 +45,7 @@ else {
 		$ac++;	// for ids
 
 		print "<tr>";
-		print "	<th colspan='6'>$ac.) $a->name ($a->description) :: $a->type</th>";
+		print "	<td colspan='7' class='th'>$ac.) $a->name ($a->description) :: $a->type</td>";
 		print "</tr>";
 
 		# fetch all scanned subnets
@@ -62,6 +63,8 @@ else {
 				$status_check = $subnet->pingSubnet==1 ? "<i class='fa fa-check'></i>" : "";
 				//set discovery
 				$discovery 	  = $subnet->discoverSubnet==1 ? "<i class='fa fa-check'></i>" : "";
+				//set dns
+				$dns 	      = $subnet->resolveDNS==1 ? "<i class='fa fa-check'></i>" : "";
 
 				# check permission
 				$permission = $Subnets->check_permission ($User->user, $subnet->id);
@@ -76,6 +79,8 @@ else {
 					print "	<td>$section->name ($section->description)</td>";
 					print "	<td>$status_check</td>";
 					print "	<td>$discovery</td>";
+					print "	<td>$dns</td>";
+
 
 					print "	<td class='actions' style='padding:0px;'>";
 					print "	<div class='btn-group'>";
@@ -89,7 +94,7 @@ else {
 			# none available
 			if ($cnt===0) {
 				print "<tr>";
-				print "	<td colspan=6>";
+				print "	<td colspan=7>";
 				$Result->show("info", _('No subnets available'), false);
 				print "	</td>";
 				print "</tr>";
@@ -97,7 +102,7 @@ else {
 		}
 		else {
 			print "<tr>";
-			print "	<td colspan=6>";
+			print "	<td colspan=7>";
 			$Result->show("info", _('No subnets'), false);
 			print "	</td>";
 			print "</tr>";

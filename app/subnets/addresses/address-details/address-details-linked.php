@@ -30,7 +30,7 @@ if (strlen($User->settings->link_field)>0) {
             // hostname
             print "<tr>";
             print " <th>"._("Hostname")."</th>";
-            print " <td>$s->dns_name</td>";
+            print " <td>$s->hostname</td>";
             print "</tr>";
 
             // section
@@ -63,4 +63,3 @@ if (strlen($User->settings->link_field)>0) {
 else {
     $Result->show("info", _("Address linking disabled"), false);
 }
-?>

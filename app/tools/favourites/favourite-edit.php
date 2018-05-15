@@ -3,7 +3,7 @@
 /* Edit favourite subnets */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -19,4 +19,3 @@ is_numeric($_POST['subnetId']) ? : $Result->show("danger", _('Invalid ID'),false
 # execute action
 if(!$User->edit_favourite($_POST['action'], $_POST['subnetId'])) 	{ $Result->show("danger", _('Error editing favourite'),false, true); }
 else 																{ print "success"; }
-?>

@@ -45,6 +45,13 @@ class Scan extends Common_functions {
 	public $icmp_type = "ping";
 
 	/**
+	 * Sets OS type
+	 *
+	 * @var string
+	 */
+	public $os_type = "default";
+
+	/**
 	 * icmp timeout
 	 *
 	 * (default value: 1)
@@ -136,6 +143,8 @@ class Scan extends Common_functions {
 		is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 		# set type
 		$this->reset_scan_method ($this->settings->scanPingType);
+		# set OS type
+		$this->set_os_type ();
 		# set php exec
 		$this->set_php_exec ();
 		# Log object
@@ -192,7 +201,35 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function set_php_exec () {
-		$this->php_exec = PHP_BINDIR."/php";
+		include(dirname(__FILE__)."/../../config.php");
+
+		// Invoked via CLI, use current php-cli binary if known (>php5.3)
+		if ( php_sapi_name() === "cli" && defined('PHP_BINARY') ) {
+			$this->php_exec = PHP_BINARY;
+			return;
+		}
+
+		// Invoked via HTML (or php5.3)
+
+		// Check for user specified php-cli binary (Multiple php versions installed)
+		if ( !empty($php_cli_binary) ) {
+			$this->php_exec = $php_cli_binary;
+			return;
+		}
+
+		// Default: Use system default php version symlinked to php in PHP_BINDIR
+		$this->php_exec = $this->os_type=="Windows" ? PHP_BINARY : PHP_BINDIR."/php";
+	}
+
+	/**
+	 * Sets OS type
+	 *
+	 * @method set_os_type
+	 */
+	private function set_os_type () {
+		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $this->os_type = "FreeBSD"; }
+		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $this->os_type = "Linux"; }
+		elseif(PHP_OS == "WIN32" || PHP_OS == "Windows" || PHP_OS == "WINNT")	{ $this->os_type = "Windows"; }
 	}
 
 	/**
@@ -252,7 +289,7 @@ class Scan extends Common_functions {
 		# set method name variable
 		$ping_method = "ping_address_method_".$this->icmp_type;
 		# ping with selected method
-		return $this->$ping_method ($address);
+		return $this->{$ping_method} ($address);
 	}
 
 	/**
@@ -272,10 +309,10 @@ class Scan extends Common_functions {
 		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath."6"; }
 
 		# set ping command based on OS type
-		if	(PHP_OS == "FreeBSD" || PHP_OS == "NetBSD")                         { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif(PHP_OS == "Linux" || PHP_OS == "OpenBSD")                        { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
-		elseif(PHP_OS == "WIN32" || PHP_OS == "Windows" || PHP_OS == "WINNT")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -I ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		else																	{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
+		if ($this->os_type == "FreeBSD")    { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Windows")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
+		else								{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
@@ -451,9 +488,18 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function ping_verify_path ($path) {
-		if(!file_exists($path)) {
-			if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
-			else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
+		// Windows
+		if($this->os_type=="Windows") {
+			if(!file_exists('"'.$path.'"')) {
+				if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
+				else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
+			}
+		}
+		else {
+			if(!file_exists($path)) {
+				if($this->icmp_exit)	{ exit  ($this->ping_exit_explain(1000)); }
+				else					{ return $this->Result->show("danger", _($this->ping_exit_explain(1000)), true);  }
+			}
 		}
 	}
 
@@ -539,6 +585,74 @@ class Scan extends Common_functions {
 		try { $this->Database->updateObject("scanAgents", array("id"=>$id, "last_access"=>date("Y-m-d H:i:s")), "id"); }
 		catch (Exception $e) {
 		}
+	}
+
+	/**
+	 * Updates last time that subnet was scanned
+	 *
+	 * @method update_subnet_scantime
+	 * @param  int $subnet_id
+	 * @param  false|datetime $datetime
+	 * @return void
+	 */
+	public function update_subnet_scantime ($subnet_id, $datetime = false) {
+		// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
+		// update
+		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastScan"=>$datetime), "id"); }
+		catch (Exception $e) {}
+	}
+
+	/**
+	 * Updates last time discovery check was run on subnet
+	 *
+	 * @method update_subnet_discoverytime
+	 * @param  int $subnet_id
+	 * @param  false|datetime $datetime
+	 * @return void
+	 */
+	public function update_subnet_discoverytime ($subnet_id, $datetime = false) {
+		// set date
+		$datetime = $datetime===false ? date("Y-m-d H:i:s") : $datetime;
+		// update
+		try { $this->Database->updateObject("subnets", array("id"=>$subnet_id, "lastDiscovery"=>$datetime), "id"); }
+		catch (Exception $e) {}
+	}
+
+	/**
+	 * Updates address tag if state changes
+	 *
+	 * @method update_address_tag
+	 * @param  int$address_id
+	 * @param  int $tag_id (default: 2)
+	 * @param  int $old_tag_id (default: null)
+	 * @param  dadtetime $last_seen_date (default: false)
+	 * @return bool
+	 */
+	public function update_address_tag ($address_id, $tag_id = 2, $old_tag_id = null, $last_seen_date = false) {
+		if (is_numeric($address_id)) {
+			// don't update statuses for never seen addresses !
+			if ($last_seen_date!==false && !is_null($last_seen_date) && strlen($last_seen_date)>2 && $last_seen_date!="0000-00-00 00:00:00" && $last_seen_date!="1970-01-01 00:00:01" && $last_seen_date!="1970-01-01 01:00:00") {
+				// dont update reserved to offline
+				if (!($tag_id==1 && $old_tag_id==3)) {
+					try { $this->Database->updateObject("ipaddresses", array("id"=>$address_id, "state"=>$tag_id), "id"); }
+					catch (Exception $e) {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+			}
+			else {
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+		// ok
+		return true;
 	}
 
 	/**

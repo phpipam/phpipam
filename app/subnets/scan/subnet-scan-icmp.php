@@ -8,7 +8,12 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "scan");
+$csrf = $User->Crypto->csrf_cookie ("create", "scan");
+
+# validate subnetId and type
+if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
+if(!preg_match('/[^A-Za-z0-9-]*$/', $_POST['type']))       { $Result->show("danger", "Invalid scan type", true); die(); }
+
 
 # invoke CLI with threading support
 $cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'discovery' ".$_POST['subnetId'];
@@ -46,7 +51,7 @@ print "<h5>"._('Scan results').":</h5><hr>";
 # json error
 if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), false); }
 # die if error
-elseif($retval!=0) 								{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
+elseif($retval!==0) 							{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
@@ -103,7 +108,7 @@ else {
 		print "</td>";
 		//hostname
 		print "<td>";
-		print "	<input type='text' class='form-control input-sm' name='dns_name$m' value='".@$hostname['name']."'>";
+		print "	<input type='text' class='form-control input-sm' name='hostname$m' value='".@$hostname['name']."'>";
 		print "</td>";
 		// custom
 		if (isset($required_fields)) {
@@ -131,8 +136,8 @@ else {
     			elseif($field['type'] == "date" || $field['type'] == "datetime") {
     				// just for first
     				if($timeP==0) {
-    					print '<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/1.2/bootstrap-datetimepicker.min.js"></script>';
+    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
+    					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
     					print '<script type="text/javascript">';
     					print '$(document).ready(function() {';
     					//date only
@@ -207,5 +212,3 @@ print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan 
 
 # show debug?
 if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
-
-?>

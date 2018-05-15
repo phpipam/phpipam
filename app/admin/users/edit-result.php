@@ -5,7 +5,7 @@
  *************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -16,12 +16,15 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
+$_POST = $Admin->strip_input_tags ($_POST);
+$_POST = $Admin->trim_array_objects ($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "user", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "user", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch auth method
 $auth_method = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['authMethod']);
@@ -55,7 +58,7 @@ if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", 
 if ($_POST['action']=="add") {
 	//username > 8 chars
 	if ($auth_method->type=="local") {
-		if(strlen($_POST['username'])<6)								{ $Result->show("danger", _("Username must be at least 6 characters long!"), true); }
+		if(strlen($_POST['username'])<3)								{ $Result->show("danger", _("Username must be at least 3 characters long!"), true); }
 	} else {
 		if(strlen($_POST['username'])==0)								{ $Result->show("danger", _("Username must be at least 1 character long!"), true); }
 	}
@@ -79,7 +82,7 @@ if(sizeof($myFields) > 0) {
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
 			if($_POST[$myField['name']]>1) {
-				$$_POST[$myField['name']] = "";
+				$_POST[$myField['name']] = "";
 			}
 		}
 		//not null!
@@ -91,19 +94,31 @@ if(sizeof($myFields) > 0) {
 /* update */
 
 # formulate update values
-$values = array("id"=>@$_POST['userId'],
-				"real_name"=>$_POST['real_name'],
-				"username"=>$_POST['username'],
-				"email"=>$_POST['email'],
-				"role"=>$_POST['role'],
-				"authMethod"=>$_POST['authMethod'],
-				"lang"=>$_POST['lang'],
-				"mailNotify"=>$_POST['mailNotify'],
-				"mailChangelog"=>$_POST['mailChangelog'],
-				"editVlan"=>$_POST['editVlan'],
-				"pstn"=>$_POST['pstn'],
-				"pdns"=>$_POST['pdns']
+$values = array(
+				"id"            =>@$_POST['userId'],
+				"real_name"     =>$_POST['real_name'],
+				"username"      =>$_POST['username'],
+				"email"         =>$_POST['email'],
+				"role"          =>$_POST['role'],
+				"authMethod"    =>$_POST['authMethod'],
+				"lang"          =>$_POST['lang'],
+				"mailNotify"    =>$_POST['mailNotify'],
+				"mailChangelog" =>$_POST['mailChangelog'],
+				"editVlan"      =>$_POST['editVlan'],
+				"editCircuits"  =>$_POST['editCircuits'],
+				"theme"  		=>$_POST['theme']=="default" ? "" : $_POST['theme'],
+				"pstn"          =>$_POST['pstn'],
+				"pdns"          =>$_POST['pdns']
 				);
+# custom fields
+if (sizeof($myFields)>0) {
+    foreach($myFields as $myField) {
+		# replace possible ___ back to spaces!
+		$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
+
+		if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = $_POST[$myField['nameTest']];}
+    }
+}
 # update pass ?
 if(strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add" && $auth_method->type=="local")) {
 	$values['password'] = $_POST['password1'];
@@ -130,5 +145,3 @@ else																	{ $Result->show("success", _("User $_POST[action] successfu
 
 # mail user
 if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }
-
-?>

@@ -30,24 +30,27 @@ $User->check_user_session();
 	<title><?php print $User->settings->siteTitle; ?> :: upgrade</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/bootstrap/bootstrap-custom.css">
-	<link rel="stylesheet" type="text/css" href="css/1.2/font-awesome/font-awesome.min.css">
-	<link rel="shortcut icon" href="css/1.2/images/favicon.png">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/1.2/jquery-2.1.3.min.js"></script>
-	<script type="text/javascript" src="js/1.2/jclock.jquery.js"></script>
-	<script type="text/javascript" src="js/1.2/login.js"></script>
-	<script type="text/javascript" src="js/1.2/install.js"></script>
-	<script type="text/javascript" src="js/1.2/bootstrap.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/jclock.jquery.js"></script>
+	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<?php if ($User->settings->theme!="white") { ?>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+	<?php } ?>
 	<script type="text/javascript">
 	$(document).ready(function(){
 	     if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	});
 	</script>
 	<!--[if lt IE 9]>
-	<script type="text/javascript" src="js/1.2/dieIE.js"></script>
+	<script type="text/javascript" src="js/dieIE.js"></script>
 	<![endif]-->
 </head>
 

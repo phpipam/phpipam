@@ -5,7 +5,7 @@
  ***********************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,12 +18,14 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "requests", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "requests", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify permissions
 if($Subnets->check_permission($User->user, $_POST['subnetId']) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true); }
@@ -65,17 +67,18 @@ else {
 	if ($Addresses->address_exists($Addresses->transform_address($_POST['ip_addr'], "decimal"), $subnet['id'])) { $Result->show("danger", _('IP address already exists'), true); }
 
 	//insert to ipaddresses table
-	$values = array("action"=>"add",
-					"ip_addr"=>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
-					"subnetId"=>$_POST['subnetId'],
-					"description"=>@$_POST['description'],
-					"dns_name"=>@$_POST['dns_name'],
-					"mac"=>@$_POST['mac'],
-					"owner"=>@$_POST['owner'],
-					"state"=>@$_POST['state'],
-					"switch"=>@$_POST['switch'],
-					"port"=>@$_POST['port'],
-					"note"=>@$_POST['note']
+	$values = array(
+					"action"      =>"add",
+					"ip_addr"     =>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
+					"subnetId"    =>$_POST['subnetId'],
+					"description" =>@$_POST['description'],
+					"hostname"    =>@$_POST['hostname'],
+					"mac"         =>@$_POST['mac'],
+					"owner"       =>@$_POST['owner'],
+					"state"       =>@$_POST['state'],
+					"switch"      =>@$_POST['switch'],
+					"port"        =>@$_POST['port'],
+					"note"        =>@$_POST['note']
 					);
 	if(!$Addresses->modify_address($values))	{ $Result->show("danger",  _("Failed to create IP address"), true); }
 
@@ -108,5 +111,3 @@ else {
 
 	$Tools->ip_request_send_mail ("accept", $_POST);
 }
-
-?>

@@ -76,7 +76,7 @@ function GetInt4d($data, $pos) {
 // http://uk.php.net/manual/en/function.getdate.php
 function gmgetdate($ts = null){
 	$k = array('seconds','minutes','hours','mday','wday','mon','year','yday','weekday','month',0);
-	return(array_comb($k,split(":",gmdate('s:i:G:j:w:n:Y:z:l:F:U',is_null($ts)?time():$ts))));
+	return(array_comb($k,preg_split('/:/',gmdate('s:i:G:j:w:n:Y:z:l:F:U',is_null($ts)?time():$ts))));
 	}
 
 // Added for PHP4 compatibility
@@ -94,7 +94,7 @@ function v($data,$pos) {
 
 class OLERead {
 	var $data = '';
-	function OLERead(){	}
+	function __construct(){	}
 
 	function read($sFileName){
 		// check if file exist and is readable (Darko Miljanovic)
@@ -841,7 +841,7 @@ class Spreadsheet_Excel_Reader {
 
 		// Custom pattern can be POSITIVE;NEGATIVE;ZERO
 		// The "text" option as 4th parameter is not handled
-		$parts = split(";",$format);
+		$parts = preg_split('/;/',$format);
 		$pattern = $parts[0];
 		// Negative pattern
 		if (count($parts)>2 && $num==0) {
@@ -912,7 +912,7 @@ class Spreadsheet_Excel_Reader {
 	 *
 	 * Some basic initialisation
 	 */
-	function Spreadsheet_Excel_Reader($file='',$store_extended_info=true,$outputEncoding='') {
+	public function __construct ($file='',$store_extended_info=true,$outputEncoding='') {
 		$this->_ole = new OLERead();
 		$this->setUTFEncoder('iconv');
 		if ($outputEncoding != '') {
@@ -1163,7 +1163,7 @@ class Spreadsheet_Excel_Reader {
 						    $font = substr($data, $pos+20, $numchars);
 						} else {
 						    $font = substr($data, $pos+20, $numchars*2);
-						    $font =  $this->_encodeUTF16($font); 
+						    $font =  $this->_encodeUTF16($font);
 						}
 						$this->fontRecords[] = array(
 								'height' => $height / 20,
@@ -1216,7 +1216,7 @@ class Spreadsheet_Excel_Reader {
 						$xf['borderRight'] = $this->lineStyles[($border & 0xF0) >> 4];
 						$xf['borderTop'] = $this->lineStyles[($border & 0xF00) >> 8];
 						$xf['borderBottom'] = $this->lineStyles[($border & 0xF000) >> 12];
-						
+
 						$xf['borderLeftColor'] = ($border & 0x7F0000) >> 16;
 						$xf['borderRightColor'] = ($border & 0x3F800000) >> 23;
 						$border = (ord($data[$pos+18]) | ord($data[$pos+19]) << 8);
@@ -1560,17 +1560,17 @@ class Spreadsheet_Excel_Reader {
 					}
 					break;
 				case SPREADSHEET_EXCEL_READER_TYPE_DEFCOLWIDTH:
-					$this->defaultColWidth  = ord($data[$spos+4]) | ord($data[$spos+5]) << 8; 
+					$this->defaultColWidth  = ord($data[$spos+4]) | ord($data[$spos+5]) << 8;
 					break;
 				case SPREADSHEET_EXCEL_READER_TYPE_STANDARDWIDTH:
-					$this->standardColWidth  = ord($data[$spos+4]) | ord($data[$spos+5]) << 8; 
+					$this->standardColWidth  = ord($data[$spos+4]) | ord($data[$spos+5]) << 8;
 					break;
 				case SPREADSHEET_EXCEL_READER_TYPE_COLINFO:
 					$colfrom = ord($data[$spos+0]) | ord($data[$spos+1]) << 8;
 					$colto = ord($data[$spos+2]) | ord($data[$spos+3]) << 8;
-					$cw = ord($data[$spos+4]) | ord($data[$spos+5]) << 8; 
-					$cxf = ord($data[$spos+6]) | ord($data[$spos+7]) << 8; 
-					$co = ord($data[$spos+8]); 
+					$cw = ord($data[$spos+4]) | ord($data[$spos+5]) << 8;
+					$cxf = ord($data[$spos+6]) | ord($data[$spos+7]) << 8;
+					$co = ord($data[$spos+8]);
 					for ($coli = $colfrom; $coli <= $colto; $coli++) {
 						$this->colInfo[$this->sn][$coli+1] = Array('width' => $cw, 'xf' => $cxf, 'hidden' => ($co & 0x01), 'collapsed' => ($co & 0x1000) >> 12);
 					}

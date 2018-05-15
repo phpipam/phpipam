@@ -9,16 +9,20 @@ $User->check_user_session();
 
 
 /* fetch all custom fields */
-$custom_tables = array( "ipaddresses"=>"IP address",
-						"subnets"=>"subnet",
-						"vlans"=>"VLAN",
-						"vrf"=>"VRF",
-						"users"=>"User",
-						"devices"=>"Device",
-						"racks"=>"Rack",
-						"locations"=>"Locations",
-						"pstnPrefixes"=>"PSTN Prefixes",
-						"pstnNumbers"=>"PSTN Numbers"
+$custom_tables = array(
+						"ipaddresses"      => "IP address",
+						"subnets"          => "subnet",
+						"vlans"            => "VLAN",
+						"vrf"              => "VRF",
+						"users"            => "User",
+						"userGroups"       => "User Group",
+						"devices"          => "Device",
+						"racks"            => "Rack",
+						"locations"        => "Locations",
+						"pstnPrefixes"     => "PSTN Prefixes",
+						"pstnNumbers"      => "PSTN Numbers",
+						"circuitProviders" => "Circuit providers",
+						"circuits" 		   => "Circuits"
 						);
 
 # create array
@@ -93,7 +97,7 @@ foreach($custom_fields as $k=>$cf) {
 		foreach($cf as $f)
 		{
 			# space?
-			$class = !preg_match('/^[a-zA-Z0-9 \_]+$/i', $f['name']) ? "alert-danger" : "";
+			$class = strpos($f['name'], " ")===false ? "" : "danger";
 
 			print "<tr class='$class'>";
 
@@ -101,7 +105,7 @@ foreach($custom_fields as $k=>$cf) {
 			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='Move down' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
 			else 						{ print "<td style='width:10px;'></td>";}
 
-			print "<td class='name'>$f[name]</td>";
+			print "<td class='name'>".$Tools->print_custom_field_name ($f['name'])."</td>";
 
 			# description
 			print "<td>$f[Comment]</td>";
@@ -129,7 +133,7 @@ foreach($custom_fields as $k=>$cf) {
 			print "	</div>";
 
 			# warning for older versions
-			if((is_numeric(substr($f['name'], 0, 1))) || (!preg_match('!^[\w_ ]*$!', $f['name'])) ) { print '<span class="alert alert-warning"><strong>Warning</strong>: '._('Invalid field name').'!</span>'; }
+			if((is_numeric(substr($f['name'], 0, 1))) || (!preg_match('/^(\p{L}|\p{N})[(\p{L}|\p{N}) _.-]+$/u', $f['name'])) ) { print '<span class="alert alert-warning"><strong>Warning</strong>: '._('Invalid field name').'!</span>'; }
 
 			print "</td>";
 			print "</tr>";
@@ -163,7 +167,6 @@ foreach($custom_fields as $k=>$cf) {
 
 	print "</tbody>";
 }
-
 ?>
 
 </table>

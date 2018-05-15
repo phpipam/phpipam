@@ -10,11 +10,19 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
  *
  */
 
+# rack object
+if($User->settings->enableRACK=="1") {
+	$Racks      = new phpipam_rack ($Database);
+}
+
 # verify that user is logged in
 $User->check_user_session();
 # filter devices or fetch print all?
 $devices = $Tools->fetch_all_objects("devices", "hostname");
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
+
+# strip tags - XSS
+$_GET = $User->strip_input_tags ($_GET);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('devices');
@@ -35,21 +43,29 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="switchManagement" class="table sorted table-striped table-top">';
+print '<table id="switchManagement" class="table sorted sortable table-striped table-top" data-cookie-id-table="devices_all">';
 
 #headers
 print "<thead>";
 print '<tr>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by hostname')."'>"._('Name')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by IP address')."'>"._('IP address')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by description')."'>"._('Description').'</span></th>';
+print "	<th>"._('Name')."</th>";
+print "	<th>"._('IP address')."</th>";
+print "	<th>"._('Description').'</th>';
+if($User->settings->enableRACK=="1") {
+print '	<th>'._('Rack').'</th>';
+$colspanCustom++;
+}
+if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
+print "	<th>"._('SNMP info').'</th>';
+$colspanCustom++;
+}
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
-print "	<th class='hidden-sm'>          <span rel='tooltip' data-container='body' title='"._('Sort by type')."'>". _('Type').'</span></th>';
+print "	<th class='hidden-sm'>". _('Type').'</th>';
 
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
+			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
@@ -86,9 +102,26 @@ else {
 	//print details
 	print '<tr>'. "\n";
 
-	print "	<td><a href='".create_link("tools","devices",$device['id'])."'><i class='fa fa-desktop'></i> ". $device['hostname'] .'</a></td>'. "\n";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link("tools","devices",$device['id'])."'><i class='fa fa-desktop prefix'></i> ". $device['hostname'] .'</a></td>'. "\n";
 	print "	<td>". $device['ip_addr'] .'</td>'. "\n";
 	print '	<td class="description">'. $device['description'] .'</td>'. "\n";
+	// rack
+    if($User->settings->enableRACK=="1") {
+        print "<td>";
+        # rack
+        $rack = $Racks->fetch_rack_details ($device['rack']);
+        if ($rack!==false) {
+            print "<a href='".create_link("administration", "racks", $rack->id)."'>".$rack->name."</a><br>";
+            print "<span class='badge badge1 badge5'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
+        }
+        print "</td>";
+    }
+    // snmp
+	if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
+		print "<td>";
+		print ($device['snmp_version']==0 || strlen($device['snmp_version'])==0) ?  "<span class='text-muted'>"._("Disabled")."</span>" : _("Version").": $device[snmp_version]<br>"._("Community").": $device[snmp_community]<br>";
+		print "</td>";
+	}
 	print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
 	print '	<td class="hidden-sm">'. $device_types_indexed[$device['type']]->tname .'</td>'. "\n";
 
@@ -96,6 +129,9 @@ else {
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
+				// create html links
+				$device[$field['name']] = $User->create_links($device[$field['name']], $field['type']);
+
 				print "<td class='hidden-sm hidden-xs hidden-md'>".$device[$field['name']]."</td>";
 			}
 		}
@@ -118,6 +154,12 @@ else {
 	print '	<td>'._('Device not specified').'</td>'. "\n";
 	print '	<td></td>'. "\n";
 	print '	<td></td>'. "\n";
+	if($User->settings->enableRACK=="1") {
+	print '	<td></td>'. "\n";
+	}
+	if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
+	print '	<td></td>'. "\n";
+	}
 	print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
 	print '	<td class="hidden-sm"></td>'. "\n";
 

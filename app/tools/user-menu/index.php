@@ -25,7 +25,6 @@ $langs = $User->fetch_langs();
 /* print hello */
 print "<h4>".$User->user->real_name.", "._('here you can change your account details').":</h4>";
 print "<hr><br>";
-
 ?>
 
 
@@ -46,7 +45,7 @@ print "<hr><br>";
 <tr>
     <td><?php print _('E-mail'); ?></td>
     <td>
-        <input type="text" class="form-control input-sm"  name="email" value="<?php print $User->user->email; ?>">
+        <input type="email" class="form-control input-sm"  name="email" value="<?php print $User->user->email; ?>" autocomplete="off">
     </td>
     <td class="info2"><?php print _('Email address'); ?></td>
 </tr>
@@ -73,6 +72,23 @@ if($User->user->authMethod == 1) {
     <td class="info2"><?php print _('Re-type password'); ?></td>
 </tr>
 <?php } ?>
+
+<!-- select theme -->
+<tr>
+	<td><?php print _('Theme'); ?></td>
+	<td>
+		<select name="theme" class="form-control input-sm input-w-auto">
+			<option value="default"><?php print _("Default"); ?></option>
+			<?php
+			foreach($User->themes as $theme) {
+				if($theme==$User->user->theme)	{ print "<option value='$theme' selected>$theme</option>"; }
+				else							{ print "<option value='$theme'		    >$theme</option>"; }
+			}
+			?>
+		</select>
+	</td>
+	<td class="info2"><?php print _('Select UI theme'); ?></td>
+</tr>
 
 <!-- select language -->
 <tr>
@@ -154,32 +170,14 @@ if($User->user->authMethod == 1) {
 	</td>
 </tr>
 
-<!-- Output limit -->
+<!-- Compress text in menu -->
 <tr>
-	<td class="title"><?php print _('IP address print limit'); ?></td>
+	<td class="title"><?php print _('Compress text in top menu'); ?></td>
 	<td>
-		<select name="printLimit" class="form-control input-sm input-w-auto">
-			<?php
-			$opts = array(
-				"0"=>_("Show all"),
-				"10"=>"10",
-				"30"=>"30",
-				"62"=>"62",
-				"100"=>"100",
-				"126"=>"126",
-				"254"=>"254"
-			);
-
-			foreach($opts as $key=>$line) {
-				if($User->user->printLimit == $key) { print "<option value='$key' selected>$line</option>"; }
-				else 								{ print "<option value='$key'>$line</option>"; }
-			}
-
-			?>
-		</select>
+		<input type="checkbox" value="1" class="input-switch" name="menuCompact" <?php if($User->user->menuCompact == 1) print 'checked'; ?>>
 	</td>
 	<td class="info2">
-		<?php print _('Number of IP addresses per page'); ?>
+		<?php print _('Do not show text next to menu items in dynamic menu'); ?>
 	</td>
 </tr>
 
@@ -230,7 +228,7 @@ if($User->user->authMethod == 1) {
 <span class="info2"><?php print _("Select widgets to be displayed on dashboard"); ?></span>
 
 
-<script type="text/javascript" src="js/1.2/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.4.custom.min.js"></script>
 <script>
 $(document).ready(function() {
 	// initialize sortable

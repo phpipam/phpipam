@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -19,7 +19,10 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "domain");
+$csrf = $User->Crypto->csrf_cookie ("create", "domain");
+
+# validate action
+$Admin->validate_action ($_POST['action'], true);
 
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
@@ -67,7 +70,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Domain type'); ?></td>
 		<td>
-			<select name="type" class="form-control input-w-auto" <?php print $readonly; ?>>
+			<select name="type" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
 			<?php
 			// loop
 			foreach($PowerDNS->domain_types as $type) {
@@ -171,16 +174,39 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 		<?php
 		// loop
 		foreach($PowerDNS->ttl as $k=>$ttl) {
-			// active
-			if ($k == @$pdns->nxdomain_ttl)	{ $selected = "selected"; }
-			else							{ $selected = ""; }
-			// print
-			print "<option value='$k' $selected>$ttl ($k)</option>";
+			// max 10800
+			if ($k <= 10800) {
+				// active
+				if ($k == @$pdns->nxdomain_ttl)	{ $selected = "selected"; }
+				else							{ $selected = ""; }
+				// print
+				print "<option value='$k' $selected>$ttl ($k)</option>";
+			}
 		}
 		?>
 		</select>
 		</td>
 	</tr>
+
+    <!-- expire -->
+    <tr>
+            <td><?php print _('Expire'); ?></th>
+            <td>
+            <select name="expire" class="form-control input-w-auto input-sm" <?php print $readonly; ?>>
+            <?php
+            // loop
+            foreach($PowerDNS->ttl as $k=>$ttl) {
+                    // active
+                    if ($k == @$pdns->expire)       { $selected = "selected"; }
+                    else                                                    { $selected = ""; }
+                    // print
+                    print "<option value='$k' $selected>$ttl ($k)</option>";
+            }
+            ?>
+            </select>
+            </td>
+    </tr>
+
 	</tbody>
 	<!-- records -->
 	<tr>

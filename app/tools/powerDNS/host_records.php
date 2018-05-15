@@ -21,7 +21,7 @@ else {
     # fetch records for each IP address
     foreach ($unique_ips as $k=>$ip) {
         $records = $PowerDNS->search_records ("content", $ip->content, 'content', true);
-        unset($cname);
+        $cname = array();
         // loop
         foreach ($records as $r) {
             $out[$k][] = $r;
@@ -49,9 +49,10 @@ else {
 
 
 <!-- table -->
-<table id="zonesPrint" style="margin-top: 30px;" class="table table-striped table-top table-auto">
+<table id="zonesPrint" style="margin-top: 30px;" class="table table-striped table-top">
 
 <!-- Headers -->
+<thead>
 <tr>
 	<th></th>
     <th><?php print _('Name'); ?></th>
@@ -61,7 +62,9 @@ else {
     <th><?php print _('Prio'); ?></th>
     <th><?php print _('Last update'); ?></th>
 </tr>
+</thead>
 
+<tbody>
 <?php
 
 // function to print record
@@ -106,7 +109,7 @@ if (sizeof($out)>0) {
 }
 
 ?>
-
+</tbody>
 </table>
 <?php
 }

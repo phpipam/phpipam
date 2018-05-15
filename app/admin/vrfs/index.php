@@ -25,7 +25,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 <hr><br>
 
 <div class="btn-group">
-    <button class='btn btn-sm btn-default vrfManagement' data-action='add' data-vrfid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
+    <button class='btn btn-sm btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
     <?php
     // snmp
     if($User->is_admin()===true && $User->settings->enableSNMP==1) { ?>
@@ -40,7 +40,7 @@ $custom_size = sizeof($custom) - sizeof($hidden_fields);
 # first check if they exist!
 if($all_vrfs===false) { $Result->show("info", _("No VRFs configured")."!", false);}
 else {
-	print '<table id="vrfManagement" class="table sorted table-striped table-top table-hover">'. "\n";
+	print '<table id="vrfManagement" class="table sorted table-striped table-top table-hover" data-cookie-id-table="admin_vrf">'. "\n";
 
 	# headers
 	print "<thead>";
@@ -52,7 +52,7 @@ else {
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
-				print "<th class='customField hidden-xs hidden-sm'>$field[name]</th>";
+				print "<th class='customField hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
@@ -85,7 +85,7 @@ else {
 
 		//print details
 		print '<tr class="text-top">'. "\n";
-		print '	<td class="name">'. $vrf['name'] .'</td>'. "\n";
+		print '	<td class="name"><span class="btn btn-xs btn-default"><i class="fa fa-cloud prefix"></i>'. $vrf['name'] .'</td>'. "\n";
 		print '	<td class="rd">'. $vrf['rd'] .'</td>'. "\n";
 		print "	<td><span class='text-muted'>$sections</span></td>";
 		print '	<td class="description">'. $vrf['description'] .'</td>'. "\n";
@@ -94,26 +94,8 @@ else {
 		if(sizeof($custom) > 0) {
 			foreach($custom as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {
-
 					print "<td class='customField hidden-xs hidden-sm'>";
-
-					// create links
-					$vrf[$field['name']] = $Result->create_links ($vrf[$field['name']], $field['type']);
-
-					//booleans
-					if($field['type']=="tinyint(1)")	{
-						if($vrf[$field['name']] == "0")		{ print _("No"); }
-						elseif($vrf[$field['name']] == "1")	{ print _("Yes"); }
-					}
-					//text
-					elseif($field['type']=="text") {
-						if(strlen($vrf[$field['name']])>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $vrf[$field['name']])."'>"; }
-						else											{ print ""; }
-					}
-					else {
-						print $vrf[$field['name']];
-
-					}
+					$Tools->print_custom_field ($field['type'], $vrf[$field['name']]);
 					print "</td>";
 				}
 			}
@@ -121,8 +103,8 @@ else {
 
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='edit'   data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default vrfManagement' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'><i class='fa fa-pencil'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf[vrfId]'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print "	</td>";
 		print '</tr>'. "\n";

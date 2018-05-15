@@ -4,6 +4,9 @@
  * Update alive status of all hosts in subnet
  ***************************/
 
+# validate subnetId and type
+if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }
+
 # invoke CLI with threading support
 $cmd = $Scan->php_exec." ".dirname(__FILE__) . '/../../../functions/scan/subnet-scan-icmp-execute.php'." 'update' ".$_POST['subnetId'];
 
@@ -17,6 +20,9 @@ $script_result = json_decode($output[0]);
 # set blank values
 if (!isset($script_result->values->alive) || is_null($script_result->values->alive) )	{ $script_result->values->alive = array(); }
 if (!isset($script_result->values->dead)  || is_null($script_result->values->dead) )	{ $script_result->values->dead = array(); }
+
+# set address types array
+$Tools->get_addresses_types ();
 
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
@@ -63,16 +69,21 @@ if($script_result->status==0) {
 				$ipdet = (array) $Addresses->fetch_address_multiple_criteria ($ip, $_POST['subnetId']);
 
 				# format output
-				$res[$ip]['ip_addr'] 	 = $ip;
+				$res[$ip]['id']          = $ipdet['id'];;
+				$res[$ip]['ip_addr']     = $ip;
 				$res[$ip]['description'] = $ipdet['description'];
-				$res[$ip]['dns_name'] 	 = $ipdet['dns_name'];
+				$res[$ip]['hostname']    = $ipdet['hostname'];
+				$res[$ip]['state']       = $ipdet['state'];
+				$res[$ip]['lastSeen']    = $ipdet['lastSeen'];
 
 				//online
 				if($k=="alive")	{
 					$res[$ip]['status'] = "Online";
 					$res[$ip]['code']=0;
 					//update alive time
-					@$Scan->ping_update_lastseen($ipdet['id']);
+					if(isset($ipdet['id'])) {
+						$Scan->ping_update_lastseen($ipdet['id']);
+					}
 				}
 				//offline
 				elseif($k=="dead")	{
@@ -108,6 +119,8 @@ elseif($retval!=0) 								{ $Result->show("danger", "Error executing scan! Erro
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
 elseif(!isset($script_result->values)) 			{ $Result->show("info", _("Subnet is empty")."!", false); }
+# no ip addresses - error in script
+elseif(!isset($res)) 							{ $Result->show("info", _("Error")."!", false); }
 # ok
 else {
 	# order by IP address
@@ -135,9 +148,22 @@ else {
 		print "	<td>".$Subnets->transform_to_dotted($r['ip_addr'])."</td>";
 		print "	<td>".$r['description']."</td>";
 		print "	<td>"._("$r[status]")."</td>";
-		print "	<td>".$r['dns_name']."</td>";
+		print "	<td>".$r['hostname']."</td>";
 
 		print "</tr>";
+
+		# update ipTag
+		if ($User->settings->updateTags==1 && $Tools->address_types[$r['state']]['updateTag']==1) {
+			// online
+			if ($r['code']==0 && $r['state']!=2) {
+				$Scan->update_address_tag ($r['id'], 2, $r['state'], date("Y-m-d H:i:s"));
+			}
+			// offline
+			elseif( ($r['code']==1 || $r['code']==2) && $r['state']!=1) {
+				$Scan->update_address_tag ($r['id'], 1, $r['state'], $r['lastSeen']);
+			}
+		}
+
 	}
 	print "</table>";
 }
@@ -146,4 +172,3 @@ print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan 
 
 # show debug?
 if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
-?>

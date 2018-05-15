@@ -22,9 +22,8 @@
  *
  */
 
-
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
@@ -41,25 +40,28 @@ $Scan->ping_set_exit(true);
 // set debugging
 $Scan->reset_debugging(false);
 // change scan type?
-//$Scan->reset_scan_method ("pear");
+if(@$config['discovery_check_method'])
+$Scan->reset_scan_method ($config['discovery_check_method']);
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag
-$send_mail = true;
+if(!isset($config['discovery_check_send_mail'])) {
+	$config['discovery_check_send_mail'] = true;
+}
 
 // set now for whole script
 $now     = time();
 $nowdate = date ("Y-m-d H:i:s");
 
-
 // response for mailing
 $address_change = array();			// Array with differences, can be used to email to admins
+$hostnames      = array();			// Array with detected hostnames
 
 
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!Thread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
+if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -77,10 +79,14 @@ if ($scan_subnets!==false) {
     // initial array
     $addresses_tmp = array();
     // loop
-    foreach($scan_subnets as $s) {
+    foreach($scan_subnets as $i => $s) {
     	// if subnet has slaves dont check it
     	if ($Subnets->has_slaves ($s->id) === false) {
     		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
+			// save discovery time
+			$Scan->update_subnet_discoverytime ($s->id, $nowdate);
+        } else {
+            unset( $scan_subnets[$i] );
     	}
     }
 
@@ -96,7 +102,7 @@ if ($scan_subnets!==false) {
 
 
 if($Scan->debugging)							{ print_r($scan_subnets); }
-if($scan_subnets===false) 						{ die("No subnets are marked for new hosts checking"); }
+if($scan_subnets===false || !count($scan_subnets)) { die("No subnets are marked for new hosts checking\n"); }
 
 
 //scan
@@ -105,7 +111,9 @@ if($Scan->debugging)							{ print "Using $Scan->icmp_type\n--------------------
 
 $z = 0;			//addresses array index
 
-$size_subnets = max(array_keys($scan_subnets));
+// let's just reindex the subnets array to save future issues
+$scan_subnets   = array_values($scan_subnets);
+$size_subnets   = count($scan_subnets);
 $size_addresses = max(array_keys($addresses));
 
 //different scan for fping
@@ -119,7 +127,7 @@ if($Scan->icmp_type=="fping") {
 	    	//only if index exists!
 	    	if(isset($scan_subnets[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( 'fping_subnet' );
+	            $threads[$z] = new PingThread( 'fping_subnet' );
 				$threads[$z]->start_fping( $Subnets->transform_to_dotted($scan_subnets[$z]->subnet)."/".$scan_subnets[$z]->mask );
 	            $z++;				//next index
 			}
@@ -173,7 +181,7 @@ else {
         	//only if index exists!
         	if(isset($addresses[$z])) {
 				//start new thread
-	            $threads[$z] = new Thread( 'ping_address' );
+	            $threads[$z] = new PingThread( 'ping_address' );
 	            $threads[$z]->start( $Subnets->transform_to_dotted($addresses[$z]['ip_addr']) );
 				$z++;			//next index
 			}
@@ -226,23 +234,26 @@ $Result		= new Result();
 $discovered = 0;				//for mailing
 
 foreach($scan_subnets as $s) {
-	if(sizeof(@$s->discovered)>0) {
+	if(isset($s->discovered)) {
 		foreach($s->discovered as $ip) {
 			// fetch subnet
 			$subnet = $Subnets->fetch_subnet ("id", $s->id);
 			$nsid = $subnet===false ? false : $subnet->nameserverId;
 			// try to resolve hostname
 			$hostname = $DNS->resolve_address ($ip, false, true, $nsid);
+			// save to hostnames
+			$hostnames[$ip] = $hostname['name']==$ip ? "" : $hostname['name'];
 
 			//set update query
-			$values = array("subnetId"=>$s->id,
-							"ip_addr"=>$Subnets->transform_address($ip, "decimal"),
-							"dns_name"=>$hostname['name'],
-							"description"=>"-- autodiscovered --",
-							"note"=>"This host was autodiscovered on ".$nowdate,
-							"lastSeen"=>$nowdate,
-							"state"=>"2",
-							"action"=>"add"
+			$values = array(
+							"subnetId"    =>$s->id,
+							"ip_addr"     =>$ip,
+							"hostname"    =>$hostname['name'],
+							"description" =>"-- autodiscovered --",
+							"note"        =>"This host was autodiscovered on ".$nowdate,
+							"lastSeen"    =>$nowdate,
+							"state"       =>"2",
+							"action"      =>"add"
 							);
 			//insert
 			$Addresses->modify_address($values);
@@ -259,7 +270,7 @@ $Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 # send mail
-if($discovered>0 && $send_mail) {
+if($discovered>0 && $config['discovery_check_send_mail']) {
 
 	# check for recipients
 	foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $admin) {
@@ -290,6 +301,7 @@ if($discovered>0 && $send_mail) {
 	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid gray;'>";
 	$content[] = "<tr>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
+	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
 	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
 	$content[] = "</tr>";
@@ -306,6 +318,7 @@ if($discovered>0 && $send_mail) {
 
 				$content[] = "<tr>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
+				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>".$hostnames[$ip]."</td>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
 				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
 				$content[] = "</tr>";
@@ -340,5 +353,3 @@ if($discovered>0 && $send_mail) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	}
 }
-
-?>

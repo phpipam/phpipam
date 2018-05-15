@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -80,10 +80,10 @@ $existing = $Admin->group_fetch_users ($_POST['g_id']);
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
 		<?php if(sizeof($existing) > 0) { ?>
-		<button class="btn btn-sm btn-default btn-success" id="groupRemoveUsersSubmit"><i class="fa fa-minus"></i> <?php print _('Remove selected users'); ?></button>
+		<button class='btn btn-sm btn-success submit_popup' data-script="app/admin/groups/remove-users-result.php" data-result_div="groupRemoveUsersResult" data-form='groupRemoveUsers'><?php print _('Remove selected users'); ?></button>
 		<?php } ?>
 	</div>
 
 	<!-- Result -->
-	<div class="groupRemoveUsersResult"></div>
+	<div id="groupRemoveUsersResult"></div>
 </div>

@@ -17,7 +17,8 @@ $User->check_user_session();
 /* get extension */
 $filename = $_FILES['file']['name'];
 $expfields = explode("|",$_POST['expfields']);
-$filetype = strtolower(end(explode(".", $filename)));
+$file_exp = explode(".", $filename);
+$filetype = strtolower(end($file_exp));
 
 /* list of permitted file extensions */
 $allowed = array('xls','csv');
@@ -58,9 +59,13 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 		$data = fgets($filehdl);
 		fclose($filehdl);
 
+		# set delimiter
+		#$Tools->set_csv_delimiter ($filehdl);
+		$Tools->set_csv_delimiter ($data);
+
 		/* format file */
-		$data = str_replace( array("\r\n","\r") , "" , $data);	//remove line break
-		$data = preg_split("/[;,]/", $data); //split by comma or semi-colon
+		$data = str_replace( array("\r\n","\r","\n") , "" , $data);	//remove line break
+		$data = str_getcsv ($data, $Tools->csv_delimiter);
 
 		foreach ($data as $col) {
 			$firstrow[] = $col;
@@ -82,8 +87,12 @@ if(isset($_FILES['file']) && $_FILES['file']['error'] == 0) {
 	exit;
 	}
 }
+// error
+elseif (isset($_FILES['file']['error'])) {
+	echo '{"status":"error","error":"'.$_FILES['file']['error'].'"}';
+	exit;
+}
 
 /* default - error */
-echo '{"status":"error","error":"Empty file"}';
+echo '{"status":"error","error":"Empty or too big file (limit '.ini_get('post_max_size').')"}';
 exit;
-?>

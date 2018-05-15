@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -16,7 +16,10 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
+# check maintaneance mode
+$User->check_maintaneance_mode ();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
@@ -26,12 +29,28 @@ $nat!==false ? : $Result->show("danger", _("Invalid ID"), true);
 if($nat->type=="static") {
     // static NAT can only have IP address
     if($_POST['object_type']!="ipaddresses") {
-        $Result->show("danger", _("Static NAT can only contain IP address"), true);
+        //$Result->show("danger", _("Static NAT can only contain IP address"), true);
     }
 
     // decode
     $nat_src = json_decode($nat->src, true);
     $nat_dst = json_decode($nat->dst, true);
+
+    // validate all objects
+    if(sizeof(@$nat_src['ipaddresses'])>0) {
+        foreach ($nat_src['ipaddresses'] as $ik=>$iv) {
+            if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
+                unset($nat_src['ipaddresses'][$ik]);
+            }
+        }
+    }
+    if(sizeof(@$nat_dst['ipaddresses'])>0) {
+        foreach ($nat_dst['ipaddresses'] as $ik=>$iv) {
+            if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
+                unset($nat_dst['ipaddresses'][$ik]);
+            }
+        }
+    }
 
     // check
     if(is_array($nat_src) && $_POST['type']=="src") {
