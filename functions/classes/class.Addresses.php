@@ -579,7 +579,7 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# loop and check for object ids
-		if(sizeof($all_nats)>0) {
+		if(!empty($all_nats)) {
 			# init admin object
 			$Admin = new Admin ($this->Database, false);
 			# loop

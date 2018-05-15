@@ -361,7 +361,7 @@ class Common_functions  {
 				# save
 				if ($settings!==false)	 {
 					$this->settings = $settings;
-					define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
+					define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 				}
 			}
 		}
