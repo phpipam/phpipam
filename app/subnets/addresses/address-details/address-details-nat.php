@@ -26,7 +26,7 @@ print "             <ul class='dropdown-menu' style='z-index:50'>";
                     $m=0;
                     foreach ($all_nats as $n) {
                         // not own
-                        if(!@in_array( $n->id, $all_nats_per_object['ipaddresses'][$address['id']] )) {
+                        if(!@in_array($n->id, $all_nats_per_object['ipaddresses'][$address['id']] )) {
                             print "<li><a href='' class='mapNat' data-action='edit' data-id='$n->id' data-object-type='ipaddresses' data-object-id='$address[id]'>$n->name ($n->type)</a></li>";
                             $m++;
                         }
