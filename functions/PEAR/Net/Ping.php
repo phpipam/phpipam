@@ -159,7 +159,7 @@ class Net_Ping
      */
     public static function _setSystemName()
     {
-        $OS_Guess  = new OS_Guess;
+        $OS_Guess  = @new OS_Guess;
         $sysname   = $OS_Guess->getSysname();
 
         // Refine the sysname for different Linux bundles/vendors. (This
