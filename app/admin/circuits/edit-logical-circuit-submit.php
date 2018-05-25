@@ -66,19 +66,6 @@ if(sizeof($custom) > 0) {
 	}
 }
 
-/*General plan for updating existing logical circuits
-Update entry  instead of new entryin logicCircuits table
-DROP from logicCircuitMapping where logical_cid = ?
-continue on the looping through new list of circuits
-
-/*General plan for NEW logical circuits:
-Create new entry in logicalCircuits table
-Grab dat ID of the created row
-Loop through the list of circuits:
-	Add a row into logicCircuitMapping for each circuitTypes
-	use variable i to insert the order of the the $circuits
-Done  */
-
 # set update values
 $values = array(
 				"id"        => $circuit['id'],

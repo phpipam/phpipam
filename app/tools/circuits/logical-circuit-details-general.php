@@ -3,18 +3,9 @@
 print "<h4>"._('Logical circuit details')."</h4>";
 print "<hr>";
 
-# circuit
+# logic circuit
 print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
-	// inactive status
-	/*
-	$circuit->status = $circuit->status=="Inactive" ? "<span class='badge badge1 badge5 alert-danger'>$circuit->status</span>" : $circuit->status;
-	$circuit->status = $circuit->status=="Active" ? "<span class='badge badge1 badge5 alert-success'>$circuit->status</span>" : $circuit->status;
-	$circuit->status = $circuit->status=="Reserved" ? "<span class='badge badge1 badge5 alert-default'>$circuit->status</span>" : $circuit->status;
-	$circuit_types = $Tools->fetch_all_circuit_types();
-	$type_hash = [];
-	foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
-*/
 	print '<tr>';
 	print "	<th>". _('Logical Circuit ID').'</th>';
 	print "	<td><strong>$logical_circuit->logical_cid</strong></td>";
