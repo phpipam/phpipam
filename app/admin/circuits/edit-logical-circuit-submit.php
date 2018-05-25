@@ -40,10 +40,8 @@ if($circuit['logical_cid'] == "") 	{ $Result->show("danger", _('Logical Circuit 
 #todo
 
 
-
-/* Commenting this out for now, Custom fields will come soone enough
 # fetch custom fields
-$custom = $Tools->fetch_custom_fields('circuits');
+$custom = $Tools->fetch_custom_fields('logicalCircuit');
 if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {
 
@@ -64,7 +62,6 @@ if(sizeof($custom) > 0) {
 		$update[$myField['name']] = $circuit[$myField['nameTest']];
 	}
 }
-*/
 
 /*General plan for updating existing logical circuits
 Update entry  instead of new entryin logicCircuits table
@@ -88,12 +85,12 @@ $values = array(
 				"comments"      => $circuit['comments'],
 				"member_count" => sizeof($id_list)
 				);
-/*
+
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
 }
-*/
+
 # update device
 if(!$Admin->object_modify("logicalCircuit", $circuit['action'], "id", $values))	{}
 
