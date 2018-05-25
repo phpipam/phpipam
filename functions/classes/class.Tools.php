@@ -2917,31 +2917,33 @@ class Tools extends Common_functions {
 		return sizeof($circuits)>0 ? $circuits : false;
 	}
 
-  public function fetch_all_logical_circuit_members($logical_circuit_id){
+	public function fetch_all_logical_circuits_using_circuit ($circuit_id) {
 		// set query
-		/*
 		$query[] = "select";
-		$query[] = "circuit_id";
-		//not interested in custom fields here
-		$query[] = "from logicalCircuitMapping";
-		$query[] = "where logicalCircuit_id = $logical_circuit_id";
-		$query[] = "order by `order`;";
+		$query[] = "lc.id, lc.logical_cid, lc.purpose, lc.comments, lc.member_count";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",lc.`".$f['name']."`";
+				}
+			}
+		}
+		$query[] = "from logicalCircuit as lc";
+		$query[] = "join `logicalCircuitMapping` mapping on mapping.logicalCircuit_id=lc.id";
+		$query[] = "WHERE mapping.circuit_id = $circuit_id";
+		$query[] = "order by lc.logical_cid asc;";
 		// fetch
-		try { $mappings = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
-		$mapping_ids = array();
-		//Create list
-		foreach($mappings as $mapping){
-			array_push($mapping_ids, $mapping->circuit_id);
-		}
-		//If there are no circuits, return false
-		if(sizeof($mapping_ids) == 0){
-			return false;
-		}
-		$mapping_string = implode(',',$mapping_ids);
-		*/
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+
+  public function fetch_all_logical_circuit_members($logical_circuit_id){
 		$query2[] = "SELECT";
 		$query2[] = "c.*";
 		$query2[] = "FROM `circuits` c";

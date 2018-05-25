@@ -1,7 +1,7 @@
 <?php
 
 // title
-print "<h4>"._('Member Circuits (Listed A to Z)')."</h4>";
+print "<h4>"._('Member Circuits')."</h4>";
 print "<hr>";
 
 
