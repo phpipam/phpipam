@@ -37,7 +37,10 @@ if($circuit['action']!="add" && !is_numeric($circuit['id'])) { $Result->show("da
 if($circuit['logical_cid'] == "") 	{ $Result->show("danger", _('Logical Circuit ID is mandatory').'!', true); }
 
 # Validate to make sure there aren't duplicates of the same circuit in the list of circuit ids
-#todo
+#Create list of member circuit IDs for mapping
+$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
+if(sizeof($id_list ) != sizeof(array_unique($id_list))){  $Result->show("danger", _('Remove duplicates of circuit').'!', true); }
+
 
 
 # fetch custom fields
@@ -75,8 +78,7 @@ Loop through the list of circuits:
 	Add a row into logicCircuitMapping for each circuitTypes
 	use variable i to insert the order of the the $circuits
 Done  */
-#Create list of member circuit IDs for mapping
-$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
+
 # set update values
 $values = array(
 				"id"        => $circuit['id'],
