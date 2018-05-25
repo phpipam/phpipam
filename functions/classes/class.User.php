@@ -984,7 +984,7 @@ class User extends Common_functions {
      */
     private function directory_connect ($authparams) {
         # adLDAP script
-        require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
+        require_once(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
         $dirparams = Array();
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
@@ -1095,14 +1095,34 @@ class User extends Common_functions {
         $authparams = json_decode($this->authmethodparams, true);
         $this->ldap = true;                            //set ldap flag
 
-        // set uid
-        if (!empty($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
-        else                                 { $udn = 'uid=' . $username; }
-        // set DN
-        if (!empty($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
-        else                                      { $udn = $udn . "," . $authparams['base_dn']; }
         // authenticate
+        $uid = (!empty($authparams['uid_attr']) ? $authparams['uid_attr'] : 'uid') . '=' . $username;
+        $userBaseDn = !empty($authparams['users_base_dn']) ?  $authparams['users_base_dn'] : $authparams['base_dn'];
+        $udn = $this->get_LDAP_dn($userBaseDn, $uid);
         $this->directory_authenticate($authparams, $udn, $password);
+    }
+
+    /**
+     * Returns LDAP dn of user at baseDn with uidAttr filter applying
+     *
+     * @param string $baseDn
+     * @param string $uidAttr
+     * @return bool
+     */
+    private function get_LDAP_dn($baseDn, $uidAttr) {
+        $authparams = json_decode($this->authmethodparams, true);
+        $adldap = $this->directory_connect($authparams);
+        try {
+            $adldap->authenticate($authparams['adminUsername'], $authparams['adminPassword']);
+        } catch (adLDAPException $e) {
+            $this->Log->write("Error", "Something went wrong during auth: " . $e->getMessage(), 2);
+            $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
+        }
+        $users = $adldap->user()->search($baseDn, $uidAttr);
+        if (!empty($users[0]['dn'])) {
+            return $users[0]['dn'];
+        }
+        return false;
     }
 
     /**
