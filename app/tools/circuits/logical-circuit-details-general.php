@@ -27,7 +27,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
   /* Maybe put in a calculated cost value here */
 
-/* No custom fields... yet
+
 	if(sizeof($custom_fields) > 0) {
 
     	print "<tr>";
@@ -39,12 +39,12 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			# fix for boolean
 			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
 				if($logical_circuit->{$field['name']}=="0")		{ $logical_circuit->{$field['name']} = "false"; }
-				elseif($logical_circuit->{$field['name']}=="1")	{ $logical_circuit>{$field['name']} = "true"; }
+				elseif($logical_circuit->{$field['name']}=="1")	{ $logical_circuit->{$field['name']} = "true"; }
 				else									{ $logical_circuit->{$field['name']} = ""; }
 			}
 
 			# create links
-			$logical_circuit->{$field['name']} = $Result->create_links ($logical_circuit>{$field['name']});
+			$logical_circuit->{$field['name']} = $Result->create_links ($logical_circuit->{$field['name']});
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
@@ -52,7 +52,8 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			print "</tr>";
 		}
 	}
-*/
+
+
 	// edit, delete
 	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
 		print "<tr>";

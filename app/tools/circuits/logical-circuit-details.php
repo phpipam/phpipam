@@ -21,11 +21,8 @@ print "</div>";
 
 # print
 if($logical_circuit!==false) {
-	// get custom fields
-	//$custom_fields = $Tools->fetch_custom_fields('circuits');
-	//$custom_provider_fields = $Tools->fetch_custom_fields('circuitProviders');
-	// provider
-	//$provider = $Tools->fetch_object ("circuitProviders", "id", $circuit->provider);
+	//get custom fields
+	$custom_fields = $Tools->fetch_custom_fields('logicalCircuit');
 
 	// overlay
 	print "<div class='row'>";

@@ -51,9 +51,9 @@ print implode("\n", $html);
 /* fetch all custom fields */
 $custom_tables = array(
 						"circuitProviders" => "Circuit providers",
-						"circuits" 		   => "Circuits"
+						"circuits" 		   => "Circuits",
+						"logicalCircuit" => "Logical circuits"
 						);
-
 # create array
 foreach($custom_tables as $k=>$f) {
 	$custom_fields[$k]				= $Tools->fetch_custom_fields($k);
