@@ -3,7 +3,7 @@
 $User->check_user_session();
 
 // trim and escape
-$mac = escape_input(trim($_GET['mac']));
+$mac = escape_input(trim($_POST['mac']));
 
 // validate
 if($User->validate_mac ($mac)===false) {
