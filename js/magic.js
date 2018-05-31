@@ -2362,6 +2362,17 @@ $(document).on("click", "#editVLANsubmit", function() {
     submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-result.php", $('form#vlanManagementEdit').serialize());
 });
 
+/* ---- VLAN Groups ----- */
+//load edit form
+$(document).on("click", ".editVLANgroup", function() {
+    vlanNum = $(this).attr("data-number") ? $(this).attr('data-number') : "";       //set number
+    open_popup("400", "app/admin/vlans/edit-group.php", {action:$(this).attr('data-action'), domain:$(this).attr('data-domain'), groupId:$(this).attr('data-id')} );
+});
+//submit form
+$(document).on("click", "#editVLANgroupSubmit", function() {
+    submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-vlan-group-result.php", $('form#vlanManagementEdit').serialize());
+});
+
 
 /* ---- VLAN domains ----- */
 //submit form

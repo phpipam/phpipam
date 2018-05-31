@@ -101,6 +101,10 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	// override for search
 	if ($l0=="tools" && $l1=="search")
     $el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
+  // override for vlanGroups
+  if ($l2=="vlanGroup")
+    $el = array("page", "section", "vlanGroup", "id", "extra");
+
 
 	# set rewrite
 	if($User->settings->prettyLinks=="Yes") {

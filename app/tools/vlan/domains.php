@@ -30,7 +30,7 @@
 <tbody>
 <!-- all domains -->
 <tr>
-	<td class='border-bottom'><strong><a href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>"> <?php print _('All domains'); ?></a></strong></td>
+  <td class='border-bottom'><strong><a class='btn btn-xs btn-default' href="<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>"> <i class='fa fa-cloud prefix'></i><?php print _('All domains'); ?></a></strong></td>
 	<td class='border-bottom'><?php print _('List of all VLANs in all domains'); ?></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
 	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
