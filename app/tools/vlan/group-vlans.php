@@ -207,7 +207,7 @@ else {
                         print "	<td class='actions'>";
                         print "	<div class='btn-group'>";
                         print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$v->vlanId'><i class='fa fa-pencil'></i></button>";
-                        print "		<button class='btn btn-xs btn-default moveVLAN'                      data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
+                        print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
                         print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$v->vlanId'><i class='fa fa-times'></i></button>";
                         print "	</div>";
                         print "	</td>";
@@ -226,7 +226,7 @@ else {
                         print "	<td class='actions'>";
                         print "	<div class='btn-group'>";
                         print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$v->vlanId'><i class='fa fa-pencil'></i></button>";
-                        print "		<button class='btn btn-xs btn-default moveVLAN'                      data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
+                        print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$v->vlanId'><i class='fa fa-external-link'></i></button>";
                         print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$v->vlanId'><i class='fa fa-times'></i></button>";
                         print "	</div>";
                         print "	</td>";
