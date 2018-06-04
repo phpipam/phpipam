@@ -19,7 +19,7 @@ $User->check_user_session();
 
 
 # fetch vlan details
-$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanId']);
+$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
 if($vlan===false)					{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch current domain
