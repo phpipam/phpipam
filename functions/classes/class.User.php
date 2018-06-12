@@ -768,7 +768,7 @@ class User extends Common_functions {
             $username = SAML_USERNAME;
         }
         # first we need to check if username exists
-        $this->fetch_user_details ($username);
+        $this->fetch_user_details ($username, true);
         # set method type if set, otherwise presume local auth
         $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
 
