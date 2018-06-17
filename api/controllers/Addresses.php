@@ -609,6 +609,9 @@ class Addresses_controller extends Common_api_functions  {
 	 * @return void
 	 */
 	public function validate_create_parameters () {
+		// validate input lengths
+		$this->validate_parameter_lengths();
+
 		// validate subnet
 		$this->validate_subnet ();
 
@@ -663,6 +666,9 @@ class Addresses_controller extends Common_api_functions  {
 																							{ $this->Response->throw_exception(400, "No data provided"); }
 		}
 
+		// validate input lengths
+		$this->validate_parameter_lengths();
+
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {
         	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
@@ -680,5 +686,17 @@ class Addresses_controller extends Common_api_functions  {
 		if(isset($this->_params->state)) {
 		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(400, "Tag does not exist"); } }
 		else { $this->_params->state = 2; }
+	}
+
+	/**
+	 * Validation of POST and PATCH field lengths
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_parameter_lengths () {
+		if (isset($this->_params->hostname) && mb_strlen($this->_params->hostname) > 255)	{ $this->Response->throw_exception(400, "Hostname too long"); }
+		if (isset($this->_params->description) && mb_strlen($this->_params->description) > 64)	{ $this->Response->throw_exception(400, "Description too long"); }
+		if (isset($this->_params->owner) && mb_strlen($this->_params->owner) > 32)	{ $this->Response->throw_exception(400, "Owner too long"); }
 	}
 }

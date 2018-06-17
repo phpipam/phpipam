@@ -232,7 +232,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print '	<td>'._('Hostname').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
 		print '	<div class="input-group">';
-		print ' <input type="text" name="hostname" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['hostname']. '" '.$delete.'>'. "\n";
+		print ' <input type="text" name="hostname" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['hostname']. '" '.$delete.' maxlength=255>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
 		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='right' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
@@ -253,7 +253,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		<td>
 			<input type="text" name="description" class="ip_addr form-control input-sm" value="<?php if(isset($address['description'])) {print $address['description'];} ?>" size="30"
 			<?php if ( $act == "delete" ) { print " readonly";} ?>
-			placeholder="<?php print _('Description'); ?>">
+			placeholder="<?php print _('Description'); ?>" maxlength=64>
 		</td>
 	</tr>
 
@@ -473,7 +473,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print '<tr>'. "\n";
 		print '	<td>'._('Owner').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
-		print ' <input type="text" name="owner" class="ip_addr form-control input-sm" id="owner" placeholder="'._('IP address owner').'" value="'. $address['owner']. '" size="30" '.$delete.'>'. "\n";
+		print ' <input type="text" name="owner" class="ip_addr form-control input-sm" id="owner" placeholder="'._('IP address owner').'" value="'. $address['owner']. '" size="30" '.$delete.' maxlength=32>'. "\n";
 		print '	</td>'. "\n";
 		print '</tr>'. "\n";
 	}

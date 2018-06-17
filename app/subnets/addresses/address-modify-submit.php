@@ -86,6 +86,11 @@ isset($address['subnet']) ?:		$Result->show("danger", _("Missing required fields
 isset($address['subnetId']) ?:		$Result->show("danger", _("Missing required fields"). " subnetId", true);
 isset($address['id']) ?:			$Result->show("danger", _("Missing required fields"). " id", true);
 
+# field lengths
+isset($address['hostname']) && mb_strlen($address['hostname']) > 255 &&	$Result->show("danger", _("Input too long for field"). " hostname", true);
+isset($address['description']) && mb_strlen($address['description']) > 64 &&	$Result->show("danger", _("Input too long for field"). " description", true);
+isset($address['owner']) && mb_strlen($address['owner']) > 32 &&	$Result->show("danger", _("Input too long for field"). " owner", true);
+
 # ptr
 if(!isset($address['PTRignore']))	$address['PTRignore']=0;
 
