@@ -111,7 +111,7 @@ else {
         # rack
         $rack = $Racks->fetch_rack_details ($device['rack']);
         if ($rack!==false) {
-            print "<a href='".create_link("administration", "racks", $rack->id)."'>".$rack->name."</a><br>";
+            print "<a href='".create_link("tools", "racks", $rack->id)."'>".$rack->name."</a><br>";
             print "<span class='badge badge1 badge5'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
         }
         print "</td>";

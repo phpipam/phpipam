@@ -586,11 +586,13 @@ class Common_functions  {
     	// init
     	$out = array();
     	// loop
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-			}
-			else {
-				$out[$k] = $v;
+    	if(is_array($fields)) {
+			foreach($fields as $k=>$v) {
+				if(is_null($v) || strlen($v)==0) {
+				}
+				else {
+					$out[$k] = $v;
+				}
 			}
 		}
 		# result
@@ -1185,9 +1187,10 @@ class Common_functions  {
      * @param string $action
      * @param mixed $timepicker_index
      * @param bool $disabled
+     * @param string $set_delimiter
      * @return array
      */
-    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false) {
+    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false, $set_delimiter = "") {
         # make sure it is array
 		$field  = (array) $field;
 		$object = (object) $object;
@@ -1203,7 +1206,7 @@ class Common_functions  {
 
         //set, enum
         if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text);
+        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter);
         }
         //date and time picker
         elseif($field['type'] == "date" || $field['type'] == "datetime") {
@@ -1239,9 +1242,10 @@ class Common_functions  {
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
+     * @param string $set_delimiter
      * @return array
      */
-    public function create_custom_field_input_set_enum ($field, $object, $disabled_text) {
+    public function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "") {
 		$html = array();
     	//parse values
     	$field['type'] = trim(substr($field['type'],0,-1));
@@ -1251,7 +1255,22 @@ class Common_functions  {
 
     	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
     	foreach($tmp as $v) {
-        $html[] = $v==$object->{$field['name']} ? "<option value='$v' selected='selected'>$v</option>" : "<option value='$v'>$v</option>";
+    		// set selected
+			$selected = $v==$object->{$field['name']} ? "selected='selected'" : "";
+			// parse delimiter
+			if(strlen($set_delimiter)==0) {
+				// save
+		        $html[] = "<option value='$v' $selected>$v</option>";
+			}
+			else {
+				// explode by delimiter
+				$tmp2 = explode ($set_delimiter, $v);
+	    		// reset selected
+				$selected = $tmp2[0]==$object->{$field['name']} ? "selected='selected'" : "";
+				// save
+		        $html[] = "<option value='$tmp2[0]' $selected>$tmp2[1]</option>";
+			}
+
     	}
     	$html[] = "</select>";
 

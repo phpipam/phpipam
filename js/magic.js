@@ -237,7 +237,7 @@ $(function() {
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
-                 .attr('data-page-size', '50')
+                 .attr('data-page-size', '250')
                  .attr('data-page-list', '[50,100,250,500,All]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')

@@ -67,7 +67,7 @@ else {
 }
 
 /* die if errors otherwise execute */
-if(sizeof($errors) != 0) {
+if(!empty($errors)) {
 	print '<div class="alert alert alert-danger">'._('Please correct the following errors').':'. "\n";
 	print '<ul>'. "\n";
 	foreach($errors as $error) {
