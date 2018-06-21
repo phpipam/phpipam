@@ -5,7 +5,7 @@
  *********************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -20,7 +20,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add" ? $User->csrf_cookie ("create", "folder_add") : $User->csrf_cookie ("create", "folder_".$_POST['subnetId']);
+$csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "folder_add") : $User->Crypto->csrf_cookie ("create", "folder_".$_POST['subnetId']);
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);

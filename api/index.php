@@ -17,20 +17,23 @@
  *
  */
 
-# include funtions
-require( dirname(__FILE__) . '/../functions/functions.php');		// functions and objects from phpipam
+# include functions
+if(!function_exists("create_link"))
+require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
+
+# include common API controllers
 require( dirname(__FILE__) . '/controllers/Common.php');			// common methods
 require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
 # settings
 $enable_authentication = true;
-$aes_compliant_crypt   = false;         // Default to false for backward compatibility. Use true to use AES-256 compliant RIJNDAEL algorythm (rijndael-128)
 $time_response         = true;          // adds [time] to response
 $lock_file             = "";            // (optional) file to write lock to
 
 # database and exceptions/result object
 $Database = new Database_PDO;
 $Tools    = new Tools ($Database);
+$User     = new User ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
@@ -70,16 +73,26 @@ try {
 	    	if (!in_array($extension, get_loaded_extensions()))
 	    													{ $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
+		$api_crypt_encryption_library = "openssl";
+		// Override $api_crypt_encryption_library="mcrypt" from config.php if required.
+		include( dirname(__FILE__).'/../config.php' );
+
 		// decrypt request - form_encoded
-        if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
-        	$decoded = trim(mcrypt_decrypt($aes_compliant_crypt?MCRYPT_RIJNDAEL_128:MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB));
-        	$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
-			parse_str($decoded, $params);
-			$params = (object) $params;
-        }
-        // json_encoded
+		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
+			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $api_crypt_encryption_library);
+			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
+			parse_str($decoded, $encrypted_params);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
+		}
+		// json_encoded
 		else {
-			$params = json_decode(trim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, $app->app_code, base64_decode($_GET['enc_request']), MCRYPT_MODE_ECB)));
+			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $api_crypt_encryption_library);
+			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$encrypted_params = json_decode($encrypted_params, true);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
 		}
 	}
 	// SSL checks
@@ -137,6 +150,9 @@ try {
             }
         }
     }
+
+	/* Sanitise input ---------- (user/User/USER) */
+	if (isset($params->controller)) $params->controller = strtolower($params->controller);
 
 	/* Authentication ---------- */
 
@@ -272,5 +288,3 @@ echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, 
 
 // exit
 exit();
-
-?>

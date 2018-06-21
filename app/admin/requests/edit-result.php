@@ -5,7 +5,7 @@
  ***********************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -25,7 +25,7 @@ $User->check_maintaneance_mode ();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "requests", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "requests", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # verify permissions
 if($Subnets->check_permission($User->user, $_POST['subnetId']) != 3)	{ $Result->show("danger", _('You do not have permissions to process this request')."!", true); }
@@ -72,7 +72,7 @@ else {
 					"ip_addr"     =>$Addresses->transform_address($_POST['ip_addr'],"decimal"),
 					"subnetId"    =>$_POST['subnetId'],
 					"description" =>@$_POST['description'],
-					"dns_name"    =>@$_POST['dns_name'],
+					"hostname"    =>@$_POST['hostname'],
 					"mac"         =>@$_POST['mac'],
 					"owner"       =>@$_POST['owner'],
 					"state"       =>@$_POST['state'],

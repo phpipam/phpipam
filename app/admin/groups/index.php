@@ -44,14 +44,14 @@ $colspanCustom = 0;
 
 <!-- Add new -->
 <div class="btn-group">
-	<button class='btn btn-sm btn-default editGroup' style="margin-bottom:10px;" data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/groups/edit-group.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create group'); ?></button>
 	<?php if($auth_methods!==false) { ?>
-	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'> <?php print _('Search domain groups'); ?></i></button>
+	<button class='btn btn-sm btn-default adLookup'><i class='fa fa-search'></i> <?php print _('Search domain groups'); ?></button>
 	<?php } ?>
 </div>
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top">
+<table id="userPrint" class="table sorted table-striped table-top" data-cookie-id-table="admin_groups">
 
 <!-- Headers -->
 <thead>
@@ -70,7 +70,8 @@ $colspanCustom = 0;
 		}
 	}
 	?>
-    <th colspan="2"></th>
+    <th></th>
+    <th></th>
 </tr>
 </thead>
 
@@ -140,16 +141,16 @@ if($groups) {
 		# add/remove users
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default addToGroup' 		data-groupid='$g[g_id]' data-action='add'    rel='tooltip' data-container='body'  title='"._('add users to this group')."'>   	<i class='fa fa-plus'></i></button>";
-		print "		<button class='btn btn-xs btn-default removeFromGroup' 	data-groupid='$g[g_id]' data-action='remove' rel='tooltip' data-container='body'  title='"._('remove users from this group')."'><i class='fa fa-minus'></i></button>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/add-users.php' data-class='700' data-action='add' data-g_id='$g[g_id]' rel='tooltip' data-container='body'  title='"._('add users to this group')."'><i class='fa fa-plus'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/remove-users.php' data-class='700' data-action='remove' data-g_id='$g[g_id]' rel='tooltip' data-container='body'  title='"._('remove users from this group')."'><i class='fa fa-minus'></i></a>";
 		print "	</div>";
 		print "</td>";
 
 		# edit, delete
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<button class='btn btn-xs btn-default editGroup'  		data-groupid='$g[g_id]' data-action='edit'   rel='tooltip' data-container='body'  title='"._('edit group details')."'>	<i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editGroup'  		data-groupid='$g[g_id]' data-action='delete' rel='tooltip' data-container='body'  title='"._('remove group')."'>		<i class='fa fa-times'></i></button>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/edit-group.php' data-class='700' data-action='edit' data-id='$g[g_id]'><i class='fa fa-pencil'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/groups/edit-group.php' data-class='700' data-action='delete' data-id='$g[g_id]'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print "</td>";
 

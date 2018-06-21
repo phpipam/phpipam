@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database  = new Database_PDO;
@@ -20,6 +20,7 @@ $User->check_user_session();
 
 # fetch all nat items
 $all_nat = $Tools->fetch_all_objects ("nat");
+$all_nat = $all_nat === false ? array() : $all_nat;
 
 # set arrays
 $subnet_ids  = array ();

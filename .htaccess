@@ -1,42 +1,14 @@
 <IfModule mod_rewrite.c>
 
-# apache auth basic auth example
-#AuthUserFile /path/to/.htpasswd
-#AuthName "phpIPAM authentication"
-#AuthType Basic
-#require valid-user
-
+# Enable rewrite engine
 RewriteEngine on
-
-# change rewrite base if not in root
-# also add prefix to ErrorDocument
-# RewriteBase /
-
-# passthroughs
-RewriteRule ^api/.$ - [L]
-RewriteRule ^index.php$ - [L]
+# Passthroughs
 RewriteRule ^(css|js|app|test)/.*$ - [L,QSA]
-RewriteRule app/login/captcha/captchashow.php - [L]
-
-# redirect errors
-ErrorDocument 400 /app/error/index.php
-ErrorDocument 401 /app/error/index.php
-ErrorDocument 403 /app/error/index.php
-ErrorDocument 404 /app/error/index.php
-ErrorDocument 500 /app/error/index.php
-
-# IE login dashboard fix
-RewriteRule ^login/dashboard/$ dashboard/ [R]
-RewriteRule ^logout/dashboard/$ dashboard/ [R]
-# search override
-RewriteRule ^tools/search/(.*)$ index.php?page=tools&section=search&ip=$1 [L]
 
 # Rewrites
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5&tab=$6 [L]
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4&ipaddrid=$5 [L,QSA]
-RewriteRule ^(.*)/(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3&sPage=$4 [L,QSA]
-RewriteRule ^(.*)/(.*)/(.*)/$ index.php?page=$1&section=$2&subnetId=$3 [L,QSA]
-RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L,QSA]
-RewriteRule ^(.*)/$ index.php?page=$1 [L]
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^ index.php [L]
 
 </IfModule>

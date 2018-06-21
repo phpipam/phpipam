@@ -5,7 +5,7 @@
  *******************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -24,7 +24,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "scan_all", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "scan_all", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # section
 $section_search = false;
@@ -79,7 +79,7 @@ if (isset($subnets_all)) {
         # set new POST
         $_POST = $s;
         # create csrf token
-        $_POST['csrf_cookie'] = $User->csrf_cookie ("create", "subnet_add");
+        $_POST['csrf_cookie'] = $User->Crypto->csrf_cookie ("create", "subnet_add");
         # permissions
         $subnet['permissions'] = $section->permissions;
         # check for master

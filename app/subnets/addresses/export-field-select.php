@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -65,7 +65,7 @@ print "	</tr>";
 # hostname - mandatory
 print "	<tr>";
 print "	<td>"._('Hostname')."</td>";
-print "	<td><input type='checkbox' name='dns_name' checked> </td>";
+print "	<td><input type='checkbox' name='hostname' checked> </td>";
 print "	</tr>";
 
 # firewallAddressObject - mandatory

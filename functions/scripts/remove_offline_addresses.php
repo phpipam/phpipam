@@ -12,7 +12,7 @@
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -34,7 +34,7 @@ $beforetime = date ("Y-m-d H:i:s", (time()-$config['removed_addresses_timelimit'
 
 // set query to fetch addresses and belongign subnets
 $query = "select
-			`ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`dns_name`,`ip`.`lastSeen`,
+			`ip`.`id`,`ip`.`ip_addr`,`ip`.`lastSeen`,`ip`.`subnetId`,`ip`.`description`,`ip`.`hostname`,`ip`.`lastSeen`,
 			`su`.`subnet`,`su`.`mask`,`su`.`sectionId`,`su`.`description`,
 			'delete' as `action`
 		 from
@@ -124,7 +124,7 @@ if(sizeof($removed_addresses)>0 && $config['removed_addresses_send_mail']) {
 		$content[] = "<tr>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[dns_name]</font></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Subnets->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[lastSeen]</td>";
 		$content[] = "</tr>";

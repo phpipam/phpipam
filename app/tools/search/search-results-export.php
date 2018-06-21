@@ -5,7 +5,7 @@
  ****************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php' );
 
 # initialize required objects
@@ -210,7 +210,7 @@ if(sizeof($result_addresses)>0) {
 			$worksheet->write($lineCount, $x, _($Addresses->address_type_index_to_type ($ip['state'])) );					$x++;
 			}
 			$worksheet->write($lineCount, $x, $ip['description']);					$x++;
-			$worksheet->write($lineCount, $x, $ip['dns_name']);						$x++;
+			$worksheet->write($lineCount, $x, $ip['hostname']);						$x++;
 			# switch
 			if(in_array('switch', $selected_ip_fields)) {
 				if(strlen($ip['switch'])>0 && $ip['switch']!=0) {

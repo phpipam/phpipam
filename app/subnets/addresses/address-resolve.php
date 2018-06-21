@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -25,4 +25,3 @@ $hostname = $DNS->resolve_address ($_POST['ipaddress'], false, true, $nsid);
 
 # print result
 print $hostname['name'];
-?>

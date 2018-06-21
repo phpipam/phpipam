@@ -19,7 +19,7 @@ else {
 <table class="ipaddress_subnet table-condensed table-full">
 	<tr>
 		<th style='padding-top:2px !important;'><?php print _('Subnet details'); ?></th>
-		<td><span style="font-size:14px;border:1px solid #ccc;background:white;padding:4px 8px;border-radius:3px;"><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></span> <?php print $multicast_badge; ?></td>
+		<td><span style="font-size:14px;border:1px solid #ccc;background:white;padding:4px 8px;border-radius:3px;" class='subnet_badge'><?php print "<b>".$Subnets->transform_address($subnet["subnet"],"dotted")."/$subnet[mask]</b> ($subnet_detailed[netmask])"; ?></span> <?php print $multicast_badge; ?></td>
 	</tr>
     <?php
         // if subnet is IPv4 search for linked IPv6 subnet, else show linked ipv4
@@ -319,7 +319,7 @@ else {
 				print $fwZone->firewallAddressObject;
 			}
 			if($subnet_permission > 1) {
-				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet[id].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
+				print '<a style="margin-left:10px;" href="" class="fw_autogen btn btn-default btn-xs" data-action="subnet" data-subnetid="'.$subnet['id'].'" rel="tooltip" title="'._('Generate or regenerate the subnets firewall address object name.').'"><i class="fa fa-repeat"></i></a>';
 			}
 			print "	</td>";
 			print "</tr>";
@@ -655,7 +655,7 @@ else {
 		print "<a class='csvExport btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Export IP addresses')."' data-subnetId='$subnet[id]'>		<i class='fa fa-upload'></i></a>";
 		//share
 		if($subnet_permission>1 && $User->settings->tempShare==1) {
-		print "<a class='shareTemp btn btn-xs btn-default'  href='' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."' data-id='$subnet[id]' data-type='subnets'>		<i class='fa fa-share-alt'></i></a>";
+        print "<a class='btn btn-xs btn-default open_popup' data-script='app/tools/temp-shares/edit.php' data-class='700' data-action='edit' data-id='$subnet[id]' data-type='subnets' data-container='body' rel='tooltip' title='"._('Temporary share subnet')."'><i class='fa fa-share-alt'></i></a>";
 		}
         print "<a class='mail_subnet btn btn-xs btn-default' href='#' data-id='$subnet[id]' rel='tooltip' data-container='body' title='' data-original-title='Send mail notification'>          <i class='fa fa-gray fa-envelope-o'></i></a>";
 	print "</div>";

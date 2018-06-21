@@ -473,23 +473,23 @@ class Sections extends Common_functions {
 	 */
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
-		$groups = json_decode($user->groups);
+		$groups = json_decode($user->groups, true);
 
 		# admins always has permission rwa
 		if($user->role == "Administrator")		{ return 3; }
 		else {
 			# fetch section details and check permissions
 			$section  = $this->fetch_section ("id", $sectionid);
-			$sectionP = json_decode($section->permissions);
+			$sectionP = json_decode($section->permissions, true);
 
 			# default permission is no access
 			$out = 0;
 
 			# for each group check permissions, save highest to $out
-			if(sizeof($sectionP)>0) {
+			if(is_array($sectionP)) {
 				foreach($sectionP as $sk=>$sp) {
 					# check each group if user is in it and if so check for permissions for that group
-					if(sizeof($groups)>0) {
+					if(is_array($groups)) {
 						foreach($groups as $uk=>$up) {
 							if($uk == $sk) {
 								if($sp > $out) { $out = $sp; }
@@ -544,58 +544,74 @@ class Sections extends Common_functions {
 		return $out;
 	}
 
-	/**
-	 * Delegates section permissions to all belonging subnets
-	 *
-	 * @access public
-	 * @param mixed $sectionId
-	 * @param array $removed_permissions
-	 * @param array $changed_permissions
-	 * @return bool
+	/*
+	 *	@Section Subnet menu & table functions
+	 *	--------------------------------
 	 */
-	public function delegate_section_permissions ($sectionId, $removed_permissions, $changed_permissions) {
-    	// init subnets class
-    	$Subnets = new Subnets ($this->Database);
-    	// fetch section subnets
-    	$section_subnets = $this->fetch_multiple_objects ("subnets", "sectionId", $sectionId);
-    	// loop
-    	if ($section_subnets!==false) {
-        	foreach ($section_subnets as $s) {
-                // to array
-                $s_old_perm = json_decode($s->permissions, true);
-                // removed
-                if (sizeof($removed_permissions)>0) {
-                    foreach ($removed_permissions as $k=>$p) {
-                        unset($s_old_perm[$k]);
-                    }
-                }
-                // added
-                if (sizeof($changed_permissions)>0) {
-                    foreach ($changed_permissions as $k=>$p) {
-                        $s_old_perm[$k] = $p;
-                    }
-                }
 
-                // set values
-                $values = array(
-                            "id" => $s->id,
-                            "permissions" => json_encode($s_old_perm)
-                            );
+	/**
+	 * Output subnet bootstrap-table html, JSON populated.
+	 *
+	 * @param  User $User
+	 * @param  integer $sectionId
+	 * @param  boolean $showSupernetOnly (default: false)
+	 * @return string
+	 */
+	public function print_section_subnets_table($User, $sectionId, $showSupernetOnly = false) {
+		$html = array();
 
-                // update
-                if($Subnets->modify_subnet ("edit", $values)===false)       { $Result->show("danger",  _("Failed to set subnet permissons for subnet")." $s->name!", true); }
-        	}
-        	// ok
-        	$this->Result->show("success", _("Subnet permissions recursively set")."!", true);
-    	}
+		# set custom fields
+		$Tools = new Tools ($this->Database);
+		$custom = $Tools->fetch_custom_fields ("subnets");
 
+		# set hidden fields
+		$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+		$hidden_fields = is_array($hidden_fields['subnets']) ? $hidden_fields['subnets'] : array();
 
-		try { $this->Database->updateObject("subnets", array("permissions"=>$permissions, "sectionId"=>$sectionId), "sectionId"); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
+		# check permission
+		$permission = $this->check_permission($User->user, $sectionId);
+
+		$showSupernetOnly = $showSupernetOnly===true ? '1' : '0';
+
+		# permitted
+		if ($permission != 0) {
+			// add
+			if ($permission>1) {
+				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+			}
+
+			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
+			$html[] = '<thead><tr>';
+
+			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
+			$html[] = '<th data-field="description">'._('Description').'</th>';
+			$html[] = '<th data-field="vlan">'._('VLAN').'</th>';
+			if($User->settings->enableVRF == 1) {
+				$html[] = '<th data-field="vrf">'._('VRF').'</th>';
+			}
+			$html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
+			$html[] = '<th data-field="device">'._('Device').'</th>';
+			if($User->settings->enableIPrequests == 1) {
+				$html[] = '<th data-field="requests" class="hidden-xs hidden-sm">'._('Requests').'</th>';
+			}
+			if(is_array($custom)) {
+				foreach($custom as $field) {
+					if(!in_array($field['name'], $hidden_fields)) {
+						$html[] = '<th data-field="'.urlencode($field['name']).'" class="hidden-xs hidden-sm">'.$Tools->print_custom_field_name($field['name']).'</th>';
+					}
+				}
+			}
+
+			$html[] = '<th data-field="buttons" class="actions" data-width="140"></th>';
+			$html[] = '</tr></thead></table>';
+
+			if ($showSupernetOnly==='1') {
+				$html[] = "<div class='alert alert-info'><i class='fa fa-info'></i> "._('Only master subnets are shown').'</div>';
+			}
+		} else {
+			$html[] = "<div class='alert alert-danger'>"._('You do not have permission to access this network').'!</div>';
 		}
-		return true;
+
+		return implode("\n", $html);
 	}
 }
-?>

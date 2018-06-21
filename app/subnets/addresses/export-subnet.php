@@ -5,7 +5,7 @@
  *********************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -107,7 +107,7 @@ if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('description') ,$format_title);
 	$rowCount++;
 }
-if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
+if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
 	$worksheet->write($lineCount, $rowCount, _('hostname') ,$format_title);
 	$rowCount++;
 }
@@ -208,8 +208,8 @@ foreach ($addresses as $ip) {
 		$worksheet->write($lineCount, $rowCount, $ip['description']);
 		$rowCount++;
 	}
-	if( (isset($_GET['dns_name'])) && ($_GET['dns_name'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $ip['dns_name']);
+	if( (isset($_GET['hostname'])) && ($_GET['hostname'] == "on") ) {
+		$worksheet->write($lineCount, $rowCount, $ip['hostname']);
 		$rowCount++;
 	}
 	if( (isset($_GET['firewallAddressObject'])) && ($_GET['firewallAddressObject'] == "on") ) {

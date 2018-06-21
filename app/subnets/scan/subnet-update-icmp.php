@@ -72,7 +72,7 @@ if($script_result->status==0) {
 				$res[$ip]['id']          = $ipdet['id'];;
 				$res[$ip]['ip_addr']     = $ip;
 				$res[$ip]['description'] = $ipdet['description'];
-				$res[$ip]['dns_name']    = $ipdet['dns_name'];
+				$res[$ip]['hostname']    = $ipdet['hostname'];
 				$res[$ip]['state']       = $ipdet['state'];
 				$res[$ip]['lastSeen']    = $ipdet['lastSeen'];
 
@@ -81,7 +81,9 @@ if($script_result->status==0) {
 					$res[$ip]['status'] = "Online";
 					$res[$ip]['code']=0;
 					//update alive time
-					@$Scan->ping_update_lastseen($ipdet['id']);
+					if(isset($ipdet['id'])) {
+						$Scan->ping_update_lastseen($ipdet['id']);
+					}
 				}
 				//offline
 				elseif($k=="dead")	{
@@ -146,7 +148,7 @@ else {
 		print "	<td>".$Subnets->transform_to_dotted($r['ip_addr'])."</td>";
 		print "	<td>".$r['description']."</td>";
 		print "	<td>"._("$r[status]")."</td>";
-		print "	<td>".$r['dns_name']."</td>";
+		print "	<td>".$r['hostname']."</td>";
 
 		print "</tr>";
 
@@ -170,4 +172,3 @@ print "<div class='text-right' style='margin-top:7px;'><span class='muted'>Scan 
 
 # show debug?
 if($_POST['debug']==1) 				{ print "<pre>"; print_r($output[0]); print "</pre>"; }
-?>

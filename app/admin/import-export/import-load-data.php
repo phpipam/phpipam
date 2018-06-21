@@ -54,12 +54,11 @@ if (strtolower($filetype) == "csv") {
 	# open CSV file
 	$filehdl = fopen('upload/data_import.csv', 'r');
 
-	# set delimiter
-	$Tools->set_csv_delimiter ($filehdl);
-
 	# read header row
 	$row = 0;$col = 0;
 	$line = fgets($filehdl);
+	# set delimiter
+	$Tools->set_csv_delimiter ($line);
 	$row++;
 	$line = str_replace( array("\r\n","\r","\n") , "" , $line);	//remove line break
 	$cols = str_getcsv ($line, $Tools->csv_delimiter);
@@ -98,7 +97,7 @@ elseif(strtolower($filetype) == "xls") {
 
 	# map import columns to expected fields as per previous window
 	for($col=1;$col<=$xls->colcount($sheet);$col++) {
-		$fieldmap[$col] = $impfields[$xls->val($row,$col,$sheet)];
+		$fieldmap[$col] = $impfields[$Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet))];
 		$hcol = $col;
 	}
 
@@ -110,7 +109,7 @@ elseif(strtolower($filetype) == "xls") {
 			if ($col > $hcol) {
 					$Result->show('danger', _("Extra column found on line ").$row._(" in XLS file. Please check input file."), true);
 			} else {
-				$record[$fieldmap[$col]] = trim($xls->val($row,$col,$sheet));
+				$record[$fieldmap[$col]] = trim($Tools->convert_encoding_to_UTF8($xls->val($row,$col,$sheet)));
 			}
 		}
 		$data[] = $record;

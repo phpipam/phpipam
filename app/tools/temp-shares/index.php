@@ -25,7 +25,7 @@ elseif(!is_object($temp_shares)) {
 }
 else {
 ?>
-<table class="table sorted table-striped table-hover table-top">
+<table class="table sorted table-striped table-hover table-top" data-cookie-id-table="shares">
 
 <thead>
 <tr>

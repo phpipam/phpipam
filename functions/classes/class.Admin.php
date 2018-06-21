@@ -382,12 +382,14 @@ class Admin extends Common_functions {
 	public function groups_parse ($group_ids) {
 		$out = array ();
 		// check
-		if(sizeof($group_ids)>0) {
-	    	foreach($group_ids as $g_id) {
-	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
-	    		$out[$group->g_id] = (array) $group;
-	    	}
-	    }
+		if(!is_null($group_ids)) {
+			if(sizeof($group_ids)>0) {
+		    	foreach($group_ids as $g_id) {
+		    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
+		    		$out[$group->g_id] = (array) $group;
+		    	}
+		    }
+		}
 	    # return array of groups
 	    return $out;
 	}
@@ -406,12 +408,14 @@ class Admin extends Common_functions {
 	public function groups_parse_ids ($group_ids) {
 		$out = array ();
 		// check
-		if(sizeof($group_ids) >0) {
-		    foreach($group_ids as $g_id) {
-	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
-	    		$out[$group->g_id] = $group->g_id;
-	    	}
-	    }
+		if(!is_null($group_ids)) {
+			if(sizeof($group_ids) >0) {
+			    foreach($group_ids as $g_id) {
+		    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
+		    		$out[$group->g_id] = $group->g_id;
+		    	}
+		    }
+		}
 	    # return array of group ids
 	    return $out;
 	}

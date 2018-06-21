@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "section");
+$csrf = $User->Crypto->csrf_cookie ("create", "section");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -31,7 +31,7 @@ $sections = $Sections->fetch_all_sections ();
 # fetch groups
 $groups   = $Admin->fetch_all_objects("userGroups", "g_id");
 # fetch section
-$section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
+$section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 ?>
 
 <!-- header -->
@@ -54,7 +54,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 				<input type="text" class='input-xlarge form-control input-sm input-w-250' name="name" value="<?php print $Admin->strip_xss(@$section['name']); ?>" size="30" <?php if ($_POST['action'] == "delete" ) { print ' readonly '; } ?> placeholder="<?php print _('Section name'); ?>">
 				<!-- hidden -->
 				<input type="hidden" name="action" 	value="<?php print $_POST['action']; ?>">
-				<input type="hidden" name="id" 		value="<?php print $_POST['sectionId']; ?>">
+				<input type="hidden" name="id" 		value="<?php print $_POST['sectionid']; ?>">
 				<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 			</td>
 		</tr>
@@ -75,7 +75,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 					if($sections!==false) {
 						foreach($sections as $s) {
 							# show only roots and ignore self
-							if($s->masterSection==0 && $s->id!=$_POST['sectionId']) {
+							if($s->masterSection==0 && $s->id!=$_POST['sectionid']) {
 								if($s->id==$section['masterSection'])	{ print "<option value='$s->id' selected='selected'>$s->name</option>"; }
 								else									{ print "<option value='$s->id'>$s->name</option>"; }
 							}
@@ -229,7 +229,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 			</div>
 			</td>
 		</tr>
-        <tr class="warning2">
+        <tr class="warning2 <?php if (!$checked) print 'hidden'; ?>">
             <td></td>
             <td colspan="2">
             <?php $Result->show("info", _('Permission changes will be propagated to all nested subnets')."!", false); ?>
@@ -239,24 +239,19 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionId']);
 
 		</table>	<!-- end table -->
 	</form>		<!-- end form -->
-
-	<!-- delete warning -->
-	<?php
-	if ($_POST['action'] == "delete") {
-		//print '<div class="alert alert-warning"><b>'._('Warning').'!</b><br>'._('Deleting Section will delete all belonging subnets and IP addresses').'!</div>' . "\n";
-	}
-	?>
 </div>
-
 
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger";} else { print "btn-success"; } ?>" id="editSectionSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class='btn btn-sm btn-default submit_popup' <?php if($_POST['action']=="delete") { print "btn-danger";} else { print "btn-success"; } ?> data-script="app/admin/sections/edit-result.php" data-result_div="sectionEditResult" data-form='sectionEdit'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</button>
+
 	</div>
 	<!-- result holder -->
-	<div class="sectionEditResult"></div>
+	<div class="sectionEditResult" id="sectionEditResult"></div>
 </div>
 
 

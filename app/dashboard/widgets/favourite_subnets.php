@@ -1,7 +1,7 @@
 <?php
 # required functions
 if(!isset($User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -67,8 +67,8 @@ else {
 			}
 			else {
 				//master?
-				if($Subnets->has_slaves ($f['subnetId'])) { $master = true;	 print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-folder-o'></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a> $fullinfo</td>"; }
-				else 									  { $master = false; print "	<td><a href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-sitemap' ></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a> $fullinfo</td>"; }
+				if($Subnets->has_slaves ($f['subnetId'])) { $master = true;	 print "	<td><a class='btn btn-xs btn-default' href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-folder-o prefix'></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a> $fullinfo</td>"; }
+				else 									  { $master = false; print "	<td><a class='btn btn-xs btn-default' href='".create_link("subnets",$f['sectionId'],$f['subnetId'])."'><i class='fa fa-sfolder fa-sitemap prefix' ></i>".$Subnets->transform_to_dotted($f['subnet'])."/$f[mask]</a> $fullinfo</td>"; }
 			}
 			print "	<td>$f[description]</td>";
 			print "	<td class='hidden-xs'><a href='".create_link("subnets",$f['sectionId'])."'>$f[section]</a></td>";

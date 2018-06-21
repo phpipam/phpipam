@@ -35,7 +35,7 @@ if ($sections !== false) {
 
 <!-- show sections -->
 <?php if($sections!==false) { ?>
-<table class="table sorted table-striped table-condensed table-top">
+<table class="table sorted table-striped table-condensed table-top table-td-top" data-cookie-id-table="all_sections">
 <!-- headers -->
 <thead>
 <tr>
@@ -68,7 +68,7 @@ if(isset($sections_sorted)) {
 
 			print '<tr class="'.$section['class'].'">'. "\n";
 
-		    print '	<td><a href="'.create_link("subnets", $section['id']).'"><strong>'. str_replace("_", " ", $section['name']).'</strong></a></td>'. "\n";
+		    print '	<td><a class="btn btn-xs btn-default" href="'.create_link("subnets", $section['id']).'">'. str_replace("_", " ", $section['name']).'</a></td>'. "\n";
 		    print '	<td>'. $section['description'] .'</td>'. "\n";
 		    //master Section
 		    if($section['masterSection']!=0) {
@@ -119,15 +119,14 @@ if(isset($sections_sorted)) {
 
 	    	   	print '	<td class="actions">'. "\n";
 	    	   	print "	<div class='btn-group btn-group-xs'>";
-	    		print "		<button class='btn btn-default editSection' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
-	    		print "		<button class='btn btn-default editSection' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
+				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
+				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
 	    		print "	</div>";
 	    		print '	</td>'. "\n";
 	        }
 			print '</tr>'. "\n";
 		}
 	}
-
 	// none
 	if($count==0) {
 		print "<tr>";

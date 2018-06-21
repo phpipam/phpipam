@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -23,7 +23,7 @@ if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
 }
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "vlan");
+$csrf = $User->Crypto->csrf_cookie ("create", "vlan");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);

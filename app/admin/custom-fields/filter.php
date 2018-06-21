@@ -12,7 +12,7 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -63,11 +63,12 @@ $(".input-switch").bootstrapSwitch(switch_options);
 
 	<?php
 	foreach($custom as $k=>$c) {
+		$kNew = str_replace(" ", "___", $k);
 		print "<tr>";
 		# select
 		print "	<td style='width:20px;'>";
-		if(in_array($k, $filters[$_POST['table']]))	{ print "<input type='checkbox' class='input-switch' name='$k' checked>"; }
-		else										{ print "<input type='checkbox' class='input-switch' name='$k'>"; }
+		if(in_array($k, $filters[$_POST['table']]))	{ print "<input type='checkbox' class='input-switch' name='$kNew' checked>"; }
+		else										{ print "<input type='checkbox' class='input-switch' name='$kNew'>"; }
 		print "	</td>";
 		# remove custom_
 		$k1 = $Tools->print_custom_field_name ($k);

@@ -17,16 +17,16 @@ print "<table class='table table-condensed table-td-top table-auto'>";
 if($User->is_admin(false)) {
 print "<tr>";
 print " <td colspan='4'>";
-print "     <div class='btn-group' role='group'>";
-print "         <a href='' class='btn btn-sm btn-default editNat' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> Add new nat</a>";
-if(sizeof($all_nats)>0) {
+print "     <div class='btn-group' role='group' style='margin-bottom:10px;'>";
+print "         <a href='' class='btn btn-sm btn-default editNat' data-action='add' data-id=''><i class='fa fa-plus'></i> Add new nat</a>";
+if(!empty($all_nats)) {
 print "         <div class='btn-group' role='group'>";
 print "             <button type='button' class='btn btn-sm btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>"._("Map to existing NAT")." <span class='caret'></span></button>";
 print "             <ul class='dropdown-menu' style='z-index:50'>";
                     $m=0;
                     foreach ($all_nats as $n) {
                         // not own
-                        if(!@in_array( $n->id, $all_nats_per_object['ipaddresses'][$address['id']] )) {
+                        if(!@in_array($n->id, $all_nats_per_object['ipaddresses'][$address['id']] )) {
                             print "<li><a href='' class='mapNat' data-action='edit' data-id='$n->id' data-object-type='ipaddresses' data-object-id='$address[id]'>$n->name ($n->type)</a></li>";
                             $m++;
                         }
@@ -60,6 +60,3 @@ else {
     print "</tr>";
 }
 print "</table>";
-
-
-?>

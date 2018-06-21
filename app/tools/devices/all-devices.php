@@ -43,14 +43,14 @@ print "<div class='btn-group'>";
 print "</div>";
 
 # table
-print '<table id="switchManagement" class="table sorted table-striped table-top">';
+print '<table id="switchManagement" class="table sorted sortable table-striped table-top" data-cookie-id-table="devices_all">';
 
 #headers
 print "<thead>";
 print '<tr>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by hostname')."'>"._('Name')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by IP address')."'>"._('IP address')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by description')."'>"._('Description').'</span></th>';
+print "	<th>"._('Name')."</th>";
+print "	<th>"._('IP address')."</th>";
+print "	<th>"._('Description').'</th>';
 if($User->settings->enableRACK=="1") {
 print '	<th>'._('Rack').'</th>';
 $colspanCustom++;
@@ -60,12 +60,12 @@ print "	<th>"._('SNMP info').'</th>';
 $colspanCustom++;
 }
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
-print "	<th class='hidden-sm'>          <span rel='tooltip' data-container='body' title='"._('Sort by type')."'>". _('Type').'</span></th>';
+print "	<th class='hidden-sm'>". _('Type').'</th>';
 
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
@@ -102,7 +102,7 @@ else {
 	//print details
 	print '<tr>'. "\n";
 
-	print "	<td><a href='".create_link("tools","devices",$device['id'])."'><i class='fa fa-desktop'></i> ". $device['hostname'] .'</a></td>'. "\n";
+	print "	<td><a class='btn btn-xs btn-default' href='".create_link("tools","devices",$device['id'])."'><i class='fa fa-desktop prefix'></i> ". $device['hostname'] .'</a></td>'. "\n";
 	print "	<td>". $device['ip_addr'] .'</td>'. "\n";
 	print '	<td class="description">'. $device['description'] .'</td>'. "\n";
 	// rack
@@ -111,7 +111,7 @@ else {
         # rack
         $rack = $Racks->fetch_rack_details ($device['rack']);
         if ($rack!==false) {
-            print "<a href='".create_link("administration", "racks", $rack->id)."'>".$rack->name."</a><br>";
+            print "<a href='".create_link("tools", "racks", $rack->id)."'>".$rack->name."</a><br>";
             print "<span class='badge badge1 badge5'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
         }
         print "</td>";

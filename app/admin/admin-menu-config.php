@@ -48,6 +48,7 @@ $request_cnt = $requests>0 ? "<span class='ipreqMenu'>$requests</span>" : "";
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-plus", 	"name"=>"IP requests $request_cnt", "href"=>"requests", 				"description"=>"Manage IP requests");
 }
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-filter", "name"=>"Filter IP fields", 		"href"=>"filter-fields", 			"description"=>"Select which default address fields to display");
+$admin_menu['IP related management'][] = array("show"=>true,    "icon"=>"fa-filter", "name"=>"Required IP fields",      "href"=>"required-fields",          "description"=>"Select which address fields are required to be filled when creating address.");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-magic", 	"name"=>"Custom fields", 		"href"=>"custom-fields", 			"description"=>"Manage custom fields");
 
 
@@ -78,6 +79,7 @@ $admin_menu_items = array(
                 		'devices',
                 		'device-types',
                 		'filter-fields',
+                        'required-fields',
                 		'firewall-zones',
                 		'groups',
                 		'import-export',

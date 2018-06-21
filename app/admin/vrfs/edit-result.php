@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -28,7 +28,7 @@ if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "vrf", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "vrf", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vrf');
@@ -46,16 +46,15 @@ foreach($_POST as $key=>$line) {
 	}
 }
 # glue sections together
-$_POST['sections'] = sizeof($temp)>0 ? implode(";", $temp) : null;
-
-
+$_POST['sections'] = isset($temp) ? implode(";", $temp) : null;
 
 # set update array
-$values = array("vrfId"=>@$_POST['vrfId'],
-				"name"=>$_POST['name'],
-				"rd"=>$_POST['rd'],
-				"sections"=>$_POST['sections'],
-				"description"=>$_POST['description']
+$values = array(
+				"vrfId"       =>@$_POST['vrfId'],
+				"name"        =>$_POST['name'],
+				"rd"          =>$_POST['rd'],
+				"sections"    =>$_POST['sections'],
+				"description" =>$_POST['description']
 				);
 # append custom
 if(sizeof($custom) > 0) {
@@ -73,4 +72,3 @@ else																	{ $Result->show("success", _("VRF $_POST[action] successful
 
 # remove all references if delete
 if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vrfId", $_POST['vrfId']); }
-?>

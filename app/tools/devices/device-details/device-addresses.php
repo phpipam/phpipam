@@ -29,22 +29,26 @@ $selected_ip_fields = explode(";", $User->settings->IPfilter);
 print "<h4>"._("Belonging addresses")."</h4><hr>";
 
 # Hosts table
-print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";
+print "<table id='switchMainTable' class='devices table sorted table-striped table-top table-condensed' data-cookie-id-table='device_addresses'>";
 
 # headers
+print "<thead>";
 print "<tr>";
 print "	<th>"._('IP address')."</th>";
 if(in_array("port", $selected_ip_fields)) {
 print "	<th>"._('Port')."</th>";
 }
 print "	<th>"._('Subnet')."</th>";
-print "	<th colspan='2'>"._('Description')."</th>";
+print "	<th>"._('Description')."</th>";
+print "	<th></th>";
 print "	<th class='hidden-xs'>"._('Hostname')."</th>";
 print "	<th class='hidden-xs hidden-sm'>"._('Owner')."</th>";
 print "</tr>";
+print "</thead>";
 
 # IP addresses
 $ipcnt = 0;
+print "<tbody>";
 if(sizeof($addresses) > 0) {
 	foreach ($addresses as $ip) {
 		# cast
@@ -75,7 +79,7 @@ if(sizeof($addresses) > 0) {
 			}
 			print "</td>";
 
-			print "	<td class='dns hidden-xs'>$ip[dns_name]</td>";
+			print "	<td class='dns hidden-xs'>$ip[hostname]</td>";
 			print "	<td class='owner hidden-xs hidden-sm'>$ip[owner]</td>";
 			print "</tr>";
 
@@ -91,9 +95,9 @@ print "	<td colspan='8'>"._('No hosts belonging to this device')."!</td>";
 print "</tr>";
 }
 
+print "</tbody>";
 print "</table>";			# end table
 print "</td>";
 
 print "</tr>";
 print "</table>";
-?>

@@ -5,7 +5,7 @@
  *********************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -42,37 +42,37 @@ $worksheet_name = "L2 domains";
 $worksheet =& $workbook->addWorksheet($worksheet_name);
 $worksheet->setInputEncoding("utf-8");
 
-$lineCount = 0;
-$rowCount = 0;
+$curRow = 0;
+$curColumn = 0;
 
 //write headers
 if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('Name') ,$format_header);
-	$rowCount++;
+	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
+	$curColumn++;
 }
 if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('Description') ,$format_header);
-	$rowCount++;
+	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
+	$curColumn++;
 }
 
-$lineCount++;
-$rowCount = 0;
+$curRow++;
+$curColumn = 0;
 
 foreach ($vlan_domains as $vlan_domain) {
 	//cast
 	$vlan_domain = (array) $vlan_domain;
 
 	if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $vlan_domain['name'], $format_text);
-		$rowCount++;
+		$worksheet->write($curRow, $curColumn, $vlan_domain['name'], $format_text);
+		$curColumn++;
 	}
 	if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $vlan_domain['description'], $format_text);
-		$rowCount++;
+		$worksheet->write($curRow, $curColumn, $vlan_domain['description'], $format_text);
+		$curColumn++;
 	}
 
-	$lineCount++;
-	$rowCount = 0;
+	$curRow++;
+	$curColumn = 0;
 }
 
 

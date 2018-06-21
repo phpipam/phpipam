@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -24,14 +24,14 @@ if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
 }
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "vrf");
+$csrf = $User->Crypto->csrf_cookie ("create", "vrf");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
 
 # get VRF
 if($_POST['action']!="add") {
-	$vrf = $Admin->fetch_object ("vrf", "vrfId", $_POST['vrfId']);
+	$vrf = $Admin->fetch_object ("vrf", "vrfid", $_POST['vrfid']);
 	$vrf!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 	$vrf = (array) $vrf;
 }
@@ -72,7 +72,7 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<?php
-			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="vrfId" value="'. $_POST['vrfId'] .'">'. "\n";}
+			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) { print '<input type="hidden" name="vrfId" value="'. $_POST['vrfid'] .'">'. "\n";}
 			?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
@@ -95,8 +95,8 @@ $custom = $Tools->fetch_custom_fields('vrf');
 		// loop
 		if($sections!==false) {
 			foreach($sections as $section) {
-				if(in_array($section->id, @$vrf_sections)) 	{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
-				else 										{ print '<div class="checkbox" style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on">'. $section->name .'</span></div>'. "\n"; }
+				if(in_array($section->id, @$vrf_sections)) 	{ print '<div style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on" checked> '. $section->name .'</div>'. "\n"; }
+				else 										{ print '<div style="margin:0px;"><input type="checkbox" name="section-'. $section->id .'" value="on"> '. $section->name .'</div>'. "\n"; }
 			}
 		}
 		?>

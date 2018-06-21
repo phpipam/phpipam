@@ -23,7 +23,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
@@ -234,7 +234,7 @@ $Result		= new Result();
 $discovered = 0;				//for mailing
 
 foreach($scan_subnets as $s) {
-	if(sizeof(@$s->discovered)>0) {
+	if(isset($s->discovered)) {
 		foreach($s->discovered as $ip) {
 			// fetch subnet
 			$subnet = $Subnets->fetch_subnet ("id", $s->id);
@@ -245,14 +245,15 @@ foreach($scan_subnets as $s) {
 			$hostnames[$ip] = $hostname['name']==$ip ? "" : $hostname['name'];
 
 			//set update query
-			$values = array("subnetId"=>$s->id,
-							"ip_addr"=>$ip,
-							"dns_name"=>$hostname['name'],
-							"description"=>"-- autodiscovered --",
-							"note"=>"This host was autodiscovered on ".$nowdate,
-							"lastSeen"=>$nowdate,
-							"state"=>"2",
-							"action"=>"add"
+			$values = array(
+							"subnetId"    =>$s->id,
+							"ip_addr"     =>$ip,
+							"hostname"    =>$hostname['name'],
+							"description" =>"-- autodiscovered --",
+							"note"        =>"This host was autodiscovered on ".$nowdate,
+							"lastSeen"    =>$nowdate,
+							"state"       =>"2",
+							"action"      =>"add"
 							);
 			//insert
 			$Addresses->modify_address($values);
@@ -352,5 +353,3 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	}
 }
-
-?>

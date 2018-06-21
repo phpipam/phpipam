@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,7 +18,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add" ? $User->csrf_cookie ("create", "pstn_add") : $User->csrf_cookie ("create", "pstn_".$_POST['id']);
+$csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$_POST['id']);
 
 
 # check permissions
@@ -37,7 +37,7 @@ else {
     $prefix->master = 0;
 
     $master_prefix = new StdClass ();
-    $master_prefix->name = root;
+    $master_prefix->name = 'root';
     $master_prefix->prefix = "/";
 
     # if id is set we are adding slave prefix

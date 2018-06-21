@@ -2,7 +2,7 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# print admin menu if admin user and don't die!
+# print admin menu for admin users
 if($User->is_admin(false)) {
 	# if section is not set
 	if(!isset($_GET['section'])) { $_GET['section'] = ""; }
@@ -113,7 +113,7 @@ if($User->is_admin(false)) {
 	<!-- tools -->
 	<li class="tools dropdown <?php if(@$_GET['page']=="tools") { print " ac1tive"; } ?>">
 		<a class="dropdown-toggle icon-li" data-toggle="dropdown" href="" rel='tooltip' data-placement='bottom' title='<?php print _('Show tools menu'); ?>'><i class="fa fa-wrench"></i></a>
-		<ul class="dropdown-menu admin">
+		<ul class="dropdown-menu admin tools_dropdown">
 			<!-- public -->
 			<li class="nav-header"><?php print _('Available IPAM tools'); ?> </li>
 			<!-- private -->
@@ -136,7 +136,8 @@ if($User->is_admin(false)) {
 						} else {
 							$active = "";
 						}
-						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
+						list($l0, $l1) = explode('/', $i['href']);
+						print "<li class='$active'><a href='".create_link("tools",$l0, $l1)."'>"._($i['name'])."</a></li>";
 					}
 				}
 			}
@@ -149,7 +150,8 @@ if($User->is_admin(false)) {
 	if($User->is_admin(false) && $User->settings->dbverified==0) {
 		//check
 		if(sizeof($dberrsize = $Tools->verify_database())>0) {
-			$esize = sizeof($dberrsize['tableError']) + sizeof($dberrsize['fieldError']);
+			$esize =  isset($dberrsize['tableError']) ? sizeof($dberrsize['tableError']) : 0;
+			$esize += isset($dberrsize['fieldError']) ? sizeof($dberrsize['fieldError']) : 0;
 			print "<li>";
 			print "	<a href='".create_link("administration","verify-database")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._('Database errors detected')."'><i class='fa fa-exclamation-triangle'></i><sup>$esize</sup></a>";
 			print "</li>";

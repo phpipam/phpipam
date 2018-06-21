@@ -19,12 +19,13 @@ $result_vlans = $Tools->search_vlans($searchTerm, $custom_vlan_fields);
 <h4><?php print _('Search results (VLANs)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable table sorted table-striped table-condensed table-top" data-cookie-id-table="search_vlan">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
-	<th><?php print _('Name');?></th>
 	<th><?php print _('Number');?></th>
+	<th><?php print _('Name');?></th>
 	<th><?php print _('Description');?></th>
 	<?php
 	if(sizeof($custom_vlan_fields) > 0) {
@@ -37,8 +38,9 @@ $result_vlans = $Tools->search_vlans($searchTerm, $custom_vlan_fields);
 	?>
 	<th></th>
 </tr>
+</thead>
 
-
+<tbody>
 <?php
 if(sizeof($result_vlans) > 0) {
 	# print vlans
@@ -47,8 +49,8 @@ if(sizeof($result_vlans) > 0) {
 		$vlan = (array) $vlan;
 
 		print '<tr class="nolink">' . "\n";
+		print ' <td><dd><a class="btn btn-xs btn-default" href="'.create_link("tools","vlan",$vlan['domainId'],$vlan['vlanId']).'">'. $vlan['number']     .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vlan['name']      .'</dd></td>' . "\n";
-		print ' <td><dd><a href="'.create_link("tools","vlan",$vlan['domainId'],$vlan['vlanId']).'">'. $vlan['number']     .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vlan['description'] .'</dd></td>' . "\n";
 		# custom fields
 		if(sizeof($custom_vlan_fields) > 0) {
@@ -74,7 +76,7 @@ if(sizeof($result_vlans) > 0) {
     }
 }
 ?>
-
+</tbody>
 </table>
 <?php
 if(sizeof($result_vlans) == 0) {

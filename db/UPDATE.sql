@@ -1,4 +1,9 @@
 /* VERSION 1.1 */
+
+/* Old version only had a VARCHAR(32) password */
+
+ALTER TABLE `users` MODIFY COLUMN `password` CHAR(128) COLLATE utf8_bin DEFAULT NULL ;
+
 /* VERSION 1.11 */
 UPDATE `settings` set `version` = '1.11';
 
@@ -880,3 +885,40 @@ ALTER TABLE `subnets` ADD INDEX (`location`);
 ALTER TABLE `ipaddresses` ADD INDEX (`location`);
 ALTER TABLE `circuits` ADD INDEX (`location1`);
 ALTER TABLE `circuits` ADD INDEX (`location2`);
+
+
+
+
+
+
+/* VERSION 1.32 */
+UPDATE `settings` set `version` = '1.32';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Required IP fieldsg */
+ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;
+
+/* Change dns_name to hostname */
+ALTER TABLE `ipaddresses` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
+ALTER TABLE `requests` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
+
+/* Subnet table indexes: has_slaves(), fetch_section_subnets(), subnet_familytree_*(), verify_subnet_overlapping(), verify_vrf_overlapping()... */
+ALTER TABLE `subnets` ADD INDEX (`masterSubnetId`);
+ALTER TABLE `subnets` ADD INDEX (`sectionId`);
+ALTER TABLE `subnets` ADD INDEX (`vrfId`);
+
+/* bandwidth calculator widget */
+INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes');
+
+/* add theme */
+ALTER TABLE `settings` ADD `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark';
+ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';
+
+/* Allow SNMPv3 to be selected for devices */
+ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') DEFAULT '0';
+
+/* Add database schema version field */
+ALTER TABLE `settings` ADD `dbversion` INT(8)  NOT NULL  DEFAULT '0';

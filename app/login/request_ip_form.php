@@ -71,7 +71,7 @@ if($subnets===NULL) { ?>
 <tr>
 	<th><?php print _('Hostname'); ?></th>
 	<td>
-		<input type="text" name="dns_name" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
+		<input type="text" name="hostname" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
 </tr>
 
 <!-- state -->

@@ -7,7 +7,7 @@
 
 # required functions
 if(!is_object(@$User)) {
-	require( dirname(__FILE__) . '/../../../functions/functions.php' );
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 	# classes
 	$Database	= new Database_PDO;
 	$User 		= new User ($Database);
@@ -33,7 +33,7 @@ $slimit = 5;			//we dont need this, we will recalculate
 # if direct request include plot JS
 if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 	# get widget details
-	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_REQUEST['section'])) { $Result->show("danger", _("Invalid widget"), true); }
+	if(!$widget = $Tools->fetch_object ("widgets", "wfile", $_GET['section'])) { $Result->show("danger", _("Invalid widget"), true); }
 	# reset size and limit
 	$height = 350;
 	$slimit = 5;
@@ -120,7 +120,7 @@ else {
             # set class
             $aclass = $s->usage->usedhosts_percent > $s->threshold ? "progress-bar-danger" : "progress-bar-info";
             # limit description
-            $s->description = strlen($s->description)>10 ? substr($s->description, 0,10)."..." : $s->description;
+            $s->description = $Tools->shorten_text($s->description, 10);
             $s->description = strlen($s->description)>0  ? " (".$s->description.")" : "";
             # limit class
             $limit_class = $s->usage->until_threshold<0 ? "progress-limit-negative" : "progress-limit";

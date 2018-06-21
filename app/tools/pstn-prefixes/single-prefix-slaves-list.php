@@ -10,7 +10,7 @@ else {
     $colspan = $admin ? 8 : 7;
 
     // table
-    print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top'>";
+    print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top' data-cookie-id-table='pstn_prefixes'>";
     // headers
     print "<thead>";
     print "<tr>";

@@ -5,7 +5,7 @@
  **************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -37,7 +37,7 @@ if($Install->install_database ($_POST['mysqlrootuser'], $_POST['mysqlrootpass'],
 	 	$Result->show("success alert-block", 'Database installed successfully! <a href="'.create_link().'" class="btn btn-sm btn-default">Continue</a>', true);
 	}
 	else {
-	 	$Result->show("success alert-block", 'Database installed successfully! <a href="?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">Continue</a>', true);
+	 	$Result->show("success alert-block", 'Database installed successfully! <a href="index.php?page=install&section=install_automatic&subnetId=configure" class="btn btn-sm btn-default">Continue</a>', true);
 	 }
 }
 ?>

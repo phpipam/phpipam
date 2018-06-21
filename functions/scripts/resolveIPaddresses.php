@@ -12,7 +12,7 @@
  ***********************************************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 
 # initialize objects
 $Database 	= new Database_PDO;
@@ -44,12 +44,12 @@ if(sizeof($resolved_subnets)>0) {
 # check all subnets
 if(sizeof($config['resolve_subnets']) == 0) {
 	# get ony ip's with empty DNS
-	if($config['resolve_emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where `dns_name` = "" or `dns_name` is NULL order by `ip_addr` ASC;'; }
-	else 									{ $query = 'select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
+	if($config['resolve_emptyonly'] == 1) 	{ $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where `hostname` = "" or `hostname` is NULL order by `ip_addr` ASC;'; }
+	else 									{ $query = 'select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` order by `ip_addr` ASC;'; }
 }
 # check selected subnets
 else {
-	$query[] = "select `id`,`ip_addr`,`dns_name`,`subnetId` from `ipaddresses` where ";
+	$query[] = "select `id`,`ip_addr`,`hostname`,`subnetId` from `ipaddresses` where ";
 	//go through subnets
 	$m=1;
 	foreach($config['resolve_subnets'] as $k=>$subnetId) {
@@ -60,7 +60,7 @@ else {
 	}
 	# get ony ip's with empty DNS
 	if($config['resolve_emptyonly'] == 1) {
-		$query[] = ' and (`dns_name` = "" or `dns_name` is NULL ) ';
+		$query[] = ' and (`hostname` = "" or `hostname` is NULL ) ';
 	}
 	$query[] = 'order by `ip_addr` ASC;';
 
@@ -83,7 +83,7 @@ if (sizeof($ipaddresses)>0) {
 		# update if change
 		if($hostname['class']=="resolved") {
 			# values
-			$values = array("dns_name"=>$hostname['name'],
+			$values = array("hostname"=>$hostname['name'],
 							"id"=>$ip->id
 							);
 			# execute

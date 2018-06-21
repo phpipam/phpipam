@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,7 +21,7 @@ $User->check_user_session();
 $sections = $Sections->fetch_all_sections();
 ?>
 
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/jquery-ui-1.10.3.custom.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.10.3.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <script>
 $(document).ready(function() {
 	// initialize sortable

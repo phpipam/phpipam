@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "agent");
+$csrf = $User->Crypto->csrf_cookie ("create", "agent");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -39,7 +39,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$agent = new StdClass;
-	$agent->code = str_shuffle(md5(microtime()));
+	$agent->code = $User->Crypto->generate_token();
 	# title
 	$title = _('Create new scan agent');
 }
@@ -84,7 +84,10 @@ if (@$agent->type=="direct" && $_POST['action']=="delete") {
 	<tr>
 	    <td><?php print _('Code'); ?></td>
 	    <td><input type="text" id="code" name="code" class="form-control input-sm"  value="<?php print $Admin->strip_xss(@$agent->code); ?>"  maxlength='32' <?php if(@$agent->type=="direct"||$_POST['action'] == "delete") print "readonly"; ?>></td>
-       	<td class="info2"><?php print _('Agent code'); ?><?php if(@$agent->type!="direct") { ?> <button class="btn btn-xs btn-default" id="regAgentKey"><i class="fa fa-random"></i> <?php print _('Regenerate'); ?></button><?php } ?></td>
+       	<td class="info2"><?php print _('Agent code'); ?><?php if(@$agent->type!="direct") { ?>
+       		<button class="btn btn-xs btn-default" id="regAgentKey"><i class="fa fa-random"></i> <?php print _('Regenerate'); ?></button><?php } ?>
+
+       	</td>
     </tr>
 
 	<!-- type -->
@@ -116,8 +119,11 @@ if (@$agent->type=="direct" && $_POST['action']=="delete") {
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="agentEditSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class='btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?> submit_popup' data-script="app/admin/scan-agents/edit-result.php" data-result_div="agentEditResult" data-form='agentEdit'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</button>
+
 	</div>
 	<!-- Result -->
-	<div class="agentEditResult"></div>
+	<div id="agentEditResult"></div>
 </div>

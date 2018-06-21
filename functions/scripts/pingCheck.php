@@ -30,7 +30,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../functions.php' );
+require_once( dirname(__FILE__) . '/../functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
 
 # initialize objects
@@ -115,7 +115,7 @@ foreach($scan_subnets as $s) {
 															"id"          =>$a->id,
 															"ip_addr"     =>$a->ip_addr,
 															"description" =>$a->description,
-															"dns_name"    =>$a->dns_name,
+															"hostname"    =>$a->hostname,
 															"subnetId"    =>$a->subnetId,
 															"lastSeenOld" =>$a->lastSeen,
 															"lastSeen"    =>$a->lastSeen,
@@ -130,7 +130,7 @@ foreach($scan_subnets as $s) {
 															"id"          =>$a->id,
 															"ip_addr"     =>$a->ip_addr,
 															"description" =>$a->description,
-															"dns_name"    =>$a->dns_name,
+															"hostname"    =>$a->hostname,
 															"subnetId"    =>$a->subnetId,
 															"lastSeenOld" =>$a->lastSeen,
 															"lastSeen"    =>$a->lastSeen,
@@ -222,8 +222,8 @@ if($Scan->icmp_type=="fping") {
 
 		        //resolve hostnames
 				if($subnets[$sk]['resolveDNS']=="1") {
-					$old_hostname_save = $a['dns_name'];	// save old hostname to detect change
-					$old_hostname = $config['resolve_emptyonly']===false ? false : $addresses2[$s['id']][$ak]['dns_name'];
+					$old_hostname_save = $addresses2[$s['id']][$ak]['hostname'];	// save old hostname to detect change
+					$old_hostname = $config['resolve_emptyonly']===false ? false : $addresses2[$s['id']][$ak]['hostname'];
 			        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($addresses2[$s['id']][$ak]['ip_addr']), $old_hostname, true, $subnets[$sk]['nsid']);
 					if($hostname['class']=="resolved") {
 						if ($hostname['name']!=$old_hostname_save) {
@@ -295,8 +295,8 @@ else {
 
         //resolve hostnames
 		if($a['resolveDNS']=="1") {
-			$old_hostname_save = $a['dns_name'];	// save old hostname to detect change
-			$old_hostname = $config['resolve_emptyonly']===false ? false : $a['dns_name'];
+			$old_hostname_save = $a['hostname'];	// save old hostname to detect change
+			$old_hostname = $config['resolve_emptyonly']===false ? false : $a['hostname'];
 	        $hostname = $DNS->resolve_address ($Subnets->transform_to_dotted($a['ip_addr']), $old_hostname, true, $a['nsid']);
 			if($hostname['class']=="resolved") {
 				if ($hostname['name']!=$old_hostname_save) {
@@ -472,7 +472,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 		$content[] = "<tr>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></a></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[dns_name]</font></td>";
+		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $ago</td>";
 		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $oldStatus > $newStatus</td>";
@@ -507,5 +507,3 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	}
 }
-
-?>

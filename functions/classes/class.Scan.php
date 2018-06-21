@@ -201,6 +201,23 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function set_php_exec () {
+		include(dirname(__FILE__)."/../../config.php");
+
+		// Invoked via CLI, use current php-cli binary if known (>php5.3)
+		if ( php_sapi_name() === "cli" && defined('PHP_BINARY') ) {
+			$this->php_exec = PHP_BINARY;
+			return;
+		}
+
+		// Invoked via HTML (or php5.3)
+
+		// Check for user specified php-cli binary (Multiple php versions installed)
+		if ( !empty($php_cli_binary) ) {
+			$this->php_exec = $php_cli_binary;
+			return;
+		}
+
+		// Default: Use system default php version symlinked to php in PHP_BINDIR
 		$this->php_exec = $this->os_type=="Windows" ? PHP_BINARY : PHP_BINDIR."/php";
 	}
 

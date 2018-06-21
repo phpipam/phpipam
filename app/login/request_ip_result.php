@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -24,14 +24,14 @@ if($Tools->settings->enableIPrequests==1) {
 	$_POST = $Admin->strip_input_tags($_POST);
 
 	# verify email
-	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$this->strip_xss($_POST['requester']).')', true); }
+	if(!$Result->validate_email($_POST['requester']) ) 				{ $Result->show("danger", _('Please provide valid email address').'! ('._('requester').': '.$Tools->strip_xss($_POST['requester']).')', true); }
 
 	# formulate insert values
 	$values = array(
 					"subnetId"    => $_POST['subnetId'],
 					"ip_addr"     => @$_POST['ip_addr'],
 					"description" => @$_POST['description'],
-					"dns_name"    => @$_POST['dns_name'],
+					"hostname"    => @$_POST['hostname'],
 					"state"       => $_POST['state'],
 					"owner"       => $_POST['owner'],
 					"requester"   => $_POST['requester'],

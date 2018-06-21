@@ -5,5 +5,3 @@
  */
 
 include(dirname(__FILE__) . "/../../tools/vlan/index.php");
-
-?>

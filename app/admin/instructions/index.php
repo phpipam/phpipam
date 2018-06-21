@@ -9,7 +9,7 @@
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "instructions");
+$csrf = $User->Crypto->csrf_cookie ("create", "instructions");
 
 // default
 if(!isset($_GET['subnetId'])) { $_GET['subnetId'] = 1; }
@@ -52,7 +52,7 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
     	<input type="hidden" name="id" value="<?php print $_GET['subnetId']; ?>">
 
-    	<script src="js/<?php print SCRIPT_PREFIX; ?>/ckeditor/ckeditor.js"></script>
+    	<script src="js/ckeditor/ckeditor.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
     	<script>
         	CKEDITOR.replace( 'instructions', {
     	    	uiColor: '#f9f9f9',
@@ -79,4 +79,3 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
 else {
     $Result->show("danger", "Invalid ID", false);
 }
-?>

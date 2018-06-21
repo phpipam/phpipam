@@ -12,9 +12,9 @@
 # show only for numeric (set) rackid
 if($_POST['rackid']>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
-	if(!is_object($User)) {
+	if(!isset($User) || !is_object($User)) {
 		/* functions */
-		require( dirname(__FILE__) . '/../../../functions/functions.php');
+		require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 		# initialize user object
 		$Database 	= new Database_PDO;
@@ -27,16 +27,22 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 
 		# validate in inputs
 		if(!is_numeric($_POST['rackid'])) 	{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
-		if(!is_numeric($_POST['deviceid'])) { print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
-
+		if($_POST['action']!=="add") {
+			if(!is_numeric($_POST['deviceid'])) { print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid ID"), false, false, true)."</td></tr>"; die(); }
+		}
 		# fetch rack
 		$rack = $User->fetch_object ("racks", "id", $_POST['rackid']);
 		if($rack===false) 					{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid rack"), false, false, true)."</td></tr>"; die(); }
 
 		# fetch device
-		$device = $User->fetch_object ("devices", "id", $_POST['deviceid']);
-		if($device===false) 				{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid device"), false, false, true)."</td></tr>"; die(); }
-		$device = (array) $device;
+		if($_POST['action']!=="add") {
+			$device = $User->fetch_object ("devices", "id", $_POST['deviceid']);
+			if($device===false) 				{ print "<tr><td colspan='2'>".$Result->show ("danger", _("Invalid device"), false, false, true)."</td></tr>"; die(); }
+			$device = (array) $device;
+		}
+		else {
+			$device = [];
+		}
 	}
 	# fetch rack details if set on edit
 	else {
@@ -116,7 +122,8 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 			}
 			else {
 			    foreach ($available as $a) {
-			        print "<option value='$a'>$a</option>";
+                    		$selected = $a==$device['rack_start'] ? "selected" : "";
+			        print "<option value='$a' $selected>$a</option>";
 			    }
 			}
 			?>

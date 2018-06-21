@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,10 +21,10 @@ if($Tools->check_prefix_permission ($User->user) <3)   { $Result->show("danger",
 
 # validate csrf cookie
 if($_POST['action']=="add") {
-    $User->csrf_cookie ("validate", "pstn_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+    $User->Crypto->csrf_cookie ("validate", "pstn_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 else {
-    $User->csrf_cookie ("validate", "pstn_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+    $User->Crypto->csrf_cookie ("validate", "pstn_".$_POST['id'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 
 

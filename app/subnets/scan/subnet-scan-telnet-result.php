@@ -4,4 +4,3 @@
  *******************************/
 
 include("subnet-scan-icmp-result.php");
-?>

@@ -5,7 +5,7 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,7 +21,7 @@ $User->check_user_session();
 if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit Provider details"), true, true); }
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "provider");
+$csrf = $User->Crypto->csrf_cookie ("create", "provider");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);

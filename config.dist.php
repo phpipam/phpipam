@@ -39,6 +39,7 @@ $db['tmptable_engine_type'] = "MEMORY";
 /**
  * Mail sending and other parameters for pingCheck and DiscoveryCheck scripts
  ******************************/
+
 # pingCheck.php script parameters
 $config['ping_check_send_mail']        = true;       // true/false, send or not mail on ping check
 $config['ping_check_method']           = false;      // false/ping/pear/fping, reset scan method
@@ -60,6 +61,21 @@ $config['resolve_verbose']             = true;       // verbose response - print
  * false = HIDE all php errors
  ******************************/
 $debugging = false;
+
+
+/**
+ * Allow older PHP version
+ *
+ * allow version < 5.4 with limited functionality
+ ******************************/
+$allow_older_version = false;
+
+/*
+ * API Crypt security provider. "mcrypt" or "openssl"
+ *
+ * default as of 1.3.2 "openssl"
+ ******************************/
+#$api_crypt_encryption_library = "mcrypt";
 
 
 /**
@@ -144,5 +160,14 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
 /**
  * General tweaks
  ******************************/
-$config['logo_width'] = 220;                             // logo width
-$config['requests_public'] = true;                       // Show IP request module on login page
+$config['logo_width']             = 220;                    // logo width
+$config['requests_public']        = true;                   // Show IP request module on login page
+$config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
+
+/**
+ * PHP CLI binary for scanning and network discovery.
+ *
+ * The default behaviour is to use the system wide default php version symlinked to php in PHP_BINDIR (/usr/bin/php).
+ * If multiple php versions are present; overide selection with $php_cli_binary.
+ */
+#$php_cli_binary = '/usr/bin/php7.1';

@@ -122,7 +122,7 @@ class phpipam_rack extends Tools {
      * @return void
      */
     private function define_rack_sizes () {
-        $this->rack_sizes = array(14, 20, 24, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52);
+        $this->rack_sizes = array(8, 14, 20, 24, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52);
     }
 
 
@@ -344,7 +344,7 @@ class RackDrawer extends Common_functions {
      */
     public function draw(Rack $rack) {
         $this->rack = $rack;
-        $response = file_get_contents(dirname(__FILE__).'/../../css/'.SCRIPT_PREFIX.'/images/blankracks/'.$this->rack->getSpace().'.png', false);
+        $response = file_get_contents(dirname(__FILE__).'/../../css/images/blankracks/'.$this->rack->getSpace().'.png', false);
         $this->template = imagecreatefromstring($response);
 
         $this->drawNameplate();
@@ -383,7 +383,7 @@ class RackDrawer extends Common_functions {
         $x = imagesx($img) - $width - 8;
         $y = Imagesy($img) +9;
         // imagestring($img, $font, $x/2, $y/2, $text, $color);
-        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/".SCRIPT_PREFIX."/fonts/MesloLGS-Regular.ttf", $text );
+        imagettftext($img, 8, 0, $x/2, $y/2, $color, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text );
     }
 
     /**

@@ -265,14 +265,14 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to addresses cache
-			if(sizeof($address)>0) {
+			if(!is_null($address)) {
 				# add decimal format
 				$address->ip = $this->transform_to_dotted ($address->ip_addr);
 				# save to subnets
 				$this->addresses[$id] = (object) $address;
 			}
 			#result
-			return sizeof($address)>0 ? $address : false;
+			return !is_null($address) ? $address : false;
 		}
 	}
 
@@ -298,7 +298,7 @@ class Addresses extends Common_functions {
 			$this->addresses[$address->id] = (object) $address;
 		}
 		#result
-		return sizeof($address)>0 ? $address : false;
+		return !is_null($address) ? $address : false;
 	}
 
 	/**
@@ -363,7 +363,7 @@ class Addresses extends Common_functions {
 						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
 						"subnetId"              => $address['subnetId'],
 						"description"           => @$address['description'],
-						"dns_name"              => @$address['dns_name'],
+						"hostname"              => @$address['hostname'],
 						"mac"                   => @$address['mac'],
 						"owner"                 => @$address['owner'],
 						"state"                 => @$address['state'],
@@ -385,7 +385,7 @@ class Addresses extends Common_functions {
         }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
+			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
 		}
 
 		# null empty values
@@ -429,32 +429,35 @@ class Addresses extends Common_functions {
 	protected function modify_address_edit ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# set update array
-		$insert = array("id"=>$address['id'],
-						"subnetId"=>$address['subnetId'],
-						"ip_addr"=>$this->transform_address($address['ip_addr'], "decimal"),
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore']
+		$insert = array(
+						"id"          =>$address['id'],
+						"subnetId"    =>$address['subnetId'],
+						"ip_addr"     =>$this->transform_address($address['ip_addr'], "decimal"),
+						"description" =>@$address['description'],
+						"hostname"    =>@$address['hostname'],
+						"mac"         =>@$address['mac'],
+						"owner"       =>@$address['owner'],
+						"state"       =>@$address['state'],
+						"switch"      =>@$address['switch'],
+						"port"        =>@$address['port'],
+						"note"        =>@$address['note'],
+						"is_gateway"  =>@$address['is_gateway'],
+						"excludePing" =>@$address['excludePing'],
+						"PTRignore"   =>@$address['PTRignore']
 						);
         # location
         if (isset($address['location_item'])) {
             if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
+                $this->Result->show("danger", _("Invalid location value"), true);
             }
             $insert['location'] = $address['location_item'];
         }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
+			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
 		}
 
 		# set primary key for update
@@ -503,6 +506,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -574,7 +579,7 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# loop and check for object ids
-		if(sizeof($all_nats)>0) {
+		if(!empty($all_nats)) {
 			# init admin object
 			$Admin = new Admin ($this->Database, false);
 			# loop
@@ -621,13 +626,13 @@ class Addresses extends Common_functions {
 	 */
 	public function update_address_hostname ($ip, $id, $hostname = "") {
 		if(is_numeric($id) && strlen($hostname)>0) {
-			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "dns_name"=>$hostname)); }
+			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "hostname"=>$hostname)); }
 			catch (Exception $e) {
 				return false;
 			}
 			// save log
-			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $address_old), 0);
-			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "dns_name"=>""), array("id"=>$id, "dns_name"=>$hostname), $this->mail_changelog);
+			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $hostname), 0);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->mail_changelog);
 		}
 	}
 
@@ -933,7 +938,7 @@ class Addresses extends Common_functions {
 		// validate db
 		$this->pdns_validate_connection ();
 		// execute
-		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['dns_name'], $address['ip_addr']);
+		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['hostname'], $address['ip_addr']);
 	}
 
 	/**
@@ -990,18 +995,18 @@ class Addresses extends Common_functions {
 		$values = json_decode($this->settings->powerDNS);
 
     	// set default hostname for PTR if set
-    	if (strlen($address->dns_name)==0) {
+    	if (strlen($address->hostname)==0) {
         	if (strlen($values->def_ptr_domain)>0) {
-            	$address->dns_name = $values->def_ptr_domain;
+            	$address->hostname = $values->def_ptr_domain;
         	}
     	}
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->hostname)===false)		{ return false; }
 		// fetch domain
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
 
 		// formulate new record
-		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->dns_name, $values->ttl);
+		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
 		// insert record
 		$this->PowerDNS->add_domain_record ($record, false);
 		// link to address
@@ -1024,7 +1029,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_edit ($address, $print_error = true) {
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)	{
+		if ($this->validate_hostname ($address->hostname)===false)	{
 			// remove pointer if it exists!
 			if ($this->ptr_exists ($address->PTR)===true)	{ $this->ptr_delete ($address, $print_error); }
 			else											{ return false; }
@@ -1046,7 +1051,7 @@ class Addresses extends Common_functions {
 			$old_record = $this->PowerDNS->fetch_record ($address->PTR);
 
 			// create insert array
-			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->dns_name, null, null, null, $old_record->change_date);
+			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->hostname, null, null, null, $old_record->change_date);
 			$update['id'] = $address->PTR;
 
 			// update
@@ -1214,7 +1219,7 @@ class Addresses extends Common_functions {
 								"ip_addr"=>$address[0],
 								"state"=>$address[1],
 								"description"=>$address[2],
-								"dns_name"=>$address[3],
+								"hostname"=>$address[3],
 								"mac"=>$address[4],
 								"owner"=>$address[5],
 								"switch"=>$address[6],
@@ -1729,7 +1734,7 @@ class Addresses extends Common_functions {
 	 * @return boolean
 	 */
 	public function is_hostname_unique ($hostname) {
-		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "dns_name", $hostname); }
+		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "hostname", $hostname); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1769,7 +1774,6 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {

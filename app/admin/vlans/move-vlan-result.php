@@ -5,7 +5,7 @@
  *******************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -21,19 +21,19 @@ $User->check_maintaneance_mode ();
 
 // checks
 if(!is_numeric($_POST['newDomainId']))			$Result->show("danger", _("Invalid ID"), true);
-if(!is_numeric($_POST['vlanId']))				$Result->show("danger", _("Invalid ID"), true);
+if(!is_numeric($_POST['vlanid']))				$Result->show("danger", _("Invalid ID"), true);
 
 // verify that new exists
 $vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['newDomainId']);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
 //fetch vlan
-$vlan = $Admin->fetch_object("vlans", "vlanId", $_POST['vlanId']);
+$vlan = $Admin->fetch_object("vlans", "vlanid", $_POST['vlanid']);
 if($vlan===false)					{ $Result->show("danger", _("Invalid ID"), true); }
 
 // check that it is not already set !
 if($User->settings->vlanDuplicate==0) {
-	$check_vlan = $Admin->fetch_multiple_objects ("vlans", "domainId", $vlan_domain->id, "vlanId");
+	$check_vlan = $Admin->fetch_multiple_objects ("vlans", "domainId", $vlan_domain->id, "vlanid");
 	if($check_vlan!==false) {
 		foreach($check_vlan as $v) {
 			if($v->number == $vlan->number) {
@@ -44,10 +44,9 @@ if($User->settings->vlanDuplicate==0) {
 }
 
 # formulate update query
-$values = array("vlanId"=>@$_POST['vlanId'],
+$values = array("vlanid"=>@$_POST['vlanid'],
 				"domainId"=>$vlan_domain->id
 				);
 # update
-if(!$Admin->object_modify("vlans", "edit", "vlanId", $values))	{ $Result->show("danger",  _("Failed to move VLAN to new domain").'!', true); }
+if(!$Admin->object_modify("vlans", "edit", "vlanid", $values))	{ $Result->show("danger",  _("Failed to move VLAN to new domain").'!', true); }
 else															{ $Result->show("success", _("VLAN moved to new domain successfully").'!', false); }
-?>

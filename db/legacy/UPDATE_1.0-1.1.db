@@ -1,0 +1,78 @@
+/* Provided by @tsaavik https://github.com/phpipam/phpipam/pull/1873 */
+
+/* Update from v 1.00 to 1.01 **/
+UPDATE `settings` set `version` = '1.01';  /* UPDATE version */
+/* reset donations */
+UPDATE `settings` set `donate` = '0'; 
+/* add es_ES translation */
+INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('es_ES', 'Español'); 
+
+/* Update from v 1.01 to 1.02 **/
+UPDATE `settings` set `version` = '1.02';  /* UPDATE version */
+/* add new index to subnetId in IP addresses field */
+ALTER TABLE `ipaddresses` ADD INDEX `subnetid` (`subnetId`);
+/* reset donations */
+UPDATE `settings` set `donate` = '0'; 
+/* add mail notification for all changes */
+ALTER TABLE `users` ADD `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `favourite_subnets`; 
+
+/* Update from v 1.02 to 1.03 **/
+UPDATE `settings` set `version` = '1.03';  /* UPDATE version */
+/*set switch to 0 to avoid changelog */
+update `ipaddresses` set `switch` = 0 where `switch` is null;
+/* add mail notification for changelog */
+ALTER TABLE `users` ADD `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No'  AFTER `mailNotify`;
+/* expand the size of DNS field */
+ALTER TABLE `ipaddresses` CHANGE `dns_name` `dns_name` VARCHAR(100)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
+/* addedd passChange field to users table */
+ALTER TABLE `users` ADD `passChange` SET('Yes','No') NOT NULL  DEFAULT 'No'  AFTER `mailChangelog`; 
+
+/* Update from v 1.03 to 1.04 **/
+UPDATE `settings` set `version` = '1.04';  /* UPDATE version */
+/* create table login attampts */
+DROP TABLE `loginAttempts`;
+CREATE TABLE `loginAttempts` (
+      `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+      `datetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      `ip` varchar(128) NOT NULL DEFAULT '',
+      `count` int(2) NOT NULL,
+      PRIMARY KEY (`id`),
+      UNIQUE KEY `ip` (`ip`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Update from v 1.04 to 1.05 **/
+UPDATE `settings` set `version` = '1.05';  /* UPDATE version */
+/* change password field for crypted passwords */
+ALTER TABLE `users` CHANGE `password` `password` CHAR(128)  COLLATE utf8_bin DEFAULT NULL; 
+/* Update from v 1.05 to 1.06 **/
+UPDATE `settings` set `version` = '1.06';  /* UPDATE version */
+/* add prettylinks field */
+ALTER TABLE `settings` ADD `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No'  AFTER `scanMaxThreads`; 
+
+/* Update from v 1.06 to 1.07 **/
+UPDATE `settings` set `version` = '1.07';  /* UPDATE version */
+/* add option to hide free space */
+ALTER TABLE `settings` ADD `hideFreeRange` tinyint(1) DEFAULT '0'  AFTER `prettyLinks`;
+/* add option for max vlan number */
+ALTER TABLE `settings` ADD `vlanMax` INT(8)  NULL  DEFAULT '4096'  AFTER `vlanDuplicate`;
+/* add hidden custom fields */
+ALTER TABLE `settings` ADD `hiddenCustomFields` VARCHAR(1024)  NULL  DEFAULT NULL  AFTER `hideFreeRange`; 
+
+/* Update from v 1.07 to 1.08 */
+UPDATE `settings` set `version` = '1.08';
+/* add max session duration field to settings */
+ALTER TABLE `settings` ADD `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600'  AFTER `hiddenCustomFields`;
+/* add option to subnets to discover from cron script */
+ALTER TABLE `subnets` ADD `discoverSubnet` BINARY(1)  NULL  DEFAULT '0'  AFTER `pingSubnet`; 
+
+/* Update from v 1.08 to 1.09 */
+UPDATE `settings` set `version` = '1.09';
+/* add comment to API  */
+ALTER TABLE `api` ADD `app_comment` TEXT  NULL; 
+
+/* Update from v 1.09 to 1.1 */
+UPDATE `settings` set `version` = '1.1';
+/* reset donations */
+UPDATE `settings` set `donate` = '0'; 
+/* add ssl/tls option for smtp mailer */
+ALTER TABLE `settingsMail` ADD `msecure` SET('none','ssl','tls')  NOT NULL  DEFAULT 'none'  AFTER `mtype`;

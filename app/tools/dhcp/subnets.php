@@ -83,7 +83,7 @@ function print_subnets ($s) {
 <br>
 
 <!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top table-td-top">
+<table id="zonesPrint" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="dhcp_subnets">
 
 <!-- Headers -->
 <thead>
@@ -99,7 +99,7 @@ function print_subnets ($s) {
 <?php
 // v4
 $html[] = "<tr>";
-$html[] = "<th colspan='4'>"._("IPv4 subnets")."</th>";
+$html[] = "<td class='th' colspan='4'>"._("IPv4 subnets")."</td>";
 $html[] = "</tr>";
 
 // IPv4 not configured
@@ -123,7 +123,7 @@ else {
 
 // v6
 $html[] = "<tr>";
-$html[] = "<th colspan='4'>"._("IPv6 subnets")."</th>";
+$html[] = "<td class='th' colspan='4'>"._("IPv6 subnets")."</td>";
 $html[] = "</tr>";
 
 // IPv6 not configured

@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -43,7 +43,7 @@ else {
 $share->details = implode("<br>", $tmp);
 
 //set code and timeframe
-@$share->code = md5(time());
+$share->code = $User->Crypto->generate_token();
 $share->validity = date("Y-m-d H:i:s", strtotime("+1 day"));
 
 # set url for printing
@@ -52,8 +52,8 @@ $url = $Result->createURL().create_link("temp_share",$share->code);
 ?>
 
 
-<link rel="stylesheet" type="text/css" href="css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-datetimepicker.min.css">
-<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/bootstrap-datetimepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">
+<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function() {
 $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
@@ -117,8 +117,8 @@ $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default btn-success" id="shareTempSubmit"><i class="fa fa-plus"></i> <?php print _("Add"); ?></button>
+		<button class='btn btn-sm btn-default submit_popup' data-script="app/tools/temp-shares/edit-result.php" data-result_div="shareTempSubmitResult" data-form='shareTempEdit'><i class="fa fa-plus"></i> <?php print _("Add"); ?></button>
 	</div>
 	<!-- Result -->
-	<div class="shareTempSubmitResult"></div>
+	<div id="shareTempSubmitResult"></div>
 </div>

@@ -130,13 +130,15 @@ class Net_DNS2_Lookups
 
     // 11-15 reserved
 
-    const RCODE_BADSIG          = 16;       // RFC 2845    
+    const RCODE_BADSIG          = 16;       // RFC 2845
+    const RCODE_BADVERS         = 16;       // RFC 6891    
     const RCODE_BADKEY          = 17;       // RFC 2845
     const RCODE_BADTIME         = 18;       // RFC 2845
     const RCODE_BADMODE         = 19;       // RFC 2930
     const RCODE_BADNAME         = 20;       // RFC 2930
     const RCODE_BADALG          = 21;       // RFC 2930
     const RCODE_BADTRUNC        = 22;       // RFC 4635
+    const RCODE_BADCOOKIE       = 23;       // RFC 7873
 
     /*
      * internal errors codes returned by the exceptions class
@@ -162,6 +164,7 @@ class Net_DNS2_Lookups
     const E_DNS_BADNAME         = self::RCODE_BADNAME;
     const E_DNS_BADALG          = self::RCODE_BADALG;
     const E_DNS_BADTRUNC        = self::RCODE_BADTRUNC;    
+    const E_DNS_BADCOOKIE       = self::RCODE_BADCOOKIE;
 
     // other error conditions
 
@@ -169,6 +172,7 @@ class Net_DNS2_Lookups
     const E_NS_INVALID_ENTRY    = 201;
     const E_NS_FAILED           = 202;
     const E_NS_SOCKET_FAILED    = 203;
+    const E_NS_INVALID_SOCKET   = 204;
 
     const E_PACKET_INVALID      = 300;
     const E_PARSE_ERROR         = 301;
@@ -184,6 +188,24 @@ class Net_DNS2_Lookups
     const E_CACHE_UNSUPPORTED   = 500;
     const E_CACHE_SHM_FILE      = 501;
     const E_CACHE_SHM_UNAVAIL   = 502;
+
+    /*
+     * EDNS0 Option Codes (OPT)
+     */
+    // 0 - Reserved
+    const EDNS0_OPT_LLQ             = 1;
+    const EDNS0_OPT_UL              = 2;
+    const EDNS0_OPT_NSID            = 3;
+    // 4 - Reserved
+    const EDNS0_OPT_DAU             = 5;
+    const EDNS0_OPT_DHU             = 6;
+    const EDNS0_OPT_N3U             = 7;
+    const EDNS0_OPT_CLIENT_SUBNET   = 8;
+    const EDNS0_OPT_EXPIRE          = 9;
+    const EDNS0_OPT_COOKIE          = 10;
+    const EDNS0_OPT_TCP_KEEPALIVE   = 11;
+    const EDNS0_OPT_PADDING         = 12;
+    const EDNS0_OPT_CHAIN           = 13;
 
     /*
      * DNSSEC Algorithms
@@ -273,8 +295,9 @@ class Net_DNS2_Lookups
         'NSEC3'         => 50,      // RFC 5155
         'NSEC3PARAM'    => 51,      // RFC 5155
         'TLSA'          => 52,      // RFC 6698
+        'SMIMEA'        => 53,      // draft-ietf-dane-smime-10
 
-                                    // 53 - 54 unassigned
+                                    // 54 unassigned
 
         'HIP'           => 55,      // RFC 5205
         'NINFO'         => 56,      // Not implemented
@@ -282,7 +305,7 @@ class Net_DNS2_Lookups
         'TALINK'        => 58,      // 
         'CDS'           => 59,      // RFC 7344
         'CDNSKEY'       => 60,      // RFC 7344
-        'OPENPGPKEY'    => 61,      // IETF (draft-ietf-dane-openpgpkey)
+        'OPENPGPKEY'    => 61,      // RFC 7929
         'CSYNC'         => 62,      // RFC 7477
 
                                     // 63 - 98 unassigned
@@ -310,8 +333,9 @@ class Net_DNS2_Lookups
         'ANY'           => 255,     // RFC 1035 - we support both 'ANY' and '*'
         'URI'           => 256,     // tools.ietf.org/html/draft-faltstrom-uri-06
         'CAA'           => 257,     // tools.ietf.org/html/draft-ietf-pkix-caa-03
+        'AVC'           => 258,     // Application Visibility and Control
 
-                                    // 258 - 32767 unassigned
+                                    // 259 - 32767 unassigned
 
         'TA'            => 32768,   // same as DS
         'DLV'           => 32769    // RFC 4431
@@ -384,6 +408,7 @@ class Net_DNS2_Lookups
         50          => 'Net_DNS2_RR_NSEC3',
         51          => 'Net_DNS2_RR_NSEC3PARAM',
         52          => 'Net_DNS2_RR_TLSA',
+        53          => 'Net_DNS2_RR_SMIMEA',
         55          => 'Net_DNS2_RR_HIP',
         58          => 'Net_DNS2_RR_TALINK',
         59          => 'Net_DNS2_RR_CDS',
@@ -407,6 +432,7 @@ class Net_DNS2_Lookups
         255         => 'Net_DNS2_RR_ANY',
         256         => 'Net_DNS2_RR_URI',
         257         => 'Net_DNS2_RR_CAA',
+        258         => 'Net_DNS2_RR_AVC',
         32768       => 'Net_DNS2_RR_TA',
         32769       => 'Net_DNS2_RR_DLV'
     );

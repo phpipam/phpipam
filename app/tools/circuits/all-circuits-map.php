@@ -78,20 +78,26 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                 <?php
                 $html        = array();
 
+                $map_marker_location_ids = array();
                 foreach ($all_locations as $k=>$location) {
                     // description and apostrophe fix
-                    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
-                    $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
+                    $description = str_replace(array("\r\n","\n","\r"), "<br>", escape_input($location->description));
+                    $description = !empty($description) ? "<span class=\'text-muted\'>".$description."</span>" : "";
 
-                    $html[] = "map.addMarker({";
-                    $html[] = " title: '$location->name',";
-                    $html[] = " lat: '$location->lat',";
-                    $html[] = " lng: '$location->long',";
-                    $html[] = $k % 2 == 0 ? " icon: 'css/".SCRIPT_PREFIX."/images/red-dot.png'," : " icon: 'css/".SCRIPT_PREFIX."/images/blue-dot.png',";
-                    $html[] = " infoWindow: {";
-                    $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>$location->name</a></h5>$location->description'";
-                    $html[] = "}";
-                    $html[] = "});";
+                    // Don't generate duplicate map markers
+                    if (!in_array($location->id, $map_marker_location_ids, true)) {
+                        array_push($map_marker_location_ids, $location->id);
+
+                        $html[] = "map.addMarker({";
+                        $html[] = " title: '". escape_input($location->name). "',";
+                        $html[] = " lat: '$location->lat',";
+                        $html[] = " lng: '$location->long',";
+                        $html[] = $k % 2 == 0 ? " icon: 'css/images/red-dot.png'," : " icon: 'css/images/blue-dot.png',";
+                        $html[] = " infoWindow: {";
+                        $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". escape_input($location->name). "</a></h5>$description'";
+                        $html[] = "}";
+                        $html[] = "});";
+                    }
 
                     if($k % 2 == 0) {
                         $html[] = "path = [[".$all_locations[$k+1]->lat.", ".$all_locations[$k+1]->long."], [".$all_locations[$k]->lat.", ".$all_locations[$k]->long."]]";

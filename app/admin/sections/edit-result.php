@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -25,7 +25,7 @@ $User->check_maintaneance_mode ();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "section", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "section", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 
@@ -87,67 +87,26 @@ if ($_POST['action']=="delete" && !isset($_POST['deleteconfirm'])) {
 # ok, update section
 else {
 
-    // init permission parameters
-    $new_permissions = array();             // permissions posted
-    $old_permissions = array();             // existing subnet permissions
-    $removed_permissions = array();         // removed permissions
-    $changed_permissions = array();         // changed permissions
-
-
     # fetch old section
     $section_old = $Sections->fetch_section ("id", $_POST['id']);
     // parse old permissions
     $old_permissions = json_decode($section_old->permissions, true);
 
+	list($removed_permissions, $changed_permissions, $new_permissions) = $Sections->get_permission_changes ((array) $_POST, $old_permissions);
+
 	# set variables for update
-	$values = array("id"=>@$_POST['id'],
-					"name"=>@$_POST['name'],
-					"description"=>@$_POST['description'],
-					"strictMode"=>@$_POST['strictMode'],
-					"subnetOrdering"=>@$_POST['subnetOrdering'],
-					"showVLAN"=>@$_POST['showVLAN'],
-					"showVRF"=>@$_POST['showVRF'],
-					"showSupernetOnly"=>@$_POST['showSupernetOnly'],
-					"masterSection"=>@$_POST['masterSection']
+	$values = array(
+					"id"               => @$_POST['id'],
+					"name"             => @$_POST['name'],
+					"description"      => @$_POST['description'],
+					"strictMode"       => @$_POST['strictMode'],
+					"subnetOrdering"   => @$_POST['subnetOrdering'],
+					"showVLAN"         => @$_POST['showVLAN'],
+					"showVRF"          => @$_POST['showVRF'],
+					"showSupernetOnly" => @$_POST['showSupernetOnly'],
+					"masterSection"    => @$_POST['masterSection'],
+					"permissions"      => json_encode($new_permissions)
 					);
-
-	# set new posted permissions
-	foreach($_POST as $key=>$val) {
-		if(substr($key, 0,5) == "group") {
-			if($val != "0") {
-				$new_permissions[substr($key,5)] = $val;
-			}
-		}
-	}
-
-    // calculate diff
-    if(is_array($old_permissions)) {
-        foreach ($old_permissions as $k1=>$p1) {
-            // if there is not permisison in new that remove old
-            if (!array_key_exists($k1, $new_permissions)) {
-                $removed_permissions[$k1] = 0;
-            }
-            // if change than save
-            elseif ($old_permissions[$k1]!==$new_permissions[$k1]) {
-                $changed_permissions[$k1] = $new_permissions[$k1];
-            }
-        }
-    }
-    // fix for adding
-    else {
-        $old_permissions = array();
-    }
-    // add also new groups if available
-    if(is_array($new_permissions)) {
-        foreach ($new_permissions as $k1=>$p1) {
-            if(!array_key_exists($k1, $old_permissions)) {
-                $changed_permissions[$k1] = $new_permissions[$k1];
-            }
-        }
-    }
-
-	// permissions for self
-	$values['permissions'] = json_encode($new_permissions);
 
 	# execute update
 	if(!$Sections->modify_section ($_POST['action'], $values, @$_POST['id']))	{ $Result->show("danger",  _("Section $_POST[action] failed"), false); }
@@ -155,7 +114,11 @@ else {
 
 	# delegate
 	if (@$_POST['delegate']==1) {
-        $Sections->delegate_section_permissions ($_POST['id'], $removed_permissions, $changed_permissions);
+		// fetch section subnets (use $subnets object to prime its cache)
+		$section_subnets = $Subnets->fetch_multiple_objects ("subnets", "sectionId", $_POST['id']);
+		if (!is_array($section_subnets)) $section_subnets = array();
+
+		// apply permission changes
+		$Subnets->set_permissions ($section_subnets, $removed_permissions, $changed_permissions);
 	}
 }
-?>

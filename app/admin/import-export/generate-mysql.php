@@ -5,7 +5,7 @@
  *********************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -40,4 +40,3 @@ header('Content-type: application/octet-stream');
 header('Content-Disposition: attachment; filename="'. $filename .'"');
 
 print($content);
-?>

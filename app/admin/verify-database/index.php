@@ -107,7 +107,7 @@ else {
 			print " <a class='btn btn-xs btn-danger modIPaddr' data-action='delete' data-id='$s->id' data-subnetId='$s->subnetId'><i class='fa fa-remove'></i></a> ";
 			print " <a class='btn btn-xs btn-default subnet-truncate' id='truncate' data-action='truncate' data-subnetId='$s->subnetId'><i class='fa fa-trash-o'></i></a>";
 			print "</div>";
-			print " $s->ip $s->dns_name (database id: $s->id)<br>";
+			print " $s->ip $s->hostname (database id: $s->id)<br>";
 		}
 	}
 }

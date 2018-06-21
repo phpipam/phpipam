@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "device_snmp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # get modified details
 $device = $Admin->strip_input_tags($_POST);
@@ -49,7 +49,7 @@ foreach($_POST as $key=>$line) {
 	}
 }
 # glue sections together
-$_POST['snmp_queries'] = sizeof($temp)>0 ? implode(";", $temp) : null;
+$_POST['snmp_queries'] = !empty($temp) ? implode(";", $temp) : null;
 
 # set update values
 $values = array(
