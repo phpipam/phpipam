@@ -180,7 +180,7 @@ class Install extends Common_functions {
 	 */
 	private function create_grants () {
 	 	# set query
-	    $query = 'grant ALL on `'. $this->db['name'] .'`.* to '. $this->db['user'] .'@localhost identified by "'. $this->db['pass'] .'";';
+	    $query = 'grant ALL on `'. $this->db['name'] .'`.* to '. $this->db['user'] .'@' .(isset($this->db['webhost']) ? '\'' .$this->db['webhost'] .'\'' : 'localhost') .' identified by "'. $this->db['pass'] .'";';
 		# execute
 		try { $this->Database_root->runQuery($query); }
 		catch (Exception $e) {	$this->Result->show("danger", $e->getMessage(), true);}
