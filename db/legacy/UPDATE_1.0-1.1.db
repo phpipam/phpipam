@@ -1,3 +1,5 @@
+/* Provided by @tsaavik https://github.com/phpipam/phpipam/pull/1873 */
+
 /* Update from v 1.00 to 1.01 **/
 UPDATE `settings` set `version` = '1.01';  /* UPDATE version */
 /* reset donations */
