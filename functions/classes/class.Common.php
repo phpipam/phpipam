@@ -1474,7 +1474,7 @@ class Common_functions  {
 		if(strlen($mac)<4)				{ return ""; }
 		if(!$this->validate_mac ($mac))	{ return ""; }
 		// reformat mac address
-		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
+		$mac = strtoupper($this->reformat_mac_address ($mac, 1));
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
 
