@@ -158,6 +158,7 @@ class Addresses_controller extends Common_api_functions  {
 	 *		- /addresses/search/{ip_address}/			 // searches for addresses in database, returns multiple if found
 	 *		- /addresses/search_hostname/{hostname}/     // searches for addresses in database by hostname, returns multiple if found
 	 *		- /addresses/search_hostbase/{hostbase}/     // searches for addresses by leading substring (base) of hostname, returns ordered multiple
+	 *      - /addresses/search_wildcard/{hostbase}/     // searches for addresses by substring (wildcard %) of hostname, returns ordered multiple
 	 *		- /addresses/search_mac/{mac}/   		     // searches for addresses by mac, returns ordered multiple
 	 *      - /addresses/first_free/{subnetId}/          // returns first available address (subnetId can be provided with parameters)
 	 *		- /addresses/custom_fields/                  // custom fields
@@ -316,6 +317,12 @@ class Addresses_controller extends Common_api_functions  {
             $target = $this->_params->id2."%";
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "hostname", $target, "hostname", true, true);
             // check result
+            if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
+            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+        }
+		elseif (@$this->_params->id=="search_wildcard") {
+            $target = $this->_params->id2;
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "dns_name", $target, "dns_name", true, true);
             if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
         }
