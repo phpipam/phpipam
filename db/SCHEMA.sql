@@ -831,4 +831,5 @@ CREATE TABLE `circuits` (
 
 # update version
 # ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.32';
+UPDATE `settings` set `version` = '1.40';
+UPDATE `settings` set `dbversion` = '1';
