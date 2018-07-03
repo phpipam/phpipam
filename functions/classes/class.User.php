@@ -963,7 +963,7 @@ class User extends Common_functions {
      */
     private function directory_connect ($authparams) {
         # adLDAP script
-        require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
+        require_once(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
         $dirparams = Array();
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
@@ -978,7 +978,7 @@ class User extends Common_functions {
             // TODO: remove legacy support at some point
             if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
             elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
-            if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
+            if (isset($authparams['adminUsername']) && isset($authparams['adminPassword'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
             }
@@ -1074,12 +1074,23 @@ class User extends Common_functions {
         $authparams = json_decode($this->authmethodparams, true);
         $this->ldap = true;                            //set ldap flag
 
-        // set uid
-        if (!empty($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
-        else                                 { $udn = 'uid=' . $username; }
-        // set DN
-        if (!empty($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
-        else                                      { $udn = $udn . "," . $authparams['base_dn']; }
+        // get DN from directory
+        $dn_authparams = $authparams;
+        if (!empty($authparams['users_base_dn'])) { $dn_authparams['base_dn'] = $authparams['users_base_dn']; }
+        $adldap = $this->directory_connect($dn_authparams);
+        $dn_user = $adldap->user()->info($username, array("cn"), false, 'LDAP');
+        if (!empty($dn_user[0]["dn"])) {
+                $udn = $dn_user[0]["dn"];
+        }
+
+        if (empty($udn)) {
+                // set uid
+                if (!empty($authparams['uid_attr'])) { $udn = $authparams['uid_attr'] . '=' . $username; }
+                else                                 { $udn = 'uid=' . $username; }
+                // set DN
+                if (!empty($authparams['users_base_dn'])) { $udn = $udn . "," . $authparams['users_base_dn']; }
+                else                                      { $udn = $udn . "," . $authparams['base_dn']; }
+        }
         // authenticate
         $this->directory_authenticate($authparams, $udn, $password);
     }
