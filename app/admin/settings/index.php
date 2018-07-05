@@ -176,6 +176,18 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Min Password length -->
+<tr>
+        <td class="title"><?php print _('Min Password length'); ?></td>
+        <td>
+                <input type="text" class="form-control input-sm" name="pwMin" value="<?php print $settings['pwMin']; ?>">
+        </td>
+        <td class="info2">
+                <?php print _('Set minimum Password length (default 8)'); ?>
+        </td>
+</tr>
+
+
 <!-- maintaneanceMode -->
 <tr>
 	<td class="title"><?php print _('Maintenance mode'); ?></td>

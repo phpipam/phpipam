@@ -922,3 +922,8 @@ ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') 
 
 /* Add database schema version field */
 ALTER TABLE `settings` ADD `dbversion` INT(8)  NOT NULL  DEFAULT '0';
+
+
+/* Add database PWMin field */
+ALTER TABLE `settings` ADD `pwMin` INT(8)  NOT NULL  DEFAULT '0';
+

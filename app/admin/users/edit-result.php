@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Script to display usermod result
  *************************************/
@@ -13,6 +12,7 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
+$settings = (array) $User->settings;
 
 # verify that user is logged in
 $User->check_user_session();
@@ -43,7 +43,7 @@ if($auth_method->type != "local") { $_POST['password1'] = ""; $_POST['password2'
 if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method->type=="local")) {
 	//checks
 	if($_POST['password1']!=$_POST['password2'])						{ $Result->show("danger", _("Passwords do not match"), true); }
-	if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
+	if(strlen($_POST['password1'])< $settings['pwMin'])									{ $Result->show("danger", _("Password must be at least ".$settings['pwMin']." characters long!"), true); }
 
 	//hash passowrd
 	$_POST['password1'] = $User->crypt_user_pass ($_POST['password1']);

@@ -161,6 +161,7 @@ CREATE TABLE `settings` (
   `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL,
   `vlanDuplicate` int(1) DEFAULT '0',
   `vlanMax` INT(8)  NULL  DEFAULT '4096',
+  `pwMin` INT(8)  NULL  DEFAULT '8',
   `subnetOrdering` varchar(16) DEFAULT 'subnet,asc',
   `visualLimit` int(2) NOT NULL DEFAULT '0',
   `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark',
