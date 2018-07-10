@@ -18,7 +18,7 @@ else {
 		$Result->show("info", _("No matches found for prefix")." ".$mac, false);
 	}
 	else {
-		$mac = strtoupper($User->reformat_mac_address ($mac, $format = 1));
+		$mac = strtoupper($User->reformat_mac_address ($mac, 1));
 		$mac_partial = explode(":", $mac);
 		// print
 		print "<div style='font-size:16px;'>Vendor: <strong>".$mac_vendor."</strong></div><hr>";

@@ -919,3 +919,6 @@ ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';
 
 /* Allow SNMPv3 to be selected for devices */
 ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') DEFAULT '0';
+
+/* Add database schema version field */
+ALTER TABLE `settings` ADD `dbversion` INT(8)  NOT NULL  DEFAULT '0';

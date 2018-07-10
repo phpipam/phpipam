@@ -99,7 +99,7 @@ else {
 		<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.min.css?v=<?php print SCRIPT_PREFIX; ?>"> -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php if ($User->user->ui_theme!="white") { ?>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php } ?>
 
 		<?php if ($User->settings->enableThreshold=="1") { ?>

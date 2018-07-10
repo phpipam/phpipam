@@ -150,7 +150,8 @@ if($User->is_admin(false)) {
 	if($User->is_admin(false) && $User->settings->dbverified==0) {
 		//check
 		if(sizeof($dberrsize = $Tools->verify_database())>0) {
-			$esize = sizeof($dberrsize['tableError']) + sizeof($dberrsize['fieldError']);
+			$esize =  isset($dberrsize['tableError']) ? sizeof($dberrsize['tableError']) : 0;
+			$esize += isset($dberrsize['fieldError']) ? sizeof($dberrsize['fieldError']) : 0;
 			print "<li>";
 			print "	<a href='".create_link("administration","verify-database")."' class='icon-li btn-danger' rel='tooltip' data-placement='bottom' title='"._('Database errors detected')."'><i class='fa fa-exclamation-triangle'></i><sup>$esize</sup></a>";
 			print "</li>";
