@@ -1518,8 +1518,6 @@ span.status {
 	width: 14px;
 	height: 14px;
 
-	border-radius: 8px;
-
 	box-shadow: 0px 0px 1px #666;
 	border: 1px solid white;
 }
@@ -1531,12 +1529,15 @@ span.status-hidden {
 }
 .status-success {
 	background: #A9C9A4;
+	border-radius: 50%;
 }
 .status-error {
 	background: #F59C99;
+	border-radius: 25%;
 }
 .status-warning {
 	background: #FFCE57;
+	border-radius: 50% 50% 25% 25%;
 }
 .status.status-padded {
 	background: transparent;

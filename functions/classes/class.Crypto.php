@@ -4,14 +4,6 @@
  * Cryptographic Code
  */
 class Crypto {
-
-    /**
-     * Set to "true" to use legacy mcrypt decrypt/encrypt functions for backwards compatibility.
-     * mcrypt support may be removed in a future release.
-     * @var bool (default: false)
-     */
-    private $use_legacy_mcrypt = true;
-
     /**
      * mcrypt cipher mode.
      * Change to MCRYPT_RIJNDAEL_128 to use AES-256 compliant RIJNDAEL algorithm (rijndael-128)
@@ -40,24 +32,28 @@ class Crypto {
      * encrypt data and base64 encode results
      * @param  string $rawdata
      * @param  string $password
+     * @param  string $encryption_library   (default value: "openssl")
      * @return string|false
      */
-    public function encrypt($rawdata, $password) {
-        if ($this->use_legacy_mcrypt === true)
+    public function encrypt($rawdata, $password, $encryption_library="openssl") {
+        if ($encryption_library === "mcrypt")
             return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
-        return $this->encrypt_using_openssl($rawdata, $password);
+        else
+            return $this->encrypt_using_openssl($rawdata, $password);
     }
 
     /**
      * decrypt base64 encoded data
      * @param  string $base64data
      * @param  string $password
+     * @param  string $encryption_library   (default value: "openssl")
      * @return string|false
      */
-    public function decrypt($base64data, $password) {
-        if ($this->use_legacy_mcrypt === true)
+    public function decrypt($base64data, $password, $encryption_library="openssl") {
+        if ($encryption_library === "mcrypt")
             return $this->decrypt_using_legacy_mcrypt($base64data, $password);
-        return $this->decrypt_using_openssl($base64data, $password);
+        else
+            return $this->decrypt_using_openssl($base64data, $password);
     }
 
     // OpenSSL
