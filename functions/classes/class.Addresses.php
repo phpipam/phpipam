@@ -385,7 +385,7 @@ class Addresses extends Common_functions {
         }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
+			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
 		}
 
 		# null empty values
@@ -457,7 +457,7 @@ class Addresses extends Common_functions {
         }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
+			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
 		}
 
 		# set primary key for update

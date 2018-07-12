@@ -204,7 +204,7 @@ class Scan extends Common_functions {
 		include(dirname(__FILE__)."/../../config.php");
 
 		// Invoked via CLI, use current php-cli binary if known (>php5.3)
-		if ( php_sapi_name() === "cli" && defined(PHP_BINARY) ) {
+		if ( php_sapi_name() === "cli" && defined('PHP_BINARY') ) {
 			$this->php_exec = PHP_BINARY;
 			return;
 		}
