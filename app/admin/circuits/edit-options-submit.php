@@ -39,15 +39,6 @@ if($_POST['type']=="type") {
 	if ($_POST['option']=="Default") 					{ $Result->show("danger", _('Default value cannot be deleted'), true); }
 }
 
-# get old field data
-//$circuit_options  = $Database->getFieldInfo ("circuits", $_POST['type']);
-# parse and remove type
-//$circuit_option_values = explode("'", str_replace(array("(", ")", ","), "", $circuit_options->Type));
-//unset($circuit_option_values[0]);
-// reindex and remove empty
-//$circuit_option_values = array_values(array_filter($circuit_option_values));
-//$circuit_options = (array) $circuit_options;
-
 # execute
 if($_POST['action']=="add") {
     if ($_POST['type']=="type") { $circuit_option_values[] = $_POST['option']; }
@@ -76,10 +67,6 @@ if($_POST['action']=="add"){
 }elseif(($_POST['action']=="delete")){
 	$query = "DELETE FROM `circuitTypes` WHERE id = $_POST[op_id]";
 }
-
-//$query = "ALTER TABLE `circuits` CHANGE `$_POST[type]` `$_POST[type]` ENUM('".implode("','", $circuit_option_values)."')  CHARACTER SET utf8  NULL  DEFAULT NULL";
-// print_r($query);
-// die('alert-danger');
 
 # execute
 try { $Database->runQuery($query); }
