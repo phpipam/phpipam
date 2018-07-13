@@ -117,15 +117,15 @@ if(sizeof($custom) > 0) {
 $values = array(
 				"id"        => $circuit['id'],
 				"cid"       => $circuit['cid'],
-  			"provider"  => $circuit['provider'],
-  			"type"      => $circuit['type'],
-  			"capacity"  => $circuit['capacity'],
-  			"status"    => $circuit['status'],
-  			"device1"   => $circuit['device1'],
-  			"location1" => $circuit['location1'],
-  			"device2"   => $circuit['device2'],
-  			"location2" => $circuit['location2'],
-  			"comment"   => $circuit['comment']
+  				"provider"  => $circuit['provider'],
+  				"type"      => $circuit['type'],
+  				"capacity"  => $circuit['capacity'],
+  				"status"    => $circuit['status'],
+  				"device1"   => $circuit['device1'],
+  				"location1" => $circuit['location1'],
+  				"device2"   => $circuit['device2'],
+  				"location2" => $circuit['location2'],
+  				"comment"   => $circuit['comment']
 				);
 # custom fields
 if(isset($update)) {
