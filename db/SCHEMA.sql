@@ -823,9 +823,9 @@ CREATE TABLE `circuits` (
   UNIQUE KEY `circuits_diff_UN` (`cid`,`differentiator`),
   KEY `location1` (`location1`),
   KEY `location2` (`location2`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# Dump of table logicalCircuit --
+# Dump of table logicalCircuit
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `logicalCircuit`;
 
@@ -837,10 +837,10 @@ CREATE TABLE `logicalCircuit` (
   `member_count` int(10) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `logicalCircuit_UN` (`logical_cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-# Dump of table logicalCircuitMapping --
+# Dump of table logicalCircuitMapping
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `logicalCircuitMapping`;
 
@@ -848,7 +848,7 @@ CREATE TABLE `logicalCircuitMapping` (
   `logicalCircuit_id` int(10) unsigned NOT NULL,
   `circuit_id` int(10) unsigned NOT NULL,
   `order` int(10) unsigned DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table circuitTypes
@@ -861,7 +861,7 @@ CREATE TABLE `circuitTypes` (
   `ctcolor` varchar(24) DEFAULT '#000000',
   `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table -- for autofix comment, leave as it is
