@@ -50,6 +50,11 @@ if(!in_array($circuit['type'], $type_id_array))									{ $Result->show("danger"
 $statuses = array ("Active", "Inactive", "Reserved");
 if(!in_array($circuit['status'], $statuses))									{ $Result->show("danger", _('Invalid status').'!', true); }
 
+#Check if circuit is part of a larger circuit
+if($_POST['action'] == 'delete' &&  !empty($Tools->fetch_all_logical_circuits_using_circuit($circuit['id']))) { $Result->show("danger", _('Circuit is currently used in a larger logical circuit').'!', true); }
+
+
+
 # process device / location
 if($circuit['device1']=="0") {
 	$circuit['device1']   = 0;
