@@ -862,7 +862,7 @@ CREATE TABLE `circuitTypes` (
   `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
+INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
