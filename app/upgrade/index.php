@@ -106,11 +106,15 @@ $User->check_user_session();
  *	LAST_POSSIBLE		 	 //last possible for upgrade
  */
 
+# default dbversion for older releases
+if(!isset($User->settings->dbversion)) {
+	$User->settings->dbversion = 0;
+}
 
 # authenticated, but not admins
 if (!$User->is_admin(false)) {
 	# version is ok
-	if ($User->settings->version == VERSION) {
+	if ($User->settings->version.$User->settings->dbversion == VERSION.DBVERSION) {
 		header("Location: ".create_link("login"));
 	}
 	# upgrade needed
@@ -122,7 +126,7 @@ if (!$User->is_admin(false)) {
 # admins that are authenticated
 elseif($User->is_admin(false)) {
 	# version ok
-	if ($User->settings->version == VERSION) {
+	if ($User->settings->version.$User->settings->dbversion == VERSION.DBVERSION) {
 		$title 	  = "Database upgrade check";
 		$content  = "<div class='alert alert-success'>Database seems up to date and doesn't need to be upgraded!</div>";
 		$content .= '<a href="'.create_link(null).'"><button class="btn btn-sm btn-default">Go to dashboard</button></a>';
@@ -133,16 +137,16 @@ elseif($User->is_admin(false)) {
 		$content  = "<div class='alert alert-danger'>Your phpIPAM version is too old to be upgraded, at least version ".LAST_POSSIBLE." is required for upgrade.</div>";
 	}
 	# upgrade needed
-	elseif ($User->settings->version < VERSION) {
+	elseif ($User->settings->version.$User->settings->dbversion < VERSION.DBVERSION) {
 		$title	  = "phpipam database upgrade required";
-		$title	 .= "<hr><div class='text-muted' style='font-size:13px;padding-top:5px;'>Database needs to be upgraded to version <strong>v".VERSION."</strong>, it seems you are using phpipam version <strong>v".$User->settings->version."</strong>!</div>";
+		$title	 .= "<hr><div class='text-muted' style='font-size:13px;padding-top:5px;'>Database needs to be upgraded to version <strong>".VERSION.".r".DBVERSION."</strong>, it seems you are using phpipam version <strong>".$User->settings->version.".r".$User->settings->dbversion."</strong>!</div>";
 
 		// automatic
 		$content  = "<h5 style='padding-top:10px;'>Automatic database upgrade</h5><hr>";
 		$content .= "<div style='padding:10px 0px;'>";
 		$content .= "<div class='alert alert-warning' style='margin-bottom:5px;'><strong>Warning!</strong> Backup database first before attempting to upgrade it! You have been warned.</div>";
 		$content .= "<span class='text-muted'>Clicking on upgrade button will automatically update database to newest version!</span>";
-		$content .= "<div class='text-right'><input type='button' class='upgrade btn btn-sm btn-default btn-success' style='margin-top:10px;' version='".$User->settings->version."' value='Upgrade phpipam database'></div>";
+		$content .= "<div class='text-right'><input type='button' class='upgrade btn btn-sm btn-default btn-success' style='margin-top:10px;' value='Upgrade phpipam database'></div>";
 		$content .= "<div id='upgradeResult'></idv>";
 		$content .= "</div>";
 
