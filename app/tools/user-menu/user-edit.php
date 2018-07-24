@@ -26,7 +26,7 @@ if(!is_numeric($_POST['lang']))                                                 
 
 # verify password if changed (not empty)
 if (strlen($_POST['password1']) != 0) {
-	if ( (strlen($_POST['password1']) < 8) && (!empty($_POST['password1'])) ) 	{ $Result->show("danger alert-absolute", _('Password must be at least 8 characters long!'), true); }
+	if ( (strlen($_POST['password1']) < $settings['pwMin']) && (!empty($_POST['password1'])) ) 	{ $Result->show("danger alert-absolute", _('Password must be at least ".$settings['pwMin']." characters long!'), true); }
 	else if ($_POST['password1'] != $_POST['password2']) 						{ $Result->show("danger alert-absolute", _('Passwords do not match!', true)); }
 }
 
