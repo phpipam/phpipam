@@ -7,7 +7,7 @@
 # use required functions
 
 /* redirect */
-if($User->settings->version < VERSION) {
+if($User->settings->dbversion < DBVERSION) {
 	$User->settings->prettyLinks="No";
 	header("Location: ".create_link("upgrade"));
 	die();

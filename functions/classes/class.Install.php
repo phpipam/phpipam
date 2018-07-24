@@ -399,7 +399,7 @@ class Install extends Common_functions {
 		# first check version
 		$this->get_settings ();
 
-		if($this->settings->version == VERSION)				{ $this->Result->show("danger", "Database already at latest version", true); }
+		if($this->settings->dbversion == DBVERSION)				{ $this->Result->show("danger", "Database already at latest version", true); }
 		else {
 			# check db connection
 			if($this->check_db_connection(false)===false)  	{ $this->Result->show("danger", "Cannot connect to database", true); }
@@ -428,34 +428,45 @@ class Install extends Common_functions {
 		$subversion_queries = str_replace("\r\n", "\n", $subversion_queries);
 		$queries = array_filter(explode(";\n", $subversion_queries));
 
-	    # execute all queries
-	    foreach($queries as $query) {
-    	    if (strlen($query)>5) {
-    			try { $this->Database->runQuery($query); }
-    			catch (Exception $e) {
-    				$this->Log = new Logging ($this->Database);
-    				# write log
-    				$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
-    				# fail
-    				print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
-    				$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
-    				$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
-    				# revert version
-    				//try { $this->Database->runQuery('update `settings` set `version` = ?', array($this->settings->version)); }
-    				//catch (Exception $e) { var_dump($e); }
-    				// false
-    				return false;
-    			}
-    			// save ok
-    			$queries_ok[] = $query;
+		# Begin transaction
+		$this->Database->beginTransaction();
+
+		try {
+			# execute all queries
+			foreach($queries as $query) {
+				if (strlen($query)>5) {
+					$this->Database->runQuery($query);
+					// save ok
+					$queries_ok[] = $query;
+				}
 			}
-	    }
 
+			$this->Database->runQuery("UPDATE `settings` SET `version` = ?", VERSION);
+			$this->Database->runQuery("UPDATE `settings` SET `dbversion` = ?", DBVERSION);
+			$this->Database->runQuery("UPDATE `settings` SET `dbverified` = ?", 0);
+			$this->Database->runQuery("UPDATE `settings` SET `donate` = ?", 0);
+		}
+		catch (Exception $e) {
+			# Something went wrong, revert all upgrade changes
+			$this->Database->rollBack();
 
-		# all good, print it
+			$this->Log = new Logging ($this->Database);
+			# write log
+			$this->Log->write( "Database upgrade", $e->getMessage()."<br>query: ".$query, 2 );
+			# fail
+			print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
+			$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
+			$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
+
+			return false;
+		}
+
+		# All good, save changes
+		$this->Database->commit();
+
 		sleep(1);
 		$this->Log = new Logging ($this->Database);
-		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version." to version ".VERSION.".".REVISION, 1 );
+		$this->Log->write( "Database upgrade", "Database schema upgraded from version ".$this->settings->dbversion." to version ".DBVERSION, 1 );
 		return true;
 	}
 
@@ -470,11 +481,12 @@ class Install extends Common_functions {
 		$queries = str_replace("\r\n", "\n", (file_get_contents( dirname(__FILE__) . '/../../db/UPDATE.sql')));
 
 		// fetch settings if not present - for manual instructions
-		if (!isset($this->settings->version)) { $this->get_settings (); }
+		if (!isset($this->settings->dbversion)) { $this->get_settings (); }
 
         // explode and loop to get next version from current
         $delimiter = false;
-        foreach (explode("/* VERSION ", $queries) as $k=>$q) {
+        $upgrade_steps = explode("/* DBVERSION ", $queries);
+        foreach ($upgrade_steps as $k=>$q) {
             $q_version = str_replace(" */", "", array_shift(explode("\n", $q)));
 
             // if delimiter was found in previous loop
@@ -483,13 +495,13 @@ class Install extends Common_functions {
                 break;
             }
             // if match with current set pointer to next item - delimiter
-            if ($q_version==$this->settings->version) {
+            if ($q_version==$this->settings->dbversion) {
                 $delimiter = true;
             };
         }
 
         // remove older queries before this version
-        $old_queries = explode("/* VERSION $delimiter */", $queries);
+        $old_queries = explode("/* DBVERSION $delimiter */", $queries);
         $old_queries = trim($old_queries[1]);
 
 		# return
