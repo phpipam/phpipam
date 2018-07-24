@@ -71,7 +71,7 @@ else {
 
         <tr>
             <th><?php print _("Description"); ?></th>
-            <td><?php print $rack->description; ?> U</td>
+            <td><?php print $rack->description; ?></td>
         </tr>
 
         <!-- Location -->
