@@ -922,3 +922,19 @@ ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') 
 
 /* Add database schema version field */
 ALTER TABLE `settings` ADD `dbversion` INT(8)  NOT NULL  DEFAULT '0';
+
+
+
+
+
+/* VERSION 1.33 */
+UPDATE `settings` set `version` = '1.32';
+UPDATE `settings` set `dbversion` = '1';
+
+/* reset db check field and donation */
+UPDATE `settings` set `dbverified` = 0;
+UPDATE `settings` set `donate` = 0;
+
+/* Add password policy */
+ALTER TABLE `settings` ADD `passwordPolicy` TEXT default '{"minLength":8,"maxLength":0,"minNumbers":0,"minLetters":0,"minLowerCase":0,"minUpperCase":0,"minSymbols":0,"maxSymbols":0,"allowedSymbols":"#,_,-,!,[,],=,~"}';
+

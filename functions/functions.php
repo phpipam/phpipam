@@ -62,7 +62,9 @@ require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class fo
 require( dirname(__FILE__) . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
 require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
 require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
-require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    // Crypto class
+require( dirname(__FILE__) . '/classes/class.Password_check.php' );	    // Class for password check
+
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {

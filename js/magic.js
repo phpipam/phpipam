@@ -1114,7 +1114,11 @@ $('form#userModSelf').submit(function () {
     $('div.userModSelfResult').hide();
 
     $.post('app/tools/user-menu/user-edit.php', selfdata, function(data) {
-        $('div.userModSelfResult').html(data).fadeIn('fast').delay(2000).fadeOut('slow');
+        $('div.userModSelfResult').html(data).fadeIn('fast');
+
+        if(data.search("danger")==-1) { $('div.userModSelfResult').delay(2000).fadeOut('slow'); hideSpinner(); }
+        else                          { hideSpinner(); }
+
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
