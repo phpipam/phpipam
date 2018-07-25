@@ -4,11 +4,17 @@
     ------------
     + Configurable password policy;
 
+    Enhancements, changes:
+    ----------------------------
+    + API:
+        + Add Mac Search for Addresses controller (#2005);
+
     Bugfixes:
     ----------------------------
     + Fix appended " U" in Rack description (#2046);
     + Fix Bandwidth calculator - 400 Bad Request. (#1807);
-    + Fix inconsistant API success value returned (#2045)
+    + API:
+        + Fix inconsistant API success value returned (#2045)
 
 == 1.3.2
 
