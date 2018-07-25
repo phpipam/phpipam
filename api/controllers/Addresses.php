@@ -158,6 +158,7 @@ class Addresses_controller extends Common_api_functions  {
 	 *		- /addresses/search/{ip_address}/			 // searches for addresses in database, returns multiple if found
 	 *		- /addresses/search_hostname/{hostname}/     // searches for addresses in database by hostname, returns multiple if found
 	 *		- /addresses/search_hostbase/{hostbase}/     // searches for addresses by leading substring (base) of hostname, returns ordered multiple
+	 *		- /addresses/search_mac/{mac}/   		     // searches for addresses by mac, returns ordered multiple
 	 *      - /addresses/first_free/{subnetId}/          // returns first available address (subnetId can be provided with parameters)
 	 *		- /addresses/custom_fields/                  // custom fields
 	 *		- /addresses/tags/						     // all tags
@@ -318,6 +319,12 @@ class Addresses_controller extends Common_api_functions  {
             if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
         }
+		 elseif (@$this->_params->id=="search_mac") {
+            $this->_params->id2 = $this->reformat_mac_address ($this->_params->id2, 1);
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "mac", $this->_params->id2, "mac");
+            // check result
+            if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
+            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
 		// false
 		else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
