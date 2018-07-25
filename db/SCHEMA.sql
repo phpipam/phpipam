@@ -828,9 +828,3 @@ CREATE TABLE `circuits` (
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
-
-
-# update version
-# ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.4';
-UPDATE `settings` set `dbversion` = '1';

@@ -207,6 +207,11 @@ class Install extends Common_functions {
 	    # formulate queries
 	    $queries = array_filter(explode(";\n", $query));
 
+	    # append version
+		$queries[] = "UPDATE `settings` SET `version` = '".VERSION."'";
+		$queries[] = "UPDATE `settings` SET `dbversion` = '".DBVERSION."'";
+		$queries[] = "UPDATE `settings` SET `dbverified` = 0";
+
 	    # execute
 	    foreach($queries as $q) {
 		    //length check
