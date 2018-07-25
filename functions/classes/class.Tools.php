@@ -2857,14 +2857,6 @@ class Tools extends Common_functions {
 
 
 
-
-
-
-
-
-
-
-
 	/**
 	 *	@misc methods
 	 *	------------------------------
@@ -2901,6 +2893,86 @@ class Tools extends Common_functions {
 		// return
 		return sizeof($circuits)>0 ? $circuits : false;
 	}
+
+	public function fetch_all_logical_circuits ($custom_circuit_fields = array ()) {
+		// set query
+		$query[] = "select";
+		$query[] = "lc.id, lc.logical_cid, lc.purpose, lc.comments, lc.member_count";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",lc.`".$f['name']."`";
+				}
+			}
+		}
+		$query[] = "from logicalCircuit as lc";
+		$query[] = "order by lc.logical_cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	public function fetch_all_logical_circuits_using_circuit ($circuit_id) {
+		// set query
+		$query[] = "select";
+		$query[] = "lc.id, lc.logical_cid, lc.purpose, lc.comments, lc.member_count";
+		// custom fields
+		if(is_array($custom_circuit_fields)) {
+			if(sizeof($custom_circuit_fields)>0) {
+				foreach ($custom_circuit_fields as $f) {
+					$query[] = ",lc.`".$f['name']."`";
+				}
+			}
+		}
+		$query[] = "from logicalCircuit as lc";
+		$query[] = "join `logicalCircuitMapping` mapping on mapping.logicalCircuit_id=lc.id";
+		$query[] = "WHERE mapping.circuit_id = $circuit_id";
+		$query[] = "order by lc.logical_cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+
+  public function fetch_all_logical_circuit_members($logical_circuit_id){
+		$query2[] = "SELECT";
+		$query2[] = "c.*";
+		$query2[] = "FROM `circuits` c";
+		$query2[] = "join `logicalCircuitMapping` mapping on mapping.circuit_id=c.id";
+		$query2[] = "where mapping.logicalCircuit_id = $logical_circuit_id";
+		$query2[] = "order by mapping.`order`;";
+
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query2), array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+
+  /**Fetch all circuit types**/
+	public function fetch_all_circuit_types(){
+		// set query
+		$query[] = "select";
+		$query[] = "id,ctname,ctcolor,ctpattern";
+		$query[] = "from circuitTypes";
+		try { $types = $this->Database->getObjectsQuery(implode("\n", $query), array()); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($types)>0 ? $types : false;
+	}
+
 
 	/**
 	 * Fetches all circuits for specific provider

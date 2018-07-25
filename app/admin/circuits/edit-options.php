@@ -35,7 +35,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 ?>
 
 <!-- header -->
-<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('curcuit option'); ?></div>
+<div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('Circuit option'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -45,21 +45,41 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 
 	<!-- option  -->
 	<tr>
-		<td><?php print _('Option'); ?></td>
+		<td><?php print _('Option Name'); ?></td>
 		<td>
 			<input type="text" name="option" class="form-control input-sm" placeholder="<?php print _('New Option'); ?>" value="<?php if(isset($_POST['value'])) print $_POST['value']; ?>" <?php print $readonly; ?>>
-            <?php if($_POST['action']=="delete") { ?>
-            <input type="hidden" name="option" value="<?php print $_POST['value']; ?>">
-            <?php } ?>
-            <input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-            <input type="hidden" name="type" value="<?php print $_POST['type']; ?>">
-            <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
+
 		</td>
 	</tr>
+	<tr>
+		<td><?php print  _('Map Color') ?></td>
+		<td>
 
+			<input type="color" name="color" id="color-picker" class="form-control input-sm" placeholder="<?php print _('Hex Color (ex. #000000)'); ?>" value="<?php if(isset($_POST['color'])) print $_POST['color']; ?>" <?php print $readonly; ?>>
+
+		</td>
+	</tr>
+	<tr>
+		<td><?php print  _('Map Pattern') ?></td>
+		<td>
+			<select name="pattern"  <?php print $readonly; ?>>
+				<option <?php if(isset($_POST['pattern']) && $_POST['pattern'] == 'Solid'){ print selected; }?>>Solid</option>
+				<option <?php if(isset($_POST['pattern']) && $_POST['pattern'] == 'Dotted'){ print selected; }?>>Dotted</option>
+			</select>
+		</td>
+	</tr>
+	<?php if($_POST['action']=="delete") { ?>
+	<input type="hidden" name="option" value="<?php print $_POST['value']; ?>">
+	<?php } ?>
+	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
+	<input type="hidden" name="type" value="<?php print $_POST['type']; ?>">
+	<input type="hidden" name="op_id" value="<?php print $_POST['op_id']; ?>">
+	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 	</table>
 	</form>
 </div>
+
+
 
 <!-- footer -->
 <div class="pFooter">

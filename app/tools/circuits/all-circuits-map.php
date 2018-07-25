@@ -1,14 +1,40 @@
 <?php
 
 // title
-print "<h4>"._('Map of all circuits')."</h4>";
+if(isset($_GET['map_specific']) && $_GET['map_specific'] == 'true'){
+  print "<h3>"._('Map of circuits')."</h3>";
+  $circuits_to_map = unserialize($_GET['circuits_to_map']);
+}else{
+  print "<h3>"._('Map of all circuits')."</h3>";
+}
 print "<hr>";
+print "<h4>"._('Circuit Type Legend')."</h2>";
 
-
-// fetch all circuits
+// fetch all circuits and types. Create a hash of the types to avoid lots of queries
 $circuits = $Tools->fetch_all_circuits();
+$circuit_types = $Tools->fetch_all_circuit_types();
+$type_hash = [];
+foreach($circuit_types as $t){
+  $type_hash[$t->id] = $t;
+  $html[] = "<a style='background:$t->ctcolor'>";
+  $html[] = "    <span class='badge badge1'  style='color:white' ></i>$t->ctname ($t->ctpattern Line)</span>";
+  $html[] = "</a>";
+}
+print implode("\n", $html);
+//var_dump($type_hash);
+//Fetch all locations and store info hash, same as above.
+//This will elimate the need of looping through circuits the first time
+$locations = $Tools->fetch_all_objects("locations");
+$all_locations = [];
+print "<br/>";
+print "<br/>";
+print "<br/>";
+foreach($locations as $l){ $all_locations[$l->id] = $l; }
+//var_dump($all_locations);
 
+//die();
 // check locations
+/***
 if($circuits!==false) {
     // all locations
     $all_locations = array ();
@@ -28,14 +54,16 @@ if($circuits!==false) {
             }
         }
     }
+    var_dump($all_locations);
 }
-
+**/
 
 // check
 if ($User->settings->enableLocations=="1" && (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0)) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
-elseif ($locA->name!=="/" && $locB->name!=="/") {
+//elseif ($locA->name!=="/" && $locB->name!=="/") { ?
+elseif(true) {
     // get all
     if(sizeof($all_locations)>0) {
         foreach ($all_locations as $k=>$l) {
@@ -73,12 +101,24 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                 });
 
                 var bounds = [];
+                var lineSymbol = {
+                    path: 'M 0,-1 0,1',
+                    strokeOpacity: 1,
+                    scale: 4
+                      };
+
+
+
 
                 // add markers
                 <?php
                 $html        = array();
 
                 $map_marker_location_ids = array();
+                //Instead of using the locations as the base of the loop, use the circuits to put more info on the map
+                //all_locations is now a hash based on database IDs, so no worry about worrying about duplicates in the array
+
+                //Add all locations to map
                 foreach ($all_locations as $k=>$location) {
                     // description and apostrophe fix
                     $description = str_replace(array("\r\n","\n","\r"), "<br>", escape_input($location->description));
@@ -98,7 +138,7 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                         $html[] = "}";
                         $html[] = "});";
                     }
-
+                    /*
                     if($k % 2 == 0) {
                         $html[] = "path = [[".$all_locations[$k+1]->lat.", ".$all_locations[$k+1]->long."], [".$all_locations[$k]->lat.", ".$all_locations[$k]->long."]]";
                         $html[] = "map.drawPolyline({";
@@ -108,9 +148,30 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                         $html[] = "  strokeWeight: 3";
                         $html[] = "});";
                     }
+                    */
                 }
+                //Add all circuits to map with type information
+                foreach ($circuits as $circuit) {
+                  //If map_spepcifc is set and its in the array OR it isn't set, map all
+                  if((isset($_GET['map_specific']) && in_array($circuit->id,$circuits_to_map)) || (!isset($_GET['map_specific']))){
+                    $html[] = "path = [[".$all_locations[$circuit->location1]->lat.", ".$all_locations[$circuit->location1]->long."], [".$all_locations[$circuit->location2]->lat.", ".$all_locations[$circuit->location2]->long."]]";
+                    $html[] = "map.drawPolyline({";
+                    $html[] = "  path: path,";
+                    $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
+                    if($type_hash[$circuit->type]->ctpattern == "Dotted") { $html[] = "  strokeOpacity: 0,"; }
+                    else{ $html[] = "  strokeOpacity: 0.6,"; }
+                    if($type_hash[$circuit->type]->ctpattern == "Dotted") {
+                      $html[] = " icons:[{
+                        icon: lineSymbol,
+                        offset: '0',
+                        repeat: '20px'
+                        }],"; }
+                    $html[] = "  strokeWeight: 3";
+                    $html[] = "});";
 
-                print implode("\n", $html);
+                    print implode("\n", $html);
+                  }
+                }
                 ?>
 
                 // fit zoom
