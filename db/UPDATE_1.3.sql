@@ -301,8 +301,6 @@ ALTER TABLE `subnets` ADD `nameserverId` int(11) NULL DEFAULT '0';
 
 /* VERSION 1.19 */
 UPDATE `settings` set `version` = '1.19';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* Czech traslation */
 INSERT INTO `lang` (`l_code`, `l_name`) VALUES ('cs_CZ', 'Czech');
@@ -518,16 +516,12 @@ INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes');
 
 /* reset db check field and donation */
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 
 
 
 /* VERSION 1.22 */
 UPDATE `settings` set `version` = '1.22';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* drop unused snmp table */
 DROP TABLE IF EXISTS `snmp`;
@@ -549,8 +543,6 @@ ALTER TABLE `users` ADD `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynam
 
 /* VERSION 1.23 */
 UPDATE `settings` set `version` = '1.23';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* change default datetime */
 ALTER TABLE `ipaddresses` CHANGE `lastSeen` `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01';
@@ -595,8 +587,6 @@ ALTER TABLE `nat` ADD `dst_port` INT(5)  NULL  DEFAULT NULL;
 
 /* VERSION 1.24 */
 UPDATE `settings` set `version` = '1.24';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* PSTN */
 ALTER TABLE `settings` ADD `enablePSTN` TINYINT(1)  NULL  DEFAULT '1';
@@ -635,8 +625,6 @@ ALTER TABLE `users` ADD `pstn` INT(1)  NULL  DEFAULT '1';
 
 /* VERSION 1.25 */
 UPDATE `settings` set `version` = '1.25';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* update languges */
 UPDATE `lang` SET `l_code` = 'en_GB.UTF8' WHERE `l_code` = 'en';
@@ -662,8 +650,6 @@ ALTER TABLE `users` DROP `printLimit`;
 
 /* VERSION 1.26 */
 UPDATE `settings` set `version` = '1.26';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* add http saml2 method */
 ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','SAML2')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';
@@ -677,8 +663,6 @@ ALTER TABLE `api` ADD `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30';
 
 /* VERSION 1.27 */
 UPDATE `settings` set `version` = '1.27';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* ad show supernet only */
 ALTER TABLE `sections` ADD `showSupernetOnly` INT(1)  NULL  DEFAULT '0';
@@ -691,8 +675,6 @@ ALTER TABLE `subnets` ADD `lastDiscovery` TIMESTAMP  NULL;
 
 /* VERSION 1.28 */
 UPDATE `settings` set `version` = '1.28';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* Extend username to 255 chars for LDAP logins */
 ALTER TABLE `users` CHANGE `username` `username` VARCHAR(255)  CHARACTER SET utf8  NOT NULL  DEFAULT '';
@@ -715,8 +697,6 @@ UPDATE `ipTags` set `updateTag`=1 where `id`=4;
 
 /* VERSION 1.29 */
 UPDATE `settings` set `version` = '1.29';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* Add maintaneanceMode identifier */
 ALTER TABLE `settings` ADD `maintaneanceMode` TINYINT(1)  NULL  DEFAULT '0';
@@ -728,8 +708,6 @@ ALTER TABLE `settings` CHANGE `hiddenCustomFields` `hiddenCustomFields` TEXT  CH
 
 /* VERSION 1.30 */
 UPDATE `settings` set `version` = '1.3';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* add option to globally enforce uniqueness */
 ALTER TABLE `settings` ADD `enforceUnique` TINYINT(1)  NULL  DEFAULT '1';
@@ -777,8 +755,6 @@ ALTER TABLE `settings` ADD `decodeMAC` TINYINT(1)  NULL  DEFAULT '1';
 
 /* VERSION 1.31 */
 UPDATE `settings` set `version` = '1.31';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
 /* Circuits flag */
 ALTER TABLE `settings` ADD `enableCircuits` TINYINT(1)  NULL  DEFAULT '1';
@@ -853,33 +829,30 @@ ALTER TABLE `circuits` ADD INDEX (`location2`);
 
 
 
-
 /* VERSION 1.32 */
 UPDATE `settings` set `version` = '1.32';
-UPDATE `settings` set `dbverified` = 0;
-UPDATE `settings` set `donate` = 0;
 
-/* Required IP fieldsg */
+-- Required IP fieldsg
 ALTER TABLE `settings` ADD `IPrequired` VARCHAR(128)  NULL  DEFAULT NULL;
 
-/* Change dns_name to hostname */
+-- Change dns_name to hostname
 ALTER TABLE `ipaddresses` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
 ALTER TABLE `requests` CHANGE `dns_name` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;
 
-/* Subnet table indexes: has_slaves(), fetch_section_subnets(), subnet_familytree_*(), verify_subnet_overlapping(), verify_vrf_overlapping()... */
+-- Subnet table indexes: has_slaves(), fetch_section_subnets(), subnet_familytree_*(), verify_subnet_overlapping(), verify_vrf_overlapping()...
 ALTER TABLE `subnets` ADD INDEX (`masterSubnetId`);
 ALTER TABLE `subnets` ADD INDEX (`sectionId`);
 ALTER TABLE `subnets` ADD INDEX (`vrfId`);
 
-/* bandwidth calculator widget */
+-- bandwidth calculator widget
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES (NULL, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes');
 
-/* add theme */
+-- add theme */
 ALTER TABLE `settings` ADD `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark';
 ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';
 
-/* Allow SNMPv3 to be selected for devices */
+-- Allow SNMPv3 to be selected for devices
 ALTER TABLE `devices` CHANGE `snmp_version` `snmp_version` SET('0','1','2','3') DEFAULT '0';
 
-/* Add database schema version field */
+-- Add database schema version field
 ALTER TABLE `settings` ADD `dbversion` INT(8)  NOT NULL  DEFAULT '0';

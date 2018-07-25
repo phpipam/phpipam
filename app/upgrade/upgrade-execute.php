@@ -58,7 +58,3 @@ if($Install->upgrade_database()===true) {
 		$User->set_maintaneance_mode (false);
 	}
 }
-else {
-	# print failure
-	$Result->show("danger", _("Failed to upgrade database! <a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>Go to administration and fix</a>"), false);
-}

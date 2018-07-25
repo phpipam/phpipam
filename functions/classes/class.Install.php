@@ -428,25 +428,32 @@ class Install extends Common_functions {
 
 		// replace CRLF
 		$subversion_queries = str_replace("\r\n", "\n", $subversion_queries);
-		$queries = array_filter(explode(";\n", $subversion_queries));
-
-		# Begin transaction
-		$this->Database->beginTransaction();
+		$queries = array_filter(explode(";", $subversion_queries));
 
 		try {
+			# Begin transaction
+			$this->Database->beginTransaction();
+
 			# execute all queries
-			foreach($queries as $query) {
-				if (strlen($query)>5) {
-					$this->Database->runQuery($query);
-					// save ok
-					$queries_ok[] = $query;
-				}
+			foreach($queries as $k=>$query) {
+				// remove comments
+				$query_filtered = trim(preg_replace("/\/\\*.+\*\//", "", $query));
+				$query_filtered = trim(preg_replace("/^--.+/", "", $query_filtered));
+				$query = trim($query);
+				// execute
+				$this->Database->runQuery($query_filtered);
+				// save ok
+				$queries_ok[] = $query;
+				// remove old
+				unset($queries[$k]);
 			}
 
 			$this->Database->runQuery("UPDATE `settings` SET `version` = ?", VERSION);
 			$this->Database->runQuery("UPDATE `settings` SET `dbversion` = ?", DBVERSION);
 			$this->Database->runQuery("UPDATE `settings` SET `dbverified` = ?", 0);
-			$this->Database->runQuery("UPDATE `settings` SET `donate` = ?", 0);
+
+			# All good, commit changes
+			$this->Database->commit();
 		}
 		catch (Exception $e) {
 			# Something went wrong, revert all upgrade changes
@@ -458,17 +465,22 @@ class Install extends Common_functions {
 			# fail
 			print "<h3>Upgrade failed !</h3><hr style='margin:30px;'>";
 			$this->Result->show("danger", $e->getMessage()."<hr>Failed query: <pre>".$query.";</pre>", false);
-			$this->Result->show("success", "Succesfull queries: <pre>".implode(";", $queries_ok).";</pre>", false);
+
+			# print failure
+			$this->Result->show("danger", _("Failed to upgrade database!"), false);
+			print "<div class='text-right'><a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>Go to administration and fix</a></div><br><hr><br>";
+
+			if(sizeof($queries_ok)>0)
+			$this->Result->show("success", "Succesfull queries: <pre>".implode(";<br>", $queries_ok).";</pre>", false);
+			if(sizeof($queries)>0)
+			$this->Result->show("warning", "Not executed queries: <pre>".implode(";<br>", $queries).";</pre>", false);
 
 			return false;
 		}
 
-		# All good, save changes
-		$this->Database->commit();
-
 
 		# all good, print it
-		sleep(1);
+		usleep(500000);
 		$this->Log = new Logging ($this->Database);
 		$this->Log->write( "Database upgrade", "Database upgraded from version ".$this->settings->version.".r".$this->settings->dbversion." to version ".VERSION.".r".DBVERSION, 1 );
 		return true;
@@ -489,7 +501,8 @@ class Install extends Common_functions {
 		// queries after 1.4
 		$queries_1_4 = $this->get_1_4_upgrade_queries ();
 		// merge
-		$old_queries = $queries_1_3 ."\n".$queries_1_4;
+		$old_queries = $queries_1_3 ."\n\n".$queries_1_4;
+
 		// return
 		return $old_queries;
 	}
