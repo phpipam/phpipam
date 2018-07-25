@@ -59,7 +59,7 @@ else															{ $Result->show("success", _("Settings updated successfully")
 
 # if required check all user sertings and force them to update password
 if(@$_POST['enforce']==1) {
-	try { $Database->runQuery("update `users` set `passChange` = 'Yes';"); }
+	try { $Database->runQuery("update `users` set `passChange` = 'Yes' where `authMethod` = 1;"); }
 	catch (Exception $e) {
 		$Result->show("danger", _('Error updateing users: ').$e->getMessage(), false);
 	}
