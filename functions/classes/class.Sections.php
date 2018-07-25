@@ -515,6 +515,9 @@ class Sections extends Common_functions {
 		# fetch all sections
 		$sections = $this->fetch_all_sections();
 
+		# init result
+		$out = array();
+
 		# loop through sections and check if group_id in permissions
         if ($sections !== false) {
     		foreach($sections as $section) {
@@ -536,9 +539,6 @@ class Sections extends Common_functions {
     				$out[$section->name] = 0;
     			}
     		}
-		}
-		else {
-    		$out = array();
 		}
 		# return
 		return $out;
