@@ -126,7 +126,7 @@ class Password_check extends Common_functions {
 	 * Returns last error when validation failed
 	 *
 	 * @method get_error
-	 * @return [type]
+	 * @return array
 	 */
 	public function get_errors () {
 		return $this->errors;
