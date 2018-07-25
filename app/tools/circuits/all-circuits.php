@@ -17,12 +17,15 @@ $User->check_user_session();
 $custom_fields = $Tools->fetch_custom_fields('circuits');
 # filter circuits or fetch print all?
 $circuits = $Tools->fetch_all_circuits($custom_fields);
+$circuit_types = $Tools->fetch_all_circuit_types();
+$type_hash = [];
+foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 
 # strip tags - XSS
 $_GET = $User->strip_input_tags ($_GET);
 
 # title
-print "<h4>"._('List of circuits')."</h4>";
+print "<h4>"._('List of physical circuits')."</h4>";
 print "<hr>";
 
 # print link to manage
@@ -85,7 +88,7 @@ else {
 		print '<tr>'. "\n";
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 		print "	<td class='description'><a href='".create_link($_GET['page'],"circuits","providers",$circuit->pid)."'>$circuit->name</a></td>";
-		print "	<td>$circuit->type</td>";
+		print "	<td>".$type_hash[$circuit->type]."</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
 		print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";

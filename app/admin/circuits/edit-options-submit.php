@@ -39,15 +39,6 @@ if($_POST['type']=="type") {
 	if ($_POST['option']=="Default") 					{ $Result->show("danger", _('Default value cannot be deleted'), true); }
 }
 
-# get old field data
-$circuit_options  = $Database->getFieldInfo ("circuits", $_POST['type']);
-# parse and remove type
-$circuit_option_values = explode("'", str_replace(array("(", ")", ","), "", $circuit_options->Type));
-unset($circuit_option_values[0]);
-// reindex and remove empty
-$circuit_option_values = array_values(array_filter($circuit_option_values));
-$circuit_options = (array) $circuit_options;
-
 # execute
 if($_POST['action']=="add") {
     if ($_POST['type']=="type") { $circuit_option_values[] = $_POST['option']; }
@@ -61,18 +52,21 @@ else {
 }
 
 # update exisiting vlaues to default
-$query = "update `circuits` set `$_POST[type]` = 'Default' where `$_POST[type]` = ?";
-# execute
-try { $Database->runQuery($query, array($_POST['option'])); }
-catch (Exception $e) {
-	$Result->show("danger", _("Error: ").$e->getMessage());
+if ($_POST['action']=="delete") {
+  $query = "update `circuits` set `type` = 1 where `type` = $_POST[op_id]";
+  # execute
+  try { $Database->runQuery($query, array($_POST['option'])); }
+  catch (Exception $e) {
+	  $Result->show("danger", _("Error: ").$e->getMessage());
+  }
 }
 
 # set query
-$query = "ALTER TABLE `circuits` CHANGE `$_POST[type]` `$_POST[type]` ENUM('".implode("','", $circuit_option_values)."')  CHARACTER SET utf8  NULL  DEFAULT NULL";
-
-// print_r($query);
-// die('alert-danger');
+if($_POST['action']=="add"){
+  $query = "INSERT INTO `circuitTypes` (ctname, ctcolor, ctpattern) VALUES('$_POST[option]', '$_POST[color]', '$_POST[pattern]');";
+}elseif(($_POST['action']=="delete")){
+	$query = "DELETE FROM `circuitTypes` WHERE id = $_POST[op_id]";
+}
 
 # execute
 try { $Database->runQuery($query); }
