@@ -189,7 +189,7 @@ CREATE TABLE `settings` (
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
   `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
-  `passwordPolicy` text DEFAULT '{"minLength":8,"maxLength":0,"minNumbers":0,"minLetters":0,"minLowerCase":0,"minUpperCase":0,"minSymbols":0,"maxSymbols":0,"allowedSymbols":"#,_,-,!,[,],=,~"}',
+  `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -833,4 +833,4 @@ CREATE TABLE `circuits` (
 # update version
 # ------------------------------------------------------------
 UPDATE `settings` set `version` = '1.4';
-UPDATE `settings` set `dbversion` = '0';
+UPDATE `settings` set `dbversion` = '1';
