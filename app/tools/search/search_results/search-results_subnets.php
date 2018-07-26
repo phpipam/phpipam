@@ -29,6 +29,7 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 	<th><?php print _('Subnet');?></th>
 	<th><?php print _('Description');?></th>
 	<th><?php print _('Master subnet');?></th>
+	<th><?php print _('Last scan');?></th>
 	<th><?php print _('VLAN');?></th>
 	<th><?php print _('VRF');?></th>
 	<th><?php print _('Requests');?></th>
@@ -93,6 +94,9 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 				print ' <td><a href="'.create_link("subnets",$line['sectionId'],$line['id']).'">'. $line['description'] .'</a></td>' . "\n";
 				//master
 				print ' <td>'. $master_text .'</td>' . "\n";
+				//last scan
+				$last_check_s = is_null($line['lastScan'])||$line['lastScan']==""||$line['lastScan']=="0000-00-00 00:00:00" ? "" : "<span class='text-muted'>"._("Last scan")." ".$line['lastScan']."</div>";
+				print ' <td>'.$last_check_s.'</td>' . "\n";
 				//vlan
 				print ' <td>'. @$vlan['number'] .'</td>' . "\n";
 				//vrf
