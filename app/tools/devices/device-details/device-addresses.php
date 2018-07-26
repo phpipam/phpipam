@@ -42,6 +42,7 @@ print "	<th>"._('Subnet')."</th>";
 print "	<th>"._('Description')."</th>";
 print "	<th></th>";
 print "	<th class='hidden-xs'>"._('Hostname')."</th>";
+print " <th class='hidden-xs'>"._('Last scan')."</th>";
 print "	<th class='hidden-xs hidden-sm'>"._('Owner')."</th>";
 print "</tr>";
 print "</thead>";
@@ -80,6 +81,7 @@ if(sizeof($addresses) > 0) {
 			print "</td>";
 
 			print "	<td class='dns hidden-xs'>$ip[hostname]</td>";
+			print " <td class='text-muted'>$ip[lastSeen]</td>"; 
 			print "	<td class='owner hidden-xs hidden-sm'>$ip[owner]</td>";
 			print "</tr>";
 

@@ -38,6 +38,9 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	else if (in_array('owner', $selected_ip_fields)) 								{ print '<th class="hidden-sm hidden-xs">'._('Owner').'</th>'. "\n"; $address_span++; }
 	else if (in_array('note', $selected_ip_fields)) 								{ print '<th></th>'. "\n"; $address_span++; }
 
+	//last scan
+	print '<th>'._('Last seen').'</th>'. "\n";
+	
 	# custom fields
 	if(sizeof($custom_address_fields) > 0) {
 		foreach($custom_address_fields as $field) {
@@ -144,6 +147,9 @@ if(sizeof($result_addresses) > 0) {
 				}
 				print '</td>'. "\n";
 			}
+			//last scan
+			$last_check = is_null($line['lastSeen'])||$line[‘lastSeen’]==””||$line[‘lastSeen’]==”0000-00-00 00:00:00” ? “” : “Last seen “ . $line[‘lastSeen’];
+			print "<td><span class='text-muted'>". $last_check."</span></td>". "\n";
 			//custom fields
 			if(sizeof($custom_address_fields) > 0) {
 				foreach($custom_address_fields as $field) {
