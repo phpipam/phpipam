@@ -138,6 +138,7 @@ if($slaves) {
 				
 				$last_check_s = is_null($slave['lastScan'])||$slave['lastScan']==""||$slave['lastScan'] == "0000-00-00 00:00:00" ? "" : "<span class='text-muted'>"._("Last scan")." ".$slave['lastScan']."</div>"; 
 				print "<td class='small'>".$last_check_s."</td>";
+
 				# print usage
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
 			    print '	<td class="small hidden-xs hidden-sm">'. $calculate['freehosts_percent'] .'</td>';
