@@ -125,6 +125,8 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	}
 	// description
 	print "<th>"._('Description')."</th>";
+	//last scan
+	print "<th><span rel='tooltip' title='"._('Sort by last seen')."'>"._('Last seen')."</span></th>";
 	// mac
 	if(in_array('mac', $selected_ip_fields)) 	{
     	$mac_title = $User->settings->enableMulticast=="1" ? "<th>MAC</th>" : "<th></th>";
@@ -359,7 +361,9 @@ else {
 
 				# print description - mandatory
 	        													  		  print "<td class='description'>".$addresses[$n]->description."</td>";
-				# Print mac address icon!
+				$last_seen = is_null($addresses[$n]->lastSeen)||$addresses[$n]->lastSeen==""||$addresses[$n]->lastSeen == "0000-00-00 00:00:00" ? "": "Last seen " . $addresses[$n]->lastSeen;
+			    	print "<td><span class='text-muted'>".$last_seen."</span></td>";
+			    # Print mac address icon!
 				if(in_array('mac', $selected_ip_fields)) {
                     # normalize MAC address
                 	if(strlen(@$addresses[$n]->mac)>0) {

@@ -86,6 +86,7 @@ if($slaves) {
 		print "	<th class='small'>"._('VRF')."</th>";
 		print "	<th class='small description'>"._('Subnet description')."</th>";
 		print "	<th>"._('Subnet')."</th>";
+		print " <th class='small'>"._('Last scan')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>"._('Used')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>% "._('Free')."</th>";
 		print "	<th class='small hidden-xs hidden-sm'>"._('Requests')."</th>";
@@ -134,6 +135,9 @@ if($slaves) {
 
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
 			    print "	<td><a href='".create_link("subnets",$section->id,$slave['id'])."'>".$Subnets->transform_address($slave['subnet'], "dotted")."/$slave[mask] $fullinfo</a></td>";
+				
+				$last_check_s = is_null($slave['lastScan'])||$slave['lastScan']==""||$slave['lastScan'] == "0000-00-00 00:00:00" ? "" : "<span class='text-muted'>"._("Last scan")." ".$slave['lastScan']."</div>"; 
+				print "<td class='small'>".$last_check_s."</td>";
 
 				# print usage
 			    print ' <td class="small hidden-xs hidden-sm">'. $calculate['used'] .'/'. $calculate['maxhosts'] .'</td>'. "\n";
