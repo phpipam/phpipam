@@ -8,8 +8,10 @@ $User->check_user_session();
 // table
 print "<table class='table table-condensed table-td-top table-auto table-noborder'>";
 
+$userPermission = $Subnets->check_permission($User->user, $subnet['id']);
+
 // add
-if($User->is_admin(false)) {
+if($userPermission == 3) {
 print "<tr>";
 print " <td colspan='4'>";
 print "     <div class='btn-group noborder' role='group' style='margin-bottom:10px;'>";
