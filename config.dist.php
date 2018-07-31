@@ -73,14 +73,6 @@ $config['resolve_verbose']             = true;       // verbose response - print
  ******************************/
 $debugging = false;
 
-
-/**
- * Allow older PHP version
- *
- * allow version < 5.4 with limited functionality
- ******************************/
-$allow_older_version = false;
-
 /*
  * API Crypt security provider. "mcrypt" or "openssl"
  *

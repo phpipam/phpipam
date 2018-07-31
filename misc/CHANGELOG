@@ -7,6 +7,8 @@
     Enhancements, changes:
     ----------------------------
     + Circuits enhancements (Virtual Circuits);
+    + Dropped support for 32bit systems;
+    + PHP 5.4 is now required;
     + API:
         + Add Mac Search for Addresses controller (#2005);
 
