@@ -826,28 +826,28 @@ CREATE TABLE `circuits` (
   KEY `location2` (`location2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# Dump of table logicalCircuit
+# Dump of table circuitsLogical
 # ------------------------------------------------------------
-DROP TABLE IF EXISTS `logicalCircuit`;
+DROP TABLE IF EXISTS `circuitsLogical`;
 
-CREATE TABLE `logicalCircuit` (
+CREATE TABLE `circuitsLogical` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `logical_cid` varchar(128) NOT NULL,
   `purpose` varchar(64) DEFAULT NULL,
   `comments` text,
-  `member_count` int(10) unsigned NOT NULL DEFAULT '0',
+  `member_count` int(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `logicalCircuit_UN` (`logical_cid`)
+  UNIQUE KEY `circuitsLogical_UN` (`logical_cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-# Dump of table logicalCircuitMapping
+# Dump of table circuitsLogicalMapping
 # ------------------------------------------------------------
-DROP TABLE IF EXISTS `logicalCircuitMapping`;
+DROP TABLE IF EXISTS `circuitsLogicalMapping`;
 
-CREATE TABLE `logicalCircuitMapping` (
-  `logicalCircuit_id` int(10) unsigned NOT NULL,
-  `circuit_id` int(10) unsigned NOT NULL,
+CREATE TABLE `circuitsLogicalMapping` (
+  `logicalCircuit_id` int(11) unsigned NOT NULL,
+  `circuit_id` int(11) unsigned NOT NULL,
   `order` int(10) unsigned DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -859,11 +859,15 @@ DROP TABLE IF EXISTS `circuitTypes`;
 CREATE TABLE `circuitTypes` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `ctname` varchar(64) NOT NULL,
-  `ctcolor` varchar(24) DEFAULT '#000000',
+  `ctcolor` varchar(7) DEFAULT '#000000',
   `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
 INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
+
+UPDATE `settings` SET `version` = "1.4";
+UPDATE `settings` SET `dbversion` = 2;

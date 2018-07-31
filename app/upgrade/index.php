@@ -5,6 +5,9 @@ include('functions/checks/check_php_build.php');		# check for support for PHP mo
 
 # verify that user is logged in
 $User->check_user_session();
+
+# initialize upgrade class
+$Upgrade = new Upgrade ($Database);
 ?>
 
 <!DOCTYPE HTML>
@@ -129,7 +132,7 @@ elseif($User->is_admin(false)) {
 	if ($User->settings->version.$User->settings->dbversion == VERSION.DBVERSION) {
 		$title 	  = "Database upgrade check";
 		$content  = "<div class='alert alert-success'>Database seems up to date and doesn't need to be upgraded!</div>";
-		$content .= '<a href="'.create_link(null).'"><button class="btn btn-sm btn-default">Go to dashboard</button></a>';
+		$content .= '<div class="text-right"><a href="'.create_link(null).'"><button class="btn btn-sm btn-default">Go to dashboard</button></a></div>';
 	}
 	# version too old
 	elseif ($User->settings->version < LAST_POSSIBLE) {
@@ -157,8 +160,8 @@ elseif($User->is_admin(false)) {
 		$content .= "<div style='display:none' id='manualShow'>";
 		$content .= "<span class='text-muted'>copy and paste below commands to mysql directly!</span>";
 		// get file
-		$install_queries = $Install->get_upgrade_queries ();
-		$content .= "<pre>".str_replace("\n","<br>",$install_queries)."</pre>";
+		$upgrade_queries = $Upgrade->get_queries ();
+		$content .= "<pre>".implode("\n", $upgrade_queries)."</pre>";
 		$content .= "</div>";
 		$content .= "</div>";
 	}

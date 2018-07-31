@@ -1,8 +1,14 @@
-/* VERSION 1.4.0 */
-UPDATE `settings` set `version` = '1.4';
-UPDATE `settings` set `dbversion` = '0';
-
-/* VERSION 1.4.1 */
-UPDATE `settings` set `dbversion` = '1';
--- Add password policy
-ALTER TABLE `settings` ADD `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}';
+/**
+ * Update queries are stored in functions/upgrade_queries.php form version 1.4 onwards
+ *
+ * If you need list of all queries output to put directly to database
+ * you can execute following php command to output queries:
+ *
+ * 		php functions/upgrade_queries.php 1.3.2
+ *
+ * where 1.3.2 is version you are currently using.
+ *
+ * To save it to file create output edirection:
+ *
+ * 		php functions/upgrade_queries.php 1.3.2 > UPDATE.sql
+ */
