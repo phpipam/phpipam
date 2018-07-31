@@ -795,6 +795,20 @@ abstract class DB {
 	}
 
 	/**
+	 * Delete a list of objects from the database based on identifier
+	 *
+	 * @method deleteObjects
+	 * @param  string $tableName
+	 * @param  string $identifier
+	 * @param  mixed $ids
+	 * @return bool
+	 */
+	public function deleteObjectsByIdentifier($tableName, $identifier = "id", $id = 0) {
+		$tableName = $this->escape($tableName);
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$identifier.'` = ?', $id);
+	}
+
+	/**
 	 * Delete specified row
 	 *
 	 * @access public

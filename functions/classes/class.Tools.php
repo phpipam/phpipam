@@ -2857,14 +2857,6 @@ class Tools extends Common_functions {
 
 
 
-
-
-
-
-
-
-
-
 	/**
 	 *	@misc methods
 	 *	------------------------------
@@ -2899,6 +2891,53 @@ class Tools extends Common_functions {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
 		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	/**
+	 * Fetches all logical circuits belonging to circuit
+	 *
+	 * @method fetch_all_logical_circuits_using_circuit
+	 * @param  int $circuit_id
+	 * @return array|false
+	 */
+	public function fetch_all_logical_circuits_using_circuit ($circuit_id) {
+		// set query
+		$query[] = "select";
+		$query[] = "lc.*";
+		$query[] = "from circuitsLogical as lc";
+		$query[] = "join `circuitsLogicalMapping` mapping on mapping.logicalCircuit_id=lc.id";
+		$query[] = "WHERE mapping.circuit_id = ?";
+		$query[] = "order by lc.logical_cid asc;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query), [$circuit_id]); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($circuits)>0 ? $circuits : false;
+	}
+
+	/**
+	 * Fetch all members of logical circuit
+	 *
+	 * @method fetch_all_logical_circuit_members
+	 * @param  int $logical_circuit_id
+	 * @return array|false
+	 */
+  	public function fetch_all_logical_circuit_members ($logical_circuit_id) {
+  		// set query
+		$query2[] = "SELECT";
+		$query2[] = "c.*";
+		$query2[] = "FROM `circuits` c";
+		$query2[] = "join `circuitsLogicalMapping` mapping on mapping.circuit_id=c.id";
+		$query2[] = "where mapping.logicalCircuit_id = ?";
+		$query2[] = "order by mapping.`order`;";
+		// fetch
+		try { $circuits = $this->Database->getObjectsQuery(implode("\n", $query2), $logical_circuit_id); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
 		return sizeof($circuits)>0 ? $circuits : false;
 	}
 

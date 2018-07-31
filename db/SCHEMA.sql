@@ -810,7 +810,7 @@ CREATE TABLE `circuits` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` varchar(128) DEFAULT NULL,
   `provider` int(11) unsigned NOT NULL,
-  `type` enum('Default','Bandwidth') DEFAULT NULL,
+  `type` int(10) unsigned DEFAULT NULL,
   `capacity` varchar(128) DEFAULT NULL,
   `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
   `device1` int(11) unsigned DEFAULT NULL,
@@ -818,13 +818,56 @@ CREATE TABLE `circuits` (
   `device2` int(11) unsigned DEFAULT NULL,
   `location2` int(11) unsigned DEFAULT NULL,
   `comment` text,
+  `parent` int(10) unsigned NOT NULL DEFAULT '0',
+  `differentiator` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `circuits_diff_UN` (`cid`,`differentiator`),
   KEY `location1` (`location1`),
-  KEY `location2` (`location2`),
-  UNIQUE KEY `cid` (`cid`)
+  KEY `location2` (`location2`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# Dump of table circuitsLogical
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitsLogical`;
+
+CREATE TABLE `circuitsLogical` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `logical_cid` varchar(128) NOT NULL,
+  `purpose` varchar(64) DEFAULT NULL,
+  `comments` text,
+  `member_count` int(4) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `circuitsLogical_UN` (`logical_cid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+# Dump of table circuitsLogicalMapping
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitsLogicalMapping`;
+
+CREATE TABLE `circuitsLogicalMapping` (
+  `logicalCircuit_id` int(11) unsigned NOT NULL,
+  `circuit_id` int(11) unsigned NOT NULL,
+  `order` int(10) unsigned DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table circuitTypes
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitTypes`;
+
+CREATE TABLE `circuitTypes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ctname` varchar(64) NOT NULL,
+  `ctcolor` varchar(7) DEFAULT '#000000',
+  `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
+
+UPDATE `settings` SET `version` = "1.4";
+UPDATE `settings` SET `dbversion` = 2;

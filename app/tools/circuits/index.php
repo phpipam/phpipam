@@ -40,6 +40,13 @@ else {
 	if($_GET['subnetId']=="providers") {
 		include("provider-details.php");
 	}
+	elseif ($_GET['subnetId']=="logical") {
+		if(isset($_GET["sPage"])){
+			include("logical-circuit-details.php");
+		}else{
+			include('logical-circuits.php');
+		}
+	}
 	// map
 	elseif ($_GET['subnetId']=="circuit_map") {
 		include('all-circuits-map.php');
