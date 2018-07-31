@@ -6,6 +6,7 @@
 
     Enhancements, changes:
     ----------------------------
+    + Circuits enhancements (Virtual Circuits);
     + API:
         + Add Mac Search for Addresses controller (#2005);
 
