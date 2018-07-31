@@ -1,19 +1,37 @@
 <?php
 
 # title
-print "<h4>"._('This circuit belongs to the following logical circuits')."</h4>";
+print "<h4>"._('Logical circuits')."</h4>";
 print "<hr>";
-
 # circuit
-print "<table class='ipaddress_subnet table-condensed table-auto'>";
+if($logical_circuits!==false){
 
+	print "<span class='text-muted'>"._("This circuit is member of the following logical circuits").":</span>";
 
-if(sizeof($logical_circuits) > 0){
-  foreach($logical_circuits as $lc){
-    print '<tr>';
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$lc->id)."'><i class='fa fa-random prefix'></i> $lc->logical_cid</a></td>";
-		print " <td>$lc->purpose</td>";
-		print "</tr>";
+	# table
+	print '<table class="table sorted table-striped table-top" data-cookie-id-table="all_logical_circuits">';
+	# headers
+	print "<thead>";
+	print '<tr>';
+	print "	<th>"._('Circuit ID')."</th>";
+	print "	<th>"._('Purpose').'</th>';
+	print "	<th>"._('Circuit Count').'</th>';
+	print '</tr>';
+	print "</thead>";
+
+	print "<tbody>";
+	foreach ($logical_circuits as $circuit) {
+		//print details
+		print '<tr>'. "\n";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
+		print "	<td>".$circuit->purpose."</td>";
+		print "	<td>".$circuit->member_count."</td>";
+		print '</tr>'. "\n";
+
 	}
+	print "</tbody>";
+	print "</table>";
 }
-print "</table>";
+else {
+	$Result->show("info", _("This circuit is not a member of any logical circuit."));
+}

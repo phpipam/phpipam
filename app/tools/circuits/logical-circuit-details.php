@@ -11,7 +11,7 @@ $User->check_user_session();
 is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
 
 # fetch circuit
-$logical_circuit = $Tools->fetch_object ("logicalCircuit", "id", $_GET['sPage']);
+$logical_circuit = $Tools->fetch_object ("circuitsLogical", "id", $_GET['sPage']);
 $member_circuits = $Tools->fetch_all_logical_circuit_members($_GET['sPage']);
 
 // back link
@@ -22,7 +22,7 @@ print "</div>";
 # print
 if($logical_circuit!==false) {
 	//get custom fields
-	$custom_fields = $Tools->fetch_custom_fields('logicalCircuit');
+	$custom_fields = $Tools->fetch_custom_fields('circuitsLogical');
 
 	// overlay
 	print "<div class='row'>";

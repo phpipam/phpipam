@@ -55,7 +55,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
     	print "	<td></td>";
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='max' data-action='edit' data-circuitid='$logical_circuit->id'><i class='fa fa-pencil'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$logical_circuit->id'><i class='fa fa-pencil'></i></a>";
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$logical_circuit->id'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print " </td>";

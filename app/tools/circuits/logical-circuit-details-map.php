@@ -3,19 +3,14 @@
 // title
 print "<h4>"._('Map')."</h4>";
 
-print "<hr>";
-print "<h4>"._('Circuit Type Legend')."</h2>";
-print "<hr>";
 
-$circuit_types = $Tools->fetch_all_circuit_types();
+// fetch and reorder circuit types
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){
   $type_hash[$t->id] = $t;
-  $html[] = "<a style='background:$t->ctcolor'>";
-  $html[] = "    <span class='badge badge1'  style='color:white' ></i>$t->ctname ($t->ctpattern Line)</span>";
-  $html[] = "</a>";
 }
-print implode("\n", $html);
+
 $locations = $Tools->fetch_all_objects("locations");
 $all_locations = [];
 $device_locations = [];
@@ -160,6 +155,15 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
         	<div id="gmap" style="width:100%; height:100%;"></div>
         </div>
 
+        <?php
+        print "<hr>";
+        print "<div class='text-right'>";
+        print "<h5>"._('Circuit Type Legend')."</h5>";
+        foreach($circuit_types as $t){
+          print "<span class='badge badge1'  style='color:white;background:$t->ctcolor !important'></i>$t->ctname ($t->ctpattern Line)</span>";
+        }
+        print "</div>";
+        ?>
 
         <?php
         # no coordinates

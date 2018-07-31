@@ -439,7 +439,6 @@ html {
         color: white;
         border: 1px solid $color_gray_5;
     }
-
     .breadcrumb {
         .active {
             color: $color_gray_4;
@@ -457,6 +456,12 @@ html {
             .btn-group {
                 border: none;
             }
+        }
+
+        .btn.btn-danger {
+            color: #fff;
+            background-color: #d9534f !important;
+            border-color: #d43f3a;
         }
     }
     .btn-default.active,

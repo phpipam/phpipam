@@ -93,3 +93,11 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 	<!-- result -->
 	<div id="circuit-option-edit-result"></div>
 </div>
+
+
+<script type="text/javascript" src="js/bootstrap-colorpicker.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-colorpicker.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+<script type="text/javascript">
+$(function(){
+    $('#color-picker').colorpicker();
+});

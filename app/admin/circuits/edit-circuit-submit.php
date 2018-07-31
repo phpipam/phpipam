@@ -40,7 +40,7 @@ if($circuit['cid'] == "") 													{ $Result->show("danger", _('Circuit ID i
 if($Tools->fetch_object("circuitProviders","id",$circuit['provider'])===false) { $Result->show("danger", _('Invalid provider').'!', true); }
 
 # validate type
-$all_types = $Tools->fetch_all_circuit_types();
+$all_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_id_array = [];
 foreach($all_types as $t){ array_push($type_id_array, $t->id); }
 

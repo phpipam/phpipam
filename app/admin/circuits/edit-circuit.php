@@ -58,8 +58,8 @@ if($circuit_providers===false) 	{
 	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
 }
 
-# get types 
-$all_types = $Tools->fetch_all_circuit_types();
+# get types
+$all_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";

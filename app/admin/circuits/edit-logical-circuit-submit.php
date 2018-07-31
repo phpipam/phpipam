@@ -24,7 +24,7 @@ if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->sho
 
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "logicalCircuit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "circuitsLogical", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 # validate action
 $Admin->validate_action ($_POST['action'], true);
 # get modified details
@@ -37,21 +37,18 @@ if($circuit['action']!="add" && !is_numeric($circuit['id'])) { $Result->show("da
 if($circuit['logical_cid'] == "") 	{ $Result->show("danger", _('Logical Circuit ID is mandatory').'!', true); }
 
 # Validate to make sure there aren't duplicates of the same circuit in the list of circuit ids
-#Create list of member circuit IDs for mapping
-$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
+# Create list of member circuit IDs for mapping
+$_POST['circuit_list'] = str_replace("undefined.", "", $_POST['circuit_list']);
+$id_list = $_POST['circuit_list']!=="" ? explode("." , rtrim($_POST['circuit_list'],".")) : [];
 if(sizeof($id_list ) != sizeof(array_unique($id_list))){  $Result->show("danger", _('Remove duplicates of circuit').'!', true); }
 
-
-
 # fetch custom fields
-$custom = $Tools->fetch_custom_fields('logicalCircuit');
+$custom = $Tools->fetch_custom_fields('circuitsLogical');
 if(sizeof($custom) > 0) {
 	foreach($custom as $myField) {
-
 		//replace possible ___ back to spaces
 		$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
 		if(isset($circuit[$myField['nameTest']])) { $circuit[$myField['name']] = $circuit[$myField['nameTest']];}
-
 		//booleans can be only 0 and 1!
 		if($myField['type']=="tinyint(1)") {
 			if($circuit[$myField['name']]>1) {
@@ -60,7 +57,6 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($circuit[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
-
 		# save to update array
 		$update[$myField['name']] = $circuit[$myField['nameTest']];
 	}
@@ -68,10 +64,10 @@ if(sizeof($custom) > 0) {
 
 # set update values
 $values = array(
-				"id"        => $circuit['id'],
-				"logical_cid"       => $circuit['logical_cid'],
-				"purpose"  => $circuit['purpose'],
-				"comments"      => $circuit['comments'],
+				"id"           => $circuit['id'],
+				"logical_cid"  => $circuit['logical_cid'],
+				"purpose"      => $circuit['purpose'],
+				"comments"     => $circuit['comments'],
 				"member_count" => sizeof($id_list)
 				);
 
@@ -80,46 +76,52 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 
-# update device
-if(!$Admin->object_modify("logicalCircuit", $circuit['action'], "id", $values))	{}
+# update circuit
+if(!$Admin->object_modify("circuitsLogical", $circuit['action'], "id", $values)) {}
+else {
+	$Result->show("success", _("Circuit $circuit[action] success!"));
 
-//If this is a new circuit, locate the ID (last_insert_id() would probably be better suited for this)
-if($circuit['id'] == ""){
-	$query[] = "select";
-	$query[] = "id";
-	$query[] = "from logicalCircuit";
-	if($circuit['id'] == "")
-	$query[] = "where logical_cid = '".$_POST['logical_cid']."';";
-
-	//error_log(implode("\n", $query));
-	try{ $db_circuit = $Database->getObjectsQuery(implode("\n", $query), array()); }
-	catch (Exception $e){
-		$Result->show("danger", $e->getMessage(), true);
+	// If this is a new circuit, save id of insert and process
+	if($circuit['id'] == "") {
+		if ($Admin->lastId==null) {
+			$Result->show("danger", _('Logical circuit added, but failed to create mapping').'!', true);
+		}
+		else {
+			$circuit['id'] = $Admin->lastId;
+		}
 	}
-	//Grab the first row circuit ID
-	$circuit['id'] = $db_circuit[0]->id;
-}
 
-if($circuit['id'] == ""){
-	$Result->show("danger", _('Logical circuit added, but failed to create mapping').'!', true);
-}else{
-	$drop_query = "DELETE FROM `logicalCircuitMapping` where `logicalCircuit_id` = ".$circuit['id'].";";
-	try { $Database->runQuery($drop_query); }
-	catch (Exception $e) {
-		$Result->show("danger", _("Error dropping mapping: ").$e->getMessage());
+	// delete
+	if($circuit['action'] != 'add') {
+		try { $Database->deleteObjectsByIdentifier("circuitsLogicalMapping", "logicalCircuit_id", $circuit['id']); }
+		catch (Exception $e) {
+			$Result->show("danger", _("Error dropping mapping: ").$e->getMessage());
+		}
 	}
-	if($circuit['action'] != 'delete'){
-		#Grab list of IDs and create list
-		$id_list = explode("." , rtrim($_POST['circuit_list'],"."));
-		$order = 0;
-		foreach($id_list as $member_id){
-			$insert_query = "INSERT INTO logicalCircuitMapping (`logicalCircuit_id`,`circuit_id`,`order`) VALUES ('$circuit[id]','$member_id','$order')";
-			try { $Database->runQuery($insert_query); }
-			catch (Exception $e) {
-				$Result->show("danger", _("Error inserting mapping: ").$e->getMessage());
+
+	// add mapping
+	// Grab list of IDs and create list
+	$order = 0;
+
+	if(sizeof($id_list)>0) {
+		foreach($id_list as $member_id) {
+			// insert values
+			$values = [
+						"logicalCircuit_id" => $circuit['id'],
+						"circuit_id"        => $member_id,
+						"order"             => $order
+					  ];
+
+			// insert to mapping
+			if(!$Admin->object_modify("circuitsLogicalMapping", "add", "id", $values)) {
+				$Result->show("danger", _("Error inserting mapping."));
 			}
 			$order++;
 		}
+		// all ok
 		$Result->show("success", _("Logical Circuit $circuit[action] successful").'!', false);
+	}
+	else {
+		$Result->show("warning", _("No Logical Circuits selected").'!', false);
 	}
 }

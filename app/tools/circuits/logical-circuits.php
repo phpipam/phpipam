@@ -14,10 +14,10 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 $User->check_user_session();
 
 # get custom fields
-$custom_fields = $Tools->fetch_custom_fields('logicalCircuit');
+$custom_fields = $Tools->fetch_custom_fields('circuitsLogical');
 # filter circuits or fetch print all?
-$circuits = $Tools->fetch_all_logical_circuits($custom_fields);
-$circuit_types = $Tools->fetch_all_circuit_types();
+$circuits = $Tools->fetch_all_objects ("circuitsLogical", "logical_cid");
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 
@@ -32,23 +32,24 @@ print "<hr>";
 print "<div class='btn-group'>";
 	// add
 	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
-    print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='max' data-action='add' data-circuitid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add logical circuit')."</a>";
+    	print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='add' data-circuitid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add logical circuit')."</a>";
 	}
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="all_logical_circuits">';
+print '<table id="userPrint" class="table sorted table-striped table-top" data-cookie-id-table="all_logical_circuits">';
 
 # headers
 print "<thead>";
 print '<tr>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Id')."'>"._('Circuit ID')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by purpose')."'>"._('Purpose').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by count of circuits')."'>"._('Circuit Count').'</span></th>';
+print "	<th>"._('Circuit ID')."</th>";
+print "	<th>"._('Purpose').'</th>';
+print "	<th>"._('Circuit Count').'</th>';
+print "	<th>"._('Members').'</th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
@@ -68,10 +69,22 @@ if($circuits===false) {
 else {
 	foreach ($circuits as $circuit) {
 		//print details
-		print '<tr>'. "\n";
-		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
+		print "<tr>";
+		print "	<td style='vertical-align:top !important;'><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->logical_cid</a></td>";
 		print "	<td>".$circuit->purpose."</td>";
 		print "	<td>".$circuit->member_count."</td>";
+		// members
+		print "	<td>";
+		$member_circuits = $Tools->fetch_all_logical_circuit_members ($circuit->id);
+		if($member_circuits!==false) {
+			foreach ($member_circuits as $mc) {
+				print "<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$mc->id)."'><i class='fa fa-random prefix' style='border:none;'></i> $mc->cid</a><br>";
+			}
+		}
+		else {
+			print "<span class='text-muted'>No members</span>";
+		}
+		print "	</td>";
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {
@@ -84,13 +97,12 @@ else {
 			}
 		}
 
-
 		// actions
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."''><i class='fa fa-eye'></i></a>";
 		if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
-		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='max' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
+		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
 		}
 		print "	</div>";
@@ -100,5 +112,4 @@ else {
 
 	}
 }
-
 print '</table>';

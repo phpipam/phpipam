@@ -17,7 +17,7 @@ $User->check_user_session();
 $custom_fields = $Tools->fetch_custom_fields('circuits');
 # filter circuits or fetch print all?
 $circuits = $Tools->fetch_all_circuits($custom_fields);
-$circuit_types = $Tools->fetch_all_circuit_types();
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){  $type_hash[$t->id] = $t->ctname; }
 
