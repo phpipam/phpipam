@@ -374,7 +374,7 @@ class Sections extends Common_functions {
 	public function fetch_section_domains ($sectionId) {
 		# first fetch all domains
 		$Admin = new Admin ($this->Database, false);
-		$domains = $Admin->fetch_all_objects ("vlanDomains");
+		$domains = $Admin->fetch_all_objects ("vlanDomains", "name");
 		# loop and check
 		$permitted = array();
 		foreach($domains as $d) {
