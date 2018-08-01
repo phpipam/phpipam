@@ -54,7 +54,7 @@ else {
 		# make upgrade and php build checks
 		include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 		include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
-		if($_GET['switch'] && $_SESSION['realipamusername'] && $_GET['switch'] == "back"){
+		if(@$_GET['switch'] && $_SESSION['realipamusername'] && @$_GET['switch'] == "back"){
 			$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
 			unset($_SESSION['realipamusername']);
 			print	'<script>window.location.href = "'.create_link(null).'";</script>';

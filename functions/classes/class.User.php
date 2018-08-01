@@ -214,14 +214,14 @@ class User extends Common_functions {
     private function register_session () {
         // not for api
         if ($this->api !== true) {
-            //set session name
-            $this->set_session_name();
-            //set debugging
-            $this->set_debugging();
-            // set default params
-            $this->set_session_ini_params ();
-            //register session
-            if(@$_SESSION===NULL) {
+            if (@$_SESSION===NULL) {
+                //set session name
+                $this->set_session_name();
+                //set debugging
+                $this->set_debugging();
+                //set default params
+                $this->set_session_ini_params ();
+                //register session
                 $this->start_session ();
             }
         }
