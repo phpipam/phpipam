@@ -619,8 +619,21 @@ $upgrade_queries["1.4.2"][] = "ALTER TABLE `circuits` MODIFY `type` INT UNSIGNED
 #
 # Subversion 1.4.3 queries
 #
+$upgrade_queries["1.4.3"][] = "-- Database version bump";
+$upgrade_queries["1.4.3"][] = "UPDATE `settings` set `dbversion` = '3';";
+$upgrade_queries["1.4.3"][] = "-- Create php_sessions table";
+$upgrade_queries["1.4.3"][] = "CREATE TABLE `php_sessions` (
+  `id` varchar(32) NOT NULL DEFAULT '',
+  `access` int(10) unsigned DEFAULT NULL,
+  `data` text NOT NULL,
+  `remote_ip` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 
+#
+# Subversion 1.4.4 queries
+#
 
 
 

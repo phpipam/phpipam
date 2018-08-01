@@ -3,6 +3,7 @@
     New features:
     ------------
     + Configurable password policy;
+    + Sessions can be now stored in database (#516);
 
     Enhancements, changes:
     ----------------------------

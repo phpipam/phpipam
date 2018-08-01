@@ -961,7 +961,7 @@ class Database_PDO extends DB {
 		$this->dbname 	= $db['name'];
 
 		$this->ssl = false;
-		if ($db['ssl']===true) {
+		if (@$db['ssl']===true) {
 
 			$this->pdo_ssl_opts = array (
 				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,

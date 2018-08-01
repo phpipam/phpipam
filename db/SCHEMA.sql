@@ -866,8 +866,22 @@ CREATE TABLE `circuitTypes` (
 /* insert default values */
 INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 
+
+# Dump of table php_sessions
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `php_sessions`;
+
+CREATE TABLE `php_sessions` (
+  `id` varchar(32) NOT NULL DEFAULT '',
+  `access` int(10) unsigned DEFAULT NULL,
+  `data` text NOT NULL,
+  `remote_ip` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 2;
+UPDATE `settings` SET `dbversion` = 3;

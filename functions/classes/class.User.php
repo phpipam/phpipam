@@ -104,15 +104,6 @@ class User extends Common_functions {
     private $ip;
 
     /**
-     * session name
-     *
-     * (default value: "phpipam")
-     *
-     * @var string
-     */
-    protected $sessname = "phpipam";
-
-    /**
      * Set allowed themes
      *
      * @var array
@@ -231,8 +222,26 @@ class User extends Common_functions {
             $this->set_session_ini_params ();
             //register session
             if(@$_SESSION===NULL) {
-                session_start();
+                $this->start_session ();
             }
+        }
+    }
+
+    /**
+     * Start session - files or use database handler
+     * @method start_session
+     * @return [type]
+     */
+    private function start_session () {
+        // check if database should be set for sessions
+        include( dirname(__FILE__).'/../../config.php' );
+        // db
+        if ($session_storage == "database") {
+            new Session_db ($this->Database);
+        }
+        // local
+        else {
+            session_start ();
         }
     }
 
@@ -253,10 +262,10 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_name () {
-        if(!isset($_SESSION)) {
-            include( dirname(__FILE__).'/../../config.php' );
-            $this->sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
-        }
+        include( dirname(__FILE__).'/../../config.php' );
+        $sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        // save
+        session_name($sessname);
     }
 
     /**
@@ -314,7 +323,7 @@ class User extends Common_functions {
     public function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
-            if( isset( $_SESSION['ipamusername'] ) && strlen( @$_SESSION['ipamusername'] )>0 ) {
+            if( strlen(@$_SESSION['ipamusername'])>0 ) {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout
