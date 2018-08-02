@@ -58,6 +58,34 @@ $('form#login').submit(function() {
     return false;
 });
 
+/*  submit login
+*********************/
+$('form#login_2fs').submit(function() {
+    //show spinner
+    showSpinner();
+    //stop all active animations
+    $('div#twofaCheck').stop(true,true);
+
+    var code = $('form#login_2fs input#2fa_code').val();
+    var csrf = $('form#login_2fs input#csrf_cookie').val();
+
+    $('div#twofaCheck').hide();
+    //post to check form
+    $.post('app/login/2fa/2fa_validate.php', {"code":code, "csrf_cookie":csrf}, function(data) {
+        $('div#twofaCheck').html(data).fadeIn('fast');
+        //reload after 2 seconds if succeeded!
+        if(data.search("alert alert-success") != -1) {
+            //search for redirect
+            if($('form#login input#phpipamredirect').length > 0) { setTimeout(function (){window.location=$('form#login_2fs input#phpipamredirect').val();}, 1000); }
+            else                                                 { setTimeout(loginRedirect, 1000); }
+        }
+        else {
+            hideSpinner();
+        }
+    });
+    return false;
+});
+
 /*	submit IP request
 *****************************************/
 $(document).on("submit", "#requestIP", function() {

@@ -296,6 +296,10 @@ class User extends Common_functions {
             $_SESSION['ipamusername'] = $this->user->username;
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
             $_SESSION['lastactive']   = time();
+            // 2fa required ?
+            if ($this->twofa) {
+                $_SESSION['2fa_required'] = true;
+            }
         }
     }
 
@@ -348,6 +352,15 @@ class User extends Common_functions {
     }
 
     /**
+     * Check if 2fa is required for user
+     * @method twofa_required
+     * @return bool
+     */
+    public function twofa_required () {
+        return isset($_SESSION['2fa_required']) ? true : false;
+    }
+
+    /**
      * Checks if current user is admin or not
      *
      * @access public
@@ -369,7 +382,7 @@ class User extends Common_functions {
      * @param bool $redirect (default: true)
      * @return string|false
      */
-    public function check_user_session ($redirect = true) {
+    public function check_user_session ($redirect = true, $ignore_2fa = false) {
         # not authenticated
         if($this->authenticated===false) {
             # set url
@@ -402,6 +415,11 @@ class User extends Common_functions {
                 header("Location:".$url.create_link ("login"));
                 die();
             }
+        }
+        # authenticated, do we need to do 2fa ?
+        elseif (isset($_SESSION['2fa_required']) && $ignore_2fa!==true) {
+            header("Location:".$url.create_link ("2fa"));
+            die();
         }
         else {
             return true;
@@ -780,6 +798,11 @@ class User extends Common_functions {
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
         $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
+
+        # 2fa
+        if ($this->user->{'2fa'}==1) {
+            $this->twofa = true;
+        }
 
         # get authentication method details
         $this->get_auth_method_type ();

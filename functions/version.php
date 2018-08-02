@@ -4,7 +4,7 @@ define("VERSION", "1.4");									//version changes if database structure change
 /* set latest version */
 define("VERSION_VISIBLE", "1.4");							//visible version in footer
 /* set latest revision */
-define("REVISION", "003");									//revision always changes, verision only if database structure changes
+define("REVISION", "005");									//revision always changes, verision only if database structure changes
 /* set database schema version */
 define("DBVERSION", "3");									//database schema version (future feature)
 /* set last possible upgrade */
