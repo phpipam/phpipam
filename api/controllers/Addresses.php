@@ -326,7 +326,7 @@ class Addresses_controller extends Common_api_functions  {
             if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
 		// false
-		else											{  $this->Response->throw_exception(400, "Invalid Id"); }
+		} else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
 
 
