@@ -264,8 +264,12 @@ class User extends Common_functions {
     private function set_session_name () {
         include( dirname(__FILE__).'/../../config.php' );
         $sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
-        // save
-        session_name($sessname);
+        // check old name
+        $old_name = session_name();
+        if ($sessname != $old_name) {
+          // save
+          session_name($sessname);
+        }
     }
 
     /**
