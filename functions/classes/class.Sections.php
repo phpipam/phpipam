@@ -571,7 +571,7 @@ class Sections extends Common_functions {
 		# check permission
 		$permission = $this->check_permission($User->user, $sectionId);
 
-		$showSupernetOnly = $showSupernetOnly===true ? '1' : '0';
+		$showSupernetOnly = $showSupernetOnly ? '1' : '0';
 
 		# permitted
 		if ($permission != 0) {
