@@ -4,6 +4,7 @@
     ------------
     + Configurable password policy;
     + Sessions can be now stored in database (#516);
+    + Two-factor authenticaiton - otp (Google Authenticator);
 
     Enhancements, changes:
     ----------------------------
