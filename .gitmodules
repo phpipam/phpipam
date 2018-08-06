@@ -1,5 +1,5 @@
 # git pull --recurse-submodules
-# git submodule update --recursive --remote
+# git submodule update --init --recursive --remote
 [submodule "functions/php-saml"]
 	path = functions/php-saml
 	url = https://github.com/onelogin/php-saml.git

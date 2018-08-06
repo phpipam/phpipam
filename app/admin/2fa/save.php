@@ -30,6 +30,10 @@ if(strlen($_POST['2fa_name'])>32 || strlen($_POST['2fa_name'])<1)			{ $Result->s
 if(!is_numeric($_POST['2fa_length']))										{ $Result->show("danger", _("Invalid value for length"), true); }
 if($_POST['2fa_length']>32 || $_POST['2fa_length']<16)						{ $Result->show("danger", _("Invalid length"), true); }
 
+// make sure all git sumbodules are included
+if (!file_exists(dirname(__FILE__)."/../../../functions/GoogleAuthenticator/PHPGangsta/GoogleAuthenticator.php"))	{ $Result->show("danger", _("GoogleAuthenticator submodule missing."), true); }
+if (!file_exists(dirname(__FILE__)."/../../../functions/qrcodejs/qrcode.js"))	{ $Result->show("danger", _("QRCode submodule missing."), true); }
+
 // change
 $_POST['2fa_userchange'] = isset($_POST['2fa_userchange']) ? $_POST['2fa_userchange'] : 0;
 
