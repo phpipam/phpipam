@@ -7,7 +7,8 @@ include('functions/checks/check_php_build.php');		# check for support for PHP mo
 $User->check_user_session(true, true);
 
 # if 2fa is not needed redirect to /
-if ($User->twofa_required()===false) {
+if ($User->twofa_required()===false || $User->user->{'2fa'}==0) {
+	unset($_SESSION['2fa_required']);
 	header("Location:".$url.create_link (null));
 }
 ?>

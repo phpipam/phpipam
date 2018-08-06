@@ -58,9 +58,9 @@ $('form#login').submit(function() {
     return false;
 });
 
-/*  submit login
+/*  Check 2fs
 *********************/
-$('form#login_2fs').submit(function() {
+function submit_2fs (showerror = true) {
     //show spinner
     showSpinner();
     //stop all active animations
@@ -71,10 +71,11 @@ $('form#login_2fs').submit(function() {
 
     $('div#twofaCheck').hide();
     //post to check form
-    $.post('app/login/2fa/2fa_validate.php', {"code":code, "csrf_cookie":csrf}, function(data) {
+    $.post('app/login/2fa/2fa_validate.php', {"code":code, "csrf_cookie":csrf, "show_error":showerror}, function(data) {
         $('div#twofaCheck').html(data).fadeIn('fast');
         //reload after 2 seconds if succeeded!
         if(data.search("alert alert-success") != -1) {
+            $('.login_2fs .btn-group').hide();
             //search for redirect
             if($('form#login input#phpipamredirect').length > 0) { setTimeout(function (){window.location=$('form#login_2fs input#phpipamredirect').val();}, 1000); }
             else                                                 { setTimeout(loginRedirect, 1000); }
@@ -83,8 +84,24 @@ $('form#login_2fs').submit(function() {
             hideSpinner();
         }
     });
+}
+
+/* Submit form */
+$('form#login_2fs').submit(function() {
+    submit_2fs (true)
     return false;
-});
+})
+
+/* Submit on keyup */
+$(document).keyup(function(e) {
+    var codevallength = $('form#login_2fs input#2fa_code').val().length
+    if(codevallength == 6) {
+        submit_2fs (true)
+    }
+    else if (codevallength > 0) {
+        $('div#twofaCheck').fadeOut('fast');
+    }
+})
 
 /*	submit IP request
 *****************************************/

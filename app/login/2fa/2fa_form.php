@@ -6,7 +6,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa_validation");
 <div id="login">
 
 <form name="login_2fs" id="login_2fs" class="form-inline" method="post">
-<div class="loginForm row">
+<div class="loginForm row login_2fs">
 
 	<!-- title -->
 	<div class="col-xs-12">
@@ -39,7 +39,7 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa_validation");
 	</div>
 
 
-	<div class="col-xs-12" style='margin-top:10px;' id="twofaCheck"></div>
+	<div class="col-xs-12" style='margin-top:10px;display:none' id="twofaCheck"></div>
 </div>
 </form>
 

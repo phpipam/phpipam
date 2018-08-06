@@ -14,9 +14,7 @@ else {
 	$ga = new PHPGangsta_GoogleAuthenticator();
 	// create secret
 	$secret = $ga->createSecret($User->settings->{'2fa_length'});
-	// get QR code
 	$username = strtolower($User->user->username)."@".$User->settings->{'2fa_name'};
-	$qrCodeUrl = $ga->getQRCodeGoogleUrl($username, $secret);
 
 	// save secret to DB
 	try {
@@ -42,7 +40,7 @@ else {
 	$html[] = '		</div>';
 	$html[] = '		<div class="text-center">';
 	$html[] = '		<hr>'._('You can also scan followign QR code with Google Authenticator application').':<br><br>';
-	$html[] = '			<img src="'.$qrCodeUrl.'" style="margin:auto"><br>';
+	$html[] = '			<div id="qrcode" style="width:200px;margin:auto;"></div>';
 	$html[] = '		</div>';
 	$html[] = '		<div class="text-right" style="margin-top:10px;">';
 	$html[] = '			<hr><a class="btn bt-sm btn-default" href="'.$url.create_link (null).'">'._('Validate').'</a>';
@@ -53,3 +51,17 @@ else {
 
 	print implode("\n", $html);
 }
+?>
+
+<!-- Show QR code -->
+<script type="text/javascript" src="functions/qrcodejs/qrcode.min.js"></script>
+<script type="text/javascript">
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+	text: "otpauth://totp/<?php print $username."?secret=".$secret; ?>",
+	width: 200,
+	height: 200,
+	colorDark : "#000000",
+	colorLight : "#ffffff",
+	correctLevel : QRCode.CorrectLevel.H
+});
+</script>

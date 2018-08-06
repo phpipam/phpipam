@@ -12,6 +12,8 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa");
 ?>
 
 
+
+
 <!-- title -->
 <h4><?php print _('2FA authentication'); ?></h4>
 <hr><br>
@@ -51,13 +53,22 @@ $csrf = $User->Crypto->csrf_cookie ("create", "2fa");
 	<td class="info2"><?php print _('Length of 2FA secret (16 to 32)'); ?></td>
 </tr>
 
+<!-- Length-->
+<tr>
+	<td><?php print _('2FA user change'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="2fa_userchange" <?php if($settings->{'2fa_userchange'} == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2"><?php print _('Can users change 2fa settings for their account'); ?></td>
+</tr>
+
 <!-- Force all users -->
 <tr>
 	<td><?php print _('Apply to all users'); ?></td>
 	<td>
 		<input type="checkbox" class="input-sm" name="2fa_force" value="On">
 	</td>
-	<td class="info2"><?php print _('Force all users to use 2fa on next login or disable 2fa for all users'); ?></td>
+	<td class="info2"><?php print _('Force all users to use 2fa on next login or disable 2fa for all users'); ?>.</td>
 </tr>
 
 <!-- Submit -->
@@ -88,7 +99,10 @@ else {
 	$twofa_users = false;
 }
 
-if ($twofa_users == false) {
+if (($User->settings->{'2fa_provider'}=="none")) {
+	$Result->show ('info', _("2fa is disabled"), false);
+}
+elseif ($twofa_users == false) {
 	$Result->show ('info', _("No users have 2fa enabled"), false);
 }
 else {
@@ -139,7 +153,7 @@ else {
 <article>
 <div style="margin-left: 40px; padding-left: 10px; border-left: 1px solid #58606b">
 2fa status legend:<br>
-	<span class='badge badge1 severity0'>Enabled</span> 2fa is enabled for user<br>
+	<span class='badge badge1 severity0'>Enabled</span> 2fa is enabled<br>
 	<span class='badge badge1 severity2'>Disabled</span> 2fa is disabled<br>
 	<span class='badge badge1 severity1'>Enabled, not activated</span> 2fa is enabled, but secret is not set. User will be given new secret upon first login.<br>
 </div>
@@ -156,4 +170,21 @@ Google Authenticator is available on following links based on your OS:
 	<li> <a href='https://itunes.apple.com/us/app/google-authenticator/id388497605?mt=8' target="_self">Apple iOS</a></li>
 	<li> <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2" target="_self">Android</a></li>
 </ul>
+You can also use Microsoft or any other otp provider.
 </article>
+
+
+
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>

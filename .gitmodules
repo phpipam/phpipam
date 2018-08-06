@@ -19,3 +19,6 @@
 [submodule "functions/GoogleAuthenticator"]
 	path = functions/GoogleAuthenticator
 	url = https://github.com/PHPGangsta/GoogleAuthenticator
+[submodule "functions/qrcodejs"]
+	path = functions/qrcodejs
+	url = https://github.com/davidshimjs/qrcodejs

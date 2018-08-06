@@ -214,7 +214,7 @@ class User extends Common_functions {
     private function register_session () {
         // not for api
         if ($this->api !== true) {
-            if (@$_SESSION===NULL) {
+            if (@$_SESSION===NULL && !isset($_SESSION)) {
                 //set session name
                 $this->set_session_name();
                 //set debugging
@@ -1323,7 +1323,8 @@ class User extends Common_functions {
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
                         "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
-                        "theme"            => $post['theme']
+                        "theme"            => $post['theme'],
+                        "2fa"              => $this->verify_checkbox(@$post['2fa']),
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
@@ -1444,10 +1445,10 @@ class User extends Common_functions {
     /**
      * adds new IP to block or updates count if already present
      *
-     * @access private
+     * @access public
      * @return bool
      */
-    private function block_ip () {
+    public function block_ip () {
         # validate IP
         if(!filter_var($this->ip, FILTER_VALIDATE_IP))    { return false; }
 

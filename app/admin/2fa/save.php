@@ -30,12 +30,16 @@ if(strlen($_POST['2fa_name'])>32 || strlen($_POST['2fa_name'])<1)			{ $Result->s
 if(!is_numeric($_POST['2fa_length']))										{ $Result->show("danger", _("Invalid value for length"), true); }
 if($_POST['2fa_length']>32 || $_POST['2fa_length']<16)						{ $Result->show("danger", _("Invalid length"), true); }
 
+// change
+$_POST['2fa_userchange'] = isset($_POST['2fa_userchange']) ? $_POST['2fa_userchange'] : 0;
+
 # set update values
 $values = [
-			"id"=>1,
-			"2fa_name"     => $_POST['2fa_name'],
-			"2fa_length"   => $_POST['2fa_length'],
-			"2fa_provider" => $_POST['2fa_provider']
+			"id"             => 1,
+			"2fa_name"       => $_POST['2fa_name'],
+			"2fa_length"     => $_POST['2fa_length'],
+			"2fa_provider"   => $_POST['2fa_provider'],
+			"2fa_userchange" => $_POST['2fa_userchange']
 			];
 // update
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), false); }
