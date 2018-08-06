@@ -78,6 +78,20 @@ abstract class DB {
 	 */
 	protected $port 	= '3306';
 
+	/**
+	 * Cache file to store all results from queries to
+	 *
+	 *  structure:
+	 *
+	 *      [table][index] = (object) $content
+	 *
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $cache = array();
 
 
 

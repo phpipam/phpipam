@@ -27,31 +27,6 @@ class Common_functions  {
 	 */
 	public $json_error = false;
 
-	/**
-	 * Cache file to store all results from queries to
-	 *
-	 *  structure:
-	 *
-	 *      [table][index] = (object) $content
-	 *
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access public
-	 */
-	public $cache = array();
-
-	/**
-	 * cache_check_exceptions
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access private
-	 */
-	private $cache_check_exceptions = array();
-
     /**
      * Default font
      *
@@ -391,13 +366,13 @@ class Common_functions  {
         // get method
         $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
-        if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$table][$identifier][$id])) {
-                $this->cache[$table][$identifier][$id] = (object) $object;
+        if ($this->cache_check_exceptions($table)===false) {
+            if (!isset($this->Database->cache[$table][$identifier][$id])) {
+                $this->Database->cache[$table][$identifier][$id] = (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
-                    $this->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
+                    $this->Database->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
                 }
             }
         }
@@ -457,7 +432,7 @@ class Common_functions  {
         // get method
         $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise return false
-        if (isset($this->cache[$table][$method][$id]))  { return (object) $this->cache[$table][$method][$id]; }
+        if (isset($this->Database->cache[$table][$method][$id]))  { return (object) $this->Database->cache[$table][$method][$id]; }
         else                                            { return false; }
     }
 
