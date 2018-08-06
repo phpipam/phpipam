@@ -541,9 +541,7 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
 		return $results;
@@ -603,9 +601,7 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
 		return $results;
