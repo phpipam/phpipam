@@ -1317,6 +1317,42 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * Optimized subnet IP address usage.
+	 *
+	 * For large nested subnets (10.0.0.0/8) we don't want to generate an Addresses->count_subnet_addresses() SQL
+	 * query for every nested subnet (possibly 10,000+). Collect and cache stats for all subnetIds once.
+	 *
+	 * @access private
+	 * @param integer $subnetId
+	 * @return integer
+	 */
+	private function get_subnet_ipaddr_count($subnetId) {
+
+		$ipaddr_usage = $this->cache_check("subnet_ipaddr_count", "1");
+
+		if($ipaddr_usage!==false) {
+			// Used cached table
+			$ipaddr_usage = (array)$ipaddr_usage;
+		} else {
+			// Generate and cache IP address usage table
+			try { $rows = $this->Database->getObjectsQuery("SELECT SQL_CACHE subnetId,COUNT(*) AS total FROM ipaddresses GROUP BY subnetId"); }
+			catch (Exception $e) {
+				$this->Result->show("danger", _("Error: ").$e->getMessage());
+				return false;
+			}
+			foreach ($rows as $row) $ipaddr_usage[$row->subnetId] = $row->total;
+
+			//Save
+			$this->cache_write("subnet_ipaddr_count", "1", (object)$ipaddr_usage);
+		}
+
+		// Ensure $ipaddr_usage[$subnetId] is not undefined.
+		if ( !isset($ipaddr_usage[$subnetId]) ) return 0;
+
+		return $ipaddr_usage[$subnetId];
+	}
+
+	/**
 	 * Calculate usage for single subnet
 	 *
 	 * @access private
@@ -1326,9 +1362,9 @@ class Subnets extends Common_functions {
 	 * @return void
 	 */
 	private function calculate_single_subnet_details ($subnet, $no_strict = false, $detailed = false) {
- 		// set IP version
+		// set IP version
 		$ip_version = $this->get_ip_version ($subnet->subnet);
-    	// no strict mode if it is_slave
+		// no strict mode if it is_slave
 		$section     = $this->fetch_object ("sections", "id", $subnet->sectionId);
 		$strict_mode = $no_strict ? false : (bool)$section->strictMode;
 
@@ -1337,24 +1373,25 @@ class Subnets extends Common_functions {
 			return (array)$cached_item;
 		}
 
-    	// init result
-    	$out = array();
+		// init result
+		$out = array();
 
 		// marked as full ?
 		if ($subnet->isFull==1) {
-     		// set values
-            $out["used"]              = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
-            $out["maxhosts"]          = $out['used'];
-            $out["freehosts"]         = 0;
-            $out["freehosts_percent"] = 0;
-            $out["Used_percent"]      = 100;
+			// set values
+			$out["used"]              = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
+			$out["maxhosts"]          = $out['used'];
+			$out["freehosts"]         = 0;
+			$out["freehosts_percent"] = 0;
+			$out["Used_percent"]      = 100;
 		}
 		else {
-    		// set values
-            $out["used"]              = gmp_strval($this->Addresses->count_subnet_addresses ($subnet->id));
-            $out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
 
-            // slaves fix for reducing subnet and broadcast address
+			// set values
+			$out["used"]              = $this->get_subnet_ipaddr_count($subnet->id);
+			$out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
+
+			// slaves fix for reducing subnet and broadcast address
 			if($ip_version=="IPv4" && !$strict_mode) {
 				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
@@ -1362,20 +1399,20 @@ class Subnets extends Common_functions {
 				if($subnet->mask<=126) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
 			}
 
-            // percentage
-            $out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
-            $out["freehosts_percent"] = round((($out['freehosts'] * 100.0) / $out['maxhosts']),2);
-            // detailed results ?
-            if ($detailed) {
-                // fetch full addresses
-                $addresses = $this->Addresses->fetch_subnet_addresses ($subnet->id);
-                // order - group by tag type
-                $tag_addresses = $this->calculate_subnet_usage_sort_addresses ($subnet, $addresses, $strict_mode);
-        	    // calculate use percentage for each address tag
-        	    foreach($this->address_types as $t) {
-        		    $out[$t['type']."_percent"] = round( ( ($tag_addresses[$t['type']] * 100.0) / $out['maxhosts']), 2 );
-        	    }
-            }
+			// percentage
+			$out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
+			$out["freehosts_percent"] = round((($out['freehosts'] * 100.0) / $out['maxhosts']),2);
+			// detailed results ?
+			if ($detailed) {
+				// fetch full addresses
+				$addresses = $this->Addresses->fetch_subnet_addresses ($subnet->id);
+				// order - group by tag type
+				$tag_addresses = $this->calculate_subnet_usage_sort_addresses ($subnet, $addresses, $strict_mode);
+				// calculate use percentage for each address tag
+				foreach($this->address_types as $t) {
+					$out[$t['type']."_percent"] = round( ( ($tag_addresses[$t['type']] * 100.0) / $out['maxhosts']), 2 );
+				}
+			}
 		}
 		# result
 		$this->cache_write("single_subnet_details", "$subnet->id n=$no_strict d=$detailed", (object)$out);
