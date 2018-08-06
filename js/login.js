@@ -60,7 +60,8 @@ $('form#login').submit(function() {
 
 /*  Check 2fs
 *********************/
-function submit_2fs (showerror = true) {
+function submit_2fs (showerror) {
+    if (typeof(showerror)==='undefined') showerror = true;
     //show spinner
     showSpinner();
     //stop all active animations
@@ -88,20 +89,20 @@ function submit_2fs (showerror = true) {
 
 /* Submit form */
 $('form#login_2fs').submit(function() {
-    submit_2fs (true)
+    submit_2fs (true);
     return false;
-})
+});
 
 /* Submit on keyup */
 $(document).keyup(function(e) {
     var codevallength = $('form#login_2fs input#2fa_code').val().length
     if(codevallength == 6) {
-        submit_2fs (true)
+        submit_2fs (true);
     }
     else if (codevallength > 0) {
         $('div#twofaCheck').fadeOut('fast');
     }
-})
+});
 
 /*	submit IP request
 *****************************************/
