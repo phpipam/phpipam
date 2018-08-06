@@ -190,6 +190,10 @@ CREATE TABLE `settings` (
   `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
   `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
   `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
+  `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none',
+  `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
+  `2fa_length` INT(2)  NULL  DEFAULT '16',
+  `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -355,6 +359,8 @@ CREATE TABLE `users` (
   `hideFreeRange` tinyint(1) DEFAULT '0',
   `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
   `menuCompact` TINYINT  NULL  DEFAULT '1',
+  `2fa` BOOL  NOT NULL  DEFAULT '0',
+  `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL,
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
@@ -884,4 +890,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 3;
+UPDATE `settings` SET `dbversion` = 4;

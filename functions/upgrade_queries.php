@@ -634,7 +634,16 @@ $upgrade_queries["1.4.3"][] = "CREATE TABLE `php_sessions` (
 #
 # Subversion 1.4.4 queries
 #
-
+$upgrade_queries["1.4.4"][] = "-- Database version bump";
+$upgrade_queries["1.4.4"][] = "UPDATE `settings` set `dbversion` = '4';";
+$upgrade_queries["1.4.4"][] = "-- Add 2fa to settings";
+$upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none';";
+$upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam';";
+$upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_length` INT(2)  NULL  DEFAULT '16';";
+$upgrade_queries["1.4.4"][] = "ALTER TABLE `settings` ADD `2fa_userchange` BOOL  NOT NULL  DEFAULT '1';";
+$upgrade_queries["1.4.4"][] = "-- Add 2fa to users";
+$upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa` BOOL  NOT NULL  DEFAULT '0';";
+$upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL;";
 
 
 

@@ -91,7 +91,7 @@ class Rewrite {
 	 * @return void
 	 */
 	private function set_api_flag () {
-		if($this->uri_parts[0]=="api") {
+		if(@$this->uri_parts[0]=="api") {
 			$this->is_api = true;
 		}
 	}

@@ -214,14 +214,14 @@ class User extends Common_functions {
     private function register_session () {
         // not for api
         if ($this->api !== true) {
-            //set session name
-            $this->set_session_name();
-            //set debugging
-            $this->set_debugging();
-            // set default params
-            $this->set_session_ini_params ();
-            //register session
-            if(@$_SESSION===NULL) {
+            if (@$_SESSION===NULL && !isset($_SESSION)) {
+                //set session name
+                $this->set_session_name();
+                //set debugging
+                $this->set_debugging();
+                //set default params
+                $this->set_session_ini_params ();
+                //register session
                 $this->start_session ();
             }
         }
@@ -300,6 +300,10 @@ class User extends Common_functions {
             $_SESSION['ipamusername'] = $this->user->username;
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
             $_SESSION['lastactive']   = time();
+            // 2fa required ?
+            if ($this->twofa) {
+                $_SESSION['2fa_required'] = true;
+            }
         }
     }
 
@@ -352,6 +356,15 @@ class User extends Common_functions {
     }
 
     /**
+     * Check if 2fa is required for user
+     * @method twofa_required
+     * @return bool
+     */
+    public function twofa_required () {
+        return isset($_SESSION['2fa_required']) ? true : false;
+    }
+
+    /**
      * Checks if current user is admin or not
      *
      * @access public
@@ -373,7 +386,7 @@ class User extends Common_functions {
      * @param bool $redirect (default: true)
      * @return string|false
      */
-    public function check_user_session ($redirect = true) {
+    public function check_user_session ($redirect = true, $ignore_2fa = false) {
         # not authenticated
         if($this->authenticated===false) {
             # set url
@@ -406,6 +419,11 @@ class User extends Common_functions {
                 header("Location:".$url.create_link ("login"));
                 die();
             }
+        }
+        # authenticated, do we need to do 2fa ?
+        elseif (isset($_SESSION['2fa_required']) && $ignore_2fa!==true) {
+            header("Location:".$url.create_link ("2fa"));
+            die();
         }
         else {
             return true;
@@ -784,6 +802,11 @@ class User extends Common_functions {
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
         $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
+
+        # 2fa
+        if ($this->user->{'2fa'}==1) {
+            $this->twofa = true;
+        }
 
         # get authentication method details
         $this->get_auth_method_type ();
@@ -1304,7 +1327,8 @@ class User extends Common_functions {
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
                         "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
-                        "theme"            => $post['theme']
+                        "theme"            => $post['theme'],
+                        "2fa"              => $this->verify_checkbox(@$post['2fa']),
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
@@ -1425,10 +1449,10 @@ class User extends Common_functions {
     /**
      * adds new IP to block or updates count if already present
      *
-     * @access private
+     * @access public
      * @return bool
      */
-    private function block_ip () {
+    public function block_ip () {
         # validate IP
         if(!filter_var($this->ip, FILTER_VALIDATE_IP))    { return false; }
 
