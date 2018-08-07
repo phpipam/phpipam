@@ -35,6 +35,7 @@ if(@$_POST['name'] == "") 												{ $Result->show("danger", _('Name is manda
 
 // set sections
 if(@$_POST['id']!=1) {
+	$temp = [];
 	foreach($_POST as $key=>$line) {
 		if (strlen(strstr($key,"section-"))>0) {
 			$key2 = str_replace("section-", "", $key);
@@ -64,5 +65,3 @@ else																		{ $Result->show("success", _("Domain $_POST[action] succes
 if($_POST['action']=="delete") {
 	$Admin->update_object_references ("vlans", "domainId", $_POST['id'], 1);
 }
-
-?>

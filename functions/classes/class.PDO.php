@@ -78,6 +78,20 @@ abstract class DB {
 	 */
 	protected $port 	= '3306';
 
+	/**
+	 * Cache file to store all results from queries to
+	 *
+	 *  structure:
+	 *
+	 *      [table][index] = (object) $content
+	 *
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $cache = array();
 
 
 
@@ -527,9 +541,7 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
 		return $results;
@@ -589,9 +601,7 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
 		return $results;
@@ -795,6 +805,20 @@ abstract class DB {
 	}
 
 	/**
+	 * Delete a list of objects from the database based on identifier
+	 *
+	 * @method deleteObjects
+	 * @param  string $tableName
+	 * @param  string $identifier
+	 * @param  mixed $ids
+	 * @return bool
+	 */
+	public function deleteObjectsByIdentifier($tableName, $identifier = "id", $id = 0) {
+		$tableName = $this->escape($tableName);
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$identifier.'` = ?', $id);
+	}
+
+	/**
 	 * Delete specified row
 	 *
 	 * @access public
@@ -947,7 +971,7 @@ class Database_PDO extends DB {
 		$this->dbname 	= $db['name'];
 
 		$this->ssl = false;
-		if ($db['ssl']===true) {
+		if (@$db['ssl']===true) {
 
 			$this->pdo_ssl_opts = array (
 				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,

@@ -8,7 +8,7 @@ require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Install 	= new Install ($Database);
+$Upgrade 	= new Upgrade ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -22,14 +22,9 @@ $User->is_admin(true);
 $User->set_maintaneance_mode (true);
 
 # try to upgrade database
-if($Install->upgrade_database()===true) {
+if($Upgrade->upgrade_database()===true) {
 	# print success
 	$Result->show("success", _("Database upgraded successfully! <a class='btn btn-sm btn-default' href='".create_link('dashboard')."'>Dashboard</a>"), false);
-
-    // migrate resolve_subnets
-    if(VERSION <= "1.32") {
-	    $User->migrate_resolve_subnets ();
-	}
 
 	# check for possible errors
 	if(sizeof($errors = $Tools->verify_database())>0) {
@@ -62,8 +57,4 @@ if($Install->upgrade_database()===true) {
 		# remove maintaneance mode
 		$User->set_maintaneance_mode (false);
 	}
-}
-else {
-	# print failure
-	$Result->show("danger", _("Failed to upgrade database! <a class='btn btn-sm btn-default' href='".create_link('administration', "verify-database")."'>Go to administration and fix</a>"), false);
 }

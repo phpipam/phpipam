@@ -189,12 +189,17 @@ CREATE TABLE `settings` (
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
   `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
+  `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
+  `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none',
+  `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
+  `2fa_length` INT(2)  NULL  DEFAULT '16',
+  `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `settings` (`id`, `siteTitle`, `siteAdminName`, `siteAdminMail`, `siteDomain`, `siteURL`, `domainAuth`, `enableIPrequests`, `enableVRF`, `enableDNSresolving`, `version`, `donate`, `IPfilter`, `vlanDuplicate`, `subnetOrdering`, `visualLimit`)
 VALUES
-	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.1', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
+	(1, 'phpipam IP address management', 'Sysadmin', 'admin@domain.local', 'domain.local', 'http://yourpublicurl.com', 0, 0, 0, 0, '1.4', 0, 'mac;owner;state;switch;note;firewallAddressObject', 1, 'subnet,asc', 24);
 
 
 # Dump of table settingsMail
@@ -354,6 +359,8 @@ CREATE TABLE `users` (
   `hideFreeRange` tinyint(1) DEFAULT '0',
   `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
   `menuCompact` TINYINT  NULL  DEFAULT '1',
+  `2fa` BOOL  NOT NULL  DEFAULT '0',
+  `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL,
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
@@ -809,7 +816,7 @@ CREATE TABLE `circuits` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `cid` varchar(128) DEFAULT NULL,
   `provider` int(11) unsigned NOT NULL,
-  `type` enum('Default','Bandwidth') DEFAULT NULL,
+  `type` int(10) unsigned DEFAULT NULL,
   `capacity` varchar(128) DEFAULT NULL,
   `status` enum('Active','Inactive','Reserved') NOT NULL DEFAULT 'Active',
   `device1` int(11) unsigned DEFAULT NULL,
@@ -817,18 +824,70 @@ CREATE TABLE `circuits` (
   `device2` int(11) unsigned DEFAULT NULL,
   `location2` int(11) unsigned DEFAULT NULL,
   `comment` text,
+  `parent` int(10) unsigned NOT NULL DEFAULT '0',
+  `differentiator` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE KEY `circuits_diff_UN` (`cid`,`differentiator`),
   KEY `location1` (`location1`),
-  KEY `location2` (`location2`),
-  UNIQUE KEY `cid` (`cid`)
+  KEY `location2` (`location2`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# Dump of table circuitsLogical
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitsLogical`;
+
+CREATE TABLE `circuitsLogical` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `logical_cid` varchar(128) NOT NULL,
+  `purpose` varchar(64) DEFAULT NULL,
+  `comments` text,
+  `member_count` int(4) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `circuitsLogical_UN` (`logical_cid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table circuitsLogicalMapping
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitsLogicalMapping`;
+
+CREATE TABLE `circuitsLogicalMapping` (
+  `logicalCircuit_id` int(11) unsigned NOT NULL,
+  `circuit_id` int(11) unsigned NOT NULL,
+  `order` int(10) unsigned DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table circuitTypes
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `circuitTypes`;
+
+CREATE TABLE `circuitTypes` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `ctname` varchar(64) NOT NULL,
+  `ctcolor` varchar(7) DEFAULT '#000000',
+  `ctpattern` enum('Solid','Dotted') DEFAULT 'Solid',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/* insert default values */
+INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
+
+
+# Dump of table php_sessions
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `php_sessions`;
+
+CREATE TABLE `php_sessions` (
+  `id` varchar(32) NOT NULL DEFAULT '',
+  `access` int(10) unsigned DEFAULT NULL,
+  `data` text NOT NULL,
+  `remote_ip` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-
-# update version
-# ------------------------------------------------------------
-UPDATE `settings` set `version` = '1.32';
+UPDATE `settings` SET `version` = "1.4";
+UPDATE `settings` SET `dbversion` = 4;

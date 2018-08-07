@@ -1,7 +1,32 @@
+== 1.4
+
+    New features:
+    ------------
+    + Configurable password policy;
+    + Sessions can be now stored in database (#516);
+    + Two-factor authenticaiton - otp (Google Authenticator);
+
+    Enhancements, changes:
+    ----------------------------
+    + Circuits enhancements (Virtual Circuits);
+    + Dropped support for 32bit systems;
+    + PHP 5.4 is now required;
+    + API:
+        + Add Mac Search for Addresses controller (#2005);
+
+    Bugfixes:
+    ----------------------------
+    + Fix appended " U" in Rack description (#2046);
+    + Fix Bandwidth calculator - 400 Bad Request. (#1807);
+    + API:
+        + Fix inconsistant API success value returned (#2045);
+
 == 1.3.2
 
     Enhancements, changes:
     ----------------------------
+    + Dark theme added;
+    + Full php7.2 compatibility;
     + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
     + Search for matching subnet in all VRFs feature enabled when importing addresses;
     + Added new config option to show custom fields separated from standard fields when editing IP address;

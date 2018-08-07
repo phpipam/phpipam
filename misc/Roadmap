@@ -7,13 +7,9 @@ https://github.com/phpipam/phpipam/milestone/2
         #33   2FA
         #30   DNS Update to Active Directory DNS
         #149  LDAP login requires a local user of same name
-        #442  Efficiency
-        #762  Auto Updation to Latest Stable version
         #849  Move to ADLDAP2 as submodule (#791)
               + CSV import tab with fields;
-        #829  Provide Dockerfile (#311)
         #684  Bulk/range edit non-contiguous IP addresses
-        #516  PHP sessions in database
         #728  "X.in-addr.arpa" reverse zone support
         #598  Section for vlans domain (Layer2)
         #858  swagger for clients/api docs
@@ -22,7 +18,6 @@ https://github.com/phpipam/phpipam/milestone/2
         #109  IP deletion request for non administrative users
         #1068 Custom section and other fields
         #1023 Location tags, subnet tags, ...
-        #998  User credentials security constraints are too tight and not configurable
 
     API:
         #800  Changelog Doesn't Track Changes Made Via API

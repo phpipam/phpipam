@@ -374,7 +374,7 @@ class Sections extends Common_functions {
 	public function fetch_section_domains ($sectionId) {
 		# first fetch all domains
 		$Admin = new Admin ($this->Database, false);
-		$domains = $Admin->fetch_all_objects ("vlanDomains");
+		$domains = $Admin->fetch_all_objects ("vlanDomains", "name");
 		# loop and check
 		$permitted = array();
 		foreach($domains as $d) {
@@ -515,6 +515,9 @@ class Sections extends Common_functions {
 		# fetch all sections
 		$sections = $this->fetch_all_sections();
 
+		# init result
+		$out = array();
+
 		# loop through sections and check if group_id in permissions
         if ($sections !== false) {
     		foreach($sections as $section) {
@@ -536,9 +539,6 @@ class Sections extends Common_functions {
     				$out[$section->name] = 0;
     			}
     		}
-		}
-		else {
-    		$out = array();
 		}
 		# return
 		return $out;
@@ -571,7 +571,7 @@ class Sections extends Common_functions {
 		# check permission
 		$permission = $this->check_permission($User->user, $sectionId);
 
-		$showSupernetOnly = $showSupernetOnly===true ? '1' : '0';
+		$showSupernetOnly = $showSupernetOnly ? '1' : '0';
 
 		# permitted
 		if ($permission != 0) {

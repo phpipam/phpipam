@@ -54,5 +54,3 @@ if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
 else {
 	$Result->show("danger", _('Please enter your username and password'), true);
 }
-
-?>
