@@ -120,7 +120,7 @@ $(document).ready(function(){
 			<select name="type" class="form-control input-w-auto input-sm">
 				<?php
 				foreach ($all_types as $type) {
-					$selected = $circuit->type == $type ? "selected" : "";
+					$selected = $circuit->type == $type->id ? "selected" : "";
 					print "<option value='$type->id' $selected>$type->ctname</option>";
 				}
 				?>
