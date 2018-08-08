@@ -30,7 +30,9 @@ else {
 	print "	<th>"._('Description')."</th>";
 	print "	<th>"._('Section')."</th>";
 	print "	<th>"._('Hosts check')."</th>";
+	print " <th>"._('Date')."</th>";
 	print "	<th>"._('Discover')."</th>";
+	print " <th>"._('Date')."</th>";
 	print "	<th>"._('Resolve DNS names')."</th>";
 	print "	<th></th>";
 	print "</tr>";
@@ -78,7 +80,9 @@ else {
 					print "	<td>$subnet->description</td>";
 					print "	<td>$section->name ($section->description)</td>";
 					print "	<td>$status_check</td>";
+					print " <td class='text-muted'>$subnet->lastSeen</td>";
 					print "	<td>$discovery</td>";
+					print " <td class='text-muted'>$subnet->lastDiscovery</td>"; 
 					print "	<td>$dns</td>";
 
 

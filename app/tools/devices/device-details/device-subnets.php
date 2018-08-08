@@ -28,6 +28,7 @@ print "<tr>";
 print "	<th>"._('Subnet')."</th>";
 print "	<th>"._('Section')."</th>";
 print "	<th>"._('Description')."</th>";
+print " <th>"._('Last scan')."</th>";
 print "	<th>"._('VLAN')."</th>";
 print "</tr>";
 print "</thead>";
@@ -51,6 +52,7 @@ if ($subnets !== false ) {
 			print "	<td class='ip'><a href='".create_link("subnets",$section['id'],$s->id)."'>".$Subnets->transform_to_dotted($s->subnet)."/".$s->mask."</a></td>";
 			print "	<td class='ip'><a href='".create_link("subnets",$section['id'])."'>".$section['description']."</a></td>";
 			print "	<td class='port'>".$s->description."</td>";
+			print " <td class='text-muted'>". $s->lastDiscovery."</td>"; 
 			print "	<td class='description'>".@$vlan->number ." ".@$vlan->description."</td>";
 
 			// add count
