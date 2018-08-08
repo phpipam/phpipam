@@ -335,32 +335,33 @@ function update_hidden_input(){
 			<th>Point B</th>
 		</thead>
 		<tbody>
-		<?php
-		//Loop through and create list of circuits to choose from
-		//Also, open up links in a new window to not interrupt creation
-		foreach($all_circuits as $circuit) {
-			// reformat locations
-			$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
-			$locationA_html = "<span class='text-muted'>Not set</span>";
-			if($locationA!==false) {
-				$locationA_html = "<a href='".create_link('tools',$locationA['type'],$locationA['id'])."' target='_blank'>$locationA[name]</a>";
-			}
-
-			$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
-			$locationB_html = "<span class='text-muted'>Not set</span>";
-			if($locationB!==false) {
-				$locationB_html = "<a href='".create_link('tools',$locationB['type'],$locationB['id'])."' target='_blank'>$locationB[name]</a>";
-			}
-
-			print '<tr>'. "\n";
-			print " <td><input class='id' type='hidden' value='$circuit->id'><a name='addbtn' class='btn btn-xs btn-success' rel='tooltip' title='Add to logical circuit'><i class='fa fa-plus'></i></a></td>";
-			print "	<td><a class='btn btn-xs btn-default' href='".create_link('tools',"circuits",$circuit->id)."' target='_blank'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
-			print "	<td>".$type_hash[$circuit->type]."</td>";
-			print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
-			print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
-			print '</tr>'. "\n";
+	<?php
+	//Loop through and create list of circuits to choose from
+	//Also, open up links in a new window to not interrupt creation
+    if($all_circuits){
+      foreach($all_circuits as $circuit) {
+        // reformat locations
+        $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
+        $locationA_html = "<span class='text-muted'>Not set</span>";
+        if($locationA!==false) {
+		  $locationA_html = "<a href='".create_link('tools',$locationA['type'],$locationA['id'])."' target='_blank'>$locationA[name]</a>";
 		}
-		?>
+		$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
+		$locationB_html = "<span class='text-muted'>Not set</span>";
+		if($locationB!==false) {
+		  $locationB_html = "<a href='".create_link('tools',$locationB['type'],$locationB['id'])."' target='_blank'>$locationB[name]</a>";
+        }
+
+		print '<tr>'. "\n";
+		print " <td><input class='id' type='hidden' value='$circuit->id'><a name='addbtn' class='btn btn-xs btn-success' rel='tooltip' title='Add to logical circuit'><i class='fa fa-plus'></i></a></td>";
+		print "	<td><a class='btn btn-xs btn-default' href='".create_link('tools',"circuits",$circuit->id)."' target='_blank'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
+		print "	<td>".$type_hash[$circuit->type]."</td>";
+		print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
+		print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
+		print '</tr>'. "\n";
+	  }
+	}
+	?>
 	</tbody>
 	</table>
 </div>
