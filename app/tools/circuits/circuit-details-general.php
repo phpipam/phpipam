@@ -39,6 +39,11 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	print "	<td>$circuit->capacity</td>";
 	print "</tr>";
 
+    print '<tr>';
+    print "	<th>". _('Comment').'</th>';
+    print "	<td>$circuit->comment</td>";
+    print "</tr>";
+
 	if(sizeof($custom_fields) > 0) {
 
     	print "<tr>";
