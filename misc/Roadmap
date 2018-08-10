@@ -18,6 +18,7 @@ https://github.com/phpipam/phpipam/milestone/2
         #109  IP deletion request for non administrative users
         #1068 Custom section and other fields
         #1023 Location tags, subnet tags, ...
+        Ping history graph
 
     API:
         #800  Changelog Doesn't Track Changes Made Via API
