@@ -20,7 +20,7 @@ else {
 	# if not install fetch settings etc
 	if($_GET['page']!="install" ) {
 		# database object
-		$Database 	= new Database_PDO;
+		if (!is_object($Database)) $Database = new Database_PDO;
 
 		# check if this is a new installation
 		require('functions/checks/check_db_install.php');
