@@ -1274,9 +1274,7 @@ class Subnets extends Common_functions {
 		$this->get_addresses_types();
 
 		$cached_item = $this->cache_check("subnet_usage", "$subnet->id d=$detailed");
-		if($cached_item!==false) {
-			return (array)$cached_item;
-		}
+		if(is_object($cached_item)) return $cached_item->result;
 
     	// is slaves
     	if ($this->has_slaves ($subnet->id)) {
@@ -1312,7 +1310,7 @@ class Subnets extends Common_functions {
             $subnet_usage = $this->calculate_single_subnet_details ($subnet, false, $detailed);
     	}
     	// return usage
-    	$this->cache_write("subnet_usage", "$subnet->id d=$detailed", (object)$subnet_usage);
+    	$this->cache_write("subnet_usage", "$subnet->id d=$detailed", (object)["result" => $subnet_usage]);
     	return $subnet_usage;
 	}
 
@@ -1328,28 +1326,29 @@ class Subnets extends Common_functions {
 	 */
 	private function get_subnet_ipaddr_count($subnetId) {
 
-		$ipaddr_usage = $this->cache_check("subnet_ipaddr_count", "1");
+		$cached_item = $this->cache_check("subnet_ipaddr_count", "1");
 
-		if($ipaddr_usage!==false) {
-			// Used cached table
-			$ipaddr_usage = (array)$ipaddr_usage;
+		if(is_object($cached_item)) {
+			// Use cached array
+			$ipaddr_usage = $cached_item->result;
 		} else {
+			// Generate usage array
+			$ipaddr_usage = [];
+
 			// Generate and cache IP address usage table
 			try { $rows = $this->Database->getObjectsQuery("SELECT SQL_CACHE subnetId,COUNT(*) AS total FROM ipaddresses GROUP BY subnetId"); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
+				return 0;
 			}
 			foreach ($rows as $row) $ipaddr_usage[$row->subnetId] = $row->total;
 
 			//Save
-			$this->cache_write("subnet_ipaddr_count", "1", (object)$ipaddr_usage);
+			$this->cache_write("subnet_ipaddr_count", "1", (object)["result" => $ipaddr_usage]);
 		}
 
-		// Ensure $ipaddr_usage[$subnetId] is not undefined.
-		if ( !isset($ipaddr_usage[$subnetId]) ) return 0;
-
-		return $ipaddr_usage[$subnetId];
+		// Ensure $ipaddr_usage[$subnetId] is defined.
+		return isset($ipaddr_usage[$subnetId]) ? $ipaddr_usage[$subnetId] : 0;
 	}
 
 	/**
@@ -1369,9 +1368,7 @@ class Subnets extends Common_functions {
 		$strict_mode = $no_strict ? false : (bool)$section->strictMode;
 
 		$cached_item = $this->cache_check("single_subnet_details", "$subnet->id n=$no_strict d=$detailed");
-		if($cached_item!==false) {
-			return (array)$cached_item;
-		}
+		if(is_object($cached_item)) return $cached_item->result;
 
 		// init result
 		$out = array();
@@ -1415,7 +1412,7 @@ class Subnets extends Common_functions {
 			}
 		}
 		# result
-		$this->cache_write("single_subnet_details", "$subnet->id n=$no_strict d=$detailed", (object)$out);
+		$this->cache_write("single_subnet_details", "$subnet->id n=$no_strict d=$detailed", (object)["result" => $out]);
 		return $out;
 	}
 
@@ -2871,9 +2868,7 @@ class Subnets extends Common_functions {
 
 		# Check cached result
 		$cached_item = $this->cache_check('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId");
-		if($cached_item!==false) {
-			return $cached_item->result;
-		}
+		if(is_object($cached_item)) return $cached_item->result;
 
 		$subnetP = json_decode(@$subnet->permissions, true);
 
@@ -2919,7 +2914,7 @@ class Subnets extends Common_functions {
 		}
 
 		# return result
-		$this->cache_write('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId", array('result'=>$out));
+		$this->cache_write('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId", (object)["result" => $out]);
 		return $out;
 	}
 
