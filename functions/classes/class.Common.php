@@ -149,6 +149,10 @@ class Common_functions  {
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
+
+		$cached_item = $this->cache_check("fetch_all_objects", "t=$table f=$sortField o=$sortAsc");
+		if(is_object($cached_item)) return $cached_item->result;
+
 		# fetch
 		try { $res = $this->Database->getObjects($table, $sortField, $sortAsc); }
 		catch (Exception $e) {
@@ -162,7 +166,9 @@ class Common_functions  {
     		}
 		}
 		# result
-		return sizeof($res)>0 ? $res : false;
+		$result = sizeof($res)>0 ? $res : false;
+		$this->cache_write("fetch_all_objects", "t=$table f=$sortField o=$sortAsc", (object)["result" => $result]);
+		return $result;
 	}
 
 	/**
