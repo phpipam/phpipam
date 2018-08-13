@@ -13,7 +13,7 @@ is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
 # fetch circuit
 $logical_circuit = $Tools->fetch_object ("circuitsLogical", "id", $_GET['sPage']);
 $member_circuits = $Tools->fetch_all_logical_circuit_members($_GET['sPage']);
-
+$mapping_circuits = $member_circuits;
 // back link
 print "<div'>";
 print "<a class='btn btn-sm btn-default' href='".create_link("tools","circuits", "logical")."' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('All Logical circuits')."</a>";
@@ -48,8 +48,8 @@ if($logical_circuit!==false) {
 		//
 		print "<div class='col-xs-12 col-md-6'>";
 		if($User->settings->enableLocations==1) {
-		print "<div class='col-xs-12'>";
-		include("logical-circuit-details-map.php");
+		print "<div  style='height:400px' class='col-xs-12'>";
+		include("circuit-mapping.php");
 	    print "</div>";
 		}
 	    print "</div>";

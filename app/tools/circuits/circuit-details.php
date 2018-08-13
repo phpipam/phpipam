@@ -12,6 +12,7 @@ is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true)
 
 # fetch circuit
 $circuit = $Tools->fetch_object ("circuits", "id", $_GET['subnetId']);
+$mapping_circuits[] = $circuit;
 
 // back link
 print "<div'>";
@@ -52,8 +53,8 @@ if($circuit!==false) {
 		//
 		print "<div class='col-xs-12 col-md-6'>";
 		if($User->settings->enableLocations==1) {
-		print "<div class='col-xs-12'>";
-		include("circuit-details-map.php");
+		print "<div  style='height:400px'   class='col-xs-12'>";
+		include("circuit-mapping.php");
 	    print "</div>";
 		}
 	    print "</div>";
