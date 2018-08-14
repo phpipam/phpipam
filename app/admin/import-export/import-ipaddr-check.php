@@ -59,7 +59,7 @@ foreach ($all_sections as $section) {
 
 	# skip empty sections
 	if (sizeof($section_subnets)==0) { continue; }
-	
+
 	foreach ($section_subnets as $subnet) {
 		$subnet = (array) $subnet;
 
@@ -69,7 +69,7 @@ foreach ($all_sections as $section) {
 		# store needed subnet information
 		$subnet_data[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']] = $subnet;
 		$subnet_data[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']]['type'] = $Subnets->identify_address($subnet['ip']);
-		
+
 		# grab IP addresses
 		$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 
@@ -116,13 +116,12 @@ foreach ($data as &$cdata) {
 	}
 
 	# if the subnet contains "/", split it in network and mask
-	#if ($action != "error" && (empty($cdata['subnet'])) {
 	if ( ($action != "error") && (!empty($cdata['subnet'])) ) {
 		if (preg_match("/\//", $cdata['subnet'])) {
 			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
-		} 
+		}
 		else { $msg.= "The subnet needs to have the mask defined as /BM (Bit Mask)"; $action = "error"; }
 		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
 			$msg.="Invalid network mask format."; $action = "error";
@@ -131,7 +130,6 @@ foreach ($data as &$cdata) {
 			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.="Invalid IPv6 network mask."; $action = "error"; }
 		}
 	}
-
 
 	# Check if section is provided and valid and link it if it is
 	if (!isset($section_names[strtolower($cdata['section'])])) {
@@ -207,10 +205,10 @@ foreach ($data as &$cdata) {
 		$cdata['state'] = 2;
 	}
 
-	
+
 	# Verify gateway
 	if (in_array(strtolower($cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
-	
+
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
 		if ((!empty($cdata['dns_name'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['dns_name']))) { $msg.="Invalid DNS name."; $action = "error"; }
