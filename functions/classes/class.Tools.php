@@ -3118,6 +3118,37 @@ class Tools extends Common_functions {
 		return sizeof($domains)>0 ? $domains : false;
 	}
 
+	public function fetch_customer_objects ($customer_id) {
+		// out
+		$out = [];
+		// fetch
+		foreach ($this->get_customer_object_types() as $table=>$name) {
+			$objects = $this->fetch_multiple_objects ($table, "customer_id", $customer_id);
+			if ($objects!==false) {
+				$out[$table] = $objects;
+			}
+		}
+		// return
+		return $out;
+	}
+
+	/**
+	 * Return all possible customer object relations
+	 *
+	 * @method get_customer_object_types
+	 * @return array
+	 */
+	public function get_customer_object_types () {
+		return [
+				"subnets"     =>"Subnets",
+				"ipaddresses" => "Addresses",
+				"vlans"       => "VLAN",
+				"vrf"         => "VRF",
+				"circuits"    => "Circuits",
+				"racks"       => "Racks"
+				];
+	}
+
 	/**
 	 * Parses import file
 	 *

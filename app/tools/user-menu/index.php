@@ -24,6 +24,10 @@ print "<hr><br>";
 		"widgets" => "Widgets"
 		];
 
+	// module permisisons
+	if(!$User->is_admin(false))
+	$subpages['permissions'] = "Module permissions";
+
 	// 2fa
 	if ($User->settings->{'2fa_provider'}!=='none') {
 	$subpages['2fa'] = "Two-factor authentication";

@@ -106,19 +106,26 @@ foreach ($users as $user) {
     	// vlan / VRF
     	if(strlen($user['editVlan'])==0) $user['editVlan'] = "No";
     	$user['editVlan'] = $user['editVlan']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editVlan'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editVlan'])."</span>";
-    	print _("Manage VLANs / VRFs").": ".$user['editVlan']."<br>";
+    	print _("VLANs / VRFs").": ".$user['editVlan']."<br>";
 
         // pstn
     	if ($User->settings->enablePSTN==1) {
-	    	$user['pstn'] = $user['pstn']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
+	    	$user['pstn'] = $user['pstn']=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
 	    	print _("PSTN").": ".$user['pstn']."<br>";
     	}
 
         // Circuits
     	if ($User->settings->enableCircuits==1) {
-	    	$user['editCircuits'] = $user['editCircuits']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editCircuits'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editCircuits'])."</span>";
-	    	print _("Manage Circuits").": ".$user['editCircuits']."<br>";
+	    	$user['editCircuits'] = $user['editCircuits']=="No"||is_null($user['editCircuits']) ? "<span class='badge badge1 badge5 alert-danger'>"._("No")."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editCircuits'])."</span>";
+	    	print _("Circuits").": ".$user['editCircuits']."<br>";
     	}
+
+        // Circuits
+    	if ($User->settings->enableCustomers==1) {
+	    	$user['perm_customers'] = $user['perm_customers']=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['perm_customers'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['perm_customers']))."</span>";
+	    	print _("Customers").": ".$user['perm_customers']."<br>";
+    	}
+
 
 		print "</td>";
 	}

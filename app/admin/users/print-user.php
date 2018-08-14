@@ -47,6 +47,20 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td><?php print _('Language'); ?></td>
 	<td><?php print $language->l_name; ?></td>
 </tr>
+<tr>
+	<td></td>
+	<td>
+	<div class='btn-group'>
+		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='<?php print $user->id; ?>'><i class='fa fa-pencil'></i></button>
+		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='<?php print $user->id; ?>'><i class='fa fa-times'></i></button>
+	</div>
+	</td>
+</tr>
+
+
+<tr>
+	<td colspan="2"><h4><?php print _('Module permissions'); ?></h4><hr></td>
+</tr>
 <?php if ($User->settings->enablePowerDNS==1) { ?>
 <tr>
     <?php
@@ -69,15 +83,22 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td><?php print $Subnets->parse_permissions ($user->pstn); ?></td>
 </tr>
 <?php } ?>
+<?php if ($User->settings->enableCircuits==1) { ?>
 <tr>
-	<td></td>
-	<td>
-	<div class='btn-group'>
-		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='<?php print $user->id; ?>'><i class='fa fa-pencil'></i></button>
-		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='<?php print $user->id; ?>'><i class='fa fa-times'></i></button>
-	</div>
-	</td>
+    <?php
+    $user->editCircuits = $user->editCircuits=="No"||$user->editCircuits=="Administrator" ? "Yes" : "No";
+    ?>
+	<td><?php print _('Circuits'); ?></td>
+	<td><?php print $user->editCircuits; ?></td>
 </tr>
+<?php } ?>
+<?php if ($User->settings->enableCustomers==1) { ?>
+<tr>
+	<td><?php print _('Customers'); ?></td>
+	<td><?php print $Subnets->parse_permissions ($user->perm_customers); ?></td>
+</tr>
+<?php } ?>
+
 
 
 <tr>

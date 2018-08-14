@@ -13,6 +13,29 @@ VALUES
 	(1,'You can write instructions under admin menu!');
 
 
+# Dump of table customers
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `customers`;
+
+CREATE TABLE `customers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL DEFAULT '',
+  `address` varchar(255) DEFAULT NULL,
+  `postcode` int(8) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `lat` varchar(12) DEFAULT NULL,
+  `long` varchar(12) DEFAULT NULL,
+  `contact_person` text DEFAULT NULL,
+  `contact_phone` varchar(32) DEFAULT NULL,
+  `contact_mail` varchar(255) DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `status` set('Active','Reserved','Inactive') DEFAULT 'Active',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
 # Dump of table ipaddresses
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `ipaddresses`;
@@ -37,10 +60,13 @@ CREATE TABLE `ipaddresses` (
   `PTR` INT(11)  UNSIGNED  NULL  DEFAULT '0',
   `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  `customer_id` INT(11) unsigned NULL default NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
   KEY `subnetid` (`subnetId`),
-  KEY `location` (`location`)
+  KEY `location` (`location`),
+  KEY `customer_ip` (`customer_id`),
+  CONSTRAINT `customer_ip` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `ipaddresses` (`id`, `subnetId`, `ip_addr`, `description`, `hostname`, `state`)
@@ -152,6 +178,8 @@ CREATE TABLE `settings` (
   `enableRACK` TINYINT(1)  NULL  DEFAULT '1',
   `enableLocations` TINYINT(1)  NULL  DEFAULT '1',
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
+  `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
+  `enableCustomers` TINYINT(1)  NOT NULL  DEFAULT '1',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
   `dbversion` INT(8) NOT NULL DEFAULT '0',
@@ -170,7 +198,6 @@ CREATE TABLE `settings` (
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `vcheckDate` DATETIME  NULL  DEFAULT NULL ,
   `api` BINARY  NOT NULL  DEFAULT '0',
-  `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
   `scanPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/ping',
   `scanFPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/fping',
   `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
@@ -251,6 +278,7 @@ CREATE TABLE `subnets` (
   `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
+  `customer_id` INT(11) unsigned NULL default NULL,
   `isFolder` BOOL NULL  DEFAULT '0',
   `isFull` TINYINT(1)  NULL  DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
@@ -260,10 +288,12 @@ CREATE TABLE `subnets` (
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`),
+  KEY `masterSubnetId` (`subnet`),
   KEY `location` (`location`),
-  KEY `masterSubnetId` (`masterSubnetId`),
   KEY `sectionId` (`sectionId`),
-  KEY `vrfId` (`vrfId`)
+  KEY `vrfId` (`vrfId`),
+  KEY `customer_subnets` (`customer_id`),
+  CONSTRAINT `customer_subnets` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `subnets` (`id`, `subnet`, `mask`, `sectionId`, `description`, `vrfId`, `masterSubnetId`, `allowRequests`, `vlanId`, `showName`, `permissions`, `isFolder`)
@@ -341,6 +371,7 @@ CREATE TABLE `users` (
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `perm_customers` INT(1)  NOT NULL  DEFAULT '1',
   `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
   `editVlan` SET('Yes','No')  NULL  DEFAULT 'No',
   `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No',
@@ -411,7 +442,10 @@ CREATE TABLE `vlans` (
   `number` int(4) DEFAULT NULL,
   `description` text,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`vlanId`)
+  `customer_id` INT(11) unsigned NULL default NULL,
+  PRIMARY KEY (`vlanId`),
+  KEY `customer_vlans` (`customer_id`),
+  CONSTRAINT `customer_vlans` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `vlans` (`vlanId`, `name`, `number`, `description`)
@@ -448,7 +482,10 @@ CREATE TABLE `vrf` (
   `description` varchar(256) DEFAULT NULL,
   `sections` VARCHAR(128)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`vrfId`)
+  `customer_id` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`vrfId`),
+  KEY `customer_vrf` (`customer_id`),
+  CONSTRAINT `customer_vrf` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Dump of table nameservers
@@ -825,11 +862,14 @@ CREATE TABLE `circuits` (
   `location2` int(11) unsigned DEFAULT NULL,
   `comment` text,
   `parent` int(10) unsigned NOT NULL DEFAULT '0',
+  `customer_id` int(11) unsigned DEFAULT NULL,
   `differentiator` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `circuits_diff_UN` (`cid`,`differentiator`),
   KEY `location1` (`location1`),
-  KEY `location2` (`location2`)
+  KEY `location2` (`location2`),
+  KEY `customer_circuits` (`customer_id`),
+  CONSTRAINT `customer_circuits` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Dump of table circuitsLogical
@@ -890,4 +930,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 4;
+UPDATE `settings` SET `dbversion` = 5;

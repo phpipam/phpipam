@@ -1575,4 +1575,64 @@ class User extends Common_functions {
 	    # return array of groups
 	    return isset($out) ? $out : array();
 	}
+
+    /**
+     * Get module permissions for user
+     *
+     * Result can be the following:
+     *     - 0 : no access
+     *     - 1 : read-only
+     *     - 2 ; read-write
+     *     - 3 : admin
+     *
+     * @method get_module_permissions
+     * @param  string $module_name
+     * @return int
+     */
+    public function get_module_permissions ($module_name = "") {
+        if(in_array($module_name, $this->get_modules_with_permissions())) {
+            // admin
+            if($this->is_admin()) {
+                return 3;
+            }
+            else {
+                return $User->{'perm_'.$module_name};
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+
+    /**
+     * Check if user has module permissions for specific access level
+     *
+     * @method check_module_permissions
+     * @param  string $module_name
+     * @param  int $required_level
+     * @param  bool $die
+     * @param  bool $popup
+     * @return bool|void
+     */
+    public function check_module_permissions ($module_name = "", $required_level = 1, $die = true, $popup = false) {
+        // check if valid
+        $valid = $this->get_module_permissions($module_name)>=$required_level;
+        // return or die ?
+        if ($die===true && !$valid) {
+            $this->Result->show ("danger", _("You do not have permissions to access this module"), true, $popup);
+        }
+        else {
+            return $valid;
+        }
+    }
+
+    /**
+     * Return array of all modules with permissions
+     *
+     * @method get_modules_with_permissions
+     * @return array
+     */
+    private function get_modules_with_permissions () {
+        return ["customers"];
+    }
 }

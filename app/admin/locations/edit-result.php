@@ -77,12 +77,12 @@ if(sizeof($custom) > 0) {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "address"=>$_POST['address'],
-    "lat"=>$_POST['lat'],
-    "long"=>$_POST['long'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "address"     =>$_POST['address'],
+    "lat"         =>$_POST['lat'],
+    "long"        =>$_POST['long'],
+    "description" =>$_POST['description']
     );
 
 # custom fields

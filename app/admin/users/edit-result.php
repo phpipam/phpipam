@@ -102,20 +102,22 @@ if(sizeof($myFields) > 0) {
 
 # formulate update values
 $values = array(
-				"id"            =>@$_POST['userId'],
-				"real_name"     =>$_POST['real_name'],
-				"username"      =>$_POST['username'],
-				"email"         =>$_POST['email'],
-				"role"          =>$_POST['role'],
-				"authMethod"    =>$_POST['authMethod'],
-				"lang"          =>$_POST['lang'],
-				"mailNotify"    =>$_POST['mailNotify'],
-				"mailChangelog" =>$_POST['mailChangelog'],
-				"editVlan"      =>$_POST['editVlan'],
-				"editCircuits"  =>$_POST['editCircuits'],
-				"theme"  		=>$_POST['theme']=="default" ? "" : $_POST['theme'],
-				"pstn"          =>$_POST['pstn'],
-				"pdns"          =>$_POST['pdns']
+				"id"             =>@$_POST['userId'],
+				"real_name"      =>$_POST['real_name'],
+				"username"       =>$_POST['username'],
+				"email"          =>$_POST['email'],
+				"role"           =>$_POST['role'],
+				"authMethod"     =>$_POST['authMethod'],
+				"lang"           =>$_POST['lang'],
+				"mailNotify"     =>$_POST['mailNotify'],
+				"mailChangelog"  =>$_POST['mailChangelog'],
+				"theme"          =>$_POST['theme']=="default" ? "" : $_POST['theme'],
+				// permissions
+				"editVlan"       =>$_POST['editVlan'],
+				"editCircuits"   =>$_POST['editCircuits'],
+				"pstn"           =>$_POST['pstn'],
+				"pdns"           =>$_POST['pdns'],
+				"perm_customers" =>$_POST['perm_customers'],
 				);
 # custom fields
 if (sizeof($myFields)>0) {
