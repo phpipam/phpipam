@@ -29,7 +29,6 @@ foreach ($data as &$cdata) { $used_section[strtolower($cdata['section'])]=$cdata
 # fetch all VRFs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "vrfId");
 if (!$all_vrfs) { $all_vrfs = array(); }
-$vrf_byid = array();
 # insert default VRF in the list
 array_splice($all_vrfs,0,0,(object) array(array('vrfId' => '0', 'name' => 'default', 'rd' => '0:0')));
 # process for easier later check
@@ -39,18 +38,15 @@ foreach ($all_vrfs as $vrf) {
 	$vrf = (array) $vrf;
 	$vrf_data[$vrf['name']] = $vrf;
 	$vrf_data[$vrf['rd']] = $vrf;	# add also RD as VRF name, will allow matches against both name and RD
-
-	$vrf_byid[$vrf['vrfId']] = $vrf['name'];
 }
 
 # fetch all sections and load all subnets
 $all_sections = $Sections->fetch_all_sections();
 
-# get all addresses in all subnets in all sections
-$edata = array();
-$section_names = array();
+# get all addresses in all subnets in all sections 
+$edata = array(); 
+$section_names = array(); 
 $subnet_data = array();
-$subnet_search = array();
 
 foreach ($all_sections as $section) {
 	$section = (array) $section;
@@ -63,7 +59,7 @@ foreach ($all_sections as $section) {
 
 	# skip empty sections
 	if (sizeof($section_subnets)==0) { continue; }
-
+	
 	foreach ($section_subnets as $subnet) {
 		$subnet = (array) $subnet;
 
@@ -73,9 +69,7 @@ foreach ($all_sections as $section) {
 		# store needed subnet information
 		$subnet_data[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']] = $subnet;
 		$subnet_data[$section['id']][$subnet['vrfId']][$subnet['ip']][$subnet['mask']]['type'] = $Subnets->identify_address($subnet['ip']);
-
-		$subnet_search[$section['id']][$subnet['ip']][$subnet['mask']][] = $subnet['vrfId'];
-
+		
 		# grab IP addresses
 		$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 
@@ -122,12 +116,13 @@ foreach ($data as &$cdata) {
 	}
 
 	# if the subnet contains "/", split it in network and mask
-	if ($action != "error") {
+	#if ($action != "error" && (empty($cdata['subnet'])) {
+	if ( ($action != "error") && (!empty($cdata['subnet'])) ) {
 		if (preg_match("/\//", $cdata['subnet'])) {
 			list($caddr,$cmask) = explode("/",$cdata['subnet'],2);
 			$cdata['mask'] = $cmask;
 			$cdata['subnet'] = $caddr;
-		}
+		} 
 		else { $msg.= "The subnet needs to have the mask defined as /BM (Bit Mask)"; $action = "error"; }
 		if ((!empty($cdata['mask'])) && (!preg_match("/^([0-9]+|[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+)$/", $cdata['mask']))) {
 			$msg.="Invalid network mask format."; $action = "error";
@@ -136,6 +131,7 @@ foreach ($data as &$cdata) {
 			if (($cdata['type'] == "IPv6") && (($cdata['mask']<0) || ($cdata['mask']>128))) { $msg.="Invalid IPv6 network mask."; $action = "error"; }
 		}
 	}
+
 
 	# Check if section is provided and valid and link it if it is
 	if (!isset($section_names[strtolower($cdata['section'])])) {
@@ -156,34 +152,35 @@ foreach ($data as &$cdata) {
 		$cdata['vrfId'] = 0;
 	}
 
-
-	# Check Subnet and mask are defined
-	if (empty($cdata['subnet']) or empty($cdata['mask'])) {
-		$msg.= "Subnet/Mask not provided."; $action = "error";
-	}
-
-	# If provided VRF doesn't match then search for Subnet in all VRFs
-	if ($action != "error" && isset($_GET['searchallvrfs']) && $_GET['searchallvrfs'] == 'on') {
-		if (!isset($subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
-			# We didn't match a Subnet using the provided VRF. Check search array for a single match.
-			if (isset($subnet_search[$cdata['sectionId']][$cdata['subnet']][$cdata['mask']])) {
-				$results = $subnet_search[$cdata['sectionId']][$cdata['subnet']][$cdata['mask']];
-				if (sizeof($results) == 1) {
-					$cdata['vrfId'] = $results[0];
-					$cdata['vrf']   = $vrf_byid[$results[0]];
-				} else {
-					$msg.= "Search matches multiple subnets, please specify VRF."; $action = "error";
-				}
-			}
-		}
-	}
-
 	# Check if Subnet is provided and valid and link it if it is
-	if ($action != "error") {
+	if ((!empty($cdata['subnet'])) and (!empty($cdata['mask']))) {
 		if (!isset($subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']])) {
-			$msg.= "Unable to locate the subnet in the specified VRF."; $action = "error";
+			$msg.= "Invalid Subnet. Confirm that the subnet exists before importing into it."; $action = "error";
 		} else {
 			$cdata['subnetId'] = $subnet_data[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']]['id'];
+		}
+	} else {
+		$iphost = $cdata['ip_addr'];
+		$binIp= sprintf( "%032b", ip2long($cdata['ip_addr']));
+		foreach ($subnet_data[$cdata['sectionId']][$cdata['vrfId']] as $key => $subObject )
+		{       
+			$longestMask = 0;
+			$binSub = sprintf("%032b",ip2long($key));
+			reset($subObject);
+			$mask = intval(key($subObject));
+			if( (substr($binIp,0,$mask) == substr($binSub,0,$mask)) && ($mask > $longestMask) )
+			{
+				$msg.= "Masque Trouve: " . $mask ;
+				$longestMask = $mask;
+				$cdata['subnetId'] = $subnet_data[$cdata['sectionId']][$cdata['vrfId']][$key][$mask]['id'];
+				$cdata['subnet'] = $key;
+				$cdata['mask'] = $mask; 
+			}		
+		}
+		# no subnet provided, search not implemented yet, giving out error.
+		if(empty($cdata['subnetId']))
+		{
+			$msg.= "No corresponding subnet found."; $action = "error";
 		}
 	}
 
@@ -210,27 +207,19 @@ foreach ($data as &$cdata) {
 		$cdata['state'] = 2;
 	}
 
-
+	
 	# Verify gateway
 	if (in_array(strtolower($cdata['is_gateway']),array("yes","true","1"))) { $cdata['is_gateway'] = 1; } else { $cdata['is_gateway'] = 0; }
-
+	
 	if ($action != "error") {
     	if(!$Addresses->validate_ip($cdata['ip_addr'])) { $msg.="Invalid IP address."; $action = "error"; }
-		if ((!empty($cdata['hostname'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['hostname']))) { $msg.="Invalid DNS name."; $action = "error"; }
+		if ((!empty($cdata['dns_name'])) and (!preg_match("/^(?=.{1,255}$)[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?(?:\.[0-9A-Za-z](?:(?:[0-9A-Za-z]|-){0,61}[0-9A-Za-z])?)*\.?$/", $cdata['dns_name']))) { $msg.="Invalid DNS name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['description'])) { $msg.="Invalid characters in description."; $action = "error"; }
 		if ($cdata['mac']) {
 			if (!preg_match("/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/", $cdata['mac'])) { $msg.="Invalid MAC address."; $action = "error"; }
 		}
 		if (preg_match("/[;'\"]/", $cdata['owner'])) { $msg.="Invalid characters in owner name."; $action = "error"; }
 		if (preg_match("/[;'\"]/", $cdata['note'])) { $msg.="Invalid characters in note."; $action = "error"; }
-	}
-
-	// Check IP belongs to subnet
-	if ($action != "error") {
-		$subnet_cidr = $cdata['subnet'] . '/' . $cdata['mask'];
-		$ip_mask     = $cdata['type'] == "IPv4" ? '32' : '128';
-		$ip_cidr     = $cdata['ip_addr'] . '/' . $ip_mask;
-		if (!$Subnets->verify_overlapping($ip_cidr, $subnet_cidr)) { $msg.="Invalid IP address, not inside subnet."; $action = "error"; }
 	}
 
 	# check if duplicate in the import data
@@ -246,7 +235,7 @@ foreach ($data as &$cdata) {
 
 			# Check if we need to change any fields
 			$action = "skip"; # skip duplicate fields if identical, update if different
-			if ($cdata['hostname'] != $cedata['hostname']) { $msg.= "Address DNS name will be updated."; $action = "edit"; }
+			if ($cdata['dns_name'] != $cedata['dns_name']) { $msg.= "Address DNS name will be updated."; $action = "edit"; }
 			if ($cdata['description'] != $cedata['description']) { $msg.= "Address description will be updated."; $action = "edit"; }
 			if ($cdata['mac'] != $cedata['mac']) { $msg.= "Address MAC address will be updated."; $action = "edit"; }
 			if ($cdata['owner'] != $cedata['owner']) { $msg.= "Address owner will be updated."; $action = "edit"; }
@@ -281,7 +270,6 @@ foreach ($data as &$cdata) {
 			$ndata[$cdata['sectionId']][$cdata['vrfId']][$cdata['subnet']][$cdata['mask']][$cdata['ip_addr']] = $cdata;
 		}
 	}
-
 	$cdata['msg'].= $msg;
 	$cdata['action'] = $action;
 	$counters[$action]++;
@@ -292,4 +280,7 @@ foreach ($data as &$cdata) {
 	foreach ($expfields as $cfield) { $rows.= "<td>".$cdata[$cfield]."</td>"; }
 	$rows.= "<td>"._($cdata['msg'])."</td></tr>";
 
+
 }
+
+?>
