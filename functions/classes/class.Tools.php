@@ -2554,6 +2554,7 @@ class Tools extends Common_functions {
 
 		# fetch all prefixes in section
 		$all_prefixes = $this->fetch_all_prefixes ();
+		if (!is_array($all_prefixes)) $all_prefixes = array();
 		# folder or subnet?
 		foreach($all_prefixes as $s) {
 			$children_prefixes[$s->master][] = (array) $s;
