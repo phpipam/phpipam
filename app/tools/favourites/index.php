@@ -15,7 +15,7 @@ print "<h4>"._('Favourite subnets')."</h4>";
 print "<hr>";
 
 # print if none
-if(sizeof($favourite_subnets) == 0 || !isset($favourite_subnets[0])) {
+if(empty($favourite_subnets) || !isset($favourite_subnets[0])) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No favourite subnets selected")."</p><br>";
 	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small><br>";
