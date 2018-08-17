@@ -497,6 +497,9 @@ $upgrade_queries["1.32.0"][] = "ALTER TABLE `settings` ADD `dbversion` INT(8)  N
 $upgrade_queries["1.4.0"]   = [];
 $upgrade_queries["1.4.0"][] = "-- Version update";
 $upgrade_queries["1.4.0"][] = "UPDATE `settings` set `version` = '1.4';";
+// Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'
+$upgrade_queries["1.4.0"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
+$upgrade_queries["1.4.0"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
 
 
 #
