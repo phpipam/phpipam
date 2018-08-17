@@ -2875,7 +2875,7 @@ class Tools extends Common_functions {
 	public function fetch_all_circuits ($custom_circuit_fields = array ()) {
 		// set query
 		$query[] = "select";
-		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
+		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status,c.comment";
 		// custom fields
 		if(is_array($custom_circuit_fields)) {
 			if(sizeof($custom_circuit_fields)>0) {
