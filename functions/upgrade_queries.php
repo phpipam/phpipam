@@ -497,9 +497,6 @@ $upgrade_queries["1.32.0"][] = "ALTER TABLE `settings` ADD `dbversion` INT(8)  N
 $upgrade_queries["1.4.0"]   = [];
 $upgrade_queries["1.4.0"][] = "-- Version update";
 $upgrade_queries["1.4.0"][] = "UPDATE `settings` set `version` = '1.4';";
-// Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'
-$upgrade_queries["1.4.0"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
-$upgrade_queries["1.4.0"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
 
 
 #
@@ -648,6 +645,15 @@ $upgrade_queries["1.4.4"][] = "-- Add 2fa to users";
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa` BOOL  NOT NULL  DEFAULT '0';";
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL;";
 
+
+#
+# Subversion 1.4.5 queries
+#
+$upgrade_queries["1.4.5"][] = "-- Database version bump";
+$upgrade_queries["1.4.5"][] = "UPDATE `settings` set `dbversion` = '5';";
+$upgrade_queries["1.4.5"][] = "-- Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
 
 
 // output if required
