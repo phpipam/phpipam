@@ -87,7 +87,7 @@ if (isset($objects["vlans"])) {
 		print "		<button class='btn btn-xs btn-default editVLAN' rel='tooltip' title='Edit object' data-action='edit'   data-vlanid='$vlan->vlanId'><i class='fa fa-pencil'></i></button>";
 		print "		<button class='btn btn-xs btn-default editVLAN' rel='tooltip' title='Delete object' data-action='delete' data-vlanid='$vlan->vlanId'><i class='fa fa-times'></i></button>";
 		if($User->get_module_permissions ("customers")>1)
-		print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='vlan' data-id='$vrf->vlanId'><i class='fa fa-unlink'></i></button>";
+		print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='vlans' data-id='$vlan->vlanId'><i class='fa fa-unlink'></i></button>";
 		}
 		print "	</div>";
 		print "	</td>";

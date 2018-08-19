@@ -19,7 +19,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 $addresses = $objects['ipaddresses'];
 
 # only if set
-if (isset($objects["subnets"])) {
+if (isset($objects["ipaddresses"])) {
 
 # reset custom fields to ip addresses
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
