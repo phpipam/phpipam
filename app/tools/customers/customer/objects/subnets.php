@@ -35,8 +35,8 @@ print '<table class="slaves table sorted table-striped table-condensed table-hov
 print "<thead>";
 print "<tr>";
 print "	<th class='small'>"._('VLAN')."</th>";
-print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
+print "	<th>"._('Description')."</th>";
 # custom
 if(isset($visible_fields)) {
 foreach ($visible_fields as $f) {
@@ -85,8 +85,8 @@ foreach ($objects['subnets'] as $slave_subnet) {
 
 	print "<tr>";
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
-    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
     print "	<td><a href='".create_link("subnets",$section->id,$slave_subnet['id'])."'>".$Subnets->transform_address($slave_subnet['subnet'],"dotted")."/$slave_subnet[mask]</a> $fullinfo</td>";
+    print "	<td><a href='".create_link("subnets",$section->id,$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
 
     # custom
     if(isset($visible_fields)) {

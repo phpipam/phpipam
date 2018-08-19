@@ -71,7 +71,7 @@ else {
 	foreach ($customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",urlencode($customer->title))."'>$customer->title</a></strong></td>";
+		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
 		print " <td><a href='mailto:$customer->contact_mail'>$customer->contact_person</a> ($customer->contact_phone)</td>";
 		// custom
@@ -89,7 +89,7 @@ else {
 		// actions
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
-		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"customers",urlencode($customer->title))."''><i class='fa fa-eye'></i></a>";
+		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."''><i class='fa fa-eye'></i></a>";
 		if($User->get_module_permissions("customers")>=2)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'><i class='fa fa-pencil'></i></a>";
 		if($User->get_module_permissions("customers")==3)

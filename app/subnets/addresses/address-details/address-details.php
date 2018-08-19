@@ -10,7 +10,7 @@ $User->check_user_session();
 # get subnet calculation
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);           //set network boundaries
 $gateway         = $Subnets->find_gateway($subnet['id']);
-$gateway_ip      = $gateway===false ? "" : $Subnets->transform_to_dotted($gateway->ip_addr);
+$gateway_ip      = $gateway===false ? "/" : $Subnets->transform_to_dotted($gateway->ip_addr);
 
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
@@ -37,48 +37,58 @@ if(sizeof($address)>1) {
         print " <td>$subnet_detailed[netmask] (/$subnet[mask])</td>";
         print "</tr>";
 
+        # hierarchy
+        print "<tr>";
+        print " <th>"._('Hierarchy')."</th>";
+        print " <td>";
+        $Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+        print "</td>";
+        print "</tr>";
+
+        # subnet
+        print "<tr>";
+        print " <th>"._('Subnet')."</th>";
+        print " <td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
+        print "</tr>";
+
         # gateway
         print "<tr>";
         print " <th>"._('Gateway')."</th>";
         print " <td>$gateway_ip</td>";
         print "</tr>";
 
+        # mac
+        if(in_array('mac', $selected_ip_fields)) {
+        print "<tr>";
+        print " <th>"._('MAC address')."</th>";
+        print " <td>$address[mac]</td>";
+        print "</tr>";
+        }
+
+        # state
+        print "<tr>";
+        print " <th>"._('IP status')."</th>";
+        print " <td>";
+
+        if ($address['state'] == "0")     { $stateClass = _("Offline"); }
+        else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
+        else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+        else                          { $stateClass = _("Online"); }
+
+        print $Addresses->address_type_index_to_type ($address['state']);
+        print $Addresses->address_type_format_tag ($address['state']);
+
+        print " </td>";
+        print "</tr>";
+
+
+        # divider
+        print "<tr><td></td><td><hr></td></tr>";
+
     	# description
     	print "<tr>";
     	print "	<th>"._('Description')."</th>";
     	print "	<td>$address[description]</td>";
-    	print "</tr>";
-
-        print "<tr><td></td><td><hr></td></tr>";
-
-    	# hierarchy
-    	print "<tr>";
-    	print "	<th>"._('Hierarchy')."</th>";
-    	print "	<td>";
-    	$Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
-    	print "</td>";
-    	print "</tr>";
-
-    	# subnet
-    	print "<tr>";
-    	print "	<th>"._('Subnet')."</th>";
-    	print "	<td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
-    	print "</tr>";
-
-    	# state
-    	print "<tr>";
-    	print "	<th>"._('IP status')."</th>";
-    	print "	<td>";
-
-    	if ($address['state'] == "0") 	  { $stateClass = _("Offline"); }
-    	else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-    	else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
-    	else						  { $stateClass = _("Online"); }
-
-    	print $Addresses->address_type_index_to_type ($address['state']);
-    	print $Addresses->address_type_format_tag ($address['state']);
-
-    	print "	</td>";
     	print "</tr>";
 
     	# hostname
@@ -105,19 +115,23 @@ if(sizeof($address)>1) {
     		}
     	}
 
+        # customer
+        if($User->settings->enableCustomers=="1") {
+        $customer= $Tools->fetch_object ("customers", "id", $address['customer_id']);
+        print "<tr>";
+        print " <th>"._('Customer')."</th>";
+        if($customer!==false)
+        print " <td><a href='".create_link("tools", "customers", $customer->title)."'>$customer->title</a></td>";
+        else
+        print " <td>"._("None")."</td>";
+        print "</tr>";
+        }
+
     	# mac
     	if(in_array('owner', $selected_ip_fields)) {
     	print "<tr>";
     	print "	<th>"._('Owner')."</th>";
     	print "	<td>$address[owner]</td>";
-    	print "</tr>";
-    	}
-
-    	# mac
-    	if(in_array('mac', $selected_ip_fields)) {
-    	print "<tr>";
-    	print "	<th>"._('MAC address')."</th>";
-    	print "	<td>$address[mac]</td>";
     	print "</tr>";
     	}
 
@@ -144,6 +158,13 @@ if(sizeof($address)>1) {
     	print "</tr>";
     	}
 
+        # port
+        if(in_array('port', $selected_ip_fields)) {
+        print "<tr>";
+        print " <th>"._('Port')."</th>";
+        print " <td>$address[port]</td>";
+        print "</tr>";
+        }
 
     	if($User->settings->enableLocations=="1") { ?>
     	<tr>
@@ -167,14 +188,6 @@ if(sizeof($address)>1) {
     		</td>
     	</tr>
         <?php }
-
-    	# port
-    	if(in_array('port', $selected_ip_fields)) {
-    	print "<tr>";
-    	print "	<th>"._('Port')."</th>";
-    	print "	<td>$address[port]</td>";
-    	print "</tr>";
-    	}
 
     	# last edited
     	print "<tr>";

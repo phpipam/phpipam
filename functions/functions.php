@@ -99,6 +99,16 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	# get settings
 	global $User;
 
+	// url encode all
+	if(!is_null($l6))	{ $l6 = urlencode($l6); }
+	if(!is_null($l5))	{ $l5 = urlencode($l5); }
+	if(!is_null($l4))	{ $l4 = urlencode($l4); }
+	if(!is_null($l3))	{ $l3 = urlencode($l3); }
+	if(!is_null($l2))	{ $l2 = urlencode($l2); }
+	if(!is_null($l1))	{ $l1 = urlencode($l1); }
+	if(!is_null($l0))	{ $l0 = urlencode($l0); }
+
+
 	# set normal link array
 	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");
 	// override for search

@@ -291,8 +291,9 @@ table#mappingsPrint tr.border-top td {
 .input-max-200 {
 	max-width: 200px;
 }
-
-
+.input-sm {
+	font-size: 12px !important;
+}
 
 
 

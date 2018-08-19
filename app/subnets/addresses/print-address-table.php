@@ -58,6 +58,21 @@ foreach($Addresses->address_types as $t) {
 	}
 }
 
+# remove port, owner, device, note, mac etc if none is set to preserve space
+$cnt_obj = ["port"=>0, "switch"=>0, "owner"=>0, "note"=>0, "mac"=>0];
+foreach ($addresses as $a) {
+	if (strlen($a->port)>0)	{ $cnt_obj["port"]++; }
+	if ($a->switch>0)		{ $cnt_obj["switch"]++; }
+	if(strlen($a->owner)>0)	{ $cnt_obj["owner"]++; }
+	if(strlen($a->note)>0)	{ $cnt_obj["note"]++; }
+	if(strlen($a->mac)>0)	{ $cnt_obj["mac"]++; }
+}
+// check and remove empty
+foreach ($cnt_obj as $k=>$c) {
+	if ($c==0)	{ unset($selected_ip_fields[array_search($k, $selected_ip_fields)]); }
+}
+
+
 # remove custom fields if all are empty!
 foreach($custom_fields as $field) {
 	$sizeMyFields[$field['name']] = 0;				// default value
@@ -133,13 +148,10 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
     	$mac_title = $User->settings->enableMulticast=="1" ? "<th>MAC</th>" : "<th></th>";
     	                                        { print "$mac_title"; }
     }
-	# note
+	# note, device, port, owner
 	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
-	# switch
 	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
-	# port
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
-	# owner
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
 	// custom fields
 	if(sizeof($custom_fields) > 0) {
