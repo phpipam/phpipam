@@ -78,6 +78,8 @@ else {
     	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
     	if($User->settings->enableLocations=="1")
     	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
+        if($User->settings->enableCustomers=="1")
+        $subnet_old_details['customer_id']         = @$subnet_old_temp['customer_id'];          // inherit location
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
@@ -343,6 +345,33 @@ $("input[name='subnet']").change(function() {
 	else {
 		print '<tr style="display:none"><td colspan="8"><input type="hidden" name="vrfId" value="'. $subnet_old_details['vrfId'] .'"></td></tr>'. "\n";
 	}
+
+    // customers
+    if($User->settings->enableCustomers==1) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
+
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $subnet_old_details['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                                        { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print ' <td class="info2">'._('Assign subnet to customer').'</td>' . "\n";
+        print '</tr>' . "\n";
+    }
 
 	?>
 

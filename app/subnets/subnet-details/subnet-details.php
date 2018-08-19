@@ -137,6 +137,30 @@ else {
 		</td>
 	</tr>
 
+
+	<!-- devices -->
+	<tr>
+		<th><?php print _('Customer'); ?></th>
+		<td>
+		<?php
+
+		if(!empty($subnet['customer_id'])) {
+			# fetch recursive nameserver details
+			$customer = $Tools->fetch_object("customers", "id", $subnet['customer_id']);
+			if ($customer!==false) {
+				print $customer->title;
+			}
+			else {
+				print "<span class='text-muted'>/</span>";
+			}
+		}
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+
 	<!-- devices -->
 	<tr>
 		<th><?php print _('Device'); ?></th>

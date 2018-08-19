@@ -324,6 +324,12 @@ else {
         }
         $values['location'] = $_POST['location_item'];
     }
+    # customer
+    if(isset($_POST['customer_id'])) {
+        if (is_numeric($_POST['threshold'])) {
+        $values['customer_id'] = $_POST['customer_id'];
+        }
+    }
     # threshold
     if (isset($_POST['threshold'])) {
         if (!is_numeric($_POST['threshold'])) {
