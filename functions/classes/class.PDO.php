@@ -526,6 +526,10 @@ abstract class DB {
 			$sortStr = 'DESC';
 		}
 
+		// change sort fields for vlans and vrfs. ugly :/
+	    if ($tableName=='vlans' && $sortField=='id') { $sortField = "vlanId"; }
+	    if ($tableName=='vrf' && $sortField=='id') { $sortField = "vrfId"; }
+
 		//we should escape all of the params that we need to
 		$tableName = $this->escape($tableName);
 		$sortField = $this->escape($sortField);
@@ -731,12 +735,16 @@ abstract class DB {
 
 		$result_fields = $this->escape_result_fields($result_fields);
 
-    // subnets
-    if ($table=='subnets' && $sortField=='subnet') {
-        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-    } else {
-        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-    }
+		// change sort fields for vlans and vrfs. ugly :/
+	    if ($table=='vlans' && $sortField=='id') { $sortField = "vlanId"; }
+	    if ($table=='vrf' && $sortField=='id') { $sortField = "vrfId"; }
+
+	    // subnets
+	    if ($table=='subnets' && $sortField=='subnet') {
+	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	    } else {
+	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	    }
 	}
 
 	/**

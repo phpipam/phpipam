@@ -3118,14 +3118,23 @@ class Tools extends Common_functions {
 		return sizeof($domains)>0 ? $domains : false;
 	}
 
+	/**
+	 * Fetch all objects belonging to customer
+	 *
+	 * @method fetch_customer_objects
+	 * @param  int $customer_id
+	 * @return void
+	 */
 	public function fetch_customer_objects ($customer_id) {
 		// out
 		$out = [];
 		// fetch
-		foreach ($this->get_customer_object_types() as $table=>$name) {
-			$objects = $this->fetch_multiple_objects ($table, "customer_id", $customer_id);
-			if ($objects!==false) {
-				$out[$table] = $objects;
+		if(is_numeric($customer_id)) {
+			foreach ($this->get_customer_object_types() as $table=>$name) {
+				$objects = $this->fetch_multiple_objects ($table, "customer_id", $customer_id);
+				if ($objects!==false) {
+					$out[$table] = $objects;
+				}
 			}
 		}
 		// return

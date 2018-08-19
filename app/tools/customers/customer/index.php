@@ -24,20 +24,25 @@ $hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['custom
 # structure and include details
 print "<div class='row'>";
 
-// details
-print "<div class='cols-xs-12 col-md-6'>";
-include ("details.php");
-print "</div>";
+// invlid ?
+if ($customer===false) {
+	$Result->show ("danger", _("Invalid customer"), false);
+}
+else {
+	// details
+	print "<div class='cols-xs-12 col-md-6'>";
+	include ("details.php");
+	print "</div>";
 
-// map
-print "<div class='cols-xs-12 col-md-6'>";
-if($User->settings->enableLocations==1)
-include ("map.php");
-print "</div>";
+	// map
+	print "<div class='cols-xs-12 col-md-6'>";
+	if($User->settings->enableLocations==1)
+	include ("map.php");
+	print "</div>";
 
-// objects
-print "<div class='cols-xs-12'>";
-include ("objects.php");
-print "</div>";
-
+	// objects
+	print "<div class='cols-xs-12'>";
+	include ("objects.php");
+	print "</div>";
+}
 print "</div>";

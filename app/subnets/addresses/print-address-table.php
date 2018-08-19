@@ -21,9 +21,11 @@ $DNS = new DNS ($Database, $User->settings, true);
 
 /* verifications */
 # checks
+if ($location!=="customers") {
 if(sizeof($subnet)==0) 					{ $Result->show("danger", _('Subnet does not exist'), true); }									//subnet doesnt exist
 if($subnet_permission == 0)				{ $Result->show("danger", _('You do not have permission to access this network'), true); }		//not allowed to access
 if(!is_numeric($_GET['subnetId'])) 		{ $Result->show("danger", _('Invalid ID'), true); }												//subnet id must be numeric
+}
 
 /* selected and hidden fields */
 
@@ -100,7 +102,8 @@ $statuses = explode(";", $User->settings->pingStatus);
 <!-- print title and pagenum -->
 <h4 style="margin-top:40px;">
 <?php
-if(!$slaves)		{ print _("IP addresses in $location "); }
+if($location==="customers") {}
+elseif(!$slaves)		{ print _("IP addresses in $location "); }
 elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 ?>
@@ -579,26 +582,9 @@ else {
         				if(sizeof($custom_fields) > 0) {
         					foreach($custom_fields as $myField) {
         						if(!in_array($myField['name'], $hidden_cfields)) 	{
-        							print "<td class='customField hidden-xs hidden-sm hidden-md'>";
-
-        							// create html links
-        							$s->{$myField['name']} = $Result->create_links($s->{$myField['name']}, $myField['type']);
-
-        							//booleans
-        							if($myField['type']=="tinyint(1)")	{
-        								if($s->{$myField['name']} == "0")		{ print _("No"); }
-        								elseif($s->{$myField['name']} == "1")	{ print _("Yes"); }
-        							}
-        							//text
-        							elseif($myField['type']=="text") {
-        								if(strlen($s->{$myField['name']})>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $s->{$myField['name']})."'>"; }
-        								else											{ print ""; }
-        							}
-        							else {
-        								print $s->{$myField['name']};
-
-        							}
-        							print "</td>";
+									print "<td class='customField hidden-xs hidden-sm hidden-md'>";
+									$Tools->print_custom_field ($myField['type'], $addresses[$n]->{$myField['name']});
+									print "</td>";
         						}
         				    }
                         }

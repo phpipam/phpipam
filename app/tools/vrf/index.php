@@ -170,5 +170,3 @@ else {
 		print "</table>";
 	}
 }
-
-?>

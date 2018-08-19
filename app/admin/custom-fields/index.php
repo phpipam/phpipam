@@ -22,7 +22,8 @@ $custom_tables = array(
 						"pstnPrefixes"     => "PSTN Prefixes",
 						"pstnNumbers"      => "PSTN Numbers",
 						"circuitProviders" => "Circuit providers",
-						"circuits" 		   => "Circuits"
+						"circuits" 		   => "Circuits",
+						"customers" 	   => "Customers"
 						);
 
 # create array

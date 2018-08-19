@@ -773,8 +773,11 @@ CREATE TABLE `racks` (
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
   `description` text,
+  `customer_id` INT(11) unsigned NULL default NULL,
   PRIMARY KEY (`id`),
-  KEY `location` (`location`)
+  KEY `location` (`location`),
+  KEY `customer_racks` (`customer_id`),
+  CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
