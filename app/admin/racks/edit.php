@@ -129,6 +129,34 @@ $(document).ready(function(){
 	</tr>
 	<?php } ?>
 
+	<?php
+    // customers
+    if($User->settings->enableCustomers==1) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
+
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $rack->customer_id)    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                        { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print '</tr>' . "\n";
+    }
+	?>
+
 	<!-- Description -->
 	<tr>
 		<td><?php print _('Description'); ?></td>
