@@ -507,8 +507,8 @@ class User extends Common_functions {
     private function set_ui_language () {
         if(strlen($_SESSION['ipamlanguage'])>0)     {
             putenv("LC_ALL=$_SESSION[ipamlanguage]");
+            bindtextdomain("phpipam", dirname(__FILE__)."/../locale");    // Specify location of translation tables
             setlocale(LC_ALL, $_SESSION['ipamlanguage']);        // set language
-            bindtextdomain("phpipam", "./functions/locale");    // Specify location of translation tables
             textdomain("phpipam");                                // Choose domain
         }
     }

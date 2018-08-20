@@ -42,13 +42,15 @@ print '<table id="circuitManagement" class="table sorted table-striped table-top
 # headers
 print "<thead>";
 print '<tr>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Id')."'>"._('Circuit ID')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Provider')."'>"._('Provider')."</span></th>";
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by type')."'>"._('Type').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location A')."' class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
-print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location B')."' class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
+print "	<th>"._('Circuit ID')."</th>";
+print "	<th>"._('Provider')."</th>";
+if($User->settings->enableCustomers=="1")
+print "	<th>"._('Customer').'</th>';
+print "	<th>"._('Type').'</th>';
+print "	<th><span class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
+print "	<th><span class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
+print "	<th><span class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
+print "	<th><span class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
@@ -88,6 +90,11 @@ else {
 		print '<tr>'. "\n";
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 		print "	<td class='description'><a href='".create_link($_GET['page'],"circuits","providers",$circuit->pid)."'>$circuit->name</a></td>";
+		// customers
+		if($User->settings->enableCustomers=="1") {
+			 $customer = $Tools->fetch_object ("customers", "id", $circuit->customer_id);
+			 print $customer===false ? "<td></td>" : "<td>".$customer->title."</td>";
+		}
 		print "	<td>".$type_hash[$circuit->type]."</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
 		print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";

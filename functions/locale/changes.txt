@@ -5207,6 +5207,9 @@ msgstr ""
 msgid "Customer"
 msgstr ""
 
+msgid "Customers"
+msgstr ""
+
 msgid "Select customer"
 msgstr ""
 
@@ -5252,4 +5255,262 @@ msgstr ""
 msgid "Random notes"
 msgstr ""
 
+msgid "Customers module"
+msgstr ""
+
+msgid "Enable or disable customers module for customer management"
+msgstr ""
+
+
+
+### 2FA ###
+
+msgid "2FA authentication"
+msgstr ""
+
+msgid "2FA provider"
+msgstr ""
+
+msgid "Current 2FA provider"
+msgstr ""
+
+msgid "2FA users"
+msgstr ""
+
+msgid "2FA status"
+msgstr ""
+
+msgid "2FA status legend"
+msgstr ""
+
+msgid "2FA is enabled"
+msgstr ""
+
+msgid "2FA disabled"
+msgstr ""
+
+msgid "2fa is enabled, but secret is not set. User will be given new secret upon first login"
+msgstr ""
+
+msgid "Reset secret"
+msgstr ""
+
+msgid "2FA name"
+msgstr ""
+
+msgid "Name for 2fa application that will be displayed"
+msgstr ""
+
+msgid "2FA length"
+msgstr ""
+
+msgid "Length of 2FA secret (16 to 32)"
+msgstr ""
+
+msgid "2FA status legend"
+msgstr ""
+
+msgid "2FA user change"
+msgstr ""
+
+msgid "Can users change 2fa settings for their account"
+msgstr ""
+
+msgid "Apply to all users"
+msgstr ""
+
+msgid "Force all users to use 2fa on next login or disable 2fa for all users"
+msgstr ""
+
+
+
+
+### Password policy ###
+
+msgid "phpIPAM password policy settings"
+msgstr ""
+
+msgid "Here you can set password policy for user authentication"
+msgstr ""
+
+msgid "Minimum length"
+msgstr ""
+
+msgid "Minimum password length"
+msgstr ""
+
+msgid "Maximum length"
+msgstr ""
+
+msgid "Maximum password length"
+msgstr ""
+
+msgid "Minimum numbers"
+msgstr ""
+
+msgid "Minumum number of numbers"
+msgstr ""
+
+msgid "Minimum letters"
+msgstr ""
+
+msgid "Minumum number of letters"
+msgstr ""
+
+msgid "Minimum lowercase letter"
+msgstr ""
+
+msgid "Minumum number of lowercase letters"
+msgstr ""
+
+msgid "Minimum uppercase letter"
+msgstr ""
+
+msgid "Minumum number of uppercase letters"
+msgstr ""
+
+msgid "Minimum symbols"
+msgstr ""
+
+msgid "Minumum number of symbols"
+msgstr ""
+
+msgid "Maximum symbols"
+msgstr ""
+
+msgid "Maximum number of symbols"
+msgstr ""
+
+msgid "Symbols"
+msgstr ""
+
+msgid "List of allowed symbols. csv separated."
+msgstr ""
+
+msgid "Enforce"
+msgstr ""
+
+msgid "Require all users to change password upon next login."
+msgstr ""
+
+
+
+
+
+### Circuits ####
+
+msgid "Circuit options"
+msgstr ""
+
+msgid "Physical Circuits"
+msgstr ""
+
+msgid "Logical Circuits"
+msgstr ""
+
+msgid "Circuit providers"
+msgstr ""
+
+msgid "Circuit map"
+msgstr ""
+
+msgid "Options"
+msgstr ""
+
+msgid "Point A"
+msgstr ""
+
+msgid "Point B"
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Circuit type"
+msgstr ""
+
+msgid "Capacity"
+msgstr ""
+
+msgid "Point A"
+msgstr ""
+
+msgid "Purpose"
+msgstr ""
+
+msgid "Circuit count"
+msgstr ""
+
+msgid "Members"
+msgstr ""
+
+msgid "Logical circuit physical members"
+msgstr ""
+
+msgid "Available physical circuits"
+msgstr ""
+
+
+
+### Misc 1.4 ###
+
+msgid "Theme"
+msgstr ""
+
+msgid "Select UI theme"
+msgstr ""
+
+msgid "dark"
+msgstr ""
+
+msgid "white"
+msgstr ""
+
+msgid "Compress text in top menu"
+msgstr ""
+
+msgid "Bandwidth calculator"
+msgstr ""
+
+msgid "TCP Window size"
+msgstr ""
+
+msgid "Delay"
+msgstr ""
+
+msgid "Filesize"
+msgstr ""
+
+msgid "Transfer time"
+msgstr ""
+
+msgid "IP Request"
+msgstr ""
+
+msgid "Active IP address requests"
+msgstr ""
+
+msgid "Enable Firewall Zones"
+msgstr ""
+
+msgid "Enable or disable firewall zone management module"
+msgstr ""
+
+msgid "Allow duplicate vlans"
+msgstr ""
+
+msgid "Allow duplicated vlans inside L2 domain"
+msgstr ""
+
+msgid "Decode MAC vendor"
+msgstr ""
+
+msgid "Decode MAC address vendor for addresses"
+msgstr ""
+
+msgid "Module permissions"
+msgstr ""
+
+msgid "Scan agents"
+msgstr ""
 
