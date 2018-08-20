@@ -591,8 +591,8 @@ class Sections extends Common_functions {
 			}
 			$html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
 			$html[] = '<th data-field="device">'._('Device').'</th>';
-			if($User->settings->enableIPrequests == 1) {
-				$html[] = '<th data-field="requests" class="hidden-xs hidden-sm">'._('Requests').'</th>';
+			if($User->settings->enableCustomers == 1) {
+				$html[] = '<th data-field="customer" class="hidden-xs hidden-sm">'._('Customer').'</th>';
 			}
 			if(is_array($custom)) {
 				foreach($custom as $field) {

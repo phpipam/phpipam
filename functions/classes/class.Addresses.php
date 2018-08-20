@@ -376,6 +376,17 @@ class Addresses extends Common_functions {
 						"firewallAddressObject" => @$address['firewallAddressObject'],
 						"lastSeen"              => @$address['lastSeen']
 						);
+		# customer
+		if(isset($address['customer_id'])) {
+			if (is_numeric($address['customer_id'])) {
+				if ($address['customer_id']!="0") {
+					$insert['customer_id'] = $address['customer_id'];
+				}
+				else {
+					$insert['customer_id'] = NULL;
+				}
+			}
+		}
         # location
         if (isset($address['location_item'])) {
             if (!is_numeric($address['location_item'])) {
@@ -448,6 +459,17 @@ class Addresses extends Common_functions {
 						"excludePing" =>@$address['excludePing'],
 						"PTRignore"   =>@$address['PTRignore']
 						);
+ 		# customer
+		if(isset($address['customer_id'])) {
+			if (is_numeric($address['customer_id'])) {
+				if ($address['customer_id']!="0") {
+					$insert['customer_id'] = $address['customer_id'];
+				}
+				else {
+					$insert['customer_id'] = NULL;
+				}
+			}
+		}
         # location
         if (isset($address['location_item'])) {
             if (!is_numeric($address['location_item'])) {

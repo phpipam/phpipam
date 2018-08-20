@@ -152,10 +152,10 @@ else {
 ?>
 <article>
 <div style="margin-left: 40px; padding-left: 10px; border-left: 1px solid #58606b">
-2fa status legend:<br>
-	<span class='badge badge1 severity0'>Enabled</span> 2fa is enabled<br>
-	<span class='badge badge1 severity2'>Disabled</span> 2fa is disabled<br>
-	<span class='badge badge1 severity1'>Enabled, not activated</span> 2fa is enabled, but secret is not set. User will be given new secret upon first login.<br>
+<?php print _("2FA status legend"); ?>:<br>
+	<span class='badge badge1 severity0'><?php print _("Enabled"); ?></span> <?php print _("2fa is enabled"); ?><br>
+	<span class='badge badge1 severity2'><?php print _("Disabled"); ?></span> <?php print _("2fa is disabled"); ?><br>
+	<span class='badge badge1 severity1'><?php print _("Enabled, not activated"); ?></span> <?php print _("2fa is enabled, but secret is not set. User will be given new secret upon first login");?>.<br>
 </div>
 </article>
 

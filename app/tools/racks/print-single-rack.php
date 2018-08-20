@@ -43,6 +43,16 @@ if (isset($error)) { ?>
     <?php
 }
 else {
+
+
+    # customer
+    if ($User->settings->enableCustomers=="1") {
+        $customer = $Tools->fetch_object ("customers", "id", $rack->customer_id);
+        if($customer===false) {
+            $customer = new StdClass ();
+            $customer->title = "/";
+        }
+    }
 ?>
 
 <h4><?php print _('RACK details'); ?> (<?php print $rack->name; ?>)</h4>
@@ -95,6 +105,16 @@ else {
             }
             ?>
             </td>
+        </tr>
+        <?php } ?>
+
+        <?php if ($User->settings->enableCustomers=="1") { ?>
+        <tr>
+            <td colspan='2'><hr></td>
+        </tr>
+        <tr>
+            <th><?php print _('Customer'); ?></th>
+            <td><?php print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>"; ?></td>
         </tr>
         <?php } ?>
 

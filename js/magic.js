@@ -1879,7 +1879,7 @@ $(document).on('click', "#ripeMatchSubmit", function() {
 	hidePopup2();
 });
 //change subnet permissions
-$('.showSubnetPerm').click(function() {
+$(document).on("click", ".showSubnetPerm", function () {
 	showSpinner();
 	var subnetId  = $(this).attr('data-subnetId');
 	var sectionId = $(this).attr('data-sectionId');

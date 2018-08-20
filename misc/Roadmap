@@ -41,7 +41,6 @@ https://github.com/phpipam/phpipam/milestone/2
         #771  Subnet request
 
     New modules
-        #694  Customers module;
         #777  KEA management (DHCP integration);
         #335  BGP support
                 #344  VRF RD/RT confusion; update display and perhaps track separately

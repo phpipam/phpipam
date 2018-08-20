@@ -636,6 +636,8 @@ msgstr "Glavno omrežje ne obstaja"
 #: site/ipaddr/subnetDetails.php:126
 msgid "enabled"
 msgstr "omogočeno"
+msgid "Enabled"
+msgstr "Omogočeno"
 
 #: site/tools/vrf.php:114
 msgid "No subnets belonging to this VRF"
@@ -1113,7 +1115,7 @@ msgstr "Loči več prejemnikov z ,"
 
 #: site/ipaddr/mailNotifyIP.php:104
 msgid "Title"
-msgstr "Naslov"
+msgstr "Ime"
 
 #: site/ipaddr/mailNotifyIP.php:112
 msgid "Content"
@@ -8051,3 +8053,314 @@ msgstr "Ni atributov"
 
 msgid "phpIPAM settings"
 msgstr "phpIPAM nastavitve"
+
+
+### Customers module ###
+
+msgid "All customers"
+msgstr "Vse stranke"
+
+msgid "Add customer"
+msgstr "Dodaj stranko"
+
+msgid "Customer"
+msgstr "Stranka"
+
+msgid "Customers"
+msgstr "Stranke"
+
+msgid "Select customer"
+msgstr "Izberi stranko"
+
+msgid "Edit customer"
+msgstr "Urejanje stranke"
+
+msgid "Delete customer"
+msgstr "Izbris stranke"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Customer title"
+msgstr "Ime stranke"
+
+msgid "Customer address"
+msgstr "Naslov stranke"
+
+msgid "Contact details"
+msgstr "Kontaktni podatki"
+
+msgid "Customer contact details"
+msgstr "Kontaktni podatki od stranke"
+
+msgid "Postcode"
+msgstr "Poštna številka"
+
+msgid "City"
+msgstr "Mesto"
+
+msgid "Contact person"
+msgstr "Kontaktna oseba"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Random notes"
+msgstr "Naključne opombe"
+
+msgid "Customers module"
+msgstr "Modul stranke"
+
+msgid "Enable or disable customers module for customer management"
+msgstr "Omogoči modul za stranke"
+
+
+
+### 2FA ###
+
+msgid "2FA authentication"
+msgstr "Dvofaktorska avtentikacija"
+
+msgid "2FA provider"
+msgstr "Ponudnik 2FA"
+
+msgid "Current 2FA provider"
+msgstr "Trenuten ponudnik dvofaktorske avtentikacije"
+
+msgid "2FA users"
+msgstr "Uporabniki dvofaktorske avtentikacije"
+
+msgid "2FA status"
+msgstr "Status"
+
+msgid "2FA status legend"
+msgstr "Legenda statusev"
+
+msgid "2FA is enabled"
+msgstr "Dvofaktorska avtentikacija omogočena"
+
+msgid "2FA disabled"
+msgstr "Dvofaktorska avtentikacija onemogočena"
+
+msgid "2fa is enabled, but secret is not set. User will be given new secret upon first login"
+msgstr "Dvofaktorska avtentikacije je omogočena, a skrivni ključ ni nastavljen. Uporabniku bo dodeljen nov skrivni ključ ob prvi prijavi"
+
+msgid "Reset secret"
+msgstr "Resetiraj skrivni sključ"
+
+msgid "2FA name"
+msgstr "Ime aplikacije"
+
+msgid "Name for 2fa application that will be displayed"
+msgstr "Ime za dvofaktorsko avtentikacijo, ki bo prikazana na zaslonu"
+
+msgid "2FA length"
+msgstr "Dolžina ključa"
+
+msgid "Length of 2FA secret (16 to 32)"
+msgstr "Dolžina 2fa ključa (16 do 32)"
+
+msgid "2FA user change"
+msgstr "Dovoli spremembe uporabnikom"
+
+msgid "Enabled, not activated"
+msgstr "Omogočeno, ni aktiviran"
+
+msgid "Can users change 2fa settings for their account"
+msgstr "Dovoli, da si uporabniki sami nastavljajo dvofaktorsko avtentikacijo"
+
+msgid "Apply to all users"
+msgstr "Uporabi za vse uporabnike"
+
+msgid "Force all users to use 2fa on next login or disable 2fa for all users"
+msgstr "Prisili vse uporabnike v uporabo dvofaktorske avtentikacije ob naslednji prijavi ali onemogoči za vse uporabnike"
+
+
+
+
+### Password policy ###
+
+msgid "phpIPAM password policy settings"
+msgstr "Nastavitve parametrov za politiko gesel"
+
+msgid "Here you can set password policy for user authentication"
+msgstr "tukaj se lahko nastavijo parametri za politiko dodelitve gesel"
+
+msgid "Minimum length"
+msgstr "Min dolžina"
+
+msgid "Minimum password length"
+msgstr "Minimalno število znakov v geslu"
+
+msgid "Maximum length"
+msgstr "Max dolžina"
+
+msgid "Maximum password length"
+msgstr "Maksimalna dolžina znakov v geslu"
+
+msgid "Minimum numbers"
+msgstr "Min število števil"
+
+msgid "Minumum number of numbers"
+msgstr "Minimalno število števil"
+
+msgid "Minimum letters"
+msgstr "Min število črk"
+
+msgid "Minumum number of letters"
+msgstr "Minimalno število črk v geslu"
+
+msgid "Minimum lowercase letter"
+msgstr "Min malih črk"
+
+msgid "Minumum number of lowercase letters"
+msgstr "Minimalno število malih črk v geslu"
+
+msgid "Minimum uppercase letter"
+msgstr "Min velikih črk"
+
+msgid "Minumum number of uppercase letters"
+msgstr "Minimalno število velikih črk v geslu"
+
+msgid "Minimum symbols"
+msgstr "Min simbolov"
+
+msgid "Minumum number of symbols"
+msgstr "Minimalno število simbolov v geslu"
+
+msgid "Maximum symbols"
+msgstr "Max simbolov"
+
+msgid "Maximum number of symbols"
+msgstr "Maksimalno število simbolov v geslu"
+
+msgid "Symbols"
+msgstr "Simboli"
+
+msgid "List of allowed symbols. csv separated."
+msgstr "Seznam "
+
+msgid "Enforce"
+msgstr "Vsili"
+
+msgid "Require all users to change password upon next login."
+msgstr "Zahtevaj spremembo gesla za vse uporabnike ob naslednji prijavi"
+
+
+
+
+
+### Circuits ####
+
+msgid "Circuit options"
+msgstr ""
+
+msgid "Physical Circuits"
+msgstr ""
+
+msgid "Logical Circuits"
+msgstr ""
+
+msgid "Circuit providers"
+msgstr ""
+
+msgid "Circuit map"
+msgstr ""
+
+msgid "Options"
+msgstr "Možnosti"
+
+msgid "Point A"
+msgstr "Točka A"
+
+msgid "Point B"
+msgstr "Točka B"
+
+msgid "Provider"
+msgstr "Ponudnik"
+
+msgid "Circuit type"
+msgstr "Tip"
+
+msgid "Capacity"
+msgstr "Kapaciteta"
+
+msgid "Purpose"
+msgstr "Namen"
+
+msgid "Circuit count"
+msgstr "Stevilo"
+
+msgid "Members"
+msgstr "Člani"
+
+msgid "Logical circuit physical members"
+msgstr ""
+
+msgid "Available physical circuits"
+msgstr ""
+
+
+
+### Misc 1.4 ###
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "Select UI theme"
+msgstr "Izberi temo vmesnika"
+
+msgid "dark"
+msgstr "temna"
+
+msgid "white"
+msgstr "bela"
+
+msgid "Compress text in top menu"
+msgstr "Kompresiraj tekst v meniju"
+
+msgid "Bandwidth calculator"
+msgstr "Kalkulator pasovne širine"
+
+msgid "TCP Window size"
+msgstr "Velikost TCP okna"
+
+msgid "Delay"
+msgstr "Zakasnitev"
+
+msgid "Filesize"
+msgstr "Velikost datoteke"
+
+msgid "Transfer time"
+msgstr "Čas prenosa"
+
+msgid "IP Request"
+msgstr "IP zahtevki"
+
+msgid "Active IP address requests."
+msgstr "Aktivni IP zahtevki"
+
+msgid "Enable Firewall Zones"
+msgstr "Modul pożarnih pregrad"
+
+msgid "Enable or disable firewall zone management module"
+msgstr "Omogoči modul za pożarne pregrade"
+
+msgid "Allow duplicate vlans"
+msgstr "Dovoli duplicirane VLANe"
+
+msgid "Allow duplicated vlans inside L2 domain"
+msgstr "Dovoli duplicirane VLANe znotraj L2 domene"
+
+msgid "Decode MAC vendor"
+msgstr "Dekodiraj MAC proizvajalca"
+
+msgid "Decode MAC address vendor for addresses"
+msgstr "Dokodiraj MAC anslov verndorja"
+
+msgid "Module permissions"
+msgstr "Pravice modulov"
+
+msgid "Scan agents"
+msgstr "Agenti skeniranja"
+

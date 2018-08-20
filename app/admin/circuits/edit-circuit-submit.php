@@ -140,7 +140,18 @@ $values = array(
 if(isset($update)) {
 	$values = array_merge($values, $update);
 }
+# append customerId
+if($User->settings->enableCustomers=="1") {
+	if (is_numeric($_POST['customer_id'])) {
+		if ($_POST['customer_id']>0) {
+			$values['customer_id'] = $_POST['customer_id'];
+		}
+		else {
+			$values['customer_id'] = NULL;
+		}
+	}
+}
 
-# update device
+# update
 if(!$Admin->object_modify("circuits", $circuit['action'], "id", $values))	{}
 else																	{ $Result->show("success", _("Circuit $circuit[action] successfull").'!', false); }

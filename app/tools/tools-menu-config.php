@@ -43,7 +43,8 @@ $tools_menu_items = array(
 						'locations',
 						'pstn-prefixes',
 						'mac-lookup',
-						'circuits'
+						'circuits',
+						'customers'
                     );
 
 
@@ -92,6 +93,7 @@ $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"
 
 
 # Subnets
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-users", 	 "name"=>"Customers",  	"href"=>"customers", 	"description"=>"Customers");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-star", 	  	"name"=>"Favourite networks",  	"href"=>"favourites", 	"description"=>"Favourite networks");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-sitemap", 	"name"=>"Subnets",  		   	"href"=>"subnets", 		"description"=>"All subnets");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VLAN",  				"href"=>"vlan", 		"description"=>"VLANs and belonging subnets");

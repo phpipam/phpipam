@@ -647,6 +647,58 @@ $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32) 
 
 
 
+#
+# Subversion 1.4.5 queries
+#
+$upgrade_queries["1.4.5"][] = "-- Add customers module switch";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `settings` ADD `enableCustomers` TINYINT(1)  NULL  DEFAULT '0';";
+// customers table
+$upgrade_queries["1.4.5"][] = "-- Customers table";
+$upgrade_queries["1.4.5"][] = "CREATE TABLE `customers` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(128) NOT NULL DEFAULT '',
+  `address` varchar(255) DEFAULT NULL,
+  `postcode` int(8) DEFAULT NULL,
+  `city` varchar(255) DEFAULT NULL,
+  `state` varchar(255) DEFAULT NULL,
+  `lat` varchar(12) DEFAULT NULL,
+  `long` varchar(12) DEFAULT NULL,
+  `contact_person` text DEFAULT NULL,
+  `contact_phone` varchar(32) DEFAULT NULL,
+  `contact_mail` varchar(255) DEFAULT NULL,
+  `note` text DEFAULT NULL,
+  `status` set('Active','Reserved','Inactive') DEFAULT 'Active',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `title` (`title`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+// custom field
+$upgrade_queries["1.4.5"][] = "-- Add custom field";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `customers` ADD `status` SET('Active','Reserved','Inactive')  NULL  DEFAULT 'Active';";
+// user permissions
+$upgrade_queries["1.4.5"][] = "-- add user permissions";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `users` ADD `perm_customers` INT(1)  NOT NULL  DEFAULT '1';";
+// add customer_id to all related objects
+$upgrade_queries["1.4.5"][] = "-- add customer_id to all related objects";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `subnets` ADD `customer_id` INT(11) unsigned NULL default NULL;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `ipaddresses` ADD `customer_id` INT(11) unsigned NULL default NULL;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `vlans` ADD `customer_id` INT(11) unsigned NULL default NULL;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `vrf` ADD `customer_id` INT(11) unsigned NULL default NULL;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `circuits` ADD `customer_id` INT(11) unsigned NULL default NULL;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `racks` ADD `customer_id` INT(11) unsigned NULL default NULL;";
+// Add relations to customers table
+$upgrade_queries["1.4.5"][] = "-- Add relations to customers table";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `subnets` ADD CONSTRAINT `customer_subnets` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `ipaddresses` ADD CONSTRAINT `customer_ip` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `vlans` ADD CONSTRAINT `customer_vlans` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `vrf` ADD CONSTRAINT `customer_vrf` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `circuits` ADD CONSTRAINT `customer_circuits` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+$upgrade_queries["1.4.5"][] = "ALTER TABLE `racks` ADD CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+// add widget
+$upgrade_queries["1.4.5"][] = "-- Add customers widget";
+$upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes');";
+
+
+
 // output if required
 if(php_sapi_name()=="cli") {
   // version check

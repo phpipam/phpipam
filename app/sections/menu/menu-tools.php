@@ -7,6 +7,15 @@ if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
 # tool items
 $tool_items = array();
+// customers
+if($User->settings->enableCustomers == 1) {
+$tool_items["customers"] = array(
+                        "name"=>"Customers",
+                        "href"=>array("tools", "customers"),
+                        "title"=>"Customers",
+                        "icon"=>"fa-users"
+                       );
+}
 // vlans
 $tool_items["vlan"] = array (
                         "name"=>"VLAN",
@@ -175,13 +184,14 @@ $tool_items["search"] = array (
         // active
         $active = $_GET['section']==$k ? "active" : "";
 
-        // clear name if set
-        if($User->user->menuCompact=="1") {
-            $t['name'] = "";
-        }
-
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-        print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
+        // compact menu
+        if($User->user->menuCompact=="1") {
+            print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
+        }
+        else {
+            print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+        }
         print "</li>";
     }
     ?>

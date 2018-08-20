@@ -18,6 +18,15 @@ if($vlan[0]===false)				{ $Result->show("danger", _('Invalid VLAN id'), true); }
 
 # get custom VLAN fields
 $custom_fields = $Tools->fetch_custom_fields('vlans');
+
+# customer
+if ($User->settings->enableCustomers=="1") {
+	$customer = $Tools->fetch_object ("customers", "id", $vlan['customer_id']);
+	if($customer===false) {
+		$customer = new StdClass ();
+		$customer->title = "/";
+	}
+}
 ?>
 
 
@@ -48,6 +57,16 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		<th><?php print _('Description'); ?></th>
 		<td><?php print html_entity_decode($vlan['description']); ?></td>
 	</tr>
+
+	<?php if ($User->settings->enableCustomers=="1") { ?>
+	<tr>
+		<td colspan='2'><hr></td>
+	</tr>
+	<tr>
+		<th><?php print _('Customer'); ?></th>
+		<td><?php print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>"; ?></td>
+	</tr>
+	<?php } ?>
 
 	<?php
 	/* print custom subnet fields if any */

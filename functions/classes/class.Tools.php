@@ -136,7 +136,7 @@ class Tools extends Common_functions {
 			}
 		}
 	    # set query
-	    $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
+	    $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,vlans.customer_id,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
 		# fetch
 		try { $vlans = $this->Database->getObjectsQuery($query, array($domainId)); }
 		catch (Exception $e) {
@@ -2875,7 +2875,7 @@ class Tools extends Common_functions {
 	public function fetch_all_circuits ($custom_circuit_fields = array ()) {
 		// set query
 		$query[] = "select";
-		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
+		$query[] = "c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,c.customer_id,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status";
 		// custom fields
 		if(is_array($custom_circuit_fields)) {
 			if(sizeof($custom_circuit_fields)>0) {
@@ -3089,6 +3089,7 @@ class Tools extends Common_functions {
 		$query[] = "	`d`.`name` as `domainName`,";
 		$query[] = "	`v`.`number` as `number`,";
 		$query[] = "	`v`.`description` as `description`,";
+		$query[] = "	`v`.`customer_id` as `customer_id`,";
 		// fetch custom fields
 		$custom_vlan_fields = $this->fetch_custom_fields ("vlans");
 		if ($custom_vlan_fields != false) {
@@ -3117,6 +3118,65 @@ class Tools extends Common_functions {
 		}
 		// return
 		return sizeof($domains)>0 ? $domains : false;
+	}
+
+	/**
+	 * Fetch all objects belonging to customer
+	 *
+	 * @method fetch_customer_objects
+	 * @param  int $customer_id
+	 * @return void
+	 */
+	public function fetch_customer_objects ($customer_id) {
+		// out
+		$out = [];
+		// fetch
+		if(is_numeric($customer_id)) {
+			foreach ($this->get_customer_object_types() as $table=>$name) {
+				$objects = $this->fetch_multiple_objects ($table, "customer_id", $customer_id, $this->get_customer_object_types_sorts ($table));
+				if ($objects!==false) {
+					$out[$table] = $objects;
+				}
+			}
+		}
+		// return
+		return $out;
+	}
+
+	/**
+	 * Return all possible customer object relations
+	 *
+	 * @method get_customer_object_types
+	 * @return array
+	 */
+	public function get_customer_object_types () {
+		return [
+				"subnets"     => "Subnets",
+				"ipaddresses" => "Addresses",
+				"vlans"       => "VLAN",
+				"vrf"         => "VRF",
+				"circuits"    => "Circuits",
+				"racks"       => "Racks"
+				];
+	}
+
+	/**
+	 * Return sorting for fetch_multiple_objects
+	 *
+	 * @method get_customer_object_types_sorts
+	 * @param  string $type
+	 * @return string
+	 */
+	private function get_customer_object_types_sorts ($type) {
+		switch ($type) {
+			case "subnets"     : return "subnet";
+			case "ipaddresses" : return "ip_addr";
+			case "vlans"       : return "number";
+			case "vrf"         : return "name";
+			case "circuits"    : return "cid";
+			case "racks"       : return "name";
+			default            : return "id";
+		}
 	}
 
 	/**

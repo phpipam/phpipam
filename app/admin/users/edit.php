@@ -261,7 +261,7 @@ $(document).ready(function(){
 		<td colspan="3"><hr></td>
 	</tr>
 	<tr>
-		<td><?php print _('Groups'); ?></td>
+		<td style="vertical-align: top !important"><?php print _('Groups'); ?></td>
 		<td class="groups">
 		<?php
 		//print groups
@@ -338,7 +338,25 @@ $(document).ready(function(){
             ?>
         	</select>
     	</td>
-		<td class="info2"><?php print _('Select to allow user to manage PSTN numbers'); ?></td>
+		<td class="info2"><?php print _('PSTN module permissions'); ?></td>
+	</tr>
+    <?php } ?>
+
+	<!-- customers -->
+    <?php if ($User->settings->enableCustomers==1) { ?>
+	<tr>
+    	<td><?php print _("Customers");?></td>
+    	<td>
+        	<select class="form-control input-sm input-w-auto" name="perm_customers">
+            <?php
+            foreach (array(0,1,2,3) as $p) {
+                $selected = $p==$user['perm_customers'] ? "selected" : "";
+                print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
+            }
+            ?>
+        	</select>
+    	</td>
+		<td class="info2"><?php print _('Customers module permissions'); ?></td>
 	</tr>
     <?php } ?>
 
