@@ -70,9 +70,11 @@ if($User->settings->enableCustomers=="1") {
 		if ($_POST['customer_id']>0) {
 			$values['customer_id'] = $_POST['customer_id'];
 		}
+		else {
+			$values['customer_id'] = NULL;
+		}
 	}
 }
-
 # update
 if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] VRF").'!', true); }
 else																	{ $Result->show("success", _("VRF $_POST[action] successfull").'!', false); }

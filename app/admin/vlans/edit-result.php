@@ -86,6 +86,9 @@ if($User->settings->enableCustomers=="1") {
 		if ($_POST['customer_id']>0) {
 			$values['customer_id'] = $_POST['customer_id'];
 		}
+		else {
+			$values['customer_id'] = NULL;
+		}
 	}
 }
 
