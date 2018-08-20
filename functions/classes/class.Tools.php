@@ -3132,7 +3132,7 @@ class Tools extends Common_functions {
 		// fetch
 		if(is_numeric($customer_id)) {
 			foreach ($this->get_customer_object_types() as $table=>$name) {
-				$objects = $this->fetch_multiple_objects ($table, "customer_id", $customer_id);
+				$objects = $this->fetch_multiple_objects ($table, "customer_id", $customer_id, $this->get_customer_object_types_sorts ($table));
 				if ($objects!==false) {
 					$out[$table] = $objects;
 				}
@@ -3150,13 +3150,32 @@ class Tools extends Common_functions {
 	 */
 	public function get_customer_object_types () {
 		return [
-				"subnets"     =>"Subnets",
+				"subnets"     => "Subnets",
 				"ipaddresses" => "Addresses",
 				"vlans"       => "VLAN",
 				"vrf"         => "VRF",
 				"circuits"    => "Circuits",
 				"racks"       => "Racks"
 				];
+	}
+
+	/**
+	 * Return sorting for fetch_multiple_objects
+	 *
+	 * @method get_customer_object_types_sorts
+	 * @param  string $type
+	 * @return string
+	 */
+	private function get_customer_object_types_sorts ($type) {
+		switch ($type) {
+			case "subnets"     : return "subnet";
+			case "ipaddresses" : return "ip_addr";
+			case "vlans"       : return "number";
+			case "vrf"         : return "name";
+			case "circuits"    : return "cid";
+			case "racks"       : return "name";
+			default            : return "id";
+		}
 	}
 
 	/**

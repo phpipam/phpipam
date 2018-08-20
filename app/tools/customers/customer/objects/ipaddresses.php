@@ -65,7 +65,7 @@ $statuses = explode(";", $User->settings->pingStatus);
 <?php
 
 /* Addresses content print */
-$n = 0;		//count for IP addresses - $n++ per IP address
+$n = 0;				// count for IP addresses - $n++ per IP address
 
 // print
 foreach($addresses as $dummy) {

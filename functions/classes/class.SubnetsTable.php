@@ -142,8 +142,9 @@ class SubnetsTable {
 		}
 
 		//requests
-		if ($this->Tools->settings->enableIPrequests == 1) {
-			$tr['requests'] = $subnet->allowRequests==1 ? "<i class='fa fa-gray fa-check'></i>" : "/";
+		if ($this->Tools->settings->enableCustomers == 1) {
+			$customer = $this->Tools->fetch_object ("customers", "id", $subnet->customer_id);
+			$tr['customer'] = $customer===false ? "/" : $customer->title;
 		}
 
 		//custom
