@@ -136,7 +136,7 @@ class Tools extends Common_functions {
 			}
 		}
 	    # set query
-	    $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
+	    $query = 'SELECT vlans.vlanId,vlans.number,vlans.name,vlans.description,vlans.customer_id,subnets.subnet,subnets.mask,subnets.id AS subnetId,subnets.sectionId'.@$custom_fields_query.' FROM vlans LEFT JOIN subnets ON subnets.vlanId = vlans.vlanId where vlans.`domainId` = ? ORDER BY vlans.number ASC;';
 		# fetch
 		try { $vlans = $this->Database->getObjectsQuery($query, array($domainId)); }
 		catch (Exception $e) {
@@ -3088,6 +3088,7 @@ class Tools extends Common_functions {
 		$query[] = "	`d`.`name` as `domainName`,";
 		$query[] = "	`v`.`number` as `number`,";
 		$query[] = "	`v`.`description` as `description`,";
+		$query[] = "	`v`.`customer_id` as `customer_id`,";
 		// fetch custom fields
 		$custom_vlan_fields = $this->fetch_custom_fields ("vlans");
 		if ($custom_vlan_fields != false) {

@@ -138,6 +138,28 @@ else {
 	</tr>
 
 
+	<!-- nameservers -->
+	<tr>
+		<th><?php print _('Nameservers'); ?></th>
+		<td>
+		<?php
+
+		// Only show nameservers if defined for subnet
+		if(!empty($subnet['nameserverId'])) {
+			# fetch recursive nameserver details
+			$nameservers = $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
+			print str_replace(";", ", ", $nameservers->namesrv1);
+			//Print name of nameserver group
+			print ' ('.$nameservers->name.')';
+		}
+
+		else {
+			print "<span class='text-muted'>/</span>";
+		}
+		?>
+		</td>
+	</tr>
+
 	<!-- devices -->
 	<tr>
 		<th><?php print _('Customer'); ?></th>
@@ -187,29 +209,6 @@ else {
 				print "<span class='text-muted'>/</span>";
 			}
 		}
-		else {
-			print "<span class='text-muted'>/</span>";
-		}
-		?>
-		</td>
-	</tr>
-
-
-	<!-- nameservers -->
-	<tr>
-		<th><?php print _('Nameservers'); ?></th>
-		<td>
-		<?php
-
-		// Only show nameservers if defined for subnet
-		if(!empty($subnet['nameserverId'])) {
-			# fetch recursive nameserver details
-			$nameservers = $Tools->fetch_object("nameservers", "id", $subnet['nameserverId']);
-			print str_replace(";", ", ", $nameservers->namesrv1);
-			//Print name of nameserver group
-			print ' ('.$nameservers->name.')';
-		}
-
 		else {
 			print "<span class='text-muted'>/</span>";
 		}

@@ -68,6 +68,10 @@ else {
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="description" data-sortable="true">'._('Description').'</th>' . "\n";
+	if($User->settings->enableCustomers=="1") {
+	print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
+	$csize++;
+	}
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
@@ -141,6 +145,10 @@ else {
 					print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'><i class='fa fa-cloud prefix'></i> ".$vlan[0]->number."</a></td>";
 					print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan_domain->id, $vlan[0]->vlanId)."'>".$vlan[0]->name."</a></td>";
 					print "	<td>".$vlan[0]->description."</td>";
+					if($User->settings->enableCustomers=="1") {
+						 $customer = $Tools->fetch_object ("customers", "id", $vlan[0]->customer_id);
+						 print $customer===false ? "<td></td>" : "<td>{$customer->title}</td>";
+					}
 			        //custom fields - no subnets
 			        if(sizeof(@$custom_fields) > 0) {
 				   		foreach($custom_fields as $field) {
@@ -157,6 +165,8 @@ else {
 					print "<tr class='$class'>";
 					print "<td></td>";
 					print "<td></td>";
+					print "<td></td>";
+					if($User->settings->enableCustomers=="1")
 					print "<td></td>";
 			        if(sizeof(@$custom_fields) > 0) {
 				   		foreach($custom_fields as $field) {

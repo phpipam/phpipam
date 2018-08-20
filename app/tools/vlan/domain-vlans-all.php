@@ -23,9 +23,8 @@ $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : 
 # size of custom fields
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
-
 # set disabled for non-admins
-$disabled = $User->is_admin(false)==true ? "" : "hidden";
+$disabled = $User->is_admin(false)==true||$User->user->editVlan=="Yes" ? "" : "hidden";
 
 
 # title
@@ -53,6 +52,11 @@ else {
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
 	print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('L2domain').'</th>' . "\n";
+	if($User->settings->enableCustomers=="1") {
+	print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
+	$csize++;
+	}
+
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
@@ -104,6 +108,10 @@ else {
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
 		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
+		if($User->settings->enableCustomers=="1") {
+			 $customer = $Tools->fetch_object ("customers", "id", $vlan->customer_id);
+			 print $customer===false ? "<td></td>" : "<td>{$customer->title}</td>";
+		}
         // custom fields - no subnets
         if(sizeof(@$custom_fields) > 0) {
 	   		foreach($custom_fields as $field) {
