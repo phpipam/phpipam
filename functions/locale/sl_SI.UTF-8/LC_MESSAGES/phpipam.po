@@ -1113,7 +1113,7 @@ msgstr "Loči več prejemnikov z ,"
 
 #: site/ipaddr/mailNotifyIP.php:104
 msgid "Title"
-msgstr "Naslov"
+msgstr "Ime"
 
 #: site/ipaddr/mailNotifyIP.php:112
 msgid "Content"
@@ -8051,3 +8051,54 @@ msgstr "Ni atributov"
 
 msgid "phpIPAM settings"
 msgstr "phpIPAM nastavitve"
+
+
+### Customers module ###
+
+msgid "All customers"
+msgstr "Vse stranke"
+
+msgid "Add customer"
+msgstr "Dodaj stranko"
+
+msgid "Customer"
+msgstr "Stranka"
+
+msgid "Select customer"
+msgstr "Izberi stranko"
+
+msgid "Edit customer"
+msgstr "Urejanje stranke"
+
+msgid "Delete customer"
+msgstr "Izbris stranke"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Customer title"
+msgstr "Ime stranke"
+
+msgid "Customer address"
+msgstr "Naslov stranke"
+
+msgid "Contact details"
+msgstr "Kontaktni podatki"
+
+msgid "Customer contact details"
+msgstr "Kontaktni podatki od stranke"
+
+msgid "Postcode"
+msgstr "Poštna številka"
+
+msgid "City"
+msgstr "Mesto"
+
+msgid "Contact person"
+msgstr "Kontaktna oseba"
+
+msgid "Phone"
+msgstr "Telefon"
+
+msgid "Random notes"
+msgstr "Naključne opombe"

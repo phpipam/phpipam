@@ -87,7 +87,7 @@ if($_POST['action']!="add") {
 	    	<input type="text" name="state" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$customer->state); ?>" <?php if($_POST['action'] == "delete") print "readonly"; ?> placeholder="<?php print _("State"); ?>">
 
 	    </td>
-       	<td class="info2" style="vertical-align: top !important">* <?php print _('Customer address details'); ?></td>
+       	<td class="info2" style="vertical-align: top !important">* <?php print _('Customer address'); ?></td>
     </tr>
 
 	<!-- divider -->

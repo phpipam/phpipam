@@ -5194,3 +5194,62 @@ msgstr ""
 
 
 
+
+
+### Customers module ###
+
+msgid "All customers"
+msgstr ""
+
+msgid "Add customer"
+msgstr ""
+
+msgid "Customer"
+msgstr ""
+
+msgid "Select customer"
+msgstr ""
+
+msgid "Edit customer"
+msgstr ""
+
+msgid "Delete customer"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "Customer title"
+msgstr ""
+
+msgid "Customer address"
+msgstr ""
+
+msgid "Contact details"
+msgstr ""
+
+msgid "Customer contact details"
+msgstr ""
+
+msgid "Circuits"
+msgstr ""
+
+msgid "Postcode"
+msgstr ""
+
+msgid "City"
+msgstr ""
+
+msgid "Status"
+msgstr ""
+
+msgid "Contact person"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Random notes"
+msgstr ""
+
+
