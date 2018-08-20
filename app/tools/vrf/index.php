@@ -40,7 +40,14 @@ else {
 
 		// print name
 		print "<br><br>";
-		print "<h4>".($k+1).".) $vrf[name]</h4>";
+		print "<h4>$vrf[name]</h4>";
+
+		// customers
+		if($User->settings->enableCustomers=="1") {
+			 $customer = $Tools->fetch_object ("customers", "id", $vrf['customer_id']);
+			 print $customer===false ? "" : "<span class='text-muted'>"._("Customer")." ".$customer->title."</span>";
+		}
+
 
 		# print table
 		print "<table id='vrf' class='table sorted table-striped table-condensed table-top' data-cookie-id-table='tools_vrf_$vrf[name]'>";
@@ -49,12 +56,10 @@ else {
 		print "<thead>";
 		print "	<tr>";
 		print "	<th>"._('VLAN')."</th>";
-		print "	<th>"._('Description')."</td>";
-		print "	<th>"._('Section')."</td>";
-		print "	<th>"._('Subnet')."</td>";
-		print "	<th>"._('Master Subnet')."</td>";
-		if($User->settings->enableIPrequests=="1")
-		print "	<th class='hidden-xs hidden-sm'>"._('Requests')."</td>";
+		print "	<th>"._('Description')."</th>";
+		print "	<th>"._('Section')."</th>";
+		print "	<th>"._('Subnet')."</th>";
+		print "	<th>"._('Master Subnet')."</th>";
 		print "</tr>";
 		print "</thead>";
 
@@ -136,12 +141,6 @@ else {
 						# folder
 						elseif($master['isFolder']==1)		{ print "	<td><i class='fa fa-folder fa-gray'></i> <a href='".create_link("folder",$subnet['sectionId'],$subnet['masterSubnetId'])."'>$master[description]</a></td>"; }
 						else 								{ print "	<td><a href='".create_link("subnets",$subnet['sectionId'],$subnet['masterSubnetId'])."'>".$Subnets->transform_to_dotted($master['subnet'])."/$master[mask] ($master[description])</a></td>"; }
-					}
-
-					# allow requests
-					if($User->settings->enableIPrequests=="1") {
-						if($subnet['allowRequests'] == 1) 	{ print '<td class="allowRequests requests hidden-xs hidden-sm">'._('enabled').'</td>'; }
-						else 								{ print '<td class="allowRequests hidden-xs hidden-sm"></td>'; }
 					}
 
 					print '</tr>' . "\n";

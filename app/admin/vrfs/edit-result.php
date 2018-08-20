@@ -64,6 +64,14 @@ if(sizeof($custom) > 0) {
 		if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = @$_POST[$myField['nameTest']];}
 	}
 }
+# append customerId
+if($User->settings->enableCustomers=="1") {
+	if (is_numeric($_POST['customer_id'])) {
+		if ($_POST['customer_id']>0) {
+			$values['customer_id'] = $_POST['customer_id'];
+		}
+	}
+}
 
 # update
 if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] VRF").'!', true); }
