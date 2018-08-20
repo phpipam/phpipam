@@ -693,6 +693,9 @@ $upgrade_queries["1.4.5"][] = "ALTER TABLE `vlans` ADD CONSTRAINT `customer_vlan
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `vrf` ADD CONSTRAINT `customer_vrf` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `circuits` ADD CONSTRAINT `customer_circuits` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `racks` ADD CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+// add widget
+$upgrade_queries["1.4.5"][] = "-- Add customers widget";
+$upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes');";
 
 
 
