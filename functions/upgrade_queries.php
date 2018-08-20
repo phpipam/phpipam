@@ -650,6 +650,9 @@ $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32) 
 #
 # Subversion 1.4.5 queries
 #
+$upgrade_queries["1.4.4"][] = "-- Database version bump";
+$upgrade_queries["1.4.4"][] = "UPDATE `settings` set `dbversion` = '4';";
+// cusotmers module
 $upgrade_queries["1.4.5"][] = "-- Add customers module switch";
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `settings` ADD `enableCustomers` TINYINT(1)  NULL  DEFAULT '0';";
 // customers table
@@ -696,6 +699,10 @@ $upgrade_queries["1.4.5"][] = "ALTER TABLE `racks` ADD CONSTRAINT `customer_rack
 // add widget
 $upgrade_queries["1.4.5"][] = "-- Add customers widget";
 $upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes');";
+
+
+
+
 
 
 
