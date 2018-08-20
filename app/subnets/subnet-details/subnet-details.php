@@ -170,7 +170,7 @@ else {
 			# fetch recursive nameserver details
 			$customer = $Tools->fetch_object("customers", "id", $subnet['customer_id']);
 			if ($customer!==false) {
-				print $customer->title;
+				print $customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>";
 			}
 			else {
 				print "<span class='text-muted'>/</span>";

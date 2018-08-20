@@ -59,13 +59,14 @@ foreach($Addresses->address_types as $t) {
 }
 
 # remove port, owner, device, note, mac etc if none is set to preserve space
-$cnt_obj = ["port"=>0, "switch"=>0, "owner"=>0, "note"=>0, "mac"=>0];
+$cnt_obj = ["port"=>0, "switch"=>0, "owner"=>0, "note"=>0, "mac"=>0, "customer_id"];
 foreach ($addresses as $a) {
 	if (strlen($a->port)>0)	{ $cnt_obj["port"]++; }
 	if ($a->switch>0)		{ $cnt_obj["switch"]++; }
 	if(strlen($a->owner)>0)	{ $cnt_obj["owner"]++; }
 	if(strlen($a->note)>0)	{ $cnt_obj["note"]++; }
 	if(strlen($a->mac)>0)	{ $cnt_obj["mac"]++; }
+	if($a->customer_id>0)	{ $cnt_obj["customer_id"]++; }
 }
 // check and remove empty
 foreach ($cnt_obj as $k=>$c) {
@@ -153,6 +154,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
+	if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]>0)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
 	// custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
@@ -453,6 +455,12 @@ else {
 
 				# print owner
 				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$addresses[$n]->owner."</td>"; }
+
+				# customer_id
+				if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]) {
+					$customer = $Tools->fetch_object ("customers", "id", $addresses[$n]->customer_id);
+					print $customer===false ? "<td></td>" : "<td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+				}
 
 				# print custom fields
 				if(sizeof($custom_fields) > 0) {

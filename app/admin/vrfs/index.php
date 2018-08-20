@@ -95,7 +95,7 @@ else {
 		// customer
 		if($User->settings->enableCustomers=="1") {
 			 $customer = $Tools->fetch_object ("customers", "id", $vrf['customer_id']);
-			 print $customer===false ? "<td></td>" : "<td>{$customer->title}</td>";
+			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 		}
 
 		// custom fields

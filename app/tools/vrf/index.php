@@ -45,9 +45,8 @@ else {
 		// customers
 		if($User->settings->enableCustomers=="1") {
 			 $customer = $Tools->fetch_object ("customers", "id", $vrf['customer_id']);
-			 print $customer===false ? "" : "<span class='text-muted'>"._("Customer")." ".$customer->title."</span>";
+			 print $customer===false ? "" : "<span class='text-muted'>"._("Customer")." ".$customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></span>";
 		}
-
 
 		# print table
 		print "<table id='vrf' class='table sorted table-striped table-condensed table-top' data-cookie-id-table='tools_vrf_$vrf[name]'>";

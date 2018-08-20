@@ -121,7 +121,7 @@ if(sizeof($address)>1) {
         print "<tr>";
         print " <th>"._('Customer')."</th>";
         if($customer!==false)
-        print " <td><a href='".create_link("tools", "customers", $customer->title)."'>$customer->title</a></td>";
+        print " <td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
         else
         print " <td>"._("None")."</td>";
         print "</tr>";

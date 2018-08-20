@@ -64,7 +64,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 	</tr>
 	<tr>
 		<th><?php print _('Customer'); ?></th>
-		<td><?php print $customer->title ?></td>
+		<td><?php print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>"; ?></td>
 	</tr>
 	<?php } ?>
 

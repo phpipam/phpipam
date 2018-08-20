@@ -106,8 +106,18 @@ foreach ($slave_subnets as $slave_subnet) {
 
     # customer
     if($User->settings->enableCustomers=="1") {
-    	$customer = $Tools->fetch_object ("customers", "id", $slave_subnet['customer_id']);
-    	print $customer==="false" ? "/" :  "<td class='small'>$customer->title</td>";
+    	if(is_numeric($slave_subnet['customer_id'])) {
+	    	$customer = $Tools->fetch_object ("customers", "id", $slave_subnet['customer_id']);
+	    	if ($customer===false) {
+		    	print "<td></td>";
+	    	}
+	    	else {
+    			print "<td class='small'>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+	    	}
+	    }
+	    else {
+	    	print "<td></td>";
+	    }
     }
 
 
