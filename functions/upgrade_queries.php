@@ -706,8 +706,10 @@ $upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`,
 # Subversion 1.4.5 queries
 #
 $upgrade_queries["1.4.6"][] = "-- Database version bump";
-$upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '4';";
-
+$upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '6';";
+// change permissions for modules
+$upgrade_queries["1.4.6"][] = "-- Change permissions for modules";
+$upgrade_queries["1.4.6"][] = "ALTER TABLE `users` CHANGE `pstn` `perm_pstn` INT(1)  NOT NULL  DEFAULT '1';";
 
 
 

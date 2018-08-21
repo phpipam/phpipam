@@ -93,6 +93,7 @@ $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"
 
 
 # Subnets
+if($User->settings->enableCustomers == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-users", 	 "name"=>"Customers",  	"href"=>"customers", 	"description"=>"Customers");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-star", 	  	"name"=>"Favourite networks",  	"href"=>"favourites", 	"description"=>"Favourite networks");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-sitemap", 	"name"=>"Subnets",  		   	"href"=>"subnets", 		"description"=>"All subnets");
