@@ -674,9 +674,6 @@ $upgrade_queries["1.4.5"][] = "CREATE TABLE `customers` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `title` (`title`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-// custom field
-$upgrade_queries["1.4.5"][] = "-- Add custom field";
-$upgrade_queries["1.4.5"][] = "ALTER TABLE `customers` ADD `status` SET('Active','Reserved','Inactive')  NULL  DEFAULT 'Active';";
 // user permissions
 $upgrade_queries["1.4.5"][] = "-- add user permissions";
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `users` ADD `perm_customers` INT(1)  NOT NULL  DEFAULT '1';";

@@ -61,7 +61,7 @@ print "</thead>";
 
 // no customers
 if($customers===false) {
-	$colspan = 3 + $colspanCustom;
+	$colspan = 4 + $colspanCustom;
 	print "<tr>";
 	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
 	print "</tr>";
