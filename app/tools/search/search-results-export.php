@@ -453,6 +453,7 @@ if(sizeof($result_circuits)>0) {
 	$worksheet->write($lineCount, 2, _('Type') ,$format_title);
 	$worksheet->write($lineCount, 3, _('Capacity') ,$format_title);
 	$worksheet->write($lineCount, 4, _('Status') ,$format_title);
+	$worksheet->write($lineCount, 4, _('Comment') ,$format_title);
 
 	$c=5;
 	if(sizeof($custom_circuit_fields) > 0) {
@@ -475,6 +476,7 @@ if(sizeof($result_circuits)>0) {
 		$worksheet->write($lineCount, 2, $line['type']);
 		$worksheet->write($lineCount, 3, $line['Capacity']);
 		$worksheet->write($lineCount, 4, $line['status']);
+		$worksheet->write($lineCount, 4, $line['comment']);
 
 		//custom
 		$c=5;
