@@ -136,6 +136,10 @@ if(sizeof($result_addresses)>0) {
 	if(in_array('port', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('port') ,$format_title);			$x++;
 	} else { $colSpan--; }
+	# location
+	if(in_array('location', $selected_ip_fields)) {
+	$worksheet->write($lineCount, $x, _('location') ,$format_title);		$x++;
+	} else { $colSpan--; }
 	# owner
 	if(in_array('owner', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('owner') ,$format_title);			$x++;
@@ -225,6 +229,10 @@ if(sizeof($result_addresses)>0) {
 			# port
 			if(in_array('port', $selected_ip_fields)) {
 			$worksheet->write($lineCount, $x, $ip['port']);							$x++;
+			}
+			# location
+			if(in_array('location', $selected_ip_fields)) {
+			$worksheet->write($lineCount, $x, $ip['location']);							$x++;
 			}
 			# owner
 			if(in_array('owner', $selected_ip_fields)) {
