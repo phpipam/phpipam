@@ -560,7 +560,7 @@ class Tools extends Common_functions {
 	 */
 	public function search_circuits ($search_term, $custom_circuit_fields = array()) {
 		# query
-		$query[] = "select c.id,c.cid,c.type,c.device1,c.location1,c.device2,c.location2,p.name,p.description,p.contact,c.capacity,p.id as pid,c.status,c.comment ";
+		$query[] = "select c.*,p.name,p.description,p.contact,p.id as pid ";
 		$query[] = "from circuits as c, circuitProviders as p ";
 		$query[] = "where c.provider = p.id";
 		$query[] = "and (`cid` like :search_term or `type` like :search_term or `capacity` like :search_term or `comment` like :search_term or `name` like :search_term";
