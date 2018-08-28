@@ -33,7 +33,7 @@ if($Install->upgrade_database()===true) {
 
 	# check for possible errors
 	if(sizeof($errors = $Tools->verify_database())>0) {
-		$esize = sizeof($errors['tableError']) + sizeof($errors['fieldError']);
+		$esize = (is_array($errors['tableError']) ? sizeof($errors['tableError']) : 0) + (is_array($errors['tableError']) ? sizeof($errors['fieldError']) : 0);
 
 		print '<div class="alert alert-danger">'. "\n";
 
