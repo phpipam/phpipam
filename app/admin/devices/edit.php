@@ -159,9 +159,11 @@ $('#switchManagementEdit select[name=rack]').change(function() {
             <select name="rack" class="form-control input-sm">
                 <option value="0"><?php print _("None"); ?></option>
                 <?php
-                foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
-    				else							{ print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                if ($Racks->all_racks!==false) {
+                    foreach ($Racks->all_racks as $r) {
+                        if($device['rack'] == $r->id)   { print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
+                        else                            { print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                    }
                 }
                 ?>
             </select>
