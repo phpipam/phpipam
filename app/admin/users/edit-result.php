@@ -116,9 +116,12 @@ $values = array(
 				"editVlan"       =>$_POST['editVlan'],
 				"editCircuits"   =>$_POST['editCircuits'],
 				"pstn"           =>$_POST['pstn'],
-				"pdns"           =>$_POST['pdns'],
-				"perm_customers" =>$_POST['perm_customers'],
+				"pdns"           =>$_POST['pdns']
 				);
+# perrmissions
+if(isset($_POST['perm_customers'])) {
+	$values['perm_customers'] = _POST['perm_customers'];
+}
 # custom fields
 if (sizeof($myFields)>0) {
     foreach($myFields as $myField) {
