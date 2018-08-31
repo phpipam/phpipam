@@ -59,11 +59,6 @@ if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method
 if(strlen(@$_POST['real_name'])==0)										{ $Result->show("danger", _("Real name field is mandatory!"), true); }
 # email format must be valid
 if (!$Result->validate_email(@$_POST['email'])) 						{ $Result->show("danger", _("Invalid email address!"), true); }
-# populate default value for perm_customers (NULL not allowed by DB)
-if ($_POST['perm_customers'] === NULL) { $_POST['perm_customers'] = 0; }
-
-
-
 
 # username must not already exist (if action is add)
 if ($_POST['action']=="add") {
@@ -121,9 +116,12 @@ $values = array(
 				"editVlan"       =>$_POST['editVlan'],
 				"editCircuits"   =>$_POST['editCircuits'],
 				"pstn"           =>$_POST['pstn'],
-				"pdns"           =>$_POST['pdns'],
-				"perm_customers" =>$_POST['perm_customers'],
+				"pdns"           =>$_POST['pdns']
 				);
+# perrmissions
+if(isset($_POST['perm_customers'])) {
+	$values['perm_customers'] = _POST['perm_customers'];
+}
 # custom fields
 if (sizeof($myFields)>0) {
     foreach($myFields as $myField) {
