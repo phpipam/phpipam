@@ -612,6 +612,31 @@ abstract class DB {
 	}
 
 	/**
+	 * Get all objects groped by $groupField, array of (id,count(*)) pairs
+	 *
+	 * @param  string $tableName
+	 * @param  string $groupField
+	 * @return array
+	 */
+	public function getGroupBy($tableName, $groupField = 'id') {
+		if (!$this->isConnected()) $this->connect();
+
+		$statement = $this->pdo->prepare("SELECT SQL_CACHE `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
+
+		//debug
+		$this->log_query ($statement, array());
+		$statement->execute();
+
+		$results = array();
+
+		if (is_object($statement)) {
+			$results = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
+		}
+
+		return $results;
+	}
+
+	/**
 	 * Get a single object from the database
 	 *
 	 * @access public

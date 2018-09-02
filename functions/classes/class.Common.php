@@ -274,6 +274,21 @@ class Common_functions  {
 		return $cnt;
 	}
 
+	/**
+	 * Count all objects in database.
+	 *
+	 * @param  string $table
+	 * @param  string $field
+	 * @return array|false
+	 */
+	public function count_all_database_objects ($table, $field) {
+		try { $cnt = $this->Database->getGroupBy($table, $field); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return $cnt;
+	}
 
 	/**
 	 * Get all admins that are set to receive changelog
