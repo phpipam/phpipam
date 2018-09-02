@@ -21,6 +21,13 @@ $User->check_user_session();
 $devices = $Tools->fetch_all_objects("devices", "hostname");
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 
+// reindex types
+if (isset($device_types)) {
+	foreach($device_types as $dt) {
+		$device_types_indexed[$dt->tid] = $dt;
+	}
+}
+
 # strip tags - XSS
 $_GET = $User->strip_input_tags ($_GET);
 
@@ -83,21 +90,17 @@ if($devices===false) {
 }
 // result
 else {
+	$cnt_ips     = $Tools->count_all_database_objects("ipaddresses","switch");
+	$cnt_subnets = $Tools->count_all_database_objects("subnets","device");
+
 	foreach ($devices as $device) {
 	//cast
 	$device = (array) $device;
 
 	//count items
-	$cnt1 = $Tools->count_database_objects("ipaddresses", "switch", $device['id']);
-	$cnt2 = $Tools->count_database_objects("subnets", "device",  $device['id']);
+	$cnt1 = isset($cnt_ips[$device['id']])     ?  $cnt_ips[$device['id']]     : 0;
+	$cnt2 = isset($cnt_subnets[$device['id']]) ?  $cnt_subnets[$device['id']] : 0;
 	$cnt = $cnt1 + $cnt2;
-
-	// reindex types
-	if (isset($device_types)) {
-		foreach($device_types as $dt) {
-			$device_types_indexed[$dt->tid] = $dt;
-		}
-	}
 
 	//print details
 	print '<tr>'. "\n";
@@ -146,8 +149,8 @@ else {
 	print '<tr class="unspecified">'. "\n";
 
     // count empty
-	$cnt1 = $Tools->count_database_objects("ipaddresses", "switch", 0);
-	$cnt2 = $Tools->count_database_objects("subnets", "device", 0);
+	$cnt1 = (isset($cnt_ips[""]) ? $cnt_ips[""] : 0)         + (isset($cnt_ips[0]) ? $cnt_ips[0] : 0);
+	$cnt2 = (isset($cnt_subnets[""]) ? $cnt_subnets[""] : 0) + (isset($cnt_subnets[0]) ? $cnt_subnets[0] : 0);
 	$cnt = $cnt1 + $cnt2;
 
 
