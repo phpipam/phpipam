@@ -191,15 +191,15 @@ class Common_functions  {
 		if(is_null($value))		return false;
 		if($value===0)		    return false;
 
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
 		if($cached_item!==false) {
 			return $cached_item;
 		}
 		else {
+			# null method
+			$method = is_null($method) ? "id" : $this->Database->escape($method);
+
 			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
