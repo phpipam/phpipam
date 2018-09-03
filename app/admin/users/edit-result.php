@@ -120,7 +120,7 @@ $values = array(
 				);
 # perrmissions
 if(isset($_POST['perm_customers'])) {
-	$values['perm_customers'] = _POST['perm_customers'];
+	$values['perm_customers'] = $_POST['perm_customers'];
 }
 # custom fields
 if (sizeof($myFields)>0) {
