@@ -1325,25 +1325,14 @@ class Subnets extends Common_functions {
 	 * @return integer
 	 */
 	private function get_subnet_ipaddr_count($subnetId) {
-
+		// check cache
 		$cached_item = $this->cache_check("subnet_ipaddr_count", "1");
 
 		if(is_object($cached_item)) {
-			// Use cached array
 			$ipaddr_usage = $cached_item->result;
 		} else {
 			// Generate usage array
-			$ipaddr_usage = [];
-
-			// Generate and cache IP address usage table
-			try { $rows = $this->Database->getObjectsQuery("SELECT SQL_CACHE subnetId,COUNT(*) AS total FROM ipaddresses GROUP BY subnetId"); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return 0;
-			}
-			foreach ($rows as $row) $ipaddr_usage[$row->subnetId] = $row->total;
-
-			//Save
+			$ipaddr_usage = $this->count_all_database_objects('ipaddresses', 'subnetId');
 			$this->cache_write("subnet_ipaddr_count", "1", (object)["result" => $ipaddr_usage]);
 		}
 
