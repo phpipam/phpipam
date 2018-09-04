@@ -54,17 +54,7 @@ class phpipam_mail extends Common_functions {
 		# set settings and mailsettings
 		$this->settings = $settings;
 		$this->mail_settings = $mail_settings;
-	}
 
-
-
-	/**
-	 * Initializes mailer object.
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function initialize_mailer () {
 		# we need phpmailer
 		if(file_exists(dirname(__FILE__).'/../PHPMailer/PHPMailerAutoload.php')) {
 			// legacy versions
@@ -73,14 +63,15 @@ class phpipam_mail extends Common_functions {
 			# initialize object
 			$this->Php_mailer = new PHPMailer(true);			//localhost by default
 		}
-		else {
+		elseif (file_exists(dirname(__FILE__).'/../PHPMailer/src/Exception.php')) {
 			require_once( dirname(__FILE__).'/../PHPMailer/src/Exception.php');
 			require_once( dirname(__FILE__).'/../PHPMailer/src/PHPMailer.php');
 			require_once( dirname(__FILE__).'/../PHPMailer/src/SMTP.php');
 
 			$this->Php_mailer = new PHPMailer\PHPMailer\PHPMailer();
+		} else {
+			throw new Exception(_('PHPMailer submodule is missing.'));
 		}
-
 
 		$this->Php_mailer->CharSet="UTF-8";					//set utf8
 		$this->Php_mailer->SMTPDebug = 0;					//default no debugging
