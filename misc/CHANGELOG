@@ -1,3 +1,12 @@
+== 1.3.2 rev003
+
+    Bugfixes:
+    ----------------------------
+    + Check for compatible 32 bit long2ip() (broken in PHP 7.1.0)
+    + Check for PHPMailer submodule when sending mail. #2159
+    + Check for ctype function support. This is a separate module on FreeBSD.
+    + phpmailer fix for latest phpmailer version
+
 == 1.3.2 rev002
 
     Bugfixes:
