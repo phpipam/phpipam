@@ -45,6 +45,11 @@ if ((@include_once 'PEAR.php') != true) {
 	$missingExt[] = "php PEAR support";
 }
 
+# Check for ctype functions (FreeBSD)
+if (!function_exists('ctype_alnum')) {
+	$missingExt[] = "ctype";
+}
+
 # if any extension is missing print error and die!
 if (sizeof($missingExt) != 1 || (phpversion() < "5.4" && $allow_older_version!==true)) {
 
