@@ -700,7 +700,7 @@ $upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`,
 
 
 #
-# Subversion 1.4.5 queries
+# Subversion 1.4.6 queries
 #
 $upgrade_queries["1.4.6"][] = "-- Database version bump";
 $upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '6';";
@@ -714,7 +714,7 @@ $upgrade_queries["1.4.6"][] = "ALTER TABLE `users` CHANGE `pstn` `perm_pstn` INT
 
 
 // output if required
-if(php_sapi_name()=="cli") {
+if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check
   if (!isset($argv[1])) { die("Please provide version\n"); }
   // Output
