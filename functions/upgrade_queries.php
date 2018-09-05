@@ -706,6 +706,7 @@ $upgrade_queries["1.4.6"][] = "-- Database version bump";
 $upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '6';";
 // change permissions for modules
 $upgrade_queries["1.4.6"][] = "-- Change permissions for modules";
+$upgrade_queries["1.4.6"][] = "UPDATE `users` SET `pstn` = '1' WHERE `pstn` IS NULL;";
 $upgrade_queries["1.4.6"][] = "ALTER TABLE `users` CHANGE `pstn` `perm_pstn` INT(1)  NOT NULL  DEFAULT '1';";
 
 
