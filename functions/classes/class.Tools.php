@@ -830,6 +830,22 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Fetch the db/SCHEMA.sql DBVERSION
+	 *
+	 * @return int
+	 */
+	public function fetch_schema_version() {
+		# get SCHEMA.SQL file
+		$schema = $this->read_db_schema();
+
+		$dbversion = strstr($schema, 'UPDATE `settings` SET `dbversion` =');
+		$dbversion = strstr($dbversion, ';', true);
+		$dbversion = explode("=", $dbversion);
+
+		return intval($dbversion[1]);
+	}
+
+	/**
 	 * Fetches standard database fields from SCHEMA.sql file
 	 *
 	 * @access public

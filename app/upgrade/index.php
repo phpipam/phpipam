@@ -139,6 +139,10 @@ elseif($User->is_admin(false)) {
 		$title 	  = "Database upgrade check";
 		$content  = "<div class='alert alert-danger'>Your phpIPAM version is too old to be upgraded, at least version ".LAST_POSSIBLE." is required for upgrade.</div>";
 	}
+	elseif ($Tools->fetch_schema_version() != DBVERSION) {
+		$title 	  = "Database upgrade check";
+		$content  = "<div class='alert alert-danger'><strong>Error!</strong> upgrade_queries.php DBVERSION ".VERSION."v".DBVERSION." does not match SCHEMA.sql dbversion ".VERSION."v".$Tools->fetch_schema_version()."<br>Unable to verify the database structure after applying the upgrade queries.<br><br>All upgrade_queries.php schema changes should be applied to db/SCHEMA.sql.</div>";
+	}
 	# upgrade needed
 	elseif ($User->settings->version.$User->settings->dbversion < VERSION.DBVERSION) {
 		$title	  = "phpipam database upgrade required";
