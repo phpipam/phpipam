@@ -115,12 +115,14 @@ $values = array(
 				// permissions
 				"editVlan"       =>$_POST['editVlan'],
 				"editCircuits"   =>$_POST['editCircuits'],
-				"perm_pstn"      =>$_POST['perm_pstn'],
 				"pdns"           =>$_POST['pdns']
 				);
-# perrmissions
+# permissions
 if(isset($_POST['perm_customers'])) {
 	$values['perm_customers'] = $_POST['perm_customers'];
+}
+if(isset($_POST['perm_pstn'])) {
+	$values['perm_pstn'] = $_POST['perm_pstn'];
 }
 # custom fields
 if (sizeof($myFields)>0) {
