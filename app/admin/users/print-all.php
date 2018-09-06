@@ -110,8 +110,8 @@ foreach ($users as $user) {
 
         // pstn
     	if ($User->settings->enablePSTN==1) {
-	    	$user['pstn'] = $user['pstn']=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
-	    	print _("PSTN").": ".$user['pstn']."<br>";
+	    	$user['perm_pstn'] = $user['perm_pstn']=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._("No")."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['perm_pstn']))."</span>";
+	    	print _("PSTN").": ".$user['perm_pstn']."<br>";
     	}
 
         // Circuits

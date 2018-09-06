@@ -2336,7 +2336,7 @@ class Tools extends Common_functions {
 	 * @return int
 	 */
 	public function check_prefix_permission ($user) {
-        return $user->role=="Administrator" ? 3 : $user->pstn;
+        return $user->role=="Administrator" ? 3 : $user->perm_pstn;
 	}
 
 	/**

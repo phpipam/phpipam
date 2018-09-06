@@ -2,7 +2,7 @@
 <hr>
 
 <div class="btn-group">
-    <?php if($User->is_admin(false)||$User->user->pstn==3) { ?>
+    <?php if($User->is_admin(false)||$User->user->perm_pstn==3) { ?>
 	<a href="" class='btn btn-sm btn-default editPSTN' data-action='add' data-id='0' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add prefix'); ?></a>
 	<?php }?>
 </div>
@@ -25,7 +25,7 @@ else {
     # fetch all locations
     $all_prefixes = $Tools->fetch_all_prefixes();
 
-    $colspan = $admin||$User->user->pstn==3 ? 9 : 8;
+    $colspan = $admin||$User->user->perm_pstn==3 ? 9 : 8;
 
     // table
     print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top' data-cookie-id-table='pstn_p'>";

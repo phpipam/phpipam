@@ -329,10 +329,10 @@ $(document).ready(function(){
 	<tr>
     	<td><?php print _("PSTN");?></td>
     	<td>
-        	<select class="form-control input-sm input-w-auto" name="pstn">
+        	<select class="form-control input-sm input-w-auto" name="perm_pstn">
             <?php
             foreach (array(0,1,2,3) as $p) {
-                $selected = $p==$user['pstn'] ? "selected" : "";
+                $selected = $p==$user['perm_pstn'] ? "selected" : "";
                 print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
             }
             ?>

@@ -115,7 +115,7 @@ $values = array(
 				// permissions
 				"editVlan"       =>$_POST['editVlan'],
 				"editCircuits"   =>$_POST['editCircuits'],
-				"pstn"           =>$_POST['pstn'],
+				"perm_pstn"      =>$_POST['perm_pstn'],
 				"pdns"           =>$_POST['pdns']
 				);
 # perrmissions
