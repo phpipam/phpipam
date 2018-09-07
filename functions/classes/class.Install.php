@@ -455,7 +455,7 @@ class Upgrade extends Install {
 	 */
 	private function load_all_queries () {
 		// include upgrade files
-		include_once (dirname(__FILE__)."/../upgrade_queries.php");
+		require (dirname(__FILE__)."/../upgrade_queries.php");
 		// add queries
 		foreach ($upgrade_queries as $version=>$query_arr) {
 			foreach ($query_arr as $query) {

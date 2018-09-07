@@ -32,11 +32,11 @@ print "</tr>";
 
 // pstn
 if ($User->settings->enablePSTN==1) {
-	$User->user->pstn = $User->user->pstn=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($User->user->pstn)."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($User->user->pstn))."</span>";
+	$User->user->perm_pstn = $User->user->perm_pstn=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._("No")."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($User->user->perm_pstn))."</span>";
 
 	print "<tr>";
 	print "	<td>"._("PSTN")."</td>";
-	print "	<td>".$User->user->pstn."</td>";
+	print "	<td>".$User->user->perm_pstn."</td>";
 	print "</tr>";
 }
 

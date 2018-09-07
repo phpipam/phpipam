@@ -80,7 +80,7 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 <?php if ($User->settings->enablePSTN==1) { ?>
 <tr>
 	<td><?php print _('PSTN'); ?></td>
-	<td><?php print $Subnets->parse_permissions ($user->pstn); ?></td>
+	<td><?php print $Subnets->parse_permissions ($user->perm_pstn); ?></td>
 </tr>
 <?php } ?>
 <?php if ($User->settings->enableCircuits==1) { ?>
