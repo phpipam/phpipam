@@ -772,6 +772,7 @@ CREATE TABLE `racks` (
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
+  `topDown` tinyint(1) NOT NULL DEFAULT '0',
   `description` text,
   `customer_id` INT(11) unsigned NULL default NULL,
   PRIMARY KEY (`id`),
@@ -780,6 +781,19 @@ CREATE TABLE `racks` (
   CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+# Dump of table rackContents
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `rackContents`;
+
+CREATE TABLE `rackContents` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) DEFAULT NULL,
+  `rack` int(11) unsigned DEFAULT NULL,
+  `rack_start` int(11) unsigned DEFAULT NULL,
+  `rack_size` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rack` (`rack`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table locations
@@ -798,7 +812,7 @@ CREATE TABLE `locations` (
 
 
 
-    # Dump of table pstnPrefixes
+# Dump of table pstnPrefixes
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `pstnPrefixes`;
 
@@ -933,4 +947,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 6;
+UPDATE `settings` SET `dbversion` = 7;

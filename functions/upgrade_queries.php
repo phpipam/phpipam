@@ -709,8 +709,21 @@ $upgrade_queries["1.4.6"][] = "-- Change permissions for modules";
 $upgrade_queries["1.4.6"][] = "UPDATE `users` SET `pstn` = '1' WHERE `pstn` IS NULL;";
 $upgrade_queries["1.4.6"][] = "ALTER TABLE `users` CHANGE `pstn` `perm_pstn` INT(1)  NOT NULL  DEFAULT '1';";
 
-
-
+#
+# Subversion 1.4.7 queries
+#
+$upgrade_queries["1.4.7"][] = "-- Database version bump";
+$upgrade_queries["1.4.7"][] = "UPDATE `settings` set `dbversion` = '7';";
+$upgrade_queries["1.4.7"][] = "ALTER TABLE `racks` ADD `topDown` tinyint(1) NOT NULL DEFAULT '0';";
+$upgrade_queries["1.4.7"][] = "CREATE TABLE `rackContents` (
+                                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                                `name` varchar(100) DEFAULT NULL,
+                                `rack` int(11) unsigned DEFAULT NULL,
+                                `rack_start` int(11) unsigned DEFAULT NULL,
+                                `rack_size` int(11) unsigned DEFAULT NULL,
+                                PRIMARY KEY (`id`),
+                                KEY `rack` (`rack`)
+                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
 
 // output if required
