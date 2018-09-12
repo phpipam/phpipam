@@ -16,7 +16,12 @@ function hideSpinner() { $('div.loading').fadeOut('fast'); }
 /* escape hide popups */
 $(document).keydown(function(e) {
     if(e.keyCode === 27) {
-        hidePopups();
+         if($("#popupOverlay2").is(":visible")) {
+            hidePopup2 ();
+         }
+         else {
+            hidePopup1 ();
+         }
     }
 });
 
@@ -144,6 +149,14 @@ function hidePopups() {
     $('.popup').fadeOut('fast');
     $('body').removeClass('stop-scrolling');        //enable scrolling back
     hideSpinner();
+}
+function hidePopup1() {
+    $('#popupOverlay').fadeOut('fast');
+    $('#popupOverlay .popup').fadeOut('fast');
+    // IMPORTANT: also empty loaded content to avoid issues on popup reopening
+    $('#popupOverlay > div').empty();
+    hideSpinner();
+    $('body').removeClass('stop-scrolling');        //enable scrolling back
 }
 function hidePopup2() {
     $('#popupOverlay2').fadeOut('fast');
