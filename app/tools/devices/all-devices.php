@@ -122,7 +122,12 @@ else {
     // snmp
 	if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
 		print "<td>";
+		if($User->is_admin(false)) {
 		print ($device['snmp_version']==0 || strlen($device['snmp_version'])==0) ?  "<span class='text-muted'>"._("Disabled")."</span>" : _("Version").": $device[snmp_version]<br>"._("Community").": $device[snmp_community]<br>";
+		}
+		else {
+		print ($device['snmp_version']==0 || strlen($device['snmp_version'])==0) ?  "<span class='text-muted'>"._("Disabled")."</span>" : _("Version").": $device[snmp_version]<br>"._("Community").": ********<br>";
+		}
 		print "</td>";
 	}
 	print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";

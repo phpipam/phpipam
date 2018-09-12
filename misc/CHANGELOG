@@ -22,6 +22,10 @@
     + API:
         + Fix inconsistant API success value returned (#2045);
 
+    Security Fixes:
+    ----------------------------
+    + Hide SNMP community (#2197);
+
 == 1.3.2
 
     Enhancements, changes:

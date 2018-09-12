@@ -111,8 +111,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // version
                 print '<tr>';
                 print " <th>". _('Community').'</th>';
-                print " <td>$device[snmp_community]</td>";
-                print "</tr>";
+                print $User->is_admin(false) ? " <td>$device[snmp_community]</td>" : " <td>********</td>";
                 // port
                 print '<tr>';
                 print " <th>". _('Port').'</th>';
@@ -142,7 +141,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // pass
                 print '<tr>';
                 print " <th>". _('Password').'</th>';
-                print " <td>$device[snmp_v3_auth_pass]</td>";
+                $User->is_admin(false) ? print " <td>$device[snmp_v3_auth_pass]</td>" : " <td>********</td>";
                 print "</tr>";
                 // privacy proto
                 print '<tr>';
@@ -152,7 +151,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // privacy pass
                 print '<tr>';
                 print " <th>". _('Privacy passphrase').'</th>';
-                print " <td>$device[snmp_v3_priv_pass]</td>";
+                $User->is_admin(false) ? print " <td>$device[snmp_v3_priv_pass]</td>" : " <td>********</td>";
                 print "</tr>";
                 // context name
                 print '<tr>';
