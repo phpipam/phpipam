@@ -37,8 +37,10 @@ print "<tr>";
 print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
-if($User->settings->enableCustomers=="1")
+if($User->settings->enableCustomers=="1") {
 print "	<th>"._('Customer')."</th>";
+$colspan_subnets++;
+}
 # custom
 if(isset($visible_fields)) {
 foreach ($visible_fields as $f) {
