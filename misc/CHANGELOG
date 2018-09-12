@@ -23,6 +23,9 @@
     ----------------------------
     + Fix appended " U" in Rack description (#2046);
     + Fix Bandwidth calculator - 400 Bad Request. (#1807);
+    + Fix bad DNS reverse zone for /23 subnet (#666);
+    + Fix Add missing standard field (#2153);
+    + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
     + API:
         + Fix inconsistant API success value returned (#2045);
 
