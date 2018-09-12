@@ -651,16 +651,6 @@ $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32) 
 #
 $upgrade_queries["1.4.5"][] = "-- Database version bump";
 $upgrade_queries["1.4.5"][] = "UPDATE `settings` set `dbversion` = '5';";
-$upgrade_queries["1.4.5"][] = "-- Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'";
-$upgrade_queries["1.4.5"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
-$upgrade_queries["1.4.5"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
-
-
-#
-# Subversion 1.4.5 queries
-#
-$upgrade_queries["1.4.5"][] = "-- Database version bump";
-$upgrade_queries["1.4.5"][] = "UPDATE `settings` set `dbversion` = '5';";
 // cusotmers module
 $upgrade_queries["1.4.5"][] = "-- Add customers module switch";
 $upgrade_queries["1.4.5"][] = "ALTER TABLE `settings` ADD `enableCustomers` TINYINT(1)  NULL  DEFAULT '0';";
@@ -733,6 +723,16 @@ $upgrade_queries["1.4.7"][] = "CREATE TABLE `rackContents` (
                                 PRIMARY KEY (`id`),
                                 KEY `rack` (`rack`)
                                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+
+#
+# Subversion 1.4.8 queries
+#
+$upgrade_queries["1.4.8"][] = "-- Database version bump";
+$upgrade_queries["1.4.8"][] = "UPDATE `settings` set `dbversion` = '8';";
+$upgrade_queries["1.4.8"][] = "-- Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'";
+$upgrade_queries["1.4.8"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
+$upgrade_queries["1.4.8"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
 
 
 // output if required
