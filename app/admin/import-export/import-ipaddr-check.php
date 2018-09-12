@@ -253,6 +253,8 @@ foreach ($data as &$cdata) {
 			if ($cdata['switch'] != $cedata['switch']) { $msg.= "Device will be updated."; $action = "edit"; }
 			if ($cdata['note'] != $cedata['note']) { $msg.= "Address note will be updated."; $action = "edit"; }
 			if ($cdata['state'] != $cedata['state']) { $msg.= "Address tag (state) will be updated."; $action = "edit"; }
+			if ($cdata['port'] != $cedata['port']) { $msg.= "Port will be updated."; $action = "edit"; }
+			if ($cdata['location'] != $cedata['location']) { $msg.= "Location will be updated."; $action = "edit"; }
 
 			# Check if the values of the custom fields have changed
 			if(sizeof($custom_fields) > 0) {
