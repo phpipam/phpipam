@@ -181,6 +181,9 @@ if ($addresses===false || sizeof($addresses)==0) {
     	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
 		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
     }
+    elseif ($subnet['isFull']=="1") {
+		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="dhcp"><div class="alert alert-info"><i class="fa fa-info-circle"></i> '._(" Subnet is marked as used").'</div></td></tr>'. "\n";
+    }
 }
 # print IP address
 else {
@@ -457,7 +460,7 @@ else {
 
 			    	# print location
 			    	if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>"; }
-			    
+
 				# print owner
 				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$addresses[$n]->owner."</td>"; }
 
