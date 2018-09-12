@@ -220,9 +220,10 @@ class Tools extends Common_functions {
 			}
 		}
 		$query[] = "or `switch` like :search_term ";
-		$query[] = "or `port` like :search_term ";				//port search
-		$query[] = "or `description` like :search_term ";		//descriptions
+		$query[] = "or `port` like :search_term ";				//port
+		$query[] = "or `description` like :search_term ";			//descriptions
 		$query[] = "or `note` like :search_term ";				//note
+		$query[] = "or `location` like :search_term ";				//location
 		$query[] = "or `mac` like :search_term ";				//mac
 		//tag
 		if($tags!==false)
