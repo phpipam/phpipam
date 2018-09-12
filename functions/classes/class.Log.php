@@ -599,12 +599,12 @@ class Logging extends Common_functions {
 	private function database_write_log () {
 	    # set values
 	    $values = array(
-	    			"command"=>$this->log_command,
-	    			"severity"=>$this->log_severity,
-	    			"date"=>$this->Database->toDate(),
-	    			"username"=>$this->log_username,
-	    			"ipaddr"=> array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
-	    			"details"=>$this->log_details
+					"command"  =>$this->log_command,
+					"severity" =>$this->log_severity,
+					"date"     =>$this->Database->toDate(),
+					"username" =>$this->log_username,
+					"ipaddr"   => array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
+					"details"  =>$this->log_details
 					);
 		# null empty values
 		$values = $this->reformat_empty_array_fields($values, null);
