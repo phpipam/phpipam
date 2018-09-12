@@ -37,6 +37,7 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 else {
     $rack = new StdClass ();
     $rack->size = 42;
+    $rack->topDown = 1;
 }
 
 # fetch all racks
@@ -109,6 +110,17 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+    <!-- Orientation -->
+    <tr>
+        <td><?php print _('Orientation'); ?></td>
+        <td>
+            <select name="topDown" class="form-control input-sm input-w-auto">
+                <option value="1"<?php if ($rack->topDown) print " selected" ?>><?php print _("Top-down (unit 1 at the top)"); ?></option>
+                <option value="0"<?php if (!$rack->topDown) print " selected" ?>><?php print _("Bottom-up (unit 1 at the bottom)"); ?></option>
+            </select>
+        </td>
+    </tr>
+    
 	<!-- Location -->
 	<?php if($User->settings->enableLocations=="1") { ?>
 	<tr>

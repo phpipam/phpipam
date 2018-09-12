@@ -66,7 +66,7 @@ else {
             // back
             $r->back = $r->hasBack!="0" ? "Yes" : "No";
             // cht devices
-            $cnt = $Tools->count_database_objects ("devices", "rack", $r->id);
+            $cnt = $Tools->count_database_objects ("devices", "rack", $r->id) + $Tools->count_database_objects ("rackContents", "rack", $r->id);
 
             // fix possible null
             if(strlen($r->location)==0) $r->location = 0;

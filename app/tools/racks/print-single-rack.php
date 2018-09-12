@@ -22,6 +22,7 @@ else {
     # fetch all racks
     $rack = $Racks->fetch_rack_details ($_GET['subnetId']);
     $rack_devices = $Racks->fetch_rack_devices ($_GET['subnetId']);
+    $rack_contents = $Racks->fetch_rack_contents ($_GET['subnetId']);
 
     // rack check
     if($rack===false)                       { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
@@ -165,59 +166,90 @@ else {
         print " <th>"._('Devices')."</th>";
         print " <td style='padding-bottom:20px;'>";
 
-
-
         // devices
-        if ($rack_devices===false) {
+        if ($rack_devices===false && $rack_contents===false) {
             print " <span class='text-muted'>"._("Rack is empty")."</span>";
             if($admin) {
                 print " <hr>";
-                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0'><i class='fa fa-plus'></i></a> "._("Add device");
+                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
+                print "&nbsp;&nbsp;&nbsp;";
+                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
             }
         }
         else {
+            if ($rack_devices===false) $rack_devices = array();
+            if ($rack_contents===false) $rack_contents = array();
+
+            reset($rack_devices);
+            reset($rack_contents);
+            $prev = false;
             $is_back =  false;
-            foreach ($rack_devices as $k=>$d) {
+            do {
+                if (!($cd = current($rack_devices))) {
+                    $cur = current($rack_contents);
+                    next($rack_contents);
+                    $ctype = 'content';
+                } elseif (!($cc = current($rack_contents))) {
+                    $cur = current($rack_devices);
+                    next($rack_devices);
+                    $ctype = 'device';
+                } else {
+                    if ($cd->rack_start < $cc->rack_start) {
+                        $cur = $cd;
+                        $ctype = 'device';
+                        next($rack_devices);
+                    } else {
+                        $cur = $cc;
+                        next($rack_contents);
+                        $ctype = 'content';
+                    }
+                }
+                if ($cur === false) break; # done here
+
                 // validate diff
-                if ($k!=0) {
-                    $error = $d->rack_start < ((int) $rack_devices[$k-1]->rack_start + (int) $rack_devices[$k-1]->rack_size) ? "alert-danger" : "";
+                if ($prev!==false) {
+                    $error = $cur->rack_start < ((int) $prev->rack_start + (int) $prev->rack_size) ? "alert-danger" : "";
                 }
 
                 // first
-                if($k==0 && $rack->hasBack!="0") {
+                if($prev===false && $rack->hasBack!="0") {
                     print _("Front side").":<hr>";
                 }
+
                 // first in back
-                if ($rack->hasBack!="0" && $d->rack_start>$rack->size && !$is_back) {
+                if ($rack->hasBack!="0" && $cur->rack_start>$rack->size && !$is_back) {
                     print "<br>"._("Back side").":<hr>";
                     $is_back = true;
                 }
 
                 // reformat front / back start position
-                if($rack->hasBack!="0" && $d->rack_start>$rack->size) {
-                    $d->rack_start_print = $d->rack_start - $rack->size;
+                if($rack->hasBack!="0" && $cur->rack_start>$rack->size) {
+                    $cur->rack_start_print = $cur->rack_start - $rack->size;
                 }
                 else {
-                    $d->rack_start_print = $d->rack_start;
+                    $cur->rack_start_print = $cur->rack_start;
                 }
 
                 if($admin) {
-                    print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$d->id' data-csrf='".$User->Crypto->csrf_cookie ("create", "rack_devices_".$rack->id."_device_".$d->id)."'><i class='fa fa-times'></i></a> ";
-                    print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start_print, "._("Size").": $d->rack_size U</span>";
-                    print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
+                    print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='$ctype' data-csrf='".$User->Crypto->csrf_cookie ("create", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
                 }
-                else {
-                    print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $d->rack_start_print, "._("Size").": $d->rack_size U</span>";
-                    print " <a href='".create_link("tools", "devices", $d->id)."'>$d->hostname</a><br>";
-
+                print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
+                if ($ctype == 'device') {
+                    print " <a href='".create_link("tools", "devices", $cur->id)."'>$cur->hostname</a><br>";
+                } else {
+                    print " $cur->name<br>";
                 }
 
-            }
+                # next
+                $prev = $cur;
+            } while ($cur);
 
             //add / remove device from rack
             if($admin) {
                 print "<hr>";
-                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0'><i class='fa fa-plus'></i></a> "._("Add device");
+                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
+                print "&nbsp;&nbsp;&nbsp;";
+                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
             }
         }
         print "</td>";
