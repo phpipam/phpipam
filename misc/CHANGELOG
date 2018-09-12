@@ -12,6 +12,10 @@
     + Circuits enhancements (Virtual Circuits);
     + Dropped support for 32bit systems;
     + PHP 5.4 is now required;
+    + Rack module enhancements (#1325):
+        + Dynamic rack sizes;
+        + Top-down / Bottom-up racks;
+        + Custom rack devices independant of devices (power, patchpanel);
     + API:
         + Add Mac Search for Addresses controller (#2005);
 
