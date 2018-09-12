@@ -455,9 +455,13 @@ class RackDrawer extends Common_functions {
         $this->bottomYSize = imagesy($bottom);
 
         $this->template = imagecreatetruecolor($this->rackXSize, $this->topYSize + $this->rack->getSpace() * $this->unitYSize + $this->bottomYSize);
+        // transparent BG
+        imagealphablending($this->template, false);
+        imagesavealpha($this->template, true);
+
         $textColor = imagecolorallocate($this->template, 255, 255, 255);
         $y = 0;
-        imagecopy($this->template, $top, 0, $y, 0, 0, $this->rackXSize, $this->topYSize);
+        imagecopy($this->template, $top, 0, $y+1, 0, 0, $this->rackXSize, $this->topYSize);
         $y += $this->topYSize;
         for ($i = 0; $i < $this->rack->getSpace(); $i++) {
             imagecopy($this->template, $unit, 0, $y, 0, 0, $this->rackXSize, $this->unitYSize);
@@ -486,7 +490,7 @@ class RackDrawer extends Common_functions {
      * @return void
      */
     private function drawNameplate() {
-        $nameplate = imagecreate($this->rackInsideXSize - 12, $this->topYSize - 4);
+        $nameplate = imagecreate($this->rackInsideXSize - 12, $this->topYSize - 6);
         imagecolorallocate( $nameplate, 255, 255, 255 ); // Allocate a background color (first color assigned)
         $textColour = imagecolorallocate($nameplate, 0, 0, 0);
         $this->imageCenterString($nameplate, $this->rack->getName(), $textColour);
