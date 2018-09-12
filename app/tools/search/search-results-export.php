@@ -136,6 +136,10 @@ if(sizeof($result_addresses)>0) {
 	if(in_array('port', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('port') ,$format_title);			$x++;
 	} else { $colSpan--; }
+	# location
+	if(in_array('location', $selected_ip_fields)) {
+	$worksheet->write($lineCount, $x, _('location') ,$format_title);		$x++;
+	} else { $colSpan--; }
 	# owner
 	if(in_array('owner', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('owner') ,$format_title);			$x++;
@@ -225,6 +229,10 @@ if(sizeof($result_addresses)>0) {
 			# port
 			if(in_array('port', $selected_ip_fields)) {
 			$worksheet->write($lineCount, $x, $ip['port']);							$x++;
+			}
+			# location
+			if(in_array('location', $selected_ip_fields)) {
+			$worksheet->write($lineCount, $x, $ip['location']);							$x++;
 			}
 			# owner
 			if(in_array('owner', $selected_ip_fields)) {
@@ -445,8 +453,9 @@ if(sizeof($result_circuits)>0) {
 	$worksheet->write($lineCount, 2, _('Type') ,$format_title);
 	$worksheet->write($lineCount, 3, _('Capacity') ,$format_title);
 	$worksheet->write($lineCount, 4, _('Status') ,$format_title);
+	$worksheet->write($lineCount, 5, _('Comment') ,$format_title);
 
-	$c=5;
+	$c=6;
 	if(sizeof($custom_circuit_fields) > 0) {
 		foreach($custom_circuit_fields as $field) {
 			$worksheet->write($lineCount, $c, $field['name'], $format_title);
@@ -467,9 +476,10 @@ if(sizeof($result_circuits)>0) {
 		$worksheet->write($lineCount, 2, $line['type']);
 		$worksheet->write($lineCount, 3, $line['Capacity']);
 		$worksheet->write($lineCount, 4, $line['status']);
+		$worksheet->write($lineCount, 5, $line['comment']);
 
 		//custom
-		$c=5;
+		$c=6;
 		if(sizeof($custom_circuit_fields) > 0) {
 			foreach($custom_circuit_fields as $field) {
 				$worksheet->write($lineCount, $c, $line[$field['name']]);

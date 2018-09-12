@@ -165,6 +165,14 @@ if(sizeof($address)>1) {
         print " <td>$address[port]</td>";
         print "</tr>";
         }
+	
+	# location
+        if(in_array('location', $selected_ip_fields)) {
+        print "<tr>";
+        print " <th>"._('Location')."</th>";
+        print " <td>$address[location]</td>";
+        print "</tr>";
+        }
 
     	if($User->settings->enableLocations=="1") { ?>
     	<tr>

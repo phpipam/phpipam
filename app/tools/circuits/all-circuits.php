@@ -51,6 +51,7 @@ print "	<th><span class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
 print "	<th><span class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
+print "	<th><span class='hidden-sm hidden-xs'>"._('Comment').'</span></th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
@@ -100,6 +101,7 @@ else {
 		print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
 		print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
 		print "	<td class='hidden-xs hidden-sm'>$locationB_html</td>";
+		print " <td class='hidden-xs hidden-sm'>$circuit->comment</td>";
 		//custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {

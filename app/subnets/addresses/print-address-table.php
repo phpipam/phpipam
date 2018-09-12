@@ -67,6 +67,7 @@ foreach ($addresses as $a) {
 	if(strlen($a->note)>0)	{ $cnt_obj["note"]++; }
 	if(strlen($a->mac)>0)	{ $cnt_obj["mac"]++; }
 	if($a->customer_id>0)	{ $cnt_obj["customer_id"]++; }
+	if(strlen($a->location)>0) { $cnt_obj["location"]++; }		//not sure about this, because location is INT in Database
 }
 // check and remove empty
 foreach ($cnt_obj as $k=>$c) {
@@ -149,10 +150,11 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
     	$mac_title = $User->settings->enableMulticast=="1" ? "<th>MAC</th>" : "<th></th>";
     	                                        { print "$mac_title"; }
     }
-	# note, device, port, owner
+	# note, device, port, owner, location
 	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
 	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
+	if(in_array('location', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
 	if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]>0)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
 	// custom fields
@@ -453,6 +455,9 @@ else {
 				# print port
 				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->port."</td>"; }
 
+			    	# print location
+			    	if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>"; }
+			    
 				# print owner
 				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$addresses[$n]->owner."</td>"; }
 
@@ -596,7 +601,9 @@ else {
         				}
         				# print port
         				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->port."</td>"; }
-        				# print owner
+        				# print location
+			    		if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->location."</td>"; }
+			    		# print owner
         				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$s->owner."</td>"; }
         				# print custom fields
         				if(sizeof($custom_fields) > 0) {
