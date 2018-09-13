@@ -1031,6 +1031,25 @@ $('form#ipCalc input.reset').click(function () {
     $('form#ipCalc input[type="text"]').val('');
     $('div.ipCalcResult').fadeOut('fast');
 });
+//
+$(document).on("click", "a.create_section_subnet_from_search", function() {
+    //get details - we need Section, network and subnet bitmask
+    var sectionId = $(this).attr('data-sectionId')
+    var subnet    = $(this).attr('data-subnet')
+    var bitmask   = $(this).attr('data-bitmask')
+
+    // formulate postdata
+    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+
+    //load add Subnet form / popup
+    $.post('app/admin/subnets/edit.php', postdata , function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    });
+
+    return false;
+})
 
 /* search function */
 function search_execute (loc) {

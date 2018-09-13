@@ -577,7 +577,10 @@ class Sections extends Common_functions {
 		if ($permission != 0) {
 			// add
 			if ($permission>1) {
-				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+				$html[] = "<div class='btn-group'>";
+				$html[] = '<button class="btn btn-sm btn-default btn-success editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+				$html[] = "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php'  data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')."'  data-sectionId='$sectionId'><i class='fa fa-sm fa-search'></i> "._("Find subnet")."</button>";
+				$html[] = "</div>";
 			}
 
 			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';

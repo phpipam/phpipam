@@ -149,6 +149,11 @@ $("input[name='subnet']").change(function() {
 	$masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
 });
 
+<?php if($_POST['location']=="ipcalc") { ?>
+    var $masterdopdown = $("select[name='masterSubnetId']");
+    $masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
+<?php } ?>
+
 });
 </script>
 
