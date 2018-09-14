@@ -132,6 +132,12 @@ $tool_items["search"] = array (
         print "</li>";
 	}
 	else {
+
+        # dashboard
+        print "<li class='first-item'>";
+        print " <a href='".create_link("dashboard")."'><i class='fa fa-home'></i></a>";
+        print "</li>";
+
         print "<li class='first-item'>";
         print "<a href='".create_link("tools")."'><i class='fa fa-angle-right'></i> "._('Tools')."</a>";
         print "</li>";

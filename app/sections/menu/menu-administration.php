@@ -104,6 +104,12 @@ $admin_items["locations"] = array (
 <ul class="nav navbar-nav sections icons">
 
     <?php
+
+    # dashboard
+    print "<li class='first-item administration'>";
+    print " <a href='".create_link("dashboard")."'><i class='fa fa-home'></i></a>";
+    print "</li>";
+
     print "<li class='first-item administration'>";
     print "<a href='".create_link("administration")."'><i class='fa fa-angle-right'></i> "._('Administration')."</a>";
     print "</li>";
