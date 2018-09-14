@@ -10,11 +10,13 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# verify module permissions
+$User->check_module_permissions ("racks", 3, true, true);
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -72,7 +74,7 @@ switch ($_POST['devicetype']) {
     if(!$Admin->object_modify("devices", "edit", "id", $values))	        { $Result->show("success", _("Failed to add device to rack").'!', false); }
     else																	{ $Result->show("success", _("Device added to rack").'!', false); }
     break;
-    
+
     case 'content':
     # set values
     $values = array("name"=>@$_POST['name'],
@@ -80,7 +82,7 @@ switch ($_POST['devicetype']) {
                     "rack_start"=>@$_POST['rack_start'],
                     "rack_size"=>@$_POST['rack_size'],
                     );
-    
+
     # add content
     if (!$Admin->object_modify('rackContents', 'add', null, $values))       { $Result->show("success", _("Failed to add device to rack").'!', false); }
     else                                                                    { $Result->show("success", _("Device added to rack").'!', false); }

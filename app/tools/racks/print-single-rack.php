@@ -7,8 +7,8 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# set admin
-$admin = $User->is_admin(false);
+# verify module permissions
+$User->check_module_permissions ("racks", 1, true);
 
 # check that rack support isenabled
 if ($User->settings->enableRACK!="1") {
@@ -139,27 +139,30 @@ else {
         }
 
         # action button groups
-        print "<tr>";
-        print " <th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-        print " <td style='vertical-align:bottom;align:left;'>";
+        if($User->get_module_permissions ("racks")>1) {
+            print "<tr>";
+            print " <th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
+            print " <td style='vertical-align:bottom;align:left;'>";
 
-        print " <div class='btn-toolbar' style='margin-bottom:0px'>";
-        print " <div class='btn-group'>";
+            print " <div class='btn-toolbar' style='margin-bottom:0px'>";
+            print " <div class='btn-group'>";
 
-        # permissions
-        if($User->is_admin (false)) {
-                print "     <a href='' class='btn btn-xs btn-default editRack' data-action='edit'   data-rackid='$rack->id'><i class='fa fa-pencil'></i></a>";
+            # permissions
+            if($User->get_module_permissions ("racks")>1)
+            print "     <a href='' class='btn btn-xs btn-default editRack' data-action='edit'   data-rackid='$rack->id'><i class='fa fa-pencil'></i></a>";
+            if($User->get_module_permissions ("racks")>2)
             print "     <a href='' class='btn btn-xs btn-default editRack' data-action='delete' data-rackid='$rack->id'><i class='fa fa-times'></i></a>";
+
+            print " </div>";
+            print " </div>";
+
+            print " </td>";
+            print "</tr>";
+
+            // divider
+            print "<tr><td colspan='2'><hr></td></tr>";
         }
 
-        print " </div>";
-        print " </div>";
-
-        print " </td>";
-        print "</tr>";
-
-        // divider
-        print "<tr><td colspan='2'><hr></td></tr>";
 
         // attached devices
         print "<tr>";
@@ -169,11 +172,11 @@ else {
         // devices
         if ($rack_devices===false && $rack_contents===false) {
             print " <span class='text-muted'>"._("Rack is empty")."</span>";
-            if($admin) {
+            if($User->get_module_permissions ("racks")>1) {
                 print " <hr>";
-                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
-                print "&nbsp;&nbsp;&nbsp;";
-                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
+                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
+                print "<br>";
+                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
             }
         }
         else {
@@ -230,7 +233,7 @@ else {
                     $cur->rack_start_print = $cur->rack_start;
                 }
 
-                if($admin) {
+                if($User->get_module_permissions ("racks")>1) {
                     print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='$ctype' data-csrf='".$User->Crypto->csrf_cookie ("create", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
                 }
                 print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
@@ -245,11 +248,11 @@ else {
             } while ($cur);
 
             //add / remove device from rack
-            if($admin) {
+            if($User->get_module_permissions ("racks")>1) {
                 print "<hr>";
-                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
-                print "&nbsp;&nbsp;&nbsp;";
-                print " <a href='' class='btn btn-xs btn-default editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
+                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
+                print "<br>";
+                print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='content'><i class='fa fa-plus'></i></a> "._("Add custom equipment");
             }
         }
         print "</td>";

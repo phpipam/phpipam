@@ -735,6 +735,16 @@ $upgrade_queries["1.4.8"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VAR
 $upgrade_queries["1.4.8"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
 
 
+#
+# Subversion 1.4.9 queries
+#
+$upgrade_queries["1.4.9"][] = "-- Database version bump";
+$upgrade_queries["1.4.9"][] = "UPDATE `settings` set `dbversion` = '9';";
+// Set permissions
+$upgrade_queries["1.4.9"][] = "-- Change permissions for modules";
+$upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_racks` INT(1)  NOT NULL  DEFAULT '1';";
+
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check

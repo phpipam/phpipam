@@ -1633,6 +1633,6 @@ class User extends Common_functions {
      * @return array
      */
     private function get_modules_with_permissions () {
-        return ["customers"];
+        return ["customers", "racks"];
     }
 }

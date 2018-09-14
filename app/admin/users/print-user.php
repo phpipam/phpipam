@@ -98,6 +98,12 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td><?php print $Subnets->parse_permissions ($user->perm_customers); ?></td>
 </tr>
 <?php } ?>
+<?php if ($User->settings->enableRACK==1) { ?>
+<tr>
+	<td><?php print _('Racks'); ?></td>
+	<td><?php print $Subnets->parse_permissions ($user->perm_racks); ?></td>
+</tr>
+<?php } ?>
 
 
 

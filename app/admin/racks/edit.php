@@ -10,13 +10,16 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+
+# verify module permissions
+$User->check_module_permissions ("racks", 3, true, true);
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "rack");
@@ -120,7 +123,7 @@ $(document).ready(function(){
             </select>
         </td>
     </tr>
-    
+
 	<!-- Location -->
 	<?php if($User->settings->enableLocations=="1") { ?>
 	<tr>

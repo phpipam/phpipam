@@ -17,6 +17,9 @@
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;
         + Custom rack devices independant of devices (power, patchpanel);
+    + Customized user permissions for modules:
+        + Customers modile permissions;
+        + Rack module permissions;
     + API:
         + Add Mac Search for Addresses controller (#2005);
 
