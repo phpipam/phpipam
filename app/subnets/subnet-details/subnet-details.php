@@ -137,6 +137,29 @@ else {
 		</td>
 	</tr>
 
+	<?php
+	# VRF
+	if($User->settings->enableVRF==1) {
+		# get vrf details
+		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
+		# null
+		if($vrf===false) {
+			$vrfText = "<span class='text-muted'>"._("None")."</span>";
+		}
+		else {
+			# set text
+			$vrfText = "<a href='".create_link("tools","vrf")."' target='_blank'>".$vrf->name."</a>";
+			if(!empty($vrf->description)) { $vrfText .= " [$vrf->description]";}
+		}
+
+		print "<tr>";
+		print "	<th>"._('VRF')."</th>";
+		print "	<td>$vrfText</td>";
+		print "</tr>";
+
+		$vrf = (array) $vrf;
+	}
+	?>
 
 	<!-- nameservers -->
 	<tr>
@@ -282,31 +305,6 @@ else {
     <?php } ?>
 
 	<?php
-	# VRF
-	if($User->settings->enableVRF==1) {
-		# get vrf details
-		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
-		# null
-		if($vrf===false) {
-			$vrfText = "<span class='text-muted'>"._("None")."</span>";
-		}
-		else {
-			# set text
-			$vrfText = $vrf->name;
-			if(!empty($vrf->description)) { $vrfText .= " [$vrf->description]";}
-		}
-
-        print "<tr>";
-        print "<td colspan='2'><hr></td>";
-        print "</tr>";
-		print "<tr>";
-		print "	<th>"._('VRF')."</th>";
-		print "	<td>$vrfText</td>";
-		print "</tr>";
-
-		$vrf = (array) $vrf;
-	}
-
 	# FW zone info
 	if($User->settings->enableFirewallZones==1) {
 		# class
@@ -352,7 +350,7 @@ else {
 	if(!$slaves) {
 
 		# Are IP requests allowed?
-		if ($User->settings->enableIPrequests==1) {
+		if ($User->settings->enableIPrequests==1 && $subnet_permission==3) {
 			# divider
 			print "<tr>";
 			print "	<td colspan='2'><hr></td>";
@@ -366,52 +364,55 @@ else {
 			print "</tr>";
 		}
 
-		# divider
-		print "<tr>";
-		print "	<td colspan='2'><hr></td>";
-		print "</tr>";
+		# admin only
+		if($subnet_permission==3) {
+			# divider
+			print "<tr>";
+			print "	<td colspan='2'><hr></td>";
+			print "</tr>";
 
-		# agent
-		if ($subnet['pingSubnet']==1 || $subnet['discoverSubnet']==1) {
-		print "<tr>";
-		print "	<th>"._('Scan agent')."</th>";
-		print "	<td>";
-		// fetch
-		$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
-		if ($agent===false)		{ print _("Invalid scan agent"); }
-		else					{
-			$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? "Never" : $agent->last_access;
-			print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
+			# agent
+			if ($subnet['pingSubnet']==1 || $subnet['discoverSubnet']==1) {
+			print "<tr>";
+			print "	<th>"._('Scan agent')."</th>";
+			print "	<td>";
+			// fetch
+			$agent = $Tools->fetch_object ("scanAgents", "id", $subnet['scanAgent']);
+			if ($agent===false)		{ print _("Invalid scan agent"); }
+			else					{
+				$last_check = is_null($agent->last_access)||$agent->last_access=="0000-00-00 00:00:00"||$agent->last_access=="1970-01-01 00:00:01" ? "Never" : $agent->last_access;
+				print "<strong>".$agent->name ."</strong> (".$agent->description.") <br> <span class='text-muted'>"._("Last check")." $last_check</span>";
+			}
+			print "	</td>";
+			print "</tr>";
+			}
+
+			# ping-check hosts inside subnet
+			$last_check_s = is_null($subnet['lastScan'])||$subnet['lastScan']==""||$subnet['lastScan']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastScan']."</div>";
+			$last_check_d = is_null($subnet['lastDiscovery'])||$subnet['lastDiscovery']==""||$subnet['lastDiscovery']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastDiscovery']."</div>";
+
+			print "<tr>";
+			print "	<th>"._('Hosts check')."</th>";
+			if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_s</td>"; }		# yes
+			else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+			print "</tr>";
+			# scan subnet for new hosts *
+			print "<tr>";
+			print "	<th>"._('Discover new hosts')."</th>";
+			if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_d</td>"; }		# yes
+			else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+			print "</tr>";
+			# resolve DNS names
+			print "<tr>";
+			print "	<th>"._('Resolve DNS names')."</th>";
+			if($subnet['resolveDNS'] == 1) 			    { print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+			else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
+			print "</tr>";
 		}
-		print "	</td>";
-		print "</tr>";
-		}
-
-		# ping-check hosts inside subnet
-		$last_check_s = is_null($subnet['lastScan'])||$subnet['lastScan']==""||$subnet['lastScan']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastScan']."</div>";
-		$last_check_d = is_null($subnet['lastDiscovery'])||$subnet['lastDiscovery']==""||$subnet['lastDiscovery']=="0000-00-00 00:00:00" ? "" : " <span class='text-muted'>"._("Last scan")." ".$subnet['lastDiscovery']."</div>";
-
-		print "<tr>";
-		print "	<th>"._('Hosts check')."</th>";
-		if($subnet['pingSubnet'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_s</td>"; }		# yes
-		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
-		print "</tr>";
-		# scan subnet for new hosts *
-		print "<tr>";
-		print "	<th>"._('Discover new hosts')."</th>";
-		if($subnet['discoverSubnet'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $last_check_d</td>"; }		# yes
-		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
-		print "</tr>";
-		# resolve DNS names
-		print "<tr>";
-		print "	<th>"._('Resolve DNS names')."</th>";
-		if($subnet['resolveDNS'] == 1) 			    { print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
-		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
-		print "</tr>";
 	}
 
 	# autocreate PTR records
-	if($User->settings->enablePowerDNS==1) {
+	if($User->settings->enablePowerDNS==1 && $subnet_permission==3) {
 		// initialize class
 		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
 			# powerDNS class
@@ -504,7 +505,7 @@ else {
 			# divider
 			print "<tr>";
 			print "	<th><hr></th>";
-			print "	<td></td>";
+			print "	<td><hr></td>";
 			print "</tr>";
 
 			print implode("\n", $html_custom);
