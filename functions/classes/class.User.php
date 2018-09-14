@@ -1592,7 +1592,7 @@ class User extends Common_functions {
     public function get_module_permissions ($module_name = "") {
         if(in_array($module_name, $this->get_modules_with_permissions())) {
             // admin
-            if($this->is_admin()) {
+            if($this->is_admin(false)) {
                 return 3;
             }
             else {
