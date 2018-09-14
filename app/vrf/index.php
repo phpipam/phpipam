@@ -1,7 +1,9 @@
 <?php
 
+die();
+
 # get VRF details
-$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['subnetId']);
+$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['section']);
 
 if ($vrf===false) {
 	print "<div class='subnetDetails'>";
@@ -20,4 +22,3 @@ else {
 	include_once('vrf-subnets.php');
 	print '</div>';
 }
-?>

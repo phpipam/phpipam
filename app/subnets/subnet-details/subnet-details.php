@@ -148,7 +148,7 @@ else {
 		}
 		else {
 			# set text
-			$vrfText = "<a href='".create_link("tools","vrf")."' target='_blank'>".$vrf->name."</a>";
+			$vrfText = "<a href='".create_link("tools","vrf",$vrf->vrfId)."' target='_blank'>".$vrf->name."</a>";
 			if(!empty($vrf->description)) { $vrfText .= " [$vrf->description]";}
 		}
 

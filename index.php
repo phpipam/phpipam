@@ -281,7 +281,7 @@ else {
 						else																{ include("app/subnets/index.php"); }
 					}
 					# vrf
-					elseif ($_GET['page']=="vrf") 											{ include("app/vrf/index.php"); }
+					elseif ($_GET['page']=="vrf") 											{ include("app/tools/vrf/index.php"); }
 					# vlan
 					elseif ($_GET['page']=="vlan") 											{ include("app/vlan/index.php"); }
 					# folder
