@@ -6,21 +6,13 @@
 
 # verify that user is logged in
 $User->check_user_session();
-
-# set admin
-$admin = $User->is_admin(false);
-
 ?>
 <h4><?php print _('NAT translations'); ?></h4>
 <hr>
 
-<?php if($admin && $User->settings->enableNAT=="1") { ?>
+<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")==3) { ?>
 <div class="btn-group">
-    <?php if($_GET['page']=="administration") { ?>
 	<a href="" class='btn btn-sm btn-default editNat' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
-	<?php } else { ?>
-	<a href="<?php print create_link("administration", "nat") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
-	<?php } ?>
     <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>
 </div>
 <br>
@@ -30,6 +22,10 @@ $admin = $User->is_admin(false);
 # check that nat support isenabled
 if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
+}
+# no access
+elseif ($User->check_module_permissions ("nat", 1, false, false)===false) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 else {
     # fetch all nats
@@ -48,9 +44,8 @@ else {
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
-    if($admin && $_GET['page']=="administration")
     print " <th>"._('Description')."</th>";
-    if($admin)
+    if($User->get_module_permissions ("nat")>1)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -70,7 +65,7 @@ else {
     # loop
     foreach ($nats_reordered as $k=>$nats) {
         # header
-        $colspan = $admin ? 10 : 9;
+        $colspan = 10;
         print "<tr>";
         print " <td colspan='$colspan' class='th'><i class='fa fa-exchange'></i> "._(ucwords($k)." NAT")."</td>";
         print "</tr>";
@@ -124,10 +119,9 @@ else {
                 print " <td>$n->device</td>";
                 print " <td>$n->src_port</td>";
                 print " <td>$n->dst_port</td>";
-                if($admin && $_GET['page']=="administration")
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // actions
-                if($admin) {
+                if($User->get_module_permissions ("nat")>1) {
         		print "	<td class='actions'>";
         		print "	<div class='btn-group'>";
         		print "		<a href='' class='btn btn-xs btn-default editNat' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";

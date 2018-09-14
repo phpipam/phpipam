@@ -80,7 +80,7 @@ if ($User->settings->enableNAT==1) {
             <?php if($User->is_admin(false)) { ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="permissions") print "class='active'"; ?>><a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "permissions"); ?>'><?php print _("Permissions"); ?></a></li>
             <?php } ?>
-            <?php if($User->settings->enableNAT==1) { ?>
+            <?php if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>0) { ?>
             <li role='presentation' <?php if(@$_GET['sPage']=="nat") print "class='active'"; ?>> <a href='<?php print create_link("subnets", $subnet['sectionId'], $subnet['id'], "nat"); ?>'><?php print _("NAT"); ?></a></li>
             <?php } ?>
             <?php if($User->settings->enableLocations==1) { ?>

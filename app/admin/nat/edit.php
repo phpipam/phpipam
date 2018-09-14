@@ -10,12 +10,14 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# validate NAT permissions
+$User->check_module_permissions ("nat", 2, true, true);
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "nat");

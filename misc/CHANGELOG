@@ -20,6 +20,7 @@
     + Customized user permissions for modules:
         + Customers modile permissions;
         + Rack module permissions;
+        + NAT module permissions;
     + API:
         + Add Mac Search for Addresses controller (#2005);
 

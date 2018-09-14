@@ -33,7 +33,7 @@ $tool_items["vrf"] = array(
                        );
 }
 // nat
-if($User->settings->enableNAT==1) {
+if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>1) {
 $tool_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("tools", "nat"),
@@ -76,7 +76,7 @@ $tool_items["devices"] = array (
                         "icon"=>"fa-desktop"
                         );
 // rack
-if($User->settings->enableRACK == 1) {
+if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>1) {
 $tool_items["racks"] = array (
                         "name"=>"Racks",
                         "href"=>array("tools", "racks"),

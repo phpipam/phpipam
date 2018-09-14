@@ -13,6 +13,11 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# validate NAT permissions
+if($_POST['action']=="edit")
+$User->check_module_permissions ("nat", 2, true, false);
+else
+$User->check_module_permissions ("nat", 3, true, false);
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);

@@ -377,6 +377,7 @@ CREATE TABLE `users` (
   `perm_pstn` INT(1)  NOT NULL  DEFAULT '1',
   `perm_racks` INT(1)  NOT NULL  DEFAULT '1',
   `perm_customers` INT(1)  NOT NULL  DEFAULT '1',
+  `perm_nat` INT(1)  NOT NULL  DEFAULT '1',
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',

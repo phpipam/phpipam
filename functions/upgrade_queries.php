@@ -743,6 +743,7 @@ $upgrade_queries["1.4.9"][] = "UPDATE `settings` set `dbversion` = '9';";
 // Set permissions
 $upgrade_queries["1.4.9"][] = "-- Change permissions for modules";
 $upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_racks` INT(1)  NOT NULL  DEFAULT '1';";
+$upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_nat` INT(1)  NOT NULL  DEFAULT '1';";
 
 
 // output if required
