@@ -74,7 +74,7 @@ else {
 
 		// Check user has read level permission to vlan l2domain
 		$vlan_domain = $Tools->fetch_object("vlanDomains", "id", $vlan->domainId);
-		if (!$User->check_sections_permissions($vlan_domain->permissions, 1, false)) continue;
+		if (!$User->check_l2domain_permissions($vlan_domain, 1, false)) continue;
 
 		// show free vlans - start
 		if($User->user->hideFreeRange!=1 && !isset($_GET['sPage'])) {

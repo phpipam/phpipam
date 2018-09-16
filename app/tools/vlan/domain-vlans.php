@@ -12,7 +12,7 @@ $vlan_domain = $Tools->fetch_object("vlanDomains", "id", $_GET['subnetId']);
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # Check user has read level permission to l2domain (or die with warning)
-$User->check_sections_permissions($vlan_domain->permissions);
+$User->check_l2domain_permissions($vlan_domain);
 
 # get all VLANs and subnet descriptions
 $vlans = $Tools->fetch_vlans_and_subnets ($vlan_domain->id);

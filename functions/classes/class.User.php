@@ -1577,7 +1577,7 @@ class User extends Common_functions {
 	}
 
     /**
-     * Get sections permissions for user
+     * Get user l2domain access permissions
      *
      * Result can be the following:
      *     - 0 : no access
@@ -1585,25 +1585,40 @@ class User extends Common_functions {
      *     - 2 ; read-write
      *     - 3 : admin
      *
-     * @method get_sections_permissions
-     * @param  string $sections
+     * @method get_l2domain_permissions
+     * @param  object $l2domain
      * @return int
      */
-    public function get_sections_permissions ($sections) {
+    public function get_l2domain_permissions ($l2domain) {
         if ($this->is_admin(false))
             return 3;
 
-        $cached_item = $this->cache_check('sections_permissions', "p=$sections");
+        // Default l2domain is assigned to all sections
+        if ($l2domain->id == 1) {
+            $sections_ids = [];
+            $all_sections = $this->fetch_all_objects("sections");
+            if (is_array($all_sections)) {
+                foreach($all_sections as $section){
+                    $sections_ids[] = $section->id;
+                }
+            }
+            $valid_sections = implode(';', $sections_ids);
+        } else {
+            $valid_sections = $l2domain->permissions;
+        }
+
+        $cached_item = $this->cache_check('l2domain_permissions', $valid_sections);
         if(is_object($cached_item)) return $cached_item->result;
 
-        $valid_sections = explode(";", $sections);
-
-        if (!is_array($valid_sections))
+        if (empty($valid_sections)) {
+            $this->cache_write('l2domain_permissions', $valid_sections, (object)["result" => 0]);
             return 0;
+        }
 
         $max_permission = 0;
 
-        foreach($valid_sections as $id) {
+        $ids = explode(";", $valid_sections);
+        foreach($ids as $id) {
             $section = $this->fetch_object("sections", "id", $id);
 
             if (!is_object($section)) continue;
@@ -1628,23 +1643,23 @@ class User extends Common_functions {
         }
 
         # return result
-        $this->cache_write('sections_permissions', "p=$sections", (object)["result" => $max_permission]);
+        $this->cache_write('l2domain_permissions', $valid_sections, (object)["result" => $max_permission]);
         return $max_permission;
     }
 
     /**
-     * Check if user has sections permissions for specific access level
+     * Check if user has l2domain permissions for specific access level
      *
-     * @method check_sections_permissions
-     * @param  string $sections
+     * @method check_l2domain_permissions
+     * @param  object $l2domain
      * @param  int $required_level
      * @param  bool $die
      * @param  bool $popup
      * @return bool|void
      */
-    public function check_sections_permissions($sections, $required_level = 1, $die = true, $popup = false) {
+    public function check_l2domain_permissions($l2domain, $required_level = 1, $die = true, $popup = false) {
         // check if valid
-        $valid = $this->get_sections_permissions($sections)>=$required_level;
+        $valid = $this->get_l2domain_permissions($l2domain)>=$required_level;
         // return or die ?
         if ($die===true && !$valid) {
             $this->Result->show ("danger", _("You do not have permissions to access this object"), true, $popup);
