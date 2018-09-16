@@ -35,7 +35,7 @@ $settings = $Tools->fetch_object("settings", "id", 1);
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript">
 	$(document).ready(function(){

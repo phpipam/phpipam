@@ -39,8 +39,8 @@ $Upgrade = new Upgrade ($Database);
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-	<script type="text/javascript" src="js/jclock.jquery.js"></script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/install.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
