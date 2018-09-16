@@ -139,9 +139,9 @@ class Common_functions  {
 		$a = explode('.', $verA);
 		$b = explode('.', $verB);
 
-		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;
-		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);  // 1.21 is less than 1.3
-		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;
+		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
+		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
+		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;			// 1.4.9 is less than 1.4.10
 		return 0;
 	}
 
