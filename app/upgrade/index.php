@@ -117,7 +117,7 @@ if(!isset($User->settings->dbversion)) {
 # authenticated, but not admins
 if (!$User->is_admin(false)) {
 	# version is ok
-	if ($User->settings->version.$User->settings->dbversion == VERSION.DBVERSION) {
+	if ($User->cmp_version_strings($User->settings->version.'.'.$User->settings->dbversion,VERSION.'.'.DBVERSION) == 0) {
 		header("Location: ".create_link("login"));
 	}
 	# upgrade needed
@@ -129,7 +129,7 @@ if (!$User->is_admin(false)) {
 # admins that are authenticated
 elseif($User->is_admin(false)) {
 	# version ok
-	if ($User->settings->version.$User->settings->dbversion == VERSION.DBVERSION) {
+	if ($User->cmp_version_strings($User->settings->version.'.'.$User->settings->dbversion,VERSION.'.'.DBVERSION) == 0) {
 		$title 	  = "Database upgrade check";
 		$content  = "<div class='alert alert-success'>Database seems up to date and doesn't need to be upgraded!</div>";
 		$content .= '<div class="text-right"><a href="'.create_link(null).'"><button class="btn btn-sm btn-default">Go to dashboard</button></a></div>';
@@ -144,7 +144,7 @@ elseif($User->is_admin(false)) {
 		$content  = "<div class='alert alert-danger'><strong>Error!</strong> upgrade_queries.php DBVERSION ".VERSION."v".DBVERSION." does not match SCHEMA.sql dbversion ".VERSION."v".$Tools->fetch_schema_version()."<br>Unable to verify the database structure after applying the upgrade queries.<br><br>All upgrade_queries.php schema changes should be applied to db/SCHEMA.sql.</div>";
 	}
 	# upgrade needed
-	elseif ($User->settings->version.$User->settings->dbversion < VERSION.DBVERSION) {
+	elseif ($User->cmp_version_strings($User->settings->version.'.'.$User->settings->dbversion,VERSION.'.'.DBVERSION) < 0) {
 		$title	  = "phpipam database upgrade required";
 		$title	 .= "<hr><div class='text-muted' style='font-size:13px;padding-top:5px;'>Database needs to be upgraded to version <strong>".VERSION.".r".DBVERSION."</strong>, it seems you are using phpipam version <strong>".$User->settings->version.".r".$User->settings->dbversion."</strong>!</div>";
 

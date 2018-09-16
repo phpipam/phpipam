@@ -475,7 +475,7 @@ class Upgrade extends Install {
 	 */
 	private function reqister_query ($version, $query) {
 		// check if version is higher than old version, otherwise skip query
-		if ($version > $this->old_version) {
+		if ($this->cmp_version_strings($version, $this->old_version) > 0) {
 			// break
 			if (strpos($query, "--")===0) {
 				$this->queries[] = "\n";

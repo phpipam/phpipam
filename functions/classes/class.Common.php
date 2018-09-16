@@ -122,7 +122,28 @@ class Common_functions  {
 
 
 
+	/**
+	 *	@version handling
+	 *	--------------------------------
+	 */
 
+	 /**
+	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
+	 *
+	 * @access public
+	 * @param string $verA
+	 * @param mixed $verB
+	 * @return int
+	 */
+	public function cmp_version_strings($verA, $verB) {
+		$a = explode('.', $verA);
+		$b = explode('.', $verB);
+
+		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;
+		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);  // 1.21 is less than 1.3
+		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;
+		return 0;
+	}
 
 
 
