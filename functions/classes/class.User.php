@@ -1577,6 +1577,84 @@ class User extends Common_functions {
 	}
 
     /**
+     * Get sections permissions for user
+     *
+     * Result can be the following:
+     *     - 0 : no access
+     *     - 1 : read-only
+     *     - 2 ; read-write
+     *     - 3 : admin
+     *
+     * @method get_sections_permissions
+     * @param  string $sections
+     * @return int
+     */
+    public function get_sections_permissions ($sections) {
+        if ($this->is_admin(false))
+            return 3;
+
+        $cached_item = $this->cache_check('sections_permissions', "p=$sections");
+        if(is_object($cached_item)) return $cached_item->result;
+
+        $valid_sections = explode(";", $sections);
+
+        if (!is_array($valid_sections))
+            return 0;
+
+        $max_permission = 0;
+
+        foreach($valid_sections as $id) {
+            $section = $this->fetch_object("sections", "id", $id);
+
+            if (!is_object($section)) continue;
+
+            # Get Section permissions
+            $sectionP = json_decode($section->permissions, true);
+
+            # ok, user has section access, check also for any higher access from subnet
+            if(!is_array($sectionP)) continue;
+
+            # get all user groups
+            $groups = json_decode($this->user->groups, true);
+
+            foreach($sectionP as $sk=>$sp) {
+                # check each group if user is in it and if so check for permissions for that group
+                foreach($groups as $uk=>$up) {
+                    if($uk == $sk) {
+                        if($sp > $max_permission) { $max_permission = $sp; }
+                    }
+                }
+            }
+        }
+
+        # return result
+        $this->cache_write('sections_permissions', "p=$sections", (object)["result" => $max_permission]);
+        return $max_permission;
+    }
+
+    /**
+     * Check if user has sections permissions for specific access level
+     *
+     * @method check_sections_permissions
+     * @param  string $sections
+     * @param  int $required_level
+     * @param  bool $die
+     * @param  bool $popup
+     * @return bool|void
+     */
+    public function check_sections_permissions($sections, $required_level = 1, $die = true, $popup = false) {
+        // check if valid
+        $valid = $this->get_sections_permissions($sections)>=$required_level;
+        // return or die ?
+        if ($die===true && !$valid) {
+            $this->Result->show ("danger", _("You do not have permissions to access this object"), true, $popup);
+        }
+        else {
+            return $valid;
+        }
+    }
+
+    /**
      * Get module permissions for user
      *
      * Result can be the following:
