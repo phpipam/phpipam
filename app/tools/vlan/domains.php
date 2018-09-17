@@ -40,6 +40,9 @@
 <!-- content -->
 <?php
 foreach($vlan_domains as $domain) {
+	// Check user has read level permission to l2domain
+	if (!$User->check_l2domain_permissions($domain, 1, false)) continue;
+
 	// format sections
 	if($domain->id==1) {
 		$sections = "All sections";

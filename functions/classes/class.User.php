@@ -1577,6 +1577,99 @@ class User extends Common_functions {
 	}
 
     /**
+     * Get user l2domain access permissions
+     *
+     * Result can be the following:
+     *     - 0 : no access
+     *     - 1 : read-only
+     *     - 2 ; read-write
+     *     - 3 : admin
+     *
+     * @method get_l2domain_permissions
+     * @param  object $l2domain
+     * @return int
+     */
+    public function get_l2domain_permissions ($l2domain) {
+        if ($this->is_admin(false))
+            return 3;
+
+        // Default l2domain is assigned to all sections
+        if ($l2domain->id == 1) {
+            $sections_ids = [];
+            $all_sections = $this->fetch_all_objects("sections");
+            if (is_array($all_sections)) {
+                foreach($all_sections as $section){
+                    $sections_ids[] = $section->id;
+                }
+            }
+            $valid_sections = implode(';', $sections_ids);
+        } else {
+            $valid_sections = $l2domain->permissions;
+        }
+
+        $cached_item = $this->cache_check('l2domain_permissions', $valid_sections);
+        if(is_object($cached_item)) return $cached_item->result;
+
+        if (empty($valid_sections)) {
+            $this->cache_write('l2domain_permissions', $valid_sections, (object)["result" => 0]);
+            return 0;
+        }
+
+        $max_permission = 0;
+
+        $ids = explode(";", $valid_sections);
+        foreach($ids as $id) {
+            $section = $this->fetch_object("sections", "id", $id);
+
+            if (!is_object($section)) continue;
+
+            # Get Section permissions
+            $sectionP = json_decode($section->permissions, true);
+
+            # ok, user has section access, check also for any higher access from subnet
+            if(!is_array($sectionP)) continue;
+
+            # get all user groups
+            $groups = json_decode($this->user->groups, true);
+
+            foreach($sectionP as $sk=>$sp) {
+                # check each group if user is in it and if so check for permissions for that group
+                foreach($groups as $uk=>$up) {
+                    if($uk == $sk) {
+                        if($sp > $max_permission) { $max_permission = $sp; }
+                    }
+                }
+            }
+        }
+
+        # return result
+        $this->cache_write('l2domain_permissions', $valid_sections, (object)["result" => $max_permission]);
+        return $max_permission;
+    }
+
+    /**
+     * Check if user has l2domain permissions for specific access level
+     *
+     * @method check_l2domain_permissions
+     * @param  object $l2domain
+     * @param  int $required_level
+     * @param  bool $die
+     * @param  bool $popup
+     * @return bool|void
+     */
+    public function check_l2domain_permissions($l2domain, $required_level = 1, $die = true, $popup = false) {
+        // check if valid
+        $valid = $this->get_l2domain_permissions($l2domain)>=$required_level;
+        // return or die ?
+        if ($die===true && !$valid) {
+            $this->Result->show ("danger", _("You do not have permissions to access this object"), true, $popup);
+        }
+        else {
+            return $valid;
+        }
+    }
+
+    /**
      * Get module permissions for user
      *
      * Result can be the following:
@@ -1592,7 +1685,7 @@ class User extends Common_functions {
     public function get_module_permissions ($module_name = "") {
         if(in_array($module_name, $this->get_modules_with_permissions())) {
             // admin
-            if($this->is_admin()) {
+            if($this->is_admin(false)) {
                 return 3;
             }
             else {
