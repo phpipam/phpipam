@@ -25,7 +25,7 @@ print "<hr><br>";
 		];
 
 	// module permisisons
-	if(!$User->is_admin(false))
+	//if(!$User->is_admin(false))
 	$subpages['permissions'] = "Module permissions";
 
 	// 2fa

@@ -124,6 +124,12 @@ if(isset($_POST['perm_customers'])) {
 if(isset($_POST['perm_pstn'])) {
 	$values['perm_pstn'] = $_POST['perm_pstn'];
 }
+if(isset($_POST['perm_racks'])) {
+	$values['perm_racks'] = $_POST['perm_racks'];
+}
+if(isset($_POST['perm_nat'])) {
+	$values['perm_nat'] = $_POST['perm_nat'];
+}
 # custom fields
 if (sizeof($myFields)>0) {
     foreach($myFields as $myField) {

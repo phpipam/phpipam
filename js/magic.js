@@ -1236,8 +1236,8 @@ $(document).on("change", "form#usersEdit select[name=role]", function() {
     //get details - we need Section, network and subnet bitmask
     var type = $("form#usersEdit select[name=role]").find(":selected").val();
     //we changed to domain
-    if(type == "Administrator") { $('tbody#user_notifications').show(); }
-    else            			{ $('tbody#user_notifications').hide(); }
+    if(type == "Administrator") { $('tbody#user_notifications').show(); $('tbody.module_permissions').hide(); }
+    else            			{ $('tbody#user_notifications').hide(); $('tbody.module_permissions').show(); }
 });
 
 // generate random pass

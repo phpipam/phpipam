@@ -290,7 +290,16 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Select to which groups the user belongs to'); ?></td>
 	</tr>
 
-	<!-- vlans -->
+
+	<?php
+	if($user['role']=="Administrator") {
+		print "<tbody class='module_permissions' style='display:none'>";
+	}
+	else {
+		print "<tbody class='module_permissions'>";
+	}
+	?>
+	<!-- permissions -->
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
@@ -321,6 +330,42 @@ $(document).ready(function(){
             <input type="checkbox" class="input-switch" value="Yes" name="editCircuits" <?php if($user['editCircuits'] == "Yes") print 'checked'; ?>>
     	</td>
 		<td class="info2"><?php print _('Select to allow user to manage circuits'); ?></td>
+	</tr>
+    <?php } ?>
+
+	<!-- rack -->
+    <?php if ($User->settings->enableRACK==1) { ?>
+	<tr>
+    	<td><?php print _("Rack");?></td>
+    	<td>
+        	<select class="form-control input-sm input-w-auto" name="perm_racks">
+            <?php
+            foreach (array(0,1,2,3) as $p) {
+                $selected = $p==$user['perm_racks'] ? "selected" : "";
+                print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
+            }
+            ?>
+        	</select>
+    	</td>
+		<td class="info2"><?php print _('Rack module permissions'); ?></td>
+	</tr>
+    <?php } ?>
+
+	<!-- NAT -->
+    <?php if ($User->settings->enableNAT==1) { ?>
+	<tr>
+    	<td><?php print _("NAT");?></td>
+    	<td>
+        	<select class="form-control input-sm input-w-auto" name="perm_nat">
+            <?php
+            foreach (array(0,1,2,3) as $p) {
+                $selected = $p==$user['perm_nat'] ? "selected" : "";
+                print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
+            }
+            ?>
+        	</select>
+    	</td>
+		<td class="info2"><?php print _('NAT module permissions'); ?></td>
 	</tr>
     <?php } ?>
 
@@ -359,6 +404,7 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Customers module permissions'); ?></td>
 	</tr>
     <?php } ?>
+	</tbody>
 
 	<!-- Custom -->
 	<?php

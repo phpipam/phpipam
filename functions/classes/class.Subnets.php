@@ -2920,10 +2920,10 @@ class Subnets extends Common_functions {
 	 */
 	public function parse_permissions ($permissions) {
 		switch($permissions) {
-			case 0: 	$r = _("No access");			break;
-			case 1: 	$r = _("Read");					break;
-			case 2: 	$r = _("Read / Write");			break;
-			case 3: 	$r = _("Read / Write / Admin");	break;
+			case 0: 	$r = _("No access");	break;
+			case 1: 	$r = _("Read");			break;
+			case 2: 	$r = _("Write");		break;
+			case 3: 	$r = _("Admin");		break;
 			default:	$r = _("error");
 		}
 		return $r;
