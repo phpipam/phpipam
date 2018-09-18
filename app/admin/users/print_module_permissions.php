@@ -1,6 +1,4 @@
 <?php
-require_once( dirname(__FILE__) . "/get_badge.php" );
-
 
 // process permissions
 $permissions = json_decode($user['module_permissions'], true);
