@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vrf", 1, true, false);
 
 # fetch all subnets in vrf in this section
 $slaves = $Subnets->fetch_vrf_subnets ($_GET['subnetId'], NULL);
@@ -28,6 +30,7 @@ else {
 	# headers
 	print "<thead>";
 	print "<tr>";
+	if($User->get_module_permissions ("vlan")>0)
 	print "	<th class='small'>"._('VLAN')."</th>";
 	print "	<th class='small description'>"._('Subnet description')."</th>";
 	print "	<th class='description'>"._('Subnet')."</th>";
@@ -37,7 +40,7 @@ else {
 	print "</tr>";
 	print "</thead>";
 
-
+	$m=0;
 	print "<tbody>";
 	# print subnets
 	foreach ($slaves as $subnet) {
@@ -46,7 +49,6 @@ else {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet['id']);
 		# allowed
-		$m=0;
 		if($permission > 0) {
 
             # add full information
@@ -56,6 +58,7 @@ else {
             $vlan = $Tools->fetch_object ("vlans", "vlanId", $subnet['vlanId']);
 
 			print "<tr>";
+			if($User->get_module_permissions ("vlan")>0)
 		    print "	<td><a href='".create_link("tools","vlan", $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>";
 		    print "	<td class='small description'><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>$subnet[description]</a></td>";
 		    print "	<td><a href='".create_link("subnets",$_GET['section'],$subnet['id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
@@ -101,16 +104,17 @@ else {
 
 			$m++;
 		}
-		# no because of permissions
-		if($m==0) {
-			print "<tr>";
-			print "<td colspan='6' class='visible-md visible-lg'>";
-			print "<td colspan='4' class='visible-xs visible-sm'>";
-			$Result->show("info", _("VRF has no belonging subnets")."!", false);
-			print "</td>";
-			print "</tr>";
-		}
 	}
+
+	# no because of permissions
+	if($m==0) {
+		print "<tr>";
+		print "<td colspan='6' class='visible-md visible-lg'>";
+		$Result->show("info", _("VRF has no belonging subnets")."!", false);
+		print "</td>";
+		print "</tr>";
+	}
+
 	print "</tbody>";
 	print '</table>'. "\n";
 }

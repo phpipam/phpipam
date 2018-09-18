@@ -12,6 +12,8 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('circuitsLogical');
@@ -31,7 +33,7 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+	if($User->get_module_permissions ("circuits")>2) {
     	print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='add' data-circuitid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add logical circuit')."</a>";
 	}
 print "</div>";
@@ -101,8 +103,9 @@ else {
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",'logical',$circuit->id)."''><i class='fa fa-eye'></i></a>";
-		if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+		if($User->get_module_permissions ("circuits")>1) {
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
+		if($User->get_module_permissions ("circuits")>2)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
 		}
 		print "	</div>";

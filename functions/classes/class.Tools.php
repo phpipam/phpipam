@@ -2343,19 +2343,6 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 * Checks permission for specified prefix
-	 *
-	 *	we provide user details and subnetId
-	 *
-	 * @access public
-	 * @param object $user
-	 * @return int
-	 */
-	public function check_prefix_permission ($user) {
-        return $user->role=="Administrator" ? 3 : $user->perm_pstn;
-	}
-
-	/**
 	 * Prints structured menu of prefixes
 	 *
 	 * @access public
@@ -2365,6 +2352,9 @@ class Tools extends Common_functions {
 	 * @return mixed
 	 */
 	public function print_menu_prefixes ( $user, $prefixes, $custom_fields ) {
+
+		# user class for permissions
+		$User = new User ($this->Database);
 
 		# set hidden fields
 		$this->get_settings ();
@@ -2379,8 +2369,7 @@ class Tools extends Common_functions {
 		# remove all not permitted!
 		if(sizeof($prefixes)>0) {
 		foreach($prefixes as $k=>$s) {
-			$permission = $this->check_prefix_permission ($user);
-			if($permission == 0) { unset($prefixes[$k]); }
+			if($User->get_module_permissions ("pstn")<1) { unset($prefixes[$k]); }
 		}
 		}
 
@@ -2473,16 +2462,18 @@ class Tools extends Common_functions {
                 $html[] = "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
 
 				//device
-				$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
+				if($User->get_module_permissions ("devices")>1) {
+					$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
 
-				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
-				else {
-					$device = $this->fetch_object ("devices", "id", $option['deviceId']);
-					if ($device!==false) {
-						$html[] = "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
-					}
+					if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
 					else {
-						$html[] ='	<td>/</td>' . "\n";
+						$device = $this->fetch_object ("devices", "id", $option['deviceId']);
+						if ($device!==false) {
+							$html[] = "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
+						}
+						else {
+							$html[] ='	<td>/</td>' . "\n";
+						}
 					}
 				}
 
@@ -2514,22 +2505,15 @@ class Tools extends Common_functions {
 			    	}
 			    }
 
-				# set permission
-				$permission = $this->check_prefix_permission ($user);
-
-				$html[] = "	<td class='actions' style='padding:0px;'>";
-				$html[] = "	<div class='btn-group'>";
-
-				if($permission>2) {
+				if($User->get_module_permissions ("pstn")>1) {
+					$html[] = "	<td class='actions' style='padding:0px;'>";
+					$html[] = "	<div class='btn-group'>";
 					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['id']."'><i class='fa fa-pencil'></i></button>";
+					if($User->get_module_permissions ("pstn")>2)
 					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['id']."'><i class='fa fa-times'></i></button>";
+					$html[] = "	</div>";
+					$html[] = "	</td>";
 				}
-				else {
-					$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
-					$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
-				}
-				$html[] = "	</div>";
-				$html[] = "	</td>";
 
 				$html[] = "</tr>";
 

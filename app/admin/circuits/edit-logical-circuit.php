@@ -17,8 +17,13 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# check permissions
-if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit details"), true, true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("circuits", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("circuits", 3, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "circuitsLogical");

@@ -371,13 +371,6 @@ CREATE TABLE `users` (
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
-  `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
-  `editVlan` SET('Yes','No')  NULL  DEFAULT 'No',
-  `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No',
-  `perm_pstn` INT(1)  NOT NULL  DEFAULT '1',
-  `perm_racks` INT(1)  NOT NULL  DEFAULT '1',
-  `perm_customers` INT(1)  NOT NULL  DEFAULT '1',
-  `perm_nat` INT(1)  NOT NULL  DEFAULT '1',
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
@@ -397,6 +390,7 @@ CREATE TABLE `users` (
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
+  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1"}',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`),
   KEY `id` (`id`)
@@ -949,4 +943,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 9;
+UPDATE `settings` SET `dbversion` = 10;

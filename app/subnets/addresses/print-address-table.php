@@ -152,11 +152,11 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
     }
 	# note, device, port, owner, location
 	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
-	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
+	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
-	if(in_array('location', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
+	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
-	if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]>0)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
+	if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>0)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
 	// custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
@@ -448,7 +448,7 @@ else {
 	        	}
 
 	        	# print device
-	        	if(in_array('switch', $selected_ip_fields)) {
+	        	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
 		        	# get device details
 		        	$device = (array) $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
 		        	# set rack
@@ -462,16 +462,22 @@ else {
 				}
 
 				# print port
-				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->port."</td>"; }
+				if(in_array('port', $selected_ip_fields)) {
+					print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->port."</td>";
+				}
 
-			    	# print location
-			    	if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>"; }
+			    # print location
+			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("vlan")>0) {
+			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>";
+			    }
 
 				# print owner
-				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$addresses[$n]->owner."</td>"; }
+				if(in_array('owner', $selected_ip_fields)) {
+					print "<td class='hidden-xs hidden-sm'>".$addresses[$n]->owner."</td>";
+				}
 
 				# customer_id
-				if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]) {
+				if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"] && $User->get_module_permissions ("customers")>0) {
 					$customer = $Tools->fetch_object ("customers", "id", $addresses[$n]->customer_id);
 					print $customer===false ? "<td></td>" : "<td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 				}

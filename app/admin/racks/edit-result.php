@@ -17,8 +17,14 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# verify module permissions
-$User->check_module_permissions ("racks", 3, true);
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("racks", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("racks", 3, true, true);
+}
+
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -116,8 +122,13 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 
+# remove location
+if ($User->get_module_permissions ("locations")>0) {
+	unset($values['location']);
+}
+
 # append customerId
-if($User->settings->enableCustomers=="1") {
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 	if (is_numeric($_POST['customer_id'])) {
 		if ($_POST['customer_id']>0) {
 			$values['customer_id'] = $_POST['customer_id'];

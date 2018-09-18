@@ -7,24 +7,22 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vrf", 1, true, false);
 
 # fetch all VRFs
 $vrfs = $Tools->fetch_all_objects("vrf", "vrfId");
 
-
 # title
 print "<h4>"._('Available VRFs and belonging subnets')."</h4>";
 print "<hr>";
-
 ?>
+
+<?php if($User->get_module_permissions ("vrf")>2) { ?>
 <div class="btn-group" style='margin-bottom:10px;'>
     <button class='btn btn-sm btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VRF'); ?></button>
-    <?php
-	if($User->is_admin(false)) {
-		print "<a class='btn btn-sm btn-default' href='".create_link("administration","vrfs")."' data-action='add'  data-switchid=''><i class='fa fa-pencil'></i> ". _('Manage')."</a>";
-	}
-	?>
 </div>
+<?php } ?>
 
 <?php
 /* for each VRF check which subnet has it configured */
@@ -42,7 +40,7 @@ else {
 		print "<h4><a href='".create_link("tools", "vrf", $vrf['vrfId'])."'><span class='badge badge1' style='font-size:20px;'>$vrf[name]</span></a></h4>";
 
 		// customers
-		if($User->settings->enableCustomers=="1") {
+		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 			 $customer = $Tools->fetch_object ("customers", "id", $vrf['customer_id']);
 			 print $customer===false ? "" : "<span class='text-muted'>"._("Customer")." ".$customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></span>";
 		}
@@ -53,6 +51,7 @@ else {
 		# headers
 		print "<thead>";
 		print "	<tr>";
+		if($User->get_module_permissions ("vlan")>0)
 		print "	<th>"._('VLAN')."</th>";
 		print "	<th>"._('Description')."</th>";
 		print "	<th>"._('Section')."</th>";
@@ -115,6 +114,7 @@ else {
 					# get section name
 					$section = (array) $Sections->fetch_section(null, $subnet['sectionId']);
 
+					if($User->get_module_permissions ("vlan")>0)
 					print "	<td>$subnet[VLAN]</td>";
 					print "	<td>$subnet[description]</td>";
 					print "	<td><a href='".create_link("subnets",$section['id'])."'>$section[name]</a></td>";

@@ -8,9 +8,12 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# perm check
+if ($User->get_module_permissions ('vrf')<1) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # display single VRF or all ?
-if(is_numeric(@$_GET['subnetId'])) {
-
+elseif(is_numeric(@$_GET['subnetId'])) {
 	# get VRF details
 	$vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['subnetId']);
 

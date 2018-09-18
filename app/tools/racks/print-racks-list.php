@@ -121,7 +121,7 @@ else {
             // links
             print " <td class='actions'>";
             print " <div class='btn-group'>";
-            if($User->get_module_permissions ("racks")>2)
+            if($User->get_module_permissions ("racks")>1)
             print "     <a href='' class='btn btn-xs btn-default editRack' data-action='edit'   data-rackid='$r->id'><i class='fa fa-pencil'></i></a>";
             print "     <a href='' class='btn btn-xs btn-default showRackPopup' data-rackId='$r->id' data-deviceId='0'><i class='fa fa-server'></i></a>";
             if($User->get_module_permissions ("racks")>2)

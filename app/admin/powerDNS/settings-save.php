@@ -65,4 +65,3 @@ if ($values->autoserial!==@$old_values->autoserial) {
         $PowerDNS->update_all_soa_serials ($values->autoserial);
     }
 }
-?>

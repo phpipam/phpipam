@@ -9,7 +9,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools      = new Tools ($Database);
@@ -19,6 +19,8 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check
+$User->check_module_permissions ("vrf", 3, true, false);
 
 # check for number of input values
 $max = ini_get("max_input_vars");

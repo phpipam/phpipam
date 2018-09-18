@@ -5,6 +5,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vrf", 1, true, false);
 
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
@@ -71,6 +73,30 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		</td>
 	</tr>
 
+	<tr>
+		<th><?php print _('Description'); ?></th>
+		<td><?php print $vrf->description; ?></td>
+	</tr>
+
+	<?php
+	// customers
+	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+		 $customer = $Tools->fetch_object ("customers", "id", $vrf->customer_id);
+
+		 print "<tr>";
+		 print "	<th>"._("Customer")."</th>";
+		 print "	<td>";
+		 if ($customer===false) {
+		 		print "<span class='text-muted'>/</span>";
+		 }
+		 else {
+			print "<span>".$customer->title." <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></span>";
+		 }
+		 print "	</td>";
+		 print "</tr>";
+	}
+	?>
+
 	<?php
 
 	# print custom subnet fields if any
@@ -91,17 +117,18 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		print "<tr><td><hr></td><td></td></tr>";
 	}
 
-	# action button groups
-	print "<tr>";
-	print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-	print "	<td style='vertical-align:bottom;align:left;'>";
-
-	print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
-	print "	<div class='btn-group'>";
-
 	# permissions
-	if($User->is_admin (false)) {
+	if($User->get_module_permissions ("vrf")>1) {
+		# action button groups
+		print "<tr>";
+		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align:left;'>";
+
+		print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
+		print "	<div class='btn-group'>";
+
 		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
+		if($User->get_module_permissions ("vrf")>2)
 		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
 	}
 

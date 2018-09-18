@@ -746,6 +746,25 @@ $upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_racks` INT(1)  NOT 
 $upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_nat` INT(1)  NOT NULL  DEFAULT '1';";
 
 
+#
+# Subversion 1.4.10 queries
+#
+$upgrade_queries["1.4.10"][] = "-- Database version bump";
+$upgrade_queries["1.4.10"][] = "UPDATE `settings` set `dbversion` = '10';";
+// Set permissions
+$upgrade_queries["1.4.10"][] = "-- Change permissions for modules";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` ADD `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\"}';";
+// Drop old permission fields
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `pdns`;";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `editVlan`;";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `editCircuits`;";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_nat`;";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_racks`;";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_pstn`;";
+$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_customers`;";
+
+
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check

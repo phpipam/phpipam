@@ -5,6 +5,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", 1, true, false);
 
 # not existing
 if(!$vrf) { $Result->show("danger", _('Invalid VRF id'), true); }
@@ -95,7 +97,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 	print "	<div class='btn-group'>";
 
 	# permissions
-	if($User->is_admin (false)) {
+	if($User->get_module_permissions ("vrf")>1) {
 		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
 		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
 	}

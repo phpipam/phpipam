@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
 $PowerDNS 	= new PowerDNS ($Database);
 
@@ -18,6 +18,14 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pdns", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("pdns", 3, true, false);
+}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);

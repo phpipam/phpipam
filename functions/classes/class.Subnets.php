@@ -221,6 +221,15 @@ class Subnets extends Common_functions {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
+		# User class for permissions
+		$User = new User ($this->Database);
+		# validate permissions
+		if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
+		if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
+		if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
+		if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
+		if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
+
 		# execute
 		try { $this->Database->insertObject("subnets", $values); }
 		catch (Exception $e) {
@@ -252,6 +261,15 @@ class Subnets extends Common_functions {
 
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
+
+		# User class for permissions
+		$User = new User ($this->Database);
+		# validate permissions
+		if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
+		if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
+		if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
+		if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
+		if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
 
 		# execute
 		try { $this->Database->updateObject("subnets", $values, "id"); }
@@ -2909,24 +2927,6 @@ class Subnets extends Common_functions {
 		# return result
 		$this->cache_write('subnet_permissions', "p=$subnet->permissions s=$subnet->sectionId", (object)["result" => $out]);
 		return $out;
-	}
-
-	/**
-	 * Parse subnet permissions to user readable format
-	 *
-	 * @access public
-	 * @param mixed $permissions
-	 * @return string
-	 */
-	public function parse_permissions ($permissions) {
-		switch($permissions) {
-			case 0: 	$r = _("No access");	break;
-			case 1: 	$r = _("Read");			break;
-			case 2: 	$r = _("Write");		break;
-			case 3: 	$r = _("Admin");		break;
-			default:	$r = _("error");
-		}
-		return $r;
 	}
 
 	/**

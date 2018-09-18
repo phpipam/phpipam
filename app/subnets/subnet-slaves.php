@@ -34,10 +34,11 @@ print '<table class="slaves table sorted table-striped table-condensed table-hov
 # headers
 print "<thead>";
 print "<tr>";
+if($User->get_module_permissions ("vlan")>0)
 print "	<th class='small'>"._('VLAN')."</th>";
 print "	<th class='small description'>"._('Subnet description')."</th>";
 print "	<th>"._('Subnet')."</th>";
-if($User->settings->enableCustomers=="1") {
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 print "	<th>"._('Customer')."</th>";
 $colspan_subnets++;
 }
@@ -102,12 +103,13 @@ foreach ($slave_subnets as $slave_subnet) {
 	$slave_subnet['description'] = $has_slaves_ind . $slave_subnet['description'];
 
 	print "<tr>";
+	if($User->get_module_permissions ("vlan")>0)
     print "	<td class='small'>".@$slave_vlan['number']."</td>";
     print "	<td class='small description'><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>$slave_subnet[description]</a></td>";
     print "	<td><a href='".create_link("subnets",$section['id'],$slave_subnet['id'])."'>".$Subnets->transform_address($slave_subnet['subnet'],"dotted")."/$slave_subnet[mask]</a> $fullinfo</td>";
 
     # customer
-    if($User->settings->enableCustomers=="1") {
+    if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
     	if(is_numeric($slave_subnet['customer_id'])) {
 	    	$customer = $Tools->fetch_object ("customers", "id", $slave_subnet['customer_id']);
 	    	if ($customer===false) {

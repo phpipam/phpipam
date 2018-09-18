@@ -18,9 +18,16 @@
         + Top-down / Bottom-up racks;
         + Custom rack devices independant of devices (power, patchpanel);
     + Customized user permissions for modules:
-        + Customers modile permissions;
-        + Rack module permissions;
-        + NAT module permissions;
+        + VLAN module;
+        + VRF module;
+        + PowerDNS module;
+        + Circuits module;
+        + Customers module;
+        + Devices module;
+        + Rack module;
+        + NAT module;
+        + PSTN module;
+        + Locations module;
     + API:
         + Add Mac Search for Addresses controller (#2005);
 

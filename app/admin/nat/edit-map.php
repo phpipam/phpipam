@@ -15,8 +15,13 @@ $User->check_user_session();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
-# validate NAT permissions
-$User->check_module_permissions ("nat", 2, true, true);
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("nat", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("nat", 3, true, true);
+}
 
 # validations
 if($_POST['object_type']!=="subnets" && $_POST['object_type']!=="ipaddresses")

@@ -1566,7 +1566,23 @@ class Common_functions  {
 		return array($removed_permissions, $changed_permissions, $new_permissions);
 	}
 
-
+	/**
+	 * Parse subnet permissions to user readable format
+	 *
+	 * @access public
+	 * @param mixed $permissions
+	 * @return string
+	 */
+	public function parse_permissions ($permissions) {
+		switch($permissions) {
+			case 0: 	$r = _("No access");	break;
+			case 1: 	$r = _("Read");			break;
+			case 2: 	$r = _("Write");		break;
+			case 3: 	$r = _("Admin");		break;
+			default:	$r = _("error");
+		}
+		return $r;
+	}
 
 
 

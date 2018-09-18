@@ -98,7 +98,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	}
 
 	// edit, delete
-	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+	if($User->get_module_permissions ("customers")>1) {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
@@ -107,9 +107,9 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
     	print "	<td></td>";
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		if($User->get_module_permissions("customers")>=2)
+		if($User->get_module_permissions("customers")>1)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'><i class='fa fa-pencil'></i></a>";
-		if($User->get_module_permissions("customers")==3)
+		if($User->get_module_permissions("customers")>2)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print " </td>";

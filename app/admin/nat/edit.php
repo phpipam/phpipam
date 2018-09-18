@@ -16,8 +16,13 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# validate NAT permissions
-$User->check_module_permissions ("nat", 2, true, true);
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("nat", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("nat", 3, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "nat");
@@ -83,6 +88,7 @@ $link = $readonly ? false : true;
         </tr>
 
     	<!-- Device -->
+        <?php if($User->get_module_permissions ("devices")>0) { ?>
     	<tr>
         	<th><?php print _('Device'); ?></th>
         	<td>
@@ -105,6 +111,7 @@ $link = $readonly ? false : true;
             	<span class="text-muted"><?php print _("Select Device"); ?></span>
         	</td>
         </tr>
+        <?php } ?>
 
     	<!-- Source -->
     	<?php if($_POST['action']!=="add") { ?>

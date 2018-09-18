@@ -121,6 +121,7 @@ else {
 	</tr>
 	<?php } ?>
 
+	<?php if($User->get_module_permissions ("vlan")>0) { ?>
 	<tr>
 		<th><?php print _('VLAN'); ?></th>
 		<td>
@@ -136,10 +137,11 @@ else {
 		?>
 		</td>
 	</tr>
+	<?php } ?>
 
 	<?php
 	# VRF
-	if($User->settings->enableVRF==1) {
+	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0) {
 		# get vrf details
 		$vrf = $Tools->fetch_object("vrf", "vrfId" ,$subnet['vrfId']);
 		# null
@@ -183,7 +185,8 @@ else {
 		</td>
 	</tr>
 
-	<!-- devices -->
+	<!-- Customers -->
+	<?php if($User->get_module_permissions ("customers")>0) { ?>
 	<tr>
 		<th><?php print _('Customer'); ?></th>
 		<td>
@@ -205,7 +208,9 @@ else {
 		?>
 		</td>
 	</tr>
+	<?php } ?>
 
+	<?php if($User->get_module_permissions ("devices")>0) { ?>
 	<!-- devices -->
 	<tr>
 		<th><?php print _('Device'); ?></th>
@@ -238,9 +243,10 @@ else {
 		?>
 		</td>
 	</tr>
+	<?php } ?>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
 	<tr>
 		<th><?php print _('Location'); ?></th>
 		<td>
@@ -273,6 +279,7 @@ else {
     </tr>
     <?php } ?>
 
+	<?php if($subnet_permission==3) { ?>
     <tr>
     	<th><?php print _("Last edited"); ?></th>
     	<td>
@@ -284,6 +291,7 @@ else {
     		</span>
     	</td>
     </tr>
+    <?php } ?>
 
     <?php if($User->settings->enableThreshold=="1" && $subnet['threshold']>0) { ?>
     <tr>
@@ -412,7 +420,7 @@ else {
 	}
 
 	# autocreate PTR records
-	if($User->settings->enablePowerDNS==1 && $subnet_permission==3) {
+	if($User->settings->enablePowerDNS==1 && $subnet_permission==3 && $User->get_module_permissions ("pdns")>0) {
 		// initialize class
 		if ($subnet['DNSrecursive'] == 1 || $subnet['DNSrecords']==1) {
 			# powerDNS class

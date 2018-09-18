@@ -358,6 +358,8 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_add ($address) {
+		# user - permissions
+		$User = new User ($this->Database);
 		# set insert array
 		$insert = array(
 						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
@@ -376,8 +378,12 @@ class Addresses extends Common_functions {
 						"firewallAddressObject" => @$address['firewallAddressObject'],
 						"lastSeen"              => @$address['lastSeen']
 						);
+		# permissions
+		if($User->get_module_permissions ("devices")<1) {
+			unset($insert['switch']);
+		}
 		# customer
-		if(isset($address['customer_id'])) {
+		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
 			if (is_numeric($address['customer_id'])) {
 				if ($address['customer_id']!="0") {
 					$insert['customer_id'] = $address['customer_id'];
@@ -388,7 +394,7 @@ class Addresses extends Common_functions {
 			}
 		}
         # location
-        if (isset($address['location_item'])) {
+        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
             if (!is_numeric($address['location_item'])) {
                 $this->Result->show("danger", _("Invalid location value"), true);
             }
@@ -441,7 +447,8 @@ class Addresses extends Common_functions {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
 		if (isset($address['section'])) $address_old->section = $address['section'];
-
+		# user - permissions
+		$User = new User ($this->Database);
 		# set update array
 		$insert = array(
 						"id"          =>$address['id'],
@@ -459,8 +466,12 @@ class Addresses extends Common_functions {
 						"excludePing" =>@$address['excludePing'],
 						"PTRignore"   =>@$address['PTRignore']
 						);
+		# permissions
+		if($User->get_module_permissions ("devices")<1) {
+			unset($insert['switch']);
+		}
  		# customer
-		if(isset($address['customer_id'])) {
+		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
 			if (is_numeric($address['customer_id'])) {
 				if ($address['customer_id']!="0") {
 					$insert['customer_id'] = $address['customer_id'];
@@ -471,7 +482,7 @@ class Addresses extends Common_functions {
 			}
 		}
         # location
-        if (isset($address['location_item'])) {
+        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
             if (!is_numeric($address['location_item'])) {
                 $this->Result->show("danger", _("Invalid location value"), true);
             }

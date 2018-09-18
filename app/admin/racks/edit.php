@@ -17,9 +17,13 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
-# verify module permissions
-$User->check_module_permissions ("racks", 3, true, true);
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("racks", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("racks", 3, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "rack");
@@ -125,7 +129,7 @@ $(document).ready(function(){
     </tr>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -146,7 +150,7 @@ $(document).ready(function(){
 
 	<?php
     // customers
-    if($User->settings->enableCustomers==1) {
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print

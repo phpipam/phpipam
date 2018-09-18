@@ -5,6 +5,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", 1, true, false);
 
 # get VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);
@@ -23,7 +25,7 @@ if($vlan[0]===false)				{ $Result->show("danger", _('Invalid VLAN id'), true); }
 $custom_fields = $Tools->fetch_custom_fields('vlans');
 
 # customer
-if ($User->settings->enableCustomers=="1") {
+if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 	$customer = $Tools->fetch_object ("customers", "id", $vlan['customer_id']);
 	if($customer===false) {
 		$customer = new StdClass ();
@@ -61,7 +63,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		<td><?php print html_entity_decode($vlan['description']); ?></td>
 	</tr>
 
-	<?php if ($User->settings->enableCustomers=="1") { ?>
+	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) { ?>
 	<tr>
 		<td colspan='2'><hr></td>
 	</tr>
@@ -99,23 +101,26 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		}
 	}
 
-	print "<tr>";
-	print "	<td colspan='2'><hr></td>";
-	print "</tr>";
-
-	/* action button groups */
-	print "<tr>";
-	print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-	print "	<td style='vertical-align:bottom;align:left;'>";
-
-	print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
-	print "	<div class='btn-group'>";
 
 	# permissions
-	if($User->is_admin(false)==true || $User->user->editVlan=="Yes") {
+	if($User->get_module_permissions ("vlan")>1) {
+		print "<tr>";
+		print "	<td colspan='2'><hr></td>";
+		print "</tr>";
+
+		/* action button groups */
+		print "<tr>";
+		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
+		print "	<td style='vertical-align:bottom;align:left;'>";
+
+		print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
+		print "	<div class='btn-group'>";
+
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan[vlanId]'><i class='fa fa-pencil'></i></button>";
+		if($User->get_module_permissions ("vlan")>2) {
 		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$vlan[vlanId]'><i class='fa fa-external-link'></i></button>";
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan[vlanId]'><i class='fa fa-times'></i></button>";
+		}
 	}
 
 	print "	</div>";

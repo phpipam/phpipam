@@ -855,6 +855,9 @@ class User extends Common_functions {
 
             if(sizeof($usert)==0)    { $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
             else                     { $this->user = $user; }
+
+            // register permissions
+            $this->register_user_module_permissions ();
         }
     }
 
@@ -1670,6 +1673,29 @@ class User extends Common_functions {
     }
 
     /**
+     * Register use module permissions from json
+     *
+     * @method register_user_module_permissions
+     * @return void
+     */
+    private function register_user_module_permissions () {
+        // decode
+        $permissions = json_decode($this->user->module_permissions, true);
+        // check for each module
+        foreach ($this->get_modules_with_permissions() as $m) {
+            if (!is_array($permissions)) {
+                $this->user->{'perm_'.$m} = 0;
+            }
+            elseif(array_key_exists($m, $permissions)) {
+                $this->user->{'perm_'.$m} = $permissions[$m];
+            }
+            else {
+                $this->user->{'perm_'.$m} = 0;
+            }
+        }
+    }
+
+    /**
      * Get module permissions for user
      *
      * Result can be the following:
@@ -1689,7 +1715,7 @@ class User extends Common_functions {
                 return 3;
             }
             else {
-                return $User->{'perm_'.$module_name};
+                return $this->user->{'perm_'.$module_name};
             }
         }
         else {
@@ -1725,7 +1751,33 @@ class User extends Common_functions {
      * @method get_modules_with_permissions
      * @return array
      */
-    private function get_modules_with_permissions () {
-        return ["customers", "racks", "nat"];
+    public function get_modules_with_permissions () {
+        return [
+                "vlan",
+                "vrf",
+                "pdns",
+                "circuits",
+                "racks",
+                "nat",
+                "pstn",
+                "customers",
+                "locations",
+                "devices",
+                "dhcp"
+            ];
+    }
+
+    /**
+     * Prints permission badge
+     *
+     * @method print_permission_badge
+     * @param  int $level
+     * @return string
+     */
+    public function print_permission_badge ($level) {
+        // null level
+        if(is_null($level)) $level = 0;
+        // return
+        return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
     }
 }

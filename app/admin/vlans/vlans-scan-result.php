@@ -9,7 +9,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Subnets	= new Subnets ($Database);
 $Addresses	= new Addresses ($Database);
 $Tools      = new Tools ($Database);
@@ -19,6 +19,8 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check popup
+$User->check_module_permissions ("pdns", 3, true, true);
 
 # check for number of input values
 $max = ini_get("max_input_vars");
@@ -54,12 +56,6 @@ foreach($_POST as $key=>$line) {
 	}
 }
 
-/*
-print "<pre>";
-var_dump($res);
-die('alert-danger');
-*/
-
 # insert entries
 if(sizeof($res)>0) {
 	$errors = 0;
@@ -85,4 +81,3 @@ if(sizeof($res)>0) {
 }
 # error
 else { $Result->show("danger", _("No entries available"), true); }
-?>

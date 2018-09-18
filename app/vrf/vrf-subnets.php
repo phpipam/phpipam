@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", 1, true, false);
 
 # fetch all subnets in vrf in this section
 $slaves = $Subnets->fetch_vrf_subnets ($_GET['subnetId'], $_GET['section']);
@@ -118,4 +120,3 @@ else {
 	}
 	print '</table>'. "\n";
 }
-?>

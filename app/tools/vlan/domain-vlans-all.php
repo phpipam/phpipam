@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", 1, true, false);
 
 # fetch l2 domain
 $vlan_domain = new StdClass();
@@ -24,13 +26,13 @@ $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : 
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 # set disabled for non-admins
-$disabled = $User->is_admin(false)==true||$User->user->editVlan=="Yes" ? "" : "hidden";
+$disabled = $User->get_module_permissions ("vlan")>1 ? "" : "hidden";
 
 
 # title
 print "<h4>"._('VLANs in all domains')."</h4>";
 print "<hr>";
-print "<div class='text-muted' style='padding-left:10px;'>"._('List of VLANS in all domains')."</div><hr>";
+print "<div class='text-muted' style='padding-left:10px;'>"._('List of VLANS in all domains')."</div>";
 
 print "<div class='btn-group' style='margin-bottom:10px;'>";
 print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
@@ -52,11 +54,10 @@ else {
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
 	print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('L2domain').'</th>' . "\n";
-	if($User->settings->enableCustomers=="1") {
+	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 	print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
 	$csize++;
 	}
-
 	if(sizeof(@$custom_fields) > 0) {
 		foreach($custom_fields as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
@@ -64,6 +65,7 @@ else {
 			}
 		}
 	}
+	if($User->get_module_permissions ("vlan")>1)
     print "<th></th>";
 	print "</tr>";
 	print "</thead>";
@@ -112,7 +114,7 @@ else {
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
 		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
-		if($User->settings->enableCustomers=="1") {
+		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
 			 $customer = $Tools->fetch_object ("customers", "id", $vlan->customer_id);
 			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 		}
@@ -129,6 +131,7 @@ else {
 	    }
 
         // actions
+        if ($User->get_module_permissions ("vlan")>1) {
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan->id'><i class='fa fa-pencil'></i></button>";
@@ -136,6 +139,7 @@ else {
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan->id'><i class='fa fa-times'></i></button>";
 		print "	</div>";
 		print "	</td>";
+		}
 
         print "</tr>";
 
