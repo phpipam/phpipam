@@ -31,10 +31,13 @@ if (!is_numeric($_GET['deviceId']))   { die(); }
 $rack = $User->fetch_object("racks", "id", $_GET['rackId']);
 if ($rack===false)     				  { die(); }
 
+# permission - dont draw names if user has no access to devices
+$draw_names = $User->get_module_permissions ("devices")>0 ? true : false;
+
 # back
 if(@$_GET['is_back']=="1") {
-	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true);
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true, $draw_names);
 }
 else {
-	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId']);
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], false, $draw_names);
 }

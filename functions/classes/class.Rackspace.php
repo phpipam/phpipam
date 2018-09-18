@@ -209,10 +209,11 @@ class phpipam_rack extends Tools {
      * @param  int $id
      * @param  bool|int $deviceId   // active device id
      * @param  bool $is_back        // we are drwaing back side
+     * @param  bool $draw_names     // user permission for devices
      *
      * @return [type]
      */
-    public function draw_rack ($id, $deviceId = false, $is_back = false) {
+    public function draw_rack ($id, $deviceId = false, $is_back = false, $draw_names = true) {
         // fetch rack details
         $rack = $this->fetch_rack_details ($id);
         // fetch rack devices
@@ -241,6 +242,8 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
                     }
@@ -257,6 +260,8 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
                     }
@@ -279,6 +284,8 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
                     }
@@ -295,6 +302,8 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
                     }
