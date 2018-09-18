@@ -1,4 +1,5 @@
 <?php
+require_once( dirname(__FILE__) . "/get_badge.php" );
 
 
 // process permissions
