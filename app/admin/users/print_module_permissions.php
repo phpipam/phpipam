@@ -32,6 +32,13 @@ print "<tr><td>"._("VLAN")."</td><td>".$User->print_permission_badge($user['perm
 // VRF
 print "<tr><td>"._("VRF")."</td><td>".$User->print_permission_badge($user['perm_vrf'])."</td></tr>";
 
+// PDNS
+if ($User->settings->enablePowerDNS==1)
+print "<tr><td>"._("PowerDNS")."</td><td>".$User->print_permission_badge($user['perm_pdns'])."</td></tr>";
+
+// Devices
+print "<tr><td>"._("Devices")."</td><td>".$User->print_permission_badge($user['perm_devices'])."</td></tr>";
+
 // Racks
 if ($User->settings->enableRACK==1)
 print "<tr><td>"._("Racks")."</td><td>".$User->print_permission_badge($user['perm_racks'])."</td></tr>";
@@ -40,10 +47,6 @@ print "<tr><td>"._("Racks")."</td><td>".$User->print_permission_badge($user['per
 if ($User->settings->enableCircuits==1)
 print "<tr><td>"._("Circuits")."</td><td>".$User->print_permission_badge($user['perm_circuits'])."</td></tr>";
 
-// PDNS
-if ($User->settings->enablePowerDNS==1)
-print "<tr><td>"._("PowerDNS")."</td><td>".$User->print_permission_badge($user['perm_pdns'])."</td></tr>";
-
 // NAT
 if ($User->settings->enableNAT==1)
 print "<tr><td>"._("NAT")."</td><td>".$User->print_permission_badge($user['perm_nat'])."</td></tr>";
@@ -51,6 +54,10 @@ print "<tr><td>"._("NAT")."</td><td>".$User->print_permission_badge($user['perm_
 // Customers
 if ($User->settings->enableCustomers==1)
 print "<tr><td>"._("Customers")."</td><td>".$User->print_permission_badge($user['perm_customers'])."</td></tr>";
+
+// Locations
+if ($User->settings->enableLocations==1)
+print "<tr><td>"._("Customers")."</td><td>".$User->print_permission_badge($user['perm_locations'])."</td></tr>";
 
 // pstn
 if ($User->settings->enablePSTN==1)

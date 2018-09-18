@@ -166,6 +166,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 
 
         // attached devices
+        if($User->get_module_permissions ("devices")>0) {
         print "<tr>";
         print " <th>"._('Devices')."</th>";
         print " <td style='padding-bottom:20px;'>";
@@ -258,6 +259,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         }
         print "</td>";
         print "</tr>";
+        }
         ?>
 
         <?php if($User->settings->enableLocations==1 && strlen($rack->location)>0 && $rack->location!=0) { ?>

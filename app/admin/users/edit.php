@@ -318,21 +318,26 @@ $(document).ready(function(){
 	// powerDNS
 	if ($User->settings->enablePowerDNS==1)
 	$perm_modules["perm_pdns"] = "PowerDNS";
-	// Circuits
-	if ($User->settings->enableCircuits==1)
-	$perm_modules["perm_circuits"] = "Circuits";
+	// devices
+	$perm_modules["perm_devices"] = "Devices";
 	// Racks
 	if ($User->settings->enableRACK==1)
 	$perm_modules["perm_racks"] = "Racks";
+	// Circuits
+	if ($User->settings->enableCircuits==1)
+	$perm_modules["perm_circuits"] = "Circuits";
 	// NAT
 	if ($User->settings->enableNAT==1)
 	$perm_modules["perm_nat"] = "NAT";
-	// PSTN
-	if ($User->settings->enablePSTN==1)
-	$perm_modules["perm_pstn"] = "PSTN";
 	// Customers
 	if ($User->settings->enableCustomers==1)
 	$perm_modules["perm_customers"] = "Customers";
+	// Locations
+	if ($User->settings->enableLocations==1)
+	$perm_modules["perm_locations"] = "Locations";
+	// PSTN
+	if ($User->settings->enablePSTN==1)
+	$perm_modules["perm_pstn"] = "PSTN";
 
 	// get permissions
 	$module_permissions = json_decode($user['module_permissions'], true);
