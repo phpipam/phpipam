@@ -325,8 +325,6 @@ else {
 
 				print "</tr>";
 				print "</table>";
-
-				print "<pre>";
 	    	}
 	    	?>
 

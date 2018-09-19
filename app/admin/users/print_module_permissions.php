@@ -57,7 +57,7 @@ print "<tr><td>"._("Customers")."</td><td>".$User->print_permission_badge($user[
 
 // Locations
 if ($User->settings->enableLocations==1)
-print "<tr><td>"._("Customers")."</td><td>".$User->print_permission_badge($user['perm_locations'])."</td></tr>";
+print "<tr><td>"._("Locations")."</td><td>".$User->print_permission_badge($user['perm_locations'])."</td></tr>";
 
 // pstn
 if ($User->settings->enablePSTN==1)
