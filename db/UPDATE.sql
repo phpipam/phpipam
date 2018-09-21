@@ -916,3 +916,9 @@ INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whr
 /* add theme */
 ALTER TABLE `settings` ADD `theme` VARCHAR(32)  NOT NULL  DEFAULT 'dark';
 ALTER TABLE `users` ADD `theme` VARCHAR(32)  NULL  DEFAULT '';
+
+/* VERSION X.Y.Z */
+
+/* SAMLv2 - store x509cert in DB as a param */
+ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;
+
