@@ -790,21 +790,21 @@ class Subnets_controller extends Common_api_functions {
 	/**
 	 * Returns id of subnet gateay
 	 *
-	 * @access private
+	 * @access protected
 	 * @return int|bool
 	 */
-	private function read_subnet_gateway ($id=NULL) {
+	protected function read_subnet_gateway ($id=NULL) {
 		return $id === NULL ? $this->Subnets->find_gateway ($this->_params->id) : $this->Subnets->find_gateway ($id);
 	}
 
 	/**
 	 * Returns nameserver details
 	 *
-	 * @access private
+	 * @access protected
 	 * @param mixed $nsid
 	 * @return array|false
 	 */
-	private function read_subnet_nameserver ($nsid) {
+	protected function read_subnet_nameserver ($nsid) {
     	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
 
