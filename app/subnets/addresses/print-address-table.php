@@ -69,11 +69,11 @@ foreach ($addresses as $a) {
 	if($a->customer_id>0)	{ $cnt_obj["customer_id"]++; }
 	if(strlen($a->location)>0) { $cnt_obj["location"]++; }		//not sure about this, because location is INT in Database
 }
-// check and remove empty
-foreach ($cnt_obj as $k=>$c) {
-	if ($c==0)	{ unset($selected_ip_fields[array_search($k, $selected_ip_fields)]); }
-}
 
+// check and remove empty
+foreach ($cnt_obj as $field=>$c) {
+	if ($c=="0")	{ unset($selected_ip_fields[array_search($field, $selected_ip_fields)]); }
+}
 
 # remove custom fields if all are empty!
 foreach($custom_fields as $field) {
