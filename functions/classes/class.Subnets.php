@@ -2167,8 +2167,9 @@ class Subnets extends Common_functions {
 		if ($this->identify_address($c1[0]) != $this->identify_address($c2[0])) return false;
 
 		$max_mask = $this->get_max_netmask($c1[0]);
-		$c1_mask = empty($c1[1]) ? $max_mask : $c1[1];
-		$c2_mask = empty($c2[1]) ? $max_mask : $c2[1];
+
+		$c1_mask = empty($c1[1])&&$c2[1]!="0" ? $max_mask : $c1[1];
+		$c2_mask = empty($c2[1])&&$c2[1]!="0" ? $max_mask : $c2[1];
 
 		if ($c1_mask < 0 || $c1_mask > $max_mask) return false;
 		if ($c2_mask < 0 || $c2_mask > $max_mask) return false;
