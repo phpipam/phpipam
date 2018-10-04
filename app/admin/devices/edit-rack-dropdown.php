@@ -9,7 +9,6 @@
  *
  */
 
-if($User->get_module_permissions ("racks")>0) {
 # show only for numeric (set) rackid
 if($_POST['rackid']>0 || @$device['rack']>0) {
 	# load objects for ajax-loaded stuff
@@ -44,10 +43,14 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 	}
 	# fetch rack details if set on edit
 	else {
+
 		if (@$device['rack']>0) {
 			$rack = $User->fetch_object ("racks", "id", $device['rack']);
 		}
 	}
+
+	# check permissions
+	$User->check_module_permissions ("racks", 1, true, false);
 
 	# rack devices
 	$rack_devices = $Racks->fetch_rack_devices($rack->id);
@@ -147,5 +150,4 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 else {
 	print "<input type='hidden' name='rack_start' value='0'>";
 	print "<input type='hidden' name='rack_size' value='0'>";
-}
 }
