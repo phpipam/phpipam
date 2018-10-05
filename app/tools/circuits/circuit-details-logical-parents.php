@@ -1,5 +1,8 @@
 <?php
 
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
+
 # title
 print "<h4>"._('Logical circuits')."</h4>";
 print "<hr>";

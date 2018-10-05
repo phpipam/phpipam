@@ -28,7 +28,7 @@ if($Upgrade->upgrade_database()===true) {
 
 	# check for possible errors
 	if(sizeof($errors = $Tools->verify_database())>0) {
-		$esize = sizeof($errors['tableError']) + sizeof($errors['fieldError']);
+		$esize = (is_array($errors['tableError']) ? sizeof($errors['tableError']) : 0) + (is_array($errors['tableError']) ? sizeof($errors['fieldError']) : 0);
 
 		print '<div class="alert alert-danger">'. "\n";
 
@@ -46,8 +46,10 @@ if($Upgrade->upgrade_database()===true) {
 		if (isset($errors['fieldError'])) {
 			print '<strong>'._('Missing fields').':</strong>'. "\n";
 			print '<ul class="fix-field">'. "\n";
-			foreach ($errors['fieldError'] as $table=>$field) {
-				print '<li>Table `'. $table .'`: missing field `'. $field .'`;</li>'. "\n";
+			foreach ($errors['fieldError'] as $table=>$fields) {
+				foreach ($fields as $field) {
+					print '<li>Table `'. $table .'`: missing field `'. $field .'`;</li>'. "\n";
+				}
 			}
 			print '</ul>'. "\n";
 		}

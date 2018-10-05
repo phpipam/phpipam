@@ -358,6 +358,8 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_add ($address) {
+		# user - permissions
+		$User = new User ($this->Database);
 		# set insert array
 		$insert = array(
 						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
@@ -376,8 +378,12 @@ class Addresses extends Common_functions {
 						"firewallAddressObject" => @$address['firewallAddressObject'],
 						"lastSeen"              => @$address['lastSeen']
 						);
+		# permissions
+		if($User->get_module_permissions ("devices")<1) {
+			unset($insert['switch']);
+		}
 		# customer
-		if(isset($address['customer_id'])) {
+		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
 			if (is_numeric($address['customer_id'])) {
 				if ($address['customer_id']!="0") {
 					$insert['customer_id'] = $address['customer_id'];
@@ -388,7 +394,7 @@ class Addresses extends Common_functions {
 			}
 		}
         # location
-        if (isset($address['location_item'])) {
+        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
             if (!is_numeric($address['location_item'])) {
                 $this->Result->show("danger", _("Invalid location value"), true);
             }
@@ -441,7 +447,8 @@ class Addresses extends Common_functions {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
 		if (isset($address['section'])) $address_old->section = $address['section'];
-
+		# user - permissions
+		$User = new User ($this->Database);
 		# set update array
 		$insert = array(
 						"id"          =>$address['id'],
@@ -459,8 +466,12 @@ class Addresses extends Common_functions {
 						"excludePing" =>@$address['excludePing'],
 						"PTRignore"   =>@$address['PTRignore']
 						);
+		# permissions
+		if($User->get_module_permissions ("devices")<1) {
+			unset($insert['switch']);
+		}
  		# customer
-		if(isset($address['customer_id'])) {
+		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
 			if (is_numeric($address['customer_id'])) {
 				if ($address['customer_id']!="0") {
 					$insert['customer_id'] = $address['customer_id'];
@@ -471,7 +482,7 @@ class Addresses extends Common_functions {
 			}
 		}
         # location
-        if (isset($address['location_item'])) {
+        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
             if (!is_numeric($address['location_item'])) {
                 $this->Result->show("danger", _("Invalid location value"), true);
             }
@@ -691,31 +702,30 @@ class Addresses extends Common_functions {
                 	$admins        = $Tools->fetch_multiple_objects ("users", "role", "Administrator");
                 	// if some recipients
                 	if ($admins !== false) {
-                    	// mail settings
-                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
-                    	// mail class
-                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
+						# try to send
+						try {
+	                    	// mail settings
+	                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
+	                    	// mail class
+	                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
 
-                        // send
-                        $phpipam_mail->initialize_mailer();
-                        // set parameters
-                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
-                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
-                        $content[] = "</table>";
-                        // plain
-                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
-                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
-                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
+	                        // set parameters
+	                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
+	                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+	                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
+	                        $content[] = "</table>";
+	                        // plain
+	                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
+	                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
+	                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
 
-                        # set content
-                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-                        $content_plain 	= implode("\r\n",$content_plain);
-                        # try to send
-                        try {
+	                        # set content
+	                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+	                        $content_plain 	= implode("\r\n",$content_plain);
+
                         	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
                         	//add all admins to CC
                         	$recipients = $this->changelog_mail_get_recipients ($subnet->id);
@@ -737,7 +747,7 @@ class Addresses extends Common_functions {
                         } catch (phpmailerException $e) {
                         	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
                         } catch (Exception $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
                         }
                     }
             	}

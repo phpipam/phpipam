@@ -2,9 +2,7 @@
 
 # verify that user is logged in
 $User->check_user_session();
-
-# Make sure user is admin
-$User->is_admin(true);
-
+# perm check
+$User->check_module_permissions ("pstn", 1, true, false);
 # show all prefix objects
 include(dirname(__FILE__)."/../../tools/pstn-prefixes/index.php");

@@ -10,8 +10,6 @@ $User     = new User ($Database);
 // $Admin    = new Admin ($Database, false);
 $Sections = new Sections ($Database);
 $Subnets  = new Subnets ($Database);
-// $Tools    = new Tools ($Database);
-// $Result   = new Result ();
 
 # verify that user is logged in
 $User->check_user_session();

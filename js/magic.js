@@ -16,7 +16,12 @@ function hideSpinner() { $('div.loading').fadeOut('fast'); }
 /* escape hide popups */
 $(document).keydown(function(e) {
     if(e.keyCode === 27) {
-        hidePopups();
+         if($("#popupOverlay2").is(":visible")) {
+            hidePopup2 ();
+         }
+         else {
+            hidePopup1 ();
+         }
     }
 });
 
@@ -144,6 +149,14 @@ function hidePopups() {
     $('.popup').fadeOut('fast');
     $('body').removeClass('stop-scrolling');        //enable scrolling back
     hideSpinner();
+}
+function hidePopup1() {
+    $('#popupOverlay').fadeOut('fast');
+    $('#popupOverlay .popup').fadeOut('fast');
+    // IMPORTANT: also empty loaded content to avoid issues on popup reopening
+    $('#popupOverlay > div').empty();
+    hideSpinner();
+    $('body').removeClass('stop-scrolling');        //enable scrolling back
 }
 function hidePopup2() {
     $('#popupOverlay2').fadeOut('fast');
@@ -1018,6 +1031,25 @@ $('form#ipCalc input.reset').click(function () {
     $('form#ipCalc input[type="text"]').val('');
     $('div.ipCalcResult').fadeOut('fast');
 });
+//
+$(document).on("click", "a.create_section_subnet_from_search", function() {
+    //get details - we need Section, network and subnet bitmask
+    var sectionId = $(this).attr('data-sectionId')
+    var subnet    = $(this).attr('data-subnet')
+    var bitmask   = $(this).attr('data-bitmask')
+
+    // formulate postdata
+    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+
+    //load add Subnet form / popup
+    $.post('app/admin/subnets/edit.php', postdata , function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    });
+
+    return false;
+})
 
 /* search function */
 function search_execute (loc) {
@@ -1204,8 +1236,8 @@ $(document).on("change", "form#usersEdit select[name=role]", function() {
     //get details - we need Section, network and subnet bitmask
     var type = $("form#usersEdit select[name=role]").find(":selected").val();
     //we changed to domain
-    if(type == "Administrator") { $('tbody#user_notifications').show(); }
-    else            			{ $('tbody#user_notifications').hide(); }
+    if(type == "Administrator") { $('tbody#user_notifications').show(); $('tbody.module_permissions').hide(); }
+    else            			{ $('tbody#user_notifications').hide(); $('tbody.module_permissions').show(); }
 });
 
 // generate random pass
@@ -2205,7 +2237,7 @@ $(document).on("click", ".editRack", function() {
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
-	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
+	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), devicetype:$(this).attr('data-devicetype'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
 });
 //submit edit rack devices form
 $(document).on("click", "#editRackDevicesubmit", function() {

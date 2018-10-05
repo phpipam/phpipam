@@ -83,24 +83,25 @@ if($User->settings->enableIPrequests==1) {
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-plus", 			"name"=>"IP requests", 			"href"=>"requests", 	"description"=>"Manage IP requests");
 }
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-info", 	  		"name"=>"Instructions",  		"href"=>"instructions", "description"=>"Instructions for managing IP addresses");
-if($User->settings->enablePowerDNS==1)
+if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>0)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"PowerDNS",  		    "href"=>"powerDNS", "description"=>"PowerDNS");
-if($User->settings->enableDHCP==1)
+if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>0)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-database", 	  	"name"=>"DHCP",  		        "href"=>"dhcp", "description"=>"DHCP information");
-if($User->settings->enablePSTN==1)
+if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0)
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-phone", 	  	"name"=>"PSTN prefixes",  		 "href"=>"pstn-prefixes", "description"=>"PSTN prefixes");
 $tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-sitemap", 	  	"name"=>"MAC lookup",  		 	 "href"=>"mac-lookup", "description"=>"Lookup MAC address vendor");
 
 
 # Subnets
-if($User->settings->enableCustomers == 1)
+if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-users", 	 "name"=>"Customers",  	"href"=>"customers", 	"description"=>"Customers");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-star", 	  	"name"=>"Favourite networks",  	"href"=>"favourites", 	"description"=>"Favourite networks");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-sitemap", 	"name"=>"Subnets",  		   	"href"=>"subnets", 		"description"=>"All subnets");
+if($User->get_module_permissions ("vlan")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VLAN",  				"href"=>"vlan", 		"description"=>"VLANs and belonging subnets");
-if($User->settings->enableVRF == 1)
+if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"VRFs and belonging networks");
-if($User->settings->enableNAT==1)
+if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>0)
 $tools_menu['Subnets'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"NAT", 				"href"=>"nat", 				  "description"=>"NAT translations");
 if($User->settings->enableMulticast == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map-o",		"name"=>"Multicast networks", 	"href"=>"multicast-networks", "description"=>"Multicast subnets and mapping");
@@ -117,12 +118,13 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>
 
 
 # devices
+if($User->get_module_permissions ("devices")>0)
 $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 		"description"=>"All configured devices");
-if($User->settings->enableRACK == 1)
+if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>0)
 $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-bars", 	     "name"=>"Racks",  				"href"=>"racks", 		"description"=>"Rack information");
-if($User->settings->enableCircuits == 1)
+if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>0)
 $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-random", 	 "name"=>"Circuits",  			"href"=>"circuits", 		"description"=>"Circuit information");
-if($User->settings->enableLocations == 1)
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0)
 $tools_menu['Devices'][] 	= array("show"=>true,	"icon"=>"fa-map", 	     "name"=>"Locations",  			"href"=>"locations", 	"description"=>"Locations");
 
 

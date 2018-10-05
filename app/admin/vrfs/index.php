@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vrf", 1, true, false);
 
 # fetch all vrfs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "name");

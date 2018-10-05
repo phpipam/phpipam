@@ -149,6 +149,11 @@ $("input[name='subnet']").change(function() {
 	$masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
 });
 
+<?php if($_POST['location']=="ipcalc" && !isset($_POST['freespaceMSID'])) { ?>
+    var $masterdopdown = $("select[name='masterSubnetId']");
+    $masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
+<?php } ?>
+
 });
 </script>
 
@@ -243,6 +248,7 @@ $("input[name='subnet']").change(function() {
     </tr>
     <?php } ?>
 
+    <?php if($User->get_module_permissions ("vlan")>0) { ?>
     <!-- vlan -->
     <tr>
         <td class="middle"><?php print _('VLAN'); ?></td>
@@ -251,7 +257,10 @@ $("input[name='subnet']").change(function() {
          </td>
         <td class="info2"><?php print _('Select VLAN'); ?></td>
     </tr>
+    <?php } ?>
 
+
+    <?php if($User->get_module_permissions ("devices")>0) { ?>
 	<!-- Device -->
 	<tr>
 		<td class="middle"><?php print _('Device'); ?></td>
@@ -278,6 +287,7 @@ $("input[name='subnet']").change(function() {
 		</td>
 		<td class="info2"><?php print _('Select device where subnet is located'); ?></td>
     </tr>
+    <?php } ?>
 
 	<!-- Nameservers -->
 	<tr>
@@ -309,7 +319,7 @@ $("input[name='subnet']").change(function() {
 	if(empty($subnet_old_details['allowRequests'])) 	{ $subnet_old_details['allowRequests'] = "0"; }
 
 	/* if vlan support is enabled print available vlans */
-	if($User->settings->enableVRF==1) {
+	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0) {
 		print '<tr>' . "\n";
         print '	<td class="middle">'._('VRF').'</td>' . "\n";
         print '	<td>' . "\n";
@@ -347,7 +357,7 @@ $("input[name='subnet']").change(function() {
 	}
 
     // customers
-    if($User->settings->enableCustomers==1) {
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print
@@ -372,11 +382,10 @@ $("input[name='subnet']").change(function() {
         print ' <td class="info2">'._('Assign subnet to customer').'</td>' . "\n";
         print '</tr>' . "\n";
     }
-
 	?>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>

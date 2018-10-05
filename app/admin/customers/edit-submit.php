@@ -18,10 +18,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 // verify module permissions
 if($_POST['action']=="edit") {
-	$User->check_module_permissions ("customers", 2, true, true);
+	$User->check_module_permissions ("customers", 2, true, false);
 }
 else {
-	$User->check_module_permissions ("customers", 3, true, true);
+	$User->check_module_permissions ("customers", 3, true, false);
 }
 
 // check maintaneance mode

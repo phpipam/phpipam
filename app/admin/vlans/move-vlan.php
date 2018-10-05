@@ -10,13 +10,14 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
+# perm check popup
+$User->check_module_permissions ("vlan", 2, true, true);
 
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);

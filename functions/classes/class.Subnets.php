@@ -194,15 +194,16 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
+	 * @param bool $mail_changelog (default: true)
 	 * @return bool
 	 */
-	public function modify_subnet ($action, $values) {
+	public function modify_subnet ($action, $values, $mail_changelog = true) {
 		# strip tags
 		$values = $this->strip_input_tags ($values);
 
 		# execute based on action
 		if($action=="add")			{ return $this->subnet_add ($values); }
-		elseif($action=="edit")		{ return $this->subnet_edit ($values); }
+		elseif($action=="edit")		{ return $this->subnet_edit ($values, $mail_changelog); }
 		elseif($action=="delete")	{ return $this->subnet_delete ($values['id']); }
 		elseif($action=="truncate")	{ return $this->subnet_truncate ($values['id']); }
 		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['subnet'], $values['mask']); }
@@ -219,6 +220,15 @@ class Subnets extends Common_functions {
 	private function subnet_add ($values) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
+
+		# User class for permissions
+		$User = new User ($this->Database);
+		# validate permissions
+		if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
+		if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
+		if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
+		if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
+		if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
 
 		# execute
 		try { $this->Database->insertObject("subnets", $values); }
@@ -242,14 +252,24 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
+	 * @param bool $mail_changelog
 	 * @return bool
 	 */
-	private function subnet_edit ($values) {
+	private function subnet_edit ($values, $mail_changelog = true) {
 		# save old values
 		$old_subnet = $this->fetch_subnet (null, $values['id']);
 
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
+
+		# User class for permissions
+		$User = new User ($this->Database);
+		# validate permissions
+		if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
+		if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
+		if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
+		if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
+		if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
 
 		# execute
 		try { $this->Database->updateObject("subnets", $values, "id"); }
@@ -260,6 +280,8 @@ class Subnets extends Common_functions {
 		}
 		# save ID
 		$this->lastInsertId = $this->Database->lastInsertId();
+		# changelog
+		if($mail_changelog)
 		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
 		$this->Log->write( "Subnet $old_subnet->description edit", "Subnet $old_subnet->description edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
@@ -1325,25 +1347,14 @@ class Subnets extends Common_functions {
 	 * @return integer
 	 */
 	private function get_subnet_ipaddr_count($subnetId) {
-
+		// check cache
 		$cached_item = $this->cache_check("subnet_ipaddr_count", "1");
 
 		if(is_object($cached_item)) {
-			// Use cached array
 			$ipaddr_usage = $cached_item->result;
 		} else {
 			// Generate usage array
-			$ipaddr_usage = [];
-
-			// Generate and cache IP address usage table
-			try { $rows = $this->Database->getObjectsQuery("SELECT SQL_CACHE subnetId,COUNT(*) AS total FROM ipaddresses GROUP BY subnetId"); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return 0;
-			}
-			foreach ($rows as $row) $ipaddr_usage[$row->subnetId] = $row->total;
-
-			//Save
+			$ipaddr_usage = $this->count_all_database_objects('ipaddresses', 'subnetId');
 			$this->cache_write("subnet_ipaddr_count", "1", (object)["result" => $ipaddr_usage]);
 		}
 
@@ -2156,8 +2167,9 @@ class Subnets extends Common_functions {
 		if ($this->identify_address($c1[0]) != $this->identify_address($c2[0])) return false;
 
 		$max_mask = $this->get_max_netmask($c1[0]);
-		$c1_mask = empty($c1[1]) ? $max_mask : $c1[1];
-		$c2_mask = empty($c2[1]) ? $max_mask : $c2[1];
+
+		$c1_mask = empty($c1[1])&&$c2[1]!="0" ? $max_mask : $c1[1];
+		$c2_mask = empty($c2[1])&&$c2[1]!="0" ? $max_mask : $c2[1];
 
 		if ($c1_mask < 0 || $c1_mask > $max_mask) return false;
 		if ($c2_mask < 0 || $c2_mask > $max_mask) return false;
@@ -2919,24 +2931,6 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Parse subnet permissions to user readable format
-	 *
-	 * @access public
-	 * @param mixed $permissions
-	 * @return string
-	 */
-	public function parse_permissions ($permissions) {
-		switch($permissions) {
-			case 0: 	$r = _("No access");			break;
-			case 1: 	$r = _("Read");					break;
-			case 2: 	$r = _("Read / Write");			break;
-			case 3: 	$r = _("Read / Write / Admin");	break;
-			default:	$r = _("error");
-		}
-		return $r;
-	}
-
-	/**
 	 * Apply  permission changes to array of subnets
 	 *
 	 * @access public
@@ -2966,7 +2960,7 @@ class Subnets extends Common_functions {
 				$values = array("id" => $s->id, "permissions" => json_encode($s_old_perm));
 
 				// update
-				if($this->modify_subnet ("edit", $values)===false) {
+				if($this->modify_subnet ("edit", $values, false)===false) {
 					$this->Database->rollBack();
 					if (!$s->isFolder) {
 						$name = $this->transform_to_dotted($s->subnet) . '/' . $s->mask . ' ('.$s->description.')';

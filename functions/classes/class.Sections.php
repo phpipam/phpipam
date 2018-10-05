@@ -577,7 +577,10 @@ class Sections extends Common_functions {
 		if ($permission != 0) {
 			// add
 			if ($permission>1) {
-				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+				$html[] = "<div class='btn-group'>";
+				$html[] = '<button class="btn btn-sm btn-default btn-success editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+				$html[] = "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php'  data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')."'  data-sectionId='$sectionId'><i class='fa fa-sm fa-search'></i> "._("Find subnet")."</button>";
+				$html[] = "</div>";
 			}
 
 			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
@@ -585,13 +588,15 @@ class Sections extends Common_functions {
 
 			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
 			$html[] = '<th data-field="description">'._('Description').'</th>';
+			if($User->get_module_permissions ("vlan")>0)
 			$html[] = '<th data-field="vlan">'._('VLAN').'</th>';
-			if($User->settings->enableVRF == 1) {
+			if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0) {
 				$html[] = '<th data-field="vrf">'._('VRF').'</th>';
 			}
 			$html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
+			if($User->get_module_permissions ("devices")>0)
 			$html[] = '<th data-field="device">'._('Device').'</th>';
-			if($User->settings->enableCustomers == 1) {
+			if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>0) {
 				$html[] = '<th data-field="customer" class="hidden-xs hidden-sm">'._('Customer').'</th>';
 			}
 			if(is_array($custom)) {

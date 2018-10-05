@@ -112,13 +112,10 @@ $values = array(
 				"mailNotify"     =>$_POST['mailNotify'],
 				"mailChangelog"  =>$_POST['mailChangelog'],
 				"theme"          =>$_POST['theme']=="default" ? "" : $_POST['theme'],
-				// permissions
-				"editVlan"       =>$_POST['editVlan'],
-				"editCircuits"   =>$_POST['editCircuits'],
-				"pstn"           =>$_POST['pstn'],
-				"pdns"           =>$_POST['pdns'],
-				"perm_customers" =>$_POST['perm_customers'],
 				);
+
+
+
 # custom fields
 if (sizeof($myFields)>0) {
     foreach($myFields as $myField) {
@@ -147,6 +144,19 @@ if($_POST['role']=="Administrator") {
 	}
 	$values['groups'] = json_encode(@$group);
 }
+
+# permissions
+$permissions = [];
+# check
+foreach ($User->get_modules_with_permissions() as $m) {
+	if (isset($_POST['perm_'.$m])) {
+		if (is_numeric($_POST['perm_'.$m])) {
+			$permissions[$m] = $_POST['perm_'.$m];
+		}
+	}
+}
+# formulate permissions
+$values['module_permissions'] = json_encode($permissions);
 
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }

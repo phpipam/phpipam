@@ -16,8 +16,14 @@ $User->check_user_session();
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
-# check permissions
-if($Tools->check_prefix_permission ($User->user) <3)   { $Result->show("danger", _('You do not have permission to manage PSTN prefixes'), true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pstn", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("pstn", 3, true, false);
+}
+
 
 # validate csrf cookie
 if($_POST['action']=="add") {
@@ -126,15 +132,20 @@ if(sizeof($custom) > 0) {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "prefix"=>$_POST['prefix'],
-    "master"=>$_POST['master'],
-    "start"=>$_POST['start'],
-    "stop"=>$_POST['stop'],
-    "deviceId"=>$_POST['deviceId'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "prefix"      =>$_POST['prefix'],
+    "master"      =>$_POST['master'],
+    "start"       =>$_POST['start'],
+    "stop"        =>$_POST['stop'],
+    "deviceId"    =>$_POST['deviceId'],
+    "description" =>$_POST['description']
     );
+
+# perm check
+if ($User->get_module_permissions ("devices")<1) {
+    unset ($values['deviceId']);
+}
 
 # custom fields
 if(isset($update)) {
@@ -152,5 +163,3 @@ if ($_POST['action']=="delete") {
 	$Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
     $Admin->object_modify ("pstnNumbers", "delete", "prefix", $values);
 }
-
-?>

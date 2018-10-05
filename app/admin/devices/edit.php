@@ -10,12 +10,19 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("devices", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("devices", 3, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "device");
@@ -125,7 +132,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	</tr>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -145,7 +152,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<?php } ?>
 
     <!-- Rack -->
-    <?php if($User->settings->enableRACK=="1") { ?>
+    <?php if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>0) { ?>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
@@ -159,21 +166,25 @@ $('#switchManagementEdit select[name=rack]').change(function() {
             <select name="rack" class="form-control input-sm">
                 <option value="0"><?php print _("None"); ?></option>
                 <?php
-                foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
-    				else							{ print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                if ($Racks->all_racks!==false) {
+                    foreach ($Racks->all_racks as $r) {
+                        if($device['rack'] == $r->id)   { print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
+                        else                            { print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                    }
                 }
                 ?>
             </select>
         </td>
     </tr>
 
+	<?php if ($User->get_module_permissions ("racks")>0) { ?>
     <tbody id="rack" style="<?php print $display; ?>">
 		<?php include ("edit-rack-dropdown.php"); ?>
     </tbody>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
+    <?php } ?>
     <?php } ?>
 
 	<!-- Description -->

@@ -16,9 +16,6 @@ if (isset($objects["circuits"])) {
 	# get all VLANs and subnet descriptions
 	$circuits = $objects['circuits'];
 
-
-
-
 	# get custom fields
 	$custom_fields = $Tools->fetch_custom_fields('circuits');
 
@@ -112,10 +109,10 @@ if (isset($objects["circuits"])) {
 			print "<td class='actions'>";
 			print "	<div class='btn-group'>";
 			print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'' rel='tooltip' title='"._("View")."' ><i class='fa fa-eye'></i></a>";
-			if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+			if($User->get_module_permissions ("circuits")>1)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' rel='tooltip' title='"._("Edit")."' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
+			if($User->get_module_permissions ("circuits")>2)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' rel='tooltip' title='"._("Delete")."' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
-			}
 			if($User->get_module_permissions ("customers")>1)
 			print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='circuits' data-id='$circuit->id'><i class='fa fa-unlink'></i></button>";
 			print "	</div>";

@@ -6,13 +6,21 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("nat", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("nat", 3, true, false);
+}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -37,14 +45,18 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "type"=>$_POST['type'],
-    "src_port"=>$_POST['src_port'],
-    "dst_port"=>$_POST['dst_port'],
-    "device"=>$_POST['device'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "type"        =>$_POST['type'],
+    "src_port"    =>$_POST['src_port'],
+    "dst_port"    =>$_POST['dst_port'],
+    "device"      =>$_POST['device'],
+    "description" =>$_POST['description']
     );
+
+if ($User->get_module_permissions ("devices")<1) {
+    unset ($values['device']);
+}
 
 # execute update
 if(!$Admin->object_modify ("nat", $_POST['action'], "id", $values))  { $Result->show("danger",  _("NAT $_POST[action] failed"), false); }

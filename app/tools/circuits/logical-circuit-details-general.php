@@ -1,5 +1,9 @@
 <?php
 
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
+
+
 print "<h4>"._('Logical circuit details')."</h4>";
 print "<hr>";
 
@@ -26,14 +30,12 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
     	print "</tr>";
 
 		foreach($custom_fields as $field) {
-
 			# fix for boolean
 			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
 				if($logical_circuit->{$field['name']}=="0")		{ $logical_circuit->{$field['name']} = "false"; }
 				elseif($logical_circuit->{$field['name']}=="1")	{ $logical_circuit->{$field['name']} = "true"; }
 				else									{ $logical_circuit->{$field['name']} = ""; }
 			}
-
 			# create links
 			$logical_circuit->{$field['name']} = $Result->create_links ($logical_circuit->{$field['name']});
 
@@ -44,9 +46,8 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 		}
 	}
 
-
 	// edit, delete
-	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+	if($User->get_module_permissions ("circuits")>1) {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
@@ -56,6 +57,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$logical_circuit->id'><i class='fa fa-pencil'></i></a>";
+		if($User->get_module_permissions ("circuits")>2)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$logical_circuit->id'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print " </td>";

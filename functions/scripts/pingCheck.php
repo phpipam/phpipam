@@ -410,87 +410,86 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	# none?
 	if(!isset($recepients))	{ die(); }
 
-	# fetch mailer settings
-	$mail_settings = $Tools->fetch_object("settingsMail", "id", 1);
 	# fake user object, needed for create_link
 	$User = new StdClass();
 	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
 
-	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
-	$phpipam_mail->initialize_mailer();
-
-	// set subject
-	$subject	= "phpIPAM IP state change ".$nowdate;
-
-	//html
-	$content[] = "<p style='margin-left:10px;'>$Subnets->mail_font_style <font style='font-size:16px;size:16px;'>phpIPAM host changes</font></font></p><br>";
-
-	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid #ccc;'>";
-	$content[] = "<tr>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;white-space:nowrap;'>$Subnets->mail_font_style IP</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Description</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Hostname</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Subnet</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Last seen</font></th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Status</font></th>";
-	$content[] = "</tr>";
-
-	//plain
-	$content_plain[] = "phpIPAM host changes \r\n------------------------------";
-
-	//Changes
-	foreach($address_change as $change) {
-		//reformat statuses
-		if($change['oldStatus'] == 0) {
-			$oldStatus = "<font style='color:#04B486'>Online</font>";
-			$newStatus = "<font style='color:#DF0101'>Offline</font>";
-		}
-		else {
-			$oldStatus = "<font style='color:#DF0101'>Offline</font>";
-			$newStatus = "<font style='color:#04B486'>Online</font>";
-		}
-
-		//set subnet
-		$subnet 	 = $Subnets->fetch_subnet(null, $change['subnetId']);
-		//ago
-		if(is_null($change['lastSeen']) || $change['lastSeen']=="1970-01-01 00:00:01" || $change['lastSeen']=="0000-00-00 00:00:00") {
-			$ago	  = "never";
-		} else {
-			$timeDiff = $now - strtotime($change['lastSeen']);
-
-    		// reformat
-    		$lastSeen = date("m/d H:i", strtotime($change['lastSeen']) );
-			$ago 	  = $lastSeen." (".$Result->sec2hms($timeDiff)." ago)";
-		}
-        // desc
-		$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
-		// subnet desc
-		$subnet->description = strlen($subnet->description)>0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
-
-		//content
-		$content[] = "<tr>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></a></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $ago</td>";
-		$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $oldStatus > $newStatus</td>";
-		$content[] = "</tr>";
-
-		//plain content
-		$content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr'])." (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")\r\n \t  ".strip_tags($oldStatus)." => ".strip_tags($newStatus);
-
-	}
-	$content[] = "</table>";
-
-
-	# set content
-	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	$content_plain 	= implode("\r\n",$content_plain);
-
 	# try to send
 	try {
+		# fetch mailer settings
+		$mail_settings = $Tools->fetch_object("settingsMail", "id", 1);
+		# initialize mailer
+		$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
+
+		// set subject
+		$subject	= "phpIPAM IP state change ".$nowdate;
+
+		//html
+		$content[] = "<p style='margin-left:10px;'>$Subnets->mail_font_style <font style='font-size:16px;size:16px;'>phpIPAM host changes</font></font></p><br>";
+
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid #ccc;'>";
+		$content[] = "<tr>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;white-space:nowrap;'>$Subnets->mail_font_style IP</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Description</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Hostname</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Subnet</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Last seen</font></th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid #ccc;border-bottom:2px solid gray;'>$Subnets->mail_font_style Status</font></th>";
+		$content[] = "</tr>";
+
+		//plain
+		$content_plain[] = "phpIPAM host changes \r\n------------------------------";
+
+		//Changes
+		foreach($address_change as $change) {
+			//reformat statuses
+			if($change['oldStatus'] == 0) {
+				$oldStatus = "<font style='color:#04B486'>Online</font>";
+				$newStatus = "<font style='color:#DF0101'>Offline</font>";
+			}
+			else {
+				$oldStatus = "<font style='color:#DF0101'>Offline</font>";
+				$newStatus = "<font style='color:#04B486'>Online</font>";
+			}
+
+			//set subnet
+			$subnet 	 = $Subnets->fetch_subnet(null, $change['subnetId']);
+			//ago
+			if(is_null($change['lastSeen']) || $change['lastSeen']=="1970-01-01 00:00:01" || $change['lastSeen']=="0000-00-00 00:00:00") {
+				$ago	  = "never";
+			} else {
+				$timeDiff = $now - strtotime($change['lastSeen']);
+
+	    		// reformat
+	    		$lastSeen = date("m/d H:i", strtotime($change['lastSeen']) );
+				$ago 	  = $lastSeen." (".$Result->sec2hms($timeDiff)." ago)";
+			}
+	        // desc
+			$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
+			// subnet desc
+			$subnet->description = strlen($subnet->description)>0 ? "$Subnets->mail_font_style $subnet->description</font>" : "$Subnets->mail_font_style / </font>";
+
+			//content
+			$content[] = "<tr>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($change['ip_addr'])."</font></a></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $change[description]</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style_href $change[hostname]</font></td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'><a href='".rtrim(str_replace(BASE, "",$Scan->settings->siteURL), "/")."".create_link("subnets",$subnet->sectionId,$subnet->id)."'>$Subnets->mail_font_style_href ".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask."</font></a>".$subnet->description."</td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $ago</td>";
+			$content[] = "	<td style='padding:3px 8px;border:1px solid #ccc;'>$Subnets->mail_font_style $oldStatus > $newStatus</td>";
+			$content[] = "</tr>";
+
+			//plain content
+			$content_plain[] = "\t * ".$Subnets->transform_to_dotted($change['ip_addr'])." (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")\r\n \t  ".strip_tags($oldStatus)." => ".strip_tags($newStatus);
+
+		}
+		$content[] = "</table>";
+
+
+		# set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
@@ -504,6 +503,6 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	} catch (phpmailerException $e) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
-		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
 	}
 }
