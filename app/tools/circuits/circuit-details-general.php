@@ -1,8 +1,5 @@
 <?php
 
-# perm check
-$User->check_module_permissions ("circuits", 1, true, false);
-
 print "<h4>"._('Circuit details')."</h4>";
 print "<hr>";
 
@@ -55,6 +52,7 @@ print "</tr>";
 
 
 if(sizeof($custom_fields) > 0) {
+
 	print "<tr>";
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
@@ -79,7 +77,7 @@ if(sizeof($custom_fields) > 0) {
 }
 
 // edit, delete
-if($User->get_module_permissions ("circuits")>1) {
+if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
 	print "<tr>";
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
@@ -89,7 +87,6 @@ if($User->get_module_permissions ("circuits")>1) {
 	print "	<td class='actions'>";
 	print "	<div class='btn-group'>";
 	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
-	if($User->get_module_permissions ("circuits")>2)
 	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
 	print "	</div>";
 	print " </td>";

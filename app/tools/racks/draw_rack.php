@@ -14,8 +14,6 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# verify module permissions
-$User->check_module_permissions ("racks", 1, true);
 
 # init racks object
 $Racks = new phpipam_rack ($Database);
@@ -31,13 +29,10 @@ if (!is_numeric($_GET['deviceId']))   { die(); }
 $rack = $User->fetch_object("racks", "id", $_GET['rackId']);
 if ($rack===false)     				  { die(); }
 
-# permission - dont draw names if user has no access to devices
-$draw_names = $User->get_module_permissions ("devices")>0 ? true : false;
-
 # back
 if(@$_GET['is_back']=="1") {
-	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true, $draw_names);
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], true);
 }
 else {
-	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId'], false, $draw_names);
+	$Racks->draw_rack ($_GET['rackId'],$_GET['deviceId']);
 }

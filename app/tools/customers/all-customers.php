@@ -73,11 +73,7 @@ else {
 		print '<tr>'. "\n";
 		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."'>$customer->title</a></strong></td>";
 		print "	<td>$customer->address, $customer->postcode $customer->city, $customer->state</td>";
-		// contact
-		if(strlen($customer->contact_person)>0)
 		print " <td><a href='mailto:$customer->contact_mail'>$customer->contact_person</a> ($customer->contact_phone)</td>";
-		else
-		print " <td><span class='muted'>/</span></td>";
 		// custom
 		if(sizeof(@$custom_fields) > 0) {
 			foreach($custom_fields as $field) {

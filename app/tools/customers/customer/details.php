@@ -53,22 +53,9 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	print "		<i class='fa fa-phone'></i>";
 	print " </th>";
 	print "	<td><br>";
-
-	if(strlen($customer->contact_person)>0)
 	print $customer->contact_person."<br>";
-	else
-	print "/"."<br>";
-
-	if(strlen($customer->contact_mail)>0)
 	print $customer->contact_mail."<br>";
-	else
-	print "/"."<br>";
-
-	if(strlen($customer->contact_phone)>0)
 	print $customer->contact_phone."<br>";
-	else
-	print "/"."<br>";
-
 	print "</td>";
 	print "</tr>";
 
@@ -98,7 +85,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	}
 
 	// edit, delete
-	if($User->get_module_permissions ("customers")>1) {
+	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
@@ -107,9 +94,9 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
     	print "	<td></td>";
 		print "	<td class='actions'>";
 		print "	<div class='btn-group'>";
-		if($User->get_module_permissions("customers")>1)
+		if($User->get_module_permissions("customers")>=2)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'><i class='fa fa-pencil'></i></a>";
-		if($User->get_module_permissions("customers")>2)
+		if($User->get_module_permissions("customers")==3)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'><i class='fa fa-times'></i></a>";
 		print "	</div>";
 		print " </td>";

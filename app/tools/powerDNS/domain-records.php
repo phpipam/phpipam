@@ -4,13 +4,18 @@
  * Script to edit / add / delete records for domain
  *************************************************/
 
-# verify that user is logged in
+// verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("pdns", 1, true, false);
+
+// set admin
+$admin = $User->is_admin(false);
 
 // Determines where we link back to
-$link_section = $_GET['page'] == "administration" ? 'administration' : "tools";
+if ($_GET['page'] == "administration") {
+    $link_section = 'administration';
+} else {
+    $link_section = 'tools';
+}
 
 // validate domain
 $domain = $PowerDNS->fetch_domain($_GET['ipaddrid']);
@@ -58,7 +63,7 @@ if ($domain === false) {
 <h4><?php print _('Records for domain');?> <strong><?php print $domain->name;?></strong></h4><hr>
 
 <!-- domain details -->
-<?php if($User->get_module_permissions ("pdns")>0) { ?>
+<?php if ($admin): ?>
 <blockquote style="margin-left: 30px;margin-top: 10px;">
 
     <table class="table table-pdns-details table-auto table-condensed">
@@ -67,7 +72,7 @@ if ($domain === false) {
         <td><span class="badge badge1"><?php print $domain->type;?></span></td>
     </tr>
     <?php
-    // slave check
+// slave check
     if ($domain->type == "SLAVE") {
         // master servers
         print "<tr class='text-top'>";
@@ -99,18 +104,16 @@ if ($domain === false) {
 
     </table>
 </blockquote>
-<?php } ?>
+<?php endif;?>
 
 <!-- Add new -->
 <div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
 	<a href="<?php print create_link($link_section, "powerDNS", $_GET['subnetId']);?>" class='btn btn-sm btn-default'>
 		<i class='fa fa-angle-left'></i> <?php print _('Domains');?>
 	</a>
-    <?php if($User->get_module_permissions ("pdns")>1) { ?>
 	<button class='btn btn-sm btn-default btn-success editRecord' data-action='add' data-id='0' data-domain_id='<?php print $domain->id;?>'>
 		<i class='fa fa-plus'></i> <?php print _('New record');?>
 	</button>
-    <?php } ?>
 </div>
 
 <?php
@@ -125,9 +128,7 @@ if ($domain === false) {
 <!-- Headers -->
 <thead>
 <tr>
-    <?php if($User->get_module_permissions ("pdns")>1) { ?>
 	<th></th>
-    <?php } ?>
     <th><?php print _('Name');?></th>
     <th><?php print _('Type');?></th>
     <th><?php print _('Content');?></th>
@@ -142,21 +143,17 @@ if ($domain === false) {
 
 // function to print record
 function print_record ($r) {
-    global $User;
     // check if disabled
     $trclass = $r->disabled == "1" ? 'alert alert-danger' : '';
 
     print "<tr class='$trclass'>";
     // actions
-    if ($User->get_module_permissions ("pdns")>1) {
     print "	<td>";
     print "	<div class='btn-group'>";
     print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
-    if ($User->get_module_permissions ("pdns")>2)
     print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
     print "	</div>";
     print "	</td>";
-    }
 
     // content
     print "	<td>$r->name</td>";

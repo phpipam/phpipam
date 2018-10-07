@@ -24,12 +24,8 @@ $hidden_provider_fields = is_array(@$hidden_provider_fields['circuitProviders'])
 # menu
 include("app/tools/circuits/menu.php");
 
-# perm check
-if ($User->get_module_permissions ("circuits")<1) {
-	$Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 # load subpage
-elseif (!isset($_GET['subnetId']) || (@$_GET['subnetId']=="providers" && !isset($_GET['sPage'])) ) {
+if (!isset($_GET['subnetId']) || (@$_GET['subnetId']=="providers" && !isset($_GET['sPage'])) ) {
 	// all circuits
 	if(!isset($_GET['subnetId'])) {
 		include('all-circuits.php');

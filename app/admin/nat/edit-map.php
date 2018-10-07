@@ -6,7 +6,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -15,13 +15,7 @@ $User->check_user_session();
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("nat", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("nat", 3, true, true);
-}
+
 
 # validations
 if($_POST['object_type']!=="subnets" && $_POST['object_type']!=="ipaddresses")

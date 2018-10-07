@@ -646,6 +646,7 @@ $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa` BOOL  NOT NULL  DEF
 $upgrade_queries["1.4.4"][] = "ALTER TABLE `users` ADD `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL;";
 
 
+
 #
 # Subversion 1.4.5 queries
 #
@@ -699,82 +700,20 @@ $upgrade_queries["1.4.5"][] = "INSERT INTO `widgets` ( `wtitle`, `wdescription`,
 
 
 #
-# Subversion 1.4.6 queries
+# Subversion 1.4.5 queries
 #
 $upgrade_queries["1.4.6"][] = "-- Database version bump";
 $upgrade_queries["1.4.6"][] = "UPDATE `settings` set `dbversion` = '6';";
 // change permissions for modules
 $upgrade_queries["1.4.6"][] = "-- Change permissions for modules";
-$upgrade_queries["1.4.6"][] = "UPDATE `users` SET `pstn` = '1' WHERE `pstn` IS NULL;";
 $upgrade_queries["1.4.6"][] = "ALTER TABLE `users` CHANGE `pstn` `perm_pstn` INT(1)  NOT NULL  DEFAULT '1';";
 
-#
-# Subversion 1.4.7 queries
-#
-$upgrade_queries["1.4.7"][] = "-- Database version bump";
-$upgrade_queries["1.4.7"][] = "UPDATE `settings` set `dbversion` = '7';";
-$upgrade_queries["1.4.7"][] = "ALTER TABLE `racks` ADD `topDown` tinyint(1) NOT NULL DEFAULT '0';";
-$upgrade_queries["1.4.7"][] = "CREATE TABLE `rackContents` (
-                                `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-                                `name` varchar(100) DEFAULT NULL,
-                                `rack` int(11) unsigned DEFAULT NULL,
-                                `rack_start` int(11) unsigned DEFAULT NULL,
-                                `rack_size` int(11) unsigned DEFAULT NULL,
-                                PRIMARY KEY (`id`),
-                                KEY `rack` (`rack`)
-                                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 
-
-#
-# Subversion 1.4.8 queries
-#
-$upgrade_queries["1.4.8"][] = "-- Database version bump";
-$upgrade_queries["1.4.8"][] = "UPDATE `settings` set `dbversion` = '8';";
-$upgrade_queries["1.4.8"][] = "-- Fix Consistency of VARCHAR Size on 'owner' column across tables 'ipaddresses','requests','pstnNumbers'";
-$upgrade_queries["1.4.8"][] = "ALTER TABLE `ipaddresses` MODIFY COLUMN owner VARCHAR(128);";
-$upgrade_queries["1.4.8"][] = "ALTER TABLE `requests` MODIFY COLUMN owner VARCHAR(128);";
-
-
-#
-# Subversion 1.4.9 queries
-#
-$upgrade_queries["1.4.9"][] = "-- Database version bump";
-$upgrade_queries["1.4.9"][] = "UPDATE `settings` set `dbversion` = '9';";
-// Set permissions
-$upgrade_queries["1.4.9"][] = "-- Change permissions for modules";
-$upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_racks` INT(1)  NOT NULL  DEFAULT '1';";
-$upgrade_queries["1.4.9"][] = "ALTER TABLE `users` ADD `perm_nat` INT(1)  NOT NULL  DEFAULT '1';";
-
-
-#
-# Subversion 1.4.10 queries
-#
-$upgrade_queries["1.4.10"][] = "-- Database version bump";
-$upgrade_queries["1.4.10"][] = "UPDATE `settings` set `dbversion` = '10';";
-// Set permissions
-$upgrade_queries["1.4.10"][] = "-- Change permissions for modules";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` ADD `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\"}';";
-// Drop old permission fields
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `pdns`;";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `editVlan`;";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `editCircuits`;";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_nat`;";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_racks`;";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_pstn`;";
-$upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_customers`;";
-
-
-#
-# Subversion 1.4.11 queries
-#
-$upgrade_queries["1.4.11"][] = "-- Database version bump";
-$upgrade_queries["1.4.11"][] = "UPDATE `settings` set `dbversion` = '11';";
-$upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` VARCHAR(255)  CHARACTER SET utf8  BINARY  NULL  DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\",\"locations\":\"1\",\"devices\":\"1\"}';";
 
 
 
 // output if required
-if(!defined('VERSION') && php_sapi_name()=="cli") {
+if(php_sapi_name()=="cli") {
   // version check
   if (!isset($argv[1])) { die("Please provide version\n"); }
   // Output

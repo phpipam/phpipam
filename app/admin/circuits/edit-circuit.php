@@ -17,13 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("circuits", 3, true, true);
-}
+# check permissions
+if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit details"), true, true); }
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "circuit");
@@ -59,7 +54,7 @@ $all_locations     = $Tools->fetch_all_objects("locations", "name");
 
 # no providers
 if($circuit_providers===false) 	{
-	$btn = $User->get_module_permissions ("circuits")>2 ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
+	$btn = $User->is_admin(false) ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
 	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
 }
 
@@ -161,7 +156,7 @@ $(document).ready(function(){
 
 	<?php
     // customers
-    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
+    if($User->settings->enableCustomers==1) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print

@@ -29,12 +29,8 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 	<th><?php print _('Subnet');?></th>
 	<th><?php print _('Description');?></th>
 	<th><?php print _('Master subnet');?></th>
-	<?php if($User->get_module_permissions ("vlan")>0) { ?>
 	<th><?php print _('VLAN');?></th>
-	<?php } ?>
-	<?php if($User->get_module_permissions ("vrf")>0) { ?>
 	<th><?php print _('VRF');?></th>
-	<?php } ?>
 	<th><?php print _('Requests');?></th>
 	<?php
 	if(sizeof($custom_subnet_fields) > 0) {
@@ -98,10 +94,8 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 				//master
 				print ' <td>'. $master_text .'</td>' . "\n";
 				//vlan
-				if($User->get_module_permissions ("vlan")>0)
 				print ' <td>'. @$vlan['number'] .'</td>' . "\n";
 				//vrf
-				if($User->get_module_permissions ("vrf")>0)
 				print ' <td>'. @$vrf['name'] .'</td>' . "\n";
 				//requests
 				print ' <td>'. _($line['allowRequests']) .'</td>' . "\n";

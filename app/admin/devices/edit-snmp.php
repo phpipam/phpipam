@@ -136,7 +136,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Password'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_auth_pass); ?>'>
+    		<input type='password' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_auth_pass); ?>'>
 		</td>
 	</tr>
 
@@ -156,7 +156,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Privacy passphrase'); ?></td>
 		<td>
-    		<input type='text' name="snmp_v3_priv_pass" class="form-control" placeholder="SNMP <?php print _('Privacy passphrase'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_priv_pass); ?>'>
+    		<input type='password' name="snmp_v3_priv_pass" class="form-control" placeholder="SNMP <?php print _('Privacy passphrase'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_priv_pass); ?>'>
 		</td>
 	</tr>
 

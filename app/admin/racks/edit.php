@@ -10,20 +10,13 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("racks", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("racks", 3, true, true);
-}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "rack");
@@ -44,7 +37,6 @@ if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 else {
     $rack = new StdClass ();
     $rack->size = 42;
-    $rack->topDown = 1;
 }
 
 # fetch all racks
@@ -117,19 +109,8 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
-    <!-- Orientation -->
-    <tr>
-        <td><?php print _('Orientation'); ?></td>
-        <td>
-            <select name="topDown" class="form-control input-sm input-w-auto">
-                <option value="1"<?php if ($rack->topDown) print " selected" ?>><?php print _("Top-down (unit 1 at the top)"); ?></option>
-                <option value="0"<?php if (!$rack->topDown) print " selected" ?>><?php print _("Bottom-up (unit 1 at the bottom)"); ?></option>
-            </select>
-        </td>
-    </tr>
-
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+	<?php if($User->settings->enableLocations=="1") { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -150,7 +131,7 @@ $(document).ready(function(){
 
 	<?php
     // customers
-    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
+    if($User->settings->enableCustomers==1) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print

@@ -10,19 +10,12 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("nat", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("nat", 3, true, true);
-}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "nat");
@@ -88,7 +81,6 @@ $link = $readonly ? false : true;
         </tr>
 
     	<!-- Device -->
-        <?php if($User->get_module_permissions ("devices")>0) { ?>
     	<tr>
         	<th><?php print _('Device'); ?></th>
         	<td>
@@ -111,7 +103,6 @@ $link = $readonly ? false : true;
             	<span class="text-muted"><?php print _("Select Device"); ?></span>
         	</td>
         </tr>
-        <?php } ?>
 
     	<!-- Source -->
     	<?php if($_POST['action']!=="add") { ?>

@@ -7,6 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# set admin
+$admin = $User->is_admin(false);
+
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 
@@ -14,15 +17,10 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 $hidden_custom_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['pstnPrefixes']) ? $hidden_custom_fields['pstnPrefixes'] : array();
 
-# perm check
-if ($User->get_module_permissions ("pstn")<1) {
-	$Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 # check that prefix support isenabled
-elseif ($User->settings->enablePSTN != "1") {
+if ($User->settings->enablePSTN != "1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
-}
-else {
+} else {
     # all prefixes
     if (!isset($_GET['subnetId'])) {
         include("all-prefixes.php");

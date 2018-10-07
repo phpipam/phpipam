@@ -6,9 +6,6 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# perm check
-$User->check_module_permissions ("vlan", 1, true, false);
-
 # to array
 $vlan = (array) $vlan;
 
@@ -77,7 +74,7 @@ $cfields = $Tools->fetch_custom_fields ('vlans');
 	print "	<div class='btn-group'>";
 
 	# permissions
-	if($User->get_module_permissions ("vlan")>1) {
+	if($User->is_admin (false)) {
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan[vlanId]'><i class='fa fa-pencil'></i></button>";
 		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan[vlanId]'><i class='fa fa-times'></i></button>";
 	}

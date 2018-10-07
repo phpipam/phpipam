@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -18,8 +18,6 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-# perm check popup
-$User->check_module_permissions ("vlan", 2, true, false);
 
 // checks
 if(!is_numeric($_POST['newDomainId']))			$Result->show("danger", _("Invalid ID"), true);
@@ -46,9 +44,8 @@ if($User->settings->vlanDuplicate==0) {
 }
 
 # formulate update query
-$values = array(
-				"vlanid"   =>@$_POST['vlanid'],
-				"domainId" =>$vlan_domain->id
+$values = array("vlanid"=>@$_POST['vlanid'],
+				"domainId"=>$vlan_domain->id
 				);
 # update
 if(!$Admin->object_modify("vlans", "edit", "vlanid", $values))	{ $Result->show("danger",  _("Failed to move VLAN to new domain").'!', true); }

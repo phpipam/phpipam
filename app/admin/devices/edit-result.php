@@ -10,21 +10,13 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("devices", 2, true, false);
-}
-else {
-    $User->check_module_permissions ("devices", 3, true, false);
-}
-
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -53,7 +45,7 @@ $device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>0) {
+if (strlen(@$device['rack']>0)) {
     if ($User->settings->enableRACK!="1") {
         unset($device['rack']);
     }
@@ -106,14 +98,10 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>0) {
+if (strlen(@$device['rack'])>0) {
 	$values['rack']       = $device['rack'];
 	$values['rack_start'] = $device['rack_start'];
 	$values['rack_size']  = $device['rack_size'];
-}
-# perms
-if ($User->get_module_permissions ("locations")<1) {
-	unset ($values['location']);
 }
 
 # update device

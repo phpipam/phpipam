@@ -17,12 +17,8 @@ $custom = $Tools->fetch_custom_fields('locations');
 $hidden_custom_fields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_custom_fields = is_array(@$hidden_custom_fields['locations']) ? $hidden_custom_fields['locations'] : array();
 
-# perm check
-if ($User->get_module_permissions ("locations")<1) {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 # check that location support isenabled
-elseif ($User->settings->enableLocations!="1") {
+if ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
 else {
@@ -40,3 +36,4 @@ else {
 
     }
 }
+?>

@@ -10,13 +10,13 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("circuits", 3, true, false);
+# admin check
+$User->is_admin(true);
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "circuit_options");

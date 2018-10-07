@@ -1445,7 +1445,7 @@ class PowerDNS extends Common_functions {
      */
     public function get_ptr_zone_name_v4 ($ip, $mask) {
         // check mask to see how many IP bits to remove
-        $bits = $mask<24 ? 2 : 1;
+        $bits = $mask<23 ? 2 : 1;
 
         // to array
         $zone = explode(".", $ip);

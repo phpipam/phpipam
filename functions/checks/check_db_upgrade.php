@@ -10,7 +10,7 @@ if(!isset($User->settings->dbversion)) {
 }
 
 /* redirect */
-if($User->cmp_version_strings($User->settings->version.'.'.$User->settings->dbversion,VERSION.'.'.DBVERSION) < 0) {
+if($User->settings->version.$User->settings->dbversion < VERSION.DBVERSION) {
 	$User->settings->prettyLinks="No";
 	header("Location: ".create_link("upgrade"));
 	die();
