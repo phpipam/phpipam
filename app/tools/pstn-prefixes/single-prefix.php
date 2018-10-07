@@ -12,12 +12,8 @@ $User->check_user_session();
 
 <?php
 
-# perm check
-if ($User->get_module_permissions ("pstn")<1) {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 // validate
-elseif(!is_numeric($_GET['subnetId'])) {
+if(!is_numeric($_GET['subnetId'])) {
     $Result->show("danger", _("Invalid Id"), true);
 }
 else {
@@ -36,6 +32,8 @@ else {
              $Result->show("danger", _("Prefix not found"), false);
         }
         else {
+            # set permission
+            $permission = $Tools->check_prefix_permission ($User->user);
 
             # raw prefix number
             $prefix->prefix_raw = $Tools->prefix_normalize ($prefix->prefix);
@@ -105,19 +103,17 @@ else {
         	print "	<td>$prefix->description</td>";
         	print "</tr>";
 
-            if($User->get_module_permissions ("devices")>0) {
-            	# device
-            	print "<tr>";
-            	print "	<th>"._('Device')."</th>";
-            	$device = $Tools->fetch_object ("devices", "id", $prefix->deviceId);
-            	if($device===false) {
-                	print "<td>/</td>";
-            	}
-            	else {
-            	print "	<td><a href='".create_link("tools","devices",$device->id)."'>$device->hostname</a></td>";
-                }
-            	print "</tr>";
+        	# device
+        	print "<tr>";
+        	print "	<th>"._('Device')."</th>";
+        	$device = $Tools->fetch_object ("devices", "id", $prefix->deviceId);
+        	if($device===false) {
+            	print "<td>/</td>";
+        	}
+        	else {
+        	print "	<td><a href='".create_link("tools","devices",$device->id)."'>$device->hostname</a></td>";
             }
+        	print "</tr>";
 
         	# divider
         	print "<tr>";
@@ -149,6 +145,10 @@ else {
         	print "	<td>".($details['maxhosts'] - $details['freehosts'])." / ".$details['maxhosts']." "._('Used')." (".$details['freehosts_percent']."% "._('Free').")</td>";
         	print "</tr>";
 
+        	print "<tr>";
+        	print "	<td colspan='2'><hr></td>";
+        	print "</tr>";
+
         	# print custom subnet fields if any
         	if(sizeof($cfields) > 0) {
         		// divider
@@ -171,18 +171,18 @@ else {
         	print "	<td>";
         	print " <div class='btn-group'>";
 
-            switch ($User->get_module_permissions ("pstn")) {
+            switch ($permission) {
                 case 3:
                     if (!$isMaster)
-                    print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
+                        print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
                     print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
                     print "<a class='btn btn-xs btn-default editPSTN' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
                     print "<a class='btn btn-xs btn-danger editPSTN' data-action='delete' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
                     break;
                 case 2:
                     if (!$isMaster)
-                    print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
-                    print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
+                        print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
+                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
                     print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
                     print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
                     break;

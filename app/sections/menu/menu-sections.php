@@ -10,11 +10,6 @@ $User->check_user_session();
 	# if section is not set
 	if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
-	# dashboard
-    print "<li class='first-item'>";
-    print " <a href='".create_link("dashboard")."'><i class='fa fa-home'></i></a>";
-    print "</li>";
-
 	# first item - subnets or admin
     print "<li class='first-item'>";
     print " <a href='".create_link("subnets")."'><i class='fa fa-angle-right'></i> "._('Subnets')."</a>";

@@ -6,23 +6,15 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("locations", 2, true, false);
-}
-else {
-    $User->check_module_permissions ("locations", 3, true, false);
-}
-
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 

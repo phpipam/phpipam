@@ -1,22 +1,13 @@
 <?php
 /* set latest version */
-define("VERSION", "1.4");									//decimal release version e.g 1.32
+define("VERSION", "1.4");									//version changes if database structure changes
 /* set latest version */
-define("VERSION_VISIBLE", "1.4");							//visible version in footer e.g 1.3.2
+define("VERSION_VISIBLE", "1.4");							//visible version in footer
 /* set latest revision */
-define("REVISION", "021");									//increment on static content changes (js/css) or point releases to avoid caching issues
+define("REVISION", "016");									//revision always changes, verision only if database structure changes
+/* set database schema version */
+define("DBVERSION", "5");									//database schema version (future feature)
 /* set last possible upgrade */
 define("LAST_POSSIBLE", "1.1");								//minimum required version to be able to upgrade
-
-// Automatically set DBVERSION as everyone forgets!
-function get_dbversion() {
-    require('upgrade_queries.php');
-    $upgrade_keys = array_keys($upgrade_queries);
-    return str_replace(VERSION.".", "", end($upgrade_keys));
-}
-
-if(!defined('DBVERSION'))
-define('DBVERSION', get_dbversion());
-
 /* prefix for css/js */
-define("SCRIPT_PREFIX", VERSION_VISIBLE.'_r'.REVISION.'_v'.DBVERSION);		//css and js folder prefix to prevent caching issues
+define("SCRIPT_PREFIX", VERSION_VISIBLE.'_r'.REVISION.'_v'.DBVERSION);		//css and js folder prefix to prevent caching

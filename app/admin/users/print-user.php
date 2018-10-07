@@ -61,16 +61,43 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 <tr>
 	<td colspan="2"><h4><?php print _('Module permissions'); ?></h4><hr></td>
 </tr>
-
+<?php if ($User->settings->enablePowerDNS==1) { ?>
 <tr>
-	<td colspan="2">
-		<?php
-		$user = (array) $user;
-		include("print_module_permissions.php");
-		$user = (object) $user;
-		?>
-	</td>
+    <?php
+    $user->pdns = $user->pdns=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
+    ?>
+	<td><?php print _('PowerDNS'); ?></td>
+	<td><?php print $user->pdns; ?></td>
 </tr>
+<?php } ?>
+<tr>
+    <?php
+    $user->editVlan = $user->editVlan=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
+    ?>
+	<td><?php print _('Manage VLANs / VRFs'); ?></td>
+	<td><?php print $user->editVlan; ?></td>
+</tr>
+<?php if ($User->settings->enablePSTN==1) { ?>
+<tr>
+	<td><?php print _('PSTN'); ?></td>
+	<td><?php print $Subnets->parse_permissions ($user->pstn); ?></td>
+</tr>
+<?php } ?>
+<?php if ($User->settings->enableCircuits==1) { ?>
+<tr>
+    <?php
+    $user->editCircuits = $user->editCircuits=="No"||$user->editCircuits=="Administrator" ? "Yes" : "No";
+    ?>
+	<td><?php print _('Circuits'); ?></td>
+	<td><?php print $user->editCircuits; ?></td>
+</tr>
+<?php } ?>
+<?php if ($User->settings->enableCustomers==1) { ?>
+<tr>
+	<td><?php print _('Customers'); ?></td>
+	<td><?php print $Subnets->parse_permissions ($user->perm_customers); ?></td>
+</tr>
+<?php } ?>
 
 
 

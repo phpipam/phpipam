@@ -1,14 +1,15 @@
 <h4><?php print _('List of all locations'); ?></h4>
 <hr>
 
-<?php if($User->get_module_permissions ("locations")>1) { ?>
 <div class="btn-group">
+    <?php if($_GET['page']=="administration") { ?>
 	<a href="" class='btn btn-sm btn-default editLocation' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add location'); ?></a>
+	<?php } else { ?>
+	<a href="<?php print create_link("administration", "locations") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
+	<?php } ?>
 	<a href="<?php print create_link("tools", "locations", "map") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-map'></i> <?php print _('Map'); ?></a>
 </div>
 <br>
-<?php } ?>
-
 
 <?php
 
@@ -19,19 +20,15 @@
 # verify that user is logged in
 $User->check_user_session();
 
-# perm check
-if ($User->get_module_permissions ("locations")<1) {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 # check that location support isenabled
-elseif ($User->settings->enableLocations!="1") {
+if ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
 else {
     # fetch all locations
     $all_locations = $Tools->fetch_all_objects("locations", "name");
 
-    $colspan = 4;
+    $colspan = $admin ? 5 : 4;
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
@@ -51,7 +48,7 @@ else {
 			}
 		}
 	}
-    if($User->get_module_permissions ("locations")>1)
+    if($admin)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -95,12 +92,11 @@ else {
     			}
     		}
             // actions
-            if($User->get_module_permissions ("locations")>1) {
+            if($admin) {
     		print "	<td class='actions'>";
     		print "	<div class='btn-group'>";
     		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$l->id'><i class='fa fa-pencil'></i></a>";
     		print "		<a href='".create_link("tools", "locations", $l->id)."' class='btn btn-xs btn-default' ><i class='fa fa-eye'></i></a>";
-            if($User->get_module_permissions ("locations")>2)
     		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$l->id'><i class='fa fa-times'></i></a>";
     		print "	</div>";
     		print " </td>";

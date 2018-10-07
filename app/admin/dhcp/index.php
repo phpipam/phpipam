@@ -11,12 +11,7 @@ $tabs = array("subnets", "leases", "reservations", "settings", "config");
 <h4><?php print _('DHCP management'); ?></h4>
 <hr><br>
 
-<?php
-# perm check
-if ($User->get_module_permissions ("dhcp")<1) {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
-elseif($User->settings->enableDHCP==1) { ?>
+<?php if($User->settings->enableDHCP==1) { ?>
 
     <?php
     # validate DHCP settings - JSON

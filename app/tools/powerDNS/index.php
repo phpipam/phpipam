@@ -9,7 +9,7 @@ $User->check_user_session();
 
 <?php
 # check permissions
-if ($User->get_module_permissions ("pdns")>0) {
+if ($User->is_admin(false) || $User->user->pdns=="Yes") {
 ?>
     <div class="powerDNS">
 
@@ -81,5 +81,6 @@ if ($User->get_module_permissions ("pdns")>0) {
     <?php
 }
 else {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
+    $Result->show("danger alert-absolute", _('You do not have permission to manage DNS. Please contact administrator!'), false);
 }
+?>

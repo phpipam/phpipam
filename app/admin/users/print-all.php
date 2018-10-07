@@ -26,7 +26,7 @@ $ffields = is_array(@$ffields['users']) ? $ffields['users'] : array();
 
 
 <!-- table -->
-<table id="userPrint1" class="table sorted table-striped table-top table-td-top" data-cookie-id-table="admin_users">
+<table id="userPrint1" class="table sorted table-striped table-top" data-cookie-id-table="admin_users">
 
 <!-- Headers -->
 <thead>
@@ -95,7 +95,38 @@ foreach ($users as $user) {
 	}
 	else {
 		print "<td>";
-		include("print_module_permissions.php");
+
+		// pdns
+    	if ($User->settings->enablePowerDNS==1) {
+	    	if(strlen($user['pdns'])==0) $user['pdns'] = "No";
+	    	$user['pdns'] = $user['pdns']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pdns'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['pdns'])."</span>";
+	    	print _("PowerDNS").": ".$user['pdns']."<br>";
+    	}
+
+    	// vlan / VRF
+    	if(strlen($user['editVlan'])==0) $user['editVlan'] = "No";
+    	$user['editVlan'] = $user['editVlan']=="No" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['editVlan'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editVlan'])."</span>";
+    	print _("VLANs / VRFs").": ".$user['editVlan']."<br>";
+
+        // pstn
+    	if ($User->settings->enablePSTN==1) {
+	    	$user['pstn'] = $user['pstn']=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['pstn'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['pstn']))."</span>";
+	    	print _("PSTN").": ".$user['pstn']."<br>";
+    	}
+
+        // Circuits
+    	if ($User->settings->enableCircuits==1) {
+	    	$user['editCircuits'] = $user['editCircuits']=="No"||is_null($user['editCircuits']) ? "<span class='badge badge1 badge5 alert-danger'>"._("No")."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($user['editCircuits'])."</span>";
+	    	print _("Circuits").": ".$user['editCircuits']."<br>";
+    	}
+
+        // Circuits
+    	if ($User->settings->enableCustomers==1) {
+	    	$user['perm_customers'] = $user['perm_customers']=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($user['perm_customers'])."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($Subnets->parse_permissions ($user['perm_customers']))."</span>";
+	    	print _("Customers").": ".$user['perm_customers']."<br>";
+    	}
+
+
 		print "</td>";
 	}
 

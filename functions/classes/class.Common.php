@@ -122,28 +122,7 @@ class Common_functions  {
 
 
 
-	/**
-	 *	@version handling
-	 *	--------------------------------
-	 */
 
-	 /**
-	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
-	 *
-	 * @access public
-	 * @param string $verA
-	 * @param mixed $verB
-	 * @return int
-	 */
-	public function cmp_version_strings($verA, $verB) {
-		$a = explode('.', $verA);
-		$b = explode('.', $verB);
-
-		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
-		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
-		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;			// 1.4.9 is less than 1.4.10
-		return 0;
-	}
 
 
 
@@ -212,15 +191,15 @@ class Common_functions  {
 		if(is_null($value))		return false;
 		if($value===0)		    return false;
 
+		# null method
+		$method = is_null($method) ? "id" : $this->Database->escape($method);
+
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
 		if($cached_item!==false) {
 			return $cached_item;
 		}
 		else {
-			# null method
-			$method = is_null($method) ? "id" : $this->Database->escape($method);
-
 			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -295,21 +274,6 @@ class Common_functions  {
 		return $cnt;
 	}
 
-	/**
-	 * Count all objects in database.
-	 *
-	 * @param  string $table
-	 * @param  string $field
-	 * @return array|false
-	 */
-	public function count_all_database_objects ($table, $field) {
-		try { $cnt = $this->Database->getGroupBy($table, $field); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		return $cnt;
-	}
 
 	/**
 	 * Get all admins that are set to receive changelog
@@ -1566,23 +1530,7 @@ class Common_functions  {
 		return array($removed_permissions, $changed_permissions, $new_permissions);
 	}
 
-	/**
-	 * Parse subnet permissions to user readable format
-	 *
-	 * @access public
-	 * @param mixed $permissions
-	 * @return string
-	 */
-	public function parse_permissions ($permissions) {
-		switch($permissions) {
-			case 0: 	$r = _("No access");	break;
-			case 1: 	$r = _("Read");			break;
-			case 2: 	$r = _("Write");		break;
-			case 3: 	$r = _("Admin");		break;
-			default:	$r = _("error");
-		}
-		return $r;
-	}
+
 
 
 

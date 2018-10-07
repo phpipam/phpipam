@@ -14,7 +14,7 @@ $User->check_user_session();
 print "<table class='table table-condensed table-td-top table-auto'>";
 
 // add
-if($User->get_module_permissions ("nat")>2) {
+if($User->is_admin(false)) {
 print "<tr>";
 print " <td colspan='4'>";
 print "     <div class='btn-group' role='group' style='margin-bottom:10px;'>";
@@ -44,10 +44,7 @@ print "</tr>";
 }
 
 # print
-if($User->get_module_permissions ("nat")<1) {
-    $Result->show ("danger", _("You do not have permissions to access this module"), true);
-}
-elseif(isset($all_nats_per_object['ipaddresses'][$address['id']])) {
+if(isset($all_nats_per_object['ipaddresses'][$address['id']])) {
     foreach ($all_nats_per_object['ipaddresses'][$address['id']] as $nat) {
         // set object
         $n = $all_nats[$nat];

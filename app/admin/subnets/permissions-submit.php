@@ -45,3 +45,4 @@ $subnet_list[] = $subnet_old;
 
 // apply permission changes
 $Subnets->set_permissions($subnet_list, $removed_permissions, $changed_permissions);
+?>

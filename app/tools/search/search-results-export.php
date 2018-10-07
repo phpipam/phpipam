@@ -80,22 +80,16 @@ $colSpan 	= $fieldSize + $mySize + 3;
 
 
 # search addresses
-if(@$_REQUEST['addresses']=="on")   { $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], $custom_address_fields); }
-else 								{ $result_addresses = []; }
+if(@$_REQUEST['addresses']=="on") 	{ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['high'], $search_term_edited['low'], $custom_address_fields); }
 # search subnets
-if(@$_REQUEST['subnets']=="on") 	{ $result_subnets = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], $custom_subnet_fields); }
-else 								{ $result_subnets = []; }
+if(@$_REQUEST['subnets']=="on") 	{ $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip'], $custom_subnet_fields); }
 # search vlans
-if(@$_REQUEST['vlans']=="on" && $User->get_module_permissions ("vlan")>0) 	{ $result_vlans = $Tools->search_vlans($search_term, $custom_vlan_fields); }
-else  																		{ $result_vlans = []; }
+if(@$_REQUEST['vlans']=="on") 		{ $result_vlans     = $Tools->search_vlans($search_term, $custom_vlan_fields); }
 # search vrf
-if(@$_REQUEST['vrf']=="on" && $User->get_module_permissions ("vrf")>0) 		{ $result_vrf = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
-else  																		{ $result_vrf = []; }
+if(@$_REQUEST['vrf']=="on") 		{ $result_vrf       = $Tools->search_vrfs($search_term, $custom_vrf_fields); }
 # search circuits
-if(@$_REQUEST['circuits']=="on" && $User->get_module_permissions ("circuits")>0) 	{ $result_circuits = $Tools->search_circuits($search_term, $custom_circuit_fields); }
-else 																				{ $result_circuits = []; }
-if(@$_REQUEST['circuits']=="on" && $User->get_module_permissions ("circuits")>0) 	{ $result_circuits_p = $Tools->search_circuit_providers($search_term, $custom_circuit_p_fields); }
-else  																				{ $result_circuits_p = []; }
+if(@$_REQUEST['circuits']=="on") 	{ $result_circuits   = $Tools->search_circuits($search_term, $custom_circuit_fields); }
+if(@$_REQUEST['circuits']=="on") 	{ $result_circuits_p = $Tools->search_circuit_providers($search_term, $custom_circuit_p_fields); }
 
 /*
  *	Write xls
@@ -135,7 +129,7 @@ if(sizeof($result_addresses)>0) {
 	$worksheet->write($lineCount, $x, _('description') ,$format_title);		$x++;
 	$worksheet->write($lineCount, $x, _('hostname') ,$format_title);		$x++;
 	# switch
-	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+	if(in_array('switch', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('device') ,$format_title);			$x++;
 	} else { $colSpan--; }
 	# port
@@ -143,7 +137,7 @@ if(sizeof($result_addresses)>0) {
 	$worksheet->write($lineCount, $x, _('port') ,$format_title);			$x++;
 	} else { $colSpan--; }
 	# location
-	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) {
+	if(in_array('location', $selected_ip_fields)) {
 	$worksheet->write($lineCount, $x, _('location') ,$format_title);		$x++;
 	} else { $colSpan--; }
 	# owner
@@ -222,7 +216,7 @@ if(sizeof($result_addresses)>0) {
 			$worksheet->write($lineCount, $x, $ip['description']);					$x++;
 			$worksheet->write($lineCount, $x, $ip['hostname']);						$x++;
 			# switch
-			if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+			if(in_array('switch', $selected_ip_fields)) {
 				if(strlen($ip['switch'])>0 && $ip['switch']!=0) {
 					$device = (array) $Tools->fetch_object("devices", "id", $ip['switch']);
 					$ip['switch'] = $device!=0 ? $device['hostname'] : "";
@@ -237,7 +231,7 @@ if(sizeof($result_addresses)>0) {
 			$worksheet->write($lineCount, $x, $ip['port']);							$x++;
 			}
 			# location
-			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) {
+			if(in_array('location', $selected_ip_fields)) {
 			$worksheet->write($lineCount, $x, $ip['location']);							$x++;
 			}
 			# owner
@@ -277,27 +271,18 @@ if(sizeof($result_subnets)>0) {
 	$worksheet->setInputEncoding("utf-8");
 
 	//write headers
-	$rc = 0;
-	$worksheet->write($lineCount, $rc, _('Section') ,$format_title);
-	$rc++;
-	$worksheet->write($lineCount, $rc, _('Subet') ,$format_title);
-	$rc++;
-	$worksheet->write($lineCount, $rc, _('Mask') ,$format_title);
-	$rc++;
-	$worksheet->write($lineCount, $rc, _('Description') ,$format_title);
-	$rc++;
-	$worksheet->write($lineCount, $rc, _('Master subnet') ,$format_title);
-	$rc++;
-	if($User->get_module_permissions ("vlan")>0) {
-	$worksheet->write($lineCount, $rc, _('VLAN') ,$format_title);
-	$rc++;
-	}
-	$worksheet->write($lineCount, $rc, _('IP requests') ,$format_title);
-	$rc++;
+	$worksheet->write($lineCount, 0, _('Section') ,$format_title);
+	$worksheet->write($lineCount, 1, _('Subet') ,$format_title);
+	$worksheet->write($lineCount, 2, _('Mask') ,$format_title);
+	$worksheet->write($lineCount, 3, _('Description') ,$format_title);
+	$worksheet->write($lineCount, 4, _('Master subnet') ,$format_title);
+	$worksheet->write($lineCount, 5, _('VLAN') ,$format_title);
+	$worksheet->write($lineCount, 6, _('IP requests') ,$format_title);
+	$c=7;
 	if(sizeof($custom_subnet_fields) > 0) {
 		foreach($custom_subnet_fields as $field) {
-			$worksheet->write($lineCount, $rc, $field['name'], $format_title);
-			$rc++;
+			$worksheet->write($lineCount, $c, $field['name'], $format_title);
+			$c++;
 		}
 	}
 
@@ -307,8 +292,6 @@ if(sizeof($result_subnets)>0) {
 	foreach($result_subnets as $line) {
 		//cast
 		$line = (array) $line;
-
-		$rc = 0;
 
 		//get section details
 		$section = (array) $Sections->fetch_section (null, $line['sectionId']);
@@ -332,35 +315,25 @@ if(sizeof($result_subnets)>0) {
 		$line['vlanId'] = is_numeric($vlan['number']) ? $vlan['number'] : "";
 
 		//print subnet
-		$worksheet->write($lineCount, $rc, $section['name']);
-		$rc++;
+		$worksheet->write($lineCount, 0, $section['name']);
 		if($line['isFolder']==1) {
-		$worksheet->write($lineCount, $rc, _('Folder'));
-		$rc++;
-		$worksheet->write($lineCount, $rc, "");
-		$rc++;
+		$worksheet->write($lineCount, 1, _('Folder'));
+		$worksheet->write($lineCount, 2, "");
 		}
 		else {
-		$worksheet->write($lineCount, $rc, $Subnets->transform_to_dotted($line['subnet']));
-		$rc++;
-		$worksheet->write($lineCount, $rc, $line['mask']);
-		$rc++;
+		$worksheet->write($lineCount, 1, $Subnets->transform_to_dotted($line['subnet']));
+		$worksheet->write($lineCount, 2, $line['mask']);
 		}
-		$worksheet->write($lineCount, $rc, $line['description']);
-		$rc++;
-		$worksheet->write($lineCount, $rc, $line['masterSubnetId']);
-		$rc++;
-		if($User->get_module_permissions ("vlan")>0) {
-		$worksheet->write($lineCount, $rc, $line['vlanId']);
-		$rc++;
-		}
-		$worksheet->write($lineCount, $rc, $line['allowRequests']);
-		$rc++;
+		$worksheet->write($lineCount, 3, $line['description']);
+		$worksheet->write($lineCount, 4, $line['masterSubnetId']);
+		$worksheet->write($lineCount, 5, $line['vlanId']);
+		$worksheet->write($lineCount, 6, $line['allowRequests']);
 		//custom
+		$c=7;
 		if(sizeof($custom_subnet_fields) > 0) {
 			foreach($custom_subnet_fields as $field) {
-				$worksheet->write($lineCount, $rc, $line[$field['name']]);
-				$rc++;
+				$worksheet->write($lineCount, $c, $line[$field['name']]);
+				$c++;
 			}
 		}
 

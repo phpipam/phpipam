@@ -417,12 +417,12 @@ else {
 		}
     	# set what to update
     	$values = array(
-					"vlanId"       =>$_POST['vlanId'],
-					"vrfId"        =>$_POST['vrfId'],
-					"nameserverId" =>$_POST['nameserverId'],
-					"scanAgent"    =>@$_POST['scanAgent'],
-					"device"       =>$_POST['device'],
-					"isFull"       =>$_POST['isFull']
+					"vlanId"=>$_POST['vlanId'],
+					"vrfId"=>$_POST['vrfId'],
+					"nameserverId"=>$_POST['nameserverId'],
+					"scanAgent"=>@$_POST['scanAgent'],
+					"device"=>$_POST['device'],
+					"isFull"=>$_POST['isFull']
 					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);

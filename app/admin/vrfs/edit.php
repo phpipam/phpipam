@@ -17,12 +17,10 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vrf", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("vrf", 3, true, true);
+
+# make sue user can edit
+if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
+    $Result->show("danger", _("Not allowed to change VRFs"), true, true);
 }
 
 # create csrf token

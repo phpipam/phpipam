@@ -20,14 +20,9 @@ $User->check_user_session();
 # create csrf token
 $csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_add") : $User->Crypto->csrf_cookie ("create", "pstn_".$_POST['id']);
 
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pstn", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("pstn", 3, true, true);
-}
 
+# check permissions
+if($Tools->check_prefix_permission ($User->user) < 3)   { $Result->show("danger", _('You do not have permission to manage PSTN prefixes'), true, true); }
 
 # get Location object
 if($_POST['action']!="add") {
@@ -167,7 +162,6 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 
 
     	<!-- Device -->
-        <?php if($User->get_module_permissions ("devices")>0) { ?>
     	<tr>
     		<th><?php print _('Device'); ?></th>
     		<td id="deviceDropdown">
@@ -189,7 +183,6 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     		</td>
     		<td class="info2"><?php print _('Select device where prefix is located'); ?></td>
         </tr>
-        <?php } ?>
 
         <!-- description -->
     	<tr>
@@ -206,11 +199,14 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     	<!-- Custom -->
     	<?php
     	if(sizeof($custom) > 0) {
+
     		print '<tr>';
     		print '	<td colspan="2"><hr></td>';
     		print '</tr>';
+
     		# count datepickers
     		$timepicker_index = 0;
+
     		# all my fields
     		foreach($custom as $field) {
         		// create input > result is array (required, input(html), timepicker_index)
@@ -224,7 +220,10 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     			print "</tr>";
     		}
     	}
+
     	?>
+
+
 	</tbody>
 
 	</table>

@@ -4,9 +4,6 @@
 # Prints map of all Circuits
 #
 
-# perm check
-$User->check_module_permissions ("circuits", 1, true, false);
-
 # title
 if(isset($_GET['map_specific']) && $_GET['map_specific'] == 'true'){
     print "<h3>"._('Map of circuits')."</h3>";

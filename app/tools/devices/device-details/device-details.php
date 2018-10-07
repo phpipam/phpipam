@@ -6,8 +6,6 @@
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("devices", 1, true, false);
 
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -52,7 +50,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "	<td>$device_type->tname</td>";
     	print "</tr>";
 
-        if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+        if($User->settings->enableLocations=="1") { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>
@@ -113,7 +111,8 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // version
                 print '<tr>';
                 print " <th>". _('Community').'</th>';
-                print $User->is_admin(false) ? " <td>$device[snmp_community]</td>" : " <td>********</td>";
+                print " <td>$device[snmp_community]</td>";
+                print "</tr>";
                 // port
                 print '<tr>';
                 print " <th>". _('Port').'</th>';
@@ -143,7 +142,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // pass
                 print '<tr>';
                 print " <th>". _('Password').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_auth_pass]</td>" : " <td>********</td>";
+                print " <td>$device[snmp_v3_auth_pass]</td>";
                 print "</tr>";
                 // privacy proto
                 print '<tr>';
@@ -153,7 +152,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // privacy pass
                 print '<tr>';
                 print " <th>". _('Privacy passphrase').'</th>';
-                $User->is_admin(false) ? print " <td>$device[snmp_v3_priv_pass]</td>" : " <td>********</td>";
+                print " <td>$device[snmp_v3_priv_pass]</td>";
                 print "</tr>";
                 // context name
                 print '<tr>';
@@ -185,17 +184,17 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print " <td><span class='badge badge1 badge5'>$cnt_addresses "._('Addresses')."</span></td>";
     	print "</tr>";
     	print "<tr>";
-        if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>0) {
+        if($User->settings->enableNAT=="1") {
     	print " <th>"._('NAT')."</th>";
     	print " <td><span class='badge badge1 badge5'>$cnt_nat "._('NAT')."</span></td>";
     	print "</tr>";
         }
-        if($User->settings->enablePSTN=="1" && $User->get_module_permissions ("pstn")>0) {
+        if($User->settings->enablePSTN=="1") {
         print " <th>"._('PSTN')."</th>";
         print " <td><span class='badge badge1 badge5'>$cnt_pstn "._('PSTN')."</span></td>";
         print "</tr>";
         }
-        if($User->settings->enableCircuits=="1" && $User->get_module_permissions ("pstn")>0) {
+        if($User->settings->enableCircuits=="1") {
         print " <th>"._('Circuits')."</th>";
         print " <td><span class='badge badge1 badge5'>$cnt_circuits "._('Circuits')."</span></td>";
         print "</tr>";
@@ -233,13 +232,12 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "<tr>";
     	print "	<td></td>";
 
-    	if($User->get_module_permissions ("devices")>1) {
+    	if($User->is_admin(false)) {
     		print "	<td class='actions'>";
     		print "	<div class='btn-group'>";
     		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='".$device['id']."'><i class='fa fa-pencil'></i></button>";
-            if($User->settings->enableSNMP=="1" && $User->is_admin(false))
+            if($User->settings->enableSNMP=="1")
             print "     <button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
-            if($User->get_module_permissions ("devices")>2)
     		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='".$device['id']."'><i class='fa fa-times'></i></button>";
     		print "	</div>";
     		print " </td>";
@@ -267,7 +265,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
 
 	# rack
-	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>0) {
+	if ($User->settings->enableRACK=="1") {
 
     	print "<td vertical-align:top !important;' class='text-right'>";
         // validate rack
@@ -290,3 +288,5 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 else {
     $Result->show("danger", _('Invalid ID'), false);
 }
+
+?>

@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -19,8 +19,8 @@ $User->check_user_session();
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
-# perm check
-$User->check_module_permissions ("vrf", 3, true, false);
+# admin check
+if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true, true); }
 
 # fetch devices that use get_routing_table query
 $scan_devices = $Tools->fetch_multiple_objects ("devices", "snmp_queries", "%get_vrf_table%", "id", true, true);

@@ -6,11 +6,9 @@
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("devices", 1, true, false);
 
 # rack object
-$Racks = new phpipam_rack ($Database);
+$Racks      = new phpipam_rack ($Database);
 
 # fetch all Devices
 $devices = $Admin->fetch_all_objects("devices", "hostname");
@@ -136,16 +134,14 @@ else {
 			}
 		}
 
-		if($User->get_module_permissions ("devices")>1) {
-			print '	<td class="actions">'. "\n";
-			print "	<div class='btn-group'>";
-			print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='$device[id]' rel='tooltip' title='"._('Edit')."'><i class='fa fa-pencil'></i></button>";
-			if($User->settings->enableSNMP=="1")
-			print "		<button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
-			print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='$device[id]' rel='tooltip' title='"._('Delete')."'><i class='fa fa-times'></i></button>";
-			print "	</div>";
-			print '	</td>'. "\n";
-		}
+		print '	<td class="actions">'. "\n";
+		print "	<div class='btn-group'>";
+		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='$device[id]' rel='tooltip' title='"._('Edit')."'><i class='fa fa-pencil'></i></button>";
+		if($User->settings->enableSNMP=="1")
+		print "		<button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
+		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='$device[id]' rel='tooltip' title='"._('Delete')."'><i class='fa fa-times'></i></button>";
+		print "	</div>";
+		print '	</td>'. "\n";
 
 		print '</tr>'. "\n";
 

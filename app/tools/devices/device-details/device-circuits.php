@@ -6,10 +6,6 @@
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("devices", 1, true, false);
-# perm check
-$User->check_module_permissions ("circuits", 1, true, false);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');
@@ -49,10 +45,8 @@ else {
         print " <th>"._('Type').'</th>';
         print " <th>"._('Capacity').'</th>';
         print " <th>"._('Status').'</th>';
-        if($User->get_module_permissions ("locations")>0) {
         print " <th>"._('Point A').'</th>';
         print " <th>"._('Point B').'</th>';
-        }
         print '</tr>';
         print "</thead>";
 
@@ -78,10 +72,8 @@ else {
             print " <td>$circuit->type</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
-            if($User->get_module_permissions ("locations")>0) {
             print " <td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";
-            }
             print '</tr>'. "\n";
         }
         print "</tbody>";

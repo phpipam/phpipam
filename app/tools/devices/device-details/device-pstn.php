@@ -32,10 +32,6 @@ print "<table id='switchMainTable' class='devices table table-striped table-top 
 if ($User->settings->enablePSTN!="1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
 }
-# perm check
-elseif ($User->get_module_permissions ("pstn")<1) {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 else {
     $colspan = 6;
     // table
@@ -121,10 +117,13 @@ else {
     	    	}
     	    }
 
+    		# set permission
+    		$permission = $Tools->check_prefix_permission ($User->user);
+
     		print "	<td class='actions' style='padding:0px;'>";
     		print "	<div class='btn-group'>";
 
-    		if($User->get_module_permissions ("pstn")>1) {
+    		if($permission>1) {
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
     		}

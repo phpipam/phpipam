@@ -3,12 +3,8 @@
 # fetch vlan
 $vlan = $Tools->fetch_object("vlans", "vlanId", $_GET['subnetId']);
 
-# perm check
-if ($User->get_module_permissions ("vlan")<1) {
-	$Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 # size check
-elseif($vlan===false) {
+if($vlan===false) {
 	print "<div class='subnetDetails'>";
 	print "<h3>"._("Error")."</h3><hr>";
 	$Result->show("danger", _("Invalid VLAN id"), false);
@@ -25,3 +21,4 @@ else {
 	include_once('vlan-subnets.php');
 	print '</div>';
 }
+?>

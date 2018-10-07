@@ -830,22 +830,6 @@ class Tools extends Common_functions {
 	}
 
 	/**
-	 * Fetch the db/SCHEMA.sql DBVERSION
-	 *
-	 * @return int
-	 */
-	public function fetch_schema_version() {
-		# get SCHEMA.SQL file
-		$schema = $this->read_db_schema();
-
-		$dbversion = strstr($schema, 'UPDATE `settings` SET `dbversion` =');
-		$dbversion = strstr($dbversion, ';', true);
-		$dbversion = explode("=", $dbversion);
-
-		return intval($dbversion[1]);
-	}
-
-	/**
 	 * Fetches standard database fields from SCHEMA.sql file
 	 *
 	 * @access public
@@ -1042,62 +1026,63 @@ class Tools extends Common_functions {
 	 */
 	public function ip_request_send_mail ($action="new", $values) {
 
+		# fetch mailer settings
+		$mail_settings = $this->fetch_object("settingsMail", "id", 1);
+
+		# initialize mailer
 		$this->get_settings ();
+		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+		$phpipam_mail->initialize_mailer();
+
+
+		# get all users and check who to end mail to
+		$recipients = $this->ip_request_get_mail_recipients ($values['subnetId']);
+
+		# add requester to cc
+		$recipients_requester = $values['requester'];
+
+		# reformat key / vaues
+		$values = $this->ip_request_reformat_mail_values ($values);
+		#reformat empty
+		$values = $this->reformat_empty_array_fields ($values, "/");
+
+		# generate content
+		if ($action=="new")			{ $subject	= "New IP address request"; }
+		elseif ($action=="accept")	{ $subject	= "IP address request accepted"; }
+		elseif ($action=="reject")	{ $subject	= "IP address request rejected"; }
+		else						{ $this->Result->show("danger", _("Invalid request action"), true); }
+
+		// set html content
+		$content[] = "<table style='margin-left:10px;margin-top:20px;width:auto;padding:0px;border-collapse:collapse;'>";
+		$content[] = "<tr><td colspan='2' style='margin:0px;>$this->mail_font_style <strong>$subject</strong></font></td></tr>";
+		foreach($values as $k=>$v) {
+		// title search
+		if (preg_match("/s_title_/", $k)) {
+		$content[] = "<tr><td colspan='2' style='margin:0px;border-bottom:1px solid #eeeeee;'>$this->mail_font_style<strong>$v</strong></font></td></tr>";
+		}
+		else {
+		//content
+		$content[] = "<tr>";
+		$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $k</font></td>";
+		$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $v</font></td>";
+		$content[] = "</tr>";
+		}
+		}
+		$content[] = "<tr><td style='padding-top:15px;padding-bottom:3px;text-align:right;color:#ccc;'>$this->mail_font_style Sent at ".date('Y/m/d H:i')."</font></td></tr>";
+		//set alt content
+		$content_plain[] = "$subject"."\r\n------------------------------\r\n";
+		foreach($values as $k=>$v) {
+		$content_plain[] = $k." => ".$v;
+		}
+		$content_plain[] = "\r\n\r\nSent at ".date('Y/m/d H:i');
+		$content[] = "</table>";
+
+		// set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
 
 		# try to send
 		try {
-			# fetch mailer settings
-			$mail_settings = $this->fetch_object("settingsMail", "id", 1);
-
-			# initialize mailer
-			$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
-
-			# get all users and check who to end mail to
-			$recipients = $this->ip_request_get_mail_recipients ($values['subnetId']);
-
-			# add requester to cc
-			$recipients_requester = $values['requester'];
-
-			# reformat key / vaues
-			$values = $this->ip_request_reformat_mail_values ($values);
-			#reformat empty
-			$values = $this->reformat_empty_array_fields ($values, "/");
-
-			# generate content
-			if ($action=="new")			{ $subject	= "New IP address request"; }
-			elseif ($action=="accept")	{ $subject	= "IP address request accepted"; }
-			elseif ($action=="reject")	{ $subject	= "IP address request rejected"; }
-			else						{ $this->Result->show("danger", _("Invalid request action"), true); }
-
-			// set html content
-			$content[] = "<table style='margin-left:10px;margin-top:20px;width:auto;padding:0px;border-collapse:collapse;'>";
-			$content[] = "<tr><td colspan='2' style='margin:0px;>$this->mail_font_style <strong>$subject</strong></font></td></tr>";
-			foreach($values as $k=>$v) {
-			// title search
-			if (preg_match("/s_title_/", $k)) {
-			$content[] = "<tr><td colspan='2' style='margin:0px;border-bottom:1px solid #eeeeee;'>$this->mail_font_style<strong>$v</strong></font></td></tr>";
-			}
-			else {
-			//content
-			$content[] = "<tr>";
-			$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $k</font></td>";
-			$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $v</font></td>";
-			$content[] = "</tr>";
-			}
-			}
-			$content[] = "<tr><td style='padding-top:15px;padding-bottom:3px;text-align:right;color:#ccc;'>$this->mail_font_style Sent at ".date('Y/m/d H:i')."</font></td></tr>";
-			//set alt content
-			$content_plain[] = "$subject"."\r\n------------------------------\r\n";
-			foreach($values as $k=>$v) {
-			$content_plain[] = $k." => ".$v;
-			}
-			$content_plain[] = "\r\n\r\nSent at ".date('Y/m/d H:i');
-			$content[] = "</table>";
-
-			// set content
-			$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-			$content_plain 	= implode("\r\n",$content_plain);
-
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			if ($recipients!==false) {
 			foreach($recipients as $r) {
@@ -1116,7 +1101,7 @@ class Tools extends Common_functions {
 		} catch (phpmailerException $e) {
 			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		} catch (Exception $e) {
-			$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		}
 
 		# ok
@@ -2343,6 +2328,19 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Checks permission for specified prefix
+	 *
+	 *	we provide user details and subnetId
+	 *
+	 * @access public
+	 * @param object $user
+	 * @return int
+	 */
+	public function check_prefix_permission ($user) {
+        return $user->role=="Administrator" ? 3 : $user->pstn;
+	}
+
+	/**
 	 * Prints structured menu of prefixes
 	 *
 	 * @access public
@@ -2352,9 +2350,6 @@ class Tools extends Common_functions {
 	 * @return mixed
 	 */
 	public function print_menu_prefixes ( $user, $prefixes, $custom_fields ) {
-
-		# user class for permissions
-		$User = new User ($this->Database);
 
 		# set hidden fields
 		$this->get_settings ();
@@ -2369,7 +2364,8 @@ class Tools extends Common_functions {
 		# remove all not permitted!
 		if(sizeof($prefixes)>0) {
 		foreach($prefixes as $k=>$s) {
-			if($User->get_module_permissions ("pstn")<1) { unset($prefixes[$k]); }
+			$permission = $this->check_prefix_permission ($user);
+			if($permission == 0) { unset($prefixes[$k]); }
 		}
 		}
 
@@ -2462,18 +2458,16 @@ class Tools extends Common_functions {
                 $html[] = "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
 
 				//device
-				if($User->get_module_permissions ("devices")>1) {
-					$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
+				$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
 
-					if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
+				if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
+				else {
+					$device = $this->fetch_object ("devices", "id", $option['deviceId']);
+					if ($device!==false) {
+						$html[] = "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
+					}
 					else {
-						$device = $this->fetch_object ("devices", "id", $option['deviceId']);
-						if ($device!==false) {
-							$html[] = "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
-						}
-						else {
-							$html[] ='	<td>/</td>' . "\n";
-						}
+						$html[] ='	<td>/</td>' . "\n";
 					}
 				}
 
@@ -2505,15 +2499,22 @@ class Tools extends Common_functions {
 			    	}
 			    }
 
-				if($User->get_module_permissions ("pstn")>1) {
-					$html[] = "	<td class='actions' style='padding:0px;'>";
-					$html[] = "	<div class='btn-group'>";
+				# set permission
+				$permission = $this->check_prefix_permission ($user);
+
+				$html[] = "	<td class='actions' style='padding:0px;'>";
+				$html[] = "	<div class='btn-group'>";
+
+				if($permission>2) {
 					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['id']."'><i class='fa fa-pencil'></i></button>";
-					if($User->get_module_permissions ("pstn")>2)
 					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['id']."'><i class='fa fa-times'></i></button>";
-					$html[] = "	</div>";
-					$html[] = "	</td>";
 				}
+				else {
+					$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
+					$html[] = "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
+				}
+				$html[] = "	</div>";
+				$html[] = "	</td>";
 
 				$html[] = "</tr>";
 

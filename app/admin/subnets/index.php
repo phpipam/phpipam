@@ -17,10 +17,7 @@ print "<hr>";
 /* Foreach section fetch subnets and print it! */
 if(is_array($sections)) {
 	foreach($sections as $section) {
-		# check permission
-		if($Sections->check_permission($User->user, $section->id)) {
-			print "<br><br><h4>"._('Available subnets in section')." $section->name: [$section->description]</h4>";
-			print $Sections->print_section_subnets_table($User, $section->id);
-		}
+		print "<br><br><h4>"._('Available subnets in section')." $section->name: [$section->description]</h4>";
+		print $Sections->print_section_subnets_table($User, $section->id);
 	}
 }

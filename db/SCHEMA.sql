@@ -48,7 +48,7 @@ CREATE TABLE `ipaddresses` (
   `description` varchar(64) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `mac` varchar(20) DEFAULT NULL,
-  `owner` varchar(128) DEFAULT NULL,
+  `owner` varchar(32) DEFAULT NULL,
   `state`  INT(3)  NULL  DEFAULT '2',
   `switch` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
@@ -110,7 +110,7 @@ CREATE TABLE `requests` (
   `description` varchar(64) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
-  `owner` varchar(128) DEFAULT NULL,
+  `owner` varchar(32) DEFAULT NULL,
   `requester` varchar(128) DEFAULT NULL,
   `comment` text,
   `processed` binary(1) DEFAULT NULL,
@@ -371,6 +371,11 @@ CREATE TABLE `users` (
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
   `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `perm_customers` INT(1)  NOT NULL  DEFAULT '1',
+  `pdns` SET('Yes','No')  NULL  DEFAULT 'No' ,
+  `editVlan` SET('Yes','No')  NULL  DEFAULT 'No',
+  `editCircuits` SET('Yes','No')  NULL  DEFAULT 'No',
+  `pstn` INT(1)  NULL  DEFAULT '1',
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
@@ -390,7 +395,6 @@ CREATE TABLE `users` (
   `theme` VARCHAR(32)  NULL  DEFAULT '',
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
-  `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`),
   KEY `id` (`id`)
@@ -768,7 +772,6 @@ CREATE TABLE `racks` (
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `row` INT(11)  NOT NULL  DEFAULT '1',
   `hasBack` TINYINT(1)  NOT NULL  DEFAULT '0',
-  `topDown` tinyint(1) NOT NULL DEFAULT '0',
   `description` text,
   `customer_id` INT(11) unsigned NULL default NULL,
   PRIMARY KEY (`id`),
@@ -777,19 +780,6 @@ CREATE TABLE `racks` (
   CONSTRAINT `customer_racks` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# Dump of table rackContents
-# ------------------------------------------------------------
-DROP TABLE IF EXISTS `rackContents`;
-
-CREATE TABLE `rackContents` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `rack` int(11) unsigned DEFAULT NULL,
-  `rack_start` int(11) unsigned DEFAULT NULL,
-  `rack_size` int(11) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `rack` (`rack`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table locations
@@ -808,7 +798,7 @@ CREATE TABLE `locations` (
 
 
 
-# Dump of table pstnPrefixes
+    # Dump of table pstnPrefixes
 # ------------------------------------------------------------
 DROP TABLE IF EXISTS `pstnPrefixes`;
 
@@ -943,4 +933,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 11;
+UPDATE `settings` SET `dbversion` = 5;

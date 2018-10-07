@@ -1,6 +1,5 @@
 <?php
 
-
 // title
 print "<h4>"._('Member Circuits')."</h4>";
 print "<hr>";

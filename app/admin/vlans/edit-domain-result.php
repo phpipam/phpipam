@@ -10,7 +10,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
+$Admin	 	= new Admin ($Database);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -18,13 +18,6 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vlan", 2, true, false);
-}
-else {
-    $User->check_module_permissions ("vlan", 3, true, false);
-}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -58,11 +51,10 @@ else {
 }
 
 # set update values
-$values = array(
-				"id"          =>@$_POST['id'],
-				"name"        =>@$_POST['name'],
-				"description" =>@$_POST['description'],
-				"permissions" =>@$_POST['permissions']
+$values = array("id"=>@$_POST['id'],
+				"name"=>@$_POST['name'],
+				"description"=>@$_POST['description'],
+				"permissions"=>@$_POST['permissions']
 				);
 
 # update domain

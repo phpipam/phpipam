@@ -12,12 +12,8 @@ if(!$location) {
     $location = $Tools->fetch_object("locations", "id", $location_index);
 }
 
-# perm check
-if ($User->get_module_permissions ("locations")<1) {
-    $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
 # if none than print
-elseif($location===false) {
+if($location===false) {
     $Result->show("info","Invalid location", false);
 }
 elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
@@ -86,3 +82,4 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
 <?php
     }
 }
+?>

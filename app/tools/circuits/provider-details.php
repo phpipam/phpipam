@@ -6,8 +6,6 @@
 
 # verify that user is logged in
 $User->check_user_session();
-# perm check
-$User->check_module_permissions ("circuits", 1, true, false);
 
 # check
 is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -58,6 +56,7 @@ if($provider!==false) {
 	    	print "</tr>";
 
     		foreach($custom_fields as $field) {
+
     			# fix for boolean
     			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
     				if($provider->{$field['name']}=="0")		{ $provider->{$field['name']} = "false"; }
@@ -76,7 +75,7 @@ if($provider!==false) {
     	}
 
     	// edit, delete
-    	if($User->get_module_permissions ("circuits")>1) {
+    	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
     		print "<tr>";
     		print "	<td colspan='2'><hr></td>";
     		print "</tr>";
@@ -86,7 +85,6 @@ if($provider!==false) {
     		print "	<td class='actions'>";
     		print "	<div class='btn-group'>";
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'><i class='fa fa-pencil'></i></a>";
-			if($User->get_module_permissions ("circuits")>2)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'><i class='fa fa-times'></i></a>";
     		print "	</div>";
     		print " </td>";
@@ -177,10 +175,10 @@ if($provider!==false) {
 			print "<td class='actions'>";
 			print "	<div class='btn-group'>";
 			print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."''><i class='fa fa-eye'></i></a>";
-			if($User->get_module_permissions ("circuits")>1)
+			if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
-			if($User->get_module_permissions ("circuits")>2)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
+			}
 			print "	</div>";
 			print "</td>";
 

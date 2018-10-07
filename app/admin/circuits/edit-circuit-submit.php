@@ -19,17 +19,11 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
-# perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", 2, true, false);
-}
-else {
-    $User->check_module_permissions ("circuits", 3, true, false);
-}
+# check permissions
+if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit details"), true); }
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "circuit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
-
 # validate action
 $Admin->validate_action ($_POST['action'], true);
 # get modified details
@@ -147,7 +141,7 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # append customerId
-if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+if($User->settings->enableCustomers=="1") {
 	if (is_numeric($_POST['customer_id'])) {
 		if ($_POST['customer_id']>0) {
 			$values['customer_id'] = $_POST['customer_id'];
