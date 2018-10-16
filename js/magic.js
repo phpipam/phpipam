@@ -1078,9 +1078,9 @@ function search_execute (loc) {
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
-
+    var edge = ua.indexOf("Edge/");
     //IE
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
     else 																{ var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
@@ -1845,8 +1845,9 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
 						//lets try to detect IEto set location
 					    var ua = window.navigator.userAgent;
 					    var msie = ua.indexOf("MSIE ");
+					    var edge = ua.indexOf("Edge/");
 					    //IE
-					    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+					    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
 					    else 																{ var base = ""; }
 					    //go to search page
 					    var prettyLinks = $('#prettyLinks').html();
