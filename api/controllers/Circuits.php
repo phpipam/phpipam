@@ -447,7 +447,7 @@ class Circuits_controller extends Common_api_functions {
 	 * @method validate_cid
 	 *
 	 * @param  string $action
-	 * @param  object $old_object
+	 * @param  object|null $old_object
 	 *
 	 * @return void
 	 */
