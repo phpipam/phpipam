@@ -10,9 +10,25 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
+$Tools		= new Tools ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+
+# get all custom fields
+$custom_fields = $Tools->fetch_custom_fields('vrf');
+# prepare HTML variables
+$custom_fields_names = "";
+$custom_fields_boxes = "";
+
+if(sizeof($custom_fields) > 0) {
+	foreach($custom_fields as $myField) {
+		//change spaces to "___" so it can be used as element id
+		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+ 		$custom_fields_names.= "	<th>$myField[name]</th>";
+ 		$custom_fields_boxes.= "	<td><input type='checkbox' name='$myField[nameTemp]' checked> </td>";
+ 	}
+}
 
 ?>
 
