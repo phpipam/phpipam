@@ -50,12 +50,14 @@ print "	<tr>";
 print "	<th>"._('Name')."</th>";
 print "	<th>"._('RD')."</th>";
 print "	<th>"._('Description')."</th>";
+print $custom_fields_names;
 print "	</tr>";
 
 print "	<tr>";
 print "	<td><input type='checkbox' name='name' checked title='"._('Mandatory')."'></td>";
 print "	<td><input type='checkbox' name='rd' checked> </td>";
 print "	<td><input type='checkbox' name='description' checked> </td>";
+print $custom_fields_boxes;
 print "	</tr>";
 
 print '</table>';
