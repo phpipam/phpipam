@@ -29,7 +29,7 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 <a class='btn btn-sm btn-default' href="<?php print create_link("administration","users"); ?>" style="margin-bottom:10px;"><i class='fa fa-angle-left'></i> <?php print _('All users'); ?></a>
 
 <!-- table -->
-<table id="userPrint" class="table table-hover table-auto table-condensed">
+<table id="userPrint" class="table table-hover table-auto table-condensed table-noborder">
 
 <tr>
 	<td><?php print _('Real Name'); ?></td>
@@ -47,37 +47,31 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td><?php print _('Language'); ?></td>
 	<td><?php print $language->l_name; ?></td>
 </tr>
-<?php if ($User->settings->enablePowerDNS==1) { ?>
-<tr>
-    <?php
-    $user->pdns = $user->pdns=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
-    ?>
-	<td><?php print _('PowerDNS'); ?></td>
-	<td><?php print $user->pdns; ?></td>
-</tr>
-<?php } ?>
-<tr>
-    <?php
-    $user->editVlan = $user->editVlan=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
-    ?>
-	<td><?php print _('Manage VLANs / VRFs'); ?></td>
-	<td><?php print $user->editVlan; ?></td>
-</tr>
-<?php if ($User->settings->enablePSTN==1) { ?>
-<tr>
-	<td><?php print _('PSTN'); ?></td>
-	<td><?php print $Subnets->parse_permissions ($user->pstn); ?></td>
-</tr>
-<?php } ?>
 <tr>
 	<td></td>
 	<td>
 	<div class='btn-group'>
-		<button class='btn btn-xs btn-default editUser' data-userid='<?php print $user->id; ?>' data-action='edit'  ><i class='fa fa-pencil'></i></button>
-		<button class='btn btn-xs btn-default editUser' data-userid='<?php print $user->id; ?>' data-action='delete'><i class='fa fa-times'></i></button>
+		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='<?php print $user->id; ?>'><i class='fa fa-pencil'></i></button>
+		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='<?php print $user->id; ?>'><i class='fa fa-times'></i></button>
 	</div>
 	</td>
 </tr>
+
+
+<tr>
+	<td colspan="2"><h4><?php print _('Module permissions'); ?></h4><hr></td>
+</tr>
+
+<tr>
+	<td colspan="2">
+		<?php
+		$user = (array) $user;
+		include("print_module_permissions.php");
+		$user = (object) $user;
+		?>
+	</td>
+</tr>
+
 
 
 <tr>
@@ -138,7 +132,11 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td colspan="2"><h4><?php print _('Display settings'); ?></h4><hr></td>
 </tr>
 <tr>
-	<td><?php print _('compress override'); ?></td>
+	<td><?php print _('Theme'); ?></td>
+	<td><?php print $user->theme=="" ? _("Default") : $user->theme ?></td>
+</tr>
+<tr>
+	<td><?php print _('Compress override'); ?></td>
 	<td><?php print $user->compressOverride==1 ? _("Yes") : _("No") ?></td>
 </tr>
 <tr>
@@ -193,6 +191,13 @@ if(sizeof($custom_fields) > 0) {
 		print "	</td>";
 		print "</tr>";
 		}
+}
+else {
+	print "<tr>";
+	print "	<td colspan='2'>";
+	$Result->show ("muted", _("No custom fields"), false);
+	print "	</td>";
+	print "</tr>";
 }
 ?>
 

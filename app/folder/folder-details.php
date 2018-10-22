@@ -32,7 +32,7 @@ if($folder['sectionId']!=$_GET['section'])	{
 <h4><?php print _('Folder details'); ?></h4>
 <hr>
 
-<table class="ipaddress_subnet table-condensed table-auto">
+<table class="ipaddress_subnet table-condensed table-auto" >
 
 	<tr>
 		<th><?php print _('Hierarchy'); ?></th>
@@ -51,11 +51,11 @@ if($folder['sectionId']!=$_GET['section'])	{
 
 	<?php
 	# print custom subnet fields if any
-	if(sizeof(sizeof($cfields)) > 0) {
+	if(!is_null($cfields)) {
 		foreach($cfields as $key=>$field) {
 			if(strlen($folder[$key]) > 0) {
 			print "<tr>";
-			print "	<th>$key</th>";
+			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
 			print "	<td>";
 				# booleans
 				if($field['type']=="tinyint(1)")	{

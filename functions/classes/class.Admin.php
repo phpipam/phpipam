@@ -382,12 +382,14 @@ class Admin extends Common_functions {
 	public function groups_parse ($group_ids) {
 		$out = array ();
 		// check
-		if(sizeof($group_ids)>0) {
-	    	foreach($group_ids as $g_id) {
-	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
-	    		$out[$group->g_id] = (array) $group;
-	    	}
-	    }
+		if(!is_null($group_ids)) {
+			if(sizeof($group_ids)>0) {
+		    	foreach($group_ids as $g_id) {
+		    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
+		    		$out[$group->g_id] = (array) $group;
+		    	}
+		    }
+		}
 	    # return array of groups
 	    return $out;
 	}
@@ -406,12 +408,14 @@ class Admin extends Common_functions {
 	public function groups_parse_ids ($group_ids) {
 		$out = array ();
 		// check
-		if(sizeof($group_ids) >0) {
-		    foreach($group_ids as $g_id) {
-	    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
-	    		$out[$group->g_id] = $group->g_id;
-	    	}
-	    }
+		if(!is_null($group_ids)) {
+			if(sizeof($group_ids) >0) {
+			    foreach($group_ids as $g_id) {
+		    		$group = $this->fetch_object ("userGroups", "g_id", $g_id);
+		    		$out[$group->g_id] = $group->g_id;
+		    	}
+		    }
+		}
 	    # return array of group ids
 	    return $out;
 	}
@@ -682,8 +686,13 @@ class Admin extends Common_functions {
 	    $field['action'] 		= $this->strip_input_tags($field['action']);
 	    $field['Comment'] 		= $this->strip_input_tags($field['Comment']);
 
+	    # add name prefix to distinguish custom fields
+	    if($field['action']=="edit" || $field['action']=="add") {
+		    if(strpos($field['name'], "custom_")!==0) { $field['name'] = "custom_".$field['name']; }
+		}
+
 	    # set update query
-	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[name]`;"; }
+	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[oldname]`;"; }
 	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER IGNORE TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
 	    else if ($field['action']=="edit") 							{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default COMMENT :comment;"; }
 	    else if ($field['action']=="add"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }

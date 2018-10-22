@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
 
 # check
 is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -56,7 +58,6 @@ if($provider!==false) {
 	    	print "</tr>";
 
     		foreach($custom_fields as $field) {
-
     			# fix for boolean
     			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
     				if($provider->{$field['name']}=="0")		{ $provider->{$field['name']} = "false"; }
@@ -68,14 +69,14 @@ if($provider!==false) {
     			$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']});
 
     			print "<tr>";
-    			print "<th>$field[name]</th>";
+    			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
     			print "<td>".$provider->{$field['name']}."</d>";
     			print "</tr>";
     		}
     	}
 
     	// edit, delete
-    	if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+    	if($User->get_module_permissions ("circuits")>1) {
     		print "<tr>";
     		print "	<td colspan='2'><hr></td>";
     		print "</tr>";
@@ -85,6 +86,7 @@ if($provider!==false) {
     		print "	<td class='actions'>";
     		print "	<div class='btn-group'>";
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'><i class='fa fa-pencil'></i></a>";
+			if($User->get_module_permissions ("circuits")>2)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'><i class='fa fa-times'></i></a>";
     		print "	</div>";
     		print " </td>";
@@ -111,22 +113,22 @@ if($provider!==false) {
 	}
 	else {
 		# table
-		print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+		print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="circu_prov_details">';
 
 		# headers
 		print "<thead>";
 		print '<tr>';
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Id')."'>"._('Circuit ID')."</span></th>";
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Provider')."'>"._('Provider')."</span></th>";
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by type')."'>"._('Type').'</span></th>';
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Capacity').'</span></th>';
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Capacity')."' class='hidden-sm hidden-xs'>"._('Status').'</span></th>';
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location A')."' class='hidden-sm hidden-xs'>"._('Point A').'</span></th>';
-		print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by location B')."' class='hidden-sm hidden-xs'>"._('Point B').'</span></th>';
+		print "	<th>"._('Circuit ID')."</th>";
+		print "	<th>"._('Provider')."</th>";
+		print "	<th>"._('Type').'</th>';
+		print "	<th>"._('Capacity').'</th>';
+		print "	<th>"._('Status').'</th>';
+		print "	<th>"._('Point A').'</th>';
+		print "	<th>"._('Point B').'</th>';
 		if(sizeof(@$custom_fields_circuits) > 0) {
 			foreach($custom_fields_circuits as $field) {
 				if(!in_array($field['name'], $hidden_circuit_fields)) {
-					print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
+					print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
 					$colspanCustom++;
 				}
 			}
@@ -151,7 +153,7 @@ if($provider!==false) {
 
 			//print details
 			print '<tr>'. "\n";
-			print "	<td><strong><a href='".create_link($_GET['page'],"circuits",$circuit->id)."'>$circuit->cid</a></strong></td>";
+			print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 			print "	<td>$circuit->name</td>";
 			print "	<td>$circuit->type</td>";
 			print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
@@ -175,10 +177,10 @@ if($provider!==false) {
 			print "<td class='actions'>";
 			print "	<div class='btn-group'>";
 			print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."''><i class='fa fa-eye'></i></a>";
-			if($User->is_admin(false) || $User->user->editCircuits=="Yes") {
+			if($User->get_module_permissions ("circuits")>1)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
+			if($User->get_module_permissions ("circuits")>2)
 			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
-			}
 			print "	</div>";
 			print "</td>";
 

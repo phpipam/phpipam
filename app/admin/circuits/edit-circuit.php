@@ -5,7 +5,7 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,11 +17,16 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# check permissions
-if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit details"), true, true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("circuits", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("circuits", 3, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "circuit");
+$csrf = $User->Crypto->csrf_cookie ("create", "circuit");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -54,13 +59,12 @@ $all_locations     = $Tools->fetch_all_objects("locations", "name");
 
 # no providers
 if($circuit_providers===false) 	{
-	$btn = $User->is_admin(false) ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
+	$btn = $User->get_module_permissions ("circuits")>2 ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
 	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
 }
 
-# get types and parse from enum
-$type_desc = $Database->getFieldInfo ("circuits", "type");
-$all_types = explode(",", str_replace(array("enum","(",")","'"), "",$type_desc->Type));
+# get types
+$all_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 
 # set readonly flag
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
@@ -87,7 +91,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Circuit ID'); ?></td>
 		<td>
-			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $circuit->cid; ?>" <?php print $readonly; ?>>
+			<input type="text" name="cid" style='width:200px;' class="form-control input-sm" placeholder="<?php print _('ID'); ?>" value="<?php if(isset($circuit->cid)) print $Tools->strip_xss($circuit->cid); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 				print '<input type="hidden" name="id" value="'. $_POST['circuitid'] .'">'. "\n";
@@ -121,8 +125,8 @@ $(document).ready(function(){
 			<select name="type" class="form-control input-w-auto input-sm">
 				<?php
 				foreach ($all_types as $type) {
-					$selected = $circuit->type == $type ? "selected" : "";
-					print "<option value='$type' $selected>$type</option>";
+					$selected = $circuit->type == $type->id ? "selected" : "";
+					print "<option value='$type->id' $selected>$type->ctname</option>";
 				}
 				?>
 			</select>
@@ -133,7 +137,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Capacity'); ?></td>
 		<td>
-			<input type="text" name="capacity" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Capacity'); ?>" value="<?php if(isset($circuit->capacity)) print $circuit->capacity; ?>" <?php print $readonly; ?>>
+			<input type="text" name="capacity" style='width:200px;'  class="form-control input-sm" placeholder="<?php print _('Capacity'); ?>" value="<?php if(isset($circuit->capacity)) print $Tools->strip_xss($circuit->capacity); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -155,7 +159,33 @@ $(document).ready(function(){
 		</td>
 	</tr>
 
+	<?php
+    // customers
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
 
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $circuit->customer_id)    	{ print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                         	{ print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print '</tr>' . "\n";
+    }
+	?>
 
 	<!-- devices, locations -->
 	<tr>
@@ -254,12 +284,12 @@ $(document).ready(function(){
 			// readonly
 			$disabled = $readonly == "readonly" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $_POST['action'], $timepicker_index, $readonly);
+    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $_POST['action'], $timepicker_index, $disabled);
     		// add datepicker index
     		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
-			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 			print "	<td>".$custom_input['field']."</td>";
 			print "</tr>";
 		}

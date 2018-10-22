@@ -7,10 +7,16 @@ require_once( dirname(__FILE__) . '/../config.php' );
 ini_set('session.cookie_httponly', 1);
 
 /* @debugging functions ------------------- */
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-if (!$debugging) { error_reporting(E_ERROR ^ E_WARNING); }
-else			 { error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT); }
+if($debugging) {
+	ini_set('display_errors', 1);
+	ini_set('display_startup_errors', 1);
+	error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
+}
+else {
+	ini_set('display_errors', 0);
+	ini_set('display_startup_errors', 0);
+	error_reporting(E_ERROR ^ E_WARNING);
+}
 
 /**
  * detect missing gettext and fake function
@@ -27,7 +33,7 @@ if(!defined('BASE')) {
 }
 
 // Fix JSON_UNESCAPED_UNICODE for PHP 5.3
-defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);	
+defined('JSON_UNESCAPED_UNICODE') or define('JSON_UNESCAPED_UNICODE', 256);
 
 /* @classes ---------------------- */
 require( dirname(__FILE__) . '/classes/class.Common.php' );		//Class common - common functions
@@ -49,6 +55,17 @@ require( dirname(__FILE__) . '/classes/class.Mail.php' );		//Class for Mailing
 require( dirname(__FILE__) . '/classes/class.Rackspace.php' );	//Class for Racks
 require( dirname(__FILE__) . '/classes/class.SNMP.php' );	    //Class for SNMP queries
 require( dirname(__FILE__) . '/classes/class.DHCP.php' );	    //Class for DHCP
+require( dirname(__FILE__) . '/classes/class.Rewrite.php' );	    //Class for DHCP
+require( dirname(__FILE__) . '/classes/class.SubnetsTree.php' );	    //Class for generating list of subnets based on nested tree structure
+require( dirname(__FILE__) . '/classes/class.SubnetsMenu.php' );	    //Class for generating subnets menu.
+require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class for generating JSON to populate subnet <tables> using boostrap-tables.
+require( dirname(__FILE__) . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
+require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    	// Crypto class
+require( dirname(__FILE__) . '/classes/class.Password_check.php' );	// Class for password check
+require( dirname(__FILE__) . '/classes/class.Session_DB.php' );	    // Class for storing sessions to database
+
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {
@@ -59,12 +76,17 @@ if(@$_GET['page']!="install" ) {
 	catch (Exception $e) { $settings = false; }
 	if ($settings!==false) {
 		if (phpversion() < "5.4") {
-			define(SETTINGS, json_encode($settings));
-		}else{
-			define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
+			define('SETTINGS', json_encode($settings));
+		}
+		else{
+			define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 		}
 	}
 }
+
+# create default GET parameters
+$Rewrite = new Rewrite ();
+$_GET = $Rewrite->get_url_params ();
 
 /**
  * create links function
@@ -76,6 +98,16 @@ if(@$_GET['page']!="install" ) {
 function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null, $l6 = null ) {
 	# get settings
 	global $User;
+
+	// url encode all
+	if(!is_null($l6))	{ $l6 = urlencode($l6); }
+	if(!is_null($l5))	{ $l5 = urlencode($l5); }
+	if(!is_null($l4))	{ $l4 = urlencode($l4); }
+	if(!is_null($l3))	{ $l3 = urlencode($l3); }
+	if(!is_null($l2))	{ $l2 = urlencode($l2); }
+	if(!is_null($l1))	{ $l1 = urlencode($l1); }
+	if(!is_null($l0))	{ $l0 = urlencode($l0); }
+
 
 	# set normal link array
 	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");
@@ -101,13 +133,13 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	}
 	# normal
 	else {
-		if(!is_null($l6))		{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
-		elseif(!is_null($l5))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
-		elseif(!is_null($l4))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
-		elseif(!is_null($l3))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
-		elseif(!is_null($l2))	{ $link = "?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }
-		elseif(!is_null($l1))	{ $link = "?$el[0]=$l0&$el[1]=$l1"; }
-		elseif(!is_null($l0))	{ $link = "?$el[0]=$l0"; }
+		if(!is_null($l6))		{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
+		elseif(!is_null($l5))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
+		elseif(!is_null($l4))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
+		elseif(!is_null($l3))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
+		elseif(!is_null($l2))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }
+		elseif(!is_null($l1))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1"; }
+		elseif(!is_null($l0))	{ $link = "index.php?$el[0]=$l0"; }
 		else					{ $link = ""; }
 	}
 	# prepend base
@@ -115,6 +147,15 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 
 	# result
 	return $link;
+}
+
+/**
+ * Escape HTML and quotes in user provided input
+ * @param  mixed $data
+ * @return string
+ */
+function escape_input($data) {
+       return empty($data) ? '' : htmlentities($data, ENT_QUOTES);
 }
 
 /* get version */

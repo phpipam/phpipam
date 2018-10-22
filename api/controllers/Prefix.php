@@ -63,7 +63,7 @@ class Prefix_controller extends Common_api_functions {
      * @var string
      * @access private
      */
-    private $custom_field_name = "customer_type";
+    private $custom_field_name = "custom_customer_type";
 
     /**
      * This selector will be used to order found subnets
@@ -100,7 +100,7 @@ class Prefix_controller extends Common_api_functions {
      * @var string
      * @access private
      */
-    private $custom_field_name_addr = "customer_address_type";
+    private $custom_field_name_addr = "custom_customer_address_type";
 
     /**
      * External identifier to link subnets and addresses with
@@ -783,8 +783,8 @@ class Prefix_controller extends Common_api_functions {
      */
     private function search_custom_field_name_subnets () {
         // set limit base on type
-        if($this->address_type=="IPv4")     { $limit = " and `subnet` < 4294967296"; }
-        elseif($this->address_type=="IPv6") { $limit = " and `subnet` > 4294967296"; }
+        if($this->address_type=="IPv4")     { $limit = " and CAST(`subnet` AS UNSIGNED) <= 4294967295"; }
+        elseif($this->address_type=="IPv6") { $limit = " and CAST(`subnet` AS UNSIGNED) >  4294967295"; }
         else                                { $limit = ""; }
         // set query and params
         $query = "select * from `subnets` where `".$this->custom_field_name."` = ? $limit order by `".$this->custom_field_orderby."` ".$this->custom_field_order_direction.";";
@@ -875,7 +875,7 @@ class Prefix_controller extends Common_api_functions {
      */
     public function search_first_available_subnet ($master_subnet_id, $bitmask) {
         // fetch
-        $first = $this->Subnets->search_available_single_subnet ($master_subnet_id, $bitmask);
+        $first = $this->Subnets->search_available_subnets ($master_subnet_id, $bitmask, 1, Subnets::SEARCH_FIND_FIRST);
         // return result
         return $first===false ? false : $first[0];
     }

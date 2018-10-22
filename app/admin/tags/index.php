@@ -18,9 +18,10 @@ $all_types = $Admin->fetch_all_objects("ipTags");
 
 <!-- vrfs -->
 <?php
-print '<table class="table table-striped table-top table-auto">'. "\n";
+print '<table class="table table-striped table-top table-auto" data-cookie-id-table="tags">'. "\n";
 
 # headers
+print "<thead>";
 print '<tr>'. "\n";
 print '	<th>'._('type').'</th>'. "\n";
 print '	<th>'._('Show Tag').'</th>'. "\n";
@@ -31,12 +32,14 @@ print '	<th>'._('Locked').'</th>'. "\n";
 print '	<th>'._('Update Tags').'</th>'. "\n";
 print '	<th></th>'. "\n";
 print '</tr>'. "\n";
+print "</thead>";
 
 # loop
 if ($all_types!==false) {
 	// cast
 	$all_types = (array) $all_types;
 	// loop
+	print "<tbody>";
 	foreach ($all_types as $type) {
 		//cast
 		$type = (array) $type;
@@ -64,6 +67,7 @@ if ($all_types!==false) {
 		print "	</td>";
 		print '</tr>'. "\n";
 	}
+	print "</tbody>";
 }
 print '</table>'. "\n";
 ?>

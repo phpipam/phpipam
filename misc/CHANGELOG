@@ -1,4 +1,117 @@
-== 1.31.001
+== 1.4
+
+    New features:
+    ------------
+    + Configurable password policy;
+    + Sessions can be now stored in database (#516);
+    + Two-factor authenticaiton - otp (Google Authenticator);
+    + Customers module (#694);
+    + Search for free subnet inside whole section;
+
+    Enhancements, changes:
+    ----------------------------
+    + Circuits enhancements (Virtual Circuits);
+    + Dropped support for 32bit systems;
+    + PHP 5.4 is now required;
+    + Rack module enhancements (#1325):
+        + Dynamic rack sizes;
+        + Top-down / Bottom-up racks;
+        + Custom rack devices independant of devices (power, patchpanel);
+    + Customized user permissions for modules:
+        + VLAN module;
+        + VRF module;
+        + PowerDNS module;
+        + Circuits module;
+        + Customers module;
+        + Devices module;
+        + Rack module;
+        + NAT module;
+        + PSTN module;
+        + Locations module;
+    + API:
+        + Add Mac Search for Addresses controller (#2005);
+
+    Bugfixes:
+    ----------------------------
+    + Fix appended " U" in Rack description (#2046);
+    + Fix Bandwidth calculator - 400 Bad Request. (#1807);
+    + Fix bad DNS reverse zone for /23 subnet (#666);
+    + Fix Add missing standard field (#2153);
+    + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
+    + API:
+        + Fix inconsistant API success value returned (#2045);
+
+    Security Fixes:
+    ----------------------------
+    + Hide SNMP community (#2197);
+
+== 1.3.2
+
+    Enhancements, changes:
+    ----------------------------
+    + Dark theme added;
+    + Full php7.2 compatibility;
+    + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
+    + Search for matching subnet in all VRFs feature enabled when importing addresses;
+    + Added new config option to show custom fields separated from standard fields when editing IP address;
+    + Added Required fields subpage to define IP address fields that must be filled in;
+    + Performance + bug fixes (#1660, #1657);
+    + MasterSubnet dropdown list is dynamically generated via AJAX call;
+    + Bandwidth calculator;
+    + Support 8U rack sizes. (#1891);
+    + API:
+        + New last_subnet API calls (#1655);
+
+    Translations:
+    ----------------------------
+    + German translation updated to verson 1.3.1;
+    + French translations updated. (#1881);
+
+    Bugfixes:
+    ----------------------------
+    + Fixed uncaught error if vlan number exceeds max permitted (#1455);
+    + Fixed Illegal string offset 'dns_name' in pingCheck.php errors (#1461);
+    + Performance fix for subnet_dropdown_print_available (#1562);
+    + Fixed logo updater for apache v2.4 (#1582);
+    + Fixed section names containing spaces are not included in exports (#1566);
+    + Allow DNS wildcard records (#1571);
+    + Fixed slow mac address vendor decoding for subnet detail view (#1658);
+    + Performance fix for detecting overlapping subnets. (#1052, #1426, #1533);
+    + Performance fix for slow mac address vendor decoding (#1658);
+    + Performance fix for subnet API first_subnet & all_subnets calls;
+    + Performance fix for delegating subnet permissions;
+    + Convert to UTF-8 encoding on import/export to preserve dialectics (#1659, #1700, #1728);
+    + Importing IPs loose Mac Addresses (#1607);
+    + Section names containing spaces are not included in exports. (#1566);
+    + Bug with section and dashboard (#1593);
+    + Fixed improper contents in plain text part of notification e-mails (#1707);
+    + Reduce size of email notifications (#1643);
+    + PHP 5.3 compatibility fixes (#1594, #1730);
+    + PHP 7.2 compatibility fixes (#1683, #1714);
+    + Fixed notification e-mails contain a broken link. (#1708);
+    + Allow dots to be used in domain names. (#1747);
+    + Use multi-byte compatible functions when shortening text. (#1753);
+    + Scan subnet reports/selects invalid php path. (#1757);
+    + Small code refactoring (#1699);
+    + Rack device start position overwritten. (#1545);
+    + Sections with folders returns no subnets using API. (#1883);
+    + Add custom_ prefix to Prefix controller custom fields. (#1836);
+    + Non-Admins missing the button to Add circuit. (#1902);
+    + Wrong field name of deviceTypes table when checking device type. (#1910);
+    + SNMPv3 improvements;
+    + Misc IPv6 fixes;
+
+    Security Fixes:
+    ----------------------------
+    + Code injection in Name field. (#1667);
+    + XSS (reflected) in SubnetID param. (#1702);
+    + CSRF enables open mail relay. (#1703);
+    + Reflected XSS requiring user interaction on search. (#1705);
+    + XSS reflected via CSRF in preview.php. (#1706);
+    + Reflected XSS via CSV upload. (#1742);
+    + Reflected XSS on 'mac' parameter. (#1903);
+
+== 1.3.1
 
     New features:
     ------------
@@ -13,13 +126,21 @@
     + Compact menu layout (per-user setting, showing only icons);
     + Network to network static nat;
     + Selectable logo size (from config.php) (#952);
+    + Added default option for permissions propagations (#1351);
     + API:
+        + Added Circuits controller;
         + Encrypyted requests can now also be form-encoded (#1191);
+        + Introduce mcrypt AES compatibility (#1516);
+        + Fixed field ip not displayed when filters applied (#1529);
     + New resolve hostnames option for subnet (#1222):
         + Updates hostnames via pingCheck.php script (if parameter set for subnet);
         + Updates hostnames via resolveIPaddresses.php script (if parameter set for subnet);
         + On-the-fly empty hostname update if resolved (if parameter set for subnet and enabled globally);
         + Added this infor to tools > scanned networks;
+    + Added custom_ prefix to custom field names to avoid duplication with custom fields (#1387);
+    + Added option to hide IP requests for unauthenticated users on login page (#1394);
+    + Performance optimizations for locations and subnet usage calculation;
+    + Added user groups custom fields;
 
     Translations:
     ----------------------------
@@ -32,11 +153,21 @@
     + Fixed import gateway ip (#1240);
     + Fixed JSON_UNESCAPED_UNICODE for PHP 5.3 (#1135, #1245);
     + Rename class Thread to PingThread to avoid naming conflict with pthreads Thread class (#1254);
-    + Fix custom fields integer on subnet (#1266);
+    + Fixed custom fields integer on subnet (#1266);
     + Fixed Import Ip-adress doesnt update location (#1284);
     + Fixed json_error for logo upload (#1256);
     + Fixed CSRF error when moving orphaned addresses (#1303);
     + Fixed VRF fetching via API by Id;
+    + Fixed map issues when quotes are in name/description (#1384);
+    + Fixed item not removed from NAT when deleted (#1378);
+    + Fixed Error when error_reporting = E_ALL about strict standards when importing IP addresses (#1372);
+    + Fixed Apostrophe errors in text custom fields (#1375);
+    + Fixed API error when creating address under folder (#1507);
+    + Fixed SNMPv3 (#1119);
+
+    Security Fixes:
+    ----------------------------
+    + Fixed XSS issues (#1403, #1521, #1500);
 
 == 1.3
 

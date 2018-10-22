@@ -1,6 +1,3 @@
-<?php
-
-?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 
@@ -20,15 +17,18 @@
 	<title>phpIPAM upgrade error</title>
 
 	<!-- css -->
-	<link rel="stylesheet" type="text/css" href="../css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="../css/<?php print SCRIPT_PREFIX; ?>/bootstrap/bootstrap-custom.css">
-	<link rel="shortcut icon" href="../css/<?php print SCRIPT_PREFIX; ?>/images/favicon.ico">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap.min.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<link rel="stylesheet" type="text/css" href="../css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php if ($User->settings->theme!="white") { ?>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
+	<?php } ?>
+	<link rel="shortcut icon" href="../css/images/favicon.ico">
 
 	<!--[if IE 6]>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
+	<script type="text/javascript" src="js/dieIE.js"></script>
 	<![endif]-->
 	<!--[if IE 7]>
-	<script type="text/javascript" src="js/<?php print SCRIPT_PREFIX; ?>/dieIE.js"></script>
+	<script type="text/javascript" src="js//dieIE.js"></script>
 	<![endif]-->
 </head>
 
@@ -46,12 +46,12 @@
 <div class="container-fluid">
 	<div style="width:600px;margin:auto;margin-top:20px;">
 
-		<div class="alert alert-warning"><strong>Mod_rewrite error</strong><hr>It seems your Apache is not set up properly to handle URL rewrites.</div>
+		<div class="alert alert-warning"><strong>Mod_rewrite error</strong><hr>It seems your webserver is not set up properly to handle URL rewrites.</div>
 		Please make sure all the requirements are set properly!<br><br>
 
 		<h4>1.) Define Base</h4>
 		<hr>
-		Make sure BASE directive is set for your installation. This is used to properly detect phpIPAM directory. It must be set in config.php and in .htaccess
+		Make sure BASE directive is set for your installation. This is used to properly detect phpIPAM directory. It must be set in config.php.
 
 		<div class="well" style="padding:5px;margin-top:5px;">
 		Detected BASE: <?php print str_replace("upgrade/", "", $_SERVER['REQUEST_URI']);  ?>

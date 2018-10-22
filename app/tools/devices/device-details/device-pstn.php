@@ -19,9 +19,11 @@ is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true)
 # title - subnets
 print "<h4>"._("Belonging PSTN prefixes")."</h4><hr>";
 
-//fetch
+// fetch
 $subprefixes = $Tools->fetch_multiple_objects ("pstnPrefixes", "deviceId", $device->id, 'prefix', true );
 
+// custom fields
+$custom_fields = $Tools->fetch_custom_fields ('pstnPrefixes');
 
 # Hosts table
 print "<table id='switchMainTable' class='devices table table-striped table-top table-condensed'>";
@@ -30,10 +32,14 @@ print "<table id='switchMainTable' class='devices table table-striped table-top 
 if ($User->settings->enablePSTN!="1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
 }
+# perm check
+elseif ($User->get_module_permissions ("pstn")<1) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 else {
     $colspan = 6;
     // table
-    print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top'>";
+    print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top' data-cookie-id-table='device_pstn'>";
     // headers
     print "<thead>";
     print "<tr>";
@@ -57,6 +63,7 @@ else {
     print "</thead>";
 
 
+    print "<tbody>";
     # if none than print
     if($subprefixes===false) {
         print "<tr>";
@@ -70,7 +77,7 @@ else {
 
     		print "<tr>";
     		//prefix, name
-    		print "	<td><a href='".create_link($_GET['page'],"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
+    		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"pstn-prefixes",$sp->id)."'>  ".$sp->prefix."</a></td>";
     		print "	<td><strong>$sp->name</strong></td>";
     		// range
     		print " <td>".$sp->prefix.$sp->start."<br>".$sp->prefix.$sp->stop."</td>";
@@ -114,13 +121,10 @@ else {
     	    	}
     	    }
 
-    		# set permission
-    		$permission = $Tools->check_prefix_permission ($User->user);
-
     		print "	<td class='actions' style='padding:0px;'>";
     		print "	<div class='btn-group'>";
 
-    		if($permission>1) {
+    		if($User->get_module_permissions ("pstn")>1) {
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
     		}
@@ -138,4 +142,3 @@ else {
     print "</table>";
 
 }
-?>

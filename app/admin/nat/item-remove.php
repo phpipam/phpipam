@@ -5,22 +5,24 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# validate permissions
+$User->check_module_permissions ("nat", 2, true, true);
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "nat", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
+$User->Crypto->csrf_cookie ("validate", "nat", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true, true) : "";
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);
@@ -30,7 +32,6 @@ $nat!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
 ?>
-
 
 <!-- header -->
 <div class="pHeader"><?php print _('Remove NAT item'); ?></div>
@@ -56,7 +57,6 @@ $link = $readonly ? false : true;
     }
     ?>
 </div>
-
 
 <!-- footer -->
 <div class="pFooter">

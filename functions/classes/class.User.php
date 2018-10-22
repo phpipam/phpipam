@@ -104,13 +104,11 @@ class User extends Common_functions {
     private $ip;
 
     /**
-     * session name
+     * Set allowed themes
      *
-     * (default value: "phpipam")
-     *
-     * @var string
+     * @var array
      */
-    protected $sessname = "phpipam";
+    public $themes = array("white", "dark");
 
     /**
      * (json) parameters for authentication
@@ -149,10 +147,11 @@ class User extends Common_functions {
      */
     public $Log;
 
-
-
-
-
+    /**
+     * Cryptographic functions
+     * @var Crypto
+     */
+    public $Crypto;
 
 
     /**
@@ -177,6 +176,9 @@ class User extends Common_functions {
         # Log object
         $this->Log = new Logging ($this->Database, $this->settings);
 
+        # initialize Crypto
+        $this->Crypto = new Crypto ();
+
         # register new session
         $this->register_session ();
         # check timeut
@@ -185,6 +187,8 @@ class User extends Common_functions {
         $this->is_authenticated ();
         # get users IP address
         $this->block_get_ip ();
+        # set theme
+        $this->set_user_theme ();
     }
 
 
@@ -210,17 +214,34 @@ class User extends Common_functions {
     private function register_session () {
         // not for api
         if ($this->api !== true) {
-            //set session name
-            $this->set_session_name();
-            //set debugging
-            $this->set_debugging();
-            // set default params
-            $this->set_session_ini_params ();
-            //register session
-            session_name($this->sessname);
-            if(@$_SESSION===NULL) {
-                session_start();
+            if (@$_SESSION===NULL && !isset($_SESSION)) {
+                //set session name
+                $this->set_session_name();
+                //set debugging
+                $this->set_debugging();
+                //set default params
+                $this->set_session_ini_params ();
+                //register session
+                $this->start_session ();
             }
+        }
+    }
+
+    /**
+     * Start session - files or use database handler
+     * @method start_session
+     * @return [type]
+     */
+    private function start_session () {
+        // check if database should be set for sessions
+        include( dirname(__FILE__).'/../../config.php' );
+        // db
+        if ($session_storage == "database") {
+            new Session_db ($this->Database);
+        }
+        // local
+        else {
+            session_start ();
         }
     }
 
@@ -242,7 +263,13 @@ class User extends Common_functions {
      */
     private function set_session_name () {
         include( dirname(__FILE__).'/../../config.php' );
-        $this->sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        $sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        // check old name
+        $old_name = session_name();
+        if ($sessname != $old_name) {
+          // save
+          session_name($sessname);
+        }
     }
 
     /**
@@ -255,8 +282,10 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_ini_params () {
-        ini_set('session.gc_maxlifetime', 86400);
-        ini_set('session.cookie_lifetime', 86400);
+        if(!isset($_SESSION)) {
+            ini_set('session.gc_maxlifetime', 86400);
+            ini_set('session.cookie_lifetime', 86400);
+        }
     }
 
     /**
@@ -271,6 +300,10 @@ class User extends Common_functions {
             $_SESSION['ipamusername'] = $this->user->username;
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
             $_SESSION['lastactive']   = time();
+            // 2fa required ?
+            if ($this->twofa) {
+                $_SESSION['2fa_required'] = true;
+            }
         }
     }
 
@@ -298,7 +331,7 @@ class User extends Common_functions {
     public function is_authenticated () {
         # if checked for subpages first check if $user is array
         if(!is_array($this->user)) {
-            if( isset( $_SESSION['ipamusername'] ) && strlen( @$_SESSION['ipamusername'] )>0 ) {
+            if( strlen(@$_SESSION['ipamusername'])>0 ) {
                 # save username
                 $this->username = $_SESSION['ipamusername'];
                 # check for timeout
@@ -323,6 +356,15 @@ class User extends Common_functions {
     }
 
     /**
+     * Check if 2fa is required for user
+     * @method twofa_required
+     * @return bool
+     */
+    public function twofa_required () {
+        return isset($_SESSION['2fa_required']) ? true : false;
+    }
+
+    /**
      * Checks if current user is admin or not
      *
      * @access public
@@ -344,7 +386,7 @@ class User extends Common_functions {
      * @param bool $redirect (default: true)
      * @return string|false
      */
-    public function check_user_session ($redirect = true) {
+    public function check_user_session ($redirect = true, $ignore_2fa = false) {
         # not authenticated
         if($this->authenticated===false) {
             # set url
@@ -378,8 +420,40 @@ class User extends Common_functions {
                 die();
             }
         }
+        # authenticated, do we need to do 2fa ?
+        elseif (isset($_SESSION['2fa_required']) && $ignore_2fa!==true) {
+            header("Location:".$url.create_link ("2fa"));
+            die();
+        }
         else {
             return true;
+        }
+    }
+
+    /**
+     * Sets UI theme for user
+     *
+     * @method set_user_theme
+     * @return void
+     */
+    private function set_user_theme () {
+        // set defaukt theme if field is missing
+        if(!isset($this->settings->theme)) {
+            $this->settings->theme = "dark";
+        }
+        // set user
+        if(is_object($this->user)) {
+            // use default theme from general settings
+            if(!isset($this->user->theme) || @$this->user->theme=="") {
+                $this->user->ui_theme = $this->settings->theme;
+            }
+            else {
+                $this->user->ui_theme = $this->user->theme;
+            }
+            // validate
+            if(!in_array($this->user->ui_theme, $this->themes)) {
+                $this->user->ui_theme = "white";
+            }
         }
     }
 
@@ -388,7 +462,7 @@ class User extends Common_functions {
      *     if yes set timeout flag
      *
      * @access private
-     * @return none
+     * @return void
      */
     private function check_timeout () {
         //session set
@@ -420,8 +494,8 @@ class User extends Common_functions {
      */
     private function set_redirect_cookie () {
         # save current redirect vaule
-        if($_SERVER['SCRIPT_URL']!="/login/" && $_SERVER['SCRIPT_URL']!="logout" && $_SERVER['SCRIPT_URL']!="?page=login" && $_SERVER['SCRIPT_URL']!="?page=logout" && $_SERVER['SCRIPT_URL']!="/" && $_SERVER['SCRIPT_URL']!="%2f");
-        setcookie("phpipamredirect", $_SERVER['REQUEST_URI'], time()+10, "/", null, null, true);
+        if($_SERVER['SCRIPT_URL']!="/login/" && $_SERVER['SCRIPT_URL']!="logout" && $_SERVER['SCRIPT_URL']!="?page=login" && $_SERVER['SCRIPT_URL']!="?page=logout" && $_SERVER['SCRIPT_URL']!="index.php?page=login" && $_SERVER['SCRIPT_URL']!="index.php?page=logout" && $_SERVER['SCRIPT_URL']!="/" && $_SERVER['SCRIPT_URL']!="%2f");
+        setcookie("phpipamredirect", preg_replace('/^\/+/', '/', $_SERVER['REQUEST_URI']), time()+10, "/", null, null, true);
     }
 
     /**
@@ -433,8 +507,8 @@ class User extends Common_functions {
     private function set_ui_language () {
         if(strlen($_SESSION['ipamlanguage'])>0)     {
             putenv("LC_ALL=$_SESSION[ipamlanguage]");
+            bindtextdomain("phpipam", dirname(__FILE__)."/../locale");    // Specify location of translation tables
             setlocale(LC_ALL, $_SESSION['ipamlanguage']);        // set language
-            bindtextdomain("phpipam", "./functions/locale");    // Specify location of translation tables
             textdomain("phpipam");                                // Choose domain
         }
     }
@@ -469,70 +543,6 @@ class User extends Common_functions {
         # execute
         try { $this->Database->updateObject("settings", array("id"=>1, "maintaneanceMode"=>$maintaneance_mode), "id"); }
         catch (Exception $e) {}
-    }
-
-
-
-
-
-
-    /**
-     * CSRF cookie creation / validation.
-     *
-     * @access public
-     * @param string $action (default: "create")
-     * @param mixed $index (default: null)
-     * @param mixed $value (default: null)
-     * @return string
-     */
-    public function csrf_cookie ($action = "create", $index = null, $value = null) {
-        // validate action
-        $this->csrf_validate_action ($action);
-        // execute
-        return $action == "create" ? $this->csrf_cookie_create ($index) : $this->csrf_cookie_validate ($index, $value);
-    }
-
-
-    /**
-     * Validates csrf cookie action..
-     *
-     * @access private
-     * @param mixed $action
-     * @return bool
-     */
-    private function csrf_validate_action ($action) {
-        if ($action=="create" || $action=="validate") { return true; }
-        else                                          { $this->Result->show("danger", "Invalid CSRF cookie action", true); }
-    }
-
-    /**
-     * Creates cookie to prevent csrf
-     *
-     * @access private
-     * @param mixed $index
-     * @return string
-     */
-    private function csrf_cookie_create ($index) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // save cookie
-        $_SESSION[$name] = md5(uniqid(mt_rand(), true));
-        // return
-        return $_SESSION[$name];
-    }
-
-    /**
-     * Validate provided csrf cookie
-     *
-     * @access private
-     * @param mixed $index
-     * @return bool
-     */
-    private function csrf_cookie_validate ($index, $value) {
-        // set cookie suffix
-        $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
-        // check and return
-        return $_SESSION[$name] == $value ? true : false;
     }
 
     /**
@@ -785,13 +795,18 @@ class User extends Common_functions {
      * @return void
      */
     public function authenticate ($username, $password, $saml = false) {
-        if(($saml !== false ) && (defined('MAP_SAML_USER'))) {
+        if(($saml !== false ) && (defined('MAP_SAML_USER')) && (MAP_SAML_USER !== false)) {
             $username = SAML_USERNAME;
         }
         # first we need to check if username exists
         $this->fetch_user_details ($username);
         # set method type if set, otherwise presume local auth
         $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
+
+        # 2fa
+        if ($this->user->{'2fa'}==1) {
+            $this->twofa = true;
+        }
 
         # get authentication method details
         $this->get_auth_method_type ();
@@ -840,6 +855,9 @@ class User extends Common_functions {
 
             if(sizeof($usert)==0)    { $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
             else                     { $this->user = $user; }
+
+            // register permissions
+            $this->register_user_module_permissions ();
         }
     }
 
@@ -1056,7 +1074,7 @@ class User extends Common_functions {
                 # add blocked count
                 $this->block_ip();
                 $this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
-                $this->Result->show("danger", _("Invalid username or password for " . $username ), true);
+                $this->Result->show("danger", _("Invalid username or password"), true);
 
             }
         } catch (adLDAPException $e) {
@@ -1298,18 +1316,22 @@ class User extends Common_functions {
      * @return bool
      */
     public function self_update($post) {
+        # remove theme
+        if($post['theme'] == "default") { $post['theme'] = ""; }
         # set items to update
-        $items  = array("real_name"        => $post['real_name'],
-                        "mailNotify"       => $post['mailNotify'],
-                        "mailChangelog"    => $post['mailChangelog'],
-                        "email"            => $post['email'],
-                        "lang"             => $post['lang'],
+        $items  = array("real_name"        => escape_input(strip_tags($post['real_name'])),
+                        "mailNotify"       => $post['mailNotify'] == "Yes" ? "Yes" : "No",
+                        "mailChangelog"    => $post['mailChangelog'] == "Yes" ? "Yes" : "No",
+                        "email"            => $this->validate_email($post['email']) ? escape_input($post['email']) : '',
+                        "lang"             => escape_input(strip_tags($post['lang'])),
                         "id"               => $this->user->id,
                         //display
-                        "compressOverride" => $post['compressOverride'],
+                        "compressOverride" => escape_input(strip_tags($post['compressOverride'])),
                         "hideFreeRange"    => $this->verify_checkbox(@$post['hideFreeRange']),
                         "menuType"         => $this->verify_checkbox(@$post['menuType']),
-                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact'])
+                        "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
+                        "theme"            => $post['theme'],
+                        "2fa"              => $this->verify_checkbox(@$post['2fa']),
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);
@@ -1430,10 +1452,10 @@ class User extends Common_functions {
     /**
      * adds new IP to block or updates count if already present
      *
-     * @access private
+     * @access public
      * @return bool
      */
-    private function block_ip () {
+    public function block_ip () {
         # validate IP
         if(!filter_var($this->ip, FILTER_VALIDATE_IP))    { return false; }
 
@@ -1556,4 +1578,206 @@ class User extends Common_functions {
 	    # return array of groups
 	    return isset($out) ? $out : array();
 	}
+
+    /**
+     * Get user l2domain access permissions
+     *
+     * Result can be the following:
+     *     - 0 : no access
+     *     - 1 : read-only
+     *     - 2 ; read-write
+     *     - 3 : admin
+     *
+     * @method get_l2domain_permissions
+     * @param  object $l2domain
+     * @return int
+     */
+    public function get_l2domain_permissions ($l2domain) {
+        if ($this->is_admin(false))
+            return 3;
+
+        // Default l2domain is assigned to all sections
+        if ($l2domain->id == 1) {
+            $sections_ids = [];
+            $all_sections = $this->fetch_all_objects("sections");
+            if (is_array($all_sections)) {
+                foreach($all_sections as $section){
+                    $sections_ids[] = $section->id;
+                }
+            }
+            $valid_sections = implode(';', $sections_ids);
+        } else {
+            $valid_sections = $l2domain->permissions;
+        }
+
+        $cached_item = $this->cache_check('l2domain_permissions', $valid_sections);
+        if(is_object($cached_item)) return $cached_item->result;
+
+        if (empty($valid_sections)) {
+            $this->cache_write('l2domain_permissions', $valid_sections, (object)["result" => 0]);
+            return 0;
+        }
+
+        $max_permission = 0;
+
+        $ids = explode(";", $valid_sections);
+        foreach($ids as $id) {
+            $section = $this->fetch_object("sections", "id", $id);
+
+            if (!is_object($section)) continue;
+
+            # Get Section permissions
+            $sectionP = json_decode($section->permissions, true);
+
+            # ok, user has section access, check also for any higher access from subnet
+            if(!is_array($sectionP)) continue;
+
+            # get all user groups
+            $groups = json_decode($this->user->groups, true);
+
+            foreach($sectionP as $sk=>$sp) {
+                # check each group if user is in it and if so check for permissions for that group
+                foreach($groups as $uk=>$up) {
+                    if($uk == $sk) {
+                        if($sp > $max_permission) { $max_permission = $sp; }
+                    }
+                }
+            }
+        }
+
+        # return result
+        $this->cache_write('l2domain_permissions', $valid_sections, (object)["result" => $max_permission]);
+        return $max_permission;
+    }
+
+    /**
+     * Check if user has l2domain permissions for specific access level
+     *
+     * @method check_l2domain_permissions
+     * @param  object $l2domain
+     * @param  int $required_level
+     * @param  bool $die
+     * @param  bool $popup
+     * @return bool|void
+     */
+    public function check_l2domain_permissions($l2domain, $required_level = 1, $die = true, $popup = false) {
+        // check if valid
+        $valid = $this->get_l2domain_permissions($l2domain)>=$required_level;
+        // return or die ?
+        if ($die===true && !$valid) {
+            $this->Result->show ("danger", _("You do not have permissions to access this object"), true, $popup);
+        }
+        else {
+            return $valid;
+        }
+    }
+
+    /**
+     * Register use module permissions from json
+     *
+     * @method register_user_module_permissions
+     * @return void
+     */
+    private function register_user_module_permissions () {
+        // decode
+        $permissions = json_decode($this->user->module_permissions, true);
+        // check for each module
+        foreach ($this->get_modules_with_permissions() as $m) {
+            if (!is_array($permissions)) {
+                $this->user->{'perm_'.$m} = 0;
+            }
+            elseif(array_key_exists($m, $permissions)) {
+                $this->user->{'perm_'.$m} = $permissions[$m];
+            }
+            else {
+                $this->user->{'perm_'.$m} = 0;
+            }
+        }
+    }
+
+    /**
+     * Get module permissions for user
+     *
+     * Result can be the following:
+     *     - 0 : no access
+     *     - 1 : read-only
+     *     - 2 ; read-write
+     *     - 3 : admin
+     *
+     * @method get_module_permissions
+     * @param  string $module_name
+     * @return int
+     */
+    public function get_module_permissions ($module_name = "") {
+        if(in_array($module_name, $this->get_modules_with_permissions())) {
+            // admin
+            if($this->is_admin(false)) {
+                return 3;
+            }
+            else {
+                return $this->user->{'perm_'.$module_name};
+            }
+        }
+        else {
+            return 0;
+        }
+    }
+
+    /**
+     * Check if user has module permissions for specific access level
+     *
+     * @method check_module_permissions
+     * @param  string $module_name
+     * @param  int $required_level
+     * @param  bool $die
+     * @param  bool $popup
+     * @return bool|void
+     */
+    public function check_module_permissions ($module_name = "", $required_level = 1, $die = true, $popup = false) {
+        // check if valid
+        $valid = $this->get_module_permissions($module_name)>=$required_level;
+        // return or die ?
+        if ($die===true && !$valid) {
+            $this->Result->show ("danger", _("You do not have permissions to access this module"), true, $popup);
+        }
+        else {
+            return $valid;
+        }
+    }
+
+    /**
+     * Return array of all modules with permissions
+     *
+     * @method get_modules_with_permissions
+     * @return array
+     */
+    public function get_modules_with_permissions () {
+        return [
+                "vlan",
+                "vrf",
+                "pdns",
+                "circuits",
+                "racks",
+                "nat",
+                "pstn",
+                "customers",
+                "locations",
+                "devices",
+                "dhcp"
+            ];
+    }
+
+    /**
+     * Prints permission badge
+     *
+     * @method print_permission_badge
+     * @param  int $level
+     * @return string
+     */
+    public function print_permission_badge ($level) {
+        // null level
+        if(is_null($level)) $level = 0;
+        // return
+        return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
+    }
 }

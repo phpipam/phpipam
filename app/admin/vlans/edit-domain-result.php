@@ -5,12 +5,12 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
@@ -18,12 +18,19 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("vlan", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("vlan", 3, true, false);
+}
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "vlan_domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "vlan_domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # we cannot delete default domain
 if(@$_POST['id']==1 && $_POST['action']=="delete")						{ $Result->show("danger", _("Default domain cannot be deleted"), true); }
@@ -35,6 +42,7 @@ if(@$_POST['name'] == "") 												{ $Result->show("danger", _('Name is manda
 
 // set sections
 if(@$_POST['id']!=1) {
+	$temp = [];
 	foreach($_POST as $key=>$line) {
 		if (strlen(strstr($key,"section-"))>0) {
 			$key2 = str_replace("section-", "", $key);
@@ -50,10 +58,11 @@ else {
 }
 
 # set update values
-$values = array("id"=>@$_POST['id'],
-				"name"=>@$_POST['name'],
-				"description"=>@$_POST['description'],
-				"permissions"=>@$_POST['permissions']
+$values = array(
+				"id"          =>@$_POST['id'],
+				"name"        =>@$_POST['name'],
+				"description" =>@$_POST['description'],
+				"permissions" =>@$_POST['permissions']
 				);
 
 # update domain
@@ -64,5 +73,3 @@ else																		{ $Result->show("success", _("Domain $_POST[action] succes
 if($_POST['action']=="delete") {
 	$Admin->update_object_references ("vlans", "domainId", $_POST['id'], 1);
 }
-
-?>

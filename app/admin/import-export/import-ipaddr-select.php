@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -20,7 +20,7 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("section","ip_addr","dns_name","description","vrf","subnet","mac","owner","device","note","tag","is_gateway");
+$expfields = array ("section","ip_addr","hostname","description","vrf","subnet","mac","owner","device","note","tag","is_gateway", "port", "location");
 //$disfields = array ("Section","IP Address","Hostname","Description","VRF","Subnet","MAC","owner","device","note","TAG");
 $mtable = "ipaddresses"; # main table where to check the fields
 
@@ -47,13 +47,13 @@ $extfields["tag"]["pname"] = "tag";
 ## using the extra fields as a trick to display some nicer names for these regular fields
 $extfields["ip_addr"]["table"] = "ipaddresses";
 $extfields["ip_addr"]["field"] = "ip_addr";
-$extfields["ip_addr"]["pname"] = "IP address";
-$extfields["dns_name"]["table"] = "ipaddresses";
-$extfields["dns_name"]["field"] = "dns_name";
-$extfields["dns_name"]["pname"] = "Hostname";
+$extfields["ip_addr"]["pname"] = "ip address";
+$extfields["hostname"]["table"] = "ipaddresses";
+$extfields["hostname"]["field"] = "hostname";
+$extfields["hostname"]["pname"] = "hostname";
 $extfields["gateway"]["table"] = "ipaddresses";
 $extfields["gateway"]["field"] = "is_gateway";
-$extfields["gateway"]["pname"] = "Gateway";
+$extfields["gateway"]["pname"] = "gateway";
 
 # required fields without which we will not continue
 $reqfields = array("section","ip_addr","subnet");
@@ -109,6 +109,7 @@ if(sizeof($custom_fields) > 0) {
 <div class="pContent">
 
 <?php
+if (!is_writeable( dirname(__FILE__) . '/upload' )) $Tools->Result->show("danger", _("'app/admin/import-export/upload' folder is not writeable."), false, false);
 
 # print template form
 print "<form id='selectImportFields'><div id='topmsg'>";
@@ -126,7 +127,7 @@ print "<div id='bottommsg'>"._("The fields marked with * are mandatory.")."
 	<br>"._("Providing a subnet is optional, the system will add the IP to the longest match if no subnet is provided.")."
 	<br>"._("The mask can be provided either as a separate field or with the subnet, sparated by \"/\"")."
 	</div>";
-print "<div class='checkbox'><label><input name='searchallvrfs' id='searchallvrfs' type='checkbox' unchecked>"._("Search for matching subnet in all VRFs (ignore provided VRF).")."</label></div>";
+print "<div class='checkbox'><label><input name='searchallvrfs' id='searchallvrfs' type='checkbox' unchecked>"._("Search for matching subnet in all VRFs.")."</label></div>";
 #TODO# add option to hide php fields
 #print "<div class='checkbox'><label><input name='showspecific' id='showspecific' type='checkbox' unchecked>"._("Show PHPIPAM specific columns.")."</label></div>";
 print "</form>";

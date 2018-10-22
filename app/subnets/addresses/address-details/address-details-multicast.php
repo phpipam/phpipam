@@ -35,7 +35,7 @@ if ($mtest !== true) {
             // hostname
             print "<tr>";
             print " <th>"._("Hostname")."</th>";
-            print " <td>$s->dns_name</td>";
+            print " <td>$s->hostname</td>";
             print "</tr>";
 
             // description

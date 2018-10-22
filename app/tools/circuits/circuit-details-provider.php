@@ -1,5 +1,8 @@
 <?php
 
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
+
 # title
 print "<h4>"._('Provider details')."</h4>";
 print "<hr>";
@@ -41,7 +44,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']});
 
 			print "<tr>";
-			print "<th>$field[name]</th>";
+			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			print "<td>".$provider->{$field['name']}."</d>";
 			print "</tr>";
 		}

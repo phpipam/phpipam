@@ -265,14 +265,14 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			# save to addresses cache
-			if(sizeof($address)>0) {
+			if(!is_null($address)) {
 				# add decimal format
 				$address->ip = $this->transform_to_dotted ($address->ip_addr);
 				# save to subnets
 				$this->addresses[$id] = (object) $address;
 			}
 			#result
-			return sizeof($address)>0 ? $address : false;
+			return !is_null($address) ? $address : false;
 		}
 	}
 
@@ -298,7 +298,7 @@ class Addresses extends Common_functions {
 			$this->addresses[$address->id] = (object) $address;
 		}
 		#result
-		return sizeof($address)>0 ? $address : false;
+		return !is_null($address) ? $address : false;
 	}
 
 	/**
@@ -358,12 +358,14 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_add ($address) {
+		# user - permissions
+		$User = new User ($this->Database);
 		# set insert array
 		$insert = array(
 						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
 						"subnetId"              => $address['subnetId'],
 						"description"           => @$address['description'],
-						"dns_name"              => @$address['dns_name'],
+						"hostname"              => @$address['hostname'],
 						"mac"                   => @$address['mac'],
 						"owner"                 => @$address['owner'],
 						"state"                 => @$address['state'],
@@ -376,16 +378,31 @@ class Addresses extends Common_functions {
 						"firewallAddressObject" => @$address['firewallAddressObject'],
 						"lastSeen"              => @$address['lastSeen']
 						);
+		# permissions
+		if($User->get_module_permissions ("devices")<1) {
+			unset($insert['switch']);
+		}
+		# customer
+		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+			if (is_numeric($address['customer_id'])) {
+				if ($address['customer_id']!="0") {
+					$insert['customer_id'] = $address['customer_id'];
+				}
+				else {
+					$insert['customer_id'] = NULL;
+				}
+			}
+		}
         # location
-        if (isset($address['location_item'])) {
+        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
             if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
+                $this->Result->show("danger", _("Invalid location value"), true);
             }
             $insert['location'] = $address['location_item'];
         }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
+			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
 		}
 
 		# null empty values
@@ -429,32 +446,51 @@ class Addresses extends Common_functions {
 	protected function modify_address_edit ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+		# user - permissions
+		$User = new User ($this->Database);
 		# set update array
-		$insert = array("id"=>$address['id'],
-						"subnetId"=>$address['subnetId'],
-						"ip_addr"=>$this->transform_address($address['ip_addr'], "decimal"),
-						"description"=>@$address['description'],
-						"dns_name"=>@$address['dns_name'],
-						"mac"=>@$address['mac'],
-						"owner"=>@$address['owner'],
-						"state"=>@$address['state'],
-						"switch"=>@$address['switch'],
-						"port"=>@$address['port'],
-						"note"=>@$address['note'],
-						"is_gateway"=>@$address['is_gateway'],
-						"excludePing"=>@$address['excludePing'],
-						"PTRignore"=>@$address['PTRignore']
+		$insert = array(
+						"id"          =>$address['id'],
+						"subnetId"    =>$address['subnetId'],
+						"ip_addr"     =>$this->transform_address($address['ip_addr'], "decimal"),
+						"description" =>@$address['description'],
+						"hostname"    =>@$address['hostname'],
+						"mac"         =>@$address['mac'],
+						"owner"       =>@$address['owner'],
+						"state"       =>@$address['state'],
+						"switch"      =>@$address['switch'],
+						"port"        =>@$address['port'],
+						"note"        =>@$address['note'],
+						"is_gateway"  =>@$address['is_gateway'],
+						"excludePing" =>@$address['excludePing'],
+						"PTRignore"   =>@$address['PTRignore']
 						);
+		# permissions
+		if($User->get_module_permissions ("devices")<1) {
+			unset($insert['switch']);
+		}
+ 		# customer
+		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+			if (is_numeric($address['customer_id'])) {
+				if ($address['customer_id']!="0") {
+					$insert['customer_id'] = $address['customer_id'];
+				}
+				else {
+					$insert['customer_id'] = NULL;
+				}
+			}
+		}
         # location
-        if (isset($address['location_item'])) {
+        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
             if (!is_numeric($address['location_item'])) {
-                $Result->show("danger", _("Invalid location value"), true);
+                $this->Result->show("danger", _("Invalid location value"), true);
             }
             $insert['location'] = $address['location_item'];
         }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = strlen(@$address[$c['name']])>0 ? @$address[$c['name']] : null;
+			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
 		}
 
 		# set primary key for update
@@ -503,6 +539,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_delete ($address) {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
+		if (isset($address['section'])) $address_old->section = $address['section'];
+
 		# series?
 		if($address['type']=="series") {
 			$field  = "subnetId";	$value  = $address['subnetId'];
@@ -530,6 +568,8 @@ class Addresses extends Common_functions {
 		if(@$address['remove_all_dns_records']=="1") {
     		$this->pdns_remove_ip_and_hostname_records ($address);
         }
+        # remove from NAT
+        $this->remove_address_nat_items ($address['id'], true);
 		# ok
 		return true;
 	}
@@ -553,6 +593,60 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Remove item from nat when item is removed
+	 *
+	 * @method remove_nat_item
+	 *
+	 * @param  int $obj_id
+	 * @param  bool $print
+	 *
+	 * @return int
+	 */
+	public function remove_address_nat_items ($obj_id = 0, $print = true) {
+		# set found flag for returns
+		$found = 0;
+		# fetch all nats
+		try { $all_nats = $this->Database->getObjectsQuery ("select * from `nat` where `src` like :id or `dst` like :id", array ("id"=>'%"'.$obj_id.'"%')); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		# loop and check for object ids
+		if(!empty($all_nats)) {
+			# init admin object
+			$Admin = new Admin ($this->Database, false);
+			# loop
+			foreach ($all_nats as $nat) {
+			    # remove item from nat
+			    $s = json_decode($nat->src, true);
+			    $d = json_decode($nat->dst, true);
+
+			    if(is_array($s['ipaddresses']))
+			    $s['ipaddresses'] = array_diff($s['ipaddresses'], array($obj_id));
+			    if(is_array($d['ipaddresses']))
+			    $d['ipaddresses'] = array_diff($d['ipaddresses'], array($obj_id));
+
+			    # save back and update
+			    $src_new = json_encode(array_filter($s));
+			    $dst_new = json_encode(array_filter($d));
+
+			    # update only if diff found
+			    if($s!=$src_new || $d!=$dst_new) {
+			    	$found++;
+
+				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
+				    	if($print) {
+					        $this->Result->show("success", "Address removed from NAT", false);
+						}
+				    }
+			    }
+			}
+		}
+		# return
+		return $found;
+	}
+
+	/**
 	 * Updates hostname for IP addresses
 	 *
 	 * @method update_address_hostname
@@ -565,13 +659,13 @@ class Addresses extends Common_functions {
 	 */
 	public function update_address_hostname ($ip, $id, $hostname = "") {
 		if(is_numeric($id) && strlen($hostname)>0) {
-			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "dns_name"=>$hostname)); }
+			try { $this->Database->updateObject("ipaddresses", array("id"=>$id, "hostname"=>$hostname)); }
 			catch (Exception $e) {
 				return false;
 			}
 			// save log
-			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $address_old), 0);
-			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "dns_name"=>""), array("id"=>$id, "dns_name"=>$hostname), $this->mail_changelog);
+			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $hostname), 0);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->mail_changelog);
 		}
 	}
 
@@ -608,31 +702,30 @@ class Addresses extends Common_functions {
                 	$admins        = $Tools->fetch_multiple_objects ("users", "role", "Administrator");
                 	// if some recipients
                 	if ($admins !== false) {
-                    	// mail settings
-                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
-                    	// mail class
-                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
+						# try to send
+						try {
+	                    	// mail settings
+	                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
+	                    	// mail class
+	                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
 
-                        // send
-                        $phpipam_mail->initialize_mailer();
-                        // set parameters
-                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
-                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
-                        $content[] = "</table>";
-                        // plain
-                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
-                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
-                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
+	                        // set parameters
+	                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
+	                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+	                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
+	                        $content[] = "</table>";
+	                        // plain
+	                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
+	                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
+	                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
 
-                        # set content
-                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-                        $content_plain 	= implode("\r\n",$content_plain);
-                        # try to send
-                        try {
+	                        # set content
+	                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+	                        $content_plain 	= implode("\r\n",$content_plain);
+
                         	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
                         	//add all admins to CC
                         	$recipients = $this->changelog_mail_get_recipients ($subnet->id);
@@ -654,7 +747,7 @@ class Addresses extends Common_functions {
                         } catch (phpmailerException $e) {
                         	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
                         } catch (Exception $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
                         }
                     }
             	}
@@ -877,7 +970,7 @@ class Addresses extends Common_functions {
 		// validate db
 		$this->pdns_validate_connection ();
 		// execute
-		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['dns_name'], $address['ip_addr']);
+		return $this->PowerDNS->pdns_remove_ip_and_hostname_records ($address['hostname'], $address['ip_addr']);
 	}
 
 	/**
@@ -934,18 +1027,18 @@ class Addresses extends Common_functions {
 		$values = json_decode($this->settings->powerDNS);
 
     	// set default hostname for PTR if set
-    	if (strlen($address->dns_name)==0) {
+    	if (strlen($address->hostname)==0) {
         	if (strlen($values->def_ptr_domain)>0) {
-            	$address->dns_name = $values->def_ptr_domain;
+            	$address->hostname = $values->def_ptr_domain;
         	}
     	}
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)		{ return false; }
+		if ($this->validate_hostname ($address->hostname)===false)		{ return false; }
 		// fetch domain
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
 
 		// formulate new record
-		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->dns_name, $values->ttl);
+		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
 		// insert record
 		$this->PowerDNS->add_domain_record ($record, false);
 		// link to address
@@ -968,7 +1061,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_edit ($address, $print_error = true) {
 		// validate hostname
-		if ($this->validate_hostname ($address->dns_name)===false)	{
+		if ($this->validate_hostname ($address->hostname)===false)	{
 			// remove pointer if it exists!
 			if ($this->ptr_exists ($address->PTR)===true)	{ $this->ptr_delete ($address, $print_error); }
 			else											{ return false; }
@@ -990,7 +1083,7 @@ class Addresses extends Common_functions {
 			$old_record = $this->PowerDNS->fetch_record ($address->PTR);
 
 			// create insert array
-			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->dns_name, null, null, null, $old_record->change_date);
+			$update = $this->PowerDNS->formulate_update_record ($this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), null, $address->hostname, null, null, null, $old_record->change_date);
 			$update['id'] = $address->PTR;
 
 			// update
@@ -1158,7 +1251,7 @@ class Addresses extends Common_functions {
 								"ip_addr"=>$address[0],
 								"state"=>$address[1],
 								"description"=>$address[2],
-								"dns_name"=>$address[3],
+								"hostname"=>$address[3],
 								"mac"=>$address[4],
 								"owner"=>$address[5],
 								"switch"=>$address[6],
@@ -1621,6 +1714,10 @@ class Addresses extends Common_functions {
 		$this->initialize_pear_net_IPv4 ();
 		$this->initialize_pear_net_IPv6 ();
 
+		// no null
+		if($this->transform_address ($address, "decimal")==0) {
+			return false;
+		}
 		// transform
 		$address = $this->transform_address ($address, "dotted");
 		// ipv6
@@ -1669,7 +1766,7 @@ class Addresses extends Common_functions {
 	 * @return boolean
 	 */
 	public function is_hostname_unique ($hostname) {
-		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "dns_name", $hostname); }
+		try { $cnt = $this->Database->numObjectsFilter("ipaddresses", "hostname", $hostname); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -1709,7 +1806,6 @@ class Addresses extends Common_functions {
     	$size = sizeof($addresses);
     	// vars
     	$addresses_formatted = array();
-    	$fIndex = int;
 
 		# loop through IP addresses
 		for($c=0; $c<$size; $c++) {

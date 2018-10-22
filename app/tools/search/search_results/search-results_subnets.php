@@ -20,28 +20,36 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 <h4><?php print _('Search results (Subnet list)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable table sorted table-striped table-condensed table-top" data-cookie-id-table="search_addresses">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
 	<th><?php print _('Section');?></th>
 	<th><?php print _('Subnet');?></th>
 	<th><?php print _('Description');?></th>
 	<th><?php print _('Master subnet');?></th>
+	<?php if($User->get_module_permissions ("vlan")>0) { ?>
 	<th><?php print _('VLAN');?></th>
+	<?php } ?>
+	<?php if($User->get_module_permissions ("vrf")>0) { ?>
 	<th><?php print _('VRF');?></th>
+	<?php } ?>
 	<th><?php print _('Requests');?></th>
 	<?php
 	if(sizeof($custom_subnet_fields) > 0) {
 		foreach($custom_subnet_fields as $field) {
 			if(!in_array($field['name'], $hidden_subnet_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
 	?>
 	<th style="width:5px;"></th>
 </tr>
+</thead>
+
+<tbody>
 <?php
 	$m = 0;		//to count success subnets because of permissions
 
@@ -90,8 +98,10 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 				//master
 				print ' <td>'. $master_text .'</td>' . "\n";
 				//vlan
+				if($User->get_module_permissions ("vlan")>0)
 				print ' <td>'. @$vlan['number'] .'</td>' . "\n";
 				//vrf
+				if($User->get_module_permissions ("vrf")>0)
 				print ' <td>'. @$vrf['name'] .'</td>' . "\n";
 				//requests
 				print ' <td>'. _($line['allowRequests']) .'</td>' . "\n";
@@ -108,7 +118,7 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 
 				#locked for writing
 				if($subnet_permission > 1) {
-					if(@$master_subnet['isFolder']==1) {
+					if(@$line['isFolder']=="1") {
 						print "	<td><button class='btn btn-xs btn-default add_folder' data-action='edit'  data-subnetId='$line[id]' data-sectionId='$line[sectionId]' href='#' rel='tooltip' data-container='body'  title='"._('Edit folder details')."'>		<i class='fa fa-gray fa fa-pencil'>  </i></a>";
 					} else {
 						print "	<td><button class='btn btn-xs btn-default edit_subnet' data-action='edit' data-subnetId='$line[id]' data-sectionId='$line[sectionId]' href='#' rel='tooltip' data-container='body'  title='"._('Edit subnet details')."'>		<i class='fa fa-gray fa fa-pencil'>  </i></a>";
@@ -121,6 +131,7 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 			}
 		}
 	}
+print "</tbody>";
 print "</table>";
 
 # show text if no results

@@ -5,7 +5,7 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,11 +17,16 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
-# check permissions
-if(!($User->is_admin(false) || $User->user->editCircuits=="Yes")) { $Result->show("danger", _("You are not allowed to modify Circuit Provider details"), true, true); }
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("circuits", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("circuits", 3, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "provider");
+$csrf = $User->Crypto->csrf_cookie ("create", "provider");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -71,7 +76,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $provider->name; ?>" <?php print $readonly; ?>>
+			<input type="text" name="name" class="form-control input-sm" placeholder="<?php print _('Name'); ?>" value="<?php if(isset($provider->name)) print $Tools->strip_xss($provider->name); ?>" <?php print $readonly; ?>>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
 				print '<input type="hidden" name="providerid" value="'. $_POST['providerid'] .'">'. "\n";
@@ -85,7 +90,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Description'); ?></td>
 		<td>
-			<input type="text" name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" value="<?php if(isset($provider->description)) print $provider->description; ?>" <?php print $readonly; ?>>
+			<input type="text" name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" value="<?php if(isset($provider->description)) print $Tools->strip_xss($provider->description); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -93,7 +98,7 @@ $(document).ready(function(){
 	<tr>
 		<td><?php print _('Contact'); ?></td>
 		<td>
-			<input type="text" name="contact" class="form-control input-sm" placeholder="<?php print _('Contact'); ?>" value="<?php if(isset($provider->contact)) print $provider->contact; ?>" <?php print $readonly; ?>>
+			<input type="text" name="contact" class="form-control input-sm" placeholder="<?php print _('Contact'); ?>" value="<?php if(isset($provider->contact)) print $Tools->strip_xss($provider->contact); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -118,7 +123,7 @@ $(document).ready(function(){
     		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
-			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 			print "	<td>".$custom_input['field']."</td>";
 			print "</tr>";
 		}

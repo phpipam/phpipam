@@ -11,7 +11,7 @@ $User->check_user_session();
 $mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "mail");
+$csrf = $User->Crypto->csrf_cookie ("create", "mail");
 ?>
 
 <!-- title -->
@@ -74,7 +74,7 @@ $csrf = $User->csrf_cookie ("create", "mail");
 				<option value="tls" <?php if($mail_settings->msecure=="tls") print "selected='selected'"; ?>><?php print _('TLS'); ?></option>
 			</select>
 		</td>
-		<td class="info2"><?php print _('Select yes if authentication is required'); ?></td>
+		<td class="info2"><?php print _('Select cryptographic security protocol'); ?></td>
 	</tr>
 
 	<!-- Server auth -->
@@ -144,8 +144,8 @@ $csrf = $User->csrf_cookie ("create", "mail");
 		<td class="title"></td>
 		<td class="submit" style="padding-top:30px;">
 		<div class="btn-group pull-right">
-			<a class="btn btn-sm btn-default sendTestMail"><i class="icon icon-gray icon-envelope"></i> <?php print _('Send test email'); ?></a>
-			<input type="submit" class="btn btn-sm btn-default btn-success pull-right" value="<?php print _('Save changes'); ?>">
+			<a class='btn btn-sm btn-default submit_popup' data-script="app/admin/mail/test-mail.php" data-result_div="settingsMailEdit" data-form='mailsettings' data-noreload='true'><i class="icon icon-gray icon-envelope"></i> <?php print _('Send test email'); ?></a>
+			<input type="submit" class="btn btn-default btn-success btn-sm submit_popup" data-script="app/admin/mail/edit.php" data-result_div="settingsMailEdit" data-form='mailsettings' value="<?php print _("Save"); ?>">
 		</div>
 		</td>
 		<td></td>
@@ -156,4 +156,4 @@ $csrf = $User->csrf_cookie ("create", "mail");
 
 
 <!-- Result -->
-<div class="settingsMailEdit"></div>
+<div id="settingsMailEdit"></div>

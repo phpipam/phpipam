@@ -64,7 +64,7 @@ if($firewallZoneMapping) {
 		# mappings
 		foreach ($firewallZoneMapping as $mapping ) {
 			# set rowspan in case if there are more than one networks bound to the zone
-			$counter = count($mapping->network);
+			$counter = property_exists($mapping,'network') ? count($mapping->network) : 1;
 			if ($counter === 0) {
 				$counter = 1;
 			}
@@ -85,13 +85,13 @@ if($firewallZoneMapping) {
 					# display subnet informations
 					if ($network->subnetId) {
 						// description fix
-						$network->subnetDescription = strlen($network->subnetDescription)>0 ? " (".$network->subnetDescription.")" : "";
+						$subnetDescription = !empty($network->subnetDescription) ? " (".escape_input($network->subnetDescription).")" : "";
 						// subnet
 						if (!$network->subnetIsFolder) {
-							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$network->subnetDescription.'</a></td>';
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">'.$Subnets->transform_to_dotted($network->subnet).'/'.$network->subnetMask.$subnetDescription.'</a></td>';
 						}
 						else {
-							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$network->subnetDescription.'</a></td>';
+							print '<td><a href="'.create_link("subnets",$network->sectionId,$network->subnetId).'">Folder'.$subnetDescription.'</a></td>';
 						}
 					} else {
 						print '<td>/</td>';
@@ -99,8 +99,8 @@ if($firewallZoneMapping) {
 					# display vlan informations
 					if ($network->vlanId) {
 						// name fix
-						$network->vlanName = strlen($network->vlanName)>0 ? " (".$network->vlanName.")" : "";
-						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.''.$network->vlanName.'</a></td>';
+						$vlanName = !empty($network->vlanName) ? " (".$network->vlanName.")" : "";
+						print '<td><a href="'.create_link('tools','vlan',$network->domainId,$network->vlanId).'">Vlan '.$network->vlan.''.$vlanName.'</a></td>';
 					} else {
 						print '<td>/</td>';
 					}

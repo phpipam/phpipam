@@ -1,7 +1,7 @@
 <table class="donate">
 <tr>
 	<td>
-		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?><?php if(REVISION > 0) { print " rev".REVISION; } ?></a>
+		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?><?php if(DBVERSION > 0) { print " dbversion".DBVERSION; } ?></a>
 	</td>
 
 	<?php
@@ -15,7 +15,7 @@
 	if($User->settings->donate == 0) {
 
 print '	<td id="donate" class="hidden-xs hidden-sm" rel="tooltip" data-html="true" title="'._('phpIPAM is free, open-source project').'.<br>'._('If you like the software you can donate by clicking this button to support further development').'.">
-		<a href="https://phpipam.net/donate/" target="_blank"><input type="image" src="css/'.SCRIPT_PREFIX.'/images/btn_donate_SM.gif" name="submit"></a>
+		<a href="https://phpipam.net/donate/" target="_blank"><input type="image" src="css/images/btn_donate_SM.gif" name="submit"></a>
 	</td>';
 
 	}

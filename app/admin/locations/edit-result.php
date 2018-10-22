@@ -1,25 +1,33 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("locations", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("locations", 3, true, false);
+}
+
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "location", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "location", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # validations
 if($_POST['action']=="delete" || $_POST['action']=="edit") {
@@ -29,7 +37,7 @@ if($_POST['action']=="delete" || $_POST['action']=="edit") {
 }
 if($_POST['action']=="add" || $_POST['action']=="edit") {
     // name
-    if(strlen($_POST['name'])<3)                                            {  $Result->show("danger",  _("Name must have at least 3 characters"), true); }
+    if(strlen($_POST['name'])<1)                                            {  $Result->show("danger",  _("Name must have at least 1 character"), true); }
     // lat, long
     if($_POST['action']!=="delete") {
         // lat
@@ -77,12 +85,12 @@ if(sizeof($custom) > 0) {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "address"=>$_POST['address'],
-    "lat"=>$_POST['lat'],
-    "long"=>$_POST['long'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "address"     =>$_POST['address'],
+    "lat"         =>$_POST['lat'],
+    "long"        =>$_POST['long'],
+    "description" =>$_POST['description']
     );
 
 # custom fields

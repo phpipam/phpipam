@@ -12,8 +12,12 @@ if(!$location) {
     $location = $Tools->fetch_object("locations", "id", $location_index);
 }
 
+# perm check
+if ($User->get_module_permissions ("locations")<1) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # if none than print
-if($location===false) {
+elseif($location===false) {
     $Result->show("info","Invalid location", false);
 }
 elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
@@ -37,7 +41,7 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
     if( (strlen($location->long)>0 && strlen($location->lat))) {
 
     // description and apostrophe fix
-    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
+    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".escape_input($location->description)."</span>" : "";
     $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
     ?>
     <script type="text/javascript">
@@ -47,16 +51,16 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
             var map = new GMaps({
               div: '#gmap',
               zoom: 15,
-              lat: '<?php print $location->lat; ?>',
-              lng: '<?php print $location->long; ?>'
+              lat: '<?php print escape_input($location->lat); ?>',
+              lng: '<?php print escape_input($location->long); ?>'
             });
 
             map.addMarker({
-             title: '<?php print $location->name; ?>',
-             lat: '<?php print $location->lat; ?>',
-             lng: '<?php print $location->long; ?>',
+             title: "'<?php print addslashes($location->name); ?>'",
+             lat: '<?php print escape_input($location->lat); ?>',
+             lng: '<?php print escape_input($location->long); ?>',
              infoWindow: {
-                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print $location->name; ?></a></h5><?php print $location->description; ?>'
+                content: '<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print addslashes($location->name); ?></a></h5><?php print $location->description; ?>'
              }
             });
 
@@ -82,4 +86,3 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
 <?php
     }
 }
-?>

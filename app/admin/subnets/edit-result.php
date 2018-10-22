@@ -7,7 +7,7 @@
 /* this can come from snmp, so if objects are already initialized print it */
 if (!function_exists("create_link")) {
     /* functions */
-    require( dirname(__FILE__) . '/../../../functions/functions.php');
+    require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
     # initialize user object
     $Database 	= new Database_PDO;
@@ -30,10 +30,10 @@ $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
 if($_POST['action']=="add") {
-	$User->csrf_cookie ("validate", "subnet_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+	$User->Crypto->csrf_cookie ("validate", "subnet_add", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 else {
-	$User->csrf_cookie ("validate", "subnet_".$_POST['subnetId'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+	$User->Crypto->csrf_cookie ("validate", "subnet_".$_POST['subnetId'], $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 }
 
 # if show name than description must be set
@@ -324,6 +324,17 @@ else {
         }
         $values['location'] = $_POST['location_item'];
     }
+	# append customerId
+	if($User->settings->enableCustomers=="1") {
+		if (is_numeric($_POST['customer_id'])) {
+			if ($_POST['customer_id']>0) {
+				$values['customer_id'] = $_POST['customer_id'];
+			}
+			else {
+				$values['customer_id'] = NULL;
+			}
+		}
+	}
     # threshold
     if (isset($_POST['threshold'])) {
         if (!is_numeric($_POST['threshold'])) {
@@ -406,12 +417,12 @@ else {
 		}
     	# set what to update
     	$values = array(
-					"vlanId"=>$_POST['vlanId'],
-					"vrfId"=>$_POST['vrfId'],
-					"nameserverId"=>$_POST['nameserverId'],
-					"scanAgent"=>@$_POST['scanAgent'],
-					"device"=>$_POST['device'],
-					"isFull"=>$_POST['isFull']
+					"vlanId"       =>$_POST['vlanId'],
+					"vrfId"        =>$_POST['vrfId'],
+					"nameserverId" =>$_POST['nameserverId'],
+					"scanAgent"    =>@$_POST['scanAgent'],
+					"device"       =>$_POST['device'],
+					"isFull"       =>$_POST['isFull']
 					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);
@@ -443,7 +454,7 @@ else {
 		if (!isset($_POST['DNSrecursive']) && @$old_subnet_details->DNSrecursive==0) { $_POST['DNSrecursive'] = 0; }
 
 		// recreate csrf cookie
-        $csrf = $User->csrf_cookie ("create", "domain");
+        $csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 		//delete
 		if ($_POST['action']=="delete") {
@@ -539,4 +550,3 @@ else {
 	}
 }
 ?>
-

@@ -5,7 +5,7 @@
  ********************************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -20,6 +20,8 @@ $User->check_user_session();
 
 # id must be numeric
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true);
+
+$csrf = $User->Crypto->csrf_cookie ("create", "mail_notify");
 
 # get IP address id
 $id = $_POST['id'];
@@ -111,6 +113,7 @@ if(sizeof($custom_fields) > 0) {
 	</tr>
 
 	</table>
+	<input type="hidden" name='csrf_cookie' value='<?php print $csrf; ?>'>
 	</form>
 </div>
 

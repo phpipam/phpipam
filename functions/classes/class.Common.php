@@ -27,31 +27,6 @@ class Common_functions  {
 	 */
 	public $json_error = false;
 
-	/**
-	 * Cache file to store all results from queries to
-	 *
-	 *  structure:
-	 *
-	 *      [table][index] = (object) $content
-	 *
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access public
-	 */
-	public $cache = array();
-
-	/**
-	 * cache_check_exceptions
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access private
-	 */
-	private $cache_check_exceptions = array();
-
     /**
      * Default font
      *
@@ -138,11 +113,37 @@ class Common_functions  {
 	 */
 	protected $debugging;
 
+	/**
+	 * Cache mac vendor objects
+	 * @var array|null
+	 */
+	private $mac_address_vendors = null;
 
 
 
 
+	/**
+	 *	@version handling
+	 *	--------------------------------
+	 */
 
+	 /**
+	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
+	 *
+	 * @access public
+	 * @param string $verA
+	 * @param mixed $verB
+	 * @return int
+	 */
+	public function cmp_version_strings($verA, $verB) {
+		$a = explode('.', $verA);
+		$b = explode('.', $verB);
+
+		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
+		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
+		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;			// 1.4.9 is less than 1.4.10
+		return 0;
+	}
 
 
 
@@ -169,6 +170,10 @@ class Common_functions  {
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
+
+		$cached_item = $this->cache_check("fetch_all_objects", "t=$table f=$sortField o=$sortAsc");
+		if(is_object($cached_item)) return $cached_item->result;
+
 		# fetch
 		try { $res = $this->Database->getObjects($table, $sortField, $sortAsc); }
 		catch (Exception $e) {
@@ -182,7 +187,9 @@ class Common_functions  {
     		}
 		}
 		# result
-		return sizeof($res)>0 ? $res : false;
+		$result = sizeof($res)>0 ? $res : false;
+		$this->cache_write("fetch_all_objects", "t=$table f=$sortField o=$sortAsc", (object)["result" => $result]);
+		return $result;
 	}
 
 	/**
@@ -205,26 +212,26 @@ class Common_functions  {
 		if(is_null($value))		return false;
 		if($value===0)		    return false;
 
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
 		if($cached_item!==false) {
 			return $cached_item;
 		}
 		else {
+			# null method
+			$method = is_null($method) ? "id" : $this->Database->escape($method);
+
 			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
 			}
 			# save to cache array
-			if(sizeof($res)>0) {
-    			// set identifier
-    			$method = $this->cache_set_identifier ($table);
-    			// save
-    			$this->cache_write ($table, $res->{$method}, $res);
+			if($res !== null && is_object($res)) {
+				// set identifier
+				$method = $this->cache_set_identifier ($table);
+				// save
+				$this->cache_write ($table, $res->{$method}, $res);
 				return $res;
 			}
 			else {
@@ -257,8 +264,8 @@ class Common_functions  {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
 				return false;
 			}
-			# save to cach
-			if (sizeof($res)>0) {
+			# save to cache
+			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
     			foreach ($res as $r) {
         			$this->cache_write ($table, $r->id, $r);
     			}
@@ -288,6 +295,21 @@ class Common_functions  {
 		return $cnt;
 	}
 
+	/**
+	 * Count all objects in database.
+	 *
+	 * @param  string $table
+	 * @param  string $field
+	 * @return array|false
+	 */
+	public function count_all_database_objects ($table, $field) {
+		try { $cnt = $this->Database->getGroupBy($table, $field); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return $cnt;
+	}
 
 	/**
 	 * Get all admins that are set to receive changelog
@@ -356,7 +378,7 @@ class Common_functions  {
 				# save
 				if ($settings!==false)	 {
 					$this->settings = $settings;
-					define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
+					define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 				}
 			}
 		}
@@ -386,13 +408,13 @@ class Common_functions  {
         // get method
         $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
-        if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$table][$identifier][$id])) {
-                $this->cache[$table][$identifier][$id] = (object) $object;
+        if ($this->cache_check_exceptions($table)===false) {
+            if (!isset($this->Database->cache[$table][$identifier][$id])) {
+                $this->Database->cache[$table][$identifier][$id] = (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
-                    $this->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
+                    $this->Database->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
                 }
             }
         }
@@ -452,7 +474,7 @@ class Common_functions  {
         // get method
         $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise return false
-        if (isset($this->cache[$table][$method][$id]))  { return (object) $this->cache[$table][$method][$id]; }
+        if (isset($this->Database->cache[$table][$method][$id]))  { return (object) $this->Database->cache[$table][$method][$id]; }
         else                                            { return false; }
     }
 
@@ -526,7 +548,14 @@ class Common_functions  {
 	public function strip_input_tags ($input) {
 		if(is_array($input)) {
 			foreach($input as $k=>$v) {
-    			$input[$k] = strip_tags($v);
+				if(is_array($v)) {
+					foreach ($v as $k1=>$v1) {
+		    			$input[$k][$k1] = strip_tags($v1);
+					}
+				}
+				else {
+	    			$input[$k] = strip_tags($v);
+				}
             }
 		}
 		else {
@@ -574,11 +603,13 @@ class Common_functions  {
     	// init
     	$out = array();
     	// loop
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-			}
-			else {
-				$out[$k] = $v;
+    	if(is_array($fields)) {
+			foreach($fields as $k=>$v) {
+				if(is_null($v) || strlen($v)==0) {
+				}
+				else {
+					$out[$k] = $v;
+				}
 			}
 		}
 		# result
@@ -609,6 +640,31 @@ class Common_functions  {
 	}
 
 	/**
+	 * Strip XSS on value print
+	 *
+	 * @method strip_xss
+	 *
+	 * @param  string $input
+	 *
+	 * @return string
+	 */
+	public function strip_xss ($input) {
+		return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
+	}
+
+	/**
+	 * Detect the encoding used for a string and convert to UTF-8
+	 *
+	 * @method convert_encoding_to_UTF8
+	 * @param  string $string
+	 * @return string
+	 */
+	public function convert_encoding_to_UTF8($string) {
+		//convert encoding if necessary
+		return mb_convert_encoding($string, 'UTF-8', mb_detect_encoding($string, 'ASCII, UTF-8, ISO-8859-1, auto', true));
+	}
+
+	/**
 	 * Function to verify checkbox if 0 length
 	 *
 	 * @access public
@@ -616,7 +672,7 @@ class Common_functions  {
 	 * @return int|mixed
 	 */
 	public function verify_checkbox ($field) {
-		return @$field==""||strlen(@$field)==0 ? 0 : $field;
+		return @$field==""||strlen(@$field)==0 ? 0 : escape_input($field);
 	}
 
 	/**
@@ -627,21 +683,18 @@ class Common_functions  {
 	 * @return mixed IP version
 	 */
 	public function identify_address ($address) {
-	    # dotted representation
-	    if (strpos($address, ":")) 		{ return 'IPv6'; }
-	    elseif (strpos($address, ".")) 	{ return 'IPv4'; }
-	    # numeric representation
-	    elseif (is_numeric($address)) {
-	    	if(4294967295 > $address)	{ return 'IPv4'; }
-	    	else 						{ return 'IPv6'; }
-	    }
-	    # decimal representation
-	    else  {
-	        # IPv4 address
-	        if(strlen($address) < 12) 	{ return 'IPv4'; }
-	        # IPv6 address
-	    	else 						{ return 'IPv6'; }
-	    }
+		# dotted representation
+		if (strpos($address, ':') !== false) return 'IPv6';
+		if (strpos($address, '.') !== false) return 'IPv4';
+		# numeric representation
+		if (is_numeric($address)) {
+			if($address <= 4294967295) return 'IPv4'; // 4294967295 = '255.255.255.255'
+			return 'IPv6';
+		} else {
+			# decimal representation
+			if(strlen($address) < 12) return 'IPv4';
+			return 'IPv6';
+		}
 	}
 
 	/**
@@ -732,19 +785,15 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function shorten_text($text, $chars = 25) {
-		//count input text size
-		$startLen = mb_strlen($text);
-		//cut onwanted chars
-	    $text = mb_substr($text,0,$chars);
-		//count output text size
-		$endLen = mb_strlen($text);
-
-		//append dots if it was cut
-		if($endLen != $startLen) {
-			$text = $text."...";
+		// minimum length = 8
+		if ($chars < 8) $chars = 8;
+		// count input text size
+		$origLen = mb_strlen($text);
+		// cut unwanted chars
+		if ($origLen > $chars) {
+			$text = mb_substr($text, 0, $chars-3) . '...';
 		}
-
-	    return $text;
+		return $text;
 	}
 
 	/**
@@ -794,22 +843,27 @@ class Common_functions  {
 	public function createURL () {
 		// SSL on standard port
 		if(($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
-			$url = "https://$_SERVER[HTTP_HOST]";
+			$url = "https://".$_SERVER['HTTP_HOST'];
 		}
 		// reverse proxy doing SSL offloading
-        elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-        	$url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]";
-        }
+		elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+			if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+				$url = "https://".$_SERVER['HTTP_X_FORWARDED_HOST'];
+			}
+			else {
+				$url = "https://".$_SERVER['HTTP_HOST'];
+			}
+		}
 		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
-			$url = "https://$_SERVER[SERVER_NAME]";
+			$url = "https://".$_SERVER['SERVER_NAME'];
 		}
 		// custom port
-		elseif($_SERVER['SERVER_PORT']!="80") {
-			$url = "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
+		elseif($_SERVER['SERVER_PORT']!="80" && (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT']!="80")) {
+			$url = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
 		}
 		// normal http
 		else {
-			$url = "http://$_SERVER[HTTP_HOST]";
+			$url = "http://".$_SERVER['HTTP_HOST'];
 		}
 
 		//result
@@ -859,7 +913,8 @@ class Common_functions  {
 		        "split",
 		        "resize",
 		        "move",
-		        "remove"
+		        "remove",
+		        "assign"
 		      );
 	}
 
@@ -886,7 +941,7 @@ class Common_functions  {
 	 * @return bool
 	 */
 	public function validate_email($email) {
-	    return preg_match("/([\w\-]+\@[\w\-]+\.[\w\-]+)/",$email) ? true : false;
+		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
 	/**
@@ -1013,25 +1068,10 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function long2ip6($ipv6long) {
-	    $bin = gmp_strval(gmp_init($ipv6long,10),2);
-	    $ipv6 = "";
-
-	    if (strlen($bin) < 128) {
-	        $pad = 128 - strlen($bin);
-	        for ($i = 1; $i <= $pad; $i++) {
-	            $bin = "0".$bin;
-	        }
-	    }
-
-	    $bits = 0;
-	    while ($bits <= 7)
-	    {
-	        $bin_part = substr($bin,($bits*16),16);
-	        $ipv6 .= dechex(bindec($bin_part)).":";
-	        $bits++;
-	    }
-	    // compress result
-	    return inet_ntop(inet_pton(substr($ipv6,0,-1)));
+		$hex = sprintf('%032s', gmp_strval(gmp_init($ipv6long, 10), 16));
+		$ipv6 = implode(':', str_split($hex, 4));
+		// compress result
+		return inet_ntop(inet_pton($ipv6));
 	}
 
 	/**
@@ -1121,13 +1161,20 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function get_latlng_from_address ($address) {
+		// get config
+		include(dirname(__FILE__)."/../../config.php");
         // replace spaces
         $address = str_replace(' ','+',$address);
-        // get grocode
-        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+        // get geocode
+        if(isset($gmaps_api_geocode_key)) {
+	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false&key='.$gmaps_api_geocode_key);
+    	}
+    	else {
+	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
+    	}
         $output= json_decode($geocode);
         // return result
-        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng));
+        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng), "error"=>$output->error_message);
 	}
 
     /**
@@ -1157,9 +1204,10 @@ class Common_functions  {
      * @param string $action
      * @param mixed $timepicker_index
      * @param bool $disabled
+     * @param string $set_delimiter
      * @return array
      */
-    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false) {
+    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false, $set_delimiter = "") {
         # make sure it is array
 		$field  = (array) $field;
 		$object = (object) $object;
@@ -1175,7 +1223,7 @@ class Common_functions  {
 
         //set, enum
         if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text);
+        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter);
         }
         //date and time picker
         elseif($field['type'] == "date" || $field['type'] == "datetime") {
@@ -1211,18 +1259,35 @@ class Common_functions  {
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
+     * @param string $set_delimiter
      * @return array
      */
-    public function create_custom_field_input_set_enum ($field, $object, $disabled_text) {
+    public function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "") {
 		$html = array();
     	//parse values
-    	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", ")", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", ")", "'"), "", $field['type']));
+    	$field['type'] = trim(substr($field['type'],0,-1));
+    	$tmp = substr($field['type'], 0,3)=="set" ? explode(",", str_replace(array("set(", "'"), "", $field['type'])) : explode(",", str_replace(array("enum(", "'"), "", $field['type']));
     	//null
     	if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
     	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
     	foreach($tmp as $v) {
-        $html[] = $v==$object->{$field['name']} ? "<option value='$v' selected='selected'>$v</option>" : "<option value='$v'>$v</option>";
+    		// set selected
+			$selected = $v==$object->{$field['name']} ? "selected='selected'" : "";
+			// parse delimiter
+			if(strlen($set_delimiter)==0) {
+				// save
+		        $html[] = "<option value='$v' $selected>$v</option>";
+			}
+			else {
+				// explode by delimiter
+				$tmp2 = explode ($set_delimiter, $v);
+	    		// reset selected
+				$selected = $tmp2[0]==$object->{$field['name']} ? "selected='selected'" : "";
+				// save
+		        $html[] = "<option value='$tmp2[0]' $selected>$tmp2[1]</option>";
+			}
+
     	}
     	$html[] = "</select>";
 
@@ -1244,8 +1309,8 @@ class Common_functions  {
    		$html = array ();
     	// just for first
     	if($timepicker_index==0) {
-    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
-    		$html[] =  '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
+    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
+    		$html[] =  '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
     		$html[] =  '<script type="text/javascript">';
     		$html[] =  '$(document).ready(function() {';
     		//date only
@@ -1263,7 +1328,7 @@ class Common_functions  {
 
     	//field
     	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
-    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $object->{$field['name']}. '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $this->strip_xss($object->{$field['name']}). '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
 
     	// result
     	return array (
@@ -1309,7 +1374,7 @@ class Common_functions  {
      */
     public function create_custom_field_input_textarea ($field, $object, $disabled_text) {
     	$html = array ();
-    	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
+    	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
     	// result
     	return $html;
 	}
@@ -1334,9 +1399,54 @@ class Common_functions  {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
-		$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $object->{$field['name']}. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+		$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
     	// result
     	return $html;
+	}
+
+	/**
+	 * Prints custom field
+	 *
+	 * @method print_custom_field
+	 *
+	 * @param  string $type
+	 * @param  string $value
+	 *
+	 * @return void
+	 */
+	public function print_custom_field ($type, $value) {
+		// escape
+		$value = str_replace("'", "&#39;", $value);
+		// create links
+		$value = $this->create_links ($value, $type);
+
+		//booleans
+		if($type=="tinyint(1)")	{
+			if($value == "1")			{ print _("Yes"); }
+			elseif(strlen($value)==0) 	{ print "/"; }
+			else						{ print _("No"); }
+		}
+		//text
+		elseif($type=="text") {
+			if(strlen($value)>0)	{ print "<i class='fa fa-gray fa-comment' rel='tooltip' data-container='body' data-html='true' title='".str_replace("\n", "<br>", $value)."'>"; }
+			else					{ print ""; }
+		}
+		else {
+			print $value;
+		}
+	}
+
+	/**
+	 * Print custom field name, strip out custom_ prefix
+	 *
+	 * @method print_custom_field_name
+	 *
+	 * @param  string $name
+	 *
+	 * @return string
+	 */
+	public function print_custom_field_name ($name, $return = true) {
+		return strpos($name, "custom_")===0 ? substr($name, 7) : $name;
 	}
 
 	/**
@@ -1381,27 +1491,98 @@ class Common_functions  {
 		if(strlen($mac)<4)				{ return ""; }
 		if(!$this->validate_mac ($mac))	{ return ""; }
 		// reformat mac address
-		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
+		$mac = strtoupper($this->reformat_mac_address ($mac, 1));
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
-        $data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
-        // check
-        if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
-            	//check for provided mac
-                if(strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]) == strtoupper($match[1] . ':' . $match[2] . ':' . $match[3])) {
-                	return $match[4];
-                }
-            }
-            // not matched
-            return "";
-        } else {
-            return "";
-        }
+
+		if (is_null($this->mac_address_vendors)) {
+			//populate mac vendors array
+			$this->mac_address_vendors = array();
+
+			$data = file_get_contents(dirname(__FILE__)."/../vendormacs.xml");
+
+			if (preg_match_all('/\<VendorMapping\smac_prefix="([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})[:-]([0-9a-fA-F]{2})"\svendor_name="(.*)"\/\>/', $data, $matches, PREG_SET_ORDER)) {
+				if (is_array($matches)) {
+					foreach ($matches as $match) {
+						$mac_vendor = strtoupper($match[1] . ':' . $match[2] . ':' . $match[3]);
+						$this->mac_address_vendors[$mac_vendor] = $match[4];
+					}
+				}
+			}
+		}
+
+		$mac_vendor = strtoupper($mac_partial[0] . ':' . $mac_partial[1] . ':' . $mac_partial[2]);
+
+		if (isset($this->mac_address_vendors[$mac_vendor])) {
+			return $this->mac_address_vendors[$mac_vendor];
+		} else {
+			return "";
+		}
 	}
 
+	/**
+	 * Read user supplied permissions ($_POST) and calculate deltas from old_permissions
+	 *
+	 * @access public
+	 * @param  array $post_permissions
+	 * @param  array $old_permissions
+	 * @return array
+	 */
+	public function get_permission_changes ($post_permissions, $old_permissions) {
+		$new_permissions = array();
+		$removed_permissions = array();
+		$changed_permissions = array();
 
+		# set new posted permissions
+		foreach($post_permissions as $key=>$val) {
+			if(substr($key, 0,5) == "group") {
+				if($val != "0") $new_permissions[substr($key,5)] = $val;
+			}
+		}
 
+		// calculate diff
+		if(is_array($old_permissions)) {
+			foreach ($old_permissions as $k1=>$p1) {
+				// if there is not permisison in new that remove old
+				// if change than save
+				if (!array_key_exists($k1, $new_permissions)) {
+					$removed_permissions[$k1] = 0;
+				} elseif ($old_permissions[$k1]!==$new_permissions[$k1]) {
+					$changed_permissions[$k1] = $new_permissions[$k1];
+				}
+			}
+		} else {
+			$old_permissions = array();  // fix for adding
+		}
+		// add also new groups if available
+		if(is_array($new_permissions)) {
+			foreach ($new_permissions as $k1=>$p1) {
+				if(!array_key_exists($k1, $old_permissions)) {
+					$changed_permissions[$k1] = $new_permissions[$k1];
+				}
+			}
+		}
+
+		return array($removed_permissions, $changed_permissions, $new_permissions);
+	}
+
+	/**
+	 * Parse subnet permissions to user readable format
+	 *
+	 * @access public
+	 * @param mixed $permissions
+	 * @return string
+	 */
+	public function parse_permissions ($permissions) {
+		switch($permissions) {
+			case 0: 	$r = _("No access");	break;
+			case 1: 	$r = _("Read");			break;
+			case 2: 	$r = _("Write");		break;
+			case 3: 	$r = _("Admin");		break;
+			default:	$r = _("error");
+		}
+		return $r;
+	}
 
 
 
@@ -1576,23 +1757,23 @@ class Common_functions  {
         	}
         	// install, upgrade
         	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
         	}
         	// sections, subnets
         	elseif ($get['page']=="subnets" || $get['page']=="folder") {
             	// subnets
-            	$title[] = "Subnets";
+            	$title[] = _("Subnets");
 
             	// section
             	if (isset($get['section'])) {
-                 	$se = $this->fetch_object ("sections", "id", $get['section']);
+                 	$se = $this->fetch_object ("sections", "id", escape_input($get['section']));
                 	if($se!==false) {
                     	$title[] = $se->name;
                 	}
             	}
             	// subnet
             	if (isset($get['subnetId'])) {
-                 	$sn = $this->fetch_object ("subnets", "id", $get['subnetId']);
+                 	$sn = $this->fetch_object ("subnets", "id", escape_input($get['subnetId']));
                 	if($sn!==false) {
                     	if($sn->isFolder) {
                         	$title[] = $sn->description;
@@ -1605,7 +1786,7 @@ class Common_functions  {
             	}
             	// ip address
             	if (isset($get['ipaddrid'])) {
-                    $ip = $this->fetch_object ("ipaddresses", "id", $get['ipaddrid']);
+                    $ip = $this->fetch_object ("ipaddresses", "id", escape_input($get['ipaddrid']));
                     if($ip!==false) {
                         $title[] = $this->transform_address($ip->ip_addr, "dotted");
                     }
@@ -1613,26 +1794,26 @@ class Common_functions  {
         	}
         	// tools, admin
         	elseif ($get['page']=="tools" || $get['page']=="administration") {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
             	// subpage
             	if (isset($get['section'])) {
-                	$title[] = ucwords($get['section']);
+                	$title[] = ucwords(escape_input($get['section']));
             	}
             	if (isset($get['subnetId'])) {
                 	// vland domain
                 	if($get['section']=="vlan") {
-                     	$se = $this->fetch_object ("vlanDomains", "id", $get['subnetId']);
+                     	$se = $this->fetch_object ("vlanDomains", "id", escape_input($get['subnetId']));
                     	if($se!==false) {
                         	$title[] = $se->name." domain";
                     	}
                 	}
                 	else {
-                    	$title[] = ucwords($get['subnetId']);
+                    	$title[] = ucwords(escape_input($get['subnetId']));
                     }
             	}
         	}
         	else {
-            	$title[] = ucwords($get['page']);
+            	$title[] = ucwords(escape_input($get['page']));
             }
     	}
         // return title

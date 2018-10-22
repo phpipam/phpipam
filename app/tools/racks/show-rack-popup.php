@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -18,6 +18,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# verify module permissions
+$User->check_module_permissions ("racks", 1, true, true);
 
 # check that rack support isenabled
 if ($User->settings->enableRACK!="1") {
@@ -30,7 +32,6 @@ else {
     $Racks = new phpipam_rack ($Database);
     # fetch all racks
     $rack = $Racks->fetch_rack_details ($_POST['rackid']);
-    $rack_devices = $Racks->fetch_rack_devices ($_POST['rackid']);
 
     // rack check
     if($rack===false)                       { $error =_("Invalid rack Id"); }

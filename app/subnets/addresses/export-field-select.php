@@ -5,7 +5,7 @@
  */
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -65,7 +65,7 @@ print "	</tr>";
 # hostname - mandatory
 print "	<tr>";
 print "	<td>"._('Hostname')."</td>";
-print "	<td><input type='checkbox' name='dns_name' checked> </td>";
+print "	<td><input type='checkbox' name='hostname' checked> </td>";
 print "	</tr>";
 
 # firewallAddressObject - mandatory
@@ -87,10 +87,12 @@ print "	<td><input type='checkbox' name='owner' checked> </td>";
 print "	</tr>";
 
 # switch
+if($User->get_module_permissions ("devices")>0) {
 print "	<tr>";
 print "	<td>"._('Switch')."</td>";
 print "	<td><input type='checkbox' name='switch' checked> </td>";
 print "	</tr>";
+}
 
 # port
 print "	<tr>";
@@ -105,10 +107,12 @@ print "	<td><input type='checkbox' name='note' checked> </td>";
 print "	</tr>";
 
 # note
+if($User->get_module_permissions ("location")>0) {
 print "	<tr>";
 print "	<td>"._('Location')."</td>";
 print "	<td><input type='checkbox' name='location' checked> </td>";
 print "	</tr>";
+}
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');

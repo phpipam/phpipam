@@ -95,7 +95,7 @@ class Responses {
 		$this->errors[501] = "Not Implemented";
 		$this->errors[503] = "Service Unavailable";
 		$this->errors[505] = "HTTP Version Not Supported";
-		$this->errors[511] = "Network Authentication Required";
+		//$this->errors[511] = "Network Authentication Required";
 	}
 
 	/**
@@ -111,7 +111,7 @@ class Responses {
 		$this->exception = true;
 
 		// set success
-		$this->result['success'] = 0;
+		$this->result['success'] = false;
 		// set exit code
 		$this->result['code'] 	 = $code;
 		// set message
@@ -193,7 +193,7 @@ class Responses {
     	if(isset($_SERVER['CONTENT_TYPE']))
     	$_SERVER['CONTENT_TYPE'] = array_shift(explode(";", $_SERVER['CONTENT_TYPE']));
 		// not set, presume json
-		if( !isset($_SERVER['CONTENT_TYPE']) ) {}
+		if( !isset($_SERVER['CONTENT_TYPE']) || strlen(@$_SERVER['CONTENT_TYPE']==0) ) {}
 		// post
 		elseif($_SERVER['CONTENT_TYPE']=="application/x-www-form-urlencoded") {}
 		// set, verify
@@ -293,9 +293,11 @@ class Responses {
 				if(sizeof($custom_fields)>0) {
 					foreach($custom_fields as $k=>$cf) {
 						// add to result
-						$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
-						// remove unnested data
-						unset($this->result['data'][$dk]->$k);
+						if(isset($d->$k)) {
+							$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
+							// remove unnested data
+							unset($this->result['data'][$dk]->$k);
+						}
 					}
 				}
 				else {

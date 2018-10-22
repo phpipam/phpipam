@@ -5,20 +5,28 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("locations", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("locations", 3, true, true);
+}
+
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "location");
+$csrf = $User->Crypto->csrf_cookie ("create", "location");
 
 # validate action
 $Admin->validate_action ($_POST['action'], true);
@@ -53,7 +61,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Name'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="name" value="<?php print $location->name; ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
@@ -78,7 +86,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Address'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="address" value="<?php print $location->address; ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="address" value="<?php print $Tools->strip_xss($location->address); ?>" placeholder='<?php print _('Address'); ?>' <?php print $readonly; ?>>
             	<?php print _('or'); ?>
         	</td>
         	<td>
@@ -89,7 +97,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Latitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $location->lat; ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="lat" value="<?php print $Tools->strip_xss($location->lat); ?>" placeholder='<?php print _('Latitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("latitude"); ?></span>
@@ -99,7 +107,7 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<tr>
         	<th><?php print _('Longitude'); ?></th>
         	<td>
-            	<input type="text" class="form-control input-sm" name="long" value="<?php print $location->long; ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
+            	<input type="text" class="form-control input-sm" name="long" value="<?php print $Tools->strip_xss($location->long); ?>" placeholder='<?php print _('Longitude'); ?>' <?php print $readonly; ?>>
         	</td>
         	<td>
             	<span class="text-muted"><?php print _("Longitude"); ?></span>
@@ -126,7 +134,7 @@ $custom = $Tools->fetch_custom_fields('locations');
         		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
                 // print
     			print "<tr>";
-    			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+    			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
     			print "	<td>".$custom_input['field']."</td>";
     			print "</tr>";
     		}

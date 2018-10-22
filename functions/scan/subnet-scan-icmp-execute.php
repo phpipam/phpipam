@@ -27,8 +27,12 @@
  */
 
 /* functions */
-require( dirname(__FILE__) . '/../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../functions/classes/class.Thread.php');
+
+// Don't pollute the generated JSON output with php notice & deprecation errors (error: Invalid JSON response - JSON_ERROR_SYNTAX).
+// Report simple running errors only.
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -85,7 +89,7 @@ if($Scan->settings->scanPingType=="fping" && $argv[1]=="discovery") {
 	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
 
 	# parse result
-	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
+	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {
@@ -115,7 +119,7 @@ elseif($Scan->settings->scanPingType=="fping") {
 	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
 
 	# parse result
-	if(sizeof(@$Scan->fping_result)==0)					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
+	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
 	else {
 		//check each line
 		foreach($Scan->fping_result as $l) {

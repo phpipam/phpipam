@@ -1,3 +1,13 @@
+<?php
+// disable requests module for public
+if(@$config['requests_public']===false) {
+	print "<div id='login' style='padding:20px;padding-bottom:0px;'>";
+	$Result->show("danger", _("Public IP requests are disabled"), false);
+	print "</div>";
+}
+else {
+?>
+
 <div id="login" class="request">
 <form name="requestIP" id="requestIP">
 
@@ -61,7 +71,7 @@ if($subnets===NULL) { ?>
 <tr>
 	<th><?php print _('Hostname'); ?></th>
 	<td>
-		<input type="text" name="dns_name" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
+		<input type="text" name="hostname" class="form-control" size="30" placeholder="<?php print _('device hostname'); ?>"></td>
 </tr>
 
 <!-- state -->
@@ -166,5 +176,6 @@ if(is_object($instructions)) {
         print "</div>";
         print "</div>";
     }
+}
 }
 ?>

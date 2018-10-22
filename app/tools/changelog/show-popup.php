@@ -1,7 +1,7 @@
 <?php
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database = new Database_PDO;
@@ -109,17 +109,18 @@ print "	<td>";
 
 	foreach ($changelog as $c) {
 		// field
-		$field = explode(":", $c);
+		$field = explode(": ", $c);
 	    $value = explode("=>", $field[1]);
 
-	    $field = trim(str_replace(array("[","]"), "", $field[0]));
+	    $field_name = trim(str_replace(array("[","]"), "", $field[0]));
+
 	    if(is_array(@$Log->changelog_keys[$type])) {
-		    if (array_key_exists($field, $Log->changelog_keys[$type])) {
-	    	    $field = $Log->changelog_keys[$type][$field];
+		    if (array_key_exists($field_name, $Log->changelog_keys[$type])) {
+	    	    $field_name = $Log->changelog_keys[$type][$field_name];
 		    }
 	    }
 
-		$diff_1  = "<strong>$field</strong>: ".trim($value[0]);
+		$diff_1  = "<strong>$field_name</strong>: ".trim($value[0]);
 		if($clog->caction=="edit")
 		$diff_1 .= "  => ".trim($value[1]);
 

@@ -19,6 +19,9 @@ $folderId = $_GET['subnetId'];
 # get section details
 $section = $Sections->fetch_section ("id", $folder['sectionId']);
 
+// init subnets
+$subnets = array();
+
 if($slaves) {
 	# sort slaves by folder / subnet
 	foreach($slaves as $s) {
@@ -27,20 +30,23 @@ if($slaves) {
 	}
 
 	# first print belonging folders
-	if(sizeof(@$folders)>0) {
+	if(isset($folders)) {
 		# print title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ". sizeof($folders)." "._('directly nested folders').":</h4><hr>";
 
 		# table
-		print '<table class="slaves table table-striped table-condensed table-hover table-full table-top" style="margin-bottom:50px;">'. "\n";
+		print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" style="margin-bottom:50px;" data-cookie-id-table="folder_subnets">'. "\n";
 		# headers
+		print "<thead>";
 		print "<tr>";
 		print "	<th class='small' style='width:55px;'></th>";
 		print "	<th class='description'>"._('Folder')."</th>";
 		print "</tr>";
+		print "</thead>";
 
 		# folders
 		$m=0;
+		print "<tbody>";
 		foreach($folders as $f) {
 			$f = (array) $f;
 			# check permission
@@ -61,21 +67,23 @@ if($slaves) {
 			print "</td>";
 			print "</tr>";
 		}
-
+		print "</tbody>";
 		print "</table>";
 	}
 	# print subnets
-	if(sizeof(@$subnets)>0) {
+	if(sizeof($subnets)>0) {
 		# title
 		print "<h4>"._("Folder")." $folder[description] "._('has')." ".sizeof($subnets)." "._('directly nested subnets').":</h4><hr><br>";
 
 		# print table
-		print '<table class="slaves table table-striped table-condensed table-hover table-full table-top">'. "\n";
+		print '<table class="slaves table sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="folder_subnets_sorted">'. "\n";
 
 		# headers
+		print "<thead>";
 		print "<tr>";
+		if($User->get_module_permissions ("vlan")>0)
 		print "	<th class='small'>"._('VLAN')."</th>";
-		if($User->settings->enableVRF==1)
+		if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0)
 		print "	<th class='small'>"._('VRF')."</th>";
 		print "	<th class='small description'>"._('Subnet description')."</th>";
 		print "	<th>"._('Subnet')."</th>";
@@ -84,9 +92,11 @@ if($slaves) {
 		print "	<th class='small hidden-xs hidden-sm'>"._('Requests')."</th>";
 		print " <th class='actions'></th>";
 		print "</tr>";
+		print "</thead>";
 
 		# print slave subnets
 		$m=0;
+		print "<tbody>";
 		foreach ($subnets as $slave) {
 			# cast
 			$slave = (array) $slave;
@@ -119,8 +129,9 @@ if($slaves) {
                 }
 
 				print "<tr>";
+				if($User->get_module_permissions ("vlan")>0)
 			    print "	<td class='small'>".$vlan['number']."</td>";
-			    if($User->settings->enableVRF==1)
+			    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0)
 			    print "	<td class='small'>".$vrf['name']."</td>";
 
 			    print "	<td class='small description'><a href='".create_link("subnets",$section->id,$slave['id'])."'>$slave[description]</a></td>";
@@ -167,7 +178,7 @@ if($slaves) {
 			print "</td>";
 			print "</tr>";
 		}
-
+		print "</tbody>";
 		print '</table>'. "\n";
 	}
 }

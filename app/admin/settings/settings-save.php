@@ -5,7 +5,7 @@
  **************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,7 +17,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "settings", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 
 //check for http/https
@@ -71,6 +71,7 @@ $values = array("id"=>1,
 				"enableLocations"     =>$Admin->verify_checkbox(@$_POST['enableLocations']),
 				"enableSNMP"          =>$Admin->verify_checkbox(@$_POST['enableSNMP']),
 				"enablePSTN"          =>$Admin->verify_checkbox(@$_POST['enablePSTN']),
+				"enableCustomers"     =>$Admin->verify_checkbox(@$_POST['enableCustomers']),
 				"enableThreshold"     =>$Admin->verify_checkbox(@$_POST['enableThreshold']),
 				"enableVRF"           =>$Admin->verify_checkbox(@$_POST['enableVRF']),
 				"enableDNSresolving"  =>$Admin->verify_checkbox(@$_POST['enableDNSresolving']),
@@ -86,11 +87,13 @@ $values = array("id"=>1,
 				//"enableDHCP"        =>$Admin->verify_checkbox(@$_POST['enableDHCP']),
 				"enableFirewallZones" =>$Admin->verify_checkbox(@$_POST['enableFirewallZones']),
 				"maintaneanceMode" 	  =>$Admin->verify_checkbox(@$_POST['maintaneanceMode']),
+				"permissionPropagate" =>$Admin->verify_checkbox(@$_POST['permissionPropagate']),
 				"link_field"          =>@$_POST['link_field'],
 				"log"                 =>@$_POST['log'],
 				//display
 				"donate"              =>$Admin->verify_checkbox(@$_POST['donate']),
 				"visualLimit"         =>@$_POST['visualLimit'],
+				"theme"         	  =>@$_POST['theme'],
 				"subnetOrdering"      =>@$_POST['subnetOrdering'],
 				"subnetView"          =>@$_POST['subnetView'],
 				//ping
@@ -102,4 +105,3 @@ $values = array("id"=>1,
 				);
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true); }
 else															{ $Result->show("success", _("Settings updated successfully"), true); }
-?>

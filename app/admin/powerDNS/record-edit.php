@@ -5,7 +5,7 @@
  ************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -17,9 +17,16 @@ $PowerDNS 	= new PowerDNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pdns", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("pdns", 3, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "record");
+$csrf = $User->Crypto->csrf_cookie ("create", "record");
 
 # save settings for powerDNS default
 $pdns = $PowerDNS->db_settings;
@@ -65,8 +72,12 @@ else {
 		// die if not existing
 		if (!is_numeric($_POST['domain_id'])) {
     		# admin?
-    		if ($User->is_admin())   { $Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong><span class='ip_dns_addr hidden'>".$_POST['id']."</span> "._("does not exist")."!"."<hr><button class='btn btn-sm btn-default editDomain2 editDomain' data-action='add' data-id='0'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true); }
-    		else                     { $Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong> "._("does not exist")."!", true, true); }
+    		if ($User->is_admin()) {
+    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong><span class='ip_dns_addr hidden'>".$_POST['id']."</span> "._("does not exist")."!"."<hr><button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0' data-secondary='true'><i class='fa fa-plus'></i> "._('Create domain')."</button>", true, true);
+    		}
+    		else {
+    			$Result->show("danger", _("Domain")." <strong>".$_POST['domain_id']."</strong> "._("does not exist")."!", true, true);
+    		}
 		}
 		else {
 			$record = new StdClass ();
@@ -196,7 +207,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<?php if($_POST['action']!=="delete" && isset($record->id)) { ?>
+		<?php if($_POST['action']!=="delete" && isset($record->id) && $User->get_module_permissions ("pdns")>2) { ?>
 		<button class="btn btn-sm btn-default btn-danger" id="editRecordSubmitDelete"><i class="fa fa-trash-o"></i> <?php print _("Delete"); ?></button>
 		<?php } ?>
 		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>

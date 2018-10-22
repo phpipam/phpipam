@@ -5,7 +5,9 @@
  */
 
 # filter ip value
-$_GET['ip'] = $Subnets->strip_input_tags(urldecode(trim($_GET['ip'])));
+if(isset($_GET['ip'])) {
+	$_GET['ip'] = $Subnets->strip_input_tags(urldecode(trim($_GET['ip'])));
+}
 
 # verify that user is logged in
 $User->check_user_session();
@@ -37,7 +39,7 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 
 	<div class="input-group" id="searchForm">
 		<form id="userMenuSearch">
-		<input type="text" class="form-control searchInput input-sm" name='ip' placeholder='<?php print _('Search string'); ?>' type='text' value='<?php print @$_GET['ip']; ?>'>
+		<input type="text" class="form-control searchInput input-sm" name='ip' placeholder='<?php print _('Search string'); ?>' type='text' value='<?php print $Subnets->strip_xss(@$_GET['ip']); ?>'>
 		</form>
 		<span class="input-group-btn">
         	<button class="btn btn-default btn-sm searchSubmit" type="button"><?php print _('Search'); ?></button>
@@ -61,7 +63,7 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 
 	<!-- settings -->
 	<?php
-	if($_SESSION['realipamusername']){
+	if($_SESSION['realipamusername']) {
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>
 

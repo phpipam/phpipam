@@ -92,12 +92,14 @@ class Net_DNS2_RR_SSHFP extends Net_DNS2_RR
     const SSHFP_ALGORITHM_RES   = 0;
     const SSHFP_ALGORITHM_RSA   = 1;
     const SSHFP_ALGORITHM_DSS   = 2;
+    const SSHFP_ALGORITHM_ECDSA = 3;
 
     /*
      * Fingerprint Types
      */
     const SSHFP_FPTYPE_RES      = 0;
     const SSHFP_FPTYPE_SHA1     = 1;
+    const SSHFP_FPTYPE_SHA256   = 2;
 
 
     /**
@@ -137,15 +139,17 @@ class Net_DNS2_RR_SSHFP extends Net_DNS2_RR
         //
         if ( ($algorithm != self::SSHFP_ALGORITHM_RSA) 
             && ($algorithm != self::SSHFP_ALGORITHM_DSS) 
+            && ($algorithm != self::SSHFP_ALGORITHM_ECDSA) 
         ) {
             return false;
         }
 
         //
-        // there's only one fingerprint type currently implemented, so if it's not
-        // that, then fail.
+        // there are only two fingerprints defined
         //
-        if ($fp_type != self::SSHFP_FPTYPE_SHA1) {
+        if ( ($fp_type != self::SSHFP_FPTYPE_SHA1)
+            && ($fp_type != self::SSHFP_FPTYPE_SHA256) 
+        ) {
             return false;
         }
 
@@ -178,19 +182,21 @@ class Net_DNS2_RR_SSHFP extends Net_DNS2_RR
             $this->fp_type      = $x['fp_type'];
 
             //
-            // There are only two algorithm's defined 
+            // There are only three algorithm's defined 
             //
             if ( ($this->algorithm != self::SSHFP_ALGORITHM_RSA) 
                 && ($this->algorithm != self::SSHFP_ALGORITHM_DSS)
+                && ($this->algorithm != self::SSHFP_ALGORITHM_ECDSA)
             ) {
                 return false;
             }
 
             //
-            // there's only one fingerprint type currently implemented, 
-            // so if it's not that, then fail.
+            // there are only two fingerprints defined
             //
-            if ($this->fp_type != self::SSHFP_FPTYPE_SHA1) {
+            if ( ($this->fp_type != self::SSHFP_FPTYPE_SHA1)
+                && ($this->fp_type != self::SSHFP_FPTYPE_SHA256)
+            ) {
                 return false;
             }
             

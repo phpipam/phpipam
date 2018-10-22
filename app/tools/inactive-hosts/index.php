@@ -72,11 +72,10 @@ else {
         print " <td><span class='status status-error'></span></td>";
         print " <td><a href='".create_link("subnets", $s->sectionId, $s->subnetId, "address-details", $s->id)."'>".$Subnets->transform_address($s->ip_addr)."</a></td>";
         print " <td><a href='".create_link("subnets", $s->sectionId, $s->subnetId)."'>".$Subnets->transform_address($s->subnet)."/".$s->mask."</a></td>";
-        print " <td>$s->dns_name</td>";
+        print " <td>$s->hostname</td>";
         print " <td>$s->lastSeen</td>";
         print "</tr>";
 
     }
     print "</table>";
 }
-?>

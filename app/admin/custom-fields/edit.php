@@ -14,7 +14,7 @@
 
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -27,7 +27,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "custom_field");
+$csrf = $User->Crypto->csrf_cookie ("create", "custom_field");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -43,6 +43,27 @@ else 							{ $_POST['oldname'] = $_POST['fieldName'];}
 $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST['fieldName']);
 ?>
 
+<script type='text/javascript'>
+$(document).ready (function () {
+// check spce
+check_name_whitespace ();
+// on focusout
+$("input[name='name']").focusout(function () {
+check_name_whitespace ();
+});
+// check space function
+function check_name_whitespace () {
+	var namefieldval = $("input[name='name']").val();
+	if (namefieldval.indexOf(' ') >= 0) {
+		$('tr.spacewarning td').html("<div class='alert alert-warning'><i class='fa fa-exclamation'></i> Please consider using Name without spaces!</div>");
+		$('tr.spacewarning').show();
+	}
+	else {
+		$('tr.spacewarning').hide();
+	}
+}
+});
+</script>
 
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('custom field'); ?></div>
 
@@ -56,13 +77,16 @@ $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST[
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="name" class="form-control input-sm" value="<?php print $_POST['fieldName']; ?>" placeholder="<?php print _('Select field name'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
+			<input type="text" name="name" class="form-control input-sm" value="<?php print $Tools->print_custom_field_name ($_POST['fieldName']); ?>" placeholder="<?php print _('Select field name'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
 
 			<input type="hidden" name="oldname" value="<?php print $_POST['oldname']; ?>">
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="table" value="<?php print $_POST['table']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
+	</tr>
+	<tr class='spacewarning'>
+		<td colspan="2"></td>
 	</tr>
 
 	<!-- Description -->
@@ -78,7 +102,16 @@ $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST[
 		<td><?php print _('Type'); ?></td>
 		<?php
 		// define supported types
-		$mTypes = array("varchar"=>"varchar", "integer"=>"int", "boolean"=>"bool", "text"=>"text", "date"=>"date", "datetime"=>"datetime", "set"=>"set", "enum"=>"enum");
+		$mTypes = array(
+						"varchar"  =>"varchar",
+						"integer"  =>"int",
+						"boolean"  =>"bool",
+						"text"     =>"text",
+						"date"     =>"date",
+						"datetime" =>"datetime",
+						"set"      =>"set",
+						"enum"     =>"enum"
+		                );
 		//reformat old type
 		$oldMType = strstr(@$fieldval['Type'], "(", true);
 		$oldMSize = str_replace(array("(",")"), "",strstr(@$fieldval['Type'], "(", false));
@@ -103,7 +136,7 @@ $fieldval = (array) $Tools->fetch_full_field_definition($_POST['table'], $_POST[
 	<tr>
 		<td><?php print _('Size / Length'); ?></td>
 		<td>
-			<input type="text" name="fieldSize" class="form-control input-sm input-w-100" value="<?php print @$oldMSize; ?>" placeholder="<?php print _('Enter field length'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
+			<input type="text" name="fieldSize" class="form-control input-sm" value="<?php print htmlentities(@$oldMSize); ?>" placeholder="<?php print _('Enter field length'); ?>" <?php if($_POST['action'] == "delete") { print 'readonly'; } ?>>
 		</td>
 	</tr>
 

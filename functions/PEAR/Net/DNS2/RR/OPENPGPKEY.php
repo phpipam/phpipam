@@ -115,7 +115,7 @@ class Net_DNS2_RR_OPENPGPKEY extends Net_DNS2_RR
     {
         if ($this->rdlength > 0) {
 
-            $this->key = base64_encode($this->rdata);
+            $this->key = base64_encode(substr($this->rdata, 0, $this->rdlength));
 
             return true;
         }

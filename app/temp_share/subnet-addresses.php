@@ -74,7 +74,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 
 
 <!-- table -->
-<table class="ipaddresses normalTable table table-striped table-condensed table-hover table-full table-top">
+<table class="ipaddresses sortable sorted normalTable table table-condensed table-full table-top" data-cookie-id-table="ipaddresses">
 
 <!-- headers -->
 <tbody>
@@ -103,7 +103,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
 			if(!in_array($myField['name'], $hidden_cfields)) {
-				print "<th class='hidden-xs hidden-sm hidden-md'>$myField[name]</th>";
+				print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($myField['name'])."</th>";
 			}
 		}
 	}
@@ -187,7 +187,7 @@ else {
 		    print "</td>";
 
 		    # resolve dns name
-		    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->dns_name, false, $subnet['nameserverId']);
+		    $resolve = $DNS->resolve_address($addresses[$n]->ip_addr, $addresses[$n]->hostname, false, $subnet['nameserverId']);
 																	{ print "<td class='$resolve[class] hostname'>$resolve[name]</td>"; }
 
 			# print description - mandatory

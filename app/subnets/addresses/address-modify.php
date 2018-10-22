@@ -8,7 +8,7 @@
 
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize required objects
 $Database 	= new Database_PDO;
@@ -22,7 +22,7 @@ $Addresses	= new Addresses ($Database);
 $User->check_user_session();
 
 # create csrf token
-$csrf = $_POST['action']=="add"||$_POST['action']=="all-add" ? $User->csrf_cookie ("create", "address_add") : $User->csrf_cookie ("create", "address_".$_POST['id']);
+$csrf = $_POST['action']=="add"||$_POST['action']=="all-add" ? $User->Crypto->csrf_cookie ("create", "address_add") : $User->Crypto->csrf_cookie ("create", "address_".$_POST['id']);
 
 # validate action
 $Tools->validate_action ($_POST['action']);
@@ -32,9 +32,9 @@ is_numeric($_POST['subnetId']) ?:						$Result->show("danger", _("Invalid subnet
 is_numeric($_POST['id']) || strlen($_POST['id'])==0 ?:	$Result->show("danger", _("Invalid ID"), true, true);
 
 # get posted values
-$subnetId= $_POST['subnetId'];
-$action  = $_POST['action'];
-$id      = $_POST['id'];
+$subnetId= escape_input($_POST['subnetId']);
+$action  = escape_input($_POST['action']);
+$id      = escape_input($_POST['id']);
 
 # fetch subnet
 $subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
@@ -45,9 +45,9 @@ sizeof($subnet)>0 ?:			$Result->show("danger", _("Invalid subnet"), true, true);
 $subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);
 $subnet_permission > 1 ?:		$Result->show("danger", _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
 
-# set selected address fields array
-$selected_ip_fields = $User->settings->IPfilter;
-$selected_ip_fields = explode(";", $selected_ip_fields);																			//format to array
+// set selected address and required addresses fields array
+$selected_ip_fields = explode(";", $User->settings->IPfilter);
+$required_ip_fields = explode(";", $User->settings->IPrequired);																			//format to array
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -172,6 +172,15 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 	<!-- IP address modify form -->
 	<form class="editipaddress" role="form" name="editipaddress">
+
+	<?php
+	if($config['split_ip_custom_fields']===true) {
+		print "<div class='row'>";
+		print "<div class='col-xs-12 col-md-6' style='border-right:1px solid #eee'>";
+		print "<h4>"._("Standard fields")."</h4><hr>";
+	}
+	?>
+
 	<!-- edit IP address table -->
 	<table id="editipaddress" class="table table-noborder table-condensed">
 
@@ -215,12 +224,15 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 	<!-- DNS name -->
 	<?php
-	if(!isset($address['dns_name'])) {$address['dns_name'] = "";}
+	if(!isset($address['hostname'])) {$address['hostname'] = "";}
+		// set star if field is required
+		$required = in_array("hostname", $required_ip_fields) ? " *" : "";
+
 		print '<tr>'. "\n";
-		print '	<td>'._('Hostname').'</td>'. "\n";
+		print '	<td>'._('Hostname').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
 		print '	<div class="input-group">';
-		print ' <input type="text" name="dns_name" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['dns_name']. '" '.$delete.'>'. "\n";
+		print ' <input type="text" name="hostname" class="ip_addr form-control input-sm" placeholder="'._('Hostname').'" value="'. $address['hostname']. '" '.$delete.'>'. "\n";
 		print '	 <span class="input-group-addon">'."\n";
 		print "		<i class='fa fa-gray fa-repeat' id='refreshHostname' data-subnetId='$subnetId' rel='tooltip' data-placement='right' title='"._('Click to check for hostname')."'></i></span>";
 		print "	</span>";
@@ -231,7 +243,13 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 	<!-- description -->
 	<tr>
-		<td><?php print _('Description'); ?></td>
+		<td>
+			<?php
+			// set star if field is required
+			$required = in_array("description", $required_ip_fields) ? " *" : "";
+			print _('Description').$required;
+			?>
+		</td>
 		<td>
 			<input type="text" name="description" class="ip_addr form-control input-sm" value="<?php if(isset($address['description'])) {print $address['description'];} ?>" size="30"
 			<?php if ( $act == "delete" ) { print " readonly";} ?>
@@ -244,8 +262,11 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	if(in_array('mac', $selected_ip_fields)) {
 		if(!isset($address['mac'])) {$address['mac'] = "";}
 
+		// set star if field is required
+		$required = in_array("description", $required_ip_fields) ? " *" : "";
+
 		print '<tr class="text-top">'. "\n";
-		print '	<td style="padding-top:7px;">'._('MAC address').'</td>'. "\n";
+		print '	<td style="padding-top:7px;">'._('MAC address').$required.'</td>'. "\n";
 		print '	<td>'. "\n";
 
 		# multicast selection
@@ -255,124 +276,27 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
     		else                    { $mcast_class=""; $mcast_help_block = ""; }
 
      		if ($User->is_admin (false)) {
-        		print ' <div class="form-group '.$mcast_class.'">';
+        		print ' <div class="form-group '.$mcast_class.'" style="margin-bottom:0px;">';
         		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'.$mcast_help_block;
         		print ' </div>';
     		}
     		else {
-         		print ' <div class="form-group '.$mcast_class.'">';
+         		print ' <div class="form-group '.$mcast_class.'" style="margin-bottom:0px;">';
         		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.' disabled="disabled">'.$mcast_help_block;
         		print ' <input type="hidden" name="mac" value="'. $address['mac']. '">';
         		print ' </div>';
     		}
 		}
 		else {
-        		print ' <div class="form-group">';
+        		print ' <div class="form-group" style="margin-bottom:0px;">';
         		print ' <input type="text" name="mac" class="ip_addr form-control input-sm" placeholder="'._('MAC address').'" value="'. $address['mac']. '" size="30" '.$delete.'>'. "\n";
         		print ' </div>';
 		}
         print '	</td>'. "\n";
     	print '</tr>'. "\n";
 	}
-	?>
-	<!-- Owner -->
-	<?php
-	if(in_array('owner', $selected_ip_fields)) {
 
-		if(!isset($address['owner'])) {$address['owner'] = "";}
-
-		print '<tr>'. "\n";
-		print '	<td>'._('Owner').'</td>'. "\n";
-		print '	<td>'. "\n";
-		print ' <input type="text" name="owner" class="ip_addr form-control input-sm" id="owner" placeholder="'._('IP address owner').'" value="'. $address['owner']. '" size="30" '.$delete.'>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
-	}
-	?>
-	<!-- switch / port -->
-	<?php
-	if(!isset($address['switch']))  {$address['switch'] = "";}
-	if(!isset($address['port'])) 	{$address['port'] = "";}
-
-	# both are active
-	if(in_array('switch', $selected_ip_fields)) {
-		print '<tr>'. "\n";
-		print '	<td>'._('Device').'</td>'. "\n";
-		print '	<td>'. "\n";
-
-		print '<select name="switch" class="ip_addr form-control input-sm input-w-auto" '.$delete.'>'. "\n";
-		print '<option disabled>'._('Select device').':</option>'. "\n";
-		print '<option value="0" selected>'._('None').'</option>'. "\n";
-
-		// fetch devices
-		$devices = $Tools->fetch_all_objects("devices", "hostname");
-        if ($devices!==false) {
-    		foreach($devices as $device) {
-    			$device = (array) $device;
-    			//check if permitted in this section!
-    			$sections=explode(";", $device['sections']);
-    			if(in_array($subnet['sectionId'], $sections)) {
-    			//if same
-    			if($device['id'] == $address['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }
-    			else 									{ print '<option value="'. $device['id'] .'">'. $device['hostname'] .'</option>'. "\n";			 }
-    			}
-    		}
-		}
-		print '</select>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
-	}
-
-    // location
-    if($User->settings->enableLocations=="1") { ?>
-	<tr>
-		<td><?php print _('Location'); ?></td>
-		<td>
-			<select name="location_item" class="form-control input-sm input-w-auto">
-    			<option value="0"><?php print _("None"); ?></option>
-    			<?php
-                if($locations!==false) {
-        			foreach($locations as $l) {
-        				if($address['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
-        				else					            { print "<option value='$l->id'>$l->name</option>"; }
-        			}
-    			}
-    			?>
-			</select>
-		</td>
-	</tr>
-	<?php
-    }
-
-	# Port
-	if(in_array('port', $selected_ip_fields)) {
-
-		if(!isset($address['port'])) {$address['port'] = "";}
-
-		print '<tr>'. "\n";
-		print '	<td>'._('Port').'</td>'. "\n";
-		print '	<td>'. "\n";
-		print ' <input type="text" name="port"  class="ip_addr form-control input-sm input-w-150"  id="port"   placeholder="'._('Port').'"   value="'. $address['port']. '" size="30" '.$delete.'>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
-	}
-	?>
-	<!-- note -->
-	<?php
-	if(in_array('note', $selected_ip_fields)) {
-
-		if(!isset($address['note'])) {$address['note'] = "";}
-
-		print '<tr>'. "\n";
-		print '	<td>'._('Note').'</td>'. "\n";
-		print '	<td class="note">'. "\n";
-		print ' <textarea name="note" class="ip_addr form-control input-sm" cols="23" rows="2" placeholder="'._('Additional notes about IP address').'" '.$delete.'>'. $address['note'] . '</textarea>'. "\n";
-		print '	</td>'. "\n";
-		print '</tr>'. "\n";
-	}
-	?>
-	<!-- state -->
-	<?php
+	// tag
 	# fetch all states
 	$ip_types = (array) $Addresses->addresses_types_fetch();
 	# default type
@@ -390,12 +314,10 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print '		</select>'. "\n";
 	print '	</td>'. "\n";
 	print '</tr>'. "\n";
-	?>
 
-	<!-- set gateway -->
-	<tr>
-    	<td colspan="2"><hr></td>
-	</tr>
+
+
+	?>
 	<tr>
 		<td><?php print _("Is gateway"); ?></td>
 		<td>
@@ -436,7 +358,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		if ($_POST['action']=="delete" || $_POST['action']=="all-edit") {
     		// check
     		$PowerDNS = new PowerDNS ($Database);
-    		$records  = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
+    		$records  = $PowerDNS->search_records ("name", $address['hostname'], 'name', true);
     		$records2 = $PowerDNS->search_records ("content", $address['ip'], 'content', true);
 
     		if ($records!==false || $records2!==false) {
@@ -456,7 +378,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
         	 	// hostname records
         	 	if ($records!==false) {
             	 	print " <div style='margin-left:60px'>";
-            	 	$dns_records[] = $address['dns_name'];
+            	 	$dns_records[] = $address['hostname'];
             	 	$dns_records[] = "<ul class='submenu-dns'>";
             	 	foreach ($records as $r) {
     					if($r->type!="SOA" && $r->type!="NS")
@@ -507,6 +429,156 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
     	 	}
 	 	}
 	}
+
+
+
+	// divider
+	print "<tr>";
+    print " <td colspan='2'><hr></td>";
+	print "</tr>";
+
+	// customer
+	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+
+		print '<tr>'. "\n";
+		print '	<td>'._('Customer').'</td>'. "\n";
+		print '	<td>'. "\n";
+
+		print '<select name="customer_id" class="ip_addr form-control input-sm input-xs input-w-auto" '.$delete.'>'. "\n";
+		print '<option disabled>'._('Select customer').':</option>'. "\n";
+		print '<option value="0" selected>'._('None').'</option>'. "\n";
+
+		// fetch devices
+		$customers = $Tools->fetch_all_objects("customers", "title");
+        if ($customers!==false) {
+    		foreach($customers as $customer) {
+    			//if same
+    			if($customer->id == $address['customer_id']) 	{ print '<option value="'. $customer->id .'" selected>'. $customer->title .'</option>'. "\n"; }
+    			else 											{ print '<option value="'. $customer->id .'">'. $customer->title .'</option>'. "\n";			 }
+    		}
+		}
+		print '</select>'. "\n";
+		print '	</td>'. "\n";
+		print '</tr>'. "\n";
+	}
+
+	// owner
+	if(in_array('owner', $selected_ip_fields)) {
+
+		if(!isset($address['owner'])) {$address['owner'] = "";}
+
+		// set star if field is required
+		$required = in_array("owner", $required_ip_fields) ? " *" : "";
+
+		print '<tr>'. "\n";
+		print '	<td>'._('Owner').$required.'</td>'. "\n";
+		print '	<td>'. "\n";
+		print ' <input type="text" name="owner" class="ip_addr form-control input-sm" id="owner" placeholder="'._('IP address owner').'" value="'. $address['owner']. '" size="30" '.$delete.'>'. "\n";
+		print '	</td>'. "\n";
+		print '</tr>'. "\n";
+	}
+
+	// switch / port
+	if(!isset($address['switch']))  {$address['switch'] = "";}
+	if(!isset($address['port'])) 	{$address['port'] = "";}
+
+	# both are active
+	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+
+		// set star if field is required
+		$required = in_array("switch", $required_ip_fields) ? " *" : "";
+
+		print '<tr>'. "\n";
+		print '	<td>'._('Device').$required.'</td>'. "\n";
+		print '	<td>'. "\n";
+
+		print '<select name="switch" class="ip_addr form-control input-sm input-w-auto" '.$delete.'>'. "\n";
+		print '<option disabled>'._('Select device').':</option>'. "\n";
+		if($required=="")
+		print '<option value="0" selected>'._('None').'</option>'. "\n";
+
+		// fetch devices
+		$devices = $Tools->fetch_all_objects("devices", "hostname");
+        if ($devices!==false) {
+    		foreach($devices as $device) {
+    			$device = (array) $device;
+    			//check if permitted in this section!
+    			$sections=explode(";", $device['sections']);
+    			if(in_array($subnet['sectionId'], $sections)) {
+    			//if same
+    			if($device['id'] == $address['switch']) { print '<option value="'. $device['id'] .'" selected>'. $device['hostname'] .'</option>'. "\n"; }
+    			else 									{ print '<option value="'. $device['id'] .'">'. $device['hostname'] .'</option>'. "\n";			 }
+    			}
+    		}
+		}
+		print '</select>'. "\n";
+		print '	</td>'. "\n";
+		print '</tr>'. "\n";
+	}
+
+
+
+	# Port
+	if(in_array('port', $selected_ip_fields)) {
+
+		if(!isset($address['port'])) {$address['port'] = "";}
+
+		// set star if field is required
+		$required = in_array("port", $required_ip_fields) ? " *" : "";
+
+		print '<tr>'. "\n";
+		print '	<td>'._('Port').$required.'</td>'. "\n";
+		print '	<td>'. "\n";
+		print ' <input type="text" name="port"  class="ip_addr form-control input-sm input-w-150"  id="port"   placeholder="'._('Port').'"   value="'. $address['port']. '" size="30" '.$delete.'>'. "\n";
+		print '	</td>'. "\n";
+		print '</tr>'. "\n";
+	}
+
+
+    // location
+    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+	<tr>
+		<td>
+			<?php
+			// set star if field is required
+			$required = in_array("location_item", $required_ip_fields) ? " *" : "";
+			print _('Location').$required;
+			?>
+			</td>
+		<td>
+			<select name="location_item" class="form-control input-sm input-w-auto">
+				<?php if($required=="") { ?>
+    			<option value="0"><?php print _("None"); ?></option>
+    			<?php } ?>
+    			<?php
+                if($locations!==false) {
+        			foreach($locations as $l) {
+        				if($address['location'] == $l->id)	{ print "<option value='$l->id' selected='selected'>$l->name</option>"; }
+        				else					            { print "<option value='$l->id'>$l->name</option>"; }
+        			}
+    			}
+    			?>
+			</select>
+		</td>
+	</tr>
+	<?php } ?>
+
+	<!-- note -->
+	<?php
+	if(in_array('note', $selected_ip_fields)) {
+
+		if(!isset($address['note'])) {$address['note'] = "";}
+
+		// set star if field is required
+		$required = in_array("note", $required_ip_fields) ? " *" : "";
+
+		print '<tr>'. "\n";
+		print '	<td>'._('Note').$required.'</td>'. "\n";
+		print '	<td class="note">'. "\n";
+		print ' <textarea name="note" class="ip_addr form-control input-sm" cols="23" rows="2" placeholder="'._('Additional notes about IP address').'" '.$delete.'>'. $address['note'] . '</textarea>'. "\n";
+		print '	</td>'. "\n";
+		print '</tr>'. "\n";
+	}
 	?>
 
 	<tr>
@@ -515,6 +587,24 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	<!-- Custom fields -->
 	<?php
 	if(sizeof($custom_fields) > 0) {
+
+		if($config['split_ip_custom_fields']===true) { ?>
+
+			<style type='text/css'>
+			.popup_w500 {
+				width: 900px;
+				margin-left: -450px;
+			}
+			</style>
+
+				</table>
+			</div>
+			<div class='col-xs-12 col-md-6'>
+				<h4><?php print _("Custom fields"); ?></h4><hr>
+				<table id='editipaddress' class='table table-noborder table-condensed'>
+		<?php
+		}
+
 		# count datepickers
 		$timeP = 0;
 
@@ -528,10 +618,10 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			else						{ $required = ""; }
 
 			# set default value !
-			if ($_POST['action']=="add")	{ $address[$field['name']] = $field['Default']; }
+			if ($_POST['action']=="add" || $_POST['action']=="all-add")	{ $address[$field['name']] = $field['Default']; }
 
 			print '<tr>'. "\n";
-			print '	<td>'. $field['name'] .' '.$required.'</td>'. "\n";
+			print '	<td>'. $Tools->print_custom_field_name ($field['name']) .' '.$required.'</td>'. "\n";
 			print '	<td>'. "\n";
 
 			//set type
@@ -552,8 +642,8 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
+					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
 					print '<script type="text/javascript">';
 					print '$(document).ready(function() {';
 					//date only
@@ -657,6 +747,10 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
 </table>	<!-- end edit ip address table -->
+<?php if($config['split_ip_custom_fields']===true) {
+	print "</div>";
+	print "</div>";
+}?>
 </form>		<!-- end IP address edit form -->
 
 

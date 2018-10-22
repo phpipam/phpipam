@@ -12,9 +12,9 @@ print "<h4>phpIPAM version check</h4><hr>";
 if(!$version = $Tools->check_latest_phpipam_version(true)) { $Result->show("danger", _("Version check failed").'!', false); }
 else {
 	//print result
-	if($User->settings->version == $version) 		{ $Result->show("success", _('Latest version').' ('. $User->settings->version .') '._('already installed').'!', false); }
-	else if ($User->settings->version > $version) 	{ $Result->show("success", _('Development version').' ('. $User->settings->version .') '._('installed! Latest production version is').' '. $version, false);}
-	else 											{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.$User->settings->version."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('here').'</a>.', false); }
+	if(VERSION_VISIBLE == $version) 		{ $Result->show("success", _('Latest version').' ('. VERSION_VISIBLE .') '._('already installed').'!', false); }
+	else if (VERSION_VISIBLE > $version) 	{ $Result->show("success", _('Development version').' ('. VERSION_VISIBLE .') '._('installed! Latest production version is').' '. $version, false);}
+	else 									{ $Result->show("danger",  _('New version of phpipam available').':</b><hr>'._('Installed version').': '.VERSION_VISIBLE."<br>"._('Available version').': '. $version."<br><br>"._('You can download new version').' <a href="https://sourceforge.net/projects/phpipam/files/current/phpipam-'. $version .'.tar/download">'._('here').'</a>.', false); }
 }
 
 # release and commit logs
@@ -22,7 +22,7 @@ print "<ul class='nav nav-tabs log-tabs'>";
 print "<li role='presentation' class='active'><a href='' data-target='changelog'>Change log</a></li>";
 if(!is_null($Tools->phpipam_releases))
 print "<li role='presentation'>				  <a href='' data-target='releaselog'>Release log</a></li>";
-if ($User->settings->version > $version)
+if (VERSION_VISIBLE > $version)
 print "<li role='presentation'>				  <a href='' data-target='gitlog'>Commit log (local)</a></li>";
 print "</ul>";
 
@@ -44,7 +44,7 @@ print "<div class='log-print releaselog' style='display:none'>";
 print "<h4 style='margin-top:40px;'>Release log</h4><hr>";
 foreach ($Tools->phpipam_releases as $r) {
 	// pre-release ?
-	$prerelease = !is_numeric(str_replace("Version", "", $r->title)) ? "<span class='label label-danger'>Prerelease</span>" : "";
+	$prerelease = !is_numeric(str_replace(array("Version", "."), "", $r->title)) ? "<span class='label label-danger'>Prerelease</span>" : "";
 
 	// title
 	print "<h5><i class='fa fa-angle-double-right'></i> $r->title $prerelease</h5>";
@@ -53,14 +53,14 @@ foreach ($Tools->phpipam_releases as $r) {
 	print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime($r->updated))."</span> ";
 	print "<div style='padding-top:10px;'>$r->content</div>";
 	// tag
-	print "<a class='btn btn-xs btn-default' href='http://github.com".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
+	print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
 	print "</div>";
 }
 print "</div>";
 }
 
 # commit log for devel
-if ($User->settings->version > $version) {
+if (VERSION_VISIBLE > $version) {
 
 	print "<div class='log-print gitlog' style='display:none'>";
 
@@ -99,7 +99,7 @@ if ($User->settings->version > $version) {
 			// date
 			print "<div style='padding-left:20px;margin-bottom:20px;'>";
 			print "$out[author] <span class='text-muted'>(pushed on $out[date])</span>";
-			print "<div style='padding:10px;background:white;max-width:400px;border-radius:6px;border:1px solid #ddd;'>$lines</div>";
+			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>$lines</div>";
 			// tag
 			print "<a class='btn btn-xs btn-default' style='margin-top:3px;' href='https://github.com/phpipam/phpipam/commit/$out[commit]' target='_blank'>View</a>";
 			print "</div>";
@@ -108,4 +108,3 @@ if ($User->settings->version > $version) {
 
 	print "</div>";
 }
-?>

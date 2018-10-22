@@ -5,17 +5,19 @@
  *******************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+$User->check_module_permissions ("vlan", 3, true, true);
 
 # fake error
 print "<div class='alert-danger hidden'></div>";
@@ -171,8 +173,8 @@ else {
     			elseif($field['type'] == "date" || $field['type'] == "datetime") {
     				// just for first
     				if($timeP==0) {
-    					print '<link rel="stylesheet" type="text/css" href="css/'.SCRIPT_PREFIX.'/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/'.SCRIPT_PREFIX.'/bootstrap-datetimepicker.min.js"></script>';
+    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
+    					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
     					print '<script type="text/javascript">';
     					print '$(document).ready(function() {';
     					//date only
@@ -255,4 +257,3 @@ print "</div>";
 
 # show debug?
 if($_POST['debug']==1) 				{ print "<pre>"; print_r($debug); print "</pre>"; }
-?>

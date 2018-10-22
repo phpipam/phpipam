@@ -157,7 +157,9 @@ class Addresses_controller extends Common_api_functions  {
 	 *      - /addresses/{ip}/{subnetId}/                // Returns address from subnet
 	 *		- /addresses/search/{ip_address}/			 // searches for addresses in database, returns multiple if found
 	 *		- /addresses/search_hostname/{hostname}/     // searches for addresses in database by hostname, returns multiple if found
+	 *		- /addresses/search_linked/{value}/          // searches in database for addresses linked by customer defined "Link addresses" field, returns multiple if found
 	 *		- /addresses/search_hostbase/{hostbase}/     // searches for addresses by leading substring (base) of hostname, returns ordered multiple
+	 *		- /addresses/search_mac/{mac}/   		     // searches for addresses by mac, returns ordered multiple
 	 *      - /addresses/first_free/{subnetId}/          // returns first available address (subnetId can be provided with parameters)
 	 *		- /addresses/custom_fields/                  // custom fields
 	 *		- /addresses/tags/						     // all tags
@@ -259,6 +261,15 @@ class Addresses_controller extends Common_api_functions  {
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses/tags", true, false)); }
 			}
 		}
+		// Search all addresses matching custom link_field field's value
+		elseif($this->_params->id=="search_linked") {
+			// 
+			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $this->Addresses->Log->settings->link_field, $this->_params->id2);
+			// result
+				if($result===false)						{ $this->Response->throw_exception(200, 'No addresses found'); }
+				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)); }
+		}
+		//
 		// id not set
 		elseif (!isset($this->_params->id)) {
 														{ $this->Response->throw_exception(400, 'Address ID is required'); }
@@ -305,7 +316,7 @@ class Addresses_controller extends Common_api_functions  {
 		}
         // search host ?
         elseif (@$this->_params->id=="search_hostname") {
-            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "dns_name", $this->_params->id2);
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "hostname", $this->_params->id2);
             // check result
             if($result===false)                         { $this->Response->throw_exception(200, 'Hostname not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
@@ -313,13 +324,19 @@ class Addresses_controller extends Common_api_functions  {
         // search host base (initial substring), return sorted by name
         elseif (@$this->_params->id=="search_hostbase") {
             $target = $this->_params->id2."%";
-            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "dns_name", $target, "dns_name", true, true);
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "hostname", $target, "hostname", true, true);
             // check result
             if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
         }
+		 elseif (@$this->_params->id=="search_mac") {
+            $this->_params->id2 = $this->reformat_mac_address ($this->_params->id2, 1);
+            $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "mac", $this->_params->id2, "mac");
+            // check result
+            if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
+            else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
 		// false
-		else											{  $this->Response->throw_exception(400, "Invalid Id"); }
+		} else											{  $this->Response->throw_exception(400, "Invalid Id"); }
 	}
 
 
@@ -512,7 +529,7 @@ class Addresses_controller extends Common_api_functions  {
 		// delete pdns records ?
 		if(isset($this->_params->remove_dns)) {
 			$values['remove_all_dns_records'] = 1;
-			$values['dns_name']				  = $this->old_address->dns_name;
+			$values['hostname']				  = $this->old_address->hostname;
 			$values['ip_addr']				  = $this->Tools->transform_address($this->old_address->ip, "dotted");
 			$values['PTR']				  	  = $this->old_address->PTR;
 			$values['subnetId']				  = $this->old_address->subnetId;
@@ -579,6 +596,23 @@ class Addresses_controller extends Common_api_functions  {
 	}
 
 	/**
+	 * This method will be used if subnetId is not present and will try to
+	 * find it in system itself.
+	 *
+	 * It will only take into consideration subnets that do not have underlying
+	 * slave subnets.
+	 *
+	 * In case more than 1 subnet is found error will be thrown.
+	 *
+	 * @method autosearch_subnet_id
+	 *
+	 * @return void
+	 */
+	private function autosearch_subnet_id () {
+
+	}
+
+	/**
 	 * Validates address on creation
 	 *
 	 * @access public
@@ -593,11 +627,17 @@ class Addresses_controller extends Common_api_functions  {
 
 		// fetch subnet
 		$subnet = $this->subnet_details;
-		// formulate CIDR
-		$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
+		// check if it is not folder
+		if($subnet->isFolder!="1") {
+			// formulate CIDR
+			$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
 
-		// validate address, that it is inside subnet, not subnet/broadcast
-		$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
+			// validate address, that it is inside subnet, not subnet/broadcast
+			$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
+		}
+		else {
+			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)		{ $this->Response->throw_exception(400, "Invalid address"); }
+		}
 
     	//validate and normalize MAC address
     	if(strlen($this->_params->mac)>0) {
@@ -652,5 +692,3 @@ class Addresses_controller extends Common_api_functions  {
 		else { $this->_params->state = 2; }
 	}
 }
-
-?>

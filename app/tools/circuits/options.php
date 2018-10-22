@@ -16,24 +16,18 @@ if($User->is_admin(false)) {
 	$html[] = "<hr>";
 
 	// options for circuits
-	$html[] = _("Here you can manage options for circuit types").":<hr>";
+	$html[] = _("Here you can manage options for circuit types").":<br>";
 
 	# get all available set options
-	$circuit_options      = $Database->getFieldInfo ("circuits", "type");
-	# parse and remove type
-	$circuit_option_values      = explode("'", str_replace(array("(", ")", ","), "", $circuit_options->Type));
-	unset($circuit_option_values[0]);
-	// reindex and remove empty
-	$circuit_option_values      = array_values(array_filter($circuit_option_values));
+	$circuit_options = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 
-
-    foreach($circuit_option_values as $v) {
-    $html[] = "<a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='delete' data-type='type' data-value='$v' href='' rel='tooltip' data-placement='right' title='Remove option'>";
-    $html[] = "    <span class='badge badge1'><i class='fa fa-minus alert-danger'></i> $v</span>";
-    $html[] = "</a><br>";
+    foreach($circuit_options as $v) {
+	$html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='delete' data-type='type' data-op_id='$v->id' data-value='$v->ctname' data-color='$v->ctcolor' data-pattern='$v->ctpattern' href='' rel='tooltip' data-placement='right' title='Remove option'>";
+	$html[] = "    <span class='badge badge1' style='color:white;background:$v->ctcolor !important'><i class='fa fa-remove'></i> $v->ctname ($v->ctpattern Line)</span>";
+	$html[] = "</a><br>";
     }
-    $html[] = "<hr>";
-    $html[] = "<a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='add' data-type='type' data-value=''  href='' rel='tooltip' data-placement='right'  title='Add option'>";
+    $html[] = "<br>";
+    $html[] = " <a class='open_popup' data-script='app/admin/circuits/edit-options.php' data-action='add' data-type='type' data-op_id='' data-value='' data-color=''  data-pattern=''  href='' rel='tooltip' data-placement='right'  title='Add option'>";
     $html[] = "    <span class='badge badge1 alert-success'><i class='fa fa-plus'></i> "._('Add option')."</span>";
     $html[] = "</a>";
 }
@@ -50,9 +44,9 @@ print implode("\n", $html);
 /* fetch all custom fields */
 $custom_tables = array(
 						"circuitProviders" => "Circuit providers",
-						"circuits" 		   => "Circuits"
+						"circuits"         => "Circuits",
+						"circuitsLogical"  => "Logical circuits"
 						);
-
 # create array
 foreach($custom_tables as $k=>$f) {
 	$custom_fields[$k]				= $Tools->fetch_custom_fields($k);
@@ -131,7 +125,7 @@ foreach($custom_fields as $k=>$cf) {
 			if (( ($m+1) != $size) ) 	{ print "<td style='width:10px;'><button class='btn btn-xs btn-default down' data-direction='down' data-table='$table' rel='tooltip' title='Move down' data-fieldname='".$custom_fields_numeric[$table][$m]['name']."' data-nextfieldname='".$custom_fields_numeric[$table][$m+1]['name']."'><i class='fa fa-chevron-down'></i></button></td>";	}
 			else 						{ print "<td style='width:10px;'></td>";}
 
-			print "<td class='name'>$f[name]</td>";
+			print "<td class='name'>".$Tools->print_custom_field_name ($f['name'])."</td>";
 
 			# description
 			print "<td>$f[Comment]</td>";

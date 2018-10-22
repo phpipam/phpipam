@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "user");
+$csrf = $User->Crypto->csrf_cookie ("create", "user");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -200,6 +200,23 @@ $(document).ready(function(){
 		<td class="info2"><?php print _('Select language'); ?></td>
 	</tr>
 
+	<!-- select theme -->
+	<tr>
+		<td><?php print _('Theme'); ?></td>
+		<td>
+			<select name="theme" class="form-control input-sm input-w-auto">
+				<option value="default"><?php print _("Default"); ?></option>
+				<?php
+				foreach($User->themes as $theme) {
+					if($theme==$user['theme'])	{ print "<option value='$theme' selected>$theme</option>"; }
+					else						{ print "<option value='$theme'		    >$theme</option>"; }
+				}
+				?>
+			</select>
+		</td>
+		<td class="info2"><?php print _('Select UI theme'); ?></td>
+	</tr>
+
     <!-- send notification mail -->
     <tr>
     	<td><?php print _('Notification'); ?></td>
@@ -238,13 +255,19 @@ $(document).ready(function(){
 	</tr>
 	</tbody>
 
+
+
+
+
 	<!-- groups -->
-	<tbody>
+	<?php
+	print $user['role']=="Administrator" ?  "<tbody class='module_permissions' style='display:none'>" : "<tbody class='module_permissions'>";
+	?>
 	<tr>
-		<td colspan="3"><hr></td>
+		<td colspan="3"><hr><h5><strong><?php print _('Groups'); ?>:</strong></h5></td>
 	</tr>
 	<tr>
-		<td><?php print _('Groups'); ?></td>
+		<td style="vertical-align: top !important"></td>
 		<td class="groups">
 		<?php
 		//print groups
@@ -272,58 +295,72 @@ $(document).ready(function(){
 		</td>
 		<td class="info2"><?php print _('Select to which groups the user belongs to'); ?></td>
 	</tr>
+	</tbody>
 
-	<!-- vlans -->
-	<tr>
-		<td colspan="3"><hr></td>
-	</tr>
-	<tr>
-    	<td><?php print _("VLANs / VRFs"); ?></td>
-    	<td>
-            <input type="checkbox" class="input-switch" value="Yes" name="editVlan" <?php if($user['editVlan'] == "Yes") print 'checked'; ?>>
-    	</td>
-		<td class="info2"><?php print _('Select to allow user to manage VLANs and VRFs'); ?></td>
-	</tr>
 
-	<!-- pdns -->
-    <?php if ($User->settings->enablePowerDNS==1) { ?>
-	<tr>
-    	<td><?php print _("PowerDNS"); ?></td>
-    	<td>
-            <input type="checkbox" class="input-switch" value="Yes" name="pdns" <?php if($user['pdns'] == "Yes") print 'checked'; ?>>
-    	</td>
-		<td class="info2"><?php print _('Select to allow user to create DNS records'); ?></td>
-	</tr>
-    <?php } ?>
 
-	<!-- circuits -->
-    <?php if ($User->settings->enableCircuits==1) { ?>
-	<tr>
-    	<td><?php print _("Manage Circuits"); ?></td>
-    	<td>
-            <input type="checkbox" class="input-switch" value="Yes" name="editCircuits" <?php if($user['editCircuits'] == "Yes") print 'checked'; ?>>
-    	</td>
-		<td class="info2"><?php print _('Select to allow user to manage circuits'); ?></td>
-	</tr>
-    <?php } ?>
 
-	<!-- pstn -->
-    <?php if ($User->settings->enablePSTN==1) { ?>
-	<tr>
-    	<td><?php print _("PSTN");?></td>
-    	<td>
-        	<select class="form-control input-sm input-w-auto" name="pstn">
-            <?php
-            foreach (array(0,1,2,3) as $p) {
-                $selected = $p==$user['pstn'] ? "selected" : "";
-                print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
-            }
-            ?>
-        	</select>
-    	</td>
-		<td class="info2"><?php print _('Select to allow user to manage PSTN numbers'); ?></td>
-	</tr>
-    <?php } ?>
+	<?php
+
+	print $user['role']=="Administrator" ?  "<tbody class='module_permissions' style='display:none'>" : "<tbody class='module_permissions'>";
+
+	// Divider
+	print '<tr>';
+	print '	<td colspan="3"><hr><h5><strong>'._("Module permissions").':</strong></h5></td>';
+	print '</tr>';
+
+	// Modules permissions
+	$perm_modules = [];
+	// VLAN
+	$perm_modules["perm_vlan"] = "VLAN";
+	// VRF
+	$perm_modules["perm_vrf"]  = "VRF";
+	// powerDNS
+	if ($User->settings->enablePowerDNS==1)
+	$perm_modules["perm_pdns"] = "PowerDNS";
+	// devices
+	$perm_modules["perm_devices"] = "Devices";
+	// Racks
+	if ($User->settings->enableRACK==1)
+	$perm_modules["perm_racks"] = "Racks";
+	// Circuits
+	if ($User->settings->enableCircuits==1)
+	$perm_modules["perm_circuits"] = "Circuits";
+	// NAT
+	if ($User->settings->enableNAT==1)
+	$perm_modules["perm_nat"] = "NAT";
+	// Customers
+	if ($User->settings->enableCustomers==1)
+	$perm_modules["perm_customers"] = "Customers";
+	// Locations
+	if ($User->settings->enableLocations==1)
+	$perm_modules["perm_locations"] = "Locations";
+	// PSTN
+	if ($User->settings->enablePSTN==1)
+	$perm_modules["perm_pstn"] = "PSTN";
+
+	// get permissions
+	$module_permissions = json_decode($user['module_permissions'], true);
+
+	// loop
+	foreach ($perm_modules as $key=>$name) {
+		// print row
+		print "<tr>";
+		print "	<td>"._($name)."</td>";
+		print "	<td>";
+		print "		<select class='form-control input-sm input-w-auto' name='$key'>";
+        foreach (array(0,1,2,3) as $p) {
+			$selected = $p==$module_permissions[str_replace("perm_","",$key)] ? "selected" : "";
+            print "<option value='$p' $selected>".$Subnets->parse_permissions ($p)."</option>";
+        }
+		print "		</select>";
+		print "	</td>";
+		print "	<td class='info2'>"._($name.' module permissions')."</td>";
+		print "</tr>";
+	}
+
+	?>
+	</tbody>
 
 	<!-- Custom -->
 	<?php
@@ -349,7 +386,6 @@ $(document).ready(function(){
 		}
 	}
 	?>
-	</tbody>
 
 
 </table>
@@ -362,9 +398,11 @@ $(document).ready(function(){
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editUserSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>
+		<button class='btn btn-sm btn-default submit_popup <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>' data-script="app/admin/users/edit-result.php" data-result_div="usersEditResult" data-form='usersEdit'>
+			<i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?>
+		</button>
 	</div>
 
 	<!-- Result -->
-	<div class="usersEditResult"></div>
+	<div id="usersEditResult"></div>
 </div>

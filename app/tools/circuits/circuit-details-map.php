@@ -1,5 +1,8 @@
 <?php
 
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
+
 // title
 print "<h4>"._('Map')."</h4>";
 print "<hr>";
@@ -63,12 +66,12 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
                     $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
 
                     $html[] = "map.addMarker({";
-                    $html[] = " title: '$location->name',";
+                    $html[] = " title: '". addslashes($location->name). "',";
                     $html[] = " lat: '$location->lat',";
                     $html[] = " lng: '$location->long',";
-                    $html[] = $k==0 ? " icon: 'css/".SCRIPT_PREFIX."/images/red-dot.png'," : " icon: 'css/".SCRIPT_PREFIX."/images/blue-dot.png',";
+                    $html[] = $k==0 ? " icon: 'css/images/red-dot.png'," : " icon: 'css/images/blue-dot.png',";
                     $html[] = " infoWindow: {";
-                    $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>$location->name</a></h5>$location->description'";
+                    $html[] = "    content: '<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". addslashes($location->name). "</a></h5>$location->description'";
                     $html[] = "}";
                     $html[] = "});";
                 }

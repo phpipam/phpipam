@@ -578,7 +578,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain)>0 ? $domain : false;
+        return !is_null($domain) ? $domain : false;
     }
 
     /**
@@ -600,7 +600,7 @@ class PowerDNS extends Common_functions {
         $this->domains_cache[$domain->id] = $domain;
 
         # result
-        return sizeof($domain[0])>0 ? $domain[0] : false;
+        return is_object(($domain[0])) ? $domain[0] : false;
     }
 
     /**
@@ -709,7 +709,7 @@ class PowerDNS extends Common_functions {
             return false;
         }
         # result
-        return sizeof($record)>0 ? $record : false;
+        return !is_null($record) ? $record : false;
     }
 
     /**
@@ -1223,6 +1223,11 @@ class PowerDNS extends Common_functions {
             { return $name; }
         }
 
+        // DNS wildcard records are OK (https://tools.ietf.org/html/rfc4592#section-2.1.1)
+        if (preg_match("/^\*\..*$/", $name) && $this->validate_hostname(substr($name, 2))) {
+            return $name;
+        }
+
         // for all other record types null is ok, otherwise URI is required
         if (strlen($name)>0 && !$this->validate_hostname($name)){ $this->Result->show("danger", _("Invalid record name"), true); }
         // ok
@@ -1440,7 +1445,7 @@ class PowerDNS extends Common_functions {
      */
     public function get_ptr_zone_name_v4 ($ip, $mask) {
         // check mask to see how many IP bits to remove
-        $bits = $mask<23 ? 2 : 1;
+        $bits = $mask<24 ? 2 : 1;
 
         // to array
         $zone = explode(".", $ip);

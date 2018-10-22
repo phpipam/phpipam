@@ -5,7 +5,7 @@
  *************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -22,7 +22,7 @@ $User->check_maintaneance_mode ();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
-$User->csrf_cookie ("validate", "apiedit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie ("validate", "apiedit", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 /* checks */
 $error = array();
@@ -54,16 +54,18 @@ if(sizeof($error) > 0) {
 }
 else {
 	# create array of values for modification
-	$values = array("id"=>@$_POST['id'],
-					"app_id"=>$_POST['app_id'],
-					"app_code"=>@$_POST['app_code'],
-					"app_permissions"=>@$_POST['app_permissions'],
-					"app_security"=>@$_POST['app_security'],
-					"app_lock"=>@$_POST['app_lock'],
-					"app_lock_wait"=>@$_POST['app_lock_wait'],
-					"app_nest_custom_fields"=>@$_POST['app_nest_custom_fields'],
-					"app_show_links"=>@$_POST['app_show_links'],
-					"app_comment"=>@$_POST['app_comment']);
+	$values = array(
+					"id"                     =>@$_POST['id'],
+					"app_id"                 =>$_POST['app_id'],
+					"app_code"               =>@$_POST['app_code'],
+					"app_permissions"        =>@$_POST['app_permissions'],
+					"app_security"           =>@$_POST['app_security'],
+					"app_lock"               =>@$_POST['app_lock'],
+					"app_lock_wait"          =>@$_POST['app_lock_wait'],
+					"app_nest_custom_fields" =>@$_POST['app_nest_custom_fields'],
+					"app_show_links"         =>@$_POST['app_show_links'],
+					"app_comment"            =>@$_POST['app_comment']
+					);
 
 	# execute
 	if(!$Admin->object_modify("api", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("API $_POST[action] error"), true); }

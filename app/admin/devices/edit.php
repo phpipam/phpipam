@@ -5,20 +5,27 @@
  ************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("devices", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("devices", 3, true, true);
+}
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "device");
+$csrf = $User->Crypto->csrf_cookie ("create", "device");
 
 # strip tags - XSS
 $_POST = $User->strip_input_tags ($_POST);
@@ -76,7 +83,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
    $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
 
    // load dropdown
-   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val()}, function(data) {
+   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
    		$('tbody#rack').html(data);
    });
 });
@@ -85,7 +92,6 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 
 <!-- header -->
 <div class="pHeader"><?php print ucwords(_("$_POST[action]")); ?> <?php print _('device'); ?></div>
-
 
 <!-- content -->
 <div class="pContent">
@@ -97,7 +103,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('Name'); ?></td>
 		<td>
-			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $device['hostname']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="hostname" class="form-control input-sm" placeholder="<?php print _('Hostname'); ?>" value="<?php if(isset($device['hostname'])) print $Tools->strip_xss($device['hostname']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -105,7 +111,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('IP address'); ?></td>
 		<td>
-			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $device['ip_addr']; ?>" <?php print $readonly; ?>>
+			<input type="text" name="ip_addr" class="form-control input-sm" placeholder="<?php print _('IP address'); ?>" value="<?php if(isset($device['ip_addr'])) print $Tools->strip_xss($device['ip_addr']); ?>" <?php print $readonly; ?>>
 		</td>
 	</tr>
 
@@ -126,7 +132,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	</tr>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -146,7 +152,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<?php } ?>
 
     <!-- Rack -->
-    <?php if($User->settings->enableRACK=="1") { ?>
+    <?php if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>0) { ?>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
@@ -160,21 +166,25 @@ $('#switchManagementEdit select[name=rack]').change(function() {
             <select name="rack" class="form-control input-sm">
                 <option value="0"><?php print _("None"); ?></option>
                 <?php
-                foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
-    				else							{ print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                if ($Racks->all_racks!==false) {
+                    foreach ($Racks->all_racks as $r) {
+                        if($device['rack'] == $r->id)   { print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
+                        else                            { print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                    }
                 }
                 ?>
             </select>
         </td>
     </tr>
 
+	<?php if ($User->get_module_permissions ("racks")>0) { ?>
     <tbody id="rack" style="<?php print $display; ?>">
 		<?php include ("edit-rack-dropdown.php"); ?>
     </tbody>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
+    <?php } ?>
     <?php } ?>
 
 	<!-- Description -->
@@ -210,12 +220,11 @@ $('#switchManagementEdit select[name=rack]').change(function() {
     		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
 			print "<tr>";
-			print "	<td>".ucwords($field['name'])." ".$custom_input['required']."</td>";
+			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
 			print "	<td>".$custom_input['field']."</td>";
 			print "</tr>";
 		}
 	}
-
 	?>
 
 	<!-- Sections -->

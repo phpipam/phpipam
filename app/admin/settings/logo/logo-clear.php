@@ -4,7 +4,7 @@
  *************************************************/
 
  /* functions */
-require( dirname(__FILE__) . '/../../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -15,7 +15,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 // define file
-$file = dirname(__FILE__)."/../../../../css/".SCRIPT_PREFIX."/images/logo/logo.png";
+$file = dirname(__FILE__)."/../../../../css/images/logo/logo.png";
 
 # try to remove logo
 try {
@@ -30,5 +30,3 @@ try {
 catch(Exception $e) {
     $Result->show("danger", "Cannot remove logo file ".$file." - error ".$e->getMessage());
 }
-
-?>

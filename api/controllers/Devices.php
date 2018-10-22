@@ -54,7 +54,7 @@ class Devices_controller extends Common_api_functions {
      *
      * @var mixed
      */
-    protected $default_search_fields = ['hostname','ip_addr','description'];
+    protected $default_search_fields = array('hostname','ip_addr','description');
 
 
     /**
@@ -344,7 +344,7 @@ class Devices_controller extends Common_api_functions {
                 $this->Response->throw_exception(400, 'Invalid devicetype identifier');
             }
             // check
-            if ($this->Tools->fetch_object('deviceTypes', 'id', $this->_params->type) === false) {
+            if ($this->Tools->fetch_object('deviceTypes', 'tid', $this->_params->type) === false) {
                 $this->Response->throw_exception(400, 'Device type does not exist');
             }
         }

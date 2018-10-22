@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vlan", 1, true, false);
 
 # fetch all subnets in VLAN in this section
 $slaves = $Subnets->fetch_vlan_subnets ($_GET['subnetId'], $_GET['section']);
@@ -120,4 +122,3 @@ else {
 	}
 	print '</table>'. "\n";
 }
-?>

@@ -5,7 +5,7 @@
  *********************************/
 
 # include required scripts
-require( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
@@ -42,24 +42,24 @@ $worksheet_name = "VRFs";
 $worksheet =& $workbook->addWorksheet($worksheet_name);
 $worksheet->setInputEncoding("utf-8");
 
-$lineCount = 0;
-$rowCount = 0;
+$curRow = 0;
+$curColumn = 0;
 
 //write headers
 if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('Name') ,$format_header);
-	$rowCount++;
+	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
+	$curColumn++;
 }
 if( (isset($_GET['rd'])) && ($_GET['rd'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('RD') ,$format_header);
-	$rowCount++;
+	$worksheet->write($curRow, $curColumn, _('RD') ,$format_header);
+	$curColumn++;
 }
 if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
-	$worksheet->write($lineCount, $rowCount, _('Description') ,$format_header);
-	$rowCount++;
+	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
+	$curColumn++;
 }
 
-$lineCount++;
+$curRow++;
 
 //write all VRF entries
 foreach ($all_vrfs as $vrf) {
@@ -67,26 +67,26 @@ foreach ($all_vrfs as $vrf) {
 	$vrf = (array) $vrf;
 
 	//reset row count
-	$rowCount = 0;
+	$curColumn = 0;
 
 	if( (isset($_GET['name'])) && ($_GET['name'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $vrf['name'], $format_text);
-		$rowCount++;
+		$worksheet->write($curRow, $curColumn, $vrf['name'], $format_text);
+		$curColumn++;
 	}
 	if( (isset($_GET['rd'])) && ($_GET['rd'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $vrf['rd'], $format_text);
-		$rowCount++;
+		$worksheet->write($curRow, $curColumn, $vrf['rd'], $format_text);
+		$curColumn++;
 	}
 	if( (isset($_GET['description'])) && ($_GET['description'] == "on") ) {
-		$worksheet->write($lineCount, $rowCount, $vrf['description'], $format_text);
-		$rowCount++;
+		$worksheet->write($curRow, $curColumn, $vrf['description'], $format_text);
+		$curColumn++;
 	}
 
-	$lineCount++;
+	$curRow++;
 }
 
 //new line
-$lineCount++;
+$curRow++;
 
 // sending HTTP headers
 $workbook->send($filename);

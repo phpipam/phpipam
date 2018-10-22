@@ -5,7 +5,7 @@
  *********************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
 $Database 	= new Database_PDO;
@@ -19,7 +19,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # create csrf token
-$csrf = $User->csrf_cookie ("create", "permissions");
+$csrf = $User->Crypto->csrf_cookie ("create", "permissions");
 
 
 # ID must be numeric
@@ -119,7 +119,8 @@ $('.input-switch').on('switchChange.bootstrapSwitch', function (e, data) {
     <tr>
         <td><?php print _('Propagate changes'); ?></td>
         <td>
-            <input type="checkbox" style="margin-left: 0px; padding-left: 0px;" name="set_inheritance" class="input-switch" value="Yes" checked="checked">
+        	<?php $checked = $User->settings->permissionPropagate=="1" ? "checked" : ""; ?>
+            <input type="checkbox" style="margin-left: 0px; padding-left: 0px;" name="set_inheritance" class="input-switch" value="Yes" <?php print $checked; ?>>
         </td>
     </tr>
     <tr class="warning2">

@@ -5,7 +5,7 @@
  *************************************************/
 
 /* functions */
-require( dirname(__FILE__) . '/../../../functions/functions.php');
+require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # classes
 $Database 	= new Database_PDO;
@@ -55,6 +55,8 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	# set standard fields
 	$standard_fields = array ("ip address","ip state","description","hostname","fw_object","mac","owner","device","port","notes", "location");
+
+	if (!is_writeable( dirname(__FILE__) . '/upload' )) $Result->show("danger", _("'app/subnets/import-subnet/upload' folder is not writeable."), false, false);
 	?>
 
 	<!-- notes -->
@@ -89,9 +91,9 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 
     <!-- jQuery File Upload Dependencies -->
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.ui.widget.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.iframe-transport.js"></script>
-    <script src="js/<?php print SCRIPT_PREFIX; ?>/uploader/jquery.fileupload.js"></script>
+    <script src="js/uploader/jquery.ui.widget.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js/uploader/jquery.iframe-transport.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+    <script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
     <script type="text/javascript">

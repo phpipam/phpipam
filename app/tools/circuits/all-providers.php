@@ -12,6 +12,9 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("circuits", 1, true, false);
+
 # filter circuits or fetch print all?
 $circuit_providers = $Tools->fetch_all_objects("circuitProviders", "name");
 
@@ -31,13 +34,13 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->is_admin(false)) {
+	if($User->get_module_permissions ("circuits")>2) {
     print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>";
 	}
 print "</div>";
 
 # table
-print '<table id="circuitManagement" class="table sorted table-striped table-top">';
+print '<table id="circuitManagement" class="table sorted table-striped table-top" data-cookie-id-table="circuit_providers">';
 
 #headers
 print "<thead>";
@@ -49,7 +52,7 @@ print "	<th><span rel='tooltip' data-container='body' title='"._('Sort by Contac
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." $field[name]'>".$field['name']."</th>";
+			print "<th class='hidden-sm hidden-xs hidden-md'><span rel='tooltip' data-container='body' title='"._('Sort by')." ".$Tools->print_custom_field_name ($field['name'])."'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			$colspanCustom++;
 		}
 	}
@@ -72,7 +75,7 @@ else {
 		$cnt = $Database->numObjectsFilter("circuits", "provider", $provider->id);
 		//print details
 		print '<tr>'. "\n";
-		print "	<td><strong><a href='".create_link($_GET['page'],"circuits","providers",$provider->id)."'>$provider->name</a></strong></td>";
+		print "	<td><strong><a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits","providers",$provider->id)."'>$provider->name</a></strong></td>";
 		print "	<td>$provider->description</td>";
 		print "	<td>$cnt "._("Circuits")."</td>";
 		print " <td>$provider->contact</td>";
@@ -92,15 +95,14 @@ else {
 		print "<td class='actions'>";
 		print "	<div class='btn-group'>";
 		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits","providers",$provider->id)."''><i class='fa fa-eye'></i></a>";
-		if($User->is_admin(false)||$User->user->editCircuits=="Yes") {
+		if($User->get_module_permissions ("circuits")>1)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'><i class='fa fa-pencil'></i></a>";
+		if($User->get_module_permissions ("circuits")>2)
 		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'><i class='fa fa-times'></i></a>";
-		}
 		print "	</div>";
 		print "</td>";
 
 		print '</tr>';
-
 	}
 }
 

@@ -99,6 +99,16 @@ class phpipamSNMP extends Common_functions {
 	 */
 	private $snmp_timeout = '500';
 
+    /**
+    * Object containing SNMPv3 Security session parameters
+    *
+    * (default value: false)
+    *
+    * @var mixed
+    * @access private
+    */
+    private $snmpv3_security = false;
+
 	/**
 	 * array ob objects of SNMP methods
 	 *
@@ -249,6 +259,8 @@ class phpipamSNMP extends Common_functions {
     	$this->set_snmp_port ($device->snmp_port);
     	# set timeout
     	$this->set_snmp_timeout ($device->snmp_timeout);
+        # set SNMPv3 security
+        $this->set_snmpv3_security ($device);
 	}
 
 	/**
@@ -309,7 +321,7 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_version ($version = 1) {
-    	if ($version==1 || $version==2) {
+    	if ($version==1 || $version==2 || $version==3) {
     	    $this->snmp_version = $version;
     	}
 	}
@@ -340,6 +352,27 @@ class phpipamSNMP extends Common_functions {
         }
 	}
 
+    /**
+     * Sets SNMPv3 Security parameters
+     *
+     * @access private
+     * @param mixed $timeout
+     * @return void
+     */
+    private function set_snmpv3_security ($device) {
+        # only for v3
+        if($device->snmp_version == "3") {
+            $this->snmpv3_security                  = new StdClass();
+            $this->snmpv3_security->sec_level       = $device->snmp_v3_sec_level;
+            $this->snmpv3_security->auth_proto      = $device->snmp_v3_auth_protocol;
+            $this->snmpv3_security->auth_pass       = $device->snmp_v3_auth_pass;
+            $this->snmpv3_security->priv_proto      = $device->snmp_v3_priv_protocol;
+            $this->snmpv3_security->priv_pass       = $device->snmp_v3_priv_pass;
+            $this->snmpv3_security->contextName     = $device->snmp_v3_ctx_name;
+            $this->snmpv3_security->contextEngineID = $device->snmp_v3_ctx_engine_id;
+        }
+    }
+
 
 
 
@@ -360,7 +393,16 @@ class phpipamSNMP extends Common_functions {
         if ($this->snmp_session === false) {
             if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
             elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
-            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
+            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout);
+                                                  $this->snmp_session->setSecurity(
+                                                                                   $this->snmpv3_security->sec_level,
+                                                                                   $this->snmpv3_security->auth_proto,
+                                                                                   $this->snmpv3_security->auth_pass,
+                                                                                   $this->snmpv3_security->priv_proto,
+                                                                                   $this->snmpv3_security->priv_pass,
+                                                                                   $this->snmpv3_security->contextName,
+                                                                                   $this->snmpv3_security->contextEngineID
+                                                                                   );}
             else                                { throw new Exception ("Invalid SNMP version"); }
         }
         // set parameters

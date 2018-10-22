@@ -7,7 +7,7 @@ $(document).ready(function() {
 </script>
 
 
-<table id="logs" class="table table-condensed table-hover table-top" style="margin-top:10px;">
+<table id="logs" class="table sorted nosearch nopagination table-condensed table-hover table-top" style="margin-top:10px;" data-cookie-id-table="show_logs">
 
 <?php
 
@@ -19,7 +19,7 @@ $(document).ready(function() {
 if(!is_object($User)) {
 
 	/* functions */
-	require( dirname(__FILE__) . '/../../../functions/functions.php');
+	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 	# initialize user object
 	$Database 	= new Database_PDO;
@@ -41,14 +41,18 @@ if ( empty($_POST['Informational']) && empty($_POST['Notice']) && empty($_POST['
 ?>
 
 <!-- print headers -->
+<thead>
 <tr>
     <th class="date" style="width:130px;white-space:nowrap"><?php print _('Date'); ?></th>
     <th><?php print _('Severity'); ?></th>
     <th><?php print _('Username'); ?></th>
     <th><?php print _('IP address'); ?></th>
-    <th colspan="2"><?php print _('Event'); ?></th>
+    <th><?php print _('Event'); ?></th>
+    <th></th>
 </tr>
+</thead>
 
+<tbody>
 <!-- print logs -->
 <?php
 
@@ -109,7 +113,7 @@ foreach ($logs as $log) {
 	print '</tr>'. "\n";
 }
 ?>
-
+</tbody>
 </table>	<!-- end filter table -->
 
 

@@ -19,26 +19,28 @@ $result_vlans = $Tools->search_vlans($searchTerm, $custom_vlan_fields);
 <h4><?php print _('Search results (VLANs)');?>:</h4>
 <hr>
 
-<table class="searchTable table table-striped table-condensed table-top">
+<table class="searchTable table sorted table-striped table-condensed table-top" data-cookie-id-table="search_vlan">
 
 <!-- headers -->
+<thead>
 <tr id="searchHeader">
-	<th><?php print _('Name');?></th>
 	<th><?php print _('Number');?></th>
+	<th><?php print _('Name');?></th>
 	<th><?php print _('Description');?></th>
 	<?php
 	if(sizeof($custom_vlan_fields) > 0) {
 		foreach($custom_vlan_fields as $field) {
 			if(!in_array($field['name'], $hidden_vlan_fields)) {
-				print "	<th class='hidden-xs hidden-sm'>$field[name]</th>";
+				print "	<th class='hidden-xs hidden-sm'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 			}
 		}
 	}
 	?>
 	<th></th>
 </tr>
+</thead>
 
-
+<tbody>
 <?php
 if(sizeof($result_vlans) > 0) {
 	# print vlans
@@ -47,15 +49,17 @@ if(sizeof($result_vlans) > 0) {
 		$vlan = (array) $vlan;
 
 		print '<tr class="nolink">' . "\n";
+		print ' <td><dd><a class="btn btn-xs btn-default" href="'.create_link("tools","vlan",$vlan['domainId'],$vlan['vlanId']).'">'. $vlan['number']     .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vlan['name']      .'</dd></td>' . "\n";
-		print ' <td><dd><a href="'.create_link("tools","vlan",$vlan['domainId'],$vlan['vlanId']).'">'. $vlan['number']     .'</a></dd></td>' . "\n";
 		print ' <td><dd>'. $vlan['description'] .'</dd></td>' . "\n";
 		# custom fields
 		if(sizeof($custom_vlan_fields) > 0) {
 			foreach($custom_vlan_fields as $field) {
 				if(!in_array($field['name'], $hidden_vlan_fields)) {
 					$vlan[$field['name']] = $Result->create_links ($vlan[$field['name']], $field['type']);
-					print "	<td class='hidden-xs hidden-sm'>".$vlan[$field['name']]."</td>";
+					print "	<td class='hidden-xs hidden-sm'>";
+					$Tools->print_custom_field ($field['type'], $vlan[$field['name']]);
+					print "</td>";
 				}
 			}
 		}
@@ -72,7 +76,7 @@ if(sizeof($result_vlans) > 0) {
     }
 }
 ?>
-
+</tbody>
 </table>
 <?php
 if(sizeof($result_vlans) == 0) {
