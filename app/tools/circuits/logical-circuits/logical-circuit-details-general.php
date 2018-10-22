@@ -54,13 +54,17 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
     	print "<tr>";
     	print "	<td></td>";
-		print "	<td class='actions'>";
-		print "	<div class='btn-group'>";
-		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$logical_circuit->id'><i class='fa fa-pencil'></i></a>";
-		if($User->get_module_permissions ("circuits")>2)
-		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$logical_circuit->id'><i class='fa fa-times'></i></a>";
-		print "	</div>";
-		print " </td>";
+		// actions
+		print "<td class='actions'>";
+        $links = [];
+        $links[] = ["type"=>"header", "text"=>"Manage circuit"];
+        $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$logical_circuit->id'", "icon"=>"pencil"];
+        if($User->get_module_permissions ("circuits")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$logical_circuit->id'", "icon"=>"times"];
+        }
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links, true, true);
+        print "</td>";
     	print "</tr>";
 	}
 

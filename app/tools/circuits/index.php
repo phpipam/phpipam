@@ -32,23 +32,23 @@ if ($User->get_module_permissions ("circuits")<1) {
 elseif (!isset($_GET['subnetId']) || (@$_GET['subnetId']=="providers" && !isset($_GET['sPage'])) ) {
 	// all circuits
 	if(!isset($_GET['subnetId'])) {
-		include('all-circuits.php');
+		include('physical-circuits/all-circuits.php');
 	}
 	// all providers
 	else {
-		include('all-providers.php');
+		include('providers/all-providers.php');
 	}
 }
 else {
 	// specific provider
 	if($_GET['subnetId']=="providers") {
-		include("provider-details.php");
+		include("providers/provider-details.php");
 	}
 	elseif ($_GET['subnetId']=="logical") {
 		if(isset($_GET["sPage"])){
-			include("logical-circuit-details.php");
+			include("logical-circuits/logical-circuit-details.php");
 		}else{
-			include('logical-circuits.php');
+			include('logical-circuits/logical-circuits.php');
 		}
 	}
 	// map
@@ -61,6 +61,6 @@ else {
 	}
 	// specific circuit
 	else {
-		include("circuit-details.php");
+		include("physical-circuits/circuit-details.php");
 	}
 }

@@ -148,7 +148,7 @@ else {
             }
 			if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
 	            $links[] = ["type"=>"header", "text"=>"SNMP"];
-	            $links[] = ["type"=>"link", "text"=>"Manage SNMP", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
+	            $links[] = ["type"=>"link", "text"=>"Manage SNMP", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='edit' data-switchId='$device[id]''", "icon"=>"cogs"];
 			}
             // print links
             print $User->print_actions($User->user->compress_actions, $links);
