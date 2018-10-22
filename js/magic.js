@@ -2376,11 +2376,6 @@ $(document).on("click", "#editTypesubmit", function() {
 
 
 /* ---- VLANs ----- */
-//load edit form
-$(document).on("click", ".editVLAN", function() {
-    vlanNum = $(this).attr("data-number") ? $(this).attr('data-number') : "";		//set number
-	open_popup("400", "app/admin/vlans/edit.php", {vlanId:$(this).attr('data-vlanid'), action:$(this).attr('data-action'), vlanNum:vlanNum, domain:$(this).attr('data-domain')} );
-});
 //submit form
 $(document).on("click", "#editVLANsubmit", function() {
     submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-result.php", $('form#vlanManagementEdit').serialize());
