@@ -1838,13 +1838,14 @@ class Common_functions  {
 	 *
 	 * @method print_actions
 	 * @param  string $type
-	 * @param  bool $left_align
 	 * @param  array $items [array of items]
+	 * @param  bool $left_align
+	 * @param  bool $print_text
 	 * @return [type]
 	 */
-	public function print_actions ($compress = "1", $items = [], $left_align = false) {
+	public function print_actions ($compress = "1", $items = [], $left_align = false, $print_text = false) {
 	    if (sizeof($items)>0) {
-	        return $compress=="1" ? $this->print_actions_dropdown($items, $left_align) : $this->print_actions_buttons ($items);
+	        return $compress=="1" ? $this->print_actions_dropdown($items, $left_align, $print_text) : $this->print_actions_buttons ($items);
 	    }
 	    else {
 	        return "";
@@ -1857,16 +1858,19 @@ class Common_functions  {
 	 * @method print_actions_buttons
 	 * @param  array $items [array of items]
 	 * @param  bool $left_align
+	 * @param  bool $print_text
 	 * @return string
 	 */
-	private function print_actions_dropdown ($items = [], $left_align = false) {
+	private function print_actions_dropdown ($items = [], $left_align = false, $print_text = false) {
 	    // init
 	    $html   = [];
 	    // alignment
 	    $alignment = $left_align ? "dropdown-menu-left" : "dropdown-menu-right";
+	    // text
+	    $action_text = $print_text ? " Actions " : " <i class='fa fa-cogs'></i> ";
 
 	    $html[] = "<div class='dropdown'>";
-	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='t1ooltip' title='"._("Actions")."'><i class='fa fa-cogs'></i> <span class='caret'></span></button>";
+	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
 	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu' style='z-index:9'>";
 
 	    // loop items

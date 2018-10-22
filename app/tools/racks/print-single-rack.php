@@ -156,7 +156,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                 $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$rack->id'", "icon"=>"times"];
             }
             // print links
-            print $User->print_actions($User->user->compress_actions, $links, true);
+            print $User->print_actions($User->user->compress_actions, $links, true, true);
             print "</td>";
 
 

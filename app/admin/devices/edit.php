@@ -37,11 +37,11 @@ $Admin->validate_action ($_POST['action'], true);
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['switchId']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($_POST['action']!="add" && !is_numeric($_POST['switchid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch device details
 if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-	$device = (array) $Admin->fetch_object("devices", "id", $_POST['switchId']);
+	$device = (array) $Admin->fetch_object("devices", "id", $_POST['switchid']);
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
@@ -83,7 +83,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
    $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
 
    // load dropdown
-   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
+   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchid]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
    		$('tbody#rack').html(data);
    });
 });
@@ -194,7 +194,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<textarea name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" <?php print $readonly; ?>><?php if(isset($device['description'])) print $device['description']; ?></textarea>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="switchId" value="'. $_POST['switchId'] .'">'. "\n";
+				print '<input type="hidden" name="switchid" value="'. $_POST['switchid'] .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

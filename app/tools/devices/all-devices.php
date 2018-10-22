@@ -45,7 +45,7 @@ print "<hr>";
 print "<div class='btn-group'>";
 	//administer
 	if($User->get_module_permissions ("devices")>1) {
-		print "<button class='btn btn-sm btn-default btn-success editSwitch' data-action='add'   data-switchid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add device')."</button>"; }
+		print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/devices/edit.php' data-class='500' data-action='add' data-switchid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add device')."</button>"; }
 	//admin
 	if($User->is_admin(false))
 	print "<a href='".create_link("administration", "device-types")."' class='btn btn-sm btn-default'><i class='fa fa-tablet'></i> "._('Manage device types')."</a>";
@@ -136,15 +136,24 @@ else {
 
 		# actions
 		if($User->get_module_permissions ("devices")>1) {
-			print '	<td class="actions">'. "\n";
-			print "	<div class='btn-group'>";
-			print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='$device[id]' rel='tooltip' title='"._('Edit')."'><i class='fa fa-pencil'></i></button>";
-			if($User->settings->enableSNMP=="1" && $User->is_admin(false))
-			print "		<button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
-			if($User->get_module_permissions ("devices")>2)
-			print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='$device[id]' rel='tooltip' title='"._('Delete')."'><i class='fa fa-times'></i></button>";
-			print "	</div>";
-			print '	</td>'. "\n";
+            // links
+            print "<td class='actions'>";
+            $links = [];
+            $links[] = ["type"=>"header", "text"=>"Manage device"];
+            $links[] = ["type"=>"link", "text"=>"Edit device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
+
+            if($User->get_module_permissions ("devices")>2) {
+	            $links[] = ["type"=>"link", "text"=>"Delete device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
+	            $links[] = ["type"=>"divider"];
+            }
+			if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
+	            $links[] = ["type"=>"header", "text"=>"SNMP"];
+	            $links[] = ["type"=>"link", "text"=>"Manage SNMP", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
+			}
+            // print links
+            print $User->print_actions($User->user->compress_actions, $links);
+            print "</td>";
+
 		}
 
 		print '</tr>'. "\n";

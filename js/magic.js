@@ -2134,17 +2134,9 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
 
 
 /* ---- Devices ----- */
-//load edit form
-$(document).on("click", ".editSwitch", function() {
-	open_popup("400", "app/admin/devices/edit.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editSwitchsubmit", function() {
     submit_popup_data (".switchManagementEditResult", "app/admin/devices/edit-result.php", $('form#switchManagementEdit').serialize());
-});
-// edit switch snmp
-$(document).on("click", ".editSwitchSNMP", function() {
-	open_popup("400", "app/admin/devices/edit-snmp.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
 });
 //submit form
 $(document).on("click", "#editSwitchSNMPsubmit", function() {
