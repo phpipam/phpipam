@@ -1763,6 +1763,8 @@ $(document).on("click", ".editSubnet", function() {
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+
+    return false;
 });
 //resize / split subnet
 $(document).on("click", "#resize, #split, #truncate, .subnet-truncate", function() {

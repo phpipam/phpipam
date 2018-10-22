@@ -1867,7 +1867,7 @@ class Common_functions  {
 	    // alignment
 	    $alignment = $left_align ? "dropdown-menu-left" : "dropdown-menu-right";
 	    // text
-	    $action_text = $print_text ? " Actions " : " <i class='fa fa-cogs'></i> ";
+	    $action_text = $print_text ? " <i class='fa fa-cogs'></i> Actions " : " <i class='fa fa-cogs'></i> ";
 
 	    $html[] = "<div class='dropdown'>";
 	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
