@@ -2170,17 +2170,17 @@ $(document).on("click", "#saveVlanScanResults", function() {
 
 //snmp vrf query popup
 $(document).on("click", "#snmp-vrf", function() {
-    open_popup ("700", "app/admin/vrfs/vrf-scan.php", {}, true);
+    open_popup ("700", "app/admin/vrf/vrf-scan.php", {}, true);
     return false;
 });
 //snmp vrf query execute
 $(document).on("click", ".show-vrf-scan-result", function() {
-    submit_popup_data (".vrf-scan-result", "app/admin/vrfs/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
+    submit_popup_data (".vrf-scan-result", "app/admin/vrf/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
     return false;
 });
 // submit vrf query result
 $(document).on("click", "#saveVrfScanResults", function() {
-    submit_popup_data ("#vrfScanAddResult", "app/admin/vrfs/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
+    submit_popup_data ("#vrfScanAddResult", "app/admin/vrf/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
     return false;
 });
 
@@ -2392,7 +2392,7 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
 /* ---- VRF ----- */
 //submit form
 $(document).on("click", "#editVRF", function() {
-    submit_popup_data (".vrfManagementEditResult", "app/admin/vrfs/edit-result.php", $('form#vrfManagementEdit').serialize());
+    submit_popup_data (".vrfManagementEditResult", "app/admin/vrf/edit-result.php", $('form#vrfManagementEdit').serialize());
 });
 
 /* ---- Nameservers ----- */

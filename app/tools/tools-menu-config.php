@@ -44,7 +44,8 @@ $tools_menu_items = array(
 						'pstn-prefixes',
 						'mac-lookup',
 						'circuits',
-						'customers'
+						'customers',
+						"duplicates"
                     );
 
 
@@ -113,6 +114,7 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-th-large", 	 "name"=
 if($User->settings->tempShare==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-share-alt",  "name"=>"Temporary shares", 	"href"=>"temp-shares",	"description"=>"List of temporary shared objects");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-thumbs-down",  "name"=>"Inactive Hosts", 	"href"=>"inactive-hosts",	"description"=>"List of inactive hosts");
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-files-o",  "name"=>"Duplicates", 	"href"=>"duplicates",	"description"=>"List of duplicate subnets and addresses");
 if($User->settings->enableThreshold==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>"Threshold", 	"href"=>"threshold",	"description"=>"List of thresholded subnets");
 

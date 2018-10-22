@@ -70,17 +70,27 @@ if (isset($objects["vrf"])) {
 	    	}
 	    }
 
-        // actions
-		print "	<td class='actions'>";
-		print "	<div class='btn-group'>";
-		if($User->user->edit_vlan=="Yes"||$User->is_admin(false)) {
-		print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Edit' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Delete' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
+		// actions
+        print "<td class='actions'>";
+        $links = [];
+        $links[] = ["type"=>"header", "text"=>"Show"];
+        $links[] = ["type"=>"link", "text"=>"Show VRF", "href"=>create_link($_GET['page'], "vrf", $vrf->vrfId), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"divider"];
+        if($User->get_module_permissions ("vrf")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage"];
+            $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
+        }
+        if($User->get_module_permissions ("vrf")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'", "icon"=>"times"];
+        }
+		if($User->get_module_permissions ("customers")>1) {
+	        $links[] = ["type"=>"divider"];
+            $links[] = ["type"=>"header", "text"=>"Unlink"];
+            $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='vrf' data-id='$vrf->vrfId'", "icon"=>"times"];
 		}
-		if($User->get_module_permissions ("customers")>1)
-		print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='vrf' data-id='$vrf->vrfId'><i class='fa fa-unlink'></i></button>";
-		print "	</div>";
-		print "	</td>";
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links);
+        print "</td>";
 
         print "</tr>";
 
