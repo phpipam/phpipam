@@ -2243,11 +2243,6 @@ $(document).on("click", ".showRackPopup", function() {
 
 
 /* ---- Locations ----- */
-//load edit form
-$(document).on("click", ".editLocation", function() {
-	open_popup("700", "app/admin/locations/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
-    return false;
-});
 //submit form
 $(document).on("click", "#editLocationSubmit", function() {
     submit_popup_data (".editLocationResult", "app/admin/locations/edit-result.php", $('form#editLocation').serialize());

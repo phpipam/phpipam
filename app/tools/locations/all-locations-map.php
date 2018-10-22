@@ -4,13 +4,12 @@
 <?php } ?>
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
-<?php if($User->get_module_permissions ("locations")>1) { ?>
-<div class="btn-group">
-	<a href="" class='btn btn-sm btn-default editLocation' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add location'); ?></a>
-	<a href="<?php print create_link("tools", "locations") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'> <?php print _('Locations list'); ?></a>
-</div>
+<?php
+if($User->get_module_permissions ("locations")>1) {
+include('menu.php');
+}
+?>
 <br>
-<?php } ?>
 <?php } ?>
 <?php
 
