@@ -391,6 +391,7 @@ CREATE TABLE `users` (
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
   `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
+  `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`),
   KEY `id` (`id`)
@@ -943,4 +944,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 11;
+UPDATE `settings` SET `dbversion` = 12;
