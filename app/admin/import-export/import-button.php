@@ -69,7 +69,7 @@ $(function(){
 
 			// Append the file name and file size
 			$('#uploadResult').append(data.files[0].name + ' (<i>' + formatFileSize(data.files[0].size) + '</i>)');
-			$('#uploadResult').append(' <span rel="tooltip" data-placement="bottom" title="<?php print _("Cancel upload");?>"> <i class="fa fa-times-circle" ></i></span>');
+			$('#uploadResult').append(' <span rel="tooltip" data-placement="bottom" title="<?php print addslashes(_("Cancel upload"));?>"> <i class="fa fa-times-circle" ></i></span>');
 
 			// Listen for clicks on the cancel icon
 			$('#uploadResult').find('span').click(function(){
@@ -119,7 +119,7 @@ $(function(){
 					resp.expfields.forEach(function(expfield) {
 						//console.log(resp.fields);
 						var td= $('<td></td>').appendTo("#fieldstable > tbody #fieldsrow");
-						var s = $('<select name="importFields__' + expfield.replace(/\s/g,"_") + '" class="form-control input-sm input-w-auto" rel="tooltip" data-placement="bottom" title="<?php print _("Pick import colum for"); ?> ' + expfield + ' <?php print _("field"); ?>"/>');
+						var s = $('<select name="importFields__' + expfield.replace(/\s/g,"_") + '" class="form-control input-sm input-w-auto" rel="tooltip" data-placement="bottom" title="<?php print addslashes(_("Pick import colum for")); ?> ' + expfield + ' <?php print _("field"); ?>"/>');
 						$('<option />', {value: "-", text: "-"}).appendTo(s);
 						resp.impfields.forEach(function(impfield) {
                                                         if (expfield.toUpperCase() === impfield.toUpperCase().replace("IP ADDRESS", "IP_ADDR")) {
@@ -133,17 +133,17 @@ $(function(){
 				    });
 					if (matches == 0) {
 						$('#bottommsg').addClass('alert alert-danger');
-						$('#bottommsg').append('<i class="fa fa-exclamation-triangle"></i> <?php print _("No fields were automatically matched. The import file needs to have a header row!"); ?><br>');
+						$('#bottommsg').append('<i class="fa fa-exclamation-triangle"></i> <?php print addslashes(_("No fields were automatically matched. The import file needs to have a header row!")); ?><br>');
 					}
 					if ((matches > 0) && (matches != resp.expfields.length)) {
 						// console.log(matches + " mismatches vs " + resp.expfields.length);
 						$('#bottommsg').addClass('alert alert-warning');
-						$('#bottommsg').append('<i class="fa fa-exclamation-triangle"></i> <?php print _("Not all the fields were automatically matched. Please check manually."); ?><br>');
+						$('#bottommsg').append('<i class="fa fa-exclamation-triangle"></i> <?php print addslashes(_("Not all the fields were automatically matched. Please check manually.")); ?><br>');
 					}
 					if (matches == resp.expfields.length) {
 						// console.log(matches + " matches vs " + resp.expfields.length);
 						$('#bottommsg').addClass('alert alert-success');
-						$('#bottommsg').append('<i class="fa fa-info-circle"></i> <?php print _("All the fields were automatically matched. Please check if correct."); ?><br>');
+						$('#bottommsg').append('<i class="fa fa-info-circle"></i> <?php print addslashes(_("All the fields were automatically matched. Please check if correct.")); ?><br>');
 					}
 					// enable preview button
 				    $('#dataImportPreview').removeAttr('disabled');
@@ -153,7 +153,7 @@ $(function(){
 					$('#filetype').val(resp.filetype);
 
 				} else {
-					$('#topmsg').append('<?php print _("No header row found in uploaded file. Please check."); ?><br>');
+					$('#topmsg').append('<?php print addslashes(_("No header row found in uploaded file. Please check.")); ?><br>');
 				}
 
 			}
