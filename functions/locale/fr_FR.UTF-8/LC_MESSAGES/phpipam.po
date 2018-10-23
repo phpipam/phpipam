@@ -581,7 +581,7 @@ msgstr "Requêtes"
 
 #: site/tools/vrf.php:86
 msgid "Master subnet does not exist"
-msgstr "sous-réseau maître inexistant"
+msgstr "Sous-réseau maître inexistant"
 
 #: site/tools/vrf.php:104 site/tools/subnets.php:104 site/ipaddr/subnetDetails.php:126
 msgid "enabled"
