@@ -61,13 +61,13 @@ foreach($Addresses->address_types as $t) {
 # remove port, owner, device, note, mac etc if none is set to preserve space
 $cnt_obj = ["port"=>0, "switch"=>0, "owner"=>0, "note"=>0, "mac"=>0, "customer_id"];
 foreach ($addresses as $a) {
-	if (strlen($a->port)>0)	{ $cnt_obj["port"]++; }
-	if ($a->switch>0)		{ $cnt_obj["switch"]++; }
-	if(strlen($a->owner)>0)	{ $cnt_obj["owner"]++; }
-	if(strlen($a->note)>0)	{ $cnt_obj["note"]++; }
-	if(strlen($a->mac)>0)	{ $cnt_obj["mac"]++; }
-	if($a->customer_id>0)	{ $cnt_obj["customer_id"]++; }
-	if(strlen($a->location)>0) { $cnt_obj["location"]++; }		//not sure about this, because location is INT in Database
+	if (strlen($a->port)>0)		{ $cnt_obj["port"]++; }
+	if ($a->switch>0)			{ $cnt_obj["switch"]++; }
+	if (strlen($a->owner)>0)	{ $cnt_obj["owner"]++; }
+	if (strlen($a->note)>0)		{ $cnt_obj["note"]++; }
+	if (strlen($a->mac)>0)		{ $cnt_obj["mac"]++; }
+	if ($a->customer_id>0)		{ $cnt_obj["customer_id"]++; }
+	if (strlen($a->location)>0)	{ $cnt_obj["location"]++; }		//not sure about this, because location is INT in Database
 }
 
 // check and remove empty
@@ -119,7 +119,7 @@ $statuses = explode(";", $User->settings->pingStatus);
 <!-- print title and pagenum -->
 <h4 style="margin-top:40px;">
 <?php
-if($location==="customers") {}
+if($location === "customers") {}
 elseif(!$slaves)		{ print _("IP addresses in $location "); }
 elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
@@ -467,8 +467,9 @@ else {
 				}
 
 			    # print location
-			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("vlan")>0) {
-			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>";
+			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) {
+					$location_name = $Tools->fetch_object("locations", "id", $addresses[$n]->location);
+			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
 			    }
 
 				# print owner
