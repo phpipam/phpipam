@@ -178,8 +178,13 @@ class User_controller extends Common_api_functions {
 		if ($this->_params->id=="token_expires" || $this->_params->id=="expires" || !isset($this->_params->id) || $this->_params->id=="all" || $this->_params->id=="admins") {
 			// block IP
 			$this->validate_block ();
-			// validate token
-			$this->validate_requested_token ();
+			
+			if( !isset($this->_params->id) ||  $this->_params->id=="token_expires" ||  $this->_params->id=="expires")
+			{  
+				// validate token for call /user  /user/token /user/token_expires 
+				// but not for  /user/all   /user/admin  api calls.
+				$this->validate_requested_token ();
+			}
 			// users fetch
 			if ($this->_params->id=="admins" || $this->_params->id=="all") {
 				// fetch details
