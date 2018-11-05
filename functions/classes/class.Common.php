@@ -27,31 +27,6 @@ class Common_functions  {
 	 */
 	public $json_error = false;
 
-	/**
-	 * Cache file to store all results from queries to
-	 *
-	 *  structure:
-	 *
-	 *      [table][index] = (object) $content
-	 *
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access public
-	 */
-	public $cache = array();
-
-	/**
-	 * cache_check_exceptions
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access private
-	 */
-	private $cache_check_exceptions = array();
-
     /**
      * Default font
      *
@@ -147,7 +122,28 @@ class Common_functions  {
 
 
 
+	/**
+	 *	@version handling
+	 *	--------------------------------
+	 */
 
+	 /**
+	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
+	 *
+	 * @access public
+	 * @param string $verA
+	 * @param mixed $verB
+	 * @return int
+	 */
+	public function cmp_version_strings($verA, $verB) {
+		$a = explode('.', $verA);
+		$b = explode('.', $verB);
+
+		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
+		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
+		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;			// 1.4.9 is less than 1.4.10
+		return 0;
+	}
 
 
 
@@ -174,6 +170,10 @@ class Common_functions  {
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
+
+		$cached_item = $this->cache_check("fetch_all_objects", "t=$table f=$sortField o=$sortAsc");
+		if(is_object($cached_item)) return $cached_item->result;
+
 		# fetch
 		try { $res = $this->Database->getObjects($table, $sortField, $sortAsc); }
 		catch (Exception $e) {
@@ -187,7 +187,9 @@ class Common_functions  {
     		}
 		}
 		# result
-		return sizeof($res)>0 ? $res : false;
+		$result = sizeof($res)>0 ? $res : false;
+		$this->cache_write("fetch_all_objects", "t=$table f=$sortField o=$sortAsc", (object)["result" => $result]);
+		return $result;
 	}
 
 	/**
@@ -210,15 +212,15 @@ class Common_functions  {
 		if(is_null($value))		return false;
 		if($value===0)		    return false;
 
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
 		if($cached_item!==false) {
 			return $cached_item;
 		}
 		else {
+			# null method
+			$method = is_null($method) ? "id" : $this->Database->escape($method);
+
 			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -293,6 +295,21 @@ class Common_functions  {
 		return $cnt;
 	}
 
+	/**
+	 * Count all objects in database.
+	 *
+	 * @param  string $table
+	 * @param  string $field
+	 * @return array|false
+	 */
+	public function count_all_database_objects ($table, $field) {
+		try { $cnt = $this->Database->getGroupBy($table, $field); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return $cnt;
+	}
 
 	/**
 	 * Get all admins that are set to receive changelog
@@ -361,7 +378,7 @@ class Common_functions  {
 				# save
 				if ($settings!==false)	 {
 					$this->settings = $settings;
-					define(SETTINGS, json_encode($settings, JSON_UNESCAPED_UNICODE));
+					define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
 				}
 			}
 		}
@@ -391,13 +408,13 @@ class Common_functions  {
         // get method
         $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
-        if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$table][$identifier][$id])) {
-                $this->cache[$table][$identifier][$id] = (object) $object;
+        if ($this->cache_check_exceptions($table)===false) {
+            if (!isset($this->Database->cache[$table][$identifier][$id])) {
+                $this->Database->cache[$table][$identifier][$id] = (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
-                    $this->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
+                    $this->Database->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
                 }
             }
         }
@@ -457,7 +474,7 @@ class Common_functions  {
         // get method
         $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise return false
-        if (isset($this->cache[$table][$method][$id]))  { return (object) $this->cache[$table][$method][$id]; }
+        if (isset($this->Database->cache[$table][$method][$id]))  { return (object) $this->Database->cache[$table][$method][$id]; }
         else                                            { return false; }
     }
 
@@ -531,7 +548,14 @@ class Common_functions  {
 	public function strip_input_tags ($input) {
 		if(is_array($input)) {
 			foreach($input as $k=>$v) {
-    			$input[$k] = strip_tags($v);
+				if(is_array($v)) {
+					foreach ($v as $k1=>$v1) {
+		    			$input[$k][$k1] = strip_tags($v1);
+					}
+				}
+				else {
+	    			$input[$k] = strip_tags($v);
+				}
             }
 		}
 		else {
@@ -579,11 +603,13 @@ class Common_functions  {
     	// init
     	$out = array();
     	// loop
-		foreach($fields as $k=>$v) {
-			if(is_null($v) || strlen($v)==0) {
-			}
-			else {
-				$out[$k] = $v;
+    	if(is_array($fields)) {
+			foreach($fields as $k=>$v) {
+				if(is_null($v) || strlen($v)==0) {
+				}
+				else {
+					$out[$k] = $v;
+				}
 			}
 		}
 		# result
@@ -817,27 +843,27 @@ class Common_functions  {
 	public function createURL () {
 		// SSL on standard port
 		if(($_SERVER['HTTPS'] == 'on') || ($_SERVER['SERVER_PORT'] == 443)) {
-			$url = "https://$_SERVER[HTTP_HOST]";
+			$url = "https://".$_SERVER['HTTP_HOST'];
 		}
 		// reverse proxy doing SSL offloading
-        elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
-            if (isset($_SERVER[HTTP_X_FORWARDED_HOST])) {
-                $url = "https://$_SERVER[HTTP_X_FORWARDED_HOST]";
-            }
-            else {
-                $url = "https://$_SERVER[HTTP_HOST]";
-            }
-        }
+		elseif(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+			if (isset($_SERVER['HTTP_X_FORWARDED_HOST'])) {
+				$url = "https://".$_SERVER['HTTP_X_FORWARDED_HOST'];
+			}
+			else {
+				$url = "https://".$_SERVER['HTTP_HOST'];
+			}
+		}
 		elseif(isset($_SERVER['HTTP_X_SECURE_REQUEST'])  && $_SERVER['HTTP_X_SECURE_REQUEST'] == 'true') {
-			$url = "https://$_SERVER[SERVER_NAME]";
+			$url = "https://".$_SERVER['SERVER_NAME'];
 		}
 		// custom port
 		elseif($_SERVER['SERVER_PORT']!="80" && (isset($_SERVER['HTTP_X_FORWARDED_PORT']) && $_SERVER['HTTP_X_FORWARDED_PORT']!="80")) {
-			$url = "http://$_SERVER[SERVER_NAME]:$_SERVER[SERVER_PORT]";
+			$url = "http://".$_SERVER['SERVER_NAME'].":".$_SERVER['SERVER_PORT'];
 		}
 		// normal http
 		else {
-			$url = "http://$_SERVER[HTTP_HOST]";
+			$url = "http://".$_SERVER['HTTP_HOST'];
 		}
 
 		//result
@@ -1178,9 +1204,10 @@ class Common_functions  {
      * @param string $action
      * @param mixed $timepicker_index
      * @param bool $disabled
+     * @param string $set_delimiter
      * @return array
      */
-    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false) {
+    public function create_custom_field_input ($field, $object, $action, $timepicker_index, $disabled = false, $set_delimiter = "") {
         # make sure it is array
 		$field  = (array) $field;
 		$object = (object) $object;
@@ -1196,7 +1223,7 @@ class Common_functions  {
 
         //set, enum
         if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text);
+        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter);
         }
         //date and time picker
         elseif($field['type'] == "date" || $field['type'] == "datetime") {
@@ -1232,9 +1259,10 @@ class Common_functions  {
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
+     * @param string $set_delimiter
      * @return array
      */
-    public function create_custom_field_input_set_enum ($field, $object, $disabled_text) {
+    public function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "") {
 		$html = array();
     	//parse values
     	$field['type'] = trim(substr($field['type'],0,-1));
@@ -1244,7 +1272,22 @@ class Common_functions  {
 
     	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
     	foreach($tmp as $v) {
-        $html[] = $v==$object->{$field['name']} ? "<option value='$v' selected='selected'>$v</option>" : "<option value='$v'>$v</option>";
+    		// set selected
+			$selected = $v==$object->{$field['name']} ? "selected='selected'" : "";
+			// parse delimiter
+			if(strlen($set_delimiter)==0) {
+				// save
+		        $html[] = "<option value='$v' $selected>$v</option>";
+			}
+			else {
+				// explode by delimiter
+				$tmp2 = explode ($set_delimiter, $v);
+	    		// reset selected
+				$selected = $tmp2[0]==$object->{$field['name']} ? "selected='selected'" : "";
+				// save
+		        $html[] = "<option value='$tmp2[0]' $selected>$tmp2[1]</option>";
+			}
+
     	}
     	$html[] = "</select>";
 
@@ -1448,7 +1491,7 @@ class Common_functions  {
 		if(strlen($mac)<4)				{ return ""; }
 		if(!$this->validate_mac ($mac))	{ return ""; }
 		// reformat mac address
-		$mac = strtoupper($this->reformat_mac_address ($mac, $format = 1));
+		$mac = strtoupper($this->reformat_mac_address ($mac, 1));
 		$mac_partial = explode(":", $mac);
 		// get mac XML database
 
@@ -1523,7 +1566,23 @@ class Common_functions  {
 		return array($removed_permissions, $changed_permissions, $new_permissions);
 	}
 
-
+	/**
+	 * Parse subnet permissions to user readable format
+	 *
+	 * @access public
+	 * @param mixed $permissions
+	 * @return string
+	 */
+	public function parse_permissions ($permissions) {
+		switch($permissions) {
+			case 0: 	$r = _("No access");	break;
+			case 1: 	$r = _("Read");			break;
+			case 2: 	$r = _("Write");		break;
+			case 3: 	$r = _("Admin");		break;
+			default:	$r = _("error");
+		}
+		return $r;
+	}
 
 
 

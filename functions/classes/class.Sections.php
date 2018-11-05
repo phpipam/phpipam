@@ -374,7 +374,7 @@ class Sections extends Common_functions {
 	public function fetch_section_domains ($sectionId) {
 		# first fetch all domains
 		$Admin = new Admin ($this->Database, false);
-		$domains = $Admin->fetch_all_objects ("vlanDomains");
+		$domains = $Admin->fetch_all_objects ("vlanDomains", "name");
 		# loop and check
 		$permitted = array();
 		foreach($domains as $d) {
@@ -473,23 +473,23 @@ class Sections extends Common_functions {
 	 */
 	public function check_permission ($user, $sectionid) {
 		# decode groups user belongs to
-		$groups = json_decode($user->groups);
+		$groups = json_decode($user->groups, true);
 
 		# admins always has permission rwa
 		if($user->role == "Administrator")		{ return 3; }
 		else {
 			# fetch section details and check permissions
 			$section  = $this->fetch_section ("id", $sectionid);
-			$sectionP = json_decode($section->permissions);
+			$sectionP = json_decode($section->permissions, true);
 
 			# default permission is no access
 			$out = 0;
 
 			# for each group check permissions, save highest to $out
-			if(sizeof($sectionP)>0) {
+			if(is_array($sectionP)) {
 				foreach($sectionP as $sk=>$sp) {
 					# check each group if user is in it and if so check for permissions for that group
-					if(sizeof($groups)>0) {
+					if(is_array($groups)) {
 						foreach($groups as $uk=>$up) {
 							if($uk == $sk) {
 								if($sp > $out) { $out = $sp; }
@@ -515,6 +515,9 @@ class Sections extends Common_functions {
 		# fetch all sections
 		$sections = $this->fetch_all_sections();
 
+		# init result
+		$out = array();
+
 		# loop through sections and check if group_id in permissions
         if ($sections !== false) {
     		foreach($sections as $section) {
@@ -536,9 +539,6 @@ class Sections extends Common_functions {
     				$out[$section->name] = 0;
     			}
     		}
-		}
-		else {
-    		$out = array();
 		}
 		# return
 		return $out;
@@ -571,13 +571,16 @@ class Sections extends Common_functions {
 		# check permission
 		$permission = $this->check_permission($User->user, $sectionId);
 
-		$showSupernetOnly = $showSupernetOnly===true ? '1' : '0';
+		$showSupernetOnly = $showSupernetOnly ? '1' : '0';
 
 		# permitted
 		if ($permission != 0) {
 			// add
 			if ($permission>1) {
-				$html[] = '<button class="btn btn-sm btn-default editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+				$html[] = "<div class='btn-group'>";
+				$html[] = '<button class="btn btn-sm btn-default btn-success editSubnet" data-action="add" data-sectionid="'.$sectionId.'" data-subnetId="" rel="tooltip" data-placement="left" title="'._('Add new subnet to section').'"><i class="fa fa-plus"></i> '._('Add subnet').'</button>';
+				$html[] = "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php'  data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')."'  data-sectionId='$sectionId'><i class='fa fa-sm fa-search'></i> "._("Find subnet")."</button>";
+				$html[] = "</div>";
 			}
 
 			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
@@ -585,14 +588,16 @@ class Sections extends Common_functions {
 
 			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
 			$html[] = '<th data-field="description">'._('Description').'</th>';
+			if($User->get_module_permissions ("vlan")>0)
 			$html[] = '<th data-field="vlan">'._('VLAN').'</th>';
-			if($User->settings->enableVRF == 1) {
+			if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0) {
 				$html[] = '<th data-field="vrf">'._('VRF').'</th>';
 			}
 			$html[] = '<th data-field="masterSubnet">'._('Master Subnet').'</th>';
+			if($User->get_module_permissions ("devices")>0)
 			$html[] = '<th data-field="device">'._('Device').'</th>';
-			if($User->settings->enableIPrequests == 1) {
-				$html[] = '<th data-field="requests" class="hidden-xs hidden-sm">'._('Requests').'</th>';
+			if($User->settings->enableCustomers == 1 && $User->get_module_permissions ("customers")>0) {
+				$html[] = '<th data-field="customer" class="hidden-xs hidden-sm">'._('Customer').'</th>';
 			}
 			if(is_array($custom)) {
 				foreach($custom as $field) {

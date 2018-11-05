@@ -6,8 +6,12 @@ $User->check_user_session();
 if ($User->settings->enablePSTN!="1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
 }
+# perm check
+elseif ($User->get_module_permissions ("pstn")<1) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 else {
-    $colspan = $admin ? 8 : 7;
+    $colspan = $User->get_module_permissions ("devices")>0 ? 8 : 7;
 
     // table
     print "<table id='manageSubnets' class='ipaddresses table sorted table-striped table-top table-td-top' data-cookie-id-table='pstn_prefixes'>";
@@ -20,6 +24,7 @@ else {
     print " <th>"._('Start')."</th>";
     print " <th>"._('Stop')."</th>";
     print " <th>"._('Objects')."</th>";
+    if ($User->get_module_permissions ("devices")>0)
     print " <th>"._('Device')."</th>";
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
@@ -29,7 +34,7 @@ else {
 			}
 		}
 	}
-    if($admin)
+    if($User->get_module_permissions ("pstn")>1)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -85,18 +90,20 @@ else {
             print "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
 
     		//device
-    		$device = ( $sp->deviceId==0 || empty($sp->deviceId) ) ? false : true;
-    		if($device===false) {
-        		print '	<td>/</td>' . "\n"; }
-    		else {
-    			$device = $Tools->fetch_object ("devices", "id", $sp->deviceId);
-    			if ($device!==false) {
-    				print "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
-    			}
-    			else {
-    				print '	<td>/</td>' . "\n";
-    			}
-    		}
+            if ($User->get_module_permissions ("devices")>0) {
+        		$device = ( $sp->deviceId==0 || empty($sp->deviceId) ) ? false : true;
+        		if($device===false) {
+            		print '	<td>/</td>' . "\n"; }
+        		else {
+        			$device = $Tools->fetch_object ("devices", "id", $sp->deviceId);
+        			if ($device!==false) {
+        				print "	<td><a href='".create_link("tools","devices",$device->id)."'>".$device->hostname .'</a></td>' . "\n";
+        			}
+        			else {
+        				print '	<td>/</td>' . "\n";
+        			}
+        		}
+            }
 
     		//custom
     		if(sizeof($custom) > 0) {
@@ -110,22 +117,23 @@ else {
     	    	}
     	    }
 
-    		# set permission
-    		$permission = $Tools->check_prefix_permission ($User->user);
+            if($User->get_module_permissions ("pstn")>1) {
+        		print "	<td class='actions' style='padding:0px;'>";
+        		print "	<div class='btn-group'>";
 
-    		print "	<td class='actions' style='padding:0px;'>";
-    		print "	<div class='btn-group'>";
-
-    		if($permission>1) {
-    			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
-    			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
-    		}
-    		else {
-    			print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
-    			print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
-    		}
-    		print "	</div>";
-    		print "	</td>";
+        		if($User->get_module_permissions ("pstn")>1) {
+        			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
+                    if ($User->get_module_permissions ("pstn")>2) {
+        			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
+                    }
+        		}
+        		else {
+        			print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
+        			print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
+        		}
+        		print "	</div>";
+        		print "	</td>";
+            }
 
     		print "</tr>";
 

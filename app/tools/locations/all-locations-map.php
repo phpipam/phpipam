@@ -4,17 +4,14 @@
 <?php } ?>
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
+<?php if($User->get_module_permissions ("locations")>1) { ?>
 <div class="btn-group">
-    <?php if($_GET['page']=="administration") { ?>
 	<a href="" class='btn btn-sm btn-default editLocation' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add location'); ?></a>
-	<?php } else { ?>
-	<a href="<?php print create_link("administration", "locations") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
-	<?php } ?>
 	<a href="<?php print create_link("tools", "locations") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'> <?php print _('Locations list'); ?></a>
 </div>
 <br>
 <?php } ?>
-
+<?php } ?>
 <?php
 
 /**
@@ -23,9 +20,15 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("locations", 1, true, false);
 
+# perm check
+if ($User->get_module_permissions ("locations")<1) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # check that location support isenabled
-if ($User->settings->enableLocations!="1") {
+elseif ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
 elseif ($User->settings->enableLocations=="1" && (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0)) {

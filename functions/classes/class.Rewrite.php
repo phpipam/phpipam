@@ -91,7 +91,7 @@ class Rewrite {
 	 * @return void
 	 */
 	private function set_api_flag () {
-		if($this->uri_parts[0]=="api") {
+		if(@$this->uri_parts[0]=="api") {
 			$this->is_api = true;
 		}
 	}
@@ -136,11 +136,17 @@ class Rewrite {
 			else {
 				$this->uri_parts = array_values(array_filter(explode("/", $_SERVER['REQUEST_URI'])));
 			}
+
+			// urldecode uri_parts
+			foreach($this->uri_parts as $i => $v) $this->uri_parts[$i] = urldecode($v);
+
 			// set api flag
 			$this->set_api_flag ();
 		}
-		// no rewrites - rewurn default
+		// no rewrites - return default
 		else {
+			// The superglobals $_GET and $_REQUEST are already urldecoded.
+			// https://secure.php.net/manual/en/function.urldecode.php
 			$this->get_params = $_GET;
 		}
 	}
@@ -263,6 +269,8 @@ class Rewrite {
 				}
 			}
 		}
+		// apppend QSA
+		$this->append_qsa();
 	}
 
 	/**

@@ -8,11 +8,12 @@
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 
 # initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Tools	 	= new Tools ($Database);
-$Result 	= new Result ();
+$Database       = new Database_PDO;
+$User           = new User ($Database);
+$Admin          = new Admin ($Database);
+$Tools          = new Tools ($Database);
+$Result         = new Result ();
+$Password_check = new Password_check ();
 
 # verify that user is logged in
 $User->check_user_session();
@@ -45,6 +46,11 @@ if((strlen(@$_POST['password1'])>0 || (@$_POST['action']=="add") && $auth_method
 	if($_POST['password1']!=$_POST['password2'])						{ $Result->show("danger", _("Passwords do not match"), true); }
 	if(strlen($_POST['password1'])<8)									{ $Result->show("danger", _("Password must be at least 8 characters long!"), true); }
 
+	//enforce password policy
+	$policy = (json_decode($User->settings->passwordPolicy, true));
+	$Password_check->set_requirements  ($policy, explode(",",$policy['allowedSymbols']));
+	if (!$Password_check->validate ($_POST['password1'])) 				{ $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
+
 	//hash passowrd
 	$_POST['password1'] = $User->crypt_user_pass ($_POST['password1']);
 }
@@ -69,6 +75,7 @@ if ($_POST['action']=="add") {
 }
 # admin user cannot be deleted
 if($_POST['action']=="delete" && $_POST['username']=="admin") 			{ $Result->show("danger", _("Admin user cannot be deleted"), true); }
+
 
 # custom fields check
 $myFields = $Tools->fetch_custom_fields('users');
@@ -95,21 +102,20 @@ if(sizeof($myFields) > 0) {
 
 # formulate update values
 $values = array(
-				"id"            =>@$_POST['userId'],
-				"real_name"     =>$_POST['real_name'],
-				"username"      =>$_POST['username'],
-				"email"         =>$_POST['email'],
-				"role"          =>$_POST['role'],
-				"authMethod"    =>$_POST['authMethod'],
-				"lang"          =>$_POST['lang'],
-				"mailNotify"    =>$_POST['mailNotify'],
-				"mailChangelog" =>$_POST['mailChangelog'],
-				"editVlan"      =>$_POST['editVlan'],
-				"editCircuits"  =>$_POST['editCircuits'],
-				"theme"  		=>$_POST['theme']=="default" ? "" : $_POST['theme'],
-				"pstn"          =>$_POST['pstn'],
-				"pdns"          =>$_POST['pdns']
+				"id"             =>@$_POST['userId'],
+				"real_name"      =>$_POST['real_name'],
+				"username"       =>$_POST['username'],
+				"email"          =>$_POST['email'],
+				"role"           =>$_POST['role'],
+				"authMethod"     =>$_POST['authMethod'],
+				"lang"           =>$_POST['lang'],
+				"mailNotify"     =>$_POST['mailNotify'],
+				"mailChangelog"  =>$_POST['mailChangelog'],
+				"theme"          =>$_POST['theme']=="default" ? "" : $_POST['theme'],
 				);
+
+
+
 # custom fields
 if (sizeof($myFields)>0) {
     foreach($myFields as $myField) {
@@ -138,6 +144,19 @@ if($_POST['role']=="Administrator") {
 	}
 	$values['groups'] = json_encode(@$group);
 }
+
+# permissions
+$permissions = [];
+# check
+foreach ($User->get_modules_with_permissions() as $m) {
+	if (isset($_POST['perm_'.$m])) {
+		if (is_numeric($_POST['perm_'.$m])) {
+			$permissions[$m] = $_POST['perm_'.$m];
+		}
+	}
+}
+# formulate permissions
+$values['module_permissions'] = json_encode($permissions);
 
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }

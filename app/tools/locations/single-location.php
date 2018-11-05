@@ -16,8 +16,12 @@ if(!is_numeric($_GET['subnetId'])) {
     $Result->show("danger", _("Invalid Id"), true);
 }
 else {
+    # perm check
+    if ($User->get_module_permissions ("locations")<1) {
+        $Result->show("danger", _("You do not have permissions to access this module"), false);
+    }
     # check that location support isenabled
-    if ($User->settings->enableLocations!="1") {
+    elseif ($User->settings->enableLocations!="1") {
         $Result->show("danger", _("Locations module disabled."), false);
     }
     else {
@@ -99,19 +103,22 @@ else {
             	}
 
             	# actions
-            	print "<tr>";
-            	print " <td colspan='2'><hr></td>";
-            	print "</tr>";
+                if ($User->get_module_permissions ("locations")>1) {
+                	print "<tr>";
+                	print " <td colspan='2'><hr></td>";
+                	print "</tr>";
 
-            	print "<tr>";
-            	print "	<th></th>";
-            	print "	<td>";
-                print "	<div class='btn-group'>";
-        		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$location->id'><i class='fa fa-pencil'></i></a>";
-        		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$location->id'><i class='fa fa-times'></i></a>";
-        		print "	</div>";
-            	print " </td>";
-            	print "</tr>";
+                	print "<tr>";
+                	print "	<th></th>";
+                	print "	<td>";
+                    print "	<div class='btn-group'>";
+            		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$location->id'><i class='fa fa-pencil'></i></a>";
+                    if($User->get_module_permissions ("locations")>2)
+            		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$location->id'><i class='fa fa-times'></i></a>";
+            		print "	</div>";
+                	print " </td>";
+                	print "</tr>";
+                }
 
             	// fetch objects
             	$objects = $Tools->fetch_location_objects ($location->id);
@@ -132,6 +139,18 @@ else {
                     foreach ($objects as $o) {
                         $object_groups[$o->type][] = $o;
                     }
+
+                    # permissions
+                    if($User->get_module_permissions ("racks")<1)
+                    unset($object_groups['racks']);
+
+                    # permissions
+                    if($User->get_module_permissions ("devices")<1)
+                    unset($object_groups['devices']);
+
+                    # permissions
+                    if($User->get_module_permissions ("circuits")<1)
+                    unset($object_groups['circuits']);
 
                     // loop
                     foreach ($object_groups as $t=>$ob) {
@@ -190,4 +209,3 @@ else {
         }
     }
 }
-?>

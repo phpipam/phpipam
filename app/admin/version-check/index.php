@@ -53,7 +53,7 @@ foreach ($Tools->phpipam_releases as $r) {
 	print "<span class='text-muted'>Released on ".date("Y-M-d", strtotime($r->updated))."</span> ";
 	print "<div style='padding-top:10px;'>$r->content</div>";
 	// tag
-	print "<a class='btn btn-xs btn-default' href='http://github.com".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
+	print "<a class='btn btn-xs btn-default' href='".$r->link->{'@attributes'}->href."'>Download (GitHub)</a>";
 	print "</div>";
 }
 print "</div>";
@@ -99,7 +99,7 @@ if (VERSION_VISIBLE > $version) {
 			// date
 			print "<div style='padding-left:20px;margin-bottom:20px;'>";
 			print "$out[author] <span class='text-muted'>(pushed on $out[date])</span>";
-			print "<div style='padding:10px;background:white;max-width:400px;border-radius:6px;border:1px solid #ddd;'>$lines</div>";
+			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>$lines</div>";
 			// tag
 			print "<a class='btn btn-xs btn-default' style='margin-top:3px;' href='https://github.com/phpipam/phpipam/commit/$out[commit]' target='_blank'>View</a>";
 			print "</div>";

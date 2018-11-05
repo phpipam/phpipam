@@ -4,20 +4,12 @@
  * Cryptographic Code
  */
 class Crypto {
-
-    /**
-     * Set to "true" to use legacy mcrypt decrypt/encrypt functions for backwards compatibility.
-     * mcrypt support may be removed in a future release.
-     * @var bool (default: false)
-     */
-    private $use_legacy_mcrypt = true;
-
     /**
      * mcrypt cipher mode.
      * Change to MCRYPT_RIJNDAEL_128 to use AES-256 compliant RIJNDAEL algorithm (rijndael-128)
      * @var mixed
      */
-    private $legacy_mcrypt_aes_mode = 'MCRYPT_RIJNDAEL_256';
+    private $legacy_mcrypt_aes_mode = "rijndael-256"; // Use string value as MCRYPT_RIJNDAEL_256 constant may not be defined.
 
     /**
      * Result
@@ -40,24 +32,28 @@ class Crypto {
      * encrypt data and base64 encode results
      * @param  string $rawdata
      * @param  string $password
+     * @param  string $encryption_library   (default value: "openssl")
      * @return string|false
      */
-    public function encrypt($rawdata, $password) {
-        if ($this->use_legacy_mcrypt === true)
+    public function encrypt($rawdata, $password, $encryption_library="openssl") {
+        if ($encryption_library === "mcrypt")
             return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
-        return $this->encrypt_using_openssl($rawdata, $password);
+        else
+            return $this->encrypt_using_openssl($rawdata, $password);
     }
 
     /**
      * decrypt base64 encoded data
      * @param  string $base64data
      * @param  string $password
+     * @param  string $encryption_library   (default value: "openssl")
      * @return string|false
      */
-    public function decrypt($base64data, $password) {
-        if ($this->use_legacy_mcrypt === true)
+    public function decrypt($base64data, $password, $encryption_library="openssl") {
+        if ($encryption_library === "mcrypt")
             return $this->decrypt_using_legacy_mcrypt($base64data, $password);
-        return $this->decrypt_using_openssl($base64data, $password);
+        else
+            return $this->decrypt_using_openssl($base64data, $password);
     }
 
     // OpenSSL
@@ -140,7 +136,8 @@ class Crypto {
      * @return string|false
      */
     private function encrypt_using_legacy_mcrypt($rawdata, $password) {
-        return base64_encode(mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
+        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
+        return base64_encode(@mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
     }
 
     /**
@@ -150,7 +147,8 @@ class Crypto {
      * @return string|false
      */
     private function decrypt_using_legacy_mcrypt($base64data, $password) {
-        return trim(mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
+        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
+        return trim(@mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
     }
 
     /**** Security Tokens ****/

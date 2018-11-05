@@ -5,7 +5,8 @@
 
 /* get extension */
 $filename = $_FILES['file']['name'];
-$filename = end(explode(".", $filename));
+$filename = explode(".", $filename);
+$filename = end($filename);
 
 /* get settings */
 include(dirname(__FILE__)."/../../../../functions/functions.php");

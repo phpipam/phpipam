@@ -47,28 +47,6 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	<td><?php print _('Language'); ?></td>
 	<td><?php print $language->l_name; ?></td>
 </tr>
-<?php if ($User->settings->enablePowerDNS==1) { ?>
-<tr>
-    <?php
-    $user->pdns = $user->pdns=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
-    ?>
-	<td><?php print _('PowerDNS'); ?></td>
-	<td><?php print $user->pdns; ?></td>
-</tr>
-<?php } ?>
-<tr>
-    <?php
-    $user->editVlan = $user->editVlan=="Yes"||$user->role=="Administrator" ? "Yes" : "No";
-    ?>
-	<td><?php print _('Manage VLANs / VRFs'); ?></td>
-	<td><?php print $user->editVlan; ?></td>
-</tr>
-<?php if ($User->settings->enablePSTN==1) { ?>
-<tr>
-	<td><?php print _('PSTN'); ?></td>
-	<td><?php print $Subnets->parse_permissions ($user->pstn); ?></td>
-</tr>
-<?php } ?>
 <tr>
 	<td></td>
 	<td>
@@ -78,6 +56,22 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 	</div>
 	</td>
 </tr>
+
+
+<tr>
+	<td colspan="2"><h4><?php print _('Module permissions'); ?></h4><hr></td>
+</tr>
+
+<tr>
+	<td colspan="2">
+		<?php
+		$user = (array) $user;
+		include("print_module_permissions.php");
+		$user = (object) $user;
+		?>
+	</td>
+</tr>
+
 
 
 <tr>

@@ -95,7 +95,7 @@ $('#switchSNMPManagementEdit').change(function() {
     <tbody id="details" style="<?php print $display; ?>">
 	<!-- version -->
 	<tr>
-		<td><?php print _('Community'); ?></td>
+		<td><?php print _('Community/User'); ?></td>
 		<td>
     		<input name="snmp_community" class="form-control" placeholder="SNMP <?php print _('Community'); ?>" value='<?php print $device->snmp_community; ?>'>
 		</td>
@@ -136,7 +136,7 @@ $('#switchSNMPManagementEdit').change(function() {
 	<tr class="details3" style="<?php print $display_v3; ?>">
 		<td><?php print _('Password'); ?></td>
 		<td>
-    		<input type='password' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_auth_pass); ?>'>
+    		<input type='text' name="snmp_v3_auth_pass" class="form-control" placeholder="SNMPv3 <?php print _('Password'); ?>" value='<?php print $Tools->strip_xss($device->snmp_v3_auth_pass); ?>'>
 		</td>
 	</tr>
 
@@ -147,7 +147,7 @@ $('#switchSNMPManagementEdit').change(function() {
     		<select name="snmp_v3_priv_protocol" class="form-control input-w-auto">
         		<option value="none"><?php print _("Not used"); ?></option>
         		<option value="DES" <?php if($device->snmp_v3_priv_protocol=="DES") print "selected"; ?>>DES</option>
-        		<option value="AES" <?php if($device->snmp_v3_priv_protocol=="AES") print "selected"; ?>>AES</option>
+        		<option value="AES" <?php if($device->snmp_v3_priv_protocol=="AES") print "selected"; ?>>AES-128</option>
     		</select>
 		</td>
 	</tr>

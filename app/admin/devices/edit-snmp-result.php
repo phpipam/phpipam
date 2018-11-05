@@ -49,7 +49,7 @@ foreach($_POST as $key=>$line) {
 	}
 }
 # glue sections together
-$_POST['snmp_queries'] = sizeof($temp)>0 ? implode(";", $temp) : null;
+$_POST['snmp_queries'] = !empty($temp) ? implode(";", $temp) : null;
 
 # set update values
 $values = array(

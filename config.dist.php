@@ -9,6 +9,17 @@ $db['pass'] = 'phpipamadmin';
 $db['name'] = 'phpipam';
 $db['port'] = 3306;
 
+/**
+ * Database webhost settings
+ *
+ * Enable and change this setting if your MySQL database does not run on
+ * localhost and you want to use the automatic database installation method
+ * to create a database user for you (which by default is created @localhost)
+ *
+ * Set to the hostname or IP address of the webserver, or % to allow all
+ ******************************/
+#$db['webhost'] = 'localhost';
+
 
 /**
  *  SSL options for MySQL
@@ -62,13 +73,12 @@ $config['resolve_verbose']             = true;       // verbose response - print
  ******************************/
 $debugging = false;
 
-
-/**
- * Allow older PHP version
+/*
+ * API Crypt security provider. "mcrypt" or "openssl"
  *
- * allow version < 5.4 with limited functionality
+ * default as of 1.3.2 "openssl"
  ******************************/
-$allow_older_version = false;
+#$api_crypt_encryption_library = "mcrypt";
 
 
 /**
@@ -77,6 +87,14 @@ $allow_older_version = false;
  *  optional
  ******************************/
 $phpsessname = "phpipam";
+
+
+/**
+ * Session storage - files or database
+ *
+ * @var string
+ */
+$session_storage = "files";
 
 
 /**

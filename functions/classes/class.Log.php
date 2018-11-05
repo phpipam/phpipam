@@ -475,7 +475,7 @@ class Logging extends Common_functions {
 
 		# open syslog and write log
 		openlog('phpipam', LOG_NDELAY | LOG_PID, $this->syslog_facility);
-		syslog($this->syslog_priority, "$_SERVER[REMOTE_ADDR] | ".$username.$this->log_command." | ".$this->log_details);
+		syslog($this->syslog_priority, $_SERVER['REMOTE_ADDR']." | ".$username.$this->log_command." | ".$this->log_details);
 
 		# close
 		closelog();
@@ -599,12 +599,12 @@ class Logging extends Common_functions {
 	private function database_write_log () {
 	    # set values
 	    $values = array(
-	    			"command"=>$this->log_command,
-	    			"severity"=>$this->log_severity,
-	    			"date"=>$this->Database->toDate(),
-	    			"username"=>$this->log_username,
-	    			"ipaddr"=> array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
-	    			"details"=>$this->log_details
+					"command"  =>$this->log_command,
+					"severity" =>$this->log_severity,
+					"date"     =>$this->Database->toDate(),
+					"username" =>$this->log_username,
+					"ipaddr"   => array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
+					"details"  =>$this->log_details
 					);
 		# null empty values
 		$values = $this->reformat_empty_array_fields($values, null);
@@ -754,6 +754,9 @@ class Logging extends Common_functions {
 		// make sure we have settings
 		$this->get_settings ();
 
+		# default log
+		$log = array();
+
 		// check if syslog globally enabled and write log
 	    if($this->settings->enableChangelog==1) {
 		    # get user details and initialize required objects
@@ -764,9 +767,6 @@ class Logging extends Common_functions {
 
 		    # unset unneeded values and format
 		    $this->changelog_unset_unneeded_values ();
-
-		    # default log
-		    $log = array();
 
 		    # calculate diff
 		    if($action == "edit") {
@@ -802,7 +802,7 @@ class Logging extends Common_functions {
 			}
 
 			# if change happened write it!
-			if(sizeof($log)>0) {
+			if(is_array($log) && sizeof($log)>0) {
 				// reformat null
 				foreach ($log as $k=>$v) {
 					$log[$k] = str_replace(": <br>", ": / <br>", $v);
@@ -1904,19 +1904,18 @@ class Logging extends Common_functions {
     		return true;
         }
 
-		# fetch mailer settings
-		$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
-
-		# initialize mailer
-		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
-		$phpipam_mail->initialize_mailer();
-
-		// set content
-		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-		$content_plain = implode("\r\n",$content_plain);
-
 		# try to send
 		try {
+			# fetch mailer settings
+			$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
+
+			# initialize mailer
+			$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+
+			// set content
+			$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+			$content_plain = implode("\r\n",$content_plain);
+
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			foreach($recipients as $r) {
 			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
@@ -1929,7 +1928,7 @@ class Logging extends Common_functions {
 		} catch (phpmailerException $e) {
 			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		} catch (Exception $e) {
-			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
 		}
 
 		# ok

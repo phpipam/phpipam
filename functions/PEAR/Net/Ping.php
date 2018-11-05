@@ -146,7 +146,7 @@ class Net_Ping
         $sysname = Net_Ping::_setSystemName();
 
         if (($ping_path = Net_Ping::_setPingPath($sysname)) == NET_PING_CANT_LOCATE_PING_BINARY) {
-            return $this->pear->raiseError(NET_PING_CANT_LOCATE_PING_BINARY_MSG, NET_PING_CANT_LOCATE_PING_BINARY);
+            return PEAR::raiseError(NET_PING_CANT_LOCATE_PING_BINARY_MSG, NET_PING_CANT_LOCATE_PING_BINARY);
         } else {
             return new Net_Ping($ping_path, $sysname);
         }
@@ -159,7 +159,7 @@ class Net_Ping
      */
     public static function _setSystemName()
     {
-        $OS_Guess  = new OS_Guess;
+        $OS_Guess  = @new OS_Guess;
         $sysname   = $OS_Guess->getSysname();
 
         // Refine the sysname for different Linux bundles/vendors. (This
@@ -452,7 +452,7 @@ class Net_Ping
     */
     public static function _raiseError($error)
     {
-        if ($this->pear->isError($error)) {
+        if (PEAR::isError($error)) {
             $error = $error->getMessage();
         }
         trigger_error($error, E_USER_WARNING);

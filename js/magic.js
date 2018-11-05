@@ -16,7 +16,12 @@ function hideSpinner() { $('div.loading').fadeOut('fast'); }
 /* escape hide popups */
 $(document).keydown(function(e) {
     if(e.keyCode === 27) {
-        hidePopups();
+         if($("#popupOverlay2").is(":visible")) {
+            hidePopup2 ();
+         }
+         else {
+            hidePopup1 ();
+         }
     }
 });
 
@@ -145,6 +150,14 @@ function hidePopups() {
     $('body').removeClass('stop-scrolling');        //enable scrolling back
     hideSpinner();
 }
+function hidePopup1() {
+    $('#popupOverlay').fadeOut('fast');
+    $('#popupOverlay .popup').fadeOut('fast');
+    // IMPORTANT: also empty loaded content to avoid issues on popup reopening
+    $('#popupOverlay > div').empty();
+    hideSpinner();
+    $('body').removeClass('stop-scrolling');        //enable scrolling back
+}
 function hidePopup2() {
     $('#popupOverlay2').fadeOut('fast');
     $('#popupOverlay2 .popup').fadeOut('fast');
@@ -237,7 +250,7 @@ $(function() {
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
-                 .attr('data-page-size', '50')
+                 .attr('data-page-size', '250')
                  .attr('data-page-list', '[50,100,250,500,All]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')
@@ -1018,6 +1031,25 @@ $('form#ipCalc input.reset').click(function () {
     $('form#ipCalc input[type="text"]').val('');
     $('div.ipCalcResult').fadeOut('fast');
 });
+//
+$(document).on("click", "a.create_section_subnet_from_search", function() {
+    //get details - we need Section, network and subnet bitmask
+    var sectionId = $(this).attr('data-sectionId')
+    var subnet    = $(this).attr('data-subnet')
+    var bitmask   = $(this).attr('data-bitmask')
+
+    // formulate postdata
+    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+
+    //load add Subnet form / popup
+    $.post('app/admin/subnets/edit.php', postdata , function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    });
+
+    return false;
+})
 
 /* search function */
 function search_execute (loc) {
@@ -1046,9 +1078,9 @@ function search_execute (loc) {
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
-
+    var edge = ua.indexOf("Edge/");
     //IE
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
     else 																{ var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
@@ -1114,7 +1146,11 @@ $('form#userModSelf').submit(function () {
     $('div.userModSelfResult').hide();
 
     $.post('app/tools/user-menu/user-edit.php', selfdata, function(data) {
-        $('div.userModSelfResult').html(data).fadeIn('fast').delay(2000).fadeOut('slow');
+        $('div.userModSelfResult').html(data).fadeIn('fast');
+
+        if(data.search("danger")==-1) { $('div.userModSelfResult').delay(2000).fadeOut('slow'); hideSpinner(); }
+        else                          { hideSpinner(); }
+
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
@@ -1200,8 +1236,8 @@ $(document).on("change", "form#usersEdit select[name=role]", function() {
     //get details - we need Section, network and subnet bitmask
     var type = $("form#usersEdit select[name=role]").find(":selected").val();
     //we changed to domain
-    if(type == "Administrator") { $('tbody#user_notifications').show(); }
-    else            			{ $('tbody#user_notifications').hide(); }
+    if(type == "Administrator") { $('tbody#user_notifications').show(); $('tbody.module_permissions').hide(); }
+    else            			{ $('tbody#user_notifications').hide(); $('tbody.module_permissions').show(); }
 });
 
 // generate random pass
@@ -1372,7 +1408,7 @@ $('#logDirection button').click(function() {
 $('#downloadLogs').click(function() {
     showSpinner();
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/logs/export.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php'></iframe></div>");
     hideSpinner();
     //show downloading
     $('div.logs').prepend("<div class='alert alert-info' id='logsInfo'><i class='icon-remove icon-gray selfDestruct'></i> Preparing download... </div>");
@@ -1809,8 +1845,9 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
 						//lets try to detect IEto set location
 					    var ua = window.navigator.userAgent;
 					    var msie = ua.indexOf("MSIE ");
+					    var edge = ua.indexOf("Edge/");
 					    //IE
-					    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+					    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
 					    else 																{ var base = ""; }
 					    //go to search page
 					    var prettyLinks = $('#prettyLinks').html();
@@ -1875,7 +1912,7 @@ $(document).on('click', "#ripeMatchSubmit", function() {
 	hidePopup2();
 });
 //change subnet permissions
-$('.showSubnetPerm').click(function() {
+$(document).on("click", ".showSubnetPerm", function () {
 	showSpinner();
 	var subnetId  = $(this).attr('data-subnetId');
 	var sectionId = $(this).attr('data-sectionId');
@@ -2201,7 +2238,7 @@ $(document).on("click", ".editRack", function() {
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
-	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
+	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), devicetype:$(this).attr('data-devicetype'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
 });
 //submit edit rack devices form
 $(document).on("click", "#editRackDevicesubmit", function() {

@@ -7,15 +7,26 @@ if(!isset($_GET['section'])) { $_GET['section'] = ""; }
 
 # tool items
 $tool_items = array();
+// customers
+if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("customers")>0) {
+$tool_items["customers"] = array(
+                        "name"=>"Customers",
+                        "href"=>array("tools", "customers"),
+                        "title"=>"Customers",
+                        "icon"=>"fa-users"
+                       );
+}
 // vlans
+if($User->get_module_permissions ("vlan")>0) {
 $tool_items["vlan"] = array (
                         "name"=>"VLAN",
                         "href"=>array("tools", "vlan"),
                         "title"=>"Show VLANs and belonging subnets",
                         "icon"=>"fa-cloud"
                         );
+}
 // VRF
-if($User->settings->enableVRF == 1) {
+if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0) {
 $tool_items["vrf"] = array(
                         "name"=>"VRF",
                         "href"=>array("tools", "vrf"),
@@ -24,7 +35,7 @@ $tool_items["vrf"] = array(
                        );
 }
 // nat
-if($User->settings->enableNAT==1) {
+if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>0) {
 $tool_items["nat"] = array (
                         "name"=>"NAT",
                         "href"=>array("tools", "nat"),
@@ -33,7 +44,7 @@ $tool_items["nat"] = array (
                         );
 }
 // pdns
-if($User->settings->enablePowerDNS==1) {
+if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>0) {
 $tool_items["powerDNS"] = array (
                         "name"=>"PowerDNS",
                         "href"=>array("tools", "powerDNS"),
@@ -42,7 +53,7 @@ $tool_items["powerDNS"] = array (
                         );
 }
 // dhcp
-if($User->settings->enableDHCP==1) {
+if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>0) {
 $tool_items["dhcp"] = array (
                         "name"=>"DHCP",
                         "href"=>array("tools", "dhcp"),
@@ -51,7 +62,7 @@ $tool_items["dhcp"] = array (
                         );
 }
 // locations
-if($User->settings->enableLocations == 1) {
+if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>0) {
 $tool_items["locations"] = array (
                         "name"=>"Locations",
                         "href"=>array("tools", "locations"),
@@ -60,6 +71,7 @@ $tool_items["locations"] = array (
                         );
 }
 // devices
+if($User->get_module_permissions ("devices")>0)
 $tool_items["devices"] = array (
                         "name"=>"Devices",
                         "href"=>array("tools", "devices"),
@@ -67,7 +79,7 @@ $tool_items["devices"] = array (
                         "icon"=>"fa-desktop"
                         );
 // rack
-if($User->settings->enableRACK == 1) {
+if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>0) {
 $tool_items["racks"] = array (
                         "name"=>"Racks",
                         "href"=>array("tools", "racks"),
@@ -76,7 +88,7 @@ $tool_items["racks"] = array (
                         );
 }
 // circuits
-if($User->settings->enableCircuits == 1) {
+if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>0) {
 $tool_items["circuits"] = array (
                         "name"=>"Circuits",
                         "href"=>array("tools", "circuits"),
@@ -85,7 +97,7 @@ $tool_items["circuits"] = array (
                         );
 }
 // pstn
-if($User->settings->enablePSTN==1) {
+if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0) {
 $tool_items["pstn-prefixes"] = array (
                         "name"=>"PSTN",
                         "href"=>array("tools", "pstn-prefixes"),
@@ -123,6 +135,12 @@ $tool_items["search"] = array (
         print "</li>";
 	}
 	else {
+
+        # dashboard
+        print "<li class='first-item'>";
+        print " <a href='".create_link("dashboard")."'><i class='fa fa-home'></i></a>";
+        print "</li>";
+
         print "<li class='first-item'>";
         print "<a href='".create_link("tools")."'><i class='fa fa-angle-right'></i> "._('Tools')."</a>";
         print "</li>";
@@ -175,13 +193,14 @@ $tool_items["search"] = array (
         // active
         $active = $_GET['section']==$k ? "active" : "";
 
-        // clear name if set
-        if($User->user->menuCompact=="1") {
-            $t['name'] = "";
-        }
-
         print "<li rel='tooltip' title='"._($t['title'])."' data-placement='bottom' class='$active'>";
-        print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i> "._($t['name'])."</a>";
+        // compact menu
+        if($User->user->menuCompact=="1") {
+            print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='hidden-xs fa $t[icon]'></i><span class='visible-xs'> <i class='fa $t[icon]'></i>"._($t['name'])."</span></a>";
+        }
+        else {
+            print " <a href='".create_link($t['href'][0], $t['href'][1])."'><i class='fa $t[icon]'></i>"._($t['name'])."</a>";
+        }
         print "</li>";
     }
     ?>

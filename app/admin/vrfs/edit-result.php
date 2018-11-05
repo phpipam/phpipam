@@ -18,10 +18,12 @@ $Result 	= new Result ();
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-
-# make sue user can edit
-if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
-    $Result->show("danger", _("Not allowed to change VRFs"), true, true);
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("vrf", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("vrf", 3, true, true);
 }
 
 # strip input tags
@@ -64,7 +66,17 @@ if(sizeof($custom) > 0) {
 		if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = @$_POST[$myField['nameTest']];}
 	}
 }
-
+# append customerId
+if($User->settings->enableCustomers=="1") {
+	if (is_numeric($_POST['customer_id'])) {
+		if ($_POST['customer_id']>0) {
+			$values['customer_id'] = $_POST['customer_id'];
+		}
+		else {
+			$values['customer_id'] = NULL;
+		}
+	}
+}
 # update
 if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] VRF").'!', true); }
 else																	{ $Result->show("success", _("VRF $_POST[action] successfull").'!', false); }

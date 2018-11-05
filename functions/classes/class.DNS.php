@@ -52,6 +52,13 @@ class DNS extends Common_functions {
 	public $dns_type = "local";
 
 	/**
+	 * Multiple result flag
+	 *
+	 * @var bool
+	 */
+	private $multiple = false;
+
+	/**
 	 * Flag if local DNS in /etc/resolv.conf cannot be accessed
 	 *
 	 * @var bool
@@ -109,6 +116,18 @@ class DNS extends Common_functions {
 		$this->initialize_pear_net_DNS2 ();
 		// set print error flg
 		$this->print_error = $print_error;
+	}
+
+	/**
+	 * Set flag to return multiple records if found
+	 *
+	 * @method set_multiple
+	 * @param  bool $multiple
+	 */
+	public function set_multiple ($multiple = false) {
+		if(is_bool($multiple)) {
+			$this->multiple = $multiple;
+		}
 	}
 
 
@@ -283,8 +302,17 @@ class DNS extends Common_functions {
 
 			foreach($result->answer as $mxrr) {
 				if ($mxrr->{$search}) {
-					return $mxrr->{$search};
+					if ($this->multiple) {
+						$res_m[] = $mxrr->{$search};
+					}
+					else {
+						return $mxrr->{$search};
+					}
 				}
+			}
+			// multiple return
+			if($this->multiple) {
+				return $res_m;
 			}
 		}
 		else {

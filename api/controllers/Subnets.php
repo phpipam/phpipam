@@ -728,7 +728,7 @@ class Subnets_controller extends Common_api_functions {
 		}
 
 		# result
-		return sizeof($result)==0 ? false : $result;
+		return empty($result) ? false : $result;
 	}
 
 	/**

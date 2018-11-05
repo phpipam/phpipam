@@ -4223,19 +4223,19 @@ msgstr "Réseaux favoris"
 
 #: site/ipaddr/ipDetailsChangelog.php
 msgid "Changelog"
-msgstr "Changelo"
+msgstr "Historique de versions"
 
 msgid "No changelogs available"
-msgstr "Aucune changelog disponible"
+msgstr "Aucun historique de versions disponible"
 
 msgid "No changelog entries are available for this host"
-msgstr "Aucune entrée dans le changelog pour cet hôte"
+msgstr "Aucune entrée dans l'historique de versions pour cet hôte"
 
 msgid "No changelog entries are available for this subnet"
-msgstr "Aucune entrée dans le changelot pour ce sous-réseau"
+msgstr "Aucune entrée dans l'historique de versions pour ce sous-réseau"
 
 msgid "No changelog entries are available for this section"
-msgstr "Aucune entrée dans le changelog pour cette section"
+msgstr "Aucune entrée dans l'historique de versions pour cette section"
 
 #: site/ipaddr/ipDetails.php
 msgid "Availability"
@@ -4268,11 +4268,11 @@ msgstr "Affichage limité aux 500 dernières lignes"
 
 #: site/admin/settings.php
 msgid "Enable changelog"
-msgstr "Activer le changelog"
+msgstr "Activer l'historique de versions"
 
 #: site/tools/changelog.php
 msgid "Change logging is disabled. You can enable it under administration"
-msgstr "Changelog désactivé. Vous pouvez l'activer dans la parte administration"
+msgstr "Historique de versions désactivé. Vous pouvez l'activer dans la partie administration"
 
 #: site/admin/settings.php
 msgid "Ping path"
@@ -4289,7 +4289,7 @@ msgstr "Réglez le nombre maximum de tests ICMP parallèles (par défaut 128)"
 
 #: functions/functions-common.php
 msgid "Last 5 change log entries"
-msgstr "5 dernières lignes de changelog"
+msgstr "5 dernières lignes de l'historique de versions"
 
 #: site/admin/widgets.php
 msgid "You can manage widgets here"
@@ -4366,7 +4366,7 @@ msgstr "Taille du widget"
 
 #: site/ipaddr/scan/subnetScanDiscoveryPing.php
 msgid "No alive host found"
-msgstr "Aucun hôte active trouvé"
+msgstr "Aucun hôte actif trouvé"
 
 msgid "Errors occured during scan"
 msgstr "Des erreurs se sont produites pendant le scan"
@@ -5385,7 +5385,7 @@ msgid "Invalid authentication method"
 msgstr "Méthode d'authentification invalide"
 
 msgid "Username must be at least 6 characters long!"
-msgstr "Le username doit avoir au minimum 6 caractères de long !"
+msgstr "Le nom d'utilisateur doit avoir au minimum 6 caractères de long !"
 
 msgid "No servers available"
 msgstr "Aucun serveur disponible"
@@ -5463,7 +5463,7 @@ msgid ""
 "First create new user under user management with <u>same username as on AD</u> and set authention type to one "
 "of available methods."
 msgstr ""
-"Premièrement créez un nouvel utilisateur dans Gestion des utilisateurs avec <u>le même username que dans l'AD</"
+"Premièrement créez un nouvel utilisateur dans Gestion des utilisateurs avec <u>le même nom d'utilisateur que dans l'AD</"
 "u> et choisissez l'un des modes d'authentification disponibles."
 
 msgid "Failed to edit authentication method"
@@ -5820,7 +5820,7 @@ msgid "Error: Invalid authentication method"
 msgstr "Erreur : méthode d'authentification invalide"
 
 msgid "Invalid username or password"
-msgstr "Username ou mot de passe invalide"
+msgstr "Nom d'utilisateur ou mot de passe invalide"
 
 msgid "php Socket extension missing"
 msgstr "Extension php Socket manquante"

@@ -16,6 +16,8 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"n
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-user",		"name"=>"Users", 					"href"=>"users",					"description"=>"User management");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-users", 	"name"=>"Groups", 	 				"href"=>"groups", 					"description"=>"User group management");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-server", 	"name"=>"Authentication methods", 	"href"=>"authentication-methods", 	"description"=>"Manage user authentication methods and servers");
+$admin_menu['Server management'][] = array("show"=>true,    "icon"=>"fa-shield","name"=>"2FA",                     "href"=>"2fa",   "description"=>"Two-factor authentication with Google Authenticator");
+$admin_menu['Server management'][] = array("show"=>true,    "icon"=>"fa-unlock",    "name"=>"Password policy",        "href"=>"password-policy",          "description"=>"Set user password policy");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-envelope-o", "name"=>"Mail settings", 			"href"=>"mail", 					"description"=>"Set mail parameters and mail server settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"name"=>"API", 						"href"=>"api", 						"description"=>"API settings");
 if($User->settings->enablePowerDNS==1)
@@ -31,6 +33,7 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-phone", 		"
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"name"=>"Edit instructions", 		"href"=>"instructions", 			"description"=>"Set phpipam instructions for end users");
 
 # IP related management
+$admin_menu['IP related management'][] = array("show"=>true,    "icon"=>"fa-users", "name"=>"Customers",                "href"=>"customers",                 "description"=>"Customer management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server", "name"=>"Sections", 				"href"=>"sections", 				"description"=>"Section management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 				"href"=>"subnets", 					"description"=>"Subnet management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
@@ -74,6 +77,7 @@ $admin_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search-plus", 			"name"
 $admin_menu_items = array(
                         'api',
                 		'authentication-methods',
+                        'password-policy',
                 		'custom-fields',
                 		'dhcp',
                 		'devices',
@@ -107,8 +111,8 @@ $admin_menu_items = array(
                 		'nat',
                 		'locations',
                         'circuits',
-                		'pstn-prefixes'
+                		'pstn-prefixes',
+                        '2fa',
+                        'customers'
                     );
 
-
-?>

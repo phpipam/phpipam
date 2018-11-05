@@ -9,12 +9,12 @@ $User->check_user_session();
 print "<table class='table table-condensed table-td-top table-auto table-noborder'>";
 
 // add
-if($User->is_admin(false)) {
+if($User->get_module_permissions ("nat")>2) {
 print "<tr>";
 print " <td colspan='4'>";
 print "     <div class='btn-group noborder' role='group' style='margin-bottom:10px;'>";
 print "         <a href='' class='btn btn-sm btn-default editNat' data-action='add' data-id=''><i class='fa fa-plus'></i> Add new nat</a>";
-if(sizeof($all_nats)>0) {
+if(!empty($all_nats)) {
 print "         <div class='btn-group' role='group'>";
 print "             <button type='button' class='btn btn-sm btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>"._("Map to existing NAT")." <span class='caret'></span></button>";
 print "             <ul class='dropdown-menu' style='z-index:50'>";
@@ -42,7 +42,10 @@ print "</tr>";
 
 
 # print
-if(isset($all_nats_per_object['subnets'][$subnet['id']])) {
+if($User->get_module_permissions ("nat")<1) {
+    $Result->show ("danger", _("You do not have permissions to access this module"), true);
+}
+elseif(isset($all_nats_per_object['subnets'][$subnet['id']])) {
     foreach ($all_nats_per_object['subnets'][$subnet['id']] as $nat) {
         // set object
         $n = $all_nats[$nat];
@@ -58,6 +61,3 @@ else {
     print "</tr>";
 }
 print "</table>";
-
-
-?>

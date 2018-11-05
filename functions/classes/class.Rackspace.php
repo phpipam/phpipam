@@ -122,7 +122,7 @@ class phpipam_rack extends Tools {
      * @return void
      */
     private function define_rack_sizes () {
-        $this->rack_sizes = array(14, 20, 24, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52);
+        $this->rack_sizes = range(1,65);
     }
 
 
@@ -181,6 +181,16 @@ class phpipam_rack extends Tools {
         return $this->fetch_multiple_objects ("devices", "rack", $id, "rack_start", true);
     }
 
+    /**
+     * Fetches all freeform contents attached to rack
+     *
+     * @access public
+     * @param mixed $id
+     * @return void
+     */
+    public function fetch_rack_contents ($id) {
+        return $this->fetch_multiple_objects ("rackContents", "rack", $id, "rack_start", true);
+    }
 
 
 
@@ -199,20 +209,67 @@ class phpipam_rack extends Tools {
      * @param  int $id
      * @param  bool|int $deviceId   // active device id
      * @param  bool $is_back        // we are drwaing back side
+     * @param  bool $draw_names     // user permission for devices
      *
      * @return [type]
      */
-    public function draw_rack ($id, $deviceId = false, $is_back = false) {
+    public function draw_rack ($id, $deviceId = false, $is_back = false, $draw_names = true) {
         // fetch rack details
         $rack = $this->fetch_rack_details ($id);
         // fetch rack devices
         $devices = $this->fetch_rack_devices ($id);
+        // fetch freeform rack contents
+        $contents = $this->fetch_rack_contents ($id);
         // set size
         $this->rack_size = $rack->size;
+        // set orientation
+        $this->rack_orientation = $rack->topDown;
         // set name
-        $this->rack_name = $is_back ? "["._("Back")."] ".$rack->name : "["._("Front")."] ".$rack->name;
+        $this->rack_name = $is_back ? "[R] ".$rack->name : "[F] ".$rack->name;
 
-        // set content
+        // set freeform content
+        if ($contents!==false) {
+            foreach ($contents as $c) {
+                // back side
+                if ($is_back) {
+                    if ($c->rack_start > $rack->size) {
+                        // add initial location
+                        $rd = array("id"=>$c->id,
+                                    "name"=>$c->name,
+                                    "startLocation"=>$c->rack_start-$rack->size,
+                                    "size"=>$c->rack_size,
+                                    "rackName"=>$rack->name
+                                    );
+                        // if startlocation is not set
+                        $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
+                        // save content
+                        $this->rack_content[] = new RackContent ($rd);
+                    }
+                }
+                // front side
+                else {
+                    if($c->rack_start <= $rack->size) {
+                        // add initial location
+                        $rd = array("id"=>$c->id,
+                                    "name"=>$c->name,
+                                    "startLocation"=>$c->rack_start,
+                                    "size"=>$c->rack_size,
+                                    "rackName"=>$rack->name
+                                    );
+                        // if startlocation is not set
+                        $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
+                        // save content
+                        $this->rack_content[] = new RackContent ($rd);
+                    }
+                }
+            }
+        }
+
+        // set devices content
         if ($devices!==false) {
             foreach ($devices as $d) {
                 // back side devices
@@ -227,11 +284,13 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
                     }
                 }
-                // front size devices
+                // front side devices
                 else {
                     if($d->rack_start <= $rack->size) {
                         // add initial location
@@ -243,6 +302,8 @@ class phpipam_rack extends Tools {
                                     );
                         // if startlocation is not set
                         $rd['startLocation'] -= 1;
+                        // remove name if not permitted
+                        if(!$draw_names) { unset ($rd['name']); }
                         // save content
                         $this->rack_content[] = new RackContent ($rd);
                     }
@@ -271,6 +332,8 @@ class phpipam_rack extends Tools {
         $this->Rack = new Rack (array("name"=>$this->rack_name, "content"=>$this->rack_content));
         // set rack size
         $this->Rack->setSpace($this->rack_size);
+        // set rack orientation
+        $this->Rack->setOrientation($this->rack_orientation);
     }
 
     /**
@@ -334,6 +397,53 @@ class RackDrawer extends Common_functions {
      */
     private $template;
 
+    /**
+     * rackXSize
+     *
+     * @var mixed
+     * @access private
+     */
+    private $rackXSize;
+
+    /**
+     * rackInsideXOffset
+     *
+     * @var mixed
+     * @access private
+     */
+    private $rackInsideXOffset = 27;
+
+    /**
+     * rackInsideXSize
+     *
+     * @var mixed
+     * @access private
+     */
+    private $rackInsideXSize = 200;
+
+    /**
+     * topYSize
+     *
+     * @var mixed
+     * @access private
+     */
+    private $topYSize;
+
+    /**
+     * unitYSize
+     *
+     * @var mixed
+     * @access private
+     */
+    private $unitYSize;
+
+    /**
+     * bottomYSize
+     *
+     * @var mixed
+     * @access private
+     */
+    private $bottomYSize;
 
     /**
      * Draws rack
@@ -344,8 +454,35 @@ class RackDrawer extends Common_functions {
      */
     public function draw(Rack $rack) {
         $this->rack = $rack;
-        $response = file_get_contents(dirname(__FILE__).'/../../css/images/blankracks/'.$this->rack->getSpace().'.png', false);
-        $this->template = imagecreatefromstring($response);
+
+        $top = imagecreatefromstring(file_get_contents(dirname(__FILE__).'/../../css/images/blankracks/rack-top.png', false));
+        $unit = imagecreatefromstring(file_get_contents(dirname(__FILE__).'/../../css/images/blankracks/rack-unit.png', false));
+        $bottom = imagecreatefromstring(file_get_contents(dirname(__FILE__).'/../../css/images/blankracks/rack-bottom.png', false));
+        $this->rackXSize = imagesx($top);
+        $this->topYSize = imagesy($top);
+        $this->unitYSize = imagesy($unit);
+        $this->bottomYSize = imagesy($bottom);
+
+        $this->template = imagecreatetruecolor($this->rackXSize, $this->topYSize + $this->rack->getSpace() * $this->unitYSize + $this->bottomYSize);
+        // transparent BG
+        imagealphablending($this->template, false);
+        imagesavealpha($this->template, true);
+
+        $textColor = imagecolorallocate($this->template, 255, 255, 255);
+        $y = 0;
+        imagecopy($this->template, $top, 0, $y+1, 0, 0, $this->rackXSize, $this->topYSize);
+        $y += $this->topYSize;
+        for ($i = 0; $i < $this->rack->getSpace(); $i++) {
+            imagecopy($this->template, $unit, 0, $y, 0, 0, $this->rackXSize, $this->unitYSize);
+            $text = ($this->rack->getOrientation()) ? $i + 1 : $this->rack->getSpace() - $i;
+            $textBox = imagettfbbox(12, 0, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+            imagettftext($this->template, 12, 0,
+                $this->rackInsideXOffset - 4 - abs($textBox[2] - $textBox[0]),
+                $y + abs($textBox[1] - $textBox[7]) + round(($this->unitYSize - ($textBox[1] - $textBox[7])) / 2),
+                $textColor, dirname(__FILE__)."/../../css/fonts/MesloLGS-Regular.ttf", $text);
+            $y += $this->unitYSize;
+        }
+        imagecopy($this->template, $bottom, 0, $y, 0, 0, $this->rackXSize, $this->bottomYSize);
 
         $this->drawNameplate();
         $this->drawContents();
@@ -362,11 +499,11 @@ class RackDrawer extends Common_functions {
      * @return void
      */
     private function drawNameplate() {
-        $nameplate = imagecreate(150, 20);
+        $nameplate = imagecreate($this->rackInsideXSize - 12, $this->topYSize - 6);
         imagecolorallocate( $nameplate, 255, 255, 255 ); // Allocate a background color (first color assigned)
         $textColour = imagecolorallocate($nameplate, 0, 0, 0);
         $this->imageCenterString($nameplate, $this->rack->getName(), $textColour);
-        imagecopy($this->template, $nameplate, 52, 1, 0, 0, 150, 20);
+        imagecopy($this->template, $nameplate, $this->rackInsideXOffset + 6, 2, 0, 0, $this->rackInsideXSize - 12, $this->topYSize - 4);
     }
 
     /**
@@ -395,14 +532,16 @@ class RackDrawer extends Common_functions {
     private function drawContents() {
         foreach ($this->rack->getContent() as $content)
         {
-            $pixelSize = 20 * $content->getSize();
+            $pixelSize = $this->unitYSize * $content->getSize();
 
-            $img = imagecreate(200, $pixelSize);
+            $img = imagecreate($this->rackInsideXSize - 2, $pixelSize);
             $this->drawContent($content, $img, $content->getName());
 
-            $yPos = 22 + 20 * ($this->rack->getSpace() - ($content->getStartLocation() + $content->getSize()));
+            $yPos = ($this->rack->getOrientation()) ?
+                $this->topYSize + $this->unitYSize * ($content->getStartLocation()) :
+                $this->topYSize + $this->unitYSize * ($this->rack->getSpace() - ($content->getStartLocation() + $content->getSize()));
 
-            imagecopy($this->template, $img, 27, $yPos, 0, 0, 200, $pixelSize);
+            imagecopy($this->template, $img, $this->rackInsideXOffset + 1, $yPos, 0, 0, $this->rackInsideXSize - 2, $pixelSize);
             imagedestroy($img);
         }
     }
@@ -429,8 +568,8 @@ class RackDrawer extends Common_functions {
         }
 
         $this->imageCenterString($img, $name, $textColour);
-        imageline($img, 0, 0, 200, 0, $lineColour);
-        imageline($img, 0, imagesy($img) - 1, 200, imagesy($img) - 1, $lineColour);
+        imageline($img, 0, 0, $this->rackInsideXSize - 2, 0, $lineColour);
+        imageline($img, 0, imagesy($img) - 1, $this->rackInsideXSize - 2, imagesy($img) - 1, $lineColour);
     }
 }
 
@@ -485,6 +624,16 @@ class Rack extends Model {
      * @access private
      */
     private $space = 48;
+
+    /**
+     * orientation
+     *
+     * (default value: 0)
+     *
+     * @var int
+     * @access private
+     */
+    private $orientation = 0;
 
     /**
      * Rack content
@@ -545,6 +694,27 @@ class Rack extends Model {
      */
     public function setSpace($space) {
         $this->space = $space;
+    }
+
+    /**
+     * getOrientation function.
+     *
+     * @access public
+     * @return void
+     */
+    public function getOrientation() {
+        return $this->orientation;
+    }
+
+    /**
+     * setOrientation function.
+     *
+     * @access public
+     * @param mixed $orientation
+     * @return void
+     */
+    public function setOrientation($orientation) {
+        $this->orientation = $orientation;
     }
 
     /**

@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("vrf", 1, true, false);
 
 # fetch all vrfs
 $all_vrfs = $Admin->fetch_all_objects("vrf", "name");
@@ -49,6 +51,8 @@ else {
 	print '	<th>'._('RD').'</th>'. "\n";
 	print '	<th>'._('Sections').'</th>'. "\n";
 	print '	<th>'._('Description').'</th>'. "\n";
+	if($User->settings->enableCustomers=="1")
+	print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
 			if(!in_array($field['name'], $hidden_fields)) {
@@ -89,6 +93,12 @@ else {
 		print '	<td class="rd">'. $vrf['rd'] .'</td>'. "\n";
 		print "	<td><span class='text-muted'>$sections</span></td>";
 		print '	<td class="description">'. $vrf['description'] .'</td>'. "\n";
+
+		// customer
+		if($User->settings->enableCustomers=="1") {
+			 $customer = $Tools->fetch_object ("customers", "id", $vrf['customer_id']);
+			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+		}
 
 		// custom fields
 		if(sizeof($custom) > 0) {
