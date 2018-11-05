@@ -770,7 +770,7 @@ $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_customers`;";
 $upgrade_queries["1.4.11"][] = "-- Database version bump";
 $upgrade_queries["1.4.11"][] = "UPDATE `settings` set `dbversion` = '11';";
 $upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` VARCHAR(255)  CHARACTER SET utf8  BINARY  NULL  DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\",\"locations\":\"1\",\"devices\":\"1\"}';";
-
+$upgrade_queries["1.4.11"][] = "ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;";
 
 
 // output if required
