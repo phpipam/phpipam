@@ -943,4 +943,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 11;
+UPDATE `settings` SET `dbversion` = 12;
