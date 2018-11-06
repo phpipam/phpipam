@@ -2078,9 +2078,10 @@ class Tools extends Common_functions {
      * @param bool $admin (default: false) > shows remove links
      * @param bool|mixed $object_type (default: false)
      * @param bool $object_id (default: false)
+     * @param string $actions_menu
      * @return string
      */
-    public function print_nat_table ($n, $is_admin = false, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
+    public function print_nat_table ($n, $is_admin = false, $nat_id = false, $admin = false, $object_type = false, $object_id=false, $actions_menu = "") {
         // cast to object to be sure if array provided
         $n = (object) $n;
 
@@ -2118,10 +2119,9 @@ class Tools extends Common_functions {
         $html[] = "<tr>";
         $html[] = "<td colspan='4'>";
         $html[] = "<span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
-        $html[] = "	<div class='btn-group pull-right'>";
-        $html[] = "		<a href='' class='btn btn-xs btn-default editNat' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";
-        $html[] = "		<a href='' class='btn btn-xs btn-default editNat' data-action='delete' data-id='$n->id'><i class='fa fa-times'></i></a>";
-        $html[] = "	</div>";
+        $html[] = "<span class='pull-right'>";
+        $html[] = $actions_menu;
+        $html[] = "</span>";
         $html[] = "</td>";
         $html[] = "</tr>";
 
