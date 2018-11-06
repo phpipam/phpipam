@@ -132,7 +132,6 @@ if (isset($objects["circuits"])) {
 
 		}
 	}
-
 }
 else {
 	$Result->show("info", _("No objects"));

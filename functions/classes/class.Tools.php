@@ -2314,7 +2314,7 @@ class Tools extends Common_functions {
 			}
 		}
 		# return array
-		return $reverse ? array_reverse($parents, truetrue) :$parents;
+		return $reverse ? array_reverse($parents, true) :$parents;
 	}
 
 	/**
