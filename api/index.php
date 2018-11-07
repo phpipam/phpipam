@@ -71,16 +71,13 @@ try {
 		$api_crypt_encryption_library = "openssl";
 		// Override $api_crypt_encryption_library="mcrypt" from config.php if required.
 		include( dirname(__FILE__).'/../config.php' );
-		
-		if( $api_crypt_encryption_library  == "mcrypt" )
-		{
-			// verify php extensions
-			foreach (array("mcrypt") as $extension) {
-			if (!in_array($extension, get_loaded_extensions()))
-			    { $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
-			}
+
+		// verify php extensions
+		$extensions = ($api_crypt_encryption_library == "mcrypt") ? ["mcrypt"] : ["openssl"];
+		foreach ($extensions as $extension) {
+		if (!in_array($extension, get_loaded_extensions()))
+		    { $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
 		}
-		
 
 		// decrypt request - form_encoded
 		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
