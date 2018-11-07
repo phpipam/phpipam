@@ -90,7 +90,7 @@ class phpipamSNMP extends Common_functions {
 	private $snmp_port = '161';
 
 	/**
-	 * Default snmp timeut in ms
+	 * Default snmp timeout in ms
 	 *
 	 * (default value: '500')
 	 *
@@ -391,9 +391,9 @@ class phpipamSNMP extends Common_functions {
     private function connection_open () {
         // init connection
         if ($this->snmp_session === false) {
-            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
-            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout); }
-            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout);
+            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000); }
+            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000); }
+            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000);
                                                   $this->snmp_session->setSecurity(
                                                                                    $this->snmpv3_security->sec_level,
                                                                                    $this->snmpv3_security->auth_proto,
