@@ -82,6 +82,13 @@ $debugging = false;
 
 
 /**
+ * Allow API calls over HTTP (security = none)
+ *
+ * @var bool
+ */
+$api_allow_unsafe = false;
+
+/**
  *  manual set session name for auth
  *  increases security
  *  optional

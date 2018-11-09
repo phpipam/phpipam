@@ -30,6 +30,9 @@
         + PSTN module;
         + Locations module;
     + API:
+        + New API security type - SSL with app code (static app code);
+        + New config.php option $api_allow_unsafe to allow non-SSL API queries;
+        + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
 
     Bugfixes:
