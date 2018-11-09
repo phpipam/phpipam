@@ -1,74 +1,56 @@
-<script type="text/javascript">
-/* fix for ajax-loading tooltips */
-$('body').tooltip({ selector: '[rel=tooltip]' });
-</script>
-
 <?php
 
-/**
- * Script to display all customers
- *
- */
+/*
+ * Script to display search results
+ **********************************/
 
 # verify that user is logged in
 $User->check_user_session();
-# verify module permissions
-$User->check_module_permissions ("customers", 1, true);
-# filter customers or fetch print all?
-$customers = $Tools->fetch_all_objects("customers", "title");
 
-# strip tags - XSS
-$_GET = $User->strip_input_tags ($_GET);
+# get all custom fields
+$custom_customers_fields = $_REQUEST['customers']=="on"     ? $Tools->fetch_custom_fields ("customers") : array();
+$hidden_customer_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
 
-# get custom fields
-$custom_fields = $Tools->fetch_custom_fields('customers');
-# get hidden fields */
-$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
-$hidden_fields = is_array(@$hidden_fields['customers']) ? $hidden_fields['customers'] : array();
+# search cusotmers
+$result_customers = $Tools->search_customers ($searchTerm, $custom_customers_fields);
+?>
 
-# title
-print "<h4>"._('All customers')."</h4>";
-print "<hr>";
+<br>
+<h4><?php print _('Search results (Customers)');?>:</h4>
+<hr>
 
-# print link to manage
-print "<div class='btn-group'>";
-	// add
-	if($User->get_module_permissions("customers")==3) {
-    print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add customer')."</a>";
-	}
-print "</div>";
 
-# table
-print '<table id="customers" class="table sorted table-striped table-top" data-cookie-id-table="customers">';
-
-# headers
-print "<thead>";
-print '<tr>';
-print "	<th>"._('Title')."</th>";
-print "	<th>"._('Address').'</th>';
-print "	<th>"._('Contact').'</th>';
-if(sizeof(@$custom_fields) > 0) {
-	foreach($custom_fields as $field) {
-		if(!in_array($field['name'], $hidden_fields)) {
-			print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
-			$colspanCustom++;
-		}
-	}
-}
-print '	<th class="actions"></th>';
-print '</tr>';
-print "</thead>";
+<?php
 
 // no customers
-if($customers===false) {
-	$colspan = 4 + $colspanCustom;
-	print "<tr>";
-	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
-	print "</tr>";
+if($result_customers===false) {
+	$Result->show("info", _("No results"), false);
 }
 // result
 else {
-	foreach ($customers as $customer) {
+
+	# table
+	print '<table class="searchTable table sorted table-striped table-top" data-cookie-id-table="customers">';
+
+	# headers
+	print "<thead>";
+	print '<tr>';
+	print "	<th>"._('Title')."</th>";
+	print "	<th>"._('Address').'</th>';
+	print "	<th>"._('Contact').'</th>';
+	if(sizeof(@$custom_customers_fields) > 0) {
+		foreach($custom_customers_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "<th class='hidden-sm hidden-xs hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+				$colspanCustom++;
+			}
+		}
+	}
+	print '	<th class="actions"></th>';
+	print '</tr>';
+	print "</thead>";
+
+	foreach ($result_customers as $customer) {
 		// print details
 		print '<tr>'. "\n";
 		print "	<td><strong><a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"customers",$customer->title)."'>$customer->title</a></strong></td>";
@@ -79,8 +61,8 @@ else {
 		else
 		print " <td><span class='muted'>/</span></td>";
 		// custom
-		if(sizeof(@$custom_fields) > 0) {
-			foreach($custom_fields as $field) {
+		if(sizeof(@$custom_customers_fields) > 0) {
+			foreach($custom_customers_fields as $field) {
 				if(!in_array($field['name'], $hidden_fields)) {
 					// create html links
 					$customer->{$field['name']} = $User->create_links($customer->{$field['name']}, $field['type']);
@@ -111,6 +93,6 @@ else {
 
 		print '</tr>';
 	}
-}
 
-print '</table>';
+	print '</table>';
+}
