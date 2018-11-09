@@ -2505,13 +2505,22 @@ class Tools extends Common_functions {
 			    	}
 			    }
 
-				if($User->get_module_permissions ("pstn")>1) {
+			    // actions
+				if($User->get_module_permissions ("pstn")>0) {
 					$html[] = "	<td class='actions' style='padding:0px;'>";
-					$html[] = "	<div class='btn-group'>";
-					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['id']."'><i class='fa fa-pencil'></i></button>";
-					if($User->get_module_permissions ("pstn")>2)
-					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['id']."'><i class='fa fa-times'></i></button>";
-					$html[] = "	</div>";
+					$links = [];
+			        $links[] = ["type"=>"header", "text"=>"Show"];
+			        $links[] = ["type"=>"link", "text"=>"View prefix", "href"=>create_link($_GET['page'], "pstn-prefixes", $option['id']), "icon"=>"eye", "visible"=>"dropdown"];
+
+			        if($User->get_module_permissions ("pstn")>1) {
+			            $links[] = ["type"=>"divider"];
+			            $links[] = ["type"=>"header", "text"=>"Manage"];
+			            $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$option[id]'", "icon"=>"pencil"];
+			        }
+			        if($User->get_module_permissions ("pstn")>2) {
+			            $links[] = ["type"=>"link", "text"=>"Delete prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$option[id]'", "icon"=>"times"];
+			        }
+			        $html[] = $User->print_actions($User->user->compress_actions, $links);
 					$html[] = "	</td>";
 				}
 
