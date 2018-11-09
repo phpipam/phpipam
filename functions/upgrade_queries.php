@@ -778,9 +778,16 @@ $upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` 
 #
 $upgrade_queries["1.4.12"][] = "-- Database version bump";
 $upgrade_queries["1.4.12"][] = "UPDATE `settings` set `dbversion` = '12';";
-$upgrade_queries["1.4.12"][] = "ALTER TABLE `users` ADD `compress_actions` TINYINT(1)  NULL  DEFAULT '1';";
+$upgrade_queries["1.4.12"][] = "ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;";
 
 
+
+#
+# Subversion 1.4.13 queries
+#
+$upgrade_queries["1.4.13"][] = "-- Database version bump";
+$upgrade_queries["1.4.13"][] = "UPDATE `settings` set `dbversion` = '13';";
+$upgrade_queries["1.4.13"][] = "ALTER TABLE `users` ADD `compress_actions` TINYINT(1)  NULL  DEFAULT '1';";
 
 
 

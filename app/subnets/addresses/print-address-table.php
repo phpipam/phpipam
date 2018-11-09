@@ -284,8 +284,8 @@ else {
 					}
 					unset($dns_records);
 					if ($records !== false || $ptr!==false) {
-						$dns_records[] = "<hr>";
-						$dns_records[] = "<ul class='submenu-dns'>";
+						$dns_records[] = "<br>";
+						$dns_records[] = "<ul class='submenu-dns text-muted'>";
 						if($records!==false) {
 							foreach ($records as $r) {
 								if($r->type!="SOA" && $r->type!="NS")
@@ -308,8 +308,8 @@ else {
 					if ($records2 !== false) {
                         $dns_cname_unique = array();        // unique CNAME records to prevent multiple
                         unset($cname);
-						$dns_records2[] = "<hr>";
-						$dns_records2[] = "<ul class='submenu-dns'>";
+						$dns_records2[] = "<br>";
+						$dns_records2[] = "<ul class='submenu-dns text-muted'>";
 						foreach ($records2 as $r) {
 							if($r->type!="SOA" && $r->type!="NS")
 							$dns_records2[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->name </li>";
