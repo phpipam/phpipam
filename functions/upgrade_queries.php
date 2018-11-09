@@ -773,6 +773,14 @@ $upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` 
 
 
 
+#
+# Subversion 1.4.12 queries
+#
+$upgrade_queries["1.4.12"][] = "-- Database version bump";
+$upgrade_queries["1.4.12"][] = "UPDATE `settings` set `dbversion` = '12';";
+$upgrade_queries["1.4.12"][] = "ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;";
+
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check
