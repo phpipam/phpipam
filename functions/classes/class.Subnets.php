@@ -1960,7 +1960,7 @@ class Subnets extends Common_functions {
 		$sections_subnets = $masterSubnetId==0 ? $this->fetch_overlapping_subnets($new_subnet, 'sectionId', $sectionId) : $this->fetch_subnet_slaves($masterSubnetId);
 
 	    # verify new against each existing
-	    if (sizeof($sections_subnets)>0 && is_array($sections_subnets)) {
+	    if (is_array($sections_subnets) && sizeof($sections_subnets)>0) {
 	        foreach ($sections_subnets as $existing_subnet) {
 	            //only check if vrfId's match
 	            if((int) $existing_subnet->vrfId==$vrfId) {
