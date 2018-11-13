@@ -142,9 +142,10 @@ else {
 
 	<!-- jQuery error -->
 	<div class="jqueryError">
-		<div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
+		<div class='alert alert-danger' style="width:450px;margin:auto">jQuery error!
 		<div class="jqueryErrorText"></div><br>
 		<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+		</div>
 	</div>
 
 	<!-- Popups -->
