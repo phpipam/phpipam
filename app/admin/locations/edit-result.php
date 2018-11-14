@@ -50,7 +50,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
         }
 
         // fetch latlng
-        if(strlen($_POST['lat'])==0 && strlen($_POST['long'])==0 && strlen($_POST['address'])>0) {
+        if(strlen($gmaps_api_key)!=0 && strlen($_POST['lat'])==0 && strlen($_POST['long'])==0 && strlen($_POST['address'])>0) {
             $latlng = $Tools->get_latlng_from_address ($_POST['address']);
             if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
                 $_POST['lat'] = $latlng['lat'];
