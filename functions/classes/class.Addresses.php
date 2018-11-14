@@ -465,7 +465,8 @@ class Addresses extends Common_functions {
 						"note"        =>@$address['note'],
 						"is_gateway"  =>@$address['is_gateway'],
 						"excludePing" =>@$address['excludePing'],
-						"PTRignore"   =>@$address['PTRignore']
+						"PTRignore"   =>@$address['PTRignore'],
+						"lastSeen"    =>@$address['lastSeen']
 						);
 		# permissions
 		if($this->api!==true) {
