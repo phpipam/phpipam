@@ -393,6 +393,7 @@ class Addresses extends Common_functions {
 						$insert['customer_id'] = NULL;
 					}
 				}
+			}
 	        # location
 	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
 	            if (!is_numeric($address['location_item'])) {
@@ -472,7 +473,7 @@ class Addresses extends Common_functions {
 		if($this->api!==true) {
 			if($User->get_module_permissions ("devices")<1) {
 				unset($insert['switch']);
-
+			}
 	 		# customer
 			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
 				if (is_numeric($address['customer_id'])) {
