@@ -379,27 +379,28 @@ class Addresses extends Common_functions {
 						"lastSeen"              => @$address['lastSeen']
 						);
 		# permissions
-		if($User->get_module_permissions ("devices")<1) {
-			unset($insert['switch']);
-		}
-		# customer
-		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
-			if (is_numeric($address['customer_id'])) {
-				if ($address['customer_id']!="0") {
-					$insert['customer_id'] = $address['customer_id'];
-				}
-				else {
-					$insert['customer_id'] = NULL;
-				}
+		if($this->api!==true) {
+			if($User->get_module_permissions ("devices")<1) {
+				unset($insert['switch']);
 			}
-		}
-        # location
-        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
-            if (!is_numeric($address['location_item'])) {
-                $this->Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
+			# customer
+			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+				if (is_numeric($address['customer_id'])) {
+					if ($address['customer_id']!="0") {
+						$insert['customer_id'] = $address['customer_id'];
+					}
+					else {
+						$insert['customer_id'] = NULL;
+					}
+				}
+	        # location
+	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
+	            if (!is_numeric($address['location_item'])) {
+	                $this->Result->show("danger", _("Invalid location value"), true);
+	            }
+	            $insert['location'] = $address['location_item'];
+	        }
+	    }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -467,27 +468,29 @@ class Addresses extends Common_functions {
 						"PTRignore"   =>@$address['PTRignore']
 						);
 		# permissions
-		if($User->get_module_permissions ("devices")<1) {
-			unset($insert['switch']);
-		}
- 		# customer
-		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
-			if (is_numeric($address['customer_id'])) {
-				if ($address['customer_id']!="0") {
-					$insert['customer_id'] = $address['customer_id'];
-				}
-				else {
-					$insert['customer_id'] = NULL;
+		if($this->api!==true) {
+			if($User->get_module_permissions ("devices")<1) {
+				unset($insert['switch']);
+
+	 		# customer
+			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+				if (is_numeric($address['customer_id'])) {
+					if ($address['customer_id']!="0") {
+						$insert['customer_id'] = $address['customer_id'];
+					}
+					else {
+						$insert['customer_id'] = NULL;
+					}
 				}
 			}
-		}
-        # location
-        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
-            if (!is_numeric($address['location_item'])) {
-                $this->Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
+	        # location
+	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
+	            if (!is_numeric($address['location_item'])) {
+	                $this->Result->show("danger", _("Invalid location value"), true);
+	            }
+	            $insert['location'] = $address['location_item'];
+	        }
+	    }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];

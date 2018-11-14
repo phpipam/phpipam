@@ -224,11 +224,13 @@ class Subnets extends Common_functions {
 		# User class for permissions
 		$User = new User ($this->Database);
 		# validate permissions
-		if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
-		if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
-		if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
-		if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
-		if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
+		if($this->api!==true) {
+			if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
+			if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
+			if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
+			if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
+			if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
+		}
 
 		# execute
 		try { $this->Database->insertObject("subnets", $values); }
@@ -265,11 +267,13 @@ class Subnets extends Common_functions {
 		# User class for permissions
 		$User = new User ($this->Database);
 		# validate permissions
-		if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
-		if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
-		if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
-		if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
-		if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
+		if($this->api!==true) {
+			if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
+			if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
+			if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
+			if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
+			if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
+		}
 
 		# execute
 		try { $this->Database->updateObject("subnets", $values, "id"); }
