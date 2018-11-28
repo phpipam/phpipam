@@ -26,7 +26,10 @@ foreach($tools_menu as $k=>$tool) {
 		# multiple hrefs ?
 		$href = explode("/", $t['href']);
 		if(sizeof($href)>0) {
+			if(isset($href[1]))
 			print "<a href='".create_link("tools", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+			else
+			print "<a href='".create_link("tools", $href[0])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
 		}
 		else {
 			print "<a href='".create_link("tools", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";

@@ -1820,5 +1820,121 @@ class Common_functions  {
     	return implode(" / ", $title);
 	}
 
+
+
+
+	/**
+	 * Print action wrapper
+	 *
+	 * Provided items can have following items:
+	 *     type: link, divider, header
+	 *     text: text to print
+	 *     href: ''
+	 *     class: classes to be added to item
+	 *     dataparams: params to be added (e.g. data-deviceid='0')
+	 *     icon: name for icon
+	 *     visible: where it should be visible
+	 *
+	 *
+	 * @method print_actions
+	 * @param  string $type
+	 * @param  array $items [array of items]
+	 * @param  bool $left_align
+	 * @param  bool $print_text
+	 * @return [type]
+	 */
+	public function print_actions ($compress = "1", $items = [], $left_align = false, $print_text = false) {
+	    if (sizeof($items)>0) {
+	        return $compress=="1" ? $this->print_actions_dropdown($items, $left_align, $print_text) : $this->print_actions_buttons ($items);
+	    }
+	    else {
+	        return "";
+	    }
+	}
+
+	/**
+	 * Prints action dropdown
+	 *
+	 * @method print_actions_buttons
+	 * @param  array $items [array of items]
+	 * @param  bool $left_align
+	 * @param  bool $print_text
+	 * @return string
+	 */
+	private function print_actions_dropdown ($items = [], $left_align = false, $print_text = false) {
+	    // init
+	    $html   = [];
+	    // alignment
+	    $alignment = $left_align ? "dropdown-menu-left" : "dropdown-menu-right";
+	    // text
+	    $action_text = $print_text ? " <i class='fa fa-cogs'></i> Actions " : " <i class='fa fa-cogs'></i> ";
+
+	    $html[] = "<div class='dropdown'>";
+	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
+	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu' style='z-index:9'>";
+
+	    // loop items
+	    foreach ($items as $i) {
+	        // visible
+	        if (isset($i['visible'])) {
+	            if ($i['visible']!="dropdown") {
+	                continue;
+	            }
+	        }
+	        // title
+	        if ($i['type']=="header") {
+	            $html[] = "   <li class='dropdown-header'>".($i['text'])."</li>";
+
+	        }
+	        // separator
+	        elseif ($i['type']=="divider") {
+	            $html[] = "   <li role='separator' class='divider'></li>";
+	        }
+	        // item
+	        else {
+	            $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> "._($i['text'])."</a></li>";
+	        }
+	    }
+	    // remove last divider if present
+	    if (strpos(end($html),"divider")!==false) {
+	        array_pop($html);
+	    }
+	    // end
+	    $html[] = " </ul>";
+	    $html[] = "</div>";
+	    // result
+	    return implode("\n", $html);
+	}
+
+
+	/**
+	 * Prints icons btn-group
+	 *
+	 * @method print_actions_buttons
+	 * @param  array $items [array of items]
+	 * @return string
+	 */
+	private function print_actions_buttons ($items = []) {
+	    // init
+	    $html   = [];
+	    // structure
+	    $html[] = " <div class='btn-group'>";
+	    // irems
+	    foreach ($items as $i) {
+	        // visible
+	        if (isset($i['visible'])) {
+	            if ($i['visible']!="buttons") {
+	                continue;
+	            }
+	        }
+	        // save only links
+	        if($i['type']=="link") {
+	            $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='"._($i['text'])."'><i class='fa fa-$i[icon]'></i></a>";
+	        }
+	    }
+	    // end
+	    $html[] =  " </div>";
+	    // result
+	    return implode("\n", $html);
+	}
 }
-?>

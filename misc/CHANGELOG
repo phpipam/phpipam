@@ -13,6 +13,7 @@
     + Circuits enhancements (Virtual Circuits);
     + Dropped support for 32bit systems;
     + PHP 5.4 is now required;
+    + Added comressed actions dropdown;
     + Rack module enhancements (#1325):
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;
@@ -29,6 +30,9 @@
         + PSTN module;
         + Locations module;
     + API:
+        + New API security type - SSL with app code (static app code);
+        + New config.php option $api_allow_unsafe to allow non-SSL API queries;
+        + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
 
     Bugfixes:
@@ -44,6 +48,7 @@
     Security Fixes:
     ----------------------------
     + Hide SNMP community (#2197);
+    + Hide LDAP/AD/Radius username / password and secret from logs and syslog (#2006);
 
 == 1.3.2
 

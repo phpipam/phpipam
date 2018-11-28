@@ -119,19 +119,17 @@ else {
 
             if($User->get_module_permissions ("pstn")>1) {
         		print "	<td class='actions' style='padding:0px;'>";
-        		print "	<div class='btn-group'>";
 
-        		if($User->get_module_permissions ("pstn")>1) {
-        			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
-                    if ($User->get_module_permissions ("pstn")>2) {
-        			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
-                    }
-        		}
-        		else {
-        			print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
-        			print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
-        		}
-        		print "	</div>";
+                $links = [];
+                if($User->get_module_permissions ("pstn")>1) {
+                $links[] = ["type"=>"header", "text"=>"Manage"];
+                $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$sp->id'", "icon"=>"pencil"];
+                }
+                if($User->get_module_permissions ("pstn")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$sp->id'", "icon"=>"times"];
+                }
+                print $User->print_actions($User->user->compress_actions, $links);
+
         		print "	</td>";
             }
 

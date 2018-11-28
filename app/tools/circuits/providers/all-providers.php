@@ -92,15 +92,22 @@ else {
 		}
 
 		// actions
-		print "<td class='actions'>";
-		print "	<div class='btn-group'>";
-		print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits","providers",$provider->id)."''><i class='fa fa-eye'></i></a>";
-		if($User->get_module_permissions ("circuits")>1)
-		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'><i class='fa fa-pencil'></i></a>";
-		if($User->get_module_permissions ("circuits")>2)
-		print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'><i class='fa fa-times'></i></a>";
-		print "	</div>";
-		print "</td>";
+        print "<td class='actions'>";
+        $links = [];
+        $links[] = ["type"=>"header", "text"=>"View"];
+        $links[] = ["type"=>"link", "text"=>"Show provider", "href"=>create_link($_GET['page'], "circuits","providers",$provider->id), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"divider"];
+        if($User->get_module_permissions ("circuits")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage provider"];
+            $links[] = ["type"=>"link", "text"=>"Edit provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
+        }
+        if($User->get_module_permissions ("circuits")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
+            $links[] = ["type"=>"divider"];
+        }
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links);
+        print "</td>";
 
 		print '</tr>';
 	}

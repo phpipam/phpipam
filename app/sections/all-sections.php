@@ -55,6 +55,7 @@ $colspan = 8;
     <th><?php print _('Subnets'); ?></th>
     <?php if($User->is_admin(false)) { ?>
     <th><?php print _('Group Permissions'); ?></th>
+    <th></th>
     <?php $colspan--;} ?>
 </tr>
 </thead>
@@ -128,10 +129,18 @@ if(isset($sections_sorted)) {
 	    		print "</td>";
 
 	    	   	print '	<td class="actions">'. "\n";
-	    	   	print "	<div class='btn-group btn-group-xs'>";
-				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='edit'   data-sectionid='$section[id]'><i class='fa fa-pencil'></i></button>";
-				print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'><i class='fa fa-times'></i></button>";
-	    		print "	</div>";
+
+	    	   	// links
+		        $links = [];
+	            $links[] = ["type"=>"header", "text"=>"Show"];
+	            $links[] = ["type"=>"link", "text"=>"View section", "href"=>create_link( "subnets", $section['id']), "icon"=>"eye", "visible"=>"dropdown"];
+	            $links[] = ["type"=>"divider"];
+	            $links[] = ["type"=>"header", "text"=>"Manage"];
+	            $links[] = ["type"=>"link", "text"=>"Edit section", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'", "icon"=>"pencil"];
+	            $links[] = ["type"=>"link", "text"=>"Delete section", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'", "icon"=>"times"];
+		        // print links
+		        print $User->print_actions($User->user->compress_actions, $links);
+
 	    		print '	</td>'. "\n";
 	        }
 			print '</tr>'. "\n";

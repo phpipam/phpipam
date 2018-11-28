@@ -391,6 +391,7 @@ CREATE TABLE `users` (
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
   `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
+  `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`),
   KEY `id` (`id`)
@@ -514,11 +515,12 @@ CREATE TABLE `api` (
   `app_code` varchar(32) NULL DEFAULT '',
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
-  `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
+  `app_security`SET('ssl_code','ssl_token','crypt','user','none')  NOT NULL  DEFAULT 'ssl_token',
   `app_lock` INT(1)  NOT NULL  DEFAULT '0',
   `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
   `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0',
   `app_show_links` TINYINT(1)  NULL  DEFAULT '0',
+  `app_last_access` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -627,7 +629,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` set('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
-  `params` varchar(1024) DEFAULT NULL,
+  `params` varchar(2048) DEFAULT NULL,
   `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
   PRIMARY KEY (`id`)
@@ -943,4 +945,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 11;
+UPDATE `settings` SET `dbversion` = 14;

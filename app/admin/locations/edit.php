@@ -60,14 +60,11 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<!-- name -->
     	<tr>
         	<th><?php print _('Name'); ?></th>
-        	<td>
+        	<td colspan="2">
             	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-        	</td>
-        	<td>
-            	<span class="text-muted"><?php print _("Set Location name"); ?></span>
         	</td>
         </tr>
 
@@ -135,7 +132,7 @@ $custom = $Tools->fetch_custom_fields('locations');
                 // print
     			print "<tr>";
     			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
-    			print "	<td>".$custom_input['field']."</td>";
+    			print "	<td colspan='2'>".$custom_input['field']."</td>";
     			print "</tr>";
     		}
     	}

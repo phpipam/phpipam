@@ -111,11 +111,17 @@ else {
                 	print "<tr>";
                 	print "	<th></th>";
                 	print "	<td>";
-                    print "	<div class='btn-group'>";
-            		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$location->id'><i class='fa fa-pencil'></i></a>";
-                    if($User->get_module_permissions ("locations")>2)
-            		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$location->id'><i class='fa fa-times'></i></a>";
-            		print "	</div>";
+                    $links = [];
+                    $links[] = ["type"=>"header", "text"=>"Manage"];
+                    $links[] = ["type"=>"link", "text"=>"Edit location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$location->id'", "icon"=>"pencil"];
+
+                    if($User->get_module_permissions ("locations")>2) {
+                        $links[] = ["type"=>"link", "text"=>"Delete location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$location->id'", "icon"=>"times"];
+                        $links[] = ["type"=>"divider"];
+                    }
+                    // print links
+                    print $User->print_actions($User->user->compress_actions, $links, true, true);
+
                 	print " </td>";
                 	print "</tr>";
                 }

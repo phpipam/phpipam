@@ -143,21 +143,24 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         if($User->get_module_permissions ("racks")>1) {
             print "<tr>";
             print " <th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
-            print " <td style='vertical-align:bottom;align:left;'>";
+            print "<td class='actions'>";
 
-            print " <div class='btn-toolbar' style='margin-bottom:0px'>";
-            print " <div class='btn-group'>";
 
+            $links = [];
             # permissions
-            if($User->get_module_permissions ("racks")>1)
-            print "     <a href='' class='btn btn-xs btn-default editRack' data-action='edit'   data-rackid='$rack->id'><i class='fa fa-pencil'></i></a>";
-            if($User->get_module_permissions ("racks")>2)
-            print "     <a href='' class='btn btn-xs btn-default editRack' data-action='delete' data-rackid='$rack->id'><i class='fa fa-times'></i></a>";
+            if($User->get_module_permissions ("racks")>1) {
+                $links[] = ["type"=>"header", "text"=>"Manage"];
+                $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$rack->id'", "icon"=>"pencil"];
+            }
+            if($User->get_module_permissions ("racks")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$rack->id'", "icon"=>"times"];
+            }
+            // print links
+            print $User->print_actions($User->user->compress_actions, $links, true, true);
+            print "</td>";
 
-            print " </div>";
-            print " </div>";
 
-            print " </td>";
+
             print "</tr>";
 
             // divider

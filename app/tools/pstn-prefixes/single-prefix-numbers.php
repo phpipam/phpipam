@@ -152,13 +152,19 @@ $colspan_dhcp = 4;
 
 
 			# actions
-            if($User->get_module_permissions ("pstn")>1) {
+            if($User->get_module_permissions ("pstn")>0) {
             	print "	<td class='actions'>";
-                print "	<div class='btn-group'>";
-        		print "		<a href='' class='btn btn-xs btn-default editPSTNnumber' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";
-                if($User->get_module_permissions ("pstn")>2)
-        		print "		<a href='' class='btn btn-xs btn-default editPSTNnumber' data-action='delete' data-id='$n->id'><i class='fa fa-times'></i></a>";
-        		print "	</div>";
+
+                $links = [];
+                if($User->get_module_permissions ("pstn")>1) {
+                $links[] = ["type"=>"header", "text"=>"Manage"];
+                $links[] = ["type"=>"link", "text"=>"Edit number", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+                }
+                if($User->get_module_permissions ("pstn")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete number", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+                }
+                print $User->print_actions($User->user->compress_actions, $links);
+
             	print " </td>";
             }
 

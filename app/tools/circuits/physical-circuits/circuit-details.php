@@ -70,17 +70,17 @@ if($circuit!==false) {
 	    print "</div>";
 	    print "</div>";
 
-    print "</div>";
+		print "</div>";
 
 		//
 		// logical circuits
 		//
-	print "<div class='col-xs-12' style='margin-top:50px;'>";
-	print "<div class='col-xs-12'>";
-	include("circuit-details-logical-parents.php");
+		print "<div class='col-xs-12' style='margin-top:50px;'>";
+		print "<div class='col-xs-12'>";
+		include("circuit-details-logical-parents.php");
 		print "</div>";
 		print "</div>";
-	print "</div>";
+		print "</div>";
 
 }
 else {

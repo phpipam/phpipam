@@ -84,11 +84,16 @@ if($provider!==false) {
 	    	print "<tr>";
 	    	print "	<td></td>";
     		print "	<td class='actions'>";
-    		print "	<div class='btn-group'>";
-			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'><i class='fa fa-pencil'></i></a>";
-			if($User->get_module_permissions ("circuits")>2)
-			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'><i class='fa fa-times'></i></a>";
-    		print "	</div>";
+
+	        $links = [];
+            $links[] = ["type"=>"header", "text"=>"Manage provider"];
+            $links[] = ["type"=>"link", "text"=>"Edit provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
+	        if($User->get_module_permissions ("circuits")>2) {
+	            $links[] = ["type"=>"link", "text"=>"Delete provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
+	        }
+	        // print links
+	        print $User->print_actions($User->user->compress_actions, $links, true, true);
+
     		print " </td>";
 	    	print "</tr>";
     	}
@@ -172,17 +177,24 @@ if($provider!==false) {
 				}
 			}
 
-
 			// actions
-			print "<td class='actions'>";
-			print "	<div class='btn-group'>";
-			print "		<a class='btn btn-xs btn-default' href='".create_link($_GET['page'],"circuits",$circuit->id)."''><i class='fa fa-eye'></i></a>";
-			if($User->get_module_permissions ("circuits")>1)
-			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'><i class='fa fa-pencil'></i></a>";
-			if($User->get_module_permissions ("circuits")>2)
-			print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'><i class='fa fa-times'></i></a>";
-			print "	</div>";
-			print "</td>";
+	        print "<td class='actions'>";
+	        $links = [];
+	        if($User->get_module_permissions ("circuits")>0) {
+	            $links[] = ["type"=>"header", "text"=>"Show circuit"];
+	            $links[] = ["type"=>"link", "text"=>"View", "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
+	            $links[] = ["type"=>"divider"];
+	        }
+	        if($User->get_module_permissions ("circuits")>1) {
+	            $links[] = ["type"=>"header", "text"=>"Manage circuit"];
+	            $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
+	        }
+	        if($User->get_module_permissions ("circuits")>2) {
+	            $links[] = ["type"=>"link", "text"=>"Delete circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", "icon"=>"times"];
+	        }
+	        // print links
+	        print $User->print_actions($User->user->compress_actions, $links);
+	        print "</td>";
 
 			print '</tr>'. "\n";
 		}

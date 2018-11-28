@@ -16,8 +16,8 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"n
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-user",		"name"=>"Users", 					"href"=>"users",					"description"=>"User management");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-users", 	"name"=>"Groups", 	 				"href"=>"groups", 					"description"=>"User group management");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-server", 	"name"=>"Authentication methods", 	"href"=>"authentication-methods", 	"description"=>"Manage user authentication methods and servers");
-$admin_menu['Server management'][] = array("show"=>true,    "icon"=>"fa-shield","name"=>"2FA",                     "href"=>"2fa",   "description"=>"Two-factor authentication with Google Authenticator");
-$admin_menu['Server management'][] = array("show"=>true,    "icon"=>"fa-unlock",    "name"=>"Password policy",        "href"=>"password-policy",          "description"=>"Set user password policy");
+$admin_menu['Server management'][] = array("show"=>true,    "icon"=>"fa-shield","name"=>"2FA",                          "href"=>"2fa",                      "description"=>"Two-factor authentication with Google Authenticator");
+$admin_menu['Server management'][] = array("show"=>true,    "icon"=>"fa-unlock",    "name"=>"Password policy",          "href"=>"password-policy",          "description"=>"Set user password policy");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-envelope-o", "name"=>"Mail settings", 			"href"=>"mail", 					"description"=>"Set mail parameters and mail server settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-cogs", 		"name"=>"API", 						"href"=>"api", 						"description"=>"API settings");
 if($User->settings->enablePowerDNS==1)
@@ -29,7 +29,7 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-language", 
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-tachometer","name"=>"Widgets", 					"href"=>"widgets", 					"description"=>"Manage widget settings");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-tag", 		"name"=>"Tags", 					"href"=>"tags", 					"description"=>"Manage tags");
 if($User->settings->enablePSTN==1)
-$admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-phone", 		"name"=>"PSTN prefixes", 			"href"=>"pstn-prefixes", 			"description"=>"PSTN prefixes");
+$admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-phone", 		"name"=>"PSTN prefixes", 		"href"=>"pstn-prefixes", 			"description"=>"PSTN prefixes");
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"name"=>"Edit instructions", 		"href"=>"instructions", 			"description"=>"Set phpipam instructions for end users");
 
 # IP related management
@@ -38,7 +38,7 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server"
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 				"href"=>"subnets", 					"description"=>"Subnet management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VLAN", 					"href"=>"vlans", 					"description"=>"VLAN management");
 if($User->settings->enableVRF==1)
-$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VRF", 					"href"=>"vrfs", 					"description"=>"VRF management");
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VRF", 					"href"=>"vrf", 					"description"=>"VRF management");
 if($User->settings->enableNAT==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"NAT", 				    "href"=>"nat", 				        "description"=>"NAT settings");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"Nameservers", 			"href"=>"nameservers", 				"description"=>"Recursive nameserver sets for subnets");
@@ -56,15 +56,15 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-magic",
 
 
 # device managements
-$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-desktop","name"=>"Devices",                 "href"=>"devices",                  "description"=>"Device management");
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-desktop","name"=>"Devices",                     "href"=>"devices",                  "description"=>"Device management");
 if($User->settings->enableRACK == 1)
-$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-bars",  "name"=>"Racks",                   "href"=>"racks",                     "description"=>"Rack management");
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-bars",  "name"=>"Racks",                        "href"=>"racks",                    "description"=>"Rack management");
 if($User->settings->enableCircuits == 1)
-$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-random",  "name"=>"Circuits",                   "href"=>"circuits",                     "description"=>"Circuits management");
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-random",  "name"=>"Circuits",                   "href"=>"circuits",                 "description"=>"Circuits management");
 if($User->settings->enableSNMP == 1)
-$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-cogs","name"=>"SNMP",                         "href"=>"snmp",                   "description"=>"SNMP management");
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-cogs","name"=>"SNMP",                           "href"=>"snmp",                     "description"=>"SNMP management");
 if($User->settings->enableLocations == 1)
-$admin_menu['Device management'][]  = array("show"=>true,   "icon"=>"fa-map",        "name"=>"Locations",           "href"=>"locations",    "description"=>"Locations");
+$admin_menu['Device management'][]  = array("show"=>true,   "icon"=>"fa-map",        "name"=>"Locations",               "href"=>"locations",                "description"=>"Locations");
 
 
 # Tools
@@ -106,7 +106,7 @@ $admin_menu_items = array(
                 		'verify-database',
                 		'version-check',
                 		'vlans',
-                		'vrfs',
+                		'vrf',
                 		'widgets',
                 		'nat',
                 		'locations',

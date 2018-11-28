@@ -622,6 +622,39 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Function to search customers
+	 *
+	 * @access public
+	 * @param mixed $search_term
+	 * @param array $custom_fields (default: array())
+	 * @return array
+	 */
+	public function search_customers ($search_term, $custom_fields = array()) {
+		# query
+		$query[] = "select * from `customers` where `title` like :search_term or `address` like :search_term or `postcode` like :search_term or `city` like :search_term or `state` like :search_term ";
+		# custom
+	    if(sizeof($custom_fields) > 0) {
+			foreach($custom_fields as $myField) {
+				$myField['name'] = $this->Database->escape($myField['name']);
+				$query[] = " or `$myField[name]` like :search_term ";
+			}
+		}
+		$query[] = ";";
+		# join query
+		$query = implode("\n", $query);
+
+		# fetch
+		try { $search = $this->Database->getObjectsQuery($query, array("search_term"=>"%$search_term%")); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+	    # return result
+	    return $search;
+	}
+
+	/**
 	 * Reformat possible nun-full IPv4 address for search
 	 *
 	 *	e.g. 10.10.10 -> 10.10.10.0 - 10.10.10.255
@@ -2078,9 +2111,10 @@ class Tools extends Common_functions {
      * @param bool $admin (default: false) > shows remove links
      * @param bool|mixed $object_type (default: false)
      * @param bool $object_id (default: false)
+     * @param string $actions_menu
      * @return string
      */
-    public function print_nat_table ($n, $is_admin = false, $nat_id = false, $admin = false, $object_type = false, $object_id=false) {
+    public function print_nat_table ($n, $is_admin = false, $nat_id = false, $admin = false, $object_type = false, $object_id=false, $actions_menu = "") {
         // cast to object to be sure if array provided
         $n = (object) $n;
 
@@ -2118,10 +2152,9 @@ class Tools extends Common_functions {
         $html[] = "<tr>";
         $html[] = "<td colspan='4'>";
         $html[] = "<span class='badge badge1 badge5'>".ucwords($n->type)."</span> <strong>$n->name</strong> <span class='text-muted'>$n->description</span>";
-        $html[] = "	<div class='btn-group pull-right'>";
-        $html[] = "		<a href='' class='btn btn-xs btn-default editNat' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";
-        $html[] = "		<a href='' class='btn btn-xs btn-default editNat' data-action='delete' data-id='$n->id'><i class='fa fa-times'></i></a>";
-        $html[] = "	</div>";
+        $html[] = "<span class='pull-right'>";
+        $html[] = $actions_menu;
+        $html[] = "</span>";
         $html[] = "</td>";
         $html[] = "</tr>";
 
@@ -2314,7 +2347,7 @@ class Tools extends Common_functions {
 			}
 		}
 		# return array
-		return $reverse ? array_reverse($parents, truetrue) :$parents;
+		return $reverse ? array_reverse($parents, true) :$parents;
 	}
 
 	/**
@@ -2505,13 +2538,22 @@ class Tools extends Common_functions {
 			    	}
 			    }
 
-				if($User->get_module_permissions ("pstn")>1) {
+			    // actions
+				if($User->get_module_permissions ("pstn")>0) {
 					$html[] = "	<td class='actions' style='padding:0px;'>";
-					$html[] = "	<div class='btn-group'>";
-					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$option['id']."'><i class='fa fa-pencil'></i></button>";
-					if($User->get_module_permissions ("pstn")>2)
-					$html[] = "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$option['id']."'><i class='fa fa-times'></i></button>";
-					$html[] = "	</div>";
+					$links = [];
+			        $links[] = ["type"=>"header", "text"=>"Show"];
+			        $links[] = ["type"=>"link", "text"=>"View prefix", "href"=>create_link($_GET['page'], "pstn-prefixes", $option['id']), "icon"=>"eye", "visible"=>"dropdown"];
+
+			        if($User->get_module_permissions ("pstn")>1) {
+			            $links[] = ["type"=>"divider"];
+			            $links[] = ["type"=>"header", "text"=>"Manage"];
+			            $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$option[id]'", "icon"=>"pencil"];
+			        }
+			        if($User->get_module_permissions ("pstn")>2) {
+			            $links[] = ["type"=>"link", "text"=>"Delete prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$option[id]'", "icon"=>"times"];
+			        }
+			        $html[] = $User->print_actions($User->user->compress_actions, $links);
 					$html[] = "	</td>";
 				}
 

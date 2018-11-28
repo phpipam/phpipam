@@ -467,8 +467,9 @@ else {
 				}
 
 			    # print location
-			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("vlan")>0) {
-			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>";
+			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) {
+			    	$location_name = $Tools->fetch_object("locations", "id", $addresses[$n]->location);
+			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
 			    }
 
 				# print owner

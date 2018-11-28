@@ -1071,9 +1071,10 @@ function search_execute (loc) {
     var vrf       = $('#'+form_name+' input[name=vrf]').is(":checked") ? "on" : "off";
     var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
     var circuits  = $('#'+form_name+' input[name=circuits]').is(":checked") ? "on" : "off";
+    var customers = $('#'+form_name+' input[name=customers]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'","customers":"'+customers+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
@@ -1105,7 +1106,7 @@ $('form#search').submit(function () {
 // search ipaddress override
 $('a.search_ipaddress').click(function() {
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off"}',365);
+    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off","customers":"off"}',365);
 });
 
 //show/hide search select fields
@@ -1763,6 +1764,8 @@ $(document).on("click", ".editSubnet", function() {
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+
+    return false;
 });
 //resize / split subnet
 $(document).on("click", "#resize, #split, #truncate, .subnet-truncate", function() {
@@ -2134,17 +2137,9 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
 
 
 /* ---- Devices ----- */
-//load edit form
-$(document).on("click", ".editSwitch", function() {
-	open_popup("400", "app/admin/devices/edit.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editSwitchsubmit", function() {
     submit_popup_data (".switchManagementEditResult", "app/admin/devices/edit-result.php", $('form#switchManagementEdit').serialize());
-});
-// edit switch snmp
-$(document).on("click", ".editSwitchSNMP", function() {
-	open_popup("400", "app/admin/devices/edit-snmp.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
 });
 //submit form
 $(document).on("click", "#editSwitchSNMPsubmit", function() {
@@ -2178,17 +2173,17 @@ $(document).on("click", "#saveVlanScanResults", function() {
 
 //snmp vrf query popup
 $(document).on("click", "#snmp-vrf", function() {
-    open_popup ("700", "app/admin/vrfs/vrf-scan.php", {}, true);
+    open_popup ("700", "app/admin/vrf/vrf-scan.php", {}, true);
     return false;
 });
 //snmp vrf query execute
 $(document).on("click", ".show-vrf-scan-result", function() {
-    submit_popup_data (".vrf-scan-result", "app/admin/vrfs/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
+    submit_popup_data (".vrf-scan-result", "app/admin/vrf/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
     return false;
 });
 // submit vrf query result
 $(document).on("click", "#saveVrfScanResults", function() {
-    submit_popup_data ("#vrfScanAddResult", "app/admin/vrfs/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
+    submit_popup_data ("#vrfScanAddResult", "app/admin/vrf/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
     return false;
 });
 
@@ -2251,11 +2246,6 @@ $(document).on("click", ".showRackPopup", function() {
 
 
 /* ---- Locations ----- */
-//load edit form
-$(document).on("click", ".editLocation", function() {
-	open_popup("700", "app/admin/locations/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
-    return false;
-});
 //submit form
 $(document).on("click", "#editLocationSubmit", function() {
     submit_popup_data (".editLocationResult", "app/admin/locations/edit-result.php", $('form#editLocation').serialize());
@@ -2389,11 +2379,6 @@ $(document).on("click", "#editTypesubmit", function() {
 
 
 /* ---- VLANs ----- */
-//load edit form
-$(document).on("click", ".editVLAN", function() {
-    vlanNum = $(this).attr("data-number") ? $(this).attr('data-number') : "";		//set number
-	open_popup("400", "app/admin/vlans/edit.php", {vlanId:$(this).attr('data-vlanid'), action:$(this).attr('data-action'), vlanNum:vlanNum, domain:$(this).attr('data-domain')} );
-});
 //submit form
 $(document).on("click", "#editVLANsubmit", function() {
     submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-result.php", $('form#vlanManagementEdit').serialize());
@@ -2410,7 +2395,7 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
 /* ---- VRF ----- */
 //submit form
 $(document).on("click", "#editVRF", function() {
-    submit_popup_data (".vrfManagementEditResult", "app/admin/vrfs/edit-result.php", $('form#vrfManagementEdit').serialize());
+    submit_popup_data (".vrfManagementEditResult", "app/admin/vrf/edit-result.php", $('form#vrfManagementEdit').serialize());
 });
 
 /* ---- Nameservers ----- */
