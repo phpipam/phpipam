@@ -49,6 +49,7 @@
     ----------------------------
     + Hide SNMP community (#2197);
     + Hide LDAP/AD/Radius username / password and secret from logs and syslog (#2006);
+    + XSS in phpipamredirect cookie (#2338);
 
 == 1.3.2
 
