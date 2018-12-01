@@ -20,6 +20,9 @@ $ga 			= new PHPGangsta_GoogleAuthenticator();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "user-menu", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 # change ?
 if(@$_POST['2fa']=="1" && $User->user->{'2fa'}=="1") {
 	$Result->show("info", _("No change"), true);
