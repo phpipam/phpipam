@@ -37,14 +37,14 @@ if($nat->type=="static") {
     $nat_dst = json_decode($nat->dst, true);
 
     // validate all objects
-    if(sizeof(@$nat_src['ipaddresses'])>0) {
+    if(is_array(@$nat_src['ipaddresses'])) {
         foreach ($nat_src['ipaddresses'] as $ik=>$iv) {
             if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
                 unset($nat_src['ipaddresses'][$ik]);
             }
         }
     }
-    if(sizeof(@$nat_dst['ipaddresses'])>0) {
+    if(is_array(@$nat_dst['ipaddresses'])) {
         foreach ($nat_dst['ipaddresses'] as $ik=>$iv) {
             if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
                 unset($nat_dst['ipaddresses'][$ik]);
