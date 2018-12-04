@@ -91,6 +91,12 @@ if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
     $nat_id   = $_POST['id'];               // nat id
     $nat_type = $_POST['type'];             // src, dst
 
+    // validate object type
+    if (!in_array($obj_type, ['subnets', 'ipaddresses'])) { $Result->show("danger", _("Invalid object type"), true); }
+
+    // validate object id
+    if (!is_numeric($obj_id)) { $Result->show("danger", _("Invalid object id"), true); }
+
     // validate object
     $item = $Tools->fetch_object ($obj_type, "id", $obj_id);
     if($item!==false) {
