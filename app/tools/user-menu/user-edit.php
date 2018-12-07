@@ -20,6 +20,9 @@ $Password_check = new Password_check ();
 # verify that user is logged in
 $User->check_user_session();
 
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "user-menu", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 # verify email
 if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL))							{ $Result->show("danger alert-absolute",  _('Email not valid!'), true); }
 
@@ -33,6 +36,11 @@ if (strlen($_POST['password1']) != 0) {
 	$policy = (json_decode($User->settings->passwordPolicy, true));
 	$Password_check->set_requirements  ($policy, explode(",",$policy['allowedSymbols']));
 	if (!$Password_check->validate ($_POST['password1'])) 						{ $Result->show("danger alert-danger ", _('Password validation errors').":<br> - ".implode("<br> - ", $Password_check->get_errors ()), true); }
+}
+
+# Verify Theme
+if (!empty($_POST['theme'])) {
+	if (!in_array($_POST['theme'], ['default', 'white', 'dark'])) 				{ $Result->show("danger alert-absolute", _('Invalid theme'), true); }
 }
 
 # set override
