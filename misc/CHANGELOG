@@ -52,6 +52,7 @@
     + XSS in phpipamredirect cookie (#2338);
     + XSS in print-user.php, CSRF in user-edit.php (#2326);
     + Possible SQL injection in nat/item-add-submit.php (#2344);
+    + Fixed possible file inclusion in editing authenticaiton methods;
 
 == 1.3.2
 

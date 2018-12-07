@@ -60,6 +60,7 @@ elseif($User->settings->enableDHCP==1) { ?>
         <?php
         // include file
         if(!file_exists(dirname(__FILE__) . "/$_GET[subnetId].php")) 	{ $Result->show("danger", "Invalid request", true); }
+        elseif (!in_array($_GET['subnetId'], $tabs))                    { $Result->show("danger", "Invalid request", true); }
         else													        { include(dirname(__FILE__) . "/$_GET[subnetId].php"); }
         ?>
         </div>
