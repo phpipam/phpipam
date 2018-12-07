@@ -32,6 +32,8 @@ $Snmp = new phpipamSNMP ();
 
 # domain Id must be int
 if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true); }
+# submit ID must be numeric
+if (!is_numeric($_POST['subnetId']))            { $Result->show("danger", _("Invalid subnet Id"), true); }
 # fetch domain
 $domain = $Tools->fetch_object ("vlanDomains", "id", $_POST['domainId']);
 if ($domain===false)                            { $Result->show("danger", _("Invalid domain Id"), true); }
