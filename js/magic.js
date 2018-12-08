@@ -766,7 +766,7 @@ $(document).on('click', 'a#saveScanResults', function() {
 	var subnetId = $(this).attr('data-subnetId');
 	var postData = $('form.'+script+"-form").serialize();
 	var postData = postData+"&subnetId="+subnetId;
-	$.post('app/subnets/scan/subnet-'+script+"-result.php", postData, function(data) {
+	$.post('app/subnets/scan/subnet-scan-result-'+script+".php", postData, function(data) {
         $('#subnetScanAddResult').html(data);
         //hide if success!
         //reload after 2 seconds if succeeded!
@@ -2151,7 +2151,7 @@ $(document).on("click", "#test-snmp", function() {
 });
 //snmp route query popup
 $(document).on("click", "#snmp-routing", function() {
-    open_popup ("700", "app/subnets/scan/subnet-scan-snmp-route.php", "", true);
+    open_popup ("700", "app/subnets/scan/subnet-scan-execute-snmp-route.php", "", true);
     return false;
 });
 
@@ -2195,7 +2195,7 @@ $(document).on("click", ".select-snmp-subnet", function() {
 });
 //snmp route query popup - section search
 $(document).on("click", "#snmp-routing-section", function() {
-    open_popup ("masks", "app/subnets/scan/subnet-scan-snmp-route-all.php", {sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId')});
+    open_popup ("masks", "app/subnets/scan/subnet-scan-execute-snmp-route-all.php", {sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId')});
     return false;
 });
 //remove all results for device
@@ -2210,7 +2210,7 @@ $(document).on("click", ".remove-snmp-subnet", function() {
 });
 ///add subnets to section
 $(document).on("click", "#add-subnets-to-section-snmp", function() {
-   submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-snmp-route-all-result.php", $('form#editSubnetDetailsSNMPall').serialize());
+   submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-result-snmp-route-all.php", $('form#editSubnetDetailsSNMPall').serialize());
    return false;
 });
 
