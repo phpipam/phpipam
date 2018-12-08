@@ -4,27 +4,11 @@
  * Discover newsubnetshosts with snmp
  *******************************/
 
-/* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database, false);
-$Subnets	= new Subnets ($Database);
-$Sections	= new Sections ($Database);
-$Addresses	= new Addresses ($Database);
-$Tools		= new Tools ($Database);
-$Result 	= new Result ();
-
-# verify that user is logged in
-$User->check_user_session();
+# Check we have been included and not called directly
+if (!isset($subnet_scan_result_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
-
-# validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "scan_all", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # section
 $section_search = false;
