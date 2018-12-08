@@ -17,6 +17,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "scan");
 
 # ID must be numeric
 if(!is_numeric($_POST['subnetId']))										{ $Result->show("danger", _("Invalid ID"), true, true); }
@@ -104,7 +106,7 @@ $subnet->description = strlen($subnet->description)>0 ? "(".$subnet->description
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<button class="btn btn-sm btn-default btn-success" id="subnetScanSubmit" data-subnetId='<?php print $_POST['subnetId']; ?>'><i class="fa fa-gears"></i> <?php print _('Scan subnet'); ?></button>
+		<button class="btn btn-sm btn-default btn-success" id="subnetScanSubmit" data-subnetId='<?php print $_POST['subnetId']; ?>' data-csrf-cookie='<?php print $csrf; ?>'><i class="fa fa-gears"></i> <?php print _('Scan subnet'); ?></button>
 	</div>
 
 	<div class="subnetTruncateResult"></div>

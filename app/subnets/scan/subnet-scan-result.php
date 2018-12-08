@@ -29,7 +29,7 @@ switch ($type) {
     case "snmp-mac":
     case "snmp-route-all":
         $subnet_scan_result_included = true;
-        include("subnet-scan-result-$type.php");
+        require("subnet-scan-result-$type.php");
         break;
     default:
         $Result->show("danger", _("Invalid scan type"), true);

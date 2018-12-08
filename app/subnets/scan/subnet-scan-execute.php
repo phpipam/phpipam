@@ -24,6 +24,9 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
 # subnet Id must be a integer
 if(!is_numeric($_POST['subnetId']))	{ $Result->show("danger", _("Invalid ID"), true); }
 
@@ -43,29 +46,21 @@ if ($_POST['type']!="update-icmp" && $subnet->isFull==1)                { $Resul
 # verify php path
 if(!file_exists($Scan->php_exec))	{ $Result->show("danger", _("Invalid php path"), true, true); }
 
-# scan
-switch ($_POST['type']) {
+$type = $_POST['type'];
+
+switch ($type) {
+#scan
     case "scan-icmp":
-        include("subnet-scan-execute-scan-icmp.php");
-        break;
     case "scan-telnet":
-        include("subnet-scan-execute-scan-telnet.php");
-        break;
     case "snmp-arp":
-        include("subnet-scan-execute-snmp-arp.php");
-        break;
     case "snmp-mac":
-        include("subnet-scan-execute-snmp-mac.php");
-        break;
     case "snmp-route-all":
-        include("subnet-scan-execute-snmp-route-all.php");
-        break;
 # discovery
     case "update-icmp":
-        include("subnet-scan-execute-update-icmp.php");
-        break;
     case "update-snmp-arp":
-        include("subnet-scan-execute-update-snmp-arp.php");
+        $csrf = $_POST['csrf_cookie'];
+        $subnet_scan_execute_included = true;
+        require("subnet-scan-execute-$type.php");
         break;
     default:
         $Result->show("danger", _("Invalid scan type"), true);

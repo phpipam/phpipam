@@ -4,17 +4,17 @@
  * Discover new hosts with telnet scan
  *******************************/
 
-# verify that user is logged in
-$User->check_user_session();
+# Check we have been included and not called directly
+if (!isset($subnet_scan_execute_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 # get ports
-if(strlen($_POST['port'])==0) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
+if(empty($_POST['port'])) 	  { $Result->show("danger", _('Please enter ports to scan').'!', true); }
 
 //verify ports
 $pcheck = explode(";", str_replace(",",";",$_POST['port']));
 foreach($pcheck as $p) {
 	if(!is_numeric($p)) {
-		$Result->show("danger", _("Invalid port")." ($p)", true);
+		$Result->show("danger", _("Invalid port").' ('.escape_input($p).')', true);
 	}
 }
 $_POST['port'] = str_replace(";",",",$_POST['port']);

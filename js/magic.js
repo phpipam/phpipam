@@ -732,12 +732,13 @@ $(document).on('click','#subnetScanSubmit', function() {
 	showSpinner();
 	$('#subnetScanResult').slideUp('fast');
 	var subnetId = $(this).attr('data-subnetId');
+	var csrf     = $(this).attr('data-csrf-cookie');
 	var type 	 = $('select[name=type]').find(":selected").val();
 	if($('input[name=debug]').is(':checked'))	{ var debug = 1; }
 	else										{ var debug = 0; }
 	var port     = $('input[name=telnetports]').val();
 	$('#alert-scan').slideUp('fast');
-	$.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port}, function(data) {
+	$.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port, csrf_cookie:csrf}, function(data) {
         $('#subnetScanResult').html(data).slideDown('fast');
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;

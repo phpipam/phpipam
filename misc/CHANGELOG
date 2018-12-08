@@ -53,6 +53,7 @@
     + XSS in print-user.php, CSRF in user-edit.php (#2326);
     + Possible SQL injection in nat/item-add-submit.php (#2344);
     + Fixed possible file inclusion in editing authenticaiton methods;
+    + XSS in subnet-scan-telnet.php, CSRF in subnet-scan-execute.php (#2327);
 
 == 1.3.2
 

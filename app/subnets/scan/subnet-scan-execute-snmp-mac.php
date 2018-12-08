@@ -4,11 +4,8 @@
  * Discover new hosts with snmp
  *******************************/
 
-# verify that user is logged in
-$User->check_user_session();
-
-# create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "scan");
+# Check we have been included and not called directly
+if (!isset($subnet_scan_execute_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
