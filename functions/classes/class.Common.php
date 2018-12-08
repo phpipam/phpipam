@@ -833,7 +833,7 @@ class Common_functions  {
     	// return
     	return $mac;
 	}
-	
+
 	/**
 	* Returns true if site is accessed with https
 	*
@@ -841,15 +841,16 @@ class Common_functions  {
 	* @return bool
 	*/
 	public function isHttps() {
-		$isSecure = false;
 		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
-			$isSecure = true;
+			return true;
 		}
-		elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
-			$isSecure = true;
+		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+			return true;
 		}
-		
-		return $isSecure;
+		if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+			return true;
+		}
+		return false;
 	}
 
 	/**

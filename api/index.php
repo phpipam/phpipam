@@ -99,9 +99,8 @@ try {
 	// SSL checks
 	elseif($app->app_security=="ssl_token" || $app->app_security=="ssl_code") {
 		// verify SSL
-		if (!(new Common_functions())->isHttps()) {
-															{ $Response->throw_exception(503, 'App requires SSL connection'); }
-		}
+		if (!$Tools->isHttps()) { $Response->throw_exception(503, _('SSL connection is required for API')); }
+
 		// save request parameters
 		$params = (object) $_GET;
 	}
@@ -112,7 +111,7 @@ try {
 			$params = (object) $_GET;
 		}
 		else {
-			$Response->throw_exception(503, 'SSL connection is required for API');
+			$Response->throw_exception(503, _('SSL connection is required for API'));
 		}
 	}
 	// error, invalid security
