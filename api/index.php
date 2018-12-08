@@ -99,7 +99,7 @@ try {
 	// SSL checks
 	elseif($app->app_security=="ssl_token" || $app->app_security=="ssl_code") {
 		// verify SSL
-		if (!((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443)) {
+		if (!(new Common_functions())->isHttps()) {
 															{ $Response->throw_exception(503, 'App requires SSL connection'); }
 		}
 		// save request parameters
