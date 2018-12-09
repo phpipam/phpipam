@@ -1257,7 +1257,7 @@ class Subnets extends Common_functions {
 			return false;
 		}
         # result
-        return sizeof($subnet)>0 ? $subnet : false;
+        return is_object($subnet) ? $subnet : false;
 
 	}
 
