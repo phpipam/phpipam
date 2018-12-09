@@ -64,7 +64,7 @@ if ($User->settings->scanPingType=="fping" && isset($script_result->values->aliv
 $m=0;
 if($script_result->status==0) {
 	//loop types (dead, alive, error)
-	if(sizeof($script_result->values)>0) {
+	if(!empty($script_result->values)) {
 		foreach($script_result->values as $k=>$r) {
 			//loop addresses in type
 			foreach($r as $ip) {

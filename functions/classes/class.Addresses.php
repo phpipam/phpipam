@@ -291,7 +291,7 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# save to addresses cache
-		if(sizeof($address)>0) {
+		if(is_object($address)) {
 			# add decimal format
 			$address->ip = $this->transform_to_dotted ($address->ip_addr);
 			# save to subnets
