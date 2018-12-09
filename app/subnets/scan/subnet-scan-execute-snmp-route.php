@@ -1,5 +1,8 @@
 <?php
 
+# Check we have been included via subnet-scan-excute.php and not called directly
+# FIXME - require("subnet-scan-check-included.php");
+
 /*
  * This script finds slave subnets via snmp
  *

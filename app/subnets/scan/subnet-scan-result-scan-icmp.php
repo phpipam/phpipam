@@ -1,10 +1,11 @@
 <?php
+
+# Check we have been included via subnet-scan-result.php and not called directly
+require("subnet-scan-check-included.php");
+
 /*
  * insert new hosts to database
  *******************************/
-
-# Check we have been included and not called directly
-if (!isset($subnet_scan_result_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";

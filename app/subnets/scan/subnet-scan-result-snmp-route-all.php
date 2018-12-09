@@ -1,11 +1,11 @@
 <?php
 
+# Check we have been included via subnet-scan-result.php and not called directly
+require("subnet-scan-check-included.php");
+
 /*
  * Discover newsubnetshosts with snmp
  *******************************/
-
-# Check we have been included and not called directly
-if (!isset($subnet_scan_result_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);

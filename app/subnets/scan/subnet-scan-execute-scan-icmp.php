@@ -1,11 +1,11 @@
 <?php
 
+# Check we have been included via subnet-scan-excute.php and not called directly
+require("subnet-scan-check-included.php");
+
 /*
  * Discover new hosts with ping
  *******************************/
-
-# Check we have been included and not called directly
-if (!isset($subnet_scan_execute_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 # validate subnetId and type
 if(!is_numeric($_POST['subnetId']))                        { $Result->show("danger", "Invalid subnet Id", true); die(); }

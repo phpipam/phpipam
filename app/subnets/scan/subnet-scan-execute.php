@@ -59,7 +59,6 @@ switch ($type) {
     case "update-icmp":
     case "update-snmp-arp":
         $csrf = $_POST['csrf_cookie'];
-        $subnet_scan_execute_included = true;
         require("subnet-scan-execute-$type.php");
         break;
     default:

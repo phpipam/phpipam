@@ -1,10 +1,11 @@
 <?php
+
+# Check we have been included via subnet-scan-result.php and not called directly
+require("subnet-scan-check-included.php");
+
 /*
  * insert new hosts to database
  *******************************/
-
-# Check we have been included and not called directly
-if (!isset($subnet_scan_result_included)) { $Result->show("danger", _("Invalid request"), true); }
 
 # verify that user has write permissionss for subnet
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true); }

@@ -28,7 +28,6 @@ switch ($type) {
     case "scan-snmp-arp":
     case "snmp-mac":
     case "snmp-route-all":
-        $subnet_scan_result_included = true;
         require("subnet-scan-result-$type.php");
         break;
     default:
