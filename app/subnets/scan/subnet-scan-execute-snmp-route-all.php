@@ -138,7 +138,7 @@ else {
     $vrfs  = $Tools->fetch_all_objects("vrf", "name");
 
     # create csrf token
-    $csrf = $User->Crypto->csrf_cookie ("create", "scan_all");
+    $csrf = $User->Crypto->csrf_cookie ("create", "scan");
 ?>
 
 <!-- header -->

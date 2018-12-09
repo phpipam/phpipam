@@ -25,12 +25,12 @@ $type = $_POST['type'];
 switch ($type) {
     case "scan-icmp":
     case "scan-telnet":
-    case "snmp-arp":
+    case "scan-snmp-arp":
     case "snmp-mac":
     case "snmp-route-all":
         $subnet_scan_result_included = true;
         require("subnet-scan-result-$type.php");
         break;
     default:
-        $Result->show("danger", _("Invalid scan type"), true);
+        $Result->show("danger", _("Invalid scan type").' ('.escape_input($type).')', true);
 }

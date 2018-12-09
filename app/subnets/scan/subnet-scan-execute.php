@@ -52,7 +52,7 @@ switch ($type) {
 #scan
     case "scan-icmp":
     case "scan-telnet":
-    case "snmp-arp":
+    case "scan-snmp-arp":
     case "snmp-mac":
     case "snmp-route-all":
 # discovery
@@ -63,5 +63,5 @@ switch ($type) {
         require("subnet-scan-execute-$type.php");
         break;
     default:
-        $Result->show("danger", _("Invalid scan type"), true);
+        $Result->show("danger", _("Invalid scan type").' ('.escape_input($type).')', true);
 }
