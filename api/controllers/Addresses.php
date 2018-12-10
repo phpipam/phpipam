@@ -329,7 +329,15 @@ class Addresses_controller extends Common_api_functions  {
             if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
             else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
         }
-		 elseif (@$this->_params->id=="search_mac") {
+	// search partial hostname, return sorted by name
+	elseif (@$this->_params->id=="search_hostname_partial") {
+	    $target = "%".$this->_params->id2."%";
+	    $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "hostname", $target, "hostname", true, true);
+	    // check result
+	    if($result===false)                         { $this->Response->throw_exception(200, 'Host name not found'); }
+	    else                                        { return array("code"=>200, "data"=>$this->prepare_result ($result, $this->_params->controller, false, false));}
+	}
+	elseif (@$this->_params->id=="search_mac") {
             $this->_params->id2 = $this->reformat_mac_address ($this->_params->id2, 1);
             $result = $this->Tools->fetch_multiple_objects ("ipaddresses", "mac", $this->_params->id2, "mac");
             // check result
