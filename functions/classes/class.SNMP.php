@@ -347,9 +347,11 @@ class phpipamSNMP extends Common_functions {
 	 * @return void
 	 */
 	private function set_snmp_timeout ($timeout) {
-    	if (is_numeric($timeout)) {
-        	$this->snmp_timeout = $timeout;
-        }
+		if (is_numeric($timeout) && $timeout > 0) {
+			$this->snmp_timeout = $timeout < 10000 ? $timeout : 10000;
+		} else {
+			$this->snmp_timeout = 1000;
+		}
 	}
 
     /**

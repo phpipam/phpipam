@@ -37,7 +37,7 @@ elseif ($device->snmp_version=="3")                             { $display=''; $
 else                                                            { $display=''; $display_v3 = ''; }
 
 // default values
-if (strlen($device->snmp_timeout)==0)   { $device->snmp_timeout = 1000000; }
+if (strlen($device->snmp_timeout)==0)   { $device->snmp_timeout = 1000; }
 ?>
 
 <script type="text/javascript">

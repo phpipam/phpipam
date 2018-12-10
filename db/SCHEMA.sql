@@ -320,7 +320,7 @@ CREATE TABLE `devices` (
   `snmp_community` varchar(100) DEFAULT NULL,
   `snmp_version` set('0','1','2','3') DEFAULT '0',
   `snmp_port` mediumint(5) unsigned DEFAULT '161',
-  `snmp_timeout` mediumint(5) unsigned DEFAULT '500',
+  `snmp_timeout` mediumint(5) unsigned DEFAULT '1000',
   `snmp_queries` varchar(128) DEFAULT NULL,
   `snmp_v3_sec_level` set('none','noAuthNoPriv','authNoPriv','authPriv') DEFAULT 'none',
   `snmp_v3_auth_protocol` set('none','MD5','SHA') DEFAULT 'none',
@@ -945,4 +945,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 14;
+UPDATE `settings` SET `dbversion` = 15;
