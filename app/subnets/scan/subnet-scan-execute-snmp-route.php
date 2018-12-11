@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included via subnet-scan-excute.php and not called directly
-# FIXME - require("subnet-scan-check-included.php");
+require("subnet-scan-check-included.php");
 
 /*
  * This script finds slave subnets via snmp
@@ -10,20 +10,7 @@
  *
  ******************************************/
 
-/* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
-# initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Tools	 	= new Tools ($Database);
-$Sections	= new Sections ($Database);
-$Subnets	= new Subnets ($Database);
 $Snmp       = new phpipamSNMP ();
-$Result 	= new Result ();
-
-# verify that user is logged in
-$User->check_user_session();
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", "SNMP module disbled", true, true, false, true); }

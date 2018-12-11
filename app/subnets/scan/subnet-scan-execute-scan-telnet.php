@@ -22,9 +22,6 @@ $_POST['port'] = str_replace(";",",",$_POST['port']);
 // verify subnetId
 if(!is_numeric($_POST['subnetId'])) { $Result->show("danger", _('Invalid subnet Identifier').'!', true); }
 
-# create csrf token
-$csrf = $User->Crypto->csrf_cookie ("create", "scan");
-
 # invoke CLI with threading support
 $cmd = $Scan->php_exec." ".dirname(__FILE__) . "/../../../functions/scan/subnet-scan-telnet-execute.php $_POST[subnetId] '$_POST[port]'";
 

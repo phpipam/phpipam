@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included via subnet-scan-excute.php and not called directly
-# FIXME - require("subnet-scan-check-included.php");
+require("subnet-scan-check-included.php");
 
 /*
  * Discover new subnets with snmp
@@ -9,31 +9,6 @@
  * Discover new slave subnets with snmp
  *
  *******************************/
-
-# flag for ajax-loaded
-$ajax_loaded = false;
-
-# ajax check
-if (!function_exists("create_link")) {
-    /* functions */
-    require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-
-    # initialize user object
-    $Database 	= new Database_PDO;
-    $User 		= new User ($Database);
-    $Tools	 	= new Tools ($Database);
-    $Sections	= new Sections ($Database);
-    $Subnets	= new Subnets ($Database);
-    $Snmp       = new phpipamSNMP ();
-    $Result 	= new Result ();
-
-    # set ajax
-    $ajax_loaded = true;
-}
-
-
-# verify that user is logged in
-$User->check_user_session();
 
 # snmp class
 $Snmp       = new phpipamSNMP ();
@@ -139,9 +114,6 @@ else {
     # fetch vrfs
     if($User->settings->enableVRF==1)
     $vrfs  = $Tools->fetch_all_objects("vrf", "name");
-
-    # create csrf token
-    $csrf = $User->Crypto->csrf_cookie ("create", "scan");
 ?>
 
 <!-- header -->

@@ -2153,7 +2153,7 @@ $(document).on("click", "#test-snmp", function() {
 });
 //snmp route query popup
 $(document).on("click", "#snmp-routing", function() {
-    open_popup ("700", "app/subnets/scan/subnet-scan-execute-snmp-route.php", "", true);
+    open_popup ("700", "app/subnets/scan/subnet-scan-execute.php", {type:'snmp-route', csrf_cookie:$(this).attr('data-csrf-cookie')}, true);
     return false;
 });
 
@@ -2197,7 +2197,7 @@ $(document).on("click", ".select-snmp-subnet", function() {
 });
 //snmp route query popup - section search
 $(document).on("click", "#snmp-routing-section", function() {
-    open_popup ("masks", "app/subnets/scan/subnet-scan-execute-snmp-route-all.php", {sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId')});
+    open_popup ("masks", "app/subnets/scan/subnet-scan-execute.php", {type:'snmp-route-all', sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId'), csrf_cookie:$(this).attr('data-csrf-cookie'), ajax_loaded:'true'});
     return false;
 });
 //remove all results for device
