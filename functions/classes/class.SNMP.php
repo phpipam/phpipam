@@ -92,12 +92,22 @@ class phpipamSNMP extends Common_functions {
 	/**
 	 * Default snmp timeout in ms
 	 *
-	 * (default value: '500')
+	 * (default value: '1000')
 	 *
 	 * @var string
 	 * @access private
 	 */
-	private $snmp_timeout = '500';
+	private $snmp_timeout = '1000';
+
+	/**
+	 * Default snmp retries
+	 *
+	 * (default value: '3')
+	 *
+	 * @var string
+	 * @access private
+	 */
+	private $snmp_retries = '3';
 
     /**
     * Object containing SNMPv3 Security session parameters
@@ -393,9 +403,9 @@ class phpipamSNMP extends Common_functions {
     private function connection_open () {
         // init connection
         if ($this->snmp_session === false) {
-            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000); }
-            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000); }
-            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000);
+            if ($this->snmp_version=="1")       { $this->snmp_session = new SNMP(SNMP::VERSION_1,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
+            elseif ($this->snmp_version=="2")   { $this->snmp_session = new SNMP(SNMP::VERSION_2c, $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries); }
+            elseif ($this->snmp_version=="3")   { $this->snmp_session = new SNMP(SNMP::VERSION_3,  $this->snmp_host, $this->snmp_community, $this->snmp_timeout * 1000, $this->snmp_retries);
                                                   $this->snmp_session->setSecurity(
                                                                                    $this->snmpv3_security->sec_level,
                                                                                    $this->snmpv3_security->auth_proto,
