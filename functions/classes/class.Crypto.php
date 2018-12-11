@@ -189,22 +189,15 @@ class Crypto {
      * @return string
      */
     public function csrf_cookie ($action = "create", $index = null, $value = null) {
-        // validate action
-        $this->csrf_validate_action ($action);
-        // execute
-        return $action == "create" ? $this->csrf_cookie_create ($index) : $this->csrf_cookie_validate ($index, $value);
-    }
-
-    /**
-     * Validates csrf cookie action..
-     *
-     * @access private
-     * @param mixed $action
-     * @return bool
-     */
-    private function csrf_validate_action ($action) {
-        if ($action=="create" || $action=="validate") { return true; }
-        else                                          { $this->Result->show("danger", "Invalid CSRF cookie action", true); }
+        switch ($action) {
+            case "create":
+            case "create-if-not-exists":
+                return $this->csrf_cookie_create ($index, $action == "create-if-not-exists");
+            case "validate":
+                return $this->csrf_cookie_validate ($index, $value);
+            default:
+                $this->Result->show("danger", _("Invalid CSRF cookie action"), true);
+        }
     }
 
     /**
@@ -212,11 +205,15 @@ class Crypto {
      *
      * @access private
      * @param mixed $index
+     * @param bool $if_not_exists (default: false)
      * @return string
      */
-    private function csrf_cookie_create ($index) {
+    private function csrf_cookie_create ($index, $if_not_exists = false) {
         // set cookie suffix
         $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
+        // check if exists
+        if ($if_not_exists && isset($_SESSION[$name]))
+            return $_SESSION[$name];
         // save cookie
         $_SESSION[$name] = $this->generate_token();
         // return
