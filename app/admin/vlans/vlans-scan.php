@@ -16,8 +16,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", 3, true, true);
+# validate csrf cookie
+$csrf = $User->Crypto->csrf_cookie ("create", "scan");
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
@@ -53,6 +57,7 @@ if ($scan_devices===false)                      { $Result->show("danger", _("No 
         }
         ?>
         <input type="hidden" name="domainId" value="<?php print $_POST['domainId']; ?>">
+        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </form>
     </div>
     <hr>

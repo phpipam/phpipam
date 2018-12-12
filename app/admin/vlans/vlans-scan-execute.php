@@ -16,8 +16,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", 3, true, true);
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fake error
 print "<div class='alert-danger hidden'></div>";
@@ -32,8 +36,6 @@ $Snmp = new phpipamSNMP ();
 
 # domain Id must be int
 if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true); }
-# submit ID must be numeric
-if (!is_numeric($_POST['subnetId']))            { $Result->show("danger", _("Invalid subnet Id"), true); }
 # fetch domain
 $domain = $Tools->fetch_object ("vlanDomains", "id", $_POST['domainId']);
 if ($domain===false)                            { $Result->show("danger", _("Invalid domain Id"), true); }
@@ -235,6 +237,7 @@ else {
 	print "</tr>";
 
 	print "</table>";
+	print '<input type="hidden" name="csrf_cookie" value="'.$_POST['csrf_cookie'].'">';
 	print "</form>";
 
     // print errors
