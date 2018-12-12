@@ -1890,7 +1890,7 @@ class Common_functions  {
 
 	    $html[] = "<div class='dropdown'>";
 	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
-	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu' style='z-index:9'>";
+	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu'>";
 
 	    // loop items
 	    foreach ($items as $i) {

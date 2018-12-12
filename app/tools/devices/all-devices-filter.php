@@ -67,7 +67,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	// filters - device type
 	print "<div class='btn-group'>";
 	print "	<button class='btn btn-sm btn-default dropdown-toggle' type='button' id='dropdownMenua3' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>"._("Device type")." <span class='caret'></span></button>";
-	print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3' style='z-index:9'>";
+	print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3'>";
 	print "   <li><a href='".create_link("tools","devices")."'>"._("All types")."</a></li>";
 	print "		<li role='separator' class='divider'></li>";
 	foreach ($device_types_indexed as $d) {
@@ -85,7 +85,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 
 		print "<div class='btn-group'>";
 		print "	<button class='btn btn-sm btn-default dropdown-toggle' type='button' id='dropdownMenua3' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>"._("Rack")." <span class='caret'></span></button>";
-		print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3' style='z-index:9'>";
+		print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3'>";
 		print "   <li><a href='".create_link("tools","devices")."'>"._("All racks")."</a></li>";
 		print "		<li role='separator' class='divider'></li>";
 		foreach ($Racks->all_racks as $r) {
@@ -103,7 +103,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 
 		print "<div class='btn-group'>";
 		print "	<button class='btn btn-sm btn-default dropdown-toggle' type='button' id='dropdownMenua3' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>"._("Location")." <span class='caret'></span></button>";
-		print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3' style='z-index:9'>";
+		print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3'>";
 		print "   <li><a href='".create_link("tools","devices")."'>"._("All locations")."</a></li>";
 		print "		<li role='separator' class='divider'></li>";
 		foreach ($all_locations as $l) {
@@ -117,7 +117,7 @@ print "<div class='btn-group' style='margin-bottom:7px;'>";
 	// filters - section
 	print "<div class='btn-group'>";
 	print "	<button class='btn btn-sm btn-default dropdown-toggle' type='button' id='dropdownMenua3' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true'>"._("Section")." <span class='caret'></span></button>";
-	print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3' style='z-index:9'>";
+	print " <ul class='dropdown-menu' aria-labelledby='dropdownMenua3'>";
 	print "   <li><a href='".create_link("tools","devices")."'>"._("All sections")."</a></li>";
 	print "		<li role='separator' class='divider'></li>";
 	foreach ($sections as $s) {

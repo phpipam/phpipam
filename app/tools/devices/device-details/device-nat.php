@@ -30,7 +30,7 @@ if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>0) {
     if($all_nats!==false) {
     print "         <div class='btn-group' role='group'>";
     print "             <button type='button' class='btn btn-sm btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>"._("Map to existing NAT")." <span class='caret'></span></button>";
-    print "             <ul class='dropdown-menu' style='z-index:50'>";
+    print "             <ul class='dropdown-menu'>";
                         foreach ($all_nats as $n) {
                             print "<li><a href='' class='mapNat' data-action='edit' data-id='$n->id' data-object-type='subnets' data-object-id='$device[id]'>$n->name ($n->type)</a></li>";
                         }
