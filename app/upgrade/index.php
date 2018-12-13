@@ -152,6 +152,11 @@ elseif($User->is_admin(false)) {
 		$content  = "<h5 style='padding-top:10px;'>Automatic database upgrade</h5><hr>";
 		$content .= "<div style='padding:10px 0px;'>";
 		$content .= "<div class='alert alert-warning' style='margin-bottom:5px;'><strong>Warning!</strong> Backup database first before attempting to upgrade it! You have been warned.</div>";
+		// Check max_execution_time >= 10mins
+		$max_exec_time = ini_get('max_execution_time');
+		if ($max_exec_time!=-1 && $max_exec_time < 600) {
+			$content .= "<div class='alert alert-warning' style='margin-bottom:5px;'><strong>Warning!</strong> php.ini max_execution_time (".$max_exec_time.") < 600<br>Upgrade script may not complete. Please consider increasing max_execution_time before upgrading.</div>";
+		}
 		$content .= "<span class='text-muted'>Clicking on upgrade button will automatically update database to newest version!</span>";
 		$content .= "<div class='text-right'><input type='button' class='upgrade btn btn-sm btn-default btn-success' style='margin-top:10px;' value='Upgrade phpipam database'></div>";
 		$content .= "<div id='upgradeResult'></idv>";

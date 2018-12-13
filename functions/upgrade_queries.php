@@ -24,9 +24,9 @@ $upgrade_queries["1.2.0"][] = "ALTER TABLE `settings` ADD `subnetView` TINYINT  
 $upgrade_queries["1.2.0"][] = "-- add 'user' to app_security set";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `api` CHANGE `app_security` `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl';";
 $upgrade_queries["1.2.0"][] = "-- add english_US language";
-$upgrade_queries["1.2.0"][] = "INSERT INTO `lang` (`l_id`, `l_code`, `l_name`) VALUES (NULL, 'en_US', 'English (US)';";
+$upgrade_queries["1.2.0"][] = "INSERT INTO `lang` (`l_id`, `l_code`, `l_name`) VALUES (NULL, 'en_US', 'English (US)');";
 $upgrade_queries["1.2.0"][] = "-- update the firewallZones table to suit the new layout";
-$upgrade_queries["1.2.0"][] = "ALTER TABLE `firewallZones` DROP COLUMN `vlanId`, DROP COLUMN `stacked`";
+$upgrade_queries["1.2.0"][] = "ALTER TABLE `firewallZones` DROP COLUMN `vlanId`, DROP COLUMN `stacked`;";
 $upgrade_queries["1.2.0"][] = "-- add a new table to store subnetId and zoneId";
 $upgrade_queries["1.2.0"][] = "
 CREATE TABLE `firewallZoneSubnet` (
@@ -43,7 +43,7 @@ CREATE TABLE `firewallZoneSubnet` (
     FOREIGN KEY (`subnetId`)
     REFERENCES `subnets` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION;";
+    ON UPDATE NO ACTION);";
 $upgrade_queries["1.2.0"][] = "-- copy old subnet IDs from firewallZones table into firewallZoneSubnet";
 $upgrade_queries["1.2.0"][] = "INSERT INTO `firewallZoneSubnet` (zoneId,subnetId) SELECT id AS zoneId,subnetId from `firewallZones`;";
 $upgrade_queries["1.2.0"][] = "-- remove the field subnetId from firewallZones, it's not longer needed ";
@@ -54,12 +54,12 @@ $upgrade_queries["1.2.0"][] = "ALTER TABLE `firewallZoneMapping` ADD CONSTRAINT 
 $upgrade_queries["1.2.0"][] = "-- add firewallAddresObject field to the ipaddresses table to store fw addr. obj. names permanently";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `ipaddresses` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL;";
 $upgrade_queries["1.2.0"][] = "-- activate the firewallAddressObject IP field filter on default";
-$upgrade_queries["1.2.0"][] = "UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject';";
+$upgrade_queries["1.2.0"][] = "UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject');";
 $upgrade_queries["1.2.0"][] = "-- add a column for subnet firewall address objects";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `subnets` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL;";
 $upgrade_queries["1.2.0"][] = "-- add http and apache auth method";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';";
-$upgrade_queries["1.2.0"][] = "INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`) VALUES ('http', NULL, 'Yes', 'Apache authentication';";
+$upgrade_queries["1.2.0"][] = "INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`) VALUES ('http', NULL, 'Yes', 'Apache authentication');";
 $upgrade_queries["1.2.0"][] = "-- allow powerdns record management for user";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No';";
 $upgrade_queries["1.2.0"][] = "-- add Ip request widget";
