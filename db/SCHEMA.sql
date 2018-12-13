@@ -288,7 +288,7 @@ CREATE TABLE `subnets` (
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`),
-  KEY `masterSubnetId` (`subnet`),
+  KEY `masterSubnetId` (`masterSubnetId`),
   KEY `location` (`location`),
   KEY `sectionId` (`sectionId`),
   KEY `vrfId` (`vrfId`),
@@ -945,4 +945,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 15;
+UPDATE `settings` SET `dbversion` = 16;

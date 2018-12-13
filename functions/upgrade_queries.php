@@ -807,8 +807,18 @@ $upgrade_queries["1.4.14"][] = "ALTER TABLE `api` ADD `app_last_access` DATETIME
 #
 # Subversion 1.4.15 queries
 #
+$upgrade_queries["1.4.15"][] = "-- Convert snmp_timeout to milliseconds";
 $upgrade_queries["1.4.15"][] = "ALTER TABLE `devices` CHANGE `snmp_timeout` `snmp_timeout` mediumint(5) unsigned DEFAULT '1000';";
 $upgrade_queries["1.4.15"][] = "UPDATE `devices` SET `snmp_timeout` = `snmp_timeout`/1000 WHERE `snmp_timeout` > 10000;";
+
+
+
+#
+# Subversion 1.4.16 queries
+#
+$upgrade_queries["1.4.16"][] = "-- Fix masterSubnetId index definition";
+$upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` DROP INDEX `masterSubnetId`;";
+$upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` ADD INDEX(`masterSubnetId`);";
 
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
