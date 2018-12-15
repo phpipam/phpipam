@@ -42,6 +42,7 @@
     + Fix bad DNS reverse zone for /23 subnet (#666);
     + Fix Add missing standard field (#2153);
     + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
+    + Fix Subnet details - Filter button missing when compressed range is used (#2353);
     + API:
         + Fix inconsistant API success value returned (#2045);
 
