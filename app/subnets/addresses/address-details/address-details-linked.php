@@ -34,14 +34,12 @@ if (strlen($User->settings->link_field)>0) {
             print "</tr>";
 
             // section
-            $se->description = strlen($se->description)>0 ? "(".$se->description.")" : "";
             print "<tr>";
             print " <th>"._("Section")."</th>";
             print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_description</td>";
             print "</tr>";
 
             // subnet
-            $sn->description = strlen($sn->description)>0 ? "(".$sn->description.")" : "";
             print "<tr>";
             print " <th>"._("Subnet")."</th>";
             print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_address($sn->subnet, "dotted")."/".$sn->mask."</a> ".$sn_description."</td>";
