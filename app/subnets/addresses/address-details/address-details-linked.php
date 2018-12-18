@@ -5,7 +5,7 @@ $User->check_user_session();
 // now search for similar addresses if chosen
 if (strlen($User->settings->link_field)>0) {
 	// search
-	$similar = $Addresses->search_similar_addresses ($User->settings->link_field, $address[$User->settings->link_field], $address['id']);
+	$similar = $Addresses->search_similar_addresses ((object)$address, $User->settings->link_field, $address[$User->settings->link_field]);
 
 	if($similar!==false) {
 
