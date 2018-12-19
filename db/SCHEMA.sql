@@ -64,9 +64,6 @@ CREATE TABLE `ipaddresses` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `sid_ip_unique` (`ip_addr`,`subnetId`),
   KEY `subnetid` (`subnetId`),
-  KEY `hostname` (`hostname`),
-  KEY `mac`      (`mac`),
-  KEY `owner`    (`owner`),
   KEY `location` (`location`),
   KEY `customer_ip` (`customer_id`),
   CONSTRAINT `customer_ip` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
