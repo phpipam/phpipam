@@ -237,7 +237,7 @@ class Admin extends Common_functions {
 	 * @param array $values_log		//log variables
 	 * @return boolean
 	 */
-	private function object_edit ($table, $key="id", $values, $values_log) {
+	private function object_edit ($table, $key="id", $values, $values_log = []) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
