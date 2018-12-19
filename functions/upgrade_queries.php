@@ -825,10 +825,9 @@ $upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` ADD INDEX(`masterSubnetId`
 #
 # Subversion 1.4.17 queries
 #
-$upgrade_queries["1.4.17"][] = "-- Performance fix for linked addresses (#2324);";
-$upgrade_queries["1.4.17"][] = "ALTER TABLE `ipaddresses` ADD INDEX(`hostname`);";
-$upgrade_queries["1.4.17"][] = "ALTER TABLE `ipaddresses` ADD INDEX(`mac`);";
-$upgrade_queries["1.4.17"][] = "ALTER TABLE `ipaddresses` ADD INDEX(`owner`);";
+$upgrade_queries["1.4.17"][] = "-- Performance fix for linked addresses, moved to settings;";
+
+
 
 #
 # Subversion 1.4.18 queries

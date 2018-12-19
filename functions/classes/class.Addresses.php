@@ -354,7 +354,7 @@ class Addresses extends Common_functions {
 	 */
 	public function search_similar_addresses ($address, $linked_field, $value) {
 		// sanity checks
-		if(!is_object($address) || !in_array($linked_field, ['ip_addr','hostname','mac','owner']) || strlen($value)==0)
+		if(!is_object($address) || !property_exists($address, $linked_field) || strlen($value)==0)
 			return false;
 
 		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
