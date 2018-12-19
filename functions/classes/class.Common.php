@@ -410,7 +410,7 @@ class Common_functions  {
         // check if cache is already set, otherwise save
         if ($this->cache_check_exceptions($table)===false) {
             if (!isset($this->Database->cache[$table][$identifier][$id])) {
-                $this->Database->cache[$table][$identifier][$id] = (object) $object;
+                $this->Database->cache[$table][$identifier][$id] = clone (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
@@ -474,7 +474,7 @@ class Common_functions  {
         // get method
         $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise return false
-        if (isset($this->Database->cache[$table][$method][$id]))  { return (object) $this->Database->cache[$table][$method][$id]; }
+        if (isset($this->Database->cache[$table][$method][$id]))  { return clone (object) $this->Database->cache[$table][$method][$id]; }
         else                                            { return false; }
     }
 

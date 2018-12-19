@@ -567,7 +567,7 @@ else {
 			// now search for similar addresses if chosen
 			if (strlen($User->settings->link_field)>0) {
     			// search
-    			$similar = $Addresses->search_similar_addresses ($User->settings->link_field, $addresses[$n]->{$User->settings->link_field}, $addresses[$n]->id);
+    			$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $addresses[$n]->{$User->settings->link_field});
 
     			if($similar!==false) {
 

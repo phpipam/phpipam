@@ -820,6 +820,23 @@ $upgrade_queries["1.4.16"][] = "-- Fix masterSubnetId index definition";
 $upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` DROP INDEX `masterSubnetId`;";
 $upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` ADD INDEX(`masterSubnetId`);";
 
+
+
+#
+# Subversion 1.4.17 queries
+#
+$upgrade_queries["1.4.17"][] = "-- Performance fix for linked addresses (#2324);";
+$upgrade_queries["1.4.17"][] = "ALTER TABLE `ipaddresses` ADD INDEX(`hostname`);";
+$upgrade_queries["1.4.17"][] = "ALTER TABLE `ipaddresses` ADD INDEX(`mac`);";
+$upgrade_queries["1.4.17"][] = "ALTER TABLE `ipaddresses` ADD INDEX(`owner`);";
+
+#
+# Subversion 1.4.18 queries
+#
+$upgrade_queries["1.4.18"][] = "-- DROP redundant indexes;";
+$upgrade_queries["1.4.18"][] = "ALTER TABLE `users` DROP INDEX `id`;";
+$upgrade_queries["1.4.18"][] = "ALTER TABLE `sections` DROP INDEX `id`;";
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check

@@ -5,7 +5,7 @@ $User->check_user_session();
 // now search for similar addresses if chosen
 if (strlen($User->settings->link_field)>0) {
 	// search
-	$similar = $Addresses->search_similar_addresses ($User->settings->link_field, $address[$User->settings->link_field], $address['id']);
+	$similar = $Addresses->search_similar_addresses ((object)$address, $User->settings->link_field, $address[$User->settings->link_field]);
 
 	if($similar!==false) {
 
@@ -34,14 +34,12 @@ if (strlen($User->settings->link_field)>0) {
             print "</tr>";
 
             // section
-            $se->description = strlen($se->description)>0 ? "(".$se->description.")" : "";
             print "<tr>";
             print " <th>"._("Section")."</th>";
             print " <td><a href='".create_link("subnets", $sn->sectionId)."'>$se->name</a> $se_description</td>";
             print "</tr>";
 
             // subnet
-            $sn->description = strlen($sn->description)>0 ? "(".$sn->description.")" : "";
             print "<tr>";
             print " <th>"._("Subnet")."</th>";
             print " <td><a href='".create_link("subnets", $sn->sectionId, $sn->id)."'>".$Subnets->transform_address($sn->subnet, "dotted")."/".$sn->mask."</a> ".$sn_description."</td>";

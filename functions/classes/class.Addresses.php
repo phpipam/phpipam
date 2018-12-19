@@ -302,29 +302,74 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Bulk fetch similar addresses.
+	 *
+	 * The subnets details page will call search_similar_addresses() for EVERY IP in the subnet.
+	 * Bulk request and cache this information on the first call. Sort returned IPs by ip_addr.
+	 *
+	 * Returns an array indexed by $value.  $bulk_search[$value] = Array of similar IPs with same $value
+	 *
+	 * @access public
+	 * @param object $address
+	 * @param mixed $linked_field
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
+		// Check cache
+		$cached_item = $this->cache_check("similar_addresses", "f=$linked_field id=$address->subnetId");
+		if (is_object($cached_item))
+			return $cached_item->result;
+
+		// Fetch all similar addresses for entire subnet.
+		try {
+			$query = "SELECT SQL_CACHE * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
+			$linked_subnet_addrs = $this->Database->getObjectsQuery($query, array($address->subnetId));
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		$bulk_search = [];
+		if (is_array($linked_subnet_addrs)) {
+			foreach($linked_subnet_addrs as $linked) {
+				// Index by $linked->{$linked_field} for easy searching.
+				$bulk_search[$linked->{$linked_field}][] = $linked;
+			}
+		}
+
+		// Save to cache and return
+		$this->cache_write("similar_addresses", "f=$linked_field id=$address->subnetId", (object)["result" => $bulk_search]);
+		return $bulk_search;
+	}
+
+	/**
 	 * Searches database for similar addresses
 	 *
 	 * @access public
+	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @param mixed $address_id
 	 * @return void
 	 */
-	public function search_similar_addresses ($linked_field, $value, $address_id) {
-    	// checks
-    	if(strlen($linked_field)>0 && strlen($value)>0 && is_numeric($address_id)) {
-        	// search
-     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ? and state != 4;", array($value, $address_id)); }
-    		catch (Exception $e) {
-    			$this->Result->show("danger", _("Error: ").$e->getMessage());
-    			return false;
-    		}
-    		#result
-    		return sizeof($addresses)>0 ? $addresses : false;
-        }
-        else {
-            return false;
-        }
+	public function search_similar_addresses ($address, $linked_field, $value) {
+		// sanity checks
+		if(!is_object($address) || !in_array($linked_field, ['ip_addr','hostname','mac','owner']) || strlen($value)==0)
+			return false;
+
+		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
+
+		// Check if similar addresses exist with the specifed $value
+		if (!isset($bulk_search[$address->{$linked_field}]))
+			return false;
+
+		$results = $bulk_search[$address->{$linked_field}];
+		// Remove $address from results
+		foreach ($results as $i => $similar) {
+			if ($similar->id == $address->id) unset($results[$i]);
+		}
+
+		return !empty($results) ? $results : false;
 	}
 
 	/**
