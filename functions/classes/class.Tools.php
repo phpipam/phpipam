@@ -1553,6 +1553,19 @@ class Tools extends Common_functions {
 	}
 
 	/**
+	 * Get list of table indexes
+	 *
+	 * @param  string $table
+	 * @return mixed
+	 */
+	private function get_table_indexes($table) {
+		try { return $indexes = $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Invalid query for `$table` database index check : ").$e->getMessage(), true);
+		}
+	}
+
+	/**
 	 * Using required database indexes remove all that are existing and return array of missing indexes
 	 *
 	 * @method get_missing_database_indexes
@@ -1562,10 +1575,7 @@ class Tools extends Common_functions {
 	private function get_missing_database_indexes ($schema_indexes) {
 		// loop
 		foreach ($schema_indexes as $table=>$index) {
-			try { $indexes = $this->Database->getObjectsQuery("SHOW INDEX from `$table` where `Key_name` != 'PRIMARY';"); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Invalid query for `$table` database index check : ").$e->getMessage(), true);
-			}
+			$indexes = $this->get_table_indexes($table);
 			// remove existing
 			if ($indexes!==false) {
 				foreach ($indexes as $i) {
@@ -1626,6 +1636,56 @@ class Tools extends Common_functions {
 		}
 	}
 
+	/**
+	 * Manage indexes for linked addresses
+	 *
+	 * @param  string $linked_field
+	 * @return void
+	 */
+	public function verify_linked_field_indexes ($linked_field) {
+		$valid_fields = $this->fetch_custom_fields ('ipaddresses');
+		$valid_fields = array_merge(['ip_addr','hostname','mac','owner'], array_keys($valid_fields));
+
+		// get indexes from schema and table
+		$schema_indexes = $this->get_schema_indexes();
+		$table_indexes  = $this->get_table_indexes('ipaddresses');
+
+		if (!is_array($schema_indexes) || !is_array($table_indexes))
+			return;
+
+		$linked_field_index_found = false;
+
+		foreach ($table_indexes as $i) {
+			// check for valid linked_field candidates
+			if (!in_array($i->Key_name, $valid_fields))
+				continue;
+			// skip permanent indexes defined in schema
+			if (in_array($i->Key_name, $schema_indexes['ipaddresses']))
+				continue;
+			// skip selected linked_field
+			if ($i->Key_name == $linked_field) {
+				$linked_field_index_found = true;
+				continue;
+			}
+
+			// Remove un-necessary linked_field indexes.
+			try { $this->Database->runQuery("ALTER TABLE `ipaddresses` DROP INDEX $i->Key_name;"); }
+			catch (Exception $e) {
+				$this->Result->show("danger", $e->getMessage(), true);
+			}
+			$this->Result->show("info", _("Removing link addresses index : ").$i->Key_name);
+		}
+
+		if ($linked_field_index_found || !in_array($linked_field, $valid_fields))
+			return;
+
+		// Create selected linked_field index if not exists.
+		try { $this->Database->runQuery("ALTER TABLE `ipaddresses` ADD INDEX ($linked_field);"); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		$this->Result->show("info", _("Adding link addresses index : ").$linked_field);
+	}
 
 
 

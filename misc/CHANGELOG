@@ -4,7 +4,7 @@
     ------------
     + Configurable password policy;
     + Sessions can be now stored in database (#516);
-    + Two-factor authenticaiton - otp (Google Authenticator);
+    + Two-factor authentication - otp (Google Authenticator);
     + Customers module (#694);
     + Search for free subnet inside whole section;
 
@@ -13,11 +13,11 @@
     + Circuits enhancements (Virtual Circuits);
     + Dropped support for 32bit systems;
     + PHP 5.4 is now required;
-    + Added comressed actions dropdown;
+    + Added compressed actions dropdown;
     + Rack module enhancements (#1325):
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;
-        + Custom rack devices independant of devices (power, patchpanel);
+        + Custom rack devices independent of devices (power, patch panel);
     + Customized user permissions for modules:
         + VLAN module;
         + VRF module;
@@ -43,8 +43,9 @@
     + Fix Add missing standard field (#2153);
     + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
     + Fix Subnet details - Filter button missing when compressed range is used (#2353);
+    + Fix slow page load times with linked addresses (#2324);
     + API:
-        + Fix inconsistant API success value returned (#2045);
+        + Fix inconsistent API success value returned (#2045);
 
     Security Fixes:
     ----------------------------
@@ -53,7 +54,7 @@
     + XSS in phpipamredirect cookie (#2338);
     + XSS in print-user.php, CSRF in user-edit.php (#2326);
     + Possible SQL injection in nat/item-add-submit.php (#2344);
-    + Fixed possible file inclusion in editing authenticaiton methods;
+    + Fixed possible file inclusion in editing authentication methods;
     + XSS in subnet-scan-telnet.php, CSRF in subnet-scan-execute.php (#2327);
 
 == 1.3.2
