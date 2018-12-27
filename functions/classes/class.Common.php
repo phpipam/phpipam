@@ -410,12 +410,12 @@ class Common_functions  {
         // check if cache is already set, otherwise save
         if ($this->cache_check_exceptions($table)===false) {
             if (!isset($this->Database->cache[$table][$identifier][$id])) {
-                $this->Database->cache[$table][$identifier][$id] = clone (object) $object;
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
-                    $this->Database->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
+                    $object->ip = $this->transform_address ($object->{$ip_check}, "dotted");
                 }
+                $this->Database->cache[$table][$identifier][$id] = clone (object) $object;
             }
         }
     }
