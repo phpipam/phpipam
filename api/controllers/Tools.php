@@ -125,16 +125,17 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	private function define_tools_controllers () {
-		$this->subcontrollers = array("ipTags"=>"tags",
-									  "devices"=>"devices",
-									  "deviceTypes"=>"devicetypes",
-									  "vlans"=>"vlans",
-									  "vrf"=>"vrfs",
-									  "nameservers"=>"nameservers",
-									  "scanAgents"=>"scanagents",
-									  "locations"=>"locations",
-									  "racks"=>"racks",
-									  "nat"=>"nat"
+		$this->subcontrollers = array(
+		                              	"ipTags"	  => "tags",
+										"devices"     => "devices",
+										"deviceTypes" => "device_types",
+										"vlans"       => "vlans",
+										"vrf"         => "vrfs",
+										"nameservers" => "nameservers",
+										"scanAgents"  => "scanagents",
+										"locations"   => "locations",
+										"racks"       => "racks",
+										"nat"         => "nat"
 									  );
 	}
 
@@ -146,16 +147,16 @@ class Tools_controller extends Common_api_functions {
 	 */
 	private function define_available_identifiers () {
 		$this->identifiers = array(
-								"ipTags"=>array("id2", "id3"),
-								"devices"=>array("id2", "id3"),
-								"deviceTypes"=>array("id2", "id3"),
-								"vlans"=>array("id2", "id3"),
-								"vrf"=>array("id2", "id3"),
-								"nameservers"=>array("id2"),
-								"scanAgents"=>array("id2"),
-								"locations"=>array("id2", "id3"),
-								"racks"=>array("id2", "id3"),
-								"nat"=>array("id2", "id3")
+								"ipTags"      => array("id2", "id3"),
+								"devices"     => array("id2", "id3"),
+								"deviceTypes" => array("id2", "id3"),
+								"vlans"       => array("id2", "id3"),
+								"vrf"         => array("id2", "id3"),
+								"nameservers" => array("id2"),
+								"scanAgents"  => array("id2"),
+								"locations"   => array("id2", "id3"),
+								"racks"       => array("id2", "id3"),
+								"nat"         => array("id2", "id3")
 								);
 	}
 
@@ -228,7 +229,8 @@ class Tools_controller extends Common_api_functions {
 	 *		- {parameter}		- additional parameter (optional)
 	 *
 	 *  Special options:
-	 *      - /tools/deviceTypes/{id}/devices/
+	 *      - /tools/device_types/{id}/
+	 *      - /tools/device_types/{id}/devices/
 	 *
 	 *      - /tools/vlans/{id}/subnets/
 	 *

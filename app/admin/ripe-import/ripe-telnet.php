@@ -103,7 +103,7 @@ else {
 			print '<td>'. "\n";
 			print '<select name="vrf-'. $m .'" class="form-control input-sm input-w-auto">'. "\n";
 			print '<option value="0">No VRF</option>';
-			if(sizeof(@$vrfs)>1) {
+			if(sizeof(@$vrfs)>0) {
 				foreach($vrfs as $vrf) {
 					# set description
 					$vrf_description = strlen($vrf->description)>0 ? " (".$vrf->description.")" : "";

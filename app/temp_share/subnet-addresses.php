@@ -119,7 +119,7 @@ $m = sizeof($addresses) -1;		//last address index
 
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
-   	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true, false, false, $section['strictMode']);
+   	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
 	print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
 }
 # print IP address

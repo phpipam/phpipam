@@ -151,9 +151,11 @@ class Responses {
 	 * @access public
 	 * @param mixed $result
 	 * @param bool|int|double $time
+	 * @param bool $nest_custom_fields
+	 * @param array $custom_fields
 	 * @return void
 	 */
-	public function formulate_result ($result, $time = false) {
+	public function formulate_result ($result, $time = false, $nest_custom_fields = false, $custom_fields = array()) {
 		// make sure result is array
 		$this->result = is_null($this->result) ? (array) $result : $this->result;
 
@@ -170,6 +172,11 @@ class Responses {
 		// time
 		if($time!==false) {
     		$this->time = $time;
+		}
+
+		// custom fields nesting
+		if($nest_custom_fields==1 && $this->exception!==true) {
+			$this->nest_custom_fields ($custom_fields);
 		}
 
 		// return result
@@ -269,6 +276,49 @@ class Responses {
     	}
     	# set
 		header("Location: ".$location);
+	}
+
+	/**
+	 * Function to formulate custom fields as separate item
+	 *
+	 * @method nest_custom_fields
+	 * @param  array              $custom_fields
+	 * @return void
+	 */
+	private function nest_custom_fields ($custom_fields = array()) {
+		// Nest all fields in an array result.  Guard against arrays
+		// with string keys to ensure we don't mistakenly assume a
+		// simple associative array is an array of objects.
+		if (is_array($this->result['data']) && sizeof(array_filter(array_keys($this->result['data']), 'is_string')) == 0) {
+			foreach ($this->result['data'] as $dk=>$d) {
+				if(sizeof($custom_fields)>0) {
+					foreach($custom_fields as $k=>$cf) {
+						// add to result
+						$this->result['data'][$dk]->custom_fields[$k] = $d->$k;
+						// remove unnested data
+						unset($this->result['data'][$dk]->$k);
+					}
+				}
+				else {
+					$d->custom_fields = NULL;
+				}
+			}
+		}
+		// This is a single element but we need to guard against
+		// non-objects here too.
+		elseif (is_object($this->result['data'])) {
+			if(sizeof($custom_fields)>0) {
+				foreach($custom_fields as $k=>$cf) {
+					// add to result
+					$this->result['data']->custom_fields[$k] = $this->result['data']->$k;
+					// remove unnested data
+					unset($this->result['data']->$k);
+				}
+			}
+			else {
+				$this->result['data']->custom_fields = NULL;
+			}
+		}
 	}
 
 	/**

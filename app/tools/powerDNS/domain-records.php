@@ -49,10 +49,12 @@ if ($domain === false) {
 
         // sort so SOA appears at the top
         $order = array();
-        foreach ($records_default as $key => $row) {
-            $order[$key] = $row->order;
+        if(isset($records_default)) {
+            foreach ($records_default as $key => $row) {
+                $order[$key] = $row->order;
+            }
+            array_multisort($records_default, SORT_ASC, SORT_NUMERIC, $order);
         }
-        array_multisort($records_default, SORT_ASC, SORT_NUMERIC, $order);
     }
 
     ?>
@@ -140,59 +142,58 @@ if ($domain === false) {
 <?php
 
 // function to print record
-        function print_record($r)
-        {
-            // check if disabled
-            $trclass = $r->disabled == "1" ? 'alert alert-danger' : '';
+function print_record ($r) {
+    // check if disabled
+    $trclass = $r->disabled == "1" ? 'alert alert-danger' : '';
 
-            print "<tr class='$trclass'>";
-            // actions
-            print "	<td>";
-            print "	<div class='btn-group'>";
-            print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
-            print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
-            print "	</div>";
-            print "	</td>";
+    print "<tr class='$trclass'>";
+    // actions
+    print "	<td>";
+    print "	<div class='btn-group'>";
+    print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
+    print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
+    print "	</div>";
+    print "	</td>";
 
-            // content
-            print "	<td>$r->name</td>";
-            print "	<td><span class='badge badge1'>$r->type</span></td>";
-            print "	<td>$r->content</td>";
-            print "	<td>$r->ttl</td>";
-            print "	<td>$r->prio</td>";
-            print "	<td>$r->change_date</td>";
+    // content
+    print "	<td>$r->name</td>";
+    print "	<td><span class='badge badge1'>$r->type</span></td>";
+    print "	<td>$r->content</td>";
+    print "	<td>$r->ttl</td>";
+    print "	<td>$r->prio</td>";
+    print "	<td>$r->change_date</td>";
 
-            print "</tr>";
-        }
+    print "</tr>";
+}
 
 // default records
-        if (isset($records_default)) {
+if (isset($records_default)) {
 
-            print "<tr>";
-            print "	<th colspan='7'  style='padding-top:20px;'>" . _("SOA, NS records") . "</th>";
-            print "</tr>";
+    print "<tr>";
+    print "	<th colspan='7'  style='padding-top:20px;'>" . _("SOA, NS records") . "</th>";
+    print "</tr>";
 
-// defaults
-            foreach ($records_default as $r) {
-                print_record($r);
-            }
-        }
+    // defaults
+    foreach ($records_default as $r) {
+        print_record($r);
+    }
+}
 
 // host records
-        print "<tr>";
-        print "	<th colspan='7' style='padding-top:20px;'>" . _("Domain records") . "</th>";
-        print "</tr>";
+print "<tr>";
+print "	<th colspan='7' style='padding-top:20px;'>" . _("Domain records") . "</th>";
+print "</tr>";
 
 // defaults
-        if (sizeof($records) > 0) {
-            foreach ($records as $r) {
-                print_record($r);
-            }
-        } else {
-            print "<tr>";
-            print "	<td colspan='7'><div class='alert alert-info'>" . _("No records") . "</div></td>";
-            print "</tr>";
-        }
+if (sizeof($records) > 0) {
+    foreach ($records as $r) {
+        print_record($r);
+    }
+} else {
+    print "<tr>";
+    print "	<td colspan='7'><div class='alert alert-info'>" . _("No records") . "</div></td>";
+    print "</tr>";
+}
 
         ?>
 </tbody>
@@ -200,4 +201,3 @@ if ($domain === false) {
 <?php
 }
 }
-?>

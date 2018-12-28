@@ -60,11 +60,13 @@ print "</tr>";
 print "<tr>";
 print "	<td>"._('Object')."</td>";
 print "	<td>";
-	if($type=="IP address")	  { print _($type)." (<a href='".create_link("subnets",$clog->sectionId,$clog->subnetId,"address-details",$clog->tid)."'>".$Subnets->transform_address ($clog->ip_addr, "dotted")."</a>)";}
-	elseif($type=="Subnet")   { print _($type)." (<a href='".create_link("subnets",$clog->sectionId,$clog->tid)."'>".$Subnets->transform_address ($clog->ip_addr, "dotted")."/$clog->mask</a>)";}
-	elseif($type=="Folder")   { print _($type)." (<a href='".create_link("folder",$clog->sectionId,$clog->tid)."'>$clog->sDescription</a>)"; }
-	elseif($type=="Section")  { print _($type)." (<a href='".create_link("subnets",$clog->tid)."'>$clog->sDescription</a>)"; }
-	else 					  { print _($type); }
+	// print object details
+	if(strlen($clog->tid)==0) 	{ print _($type)." <span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span>"; }
+	elseif($type=="IP address") { print _($type)." (<a href='".create_link("subnets",$clog->sectionId,$clog->subnetId,"address-details",$clog->tid)."'>".$Subnets->transform_address ($clog->ip_addr, "dotted")."</a>)";}
+	elseif($type=="Subnet")   	{ print _($type)." (<a href='".create_link("subnets",$clog->sectionId,$clog->tid)."'>".$Subnets->transform_address ($clog->ip_addr, "dotted")."/$clog->mask</a>)";}
+	elseif($type=="Folder")   	{ print _($type)." (<a href='".create_link("folder",$clog->sectionId,$clog->tid)."'>$clog->sDescription</a>)"; }
+	elseif($type=="Section")  	{ print _($type)." (<a href='".create_link("subnets",$clog->tid)."'>$clog->sDescription</a>)"; }
+	else 					    { print _($type); }
 print "</td>";
 print "</tr>";
 

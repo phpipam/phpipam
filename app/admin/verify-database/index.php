@@ -107,4 +107,10 @@ else {
 }
 
 
+print "<h4>"._('Missing indexes').'</h4><hr>';
+
+if($Tools->verify_database_indexes()===true) {
+	$Result->show ("success", _("No missing indexes detected"), false);
+}
+
 ?>

@@ -607,7 +607,13 @@ $('.slider').slider().on('slide', function(ev){
 				}
 				//default - input field
 				else {
-					print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $subnet_old_details[$field['name']]. '" size="30" rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
+                    // max length
+                    $maxlength = 0;
+                    if(strpos($field['type'],"varchar")!==false) {
+                        $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+                    }
+                    // print
+					print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $subnet_old_details[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
 				}
 
 				print '	</td>'. "\n";

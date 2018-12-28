@@ -52,3 +52,5 @@ RewriteRule ^(.*)/(.*)/$ index.php?page=$1&section=$2 [L,QSA]
 RewriteRule ^(.*)/$ index.php?page=$1 [L]
 
 </IfModule>
+
+php_value xdebug.remote_host 192.168.1.78

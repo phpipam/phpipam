@@ -24,19 +24,17 @@ require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, head
 
 # settings
 $enable_authentication = true;
-$time_response = true;          // adds [time] to response
-$lock_file = "";                // (optional) file to write lock to
+$time_response         = true;          // adds [time] to response
+$lock_file             = "";            // (optional) file to write lock to
 
-# database object
-$Database 	= new Database_PDO;
-$Tools	    = new Tools ($Database);
-
-# exceptions/result object
+# database and exceptions/result object
+$Database = new Database_PDO;
+$Tools    = new Tools ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
 if(SETTINGS===null)
-$settings 	= $Tools->fetch_object ("settings", "id", 1);
+$settings = $Tools->fetch_object ("settings", "id", 1);
 
 # set empty controller for options
 if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
@@ -45,10 +43,8 @@ if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
 
 /* wrap in a try-catch block to catch exceptions */
 try {
-
 	// start measuring
 	$start = microtime(true);
-
 
 	/* Validate application ---------- */
 
@@ -186,6 +182,17 @@ try {
 	// it the parameters from the request and Database object
 	$controller = new $controller($Database, $Tools, $params, $Response);
 
+	// pass app params for links result
+	$controller->app = $app;
+
+	// Unmarshal the custom_fields JSON object into the main object for
+	// POST and PATCH. This only works for controllers that support custom
+	// fields and if the app has nested custom fields enabled, otherwise
+	// this is skipped.
+	if (strtoupper($_SERVER['REQUEST_METHOD']) == 'POST' || strtoupper($_SERVER['REQUEST_METHOD']) == 'PATCH') {
+		$controller->unmarshal_nested_custom_fields();
+	}
+
 	// check if the action exists in the controller. if not, throw an exception.
 	if( method_exists($controller, strtolower($_SERVER['REQUEST_METHOD'])) === false ) {
 		$Response->throw_exception(501, $Response->errors[501]);
@@ -252,7 +259,7 @@ if($time_response) {
 }
 
 //output result
-echo $Response->formulate_result ($result, $time);
+echo $Response->formulate_result ($result, $time, $app->app_nest_custom_fields, $controller->custom_fields);
 
 // exit
 exit();

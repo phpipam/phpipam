@@ -1,0 +1,711 @@
+section,ip,hostname,description,vrf,subnet,mask,mac,owner,device,note,tag,gateway,accesso_id,customer_type,used
+WIC,77.242.128.130,,web.halservice.it,,77.242.128.128/26,26,,web.halservice.it,,,,,,nessuno,1
+WIC,77.242.128.131,,www.halservice.it,,77.242.128.128/26,26,,www.halservice.it,,,,,,nessuno,1
+WIC,77.242.128.132,,www.wicadsl.it,,77.242.128.128/26,26,,www.wicadsl.it,,,,,,nessuno,1
+WIC,77.242.128.133,,wicmanager.wicadsl.it,,77.242.128.128/26,26,,wicmanager.wicadsl.it,,,,,,nessuno,1
+WIC,77.242.128.134,,www.bmsnet.info,,77.242.128.128/26,26,,www.bmsnet.info,,,,,,nessuno,1
+WIC,77.242.128.135,,www.peplink.it,,77.242.128.128/26,26,,www.peplink.it,,,,,,nessuno,1
+WIC,77.242.128.136,,hotspot.wicadsl.it,,77.242.128.128/26,26,,hotspot.wicadsl.it,,,,,,nessuno,1
+WIC,77.242.128.137,,accountdisabled.wicadsl.it,,77.242.128.128/26,26,,accountdisabled.wicadsl.it,,,,,,nessuno,1
+WIC,77.242.128.138,,www.dedalusmail.it,,77.242.128.128/26,26,,www.dedalusmail.it,,,,,,nessuno,1
+WIC,77.242.128.139,,portale.wicadsl.it,,77.242.128.128/26,26,,portale.wicadsl.it,,,,,,nessuno,1
+WIC,77.242.128.140,,www.coils-to.it,,77.242.128.128/26,26,,www.coils-to.it,,,,,,nessuno,1
+WIC,77.242.128.141,,www.phototurri.it,,77.242.128.128/26,26,,www.phototurri.it,,,,,,nessuno,1
+WIC,77.242.128.143,,www.cimberio.it,,77.242.128.128/26,26,,www.cimberio.it,,,,,,nessuno,1
+WIC,77.242.128.149,,JEEG,,77.242.128.128/26,26,,JEEG,,,,,,nessuno,1
+WIC,77.242.128.150,,redmine.cimberio.it,,77.242.128.128/26,26,,redmine.cimberio.it,,,,,,nessuno,1
+WIC,77.242.129.44,,Trasgo,,77.242.129.44/30,30,,trasgo.taslog,,,,,,nessuno,1
+WIC,77.242.132.241,,Adriano Fuselli,,77.242.132.240/28,28,,adriano.fuselli,,,,,9333,nessuno,1
+WIC,77.242.141.176,,Fraliba,,77.242.141.160/27,27,,ristorante.fraliba,,,,,4244,nessuno,1
+WIC,77.242.141.158,,Giacomo Barberis,,77.242.141.144/28,28,,giacomo.barberis,,,,,4261,nessuno,1
+WIC,77.242.141.185,,Piero Oppezzo,,77.242.141.160/27,27,,piero.oppezzo,,,,,4226,nessuno,1
+WIC,77.242.141.172,,Farmacia Ferretti,,77.242.141.160/27,27,,paolo.ferretti,,,,,4272,nessuno,1
+WIC,77.242.141.165,,Delponte & Ferraris Potino & C. SNC,,77.242.141.160/27,27,,delponte.ferraris,,,,,4279,nessuno,1
+WIC,77.242.141.202,,Piero Luigi Dallimonti,,77.242.141.192/27,27,,pieroluigi.dallimonti,,,,,4436,nessuno,1
+WIC,77.242.141.156,,Aldo Beltrame,,77.242.141.144/28,28,,aldo.beltrame,,,,,4460,nessuno,1
+WIC,77.242.141.187,,Tiziana Dallo,,77.242.141.160/27,27,,tiziana.dallo,,,,,4549,nessuno,1
+WIC,77.242.141.154,,Vallerani Claudia,,77.242.141.144/28,28,,claudia.vallerani,,,,,4717,nessuno,1
+WIC,77.242.141.203,,Giuseppina Dematteo,,77.242.141.192/27,27,,giuseppina.dematteo,,,,,4721,nessuno,1
+WIC,77.242.141.153,,Pelli Vittorio,,77.242.141.144/28,28,,vittorio.pelli,,,,,4790,nessuno,1
+WIC,77.242.141.194,,Fabrizio Berteletti,,77.242.141.192/27,27,,fabrizio.berteletti,,,,,4791,nessuno,1
+WIC,77.242.141.204,,Grazia Bonpan,,77.242.141.192/27,27,,grazia.bonpan,,,,,5282,nessuno,1
+WIC,77.242.141.208,,Marco Barberis,,77.242.141.192/27,27,,marco.barberis,,,,,5443,nessuno,1
+WIC,77.242.141.168,,Editrice La Losna,,77.242.141.160/27,27,,lalosna.editrice,,,,,5380,nessuno,1
+WIC,77.242.141.166,,Barbara Turci,,77.242.141.160/27,27,,barbara.turci,,,,,5535,nessuno,1
+WIC,77.242.141.207,,Luca Cecchetto,,77.242.141.192/27,27,,luca.cecchetto,,,,,5454,nessuno,1
+WIC,77.242.141.209,,Paolo Simonazzi,,77.242.141.192/27,27,,paolo.simonazzi,,,,,5670,nessuno,1
+WIC,77.242.141.201,,Mauro Perino,,77.242.141.192/27,27,,mauro.perino,,,,,5640,nessuno,1
+WIC,77.242.141.151,,Franchino Andrea,,77.242.141.144/28,28,,andrea.franchino,,,,,5706,nessuno,1
+WIC,77.242.141.150,,Brunetti Pierino,,77.242.141.144/28,28,,pierino.brunetti,,,,,5741,nessuno,1
+WIC,77.242.141.147,,Grazioli Barbara,,77.242.141.144/28,28,,barbara.grazioli,,,,,5719,nessuno,1
+WIC,77.242.141.196,,Letizia Zanello,,77.242.141.192/27,27,,letizia.zanello,,,,,5908,nessuno,1
+WIC,77.242.141.214,,Lorenzo Sirini,,77.242.141.192/27,27,,lorenzo.sirini,,,,,5992,nessuno,1
+WIC,77.242.141.205,,Claudio Daru,,77.242.141.192/27,27,,claudio.daru,,,,,6158,nessuno,1
+WIC,77.242.141.190,,Officine Riunite,,77.242.141.160/27,27,,officine.riunite,,,,,6224,nessuno,1
+WIC,77.242.141.31,,Zanisas Zani,,77.242.141.24/29,29,,zanisas.zani,,,,,6482,nessuno,1
+WIC,77.242.141.148,,Punto Luce,,77.242.141.144/28,28,,punto.lucesas,,,,,6570,nessuno,1
+WIC,77.242.141.179,,Rubinetterie Perino,,77.242.141.160/27,27,,rubinetterie.perino,,,,,6597,nessuno,1
+WIC,77.242.141.149,,Patriarca Secondo,,77.242.141.144/28,28,,secondo.patriarca,,,,,6600,nessuno,1
+WIC,77.242.141.155,,Achitetto Bertone Recetto,,77.242.141.144/28,28,,enrico.bertone,,,,,6705,nessuno,1
+WIC,77.242.141.215,,Stefano11,,77.242.141.192/27,27,,stefano11,,,,,6872,nessuno,1
+WIC,77.242.141.192,,Casa Anziani,,77.242.141.192/27,27,,casa.anziani,,,,,6915,nessuno,1
+WIC,77.242.141.188,,Cl.auto,,77.242.141.160/27,27,,cl.auto,,,,,7017,nessuno,1
+WIC,77.242.141.211,,HS Proloco,,77.242.141.192/27,27,,hal.hsproloco,,,,,8297,nessuno,1
+WIC,77.242.141.169,,Giancarlo.voip,,77.242.141.160/27,27,,giancarlo.voip,,,,,7077,nessuno,1
+WIC,77.242.141.189,,Andrea Varalda,,77.242.141.160/27,27,,andrea.varalda,,,,,8329,nessuno,1
+WIC,77.242.141.170,,zelateria2,,77.242.141.160/27,27,,zelateria.zamboni2,,,,,7556,nessuno,1
+WIC,77.242.141.171,,Agicoom,,77.242.141.160/27,27,,agicoom.srl,,,,,7551,nessuno,1
+WIC,77.242.133.170, ,osteria.del.caccetta,,77.242.133.168/29,29,,osteria.del.caccetta,,,,,9309,nessuno,1
+WIC,77.242.137.70,,Tenuta del Sole,,77.242.137.64/29,29,,latenuta.delsole,,,,,8217,nessuno,1
+WIC,77.242.137.71,,Nobili Rubinetterie,,77.242.137.64/29,29,,nobili.rubinetterie,,,,,8486,nessuno,1
+WIC,77.242.138.1,,OMV Caresanablot - ,,77.242.138.0/29,29,,omv.srl,,,,,6202,nessuno,1
+WIC,77.242.138.2,,Lira Piano Rosa,,77.242.138.0/29,29,,lira.pianorosa,,,,,9033,nessuno,1
+WIC,77.242.138.3,,Galizzi Pray,,77.242.138.0/29,29,,galizzi.impianti,,,,,9137,nessuno,1
+WIC,77.242.138.7,,Battiana,,77.242.138.0/29,29,,battiana.srl,,,,,6270,nessuno,1
+WIC,77.242.141.26,,Sala - Roasio,,77.242.141.24/29,29,,adriana.sala,,,,,4253,nessuno,1
+WIC,77.242.141.28,,REDA,,77.242.141.24/29,29,,successori.reda,,,,,7932,nessuno,1
+WIC,77.242.141.29,,REDA,,77.242.141.24/29,29,,successori.reda,,,,,7932,nessuno,1
+WIC,77.242.141.30,,Basso Legnami 2 - Caulera,,77.242.141.24/29,29,,basso.legnami2,,,,,8046,nessuno,1
+WIC,77.242.141.33,,Immobilsesia S.r.l,,77.242.141.32/27,27,,immobilsesia.srl,,,,,8406,nessuno,1
+WIC,77.242.141.35,,Gnos Josef,,77.242.141.32/27,27,,josef.gnos,,,,,8931,nessuno,1
+WIC,77.242.141.36,,De Franceschi Remo,,77.242.141.32/27,27,,remo.defranceschi2,,,,,8928,nessuno,1
+WIC,77.242.141.37,,Zignone Andrea,,77.242.141.32/27,27,,andrea.zignone,,,,,8937,nessuno,1
+WIC,77.242.131.165, ,,,77.242.131.164/30,30,,studio.quirico.voip,,,,,10786,nessuno,1
+WIC,77.242.141.38,,ISS (Eriani),,77.242.141.32/27,27,,iss.shop,,,,,8938,nessuno,1
+WIC,77.242.141.39,,Pasticceria Corradi,,77.242.141.32/27,27,,pasticceria.corradi,,,,,8954,nessuno,1
+WIC,77.242.141.40,,Rodighiero Umberto,,77.242.141.32/27,27,,umberto.rodighiero,,,,,9008,nessuno,1
+WIC,77.242.141.41,,Pancera Valerio,,77.242.141.32/27,27,,valerio.pancera,,,,,8991,nessuno,1
+WIC,77.242.141.42,,Taboni Simonetta,,77.242.141.32/27,27,,simonetta.taboni,,,,,4649,nessuno,1
+WIC,77.242.141.43,,Borella Maria Dolores,,77.242.141.32/27,27,,mariadolores.borella,,,,,9007,nessuno,1
+WIC,77.242.141.44,,Zar Senni Rifugio,,77.242.141.32/27,27,,zar.senni,,,,,9272,nessuno,1
+WIC,77.242.141.45,,Cavagna Franco Autotrasporti,,77.242.141.32/27,27,,franco.cavagna,,,,,6407,nessuno,1
+WIC,77.242.141.46,,Guglielmina Varallo Fax,,77.242.141.32/27,27,,guglielmina.varallo.fax,,,,,9077,nessuno,1
+WIC,77.242.141.47,,Limonio Alessandro,,77.242.141.32/27,27,,alessandro.limonio,,,,,4872,nessuno,1
+WIC,77.242.141.49,,Zunino Danilo,,77.242.141.32/27,27,,danilo.zunino,,,,,9046,nessuno,1
+WIC,77.242.141.50,,Zaninetti Pietro SAS,,77.242.141.32/27,27,,pietro.zaninetti,,,,,6504,nessuno,1
+WIC,77.242.141.52,,Onestà Fabrizio,,77.242.141.32/27,27,,fabrizio.onesta,,,,,9056,nessuno,1
+WIC,77.242.141.53,,Prova MBG Masoni,,77.242.141.32/27,27,,mbg.masoni,,,,,6575,nessuno,1
+WIC,77.242.141.54,,Puiu Rica,,77.242.141.32/27,27,,puiu.rica,,,,,6087,nessuno,1
+WIC,77.242.141.55,,Boldrini Sabra,,77.242.141.32/27,27,,sabra.boldrini1,,,,,9142,nessuno,1
+WIC,77.242.141.57,,Palladino Silvio,,77.242.141.32/27,27,,silvio.palladino,,,,,5688,nessuno,1
+WIC,77.242.141.59,,Valeri Emanuela,,77.242.141.32/27,27,,manuela.valeri,,,,,8089,nessuno,1
+WIC,77.242.141.61,,Mazzia Victoria,,77.242.141.32/27,27,,victoria.mazzia,,,,,4462,nessuno,1
+WIC,77.242.141.62,,Aspatura Piera,,77.242.141.32/27,27,,aspatura.piera,,,,,6415,nessuno,1
+WIC,77.242.141.63,,Carenzo Franco,,77.242.141.32/27,27,,franco.carenzo,,,,,5856,nessuno,1
+WIC,77.242.141.64,,Gardoni Negozio Omegna,,77.242.141.64/26,26,,elettro.gardoni,,,,,9195,nessuno,1
+WIC,77.242.141.65,,Real Project - Giudice,,77.242.141.64/26,26,,giorgio.giudice,,,,,7522,nessuno,1
+WIC,77.242.141.66,,Crivellari Fiorina,,77.242.141.64/26,26,,fiorina.crivellari,,,,,6439,nessuno,1
+WIC,77.242.141.67,,Arrigone Marco ,,77.242.141.64/26,26,,marco.arrigone,,,,,8427,nessuno,1
+WIC,77.242.141.69,,Caser Nicole,,77.242.141.64/26,26,,nicole.caser,,,,,6531,nessuno,1
+WIC,77.242.141.70,,Viotti Gilberto,,77.242.141.64/26,26,,gilberto.viotti,,,,,8460,nessuno,1
+WIC,77.242.141.71,,Paolo Massarenti,,77.242.141.64/26,26,,paolo.massarenti,,,,,5813,nessuno,1
+WIC,77.242.141.72,,Marangoni Donatella,,77.242.141.64/26,26,,donatella.marangoni,,,,,8183,nessuno,1
+WIC,77.242.141.73,,Giulini Davide,,77.242.141.64/26,26,,daniele.giulini,,,,,5574,nessuno,1
+WIC,77.242.141.74,,Dobows,,77.242.141.64/26,26,,dobows.tech,,,,,6273,nessuno,1
+WIC,77.242.141.75,,Aime Graziella,,77.242.141.64/26,26,,graziella.aime,,,,,6559,nessuno,1
+WIC,77.242.141.77,,Tecnometal,,77.242.141.64/26,26,,tecno.metal,,,,,8493,nessuno,1
+WIC,77.242.141.51, ,,,77.242.141.32/27,27,,paolo.paglino,,,,,10703,nessuno,1
+WIC,77.242.141.79,,Fibre Tessili Masieri,,77.242.141.64/26,26,,fibretessili.masieri,,,,,8505,nessuno,1
+WIC,77.242.141.80,,Valeriana Capuzzi,,77.242.141.64/26,26,,valeriana.capuzzi,,,,,8492,nessuno,1
+WIC,77.242.141.81,,Donna Massimo,,77.242.141.64/26,26,,massimo.donna,,,,,7949,nessuno,1
+WIC,77.242.141.82,,Betonstrade S.r.l,,77.242.141.64/26,26,,betonstrade.srl,,,,,6228,nessuno,1
+WIC,77.242.141.157,,NAI,,77.242.141.144/28,28,,cesare.nai,,,,,6204,nessuno,1
+WIC,77.242.141.173,,Cromatura BRT,,77.242.141.160/27,27,,cromatura.brt,,,,,7563,nessuno,1
+WIC,77.242.141.152,,Ricaldone Carlo,,77.242.141.144/28,28,,carlo.riccaldone,,,,,7575,nessuno,1
+WIC,77.242.141.183,,Pulitura Metalli,,77.242.141.160/27,27,,pulitura.ftm,,,,,7762,nessuno,1
+WIC,77.242.141.180,,Bellosta Impianti Elettrici,,77.242.141.160/27,27,,bellosta.impiantielettrici,,,,,7687,nessuno,1
+WIC,77.242.141.184,,Domar Daniel Lucie,,77.242.141.160/27,27,,daniel.domar,,,,,8299,nessuno,1
+WIC,77.242.141.182,,Foto Loda Maurizio,,77.242.141.160/27,27,,loda.maurizio,,,,,8545,nessuno,1
+WIC,77.242.141.167,,Giovanni Radini,,77.242.141.160/27,27,,giovanni.radini,,,,,8574,nessuno,1
+WIC,77.242.141.177,,Lora e Festa,,77.242.141.160/27,27,,lorafesta.spa,,,,,8627,nessuno,1
+WIC,77.242.141.198,,Termoidraulica Perrone,,77.242.141.192/27,27,,termoidraulica.perrone,,,,,7999,nessuno,1
+WIC,77.242.141.178,,Renzo Rotti,,77.242.141.160/27,27,,renzo.rotti,,,,,8022,nessuno,1
+WIC,77.242.141.195,,Capri.corn,,77.242.141.192/27,27,,capri.corn,,,,,3831,nessuno,1
+WIC,77.242.130.30,,Comunità il Campo (Sostegno),,77.242.130.28/30,30,,comunita.campo,,,,,8026,nessuno,1
+WIC,77.242.130.31,,Piatti Freschi,,77.242.130.28/30,30,,piatti.freschi,,,,,7968,nessuno,1
+WIC,77.242.130.52,,Neinver,,77.242.130.52/30,30,,neinver.italia,,,,,6187,nessuno,1
+WIC,77.242.130.53,,Dimensione Danza,,77.242.130.52/30,30,,dimensione.danza,,,,,6170,nessuno,1
+WIC,77.242.130.54,,STA Ingegneria Casaleggio,,77.242.130.52/30,30,,sta.ingegneria,,,,,6280,nessuno,1
+WIC,77.242.130.113,,Sostegno Municipio,,77.242.130.112/30,30,,comune.sostegno,,,,,8738,nessuno,1
+WIC,77.242.130.114,,Sostegno Scuole,,77.242.130.112/30,30,,comune.sostegno,,,,,8738,nessuno,1
+WIC,77.242.130.115,,Sostegno Ambulatorio,,77.242.130.112/30,30,,comune.sostegno,,,,,8738,nessuno,1
+WIC,77.242.131.69,,Castellano Mauro,,77.242.131.68/30,30,,mauro.castellano,,,,,4405,nessuno,1
+WIC,77.242.131.70,,Melani Alessio,,77.242.131.68/30,30,,alessio.melani,,,,,4265,nessuno,1
+WIC,77.242.131.71,,Riseria Morgante,,77.242.131.68/30,30,,riseria.morgante,,,,,7487,nessuno,1
+WIC,77.242.131.72,,Windsl 001,,77.242.131.72/30,30,,windsl001,,,,,3852,nessuno,1
+WIC,77.242.131.73,,Roncolato Chiara,,77.242.131.72/30,30,,chiara.roncolato,,,,,5954,nessuno,1
+WIC,77.242.131.74,,Sarti Valerio/Bercellino,,77.242.131.72/30,30,,valerio.sarti,,,,,8282,nessuno,1
+WIC,77.242.131.75,,Farmacia Maio snc,,77.242.131.72/30,30,,farmacia.maio,,,,,8816,nessuno,1
+WIC,77.242.131.100,,Paola Bertolo,,77.242.131.100/30,30,,paola.bertolo,,,,,4186,nessuno,1
+WIC,77.242.131.101,,Cagna Perazzo Liliana,,77.242.131.100/30,30,,liliana.cagnaperazzo,,,,,4008,nessuno,1
+WIC,77.242.131.102,,Sit Slesia,,77.242.131.100/30,30,,sit.slesia,,,,,6518,nessuno,1
+WIC,77.242.131.103,,Regalzi Alessandra,,77.242.131.100/30,30,,alessandra.regalzi,,,,,5928,nessuno,1
+WIC,77.242.131.129,,Ambulatorio Roasio,,77.242.131.128/29,29,,ambulatorio.roasio,,,,,6588,nessuno,1
+WIC,77.242.131.130,,Zepitex,,77.242.131.128/29,29,,zepitex.zepi,,,,,6345,nessuno,1
+WIC,77.242.131.131,,Piero Orlandini,,77.242.131.128/29,29,,piero.orlandini,,,,,5339,nessuno,1
+WIC,77.242.131.132,,Cagna Perazzo Emanuele,,77.242.131.128/29,29,,emanuele.perazzo,,,,,4037,nessuno,1
+WIC,77.242.131.133,,Tecno Vinil,,77.242.131.128/29,29,,tecno.vinil,,,,,4263,nessuno,1
+WIC,77.242.131.134,,Tecno Vinil,,77.242.131.128/29,29,,tecno.vinil,,,,,4263,nessuno,1
+WIC,77.242.131.135,,Lanificio Colombo Ghemme,,77.242.131.128/29,29,,lan.colombo-ghemme,,,,,6855,nessuno,1
+WIC,77.242.131.136,,Manifattura di Valsesia,,77.242.131.136/29,29,,manifatturadivalsesia.ditta,,,,,4142,nessuno,1
+WIC,77.242.131.137,,Municipio Roasio,,77.242.131.136/29,29,,municipio.roasio,,,,,3907,nessuno,1
+WIC,77.242.131.138,,Borgomanero Vigili HS,,77.242.131.136/29,29,,borgomanero.vigili,,,,,8454,nessuno,1
+WIC,77.242.131.139,,Borgomanero Stazione Bus HS,,77.242.131.136/29,29,,borgomanero.parcoresistenza,,,,,8455,nessuno,1
+WIC,77.242.131.140,,Borgomanero San Gottardo HS,,77.242.131.136/29,29,,borgomanero.bus,,,,,8456,nessuno,1
+WIC,77.242.131.141,,Borgomanero Parco Resistenza HS,,77.242.131.136/29,29,,borgomanero.sangottardo,,,,,8457,nessuno,1
+WIC,77.242.131.142,,New Sistem (Orta),,77.242.131.136/29,29,,new.system,,,,,8762,nessuno,1
+WIC,77.242.131.252, ,andreis.parone,,77.242.131.252/30,30,,andreis.parone,,,,,9292,nessuno,1
+WIC,77.242.131.253,,Travaglia Damiano,,77.242.131.252/30,30,,damiano.travaglia,,,,,5154,nessuno,1
+WIC,77.242.131.254,,Comero Roberto,,77.242.131.252/30,30,,roberto.comero,,,,,3909,nessuno,1
+WIC,77.242.131.255, ,avvocato.lauti,,77.242.131.252/30,30,,avvocato.lauti,,,,,9127,nessuno,1
+WIC,77.242.132.16,,Marco,,77.242.132.16/30,30,,m.cura,,,,,7034,nessuno,1
+WIC,77.242.132.17,,Comie,,77.242.132.16/30,30,,comie.srl,,,,,4051,nessuno,1
+WIC,77.242.132.18,,Unione Bassa Sesia,,77.242.132.16/30,30,,unione.bassasesia,,,,,7542,nessuno,1
+WIC,77.242.132.19,,Tazzoglio Elena,,77.242.132.16/30,30,,tazzoglio.elena,,,,,8796,nessuno,1
+WIC,77.242.132.120, ,pgs.srl,,77.242.132.120/30,30,,pgs.srl,,,,,9201,nessuno,1
+WIC,77.242.132.160,,Daniel,,77.242.132.160/29,29,,danbaldini,,,,,7047,nessuno,1
+WIC,77.242.132.161,,Ferracin Silvana,,77.242.132.160/29,29,,silvana.ferracin,,,,,5332,nessuno,1
+WIC,77.242.132.162,,Cordar Valsesia,,77.242.132.160/29,29,,cordar.valsesia,,,,,6500,nessuno,1
+WIC,77.242.132.163,,Lanificio Colombo Borgo,,77.242.132.160/29,29,,lan.colombo-borgo,,,,,6869,nessuno,1
+WIC,77.242.132.164,,Metal Tecnica,,77.242.132.160/29,29,,metal.tecnica,,,,,6300,nessuno,1
+WIC,77.242.132.165,,Zandonella Adriano,,77.242.132.160/29,29,,adriano.zandonella,,,,,4770,nessuno,1
+WIC,77.242.132.166,,Valvomec,,77.242.132.160/29,29,,valvomec.srl,,,,,3973,nessuno,1
+WIC,77.242.132.167,,Assoluce Impianti,,77.242.132.160/29,29,,assoluce.impianti,,,,,6212,nessuno,1
+WIC,77.242.141.175,,Robiolio Bottoni,,77.242.141.160/27,27,,claudio.bottoni,,,,,7845,nessuno,1
+WIC,77.242.132.168,,Cavallo Paolo,,77.242.132.168/30,30,,paolo.cavallo,,,,,5694,nessuno,1
+WIC,77.242.132.169,,Galli Claudia,,77.242.132.168/30,30,,claudia.galli,,,,,5490,nessuno,1
+WIC,77.242.132.170,,Felissati,,77.242.132.168/30,30,,felissati2,,,,,3866,nessuno,1
+WIC,77.242.132.171,,Municpio Serravalle,,77.242.132.168/30,30,,municipio.serravalle,,,,,6490,nessuno,1
+WIC,77.242.132.240,,Bosco Rachele,,77.242.132.240/28,28,,rachele.bosco,,,,,8153,nessuno,1
+WIC,77.242.132.242,,Voip Pool,,77.242.132.240/28,28,,salvatore.geraci,,,,,4840,nessuno,1
+WIC,77.242.132.247,,Maran Peracini,,77.242.132.240/28,28,,maran.peracini,,,,,4291,nessuno,1
+WIC,77.242.132.248,,Matera Giuseppe Negozio - VoIP,,77.242.132.240/28,28,,matera.vinialimentari2,,,,,7011,nessuno,1
+WIC,77.242.132.249,,Matera Giuseppe Casa - VoIP,,77.242.132.240/28,28,,matera.vinialimentari,,,,,6698,nessuno,1
+WIC,77.242.132.250,,Gattoni Rosella Casa - VoIP,,77.242.132.240/28,28,,gghair.gattoni2,,,,,7076,nessuno,1
+WIC,77.242.132.251,,G.G. Hair - Gattoni - VoIP,,77.242.132.240/28,28,,gghair.gattoni,,,,,6169,nessuno,1
+WIC,77.242.132.252,,Tipolitografia Valsesia,,77.242.132.240/28,28,,tipolito.borgosesia,,,,,6322,nessuno,1
+WIC,77.242.132.254,,Valvosider1,,77.242.132.240/28,28,,valvo.sider,,,,,3944,nessuno,1
+WIC,77.242.132.255,,Valvosider2,,77.242.132.240/28,28,,valvo.sidermag,,,,,7578,nessuno,1
+WIC,77.242.133.8,,SVVP Cabina 1,,77.242.133.8/29,29,,svpp.cabina1,,,,,8399,nessuno,1
+WIC,77.242.133.9,,SVVP Cabina 2,,77.242.133.8/29,29,,svpp.cabina2,,,,,8400,nessuno,1
+WIC,77.242.133.10,,SVVP Cabina 3,,77.242.133.8/29,29,,svpp.cabina3,,,,,8401,nessuno,1
+WIC,77.242.133.12,,Beltrami Impianti,,77.242.133.8/29,29,,beltrami.impianti,,,,,4069,nessuno,1
+WIC,77.242.133.13,,Arfino Simone,,77.242.133.8/29,29,,simone.arfino,,,,,6183,nessuno,1
+WIC,77.242.133.14,,Tecno Computer,,77.242.133.8/29,29,,tecno.computers,,,,,8006,nessuno,1
+WIC,77.242.133.15,,Valduggia Sala Giunta,,77.242.133.8/29,29,,valduggia.salagiunta,,,,,3817,nessuno,1
+WIC,77.242.133.16,,Sergio Ottinetti,,77.242.133.16/29,29,,sergio.ottinetti,,,,,4048,nessuno,1
+WIC,77.242.133.17,,Novara Giancarlo,,77.242.133.16/29,29,,giancarlo.novara,,,,,5714,nessuno,1
+WIC,77.242.133.18,,Valduggia - Fax Scuole Elementari,,77.242.133.16/29,29,,valduggia.scelemfax,,,,,3818,nessuno,1
+WIC,77.242.133.19,,Valduggia - Fax Scuole Medie,,77.242.133.16/29,29,,valduggia.scmediefax,,,,,3820,nessuno,1
+WIC,77.242.133.20,,Valduggia - Fax Asilo,,77.242.133.16/29,29,,valduggia.asilofax,,,,,3819,nessuno,1
+WIC,77.242.133.21,,Bluetag,,77.242.133.16/29,29,,blue.tag,,,,,6680,nessuno,1
+WIC,77.242.133.22,,Mauro Badanai,,77.242.133.16/29,29,,mauro.badanai,,,,,4543,nessuno,1
+WIC,77.242.133.23,,Metalli Pressati,,77.242.133.16/29,29,,metalli.pressati,,,,,6704,nessuno,1
+WIC,77.242.133.44,,Rizzi Cristiana (MiniBS Studio Medico),,77.242.133.44/30,30,,cristiana.rizzi,,,,,6114,nessuno,1
+WIC,77.242.133.45,,Rigoli Giuliomaria (MiniBS Studio Medico),,77.242.133.44/30,30,,giuliomaria.rigoli,,,,,6435,nessuno,1
+WIC,77.242.133.46,,Mitta Laura (MiniBS Studio Medico),,77.242.133.44/30,30,,laura.mitta,,,,,6210,nessuno,1
+WIC,77.242.133.47,,Carlo Moretta (problema dyndns DVR),,77.242.133.44/30,30,,pierluigi.moretta2,,,,,3918,nessuno,1
+WIC,77.242.133.65,,Sofmet,,77.242.133.64/30,30,,sofmet.giorgio,,,,,6459,nessuno,1
+WIC,77.242.133.66,,Optimisti,,77.242.133.64/30,30,,optimisti.sas,,,,,6285,nessuno,1
+WIC,77.242.133.122,,Ergon2,,77.242.133.120/29,29,,ergon.due,,,,,3898,nessuno,1
+WIC,77.242.133.123,,Zaninetti Guido,,77.242.133.120/29,29,,guido.zaninetti,,,,,5305,nessuno,1
+WIC,77.242.133.125,,Veronese Pier Paolo,,77.242.133.120/29,29,,pierpaolo.veronese,,,,,5770,nessuno,1
+WIC,77.242.133.126,,Roberto Cacciatori,,77.242.133.120/29,29,,roberto.cacciatori,,,,,4372,nessuno,1
+WIC,77.242.141.56, ,,,77.242.141.32/27,27,,antonio.pusceddu,,,,,10700,nessuno,1
+WIC,77.242.133.127,,Lira:Cascina Ben,,77.242.133.120/29,29,,lanfranchini,,,,,3943,nessuno,1
+WIC,77.242.133.137,,2000 NET x Off.Rigamonti(Molino Rastelli),,77.242.133.136/30,30,,offrigamonti.distaccamento,,,,,9133,nessuno,1
+WIC,77.242.133.138,,BRV,,77.242.133.136/30,30,,brv.rubinetterie,,,,,6508,nessuno,1
+WIC,77.242.133.139,,Ergon,,77.242.133.136/30,30,,ergon,,,,,3897,nessuno,1
+WIC,77.242.133.156,,Italian Casting (Valvosider),,77.242.133.156/30,30,,italian.casting,,,,,4300,nessuno,1
+WIC,77.242.133.158,,IPG - Valvometal,,77.242.133.156/30,30,,ipg.valduggia,,,,,4256,nessuno,1
+WIC,77.242.133.159,,2000.net c/o officine rigamonti,,77.242.133.156/30,30,,duemila.net,,,,,7503,nessuno,1
+WIC,77.242.133.160,,Parrocchia,,77.242.133.160/29,29,,parrocchia.alagna,,,,,7223,nessuno,1
+WIC,77.242.133.161,,Claudio,,77.242.133.160/29,29,,claudio.enzio,,,,,6861,nessuno,1
+WIC,77.242.133.162,,Rosa Challenge,,77.242.133.160/29,29,,rosa.challenge,,,,,6749,nessuno,1
+WIC,77.242.133.163,,Gessi,,77.242.133.160/29,29,,gessi.alagna,,,,,4087,nessuno,1
+WIC,77.242.133.164,,Moretta - Alagna,,77.242.133.160/29,29,,moretta.alagna,,,,,7579,nessuno,1
+WIC,77.242.133.166,,Solaro del Borgo,,77.242.133.160/29,29,,maurizio.solaro,,,,,5858,nessuno,1
+WIC,77.242.133.167,,Moretta Carlo - Alagna,,77.242.133.160/29,29,,moretta.alagna2,,,,,7580,nessuno,1
+WIC,77.242.133.168,,Bertini Alagna,,77.242.133.168/29,29,,bertini.srl,,,,,9246,nessuno,1
+WIC,77.242.133.169,,Rifugio Crespi Calderini,,77.242.133.168/29,29,,rifugio.crespi.calderini,,,,,9252,nessuno,1
+WIC,77.242.133.171, ,comune.cressa,,77.242.133.168/29,29,,comune.cressa,,,,,9359,nessuno,1
+WIC,77.242.133.172, ,icedri.spa,,77.242.133.168/29,29,,icedri.spa,,,,,9327,nessuno,1
+WIC,77.242.133.174, ,hal.energybus10,,77.242.133.168/29,29,,hal.energybus10,,,,,8982,nessuno,1
+WIC,77.242.133.175, ,pgs.srl,,77.242.133.168/29,29,,pgs.srl,,,,,9201,nessuno,1
+WIC,77.242.133.192,,Capanna Gnifetti,,77.242.133.192/29,29,,capanna.gnifetti,,,,,3941,nessuno,1
+WIC,77.242.133.193,,Fioramonti Walter,,77.242.133.192/29,29,,mera.ski,,,,,6223,nessuno,1
+WIC,77.242.133.195,,Gessi Mera,,77.242.133.192/29,29,,gessi.mera,,,,,4086,nessuno,1
+WIC,77.242.133.199,,Gianotti VoIP,,77.242.133.192/29,29,,luciano.gianotti,,,,,8158,nessuno,1
+WIC,77.242.133.216,,Andreis Quare,,77.242.133.216/30,30,,andreis.quare,,,,,7030,nessuno,1
+WIC,77.242.133.217,,Ecoconsul S.r.l,,77.242.133.216/30,30,,ecoconsult.nw,,,,,8996,nessuno,1
+WIC,77.242.134.3,,Parcheggio Coggiola,,77.242.134.0/30,30,,coggiola.parcheggio,,,,,6771,nessuno,1
+WIC,77.242.134.4,,Ferraris Paolo,,77.242.134.4/30,30,,paolo.ferraris,,,,,4262,nessuno,1
+WIC,77.242.134.5,,Ferraris Gabriele VoIP,,77.242.134.4/30,30,,gabriele.ferraris,,,,,4266,nessuno,1
+WIC,77.242.134.6,,Ferrari Gabriele CPE,,77.242.134.4/30,30,,gabriele.ferraris,,,,,4266,nessuno,1
+WIC,77.242.134.7,,Widsl Mishina (dinaminco),,77.242.134.4/30,30,,windsl003,,,,,7931,nessuno,1
+WIC,77.242.134.64,,Melchisedecco Mario,,77.242.134.64/26,26,,mario.melchisedecco,,,,,4519,nessuno,1
+WIC,77.242.134.65,,Mattiuz Andrea,,77.242.134.64/26,26,,andrea.mattiuz,,,,,5986,nessuno,1
+WIC,77.242.134.67,,Multone Roberto,,77.242.134.64/26,26,,roberto.multone,,,,,4383,nessuno,1
+WIC,77.242.134.68,,Zanazzo Mario,,77.242.134.64/26,26,,mario.zanazzo,,,,,4479,nessuno,1
+WIC,77.242.134.69,,Multone Davide,,77.242.134.64/26,26,,davide.multone,,,,,6045,nessuno,1
+WIC,77.242.134.70,,Zanola Roberto,,77.242.134.64/26,26,,roberto.zanola,,,,,4807,nessuno,1
+WIC,77.242.134.71,,Rovere Silvia,,77.242.134.64/26,26,,silvia.rovere,,,,,6016,nessuno,1
+WIC,77.242.134.73,,Delponte Antonio,,77.242.134.64/26,26,,antonio.delponte,,,,,7626,nessuno,1
+WIC,77.242.134.74,,De Bei Gabriella,,77.242.134.64/26,26,,gabriella.debei,,,,,5503,nessuno,1
+WIC,77.242.134.75,,Cerutti Danilo,,77.242.134.64/26,26,,danilo.cerutti,,,,,7925,nessuno,1
+WIC,77.242.134.76, ,massimo.poletti,,77.242.134.64/26,26,,massimo.poletti,,,,,9113,nessuno,1
+WIC,77.242.134.77,,Costenaro Sandro,,77.242.134.64/26,26,,sandro.costenaro,,,,,7666,nessuno,1
+WIC,77.242.134.78,,Orlando Gianbattista,,77.242.134.64/26,26,,gianbattista.orlando,,,,,8177,nessuno,1
+WIC,77.242.134.79,,Gattoni Viviana,,77.242.134.64/26,26,,viviana.gattoni,,,,,8117,nessuno,1
+WIC,77.242.134.80,,Framorando Roberto,,77.242.134.64/26,26,,roberto.framorando,,,,,5594,nessuno,1
+WIC,77.242.134.81,,Trinca Colonel Francesco,,77.242.134.64/26,26,,francesco.trinca,,,,,8028,nessuno,1
+WIC,77.242.134.82,,Bushgjokaj Halil,,77.242.134.64/26,26,,halil.bushgjokaj,,,,,7918,nessuno,1
+WIC,77.242.134.83,,Beltrami Roberto,,77.242.134.64/26,26,,roberto.beltrami,,,,,7959,nessuno,1
+WIC,77.242.134.84,,Viaretti Mauro,,77.242.134.64/26,26,,mauro.viaretti,,,,,6339,nessuno,1
+WIC,77.242.134.85,,Marone Aunet Giovanni,,77.242.134.64/26,26,,giovanni.maroneaunet,,,,,5562,nessuno,1
+WIC,77.242.134.86,,Nicolini Claudio,,77.242.134.64/26,26,,claudio.nicolini,,,,,8304,nessuno,1
+WIC,77.242.134.87,,Crevacore Lucia,,77.242.134.64/26,26,,lucia.crevacore,,,,,7835,nessuno,1
+WIC,77.242.134.88,,Piccinino Alessandra,,77.242.134.64/26,26,,alessandra.piccinino,,,,,7948,nessuno,1
+WIC,77.242.134.89,,Pene Chejkh,,77.242.134.64/26,26,,chejkh.pene,,,,,8208,nessuno,1
+WIC,77.242.134.90,,Martinasso Giancarlo,,77.242.134.64/26,26,,giancarlo.martinasso,,,,,5351,nessuno,1
+WIC,77.242.134.93,,Delponte Diego,,77.242.134.64/26,26,,diego.delponte,,,,,7619,nessuno,1
+WIC,77.242.134.94,,Vonlanthen Karin,,77.242.134.64/26,26,,karin.vonlanthen,,,,,5785,nessuno,1
+WIC,77.242.134.95,,Palestrini Alberto,,77.242.134.64/26,26,,alberto.palestrini,,,,,5907,nessuno,1
+WIC,77.242.134.96, ,rodolfo.lo.schiavo,,77.242.134.64/26,26,,rodolfo.lo.schiavo,,,,,9293,nessuno,1
+WIC,77.242.134.97,,Miriz Christian,,77.242.134.64/26,26,,christian.miritz,,,,,7832,nessuno,1
+WIC,77.242.134.98,,Beraha Carlo,,77.242.134.64/26,26,,carlo.beraha,,,,,5575,nessuno,1
+WIC,77.242.134.99,,Belotti Nella,,77.242.134.64/26,26,,nella.belotti,,,,,6561,nessuno,1
+WIC,77.242.134.101,,Miola Ivana,,77.242.134.64/26,26,,ivana.miola,,,,,4449,nessuno,1
+WIC,77.242.134.102,,Da Silvia Sonia Maria,,77.242.134.64/26,26,,sonia.dasilva,,,,,5837,nessuno,1
+WIC,77.242.134.103,,Catto Martina,,77.242.134.64/26,26,,martina.catto,,,,,5868,nessuno,1
+WIC,77.242.134.104,,Morino Fulvio,,77.242.134.64/26,26,,fulvio.morino,,,,,5229,nessuno,1
+WIC,77.242.134.105,,Comero Daniele,,77.242.134.64/26,26,,daniele.comero,,,,,5753,nessuno,1
+WIC,77.242.134.106,,Isotta Giulio,,77.242.134.64/26,26,,giulio.isotta,,,,,5931,nessuno,1
+WIC,77.242.134.107,,Franchino Oscar,,77.242.134.64/26,26,,oscar.franchino,,,,,4876,nessuno,1
+WIC,77.242.134.108,,Mugione Oscar,,77.242.134.64/26,26,,antonio.mugione,,,,,4986,nessuno,1
+WIC,77.242.134.109,,Pignolo Michele,,77.242.134.64/26,26,,michele.pignolo,,,,,6023,nessuno,1
+WIC,77.242.134.110,,Bondi Graziella Maria,,77.242.134.64/26,26,,graziellamaria.bondi,,,,,9235,nessuno,1
+WIC,77.242.134.111,,Risoletti Donato,,77.242.134.64/26,26,,donato.risoletti,,,,,4472,nessuno,1
+WIC,77.242.134.113,,Peretti Giuseppe,,77.242.134.64/26,26,,giuseppe.peretti,,,,,5482,nessuno,1
+WIC,77.242.134.114,,Zocchi Carla,,77.242.134.64/26,26,,carla.zocchi,,,,,4695,nessuno,1
+WIC,77.242.134.115,,Salsa Roberta,,77.242.134.64/26,26,,roberta.salsa,,,,,4949,nessuno,1
+WIC,77.242.134.116,,Guidetti Flavio,,77.242.134.64/26,26,,flavio.guidetti,,,,,4630,nessuno,1
+WIC,77.242.134.117,,Caldana Mario,,77.242.134.64/26,26,,mario.caldana,,,,,5477,nessuno,1
+WIC,77.242.134.118,,Talamini Roberto,,77.242.134.64/26,26,,roberto.talamini,,,,,5381,nessuno,1
+WIC,77.242.134.121,,Bussone Marco,,77.242.134.64/26,26,,marco.bussone,,,,,5619,nessuno,1
+WIC,77.242.134.123,,Ugge Alessandra,,77.242.134.64/26,26,,alessandra.ugge,,,,,5198,nessuno,1
+WIC,77.242.134.100,,Circolo di Agrano,,77.242.134.64/26,26,,agrano.voip,,,,,7549,nessuno,1
+WIC,77.242.134.124,,Massara Gianluca,,77.242.134.64/26,26,,gianluca.massara,,,,,5348,nessuno,1
+WIC,77.242.134.126,,GAM Automatic,,77.242.134.64/26,26,,gam.automatic,,,,,4217,nessuno,1
+WIC,77.242.134.127,,TMP Trial,,77.242.134.64/26,26,,super.enduro2,,,,,3842,nessuno,1
+WIC,77.242.134.244,,Setti Claudio,,77.242.134.244/30,30,,claudio.setti1,,,,,9029,nessuno,1
+WIC,77.242.134.245,,Tecnoedil,,77.242.134.244/30,30,,oliviero.paganotti,,,,,4495,nessuno,1
+WIC,77.242.134.246,,Electrika,,77.242.134.244/30,30,,electrika.cc,,,,,3917,nessuno,1
+WIC,77.242.134.247,,Ist. Comprensivo Pray - Internet,,77.242.134.244/30,30,,pray.ic-internet,,,,,6917,nessuno,1
+WIC,77.242.135.48,,Roberto Tamiazzo - TEMP per PS3,,77.242.135.48/29,29,,roberto.tamiazzo,,,,,4907,nessuno,1
+WIC,77.242.135.50,,Beta Rubinetterie - TEMP per problemi voip,,77.242.135.48/29,29,,rubinetterie.beta.voip,,,,,6966,nessuno,1
+WIC,77.242.135.52,,MTB,,77.242.135.48/29,29,,mtb.mtbsrl,,,,,6307,nessuno,1
+WIC,77.242.135.53,,Model Plastic - VoIP,,77.242.135.48/29,29,,model.plastic,,,,,4102,nessuno,1
+WIC,77.242.135.55,,Natale Arnese,,77.242.135.48/29,29,,natale.arnese,,,,,4406,nessuno,1
+WIC,77.242.135.56,,Anchisi Alessando(4514)ex EDIL COSTRUENDO,,77.242.135.56/30,30,,alessandro.anchisi2,,,,,4071,nessuno,1
+WIC,77.242.135.57,,Giorgio,,77.242.135.56/30,30,,giorgio.botta,,,,,5923,nessuno,1
+WIC,77.242.135.58,,Comune di Sabbia,,77.242.135.56/30,30,,sabbia.webcam,,,,,3888,nessuno,1
+WIC,77.242.135.59,,Savoini Graziella,,77.242.135.56/30,30,,graziella.savoini,,,,,6945,nessuno,1
+WIC,77.242.135.60,,Sacro Monte Varallo,,77.242.135.60/30,30,,varallo.sacromonte,,,,,4247,nessuno,1
+WIC,77.242.135.72,,Toscanini Doccio,,77.242.135.72/29,29,,toscanini.doccio,,,,,3921,nessuno,1
+WIC,77.242.135.73,,Stefano Casa,,77.242.135.72/29,29,,stefano.voip,,,,,6846,nessuno,1
+WIC,77.242.135.74,,Festa Unità Quarona,,77.242.135.72/29,29,,fu.quarona,,,,,6748,nessuno,1
+WIC,77.242.135.75,,Autolavggio Labrador - Varallo,,77.242.135.72/29,29,,autolavaggio.labrador,,,,,6346,nessuno,1
+WIC,77.242.135.76,,Varallo - Scuole elementari,,77.242.135.72/29,29,,varallo.scelem,,,,,8194,nessuno,1
+WIC,77.242.135.77,,Varallo - Municipio,,77.242.135.72/29,29,,varallo.mun,,,,,8193,nessuno,1
+WIC,77.242.135.78,,Andreis Quarone,,77.242.135.72/29,29,,andreis.quarone,,,,,8782,nessuno,1
+WIC,77.242.135.88,,Comune di Madonna del Sasso - Municipio,,77.242.135.88/29,29,,madonnadelsasso.municipio,,,,,6762,nessuno,1
+WIC,77.242.135.89,,Galli - Casa Valmaggiore,,77.242.135.88/29,29,,giuseppe.galli,,,,,4076,nessuno,1
+WIC,77.242.135.90,,Enrico Milanolo - Per accesso ad AS400 Cimberio senza VPN,,77.242.135.88/29,29,,e.milanolo,,,,,6675,nessuno,1
+WIC,77.242.135.91,,Comune di Varallo - Sacro Monte (CSP),,77.242.135.88/29,29,,varallo.sacromonte,,,,,4247,nessuno,1
+WIC,77.242.135.92,,Comune di Varallo - Municipio,,77.242.135.88/29,29,,varallo.mun,,,,,8193,nessuno,1
+WIC,77.242.135.93,,Turlo - Roccapietra,,77.242.135.88/29,29,,turlo.srl,,,,,7697,nessuno,1
+WIC,77.242.135.95,,Galloppini - Ranghetto,,77.242.135.88/29,29,,galloppini.srl,,,,,4230,nessuno,1
+WIC,77.242.135.128,,Toscanini Varallo,,77.242.135.128/30,30,,toscanini.varallo,,,,,3922,nessuno,1
+WIC,77.242.135.129, ,giancarlo.colombo,,77.242.135.128/30,30,,giancarlo.colombo,,,,,8578,nessuno,1
+WIC,77.242.135.130, ,boca.srl,,77.242.135.128/30,30,,boca.srl,,,,,9324,nessuno,1
+WIC,77.242.135.131, ,dvk.system,,77.242.135.128/30,30,,dvk.system,,,,,9318,nessuno,1
+WIC,77.242.135.136,,Basik2 Borgosesia Manifattura,,77.242.135.136/29,29,,basikdue.manifattura,,,,,8988,nessuno,1
+WIC,77.242.135.137,,Basik2 Borgosesia Viale Varallo,,77.242.135.136/29,29,,basikdue.vialevarallo,,,,,8989,nessuno,1
+WIC,77.242.135.138,,Basik2 Agnona,,77.242.135.136/29,29,,basikdue.agnona,,,,,8987,nessuno,1
+WIC,77.242.135.139,,Basik2 Roccapietra,,77.242.135.136/29,29,,basikdue.roccapietra,,,,,8985,nessuno,1
+WIC,77.242.135.140,,Basik2 Quarona,,77.242.135.136/29,29,,basikdue.quarona,,,,,8986,nessuno,1
+WIC,77.242.135.141,,Basik2 Varallo Rotondi,,77.242.135.136/29,29,,basikdue.varallo,,,,,8984,nessuno,1
+WIC,77.242.135.143, ,newstyle.ianni,,77.242.135.136/29,29,,newstyle.ianni,,,,,7743,nessuno,1
+WIC,77.242.136.1,,Urban Maurizio,,77.242.136.0/27,27,,urban.maurizio,,,,,7770,nessuno,1
+WIC,77.242.136.2,,Ferraris Potino,,77.242.136.0/27,27,,fausto.ferrarispotino,,,,,5789,nessuno,1
+WIC,77.242.136.3,,Motta Ermanno,,77.242.136.0/27,27,,ermanno.motta,,,,,4330,nessuno,1
+WIC,77.242.136.5,,Moroso Giancarlo,,77.242.136.0/27,27,,giancarlo.moroso,,,,,5661,nessuno,1
+WIC,77.242.136.6,,Vigna Giuseppe/ Cantun Balin,,77.242.136.0/27,27,,trattoria.cantunbalin,,,,,4237,nessuno,1
+WIC,77.242.136.11,,Bertole,,77.242.136.0/27,27,,margherita.bertole,,,,,4322,nessuno,1
+WIC,77.242.136.16,,Alvaro Gualea,,77.242.136.0/27,27,,alvaro.gualea,,,,,8170,nessuno,1
+WIC,77.242.136.17,,Sergio Cottura,,77.242.136.0/27,27,,sergio.cottura,,,,,7895,nessuno,1
+WIC,77.242.136.18,,Bylu Intimo,,77.242.136.0/27,27,,bylu.intimo,,,,,7512,nessuno,1
+WIC,77.242.136.19,,Bylu Casa,,77.242.136.0/27,27,,bylu.casa,,,,,7513,nessuno,1
+WIC,77.242.136.20,,Massimo Freguja,,77.242.136.0/27,27,,massimo.freguja,,,,,4928,nessuno,1
+WIC,77.242.128.254,,Sandys Casaforte,,77.242.128.252/30,30,,sandys.srl,,,,,6272,nessuno,1
+WIC,77.242.129.1,,Conca dei rododendri,,77.242.129.0/29,29,,conca.rododendri,,,,,8389,nessuno,1
+WIC,77.242.129.2,,Intermarp,,77.242.129.0/29,29,,intermarp.italia,,,,,6516,nessuno,1
+WIC,77.242.129.3,,Neinver,,77.242.129.0/29,29,,nein.ver,,,,,6859,nessuno,1
+WIC,77.242.129.4,,Autorama Caresanablot,,77.242.129.0/29,29,,auto.rama,,,,,6150,nessuno,1
+WIC,77.242.130.20,,Autotrasporti Capozi,,77.242.130.20/30,30,,autotrasporti.capozi,,,,,6564,nessuno,1
+WIC,77.242.130.21,,Levi Strauss,,77.242.130.20/30,30,,levi.strauss,,,,,6473,nessuno,1
+WIC,77.242.130.22,,Errebi,,77.242.130.20/30,30,,errebi.spa,,,,,6413,nessuno,1
+WIC,77.242.136.21,,Oliveto Graziella,,77.242.136.0/27,27,,oliveto.graziella,,,,,8180,nessuno,1
+WIC,77.242.136.23,,Maurizio Borla,,77.242.136.0/27,27,,maurizio.borla,,,,,4873,nessuno,1
+WIC,77.242.136.24,,Hotel Monterosa,,77.242.136.0/27,27,,hotel.monterosa,,,,,7942,nessuno,1
+WIC,77.242.136.25,,Pettinaroli Test,,77.242.136.0/27,27,,pettinaroli.test,,,,,7615,nessuno,1
+WIC,77.242.136.26,,Locanda Riviera,,77.242.136.0/27,27,,locanda.riviera,,,,,8249,nessuno,1
+WIC,77.242.136.27,,Gardoni Massimo,,77.242.136.0/27,27,,massimo.gardoni,,,,,4701,nessuno,1
+WIC,77.242.136.28,,Mignosi Rizzieno,,77.242.136.0/27,27,,rizziero.mignosi,,,,,5187,nessuno,1
+WIC,77.242.136.29,,Baviera Giovanni,,77.242.136.0/27,27,,giovanni.baviera,,,,,5476,nessuno,1
+WIC,77.242.136.30,,Crotta Donata,,77.242.136.0/27,27,,donata.crotta,,,,,9192,nessuno,1
+WIC,77.242.136.31,,Godi Gianfranco,,77.242.136.0/27,27,,gianfranco.godi,,,,,8894,nessuno,1
+WIC,77.242.136.32,,Antonio Ferrari,,77.242.136.32/29,29,,antonio.ferrari,,,,,5475,nessuno,1
+WIC,77.242.136.34,,Comunica Srl,,77.242.136.32/29,29,,comunica.srl,,,,,8503,nessuno,1
+WIC,77.242.136.35,,De Agostini - Arola,,77.242.136.32/29,29,,bruna.deagostini,,,,,8149,nessuno,1
+WIC,77.242.136.36,,Comune di Soriso Hotspot,,77.242.136.32/29,29,,municipio.soriso,,,,,6327,nessuno,1
+WIC,77.242.136.37,,Armeno Hotspot,,77.242.136.32/29,29,,armeno.hotspot,,,,,6770,nessuno,1
+WIC,77.242.136.38,,Medina Davide,,77.242.136.32/29,29,,davide.medina,,,,,3878,nessuno,1
+WIC,77.242.136.39,,Medina Davide,,77.242.136.32/29,29,,davide.medina2,,,,,3879,nessuno,1
+WIC,77.242.136.41,,Cavalleri Monica,,77.242.136.40/30,30,,monica.cavalleri,,,,,4334,nessuno,1
+WIC,77.242.136.42,,Alessandra Alessianghini,,77.242.136.40/30,30,,alessandra.alessianghini,,,,,8067,nessuno,1
+WIC,77.242.141.212,,Roberto Urban,,77.242.141.192/27,27,,roberto.urban,,,,,4642,nessuno,1
+WIC,77.242.141.191,,Arianna Manuedda,,77.242.141.160/27,27,,arianna.manuedda,,,,,8740,nessuno,1
+WIC,77.242.141.220,,Gessi Guardella,,77.242.141.192/27,27,,gessi.guardella,,,,,8810,nessuno,1
+WIC,77.242.141.200,,Leonardo di Rienzo,,77.242.141.192/27,27,,leonardo.dirienzo,,,,,4839,nessuno,1
+WIC,77.242.141.159,,Nicoloso Valdi,,77.242.141.144/28,28,,valdi.nicoloso,,,,,9041,nessuno,1
+WIC,77.242.141.217,,Manera Marina,,77.242.141.192/27,27,,marina.manera,,,,,9182,nessuno,1
+WIC,77.242.141.218,,PGS srl,,77.242.141.192/27,27,,pgs.srl,,,,,9201,nessuno,1
+WIC,77.242.129.45, ,lucia.zefiretti,,77.242.129.44/30,30,,lucia.zefiretti,,,,,8133,nessuno,1
+WIC,77.242.129.46, ,claudio.enzio3,,77.242.129.44/30,30,,claudio.enzio3,,,,,6874,nessuno,1
+WIC,77.242.129.47, ,roberto.dibenedetto,,77.242.129.44/30,30,,roberto.dibenedetto,,,,,9280,nessuno,1
+WIC,77.242.133.194, ,ergon.mazzola,,77.242.133.192/29,29,,ergon.mazzola,,,,,9421,nessuno,1
+WIC,77.242.136.14, ,stanislav.belsky,,77.242.136.0/27,27,,stanislav.belsky,,,,,9398,nessuno,1
+WIC,77.242.141.24, ,simone.giovanetti,,77.242.141.24/29,29,,simone.giovanetti,,,,,9431,nessuno,1
+WIC,77.242.141.27, ,carlo.giroldi,,77.242.141.24/29,29,,carlo.giroldi,,,,,9144,nessuno,1
+WIC,77.242.130.150, ,alessandro.randetti,,77.242.130.148/30,30,,alessandro.randetti,,,,,9477,nessuno,1
+WIC,77.242.130.151, ,ecoprogress.srl,,77.242.130.148/30,30,,ecoprogress.srl,,,,,9490,nessuno,1
+WIC,77.242.131.36, ,arnaldo.fuselli,,77.242.131.36/30,30,,arnaldo.fuselli,,,,,9145,nessuno,1
+WIC,77.242.135.79, ,sven.hohn,,77.242.135.72/29,29,,sven.hohn,,,,,9427,nessuno,1
+WIC,77.242.131.68, ,telepati.lora,,77.242.131.68/30,30,,telepati.lora,,,,,3809,nessuno,1
+WIC,77.242.131.37, ,studio.progettazione,,77.242.131.36/30,30,,studio.progettazione,,,,,6360,nessuno,1
+WIC,77.242.131.38, ,mirco.lavarini,,77.242.131.36/30,30,,mirco.lavarini,,,,,9432,nessuno,1
+WIC,77.242.131.39, ,cai.granero,,77.242.131.36/30,30,,cai.granero,,,,,9358,nessuno,1
+WIC,77.242.131.40, ,sergio.lucchini,,77.242.131.40/30,30,,sergio.lucchini,,,,,9478,nessuno,1
+WIC,77.242.131.41, ,gianluca.callegaro,,77.242.131.40/30,30,,gianluca.callegaro,,,,,9466,nessuno,1
+WIC,77.242.131.42, ,luigi.avondo,,77.242.131.40/30,30,,luigi.avondo,,,,,9414,nessuno,1
+WIC,77.242.131.43, ,giovanni.monti,,77.242.131.40/30,30,,giovanni.monti,,,,,9223,nessuno,1
+WIC,77.242.130.148, ,luca.chiaverano,,77.242.130.148/30,30,,luca.chiaverano,,,,,5281,nessuno,1
+WIC,77.242.137.34, ,gianluca.santia,,77.242.137.32/30,30,,gianluca.santia,,,,,6445,nessuno,1
+WIC,77.242.131.44, ,marcella.martinelli,,77.242.131.44/30,30,,marcella.martinelli,,,,,9330,nessuno,1
+WIC,77.242.137.35, ,ori.srl,,77.242.137.32/30,30,,ori.srl,,,,,9567,nessuno,1
+WIC,77.242.131.45, ,sategna.genzianella,,77.242.131.44/30,30,,sategna.genzianella,,,,,9496,nessuno,1
+WIC,77.242.131.46, ,mm.impianti,,77.242.131.44/30,30,,mm.impianti,,,,,9515,nessuno,1
+WIC,77.242.137.63, ,silvio.nerini,,77.242.137.60/30,30,,silvio.nerini,,,,,9534,nessuno,1
+WIC,77.242.133.64, ,erta.srl,,77.242.133.64/30,30,,erta.srl,,,,,9586,nessuno,1
+WIC,77.242.136.15, ,corte.alzo,,77.242.136.0/27,27,,corte.alzo,,,,,,nessuno,1
+WIC,77.242.131.47, ,cesali.alberto,,77.242.131.44/30,30,,cesali.alberto,,,,,9563,nessuno,1
+WIC,77.242.136.8, ,mario.dellavedova,,77.242.136.0/27,27,,mario.dellavedova,,,,,8293,nessuno,1
+WIC,77.242.133.67, ,svetlana.fisun,,77.242.133.64/30,30,,svetlana.fisun,,,,,9617,nessuno,1
+WIC,77.242.133.218, ,pramar.marchiorocasa,,77.242.133.216/30,30,,pramar.marchiorocasa,,,,,9638,nessuno,1
+WIC,77.242.133.219, ,bruno.prelli,,77.242.133.216/30,30,,bruno.prelli,,,,,5178,nessuno,1
+WIC,77.242.131.48, ,capitano.badanelli,,77.242.131.48/30,30,,capitano.badanelli,,,,,8870,nessuno,1
+WIC,77.242.131.49, ,franco.ruga,,77.242.131.48/30,30,,franco.ruga,,,,,9649,nessuno,1
+WIC,77.242.131.50, ,patrick.bertoldo,,77.242.131.48/30,30,,patrick.bertoldo,,,,,9625,nessuno,1
+WIC,77.242.131.143, ,giorgio.ranzini,,77.242.131.136/29,29,,giorgio.ranzini,,,,,4601,nessuno,1
+WIC,77.242.135.51, ,telepati.centrozegna,,77.242.135.48/29,29,,telepati.centrozegna,,,,,3806,nessuno,1
+WIC,77.242.131.51, ,vladimiro.robiolio,,77.242.131.48/30,30,,vladimiro.robiolio,,,,,9658,nessuno,1
+WIC,77.242.131.52, ,scuolasci.mera,,77.242.131.52/30,30,,scuolasci.mera,,,,,9590,nessuno,1
+WIC,77.242.131.53, ,roberto.guidetti,,77.242.131.52/30,30,,roberto.guidetti,,,,,9648,nessuno,1
+WIC,77.242.129.0, ,burocco.industrial.valves.srl,,77.242.129.0/29,29,,burocco.industrial.valves.srl,,,,,9527,nessuno,1
+WIC,77.242.131.54, ,giuseppina.napoli,,77.242.131.52/30,30,,giuseppina.napoli,,,,,9560,nessuno,1
+WIC,77.242.131.55, ,giuseppe.martinetti,,77.242.131.52/30,30,,giuseppe.martinetti,,,,,5170,nessuno,1
+WIC,77.242.131.56, ,iris.angelini,,77.242.131.56/30,30,,iris.angelini,,,,,9709,nessuno,1
+WIC,77.242.131.57, ,giuliano.granelli,,77.242.131.56/30,30,,giuliano.granelli,,,,,9688,nessuno,1
+WIC,77.242.129.7, ,valvometal.castano,,77.242.129.0/29,29,,valvometal.castano,,,,,9661,nessuno,1
+WIC,77.242.135.61, ,phorma.vicario,,77.242.135.60/30,30,,phorma.vicario,,,,,6486,nessuno,1
+WIC,77.242.135.62, ,teorema.srl2,,77.242.135.60/30,30,,teorema.srl2,,,,,9580,nessuno,1
+WIC,77.242.136.40, ,innolav.cooperativa,,77.242.136.40/30,30,,innolav.cooperativa,,,,,9036,nessuno,1
+WIC,77.242.133.11, ,spedi.srl,,77.242.133.8/29,29,,spedi.srl,,,,,9645,nessuno,1
+WIC,77.242.131.58, ,giuseppina.montanaro,,77.242.131.56/30,30,,giuseppina.montanaro,,,,,9694,nessuno,1
+WIC,77.242.130.23,,Basso Legnami,,77.242.130.20/30,30,,legnami.basso,,,,,6662,nessuno,1
+WIC,77.242.130.28,,Bozio Bralino Giorgio,,77.242.130.28/30,30,,giorgio.boziobralino.casa,,,,,6949,nessuno,1
+WIC,77.242.130.29,,TRS Evolotuion Trussardi,,77.242.130.28/30,30,,trsevolution.trussardi,,,,,7673,nessuno,1
+WIC,77.242.138.5, ,marmotta.rosa,,77.242.138.0/29,29,,marmotta.rosa,,,,,9796,nessuno,1
+WIC,77.242.131.59, ,giuseppe.delmasto,,77.242.131.56/30,30,,giuseppe.delmasto,,,,,9571,nessuno,1
+WIC,77.242.138.4, ,tera.system,,77.242.138.0/29,29,,tera.system,,,,,9128,nessuno,1
+WIC,77.242.131.128, ,tera.systemsas,,77.242.131.128/29,29,,tera.systemsas,,,,,9808,nessuno,1
+WIC,77.242.141.197, ,mutuosoccorso.sostegno,,77.242.141.192/27,27,,mutuosoccorso.sostegno,,,,,9681,nessuno,1
+WIC,77.242.133.136, ,duemilanet.celli,,77.242.133.136/30,30,,duemilanet.celli,,,,,9879,nessuno,1
+WIC,77.242.131.60, ,luca.ferrari,,77.242.131.60/30,30,,luca.ferrari,,,,,9862,nessuno,1
+WIC,77.242.131.61, ,francesca.cristina,,77.242.131.60/30,30,,francesca.cristina,,,,,9821,nessuno,1
+WIC,77.242.133.121, ,sortex.srl,,77.242.133.120/29,29,,sortex.srl,,,,,9175,nessuno,1
+WIC,77.242.130.112, ,trasgo.landiona,,77.242.130.112/30,30,,trasgo.landiona,,,,,3955,nessuno,1
+WIC,77.242.133.120, ,zanolo.spa,,77.242.133.120/29,29,,zanolo.spa,,,,,9196,nessuno,1
+WIC,77.242.137.26, ,fratelli.sogno,,77.242.137.24/30,30,,fratelli.sogno,,,,,8421,nessuno,1
+WIC,77.242.134.2, ,marinarosa.marcora,,77.242.134.0/30,30,,marinarosa.marcora,,,,,9730,nessuno,1
+WIC,77.242.134.1, ,ibrahim.musa,,77.242.134.0/30,30,,ibrahim.musa,,,,,9963,nessuno,1
+WIC,77.242.133.157,,Masso Industrie,,77.242.133.156/30,30,,Masso Industrie,,,,,5724,nessuno,1
+WIC,77.242.138.6, ,alfonso.curella,,77.242.138.0/29,29,,alfonso.curella,,,,,9702,nessuno,1
+WIC,77.242.134.0, ,giovanni.pignataro,,77.242.134.0/30,30,,giovanni.pignataro,,,,,9818,nessuno,1
+WIC,77.242.133.124,,LANFRANCHI FABRIZIO ,,77.242.133.120/29,29,,LANFRANCHI FABRIZIO ,,,,,5449,nessuno,1
+WIC,77.242.132.243,,PC Code Rizzi Cristina,,77.242.132.240/28,28,,pc.code,,,,,7012,nessuno,1
+WIC,77.242.132.244,,Burla,,77.242.132.240/28,28,,cascina.burla,,,,,6254,nessuno,1
+WIC,77.242.132.245,,Belotti Pierantonio - VoIP,,77.242.132.240/28,28,,pierantonio.belotti,,,,,7559,nessuno,1
+WIC,77.242.132.246,,Vicario Giancarlo,,77.242.132.240/28,28,,giancarlo.vicario,,,,,5919,nessuno,1
+WIC,77.242.141.206, ,alberto.barberisnegra,,77.242.141.192/27,27,,alberto.barberisnegra,,,,,9281,nessuno,1
+WIC,77.242.131.62, ,luca.comoli,,77.242.131.60/30,30,,luca.comoli,,,,,9613,nessuno,1
+WIC,77.242.136.33, ,scuolamedia.marconi,,77.242.136.32/29,29,,scuolamedia.marconi,,,,,9934,nessuno,1
+WIC,77.242.130.48, ,vistarini.srl,,77.242.130.48/30,30,,vistarini.srl,,,,,9977,nessuno,1
+WIC,77.242.130.49, ,germano.fredo,,77.242.130.48/30,30,,germano.fredo,,,,,10004,nessuno,1
+WIC,77.242.131.63, ,stella.tagliabue,,77.242.131.60/30,30,,stella.tagliabue,,,,,9287,nessuno,1
+WIC,77.242.141.60, ,versoprobo.amenoufficio,,77.242.141.32/27,27,,versoprobo.amenoufficio,,,,,10036,nessuno,1
+WIC,77.242.131.144, ,paola.zanetti,,77.242.131.144/30,30,,paola.zanetti,,,,,4598,nessuno,1
+WIC,77.242.130.50, ,negrito.gas,,77.242.130.48/30,30,,negrito.gas,,,,,9704,nessuno,1
+WIC,77.242.130.51, ,gabriella.piotto,,77.242.130.48/30,30,,gabriella.piotto,,,,,9971,nessuno,1
+WIC,77.242.130.68, ,zamboni.gianenrico,,77.242.130.68/30,30,,zamboni.gianenrico,,,,,6763,nessuno,1
+WIC,77.242.138.0, ,renzo.sudetti,,77.242.138.0/29,29,,renzo.sudetti,,,,,5297,nessuno,1
+WIC,77.242.131.146, ,guglielmina.gattinara.fax,,77.242.131.144/30,30,,guglielmina.gattinara.fax,,,,,10088,nessuno,1
+WIC,77.242.131.147, ,wima.urban,,77.242.131.144/30,30,,wima.urban,,,,,6137,nessuno,1
+WIC,77.242.130.69, ,vidoni.orlandosnc,,77.242.130.68/30,30,,vidoni.orlandosnc,,,,,10070,nessuno,1
+WIC,77.242.130.71, ,confezioni.gierre,,77.242.130.68/30,30,,confezioni.gierre,,,,,6520,nessuno,1
+WIC,77.242.130.108, ,mantovani.cristiana,,77.242.130.108/30,30,,mantovani.cristiana,,,,,10118,nessuno,1
+WIC,77.242.130.109, ,scelementari.centro,,77.242.130.108/30,30,,scelementari.centro,,,,,9936,nessuno,1
+WIC,77.242.130.110, ,scelementari.aranco,,77.242.130.108/30,30,,scelementari.aranco,,,,,9935,nessuno,1
+WIC,77.242.130.111, ,mutec.srl,,77.242.130.108/30,30,,mutec.srl,,,,,9503,nessuno,1
+WIC,77.242.130.116, ,comune.cavaglio,,77.242.130.116/30,30,,comune.cavaglio,,,,,10140,nessuno,1
+WIC,77.242.134.92, ,francesca.castano,,77.242.134.64/26,26,,francesca.castano,,,,,10089,nessuno,1
+WIC,77.242.136.9, ,angelo.ceresa,,77.242.136.0/27,27,,angelo.ceresa,,,,,10074,nessuno,1
+WIC,77.242.131.152, ,elisabetta.nale,,77.242.131.152/30,30,,elisabetta.nale,,,,,10025,nessuno,1
+WIC,77.242.131.153, ,rita.sesia,,77.242.131.152/30,30,,rita.sesia,,,,,10082,nessuno,1
+WIC,77.242.131.154, ,elena.ramacci,,77.242.131.152/30,30,,elena.ramacci,,,,,10063,nessuno,1
+WIC,77.242.131.155, ,giuseppe.brotto,,77.242.131.152/30,30,,giuseppe.brotto,,,,,10127,nessuno,1
+WIC,77.242.130.118, ,michele.de.angelis,,77.242.130.116/30,30,,michele.de.angelis,,,,,10163,nessuno,1
+WIC,77.242.136.10, ,sperandio.roldano,,77.242.136.0/27,27,,sperandio.roldano,,,,,10195,nessuno,1
+WIC,77.242.131.156, ,silvia.pregnolato,,77.242.131.156/30,30,,silvia.pregnolato,,,,,10135,nessuno,1
+WIC,77.242.131.157, ,alpyland.mottarone,,77.242.131.156/30,30,,alpyland.mottarone,,,,,9143,nessuno,1
+WIC,77.242.130.119, ,alpyland.mottarone,,77.242.130.116/30,30,,alpyland.mottarone,,,,,9143,nessuno,1
+WIC,77.242.131.159, ,andreino.tabarini,,77.242.131.156/30,30,,andreino.tabarini,,,,,10174,nessuno,1
+WIC,77.242.131.145, ,caseificio.bralino,,77.242.131.144/30,30,,caseificio.bralino,,,,,10180,nessuno,1
+WIC,77.242.131.160, ,anna.scarel,,77.242.131.160/30,30,,anna.scarel,,,,,4921,nessuno,1
+WIC,77.242.130.136, ,nuova.rettifica,,77.242.130.136/30,30,,nuova.rettifica,,,,,10200,nessuno,1
+WIC,77.242.130.137, ,rifugio.pastore,,77.242.130.136/30,30,,rifugio.pastore,,,,,3942,nessuno,1
+WIC,77.242.141.193, ,parrocchia.boca,,77.242.141.192/27,27,,parrocchia.boca,,,,,10228,nessuno,1
+WIC,77.242.130.138, ,golfclub.castelconturbia,,77.242.130.136/30,30,,golfclub.castelconturbia,,,,,9365,nessuno,1
+WIC,77.242.141.58, ,,,77.242.141.32/27,27,,ercole.sigalone,,,,,10667,nessuno,1
+WIC,77.242.131.66, ,,,77.242.131.64/30,30,,karon.comunicazione,,,,,8366,nessuno,1
+WIC,77.242.131.249, ,fabio.porziobodolo,,77.242.131.248/30,30,,fabio.porziobodolo,,,,,10269,nessuno,1
+WIC,77.242.131.250, ,capanna.margherita,,77.242.131.248/30,30,,capanna.margherita,,,,,3940,nessuno,1
+WIC,77.242.131.251, ,rifugio.barbaferrero,,77.242.131.248/30,30,,rifugio.barbaferrero,,,,,3939,nessuno,1
+WIC,77.242.141.216, ,morea.albergoriviera,,77.242.141.192/27,27,,morea.albergoriviera,,,,,10344,nessuno,1
+WIC,77.242.132.20, ,dvk.fontaneto,,77.242.132.20/30,30,,dvk.fontaneto,,,,,10350,nessuno,1
+WIC,77.242.133.196,,Caimi (dinamico),,77.242.133.192/29,29,,marco.caimi,,,,,8408,nessuno,1
+WIC,77.242.141.210, ,giuseppe.polistena,,77.242.141.192/27,27,,giuseppe.polistena,,,,,10403,nessuno,1
+WIC,77.242.133.198,,Meraski seggiovie Scopello,,77.242.133.192/29,29,,meraski.scopello,,,,,7984,nessuno,1
+WIC,77.242.131.161, ,maria.isabella,,77.242.131.160/30,30,,maria.isabella,,,,,10329,nessuno,1
+WIC,77.242.132.21, ,stefano.landriani,,77.242.132.20/30,30,,stefano.landriani,,,,,10351,nessuno,1
+WIC,77.242.133.61, ,,,77.242.133.60/30,30,,tecnoverde.roccapietra,,,,,10801,nessuno,1
+WIC,77.242.131.162, ,michael.nichini,,77.242.131.160/30,30,,michael.nichini,,,,,10365,nessuno,1
+WIC,77.242.131.163, ,centro.comunitario,,77.242.131.160/30,30,,centro.comunitario,,,,,6757,nessuno,1
+WIC,77.242.132.23, ,latenuta.delsolefontaneto,,77.242.132.20/30,30,,latenuta.delsolefontaneto,,,,,8670,nessuno,1
+WIC,77.242.134.125, ,silvio.torsetta,,77.242.134.64/26,26,,silvio.torsetta,,,,,9926,nessuno,1
+WIC,77.242.134.120, ,piero.balbo,,77.242.134.64/26,26,,piero.balbo,,,,,8768,nessuno,1
+WIC,77.242.141.199, ,irines.giuseppa.bruttini,,77.242.141.192/27,27,,irines.giuseppa.bruttini,,,,,10370,nessuno,1
+WIC,77.242.141.68, ,massimo.maffioli,,77.242.141.64/26,26,,massimo.maffioli,,,,,10093,nessuno,1
+WIC,77.242.141.76, ,silvio.torsetta,,77.242.141.64/26,26,,silvio.torsetta,,,,,9926,nessuno,1
+WIC,77.242.135.142, ,armida.zampese,,77.242.135.136/29,29,,armida.zampese,,,,,10470,nessuno,1
+WIC,77.242.133.197, ,radiant.12.srl,,77.242.133.192/29,29,,radiant.12.srl,,,,,10481,nessuno,1
+WIC,77.242.133.173, ,radiant.12.srl1,,77.242.133.168/29,29,,radiant.12.srl1,,,,,10482,nessuno,1
+WIC,77.242.141.25, ,dvk.fontaneto,,77.242.141.24/29,29,,dvk.fontaneto,,,,,10350,nessuno,1
+WIC,77.242.133.165, ,carla.zocchi,,77.242.133.160/29,29,,carla.zocchi,,,,,4695,nessuno,1
+WIC,77.242.141.84, ,fondazione.marazza,,77.242.141.64/26,26,,fondazione.marazza,,,,,10437,nessuno,1
+WIC,77.242.141.83, ,gmt.srl,,77.242.141.64/26,26,,gmt.srl,,,,,10484,nessuno,1
+WIC,77.242.130.149, ,valeriano.regenero,,77.242.130.148/30,30,,valeriano.regenero,,,,,9181,nessuno,1
+WIC,77.242.131.167, ,,,77.242.131.164/30,30,,mauro.zanetti,,,,,10671,nessuno,1
+WIC,77.242.131.158, ,alpyland.mottarone,,77.242.131.156/30,30,,alpyland.mottarone,,,,,9143,nessuno,1
+WIC,77.242.134.119,,Valter Romagnoli,,77.242.134.64/26,26,,valter.romagnoli,,,,,5099,nessuno,1
+WIC,77.242.136.12,,Giuseppe Bertone,,77.242.136.0/27,27,,giuseppe.bertone,,,,,7779,nessuno,1
+WIC,77.242.136.13,,Andrea Fasano,,77.242.136.0/27,27,,andrea.fasano,,,,,5899,nessuno,1
+WIC,77.242.136.43,,Maffi Mario,,77.242.136.40/30,30,,mario.maffi,,,,,5144,nessuno,1
+WIC,77.242.136.64,,Di Caterina Roberto,,77.242.136.64/30,30,,roberto.dicaterina,,,,,5607,nessuno,1
+WIC,77.242.136.66,,Motocicli Antonioli,,77.242.136.64/30,30,,motocicli.antonioli,,,,,6249,nessuno,1
+WIC,77.242.136.67,,Frattini Anotonella,,77.242.136.64/30,30,,antonella.frattini,,,,,8854,nessuno,1
+WIC,77.242.137.8,,Roberto Cimberio,,77.242.137.8/30,30,,roberto.cimberio,,,,,4154,nessuno,1
+WIC,77.242.137.9,,Lubelli,,77.242.137.8/30,30,,chinza.lubelli,,,,,5496,nessuno,1
+WIC,77.242.137.10,,Albertoni Federico,,77.242.137.8/30,30,,federico.albertoni,,,,,4454,nessuno,1
+WIC,77.242.137.11,,Sanicrom (temp per vpn con Huber),,77.242.137.8/30,30,,sanicrom.sas,,,,,6124,nessuno,1
+WIC,77.242.137.24,,Vi.Ma Temp per problemi invio posta,,77.242.137.24/30,30,,alessandro.manzetti,,,,,7071,nessuno,1
+WIC,77.242.137.25,,Rota Temp Voip,,77.242.137.24/30,30,,ivo.rota,,,,,5644,nessuno,1
+WIC,77.242.137.27,,Comune Madonna del Sasso - Artò,,77.242.137.24/30,30,,madonnadelsasso.arto,,,,,6766,nessuno,1
+WIC,77.242.137.32,,Comune Madonna del Sasso - Centonara,,77.242.137.32/30,30,,madonnadelsasso.centonara,,,,,6767,nessuno,1
+WIC,77.242.137.33,,Comune Madonna del Sasso - Santuario,,77.242.137.32/30,30,,madonnadelsasso.santuario,,,,,6765,nessuno,1
+WIC,77.242.137.61,,Comune di Armeno,,77.242.137.60/30,30,,comune.armeno,,,,,6866,nessuno,1
+WIC,77.242.137.62,,C.I.S.S Cusio - connessione presso scuole di Armeno,,77.242.137.60/30,30,,ciss.cusio,,,,,6612,nessuno,1
+WIC,77.242.137.64,,Comune Borgomanero MFH,,77.242.137.64/29,29,,comune.borgomanero,,,,,4223,nessuno,1
+WIC,77.242.137.65,,Barinotti Marco (ex Stefania Moio),,77.242.137.64/29,29,,barinotti.marco,,,,,8896,nessuno,1
+WIC,77.242.137.66,,Ferracin Alberto (ex BAKRAOUI Said),,77.242.137.64/29,29,,alberto.ferracin,,,,,8481,nessuno,1
+WIC,77.242.137.67,,Lorenzo Baranzelli,,77.242.137.64/29,29,,studio.bagainirillo,,,,,8295,nessuno,1
+WIC,77.242.137.68,,Franzosi Gabriele,,77.242.137.64/29,29,,gabriele.franzosi,,,,,7001,nessuno,1
+WIC,77.242.137.69,,Bonfanti - San Maurizio,,77.242.137.64/29,29,,mariagrazia.bonfanti,,,,,6117,nessuno,1
+WIC,77.242.141.86,,Turci Ermanno,,77.242.141.64/26,26,,ermanno.turci,,,,,4857,nessuno,1
+WIC,77.242.141.87,,Rossi Mauro tabaccaio,,77.242.141.64/26,26,,mauro.rossitab,,,,,7859,nessuno,1
+WIC,77.242.141.88,,GPZeta - Donato Cortese,,77.242.141.64/26,26,,donato.cortese,,,,,4235,nessuno,1
+WIC,77.242.141.90,,Safe Trasformatori,,77.242.141.64/26,26,,safe.trasformatori,,,,,9180,nessuno,1
+WIC,77.242.141.91,,Ravelli Pierluigi,,77.242.141.64/26,26,,pierluigi.ravelli,,,,,8686,nessuno,1
+WIC,77.242.141.92,,Agriturismo La Capuccina,,77.242.141.64/26,26,,agriturismo.la.capuccina,,,,,8221,nessuno,1
+WIC,77.242.141.93,,Arrigo Carazzo,,77.242.141.64/26,26,,arrigo.carazzo,,,,,4483,nessuno,1
+WIC,77.242.141.94,,Cattaneo Virginio,,77.242.141.64/26,26,,virginio.cattaneo,,,,,8661,nessuno,1
+WIC,77.242.141.95,,Fabio Caldi,,77.242.141.64/26,26,,fabio.caldi,,,,,6436,nessuno,1
+WIC,77.242.131.169, ,,,77.242.131.168/30,30,,alessandra.peveraro,,,,,5061,nessuno,1
+WIC,77.242.141.96,,Deagostini Antonella,,77.242.141.64/26,26,,antonella.deagostini,,,,,8695,nessuno,1
+WIC,77.242.141.97,,Pierlot Sylvain Yves,,77.242.141.64/26,26,,sylvainy.pierlot,,,,,8780,nessuno,1
+WIC,77.242.141.98,,Rossi Roberto,,77.242.141.64/26,26,,roberto.rossi.briona,,,,,5185,nessuno,1
+WIC,77.242.141.99,,Cavallet Renato,,77.242.141.64/26,26,,renato.cavallet,,,,,8714,nessuno,1
+WIC,77.242.141.100,,Mignosi Flavio,,77.242.141.64/26,26,,flavio.mignosi,,,,,6403,nessuno,1
+WIC,77.242.141.101,,Bozza Paolo,,77.242.141.64/26,26,,autoriparazioni.bozza,,,,,8182,nessuno,1
+WIC,77.242.141.102,,Az. Agr. Barcellini,,77.242.141.64/26,26,,elio.barcellini,,,,,6268,nessuno,1
+WIC,77.242.141.103,,Farmacia Menzano,,77.242.141.64/26,26,,farmacia.menzano,,,,,4147,nessuno,1
+WIC,77.242.141.104,,S.I.S srl,,77.242.141.64/26,26,,sis.srl,,,,,8131,nessuno,1
+WIC,77.242.141.105,,Arch.Tacchini Marta,,77.242.141.64/26,26,,architetto.tacchini.marta,,,,,8694,nessuno,1
+WIC,77.242.141.106,,Ndiaye Mouhamed,,77.242.141.64/26,26,,mmedmoustapha.ndiaye,,,,,8397,nessuno,1
+WIC,77.242.141.107,,Tino Viviani Sartoria srl,,77.242.141.64/26,26,,agostino.viviani,,,,,4280,nessuno,1
+WIC,77.242.141.108,,Centro Acquisti Doccio 3 srl,,77.242.141.64/26,26,,centroacquisti.doccio3,,,,,8808,nessuno,1
+WIC,77.242.141.109,,Maggiolini Flavio,,77.242.141.64/26,26,,maggiolini.flavio,,,,,8152,nessuno,1
+WIC,77.242.141.112, ,gabriella.kelemen,,77.242.141.64/26,26,,gabriella.kelemen,,,,,9231,nessuno,1
+WIC,77.242.131.164, ,,,77.242.131.164/30,30,,roberto.gilardone,,,,,10585,nessuno,1
+WIC,77.242.141.115,,Confortaree S.r.l.,,77.242.141.64/26,26,,confortaree.srl,,,,,6263,nessuno,1
+WIC,77.242.141.116,,Gelateria Torre,,77.242.141.64/26,26,,antica.torre,,,,,7858,nessuno,1
+WIC,77.242.141.117,,Calgaro Massimo,,77.242.141.64/26,26,,massimo.calgaro,,,,,8840,nessuno,1
+WIC,77.242.141.118,,Az. Agr. Morgante,,77.242.141.64/26,26,,fabrizio.morgante,,,,,8830,nessuno,1
+WIC,77.242.141.121,,Leonardo Vecchio,,77.242.141.64/26,26,,leo.pppoe,,,,,6987,nessuno,1
+WIC,77.242.141.122,,Colombo Massimo,,77.242.141.64/26,26,,massimo.colombo,,,,,4884,nessuno,1
+WIC,77.242.141.123,,Gualino Mattai,,77.242.141.64/26,26,,corrado.gualino,,,,,4427,nessuno,1
+WIC,77.242.141.124,,Autoriparazioni RR Luppi,,77.242.141.64/26,26,,autoriparazionirr.luppi,,,,,7672,nessuno,1
+WIC,77.242.141.125,,Scuola elementare Lozzolo,,77.242.141.64/26,26,,elementari.lozzolo,,,,,3861,nessuno,1
+WIC,77.242.141.126,,Ceranini Nicole Jeanmarie,,77.242.141.64/26,26,,nicole.ceranini,,,,,8678,nessuno,1
+WIC,77.242.141.127,,Oratorio di Miasino,,77.242.141.64/26,26,,oratorio.miasino,,,,,8900,nessuno,1
+WIC,77.242.141.132,,Imp. Ilaria,,77.242.141.132/30,30,,impresa.ilaria,,,,,4018,nessuno,1
+WIC,77.242.141.133,,Martelli Bruno,,77.242.141.132/30,30,,bruno.martelli,,,,,5841,nessuno,1
+WIC,77.242.141.134,,Avondo Artemio,,77.242.141.132/30,30,,artemio.avondo,,,,,5808,nessuno,1
+WIC,77.242.141.135,,Pizzeria Da Claudio,,77.242.141.132/30,30,,ristorante.daclaudio,,,,,9171,nessuno,1
+WIC,77.242.141.136,,Studio Tecnico Beltrame,,77.242.141.136/29,29,,studitecnico.beltrame,,,,,9040,nessuno,1
+WIC,77.242.141.137,,Saullo Gianluca,,77.242.141.136/29,29,,gianluca.saullo,,,,,9160,nessuno,1
+WIC,77.242.141.138,,Martinelli Daniela,,77.242.141.136/29,29,,daniela.martinelli,,,,,9122,nessuno,1
+WIC,77.242.141.139,,Bar Ristorante Aquila Nera,,77.242.141.136/29,29,,aquila.nera.ristorante,,,,,9162,nessuno,1
+WIC,77.242.141.140,,Citton Teresio,,77.242.141.136/29,29,,teresio.citton,,,,,5865,nessuno,1
+WIC,77.242.141.141,,Consulenze Finissaggio Tessile,,77.242.141.136/29,29,,consfinissaggi.tessili,,,,,6576,nessuno,1
+WIC,77.242.141.142,,Gallina Alessandro,,77.242.141.136/29,29,,alegallina.pppoe,,,,,7070,nessuno,1
+WIC,77.242.141.143,,Claudio Pile,,77.242.141.136/29,29,,claudio.pile,,,,,6793,nessuno,1
+WIC,77.242.141.144,,Vittone Mauro,,77.242.141.144/28,28,,mauro.vittone,,,,,5897,nessuno,1
+WIC,77.242.141.146,,Spirito Walter,,77.242.141.144/28,28,,walter.spirito,,,,,4224,nessuno,1
+WIC,77.242.141.221, ,cai.valsessera,,77.242.141.192/27,27,,cai.valsessera,,,,,9279,nessuno,1
+WIC,77.242.141.222, ,monterosa.tv2,,77.242.141.192/27,27,,monterosa.tv2,,,,,4056,nessuno,1
+WIC,77.242.141.223, ,alberto.midena,,77.242.141.192/27,27,,alberto.midena,,,,,4704,nessuno,1
+WIC,77.242.141.174,,Rigamonti Ghisa,,77.242.141.160/27,27,,rigamontighisa,,,,,4267,nessuno,1
+WIC,77.242.141.181,,Scuola Infanzia Lozzolo,,77.242.141.160/27,27,,infanzia.lozzolo,,,,,3860,nessuno,1
+WIC,77.242.141.186,,Motonautica S. Giulio di Bassotto,,77.242.141.160/27,27,,motonautica.sangiulio,,,,,7614,nessuno,1
+WIC,77.242.141.160,,Fontana Stefano,,77.242.141.160/27,27,,comie.bis,,,,,4078,nessuno,1
+WIC,77.242.141.161,,Electronic System Pitto,,77.242.141.160/27,27,,electronic.system,,,,,4053,nessuno,1
+WIC,77.242.141.213,,Tailly PPPoE,,77.242.141.192/27,27,,tailly.pppoe,,,,,7639,nessuno,1
+WIC,77.242.141.163,,Manifattura di Valsesia,,77.242.141.160/27,27,,manifatturadivalsesia.casa,,,,,4143,nessuno,1
+WIC,77.242.132.121, ,,,77.242.132.120/30,30,,marcello.bergamasco,,,,,10450,nessuno,1
+WIC,77.242.135.94, ,,,77.242.135.88/29,29,,tessitura.di.crevacuore,,,,,10438,nessuno,1
+WIC,77.242.137.60, ,,,77.242.137.60/30,30,,mario.brambilla,,,,,10575,nessuno,1
+WIC,77.242.130.117, ,,,77.242.130.116/30,30,,claudio.fonio,,,,,8141,nessuno,1
+WIC,77.242.134.112, ,,,77.242.134.64/26,26,,levati.ivana,,,,,10538,nessuno,1
+WIC,77.242.130.55, ,,,77.242.130.52/30,30,,comune.di.mandello.vitta,,,,,9901,nessuno,1
+WIC,77.242.141.89, ,,,77.242.141.64/26,26,,bruno.langhi,,,,,10432,nessuno,1
+WIC,77.242.135.49, ,,,77.242.135.48/29,29,,tecnoflam.srl,,,,,10588,nessuno,1
+WIC,77.242.135.63, ,,,77.242.135.60/30,30,,comune.civiasco,,,,,7396,nessuno,1
+WIC,77.242.141.111, ,,,77.242.141.64/26,26,,alberto.cavigioli,,,,,10459,nessuno,1
+WIC,77.242.132.22, ,,,77.242.132.20/30,30,,franco.filisetti,,,,,5898,nessuno,1
+WIC,77.242.141.110, ,,,77.242.141.64/26,26,,davide.ferraris,,,,,10572,nessuno,1
+WIC,77.242.141.114, ,,,77.242.141.64/26,26,,coiffeur.ruben,,,,,10579,nessuno,1
+WIC,77.242.141.162, ,,,77.242.141.160/27,27,,studio.geomcandini,,,,,10512,nessuno,1
+WIC,77.242.129.6,,,,77.242.129.0/29,29,,,,,,,,nessuno,1
+WIC,77.242.129.5,,,,77.242.129.0/29,29,,,,,,,,nessuno,1
+WIC,77.242.136.65, ,,,77.242.136.64/30,30,,roberto.comerocasa,,,,,4870,nessuno,1
+WIC,77.242.130.16, ,,,77.242.130.16/30,30,,wiset.test,,,,,10444,nessuno,1
+WIC,77.242.130.17, ,,,77.242.130.16/30,30,,wiset1.test,,,,,10614,nessuno,1
+WIC,77.242.130.18, ,,,77.242.130.16/30,30,,marco.morabito,,,,,9108,nessuno,1
+WIC,77.242.130.19, ,,,77.242.130.16/30,30,,flavio.castioni,,,,,10426,nessuno,1
+WIC,77.242.130.24, ,,,77.242.130.24/30,30,,luciano.fantin,,,,,10603,nessuno,1
+WIC,77.242.131.67, ,,,77.242.131.64/30,30,,walter.calzavara,,,,,10632,nessuno,1
+WIC,77.242.133.60, ,,,77.242.133.60/30,30,,stefano.lorenzoli,,,,,10739,nessuno,1
+WIC,77.242.130.25, ,,,77.242.130.24/30,30,,reggiani.doccio,,,,,10530,nessuno,1
+WIC,77.242.130.26, ,,,77.242.130.24/30,30,,stass.rossirosa.valduggia,,,,,3896,nessuno,1
+WIC,77.242.130.27, ,,,77.242.130.24/30,30,,osvaldo.coretti,,,,,9696,nessuno,1
+WIC,77.242.131.166, ,,,77.242.131.164/30,30,,milena.giribuola,,,,,10731,nessuno,1
+WIC,77.242.130.57, ,,,77.242.130.56/30,30,,zancaner.srl,,,,,10640,nessuno,1
+WIC,77.242.130.58, ,,,77.242.130.56/30,30,,pertech.perona,,,,,6471,nessuno,1
+WIC,77.242.136.0, ,,,77.242.136.0/27,27,,emanuele.zanetta,,,,,10635,nessuno,1
+WIC,77.242.130.59, ,,,77.242.130.56/30,30,,mauro.masserano,,,,,4335,nessuno,1
+WIC,77.242.130.140, ,,,77.242.130.140/30,30,,bioecotermo.srl,,,,,10464,nessuno,1
+WIC,77.242.130.141, ,,,77.242.130.140/30,30,,enrico.covolo,,,,,6645,nessuno,1
+WIC,77.242.131.168, ,,,77.242.131.168/30,30,,giorgio.durio,,,,,8959,nessuno,1
+WIC,77.242.136.4, ,,,77.242.136.0/27,27,,lucia.carera,,,,,8106,nessuno,1
+WIC,77.242.136.7, ,,,77.242.136.0/27,27,,elettro.luce,,,,,8521,nessuno,1
+WIC,77.242.136.22, ,,,77.242.136.0/27,27,,bozio.arredamenti,,,,,10609,nessuno,1
+WIC,77.242.130.143, ,,,77.242.130.140/30,30,,lpc.ferriluca,,,,,10696,nessuno,1
+WIC,77.242.141.145, ,,,77.242.141.144/28,28,,alimentari.boniforti,,,,,10517,nessuno,1
+WIC,77.242.141.78, ,,,77.242.141.64/26,26,,elettroluce.prova,,,,,9551,nessuno,1
+WIC,77.242.131.248, ,,,77.242.131.248/30,30,,bertini.aosta,,,,,10675,nessuno,1
+WIC,77.242.130.56, ,,,77.242.130.56/30,30,,trabaldotogna.pray,,,,,10578,nessuno,1
+WIC,77.242.141.113, ,,,77.242.141.64/26,26,,lorenzo.baranzelli1,,,,,10695,nessuno,1
+WIC,77.242.130.139, ,,,77.242.130.136/30,30,,hal.adslplus,,,,,6777,nessuno,1
+WIC,77.242.141.119, ,,,77.242.141.64/26,26,,flavio.mattachini,,,,,10604,nessuno,1
+WIC,77.242.141.164, ,,,77.242.141.160/27,27,,reggiani.doccio,,,,,10530,nessuno,1
+WIC,77.242.141.32, ,,,77.242.141.32/27,27,,studioquirico.casa,,,,,10761,nessuno,1
+WIC,77.242.141.34, ,,,77.242.141.32/27,27,,studioquirico.ufficio,,,,,10760,nessuno,1
+WIC,77.242.141.48, ,,,77.242.141.32/27,27,,residence.mary,,,,,10651,nessuno,1
+WIC,77.242.131.64, ,,,77.242.131.64/30,30,,electric.card,,,,,10658,nessuno,1
+WIC,77.242.131.65, ,,,77.242.131.64/30,30,,lafalegnameria.snc,,,,,10333,nessuno,1
+WIC,77.242.133.63, ,,,77.242.133.60/30,30,,isa.snc,,,,,10822,nessuno,1
+WIC,77.242.133.68, ,,,77.242.133.68/30,30,,isa.snc2,,,,,10821,nessuno,1
+WIC,77.242.130.142,,,,77.242.130.140/30,30,,allegroitalia.alagna,,,,,10665,nessuno,1
+WIC,77.242.133.69, ,,,77.242.133.68/30,30,,red.iris.cafe,,,,,9609,nessuno,1
+WIC,77.242.134.66, ,,,77.242.134.64/26,26,,fernando.rizzello,,,,,10705,nessuno,1
+WIC,77.242.134.72, ,,,77.242.134.64/26,26,,ristorante.lucciola,,,,,10839,nessuno,1
+WIC,77.242.133.71, ,,,77.242.133.68/30,30,,sacal.spa,,,,,10876,nessuno,1
+WIC,77.242.133.70, ,,,77.242.133.68/30,30,,marisa.deglia,,,,,10189,nessuno,1
+WIC,77.242.133.140, ,,,77.242.133.140/30,30,,vincenzo.pellegrino,,,,,10138,nessuno,1
+WIC,77.242.133.141, ,,,77.242.133.140/30,30,,luca.roncaglioni,,,,,10862,nessuno,1
+WIC,77.242.133.142, ,,,77.242.133.140/30,30,,m.f..consulting,,,,,10154,nessuno,1
+WIC,77.242.133.143, ,,,77.242.133.140/30,30,,anfed.agri,,,,,10768,nessuno,1
+WIC,77.242.141.219, ,,,77.242.141.192/27,27,,patrizia.ghiringhelli,,,,,10817,nessuno,1
+WIC,77.242.141.85, ,,,77.242.141.64/26,26,,alessandro.tassera,,,,,10841,nessuno,1
+WIC,77.242.133.72, ,,,77.242.133.72/30,30,,studio.miazzo,,,,,10955,nessuno,1
+WIC,77.242.141.120, ,,,77.242.141.64/26,26,,maria.antonietta.gallazzini,,,,,10795,nessuno,1
+WIC,77.242.131.170, ,,,77.242.131.168/30,30,,barbaras.ceccarelli,,,,,10902,nessuno,1
+WIC,77.242.131.171, ,,,77.242.131.168/30,30,,rcn.srl,,,,,10820,nessuno,1
+WIC,77.242.133.62, ,,,77.242.133.60/30,30,,marco.pavesi,,,,,9232,nessuno,1
+WIC,77.242.133.73,,,,77.242.133.72/30,30,,,,,,,0,nessuno,1
+WIC,77.242.133.74,,,,77.242.133.72/30,30,,,,,,,0,nessuno,1
+WIC,77.242.133.75,,,,77.242.133.72/30,30,,,,,,,0,nessuno,1
+WIC,77.242.134.122, ,,,77.242.134.64/26,26,,comune.piode,,,,,10868,nessuno,1
+WIC,77.242.131.180, ,,,77.242.131.180/30,30,,albanese.voip,,,,,6758,nessuno,1
+WIC,77.242.131.181, ,,,77.242.131.180/30,30,,ter.design,,,,,6313,nessuno,1
+WIC,77.242.131.182, ,,,77.242.131.180/30,30,,luigi.arrigoni,,,,,10922,nessuno,1
+WIC,77.242.131.183, ,,,77.242.131.180/30,30,,mattia.fiorito,,,,,10887,nessuno,1
+WIC,77.242.131.184, ,,,77.242.131.184/30,30,,ottorina.gamaggio,,,,,10804,nessuno,1
+WIC,77.242.131.185, ,,,77.242.131.184/30,30,,ufficio.moderno,,,,,10856,nessuno,1
+WIC,77.242.132.253, ,,,77.242.132.240/28,28,,curcio.trasporti,,,,,10988,nessuno,1
+WIC,77.242.135.32, ,,,77.242.135.32/30,30,,lorena.zanetti,,,,,8875,nessuno,1
+WIC,77.242.135.33, ,,,77.242.135.32/30,30,,diego.martini,,,,,10973,nessuno,1
+WIC,77.242.131.186, ,,,77.242.131.184/30,30,,enrico.bina,,,,,11104,nessuno,1
+WIC,77.242.131.187, ,,,77.242.131.184/30,30,,federica.ruggeri,,,,,10990,nessuno,1
+WIC,77.242.131.188, ,,,77.242.131.188/30,30,,paolo.medina,,,,,6279,nessuno,1
+WIC,77.242.131.189, ,,,77.242.131.188/30,30,,salvatore.gabriele,,,,,11096,nessuno,1
+WIC,77.242.131.190, ,,,77.242.131.188/30,30,,saldo.tecnica,,,,,6701,nessuno,1
+WIC,77.242.131.191, ,,,77.242.131.188/30,30,,studio.erbetta,,,,,11034,nessuno,1
+WIC,77.242.135.34, ,,,77.242.135.32/30,30,,marco.rossi1,,,,,11033,nessuno,1
+WIC,77.242.135.35, ,,,77.242.135.32/30,30,,franco.battagion,,,,,10971,nessuno,1
+WIC,77.242.130.70, ,,,77.242.130.68/30,30,,andrea.grosso,,,,,10194,nessuno,1
+WIC,77.242.134.91, ,,,77.242.134.64/26,26,,metaledil.srl,,,,,10741,nessuno,1
+WIC,77.242.135.54, ,,,77.242.135.48/29,29,,802ls.rostiti,,,,,10746,nessuno,1

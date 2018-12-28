@@ -42,6 +42,8 @@
         + POST transaction locking;
         + All first_free and first_address responses are now "data" instead of "ip" and "subnet" for consistency;
         + Subnet splitting now copies over custom fields values by default (user custom_fields=no to revert);
+        + Added API option to nest custom_fields to assure correct structure;
+        + Added option to show/hide links in api by default for each app;
         + New methods:
             + users:
                 GET    /user/expires/                         // returns token expiration date
@@ -90,6 +92,7 @@
     + Subnet overlapping now checked also inside folders to prevernt duplicates;
     + Subnet overlapping now checked also between sections if VRF defined;
     + Added new settings directive that requires unique subnets accross sections;
+    + Added index check in verify database to detect and fix possible missing DB indexes;
 
     Bugfixes:
     ----------------------------
@@ -104,6 +107,7 @@
     + PowerDNS records cannot be created on slave zone;
     + Fixed subnet resizing bug if subnet contained slaves;
     + Added separate CSRF cookies for each address/subnet/pstn object;
+    + Deleted items are now shown and searchable from changelog;
 
 == 1.20.1
 

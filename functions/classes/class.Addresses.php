@@ -752,7 +752,8 @@ class Addresses extends Common_functions {
 				    if($subnet['mask']==31)	{
 					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>0) 			{ return gmp_strval($subnet['subnet']); }
 				    } else {
-					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>1) 			{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }
+					    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))>((bool)$section->strictMode ? 1 : 0)) 			{ 
+                            return gmp_strval(gmp_add($subnet['subnet'], ((bool)$section->strictMode ? 1 : 0))); }
 					    elseif($ip_version=="IPv6") {
 						    if(sizeof($addresses)==1) {
 							    if(gmp_strval(gmp_sub($addresses[$k]->ip_addr, $subnet['subnet']))==0)	{ return gmp_strval(gmp_add($subnet['subnet'], 1)); }

@@ -166,7 +166,10 @@ class Vrfs_controller extends Common_api_functions {
 
 				// check result
 				if($result===false)					{ $this->Response->throw_exception(404, 'No subnets belonging to this vrf'); }
-				else								{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
+				else {
+					$this->custom_fields = $this->Tools->fetch_custom_fields('subnets');
+					return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true));
+				}
 			}
 			// error
 			else {

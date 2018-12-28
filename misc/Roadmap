@@ -1,6 +1,8 @@
 Feature candidates for 1.4:
 ---------------------------
 
+https://github.com/phpipam/phpipam/milestone/2
+
     Enhancements
         #33   2FA
         #30   DNS Update to Active Directory DNS
@@ -14,13 +16,20 @@ Feature candidates for 1.4:
         #516  PHP sessions in database
         #728  "X.in-addr.arpa" reverse zone support
         #598  Section for vlans domain (Layer2)
-        #800  Changelog Doesn't Track Changes Made Via API
         #858  swagger for clients/api docs
         #518  use PowerDNS API rather than modifying the backend DB
         #198  Enhancement: Multiple PowerDNS
-        #576  API: Get last_available_address
-        #448  API: allow full text search like in frontend
         #109  IP deletion request for non administrative users
+        #1068 Custom section and other fields
+        #1023 Location tags, subnet tags, ...
+        #998  User credentials security constraints are too tight and not configurable
+
+    API:
+        #800  Changelog Doesn't Track Changes Made Via API
+        #576  Get last_available_address
+        #448  allow full text search like in frontend
+        #953  PSTN prefixes controller
+        #1022 Add timezone to token timestamp output
 
     User interface:
         #770  Show usage graph for whole section
@@ -46,6 +55,7 @@ Feature candidates for 1.4:
         #696  Password management
         #545  Wirelless LAN list
         #880  webhooks or similar mechanism to send data to external URL / script
+        #1046 NTP Server addresses
 
 
 

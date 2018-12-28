@@ -594,7 +594,15 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			}
 			//default - input field
 			else {
-				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. @$address[$field['name']]. '" size="30" '.$delete.' rel="tooltip" data-placement="right" title="'.$field['Comment'].'">'. "\n";
+                // max length
+                $maxlength = 0;
+                if(strpos($field['type'],"varchar")!==false) {
+                    $maxlength = str_replace(array("varchar","(",")"),"", $field['type']);
+                }
+                // fix maxlength=0
+                $maxlength = $maxlength==0 ? "" : $maxlength;
+                // print
+				print ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $field['name'] .'" value="'. $address[$field['name']]. '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'">'. "\n";
 			}
 
 			print '	</td>'. "\n";

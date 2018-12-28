@@ -158,7 +158,7 @@ if(sizeof($uwidgets)>1) {
 				if($wdet['whref']=="yes")	{ print "<a href='".create_link("widgets",$wdet['wfile'])."'> <h4>"._($wdet['wtitle'])."<i class='fa fa-external-link fa-gray pull-right'></i></h4></a>"; }
 				else						{ print "<h4>"._($wdet['wtitle'])."</h4>"; }
 				print "		<div class='hContent'>";
-				print "			<div style='text-align:center;padding-top:50px;'><strong>"._('Loading statistics')."</strong><br><i class='fa fa-spinner fa-spin'></i></div>";
+				print "			<div style='text-align:center;padding-top:50px;'><strong>"._('Loading widget')."</strong><br><i class='fa fa-spinner fa-spin'></i></div>";
 				print "		</div>";
 				print "	</div>";
 				print "	</div>";

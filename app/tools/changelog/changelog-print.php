@@ -134,7 +134,10 @@ else {
 			print "	<td>$l[ctype]</td>";
 
 			# subnet, section or ip address
-			if($l['ctype']=="IP address")	{
+			if(strlen($l['tid'])==0) {
+				print "<td><span class='badge badge1 badge5 alert-danger'>"._("Deleted")."</span></td>";
+			}
+			elseif($l['ctype']=="IP address")	{
 				print "	<td><a href='".create_link("subnets",$l['sectionId'],$l['subnetId'],"address-details",$l['tid'])."'>".$Subnets->transform_address($l['ip_addr'],"dotted")."</a></td>";
 			}
 			elseif($l['ctype']=="Subnet")   {

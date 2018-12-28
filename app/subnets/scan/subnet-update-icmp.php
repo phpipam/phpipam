@@ -117,6 +117,8 @@ elseif($retval!=0) 								{ $Result->show("danger", "Error executing scan! Erro
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
 elseif(!isset($script_result->values)) 			{ $Result->show("info", _("Subnet is empty")."!", false); }
+# no ip addresses - error in script
+elseif(!isset($res)) 							{ $Result->show("info", _("Error")."!", false); }
 # ok
 else {
 	# order by IP address

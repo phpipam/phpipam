@@ -122,7 +122,7 @@ class phpipam_rack extends Tools {
      * @return void
      */
     private function define_rack_sizes () {
-        $this->rack_sizes = array(14, 20, 24, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48);
+        $this->rack_sizes = array(14, 20, 24, 30, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52);
     }
 
 
