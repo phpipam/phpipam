@@ -26,6 +26,45 @@ class Crypto {
         $this->Result = new Result ();
     }
 
+    /**** Random and hashing  ****/
+
+    /**
+     * Generate $len pseudo random bytes
+     * @param  integer $len
+     * @return string
+     */
+    public function random_pseudo_bytes($len) {
+        $bytes = openssl_random_pseudo_bytes($len);
+
+        if ($bytes !== false)
+            return $bytes;
+
+        // fall-back method
+        $bytes = "";
+        for ($i=0; $i<$len; $i+=16) {
+            $bytes .= md5(uniqid(mt_rand(), true), true);
+        }
+        return substr($bytes, 0, $len);
+    }
+
+    /**
+     * Generate a keyed hash value using the HMAC method
+     * @param  string  $algo
+     * @param  mixed   $data1
+     * @param  mixed   $data2
+     * @param  boolean $raw_output
+     * @return string|false
+     */
+    private function hash_hmac($algo, $data1, $data2, $raw_output = false) {
+        $hash = hash_hmac($algo, $data1, $data2, $raw_output);
+
+        if ($hash !== false)
+            return $hash;
+
+        $this->Result->show("danger", _("Error: "). _("Unsupported hash_hmac algo"). " ($algo)", true);
+        return false;
+    }
+
     /**** Data encryption & decryption ****/
 
     /**
@@ -70,11 +109,11 @@ class Crypto {
 
         // Encrypt using IV
         $ivlen = openssl_cipher_iv_length('AES-128-CBC');
-        $iv = openssl_random_pseudo_bytes($ivlen);
+        $iv = $this->random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($rawdata, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
 
         // Generate HMAC covering IV and ciphertext
-        $hmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
+        $hmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
 
         // Base64 encode results
         return base64_encode( $hmac.$iv.$ciphertext_raw );
@@ -105,7 +144,7 @@ class Crypto {
         $ciphertext_raw = substr($c, 32+$ivlen);
 
         // Verify HMAC covering IV and ciphertext
-        $calcmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
+        $calcmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
         if (!$this->compat_hash_equals($hmac, $calcmac))
             return false;
 
@@ -158,9 +197,9 @@ class Crypto {
      * @return string
      */
     public function generate_token() {
-        $data1 = openssl_random_pseudo_bytes(32);
-        $data2 = openssl_random_pseudo_bytes(32);
-        return hash_hmac('md5', $data1, $data2);
+        $data1 = $this->random_pseudo_bytes(32);
+        $data2 = $this->random_pseudo_bytes(32);
+        return $this->hash_hmac('sha256', $data1, $data2);
     }
 
     /**
