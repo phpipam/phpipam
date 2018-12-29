@@ -148,7 +148,7 @@ class Session_DB {
 	 */
 	public function _gc ($max) {
 		try {
-			$this->Database->runQuery("delete * from php_sessions where `access` < ?", [time() - $max]);
+			$this->Database->runQuery ("DELETE FROM php_sessions WHERE `access` < ?", [time() - $max]);
 			return true;
 		}
 		catch (Exception $e) {
