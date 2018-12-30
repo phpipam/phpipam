@@ -931,7 +931,7 @@ INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 DROP TABLE IF EXISTS `php_sessions`;
 
 CREATE TABLE `php_sessions` (
-  `id` varchar(32) NOT NULL DEFAULT '',
+  `id` varchar(128) NOT NULL DEFAULT '',
   `access` int(10) unsigned DEFAULT NULL,
   `data` text NOT NULL,
   `remote_ip` varchar(100) DEFAULT NULL,
@@ -943,4 +943,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 18;
+UPDATE `settings` SET `dbversion` = 19;

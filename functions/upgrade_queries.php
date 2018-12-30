@@ -836,6 +836,14 @@ $upgrade_queries["1.4.18"][] = "-- DROP redundant indexes;";
 $upgrade_queries["1.4.18"][] = "ALTER TABLE `users` DROP INDEX `id`;";
 $upgrade_queries["1.4.18"][] = "ALTER TABLE `sections` DROP INDEX `id`;";
 
+
+
+#
+# Subversion 1.4.19 queries
+#
+$upgrade_queries["1.4.19"][] = "-- Support longer php_session ids (session.hash_function = sha512/whirlpool);";
+$upgrade_queries["1.4.19"][] = "ALTER TABLE `php_sessions` CHANGE `id` `id` VARCHAR(128);";
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check
