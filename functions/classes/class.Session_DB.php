@@ -81,9 +81,13 @@ class Session_DB {
 	public function _read ($id) {
 		// check database for cookie
 		try {
-			$session = $this->Database->getObject ("php_sessions", $id);
+			// Note: Database->getObject() does not support non-numeric id's. Use findObject().
+			$session = $this->Database->findObject ('php_sessions', 'id', $id);
 			// check
-			return $session===null ? "" : $session->data;
+			if (!is_object($session) || empty($session->data))
+				return "";
+
+			return $session->data;
 		}
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), false);
