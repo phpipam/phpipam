@@ -193,29 +193,15 @@ class Crypto {
     /**** Security Tokens ****/
 
     /**
-     * Generate tokens for temporary shares, API and scan agents.
+     * Generate html safe tokens for temporary shares, API and scan agents.
+     * @param  integer $len
      * @return string
      */
-    public function generate_token() {
-        $data1 = $this->random_pseudo_bytes(32);
-        $data2 = $this->random_pseudo_bytes(32);
-        return $this->hash_hmac('sha256', $data1, $data2);
-    }
-
-    /**
-     * Generate API user token.
-     * @param  integer $token_length
-     * @return string
-     */
-    public function generate_api_token($token_length) {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$%!=.-+';
-        $chars_length = strlen($chars);
-        // generate string
-        $token = '';
-        for ($i = 0; $i < $token_length; $i++) {
-            $token .= $chars[rand(0, $chars_length - 1)];
-        }
-        return $token;
+    public function generate_html_safe_token($len=32) {
+        $bytes = $this->random_pseudo_bytes($len);
+        // base64url variant
+        $token = strtr(base64_encode($bytes), '+/', '-_');
+        return substr($token, 0, $len);
     }
 
     /**
@@ -254,7 +240,7 @@ class Crypto {
         if ($if_not_exists && isset($_SESSION[$name]))
             return $_SESSION[$name];
         // save cookie
-        $_SESSION[$name] = $this->generate_token();
+        $_SESSION[$name] = $this->generate_html_safe_token(32);
         // return
         return $_SESSION[$name];
     }

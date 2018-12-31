@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$api = new StdClass;
-	$api->app_code = $User->Crypto->generate_token();
+	$api->app_code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Add new api key');
 }
