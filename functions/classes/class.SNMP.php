@@ -10,16 +10,6 @@
 class phpipamSNMP extends Common_functions {
 
 	/**
-	 * Settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
-	/**
 	 * Saves last result value
 	 *
 	 * (default value: false)

@@ -7,17 +7,6 @@
 
 class DNS extends Common_functions {
 
-
-	/**
-	 * settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
 	/**
 	 * type of record to fetch
 	 *

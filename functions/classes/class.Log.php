@@ -12,7 +12,6 @@
 
 class Logging extends Common_functions {
 
-
 	/**
 	 * debugging flag
 	 *
@@ -293,15 +292,6 @@ class Logging extends Common_functions {
 	 * @access protected
 	 */
 	protected $Tools;
-
-	/**
-	 * settings
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $settings;
-
 
 
 

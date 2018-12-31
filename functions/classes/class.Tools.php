@@ -7,16 +7,6 @@
 class Tools extends Common_functions {
 
 	/**
-	 * settings
-	 *
-	 * (default value: null)
-	 *
-	 * @var object
-	 * @access public
-	 */
-	public $settings = null;
-
-	/**
 	 * (array) IP address types from Addresses object
 	 *
 	 * (default value: null)

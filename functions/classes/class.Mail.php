@@ -10,17 +10,6 @@
 
 class phpipam_mail extends Common_functions {
 
-
-	/**
-	 * phpipam settings
-	 *
-	 * (default value: null)
-	 *
-	 * @var object|bool
-	 * @access public
-	 */
-	public $settings = null;
-
 	/**
 	 * (obj) mail settings
 	 *
