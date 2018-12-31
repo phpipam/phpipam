@@ -966,7 +966,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;
@@ -1013,7 +1013,7 @@ class Addresses extends Common_functions {
 	 */
 	public function pdns_remove_ip_and_hostname_records ($address) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;

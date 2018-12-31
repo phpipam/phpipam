@@ -3263,7 +3263,7 @@ class Tools extends Common_functions {
 	 */
 	public function parse_import_file ($filetype = "xls", $subnet = object, $custom_address_fields) {
     	# start object and get settings
-    	$this->settings ();
+    	$this->get_settings ();
     	$this->Subnets = new Subnets ($this->Database);
 
         # CSV

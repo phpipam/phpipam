@@ -2560,7 +2560,7 @@ class Subnets extends Common_functions {
 	 */
 	public function find_inactive_hosts ($timelimit = 86400, $limit = 100) {
     	// fetch settings
-    	$this->settings ();
+    	$this->get_settings ();
     	// search
  		try { $res = $this->Database->getObjectsQuery("select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", array(date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr($this->settings->pingStatus, ";")))) ); }
 		catch (Exception $e) {

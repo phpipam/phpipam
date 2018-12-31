@@ -381,16 +381,6 @@ class Common_functions  {
 		}
 	}
 
-	/**
-	 * get_settings alias
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function settings () {
-		return $this->get_settings();
-	}
-
 
     /**
      * Write result to cache.
