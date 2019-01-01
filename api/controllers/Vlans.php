@@ -339,7 +339,7 @@ class Vlans_controller extends Common_api_functions {
 	 */
 	private function validate_vlan_edit () {
 		# get settings
-		$this->settings = $this->Admin->fetch_object ("settings", "id", 1);
+		$this->settings = $this->Admin->get_settings();
 
 		# Check vlan number
 		if ( $this->_params->number > $this->settings->vlanMax )

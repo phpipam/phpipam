@@ -82,22 +82,6 @@ require( dirname(__FILE__) . '/classes/class.Password_check.php' );	// Class for
 require( dirname(__FILE__) . '/classes/class.Session_DB.php' );	    // Class for storing sessions to database
 
 
-# save settings to constant
-if(@$_GET['page']!="install" ) {
-	# database object
-	$Database 	= new Database_PDO;
-	# try to fetch settings
-	try { $settings = $Database->getObject("settings", 1); }
-	catch (Exception $e) { $settings = false; }
-	if ($settings!==false) {
-		if (phpversion() < "5.4") {
-			define('SETTINGS', json_encode($settings));
-		}
-		else{
-			define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
-		}
-	}
-}
 
 # create default GET parameters
 $Rewrite = new Rewrite ();

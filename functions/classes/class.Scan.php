@@ -140,7 +140,7 @@ class Scan extends Common_functions {
 		# debugging
 		$this->set_debugging();
 		# fetch settings
-		is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
+		$this->settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 		# set type
 		$this->reset_scan_method ($this->settings->scanPingType);
 		# set OS type

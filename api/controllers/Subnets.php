@@ -1043,7 +1043,7 @@ class Subnets_controller extends Common_api_functions {
 		$section = $this->Tools->fetch_object ("sections", "id", $this->_params->sectionId);
 		if($section===false)																		{ $this->Response->throw_exception(400, "Invalid section Id"); }
 		// settings
-		$this->settings = $this->Tools->fetch_object ("settings", "id", 1);
+		$this->settings = $this->Tools->get_settings();
 
 		# get master subnet details for folder overrides
 		if($this->_params->masterSubnetId!=0)	{

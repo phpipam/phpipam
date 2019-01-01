@@ -358,27 +358,22 @@ class Common_functions  {
 	 * fetches settings from database
 	 *
 	 * @access private
-	 * @return void
+	 * @return mixed
 	 */
 	public function get_settings () {
-		# constant defined
-		if (defined('SETTINGS')) {
-			if ($this->settings === null || $this->settings === false) {
-				$this->settings = json_decode(SETTINGS);
-			}
-		}
-		else {
-			# cache check
-			if($this->settings === null) {
-				try { $settings = $this->Database->getObject("settings", 1); }
-				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-				# save
-				if ($settings!==false)	 {
-					$this->settings = $settings;
-					define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
-				}
-			}
-		}
+		if (is_object($this->settings))
+			return $this->settings;
+
+		// fetch_object results are cached in $Database->cache.
+		$settings = $this->fetch_object("settings", "id", 1);
+
+		if (!is_object($settings))
+			return false;
+
+		#save
+		$this->settings = $settings;
+
+		return $this->settings;
 	}
 
 

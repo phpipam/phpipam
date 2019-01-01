@@ -36,8 +36,7 @@ $User     = new User ($Database);
 $Response = new Responses ();
 
 # get phpipam settings
-if(SETTINGS===null)
-$settings = $Tools->fetch_object ("settings", "id", 1);
+$settings = $Tools->get_settings();
 
 # set empty controller for options
 if($_SERVER['REQUEST_METHOD']=="OPTIONS") {
