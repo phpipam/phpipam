@@ -153,27 +153,6 @@ class Tools extends Common_functions {
 		return is_array($out) ? array_values($out) : false;
 	}
 
-	/**
-	 * Validates VLAN
-	 *
-	 *	not 1
-	 *	integer
-	 *	not higher that maxVLAN from settings
-	 *
-	 * @access public
-	 * @param int $number
-	 * @return mixed|bool
-	 */
-	public function validate_vlan ($number) {
-		# fetch highest vlan id
-		$settings = $this->get_settings();
-
-		if(empty($number)) 							{ return true; }
-		elseif(!is_numeric($number)) 				{ return _('VLAN must be numeric value!'); }
-		elseif ($number > $settings['vlanMax']) 	{ return _('Vlan number can be max '.$settings['vlanMax']); }
-		else 										{ return true; }
-	}
-
 
 
 
