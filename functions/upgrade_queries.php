@@ -844,6 +844,12 @@ $upgrade_queries["1.4.18"][] = "ALTER TABLE `sections` DROP INDEX `id`;";
 $upgrade_queries["1.4.19"][] = "-- Support longer php_session ids (session.hash_function = sha512/whirlpool);";
 $upgrade_queries["1.4.19"][] = "ALTER TABLE `php_sessions` CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
 
+
+
+// Japanese translation
+$upgrade_queries["1.4.20"][] = "-- Add Japanese translation";
+$upgrade_queries["1.4.20"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Japanese', 'ja_JP.UTF-8');";
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check
