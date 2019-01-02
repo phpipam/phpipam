@@ -35,6 +35,10 @@
         + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
 
+    Translations:
+    ----------------------------
+    + Japanese translation added;
+
     Bugfixes:
     ----------------------------
     + Fix appended " U" in Rack description (#2046);

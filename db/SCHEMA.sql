@@ -423,7 +423,8 @@ VALUES
 	(8, 'cs_CZ.UTF-8', 'Czech'),
 	(9, 'en_US.UTF-8', 'English (US)'),
   (10,'ru_RU.UTF-8', 'Russian'),
-  (11,'zh_CN.UTF-8', 'Chinese');
+  (11,'zh_CN.UTF-8', 'Chinese'),
+  (12,'ja_JP.UTF-8', 'Japanese');
 
 
 # Dump of table vlans
@@ -943,4 +944,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 19;
+UPDATE `settings` SET `dbversion` = 20;
