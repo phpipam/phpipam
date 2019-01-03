@@ -2847,6 +2847,20 @@ class Tools extends Common_functions {
 		return $this->address_types[$index]["type"];
 	}
 
+	/**
+	 * explode $string using $delimiter and filter null values.
+	 *
+	 * @param  string $delimiter
+	 * @param  string $string
+	 * @return mixed
+	 */
+	public function explode_filtered($delimiter, $string) {
+		$ret = explode($delimiter, $string);
+		if (!is_array($ret))
+			return false;
+		return array_filter($ret);
+	}
+
 
 
 

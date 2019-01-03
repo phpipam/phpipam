@@ -14,7 +14,7 @@ foreach($Tools->fetch_standard_fields("ipaddresses") as $s) {
 }
 
 // get all selected fields and put them to array
-$selected_fields = explode(";", $User->settings->IPfilter);
+$selected_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 
 // unset mandatory fields -> id,subnetid,ip_addr
 unset($standard_fields['id'],

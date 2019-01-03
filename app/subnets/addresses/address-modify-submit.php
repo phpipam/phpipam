@@ -45,8 +45,8 @@ $address = $_POST;
 
 
 // set selected address and required addresses fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);
-$required_ip_fields = explode(";", $User->settings->IPrequired);
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
+$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);
 // append one missing from selected
 $selected_ip_fields[] = "description";
 $selected_ip_fields[] = "hostname";
