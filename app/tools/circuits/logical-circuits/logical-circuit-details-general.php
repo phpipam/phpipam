@@ -20,7 +20,12 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	print "	<td>$logical_circuit->purpose</td>";
 	print "</tr>";
 
-  /* Maybe put in a calculated cost value here */
+	print '<tr>';
+	print "	<th>". _('Comment').'</th>';
+	print "	<td>$logical_circuit->comments</td>";
+	print "</tr>";
+      
+      /* Maybe put in a calculated cost value here */
 
 
 	if(sizeof($custom_fields) > 0) {
