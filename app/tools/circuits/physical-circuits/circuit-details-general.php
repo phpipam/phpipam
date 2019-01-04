@@ -42,6 +42,11 @@ print "	<th>". _('Capacity').'</th>';
 print "	<td>$circuit->capacity</td>";
 print "</tr>";
 
+print '<tr>';
+print "	<th>". _('Comment').'</th>';
+print "	<td>$circuit->comments</td>";
+print "</tr>";
+
 if ($User->settings->enableCustomers=="1") {
 	$customer = $Tools->fetch_object ("customers", "id", $circuit->customer_id);
 	if($customer===false) {
