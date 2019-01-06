@@ -285,5 +285,3 @@ class phpipam_mail extends Common_functions {
 	}
 
 }
-
-?>

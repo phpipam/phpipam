@@ -626,5 +626,3 @@ class DHCP_kea extends Common_functions {
         fclose($sock);
     }
 }
-
-?>

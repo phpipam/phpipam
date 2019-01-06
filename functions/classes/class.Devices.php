@@ -76,4 +76,3 @@ class Devices extends Common_functions {
 
 
 }
-?>
