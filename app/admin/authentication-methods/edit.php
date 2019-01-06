@@ -23,7 +23,7 @@ if($_POST['action']!="add") {
 }
 
 # check for permitted auth methods
-$permitted_methods = ["AD", "LDAP", "NetIQ", "Radius", "SAML2"];
+$permitted_methods = $User->fetch_available_auth_method_types();
 
 # route to proper auth method editing
 if(!file_exists(dirname(__FILE__)."/edit-$_POST[type].php"))	{ $Result->show("danger", _("Invalid method type"), true, true); }
