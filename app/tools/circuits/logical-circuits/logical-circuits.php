@@ -48,6 +48,7 @@ print "	<th>"._('Circuit ID')."</th>";
 print "	<th>"._('Purpose').'</th>';
 print "	<th>"._('Circuit Count').'</th>';
 print "	<th>"._('Members').'</th>';
+print "	<th>"._('Comment').'</th>';
 if(sizeof(@$custom_fields) > 0) {
 	foreach($custom_fields as $field) {
 		if(!in_array($field['name'], $hidden_circuit_fields)) {
@@ -86,6 +87,7 @@ else {
 		else {
 			print "<span class='text-muted'>No members</span>";
 		}
+		print "	<td>".$circuit->comments."</td>";
 		print "	</td>";
 		//custom
 		if(sizeof(@$custom_fields) > 0) {

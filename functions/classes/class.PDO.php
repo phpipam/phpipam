@@ -1123,7 +1123,3 @@ class Database_PDO extends DB {
 		return array($foreignLinksByTable, $foreignLinksByRefTable);
 	}
 }
-
-
-
-?>

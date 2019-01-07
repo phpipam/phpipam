@@ -14,7 +14,7 @@ foreach($Tools->fetch_standard_fields("ipaddresses") as $s) {
 }
 
 // get all selected fields and put them to array
-$selected_fields = explode(";", $User->settings->IPrequired);
+$selected_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);
 
 // unset fields that are excluded
 unset($standard_fields['id'],

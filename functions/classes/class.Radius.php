@@ -825,5 +825,3 @@ class Radius
         return (2 == ($this->_radius_packet_received));
     }
 }
-
-?>

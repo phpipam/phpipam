@@ -14,6 +14,7 @@
     + Dropped support for 32bit systems;
     + PHP 5.4 is now required;
     + Added compressed actions dropdown;
+    + SNMP module no longer requires MIB files;
     + Rack module enhancements (#1325):
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;
@@ -48,6 +49,8 @@
     + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
     + Fix Subnet details - Filter button missing when compressed range is used (#2353);
     + Fix slow page load times with linked addresses (#2324);
+    + Fix " - is required" error when adding IPs with an empty IP filter set (#2334);
+    + Fix logical circuits add/delete errors (#2381);
     + API:
         + Fix inconsistent API success value returned (#2045);
 

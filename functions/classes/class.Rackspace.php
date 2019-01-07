@@ -914,5 +914,3 @@ class RackContent extends Model {
         $this->size = $size;
     }
 }
-
-?>

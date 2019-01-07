@@ -242,7 +242,7 @@ function update_hidden_input(){
 				// readonly
 				$disabled = $readonly == "readonly" ? true : false;
 	    		// create input > result is array (required, input(html), timepicker_index)
-	    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $_POST['action'], $timepicker_index, $disabled);
+	    		$custom_input = $Tools->create_custom_field_input ($field, $logical_circuit, $_POST['action'], $timepicker_index, $disabled);
 	    		// add datepicker index
 	    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
 	            // print
