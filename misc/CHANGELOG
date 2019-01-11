@@ -50,6 +50,7 @@
     + Fix Subnet details - Filter button missing when compressed range is used (#2353);
     + Fix slow page load times with linked addresses (#2324);
     + Fix " - is required" error when adding IPs with an empty IP filter set (#2334);
+    + Fix column 'masterSubnetId' cannot be null error when adding subnets (#1977);
     + Fix logical circuits add/delete errors (#2381);
     + API:
         + Fix inconsistent API success value returned (#2045);

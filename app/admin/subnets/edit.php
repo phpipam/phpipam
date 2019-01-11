@@ -146,12 +146,12 @@ $('.slider').slider().on('slide', function(ev){
 // mastersubnet Ajax
 $("input[name='subnet']").change(function() {
 	var $masterdopdown = $("select[name='masterSubnetId']");
-	$masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
+	$masterdopdown.load('<?php print 'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
 });
 
 <?php if($_POST['location']=="ipcalc" && !isset($_POST['freespaceMSID'])) { ?>
     var $masterdopdown = $("select[name='masterSubnetId']");
-    $masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
+    $masterdopdown.load('<?php print 'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
 <?php } ?>
 
 });
