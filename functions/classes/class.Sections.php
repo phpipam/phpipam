@@ -583,7 +583,7 @@ class Sections extends Common_functions {
 				$html[] = "</div>";
 			}
 
-			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="'.BASE.'app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
+			$html[] = '<table id="manageSubnets" class="table sorted-new table-striped table-condensed table-top table-no-bordered" data-pagination="true" data-cookie-id-table="sectionSubnets"  data-side-pagination="server" data-search="true" data-toggle="table" data-url="app/json/section/subnets.php?sectionId='.$sectionId.'&showSupernetOnly='.$showSupernetOnly.'">';
 			$html[] = '<thead><tr>';
 
 			$html[] = '<th data-field="subnet">'._('Subnet').'</th>';
