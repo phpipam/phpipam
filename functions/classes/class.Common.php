@@ -1186,7 +1186,7 @@ class Common_functions  {
 		include( dirname(__FILE__). "/../../config.php" );
 
 		if(empty($gmaps_api_geocode_key)) {
-			$results['error'] = _("Geocode API key not set");
+			$results['info'] = _("Geocode API key not set");
 			return $results;
 		}
 
