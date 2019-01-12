@@ -4,7 +4,8 @@
 require_once( dirname(__FILE__) . '/../config.php' );
 
 /* @http only cookies ------------------- */
-ini_set('session.cookie_httponly', 1);
+if(php_sapi_name()!="cli")
+	ini_set('session.cookie_httponly', 1);
 
 /* @debugging functions ------------------- */
 if($debugging) {
