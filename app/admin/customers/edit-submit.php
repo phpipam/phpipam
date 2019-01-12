@@ -100,7 +100,7 @@ if($latlng['lat']!=NULL && $latlng['lng']!=NULL) {
     $values['long'] = $latlng['lng'];
 }
 else {
-    $Result->show("warning", _('Failed to update location lat/lng from google'), false);
+    $Result->show("warning", _('Failed to update location lat/lng from google')."<br>".escape_input($latlng['error']), false);
 }
 
 // update customer

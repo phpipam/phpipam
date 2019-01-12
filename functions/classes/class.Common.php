@@ -1180,20 +1180,36 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function get_latlng_from_address ($address) {
-		// get config
-		include(dirname(__FILE__)."/../../config.php");
-        // replace spaces
-        $address = str_replace(' ','+',$address);
-        // get geocode
-        if(isset($gmaps_api_geocode_key)) {
-	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false&key='.$gmaps_api_geocode_key);
-    	}
-    	else {
-	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
-    	}
-        $output= json_decode($geocode);
-        // return result
-        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng), "error"=>$output->error_message);
+		$results = array('lat' => null, 'lng' => null, 'error' => null);
+
+		// get geocode API key
+		include( dirname(__FILE__). "/../../config.php" );
+
+		if(empty($gmaps_api_geocode_key)) {
+			$results['error'] = _("Geocode API key not set");
+			return $results;
+		}
+
+		# Geocode address
+		$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key));
+
+		if ($geocode === false) {
+			$results['error'] = _("Geocode lookup failed. Check Internet connectivity.");
+			return $results;
+		}
+
+		$output= json_decode($geocode);
+
+		if (isset($output->results[0]->geometry->location->lat))
+			$results['lat'] = str_replace(",", ".", $output->results[0]->geometry->location->lat);
+
+		if (isset($output->results[0]->geometry->location->lng))
+			$results['lng'] = str_replace(",", ".", $output->results[0]->geometry->location->lng);
+
+		if (isset($output->error_message))
+			$results['error'] = $output->error_message;
+
+		return $results;
 	}
 
     /**
