@@ -35,6 +35,8 @@
         + New config.php option $api_allow_unsafe to allow non-SSL API queries;
         + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
+    + Widgets:
+        + New user instruction widget (#2383);
 
     Translations:
     ----------------------------
