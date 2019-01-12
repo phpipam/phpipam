@@ -850,6 +850,16 @@ $upgrade_queries["1.4.19"][] = "ALTER TABLE `php_sessions` CHANGE `id` `id` VARC
 $upgrade_queries["1.4.20"][] = "-- Add Japanese translation";
 $upgrade_queries["1.4.20"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Japanese', 'ja_JP.UTF-8');";
 
+
+
+// Instruction widget
+$upgrade_queries["1.4.21"][] = "-- Instruction widget";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `whref` `whref` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wsize` `wsize` ENUM('4','6','8','12') NOT NULL DEFAULT '6';";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wadminonly` `wadminonly` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wactive` `wactive` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.4.21"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes');";
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check

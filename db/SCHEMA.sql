@@ -554,10 +554,10 @@ CREATE TABLE `widgets` (
   `wdescription` varchar(1024) DEFAULT NULL,
   `wfile` varchar(64) NOT NULL DEFAULT '',
   `wparams` varchar(1024) DEFAULT NULL,
-  `whref` set('yes','no') NOT NULL DEFAULT 'no',
-  `wsize` SET('4','6','8','12') NOT NULL DEFAULT '6',
-  `wadminonly` set('yes','no') NOT NULL DEFAULT 'no',
-  `wactive` set('yes','no') NOT NULL DEFAULT 'no',
+  `whref` enum('yes','no') NOT NULL DEFAULT 'no',
+  `wsize` enum('4','6','8','12') NOT NULL DEFAULT '6',
+  `wadminonly` enum('yes','no') NOT NULL DEFAULT 'no',
+  `wactive` enum('yes','no') NOT NULL DEFAULT 'no',
   PRIMARY KEY (`wid`)
 ) DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -579,7 +579,8 @@ VALUES
 	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes'),
 	(15, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes'),
   (16, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes'),
-  (17, 'Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes');
+  (17, 'Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes'),
+  (18, 'User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes');
 
 
 
@@ -944,4 +945,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 20;
+UPDATE `settings` SET `dbversion` = 21;
