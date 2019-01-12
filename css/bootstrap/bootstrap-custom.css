@@ -6,18 +6,15 @@
 @font-face {
   font-family: 'Source Sans Pro';
   font-style: normal;
-  font-weight: 300;
+  /* font-weight: 300; */
   src: local('Source Sans Pro Light'), local('SourceSansPro-Light'), url("../fonts/source_sans_pro/SourceSansPro-Light.woff2") format('woff2');
 }
 
 /* @general ---------- */
 body {
 	font-size: 13px;
-	font-weight: 300;
-}
-input,
-select {
-	font-weight: 300;
+	/* font-weight: 300; */
+	-webkit-font-smoothing: antialiased;
 }
 div.checkbox {
     padding-left: 0px;
@@ -114,12 +111,12 @@ hr {
   border-bottom: 1px solid #ffffff;
 }
 h4 {
-	font-weight: 300;
+	font-weight: 400;
 	text-shadow: 1px 1px 0px white;
 	font-size: 18px;
 }
 h5 {
-	font-weight: 300;
+	font-weight: 400;
 	text-shadow: 1px 1px 0px white;
 	font-size: 14px;
 }
@@ -129,7 +126,7 @@ h5 .label {
 }
 h1, h2, h3, h4, h5, .pHeader {
 	font-family: "Source Sans Pro", "Source Sans Pro", Arial, sans-serif;
-	font-weight: 300;
+	font-weight: 400;
 	color: #428bca;
 }
 .row {
@@ -291,8 +288,9 @@ table#mappingsPrint tr.border-top td {
 .input-max-200 {
 	max-width: 200px;
 }
-
-
+.input-sm {
+	font-size: 12px !important;
+}
 
 
 
@@ -588,7 +586,7 @@ div#user_menu {
 
 	text-align: right;
 
-	z-index: 98;
+	z-index: 97;
 }
 div#user_menu span.info {
 	padding: 0px;
@@ -1104,7 +1102,7 @@ span.severity2 {
 #w-access_logs a,
 #w-error_logs a {
 	color: #333;
-	font-weight: 300;
+	/* font-weight: 300; */
 	cursor: pointer;
 }
 
@@ -1247,7 +1245,7 @@ ul#subnets li.active a {
 	font-weight: bold;
 }
 ul#subnets li.active li a {
-	font-weight: 300;
+	/* font-weight: 300; */
 	color: #333;
 }
 ul#subnets li.leaf.active i {
@@ -2472,7 +2470,6 @@ div.jqueryErrorText {
 	padding: 10px;
 	margin: auto;
 	margin-top: 10px;
-	font-weight: 300;
 	display: none;
 
 	border-top: 1px solid #ccc;

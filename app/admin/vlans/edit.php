@@ -16,10 +16,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
-
-# make sue user can edit
-if ($User->is_admin(false)==false && $User->user->editVlan!="Yes") {
-    $Result->show("danger", _("Not allowed to change VLANs"), true, true);
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("vlan", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("vlan", 3, true, true);
 }
 
 # create csrf token
@@ -32,7 +34,7 @@ $_POST = $User->strip_input_tags ($_POST);
 $Admin->validate_action ($_POST['action'], true);
 
 # fetch vlan details
-$vlan = $Admin->fetch_object ("vlans", "vlanId", @$_POST['vlanId']);
+$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
 $vlan = $vlan!==false ? (array) $vlan : array();
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vlans');
@@ -55,6 +57,8 @@ if($_POST['action']=="add") {
 	} else {
 		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['domain']);
 	}
+	if(isset($_POST['number']))
+	$vlan['number'] = $_POST['number'];
 } else {
 		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan['domainId']);
 }
@@ -85,7 +89,7 @@ $(document).ready(function(){
 		if (@$_POST['domain']!="all") {
 			print $vlan_domain->name." (".$vlan_domain->description.")";
 		} else {
-			print "<select name='domainId' class='form-control input-sm'>";
+			print "<select name='domainid' class='form-control input-sm'>";
 			foreach ($vlan_domains as $d) {
 				print "<option value='$d->id'>$d->name</option>";
 			}
@@ -118,14 +122,44 @@ $(document).ready(function(){
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vlan['description']); ?>" <?php print $readonly; ?>>
-			<input type="hidden" name="vlanId" value="<?php print @$_POST['vlanId']; ?>">
+			<input type="hidden" name="vlanid" value="<?php print @$_POST['vlanid']; ?>">
 			<?php if(@$_POST['domain']!=="all") { ?>
-			<input type="hidden" name="domainId" value="<?php print $vlan_domain->id; ?>">
+			<input type="hidden" name="domainid" value="<?php print $vlan_domain->id; ?>">
 			<?php } ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 		</td>
 	</tr>
+
+
+	<?php
+    // customers
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
+        // fetch customers
+        $customers = $Tools->fetch_all_objects ("customers", "title");
+        // print
+        print '<tr>' . "\n";
+        print ' <td class="middle">'._('Customer').'</td>' . "\n";
+        print ' <td>' . "\n";
+        print ' <select name="customer_id" class="form-control input-sm input-w-auto">'. "\n";
+
+        //blank
+        print '<option disabled="disabled">'._('Select Customer').'</option>';
+        print '<option value="0">'._('None').'</option>';
+
+        if($customers!=false) {
+            foreach($customers as $customer) {
+                if ($customer->id == $vlan['customer_id'])    { print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                else                                          { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
+            }
+        }
+
+        print ' </select>'. "\n";
+        print ' </td>' . "\n";
+        print '</tr>' . "\n";
+    }
+	?>
+
 
 	<?php if($_POST['action']=="add" || $_POST['action']=="edit") { ?>
     <!-- require unique -->

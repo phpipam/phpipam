@@ -65,7 +65,7 @@ if ($ip_address===false) {
 
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 # fetch custom fields
 $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 ?>

@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("devices", 1, true, false);
 
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -50,7 +52,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "	<td>$device_type->tname</td>";
     	print "</tr>";
 
-        if($User->settings->enableLocations=="1") { ?>
+        if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>
@@ -71,7 +73,33 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     		?>
     		</td>
     	</tr>
+
         <?php }
+
+        // acrtions
+        if($User->get_module_permissions ("devices")>1) {
+            print "<tr>";
+            print " <td></td>";
+            print " <td>";
+
+            $links = [];
+            $links[] = ["type"=>"header", "text"=>"Manage device"];
+            $links[] = ["type"=>"link", "text"=>"Edit device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
+
+            if($User->get_module_permissions ("devices")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
+                $links[] = ["type"=>"divider"];
+            }
+            if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
+                $links[] = ["type"=>"header", "text"=>"SNMP"];
+                $links[] = ["type"=>"link", "text"=>"Manage SNMP", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='delete' data-switchId='$device[id]''", "icon"=>"cogs"];
+            }
+            // print links
+            print $User->print_actions($User->user->compress_actions, $links, true, true);
+            print " </td>";
+            print "</tr>";
+        }
+
 
     	print "<tr>";
     	print "	<td colspan='2'><hr></td>";
@@ -111,8 +139,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // version
                 print '<tr>';
                 print " <th>". _('Community').'</th>';
-                print " <td>$device[snmp_community]</td>";
-                print "</tr>";
+                print $User->is_admin(false) ? " <td>$device[snmp_community]</td>" : " <td>********</td>";
                 // port
                 print '<tr>';
                 print " <th>". _('Port').'</th>';
@@ -142,7 +169,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // pass
                 print '<tr>';
                 print " <th>". _('Password').'</th>';
-                print " <td>$device[snmp_v3_auth_pass]</td>";
+                $User->is_admin(false) ? print " <td>$device[snmp_v3_auth_pass]</td>" : " <td>********</td>";
                 print "</tr>";
                 // privacy proto
                 print '<tr>';
@@ -152,7 +179,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
                 // privacy pass
                 print '<tr>';
                 print " <th>". _('Privacy passphrase').'</th>';
-                print " <td>$device[snmp_v3_priv_pass]</td>";
+                $User->is_admin(false) ? print " <td>$device[snmp_v3_priv_pass]</td>" : " <td>********</td>";
                 print "</tr>";
                 // context name
                 print '<tr>';
@@ -184,17 +211,17 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print " <td><span class='badge badge1 badge5'>$cnt_addresses "._('Addresses')."</span></td>";
     	print "</tr>";
     	print "<tr>";
-        if($User->settings->enableNAT=="1") {
+        if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>0) {
     	print " <th>"._('NAT')."</th>";
     	print " <td><span class='badge badge1 badge5'>$cnt_nat "._('NAT')."</span></td>";
     	print "</tr>";
         }
-        if($User->settings->enablePSTN=="1") {
+        if($User->settings->enablePSTN=="1" && $User->get_module_permissions ("pstn")>0) {
         print " <th>"._('PSTN')."</th>";
         print " <td><span class='badge badge1 badge5'>$cnt_pstn "._('PSTN')."</span></td>";
         print "</tr>";
         }
-        if($User->settings->enableCircuits=="1") {
+        if($User->settings->enableCircuits=="1" && $User->get_module_permissions ("pstn")>0) {
         print " <th>"._('Circuits')."</th>";
         print " <td><span class='badge badge1 badge5'>$cnt_circuits "._('Circuits')."</span></td>";
         print "</tr>";
@@ -232,24 +259,6 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	print "<tr>";
     	print "	<td></td>";
 
-    	if($User->is_admin(false)) {
-    		print "	<td class='actions'>";
-    		print "	<div class='btn-group'>";
-    		print "		<button class='btn btn-xs btn-default editSwitch' data-action='edit'   data-switchid='".$device['id']."'><i class='fa fa-pencil'></i></button>";
-            if($User->settings->enableSNMP=="1")
-            print "     <button class='btn btn-xs btn-default editSwitchSNMP' data-action='edit' data-switchid='$device[id]' rel='tooltip' title='Manage SNMP'><i class='fa fa-cogs'></i></button>";
-    		print "		<button class='btn btn-xs btn-default editSwitch' data-action='delete' data-switchid='".$device['id']."'><i class='fa fa-times'></i></button>";
-    		print "	</div>";
-    		print " </td>";
-    	}
-    	else {
-    		print "	<td class='small actions'>";
-    		print "	<div class='btn-group'>";
-    		print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
-    		print "		<button class='btn btn-xs btn-default disabled'><i class='fa fa-gray fa-times'></i></button>";
-    		print "	</div>";
-    		print " </td>";
-    	}
     	print "</tr>";
 
     print "</table>";
@@ -265,7 +274,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 
 
 	# rack
-	if ($User->settings->enableRACK=="1") {
+	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>0) {
 
     	print "<td vertical-align:top !important;' class='text-right'>";
         // validate rack
@@ -288,5 +297,3 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
 else {
     $Result->show("danger", _('Invalid ID'), false);
 }
-
-?>

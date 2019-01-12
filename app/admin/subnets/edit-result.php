@@ -324,6 +324,17 @@ else {
         }
         $values['location'] = $_POST['location_item'];
     }
+	# append customerId
+	if($User->settings->enableCustomers=="1") {
+		if (is_numeric($_POST['customer_id'])) {
+			if ($_POST['customer_id']>0) {
+				$values['customer_id'] = $_POST['customer_id'];
+			}
+			else {
+				$values['customer_id'] = NULL;
+			}
+		}
+	}
     # threshold
     if (isset($_POST['threshold'])) {
         if (!is_numeric($_POST['threshold'])) {
@@ -406,12 +417,12 @@ else {
 		}
     	# set what to update
     	$values = array(
-					"vlanId"=>$_POST['vlanId'],
-					"vrfId"=>$_POST['vrfId'],
-					"nameserverId"=>$_POST['nameserverId'],
-					"scanAgent"=>@$_POST['scanAgent'],
-					"device"=>$_POST['device'],
-					"isFull"=>$_POST['isFull']
+					"vlanId"       =>$_POST['vlanId'],
+					"vrfId"        =>$_POST['vrfId'],
+					"nameserverId" =>$_POST['nameserverId'],
+					"scanAgent"    =>@$_POST['scanAgent'],
+					"device"       =>$_POST['device'],
+					"isFull"       =>$_POST['isFull']
 					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);

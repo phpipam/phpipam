@@ -157,6 +157,7 @@ class Addresses_controller extends Common_api_functions  {
 	 *      - /addresses/{ip}/{subnetId}/                // Returns address from subnet
 	 *		- /addresses/search/{ip_address}/			 // searches for addresses in database, returns multiple if found
 	 *		- /addresses/search_hostname/{hostname}/     // searches for addresses in database by hostname, returns multiple if found
+	 *		- /addresses/search_linked/{value}/          // searches in database for addresses linked by customer defined "Link addresses" field, returns multiple if found
 	 *		- /addresses/search_hostbase/{hostbase}/     // searches for addresses by leading substring (base) of hostname, returns ordered multiple
 	 *      - /addresses/search_wildcard/{hostbase}/     // searches for addresses by substring (wildcard %) of hostname, returns ordered multiple
 	 *		- /addresses/search_mac/{mac}/   		     // searches for addresses by mac, returns ordered multiple
@@ -261,6 +262,15 @@ class Addresses_controller extends Common_api_functions  {
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses/tags", true, false)); }
 			}
 		}
+		// Search all addresses matching custom link_field field's value
+		elseif($this->_params->id=="search_linked") {
+			// 
+			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $this->Addresses->Log->settings->link_field, $this->_params->id2);
+			// result
+				if($result===false)						{ $this->Response->throw_exception(200, 'No addresses found'); }
+				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, "addresses", true, false)); }
+		}
+		//
 		// id not set
 		elseif (!isset($this->_params->id)) {
 														{ $this->Response->throw_exception(400, 'Address ID is required'); }

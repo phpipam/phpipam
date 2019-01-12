@@ -291,7 +291,7 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# save to addresses cache
-		if(sizeof($address)>0) {
+		if(is_object($address)) {
 			# add decimal format
 			$address->ip = $this->transform_to_dotted ($address->ip_addr);
 			# save to subnets
@@ -302,29 +302,74 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Bulk fetch similar addresses.
+	 *
+	 * The subnets details page will call search_similar_addresses() for EVERY IP in the subnet.
+	 * Bulk request and cache this information on the first call. Sort returned IPs by ip_addr.
+	 *
+	 * Returns an array indexed by $value.  $bulk_search[$value] = Array of similar IPs with same $value
+	 *
+	 * @access public
+	 * @param object $address
+	 * @param mixed $linked_field
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
+		// Check cache
+		$cached_item = $this->cache_check("similar_addresses", "f=$linked_field id=$address->subnetId");
+		if (is_object($cached_item))
+			return $cached_item->result;
+
+		// Fetch all similar addresses for entire subnet.
+		try {
+			$query = "SELECT SQL_CACHE * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
+			$linked_subnet_addrs = $this->Database->getObjectsQuery($query, array($address->subnetId));
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		$bulk_search = [];
+		if (is_array($linked_subnet_addrs)) {
+			foreach($linked_subnet_addrs as $linked) {
+				// Index by $linked->{$linked_field} for easy searching.
+				$bulk_search[$linked->{$linked_field}][] = $linked;
+			}
+		}
+
+		// Save to cache and return
+		$this->cache_write("similar_addresses", "f=$linked_field id=$address->subnetId", (object)["result" => $bulk_search]);
+		return $bulk_search;
+	}
+
+	/**
 	 * Searches database for similar addresses
 	 *
 	 * @access public
+	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @param mixed $address_id
 	 * @return void
 	 */
-	public function search_similar_addresses ($linked_field, $value, $address_id) {
-    	// checks
-    	if(strlen($linked_field)>0 && strlen($value)>0 && is_numeric($address_id)) {
-        	// search
-     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ? and state != 4;", array($value, $address_id)); }
-    		catch (Exception $e) {
-    			$this->Result->show("danger", _("Error: ").$e->getMessage());
-    			return false;
-    		}
-    		#result
-    		return sizeof($addresses)>0 ? $addresses : false;
-        }
-        else {
-            return false;
-        }
+	public function search_similar_addresses ($address, $linked_field, $value) {
+		// sanity checks
+		if(!is_object($address) || !property_exists($address, $linked_field) || strlen($value)==0)
+			return false;
+
+		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
+
+		// Check if similar addresses exist with the specifed $value
+		if (!isset($bulk_search[$address->{$linked_field}]))
+			return false;
+
+		$results = $bulk_search[$address->{$linked_field}];
+		// Remove $address from results
+		foreach ($results as $i => $similar) {
+			if ($similar->id == $address->id) unset($results[$i]);
+		}
+
+		return !empty($results) ? $results : false;
 	}
 
 	/**
@@ -358,6 +403,8 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_add ($address) {
+		# user - permissions
+		$User = new User ($this->Database);
 		# set insert array
 		$insert = array(
 						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
@@ -376,13 +423,30 @@ class Addresses extends Common_functions {
 						"firewallAddressObject" => @$address['firewallAddressObject'],
 						"lastSeen"              => @$address['lastSeen']
 						);
-        # location
-        if (isset($address['location_item'])) {
-            if (!is_numeric($address['location_item'])) {
-                $this->Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
+		# permissions
+		if($this->api!==true) {
+			if($User->get_module_permissions ("devices")<1) {
+				unset($insert['switch']);
+			}
+			# customer
+			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+				if (is_numeric($address['customer_id'])) {
+					if ($address['customer_id']!="0") {
+						$insert['customer_id'] = $address['customer_id'];
+					}
+					else {
+						$insert['customer_id'] = NULL;
+					}
+				}
+			}
+	        # location
+	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
+	            if (!is_numeric($address['location_item'])) {
+	                $this->Result->show("danger", _("Invalid location value"), true);
+	            }
+	            $insert['location'] = $address['location_item'];
+	        }
+	    }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -430,7 +494,8 @@ class Addresses extends Common_functions {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
 		if (isset($address['section'])) $address_old->section = $address['section'];
-
+		# user - permissions
+		$User = new User ($this->Database);
 		# set update array
 		$insert = array(
 						"id"          =>$address['id'],
@@ -446,15 +511,33 @@ class Addresses extends Common_functions {
 						"note"        =>@$address['note'],
 						"is_gateway"  =>@$address['is_gateway'],
 						"excludePing" =>@$address['excludePing'],
-						"PTRignore"   =>@$address['PTRignore']
+						"PTRignore"   =>@$address['PTRignore'],
+						"lastSeen"    =>@$address['lastSeen']
 						);
-        # location
-        if (isset($address['location_item'])) {
-            if (!is_numeric($address['location_item'])) {
-                $this->Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
+		# permissions
+		if($this->api!==true) {
+			if($User->get_module_permissions ("devices")<1) {
+				unset($insert['switch']);
+			}
+	 		# customer
+			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+				if (is_numeric($address['customer_id'])) {
+					if ($address['customer_id']!="0") {
+						$insert['customer_id'] = $address['customer_id'];
+					}
+					else {
+						$insert['customer_id'] = NULL;
+					}
+				}
+			}
+	        # location
+	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
+	            if (!is_numeric($address['location_item'])) {
+	                $this->Result->show("danger", _("Invalid location value"), true);
+	            }
+	            $insert['location'] = $address['location_item'];
+	        }
+	    }
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -669,31 +752,30 @@ class Addresses extends Common_functions {
                 	$admins        = $Tools->fetch_multiple_objects ("users", "role", "Administrator");
                 	// if some recipients
                 	if ($admins !== false) {
-                    	// mail settings
-                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
-                    	// mail class
-                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
+						# try to send
+						try {
+	                    	// mail settings
+	                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
+	                    	// mail class
+	                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
 
-                        // send
-                        $phpipam_mail->initialize_mailer();
-                        // set parameters
-                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
-                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
-                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
-                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
-                        $content[] = "</table>";
-                        // plain
-                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
-                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
-                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
+	                        // set parameters
+	                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
+	                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
+	                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
+	                        $content[] = "</table>";
+	                        // plain
+	                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
+	                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
+	                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
 
-                        # set content
-                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-                        $content_plain 	= implode("\r\n",$content_plain);
-                        # try to send
-                        try {
+	                        # set content
+	                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+	                        $content_plain 	= implode("\r\n",$content_plain);
+
                         	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
                         	//add all admins to CC
                         	$recipients = $this->changelog_mail_get_recipients ($subnet->id);
@@ -715,7 +797,7 @@ class Addresses extends Common_functions {
                         } catch (phpmailerException $e) {
                         	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
                         } catch (Exception $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
                         }
                     }
             	}

@@ -425,6 +425,18 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+
+<!-- customers -->
+<tr>
+	<td class="title"><?php print _('Customers module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableCustomers" <?php if($settings['enableCustomers'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable customers module for customer management'); ?>
+	</td>
+</tr>
+
 <!-- Link fields -->
 <tr>
 	<td class="title"><?php print _('Link addresses'); ?></td>

@@ -8,7 +8,7 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     // try to authenticate
 	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
 	// Redirect user where he came from, if unknown go to dashboard.
-	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
+	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }
 	else                                        { header("Location: ".create_link("dashboard")); }
 	exit();
 }
@@ -50,7 +50,7 @@ if(@$config['requests_public']===false) {
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript">

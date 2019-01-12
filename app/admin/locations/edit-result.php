@@ -6,15 +6,23 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("locations", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("locations", 3, true, false);
+}
+
 # check maintaneance mode
 $User->check_maintaneance_mode ();
-
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
 
@@ -49,7 +57,11 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
                 $_POST['long'] = $latlng['lng'];
             }
             else {
-                $Result->show("warning", _('Failed to update location lat/lng from google'), false);
+                if (!empty($latlng['info'])) {
+                    $Result->show("info", escape_input($latlng['info']), false);
+                } else {
+                    $Result->show("warning", _('Failed to update location lat/lng from google')."<br>".escape_input($latlng['error']), false);
+                }
             }
         }
     }
@@ -77,12 +89,12 @@ if(sizeof($custom) > 0) {
 
 // set values
 $values = array(
-    "id"=>@$_POST['id'],
-    "name"=>$_POST['name'],
-    "address"=>$_POST['address'],
-    "lat"=>$_POST['lat'],
-    "long"=>$_POST['long'],
-    "description"=>$_POST['description']
+    "id"          =>@$_POST['id'],
+    "name"        =>$_POST['name'],
+    "address"     =>$_POST['address'],
+    "lat"         =>$_POST['lat'],
+    "long"        =>$_POST['long'],
+    "description" =>$_POST['description']
     );
 
 # custom fields

@@ -15,7 +15,7 @@ print "<h4>"._('Favourite subnets')."</h4>";
 print "<hr>";
 
 # print if none
-if(sizeof($favourite_subnets) == 0 || !isset($favourite_subnets[0])) {
+if(empty($favourite_subnets) || !isset($favourite_subnets[0])) {
 	print "<blockquote style='margin-top:20px;margin-left:20px;'>";
 	print "<p>"._("No favourite subnets selected")."</p><br>";
 	print "<small>"._("You can add subnets to favourites by clicking star icon in subnet details")."!</small><br>";
@@ -30,6 +30,7 @@ else {
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Description')."</th>";
 	print "	<th>"._('Section')."</th>";
+	if($User->get_module_permissions ("vlan")>0)
 	print "	<th class='hidden-xs hidden-sm'>"._('VLAN')."</th>";
 	print "	<th class='hidden-xs hidden-sm'>"._('Used')."</th>";
 	print "	<th></th>";
@@ -62,6 +63,8 @@ else {
 			# vlan
 			$vlan = $Tools->fetch_object("vlans", "vlanId", $f['vlanId']);
 			$vlan = $vlan===false ? "" : $vlan->number;
+
+			if($User->get_module_permissions ("vlan")>0)
 			print "	<td class='hidden-xs hidden-sm'>$vlan</td>";
 
 			# usage

@@ -40,8 +40,9 @@ else{
                 'url' => $params->idplogout,
             ),
             'certFingerprint' => $params->idpcertfingerprint,
-	        'certFingerprintAlgorithm' => $params->idpcertalgorithm,
-        ),
+            'certFingerprintAlgorithm' => $params->idpcertalgorithm,
+            'x509cert' => $params->idpx509cert,
+	),
     );
 	$auth = new OneLogin_Saml2_Auth($settings);
 }
@@ -82,7 +83,7 @@ else{
 	$User->authenticate ( $auth->getNameId(), '', true);
 
 	// Redirect user where he came from, if unknown go to dashboard.
-	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
+	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }
 	else                                        { header("Location: ".create_link("dashboard")); }
 
 }

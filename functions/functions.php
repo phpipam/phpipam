@@ -62,7 +62,10 @@ require( dirname(__FILE__) . '/classes/class.SubnetsTable.php' );	    //Class fo
 require( dirname(__FILE__) . '/classes/class.SubnetsMasterDropDown.php' );	    //Class for generating HTML master subnet dropdown menus
 require( dirname(__FILE__) . '/classes/class.Devtype.php' );	    //
 require( dirname(__FILE__) . '/classes/class.Devices.php' );	    //
-require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    //
+require( dirname(__FILE__) . '/classes/class.Crypto.php' );	    	// Crypto class
+require( dirname(__FILE__) . '/classes/class.Password_check.php' );	// Class for password check
+require( dirname(__FILE__) . '/classes/class.Session_DB.php' );	    // Class for storing sessions to database
+
 
 # save settings to constant
 if(@$_GET['page']!="install" ) {
@@ -95,6 +98,16 @@ $_GET = $Rewrite->get_url_params ();
 function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null, $l5 = null, $l6 = null ) {
 	# get settings
 	global $User;
+
+	// url encode all
+	if(!is_null($l6))	{ $l6 = urlencode($l6); }
+	if(!is_null($l5))	{ $l5 = urlencode($l5); }
+	if(!is_null($l4))	{ $l4 = urlencode($l4); }
+	if(!is_null($l3))	{ $l3 = urlencode($l3); }
+	if(!is_null($l2))	{ $l2 = urlencode($l2); }
+	if(!is_null($l1))	{ $l1 = urlencode($l1); }
+	if(!is_null($l0))	{ $l0 = urlencode($l0); }
+
 
 	# set normal link array
 	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");

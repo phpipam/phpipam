@@ -1,15 +1,12 @@
 <h4><?php print _('List of all locations'); ?></h4>
 <hr>
 
-<div class="btn-group">
-    <?php if($_GET['page']=="administration") { ?>
-	<a href="" class='btn btn-sm btn-default editLocation' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add location'); ?></a>
-	<?php } else { ?>
-	<a href="<?php print create_link("administration", "locations") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> <?php print _('Manage'); ?></a>
-	<?php } ?>
-	<a href="<?php print create_link("tools", "locations", "map") ?>" class='btn btn-sm btn-default' style='margin-bottom:10px;'><i class='fa fa-map'></i> <?php print _('Map'); ?></a>
-</div>
-<br>
+<?php
+if($User->get_module_permissions ("locations")>1) {
+include('menu.php');
+}
+?>
+
 
 <?php
 
@@ -20,15 +17,19 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# perm check
+if ($User->get_module_permissions ("locations")<1) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # check that location support isenabled
-if ($User->settings->enableLocations!="1") {
+elseif ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
 else {
     # fetch all locations
     $all_locations = $Tools->fetch_all_objects("locations", "name");
 
-    $colspan = $admin ? 5 : 4;
+    $colspan = 4;
 
     // table
     print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='all_locations'>";
@@ -48,7 +49,7 @@ else {
 			}
 		}
 	}
-    if($admin)
+    if($User->get_module_permissions ("locations")>1)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -92,14 +93,24 @@ else {
     			}
     		}
             // actions
-            if($admin) {
-    		print "	<td class='actions'>";
-    		print "	<div class='btn-group'>";
-    		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='edit'   data-id='$l->id'><i class='fa fa-pencil'></i></a>";
-    		print "		<a href='".create_link("tools", "locations", $l->id)."' class='btn btn-xs btn-default' ><i class='fa fa-eye'></i></a>";
-    		print "		<a href='' class='btn btn-xs btn-default editLocation' data-action='delete' data-id='$l->id'><i class='fa fa-times'></i></a>";
-    		print "	</div>";
-    		print " </td>";
+            if($User->get_module_permissions ("locations")>1) {
+            print "<td class='actions'>";
+            $links = [];
+            $links[] = ["type"=>"header", "text"=>"Show"];
+            $links[] = ["type"=>"link", "text"=>"Show location", "href"=>create_link($_GET['page'], "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"divider"];
+
+            $links[] = ["type"=>"header", "text"=>"Manage"];
+            $links[] = ["type"=>"link", "text"=>"Edit location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$l->id'", "icon"=>"pencil"];
+
+            if($User->get_module_permissions ("locations")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$l->id'", "icon"=>"times"];
+                $links[] = ["type"=>"divider"];
+            }
+            // print links
+            print $User->print_actions($User->user->compress_actions, $links);
+            print "</td>";
+
     		}
 
             print "</tr>";

@@ -18,7 +18,7 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
 // if fw not set remove!
 unset($selected_ip_fields['firewallAddressObject']);
 

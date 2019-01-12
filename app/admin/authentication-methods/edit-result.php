@@ -38,13 +38,21 @@ else {
 }
 
 # set update query
-$values = array("id"=>@$_POST['id'],
-				"type"=>$_POST['type'],
-				"description"=>@$_POST['description'],
+$values = array(
+				"id"          =>@$_POST['id'],
+				"type"        =>$_POST['type'],
+				"description" =>@$_POST['description'],
 				);
 # add params
 unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
 $values["params"]=json_encode($_POST);
+
+# log values
+$values_log = $values;
+$_POST['adminUsername'] = "********";
+$_POST['adminPassword'] = "********";
+$_POST['secret']	 	= "********";
+$values_log["params"]=json_encode($_POST);
 
 # add - set protected
 if($action=="add") {
@@ -52,8 +60,8 @@ if($action=="add") {
 }
 
 # update
-if(!$Admin->object_modify("usersAuthMethod", $action, "id", $values))	{ $Result->show("danger",  _("Failed to edit authentication method"), false); }
-else																	{ $Result->show("success", _("Authentication method updated"), false); }
+if(!$Admin->object_modify("usersAuthMethod", $action, "id", $values, $values_log))	{ $Result->show("danger",  _("Failed to edit authentication method"), false); }
+else																				{ $Result->show("success", _("Authentication method updated"), false); }
 
 # if delete also reset all users that have thos auth method
 if($action=="delete") {

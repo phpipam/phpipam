@@ -27,31 +27,6 @@ class Common_functions  {
 	 */
 	public $json_error = false;
 
-	/**
-	 * Cache file to store all results from queries to
-	 *
-	 *  structure:
-	 *
-	 *      [table][index] = (object) $content
-	 *
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access public
-	 */
-	public $cache = array();
-
-	/**
-	 * cache_check_exceptions
-	 *
-	 * (default value: array())
-	 *
-	 * @var array
-	 * @access private
-	 */
-	private $cache_check_exceptions = array();
-
     /**
      * Default font
      *
@@ -147,7 +122,28 @@ class Common_functions  {
 
 
 
+	/**
+	 *	@version handling
+	 *	--------------------------------
+	 */
 
+	 /**
+	 * Compare dotted version numbers 1.21.0 <=> 1.4.10
+	 *
+	 * @access public
+	 * @param string $verA
+	 * @param mixed $verB
+	 * @return int
+	 */
+	public function cmp_version_strings($verA, $verB) {
+		$a = explode('.', $verA);
+		$b = explode('.', $verB);
+
+		if ($a[0] != $b[0]) return $a[0] < $b[0] ? -1 : 1;			// 1.x.y is less than 2.x.y
+		if (strcmp($a[1], $b[1]) != 0) return strcmp($a[1], $b[1]);	// 1.21.y is less than 1.3.y
+		if ($a[2] != $b[2]) return $a[2] < $b[2] ? -1 : 1;			// 1.4.9 is less than 1.4.10
+		return 0;
+	}
 
 
 
@@ -174,6 +170,10 @@ class Common_functions  {
 	public function fetch_all_objects ($table=null, $sortField="id", $sortAsc=true) {
 		# null table
 		if(is_null($table)||strlen($table)==0) return false;
+
+		$cached_item = $this->cache_check("fetch_all_objects", "t=$table f=$sortField o=$sortAsc");
+		if(is_object($cached_item)) return $cached_item->result;
+
 		# fetch
 		try { $res = $this->Database->getObjects($table, $sortField, $sortAsc); }
 		catch (Exception $e) {
@@ -187,7 +187,9 @@ class Common_functions  {
     		}
 		}
 		# result
-		return sizeof($res)>0 ? $res : false;
+		$result = sizeof($res)>0 ? $res : false;
+		$this->cache_write("fetch_all_objects", "t=$table f=$sortField o=$sortAsc", (object)["result" => $result]);
+		return $result;
 	}
 
 	/**
@@ -210,15 +212,15 @@ class Common_functions  {
 		if(is_null($value))		return false;
 		if($value===0)		    return false;
 
-		# null method
-		$method = is_null($method) ? "id" : $this->Database->escape($method);
-
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
 		if($cached_item!==false) {
 			return $cached_item;
 		}
 		else {
+			# null method
+			$method = is_null($method) ? "id" : $this->Database->escape($method);
+
 			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
 			catch (Exception $e) {
 				$this->Result->show("danger", _("Error: ").$e->getMessage());
@@ -293,6 +295,21 @@ class Common_functions  {
 		return $cnt;
 	}
 
+	/**
+	 * Count all objects in database.
+	 *
+	 * @param  string $table
+	 * @param  string $field
+	 * @return array|false
+	 */
+	public function count_all_database_objects ($table, $field) {
+		try { $cnt = $this->Database->getGroupBy($table, $field); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return $cnt;
+	}
 
 	/**
 	 * Get all admins that are set to receive changelog
@@ -391,14 +408,14 @@ class Common_functions  {
         // get method
         $identifier = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise save
-        if ($this->cache_check_exceptions!==false) {
-            if (!isset($this->cache[$table][$identifier][$id])) {
-                $this->cache[$table][$identifier][$id] = (object) $object;
+        if ($this->cache_check_exceptions($table)===false) {
+            if (!isset($this->Database->cache[$table][$identifier][$id])) {
                 // add ip ?
                 $ip_check = $this->cache_check_add_ip($table);
                 if ($ip_check!==false) {
-                    $this->cache[$table][$identifier][$id]->ip = $this->transform_address ($object->{$ip_check}, "dotted");
+                    $object->ip = $this->transform_address ($object->{$ip_check}, "dotted");
                 }
+                $this->Database->cache[$table][$identifier][$id] = clone (object) $object;
             }
         }
     }
@@ -457,7 +474,7 @@ class Common_functions  {
         // get method
         $method = $this->cache_set_identifier ($table);
         // check if cache is already set, otherwise return false
-        if (isset($this->cache[$table][$method][$id]))  { return (object) $this->cache[$table][$method][$id]; }
+        if (isset($this->Database->cache[$table][$method][$id]))  { return clone (object) $this->Database->cache[$table][$method][$id]; }
         else                                            { return false; }
     }
 
@@ -818,6 +835,25 @@ class Common_functions  {
 	}
 
 	/**
+	* Returns true if site is accessed with https
+	*
+	* @access public
+	* @return bool
+	*/
+	public function isHttps() {
+		if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') {
+			return true;
+		}
+		if (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https') {
+			return true;
+		}
+		if (!empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Create URL for base
 	 *
 	 * @access public
@@ -1144,20 +1180,36 @@ class Common_functions  {
 	 * @return array
 	 */
 	public function get_latlng_from_address ($address) {
-		// get config
-		include(dirname(__FILE__)."/../../config.php");
-        // replace spaces
-        $address = str_replace(' ','+',$address);
-        // get geocode
-        if(isset($gmaps_api_geocode_key)) {
-	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false&key='.$gmaps_api_geocode_key);
-    	}
-    	else {
-	        $geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$address.'&sensor=false');
-    	}
-        $output= json_decode($geocode);
-        // return result
-        return array("lat"=>str_replace(",", ".", $output->results[0]->geometry->location->lat), "lng"=>str_replace(",", ".", $output->results[0]->geometry->location->lng), "error"=>$output->error_message);
+		$results = array('lat' => null, 'lng' => null, 'error' => null);
+
+		// get geocode API key
+		include( dirname(__FILE__). "/../../config.php" );
+
+		if(empty($gmaps_api_geocode_key)) {
+			$results['info'] = _("Geocode API key not set");
+			return $results;
+		}
+
+		# Geocode address
+		$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key));
+
+		if ($geocode === false) {
+			$results['error'] = _("Geocode lookup failed. Check Internet connectivity.");
+			return $results;
+		}
+
+		$output= json_decode($geocode);
+
+		if (isset($output->results[0]->geometry->location->lat))
+			$results['lat'] = str_replace(",", ".", $output->results[0]->geometry->location->lat);
+
+		if (isset($output->results[0]->geometry->location->lng))
+			$results['lng'] = str_replace(",", ".", $output->results[0]->geometry->location->lng);
+
+		if (isset($output->error_message))
+			$results['error'] = $output->error_message;
+
+		return $results;
 	}
 
     /**
@@ -1549,7 +1601,23 @@ class Common_functions  {
 		return array($removed_permissions, $changed_permissions, $new_permissions);
 	}
 
-
+	/**
+	 * Parse subnet permissions to user readable format
+	 *
+	 * @access public
+	 * @param mixed $permissions
+	 * @return string
+	 */
+	public function parse_permissions ($permissions) {
+		switch($permissions) {
+			case 0: 	$r = _("No access");	break;
+			case 1: 	$r = _("Read");			break;
+			case 2: 	$r = _("Write");		break;
+			case 3: 	$r = _("Admin");		break;
+			default:	$r = _("error");
+		}
+		return $r;
+	}
 
 
 
@@ -1787,5 +1855,121 @@ class Common_functions  {
     	return implode(" / ", $title);
 	}
 
+
+
+
+	/**
+	 * Print action wrapper
+	 *
+	 * Provided items can have following items:
+	 *     type: link, divider, header
+	 *     text: text to print
+	 *     href: ''
+	 *     class: classes to be added to item
+	 *     dataparams: params to be added (e.g. data-deviceid='0')
+	 *     icon: name for icon
+	 *     visible: where it should be visible
+	 *
+	 *
+	 * @method print_actions
+	 * @param  string $type
+	 * @param  array $items [array of items]
+	 * @param  bool $left_align
+	 * @param  bool $print_text
+	 * @return [type]
+	 */
+	public function print_actions ($compress = "1", $items = [], $left_align = false, $print_text = false) {
+	    if (sizeof($items)>0) {
+	        return $compress=="1" ? $this->print_actions_dropdown($items, $left_align, $print_text) : $this->print_actions_buttons ($items);
+	    }
+	    else {
+	        return "";
+	    }
+	}
+
+	/**
+	 * Prints action dropdown
+	 *
+	 * @method print_actions_buttons
+	 * @param  array $items [array of items]
+	 * @param  bool $left_align
+	 * @param  bool $print_text
+	 * @return string
+	 */
+	private function print_actions_dropdown ($items = [], $left_align = false, $print_text = false) {
+	    // init
+	    $html   = [];
+	    // alignment
+	    $alignment = $left_align ? "dropdown-menu-left" : "dropdown-menu-right";
+	    // text
+	    $action_text = $print_text ? " <i class='fa fa-cogs'></i> Actions " : " <i class='fa fa-cogs'></i> ";
+
+	    $html[] = "<div class='dropdown'>";
+	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
+	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu'>";
+
+	    // loop items
+	    foreach ($items as $i) {
+	        // visible
+	        if (isset($i['visible'])) {
+	            if ($i['visible']!="dropdown") {
+	                continue;
+	            }
+	        }
+	        // title
+	        if ($i['type']=="header") {
+	            $html[] = "   <li class='dropdown-header'>".($i['text'])."</li>";
+
+	        }
+	        // separator
+	        elseif ($i['type']=="divider") {
+	            $html[] = "   <li role='separator' class='divider'></li>";
+	        }
+	        // item
+	        else {
+	            $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> "._($i['text'])."</a></li>";
+	        }
+	    }
+	    // remove last divider if present
+	    if (strpos(end($html),"divider")!==false) {
+	        array_pop($html);
+	    }
+	    // end
+	    $html[] = " </ul>";
+	    $html[] = "</div>";
+	    // result
+	    return implode("\n", $html);
+	}
+
+
+	/**
+	 * Prints icons btn-group
+	 *
+	 * @method print_actions_buttons
+	 * @param  array $items [array of items]
+	 * @return string
+	 */
+	private function print_actions_buttons ($items = []) {
+	    // init
+	    $html   = [];
+	    // structure
+	    $html[] = " <div class='btn-group'>";
+	    // irems
+	    foreach ($items as $i) {
+	        // visible
+	        if (isset($i['visible'])) {
+	            if ($i['visible']!="buttons") {
+	                continue;
+	            }
+	        }
+	        // save only links
+	        if($i['type']=="link") {
+	            $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='"._($i['text'])."'><i class='fa fa-$i[icon]'></i></a>";
+	        }
+	    }
+	    // end
+	    $html[] =  " </div>";
+	    // result
+	    return implode("\n", $html);
+	}
 }
-?>

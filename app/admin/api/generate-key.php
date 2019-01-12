@@ -9,5 +9,5 @@ $User 		= new User ($Database);
 # verify that user is logged in
 $User->check_user_session();
 
-print $User->Crypto->generate_token();
+print $User->Crypto->generate_html_safe_token(32);
 ?>

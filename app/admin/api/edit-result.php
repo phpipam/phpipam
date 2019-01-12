@@ -43,6 +43,8 @@ if($_POST['action']!="delete") {
     	if(!is_numeric($_POST['app_lock_wait']))                                                            { $error[] = "Invalid wait value"; }
     	elseif ($_POST['app_lock_wait']<1)                                                                  { $error[] = "Invalid wait value"; }
 	}
+	# api_allow_unsafe check
+	if($_POST['app_security']=="none" && $api_allow_unsafe!==true)											{ $error[] = "API server requires SSL. Please set $api_allow_unsafe in config.php to override"; }
 }
 
 # default lock_wait
@@ -54,16 +56,18 @@ if(sizeof($error) > 0) {
 }
 else {
 	# create array of values for modification
-	$values = array("id"=>@$_POST['id'],
-					"app_id"=>$_POST['app_id'],
-					"app_code"=>@$_POST['app_code'],
-					"app_permissions"=>@$_POST['app_permissions'],
-					"app_security"=>@$_POST['app_security'],
-					"app_lock"=>@$_POST['app_lock'],
-					"app_lock_wait"=>@$_POST['app_lock_wait'],
-					"app_nest_custom_fields"=>@$_POST['app_nest_custom_fields'],
-					"app_show_links"=>@$_POST['app_show_links'],
-					"app_comment"=>@$_POST['app_comment']);
+	$values = array(
+					"id"                     =>@$_POST['id'],
+					"app_id"                 =>$_POST['app_id'],
+					"app_code"               =>@$_POST['app_code'],
+					"app_permissions"        =>@$_POST['app_permissions'],
+					"app_security"           =>@$_POST['app_security'],
+					"app_lock"               =>@$_POST['app_lock'],
+					"app_lock_wait"          =>@$_POST['app_lock_wait'],
+					"app_nest_custom_fields" =>@$_POST['app_nest_custom_fields'],
+					"app_show_links"         =>@$_POST['app_show_links'],
+					"app_comment"            =>@$_POST['app_comment']
+					);
 
 	# execute
 	if(!$Admin->object_modify("api", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("API $_POST[action] error"), true); }

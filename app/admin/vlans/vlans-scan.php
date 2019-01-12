@@ -10,17 +10,21 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
+# perm check popup
+$User->check_module_permissions ("vlan", 3, true, true);
+# validate csrf cookie
+$csrf = $User->Crypto->csrf_cookie ("create", "scan");
 
 # scan disabled
 if ($User->settings->enableSNMP!="1")           { $Result->show("danger", _("SNMP module disbled"), true, true); }
-# admin check
-if($User->is_admin()!==true) 	                { $Result->show("danger", _('Admin privileges required'), true, true); }
 
 # domain Id must be int
 if (!is_numeric($_POST['domainId']))            { $Result->show("danger", _("Invalid domain Id"), true, true); }
@@ -53,6 +57,7 @@ if ($scan_devices===false)                      { $Result->show("danger", _("No 
         }
         ?>
         <input type="hidden" name="domainId" value="<?php print $_POST['domainId']; ?>">
+        <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
         </form>
     </div>
     <hr>

@@ -340,6 +340,10 @@ class Vlans_controller extends Common_api_functions {
 		# get settings
 		$this->settings = $this->Admin->fetch_object ("settings", "id", 1);
 
+		# Check vlan number
+		if ( $this->_params->number > $this->settings->vlanMax )
+			$this->Response->throw_exception(500, _('Highest possible VLAN number is ').$this->settings->vlanMax.'!');
+
 		//if it already exist die
 		if($this->settings->vlanDuplicate==0 && $_SERVER['REQUEST_METHOD']=="POST") {
 			$check_vlan = $this->Admin->fetch_multiple_objects ("vlans", "domainId", $this->_params->domainId, "vlanId");

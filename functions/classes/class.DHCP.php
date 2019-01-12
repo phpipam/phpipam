@@ -316,5 +316,3 @@ class DHCP extends Common_functions {
     /* @write methods --------------- */
 
 }
-
-?>

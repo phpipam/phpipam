@@ -95,7 +95,7 @@ if($subnets===NULL) { ?>
 <!-- owner -->
 <?php
 # check which fields are set to be displayed
-$setFields = explode(";", $User->settings->IPfilter);
+$setFields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 
 # owner if set
 if(in_array('owner', $setFields)) {

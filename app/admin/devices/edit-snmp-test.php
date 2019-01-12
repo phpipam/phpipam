@@ -31,6 +31,7 @@ if(!is_numeric($_POST['snmp_version']))			              { $Result->show("danger"
 if($_POST['snmp_version']!=0) {
 if(!is_numeric($_POST['snmp_port']))			              { $Result->show("danger", _("Invalid port"), true, true, false, true); }
 if(!is_numeric($_POST['snmp_timeout']))			              { $Result->show("danger", _("Invalid timeout"), true, true, false, true); }
+if($_POST['snmp_timeout'] > 10000)				              { $Result->show("danger", _("Invalid timeout").' > 10,000ms (10s)', true, true, false, true); }
 }
 
 # version can be 0, 1 or 2

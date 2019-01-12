@@ -20,7 +20,7 @@ else {
 	# if not install fetch settings etc
 	if($_GET['page']!="install" ) {
 		# database object
-		$Database 	= new Database_PDO;
+		if (!is_object($Database)) $Database = new Database_PDO;
 
 		# check if this is a new installation
 		require('functions/checks/check_db_install.php');
@@ -40,6 +40,7 @@ else {
 
 	/** include proper subpage **/
 	if($_GET['page']=="install")		{ require("app/install/index.php"); }
+	elseif($_GET['page']=="2fa")		{ require("app/login/2fa/index.php"); }
 	elseif($_GET['page']=="upgrade")	{ require("app/upgrade/index.php"); }
 	elseif($_GET['page']=="login")		{ require("app/login/index.php"); }
 	elseif($_GET['page']=="temp_share")	{ require("app/temp_share/index.php"); }
@@ -54,7 +55,7 @@ else {
 		# make upgrade and php build checks
 		include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 		include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
-		if($_GET['switch'] && $_SESSION['realipamusername'] && $_GET['switch'] == "back"){
+		if(@$_GET['switch'] && $_SESSION['realipamusername'] && @$_GET['switch'] == "back"){
 			$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
 			unset($_SESSION['realipamusername']);
 			print	'<script>window.location.href = "'.create_link(null).'";</script>';
@@ -107,7 +108,7 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script type="text/javascript" src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 		<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -141,9 +142,10 @@ else {
 
 	<!-- jQuery error -->
 	<div class="jqueryError">
-		<div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
+		<div class='alert alert-danger' style="width:450px;margin:auto">jQuery error!
 		<div class="jqueryErrorText"></div><br>
 		<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+		</div>
 	</div>
 
 	<!-- Popups -->
@@ -280,7 +282,7 @@ else {
 						else																{ include("app/subnets/index.php"); }
 					}
 					# vrf
-					elseif ($_GET['page']=="vrf") 											{ include("app/vrf/index.php"); }
+					elseif ($_GET['page']=="vrf") 											{ include("app/tools/vrf/index.php"); }
 					# vlan
 					elseif ($_GET['page']=="vlan") 											{ include("app/vlan/index.php"); }
 					# folder

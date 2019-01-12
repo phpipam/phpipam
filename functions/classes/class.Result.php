@@ -190,5 +190,3 @@ class Result extends Common_functions {
 		if ($this->die === true)	{ die(); }
 	}
 }
-
-?>

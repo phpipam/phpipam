@@ -18,7 +18,7 @@ $db['port'] = 3306;
  *
  * Set to the hostname or IP address of the webserver, or % to allow all
  ******************************/
-#$db['webhost'] = 'localhost';
+// $db['webhost'] = 'localhost';
 
 
 /**
@@ -73,21 +73,20 @@ $config['resolve_verbose']             = true;       // verbose response - print
  ******************************/
 $debugging = false;
 
-
-/**
- * Allow older PHP version
- *
- * allow version < 5.4 with limited functionality
- ******************************/
-$allow_older_version = false;
-
 /*
  * API Crypt security provider. "mcrypt" or "openssl"
  *
  * default as of 1.3.2 "openssl"
  ******************************/
-#$api_crypt_encryption_library = "mcrypt";
+// $api_crypt_encryption_library = "mcrypt";
 
+
+/**
+ * Allow API calls over HTTP (security = none)
+ *
+ * @var bool
+ */
+$api_allow_unsafe = false;
 
 /**
  *  manual set session name for auth
@@ -98,8 +97,23 @@ $phpsessname = "phpipam";
 
 
 /**
- *	BASE definition if phpipam
- * 	is not in root directory (e.g. /phpipam/)
+ * Session storage - files or database
+ *
+ * @var string
+ */
+$session_storage = "files";
+
+
+/**
+ * Path to access phpipam in site URL, http:/url/BASE/
+ *
+ * BASE definition should end with a trailing slash "/"
+ * BASE will be set automatically if not defined. examples...
+ *
+ *  http://phpipam.local/            =  define('BASE', "/");
+ *  http://company.website/phpipam/  =  define('BASE', "/phpipam/");
+ *  http://company.website/ipam/     =  define('BASE', "/ipam/");
+ *
  ******************************/
 if(!defined('BASE'))
 define('BASE', "/");
@@ -165,7 +179,7 @@ elseif ($proxy_enabled == true && $proxy_use_auth == true) {
 }
 
 /* for debugging proxy config uncomment next line */
-#var_dump(stream_context_get_options(stream_context_get_default()));
+// var_dump(stream_context_get_options(stream_context_get_default()));
 
 
 /**
@@ -181,4 +195,4 @@ $config['split_ip_custom_fields'] = false;                  // Show custom field
  * The default behaviour is to use the system wide default php version symlinked to php in PHP_BINDIR (/usr/bin/php).
  * If multiple php versions are present; overide selection with $php_cli_binary.
  */
-#$php_cli_binary = '/usr/bin/php7.1';
+// $php_cli_binary = '/usr/bin/php7.1';

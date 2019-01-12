@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# verify module permissions
+$User->check_module_permissions ("racks", 1, true);
 
 # set admin
 $admin = $User->is_admin(false);
@@ -20,6 +22,7 @@ $admin = $User->is_admin(false);
 if ($User->settings->enableRACK!="1") {
     $Result->show("danger", _("RACK management disabled."), false);
 }
+# print racks
 else {
     # print
     print "<ul class='nav nav-tabs' style='margin-bottom:20px;'>";
@@ -31,7 +34,7 @@ else {
 
     # buttons
     print '<div class="btn-group">';
-    if($admin)
+    if($User->get_module_permissions ("racks")>2)
     print "    <a href=''' class='btn btn-sm btn-default  editRack' data-action='add'   data-rackid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add rack')."</a>";
     print '</div>';
     print '<br>';

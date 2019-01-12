@@ -74,7 +74,7 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 
 
 <!-- table -->
-<table class="ipaddresses normalTable table table-striped table-condensed table-hover table-full table-top">
+<table class="ipaddresses sortable sorted normalTable table table-condensed table-full table-top" data-cookie-id-table="ipaddresses">
 
 <!-- headers -->
 <tbody>

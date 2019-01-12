@@ -10,12 +10,19 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("devices", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("devices", 3, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "device");
@@ -30,11 +37,11 @@ $Admin->validate_action ($_POST['action'], true);
 $custom = $Tools->fetch_custom_fields('devices');
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['switchId']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if($_POST['action']!="add" && !is_numeric($_POST['switchid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
 
 # fetch device details
 if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-	$device = (array) $Admin->fetch_object("devices", "id", $_POST['switchId']);
+	$device = (array) $Admin->fetch_object("devices", "id", $_POST['switchid']);
 	// false
 	if ($device===false)                                            { $Result->show("danger", _("Invalid ID"), true, true);  }
 }
@@ -76,7 +83,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
    $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
 
    // load dropdown
-   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchId]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
+   $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchid]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
    		$('tbody#rack').html(data);
    });
 });
@@ -125,7 +132,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	</tr>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1") { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
@@ -145,7 +152,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<?php } ?>
 
     <!-- Rack -->
-    <?php if($User->settings->enableRACK=="1") { ?>
+    <?php if($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>0) { ?>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
@@ -159,21 +166,25 @@ $('#switchManagementEdit select[name=rack]').change(function() {
             <select name="rack" class="form-control input-sm">
                 <option value="0"><?php print _("None"); ?></option>
                 <?php
-                foreach ($Racks->all_racks as $r) {
-     				if($device['rack'] == $r->id)	{ print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
-    				else							{ print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                if ($Racks->all_racks!==false) {
+                    foreach ($Racks->all_racks as $r) {
+                        if($device['rack'] == $r->id)   { print "<option value='$r->id' data-location='$r->location' selected>$r->name</option>"; }
+                        else                            { print "<option value='$r->id' data-location='$r->location'>$r->name</option>"; }
+                    }
                 }
                 ?>
             </select>
         </td>
     </tr>
 
+	<?php if ($User->get_module_permissions ("racks")>0) { ?>
     <tbody id="rack" style="<?php print $display; ?>">
 		<?php include ("edit-rack-dropdown.php"); ?>
     </tbody>
 	<tr>
 	   	<td colspan="2"><hr></td>
     </tr>
+    <?php } ?>
     <?php } ?>
 
 	<!-- Description -->
@@ -183,7 +194,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 			<textarea name="description" class="form-control input-sm" placeholder="<?php print _('Description'); ?>" <?php print $readonly; ?>><?php if(isset($device['description'])) print $device['description']; ?></textarea>
 			<?php
 			if( ($_POST['action'] == "edit") || ($_POST['action'] == "delete") ) {
-				print '<input type="hidden" name="switchId" value="'. $_POST['switchId'] .'">'. "\n";
+				print '<input type="hidden" name="switchid" value="'. $_POST['switchid'] .'">'. "\n";
 			} ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
