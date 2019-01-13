@@ -1540,6 +1540,10 @@ class User extends Common_functions {
      * @return array
      */
     public function get_user_permissions_from_json ($json) {
+        // Check cache
+        $cached_item = $this->cache_check('get_user_permissions_from_json', hash('sha256',$json));
+        if(is_object($cached_item)) return $cached_item->result;
+
         $groups = array();
         foreach((array) json_decode($json, true) as $group_id => $perm) {
             $group_details = $this->groups_parse (array($group_id));
@@ -1553,6 +1557,8 @@ class User extends Common_functions {
 
             $groups[] = $tmp;
         }
+        // Cache results to avoid repeat database queries.
+        $this->cache_write('get_user_permissions_from_json', hash('sha256',$json), (object)["result" => $groups]);
         return $groups;
     }
 
