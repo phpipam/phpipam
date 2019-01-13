@@ -256,41 +256,43 @@ class Common_api_functions {
 		// validate
 		$this->validate_filter_by ($result);
 
-		// filter - array
+		if (is_object($result)) {
+			// Filter single object
+			if(!property_exists($result, $this->_params->filter_by))
+				return $result;
+
+			if ($result->{$this->_params->filter_by} != $this->_params->filter_value)
+				$this->Response->throw_exception(404, _('No results (filter applied)'));
+
+			return $result;
+		}
+
 		if (is_array($result)) {
-			foreach ($result as $m=>$r) {
-				foreach ($r as $k=>$v) {
-					if ($k == $this->_params->filter_by) {
-						if ($v != $this->_params->filter_value) {
-							unset($result[$m]);
-							break;
-						}
-					}
-				}
+			// Filter array of objects
+			foreach($result as $m=>$r) {
+				if(!property_exists($r, $this->_params->filter_by))
+					continue;
+				if ($r->{$this->_params->filter_by} == $this->_params->filter_value)
+					continue;
+				// Remove object
+				unset($result[$m]);
 			}
+
+			if (empty($result))
+				$this->Response->throw_exception(404, _('No results (filter applied)'));
+
+			# reindex filtered result
+			$result = array_values($result);
+
+			// Single result - return as object
+			if (sizeof($result) == 1)
+				return $result[0];
+
+			return $result;
 		}
-		// filter - single
-		else {
-			foreach ($result as $k=>$v) {
-				if ($k == $this->_params->filter_by) {
-					if ($v != $this->_params->filter_value) {
-						unset($result);
-						break;
-					}
-				}
-			}
-		}
 
-		# null?
-		if (sizeof($result)==0)				{ $this->Response->throw_exception(404, 'No results (filter applied)'); }
-        # reindex filtered result
-        else {
-            $result = array_values($result);
-        }
-
-
-		# result
-		return $result;
+		// Bad input
+		return false;
 	}
 
 	/**
