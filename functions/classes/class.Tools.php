@@ -195,7 +195,7 @@ class Tools extends Common_functions {
 		if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = "or `$myField[name]` like :search_term ";
+				$query[] = "or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = "or `switch` like :search_term ";
@@ -269,7 +269,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = "order by `subnet` asc, `mask` asc;";
@@ -411,7 +411,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = ";";
@@ -445,7 +445,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = ";";
@@ -478,7 +478,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_prefix_fields) > 0) {
 			foreach($custom_prefix_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = "order by  raw asc;";
@@ -511,7 +511,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_prefix_fields) > 0) {
 			foreach($custom_prefix_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = "order by number asc;";
@@ -547,7 +547,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_circuit_fields) > 0) {
 			foreach($custom_circuit_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 
@@ -582,7 +582,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_circuit_fields) > 0) {
 			foreach($custom_circuit_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = "order by name asc;";
@@ -615,7 +615,7 @@ class Tools extends Common_functions {
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
 				$myField['name'] = $this->Database->escape($myField['name']);
-				$query[] = " or `$myField[name]` like :search_term ";
+				$query[] = " or CONVERT(`$myField[name]` USING utf8) like :search_term ";
 			}
 		}
 		$query[] = ";";
