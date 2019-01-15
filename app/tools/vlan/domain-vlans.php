@@ -40,6 +40,9 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
     // back
     if(sizeof($vlan_domains)>1) {
     print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GET['section'])."'><i class='fa fa-angle-left'></i> "._('L2 Domains')."</a>";
+    if($User->get_module_permissions ("vlan")>2) {
+    print "<a class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-class='500' data-action='add' data-domain='".$vlan_domain->id."' data-number='1'><i class='fa fa-plus'></i>"._('Add VLAN')."</a>";
+    }
     }
     ?>
     <?php
@@ -59,7 +62,7 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
 
 <?php
 # no VLANS?
-if($vlans===false) {
+if(empty($vlans)) {
 	$Result->show("info", _("No VLANS configured"), false);
 }
 else {

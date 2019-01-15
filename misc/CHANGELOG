@@ -54,6 +54,7 @@
     + Fix " - is required" error when adding IPs with an empty IP filter set (#2334);
     + Fix column 'masterSubnetId' cannot be null error when adding subnets (#1977);
     + Fix logical circuits add/delete errors (#2381);
+    + Fix adding new VLANs to an empty L2Domain (#2400);
     + API:
         + Fix inconsistent API success value returned (#2045);
         + Fix filter_by functionality (#2392);
