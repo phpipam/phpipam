@@ -261,7 +261,8 @@ class phpipamSNMP extends Common_functions {
 
     		'CISCO-VTP-MIB::vtpVlanName'          => '.1.3.6.1.4.1.9.9.46.1.3.1.1.4',
 
-    		'MPLS-VPN-MIB::mplsVpnVrfDescription' => '.1.3.6.1.3.118.1.2.2.1'
+    		'MPLS-VPN-MIB::mplsVpnVrfDescription'        => '.1.3.6.1.3.118.1.2.2.1.2',
+    		'MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher' => '.1.3.6.1.3.118.1.2.2.1.3'
     	];
 	}
 
@@ -803,6 +804,29 @@ class phpipamSNMP extends Common_functions {
     }
 
     /**
+     * Decode mplsVpnVrfName oid to ASCII
+     * @param  string $oid
+     * @return string
+     */
+    private function decode_mplsVpnVrfName($oid) {
+        // mplsVpnVrfName. When this object is used as an index to a table,
+        // the first octet is the string length, and subsequent octets are
+        // the ASCII codes of each character.
+        // For example, “vpn1” is represented as 4.118.112.110.49.
+        $a = array_values(array_filter(explode('.', $oid)));
+        if (($a[0]+1) != sizeof($a))
+            return $oid;
+
+        $mplsVpnVrfName = "";
+
+        foreach($a as $i=>$v) {
+            if ($i == 0) continue;
+            $mplsVpnVrfName .= chr($v);
+        }
+        return $mplsVpnVrfName;
+    }
+
+    /**
      * Fetch vrf table from device.
      *
      * @access private
@@ -813,16 +837,28 @@ class phpipamSNMP extends Common_functions {
         $this->connection_open ();
 
         // fetch
-        $res1 = $this->snmp_walk ( "MPLS-VPN-MIB::mplsVpnVrfDescription" );    // MPLS-VPN-MIB::mplsVpnVrfDescription."OAM" = STRING: 300:1
+        $res = [];
+        $res1 = $this->snmp_walk ( "MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher" );
+        $res2 = $this->snmp_walk ( "MPLS-VPN-MIB::mplsVpnVrfDescription" );
 
-        // parse result
+        // parse results
         foreach ($res1 as $k=>$r) {
+            // set name
+            $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfRouteDistinguisher'].'.', "", $k);
+            $k = str_replace("\"", "", $k);
+            $k = $this->decode_mplsVpnVrfName($k);
+            // set rd
+            $r  = $this->parse_snmp_result_value ($r);
+            $res[$k]['rd'] = $r;
+        }
+        foreach ($res2 as $k=>$r) {
             // set name
             $k = str_replace($this->snmp_oids['MPLS-VPN-MIB::mplsVpnVrfDescription'].'.', "", $k);
             $k = str_replace("\"", "", $k);
-            // set rd
+            $k = $this->decode_mplsVpnVrfName($k);
+            // set descr
             $r  = $this->parse_snmp_result_value ($r);
-            $res[$k] = $r;
+            $res[$k]['descr'] = $r;
         }
 
         // save result
@@ -849,17 +885,23 @@ class phpipamSNMP extends Common_functions {
         }
         // return
         return implode(":", $mac);
-	}
+    }
 
-	/**
-	 * Parses result - removes STRING:
-	 *
-	 * @access private
-	 * @param mixed $r
-	 * @return void
-	 */
-	private function parse_snmp_result_value ($r) {
-    	return trim(str_replace("\"","",substr($r, strpos($r, ":")+2)));
-	}
+    /**
+     * Parses result - removes STRING:
+     *
+     * @access private
+     * @param mixed $r
+     * @return void
+     */
+    private function parse_snmp_result_value ($r) {
+        $r = stripslashes($r);
+        $r = trim(substr($r, strpos($r, ":")+2));
+        // if the first char is a " then remove it
+        if(substr_compare($r, '"', 0, 1)===0)  $r=substr($r, 1);
+        // if the last char is a " then remove it
+        if(substr_compare($r, '"', -1, 1)===0) $r=substr($r, 0,-1);
+        return escape_input($r);
+    }
 
 }

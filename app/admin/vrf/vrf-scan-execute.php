@@ -126,18 +126,19 @@ else {
 
 	// alive
 	$m=0;
-	foreach ($new_vrfs as $name=>$rd ) {
+	foreach ($new_vrfs as $name=>$data ) {
         print "<tr class='result$m'>";
 		//name
-		print "<td>$name</td>";
+		print "<td>";
+		print "$name<input type='hidden' name='name$m' value='$name'>";
+		print "</td>";
 		//rd
 		print "<td>";
-		print "	<input type='text' class='form-control input-sm' name='rd$m' value='$rd'>";
-		print "	<input type='hidden' name='name$m' value='$name'>";
+		print "	<input type='text' class='form-control input-sm' name='rd$m' value='".$data['rd']."'>";
 		print "</td>";
 		//description
 		print "<td>";
-		print "	<input type='text' class='form-control input-sm' name='description$m'>";
+		print "	<input type='text' class='form-control input-sm' name='description$m' value='".$data['descr']."'>";
 		print "</td>";
 		// custom
 		if (isset($required_fields)) {
