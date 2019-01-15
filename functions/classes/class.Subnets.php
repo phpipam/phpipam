@@ -688,47 +688,40 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * This function fetches id, subnet and mask for all subnets
+	 * Fetch all subnets marked for ping checks. Needed for pingCheck script
 	 *
-	 *	Needed for pingCheck script
-	 *
-	 * @access public
-	 * @param int $agentId (default:null)
+	 * @param  $agentId (default:null)
 	 * @return array|false
 	 */
 	public function fetch_all_subnets_for_pingCheck ($agentId=null) {
-		# null
-		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
-		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` where `scanAgent` = ? and `pingSubnet` = 1 and `isFolder`= 0 and `mask` > '0' and subnet > 16843009;", array($agentId)); }
-		catch (Exception $e) {
-			$this->Result->show("danger", _("Error: ").$e->getMessage());
-			return false;
-		}
-		# result
-		return sizeof($subnets)>0 ? $subnets : false;
+		return $this->fetch_all_subnets_for_check('pingSubnet', $agentId);
 	}
 
 	/**
-	 * This function fetches id, subnet and mask for all subnets
+	 * Fetch all subnets marked for discovery checks. Needed for discoveryCheck script
 	 *
-	 *	Needed for discoveryCheck script
-	 *
-	 * @access public
-	 * @param int $agentId (default:null)
+	 * @param  $agentId (default:null)
 	 * @return array|false
 	 */
 	public function fetch_all_subnets_for_discoveryCheck ($agentId=null) {
-		# null
+		return $this->fetch_all_subnets_for_check('discoverSubnet', $agentId);
+	}
+
+	/**
+	 * Fetch all subnets marked for discovery/ping checks.
+	 *
+	 * @param  $agentId (default:null)
+	 * @return array|false
+	 */
+	private function fetch_all_subnets_for_Check($discoverytype, $agentId) {
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
-		# fetch
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask` FROM `subnets` where `scanAgent` = ? and `discoverSubnet` = 1 and `isFolder`= 0 and `isFull`!= 1 and `mask` > '0' and subnet > 16843009 and `mask` > 0;", array($agentId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` WHERE `scanAgent` = ? AND `$discoverytype` = 1 AND `isFolder`= 0 AND `mask` > 0;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
 		}
 		# result
-		return sizeof($subnets)>0 ? $subnets : false;
+		return is_array($subnets) ? $subnets : false;
 	}
 
 	/**
