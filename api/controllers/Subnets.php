@@ -213,16 +213,15 @@ class Subnets_controller extends Common_api_functions {
 		// check if id2 is set ?
 		if(isset($this->_params->id2)) {
 			// is IP address provided
-			if($this->_params->id=="cidr") {
+			if($this->_params->id=="cidr" || $this->_params->id=="search") {
 				$result = $this->read_search_subnet ();
 				// check result
 				if($result==false)						{ $this->Response->throw_exception(200, "No subnets found"); }
 				else									{ return array("code"=>200, "data"=>$this->prepare_result ($result, null, true, true)); }
 			}
-			else {
-				// validate id
-				$this->validate_subnet_id ();
-			}
+
+			// validate id
+			$this->validate_subnet_id ();
 
 			// addresses in subnet
 			if($this->_params->id2=="addresses") {
