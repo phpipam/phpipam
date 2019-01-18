@@ -82,25 +82,23 @@ if (isset($queries)) {
                 $Snmp->get_query ("get_vlan_table");
                 if (is_array($Snmp->last_result)) {
                     foreach ($Snmp->last_result as $k=>$r) {
-                        if (is_numeric($k)) {
+                        if (!is_numeric($k)) { continue; }
+
+                        try {
                             // ok, we have vlan, set query
                             $Snmp->set_snmp_device ($device, $k);
-                            try {
-                                $Snmp->get_query ($query);
-                                $vlan_set = true;
-                                break;
-                            }
-                            catch (Exception $e) {}
+                            $Snmp->get_query ($query);
+                            $poll_success = true;
+                            break;
                         }
+                        catch (Exception $e) { $last_error = $e->getMessage(); }
                     }
+                    if (!isset($poll_success)) { throw new Exception($last_error); }
                 }
             }
             else {
                 // reset vlan
-                if (isset($vlan_set)) {
-                    unserialize($vlan_set);
-                    $Snmp->set_snmp_device ($device);
-                }
+                $Snmp->set_snmp_device ($device);
                 $Snmp->get_query ($query);
             }
 

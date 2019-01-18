@@ -519,7 +519,7 @@ class phpipamSNMP extends Common_functions {
         $this->snmp_session->oid_output_format = SNMP_OID_OUTPUT_NUMERIC;
 
 		// Fetch device sysObjectID.  TODO: Customise queries based on vendor sysObjectID (HP, FortiGate, ...)
-		$this->snmp_sysObjectID = $this->snmp_get( 'SNMPv2-MIB::sysObjectID', '0' );
+		// $this->snmp_sysObjectID = $this->snmp_get( 'SNMPv2-MIB::sysObjectID', '0' );
     }
 
     /**
