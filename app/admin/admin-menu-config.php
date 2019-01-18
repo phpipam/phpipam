@@ -33,6 +33,7 @@ $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-phone", 		"
 $admin_menu['Server management'][] = array("show"=>true,	"icon"=>"fa-info", 		"name"=>"Edit instructions", 		"href"=>"instructions", 			"description"=>"Set phpipam instructions for end users");
 
 # IP related management
+if($User->settings->enableCustomers==1)
 $admin_menu['IP related management'][] = array("show"=>true,    "icon"=>"fa-users", "name"=>"Customers",                "href"=>"customers",                 "description"=>"Customer management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-server", "name"=>"Sections", 				"href"=>"sections", 				"description"=>"Section management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-sitemap","name"=>"Subnets", 				"href"=>"subnets", 					"description"=>"Subnet management");
