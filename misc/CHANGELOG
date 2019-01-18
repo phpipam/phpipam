@@ -15,6 +15,7 @@
     + PHP 5.4 is now required;
     + Added compressed actions dropdown;
     + SNMP module no longer requires MIB files;
+    + Performance enhancements running under Azure/Amazon;
     + Rack module enhancements (#1325):
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;
@@ -35,6 +36,7 @@
         + New config.php option $api_allow_unsafe to allow non-SSL API queries;
         + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
+        + New overlapping API call;
     + Widgets:
         + New user instruction widget (#2383);
 
