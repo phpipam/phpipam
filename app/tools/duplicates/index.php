@@ -22,9 +22,9 @@ if (sizeof($duplicate_subnets)>0) {
         $subnets = $Database->getObjectsQuery("select * from subnets where subnet = ? and mask = ?", [$s->subnet, $s->mask]);
         if (sizeof($subnets)>0) {
             foreach ($subnets as $subnet) {
-                permission
+                // permission
 
-                save
+                // save
             }
         }
     }
