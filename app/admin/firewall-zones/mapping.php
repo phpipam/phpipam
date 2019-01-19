@@ -15,14 +15,14 @@ $Zones 		= new FirewallZones($Database);
 $User->check_user_session();
 
 # fetch all zone mappings
-$firewallZoneMapping = $Zones->get_zone_mappings();
+$firewallZoneMappings = $Zones->get_zone_mappings();
 
 # reorder by device
-if ($firewallZoneMapping!==false) {
+if (is_array($firewallZoneMappings)) {
 	# devices
 	$devices = array();
 	# add
-	foreach ($firewallZoneMapping as $m) {
+	foreach ($firewallZoneMappings as $m) {
 		$devices[$m->deviceId][] = $m;
 	}
 }
@@ -31,7 +31,7 @@ if ($firewallZoneMapping!==false) {
 <button class="btn btn-sm btn-default btn-success editMapping" style="margin-bottom:10px;margin-top: 25px;" data-action="add" data-id="0"><i style="padding-right:5px;" class="fa fa-plus"></i><?php print _('Create Firewall zone mapping') ?></button>
 
 <?php
-if($firewallZoneMapping) {
+if(is_array($firewallZoneMappings)) {
 ?>
 	<!-- table -->
 	<table id="mappingsPrint" class="table table-td-top table-top table-condensed">

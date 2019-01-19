@@ -79,7 +79,7 @@ foreach ($all_sections as $section) {
 		# grab IP addresses
 		$ipaddresses = $Addresses->fetch_subnet_addresses ($subnet['id']);
 
-		if (sizeof($ipaddresses)==0) { continue; }
+		if (!is_array($ipaddresses) || sizeof($ipaddresses)==0) { continue; }
 
 		foreach ($ipaddresses as $ip) {
 

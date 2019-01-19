@@ -34,7 +34,7 @@ class phpipamSNMP extends Common_functions {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var SNMP|bool
      * @access private
      */
     private $snmp_session = false;

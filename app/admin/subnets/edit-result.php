@@ -522,7 +522,7 @@ else {
 				$Addresses->pdns_validate_connection ();
 				$hosts = $Addresses->fetch_subnet_addresses ($old_subnet_details->id, "ip_addr", "asc");
 				// loop
-				if (sizeof($hosts)>0) {
+				if (is_array($hosts) && sizeof($hosts)>0) {
 					$cnt = 0;
 					$err = 0;
 					$ski = 0;

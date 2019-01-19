@@ -33,6 +33,7 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 
 # fetch all firewall zones
 $firewallZones = $Zones->get_zones();
+if (!is_array($firewallZones)) { $firewallZones = array(); }
 
 # fetch settings
 $firewallZoneSettings = json_decode($User->settings->firewallZoneSettings,true);
