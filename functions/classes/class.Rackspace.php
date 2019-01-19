@@ -22,7 +22,7 @@ class phpipam_rack extends Tools {
      *
      * (default value: false)
      *
-     * @var bool
+     * @var object|bool
      * @access public
      */
     public $all_racks = false;
