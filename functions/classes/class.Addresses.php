@@ -892,6 +892,7 @@ class Addresses extends Common_functions {
 
 		# fetch all addresses in subnet and subnet
 		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc", array("ip_addr"));
+		if (!is_array($addresses)) { $addresses = array(); }
 		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
 
 		# if folder return false
@@ -1924,9 +1925,11 @@ class Addresses extends Common_functions {
     	$false = array();
 		// find unique ids
 		$ids = $this->find_unique_subnetids ();
-		if ($ids===false)										{ return false; }
 
 		// validate
+		if (!is_array($ids))
+			return false;
+
 		foreach ($ids as $id) {
 			if ($this->verify_subnet_id ($id->subnetId)===false) {
 				$false[] = $this->fetch_subnet_addresses ($id->subnetId);

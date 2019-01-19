@@ -283,10 +283,10 @@ else {
 					        } else { $Addresses->ptr_link($addresses[$n]->id, 0); }
 					}
 					unset($dns_records);
-					if ($records !== false || $ptr!==false) {
+					if (is_array($records) || $ptr!==false) {
 						$dns_records[] = "<br>";
 						$dns_records[] = "<ul class='submenu-dns text-muted'>";
-						if($records!==false) {
+						if(is_array($records)) {
 							foreach ($records as $r) {
 								if($r->type!="SOA" && $r->type!="NS")
 								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
@@ -305,7 +305,7 @@ else {
 					// search for IP records
 					$records2 = $PowerDNS->search_records ("content", $addresses[$n]->ip, 'content', true);
 					unset($dns_records2);
-					if ($records2 !== false) {
+					if (is_array($records2)) {
                         $dns_cname_unique = array();        // unique CNAME records to prevent multiple
                         unset($cname);
 						$dns_records2[] = "<br>";
@@ -315,7 +315,7 @@ else {
 							$dns_records2[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->name </li>";
                             //search also for CNAME records
                             $dns_records_cname = $PowerDNS->seach_aliases ($r->name);
-                            if($dns_records_cname!==false) {
+                            if(is_array($dns_records_cname)) {
                                 foreach ($dns_records_cname as $cn) {
                                     if (!in_array($cn->name, $dns_cname_unique)) {
                                         $cname[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$cn->id' data-domain_id='$cn->domain_id'>$cn->type</span> $cn->name </li>";

@@ -18,7 +18,7 @@ $User->check_user_session();
 $firewallZoneMapping = $Zones->get_zone_mappings();
 
 # reorder by device
-if ($firewallZoneMapping!==false) {
+if (is_array($firewallZoneMapping)) {
 	# devices
 	$devices = array();
 	# add

@@ -2324,8 +2324,10 @@ class Subnets extends Common_functions {
 			$subnet_addresses = $Addresses->fetch_subnet_addresses ($subnetId, "ip_addr", "asc");
 
 			//check all IP addresses against new subnet
-			foreach($subnet_addresses as $ip) {
-				$Addresses->verify_address( $this->transform_to_dotted($ip->ip_addr), $this->transform_to_dotted($subnet)."/".$mask, false, true );
+			if (is_array($subnet_addresses)) {
+				foreach($subnet_addresses as $ip) {
+					$Addresses->verify_address( $this->transform_to_dotted($ip->ip_addr), $this->transform_to_dotted($subnet)."/".$mask, false, true );
+				}
 			}
 			//Checks for strict mode
 			if ($section->strictMode==1) {
@@ -2405,44 +2407,46 @@ class Subnets extends Common_functions {
 		$subSize = sizeof($newsubnets);		# how many times to check
 		$n = 0;								# ip address count
 		// loop
-		foreach($addresses as $ip) {
-			//cast
-			$ip = (array) $ip;
-			# check to which it belongs
-			for($m=0; $m<$subSize; $m++) {
+		if (is_array($addresses)) {
+			foreach($addresses as $ip) {
+				//cast
+				$ip = (array) $ip;
+				# check to which it belongs
+				for($m=0; $m<$subSize; $m++) {
 
-				# check if between this and next - strict
-				if($strict == "yes") {
-					# check if last
-					if(($m+1) == $subSize) {
-						if($ip['ip_addr'] > $newsubnets[$m]['subnet']) {
+					# check if between this and next - strict
+					if($strict == "yes") {
+						# check if last
+						if(($m+1) == $subSize) {
+							if($ip['ip_addr'] > $newsubnets[$m]['subnet']) {
+								$addresses[$n]->subnetId = $newsubnets[$m]['id'];
+							}
+						}
+						elseif( ($ip['ip_addr'] > $newsubnets[$m]['subnet']) && ($ip['ip_addr'] < @$newsubnets[$m+1]['subnet']) ) {
 							$addresses[$n]->subnetId = $newsubnets[$m]['id'];
 						}
 					}
-					elseif( ($ip['ip_addr'] > $newsubnets[$m]['subnet']) && ($ip['ip_addr'] < @$newsubnets[$m+1]['subnet']) ) {
-						$addresses[$n]->subnetId = $newsubnets[$m]['id'];
-					}
-				}
-				# unstrict - permit network and broadcast
-				else {
-					# check if last
-					if(($m+1) == $subSize) {
-						if($ip['ip_addr'] >= $newsubnets[$m]['subnet']) {
+					# unstrict - permit network and broadcast
+					else {
+						# check if last
+						if(($m+1) == $subSize) {
+							if($ip['ip_addr'] >= $newsubnets[$m]['subnet']) {
+								$addresses[$n]->subnetId = $newsubnets[$m]['id'];
+							}
+						}
+						elseif( ($ip['ip_addr'] >= $newsubnets[$m]['subnet']) && ($ip['ip_addr'] < $newsubnets[$m+1]['subnet']) ) {
 							$addresses[$n]->subnetId = $newsubnets[$m]['id'];
 						}
 					}
-					elseif( ($ip['ip_addr'] >= $newsubnets[$m]['subnet']) && ($ip['ip_addr'] < $newsubnets[$m+1]['subnet']) ) {
-						$addresses[$n]->subnetId = $newsubnets[$m]['id'];
-					}
 				}
-			}
 
-			# if subnetId is still the same save to error
-			if($addresses[$n]->subnetId == $subnet_old->id) {
-				$this->Result->show("danger", _('Wrong IP addresses (subnet or broadcast)').' - '.$this->transform_to_dotted($ip['ip_addr']), true);
+				# if subnetId is still the same save to error
+				if($addresses[$n]->subnetId == $subnet_old->id) {
+					$this->Result->show("danger", _('Wrong IP addresses (subnet or broadcast)').' - '.$this->transform_to_dotted($ip['ip_addr']), true);
+				}
+				# next IP address
+				$n++;
 			}
-			# next IP address
-			$n++;
 		}
 
 		# check if new overlap (e.g. was added twice)

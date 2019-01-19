@@ -105,7 +105,7 @@ foreach($scan_subnets as $s) {
 			                   );
 		}
 		//save addresses
-		if(sizeof($subnet_addresses)>0) {
+		if(is_array($subnet_addresses) && sizeof($subnet_addresses)>0) {
 			foreach($subnet_addresses as $a) {
 				//ignore excludePing
 				if($a->excludePing!=1) {

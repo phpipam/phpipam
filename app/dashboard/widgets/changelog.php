@@ -29,6 +29,7 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 if ($User->settings->log!="syslog") {
 	/* get logs */
 	$clogs = $Log->fetch_all_changelogs (false, "", 50);
+	if (!is_array($clogs)) { $clogs = array(); }
 }
 
 # syslog

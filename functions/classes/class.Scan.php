@@ -805,7 +805,7 @@ class Scan extends Common_functions {
 		// get all existing IP addresses in subnet
 		$addresses  = $Addresses->fetch_subnet_addresses($subnetId);
 		// if some exist remove them
-		if(sizeof($addresses)>0 && sizeof(@$ip)>0) {
+		if(is_array($addresses) && is_array($ip) && sizeof($ip)>0) {
 			foreach($addresses as $a) {
 				$key = array_search($a->ip_addr, $ip);
 				if($key !== false) {
@@ -850,7 +850,7 @@ class Scan extends Common_functions {
 		// get all existing IP addresses in subnet
 		$subnet_addresses = $Addresses->fetch_subnet_addresses($subnetId);
 		//create array
-		if(sizeof($subnet_addresses)>0) {
+		if(is_array($subnet_addresses) && sizeof($subnet_addresses)>0) {
 			foreach($subnet_addresses as $a) {
 				$scan_addresses[$a->id] = $a->ip_addr;
 			}

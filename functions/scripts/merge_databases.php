@@ -415,11 +415,13 @@ foreach ($old_data as $table => $table_content) {
 			if (strlen($value_obj->src) > 0) {
 				$arr     = json_encode($value_obj->src, true);
 				$arr_new = array();
-				foreach ($arr as $type=>$objects) {
-					$arr_new[$type] = array();
-					if(sizeof($objects)>0) {
-						foreach($objects as $ok=>$object) {
-							$arr_new[$type][] = $highest_ids_append[$type] + $object;
+				if (is_array($arr)) {
+					foreach ($arr as $type=>$objects) {
+						$arr_new[$type] = array();
+						if(sizeof($objects)>0) {
+							foreach($objects as $ok=>$object) {
+								$arr_new[$type][] = $highest_ids_append[$type] + $object;
+							}
 						}
 					}
 				}
@@ -429,11 +431,13 @@ foreach ($old_data as $table => $table_content) {
 			if (strlen($value_obj->dst) > 0) {
 				$arr     = json_encode($value_obj->dst, true);
 				$arr_new = array();
-				foreach ($arr as $type=>$objects) {
-					$arr_new[$type] = array();
-					if(sizeof($objects)>0) {
-						foreach($objects as $ok=>$object) {
-							$arr_new[$type][] = $highest_ids_append[$type] + $object;
+				if (is_array($arr)) {
+					foreach ($arr as $type=>$objects) {
+						$arr_new[$type] = array();
+						if(sizeof($objects)>0) {
+							foreach($objects as $ok=>$object) {
+								$arr_new[$type][] = $highest_ids_append[$type] + $object;
+							}
 						}
 					}
 				}

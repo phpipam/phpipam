@@ -801,6 +801,10 @@ abstract class DB {
 		$objs = $this->getObjectsQuery($query, $values, $class);
 
 		$list = array();
+
+		if (!is_array($objs))
+			return $list;
+
 		foreach ($objs as $obj) {
 			$columns = array_values((array)$obj);
 			$list[] = $columns[0];
@@ -1063,6 +1067,10 @@ class Database_PDO extends DB {
 		");
 
 		$columnsByTable = array();
+
+		if (!is_array($columns))
+			return $columnsByTable;
+
 		foreach ($columns as $column) {
 			if (!isset($columnsByTable[$column->table_name])) {
 				$columnsByTable[$column->table_name] = array();
@@ -1107,6 +1115,10 @@ class Database_PDO extends DB {
 
 		$foreignLinksByTable = array();
 		$foreignLinksByRefTable = array();
+
+		if (!is_array($foreignLinks))
+			return array($foreignLinksByTable, $foreignLinksByRefTable);
+
 		foreach ($foreignLinks as $foreignLink) {
 			if (!isset($foreignLinksByTable[$foreignLink->table_name])) {
 				$foreignLinksByTable[$foreignLink->table_name] = array();
