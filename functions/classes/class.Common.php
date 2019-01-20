@@ -182,9 +182,11 @@ class Common_functions  {
 		}
 		# save
 		if (sizeof($res)>0) {
-    		foreach ($res as $r) {
-        		$this->cache_write ($table, $r->id, $r);
-    		}
+			foreach ($res as $r) {
+				// set identifier
+				$method = $this->cache_set_identifier ($table);
+				$this->cache_write ($table, $r->{$method}, $r);
+			}
 		}
 		# result
 		$result = sizeof($res)>0 ? $res : false;
@@ -230,7 +232,6 @@ class Common_functions  {
 			if($res !== null && is_object($res)) {
 				// set identifier
 				$method = $this->cache_set_identifier ($table);
-				// save
 				$this->cache_write ($table, $res->{$method}, $res);
 				return $res;
 			}
@@ -266,9 +267,11 @@ class Common_functions  {
 			}
 			# save to cache
 			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
-    			foreach ($res as $r) {
-        			$this->cache_write ($table, $r->id, $r);
-    			}
+				foreach ($res as $r) {
+					// set identifier
+					$method = $this->cache_set_identifier ($table);
+					$this->cache_write ($table, $r->{$method}, $r);
+				}
 			}
 			# result
 			return sizeof($res)>0 ? $res : false;
@@ -448,19 +451,26 @@ class Common_functions  {
         return array_key_exists ($table, $ip_tables) ? $ip_tables[$table] : false;
     }
 
-    /**
-     * Set identifier for table - exceptions.
-     *
-     * @access protected
-     * @param mixed $table
-     * @return mixed
-     */
-    protected function cache_set_identifier ($table) {
-        // vlan and subnets have different identifiers
-        if ($table=="vlans")        { return "vlanId"; }
-        elseif ($table=="vrf")      { return "vrfId"; }
-        else                        { return "id"; }
-    }
+	/**
+	 * Set identifier for table - exceptions.
+	 *
+	 * @access protected
+	 * @param string $table
+	 * @return string
+	 */
+	protected function cache_set_identifier ($table) {
+		// Tables with different identifiers
+		$mapings = [
+			'userGroups'=>'g_id',
+			'lang'=>'l_id',
+			'vlans'=>'vlanId',
+			'vrf'=>'vrfId',
+			'changelog'=>'cid',
+			'widgets'=>'wid',
+			'deviceTypes'=>'tid'];
+
+		return isset($mapings[$table]) ? $mapings[$table] : 'id';
+	}
 
     /**
      * Checks if object alreay exists in cache..
