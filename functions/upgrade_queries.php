@@ -860,6 +860,12 @@ $upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wadminonly` `wadmi
 $upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wactive` `wactive` ENUM('yes','no') NOT NULL DEFAULT 'no';";
 $upgrade_queries["1.4.21"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes');";
 
+// HTTP headers auth method
+$upgrade_queries["1.4.22"][] = "-- HTTP headers auth method";
+$upgrade_queries["1.4.22"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http','headers')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';";
+$upgrade_queries["1.4.22"][] = "INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`) VALUES ('headers', NULL, 'Yes', 'External HTTP header authentication');";
+
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check

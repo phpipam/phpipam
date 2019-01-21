@@ -170,6 +170,11 @@ class User extends Common_functions {
         # initialize Result
         $this->Result = new Result ();
 
+        include( dirname(__FILE__).'/../../config.php' );
+        if (@isset($config['default_authentication_method'])) {
+            $this->authmethodtype = $config['default_authentication_method'];
+        }
+
         # get settings
         $this->get_settings ();
 
@@ -189,6 +194,7 @@ class User extends Common_functions {
         $this->block_get_ip ();
         # set theme
         $this->set_user_theme ();
+
     }
 
 
@@ -340,7 +346,11 @@ class User extends Common_functions {
                 }
                 else {
                     # fetch user profile and save it
-                    $this->fetch_user_details ($this->username);
+                    if ($this->fetch_user_details ($this->username) === null) {
+                        session_unset();
+                        $this->authenticated = false;
+                        return false;
+                    }
 
                     $this->authenticated = true;
                     $this->reset_inactivity_time();
@@ -768,12 +778,86 @@ class User extends Common_functions {
 
 
 
+    /**
+     * header user authentication method, authenticates users through external HTTP headers
+     * Assumes that the HTTP header defined in $config['auth_headers_user_field'] is trusted.
+     *
+     * If the user doesn't exists in the database yet it is created based on the default settings.
+     *
+     * @access private
+     * @param mixed $username
+     * @param mixed $role
+     * @return void
+     */
+    public function auth_headers_fetch_or_create_user ($username, $role = 'User') {
+        $user = $this->Database->findObject("users", "username", $username);
 
+        if (!$user) {
+            $Admin = new Admin($this->Database, false);
 
+            include( dirname(__FILE__).'/../../config.php' );
 
+            $email = null;
+            if (@isset($config['auth_headers_email_field']) && isset($_SERVER[$config['auth_headers_email_field']])) {
+                $email = $_SERVER[$config['auth_headers_email_field']];
+            }
 
+            $group_ids = array(2);
+            if (@isset($config['auth_headers_default_groups'])) {
+                $group_ids = explode($config['auth_headers_default_groups']);
+            }
+            $groups = array();
 
+            foreach ($group_ids as $id) {
+                $groups[$id] = "$id";
+            }
 
+            $this->Log->write("User $username not present. Creating new. email: $email, groups: " . json_encode($groups));
+
+            $values = array(
+                "username"       =>$username,
+                "real_name"      =>$username,
+                "email"          =>$email,
+                "role"           =>'User',
+                "groups"         =>json_encode($groups),
+                "authMethod"     =>3
+                );
+
+            $Admin->object_modify("users", "add", "id", $values);
+
+            $user = $this->Database->findObject("users", "username", $username);
+        }
+
+        $this->user = $user;
+
+        // register permissions
+        $this->register_user_module_permissions ();
+
+        $this->authmethodid = 3; // method headers
+    }
+
+    /**
+     * header user authentication method, authenticates users through external HTTP headers
+     * Main authentication has been done before in the auth_headers_fetch_or_create_user method
+     *
+     * @access private
+     * @param mixed $username
+     * @param mixed $password
+     * @return void
+     */
+    private function auth_headers ($username, $password) {
+        # save to session
+        $this->write_session_parameters ();
+
+        $this->Result->show("success", _("Login successful"));
+        $this->Log->write( "User login", "User ".$this->user->real_name." logged in", 0, $username );
+
+        # write last logintime
+        $this->update_login_time ();
+
+        # remove possible blocked IP
+        $this->block_remove_entry ();
+    }
 
 
     /**
@@ -798,10 +882,15 @@ class User extends Common_functions {
         if(($saml !== false ) && (defined('MAP_SAML_USER')) && (MAP_SAML_USER !== false)) {
             $username = SAML_USERNAME;
         }
-        # first we need to check if username exists
-        $this->fetch_user_details ($username);
-        # set method type if set, otherwise presume local auth
-        $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
+
+        if ($this->authmethodtype === 'headers') {
+            $this->auth_headers_fetch_or_create_user ($username);
+        } else {
+            # first we need to check if username exists
+            $this->fetch_user_details ($username);
+            # set method type if set, otherwise presume local auth
+            $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
+        }
 
         # 2fa
         if ($this->user->{'2fa'}==1) {
@@ -853,12 +942,23 @@ class User extends Common_functions {
             # admin?
             if($user->role == "Administrator")    { $this->isadmin = true; }
 
-            if(sizeof($usert)==0)    { $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
-            else                     { $this->user = $user; }
+            if(sizeof($usert)==0) {
+                if ($this->authmethodtype === "headers") {
+                    return null;
+                }
+                $this->block_ip ();
+                $this->Log->write ("User login", _('Invalid username'), 2, $username );
+                $this->Result->show("danger", _("Invalid username or password"), true);
+                return false;
+            } else {
+                $this->user = $user;
+            }
 
             // register permissions
             $this->register_user_module_permissions ();
+            return true;
         }
+        return true;
     }
 
     /**

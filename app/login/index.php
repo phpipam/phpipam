@@ -4,9 +4,11 @@ header('X-XSS-Protection:1; mode=block');
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
 // http auth
-if( !empty($_SERVER['PHP_AUTH_USER']) ) {
-    // try to authenticate
-	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
+if( !empty($_SERVER['PHP_AUTH_USER']) || (@isset($config['auth_headers_username_field']) && isset($_SERVER[$config['auth_headers_username_field']])) ) {
+
+	$username = ($_SERVER['PHP_AUTH_USER'] ?: $_SERVER[$config['auth_headers_username_field']]);
+	// try to authenticate
+	$User->authenticate ($username, '');
 	// Redirect user where he came from, if unknown go to dashboard.
 	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }
 	else                                        { header("Location: ".create_link("dashboard")); }

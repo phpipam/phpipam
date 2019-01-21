@@ -135,6 +135,12 @@ define('MAP_SAML_USER', true);    // Enable SAML username mapping
 if(!defined('SAML_USERNAME'))
 define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
 
+/**
+ * External HTTP header authentication
+ ******************************/
+//$config['auth_headers_email_field'] = 'HTTP_X_EMAIL';
+//$config['auth_headers_username_field'] = 'HTTP_X_USERNAME';
+//$config['default_authentication_method'] = 'headers';
 
 /**
  * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
