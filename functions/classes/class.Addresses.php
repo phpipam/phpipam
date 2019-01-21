@@ -339,7 +339,7 @@ class Addresses extends Common_functions {
 		}
 
 		// Save to cache and return
-		$this->cache_write("similar_addresses", "f=$linked_field id=$address->subnetId", (object)["result" => $bulk_search]);
+		$this->cache_write ("similar_addresses", (object) ["id"=>"f=$linked_field id=$address->subnetId", "result" => $bulk_search]);
 		return $bulk_search;
 	}
 

@@ -181,16 +181,14 @@ class Common_functions  {
 			return false;
 		}
 		# save
-		if (sizeof($res)>0) {
+		if (is_array($res)) {
 			foreach ($res as $r) {
-				// set identifier
-				$method = $this->cache_set_identifier ($table);
-				$this->cache_write ($table, $r->{$method}, $r);
+				$this->cache_write ($table, $r);
 			}
 		}
 		# result
-		$result = sizeof($res)>0 ? $res : false;
-		$this->cache_write("fetch_all_objects", "t=$table f=$sortField o=$sortAsc", (object)["result" => $result]);
+		$result = (is_array($res) && sizeof($res)>0) ? $res : false;
+		$this->cache_write ("fetch_all_objects", (object) ["id"=>"t=$table f=$sortField o=$sortAsc", "result" => $result]);
 		return $result;
 	}
 
@@ -229,10 +227,8 @@ class Common_functions  {
 				return false;
 			}
 			# save to cache array
-			if($res !== null && is_object($res)) {
-				// set identifier
-				$method = $this->cache_set_identifier ($table);
-				$this->cache_write ($table, $res->{$method}, $res);
+			if(is_object($res)) {
+				$this->cache_write ($table, $res);
 				return $res;
 			}
 			else {
@@ -268,13 +264,11 @@ class Common_functions  {
 			# save to cache
 			if ($result_fields==="*" && is_array($res)) { // Only cache objects containing all fields
 				foreach ($res as $r) {
-					// set identifier
-					$method = $this->cache_set_identifier ($table);
-					$this->cache_write ($table, $r->{$method}, $r);
+					$this->cache_write ($table, $r);
 				}
 			}
 			# result
-			return sizeof($res)>0 ? $res : false;
+			return (is_array($res) && sizeof($res)>0) ? $res : false;
 		}
 	}
 
@@ -402,25 +396,38 @@ class Common_functions  {
      * Write result to cache.
      *
      * @access protected
-     * @param mixed $table
-     * @param mixed $id
+     * @param string $table
      * @param mixed $object
      * @return void
      */
-    protected function cache_write ($table, $id, $object) {
-        // get method
+    protected function cache_write ($table, $object) {
+        if (!is_object($object))
+            return;
+
+        // Exclude exceptions from caching
+        if ($this->cache_check_exceptions($table))
+            return;
+
+        // get and check id property
         $identifier = $this->cache_set_identifier ($table);
-        // check if cache is already set, otherwise save
-        if ($this->cache_check_exceptions($table)===false) {
-            if (!isset($this->Database->cache[$table][$identifier][$id])) {
-                // add ip ?
-                $ip_check = $this->cache_check_add_ip($table);
-                if ($ip_check!==false) {
-                    $object->ip = $this->transform_address ($object->{$ip_check}, "dotted");
-                }
-                $this->Database->cache[$table][$identifier][$id] = clone (object) $object;
-            }
+
+        if (!property_exists($object, $identifier))
+            return;
+
+        $id = $object->{$identifier};
+
+        // already set
+        if (isset($this->Database->cache[$table][$identifier][$id]))
+            return;
+
+        // add ip ?
+        $ip_check = $this->cache_check_add_ip($table);
+        if ($ip_check!==false) {
+            $object->ip = $this->transform_address ($object->{$ip_check}, "dotted");
         }
+
+        // save
+        $this->Database->cache[$table][$identifier][$id] = clone $object;
     }
 
     /**
@@ -431,46 +438,49 @@ class Common_functions  {
      * @return bool
      */
     protected function cache_check_exceptions ($table) {
-        // define
-        $exceptions = array("deviceTypes");
+        $exceptions = [
+            "firewallZoneSubnet"=>1,
+            "circuitsLogicalMapping" =>1,
+            "php_sessions"=>1];
+
         // check
-        return in_array($table, $exceptions) ? true : false;
+        return isset($exceptions[$table]) ? true : false;
     }
 
     /**
-     * Cehck if ip is to be added to result
+     * Check if ip is to be added to result
      *
      * @access protected
      * @param mixed $table
      * @return bool|mixed
      */
     protected function cache_check_add_ip ($table) {
-        // define
-        $ip_tables = array("subnets"=>"subnet", "ipaddresses"=>"ip_addr");
+        $ip_tables = ["subnets"=>"subnet", "ipaddresses"=>"ip_addr"];
+
         // check
         return array_key_exists ($table, $ip_tables) ? $ip_tables[$table] : false;
     }
 
-	/**
-	 * Set identifier for table - exceptions.
-	 *
-	 * @access protected
-	 * @param string $table
-	 * @return string
-	 */
-	protected function cache_set_identifier ($table) {
-		// Tables with different identifiers
-		$mapings = [
-			'userGroups'=>'g_id',
-			'lang'=>'l_id',
-			'vlans'=>'vlanId',
-			'vrf'=>'vrfId',
-			'changelog'=>'cid',
-			'widgets'=>'wid',
-			'deviceTypes'=>'tid'];
+    /**
+     * Set identifier for table - exceptions.
+     *
+     * @access protected
+     * @param string $table
+     * @return string
+     */
+    protected function cache_set_identifier ($table) {
+        // Tables with different primary keys
+        $mapings = [
+            'userGroups'=>'g_id',
+            'lang'=>'l_id',
+            'vlans'=>'vlanId',
+            'vrf'=>'vrfId',
+            'changelog'=>'cid',
+            'widgets'=>'wid',
+            'deviceTypes'=>'tid'];
 
-		return isset($mapings[$table]) ? $mapings[$table] : 'id';
-	}
+        return isset($mapings[$table]) ? $mapings[$table] : 'id';
+    }
 
     /**
      * Checks if object alreay exists in cache..
@@ -481,11 +491,14 @@ class Common_functions  {
      * @return bool|array
      */
     protected function cache_check ($table, $id) {
-        // get method
-        $method = $this->cache_set_identifier ($table);
+        // get identifier
+        $identifier = $this->cache_set_identifier ($table);
+
         // check if cache is already set, otherwise return false
-        if (isset($this->Database->cache[$table][$method][$id]))  { return clone (object) $this->Database->cache[$table][$method][$id]; }
-        else                                            { return false; }
+        if (isset($this->Database->cache[$table][$identifier][$id]))
+            return clone $this->Database->cache[$table][$identifier][$id];
+
+        return false;
     }
 
 
