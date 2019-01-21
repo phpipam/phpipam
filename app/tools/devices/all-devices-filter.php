@@ -23,12 +23,11 @@ if (isset($_GET['subnetId']) && isset($_GET['sPage'])) {
 		$section = $Database->getObjectQuery("select id,name from `sections` where `name` = ?", [$_GET['sPage']]);
 		// check in which section device can be
 		foreach ($devices as $k=>$d) {
-    		$section_ids = explode(";", $d->sections);
-    		foreach($section_ids as $k=>$id) {
-    			if (!in_array($section->id, $section_ids)) {
-					unset($devices[$k]);
-    			}
-    		}
+			$device_section_ids = explode(";", $d->sections);
+
+			if (!in_array($section->id, $device_section_ids)) {
+				unset($devices[$k]);
+			}
     	}
 	}
 	// rack
