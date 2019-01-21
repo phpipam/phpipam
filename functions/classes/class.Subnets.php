@@ -805,7 +805,7 @@ class Subnets extends Common_functions {
     			return false;
     		}
     		// check
-    		if (is_arrays($subnets)) {
+    		if (is_array($subnets)) {
         		foreach ($subnets as $s) {
                     $this->cache_write ("subnets", $s);
         		}
