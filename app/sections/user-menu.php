@@ -66,7 +66,7 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 
 	<!-- settings -->
 	<?php
-	if($_SESSION['realipamusername']) {
+	if(isset($_SESSION['realipamusername'])) {
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>
 

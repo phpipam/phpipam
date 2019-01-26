@@ -118,8 +118,10 @@ if(@$config['requests_public']===false) {
 		# get language
 		$lang = $User->get_default_lang();
 
-		putenv("LC_ALL=".$lang->l_code);
-		setlocale(LC_ALL, $lang->l_code);					// set language
+		if (is_object($lang)) {
+			putenv("LC_ALL=".$lang->l_code);
+			setlocale(LC_ALL, $lang->l_code);					// set language
+		}
 		bindtextdomain("phpipam", "./functions/locale");	// Specify location of translation tables
 		textdomain("phpipam");								// Choose domain
 	}
@@ -138,8 +140,10 @@ if(@$config['requests_public']===false) {
 		# deauthenticate user
 		if ( $User->is_authenticated()===true ) {
 			# print result
-			if($_GET['section']=="timeout")		{ $Result->show("success", _('You session has timed out')); }
-			else								{ $Result->show("success", _('You have logged out')); }
+			if(isset($_GET['section']) && $_GET['section']=="timeout")
+				$Result->show("success", _('You session has timed out'));
+			else
+				$Result->show("success", _('You have logged out'));
 
 			# write log
 			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );
