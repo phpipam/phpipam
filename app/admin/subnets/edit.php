@@ -32,10 +32,7 @@ $Admin->validate_action ($_POST['action'], true);
 # verify(version 2) that user has permissions to add subnet
  if($_POST['action'] == "add") {
          if($Sections->check_permission ($User->user, $_POST['sectionId']) != 3) {
-               if($Subnets->check_permission ($User->user, $_POST['freespaceMSID']) != 3)      { $Result-
-                       >show("danger", _('You do not have permissions to add edit/
-                       delete this subnet')."!", true, true); 
-                }
+               if($Subnets->check_permission ($User->user, $_POST['freespaceMSID']) != 3) { $Result->show("danger", _('You do not have permissions to add edit/delete this subnet')."!", true, true); }
          }
 }
 
