@@ -731,9 +731,7 @@ class adLDAP {
         else { $this->ldapBind = @ldap_bind($this->ldapConnection, $username.$this->accountSuffix, $password); }
 
         if (!$this->ldapBind) {
-            // define(LDAP_OPT_DIAGNOSTIC_MESSAGE, 0x0032)
-            ldap_get_option($this->ldapConnection, 0x0032, $extended_error);
-            throw new adLDAPException(_('LDAP Bind failed: ').$extended_error);
+            $ret = false;
         }
 
         // Cnce we've checked their details, kick back into admin mode if we have it
@@ -783,7 +781,10 @@ class adLDAP {
      * return string
      */
     public function getLastError() {
-        return @ldap_error($this->ldapConnection);
+        $extended_error = "";
+        // define(LDAP_OPT_DIAGNOSTIC_MESSAGE, 0x0032)
+        @ldap_get_option($this->ldapConnection, 0x0032, $extended_error);
+        return $extended_error;
     }
 
     /**
