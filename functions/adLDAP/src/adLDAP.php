@@ -731,7 +731,9 @@ class adLDAP {
         else { $this->ldapBind = @ldap_bind($this->ldapConnection, $username.$this->accountSuffix, $password); }
 
         if (!$this->ldapBind) {
-            $ret = false;
+            // define(LDAP_OPT_DIAGNOSTIC_MESSAGE, 0x0032)
+            ldap_get_option($this->ldapConnection, 0x0032, $extended_error);
+            throw new adLDAPException(_('LDAP Bind failed: ').$extended_error);
         }
 
         // Cnce we've checked their details, kick back into admin mode if we have it
