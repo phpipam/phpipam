@@ -1,3 +1,6 @@
+# phpIPAM Dockerfile
+# Pre-built Alpine Linux (AMD64) images are maintained at https://hub.docker.com/u/phpipam
+
 FROM alpine:3.9
 
 WORKDIR /phpipam
