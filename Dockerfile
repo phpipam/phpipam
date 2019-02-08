@@ -3,7 +3,7 @@
 
 FROM alpine:3.9
 
-MAINTAINER Gary Allan "github@gallan.co.uk"
+MAINTAINER Gary Allan <github@gallan.co.uk>
 
 WORKDIR /phpipam
 
