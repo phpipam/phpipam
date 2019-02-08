@@ -101,11 +101,11 @@ $phpsessname = "phpipam";
  * Path to access phpipam in site URL, http:/url/BASE/
  *
  * BASE definition should end with a trailing slash "/"
- * BASE will be set automatically if not defined. examples...
+ * BASE will be set automatically if not defined. Examples...
  *
- *  http://phpipam.local/            =  define('BASE', "/");
- *  http://company.website/phpipam/  =  define('BASE', "/phpipam/");
- *  http://company.website/ipam/     =  define('BASE', "/ipam/");
+ *  If you access the login page at http://phpipam.local/           =  define('BASE', "/");
+ *  If you access the login page at http://company.website/phpipam/ =  define('BASE', "/phpipam/");
+ *  If you access the login page at http://company.website/ipam/    =  define('BASE', "/ipam/");
  *
  ******************************/
 if(!defined('BASE'))
