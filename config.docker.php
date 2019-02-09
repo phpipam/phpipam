@@ -15,6 +15,7 @@ getenv('IPAM_DATABASE_USER') ? $db['user'] = getenv('IPAM_DATABASE_USER') : fals
 getenv('IPAM_DATABASE_PASS') ? $db['pass'] = getenv('IPAM_DATABASE_PASS') : false;
 getenv('IPAM_DATABASE_NAME') ? $db['name'] = getenv('IPAM_DATABASE_NAME') : false;
 getenv('IPAM_DATABASE_PORT') ? $db['port'] = getenv('IPAM_DATABASE_PORT') : false;
+getenv('IPAM_DATABASE_WEBHOST') ? $db['webhost'] = getenv('IPAM_DATABASE_WEBHOST') : false;
 
  /**
   * Google MAPs API key for locations to display map
