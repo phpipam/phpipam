@@ -1044,6 +1044,22 @@ class Common_functions  {
 	}
 
 	/**
+	 * Transforms int to ipv4
+	 *
+	 * @access public
+	 * @param mixed $ipv4long
+	 * @return mixed
+	 */
+	public function long2ip4($ipv4long) {
+		if (PHP_INT_SIZE==4) {
+			// As of php7.1 long2ip() no longer accepts strings.
+			// Convert unsigned int IPv4 to signed integer.
+			$ipv4long = (int) ($ipv4long + 0);
+		}
+		return long2ip($ipv4long);
+	}
+
+	/**
 	 * Transforms int to ipv6
 	 *
 	 * @access public
@@ -1098,7 +1114,7 @@ class Common_functions  {
 	 * @return mixed dotted format
 	 */
 	public function transform_to_dotted ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
+	    if ($this->identify_address ($address) == "IPv4" ) 				{ return($this->long2ip4($address)); }
 	    else 								 			  				{ return($this->long2ip6($address)); }
 	}
 

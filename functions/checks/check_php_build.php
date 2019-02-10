@@ -51,8 +51,7 @@ if (!function_exists('ctype_alnum')) {
 }
 
 # if any extension is missing print error and die!
-if (sizeof($missingExt) != 1 || (phpversion() < "5.4" && $allow_older_version!==true) ||
-    (PHP_INT_SIZE==4 && (@long2ip('3355443200') !== '200.0.0.0'))) {
+if (sizeof($missingExt) != 1 || (phpversion() < "5.4" && $allow_older_version!==true) ) {
 
     /* remove dummy 0 line */
     unset($missingExt[0]);
@@ -86,11 +85,6 @@ if (sizeof($missingExt) != 1 || (phpversion() < "5.4" && $allow_older_version!==
         $error  .= "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:500px;'><strong>"._('Unsupported PHP version')."!</strong><br><hr>";
         $error  .= _('From release 1.3.2 on at least PHP version 5.4 is required!')."<br>"._('You can override this by setting $allow_older_version=true in config.php.')."<br>";
         $error  .= _("Detected PHP version: ").phpversion(). "<br><br>\n";
-        $error  .= _("Last development version can be downloaded ")." <a href='https://github.com/phpipam/phpipam' target='_blank'>here</a>.";
-    }
-    else {
-        $error  .= "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:500px;'><strong>"._('Not 64-bit system')."!</strong><br><hr>";
-        $error  .= _('From PHP 7.1.0 long2ip() no longer accepts strings and is incompatible.')."<br>"._('64 bit PHP is required!')."<br>";
         $error  .= _("Last development version can be downloaded ")." <a href='https://github.com/phpipam/phpipam' target='_blank'>here</a>.";
     }
 
