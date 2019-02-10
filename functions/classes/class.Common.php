@@ -1466,10 +1466,10 @@ class Common_functions  {
     	else {
         	//device ?
         	if ($deviceId!==false) {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
+            	return "app/tools/racks/draw_rack.php?rackId=$rackId&deviceId=$deviceId&is_back=$is_back";
         	}
         	else {
-            	return $this->createURL ().BASE."app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
+            	return "app/tools/racks/draw_rack.php?rackId=$rackId&is_back=$is_back";
         	}
     	}
 	}
