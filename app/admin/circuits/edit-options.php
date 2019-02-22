@@ -63,8 +63,8 @@ $readonly = $_POST['action']=="delete" ? "disabled" : "";
 		<td><?php print  _('Map Pattern') ?></td>
 		<td>
 			<select name="pattern"  <?php print $readonly; ?>>
-				<option <?php if(isset($_POST['pattern']) && $_POST['pattern'] == 'Solid'){ print selected; }?>>Solid</option>
-				<option <?php if(isset($_POST['pattern']) && $_POST['pattern'] == 'Dotted'){ print selected; }?>>Dotted</option>
+				<option <?php if(isset($_POST['pattern']) && $_POST['pattern'] == 'Solid'){ print 'selected'; }?>>Solid</option>
+				<option <?php if(isset($_POST['pattern']) && $_POST['pattern'] == 'Dotted'){ print 'selected'; }?>>Dotted</option>
 			</select>
 		</td>
 	</tr>
