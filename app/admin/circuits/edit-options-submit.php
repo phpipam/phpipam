@@ -50,4 +50,6 @@ if(!$Admin->object_modify("circuitTypes", $_POST['action'], "id", $values))  { $
 else                                                                         { $Result->show("success", _("Option $_POST[action] success"), false); }
 
 # updates values to default
-$Admin->update_object_references ("circuits", "type", $_POST['op_id'], 1);
+if (is_numeric($_POST['op_id'])) {
+  $Admin->update_object_references ("circuits", "type", $_POST['op_id'], 1);
+}
