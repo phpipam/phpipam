@@ -31,15 +31,14 @@ exec($cmd, $output, $retval);
 # format result back to object
 $script_result = json_decode($output[0]);
 
-
+# json error
+if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), true); }
 
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
 
-# json error
-if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), false); }
 # die if error
-elseif($retval!=0) 								{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
+if($retval!=0) 								{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
