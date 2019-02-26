@@ -2199,8 +2199,8 @@ class Tools extends Common_functions {
 
         // append ports
         if(($n->type=="static" || $n->type=="destination") && (strlen($n->src_port)>0 && strlen($n->dst_port)>0)) {
-            $sources      = implode("<br>", $sources)." /".$n->src_port;
-            $destinations = implode("<br>", $destinations)." /".$n->dst_port;
+            $sources      = implode("<br>", $sources)." :".$n->src_port;
+            $destinations = implode("<br>", $destinations)." :".$n->dst_port;
         }
         else {
             $sources      = implode("<br>", $sources);
