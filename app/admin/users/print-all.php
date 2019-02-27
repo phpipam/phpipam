@@ -66,7 +66,10 @@ foreach ($users as $user) {
 	if($user['role'] == "Administrator") 	{ print '	<td><img src="css/images/userVader.png" rel="tooltip" title="'._('Administrator').'"></td>'. "\n"; }
 	else 									{ print '	<td><img src="css/images/userTrooper.png" rel="tooltip" title="'. _($user['role']) .'"></td>'. "\n";	}
 
-	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a></td>'. "\n";
+	# disabled
+	$disabled = $user['disabled']=="Yes" ? "<span class='badge badge1 badge5 alert-danger'>"._("Disabled")."</span>" : "";
+
+	print '	<td><a href="'.create_link("administration","users",$user['id']).'">' . $user['real_name'] . '</a> '.$disabled.'</td>'. "\n";
 	print '	<td>' . $user['username']  . '</td>'. "\n";
 	print '	<td>' . $user['email']     . '</td>'. "\n";
 	print '	<td>' . $user['role']      . '</td>'. "\n";
@@ -148,16 +151,23 @@ foreach ($users as $user) {
 		}
 	}
 
-	# edit, delete
+
 	print "	<td class='actions'>";
-	print "	<div class='btn-group nowrap'>";
-	print "		<a class='btn btn-xs btn-default' href='".create_link("administration","users",$user['id'])."'><i class='fa fa-eye'></i></a></button>";
-	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'><i class='fa fa-pencil'></i></a>";
-	print "		<a class='btn btn-xs btn-default";
-	if(isset($_SESSION['realipamusername'])) { print " disabled";}
-	print "' href='".create_link("administration","users","switch","$user[username]")."'><i class='fa fa-exchange'></i></a></button>";
-	print "		<a class='btn btn-xs btn-default open_popup' data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'><i class='fa fa-times'></i></a>";
-	print "	</div>";
+    $links = [];
+    $links[] = ["type"=>"header", "text"=>"Show user"];
+    $links[] = ["type"=>"link", "text"=>"Show user", "href"=>create_link("administration", "users", $user['id']), "icon"=>"eye", "visible"=>"dropdown"];
+ 	$links[] = ["type"=>"divider"];
+    $links[] = ["type"=>"header", "text"=>"Manage user"];
+    $links[] = ["type"=>"link", "text"=>"Edit user", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'", "icon"=>"pencil"];
+    $links[] = ["type"=>"link", "text"=>"Delete user", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'", "icon"=>"times"];
+	if(!isset($_SESSION['realipamusername'])) {
+ 	$links[] = ["type"=>"divider"];
+    $links[] = ["type"=>"header", "text"=>"Swap user"];
+    $links[] = ["type"=>"link", "text"=>"Swap user", "href"=>create_link("administration", "users", "switch", $user['username']), "icon"=>"exchange"];
+	}
+
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
 	print "	</td>";
 
 	print '</tr>' . "\n";

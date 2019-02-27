@@ -2855,20 +2855,11 @@ class Tools extends Common_functions {
 	 * @return mixed
 	 */
 	public function explode_filtered($delimiter, $string) {
-		$ret = explode($delimiter, $string);
-		if (!is_array($ret))
-			return false;
-		return array_filter($ret);
+	    $ret = explode($delimiter, $string);
+	    if (!is_array($ret))
+	        return false;
+	    return array_filter($ret);
 	}
-
-
-
-
-
-
-
-
-
 
 
 	/**

@@ -425,6 +425,11 @@ class User extends Common_functions {
             header("Location:".$url.create_link ("2fa"));
             die();
         }
+        # disabled
+        elseif ($this->user->disabled=="Yes") {
+            header("Location:".$url.create_link ("login"));
+            die();
+        }
         else {
             return true;
         }
@@ -815,6 +820,10 @@ class User extends Common_functions {
         if(!method_exists($this, $this->authmethodtype))    {
             $this->Log->write ("User login", _('Error: Invalid authentication method'), 2 );
             $this->Result->show("danger", _("Error: Invalid authentication method"), true);
+        }
+        # disabled
+        elseif ($this->user->disabled=="Yes") {
+            $this->Result->show("danger", _("Your account has been disabled").".", true);
         }
         else {
             # set method name variable

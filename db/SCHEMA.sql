@@ -374,6 +374,7 @@ CREATE TABLE `users` (
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
+  `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No',
   `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
   `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
   `passChange` SET('Yes','No')  NOT NULL  DEFAULT 'No',
@@ -945,4 +946,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 21;
+UPDATE `settings` SET `dbversion` = 22;

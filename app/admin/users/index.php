@@ -15,5 +15,5 @@ if(@$_GET['subnetId']=="switch"){
 }
 
 # print all or specific user?
-if(isset($_GET['subnetId']))	{ include("print-user.php"); }
+if(isset($_GET['subnetId']))	{ include("print-user/index.php"); }
 else							{ include("print-all.php"); }

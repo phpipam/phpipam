@@ -4,7 +4,6 @@ Feature candidates for 1.4:
 https://github.com/phpipam/phpipam/milestone/2
 
     Enhancements
-        #33   2FA
         #30   DNS Update to Active Directory DNS
         #149  LDAP login requires a local user of same name
         #849  Move to ADLDAP2 as submodule (#791)
@@ -12,7 +11,6 @@ https://github.com/phpipam/phpipam/milestone/2
         #684  Bulk/range edit non-contiguous IP addresses
         #728  "X.in-addr.arpa" reverse zone support
         #598  Section for vlans domain (Layer2)
-        #858  swagger for clients/api docs
         #518  use PowerDNS API rather than modifying the backend DB
         #198  Enhancement: Multiple PowerDNS
         #109  IP deletion request for non administrative users
@@ -28,7 +26,6 @@ https://github.com/phpipam/phpipam/milestone/2
         #1022 Add timezone to token timestamp output
 
     User interface:
-        #770  Show usage graph for whole section
         #700  Enhance changelog information in changelog and mail
         #798  Move orphaned hosts to new master subnet
         #785  Show expandable tree structure for section subnets full view
