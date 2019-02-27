@@ -209,7 +209,7 @@ class Responses {
 	 * @return void
 	 */
 	private function get_request_content_type () {
-		$this->result_type = $_SERVER['CONTENT_TYPE']=="application/xml" ? "xml" : "json";
+		$this->result_type = (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE']=="application/xml") ? "xml" : "json";
 	}
 
 	/**

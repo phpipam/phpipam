@@ -69,7 +69,7 @@ class SubnetsTable {
 		if (!isset($subnet->ip)) {
 			$subnet->ip = $this->Tools->transform_to_dotted($subnet->subnet);
 		}
-		if (is_object($subnet->masterSubnet) && !isset($subnet->masterSubnet->ip)) {
+		if (is_object($subnet->masterSubnet) && $subnet->masterSubnet->isFolder!=1 && !isset($subnet->masterSubnet->ip)) {
 			$subnet->masterSubnet->ip = $this->Tools->transform_to_dotted($subnet->masterSubnet->subnet);
 		}
 
@@ -104,8 +104,11 @@ class SubnetsTable {
 		}
 
 		//vlan
-		$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId==1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number." <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain ".$this->all_vlans[$subnet->vlanId]->domainName."'>".$this->all_vlans[$subnet->vlanId]->domainName."</span>";
-
+		if (isset($this->all_vlans[$subnet->vlanId]->number)) {
+			$tr['vlan'] = $this->all_vlans[$subnet->vlanId]->domainId==1 ? $this->all_vlans[$subnet->vlanId]->number : $this->all_vlans[$subnet->vlanId]->number." <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain ".$this->all_vlans[$subnet->vlanId]->domainName."'>".$this->all_vlans[$subnet->vlanId]->domainName."</span>";
+		} else {
+			$tr['vlan'] = _('Default');
+		}
 		//vrf
 		if($this->Tools->settings->enableVRF == 1) {
 			# fetch vrf

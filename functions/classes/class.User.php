@@ -301,7 +301,7 @@ class User extends Common_functions {
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
             $_SESSION['lastactive']   = time();
             // 2fa required ?
-            if ($this->twofa) {
+            if (isset($this->twofa) && $this->twofa) {
                 $_SESSION['2fa_required'] = true;
             }
         }

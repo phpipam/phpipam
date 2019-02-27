@@ -308,7 +308,7 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 		$content_plain[] = "phpIPAM found $discovered new hosts\r\n------------------------------";
 		//Changes
 		foreach($scan_subnets as $s) {
-			if(sizeof(@$s->discovered)>0) {
+			if(is_array($s->discovered)) {
 				foreach($s->discovered as $ip) {
 					//set subnet
 					$subnet 	 = $Subnets->fetch_subnet(null, $s->id);

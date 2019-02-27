@@ -121,7 +121,7 @@ class SubnetsMenu {
 			$style_active = "active";
 			$style_leafClass = "";
 
-			if ($subnet->has_children || $subnet->isFolder == 1) {
+			if ((property_exists($subnet, "has_children") && $subnet->has_children) || $subnet->isFolder == 1) {
 				$style_open = "open";
 				$style_openf = "-open";
 			} else {
@@ -174,12 +174,12 @@ class SubnetsMenu {
 			}
 			// print name
 			elseif($subnet->showName == 1) {
-				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$subnet->style_leafClass.' fa fa-gray fa-angle-right"></i>';
+				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$style_leafClass.' fa fa-gray fa-angle-right"></i>';
 				$this->html[] = '<a href="'.create_link("subnets", $subnet->sectionId, $subnet->id).'" rel="tooltip" data-placement="right" title="'.$subnet->ip.'/'.$subnet->mask.'">'.$subnet->description.'</a></li>';
 			}
 			// print subnet
 			else {
-				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$subnet->style_leafClass.' fa fa-gray fa-angle-right"></i>';
+				$this->html[] = '<li class="leaf '.$style_active.'"><i data-str_id="'.$subnet->id.'" class="'.$style_leafClass.' fa fa-gray fa-angle-right"></i>';
 				$this->html[] = '<a href="'.create_link("subnets",  $subnet->sectionId,$subnet->id).'" rel="tooltip" data-placement="right" title="'.$description.'">'.$description.'</a></li>';
 			}
 		}
@@ -225,7 +225,7 @@ class SubnetsMenu {
 			# Open selected and its parents
 			while ($selected !== false) {
 				$this->expanded[$selected->id] = 1;
-				$selected = is_object($selected->masterSubnet) ? $selected->masterSubnet : false;
+				$selected = (isset($selected->masterSubnet) && is_object($selected->masterSubnet)) ? $selected->masterSubnet : false;
 			}
 		}
 

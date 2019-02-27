@@ -325,7 +325,7 @@ class OLE extends PEAR
                 $pps = new OLE_PPS_File($name);
                 break;
             default:
-                continue;
+                continue 2;
             }
             fseek($fh, 1, SEEK_CUR);
             $pps->Type    = $type;

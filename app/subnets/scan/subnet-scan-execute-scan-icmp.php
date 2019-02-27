@@ -22,6 +22,9 @@ exec($cmd, $output, $retval);
 $output = array_values(array_filter($output));
 $script_result = json_decode($output[0]);
 
+# json error
+if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), true); }
+
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
 	// fetch all hosts to be scanned
@@ -45,10 +48,8 @@ if ($User->settings->scanPingType=="fping" && isset($script_result->values->aliv
 //title
 print "<h5>"._('Scan results').":</h5><hr>";
 
-# json error
-if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), false); }
 # die if error
-elseif($retval!==0) 							{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
+if($retval!==0) 							{ $Result->show("danger", "Error executing scan! Error code - $retval", false); }
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty

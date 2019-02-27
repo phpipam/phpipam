@@ -781,7 +781,10 @@ class adLDAP {
      * return string
      */
     public function getLastError() {
-        return @ldap_error($this->ldapConnection);
+        $extended_error = "";
+        // define(LDAP_OPT_DIAGNOSTIC_MESSAGE, 0x0032)
+        @ldap_get_option($this->ldapConnection, 0x0032, $extended_error);
+        return $extended_error;
     }
 
     /**

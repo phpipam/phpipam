@@ -12,6 +12,7 @@ $tools_menu = array();
 $tools_menu_icons['Tools'] 		= "fa-wrench";
 $tools_menu_icons['Subnets'] 	= "fa-sitemap";
 $tools_menu_icons['User Menu'] 	= "fa-user";
+$tools_menu_icons['Devices'] 	= "fa-desktop";
 
 # inclusion check
 $tools_menu_items = array(

@@ -342,10 +342,17 @@ class Scan extends Common_functions {
 		$ping = Net_Ping::factory();
 
 		# ipv6 not supported
-		if ($this->identify_address ($address)=="IPv6") {
+		if (!is_object($ping) || $this->identify_address ($address)=="IPv6") {
     		//return result for web or cmd
     		if($this->icmp_exit) 	{ exit	(255); }
     		else	  				{ return 255; }
+		}
+
+		# Check for PEAR_Error
+		if (get_class($ping) == "PEAR_Error") {
+			//return result for web or cmd
+			if($this->icmp_exit)    { exit ($ping->code); }
+			else                    { return $ping->code; }
 		}
 
 		# check for errors

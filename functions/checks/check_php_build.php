@@ -17,7 +17,7 @@
 
 
 # Required extensions
-$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd");
+$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype");
 
 # Available extensions
 $availableExt = get_loaded_extensions();

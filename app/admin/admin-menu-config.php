@@ -9,6 +9,7 @@
 $admin_menu_icons['Server management'] 		= "fa-cogs";
 $admin_menu_icons['IP related management'] 	= "fa-sitemap";
 $admin_menu_icons['Tools'] 					= "fa-wrench";
+$admin_menu_icons['Device management'] 		= "fa-desktop";
 
 
 # Server management
@@ -47,7 +48,7 @@ if($User->settings->enableFirewallZones == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-fire","name"=>"Firewall Zones", 		    "href"=>"firewall-zones", 			"description"=>"Firewall zone management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-upload", 	"name"=>"Import / Export", 	    "href"=>"import-export", 		    "description"=>"Import/Export IP related data (VRF, VLAN, Subnets, IP, Devices)");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud-download", 	"name"=>"RIPE import", 	"href"=>"ripe-import", 				"description"=>"Import subnets from RIPE");
-if($User->settings->enableIPrequests==1) {
+if($User->settings->enableIPrequests==1 && isset($requests)) {
 $request_cnt = $requests>0 ? "<span class='ipreqMenu'>$requests</span>" : "";
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-plus", 	"name"=>"IP requests $request_cnt", "href"=>"requests", 				"description"=>"Manage IP requests");
 }

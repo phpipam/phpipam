@@ -923,19 +923,16 @@ class Common_functions  {
 	 * @return mixed
 	 */
 	public function create_links ($text, $field_type = "varchar") {
-        // create links only for varchar fields
-        if (strpos($field_type, "varchar")!==false) {
-    		// regular expression
-    		$reg_exUrl = "#(http|https|ftp|ftps|telnet|ssh)://\S+[^\s.,>)\];'\"!?]#";
+		// create links only for varchar fields
+		if (strpos($field_type, "varchar")!==false) {
+			// regular expression
+			$reg_exUrl = "#((http|https|ftp|ftps|telnet|ssh)://\S+[^\s.,>)\];'\"!?])#";
 
-    		// Check if there is a url in the text
-    		if(preg_match($reg_exUrl, $text, $url)) {
-    	       // make the urls hyper links
-    	       $text = preg_replace($reg_exUrl, "<a href='{$url[0]}' target='_blank'>{$url[0]}</a> ", $text);
-    		}
-        }
-        // return text
-        return $text;
+			// Check if there is a url in the text, make the urls hyper links
+			$text = preg_replace($reg_exUrl, "<a href='$0' target='_blank'>$0</a>", $text);
+		}
+		// return text
+		return $text;
 	}
 
 	/**
@@ -1103,6 +1100,22 @@ class Common_functions  {
 	}
 
 	/**
+	 * Transforms int to ipv4
+	 *
+	 * @access public
+	 * @param mixed $ipv4long
+	 * @return mixed
+	 */
+	public function long2ip4($ipv4long) {
+		if (PHP_INT_SIZE==4) {
+			// As of php7.1 long2ip() no longer accepts strings.
+			// Convert unsigned int IPv4 to signed integer.
+			$ipv4long = (int) ($ipv4long + 0);
+		}
+		return long2ip($ipv4long);
+	}
+
+	/**
 	 * Transforms int to ipv6
 	 *
 	 * @access public
@@ -1157,7 +1170,7 @@ class Common_functions  {
 	 * @return mixed dotted format
 	 */
 	public function transform_to_dotted ($address) {
-	    if ($this->identify_address ($address) == "IPv4" ) 				{ return(long2ip($address)); }
+	    if ($this->identify_address ($address) == "IPv4" ) 				{ return($this->long2ip4($address)); }
 	    else 								 			  				{ return($this->long2ip6($address)); }
 	}
 

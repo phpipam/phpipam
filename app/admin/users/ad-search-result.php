@@ -39,7 +39,7 @@ try {
 	$options = array(
 			'base_dn'=>$params->base_dn,
 			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>explode(";",$params->domain_controllers),
+			'domain_controllers'=>explode(";", str_replace(" ", "", $params->domain_controllers)),
 			'use_ssl'=>$params->use_ssl,
 			'use_tls'=>$params->use_tls,
 			'ad_port'=>$params->ad_port
@@ -47,14 +47,14 @@ try {
 	//AD
 	$adldap = new adLDAP($options);
 
+	// set OpenLDAP flag
+	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
+
 	//try to login with higher credentials for search
 	$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
 	if ($authUser == false) {
-		$Result->show("danger", _("Invalid credentials"), true);
+		$Result->show("danger", _("Invalid credentials")."<br>".$adldap->getLastError(), true);
 	}
-
-	// set OpenLDAP flag
-	if($server->type == "LDAP") { $adldap->setUseOpenLDAP(true); }
 
 	//search for domain user!
 	$userinfo = $adldap->user()->info("$_POST[dname]*", array("*"),false,$server->type);

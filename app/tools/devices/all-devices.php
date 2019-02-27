@@ -57,6 +57,8 @@ include_once ("all-devices-filter.php");
 # table
 print '<table id="switchManagement" class="table sorted sortable table-striped table-top" data-cookie-id-table="devices_all">';
 
+$colspanCustom = 0;
+
 #headers
 print "<thead>";
 print '<tr>';

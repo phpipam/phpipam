@@ -42,14 +42,18 @@ $devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");
 $devices = $Devices->fetch_all_objects("devices", "id");
 $all_sections = $Sections->fetch_all_sections();
 
-foreach ($all_sections as $section) {
-	$section = (array) $section;
-	$section_ids[$section['id']] = $section;
+if (is_array($all_sections)) {
+	foreach ($all_sections as $section) {
+		$section = (array) $section;
+		$section_ids[$section['id']] = $section;
+	}
 }
 
-foreach ($deviceTypes as $d) {
-    $d = (array) $d;
-    $deviceTypes[$d['tid']] = $d;
+if (is_array($deviceTypes)) {
+	foreach ($deviceTypes as $d) {
+	    $d = (array) $d;
+	    $deviceTypes[$d['tid']] = $d;
+	}
 }
 
 
