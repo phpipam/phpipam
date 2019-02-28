@@ -74,8 +74,9 @@ if ($_POST['action']=="add") {
 	}
 }
 # admin user cannot be deleted
-if($_POST['action']=="delete" && $_POST['username']=="admin") 			{ $Result->show("danger", _("Admin user cannot be deleted"), true); }
-
+if($_POST['action']=="delete" && $_POST['userId']==1) 			{ $Result->show("danger", _("Admin user cannot be deleted"), true); }
+# admin user cannot be disabled
+if($_POST['disabled']=="Yes" && $_POST['userId']==1) 			{ $Result->show("danger", _("Admin user cannot be disabled"), true); }
 
 # custom fields check
 $myFields = $Tools->fetch_custom_fields('users');
@@ -112,6 +113,7 @@ $values = array(
 				"mailNotify"     =>$_POST['mailNotify'],
 				"mailChangelog"  =>$_POST['mailChangelog'],
 				"theme"          =>$_POST['theme']=="default" ? "" : $_POST['theme'],
+				"disabled"       =>$_POST['disabled']=="Yes" ? "Yes" : "No"
 				);
 
 
