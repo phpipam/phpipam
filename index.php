@@ -125,10 +125,15 @@ else {
 		<!--[if lt IE 9]>
 		<script type="text/javascript" src="js/dieIE.js"></script>
 		<![endif]-->
-		<?php if ($User->settings->enableLocations=="1" && isset($gmaps_api_key) && strlen($gmaps_api_key)>0) { ?>
+		<?php if ($User->settings->enableLocations=="1" && isset($gmaps_api_key) && strlen($gmaps_api_key)>0) { 
+		if($gmaps_api_key!=OSMAP) { ?>
 		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".$gmaps_api_key; ?>"></script>
 		<script type="text/javascript" src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<?php }	?>
+		<?php } else { ?>
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin=""/>
+		<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js" integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg==" crossorigin=""></script>
+		<?php }
+		  } ?>
 		<!-- jQuery UI -->
 		<script type="text/javascript" src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 

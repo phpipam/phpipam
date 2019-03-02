@@ -7,9 +7,10 @@ $User->check_module_permissions ("circuits", 1, true, false);
 // title
 print "<h4>"._('Map')."</h4>";
 
-
+# get custom fields
+$custom_fields = $Tools->fetch_custom_fields('circuits');
 // fetch and reorder circuit types
-$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
+$circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname", $custom_fields);
 $type_hash = [];
 foreach($circuit_types as $t){
   $type_hash[$t->id] = $t;
@@ -76,7 +77,8 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
     array_keys($all_locations);
 
     // print
-    if (sizeof($all_locations)>0) { ?>
+    if (sizeof($all_locations)>0) {
+	if($gmaps_api_key!="OSMAP"){ ?>
         <script type="text/javascript">
             $(document).ready(function() {
                 // init gmaps
@@ -158,8 +160,88 @@ elseif ($locA->name!=="/" && $locB->name!=="/") {
         <div style="width:100%; height:400px;" id="map_overlay">
         	<div id="gmap" style="width:100%; height:100%;"></div>
         </div>
+	<?php }
+	else { ?>
+		<script type="text/javascript">
+		function initMap() {
+			var osmap = L.map('osmap').setView([0, 0], 1);
+		        //http://leaflet-extras.github.io/leaflet-providers/preview/
+		     /*   L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+		            // Il est toujours bien de laisser le lien vers la source des données
+		            attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+		            minZoom: 1,
+		            maxZoom: 20
+		        }).addTo(osmap); */
+
+			var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+				maxZoom: 17,
+				attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+			}).addTo(osmap);
+
+			var markers = [];
+			var path = [];
+			// add markers
+		        <?php
+		        $html        = array();
+
+		        $map_marker_location_ids = array();
+		        foreach ($all_locations as $k=>$location) {
+			  if(in_array($location->id, $location_ids_to_map)){
+		            // description and apostrophe fix
+		            $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".addslashes($location->description)."</span>" : "";
+                      	    $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
+
+
+				$html[] = "var marker = L.marker([$location->lat, $location->long]).addTo(osmap);";
+				$html[] = "marker.bindTooltip('".escape_input($location->name)."');";
+				$html[] = "marker.bindPopup('<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". escape_input($location->name). "</a></h5>$location->description');";
+				$html[] = "markers.push(marker);";
+		    	  }
+		        }
+			if(sizeof($all_locations)==2) {
+				    $html[] = "path = [[".$all_locations[0]->long.", ".$all_locations[0]->lat."], [".$all_locations[1]->long.", ".$all_locations[1]->lat."]]";
+                		    $html[] = 'var gj = L.geoJSON({"type": "LineString","coordinates": path}).addTo(osmap);';
+				    if($circuit->custom_code)
+				        $html[] = 'gj.bindTooltip("'.$circuit->custom_code.'");';
+			}
+
+			// add lines
+		        foreach ($member_circuits as $circuit) {
+		          //If map_spepcifc is set and its in the array OR it isn't set, map all
+		            $locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
+		            $locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
+		            if($locationA['location']!="" && $locationB['location']!="") {
+		              $valid_circuit = True;
+		              $locationA['location'] = $Tools->fetch_object ("locations", "id", $locationA['location']);
+		              $locationB['location'] = $Tools->fetch_object ("locations", "id", $locationB['location']);
+		            }else{
+		              $valid_circuit = False;
+		            }
+		            if($valid_circuit){
+		              $html[] = "path = [[".$all_locations[$locationA['location']->id]->long.", ".$all_locations[$locationA['location']->id]->lat."], [".$all_locations[$locationB['location']->id]->long.", ".$all_locations[$locationB['location']->id]->lat."]]";
+			      $html[] = 'var gj = L.geoJSON({"type": "LineString","coordinates": path},{color:"'.$type_hash[$circuit->type]->ctcolor.'"}).addTo(osmap);';
+			      if($circuit->custom_code)
+				        $html[] = 'gj.bindTooltip("'.$circuit->custom_code.'");';
+			    }
+			}
+
+			print implode("\n", $html);
+			?>
+
+			var group = new L.featureGroup(markers);
+			osmap.fitBounds(group.getBounds().pad(0.5));
+
+            	}
+		$(document).ready(initMap);
+	</script>
+
+	<div style="width:100%; height:400px;" id="map_overlay">
+        	<div id="osmap" style="width:100%; height:100%;"></div>
+        </div>
+
 
         <?php
+	     }
         print "<hr>";
         print "<div class='text-right'>";
         print "<h5>"._('Circuit Type Legend')."</h5>";

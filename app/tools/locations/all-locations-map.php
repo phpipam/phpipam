@@ -68,7 +68,8 @@ else {
         array_keys($all_locations);
 
         // calculate
-        if (sizeof($all_locations)>0) { ?>
+        if (sizeof($all_locations)>0) {
+		if($gmaps_api_key!="OSMAP"){ ?>
             <script type="text/javascript">
                 $(document).ready(function() {
                     // init gmaps
@@ -122,10 +123,75 @@ else {
             <div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
             	<div id="gmap" style="width:100%; height:100%;"></div>
             </div>
+	<?php }
+	else { ?>
+	<script type="text/javascript">
+		function initMap() {
+			// resize map function
+		        <?php if(!isset($height)) { ?>
+		        function resize_map () {
+		            var heights = window.innerHeight - 340;
+		            $('#map_overlay').css("height", heights+"px");
+		        }
+		        resize_map();
+		        window.onresize = function() {
+		            resize_map();
+		        };
+		        <?php } ?>
 
+			var lat = '<?php print $all_locations[0]->lat; ?>';
+			var lon = '<?php print $all_locations[0]->long; ?>';
+			var osmap = L.map('osmap').setView([lat, lon], 1);
+		        //http://leaflet-extras.github.io/leaflet-providers/preview/
+		     /*   L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+		            // Il est toujours bien de laisser le lien vers la source des données
+		            attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+		            minZoom: 1,
+		            maxZoom: 20
+		        }).addTo(osmap); */
+
+			var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+				maxZoom: 17,
+				attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+			}).addTo(osmap);
+
+			var markers = [];
+			// add markers
+		        <?php
+		        $html        = array();
+
+		        $map_marker_location_ids = array();
+		        foreach ($all_locations as $k=>$location) {
+		            // description and apostrophe fix
+			    $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".escape_input($location->description)."</span>" : "";
+                            $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
+
+
+				$html[] = "var marker = L.marker([$location->lat, $location->long]).addTo(osmap);";
+				$html[] = "marker.bindTooltip('".escape_input($location->name)."');";
+				$html[] = "marker.bindPopup('<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". escape_input($location->name). "</a></h5>$location->description');";
+				$html[] = "markers.push(marker);";
+		        }
+
+		        print implode("\n", $html);
+		        ?>
+
+			var group = new L.featureGroup(markers);
+			osmap.fitBounds(group.getBounds().pad(0.5));
+
+			osmap.on('contextmenu', function(e) { console.log("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng) });
+
+            	}
+		$(document).ready(initMap);
+	</script>
+
+	<div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
+        	<div id="osmap" style="width:100%; height:100%;"></div>
+        </div>
 
         <?php
         # no coordinates
+	    }
         }
         else {
             $Result->show("info","No Locations with coordinates configured", false);

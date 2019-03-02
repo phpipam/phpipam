@@ -15,9 +15,10 @@ if(isset($_GET['map_specific']) && $_GET['map_specific'] == 'true'){
     print "<h3>"._('Map of all circuits')."</h3>";
 }
 
-
+# get custom fields
+$custom_fields = $Tools->fetch_custom_fields('circuits');
 // fetch all circuits and types. Create a hash of the types to avoid lots of queries
-$circuits = $Tools->fetch_all_circuits();
+$circuits = $Tools->fetch_all_circuits($custom_fields);
 $circuit_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $type_hash = [];
 foreach($circuit_types as $t){
@@ -62,7 +63,8 @@ elseif(true) {
     }
 
     // print
-    if (sizeof($all_locations)>0) { ?>
+    if (sizeof($all_locations)>0) {
+	 if($gmaps_api_key!="OSMAP"){ ?>
         <script type="text/javascript">
             $(document).ready(function() {
                 // init gmaps
@@ -168,9 +170,82 @@ elseif(true) {
         <div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
         	<div id="gmap" style="width:100%; height:100%;"></div>
         </div>
+	<?php }
+	else { ?>
+	<script type="text/javascript">
+		function initMap() {
+			// resize map function
+		        <?php if(!isset($height)) { ?>
+		        function resize_map () {
+		            var heights = window.innerHeight - 320;
+		            $('#map_overlay').css("height", heights+"px");
+		        }
+		        resize_map();
+		        window.onresize = function() {
+		            resize_map();
+		        };
+		        <?php } ?>
+			var osmap = L.map('osmap').setView([0, 0], 1);
+		        //http://leaflet-extras.github.io/leaflet-providers/preview/
+		     /*   L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
+		            // Il est toujours bien de laisser le lien vers la source des données
+		            attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
+		            minZoom: 1,
+		            maxZoom: 20
+		        }).addTo(osmap); */
 
+			var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+				maxZoom: 17,
+				attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
+			}).addTo(osmap);
+
+			var markers = [];
+			var path = [];
+			// add markers
+		        <?php
+		        $html        = array();
+
+		        $map_marker_location_ids = array();
+		        foreach ($all_locations as $k=>$location) {
+		            // description and apostrophe fix
+		            $description = str_replace(array("\r\n","\n","\r"), "<br>", escape_input($location->description));
+		            $description = !empty($description) ? "<span class=\'text-muted\'>".$description."</span>" : "";
+
+		            // Don't generate duplicate map markers
+		            if (!in_array($location->id, $map_marker_location_ids, true)) {
+		                array_push($map_marker_location_ids, $location->id);
+
+				$html[] = "var marker = L.marker([$location->lat, $location->long]).addTo(osmap);";
+				$html[] = "marker.bindTooltip('".escape_input($location->name)."');";
+				$html[] = "marker.bindPopup('<h5><a href=\'".create_link("tools", "locations", $location->id)."\'>". escape_input($location->name). "</a></h5>$description');";
+				$html[] = "markers.push(marker);";
+		            }
+	        	}
+			foreach ($circuits as $circuit) {
+				if($all_locations[$circuit->location1]->long && $all_locations[$circuit->location2]->long && ((isset($_GET['map_specific']) && in_array($circuit->id,$circuits_to_map)) || (!isset($_GET['map_specific'])))){
+				    $html[] = "path = [[".$all_locations[$circuit->location1]->long.", ".$all_locations[$circuit->location1]->lat."], [".$all_locations[$circuit->location2]->long.", ".$all_locations[$circuit->location2]->lat."]]";
+				    $html[] = 'var gj = L.geoJSON({"type": "LineString","coordinates": path},{color: "'.$type_hash[$circuit->type]->ctcolor.'"}).addTo(osmap);';
+				    if($circuit->custom_code)
+				        $html[] = 'gj.bindTooltip("'.$circuit->custom_code.'");';
+				}
+			}
+
+		        print implode("\n", $html);
+		        ?>
+
+			var group = new L.featureGroup(markers);
+			osmap.fitBounds(group.getBounds().pad(0.5));
+
+            	}
+		$(document).ready(initMap);
+	</script>
+
+	<div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
+        	<div id="osmap" style="width:100%; height:100%;"></div>
+        </div>
 
         <?php
+  	  }
         print "<hr>";
         print "<div class='text-right'>";
         print "<h5>"._('Circuit Type Legend')."</h5>";
