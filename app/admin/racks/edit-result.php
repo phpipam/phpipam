@@ -112,7 +112,6 @@ $values = array(
 				"id"          => @$rack['rackid'],
 				"name"        => @$rack['name'],
 				"size"        => @$rack['size'],
-				"location"    => @$rack['location'],
 				"hasBack"     => $Admin->verify_checkbox(@$rack['hasBack']),
                 "topDown"     => @$rack['topDown'],
 				"description" => @$rack['description']
@@ -122,21 +121,18 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 
-# remove location
-if ($User->get_module_permissions ("locations")>0) {
-	unset($values['location']);
+# append location
+if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>1) {
+    if (is_numeric($_POST['location'])) {
+        $values['location'] = $_POST['location'] > 0 ? $_POST['location'] : NULL;
+    }
 }
 
 # append customerId
-if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
-	if (is_numeric($_POST['customer_id'])) {
-		if ($_POST['customer_id']>0) {
-			$values['customer_id'] = $_POST['customer_id'];
-		}
-		else {
-			$values['customer_id'] = NULL;
-		}
-	}
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>1) {
+    if (is_numeric($_POST['customer_id'])) {
+        $values['customer_id'] = $_POST['customer_id'] > 0 ? $_POST['customer_id'] : NULL;
+    }
 }
 
 # update rack

@@ -414,7 +414,6 @@ class Addresses extends Common_functions {
 						"mac"                   => @$address['mac'],
 						"owner"                 => @$address['owner'],
 						"state"                 => @$address['state'],
-						"switch"                => @$address['switch'],
 						"port"                  => @$address['port'],
 						"note"                  => @$address['note'],
 						"is_gateway"            => @$address['is_gateway'],
@@ -425,26 +424,25 @@ class Addresses extends Common_functions {
 						);
 		# permissions
 		if($this->api!==true) {
-			if($User->get_module_permissions ("devices")<1) {
-				unset($insert['switch']);
+			if($User->get_module_permissions ("devices")>1) {
+				if (is_numeric($address['switch'])) {
+					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
+				}
 			}
 			# customer
-			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+			if($User->get_module_permissions ("customers")>1) {
 				if (is_numeric($address['customer_id'])) {
-					if ($address['customer_id']!="0") {
-						$insert['customer_id'] = $address['customer_id'];
-					}
-					else {
-						$insert['customer_id'] = NULL;
-					}
+					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
 				}
 			}
 	        # location
-	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
-	            if (!is_numeric($address['location_item'])) {
-	                $this->Result->show("danger", _("Invalid location value"), true);
-	            }
-	            $insert['location'] = $address['location_item'];
+	        if ($User->get_module_permissions ("locations")>1) {
+	            if (is_numeric($address['location_item'])) {
+					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
+	            } else {
+					$this->Result->show("danger", _("Invalid location value"), true);
+				}
+
 	        }
 	    }
 		# custom fields, append to array
@@ -506,7 +504,6 @@ class Addresses extends Common_functions {
 						"mac"         =>@$address['mac'],
 						"owner"       =>@$address['owner'],
 						"state"       =>@$address['state'],
-						"switch"      =>@$address['switch'],
 						"port"        =>@$address['port'],
 						"note"        =>@$address['note'],
 						"is_gateway"  =>@$address['is_gateway'],
@@ -516,26 +513,25 @@ class Addresses extends Common_functions {
 						);
 		# permissions
 		if($this->api!==true) {
-			if($User->get_module_permissions ("devices")<1) {
-				unset($insert['switch']);
+			if($User->get_module_permissions ("devices")>1) {
+				if (is_numeric($address['switch'])) {
+					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
+				}
 			}
-	 		# customer
-			if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
+			# customer
+			if($User->get_module_permissions ("customers")>1) {
 				if (is_numeric($address['customer_id'])) {
-					if ($address['customer_id']!="0") {
-						$insert['customer_id'] = $address['customer_id'];
-					}
-					else {
-						$insert['customer_id'] = NULL;
-					}
+					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
 				}
 			}
 	        # location
-	        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
-	            if (!is_numeric($address['location_item'])) {
-	                $this->Result->show("danger", _("Invalid location value"), true);
-	            }
-	            $insert['location'] = $address['location_item'];
+	        if ($User->get_module_permissions ("locations")>1) {
+	            if (is_numeric($address['location_item'])) {
+					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
+	            } else {
+					$this->Result->show("danger", _("Invalid location value"), true);
+				}
+
 	        }
 	    }
 		# custom fields, append to array
