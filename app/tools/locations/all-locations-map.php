@@ -168,7 +168,7 @@ else {
 			var group = new L.featureGroup(markers);
 			osmap.fitBounds(group.getBounds().pad(0.5));
 
-			osmap.on('contextmenu', function(e) { $("#osmapData").html("Lat, Lon : " + e.latlng.lat + ", " + e.latlng.lng);});	
+			osmap.on('contextmenu', function(e) { $("#osmapData").html("Lat, Lon : " + e.latlng.lat.toFixed(8) + ", " + e.latlng.lng.toFixed(8));});	
 
             	}
 		$(document).ready(initMap);
