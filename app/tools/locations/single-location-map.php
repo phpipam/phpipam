@@ -90,27 +90,13 @@ elseif (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
 
 			var lat = '<?php print escape_input($location->lat); ?>';
 			var lon = '<?php print escape_input($location->long); ?>';
-			var osmap = L.map('osmap').setView([lat, lon], 15);
-		        //http://leaflet-extras.github.io/leaflet-providers/preview/
-		     /*   L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
-		            // Il est toujours bien de laisser le lien vers la source des données
-		            attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
-		            minZoom: 1,
-		            maxZoom: 20
-		        }).addTo(osmap); */
-
-			var OpenTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-				maxZoom: 17,
-				attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-			}).addTo(osmap);
+			var osmap = L.map('osmap').setView([lat, lon], 17);
+		        osmapInitTitleLayers(osmap);
 
 			// add marker
 			var marker = L.marker([<?php print escape_input($location->lat); ?>, <?php print escape_input($location->long); ?>]).addTo(osmap);
 			marker.bindTooltip('<?php print addslashes($location->name); ?>');
 			marker.bindPopup('<h5><a href="<?php print create_link("tools", "locations", $location->id); ?>."\'><?php print addslashes($location->name); ?></a></h5><?php print $location->description; ?>');
-
-			var group = new L.featureGroup(markers);
-			osmap.fitBounds(group.getBounds().pad(0.5));
 
             	}
 		$(document).ready(initMap);
