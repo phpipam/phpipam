@@ -439,8 +439,6 @@ class Addresses extends Common_functions {
 	        if ($User->get_module_permissions ("locations")>1) {
 	            if (is_numeric($address['location_item'])) {
 					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
-	            } else {
-					$this->Result->show("danger", _("Invalid location value"), true);
 				}
 
 	        }
@@ -528,10 +526,7 @@ class Addresses extends Common_functions {
 	        if ($User->get_module_permissions ("locations")>1) {
 	            if (is_numeric($address['location_item'])) {
 					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
-	            } else {
-					$this->Result->show("danger", _("Invalid location value"), true);
 				}
-
 	        }
 	    }
 		# custom fields, append to array
