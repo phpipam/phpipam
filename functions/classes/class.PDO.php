@@ -1020,6 +1020,10 @@ class Database_PDO extends DB {
 
 			$this->ssl = array();
 
+			if ($db['ssl_verify']===false) {
+				$this->ssl[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+			}
+
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
 				if ($db[$key]) {
 					$this->ssl[$pdoopt] = $db[$key];
