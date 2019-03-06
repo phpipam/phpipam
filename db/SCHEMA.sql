@@ -560,7 +560,7 @@ CREATE TABLE `widgets` (
   `wadminonly` enum('yes','no') NOT NULL DEFAULT 'no',
   `wactive` enum('yes','no') NOT NULL DEFAULT 'no',
   PRIMARY KEY (`wid`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
 VALUES
@@ -719,7 +719,8 @@ CREATE TABLE `firewallZoneSubnet` (
     FOREIGN KEY (`subnetId`)
     REFERENCES `subnets` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table scanAgents
