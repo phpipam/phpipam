@@ -114,8 +114,8 @@ try {
 	}
 
 
-	// append POST parameters if POST or PATCH
-	if($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
+	// Append Global API parameters / POST parameters if POST,PATCH or DELETE
+	if($_SERVER['REQUEST_METHOD']=="GET" || $_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE") {
 		// if application tupe is JSON (application/json)
         if(strpos($_SERVER['CONTENT_TYPE'], "application/json")!==false){
             $rawPostData = file_get_contents('php://input');
