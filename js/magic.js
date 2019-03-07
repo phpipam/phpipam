@@ -228,7 +228,7 @@ function createCookie(name,value,days) {
         var expires = "";
     }
 
-    document.cookie = name+"="+encodeURI(value)+expires+"; path=/";
+    document.cookie = name+"="+value+expires+"; path=/";
 }
 function readCookie(name) {
     var nameEQ = name + "=";
