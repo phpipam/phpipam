@@ -1,3 +1,13 @@
+== 1.3.2 rev004
+
+    Bugfixes:
+    ----------------------------
+    + Fix for incompatible 32 bit long2ip() (broken in PHP 7.1.0);
+    + Make database grant host configurable;
+    + Restore API filter_by functionality. (#2392);
+    + Read global API parameters for API GET requests. (#2455);
+    + define(BASE) documentation fixes;
+
 == 1.3.2 rev003
 
     Bugfixes:
