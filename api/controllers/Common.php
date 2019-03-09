@@ -690,7 +690,7 @@ class Common_api_functions {
 	 */
 	protected function remove_folders ($result) {
 		// must be subnets
-		if($this->_params->controller!="subnets") {
+		if(!($this instanceof Subnets_controller)) {
 			return $result;
 		}
 		else {
@@ -718,7 +718,7 @@ class Common_api_functions {
 	 */
 	protected function remove_subnets ($result) {
 		// must be subnets
-		if($this->_params->controller!="folders") {
+		if(!($this instanceof Folders_controller)) {
 			return $result;
 		}
 		else {
