@@ -349,7 +349,7 @@ class Scan extends Common_functions {
 		}
 
 		# Check for PEAR_Error
-		if (get_class($ping) == "PEAR_Error") {
+		if ($ping instanceof PEAR_Error) {
 			//return result for web or cmd
 			if($this->icmp_exit)    { exit ($ping->code); }
 			else                    { return $ping->code; }
