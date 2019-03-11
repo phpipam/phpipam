@@ -747,33 +747,39 @@ class Subnets_controller extends Common_api_functions {
 		// fetch
 		$results = $this->Subnets->fetch_all_subnets();
 
+		if (!is_array($results))
+			return false;
+
+		$subnet_gws = [];
+		$gateways = $this->Subnets->fetch_multiple_objects('ipaddresses', 'is_gateway', 1);
+		foreach($gateways as $gw) {
+			$subnet_gws[$gw->id][] = $this->transform_address ($gw);
+		}
+
 		// add nameservers, GW, permission and location for each network found
-		if($results!==false) {
-			foreach($results as $key => $result) {
-				$ns = $this->read_subnet_nameserver($result->nameserverId);
-				if ($ns!==false) {
-					$result->nameservers = $ns;
-				}
-
-				$gateway = $this->read_subnet_gateway ($result->id);
-				if ( $gateway!== false) {
-					$result->gatewayId = $gateway->id;
-					$gateway = $this->transform_address ($gateway);
-					$result->gateway = $gateway;
-				}
-
-				$result->permissions = $this->User->get_user_permissions_from_json($result->permissions);
-
-				// location details
-				if(!empty($result->location)) {
-					$result->location = $this->Tools->fetch_object ("locations", "id", $result->location);
-				} else {
-					$result->location = array();
-				}
-
-    			// erase old values
-    			$results[$key] = $result;
+		foreach($results as $key => $result) {
+			$ns = $this->read_subnet_nameserver($result->nameserverId);
+			if ($ns!==false) {
+				$result->nameservers = $ns;
 			}
+
+			if (isset($subnet_gws[$result->id])) {
+				$gateway = $subnet_gws[$result->id][0];
+				$result->gatewayId = $gateway->id;
+				$result->gateway = $gateway;
+			}
+
+			$result->permissions = $this->User->get_user_permissions_from_json($result->permissions);
+
+			// location details
+			if(!empty($result->location)) {
+				$result->location = $this->Tools->fetch_object ("locations", "id", $result->location);
+			} else {
+				$result->location = array();
+			}
+
+			// erase old values
+			$results[$key] = $result;
 		}
 
 		# result
@@ -811,7 +817,8 @@ class Subnets_controller extends Common_api_functions {
 	 * @return array|false
 	 */
 	private function read_subnet_nameserver ($nsid) {
-    	return $this->Tools->fetch_object ("nameservers", "id", $nsid);
+		if (!is_numeric($nsid) || $nsid <= 0) return false;
+		return $this->Tools->fetch_object ("nameservers", "id", $nsid);
 	}
 
 	/**
