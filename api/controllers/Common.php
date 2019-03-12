@@ -251,48 +251,40 @@ class Common_api_functions {
 	 * @return void
 	 */
 	protected function filter_result ($result = array ()) {
-    	// remap keys before applying filter
-    	$result = $this->remap_keys ($result, false);
+		// remap keys before applying filter
+		$result = $this->remap_keys ($result, false);
 		// validate
 		$this->validate_filter_by ($result);
 
-		if (is_object($result)) {
-			// Filter single object
-			if(!property_exists($result, $this->_params->filter_by))
-				return $result;
+		// Filter single object
+		if (is_object($result))
+			$result = [$result];    // convert to array of objects
 
-			if ($result->{$this->_params->filter_by} != $this->_params->filter_value)
-				$this->Response->throw_exception(404, _('No results (filter applied)'));
+		if (!is_array($result))
+			return false;           // Bad input
 
-			return $result;
+		// Filter array of objects
+		$result2 = [];
+		foreach($result as $r) {
+			if (!property_exists($r, $this->_params->filter_by))
+				continue;
+			if ($r->{$this->_params->filter_by} != $this->_params->filter_value)
+				continue;
+
+			$result2[] = $r;        // save match
 		}
 
-		if (is_array($result)) {
-			// Filter array of objects
-			foreach($result as $m=>$r) {
-				if(!property_exists($r, $this->_params->filter_by))
-					continue;
-				if ($r->{$this->_params->filter_by} == $this->_params->filter_value)
-					continue;
-				// Remove object
-				unset($result[$m]);
-			}
+		if (empty($result2))
+			$this->Response->throw_exception(404, _('No results (filter applied)'));
 
-			if (empty($result))
-				$this->Response->throw_exception(404, _('No results (filter applied)'));
+		# reindex filtered result
+		$result = array_values($result2);
 
-			# reindex filtered result
-			$result = array_values($result);
+		// Single result - return as object
+		if (sizeof($result) == 1)
+			return $result[0];
 
-			// Single result - return as object
-			if (sizeof($result) == 1)
-				return $result[0];
-
-			return $result;
-		}
-
-		// Bad input
-		return false;
+		return $result;
 	}
 
 	/**
@@ -306,34 +298,18 @@ class Common_api_functions {
 	 */
 	protected function validate_filter_by ($result) {
 		// validate filter
-		if (is_array($result))	{ $result_tmp = $result[0]; }
-		else					{ $result_tmp = $result; }
+		if (is_array($result))	{ $result = $result[0]; }
 
-        // validate filter_value
-        if(!isset($this->_params->filter_value)) {
-            $this->Response->throw_exception(400, 'Missing filter_value');
-        }
-        elseif (strlen($this->_params->filter_value)==0) {
-            $this->Response->throw_exception(400, 'Empty filter_value');
-        }
+		// validate filter_value
+		if(!isset($this->_params->filter_value))
+			$this->Response->throw_exception(400, _('Missing filter_value'));
 
-        // validate filter_by
-		$error = true;
-		if(is_array($result_tmp)) {
-    		foreach ($result_tmp as $k=>$v) {
-    			if ($k==$this->_params->filter_by) {
-    				$error = false;
-    			}
-    		}
-		}
-		else {
-    		$error = false;
-		}
+		if (strlen($this->_params->filter_value)==0)
+			$this->Response->throw_exception(400, _('Empty filter_value'));
 
-		// die
-		if ($error)	{
-    		$this->Response->throw_exception(400, 'Invalid filter_by');
-        }
+		// validate filter_by is a valid property
+		if (!is_object($result) || !property_exists($result, $this->_params->filter_by))
+			$this->Response->throw_exception(400, _('Invalid filter_by'));
 	}
 
 	/**
