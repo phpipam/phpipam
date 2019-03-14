@@ -268,10 +268,22 @@ class Common_api_functions {
 		foreach($result as $r) {
 			if (!property_exists($r, $this->_params->filter_by))
 				continue;
-			if ($r->{$this->_params->filter_by} != $this->_params->filter_value)
-				continue;
 
-			$result2[] = $r;        // save match
+			if ($this->_params->filter_match == 'partial') {
+				// match partial string
+				if (strpos($r->{$this->_params->filter_by}, $this->_params->filter_value) === false)
+					continue;
+			} elseif ($this->_params->filter_match == 'regex') {
+				// match regular expression
+				if (preg_match($this->_params->filter_value, $r->{$this->_params->filter_by}) !== 1)
+					continue;
+			} else {
+				// match full string
+				if ($r->{$this->_params->filter_by} != $this->_params->filter_value)
+					continue;
+			}
+
+			$result2[] = $r;    // save match
 		}
 
 		if (empty($result2))
@@ -310,6 +322,19 @@ class Common_api_functions {
 		// validate filter_by is a valid property
 		if (!is_object($result) || !property_exists($result, $this->_params->filter_by))
 			$this->Response->throw_exception(400, _('Invalid filter_by'));
+
+		// validate filter_match (default:'full')
+		if (!isset($this->_params->filter_match))
+			$this->_params->filter_match = 'full';
+
+		if (!in_array($this->_params->filter_match, ['full', 'partial', 'regex']))
+			$this->Response->throw_exception(400, _('Invalid filter_match'));
+
+		if ($this->_params->filter_match == 'regex') {
+			@preg_match($this->_params->filter_value, 'phpIPAM');
+			if (($last_err = preg_last_error()) != PREG_NO_ERROR)
+				$this->Response->throw_exception(400, _('Invalid regular expression')." (err=$last_err)");
+		}
 	}
 
 	/**
