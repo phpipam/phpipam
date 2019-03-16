@@ -38,6 +38,7 @@
         + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
         + New overlapping API call;
+        + New global API parameter filter_match = full,partial,regex;
     + Widgets:
         + New user instruction widget (#2383);
 
