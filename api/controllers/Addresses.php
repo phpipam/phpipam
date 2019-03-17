@@ -263,7 +263,7 @@ class Addresses_controller extends Common_api_functions  {
 		}
 		// Search all addresses matching custom link_field field's value
 		elseif($this->_params->id=="search_linked") {
-			// 
+			//
 			$result = $this->Tools->fetch_multiple_objects ("ipaddresses", $this->Addresses->Log->settings->link_field, $this->_params->id2);
 			// result
 				if($result===false)						{ $this->Response->throw_exception(200, 'No addresses found'); }
@@ -623,7 +623,8 @@ class Addresses_controller extends Common_api_functions  {
 		$this->validate_subnet ();
 
 		// validate overlapping
-		if($this->Addresses->address_exists ($this->_params->ip_addr, $this->_params->subnetId))	{ $this->Response->throw_exception(409, "IP address already exists"); }
+		if($this->Addresses->address_exists ($this->_params->ip_addr, $this->_params->subnetId))
+			$this->Response->throw_exception(409, "IP address already exists");
 
 		// fetch subnet
 		$subnet = $this->subnet_details;
@@ -634,27 +635,12 @@ class Addresses_controller extends Common_api_functions  {
 
 			// validate address, that it is inside subnet, not subnet/broadcast
 			$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
-		}
-		else {
-			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)		{ $this->Response->throw_exception(400, "Invalid address"); }
+		} else {
+			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)
+				$this->Response->throw_exception(400, "Invalid address");
 		}
 
-    	//validate and normalize MAC address
-    	if(strlen($this->_params->mac)>0) {
-        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
-        	// normalize
-        	else {
-            	$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
-        	}
-    	}
-
-		// validate device
-		if(isset($this->_params->switch)) {
-		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(400, "Device does not exist"); } }
-		// validate state
-		if(isset($this->_params->state)) {
-		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(400, "Tag does not exist"); } }
-		else { $this->_params->state = 2; }
+		$this->validate_create_update_common();
 	}
 
 	/**
@@ -670,25 +656,44 @@ class Addresses_controller extends Common_api_functions  {
 		// if no data is present print it
 		if(sizeof((array) $this->_params)==3) {
 			if(isset($this->_params->app_id) && isset($this->_params->controller) && isset($this->_params->id))
-																							{ $this->Response->throw_exception(400, "No data provided"); }
+				$this->Response->throw_exception(400, "No data provided");
 		}
 
-    	//validate and normalize MAC address
-    	if(strlen($this->_params->mac)>0) {
-        	if($this->validate_mac ($this->_params->mac)===false)                           { $this->Response->throw_exception(400, "Invalid MAC address"); }
-        	// normalize
-        	else {
-            	$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
-        	}
-    	}
+		$this->validate_create_update_common();
+	}
+
+	/**
+	 * Validation of POST/PATCH parameters - common checks
+	 *
+	 * @access private
+	 * @return void
+	 */
+	private function validate_create_update_common () {
+		//validate and normalize MAC address
+		if(strlen($this->_params->mac)>0) {
+			if($this->validate_mac ($this->_params->mac)===false)
+				$this->Response->throw_exception(400, "Invalid MAC address");
+			// normalize
+			$this->_params->mac = $this->reformat_mac_address ($this->_params->mac, 1);
+		}
 
 		// validate device
 		if(isset($this->_params->switch)) {
-		if($this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)	    { $this->Response->throw_exception(400, "Device does not exist"); } }
+			if (!empty($this->_params->switch) && !is_numeric($this->_params->switch)) {
+				$this->Response->throw_exception(400, "Device does not exist");
+			}
+			if($this->_params->switch > 0 && $this->Tools->fetch_object("devices", "id", $this->_params->switch)===false)
+				$this->Response->throw_exception(400, "Device does not exist");
+		}
 
 		// validate state
 		if(isset($this->_params->state)) {
-		if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)		{ $this->Response->throw_exception(400, "Tag does not exist"); } }
-		else { $this->_params->state = 2; }
+			if (!empty($this->_params->state) && !is_numeric($this->_params->state))
+				$this->Response->throw_exception(400, "Invalid state");
+			if($this->Tools->fetch_object("ipTags", "id", $this->_params->state)===false)
+				$this->Response->throw_exception(400, "Tag does not exist");
+		} else {
+			$this->_params->state = 2;
+		}
 	}
 }
