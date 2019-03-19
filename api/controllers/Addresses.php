@@ -152,6 +152,7 @@ class Addresses_controller extends Common_api_functions  {
 	 * Read address functions
 	 *
 	 *	identifiers can be:
+	 *		- /								             // returns all addresses in all sections
 	 *		- /addresses/{id}/
 	 *		- /addresses/{id}/ping/					     // pings address
 	 *      - /addresses/{ip}/{subnetId}/                // Returns address from subnet
@@ -165,13 +166,22 @@ class Addresses_controller extends Common_api_functions  {
 	 *		- /addresses/tags/						     // all tags
 	 *		- /addresses/tags/{id}/					     // specific tag
 	 *		- /addresses/tags/{id}/addresses/			 // returns all addresses that are tagged with this tag ***if subnetId is provided it will be filtered to specific subnet
+	 *		- /all/							             // returns all addresses in all sections
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
+		// all
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
+			// fetch all
+			$result = $this->Addresses->fetch_all_objects ("ipaddresses");
+			// check result
+			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read addresses"); }
+			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "addresses", true, true)); }
+		}
 		// subnet Id > read all addresses in subnet
-		if($this->_params->id=="custom_fields") {
+		elseif($this->_params->id=="custom_fields") {
 			// check result
 			if(sizeof($this->custom_fields)==0)			{ $this->Response->throw_exception(200, 'No custom fields defined'); }
 			else										{ return array("code"=>200, "data"=>$this->custom_fields); }

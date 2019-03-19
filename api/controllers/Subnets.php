@@ -190,6 +190,7 @@ class Subnets_controller extends Common_api_functions {
 	 * Reads subnet functions
 	 *
 	 *	Identifier can be:
+	 *		- /								// returns all subnets in all sections
 	 *		- /{id}/
 	 *		- /custom_fields/				// returns custom fields
 	 *		- /cidr/{subnet}/				// subnets in CIDR format
@@ -210,9 +211,16 @@ class Subnets_controller extends Common_api_functions {
 	 * @return array
 	 */
 	public function GET () {
+		// all
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
+			$result = $this->read_all_subnets();
+			// check result
+			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read subnets"); }
+			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
+		}
 		// cidr check
 		// check if id2 is set ?
-		if(isset($this->_params->id2)) {
+		elseif(isset($this->_params->id2)) {
 			// is IP address provided
 			if($this->_params->id=="cidr" || $this->_params->id=="search") {
 				$result = $this->read_search_subnet ();
@@ -290,13 +298,6 @@ class Subnets_controller extends Common_api_functions {
 			// check result
 			if($result==false)							{ $this->Response->throw_exception(400, "Invalid subnet Id (".$this->_params->id.")"); }
 			else										{ return array("code"=>200, "data"=>$this->prepare_result ($result, "subnets", true, true)); }
-		}
-		// all
-		elseif ($this->_params->id=="all") {
-			$result = $this->read_all_subnets();
-			// check result
-			if ($result===false)						{ $this->Response->throw_exception(500, "Unable to read subnets"); }
-			else										{ return array("code"=>200, "data"=>$this->prepare_result($result, "subnets", true, true)); }
 		}
 		// false
 		else 											{ $this->Response->throw_exception(404, 'Invalid Id'); }

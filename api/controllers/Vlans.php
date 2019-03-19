@@ -128,13 +128,14 @@ class Vlans_controller extends Common_api_functions {
 	 *		- /{id}/subnets/{sectionId}/	returns subnets belonging to this VLAN inside one section
 	 *		- /custom_fields/			    returns custom fields
 	 *		- /search/{number}/			    returns all vlans with specified number
+	 *      - /all/                         returns all vlans
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No vlans configured'); }
