@@ -727,7 +727,7 @@ class Common_api_functions {
 			if (is_array($result)) {
 				foreach($result as $k=>$r) {
 					// remove
-					if($r->isFolder!="1")				{ unset($r); }
+					if($r->isFolder!="1")				{ unset($result[$k]); }
 			}	}
 			// single item
 			else {
