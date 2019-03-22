@@ -572,20 +572,17 @@ class Common_functions  {
 		if(is_array($input)) {
 			foreach($input as $k=>$v) {
 				if(is_array($v)) {
-					foreach ($v as $k1=>$v1) {
-		    			$input[$k][$k1] = strip_tags($v1);
-					}
+					$input[$k] = $this->strip_input_tags($v);
+					continue;
 				}
-				else {
-	    			$input[$k] = strip_tags($v);
-				}
-            }
+				$input[$k] = is_null($v) ? NULL : strip_tags($v);
+			}
+			# stripped array
+			return $input;
 		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
+
+		// not array
+		return is_null($input) ? NULL : strip_tags($input);
 	}
 
 	/**
