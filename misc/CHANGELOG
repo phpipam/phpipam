@@ -62,6 +62,7 @@
     + API:
         + Fix inconsistent API success value returned (#2045);
         + Fix filter_by functionality (#2392);
+        + Fix PATCH functionality (#2470, #2481);
 
     Security Fixes:
     ----------------------------
