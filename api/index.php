@@ -22,8 +22,8 @@ if(!function_exists("create_link"))
 require_once( dirname(__FILE__) . '/../functions/functions.php' );		// functions and objects from phpipam
 
 # include common API controllers
-require( dirname(__FILE__) . '/controllers/Common.php');			// common methods
-require( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
+require_once( dirname(__FILE__) . '/controllers/Common.php');			// common methods
+require_once( dirname(__FILE__) . '/controllers/Responses.php');			// exception, header and response handling
 
 # settings
 $time_response         = true;          // adds [time] to response
@@ -166,7 +166,7 @@ try {
 	if (@$params->controller != "user") {
 		if($app->app_security=="ssl_token" || $app->app_security=="none") {
 			// start auth class and validate connection
-			require( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
 			$Authentication->check_auth ();
 		}
@@ -174,7 +174,7 @@ try {
 		// validate ssl_code
 		if($app->app_security=="ssl_code") {
 			// start auth class and validate connection
-			require( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
 			$Authentication->check_auth_code ($app->app_id);
 		}
@@ -184,7 +184,7 @@ try {
 		// validate ssl_code
 		if($app->app_security=="ssl_code") {
 			// start auth class and validate connection
-			require( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
+			require_once( dirname(__FILE__) . '/controllers/User.php');				// authentication and token handling
 			$Authentication = new User_controller ($Database, $Tools, $params, $Response);
 			$Authentication->check_auth_code ($app->app_id);
 
@@ -220,11 +220,11 @@ try {
 
 	// check if the controller exists. if not, throw an exception
 	if( file_exists( dirname(__FILE__) . "/controllers/$controller_file.php") ) {
-		require( dirname(__FILE__) . "/controllers/$controller_file.php");
+		require_once( dirname(__FILE__) . "/controllers/$controller_file.php");
 	}
 	// check custom controllers
 	elseif( file_exists( dirname(__FILE__) . "/controllers/custom/$controller_file.php") ) {
-		require( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
+		require_once( dirname(__FILE__) . "/controllers/custom/$controller_file.php");
 	}
 	else {
 		$Response->throw_exception(400, 'Invalid controller');
