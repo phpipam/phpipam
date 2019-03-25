@@ -9,7 +9,7 @@ is_numeric($_GET['sPage']) ? : $Result->show("danger", _("Invalid ID"), true);
 
 // back link
 print "<div'>";
-print "<a class='btn btn-sm btn-default' href='".create_link("tools","routing","bgp")."' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('BGP table')."</a>";
+print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'],"routing","bgp")."' style='margin-bottom:10px;'><i class='fa fa-angle-left'></i> ". _('BGP table')."</a>";
 print "</div>";
 
 

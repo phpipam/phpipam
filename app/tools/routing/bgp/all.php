@@ -98,7 +98,7 @@ else {
             $links = [];
             if($User->get_module_permissions ("routing")>0) {
                 $links[] = ["type"=>"header", "text"=>"Show BGP"];
-                $links[] = ["type"=>"link", "text"=>"Show BGP", "href"=>create_link($_GET['page'], "routing", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
+                $links[] = ["type"=>"link", "text"=>"Show BGP", "href"=>create_link($_GET['page'], "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"divider"];
             }
             if($User->get_module_permissions ("routing")>1) {
