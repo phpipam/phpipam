@@ -46,7 +46,8 @@ $tools_menu_items = array(
 						'mac-lookup',
 						'circuits',
 						'customers',
-						"duplicates"
+						"duplicates",
+						"routing"
                     );
 
 
@@ -105,6 +106,8 @@ if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"VRFs and belonging networks");
 if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>0)
 $tools_menu['Subnets'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"NAT", 				"href"=>"nat", 				  "description"=>"NAT translations");
+if($User->settings->enableRouting==1 && $User->get_module_permissions ("routing")>0)
+$tools_menu['Subnets'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"Routing", 			"href"=>"routing", 				  "description"=>"Routing information");
 if($User->settings->enableMulticast == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map-o",		"name"=>"Multicast networks", 	"href"=>"multicast-networks", "description"=>"Multicast subnets and mapping");
 if($User->settings->enableFirewallZones == 1)

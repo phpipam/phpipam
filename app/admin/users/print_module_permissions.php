@@ -63,4 +63,8 @@ print "<tr><td>"._("Locations")."</td><td>".$User->print_permission_badge($user[
 if ($User->settings->enablePSTN==1)
 print "<tr><td>"._("PSTN")."</td><td>".$User->print_permission_badge($user['perm_pstn'])."</td></tr>";
 
+// routing
+if ($User->settings->enableRouting==1)
+print "<tr><td>"._("Routing")."</td><td>".$User->print_permission_badge($user['perm_routing'])."</td></tr>";
+
 print "</table>";

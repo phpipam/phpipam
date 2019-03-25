@@ -3228,6 +3228,36 @@ class Tools extends Common_functions {
 		return $out;
 	}
 
+
+	/**
+	 * Fetch all routing subnets
+	 *
+	 * @method fetch_routing_subnets
+	 * @param  string $type [bgp,ospf]
+	 * @param  int $id (default: 0)
+	 * @param  bool $cnt (default: true)
+	 * @return false|array
+	 */
+	public function fetch_routing_subnets ($type="bgp", $id = 0, $cnt = false) {
+		// set type
+		$type = $type=="bgp" ? "bgp" : "ospf";
+		// set count
+		$fields = $cnt ? "count(*) as cnt" : "*,s.id as subnet_id";
+		// set query
+		$query = "select $fields from subnets as s, routing_subnets as r
+					where r.type = ? and r.object_id = ? and r.subnet_id = s.id
+					order by r.direction asc, s.subnet asc;";
+		// fetch
+		try { $subnets = $this->Database->getObjectsQuery($query, [$type, $id]); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($subnets)>0 ? $subnets : false;
+	}
+
+
+
 	/**
 	 * Return all possible customer object relations
 	 *

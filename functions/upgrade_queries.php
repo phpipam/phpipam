@@ -865,6 +865,46 @@ $upgrade_queries["1.4.22"][] = "-- Add disabled user flag";
 $upgrade_queries["1.4.22"][] = "ALTER TABLE `users` ADD `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No';";
 
 
+#
+# Subversion 1.4.23 queries
+#
+// extend hostname for devices
+$upgrade_queries["1.4.23"][] = "ALTER TABLE `devices` CHANGE `hostname` `hostname` VARCHAR(255)  CHARACTER SET utf8  COLLATE utf8_general_ci  NULL  DEFAULT NULL;";
+// routing module
+$upgrade_queries["1.4.23"][] = "-- Add routing module flag";
+$upgrade_queries["1.4.23"][] = "ALTER TABLE `settings` ADD `enableRouting` TINYINT(1)  NULL  DEFAULT '0';";
+// routing tables
+$upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_bgp` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `local_as` int(12) unsigned NOT NULL,
+  `local_address` varchar(100) NOT NULL DEFAULT '',
+  `peer_name` varchar(255) NOT NULL DEFAULT '',
+  `peer_as` int(12) unsigned NOT NULL,
+  `peer_address` varchar(100) NOT NULL DEFAULT '',
+  `bgp_type` enum('internal','external') NOT NULL DEFAULT 'external',
+  `vrf_id` int(11) unsigned DEFAULT NULL,
+  `circuit_id` int(11) unsigned DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vrf_id` (`vrf_id`),
+  KEY `circuit_id` (`circuit_id`),
+  CONSTRAINT `circuit_id` FOREIGN KEY (`circuit_id`) REFERENCES `circuits` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `vrf` (`vrfId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+// subnet mapping
+$upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_subnets` (
+  `id` int(11) unsigned NOT NULL,
+  `type` enum('bgp','ospf') NOT NULL DEFAULT 'bgp',
+  `direction` enum('advertised','received') NOT NULL DEFAULT 'advertised',
+  `object_id` int(11) unsigned NOT NULL,
+  `subnet_id` int(11) NOT NULL,
+  KEY `bgp_id` (`object_id`),
+  KEY `subnet_id` (`subnet_id`),
+  CONSTRAINT `bgp_id` FOREIGN KEY (`object_id`) REFERENCES `routing_bgp` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subnet_id` FOREIGN KEY (`subnet_id`) REFERENCES `subnets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+
 
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {

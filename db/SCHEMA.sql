@@ -214,6 +214,7 @@ CREATE TABLE `settings` (
   `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
+  `enableRouting` TINYINT(1)  NULL  DEFAULT '0',
   `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
   `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
   `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none',
@@ -311,7 +312,7 @@ DROP TABLE IF EXISTS `devices`;
 
 CREATE TABLE `devices` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `hostname` varchar(100) DEFAULT NULL,
+  `hostname` varchar(255) DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `type` int(2) DEFAULT '0',
   `description` varchar(256) DEFAULT NULL,
@@ -942,8 +943,49 @@ CREATE TABLE `php_sessions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+# Dump of table routing_bgp
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `routing_bgp`;
+
+CREATE TABLE `routing_bgp` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `local_as` int(12) unsigned NOT NULL,
+  `local_address` varchar(100) NOT NULL DEFAULT '',
+  `peer_name` varchar(255) NOT NULL DEFAULT '',
+  `peer_as` int(12) unsigned NOT NULL,
+  `peer_address` varchar(100) NOT NULL DEFAULT '',
+  `bgp_type` enum('internal','external') NOT NULL DEFAULT 'external',
+  `vrf_id` int(11) unsigned DEFAULT NULL,
+  `circuit_id` int(11) unsigned DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `vrf_id` (`vrf_id`),
+  KEY `circuit_id` (`circuit_id`),
+  CONSTRAINT `circuit_id` FOREIGN KEY (`circuit_id`) REFERENCES `circuits` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `vrf` (`vrfId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table routing_subnets
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `routing_subnets`;
+
+CREATE TABLE `routing_subnets` (
+  `id` int(11) unsigned NOT NULL,
+  `type` enum('bgp','ospf') NOT NULL DEFAULT 'bgp',
+  `direction` enum('advertised','received') NOT NULL DEFAULT 'advertised',
+  `object_id` int(11) unsigned NOT NULL,
+  `subnet_id` int(11) NOT NULL,
+  KEY `bgp_id` (`object_id`),
+  KEY `subnet_id` (`subnet_id`),
+  CONSTRAINT `bgp_id` FOREIGN KEY (`object_id`) REFERENCES `routing_bgp` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subnet_id` FOREIGN KEY (`subnet_id`) REFERENCES `subnets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 22;
+UPDATE `settings` SET `dbversion` = 23;
