@@ -310,7 +310,7 @@ class Scan extends Common_functions {
 
 		# set ping command based on OS type
 		if ($this->os_type == "FreeBSD")    { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
 		elseif($this->os_type == "Windows")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
 		else								{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
 
