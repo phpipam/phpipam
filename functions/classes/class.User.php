@@ -938,7 +938,7 @@ class User extends Common_functions {
      */
     private function auth_local ($username, $password) {
         # auth ok
-        if($this->user->password == crypt($password, $this->user->password)) {
+        if(hash_equals($this->user->password, crypt($password, $this->user->password))) {
             # save to session
             $this->write_session_parameters ();
 
