@@ -9,6 +9,26 @@ if(!function_exists('gettext')) {
 }
 
 /**
+ * A timing safe equals comparison for pre php5.6
+ * more info here: http://blog.ircmaxell.com/2014/11/its-all-about-time.html.
+ */
+if(!function_exists('hash_equals')) {
+	function hash_equals($safeString, $userString) {
+		$safeLen = strlen($safeString);
+		$userLen = strlen($userString);
+
+		if ($userLen != $safeLen) { return false; }
+
+		$result = 0;
+		for ($i = 0; $i < $userLen; ++$i) {
+			$result |= (ord($safeString[$i]) ^ ord($userString[$i]));
+		}
+		// They are only identical strings if $result is exactly 0...
+		return $result === 0;
+	}
+}
+
+/**
  * create links function
  *
  *	if rewrite is enabled in settings use rewrite, otherwise ugly links

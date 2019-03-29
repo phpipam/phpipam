@@ -145,25 +145,11 @@ class Crypto {
 
         // Verify HMAC covering IV and ciphertext
         $calcmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
-        if (!$this->compat_hash_equals($hmac, $calcmac))
+        if (!hash_equals($hmac, $calcmac))
             return false;
 
         // Finally decrypt
         return openssl_decrypt($ciphertext_raw, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
-    }
-
-    /**
-     * Use a constant time hmac comparison if available (php5.6+)
-     * @param  string $hmac1
-     * @param  string $hmac2
-     * @return bool
-     */
-    private function compat_hash_equals($hmac1, $hmac2) {
-        // PHP 5.6+, timing attack safe comparison
-        if (function_exists('hash_equals'))
-            return hash_equals($hmac1, $hmac2);
-        // timing attack unsafe comparison
-        return $hmac1 === $hmac2;
     }
 
     // Legacy mcrypt - mcrypt support may be removed in a future release.
