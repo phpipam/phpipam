@@ -3,6 +3,22 @@
 /* @config file ------------------ */
 require_once( dirname(__FILE__) . '/../config.php' );
 
+/**
+ * proxy to use for every internet access like update check
+ ******************************/
+if ($proxy_enabled == true) {
+	if ($proxy_use_auth == false) {
+		stream_context_set_default (['http' => ['proxy'=>'tcp://'.$proxy_server.':'.$proxy_port]]);
+	} else {
+		$proxy_auth = base64_encode("$proxy_user:$proxy_pass");
+		stream_context_set_default (['http' => ['proxy'=>'tcp://'.$proxy_server.':'.$proxy_port,
+												'request_fulluri' => true,
+												'header' => "Proxy-Authorization: Basic $proxy_auth"]]);
+	}
+	/* for debugging proxy config uncomment next line */
+	// var_dump(stream_context_get_options(stream_context_get_default()));
+}
+
 /* global and missing functions */
 require('global_functions.php');
 
