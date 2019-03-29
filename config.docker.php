@@ -27,6 +27,16 @@ getenv('IPAM_GMAPS_API_KEY') ? $gmaps_api_key         = getenv('IPAM_GMAPS_API_K
 getenv('IPAM_GMAPS_API_KEY') ? $gmaps_api_geocode_key = getenv('IPAM_GMAPS_API_KEY') : false;
 
 /**
+ * proxy connection details
+ ******************************/
+getenv('PROXY_ENABLED')  ? $proxy_enabled  = getenv('PROXY_ENABLED')  : false;
+getenv('PROXY_SERVER')   ? $proxy_server   = getenv('PROXY_SERVER')   : false;
+getenv('PROXY_PORT')     ? $proxy_port     = getenv('PROXY_PORT')     : false;
+getenv('PROXY_USER')     ? $proxy_user     = getenv('PROXY_USER')     : false;
+getenv('PROXY_PASS')     ? $proxy_pass     = getenv('PROXY_PASS')     : false;
+getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
+
+/**
  * Session storage - files or database
  *
  * @var string
