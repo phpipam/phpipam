@@ -884,12 +884,15 @@ $upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_bgp` (
   `bgp_type` enum('internal','external') NOT NULL DEFAULT 'external',
   `vrf_id` int(11) unsigned DEFAULT NULL,
   `circuit_id` int(11) unsigned DEFAULT NULL,
+  `customer_id` int(11) unsigned DEFAULT NULL,
   `description` text DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `vrf_id` (`vrf_id`),
   KEY `circuit_id` (`circuit_id`),
-  CONSTRAINT `circuit_id` FOREIGN KEY (`circuit_id`) REFERENCES `circuits` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `vrf` (`vrfId`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `cust_id` (`customer_id`),
+  CONSTRAINT `circuit_id` FOREIGN KEY (`circuit_id`) REFERENCES `circuits` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `cust_id` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `vrf_id` FOREIGN KEY (`vrf_id`) REFERENCES `vrf` (`vrfId`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 // subnet mapping
 $upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_subnets` (

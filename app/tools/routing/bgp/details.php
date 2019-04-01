@@ -29,6 +29,11 @@ else {
         $vrf = $Tools->fetch_object ("vrf", "vrfId", $bgp->vrf_id);
     }
 
+    // customers fetch
+    if ($User->settings->enableCustomers=="1") {
+        $customer = $Tools->fetch_object ("customers", "id", $bgp->customer_id);
+    }
+
     // overlay
     print "<div class='row'>";
         //
