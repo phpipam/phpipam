@@ -38,6 +38,7 @@
         + Added last access field to api;
         + Add Mac Search for Addresses controller (#2005);
         + New overlapping API call;
+        + New global API parameter filter_match = full,partial,regex;
     + Widgets:
         + New user instruction widget (#2383);
 
@@ -58,9 +59,11 @@
     + Fix column 'masterSubnetId' cannot be null error when adding subnets (#1977);
     + Fix logical circuits add/delete errors (#2381);
     + Fix adding new VLANs to an empty L2Domain (#2400);
+    + Fix Nested child subnets with "na" permissions visible (#2223);
     + API:
         + Fix inconsistent API success value returned (#2045);
         + Fix filter_by functionality (#2392);
+        + Fix PATCH functionality (#2470, #2481);
 
     Security Fixes:
     ----------------------------

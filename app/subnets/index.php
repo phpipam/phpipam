@@ -124,6 +124,13 @@ if ($User->settings->enableNAT==1) {
 		<?php
 		if($slaves) {
 			$slave_subnets = (array) $Subnets->fetch_subnet_slaves ($subnet['id']);
+			// check slave permissions
+			foreach($slave_subnets as $k=>$slave) {
+				if ($Subnets->check_permission($User->user, $slave->id, $slave) == 0) {
+					unset($slave_subnets[$k]);
+				}
+			}
+			$slave_subnets = array_values($slave_subnets);
 			include('subnet-slaves.php');
 		}
 		?>

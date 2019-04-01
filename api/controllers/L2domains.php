@@ -118,13 +118,14 @@ class L2domains_controller extends Common_api_functions {
 	 *		- /{id}/
 	 *		- /{id}/vlans/
 	 *		- /custom_fields/
+	 *		- /all/				// will return all domains
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all domains
-		if(!isset($this->_params->id)) {
+		if(!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlanDomains", 'id', true);
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No domains configured'); }

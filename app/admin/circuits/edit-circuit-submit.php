@@ -147,14 +147,9 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # append customerId
-if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>1) {
 	if (is_numeric($_POST['customer_id'])) {
-		if ($_POST['customer_id']>0) {
-			$values['customer_id'] = $_POST['customer_id'];
-		}
-		else {
-			$values['customer_id'] = NULL;
-		}
+	       $values['customer_id'] = $_POST['customer_id'] > 0 ? $_POST['customer_id'] : NULL;
 	}
 }
 

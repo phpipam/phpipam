@@ -13,7 +13,7 @@ $User->check_module_permissions ("customers", 1, true);
 
 # check key
 if (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0) {
-    $Result->show("info text-center nomargin", _("$customer: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
+    $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 else {
     // get lat long
