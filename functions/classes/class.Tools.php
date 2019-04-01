@@ -3271,7 +3271,8 @@ class Tools extends Common_functions {
 				"vlans"       => "VLAN",
 				"vrf"         => "VRF",
 				"circuits"    => "Circuits",
-				"racks"       => "Racks"
+				"racks"       => "Racks",
+				"routing_bgp" => "BGP Routing"
 				];
 	}
 
