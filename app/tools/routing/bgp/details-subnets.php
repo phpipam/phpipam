@@ -12,7 +12,7 @@ print "<hr>";
 
 // check
 if($subnets===false) {
-	$Result->show("info", _("BGP has no belonging subnets")."!", false);
+	$Result->show("info", _("BGP has no mapped subnets")."!", false);
 }
 else {
 	# table
@@ -54,7 +54,7 @@ else {
             $vrf  = $Tools->fetch_object ("vrf", "vrfId", $subnet['vrfId']);
 
             # icon
-            $icon = $subnet['direction'] == "advertised" ? "<i class='fa fa-arrow-up'></i>" : "<i class='fa fa-down'></i>";
+            $icon = $subnet['direction'] == "advertised" ? "<i class='fa fa-arrow-up'></i>" : "<i class='fa fa-arrow-down'></i>";
 
 			print "<tr>";
 		    print "	<td><a href='".create_link("subnets",$subnet['sectionId'],$subnet['subnet_id'])."'>".$Subnets->transform_address($subnet['subnet'], "dotted")."/$subnet[mask] $fullinfo</a></td>";
@@ -70,10 +70,10 @@ else {
             $links = [];
             if($User->get_module_permissions ("routing")>2) {
                 $links[] = ["type"=>"header", "text"=>"Edit mapping"];
-                $links[] = ["type"=>"link", "text"=>"Delete mapping", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp-mapping-submit.php?action=delete' data-bgpid='$bgp->id'", "icon"=>"minus"];
+                $links[] = ["type"=>"link", "text"=>"Delete mapping", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp-mapping-delete.php' data-secondary='true' data-bgpid='$subnet[id]'", "icon"=>"minus"];
             }
             // print links
-            print $User->print_actions($User->user->compress_actions, $links);
+            print $User->print_actions(0, $links);
 			print '</tr>' . "\n";
 
 			$m++;
@@ -86,6 +86,6 @@ else {
 
 	# no because of permissions
 	if($m==0) {
-		$Result->show("info", _("BGP has no belonging subnets")."!", false);
+		$Result->show("info", _("BGP has no mapped subnets")."!", false);
 	}
 }

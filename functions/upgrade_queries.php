@@ -896,16 +896,18 @@ $upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_bgp` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 // subnet mapping
 $upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_subnets` (
-  `id` int(11) unsigned NOT NULL,
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('bgp','ospf') NOT NULL DEFAULT 'bgp',
   `direction` enum('advertised','received') NOT NULL DEFAULT 'advertised',
   `object_id` int(11) unsigned NOT NULL,
   `subnet_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `type` (`type`,`object_id`,`subnet_id`),
   KEY `bgp_id` (`object_id`),
   KEY `subnet_id` (`subnet_id`),
   CONSTRAINT `bgp_id` FOREIGN KEY (`object_id`) REFERENCES `routing_bgp` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `subnet_id` FOREIGN KEY (`subnet_id`) REFERENCES `subnets` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
 
 

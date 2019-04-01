@@ -15,6 +15,14 @@ $User->check_user_session();
 # create csrf token
 $User->Crypto->csrf_cookie ("validate", "routing_bgp", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("routing", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("routing", 3, true, true);
+}
+
 # validate
 if ($_POST['action']=="edit" || $_POST['action']=="add") {
 	if(!is_numeric($_POST['local_as']))  				{ $Result->show("danger",  _("Invalid local AS"), true); }
