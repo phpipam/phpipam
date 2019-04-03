@@ -1267,14 +1267,14 @@ class Common_functions  {
 		}
 
 		# Geocode address
-		$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key));
+		$curl = $this->curl_fetch_url('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key), ["Accept: application/json"]);
 
-		if ($geocode === false) {
+		if ($curl['result'] === false) {
 			$results['error'] = _("Geocode lookup failed. Check Internet connectivity.");
 			return $results;
 		}
 
-		$output= json_decode($geocode);
+		$output= json_decode($curl['result']);
 
 		if (isset($output->results[0]->geometry->location->lat))
 			$results['lat'] = str_replace(",", ".", $output->results[0]->geometry->location->lat);

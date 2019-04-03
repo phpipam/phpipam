@@ -1691,19 +1691,17 @@ class Tools extends Common_functions {
 		# fetch settings
 		$this->get_settings ();
 		# check for release
-    	# try to fetch
-    	$release_gh = @file('https://github.com/phpipam/phpipam/releases.atom');
-    	# check
-    	if ($release_gh===false) {
-        	if($print_error) {
-            	$this->Result->show("danger", "Cannot fetch https://github.com/phpipam/phpipam/releases.atom", false);
-            }
-        	return false;
-    	}
+		# try to fetch
+		$curl = $this->curl_fetch_url('https://github.com/phpipam/phpipam/releases.atom');
+		# check
+		if ($curl['result']===false) {
+			if($print_error) {
+				$this->Result->show("danger", "Cannot fetch https://github.com/phpipam/phpipam/releases.atom", false);
+			}
+			return false;
+		}
 		# set releases href
-		$feed = implode($release_gh);
-		// fetch
-		$xml = simplexml_load_string($feed);
+		$xml = simplexml_load_string($curl['result']);
 
 		// if ok
 		if ($xml!==false) {
