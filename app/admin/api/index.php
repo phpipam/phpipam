@@ -106,29 +106,6 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 	}
 	?>
 
-	<?php
-	# print error if extensions are not available on server!
-	$requiredExt  = array("curl", "openssl");
-	$availableExt = get_loaded_extensions();
-	# check for missing ext
-	$missingExt = array();
-	foreach ($requiredExt as $extension) {
-	    if (!in_array($extension, $availableExt)) {
-	        $missingExt[] = $extension;
-	    }
-	}
-	# print warning if missing
-	if (sizeof($missingExt) > 0) {
-	    print "<div class='alert alert alert-danger'><strong>"._('The following PHP extensions for API server are missing').":</strong><br><hr>";
-	    print '<ul>' . "\n";
-	    foreach ($missingExt as $missing) {
-	        print '<li>'. $missing .'</li>' . "\n";
-	    }
-	    print '</ul>';
-	    print _('Please recompile PHP to include missing extensions for API server') . "\n";
-	    print "</div>";
-	}
-	?>
 	<hr>
 
 	<h4><?php print _('API documentation'); ?></h4>
