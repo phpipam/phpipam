@@ -3425,7 +3425,7 @@ class Subnets extends Common_functions {
 	 */
 	private function query_ripe ($subnet) {
 		// fetch
-		$ripe_result = $this->identify_address ($subnet)=="IPv4" ? $this->curl_fetch ("ripe", "inetnum", $subnet) : $this->curl_fetch ("ripe", "inet6num", $subnet);
+		$ripe_result = $this->identify_address ($subnet)=="IPv4" ? $this->ripe_arin_fetch ("ripe", "inetnum", $subnet) : $this->ripe_arin_fetch ("ripe", "inet6num", $subnet);
 		// not existings
 		if ($ripe_result['result_code']==404) {
 			// return array
@@ -3461,7 +3461,7 @@ class Subnets extends Common_functions {
 		$subnet_arr = explode("/", $subnet);
 		$subnet = reset($subnet_arr);
 		// fetch
-		$arin_result = $this->curl_fetch ("arin", null, $subnet);
+		$arin_result = $this->ripe_arin_fetch ("arin", null, $subnet);
 
 		// not existings
 		if ($arin_result['result_code']==404) {
@@ -3503,7 +3503,7 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Fetch details from ripe
+	 * Fetch details from ripe or arin
 	 *
 	 * @access private
 	 * @param string $network (default: "ripe")
@@ -3511,24 +3511,16 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet
 	 * @return array
 	 */
-	private function curl_fetch ($network = "ripe", $type = "inetnum", $subnet) {
+	private function ripe_arin_fetch ($network = "ripe", $type = "inetnum", $subnet) {
 		// set url
 		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
-		// fetch with curl
-	    $curl = curl_init();
-	    curl_setopt($curl, CURLOPT_URL, $url);
-	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Accept: application/json"));
-	    // fetch result
-		$result = json_decode(curl_exec ($curl));
-	    // http response code
-	    $result_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-	    // close
-	    curl_close ($curl);
 
-	    // result
-	    return array("result"=>$result, "result_code"=>$result_code);
+		$result = $this->curl_fetch_url($url, ["Accept: application/json"]);
+
+		$result['result'] = json_decode($result['result']);
+
+		// result
+		return $result;
 	}
 
 	/**

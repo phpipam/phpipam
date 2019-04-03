@@ -1206,6 +1206,49 @@ class Common_functions  {
 	}
 
 	/**
+	 * Download URL via CURL
+	 * @param  string $url
+	 * @param  array|false $headers
+	 */
+	public function curl_fetch_url($url, $headers=false) {
+		// get proxy settings
+		include( dirname(__FILE__). "/../../config.php" );
+
+		try {
+			$result = "";
+			$result_code = 503; // service unavailable
+
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curl, CURLOPT_FAILONERROR, true);
+			if (is_array($headers))
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+			// configure proxy settings
+			if (isset($proxy_enabled) && $proxy_enabled == true) {
+				curl_setopt($curl, CURLOPT_PROXY, $proxy_server);
+				curl_setopt($curl, CURLOPT_PROXYPORT, $proxy_port);
+				if (isset($proxy_use_auth) && $proxy_use_auth == true) {
+				curl_setopt($curl, CURLOPT_PROXYUSERPWD, $proxy_user.':'.$proxy_pass);
+				}
+			}
+
+			$result = curl_exec ($curl);
+
+			$result_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+			// close
+			curl_close ($curl);
+
+		} catch (Exception $e) {
+		}
+
+		return ["result"=>$result, "result_code"=>$result_code];
+	}
+
+	/**
 	 * Fetches latlng from googlemaps by provided address
 	 *
 	 * @access public
