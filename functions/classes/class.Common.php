@@ -1208,9 +1208,10 @@ class Common_functions  {
 	/**
 	 * Download URL via CURL
 	 * @param  string $url
-	 * @param  array|false $headers
+	 * @param  array|boolean $headers (default:false)
+	 * @param  integer $timeout (default:30)
 	 */
-	public function curl_fetch_url($url, $headers=false) {
+	public function curl_fetch_url($url, $headers=false, $timeout=30) {
 		// get proxy settings
 		include( dirname(__FILE__). "/../../config.php" );
 
@@ -1224,7 +1225,7 @@ class Common_functions  {
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_FAILONERROR, true);
 			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
-			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
 			if (is_array($headers))
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
