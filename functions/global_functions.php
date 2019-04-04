@@ -1,7 +1,7 @@
 <?php
 
 /**
- * detect missing gettext and fake function
+ * Detect missing gettext and fake function
  */
 if(!function_exists('gettext')) {
 	function gettext ($text) 	{ return $text; }
@@ -9,8 +9,8 @@ if(!function_exists('gettext')) {
 }
 
 /**
- * A timing safe equals comparison for pre php5.6
- * more info here: http://blog.ircmaxell.com/2014/11/its-all-about-time.html.
+ * Supported in PHP 5 >= 5.6.0
+ * A timing safe equals comparison more info here: http://blog.ircmaxell.com/2014/11/its-all-about-time.html.
  */
 if(!function_exists('hash_equals')) {
 	function hash_equals($safeString, $userString) {
@@ -25,6 +25,26 @@ if(!function_exists('hash_equals')) {
 		}
 		// They are only identical strings if $result is exactly 0...
 		return $result === 0;
+	}
+}
+
+/**
+ *  Supported in PHP 5 >= 5.5.0
+ *  For older php versions make sure that function "json_last_error_msg" exist and create it if not
+*/
+if (!function_exists('json_last_error_msg')) {
+	function json_last_error_msg() {
+		static $ERRORS = [
+			JSON_ERROR_NONE => 'No error',
+			JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
+			JSON_ERROR_STATE_MISMATCH => 'State mismatch (invalid or malformed JSON)',
+			JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
+			JSON_ERROR_SYNTAX => 'Syntax error',
+			JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded'
+		];
+
+		$error = json_last_error();
+		return isset($ERRORS[$error]) ? $ERRORS[$error] : 'Unknown error';
 	}
 }
 

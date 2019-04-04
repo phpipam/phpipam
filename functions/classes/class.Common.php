@@ -1043,23 +1043,6 @@ class Common_functions  {
      * @return mixed
      */
     public function validate_json_string($string) {
-        // for older php versions make sure that function "json_last_error_msg" exist and create it if not
-        if (!function_exists('json_last_error_msg')) {
-            function json_last_error_msg() {
-                static $ERRORS = array(
-                    JSON_ERROR_NONE => 'No error',
-                    JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
-                    JSON_ERROR_STATE_MISMATCH => 'State mismatch (invalid or malformed JSON)',
-                    JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
-                    JSON_ERROR_SYNTAX => 'Syntax error',
-                    JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded'
-                );
-
-                $error = json_last_error();
-                return isset($ERRORS[$error]) ? $ERRORS[$error] : 'Unknown error';
-            }
-        }
-
         // try to decode
         json_decode($string);
         // check for error
@@ -1200,6 +1183,11 @@ class Common_functions  {
 		$error[3] = "JSON_ERROR_CTRL_CHAR";
 		$error[4] = "JSON_ERROR_SYNTAX";
 		$error[5] = "JSON_ERROR_UTF8";
+		$error[6] = "JSON_ERROR_RECURSION";
+		$error[7] = "JSON_ERROR_INF_OR_NAN";
+		$error[8] = "JSON_ERROR_UNSUPPORTED_TYPE";
+		$error[9] = "JSON_ERROR_INVALID_PROPERTY_NAME";
+		$error[10] = "JSON_ERROR_UTF16";
 		// return def
 		if (isset($error[$error_int]))	{ return $error[$error_int]; }
 		else							{ return "JSON_ERROR_UNKNOWN"; }
