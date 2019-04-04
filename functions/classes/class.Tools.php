@@ -1696,7 +1696,7 @@ class Tools extends Common_functions {
 		# check
 		if ($curl['result']===false) {
 			if($print_error) {
-				$this->Result->show("danger", "Cannot fetch https://github.com/phpipam/phpipam/releases.atom", false);
+				$this->Result->show("danger", "Cannot fetch https://github.com/phpipam/phpipam/releases.atom : ".$curl['error_msg'], false);
 			}
 			return false;
 		}

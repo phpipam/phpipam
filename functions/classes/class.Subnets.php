@@ -3434,7 +3434,7 @@ class Subnets extends Common_functions {
 		// fail
 		if ($ripe_result['result_code']!==200) {
 			// return array
-			return array("result"=>"error", "error"=>"Error connecting to ripe rest api");
+			return array("result"=>"error", "error"=>"Error connecting to ripe rest api : ".$ripe_result['error_msg']);
 		}
 		else {
     		$out = array();
@@ -3471,7 +3471,7 @@ class Subnets extends Common_functions {
 		// fail
 		if ($arin_result['result_code']!==200) {
 			// return array
-			return array("result"=>"error", "error"=>"Error connecting to arin rest api");
+			return array("result"=>"error", "error"=>"Error connecting to arin rest api : ".$ripe_result['error_msg']);
 		}
 		else {
     		$out = array();

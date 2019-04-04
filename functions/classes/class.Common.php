@@ -1214,15 +1214,17 @@ class Common_functions  {
 		// get proxy settings
 		include( dirname(__FILE__). "/../../config.php" );
 
-		try {
-			$result = "";
-			$result_code = 503; // service unavailable
+		$result = ['result'=>false, 'result_code'=>503, 'error_msg'=>''];
 
+		try {
 			$curl = curl_init();
 			curl_setopt($curl, CURLOPT_URL, $url);
 			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($curl, CURLOPT_MAXREDIRS, 4);
 			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 			curl_setopt($curl, CURLOPT_FAILONERROR, true);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
 			if (is_array($headers))
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
@@ -1235,9 +1237,9 @@ class Common_functions  {
 				}
 			}
 
-			$result = curl_exec ($curl);
-
-			$result_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			$result['result']      = curl_exec($curl);
+			$result['result_code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			$result['error_msg']   = curl_error($curl);
 
 			// close
 			curl_close ($curl);
@@ -1245,7 +1247,7 @@ class Common_functions  {
 		} catch (Exception $e) {
 		}
 
-		return ["result"=>$result, "result_code"=>$result_code];
+		return $result;
 	}
 
 	/**
