@@ -988,14 +988,13 @@ class Subnets extends Common_functions {
 	 * @method set_tmptable_engine_type
 	 */
 	private function set_tmptable_engine_type () {
-		// read config.php
-		include(dirname(__FILE__)."/../../config.php");
-		// if set check array
-		if(isset($db['tmptable_engine_type'])) {
-			if($db['tmptable_engine_type']=="MEMORY" || $db['tmptable_engine_type']=="InnoDB") {
-				$this->tmptable_engine_type = $db['tmptable_engine_type'];
-			}
-		}
+		$db = Config::get('db');
+
+		if(!isset($db['tmptable_engine_type']))
+			return;
+
+		if($db['tmptable_engine_type']=="MEMORY" || $db['tmptable_engine_type']=="InnoDB")
+			$this->tmptable_engine_type = $db['tmptable_engine_type'];
 	}
 
 	/**

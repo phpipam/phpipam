@@ -234,9 +234,7 @@ class User extends Common_functions {
      */
     private function start_session () {
         // check if database should be set for sessions
-        include( dirname(__FILE__).'/../../config.php' );
-        // db
-        if ($session_storage == "database") {
+        if (Config::get('session_storage') == "database") {
             new Session_db ($this->Database);
         }
         // local
@@ -262,8 +260,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_name () {
-        include( dirname(__FILE__).'/../../config.php' );
-        $sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        $sessname = Config::get('phpsessname', 'phpipam');
         // check old name
         $old_name = session_name();
         if ($sessname != $old_name) {
@@ -560,26 +557,21 @@ class User extends Common_functions {
      */
     public function migrate_resolve_subnets () {
         // read config.php
-        include( dirname(__FILE__).'/../../config.php' );
+        $config = Config::get('config');
+
         // check for array and values
-        if(isset($config['resolve_subnets'])) {
-            if(is_array($config['resolve_subnets'])) {
-                if (sizeof($config['resolve_subnets'])>0) {
-                    foreach ($config['resolve_subnets'] as $subnetId) {
-                        $update = array (
-                                         "id"         => $subnetId,
-                                         "resolveDNS" => 1
-                                         );
-                        // update
-                        try {
-                            $this->Database->updateObject("subnets", $update);
-                        } catch (Exception $e) {}
-                    }
-                    // print that is can be deleted
-                    $this->Result->show ("warning", '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
-                }
-            }
+        if(!isset($config['resolve_subnets']) || !is_array($config['resolve_subnets']) || sizeof($config['resolve_subnets'])==0)
+            return;
+
+        foreach ($config['resolve_subnets'] as $subnetId) {
+            $update = ["id" => $subnetId, "resolveDNS" => 1 ];
+            // update
+            try {
+                $this->Database->updateObject("subnets", $update);
+            } catch (Exception $e) {}
         }
+        // print that is can be deleted
+        $this->Result->show ("warning", '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
     }
 
 

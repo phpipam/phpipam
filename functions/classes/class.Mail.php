@@ -214,7 +214,7 @@ class phpipam_mail extends Common_functions {
 	 */
 	private function set_body_start () {
 		# read config
-		require_once( dirname(__FILE__).'/../../config.php');
+		$config = Config::get('config');
 
 		// set width
 		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;

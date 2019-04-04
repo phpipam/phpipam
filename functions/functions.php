@@ -1,20 +1,23 @@
 <?php
 
 /* @config file ------------------ */
+require_once( dirname(__FILE__) . '/classes/class.Config.php' );
 require_once( dirname(__FILE__) . '/../config.php' );
 
 /**
  * proxy to use for every internet access like update check
  ******************************/
-if ($proxy_enabled == true) {
-	if ($proxy_use_auth == false) {
-		stream_context_set_default (['http' => ['proxy'=>'tcp://'.$proxy_server.':'.$proxy_port]]);
-	} else {
-		$proxy_auth = base64_encode("$proxy_user:$proxy_pass");
-		stream_context_set_default (['http' => ['proxy'=>'tcp://'.$proxy_server.':'.$proxy_port,
-												'request_fulluri' => true,
-												'header' => "Proxy-Authorization: Basic $proxy_auth"]]);
+if (Config::get('proxy_enabled') == true) {
+	$proxy_settings = [
+		'proxy'           => 'tcp://'.Config::get('proxy_server').':'.Config::get('proxy_port'),
+		'request_fulluri' => true];
+
+	if (Config::get('proxy_use_auth') == true) {
+		$proxy_auth = base64_encode(Config::get('proxy_user').':'.Config::get('proxy_pass'));
+		$proxy_settings['header'] = "Proxy-Authorization: Basic ".$proxy_auth;
 	}
+	stream_context_set_default (['http' => $proxy_settings]);
+
 	/* for debugging proxy config uncomment next line */
 	// var_dump(stream_context_get_options(stream_context_get_default()));
 }
@@ -27,7 +30,7 @@ if(php_sapi_name()!="cli")
 	ini_set('session.cookie_httponly', 1);
 
 /* @debugging functions ------------------- */
-if($debugging) {
+if(Config::get('debugging')==true) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);

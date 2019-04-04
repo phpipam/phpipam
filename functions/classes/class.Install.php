@@ -301,25 +301,13 @@ class Install extends Common_functions {
 	}
 
 	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	public function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
-	}
-
-	/**
 	 * Sets DB parmaeters
 	 *
 	 * @access private
 	 * @return void
 	 */
 	private function set_db_params () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		$this->db = $db;
+		$this->db = Config::get('db');
 	}
 
 

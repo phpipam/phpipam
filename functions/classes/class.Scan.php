@@ -201,8 +201,6 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	private function set_php_exec () {
-		include(dirname(__FILE__)."/../../config.php");
-
 		// Invoked via CLI, use current php-cli binary if known (>php5.3)
 		if ( php_sapi_name() === "cli" && defined('PHP_BINARY') ) {
 			$this->php_exec = PHP_BINARY;
@@ -210,6 +208,7 @@ class Scan extends Common_functions {
 		}
 
 		// Invoked via HTML (or php5.3)
+		$php_cli_binary = Config::get('php_cli_binary');
 
 		// Check for user specified php-cli binary (Multiple php versions installed)
 		if ( !empty($php_cli_binary) ) {
