@@ -44,7 +44,7 @@ print "</tr>";
 
 print '<tr>';
 print "	<th>". _('Comment').'</th>';
-print "	<td>$circuit->comments</td>";
+print "	<td>$circuit->comment</td>";
 print "</tr>";
 
 if ($User->settings->enableCustomers=="1") {
