@@ -53,7 +53,7 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 			$a = (array) $a;
 
 			# set class
-			$class = $a['app_permissions']==0||($api_allow_unsafe!==true && $a['app_security']=="none") ? "alert-danger" : "";
+			$class = $a['app_permissions']==0||(Config::get('api_allow_unsafe')!==true && $a['app_security']=="none") ? "alert-danger" : "";
 
 			print '<tr class="'.$class.'">' . "\n";
 

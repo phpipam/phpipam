@@ -2,7 +2,7 @@
 
 /* @config file ------------------ */
 require_once( dirname(__FILE__) . '/classes/class.Config.php' );
-require_once( dirname(__FILE__) . '/../config.php' );
+$config = Config::get('config');
 
 /**
  * proxy to use for every internet access like update check

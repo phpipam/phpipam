@@ -67,15 +67,11 @@ try {
 
 	// crypt check
 	if($app->app_security=="crypt") {
-		$api_crypt_encryption_library = "openssl";
-		// Override $api_crypt_encryption_library="mcrypt" from config.php if required.
-		include( dirname(__FILE__).'/../config.php' );
+		$api_crypt_encryption_library = Config::get('api_crypt_encryption_library') === "mcrypt" ? 'mcrypt' : 'openssl';
 
 		// verify php extensions
-		$extensions = ($api_crypt_encryption_library == "mcrypt") ? ["mcrypt"] : ["openssl"];
-		foreach ($extensions as $extension) {
-		if (!in_array($extension, get_loaded_extensions()))
-		    { $Response->throw_exception(500, 'php extension '.$extension.' missing'); }
+		if (!in_array($api_crypt_encryption_library, get_loaded_extensions())) {
+			$Response->throw_exception(500, 'php extension '.$api_crypt_encryption_library.' missing');
 		}
 
 		// decrypt request - form_encoded
@@ -99,7 +95,9 @@ try {
 	// SSL checks
 	elseif($app->app_security=="ssl_token" || $app->app_security=="ssl_code") {
 		// verify SSL
-		if (!$Tools->isHttps()) { $Response->throw_exception(503, _('SSL connection is required for API')); }
+		if (!$Tools->isHttps()) {
+			$Response->throw_exception(503, _('SSL connection is required for API'));
+		}
 
 		// save request parameters
 		$params = (object) $_GET;
@@ -107,12 +105,12 @@ try {
 	// no security
 	elseif($app->app_security=="none") {
 		// make sure it is permitted in config.php
-		if ($api_allow_unsafe) {
-			$params = (object) $_GET;
-		}
-		else {
+		if (Config::get('api_allow_unsafe')!==true) {
 			$Response->throw_exception(503, _('SSL connection is required for API'));
 		}
+
+		// save request parameters
+		$params = (object) $_GET;
 	}
 	// error, invalid security
 	else {

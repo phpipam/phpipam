@@ -51,20 +51,17 @@ $tools_menu_items = array(
 
 
 #custom
-if (isset($private_subpages)) {
-    if(is_array($private_subpages)) {
-        if (sizeof($private_subpages)>0) {
-            # array and icon
-            $tools_menu['Custom tools'] = array();
-            $tools_menu_icons['Custom tools'] = "fa-star";
-            // loop
-            foreach ($private_subpages as $s) {
-                // title
-                $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
-                // add to inclusion check
-                $tools_menu_items[] = $s;
-            }
-        }
+$private_subpages = Config::get('private_subpages');
+if(is_array($private_subpages) && sizeof($private_subpages)>0) {
+    # array and icon
+    $tools_menu['Custom tools'] = array();
+    $tools_menu_icons['Custom tools'] = "fa-star";
+    // loop
+    foreach ($private_subpages as $s) {
+        // title
+        $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
+        // add to inclusion check
+        $tools_menu_items[] = $s;
     }
 }
 
