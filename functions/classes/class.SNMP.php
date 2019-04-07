@@ -149,13 +149,6 @@ class phpipamSNMP extends Common_functions {
 	 */
 	public $vlan_number = 1;
 
-	/**
-	 * Result object - for result printing
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
 
 
 

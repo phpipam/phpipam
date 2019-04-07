@@ -46,54 +46,12 @@ class Addresses extends Common_functions {
     public $lastId = false;
 
 	/**
-	 * Debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
-	 * Database conenction
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Subnets object
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Subnets;
-
-	/**
-	 * Logging object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 	/**
 	 * PowerDNS object

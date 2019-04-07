@@ -24,22 +24,6 @@ class Tools extends Common_functions {
 	public $csv_delimiter = ",";
 
 	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
 	 * Addresses object
 	 *
 	 * (default value: false)
@@ -48,33 +32,6 @@ class Tools extends Common_functions {
 	 * @access protected
 	 */
 	protected $Addresses = false;
-
-	/**
-	 * for Result printing
-	 *
-	 * @var object
-	 * @access public
-	 */
-	public $Result;
-
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * Database connection
-	 *
-	 * @var object
-	 * @access protected
-	 */
-	protected $Database;
-
 
 
 

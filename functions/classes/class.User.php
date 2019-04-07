@@ -16,15 +16,6 @@ class User extends Common_functions {
     public $username;
 
     /**
-     * from api flag
-     *
-     * (default value: false)
-     *
-     * @var bool
-     */
-    public $api = false;
-
-    /**
      * flag if user is authenticated
      *
      * (default value: false)
@@ -116,36 +107,6 @@ class User extends Common_functions {
      * @var mixed
      */
     protected $authmethodparams;
-
-    /**
-     *  debugging flag
-     *
-     * (default value: false)
-     *
-     * @var bool
-     */
-    protected $debugging = false;
-
-    /**
-     * Result object
-     *
-     * @var object
-     */
-    public $Result;
-
-    /**
-     * for Database connection
-     *
-     * @var mixed
-     */
-    protected $Database;
-
-    /**
-     * for Logging connection
-     *
-     * @var object
-     */
-    public $Log;
 
     /**
      * Cryptographic functions

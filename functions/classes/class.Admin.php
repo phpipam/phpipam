@@ -44,14 +44,6 @@ class Admin extends Common_functions {
 	private $admin_required = true;
 
 	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * User
 	 *
 	 * @var mixed
@@ -59,31 +51,7 @@ class Admin extends Common_functions {
 	 */
 	protected $User;
 
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
 
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 
 

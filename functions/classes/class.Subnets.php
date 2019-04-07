@@ -72,30 +72,6 @@ class Subnets extends Common_functions {
 	protected $arin = array();
 
 	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
-	 * for Result printing
-	 *
-	 * @var object
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Addresses class
 	 *
 	 * (default value: false)
@@ -125,21 +101,6 @@ class Subnets extends Common_functions {
 	 */
 	private $gmp_bitmasks;
 
-	/**
-	 * for Database connection
-	 *
-	 * @var object
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * for Logging connection
-	 *
-	 * @var object
-	 * @access public
-	 */
-	public $Log;
 
 
 

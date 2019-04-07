@@ -6,7 +6,6 @@
 
 class Install extends Common_functions {
 
-
 	/**
 	 * to store DB exceptions
 	 *
@@ -24,47 +23,12 @@ class Install extends Common_functions {
 	protected $db;
 
 	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
-	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Database_root - for initial installation
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Database_root;
-
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
-
 
 
 
@@ -393,11 +357,6 @@ class Upgrade extends Install {
 	 */
 	private $old_version = "1.2";
 
-	/**
-	 * Result
-	 * @var obj
-	 */
-	public $Result;
 
 	/**
 	 * __construct function.

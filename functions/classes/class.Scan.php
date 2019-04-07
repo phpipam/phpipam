@@ -25,16 +25,6 @@ class Scan extends Common_functions {
 	public $php_exec = null;
 
 	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
-	/**
 	 * default icmp type
 	 *
 	 * (default value: "ping")
@@ -82,14 +72,6 @@ class Scan extends Common_functions {
 	protected $icmp_exit = false;
 
 	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Database
 	 *
 	 * @var mixed
@@ -113,13 +95,6 @@ class Scan extends Common_functions {
 	 */
 	protected $Addresses;
 
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 
 

@@ -18,14 +18,6 @@ class DNS extends Common_functions {
 	private $type = "A";
 
 	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Database
 	 *
 	 * @var mixed

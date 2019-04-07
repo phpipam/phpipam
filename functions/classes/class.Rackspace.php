@@ -37,30 +37,6 @@ class phpipam_rack extends Tools {
      */
     private $rack_content = array();
 
-	/**
-	 * Result printing class
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
-	 * Database class
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Logging class
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
-
     /**
      * Rack
      *
