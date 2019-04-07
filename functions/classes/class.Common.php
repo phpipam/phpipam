@@ -202,39 +202,30 @@ class Common_functions  {
 	 * @return false|object
 	 */
 	public function fetch_object ($table=null, $method=null, $value) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-
 		// checks
-		if(is_null($table))		return false;
-		if(strlen($table)==0)   return false;
-		if(is_null($method))	return false;
-		if(is_null($value))		return false;
-		if($value===0)		    return false;
+		if(!is_string($table)) return false;
+		if(strlen($table)==0)  return false;
+		if(is_null($method))   return false;
+		if(is_null($value))    return false;
+		if($value===0)         return false;
 
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
-		if($cached_item!==false) {
+		if(is_object($cached_item))
 			return $cached_item;
-		}
-		else {
-			# null method
-			$method = is_null($method) ? "id" : $this->Database->escape($method);
 
-			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to cache array
-			if(is_object($res)) {
-				$this->cache_write ($table, $res);
-				return $res;
-			}
-			else {
-				return false;
-			}
+		# null method
+		$method = is_null($method) ? "id" : $this->Database->escape($method);
+
+		try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
 		}
+
+		# save to cache array
+		$this->cache_write ($table, $res);
+		return $res;
 	}
 
 	/**
