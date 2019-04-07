@@ -119,6 +119,14 @@ class Common_api_functions {
 	protected $Subnets;
 
 	/**
+	 * Master user class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $User;
+
+	/**
 	 * App object - will be passed by index.php
 	 * to provide app detauls
 	 *

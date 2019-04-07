@@ -7,6 +7,13 @@
 
 class FirewallZones extends Common_functions {
 
+	/**
+	 * private Subnets object
+	 *
+	 * @var Subnets
+	 * @access private
+	 */
+	private $Subnets;
 
 	/**
 	 * connection error string

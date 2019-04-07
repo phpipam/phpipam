@@ -8,6 +8,15 @@
 class Common_functions  {
 
 	/**
+     * from api flag
+     *
+     * (default value: false)
+     *
+     * @var bool
+     */
+    public $api = false;
+
+	/**
 	 * settings
 	 *
 	 * (default value: null)
