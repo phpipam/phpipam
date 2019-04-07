@@ -67,6 +67,13 @@ class DNS extends Common_functions {
 	 */
 	public $print_error = false;
 
+	/**
+	 * Resolve error if DNS is not accessible
+	 *
+	 * @var mixed
+	 */
+	private $resolve_error;
+
 
 
 

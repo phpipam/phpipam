@@ -3,6 +3,7 @@
 require_once( dirname(__FILE__).'/../../../functions/functions.php' );
 
 # initialize objects
+$Database	= new Database_PDO;
 $Result		= new Result;
 $User		= new User ($Database);
 # verify that user is logged in

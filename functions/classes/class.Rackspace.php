@@ -18,6 +18,24 @@ class phpipam_rack extends Tools {
     public $rack_sizes = array();
 
     /**
+     * Current rack size
+     * @var integer
+     */
+    public $rack_size = 0;
+
+    /**
+     * Current rack orientation
+     * @var integer
+     */
+    public $rack_orientation = 0;
+
+    /**
+     * Current rack name
+     * @var string
+     */
+    public $rack_name = "";
+
+    /**
      * List of all racks
      *
      * (default value: false)
