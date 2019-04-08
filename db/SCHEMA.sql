@@ -179,6 +179,7 @@ CREATE TABLE `settings` (
   `enablePSTN` TINYINT(1)  NULL  DEFAULT '0',
   `enableChangelog` TINYINT(1)  NOT NULL  DEFAULT '1',
   `enableCustomers` TINYINT(1)  NOT NULL  DEFAULT '1',
+  `disableOrphaned` TINYINT(1)  NOT NULL  DEFAULT '0',
   `link_field` VARCHAR(32)  NULL  DEFAULT '0',
   `version` varchar(5) DEFAULT NULL,
   `dbversion` INT(8) NOT NULL DEFAULT '0',
