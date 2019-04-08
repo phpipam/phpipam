@@ -313,6 +313,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Orphaned addresses -->
+<tr>
+	<td class="title"><?php print _('Orphaned addresses'); ?></td>
+	<td>
+		<input type="checkbox" value="1" class="input-switch" name="disableOrphaned" <?php if($settings['disableOrphaned'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Disable orphaned addresses warning and write lock'); ?>
+	</td>
+</tr>
+
 <!-- Share -->
 <tr>
 	<td class="title"><?php print _('Temporary shares'); ?></td>

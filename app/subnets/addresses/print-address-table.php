@@ -121,7 +121,7 @@ $statuses = explode(";", $User->settings->pingStatus);
 <?php
 if($location==="customers") {}
 elseif(!$slaves)		{ print _("IP addresses in $location "); }
-elseif(@$orphaned)	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
+elseif(@$orphaned && $User->settings->disableOrphaned=="0")	{ print "<div class='alert alert-warning alert-block'>"._('Orphaned IP addresses for subnet')." <strong>$subnet[description]</strong> (".sizeof($addresses)." orphaned) <br><span class='text-muted' style='font-size:12px;margin-top:10px;'>"._('This happens if subnet contained IP addresses when new child subnet was created')."'<span><hr><a class='btn btn-sm btn-default' id='truncate' href='' data-subnetid='".$subnet['id']."'><i class='fa fa-times'></i> "._("Remove all")."</a></div>"; }
 else 				{ print _("IP addresses belonging to ALL nested subnets"); }
 ?>
 </h4>
@@ -516,7 +516,7 @@ else {
 			print "<td class='btn-actions'>";
 			print "	<div class='btn-group'>";
 			# orphaned
-			if(@$orphaned && $subnet_permission > 1) {
+			if((@$orphaned && $subnet_permission > 1) && $User->settings->disableOrphaned=="0" ) {
 				print "		<a class='move_ipaddress   btn btn-xs btn-default moveIPaddr' data-action='move'   data-subnetId='$subnet[id]' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' title='"._('Move to different subnet')."'>		<i class='fa fa-gray fa-pencil'> </i></a>";
 				print "		<a class='delete_ipaddress btn btn-xs btn-default modIPaddr'  data-action='delete' data-subnetId='$subnet[id]' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' title='"._('Delete IP address')."'>				<i class='fa fa-gray fa-times'>  </i></a>";
 			}
