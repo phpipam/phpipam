@@ -57,7 +57,11 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
                 $_POST['long'] = $latlng['lng'];
             }
             else {
-                $Result->show("warning", _('Failed to update location lat/lng from google'), false);
+                if (!empty($latlng['info'])) {
+                    $Result->show("info", escape_input($latlng['info']), false);
+                } else {
+                    $Result->show("warning", _('Failed to update location lat/lng from google')."<br>".escape_input($latlng['error']), false);
+                }
             }
         }
     }

@@ -81,16 +81,29 @@ if (isset($objects["vlans"])) {
 	    }
 
         // actions
-		print "	<td class='actions'>";
-		print "	<div class='btn-group'>";
-		if($User->user->edit_vlan=="Yes"||$User->is_admin(false)) {
-		print "		<button class='btn btn-xs btn-default editVLAN' rel='tooltip' title='Edit object' data-action='edit'   data-vlanid='$vlan->vlanId'><i class='fa fa-pencil'></i></button>";
-		print "		<button class='btn btn-xs btn-default editVLAN' rel='tooltip' title='Delete object' data-action='delete' data-vlanid='$vlan->vlanId'><i class='fa fa-times'></i></button>";
-		if($User->get_module_permissions ("customers")>1)
-		print "		<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='vlans' data-id='$vlan->vlanId'><i class='fa fa-unlink'></i></button>";
+        print "<td class='actions'>";
+        $links = [];
+        if($User->get_module_permissions ("vlan")>0) {
+            $links[] = ["type"=>"header", "text"=>"View"];
+            $links[] = ["type"=>"link", "text"=>"Show vlan", "href"=>create_link("tools", "vlan", $vlan->domainId, $vlan->vlanId), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"divider"];
+        }
+        if($User->get_module_permissions ("vlan")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage"];
+            $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan->vlanId'", "icon"=>"pencil"];
+        }
+        if($User->get_module_permissions ("vlan")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan->vlanId'", "icon"=>"times"];
+        }
+		if($User->get_module_permissions ("customers")>1) {
+            $links[] = ["type"=>"divider"];
+	        $links[] = ["type"=>"header", "text"=>"Unlink"];
+            $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='vlans' data-id='$vlan->vlanId'", "icon"=>"unlink"];
 		}
-		print "	</div>";
-		print "	</td>";
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links);
+        print "</td>";
+		print '</tr>'. "\n";
 
         print "</tr>";
 

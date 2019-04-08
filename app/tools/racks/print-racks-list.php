@@ -119,15 +119,25 @@ else {
     		}
 
             // links
-            print " <td class='actions'>";
-            print " <div class='btn-group'>";
-            if($User->get_module_permissions ("racks")>1)
-            print "     <a href='' class='btn btn-xs btn-default editRack' data-action='edit'   data-rackid='$r->id'><i class='fa fa-pencil'></i></a>";
-            print "     <a href='' class='btn btn-xs btn-default showRackPopup' data-rackId='$r->id' data-deviceId='0'><i class='fa fa-server'></i></a>";
-            if($User->get_module_permissions ("racks")>2)
-            print "     <a href='' class='btn btn-xs btn-default editRack' data-action='delete' data-rackid='$r->id'><i class='fa fa-times'></i></a>";
-            print " </div>";
-            print " </td>";
+            print "<td class='actions'>";
+            $links = [];
+            if($User->get_module_permissions ("racks")>0) {
+                $links[] = ["type"=>"header", "text"=>"Show Rack"];
+                $links[] = ["type"=>"link", "text"=>"Show rack", "href"=>create_link($_GET['page'], "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
+                $links[] = ["type"=>"link", "text"=>"Show popup", "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
+                $links[] = ["type"=>"divider"];
+            }
+            if($User->get_module_permissions ("racks")>1) {
+                $links[] = ["type"=>"header", "text"=>"Manage rack"];
+                $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$r->id'", "icon"=>"pencil"];
+            }
+            if($User->get_module_permissions ("racks")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$r->id'", "icon"=>"times"];
+                $links[] = ["type"=>"divider"];
+            }
+            // print links
+            print $User->print_actions($User->user->compress_actions, $links);
+            print "</td>";
 
             print "</tr>";
         }

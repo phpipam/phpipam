@@ -76,7 +76,7 @@ foreach($Admin->fetch_multiple_objects ("users", "role", "Administrator") as $ad
 if(!isset($recepients))	{ die(); }
 
 // fetch settings
-$settings = $Admin->fetch_object("settings", "id", 1);
+$settings = $Admin->get_settings();
 
 # try to send
 try {

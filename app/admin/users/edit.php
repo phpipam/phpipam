@@ -105,6 +105,19 @@ $(document).ready(function(){
     	<td class="info2"><?php print _('Enter users email address'); ?></td>
     </tr>
 
+    <!-- Status -->
+    <tr>
+    	<td><?php print _('Status'); ?></td>
+    	<td>
+        <select name="disabled" class="form-control input-sm input-w-auto">
+            <option value="Yes" <?php if (@$user['disabled'] == "Yes") print "selected"; ?>><?php print _('Disabled'); ?></option>
+            <option value="No" 	<?php if (@$user['disabled'] == "No" || $_POST['action'] == "add") print "selected"; ?>><?php print _('Enabled'); ?></option>
+        </select>
+
+        </td>
+    	<td class="info2"><?php print _('You can disable user here'); ?>.</td>
+	</tr>
+
     <!-- role -->
     <tr>
     	<td><?php print _('User role'); ?></td>

@@ -37,14 +37,14 @@ if($nat->type=="static") {
     $nat_dst = json_decode($nat->dst, true);
 
     // validate all objects
-    if(sizeof(@$nat_src['ipaddresses'])>0) {
+    if(is_array(@$nat_src['ipaddresses'])) {
         foreach ($nat_src['ipaddresses'] as $ik=>$iv) {
             if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
                 unset($nat_src['ipaddresses'][$ik]);
             }
         }
     }
-    if(sizeof(@$nat_dst['ipaddresses'])>0) {
+    if(is_array(@$nat_dst['ipaddresses'])) {
         foreach ($nat_dst['ipaddresses'] as $ik=>$iv) {
             if($Tools->fetch_object("ipaddresses", "id", $iv)===false) {
                 unset($nat_dst['ipaddresses'][$ik]);
@@ -90,6 +90,12 @@ if(isset($_POST['object_type']) && isset($_POST['object_id'])) {
     $obj_id   = $_POST['object_id'];        // object identifier
     $nat_id   = $_POST['id'];               // nat id
     $nat_type = $_POST['type'];             // src, dst
+
+    // validate object type
+    if (!in_array($obj_type, ['subnets', 'ipaddresses'])) { $Result->show("danger", _("Invalid object type"), true); }
+
+    // validate object id
+    if (!is_numeric($obj_id)) { $Result->show("danger", _("Invalid object id"), true); }
 
     // validate object
     $item = $Tools->fetch_object ($obj_type, "id", $obj_id);

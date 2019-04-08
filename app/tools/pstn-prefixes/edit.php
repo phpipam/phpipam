@@ -175,7 +175,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
     				<option value="0"><?php print _('None'); ?></option>
     				<?php
     				// fetch all devices
-    				$devices = $Admin->fetch_all_objects("devices");
+    				$devices = $Admin->fetch_all_objects("devices", "hostname");
     				// loop
     				if ($devices!==false) {
     					foreach($devices as $device) {

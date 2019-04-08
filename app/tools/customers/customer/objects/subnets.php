@@ -113,23 +113,34 @@ foreach ($objects['subnets'] as $slave_subnet) {
 
 	# edit
 	print "	<td class='actions'>";
-	print "	<div class='btn-group'>";
 
+    // actions
 	$slave_subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);
-	if($slave_subnet_permission == 3) {
-		print "		<button class='btn btn btn-xs btn-default editSubnet'     data-action='edit'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-pencil'></i></button>";
-		print "		<button class='btn btn btn-xs btn-default showSubnetPerm' data-action='show'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-tasks'></i></button>";
-		print "		<button class='btn btn btn-xs btn-default editSubnet'     data-action='delete' data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'><i class='fa fa-gray fa-times'></i></button>";
-	}
-	else {
-		print "		<button class='btn btn btn-xs btn-default disabled'><i class='fa fa-gray fa-pencil'></i></button>";
-		print "		<button class='btn btn btn-xs btn-default disabled'><i class='fa fa-gray fa-tasks'></i></button>";
-		print "		<button class='btn btn btn-xs btn-default disabled'><i class='fa fa-gray fa-remove'></i></button>";
-	}
-	if($User->get_module_permissions ("customers")>1)
-	print "	<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='subnets' data-id='{$slave_subnet['id']}'><i class='fa fa-unlink'></i></button>";
-	print "	</div>";
-	print " </td>";
+
+    $links = [];
+
+    $links[] = ["type"=>"header", "text"=>"View"];
+    $links[] = ["type"=>"link", "text"=>"Show subnet", "href"=>create_link("subnets", $section->id,$slave_subnet['id']), "icon"=>"eye", "visible"=>"dropdown"];
+
+    if($slave_subnet_permission==3) {
+    	// manage
+	    $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>"Manage"];
+        $links[] = ["type"=>"link", "text"=>"Edit subnet", "href"=>"", "class"=>"editSubnet", "dataparams"=>" data-action='edit'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"pencil"];
+        $links[] = ["type"=>"link", "text"=>"Delete subnet", "href"=>"", "class"=>"editSubnet", "dataparams"=>" data-action='delete'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"times"];
+	    // permissions
+	    $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>"Permissions"];
+        $links[] = ["type"=>"link", "text"=>"Edit permissions", "href"=>"", "class"=>"showSubnetPerm", "dataparams"=>"data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"tasks"];
+    }
+    if($User->get_module_permissions ("customers")>1) {
+ 	    $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>"Unlink"];
+        $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700'data-object='subnets' data-id='{$slave_subnet['id']}'", "icon"=>"unlink"];
+    }
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
+    print "</td>";
 
 	print '</tr>' . "\n";
 }

@@ -28,7 +28,7 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
 
 // set size
 $selected_ip_fields_size = in_array('state', $selected_ip_fields) ? sizeof($selected_ip_fields)-1 : sizeof($selected_ip_fields);	//set size of selected fields
@@ -161,26 +161,33 @@ foreach($addresses as $dummy) {
 		print "<td class='hidden-xs hidden-sm'>".$addresses[$n]->owner."</td>";
 	}
 
-	# print action links if user can edit
-	print "<td class='btn-actions'>";
-	print "	<div class='btn-group'>";
-	# write permitted
-	if( $subnet_permission > 1) {
-		print "<a class='edit_ipaddress   btn btn-xs btn-default modIPaddr' rel='tooltip' data-container='body' title='"._('Edit IP address details')."' data-action='edit'  data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' >															<i class='fa fa-gray fa-pencil'></i></a>";
-		print "<a class='ping_ipaddress   btn btn-xs btn-default' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
-		print "<a class='delete_ipaddress btn btn-xs btn-default modIPaddr' rel='tooltip' data-container='body' title='"._('Delete')."' data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'>		<i class='fa fa-gray fa-times'>  </i></a>";
-	}
-	# write not permitted
-	else {
-		print "<a class='edit_ipaddress   btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Edit IP address details (disabled)')."'>													<i class='fa fa-gray fa-pencil'></i></a>";
-		print "<a class='				   btn btn-xs btn-default disabled'  data-id='".$addresses[$n]->id."' href='#' rel='tooltip' data-container='body' title='"._('Check availability')."'>					<i class='fa fa-gray fa-cogs'></i></a>";
-		print "<a class='delete_ipaddress btn btn-xs btn-default disabled' rel='tooltip' data-container='body' title='"._('Delete IP address (disabled)')."'>														<i class='fa fa-gray fa-times'></i></a>";
-	}
-	if($User->get_module_permissions ("customers")>1)
-	print "	<button class='btn btn-xs btn-default open_popup' rel='tooltip' title='Unlink object' data-script='app/admin/customers/unlink.php' data-class='700' data-object='ipaddresses' data-id='{$addresses[$n]->id}'><i class='fa fa-unlink'></i></button>";
 
-	print "	</div>";
-	print "</td>";
+	# edit
+	print "	<td class='actions'>";
+    $links = [];
+
+    $links[] = ["type"=>"header", "text"=>"View"];
+    $links[] = ["type"=>"link", "text"=>"Show address", "href"=>create_link("subnets",$subnet['sectionId'],$dummy->subnetId,"address-details",$dummy->id), "icon"=>"eye", "visible"=>"dropdown"];
+
+    if($subnet_permission>1) {
+    	// manage
+	    $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>"Manage"];
+        $links[] = ["type"=>"link", "text"=>"Edit address",   "href"=>"", "class"=>"modIPaddr", "dataparams"=>" data-action='edit'  data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"pencil"];
+        $links[] = ["type"=>"link", "text"=>"Delete address", "href"=>"", "class"=>"modIPaddr", "dataparams"=>" data-action='delete' data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."' href='#' id2='".$Subnets->transform_to_dotted($addresses[$n]->ip_addr)."'", "icon"=>"times"];
+	    // ping
+	    $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>"Status check"];
+        $links[] = ["type"=>"link", "text"=>"Check avalibility", "href"=>"", "class"=>"ping_ipaddress", "dataparams"=>" data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"cogs"];
+    }
+    if($User->get_module_permissions ("customers")>1) {
+ 	    $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>"Unlink"];
+        $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='ipaddresses' data-id='{$addresses[$n]->id}'", "icon"=>"unlink"];
+    }
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
+    print "</td>";
 
 	print '</tr>'. "\n";
 

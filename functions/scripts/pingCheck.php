@@ -73,7 +73,7 @@ $nowdate = date ("Y-m-d H:i:s");
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!PingThread::available()) 					{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
+if(!PingThread::available()) 					{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -105,7 +105,7 @@ foreach($scan_subnets as $s) {
 			                   );
 		}
 		//save addresses
-		if(sizeof($subnet_addresses)>0) {
+		if(is_array($subnet_addresses) && sizeof($subnet_addresses)>0) {
 			foreach($subnet_addresses as $a) {
 				//ignore excludePing
 				if($a->excludePing!=1) {
@@ -200,7 +200,7 @@ if($Scan->icmp_type=="fping") {
 
 	//now we must remove all non-existing hosts
 	foreach($subnets as $sk=>$s) {
-		if(sizeof(@$s['result'])>0 && sizeof($addresses[$s['id']])>0) {
+		if(!empty($s['result']) && is_array($addresses[$s['id']])) {
 			//loop addresses
 			foreach($addresses[$s['id']] as $ak=>$a) {
 				//offline host

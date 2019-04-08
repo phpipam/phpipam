@@ -59,11 +59,14 @@ if(@$_REQUEST['subnets']!="on" && @$_REQUEST['addresses']!="on" && @$_REQUEST['v
 		<?php if($User->settings->enableCircuits==1) { ?>
 		<input type="checkbox" name="circuits" 	    value="on" <?php if($_REQUEST['circuits']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?><br>
 		<?php } ?>
+		<?php if($User->settings->enableCustomers==1) { ?>
+		<input type="checkbox" name="customers" 	    value="on" <?php if($_REQUEST['customers']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?><br>
+		<?php } ?>
 	</div>
 
 	<!-- settings -->
 	<?php
-	if($_SESSION['realipamusername']) {
+	if(isset($_SESSION['realipamusername'])) {
 	$realuser = $Tools->fetch_object("users", "username", $_SESSION['realipamusername']);
 	?>
 

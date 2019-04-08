@@ -8,6 +8,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# create csrf token
+$csrf = $User->Crypto->csrf_cookie ("create", "user-menu");
+
 ?>
 <script type="text/javascript">
 //show clock
@@ -61,7 +64,7 @@ $(document).ready(function() {
 		}).get().join(';');
 
 		//save user widgets
-		$.post('app/tools/user-menu/user-widgets-set.php', {widgets:widgets}, function(data) {});
+		$.post('app/tools/user-menu/user-widgets-set.php', {widgets:widgets, csrf_cookie:"<?php print $csrf; ?>"}, function(data) {});
 
 		//remove sortable class
 		$('#dashboard .row-fluid').sortable("destroy");

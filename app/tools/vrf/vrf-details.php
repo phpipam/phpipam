@@ -24,7 +24,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 
 <div class="btn-group" style='margin-bottom:10px;'>
-    <a href='<?php print create_link("tools", "vrf"); ?>' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _("All VRFs"); ?></a>
+    <a href='<?php print create_link($_GET['page'], "vrf"); ?>' class='btn btn-sm btn-default'><i class='fa fa-angle-left'></i> <?php print _("All VRFs"); ?></a>
 </div>
 
 <table class="ipaddress_subnet table-condensed table-full">
@@ -124,19 +124,20 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
 		print "	<td style='vertical-align:bottom;align:left;'>";
 
-		print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
-		print "	<div class='btn-group'>";
-
-		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'><i class='fa fa-pencil'></i></button>";
-		if($User->get_module_permissions ("vrf")>2)
-		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vrfs/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'><i class='fa fa-times'></i></button>";
+		// actions
+        $links = [];
+        if($User->get_module_permissions ("vrf")>1) {
+            $links[] = ["type"=>"header", "text"=>"Manage"];
+            $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
+        }
+        if($User->get_module_permissions ("vrf")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'", "icon"=>"times"];
+        }
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links, true, true);
+		print "	</td>";
+		print "</tr>";
 	}
-
-	print "	</div>";
-	print "	</div>";
-
-	print "	</td>";
-	print "</tr>";
 	?>
 
 </table>	<!-- end subnet table -->

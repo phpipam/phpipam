@@ -56,6 +56,9 @@ if (isset($_COOKIE['search_parameters'])) {
 		<?php if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>0) { ?>
 		<input type="checkbox" name="circuits" 	    value="on" <?php if($_GET['circuits']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Circuits'); ?>
 		<?php } ?>
+		<?php if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) { ?>
+		<input type="checkbox" name="customers" 	    value="on" <?php if($_GET['customers']=="on") 	{ print "checked='checked'"; } ?>> <?php print _('Customers'); ?>
+		<?php } ?>
 	</div>
 </form>
 

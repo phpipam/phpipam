@@ -25,7 +25,7 @@ $addresses     = $Tools->fetch_multiple_objects("ipaddresses", "switch", $device
 if ($addresses===false) { $addresses = array(); }
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 
 # title - hosts
 print "<h4>"._("Belonging addresses")."</h4><hr>";

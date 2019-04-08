@@ -133,7 +133,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<input type="text" name="ad_port" class="form-control input-sm input-w-100" value="<?php print @$method_settings->params->ad_port; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="port info2">
-			<?php print _('The default port for LDAP non-SSL connections'); ?>
+			<?php print _('The default port for LDAP non-SSL connections'); ?>: 389 (SSL=636)
 		</td>
 	</tr>
 

@@ -34,5 +34,3 @@ foreach($admin_menu as $k=>$tool) {
 
 	print "</div>";
 }
-
-?>

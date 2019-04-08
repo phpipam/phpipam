@@ -29,7 +29,7 @@ $(document).ready(function() {
 		}).get().join(';');
 
 		//post
-		$.post('app/tools/user-menu/user-widgets-set.php', {widgets: lis}, function(data) {
+		$.post('app/tools/user-menu/user-widgets-set.php', {widgets: lis, csrf_cookie: '<?php print $csrf; ?>'}, function(data) {
 			$('.userModSelfResultW').html(data).fadeIn('fast');
 		});
 	});

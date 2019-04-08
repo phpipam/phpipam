@@ -16,8 +16,12 @@ $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# check maintaneance mode
+$User->check_maintaneance_mode ();
 # perm check popup
 $User->check_module_permissions ("vlan", 3, true, true);
+# validate csrf cookie
+$User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # fake error
 print "<div class='alert-danger hidden'></div>";
@@ -72,7 +76,7 @@ foreach ($scan_devices as $d) {
     try {
         $res = $Snmp->get_query("get_vlan_table");
         // remove those not in subnet
-        if (sizeof($res)>0) {
+        if (is_array($res) && sizeof($res)>0) {
            // save for debug
            $debug[$d->hostname]["get_vlan_table"] = $res;
            // loop and save
@@ -233,6 +237,7 @@ else {
 	print "</tr>";
 
 	print "</table>";
+	print '<input type="hidden" name="csrf_cookie" value="'.$_POST['csrf_cookie'].'">';
 	print "</form>";
 
     // print errors

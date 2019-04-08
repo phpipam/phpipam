@@ -65,15 +65,6 @@ class DHCP extends Common_functions {
      */
     private $DHCP_server = false;
 
-    /**
-     * Result holder
-     *
-     *  Fore result printing in case of errors
-     *
-     * @var mixed
-     * @access public
-     */
-    public $Result;
 
 
 
@@ -316,5 +307,3 @@ class DHCP extends Common_functions {
     /* @write methods --------------- */
 
 }
-
-?>

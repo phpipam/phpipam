@@ -37,11 +37,11 @@ $custom = $Tools->fetch_custom_fields('vlans');
 
 //if it already exist die
 if($User->settings->vlanDuplicate==0 && ($_POST['action']=="add" || $_POST['action']=="edit")) {
-	$check_vlan = $Admin->fetch_multiple_objects ("vlans", "domainId", $_POST['domainId'], "vlanId");
+	$check_vlan = $Admin->fetch_multiple_objects ("vlans", "domainId", $_POST['domainid'], "vlanId");
 	// check
 	if($check_vlan!==false) {
 		foreach($check_vlan as $v) {
-			if ($v->vlanId==$_POST['vlanId']) {}
+			if ($v->vlanId==$_POST['vlanid']) {}
 			elseif($v->number == $_POST['number']) {
 																			{ $Result->show("danger", _("VLAN already exists"), true); }
 			}
@@ -67,11 +67,11 @@ if(strlen($_POST['name'])==0)												{ $Result->show("danger", _('Name is re
 
 # formulate update query
 $values = array(
-				"vlanId"      => $_POST['vlanId'],
+				"vlanId"      => $_POST['vlanid'],
 				"number"      => $_POST['number'],
 				"name"        => $_POST['name'],
 				"description" => $_POST['description'],
-				"domainId"    => $_POST['domainId']
+				"domainId"    => $_POST['domainid']
 				);
 
 # append custom
@@ -100,7 +100,7 @@ if(!$Admin->object_modify("vlans", $_POST['action'], "vlanId", $values))	{ $Resu
 else																		{ $Result->show("success", _("VLAN $_POST[action] successfull").'!', false); }
 
 # remove all references if delete
-if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vlanId", $_POST['vlanId']); }
+if($_POST['action']=="delete") { $Admin->remove_object_references ("subnets", "vlanId", $_POST['vlanid']); }
 
 # print value for on the fly
 if($_POST['action']=="add")	   { print '<p id="vlanidforonthefly"    style="display:none">'.$Admin->lastId.'</p>'; }

@@ -209,7 +209,7 @@ class Responses {
 	 * @return void
 	 */
 	private function get_request_content_type () {
-		$this->result_type = $_SERVER['CONTENT_TYPE']=="application/xml" ? "xml" : "json";
+		$this->result_type = (isset($_SERVER['CONTENT_TYPE']) && $_SERVER['CONTENT_TYPE']=="application/xml") ? "xml" : "json";
 	}
 
 	/**
@@ -285,6 +285,9 @@ class Responses {
 	 * @return void
 	 */
 	private function nest_custom_fields ($custom_fields = array()) {
+		// make sure custom_fields is array
+		if(!is_array($custom_fields)) { $custom_fields = []; }
+
 		// Nest all fields in an array result.  Guard against arrays
 		// with string keys to ensure we don't mistakenly assume a
 		// simple associative array is an array of objects.

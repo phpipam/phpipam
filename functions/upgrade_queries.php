@@ -24,9 +24,9 @@ $upgrade_queries["1.2.0"][] = "ALTER TABLE `settings` ADD `subnetView` TINYINT  
 $upgrade_queries["1.2.0"][] = "-- add 'user' to app_security set";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `api` CHANGE `app_security` `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl';";
 $upgrade_queries["1.2.0"][] = "-- add english_US language";
-$upgrade_queries["1.2.0"][] = "INSERT INTO `lang` (`l_id`, `l_code`, `l_name`) VALUES (NULL, 'en_US', 'English (US)';";
+$upgrade_queries["1.2.0"][] = "INSERT INTO `lang` (`l_id`, `l_code`, `l_name`) VALUES (NULL, 'en_US', 'English (US)');";
 $upgrade_queries["1.2.0"][] = "-- update the firewallZones table to suit the new layout";
-$upgrade_queries["1.2.0"][] = "ALTER TABLE `firewallZones` DROP COLUMN `vlanId`, DROP COLUMN `stacked`";
+$upgrade_queries["1.2.0"][] = "ALTER TABLE `firewallZones` DROP COLUMN `vlanId`, DROP COLUMN `stacked`;";
 $upgrade_queries["1.2.0"][] = "-- add a new table to store subnetId and zoneId";
 $upgrade_queries["1.2.0"][] = "
 CREATE TABLE `firewallZoneSubnet` (
@@ -43,7 +43,7 @@ CREATE TABLE `firewallZoneSubnet` (
     FOREIGN KEY (`subnetId`)
     REFERENCES `subnets` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION;";
+    ON UPDATE NO ACTION);";
 $upgrade_queries["1.2.0"][] = "-- copy old subnet IDs from firewallZones table into firewallZoneSubnet";
 $upgrade_queries["1.2.0"][] = "INSERT INTO `firewallZoneSubnet` (zoneId,subnetId) SELECT id AS zoneId,subnetId from `firewallZones`;";
 $upgrade_queries["1.2.0"][] = "-- remove the field subnetId from firewallZones, it's not longer needed ";
@@ -54,12 +54,12 @@ $upgrade_queries["1.2.0"][] = "ALTER TABLE `firewallZoneMapping` ADD CONSTRAINT 
 $upgrade_queries["1.2.0"][] = "-- add firewallAddresObject field to the ipaddresses table to store fw addr. obj. names permanently";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `ipaddresses` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL;";
 $upgrade_queries["1.2.0"][] = "-- activate the firewallAddressObject IP field filter on default";
-$upgrade_queries["1.2.0"][] = "UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject';";
+$upgrade_queries["1.2.0"][] = "UPDATE `settings` SET IPfilter = CONCAT(IPfilter,';firewallAddressObject');";
 $upgrade_queries["1.2.0"][] = "-- add a column for subnet firewall address objects";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `subnets` ADD COLUMN `firewallAddressObject` VARCHAR(100) NULL DEFAULT NULL;";
 $upgrade_queries["1.2.0"][] = "-- add http and apache auth method";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` SET('local','AD','LDAP','NetIQ','Radius','http')  CHARACTER SET utf8  NOT NULL  DEFAULT 'local';";
-$upgrade_queries["1.2.0"][] = "INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`) VALUES ('http', NULL, 'Yes', 'Apache authentication';";
+$upgrade_queries["1.2.0"][] = "INSERT INTO `usersAuthMethod` (`type`, `params`, `protected`, `description`) VALUES ('http', NULL, 'Yes', 'Apache authentication');";
 $upgrade_queries["1.2.0"][] = "-- allow powerdns record management for user";
 $upgrade_queries["1.2.0"][] = "ALTER TABLE `users` ADD `pdns` SET('Yes','No')  NULL  DEFAULT 'No';";
 $upgrade_queries["1.2.0"][] = "-- add Ip request widget";
@@ -770,6 +770,99 @@ $upgrade_queries["1.4.10"][] = "ALTER TABLE `users` DROP `perm_customers`;";
 $upgrade_queries["1.4.11"][] = "-- Database version bump";
 $upgrade_queries["1.4.11"][] = "UPDATE `settings` set `dbversion` = '11';";
 $upgrade_queries["1.4.11"][] = "ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` VARCHAR(255)  CHARACTER SET utf8  BINARY  NULL  DEFAULT '{\"vlan\":\"1\",\"vrf\":\"1\",\"pdns\":\"1\",\"circuits\":\"1\",\"racks\":\"1\",\"nat\":\"1\",\"pstn\":\"1\",\"customers\":\"1\",\"locations\":\"1\",\"devices\":\"1\"}';";
+
+
+#
+# Subversion 1.4.12 queries
+#
+$upgrade_queries["1.4.12"][] = "-- Database version bump";
+$upgrade_queries["1.4.12"][] = "UPDATE `settings` set `dbversion` = '12';";
+$upgrade_queries["1.4.12"][] = "ALTER TABLE usersAuthMethod MODIFY COLUMN `params` varchar(2048) DEFAULT NULL;";
+
+
+#
+# Subversion 1.4.13 queries
+#
+$upgrade_queries["1.4.13"][] = "-- Database version bump";
+$upgrade_queries["1.4.13"][] = "UPDATE `settings` set `dbversion` = '13';";
+$upgrade_queries["1.4.13"][] = "ALTER TABLE `users` ADD `compress_actions` TINYINT(1)  NULL  DEFAULT '1';";
+
+
+#
+# Subversion 1.4.14 queries
+#
+$upgrade_queries["1.4.14"][] = "-- Database version bump";
+$upgrade_queries["1.4.14"][] = "UPDATE `settings` set `dbversion` = '14';";
+$upgrade_queries["1.4.14"][] = "-- Change API security";
+$upgrade_queries["1.4.14"][] = "ALTER TABLE `api` CHANGE `app_security` `app_security` SET('ssl_code','ssl_token','crypt','user','none','ssl') CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT 'ssl_token'";
+$upgrade_queries["1.4.14"][] = "UPDATE `api` set `app_security` = 'ssl_token' where `app_security` = 'ssl'";
+$upgrade_queries["1.4.14"][] = "ALTER TABLE `api` CHANGE `app_security` `app_security` SET('ssl_code','ssl_token','crypt','user','none') CHARACTER SET utf8  COLLATE utf8_general_ci  NOT NULL  DEFAULT 'ssl_token'";
+$upgrade_queries["1.4.14"][] = "ALTER TABLE `api` ADD `app_last_access` DATETIME  NULL";
+
+
+#
+# Subversion 1.4.15 queries
+#
+$upgrade_queries["1.4.15"][] = "-- Convert snmp_timeout to milliseconds";
+$upgrade_queries["1.4.15"][] = "ALTER TABLE `devices` CHANGE `snmp_timeout` `snmp_timeout` mediumint(5) unsigned DEFAULT '1000';";
+$upgrade_queries["1.4.15"][] = "UPDATE `devices` SET `snmp_timeout` = `snmp_timeout`/1000 WHERE `snmp_timeout` > 10000;";
+
+
+#
+# Subversion 1.4.16 queries
+#
+$upgrade_queries["1.4.16"][] = "-- Fix masterSubnetId index definition";
+$upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` DROP INDEX `masterSubnetId`;";
+$upgrade_queries["1.4.16"][] = "ALTER TABLE `subnets` ADD INDEX(`masterSubnetId`);";
+
+
+#
+# Subversion 1.4.17 queries
+#
+$upgrade_queries["1.4.17"][] = "-- Performance fix for linked addresses, moved to settings;";
+
+
+#
+# Subversion 1.4.18 queries
+#
+$upgrade_queries["1.4.18"][] = "-- DROP redundant indexes;";
+$upgrade_queries["1.4.18"][] = "ALTER TABLE `users` DROP INDEX `id`;";
+$upgrade_queries["1.4.18"][] = "ALTER TABLE `sections` DROP INDEX `id`;";
+
+
+#
+# Subversion 1.4.19 queries
+#
+$upgrade_queries["1.4.19"][] = "-- Support longer php_session ids (session.hash_function = sha512/whirlpool);";
+$upgrade_queries["1.4.19"][] = "ALTER TABLE `php_sessions` CHANGE `id` `id` VARCHAR(128) NOT NULL DEFAULT '';";
+
+
+#
+# Subversion 1.4.20 queries
+#
+// japanese translation
+$upgrade_queries["1.4.20"][] = "-- Add Japanese translation";
+$upgrade_queries["1.4.20"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Japanese', 'ja_JP.UTF-8');";
+
+
+#
+# Subversion 1.4.21 queries
+#
+// instructions widget
+$upgrade_queries["1.4.21"][] = "-- Instruction widget";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `whref` `whref` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wsize` `wsize` ENUM('4','6','8','12') NOT NULL DEFAULT '6';";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wadminonly` `wadminonly` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.4.21"][] = "ALTER TABLE `widgets` CHANGE `wactive` `wactive` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.4.21"][] = "INSERT INTO `widgets` (`wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`) VALUES ('User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes');";
+
+
+#
+# Subversion 1.4.22 queries
+#
+// disable user
+$upgrade_queries["1.4.22"][] = "-- Add disabled user flag";
+$upgrade_queries["1.4.22"][] = "ALTER TABLE `users` ADD `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No';";
 
 
 

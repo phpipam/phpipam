@@ -216,6 +216,7 @@ if($User->user->authMethod == 1) {
 </tr>
 
 </table>
+<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 </form>
 
 

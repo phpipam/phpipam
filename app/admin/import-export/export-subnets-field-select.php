@@ -119,7 +119,7 @@ if($all_sections!==false) {
 	foreach ($sections_sorted as $section) {
 		//cast
 		$section = (array) $section;
-		$section['url_name'] = urlencode($section['name']);
+		$section['url_name'] = urlencode($section['id']);
 
 		print '<tr>';
 		print '	<td><div class="checkbox"><label><input type="checkbox" id="exportCheck" name="exportSection__'.$section['url_name'].'" checked>'.$section['name'].'</label></div></td>';

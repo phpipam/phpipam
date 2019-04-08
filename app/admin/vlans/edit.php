@@ -34,7 +34,7 @@ $_POST = $User->strip_input_tags ($_POST);
 $Admin->validate_action ($_POST['action'], true);
 
 # fetch vlan details
-$vlan = $Admin->fetch_object ("vlans", "vlanId", @$_POST['vlanId']);
+$vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);
 $vlan = $vlan!==false ? (array) $vlan : array();
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('vlans');
@@ -57,6 +57,8 @@ if($_POST['action']=="add") {
 	} else {
 		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $_POST['domain']);
 	}
+	if(isset($_POST['number']))
+	$vlan['number'] = $_POST['number'];
 } else {
 		$vlan_domain = $Admin->fetch_object("vlanDomains", "id", $vlan['domainId']);
 }
@@ -87,7 +89,7 @@ $(document).ready(function(){
 		if (@$_POST['domain']!="all") {
 			print $vlan_domain->name." (".$vlan_domain->description.")";
 		} else {
-			print "<select name='domainId' class='form-control input-sm'>";
+			print "<select name='domainid' class='form-control input-sm'>";
 			foreach ($vlan_domains as $d) {
 				print "<option value='$d->id'>$d->name</option>";
 			}
@@ -120,9 +122,9 @@ $(document).ready(function(){
 		<td><?php print _('Description'); ?></td>
 		<td>
 			<input type="text" class="description form-control input-sm" name="description" placeholder="<?php print _('Description'); ?>" value="<?php print $Tools->strip_xss(@$vlan['description']); ?>" <?php print $readonly; ?>>
-			<input type="hidden" name="vlanId" value="<?php print @$_POST['vlanId']; ?>">
+			<input type="hidden" name="vlanid" value="<?php print @$_POST['vlanid']; ?>">
 			<?php if(@$_POST['domain']!=="all") { ?>
-			<input type="hidden" name="domainId" value="<?php print $vlan_domain->id; ?>">
+			<input type="hidden" name="domainid" value="<?php print $vlan_domain->id; ?>">
 			<?php } ?>
 			<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
 			<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">

@@ -138,7 +138,7 @@ foreach ($sections as $section) {
 
 			$lineCount++;
 
-			if(sizeof($ipaddresses) > 0) {
+			if(is_array($ipaddresses) && sizeof($ipaddresses) > 0) {
 
 			foreach ($ipaddresses as $ip) {
 				//cast

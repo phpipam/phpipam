@@ -60,7 +60,7 @@ $Addresses->ptr_unlink_subnet_addresses ($subnet->id);
 $hosts   = $Addresses->fetch_subnet_addresses ($subnet->id, "ip_addr", "asc");
 
 // create PTR records
-if (sizeof($hosts)>0) {
+if (is_array($hosts) && sizeof($hosts)>0) {
 	foreach ($hosts as $h) {
     	// set default hostname for PTR if set
     	if (strlen($h->hostname)==0) {

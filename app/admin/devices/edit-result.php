@@ -35,7 +35,7 @@ $User->Crypto->csrf_cookie ("validate", "device", $_POST['csrf_cookie']) === fal
 $device = $Admin->strip_input_tags($_POST);
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['switchId']))			{ $Result->show("danger", _("Invalid ID"), true); }
+if($_POST['action']!="add" && !is_numeric($_POST['switchid']))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # available devices set
 foreach($device as $key=>$line) {
@@ -93,7 +93,7 @@ if(sizeof($custom) > 0) {
 
 # set update values
 $values = array(
-				"id"          =>$device['switchId'],
+				"id"          =>$device['switchid'],
 				"hostname"    =>$device['hostname'],
 				"ip_addr"     =>$device['ip_addr'],
 				"type"        =>$device['type'],

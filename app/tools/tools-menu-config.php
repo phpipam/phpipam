@@ -12,6 +12,7 @@ $tools_menu = array();
 $tools_menu_icons['Tools'] 		= "fa-wrench";
 $tools_menu_icons['Subnets'] 	= "fa-sitemap";
 $tools_menu_icons['User Menu'] 	= "fa-user";
+$tools_menu_icons['Devices'] 	= "fa-desktop";
 
 # inclusion check
 $tools_menu_items = array(
@@ -44,25 +45,23 @@ $tools_menu_items = array(
 						'pstn-prefixes',
 						'mac-lookup',
 						'circuits',
-						'customers'
+						'customers',
+						"duplicates"
                     );
 
 
 #custom
-if (isset($private_subpages)) {
-    if(is_array($private_subpages)) {
-        if (sizeof($private_subpages)>0) {
-            # array and icon
-            $tools_menu['Custom tools'] = array();
-            $tools_menu_icons['Custom tools'] = "fa-star";
-            // loop
-            foreach ($private_subpages as $s) {
-                // title
-                $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
-                // add to inclusion check
-                $tools_menu_items[] = $s;
-            }
-        }
+$private_subpages = Config::get('private_subpages');
+if(is_array($private_subpages) && sizeof($private_subpages)>0) {
+    # array and icon
+    $tools_menu['Custom tools'] = array();
+    $tools_menu_icons['Custom tools'] = "fa-star";
+    // loop
+    foreach ($private_subpages as $s) {
+        // title
+        $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
+        // add to inclusion check
+        $tools_menu_items[] = $s;
     }
 }
 
@@ -113,6 +112,7 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-th-large", 	 "name"=
 if($User->settings->tempShare==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-share-alt",  "name"=>"Temporary shares", 	"href"=>"temp-shares",	"description"=>"List of temporary shared objects");
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-thumbs-down",  "name"=>"Inactive Hosts", 	"href"=>"inactive-hosts",	"description"=>"List of inactive hosts");
+$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-files-o",  "name"=>"Duplicates", 	"href"=>"duplicates",	"description"=>"List of duplicate subnets and addresses");
 if($User->settings->enableThreshold==1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-bullhorn",  "name"=>"Threshold", 	"href"=>"threshold",	"description"=>"List of thresholded subnets");
 

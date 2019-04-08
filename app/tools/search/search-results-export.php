@@ -67,6 +67,7 @@ $custom_vlan_fields      = $_REQUEST['vlans']=="on"     ? $Tools->fetch_custom_f
 $custom_vrf_fields       = $_REQUEST['vrf']=="on"       ? $Tools->fetch_custom_fields ("vrf") : array();
 $custom_circuit_fields   = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuits") : array();
 $custom_circuit_p_fields = $_REQUEST['circuits']=="on"  ? $Tools->fetch_custom_fields ("circuitProviders") : array();
+$custom_customer_fields  = $_REQUEST['customers']=="on" ? $Tools->fetch_custom_fields ("customers") : array();
 
 
 # set selected address fields array
@@ -96,6 +97,10 @@ if(@$_REQUEST['circuits']=="on" && $User->get_module_permissions ("circuits")>0)
 else 																				{ $result_circuits = []; }
 if(@$_REQUEST['circuits']=="on" && $User->get_module_permissions ("circuits")>0) 	{ $result_circuits_p = $Tools->search_circuit_providers($search_term, $custom_circuit_p_fields); }
 else  																				{ $result_circuits_p = []; }
+
+# search customers
+if(@$_REQUEST['customers']=="on" && $User->get_module_permissions ("customers")>0) 		{ $result_customers = $Tools->search_customers($search_term, $custom_vrf_fields); }
+else  																					{ $result_customers = []; }
 
 /*
  *	Write xls
@@ -568,6 +573,56 @@ if(sizeof($result_circuits_p)>0) {
 	}
 }
 
+
+
+
+/* -- Create a worksheet for Customers -- */
+if(sizeof($result_customers)>0) {
+	$lineCount = 0;
+
+	$worksheet =& $workbook->addWorksheet(_('Customers'));
+	$worksheet->setInputEncoding("utf-8");
+
+	//write headers
+	$worksheet->write($lineCount, 0, _('Title') ,$format_title);
+	$worksheet->write($lineCount, 1, _('Address') ,$format_title);
+	$worksheet->write($lineCount, 2, _('Contact') ,$format_title);
+
+	$c=3;
+	if(sizeof($custom_customer_fields) > 0) {
+		foreach($custom_customer_fields as $field) {
+			$worksheet->write($lineCount, $c, $field['name'], $format_title);
+			$c++;
+		}
+	}
+
+	//new line
+	$lineCount++;
+
+	foreach($result_customers as $line) {
+		//cast
+		$line = (array) $line;
+
+		//print details
+		$worksheet->write($lineCount, 0, $line['title'], $format_left);
+		$worksheet->write($lineCount, 1, $line['address'].", ".$line['postcode']." ".$line['city'].", ".$line['state']);
+		if(strlen($line['contact_person'])>0)
+		$worksheet->write($lineCount, 2, $line['contact_person']." - ".$line['contact_mail']." (".$line['contact_phone'].")");
+		else
+		$worksheet->write($lineCount, 2, "");
+
+		//custom
+		$c=3;
+		if(sizeof($custom_customer_fields) > 0) {
+			foreach($custom_customer_fields as $field) {
+				$worksheet->write($lineCount, $c, $line[$field['name']]);
+				$c++;
+			}
+		}
+		//new line
+		$lineCount++;
+	}
+}
 
 
 

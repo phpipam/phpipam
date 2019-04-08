@@ -19,6 +19,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 
+$db = Config::get('db');
 
 //set filename
 $filename = "phpipam_MySQL_dump_". date("Y-m-d") .".sql";

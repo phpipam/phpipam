@@ -113,21 +113,20 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
 		print "	<td style='vertical-align:bottom;align:left;'>";
 
-		print "	<div class='btn-toolbar' style='margin-bottom:0px'>";
-		print "	<div class='btn-group'>";
+        // actions
+        $links = [];
+        $links[] = ["type"=>"header", "text"=>"Manage"];
+        $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan[vlanId]'", "icon"=>"pencil"];
 
-		print "		<button class='btn btn-xs btn-default editVLAN' data-action='edit'   data-vlanid='$vlan[vlanId]'><i class='fa fa-pencil'></i></button>";
-		if($User->get_module_permissions ("vlan")>2) {
-		print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/move-vlan.php' data-class='700' data-vlanid='$vlan[vlanId]'><i class='fa fa-external-link'></i></button>";
-		print "		<button class='btn btn-xs btn-default editVLAN' data-action='delete' data-vlanid='$vlan[vlanId]'><i class='fa fa-times'></i></button>";
-		}
+        if($User->get_module_permissions ("vlan")>2) {
+            $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan[vlanId]'", "icon"=>"times"];
+        }
+        // print links
+        print $User->print_actions($User->user->compress_actions, $links, true, true);
+
+		print "	</td>";
+		print "</tr>";
 	}
-
-	print "	</div>";
-	print "	</div>";
-
-	print "	</td>";
-	print "</tr>";
 
 	?>
 

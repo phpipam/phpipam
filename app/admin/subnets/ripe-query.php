@@ -64,7 +64,7 @@ $res = $Subnets->resolve_ripe_arin ($_POST['subnet']);
 				print "<select name='$d' class='form-control input-sm'>";
 				print "<option value='0'>None</option>";
 				// print custom
-				if (sizeof($custom_fields>0)) {
+				if (is_array($custom_fields)) {
 					foreach ($custom_fields as $f) {
 						// replace descr with description
 						if ($k=="descr")	$k = "description";

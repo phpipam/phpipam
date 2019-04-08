@@ -139,8 +139,7 @@ CREATE TABLE `sections` (
   `showSupernetOnly` BOOL  NOT NULL  DEFAULT '0',
   `DNS` VARCHAR(128)  NULL  DEFAULT NULL,
   PRIMARY KEY (`name`),
-  UNIQUE KEY `id_2` (`id`),
-  KEY `id` (`id`)
+  UNIQUE KEY `id_2` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `sections` (`id`, `name`, `description`, `permissions`)
@@ -288,7 +287,7 @@ CREATE TABLE `subnets` (
   `lastScan` TIMESTAMP  NULL,
   `lastDiscovery` TIMESTAMP  NULL,
   PRIMARY KEY (`id`),
-  KEY `masterSubnetId` (`subnet`),
+  KEY `masterSubnetId` (`masterSubnetId`),
   KEY `location` (`location`),
   KEY `sectionId` (`sectionId`),
   KEY `vrfId` (`vrfId`),
@@ -320,7 +319,7 @@ CREATE TABLE `devices` (
   `snmp_community` varchar(100) DEFAULT NULL,
   `snmp_version` set('0','1','2','3') DEFAULT '0',
   `snmp_port` mediumint(5) unsigned DEFAULT '161',
-  `snmp_timeout` mediumint(5) unsigned DEFAULT '500',
+  `snmp_timeout` mediumint(5) unsigned DEFAULT '1000',
   `snmp_queries` varchar(128) DEFAULT NULL,
   `snmp_v3_sec_level` set('none','noAuthNoPriv','authNoPriv','authPriv') DEFAULT 'none',
   `snmp_v3_auth_protocol` set('none','MD5','SHA') DEFAULT 'none',
@@ -375,6 +374,7 @@ CREATE TABLE `users` (
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
+  `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No',
   `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
   `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
   `passChange` SET('Yes','No')  NOT NULL  DEFAULT 'No',
@@ -391,9 +391,9 @@ CREATE TABLE `users` (
   `token` VARCHAR(24)  NULL  DEFAULT NULL,
   `token_valid_until` DATETIME  NULL,
   `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
+  `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
   PRIMARY KEY (`username`),
-  UNIQUE KEY `id_2` (`id`),
-  KEY `id` (`id`)
+  UNIQUE KEY `id_2` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /* insert default values */
 INSERT INTO `users` (`id`, `username`, `password`, `groups`, `role`, `real_name`, `email`, `domainUser`,`widgets`, `passChange`)
@@ -424,7 +424,8 @@ VALUES
 	(8, 'cs_CZ.UTF-8', 'Czech'),
 	(9, 'en_US.UTF-8', 'English (US)'),
   (10,'ru_RU.UTF-8', 'Russian'),
-  (11,'zh_CN.UTF-8', 'Chinese');
+  (11,'zh_CN.UTF-8', 'Chinese'),
+  (12,'ja_JP.UTF-8', 'Japanese');
 
 
 # Dump of table vlans
@@ -514,11 +515,12 @@ CREATE TABLE `api` (
   `app_code` varchar(32) NULL DEFAULT '',
   `app_permissions` int(1) DEFAULT '1',
   `app_comment` TEXT  NULL,
-  `app_security` SET('crypt','ssl','user','none')  NOT NULL  DEFAULT 'ssl',
+  `app_security`SET('ssl_code','ssl_token','crypt','user','none')  NOT NULL  DEFAULT 'ssl_token',
   `app_lock` INT(1)  NOT NULL  DEFAULT '0',
   `app_lock_wait` INT(4)  NOT NULL  DEFAULT '30',
   `app_nest_custom_fields` TINYINT(1)  NULL  DEFAULT '0',
   `app_show_links` TINYINT(1)  NULL  DEFAULT '0',
+  `app_last_access` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_id` (`app_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -553,12 +555,12 @@ CREATE TABLE `widgets` (
   `wdescription` varchar(1024) DEFAULT NULL,
   `wfile` varchar(64) NOT NULL DEFAULT '',
   `wparams` varchar(1024) DEFAULT NULL,
-  `whref` set('yes','no') NOT NULL DEFAULT 'no',
-  `wsize` SET('4','6','8','12') NOT NULL DEFAULT '6',
-  `wadminonly` set('yes','no') NOT NULL DEFAULT 'no',
-  `wactive` set('yes','no') NOT NULL DEFAULT 'no',
+  `whref` enum('yes','no') NOT NULL DEFAULT 'no',
+  `wsize` enum('4','6','8','12') NOT NULL DEFAULT '6',
+  `wadminonly` enum('yes','no') NOT NULL DEFAULT 'no',
+  `wactive` enum('yes','no') NOT NULL DEFAULT 'no',
   PRIMARY KEY (`wid`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `widgets` (`wid`, `wtitle`, `wdescription`, `wfile`, `wparams`, `whref`, `wsize`, `wadminonly`, `wactive`)
 VALUES
@@ -578,7 +580,8 @@ VALUES
 	(14,'Inactive hosts', 'Shows list of inactive hosts for defined period', 'inactive-hosts', 86400, 'yes', '6', 'yes', 'yes'),
 	(15, 'Locations', 'Shows map of locations', 'locations', NULL, 'yes', '6', 'no', 'yes'),
   (16, 'Bandwidth calculator', 'Calculate bandwidth', 'bw_calculator', NULL, 'no', '6', 'no', 'yes'),
-  (17, 'Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes');
+  (17, 'Customers', 'Shows customer list', 'customers', NULL, 'yes', '6', 'no', 'yes'),
+  (18, 'User Instructions', 'Shows user instructions', 'instructions', NULL, 'yes', '6', 'no', 'yes');
 
 
 
@@ -627,7 +630,7 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `type` set('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
-  `params` varchar(1024) DEFAULT NULL,
+  `params` varchar(2048) DEFAULT NULL,
   `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
   PRIMARY KEY (`id`)
@@ -716,7 +719,8 @@ CREATE TABLE `firewallZoneSubnet` (
     FOREIGN KEY (`subnetId`)
     REFERENCES `subnets` (`id`)
     ON DELETE CASCADE
-    ON UPDATE NO ACTION);
+    ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 # Dump of table scanAgents
@@ -931,7 +935,7 @@ INSERT INTO `circuitTypes` (`ctname`) VALUES ('Default');
 DROP TABLE IF EXISTS `php_sessions`;
 
 CREATE TABLE `php_sessions` (
-  `id` varchar(32) NOT NULL DEFAULT '',
+  `id` varchar(128) NOT NULL DEFAULT '',
   `access` int(10) unsigned DEFAULT NULL,
   `data` text NOT NULL,
   `remote_ip` varchar(100) DEFAULT NULL,
@@ -943,4 +947,4 @@ CREATE TABLE `php_sessions` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 11;
+UPDATE `settings` SET `dbversion` = 22;

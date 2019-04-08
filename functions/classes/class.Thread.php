@@ -54,7 +54,7 @@ class PingThread {
 	*/
     public static function available() {
         $required_functions = array(
-            'pcntl_fork',
+            'pcntl_fork', 'posix_getpid'
         );
 
         foreach( $required_functions as $function ) {

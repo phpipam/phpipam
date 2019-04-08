@@ -43,7 +43,7 @@ foreach($masks as $m) {
 		print "	<td>$m->bitmask</td>";
 		print "	<td>$m->netmask</td>";
 		print "	<td>$m->wildcard</td>";
-		print "	<td class='visible-lg'>$m->binary</td>";
+		print "	<td class='visible-lg'>".$m->binary."</td>";
 		print "	<td>$m->subnets</td>";
 		print "	<td>$m->hosts</td>";
 		if(!$popup) {

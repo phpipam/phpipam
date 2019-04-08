@@ -146,12 +146,12 @@ $('.slider').slider().on('slide', function(ev){
 // mastersubnet Ajax
 $("input[name='subnet']").change(function() {
 	var $masterdopdown = $("select[name='masterSubnetId']");
-	$masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
+	$masterdopdown.load('<?php print 'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=' + $masterdopdown.val());
 });
 
 <?php if($_POST['location']=="ipcalc" && !isset($_POST['freespaceMSID'])) { ?>
     var $masterdopdown = $("select[name='masterSubnetId']");
-    $masterdopdown.load('<?php print BASE.'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
+    $masterdopdown.load('<?php print 'app/subnets/mastersubnet-dropdown.php?section='.urlencode($_POST['sectionId']).'&cidr='; ?>' + $(this).val() + '&prev=0');
 <?php } ?>
 
 });
@@ -209,8 +209,8 @@ $("input[name='subnet']").change(function() {
         <td class="info2">
             <div class="btn-group">
             	<button type="button" class="btn btn-xs btn-default show-masks" rel='tooltip' data-placement="bottom" title='<?php print _('Subnet masks'); ?>' data-closeClass="hidePopup2"><i class="fa fa-th-large"></i></button>
-            	<?php if($User->settings->enableSNMP == "1" && $_POST['action']=="add") { ?>
-            	<button type="button" class="btn btn-xs btn-default"  id='snmp-routing' rel='tooltip' data-placement="bottom" title='<?php print _('Search for subnets through SNMP'); ?>'><i class="fa fa-cogs"></i></button>
+            	<?php if($User->settings->enableSNMP == "1" && $_POST['action']=="add") { $csrf_scan = $User->Crypto->csrf_cookie ("create-if-not-exists", "scan"); ?>
+            	<button type="button" class="btn btn-xs btn-default"  id='snmp-routing' rel='tooltip' data-placement="bottom" data-csrf-cookie='<?php print $csrf_scan; ?>' title='<?php print _('Search for subnets through SNMP'); ?>'><i class="fa fa-cogs"></i></button>
             	<?php } ?>
             	<button type="button" class="btn btn-xs btn-default"  id='get-ripe' rel='tooltip' data-placement="bottom" title='<?php print _('Get information from RIPE / ARIN database'); ?>'><i class="fa fa-refresh"></i></button>
             </div>

@@ -12,7 +12,7 @@ $User->check_user_session();
 
 <?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")==3) { ?>
 <div class="btn-group">
-	<a href="" class='btn btn-sm btn-default editNat' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
+	<a href="" class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
     <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>
 </div>
 <br>
@@ -123,10 +123,12 @@ else {
                 // actions
                 if($User->get_module_permissions ("nat")>1) {
         		print "	<td class='actions'>";
-        		print "	<div class='btn-group'>";
-        		print "		<a href='' class='btn btn-xs btn-default editNat' data-action='edit'   data-id='$n->id'><i class='fa fa-pencil'></i></a>";
-        		print "		<a href='' class='btn btn-xs btn-default editNat' data-action='delete' data-id='$n->id'><i class='fa fa-times'></i></a>";
-        		print "	</div>";
+                $links = [];
+                $links[] = ["type"=>"header", "text"=>"Manage NAT"];
+                $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+                $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+                // print links
+                print $User->print_actions($User->user->compress_actions, $links);
         		print " </td>";
         		}
 

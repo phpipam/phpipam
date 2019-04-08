@@ -292,6 +292,23 @@ class User_controller extends Common_api_functions {
 
 
 
+	/**
+	 * Checks authentication token (app_code) from ssl_code method
+	 *
+	 * @method check_auth_code
+	 * @param  string $app_id
+	 * @return void
+	 */
+	public function check_auth_code ($app_id = "") {
+		// block IP
+		$this->validate_block ();
+		// validate token
+		$this->validate_requested_token_code ($app_id);
+	}
+
+
+
+
 
 
 
@@ -536,6 +553,27 @@ class User_controller extends Common_api_functions {
 	}
 
 	/**
+	 * Validates token for ssl_code method
+	 *
+	 * @method validate_requested_token_code
+	 * @param  string $app_id
+	 * @return void
+	 */
+	private function validate_requested_token_code ($app_id) {
+		// check that token is present
+		if(!isset($_SERVER['HTTP_PHPIPAM_TOKEN']))	{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
+		// validate and remove token
+		else {
+			// fetch app_id from token
+			if(($app_temp = $this->Admin->fetch_object ("api", "app_code", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
+													{ $this->Response->throw_exception(401, $this->Response->errors[401]); }
+
+			// if they dont match die
+			if ($app_id != $app_temp->app_id)		{ $this->Response->throw_exception(403, "Invalid token"); }
+		}
+	}
+
+	/**
 	 * Checks if token has expired
 	 *
 	 * @access private
@@ -603,7 +641,7 @@ class User_controller extends Common_api_functions {
 	 */
 	private function generate_token () {
 		// save token and valid time
-		$this->token = $this->User->Crypto->generate_api_token($this->token_length);
+		$this->token = $this->User->Crypto->generate_html_safe_token($this->token_length);
 		$this->token_expires = date("Y-m-d H:i:s", time()+$this->token_valid_time);
 	}
 

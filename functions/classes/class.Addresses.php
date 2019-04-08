@@ -46,54 +46,12 @@ class Addresses extends Common_functions {
     public $lastId = false;
 
 	/**
-	 * Debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
-	 * Database conenction
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Subnets object
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Subnets;
-
-	/**
-	 * Logging object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 	/**
 	 * PowerDNS object
@@ -291,7 +249,7 @@ class Addresses extends Common_functions {
 			return false;
 		}
 		# save to addresses cache
-		if(sizeof($address)>0) {
+		if(is_object($address)) {
 			# add decimal format
 			$address->ip = $this->transform_to_dotted ($address->ip_addr);
 			# save to subnets
@@ -302,29 +260,74 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Bulk fetch similar addresses.
+	 *
+	 * The subnets details page will call search_similar_addresses() for EVERY IP in the subnet.
+	 * Bulk request and cache this information on the first call. Sort returned IPs by ip_addr.
+	 *
+	 * Returns an array indexed by $value.  $bulk_search[$value] = Array of similar IPs with same $value
+	 *
+	 * @access public
+	 * @param object $address
+	 * @param mixed $linked_field
+	 * @param mixed $value
+	 * @return void
+	 */
+	private function bulk_fetch_similar_addresses($address, $linked_field, $value) {
+		// Check cache
+		$cached_item = $this->cache_check("similar_addresses", "f=$linked_field id=$address->subnetId");
+		if (is_object($cached_item))
+			return $cached_item->result;
+
+		// Fetch all similar addresses for entire subnet.
+		try {
+			$query = "SELECT SQL_CACHE * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
+			$linked_subnet_addrs = $this->Database->getObjectsQuery($query, array($address->subnetId));
+		} catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+
+		$bulk_search = [];
+		if (is_array($linked_subnet_addrs)) {
+			foreach($linked_subnet_addrs as $linked) {
+				// Index by $linked->{$linked_field} for easy searching.
+				$bulk_search[$linked->{$linked_field}][] = $linked;
+			}
+		}
+
+		// Save to cache and return
+		$this->cache_write ("similar_addresses", (object) ["id"=>"f=$linked_field id=$address->subnetId", "result" => $bulk_search]);
+		return $bulk_search;
+	}
+
+	/**
 	 * Searches database for similar addresses
 	 *
 	 * @access public
+	 * @param object $address
 	 * @param mixed $linked_field
 	 * @param mixed $value
-	 * @param mixed $address_id
 	 * @return void
 	 */
-	public function search_similar_addresses ($linked_field, $value, $address_id) {
-    	// checks
-    	if(strlen($linked_field)>0 && strlen($value)>0 && is_numeric($address_id)) {
-        	// search
-     		try { $addresses = $this->Database->getObjectsQuery("SELECT * FROM `ipaddresses` where `$linked_field` = ? and `id` != ? and state != 4;", array($value, $address_id)); }
-    		catch (Exception $e) {
-    			$this->Result->show("danger", _("Error: ").$e->getMessage());
-    			return false;
-    		}
-    		#result
-    		return sizeof($addresses)>0 ? $addresses : false;
-        }
-        else {
-            return false;
-        }
+	public function search_similar_addresses ($address, $linked_field, $value) {
+		// sanity checks
+		if(!is_object($address) || !property_exists($address, $linked_field) || strlen($value)==0)
+			return false;
+
+		$bulk_search = $this->bulk_fetch_similar_addresses($address, $linked_field, $value);
+
+		// Check if similar addresses exist with the specifed $value
+		if (!isset($bulk_search[$address->{$linked_field}]))
+			return false;
+
+		$results = $bulk_search[$address->{$linked_field}];
+		// Remove $address from results
+		foreach ($results as $i => $similar) {
+			if ($similar->id == $address->id) unset($results[$i]);
+		}
+
+		return !empty($results) ? $results : false;
 	}
 
 	/**
@@ -369,7 +372,6 @@ class Addresses extends Common_functions {
 						"mac"                   => @$address['mac'],
 						"owner"                 => @$address['owner'],
 						"state"                 => @$address['state'],
-						"switch"                => @$address['switch'],
 						"port"                  => @$address['port'],
 						"note"                  => @$address['note'],
 						"is_gateway"            => @$address['is_gateway'],
@@ -379,27 +381,30 @@ class Addresses extends Common_functions {
 						"lastSeen"              => @$address['lastSeen']
 						);
 		# permissions
-		if($User->get_module_permissions ("devices")<1) {
-			unset($insert['switch']);
-		}
-		# customer
-		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
-			if (is_numeric($address['customer_id'])) {
-				if ($address['customer_id']!="0") {
-					$insert['customer_id'] = $address['customer_id'];
-				}
-				else {
-					$insert['customer_id'] = NULL;
-				}
+		if($this->api===true || $User->get_module_permissions ("devices")>1) {
+			if (array_key_exists('switch', $address)) {
+				if (empty($address['switch']) || is_numeric($address['switch']))
+					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
 			}
 		}
-        # location
-        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
-            if (!is_numeric($address['location_item'])) {
-                $this->Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
+		# customer
+		if($this->api===true || $User->get_module_permissions ("customers")>1) {
+			if (array_key_exists('customer_id', $address)) {
+				if (empty($address['customer_id']) || is_numeric($address['customer_id']))
+					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
+			}
+		}
+		# location
+		if ($this->api===true || $User->get_module_permissions ("locations")>1) {
+			if (array_key_exists('location_item', $address)) {
+				if (empty($address['location_item']) || is_numeric($address['location_item']))
+					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
+			}
+			if (array_key_exists('location', $address)) {
+				if (empty($address['location']) || is_numeric($address['location']))
+					$insert['location'] = $address['location'] > 0 ? $address['location'] : NULL;
+			}
+		}
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -459,35 +464,38 @@ class Addresses extends Common_functions {
 						"mac"         =>@$address['mac'],
 						"owner"       =>@$address['owner'],
 						"state"       =>@$address['state'],
-						"switch"      =>@$address['switch'],
 						"port"        =>@$address['port'],
 						"note"        =>@$address['note'],
 						"is_gateway"  =>@$address['is_gateway'],
 						"excludePing" =>@$address['excludePing'],
-						"PTRignore"   =>@$address['PTRignore']
+						"PTRignore"   =>@$address['PTRignore'],
+						"lastSeen"    =>@$address['lastSeen']
 						);
 		# permissions
-		if($User->get_module_permissions ("devices")<1) {
-			unset($insert['switch']);
-		}
- 		# customer
-		if(isset($address['customer_id']) && $User->get_module_permissions ("customers")>0) {
-			if (is_numeric($address['customer_id'])) {
-				if ($address['customer_id']!="0") {
-					$insert['customer_id'] = $address['customer_id'];
-				}
-				else {
-					$insert['customer_id'] = NULL;
-				}
+		if($this->api===true || $User->get_module_permissions ("devices")>1) {
+			if (array_key_exists('switch', $address)) {
+				if (empty($address['switch']) || is_numeric($address['switch']))
+					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
 			}
 		}
-        # location
-        if (isset($address['location_item']) && $User->get_module_permissions ("locations")>0) {
-            if (!is_numeric($address['location_item'])) {
-                $this->Result->show("danger", _("Invalid location value"), true);
-            }
-            $insert['location'] = $address['location_item'];
-        }
+		# customer
+		if($this->api===true || $User->get_module_permissions ("customers")>1) {
+			if (array_key_exists('customer_id', $address)) {
+				if (empty($address['customer_id']) || is_numeric($address['customer_id']))
+					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
+			}
+		}
+		# location
+		if ($this->api===true || $User->get_module_permissions ("locations")>1) {
+			if (array_key_exists('location_item', $address)) {
+				if (empty($address['location_item']) || is_numeric($address['location_item']))
+					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
+			}
+			if (array_key_exists('location', $address)) {
+				if (empty($address['location']) || is_numeric($address['location']))
+					$insert['location'] = $address['location'] > 0 ? $address['location'] : NULL;
+			}
+		}
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -842,6 +850,7 @@ class Addresses extends Common_functions {
 
 		# fetch all addresses in subnet and subnet
 		$addresses = $this->fetch_subnet_addresses ($subnetId, "ip_addr", "asc", array("ip_addr"));
+		if (!is_array($addresses)) { $addresses = array(); }
 		$subnet = (array) $Subnets->fetch_subnet(null, $subnetId);
 
 		# if folder return false
@@ -915,7 +924,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;
@@ -962,7 +971,7 @@ class Addresses extends Common_functions {
 	 */
 	public function pdns_remove_ip_and_hostname_records ($address) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;
@@ -1874,9 +1883,11 @@ class Addresses extends Common_functions {
     	$false = array();
 		// find unique ids
 		$ids = $this->find_unique_subnetids ();
-		if ($ids===false)										{ return false; }
 
 		// validate
+		if (!is_array($ids))
+			return false;
+
 		foreach ($ids as $id) {
 			if ($this->verify_subnet_id ($id->subnetId)===false) {
 				$false[] = $this->fetch_subnet_addresses ($id->subnetId);

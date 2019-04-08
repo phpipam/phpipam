@@ -49,6 +49,7 @@ $username = strtolower($User->user->username)."@".$User->settings->{'2fa_name'};
 	<?php }  ?>
 </tr>
 </table>
+<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
 </form>
 
 <!-- result -->

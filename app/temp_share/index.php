@@ -3,7 +3,7 @@
 include('functions/checks/check_php_build.php');		# check for support for PHP modules and database connection
 
 # fetch settings
-$settings = $Tools->fetch_object("settings", "id", 1);
+$settings = $Tools->get_settings();
 ?>
 
 <!DOCTYPE HTML>

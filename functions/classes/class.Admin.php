@@ -44,14 +44,6 @@ class Admin extends Common_functions {
 	private $admin_required = true;
 
 	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * User
 	 *
 	 * @var mixed
@@ -59,31 +51,7 @@ class Admin extends Common_functions {
 	 */
 	protected $User;
 
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
 
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 
 
@@ -177,15 +145,20 @@ class Admin extends Common_functions {
 	 * @param string $action
 	 * @param string|array $field
 	 * @param array $values
+	 * @param array $values_log
 	 * @return void
 	 */
-	public function object_modify ($table, $action=null, $field="id", $values = array ()) {
+	public function object_modify ($table, $action=null, $field="id", $values = [], $values_log = []) {
 		# strip tags
-		$values = $this->strip_input_tags ($values);
+		$values     = $this->strip_input_tags ($values);
+		$values_log = $this->strip_input_tags ($values_log);
+
+		# if empty values_log inherit from values to preserve old functionality
+		if(sizeof($values_log)==0)	{ $values_log = $values; }
 
 		# execute based on action
-		if($action=="add")					{ return $this->object_add ($table, $values); }
-		elseif($action=="edit")				{ return $this->object_edit ($table, $field, $values); }
+		if($action=="add")					{ return $this->object_add ($table, $values, $values_log); }
+		elseif($action=="edit")				{ return $this->object_edit ($table, $field, $values, $values_log); }
 		elseif($action=="edit-multiple")	{ return $this->object_edit_multiple ($table, $field, $values); }		//$field = array of ids
 		elseif($action=="delete")			{ return $this->object_delete ($table, $field, $values[$field]); }
 		else								{ return $this->Result->show("danger", _("Invalid action"), true); }
@@ -199,9 +172,10 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table
 	 * @param mixed $values
+	 * @param array $values_log		//log variables
 	 * @return boolean
 	 */
-	private function object_add ($table, $values) {
+	private function object_add ($table, $values, $values_log) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -209,13 +183,13 @@ class Admin extends Common_functions {
 		try { $this->Database->insertObject($table, $values); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
+			$this->Log->write( "$table object creation", "Failed to create new $table database object<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( "$table object creation", "New $table database object created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( "$table object creation", "New $table database object created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
 		return true;
 	}
 
@@ -228,9 +202,10 @@ class Admin extends Common_functions {
 	 * @access private
 	 * @param mixed $table			//name of table to update
 	 * @param array $values			//update variables
+	 * @param array $values_log		//log variables
 	 * @return boolean
 	 */
-	private function object_edit ($table, $key="id", $values) {
+	private function object_edit ($table, $key="id", $values, $values_log = []) {
 		# null empty values
 		$values = $this->reformat_empty_array_fields ($values, null);
 
@@ -238,13 +213,13 @@ class Admin extends Common_functions {
 		try { $this->Database->updateObject($table, $values, $key); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
-			$this->Log->write( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 2);
+			$this->Log->write( "$table object $values[$key] edit", "Failed to edit object $key=$values[$key] in $table<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 2);
 			return false;
 		}
 		# save ID
 		$this->save_last_insert_id ();
 		# ok
-		$this->Log->write( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);
+		$this->Log->write( "$table object $values[$key] edit", "Object $key=$values[$key] in $table edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values_log, "NULL")), 0);
 		return true;
 	}
 

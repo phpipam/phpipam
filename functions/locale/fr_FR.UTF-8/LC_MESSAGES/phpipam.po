@@ -612,7 +612,7 @@ msgstr "Port"
 
 #: site/tools/vlan.php:17
 msgid "Available VLANs:"
-msgstr "VLANs disponibles: "
+msgstr "VLANs disponibles :"
 
 #: site/tools/vlan.php:25 site/tools/searchResults.php:338 site/admin/manageVLANEdit.php:50
 #: site/admin/manageVLANs.php:35
@@ -621,7 +621,7 @@ msgstr "Numéro"
 
 #: site/tools/vlan.php:28 site/tools/searchResults.php:340
 msgid "Belonging subnets"
-msgstr "Sous-réseau correspondants"
+msgstr "Sous-réseaux correspondants"
 
 #: site/tools/vlan.php:31 site/tools/subnets.php:50
 msgid "free"
@@ -747,11 +747,11 @@ msgstr "Vous pouvez rechercher des plages avec * (ex 10.23.3.*)"
 
 #: site/tools/searchTips.php:28
 msgid "* shows ALL IP addresses and subnets"
-msgstr "Afficher toutes les adresses IP et sous-réseaux"
+msgstr "* affiche toutes les adresses IP et sous-réseaux"
 
 #: site/tools/searchTips.php:35
 msgid "IPv6 search tips"
-msgstr "Conseils de recherche IPv4"
+msgstr "Conseils de recherche IPv6"
 
 #: site/tools/searchTips.php:37
 msgid "You can search through ranges by specifying whole subnet (e.g. 2002:8a10::/32)"
@@ -3037,7 +3037,7 @@ msgstr ""
 
 #: site/admin/manageSubnetsplit.php:109
 msgid "Existing IP addresses will be assigned to new subnets"
-msgstr "Les adresse IP existantes seront assignées aux nouveaux sous-réseaux."
+msgstr "Les adresses IP existantes seront assignées aux nouveaux sous-réseaux."
 
 #: site/admin/manageSubnetsplit.php:110
 msgid "Group under current will create new nested subnets under current one"
@@ -5778,7 +5778,7 @@ msgid "Import file and show addresses"
 msgstr "Importer le fichier et afficher les adresses"
 
 msgid "VLAN has no belonging subnets"
-msgstr "le VLAN ne possède pas de sous-réseau rattaché"
+msgstr "Le VLAN ne possède pas de sous-réseau rattaché"
 
 msgid "Folder has no subfolders"
 msgstr "Le dossier n'a pas de sous-dossier"
@@ -6564,7 +6564,7 @@ msgid "Objects"
 msgstr "Objets"
 
 msgid "Address"
-msgstr "Addresse"
+msgstr "Adresse"
 
 msgid "Set Location name"
 msgstr "Choisir le nom de l'emplacement"
@@ -7046,7 +7046,7 @@ msgid "IPv4 reverse domains"
 msgstr "Domaines inverses IPv4"
 
 msgid "Adding domain record on slave zone is not permitted"
-msgstr "Ajouter un enregistrement de domaine sur une zone escale n'est pas autorisé"
+msgstr "Ajouter un enregistrement de domaine sur une zone esclave n'est pas autorisé"
 
 msgid "Delete"
 msgstr "Supprimer"
@@ -7229,10 +7229,10 @@ msgid "Enable or disable PSTN module to manage phone numbers"
 msgstr "Activer/désactiver le module PSTN pour gérer les numéros de téléphone"
 
 msgid "Link addresses"
-msgstr "Lier addresses"
+msgstr "Lier adresses"
 
 msgid "Display linked addresses from another subnet if it matches selected field"
-msgstr "Afficher les addresses liées d'une autre sous-réseau s'il y a correspondance avec les champs choisis"
+msgstr "Afficher les adresses liées d'une autre sous-réseau s'il y a correspondance avec les champs choisis"
 
 msgid "Set where to send system logs"
 msgstr "Choisir où envoyer les logs système"
@@ -7580,10 +7580,10 @@ msgid "No NAT objects available"
 msgstr "Aucun objet de NAT disponible"
 
 msgid "No NAT translations for this address"
-msgstr "Aucune translation NAT pour cette addresse"
+msgstr "Aucune translation NAT pour cette adresse"
 
 msgid "Address permissions"
-msgstr "Permissions d'addresses"
+msgstr "Permissions d'adresses"
 
 msgid "General"
 msgstr "Général"

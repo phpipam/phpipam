@@ -133,8 +133,10 @@ if($section_permission == 3) {
 	print "	 <button id='add_subnet' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new subnet to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-plus'></i></button>";
 	print "	 <button class='btn btn-xs btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php'  data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')." $section[name]'  data-sectionId='$section[id]'><i class='fa fa-sm fa-search'></i></button>";
 	# snmp
-	if($User->settings->enableSNMP==1)
-	print "	 <button class='btn btn-xs btn-default btn-success' id='snmp-routing-section'  rel='tooltip' data-container='body' data-sectionId='$section[id]' data-subnetId='0'  data-placement='top' title='"._('Search for subnets through SNMP')."'><i class='fa fa-sm fa-cogs'></i></button>";
+	if($User->settings->enableSNMP==1) {
+    $csrf = $User->Crypto->csrf_cookie ("create", "scan");
+	print "	 <button class='btn btn-xs btn-default btn-success' id='snmp-routing-section'  rel='tooltip' data-container='body' data-sectionId='$section[id]' data-subnetId='0' data-csrf-cookie='$csrf'  data-placement='top' title='"._('Search for subnets through SNMP')."'><i class='fa fa-sm fa-cogs'></i></button>";
+    }
 	print "	 <button id='add_folder' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new folder to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-folder'></i></button>";
 	print "	</div>";
 	print "	</span>";

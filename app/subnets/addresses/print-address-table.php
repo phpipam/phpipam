@@ -36,7 +36,7 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['ipaddresses']) ? $hidden_cfields['ipaddresses'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
 // if fw not set remove!
 if($User->settings->enableFirewallZones != 1) { unset($selected_ip_fields['firewallAddressObject']); }
 // set size
@@ -106,7 +106,7 @@ if(sizeof($custom_fields) > 0) {
 # set colspan for output
 $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
-$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields);			//dhcp colspan
+$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields) -4;		//dhcp colspan
 $colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
 $colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp colspan negative fix
 
@@ -253,7 +253,7 @@ else {
 				    //calculate
 				    $tDiff = time() - strtotime($addresses[$n]->lastSeen);
 				    if($addresses[$n]->excludePing=="1" ) { $hStatus = "padded"; $hTooltip = ""; }
-				    if(is_null($addresses[$n]->lastSeen))   { $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address was never online")."'"; }
+				    elseif(is_null($addresses[$n]->lastSeen))   { $hStatus = "neutral"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address was never online")."'"; }
 				    elseif($tDiff < $statuses[0])	{ $hStatus = "success";	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is alive")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'"; }
 				    elseif($tDiff < $statuses[1])	{ $hStatus = "warning"; $hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address warning")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'"; }
 				    elseif($tDiff > $statuses[1])	{ $hStatus = "error"; 	$hTooltip = "rel='tooltip' data-container='body' data-html='true' data-placement='left' title='"._("Address is offline")."<hr>"._("Last seen").": ".$addresses[$n]->lastSeen."'";}
@@ -274,7 +274,7 @@ else {
                     // search for hostname records
 					$records = $PowerDNS->search_records ("name", $addresses[$n]->hostname, 'name', true);
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
-					$ptr_name = $PowerDNS->get_ip_ptr_name(long2ip($addresses[$n]->ip_addr));
+					$ptr_name = $PowerDNS->get_ip_ptr_name($Tools->long2ip4($addresses[$n]->ip_addr));
 					if(! $ptr || $ptr_name != $ptr->name) {
 					        $ptr = $PowerDNS->search_records("name", $ptr_name);
 					        if($ptr) {
@@ -283,10 +283,10 @@ else {
 					        } else { $Addresses->ptr_link($addresses[$n]->id, 0); }
 					}
 					unset($dns_records);
-					if ($records !== false || $ptr!==false) {
+					if (is_array($records) || $ptr!==false) {
 						$dns_records[] = "<br>";
 						$dns_records[] = "<ul class='submenu-dns text-muted'>";
-						if($records!==false) {
+						if(is_array($records)) {
 							foreach ($records as $r) {
 								if($r->type!="SOA" && $r->type!="NS")
 								$dns_records[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->content </li>";
@@ -305,7 +305,7 @@ else {
 					// search for IP records
 					$records2 = $PowerDNS->search_records ("content", $addresses[$n]->ip, 'content', true);
 					unset($dns_records2);
-					if ($records2 !== false) {
+					if (is_array($records2)) {
                         $dns_cname_unique = array();        // unique CNAME records to prevent multiple
                         unset($cname);
 						$dns_records2[] = "<br>";
@@ -315,7 +315,7 @@ else {
 							$dns_records2[]   = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$r->id' data-domain_id='$r->domain_id'>$r->type</span> $r->name </li>";
                             //search also for CNAME records
                             $dns_records_cname = $PowerDNS->seach_aliases ($r->name);
-                            if($dns_records_cname!==false) {
+                            if(is_array($dns_records_cname)) {
                                 foreach ($dns_records_cname as $cn) {
                                     if (!in_array($cn->name, $dns_cname_unique)) {
                                         $cname[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$cn->id' data-domain_id='$cn->domain_id'>$cn->type</span> $cn->name </li>";
@@ -467,8 +467,9 @@ else {
 				}
 
 			    # print location
-			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("vlan")>0) {
-			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$addresses[$n]->location."</td>";
+			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) {
+			    	$location_name = $Tools->fetch_object("locations", "id", $addresses[$n]->location);
+			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
 			    }
 
 				# print owner
@@ -566,7 +567,7 @@ else {
 			// now search for similar addresses if chosen
 			if (strlen($User->settings->link_field)>0) {
     			// search
-    			$similar = $Addresses->search_similar_addresses ($User->settings->link_field, $addresses[$n]->{$User->settings->link_field}, $addresses[$n]->id);
+    			$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $addresses[$n]->{$User->settings->link_field});
 
     			if($similar!==false) {
 

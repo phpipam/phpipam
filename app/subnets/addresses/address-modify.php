@@ -46,8 +46,8 @@ $subnet_permission = $Subnets->check_permission($User->user, $subnet['id']);
 $subnet_permission > 1 ?:		$Result->show("danger", _('Cannot edit IP address details').'! <br>'._('You do not have write access for this network'), true, true);
 
 // set selected address and required addresses fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);
-$required_ip_fields = explode(";", $User->settings->IPrequired);																			//format to array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
+$required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired);																			//format to array
 
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
@@ -361,7 +361,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
     		$records  = $PowerDNS->search_records ("name", $address['hostname'], 'name', true);
     		$records2 = $PowerDNS->search_records ("content", $address['ip'], 'content', true);
 
-    		if ($records!==false || $records2!==false) {
+    		if (is_array($records) || is_array($records2)) {
         		// form
         		print '<tr>';
         	 	print '<td>'._("Remove DNS records").'</td>';
@@ -376,7 +376,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
         	 	print "<hr>";
 
         	 	// hostname records
-        	 	if ($records!==false) {
+        	 	if (is_array($records)) {
             	 	print " <div style='margin-left:60px'>";
             	 	$dns_records[] = $address['hostname'];
             	 	$dns_records[] = "<ul class='submenu-dns'>";
@@ -392,7 +392,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
         	 	}
 
         	 	// IP records
-        	 	if ($records2!==false) {
+        	 	if (is_array($records2)) {
             	 	print " <div style='margin-left:60px'>";
             	 	$dns_records[] = $address['ip'];
             	 	$dns_records[] = "<ul class='submenu-dns'>";
@@ -404,7 +404,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
                     //search also for CNAME records
                     $dns_cname_unique = array();
                     $dns_records_cname = $PowerDNS->seach_aliases ($r->name);
-                    if($dns_records_cname!==false) {
+                    if(is_array($dns_records_cname)) {
                         foreach ($dns_records_cname as $cn) {
                             if (!in_array($cn->name, $dns_cname_unique)) {
                                 $cname[] = "<li><i class='icon-gray fa fa-gray fa-angle-right'></i> <span class='badge badge1 badge2 editRecord' data-action='edit' data-id='$cn->id' data-domain_id='$cn->domain_id'>$cn->type</span> $cn->name </li>";

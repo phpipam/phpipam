@@ -17,7 +17,7 @@
 
 
 # Required extensions
-$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd");
+$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl");
 
 # Available extensions
 $availableExt = get_loaded_extensions();
@@ -43,11 +43,6 @@ if (function_exists("apache_get_modules")) {
 # check for PEAR functions
 if ((@include_once 'PEAR.php') != true) {
 	$missingExt[] = "php PEAR support";
-}
-
-# Check for ctype functions (FreeBSD)
-if (!function_exists('ctype_alnum')) {
-	$missingExt[] = "ctype";
 }
 
 # if any extension is missing print error and die!

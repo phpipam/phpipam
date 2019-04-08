@@ -28,6 +28,7 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);
 $subnet = (array) $Tools->fetch_object ("subnets", "id", $_GET['subnetId']);
 # fetch all IP addresses in subnet
 $addresses = $Addresses->fetch_subnet_addresses ($_GET['subnetId'], "ip_addr", "asc");
+if (!is_array($addresses)) { $addresses = array(); }
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 

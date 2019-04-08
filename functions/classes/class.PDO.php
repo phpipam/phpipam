@@ -801,6 +801,10 @@ abstract class DB {
 		$objs = $this->getObjectsQuery($query, $values, $class);
 
 		$list = array();
+
+		if (!is_array($objs))
+			return $list;
+
 		foreach ($objs as $obj) {
 			$columns = array_values((array)$obj);
 			$list[] = $columns[0];
@@ -995,7 +999,8 @@ class Database_PDO extends DB {
 	 */
 	private function set_db_params () {
 		# use config file
-		require( dirname(__FILE__) . '/../../config.php' );
+		$db = Config::get('db');
+
 		# set
 		$this->host 	= $db['host'];
 		$this->port 	= $db['port'];
@@ -1015,6 +1020,10 @@ class Database_PDO extends DB {
 			);
 
 			$this->ssl = array();
+
+			if ($db['ssl_verify']===false) {
+				$this->ssl[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+			}
 
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
 				if ($db[$key]) {
@@ -1063,6 +1072,10 @@ class Database_PDO extends DB {
 		");
 
 		$columnsByTable = array();
+
+		if (!is_array($columns))
+			return $columnsByTable;
+
 		foreach ($columns as $column) {
 			if (!isset($columnsByTable[$column->table_name])) {
 				$columnsByTable[$column->table_name] = array();
@@ -1107,6 +1120,10 @@ class Database_PDO extends DB {
 
 		$foreignLinksByTable = array();
 		$foreignLinksByRefTable = array();
+
+		if (!is_array($foreignLinks))
+			return array($foreignLinksByTable, $foreignLinksByRefTable);
+
 		foreach ($foreignLinks as $foreignLink) {
 			if (!isset($foreignLinksByTable[$foreignLink->table_name])) {
 				$foreignLinksByTable[$foreignLink->table_name] = array();
@@ -1123,7 +1140,3 @@ class Database_PDO extends DB {
 		return array($foreignLinksByTable, $foreignLinksByRefTable);
 	}
 }
-
-
-
-?>

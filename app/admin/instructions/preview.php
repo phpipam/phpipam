@@ -17,7 +17,7 @@ $_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_P
 
 ?>
 <div class="normalTable" style="padding: 5px;">
-  <div class='well'>
+  <div class='instructions well'>
     <?php print $_POST['instructions']; ?>
   </div>
 </div>

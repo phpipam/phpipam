@@ -10,7 +10,7 @@ $User->check_module_permissions ("vlan", 1, true, false);
 <?php if($User->get_module_permissions ("vlan")>2) { ?>
 <div class="btn-group" style="margin-bottom:10px;">
 	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add L2 Domain'); ?></button>
-	<button class="btn btn-sm btn-default editVLAN" data-action="add" data-domain="all" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add VLAN'); ?></button>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-class='500' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VLAN'); ?></button>
 </div>
 <?php } ?>
 
@@ -24,7 +24,7 @@ $User->check_module_permissions ("vlan", 1, true, false);
 	<th><?php print _('Count'); ?></th>
 	<th><?php print _('Sections'); ?></th>
 	<th></th>
-	<?php if($User->get_module_permissions ("vlan")>1) { ?><th></th><?php } ?>
+	<th></th>
 </tr>
 </thead>
 
@@ -75,17 +75,26 @@ foreach($vlan_domains as $domain) {
 	print "	<td>$cnt "._("VLANs")."</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
 	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
-	//manage
-	if($User->get_module_permissions ("vlan")>1) {
-	print "	<td class='actions'>";
-	print "	<div class='btn-group'>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='edit'   data-id='$domain->id'><i class='fa fa-pencil'></i></button>";
-	if($User->get_module_permissions ("vlan")>2)
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='delete' data-id='$domain->id'><i class='fa fa-times'></i></button>";
-	print "	</div>";
-	print "	</td>";
-	}
-	print "	</td>";
+
+    // links
+    print "<td class='actions'>";
+    $links = [];
+    if($User->get_module_permissions ("vlan")>0) {
+        $links[] = ["type"=>"header", "text"=>"Show"];
+        $links[] = ["type"=>"link", "text"=>"Show domain VLANs", "href"=>create_link($_GET['page'], "vlan", $domain->id), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"divider"];
+    }
+    if($User->get_module_permissions ("vlan")>1) {
+        $links[] = ["type"=>"header", "text"=>"Manage"];
+        $links[] = ["type"=>"link", "text"=>"Edit domain", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='edit' data-id='$domain->id'", "icon"=>"pencil"];
+    }
+    if($User->get_module_permissions ("vlan")>2) {
+        $links[] = ["type"=>"link", "text"=>"Delete domain", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='delete' data-id='$domain->id'", "icon"=>"times"];
+        $links[] = ["type"=>"divider"];
+    }
+    // print links
+    print $User->print_actions($User->user->compress_actions, $links);
+    print "</td>";
 
 	print "</tr>";
 }

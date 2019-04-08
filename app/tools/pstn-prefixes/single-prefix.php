@@ -171,30 +171,22 @@ else {
         	print "	<td>";
         	print " <div class='btn-group'>";
 
-            switch ($User->get_module_permissions ("pstn")) {
-                case 3:
-                    if (!$isMaster)
-                    print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
-                    print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
-                    print "<a class='btn btn-xs btn-default editPSTN' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
-                    print "<a class='btn btn-xs btn-danger editPSTN' data-action='delete' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
-                    break;
-                case 2:
-                    if (!$isMaster)
-                    print "<a class='btn btn-xs btn-success editPSTNnumber' data-action='add' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
-                    print "<a class='btn btn-xs btn-default editPSTN' data-action='edit' data-id='$prefix->id' data-container='body' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
-                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
-                    print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
-                    break;
-                default:
-                    print "<button class='btn btn-xs btn-default btn-danger' data-container='body' rel='tooltip' title='" . _('You do not have permissions to edit prefix') . "'><i class='fa fa-lock'></i></button> ";
-                    if (!$isMaster)
-                        print "<a class='btn btn-xs btn-success disabled' rel='tooltip' title='" . _('Add address to prefix') . "'><i class='fa fa-plus'></i></a>";
-                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Edit prefix properties') . "'><i class='fa fa-pencil'></i></a>";
-                    print "<a class='btn btn-xs btn-default disabled' rel='tooltip' title='" . _('Create new prefix') . "'><i class='fa fa-plus-circle'></i></a> ";
-                    print "<a class='btn btn-xs btn-danger disabled' rel='tooltip' title='" . _('Delete prefix') . "'><i class='fa fa-remove'></i></a>";
-                    break;
+            $links = [];
+            if($User->get_module_permissions ("pstn")>1) {
+                if(!$isMaster) {
+                $links[] = ["type"=>"header", "text"=>"Create address"];
+                $links[] = ["type"=>"link", "text"=>"Add address to prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus"];
+                }
+                $links[] = ["type"=>"header", "text"=>"Create"];
+                $links[] = ["type"=>"link", "text"=>"Create new prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus-circle"];
+                $links[] = ["type"=>"divider"];
+                $links[] = ["type"=>"header", "text"=>"Manage"];
+                $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$prefix->id'", "icon"=>"pencil"];
             }
+            if($User->get_module_permissions ("pstn")>2) {
+                $links[] = ["type"=>"link", "text"=>"Delete prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$prefix->id'", "icon"=>"times"];
+            }
+            print $User->print_actions($User->user->compress_actions, $links, true);
 
             print "	</div>";
 

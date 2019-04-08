@@ -54,7 +54,7 @@ catch (Exception $e) {
 }
 
 # if none die, none to remove
-if (sizeof($offline_addresses)==0) {
+if (!is_array($offline_addresses) || empty($offline_addresses)) {
 	die();
 }
 # remove

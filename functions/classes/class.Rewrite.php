@@ -176,6 +176,7 @@ class Rewrite {
 				$this->get_params = $_GET;
 			} else {
 				foreach ($this->uri_parts as $k=>$l) {
+					if (strncmp($l, '?', 1) == 0) continue; //skip qsa
 					switch ($k) {
 						case 0  : $this->get_params['page'] 	= $l;	break;
 						case 1  : $this->get_params['section']  = $l;	break;
@@ -258,6 +259,7 @@ class Rewrite {
 		// create
 		if(sizeof($this->uri_parts)>0) {
 			foreach ($this->uri_parts as $k=>$l) {
+				if (strncmp($l, '?', 1) == 0) continue; //skip qsa
 				switch ($k) {
 					case 0  : $this->get_params['app_id']     = $l;	break;
 					case 1  : $this->get_params['controller'] = $l;	break;

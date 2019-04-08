@@ -12,17 +12,6 @@
 
 class Logging extends Common_functions {
 
-
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
 	/**
 	 * log_type
 	 *
@@ -247,22 +236,6 @@ class Logging extends Common_functions {
 	);
 
 	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Result object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Addresses object
 	 *
 	 * @var mixed
@@ -293,15 +266,6 @@ class Logging extends Common_functions {
 	 * @access protected
 	 */
 	protected $Tools;
-
-	/**
-	 * settings
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $settings;
-
 
 
 

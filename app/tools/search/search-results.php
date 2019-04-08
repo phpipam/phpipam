@@ -30,7 +30,7 @@ $selected_ip_fields = explode(";", $selected_ip_fields);
 
 
 // all are off?
-if(!isset($_GET['addresses']) && !isset($_GET['subnets']) && !isset($_GET['vlans']) && !isset($_GET['vrf']) && !isset($_GET['pstn']) && !isset($_GET['circuits']) ) {
+if(!isset($_GET['addresses']) && !isset($_GET['subnets']) && !isset($_GET['vlans']) && !isset($_GET['vrf']) && !isset($_GET['pstn']) && !isset($_GET['circuits']) && !isset($_GET['customers']) ) {
     include("search-tips.php");
 }
 // empty request
@@ -68,6 +68,10 @@ else {
 	// circuits
 	if($User->get_module_permissions ("circuits")>0) {
 	if(@$_GET['circuits']=="on" && strlen($_GET['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_circuits.php'); }
+	}
+	// customers
+	if($User->get_module_permissions ("customers")>0) {
+	if(@$_GET['customers']=="on" && strlen($_GET['ip'])>0) 	{ include(dirname(__FILE__).'/search_results/search-results_customers.php'); }
 	}
 
 	// export holder

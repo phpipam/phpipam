@@ -95,12 +95,14 @@ $('form#login_2fs').submit(function() {
 
 /* Submit on keyup */
 $(document).keyup(function(e) {
-    var codevallength = $('form#login_2fs input#2fa_code').val().length
-    if(codevallength == 6) {
-        submit_2fs (true);
-    }
-    else if (codevallength > 0) {
-        $('div#twofaCheck').fadeOut('fast');
+    var codeval = $('form#login_2fs input#2fa_code').val();
+    if (codeval != null) {
+        if(codeval.length == 6) {
+            submit_2fs (true);
+        }
+        else if (codeval.length > 0) {
+            $('div#twofaCheck').fadeOut('fast');
+        }
     }
 });
 

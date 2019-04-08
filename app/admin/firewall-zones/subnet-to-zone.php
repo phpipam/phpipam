@@ -26,7 +26,7 @@ if (!preg_match('/^[0-9]+$/i', $_POST['subnetId'])) 	{ $Result->show("danger", _
 $firewallZones = $Zones->get_zones();
 
 # no zones
-if($firewallZones===false)                              { $Result->show("danger", _("No zones available"), true, true); }
+if(!is_array($firewallZones))                              { $Result->show("danger", _("No zones available"), true, true); }
 ?>
 
 <!-- header  -->

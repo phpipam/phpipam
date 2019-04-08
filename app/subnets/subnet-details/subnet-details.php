@@ -132,8 +132,10 @@ else {
 		if(!empty($vlan['name'])) 		 { print ' - '.$vlan['name']; }					//Print name if provided
 		if(!empty($vlan['description'])) { print ' ['. $vlan['description'] .']'; }		//Print description if provided
 		// domain
+		if (isset($vlan['domainId'])) {
     		$l2domain = $Tools->fetch_object("vlanDomains", "id", $vlan['domainId']);
     		if($l2domain!==false)       { print " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $l2domain->name'>$l2domain->name "._('Domain')." </span>"; }
+        }
 		?>
 		</td>
 	</tr>

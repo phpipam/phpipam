@@ -31,6 +31,7 @@ if(!is_numeric($_POST['snmp_version']))			              { $Result->show("danger"
 if($_POST['snmp_version']!=0) {
 if(!is_numeric($_POST['snmp_port']))			              { $Result->show("danger", _("Invalid port"), true, true, false, true); }
 if(!is_numeric($_POST['snmp_timeout']))			              { $Result->show("danger", _("Invalid timeout"), true, true, false, true); }
+if($_POST['snmp_timeout'] > 10000)				              { $Result->show("danger", _("Invalid timeout").' > 10,000ms (10s)', true, true, false, true); }
 }
 
 # version can be 0, 1 or 2
@@ -81,25 +82,23 @@ if (isset($queries)) {
                 $Snmp->get_query ("get_vlan_table");
                 if (is_array($Snmp->last_result)) {
                     foreach ($Snmp->last_result as $k=>$r) {
-                        if (is_numeric($k)) {
+                        if (!is_numeric($k)) { continue; }
+
+                        try {
                             // ok, we have vlan, set query
                             $Snmp->set_snmp_device ($device, $k);
-                            try {
-                                $Snmp->get_query ($query);
-                                $vlan_set = true;
-                                break;
-                            }
-                            catch (Exception $e) {}
+                            $Snmp->get_query ($query);
+                            $poll_success = true;
+                            break;
                         }
+                        catch (Exception $e) { $last_error = $e->getMessage(); }
                     }
+                    if (!isset($poll_success)) { throw new Exception($last_error); }
                 }
             }
             else {
                 // reset vlan
-                if (isset($vlan_set)) {
-                    unserialize($vlan_set);
-                    $Snmp->set_snmp_device ($device);
-                }
+                $Snmp->set_snmp_device ($device);
                 $Snmp->get_query ($query);
             }
 
