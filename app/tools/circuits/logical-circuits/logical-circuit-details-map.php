@@ -43,12 +43,12 @@ if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key')
 elseif(sizeof($location_ids_to_map) == 0){
   $Result->show("info","No members of logical circuit.", false);
 }
-elseif ($locA->name!=="/" && $locB->name!=="/") {
+elseif ($locA->name_print!=="/" && $locB->name_print!=="/") {
 	//$all_locations = array ();
 
 	// add point A and B
-	if ($locA->name!=="/") { $all_locations[] = $locA; }
-	if ($locB->name!=="/") { $all_locations[] = $locB; }
+	if ($locA->name_print!=="/") { $all_locations[] = $locA; }
+	if ($locB->name_print!=="/") { $all_locations[] = $locB; }
 
     // get all
     foreach ($all_locations as $k=>$l) {

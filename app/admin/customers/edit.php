@@ -45,6 +45,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$customer = new StdClass;
+	$customer->id = null;
 	# title
 	$title = _('Add new customer');
 }

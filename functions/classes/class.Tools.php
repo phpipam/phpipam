@@ -34,7 +34,7 @@ class Tools extends Common_functions {
 	protected $Addresses = false;
 
 	/**
-	 * Avaiable phpIPAM releases
+	 * Available phpIPAM releases
 	 * @var array
 	 */
 	public $phpipam_releases = [];
