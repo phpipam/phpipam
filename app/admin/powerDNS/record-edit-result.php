@@ -38,7 +38,15 @@ if ($_POST['action'] != "delete") {
 }
 
 # dont permit modifications on slave domain
-$domain = $PowerDNS->fetch_domain ($_POST['domain_id']);
+if( $_POST["type"] == "CNAME") {
+    $d = explode(".", $_POST['name']);
+    do {
+        array_shift($d);
+        $domain = $PowerDNS->fetch_domain (implode(".", $d));
+    } while($domain === false);
+} else {
+    $domain = $PowerDNS->fetch_domain ($_POST['domain_id']);
+}
 $domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 
 if(strtolower($domain->type) == "slave") {
@@ -50,7 +58,7 @@ if ($_POST['action'] == "edit") {
     $values = $PowerDNS->formulate_update_record($_POST['name'], $_POST['type'], $_POST['content'], $_POST['ttl'], $_POST['prio'], $_POST['disabled'], $record->change_date);
     $values['domain_id'] = $_POST['domain_id'];
 } elseif ($_POST['action'] == "add") {
-    $values = $PowerDNS->formulate_new_record($_POST['domain_id'], $_POST['name'], $_POST['type'], $_POST['content'], $_POST['ttl'], $_POST['prio'], $_POST['disabled']);
+    $values = $PowerDNS->formulate_new_record($domain->id, $_POST['name'], $_POST['type'], $_POST['content'], $_POST['ttl'], $_POST['prio'], $_POST['disabled']);
 } elseif ($_POST['action'] == "delete") {
     $values['domain_id'] = $_POST['domain_id'];
 }
