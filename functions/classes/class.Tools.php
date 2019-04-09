@@ -53,12 +53,12 @@ class Tools extends Common_functions {
 	 * @access public
 	 */
 	public function __construct (Database_PDO $database) {
+		parent::__construct();
+
 		# set database object
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-		# set debugging
-		$this->set_debugging ();
 	}
 
 

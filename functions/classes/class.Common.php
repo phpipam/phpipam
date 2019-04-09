@@ -130,6 +130,15 @@ class Common_functions  {
 
 
 
+	/**
+	 * __construct function
+	 *
+	 * @access public
+	 */
+	public function __construct () {
+		# debugging
+		$this->set_debugging( Config::get('debugging') );
+	}
 
 	/**
 	 *	@version handling
@@ -486,19 +495,26 @@ class Common_functions  {
         return false;
     }
 
-
-
-
 	/**
 	 * Sets debugging
 	 *
-	 * @access private
+	 * @access public
+	 * @param bool $debug (default: false)
 	 * @return void
 	 */
-	public function set_debugging () {
-		if(Config::get('debugging')==true) { $this->debugging = true; }
+	public function set_debugging ($debug = false) {
+		$this->debugging = $debug==true ? true : false;
 	}
 
+	/**
+	 * Gets debugging
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function get_debugging () {
+		return $this->debugging;
+	}
 
 	/**
 	 * Initializes PEAR Net IPv4 object

@@ -108,12 +108,12 @@ class Scan extends Common_functions {
 	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-		# debugging
-		$this->set_debugging();
 		# fetch settings
 		$this->settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 		# set type
@@ -156,17 +156,6 @@ class Scan extends Common_functions {
 		else {
 			$this->icmp_type = $method;
 		}
-	}
-
-	/**
-	 * Resets debugging
-	 *
-	 * @access public
-	 * @param bool $debug (default: false)
-	 * @return void
-	 */
-	public function reset_debugging ($debug = false) {
-		$this->debugging = $debug;
 	}
 
 	/**

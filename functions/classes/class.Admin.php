@@ -64,12 +64,12 @@ class Admin extends Common_functions {
 	 * @param bool $admin_required (default: true)
 	 */
 	public function __construct (Database_PDO $database, $admin_required = true) {
+		parent::__construct();
+
 		# initialize database object
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-		# set debugging
-		$this->set_debugging ();
 		# set admin flag
 		$this->set_admin_required ($admin_required);
 		# verify that user is admin
