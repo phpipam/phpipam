@@ -70,12 +70,12 @@ class Addresses extends Common_functions {
 	 * @access public
 	 */
 	public function __construct (Database_PDO $Database) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $Database;
 		# initialize Result
 		$this->Result = new Result ();
-		# debugging
-		$this->set_debugging();
 
 		# Log object
 		$this->Log = new Logging ($this->Database);

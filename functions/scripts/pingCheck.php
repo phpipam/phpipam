@@ -46,7 +46,7 @@ $Result		= new Result();
 // set exit flag to true
 $Scan->ping_set_exit(true);
 // set debugging
-$Scan->reset_debugging(false);
+$Scan->set_debugging(false);
 // fetch agent
 $agent = $Tools->fetch_object("scanAgents", "id", 1);
 // set address types array
@@ -86,7 +86,7 @@ if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_pingCheck (1);
-if($Scan->debugging)							{ print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ print_r($scan_subnets); }
 if($scan_subnets===false) 						{ die("No subnets are marked for checking status updates\n"); }
 //fetch all addresses that need to be checked
 foreach($scan_subnets as $s) {
@@ -148,7 +148,7 @@ foreach($scan_subnets as $s) {
 }
 
 
-if($Scan->debugging)							{ print "Using $Scan->icmp_type\n--------------------\n\n";print_r($addresses); }
+if($Scan->get_debugging()==true)				{ print "Using $Scan->icmp_type\n--------------------\n\n";print_r($addresses); }
 //if none die
 if(!isset($addresses))							{ die("No addresses to check"); }
 
@@ -285,7 +285,7 @@ else {
 	$Addresses = new Addresses ($Database);
 
 	// reset debugging
-	$Scan->reset_debugging(false);
+	$Scan->set_debugging(false);
 
 	# update all active statuses
 	foreach($addresses as $k=>$a) {
@@ -380,7 +380,7 @@ $Scan->ping_update_scanagent_checktime (1, $nowdate);
 
 
 # print change
-if($Scan->debugging)							{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
+if($Scan->get_debugging()==true)				{ print "\nAddress changes:\n----------\n"; print_r($address_change); }
 
 # all done, mail diff?
 if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
@@ -398,7 +398,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 	// set exit flag to true
 	$Scan->ping_set_exit(true);
 	// set debugging
-	$Scan->reset_debugging(false);
+	$Scan->set_debugging(false);
 
 
 	# check for recipients

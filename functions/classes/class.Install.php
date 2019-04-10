@@ -40,13 +40,13 @@ class Install extends Common_functions {
 	 * @param Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
+		parent::__construct();
+
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
-		# set debugging
-		$this->set_debugging ();
-		# set debugging
+		# set db
 		$this->set_db_params ();
 		# Log object
 		try { $this->Database->connect(); }

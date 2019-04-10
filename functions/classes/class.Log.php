@@ -278,6 +278,8 @@ class Logging extends Common_functions {
 	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $database;
 		# Result
@@ -292,8 +294,6 @@ class Logging extends Common_functions {
 		else {
 			$this->settings = (object) $settings;
 		}
-		# debugging
-		$this->set_debugging();
 		# set log type
 		$this->set_log_type ();
 	}

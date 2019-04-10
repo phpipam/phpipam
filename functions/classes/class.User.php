@@ -123,6 +123,7 @@ class User extends Common_functions {
      * @param bool $api (default: false)
      */
     public function __construct (Database_PDO $database, $api = false) {
+        parent::__construct();
 
         # Save database object
         $this->Database = $database;
@@ -178,8 +179,6 @@ class User extends Common_functions {
             if (@$_SESSION===NULL && !isset($_SESSION)) {
                 //set session name
                 $this->set_session_name();
-                //set debugging
-                $this->set_debugging();
                 //set default params
                 $this->set_session_ini_params ();
                 //register session

@@ -38,7 +38,7 @@ $Result		= new Result();
 // set exit flag to true
 $Scan->ping_set_exit(true);
 // set debugging
-$Scan->reset_debugging(false);
+$Scan->set_debugging(false);
 // change scan type?
 if(@$config['discovery_check_method'])
 $Scan->reset_scan_method ($config['discovery_check_method']);
@@ -101,12 +101,12 @@ if ($scan_subnets!==false) {
 }
 
 
-if($Scan->debugging)							{ print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ print_r($scan_subnets); }
 if($scan_subnets===false || !count($scan_subnets)) { die("No subnets are marked for new hosts checking\n"); }
 
 
 //scan
-if($Scan->debugging)							{ print "Using $Scan->icmp_type\n--------------------\n\n"; }
+if($Scan->get_debugging()==true)				{ print "Using $Scan->icmp_type\n--------------------\n\n"; }
 
 
 $z = 0;			//addresses array index
@@ -217,7 +217,7 @@ else {
 
 
 # print change
-if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ "\nDiscovered addresses:\n----------\n"; print_r($scan_subnets); }
 
 
 
