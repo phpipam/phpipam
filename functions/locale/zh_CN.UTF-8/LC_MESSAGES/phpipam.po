@@ -2,7 +2,7 @@
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 # SongWenwen <abc@upc.edu.cn>.
-# "Project-Id-Version: 0.1 \n"
+# "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: SongWenwen <abc@upc.edu.cn>\n"
 # "Last-Translator: 2017-04-1\n"
 # "Language: zh_CN\n"
@@ -1281,7 +1281,7 @@ msgstr "不能编辑IP地址细节"
 
 #: site/ipaddr/modifyIpAddress.php:31
 msgid "You do not have write access for this network'"
-msgstr "您没有此网络的写访问权限'"
+msgstr "您没有此网络的写访问权限’"
 
 #: site/ipaddr/modifyIpAddress.php:79 site/ipaddr/modifyIpAddress.php:80
 msgid "add"
