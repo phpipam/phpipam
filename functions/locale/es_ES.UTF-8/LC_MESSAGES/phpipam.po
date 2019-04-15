@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
 
-# "Project-Id-Version: 0.99.001\n"
+# "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2014-04-04 16:50+0100\n"
@@ -2136,11 +2136,11 @@ msgstr "Descargar volcado XLS"
 
 #: site/admin/export.php:27
 msgid "Create hostfile dump"
-msgstr "Crear volcado en fichero 'hosts'"
+msgstr "Crear volcado en fichero ’hosts’"
 
 #: site/admin/export.php:28
 msgid "Prepare hostfile dump"
-msgstr "Descargar fichero 'hosts'"
+msgstr "Descargar fichero ’hosts’"
 
 #: site/admin/manageSubnetEdit.php:14 site/admin/manageSubnetEditResult.php:14
 msgid "You do not have permissions to add new subnet in this section"
@@ -3212,7 +3212,7 @@ msgstr "Las IPs existentes serán asignadas a nuevas subredes"
 
 #: site/admin/manageSubnetsplit.php:110
 msgid "Group under current will create new nested subnets under current one"
-msgstr "'Agrupar bajo la actual' creará nuevas subredes anidadas bajo la actual"
+msgstr "’Agrupar bajo la actual’ creará nuevas subredes anidadas bajo la actual"
 
 #: site/admin/manageSubnetsplit.php:111
 msgid "If existing IP will fall to subnet/broadcast of new subnets split will fail, "
@@ -4033,7 +4033,7 @@ msgstr "Por defecto"
 
 #: site/ipaddr/subnetDiscoveryPing.php
 msgid "Threading is required for scanning subnets. Please recompile PHP with pcntl extension"
-msgstr "Se requiere 'threading' para el escaneado de subredes. Compile PHP con la extensión 'pcntl'"
+msgstr "Se requiere ’threading’ para el escaneado de subredes. Compile PHP con la extensión ’pcntl’"
 
 #: site/ipaddr/subnetDiscoveryPing.php
 msgid "Add discovered hosts"
@@ -4262,7 +4262,7 @@ msgstr "SubSecciones en"
 
 #: site/admin/manageSectionEdit.php
 msgid "Select parent section to create subsection"
-msgstr "Seleccionar sección 'padre' para crear subsecciones"
+msgstr "Seleccionar sección ’padre’ para crear subsecciones"
 
 #: site/tools/userMenu.php
 msgid "Widgets"
@@ -4467,10 +4467,10 @@ msgstr "Registro de cambios deshabilitado. Puede activarlo en Administración"
 
 #: site/admin/settings.php
 msgid "Ping path"
-msgstr "Ruta al 'ping'"
+msgstr "Ruta al ’ping’"
 
 msgid "Set path for ping executable file (default /bin/ping)"
-msgstr "Indique la ruta al fichero ejecutable de 'ping' (por defecto /bin/ping)"
+msgstr "Indique la ruta al fichero ejecutable de ’ping’ (por defecto /bin/ping)"
 
 msgid "Max scan threads"
 msgstr "Máx instancias escaneo"
@@ -4599,7 +4599,7 @@ msgid "Server authentication"
 msgstr "Autentificación"
 
 msgid "Select yes if authentication is required"
-msgstr "Seleccione 'Sí' si el servidor precisa autentificación"
+msgstr "Seleccione ’Sí’ si el servidor precisa autentificación"
 
 msgid "Set username for SMTP authentication"
 msgstr "Indique el nombre de usuario para la autentificación SMTP"

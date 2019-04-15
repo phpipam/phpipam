@@ -50,13 +50,16 @@ else {
 		// fetch all domains
 		$all_domains = $PowerDNS->fetch_all_domains ();
 		if ($all_domains!==false) {
+
+			// Reverse the hostname, this fixes #1471 and #2374
+			$r_hostname = implode(".", array_reverse(explode(".", $_POST['domain_id'])));
+
 			foreach($all_domains as $dk=>$domain_s) {
-				// loop through and find all matches
-				if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
-					// check best match to avoid for example a.example.net.nz1 added to example.net.nz
-					if (substr($_POST['domain_id'], -strlen($domain_s->name)) === $domain_s->name) {
-						$matches[$dk] = $domain_s;
-					}
+				// Reverse the domain and compare it reversed, this fixes #1471 and #2374
+				$r_domain = implode(".", array_reverse(explode(".", $domain_s->name)));
+
+				if (substr($r_hostname, 0, strlen($r_domain)) == $r_domain) {
+					$matches[$dk] = $domain_s;
 				}
 			}
 			// match found ?

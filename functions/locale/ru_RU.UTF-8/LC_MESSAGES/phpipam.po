@@ -3,7 +3,7 @@
 # "Content-Transfer-Encoding: 8bit\n"
 # "Last-Translator: Andrey Kolbasenko <Andrey.Kolbasenko@south.rt.ru>\n"
 # "PO-Revision-Date: 2017-03-19 09:52+0300\n"
-# "Project-Id-Version: \n"
+# "Project-Id-Version: 1.40\n"
 # "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
 # "Language: ru_RU\n"
 # "MIME-Version: 1.0\n"

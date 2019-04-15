@@ -243,7 +243,8 @@ class Common_functions  {
 
 		# save to cache array
 		$this->cache_write ($table, $res);
-		return $res;
+
+		return is_object($res) ? $res : false;
 	}
 
 	/**

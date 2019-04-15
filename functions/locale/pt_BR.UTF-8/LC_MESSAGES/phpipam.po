@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
 #
-# "Project-Id-Version: 0.8\n"
+# "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -2929,7 +2929,7 @@ msgstr "Nenhuma sub-rede encontrada"
 
 #: site/admin/RIPE / ARINImportTelnet.php:56
 msgid "I found the following routes belonging to AS"
-msgstr "Eu encontrei as seguintes rotas pertencentes as AS's"
+msgstr "Eu encontrei as seguintes rotas pertencentes as AS’s"
 
 #: site/admin/RIPE / ARINImportTelnet.php:69
 msgid "Remove this subnet"

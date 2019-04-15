@@ -1,4 +1,4 @@
-# "Project-Id-Version: 1.0\n"
+# "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: \n"
 # "POT-Creation-Date: 2018-07-24 15:33+0900\n"
 # "PO-Revision-Date: 2018-06-29 16:19+0900\n"
@@ -3535,7 +3535,7 @@ msgstr "インポートするサブネットファイルとフィールドを選
 #: /var/www/phpipam/app/admin/import-export/import-vrf-select.php:68
 #: /var/www/phpipam/app/admin/import-export/import-devices-select.php:116
 msgid "'app/admin/import-export/upload' folder is not writeable."
-msgstr "'app/admin/import-export/upload' フォルダに書き込みできません"
+msgstr "’app/admin/import-export/upload’ フォルダに書き込みできません"
 
 #: /var/www/phpipam/app/admin/import-export/import-subnets-select.php:103
 #: /var/www/phpipam/app/admin/import-export/import-vlan-select.php:85
@@ -7060,7 +7060,7 @@ msgstr "カスタムロゴをアップロードします"
 
 #: /var/www/phpipam/app/admin/settings/logo/logo-uploader.php:43
 msgid "'css/images/logo' folder is not writeable."
-msgstr "'css/images/logo' フォルダが書き込みできません"
+msgstr "’css/images/logo’ フォルダが書き込みできません"
 
 #: /var/www/phpipam/app/admin/settings/logo/logo-uploader.php:45
 msgid "Current"
@@ -7112,7 +7112,7 @@ msgstr "ログインテキスト"
 
 #: /var/www/phpipam/app/admin/settings/index.php:77
 msgid "Show text above 'username' field on login page (default empty)"
-msgstr "ログインページの 'username'フィールドの上にテキストを表示します（デフォルトは"
+msgstr "ログインページの ’username’フィールドの上にテキストを表示します（デフォルトは"
 "空）"
 
 #: /var/www/phpipam/app/admin/settings/index.php:81
@@ -8966,12 +8966,12 @@ msgstr "アップグレード"
 
 #: /var/www/phpipam/app/upgrade/upgrade-execute.php:27
 msgid "Database upgraded successfully! <a class='btn btn-sm btn-default' href='"
-msgstr "データベースのアップグレードに成功しました。<a class='btn btn-sm btn-"
+msgstr "データベースのアップグレードに成功しました。<a class=’btn btn-sm btn-"
 "default' href='"
 
 #: /var/www/phpipam/app/upgrade/upgrade-execute.php:68
 msgid "Failed to upgrade database! <a class='btn btn-sm btn-default' href='"
-msgstr "データベースのアップグレードに失敗しました。<a class='btn btn-sm btn-"
+msgstr "データベースのアップグレードに失敗しました。<a class=’btn btn-sm btn-"
 "default' href='"
 
 #: /var/www/phpipam/app/footer.php:11
@@ -9091,7 +9091,7 @@ msgstr "XLS / CSVサブネットインポート"
 
 #: /var/www/phpipam/app/subnets/import-subnet/index.php:59
 msgid "'app/subnets/import-subnet/upload' folder is not writeable."
-msgstr "'app/subnets/import-subnet/upload' フォルダが書き込みできません"
+msgstr "’app/subnets/import-subnet/upload’ フォルダが書き込みできません"
 
 #: /var/www/phpipam/app/subnets/import-subnet/index.php:63
 msgid "To successfully import data please use the following XLS/CSV structure:"
