@@ -25,7 +25,7 @@ $custom_tables = array(
 						"circuits" 		   => "Circuits",
 						"customers" 	   => "Customers",
 						"routing_bgp" 	   => "BGP Routing",
-						"routing_ospf" 	   => "OSPF Routing"
+						//"routing_ospf" 	   => "OSPF Routing"
 						);
 
 # create array
