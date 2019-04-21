@@ -910,6 +910,13 @@ $upgrade_queries["1.4.23"][] = "CREATE TABLE `routing_subnets` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;";
 
 
+#
+# Subversion 1.4.24 queries
+#
+// add policy NAT option
+$upgrade_queries["1.4.24"][] = "ALTER TABLE `nat` ADD `policy` SET('Yes','No')  NOT NULL  DEFAULT 'No';";
+$upgrade_queries["1.4.24"][] = "ALTER TABLE `nat` ADD `policy_dst` VARCHAR(255)  NULL  DEFAULT NULL;";
+
 
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {

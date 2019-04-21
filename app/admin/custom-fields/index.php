@@ -24,6 +24,7 @@ $custom_tables = array(
 						"circuitProviders" => "Circuit providers",
 						"circuits" 		   => "Circuits",
 						"customers" 	   => "Customers",
+						"nat"			   => "NAT",
 						"routing_bgp" 	   => "BGP Routing",
 						//"routing_ospf" 	   => "OSPF Routing"
 						);

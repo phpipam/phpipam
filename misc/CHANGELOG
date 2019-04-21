@@ -17,7 +17,9 @@
     + Added compressed actions dropdown;
     + SNMP module no longer requires MIB files;
     + Performance enhancements running under Azure/Amazon;
-    + Added option to disable user (#1327)
+    + Added option to disable user (#1327);
+    + Added policy NAT option;
+    + Added custom NAT fields;
     + Rack module enhancements (#1325):
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;

@@ -752,15 +752,16 @@ CREATE TABLE `nat` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
   `type` set('source','static','destination') DEFAULT 'source',
-  `src` text,
-  `dst` text,
+  `src` text DEFAULT NULL,
+  `dst` text DEFAULT NULL,
   `src_port` int(5) DEFAULT NULL,
-  `dst_port` INT(5) DEFAULT NULL,
-  `device` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
-  `description` text,
+  `dst_port` int(5) DEFAULT NULL,
+  `device` int(11) unsigned DEFAULT NULL,
+  `description` text DEFAULT NULL,
+  `policy` set('Yes','No') NOT NULL DEFAULT 'No',
+  `policy_dst` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 # Dump of table racks
 # ------------------------------------------------------------
@@ -994,4 +995,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 23;
+UPDATE `settings` SET `dbversion` = 24;
