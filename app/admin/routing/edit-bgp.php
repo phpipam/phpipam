@@ -85,7 +85,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 			<select name="bgp_type" class="form-control input-w-auto input-sm">
 				<?php
 				foreach (["internal", "external"] as $type) {
-					$selected = $bgp->bgp_type == $type ? "selected" : "";
+					$selected = isset($bgp->bgp_type) && $bgp->bgp_type == $type ? "selected" : "";
 					print "<option value='$type' $selected>$type</option>";
 				}
 				?>
@@ -110,7 +110,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
         if($customers!=false) {
             foreach($customers as $customer) {
-                if ($customer->id == $bgp->customer_id)    	{ print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
+                if (isset($bgp->customer_id) && $customer->id == $bgp->customer_id)    	{ print '<option value="'. $customer->id .'" selected>'.$customer->title.'</option>'; }
                 else                                         { print '<option value="'. $customer->id .'">'.$customer->title.'</option>'; }
             }
         }
@@ -136,7 +136,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
         if($circuits!=false) {
             foreach($circuits as $circuit) {
-                if ($circuit->id == $bgp->circuit_id)    	{ print '<option value="'. $circuit->id .'" selected>'.$circuit->cid.'</option>'; }
+                if (isset($bgp->circuit_id) && $circuit->id == $bgp->circuit_id)    	{ print '<option value="'. $circuit->id .'" selected>'.$circuit->cid.'</option>'; }
                 else                                        { print '<option value="'. $circuit->id .'">'.$circuit->cid.'</option>'; }
             }
         }
@@ -162,7 +162,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
         if($vrfs!=false) {
             foreach($vrfs as $vrf) {
-                if ($vrf->vrfId == $bgp->vrf_id)    { print '<option value="'. $vrf->vrfId .'" selected>'.$vrf->name.'</option>'; }
+                if (isset($bgp->vrf_id) && $vrf->vrfId == $bgp->vrf_id)    { print '<option value="'. $vrf->vrfId .'" selected>'.$vrf->name.'</option>'; }
                 else                                { print '<option value="'. $vrf->vrfId .'">'.$vrf->name.'</option>'; }
             }
         }
