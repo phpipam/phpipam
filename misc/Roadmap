@@ -17,6 +17,7 @@ https://github.com/phpipam/phpipam/milestone/2
         #1068 Custom section and other fields
         #1023 Location tags, subnet tags, ...
         Ping history graph
+        #990 Theme for people with red green (color) deficiency.
 
     API:
         #800  Changelog Doesn't Track Changes Made Via API

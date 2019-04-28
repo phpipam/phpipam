@@ -8,6 +8,15 @@
 class Common_functions  {
 
 	/**
+     * from api flag
+     *
+     * (default value: false)
+     *
+     * @var bool
+     */
+    public $api = false;
+
+	/**
 	 * settings
 	 *
 	 * (default value: null)
@@ -121,6 +130,15 @@ class Common_functions  {
 
 
 
+	/**
+	 * __construct function
+	 *
+	 * @access public
+	 */
+	public function __construct () {
+		# debugging
+		$this->set_debugging( Config::get('debugging') );
+	}
 
 	/**
 	 *	@version handling
@@ -202,39 +220,31 @@ class Common_functions  {
 	 * @return false|object
 	 */
 	public function fetch_object ($table=null, $method=null, $value) {
-		# null table
-		if(is_null($table)||strlen($table)==0) return false;
-
 		// checks
-		if(is_null($table))		return false;
-		if(strlen($table)==0)   return false;
-		if(is_null($method))	return false;
-		if(is_null($value))		return false;
-		if($value===0)		    return false;
+		if(!is_string($table)) return false;
+		if(strlen($table)==0)  return false;
+		if(is_null($method))   return false;
+		if(is_null($value))    return false;
+		if($value===0)         return false;
 
 		# check cache
 		$cached_item = $this->cache_check($table, $value);
-		if($cached_item!==false) {
+		if(is_object($cached_item))
 			return $cached_item;
-		}
-		else {
-			# null method
-			$method = is_null($method) ? "id" : $this->Database->escape($method);
 
-			try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
-			catch (Exception $e) {
-				$this->Result->show("danger", _("Error: ").$e->getMessage());
-				return false;
-			}
-			# save to cache array
-			if(is_object($res)) {
-				$this->cache_write ($table, $res);
-				return $res;
-			}
-			else {
-				return false;
-			}
+		# null method
+		$method = is_null($method) ? "id" : $this->Database->escape($method);
+
+		try { $res = $this->Database->getObjectQuery("SELECT * from `$table` where `$method` = ? limit 1;", array($value)); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
 		}
+
+		# save to cache array
+		$this->cache_write ($table, $res);
+
+		return is_object($res) ? $res : false;
 	}
 
 	/**
@@ -358,37 +368,22 @@ class Common_functions  {
 	 * fetches settings from database
 	 *
 	 * @access private
-	 * @return void
+	 * @return mixed
 	 */
 	public function get_settings () {
-		# constant defined
-		if (defined('SETTINGS')) {
-			if ($this->settings === null || $this->settings === false) {
-				$this->settings = json_decode(SETTINGS);
-			}
-		}
-		else {
-			# cache check
-			if($this->settings === null) {
-				try { $settings = $this->Database->getObject("settings", 1); }
-				catch (Exception $e) { $this->Result->show("danger", _("Database error: ").$e->getMessage()); }
-				# save
-				if ($settings!==false)	 {
-					$this->settings = $settings;
-					define('SETTINGS', json_encode($settings, JSON_UNESCAPED_UNICODE));
-				}
-			}
-		}
-	}
+		if (is_object($this->settings))
+			return $this->settings;
 
-	/**
-	 * get_settings alias
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function settings () {
-		return $this->get_settings();
+		// fetch_object results are cached in $Database->cache.
+		$settings = $this->fetch_object("settings", "id", 1);
+
+		if (!is_object($settings))
+			return false;
+
+		#save
+		$this->settings = $settings;
+
+		return $this->settings;
 	}
 
 
@@ -501,20 +496,26 @@ class Common_functions  {
         return false;
     }
 
-
-
-
 	/**
 	 * Sets debugging
 	 *
-	 * @access private
+	 * @access public
+	 * @param bool $debug (default: false)
 	 * @return void
 	 */
-	public function set_debugging () {
-		include( dirname(__FILE__) . '/../../config.php' );
-		$this->debugging = $debugging ? true : false;
+	public function set_debugging ($debug = false) {
+		$this->debugging = $debug==true ? true : false;
 	}
 
+	/**
+	 * Gets debugging
+	 *
+	 * @access public
+	 * @return bool
+	 */
+	public function get_debugging () {
+		return $this->debugging;
+	}
 
 	/**
 	 * Initializes PEAR Net IPv4 object
@@ -572,20 +573,17 @@ class Common_functions  {
 		if(is_array($input)) {
 			foreach($input as $k=>$v) {
 				if(is_array($v)) {
-					foreach ($v as $k1=>$v1) {
-		    			$input[$k][$k1] = strip_tags($v1);
-					}
+					$input[$k] = $this->strip_input_tags($v);
+					continue;
 				}
-				else {
-	    			$input[$k] = strip_tags($v);
-				}
-            }
+				$input[$k] = is_null($v) ? NULL : strip_tags($v);
+			}
+			# stripped array
+			return $input;
 		}
-		else {
-			$input = strip_tags($input);
-		}
-		# stripped
-		return $input;
+
+		// not array
+		return is_null($input) ? NULL : strip_tags($input);
 	}
 
 	/**
@@ -1046,23 +1044,6 @@ class Common_functions  {
      * @return mixed
      */
     public function validate_json_string($string) {
-        // for older php versions make sure that function "json_last_error_msg" exist and create it if not
-        if (!function_exists('json_last_error_msg')) {
-            function json_last_error_msg() {
-                static $ERRORS = array(
-                    JSON_ERROR_NONE => 'No error',
-                    JSON_ERROR_DEPTH => 'Maximum stack depth exceeded',
-                    JSON_ERROR_STATE_MISMATCH => 'State mismatch (invalid or malformed JSON)',
-                    JSON_ERROR_CTRL_CHAR => 'Control character error, possibly incorrectly encoded',
-                    JSON_ERROR_SYNTAX => 'Syntax error',
-                    JSON_ERROR_UTF8 => 'Malformed UTF-8 characters, possibly incorrectly encoded'
-                );
-
-                $error = json_last_error();
-                return isset($ERRORS[$error]) ? $ERRORS[$error] : 'Unknown error';
-            }
-        }
-
         // try to decode
         json_decode($string);
         // check for error
@@ -1203,9 +1184,57 @@ class Common_functions  {
 		$error[3] = "JSON_ERROR_CTRL_CHAR";
 		$error[4] = "JSON_ERROR_SYNTAX";
 		$error[5] = "JSON_ERROR_UTF8";
+		$error[6] = "JSON_ERROR_RECURSION";
+		$error[7] = "JSON_ERROR_INF_OR_NAN";
+		$error[8] = "JSON_ERROR_UNSUPPORTED_TYPE";
+		$error[9] = "JSON_ERROR_INVALID_PROPERTY_NAME";
+		$error[10] = "JSON_ERROR_UTF16";
 		// return def
 		if (isset($error[$error_int]))	{ return $error[$error_int]; }
 		else							{ return "JSON_ERROR_UNKNOWN"; }
+	}
+
+	/**
+	 * Download URL via CURL
+	 * @param  string $url
+	 * @param  array|boolean $headers (default:false)
+	 * @param  integer $timeout (default:30)
+	 */
+	public function curl_fetch_url($url, $headers=false, $timeout=30) {
+		$result = ['result'=>false, 'result_code'=>503, 'error_msg'=>''];
+
+		try {
+			$curl = curl_init();
+			curl_setopt($curl, CURLOPT_URL, $url);
+			curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+			curl_setopt($curl, CURLOPT_MAXREDIRS, 4);
+			curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+			curl_setopt($curl, CURLOPT_FAILONERROR, true);
+			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, true);
+			curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $timeout);
+			if (is_array($headers))
+			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+			// configure proxy settings
+			if (Config::get('proxy_enabled') == true) {
+				curl_setopt($curl, CURLOPT_PROXY, Config::get('proxy_server'));
+				curl_setopt($curl, CURLOPT_PROXYPORT, Config::get('proxy_port'));
+				if (Config::get('proxy_use_auth') == true) {
+				curl_setopt($curl, CURLOPT_PROXYUSERPWD, Config::get('proxy_user').':'.Config::get('proxy_pass'));
+				}
+			}
+
+			$result['result']      = curl_exec($curl);
+			$result['result_code'] = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+			$result['error_msg']   = curl_error($curl);
+
+			// close
+			curl_close ($curl);
+
+		} catch (Exception $e) {
+		}
+
+		return $result;
 	}
 
 	/**
@@ -1219,7 +1248,7 @@ class Common_functions  {
 		$results = array('lat' => null, 'lng' => null, 'error' => null);
 
 		// get geocode API key
-		include( dirname(__FILE__). "/../../config.php" );
+		$gmaps_api_geocode_key = Config::get('gmaps_api_geocode_key');
 
 		if(empty($gmaps_api_geocode_key)) {
 			$results['info'] = _("Geocode API key not set");
@@ -1227,14 +1256,14 @@ class Common_functions  {
 		}
 
 		# Geocode address
-		$geocode = file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key));
+		$curl = $this->curl_fetch_url('https://maps.google.com/maps/api/geocode/json?address='.rawurlencode($address).'&sensor=false&key='.rawurlencode($gmaps_api_geocode_key), ["Accept: application/json"]);
 
-		if ($geocode === false) {
+		if ($curl['result'] === false) {
 			$results['error'] = _("Geocode lookup failed. Check Internet connectivity.");
 			return $results;
 		}
 
-		$output= json_decode($geocode);
+		$output= json_decode($curl['result']);
 
 		if (isset($output->results[0]->geometry->location->lat))
 			$results['lat'] = str_replace(",", ".", $output->results[0]->geometry->location->lat);

@@ -10,16 +10,6 @@
 class phpipamSNMP extends Common_functions {
 
 	/**
-	 * Settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
-	/**
 	 * Saves last result value
 	 *
 	 * (default value: false)
@@ -159,13 +149,6 @@ class phpipamSNMP extends Common_functions {
 	 */
 	public $vlan_number = 1;
 
-	/**
-	 * Result object - for result printing
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
 
 
 

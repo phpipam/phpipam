@@ -72,30 +72,6 @@ class Subnets extends Common_functions {
 	protected $arin = array();
 
 	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
-	 * for Result printing
-	 *
-	 * @var object
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Addresses class
 	 *
 	 * (default value: false)
@@ -125,21 +101,6 @@ class Subnets extends Common_functions {
 	 */
 	private $gmp_bitmasks;
 
-	/**
-	 * for Database connection
-	 *
-	 * @var object
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * for Logging connection
-	 *
-	 * @var object
-	 * @access public
-	 */
-	public $Log;
 
 
 
@@ -988,14 +949,13 @@ class Subnets extends Common_functions {
 	 * @method set_tmptable_engine_type
 	 */
 	private function set_tmptable_engine_type () {
-		// read config.php
-		include(dirname(__FILE__)."/../../config.php");
-		// if set check array
-		if(isset($db['tmptable_engine_type'])) {
-			if($db['tmptable_engine_type']=="MEMORY" || $db['tmptable_engine_type']=="InnoDB") {
-				$this->tmptable_engine_type = $db['tmptable_engine_type'];
-			}
-		}
+		$db = Config::get('db');
+
+		if(!isset($db['tmptable_engine_type']))
+			return;
+
+		if($db['tmptable_engine_type']=="MEMORY" || $db['tmptable_engine_type']=="InnoDB")
+			$this->tmptable_engine_type = $db['tmptable_engine_type'];
 	}
 
 	/**
@@ -2561,9 +2521,9 @@ class Subnets extends Common_functions {
 	 */
 	public function find_inactive_hosts ($timelimit = 86400, $limit = 100) {
     	// fetch settings
-    	$this->settings ();
+    	$this->get_settings ();
     	// search
-  		try { $res = $this->Database->getObjectsQuery("select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? limit $limit;", array(date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr($this->settings->pingStatus, ";")))) ); }
+ 		try { $res = $this->Database->getObjectsQuery("select ipaddresses.* from `ipaddresses` join subnets on ipaddresses.subnetId = subnets.id where subnets.pingSubnet = 1 and `lastSeen` between ? and ? order by lastSeen desc limit $limit;", array(date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-$timelimit), date("Y-m-d H:i:s", strtotime(date("Y-m-d H:i:s"))-(int) str_replace(";","",strstr($this->settings->pingStatus, ";")))) ); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -3425,7 +3385,7 @@ class Subnets extends Common_functions {
 	 */
 	private function query_ripe ($subnet) {
 		// fetch
-		$ripe_result = $this->identify_address ($subnet)=="IPv4" ? $this->curl_fetch ("ripe", "inetnum", $subnet) : $this->curl_fetch ("ripe", "inet6num", $subnet);
+		$ripe_result = $this->identify_address ($subnet)=="IPv4" ? $this->ripe_arin_fetch ("ripe", "inetnum", $subnet) : $this->ripe_arin_fetch ("ripe", "inet6num", $subnet);
 		// not existings
 		if ($ripe_result['result_code']==404) {
 			// return array
@@ -3434,7 +3394,7 @@ class Subnets extends Common_functions {
 		// fail
 		if ($ripe_result['result_code']!==200) {
 			// return array
-			return array("result"=>"error", "error"=>"Error connecting to ripe rest api");
+			return array("result"=>"error", "error"=>"Error connecting to ripe rest api : ".$ripe_result['error_msg']);
 		}
 		else {
     		$out = array();
@@ -3461,7 +3421,7 @@ class Subnets extends Common_functions {
 		$subnet_arr = explode("/", $subnet);
 		$subnet = reset($subnet_arr);
 		// fetch
-		$arin_result = $this->curl_fetch ("arin", null, $subnet);
+		$arin_result = $this->ripe_arin_fetch ("arin", null, $subnet);
 
 		// not existings
 		if ($arin_result['result_code']==404) {
@@ -3471,7 +3431,7 @@ class Subnets extends Common_functions {
 		// fail
 		if ($arin_result['result_code']!==200) {
 			// return array
-			return array("result"=>"error", "error"=>"Error connecting to arin rest api");
+			return array("result"=>"error", "error"=>"Error connecting to arin rest api : ".$ripe_result['error_msg']);
 		}
 		else {
     		$out = array();
@@ -3503,7 +3463,7 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Fetch details from ripe
+	 * Fetch details from ripe or arin
 	 *
 	 * @access private
 	 * @param string $network (default: "ripe")
@@ -3511,24 +3471,16 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet
 	 * @return array
 	 */
-	private function curl_fetch ($network = "ripe", $type = "inetnum", $subnet) {
+	private function ripe_arin_fetch ($network = "ripe", $type = "inetnum", $subnet) {
 		// set url
 		$url = $network=="ripe" ? "http://rest.db.ripe.net/ripe/$type/$subnet" : "http://whois.arin.net/rest/nets;q=$subnet?showDetails=true&showARIN=false&showNonArinTopLevelNet=false&ext=netref2";
-		// fetch with curl
-	    $curl = curl_init();
-	    curl_setopt($curl, CURLOPT_URL, $url);
-	    curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-	    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-	    curl_setopt($curl, CURLOPT_HTTPHEADER, array("Accept: application/json"));
-	    // fetch result
-		$result = json_decode(curl_exec ($curl));
-	    // http response code
-	    $result_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-	    // close
-	    curl_close ($curl);
 
-	    // result
-	    return array("result"=>$result, "result_code"=>$result_code);
+		$result = $this->curl_fetch_url($url, ["Accept: application/json"]);
+
+		$result['result'] = json_decode($result['result']);
+
+		// result
+		return $result;
 	}
 
 	/**

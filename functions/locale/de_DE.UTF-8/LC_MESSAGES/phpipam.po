@@ -2,7 +2,7 @@
 # Copyright (C) phpipam 2013
 # This file is distributed under the same license as the phpipam package.
 # miha petkovsek <miha.petkovsek@gmail.com>, 2013.
-# "Project-Id-Version: 1.2.000\n"
+# "Project-Id-Version: 1.40\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2013-04-02 14:33+0200\n"
 # "PO-Revision-Date: 2016-02-12 14:45+0200\n"
@@ -2287,7 +2287,7 @@ msgstr "Split Subnetz"
 #: site/admin/manageSubnetEdit.php:223 site/admin/manageSubnettruncate.php:27
 #: site/admin/manageSubnettruncate.php:60
 msgid "Truncate subnet"
-msgstr "IP's l&ouml;schen"
+msgstr "IP’s l&ouml;schen"
 
 #: site/admin/manageSubnetEdit.php:227
 msgid "Resize, split or truncate this subnet"

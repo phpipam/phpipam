@@ -25,16 +25,6 @@ class Scan extends Common_functions {
 	public $php_exec = null;
 
 	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
-	/**
 	 * default icmp type
 	 *
 	 * (default value: "ping")
@@ -82,14 +72,6 @@ class Scan extends Common_functions {
 	protected $icmp_exit = false;
 
 	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Database
 	 *
 	 * @var mixed
@@ -113,13 +95,6 @@ class Scan extends Common_functions {
 	 */
 	protected $Addresses;
 
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 
 
@@ -133,14 +108,14 @@ class Scan extends Common_functions {
 	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
-		# debugging
-		$this->set_debugging();
 		# fetch settings
-		is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
+		$this->settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
 		# set type
 		$this->reset_scan_method ($this->settings->scanPingType);
 		# set OS type
@@ -184,25 +159,12 @@ class Scan extends Common_functions {
 	}
 
 	/**
-	 * Resets debugging
-	 *
-	 * @access public
-	 * @param bool $debug (default: false)
-	 * @return void
-	 */
-	public function reset_debugging ($debug = false) {
-		$this->debugging = $debug;
-	}
-
-	/**
 	 * Sets php exec
 	 *
 	 * @access private
 	 * @return void
 	 */
 	private function set_php_exec () {
-		include(dirname(__FILE__)."/../../config.php");
-
 		// Invoked via CLI, use current php-cli binary if known (>php5.3)
 		if ( php_sapi_name() === "cli" && defined('PHP_BINARY') ) {
 			$this->php_exec = PHP_BINARY;
@@ -210,6 +172,7 @@ class Scan extends Common_functions {
 		}
 
 		// Invoked via HTML (or php5.3)
+		$php_cli_binary = Config::get('php_cli_binary');
 
 		// Check for user specified php-cli binary (Multiple php versions installed)
 		if ( !empty($php_cli_binary) ) {
@@ -310,7 +273,7 @@ class Scan extends Common_functions {
 
 		# set ping command based on OS type
 		if ($this->os_type == "FreeBSD")    { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -w $this->icmp_timeout $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
 		elseif($this->os_type == "Windows")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
 		else								{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
 
@@ -349,7 +312,7 @@ class Scan extends Common_functions {
 		}
 
 		# Check for PEAR_Error
-		if (get_class($ping) == "PEAR_Error") {
+		if ($ping instanceof PEAR_Error) {
 			//return result for web or cmd
 			if($this->icmp_exit)    { exit ($ping->code); }
 			else                    { return $ping->code; }

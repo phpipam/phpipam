@@ -16,15 +16,6 @@ class User extends Common_functions {
     public $username;
 
     /**
-     * from api flag
-     *
-     * (default value: false)
-     *
-     * @var bool
-     */
-    public $api = false;
-
-    /**
      * flag if user is authenticated
      *
      * (default value: false)
@@ -118,36 +109,6 @@ class User extends Common_functions {
     protected $authmethodparams;
 
     /**
-     *  debugging flag
-     *
-     * (default value: false)
-     *
-     * @var bool
-     */
-    protected $debugging = false;
-
-    /**
-     * Result object
-     *
-     * @var object
-     */
-    public $Result;
-
-    /**
-     * for Database connection
-     *
-     * @var mixed
-     */
-    protected $Database;
-
-    /**
-     * for Logging connection
-     *
-     * @var object
-     */
-    public $Log;
-
-    /**
      * Cryptographic functions
      * @var Crypto
      */
@@ -162,6 +123,7 @@ class User extends Common_functions {
      * @param bool $api (default: false)
      */
     public function __construct (Database_PDO $database, $api = false) {
+        parent::__construct();
 
         # Save database object
         $this->Database = $database;
@@ -217,8 +179,6 @@ class User extends Common_functions {
             if (@$_SESSION===NULL && !isset($_SESSION)) {
                 //set session name
                 $this->set_session_name();
-                //set debugging
-                $this->set_debugging();
                 //set default params
                 $this->set_session_ini_params ();
                 //register session
@@ -234,9 +194,7 @@ class User extends Common_functions {
      */
     private function start_session () {
         // check if database should be set for sessions
-        include( dirname(__FILE__).'/../../config.php' );
-        // db
-        if ($session_storage == "database") {
+        if (Config::get('session_storage') == "database") {
             new Session_db ($this->Database);
         }
         // local
@@ -262,8 +220,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_name () {
-        include( dirname(__FILE__).'/../../config.php' );
-        $sessname = strlen(@$phpsessname)>0 ? $phpsessname : "phpipam";
+        $sessname = Config::get('phpsessname', 'phpipam');
         // check old name
         $old_name = session_name();
         if ($sessname != $old_name) {
@@ -560,26 +517,21 @@ class User extends Common_functions {
      */
     public function migrate_resolve_subnets () {
         // read config.php
-        include( dirname(__FILE__).'/../../config.php' );
+        $config = Config::get('config');
+
         // check for array and values
-        if(isset($config['resolve_subnets'])) {
-            if(is_array($config['resolve_subnets'])) {
-                if (sizeof($config['resolve_subnets'])>0) {
-                    foreach ($config['resolve_subnets'] as $subnetId) {
-                        $update = array (
-                                         "id"         => $subnetId,
-                                         "resolveDNS" => 1
-                                         );
-                        // update
-                        try {
-                            $this->Database->updateObject("subnets", $update);
-                        } catch (Exception $e) {}
-                    }
-                    // print that is can be deleted
-                    $this->Result->show ("warning", '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
-                }
-            }
+        if(!isset($config['resolve_subnets']) || !is_array($config['resolve_subnets']) || sizeof($config['resolve_subnets'])==0)
+            return;
+
+        foreach ($config['resolve_subnets'] as $subnetId) {
+            $update = ["id" => $subnetId, "resolveDNS" => 1 ];
+            // update
+            try {
+                $this->Database->updateObject("subnets", $update);
+            } catch (Exception $e) {}
         }
+        // print that is can be deleted
+        $this->Result->show ("warning", '$config[resolve_subnets] '._('was migrated to database. It can be deleted from config.php'), false);
     }
 
 
@@ -938,7 +890,7 @@ class User extends Common_functions {
      */
     private function auth_local ($username, $password) {
         # auth ok
-        if($this->user->password == crypt($password, $this->user->password)) {
+        if(hash_equals($this->user->password, crypt($password, $this->user->password))) {
             # save to session
             $this->write_session_parameters ();
 
@@ -1778,7 +1730,8 @@ class User extends Common_functions {
                 "customers",
                 "locations",
                 "devices",
-                "dhcp"
+                "dhcp",
+                "routing"
             ];
     }
 

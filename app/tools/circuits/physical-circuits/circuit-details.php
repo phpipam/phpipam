@@ -80,7 +80,7 @@ if($circuit!==false) {
 		include("circuit-details-logical-parents.php");
 		print "</div>";
 		print "</div>";
-		print "</div>";
+	print "</div>";
 
 }
 else {

@@ -8,15 +8,15 @@ print "<h4>"._('Map')."</h4>";
 print "<hr>";
 
 // check
-if ($User->settings->enableLocations=="1" && (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0)) {
+if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
-elseif ($locA->name!=="/" && $locB->name!=="/") {
+elseif ($locA->name_print!=="/" && $locB->name_print!=="/") {
 	$all_locations = array ();
 
 	// add point A and B
-	if ($locA->name!=="/") { $all_locations[] = $locA; }
-	if ($locB->name!=="/") { $all_locations[] = $locB; }
+	if ($locA->name_print!=="/") { $all_locations[] = $locA; }
+	if ($locB->name_print!=="/") { $all_locations[] = $locB; }
 
     // get all
     foreach ($all_locations as $k=>$l) {

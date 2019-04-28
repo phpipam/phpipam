@@ -116,37 +116,6 @@ class PowerDNS extends Common_functions {
      */
     protected $Database_pdns;
 
-    /**
-     * Result
-     *
-     * @var object
-     * @access public
-     */
-    public $Result;
-
-    /**
-     * Net_IPv4 object
-     *
-     * @var resource
-     * @access protected
-     */
-    protected $Net_IPv4;
-
-    /**
-     * Net_IPv6object
-     *
-     * @var resource
-     * @access protected
-     */
-    protected $Net_IPv6;
-
-    /**
-     * Log
-     *
-     * @var object
-     * @access public
-     */
-    public $Log;
 
 
 
@@ -314,6 +283,7 @@ class PowerDNS extends Common_functions {
         $record_types[] = "NS";
         $record_types[] = "SOA";
         $record_types[] = "SPF";
+        $record_types[] = "SRV";
 
         // save
         $this->record_types = (object) $record_types;

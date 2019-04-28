@@ -84,6 +84,7 @@ class SubnetsTree {
 		$root->id = 0;
 		$root->isFolder = 1;
 		$root->description = _("Root folder");
+		$root->masterSubnetId = 0;
 
 		$this->subnets_by_id = array(0 => $root);
 		$this->children_by_parent_id = array();

@@ -33,7 +33,7 @@ $all_locations = [];
 foreach($locations as $l){ $all_locations[$l->id] = $l; }
 
 // check
-if ($User->settings->enableLocations=="1" && (!isset($gmaps_api_key) || strlen($gmaps_api_key)==0)) {
+if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 //elseif ($locA->name!=="/" && $locB->name!=="/") { ?

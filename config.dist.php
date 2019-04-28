@@ -37,7 +37,8 @@ $db['ssl_key']    = '/path/to/cert.key';             // path to an SSL key file.
 $db['ssl_cert']   = '/path/to/cert.crt';             // path to an SSL certificate file. Only makes sense combined with ssl_key
 $db['ssl_ca']     = '/path/to/ca.crt';               // path to a file containing SSL CA certs
 $db['ssl_capath'] = '/path/to/ca_certs';             // path to a directory containing CA certs
-$db['ssl_cipher'] = '/DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
+$db['ssl_cipher'] = 'DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
+$db['ssl_verify'] = 'true';                          // Verify Common Name (CN) of server certificate?
 
 
 /**
@@ -161,27 +162,6 @@ $proxy_port     = '8080';                                 // Proxy server port
 $proxy_user     = 'USERNAME';                             // Proxy Username
 $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
-
-/**
- * proxy to use for every internet access like update check
- ******************************/
-$proxy_auth     = base64_encode("$proxy_user:$proxy_pass");
-
-if ($proxy_enabled == true && $proxy_use_auth == false) {
-    stream_context_set_default(array('http' => array('proxy'=>'tcp://'.$proxy_server.':'.$proxy_port)));
-}
-elseif ($proxy_enabled == true && $proxy_use_auth == true) {
-    stream_context_set_default(
-        array('http' => array(
-              'proxy' => "tcp://$proxy_server:$proxy_port",
-              'request_fulluri' => true,
-              'header' => "Proxy-Authorization: Basic $proxy_auth"
-        )));
-}
-
-/* for debugging proxy config uncomment next line */
-// var_dump(stream_context_get_options(stream_context_get_default()));
-
 
 /**
  * General tweaks

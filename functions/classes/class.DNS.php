@@ -7,17 +7,6 @@
 
 class DNS extends Common_functions {
 
-
-	/**
-	 * settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
 	/**
 	 * type of record to fetch
 	 *
@@ -27,14 +16,6 @@ class DNS extends Common_functions {
 	 * @access private
 	 */
 	private $type = "A";
-
-	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
 
 	/**
 	 * Database
@@ -85,6 +66,13 @@ class DNS extends Common_functions {
 	 * @var bool
 	 */
 	public $print_error = false;
+
+	/**
+	 * Resolve error if DNS is not accessible
+	 *
+	 * @var mixed
+	 */
+	private $resolve_error;
 
 
 

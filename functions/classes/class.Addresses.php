@@ -46,54 +46,12 @@ class Addresses extends Common_functions {
     public $lastId = false;
 
 	/**
-	 * Debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access protected
-	 */
-	protected $debugging = false;
-
-	/**
-	 * PEAR NET IPv4 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv4;
-
-	/**
-	 * PEAR NET IPv6 object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Net_IPv6;
-
-	/**
-	 * Database conenction
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Subnets object
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Subnets;
-
-	/**
-	 * Logging object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
 
 	/**
 	 * PowerDNS object
@@ -112,12 +70,12 @@ class Addresses extends Common_functions {
 	 * @access public
 	 */
 	public function __construct (Database_PDO $Database) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $Database;
 		# initialize Result
 		$this->Result = new Result ();
-		# debugging
-		$this->set_debugging();
 
 		# Log object
 		$this->Log = new Logging ($this->Database);
@@ -423,28 +381,30 @@ class Addresses extends Common_functions {
 						"lastSeen"              => @$address['lastSeen']
 						);
 		# permissions
-		if($this->api!==true) {
-			if($User->get_module_permissions ("devices")>1) {
-				if (is_numeric($address['switch'])) {
+		if($this->api===true || $User->get_module_permissions ("devices")>1) {
+			if (array_key_exists('switch', $address)) {
+				if (empty($address['switch']) || is_numeric($address['switch']))
 					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
-				}
 			}
-			# customer
-			if($User->get_module_permissions ("customers")>1) {
-				if (is_numeric($address['customer_id'])) {
+		}
+		# customer
+		if($this->api===true || $User->get_module_permissions ("customers")>1) {
+			if (array_key_exists('customer_id', $address)) {
+				if (empty($address['customer_id']) || is_numeric($address['customer_id']))
 					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
-				}
 			}
-	        # location
-	        if ($User->get_module_permissions ("locations")>1) {
-	            if (is_numeric($address['location_item'])) {
+		}
+		# location
+		if ($this->api===true || $User->get_module_permissions ("locations")>1) {
+			if (array_key_exists('location_item', $address)) {
+				if (empty($address['location_item']) || is_numeric($address['location_item']))
 					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
-	            } else {
-					$this->Result->show("danger", _("Invalid location value"), true);
-				}
-
-	        }
-	    }
+			}
+			if (array_key_exists('location', $address)) {
+				if (empty($address['location']) || is_numeric($address['location']))
+					$insert['location'] = $address['location'] > 0 ? $address['location'] : NULL;
+			}
+		}
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -512,28 +472,30 @@ class Addresses extends Common_functions {
 						"lastSeen"    =>@$address['lastSeen']
 						);
 		# permissions
-		if($this->api!==true) {
-			if($User->get_module_permissions ("devices")>1) {
-				if (is_numeric($address['switch'])) {
+		if($this->api===true || $User->get_module_permissions ("devices")>1) {
+			if (array_key_exists('switch', $address)) {
+				if (empty($address['switch']) || is_numeric($address['switch']))
 					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
-				}
 			}
-			# customer
-			if($User->get_module_permissions ("customers")>1) {
-				if (is_numeric($address['customer_id'])) {
+		}
+		# customer
+		if($this->api===true || $User->get_module_permissions ("customers")>1) {
+			if (array_key_exists('customer_id', $address)) {
+				if (empty($address['customer_id']) || is_numeric($address['customer_id']))
 					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
-				}
 			}
-	        # location
-	        if ($User->get_module_permissions ("locations")>1) {
-	            if (is_numeric($address['location_item'])) {
+		}
+		# location
+		if ($this->api===true || $User->get_module_permissions ("locations")>1) {
+			if (array_key_exists('location_item', $address)) {
+				if (empty($address['location_item']) || is_numeric($address['location_item']))
 					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
-	            } else {
-					$this->Result->show("danger", _("Invalid location value"), true);
-				}
-
-	        }
-	    }
+			}
+			if (array_key_exists('location', $address)) {
+				if (empty($address['location']) || is_numeric($address['location']))
+					$insert['location'] = $address['location'] > 0 ? $address['location'] : NULL;
+			}
+		}
 		# custom fields, append to array
 		foreach($this->set_custom_fields() as $c) {
 			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
@@ -962,7 +924,7 @@ class Addresses extends Common_functions {
 	 */
 	public function ptr_modify ($action, $address, $print_error = true) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;
@@ -1009,7 +971,7 @@ class Addresses extends Common_functions {
 	 */
 	public function pdns_remove_ip_and_hostname_records ($address) {
         // fetch settings
-        $this->settings ();
+        $this->get_settings ();
         //check if powerdns enabled
         if ($this->settings->enablePowerDNS!=1) {
             return false;

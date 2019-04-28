@@ -53,8 +53,8 @@ $Tools_old    = new Tools ($Database_old);
 
 
 // fetch and check settings
-$settings     = $Tools->fetch_object ("settings", "id", 1);
-$settings_old = $Tools_old->fetch_object ("settings", "id", 1);
+$settings     = $Tools->get_settings();
+$settings_old = $Tools_old->get_settings();
 
 if($settings->version !== $settings_old->version)	{ $Result->show("danger", "Versions do not match ($settings->version vs $settings_old->version) !"); }
 

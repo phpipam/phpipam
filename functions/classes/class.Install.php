@@ -6,7 +6,6 @@
 
 class Install extends Common_functions {
 
-
 	/**
 	 * to store DB exceptions
 	 *
@@ -24,47 +23,12 @@ class Install extends Common_functions {
 	protected $db;
 
 	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
-	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
 	 * Database_root - for initial installation
 	 *
 	 * @var mixed
 	 * @access protected
 	 */
 	protected $Database_root;
-
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
-
 
 
 
@@ -76,13 +40,13 @@ class Install extends Common_functions {
 	 * @param Database_PDO $Database
 	 */
 	public function __construct (Database_PDO $Database) {
+		parent::__construct();
+
 		# initialize Result
 		$this->Result = new Result ();
 		# initialize object
 		$this->Database = $Database;
-		# set debugging
-		$this->set_debugging ();
-		# set debugging
+		# set db
 		$this->set_db_params ();
 		# Log object
 		try { $this->Database->connect(); }
@@ -301,25 +265,13 @@ class Install extends Common_functions {
 	}
 
 	/**
-	 * sets debugging if set in config.php file
-	 *
-	 * @access private
-	 * @return void
-	 */
-	public function set_debugging () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		if($debugging==true) { $this->debugging = true; }
-	}
-
-	/**
 	 * Sets DB parmaeters
 	 *
 	 * @access private
 	 * @return void
 	 */
 	private function set_db_params () {
-		require( dirname(__FILE__) . '/../../config.php' );
-		$this->db = $db;
+		$this->db = Config::get('db');
 	}
 
 
@@ -405,11 +357,6 @@ class Upgrade extends Install {
 	 */
 	private $old_version = "1.2";
 
-	/**
-	 * Result
-	 * @var obj
-	 */
-	public $Result;
 
 	/**
 	 * __construct function.

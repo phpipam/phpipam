@@ -89,11 +89,20 @@ $admin_items["circuits"] = array (
                         "icon"=>"fa-random"
                         );
 }
+// BGP
+if($User->settings->enableRouting == 1) {
+$admin_items["routing"] = array (
+                        "name"=>"Routing",
+                        "href"=>array("administration", "routing"),
+                        "title"=>"Show Routing",
+                        "icon"=>"fa-exchange"
+                        );
+}
 // locations
 if($User->settings->enableLocations == 1) {
 $admin_items["locations"] = array (
                         "name"=>"Locations",
-                        "href"=>array("tools", "locations"),
+                        "href"=>array("administration", "locations"),
                         "title"=>"Show locations",
                         "icon"=>"fa-map"
                         );

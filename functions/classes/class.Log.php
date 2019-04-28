@@ -12,17 +12,6 @@
 
 class Logging extends Common_functions {
 
-
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
 	/**
 	 * log_type
 	 *
@@ -247,22 +236,6 @@ class Logging extends Common_functions {
 	);
 
 	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Result object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Addresses object
 	 *
 	 * @var mixed
@@ -294,15 +267,6 @@ class Logging extends Common_functions {
 	 */
 	protected $Tools;
 
-	/**
-	 * settings
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $settings;
-
-
 
 
 
@@ -314,6 +278,8 @@ class Logging extends Common_functions {
 	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $database;
 		# Result
@@ -328,8 +294,6 @@ class Logging extends Common_functions {
 		else {
 			$this->settings = (object) $settings;
 		}
-		# debugging
-		$this->set_debugging();
 		# set log type
 		$this->set_log_type ();
 	}

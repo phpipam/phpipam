@@ -39,6 +39,9 @@ if($_POST['action']!="add") {
 # disable edit on delete
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 $link = $readonly ? false : true;
+
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('nat');
 ?>
 
 
@@ -113,8 +116,43 @@ $link = $readonly ? false : true;
         </tr>
         <?php } ?>
 
+        <tr>
+            <th><?php print _('Description'); ?></th>
+            <td colspan="2">
+                <textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $nat->description; ?></textarea>
+            </td>
+        </tr>
+
     	<!-- Source -->
     	<?php if($_POST['action']!=="add") { ?>
+
+        <!-- Policy nat -->
+        <tr class='port'>
+            <th><?php print _('Policy NAT'); ?></th>
+            <td>
+                <select name="policy" class="form-control input-sm input-w-auto" <?php print $readonly; ?>>
+                <?php
+                foreach (["No", "Yes"] as $d) {
+                    $selected = $nat->policy==$d ? "selected" : "";
+                    print "<option value='$d' $selected>$d</option>";
+                }
+                ?>
+            </td>
+            <td>
+                <span class="text-muted"><?php print _("Use destination policy NAT"); ?></span>
+            </td>
+        </tr>
+
+        <tr class='port'>
+            <th><?php print _('Destination address'); ?></th>
+            <td>
+                <input type="text" class="form-control input-sm" name="policy_dst" value="<?php print $nat->policy_dst; ?>" placeholder='<?php print _('IP'); ?>' <?php print $readonly; ?>>
+            </td>
+            <td>
+                <span class="text-muted"><?php print _("Destination address for policy NAT"); ?></span>
+            </td>
+        </tr>
+
     	<tr>
         	<td colspan="3"><hr></td>
     	</tr>
@@ -210,14 +248,35 @@ $link = $readonly ? false : true;
             	<span class="text-muted"><?php print _("Destination port"); ?></span>
         	</td>
         </tr>
+
         <?php } ?>
 
-    	<tr>
-        	<th><?php print _('Description'); ?></th>
-        	<td colspan="2">
-            	<textarea class="form-control input-sm" name="description" placeholder='<?php print _('Port'); ?>' <?php print $readonly; ?>><?php print $nat->description; ?></textarea>
-        	</td>
-        </tr>
+        <!-- Custom -->
+        <?php
+        if(sizeof($custom) > 0) {
+
+            print '<tr>';
+            print ' <td colspan="3"><hr></td>';
+            print '</tr>';
+
+            # count datepickers
+            $timepicker_index = 0;
+
+            # all my fields
+            foreach($custom as $field) {
+                // create input > result is array (required, input(html), timepicker_index)
+                $custom_input = $Tools->create_custom_field_input ($field, $nat, $_POST['action'], $timepicker_index);
+                // add datepicker index
+                $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+                // print
+                print "<tr>";
+                print " <th>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</th>";
+                print " <td>".$custom_input['field']."</td>";
+                print " <td><span class='muted'>".$field['Comment']."</span></td>";
+                print "</tr>";
+            }
+        }
+        ?>
 
 	</tbody>
 

@@ -46,25 +46,23 @@ $tools_menu_items = array(
 						'mac-lookup',
 						'circuits',
 						'customers',
-						"duplicates"
+						"duplicates",
+						"routing"
                     );
 
 
 #custom
-if (isset($private_subpages)) {
-    if(is_array($private_subpages)) {
-        if (sizeof($private_subpages)>0) {
-            # array and icon
-            $tools_menu['Custom tools'] = array();
-            $tools_menu_icons['Custom tools'] = "fa-star";
-            // loop
-            foreach ($private_subpages as $s) {
-                // title
-                $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
-                // add to inclusion check
-                $tools_menu_items[] = $s;
-            }
-        }
+$private_subpages = Config::get('private_subpages');
+if(is_array($private_subpages) && sizeof($private_subpages)>0) {
+    # array and icon
+    $tools_menu['Custom tools'] = array();
+    $tools_menu_icons['Custom tools'] = "fa-star";
+    // loop
+    foreach ($private_subpages as $s) {
+        // title
+        $tools_menu['Custom tools'][] = array("show"=>true,	"icon"=>"fa-angle-right", "name"=>ucwords($s),  "href"=>$s, 	"description"=>ucwords($s)." "._("custom tool"));
+        // add to inclusion check
+        $tools_menu_items[] = $s;
     }
 }
 
@@ -105,6 +103,8 @@ if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>0)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"VRFs and belonging networks");
 if($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>0)
 $tools_menu['Subnets'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"NAT", 				"href"=>"nat", 				  "description"=>"NAT translations");
+if($User->settings->enableRouting==1 && $User->get_module_permissions ("routing")>0)
+$tools_menu['Subnets'][] = array("show"=>true,	"icon"=>"fa-exchange", 	      "name"=>"Routing", 			"href"=>"routing", 				  "description"=>"Routing information");
 if($User->settings->enableMulticast == 1)
 $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-map-o",		"name"=>"Multicast networks", 	"href"=>"multicast-networks", "description"=>"Multicast subnets and mapping");
 if($User->settings->enableFirewallZones == 1)

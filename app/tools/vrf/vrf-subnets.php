@@ -15,14 +15,14 @@ $slaves = $Subnets->fetch_vrf_subnets ($_GET['subnetId'], NULL);
 # no subnets
 if(!$slaves) {
 	print "<hr>";
-	print "<h4>"._('VRF')." $vrf->number (".$vrf->description.") "._('has no belonging subnets')."</h4>";
+	print "<h4>"._('VRF')." $vrf->name (".$vrf->description.") "._('has no belonging subnets')."</h4>";
 }
 else {
 	# cast
 	$vrf = (array) $vrf;
 	# print title
 	$slaveNum = sizeof($slaves);
-	print "<h4>"._('VRF')." $vrf[number] (".$vrf['name'].") "._('has')." $slaveNum "._('belonging subnets').":</h4><hr><br>";
+	print "<h4>"._('VRF')." $vrf[name] (".$vrf['description'].") "._('has')." $slaveNum "._('belonging subnets').":</h4><hr><br>";
 
 	# table
 	print '<table class="table slaves sorted table-striped table-condensed table-hover table-full table-top" data-cookie-id-table="vrf_subnets_slaves">'. "\n";
