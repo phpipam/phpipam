@@ -64,7 +64,7 @@ elseif(true) {
 
     // print
     if (sizeof($all_locations)>0) {
-	 if($gmaps_api_key!="OSMAP"){ ?>
+        if(Config::get('gmaps_api_key')!="OSMAP"){ ?>
         <script type="text/javascript">
             $(document).ready(function() {
                 // init gmaps

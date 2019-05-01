@@ -43,7 +43,7 @@ elseif (strlen(Config::get('gmaps_api_key'))==0) {
     // description and apostrophe fix
     $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".escape_input($location->description)."</span>" : "";
     $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
-    if($gmaps_api_key!="OSMAP") {
+    if(Config::get('gmaps_api_key')!="OSMAP") {
     ?>
     <script type="text/javascript">
         $(document).ready(function() {
