@@ -668,7 +668,7 @@ class Admin extends Common_functions {
 
 	    # set update query
 	    if($field['action']=="delete") 								{ $query  = "ALTER TABLE `$field[table]` DROP `$field[oldname]`;"; }
-	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER IGNORE TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
+	    else if ($field['action']=="edit"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
 	    else if ($field['action']=="edit") 							{ $query  = "ALTER TABLE `$field[table]` CHANGE COLUMN `$field[oldname]` `$field[name]` $field[ftype] $charset DEFAULT :default COMMENT :comment;"; }
 	    else if ($field['action']=="add"&&@$field['NULL']=="NO") 	{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NOT NULL COMMENT :comment;"; }
 	    else if ($field['action']=="add")							{ $query  = "ALTER TABLE `$field[table]` ADD COLUMN 	`$field[name]` 					$field[ftype] $charset DEFAULT :default NULL COMMENT :comment;"; }
