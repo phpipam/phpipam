@@ -21,7 +21,7 @@ if(!is_numeric($_POST['bgp_id']))  			{ $Result->show("danger",  _("Invalid ID")
 if(strlen($_POST['subnet'])<2)				{ $Result->show("danger",  _("Please enter at least 2 characters."), true); }
 
 # query
-$query = 'select INET_NTOA(`subnet`) as subnet,id,mask,description from `subnets` where INET_NTOA(`subnet`) like "'.$_POST['subnet'].'%" and `subnet` > 1 and `isFolder` = 0';
+$query = 'select INET_NTOA(`subnet`) as subnet,id,mask,description from `subnets` where INET_NTOA(`subnet`) like "'.$_POST['subnet'].'%" and `subnet` > 1 and COALESCE(`isFolder`,0) = 0';
 # execute
 try { $subnets = $Database->getObjectsQuery($query); }
 catch (Exception $e) {
