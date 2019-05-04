@@ -123,7 +123,7 @@ if($slaves) {
 
 				# add full information
                 $fullinfo = $slave['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
-                if ($slave['isFull']!==1) {
+                if ($slave['isFull']!=1) {
                     # if usage is 100%, fake usFull to true!
                     if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
                 }
