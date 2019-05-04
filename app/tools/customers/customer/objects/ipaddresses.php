@@ -108,7 +108,7 @@ foreach($addresses as $dummy) {
     print "	<td><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'])."' rel='tooltip' title='".$subnet['description']."'>".$Tools->transform_to_dotted($subnet['subnet'])."/".$subnet['mask']."</a></td>";
 
     // hostname
-	print "<td class='hostname'>{$addresses[$n]->dns_name}</td>";
+	print "<td class='hostname'>{$addresses[$n]->hostname}</td>";
 
 	// print description - mandatory
 	print "<td class='description'>".$addresses[$n]->description."</td>";
