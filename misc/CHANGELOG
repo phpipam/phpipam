@@ -42,6 +42,7 @@
         + Add Mac Search for Addresses controller (#2005);
         + New overlapping API call;
         + New global API parameter filter_match = full,partial,regex;
+        + Add Tools API customers submodule;
     + Widgets:
         + New user instruction widget (#2383);
 
