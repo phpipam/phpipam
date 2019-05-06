@@ -135,7 +135,8 @@ class Tools_controller extends Common_api_functions {
 										"scanAgents"  => "scanagents",
 										"locations"   => "locations",
 										"racks"       => "racks",
-										"nat"         => "nat"
+										"nat"         => "nat",
+										"customers"   => "customers"
 									  );
 	}
 
@@ -156,7 +157,8 @@ class Tools_controller extends Common_api_functions {
 								"scanAgents"  => array("id2"),
 								"locations"   => array("id2", "id3"),
 								"racks"       => array("id2", "id3"),
-								"nat"         => array("id2", "id3")
+								"nat"         => array("id2", "id3"),
+								"customers"   => array("id2")
 								);
 	}
 
@@ -388,8 +390,8 @@ class Tools_controller extends Common_api_functions {
 		# rewrite tool controller _params
 		$table_name = $this->rewrite_tool_input_params ();
 
-		# Get coordinates if locations
-		if($table_name=="locations")
+		# Get coordinates if address is set
+		if(key_exists('address', $this->_params) && in_array('lat', $this->valid_keys))
 			$this->format_location ();
 
 		# check for valid keys
@@ -439,8 +441,8 @@ class Tools_controller extends Common_api_functions {
 		# rewrite tool controller _params
 		$table_name = $this->rewrite_tool_input_params();
 
-		# Get coordinates if locations
-		if($table_name=="locations")
+		# Get coordinates if address is changed
+		if(key_exists('address', $this->_params) && in_array('lat', $this->valid_keys))
 			$this->format_location ();
 
 		# validate and prepare keys
