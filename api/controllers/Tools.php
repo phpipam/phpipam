@@ -385,17 +385,12 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function POST () {
-		# vlans, vrfs
-		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
-													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
-
-		# remap keys
-		$this->remap_keys ();
+		# rewrite tool controller _params
+		$table_name = $this->rewrite_tool_input_params ();
 
 		# Get coordinates if locations
-		if($this->_params->id=="locations") {
-			$values = $this->format_location ();
-		}
+		if($table_name=="locations")
+			$this->format_location ();
 
 		# check for valid keys
 		$values = $this->validate_keys ();
@@ -403,17 +398,16 @@ class Tools_controller extends Common_api_functions {
 		# validations
 		$this->validate_post_patch ();
 
-		# only 1 parameter ?
-		if (sizeof($values)==1)						{ $this->Response->throw_exception(400, 'No parameters'); }
+		# Need at least 1 parameter
+		if (sizeof($values)==0)
+			$this->Response->throw_exception(400, 'No parameters');
 
 		# execute update
-		if(!$this->Admin->object_modify ($this->_params->id, "add", "", $values))
-													{ $this->Response->throw_exception(500, $this->_params->id." object creation failed"); }
-		else {
-			//set result
-			return array("code"=>201, "data"=>$this->_params->id." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$this->_params->id."/".$this->Admin->lastId."/");
-		}
+		if(!$this->Admin->object_modify ($table_name, "add", "", $values))
+			$this->Response->throw_exception(500, $table_name." object creation failed");
 
+		//set result
+		return array("code"=>201, "data"=>$table_name." object created", "id"=>$this->Admin->lastId, "location"=>"/api/".$this->_params->app_id."/tools/".$table_name."/".$this->Admin->lastId."/");
 	}
 
 
@@ -442,36 +436,32 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function PATCH () {
-		# vlans, vrfs
-		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
-													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
-		# remap keys
-		$this->remap_keys ();
+		# rewrite tool controller _params
+		$table_name = $this->rewrite_tool_input_params();
 
-		# verify object
-		$this->validate_tools_object ();
-
-		# validations
-		$this->validate_post_patch ();
-
-		# rewrite keys - id2 must become id and unset
-		$table_name = $this->_params->id;
-		$this->_params->id = $this->_params->id2;
-		unset($this->_params->id2);
+		# Get coordinates if locations
+		if($table_name=="locations")
+			$this->format_location ();
 
 		# validate and prepare keys
 		$values = $this->validate_keys ();
 
-		# only 1 parameter ?
-		if (sizeof($values)==1)						{ $this->Response->throw_exception(400, 'No parameters'); }
+		# validations
+		$this->validate_post_patch ();
+
+		# verify object
+		$this->validate_tools_object ($table_name);
+
+		# Need at least 2 parameter (id + patch field)
+		if (sizeof($values)<=1)
+			$this->Response->throw_exception(400, 'No parameters');
 
 		# execute update
-		if(!$this->Admin->object_modify ($table_name, "edit",  $this->sort_key, $values))
-													{ $this->Response->throw_exception(500, $table_name." object edit failed"); }
-		else {
-			//set result
-			return array("code"=>200, "message"=>$table_name." object updated");
-		}
+		if(!$this->Admin->object_modify ($table_name, "edit", $this->sort_key, $values))
+			$this->Response->throw_exception(500, $table_name." object edit failed");
+
+		//set result
+		return array("code"=>200, "message"=>$table_name." object updated");
 	}
 
 
@@ -485,34 +475,59 @@ class Tools_controller extends Common_api_functions {
 	 * @return void
 	 */
 	public function DELETE () {
-		# vlans, vrfs
-		if ($this->_params->id=="vlans" || $this->_params->id=="vrf")
-													{ $this->Response->throw_exception(400, 'Please use '.$this->_params->id.' controller'); }
+		# rewrite tool controller _params
+		$table_name = $this->rewrite_tool_input_params();
 
 		# verify object
-		$this->validate_tools_object ();
+		$this->validate_tools_object ($table_name);
 
 		# set variables for delete
 		$values = array();
-		$values[$this->sort_key] = $this->_params->id2;
+		$values[$this->sort_key] = $this->_params->{$this->sort_key};
 
 		# execute delete
-		if(!$this->Admin->object_modify ($this->_params->id, "delete",  $this->sort_key, $values))
-													{ $this->Response->throw_exception(500, $this->_params->id." object delete failed"); }
-		else {
-			// set update field
-			if ($this->_params->id == "devices")	{ $update_field = "switch"; }
-			elseif ($this->_params->id == "ipTags")	{ $update_field = "state"; }
+		if(!$this->Admin->object_modify ($table_name, "delete", $this->sort_key, $values))
+			$this->Response->throw_exception(500, $table_name." object delete failed");
 
-			// delete all references
-			if (isset($update_field))
-			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->id2);
+		// set update field
+		if ($table_name == "devices")	{ $update_field = "switch"; }
+		if ($table_name == "ipTags")	{ $update_field = "state"; }
 
-			// set result
-			return array("code"=>200, "message"=>$this->_params->id." object deleted");
-		}
+		// delete all references
+		if (isset($update_field))
+			$this->Admin->remove_object_references ("ipaddresses", $update_field, $this->_params->{$this->sort_key});
+
+		// set result
+		return array("code"=>200, "message"=>$table_name." object deleted");
 	}
 
+	/**
+	 * Remap _Params and record re table name
+	 * @return mixed
+	 */
+	private function rewrite_tool_input_params() {
+		$table_name = $this->_params->id;
+
+		# vlans, vrfs
+		if (in_array($table_name, ["vlans", "vrf"]))
+			$this->Response->throw_exception(400, 'Please use '.$table_name.' controller');
+
+		# remove table_name and rewrite _params
+		unset($this->_params->id);
+		if (isset($this->_params->id2)) {
+			$this->_params->id = $this->_params->id2;
+			unset($this->_params->id2);
+		}
+		if (isset($this->_params->id3)) {
+			$this->_params->id2 = $this->_params->id3;
+			unset($this->_params->id3);
+		}
+
+		# remap remaining keys
+		$this->remap_keys (null, null, $table_name);
+
+		return $table_name;
+	}
 
 
 
@@ -570,9 +585,10 @@ class Tools_controller extends Common_api_functions {
 	 * @access private
 	 * @return void
 	 */
-	private function validate_tools_object () {
-		if ($this->Tools->fetch_object ($this->_params->id, $this->sort_key, $this->_params->id2)===false)
-																			{ $this->Response->throw_exception(400, "Invalid identifier"); }
+	private function validate_tools_object ($table_name) {
+		$obj = $this->Tools->fetch_object ($table_name, $this->sort_key, $this->_params->{$this->sort_key});
+		if (!is_object($obj))
+			$this->Response->throw_exception(400, "Invalid identifier");
 	}
 
 	/**

@@ -149,6 +149,7 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function object_modify ($table, $action=null, $field="id", $values = [], $values_log = []) {
+		if (!is_string($table) || strlen($table) == 0) return false;
 		# strip tags
 		$values     = $this->strip_input_tags ($values);
 		$values_log = $this->strip_input_tags ($values_log);
