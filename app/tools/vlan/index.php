@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # fetch all l2 domains
-$vlan_domains = $Tools->fetch_all_objects("vlanDomains", "id");
+$vlan_domains = $Tools->fetch_all_objects("vlanDomains", "name");
 
 # get custom fields
 $custom_fields = (array) $Tools->fetch_custom_fields('vlanDomains');
@@ -24,8 +24,12 @@ if($_GET['page']=="administration") { $csize++; }
 # set default domain
 if(sizeof($vlan_domains)==1) { $_GET['subnetId'] = 1; }
 
+# perm check
+if ($User->get_module_permissions ("vlan")<1) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # search vlan requested
-if(@$_GET['subnetId']=="all")									{ include("domain-vlans-all.php"); }
+elseif(@$_GET['subnetId']=="all")								{ include("domain-vlans-all.php"); }
 # vlan requested
 elseif(isset($_GET['sPage']))									{ include("vlan-details.php"); }
 # print all domains

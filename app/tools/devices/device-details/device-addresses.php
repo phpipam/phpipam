@@ -6,6 +6,8 @@
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check
+$User->check_module_permissions ("devices", 1, true, false);
 
 # check
 is_numeric($_GET['subnetId']) ? : $Result->show("danger", _("Invalid ID"), true);
@@ -23,7 +25,7 @@ $addresses     = $Tools->fetch_multiple_objects("ipaddresses", "switch", $device
 if ($addresses===false) { $addresses = array(); }
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);
 
 # title - hosts
 print "<h4>"._("Belonging addresses")."</h4><hr>";

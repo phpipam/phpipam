@@ -10,13 +10,21 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("devices", 2, true, false);
+}
+else {
+    $User->check_module_permissions ("devices", 3, true, false);
+}
+
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -27,7 +35,7 @@ $User->Crypto->csrf_cookie ("validate", "device", $_POST['csrf_cookie']) === fal
 $device = $Admin->strip_input_tags($_POST);
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['switchId']))			{ $Result->show("danger", _("Invalid ID"), true); }
+if($_POST['action']!="add" && !is_numeric($_POST['switchid']))			{ $Result->show("danger", _("Invalid ID"), true); }
 
 # available devices set
 foreach($device as $key=>$line) {
@@ -45,7 +53,7 @@ $device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (strlen(@$device['rack']>0)) {
+if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>0) {
     if ($User->settings->enableRACK!="1") {
         unset($device['rack']);
     }
@@ -85,7 +93,7 @@ if(sizeof($custom) > 0) {
 
 # set update values
 $values = array(
-				"id"          =>$device['switchId'],
+				"id"          =>$device['switchid'],
 				"hostname"    =>$device['hostname'],
 				"ip_addr"     =>$device['ip_addr'],
 				"type"        =>$device['type'],
@@ -98,10 +106,14 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack'])>0) {
+if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>0) {
 	$values['rack']       = $device['rack'];
 	$values['rack_start'] = $device['rack_start'];
 	$values['rack_size']  = $device['rack_size'];
+}
+# perms
+if ($User->get_module_permissions ("locations")<1) {
+	unset ($values['location']);
 }
 
 # update device

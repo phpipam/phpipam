@@ -10,7 +10,7 @@ $User->check_user_session();
 # get subnet calculation
 $subnet_detailed = $Subnets->get_network_boundaries ($subnet['subnet'], $subnet['mask']);           //set network boundaries
 $gateway         = $Subnets->find_gateway($subnet['id']);
-$gateway_ip      = $gateway===false ? "" : $Subnets->transform_to_dotted($gateway->ip_addr);
+$gateway_ip      = $gateway===false ? "/" : $Subnets->transform_to_dotted($gateway->ip_addr);
 
 # check if it exists, otherwise print error
 if(sizeof($address)>1) {
@@ -37,48 +37,58 @@ if(sizeof($address)>1) {
         print " <td>$subnet_detailed[netmask] (/$subnet[mask])</td>";
         print "</tr>";
 
+        # hierarchy
+        print "<tr>";
+        print " <th>"._('Hierarchy')."</th>";
+        print " <td>";
+        $Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
+        print "</td>";
+        print "</tr>";
+
+        # subnet
+        print "<tr>";
+        print " <th>"._('Subnet')."</th>";
+        print " <td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
+        print "</tr>";
+
         # gateway
         print "<tr>";
         print " <th>"._('Gateway')."</th>";
         print " <td>$gateway_ip</td>";
         print "</tr>";
 
+        # mac
+        if(in_array('mac', $selected_ip_fields)) {
+        print "<tr>";
+        print " <th>"._('MAC address')."</th>";
+        print " <td>$address[mac]</td>";
+        print "</tr>";
+        }
+
+        # state
+        print "<tr>";
+        print " <th>"._('IP status')."</th>";
+        print " <td>";
+
+        if ($address['state'] == "0")     { $stateClass = _("Offline"); }
+        else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
+        else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
+        else                          { $stateClass = _("Online"); }
+
+        print $Addresses->address_type_index_to_type ($address['state']);
+        print $Addresses->address_type_format_tag ($address['state']);
+
+        print " </td>";
+        print "</tr>";
+
+
+        # divider
+        print "<tr><td></td><td><hr></td></tr>";
+
     	# description
     	print "<tr>";
     	print "	<th>"._('Description')."</th>";
     	print "	<td>$address[description]</td>";
-    	print "</tr>";
-
-        print "<tr><td></td><td><hr></td></tr>";
-
-    	# hierarchy
-    	print "<tr>";
-    	print "	<th>"._('Hierarchy')."</th>";
-    	print "	<td>";
-    	$Subnets->print_breadcrumbs ($Sections, $Subnets, $_GET, $Addresses);
-    	print "</td>";
-    	print "</tr>";
-
-    	# subnet
-    	print "<tr>";
-    	print "	<th>"._('Subnet')."</th>";
-    	print "	<td>$subnet[ip]/$subnet[mask] ($subnet[description])</td>";
-    	print "</tr>";
-
-    	# state
-    	print "<tr>";
-    	print "	<th>"._('IP status')."</th>";
-    	print "	<td>";
-
-    	if ($address['state'] == "0") 	  { $stateClass = _("Offline"); }
-    	else if ($address['state'] == "2") { $stateClass = _("Reserved"); }
-    	else if ($address['state'] == "3") { $stateClass = _("DHCP"); }
-    	else						  { $stateClass = _("Online"); }
-
-    	print $Addresses->address_type_index_to_type ($address['state']);
-    	print $Addresses->address_type_format_tag ($address['state']);
-
-    	print "	</td>";
     	print "</tr>";
 
     	# hostname
@@ -105,19 +115,23 @@ if(sizeof($address)>1) {
     		}
     	}
 
+        # customer
+        if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+        $customer= $Tools->fetch_object ("customers", "id", $address['customer_id']);
+        print "<tr>";
+        print " <th>"._('Customer')."</th>";
+        if($customer!==false)
+        print " <td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
+        else
+        print " <td>"._("None")."</td>";
+        print "</tr>";
+        }
+
     	# mac
     	if(in_array('owner', $selected_ip_fields)) {
     	print "<tr>";
     	print "	<th>"._('Owner')."</th>";
     	print "	<td>$address[owner]</td>";
-    	print "</tr>";
-    	}
-
-    	# mac
-    	if(in_array('mac', $selected_ip_fields)) {
-    	print "<tr>";
-    	print "	<th>"._('MAC address')."</th>";
-    	print "	<td>$address[mac]</td>";
     	print "</tr>";
     	}
 
@@ -130,7 +144,7 @@ if(sizeof($address)>1) {
     	}
 
     	# switch
-    	if(in_array('switch', $selected_ip_fields)) {
+    	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
     	print "<tr>";
     	print "	<th>"._('Device')."</th>";
     	if(strlen($address['switch'])>0) {
@@ -144,8 +158,15 @@ if(sizeof($address)>1) {
     	print "</tr>";
     	}
 
+        # port
+        if(in_array('port', $selected_ip_fields)) {
+        print "<tr>";
+        print " <th>"._('Port')."</th>";
+        print " <td>$address[port]</td>";
+        print "</tr>";
+        }
 
-    	if($User->settings->enableLocations=="1") { ?>
+    	if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>
@@ -167,14 +188,6 @@ if(sizeof($address)>1) {
     		</td>
     	</tr>
         <?php }
-
-    	# port
-    	if(in_array('port', $selected_ip_fields)) {
-    	print "<tr>";
-    	print "	<th>"._('Port')."</th>";
-    	print "	<td>$address[port]</td>";
-    	print "</tr>";
-    	}
 
     	# last edited
     	print "<tr>";
@@ -210,7 +223,7 @@ if(sizeof($address)>1) {
 
     	# search for DNS records
     	if($User->settings->enablePowerDNS==1 && $subnet['DNSrecords']==1 ) {
-    		$records = $PowerDNS->search_records ("name", $address['dns_name'], 'name', true);
+    		$records = $PowerDNS->search_records ("name", $address['hostname'], 'name', true);
     		$ptr	 = $PowerDNS->fetch_record ($address['PTR']);
     		if ($records !== false || $ptr!==false) {
 
@@ -333,7 +346,7 @@ if(sizeof($address)>1) {
     			print "		<a class='search_ipaddress btn btn-default btn-xs         "; if(strlen($resolve['name']) == 0) { print "disabled"; } print "' href='".create_link("tools","search",$resolve['name'])."' "; if(strlen($resolve['name']) != 0)   { print "rel='tooltip' data-container='body' title='"._('Search same hostnames in db')."'"; } print ">	<i class='fa fa-gray fa-search'></i></a>";
     			print "		<a class='mail_ipaddress   btn btn-default btn-xs          ' href='#' data-id='".$address['id']."' rel='tooltip' data-container='body' title='"._('Send mail notification')."'>																																<i class='fa fa-gray fa-envelope-o'></i></a>";
     			if($zone) {
-    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['dns_name'])) ? '':$address['dns_name'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>";
+    			print "		<a class='fw_autogen	   btn btn-default btn-xs          ' href='#' data-subnetid='".$subnet['id']."' data-action='adr' data-ipid='".$address['id']."' data-dnsname='".((preg_match('/\//i',$address['hostname'])) ? '':$address['hostname'])."' rel='tooltip' data-container='body' title='"._('Regenerate firewall addres object.')."'><i class='fa fa-gray fa-fire'></i></a>";
     			}
     			print "		<a class='delete_ipaddress btn btn-default btn-xs modIPaddr' data-action='delete' data-subnetId='".$address['subnetId']."' data-id='".$address['id']."' href='#' id2='$address[ip]' rel='tooltip' data-container='body' title='"._('Delete IP address')."'>													<i class='fa fa-gray fa-times'></i></a>";
     			//share

@@ -128,13 +128,14 @@ class Vlans_controller extends Common_api_functions {
 	 *		- /{id}/subnets/{sectionId}/	returns subnets belonging to this VLAN inside one section
 	 *		- /custom_fields/			    returns custom fields
 	 *		- /search/{number}/			    returns all vlans with specified number
+	 *      - /all/                         returns all vlans
 	 *
 	 * @access public
 	 * @return void
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vlans", 'vlanId');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No vlans configured'); }
@@ -338,7 +339,11 @@ class Vlans_controller extends Common_api_functions {
 	 */
 	private function validate_vlan_edit () {
 		# get settings
-		$this->settings = $this->Admin->fetch_object ("settings", "id", 1);
+		$this->settings = $this->Admin->get_settings();
+
+		# Check vlan number
+		if ( $this->_params->number > $this->settings->vlanMax )
+			$this->Response->throw_exception(500, _('Highest possible VLAN number is ').$this->settings->vlanMax.'!');
 
 		//if it already exist die
 		if($this->settings->vlanDuplicate==0 && $_SERVER['REQUEST_METHOD']=="POST") {

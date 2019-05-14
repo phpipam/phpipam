@@ -84,6 +84,7 @@ class SubnetsTree {
 		$root->id = 0;
 		$root->isFolder = 1;
 		$root->description = _("Root folder");
+		$root->masterSubnetId = 0;
 
 		$this->subnets_by_id = array(0 => $root);
 		$this->children_by_parent_id = array();
@@ -107,7 +108,7 @@ class SubnetsTree {
 	private function walk_recursive($id, $level, $show_root) {
 		if ($id != 0 || $show_root === true) $this->output($this->subnets_by_id[$id], $level++);
 
-		if (!is_array($this->children_by_parent_id[$id])) return;
+		if (!isset($this->children_by_parent_id[$id])) return;
 
 		$children = $this->children_by_parent_id[$id];
 		foreach($children as $child_id) $this->walk_recursive($child_id, $level, $show_root);

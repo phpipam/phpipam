@@ -34,7 +34,7 @@ define('NET_PING_RESULT_UNSUPPORTED_BACKEND_MSG', 'Backend not Supported'       
 define('NET_PING_FAILED',                     0);
 define('NET_PING_HOST_NOT_FOUND',             1);
 define('NET_PING_INVALID_ARGUMENTS',          2);
-define('NET_PING_CANT_LOCATE_PING_BINARY',    3);
+define('NET_PING_CANT_LOCATE_PING_BINARY',    1000);
 define('NET_PING_RESULT_UNSUPPORTED_BACKEND', 4);
 
 
@@ -146,7 +146,7 @@ class Net_Ping
         $sysname = Net_Ping::_setSystemName();
 
         if (($ping_path = Net_Ping::_setPingPath($sysname)) == NET_PING_CANT_LOCATE_PING_BINARY) {
-            return $this->pear->raiseError(NET_PING_CANT_LOCATE_PING_BINARY_MSG, NET_PING_CANT_LOCATE_PING_BINARY);
+            return PEAR::raiseError(NET_PING_CANT_LOCATE_PING_BINARY_MSG, NET_PING_CANT_LOCATE_PING_BINARY);
         } else {
             return new Net_Ping($ping_path, $sysname);
         }
@@ -159,7 +159,7 @@ class Net_Ping
      */
     public static function _setSystemName()
     {
-        $OS_Guess  = new OS_Guess;
+        $OS_Guess  = @new OS_Guess;
         $sysname   = $OS_Guess->getSysname();
 
         // Refine the sysname for different Linux bundles/vendors. (This
@@ -452,7 +452,7 @@ class Net_Ping
     */
     public static function _raiseError($error)
     {
-        if ($this->pear->isError($error)) {
+        if (PEAR::isError($error)) {
             $error = $error->getMessage();
         }
         trigger_error($error, E_USER_WARNING);

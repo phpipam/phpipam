@@ -12,17 +12,6 @@
 
 class Logging extends Common_functions {
 
-
-	/**
-	 * debugging flag
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $debugging = false;
-
 	/**
 	 * log_type
 	 *
@@ -247,22 +236,6 @@ class Logging extends Common_functions {
 	);
 
 	/**
-	 * Database object
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
-
-	/**
-	 * Result object
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
-
-	/**
 	 * Addresses object
 	 *
 	 * @var mixed
@@ -294,15 +267,6 @@ class Logging extends Common_functions {
 	 */
 	protected $Tools;
 
-	/**
-	 * settings
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $settings;
-
-
 
 
 
@@ -314,6 +278,8 @@ class Logging extends Common_functions {
 	 * @param mixed $settings (default: null)
 	 */
 	public function __construct (Database_PDO $database, $settings = null) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $database;
 		# Result
@@ -328,8 +294,6 @@ class Logging extends Common_functions {
 		else {
 			$this->settings = (object) $settings;
 		}
-		# debugging
-		$this->set_debugging();
 		# set log type
 		$this->set_log_type ();
 	}
@@ -599,12 +563,12 @@ class Logging extends Common_functions {
 	private function database_write_log () {
 	    # set values
 	    $values = array(
-	    			"command"=>$this->log_command,
-	    			"severity"=>$this->log_severity,
-	    			"date"=>$this->Database->toDate(),
-	    			"username"=>$this->log_username,
-	    			"ipaddr"=> array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
-	    			"details"=>$this->log_details
+					"command"  =>$this->log_command,
+					"severity" =>$this->log_severity,
+					"date"     =>$this->Database->toDate(),
+					"username" =>$this->log_username,
+					"ipaddr"   => array_key_exists('HTTP_X_REAL_IP', $_SERVER) ? $_SERVER['HTTP_X_REAL_IP'] : @$_SERVER['REMOTE_ADDR'],
+					"details"  =>$this->log_details
 					);
 		# null empty values
 		$values = $this->reformat_empty_array_fields($values, null);
@@ -1904,19 +1868,18 @@ class Logging extends Common_functions {
     		return true;
         }
 
-		# fetch mailer settings
-		$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
-
-		# initialize mailer
-		$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
-		$phpipam_mail->initialize_mailer();
-
-		// set content
-		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-		$content_plain = implode("\r\n",$content_plain);
-
 		# try to send
 		try {
+			# fetch mailer settings
+			$mail_settings = $this->Tools->fetch_object("settingsMail", "id", 1);
+
+			# initialize mailer
+			$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
+
+			// set content
+			$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+			$content_plain = implode("\r\n",$content_plain);
+
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 			foreach($recipients as $r) {
 			$phpipam_mail->Php_mailer->addAddress(addslashes(trim($r->email)));
@@ -1929,7 +1892,7 @@ class Logging extends Common_functions {
 		} catch (phpmailerException $e) {
 			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
 		} catch (Exception $e) {
-			$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+			$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
 		}
 
 		# ok

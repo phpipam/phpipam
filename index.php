@@ -3,7 +3,6 @@ ob_start();
 
 /* config */
 if (!file_exists("config.php"))	{ die("<br><hr>-- config.php file missing! Please copy default config file `config.dist.php` to `config.php` and set configuration! --<hr><br>phpipam installation documentation: <a href='http://phpipam.net/documents/installation/'>http://phpipam.net/documents/installation/</a>"); }
-else 							{ require('config.php'); }
 
 /* site functions */
 require_once( 'functions/functions.php' );
@@ -20,7 +19,7 @@ else {
 	# if not install fetch settings etc
 	if($_GET['page']!="install" ) {
 		# database object
-		$Database 	= new Database_PDO;
+		$Database = new Database_PDO;
 
 		# check if this is a new installation
 		require('functions/checks/check_db_install.php');
@@ -40,6 +39,7 @@ else {
 
 	/** include proper subpage **/
 	if($_GET['page']=="install")		{ require("app/install/index.php"); }
+	elseif($_GET['page']=="2fa")		{ require("app/login/2fa/index.php"); }
 	elseif($_GET['page']=="upgrade")	{ require("app/upgrade/index.php"); }
 	elseif($_GET['page']=="login")		{ require("app/login/index.php"); }
 	elseif($_GET['page']=="temp_share")	{ require("app/temp_share/index.php"); }
@@ -54,7 +54,7 @@ else {
 		# make upgrade and php build checks
 		include('functions/checks/check_db_upgrade.php'); 	# check if database needs upgrade
 		include('functions/checks/check_php_build.php');	# check for support for PHP modules and database connection
-		if($_GET['switch'] && $_SESSION['realipamusername'] && $_GET['switch'] == "back"){
+		if(@$_GET['switch'] && $_SESSION['realipamusername'] && @$_GET['switch'] == "back"){
 			$_SESSION['ipamusername'] = $_SESSION['realipamusername'];
 			unset($_SESSION['realipamusername']);
 			print	'<script>window.location.href = "'.create_link(null).'";</script>';
@@ -99,7 +99,7 @@ else {
 		<!-- <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.min.css?v=<?php print SCRIPT_PREFIX; ?>"> -->
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php if ($User->user->ui_theme!="white") { ?>
-		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php } ?>
 
 		<?php if ($User->settings->enableThreshold=="1") { ?>
@@ -107,7 +107,7 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script type="text/javascript" src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 		<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -124,8 +124,8 @@ else {
 		<!--[if lt IE 9]>
 		<script type="text/javascript" src="js/dieIE.js"></script>
 		<![endif]-->
-		<?php if ($User->settings->enableLocations=="1" && isset($gmaps_api_key) && strlen($gmaps_api_key)>0) { ?>
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".$gmaps_api_key; ?>"></script>
+		<?php if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))>0) { ?>
+		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".Config::get('gmaps_api_key'); ?>"></script>
 		<script type="text/javascript" src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php }	?>
 		<!-- jQuery UI -->
@@ -141,9 +141,10 @@ else {
 
 	<!-- jQuery error -->
 	<div class="jqueryError">
-		<div class='alert alert-danger' style="width:400px;margin:auto">jQuery error!</div>
+		<div class='alert alert-danger' style="width:450px;margin:auto">jQuery error!
 		<div class="jqueryErrorText"></div><br>
 		<a href="<?php print create_link(null); ?>" class="btn btn-sm btn-default" id="hideError" style="margin-top:0px;">Hide</a>
+		</div>
 	</div>
 
 	<!-- Popups -->
@@ -280,7 +281,7 @@ else {
 						else																{ include("app/subnets/index.php"); }
 					}
 					# vrf
-					elseif ($_GET['page']=="vrf") 											{ include("app/vrf/index.php"); }
+					elseif ($_GET['page']=="vrf") 											{ include("app/tools/vrf/index.php"); }
 					# vlan
 					elseif ($_GET['page']=="vlan") 											{ include("app/vlan/index.php"); }
 					# folder

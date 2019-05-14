@@ -25,4 +25,3 @@ $hostname = $DNS->resolve_address ($_POST['ipaddress'], false, true, $nsid);
 
 # print result
 print $hostname['name'];
-?>

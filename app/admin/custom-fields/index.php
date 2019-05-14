@@ -23,7 +23,11 @@ $custom_tables = array(
 						"pstnPrefixes"     => "PSTN Prefixes",
 						"pstnNumbers"      => "PSTN Numbers",
 						"circuitProviders" => "Circuit providers",
-						"circuits" 		   => "Circuits"
+						"circuits" 		   => "Circuits",
+						"customers" 	   => "Customers",
+						"nat"			   => "NAT",
+						"routing_bgp" 	   => "BGP Routing",
+						//"routing_ospf" 	   => "OSPF Routing"
 						);
 
 # create array

@@ -18,7 +18,7 @@ $hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
 $hidden_cfields = is_array($hidden_cfields['subnets']) ? $hidden_cfields['subnets'] : array();
 
 # set selected address fields array
-$selected_ip_fields = explode(";", $User->settings->IPfilter);  																	//format to array
+$selected_ip_fields = $Tools->explode_filtered(";", $User->settings->IPfilter);  																	//format to array
 // if fw not set remove!
 unset($selected_ip_fields['firewallAddressObject']);
 
@@ -80,7 +80,7 @@ if ($subnets!==false) {
 		# check permission
 		$permission = $Subnets->check_permission ($User->user, $subnet->id);
 		//if it has slaves dont print it, slaves will be printed automatically
-		if($permission > 0 && ($Subnets->has_slaves($subnet->id)===false || $subnet->isFolder!="0")) {
+		if($permission > 0 && ($Subnets->has_slaves($subnet->id)===false || $subnet->isFolder=="1")) {
     		// add to count
     		$subnet_count++;
 

@@ -38,7 +38,7 @@ $Result		= new Result();
 // set exit flag to true
 $Scan->ping_set_exit(true);
 // set debugging
-$Scan->reset_debugging(false);
+$Scan->set_debugging(false);
 // change scan type?
 if(@$config['discovery_check_method'])
 $Scan->reset_scan_method ($config['discovery_check_method']);
@@ -61,7 +61,7 @@ $hostnames      = array();			// Array with detected hostnames
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl extension"); }
+if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -101,12 +101,12 @@ if ($scan_subnets!==false) {
 }
 
 
-if($Scan->debugging)							{ print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ print_r($scan_subnets); }
 if($scan_subnets===false || !count($scan_subnets)) { die("No subnets are marked for new hosts checking\n"); }
 
 
 //scan
-if($Scan->debugging)							{ print "Using $Scan->icmp_type\n--------------------\n\n"; }
+if($Scan->get_debugging()==true)				{ print "Using $Scan->icmp_type\n--------------------\n\n"; }
 
 
 $z = 0;			//addresses array index
@@ -217,7 +217,7 @@ else {
 
 
 # print change
-if($Scan->debugging)							{ "\nDiscovered addresses:\n----------\n"; print_r($scan_subnets); }
+if($Scan->get_debugging()==true)				{ "\nDiscovered addresses:\n----------\n"; print_r($scan_subnets); }
 
 
 
@@ -281,62 +281,59 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 	# none?
 	if(!isset($recepients))	{ die(); }
 
-	# fetch mailer settings
-	$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
 	# fake user object, needed for create_link
 	$User = new StdClass();
 	@$User->settings->prettyLinks = $Scan->settings->prettyLinks;
 
-	# initialize mailer
-	$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
-	$phpipam_mail->initialize_mailer();
-
-
-
-	// set subject
-	$subject	= "phpIPAM new addresses detected ".date("Y-m-d H:i:s");
-
-	//html
-	$content[] = "<h3>phpIPAM found $discovered new hosts</h3>";
-	$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid gray;'>";
-	$content[] = "<tr>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
-	$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
-	$content[] = "</tr>";
-	//plain
-	$content_plain[] = "phpIPAM found $discovered new hosts\r\n------------------------------";
-	//Changes
-	foreach($scan_subnets as $s) {
-		if(sizeof(@$s->discovered)>0) {
-			foreach($s->discovered as $ip) {
-				//set subnet
-				$subnet 	 = $Subnets->fetch_subnet(null, $s->id);
-				//set section
-				$section 	 = $Admin->fetch_object("sections", "id", $s->sectionId);
-
-				$content[] = "<tr>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>".$hostnames[$ip]."</td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
-				$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
-				$content[] = "</tr>";
-
-				//plain content
-				$content_plain[] = "\t * $ip (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")";
-			}
-		}
-	}
-	$content[] = "</table>";
-
-
-	# set content
-	$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	$content_plain 	= implode("\r\n",$content_plain);
-
 	# try to send
 	try {
+		# fetch mailer settings
+		$mail_settings = $Admin->fetch_object("settingsMail", "id", 1);
+		# initialize mailer
+		$phpipam_mail = new phpipam_mail($Scan->settings, $mail_settings);
+
+		// set subject
+		$subject	= "phpIPAM new addresses detected ".date("Y-m-d H:i:s");
+
+		//html
+		$content[] = "<h3>phpIPAM found $discovered new hosts</h3>";
+		$content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;border:1px solid gray;'>";
+		$content[] = "<tr>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>IP</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Hostname</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Subnet</th>";
+		$content[] = "	<th style='padding:3px 8px;border:1px solid silver;border-bottom:2px solid gray;'>Section</th>";
+		$content[] = "</tr>";
+		//plain
+		$content_plain[] = "phpIPAM found $discovered new hosts\r\n------------------------------";
+		//Changes
+		foreach($scan_subnets as $s) {
+			if(is_array($s->discovered)) {
+				foreach($s->discovered as $ip) {
+					//set subnet
+					$subnet 	 = $Subnets->fetch_subnet(null, $s->id);
+					//set section
+					$section 	 = $Admin->fetch_object("sections", "id", $s->sectionId);
+
+					$content[] = "<tr>";
+					$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>$ip</td>";
+					$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'>".$hostnames[$ip]."</td>";
+					$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id,$subnet->id)."'>".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask." - ".$subnet->description."</a></td>";
+					$content[] = "	<td style='padding:3px 8px;border:1px solid silver;'><a href='".rtrim($Scan->settings->siteURL, "/")."".create_link("subnets",$section->id)."'>$section->name $section->description</a></td>";
+					$content[] = "</tr>";
+
+					//plain content
+					$content_plain[] = "\t * $ip (".$Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask.")";
+				}
+			}
+		}
+		$content[] = "</table>";
+
+
+		# set content
+		$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+		$content_plain 	= implode("\r\n",$content_plain);
+
 		$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
 		//add all admins to CC
 		foreach($recepients as $admin) {
@@ -350,6 +347,6 @@ if($discovered>0 && $config['discovery_check_send_mail']) {
 	} catch (phpmailerException $e) {
 		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
 	} catch (Exception $e) {
-		$Result->show_cli("Mailer Error: ".$e->errorMessage(), true);
+		$Result->show_cli("Mailer Error: ".$e->getMessage(), true);
 	}
 }

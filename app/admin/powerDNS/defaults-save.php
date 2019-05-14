@@ -53,4 +53,3 @@ $values = array("id"=>1,
 				);
 if(!$Admin->object_modify("settings", "edit", "id", $values))	{ $Result->show("danger",  _("Cannot update settings"), true); }
 else															{ $Result->show("success", _("Settings updated successfully"), true); }
-?>

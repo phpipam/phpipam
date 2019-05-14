@@ -8,7 +8,7 @@
 
 // defines Securimage class
 require_once 'captcha/securimage.php';
-require_once '../../config.php';
+require_once '../../functions/functions.php';
 
 // options
 $options = array (
@@ -24,7 +24,7 @@ $options = array (
 			'wordlist_file_encoding' => null,        // character encoding of word file if other than ASCII (e.g. UTF-8, GB2312)
 			'ttf_file'               => './captcha/AHGBold.ttf',   // TTF file for captcha text
 			'no_session'             => false,
-			'session_name'           => $phpsessname,
+			'session_name'           => Config::get('phpsessname', 'phpipam'),
 			'use_database'           => false
 			);
 

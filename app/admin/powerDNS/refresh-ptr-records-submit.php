@@ -21,6 +21,8 @@ $PowerDNS 	= new PowerDNS ($Database);
 $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
+# perm check
+$User->check_module_permissions ("pdns", 2, true, false);
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);
@@ -58,7 +60,7 @@ $Addresses->ptr_unlink_subnet_addresses ($subnet->id);
 $hosts   = $Addresses->fetch_subnet_addresses ($subnet->id, "ip_addr", "asc");
 
 // create PTR records
-if (sizeof($hosts)>0) {
+if (is_array($hosts) && sizeof($hosts)>0) {
 	foreach ($hosts as $h) {
     	// set default hostname for PTR if set
     	if (strlen($h->hostname)==0) {
@@ -100,14 +102,14 @@ if (sizeof(@$success)>0) {
 	}
 	$print[] = "</div>";
 }
-if (sizeof(@$failures)>0) {
+if (is_array($failures) && sizeof($failures)>0) {
 	$print[] = "<div class='alert alert-danger'><h4>Invalid PTR hostnames:</h4>";
 	foreach ($failures as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";
 	}
 	$print[] = "</div>";
 }
-if (sizeof(@$ignored)>0) {
+if (is_array($ignored) && sizeof($ignored)>0) {
 	$print[] = "<div class='alert alert-info'><h4>Ignored records:</h4>";
 	foreach ($ignored as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";

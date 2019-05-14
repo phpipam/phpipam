@@ -78,6 +78,20 @@ abstract class DB {
 	 */
 	protected $port 	= '3306';
 
+	/**
+	 * Cache file to store all results from queries to
+	 *
+	 *  structure:
+	 *
+	 *      [table][index] = (object) $content
+	 *
+	 *
+	 * (default value: array())
+	 *
+	 * @var array
+	 * @access public
+	 */
+	public $cache = array();
 
 
 
@@ -512,6 +526,10 @@ abstract class DB {
 			$sortStr = 'DESC';
 		}
 
+		// change sort fields for vlans and vrfs. ugly :/
+	    if ($tableName=='vlans' && $sortField=='id') { $sortField = "vlanId"; }
+	    if ($tableName=='vrf' && $sortField=='id') { $sortField = "vrfId"; }
+
 		//we should escape all of the params that we need to
 		$tableName = $this->escape($tableName);
 		$sortField = $this->escape($sortField);
@@ -527,9 +545,7 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
 		}
 
 		return $results;
@@ -589,9 +605,32 @@ abstract class DB {
 		$results = array();
 
 		if (is_object($statement)) {
-			while ($newObj = $statement->fetchObject($class)) {
-				$results[] = $newObj;
-			}
+			$results = $statement->fetchAll($class == 'stdClass' ? PDO::FETCH_CLASS : PDO::FETCH_NUM);
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Get all objects groped by $groupField, array of (id,count(*)) pairs
+	 *
+	 * @param  string $tableName
+	 * @param  string $groupField
+	 * @return array
+	 */
+	public function getGroupBy($tableName, $groupField = 'id') {
+		if (!$this->isConnected()) $this->connect();
+
+		$statement = $this->pdo->prepare("SELECT SQL_CACHE `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
+
+		//debug
+		$this->log_query ($statement, array());
+		$statement->execute();
+
+		$results = array();
+
+		if (is_object($statement)) {
+			$results = $statement->fetchAll(PDO::FETCH_KEY_PAIR);
 		}
 
 		return $results;
@@ -721,12 +760,16 @@ abstract class DB {
 
 		$result_fields = $this->escape_result_fields($result_fields);
 
-    // subnets
-    if ($table=='subnets' && $sortField=='subnet') {
-        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-    } else {
-        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-    }
+		// change sort fields for vlans and vrfs. ugly :/
+	    if ($table=='vlans' && $sortField=='id') { $sortField = "vlanId"; }
+	    if ($table=='vrf' && $sortField=='id') { $sortField = "vrfId"; }
+
+	    // subnets
+	    if ($table=='subnets' && $sortField=='subnet') {
+	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	    } else {
+	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+	    }
 	}
 
 	/**
@@ -758,6 +801,10 @@ abstract class DB {
 		$objs = $this->getObjectsQuery($query, $values, $class);
 
 		$list = array();
+
+		if (!is_array($objs))
+			return $list;
+
 		foreach ($objs as $obj) {
 			$columns = array_values((array)$obj);
 			$list[] = $columns[0];
@@ -792,6 +839,20 @@ abstract class DB {
 		$idParts = array_fill(0, $num, '`id`=?');
 
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE ' . implode(' OR ', $idParts), $ids);
+	}
+
+	/**
+	 * Delete a list of objects from the database based on identifier
+	 *
+	 * @method deleteObjects
+	 * @param  string $tableName
+	 * @param  string $identifier
+	 * @param  mixed $ids
+	 * @return bool
+	 */
+	public function deleteObjectsByIdentifier($tableName, $identifier = "id", $id = 0) {
+		$tableName = $this->escape($tableName);
+		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$identifier.'` = ?', $id);
 	}
 
 	/**
@@ -938,7 +999,8 @@ class Database_PDO extends DB {
 	 */
 	private function set_db_params () {
 		# use config file
-		require( dirname(__FILE__) . '/../../config.php' );
+		$db = Config::get('db');
+
 		# set
 		$this->host 	= $db['host'];
 		$this->port 	= $db['port'];
@@ -947,7 +1009,7 @@ class Database_PDO extends DB {
 		$this->dbname 	= $db['name'];
 
 		$this->ssl = false;
-		if ($db['ssl']===true) {
+		if (@$db['ssl']===true) {
 
 			$this->pdo_ssl_opts = array (
 				'ssl_key'    => PDO::MYSQL_ATTR_SSL_KEY,
@@ -958,6 +1020,10 @@ class Database_PDO extends DB {
 			);
 
 			$this->ssl = array();
+
+			if ($db['ssl_verify']===false) {
+				$this->ssl[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
+			}
 
 			foreach ($this->pdo_ssl_opts as $key => $pdoopt) {
 				if ($db[$key]) {
@@ -1006,6 +1072,10 @@ class Database_PDO extends DB {
 		");
 
 		$columnsByTable = array();
+
+		if (!is_array($columns))
+			return $columnsByTable;
+
 		foreach ($columns as $column) {
 			if (!isset($columnsByTable[$column->table_name])) {
 				$columnsByTable[$column->table_name] = array();
@@ -1050,6 +1120,10 @@ class Database_PDO extends DB {
 
 		$foreignLinksByTable = array();
 		$foreignLinksByRefTable = array();
+
+		if (!is_array($foreignLinks))
+			return array($foreignLinksByTable, $foreignLinksByRefTable);
+
 		foreach ($foreignLinks as $foreignLink) {
 			if (!isset($foreignLinksByTable[$foreignLink->table_name])) {
 				$foreignLinksByTable[$foreignLink->table_name] = array();
@@ -1066,7 +1140,3 @@ class Database_PDO extends DB {
 		return array($foreignLinksByTable, $foreignLinksByRefTable);
 	}
 }
-
-
-
-?>

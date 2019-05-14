@@ -119,6 +119,14 @@ class Common_api_functions {
 	protected $Subnets;
 
 	/**
+	 * Master user class
+	 *
+	 * @var mixed
+	 * @access protected
+	 */
+	protected $User;
+
+	/**
 	 * App object - will be passed by index.php
 	 * to provide app detauls
 	 *
@@ -251,45 +259,51 @@ class Common_api_functions {
 	 * @return void
 	 */
 	protected function filter_result ($result = array ()) {
-    	// remap keys before applying filter
-    	$result = $this->remap_keys ($result, false);
+		// remap keys before applying filter
+		$result = $this->remap_keys ($result, false);
 		// validate
 		$this->validate_filter_by ($result);
 
-		// filter - array
-		if (is_array($result)) {
-			foreach ($result as $m=>$r) {
-				foreach ($r as $k=>$v) {
-					if ($k == $this->_params->filter_by) {
-						if ($v != $this->_params->filter_value) {
-							unset($result[$m]);
-							break;
-						}
-					}
-				}
+		// Filter single object
+		if (is_object($result))
+			$result = [$result];    // convert to array of objects
+
+		if (!is_array($result))
+			return false;           // Bad input
+
+		// Filter array of objects
+		$result2 = [];
+		foreach($result as $r) {
+			if (!property_exists($r, $this->_params->filter_by))
+				continue;
+
+			if ($this->_params->filter_match == 'partial') {
+				// match partial string
+				if (strpos($r->{$this->_params->filter_by}, $this->_params->filter_value) === false)
+					continue;
+			} elseif ($this->_params->filter_match == 'regex') {
+				// match regular expression
+				if (preg_match($this->_params->filter_value, $r->{$this->_params->filter_by}) !== 1)
+					continue;
+			} else {
+				// match full string
+				if ($r->{$this->_params->filter_by} != $this->_params->filter_value)
+					continue;
 			}
-		}
-		// filter - single
-		else {
-			foreach ($result as $k=>$v) {
-				if ($k == $this->_params->filter_by) {
-					if ($v != $this->_params->filter_value) {
-						unset($result);
-						break;
-					}
-				}
-			}
+
+			$result2[] = $r;    // save match
 		}
 
-		# null?
-		if (sizeof($result)==0)				{ $this->Response->throw_exception(404, 'No results (filter applied)'); }
-        # reindex filtered result
-        else {
-            $result = array_values($result);
-        }
+		if (empty($result2))
+			$this->Response->throw_exception(404, _('No results (filter applied)'));
 
+		# reindex filtered result
+		$result = array_values($result2);
 
-		# result
+		// Single result - return as object
+		if (sizeof($result) == 1)
+			return $result[0];
+
 		return $result;
 	}
 
@@ -304,34 +318,31 @@ class Common_api_functions {
 	 */
 	protected function validate_filter_by ($result) {
 		// validate filter
-		if (is_array($result))	{ $result_tmp = $result[0]; }
-		else					{ $result_tmp = $result; }
+		if (is_array($result))	{ $result = $result[0]; }
 
-        // validate filter_value
-        if(!isset($this->_params->filter_value)) {
-            $this->Response->throw_exception(400, 'Missing filter_value');
-        }
-        elseif (strlen($this->_params->filter_value)==0) {
-            $this->Response->throw_exception(400, 'Empty filter_value');
-        }
+		// validate filter_value
+		if(!isset($this->_params->filter_value))
+			$this->Response->throw_exception(400, _('Missing filter_value'));
 
-        // validate filter_by
-		$error = true;
-		if(is_array($result_tmp)) {
-    		foreach ($result_tmp as $k=>$v) {
-    			if ($k==$this->_params->filter_by) {
-    				$error = false;
-    			}
-    		}
+		if (strlen($this->_params->filter_value)==0)
+			$this->Response->throw_exception(400, _('Empty filter_value'));
+
+		// validate filter_by is a valid property
+		if (!is_object($result) || !property_exists($result, $this->_params->filter_by))
+			$this->Response->throw_exception(400, _('Invalid filter_by'));
+
+		// validate filter_match (default:'full')
+		if (!isset($this->_params->filter_match))
+			$this->_params->filter_match = 'full';
+
+		if (!in_array($this->_params->filter_match, ['full', 'partial', 'regex']))
+			$this->Response->throw_exception(400, _('Invalid filter_match'));
+
+		if ($this->_params->filter_match == 'regex') {
+			@preg_match($this->_params->filter_value, 'phpIPAM');
+			if (($last_err = preg_last_error()) != PREG_NO_ERROR)
+				$this->Response->throw_exception(400, _('Invalid regular expression')." (err=$last_err)");
 		}
-		else {
-    		$error = false;
-		}
-
-		// die
-		if ($error)	{
-    		$this->Response->throw_exception(400, 'Invalid filter_by');
-        }
 	}
 
 	/**
@@ -724,7 +735,7 @@ class Common_api_functions {
 			if (is_array($result)) {
 				foreach($result as $k=>$r) {
 					// remove
-					if($r->isFolder!="1")				{ unset($r); }
+					if($r->isFolder!="1")				{ unset($result[$k]); }
 			}	}
 			// single item
 			else {
@@ -745,9 +756,10 @@ class Common_api_functions {
 	 * @access protected
 	 * @param mixed $result (default: null)
 	 * @param mixed $controller (default: null)
+	 * @param mixed $tools_table (default: null)
 	 * @return void
 	 */
-	protected function remap_keys ($result = null, $controller = null) {
+	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
 		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip");
 
@@ -756,8 +768,8 @@ class Common_api_functions {
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($controller=="circuits") { $this->keys['cid'] = "circuit_id"; }
 		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
-		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
-		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
+		if($this->_params->controller=="tools" && $tools_table=="deviceTypes")  { $this->keys['tid'] = "id"; }
+		if($this->_params->controller=="tools" && $tools_table=="nameservers")  { $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="subnets" )  								  { $this->keys['ip'] = "ip_addr"; }
 
 		// special keys for POST / PATCH
@@ -765,8 +777,8 @@ class Common_api_functions {
 		if($this->_params->controller=="circuits")   								  { $this->keys['cid'] 		= "circuit_id"; }
 		}
 
-		// POST / PATCH
-		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH")		{ return $this->remap_update_keys (); }
+		// POST / PATCH / DELETE
+		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE")		{ return $this->remap_update_keys (); }
 		// GET
 		elseif ($_SERVER['REQUEST_METHOD']=="GET")											{ return $this->remap_result_keys ($result); }
 	}

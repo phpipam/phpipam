@@ -7,17 +7,6 @@
 
 class DNS extends Common_functions {
 
-
-	/**
-	 * settings
-	 *
-	 * (default value: false)
-	 *
-	 * @var bool
-	 * @access public
-	 */
-	public $settings = false;
-
 	/**
 	 * type of record to fetch
 	 *
@@ -27,14 +16,6 @@ class DNS extends Common_functions {
 	 * @access private
 	 */
 	private $type = "A";
-
-	/**
-	 * Result
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Result;
 
 	/**
 	 * Database
@@ -50,6 +31,13 @@ class DNS extends Common_functions {
 	 * @var string
 	 */
 	public $dns_type = "local";
+
+	/**
+	 * Multiple result flag
+	 *
+	 * @var bool
+	 */
+	private $multiple = false;
 
 	/**
 	 * Flag if local DNS in /etc/resolv.conf cannot be accessed
@@ -78,6 +66,13 @@ class DNS extends Common_functions {
 	 * @var bool
 	 */
 	public $print_error = false;
+
+	/**
+	 * Resolve error if DNS is not accessible
+	 *
+	 * @var mixed
+	 */
+	private $resolve_error;
 
 
 
@@ -109,6 +104,18 @@ class DNS extends Common_functions {
 		$this->initialize_pear_net_DNS2 ();
 		// set print error flg
 		$this->print_error = $print_error;
+	}
+
+	/**
+	 * Set flag to return multiple records if found
+	 *
+	 * @method set_multiple
+	 * @param  bool $multiple
+	 */
+	public function set_multiple ($multiple = false) {
+		if(is_bool($multiple)) {
+			$this->multiple = $multiple;
+		}
 	}
 
 
@@ -283,8 +290,17 @@ class DNS extends Common_functions {
 
 			foreach($result->answer as $mxrr) {
 				if ($mxrr->{$search}) {
-					return $mxrr->{$search};
+					if ($this->multiple) {
+						$res_m[] = $mxrr->{$search};
+					}
+					else {
+						return $mxrr->{$search};
+					}
 				}
+			}
+			// multiple return
+			if($this->multiple) {
+				return $res_m;
 			}
 		}
 		else {

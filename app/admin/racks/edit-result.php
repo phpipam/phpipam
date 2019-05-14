@@ -10,13 +10,21 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Racks      = new phpipam_rack ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("racks", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("racks", 3, true, true);
+}
+
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 
@@ -62,6 +70,22 @@ if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack['size'] < $rack_d
 			}
 		}
 	}
+
+    // fetch all custom devices
+    $rack_content = $Racks->fetch_rack_contents ($rack_details->id);
+    // split to front / back
+    if (is_array($rack_content)) {
+        foreach ($rack_content as $d) {
+            // front devices
+            if($d->rack_start <= $rack_details->size) {
+                if (($d->rack_start + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+            }
+            // back devices
+            else {
+                if (($d->rack_start - $rack_details->size + $d->rack_size -1) > $rack['size']) { $Result->show("danger", _('Device')." $d->hostname ".("is out of bounds for new rack size"."!"), true); }
+            }
+        }
+    }
 }
 
 # fetch custom fields
@@ -88,13 +112,27 @@ $values = array(
 				"id"          => @$rack['rackid'],
 				"name"        => @$rack['name'],
 				"size"        => @$rack['size'],
-				"location"    => @$rack['location'],
 				"hasBack"     => $Admin->verify_checkbox(@$rack['hasBack']),
+                "topDown"     => @$rack['topDown'],
 				"description" => @$rack['description']
 				);
 # custom fields
 if(isset($update)) {
 	$values = array_merge($values, $update);
+}
+
+# append location
+if ($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>1) {
+    if (is_numeric($_POST['location'])) {
+        $values['location'] = $_POST['location'] > 0 ? $_POST['location'] : NULL;
+    }
+}
+
+# append customerId
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>1) {
+    if (is_numeric($_POST['customer_id'])) {
+        $values['customer_id'] = $_POST['customer_id'] > 0 ? $_POST['customer_id'] : NULL;
+    }
 }
 
 # update rack
@@ -104,24 +142,26 @@ else																	{ $Result->show("success", _("Rack $rack[action] successful
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses
 	$Admin->remove_object_references ("devices", "rack", $values["id"], NULL);
+    # remove all custom devices for the rack
+    try { $Database->runQuery("delete from rackContents where `rack` = ?", array($values['id'])); }
+    catch (Exception $e) {}
 }
 # remove all devices if back is removed
 if($_POST['action']=="edit" && @$rack['hasBack']!="1") {
-	try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
-	catch (Exception $e) {}
+    try { $Database->runQuery("update devices set `rack` = 0 where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+    catch (Exception $e) {}
+    try { $Database->runQuery("delete from rackContents where `rack` = ? and rack_start > ?;", array($rack['rackid'], $rack['size'])); }
+    catch (Exception $e) {}
 }
 # update positions of rack devices when rack size changes
 if($_POST['action']=="edit" && @$rack['hasBack']=="1" && $rack_details->size!=$rack['size'] ) {
-	// set values
 	$values = array (
 						"rackid"   => $rack_details->id,
 						"new_size" => $rack['size'],
 						"old_size" => $rack_details->size
 	                 );
-	// set query based on shrink / expand
-	$query = "UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size";
-
-	// execute
-	try { $Database->runQuery($query, $values); }
-	catch (Exception $e) {}
+    try { $Database->runQuery("UPDATE `devices` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size", $values); }
+    catch (Exception $e) {}
+    try { $Database->runQuery("UPDATE `rackContents` set `rack_start` = `rack_start` + :new_size - :old_size where `rack` = :rackid and rack_start > :old_size", $values); }
+    catch (Exception $e) {}
 }

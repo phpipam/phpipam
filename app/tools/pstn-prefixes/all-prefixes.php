@@ -2,7 +2,7 @@
 <hr>
 
 <div class="btn-group">
-    <?php if($User->is_admin(false)||$User->user->pstn==3) { ?>
+    <?php if($User->get_module_permissions ("pstn")>2) { ?>
 	<a href="" class='btn btn-sm btn-default editPSTN' data-action='add' data-id='0' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add prefix'); ?></a>
 	<?php }?>
 </div>
@@ -17,15 +17,19 @@
 # verify that user is logged in
 $User->check_user_session();
 
+# perm check
+if ($User->get_module_permissions ("pstn")<1) {
+    $Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # check that location support isenabled
-if ($User->settings->enablePSTN!="1") {
+elseif ($User->settings->enablePSTN!="1") {
     $Result->show("danger", _("PSTN prefixes module disabled."), false);
 }
 else {
     # fetch all locations
     $all_prefixes = $Tools->fetch_all_prefixes();
 
-    $colspan = $admin||$User->user->pstn==3 ? 9 : 8;
+    $colspan = $User->get_module_permissions ("pstn")>2 ? 9 : 8;
 
     // table
     print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top' data-cookie-id-table='pstn_p'>";
@@ -38,6 +42,7 @@ else {
     print " <th>"._('Start')."</th>";
     print " <th>"._('Stop')."</th>";
     print " <th>"._('Numbers')."</th>";
+    if($User->get_module_permissions ("devices")>1)
     print " <th>"._('Device')."</th>";
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
@@ -47,6 +52,7 @@ else {
 			}
 		}
 	}
+    if($User->get_module_permissions ("pstn")>1)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";

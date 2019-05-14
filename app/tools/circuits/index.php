@@ -24,21 +24,32 @@ $hidden_provider_fields = is_array(@$hidden_provider_fields['circuitProviders'])
 # menu
 include("app/tools/circuits/menu.php");
 
+# perm check
+if ($User->get_module_permissions ("circuits")<1) {
+	$Result->show("danger", _("You do not have permissions to access this module"), false);
+}
 # load subpage
-if (!isset($_GET['subnetId']) || (@$_GET['subnetId']=="providers" && !isset($_GET['sPage'])) ) {
+elseif (!isset($_GET['subnetId']) || (@$_GET['subnetId']=="providers" && !isset($_GET['sPage'])) ) {
 	// all circuits
 	if(!isset($_GET['subnetId'])) {
-		include('all-circuits.php');
+		include('physical-circuits/all-circuits.php');
 	}
 	// all providers
 	else {
-		include('all-providers.php');
+		include('providers/all-providers.php');
 	}
 }
 else {
 	// specific provider
 	if($_GET['subnetId']=="providers") {
-		include("provider-details.php");
+		include("providers/provider-details.php");
+	}
+	elseif ($_GET['subnetId']=="logical") {
+		if(isset($_GET["sPage"])){
+			include("logical-circuits/logical-circuit-details.php");
+		}else{
+			include('logical-circuits/logical-circuits.php');
+		}
 	}
 	// map
 	elseif ($_GET['subnetId']=="circuit_map") {
@@ -50,6 +61,6 @@ else {
 	}
 	// specific circuit
 	else {
-		include("circuit-details.php");
+		include("physical-circuits/circuit-details.php");
 	}
 }

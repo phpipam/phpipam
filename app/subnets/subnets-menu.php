@@ -90,7 +90,7 @@ else {
 
 
 	/* print VLAN menu ---------- */
-	if($section['showVLAN'] == 1) {
+	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>0) {
 		$vlans = $Sections->fetch_section_vlans($_GET['section']);
 
 		# if some is present
@@ -106,7 +106,7 @@ else {
 
 
 	/* print VRF menu ---------- */
-	if($User->settings->enableVRF==1 && $section['showVRF']==1) {
+	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>0) {
 		$vrfs = $Sections->fetch_section_vrfs($_GET['section']);
 
 		# if some is present
@@ -128,12 +128,15 @@ if($section_permission == 3) {
 	if(isset($_GET['subnetId'])) {
 	print "	<button class='btn btn-xs btn-default pull-left' id='hideSubnets' rel='tooltip' title='"._('Hide subnet list')."' data-placement='right'><i class='fa fa-gray fa-sm fa-chevron-left'></i></button>";
 	}
-	print "	<span>"._('Add new');
+	print "	<span>";
 	print "	<div class='btn-group'>";
 	print "	 <button id='add_subnet' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new subnet to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-plus'></i></button>";
+	print "	 <button class='btn btn-xs btn-default btn-success open_popup' data-script='app/admin/subnets/find_free_section_subnets.php'  data-class='700' rel='tooltip' data-container='body'  data-placement='top' title='"._('Search for free subnets in section ')." $section[name]'  data-sectionId='$section[id]'><i class='fa fa-sm fa-search'></i></button>";
 	# snmp
-	if($User->settings->enableSNMP==1)
-	print "	 <button class='btn btn-xs btn-default btn-success' id='snmp-routing-section'  rel='tooltip' data-container='body' data-sectionId='$section[id]' data-subnetId='0'  data-placement='top' title='"._('Search for subnets through SNMP')."'><i class='fa fa-sm fa-cogs'></i></button>";
+	if($User->settings->enableSNMP==1) {
+    $csrf = $User->Crypto->csrf_cookie ("create", "scan");
+	print "	 <button class='btn btn-xs btn-default btn-success' id='snmp-routing-section'  rel='tooltip' data-container='body' data-sectionId='$section[id]' data-subnetId='0' data-csrf-cookie='$csrf'  data-placement='top' title='"._('Search for subnets through SNMP')."'><i class='fa fa-sm fa-cogs'></i></button>";
+    }
 	print "	 <button id='add_folder' class='btn btn-xs btn-default btn-success'  rel='tooltip' data-container='body'  data-placement='top' title='"._('Add new folder to')." $section[name]'  data-subnetId='' data-sectionId='$section[id]' data-action='add'><i class='fa fa-sm fa-folder'></i></button>";
 	print "	</div>";
 	print "	</span>";

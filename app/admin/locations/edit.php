@@ -10,12 +10,20 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
+$Admin	 	= new Admin ($Database, false);
 $Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("locations", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("locations", 3, true, true);
+}
+
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "location");
@@ -52,14 +60,11 @@ $custom = $Tools->fetch_custom_fields('locations');
     	<!-- name -->
     	<tr>
         	<th><?php print _('Name'); ?></th>
-        	<td>
+        	<td colspan="2">
             	<input type="text" class="form-control input-sm" name="name" value="<?php print $Tools->strip_xss($location->name); ?>" placeholder='<?php print _('Name'); ?>' <?php print $readonly; ?>>
             	<input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
             	<input type="hidden" name="id" value="<?php print $location->id; ?>">
             	<input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
-        	</td>
-        	<td>
-            	<span class="text-muted"><?php print _("Set Location name"); ?></span>
         	</td>
         </tr>
 
@@ -127,7 +132,7 @@ $custom = $Tools->fetch_custom_fields('locations');
                 // print
     			print "<tr>";
     			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
-    			print "	<td>".$custom_input['field']."</td>";
+    			print "	<td colspan='2'>".$custom_input['field']."</td>";
     			print "</tr>";
     		}
     	}

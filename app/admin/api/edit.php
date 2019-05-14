@@ -36,7 +36,7 @@ if($_POST['action']!="add") {
 } else {
 	# generate new code
 	$api = new StdClass;
-	$api->app_code = $User->Crypto->generate_token();
+	$api->app_code = $User->Crypto->generate_html_safe_token(32);
 	# title
 	$title = _('Add new api key');
 }
@@ -94,14 +94,11 @@ if($_POST['action']!="add") {
 	    <td>
 	    	<select name="app_security" class="form-control input-sm input-w-auto">
 	    	<?php
-	    	$perms = array(0=>"crypt",1=>"ssl",2=>"none",3=>"user");
-
-	    	// user not yet supported
-	    	unset($perms[3]);
+	    	$perms = array("SSL with User token"=>"ssl_token","SSL with App code token"=>"ssl_code","Encrypted"=>"crypt", "User token"=>"none");
 
 	    	foreach($perms as $k=>$p) {
-		    	if($p==$api->app_security)		{ print "<option value='$p' selected='selected'>"._($p)."</option>"; }
-		    	else							{ print "<option value='$p' 				   >"._($p)."</option>"; }
+		    	if($p==$api->app_security)		{ print "<option value='$p' selected='selected'>"._($k)."</option>"; }
+		    	else							{ print "<option value='$p' 				   >"._($k)."</option>"; }
 	    	}
 	    	?>
 	    	</select>

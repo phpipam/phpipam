@@ -116,37 +116,6 @@ class PowerDNS extends Common_functions {
      */
     protected $Database_pdns;
 
-    /**
-     * Result
-     *
-     * @var object
-     * @access public
-     */
-    public $Result;
-
-    /**
-     * Net_IPv4 object
-     *
-     * @var resource
-     * @access protected
-     */
-    protected $Net_IPv4;
-
-    /**
-     * Net_IPv6object
-     *
-     * @var resource
-     * @access protected
-     */
-    protected $Net_IPv6;
-
-    /**
-     * Log
-     *
-     * @var object
-     * @access public
-     */
-    public $Log;
 
 
 
@@ -314,6 +283,7 @@ class PowerDNS extends Common_functions {
         $record_types[] = "NS";
         $record_types[] = "SOA";
         $record_types[] = "SPF";
+        $record_types[] = "SRV";
 
         // save
         $this->record_types = (object) $record_types;
@@ -611,14 +581,16 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function count_domain_records ($domain_id) {
-        # fetch
-        try { $res = $this->Database_pdns->numObjectsFilter("records", "domain_id", $domain_id); }
+        // query
+        $query = 'SELECT COUNT(*) AS `cnt` FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL;';
+        // fetch
+        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
         }
         # result
-        return $res;
+        return $records[0]->cnt;
     }
 
     /**
@@ -660,7 +632,7 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function fetch_all_domain_records ($domain_id) {
-        $query = "select * from `records` where `domain_id` = ? order by $this->orderby $this->orderdir limit $this->limit;";
+        $query = "SELECT * FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL ORDER BY $this->orderby $this->orderdir LIMIT $this->limit;";
         // fetch
         try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
         catch (Exception $e) {
@@ -1445,7 +1417,7 @@ class PowerDNS extends Common_functions {
      */
     public function get_ptr_zone_name_v4 ($ip, $mask) {
         // check mask to see how many IP bits to remove
-        $bits = $mask<23 ? 2 : 1;
+        $bits = $mask<24 ? 2 : 1;
 
         // to array
         $zone = explode(".", $ip);

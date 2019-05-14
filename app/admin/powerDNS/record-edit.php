@@ -17,6 +17,13 @@ $PowerDNS 	= new PowerDNS ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
+# perm check popup
+if($_POST['action']=="edit") {
+    $User->check_module_permissions ("pdns", 2, true, true);
+}
+else {
+    $User->check_module_permissions ("pdns", 3, true, true);
+}
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "record");
@@ -43,13 +50,16 @@ else {
 		// fetch all domains
 		$all_domains = $PowerDNS->fetch_all_domains ();
 		if ($all_domains!==false) {
+
+			// Reverse the hostname, this fixes #1471 and #2374
+			$r_hostname = implode(".", array_reverse(explode(".", $_POST['domain_id'])));
+
 			foreach($all_domains as $dk=>$domain_s) {
-				// loop through and find all matches
-				if (strpos($_POST['domain_id'],$domain_s->name) !== false) {
-					// check best match to avoid for example a.example.net.nz1 added to example.net.nz
-					if (substr($_POST['domain_id'], -strlen($domain_s->name)) === $domain_s->name) {
-						$matches[$dk] = $domain_s;
-					}
+				// Reverse the domain and compare it reversed, this fixes #1471 and #2374
+				$r_domain = implode(".", array_reverse(explode(".", $domain_s->name)));
+
+				if (substr($r_hostname, 0, strlen($r_domain)) == $r_domain) {
+					$matches[$dk] = $domain_s;
 				}
 			}
 			// match found ?
@@ -200,7 +210,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 <div class="pFooter">
 	<div class="btn-group">
 		<button class="btn btn-sm btn-default hidePopups"><?php print _('Cancel'); ?></button>
-		<?php if($_POST['action']!=="delete" && isset($record->id)) { ?>
+		<?php if($_POST['action']!=="delete" && isset($record->id) && $User->get_module_permissions ("pdns")>2) { ?>
 		<button class="btn btn-sm btn-default btn-danger" id="editRecordSubmitDelete"><i class="fa fa-trash-o"></i> <?php print _("Delete"); ?></button>
 		<?php } ?>
 		<button class="btn btn-sm btn-default <?php if($_POST['action']=="delete") { print "btn-danger"; } else { print "btn-success"; } ?>" id="editRecordSubmit"><i class="fa <?php if($_POST['action']=="add") { print "fa-plus"; } else if ($_POST['action']=="delete") { print "fa-trash-o"; } else { print "fa-check"; } ?>"></i> <?php print ucwords(_($_POST['action'])); ?></button>

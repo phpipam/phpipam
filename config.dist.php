@@ -9,6 +9,17 @@ $db['pass'] = 'phpipamadmin';
 $db['name'] = 'phpipam';
 $db['port'] = 3306;
 
+/**
+ * Database webhost settings
+ *
+ * Enable and change this setting if your MySQL database does not run on
+ * localhost and you want to use the automatic database installation method
+ * to create a database user for you (which by default is created @localhost)
+ *
+ * Set to the hostname or IP address of the webserver, or % to allow all
+ ******************************/
+// $db['webhost'] = 'localhost';
+
 
 /**
  *  SSL options for MySQL
@@ -26,7 +37,8 @@ $db['ssl_key']    = '/path/to/cert.key';             // path to an SSL key file.
 $db['ssl_cert']   = '/path/to/cert.crt';             // path to an SSL certificate file. Only makes sense combined with ssl_key
 $db['ssl_ca']     = '/path/to/ca.crt';               // path to a file containing SSL CA certs
 $db['ssl_capath'] = '/path/to/ca_certs';             // path to a directory containing CA certs
-$db['ssl_cipher'] = '/DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
+$db['ssl_cipher'] = 'DHE-RSA-AES256-SHA:AES128-SHA'; // one or more SSL Ciphers
+$db['ssl_verify'] = 'true';                          // Verify Common Name (CN) of server certificate?
 
 
 /**
@@ -62,14 +74,20 @@ $config['resolve_verbose']             = true;       // verbose response - print
  ******************************/
 $debugging = false;
 
+/*
+ * API Crypt security provider. "mcrypt" or "openssl"
+ *
+ * default as of 1.3.2 "openssl"
+ ******************************/
+// $api_crypt_encryption_library = "mcrypt";
+
 
 /**
- * Allow older PHP version
+ * Allow API calls over HTTP (security = none)
  *
- * allow version < 5.4 with limited functionality
- ******************************/
-$allow_older_version = false;
-
+ * @var bool
+ */
+$api_allow_unsafe = false;
 
 /**
  *  manual set session name for auth
@@ -80,8 +98,23 @@ $phpsessname = "phpipam";
 
 
 /**
- *	BASE definition if phpipam
- * 	is not in root directory (e.g. /phpipam/)
+ * Session storage - files or database
+ *
+ * @var string
+ */
+$session_storage = "files";
+
+
+/**
+ * Path to access phpipam in site URL, http:/url/BASE/
+ *
+ * BASE definition should end with a trailing slash "/"
+ * BASE will be set automatically if not defined. Examples...
+ *
+ *  If you access the login page at http://phpipam.local/           =  define('BASE', "/");
+ *  If you access the login page at http://company.website/phpipam/ =  define('BASE', "/phpipam/");
+ *  If you access the login page at http://company.website/ipam/    =  define('BASE', "/ipam/");
+ *
  ******************************/
 if(!defined('BASE'))
 define('BASE', "/");
@@ -130,27 +163,6 @@ $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
 /**
- * proxy to use for every internet access like update check
- ******************************/
-$proxy_auth     = base64_encode("$proxy_user:$proxy_pass");
-
-if ($proxy_enabled == true && $proxy_use_auth == false) {
-    stream_context_set_default(array('http' => array('proxy'=>'tcp://'.$proxy_server.':'.$proxy_port)));
-}
-elseif ($proxy_enabled == true && $proxy_use_auth == true) {
-    stream_context_set_default(
-        array('http' => array(
-              'proxy' => "tcp://$proxy_server:$proxy_port",
-              'request_fulluri' => true,
-              'header' => "Proxy-Authorization: Basic $proxy_auth"
-        )));
-}
-
-/* for debugging proxy config uncomment next line */
-#var_dump(stream_context_get_options(stream_context_get_default()));
-
-
-/**
  * General tweaks
  ******************************/
 $config['logo_width']             = 220;                    // logo width
@@ -163,4 +175,4 @@ $config['split_ip_custom_fields'] = false;                  // Show custom field
  * The default behaviour is to use the system wide default php version symlinked to php in PHP_BINDIR (/usr/bin/php).
  * If multiple php versions are present; overide selection with $php_cli_binary.
  */
-#$php_cli_binary = '/usr/bin/php7.1';
+// $php_cli_binary = '/usr/bin/php7.1';

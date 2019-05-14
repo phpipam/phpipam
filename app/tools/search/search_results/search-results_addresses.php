@@ -30,9 +30,15 @@ $result_addresses = $Tools->search_addresses($searchTerm, $searchTerm_edited['hi
 	# mac
 	if(in_array('mac', $selected_ip_fields)) 										{ print '<th></th>'. "\n"; $address_span++; }
 	# switch
+	if($User->get_module_permissions ("devices")>0) {
 	if(in_array('switch', $selected_ip_fields))										{ print '<th class="hidden-sm hidden-xs">'._('Device').'</th>'. "\n"; $address_span++; }
+	}
 	# port
 	if(in_array('port', $selected_ip_fields)) 										{ print '<th>'._('Port').'</th>'. "\n"; $address_span++; }
+	# location
+	if($User->get_module_permissions ("locations")>0) {
+	if(in_array('location', $selected_ip_fields)) 										{ print '<th>'._('Location').'</th>'. "\n"; $address_span++; }
+	}
 	# owner and note
 	if( (in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) { print '<th class="hidden-sm hidden-xs">'._('Owner').'</th><th></th>'. "\n"; $address_span=$address_span+2; }
 	else if (in_array('owner', $selected_ip_fields)) 								{ print '<th class="hidden-sm hidden-xs">'._('Owner').'</th>'. "\n"; $address_span++; }
@@ -109,7 +115,7 @@ if(sizeof($result_addresses) > 0) {
 				print '	</td>'. "\n";
 			}
 			//device
-			if(in_array('switch', $selected_ip_fields)) 										{
+			if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
 				if(strlen($line['switch'])>0 && $line['switch']!="0") {
 					# get switch
 					$switch = (array) $Tools->fetch_object("devices", "id", $line['switch']);
@@ -123,6 +129,8 @@ if(sizeof($result_addresses) > 0) {
 			}
 			//port
 			if(in_array('port', $selected_ip_fields)) 										{ print ' <td>'. $line['port']  .'</td>' . "\n"; }
+			//location
+			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) 										{ print ' <td>'. $line['location']  .'</td>' . "\n"; }
 			//owner and note
 			if((in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) {
 				print ' <td class="hidden-sm hidden-xs">'. $line['owner']  .'</td>' . "\n";

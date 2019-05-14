@@ -22,11 +22,12 @@ else {
 	$method_settings = new StdClass ();
 	$method_settings->params = new StdClass ();
 	# set default values
-    $method_settings->params->idpissuer = "";
+	$method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
 	$method_settings->params->idplogout = "";
 	$method_settings->params->idpcertfingerprint = "";
 	$method_settings->params->idpcertalgorithm = "sha1";
+	$method_settings->params->idpx509cert = "";
 	//$method_settings->params->timeout = 2;
 }
 
@@ -136,6 +137,16 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		</td>
 		<td class="base_dn info2">
 			<?php print _('Enter IDP X509 certificate algorithm'); ?>
+		</td>
+	</tr>
+	<!-- Idp cert x509 --> 
+	<tr>
+ 		<td><?php print _('IDP X509 certificate'); ?></td>
+		<td>
+			<input type="text" name="idpx509cert" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509cert; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Enter IDP X509 certificate'); ?>
 		</td>
 	</tr>
 

@@ -16,7 +16,12 @@ function hideSpinner() { $('div.loading').fadeOut('fast'); }
 /* escape hide popups */
 $(document).keydown(function(e) {
     if(e.keyCode === 27) {
-        hidePopups();
+         if($("#popupOverlay2").is(":visible")) {
+            hidePopup2 ();
+         }
+         else {
+            hidePopup1 ();
+         }
     }
 });
 
@@ -145,6 +150,14 @@ function hidePopups() {
     $('body').removeClass('stop-scrolling');        //enable scrolling back
     hideSpinner();
 }
+function hidePopup1() {
+    $('#popupOverlay').fadeOut('fast');
+    $('#popupOverlay .popup').fadeOut('fast');
+    // IMPORTANT: also empty loaded content to avoid issues on popup reopening
+    $('#popupOverlay > div').empty();
+    hideSpinner();
+    $('body').removeClass('stop-scrolling');        //enable scrolling back
+}
 function hidePopup2() {
     $('#popupOverlay2').fadeOut('fast');
     $('#popupOverlay2 .popup').fadeOut('fast');
@@ -206,13 +219,13 @@ function createCookie(name,value,days) {
     var date;
     var expires;
 
-    if (typeof days === 'undefined') {
+    if (typeof days !== 'undefined') {
         date = new Date();
         date.setTime(date.getTime()+(days*24*60*60*1000));
         expires = "; expires="+date.toGMTString();
     }
     else {
-	    var expires = "";
+        var expires = "";
     }
 
     document.cookie = name+"="+value+expires+"; path=/";
@@ -237,7 +250,7 @@ $(function() {
 $('table.sorted-new')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
-                 .attr('data-page-size', '50')
+                 .attr('data-page-size', '250')
                  .attr('data-page-list', '[50,100,250,500,All]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')
@@ -252,7 +265,7 @@ $('table.sorted-new')
 $('table.sorted')
                  .attr("data-toggle", "table")
                  .attr('data-pagination', 'true')
-                 .attr('data-page-size', '50')
+                 .attr('data-page-size', '250')
                  .attr('data-page-list', '[50,100,250,500,All]')
                  .attr('data-search','true')
                  .attr('data-classes','table-no-bordered')
@@ -719,12 +732,13 @@ $(document).on('click','#subnetScanSubmit', function() {
 	showSpinner();
 	$('#subnetScanResult').slideUp('fast');
 	var subnetId = $(this).attr('data-subnetId');
+	var csrf     = $(this).attr('data-csrf-cookie');
 	var type 	 = $('select[name=type]').find(":selected").val();
 	if($('input[name=debug]').is(':checked'))	{ var debug = 1; }
 	else										{ var debug = 0; }
 	var port     = $('input[name=telnetports]').val();
 	$('#alert-scan').slideUp('fast');
-	$.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port}, function(data) {
+	$.post('app/subnets/scan/subnet-scan-execute.php', {subnetId:subnetId, type:type, debug:debug, port:port, csrf_cookie:csrf}, function(data) {
         $('#subnetScanResult').html(data).slideDown('fast');
 		hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });	return false;
@@ -753,7 +767,8 @@ $(document).on('click', 'a#saveScanResults', function() {
 	var subnetId = $(this).attr('data-subnetId');
 	var postData = $('form.'+script+"-form").serialize();
 	var postData = postData+"&subnetId="+subnetId;
-	$.post('app/subnets/scan/subnet-'+script+"-result.php", postData, function(data) {
+	var postData = postData+"&type="+script;
+	$.post('app/subnets/scan/subnet-scan-result.php', postData, function(data) {
         $('#subnetScanAddResult').html(data);
         //hide if success!
         //reload after 2 seconds if succeeded!
@@ -1018,6 +1033,25 @@ $('form#ipCalc input.reset').click(function () {
     $('form#ipCalc input[type="text"]').val('');
     $('div.ipCalcResult').fadeOut('fast');
 });
+//
+$(document).on("click", "a.create_section_subnet_from_search", function() {
+    //get details - we need Section, network and subnet bitmask
+    var sectionId = $(this).attr('data-sectionId')
+    var subnet    = $(this).attr('data-subnet')
+    var bitmask   = $(this).attr('data-bitmask')
+
+    // formulate postdata
+    var postdata  = "sectionId=" + sectionId + "&subnet=" + subnet + "&bitmask=" + bitmask + "&action=add&location=ipcalc";
+
+    //load add Subnet form / popup
+    $.post('app/admin/subnets/edit.php', postdata , function(data) {
+        $('#popupOverlay div.popup_w700').html(data);
+        showPopup('popup_w700');
+        hideSpinner();
+    });
+
+    return false;
+})
 
 /* search function */
 function search_execute (loc) {
@@ -1039,16 +1073,17 @@ function search_execute (loc) {
     var vrf       = $('#'+form_name+' input[name=vrf]').is(":checked") ? "on" : "off";
     var pstn      = $('#'+form_name+' input[name=pstn]').is(":checked") ? "on" : "off";
     var circuits  = $('#'+form_name+' input[name=circuits]').is(":checked") ? "on" : "off";
+    var customers = $('#'+form_name+' input[name=customers]').is(":checked") ? "on" : "off";
 
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'"}',365);
+    createCookie("search_parameters",'{"addresses":"'+addresses+'","subnets":"'+subnets+'","vlans":"'+vlans+'","vrf":"'+vrf+'","pstn":"'+pstn+'","circuits":"'+circuits+'","customers":"'+customers+'"}',365);
 
     //lets try to detect IEto set location
     var ua = window.navigator.userAgent;
     var msie = ua.indexOf("MSIE ");
-
+    var edge = ua.indexOf("Edge/");
     //IE
-    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
     else 																{ var base = ""; }
     //go to search page
     var prettyLinks = $('#prettyLinks').html();
@@ -1073,7 +1108,7 @@ $('form#search').submit(function () {
 // search ipaddress override
 $('a.search_ipaddress').click(function() {
     // set cookie json-encoded with parameters
-    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off"}',365);
+    createCookie("search_parameters",'{"addresses":"on","subnets":"off","vlans":"off","vrf":"off","pstn":"off","circuits":"off","customers":"off"}',365);
 });
 
 //show/hide search select fields
@@ -1114,7 +1149,11 @@ $('form#userModSelf').submit(function () {
     $('div.userModSelfResult').hide();
 
     $.post('app/tools/user-menu/user-edit.php', selfdata, function(data) {
-        $('div.userModSelfResult').html(data).fadeIn('fast').delay(2000).fadeOut('slow');
+        $('div.userModSelfResult').html(data).fadeIn('fast');
+
+        if(data.search("danger")==-1) { $('div.userModSelfResult').delay(2000).fadeOut('slow'); hideSpinner(); }
+        else                          { hideSpinner(); }
+
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
@@ -1200,8 +1239,8 @@ $(document).on("change", "form#usersEdit select[name=role]", function() {
     //get details - we need Section, network and subnet bitmask
     var type = $("form#usersEdit select[name=role]").find(":selected").val();
     //we changed to domain
-    if(type == "Administrator") { $('tbody#user_notifications').show(); }
-    else            			{ $('tbody#user_notifications').hide(); }
+    if(type == "Administrator") { $('tbody#user_notifications').show(); $('tbody.module_permissions').hide(); }
+    else            			{ $('tbody#user_notifications').hide(); $('tbody.module_permissions').show(); }
 });
 
 // generate random pass
@@ -1372,7 +1411,7 @@ $('#logDirection button').click(function() {
 $('#downloadLogs').click(function() {
     showSpinner();
     $("div.dl").remove();    //remove old innerDiv
-    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/admin/logs/export.php'></iframe></div>");
+    $('div.exportDIV').append("<div style='display:none' class='dl'><iframe src='app/tools/logs/export.php'></iframe></div>");
     hideSpinner();
     //show downloading
     $('div.logs').prepend("<div class='alert alert-info' id='logsInfo'><i class='icon-remove icon-gray selfDestruct'></i> Preparing download... </div>");
@@ -1727,6 +1766,8 @@ $(document).on("click", ".editSubnet", function() {
         showPopup('popup_w700');
         hideSpinner();
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+
+    return false;
 });
 //resize / split subnet
 $(document).on("click", "#resize, #split, #truncate, .subnet-truncate", function() {
@@ -1809,8 +1850,9 @@ $(document).on("click", ".editSubnetSubmit, .editSubnetSubmitDelete", function()
 						//lets try to detect IEto set location
 					    var ua = window.navigator.userAgent;
 					    var msie = ua.indexOf("MSIE ");
+					    var edge = ua.indexOf("Edge/");
 					    //IE
-					    if (msie > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
+					    if (msie > 0 || edge > 0 || !!navigator.userAgent.match(/Trident.*rv\:11\./)) 	{ var base = $('.iebase').html(); }
 					    else 																{ var base = ""; }
 					    //go to search page
 					    var prettyLinks = $('#prettyLinks').html();
@@ -1875,7 +1917,7 @@ $(document).on('click', "#ripeMatchSubmit", function() {
 	hidePopup2();
 });
 //change subnet permissions
-$('.showSubnetPerm').click(function() {
+$(document).on("click", ".showSubnetPerm", function () {
 	showSpinner();
 	var subnetId  = $(this).attr('data-subnetId');
 	var sectionId = $(this).attr('data-sectionId');
@@ -2097,17 +2139,9 @@ $(document).on("click", ".editFolderSubmitDelete", function() {
 
 
 /* ---- Devices ----- */
-//load edit form
-$(document).on("click", ".editSwitch", function() {
-	open_popup("400", "app/admin/devices/edit.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
-});
 //submit form
 $(document).on("click", "#editSwitchsubmit", function() {
     submit_popup_data (".switchManagementEditResult", "app/admin/devices/edit-result.php", $('form#switchManagementEdit').serialize());
-});
-// edit switch snmp
-$(document).on("click", ".editSwitchSNMP", function() {
-	open_popup("400", "app/admin/devices/edit-snmp.php", {switchId:$(this).attr('data-switchid'), action:$(this).attr('data-action')} );
 });
 //submit form
 $(document).on("click", "#editSwitchSNMPsubmit", function() {
@@ -2119,7 +2153,7 @@ $(document).on("click", "#test-snmp", function() {
 });
 //snmp route query popup
 $(document).on("click", "#snmp-routing", function() {
-    open_popup ("700", "app/subnets/scan/subnet-scan-snmp-route.php", "", true);
+    open_popup ("700", "app/subnets/scan/subnet-scan-execute.php", {type:'snmp-route', csrf_cookie:$(this).attr('data-csrf-cookie')}, true);
     return false;
 });
 
@@ -2141,17 +2175,17 @@ $(document).on("click", "#saveVlanScanResults", function() {
 
 //snmp vrf query popup
 $(document).on("click", "#snmp-vrf", function() {
-    open_popup ("700", "app/admin/vrfs/vrf-scan.php", {}, true);
+    open_popup ("700", "app/admin/vrf/vrf-scan.php", {}, true);
     return false;
 });
 //snmp vrf query execute
 $(document).on("click", ".show-vrf-scan-result", function() {
-    submit_popup_data (".vrf-scan-result", "app/admin/vrfs/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
+    submit_popup_data (".vrf-scan-result", "app/admin/vrf/vrf-scan-execute.php", $('form#select-devices-vrf-scan').serialize(), true);
     return false;
 });
 // submit vrf query result
 $(document).on("click", "#saveVrfScanResults", function() {
-    submit_popup_data ("#vrfScanAddResult", "app/admin/vrfs/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
+    submit_popup_data ("#vrfScanAddResult", "app/admin/vrf/vrf-scan-result.php", $('form#scan-snmp-vrf-form').serialize());
     return false;
 });
 
@@ -2163,7 +2197,7 @@ $(document).on("click", ".select-snmp-subnet", function() {
 });
 //snmp route query popup - section search
 $(document).on("click", "#snmp-routing-section", function() {
-    open_popup ("masks", "app/subnets/scan/subnet-scan-snmp-route-all.php", {sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId')});
+    open_popup ("masks", "app/subnets/scan/subnet-scan-execute.php", {type:'snmp-route-all', sectionId:$(this).attr('data-sectionId'), subnetId:$(this).attr('data-subnetId'), csrf_cookie:$(this).attr('data-csrf-cookie'), ajax_loaded:'true'});
     return false;
 });
 //remove all results for device
@@ -2178,7 +2212,9 @@ $(document).on("click", ".remove-snmp-subnet", function() {
 });
 ///add subnets to section
 $(document).on("click", "#add-subnets-to-section-snmp", function() {
-   submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-snmp-route-all-result.php", $('form#editSubnetDetailsSNMPall').serialize());
+   var postData = $('form#editSubnetDetailsSNMPall').serialize();
+   var postData = postData+"&type=snmp-route-all";
+   submit_popup_data (".add-subnets-to-section-snmp-result", "app/subnets/scan/subnet-scan-result.php", postData);
    return false;
 });
 
@@ -2201,7 +2237,7 @@ $(document).on("click", ".editRack", function() {
 });
 //load edit rack devices form
 $(document).on("click", ".editRackDevice", function() {
-	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
+	open_popup("400", "app/admin/racks/edit-rack-devices.php", {rackid:$(this).attr('data-rackid'), deviceid:$(this).attr('data-deviceid'), devicetype:$(this).attr('data-devicetype'), action:$(this).attr('data-action'),csrf_cookie:$(this).attr('data-csrf')} );	return false;
 });
 //submit edit rack devices form
 $(document).on("click", "#editRackDevicesubmit", function() {
@@ -2214,11 +2250,6 @@ $(document).on("click", ".showRackPopup", function() {
 
 
 /* ---- Locations ----- */
-//load edit form
-$(document).on("click", ".editLocation", function() {
-	open_popup("700", "app/admin/locations/edit.php", {id:$(this).attr('data-id'), action:$(this).attr('data-action')} );
-    return false;
-});
 //submit form
 $(document).on("click", "#editLocationSubmit", function() {
     submit_popup_data (".editLocationResult", "app/admin/locations/edit-result.php", $('form#editLocation').serialize());
@@ -2352,11 +2383,6 @@ $(document).on("click", "#editTypesubmit", function() {
 
 
 /* ---- VLANs ----- */
-//load edit form
-$(document).on("click", ".editVLAN", function() {
-    vlanNum = $(this).attr("data-number") ? $(this).attr('data-number') : "";		//set number
-	open_popup("400", "app/admin/vlans/edit.php", {vlanId:$(this).attr('data-vlanid'), action:$(this).attr('data-action'), vlanNum:vlanNum, domain:$(this).attr('data-domain')} );
-});
 //submit form
 $(document).on("click", "#editVLANsubmit", function() {
     submit_popup_data (".vlanManagementEditResult", "app/admin/vlans/edit-result.php", $('form#vlanManagementEdit').serialize());
@@ -2373,7 +2399,7 @@ $(document).on("click", "#editVLANdomainsubmit", function() {
 /* ---- VRF ----- */
 //submit form
 $(document).on("click", "#editVRF", function() {
-    submit_popup_data (".vrfManagementEditResult", "app/admin/vrfs/edit-result.php", $('form#vrfManagementEdit').serialize());
+    submit_popup_data (".vrfManagementEditResult", "app/admin/vrf/edit-result.php", $('form#vrfManagementEdit').serialize());
 });
 
 /* ---- Nameservers ----- */

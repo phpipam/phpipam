@@ -7,6 +7,13 @@
 
 class FirewallZones extends Common_functions {
 
+	/**
+	 * private Subnets object
+	 *
+	 * @var Subnets
+	 * @access private
+	 */
+	private $Subnets;
 
 	/**
 	 * connection error string
@@ -50,21 +57,6 @@ class FirewallZones extends Common_functions {
 	 */
 	public $firewallZoneSettings;
 
-	/**
-	 * Log
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $Log;
-
-	/**
-	 * Database
-	 *
-	 * @var mixed
-	 * @access protected
-	 */
-	protected $Database;
 
 
 
@@ -208,7 +200,7 @@ class FirewallZones extends Common_functions {
 		}
 
 		# return the values
-		return sizeof($zoneName)>0 ? $zoneName : false;
+		return !empty($zoneName) ? $zoneName : false;
 	}
 
 
@@ -645,7 +637,7 @@ class FirewallZones extends Common_functions {
 			print '<span><i class="fa fa-close"></i></span>';
 			print "</a>";
 
-			if ($network->subnetIsFolder == 1 ) {
+			if ($network->subnetIsFolder == 1) {
 				print 'Folder: '.$network->subnetDescription;
 			} else {
 				# display network information with or without description

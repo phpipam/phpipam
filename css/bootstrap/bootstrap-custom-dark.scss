@@ -273,6 +273,11 @@ html {
             font-weight: normal;
         }
     }
+    .dropdown-menu {
+        .divider {
+            background-color: #333 !important;
+        }
+    }
     ul.dropdown-menu{
         background: url("../images/bg-light.png") no-repeat center center fixed;
         -webkit-background-size: cover;
@@ -439,7 +444,6 @@ html {
         color: white;
         border: 1px solid $color_gray_5;
     }
-
     .breadcrumb {
         .active {
             color: $color_gray_4;
@@ -457,6 +461,12 @@ html {
             .btn-group {
                 border: none;
             }
+        }
+
+        .btn.btn-danger {
+            color: #fff;
+            background-color: #d9534f !important;
+            border-color: #d43f3a;
         }
     }
     .btn-default.active,
@@ -606,13 +616,13 @@ html {
         background: url("../images/li-dns-last-dark.png") no-repeat 4px -1px !important;
     }
     table tr.similar td:nth-child(1) {
-        background: white url("../images/li-dns-dark.png") no-repeat 17px -5px !important;
+        background: url("../images/li-dns-dark.png") no-repeat 17px -5px !important;
     }
     table tr.similar-last td:nth-child(1) {
-        background: white url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important;
+        background: url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important;
     }
     table tr.similar-last td:nth-child(1) {
-        background: white url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important;
+        background: url("../images/li-dns-last-dark.png") no-repeat 17px -5px !important;
     }
 
     // subnet details

@@ -1,7 +1,91 @@
+== 1.4
+
+    New features:
+    ------------
+    + Configurable password policy;
+    + Sessions can be now stored in database (#516);
+    + Two-factor authentication - otp (Google Authenticator);
+    + Customers module (#694);
+    + Routing module (BGP, OSPF) (#2135);
+    + Search for free subnet inside whole section;
+
+    Enhancements, changes:
+    ----------------------------
+    + Circuits enhancements (Virtual Circuits);
+    + Dropped support for 32bit systems;
+    + PHP 5.4 is now required;
+    + Added compressed actions dropdown;
+    + SNMP module no longer requires MIB files;
+    + Performance enhancements running under Azure/Amazon;
+    + Added option to disable user (#1327);
+    + Added policy NAT option;
+    + Added custom NAT fields;
+    + Rack module enhancements (#1325):
+        + Dynamic rack sizes;
+        + Top-down / Bottom-up racks;
+        + Custom rack devices independent of devices (power, patch panel);
+    + Customized user permissions for modules:
+        + VLAN module;
+        + VRF module;
+        + PowerDNS module;
+        + Circuits module;
+        + Customers module;
+        + Devices module;
+        + Rack module;
+        + NAT module;
+        + PSTN module;
+        + Locations module;
+    + API:
+        + New API security type - SSL with app code (static app code);
+        + New config.php option $api_allow_unsafe to allow non-SSL API queries;
+        + Added last access field to api;
+        + Add Mac Search for Addresses controller (#2005);
+        + New overlapping API call;
+        + New global API parameter filter_match = full,partial,regex;
+        + Add Tools API customers submodule;
+    + Widgets:
+        + New user instruction widget (#2383);
+
+    Translations:
+    ----------------------------
+    + Japanese translation added;
+
+    Bugfixes:
+    ----------------------------
+    + Fix appended " U" in Rack description (#2046);
+    + Fix Bandwidth calculator - 400 Bad Request. (#1807);
+    + Fix bad DNS reverse zone for /23 subnet (#666);
+    + Fix Add missing standard field (#2153);
+    + Fix Consistency of VARCHAR Size on 'owner' column across tables (#2136);
+    + Fix Subnet details - Filter button missing when compressed range is used (#2353);
+    + Fix slow page load times with linked addresses (#2324);
+    + Fix " - is required" error when adding IPs with an empty IP filter set (#2334);
+    + Fix column 'masterSubnetId' cannot be null error when adding subnets (#1977);
+    + Fix logical circuits add/delete errors (#2381);
+    + Fix adding new VLANs to an empty L2Domain (#2400);
+    + Fix Nested child subnets with "na" permissions visible (#2223);
+    + Fix translations containing apostrophes break functionality (#2504);
+    + API:
+        + Fix inconsistent API success value returned (#2045);
+        + Fix filter_by functionality (#2392);
+        + Fix PATCH functionality (#2470, #2481);
+
+    Security Fixes:
+    ----------------------------
+    + Hide SNMP community (#2197);
+    + Hide LDAP/AD/Radius username / password and secret from logs and syslog (#2006);
+    + XSS in phpipamredirect cookie (#2338);
+    + XSS in print-user.php, CSRF in user-edit.php (#2326);
+    + Possible SQL injection in nat/item-add-submit.php (#2344);
+    + Fixed possible file inclusion in editing authentication methods;
+    + XSS in subnet-scan-telnet.php, CSRF in subnet-scan-execute.php (#2327);
+
 == 1.3.2
 
     Enhancements, changes:
     ----------------------------
+    + Dark theme added;
+    + Full php7.2 compatibility;
     + url_rewrite has changed, please use new rewrite scheme (https://phpipam.net/news/new_rewrite_scheme/);
     + Search for matching subnet in all VRFs feature enabled when importing addresses;
     + Added new config option to show custom fields separated from standard fields when editing IP address;
@@ -9,12 +93,14 @@
     + Performance + bug fixes (#1660, #1657);
     + MasterSubnet dropdown list is dynamically generated via AJAX call;
     + Bandwidth calculator;
+    + Support 8U rack sizes. (#1891);
     + API:
         + New last_subnet API calls (#1655);
 
     Translations:
     ----------------------------
     + German translation updated to verson 1.3.1;
+    + French translations updated. (#1881);
 
     Bugfixes:
     ----------------------------
@@ -42,6 +128,12 @@
     + Use multi-byte compatible functions when shortening text. (#1753);
     + Scan subnet reports/selects invalid php path. (#1757);
     + Small code refactoring (#1699);
+    + Rack device start position overwritten. (#1545);
+    + Sections with folders returns no subnets using API. (#1883);
+    + Add custom_ prefix to Prefix controller custom fields. (#1836);
+    + Non-Admins missing the button to Add circuit. (#1902);
+    + Wrong field name of deviceTypes table when checking device type. (#1910);
+    + SNMPv3 improvements;
     + Misc IPv6 fixes;
 
     Security Fixes:
@@ -52,6 +144,7 @@
     + Reflected XSS requiring user interaction on search. (#1705);
     + XSS reflected via CSRF in preview.php. (#1706);
     + Reflected XSS via CSV upload. (#1742);
+    + Reflected XSS on 'mac' parameter. (#1903);
 
 == 1.3.1
 

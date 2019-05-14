@@ -124,13 +124,14 @@ class Devices_controller extends Common_api_functions {
      *      - /{id}/{subnets}/      // returns all subnets attached to device
      *      - /{id}/{addresses}/    // returns all IP addresses attached to device
      *      - /search/{search_q}/   // searches for devices
+     *      - /all/                 // returns all devices
      *
      * @access public
      * @return void
      */
     public function GET () {
         // all objects
-        if (!isset($this->_params->id)) {
+        if (!isset($this->_params->id) || $this->_params->id == "all") {
             // fetch all devices
             $result = $this->Tools->fetch_all_objects('devices', 'id');
             // result
@@ -344,7 +345,7 @@ class Devices_controller extends Common_api_functions {
                 $this->Response->throw_exception(400, 'Invalid devicetype identifier');
             }
             // check
-            if ($this->Tools->fetch_object('deviceTypes', 'id', $this->_params->type) === false) {
+            if ($this->Tools->fetch_object('deviceTypes', 'tid', $this->_params->type) === false) {
                 $this->Response->throw_exception(400, 'Device type does not exist');
             }
         }

@@ -4,20 +4,12 @@
  * Cryptographic Code
  */
 class Crypto {
-
-    /**
-     * Set to "true" to use legacy mcrypt decrypt/encrypt functions for backwards compatibility.
-     * mcrypt support may be removed in a future release.
-     * @var bool (default: false)
-     */
-    private $use_legacy_mcrypt = true;
-
     /**
      * mcrypt cipher mode.
      * Change to MCRYPT_RIJNDAEL_128 to use AES-256 compliant RIJNDAEL algorithm (rijndael-128)
      * @var mixed
      */
-    private $legacy_mcrypt_aes_mode = 'MCRYPT_RIJNDAEL_256';
+    private $legacy_mcrypt_aes_mode = "rijndael-256"; // Use string value as MCRYPT_RIJNDAEL_256 constant may not be defined.
 
     /**
      * Result
@@ -34,30 +26,73 @@ class Crypto {
         $this->Result = new Result ();
     }
 
+    /**** Random and hashing  ****/
+
+    /**
+     * Generate $len pseudo random bytes
+     * @param  integer $len
+     * @return string
+     */
+    public function random_pseudo_bytes($len) {
+        $bytes = openssl_random_pseudo_bytes($len);
+
+        if ($bytes !== false)
+            return $bytes;
+
+        // fall-back method
+        $bytes = "";
+        for ($i=0; $i<$len; $i+=16) {
+            $bytes .= md5(uniqid(mt_rand(), true), true);
+        }
+        return substr($bytes, 0, $len);
+    }
+
+    /**
+     * Generate a keyed hash value using the HMAC method
+     * @param  string  $algo
+     * @param  mixed   $data1
+     * @param  mixed   $data2
+     * @param  boolean $raw_output
+     * @return string|false
+     */
+    private function hash_hmac($algo, $data1, $data2, $raw_output = false) {
+        $hash = hash_hmac($algo, $data1, $data2, $raw_output);
+
+        if ($hash !== false)
+            return $hash;
+
+        $this->Result->show("danger", _("Error: "). _("Unsupported hash_hmac algo"). " ($algo)", true);
+        return false;
+    }
+
     /**** Data encryption & decryption ****/
 
     /**
      * encrypt data and base64 encode results
      * @param  string $rawdata
      * @param  string $password
+     * @param  string $encryption_library   (default value: "openssl")
      * @return string|false
      */
-    public function encrypt($rawdata, $password) {
-        if ($this->use_legacy_mcrypt === true)
+    public function encrypt($rawdata, $password, $encryption_library="openssl") {
+        if ($encryption_library === "mcrypt")
             return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
-        return $this->encrypt_using_openssl($rawdata, $password);
+        else
+            return $this->encrypt_using_openssl($rawdata, $password);
     }
 
     /**
      * decrypt base64 encoded data
      * @param  string $base64data
      * @param  string $password
+     * @param  string $encryption_library   (default value: "openssl")
      * @return string|false
      */
-    public function decrypt($base64data, $password) {
-        if ($this->use_legacy_mcrypt === true)
+    public function decrypt($base64data, $password, $encryption_library="openssl") {
+        if ($encryption_library === "mcrypt")
             return $this->decrypt_using_legacy_mcrypt($base64data, $password);
-        return $this->decrypt_using_openssl($base64data, $password);
+        else
+            return $this->decrypt_using_openssl($base64data, $password);
     }
 
     // OpenSSL
@@ -74,11 +109,11 @@ class Crypto {
 
         // Encrypt using IV
         $ivlen = openssl_cipher_iv_length('AES-128-CBC');
-        $iv = openssl_random_pseudo_bytes($ivlen);
+        $iv = $this->random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($rawdata, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
 
         // Generate HMAC covering IV and ciphertext
-        $hmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
+        $hmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
 
         // Base64 encode results
         return base64_encode( $hmac.$iv.$ciphertext_raw );
@@ -109,26 +144,12 @@ class Crypto {
         $ciphertext_raw = substr($c, 32+$ivlen);
 
         // Verify HMAC covering IV and ciphertext
-        $calcmac = hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
-        if (!$this->compat_hash_equals($hmac, $calcmac))
+        $calcmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
+        if (!hash_equals($hmac, $calcmac))
             return false;
 
         // Finally decrypt
         return openssl_decrypt($ciphertext_raw, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
-    }
-
-    /**
-     * Use a constant time hmac comparison if available (php5.6+)
-     * @param  string $hmac1
-     * @param  string $hmac2
-     * @return bool
-     */
-    private function compat_hash_equals($hmac1, $hmac2) {
-        // PHP 5.6+, timing attack safe comparison
-        if (function_exists('hash_equals'))
-            return hash_equals($hmac1, $hmac2);
-        // timing attack unsafe comparison
-        return $hmac1 === $hmac2;
     }
 
     // Legacy mcrypt - mcrypt support may be removed in a future release.
@@ -140,7 +161,8 @@ class Crypto {
      * @return string|false
      */
     private function encrypt_using_legacy_mcrypt($rawdata, $password) {
-        return base64_encode(mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
+        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
+        return base64_encode(@mcrypt_encrypt($this->legacy_mcrypt_aes_mode, $password, $rawdata, MCRYPT_MODE_ECB));
     }
 
     /**
@@ -150,35 +172,22 @@ class Crypto {
      * @return string|false
      */
     private function decrypt_using_legacy_mcrypt($base64data, $password) {
-        return trim(mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
+        // Suppress php72 mcrypt deprecation warnings (module is available in PECL).
+        return trim(@mcrypt_decrypt($this->legacy_mcrypt_aes_mode, $password, base64_decode($base64data), MCRYPT_MODE_ECB));
     }
 
     /**** Security Tokens ****/
 
     /**
-     * Generate tokens for temporary shares, API and scan agents.
+     * Generate html safe tokens for temporary shares, API and scan agents.
+     * @param  integer $len
      * @return string
      */
-    public function generate_token() {
-        $data1 = openssl_random_pseudo_bytes(32);
-        $data2 = openssl_random_pseudo_bytes(32);
-        return hash_hmac('md5', $data1, $data2);
-    }
-
-    /**
-     * Generate API user token.
-     * @param  integer $token_length
-     * @return string
-     */
-    public function generate_api_token($token_length) {
-        $chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_$%!=.-+';
-        $chars_length = strlen($chars);
-        // generate string
-        $token = '';
-        for ($i = 0; $i < $token_length; $i++) {
-            $token .= $chars[rand(0, $chars_length - 1)];
-        }
-        return $token;
+    public function generate_html_safe_token($len=32) {
+        $bytes = $this->random_pseudo_bytes($len);
+        // base64url variant
+        $token = strtr(base64_encode($bytes), '+/', '-_');
+        return substr($token, 0, $len);
     }
 
     /**
@@ -191,22 +200,15 @@ class Crypto {
      * @return string
      */
     public function csrf_cookie ($action = "create", $index = null, $value = null) {
-        // validate action
-        $this->csrf_validate_action ($action);
-        // execute
-        return $action == "create" ? $this->csrf_cookie_create ($index) : $this->csrf_cookie_validate ($index, $value);
-    }
-
-    /**
-     * Validates csrf cookie action..
-     *
-     * @access private
-     * @param mixed $action
-     * @return bool
-     */
-    private function csrf_validate_action ($action) {
-        if ($action=="create" || $action=="validate") { return true; }
-        else                                          { $this->Result->show("danger", "Invalid CSRF cookie action", true); }
+        switch ($action) {
+            case "create":
+            case "create-if-not-exists":
+                return $this->csrf_cookie_create ($index, $action == "create-if-not-exists");
+            case "validate":
+                return $this->csrf_cookie_validate ($index, $value);
+            default:
+                $this->Result->show("danger", _("Invalid CSRF cookie action"), true);
+        }
     }
 
     /**
@@ -214,13 +216,17 @@ class Crypto {
      *
      * @access private
      * @param mixed $index
+     * @param bool $if_not_exists (default: false)
      * @return string
      */
-    private function csrf_cookie_create ($index) {
+    private function csrf_cookie_create ($index, $if_not_exists = false) {
         // set cookie suffix
         $name = is_null($index) ? "csrf_cookie" : "csrf_cookie_".$index;
+        // check if exists
+        if ($if_not_exists && isset($_SESSION[$name]))
+            return $_SESSION[$name];
         // save cookie
-        $_SESSION[$name] = $this->generate_token();
+        $_SESSION[$name] = $this->generate_html_safe_token(32);
         // return
         return $_SESSION[$name];
     }

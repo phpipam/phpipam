@@ -8,7 +8,7 @@ if( !empty($_SERVER['PHP_AUTH_USER']) ) {
     // try to authenticate
 	$User->authenticate ($_SERVER['PHP_AUTH_USER'], '');
 	// Redirect user where he came from, if unknown go to dashboard.
-	if( isset($_COOKIE['phpipamredirect']) )    { header("Location: ".$_COOKIE['phpipamredirect']); }
+	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }
 	else                                        { header("Location: ".create_link("dashboard")); }
 	exit();
 }
@@ -45,12 +45,12 @@ if(@$config['requests_public']===false) {
 	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<link rel="stylesheet" type="text/css" href="css/font-awesome/font-awesome.min.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<?php if ($User->settings->theme!="white") { ?>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?><?php print time(); ?>">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->settings->theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 	<?php } ?>
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script type="text/javascript" src="js/jquery-3.1.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script type="text/javascript">
@@ -118,8 +118,10 @@ if(@$config['requests_public']===false) {
 		# get language
 		$lang = $User->get_default_lang();
 
-		putenv("LC_ALL=".$lang->l_code);
-		setlocale(LC_ALL, $lang->l_code);					// set language
+		if (is_object($lang)) {
+			putenv("LC_ALL=".$lang->l_code);
+			setlocale(LC_ALL, $lang->l_code);					// set language
+		}
 		bindtextdomain("phpipam", "./functions/locale");	// Specify location of translation tables
 		textdomain("phpipam");								// Choose domain
 	}
@@ -138,8 +140,10 @@ if(@$config['requests_public']===false) {
 		# deauthenticate user
 		if ( $User->is_authenticated()===true ) {
 			# print result
-			if($_GET['section']=="timeout")		{ $Result->show("success", _('You session has timed out')); }
-			else								{ $Result->show("success", _('You have logged out')); }
+			if(isset($_GET['section']) && $_GET['section']=="timeout")
+				$Result->show("success", _('You session has timed out'));
+			else
+				$Result->show("success", _('You have logged out'));
 
 			# write log
 			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );

@@ -21,8 +21,8 @@ $User->check_user_session();
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "pstn_number");
 
-# check permissions
-if($Tools->check_prefix_permission ($User->user) < 2)   { $Result->show("danger", _('You do not have permission to manage PSTN numbers'), true, true); }
+# perm check popup
+$User->check_module_permissions ("pstn", 2, true, true);
 
 # get Location object
 if($_POST['action']!="add") {
@@ -145,6 +145,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	?>
 
     	<!-- Device -->
+        <?php if ($User->get_module_permissions ("devices")>0) { ?>
     	<tr>
     		<th><?php print _('Device'); ?></th>
     		<td id="deviceDropdown">
@@ -152,7 +153,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     				<option value="0"><?php print _('None'); ?></option>
     				<?php
     				// fetch all devices
-    				$devices = $Admin->fetch_all_objects("devices");
+    				$devices = $Admin->fetch_all_objects("devices", "hostname");
     				// loop
     				if ($devices!==false) {
     					foreach($devices as $device) {
@@ -166,6 +167,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     		</td>
     		<td class="info2"><?php print _('Select device where prefix is located'); ?></td>
         </tr>
+        <?php } ?>
 
         <!-- description -->
     	<tr>

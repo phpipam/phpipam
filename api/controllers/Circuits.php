@@ -163,6 +163,7 @@ class Circuits_controller extends Common_api_functions {
 	 *		- /{id}/                        returns circuit details
 	 *		- /id/{id}/                     returns circuit details by cid
 	 *		- /circuit_id/{id}/             returns circuit details by cid
+	 * 		- /all/							returns all circuits
 	 *
 	 *
 	 * parameters (providers):
@@ -175,7 +176,7 @@ class Circuits_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ($this->type, 'id');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, "No {$this->type_text}s configured"); }
@@ -447,7 +448,7 @@ class Circuits_controller extends Common_api_functions {
 	 * @method validate_cid
 	 *
 	 * @param  string $action
-	 * @param  object $old_object
+	 * @param  object|null $old_object
 	 *
 	 * @return void
 	 */

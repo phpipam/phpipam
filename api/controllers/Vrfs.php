@@ -127,6 +127,7 @@ class Vrfs_controller extends Common_api_functions {
 	 *		- /custom_fields/		// returns all VRF custom fields
 	 *		- /{id}/				// returns VRF by id
 	 *		- /{id}/subnets/		// subnets inside vrf
+	 *		- /all/			        // returns all VRFs
 	 *
 	 *
 	 * @access public
@@ -134,7 +135,7 @@ class Vrfs_controller extends Common_api_functions {
 	 */
 	public function GET () {
 		// all
-		if (!isset($this->_params->id)) {
+		if (!isset($this->_params->id) || $this->_params->id == "all") {
 			$result = $this->Tools->fetch_all_objects ("vrf", 'vrfId');
 			// check result
 			if($result===false)						{ $this->Response->throw_exception(200, 'No vrfs configured'); }

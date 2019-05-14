@@ -9,6 +9,10 @@ $User->check_user_session();
 
 # fetch all APIs
 $all_apis = $Admin->fetch_all_objects("api");
+
+# app security texts
+$app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code token"=>"ssl_code","Encrypted"=>"crypt", "User token"=>"none");
+
 ?>
 
 <!-- display existing groups -->
@@ -37,6 +41,7 @@ $all_apis = $Admin->fetch_all_objects("api");
 	    print "<th>"._('Nest custom fields').'</th>';
 	    print "<th>"._('Show links').'</th>';
 	    print "<th>"._('Comment').'</th>';
+	    print "<th>"._('Last access').'</th>';
 	    print '<th></th>';
 		print '</tr>';
 		print "</thead>";
@@ -47,11 +52,10 @@ $all_apis = $Admin->fetch_all_objects("api");
 			# cast
 			$a = (array) $a;
 
-			# hide key if not crpt
-			if($a['app_security']!="crypt")	{ $a['app_code']="<span class='text-muted'>"._('Not used')."</span>"; }
-			if($a['app_security']=="ssl")	{ $a['app_security'] = "SSL"; }
+			# set class
+			$class = $a['app_permissions']==0||(Config::get('api_allow_unsafe')!==true && $a['app_security']=="none") ? "alert-danger" : "";
 
-			print '<tr>' . "\n";
+			print '<tr class="'.$class.'">' . "\n";
 
 			print '	<td>' . $a['app_id'] . '</td>'. "\n";
 			print '	<td>' . $a['app_code'] . '</td>'. "\n";
@@ -70,16 +74,19 @@ $all_apis = $Admin->fetch_all_objects("api");
 			$a['app_nest_custom_fields'] = $a['app_nest_custom_fields']==1 ? _("Yes") : _("No");
 			$a['app_show_links'] 		 = $a['app_show_links']==1 ? _("Yes") : _("No");
 
-			# override permissions if user
-			if($a['app_security']=="user")	{ $a['app_permissions']="<span class='text-muted'>"._('Per user')."</span>"; }
+
+			$a['app_security'] = array_search($a['app_security'], $app_perms_text);
+
+			$a['app_last_access'] = strlen($a['app_last_access'])==0 ? "Never" : $a['app_last_access'];
 
 			print '	<td>' . $a['app_permissions'] . '</td>'. "\n";
-			print '	<td>' . ucwords($a['app_security']) . '</td>'. "\n";
+			print '	<td>' . $a['app_security'] . '</td>'. "\n";
 			print '	<td>' . $a['app_lock'] . '</td>'. "\n";
 			print '	<td>' . $a['app_lock_wait'] . '</td>'. "\n";
 			print '	<td>' . $a['app_nest_custom_fields'] . '</td>'. "\n";
 			print '	<td>' . $a['app_show_links'] . '</td>'. "\n";
 			print '	<td>' . $a['app_comment'] . '</td>'. "\n";
+			print '	<td>' . $a['app_last_access'] . '</td>'. "\n";
 
 			# add/remove APIs
 			print "	<td class='actions'>";
@@ -99,29 +106,6 @@ $all_apis = $Admin->fetch_all_objects("api");
 	}
 	?>
 
-	<?php
-	# print error if extensions are not available on server!
-	$requiredExt  = array("mcrypt", "curl");
-	$availableExt = get_loaded_extensions();
-	# check for missing ext
-	$missingExt = array();
-	foreach ($requiredExt as $extension) {
-	    if (!in_array($extension, $availableExt)) {
-	        $missingExt[] = $extension;
-	    }
-	}
-	# print warning if missing
-	if (sizeof($missingExt) > 0) {
-	    print "<div class='alert alert alert-danger'><strong>"._('The following PHP extensions for API server are missing').":</strong><br><hr>";
-	    print '<ul>' . "\n";
-	    foreach ($missingExt as $missing) {
-	        print '<li>'. $missing .'</li>' . "\n";
-	    }
-	    print '</ul>';
-	    print _('Please recompile PHP to include missing extensions for API server') . "\n";
-	    print "</div>";
-	}
-	?>
 	<hr>
 
 	<h4><?php print _('API documentation'); ?></h4>
