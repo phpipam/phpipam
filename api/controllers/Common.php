@@ -300,10 +300,6 @@ class Common_api_functions {
 		# reindex filtered result
 		$result = array_values($result2);
 
-		// Single result - return as object
-		if (sizeof($result) == 1)
-			return $result[0];
-
 		return $result;
 	}
 
