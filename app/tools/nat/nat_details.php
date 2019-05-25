@@ -61,7 +61,7 @@ else {
 
         // append policy
         if($n->policy=="Yes")   {
-            $n->type .= " - Policy";
+            $n->type .= " Policy";
             $policy_dst = $n->policy_dst;
         }
         else {
@@ -85,22 +85,13 @@ else {
         // type
         print "<tr>";
         print "	<th>"._("Type")."</th>";
-        print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
+        print " <td><span class='badge badge1 badge5'>".ucwords($n->type)." NAT</span></td>";
         print "</tr>";
         // policy
-        if($n->policy=="Yes") {
         print "<tr>";
-        print "	<th>"._("Policy")."</th>";
-        print " <td>"._("Destination address ")." $n->policy_dst</td>";
+        print "	<th>"._("Policy")." NAT</th>";
+        print " <td>".$n->policy."</td>";
         print "</tr>";
-        // policy
-        }
-        else {
-        print "<tr>";
-        print "	<th>"._("Policy")."</th>";
-        print " <td>"._("No")."</td>";
-        print "</tr>";
-        }
         // description
         print "<tr>";
         print "	<th>"._("Description")."</th>";
@@ -117,9 +108,16 @@ else {
         print "	<td>";
 
         print "<table class='ipaddress_subnet table-condensed'>";
+        print "<tr>";
         print " <td>".implode("<br>", $sources)."</td>";
         print " <td style='width:10px;'><i class='fa $icon'></i></td>";
         print " <td>".implode("<br>", $destinations)."</td>";
+        print "</tr>";
+        if($n->policy=="Yes") {
+        print "<tr>";
+        print " <td colspan='3'><br>if "._("Destination address ")." is ".$n->policy_dst."</td>";
+        print "</tr>";
+        }
         print "</table>";
 
         print "</td>";

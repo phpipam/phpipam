@@ -49,11 +49,11 @@ else {
     print "<tr>";
     print " <th>"._('Name')."</th>";
     print " <th>"._('Type')."</th>";
-    if($policy_nat_found)
-    print " <th>"._('Policy IP')."</th>";
     print " <th>"._('Translation')."</th>";
     print " <th></th>";
     print " <th></th>";
+    if($policy_nat_found)
+    print " <th>"._('Policy DST IP')."</th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
@@ -71,9 +71,15 @@ else {
     # rearrange based on type
     if($all_nats !== false) {
         foreach ($all_nats as $n) {
+            # policy
+            if($n->policy=="Yes") { $n->type = $n->type . " policy"; }
+            # save
             $nats_reordered[$n->type][] = $n;
         }
     }
+
+    # reorder
+    ksort($nats_reordered);
 
     # loop
     foreach ($nats_reordered as $k=>$nats) {
@@ -116,13 +122,7 @@ else {
                 $icon =  $n->type=="static" ? "fa-arrows-h" : "fa-long-arrow-right";
 
                 // append policy
-                if($n->policy=="Yes")   {
-                    $n->type .= " - Policy";
-                    $policy_dst = $n->policy_dst;
-                }
-                else {
-                    $policy_dst = "/";
-                }
+                $policy_dst = $n->policy=="Yes" ? $n->policy_dst : "/";
 
                 // description
                 $n->description = str_replace("\n", "<br>", $n->description);
@@ -135,11 +135,11 @@ else {
                 print "<tr>";
                 print " <td><strong><a href='".create_link($_GET['page'], "nat", $n->id)."'>$n->name</a></strong></td>";
                 print " <td><span class='badge badge1 badge5'>".ucwords($n->type)."</span></td>";
-                if($policy_nat_found)
-                print " <td>$policy_dst</td>";
                 print " <td>".implode("<br>", $sources)."</td>";
                 print " <td style='width:10px;'><i class='fa $icon'></i></td>";
                 print " <td>".implode("<br>", $destinations)."</td>";
+                if($policy_nat_found)
+                print " <td>$policy_dst</td>";
                 print " <td>$n->device</td>";
                 print " <td>$n->src_port</td>";
                 print " <td>$n->dst_port</td>";
