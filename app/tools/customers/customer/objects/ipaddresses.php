@@ -49,9 +49,8 @@ $statuses = explode(";", $User->settings->pingStatus);
 	print "<th class='s_ipaddr'>"._('Subnet')."</th>";
 	print "<th>"._('Hostname')."</th>";
 	print "<th>"._('Description')."</th>";
-	if(in_array('mac', $selected_ip_fields))
-	print "<th>"._('MAC')."</th>";
-	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
+	if(in_array('mac', $selected_ip_fields))	{ print "<th>"._('MAC')."</th>"; }
+	if(in_array('note', $selected_ip_fields)) 	{ print "<th>"._('Note')."</th>"; }
 	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
