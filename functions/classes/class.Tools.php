@@ -218,11 +218,11 @@ class Tools extends Common_functions {
 	 */
 	private function search_subnets_range ($search_term, $high, $low, $custom_fields = array()) {
 		# reformat low/high
-		if($high==0 && $low==0)	{ $high = "1"; $low="1"; }
+		if($high==0 && $low==0)	{ $high = "1"; $low = "1"; }
 
 		# set search query
 		$query[] = "select * from `subnets` where `description` like :search_term ";
-		$query[] = "or `subnet` between :low and :high ";
+		$query[] = "or (`subnet` >= :low and `subnet` <= :high )";
 		# custom
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
@@ -274,7 +274,7 @@ class Tools extends Common_functions {
 					# parse address
 					$net = $this->Net_IPv4->parseAddress($this->transform_address($s['subnet']).'/'.$s['mask'], "dotted");
 
-					if($low>$this->transform_to_decimal(@$net->network) && $low<$this->transform_address($net->broadcast, "decimal")) {
+					if($low>=$this->transform_to_decimal(@$net->network) && $low<=$this->transform_address($net->broadcast, "decimal")) {
 						$ids[] = $s['id'];
 					}
 				}

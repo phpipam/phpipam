@@ -43,12 +43,14 @@
         + New overlapping API call;
         + New global API parameter filter_match = full,partial,regex;
         + Add Tools API customers submodule;
+        + Fix filtered results to always return data as array (#2558);
     + Widgets:
         + New user instruction widget (#2383);
 
     Translations:
     ----------------------------
-    + Japanese translation added;
+    + Japanese (ja_JP) translation added;
+    + Traditional Chinese (zh_TW) translation added;
 
     Bugfixes:
     ----------------------------
@@ -65,6 +67,7 @@
     + Fix adding new VLANs to an empty L2Domain (#2400);
     + Fix Nested child subnets with "na" permissions visible (#2223);
     + Fix translations containing apostrophes break functionality (#2504);
+    + Set requestedAuthnContext to false for SAML (#2457);
     + API:
         + Fix inconsistent API success value returned (#2045);
         + Fix filter_by functionality (#2392);

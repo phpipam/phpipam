@@ -918,6 +918,17 @@ $upgrade_queries["1.4.24"][] = "ALTER TABLE `nat` ADD `policy` SET('Yes','No')  
 $upgrade_queries["1.4.24"][] = "ALTER TABLE `nat` ADD `policy_dst` VARCHAR(255)  NULL  DEFAULT NULL;";
 
 
+
+#
+# Subversion 1.4.25 queries
+#
+// Traditional chinese traslation
+$upgrade_queries["1.4.25"][] = "-- Add russian and Chinese translations";
+$upgrade_queries["1.4.25"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Chinese traditional', 'zh_TW.UTF-8');";
+
+
+
+
 // output if required
 if(!defined('VERSION') && php_sapi_name()=="cli") {
   // version check
