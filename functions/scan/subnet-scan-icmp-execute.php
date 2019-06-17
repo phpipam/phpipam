@@ -23,6 +23,7 @@
  *		* ping
  *		* pear
  *		* fping
+ * 		* Nmap
  *
  */
 
@@ -54,7 +55,7 @@ if(php_sapi_name()!="cli") 								{ die(json_encode(array("status"=>1, "error"=
 //check input parameters
 if(!isset($argv[1]) || !isset($argv[2]))				{ die(json_encode(array("status"=>1, "error"=>"Missing required input parameters"))); }
 // test to see if threading is available
-if($Scan->settings->scanPingType!="fping")
+if ($Scan->settings->scanPingType != "fping" && $Scan->settings->scanPingType != "nmap")
 if( !PingThread::available() ) 								{ die(json_encode(array("status"=>1, "error"=>"Threading is required for scanning subnets. Please recompile PHP with pcntl extension"))); }
 //check script
 if($argv[1]!="update"&&$argv[1]!="discovery")			{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type!"))); }
@@ -66,12 +67,12 @@ if(!is_numeric($argv[2])) {
 /**
  * Select how to scan based on scan type.
  *
- * if ping/pear make threads, if fping than just check since it has built-in threading !
+ * if ping/pear make threads, if fping/Nmap than just check since it has built-in threading !
  */
 
 
 # fping
-if($Scan->settings->scanPingType=="fping" && $argv[1]=="discovery") {
+if ($Scan->settings->scanPingType == "fping") {
 	# fetch subnet
 	$subnet = $Subnets->fetch_subnet(null, $argv[2]);
 	$subnet!==false ? : 								  die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided")));
@@ -100,34 +101,22 @@ if($Scan->settings->scanPingType=="fping" && $argv[1]=="discovery") {
 		}
 	}
 }
-# fping - status update
-elseif($Scan->settings->scanPingType=="fping") {
-	# fetch subnet
+# Nmap
+elseif ($Scan->settings->scanPingType == "nmap") {
 	$subnet = $Subnets->fetch_subnet(null, $argv[2]);
-	$subnet!==false ? : 								  die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided")));
-
-	//set exit flag to true
+	if (!$subnet) {
+		die(json_encode(array("status" => 1, "error" => "Invalid subnet ID provided")));
+	}
 	$Scan->ping_set_exit(false);
-
-	# set cidr
-	$subnet_cidr = $Subnets->transform_to_dotted($subnet->subnet)."/".$subnet->mask;
-	# execute
-	$retval = $Scan->ping_address_method_fping_subnet ($subnet_cidr);
-
-	# errors
-	if($retval==3)										{ die(json_encode(array("status"=>1, "error"=>"invalid command line arguments"))); }
-	if($retval==4)										{ die(json_encode(array("status"=>1, "error"=>"system call failure"))); }
-
-	# parse result
-	if(empty($Scan->fping_result))					{ die(json_encode(array("status"=>0, "values"=>array("alive"=>null)))); }
-	else {
-		//check each line
-		foreach($Scan->fping_result as $l) {
-			//split
-			$field = array_filter(explode(" ", $l));
-			//create result
-			$out['alive'][] = $Subnets->transform_to_decimal($field[0]);
-		}
+	$subnet_cidr = $Subnets->transform_to_dotted($subnet->subnet) . "/" . $subnet->mask;
+	$retval = $Scan->ping_address_method_nmap_subnet($subnet_cidr);
+	if ($retval) {
+		die(json_encode(array("status" => 1, "error" => "Nmap terminated with error")));
+	}
+	if (empty($Scan->nmap_result)) {
+		die(json_encode(array("status" => 0, "values" => array("alive" => null))));
+	} else {
+		$out['alive'] = array_map(array($Subnets, "transform_to_decimal"), $Scan->nmap_result);
 	}
 }
 # pear / ping

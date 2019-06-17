@@ -25,24 +25,11 @@ $script_result = json_decode($output[0]);
 # json error
 if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), true); }
 
-# if method is fping we need to check against existing hosts because it produces list of all ips !
-if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
+# if method is fping/Nmap we need to check against existing hosts because it produces list of all ips !
+if (($User->settings->scanPingType == "fping" || $User->settings->scanPingType == "nmap") && isset($script_result->values->alive)) {
 	// fetch all hosts to be scanned
-	$to_scan_hosts = $Scan->prepare_addresses_to_scan ("discovery", $_POST['subnetId']);
-	// loop check
-	foreach($script_result->values->alive as $rk=>$result) {
-		if(!in_array($Subnets->transform_address($result, "decimal"), $to_scan_hosts)) {
-			unset($script_result->values->alive[$rk]);
-		}
-	}
-	// null
-	if (sizeof($script_result->values->alive)==0) {
-		unset($script_result->values->alive);
-	}
-	//rekey
-	else {
-		$script_result->values->alive = array_values($script_result->values->alive);
-	}
+	$to_scan_hosts = $Scan->prepare_addresses_to_scan("discovery", $_POST['subnetId']);
+	$script_result->values->alive = array_intersect($script_result->values->alive, $to_scan_hosts);
 }
 
 //title
@@ -53,7 +40,7 @@ if($retval!==0) 							{ $Result->show("danger", "Error executing scan! Error co
 # error?
 elseif($script_result->status===1)				{ $Result->show("danger", $script_result->error, false); }
 # empty
-elseif(!isset($script_result->values->alive)) 	{ $Result->show("danger", _("No alive host found")."!", false); }
+elseif(empty($script_result->values->alive)) 	{ $Result->show("danger", _("No alive host found")."!", false); }
 # ok
 else {
 	// fetch subnet and set nsid

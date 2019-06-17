@@ -103,6 +103,7 @@ $values = array("id"=>1,
 				"pingStatus"          =>@$_POST['pingStatus'],
 				"scanPingPath"        =>@$_POST['scanPingPath'],
 				"scanFPingPath"       =>@$_POST['scanFPingPath'],
+				"scanNmapPath"        =>@$_POST['scanNmapPath'],
 				"scanMaxThreads"      =>@$_POST['scanMaxThreads']
 				);
 // Update linked_field indexes

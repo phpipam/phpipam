@@ -54,10 +54,10 @@ $db['tmptable_engine_type'] = "MEMORY";
 
 # pingCheck.php script parameters
 $config['ping_check_send_mail']        = true;       // true/false, send or not mail on ping check
-$config['ping_check_method']           = false;      // false/ping/pear/fping, reset scan method
+$config['ping_check_method']           = false;      // false/ping/pear/fping/nmap, reset scan method
 # discoveryCheck.php script parameters
 $config['discovery_check_send_mail']   = true;       // true/false, send or not mail on discovery check
-$config['discovery_check_method']      = false;      // false/ping/pear/fping, reset scan method
+$config['discovery_check_method']      = false;      // false/ping/pear/fping/nmap, reset scan method
 # remove_offline_addresses.php script parameters
 $config['removed_addresses_send_mail'] = true;       // true/false, send or not mail on pomoving inactive addresses
 $config['removed_addresses_timelimit'] = 86400 * 7;  // int, after how many seconds of inactivity address will be deleted (7 days)

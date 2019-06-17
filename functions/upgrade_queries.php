@@ -927,6 +927,14 @@ $upgrade_queries["1.4.25"][] = "-- Add russian and Chinese translations";
 $upgrade_queries["1.4.25"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Chinese traditional', 'zh_TW.UTF-8');";
 
 
+#
+# Subversion 1.4.26 queries
+#
+// add Nmap scan type
+$upgrade_queries["1.4.26"][] = "ALTER TABLE `settings` ADD `scanNmapPath` VARCHAR(64)  NULL  DEFAULT '/usr/bin/nmap';";
+$upgrade_queries["1.4.26"][] = "ALTER TABLE `settings` CHANGE `scanPingType` `scanPingType` SET('ping','pear','fping','nmap')  NOT NULL  DEFAULT 'ping';";
+
+
 
 
 // output if required
