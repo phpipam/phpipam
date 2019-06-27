@@ -98,7 +98,7 @@ $domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
 // default
 if (!isset($record)) {
 	$record = new StdClass ();
-	$record->ttl = 3600;
+	$record->ttl = @$pdns->ttl;
 	$record->name = $domain->name;
 }
 
