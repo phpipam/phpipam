@@ -10,6 +10,7 @@
  *		- ping
  *		- pear ping
  *		- fping
+ * 		- Nmap
  *
  *	Fping is new since version 1.2, it will work faster because it has built-in threading
  *	so we are only forking separate subnets
@@ -61,7 +62,7 @@ $hostnames      = array();			// Array with detected hostnames
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
+if (!$Scan->icmp_type == "nmap" && !PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -70,7 +71,12 @@ if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
 if ($Scan->icmp_type=="fping") {
 if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
 }
-
+// verify Nmap path
+if ($Scan->icmp_type == "nmap") {
+	if (!file_exists($Scan->settings->scanNmapPath)) {
+		die("Invalid Nmap path!");
+	}
+}
 
 //first fetch all subnets to be scanned
 $scan_subnets = $Subnets->fetch_all_subnets_for_discoveryCheck (1);
@@ -83,6 +89,9 @@ if ($scan_subnets!==false) {
     	// if subnet has slaves dont check it
     	if ($Subnets->has_slaves ($s->id) === false) {
     		$addresses_tmp[$s->id] = $Scan-> prepare_addresses_to_scan ("discovery", $s->id, false);
+    		foreach ($addresses_tmp[$s->id] as $a) {
+    			$address_to_subnet[$a] = $s;
+			}
 			// save discovery time
 			$Scan->update_subnet_discoverytime ($s->id, $nowdate);
         } else {
@@ -166,6 +175,19 @@ if($Scan->icmp_type=="fping") {
     		}
             //rekey
             $scan_subnets[$sk]->discovered = array_values($scan_subnets[$sk]->discovered);
+		}
+	}
+}
+//Nmap
+elseif ($Scan->icmp_type == "nmap") {
+	foreach ($scan_subnets as $subnet) {
+		$subnets_cidr[] = $Subnets->transform_to_dotted($subnet->subnet) . "/" . $subnet->mask;
+	}
+	$result = $Scan->ping_address_method_nmap_subnet($subnets_cidr, true);
+	foreach ($result as $alive) {
+		$alive = $Subnets->transform_to_decimal($alive);
+		if (isset($address_to_subnet[$alive])) {
+			$address_to_subnet[$alive]->discovered[] = $alive;
 		}
 	}
 }

@@ -133,7 +133,7 @@ class Scan extends Common_functions {
 	 * @return array
 	 */
 	public function ping_fetch_types () {
-		return array("ping", "pear", "fping");
+		return array("ping", "pear", "fping", "nmap");
 	}
 
 	/**
@@ -448,6 +448,64 @@ class Scan extends Common_functions {
 		# return result for web or cmd
 		if($this->icmp_exit)	{ exit  ($retval); }
 		else					{ return $retval; }
+	}
+
+	/**
+	 * Ping selected address with Nmap
+	 *
+	 * @access protected
+	 * @param string $address
+	 * @return int
+	 */
+	protected function ping_address_method_nmap($address) {
+		$this->ping_verify_path($this->settings->scanNmapPath);
+		$mode = $this->identify_address($address) == "IPv6" ? "-6" : "-4";
+		$cmd = $this->settings->scanNmapPath . " -sn -PE -n -oX - $mode --privileged --noninteractive -- $address";
+		exec(escapeshellcmd($cmd), $output, $retval);
+		if ($retval) {
+			if ($this->icmp_exit) {
+				exit($retval);
+			} else {
+				return $retval;
+			}
+		}
+		$xml = simplexml_load_string(implode($output));
+		$retval = 1 - $xml->runstats->hosts['up'];
+		if ($this->icmp_exit) {
+			exit($retval);
+		} else {
+			return $retval;
+		}
+	}
+
+	/**
+	 * Ping selected subnet(s) with Nmap
+	 *
+	 * @access public
+	 * @param string|array $subnet_cidr
+	 * @return int|array
+	 */
+	public function ping_address_method_nmap_subnet ($subnet_cidr, $return_result = false) {
+		$this->ping_verify_path($this->settings->scanNmapPath);
+		if (is_array($subnet_cidr)) {
+			$subnet_cidr = implode(" ", $subnet_cidr);
+		}
+		$cmd = $this->settings->scanNmapPath . " -sn -PE -n -oX - --privileged --noninteractive -- $subnet_cidr";
+		exec(escapeshellcmd($cmd), $output, $retval);
+		$xml = simplexml_load_string(implode($output));
+		$out = array();
+		foreach ($xml->host as $host) {
+			$out[] = (string)$host->address['addr'];
+		}
+		$this->nmap_result = $out;
+		if ($return_result) {
+			return $out;
+		}
+		if ($this->icmp_exit) {
+			exit($retval);
+		} else {
+			return $retval;
+		}
 	}
 
 	/**

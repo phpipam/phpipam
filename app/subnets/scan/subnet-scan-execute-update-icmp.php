@@ -30,37 +30,12 @@ if (!isset($script_result->values->dead)  || is_null($script_result->values->dea
 # set address types array
 $Tools->get_addresses_types ();
 
-# if method is fping we need to check against existing hosts because it produces list of all ips !
-if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
+# if method is fping/Nmap we need to check against existing hosts because it produces list of all ips !
+if ($User->settings->scanPingType == "fping" || $User->settings->scanPingType == "nmap") {
 	// fetch all hosts to be scanned
-	$all_subnet_hosts = $Scan->prepare_addresses_to_scan ("update", $_POST['subnetId']);
-	// loop check
-	foreach ($all_subnet_hosts as $k=>$h) {
-		// alive ?
-		if (sizeof($script_result->values->alive)>0) {
-			if (!in_array($h, $script_result->values->alive)) {
-				$script_result->values->dead[] = $h;
-			}
-		}
-		else {
-			$script_result->values->dead = $all_subnet_hosts;
-		}
-	}
-
-	// null
-	if (sizeof($script_result->values->dead)==0)  {
-		unset($script_result->values->dead); }
-	else	{
-		$script_result->values->dead = array_values($script_result->values->dead);
-	}
-
-	if (sizeof($script_result->values->alive)==0) {
-		unset($script_result->values->alive);
-	}
-	//rekey
-	else {
-		$script_result->values->alive = array_values($script_result->values->alive);
-	}
+	$all_subnet_hosts = $Scan->prepare_addresses_to_scan("update", $_POST['subnetId']);
+	$script_result->values->alive = array_intersect($script_result->values->alive, $all_subnet_hosts);
+	$script_result->values->dead = array_diff($all_subnet_hosts, $script_result->values->alive);
 }
 
 # recode to same array with statuses

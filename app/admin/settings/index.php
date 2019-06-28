@@ -545,7 +545,7 @@ $(document).ready(function() {
 	<td>
 		<select name="scanPingType" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping");
+		$types = array("ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping", "nmap"=>"Nmap");
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['scanPingType']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -563,7 +563,7 @@ $(document).ready(function() {
 	<td class="title"><?php print _('Ping path'); ?></td>
 	<?php
 	//verify that ping file exists!
-	if(!file_exists($settings['scanPingPath'])&&$settings['scanFPingType']=="ping")		{ $class="danger"; }
+	if(!file_exists($settings['scanPingPath'])&&$settings['scanPingType']=="ping")		{ $class="danger"; }
 	else																				{ $class=""; }
 	?>
 	<td class="<?php print $class; ?>">
@@ -579,7 +579,7 @@ $(document).ready(function() {
 	<td class="title"><?php print _('FPing path'); ?></td>
 	<?php
 	//verify that ping file exists!
-	if(!file_exists($settings['scanFPingPath'])&&$settings['scanFPingType']=="fping")	{ $class="danger"; }
+	if(!file_exists($settings['scanFPingPath'])&&$settings['scanPingType']=="fping")	{ $class="danger"; }
 	else																				{ $class=""; }
 	?>
 	<td class="<?php print $class; ?>">
@@ -587,6 +587,22 @@ $(document).ready(function() {
 	</td>
 	<td class="info2">
 		<?php print _('Set path for fping executable file (default /bin/fping)'); ?>
+	</td>
+</tr>
+
+<!-- Nmap path -->
+<tr>
+	<td class="title"><?php print _('Nmap path'); ?></td>
+	<?php
+	//verify that nmap file exists!
+	if(!file_exists($settings['scanNmapPath'])&&$settings['scanPingType']=="nmap")	{ $class="danger"; }
+	else																				{ $class=""; }
+	?>
+	<td class="<?php print $class; ?>">
+		<input type="text" class="form-control input-sm" name="scanNmapPath" value="<?php print $settings['scanNmapPath']; ?>">
+	</td>
+	<td class="info2">
+		<?php print _('Set path for Nmap executable file (default /usr/bin/nmap)'); ?>
 	</td>
 </tr>
 

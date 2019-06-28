@@ -199,7 +199,8 @@ CREATE TABLE `settings` (
   `api` BINARY  NOT NULL  DEFAULT '0',
   `scanPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/ping',
   `scanFPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/fping',
-  `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
+  `scanNmapPath` VARCHAR(64)  NULL  DEFAULT '/usr/bin/nmap',
+  `scanPingType` SET('ping','pear','fping','nmap')  NOT NULL  DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
   `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
   `hiddenCustomFields` text NULL,
@@ -995,4 +996,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 25;
+UPDATE `settings` SET `dbversion` = 26;

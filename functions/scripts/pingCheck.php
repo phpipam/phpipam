@@ -11,6 +11,7 @@
  *		- ping
  *		- pear ping
  *		- fping
+ * 		- Nmap
  *
  *
  *	Fping is new since version 1.2, it will work faster because it has built-in threading
@@ -73,7 +74,7 @@ $nowdate = date ("Y-m-d H:i:s");
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!PingThread::available()) 					{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
+if (!$Scan->icmp_type == "nmap" && !PingThread::available()) 					{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
@@ -81,6 +82,12 @@ if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
 // verify fping path
 if ($Scan->icmp_type=="fping") {
 if(!file_exists($Scan->settings->scanFPingPath)){ die("Invalid fping path!"); }
+}
+// verify Nmap path
+if ($Scan->icmp_type == "nmap") {
+	if (!file_exists($Scan->settings->scanNmapPath)) {
+		die("Invalid Nmap path!");
+	}
 }
 
 
@@ -96,7 +103,7 @@ foreach($scan_subnets as $s) {
 
 		$subnet_addresses = $Addresses->fetch_subnet_addresses ($s->id);
 		//set array for fping
-		if($Scan->icmp_type=="fping")	{
+		if ($Scan->icmp_type == "fping" || $Scan->icmp_type == "nmap") {
 			$subnets[] = array(
 								"id"         =>$s->id,
 								"cidr"       =>$Subnets->transform_to_dotted($s->subnet)."/".$s->mask,
@@ -136,7 +143,8 @@ foreach($scan_subnets as $s) {
 															"lastSeen"    =>$a->lastSeen,
 															"state"       =>$a->state,
 															"resolveDNS"  =>$s->resolveDNS,
-															"nsid"        =>$s->nsid
+															"nsid"        =>$s->nsid,
+															"lastSeenNew" => NULL
 						                          			);
 					}
 				}
@@ -234,6 +242,29 @@ if($Scan->icmp_type=="fping") {
 			}
 		}
 	}
+}
+//Nmap
+elseif ($Scan->icmp_type == "nmap") {
+	$addresses = array_column($addresses, NULL, "ip_addr");
+	$subnets_cidr = array_column($subnets, "cidr");
+	$result = $Scan->ping_address_method_nmap_subnet($subnets_cidr, true);
+	foreach ($result as $alive) {
+		$alive = $Subnets->transform_to_decimal($alive);
+		if (isset($addresses[$alive])) {
+			$addresses[$alive]["lastSeenNew"] = $nowdate;
+			$Scan->ping_update_lastseen($addresses[$alive]["id"], $nowdate);
+		}
+	}
+	foreach ($addresses as $a) {
+		if ($a["resolveDNS"]) {
+			$hostname = !$config['resolve_emptyonly'] ? false : $a['hostname'];
+			$response = $DNS->resolve_address($a["ip_addr"], $hostname, true, $a["nsid"]);
+			if ($response["class"] == "resolved" && $response["name"] != $a["hostname"]) {
+				$Addresses->update_address_hostname($Subnets->transform_to_dotted($a["ip_addr"]), $a["id"], $response["name"]);
+			}
+		}
+	}
+	$address_change =& $addresses;
 }
 //ping, pear
 else {
