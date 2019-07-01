@@ -52,6 +52,8 @@ $required_ip_fields = $Tools->explode_filtered(";", $User->settings->IPrequired)
 # get all custom fields
 $custom_fields = $Tools->fetch_custom_fields ('ipaddresses');
 
+$groups = $Tools->fetch_all_objects("ipGroups");
+
 # if subnet is full we cannot any more ip addresses
 if (($action=="add" || $action=="all-add") && ($subnet['isFull']==1 && $subnet['isFolder']!=1))   $Result->show("warning", _("Cannot add address as subnet is market as used"), true, true);
 
@@ -73,6 +75,13 @@ else {
 	$address = (array) $Addresses->fetch_address(null, $id);
 	// save old mac for multicast check
 	$address['mac_old'] = @$address['mac'];
+}
+
+$currentGroups  = $Tools->fetch_multiple_objects("ipGroupsMapping", 'ip_id', $id);
+$selectedGroups = [];
+
+foreach ($currentGroups as $group) {
+    $selectedGroups[$group->group_id] = $group->group_id;
 }
 
 # Set action and button text
@@ -162,6 +171,11 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 <?php } ?>
 
 });
+
+$('#groups').multiselect({
+    enableFiltering: true,
+    enableCaseInsensitiveFiltering: true
+});
 </script>
 
 <!-- header -->
@@ -172,7 +186,6 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 	<!-- IP address modify form -->
 	<form class="editipaddress" role="form" name="editipaddress">
-
 	<?php
 	if($config['split_ip_custom_fields']===true) {
 		print "<div class='row'>";
@@ -532,8 +545,38 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		print ' <input type="text" name="port"  class="ip_addr form-control input-sm input-w-150"  id="port"   placeholder="'._('Port').'"   value="'. $address['port']. '" size="30" '.$delete.'>'. "\n";
 		print '	</td>'. "\n";
 		print '</tr>'. "\n";
-	}
+	} ?>
 
+    <!-- Groups -->
+    <tr>
+        <?php
+        # Port
+        //            if(in_array('port', $selected_ip_fields)) {
+
+        if(!isset($address['port'])) {$address['port'] = "";}
+
+        // set star if field is required
+        $required = in_array("groups", $required_ip_fields) ? " *" : "";
+
+        print '<tr>'. "\n";
+        print '	<td>'._('Groups').$required.'</td>'. "\n";
+        print '	<td>'. "\n";
+        print '<select id="groups" name="groups[]" multiple="multiple">';
+            foreach ($groups as $group) {
+                if (array_search($group->id, $selectedGroups)) {
+                    print "<option selected='selected' value=\"$group->id\">$group->name</option>";
+                } else {
+                    print "<option value=\"$group->id\">$group->name</option>";
+                }
+            }
+        print  '</select>'. "\n";
+        print '	</td>'. "\n";
+        print '</tr>'. "\n";
+        //            }
+        ?>
+    </tr>
+
+    <?php
 
     // location
     if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>

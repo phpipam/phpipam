@@ -436,6 +436,47 @@ abstract class DB {
 		return $this->runQuery('UPDATE `'.$tableName.'` SET '.implode(',', $preparedParamArr).'  WHERE '.implode(' OR ', $idParts), $all_values);
 	}
 
+    /**
+     * Update multiple objects at once.
+     *
+     * @access public
+     * @param array  $values
+     * @param array  $custom
+     * @return void
+     */
+    public function updateMultipleGroups($values, $custom = null) {
+        //set values
+        $objParams = array_keys($values);
+        $preparedParamArr = array();
+        foreach ($objParams as $objParam) {
+            $preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
+        }
+
+        if (!empty($values)) {
+            $currentMapping = $this->findObjects('ipGroupsMapping', 'ip_id', $custom['id']);
+
+            $newMapping = [];
+            foreach ($values as $value) {
+                $newMapping[] = [
+                    'id'       => null,
+                    'ip_id'    => $custom['id'],
+                    'group_id' => $value
+                ];
+            }
+
+            if (array_column($newMapping, 'group_id') !== array_column($currentMapping, 'group_id')) {
+                if (!empty($currentMapping)) {
+                    $this->deleteObjects('ipGroupsMapping', array_column($currentMapping, 'id'));
+                }
+
+                foreach ($newMapping as $item) {
+                    $this->insertObject('ipGroupsMapping', $item);
+                }
+            }
+        }
+    }
+
+
 	/**
 	 * Insert an object into a table
 	 * Note: an id field is ignored if specified.
@@ -591,7 +632,7 @@ abstract class DB {
 	 * @param mixed $query (default: null)
 	 * @param array $values (default: array())
 	 * @param string $class (default: 'stdClass')
-	 * @return void
+	 * @return array
 	 */
 	public function getObjectsQuery($query = null, $values = array(), $class = 'stdClass') {
 		if (!$this->isConnected()) $this->connect();
@@ -749,7 +790,7 @@ abstract class DB {
 	 * @param bool $like (default: false)
 	 * @param bool $negate (default: false)
 	 * @param string|array $result_fields (default: "*")
-	 * @return void
+	 * @return array
 	 */
 	public function findObjects($table, $field, $value, $sortField = 'id', $sortAsc = true, $like = false, $negate = false, $result_fields = "*") {
 		$table = $this->escape($table);
@@ -767,9 +808,10 @@ abstract class DB {
 	    // subnets
 	    if ($table=='subnets' && $sortField=='subnet') {
 	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY LPAD(`subnet`,39,0) ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
-	    } else {
-	        return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
 	    }
+
+	    return $this->getObjectsQuery('SELECT '.$result_fields.' FROM `' . $table . '` WHERE `'. $field .'`'.$negate_operator. $operator .'? ORDER BY `'.$sortField.'` ' . ($sortAsc ? '' : 'DESC') . ';', array($value));
+
 	}
 
 	/**
@@ -798,19 +840,7 @@ abstract class DB {
 	 * @return void
 	 */
 	public function getList($query = null, $values = array(), $class = 'stdClass') {
-		$objs = $this->getObjectsQuery($query, $values, $class);
-
-		$list = array();
-
-		if (!is_array($objs))
-			return $list;
-
-		foreach ($objs as $obj) {
-			$columns = array_values((array)$obj);
-			$list[] = $columns[0];
-		}
-
-		return $list;
+        return $this->getObjectsQuery($query, $values, $class);
 	}
 
 	/**

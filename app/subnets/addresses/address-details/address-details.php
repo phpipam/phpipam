@@ -45,6 +45,14 @@ if(sizeof($address)>1) {
         print "</td>";
         print "</tr>";
 
+        # hierarchy
+        print "<tr>";
+        print " <th>"._('Groups')."</th>";
+        print " <td>";
+        echo $address['groups'];
+        print "</td>";
+        print "</tr>";
+
         # subnet
         print "<tr>";
         print " <th>"._('Subnet')."</th>";

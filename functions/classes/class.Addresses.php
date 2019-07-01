@@ -225,7 +225,13 @@ class Addresses extends Common_functions {
 			# save to addresses cache
 			if(!is_null($address)) {
 				# add decimal format
-				$address->ip = $this->transform_to_dotted ($address->ip_addr);
+				$address->ip   = $this->transform_to_dotted ($address->ip_addr);
+                $groups        = json_decode(json_encode($this->fetch_multiple_objects("ipGroupsMapping", 'ip_id', $id), true));
+                $ids           = array_column($groups, 'group_id');
+                $currentGroups = $this->fetch_multiple_objects_by_ids('ipGroups', $ids);
+
+
+				$address->groups = implode(', ', array_column($currentGroups, 'name'));
 				# save to subnets
 				$this->addresses[$id] = (object) $address;
 			}
@@ -257,6 +263,29 @@ class Addresses extends Common_functions {
 		}
 		#result
 		return !is_null($address) ? $address : false;
+	}
+
+    public function fetch_address_by_group($groupId)
+    {
+        try {
+            $placeholders = str_repeat ('?, ',  count($groupId) - 1) . '?';
+            $query = "SELECT *, ipGroupsMapping.group_id FROM `ipaddresses` inner join `ipGroupsMapping` on ipGroupsMapping.ip_id=ipaddresses.id where ipGroupsMapping.group_id IN($placeholders)";
+
+            $address = $this->Database->getList($query, $groupId);
+        }
+        catch (Exception $e) {
+            $this->Result->show("danger", _("Error: ").$e->getMessage());
+            return false;
+        }
+        # save to addresses cache
+        if(is_object($address)) {
+            # add decimal format
+            $address->ip = $this->transform_to_dotted ($address->ip_addr);
+            # save to subnets
+            $this->addresses[$address->id] = (object) $address;
+        }
+        #result
+        return !is_null($address) ? $address : false;
 	}
 
 	/**
@@ -515,9 +544,17 @@ class Addresses extends Common_functions {
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
-		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
-		catch (Exception $e) {
-			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
+		try {
+		    $this->Database->updateObject("ipaddresses", $insert, $id1, $id2);
+
+		    $this->Database->updateMultipleGroups($address['groups'], $insert);
+		} catch (Exception $e) {
+			$this->Log->write(
+			    "Address edit",
+                "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".
+                    $this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")),
+                2
+            );
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
