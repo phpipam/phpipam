@@ -124,7 +124,7 @@ $m = 0;				//for section change
 
 
 /* -- Create a worksheet for addresses -- */
-if(sizeof($result_addresses)>0) {
+if(is_array($result_addresses) && sizeof($result_addresses)>0) {
 	$worksheet =& $workbook->addWorksheet(_('Addresses'));
 	$worksheet->setInputEncoding("utf-8");
 
@@ -275,7 +275,7 @@ if(sizeof($result_addresses)>0) {
 
 
 /* -- Create a worksheet for subnets -- */
-if(sizeof($result_subnets)>0) {
+if(is_array($result_subnets) && sizeof($result_subnets)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('Subnets'));
@@ -377,7 +377,7 @@ if(sizeof($result_subnets)>0) {
 
 
 /* -- Create a worksheet for VLANs -- */
-if(sizeof($result_vlans)>0) {
+if(is_array($result_vlans) && sizeof($result_vlans)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('VLANs'));
@@ -425,7 +425,7 @@ if(sizeof($result_vlans)>0) {
 
 
 /* -- Create a worksheet for VRFs -- */
-if(sizeof($result_vrf)>0) {
+if(is_array($result_vrf) && sizeof($result_vrf)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('VRFs'));
@@ -473,7 +473,7 @@ if(sizeof($result_vrf)>0) {
 
 
 /* -- Create a worksheet for Circuits -- */
-if(sizeof($result_circuits)>0) {
+if(is_array($result_circuits) && sizeof($result_circuits)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('Circuits'));
@@ -529,7 +529,7 @@ if(sizeof($result_circuits)>0) {
 
 
 /* -- Create a worksheet for Circuit providers -- */
-if(sizeof($result_circuits_p)>0) {
+if(is_array($result_circuits_p) && sizeof($result_circuits_p)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('Circuit providers'));
@@ -577,7 +577,7 @@ if(sizeof($result_circuits_p)>0) {
 
 
 /* -- Create a worksheet for Customers -- */
-if(sizeof($result_customers)>0) {
+if(is_array($result_customers) && sizeof($result_customers)>0) {
 	$lineCount = 0;
 
 	$worksheet =& $workbook->addWorksheet(_('Customers'));

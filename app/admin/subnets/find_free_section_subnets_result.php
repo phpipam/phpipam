@@ -51,7 +51,7 @@ $available_subnets = [];        // all available subnets - result
 if ($section_subnets!==false) {
     if(is_array($section_subnets)) {
         foreach ($section_subnets as $s) {
-            if ($s->isFolder=="0") {
+            if ($s->isFolder!="1") {
                 if ($Subnets->identify_address ($s->subnet)==$version) {
                     // start and end check
                     if ($s->subnet >= $_POST['subnet_start'] && $s->subnet <= $_POST['subnet_end']) {

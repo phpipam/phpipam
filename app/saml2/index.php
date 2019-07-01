@@ -43,6 +43,9 @@ else{
             'certFingerprintAlgorithm' => $params->idpcertalgorithm,
             'x509cert' => $params->idpx509cert,
 	),
+       'security' => array (
+            'requestedAuthnContext' => false,
+        ),
     );
 	$auth = new OneLogin_Saml2_Auth($settings);
 }

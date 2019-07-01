@@ -581,14 +581,16 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function count_domain_records ($domain_id) {
-        # fetch
-        try { $res = $this->Database_pdns->numObjectsFilter("records", "domain_id", $domain_id); }
+        // query
+        $query = 'SELECT COUNT(*) AS `cnt` FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL;';
+        // fetch
+        try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
         catch (Exception $e) {
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
         }
         # result
-        return $res;
+        return $records[0]->cnt;
     }
 
     /**
@@ -630,7 +632,7 @@ class PowerDNS extends Common_functions {
      * @return void
      */
     public function fetch_all_domain_records ($domain_id) {
-        $query = "select * from `records` where `domain_id` = ? order by $this->orderby $this->orderdir limit $this->limit;";
+        $query = "SELECT * FROM `records` WHERE `domain_id` = ? AND `type` IS NOT NULL ORDER BY $this->orderby $this->orderdir LIMIT $this->limit;";
         // fetch
         try { $records = $this->Database_pdns->getObjectsQuery($query, array($domain_id)); }
         catch (Exception $e) {

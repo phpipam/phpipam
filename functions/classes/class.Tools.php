@@ -218,11 +218,11 @@ class Tools extends Common_functions {
 	 */
 	private function search_subnets_range ($search_term, $high, $low, $custom_fields = array()) {
 		# reformat low/high
-		if($high==0 && $low==0)	{ $high = "1"; $low="1"; }
+		if($high==0 && $low==0)	{ $high = "1"; $low = "1"; }
 
 		# set search query
 		$query[] = "select * from `subnets` where `description` like :search_term ";
-		$query[] = "or `subnet` between :low and :high ";
+		$query[] = "or (`subnet` >= :low and `subnet` <= :high )";
 		# custom
 	    if(sizeof($custom_fields) > 0) {
 			foreach($custom_fields as $myField) {
@@ -274,7 +274,7 @@ class Tools extends Common_functions {
 					# parse address
 					$net = $this->Net_IPv4->parseAddress($this->transform_address($s['subnet']).'/'.$s['mask'], "dotted");
 
-					if($low>$this->transform_to_decimal(@$net->network) && $low<$this->transform_address($net->broadcast, "decimal")) {
+					if($low>=$this->transform_to_decimal(@$net->network) && $low<=$this->transform_address($net->broadcast, "decimal")) {
 						$ids[] = $s['id'];
 					}
 				}
@@ -995,7 +995,7 @@ class Tools extends Common_functions {
 	 * @return array|null
 	 */
 	public function requests_fetch_available_subnets () {
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull` != 1 ORDER BY `subnet`;"); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and COALESCE(`isFull`,0) != 1 ORDER BY `subnet`;"); }
 		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
 
 		# save
@@ -3184,6 +3184,36 @@ class Tools extends Common_functions {
 		return $out;
 	}
 
+
+	/**
+	 * Fetch all routing subnets
+	 *
+	 * @method fetch_routing_subnets
+	 * @param  string $type [bgp,ospf]
+	 * @param  int $id (default: 0)
+	 * @param  bool $cnt (default: true)
+	 * @return false|array
+	 */
+	public function fetch_routing_subnets ($type="bgp", $id = 0, $cnt = false) {
+		// set type
+		$type = $type=="bgp" ? "bgp" : "ospf";
+		// set count
+		$fields = $cnt ? "count(*) as cnt" : "*,s.id as subnet_id";
+		// set query
+		$query = "select $fields from subnets as s, routing_subnets as r
+					where r.type = ? and r.object_id = ? and r.subnet_id = s.id
+					order by r.direction asc, s.subnet asc;";
+		// fetch
+		try { $subnets = $this->Database->getObjectsQuery($query, [$type, $id]); }
+		catch (Exception $e) {
+			$this->Result->show("danger", $e->getMessage(), true);
+		}
+		// return
+		return sizeof($subnets)>0 ? $subnets : false;
+	}
+
+
+
 	/**
 	 * Return all possible customer object relations
 	 *
@@ -3197,7 +3227,8 @@ class Tools extends Common_functions {
 				"vlans"       => "VLAN",
 				"vrf"         => "VRF",
 				"circuits"    => "Circuits",
-				"racks"       => "Racks"
+				"racks"       => "Racks",
+				"routing_bgp" => "BGP Routing"
 				];
 	}
 

@@ -102,14 +102,14 @@ if (sizeof(@$success)>0) {
 	}
 	$print[] = "</div>";
 }
-if (sizeof(@$failures)>0) {
+if (is_array($failures) && sizeof($failures)>0) {
 	$print[] = "<div class='alert alert-danger'><h4>Invalid PTR hostnames:</h4>";
 	foreach ($failures as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";
 	}
 	$print[] = "</div>";
 }
-if (sizeof(@$ignored)>0) {
+if (is_array($ignored) && sizeof($ignored)>0) {
 	$print[] = "<div class='alert alert-info'><h4>Ignored records:</h4>";
 	foreach ($ignored as $s) {
 		$print[] = "&middot; $s->hostname ($s->ip)";
