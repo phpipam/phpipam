@@ -1,22 +1,24 @@
 <?php
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Admin	 	= new Admin ($Database);
-$Tools	 	= new Tools ($Database);
-$Result 	= new Result ();
+$Database = new Database_PDO;
+$User = new User ($Database);
+$Admin = new Admin ($Database);
+$Tools = new Tools ($Database);
+$Result = new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
 
 # perm check popup
-$User->check_module_permissions ("routing", 2, true, true);
+$User->check_module_permissions("routing", 2, true, true);
 
 # ID must be numeric
-if($_POST['action']!="add" && !is_numeric($_POST['bgpid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }
+if ($_POST['action'] != "add" && !is_numeric($_POST['bgpid'])) {
+    $Result->show("danger", _("Invalid ID"), true, true);
+}
 ?>
 
 <!-- header -->
@@ -24,17 +26,20 @@ if($_POST['action']!="add" && !is_numeric($_POST['bgpid']))		{ $Result->show("da
 
 <!-- content -->
 <div class="pContent">
-	<?php
-	# submit
-	if(!$Admin->object_modify ("routing_subnets", "delete", "id", ["id"=>$_POST['bgpid']]))  { $Result->show("danger",  _("Mapping removal failed"), false); }
-	else																  			   { $Result->show("success", _("Mapping removed"), false); }
-	?>
+    <?php
+    # submit
+    if (!$Admin->object_modify("routing_subnets", "delete", "id", ["id" => $_POST['bgpid']])) {
+        $Result->show("danger", _("Mapping removal failed"), false);
+    } else {
+        $Result->show("success", _("Mapping removed"), false);
+    }
+    ?>
 
 </div>
 
 <!-- footer -->
 <div class="pFooter">
-	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Close'); ?></button>
-	</div>
+    <div class="btn-group">
+        <button class="btn btn-sm btn-default hidePopupsReload"><?php print _('Close'); ?></button>
+    </div>
 </div>

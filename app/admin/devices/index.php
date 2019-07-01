@@ -4,7 +4,7 @@
  * Script to print devices
  ***************************/
 
-include (dirname(__FILE__)."/../../tools/devices/all-devices.php");
+include(dirname(__FILE__) . "/../../tools/devices/all-devices.php");
 ?>
 
 <!-- edit result holder -->

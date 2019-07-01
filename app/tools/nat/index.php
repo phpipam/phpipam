@@ -8,15 +8,16 @@
 $User->check_user_session();
 
 # check that nat support isenabled
-if ($User->settings->enableNAT!="1") {
+if ($User->settings->enableNAT != "1") {
     $Result->show("danger", _("NAT module disabled."), false);
-}
-elseif ($User->check_module_permissions ("nat", 1, false, false)===false) {
+} elseif ($User->check_module_permissions("nat", 1, false, false) === false) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
-}
-else {
+} else {
     //single nat
-    if(isset($_GET['subnetId'])) { include(dirname(__FILE__).'/nat_details.php'); }
-    //all nats
-    else                         { include(dirname(__FILE__).'/all_nats.php'); }
+    if (isset($_GET['subnetId'])) {
+        include(dirname(__FILE__) . '/nat_details.php');
+    } //all nats
+    else {
+        include(dirname(__FILE__) . '/all_nats.php');
+    }
 }

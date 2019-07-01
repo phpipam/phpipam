@@ -7,21 +7,21 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("dhcp", 1, true, false);
+$User->check_module_permissions("dhcp", 1, true, false);
 ?>
 
-<br>
-<h4><?php print _("DHCP settings"); ?></h4><hr>
+    <br>
+    <h4><?php print _("DHCP settings"); ?></h4>
+    <hr>
 
 <?php
-foreach ($dhcp_db as $k=>$s) {
-    if(is_array($s)) {
-        print $k."<br>";
-        foreach ($s as $k2=>$s2) {
-        print "&nbsp;&nbsp; $k2: $s2<br>";
+foreach ($dhcp_db as $k => $s) {
+    if (is_array($s)) {
+        print $k . "<br>";
+        foreach ($s as $k2 => $s2) {
+            print "&nbsp;&nbsp; $k2: $s2<br>";
         }
-    }
-    else {
+    } else {
         print "$k: $s<br>";
     }
 }

@@ -1,52 +1,51 @@
 <?php
 
 # verify php build
-include('functions/checks/check_php_build.php');		// check for support for PHP modules and database connection
-define("TOOLKIT_PATH", dirname(__FILE__).'/../../functions/php-saml/');
+include('functions/checks/check_php_build.php');        // check for support for PHP modules and database connection
+define("TOOLKIT_PATH", dirname(__FILE__) . '/../../functions/php-saml/');
 require_once(TOOLKIT_PATH . '_toolkit_loader.php');   // We load the SAML2 lib
 
 // get SAML2 settings from db
-$dbobj=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-if(!$dbobj){
+$dbobj = $Tools->fetch_object("usersAuthMethod", "type", "SAML2");
+if (!$dbobj) {
     $Result->show("danger", "SAML settings not found in database", true);
 }
 
 //decode authentication module params
-$params=json_decode($dbobj->params);
+$params = json_decode($dbobj->params);
 
 //if using advanced settings, instantiate without db settings
-if($params->advanced=="1"){
-	$auth = new OneLogin_Saml2_Auth();
-}
-else{
-
-	$settings = array (
-        'sp' => array (
+if ($params->advanced == "1") {
+    $auth = new OneLogin_Saml2_Auth();
+} else {
+    
+    $settings = [
+        'sp' => [
             'entityId' => $Tools->createURL(),
-            'assertionConsumerService' => array (
-                'url' => $Tools->createURL().create_link('saml2'),
-            ),
-            'singleLogoutService' => array (
+            'assertionConsumerService' => [
+                'url' => $Tools->createURL() . create_link('saml2'),
+            ],
+            'singleLogoutService' => [
                 'url' => $Tools->createURL(),
-            ),
+            ],
             'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-        ),
-        'idp' => array (
+        ],
+        'idp' => [
             'entityId' => $params->idpissuer,
-            'singleSignOnService' => array (
+            'singleSignOnService' => [
                 'url' => $params->idplogin,
-            ),
-            'singleLogoutService' => array (
+            ],
+            'singleLogoutService' => [
                 'url' => $params->idplogout,
-            ),
+            ],
             'certFingerprint' => $params->idpcertfingerprint,
             'certFingerprintAlgorithm' => $params->idpcertalgorithm,
             'x509cert' => $params->idpx509cert,
-        ),
-       'security' => array (
+        ],
+        'security' => [
             'requestedAuthnContext' => false,
-        ),
-    );
+        ],
+    ];
 }
 try {
     $auth = new OneLogin_Saml2_Auth($settings);
@@ -58,10 +57,10 @@ try {
         echo $metadata;
     } else {
         throw new OneLogin_Saml2_Error(
-            'Invalid SP metadata: '.implode(', ', $errors),
+            'Invalid SP metadata: ' . implode(', ', $errors),
             OneLogin_Saml2_Error::METADATA_SP_INVALID
-        );  
-    }   
+        );
+    }
 } catch (Exception $e) {
     echo $e->getMessage();
 }

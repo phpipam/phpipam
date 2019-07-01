@@ -12,3 +12,9 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule ^ index.php [L]
 
 </IfModule>
+php_value upload_max_filesize 1500M
+php_value post_max_size 1500M
+
+php_value xdebug.remote_enable 1
+php_value xdebug.remote_connect_back 1
+php_value xdebug.remote_port 9000

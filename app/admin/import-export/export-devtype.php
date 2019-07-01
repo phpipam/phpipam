@@ -1,30 +1,32 @@
 <?php
 
 /***
- *	Generate XLS file for L2 domains
+ *    Generate XLS file for L2 domains
  *********************************/
 
 # include required scripts
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
+require(dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
-$Database	= new Database_PDO;
-$Result		= new Result;
-$User		= new User ($Database);
-$Admin		= new Admin ($Database);
-$Tools		= new Tools ($Database);
-if (!isset($Devtype)) { $Devtype = new Devtype ($Database); }
+$Database = new Database_PDO;
+$Result = new Result;
+$User = new User ($Database);
+$Admin = new Admin ($Database);
+$Tools = new Tools ($Database);
+if (!isset($Devtype)) {
+    $Devtype = new Devtype ($Database);
+}
 
 # verify that user is logged in
 $User->check_user_session();
 
 # fetch all devtypes domains
-$devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");
+$devtypes = $Devtype->fetch_all_objects("deviceTypes", "tid");
 
 # Create a workbook
 $today = date("Ymd");
-$filename = $today."_phpipam_deviceTypes_export.xls";
+$filename = $today . "_phpipam_deviceTypes_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -47,41 +49,41 @@ $curRow = 0;
 $curColumn = 0;
 
 //write headers
-if( (isset($_GET['tid'])) && ($_GET['tid'] == "on") ) {
-	$worksheet->write($curRow, $curColumn, _('id') ,$format_header);
-	$curColumn++;
+if ((isset($_GET['tid'])) && ($_GET['tid'] == "on")) {
+    $worksheet->write($curRow, $curColumn, _('id'), $format_header);
+    $curColumn++;
 }
-if( (isset($_GET['tname'])) && ($_GET['tname'] == "on") ) {
-	$worksheet->write($curRow, $curColumn, _('Name') ,$format_header);
-	$curColumn++;
+if ((isset($_GET['tname'])) && ($_GET['tname'] == "on")) {
+    $worksheet->write($curRow, $curColumn, _('Name'), $format_header);
+    $curColumn++;
 }
-if( (isset($_GET['tdescription'])) && ($_GET['tdescription'] == "on") ) {
-	$worksheet->write($curRow, $curColumn, _('Description') ,$format_header);
-	$curColumn++;
+if ((isset($_GET['tdescription'])) && ($_GET['tdescription'] == "on")) {
+    $worksheet->write($curRow, $curColumn, _('Description'), $format_header);
+    $curColumn++;
 }
 
 $curRow++;
 $curColumn = 0;
 
 foreach ($devtypes as $dt) {
-	//cast
-	$dt = (array) $dt;
-
-	if( (isset($_GET['tid'])) && ($_GET['tid'] == "on") ) {
-		$worksheet->write($curRow, $curColumn, $dt['tid'], $format_text);
-		$curColumn++;
-	}
-	if( (isset($_GET['tname'])) && ($_GET['tname'] == "on") ) {
-		$worksheet->write($curRow, $curColumn, $dt['tname'], $format_text);
-		$curColumn++;
-	}
-	if( (isset($_GET['tdescription'])) && ($_GET['tdescription'] == "on") ) {
-		$worksheet->write($curRow, $curColumn, $dt['tdescription'], $format_text);
-		$curColumn++;
-	}
-
-	$curRow++;
-	$curColumn = 0;
+    //cast
+    $dt = (array)$dt;
+    
+    if ((isset($_GET['tid'])) && ($_GET['tid'] == "on")) {
+        $worksheet->write($curRow, $curColumn, $dt['tid'], $format_text);
+        $curColumn++;
+    }
+    if ((isset($_GET['tname'])) && ($_GET['tname'] == "on")) {
+        $worksheet->write($curRow, $curColumn, $dt['tname'], $format_text);
+        $curColumn++;
+    }
+    if ((isset($_GET['tdescription'])) && ($_GET['tdescription'] == "on")) {
+        $worksheet->write($curRow, $curColumn, $dt['tdescription'], $format_text);
+        $curColumn++;
+    }
+    
+    $curRow++;
+    $curColumn = 0;
 }
 
 

@@ -7,5 +7,5 @@
 
 <?php
 # Module permisisons
-$user = (array) $User->user;
-include(dirname(__FILE__)."/../../admin/users/print_module_permissions.php");
+$user = (array)$User->user;
+include(dirname(__FILE__) . "/../../admin/users/print_module_permissions.php");

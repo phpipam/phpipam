@@ -1,5 +1,5 @@
 <?php
-$http_codes = array(
+$http_codes = [
     100 => 'Continue',
     101 => 'Switching Protocols',
     102 => 'Processing',
@@ -54,19 +54,23 @@ $http_codes = array(
     506 => 'Variant Also Negotiates',
     507 => 'Insufficient Storage',
     509 => 'Bandwidth Limit Exceeded',
-    510 => 'Not Extended'
-);
+    510 => 'Not Extended',
+];
 
 // validate
-if (!array_key_exists($_REQUEST['section'], $http_codes)) { $_REQUEST['section'] = 404; }
+if (!array_key_exists($_REQUEST['section'], $http_codes)) {
+    $_REQUEST['section'] = 404;
+}
 ?>
 
 <div class="container" style="margin-top:20px;">
-<div class="row">
-<div class="col-xs-12 col-md-6 col-md-offset-3 alert alert alert-danger">
-	<strong><h3><?php print _('Oops! Something went wrong!'); ?></h3></strong><hr>
-	<br>
-	<?php print _('Provided http error code is'); ?>: <strong><?php print_r($_REQUEST['section']); ?>: <?php print $http_codes[$_REQUEST['section']]; ?></strong>
-</div>
-</div>
+    <div class="row">
+        <div class="col-xs-12 col-md-6 col-md-offset-3 alert alert alert-danger">
+            <strong><h3><?php print _('Oops! Something went wrong!'); ?></h3></strong>
+            <hr>
+            <br>
+            <?php print _('Provided http error code is'); ?>: <strong><?php print_r($_REQUEST['section']); ?>
+                : <?php print $http_codes[$_REQUEST['section']]; ?></strong>
+        </div>
+    </div>
 </div>

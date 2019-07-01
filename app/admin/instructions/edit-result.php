@@ -1,56 +1,56 @@
 <?php
 
 /**
- *	Format and submit instructions to database
+ *    Format and submit instructions to database
  **********************************************/
 
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Result 	= new Result ();
-$Log 		= new Logging ($Database, $User->settings);
+$Database = new Database_PDO;
+$User = new User ($Database);
+$Result = new Result ();
+$Log = new Logging ($Database, $User->settings);
 
 # verify that user is logged in
 $User->check_user_session();
 # check maintaneance mode
-$User->check_maintaneance_mode ();
+$User->check_maintaneance_mode();
 
 # validate csrf cookie
-$User->Crypto->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+$User->Crypto->csrf_cookie("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # strip script
 $_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['instructions']);
 
 # validate ID
-if ($_POST['id']=="1" || $_POST['id']=="2") {
+if ($_POST['id'] == "1" || $_POST['id'] == "2") {
     // update
-    if($Database->objectExists("instructions", $_POST['id'])) {
+    if ($Database->objectExists("instructions", $_POST['id'])) {
         print "update";
-        try { $Database->updateObject("instructions", array("id"=>$_POST['id'], "instructions"=>$_POST['instructions']), "id"); }
-        catch (Exception $e) {
-        	$Result->show("danger", _("Error: ").$e->getMessage(), false);
-        	$Log->write( "Instructions updated", "Failed to update instructions<hr>".$e->getMessage(), 1);
+        try {
+            $Database->updateObject("instructions", ["id" => $_POST['id'], "instructions" => $_POST['instructions']], "id");
+        } catch (Exception $e) {
+            $Result->show("danger", _("Error: ") . $e->getMessage(), false);
+            $Log->write("Instructions updated", "Failed to update instructions<hr>" . $e->getMessage(), 1);
         }
-     }
-    // create new
+    } // create new
     else {
-        try { $Database->insertObject("instructions", array("id"=>$_POST['id'], "instructions"=>$_POST['instructions']), false, true, false); }
-        catch (Exception $e) {
-        	$Result->show("danger", _("Error: ").$e->getMessage(), false);
-        	$Log->write( "Instructions updated", "Failed to update instructions<hr>".$e->getMessage(), 1);
+        try {
+            $Database->insertObject("instructions", ["id" => $_POST['id'], "instructions" => $_POST['instructions']], false, true, false);
+        } catch (Exception $e) {
+            $Result->show("danger", _("Error: ") . $e->getMessage(), false);
+            $Log->write("Instructions updated", "Failed to update instructions<hr>" . $e->getMessage(), 1);
         }
     }
     // success
     if (!isset($e)) {
         # ok
-        $Log->write( "Instructions updated", "Instructions updated succesfully", 0);
+        $Log->write("Instructions updated", "Instructions updated succesfully", 0);
         $Result->show("success", _("Instructions updated successfully"), true);
     }
-}
-else {
+} else {
     $Result->show("danger", _("Invalid ID"), false);
 }

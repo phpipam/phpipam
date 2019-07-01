@@ -2,9 +2,8 @@
 
 /**
  * Based on GET parameter we load:
- * 	- all customers
+ *    - all customers
  *  - specific customer
- *
  */
 
 # verify that user is logged in
@@ -14,8 +13,7 @@ $User->is_admin(true);
 
 # load subpage
 if (!isset($_GET['subnetId'])) {
-	include(dirname(__FILE__).'/../../tools/customers/all-customers.php');
-}
-else {
-	include(dirname(__FILE__).'/../../tools/customers/customer/index.php');
+    include(dirname(__FILE__) . '/../../tools/customers/all-customers.php');
+} else {
+    include(dirname(__FILE__) . '/../../tools/customers/customer/index.php');
 }

@@ -5,7 +5,7 @@
  ***************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
 $Database = new Database_PDO;
@@ -17,13 +17,12 @@ $PowerDNS = new PowerDNS($Database);
 # verify that user is logged in
 $User->check_user_session();
 # check maintaneance mode
-$User->check_maintaneance_mode ();
+$User->check_maintaneance_mode();
 # perm check popup
-if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pdns", 2, true, true);
-}
-else {
-    $User->check_module_permissions ("pdns", 3, true, true);
+if ($_POST['action'] == "edit") {
+    $User->check_module_permissions("pdns", 2, true, true);
+} else {
+    $User->check_module_permissions("pdns", 3, true, true);
 }
 
 # strip input tags
@@ -40,16 +39,20 @@ if ($_POST['action'] != "add") {
 
 # edit and add - check that smth is in name and content!
 if ($_POST['action'] != "delete") {
-    if (strlen($_POST['name']) < 2) {$Result->show("danger", _("Invalid name"), true);}
-    if (strlen($_POST['content']) < 2) {$Result->show("danger", _("Invalid content"), true);}
+    if (strlen($_POST['name']) < 2) {
+        $Result->show("danger", _("Invalid name"), true);
+    }
+    if (strlen($_POST['content']) < 2) {
+        $Result->show("danger", _("Invalid content"), true);
+    }
 }
 
 # dont permit modifications on slave domain
-$domain = $PowerDNS->fetch_domain ($_POST['domain_id']);
-$domain!==false ? : $Result->show("danger", _("Invalid ID"), true, true);
+$domain = $PowerDNS->fetch_domain($_POST['domain_id']);
+$domain !== false ?: $Result->show("danger", _("Invalid ID"), true, true);
 
-if(strtolower($domain->type) == "slave") {
-	$Result->show("danger", _("Adding domain record on slave zone is not permitted"), true);
+if (strtolower($domain->type) == "slave") {
+    $Result->show("danger", _("Adding domain record on slave zone is not permitted"), true);
 }
 
 # validate and set values

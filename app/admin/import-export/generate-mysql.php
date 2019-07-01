@@ -1,20 +1,20 @@
 <?php
 
 /**
- *	Generate XLS file
+ *    Generate XLS file
  *********************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
 
 # initialize user object
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Sections	= new Sections ($Database);
-$Subnets	= new Subnets ($Database);
-$Addresses	= new Addresses ($Database);
-$Tools		= new Tools ($Database);
-$Result 	= new Result ();
+$Database = new Database_PDO;
+$User = new User ($Database);
+$Sections = new Sections ($Database);
+$Subnets = new Subnets ($Database);
+$Addresses = new Addresses ($Database);
+$Tools = new Tools ($Database);
+$Result = new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
@@ -22,14 +22,14 @@ $User->check_user_session();
 $db = Config::get('db');
 
 //set filename
-$filename = "phpipam_MySQL_dump_". date("Y-m-d") .".sql";
+$filename = "phpipam_MySQL_dump_" . date("Y-m-d") . ".sql";
 
 //set content
 /* $command = "mysqldump --opt -h $db['host'] -u $db['user'] -p $db['pass'] $db['name'] | gzip > $backupFile"; */
-$command      = "mysqldump --opt -h '". $db['host'] ."' -u '". $db['user'] ."' -p'". $db['pass'] ."' '". $db['name'] ."'";
-$command_safe = "mysqldump --opt -h '". $db['host'] ."' -u '". "<REDACTED>" ."' -p'". "<REDACTED>" ."' '". $db['name'] ."'";
+$command = "mysqldump --opt -h '" . $db['host'] . "' -u '" . $db['user'] . "' -p'" . $db['pass'] . "' '" . $db['name'] . "'";
+$command_safe = "mysqldump --opt -h '" . $db['host'] . "' -u '" . "<REDACTED>" . "' -p'" . "<REDACTED>" . "' '" . $db['name'] . "'";
 
-$content  = "# phpipam Database dump \n";
+$content = "# phpipam Database dump \n";
 $content .= "#    command executed: $command_safe \n";
 $content .= "# --------------------- \n\n";
 $content .= shell_exec($command);
@@ -38,6 +38,6 @@ $content .= shell_exec($command);
 header("Cache-Control: private");
 header("Content-Description: File Transfer");
 header('Content-type: application/octet-stream');
-header('Content-Disposition: attachment; filename="'. $filename .'"');
+header('Content-Disposition: attachment; filename="' . $filename . '"');
 
 print($content);

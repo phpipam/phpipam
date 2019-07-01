@@ -4,4 +4,4 @@
 $User->check_user_session();
 
 # show all nat objects
-include(dirname(__FILE__)."/../../tools/nat/index.php");
+include(dirname(__FILE__) . "/../../tools/nat/index.php");

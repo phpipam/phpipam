@@ -1,22 +1,28 @@
 <?php
 
 /***
- *	Generate XLS file for L2 domains
+ *    Generate XLS file for L2 domains
  *********************************/
 
 # include required scripts
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
+require(dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # initialize required objects
-$Database	= new Database_PDO;
-$Result		= new Result;
-$User		= new User ($Database);
-$Admin		= new Admin ($Database);
-$Tools		= new Tools ($Database);
-if (!isset($Sections)) { $Sections	= new Sections ($Database); }
-if (!isset($Devtype)) { $Devtype = new Devtype ($Database); }
-if (!isset($Devices)) { $Devices = new Devtype ($Database); }
+$Database = new Database_PDO;
+$Result = new Result;
+$User = new User ($Database);
+$Admin = new Admin ($Database);
+$Tools = new Tools ($Database);
+if (!isset($Sections)) {
+    $Sections = new Sections ($Database);
+}
+if (!isset($Devtype)) {
+    $Devtype = new Devtype ($Database);
+}
+if (!isset($Devices)) {
+    $Devices = new Devtype ($Database);
+}
 
 # verify that user is logged in
 $User->check_user_session();
@@ -26,40 +32,40 @@ $custom_fields = $Tools->fetch_custom_fields('devices');
 # prepare HTML variables
 $custom_fields_names = "";
 $custom_fields_boxes = "";
-$section_ids = array();
-$fields = array ( 'id', 'hostname', 'ip_addr', 'type', 'description', 'sections', 'rack', 'rack_start', 'rack_size', 'location' );
+$section_ids = [];
+$fields = ['id', 'hostname', 'ip_addr', 'type', 'description', 'sections', 'rack', 'rack_start', 'rack_size', 'location'];
 
-if(sizeof($custom_fields) > 0) {
-	foreach($custom_fields as $myField) {
-		//change spaces to "___" so it can be used as element id
-		$myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
-		array_push ( $fields, $myField['nameTemp'] );
-	}
+if (sizeof($custom_fields) > 0) {
+    foreach ($custom_fields as $myField) {
+        //change spaces to "___" so it can be used as element id
+        $myField['nameTemp'] = str_replace(" ", "___", $myField['name']);
+        array_push($fields, $myField['nameTemp']);
+    }
 }
 
-$section_ids = array ();
-$devtypes =  $Devtype->fetch_all_objects("deviceTypes", "tid");
+$section_ids = [];
+$devtypes = $Devtype->fetch_all_objects("deviceTypes", "tid");
 $devices = $Devices->fetch_all_objects("devices", "id");
 $all_sections = $Sections->fetch_all_sections();
 
 if (is_array($all_sections)) {
-	foreach ($all_sections as $section) {
-		$section = (array) $section;
-		$section_ids[$section['id']] = $section;
-	}
+    foreach ($all_sections as $section) {
+        $section = (array)$section;
+        $section_ids[$section['id']] = $section;
+    }
 }
 
 if (is_array($deviceTypes)) {
-	foreach ($deviceTypes as $d) {
-	    $d = (array) $d;
-	    $deviceTypes[$d['tid']] = $d;
-	}
+    foreach ($deviceTypes as $d) {
+        $d = (array)$d;
+        $deviceTypes[$d['tid']] = $d;
+    }
 }
 
 
 # Create a workbook
 $today = date("Ymd");
-$filename = $today."_phpipam_deviceTypes_export.xls";
+$filename = $today . "_phpipam_deviceTypes_export.xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -82,10 +88,9 @@ $curRow = 0;
 $curColumn = 0;
 
 
-
 foreach ($fields as $k) {
-    if( ($_GET[$k] == "on") ) {
-        $worksheet->write($curRow, $curColumn, _($k) ,$format_header);
+    if (($_GET[$k] == "on")) {
+        $worksheet->write($curRow, $curColumn, _($k), $format_header);
         $curColumn++;
     }
 }
@@ -94,18 +99,18 @@ $curRow++;
 $curColumn = 0;
 
 foreach ($devices as $d) {
-	//cast
-	$d = (array) $d;
-
+    //cast
+    $d = (array)$d;
+    
     foreach ($fields as $k) {
-        if( (isset($_GET[$k])) && ($_GET[$k] == "on") ) {
+        if ((isset($_GET[$k])) && ($_GET[$k] == "on")) {
             $worksheet->write($curRow, $curColumn, $d[$k], $format_text);
             $curColumn++;
         }
     }
-
-	$curRow++;
-	$curColumn = 0;
+    
+    $curRow++;
+    $curColumn = 0;
 }
 
 

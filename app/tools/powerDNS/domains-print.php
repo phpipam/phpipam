@@ -36,7 +36,9 @@ switch ($type) {
 }
 
 // if serach blank unset
-if (strlen(@$_POST['domain-filter']) == 0) {unset($_POST['domain-filter']);}
+if (strlen(@$_POST['domain-filter']) == 0) {
+    unset($_POST['domain-filter']);
+}
 
 // if search filter out hits
 if ($_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
@@ -63,91 +65,99 @@ if ($_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
 
 ?>
 
-<br>
-<h4><?php print $title;?></h4><hr>
+    <br>
+    <h4><?php print $title; ?></h4>
+    <hr>
 
-<!-- Back -->
-<div class="btn-group">
-    <?php if ($domains === false && isset($_POST['domain-filter'])) {?>
-    <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link("tools", "powerDNS", $_GET['subnetId']);?>"><i class='fa fa-angle-left'></i> <?php print _('Back');?></a>
-    <?php }?>
-    <?php if ($User->get_module_permissions ("pdns")>2) {?>
-    <!-- Create -->
-	<div class="btn-group noborder">
-        <button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain');?></button>
-	</div>
-
-   <?php }?>
-</div>
-<br>
+    <!-- Back -->
+    <div class="btn-group">
+        <?php if ($domains === false && isset($_POST['domain-filter'])) { ?>
+            <a class='btn btn-sm btn-default btn-default'
+               href="<?php print create_link("tools", "powerDNS", $_GET['subnetId']); ?>"><i
+                        class='fa fa-angle-left'></i> <?php print _('Back'); ?></a>
+        <?php } ?>
+        <?php if ($User->get_module_permissions("pdns") > 2) { ?>
+            <!-- Create -->
+            <div class="btn-group noborder">
+                <button class='btn btn-sm btn-default btn-success open_popup'
+                        data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0'>
+                    <i class='fa fa-plus'></i> <?php print _('Create domain'); ?></button>
+            </div>
+        
+        <?php } ?>
+    </div>
+    <br>
 
 
 <?php
 // none - filtered
-if ($domains === false && isset($_POST['domain-filter'])) {$Result->show("info alert-absolute", _("No records found for filter ") . "'" . $_POST['domain-filter'] . "'", false);}
-// none
-elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains configured"), false);} else {
-
+if ($domains === false && isset($_POST['domain-filter'])) {
+    $Result->show("info alert-absolute", _("No records found for filter ") . "'" . $_POST['domain-filter'] . "'", false);
+} // none
+elseif ($domains === false) {
+    $Result->show("info alert-absolute", _("No domains configured"), false);
+} else {
+    
     ?>
 
-<!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns">
+    <!-- table -->
+    <table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns">
 
-<!-- Headers -->
-<thead>
-<tr>
-	<?php if ($User->get_module_permissions ("pdns")>1) { ?>
-	<th style="width:80px;"></th>
-	<?php } ?>
-    <th><?php print _('Domain');?></th>
-    <th><?php print _('Type');?></th>
-    <th><?php print _('Master NS');?></th>
-    <th><?php print _('Records');?></th>
-    <th><?php print _('Serial number');?></th>
-</tr>
-</thead>
+        <!-- Headers -->
+        <thead>
+        <tr>
+            <?php if ($User->get_module_permissions("pdns") > 1) { ?>
+                <th style="width:80px;"></th>
+            <?php } ?>
+            <th><?php print _('Domain'); ?></th>
+            <th><?php print _('Type'); ?></th>
+            <th><?php print _('Master NS'); ?></th>
+            <th><?php print _('Records'); ?></th>
+            <th><?php print _('Serial number'); ?></th>
+        </tr>
+        </thead>
 
-<tbody>
-<!-- domains -->
-<?php
-/* prints domain records */
-foreach ($domains as $d) {
-    // nulls
-    foreach ($d as $k => $v) {
-        if (strlen($v) == 0) {
-            $d->$k = "<span class='muted'>/</span>";
+        <tbody>
+        <!-- domains -->
+        <?php
+        /* prints domain records */
+        foreach ($domains as $d) {
+            // nulls
+            foreach ($d as $k => $v) {
+                if (strlen($v) == 0) {
+                    $d->$k = "<span class='muted'>/</span>";
+                }
+                
+            }
+            // cont records
+            $cnt = $PowerDNS->count_domain_records($d->id);
+            // get SOA record
+            $soa = $PowerDNS->fetch_domain_records_by_type($d->id, "SOA");
+            $serial = explode(" ", $soa[0]->content);
+            $serial = $serial[2];
+            
+            print "<tr>";
+            if ($User->get_module_permissions("pdns") > 1) {
+                // actions
+                print "	<td>";
+                print "	<div class='btn-group'>";
+                print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
+                if ($User->get_module_permissions("pdns") > 2)
+                    print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='delete' data-id='$d->id'><i class='fa fa-times'></i></button>";
+                print "	</div>";
+                print "	</td>";
+            }
+            
+            // content
+            print "	<td><a href='" . create_link("tools", "powerDNS", $_GET['subnetId'], "records", $d->name) . "'>$d->name</a></td>";
+            print "	<td><span class='badge badge1'>$d->type</span></td>";
+            print "	<td>$d->master</td>";
+            print "	<td><span class='badge'>$cnt</span></td>";
+            print "	<td>$serial</td>";
+            
+            print "</tr>";
         }
-
-    }
-    // cont records
-    $cnt = $PowerDNS->count_domain_records($d->id);
-    // get SOA record
-    $soa = $PowerDNS->fetch_domain_records_by_type($d->id, "SOA");
-    $serial = explode(" ", $soa[0]->content);
-    $serial = $serial[2];
-
-    print "<tr>";
-    if ($User->get_module_permissions ("pdns")>1) {
-        // actions
-        print "	<td>";
-        print "	<div class='btn-group'>";
-        print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-        if($User->get_module_permissions ("pdns")>2)
-        print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='delete' data-id='$d->id'><i class='fa fa-times'></i></button>";
-        print "	</div>";
-        print "	</td>";
-    }
-
-    // content
-    print "	<td><a href='" . create_link("tools", "powerDNS", $_GET['subnetId'], "records", $d->name) . "'>$d->name</a></td>";
-    print "	<td><span class='badge badge1'>$d->type</span></td>";
-    print "	<td>$d->master</td>";
-    print "	<td><span class='badge'>$cnt</span></td>";
-    print "	<td>$serial</td>";
-
-    print "</tr>";
-}
-?>
-</tbody>
-</table>
-<?php }?>
+        ?>
+        </tbody>
+    </table>
+<?php } ?>

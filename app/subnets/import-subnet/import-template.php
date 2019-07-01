@@ -1,26 +1,26 @@
 <?php
 
 /**
- *	Generate XLS template
+ *    Generate XLS template
  *********************************/
 
 /* functions */
-require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require( dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
+require_once(dirname(__FILE__) . '/../../../functions/functions.php');
+require(dirname(__FILE__) . '/../../../functions/PEAR/Spreadsheet/Excel/Writer.php');
 
 # classes
-$Database 	= new Database_PDO;
-$User 		= new User ($Database);
-$Tools	 	= new Tools ($Database);
-$Addresses	= new Addresses ($Database);
-$Result 	= new Result;
+$Database = new Database_PDO;
+$User = new User ($Database);
+$Tools = new Tools ($Database);
+$Addresses = new Addresses ($Database);
+$Result = new Result;
 
 # verify that user is logged in
 $User->check_user_session();
 
 
 // Create a workbook
-$filename = "phpipam_template_". date("Y-m-d") .".xls";
+$filename = "phpipam_template_" . date("Y-m-d") . ".xls";
 $workbook = new Spreadsheet_Excel_Writer();
 $workbook->setVersion(8);
 
@@ -47,9 +47,9 @@ $worksheet->write($lineCount, 8, _('port'));
 $worksheet->write($lineCount, 9, _('note'));
 $worksheet->write($lineCount, 10, _('location'));
 $fc = 11;
-foreach($custom_address_fields as $k=>$f) {
-	$worksheet->write($lineCount, $fc, $k);
-	$fc++;
+foreach ($custom_address_fields as $k => $f) {
+    $worksheet->write($lineCount, $fc, $k);
+    $fc++;
 }
 
 // sending HTTP headers

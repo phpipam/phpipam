@@ -3,28 +3,30 @@
 $User->check_user_session();
 
 # default load ip-calculator
-if(!isset($_GET['subnetId'])) {
+if (!isset($_GET['subnetId'])) {
     $_GET['subnetId'] = "ip-calculator";
 }
 ?>
 
-<h4><?php print _('IP and bandwidth calculator');?></h4>
-<hr>
+    <h4><?php print _('IP and bandwidth calculator'); ?></h4>
+    <hr>
 
-<!-- tabs -->
-<ul class='nav nav-tabs' style='margin-bottom:20px;'>
-    <li role='presentation' <?php if($_GET['subnetId']=="ip-calculator") print "class='active'"; ?>> <a href='<?php print create_link("tools", "ip-calculator", "ip-calculator"); ?>'><?php print _("IP calculator"); ?></a></li>
-    <li role='presentation' <?php if($_GET['subnetId']=="bw-calculator") print "class='active'"; ?>> <a href='<?php print create_link("tools", "ip-calculator", "bw-calculator"); ?>'><?php print _("Bandwidth calculator"); ?></a></li>
-</ul>
+    <!-- tabs -->
+    <ul class='nav nav-tabs' style='margin-bottom:20px;'>
+        <li role='presentation' <?php if ($_GET['subnetId'] == "ip-calculator") print "class='active'"; ?>><a
+                    href='<?php print create_link("tools", "ip-calculator", "ip-calculator"); ?>'><?php print _("IP calculator"); ?></a>
+        </li>
+        <li role='presentation' <?php if ($_GET['subnetId'] == "bw-calculator") print "class='active'"; ?>><a
+                    href='<?php print create_link("tools", "ip-calculator", "bw-calculator"); ?>'><?php print _("Bandwidth calculator"); ?></a>
+        </li>
+    </ul>
 
-<!-- details -->
+    <!-- details -->
 <?php
-if($_GET['subnetId']=="ip-calculator") {
+if ($_GET['subnetId'] == "ip-calculator") {
     include("ip-calculator.php");
-}
-elseif($_GET['subnetId']=="bw-calculator") {
+} elseif ($_GET['subnetId'] == "bw-calculator") {
     include("bw-calculator.php");
-}
-else {
+} else {
     $Result->show("danger", _("Invalid request"), false);
 }

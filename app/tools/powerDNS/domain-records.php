@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("pdns", 1, true, false);
+$User->check_module_permissions("pdns", 1, true, false);
 
 // Determines where we link back to
 $link_section = $_GET['page'] == "administration" ? 'administration' : "tools";
@@ -23,7 +23,7 @@ if ($domain === false) {
     $PowerDNS->set_query_values(10000, "name,type", " asc");
     // fetch records
     $records = $PowerDNS->fetch_all_domain_records($domain->id);
-
+    
     // exclude SOA, NS
     if ($records !== false) {
         foreach ($records as $k => $r) {
@@ -39,168 +39,178 @@ if ($domain === false) {
                 unset($records[$k]);
             }
             // split to $origins ?
-
+            
         }
-
+        
         // sort so SOA appears at the top
-        $order = array();
-        if(isset($records_default)) {
+        $order = [];
+        if (isset($records_default)) {
             foreach ($records_default as $key => $row) {
                 $order[$key] = $row->order;
             }
             array_multisort($records_default, SORT_ASC, SORT_NUMERIC, $order);
         }
     }
-
+    
     ?>
 
-<br>
-<h4><?php print _('Records for domain');?> <strong><?php print $domain->name;?></strong></h4><hr>
+    <br>
+    <h4><?php print _('Records for domain'); ?> <strong><?php print $domain->name; ?></strong></h4>
+    <hr>
 
-<!-- domain details -->
-<?php if($User->get_module_permissions ("pdns")>0) { ?>
-<blockquote style="margin-left: 30px;margin-top: 10px;">
+    <!-- domain details -->
+    <?php if ($User->get_module_permissions("pdns") > 0) { ?>
+        <blockquote style="margin-left: 30px;margin-top: 10px;">
 
-    <table class="table table-pdns-details table-auto table-condensed">
-    <tr>
-        <td><?php print _("Domain type:");?></td>
-        <td><span class="badge badge1"><?php print $domain->type;?></span></td>
-    </tr>
+            <table class="table table-pdns-details table-auto table-condensed">
+                <tr>
+                    <td><?php print _("Domain type:"); ?></td>
+                    <td><span class="badge badge1"><?php print $domain->type; ?></span></td>
+                </tr>
+                <?php
+                // slave check
+                if ($domain->type == "SLAVE") {
+                    // master servers
+                    print "<tr class='text-top'>";
+                    if (strpos($domain->master, ";") !== false) {
+                        $master = explode(";", $domain->master);
+                    } else {
+                        $master = [$domain->master];
+                    }
+                    print "<td>" . _("Master servers") . ":</td>";
+                    print "<td>";
+                    foreach ($master as $k => $m) {
+                        if (strlen($m) > 0) {
+                            print "<span class='badge badge1'>$m</span><br>";
+                        }
+                    }
+                    print "</td>";
+                    print "</tr>";
+                    
+                    // notified serial
+                    $domain->notified_serial = strlen($domain->notified_serial) > 0 ? $domain->notified_serial : "/";
+                    print "<tr>";
+                    print " <td>" . _("Notified serial:") . "</td>";
+                    print " <td>" . $domain->notified_serial . "</td>";
+                    print "</tr>";
+                    // last check
+                    $domain->last_check = strlen($domain->last_check) > 0 ? $domain->last_check : "Never";
+                    print "<tr>";
+                    print " <td>" . _("Last check:") . "</td>";
+                    print " <td>" . $domain->last_check . "</td>";
+                    print "</tr>";
+                }
+                ?>
+
+            </table>
+        </blockquote>
+    <?php } ?>
+
+    <!-- Add new -->
+    <div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
+        <a href="<?php print create_link($link_section, "powerDNS", $_GET['subnetId']); ?>"
+           class='btn btn-sm btn-default'>
+            <i class='fa fa-angle-left'></i> <?php print _('Domains'); ?>
+        </a>
+        <?php if ($User->get_module_permissions("pdns") > 1) { ?>
+            <button class='btn btn-sm btn-default btn-success editRecord' data-action='add' data-id='0'
+                    data-domain_id='<?php print $domain->id; ?>'>
+                <i class='fa fa-plus'></i> <?php print _('New record'); ?>
+            </button>
+        <?php } ?>
+    </div>
+    
     <?php
-    // slave check
-    if ($domain->type == "SLAVE") {
-        // master servers
-        print "<tr class='text-top'>";
-        if (strpos($domain->master, ";") !== false) {$master = explode(";", $domain->master);} else { $master = array($domain->master);}
-        print "<td>" . _("Master servers") . ":</td>";
-        print "<td>";
-        foreach ($master as $k => $m) {
-            if (strlen($m) > 0) {
-                print "<span class='badge badge1'>$m</span><br>";
-            }
-        }
-        print "</td>";
-        print "</tr>";
-
-        // notified serial
-        $domain->notified_serial = strlen($domain->notified_serial) > 0 ? $domain->notified_serial : "/";
-        print "<tr>";
-        print " <td>" . _("Notified serial:") . "</td>";
-        print " <td>" . $domain->notified_serial . "</td>";
-        print "</tr>";
-        // last check
-        $domain->last_check = strlen($domain->last_check) > 0 ? $domain->last_check : "Never";
-        print "<tr>";
-        print " <td>" . _("Last check:") . "</td>";
-        print " <td>" . $domain->last_check . "</td>";
-        print "</tr>";
-    }
-    ?>
-
-    </table>
-</blockquote>
-<?php } ?>
-
-<!-- Add new -->
-<div class="btn-group" style="margin-bottom:10px;margin-top: 25px;">
-	<a href="<?php print create_link($link_section, "powerDNS", $_GET['subnetId']);?>" class='btn btn-sm btn-default'>
-		<i class='fa fa-angle-left'></i> <?php print _('Domains');?>
-	</a>
-    <?php if($User->get_module_permissions ("pdns")>1) { ?>
-	<button class='btn btn-sm btn-default btn-success editRecord' data-action='add' data-id='0' data-domain_id='<?php print $domain->id;?>'>
-		<i class='fa fa-plus'></i> <?php print _('New record');?>
-	</button>
-    <?php } ?>
-</div>
-
-<?php
 // none
-    if ($records === false) {$Result->show("info", _("Domain has no records"), false);} else {
+    if ($records === false) {
+        $Result->show("info", _("Domain has no records"), false);
+    } else {
         ?>
-<!--  -->
+        <!--  -->
 
-<!-- table -->
-<table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns_records">
+        <!-- table -->
+        <table id="zonesPrint" class="table sorted table-striped table-top" data-cookie-id-table="pdns_records">
 
-<!-- Headers -->
-<thead>
-<tr>
-    <?php if($User->get_module_permissions ("pdns")>1) { ?>
-	<th></th>
-    <?php } ?>
-    <th><?php print _('Name');?></th>
-    <th><?php print _('Type');?></th>
-    <th><?php print _('Content');?></th>
-    <th><?php print _('TTL');?></th>
-    <th><?php print _('Prio');?></th>
-    <th><?php print _('Last update');?></th>
-</tr>
-</thead>
+            <!-- Headers -->
+            <thead>
+            <tr>
+                <?php if ($User->get_module_permissions("pdns") > 1) { ?>
+                    <th></th>
+                <?php } ?>
+                <th><?php print _('Name'); ?></th>
+                <th><?php print _('Type'); ?></th>
+                <th><?php print _('Content'); ?></th>
+                <th><?php print _('TTL'); ?></th>
+                <th><?php print _('Prio'); ?></th>
+                <th><?php print _('Last update'); ?></th>
+            </tr>
+            </thead>
 
-<tbody>
-<?php
-
-// function to print record
-function print_record ($r) {
-    global $User;
-    // check if disabled
-    $trclass = $r->disabled == "1" ? 'alert alert-danger' : '';
-
-    print "<tr class='$trclass'>";
-    // actions
-    if ($User->get_module_permissions ("pdns")>1) {
-    print "	<td>";
-    print "	<div class='btn-group'>";
-    print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
-    if ($User->get_module_permissions ("pdns")>2)
-    print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
-    print "	</div>";
-    print "	</td>";
+            <tbody>
+            <?php
+            
+            // function to print record
+            function print_record($r)
+            {
+                global $User;
+                // check if disabled
+                $trclass = $r->disabled == "1" ? 'alert alert-danger' : '';
+                
+                print "<tr class='$trclass'>";
+                // actions
+                if ($User->get_module_permissions("pdns") > 1) {
+                    print "	<td>";
+                    print "	<div class='btn-group'>";
+                    print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
+                    if ($User->get_module_permissions("pdns") > 2)
+                        print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
+                    print "	</div>";
+                    print "	</td>";
+                }
+                
+                // content
+                print "	<td>$r->name</td>";
+                print "	<td><span class='badge badge1'>$r->type</span></td>";
+                print "	<td>$r->content</td>";
+                print "	<td>$r->ttl</td>";
+                print "	<td>$r->prio</td>";
+                print "	<td>$r->change_date</td>";
+                
+                print "</tr>";
+            }
+            
+            // default records
+            if (isset($records_default)) {
+                
+                print "<tr>";
+                print "	<td class='th' colspan='7'  style='padding-top:20px;'>" . _("SOA, NS records") . "</td>";
+                print "</tr>";
+                
+                // defaults
+                foreach ($records_default as $r) {
+                    print_record($r);
+                }
+            }
+            
+            // host records
+            print "<tr>";
+            print "	<td class='th' colspan='7' style='padding-top:20px;'>" . _("Domain records") . "</td>";
+            print "</tr>";
+            
+            // defaults
+            if (sizeof($records) > 0) {
+                foreach ($records as $r) {
+                    print_record($r);
+                }
+            } else {
+                print "<tr>";
+                print "	<td colspan='7'><div class='alert alert-info'>" . _("No records") . "</div></td>";
+                print "</tr>";
+            }
+            
+            ?>
+            </tbody>
+        </table>
+        <?php
     }
-
-    // content
-    print "	<td>$r->name</td>";
-    print "	<td><span class='badge badge1'>$r->type</span></td>";
-    print "	<td>$r->content</td>";
-    print "	<td>$r->ttl</td>";
-    print "	<td>$r->prio</td>";
-    print "	<td>$r->change_date</td>";
-
-    print "</tr>";
-}
-
-// default records
-if (isset($records_default)) {
-
-    print "<tr>";
-    print "	<td class='th' colspan='7'  style='padding-top:20px;'>" . _("SOA, NS records") . "</td>";
-    print "</tr>";
-
-    // defaults
-    foreach ($records_default as $r) {
-        print_record($r);
-    }
-}
-
-// host records
-print "<tr>";
-print "	<td class='th' colspan='7' style='padding-top:20px;'>" . _("Domain records") . "</td>";
-print "</tr>";
-
-// defaults
-if (sizeof($records) > 0) {
-    foreach ($records as $r) {
-        print_record($r);
-    }
-} else {
-    print "<tr>";
-    print "	<td colspan='7'><div class='alert alert-info'>" . _("No records") . "</div></td>";
-    print "</tr>";
-}
-
-        ?>
-</tbody>
-</table>
-<?php
-}
 }

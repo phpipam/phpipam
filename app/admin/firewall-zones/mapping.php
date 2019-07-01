@@ -20,7 +20,7 @@ $firewallZoneMappings = $Zones->get_zone_mappings();
 # reorder by device
 if (is_array($firewallZoneMappings)) {
 	# devices
-	$devices = array();
+	$devices = [];
 	# add
 	foreach ($firewallZoneMappings as $m) {
 		$devices[$m->deviceId][] = $m;
