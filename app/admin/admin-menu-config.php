@@ -117,6 +117,7 @@ $admin_menu_items = array(
                 		'pstn-prefixes',
                         '2fa',
                         'customers',
+                        'routing',
                         'ip-groups',
                     );
 
