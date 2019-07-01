@@ -300,10 +300,6 @@ class Common_api_functions {
 		# reindex filtered result
 		$result = array_values($result2);
 
-		// Single result - return as object
-		if (sizeof($result) == 1)
-			return $result[0];
-
 		return $result;
 	}
 
@@ -756,9 +752,10 @@ class Common_api_functions {
 	 * @access protected
 	 * @param mixed $result (default: null)
 	 * @param mixed $controller (default: null)
+	 * @param mixed $tools_table (default: null)
 	 * @return void
 	 */
-	protected function remap_keys ($result = null, $controller = null) {
+	protected function remap_keys ($result = null, $controller = null, $tools_table = null) {
 		// define keys array
 		$this->keys = array("switch"=>"deviceId", "state"=>"tag", "ip_addr"=>"ip");
 
@@ -767,8 +764,8 @@ class Common_api_functions {
 		if($controller=="vrfs")  	{ $this->keys['vrfId'] = "id"; }
 		if($controller=="circuits") { $this->keys['cid'] = "circuit_id"; }
 		if($controller=="l2domains"){ $this->keys['permissions'] = "sections"; }
-		if($this->_params->controller=="tools" && $this->_params->id=="deviceTypes")  { $this->keys['tid'] = "id"; }
-		if($this->_params->controller=="tools" && $this->_params->id=="nameservers")  { $this->keys['permissions'] = "sections"; }
+		if($this->_params->controller=="tools" && $tools_table=="deviceTypes")  { $this->keys['tid'] = "id"; }
+		if($this->_params->controller=="tools" && $tools_table=="nameservers")  { $this->keys['permissions'] = "sections"; }
 		if($this->_params->controller=="subnets" )  								  { $this->keys['ip'] = "ip_addr"; }
 
 		// special keys for POST / PATCH
@@ -776,8 +773,8 @@ class Common_api_functions {
 		if($this->_params->controller=="circuits")   								  { $this->keys['cid'] 		= "circuit_id"; }
 		}
 
-		// POST / PATCH
-		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH")		{ return $this->remap_update_keys (); }
+		// POST / PATCH / DELETE
+		if ($_SERVER['REQUEST_METHOD']=="POST" || $_SERVER['REQUEST_METHOD']=="PATCH" || $_SERVER['REQUEST_METHOD']=="DELETE")		{ return $this->remap_update_keys (); }
 		// GET
 		elseif ($_SERVER['REQUEST_METHOD']=="GET")											{ return $this->remap_result_keys ($result); }
 	}

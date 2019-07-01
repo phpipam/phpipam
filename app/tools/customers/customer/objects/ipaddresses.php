@@ -49,9 +49,8 @@ $statuses = explode(";", $User->settings->pingStatus);
 	print "<th class='s_ipaddr'>"._('Subnet')."</th>";
 	print "<th>"._('Hostname')."</th>";
 	print "<th>"._('Description')."</th>";
-	if(in_array('mac', $selected_ip_fields))
-	print "<th>"._('MAC')."</th>";
-	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
+	if(in_array('mac', $selected_ip_fields))	{ print "<th>"._('MAC')."</th>"; }
+	if(in_array('note', $selected_ip_fields)) 	{ print "<th>"._('Note')."</th>"; }
 	if(in_array('switch', $selected_ip_fields)) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
@@ -108,7 +107,7 @@ foreach($addresses as $dummy) {
     print "	<td><a href='".create_link("subnets", $subnet['sectionId'], $subnet['id'])."' rel='tooltip' title='".$subnet['description']."'>".$Tools->transform_to_dotted($subnet['subnet'])."/".$subnet['mask']."</a></td>";
 
     // hostname
-	print "<td class='hostname'>{$addresses[$n]->dns_name}</td>";
+	print "<td class='hostname'>{$addresses[$n]->hostname}</td>";
 
 	// print description - mandatory
 	print "<td class='description'>".$addresses[$n]->description."</td>";

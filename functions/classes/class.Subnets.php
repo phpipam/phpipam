@@ -632,7 +632,7 @@ class Subnets extends Common_functions {
 		}
 		$possible_parents = implode(',', $possible_parents);
 
-		$query = "SELECT $result_fields FROM `subnets` WHERE isFolder = 0 AND ";
+		$query = "SELECT $result_fields FROM `subnets` WHERE COALESCE(`isFolder`,0) = 0 AND ";
 		if (!is_null($method)) $query .= " `$method` = '".$this->Database->escape($value)."' AND ";
 		$query .= " (   ( LPAD(`subnet`,39,0) >= LPAD('$cidr_network',39,0) AND LPAD(`subnet`,39,0) <= LPAD('$cidr_broadcast',39,0) )";
 		$query .= "  OR (`subnet`,`mask`) IN ($possible_parents)  ) ";
@@ -676,7 +676,7 @@ class Subnets extends Common_functions {
 	 */
 	private function fetch_all_subnets_for_Check($discoverytype, $agentId) {
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` WHERE `scanAgent` = ? AND `$discoverytype` = 1 AND `isFolder`= 0 AND `mask` > 0;", array($agentId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` WHERE `scanAgent` = ? AND `$discoverytype` = 1 AND COALESCE(`isFolder`,0) = 0 AND `mask` > 0;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;
@@ -3214,7 +3214,7 @@ class Subnets extends Common_functions {
 		$foldersTree->walk(true);
 		$dropdown->subnetsTree($foldersTree);
 
-		if ($isFolder === false) {
+		if ($isFolder!=1) {
 			$dropdown->optgroup_open(_("Subnets"));
 			foreach($section_subnets as $subnet) { $subnetsTree->add($subnet); }
 			$subnetsTree->walk(false);

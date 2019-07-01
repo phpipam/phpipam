@@ -59,7 +59,7 @@ foreach($Addresses->address_types as $t) {
 }
 
 # remove port, owner, device, note, mac etc if none is set to preserve space
-$cnt_obj = ["port"=>0, "switch"=>0, "owner"=>0, "note"=>0, "mac"=>0, "customer_id"];
+$cnt_obj = ["port"=>0, "switch"=>0, "owner"=>0, "note"=>0, "mac"=>0, "customer_id"=>0];
 foreach ($addresses as $a) {
 	if (strlen($a->port)>0)	{ $cnt_obj["port"]++; }
 	if ($a->switch>0)		{ $cnt_obj["switch"]++; }
@@ -72,9 +72,9 @@ foreach ($addresses as $a) {
 
 // check and remove empty
 foreach ($cnt_obj as $field=>$c) {
-	if ($c=="0")	{ unset($selected_ip_fields[array_search($field, $selected_ip_fields)]); }
+	if ($c==0 && in_array($field, $selected_ip_fields))	{ unset($selected_ip_fields[array_search($field, $selected_ip_fields)]);  }
 }
-
+$selected_ip_fields = array_values($selected_ip_fields);  //Clean up array index
 # remove custom fields if all are empty!
 foreach($custom_fields as $field) {
 	$sizeMyFields[$field['name']] = 0;				// default value

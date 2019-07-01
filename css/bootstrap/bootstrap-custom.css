@@ -2623,6 +2623,12 @@ div.jqueryError a {
 .dropdown-header {
     font-size: 14px;
 }
+.dropdown-menu {
+	z-index: 50 !important;
+}
+#popup .dropdown-menu {
+	z-index: 1000 !important;
+}
 ul.dropdown-menu li a {
     font-size: 12px;
 }

@@ -1730,7 +1730,8 @@ class User extends Common_functions {
                 "customers",
                 "locations",
                 "devices",
-                "dhcp"
+                "dhcp",
+                "routing"
             ];
     }
 

@@ -96,6 +96,15 @@ $tool_items["circuits"] = array (
                         "icon"=>"fa-random"
                         );
 }
+// Routing
+if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>0) {
+$tool_items["routing"] = array (
+                        "name"=>"Routing",
+                        "href"=>array("tools", "routing"),
+                        "title"=>"Show routing",
+                        "icon"=>"fa-exchange"
+                        );
+}
 // pstn
 if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>0) {
 $tool_items["pstn-prefixes"] = array (

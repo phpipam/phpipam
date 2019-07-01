@@ -43,6 +43,8 @@ if($User->settings->enableVRF==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud",  "name"=>"VRF", 					"href"=>"vrf", 					"description"=>"VRF management");
 if($User->settings->enableNAT==1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"NAT", 				    "href"=>"nat", 				        "description"=>"NAT settings");
+if($User->settings->enableRouting==1)
+$admin_menu['IP related management'][] = array("show"=>true,    "icon"=>"fa-exchange",  "name"=>"Routing",              "href"=>"routing",                  "description"=>"Routing management");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"Nameservers", 			"href"=>"nameservers", 				"description"=>"Recursive nameserver sets for subnets");
 if($User->settings->enableFirewallZones == 1)
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-fire","name"=>"Firewall Zones", 		    "href"=>"firewall-zones", 			"description"=>"Firewall zone management");
@@ -119,5 +121,6 @@ $admin_menu_items = array(
                         'customers',
                         'routing',
                         'ip-groups',
+                        'routing'
                     );
 

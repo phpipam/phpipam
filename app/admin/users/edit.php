@@ -351,6 +351,9 @@ $(document).ready(function(){
 	// PSTN
 	if ($User->settings->enablePSTN==1)
 	$perm_modules["perm_pstn"] = "PSTN";
+	// Routing
+	if ($User->settings->enableRouting==1)
+	$perm_modules["perm_routing"] = "Routing";
 
 	// get permissions
 	$module_permissions = json_decode($user['module_permissions'], true);

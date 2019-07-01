@@ -425,6 +425,19 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+
+<!-- Routing -->
+<tr>
+	<td class="title"><?php print _('Routing module'); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableRouting" <?php if($settings['enableRouting'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable or disable Routing module for routing management'); ?>
+	</td>
+</tr>
+
+
 <!-- Link fields -->
 <tr>
 	<td class="title"><?php print _('Link addresses'); ?></td>

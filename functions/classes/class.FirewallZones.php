@@ -637,7 +637,7 @@ class FirewallZones extends Common_functions {
 			print '<span><i class="fa fa-close"></i></span>';
 			print "</a>";
 
-			if ($network->subnetIsFolder == 1 ) {
+			if ($network->subnetIsFolder == 1) {
 				print 'Folder: '.$network->subnetDescription;
 			} else {
 				# display network information with or without description

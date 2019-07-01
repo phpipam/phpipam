@@ -98,7 +98,7 @@ class SubnetsMasterDropDown {
 		if (!is_object($subnet)) return;
 
 		// Make use of $subnet->ip if already set by cache/previous call
-		if ($subnet->isFolder==0 && !isset($subnet->ip)) {
+		if ($subnet->isFolder!=1 && !isset($subnet->ip)) {
 			$subnet->ip = $this->Subnets->transform_to_dotted($subnet->subnet);
 		}
 
