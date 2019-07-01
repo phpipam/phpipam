@@ -82,6 +82,40 @@ VALUES
 	(9,6,'172037637','DHCP range',NULL,4),
 	(10,6,'172037638','DHCP range',NULL,4);
 
+-- ipGroups: table
+CREATE TABLE `ipGroups` (
+  `id`            int(11) NOT NULL AUTO_INCREMENT,
+  `parents`       varchar(255)     DEFAULT NULL,
+  `name`          varchar(255)     DEFAULT NULL,
+  `type`          varchar(50)      DEFAULT NULL,
+  `last_modified` datetime         DEFAULT CURRENT_TIMESTAMP,
+  `description`   varchar(255)     DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `groups_name_uindex` (`name`)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 13
+  DEFAULT CHARSET = latin1
+  COMMENT = 'ip groups';
+
+  -- ipGroupsMapping: table
+CREATE TABLE `ipGroupsMapping` (
+  `id`       int(11) NOT NULL AUTO_INCREMENT,
+  `ip_id`    int(11)          DEFAULT NULL,
+  `group_id` int(11)          DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ipGroupsMapping_ipaddresses_id_fk` (`ip_id`),
+  KEY `ipGroupsMapping_ipGroups_id_fk` (`group_id`),
+  CONSTRAINT `ipGroupsMapping_ipGroups_id_fk` FOREIGN KEY (`group_id`) REFERENCES `ipGroups` (`id`),
+  CONSTRAINT `ipGroupsMapping_ipaddresses_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ipaddresses` (`id`)
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 70
+  DEFAULT CHARSET = latin1;
+
+-- No native definition for element: ipGroupsMapping_ipaddresses_id_fk (index)
+
+-- No native definition for element: ipGroupsMapping_ipGroups_id_fk (index)
 
 # Dump of table logs
 # ------------------------------------------------------------
