@@ -53,31 +53,6 @@ foreach ($all_groups as $key => $all_group) {
         unset($all_groups[$key]);
     }
 }
-//
-//// Draw graph of groups
-//$graph = new Fhaculty\Graph\Graph();
-//
-//$parents    = mb_split(', ', $group->parents);
-//$childs     = $Admin->fetch_multiple_objects_by_ids('ipGroups', $parents);
-//$childHosts = [];
-//
-//$master = $graph->createVertex($group->name);
-//$hosts = $Addresses->fetch_address_by_group($parents);
-//
-//foreach ($childs as $child) {
-//    if (!$graph->hasVertex($child->name)) {
-//        $data1 = $graph->createVertex($child->name);
-//    } else {
-//        $data1 = $graph->getVertex($child->name);
-//    }
-//
-//    $master->createEdgeTo($data1);
-//}
-//
-//$graphviz = new Graphp\GraphViz\GraphViz();
-//$graphviz->setFormat('svg');
-//$graph->setAttribute('graphviz.graph.bgcolor', 'transparent');
-//$test = $graphviz->createImageHtml($graph);
 ?>
 
 <script>
@@ -137,8 +112,6 @@ foreach ($all_groups as $key => $all_group) {
     </tr>
 </table>
 </form>
-
-    <div style="display: table; margin: 0 auto;"><?php //echo $test; ?></div>
 </div>
 
 
