@@ -113,11 +113,11 @@ $admin_menu_items = array(
                 		'widgets',
                 		'nat',
                 		'locations',
-                        'circuits',
+                'circuits',
                 		'pstn-prefixes',
-                        '2fa',
-                        'customers',
-                        'routing',
+                '2fa',
+                'customers',
+                'routing',
                         'ip-groups',
                     );
 
