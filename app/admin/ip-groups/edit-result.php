@@ -50,14 +50,14 @@ if(sizeof($error) > 0) {
 	$Result->show("danger", $error, true);
 }
 else {
-    $parents = implode(', ', @$_POST['parents']);
+    $childs = implode(', ', @$_POST['childs']);
 	# create array of values for modification
 	$values = [
 	    "id"          => @$_POST['id'],
         "name"        => $_POST['name'],
         "description" => @$_POST['description'],
         "type"        => @$_POST['type'],
-        "parents"     => $parents
+        "childs"      => $childs
     ];
 	# null
 	$values = $Admin->remove_empty_array_fields($values);

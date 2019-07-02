@@ -85,7 +85,7 @@ VALUES
 -- ipGroups: table
 CREATE TABLE `ipGroups` (
   `id`            int(11) NOT NULL AUTO_INCREMENT,
-  `parents`       varchar(255)     DEFAULT NULL,
+  `childs`       varchar(255)     DEFAULT NULL,
   `name`          varchar(255)     DEFAULT NULL,
   `type`          varchar(50)      DEFAULT NULL,
   `last_modified` datetime         DEFAULT CURRENT_TIMESTAMP,

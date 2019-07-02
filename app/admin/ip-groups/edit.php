@@ -99,12 +99,12 @@ foreach ($all_groups as $key => $all_group) {
     <tr>
         <td><?php print _('Childs'); ?></td>
         <td>
-            <select id="types" multiple="multiple" name="parents[]">
+            <select id="types" multiple="multiple" name="childs[]">
                 <?php
-                $parents = explode(', ', $Admin->strip_xss(@$group->parents));
+                $childs = explode(', ', $Admin->strip_xss(@$group->childs));
 
                 foreach ($all_groups as $item) { ?>
-                    <option <?php echo in_array($item->id, $parents) ? 'selected' : ''; ?> value="<?php echo $item->id; ?>"><?php echo $item->name; ?></option>;
+                    <option <?php echo in_array($item->id, $childs) ? 'selected' : ''; ?> value="<?php echo $item->id; ?>"><?php echo $item->name; ?></option>;
                 <?php } ?>
             </select>
         </td>
