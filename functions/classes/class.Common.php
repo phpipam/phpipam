@@ -739,24 +739,25 @@ class Common_functions  {
 	 */
 	public function array_to_log ($logs, $changelog = false) {
 		$result = "";
-		# reformat
-		if(is_array($logs)) {
-			// changelog
-			if ($changelog===true) {
-			    foreach($logs as $key=>$req) {
-			    	# ignore __ and PHPSESSID
-			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
-			    	else 																  { $result .= "[$key]: $req<br>"; }
-				}
 
-			}
-			else {
-			    foreach($logs as $key=>$req) {
-			    	# ignore __ and PHPSESSID
-			    	if( (substr($key,0,2) == '__') || (substr($key,0,9) == 'PHPSESSID') || (substr($key,0,4) == 'pass') || $key=='plainpass' ) {}
-			    	else 																  { $result .= " ". $key . ": " . $req . "<br>"; }
-				}
-			}
+		if(!is_array($logs))
+			return $result;
+
+		foreach($logs as $key=>$req) {
+			# ignore __ and PHPSESSID
+			if( substr($key,0,2)=='__' || substr($key,0,9)=='PHPSESSID' || substr($key,0,4)=='pass' || $key=='plainpass' )
+				continue;
+
+			// NOTE The colon character ":" is reserved as it used in array_to_log for implode/explode.
+			// Replace colon (U+003A) with alternative characters.
+			// Using JSON encode/decode would be more appropiate but we need to maintain backwards compatibility with historical changelog/logs data in the database.
+			if ($req == "mac")
+				$req = strtr($req, ':', '-'); # Mac-addresses, replace Colon U+003A with hyphen U+002D
+
+			if (strpos($req, ':')!==false)
+				$req = strtr($req, ':', '.'); # Default, replace Colon U+003A with Full Stop U+002E.
+
+			$result .= ($changelog===true) ? "[$key]: $req<br>" : " ". $key . ": " . $req . "<br>";
 		}
 		return $result;
 	}

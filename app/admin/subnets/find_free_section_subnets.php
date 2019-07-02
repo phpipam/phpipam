@@ -32,7 +32,7 @@ $all_subnets = [];              // all existing subnets
 // loop and filter relevant sections
 if ($section_subnets!==false) {
     foreach ($section_subnets as $s) {
-        if ($s->isFolder=="0") {
+        if ($s->isFolder!="1") {
             // only master subnets
             if(!$Subnets->has_slaves ($s->id)) {
                 $all_subnets[] = $s;

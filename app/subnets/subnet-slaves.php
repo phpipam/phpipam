@@ -89,7 +89,7 @@ foreach ($slave_subnets as $slave_subnet) {
 
 	# add full information
 	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
-    if ($slave_subnet['isFull']!==1) {
+    if ($slave_subnet['isFull']!=1) {
         # if usage is 100%, fake usFull to true!
         if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
     }

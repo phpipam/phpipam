@@ -6,6 +6,7 @@
     + Sessions can be now stored in database (#516);
     + Two-factor authentication - otp (Google Authenticator);
     + Customers module (#694);
+    + Routing module (BGP) (#2135);
     + Search for free subnet inside whole section;
 
     Enhancements, changes:
@@ -16,7 +17,9 @@
     + Added compressed actions dropdown;
     + SNMP module no longer requires MIB files;
     + Performance enhancements running under Azure/Amazon;
-    + Added option to disable user (#1327)
+    + Added option to disable user (#1327);
+    + Added policy NAT option;
+    + Added custom NAT fields;
     + Rack module enhancements (#1325):
         + Dynamic rack sizes;
         + Top-down / Bottom-up racks;
@@ -39,12 +42,15 @@
         + Add Mac Search for Addresses controller (#2005);
         + New overlapping API call;
         + New global API parameter filter_match = full,partial,regex;
+        + Add Tools API customers submodule;
+        + Fix filtered results to always return data as array (#2558);
     + Widgets:
         + New user instruction widget (#2383);
 
     Translations:
     ----------------------------
-    + Japanese translation added;
+    + Japanese (ja_JP) translation added;
+    + Traditional Chinese (zh_TW) translation added;
 
     Bugfixes:
     ----------------------------
@@ -61,6 +67,7 @@
     + Fix adding new VLANs to an empty L2Domain (#2400);
     + Fix Nested child subnets with "na" permissions visible (#2223);
     + Fix translations containing apostrophes break functionality (#2504);
+    + Set requestedAuthnContext to false for SAML (#2457);
     + API:
         + Fix inconsistent API success value returned (#2045);
         + Fix filter_by functionality (#2392);

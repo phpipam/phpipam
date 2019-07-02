@@ -15,6 +15,7 @@ to be able to display javascript quickly and correctly.
 
 ## Branches
  - MASTER: Current development release
+ - 1.4: Productional branch for 1.4.x release
  - 1.3: Productional branch for 1.3.x release
  - 1.2: Productional branch for 1.2.x release (obsolete)
  - Other branches: Feature testing

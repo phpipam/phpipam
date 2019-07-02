@@ -61,7 +61,12 @@ $result_addresses = $Tools->search_addresses($search_term, $search_term_edited['
 $result_subnets   = $Tools->search_subnets($search_term, $search_term_edited['high'], $search_term_edited['low'], $_REQUEST['ip']. array());
 
 # if some found print
-if(sizeof($result_addresses)>0 && sizeof($result_subnets)>0) {
+if(sizeof($result_addresses)>0 || sizeof($result_subnets)>0) {
+
+    // init arrays
+    $html1 = [];
+    $html2 = [];
+
     if(sizeof($result_subnets)>0) {
         $html1[] = "<h4>Subnets</h4>";
         foreach ($result_subnets as $s) {
