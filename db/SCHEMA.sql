@@ -994,5 +994,5 @@ CREATE TABLE `routing_subnets` (
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
-UPDATE `settings` SET `version` = "1.4";
-UPDATE `settings` SET `dbversion` = 25;
+UPDATE `settings` SET `version` = "1.5";
+UPDATE `settings` SET `dbversion` = 0;
