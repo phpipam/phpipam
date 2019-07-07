@@ -147,7 +147,7 @@ class FirewallZones extends Common_functions {
 			} elseif($zoneGenerator == 1) {
 				# the highest convertable integer value for dechex() is 4294967295!
 				if($zoneName > 4294967295) {
-					return $this->Result->show("danger", _("The maximum convertable vlaue is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
+					return $this->Result->show("danger", _("The maximum convertable value is reached. Consider to switch to decimal or text mode and change the zone name length value."), true);
 				}
 				if(strlen(dechex($zoneName)) > $zoneLength){
 					return $this->Result->show("danger", _("Maximum zone name length reached! Consider to change your settings in order to generate larger zone names."), true);
