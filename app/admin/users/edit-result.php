@@ -162,7 +162,7 @@ $values['module_permissions'] = json_encode($permissions);
 
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values))	{ $Result->show("danger",  _("User $_POST[action] failed").'!', true); }
-else																	{ $Result->show("success", _("User $_POST[action] successfull").'!', false); }
+else																	{ $Result->show("success", _("User $_POST[action] successful").'!', false); }
 
 # mail user
 if($Admin->verify_checkbox(@$_POST['notifyUser'])!="0") { include("edit-notify.php"); }
