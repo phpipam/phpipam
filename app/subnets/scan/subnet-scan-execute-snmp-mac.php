@@ -22,7 +22,7 @@ if ($subnet===false)                            { $Result->show("danger", _("Inv
 
 # fetch vlan
 $vlan = $Tools->fetch_object ("vlans", "vlanId", $subnet->vlanId);
-if ($vlan===false)                              { $Result->show("danger", _("Subnet must have VLAN assigned for MAc address query"), true);  }
+if ($vlan===false)                              { $Result->show("danger", _("Subnet must have VLAN assigned for MAC address query"), true);  }
 
 # set class
 $Snmp = new phpipamSNMP ();
