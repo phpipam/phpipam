@@ -3128,7 +3128,7 @@ class Subnets extends Common_functions {
 			if($item['domainId']!=1) {
     			$domain = $this->fetch_object("vlanDomains", "id", $item['domainId']);
     			if ($domain!==false) {
-        			$item['l2domain'] = " <span class='badge badge1 badge5' rel='tooltip' title='VLAN is in domain $domain->name'>$domain->name</span>";
+        			$item['l2domain'] = " <span class='badge badge1 badge5' rel='tooltip' title='"._('VLAN is in domain')." $domain->name'>$domain->name</span>";
     			}
 			}
 
