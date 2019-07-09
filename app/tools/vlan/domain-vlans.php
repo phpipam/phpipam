@@ -112,7 +112,6 @@ else {
 				# only 1?
 				if( (($vlans[$m][0]->number)-($vlans[$m-1][0]->number)-1) ==1 ) {
 				print "<td colspan='".(5+$csize)."'><btn class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/edit.php' data-action='add' data-domain='".$vlan_domain->id."' data-number='".($vlan[0]->number -1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan[0]->number -1)." (".(($vlans[$m][0]->number)-($vlans[$m-1][0]->number)-1)." "._('free').")</td>";
-				print "<td colspan='".(5+$csize)."'><btn class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/edit.php' data-action='add' data-domain='".$vlan_domain->id."' data-number='".($vlan[0]->number -1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlan[0]->number -1)." (".(($vlans[$m][0]->number)-($vlans[$m-1][0]->number)-1)." "._('free').")</td>";
 				} else {
 				print "<td colspan='".(5+$csize)."'><btn class='btn btn-xs btn-default open_popup' data-script='app/admin/vlans/edit.php' data-action='add' data-domain='".$vlan_domain->id."' data-number='".($vlans[$m-1][0]->number+1)."'><i class='fa fa-plus'></i></btn> "._('VLAN')." ".($vlans[$m-1][0]->number+1)." - ".($vlan[0]->number -1)." (".(($vlans[$m][0]->number)-($vlans[$m-1][0]->number)-1)." "._('free').")</td>";
 				}
