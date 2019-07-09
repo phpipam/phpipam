@@ -1,7 +1,11 @@
 <table class="donate">
 <tr>
 	<td>
-		<?php var_dump(PUBLISHED); ?>
+		<?php
+		ob_start();
+		var_dump(PUBLISHED);
+		ob_end_clean();
+		?>
 		<a href="http://phpipam.net">phpIPAM IP address management <?php print '[v'. VERSION_VISIBLE. ']'; ?><?php if(PUBLISHED===false) { print " dbversion".DBVERSION; } ?></a>
 	</td>
 
@@ -24,3 +28,4 @@ print '	<td id="donate" class="hidden-xs hidden-sm" rel="tooltip" data-html="tru
 	?>
 </tr>
 </table>
+
