@@ -39,7 +39,7 @@ $User->check_user_session ();
 	<?php } ?>
 
 	<!-- VRF -->
-	<?php if($User->get_module_permissions ("vrf")>0) { ?>
+	<?php if($User->get_module_permissions ("vrf")>0 && $User->settings->enableVRF==1) { ?>
 	<tr>
 		<td class="title"><?php print _('Number of VRFs'); ?></td>
 		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("vrf");; ?></span></td>
@@ -67,7 +67,7 @@ $User->check_user_session ();
 	<?php } ?>
 
 	<!-- Locations -->
-	<?php if($User->get_module_permissions ("locations")>0) { ?>
+	<?php if($User->get_module_permissions ("locations")>0 && $User->settings->enableLocations==1) { ?>
 	<tr>
 		<td class="title"><?php print _('Number of Locations'); ?></td>
 		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("locations"); ?></span></td>
@@ -75,7 +75,7 @@ $User->check_user_session ();
 	<?php } ?>
 
 	<!-- Racks -->
-	<?php if($User->get_module_permissions ("racks")>0) { ?>
+	<?php if($User->get_module_permissions ("racks")>0 && $User->settings->enableRACK==1) { ?>
 	<tr>
 		<td class="title"><?php print _('Number of Racks'); ?></td>
 		<td class='stats-badge'><span class='badge badge1 badge5'><?php print $Database->numObjects ("racks"); ?></span></td>
