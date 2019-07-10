@@ -978,7 +978,7 @@ class User extends Common_functions {
             // TODO: remove legacy support at some point
             if ($authparams['ldap_security'] == 'tls' || $authparams['use_tls'] == 1)         { $dirparams['use_tls'] = true; }
             elseif ($authparams['ldap_security'] == 'ssl' || $authparams['use_ssl'] == 1)     { $dirparams['use_ssl'] = true; }
-            if (isset($authparams['admin_username']) && isset($authparams['admin_password'])) {
+            if (isset($authparams['adminUsername']) && isset($authparams['adminPassword'])) {
                 $dirparams['admin_username'] = $authparams['adminUsername'];
                 $dirparams['admin_password'] = $authparams['adminPassword'];
             }
