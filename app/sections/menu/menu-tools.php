@@ -10,107 +10,107 @@ $tool_items = array();
 // customers
 if($User->settings->enableCustomers == 1  && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 $tool_items["customers"] = array(
-                        "name"=>"Customers",
+                        "name"=>_("Customers"),
                         "href"=>array("tools", "customers"),
-                        "title"=>"Customers",
+                        "title"=>_("Customers"),
                         "icon"=>"fa-users"
                        );
 }
 // vlans
 if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 $tool_items["vlan"] = array (
-                        "name"=>"VLAN",
+                        "name"=>_("VLAN"),
                         "href"=>array("tools", "vlan"),
-                        "title"=>"Show VLANs and belonging subnets",
+                        "title"=>_("Show VLANs and belonging subnets"),
                         "icon"=>"fa-cloud"
                         );
 }
 // VRF
 if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 $tool_items["vrf"] = array(
-                        "name"=>"VRF",
+                        "name"=>_("VRF"),
                         "href"=>array("tools", "vrf"),
-                        "title"=>"Show VRFs and belonging networks",
+                        "title"=>_("Show VRFs and belonging networks"),
                         "icon"=>"fa-cloud"
                        );
 }
 // nat
 if($User->settings->enableNAT==1  && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
 $tool_items["nat"] = array (
-                        "name"=>"NAT",
+                        "name"=>_("NAT"),
                         "href"=>array("tools", "nat"),
-                        "title"=>"Nat translations",
+                        "title"=>_("Nat translations"),
                         "icon"=>"fa-exchange"
                         );
 }
 // pdns
 if($User->settings->enablePowerDNS==1 && $User->get_module_permissions ("pdns")>=User::ACCESS_R) {
 $tool_items["powerDNS"] = array (
-                        "name"=>"PowerDNS",
+                        "name"=>_("PowerDNS"),
                         "href"=>array("tools", "powerDNS"),
-                        "title"=>"powerDNS management",
+                        "title"=>_("powerDNS management"),
                         "icon"=>"fa-database"
                         );
 }
 // dhcp
 if($User->settings->enableDHCP==1 && $User->get_module_permissions ("dhcp")>=User::ACCESS_R) {
 $tool_items["dhcp"] = array (
-                        "name"=>"DHCP",
+                        "name"=>_("DHCP"),
                         "href"=>array("tools", "dhcp"),
-                        "title"=>"DHCP information",
+                        "title"=>-("DHCP information"),
                         "icon"=>"fa-database"
                         );
 }
 // locations
 if($User->settings->enableLocations == 1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 $tool_items["locations"] = array (
-                        "name"=>"Locations",
+                        "name"=>_("Locations"),
                         "href"=>array("tools", "locations"),
-                        "title"=>"Show locations",
+                        "title"=>_("Show locations"),
                         "icon"=>"fa-map"
                         );
 }
 // devices
 if($User->get_module_permissions ("devices")>=User::ACCESS_R)
 $tool_items["devices"] = array (
-                        "name"=>"Devices",
+                        "name"=>_("Devices"),
                         "href"=>array("tools", "devices"),
-                        "title"=>"Show all configured devices",
+                        "title"=>_("Show all configured devices"),
                         "icon"=>"fa-desktop"
                         );
 // rack
 if($User->settings->enableRACK == 1 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 $tool_items["racks"] = array (
-                        "name"=>"Racks",
+                        "name"=>_("Racks"),
                         "href"=>array("tools", "racks"),
-                        "title"=>"Show racks",
+                        "title"=>_("Show racks"),
                         "icon"=>"fa-bars"
                         );
 }
 // circuits
 if($User->settings->enableCircuits == 1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) {
 $tool_items["circuits"] = array (
-                        "name"=>"Circuits",
+                        "name"=>_("Circuits"),
                         "href"=>array("tools", "circuits"),
-                        "title"=>"Show circuits",
+                        "title"=>_("Show circuits"),
                         "icon"=>"fa-random"
                         );
 }
 // Routing
 if($User->settings->enableRouting == 1 && $User->get_module_permissions ("routing")>=User::ACCESS_R) {
 $tool_items["routing"] = array (
-                        "name"=>"Routing",
+                        "name"=>_("Routing"),
                         "href"=>array("tools", "routing"),
-                        "title"=>"Show routing",
+                        "title"=>_("Show routing"),
                         "icon"=>"fa-exchange"
                         );
 }
 // pstn
 if($User->settings->enablePSTN==1 && $User->get_module_permissions ("pstn")>=User::ACCESS_R) {
 $tool_items["pstn-prefixes"] = array (
-                        "name"=>"PSTN",
+                        "name"=>_("PSTN"),
                         "href"=>array("tools", "pstn-prefixes"),
-                        "title"=>"PSTN prefixes",
+                        "title"=>_("PSTN prefixes"),
                         "icon"=>"fa-phone"
                         );
 }
@@ -118,17 +118,17 @@ $tool_items["pstn-prefixes"] = array (
 // multicast
 if($User->settings->enableMulticast == 1) {
 $tool_items["multicast-networks"] = array (
-                        "name"=>"Multicast",
+                        "name"=>_("Multicast"),
                         "href"=>array("tools", "multicast-networks"),
-                        "title"=>"Show multicast subnets and mapping",
+                        "title"=>_("Show multicast subnets and mapping"),
                         "icon"=>"fa-map-o"
                         );
 }
 // search
 $tool_items["search"] = array (
-                        "name"=>"Search",
+                        "name"=>_("Search"),
                         "href"=>array("tools", "search"),
-                        "title"=>"Search database Addresses, subnets and VLANs",
+                        "title"=>_("Search database Addresses, subnets and VLANs"),
                         "icon"=>"fa-search"
                         );
 ?>
@@ -215,7 +215,7 @@ $tool_items["search"] = array (
     ?>
 
     <!-- all tools -->
-    <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print "active"; ?>'>
+    <li class='<?php if($_GET['page']=="tools" && (!isset($_GET['section']) || strlen($_GET['section'])==0)) print _("active"); ?>'>
          <a href='<?php print create_link("tools"); ?>'><i class='fa fa-list'></i> <?php print _('All tools'); ?></a>
     </li>
 </ul>
