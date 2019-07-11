@@ -153,7 +153,7 @@ $(document).ready(function() {
 	<td>
 		<select name="inactivityTimeout" class="form-control input-sm input-w-auto">
 		<?php
-		$durations = array("900"=>"15 minutes","1800"=>"30 minutes", "3600"=>"1 hour", "7200"=>"2 hours", "21600"=>"6 hours", "43200"=>"12 hours", "86400"=>"24 hours");
+		$durations = array("900"=>_("15 minutes"),"1800"=>_("30 minutes"), "3600"=>_("1 hour"), "7200"=>_("2 hours"), "21600"=>_("6 hours"), "43200"=>_("12 hours"), "86400"=>_("24 hours"));
 		//default
 		foreach($durations as $k=>$d) {
 			if($k==$settings['inactivityTimeout']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -474,7 +474,7 @@ $(document).ready(function() {
 	<td>
 		<select name="log" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("Database"=>"Database", "syslog"=>"Syslog", "both"=>"Syslog and local Database");
+		$types = array("Database"=>_("Database"), "syslog"=>_("Syslog"), "both"=>_("Syslog and local Database"));
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['log']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
@@ -695,8 +695,8 @@ $(document).ready(function() {
 			<?php
 			$opts = array(
 				"0"=>_("Subnet Network Only"),
-				"1"=>"Description Only",
-				"2"=>"Subnet Network and Description"
+				"1"=>_("Description Only"),
+				"2"=>_("Subnet Network and Description")
 			);
 			foreach($opts as $key=>$line) {
 				if($settings['subnetView'] == $key) { print "<option value='$key' selected>$line</option>"; }
