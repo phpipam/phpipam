@@ -59,6 +59,7 @@ require( dirname(__FILE__) . '/classes/class.Result.php' );		//Class for result 
 require( dirname(__FILE__) . '/classes/class.Install.php' );	//Class for Install
 require( dirname(__FILE__) . '/classes/class.Sections.php' );	//Class for sections
 require( dirname(__FILE__) . '/classes/class.Subnets.php' );	//Class for subnets
+require(dirname(__FILE__) . '/classes/class.ipGroups.php');	//Class for subnets
 require( dirname(__FILE__) . '/classes/class.Tools.php' );		//Class for tools
 require( dirname(__FILE__) . '/classes/class.Addresses.php' );	//Class for addresses
 require( dirname(__FILE__) . '/classes/class.Scan.php' );		//Class for Scanning and pinging

@@ -68,19 +68,6 @@ else {
 	} else {
 	    $Result->show("success", _("IP Group $_POST[action] success"), false);
 	}
-
-//	# delete - unset scanning in all subnets
-//	if ($_POST['action']=="delete") {
-//		$query = "update `subnets` set `scanAgent`=0, `pingSubnet`=0, `discoverSubnet`=0 where `scanAgent` = ?;";
-//
-//		try { $Database->runQuery($query, array($_POST['id'])); }
-//		catch (Exception $e) {
-//			$Result->show("danger", _("Error: ").$e->getMessage());
-//			return false;
-//		}
-//		// references removed
-//		$Result->show("info", _("Scan agent references removed"));
-//	}
 }
 
 ?>

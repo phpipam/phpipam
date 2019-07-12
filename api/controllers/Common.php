@@ -209,7 +209,7 @@ class Common_api_functions {
 	 * @param mixed $controller (default: null)
 	 * @param bool $links (default: true)
 	 * @param bool $transform_address (default: true)
-	 * @return void
+	 * @return array
 	 */
 	protected function prepare_result ($result, $controller = null, $links = true, $transform_address = true) {
 		// empty controller
@@ -579,7 +579,7 @@ class Common_api_functions {
 	 * Validates posted keys and returns proper inset values
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	protected function validate_keys () {
     	// init values

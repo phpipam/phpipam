@@ -104,7 +104,7 @@ class Responses {
 	 * @access public
 	 * @param int $code (default: 400)
 	 * @param mixed $exception
-	 * @return void
+	 * @throws Exception
 	 */
 	public function throw_exception ($code = 400, $exception) {
 		// set failed

@@ -28,6 +28,7 @@ else {
 		$Result		= new Result;
 		$User		= new User ($Database);
 		$Sections	= new Sections ($Database);
+		$Groups  	= new ipGroups ($Database);
 		$Subnets	= new Subnets ($Database);
 		$Tools	    = new Tools ($Database);
 		$Addresses	= new Addresses ($Database);
