@@ -171,16 +171,16 @@ else {
             // links
             print "<td class='actions'>";
             $links = [];
-            $links[] = ["type"=>"header", "text"=>"Manage device"];
-            $links[] = ["type"=>"link", "text"=>"Edit device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
+            $links[] = ["type"=>"header", "text"=>_("Manage device")];
+            $links[] = ["type"=>"link", "text"=>_("Edit device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
 
             if($User->get_module_permissions ("devices")>=User::ACCESS_RWA) {
-	            $links[] = ["type"=>"link", "text"=>"Delete device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
+	            $links[] = ["type"=>"link", "text"=>_("Delete device"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
 	            $links[] = ["type"=>"divider"];
             }
 			if($User->settings->enableSNMP=="1" && $User->is_admin(false)) {
-	            $links[] = ["type"=>"header", "text"=>"SNMP"];
-	            $links[] = ["type"=>"link", "text"=>"Manage SNMP", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='edit' data-switchId='$device[id]''", "icon"=>"cogs"];
+	            $links[] = ["type"=>"header", "text"=>_("SNMP")];
+	            $links[] = ["type"=>"link", "text"=>_("Manage SNMP"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/devices/edit-snmp.php' data-class='500' data-action='edit' data-switchId='$device[id]''", "icon"=>"cogs"];
 			}
             // print links
             print $User->print_actions($User->user->compress_actions, $links);
