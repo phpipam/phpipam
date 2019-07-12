@@ -92,7 +92,7 @@ else {
         # if none than print
         if(sizeof($nats)==0) {
             print "<tr>";
-            print " <td colspan='$colspan'>".$Result->show("info","No $k NAT configured", false, false, true)."</td>";
+            print " <td colspan='$colspan'>".$Result->show("info",_("No ").$k._(" NAT configured"), false, false, true)."</td>";
             print "</tr>";
         }
         else {
@@ -148,9 +148,9 @@ else {
                 if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
         		print "	<td class='actions'>";
                 $links = [];
-                $links[] = ["type"=>"header", "text"=>"Manage NAT"];
-                $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
-                $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+                $links[] = ["type"=>"header", "text"=>_("Manage NAT")];
+                $links[] = ["type"=>"link", "text"=>_("Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+                $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
                 // print links
                 print $User->print_actions($User->user->compress_actions, $links);
         		print " </td>";
