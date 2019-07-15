@@ -12,6 +12,33 @@ INSERT INTO `instructions` (`id`, `instructions`)
 VALUES
 	(1,'You can write instructions under admin menu!');
 
+# Dump table of portMaps
+# ------------------------------------------------------------
+CREATE TABLE `portMaps` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) NOT NULL DEFAULT 'Blank Map',
+  `description` VARCHAR(256) NULL,
+  `hostDevice` INT(11) NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# Dump table of ports
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `ports`;
+
+CREATE TABLE `ports` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `map_id` int(11) DEFAULT NULL,
+  `number` int(11) DEFAULT NULL,
+  `vlan` int(11) DEFAULT NULL,
+  `tagged` set('UNTAGGED','TAGGED') DEFAULT 'UNTAGGED',
+  `name` varchar(45) DEFAULT NULL,
+  `device` int(11) DEFAULT NULL,
+  `remote_port` int(11) DEFAULT NULL,
+  `type` set('ETH','SFP','SFP+','RF') DEFAULT 'ETH',
+  `poe` set('N/A','INPUT','OUTPUT') DEFAULT 'N/A',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 # Dump of table customers
 # ------------------------------------------------------------
