@@ -109,7 +109,7 @@ class Groups_controller extends Common_api_functions {
             ),
         );
         # result
-        return array("code"=>200, "data"=>$result);
+        return $this->getPreparedResult($result);
     }
 
     /**
@@ -119,6 +119,7 @@ class Groups_controller extends Common_api_functions {
      *      - /                     // returns all groups
      *		- /{id}/                // returns group details
      *		- /{name}/ 				// group name
+     *      - /addresses/           // returns all addresses grouped by ipGroups
      *
      *	If no ID is provided all groups are returned
      *
@@ -127,12 +128,15 @@ class Groups_controller extends Common_api_functions {
      * @return array
      */
     public function GET() {
+        if ($this->_params->id == 'addresses') {
+            $result = $this->ipGroups->get_addresses_grouped_by_group();
+
+            return $this->getPreparedResult($result);
+        }
+
         if (isset($this->_params->id)) {
-            if (is_numeric($this->_params->id)) {
-                $result = $this->ipGroups->fetch_group("id", $this->_params->id);
-            } else {
-                $result = $this->ipGroups->fetch_group ("name", $this->_params->id);
-            }
+            $method = is_numeric($this->_params->id) ? 'id' : 'name';
+            $result = $this->ipGroups->fetch_group($method, $this->_params->id);
         } else {
             $result = $this->ipGroups->fetch_all_groups();
         }
@@ -141,10 +145,7 @@ class Groups_controller extends Common_api_functions {
             $this->Response->throw_exception(404, $this->Response->errors[404]);
         }
 
-        return array(
-            "code" => 200,
-            "data" => $this->prepare_result($result, null, true, true)
-        );
+        return $this->getPreparedResult($result);
     }
 
     /**

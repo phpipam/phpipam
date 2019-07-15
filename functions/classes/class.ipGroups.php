@@ -226,4 +226,16 @@ class ipGroups extends Common_functions {
     	if (is_null($method))   $method = "id";
         return $this->fetch_object ("ipGroups", $method, $value);
 	}
+
+    /**
+     * Returns addresses
+     *
+     * @return array
+     */
+    public function get_addresses_grouped_by_group()
+    {
+        $query = 'SELECT IP.hostname, G.name, IP.id AS ipID, G.id as groupID FROM ipaddresses AS IP INNER JOIN ipGroupsMapping Mapping ON IP.id = Mapping.ip_id INNER JOIN ipGroups G ON Mapping.group_id = G.id';
+
+        return $this->Database->getObjectsQuery($query);
+	}
 }

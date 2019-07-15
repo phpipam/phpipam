@@ -1018,4 +1018,19 @@ class Common_api_functions {
 			unset($this->_params->custom_fields);
 		}
 	}
+
+    /**
+     * Prepare and return result
+     *
+     * @param array  $result
+     * @param int    $code
+     * @return array
+     */
+    public function getPreparedResult($result, $code = 200)
+    {
+        return array(
+            "code" => $code,
+            "data" => $this->prepare_result($result, null, true, true)
+        );
+	}
 }
