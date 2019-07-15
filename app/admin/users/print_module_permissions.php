@@ -39,6 +39,9 @@ print "<tr><td>"._("PowerDNS")."</td><td>".$User->print_permission_badge($user['
 // Devices
 print "<tr><td>"._("Devices")."</td><td>".$User->print_permission_badge($user['perm_devices'])."</td></tr>";
 
+// Port Maps
+print "<tr><td>"._("Port Maps")."</td><td>".$User->print_permission_badge($user['perm_portMaps'])."</td></tr>";
+
 // Racks
 if ($User->settings->enableRACK==1)
 print "<tr><td>"._("Racks")."</td><td>".$User->print_permission_badge($user['perm_racks'])."</td></tr>";

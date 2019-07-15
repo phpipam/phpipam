@@ -1723,6 +1723,7 @@ class User extends Common_functions {
                 "vlan",
                 "vrf",
                 "pdns",
+                "portMaps",
                 "circuits",
                 "racks",
                 "nat",
