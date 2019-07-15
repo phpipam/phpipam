@@ -361,6 +361,7 @@ CREATE TABLE `devices` (
   `rack_size` int(11) unsigned DEFAULT NULL,
   `location` int(11) unsigned DEFAULT NULL,
   `editDate` timestamp NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
+  `port_map` int(11) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `hostname` (`hostname`),
   KEY `location` (`location`)

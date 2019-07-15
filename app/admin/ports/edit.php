@@ -29,7 +29,7 @@ $csrf = $User->Crypto->csrf_cookie("create", "port");
 # validate action
 $Admin->validate_action($_POST['action'], true);
 
-# get Location object
+# get port object
 if ($_POST['action'] != "add") {
     $port = $Admin->fetch_object("ports", "id", $_POST['id']);
     $port !== false ?: $Result->show("danger", _("Invalid ID: ") . $_POST['id'], true, true);
@@ -61,7 +61,7 @@ $custom = $Tools->fetch_custom_fields('ports');
                         <input type="number" class="form-control input-sm" name="number" value="<?php print $Tools->strip_xss($port->number); ?>" placeholder='<?php print _('Number'); ?>' <?php print $readonly; ?>>
                         <input type="hidden" name="csrf_cookie" value="<?php print $csrf; ?>">
                         <input type="hidden" name="id" value="<?php print $port->id; ?>">
-                        <input type="hidden" name="map_id" value="<?php print $_POST['mapId']; ?>">
+                        <input type="hidden" name="map_id" value="<?php print $_POST['map_id']; ?>">
                         <input type="hidden" name="action" value="<?php print $_POST['action']; ?>">
                     </td>
                 </tr>

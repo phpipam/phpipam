@@ -19,13 +19,13 @@ if (isset($mapId)) {
 
 <div class="btn-toolbar">
     <?php if ($_GET['page'] == "administration") { ?>
-        <a href="" class='btn btn-sm btn-default editPort' data-action='add' data-id='' <?php print "data-mapId='" . $_GET['subnetId'] . "' " ?> style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add Port'); ?></a>
+        <a href="" class='btn btn-sm btn-default editPort' data-action='add' data-id='' <?php print "data-map_id='" . $_GET['subnetId'] . "' " ?> style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add Port'); ?></a>
     <?php
     } else {
         if ($User->get_module_permissions("portMaps") > 1) {
             print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/portMaps/edit.php' data-class='500' data-action='edit' data-id='" . $object_id . "' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> " . _('Edit port map') . "</button>";
             print "";
-            print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/ports/edit.php' data-class='500' data-action='add' data-id='" . $object_id . "' style='margin-bottom:10px;'><i class='fa fa-plus'></i> " . _('Add port') . "</button>";
+            print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/ports/edit.php' data-class='500' data-action='add' data-map_id='" . filter_input(INPUT_GET, 'subnetId') . "' style='margin-bottom:10px;'><i class='fa fa-plus'></i> " . _('Add port') . "</button>";
         }
     }
     ?>

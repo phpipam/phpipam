@@ -107,8 +107,11 @@ if (!$Admin->object_modify("portMaps", $_POST['action'], "id", $values)) {
     }
 
     if (isset($values["hostDevice"])) { //If adding/changing device, point device to the new map
-        //TODO: Remove special function 
-        $Admin->update_specific_object("devices", "port_map", $values["hostDevice"], $values["id"]);
+        $device = array(
+            "id"=> $values["hostDevice"],
+            "port_map"=> $values["id"]
+        );
+        $Admin->object_modify("devices", "edit", "id", $device);
     }
 
     $Result->show("success", _("Port Map $_POST[action] successful"), false);

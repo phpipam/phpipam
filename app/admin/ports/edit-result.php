@@ -69,7 +69,6 @@ $values = array(
     "device" => $_POST['device'],
     "vlan" => $_POST['vlan'],
     "tagged" => $_POST['tagged'],
-    "state" => $_POST['state'],
     "type" => $_POST['type'],
     "poe" => $_POST['poe'],
 );

@@ -74,7 +74,7 @@ if ($portMaps === false) {
             $links = [];
             $links[] = ["type" => "header", "text" => "Manage port map"];
             $links[] = ["type" => "link", "text" => "Edit port map", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/portMaps/edit.php' data-class='500' data-action='edit' data-id='$portMap[id]'", "icon" => "pencil"];
-            $links[] = ["type" => "link", "text" => "Copy port map", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/portMaps/edit.php' data-class='500' data-action='edit' data-sourceId='$portMap[id]'", "icon" => "exchange"];
+            $links[] = ["type" => "link", "text" => "Copy port map", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/portMaps/edit.php' data-class='500' data-action='copy' data-id='$portMap[id]'", "icon" => "exchange"];
 
             if ($User->get_module_permissions("devices") > 2) {
                 $links[] = ["type" => "link", "text" => "Delete port map", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/portMaps/edit.php' data-class='500' data-action='delete' data-id='$portMap[id]'", "icon" => "times"];
