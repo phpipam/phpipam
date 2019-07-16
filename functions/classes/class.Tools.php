@@ -3487,14 +3487,14 @@ class Tools extends Common_functions {
 		$strict_mode   = ($type === 'IPv6') ? '0' : '2';
 
 		if($perc) {
-			$query = "SELECT SQL_CACHE s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
+			$query = "SELECT s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
 					COUNT(*) AS `usage`,ROUND(COUNT(*)/(POW(2,$type_max_mask-`mask`)-$strict_mode)*100,2) AS `percentage` FROM `ipaddresses` AS `i`
 					LEFT JOIN `subnets` AS `s` ON i.subnetId = s.id
 					WHERE s.mask < ($type_max_mask-1) AND CAST(s.subnet AS UNSIGNED) $type_operator 4294967295
 					GROUP BY i.subnetId
 					ORDER BY `percentage` DESC $limit;";
 		} else {
-			$query = "SELECT SQL_CACHE s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
+			$query = "SELECT s.sectionId,s.id,s.subnet,mask,IF(char_length(s.description)>0,s.description,'No description') AS description,
 					COUNT(*) AS `usage` FROM `ipaddresses` AS `i`
 					LEFT JOIN `subnets` AS `s` ON i.subnetId = s.id
 					WHERE CAST(s.subnet AS UNSIGNED) $type_operator 4294967295

@@ -621,7 +621,7 @@ abstract class DB {
 	public function getGroupBy($tableName, $groupField = 'id') {
 		if (!$this->isConnected()) $this->connect();
 
-		$statement = $this->pdo->prepare("SELECT SQL_CACHE `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
+		$statement = $this->pdo->prepare("SELECT `$groupField`,COUNT(*) FROM `$tableName` GROUP BY `$groupField`");
 
 		//debug
 		$this->log_query ($statement, array());

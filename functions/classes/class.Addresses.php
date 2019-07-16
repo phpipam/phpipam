@@ -281,7 +281,7 @@ class Addresses extends Common_functions {
 
 		// Fetch all similar addresses for entire subnet.
 		try {
-			$query = "SELECT SQL_CACHE * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
+			$query = "SELECT * FROM `ipaddresses` WHERE `state`<>4 AND `$linked_field` IN (SELECT `$linked_field` FROM `ipaddresses` WHERE `subnetId`=? AND LENGTH(`$linked_field`)>0) ORDER BY LPAD(ip_addr,39,0)";
 			$linked_subnet_addrs = $this->Database->getObjectsQuery($query, array($address->subnetId));
 		} catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
