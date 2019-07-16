@@ -333,6 +333,8 @@ $(document).ready(function(){
 	$perm_modules["perm_pdns"] = "PowerDNS";
 	// devices
 	$perm_modules["perm_devices"] = "Devices";
+	// port maps
+	$perm_modules["perm_portMaps"] = "Port Maps";
 	// Racks
 	if ($User->settings->enableRACK==1)
 	$perm_modules["perm_racks"] = "Racks";

@@ -75,7 +75,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     	</tr>
 
         <?php }
-
+        
         // acrtions
         if($User->get_module_permissions ("devices")>1) {
             print "<tr>";

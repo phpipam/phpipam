@@ -944,6 +944,7 @@ class Common_functions  {
 		return array(
 		        "add",
 		        "all-add",
+                        "copy".
 		        "edit",
 		        "all-edit",
 		        "delete",

@@ -69,6 +69,7 @@ if($User->settings->enableSNMP == 1)
 $admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-cogs","name"=>"SNMP",                           "href"=>"snmp",                     "description"=>"SNMP management");
 if($User->settings->enableLocations == 1)
 $admin_menu['Device management'][]  = array("show"=>true,   "icon"=>"fa-map",        "name"=>"Locations",               "href"=>"locations",                "description"=>"Locations");
+$admin_menu['Device management'][] = array("show"=>true,    "icon"=>"fa-map","name"=>"Port Maps",                 "href"=>"portMaps",                  "description"=>"Port Map management");
 
 
 # Tools
