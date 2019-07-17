@@ -164,6 +164,7 @@ $upgrade_queries["1.23.0"][] = "UPDATE `settings` set `version` = '1.23';";
 // change default datetime
 $upgrade_queries["1.23.0"][] = "-- Change default datetime";
 $upgrade_queries["1.23.0"][] = "ALTER TABLE `ipaddresses` CHANGE `lastSeen` `lastSeen` DATETIME  NULL  DEFAULT '1970-01-01 00:00:01';";
+$upgrade_queries["1.23.0"][] = "update ipaddresses set lastSeen='1970-01-01 00:00:01' where lastSeen < '0000-01-01 00:00:00';";
 // add linked subnet field
 $upgrade_queries["1.23.0"][] = "-- Add linked subnet field";
 $upgrade_queries["1.23.0"][] = "ALTER TABLE `subnets` ADD `linked_subnet` INT(11)  UNSIGNED  NULL  DEFAULT NULL;";
