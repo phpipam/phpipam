@@ -5,6 +5,7 @@
     + Fixed upgrade queries issues from 1.3.2 to 1.4;
     + Fixed boolean printout in footer (#2625);
     + Fixed BGP Admin isn't working (#2631);
+    + MySQL 8.0 compatibility. (#2646,#2239);
 
 
 == 1.4
