@@ -532,7 +532,14 @@ else {
 				}
 				else
 				{
-					$_ipaddress_xyz = $Subnets->transform_to_dotted( $addresses[$n]->ip_addr);
+					/*
+					I have added code to connect the host directly via HTTP/SSH/TELNET/RDP 
+					using protocol handeler. but in my code my added opction is displyeing 
+					to all host. if posible please add 4 nos custom field in database like HTTP,SSH,MSTSC and RDP
+					and using the true/false value of those 4 custom field user can choose what to use in which host
+					/*
+					
+				 	$_ipaddress_xyz = $Subnets->transform_to_dotted( $addresses[$n]->ip_addr);
 					print "<a href='http://".$_ipaddress_xyz."' class = 'btn btn-xs btn-default'><i class='fa fa-internet-explorer'></i></a>";	
 					print "<a href='ssh:".$_ipaddress_xyz."' class = 'btn btn-xs btn-default'><i class='fa fa-linux'></i></a>";		
 					print "<a href='telnet:".$_ipaddress_xyz."' class = 'btn btn-xs btn-default'><i class='fa fa-terminal'></i></a>";
