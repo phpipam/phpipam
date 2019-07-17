@@ -145,11 +145,11 @@ if ($all_ports_in_map === false) {
             print "<td class='actions'>";
             $links = [];
             $links[] = ["type" => "header", "text" => "Manage port"];
-            $links[] = ["type" => "link", "text" => "Edit port", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/ports/edit.php' data-class='500' data-action='edit' data-id='$port->id'", "icon" => "pencil"];
+            $links[] = ["type" => "link", "text" => "Edit port", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/ports/edit.php' data-class='500' data-action='edit' data-map_id='$port->map_id' data-id='$port->id'", "icon" => "pencil"];
 
             if ($User->get_module_permissions("devices") > 2) {
                 $links[] = ["type" => "divider"];
-                $links[] = ["type" => "link", "text" => "Delete port map", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/ports/edit.php' data-class='500' data-action='delete' data-id='$port->id'", "icon" => "times"];
+                $links[] = ["type" => "link", "text" => "Delete port", "href" => "", "class" => "open_popup", "dataparams" => " data-script='app/admin/ports/edit.php' data-class='500' data-action='delete' data-id='$port->id'", "icon" => "times"];
             }
             // print links
             print $User->print_actions($User->user->compress_actions, $links);
