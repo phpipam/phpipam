@@ -1058,6 +1058,39 @@ class Common_functions  {
     }
 
 	/**
+	 * Validate a postal code.
+	 *
+	 * https://gist.github.com/mpezzi/1171590
+	 *
+	 * @param $value
+	 * @param $country
+     * @return bool
+	 */
+	public function validate_postcode ($value = "", $country = 'united kingdom') {
+		// to lower
+		$country = strtolower($country);
+		// set regexes
+		$country_regex = array(
+			'united kingdom' => '/\\A\\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\\b\\z/i',
+			'england'        => '/\\A\\b[A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}\\b\\z/i',
+			'canada'         => '/\\A\\b[ABCEGHJKLMNPRSTVXY][0-9][A-Z][ ]?[0-9][A-Z][0-9]\\b\\z/i',
+			'italy'          => '/^[0-9]{5}$/i',
+			'deutschland'    => '/^[0-9]{5}$/i',
+			'germany'        => '/^[0-9]{5}$/i',
+			'belgium'        => '/^[1-9]{1}[0-9]{3}$/i',
+			'united states'  => '/\\A\\b[0-9]{5}(?:-[0-9]{4})?\\b\\z/i',
+			'default'        => '/^[0-9]/i',
+		);
+
+		// check for country
+		if ( isset($country_regex[$country]) ) {
+			return preg_match($country_regex[$country], $value);
+		}
+		// default
+		return preg_match($country_regex['default'], $value);
+	}
+
+	/**
 	 * Transforms ipv6 to nt
 	 *
 	 * @access public

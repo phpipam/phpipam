@@ -8,6 +8,7 @@
     ----------------------------
     + do not show statistics in dashboard widget for disabled modules (#2602);
     + MySQL 8.0 compatibility. (#2646,#2239);
+    + Permit non-numeric postcodes for customers (#2393);
 
 == 1.4.1
 

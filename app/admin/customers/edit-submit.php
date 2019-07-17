@@ -49,8 +49,8 @@ if ($customer['action']!="delete") {
 	if(strlen($_POST['address'])<3)		{ $Result->show("danger", _("Invalid Address"), true); }
 	if(strlen($_POST['city'])<3)		{ $Result->show("danger", _("Invalid City"), true); }
 	if(strlen($_POST['state'])<3)		{ $Result->show("danger", _("Invalid State"), true); }
-	// check integers
-	if(!is_numeric($_POST['postcode']))	{ $Result->show("danger", _("Invalid Postcode"), true); }
+	// validate postcode
+	if(!$Tools->validate_postcode ($_POST['postcode'], $_POST['state'])) { $Result->show("danger", _("Invalid Postcode"), true); }
 }
 
 // fetch custom fields

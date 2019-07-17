@@ -21,7 +21,7 @@ CREATE TABLE `customers` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(128) NOT NULL DEFAULT '',
   `address` varchar(255) DEFAULT NULL,
-  `postcode` int(8) DEFAULT NULL,
+  `postcode` VARCHAR(32) NULL DEFAULT NULL,
   `city` varchar(255) DEFAULT NULL,
   `state` varchar(255) DEFAULT NULL,
   `lat` varchar(12) DEFAULT NULL,
@@ -995,4 +995,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 0;
+UPDATE `settings` SET `dbversion` = 26;
