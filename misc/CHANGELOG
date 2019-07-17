@@ -1,5 +1,9 @@
 == 1.5
 
+    Enhancements, changes:
+    ----------------------------
+    + Added clear changelogs button and script (#2639);
+
     Bugfixes:
     ----------------------------
     + do not show statistics in dashboard widget for disabled modules (#2602);

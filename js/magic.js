@@ -1426,6 +1426,15 @@ $('#clearLogs').click(function() {
     }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
     return false;
 });
+//logs clear
+$('#clearChangeLogs').click(function() {
+    showSpinner();
+    $.post('app/tools/changelog/clear-logs.php', function(data) {
+        $('div.logs').html(data);
+        hideSpinner();
+    }).fail(function(jqxhr, textStatus, errorThrown) { showError(jqxhr.statusText + "<br>Status: " + textStatus + "<br>Error: "+errorThrown); });
+    return false;
+});
 
 
 // commit logs
