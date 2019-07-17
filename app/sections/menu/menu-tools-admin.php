@@ -136,8 +136,7 @@ if($User->is_admin(false)) {
 						} else {
 							$active = "";
 						}
-						list($l0, $l1) = explode('/', $i['href']);
-						print "<li class='$active'><a href='".create_link("tools",$l0, $l1)."'>"._($i['name'])."</a></li>";
+						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
 					}
 				}
 			}
