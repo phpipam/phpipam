@@ -225,15 +225,17 @@ class Addresses extends Common_functions {
 			# save to addresses cache
 			if(!is_null($address)) {
 				# add decimal format
-				$address->ip   = $this->transform_to_dotted ($address->ip_addr);
-                $groups        = json_decode(json_encode($this->fetch_multiple_objects("ipGroupsMapping", 'ip_id', $id), true));
-                $ids           = array_column($groups, 'group_id');
-                $currentGroups = $this->fetch_multiple_objects_by_ids('ipGroups', $ids);
+				$address->ip = $this->transform_to_dotted ($address->ip_addr);
+                $groups      = json_decode(json_encode($this->fetch_multiple_objects("ipGroupsMapping", 'ip_id', $id), true));
 
+                if (is_array($groups)) {
+                    $ids           = array_column($groups, 'group_id');
+                    $currentGroups = $this->fetch_multiple_objects_by_ids('ipGroups', $ids);
 
-				$address->groups = implode(', ', array_column($currentGroups, 'name'));
-				# save to subnets
-				$this->addresses[$id] = (object) $address;
+                    $address->groups = implode(', ', array_column($currentGroups, 'name'));
+                    # save to subnets
+                    $this->addresses[$id] = (object) $address;
+                }
 			}
 			#result
 			return !is_null($address) ? $address : false;
@@ -446,7 +448,13 @@ class Addresses extends Common_functions {
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
-		try { $this->Database->insertObject("ipaddresses", $insert); }
+		try {
+		    $id = $this->Database->insertObject("ipaddresses", $insert);
+
+		    if (is_numeric($id)) {
+                $this->Database->updateMultipleGroups($address['groups'], $id);
+            }
+		}
 		catch (Exception $e) {
 			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -547,7 +555,7 @@ class Addresses extends Common_functions {
 		try {
 		    $this->Database->updateObject("ipaddresses", $insert, $id1, $id2);
 
-		    $this->Database->updateMultipleGroups($address['groups'], $insert);
+		    $this->Database->updateMultipleGroups($address['groups'], $insert['id']);
 		} catch (Exception $e) {
 			$this->Log->write(
 			    "Address edit",
@@ -595,7 +603,15 @@ class Addresses extends Common_functions {
 			$field2 = null;			$value2 = null;
 		}
 		# execute
-		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
+		try {
+		    $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2);
+
+            $currentMapping = $this->Database->findObjects('ipGroupsMapping', 'ip_id', $address['id']);
+
+            if ($currentMapping) {
+                $this->Database->deleteObjects('ipGroupsMapping', array_column($currentMapping, 'id'));
+            }
+		}
 		catch (Exception $e) {
 			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);

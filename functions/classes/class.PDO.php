@@ -441,25 +441,26 @@ abstract class DB {
      *
      * @access public
      * @param array  $values
-     * @param array  $custom
+     * @param array  $id
      * @return void
      */
-    public function updateMultipleGroups($values, $custom = null) {
+    public function updateMultipleGroups($values, $id = null) {
         //set values
-        $objParams = array_keys($values);
+        $objParams        = array_keys($values);
         $preparedParamArr = array();
+        $currentMapping   = $this->findObjects('ipGroupsMapping', 'ip_id', $id);
+
         foreach ($objParams as $objParam) {
             $preparedParamArr[] = '`' . $this->escape($objParam) . '`=?';
         }
 
         if (!empty($values)) {
-            $currentMapping = $this->findObjects('ipGroupsMapping', 'ip_id', $custom['id']);
-
             $newMapping = [];
+
             foreach ($values as $value) {
                 $newMapping[] = [
                     'id'       => null,
-                    'ip_id'    => $custom['id'],
+                    'ip_id'    => $id,
                     'group_id' => $value
                 ];
             }
@@ -472,6 +473,10 @@ abstract class DB {
                 foreach ($newMapping as $item) {
                     $this->insertObject('ipGroupsMapping', $item);
                 }
+            }
+        } else {
+            if ($currentMapping) {
+                $this->deleteObjects('ipGroupsMapping', array_column($currentMapping, 'id'));
             }
         }
     }
@@ -487,7 +492,7 @@ abstract class DB {
 	 * @param bool $raw (default: false)
 	 * @param bool $replace (default: false)
 	 * @param bool $ignoreId (default: true)
-	 * @return void
+	 * @return integer|bool
 	 */
 	public function insertObject($tableName, $obj, $raw = false, $replace = false, $ignoreId = true) {
 		if (!$this->isConnected()) $this->connect();
