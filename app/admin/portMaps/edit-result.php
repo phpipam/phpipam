@@ -87,9 +87,9 @@ if ($_POST['action'] == "delete") {
 if (!$Admin->object_modify("portMaps", $_POST['action'], "id", $values)) {
     $Result->show("danger", _("Port Map $_POST[action] failed"), false);
 } else {
+    $values["id"] = $Admin->lastId; //Get ID of new port map
     if ($_POST['action'] == "copy") { //If copying a port map also copy ports
         $ports = $Tools->fetch_multiple_objects("ports", "map_id", $_POST['id']); // Get all ports associated with old map
-        $values["id"] = $Admin->lastId; //Get ID of new port map
         foreach ($ports as $port) {
             $clonedPort = array(
                 "map_id" => $values["id"],
