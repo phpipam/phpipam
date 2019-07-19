@@ -105,9 +105,7 @@ CREATE TABLE `ipGroupsMapping` (
   `group_id` int(11)          DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `ipGroupsMapping_ipaddresses_id_fk` (`ip_id`),
-  KEY `ipGroupsMapping_ipGroups_id_fk` (`group_id`),
-  CONSTRAINT `ipGroupsMapping_ipGroups_id_fk` FOREIGN KEY (`group_id`) REFERENCES `ipGroups` (`id`),
-  CONSTRAINT `ipGroupsMapping_ipaddresses_id_fk` FOREIGN KEY (`ip_id`) REFERENCES `ipaddresses` (`id`)
+  KEY `ipGroupsMapping_ipGroups_id_fk` (`group_id`)
 )
   ENGINE = InnoDB
   AUTO_INCREMENT = 70
