@@ -511,17 +511,22 @@ class User_controller extends Common_api_functions {
 		if(!isset($_SERVER['HTTP_PHPIPAM_TOKEN']))	{ $this->Response->throw_exception(403, "Please provide token"); }
 		// validate and remove token
 		else {
-			// fetch token
-			if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
+			// fetch token - for SSL with APP code differently
+			if($this->app->app_security=="ssl_code") {
+				if($_SERVER['HTTP_PHPIPAM_TOKEN']!=$this->app->app_code)
 													{ $this->Response->throw_exception(403, "Invalid token"); }
-			// save token
-			$this->User->user    = $token;
-			$this->token         = $token->token;
-			$this->token_expires = $token->token_valid_until;
-
-			// expired
-			if($this->validate_token_expiration () === true)
+			}
+			else {
+				if(($token = $this->Admin->fetch_object ("users", "token", $_SERVER['HTTP_PHPIPAM_TOKEN'])) === false)
+													{ $this->Response->throw_exception(403, "Invalid token"); }
+				// save token
+				$this->User->user    = $token;
+				$this->token         = $token->token;
+				$this->token_expires = $token->token_valid_until;
+				// expired
+				if($this->validate_token_expiration () === true)
 													{  $this->Response->throw_exception(403, "Token expired");  }
+			}
 		}
 	}
 

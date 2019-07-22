@@ -6,7 +6,8 @@
     + Fixed boolean printout in footer (#2625);
     + Fixed BGP Admin isn't working (#2631);
     + MySQL 8.0 compatibility. (#2646,#2239);
-
+    + API:
+        + Fixed /user/ calls for SSL with app code (static app code);
 
 == 1.4
 
