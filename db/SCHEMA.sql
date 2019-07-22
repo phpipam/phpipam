@@ -35,7 +35,7 @@ CREATE TABLE `ports` (
   `name` varchar(45) DEFAULT NULL,
   `device` int(11) DEFAULT NULL,
   `remote_port` int(11) DEFAULT NULL,
-  `type` set('ETH','SFP','SFP+','RF') DEFAULT 'ETH',
+  `type` set('ETH', 'SFP', 'SFP+', 'QSFP', 'QSFP+', 'XFP', 'RF') DEFAULT 'ETH',
   `poe` set('N/A','INPUT','OUTPUT') DEFAULT 'N/A',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

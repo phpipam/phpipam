@@ -9,7 +9,7 @@
 $User->check_user_session();
 
 # fetch all ports for the selected map
-$object_id = filter_input(INPUT_GET, 'subnetId');
+$object_id = $_GET['subnetId'];
 if (isset($mapId)) {
     $object_id = $mapId;
 }
@@ -25,7 +25,7 @@ if (isset($mapId)) {
         if ($User->get_module_permissions("portMaps") > 1) {
             print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/portMaps/edit.php' data-class='500' data-action='edit' data-id='" . $object_id . "' style='margin-bottom:10px;'><i class='fa fa-pencil'></i> " . _('Edit port map') . "</button>";
             print "";
-            print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/ports/edit.php' data-class='500' data-action='add' data-map_id='" . filter_input(INPUT_GET, 'subnetId') . "' style='margin-bottom:10px;'><i class='fa fa-plus'></i> " . _('Add port') . "</button>";
+            print "<button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/ports/edit.php' data-class='500' data-action='add' data-map_id='" . $_GET['subnetId'] . "' style='margin-bottom:10px;'><i class='fa fa-plus'></i> " . _('Add port') . "</button>";
         }
     }
     ?>
