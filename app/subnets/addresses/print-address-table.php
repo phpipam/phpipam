@@ -106,9 +106,7 @@ if(sizeof($custom_fields) > 0) {
 # set colspan for output
 $colspan['empty']  = $selected_ip_fields_size + sizeof($custom_fields) +4;		//empty colspan
 $colspan['unused'] = $selected_ip_fields_size + sizeof($custom_fields) +3;		//unused colspan
-$colspan['dhcp']   = $selected_ip_fields_size + sizeof($custom_fields) -4;		//dhcp colspan
-$colspan['dhcp']   = in_array("firewallAddressObject", $selected_ip_fields) ? $colspan['dhcp']-1 : $colspan['dhcp'];
-$colspan['dhcp']   = ($colspan['dhcp'] < 0) ? 0 : $colspan['dhcp'];				//dhcp colspan negative fix
+$colspan['dhcp']   = sizeof($selected_ip_fields) + sizeof($custom_fields);		//dhcp colspan
 
 # set ping statuses for warning and offline
 $statuses = explode(";", $User->settings->pingStatus);
