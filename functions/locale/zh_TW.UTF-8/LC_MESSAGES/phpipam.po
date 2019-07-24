@@ -4,7 +4,7 @@
 # Jason Cheng <sanyu3u@gmail.com>
 # "Project-Id-Version: 1.0\n"
 # "Report-Msgid-Bugs-To: Jason Cheng <sanyu3u@gmail.com>\n"
-# "Last-Translator: 2019-07-23\n"
+# "Last-Translator: 2019-07-24\n"
 # "Language: zh_TW\n"
 # "MIME-Version: 1.0\n"
 # "Content-Type: text/plain; charset=UTF-8\n"
@@ -723,7 +723,7 @@ msgstr "可用的 VLAN："
 #: site/tools/vlan.php:25 site/tools/searchResults.php:338
 #: site/admin/manageVLANEdit.php:50 site/admin/manageVLANs.php:35
 msgid "Number"
-msgstr "數量"
+msgstr "編號"
 
 #: site/tools/vlan.php:28 site/tools/searchResults.php:340
 msgid "Belonging subnets"
@@ -4358,10 +4358,10 @@ msgid "Username not existing"
 msgstr "使用者名稱不存在"
 
 msgid "Invalid baseDN setting for AD"
-msgstr "無效的baseDN"
+msgstr "基礎 DN 的設定無效"
 
 msgid "AD account does not have enough privileges for search"
-msgstr "AD使用者沒有足夠的搜尋權限"
+msgstr "AD 使用者沒有足夠的搜尋權限"
 
 #: site/admin/usersEditResult.php
 msgid "Admin user cannot be deleted"
@@ -4372,7 +4372,7 @@ msgid "Error adding new folder"
 msgstr "加入新的資料夾錯誤 "
 
 msgid "Folder, IP addresses and all belonging subnets deleted successfully"
-msgstr "資料夾，IP位址和所屬子網路刪除成功"
+msgstr "資料夾，IP 位址和所屬子網路刪除成功"
 
 msgid "Folder add successfull"
 msgstr "資料夾加入成功"
@@ -6540,7 +6540,7 @@ msgid "Bind user"
 msgstr "繫結使用者"
 
 msgid "User DN to bind as for search operations (optional). "
-msgstr "使用者DN綁定搜尋操作 (可選) 。"
+msgstr "使用者 DN 繫結搜尋作業 (非必要) 。"
 
 msgid "Bind password"
 msgstr "繫結密碼"
@@ -6907,7 +6907,7 @@ msgid "The default port for LDAP non-SSL connections"
 msgstr "預設 LDAP 連接埠非 SSL"
 
 msgid "LDAP hosts, separated by a semicolon (;)"
-msgstr "LDAP 主機，以分號 ; 分隔"
+msgstr "LDAP 主機，以分號 ; 字元分隔"
 
 msgid "Base DN for your users, if different from the base DN above."
 msgstr "若與上面的基礎 DN 不同，請您輸入您的使用者基礎 DN。"
@@ -8516,13 +8516,13 @@ msgid "Numbers"
 msgstr "數量"
 
 msgid "You do not have permission to manage PSTN numbers"
-msgstr "您沒有管理PSTN號碼的權限"
+msgstr "您沒有管理 PSTN 號碼的權限"
 
 msgid "Invalid PSTN number identifier"
-msgstr "無效的PSTN號碼識別碼"
+msgstr "無效的 PSTN 號碼識別碼"
 
 msgid "Number must be numeric"
-msgstr "數字必須是數字型"
+msgstr "數字必須是數字型態"
 
 msgid "Invalid prefix"
 msgstr "首碼無效"
@@ -9903,3 +9903,6 @@ msgstr "路由模組權限"
 
 msgid "First IP Address available"
 msgstr "第一個可用的 IP 位址"
+
+msgid "Select server"
+msgstr "選擇伺服器"
