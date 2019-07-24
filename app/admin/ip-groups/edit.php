@@ -6,7 +6,6 @@
 
 /* functions */
 require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
-require_once ( dirname(__FILE__) . '/../../../vendor/autoload.php');
 
 # initialize user object
 $Database 	= new Database_PDO;
