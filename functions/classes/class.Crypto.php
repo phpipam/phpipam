@@ -75,10 +75,13 @@ class Crypto {
      * @return string|false
      */
     public function encrypt($rawdata, $password, $encryption_library="openssl") {
-        if ($encryption_library === "mcrypt")
+        if ($encryption_library === "mcrypt") {
             return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
-        else
+        } else if($encryption_library === "openssl-256") {
+            return $this->encrypt_using_openssl_256($rawdata, $password);
+        } else {
             return $this->encrypt_using_openssl($rawdata, $password);
+        }
     }
 
     /**
@@ -89,10 +92,13 @@ class Crypto {
      * @return string|false
      */
     public function decrypt($base64data, $password, $encryption_library="openssl") {
-        if ($encryption_library === "mcrypt")
+        if ($encryption_library === "mcrypt") {
             return $this->decrypt_using_legacy_mcrypt($base64data, $password);
-        else
+        } else if($encryption_library === "openssl-256") {
+            return $this->decrypt_using_openssl_256($base64data, $password);
+        } else {
             return $this->decrypt_using_openssl($base64data, $password);
+        };
     }
 
     // OpenSSL
@@ -150,6 +156,64 @@ class Crypto {
 
         // Finally decrypt
         return openssl_decrypt($ciphertext_raw, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+    }
+
+    // OpenSSL-256
+
+    /**
+     * encrypt data and base64 encode results
+     * @param  string $rawdata
+     * @param  string $password
+     * @return string|false
+     */
+    private function encrypt_using_openssl_256($rawdata, $password) {
+
+        // Binary key derived from password
+        $key = substr(hash('sha256', $password, true), 0, 32);
+
+        // Encrypt using IV
+        $ivlen = openssl_cipher_iv_length('AES-256-CBC');
+        $iv = $this->random_pseudo_bytes($ivlen);
+        $ciphertext_raw = openssl_encrypt($rawdata, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
+
+        // Generate HMAC covering IV and ciphertext
+        $hmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key);
+        
+        // Base64 encode results
+        return base64_encode( $hmac.$iv.$ciphertext_raw );
+    }
+
+    /**
+     * decrypt base64 encoded data
+     * @param  string $base64data
+     * @param  string $password
+     * @return string|false
+     */
+    private function decrypt_using_openssl_256($base64data, $password) {
+        // Binary key derived from password
+        $key = substr(hash('sha256', $password, true), 0, 32);
+
+        $c = base64_decode($base64data);
+        if ($c === false) return false;
+
+        $ivlen = openssl_cipher_iv_length('AES-256-CBC');
+
+        // Check data > minimum length
+        if (strlen($c) <= (64+$ivlen))
+            return false;
+
+        // Split binary data into hmac, iv and ciphertext
+        $hmac = substr($c, 0, 64);
+        $iv = substr($c, 64, $ivlen);
+        $ciphertext_raw = substr($c, 64+$ivlen);
+
+        // Verify HMAC covering IV and ciphertext
+        $calcmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key);
+        if (!hash_equals($hmac, $calcmac))
+            return false;
+
+        // Finally decrypt
+        return openssl_decrypt($ciphertext_raw, 'AES-256-CBC', $key, OPENSSL_RAW_DATA, $iv);
     }
 
     // Legacy mcrypt - mcrypt support may be removed in a future release.
