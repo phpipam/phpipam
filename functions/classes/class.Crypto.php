@@ -103,7 +103,7 @@ class Crypto {
      * @param  string $password
      * @return string|false
      */
-    private function encrypt_using_openssl($rawdata, $password, $key_size = 128) {
+    private function encrypt_using_openssl($rawdata, $password, $key_size) {
         $method = ($key_size == "openssl-256") ? 'AES-256-CBC' : 'AES-128-CBC';
         
         // Binary key derived from password
@@ -126,7 +126,7 @@ class Crypto {
      * @param  string $password
      * @return string|false
      */
-    private function decrypt_using_openssl($base64data, $password, $key_size = 128) {
+    private function decrypt_using_openssl($base64data, $password, $key_size) {
         $method = ($key_size == "openssl-256") ? 'AES-256-CBC' : 'AES-128-CBC';
 
         // Binary key derived from password
