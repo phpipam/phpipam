@@ -71,28 +71,65 @@ class Crypto {
      * encrypt data and base64 encode results
      * @param  string $rawdata
      * @param  string $password
-     * @param  string $encryption_library   (default value: "openssl")
+     * @param  string method   (default value: "openssl-128-cbc")
      * @return string|false
      */
-    public function encrypt($rawdata, $password, $encryption_library="openssl") {
-        if ($encryption_library === "mcrypt")
+    public function encrypt($rawdata, $password, $method="openssl-128-cbc") {
+        $method = $this->supported_methods($method);
+
+        if ($method === 'mcrypt')
             return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
         else
-            return $this->encrypt_using_openssl($rawdata, $password, $encryption_library);
+            return $this->encrypt_using_openssl($rawdata, $password, $method);
     }
 
     /**
      * decrypt base64 encoded data
      * @param  string $base64data
      * @param  string $password
-     * @param  string $encryption_library   (default value: "openssl")
+     * @param  string $method   (default value: "openssl-128-cbc")
      * @return string|false
      */
-    public function decrypt($base64data, $password, $encryption_library="openssl") {
-        if ($encryption_library === "mcrypt")
+    public function decrypt($base64data, $password, $method="openssl-128-cbc") {
+        $method = $this->supported_methods($method);
+
+        if ($method === "mcrypt")
             return $this->decrypt_using_legacy_mcrypt($base64data, $password);
         else
-            return $this->decrypt_using_openssl($base64data, $password, $encryption_library);
+            return $this->decrypt_using_openssl($base64data, $password, $method);
+    }
+
+    /**
+     * Return a supported encryption method
+     * @param  string $method
+     * @return string
+     */
+    private function supported_methods($method) {
+        switch ($method) {
+            case 'mcrypt':
+                $retval = 'mcrypt';
+                break;
+
+            case 'openssl':
+            case 'openssl-128':
+            case 'openssl-128-cbc':
+                $retval = 'AES-128-CBC';
+                break;
+
+            case 'openssl-256':
+            case 'openssl-256-cbc':
+                $retval = 'AES-256-CBC';
+                break;
+
+            default:
+                $this->Result->show("danger", _("Error: "). _('Unsupported $api_crypt_encryption_library method: ').escape_input($method), true);
+        }
+
+        $required_ext = ($retval === 'mcrypt') ? 'mcrypt' : 'openssl';
+        if (!in_array($required_ext, get_loaded_extensions()))
+            $this->Result->show("danger", _("Error: "). _('php extension not installed: ').$required_ext, true);
+
+        return $retval;
     }
 
     // OpenSSL
@@ -101,12 +138,11 @@ class Crypto {
      * encrypt data and base64 encode results
      * @param  string $rawdata
      * @param  string $password
+     * @param  string $method
      * @return string|false
      */
-    private function encrypt_using_openssl($rawdata, $password, $key_size) {
-        $method = ($key_size == "openssl-256") ? 'AES-256-CBC' : 'AES-128-CBC';
-        
-        // Binary key derived from password
+    private function encrypt_using_openssl($rawdata, $password, $method) {
+        // Binary key derived from password (32 bytes)
         $key = openssl_digest($password, 'sha256', true);
         // Encrypt using IV
         $ivlen = openssl_cipher_iv_length($method);
@@ -124,12 +160,11 @@ class Crypto {
      * decrypt base64 encoded data
      * @param  string $base64data
      * @param  string $password
+     * @param  string $method
      * @return string|false
      */
-    private function decrypt_using_openssl($base64data, $password, $key_size) {
-        $method = ($key_size == "openssl-256") ? 'AES-256-CBC' : 'AES-128-CBC';
-
-        // Binary key derived from password
+    private function decrypt_using_openssl($base64data, $password, $method) {
+        // Binary key derived from password (32 bytes)
         $key = openssl_digest($password, 'sha256', true);
 
         $c = base64_decode($base64data);
