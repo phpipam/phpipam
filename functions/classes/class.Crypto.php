@@ -78,7 +78,7 @@ class Crypto {
         if ($encryption_library === "mcrypt")
             return $this->encrypt_using_legacy_mcrypt($rawdata, $password);
         else
-            return $this->encrypt_using_openssl($rawdata, $password);
+            return $this->encrypt_using_openssl($rawdata, $password, $encryption_library);
     }
 
     /**
@@ -92,7 +92,7 @@ class Crypto {
         if ($encryption_library === "mcrypt")
             return $this->decrypt_using_legacy_mcrypt($base64data, $password);
         else
-            return $this->decrypt_using_openssl($base64data, $password);
+            return $this->decrypt_using_openssl($base64data, $password, $encryption_library);
     }
 
     // OpenSSL
@@ -103,14 +103,15 @@ class Crypto {
      * @param  string $password
      * @return string|false
      */
-    private function encrypt_using_openssl($rawdata, $password) {
+    private function encrypt_using_openssl($rawdata, $password, $key_size) {
+        $method = ($key_size == "openssl-256") ? 'AES-256-CBC' : 'AES-128-CBC';
+        
         // Binary key derived from password
         $key = openssl_digest($password, 'sha256', true);
-
         // Encrypt using IV
-        $ivlen = openssl_cipher_iv_length('AES-128-CBC');
+        $ivlen = openssl_cipher_iv_length($method);
         $iv = $this->random_pseudo_bytes($ivlen);
-        $ciphertext_raw = openssl_encrypt($rawdata, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        $ciphertext_raw = openssl_encrypt($rawdata, $method, $key, OPENSSL_RAW_DATA, $iv);
 
         // Generate HMAC covering IV and ciphertext
         $hmac = $this->hash_hmac('sha256', $iv.$ciphertext_raw, $key, true);
@@ -125,14 +126,16 @@ class Crypto {
      * @param  string $password
      * @return string|false
      */
-    private function decrypt_using_openssl($base64data, $password) {
+    private function decrypt_using_openssl($base64data, $password, $key_size) {
+        $method = ($key_size == "openssl-256") ? 'AES-256-CBC' : 'AES-128-CBC';
+
         // Binary key derived from password
         $key = openssl_digest($password, 'sha256', true);
 
         $c = base64_decode($base64data);
         if ($c === false) return false;
 
-        $ivlen = openssl_cipher_iv_length('AES-128-CBC');
+        $ivlen = openssl_cipher_iv_length($method);
 
         // Check data > minimum length
         if (strlen($c) <= (32+$ivlen))
@@ -149,7 +152,7 @@ class Crypto {
             return false;
 
         // Finally decrypt
-        return openssl_decrypt($ciphertext_raw, 'AES-128-CBC', $key, OPENSSL_RAW_DATA, $iv);
+        return openssl_decrypt($ciphertext_raw, $method, $key, OPENSSL_RAW_DATA, $iv);
     }
 
     // Legacy mcrypt - mcrypt support may be removed in a future release.
