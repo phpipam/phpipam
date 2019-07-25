@@ -27,6 +27,9 @@ Just run `php functions/scripts/reset-admin-password.php` in the cli and enter y
 The Default credentials for a new instance of phpIPAM are the same as the credentials for
 the demo page: `Admin / ipamadmin`
 
+## Docker
+Community maintained docker images are available at https://hub.docker.com/u/phpipam
+
 ## Changelog
 See misc/CHANGELOG
 
