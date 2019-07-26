@@ -61,7 +61,7 @@ $hostnames      = array();			// Array with detected hostnames
 // script can only be run from cli
 if(php_sapi_name()!="cli") 						{ die("This script can only be run from cli!"); }
 // test to see if threading is available
-if(!PingThread::available()) 						{ die("Threading is required for scanning subnets. Please recompile PHP with pcntl & posix extensions"); }
+if(!PingThread::available($errmsg)) 			{ die("Threading is required for scanning subnets - Error: $errmsg\n"); }
 // verify ping path
 if ($Scan->icmp_type=="ping") {
 if(!file_exists($Scan->settings->scanPingPath)) { die("Invalid ping path!"); }
