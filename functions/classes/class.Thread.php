@@ -52,16 +52,13 @@ class PingThread {
 	*
 	* @return boolean
 	*/
-    public static function available() {
-        $required_functions = array(
-            'pcntl_fork', 'posix_getpid'
-        );
+    public static function available(&$errmsg = null) {
+        $required_extensions = ['posix','pcntl'];
+        $required_functions  = ['posix_getpid','posix_getppid','posix_mkfifo','posix_kill',
+                                'pcntl_fork','pcntl_waitpid','pcntl_wifexited','pcntl_wexitstatus','pcntl_signal'];
 
-        foreach( $required_functions as $function ) {
-            if ( !function_exists( $function ) ) {
-                return false;
-            }
-        }
+        if ($errmsg = php_feature_missing($required_extensions, $required_functions))
+            return false;
 
         return true;
     }
