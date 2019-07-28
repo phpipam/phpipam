@@ -124,6 +124,9 @@ class Scan extends Common_functions {
 		$this->set_php_exec ();
 		# Log object
 		$this->Log = new Logging ($this->Database, $this->settings);
+
+		if ($errmsg = php_feature_missing(null, ['exec']))
+			$this->Result->show("danger", $errmsg, true);
 	}
 
 	/**
