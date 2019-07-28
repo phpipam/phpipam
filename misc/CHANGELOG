@@ -7,6 +7,7 @@
     + Fixed BGP Admin isn't working (#2631);
     + MySQL 8.0 compatibility. (#2646,#2239);
     + Table layout not aligned (#2656);
+    + Improve scanning requirement checks (#1183);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
