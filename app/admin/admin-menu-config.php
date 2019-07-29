@@ -57,6 +57,7 @@ $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-plus", 
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-filter", "name"=>"Filter IP fields", 		"href"=>"filter-fields", 			"description"=>"Select which default address fields to display");
 $admin_menu['IP related management'][] = array("show"=>true,    "icon"=>"fa-filter", "name"=>"Required IP fields",      "href"=>"required-fields",          "description"=>"Select which address fields are required to be filled when creating address.");
 $admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-magic", 	"name"=>"Custom fields", 		"href"=>"custom-fields", 			"description"=>"Manage custom fields");
+$admin_menu['IP related management'][] = array("show"=>true,	"icon"=>"fa-exchange", 	"name"=>"IP Groups", 		"href"=>"ip-groups", 			"description"=>"Manage ip groups");
 
 
 # device managements
@@ -115,9 +116,11 @@ $admin_menu_items = array(
                 		'nat',
                 		'locations',
                         'circuits',
-                		'pstn-prefixes',
+                        'pstn-prefixes',
                         '2fa',
                         'customers',
+                        'routing',
+                        'ip-groups',
                         'routing'
                     );
 

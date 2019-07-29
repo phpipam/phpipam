@@ -28,6 +28,7 @@ else {
 		$Result		= new Result;
 		$User		= new User ($Database);
 		$Sections	= new Sections ($Database);
+		$Groups  	= new ipGroups ($Database);
 		$Subnets	= new Subnets ($Database);
 		$Tools	    = new Tools ($Database);
 		$Addresses	= new Addresses ($Database);
@@ -101,6 +102,8 @@ else {
 		<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-custom-<?php print $User->user->ui_theme; ?>.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php } ?>
 
+
+        <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-multiselect.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php if ($User->settings->enableThreshold=="1") { ?>
 		<link rel="stylesheet" type="text/css" href="css/slider.css?v=<?php print SCRIPT_PREFIX; ?>">
 		<?php } ?>
@@ -114,6 +117,8 @@ else {
 		<script type="text/javascript" src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script type="text/javascript" src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+        <script type="text/javascript" src="js/bootstrap-multiselect.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+        <script type="text/javascript" src="js/typeahead.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!-- bootstrap table -->
 		<script src="js/bootstrap-table/bootstrap-table.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>

@@ -209,7 +209,7 @@ class Common_api_functions {
 	 * @param mixed $controller (default: null)
 	 * @param bool $links (default: true)
 	 * @param bool $transform_address (default: true)
-	 * @return void
+	 * @return array
 	 */
 	protected function prepare_result ($result, $controller = null, $links = true, $transform_address = true) {
 		// empty controller
@@ -579,7 +579,7 @@ class Common_api_functions {
 	 * Validates posted keys and returns proper inset values
 	 *
 	 * @access private
-	 * @return void
+	 * @return array
 	 */
 	protected function validate_keys () {
     	// init values
@@ -1017,5 +1017,20 @@ class Common_api_functions {
 			}
 			unset($this->_params->custom_fields);
 		}
+	}
+
+    /**
+     * Prepare and return result
+     *
+     * @param array  $result
+     * @param int    $code
+     * @return array
+     */
+    public function getPreparedResult($result, $code = 200)
+    {
+        return array(
+            "code" => $code,
+            "data" => $this->prepare_result($result, null, true, true)
+        );
 	}
 }
