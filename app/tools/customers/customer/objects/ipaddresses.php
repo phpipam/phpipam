@@ -2,7 +2,7 @@
 <hr>
 <span class="text-muted"><?php print _("All IP addresses belonging to customer"); ?>.</span>
 
-<script type="text/javascript">
+<script>
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>

@@ -1444,8 +1444,8 @@ class Common_functions  {
     	// just for first
     	if($timepicker_index==0) {
     		$html[] =  '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-    		$html[] =  '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-    		$html[] =  '<script type="text/javascript">';
+    		$html[] =  '<script src="js/bootstrap-datetimepicker.min.js"></script>';
+    		$html[] =  '<script>';
     		$html[] =  '$(document).ready(function() {';
     		//date only
     		$html[] =  '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';

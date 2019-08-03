@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });
 </script>

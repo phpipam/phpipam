@@ -65,7 +65,7 @@ if($_POST['action']=="add") {
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true); }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

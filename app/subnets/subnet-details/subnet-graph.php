@@ -17,12 +17,12 @@ $unused_color = $User->user->ui_theme=="dark" ? "rgba(0,0,0,0.1)" : "white";
 <div id="pieChart" style="height:220px;width:100%;"></div>
 
 <!-- charts -->
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.js"></script>
-<script language="javascript" type="text/javascript" src="js/flot/jquery.flot.pie.js"></script>
-<!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/flot/excanvas.min.js"></script><![endif]-->
+<script src="js/flot/jquery.flot.js"></script>
+<script src="js/flot/jquery.flot.pie.js"></script>
+<!--[if lte IE 8]><script src="js/flot/excanvas.min.js"></script><![endif]-->
 
 
-<script type="text/javascript">
+<script>
 $(function () {
 	//data
     var data = [

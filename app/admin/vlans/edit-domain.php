@@ -40,7 +40,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

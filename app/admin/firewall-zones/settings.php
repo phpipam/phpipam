@@ -72,7 +72,7 @@ $namePattern = array (	'patternIndicator' 	=> '<span class="label label-default"
 						'patternSeparator' 	=> '<span class="label label-default" style="margin-right:5px;"><input type="hidden" value="patternSeparator">'.$firewallZoneSettings['separator'].'</span>');
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

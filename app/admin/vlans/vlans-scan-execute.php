@@ -178,8 +178,8 @@ else {
     				// just for first
     				if($timeP==0) {
     					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-    					print '<script type="text/javascript">';
+    					print '<script src="js/bootstrap-datetimepicker.min.js"></script>';
+    					print '<script>';
     					print '$(document).ready(function() {';
     					//date only
     					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';

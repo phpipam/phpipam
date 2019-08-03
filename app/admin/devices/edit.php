@@ -66,7 +66,7 @@ if (is_null($device['rack']))   { $display='display:none'; }
 else                            { $display=''; }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

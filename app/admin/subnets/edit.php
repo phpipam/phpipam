@@ -110,9 +110,9 @@ $readonly = $_POST['action']=="edit" || $_POST['action']=="delete" ? true : fals
 ?>
 
 <?php if ($User->settings->enableThreshold=="1") { ?>
-<script type="text/javascript" src="js/bootstrap-slider.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+<script src="js/bootstrap-slider.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 <?php } ?>
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {

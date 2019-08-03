@@ -62,7 +62,7 @@ $csrf_cookie = $User->Crypto->csrf_cookie ("create", "nat_add");
 </div>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
     $('form#search_nats').submit(function() {
         $.post("app/admin/nat/item-add-search.php", $(this).serialize(), function(data) {

@@ -44,7 +44,7 @@ elseif (strlen(Config::get('gmaps_api_key'))==0) {
     $location->description = strlen($location->description)>0 ? "<span class=\'text-muted\'>".escape_input($location->description)."</span>" : "";
     $location->description = str_replace(array("\r\n","\n","\r"), "<br>", $location->description );
     ?>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
 
             // init gmaps

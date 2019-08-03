@@ -37,7 +37,7 @@ else {
     $customer->note = strlen($customer->note)>0 ? "<span class=\'text-muted\'>".escape_input($customer->note)."</span>" : "";
     $customer->note = str_replace(array("\r\n","\n","\r"), "<br>", $customer->note );
     ?>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
 
             // init gmaps

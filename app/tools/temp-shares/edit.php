@@ -53,8 +53,8 @@ $url = $Result->createURL().create_link("temp_share",$share->code);
 
 
 <link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">
-<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript">
+<script src="js/bootstrap-datetimepicker.min.js"></script>
+<script>
 $(document).ready(function() {
 $(".datetimepicker").datetimepicker( { pickDate: true, pickTime: true } );
 })

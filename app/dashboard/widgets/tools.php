@@ -33,7 +33,7 @@ $tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>
 ?>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 	return false;

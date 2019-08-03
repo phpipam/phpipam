@@ -106,28 +106,28 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script type="text/javascript" src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script type="text/javascript" src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
-		<script type="text/javascript" src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php } ?>
-		<script type="text/javascript" src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script type="text/javascript" src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
-		<script type="text/javascript" src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/magic.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/bootstrap-switch.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!-- bootstrap table -->
 		<script src="js/bootstrap-table/bootstrap-table.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/bootstrap-table/bootstrap-table-cookie.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 		<!--[if lt IE 9]>
-		<script type="text/javascript" src="js/dieIE.js"></script>
+		<script src="js/dieIE.js"></script>
 		<![endif]-->
 		<?php if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))>0) { ?>
-		<script type="text/javascript" src="https://maps.google.com/maps/api/js<?php print "?key=".Config::get('gmaps_api_key'); ?>"></script>
-		<script type="text/javascript" src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="https://maps.google.com/maps/api/js<?php print "?key=".Config::get('gmaps_api_key'); ?>"></script>
+		<script src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php }	?>
 		<!-- jQuery UI -->
-		<script type="text/javascript" src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jquery-ui-1.12.1.custom.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 	</head>
 

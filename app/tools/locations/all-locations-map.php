@@ -69,7 +69,7 @@ else {
 
         // calculate
         if (sizeof($all_locations)>0) { ?>
-            <script type="text/javascript">
+            <script>
                 $(document).ready(function() {
                     // init gmaps
                     var map = new GMaps({

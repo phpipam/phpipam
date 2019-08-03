@@ -35,7 +35,7 @@ else													{ $dashboard = false; }
 </style>
 
 <!-- JS -->
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	//if you need some JS write it here, jQuery is already included
 	return false;

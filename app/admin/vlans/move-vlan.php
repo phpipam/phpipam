@@ -31,7 +31,7 @@ if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true
 $vlan_domains = $Admin->fetch_all_objects("vlanDomains", "id");
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

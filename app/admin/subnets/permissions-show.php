@@ -32,7 +32,7 @@ $subnet = $Subnets->fetch_subnet(null, $_POST['subnetId']);
 ?>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {

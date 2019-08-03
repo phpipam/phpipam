@@ -60,7 +60,7 @@ if ($_POST['action']=="remove") {
 
     # js
     ?>
-    <script type="text/javascript">
+    <script>
     $(document).ready(function() {
     $('.hidePopups').click(function(){
        window. location.reload();
@@ -97,7 +97,7 @@ else {
     }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

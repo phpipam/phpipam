@@ -73,7 +73,7 @@ if($circuit_providers===false) 	{
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 
 function addAllCircuitsHandlers(){
 	$('#all_circuits tbody tr td').on("click","a[name='addbtn']",function(event){

@@ -40,7 +40,7 @@ else                                                            { $display=''; $
 if (strlen($device->snmp_timeout)==0)   { $device->snmp_timeout = 1000; }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

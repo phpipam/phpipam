@@ -70,7 +70,7 @@ $all_types = $Tools->fetch_all_objects ("circuitTypes", "ctname");
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
