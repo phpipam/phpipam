@@ -92,14 +92,16 @@ if (VERSION_VISIBLE > $version) {
 				unset($lines[0]);
 			}
 			// merge
+			foreach ($lines as $i => $line)
+				$lines[$i] = escape_input($line);
 			$lines = implode("<br>", array_filter($lines));
 
 			// title
-			print "<h5><i class='fa fa-angle-double-right'></i> $out[commit]</h5>";
+			print "<h5><i class='fa fa-angle-double-right'></i> ".escape_input($out['commit'])."</h5>";
 			// date
 			print "<div style='padding-left:20px;margin-bottom:20px;'>";
-			print "$out[author] <span class='text-muted'>(pushed on $out[date])</span>";
-			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>$lines</div>";
+			print escape_input($out['author'])." <span class='text-muted'>(pushed on ".escape_input($out['date']).")</span>";
+			print "<div style='padding:10px;max-width:400px;border-radius:6px;border:1px solid #ddd;'>".$lines."</div>";
 			// tag
 			print "<a class='btn btn-xs btn-default' style='margin-top:3px;' href='https://github.com/phpipam/phpipam/commit/$out[commit]' target='_blank'>View</a>";
 			print "</div>";
