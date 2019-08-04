@@ -8,6 +8,7 @@
     + Bandwidth calculator - 400 Bad Request (#1807,#2648);
     + Table layout not aligned (#2656);
     + Improve scanning requirement checks (#1183);
+    + Date picker hidden (#2673);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
