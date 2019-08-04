@@ -70,7 +70,7 @@
             }
             this._compileFormat();
             if (this.component) icon = this.component.find('span');
-			
+
             if (this.pickTime) {
                 if (icon && icon.length) {
                   this.timeIcon = icon.data('time-icon');
@@ -229,7 +229,7 @@
             else this.setValue(date.valueOf());
         },
 
-        
+
 
         setEndDate: function (date) {
             if (date instanceof Date) {
@@ -274,7 +274,7 @@
             offset.top = offset.top + this.$element.outerHeight();
 
             var $window = $(window);
-			
+
 			if (offset.top + this.widget.height() > $window.height()) offset.top = offset.top - (this.widget.height() + this.height + 10);
 
             if (this.options.width !== undefined) {
@@ -1102,7 +1102,7 @@
                 this.update();
             }
         }
-	
+
     $.fn.datetimepicker = function (option, val) {
         return this.each(function () {
             var $this = $(this),
@@ -1195,7 +1195,7 @@
             );
         } else if (pickTime) {
             return (
-              '<div class="bootstrap-datetimepicker-widget dropdown-menu">' +
+              '<div class="bootstrap-datetimepicker-widget dropdown-menu" style="z-index:9999 !important;">' +
                 '<div class="timepicker">' +
                   TPGlobal.getTemplate(is12Hours, showSeconds, upIcon, downIcon) +
                 '</div>' +
@@ -1203,7 +1203,7 @@
             );
         } else {
             return (
-              '<div class="bootstrap-datetimepicker-widget dropdown-menu">' +
+              '<div class="bootstrap-datetimepicker-widget dropdown-menu" style="z-index:9999 !important;">' +
                 '<div class="datepicker">' +
                   DPGlobal.template +
                 '</div>' +

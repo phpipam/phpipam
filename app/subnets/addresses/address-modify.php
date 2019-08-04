@@ -642,8 +642,8 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script src="js/bootstrap-datetimepicker.min.js"></script>';
+					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
+					print '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
 					print '<script>';
 					print '$(document).ready(function() {';
 					//date only
