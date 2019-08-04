@@ -65,16 +65,16 @@ if (VERSION_VISIBLE > $version) {
 	print "<div class='log-print gitlog' style='display:none'>";
 
 	# check
-	$commit_log = shell_exec("git log");
+	$commit_log = shell_exec("git log -n100");
 
-	if ($commit_log=="NULL") {
+	if (!is_string($commit_log)) {
 		$Result->show("info", "Git not available", false);
 	}
 	else {
 		// title
-		print "<h4 style='margin-top:40px;'>Commit log (local)</h4><hr>";
+		print "<h4 style='margin-top:40px;'>Commit log (local) [Last 100]</h4><hr>";
 		// split commits
-		$commit_log = array_filter(explode("commit ", $commit_log));
+		$commit_log = preg_split('/\r?\ncommit /', "\n".$commit_log, null, PREG_SPLIT_NO_EMPTY);
 
 		// loop
 		foreach ($commit_log as $commit) {
@@ -85,10 +85,10 @@ if (VERSION_VISIBLE > $version) {
 			$out['commit'] = $lines[0];
 			// remove unneeded
 			foreach ($lines as $k=>$l) {
-				if (strpos($l, "Author")!==false)		{ $out['author'] = substr($l, 7);	unset($lines[$k]); }
-				elseif (strpos($l, "Date")!==false)		{ $out['date'] = substr($l, 7);     unset($lines[$k]); }
-				elseif (strpos($l, "Merge:")!==false)	{ $out['pr'] = $l;	unset($lines[$k]); }
-				elseif (strlen(trim($l))==0)			{ unset($lines[$k]); }
+				if     (strpos($l, "Author: ")===0)	{ $out['author'] = substr($l, 7);	unset($lines[$k]); }
+				elseif (strpos($l, "Date: ")===0)	{ $out['date'] = substr($l, 7);     unset($lines[$k]); }
+				elseif (strpos($l, "Merge: ")===0)	{ $out['pr'] = $l;	unset($lines[$k]); }
+				elseif (strlen(trim($l))==0)		{ unset($lines[$k]); }
 				unset($lines[0]);
 			}
 			// merge
