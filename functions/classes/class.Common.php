@@ -1410,9 +1410,9 @@ class Common_functions  {
    		$html = array ();
     	// just for first
     	if($timepicker_index==0) {
-    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-    		$html[] =  '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-    		$html[] =  '<script type="text/javascript">';
+    		$html[] =  '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
+    		$html[] =  '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
+    		$html[] =  '<script>';
     		$html[] =  '$(document).ready(function() {';
     		//date only
     		$html[] =  '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';
