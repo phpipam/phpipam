@@ -38,7 +38,7 @@ $settings = $Tools->get_settings();
 	<?php } ?>
 
 	<!-- js -->
-	<script src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/jquery-3.4.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script>
 	$(document).ready(function(){
