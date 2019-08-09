@@ -87,7 +87,7 @@ if (isset($objects["racks"])) {
             $links[] = ["type"=>"link", "text"=>"Show popup", "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
             $links[] = ["type"=>"divider"];
         }
-        if($User->get_module_permissions ("racks")>1) {
+        if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage rack"];
             $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$r->id'", "icon"=>"pencil"];
         }
@@ -95,7 +95,7 @@ if (isset($objects["racks"])) {
             $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$r->id'", "icon"=>"times"];
             $links[] = ["type"=>"divider"];
         }
-        if($User->get_module_permissions ("customers")>1) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
             $links[] = ["type"=>"divider"];
             $links[] = ["type"=>"header", "text"=>"Unlink"];
             $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='racks' data-id='$r->id'", "icon"=>"unlink"];

@@ -84,7 +84,7 @@ if(sizeof($custom_fields) > 0) {
 }
 
 // edit, delete
-if($User->get_module_permissions ("circuits")>1) {
+if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
 	print "<tr>";
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";

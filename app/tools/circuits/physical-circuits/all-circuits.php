@@ -124,7 +124,7 @@ else {
             $links[] = ["type"=>"link", "text"=>"View", "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
-        if($User->get_module_permissions ("circuits")>1) {
+        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage circuit"];
             $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
         }

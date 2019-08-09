@@ -96,7 +96,7 @@ elseif ($domains === false) {$Result->show("info alert-absolute", _("No domains 
 <!-- Headers -->
 <thead>
 <tr>
-	<?php if ($User->get_module_permissions ("pdns")>1) { ?>
+	<?php if ($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>
 	<th style="width:80px;"></th>
 	<?php } ?>
     <th><?php print _('Domain');?></th>
@@ -127,7 +127,7 @@ foreach ($domains as $d) {
     $serial = $serial[2];
 
     print "<tr>";
-    if ($User->get_module_permissions ("pdns")>1) {
+    if ($User->get_module_permissions ("pdns")>=User::ACCESS_RW) {
         // actions
         print "	<td>";
         print "	<div class='btn-group'>";

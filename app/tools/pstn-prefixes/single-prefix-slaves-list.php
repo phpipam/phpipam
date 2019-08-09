@@ -34,7 +34,7 @@ else {
 			}
 		}
 	}
-    if($User->get_module_permissions ("pstn")>1)
+    if($User->get_module_permissions ("pstn")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -117,11 +117,11 @@ else {
     	    	}
     	    }
 
-            if($User->get_module_permissions ("pstn")>1) {
+            if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
         		print "	<td class='actions' style='padding:0px;'>";
 
                 $links = [];
-                if($User->get_module_permissions ("pstn")>1) {
+                if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
                 $links[] = ["type"=>"header", "text"=>"Manage"];
                 $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$sp->id'", "icon"=>"pencil"];
                 }

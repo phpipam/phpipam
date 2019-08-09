@@ -450,7 +450,7 @@ else {
 		        	# get device details
 		        	$device = (array) $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
 		        	# set rack
-		        	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>1) {
+		        	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
 		        	$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";
 																		  print "<td class='hidden-xs hidden-sm hidden-md'>$rack <a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
 					}

@@ -36,7 +36,7 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 	<td class='border-bottom'></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
 	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
-	<?php if($User->get_module_permissions ("vlan")>1) { ?><td class='border-bottom'></td><?php } ?>
+	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) { ?><td class='border-bottom'></td><?php } ?>
 </tr>
 
 <!-- content -->
@@ -84,7 +84,7 @@ foreach($vlan_domains as $domain) {
         $links[] = ["type"=>"link", "text"=>"Show domain VLANs", "href"=>create_link($_GET['page'], "vlan", $domain->id), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
     }
-    if($User->get_module_permissions ("vlan")>1) {
+    if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
         $links[] = ["type"=>"header", "text"=>"Manage"];
         $links[] = ["type"=>"link", "text"=>"Edit domain", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='edit' data-id='$domain->id'", "icon"=>"pencil"];
     }

@@ -58,7 +58,7 @@ else {
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
     print " <th>"._('Description')."</th>";
-    if($User->get_module_permissions ("nat")>1)
+    if($User->get_module_permissions ("nat")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -145,7 +145,7 @@ else {
                 print " <td>$n->dst_port</td>";
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // actions
-                if($User->get_module_permissions ("nat")>1) {
+                if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
         		print "	<td class='actions'>";
                 $links = [];
                 $links[] = ["type"=>"header", "text"=>"Manage NAT"];

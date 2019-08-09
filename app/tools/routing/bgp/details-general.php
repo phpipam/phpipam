@@ -113,7 +113,7 @@ if(sizeof($custom_bgp) > 0) {
 }
 
 // edit, delete
-if($User->get_module_permissions ("routing")>1) {
+if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {
     print "<tr>";
     print " <td colspan='2'><hr></td>";
     print "</tr>";
@@ -123,7 +123,7 @@ if($User->get_module_permissions ("routing")>1) {
     print " <td class='actions'>";
 
     $links = [];
-    if($User->get_module_permissions ("routing")>1) {
+    if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {
         $links[] = ["type"=>"header", "text"=>"Manage BGP"];
         $links[] = ["type"=>"link", "text"=>"Edit BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", "icon"=>"pencil"];
     }

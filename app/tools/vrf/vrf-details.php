@@ -118,7 +118,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 	}
 
 	# permissions
-	if($User->get_module_permissions ("vrf")>1) {
+	if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
 		# action button groups
 		print "<tr>";
 		print "	<th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
@@ -126,7 +126,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 		// actions
         $links = [];
-        if($User->get_module_permissions ("vrf")>1) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
         }

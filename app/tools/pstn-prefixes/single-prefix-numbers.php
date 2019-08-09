@@ -36,7 +36,7 @@ $colspan_dhcp = 4;
     		}
     	}
         ?>
-        <?php  if($User->get_module_permissions ("pstn")>1) { ?>
+        <?php  if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) { ?>
         <th></th>
         <?php } ?>
     </tr>
@@ -156,7 +156,7 @@ $colspan_dhcp = 4;
             	print "	<td class='actions'>";
 
                 $links = [];
-                if($User->get_module_permissions ("pstn")>1) {
+                if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
                 $links[] = ["type"=>"header", "text"=>"Manage"];
                 $links[] = ["type"=>"link", "text"=>"Edit number", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
                 }

@@ -77,7 +77,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
         <?php }
 
         // acrtions
-        if($User->get_module_permissions ("devices")>1) {
+        if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
             print "<tr>";
             print " <td></td>";
             print " <td>";

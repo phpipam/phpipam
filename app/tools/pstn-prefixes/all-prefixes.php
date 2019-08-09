@@ -42,7 +42,7 @@ else {
     print " <th>"._('Start')."</th>";
     print " <th>"._('Stop')."</th>";
     print " <th>"._('Numbers')."</th>";
-    if($User->get_module_permissions ("devices")>1)
+    if($User->get_module_permissions ("devices")>=User::ACCESS_RW)
     print " <th>"._('Device')."</th>";
 	if(sizeof($custom) > 0) {
 		foreach($custom as $field) {
@@ -52,7 +52,7 @@ else {
 			}
 		}
 	}
-    if($User->get_module_permissions ("pstn")>1)
+    if($User->get_module_permissions ("pstn")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";

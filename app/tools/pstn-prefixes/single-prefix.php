@@ -172,7 +172,7 @@ else {
         	print " <div class='btn-group'>";
 
             $links = [];
-            if($User->get_module_permissions ("pstn")>1) {
+            if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
                 if(!$isMaster) {
                 $links[] = ["type"=>"header", "text"=>"Create address"];
                 $links[] = ["type"=>"link", "text"=>"Add address to prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus"];

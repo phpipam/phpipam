@@ -2490,7 +2490,7 @@ class Tools extends Common_functions {
                 $html[] = "	<td><span class='badge badge1 badge5'>".$cnt."</span></td>";
 
 				//device
-				if($User->get_module_permissions ("devices")>1) {
+				if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
 					$device = ( $option['deviceId']==0 || empty($option['deviceId']) ) ? false : true;
 
 					if($device===false) { $html[] ='	<td>/</td>' . "\n"; }
@@ -2540,7 +2540,7 @@ class Tools extends Common_functions {
 			        $links[] = ["type"=>"header", "text"=>"Show"];
 			        $links[] = ["type"=>"link", "text"=>"View prefix", "href"=>create_link($_GET['page'], "pstn-prefixes", $option['id']), "icon"=>"eye", "visible"=>"dropdown"];
 
-			        if($User->get_module_permissions ("pstn")>1) {
+			        if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
 			            $links[] = ["type"=>"divider"];
 			            $links[] = ["type"=>"header", "text"=>"Manage"];
 			            $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$option[id]'", "icon"=>"pencil"];

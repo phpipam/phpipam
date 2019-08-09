@@ -103,7 +103,7 @@ else {
             	}
 
             	# actions
-                if ($User->get_module_permissions ("locations")>1) {
+                if ($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
                 	print "<tr>";
                 	print " <td colspan='2'><hr></td>";
                 	print "</tr>";

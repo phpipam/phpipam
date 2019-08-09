@@ -26,7 +26,7 @@ $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : 
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 # set disabled for non-admins
-$disabled = $User->get_module_permissions ("vlan")>1 ? "" : "hidden";
+$disabled = $User->get_module_permissions ("vlan")>=User::ACCESS_RW ? "" : "hidden";
 
 
 # title
@@ -65,7 +65,7 @@ else {
 			}
 		}
 	}
-	if($User->get_module_permissions ("vlan")>1)
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
     print "<th></th>";
 	print "</tr>";
 	print "</thead>";
@@ -132,10 +132,10 @@ else {
 	    }
 
         // actions
-        if ($User->get_module_permissions ("vlan")>1) {
+        if ($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("vlan")>1) {
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan->id'", "icon"=>"pencil"];
         }

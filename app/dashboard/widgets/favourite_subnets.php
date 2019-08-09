@@ -46,7 +46,7 @@ else {
 	print "	<th>"._('Object')."</th>";
 	print "	<th>"._('Description')."</th>";
 	print "	<th class='hidden-xs'>"._('Section')."</th>";
-	if($User->get_module_permissions ("vlan")>1)
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
 	print "	<th>"._('VLAN')."</th>";
 	print "	<th></th>";
 	print "</tr>";

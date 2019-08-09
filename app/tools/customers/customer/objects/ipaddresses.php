@@ -179,7 +179,7 @@ foreach($addresses as $dummy) {
         $links[] = ["type"=>"header", "text"=>"Status check"];
         $links[] = ["type"=>"link", "text"=>"Check avalibility", "href"=>"", "class"=>"ping_ipaddress", "dataparams"=>" data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"cogs"];
     }
-    if($User->get_module_permissions ("customers")>1) {
+    if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
  	    $links[] = ["type"=>"divider"];
         $links[] = ["type"=>"header", "text"=>"Unlink"];
         $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='ipaddresses' data-id='{$addresses[$n]->id}'", "icon"=>"unlink"];

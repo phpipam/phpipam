@@ -22,7 +22,7 @@ if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User
     print "<table class='table table-condensed table-td-top table-auto table-noborder'>";
 
     // add
-    if($User->get_module_permissions ("nat")>1) {
+    if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
     print "<tr>";
     print " <td colspan='4'>";
     print "     <div class='btn-group' role='group'>";
@@ -51,7 +51,7 @@ if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User
 
         // set actions
         $links = [];
-        if($User->get_module_permissions ("nat")>1) {
+        if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
             $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];

@@ -51,7 +51,7 @@ elseif(isset($all_nats_per_object['subnets'][$subnet['id']])) {
         $n = $all_nats[$nat];
         // set actions
         $links = [];
-        if($User->get_module_permissions ("nat")>1) {
+        if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
             $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];

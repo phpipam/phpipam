@@ -103,7 +103,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 
 
 	# permissions
-	if($User->get_module_permissions ("vlan")>1) {
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";

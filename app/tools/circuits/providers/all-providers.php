@@ -97,7 +97,7 @@ else {
         $links[] = ["type"=>"header", "text"=>"View"];
         $links[] = ["type"=>"link", "text"=>"Show provider", "href"=>create_link($_GET['page'], "circuits","providers",$provider->id), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
-        if($User->get_module_permissions ("circuits")>1) {
+        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage provider"];
             $links[] = ["type"=>"link", "text"=>"Edit provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
         }

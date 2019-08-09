@@ -5,7 +5,7 @@
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
 <?php
-if($User->get_module_permissions ("locations")>1) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
 include('menu.php');
 }
 ?>

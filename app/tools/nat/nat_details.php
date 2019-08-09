@@ -167,7 +167,7 @@ else {
 		}
 
         // actions
-        if($User->get_module_permissions ("nat")>1) {
+        if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
 
         print "<tr>";
         print "	<td colspan='4'><hr></th>";

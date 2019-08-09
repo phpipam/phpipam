@@ -93,7 +93,7 @@ if (isset($objects["routing_bgp"])) {
                 $links[] = ["type"=>"link", "text"=>"Show BGP", "href"=>create_link($_GET['page'], "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"divider"];
             }
-            if($User->get_module_permissions ("routing")>1) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {
                 $links[] = ["type"=>"header", "text"=>"Manage BGP"];
                 $links[] = ["type"=>"link", "text"=>"Edit BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", "icon"=>"pencil"];
             }

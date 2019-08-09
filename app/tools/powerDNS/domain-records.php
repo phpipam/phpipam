@@ -106,7 +106,7 @@ if ($domain === false) {
 	<a href="<?php print create_link($link_section, "powerDNS", $_GET['subnetId']);?>" class='btn btn-sm btn-default'>
 		<i class='fa fa-angle-left'></i> <?php print _('Domains');?>
 	</a>
-    <?php if($User->get_module_permissions ("pdns")>1) { ?>
+    <?php if($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>
 	<button class='btn btn-sm btn-default btn-success editRecord' data-action='add' data-id='0' data-domain_id='<?php print $domain->id;?>'>
 		<i class='fa fa-plus'></i> <?php print _('New record');?>
 	</button>
@@ -125,7 +125,7 @@ if ($domain === false) {
 <!-- Headers -->
 <thead>
 <tr>
-    <?php if($User->get_module_permissions ("pdns")>1) { ?>
+    <?php if($User->get_module_permissions ("pdns")>=User::ACCESS_RW) { ?>
 	<th></th>
     <?php } ?>
     <th><?php print _('Name');?></th>
@@ -148,7 +148,7 @@ function print_record ($r) {
 
     print "<tr class='$trclass'>";
     // actions
-    if ($User->get_module_permissions ("pdns")>1) {
+    if ($User->get_module_permissions ("pdns")>=User::ACCESS_RW) {
     print "	<td>";
     print "	<div class='btn-group'>";
     print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";

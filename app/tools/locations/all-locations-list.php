@@ -2,7 +2,7 @@
 <hr>
 
 <?php
-if($User->get_module_permissions ("locations")>1) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
 include('menu.php');
 }
 ?>
@@ -49,7 +49,7 @@ else {
 			}
 		}
 	}
-    if($User->get_module_permissions ("locations")>1)
+    if($User->get_module_permissions ("locations")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -93,7 +93,7 @@ else {
     			}
     		}
             // actions
-            if($User->get_module_permissions ("locations")>1) {
+            if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
             print "<td class='actions'>";
             $links = [];
             $links[] = ["type"=>"header", "text"=>"Show"];

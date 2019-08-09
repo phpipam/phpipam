@@ -118,7 +118,7 @@ else {
         $links[] = ["type"=>"header", "text"=>"Show"];
         $links[] = ["type"=>"link", "text"=>"Show VRF", "href"=>create_link($_GET['page'], "vrf", $vrf['vrfId']), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
-        if($User->get_module_permissions ("vrf")>1) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'", "icon"=>"pencil"];
         }

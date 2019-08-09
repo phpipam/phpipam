@@ -127,7 +127,7 @@ else {
                 $links[] = ["type"=>"link", "text"=>"Show popup", "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
                 $links[] = ["type"=>"divider"];
             }
-            if($User->get_module_permissions ("racks")>1) {
+            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
                 $links[] = ["type"=>"header", "text"=>"Manage rack"];
                 $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$r->id'", "icon"=>"pencil"];
             }

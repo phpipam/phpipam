@@ -124,7 +124,7 @@ else {
     		print "	<td class='actions' style='padding:0px;'>";
     		print "	<div class='btn-group'>";
 
-    		if($User->get_module_permissions ("pstn")>1) {
+    		if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='edit'   data-id='".$sp->id."'><i class='fa fa-gray fa-pencil'></i></button>";
     			print "		<button class='btn btn-xs btn-default editPSTN' data-action='delete' data-id='".$sp->id."'><i class='fa fa-gray fa-times'></i></button>";
     		}
