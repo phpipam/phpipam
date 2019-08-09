@@ -49,7 +49,7 @@ else {
         print " <th>"._('Type').'</th>';
         print " <th>"._('Capacity').'</th>';
         print " <th>"._('Status').'</th>';
-        if($User->get_module_permissions ("locations")>0) {
+        if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
         print " <th>"._('Point A').'</th>';
         print " <th>"._('Point B').'</th>';
         }
@@ -78,7 +78,7 @@ else {
             print " <td>$circuit->type</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->capacity</td>";
             print " <td class='hidden-xs hidden-sm'>$circuit->status</td>";
-            if($User->get_module_permissions ("locations")>0) {
+            if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
             print " <td class='hidden-xs hidden-sm'>$locationA_html</td>";
             print " <td class='hidden-xs hidden-sm'>$locationB_html</td>";
             }

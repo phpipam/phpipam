@@ -10,7 +10,7 @@ $User->check_user_session();
 $all_nats = array();
 $all_nats_per_object = array();
 
-if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>0) {
+if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User::ACCESS_R) {
     # fetch all object
     $all_nats = $Tools->fetch_multiple_objects ("nat", "device", $device->id);
 

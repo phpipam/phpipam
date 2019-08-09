@@ -96,7 +96,7 @@ else {
             // links
             print "<td class='actions'>";
             $links = [];
-            if($User->get_module_permissions ("routing")>0) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_R) {
                 $links[] = ["type"=>"header", "text"=>"Show BGP"];
                 $links[] = ["type"=>"link", "text"=>"Show BGP", "href"=>create_link($_GET['page'], "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"divider"];

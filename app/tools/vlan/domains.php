@@ -79,7 +79,7 @@ foreach($vlan_domains as $domain) {
     // links
     print "<td class='actions'>";
     $links = [];
-    if($User->get_module_permissions ("vlan")>0) {
+    if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
         $links[] = ["type"=>"header", "text"=>"Show"];
         $links[] = ["type"=>"link", "text"=>"Show domain VLANs", "href"=>create_link($_GET['page'], "vlan", $domain->id), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];

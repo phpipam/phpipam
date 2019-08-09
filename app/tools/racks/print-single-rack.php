@@ -47,7 +47,7 @@ else {
 
 
 # customer
-if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
     $customer = $Tools->fetch_object ("customers", "id", $rack->customer_id);
 }
 ?>
@@ -105,7 +105,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         </tr>
         <?php } ?>
 
-        <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>0) { ?>
+        <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
         <tr>
             <td colspan='2'><hr></td>
         </tr>
@@ -113,7 +113,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             <th><?php print _('Customer'); ?></th>
             <td>
                 <?php
-                if($customer!==false && $User->get_module_permissions ("customers")>0)
+                if($customer!==false && $User->get_module_permissions ("customers")>=User::ACCESS_R)
                 print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>";
                 ?>
                 </td>
@@ -169,7 +169,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 
 
         // attached devices
-        if($User->get_module_permissions ("devices")>0) {
+        if($User->get_module_permissions ("devices")>=User::ACCESS_R) {
         print "<tr>";
         print " <th>"._('Devices')."</th>";
         print " <td style='padding-bottom:20px;'>";

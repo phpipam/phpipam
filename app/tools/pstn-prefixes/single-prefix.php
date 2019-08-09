@@ -105,7 +105,7 @@ else {
         	print "	<td>$prefix->description</td>";
         	print "</tr>";
 
-            if($User->get_module_permissions ("devices")>0) {
+            if($User->get_module_permissions ("devices")>=User::ACCESS_R) {
             	# device
             	print "<tr>";
             	print "	<th>"._('Device')."</th>";

@@ -90,7 +90,7 @@ else {
 
 
 	/* print VLAN menu ---------- */
-	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>0) {
+	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 		$vlans = $Sections->fetch_section_vlans($_GET['section']);
 
 		# if some is present
@@ -106,7 +106,7 @@ else {
 
 
 	/* print VRF menu ---------- */
-	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>0) {
+	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		$vrfs = $Sections->fetch_section_vrfs($_GET['section']);
 
 		# if some is present

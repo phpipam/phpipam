@@ -145,7 +145,7 @@ $custom = $Tools->fetch_custom_fields('pstnNumbers');
     	?>
 
     	<!-- Device -->
-        <?php if ($User->get_module_permissions ("devices")>0) { ?>
+        <?php if ($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Device'); ?></th>
     		<td id="deviceDropdown">

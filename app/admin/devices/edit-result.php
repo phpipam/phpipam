@@ -53,7 +53,7 @@ $device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>0) {
+if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
         unset($device['rack']);
     }
@@ -106,7 +106,7 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>0) {
+if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 	$values['rack']       = $device['rack'];
 	$values['rack_start'] = $device['rack_start'];
 	$values['rack_size']  = $device['rack_size'];

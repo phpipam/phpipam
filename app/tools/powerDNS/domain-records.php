@@ -58,7 +58,7 @@ if ($domain === false) {
 <h4><?php print _('Records for domain');?> <strong><?php print $domain->name;?></strong></h4><hr>
 
 <!-- domain details -->
-<?php if($User->get_module_permissions ("pdns")>0) { ?>
+<?php if($User->get_module_permissions ("pdns")>=User::ACCESS_R) { ?>
 <blockquote style="margin-left: 30px;margin-top: 10px;">
 
     <table class="table table-pdns-details table-auto table-condensed">

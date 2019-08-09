@@ -107,7 +107,7 @@ if (isset($objects["circuits"])) {
 			// actions
 	        print "<td class='actions'>";
 	        $links = [];
-	        if($User->get_module_permissions ("circuits")>0) {
+	        if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
 	            $links[] = ["type"=>"header", "text"=>"Show circuit"];
 	            $links[] = ["type"=>"link", "text"=>"View", "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
 	        }

@@ -54,7 +54,7 @@ else {
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
 	print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('L2domain').'</th>' . "\n";
-	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 	print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
 	$csize++;
 	}
@@ -115,7 +115,7 @@ else {
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
 		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
-		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 			 $customer = $Tools->fetch_object ("customers", "id", $vlan->customer_id);
 			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 		}

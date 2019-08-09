@@ -75,7 +75,7 @@ else {
         // actions
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("customers")>0) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>"Show"];
             $links[] = ["type"=>"link", "text"=>"Show customer", "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];

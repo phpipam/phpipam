@@ -116,7 +116,7 @@ if(sizeof($address)>1) {
     	}
 
         # customer
-        if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+        if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
         $customer= $Tools->fetch_object ("customers", "id", $address['customer_id']);
         print "<tr>";
         print " <th>"._('Customer')."</th>";
@@ -144,7 +144,7 @@ if(sizeof($address)>1) {
     	}
 
     	# switch
-    	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+    	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
     	print "<tr>";
     	print "	<th>"._('Device')."</th>";
     	if(strlen($address['switch'])>0) {
@@ -166,7 +166,7 @@ if(sizeof($address)>1) {
         print "</tr>";
         }
 
-    	if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+    	if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Location'); ?></th>
     		<td>

@@ -66,7 +66,7 @@ if(sizeof($result_vlans) > 0) {
         // actions
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("vlan")>0) {
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>"View"];
             $links[] = ["type"=>"link", "text"=>"Show vlan", "href"=>create_link("tools", "vlan", $vlan['domainId'], $vlan['vlanId']), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];

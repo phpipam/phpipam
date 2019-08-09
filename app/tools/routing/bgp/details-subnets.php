@@ -24,11 +24,11 @@ else {
 	print "	<th>"._('Subnet')."</th>";
 	print "	<th>"._('Description')."</th>";
 	print "	<th>"._('Direction')."</th>";
-	if($User->get_module_permissions ("vlan")>0) {
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 	print "	<th class='small'>"._('VLAN')."</th>";
 	$colspan++;
 	}
-	if($User->get_module_permissions ("vrf")>0) {
+	if($User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 	print "	<th class='small'>"._('VRF')."</th>";
 	$colspan++;
 	}
@@ -61,9 +61,9 @@ else {
 		    print "	<td>$subnet[description]</td>";
 		    print "	<td>$icon ".ucwords($subnet['direction'])."</td>";
 
-			if($User->get_module_permissions ("vlan")>0)
+			if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
 		    print "	<td class='small'><a href='".create_link("tools","vlan", $vlan->domainId, $vlan->vlanId)."'><span class='badge badge1'>$vlan->number</span></a></td>";
-			if($User->get_module_permissions ("vrf")>0)
+			if($User->get_module_permissions ("vrf")>=User::ACCESS_R)
 		    print "	<td class='small'><a href='".create_link("tools","vrf", $vrf->vrfId)."'><span class='badge badge1'>$vrf->name</span></a></td>";
 			# edit
 			print "	<td class='actions'>";

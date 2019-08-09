@@ -49,7 +49,7 @@ if($logical_circuit!==false) {
 		// map
 		//
 		print "<div class='col-xs-12 col-md-6'>";
-		if($User->settings->enableLocations==1 && $User->get_module_permissions ("locations")>0) {
+		if($User->settings->enableLocations==1 && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 		print "<div class='col-xs-12'>";
 		include("logical-circuit-details-map.php");
 	    print "</div>";

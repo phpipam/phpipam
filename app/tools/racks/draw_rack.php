@@ -32,7 +32,7 @@ $rack = $User->fetch_object("racks", "id", $_GET['rackId']);
 if ($rack===false)     				  { die(); }
 
 # permission - dont draw names if user has no access to devices
-$draw_names = $User->get_module_permissions ("devices")>0 ? true : false;
+$draw_names = $User->get_module_permissions ("devices")>=User::ACCESS_R ? true : false;
 
 # back
 if(@$_GET['is_back']=="1") {

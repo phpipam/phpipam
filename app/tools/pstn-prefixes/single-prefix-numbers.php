@@ -22,7 +22,7 @@ $colspan_dhcp = 4;
         <th><?php print _("Name"); ?></th>
         <th><?php print _("Owner"); ?></th>
         <th><?php print _("State"); ?></th>
-        <?php if ($User->get_module_permissions ("devices")>0) { ?>
+        <?php if ($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
         <th><?php print _("Device"); ?></th>
         <?php } ?>
         <th></th>
@@ -118,7 +118,7 @@ $colspan_dhcp = 4;
             // state
             print "<td>".$Addresses->address_type_index_to_type ($n->state)."</td>";
             // device
-            if ($User->get_module_permissions ("devices")>0) {
+            if ($User->get_module_permissions ("devices")>=User::ACCESS_R) {
             print "<td>$device</td>";
             }
             // description
@@ -152,7 +152,7 @@ $colspan_dhcp = 4;
 
 
 			# actions
-            if($User->get_module_permissions ("pstn")>0) {
+            if($User->get_module_permissions ("pstn")>=User::ACCESS_R) {
             	print "	<td class='actions'>";
 
                 $links = [];

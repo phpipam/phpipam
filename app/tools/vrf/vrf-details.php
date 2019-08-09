@@ -80,7 +80,7 @@ $cfields = $Tools->fetch_custom_fields ('vrf');
 
 	<?php
 	// customers
-	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 		 $customer = $Tools->fetch_object ("customers", "id", $vrf->customer_id);
 
 		 print "<tr>";

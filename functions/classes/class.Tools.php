@@ -2534,7 +2534,7 @@ class Tools extends Common_functions {
 			    }
 
 			    // actions
-				if($User->get_module_permissions ("pstn")>0) {
+				if($User->get_module_permissions ("pstn")>=User::ACCESS_R) {
 					$html[] = "	<td class='actions' style='padding:0px;'>";
 					$links = [];
 			        $links[] = ["type"=>"header", "text"=>"Show"];

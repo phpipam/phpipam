@@ -25,7 +25,7 @@ if($vlan[0]===false)				{ $Result->show("danger", _('Invalid VLAN id'), true); }
 $custom_fields = $Tools->fetch_custom_fields('vlans');
 
 # customer
-if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 	$customer = $Tools->fetch_object ("customers", "id", $vlan['customer_id']);
 	if($customer===false) {
 		$customer = new StdClass ();
@@ -63,7 +63,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 		<td><?php print html_entity_decode($vlan['description']); ?></td>
 	</tr>
 
-	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) { ?>
+	<?php if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
 	<tr>
 		<td colspan='2'><hr></td>
 	</tr>

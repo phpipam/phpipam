@@ -121,7 +121,7 @@ else {
             // links
             print "<td class='actions'>";
             $links = [];
-            if($User->get_module_permissions ("racks")>0) {
+            if($User->get_module_permissions ("racks")>=User::ACCESS_R) {
                 $links[] = ["type"=>"header", "text"=>"Show Rack"];
                 $links[] = ["type"=>"link", "text"=>"Show rack", "href"=>create_link($_GET['page'], "racks", $r->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"link", "text"=>"Show popup", "href"=>"", "class"=>"showRackPopup", "dataparams"=>"data-rackId='$r->id' data-deviceId='0'", "icon"=>"server"];
