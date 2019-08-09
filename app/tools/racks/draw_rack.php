@@ -15,7 +15,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("racks", 1, true);
+$User->check_module_permissions ("racks", User::ACCESS_R, true);
 
 # init racks object
 $Racks = new phpipam_rack ($Database);

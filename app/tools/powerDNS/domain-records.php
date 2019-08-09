@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("pdns", 1, true, false);
+$User->check_module_permissions ("pdns", User::ACCESS_R, true, false);
 
 // Determines where we link back to
 $link_section = $_GET['page'] == "administration" ? 'administration' : "tools";

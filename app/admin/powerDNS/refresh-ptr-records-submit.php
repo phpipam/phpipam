@@ -22,7 +22,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check
-$User->check_module_permissions ("pdns", 2, true, false);
+$User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
 
 # fetch subnet
 $subnet = $Subnets->fetch_subnet ("id", $_POST['subnetId']);

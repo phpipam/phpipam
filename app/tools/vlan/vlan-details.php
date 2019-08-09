@@ -6,7 +6,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vlan", 1, true, false);
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # get VLAN details
 $vlan = (array) $Tools->fetch_object("vlans", "vlanId", $_GET['sPage']);

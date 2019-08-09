@@ -13,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("customers", 1, true);
+$User->check_module_permissions ("customers", User::ACCESS_R, true);
 # filter customers or fetch print all?
 $customers = $Tools->fetch_all_objects("customers", "title");
 

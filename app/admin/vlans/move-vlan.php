@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check popup
-$User->check_module_permissions ("vlan", 2, true, true);
+$User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
 
 # fetch vlan details
 $vlan = $Admin->fetch_object ("vlans", "vlanid", @$_POST['vlanid']);

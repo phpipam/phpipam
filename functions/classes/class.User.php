@@ -1662,6 +1662,11 @@ class User extends Common_functions {
         }
     }
 
+    const ACCESS_NONE = 0;
+    const ACCESS_R = 1;
+    const ACCESS_RW = 2;
+    const ACCESS_RWA = 3;
+
     /**
      * Get module permissions for user
      *
@@ -1679,14 +1684,14 @@ class User extends Common_functions {
         if(in_array($module_name, $this->get_modules_with_permissions())) {
             // admin
             if($this->is_admin(false)) {
-                return 3;
+                return User::ACCESS_RWA;
             }
             else {
                 return $this->user->{'perm_'.$module_name};
             }
         }
         else {
-            return 0;
+            return User::ACCESS_NONE;
         }
     }
 
@@ -1700,7 +1705,7 @@ class User extends Common_functions {
      * @param  bool $popup
      * @return bool|void
      */
-    public function check_module_permissions ($module_name = "", $required_level = 1, $die = true, $popup = false) {
+    public function check_module_permissions ($module_name = "", $required_level = User::ACCESS_R, $die = true, $popup = false) {
         // check if valid
         $valid = $this->get_module_permissions($module_name)>=$required_level;
         // return or die ?

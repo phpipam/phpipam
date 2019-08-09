@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vlan", 1, true, false);
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # fetch l2 domain
 $vlan_domain = new StdClass();

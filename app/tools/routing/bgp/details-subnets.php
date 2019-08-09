@@ -1,7 +1,7 @@
 <?php
 
 # perm check
-$User->check_module_permissions ("routing", 1, true, false);
+$User->check_module_permissions ("routing", User::ACCESS_R, true, false);
 
 // fetch subnets
 $subnets = $Tools->fetch_routing_subnets ("bgp", $bgp->id, false);

@@ -7,9 +7,9 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("devices", 1, true, false);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 # perm check
-$User->check_module_permissions ("circuits", 1, true, false);
+$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # fetch custom fields
 $custom = $Tools->fetch_custom_fields('circuits');

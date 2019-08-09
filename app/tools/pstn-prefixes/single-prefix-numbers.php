@@ -5,7 +5,7 @@ $User->check_user_session();
 # custom fields
 $custom_fields = $Tools->fetch_custom_fields ('pstnNumbers');
 # perm check
-$User->check_module_permissions ("pstn", 1, true, false);
+$User->check_module_permissions ("pstn", User::ACCESS_R, true, false);
 
 // colspan
 $colspan = 8;

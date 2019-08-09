@@ -14,7 +14,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # permissions
-$User->check_module_permissions ("routing", 2, true, false);
+$User->check_module_permissions ("routing", User::ACCESS_RW, true, false);
 
 # validates
 if(!is_numeric($_POST['bgp_id']))  			{ $Result->show("danger",  _("Invalid ID"), true); }

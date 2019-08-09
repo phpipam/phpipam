@@ -18,7 +18,7 @@ $Result    = new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # validate NAT permissions
-$User->check_module_permissions ("nat", 3, true, true);
+$User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
 
 # fetch all nat items
 $all_nat = $Tools->fetch_all_objects ("nat");

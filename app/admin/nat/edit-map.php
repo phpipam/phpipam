@@ -17,10 +17,10 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("nat", 2, true, true);
+    $User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("nat", 3, true, true);
+    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, true);
 }
 
 # validations

@@ -19,7 +19,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check popup
-$User->check_module_permissions ("vlan", 2, true, false);
+$User->check_module_permissions ("vlan", User::ACCESS_RW, true, false);
 
 // checks
 if(!is_numeric($_POST['newDomainId']))			$Result->show("danger", _("Invalid ID"), true);

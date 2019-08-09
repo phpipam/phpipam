@@ -13,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", 1, true, false);
+$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('circuits');

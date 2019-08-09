@@ -19,10 +19,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("devices", 2, true, false);
+    $User->check_module_permissions ("devices", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("devices", 3, true, false);
+    $User->check_module_permissions ("devices", User::ACCESS_RWA, true, false);
 }
 
 # check maintaneance mode

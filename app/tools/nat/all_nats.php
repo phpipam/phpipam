@@ -26,7 +26,7 @@ if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
 }
 # no access
-elseif ($User->check_module_permissions ("nat", 1, false, false)===false) {
+elseif ($User->check_module_permissions ("nat", User::ACCESS_R, false, false)===false) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 else {

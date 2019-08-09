@@ -18,7 +18,7 @@ if($User->settings->enableRACK=="1") {
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("devices", 1, true, false);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # filter devices or fetch print all?
 $devices = $Tools->fetch_all_objects("devices", "hostname");
