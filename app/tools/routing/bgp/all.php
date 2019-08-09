@@ -23,7 +23,7 @@ else {
     # print link to manage
     print "<div class='btn-group'>";
         // add
-        if($User->get_module_permissions ("routing")>2) {
+        if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
         print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/routing/edit-bgp.php' data-class='700' data-action='add' data-bgpid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add peer')."</a>";
         }
     print "</div>";
@@ -105,7 +105,7 @@ else {
                 $links[] = ["type"=>"header", "text"=>"Manage BGP"];
                 $links[] = ["type"=>"link", "text"=>"Edit BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", "icon"=>"pencil"];
             }
-            if($User->get_module_permissions ("routing")>2) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"link", "text"=>"Delete BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='delete' data-class='700' data-bgpid='$bgp->id'", "icon"=>"times"];
                 $links[] = ["type"=>"divider"];
             }

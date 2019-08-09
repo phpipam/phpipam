@@ -2,7 +2,7 @@
 <hr>
 
 <div class="btn-group">
-    <?php if($User->get_module_permissions ("pstn")>2) { ?>
+    <?php if($User->get_module_permissions ("pstn")>=User::ACCESS_RWA) { ?>
 	<a href="" class='btn btn-sm btn-default editPSTN' data-action='add' data-id='0' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add prefix'); ?></a>
 	<?php }?>
 </div>
@@ -29,7 +29,7 @@ else {
     # fetch all locations
     $all_prefixes = $Tools->fetch_all_prefixes();
 
-    $colspan = $User->get_module_permissions ("pstn")>2 ? 9 : 8;
+    $colspan = $User->get_module_permissions ("pstn")>=User::ACCESS_RWA ? 9 : 8;
 
     // table
     print "<table id='manageSubnets' class='table sorted table-striped table-top table-td-top' data-cookie-id-table='pstn_p'>";

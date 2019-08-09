@@ -71,7 +71,7 @@ if ($_GET['sPage'] == "search" && strlen(@$_POST['domain-filter']) > 0) {
     <?php if ($domains === false && isset($_POST['domain-filter'])) {?>
     <a class='btn btn-sm btn-default btn-default'  href="<?php print create_link("tools", "powerDNS", $_GET['subnetId']);?>"><i class='fa fa-angle-left'></i> <?php print _('Back');?></a>
     <?php }?>
-    <?php if ($User->get_module_permissions ("pdns")>2) {?>
+    <?php if ($User->get_module_permissions ("pdns")>=User::ACCESS_RWA) {?>
     <!-- Create -->
 	<div class="btn-group noborder">
         <button class='btn btn-sm btn-default btn-success open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='add' data-id='0'><i class='fa fa-plus'></i> <?php print _('Create domain');?></button>
@@ -132,7 +132,7 @@ foreach ($domains as $d) {
         print "	<td>";
         print "	<div class='btn-group'>";
         print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='edit' data-id='$d->id'><i class='fa fa-pencil'></i></button>";
-        if($User->get_module_permissions ("pdns")>2)
+        if($User->get_module_permissions ("pdns")>=User::ACCESS_RWA)
         print "     <button class='btn btn-default btn-xs open_popup' data-script='app/admin/powerDNS/domain-edit.php' data-class='700' data-action='delete' data-id='$d->id'><i class='fa fa-times'></i></button>";
         print "	</div>";
         print "	</td>";

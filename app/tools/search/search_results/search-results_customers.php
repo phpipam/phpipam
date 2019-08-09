@@ -84,7 +84,7 @@ else {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("customers")>2) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
         }
         // print links

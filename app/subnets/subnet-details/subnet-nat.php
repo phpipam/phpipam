@@ -9,7 +9,7 @@ $User->check_user_session();
 print "<table class='table table-condensed table-td-top table-auto table-noborder'>";
 
 // add
-if($User->get_module_permissions ("nat")>2) {
+if($User->get_module_permissions ("nat")>=User::ACCESS_RWA) {
 print "<tr>";
 print " <td colspan='4'>";
 print "     <div class='btn-group noborder' role='group' style='margin-bottom:10px;'>";

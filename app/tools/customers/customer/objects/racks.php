@@ -91,7 +91,7 @@ if (isset($objects["racks"])) {
             $links[] = ["type"=>"header", "text"=>"Manage rack"];
             $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$r->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("racks")>2) {
+        if($User->get_module_permissions ("racks")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$r->id'", "icon"=>"times"];
             $links[] = ["type"=>"divider"];
         }

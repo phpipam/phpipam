@@ -80,7 +80,7 @@ if (isset($objects["vrf"])) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("vrf")>2) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'", "icon"=>"times"];
         }
 		if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {

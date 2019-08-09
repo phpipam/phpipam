@@ -12,7 +12,7 @@ $User->check_user_session();
 <hr>
 
 
-<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")==3) { ?>
+<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>=User::ACCESS_RWA) { ?>
 <div class="btn-group">
 	<a href="" class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
     <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>

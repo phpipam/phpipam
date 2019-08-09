@@ -115,7 +115,7 @@ else {
                     $links[] = ["type"=>"header", "text"=>"Manage"];
                     $links[] = ["type"=>"link", "text"=>"Edit location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$location->id'", "icon"=>"pencil"];
 
-                    if($User->get_module_permissions ("locations")>2) {
+                    if($User->get_module_permissions ("locations")>=User::ACCESS_RWA) {
                         $links[] = ["type"=>"link", "text"=>"Delete location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$location->id'", "icon"=>"times"];
                         $links[] = ["type"=>"divider"];
                     }

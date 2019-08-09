@@ -33,7 +33,7 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->get_module_permissions ("circuits")>2) {
+	if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
     print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='add' data-circuitid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add circuit')."</a>";
 	}
 print "</div>";
@@ -128,7 +128,7 @@ else {
             $links[] = ["type"=>"header", "text"=>"Manage circuit"];
             $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("circuits")>2) {
+        if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", "icon"=>"times"];
         }
         // print links

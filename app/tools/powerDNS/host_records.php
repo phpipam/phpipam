@@ -81,7 +81,7 @@ function print_record ($r) {
 	print "	<td>";
 	print "	<div class='btn-group'>";
 	print "		<button class='btn btn-default btn-xs editRecord' data-action='edit'   data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-pencil'></i></button>";
-    if($User->get_module_permissions ("pdns")>2)
+    if($User->get_module_permissions ("pdns")>=User::ACCESS_RWA)
 	print "		<button class='btn btn-default btn-xs editRecord' data-action='delete' data-id='$r->id' data-domain_id='$r->domain_id'><i class='fa fa-remove'></i></button>";
 	print "	</div>";
 	print "	</td>";

@@ -139,7 +139,7 @@ else {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("vlan")>2) {
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"divider"];
             $links[] = ["type"=>"link", "text"=>"Move VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$vlan->id'", "icon"=>"external-link"];
             $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan->id'", "icon"=>"times"];

@@ -144,7 +144,7 @@ else {
             $links[] = ["type"=>"header", "text"=>"Manage device"];
             $links[] = ["type"=>"link", "text"=>"Edit device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='edit' data-switchId='$device[id]'", "icon"=>"pencil"];
 
-            if($User->get_module_permissions ("devices")>2) {
+            if($User->get_module_permissions ("devices")>=User::ACCESS_RWA) {
 	            $links[] = ["type"=>"link", "text"=>"Delete device", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/devices/edit.php' data-class='500' data-action='delete' data-switchId='$device[id]'", "icon"=>"times"];
 	            $links[] = ["type"=>"divider"];
             }

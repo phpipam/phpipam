@@ -160,7 +160,7 @@ $colspan_dhcp = 4;
                 $links[] = ["type"=>"header", "text"=>"Manage"];
                 $links[] = ["type"=>"link", "text"=>"Edit number", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
                 }
-                if($User->get_module_permissions ("pstn")>2) {
+                if($User->get_module_permissions ("pstn")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"link", "text"=>"Delete number", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
                 }
                 print $User->print_actions($User->user->compress_actions, $links);

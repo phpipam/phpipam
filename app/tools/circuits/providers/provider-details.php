@@ -88,7 +88,7 @@ if($provider!==false) {
 	        $links = [];
             $links[] = ["type"=>"header", "text"=>"Manage provider"];
             $links[] = ["type"=>"link", "text"=>"Edit provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
-	        if($User->get_module_permissions ("circuits")>2) {
+	        if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
 	            $links[] = ["type"=>"link", "text"=>"Delete provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
 	        }
 	        // print links
@@ -189,7 +189,7 @@ if($provider!==false) {
 	            $links[] = ["type"=>"header", "text"=>"Manage circuit"];
 	            $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
 	        }
-	        if($User->get_module_permissions ("circuits")>2) {
+	        if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
 	            $links[] = ["type"=>"link", "text"=>"Delete circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", "icon"=>"times"];
 	        }
 	        // print links

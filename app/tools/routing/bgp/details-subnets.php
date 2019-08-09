@@ -68,7 +68,7 @@ else {
 			# edit
 			print "	<td class='actions'>";
             $links = [];
-            if($User->get_module_permissions ("routing")>2) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"header", "text"=>"Edit mapping"];
                 $links[] = ["type"=>"link", "text"=>"Delete mapping", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp-mapping-delete.php' data-secondary='true' data-bgpid='$subnet[id]'", "icon"=>"minus"];
             }

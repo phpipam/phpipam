@@ -7,7 +7,7 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 ?>
 
 <!-- Manage link -->
-<?php if($User->get_module_permissions ("vlan")>2) { ?>
+<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
 <div class="btn-group" style="margin-bottom:10px;">
 	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add L2 Domain'); ?></button>
 	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-class='500' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VLAN'); ?></button>
@@ -88,7 +88,7 @@ foreach($vlan_domains as $domain) {
         $links[] = ["type"=>"header", "text"=>"Manage"];
         $links[] = ["type"=>"link", "text"=>"Edit domain", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='edit' data-id='$domain->id'", "icon"=>"pencil"];
     }
-    if($User->get_module_permissions ("vlan")>2) {
+    if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
         $links[] = ["type"=>"link", "text"=>"Delete domain", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='delete' data-id='$domain->id'", "icon"=>"times"];
         $links[] = ["type"=>"divider"];
     }
