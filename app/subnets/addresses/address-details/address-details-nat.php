@@ -44,7 +44,7 @@ print "</tr>";
 }
 
 # print
-if($User->get_module_permissions ("nat")<1) {
+if($User->get_module_permissions ("nat")==User::ACCESS_NONE) {
     $Result->show ("danger", _("You do not have permissions to access this module"), true);
 }
 elseif(isset($all_nats_per_object['ipaddresses'][$address['id']])) {

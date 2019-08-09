@@ -62,7 +62,7 @@ $tabs = array("subnets", "leases", "reservations");
 <?php
 }
 } else {
-    if($User->get_module_permissions ("dhcp")<1) {
+    if($User->get_module_permissions ("dhcp")==User::ACCESS_NONE) {
         $Result->show("danger", _("You do not have permissions to access this module"), false);
     }
     else {

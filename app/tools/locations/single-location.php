@@ -17,7 +17,7 @@ if(!is_numeric($_GET['subnetId'])) {
 }
 else {
     # perm check
-    if ($User->get_module_permissions ("locations")<1) {
+    if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
         $Result->show("danger", _("You do not have permissions to access this module"), false);
     }
     # check that location support isenabled
@@ -147,15 +147,15 @@ else {
                     }
 
                     # permissions
-                    if($User->get_module_permissions ("racks")<1)
+                    if($User->get_module_permissions ("racks")==User::ACCESS_NONE)
                     unset($object_groups['racks']);
 
                     # permissions
-                    if($User->get_module_permissions ("devices")<1)
+                    if($User->get_module_permissions ("devices")==User::ACCESS_NONE)
                     unset($object_groups['devices']);
 
                     # permissions
-                    if($User->get_module_permissions ("circuits")<1)
+                    if($User->get_module_permissions ("circuits")==User::ACCESS_NONE)
                     unset($object_groups['circuits']);
 
                     // loop

@@ -2397,7 +2397,7 @@ class Tools extends Common_functions {
 		# remove all not permitted!
 		if(sizeof($prefixes)>0) {
 		foreach($prefixes as $k=>$s) {
-			if($User->get_module_permissions ("pstn")<1) { unset($prefixes[$k]); }
+			if($User->get_module_permissions ("pstn")==User::ACCESS_NONE) { unset($prefixes[$k]); }
 		}
 		}
 

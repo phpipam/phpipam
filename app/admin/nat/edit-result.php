@@ -60,7 +60,7 @@ $values = array(
     "policy_dst"  =>  ""
      );
 
-if ($User->get_module_permissions ("devices")<1) {
+if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
     unset ($values['device']);
 }
 

@@ -22,7 +22,7 @@ $hidden_custom_fields_bgp = is_array(@$hidden_custom_fields['routing_bgp']) ? $h
 print "<h4>"._('Routing information')."</h4><hr>";
 
 # perm check
-if ($User->get_module_permissions ("routing")<1) {
+if ($User->get_module_permissions ("routing")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # check that location support isenabled

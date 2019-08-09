@@ -13,7 +13,7 @@ if(!$location) {
 }
 
 # perm check
-if ($User->get_module_permissions ("locations")<1) {
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # if none than print

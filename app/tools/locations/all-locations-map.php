@@ -23,7 +23,7 @@ $User->check_user_session();
 $User->check_module_permissions ("locations", User::ACCESS_R, true, false);
 
 # perm check
-if ($User->get_module_permissions ("locations")<1) {
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # check that location support isenabled

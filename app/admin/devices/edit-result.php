@@ -112,7 +112,7 @@ if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>0) {
 	$values['rack_size']  = $device['rack_size'];
 }
 # perms
-if ($User->get_module_permissions ("locations")<1) {
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 	unset ($values['location']);
 }
 
