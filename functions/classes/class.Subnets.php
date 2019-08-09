@@ -186,11 +186,11 @@ class Subnets extends Common_functions {
 
 		# validate permissions
 		if(!$this->api) {
-			if ($User->get_module_permissions("vlan")<2) 		{ unset($valid_fields['vlanId']); }
-			if ($User->get_module_permissions("vrf")<2) 		{ unset($valid_fields['vrfId']); }
-			if ($User->get_module_permissions("devices")<2) 	{ unset($valid_fields['device']); }
-			if ($User->get_module_permissions("locations")<2) 	{ unset($valid_fields['location']); }
-			if ($User->get_module_permissions("customers")<2) 	{ unset($valid_fields['customer_id']); }
+			if ($User->get_module_permissions("vlan")<User::ACCESS_RW) 		{ unset($valid_fields['vlanId']); }
+			if ($User->get_module_permissions("vrf")<User::ACCESS_RW) 		{ unset($valid_fields['vrfId']); }
+			if ($User->get_module_permissions("devices")<User::ACCESS_RW) 	{ unset($valid_fields['device']); }
+			if ($User->get_module_permissions("locations")<User::ACCESS_RW) 	{ unset($valid_fields['location']); }
+			if ($User->get_module_permissions("customers")<User::ACCESS_RW) 	{ unset($valid_fields['customer_id']); }
 		}
 
 		// Remove non-valid fields

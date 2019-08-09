@@ -89,7 +89,7 @@ $values = array(
     "description" =>$_POST['description']
     );
 # remove device
-if ($User->get_module_permissions ("devices")<2) {
+if ($User->get_module_permissions ("devices")<User::ACCESS_RW) {
     unset ($values['deviceId']);
 }
 

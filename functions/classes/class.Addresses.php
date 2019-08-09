@@ -368,9 +368,9 @@ class Addresses extends Common_functions {
 
 	    if(!$this->api) {
 	        # permissions
-	        if ($User->get_module_permissions("devices")<2)   { unset($valid_fields['switch']); unset($valid_fields['port']); }
-	        if ($User->get_module_permissions("customers")<2) { unset($valid_fields['customer_id']); }
-	        if ($User->get_module_permissions("locations")<2) { unset($valid_fields['location']); }
+	        if ($User->get_module_permissions("devices")<User::ACCESS_RW)   { unset($valid_fields['switch']); unset($valid_fields['port']); }
+	        if ($User->get_module_permissions("customers")<User::ACCESS_RW) { unset($valid_fields['customer_id']); }
+	        if ($User->get_module_permissions("locations")<User::ACCESS_RW) { unset($valid_fields['location']); }
 	    }
 
 	    // Remove non-valid fields
