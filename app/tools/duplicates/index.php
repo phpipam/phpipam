@@ -12,7 +12,7 @@ $duplicated_ids_addresses = [];
 
 
 # Find duplicate subnets and hosts
-$duplicate_subnets   = $Database->getObjectsQuery("select subnet,mask,count(*) as cnt from subnets where COALESCE(`isFolder`,0) = 0 group by `subnet`,`mask` having cnt > 1;");
+$duplicate_subnets   = $Database->getObjectsQuery("select subnet,mask,count(*) as cnt from subnets where `isFolder` = 0 group by `subnet`,`mask` having cnt > 1;");
 $duplicate_addresses = $Database->getObjectsQuery("select ip_addr,count(*) as cnt from ipaddresses group by ip_addr having cnt > 1;");
 
 

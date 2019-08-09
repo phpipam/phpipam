@@ -319,6 +319,39 @@ class Common_functions  {
 	}
 
 	/**
+	 * Returns table schema information
+	 *
+	 * @param  string $tableName
+	 * @return array
+	 */
+	public function getTableSchemaByField($tableName) {
+		$results = [];
+
+		if (!is_string($tableName)) return $results;
+
+		$tableName = $this->Database->escape($tableName);
+
+		$cached_item = $this->cache_check("getTableSchemaByField", "t=$tableName");
+		if(is_object($cached_item)) return $cached_item->result;
+
+		try {
+			$query = "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = ? AND TABLE_NAME = ?;";
+			$schema = $this->Database->getObjectsQuery($query, [$this->Database->dbname, $tableName]);
+		} catch (\Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return $results;
+		}
+
+		if (is_array($schema)) {
+			foreach ($schema as $col) {
+				$results[$col->COLUMN_NAME] = $col;
+			}
+		}
+		$this->cache_write("getTableSchemaByField", (object) ["id"=>"t=$tableName", "result" => $results]);
+		return $results;
+	}
+
+	/**
 	 * Get all admins that are set to receive changelog
 	 *
 	 * @access public
