@@ -281,6 +281,7 @@ CREATE TABLE `subnets` (
   `customer_id` INT(11) unsigned NULL default NULL,
   `isFolder` BOOL NOT NULL DEFAULT '0',
   `isFull` BOOL NOT NULL DEFAULT '0',
+  `isPool` BOOL NOT NULL DEFAULT '0',
   `state` INT(3)  NULL  DEFAULT '2',
   `threshold` int(3)  NULL  DEFAULT 0,
   `location` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
@@ -995,4 +996,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 27;
+UPDATE `settings` SET `dbversion` = 28;

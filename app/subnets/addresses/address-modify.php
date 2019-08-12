@@ -214,10 +214,6 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			<?php
 			if (strpos($_SERVER['HTTP_REFERER'], "verify-database")!=0) { print "<input type='hidden' name='verifydatabase' value='yes'>"; }
 			?>
-
-			<?php if($action=="edit" || $action=="delete") { ?>
-			<input type="hidden" name="nostrict" value="yes">
-			<?php }  ?>
     	</td>
 	</tr>
 
@@ -715,36 +711,6 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
         </td>
     </tr>
     <?php } ?>
-
-	<?php
-	#get type
-	 $type = $Addresses->identify_address ($subnet['subnet']);
-
-	 if($subnet['mask'] < 31 && ($action=='add' ||  substr($action, 0,4)=="all-") && $type == "IPv4" ) { ?>
-	 <!-- ignore NW /BC checks -->
-	 <tr>
-		<td><?php print _('Not strict'); ?></td>
-		<td>
-		<div class='checkbox info2'>
-			<input type="checkbox" name="nostrict" value="yes"><?php print _('Permit adding network/broadcast as IP'); ?>
-		</div>
-		</td>
-	</tr>
-	<?php } ?>
-
-	<?php
-	 if($subnet['mask'] < 127 && $action=='add' && $type == "IPv6" ) { ?>
-	 <!-- ignore NW /BC checks -->
-	 <tr>
-		<td><?php print _('Not strict'); ?></td>
-		<td>
-		<div class='checkbox info2'>
-			<input type="checkbox" name="nostrict" value="yes"><?php print _('Permit adding network/broadcast as IP'); ?>
-		</div>
-		</td>
-	</tr>
-	<?php } ?>
-
 
 </table>	<!-- end edit ip address table -->
 <?php if($config['split_ip_custom_fields']===true) {

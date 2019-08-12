@@ -1344,11 +1344,8 @@ class Subnets extends Common_functions {
 	private function calculate_single_subnet_details ($subnet, $no_strict = false, $detailed = false) {
 		// set IP version
 		$ip_version = $this->get_ip_version ($subnet->subnet);
-		// no strict mode if it is_slave
-		$section     = $this->fetch_object ("sections", "id", $subnet->sectionId);
-		$strict_mode = $no_strict ? false : (bool)$section->strictMode;
 
-		$cached_item = $this->cache_check("single_subnet_details", "$subnet->id n=$no_strict d=$detailed");
+		$cached_item = $this->cache_check("single_subnet_details", "$subnet->id d=$detailed");
 		if(is_object($cached_item)) return $cached_item->result;
 
 		// init result
@@ -1357,7 +1354,7 @@ class Subnets extends Common_functions {
 		// marked as full ?
 		if ($subnet->isFull==1) {
 			// set values
-			$out["used"]              = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
+			$out["used"]              = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $subnet->isPool));
 			$out["maxhosts"]          = $out['used'];
 			$out["freehosts"]         = 0;
 			$out["freehosts_percent"] = 0;
@@ -1367,15 +1364,7 @@ class Subnets extends Common_functions {
 
 			// set values
 			$out["used"]              = $this->get_subnet_ipaddr_count($subnet->id);
-			$out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $strict_mode));
-
-			// slaves fix for reducing subnet and broadcast address
-			if($ip_version=="IPv4" && !$strict_mode) {
-				if($subnet->mask<=30) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
-			}
-			if($ip_version=="IPv6" && !$strict_mode) {
-				if($subnet->mask<=126) { $out["used"] = gmp_strval(gmp_add($out["used"],2)); }
-			}
+			$out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $subnet->isPool));
 
 			// percentage
 			$out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
@@ -1385,7 +1374,7 @@ class Subnets extends Common_functions {
 				// fetch full addresses
 				$addresses = $this->Addresses->fetch_subnet_addresses ($subnet->id);
 				// order - group by tag type
-				$tag_addresses = $this->calculate_subnet_usage_sort_addresses ($subnet, $addresses, $strict_mode);
+				$tag_addresses = $this->calculate_subnet_usage_sort_addresses ($subnet, $addresses);
 				// calculate use percentage for each address tag
 				foreach($this->address_types as $t) {
 					$out[$t['type']."_percent"] = round( ( ($tag_addresses[$t['type']] * 100.0) / $out['maxhosts']), 2 );
@@ -1393,7 +1382,7 @@ class Subnets extends Common_functions {
 			}
 		}
 		# result
-		$this->cache_write ("single_subnet_details", (object) ["id"=>"$subnet->id n=$no_strict d=$detailed", "result" => $out]);
+		$this->cache_write ("single_subnet_details", (object) ["id"=>"$subnet->id d=$detailed", "result" => $out]);
 		return $out;
 	}
 
@@ -1403,10 +1392,9 @@ class Subnets extends Common_functions {
 	 * @access private
 	 * @param obj $subnet
 	 * @param false|array $addresses (default:false)
-	 * @param bool $strict_mode
 	 * @return array
 	 */
-	private function calculate_subnet_usage_sort_addresses ($subnet, $addresses = false, $strict_mode = true) {
+	private function calculate_subnet_usage_sort_addresses ($subnet, $addresses = false) {
 		$count = array();
 		$count['Reserved'] = 0;
 		# fetch address types
@@ -1421,13 +1409,6 @@ class Subnets extends Common_functions {
 				$type = $this->translate_address_type($ip->state);
 				$count[$type] = gmp_strval(gmp_add($count[$type],1));
 			}
-		}
-		if (!$strict_mode) {
-			$ip_version  = $this->get_ip_version ($subnet->subnet);
-			$subnet_broadcast = 2;
-			if($ip_version=="IPv4" && $subnet->mask>=31)  { $subnet_broadcast = 0; }
-			if($ip_version=="IPv6" && $subnet->mask>=127) { $subnet_broadcast = 0; }
-			$count['Reserved'] = gmp_strval(gmp_add($count['Reserved'],$subnet_broadcast));
 		}
 		# result
 		return $count;
@@ -1494,18 +1475,19 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $netmask
 	 * @param mixed $ipversion
-	 * @param bool $strict (default: true)
+	 * @param bool $isPool (default: false)
 	 * @return string
 	 */
-	public function get_max_hosts ($netmask, $ipversion, $strict=true) {
+	public function get_max_hosts ($netmask, $ipversion, $isPool=false) {
 		$max_mask = ($ipversion === 'IPv4') ? 32 : 128;
 		if ($netmask<0) $netmask = 0;
 		if ($netmask>$max_mask) $netmask = $max_mask;
 
 		$max_hosts = $this->gmp_bitmasks[$ipversion][$netmask]['size'];
 
-		if ($ipversion === 'IPv4') {
-			if ($strict && $netmask<31) $max_hosts = gmp_sub($max_hosts, 2);
+		if (!$isPool) {
+			if (($ipversion == 'IPv4' && $netmask<31) || ($ipversion == 'IPv6' && $netmask<127))
+				$max_hosts = gmp_sub($max_hosts, 2);
 		}
 		return gmp_strval($max_hosts);
 	}
@@ -1682,6 +1664,60 @@ class Subnets extends Common_functions {
 		return gmp_strval($network_broadcast);
 	}
 
+	 /**
+	 * Search for unused address space between 2 IP addresses
+	 *
+	 * possible unused addresses by type, set=false for subnet/broadcast
+	 *
+	 * @param  mixed  $subnet
+	 * @param  mixed  $address1 (default:false)
+	 * @param  mixed  $address2 (default:false)
+	 * @return mixed
+	 */
+	public function find_unused_addresses($subnet, $address1=false, $address2=false) {
+		$subnet = (object) $subnet;
+
+		# Get subnet ranges
+		$min_address = $this->decimal_network_address($subnet->subnet, $subnet->mask);
+		$max_address = $this->decimal_broadcast_address($subnet->subnet, $subnet->mask);
+
+		if (!$subnet->isPool) {
+			// We are a not a Pool, remove network and broadcast addresses.
+			$type = $this->identify_address($subnet->subnet);
+
+			if (($type=="IPv4" && $subnet->mask<31) || ($type=="IPv6" && $subnet->mask<127)) {
+				$min_address = gmp_strval(gmp_add($min_address, 1));
+				$max_address = gmp_strval(gmp_sub($max_address, 1));
+			}
+		}
+
+		if ($address1===false) {
+			$address1 = $min_address;
+		} else {
+			$address1 = gmp_strval(gmp_add($this->transform_address($address1, "decimal"), 1));
+		}
+
+		if ($address2===false) {
+			$address2 = $max_address;
+		} else {
+			$address2 = gmp_strval(gmp_sub($this->transform_address($address2, "decimal"), 1));
+		}
+
+		// Check addresses are inside valid ranges.
+		if (gmp_cmp($address1, $min_address)<0 || gmp_cmp($address2, $max_address)>0)
+			return false;
+
+		$range_size = gmp_strval(gmp_add(gmp_sub($address2, $address1), 1));
+
+		if ($range_size <= 0 ) {
+			return false;
+		} elseif ($range_size == 1) {
+			return ["ip"=>$this->transform_to_dotted($address1), "hosts"=>"1"];
+		} else {
+			return ["ip"=>$this->transform_to_dotted($address1)." - ".$this->transform_to_dotted($address2), "hosts"=>$range_size];
+		}
+	}
+
 	/**
 	 * Calculates freespacemap array for a given subnet
 	 *
@@ -1741,7 +1777,7 @@ class Subnets extends Common_functions {
 		$subnets = array();
 		$ranges = $fsm['freeranges'];
 
-		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], false));
+		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], true));
 		$discovered = 0;
 		// For each range; Calculate the candidate network and broadcast addresses for size $mask and check
 		// that both are inside the current range. Increment candidate by $size=2^(mask bits) and repeat.
@@ -1787,7 +1823,7 @@ class Subnets extends Common_functions {
 		$subnets = array();
 		$ranges  = array_reverse($fsm['freeranges']);
 
-		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], false));
+		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], true));
 		$discovered = 0;
 		// For each range; Calculate the candidate network and broadcast addresses for size $mask and check
 		// that both are inside the current range. Decrement candidate by $size=2^(mask bits) and repeat.
@@ -2356,7 +2392,7 @@ class Subnets extends Common_functions {
 		//set number of subnets
 		$number_of_subnets = pow(2,$mask_diff);
 		//set max hosts per new subnet
-		$max_hosts = $this->get_max_hosts ($mask, $this->identify_address($this->transform_to_dotted($subnet_old->subnet)), false);
+		$max_hosts = $this->get_max_hosts ($mask, $this->identify_address($this->transform_to_dotted($subnet_old->subnet)), true);
 
 		# create array of new subnets based on number of subnets (number)
 		$newsubnets = array();
