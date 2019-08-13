@@ -693,7 +693,7 @@ class Common_functions  {
 	 * @return int|mixed
 	 */
 	public function verify_checkbox ($field) {
-		return @$field==""||strlen(@$field)==0 ? 0 : escape_input($field);
+		return (!isset($field) || strlen($field)==0) ? 0 : escape_input($field);
 	}
 
 	/**
