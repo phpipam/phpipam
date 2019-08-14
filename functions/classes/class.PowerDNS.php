@@ -1539,7 +1539,8 @@ class PowerDNS extends Common_functions {
      * @param mixed $indexes (array of PTR indexes)
      * @return bool
      */
-    public function remove_all_ptr_records ($domain_id, $indexes = array()) {
+    public function remove_all_ptr_records ($domain_id, $indexes = array(),
+                                            $delete_forward = false) {
         // if false return ok and dont execute
         if (sizeof($indexes)==0 || !is_array($indexes)) {
             return true;
@@ -1547,30 +1548,51 @@ class PowerDNS extends Common_functions {
          // set parameters - default
         $params = array($domain_id);
         // set query - start
-        $query  = "delete from `records` where `domain_id` = ? and `type` = 'PTR'";
+        $query_fwd = "DELETE FROM `records`
+                      WHERE `type` = 'A'
+                      AND `name` IN (
+                        SELECT * FROM(
+                          SELECT `content` FROM `records`
+                          WHERE `domain_id` = ?
+                          AND `type` = 'PTR' ";
+
+        $query  = "DELETE FROM `records`
+                   WHERE `domain_id` = ?
+                   AND `type` = 'PTR' ";
         // loop
         if (sizeof($indexes)>0) {
             $q_tmp = array();
-            $query .= " and (";
+            $query .= " AND (";
+            $query_fwd .= " AND (";
             foreach ($indexes as $i) {
                 $q_tmp[] = " `id` = ? ";
                 $params[] = $i;
             }
             // add to query
-            $query .= implode(" or ", $q_tmp);
+            $query .= implode(" OR ", $q_tmp);
             $query .= ");";
+
+            $query_fwd .= implode(" OR ", $q_tmp);
+            $query_fwd .= ")) AS t);";
         }
 
+
+        $this->Result->show("danger", _("Error: ").$query_fwd.print_r($params, TRUE));
         // execute
-        try { $this->Database_pdns->runQuery($query, $params); }
+        try {
+          if ($delete_forward) {
+            $this->Database_pdns->runQuery($query_fwd, $params);
+          }
+          $this->Database_pdns->runQuery($query, $params);
+        }
         catch (Exception $e) {
             // write log
-            $this->Log->write( "PowerDNS records delete", "Failed to delete all PowerDNS domain PTR records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);
+            $this->Log->write("PowerDNS records delete", "Failed to delete all PowerDNS domain PTR " . ($delete_forward ? 'and A ' : '' ) . "records: ".$e->getMessage()."<hr>".$this->array_to_log((array) $domain_id), 2);
             $this->Result->show("danger", _("Error: ").$e->getMessage());
             return false;
         }
         // write log
-        $this->Log->write( "PowerDNS records delete", "All PTR records for PowerDNS removed<hr>".$this->array_to_log((array) $domain_id), 0);
+        $this->Log->write( "PowerDNS records delete", "All PTR " . ($delete_forward ? 'and A ' : '' ) . "records for PowerDNS removed<hr>".$this->array_to_log((array) $domain_id), 0);
         # ok
         return true;
     }

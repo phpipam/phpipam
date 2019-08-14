@@ -312,6 +312,7 @@ else {
 					"resolveDNS"     => $Admin->verify_checkbox(@$_POST['resolveDNS']),
 					"scanAgent"      => @$_POST['scanAgent'],
 					"DNSrecursive"   => $Admin->verify_checkbox(@$_POST['DNSrecursive']),
+          "DNSforward"     => $Admin->verify_checkbox(@$_POST['DNSforward']),
 					"DNSrecords"     => $Admin->verify_checkbox(@$_POST['DNSrecords']),
 					"nameserverId"   => $_POST['nameserverId'],
 					"device"         => $_POST['device'],
@@ -450,11 +451,12 @@ else {
 		// try to fetch domain
 		$domain = $PowerDNS->fetch_domain_by_name ($zone);
 
-		// POST DNSrecursive not set, fake it if old is also 0
+		// POST DNSrecursive or DNSforward not set, fake it if old is also 0
 		if (!isset($_POST['DNSrecursive']) && @$old_subnet_details->DNSrecursive==0) { $_POST['DNSrecursive'] = 0; }
+    if (!isset($_POST['DNSforward']) && @$old_subnet_details->DNSforward==0) { $_POST['DNSforward'] = 0; }
 
 		// recreate csrf cookie
-        $csrf = $User->Crypto->csrf_cookie ("create", "domain");
+    $csrf = $User->Crypto->csrf_cookie ("create", "domain");
 
 		//delete
 		if ($_POST['action']=="delete") {
@@ -476,7 +478,7 @@ else {
 			}
 		}
 		//create
-		elseif ($_POST['action']=="add" && @$_POST['DNSrecursive']=="1") {
+		elseif ($_POST['action']=="add" && @$_POST['DNSrecursive']) {
 			// if zone exists do nothing, otherwise create zone
 			if ($domain===false) {
 				// use default values
@@ -489,7 +491,7 @@ else {
 			}
 		}
 		// update
-		elseif ($_POST['action']=="edit" && $_POST['DNSrecursive']!=$old_subnet_details->DNSrecursive) {
+		elseif ($_POST['action']=="edit" && ($_POST['DNSrecursive']!=$old_subnet_details->DNSrecursive || $_POST['DNSforward']!=$old_subnet_details->DNSforward)) {
 			// remove domain
 			if (!isset($_POST['DNSrecursive']) && $domain!==false) {
 				print "<hr><p class='hidden alert-danger'></p>";
@@ -499,9 +501,8 @@ else {
 				print "	<a class='btn btn-danger btn-xs' id='editDomainSubmit'>"._('Yes')."</a>";
 				print "	<a class='btn btn-default btn-xs hidePopupsReload'>"._('No')."</a>";
 				print "	</div>";
-
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+        print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -531,7 +532,7 @@ else {
 						if ($h->PTRignore=="1") {
 							$ski++;
 						}
-						elseif ($Addresses->ptr_add ($h, false, $h->id) !== false) {
+						elseif ($Addresses->ptr_add ($h, false, $h->id, !empty($_POST['DNSforward'])) !== false) {
 							$cnt++;
 						}
 						else {
@@ -539,7 +540,8 @@ else {
 						}
 					}
 					// print
-					$Result->show ("success", "$cnt PTR records created");
+          $a_records = empty($_POST['DNSforward']) ? ' ' : ' and A ';
+					$Result->show ("success", "$cnt PTR{$a_records}records created");
 					// error
 					if ($err!=0) {
 					$Result->show ("warning", "$err invalid hostnames");
@@ -547,6 +549,6 @@ else {
 				}
 			}
 		}
-	}
+  }
 }
 ?>

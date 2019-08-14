@@ -76,10 +76,13 @@ else {
     	$subnet_old_details['pingSubnet'] 	    = @$subnet_old_temp['pingSubnet'];        // inherit pingSubnet
     	$subnet_old_details['discoverSubnet']   = @$subnet_old_temp['discoverSubnet'];    // inherit discovery
     	$subnet_old_details['nameserverId']     = @$subnet_old_temp['nameserverId'];      // inherit nameserver
-    	if($User->settings->enableLocations=="1")
-    	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
-        if($User->settings->enableCustomers=="1")
-        $subnet_old_details['customer_id']         = @$subnet_old_temp['customer_id'];          // inherit location
+    	if($User->settings->enableLocations)
+	    	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
+      if($User->settings->enableCustomers)
+	      $subnet_old_details['customer_id']         = @$subnet_old_temp['customer_id'];          // inherit location
+			if($User->settings->enablePowerDNS)
+				$subnet_old_details['DNSrecursive'] = @$subnet_old_temp['DNSrecursive'];
+				$subnet_old_details['DNSforward'] = @$subnet_old_temp['DNSforward'];
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
@@ -126,6 +129,7 @@ var switch_options = {
 $(".input-switch").bootstrapSwitch(switch_options);
 $(".input-switch-agents-ping").bootstrapSwitch(switch_options);
 $(".input-switch-agents-scan").bootstrapSwitch(switch_options);
+$(".input-switch-dns-recursive").bootstrapSwitch(switch_options);
 
 // change - agent selector
 $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.bootstrapSwitch', function (e, data) {
@@ -137,7 +141,16 @@ $('.input-switch-agents-ping, .input-switch-agents-scan').on('switchChange.boots
 	if 		(ping==true || scan==true)		{ $("tr#scanAgentDropdown").removeClass("hidden"); }
 	else if (ping==false && scan==false)	{ $("tr#scanAgentDropdown").addClass("hidden"); }
 });
-<?php if ($User->settings->enableThreshold=="1") { ?>
+// change - allow dns forward
+$('.input-switch-dns-recursive').on('switchChange.bootstrapSwitch', function (e, data) {
+	// get state
+	var DNSrecursive = ($(".input-switch-dns-recursive").bootstrapSwitch('state'));
+
+	// change
+	if (DNSrecursive) { $("tr#dnsForwardSwitch").removeClass("hidden"); }
+	else { $("tr#dnsForwardSwitch").addClass("hidden"); }
+});
+<?php if ($User->settings->enableThreshold) { ?>
 $('.slider').slider().on('slide', function(ev){
     $('.slider-text span').html(ev.value);
 });
@@ -472,12 +485,12 @@ $("input[name='subnet']").change(function() {
 		}
 		print "</select>";
 		print "</td>";
-		print '	<td class="info2">'._('Select which scanagent to use').'</td>' . "\n";
+		print '	<td class="info2">'._('Select which scan agent to use').'</td>' . "\n";
 		print "</tr>";
 	}
 
 	//check host status
-	$checked = @$subnet_old_details['pingSubnet']==1 ? "checked": "";
+	$checked = @$subnet_old_details['pingSubnet'] ? "checked": "";
 	print '<tr>' . "\n";
     print '	<td>'._('Check hosts status').'</td>' . "\n";
     print '	<td>' . "\n";
@@ -487,7 +500,7 @@ $("input[name='subnet']").change(function() {
     print '</tr>';
 
 	//Discover new hosts
-	$checked = @$subnet_old_details['discoverSubnet']==1 ? "checked": "";
+	$checked = @$subnet_old_details['discoverSubnet'] ? "checked": "";
 	print '<tr>' . "\n";
     print '	<td>'._('Discover new hosts').'</td>' . "\n";
     print '	<td>' . "\n";
@@ -497,7 +510,7 @@ $("input[name='subnet']").change(function() {
     print '</tr>';
 
     //resolve hostname
-    $checked = @$subnet_old_details['resolveDNS']==1 ? "checked": "";
+    $checked = @$subnet_old_details['resolveDNS'] ? "checked": "";
     print '<tr>' . "\n";
     print ' <td>'._('Resolve DNS names').'</td>' . "\n";
     print ' <td>' . "\n";
@@ -558,17 +571,28 @@ $("input[name='subnet']").change(function() {
 
 		//autocreate reverse records
 		if($User->settings->enablePowerDNS==1) {
-		$checked = @$subnet_old_details['DNSrecursive']==1 ? "checked": "";
+		$checked = @$subnet_old_details['DNSrecursive'] ? "checked": "";
 		print '<tr>' . "\n";
         print '	<td>'._('Autocreate reverse records').'</td>' . "\n";
         print '	<td>' . "\n";
-        print '		<input type="checkbox" name="DNSrecursive" class="input-switch" value="1" '.$checked.'>'. "\n";
+        print '		<input type="checkbox" name="DNSrecursive" class="input-switch-dns-recursive" value="1" '.$checked.'>'. "\n";
         print '	</td>' . "\n";
         print '	<td class="info2">'._('Auto create reverse (PTR) records for this subnet').'</td>' . "\n";
         print '</tr>';
 
+		// autocreate forward records
+		$hidden = @$subnet_old_details['DNSrecursive'] ? "" : "hidden";
+		$checked = @$subnet_old_details['DNSforward'] ? "checked": "";
+		print "<tr id='dnsForwardSwitch' class='$hidden'>" . "\n";
+        print '	<td>'._('Autocreate forward records').'</td>' . "\n";
+        print '	<td>' . "\n";
+        print '		<input type="checkbox" name="DNSforward" class="input-switch" value="1" '.$checked.'>'. "\n";
+        print '	</td>' . "\n";
+        print '	<td class="info2">'._('Auto create forward (A) records for this subnet').'</td>' . "\n";
+        print '</tr>';
+
 		// show records
-		$checked = @$subnet_old_details['DNSrecords']==1 ? "checked": "";
+		$checked = @$subnet_old_details['DNSrecords'] ? "checked": "";
 		print '<tr>' . "\n";
         print '	<td>'._('Show DNS records').'</td>' . "\n";
         print '	<td>' . "\n";

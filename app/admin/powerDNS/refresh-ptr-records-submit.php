@@ -53,7 +53,7 @@ if ($domain===false) {
 $ptr_indexes = $Addresses->ptr_get_subnet_indexes ($subnet->id);
 
 // remove existing records and links
-$PowerDNS->remove_all_ptr_records ($domain->id, $ptr_indexes);
+$PowerDNS->remove_all_ptr_records ($domain->id, $ptr_indexes, $delete_reverse = $subnet->DNSforward);
 $Addresses->ptr_unlink_subnet_addresses ($subnet->id);
 
 // fetch all hosts
@@ -75,12 +75,18 @@ if (is_array($hosts) && sizeof($hosts)>0) {
 		// validate hostname, we only add valid hostnames
 		elseif ($Result->validate_hostname ($h->hostname) !== false) {
 			// formulate new record
-			$record = $PowerDNS->formulate_new_record ($domain->id, $PowerDNS->get_ip_ptr_name ($h->ip), "PTR", $h->hostname, $values['ttl']);
+			$PTR_record = $PowerDNS->formulate_new_record ($domain->id, $PowerDNS->get_ip_ptr_name ($h->ip), "PTR", $h->hostname, $values['ttl']);
 			// insert record
-			$PowerDNS->add_domain_record ($record, false);
+			$PowerDNS->add_domain_record ($PTR_record, false);
 
 			// link
 			$Addresses->ptr_link ($h->id, $PowerDNS->lastId);
+
+			// formulate and insert forward record if option enabled
+			if ($subnet->DNSforward == 1) {
+				$A_record = $PowerDNS->formulate_new_record ($domain->id, $h->hostname, "A", $h->ip, $values['ttl']);
+				$PowerDNS->add_domain_record ($A_record, false);
+			}
 
 			// ok
 			$success[] = $h;

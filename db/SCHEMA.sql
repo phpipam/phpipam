@@ -275,6 +275,7 @@ CREATE TABLE `subnets` (
   `discoverSubnet` BINARY(1)  NULL  DEFAULT '0',
   `resolveDNS` TINYINT(1)  NULL  DEFAULT '0',
   `DNSrecursive` TINYINT(1)  NULL  DEFAULT '0',
+  `DNSforward` TINYINT(1)  NULL  DEFAULT '0',
   `DNSrecords` TINYINT(1)  NULL  DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
@@ -995,4 +996,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 26;
+UPDATE `settings` SET `dbversion` = 27;

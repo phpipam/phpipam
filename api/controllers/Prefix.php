@@ -158,6 +158,7 @@ class Prefix_controller extends Common_api_functions {
                                         "pingSubnet",
                                         "discoverSubnet",
                                         "DNSrecursive",
+                                        "DNSforward",
                                         "DNSrecords",
                                         "nameserverId",
                                         "scanAgent",
