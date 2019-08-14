@@ -1616,8 +1616,17 @@ class Tools extends Common_functions {
 		if ($linked_field_index_found || !in_array($linked_field, $valid_fields))
 			return;
 
+		$schema = $this->getTableSchemaByField('ipaddresses');
+
+		if( in_array($schema[$linked_field]->DATA_TYPE, ['text', 'blob']) ) {
+			$len = $schema[$linked_field]->CHARACTER_MAXIMUM_LENGTH;
+			$query = "ALTER TABLE `ipaddresses` ADD INDEX ($linked_field($len));";
+		} else {
+			$query = "ALTER TABLE `ipaddresses` ADD INDEX ($linked_field);";
+		}
+
 		// Create selected linked_field index if not exists.
-		try { $this->Database->runQuery("ALTER TABLE `ipaddresses` ADD INDEX ($linked_field);"); }
+		try { $this->Database->runQuery($query); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
