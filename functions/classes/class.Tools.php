@@ -1617,16 +1617,24 @@ class Tools extends Common_functions {
 			return;
 
 		$schema = $this->getTableSchemaByField('ipaddresses');
+		$data_type = $schema[$linked_field]->DATA_TYPE;
 
-		if( in_array($schema[$linked_field]->DATA_TYPE, ['text', 'blob']) ) {
-			$len = $schema[$linked_field]->CHARACTER_MAXIMUM_LENGTH;
-			$query = "ALTER TABLE `ipaddresses` ADD INDEX ($linked_field($len));";
-		} else {
-			$query = "ALTER TABLE `ipaddresses` ADD INDEX ($linked_field);";
+		if( in_array($data_type, ['text', 'blob']) ) {
+			// The prefix length must be specified when indexing TEXT/BLOB datatypes.
+			// Max prefix length and behaviour varies with strict mode, MySQL/MariaDB versions and configured collation.
+			//
+			// Too complex: Avoid creating an index for this datatype and warn of possible poor performance.
+
+			$this->Result->show("warning",
+				_("Warning: ")._("Unable to create index for MySQL TEXT/BLOB datatypes.")."<br>".
+				_("Reduced performance when displaying linked addresses by ").escape_input($linked_field)." ($data_type)"."<br>".
+				_("Change custom field data type to VARCHAR and re-save to enable indexing.")
+			);
+			return;
 		}
 
 		// Create selected linked_field index if not exists.
-		try { $this->Database->runQuery($query); }
+		try { $this->Database->runQuery("ALTER TABLE `ipaddresses` ADD INDEX ($linked_field);"); }
 		catch (Exception $e) {
 			$this->Result->show("danger", $e->getMessage(), true);
 		}
