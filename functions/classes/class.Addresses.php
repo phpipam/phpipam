@@ -955,7 +955,7 @@ class Addresses extends Common_functions {
     		// to object
     		$address = (object) $address;
     		# execute based on action
-    		if($action=="add")				{ return $this->ptr_add ($address, $print_error); }							//create new PTR
+    		if($action=="add")				{ return $this->ptr_add ($address, $print_error, null, $subnet->DNSforward); }							//create new PTR
     		elseif($action=="edit")			{ return $this->ptr_edit ($address, $print_error); }						//modify existing PTR
     		elseif($action=="delete")		{ return $this->ptr_delete ($address, $print_error); }						//delete PTR
     		else							{ return $this->Result->show("danger", _("Invalid PDNS action"), true); }
@@ -1031,7 +1031,7 @@ class Addresses extends Common_functions {
 	 * @param mixed $id (default: NULL)
 	 * @return void
 	 */
-	public function ptr_add ($address, $print_error = true, $id = null) {
+	public function ptr_add ($address, $print_error = true, $id = null, $add_forward_record = false) {
 		// decode values
 		$values = json_decode($this->settings->powerDNS);
 
@@ -1047,15 +1047,23 @@ class Addresses extends Common_functions {
 		$domain = $this->pdns_fetch_domain ($address->subnetId);
 
 		// formulate new record
-		$record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
+		$ptr_record = $this->PowerDNS->formulate_new_record ($domain->id, $this->PowerDNS->get_ip_ptr_name ($this->transform_address ($address->ip_addr, "dotted")), "PTR", $address->hostname, $values->ttl);
 		// insert record
-		$this->PowerDNS->add_domain_record ($record, false);
+		$this->PowerDNS->add_domain_record ($ptr_record, false);
 		// link to address
 		$id = $id===null ? $this->lastId : $id;
 		$this->ptr_link ($id, $this->PowerDNS->lastId);
+
+		// formulate and insert backward_record if specified
+		if ($add_forward_record) {
+			$A_record = $this->PowerDNS->formulate_new_record ($domain->id, $address->hostname, "A", $this->transform_address ($address->ip_addr, "dotted"), $values->ttl);
+			$this->PowerDNS->add_domain_record ($A_record, false);
+		}
+
 		// ok
-		if ($print_error && php_sapi_name()!="cli")
-		$this->Result->show("success", "PTR record created", false);
+		if ($print_error && php_sapi_name()!="cli") {
+			$this->Result->show("success", "PTR record created", false);
+		}
 
 		return true;
 	}
@@ -1081,7 +1089,7 @@ class Addresses extends Common_functions {
 	 		// fake lastid
 	 		$this->lastId = $address->id;
 	 		// new ptr record
-	 		$this->ptr_add ($address, true);
+	 		$this->ptr_add ($address, true, null, $subnet->DNSforward);
  		}
  		// update PTR
  		else {

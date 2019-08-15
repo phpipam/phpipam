@@ -190,6 +190,7 @@ class Logging extends Common_functions {
 						"discoverSubnet"        => "Discover new hosts for this subnet",
 						"allowRequests"         => "Allow IP requests for subnet",
 						"DNSrecursive"          => "Create recursive PowerDNS records",
+						"DNSforward"            => "Create forward PowerDNS records",
 						"DNSrecords"            => "Show PowerDNS records",
 						"nameserverId"          => "Nameserver",
 						"scanAgent"             => "Scan agent index",
@@ -1074,6 +1075,7 @@ class Logging extends Common_functions {
 					$this->object_new['pingSubnet'],
 					$this->object_new['discoverSubnet'],
 					$this->object_new['DNSrecursive'],
+					$this->object_new['DNSforward'],
 					$this->object_new['DNSrecords'],
 					$this->object_new['nameserverId'],
 					$this->object_new['scanAgent'],
@@ -1093,6 +1095,7 @@ class Logging extends Common_functions {
 					$this->object_old['pingSubnet'],
 					$this->object_old['discoverSubnet'],
 					$this->object_old['DNSrecursive'],
+					$this->object_old['DNSforward'],
 					$this->object_old['DNSrecords'],
 					$this->object_old['nameserverId'],
 					$this->object_old['scanAgent'],
@@ -1420,7 +1423,7 @@ class Logging extends Common_functions {
     	$keys = array();
 		// list of keys to be changed per object
 		$keys['section'] = array("strictMode", "showVLAN", "showVRF");
-		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "DNSrecursive", "DNSrecords", "isFull");
+		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "DNSrecursive", "DNSforward", "DNSrecords", "isFull");
 		$keys['ip_addr'] = array("is_gateway", "excludePing", "PTRignore");
 
 		// check
