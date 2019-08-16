@@ -13,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("circuits", 1, true, false);
+$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 # get custom fields
 $custom_fields = $Tools->fetch_custom_fields('circuitsLogical');
@@ -33,7 +33,7 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->get_module_permissions ("circuits")>2) {
+	if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
     	print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='add' data-circuitid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add logical circuit')."</a>";
 	}
 print "</div>";
@@ -104,16 +104,16 @@ else {
 		// actions
 		print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("circuits")>0) {
+        if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>"Show circuit"];
             $links[] = ["type"=>"link", "text"=>"View", "href"=>create_link($_GET['page'],"circuits","logical",$circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
-        if($User->get_module_permissions ("circuits")>1) {
+        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage circuit"];
             $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("circuits")>2) {
+        if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", "icon"=>"times"];
         }
         // print links

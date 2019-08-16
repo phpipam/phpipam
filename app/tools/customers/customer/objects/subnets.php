@@ -133,7 +133,7 @@ foreach ($objects['subnets'] as $slave_subnet) {
         $links[] = ["type"=>"header", "text"=>"Permissions"];
         $links[] = ["type"=>"link", "text"=>"Edit permissions", "href"=>"", "class"=>"showSubnetPerm", "dataparams"=>"data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"tasks"];
     }
-    if($User->get_module_permissions ("customers")>1) {
+    if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
  	    $links[] = ["type"=>"divider"];
         $links[] = ["type"=>"header", "text"=>"Unlink"];
         $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700'data-object='subnets' data-id='{$slave_subnet['id']}'", "icon"=>"unlink"];

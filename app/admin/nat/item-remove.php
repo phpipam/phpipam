@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # validate permissions
-$User->check_module_permissions ("nat", 2, true, true);
+$User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 

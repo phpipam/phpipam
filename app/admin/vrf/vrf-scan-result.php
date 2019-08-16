@@ -20,7 +20,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check
-$User->check_module_permissions ("vrf", 3, true, false);
+$User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 
 # check for number of input values
 $max = ini_get("max_input_vars");

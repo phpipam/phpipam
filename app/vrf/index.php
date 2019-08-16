@@ -6,7 +6,7 @@ die();
 $vrf = $Tools->fetch_object ("vrf", "vrfId", $_GET['section']);
 
 # perm check
-if ($User->get_module_permissions ("vrf")<1) {
+if ($User->get_module_permissions ("vrf")==User::ACCESS_NONE) {
 	$Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 elseif ($vrf===false) {

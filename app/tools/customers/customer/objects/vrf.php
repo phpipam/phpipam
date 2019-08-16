@@ -76,14 +76,14 @@ if (isset($objects["vrf"])) {
         $links[] = ["type"=>"header", "text"=>"Show"];
         $links[] = ["type"=>"link", "text"=>"Show VRF", "href"=>create_link($_GET['page'], "vrf", $vrf->vrfId), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
-        if($User->get_module_permissions ("vrf")>1) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf->vrfId'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("vrf")>2) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf->vrfId'", "icon"=>"times"];
         }
-		if($User->get_module_permissions ("customers")>1) {
+		if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
 	        $links[] = ["type"=>"divider"];
             $links[] = ["type"=>"header", "text"=>"Unlink"];
             $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='vrf' data-id='$vrf->vrfId'", "icon"=>"times"];

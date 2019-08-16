@@ -8,7 +8,7 @@
 $User->check_user_session();
 
 # verify module permissions
-$User->check_module_permissions ("racks", 1, true);
+$User->check_module_permissions ("racks", User::ACCESS_R, true);
 
 # check that rack support isenabled
 if ($User->settings->enableRACK!="1") {
@@ -47,7 +47,7 @@ else {
 
 
 # customer
-if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
     $customer = $Tools->fetch_object ("customers", "id", $rack->customer_id);
 }
 ?>
@@ -105,7 +105,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         </tr>
         <?php } ?>
 
-        <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>0) { ?>
+        <?php if ($User->settings->enableCustomers=="1" &&  $User->get_module_permissions ("customers")>=User::ACCESS_R) { ?>
         <tr>
             <td colspan='2'><hr></td>
         </tr>
@@ -113,7 +113,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             <th><?php print _('Customer'); ?></th>
             <td>
                 <?php
-                if($customer!==false && $User->get_module_permissions ("customers")>0)
+                if($customer!==false && $User->get_module_permissions ("customers")>=User::ACCESS_R)
                 print $customer->title . " <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a>";
                 ?>
                 </td>
@@ -140,7 +140,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         }
 
         # action button groups
-        if($User->get_module_permissions ("racks")>1) {
+        if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
             print "<tr>";
             print " <th style='vertical-align:bottom;align:left;'>"._('Actions')."</th>";
             print "<td class='actions'>";
@@ -148,11 +148,11 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 
             $links = [];
             # permissions
-            if($User->get_module_permissions ("racks")>1) {
+            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
                 $links[] = ["type"=>"header", "text"=>"Manage"];
                 $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$rack->id'", "icon"=>"pencil"];
             }
-            if($User->get_module_permissions ("racks")>2) {
+            if($User->get_module_permissions ("racks")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$rack->id'", "icon"=>"times"];
             }
             // print links
@@ -169,7 +169,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
 
 
         // attached devices
-        if($User->get_module_permissions ("devices")>0) {
+        if($User->get_module_permissions ("devices")>=User::ACCESS_R) {
         print "<tr>";
         print " <th>"._('Devices')."</th>";
         print " <td style='padding-bottom:20px;'>";
@@ -177,7 +177,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
         // devices
         if ($rack_devices===false && $rack_contents===false) {
             print " <span class='text-muted'>"._("Rack is empty")."</span>";
-            if($User->get_module_permissions ("racks")>1) {
+            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
                 print " <hr>";
                 print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
                 print "<br>";
@@ -238,7 +238,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                     $cur->rack_start_print = $cur->rack_start;
                 }
 
-                if($User->get_module_permissions ("racks")>1) {
+                if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
                     print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='$ctype' data-csrf='".$User->Crypto->csrf_cookie ("create", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
                 }
                 print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
@@ -253,7 +253,7 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             } while ($cur);
 
             //add / remove device from rack
-            if($User->get_module_permissions ("racks")>1) {
+            if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
                 print "<hr>";
                 print " <a href='' class='btn btn-xs btn-default btn-success editRackDevice' data-action='add' data-rackid='$rack->id' data-deviceid='0' data-devicetype='device'><i class='fa fa-plus'></i></a> "._("Add device");
                 print "<br>";

@@ -102,7 +102,7 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
  * @return string
  */
 function escape_input($data) {
-       return empty($data) ? '' : htmlentities($data, ENT_QUOTES);
+	return (!isset($data) || strlen($data)==0) ? '' : htmlentities($data, ENT_QUOTES);
 }
 
 /**

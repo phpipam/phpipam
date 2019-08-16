@@ -9,8 +9,14 @@
     + Table layout not aligned (#2656);
     + Improve scanning requirement checks (#1183);
     + Date picker hidden (#2673);
+    + PDNS Add/Edit DNS record not working for normal users (#2686);
+    + Unable to save settings with link addresses = text custom field (#2702);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
+
+    Translations:
+    ----------------------------
+    + Traditional Chinese (zh_TW) translation updated;
 
 == 1.4.1
 

@@ -150,11 +150,11 @@ else 				{ print _("IP addresses belonging to ALL nested subnets"); }
     }
 	# note, device, port, owner, location
 	if(in_array('note', $selected_ip_fields)) 	{ print "<th></th>"; }
-	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
+	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) { print "<th class='hidden-xs hidden-sm hidden-md'>"._('Device')."</th>"; }
 	if(in_array('port', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Port')."</th>"; }
-	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
+	if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 	{ print "<th class='hidden-xs hidden-sm hidden-md'>"._('Location')."</th>"; }
 	if(in_array('owner', $selected_ip_fields)) 	{ print "<th class='hidden-xs hidden-sm'>"._('Owner')."</th>"; }
-	if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>0)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
+	if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"]>0 && $User->get_module_permissions ("customers")>=User::ACCESS_R)	{ print "<th class='hidden-xs hidden-sm'>"._('Customer')."</th>"; }
 	// custom fields
 	if(sizeof($custom_fields) > 0) {
 		foreach($custom_fields as $myField) 	{
@@ -344,7 +344,7 @@ else {
 				// add button
 				if ($User->settings->enablePowerDNS==1) {
 				// add new button
-				if ($Subnets->validate_hostname($addresses[$n]->hostname, false) && ($User->is_admin(false) || @$User->user->pdns=="Yes"))
+				if ($Subnets->validate_hostname($addresses[$n]->hostname, false) && $User->check_module_permissions ("pdns", User::ACCESS_RWA, false, false))
 				$button = "<i class='fa fa-plus-circle fa-gray fa-href editRecord' data-action='add' data-id='".$Addresses->transform_address($addresses[$n]->ip_addr, "dotted")."' data-domain_id='".$addresses[$n]->hostname."'></i>";
 				else
 				$button = "";
@@ -359,7 +359,7 @@ else {
 			    print $Addresses->address_type_format_tag($addresses[$n]->state);
 
                 # set subnet nat
-                if($User->get_module_permissions ("nat")>0) {
+                if($User->get_module_permissions ("nat")>=User::ACCESS_R) {
 	                $Addresses->print_nat_link($all_nats, $all_nats_per_object, $subnet, $addresses[$n]);
 	            }
 
@@ -446,11 +446,11 @@ else {
 	        	}
 
 	        	# print device
-	        	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+	        	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
 		        	# get device details
 		        	$device = (array) $Tools->fetch_object("devices", "id", $addresses[$n]->switch);
 		        	# set rack
-		        	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>1) {
+		        	if ($User->settings->enableRACK=="1" && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
 		        	$rack = $device['rack']>0 ? "<i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackid='$device[rack]' data-deviceid='$device[id]'></i>" : "";
 																		  print "<td class='hidden-xs hidden-sm hidden-md'>$rack <a href='".create_link("tools","devices",@$device['id'])."'>". @$device['hostname'] ."</a></td>";
 					}
@@ -465,7 +465,7 @@ else {
 				}
 
 			    # print location
-			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>0) {
+			    if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
 			    	$location_name = $Tools->fetch_object("locations", "id", $addresses[$n]->location);
 			    	print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
 			    }
@@ -476,7 +476,7 @@ else {
 				}
 
 				# customer_id
-				if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"] && $User->get_module_permissions ("customers")>0) {
+				if($User->settings->enableCustomers=="1" && $cnt_obj["customer_id"] && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 					$customer = $Tools->fetch_object ("customers", "id", $addresses[$n]->customer_id);
 					print $customer===false ? "<td></td>" : "<td>$customer->title <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 				}

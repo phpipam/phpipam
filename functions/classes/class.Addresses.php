@@ -354,6 +354,43 @@ class Addresses extends Common_functions {
 	}
 
 	/**
+	 * Check address add/edit fields are valid
+	 * @param  array|object $values
+	 * @return array
+	 */
+	private function address_check_values($values) {
+	    $User = new User ($this->Database);
+
+	    $values = (array) $values;
+	    $values['ip_addr'] = $this->transform_address($values['ip_addr'],"decimal");
+
+	    $valid_fields = array_keys( $this->getTableSchemaByField('ipaddresses') );
+
+	    if(!$this->api) {
+	        # permissions
+	        if ($User->get_module_permissions("devices")<User::ACCESS_RW)   { unset($valid_fields['switch']); unset($valid_fields['port']); }
+	        if ($User->get_module_permissions("customers")<User::ACCESS_RW) { unset($valid_fields['customer_id']); }
+	        if ($User->get_module_permissions("locations")<User::ACCESS_RW) { unset($valid_fields['location']); }
+	    }
+
+	    // Remove non-valid fields
+	    foreach($values as $i => $v) {
+	        if (!in_array($i, $valid_fields))
+	            unset($values[$i]);
+	    }
+
+	    // ToDo: These fields should have foreign key constraints
+	    $numeric_fields = ['switch', 'customer_id', 'location'];
+	    foreach($numeric_fields as $field) {
+	        if (isset($values[$field]) && (!is_numeric($values[$field]) || $values[$field] <= 0))
+	            $values[$field] = NULL;
+	    }
+
+	    # null empty values
+	    return $this->reformat_empty_array_fields($values, null);
+	}
+
+	/**
 	 * Inserts new IP address to table
 	 *
 	 * @access protected
@@ -361,63 +398,13 @@ class Addresses extends Common_functions {
 	 * @return boolean success/failure
 	 */
 	protected function modify_address_add ($address) {
-		# user - permissions
-		$User = new User ($this->Database);
-		# set insert array
-		$insert = array(
-						"ip_addr"               => $this->transform_address($address['ip_addr'],"decimal"),
-						"subnetId"              => $address['subnetId'],
-						"description"           => @$address['description'],
-						"hostname"              => @$address['hostname'],
-						"mac"                   => @$address['mac'],
-						"owner"                 => @$address['owner'],
-						"state"                 => @$address['state'],
-						"port"                  => @$address['port'],
-						"note"                  => @$address['note'],
-						"is_gateway"            => @$address['is_gateway'],
-						"excludePing"           => @$address['excludePing'],
-						"PTRignore"             => @$address['PTRignore'],
-						"firewallAddressObject" => @$address['firewallAddressObject'],
-						"lastSeen"              => @$address['lastSeen']
-						);
-		# permissions
-		if($this->api===true || $User->get_module_permissions ("devices")>1) {
-			if (array_key_exists('switch', $address)) {
-				if (empty($address['switch']) || is_numeric($address['switch']))
-					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
-			}
-		}
-		# customer
-		if($this->api===true || $User->get_module_permissions ("customers")>1) {
-			if (array_key_exists('customer_id', $address)) {
-				if (empty($address['customer_id']) || is_numeric($address['customer_id']))
-					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
-			}
-		}
-		# location
-		if ($this->api===true || $User->get_module_permissions ("locations")>1) {
-			if (array_key_exists('location_item', $address)) {
-				if (empty($address['location_item']) || is_numeric($address['location_item']))
-					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
-			}
-			if (array_key_exists('location', $address)) {
-				if (empty($address['location']) || is_numeric($address['location']))
-					$insert['location'] = $address['location'] > 0 ? $address['location'] : NULL;
-			}
-		}
-		# custom fields, append to array
-		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
-		}
-
-		# null empty values
-		$insert = $this->reformat_empty_array_fields ($insert, null);
+		$address = $this->address_check_values($address);
 
 		# remove gateway
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
-		try { $this->Database->insertObject("ipaddresses", $insert); }
+		try { $this->Database->insertObject("ipaddresses", $address); }
 		catch (Exception $e) {
 			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -432,7 +419,7 @@ class Addresses extends Common_functions {
 		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
 
 		# edit DNS PTR record
-		$this->ptr_modify ("add", $insert);
+		$this->ptr_modify ("add", $address);
 
 		# threshold alert
 		$this->threshold_check($address);
@@ -452,60 +439,14 @@ class Addresses extends Common_functions {
 		# fetch old details for logging
 		$address_old = $this->fetch_address (null, $address['id']);
 		if (isset($address['section'])) $address_old->section = $address['section'];
-		# user - permissions
-		$User = new User ($this->Database);
-		# set update array
-		$insert = array(
-						"id"          =>$address['id'],
-						"subnetId"    =>$address['subnetId'],
-						"ip_addr"     =>$this->transform_address($address['ip_addr'], "decimal"),
-						"description" =>@$address['description'],
-						"hostname"    =>@$address['hostname'],
-						"mac"         =>@$address['mac'],
-						"owner"       =>@$address['owner'],
-						"state"       =>@$address['state'],
-						"port"        =>@$address['port'],
-						"note"        =>@$address['note'],
-						"is_gateway"  =>@$address['is_gateway'],
-						"excludePing" =>@$address['excludePing'],
-						"PTRignore"   =>@$address['PTRignore'],
-						"lastSeen"    =>@$address['lastSeen']
-						);
-		# permissions
-		if($this->api===true || $User->get_module_permissions ("devices")>1) {
-			if (array_key_exists('switch', $address)) {
-				if (empty($address['switch']) || is_numeric($address['switch']))
-					$insert['switch'] = $address['switch'] > 0 ? $address['switch'] : NULL;
-			}
-		}
-		# customer
-		if($this->api===true || $User->get_module_permissions ("customers")>1) {
-			if (array_key_exists('customer_id', $address)) {
-				if (empty($address['customer_id']) || is_numeric($address['customer_id']))
-					$insert['customer_id'] = $address['customer_id'] > 0 ? $address['customer_id'] : NULL;
-			}
-		}
-		# location
-		if ($this->api===true || $User->get_module_permissions ("locations")>1) {
-			if (array_key_exists('location_item', $address)) {
-				if (empty($address['location_item']) || is_numeric($address['location_item']))
-					$insert['location'] = $address['location_item'] > 0 ? $address['location_item'] : NULL;
-			}
-			if (array_key_exists('location', $address)) {
-				if (empty($address['location']) || is_numeric($address['location']))
-					$insert['location'] = $address['location'] > 0 ? $address['location'] : NULL;
-			}
-		}
-		# custom fields, append to array
-		foreach($this->set_custom_fields() as $c) {
-			$insert[$c['name']] = !empty($address[$c['name']]) ? $address[$c['name']] : $c['Default'];
-		}
+
+		$address = $this->address_check_values($address);
 
 		# set primary key for update
 		if($address['type']=="series") {
 			$id1 = "subnetId";
 			$id2 = "ip_addr";
-			unset($insert['id']);
+			unset($address['id']);
 		} else {
 			$id1 = "id";
 			$id2 = null;
@@ -515,7 +456,7 @@ class Addresses extends Common_functions {
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
 		# execute
-		try { $this->Database->updateObject("ipaddresses", $insert, $id1, $id2); }
+		try { $this->Database->updateObject("ipaddresses", $address, $id1, $id2); }
 		catch (Exception $e) {
 			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -530,8 +471,7 @@ class Addresses extends Common_functions {
 		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
 		# edit DNS PTR record
-		$insert['PTR']=@$address['PTR'];
-		$this->ptr_modify ("edit", $insert);
+		$this->ptr_modify ("edit", $address);
 
 		# ok
 		return true;

@@ -261,7 +261,7 @@ $("input[name='subnet']").change(function() {
     </tr>
     <?php } ?>
 
-    <?php if($User->get_module_permissions ("vlan")>0) { ?>
+    <?php if($User->get_module_permissions ("vlan")>=User::ACCESS_R) { ?>
     <!-- vlan -->
     <tr>
         <td class="middle"><?php print _('VLAN'); ?></td>
@@ -273,7 +273,7 @@ $("input[name='subnet']").change(function() {
     <?php } ?>
 
 
-    <?php if($User->get_module_permissions ("devices")>0) { ?>
+    <?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
 	<!-- Device -->
 	<tr>
 		<td class="middle"><?php print _('Device'); ?></td>
@@ -332,7 +332,7 @@ $("input[name='subnet']").change(function() {
 	if(empty($subnet_old_details['allowRequests'])) 	{ $subnet_old_details['allowRequests'] = "0"; }
 
 	/* if vlan support is enabled print available vlans */
-	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0) {
+	if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		print '<tr>' . "\n";
         print '	<td class="middle">'._('VRF').'</td>' . "\n";
         print '	<td>' . "\n";
@@ -370,7 +370,7 @@ $("input[name='subnet']").change(function() {
 	}
 
     // customers
-    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print
@@ -398,7 +398,7 @@ $("input[name='subnet']").change(function() {
 	?>
 
 	<!-- Location -->
-	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+	<?php if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>

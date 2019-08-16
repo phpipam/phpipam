@@ -172,6 +172,45 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * Check subnet add/edit fields are valid
+	 * @param  array|object $values
+	 * @return array
+	 */
+	private function subnet_check_values($values) {
+		# User class for permissions
+		$User = new User ($this->Database);
+
+		$values = (array) $values;
+
+		$valid_fields = array_keys( $this->getTableSchemaByField('subnets') );
+
+		# validate permissions
+		if(!$this->api) {
+			if ($User->get_module_permissions("vlan")<User::ACCESS_RW) 		{ unset($valid_fields['vlanId']); }
+			if ($User->get_module_permissions("vrf")<User::ACCESS_RW) 		{ unset($valid_fields['vrfId']); }
+			if ($User->get_module_permissions("devices")<User::ACCESS_RW) 	{ unset($valid_fields['device']); }
+			if ($User->get_module_permissions("locations")<User::ACCESS_RW) 	{ unset($valid_fields['location']); }
+			if ($User->get_module_permissions("customers")<User::ACCESS_RW) 	{ unset($valid_fields['customer_id']); }
+		}
+
+		// Remove non-valid fields
+		foreach($values as $i => $v) {
+			if (!in_array($i, $valid_fields))
+				unset($values[$i]);
+		}
+
+		// ToDo: These fields should have foreign key constraints
+		$numeric_fields = ['vlanId', 'vrfId', 'device', 'location', 'customer_id'];
+		foreach($numeric_fields as $field) {
+			if (isset($values[$field]) && (!is_numeric($values[$field]) || $values[$field] <= 0))
+				$values[$field] = NULL;
+		}
+
+		# null empty values
+		return $this->reformat_empty_array_fields($values, null);
+	}
+
+	/**
 	 * Create new subnet method
 	 *
 	 * @access private
@@ -179,19 +218,7 @@ class Subnets extends Common_functions {
 	 * @return bool
 	 */
 	private function subnet_add ($values) {
-		# null empty values
-		$values = $this->reformat_empty_array_fields ($values, null);
-
-		# User class for permissions
-		$User = new User ($this->Database);
-		# validate permissions
-		if($this->api!==true) {
-			if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
-			if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
-			if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
-			if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
-			if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
-		}
+		$values = $this->subnet_check_values($values);
 
 		# execute
 		try { $this->Database->insertObject("subnets", $values); }
@@ -221,20 +248,7 @@ class Subnets extends Common_functions {
 	private function subnet_edit ($values, $mail_changelog = true) {
 		# save old values
 		$old_subnet = $this->fetch_subnet (null, $values['id']);
-
-		# null empty values
-		$values = $this->reformat_empty_array_fields ($values, null);
-
-		# User class for permissions
-		$User = new User ($this->Database);
-		# validate permissions
-		if($this->api!==true) {
-			if ($User->get_module_permissions ("vlan")<1) 		{ unset ($values['vlanId']); }
-			if ($User->get_module_permissions ("vrf")<1) 		{ unset ($values['vrfId']); }
-			if ($User->get_module_permissions ("devices")<1) 	{ unset ($values['device']); }
-			if ($User->get_module_permissions ("locations")<1) 	{ unset ($values['location']); }
-			if ($User->get_module_permissions ("customers")<1) 	{ unset ($values['customer_id']); }
-		}
+		$values = $this->subnet_check_values($values);
 
 		# execute
 		try { $this->Database->updateObject("subnets", $values, "id"); }
@@ -245,6 +259,7 @@ class Subnets extends Common_functions {
 		}
 		# save ID
 		$this->lastInsertId = $this->Database->lastInsertId();
+
 		# changelog
 		if($mail_changelog)
 		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
@@ -632,7 +647,7 @@ class Subnets extends Common_functions {
 		}
 		$possible_parents = implode(',', $possible_parents);
 
-		$query = "SELECT $result_fields FROM `subnets` WHERE COALESCE(`isFolder`,0) = 0 AND ";
+		$query = "SELECT $result_fields FROM `subnets` WHERE `isFolder` = 0 AND ";
 		if (!is_null($method)) $query .= " `$method` = '".$this->Database->escape($value)."' AND ";
 		$query .= " (   ( LPAD(`subnet`,39,0) >= LPAD('$cidr_network',39,0) AND LPAD(`subnet`,39,0) <= LPAD('$cidr_broadcast',39,0) )";
 		$query .= "  OR (`subnet`,`mask`) IN ($possible_parents)  ) ";
@@ -676,7 +691,7 @@ class Subnets extends Common_functions {
 	 */
 	private function fetch_all_subnets_for_Check($discoverytype, $agentId) {
 		if (is_null($agentId) || !is_numeric($agentId))	{ return false; }
-		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` WHERE `scanAgent` = ? AND `$discoverytype` = 1 AND COALESCE(`isFolder`,0) = 0 AND `mask` > 0;", array($agentId)); }
+		try { $subnets = $this->Database->getObjectsQuery("SELECT `id`,`subnet`,`sectionId`,`mask`,`resolveDNS`,`nameserverId` FROM `subnets` WHERE `scanAgent` = ? AND `$discoverytype` = 1 AND `isFolder` = 0 AND `mask` > 0;", array($agentId)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage());
 			return false;

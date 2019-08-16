@@ -2,7 +2,7 @@
 <hr>
 
 <?php
-if($User->get_module_permissions ("locations")>1) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
 include('menu.php');
 }
 ?>
@@ -18,7 +18,7 @@ include('menu.php');
 $User->check_user_session();
 
 # perm check
-if ($User->get_module_permissions ("locations")<1) {
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # check that location support isenabled
@@ -49,7 +49,7 @@ else {
 			}
 		}
 	}
-    if($User->get_module_permissions ("locations")>1)
+    if($User->get_module_permissions ("locations")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -93,7 +93,7 @@ else {
     			}
     		}
             // actions
-            if($User->get_module_permissions ("locations")>1) {
+            if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
             print "<td class='actions'>";
             $links = [];
             $links[] = ["type"=>"header", "text"=>"Show"];
@@ -103,7 +103,7 @@ else {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$l->id'", "icon"=>"pencil"];
 
-            if($User->get_module_permissions ("locations")>2) {
+            if($User->get_module_permissions ("locations")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"link", "text"=>"Delete location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$l->id'", "icon"=>"times"];
                 $links[] = ["type"=>"divider"];
             }

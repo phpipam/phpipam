@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("dhcp", 1, true, false);
+$User->check_module_permissions ("dhcp", User::ACCESS_R, true, false);
 
 # get subnets
 $subnets4 = $DHCP->read_subnets ("IPv4");

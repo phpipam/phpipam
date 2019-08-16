@@ -5,7 +5,7 @@
 
 <?php if($admin && $User->settings->enableLocations=="1") { ?>
 <?php
-if($User->get_module_permissions ("locations")>1) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
 include('menu.php');
 }
 ?>
@@ -20,10 +20,10 @@ include('menu.php');
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("locations", 1, true, false);
+$User->check_module_permissions ("locations", User::ACCESS_R, true, false);
 
 # perm check
-if ($User->get_module_permissions ("locations")<1) {
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 # check that location support isenabled

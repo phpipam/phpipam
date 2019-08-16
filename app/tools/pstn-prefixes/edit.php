@@ -22,10 +22,10 @@ $csrf = $_POST['action']=="add" ? $User->Crypto->csrf_cookie ("create", "pstn_ad
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pstn", 2, true, true);
+    $User->check_module_permissions ("pstn", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("pstn", 3, true, true);
+    $User->check_module_permissions ("pstn", User::ACCESS_RWA, true, true);
 }
 
 
@@ -167,7 +167,7 @@ $custom = $Tools->fetch_custom_fields('pstnPrefixes');
 
 
     	<!-- Device -->
-        <?php if($User->get_module_permissions ("devices")>0) { ?>
+        <?php if($User->get_module_permissions ("devices")>=User::ACCESS_R) { ?>
     	<tr>
     		<th><?php print _('Device'); ?></th>
     		<td id="deviceDropdown">

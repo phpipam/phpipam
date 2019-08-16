@@ -21,10 +21,10 @@ $User->check_maintaneance_mode ();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pdns", 2, true, false);
+    $User->check_module_permissions ("pdns", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("pdns", 3, true, false);
+    $User->check_module_permissions ("pdns", User::ACCESS_RWA, true, false);
 }
 
 # strip input tags

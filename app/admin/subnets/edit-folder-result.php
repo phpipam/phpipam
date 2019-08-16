@@ -150,8 +150,7 @@ else {
 					"id"             => @$_POST['subnetId'],
 					"isFolder"       => 1,
 					"masterSubnetId" => $_POST['masterSubnetId'],
-					"description"    => @$_POST['description'],
-					"isFull"         => @$_POST['isFull']
+					"description"    => @$_POST['description']
 					);
 	# for new subnets we add permissions
 	if($_POST['action']=="add") {

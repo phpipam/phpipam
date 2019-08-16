@@ -106,7 +106,7 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script src="js/jquery-3.3.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jquery-3.4.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
