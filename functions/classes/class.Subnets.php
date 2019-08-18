@@ -1364,7 +1364,7 @@ class Subnets extends Common_functions {
 
 			// set values
 			$out["used"]              = $this->get_subnet_ipaddr_count($subnet->id);
-			$out["maxhosts"]          = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $subnet->isPool));
+			$out["maxhosts"]          = gmp_strval($this->max_hosts ($subnet));
 
 			// percentage
 			$out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
@@ -1467,6 +1467,45 @@ class Subnets extends Common_functions {
 			$number = "~". substr($number, 0, $length - $pos) . "&middot;10^<sup>". $pos ."</sup>";
 		}
 		return $number;
+	}
+
+	/**
+	 * Subnet has reserved network and broadcast addresses
+	 *
+	 * @param  object  $subnet
+	 * @return boolean
+	 */
+	public function has_network_broadcast($subnet) {
+		$subnet = (object) $subnet;
+
+		if ($subnet->isPool)
+			return false;
+
+		$type = $this->identify_address($subnet->subnet);
+
+		if (($type == 'IPv4' && $subnet->mask<31) || ($type == 'IPv6' && $subnet->mask<127))
+			return true;
+		else
+			return false;
+	}
+
+	/**
+	* Get maxumum number of hosts for subnet
+	*
+	* @param  [type] $subnet [description]
+	* @return [type]         [description]
+	*/
+	public function max_hosts($subnet) {
+		$subnet = (object) $subnet;
+
+		$ipversion = $this->identify_address($subnet->subnet);
+
+		$max_hosts = $this->gmp_bitmasks[$ipversion][$subnet->mask]['size'];
+
+		if ($this->has_network_broadcast($subnet)) {
+			$max_hosts = gmp_sub($max_hosts, 2);
+		}
+		return gmp_strval($max_hosts);
 	}
 
 	/**
@@ -1681,14 +1720,9 @@ class Subnets extends Common_functions {
 		$min_address = $this->decimal_network_address($subnet->subnet, $subnet->mask);
 		$max_address = $this->decimal_broadcast_address($subnet->subnet, $subnet->mask);
 
-		if (!$subnet->isPool) {
-			// We are a not a Pool, remove network and broadcast addresses.
-			$type = $this->identify_address($subnet->subnet);
-
-			if (($type=="IPv4" && $subnet->mask<31) || ($type=="IPv6" && $subnet->mask<127)) {
-				$min_address = gmp_strval(gmp_add($min_address, 1));
-				$max_address = gmp_strval(gmp_sub($max_address, 1));
-			}
+		if ($this->has_network_broadcast($subnet)) {
+			$min_address = gmp_strval(gmp_add($min_address, 1));
+			$max_address = gmp_strval(gmp_sub($max_address, 1));
 		}
 
 		if ($address1===false) {

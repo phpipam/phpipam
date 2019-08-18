@@ -801,7 +801,7 @@ class Addresses extends Common_functions {
 		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
 
 	    # get max hosts
-	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']));
+	    $max_hosts = $Subnets->max_hosts ($subnet);
 
 		# full subnet?
 		if(sizeof($addresses)>=$max_hosts)																{ return false; } 	//full subnet

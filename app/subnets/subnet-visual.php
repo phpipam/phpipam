@@ -9,12 +9,9 @@ $start_visual = $Subnets->decimal_network_address($subnet['subnet'], $subnet['ma
 $stop_visual  = $Subnets->decimal_broadcast_address($subnet['subnet'], $subnet['mask']);
 
 # remove subnet and bcast addresses if not a pool
-if (!$subnet['isPool']) {
-    $type = $Subnets->identify_address($subnet->subnet);
-    if(($type=="IPv4" && $subnet['mask']<31) || ($type=="IPv6" && $subnet['mask']<127)) {
-        $start_visual = gmp_strval(gmp_add($start_visual, 1));
-        $stop_visual  = gmp_strval(gmp_sub($stop_visual, 1));
-    }
+if ($Subnets->has_network_broadcast($subnet)) {
+    $start_visual = gmp_strval(gmp_add($start_visual, 1));
+    $stop_visual  = gmp_strval(gmp_sub($stop_visual, 1));
 }
 
 # we need to reindex addresses to have ip address in decimal as key!
