@@ -1,5 +1,17 @@
 <?php
 
+/**
+ * Enable output buffering
+ ******************************/
+
+if(!ob_start("ob_gzhandler")) ob_start();
+
+function outputbuf_send() {
+	ob_end_flush();
+}
+
+register_shutdown_function('outputbuf_send');
+
 /* @config file ------------------ */
 require_once( dirname(__FILE__) . '/classes/class.Config.php' );
 $config = Config::get('config');
