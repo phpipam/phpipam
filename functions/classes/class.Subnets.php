@@ -250,6 +250,16 @@ class Subnets extends Common_functions {
 		$old_subnet = $this->fetch_subnet (null, $values['id']);
 		$values = $this->subnet_check_values($values);
 
+		# Check network/broadcast are not inuse before disabling isPool.
+		if (isset($values['isPool']) && $old_subnet->isPool==1 && $values['isPool']==0) {
+			if ($this->network_or_broadcast_address_in_use($old_subnet)) {
+				$errmsg = _("Can not disable isPool, network or broadcast address is allocated");
+				$this->Result->show("danger", $errmsg, false);
+				$this->Log->write( "Subnet edit", "Failed to edit subnet<hr>".$errmsg, 2);
+				return false;
+			}
+		}
+
 		# execute
 		try { $this->Database->updateObject("subnets", $values, "id"); }
 		catch (Exception $e) {
@@ -1701,6 +1711,30 @@ class Subnets extends Common_functions {
 		// Calculate broadcast address (decimal) by setting the /mask bits
 		$network_broadcast = gmp_or($decimalIP, $this->gmp_bitmasks[$type][$mask]['broadcast']);
 		return gmp_strval($network_broadcast);
+	}
+
+	/**
+	 * network or broadcast address exists?
+	 * @param  mixed $subnet
+	 * @return bool
+	 */
+	private function network_or_broadcast_address_in_use($subnet) {
+		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+
+		if (($type=="IPv4" && $subnet->mask>=31) || ($type=="IPv6" && $subnet->mask>=127))
+			return false;
+
+		$network   = $this->decimal_network_address($subnet->subnet, $subnet->mask);
+		$broadcast = $this->decimal_broadcast_address($subnet->subnet, $subnet->mask);
+
+		$query = "SELECT COUNT(*) AS cnt FROM `ipaddresses` WHERE `subnetId` = ? AND (`ip_addr` = ? or `ip_addr` = ?);";
+
+		try { $res = $this->Database->getObjectsQuery($query, [$subnet->id, $network, $broadcast]); }
+		catch (Exception $e) {
+			$this->Result->show("danger", _("Error: ").$e->getMessage());
+			return false;
+		}
+		return $res[0]->cnt == 0 ? false : true;
 	}
 
 	 /**
