@@ -10,6 +10,10 @@
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
+    Translations:
+    ----------------------------
+    + Update Traditional Chinese support to version 1.5 (#2658);
+
 == 1.4.1
 
     Bugfixes:
