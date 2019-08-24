@@ -5,14 +5,7 @@
 print "<br><h4>"._('Visual subnet display')." <i class='icon-gray icon-info-sign' rel='tooltip' data-html='true' title='"._('Click on IP address box<br>to manage IP address')."!'></i></h4><hr>";
 print "<div class='ip_vis'>";
 
-$start_visual = $Subnets->decimal_network_address($subnet['subnet'], $subnet['mask']);
-$stop_visual  = $Subnets->decimal_broadcast_address($subnet['subnet'], $subnet['mask']);
-
-# remove subnet and bcast addresses if not a pool
-if ($Subnets->has_network_broadcast($subnet)) {
-    $start_visual = gmp_strval(gmp_add($start_visual, 1));
-    $stop_visual  = gmp_strval(gmp_sub($stop_visual, 1));
-}
+list($start_visual, $stop_visual) = $Subnets->subnet_boundaries($subnet);
 
 # we need to reindex addresses to have ip address in decimal as key!
 $visual_addresses = array();

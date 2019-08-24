@@ -1488,15 +1488,36 @@ class Subnets extends Common_functions {
 	public function has_network_broadcast($subnet) {
 		$subnet = (object) $subnet;
 
+		# Address/NAT pools
 		if ($subnet->isPool)
 			return false;
 
+		# IPv4/IPv6 networks
 		$type = $this->identify_address($subnet->subnet);
 
 		if (($type == 'IPv4' && $subnet->mask<31) || ($type == 'IPv6' && $subnet->mask<127))
 			return true;
 		else
 			return false;
+	}
+
+	/**
+	 * Get valid min/max decimal IP for given subnet.
+	 * @param  mixed $subnet
+	 * @return array
+	 */
+	public function subnet_boundaries($subnet) {
+		$subnet = (object) $subnet;
+
+		$range_start = $this->decimal_network_address($subnet->subnet, $subnet->mask);
+		$range_end   = $this->decimal_broadcast_address($subnet->subnet, $subnet->mask);
+
+		# Exclude network and bcast addresses if not a pool
+		if ($this->has_network_broadcast($subnet)) {
+			$range_start = gmp_strval(gmp_add($range_start, 1));
+			$range_end   = gmp_strval(gmp_sub($range_end, 1));
+		}
+		return [$range_start, $range_end];
 	}
 
 	/**
