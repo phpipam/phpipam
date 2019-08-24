@@ -597,12 +597,16 @@ class Addresses_controller extends Common_api_functions  {
 	 * @access private
 	 * @return void
 	 */
-	private function validate_subnet () {
-		// numberic
-		if(!is_numeric($this->_params->subnetId))											{ $this->Response->throw_exception(400, "Subnet Id must be numeric"); }
-		// check subnet
-		if(is_null($res = $this->Subnets->fetch_subnet ("id", $this->_params->subnetId)))	{ $this->Response->throw_exception(404, "Invalid subnet Id"); }
-		else																				{ $this->subnet_details = $res; }
+	private function validate_subnetId () {
+		if(!is_numeric($this->_params->subnetId))
+			$this->Response->throw_exception(400, _("SubnetId must be numeric"));
+
+		// check subnet exists
+		$res = $this->Subnets->fetch_subnet ("id", $this->_params->subnetId);
+		if(!is_object($res))
+			$this->Response->throw_exception(404, _("Invalid subnet Id"));
+
+		$this->subnet_details = $res;
 	}
 
 	/**
@@ -630,7 +634,7 @@ class Addresses_controller extends Common_api_functions  {
 	 */
 	public function validate_create_parameters () {
 		// validate subnet
-		$this->validate_subnet ();
+		$this->validate_subnetId ();
 
 		// validate overlapping
 		if($this->Addresses->address_exists ($this->_params->ip_addr, $this->_params->subnetId))
