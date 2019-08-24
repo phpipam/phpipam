@@ -255,7 +255,7 @@ $section  = (array) $Sections->fetch_section (null, @$_POST['sectionid']);
 </div>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {

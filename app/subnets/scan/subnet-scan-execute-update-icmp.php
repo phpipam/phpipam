@@ -21,7 +21,8 @@ $output = array_values(array_filter($output));
 $script_result = json_decode($output[0]);
 
 # json error
-if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), true); }
+if(json_last_error() !== JSON_ERROR_NONE)
+	$Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
 
 # set blank values
 if (!isset($script_result->values->alive) || is_null($script_result->values->alive) )	{ $script_result->values->alive = array(); }

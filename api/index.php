@@ -66,16 +66,11 @@ try {
 
 	// crypt check
 	if($app->app_security=="crypt") {
-		$api_crypt_encryption_library = Config::get('api_crypt_encryption_library') === "mcrypt" ? 'mcrypt' : 'openssl';
-
-		// verify php extensions
-		if (!in_array($api_crypt_encryption_library, get_loaded_extensions())) {
-			$Response->throw_exception(500, 'php extension '.$api_crypt_encryption_library.' missing');
-		}
+		$encryption_method = Config::get('api_crypt_encryption_library', 'openssl-128-cbc');
 
 		// decrypt request - form_encoded
 		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
-			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $api_crypt_encryption_library);
+			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($decoded === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$decoded = $decoded[0]=="?" ? substr($decoded, 1) : $decoded;
 			parse_str($decoded, $encrypted_params);
@@ -84,7 +79,7 @@ try {
 		}
 		// json_encoded
 		else {
-			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $api_crypt_encryption_library);
+			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
 			$encrypted_params = json_decode($encrypted_params, true);
 			$encrypted_params['app_id'] = $_GET['app_id'];

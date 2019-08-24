@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vlan", 1, true, false);
+$User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 
 # fetch l2 domain
 $vlan_domain = new StdClass();
@@ -26,7 +26,7 @@ $hidden_fields = is_array(@$hidden_fields['vlans']) ? $hidden_fields['vlans'] : 
 $csize = sizeof($custom_fields) - sizeof($hidden_fields);
 
 # set disabled for non-admins
-$disabled = $User->get_module_permissions ("vlan")>1 ? "" : "hidden";
+$disabled = $User->get_module_permissions ("vlan")>=User::ACCESS_RW ? "" : "hidden";
 
 
 # title
@@ -54,7 +54,7 @@ else {
 	print ' <th data-field="number" data-sortable="true">'._('Number').'</th>' . "\n";
 	print ' <th data-field="vlname" data-sortable="true">'._('Name').'</th>' . "\n";
 	print ' <th data-field="name" data-sortable="true">'._('L2domain').'</th>' . "\n";
-	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+	if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 	print ' <th data-field="customer" data-sortable="true">'._('Customer').'</th>' . "\n";
 	$csize++;
 	}
@@ -65,7 +65,7 @@ else {
 			}
 		}
 	}
-	if($User->get_module_permissions ("vlan")>1)
+	if($User->get_module_permissions ("vlan")>=User::ACCESS_RW)
     print "<th></th>";
 	print "</tr>";
 	print "</thead>";
@@ -115,7 +115,7 @@ else {
 		print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'><i class='fa fa-cloud prefix'></i> ".$vlan->number."</a></td>";
 		print "	<td><a href='".create_link($_GET['page'], $_GET['section'], $vlan->domainId, $vlan->id)."'>".$vlan->name."</a>".$vlan->description."</td>";
 		print "	<td>".$vlan->domainName.$vlan->domainDescription."</td>";
-		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+		if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 			 $customer = $Tools->fetch_object ("customers", "id", $vlan->customer_id);
 			 print $customer===false ? "<td></td>" : "<td>{$customer->title} <a target='_blank' href='".create_link("tools","customers",$customer->title)."'><i class='fa fa-external-link'></i></a></td>";
 		}
@@ -132,14 +132,14 @@ else {
 	    }
 
         // actions
-        if ($User->get_module_permissions ("vlan")>1) {
+        if ($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("vlan")>1) {
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$vlan->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("vlan")>2) {
+        if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"divider"];
             $links[] = ["type"=>"link", "text"=>"Move VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$vlan->id'", "icon"=>"external-link"];
             $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$vlan->id'", "icon"=>"times"];

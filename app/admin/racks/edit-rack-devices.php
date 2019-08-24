@@ -18,8 +18,8 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("racks", 2, true, true);
-$User->check_module_permissions ("devices", 1, true, true);
+$User->check_module_permissions ("racks", User::ACCESS_RW, true, true);
+$User->check_module_permissions ("devices", User::ACCESS_R, true, true);
 
 # strip input tags
 $_POST = $Admin->strip_input_tags($_POST);
@@ -60,7 +60,7 @@ if ($_POST['action']=="remove") {
 
     # js
     ?>
-    <script type="text/javascript">
+    <script>
     $(document).ready(function() {
     $('.hidePopups').click(function(){
        window. location.reload();
@@ -97,7 +97,7 @@ else {
     }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

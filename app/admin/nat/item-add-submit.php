@@ -19,7 +19,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # validate permissions
-$User->check_module_permissions ("nat", 2, true, true);
+$User->check_module_permissions ("nat", User::ACCESS_RW, true, true);
 
 # get NAT object
 $nat = $Admin->fetch_object ("nat", "id", $_POST['id']);

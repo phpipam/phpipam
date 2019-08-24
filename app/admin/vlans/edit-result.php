@@ -20,10 +20,10 @@ $User->check_user_session();
 $User->check_maintaneance_mode ();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vlan", 2, true, false);
+    $User->check_module_permissions ("vlan", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("vlan", 3, true, false);
+    $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, false);
 }
 
 # strip input tags

@@ -563,7 +563,7 @@ class DHCP_kea extends Common_functions {
         $this->init_database_conection ($reservations_database['user'], $reservations_database['password'], $reservations_database['host'], 3306, $reservations_database['name']);
         // set query
         if($type=="IPv4") {
-            $query = "select 'MySQL' as 'location', `dhcp4_subnet_id`, `ipv4_address` as `ip-address`, `dhcp_identifier` as `hw-address`, `hostname` from `hosts`;";
+            $query = "select 'MySQL' as 'location', `dhcp4_subnet_id`, `ipv4_address` as `ip-address`, HEX(`dhcp_identifier`) as `hw-address`, `hostname` from `hosts`;";
         }
         else {
             $query = "select * from `hosts`;";

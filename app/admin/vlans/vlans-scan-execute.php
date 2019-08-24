@@ -19,7 +19,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check popup
-$User->check_module_permissions ("vlan", 3, true, true);
+$User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "scan", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
@@ -177,9 +177,9 @@ else {
     			elseif($field['type'] == "date" || $field['type'] == "datetime") {
     				// just for first
     				if($timeP==0) {
-    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-    					print '<script type="text/javascript">';
+    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
+    					print '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
+    					print '<script>';
     					print '$(document).ready(function() {';
     					//date only
     					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';

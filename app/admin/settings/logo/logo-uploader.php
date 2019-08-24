@@ -73,7 +73,7 @@ else {
     <script src="js//uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
-    <script type="text/javascript">
+    <script>
 	$(function(){
 
 	    var ul = $('#csvimport ul');

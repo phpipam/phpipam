@@ -13,7 +13,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # perm check popup
-$User->check_module_permissions ("routing", 2, true, true);
+$User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
 
 # ID must be numeric
 if($_POST['action']!="add" && !is_numeric($_POST['bgpid']))		{ $Result->show("danger", _("Invalid ID"), true, true); }

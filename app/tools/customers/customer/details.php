@@ -8,7 +8,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("customers", 1, true);
+$User->check_module_permissions ("customers", User::ACCESS_R, true);
 
 
 print "<h4>"._('Customer details')." - $customer->title</h4>";
@@ -98,7 +98,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	}
 
 	// edit, delete
-	if($User->get_module_permissions ("customers")>1) {
+	if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
 		print "<tr>";
 		print "	<td colspan='2'><hr></td>";
 		print "</tr>";
@@ -109,11 +109,11 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
         // actions
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("customers")>1) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("customers")>2) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
         }
         // print links

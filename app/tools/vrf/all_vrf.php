@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vrf", 1, true, false);
+$User->check_module_permissions ("vrf", User::ACCESS_R, true, false);
 
 # fetch all vrfs
 $all_vrfs = $User->fetch_all_objects("vrf", "name");
@@ -118,11 +118,11 @@ else {
         $links[] = ["type"=>"header", "text"=>"Show"];
         $links[] = ["type"=>"link", "text"=>"Show VRF", "href"=>create_link($_GET['page'], "vrf", $vrf['vrfId']), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
-        if($User->get_module_permissions ("vrf")>1) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='edit' data-vrfid='$vrf[vrfId]'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("vrf")>2) {
+        if($User->get_module_permissions ("vrf")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete VRF", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vrf/edit.php' data-class='700' data-action='delete' data-vrfid='$vrf[vrfId]'", "icon"=>"times"];
         }
         // print links

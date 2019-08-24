@@ -22,10 +22,10 @@ $csrf = $User->Crypto->csrf_cookie ("create", "routing_bgp");
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("routing", 2, true, true);
+    $User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("routing", 3, true, true);
+    $User->check_module_permissions ("routing", User::ACCESS_RWA, true, true);
 }
 
 # strip tags - XSS
@@ -95,7 +95,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 
 	<?php
     // customers
-    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0) {
+    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print
@@ -121,7 +121,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
     }
 
     // circuits
-    if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>0) {
+    if($User->settings->enableCircuits==1 && $User->get_module_permissions ("circuits")>=User::ACCESS_R) {
         // fetch customers
         $circuits = $Tools->fetch_all_objects ("circuits", "cid");
         // print
@@ -147,7 +147,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
     }
 
     // circuits
-    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>0) {
+    if($User->settings->enableVRF==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
         // fetch customers
         $vrfs = $Tools->fetch_all_objects ("vrf", "name");
         // print

@@ -93,7 +93,7 @@ else {
 </table>
 </div>
 
-<script type="text/javascript">
+<script>
 	$(document).ready(function() {
     	if ($('#subnetId').children('option').length>0) {
     		var subnetId = $('select#subnetId option:selected').attr('value');

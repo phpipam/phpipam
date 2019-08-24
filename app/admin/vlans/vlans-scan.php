@@ -19,7 +19,7 @@ $User->check_user_session();
 # check maintaneance mode
 $User->check_maintaneance_mode ();
 # perm check popup
-$User->check_module_permissions ("vlan", 3, true, true);
+$User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 # validate csrf cookie
 $csrf = $User->Crypto->csrf_cookie ("create", "scan");
 

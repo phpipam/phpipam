@@ -83,14 +83,13 @@ else {
 
 	/* print subnets menu ---------- */
 	print "<div class='subnets'>";
-	# print links
-	$section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, array());
-	print $Subnets->print_subnets_menu($User->user, $section_subnets);
+	print "<ul id='subnets' data-section='".urlencode($_GET['section'])."' data-subnetId='".urlencode($_GET['subnetId'])."'>";
+	print _("Loading")."...<i class='fa fa-spinner fa-spin'></i>";
+	print "</ul>";
 	print "</div>";
 
-
 	/* print VLAN menu ---------- */
-	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>0) {
+	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>=User::ACCESS_R) {
 		$vlans = $Sections->fetch_section_vlans($_GET['section']);
 
 		# if some is present
@@ -106,7 +105,7 @@ else {
 
 
 	/* print VRF menu ---------- */
-	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>0) {
+	if($User->settings->enableVRF==1 && $section['showVRF']==1 && $User->get_module_permissions ("vrf")>=User::ACCESS_R) {
 		$vrfs = $Sections->fetch_section_vrfs($_GET['section']);
 
 		# if some is present

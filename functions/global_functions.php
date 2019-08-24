@@ -102,5 +102,39 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
  * @return string
  */
 function escape_input($data) {
-       return empty($data) ? '' : htmlentities($data, ENT_QUOTES);
+	return (!isset($data) || strlen($data)==0) ? '' : htmlentities($data, ENT_QUOTES);
+}
+
+/**
+ * Check if required php features are missing
+ * @param  mixed $required_extensions
+ * @param  mixed $required_functions
+ * @return string|bool
+ */
+function php_feature_missing($required_extensions = null, $required_functions = null) {
+
+	if (is_array($required_extensions)) {
+		foreach ($required_extensions as $ext) {
+			if (extension_loaded($ext))
+				continue;
+
+			return _('Required PHP extension not installed: ').$ext;
+		}
+	}
+
+	if (is_array($required_functions)) {
+		foreach ($required_functions as $function) {
+			if (function_exists($function))
+				continue;
+
+			$ini_path = trim( php_ini_loaded_file() );
+			$disabled_functions = ini_get('disable_functions');
+			if (is_string($disabled_functions) && in_array($function, explode(';',$disabled_functions)))
+				return _('Required function disabled')." : $ini_path, disable_functions=$function";
+
+			return _('Required function not found: ').$function.'()';
+		}
+	}
+
+	return false;
 }

@@ -96,7 +96,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
     <script src="js/uploader/jquery.fileupload.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 
 
-    <script type="text/javascript">
+    <script>
 	$(function(){
 
 	    var ul = $('#csvimport ul');

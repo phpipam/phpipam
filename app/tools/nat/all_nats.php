@@ -12,7 +12,7 @@ $User->check_user_session();
 <hr>
 
 
-<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")==3) { ?>
+<?php if($User->settings->enableNAT=="1" && $User->get_module_permissions ("nat")>=User::ACCESS_RWA) { ?>
 <div class="btn-group">
 	<a href="" class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> <?php print _('Add nat'); ?></a>
     <a class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/cleanup.php' data-class='700'><i class="fa fa-legal"></i> <?php print _('Cleanup'); ?></a>
@@ -26,7 +26,7 @@ if ($User->settings->enableNAT!="1") {
     $Result->show("danger", _("NAT module disabled."), false);
 }
 # no access
-elseif ($User->check_module_permissions ("nat", 1, false, false)===false) {
+elseif ($User->check_module_permissions ("nat", User::ACCESS_R, false, false)===false) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 else {
@@ -58,7 +58,7 @@ else {
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";
     print " <th>"._('Description')."</th>";
-    if($User->get_module_permissions ("nat")>1)
+    if($User->get_module_permissions ("nat")>=User::ACCESS_RW)
     print " <th style='width:80px'></th>";
     print "</tr>";
     print "</thead>";
@@ -145,7 +145,7 @@ else {
                 print " <td>$n->dst_port</td>";
                 print " <td><span class='text-muted'>$n->description</span></td>";
                 // actions
-                if($User->get_module_permissions ("nat")>1) {
+                if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
         		print "	<td class='actions'>";
                 $links = [];
                 $links[] = ["type"=>"header", "text"=>"Manage NAT"];

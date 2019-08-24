@@ -18,10 +18,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vlan", 2, true, true);
+    $User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("vlan", 3, true, true);
+    $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token
@@ -65,7 +65,7 @@ if($_POST['action']=="add") {
 if($vlan_domain===false)			{ $Result->show("danger", _("Invalid ID"), true, true); }
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });
@@ -134,7 +134,7 @@ $(document).ready(function(){
 
 	<?php
     // customers
-    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>0) {
+    if($User->settings->enableCustomers==1 && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
         // fetch customers
         $customers = $Tools->fetch_all_objects ("customers", "title");
         // print

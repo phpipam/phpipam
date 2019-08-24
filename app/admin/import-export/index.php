@@ -8,7 +8,7 @@
 $User->check_user_session();
 ?>
 
-<script type="text/javascript">
+<script>
 
 $(document).on('change', "select#dataType", function() {
 	if (this.value == "subnets") {

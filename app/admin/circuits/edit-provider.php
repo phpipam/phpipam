@@ -19,10 +19,10 @@ $User->check_user_session();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", 2, true, true);
+    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("circuits", 3, true, true);
+    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token
@@ -55,7 +55,7 @@ else {
 $readonly = $_POST['action']=="delete" ? "readonly" : "";
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
      if ($("[rel=tooltip]").length) { $("[rel=tooltip]").tooltip(); }
 });

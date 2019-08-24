@@ -132,7 +132,7 @@ else {
 ?>
 
 
-<script type="text/javascript">
+<script>
 $(document).ready(function(){
     $('#toggle_debug').click(function() { $('#debug').toggle() });
 });

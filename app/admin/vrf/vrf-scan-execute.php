@@ -17,7 +17,7 @@ $Result 	= new Result ();
 # verify that user is logged in
 $User->check_user_session();
 # perm check
-$User->check_module_permissions ("vrf", 3, true, false);
+$User->check_module_permissions ("vrf", User::ACCESS_RWA, true, false);
 
 # fake error
 print "<div class='alert-danger hidden'></div>";
@@ -166,9 +166,9 @@ else {
     			elseif($field['type'] == "date" || $field['type'] == "datetime") {
     				// just for first
     				if($timeP==0) {
-    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-    					print '<script type="text/javascript">';
+    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
+    					print '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
+    					print '<script>';
     					print '$(document).ready(function() {';
     					//date only
     					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';

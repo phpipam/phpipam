@@ -229,18 +229,12 @@ class SubnetsMenu {
 			}
 		}
 
-		# Menu start
-		$this->html[] = '<ul id="subnets">';
-
 		# loop through subnets
 		foreach($SubnetsTree->subnets as $s) {
 			$this->menu_nested_level($s->level, $s->masterSubnet);  // Applied Style is based on parent
 			$this->menu_item($s);
 		}
 		$this->menu_nested_level(0, null);
-
-		# Close menu
-		$this->html[] = '</ul>';
 	}
 
 	/**

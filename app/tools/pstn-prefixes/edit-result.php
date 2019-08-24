@@ -18,10 +18,10 @@ $_POST = $Admin->strip_input_tags($_POST);
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("pstn", 2, true, false);
+    $User->check_module_permissions ("pstn", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("pstn", 3, true, false);
+    $User->check_module_permissions ("pstn", User::ACCESS_RWA, true, false);
 }
 
 
@@ -143,7 +143,7 @@ $values = array(
     );
 
 # perm check
-if ($User->get_module_permissions ("devices")<1) {
+if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
     unset ($values['deviceId']);
 }
 

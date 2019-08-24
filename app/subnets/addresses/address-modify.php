@@ -109,7 +109,7 @@ $locations = $Tools->fetch_all_objects ("locations", "name");
 
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 /* bootstrap switch */
 var switch_options = {
@@ -438,7 +438,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	print "</tr>";
 
 	// customer
-	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>0) {
+	if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_R) {
 
 		print '<tr>'. "\n";
 		print '	<td>'._('Customer').'</td>'. "\n";
@@ -483,7 +483,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 	if(!isset($address['port'])) 	{$address['port'] = "";}
 
 	# both are active
-	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>0) {
+	if(in_array('switch', $selected_ip_fields) && $User->get_module_permissions ("devices")>=User::ACCESS_R) {
 
 		// set star if field is required
 		$required = in_array("switch", $required_ip_fields) ? " *" : "";
@@ -536,7 +536,7 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 
 
     // location
-    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>0) { ?>
+    if($User->settings->enableLocations=="1" && $User->get_module_permissions ("locations")>=User::ACCESS_R) { ?>
 	<tr>
 		<td>
 			<?php
@@ -642,9 +642,9 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 			elseif($field['type'] == "date" || $field['type'] == "datetime") {
 				// just for first
 				if($timeP==0) {
-					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-					print '<script type="text/javascript">';
+					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
+					print '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
+					print '<script>';
 					print '$(document).ready(function() {';
 					//date only
 					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';

@@ -17,7 +17,7 @@ $languages = $Admin->fetch_all_objects("lang", "l_id");
 $settings = (array) $User->settings;
 ?>
 
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
 	/* bootstrap switch */
 	var switch_options = {

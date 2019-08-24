@@ -25,10 +25,10 @@
 	<link rel="shortcut icon" href="../css/images/favicon.ico">
 
 	<!--[if IE 6]>
-	<script type="text/javascript" src="js/dieIE.js"></script>
+	<script src="js/dieIE.js"></script>
 	<![endif]-->
 	<!--[if IE 7]>
-	<script type="text/javascript" src="js//dieIE.js"></script>
+	<script src="js//dieIE.js"></script>
 	<![endif]-->
 </head>
 

@@ -1,5 +1,9 @@
 == 1.5
 
+    Enhancements, changes:
+    ----------------------------
+    + XHR left subnets menu;
+
     Bugfixes:
     ----------------------------
     + do not show statistics in dashboard widget for disabled modules (#2602);
@@ -7,6 +11,11 @@
     + Permit non-numeric postcodes for customers (#2393);
     + Bandwidth calculator - 400 Bad Request (#1807,#2648);
     + Table layout not aligned (#2656);
+    + Improve scanning requirement checks (#1183);
+    + Date picker hidden (#2673);
+    + PDNS Add/Edit DNS record not working for normal users (#2686);
+    + Unable to save settings with link addresses = text custom field (#2702);
+    + Kea MAC address display issue (#2704);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 

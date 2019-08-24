@@ -7,7 +7,7 @@
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("routing", 1, true);
+$User->check_module_permissions ("routing", User::ACCESS_R, true);
 ?>
 
 <?php
@@ -23,7 +23,7 @@ else {
     # print link to manage
     print "<div class='btn-group'>";
         // add
-        if($User->get_module_permissions ("routing")>2) {
+        if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
         print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/routing/edit-bgp.php' data-class='700' data-action='add' data-bgpid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add peer')."</a>";
         }
     print "</div>";
@@ -96,16 +96,16 @@ else {
             // links
             print "<td class='actions'>";
             $links = [];
-            if($User->get_module_permissions ("routing")>0) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_R) {
                 $links[] = ["type"=>"header", "text"=>"Show BGP"];
                 $links[] = ["type"=>"link", "text"=>"Show BGP", "href"=>create_link($_GET['page'], "routing", "bgp", $bgp->id), "icon"=>"eye", "visible"=>"dropdown"];
                 $links[] = ["type"=>"divider"];
             }
-            if($User->get_module_permissions ("routing")>1) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_RW) {
                 $links[] = ["type"=>"header", "text"=>"Manage BGP"];
                 $links[] = ["type"=>"link", "text"=>"Edit BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='edit' data-class='700' data-bgpid='$bgp->id'", "icon"=>"pencil"];
             }
-            if($User->get_module_permissions ("routing")>2) {
+            if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"link", "text"=>"Delete BGP", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/routing/edit-bgp.php' data-action='delete' data-class='700' data-bgpid='$bgp->id'", "icon"=>"times"];
                 $links[] = ["type"=>"divider"];
             }

@@ -23,7 +23,8 @@ $output = array_values(array_filter($output));
 $script_result = json_decode($output[0]);
 
 # json error
-if(json_last_error()!=0)						{ $Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error()), true); }
+if(json_last_error() !== JSON_ERROR_NONE)
+	$Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
 
 # if method is fping we need to check against existing hosts because it produces list of all ips !
 if ($User->settings->scanPingType=="fping" && isset($script_result->values->alive)) {
@@ -134,9 +135,9 @@ else {
     			elseif($field['type'] == "date" || $field['type'] == "datetime") {
     				// just for first
     				if($timeP==0) {
-    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css">';
-    					print '<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>';
-    					print '<script type="text/javascript">';
+    					print '<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap-datetimepicker.min.css?v='.SCRIPT_PREFIX.'">';
+    					print '<script src="js/bootstrap-datetimepicker.min.js?v='.SCRIPT_PREFIX.'"></script>';
+    					print '<script>';
     					print '$(document).ready(function() {';
     					//date only
     					print '	$(".datepicker").datetimepicker( {pickDate: true, pickTime: false, pickSeconds: false });';

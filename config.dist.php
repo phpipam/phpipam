@@ -75,9 +75,12 @@ $config['resolve_verbose']             = true;       // verbose response - print
 $debugging = false;
 
 /*
- * API Crypt security provider. "mcrypt" or "openssl"
+ * API Crypt security provider. "mcrypt" or "openssl*"
+ * Supported methods:
+ *    openssl-128-cbc (alias openssl, openssl-128) *default
+ *    openssl-256-cbc (alias openssl-256)
  *
- * default as of 1.3.2 "openssl"
+ * default as of 1.3.2 "openssl-128-cbc"
  ******************************/
 // $api_crypt_encryption_library = "mcrypt";
 

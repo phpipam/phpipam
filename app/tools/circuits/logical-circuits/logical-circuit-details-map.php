@@ -2,7 +2,7 @@
 
 
 # perm check
-$User->check_module_permissions ("circuits", 1, true, false);
+$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
 // title
 print "<h4>"._('Map')."</h4>";
@@ -77,7 +77,7 @@ elseif ($locA->name_print!=="/" && $locB->name_print!=="/") {
 
     // print
     if (sizeof($all_locations)>0) { ?>
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
                 // init gmaps
                 var map = new GMaps({
