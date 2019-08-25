@@ -633,11 +633,7 @@ class Addresses extends Common_functions {
         $this->get_settings ();
     	# enabled ?
     	if ($this->settings->enableThreshold=="1") {
-        	# object
-        	if (!is_object($this->Subnets)) {
-            	$this->Subnets = new Subnets ($this->Database);
-        	}
-        	# fetch subnet
+        	$this->initialize_subnets_object();
         	$subnet = $this->Subnets->fetch_subnet("id", $address->subnetId);
         	# threshold set ?
         	if ($subnet->threshold>0) {
@@ -797,7 +793,7 @@ class Addresses extends Common_functions {
 		if ($subnet['isFolder']=="1")                                                                   { return false; }
 
 		# false if slaves
-		$this->Subnets = new Subnets ($this->Database);
+		$this->initialize_subnets_object();
 		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
 
 	    # get max hosts
@@ -1357,7 +1353,6 @@ class Addresses extends Common_functions {
 	public function fetch_subnet_addresses_recursive ($subnetId, $count = false, $order=null, $order_direction=null ) {
 		# initialize subnets
 		$this->initialize_subnets_object ();
-		$this->Subnets = new Subnets ($this->Database);
 		$this->Subnets->reset_subnet_slaves_recursive();				//reset array of slaves before continuing
 	    $this->Subnets->fetch_subnet_slaves_recursive($subnetId);		//fetch array of slaves
 	    $this->Subnets->slaves = array_unique($this->Subnets->slaves);	//remove possible duplicates
@@ -1730,11 +1725,7 @@ class Addresses extends Common_functions {
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
-    	# object
-    	if (!is_object($this->Subnets)) {
-        	$this->Subnets = new Subnets ($this->Database);
-    	}
-        # fetch subnet
+    	$this->initialize_subnets_object();
         $subnet = $this->Subnets->fetch_subnet("id", $subnetId);
 		# set subnet permissions
 		$subnetP = json_decode($subnet->permissions);
