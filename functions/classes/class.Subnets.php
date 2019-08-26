@@ -2423,9 +2423,12 @@ class Subnets extends Common_functions {
 
 			//check all IP addresses against new subnet
 			if (is_array($subnet_addresses)) {
-				foreach($subnet_addresses as $ip) {
-					$Addresses->verify_address( $this->transform_to_dotted($ip->ip_addr), $this->transform_to_dotted($subnet)."/".$mask, false, true );
-				}
+				$shrunk = $this->fetch_object("subnets", "id", $subnetId);
+				if (is_object($shrunk))
+					$shrunk->mask = $mask;
+
+				foreach($subnet_addresses as $ip)
+					$Addresses->address_within_subnet($ip->ip_addr, $shrunk, true);
 			}
 			//Checks for strict mode
 			if ($section->strictMode==1) {

@@ -640,16 +640,8 @@ class Addresses_controller extends Common_api_functions  {
 		if($this->Addresses->address_exists ($this->_params->ip_addr, $this->_params->subnetId))
 			$this->Response->throw_exception(409, "IP address already exists");
 
-		// fetch subnet
-		$subnet = $this->subnet_details;
-		// check if it is not folder
-		if($subnet->isFolder!="1") {
-			// formulate CIDR
-			$subnet = $this->Subnets->transform_to_dotted ($subnet->subnet)."/".$subnet->mask;
-
-			// validate address, that it is inside subnet, not subnet/broadcast
-			$this->Addresses->verify_address( $this->_params->ip_addr, $subnet, false, true );
-		} else {
+		// check if it is a folder
+		if($this->subnet_details->isFolder) {
 			if($this->Addresses->validate_address ($this->_params->ip_addr)===false)
 				$this->Response->throw_exception(400, "Invalid address");
 		}

@@ -167,9 +167,9 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
     	if($Addresses->validate_ip( $address['stop'])===false)      { $Result->show("danger", _("Invalid IP address")."!", true); }
 	}
 	else {
-    	$Addresses->verify_address( $address['start'], "$subnet[ip]/$subnet[mask]", $subnet['isPool'] );
-    	$Addresses->verify_address( $address['stop'] , "$subnet[ip]/$subnet[mask]", $subnet['isPool'] );
-    }
+		$Addresses->address_within_subnet($address['start'], $subnet, true);
+		$Addresses->address_within_subnet($address['stop'],  $subnet, true);
+	}
 
 	# go from start to stop and insert / update / delete IPs
 	$start = $Subnets->transform_to_decimal($address['start']);
@@ -312,14 +312,6 @@ else {
 		$subnet = (array) $Subnets->fetch_subnet(null, $address['newSubnet']);
 		$address['ip_addr'] = $address_old['ip'];
 	}
-	# verify address
-	if($action!=="delete" && $subnet['isFolder']!="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $subnet['isPool'] );
-	}
-	elseif ($action!=="delete" && $subnet['isFolder']=="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "0.0.0.0/0", $subnet['isPool'] );
-	}
-
 	# if errors are present print them, else execute query!
 	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }
 	else {

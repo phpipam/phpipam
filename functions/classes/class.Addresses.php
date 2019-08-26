@@ -400,6 +400,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_add ($address) {
 		$address = $this->address_check_values($address);
 
+		$this->address_within_subnetId($address['ip_addr'], $address['subnetId'], true);
+
 		# remove gateway
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
@@ -441,6 +443,10 @@ class Addresses extends Common_functions {
 		if (isset($address['section'])) $address_old->section = $address['section'];
 
 		$address = $this->address_check_values($address);
+
+		$subnetId = array_key_exists('subnetId', $address) ? $address['subnetId'] : $address_old->subnetId;
+		if (array_key_exists('ip_addr', $address))
+			$this->address_within_subnetId($address['ip_addr'], $subnetId, true);
 
 		# set primary key for update
 		if($address['type']=="series") {
@@ -1186,8 +1192,6 @@ class Addresses extends Common_functions {
 	    # fetch subnet details
 	    $subnet = (array) $this->Subnets->fetch_subnet(null, $subnetId);
 
-	    # verify address
-	    if($this->verify_address( $address[0], $this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask'], false, false)!==false) { return false; }
 	    # check for duplicates
 	    if ($this->address_exists($address[0], $subnetId)) { return _('IP address already exists').' - '.$address[0]; }
 
@@ -1399,79 +1403,6 @@ class Addresses extends Common_functions {
 	*/
 
 	/**
-	 * Verify IP address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $no_strict (default: false)
-	 * @param bool $die (default: false)
-	 * @return boolean
-	 */
-	public function verify_address( $address, $subnet, $no_strict = false, $die=true ) {
-		# subnet should be in CIDR format
-		$this->initialize_subnets_object ();
-		if(strlen($error = $this->Subnets->verify_cidr ($subnet))>1)				{ $this->Result->show("danger", $error, $die); return true; }
-
-		# make checks
-		return $this->identify_address ($address)=="IPv6" ? $this->verify_address_IPv6 ($address, $subnet, $die) : $this->verify_address_IPv4 ($address, $subnet, $no_strict, $die);
-	}
-
-	/**
-	 * Verify IPv4 address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $no_strict
-	 * @param bool $die
-	 * @return boolean
-	 */
-	public function verify_address_IPv4 ($address, $subnet, $no_strict, $die) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv4 ();
-        # fetch mask part
-        $mask = explode("/", $subnet);
-
-		# is address valid?
-		if (!$this->Net_IPv4->validateIP($address)) 						{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# is address in provided subnet
-		elseif (!$this->Net_IPv4->ipInNetwork($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# ignore  /31 and /32 subnet broadcast and subnet checks!
-		elseif ($mask[1] == 31 || $mask[1] == 32 || $no_strict == true) 	{ }
-		# It cannot be subnet or broadcast
-		else {
-            $net = $this->Net_IPv4->parseAddress($subnet);
-
-            if ($net->network == $address) 									{ $this->Result->show("danger", _("Cannot add subnet as IP address!"), $die); return true; }
-            elseif ($net->broadcast == $address)							{ $this->Result->show("danger", _("Cannot add broadcast as IP address!"), $die); return true; }
-		}
-		# default
-		return false;
-	}
-
-	/**
-	 * Verify IPv6 address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $die
-	 * @return boolean
-	 */
-	public function verify_address_IPv6 ($address, $subnet, $die) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-		# is it valid?
-		if (!$this->Net_IPv6->checkIPv6($address)) 							{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# it must be in provided subnet
-		elseif (!$this->Net_IPv6->isInNetmask($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# default
-		return false;
-	}
-
-	/**
 	 * Validates IP address
 	 *
 	 * @access public
@@ -1543,6 +1474,58 @@ class Addresses extends Common_functions {
 		return $cnt==0 ? true : false;
 	}
 
+	/**
+	 * Check if address is within subnet (object)
+	 * @param  mixed   $address
+	 * @param  mixed   $subnet
+	 * @param  boolean $die (default:true)
+	 * @return boolean
+	 */
+	public function address_within_subnet($address, $subnet, $die=true) {
+		$address = $this->transform_address($address, "decimal");
+
+		if (is_array($subnet))
+			$subnet = (object) $subnet;
+
+		if (!is_object($subnet) || !property_exists($subnet, 'subnet') || !property_exists($subnet, 'mask')) {
+			$this->Result->show("danger", _("Invalid subnet"), $die);
+			return false;
+		}
+
+		if ($subnet->isFolder)
+			return true;
+
+		// Check if IP is within valid range
+		$this->initialize_subnets_object();
+		list($min, $max) = $this->Subnets->subnet_boundaries($subnet);
+
+		if (gmp_cmp($address, $min)<0 || gmp_cmp($address, $max)>0) {
+			$ip = $this->transform_to_dotted($address);
+			$subnet = $this->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;
+			$this->Result->show("danger", $ip._(" is not a valid address for subnet ").$subnet, $die);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if address is within subnetId
+	 * @param  mixed   $address
+	 * @param  mixed   $subnetId
+	 * @param  boolean $die (default:true)
+	 * @return boolean
+	 */
+	public function address_within_subnetId($address, $subnetId, $die=true) {
+		$subnet = $this->fetch_object("subnets", "id", $subnetId);
+
+		if (!is_object($subnet)) {
+			$this->Result->show("danger", _("Invalid subnet Id"), $die);
+			return false;
+		}
+
+		return $this->address_within_subnet($address, $subnet, $die);
+	}
 
 
 

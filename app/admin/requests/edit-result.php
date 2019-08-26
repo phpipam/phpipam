@@ -60,9 +60,6 @@ else {
 	// fetch subnet
 	$subnet_temp = $Addresses->transform_to_dotted ($subnet['subnet'])."/".$subnet['mask'];
 
-	//verify IP and subnet
-	$Addresses->verify_address( $Addresses->transform_address($_POST['ip_addr'], "dotted"), $subnet_temp, false, true);
-
 	//check if already existing and die
 	if ($Addresses->address_exists($Addresses->transform_address($_POST['ip_addr'], "decimal"), $subnet['id'])) { $Result->show("danger", _('IP address already exists'), true); }
 
