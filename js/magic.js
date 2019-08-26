@@ -466,11 +466,6 @@ $(document).on('click', '#sortablePopup li a.widget-add', function() {
 
 
 /* @subnets list ----------  */
-$("ul#subnets").each(function() {
-    var section = $(this).attr('data-section');
-    var subnetId = $(this).attr('data-subnetId');
-    $(this).load("app/subnets/subnets-menu-ajax.php?section="+section+"&subnetId="+subnetId);
-});
 
 /* leftmenu toggle submenus */
 // default hide
