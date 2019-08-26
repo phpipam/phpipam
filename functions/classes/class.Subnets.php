@@ -372,14 +372,13 @@ class Subnets extends Common_functions {
 	 * @param int $number
 	 * @param string $prefix
 	 * @param string $group (default: "yes")
-	 * @param string $strict (default: "yes")
 	 * @param string $copy_custom (default: "yes")
 	 * @return bool
 	 */
-	public function subnet_split ($subnet_old, $number, $prefix, $group="yes", $strict="yes", $copy_custom="yes") {
+	public function subnet_split ($subnet_old, $number, $prefix, $group="yes", $copy_custom="yes") {
 
 		# we first need to check if it is ok to split subnet and get parameters
-		$check = $this->verify_subnet_split ($subnet_old, $number, $group, $strict);
+		$check = $this->verify_subnet_split ($subnet_old, $number, $group);
 
 		# ok, extract parameters from result array - 0 is $newsubnets and 1 is $addresses
 		$newsubnets = $check[0];
@@ -394,8 +393,7 @@ class Subnets extends Common_functions {
 		}
 
 		# create new subnets and change subnetId for recalculated hosts
-		$m = 0;
-		foreach($newsubnets as $subnet) {
+		foreach($newsubnets as $m => $subnet) {
 			//set new subnet insert values
 			$values = array(
 							"description"    => strlen($prefix)>0 ? $prefix.($m+1) : "split_subnet_".($m+1),
@@ -410,26 +408,22 @@ class Subnets extends Common_functions {
 							"permissions"    => $subnet['permissions'],
 							"nameserverId"   => $subnet_old->nameserverId,
 							"device"		 => $subnet_old->device,
+							"isPool"		 => $subnet_old->isPool,
 							);
 			// custom fields
-			if($copy_custom=="yes") {
-				if(sizeof($custom_fields)>0) {
-					foreach ($custom_fields as $myField) {
-						$values[$myField['name']] = $subnet_old->{$myField['name']};
-					}
+			if($copy_custom=="yes" && is_array($custom_fields)) {
+				foreach ($custom_fields as $myField) {
+					$values[$myField['name']] = $subnet_old->{$myField['name']};
 				}
 			}
 			//create new subnets
 			$this->modify_subnet ("add", $values);
 
 			//get all address ids
-			$ids = array ();
+			$ids = [];
 			if(is_array($addresses)) {
 				foreach($addresses as $ip) {
-					if($ip->subnetId == $m) {
-	    				if(!isset($ids)) $ids = array();
-						$ids[] = $ip->id;
-					}
+					if($ip->subnetId == $m) { $ids[] = $ip->id; }
 				}
 			}
 
@@ -437,9 +431,6 @@ class Subnets extends Common_functions {
 			if(sizeof($ids)>0) {
 				if(!$Admin->object_modify("ipaddresses", "edit-multiple", $ids, array("subnetId"=>$this->lastInsertId)))	{ $this->Result->show("danger", _("Failed to move IP address"), true); }
 			}
-
-			# next
-			$m++;
 		}
 
 		# do we need to remove old subnet?
@@ -1364,7 +1355,7 @@ class Subnets extends Common_functions {
 		// marked as full ?
 		if ($subnet->isFull==1) {
 			// set values
-			$out["used"]              = gmp_strval($this->get_max_hosts ($subnet->mask, $ip_version, $subnet->isPool));
+			$out["used"]              = $this->max_hosts ($subnet);
 			$out["maxhosts"]          = $out['used'];
 			$out["freehosts"]         = 0;
 			$out["freehosts_percent"] = 0;
@@ -1374,7 +1365,7 @@ class Subnets extends Common_functions {
 
 			// set values
 			$out["used"]              = $this->get_subnet_ipaddr_count($subnet->id);
-			$out["maxhosts"]          = gmp_strval($this->max_hosts ($subnet));
+			$out["maxhosts"]          = $this->max_hosts ($subnet);
 
 			// percentage
 			$out["freehosts"]         = gmp_strval(gmp_sub($out['maxhosts'],$out['used']));
@@ -1533,9 +1524,9 @@ class Subnets extends Common_functions {
 
 		$max_hosts = $this->gmp_bitmasks[$ipversion][$subnet->mask]['size'];
 
-		if ($this->has_network_broadcast($subnet)) {
+		if ($this->has_network_broadcast($subnet))
 			$max_hosts = gmp_sub($max_hosts, 2);
-		}
+
 		return gmp_strval($max_hosts);
 	}
 
@@ -1866,7 +1857,7 @@ class Subnets extends Common_functions {
 		$subnets = array();
 		$ranges = $fsm['freeranges'];
 
-		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], true));
+		$size = $this->gmp_bitmasks[$fsm['type']][$mask]['size'];
 		$discovered = 0;
 		// For each range; Calculate the candidate network and broadcast addresses for size $mask and check
 		// that both are inside the current range. Increment candidate by $size=2^(mask bits) and repeat.
@@ -1912,7 +1903,7 @@ class Subnets extends Common_functions {
 		$subnets = array();
 		$ranges  = array_reverse($fsm['freeranges']);
 
-		$size = gmp_init($this->get_max_hosts($mask, $fsm['type'], true));
+		$size = $this->gmp_bitmasks[$fsm['type']][$mask]['size'];
 		$discovered = 0;
 		// For each range; Calculate the candidate network and broadcast addresses for size $mask and check
 		// that both are inside the current range. Decrement candidate by $size=2^(mask bits) and repeat.
@@ -2458,15 +2449,11 @@ class Subnets extends Common_functions {
 	 * @param mixed $subnet_old
 	 * @param mixed $number
 	 * @param string $group
-	 * @param string $strict
 	 * @return array
 	 */
-	private function verify_subnet_split ($subnet_old, $number, $group, $strict) {
-		# addresses class
-		$Addresses = new Addresses ($this->Database);
-
+	private function verify_subnet_split ($subnet_old, $number, $group) {
 		# get new mask - how much we need to add to old mask?
-		$mask_diff = int;
+		$mask_diff = 0;
 		switch($number) {
 			case "2":   $mask_diff = 1; break;
 			case "4":   $mask_diff = 2; break;
@@ -2479,74 +2466,39 @@ class Subnets extends Common_functions {
 			//otherwise die
 			default:	$this->Result->show("danger", _("Invalid number of subnets"), true);
 		}
+
 		//set new mask
 		$mask = $subnet_old->mask + $mask_diff;
-		//set number of subnets
-		$number_of_subnets = pow(2,$mask_diff);
-		//set max hosts per new subnet
-		$max_hosts = $this->get_max_hosts ($mask, $this->identify_address($this->transform_to_dotted($subnet_old->subnet)), true);
+		$type = $this->identify_address($subnet_old->subnet);
+		$max_hosts = $this->gmp_bitmasks[$type][$mask]['size'];
 
 		# create array of new subnets based on number of subnets (number)
-		$newsubnets = array();
-		for($m=0; $m<$number_of_subnets; $m++) {
+		$newsubnets = [];
+		for($m=0; $m<$number; $m++) {
 			$newsubnets[$m] 		 = (array) $subnet_old;
 			$newsubnets[$m]['id']    = $m;
 			$newsubnets[$m]['mask']  = $mask;
-
 			// if group is selected rewrite the masterSubnetId!
-			if($group=="yes") {
+			if($group=="yes")
 				$newsubnets[$m]['masterSubnetId'] = $subnet_old->id;
-			}
 			// recalculate subnet
-			if($m>0) {
+			if($m>0)
 				$newsubnets[$m]['subnet'] = gmp_strval(gmp_add($newsubnets[$m-1]['subnet'], $max_hosts));
-			}
 		}
 
 		// recalculate old hosts to put it to right subnet
-		$addresses   = $Addresses->fetch_subnet_addresses ($subnet_old->id, "ip_addr", "asc");		# get all IP addresses
-		$subSize = sizeof($newsubnets);		# how many times to check
-		$n = 0;								# ip address count
-		// loop
+		# addresses class
+		$Addresses = new Addresses ($this->Database);
+		$addresses = $Addresses->fetch_subnet_addresses ($subnet_old->id, "ip_addr", "asc");		# get all IP addresses
+
 		if (is_array($addresses)) {
-			foreach($addresses as $ip) {
-				//cast
-				$ip = (array) $ip;
-				# check to which it belongs
-				for($m=0; $m<$subSize; $m++) {
-
-					# check if between this and next - strict
-					if($strict == "yes") {
-						# check if last
-						if(($m+1) == $subSize) {
-							if($ip['ip_addr'] > $newsubnets[$m]['subnet']) {
-								$addresses[$n]->subnetId = $newsubnets[$m]['id'];
-							}
-						}
-						elseif( ($ip['ip_addr'] > $newsubnets[$m]['subnet']) && ($ip['ip_addr'] < @$newsubnets[$m+1]['subnet']) ) {
-							$addresses[$n]->subnetId = $newsubnets[$m]['id'];
-						}
-					}
-					# unstrict - permit network and broadcast
-					else {
-						# check if last
-						if(($m+1) == $subSize) {
-							if($ip['ip_addr'] >= $newsubnets[$m]['subnet']) {
-								$addresses[$n]->subnetId = $newsubnets[$m]['id'];
-							}
-						}
-						elseif( ($ip['ip_addr'] >= $newsubnets[$m]['subnet']) && ($ip['ip_addr'] < $newsubnets[$m+1]['subnet']) ) {
-							$addresses[$n]->subnetId = $newsubnets[$m]['id'];
-						}
-					}
+			foreach ($addresses as $idx_ip => $ip) {
+				$belong = $this->decimal_network_address($ip->ip_addr, $mask);
+				foreach($newsubnets as $subnet) {
+					if ($subnet['subnet'] == $belong) break;
 				}
-
-				# if subnetId is still the same save to error
-				if($addresses[$n]->subnetId == $subnet_old->id) {
-					$this->Result->show("danger", _('Wrong IP addresses (subnet or broadcast)').' - '.$this->transform_to_dotted($ip['ip_addr']), true);
-				}
-				# next IP address
-				$n++;
+				$Addresses->address_within_subnet($ip->ip_addr, $subnet, true); // die if does not belong
+				$addresses[$idx_ip]->subnetId = $subnet['id'];
 			}
 		}
 
