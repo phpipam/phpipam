@@ -81,12 +81,9 @@ else {
     print "<h4>"._('Available subnets')." <span class='pull-right' style='margin-right:5px;cursor:pointer;'><i class='fa fa-gray fa-sm $iconClass' rel='tooltip' data-placement='bottom' title='"._('Expand/compress all folders')."' id='expandfolders' data-action='$action'></i></span></h4>";
     print "<hr>";
 
+    $section_subnets = (array) $Subnets->fetch_section_subnets($_GET['section'], false, false, []);
 	/* print subnets menu ---------- */
-	print "<div class='subnets'>";
-	print "<ul id='subnets' data-section='".urlencode($_GET['section'])."' data-subnetId='".urlencode($_GET['subnetId'])."'>";
-	print _("Loading")."...<i class='fa fa-spinner fa-spin'></i>";
-	print "</ul>";
-	print "</div>";
+    print $Subnets->print_subnets_menu($User->user, $section_subnets);
 
 	/* print VLAN menu ---------- */
 	if($section['showVLAN'] == 1 && $User->get_module_permissions ("vlan")>=User::ACCESS_R) {

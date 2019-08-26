@@ -3105,6 +3105,32 @@ class Subnets extends Common_functions {
 	*/
 
 	/**
+	 * Creates HTML menu for left subnets
+	 *
+	 *      based on http://pastebin.com/GAFvSew4
+	 *
+	 * @access public
+	 * @param mixed $user
+	 * @param mixed $section_subnets        //array of all subnets in section
+	 * @return string
+	 */
+	public function print_subnets_menu($user, $section_subnets) {
+		$subnetsTree = new SubnetsTree($this, $user);
+
+		if (is_array($section_subnets)) {
+			foreach($section_subnets as $subnet) {
+				$subnetsTree->add($subnet);
+			}
+			$subnetsTree->walk(false);
+		}
+
+		$menu = new SubnetsMenu($this, $_COOKIE['sstr'], $_COOKIE['expandfolders'], $_GET['subnetId']);
+		$menu->subnetsTree($subnetsTree);
+
+		return $menu->html();
+	}
+
+	/**
 	 * Creates HTML menu for left VLANs in section
 	 *
 	 * @access public
