@@ -1277,12 +1277,12 @@ class Subnets extends Common_functions {
             $this->remove_subnet_slaves_master ($subnet->id);
 
             // set master details
-            $subnet_usage = $this->calculate_single_subnet_details ($subnet, true, false);
+            $subnet_usage = $this->calculate_single_subnet_details ($subnet, false);
 
         	// loop and add results
             foreach ($this->slaves_full as $ss) {
                 // calculate for specific subnet
-                $slave_usage = $this->calculate_single_subnet_details ($ss, true, false);
+                $slave_usage = $this->calculate_single_subnet_details ($ss, false);
                 // append slave values to its master
                 $subnet_usage['used']      = gmp_strval(gmp_add($subnet_usage['used'],$slave_usage['used']));
                 $subnet_usage['freehosts'] = gmp_strval(gmp_sub($subnet_usage['freehosts'],$slave_usage['used']));
@@ -1300,7 +1300,7 @@ class Subnets extends Common_functions {
     	}
     	// no slaves
     	else {
-            $subnet_usage = $this->calculate_single_subnet_details ($subnet, false, $detailed);
+            $subnet_usage = $this->calculate_single_subnet_details ($subnet, $detailed);
     	}
     	// return usage
     	$this->cache_write ("subnet_usage", (object) ["id"=>"$subnet->id d=$detailed", "result" => $subnet_usage]);
@@ -1338,14 +1338,10 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $subnet
-	 * @param bool $no_strict (default: false)
 	 * @param bool $detailed (default: false)
 	 * @return void
 	 */
-	private function calculate_single_subnet_details ($subnet, $no_strict = false, $detailed = false) {
-		// set IP version
-		$ip_version = $this->get_ip_version ($subnet->subnet);
-
+	private function calculate_single_subnet_details ($subnet, $detailed = false) {
 		$cached_item = $this->cache_check("single_subnet_details", "$subnet->id d=$detailed");
 		if(is_object($cached_item)) return $cached_item->result;
 
@@ -1375,7 +1371,7 @@ class Subnets extends Common_functions {
 				// fetch full addresses
 				$addresses = $this->Addresses->fetch_subnet_addresses ($subnet->id);
 				// order - group by tag type
-				$tag_addresses = $this->calculate_subnet_usage_sort_addresses ($subnet, $addresses);
+				$tag_addresses = $this->calculate_subnet_usage_sort_addresses ($addresses);
 				// calculate use percentage for each address tag
 				foreach($this->address_types as $t) {
 					$out[$t['type']."_percent"] = round( ( ($tag_addresses[$t['type']] * 100.0) / $out['maxhosts']), 2 );
@@ -1391,11 +1387,10 @@ class Subnets extends Common_functions {
 	 * Calculates subnet usage per host type
 	 *
 	 * @access private
-	 * @param obj $subnet
 	 * @param false|array $addresses (default:false)
 	 * @return array
 	 */
-	private function calculate_subnet_usage_sort_addresses ($subnet, $addresses = false) {
+	private function calculate_subnet_usage_sort_addresses ($addresses = false) {
 		$count = array();
 		$count['Reserved'] = 0;
 		# fetch address types
@@ -1512,10 +1507,10 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	* Get maxumum number of hosts for subnet
+	* Get maximum number of hosts for subnet
 	*
-	* @param  [type] $subnet [description]
-	* @return [type]         [description]
+	* @param  mixed $subnet
+	* @return string
 	*/
 	public function max_hosts($subnet) {
 		$subnet = (object) $subnet;
@@ -1531,7 +1526,7 @@ class Subnets extends Common_functions {
 	}
 
 	/**
-	 * Get maxumum number of hosts for netmask
+	 * Get maximum number of hosts for netmask
 	 *
 	 * @access public
 	 * @param mixed $netmask
@@ -1731,7 +1726,9 @@ class Subnets extends Common_functions {
 	 * @return bool
 	 */
 	private function network_or_broadcast_address_in_use($subnet) {
-		$type = ($decimalIP <= 4294967295) ? 'IPv4' : 'IPv6';
+		$subnet = (object) $subnet;
+
+		$type = ($subnet->subnet <= 4294967295) ? 'IPv4' : 'IPv6';
 
 		if (($type=="IPv4" && $subnet->mask>=31) || ($type=="IPv6" && $subnet->mask>=127))
 			return false;
@@ -2494,8 +2491,13 @@ class Subnets extends Common_functions {
 		if (is_array($addresses)) {
 			foreach ($addresses as $idx_ip => $ip) {
 				$belong = $this->decimal_network_address($ip->ip_addr, $mask);
-				foreach($newsubnets as $subnet) {
-					if ($subnet['subnet'] == $belong) break;
+				$subnet = $subnet_old;
+				// Find new subnet.
+				foreach($newsubnets as $s) {
+					if ($s['subnet'] != $belong) continue;
+
+					$subnet = $s;
+					break;
 				}
 				$Addresses->address_within_subnet($ip->ip_addr, $subnet, true); // die if does not belong
 				$addresses[$idx_ip]->subnetId = $subnet['id'];
