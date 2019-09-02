@@ -475,13 +475,13 @@ else {
 		print "</tr>";
 
 		print "<tr>";
-		print "	<th>"._('Autocreate reverse records')."</th>";
-		if($subnet['DNSrecursive'] == 1) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $btns $zone</td>"; }		# yes
+		print "	<th>"._('Autocreate ' . ($subnet['DNSforward'] ? 'DNS' : 'reverse') .' records')."</th>";
+		if($subnet['DNSrecursive']) 			{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span> $btns $zone</td>"; }		# yes
 		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 		print "<tr>";
 		print "	<th>"._('Show DNS records')."</th>";
-		if($subnet['DNSrecords'] == 1) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
+		if($subnet['DNSrecords']) 				{ print "	<td><span class='badge badge1 badge5 alert-success'>"._('enabled')."</span></td>"; }		# yes
 		else 										{ print "	<td><span class='badge badge1 badge5'>"._('disabled')."</span></td>";}		# no
 		print "</tr>";
 	}

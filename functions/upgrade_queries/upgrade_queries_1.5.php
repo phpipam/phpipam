@@ -9,6 +9,7 @@ $upgrade_queries["1.5.26"][] = "ALTER TABLE `customers` CHANGE `postcode` `postc
 $upgrade_queries["1.5.26"][] = "-- Database version bump";
 $upgrade_queries["1.5.26"][] = "UPDATE `settings` set `dbversion` = '26';";
 
+$upgrade_queries["1.5.27"][] = "ALTER TABLE `subnets` ADD `DNSforward` BOOL NOT NULL DEFAULT '0';";
 
 // fix for query logic (null handling)
 //

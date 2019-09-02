@@ -275,6 +275,7 @@ CREATE TABLE `subnets` (
   `discoverSubnet` BOOL NOT NULL DEFAULT '0',
   `resolveDNS` BOOL NOT NULL DEFAULT '0',
   `DNSrecursive` BOOL NOT NULL DEFAULT '0',
+  `DNSforward` BOOL NOT  NULL  DEFAULT '0',
   `DNSrecords` BOOL NOT NULL DEFAULT '0',
   `nameserverId` INT(11) NULL DEFAULT '0',
   `scanAgent` INT(11)  DEFAULT NULL,
