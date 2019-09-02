@@ -13,7 +13,7 @@ $User->check_user_session();
 <?php
 
 # perm check
-if ($User->get_module_permissions ("pstn")<1) {
+if ($User->get_module_permissions ("pstn")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 // validate
@@ -105,7 +105,7 @@ else {
         	print "	<td>$prefix->description</td>";
         	print "</tr>";
 
-            if($User->get_module_permissions ("devices")>0) {
+            if($User->get_module_permissions ("devices")>=User::ACCESS_R) {
             	# device
             	print "<tr>";
             	print "	<th>"._('Device')."</th>";
@@ -172,7 +172,7 @@ else {
         	print " <div class='btn-group'>";
 
             $links = [];
-            if($User->get_module_permissions ("pstn")>1) {
+            if($User->get_module_permissions ("pstn")>=User::ACCESS_RW) {
                 if(!$isMaster) {
                 $links[] = ["type"=>"header", "text"=>"Create address"];
                 $links[] = ["type"=>"link", "text"=>"Add address to prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit-number.php' data-class='700' data-action='add' data-id='$prefix->id'", "icon"=>"plus"];
@@ -183,7 +183,7 @@ else {
                 $links[] = ["type"=>"header", "text"=>"Manage"];
                 $links[] = ["type"=>"link", "text"=>"Edit prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='edit' data-id='$prefix->id'", "icon"=>"pencil"];
             }
-            if($User->get_module_permissions ("pstn")>2) {
+            if($User->get_module_permissions ("pstn")>=User::ACCESS_RWA) {
                 $links[] = ["type"=>"link", "text"=>"Delete prefix", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/tools/pstn-prefixes/edit.php' data-class='700' data-action='delete' data-id='$prefix->id'", "icon"=>"times"];
             }
             print $User->print_actions($User->user->compress_actions, $links, true);

@@ -13,7 +13,7 @@ $Result 	= new Result ();
 $User->check_user_session();
 
 # perm check popup
-$User->check_module_permissions ("routing", 2, true, true);
+$User->check_module_permissions ("routing", User::ACCESS_RW, true, true);
 
 # values
 $values = [

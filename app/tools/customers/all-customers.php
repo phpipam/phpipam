@@ -13,7 +13,7 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
 # verify that user is logged in
 $User->check_user_session();
 # verify module permissions
-$User->check_module_permissions ("customers", 1, true);
+$User->check_module_permissions ("customers", User::ACCESS_R, true);
 # filter customers or fetch print all?
 $customers = $Tools->fetch_all_objects("customers", "title");
 
@@ -33,7 +33,7 @@ print "<hr>";
 # print link to manage
 print "<div class='btn-group'>";
 	// add
-	if($User->get_module_permissions("customers")==3) {
+	if($User->get_module_permissions("customers")>=User::ACCESS_RWA) {
     print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/customers/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add customer')."</a>";
 	}
 print "</div>";
@@ -93,16 +93,16 @@ else {
         // actions
         print "<td class='actions'>";
         $links = [];
-        if($User->get_module_permissions ("customers")>0) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>"Show"];
             $links[] = ["type"=>"link", "text"=>"Show customer", "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
-        if($User->get_module_permissions ("customers")>1) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>"Manage"];
             $links[] = ["type"=>"link", "text"=>"Edit customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
         }
-        if($User->get_module_permissions ("customers")>2) {
+        if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
             $links[] = ["type"=>"link", "text"=>"Delete customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
         }
         // print links

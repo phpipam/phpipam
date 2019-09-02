@@ -17,10 +17,10 @@ $User->check_maintaneance_mode ();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("nat", 2, true, false);
+    $User->check_module_permissions ("nat", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("nat", 3, true, false);
+    $User->check_module_permissions ("nat", User::ACCESS_RWA, true, false);
 }
 
 # fetch custom fields
@@ -60,7 +60,7 @@ $values = array(
     "policy_dst"  =>  ""
      );
 
-if ($User->get_module_permissions ("devices")<1) {
+if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
     unset ($values['device']);
 }
 

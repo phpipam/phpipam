@@ -17,7 +17,7 @@ $User->check_user_session();
 $_POST = $Admin->strip_input_tags($_POST);
 
 # perm check
-$User->check_module_permissions ("pstn", 2, true, false);
+$User->check_module_permissions ("pstn", User::ACCESS_RW, true, false);
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "pstn_number", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -89,7 +89,7 @@ $values = array(
     "description" =>$_POST['description']
     );
 # remove device
-if ($User->get_module_permissions ("devices")<2) {
+if ($User->get_module_permissions ("devices")<User::ACCESS_RW) {
     unset ($values['deviceId']);
 }
 

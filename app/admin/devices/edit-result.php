@@ -19,10 +19,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("devices", 2, true, false);
+    $User->check_module_permissions ("devices", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("devices", 3, true, false);
+    $User->check_module_permissions ("devices", User::ACCESS_RWA, true, false);
 }
 
 # check maintaneance mode
@@ -53,7 +53,7 @@ $device['sections'] = !empty($temp) ? implode(";", $temp) : null;
 if($device['hostname'] == "") 											{ $Result->show("danger", _('Hostname is mandatory').'!', true); }
 
 # rack checks
-if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>0) {
+if (strlen(@$device['rack']>0) && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
     if ($User->settings->enableRACK!="1") {
         unset($device['rack']);
     }
@@ -106,13 +106,13 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # rack
-if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>0) {
+if (strlen(@$device['rack'])>0 && $User->get_module_permissions ("racks")>=User::ACCESS_R) {
 	$values['rack']       = $device['rack'];
 	$values['rack_start'] = $device['rack_start'];
 	$values['rack_size']  = $device['rack_size'];
 }
 # perms
-if ($User->get_module_permissions ("locations")<1) {
+if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 	unset ($values['location']);
 }
 

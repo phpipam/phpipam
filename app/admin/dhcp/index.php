@@ -13,7 +13,7 @@ $tabs = array("subnets", "leases", "reservations", "settings", "config");
 
 <?php
 # perm check
-if ($User->get_module_permissions ("dhcp")<1) {
+if ($User->get_module_permissions ("dhcp")==User::ACCESS_NONE) {
     $Result->show("danger", _("You do not have permissions to access this module"), false);
 }
 elseif($User->settings->enableDHCP==1) { ?>

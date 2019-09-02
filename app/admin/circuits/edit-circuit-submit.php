@@ -21,10 +21,10 @@ $User->check_maintaneance_mode ();
 
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("circuits", 2, true, false);
+    $User->check_module_permissions ("circuits", User::ACCESS_RW, true, false);
 }
 else {
-    $User->check_module_permissions ("circuits", 3, true, false);
+    $User->check_module_permissions ("circuits", User::ACCESS_RWA, true, false);
 }
 
 # validate csrf cookie
@@ -147,7 +147,7 @@ if(isset($update)) {
 	$values = array_merge($values, $update);
 }
 # append customerId
-if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>1) {
+if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("customers")>=User::ACCESS_RW) {
 	if (is_numeric($_POST['customer_id'])) {
 	       $values['customer_id'] = $_POST['customer_id'] > 0 ? $_POST['customer_id'] : NULL;
 	}
