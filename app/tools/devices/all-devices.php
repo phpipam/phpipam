@@ -24,6 +24,16 @@ $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 $devices = $Tools->fetch_all_objects("devices", "hostname");
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 
+# get custom device fields
+$custom_fields = (array) $Tools->fetch_custom_fields('devices');
+
+# set hidden fields
+$hidden_fields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_fields = is_array(@$hidden_fields['devices']) ? $hidden_fields['devices'] : array();
+
+# size of custom fields
+$csize = sizeof($custom_fields) - sizeof($hidden_fields);
+
 // filter flag
 $filter = false;
 
@@ -57,7 +67,7 @@ include_once ("all-devices-filter.php");
 # table
 print '<table id="switchManagement" class="table sorted sortable table-striped table-top" data-cookie-id-table="devices_all">';
 
-$colspanCustom = 0;
+$colspanCustom = sizeof($custom_fields) - sizeof($hidden_fields);;
 
 #headers
 print "<thead>";
@@ -76,6 +86,14 @@ $colspanCustom++;
 print "	<th style='color:#428bca'>"._('Number of hosts').'</th>';
 print "	<th class='hidden-sm'>". _('Type').'</th>';
 
+if(sizeof(@$custom_fields) > 0) {
+	foreach($custom_fields as $field) {
+		if(!in_array($field['name'], $hidden_fields)) {
+			print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+		}
+	}
+}
+
 if($User->get_module_permissions ("devices")>=User::ACCESS_RW)
 print '	<th class="actions"></th>';
 print '</tr>';
@@ -84,7 +102,7 @@ print "</thead>";
 print "<tbody>";
 // no devices
 if($devices===false) {
-	$colspan = 8 + $colspanCustom;
+	$colspan = 6 + $colspanCustom;
 	print "<tr>";
 	print "	<td colspan='$colspan'>".$Result->show('info', _('No results')."!", false, false, true)."</td>";
 	print "</tr>";
@@ -136,6 +154,18 @@ else {
 		print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
 		print '	<td class="hidden-sm">'. $device_types_indexed[$device['type']]->tname .'</td>'. "\n";
 
+        //custom fields - no subnets
+        if(sizeof(@$custom_fields) > 0) {
+	   		foreach($custom_fields as $field) {
+		   		# hidden
+		   		if(!in_array($field['name'], $hidden_fields)) {
+					print "<td class='hidden-xs hidden-sm hidden-md'>";
+					$Tools->print_custom_field ($field['type'], $device[$field['name']]);
+					print "</td>";
+				}
+	    	}
+	    }
+
 		# actions
 		if($User->get_module_permissions ("devices")>=User::ACCESS_RW) {
             // links
@@ -182,6 +212,8 @@ else {
 		}
 		print '	<td><span class="badge badge1 badge5">'. $cnt .'</span> '._('Objects').'</td>'. "\n";
 		print '	<td class="hidden-sm"></td>'. "\n";
+
+		print ' <td colspan="'.$csize.'"></td>';
 
 		if($User->get_module_permissions ("devices")>=User::ACCESS_RW)
 		print '	<td class="actions"></td>';
