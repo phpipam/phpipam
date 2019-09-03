@@ -16,6 +16,7 @@
     + PDNS Add/Edit DNS record not working for normal users (#2686);
     + Unable to save settings with link addresses = text custom field (#2702);
     + Kea MAC address display issue (#2704);
+    + Returned custom fields to devices table (#2572);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
