@@ -15,9 +15,6 @@ foreach($addresses_visual as $a) {
 }
 }
 
-$theme = $User->user->theme;
-$bgc = ($theme == dark) ? "50" : "";
-
 # print
 for($m=$start_visual; $m<=$stop_visual; $m=gmp_strval(gmp_add($m,1))) {
 
@@ -38,7 +35,8 @@ for($m=$start_visual; $m<=$stop_visual; $m=gmp_strval(gmp_add($m,1))) {
 		if(strlen($visual_addresses[$m]['description'])>0)	{ $title .= "<br>".$visual_addresses[$m]['description']; }
 
 		# set colors
-		$background = $Subnets->address_types[$visual_addresses[$m]['state']]['bgcolor'] . "$bgc !important";
+		$alpha = ($User->user->theme == "dark") ? "50" : "";
+		$background = $Subnets->address_types[$visual_addresses[$m]['state']]['bgcolor'].$alpha." !important";
 		$foreground = $Subnets->address_types[$visual_addresses[$m]['state']]['fgcolor'];
 	}
 	else {
