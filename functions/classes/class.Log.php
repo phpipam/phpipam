@@ -172,7 +172,8 @@ class Logging extends Common_functions {
 						"subnetOrdering" => "Order of subnets",
 						"order"          => "Order of display",
 						"showVLAN"       => "Show VLANs in side menu",
-						"showVRF"        => "Show VRF in side menu"
+						"showVRF"        => "Show VRF in side menu",
+						"showSupernetOnly" => "Show only supernets"
     	),
     	"subnet" => array(
 						"id"                    => "Subnet id",
@@ -195,6 +196,7 @@ class Logging extends Common_functions {
 						"scanAgent"             => "Scan agent index",
 						"isFolder"              => "Object is folder",
 						"isFull"                => "Subnet is marked as full",
+						"isPool"                => "Subnet is marked as a pool",
 						"state"                 => "Subnet state index",
 						"NAT"                   => "NAT object index",
 						"threshold"             => "Usage alert threshold",
@@ -213,7 +215,7 @@ class Logging extends Common_functions {
 						"id"                    => "Address id",
 						"subnetId"              => "Subnet",
 						"ip_addr"               => "IP address",
-						"is_gayeway"            => "Gateway",
+						"is_gateway"            => "Address is subnet gateway",
 						"description"           => "Description",
 						"hostname"              => "Hostname",
 						"mac"                   => "MAC address",
@@ -228,7 +230,6 @@ class Logging extends Common_functions {
 						"PTR"                   => "PTR object index",
 						"NAT"                   => "NAT object index",
 						"firewallAddressObject" => "Firewall object index",
-						"is_gateway"            => "Address is subnet gateway",
 						"location"              => "Address location",
 						"location_item"			=> "Address location",
 						"section"				=> "Section"
@@ -1078,6 +1079,7 @@ class Logging extends Common_functions {
 					$this->object_new['nameserverId'],
 					$this->object_new['scanAgent'],
 					$this->object_new['isFull'],
+					$this->object_new['isPool'],
 					$this->object_new['threshold'],
 					$this->object_new['lastScan'],
 					$this->object_new['lastDiscovery']
@@ -1097,6 +1099,7 @@ class Logging extends Common_functions {
 					$this->object_old['nameserverId'],
 					$this->object_old['scanAgent'],
 					$this->object_old['isFull'],
+					$this->object_old['isPool'],
 					$this->object_old['threshold'],
 					$this->object_old['lastScan'],
 					$this->object_old['lastDiscovery']
@@ -1419,8 +1422,8 @@ class Logging extends Common_functions {
     	// init
     	$keys = array();
 		// list of keys to be changed per object
-		$keys['section'] = array("strictMode", "showVLAN", "showVRF");
-		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "DNSrecursive", "DNSrecords", "isFull");
+		$keys['section'] = array("strictMode", "showVLAN", "showVRF", "showSupernetOnly");
+		$keys['subnet']  = array("allowRequests", "showName", "pingSubnet", "discoverSubnet", "resolveDNS", "DNSrecursive", "DNSrecords", "isFull", "isPool");
 		$keys['ip_addr'] = array("is_gateway", "excludePing", "PTRignore");
 
 		// check

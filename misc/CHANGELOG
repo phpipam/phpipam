@@ -1,5 +1,9 @@
 == 1.5
 
+    New features:
+    ------------
+    + Mark subnet as isPool to allocate network and broadcast addresses;
+
     Enhancements, changes:
     ----------------------------
     + XHR left subnets menu;

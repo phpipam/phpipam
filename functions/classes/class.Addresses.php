@@ -400,6 +400,8 @@ class Addresses extends Common_functions {
 	protected function modify_address_add ($address) {
 		$address = $this->address_check_values($address);
 
+		$this->address_within_subnetId($address['ip_addr'], $address['subnetId'], true);
+
 		# remove gateway
 		if($address['is_gateway']==1)	{ $this->remove_gateway ($address['subnetId']); }
 
@@ -441,6 +443,10 @@ class Addresses extends Common_functions {
 		if (isset($address['section'])) $address_old->section = $address['section'];
 
 		$address = $this->address_check_values($address);
+
+		$subnetId = array_key_exists('subnetId', $address) ? $address['subnetId'] : $address_old->subnetId;
+		if (array_key_exists('ip_addr', $address))
+			$this->address_within_subnetId($address['ip_addr'], $subnetId, true);
 
 		# set primary key for update
 		if($address['type']=="series") {
@@ -633,11 +639,7 @@ class Addresses extends Common_functions {
         $this->get_settings ();
     	# enabled ?
     	if ($this->settings->enableThreshold=="1") {
-        	# object
-        	if (!is_object($this->Subnets)) {
-            	$this->Subnets = new Subnets ($this->Database);
-        	}
-        	# fetch subnet
+        	$this->initialize_subnets_object();
         	$subnet = $this->Subnets->fetch_subnet("id", $address->subnetId);
         	# threshold set ?
         	if ($subnet->threshold>0) {
@@ -797,11 +799,11 @@ class Addresses extends Common_functions {
 		if ($subnet['isFolder']=="1")                                                                   { return false; }
 
 		# false if slaves
-		$this->Subnets = new Subnets ($this->Database);
+		$this->initialize_subnets_object();
 		if($this->Subnets->has_slaves ($subnetId))                                                      { return false; }
 
 	    # get max hosts
-	    $max_hosts = $Subnets->get_max_hosts ($subnet['mask'], $this->identify_address($subnet['subnet']));
+	    $max_hosts = $Subnets->max_hosts ($subnet);
 
 		# full subnet?
 		if(sizeof($addresses)>=$max_hosts)																{ return false; } 	//full subnet
@@ -1190,8 +1192,6 @@ class Addresses extends Common_functions {
 	    # fetch subnet details
 	    $subnet = (array) $this->Subnets->fetch_subnet(null, $subnetId);
 
-	    # verify address
-	    if($this->verify_address( $address[0], $this->transform_to_dotted($subnet['subnet'])."/".$subnet['mask'], false, false)!==false) { return false; }
 	    # check for duplicates
 	    if ($this->address_exists($address[0], $subnetId)) { return _('IP address already exists').' - '.$address[0]; }
 
@@ -1357,7 +1357,6 @@ class Addresses extends Common_functions {
 	public function fetch_subnet_addresses_recursive ($subnetId, $count = false, $order=null, $order_direction=null ) {
 		# initialize subnets
 		$this->initialize_subnets_object ();
-		$this->Subnets = new Subnets ($this->Database);
 		$this->Subnets->reset_subnet_slaves_recursive();				//reset array of slaves before continuing
 	    $this->Subnets->fetch_subnet_slaves_recursive($subnetId);		//fetch array of slaves
 	    $this->Subnets->slaves = array_unique($this->Subnets->slaves);	//remove possible duplicates
@@ -1395,181 +1394,6 @@ class Addresses extends Common_functions {
 	    return $count ? (int) $addresses[0]->cnt : $addresses;
 	}
 
-	/**
-	 * Search for unused address space between 2 IP addresses
-	 *
-	 * possible unused addresses by type
-	 *
-	 * @access public
-	 * @param int $address1
-	 * @param int $address2
-	 * @param int $netmask
-	 * @param bool $empty (default: false)
-	 * @param bool $is_subnet (default: false)
-	 * @param bool $is_broadcast (default: false)
-	 * @return void
-	 */
-	public function find_unused_addresses ($address1, $address2, $netmask, $empty=false, $is_subnet=false, $is_broadcast=false) {
-		# make sure addresses are in decimal format
-		$address1 = $this->transform_address ($address1, "decimal");
-		$address2 = $this->transform_address ($address2, "decimal");
-		# check for space
-		return $this->identify_address($address1)=="IPv6" ? $this->find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty, $is_subnet, $is_broadcast) : $this->find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty);
-	}
-
-	/**
-	 * Search for unused address space between 2 IPv4 addresses.
-	 *
-	 * unused address range or false if none available
-	 *
-	 * @access protected
-	 * @param int $address1
-	 * @param int $address2
-	 * @param int $netmask
-	 * @param bool $empty
-	 * @return void
-	 */
-	protected function find_unused_addresses_IPv4 ($address1, $address2, $netmask, $empty) {
-		# calculate diff
-		$diff = $this->calculate_address_diff ($address1, $address2);
-		# 32 subnets
-		if($netmask==32) {
-			if($empty) {
-				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-			}
-			else {
-				return false;
-			}
-		}
-		# 31 subnets
-		elseif($netmask==31) {
-
-			if($empty) {
-				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>2);
-			}
-			elseif($diff==1) {
-				if($this->is_network($address1, $netmask)) {
-					return array("ip"=>$this->transform_to_dotted($address2), "hosts"=>1);
-				}
-				elseif($this->is_broadcast($address2, $netmask)) {
-					return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-				}
-				else {
-					return false;
-				}
-			}
-			else {
-				return false;
-			}
-		}
-		# if diff is less than 2 return false */
-		elseif ( $diff < 2 ) {
-        		return false;
-    	}
-		# if diff is 2 return 1 IP address in the middle */
-		elseif ( $diff == 2 ) {
-				return array("ip"=>$this->transform_to_dotted($address1+1), "hosts"=>1);
-    	}
-		# if diff is more than 2 return pool */
-		else {
-            	return array("ip"=>$this->transform_to_dotted($address1+1)." - ".$this->transform_to_dotted(($address2-1)), "hosts"=>gmp_strval(gmp_sub($diff, 1)));
-    	}
-    	# default false
-    	return false;
-	}
-
-	/**
-	 * Search for unused address space between 2 IPv6 addresses
-	 *
-	 * Return unused address range or false if none available
-	 *
-	 * @access protected
-	 * @param int $address1
-	 * @param int $address2
-	 * @param int $netmask
-	 * @param bool $empty (default: false)
-	 * @param bool $is_subnet (default: false)
-	 * @param bool $is_broadcast (default: false)
-	 * @return void
-	 */
-	protected function find_unused_addresses_IPv6 ($address1, $address2, $netmask, $empty = false, $is_subnet = false, $is_broadcast = false) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-		if($empty) {
-    		$Subnets = new Subnets ($this->Database);
-    		return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$Subnets->get_max_hosts ($netmask, "IPv6"));
-		}
-        else {
-    		# calculate diff
-    		$diff = $this->calculate_address_diff ($address1, $address2);
-
-    		# /128
-    		if($netmask == 128) {
-        		if($diff>1) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
-                }
-        	}
-    		# /127
-    	    elseif($netmask == 127) {
-        	    if($diff==1 && $this->is_network($address1, $netmask)) {
-    				return array("ip"=>$this->transform_to_dotted($address2), "hosts"=>1);
-    			}
-    			elseif($diff==1 && $this->is_broadcast($address2, $netmask)) {
-    				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>1);
-    			}
-    			elseif($diff==0) {
-        			return false;
-    			}
-    			else {
-    				return array("ip"=>$this->transform_to_dotted($address1), "hosts"=>2);
-    			}
-    	    }
-    	    # null
-    	    elseif ($diff==0) {
-        	    return false;
-    	    }
-    	    # diff 1
-    	    elseif ($diff==1) {
-         		if($is_subnet) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1)), "hosts"=>1);
-        		}
-        		elseif($is_broadcast) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>1);
-        		}
-        		else {
-            		return false;
-                }
-    	    }
-    	    # diff 2
-    	    elseif ($diff==2 && !$is_subnet && !$is_broadcast) {
-                return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1))), "hosts"=>1);
-    	    }
-    	    # default
-    	    else {
-        		if($is_subnet) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval($address1))." - ".$this->transform_to_dotted(gmp_strval(gmp_sub($address2,1))), "hosts"=>$this->reformat_number(gmp_strval(gmp_sub($diff,0))));
-        		}
-        		elseif($is_broadcast) {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1)))." - ".$this->transform_to_dotted(gmp_strval($address2)), "hosts"=>$this->reformat_number(gmp_strval(gmp_sub($diff,0))));
-        		}
-        		else {
-                    return array("ip"=>$this->transform_to_dotted(gmp_strval(gmp_add($address1,1)))." - ".$this->transform_to_dotted(gmp_strval(gmp_sub($address2,1))), "hosts"=>$this->reformat_number(gmp_strval(gmp_strval(gmp_sub($diff,1)))));
-                }
-        	}
-
-        	# default false
-        	return false;
-    	}
-	}
-
-
-
-
-
-
-
-
 
 
 
@@ -1577,79 +1401,6 @@ class Addresses extends Common_functions {
 	* @address verification methods
 	* -------------------------------
 	*/
-
-	/**
-	 * Verify IP address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $no_strict (default: false)
-	 * @param bool $die (default: false)
-	 * @return boolean
-	 */
-	public function verify_address( $address, $subnet, $no_strict = false, $die=true ) {
-		# subnet should be in CIDR format
-		$this->initialize_subnets_object ();
-		if(strlen($error = $this->Subnets->verify_cidr ($subnet))>1)				{ $this->Result->show("danger", $error, $die); return true; }
-
-		# make checks
-		return $this->identify_address ($address)=="IPv6" ? $this->verify_address_IPv6 ($address, $subnet, $die) : $this->verify_address_IPv4 ($address, $subnet, $no_strict, $die);
-	}
-
-	/**
-	 * Verify IPv4 address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $no_strict
-	 * @param bool $die
-	 * @return boolean
-	 */
-	public function verify_address_IPv4 ($address, $subnet, $no_strict, $die) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv4 ();
-        # fetch mask part
-        $mask = explode("/", $subnet);
-
-		# is address valid?
-		if (!$this->Net_IPv4->validateIP($address)) 						{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# is address in provided subnet
-		elseif (!$this->Net_IPv4->ipInNetwork($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# ignore  /31 and /32 subnet broadcast and subnet checks!
-		elseif ($mask[1] == 31 || $mask[1] == 32 || $no_strict == true) 	{ }
-		# It cannot be subnet or broadcast
-		else {
-            $net = $this->Net_IPv4->parseAddress($subnet);
-
-            if ($net->network == $address) 									{ $this->Result->show("danger", _("Cannot add subnet as IP address!"), $die); return true; }
-            elseif ($net->broadcast == $address)							{ $this->Result->show("danger", _("Cannot add broadcast as IP address!"), $die); return true; }
-		}
-		# default
-		return false;
-	}
-
-	/**
-	 * Verify IPv6 address
-	 *
-	 * @access public
-	 * @param int $address
-	 * @param mixed $subnet (CIDR)
-	 * @param bool $die
-	 * @return boolean
-	 */
-	public function verify_address_IPv6 ($address, $subnet, $die) {
-		# Initialize PEAR NET object
-		$this->initialize_pear_net_IPv6 ();
-
-		# is it valid?
-		if (!$this->Net_IPv6->checkIPv6($address)) 							{ $this->Result->show("danger", _("IP address not valid")."! ($address)", $die); return true; }
-		# it must be in provided subnet
-		elseif (!$this->Net_IPv6->isInNetmask($address, $subnet)) 			{ $this->Result->show("danger", _("IP address not in selected subnet")."! ($address)", $die); return true; }
-		# default
-		return false;
-	}
 
 	/**
 	 * Validates IP address
@@ -1723,6 +1474,58 @@ class Addresses extends Common_functions {
 		return $cnt==0 ? true : false;
 	}
 
+	/**
+	 * Check if address is within subnet (object)
+	 * @param  mixed   $address
+	 * @param  mixed   $subnet
+	 * @param  boolean $die (default:true)
+	 * @return boolean
+	 */
+	public function address_within_subnet($address, $subnet, $die=true) {
+		$address = $this->transform_address($address, "decimal");
+
+		if (is_array($subnet))
+			$subnet = (object) $subnet;
+
+		if (!is_object($subnet) || !property_exists($subnet, 'subnet') || !property_exists($subnet, 'mask')) {
+			$this->Result->show("danger", _("Invalid subnet"), $die);
+			return false;
+		}
+
+		if ($subnet->isFolder)
+			return true;
+
+		// Check if IP is within valid range
+		$this->initialize_subnets_object();
+		list($min, $max) = $this->Subnets->subnet_boundaries($subnet);
+
+		if (gmp_cmp($address, $min)<0 || gmp_cmp($address, $max)>0) {
+			$ip = $this->transform_to_dotted($address);
+			$subnet = $this->transform_to_dotted($subnet->subnet).'/'.$subnet->mask;
+			$this->Result->show("danger", $ip._(" is not a valid address for subnet ").$subnet, $die);
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if address is within subnetId
+	 * @param  mixed   $address
+	 * @param  mixed   $subnetId
+	 * @param  boolean $die (default:true)
+	 * @return boolean
+	 */
+	public function address_within_subnetId($address, $subnetId, $die=true) {
+		$subnet = $this->fetch_object("subnets", "id", $subnetId);
+
+		if (!is_object($subnet)) {
+			$this->Result->show("danger", _("Invalid subnet Id"), $die);
+			return false;
+		}
+
+		return $this->address_within_subnet($address, $subnet, $die);
+	}
 
 
 
@@ -1905,11 +1708,7 @@ class Addresses extends Common_functions {
 		# if user is admin then return 3, otherwise check
 		if($user->role == "Administrator")	{ return 3; }
 
-    	# object
-    	if (!is_object($this->Subnets)) {
-        	$this->Subnets = new Subnets ($this->Database);
-    	}
-        # fetch subnet
+    	$this->initialize_subnets_object();
         $subnet = $this->Subnets->fetch_subnet("id", $subnetId);
 		# set subnet permissions
 		$subnetP = json_decode($subnet->permissions);

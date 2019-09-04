@@ -176,11 +176,11 @@ $m = sizeof($addresses) -1;		//last address index
 # if no IP is configured only display free subnet!
 if ($addresses===false || sizeof($addresses)==0) {
 	if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
-    	$unused = $Addresses->find_unused_addresses($Subnets->transform_to_decimal($subnet_detailed['network']), $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], $empty=true );
+    	$unused = $Subnets->find_unused_addresses ($subnet, false, false);
 		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="unused">'.$unused['ip'].' (' .$Subnets->reformat_number($unused['hosts']).')</td></tr>'. "\n";
     }
     elseif ($subnet['isFull']=="1") {
-		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="dhcp"><div class="alert alert-info"><i class="fa fa-info-circle"></i> '._(" Subnet is marked as used").'</div></td></tr>'. "\n";
+		print '<tr class="th"><td colspan="'.$colspan['empty'].'" class="dhcp"><div class="alert alert-info"><i class="fa fa-info-circle"></i> '._(" Subnet is marked as full").'</div></td></tr>'. "\n";
     }
 }
 # print IP address
@@ -195,13 +195,13 @@ else {
 	       	#
 
 	       	# check gap between network address and first IP address
-	       	if ( $n == 0) 											{ $unused = $Addresses->find_unused_addresses ( $Subnets->transform_to_decimal($subnet_detailed['network']), $addresses[$n]->ip_addr, $subnet['mask'], false, true); }
+	       	if ( $n == 0) 											{ $unused = $Subnets->find_unused_addresses ($subnet, false, $addresses[$n]->ip_addr); }
 	       	# check unused space between IP addresses
 	       	else {
 	       		// compressed and dhcp?
-	       		if($addresses[$n-1]->class=="compressed-range") 	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->stopIP, $addresses[$n]->ip_addr, $subnet['mask'], false, false, false );  }
+	       		if($addresses[$n-1]->class=="compressed-range") 	{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n-1]->stopIP, $addresses[$n]->ip_addr);  }
 	       		// ignore /31 networks and /127
-	       		elseif($subnet['mask']!=31 && $subnet['mask']!=127) { $unused = $Addresses->find_unused_addresses ( $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr, $subnet['mask'], false, false, false );  }
+	       		elseif($subnet['mask']!=31 && $subnet['mask']!=127) { $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n-1]->ip_addr, $addresses[$n]->ip_addr);  }
 	       	}
 
 	       	# if there is some result for unused print it - if sort == ip_addr
@@ -644,8 +644,8 @@ else {
 			{
 				if($User->user->hideFreeRange!=1 && $subnet['isFull']!="1") {
 					# compressed?
-					if(isset($addresses[$n]->stopIP))	{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->stopIP,  $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], false, false, true ); }
-					else 								{ $unused = $Addresses->find_unused_addresses ( $addresses[$n]->ip_addr, $Subnets->transform_to_decimal($subnet_detailed['broadcast']), $subnet['mask'], false, false, true ); }
+					if(isset($addresses[$n]->stopIP))	{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n]->stopIP,  false); }
+					else 								{ $unused = $Subnets->find_unused_addresses ($subnet, $addresses[$n]->ip_addr, false); }
 
 	            	if ( $unused  ) {
 		        		print "<tr>";

@@ -144,9 +144,6 @@ if($action=="edit" || $action=="delete" || $action=="move") {
 # set excludePing value
 $address['excludePing'] = @$address['excludePing']==1 ? 1 : 0;
 
-# no strict checks flag - for range networks and /31, /32
-$not_strict = @$address['nostrict']=="yes" ? true : false;
-
 # check if subnet is multicast
 $subnet_is_multicast = $Subnets->is_multicast ($subnet['subnet']);
 
@@ -170,9 +167,9 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
     	if($Addresses->validate_ip( $address['stop'])===false)      { $Result->show("danger", _("Invalid IP address")."!", true); }
 	}
 	else {
-    	$Addresses->verify_address( $address['start'], "$subnet[ip]/$subnet[mask]", $not_strict );
-    	$Addresses->verify_address( $address['stop'] , "$subnet[ip]/$subnet[mask]", $not_strict );
-    }
+		$Addresses->address_within_subnet($address['start'], $subnet, true);
+		$Addresses->address_within_subnet($address['stop'],  $subnet, true);
+	}
 
 	# go from start to stop and insert / update / delete IPs
 	$start = $Subnets->transform_to_decimal($address['start']);
@@ -315,14 +312,6 @@ else {
 		$subnet = (array) $Subnets->fetch_subnet(null, $address['newSubnet']);
 		$address['ip_addr'] = $address_old['ip'];
 	}
-	# verify address
-	if($action!=="delete" && $subnet['isFolder']!="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "$subnet[ip]/$subnet[mask]", $not_strict );
-	}
-	elseif ($action!=="delete" && $subnet['isFolder']=="1") {
-		$verify = $Addresses->verify_address( $address['ip_addr'], "0.0.0.0/0", $not_strict );
-	}
-
 	# if errors are present print them, else execute query!
 	if($verify) 				{ $Result->show("danger", _('Error').": $verify ($address[ip_addr])", true); }
 	else {

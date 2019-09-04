@@ -271,13 +271,19 @@ else {
 	</tr>
     <?php } ?>
 
-    <?php if(@$subnet['isFull']=="1") { ?>
+    <?php if(@$subnet['isFull'] || @$subnet['isPool']) { ?>
     <tr>
         <td colspan="2"><hr></td>
     </tr>
     <tr>
         <th></th>
-        <td class="isFull"><?php print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as used"), false, false, true); ?></td>
+        <td class="isFull">
+        <?php
+        if ($subnet['isFull'])
+        print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as full"), false, false, true);
+        if ($subnet['isPool'])
+        print $Result->show("info pull-left", "<i class='fa fa-info-circle'></i> "._("Subnet is marked as pool"), false, false, true);
+        ?></td>
     </tr>
     <?php } ?>
 

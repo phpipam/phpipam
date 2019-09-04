@@ -708,7 +708,7 @@ class Scan extends Common_functions {
 		}
 
 		// we should support only up to 4094 hosts!
-		if($Subnets->get_max_hosts ($subnet->mask, "IPv4")>4094 && php_sapi_name()!="cli")
+		if($Subnets->max_hosts ($subnet)>4094 && php_sapi_name()!="cli")
 		if ($die)												{ die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
 		else													{ return array(); }
 

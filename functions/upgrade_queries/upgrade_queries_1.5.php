@@ -40,3 +40,10 @@ $upgrade_queries["1.5.27"][] = "ALTER TABLE `subnets` CHANGE `isFolder` `isFolde
 
 $upgrade_queries["1.5.27"][] = "-- Database version bump";
 $upgrade_queries["1.5.27"][] = "UPDATE `settings` set `dbversion` = '27';";
+
+// Subnet isPool
+//
+$upgrade_queries["1.5.28"][] = "ALTER TABLE `subnets` ADD `isPool` BOOL NOT NULL DEFAULT '0';";
+
+$upgrade_queries["1.5.28"][] = "-- Database version bump";
+$upgrade_queries["1.5.28"][] = "UPDATE `settings` set `dbversion` = '28';";

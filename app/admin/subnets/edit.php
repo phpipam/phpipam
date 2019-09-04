@@ -410,12 +410,20 @@ $("input[name='subnet']").change(function() {
 	    <td colspan="3"><hr></td>
     </tr>
 	<tr>
+        <td class="middle"><?php print _('Mark as Pool'); ?></td>
+        <td>
+            <?php $checked = @$subnet_old_details['isPool']==1 ? "checked": ""; ?>
+            <input type="checkbox" name="isPool" class="input-switch" value="1" <?php print $checked; ?>>
+        </td>
+        <td class="info2"><?php print _('Mark subnet as an address pool'); ?></td>
+    </tr>
+	<tr>
         <td class="middle"><?php print _('Mark as full'); ?></td>
         <td>
             <?php $checked = @$subnet_old_details['isFull']==1 ? "checked": ""; ?>
             <input type="checkbox" name="isFull" class="input-switch" value="1" <?php print $checked; ?>>
         </td>
-        <td class="info2"><?php print _('Mark subnet as utilized'); ?></td>
+        <td class="info2"><?php print _('Mark subnet as full'); ?></td>
     </tr>
     <?php if ($User->settings->enableThreshold=="1") { ?>
 	<tr>
