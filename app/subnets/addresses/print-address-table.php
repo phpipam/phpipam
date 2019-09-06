@@ -616,7 +616,7 @@ else {
         				# print port
         				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->port."</td>"; }
         				# print location
-			    		if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->location."</td>"; }
+			    		if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$Tools->fetch_object("locations", "id", $s->location)->name."</td>"; }
 			    		# print owner
         				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$s->owner."</td>"; }
         				# print custom fields
