@@ -101,6 +101,7 @@ else {
 					"description"      => @$_POST['description'],
 					"strictMode"       => @$_POST['strictMode'],
 					"subnetOrdering"   => @$_POST['subnetOrdering'],
+					"showSubnet"       => @$_POST['showSubnet'],
 					"showVLAN"         => @$_POST['showVLAN'],
 					"showVRF"          => @$_POST['showVRF'],
 					"showSupernetOnly" => @$_POST['showSupernetOnly'],
