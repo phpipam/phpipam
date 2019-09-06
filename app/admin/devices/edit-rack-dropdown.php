@@ -84,7 +84,7 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 		   if ($m >= $rack->size) {
 		   	$available_back[$m] = $m - $rack->size;
 		   } else {
-		   	$available[$m] = $m - $rack->size;
+		   	$available[$m] = $m;
 		   }
 	        }
 	    }
