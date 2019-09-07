@@ -389,7 +389,7 @@ $("input[name='subnet']").change(function() {
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
-			<select name="location_item" class="form-control input-sm input-w-auto">
+			<select name="location" class="form-control input-sm input-w-auto">
     			<option value="0"><?php print _("None"); ?></option>
     			<?php
                 if($locations!==false) {

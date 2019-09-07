@@ -79,8 +79,8 @@ $('#switchManagementEdit select[name=rack]').change(function() {
    else                                                               { $('tbody#rack').show(); }
    // select location
    var loc = $('#switchManagementEdit select[name=rack] :selected').attr('data-location');
-   $('select[name=location_item] option:selected').prop("selected",null)
-   $('select[name=location_item] option[value="'+loc+'"]').prop("selected","selected");
+   $('select[name=location] option:selected').prop("selected",null)
+   $('select[name=location] option[value="'+loc+'"]').prop("selected","selected");
 
    // load dropdown
    $.post("app/admin/devices/edit-rack-dropdown.php", {rackid:$('#switchManagementEdit select[name=rack]').val(), deviceid:$('#switchManagementEdit input[name=switchid]').val(), action:$('#switchManagementEdit input[name=action]').val()}, function(data) {
@@ -136,7 +136,7 @@ $('#switchManagementEdit select[name=rack]').change(function() {
 	<tr>
 		<td><?php print _('Location'); ?></td>
 		<td>
-			<select name="location_item" class="form-control input-sm input-w-auto">
+			<select name="location" class="form-control input-sm input-w-auto">
     			<option value="0"><?php print _("None"); ?></option>
     			<?php
                 if($locations!==false) {

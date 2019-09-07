@@ -231,7 +231,6 @@ class Logging extends Common_functions {
 						"NAT"                   => "NAT object index",
 						"firewallAddressObject" => "Firewall object index",
 						"location"              => "Address location",
-						"location_item"			=> "Address location",
 						"section"				=> "Section"
                     )
 	);
@@ -887,8 +886,6 @@ class Logging extends Common_functions {
 			//vrf
 			elseif($k == 'vrfId') 			{ $this->object_new[$k] = $this->changelog_format_vrf_diff ($k, $v); }
 			//location
-			elseif($k == 'location_item')   { $this->object_new[$k] = $this->changelog_format_location_diff ($k, $v); }
-			//location
 			elseif($k == 'location') 	    { $this->object_new[$k] = $this->changelog_format_location_diff ($k, $v); }
 			//master section change
 			elseif($k == 'masterSection') 	{ $this->object_new[$k] = $this->changelog_format_master_section_diff ($k, $v); }
@@ -926,8 +923,6 @@ class Logging extends Common_functions {
 			elseif($k == 'vlanId') 			{ $this->object_old[$k] = $this->changelog_format_vlan_diff ($k, $v); }
 			//vrf
 			elseif($k == 'vrfId') 			{ $this->object_old[$k] = $this->changelog_format_vrf_diff ($k, $v); }
-			//location
-			elseif($k == 'location_item') 	{ $this->object_old[$k] = $this->changelog_format_location_diff ($k, $v); }
 			//location
 			elseif($k == 'location') 	    { $this->object_old[$k] = $this->changelog_format_location_diff ($k, $v); }
 			//master section change
@@ -987,8 +982,6 @@ class Logging extends Common_functions {
 				elseif($k == 'vlanId') 			{ $v = $this->changelog_format_vlan_diff ($k, $v); }
 				//vrf
 				elseif($k == 'vrfId') 			{ $v = $this->changelog_format_vrf_diff ($k, $v); }
-				//location
-				elseif($k == 'location_item') 	{ $v = $this->changelog_format_location_diff ($k, $v); }
 				//location
 				elseif($k == 'location') 	    { $v = $this->changelog_format_location_diff ($k, $v); }
 				//master section change

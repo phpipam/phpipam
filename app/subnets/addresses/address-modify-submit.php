@@ -59,7 +59,7 @@ foreach ($required_ip_fields as $k=>$f) {
 // checks
 if(is_array($required_ip_fields) && $action!="delete") {
 	// remove modules not enabled from required fields
-	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
+	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location']); }
 
 	// set default array
 	$required_field_errors = array();
