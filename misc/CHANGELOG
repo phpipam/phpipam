@@ -4,10 +4,6 @@
     ------------
     + Mark subnet as isPool to allocate network and broadcast addresses;
 
-    Enhancements, changes:
-    ----------------------------
-    + XHR left subnets menu;
-
     Bugfixes:
     ----------------------------
     + do not show statistics in dashboard widget for disabled modules (#2602);
@@ -27,6 +23,7 @@
     Translations:
     ----------------------------
     + Update Traditional Chinese support to version 1.5 (#2658);
+    + Update Simplified Chinese Translation (#2725);
 
 == 1.4.1
 
