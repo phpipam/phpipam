@@ -552,7 +552,6 @@ $("input[name='subnet']").change(function() {
             <input type="hidden" name="sectionId"       value="<?php print $_POST['sectionId']; ?>">
             <input type="hidden" name="subnetId"        value="<?php print $_POST['subnetId'];  ?>">
             <input type="hidden" name="action"    		value="<?php print $_POST['action'];    ?>">
-            <input type="hidden" name="location"    	value="<?php print @$_POST['location']; ?>">
             <?php if(isset($_POST['freespaceMSID'])) { ?>
             <input type="hidden" name="freespace"    	value="true">
             <?php } ?>
