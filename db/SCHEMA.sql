@@ -134,6 +134,7 @@ CREATE TABLE `sections` (
   `subnetOrdering` VARCHAR(16)  NULL  DEFAULT NULL,
   `order` INT(3)  NULL  DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
+  'showSubnet' BOOL NOT NULL DEFAULT '1',
   `showVLAN` BOOL  NOT NULL  DEFAULT '0',
   `showVRF` BOOL  NOT NULL  DEFAULT '0',
   `showSupernetOnly` BOOL  NOT NULL  DEFAULT '0',
@@ -996,4 +997,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 28;
+UPDATE `settings` SET `dbversion` = 29;
