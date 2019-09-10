@@ -428,7 +428,8 @@ VALUES
 	(9, 'en_US.UTF-8', 'English (US)'),
   (10,'ru_RU.UTF-8', 'Russian'),
   (11,'zh_CN.UTF-8', 'Chinese'),
-  (12,'ja_JP.UTF-8', 'Japanese');
+  (12,'ja_JP.UTF-8', 'Japanese'),
+  (13,'zh_TW.UTF-8', '繁體中文');
 
 
 # Dump of table vlans
