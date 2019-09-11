@@ -130,7 +130,10 @@ if(sizeof($result_addresses) > 0) {
 			//port
 			if(in_array('port', $selected_ip_fields)) 										{ print ' <td>'. $line['port']  .'</td>' . "\n"; }
 			//location
-			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 										{ print ' <td>'. $line['location']  .'</td>' . "\n"; }
+			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) { 
+				$location_name = $Tools->fetch_object("locations", "id", $line['location']);
+				print ' <td>'. $location_name->name .'</td>' . "\n";
+			}
 			//owner and note
 			if((in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) {
 				print ' <td class="hidden-sm hidden-xs">'. $line['owner']  .'</td>' . "\n";
