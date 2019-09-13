@@ -440,6 +440,6 @@ $upgrade_queries["1.4.24"][] = "UPDATE `settings` set `dbversion` = '24';";
 #
 // Traditional chinese traslation
 $upgrade_queries["1.4.25"][] = "-- Add russian and Chinese translations";
-$upgrade_queries["1.4.25"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Chinese traditional', 'zh_TW.UTF-8');";
+$upgrade_queries["1.4.25"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Chinese traditional (繁體中文)', 'zh_TW.UTF-8');";
 $upgrade_queries["1.4.25"][] = "-- Database version bump";
 $upgrade_queries["1.4.25"][] = "UPDATE `settings` set `dbversion` = '25';";
