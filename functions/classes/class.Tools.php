@@ -1770,7 +1770,7 @@ class Tools extends Common_functions {
         # calculate min/max IP address
         $out['Min host IP']     = long2ip(ip2long($net->network) + 1);
         $out['Max host IP']     = long2ip(ip2long($net->broadcast) - 1);
-        $out['Number of hosts'] = $Subnets->get_max_hosts ($net->bitmask, "IPv4");;
+        $out['Number of hosts'] = $Subnets->max_hosts(['subnet'=>$net->network, 'mask'=>$net->bitmask]);
 
         # subnet class
         $out['Subnet Class']    = $this->get_ipv4_address_type($net->network, $net->broadcast);
@@ -1878,12 +1878,13 @@ class Tools extends Common_functions {
         }
 
         # /min / max hosts
-        $maxIp = gmp_strval(gmp_add(gmp_pow(2, 128 - $mask),$this->ip2long6 ($subnet)));
-		$maxIp = gmp_strval(gmp_sub($maxIp, 1));
+        $longIp = $this->ip2long6($subnet);
+        $minIp = $Subnets->decimal_network_address($longIp, $mask);
+        $maxIp = $Subnets->decimal_broadcast_address($longIp, $mask);
 
-        $out['Min host IP']               = $subnet;
+        $out['Min host IP']               = $this->long2ip6 ($minIp);
         $out['Max host IP']               = $this->long2ip6 ($maxIp);
-        $out['Number of hosts']           = $Subnets->get_max_hosts ($mask, "IPv6");
+        $out['Number of hosts']           = $Subnets->max_hosts(['subnet'=>$subnet, 'mask'=>$mask]);
 
         # set address type
         $out['Address type']              = $this->get_ipv6_address_type( $cidr );
