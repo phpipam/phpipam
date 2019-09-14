@@ -137,7 +137,7 @@ class Common_functions  {
 	 */
 	public function __construct () {
 		# debugging
-		$this->set_debugging( Config::get('debugging') );
+		$this->set_debugging( Config::ValueOf('debugging') );
 	}
 
 	/**
@@ -1283,11 +1283,11 @@ class Common_functions  {
 			curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
 			// configure proxy settings
-			if (Config::get('proxy_enabled') == true) {
-				curl_setopt($curl, CURLOPT_PROXY, Config::get('proxy_server'));
-				curl_setopt($curl, CURLOPT_PROXYPORT, Config::get('proxy_port'));
-				if (Config::get('proxy_use_auth') == true) {
-				curl_setopt($curl, CURLOPT_PROXYUSERPWD, Config::get('proxy_user').':'.Config::get('proxy_pass'));
+			if (Config::ValueOf('proxy_enabled') == true) {
+				curl_setopt($curl, CURLOPT_PROXY, Config::ValueOf('proxy_server'));
+				curl_setopt($curl, CURLOPT_PROXYPORT, Config::ValueOf('proxy_port'));
+				if (Config::ValueOf('proxy_use_auth') == true) {
+				curl_setopt($curl, CURLOPT_PROXYUSERPWD, Config::ValueOf('proxy_user').':'.Config::ValueOf('proxy_pass'));
 				}
 			}
 
@@ -1315,7 +1315,7 @@ class Common_functions  {
 		$results = array('lat' => null, 'lng' => null, 'error' => null);
 
 		// get geocode API key
-		$gmaps_api_geocode_key = Config::get('gmaps_api_geocode_key');
+		$gmaps_api_geocode_key = Config::ValueOf('gmaps_api_geocode_key');
 
 		if(empty($gmaps_api_geocode_key)) {
 			$results['info'] = _("Geocode API key not set");

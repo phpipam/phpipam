@@ -999,7 +999,7 @@ class Database_PDO extends DB {
 	 */
 	private function set_db_params () {
 		# use config file
-		$db = Config::get('db');
+		$db = Config::ValueOf('db');
 
 		# set
 		$this->host 	= $db['host'];

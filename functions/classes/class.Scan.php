@@ -175,7 +175,7 @@ class Scan extends Common_functions {
 		}
 
 		// Invoked via HTML (or php5.3)
-		$php_cli_binary = Config::get('php_cli_binary');
+		$php_cli_binary = Config::ValueOf('php_cli_binary');
 
 		// Check for user specified php-cli binary (Multiple php versions installed)
 		if ( !empty($php_cli_binary) ) {

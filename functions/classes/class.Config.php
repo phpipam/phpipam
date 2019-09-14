@@ -18,12 +18,12 @@ class Config {
     }
 
     /**
-     * Get settings
+     * Get setting from config.php
      * @param  string $name
      * @param  mixed $default_value
      * @return mixed
      */
-    public static function get($name, $default_value = false) {
+    public static function ValueOf($name, $default_value = false) {
         if (self::$config === false) {
             self::read_config();
         }

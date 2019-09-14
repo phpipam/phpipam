@@ -30,7 +30,7 @@ if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 elseif ($User->settings->enableLocations!="1") {
     $Result->show("danger", _("Locations module disabled."), false);
 }
-elseif ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))==0) {
+elseif ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 else {

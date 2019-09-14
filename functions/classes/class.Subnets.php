@@ -965,7 +965,7 @@ class Subnets extends Common_functions {
 	 * @method set_tmptable_engine_type
 	 */
 	private function set_tmptable_engine_type () {
-		$db = Config::get('db');
+		$db = Config::ValueOf('db');
 
 		if(!isset($db['tmptable_engine_type']))
 			return;
