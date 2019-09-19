@@ -12,6 +12,7 @@
     + Unable to save settings with link addresses = text custom field (#2702);
     + Kea MAC address display issue (#2704);
     + Returned custom fields to devices table (#2572);
+    + Invalid scan agent key warning;
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
