@@ -732,6 +732,9 @@ class Admin extends Common_functions {
 	 * @return boolean
 	 */
 	public function reorder_custom_fields ($table, $next, $current) {
+	    $table = $this->Database->escape($table);
+	    $next = $this->Database->escape($next);
+	    $current = $this->Database->escape($current);
 	    # get current field details
 	    $Tools = new Tools ($this->Database);
 	    $old = (array) $Tools->fetch_full_field_definition ($table, $current);

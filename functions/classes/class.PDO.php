@@ -292,9 +292,13 @@ abstract class DB {
 	 * @return void
 	 */
 	public function escape($str) {
+		if (!is_string($str)) return "";
+
 		if (!$this->isConnected()) $this->connect();
 
-		return $this->unquote_outer($this->pdo->quote((string)$str));
+		// SQL Injection - strip backquote character
+		$str = str_replace('`', '', $str);
+		return $this->unquote_outer($this->pdo->quote($str));
 	}
 
 	/**
