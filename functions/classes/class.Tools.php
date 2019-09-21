@@ -747,6 +747,8 @@ class Tools extends Common_functions {
 	 * @return array
 	 */
 	public function fetch_custom_fields ($table) {
+		$table = $this->Database->escape($table);
+
     	# fetch columns
 		$fields = $this->fetch_columns ($table);
 
