@@ -21,6 +21,10 @@
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
+    Security Fixes:
+    ----------------------------
+    + SQL injections processing `tableName` (#2738);
+
     Translations:
     ----------------------------
     + Update Traditional Chinese support to version 1.5 (#2658);
