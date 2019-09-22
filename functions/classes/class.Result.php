@@ -11,7 +11,7 @@
  *
  */
 
-class Result extends Common_functions {
+class Result {
 
 	/**
 	 * error code handler
