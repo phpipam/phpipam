@@ -94,7 +94,7 @@ else {
             		foreach($cfields as $key=>$field) {
             			$location->{$key} = str_replace("\n", "<br>",$location->{$key});
             			// create links
-            			$location->{$key} = $Result->create_links($location->{$key});
+            			$location->{$key} = $Tools->create_links($location->{$key});
             			print "<tr>";
             			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
             			print "	<td style='vertical-align:top;align:left;'>".$location->{$key}."</td>";

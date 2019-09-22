@@ -66,7 +66,7 @@ if($provider!==false) {
     			}
 
     			# create links
-    			$provider->{$field['name']} = $Result->create_links ($provider->{$field['name']});
+    			$provider->{$field['name']} = $Tools->create_links ($provider->{$field['name']});
 
     			print "<tr>";
     			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

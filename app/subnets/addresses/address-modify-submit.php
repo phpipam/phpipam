@@ -261,7 +261,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 		# print errors if they exist
 		if(isset($errors)) {
-			$log = $Result->array_to_log ($errors);
+			$log = $Log->array_to_log ($errors);
 			$Result->show("danger", $log, false);
 			$Log->write( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2);
 		}

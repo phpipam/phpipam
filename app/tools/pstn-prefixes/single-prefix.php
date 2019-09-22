@@ -157,7 +157,7 @@ else {
         		foreach($cfields as $key=>$field) {
         			$prefix->{$key} = str_replace("\n", "<br>",$prefix->{$key});
         			// create links
-        			$prefix->{$key} = $Result->create_links($prefix->{$key});
+        			$prefix->{$key} = $Tools->create_links($prefix->{$key});
         			print "<tr>";
         			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
         			print "	<td style='vertical-align:top;align:left;'>".$prefix->{$key}."</td>";

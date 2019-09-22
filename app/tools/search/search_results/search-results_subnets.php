@@ -110,7 +110,7 @@ $result_subnets   = $Tools->search_subnets($searchTerm, $searchTerm_edited['high
 				if(sizeof($custom_subnet_fields) > 0) {
 					foreach($custom_subnet_fields as $field) {
 						if(!in_array($field['name'], $hidden_subnet_fields)) {
-							$line[$field['name']] = $Result->create_links ($line[$field['name']], $field['type']);
+							$line[$field['name']] = $Tools->create_links ($line[$field['name']], $field['type']);
 							print "	<td class='hidden-xs hidden-sm'>".$line[$field['name']]."</td>";
 						}
 					}

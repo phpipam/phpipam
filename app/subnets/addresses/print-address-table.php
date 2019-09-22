@@ -488,7 +488,7 @@ else {
 							print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 							// create html links
-							$addresses[$n]->{$myField['name']} = $Result->create_links($addresses[$n]->{$myField['name']}, $myField['type']);
+							$addresses[$n]->{$myField['name']} = $Tools->create_links($addresses[$n]->{$myField['name']}, $myField['type']);
 
 							//booleans
 							if($myField['type']=="tinyint(1)")	{

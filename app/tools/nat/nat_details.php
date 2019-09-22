@@ -157,7 +157,7 @@ else {
 				}
 
 				# create links
-				$n->{$field['name']} = $Result->create_links ($n->{$field['name']});
+				$n->{$field['name']} = $Tools->create_links ($n->{$field['name']});
 
 				print "<tr>";
 				print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

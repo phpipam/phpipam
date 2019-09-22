@@ -462,7 +462,7 @@ if(sizeof($address_change)>0 && $config['ping_check_send_mail']) {
 
 	    		// reformat
 	    		$lastSeen = date("m/d H:i", strtotime($change['lastSeen']) );
-				$ago 	  = $lastSeen." (".$Result->sec2hms($timeDiff)." ago)";
+				$ago 	  = $lastSeen." (".$Tools->sec2hms($timeDiff)." ago)";
 			}
 	        // desc
 			$change['description'] = strlen($change['description'])>0 ? "$Subnets->mail_font_style $change[description]</font>" : "$Subnets->mail_font_style / </font>";
