@@ -1419,6 +1419,9 @@ class Tools extends Common_functions {
 	 * @return bool
 	 */
 	public function fix_field ($table, $field) {
+		$table = $this->Database->escape($table);
+		$field = $this->Database->escape($field);
+
 		# set fix query
 		$query  = "alter table `$table` add ";
 		$query .= trim($this->get_field_fix ($table, $field), ",");
@@ -1542,6 +1545,9 @@ class Tools extends Common_functions {
 	 * @return void
 	 */
 	private function fix_missing_index ($table, $index_name) {
+		$table = $this->Database->escape($table);
+		$index_name = $this->Database->escape($index_name);
+
 		// get definition
 		$file = $this->read_db_schema();
 
