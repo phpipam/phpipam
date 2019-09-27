@@ -102,16 +102,7 @@ function check_name_whitespace () {
 		<td><?php print _('Type'); ?></td>
 		<?php
 		// define supported types
-		$mTypes = array(
-						"varchar"  =>"varchar",
-						"integer"  =>"int",
-						"boolean"  =>"bool",
-						"text"     =>"text",
-						"date"     =>"date",
-						"datetime" =>"datetime",
-						"set"      =>"set",
-						"enum"     =>"enum"
-		                );
+		$mTypes = $Admin->valid_custom_field_types();
 		//reformat old type
 		$oldMType = strstr(@$fieldval['Type'], "(", true);
 		$oldMSize = str_replace(array("(",")"), "",strstr(@$fieldval['Type'], "(", false));
