@@ -24,6 +24,7 @@
     Security Fixes:
     ----------------------------
     + SQL injections processing `tableName` (#2738);
+    + SQL injections processing `ftype` (#2751);
 
     Translations:
     ----------------------------
