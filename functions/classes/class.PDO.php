@@ -810,9 +810,10 @@ abstract class DB {
 	public function deleteRow($tableName, $field, $value, $field2=null, $value2 = null) {
 		$tableName = $this->escape($tableName);
 		$field = $this->escape($field);
+		$field2 = $this->escape($field2);
 
 		//multiple
-		if(!is_null($field2))
+		if(!empty($field2))
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=? and `'.$field2.'`=?;', array($value, $value2));
 		else
 		return $this->runQuery('DELETE FROM `'.$tableName.'` WHERE `'.$field.'`=?;', array($value));
