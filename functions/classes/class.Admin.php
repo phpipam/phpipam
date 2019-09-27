@@ -289,6 +289,9 @@ class Admin extends Common_functions {
 	 * @return null|false
 	 */
 	public function remove_object_references ($table, $field, $old_value, $new_value = NULL) {
+		$table = $this->Database->escape($table);
+		$field = $this->Database->escape($field);
+
 		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -307,6 +310,9 @@ class Admin extends Common_functions {
 	 * @return null|false
 	 */
 	public function update_object_references ($table, $field, $old_value, $new_value) {
+		$table = $this->Database->escape($table);
+		$field = $this->Database->escape($field);
+
 		try { $this->Database->runQuery("update `$table` set `$field` = ? where `$field` = ?;", array($new_value, $old_value)); }
 		catch (Exception $e) {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
@@ -601,6 +607,8 @@ class Admin extends Common_functions {
 	 * @return void
 	 */
 	public function replace_fields ($field, $search, $replace) {
+		$field = $this->Database->escape($field);
+
 		# check number of items
 		$count = $this->count_database_objects ("ipaddresses", $field, "%$search%", true);
 		# if some exist update
