@@ -659,6 +659,21 @@ class Admin extends Common_functions {
 	 */
 
 	/**
+	 * Valid custom field database types
+	 * @return array
+	 */
+	public function valid_custom_field_types() {
+		return ["varchar"  =>"varchar",
+				"integer"  =>"int",
+				"boolean"  =>"bool",
+				"text"     =>"text",
+				"date"     =>"date",
+				"datetime" =>"datetime",
+				"set"      =>"set",
+				"enum"     =>"enum"];
+	}
+
+	/**
 	 * Updates custom field definition
 	 *
 	 * @access public
@@ -685,6 +700,11 @@ class Admin extends Common_functions {
 	    # strip values
 	    $field['action'] 		= $this->strip_input_tags($field['action']);
 	    $field['Comment'] 		= $this->strip_input_tags($field['Comment']);
+
+		if (!in_array($field['ftype'], $this->valid_custom_field_types())) {
+			$this->Result->show("danger", _("Error: ")._("Invalid custom field type"));
+			return false;
+		}
 
 	    # add name prefix to distinguish custom fields
 	    if($field['action']=="edit" || $field['action']=="add") {
