@@ -292,7 +292,8 @@ abstract class DB {
 	 * @return void
 	 */
 	public function escape($str) {
-		if (!is_string($str)) return "";
+		$str = (string) $str;
+		if (strlen($str) == 0) return "";
 
 		if (!$this->isConnected()) $this->connect();
 
