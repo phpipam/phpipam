@@ -280,7 +280,7 @@ try {
 	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {
 		$Response->exception = true;
-		$Response->result['success'] = 0;
+		$Response->result['success'] = false;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
 	}
