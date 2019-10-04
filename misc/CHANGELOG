@@ -13,6 +13,7 @@
     + Kea MAC address display issue (#2704);
     + Returned custom fields to devices table (#2572);
     + Invalid scan agent key warning;
+    + Subnet filter issue when IP contains 0 octet. (#2748);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
