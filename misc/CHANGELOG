@@ -14,6 +14,7 @@
     + Returned custom fields to devices table (#2572);
     + Invalid scan agent key warning;
     + Subnet filter issue when IP contains 0 octet. (#2748);
+    + Add VLAN button not working (#2741);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
