@@ -177,7 +177,7 @@ foreach($addresses as $dummy) {
 	    // ping
 	    $links[] = ["type"=>"divider"];
         $links[] = ["type"=>"header", "text"=>"Status check"];
-        $links[] = ["type"=>"link", "text"=>"Check avalibility", "href"=>"", "class"=>"ping_ipaddress", "dataparams"=>" data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"cogs"];
+        $links[] = ["type"=>"link", "text"=>"Check availability", "href"=>"", "class"=>"ping_ipaddress", "dataparams"=>" data-subnetId='".$addresses[$n]->subnetId."' data-id='".$addresses[$n]->id."'", "icon"=>"cogs"];
     }
     if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
  	    $links[] = ["type"=>"divider"];
