@@ -56,7 +56,7 @@ print "<div class='text-muted' style='padding-left:10px;'>".$vlan_domain->descri
 	<button class="btn btn-sm btn-default" id="snmp-vlan" data-action="add" data-domainid="<?php print $vlan_domain->id; ?>"><i class="fa fa-cogs"></i> <?php print _('Scan for VLANs'); ?></button>
 	<?php } ?>
 	<?php if($User->get_module_permissions ("vlan")>1 && sizeof($vlan_domains)==1) { ?>
-	<button class="btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-action="add" data-domain="<?php print $vlan_domain->id; ?>" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add VLAN'); ?></button>
+	<button class="btn btn-sm btn-default open_popup" data-script='app/admin/vlans/edit.php' data-action="add" data-domain="<?php print $vlan_domain->id; ?>" style="margin-bottom:10px;"><i class="fa fa-plus"></i> <?php print _('Add VLAN'); ?></button>
 	<?php } ?>
 </div>
 
