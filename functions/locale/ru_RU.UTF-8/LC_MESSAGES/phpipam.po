@@ -8261,7 +8261,7 @@ msgstr "Основной"
 msgid "Firewall address object"
 msgstr "Объект адреса фаервола"
 
-msgid "Avalibility"
+msgid "Availability"
 msgstr "Доступность"
 
 msgid "DNS info"

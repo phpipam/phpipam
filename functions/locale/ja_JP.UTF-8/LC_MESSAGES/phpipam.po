@@ -9428,7 +9428,7 @@ msgid "Firewall address object"
 msgstr "ファイアウォールアドレスオブジェクトで並べ替え"
 
 #: /var/www/phpipam/app/subnets/addresses/address-details/address-details.php:191
-msgid "Avalibility"
+msgid "Availability"
 msgstr "可用性"
 
 #: /var/www/phpipam/app/subnets/addresses/address-details/address-details.php:217

@@ -6502,7 +6502,7 @@ msgstr "一般"
 msgid "Firewall address object"
 msgstr "防火墙地址对象"
 
-msgid "Avalibility"
+msgid "Availability"
 msgstr "可用性"
 
 msgid "DNS info"
