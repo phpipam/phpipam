@@ -665,6 +665,10 @@ class Admin extends Common_functions {
 	 * @return bool
 	 */
 	public function update_custom_field_definition ($field) {
+		if (!in_array($field['fieldType'], $this->valid_custom_field_types())) {
+			$this->Result->show("danger", _("Error: ")._("Invalid custom field type"));
+			return false;
+		}
 
 	    # set type definition and size of needed
 	    if($field['fieldType']=="bool" || $field['fieldType']=="text" || $field['fieldType']=="date" || $field['fieldType']=="datetime")	{ $field['ftype'] = $field['fieldType']; }
@@ -684,11 +688,6 @@ class Admin extends Common_functions {
 	    # strip values
 	    $field['action'] 		= $this->strip_input_tags($field['action']);
 	    $field['Comment'] 		= $this->strip_input_tags($field['Comment']);
-
-		if (!in_array($field['ftype'], $this->valid_custom_field_types())) {
-			$this->Result->show("danger", _("Error: ")._("Invalid custom field type"));
-			return false;
-		}
 
 	    # add name prefix to distinguish custom fields
 	    if($field['action']=="edit" || $field['action']=="add") {
