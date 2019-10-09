@@ -103,7 +103,7 @@ if(sizeof($custom_bgp) > 0) {
         }
 
         # create links
-        $bgp->{$field['name']} = $Result->create_links ($bgp->{$field['name']});
+        $bgp->{$field['name']} = $Tools->create_links ($bgp->{$field['name']});
 
         print "<tr>";
         print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

@@ -24,7 +24,7 @@ $options = array (
 			'wordlist_file_encoding' => null,        // character encoding of word file if other than ASCII (e.g. UTF-8, GB2312)
 			'ttf_file'               => './captcha/AHGBold.ttf',   // TTF file for captcha text
 			'no_session'             => false,
-			'session_name'           => Config::get('phpsessname', 'phpipam'),
+			'session_name'           => Config::ValueOf('phpsessname', 'phpipam'),
 			'use_database'           => false
 			);
 

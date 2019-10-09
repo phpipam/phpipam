@@ -42,7 +42,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 				else									{ $logical_circuit->{$field['name']} = ""; }
 			}
 			# create links
-			$logical_circuit->{$field['name']} = $Result->create_links ($logical_circuit->{$field['name']});
+			$logical_circuit->{$field['name']} = $Tools->create_links ($logical_circuit->{$field['name']});
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

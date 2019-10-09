@@ -33,7 +33,7 @@ $script_result = json_decode($output[0]);
 
 # json error
 if(json_last_error() !== JSON_ERROR_NONE)
-	$Result->show("danger", "Invalid JSON response"." - ".$Result->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
+	$Result->show("danger", "Invalid JSON response"." - ".$Scan->json_error_decode(json_last_error())." - ".escape_input($output[0]), true);
 
 //title
 print "<h5>"._('Scan results').":</h5><hr>";

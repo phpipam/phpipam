@@ -92,7 +92,7 @@ print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], $_GE
 			}
 
 			// create links
-			$vlan[$key] = $Result->create_links($vlan[$key]);
+			$vlan[$key] = $Tools->create_links($vlan[$key]);
 
 			print "<tr>";
 			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";

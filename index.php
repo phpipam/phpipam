@@ -120,8 +120,8 @@ else {
 		<!--[if lt IE 9]>
 		<script src="js/dieIE.js"></script>
 		<![endif]-->
-		<?php if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))>0) { ?>
-		<script src="https://maps.google.com/maps/api/js<?php print "?key=".Config::get('gmaps_api_key'); ?>"></script>
+		<?php if ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))>0) { ?>
+		<script src="https://maps.google.com/maps/api/js<?php print "?key=".Config::ValueOf('gmaps_api_key'); ?>"></script>
 		<script src="js/gmaps.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php }	?>
 		<!-- jQuery UI -->

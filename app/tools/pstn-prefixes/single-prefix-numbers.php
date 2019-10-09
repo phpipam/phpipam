@@ -130,7 +130,7 @@ $colspan_dhcp = 4;
 					print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 					// create html links
-					$n->{$myField['name']} = $Result->create_links($n->{$myField['name']}, $myField['type']);
+					$n->{$myField['name']} = $Tools->create_links($n->{$myField['name']}, $myField['type']);
 
 					//booleans
 					if($myField['type']=="tinyint(1)")	{

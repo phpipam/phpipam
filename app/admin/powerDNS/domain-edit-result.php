@@ -11,6 +11,7 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database, false);
+$Tools	 	= new Tools ($Database);
 $Result 	= new Result ();
 $PowerDNS 	= new PowerDNS ($Database);
 
@@ -28,7 +29,7 @@ else {
 }
 
 # strip input tags
-$_POST = $Admin->strip_input_tags($_POST);
+$_POST = $Tools->strip_input_tags($_POST);
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
@@ -38,7 +39,7 @@ $User->Crypto->csrf_cookie ("validate", "domain", $_POST['csrf_cookie']) === fal
 if ($_POST['action']!="delete") {
 	// fqdn
 	if ($_POST['action']=="add")
-	if($Result->validate_hostname($_POST['name'])===false)			{ $Result->show("danger", "Invalid domain name", true); }
+	if($Tools->validate_hostname($_POST['name'])===false)			{ $Result->show("danger", "Invalid domain name", true); }
 	// master
 	if (strlen($_POST['master'])>0) {
     	// if multilpe masters
@@ -58,8 +59,7 @@ if ($_POST['action']!="delete") {
 
 	# new domain
 	if ($_POST['action']=="add" && !isset($_POST['manual'])) {
-		// admin
-		if ($Result->validate_email($_POST['hostmaster'])===false)	{ $Result->show("danger", "Invalid domain hostmaster", true); }
+		if ($Tools->validate_email($_POST['hostmaster'])===false)	{ $Result->show("danger", "Invalid domain hostmaster", true); }
 	}
 
 	// if slave master must be present

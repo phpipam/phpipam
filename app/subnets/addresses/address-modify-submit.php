@@ -59,7 +59,7 @@ foreach ($required_ip_fields as $k=>$f) {
 // checks
 if(is_array($required_ip_fields) && $action!="delete") {
 	// remove modules not enabled from required fields
-	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location_item']); }
+	if($User->settings->enableLocations=="0") { unset($required_ip_fields['location']); }
 
 	// set default array
 	$required_field_errors = array();
@@ -261,7 +261,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 
 		# print errors if they exist
 		if(isset($errors)) {
-			$log = $Result->array_to_log ($errors);
+			$log = $Log->array_to_log ($errors);
 			$Result->show("danger", $log, false);
 			$Log->write( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2);
 		}

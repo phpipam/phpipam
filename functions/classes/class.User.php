@@ -194,7 +194,7 @@ class User extends Common_functions {
      */
     private function start_session () {
         // check if database should be set for sessions
-        if (Config::get('session_storage') == "database") {
+        if (Config::ValueOf('session_storage') == "database") {
             new Session_db ($this->Database);
         }
         // local
@@ -220,7 +220,7 @@ class User extends Common_functions {
      * @return void
      */
     private function set_session_name () {
-        $sessname = Config::get('phpsessname', 'phpipam');
+        $sessname = Config::ValueOf('phpsessname', 'phpipam');
         // check old name
         $old_name = session_name();
         if ($sessname != $old_name) {
@@ -517,7 +517,7 @@ class User extends Common_functions {
      */
     public function migrate_resolve_subnets () {
         // read config.php
-        $config = Config::get('config');
+        $config = Config::ValueOf('config');
 
         // check for array and values
         if(!isset($config['resolve_subnets']) || !is_array($config['resolve_subnets']) || sizeof($config['resolve_subnets'])==0)

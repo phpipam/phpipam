@@ -66,7 +66,7 @@ try {
 
 	// crypt check
 	if($app->app_security=="crypt") {
-		$encryption_method = Config::get('api_crypt_encryption_library', 'openssl-128-cbc');
+		$encryption_method = Config::ValueOf('api_crypt_encryption_library', 'openssl-128-cbc');
 
 		// decrypt request - form_encoded
 		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
@@ -99,7 +99,7 @@ try {
 	// no security
 	elseif($app->app_security=="none") {
 		// make sure it is permitted in config.php
-		if (Config::get('api_allow_unsafe')!==true) {
+		if (Config::ValueOf('api_allow_unsafe')!==true) {
 			$Response->throw_exception(503, _('SSL connection is required for API'));
 		}
 
@@ -280,7 +280,7 @@ try {
 	// set flag if it came from Result, just to be sure
 	if($Response->exception!==true) {
 		$Response->exception = true;
-		$Response->result['success'] = 0;
+		$Response->result['success'] = false;
 		$Response->result['code'] 	 = 500;
 		$Response->result['message'] = $result;
 	}

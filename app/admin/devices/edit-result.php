@@ -99,7 +99,7 @@ $values = array(
 				"type"        =>$device['type'],
 				"description" =>$device['description'],
 				"sections"    =>$device['sections'],
-				"location"    =>@$device['location_item']
+				"location"    =>@$device['location']
 				);
 # custom fields
 if(isset($update)) {

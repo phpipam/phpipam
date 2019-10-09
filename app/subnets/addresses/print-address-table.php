@@ -488,7 +488,7 @@ else {
 							print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 							// create html links
-							$addresses[$n]->{$myField['name']} = $Result->create_links($addresses[$n]->{$myField['name']}, $myField['type']);
+							$addresses[$n]->{$myField['name']} = $Tools->create_links($addresses[$n]->{$myField['name']}, $myField['type']);
 
 							//booleans
 							if($myField['type']=="tinyint(1)")	{
@@ -616,7 +616,10 @@ else {
         				# print port
         				if(in_array('port', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->port."</td>"; }
         				# print location
-			    		if(in_array('location', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm hidden-md'>".$s->location."</td>"; }
+						if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) {
+							$location_name = $Tools->fetch_object("locations", "id", $s->location);
+							print "<td class='hidden-xs hidden-sm hidden-md'>".$location_name->name."</td>";
+						}
 			    		# print owner
         				if(in_array('owner', $selected_ip_fields)) 				{ print "<td class='hidden-xs hidden-sm'>".$s->owner."</td>"; }
         				# print custom fields

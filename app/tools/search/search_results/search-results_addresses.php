@@ -103,7 +103,7 @@ if(sizeof($result_addresses) > 0) {
 			print $Addresses->address_type_format_tag($line['state']);
 			print ' </td>' . "\n";
 			//description
-			print ' <td>'. $Result->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
+			print ' <td>'. $Addresses->shorten_text($line['description'], $chars = 50) .'</td>' . "\n";
 			//dns
 			print ' <td>'. $line['hostname']  .'</td>' . "\n";
 			//mac
@@ -130,7 +130,10 @@ if(sizeof($result_addresses) > 0) {
 			//port
 			if(in_array('port', $selected_ip_fields)) 										{ print ' <td>'. $line['port']  .'</td>' . "\n"; }
 			//location
-			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) 										{ print ' <td>'. $line['location']  .'</td>' . "\n"; }
+			if(in_array('location', $selected_ip_fields) && $User->get_module_permissions ("locations")>=User::ACCESS_R) { 
+				$location_name = $Tools->fetch_object("locations", "id", $line['location']);
+				print ' <td>'. $location_name->name .'</td>' . "\n";
+			}
 			//owner and note
 			if((in_array('owner', $selected_ip_fields)) && (in_array('note', $selected_ip_fields)) ) {
 				print ' <td class="hidden-sm hidden-xs">'. $line['owner']  .'</td>' . "\n";
@@ -156,7 +159,7 @@ if(sizeof($result_addresses) > 0) {
 			if(sizeof($custom_address_fields) > 0) {
 				foreach($custom_address_fields as $field) {
 					if(!in_array($field['name'], $hidden_address_fields)){
-						$line[$field['name']] = $Result->create_links ($line[$field['name']], $field['type']);
+						$line[$field['name']] = $Tools->create_links ($line[$field['name']], $field['type']);
 						print '<td class="customField hidden-sm hidden-xs hidden-md">'. $line[$field['name']] .'</td>'. "\n";
 					}
 				}

@@ -52,7 +52,7 @@ $tools_menu_items = array(
 
 
 #custom
-$private_subpages = Config::get('private_subpages');
+$private_subpages = Config::ValueOf('private_subpages');
 if(is_array($private_subpages) && sizeof($private_subpages)>0) {
     # array and icon
     $tools_menu['Custom tools'] = array();

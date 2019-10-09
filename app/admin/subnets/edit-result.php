@@ -319,11 +319,11 @@ else {
 					"isPool"         => $Admin->verify_checkbox($_POST['isPool'])
 					);
     # location
-    if (isset($_POST['location_item'])) {
-        if (!is_numeric($_POST['location_item'])) {
+    if (isset($_POST['location'])) {
+        if (!is_numeric($_POST['location'])) {
             $Result->show("danger", _("Invalid location value"), true);
         }
-        $values['location'] = $_POST['location_item'];
+        $values['location'] = $_POST['location'];
     }
 	# append customerId
 	if($User->settings->enableCustomers=="1") {

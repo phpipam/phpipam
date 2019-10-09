@@ -74,7 +74,7 @@ if(sizeof($custom_fields) > 0) {
 		}
 
 		# create links
-		$circuit->{$field['name']} = $Result->create_links ($circuit->{$field['name']});
+		$circuit->{$field['name']} = $Tools->create_links ($circuit->{$field['name']});
 
 		print "<tr>";
 		print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

@@ -73,7 +73,7 @@ if (is_array($hosts) && sizeof($hosts)>0) {
 			$ignored[] = $h;
 		}
 		// validate hostname, we only add valid hostnames
-		elseif ($Result->validate_hostname ($h->hostname) !== false) {
+		elseif ($PowerDNS->validate_hostname ($h->hostname) !== false) {
 			// formulate new record
 			$record = $PowerDNS->formulate_new_record ($domain->id, $PowerDNS->get_ip_ptr_name ($h->ip), "PTR", $h->hostname, $values['ttl']);
 			// insert record

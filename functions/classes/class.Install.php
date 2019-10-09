@@ -271,7 +271,7 @@ class Install extends Common_functions {
 	 * @return void
 	 */
 	private function set_db_params () {
-		$this->db = Config::get('db');
+		$this->db = Config::ValueOf('db');
 	}
 
 

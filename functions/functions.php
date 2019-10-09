@@ -1,31 +1,22 @@
 <?php
 
-/**
- * Enable output buffering
- ******************************/
-
-if(!ob_start("ob_gzhandler")) ob_start();
-
-function outputbuf_send() {
-	ob_end_flush();
-}
-
-register_shutdown_function('outputbuf_send');
+/* Enable output buffering */
+require_once( dirname(__FILE__) . '/output_buffering.php' );
 
 /* @config file ------------------ */
 require_once( dirname(__FILE__) . '/classes/class.Config.php' );
-$config = Config::get('config');
+$config = Config::ValueOf('config');
 
 /**
  * proxy to use for every internet access like update check
  ******************************/
-if (Config::get('proxy_enabled') == true) {
+if (Config::ValueOf('proxy_enabled') == true) {
 	$proxy_settings = [
-		'proxy'           => 'tcp://'.Config::get('proxy_server').':'.Config::get('proxy_port'),
+		'proxy'           => 'tcp://'.Config::ValueOf('proxy_server').':'.Config::ValueOf('proxy_port'),
 		'request_fulluri' => true];
 
-	if (Config::get('proxy_use_auth') == true) {
-		$proxy_auth = base64_encode(Config::get('proxy_user').':'.Config::get('proxy_pass'));
+	if (Config::ValueOf('proxy_use_auth') == true) {
+		$proxy_auth = base64_encode(Config::ValueOf('proxy_user').':'.Config::ValueOf('proxy_pass'));
 		$proxy_settings['header'] = "Proxy-Authorization: Basic ".$proxy_auth;
 	}
 	stream_context_set_default (['http' => $proxy_settings]);
@@ -42,7 +33,7 @@ if(php_sapi_name()!="cli")
 	ini_set('session.cookie_httponly', 1);
 
 /* @debugging functions ------------------- */
-if(Config::get('debugging')==true) {
+if(Config::ValueOf('debugging')==true) {
 	ini_set('display_errors', 1);
 	ini_set('display_startup_errors', 1);
 	error_reporting(E_ALL ^ E_NOTICE ^ E_STRICT);

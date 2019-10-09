@@ -88,7 +88,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 			}
 
 			# create links
-			$customer->{$field['name']} = $Result->create_links ($customer->{$field['name']});
+			$customer->{$field['name']} = $Tools->create_links ($customer->{$field['name']});
 
 			print "<tr>";
 			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

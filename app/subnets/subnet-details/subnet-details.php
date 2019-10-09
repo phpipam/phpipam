@@ -509,7 +509,7 @@ else {
 					elseif($subnet[$key] == "1")	{ $html_custom[] = _("Yes"); }
 				}
 				else {
-					$html_custom[] = $Result->create_links($subnet[$key]);
+					$html_custom[] = $Tools->create_links($subnet[$key]);
 				}
 				$html_custom[] = "	</td>";
 				$html_custom[] = "</tr>";

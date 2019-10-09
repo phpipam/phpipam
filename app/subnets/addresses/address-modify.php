@@ -537,12 +537,12 @@ function validate_mac (ip, mac, sectionId, vlanId, id) {
 		<td>
 			<?php
 			// set star if field is required
-			$required = in_array("location_item", $required_ip_fields) ? " *" : "";
+			$required = in_array("location", $required_ip_fields) ? " *" : "";
 			print _('Location').$required;
 			?>
 			</td>
 		<td>
-			<select name="location_item" class="form-control input-sm input-w-auto">
+			<select name="location" class="form-control input-sm input-w-auto">
 				<?php if($required=="") { ?>
     			<option value="0"><?php print _("None"); ?></option>
     			<?php } ?>

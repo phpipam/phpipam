@@ -933,7 +933,7 @@ class Subnets extends Common_functions {
 			$out[$mask]->netmask = $net->netmask;							// netmask
 			$out[$mask]->host_bits = 32-$mask;								// host bits
 			$out[$mask]->subnet_bits = 32-$out[$mask]->host_bits;			// network bits
-			$out[$mask]->hosts = number_format($this->get_max_hosts ($mask, "IPv4"), 0, ",", ".");		// max hosts
+			$out[$mask]->hosts = number_format( $this->max_hosts(['subnet'=>'10.0.0.0', 'mask'=>$mask]) , 0, ",", ".");		// max hosts
 			$out[$mask]->subnets = number_format(pow(2,($mask-8)), 0, ",", ".");
 			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
 
@@ -965,7 +965,7 @@ class Subnets extends Common_functions {
 	 * @method set_tmptable_engine_type
 	 */
 	private function set_tmptable_engine_type () {
-		$db = Config::get('db');
+		$db = Config::ValueOf('db');
 
 		if(!isset($db['tmptable_engine_type']))
 			return;
@@ -1522,29 +1522,6 @@ class Subnets extends Common_functions {
 		if ($this->has_network_broadcast($subnet))
 			$max_hosts = gmp_sub($max_hosts, 2);
 
-		return gmp_strval($max_hosts);
-	}
-
-	/**
-	 * Get maximum number of hosts for netmask
-	 *
-	 * @access public
-	 * @param mixed $netmask
-	 * @param mixed $ipversion
-	 * @param bool $isPool (default: false)
-	 * @return string
-	 */
-	public function get_max_hosts ($netmask, $ipversion, $isPool=false) {
-		$max_mask = ($ipversion === 'IPv4') ? 32 : 128;
-		if ($netmask<0) $netmask = 0;
-		if ($netmask>$max_mask) $netmask = $max_mask;
-
-		$max_hosts = $this->gmp_bitmasks[$ipversion][$netmask]['size'];
-
-		if (!$isPool) {
-			if (($ipversion == 'IPv4' && $netmask<31) || ($ipversion == 'IPv6' && $netmask<127))
-				$max_hosts = gmp_sub($max_hosts, 2);
-		}
 		return gmp_strval($max_hosts);
 	}
 

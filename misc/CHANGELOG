@@ -3,10 +3,7 @@
     New features:
     ------------
     + Mark subnet as isPool to allocate network and broadcast addresses;
-
-    Enhancements, changes:
-    ----------------------------
-    + XHR left subnets menu;
+    + Optionally hide section subnet menus;
 
     Bugfixes:
     ----------------------------
@@ -21,12 +18,21 @@
     + Unable to save settings with link addresses = text custom field (#2702);
     + Kea MAC address display issue (#2704);
     + Returned custom fields to devices table (#2572);
+    + Invalid scan agent key warning;
+    + Subnet filter issue when IP contains 0 octet. (#2748);
+    + Add VLAN button not working (#2741);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
+
+    Security Fixes:
+    ----------------------------
+    + SQL injections processing `tableName` (#2738);
+    + SQL injections processing `ftype` (#2751);
 
     Translations:
     ----------------------------
     + Update Traditional Chinese support to version 1.5 (#2658);
+    + Update Simplified Chinese Translation (#2725);
 
 == 1.4.1
 

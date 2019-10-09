@@ -221,7 +221,7 @@ if ($subnets!==false) {
 								print "<td class='customField hidden-xs hidden-sm hidden-md'>";
 
 								// create html links
-								$address->{$myField['name']} = $Result->create_links($address->{$myField['name']}, $myField['type']);
+								$address->{$myField['name']} = $Tools->create_links($address->{$myField['name']}, $myField['type']);
 
 								//booleans
 								if($myField['type']=="tinyint(1)")	{

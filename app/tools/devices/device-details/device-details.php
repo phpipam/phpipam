@@ -243,7 +243,7 @@ if($_GET['subnetId']!=0 && sizeof($device)>0) {
     			}
 
     			# create links
-    			$device[$field['name']] = $Result->create_links ($device[$field['name']]);
+    			$device[$field['name']] = $Tools->create_links ($device[$field['name']]);
 
     			print "<tr>";
     			print "<th>".$Tools->print_custom_field_name ($field['name'])."</th>";

@@ -32,7 +32,7 @@ if ($_POST['action']=="edit" || $_POST['action']=="delete") {
 	# old
 	$agent_old = $Admin->fetch_object ("scanAgents", "id", $_POST['id']);
 	// invalid id
-	if($agent_old===false)	{ $error[] = "Invalid agent Id"; }
+	if($agent_old===false)	{ $error[] = _("Invalid agent Id"); }
 	// remove type and code if direct
 	if (@$agent_old->type=="direct") {
 		unset($_POST['type'], $_POST['code']);
@@ -48,10 +48,10 @@ if (@$agent_old->type=="direct" && $_POST['action']=="delete") {
 if($_POST['action']!="delete") {
 	# code must be exactly 32 chars long and alfanumeric if app_security = crypt
 	if(@$agent_old->type!="direct") {
-	if(strlen($_POST['code'])!=32 || !ctype_alnum($_POST['code']))		{ $error[] = "Invalid agent code"; }
+	if(strlen($_POST['code'])!=32 || !preg_match("#^[a-zA-Z0-9-_=]+$#", $_POST['code']))		{ $error[] = _("Invalid agent code"); }
 	}
 	# name must be more than 2 and alphanumberic
-	if(strlen($_POST['name'])==0)										{ $error[] = "Invalid agent name"; }
+	if(strlen($_POST['name'])==0)										{ $error[] = _("Invalid agent name"); }
 }
 
 # die if errors

@@ -412,12 +412,6 @@ class Addresses_controller extends Common_api_functions  {
 		$values['ip_addr'] = $this->Addresses->transform_address($values['ip_addr'] ,"decimal");
 		// set action
 		$values['action'] = "add";
-		// location fix because of UI
-		if(isset($values['location'])) {
-			$values['location_item'] = $values['location'];
-			unset($values['location']);
-		}
-
 		# execute
 		if(!$this->Addresses->modify_address ($values)) {
 			$this->Response->throw_exception(500, "Failed to create address");

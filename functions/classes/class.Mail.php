@@ -203,7 +203,7 @@ class phpipam_mail extends Common_functions {
 	 */
 	private function set_body_start () {
 		# read config
-		$config = Config::get('config');
+		$config = Config::ValueOf('config');
 
 		// set width
 		$logo_width = isset($config['logo_width']) ? $config['logo_width'] : 220;

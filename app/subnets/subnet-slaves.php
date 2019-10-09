@@ -134,7 +134,7 @@ foreach ($slave_subnets as $slave_subnet) {
 			elseif($slave_subnet[$key] == "1")	{ $html_custom = _("Yes"); }
 		}
 		else {
-			$html_custom = $Result->create_links($slave_subnet[$key]);
+			$html_custom = $Tools->create_links($slave_subnet[$key]);
 		}
 
         print "<td>".$html_custom."</td>";

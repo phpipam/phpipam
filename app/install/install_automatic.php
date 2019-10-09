@@ -1,5 +1,5 @@
 <?php
-$db = Config::get('db');
+$db = Config::ValueOf('db');
 
 // add prefix - install or migrate
 $title_prefix = @$_GET['subnetId']=="migrate" ? "migration" : "installation";
