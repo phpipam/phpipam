@@ -21,6 +21,7 @@
     + Invalid scan agent key warning;
     + Subnet filter issue when IP contains 0 octet. (#2748);
     + Add VLAN button not working (#2741);
+    + Incorrect subnet links in /tools/vrf/ view. (#2774);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
