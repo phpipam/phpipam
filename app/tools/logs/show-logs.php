@@ -16,7 +16,7 @@ $(document).ready(function() {
  **********************************/
 
 /* required functions */
-if(!is_object($User)) {
+if(!isset($User) || !is_object($User)) {
 
 	/* functions */
 	require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
