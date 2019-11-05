@@ -153,13 +153,21 @@ abstract class DB {
 				$this->pdo = new \PDO($dsn, $this->username, $this->password);
 			}
 
-			$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+			$this->setErrMode(\PDO::ERRMODE_EXCEPTION);
 
 		} catch (\PDOException $e) {
 			throw new Exception ("Could not connect to database! ".$e->getMessage());
 		}
 
 		@$this->pdo->query('SET NAMES \'' . $this->charset . '\';');
+	}
+
+	/**
+	 * Set PDO error mode
+	 * @param mixed $mode
+	 */
+	public function setErrMode($mode = \PDO::ERRMODE_EXCEPTION) {
+		$this->pdo->setAttribute(\PDO::ATTR_ERRMODE, $mode);
 	}
 
 	/**
