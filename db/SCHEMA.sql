@@ -429,7 +429,8 @@ VALUES
   (10, 'ru_RU.UTF-8', 'Russian'),
   (11, 'zh_CN.UTF-8', 'Chinese'),
   (12, 'ja_JP.UTF-8', 'Japanese'),
-  (13, 'zh_TW.UTF-8', 'Chinese traditional (繁體中文)');
+  (13, 'zh_TW.UTF-8', 'Chinese traditional (繁體中文)'),
+  (14, 'it_IT.UTF-8', 'Italian');
 
 
 # Dump of table vlans
@@ -998,4 +999,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 29;
+UPDATE `settings` SET `dbversion` = 30;

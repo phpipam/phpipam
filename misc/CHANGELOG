@@ -34,6 +34,7 @@
     ----------------------------
     + Update Traditional Chinese support to version 1.5 (#2658);
     + Update Simplified Chinese Translation (#2725);
+    + Italian (it_IT) translation added (#2813);
 
 == 1.4.1
 

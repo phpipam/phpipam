@@ -6,6 +6,7 @@
 
 // fix for postcode
 $upgrade_queries["1.5.26"][] = "ALTER TABLE `customers` CHANGE `postcode` `postcode` VARCHAR(32)  NULL  DEFAULT NULL;";
+
 $upgrade_queries["1.5.26"][] = "-- Database version bump";
 $upgrade_queries["1.5.26"][] = "UPDATE `settings` set `dbversion` = '26';";
 
@@ -41,6 +42,7 @@ $upgrade_queries["1.5.27"][] = "ALTER TABLE `subnets` CHANGE `isFolder` `isFolde
 $upgrade_queries["1.5.27"][] = "-- Database version bump";
 $upgrade_queries["1.5.27"][] = "UPDATE `settings` set `dbversion` = '27';";
 
+
 // Subnet isPool
 //
 $upgrade_queries["1.5.28"][] = "ALTER TABLE `subnets` ADD `isPool` BOOL NOT NULL DEFAULT '0';";
@@ -48,9 +50,19 @@ $upgrade_queries["1.5.28"][] = "ALTER TABLE `subnets` ADD `isPool` BOOL NOT NULL
 $upgrade_queries["1.5.28"][] = "-- Database version bump";
 $upgrade_queries["1.5.28"][] = "UPDATE `settings` set `dbversion` = '28';";
 
+
 // Hide section subnet tree menus
 //
 $upgrade_queries["1.5.29"][] = "ALTER TABLE `sections` ADD `showSubnet` BOOL NOT NULL DEFAULT '1';";
 
 $upgrade_queries["1.5.29"][] = "-- Database version bump";
 $upgrade_queries["1.5.29"][] = "UPDATE `settings` set `dbversion` = '29';";
+
+
+// Italian translation
+//
+$upgrade_queries["1.5.30"][] = "-- Add Italian translation";
+$upgrade_queries["1.5.30"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES ('Italian', 'it_IT.UTF-8');";
+
+$upgrade_queries["1.5.30"][] = "-- Database version bump";
+$upgrade_queries["1.5.30"][] = "UPDATE `settings` set `dbversion` = '30';";
