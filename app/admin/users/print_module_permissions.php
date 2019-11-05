@@ -29,6 +29,9 @@ print "<table class='table-noborder popover_table'>";
 // VLAN
 print "<tr><td>"._("VLAN")."</td><td>".$User->print_permission_badge($user['perm_vlan'])."</td></tr>";
 
+// L2Domains
+print "<tr><td>"._("L2Domains")."</td><td>".$User->print_permission_badge($user['perm_l2dom'])."</td></tr>";
+
 // VRF
 print "<tr><td>"._("VRF")."</td><td>".$User->print_permission_badge($user['perm_vrf'])."</td></tr>";
 

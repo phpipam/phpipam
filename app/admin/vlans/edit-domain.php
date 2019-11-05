@@ -19,10 +19,10 @@ $Result 	= new Result ();
 $User->check_user_session();
 # perm check popup
 if($_POST['action']=="edit") {
-    $User->check_module_permissions ("vlan", User::ACCESS_RW, true, true);
+    $User->check_module_permissions ("l2dom", User::ACCESS_RW, true, true);
 }
 else {
-    $User->check_module_permissions ("vlan", User::ACCESS_RWA, true, true);
+    $User->check_module_permissions ("l2dom", User::ACCESS_RWA, true, true);
 }
 
 # create csrf token

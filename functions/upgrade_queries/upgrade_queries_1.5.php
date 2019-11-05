@@ -66,3 +66,12 @@ $upgrade_queries["1.5.30"][] = "INSERT INTO `lang` (`l_name`, `l_code`) VALUES (
 
 $upgrade_queries["1.5.30"][] = "-- Database version bump";
 $upgrade_queries["1.5.30"][] = "UPDATE `settings` set `dbversion` = '30';";
+
+// L2Domain permissions
+//
+$upgrade_queries["1.5.31"][] = 'ALTER TABLE `users` CHANGE `module_permissions` `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT \'{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}\'';
+$upgrade_queries["1.5.31"][] = "-- Clone users l2dom permissions from existing vlan permission level. MySQL5.7+";
+$upgrade_queries["1.5.31"][] = "UPDATE users SET module_permissions = JSON_SET(module_permissions,'$.l2dom', JSON_EXTRACT(module_permissions,'$.vlan')); -- IGNORE_ON_FAILURE"; // MySQL 5.7+
+
+$upgrade_queries["1.5.31"][] = "-- Database version bump";
+$upgrade_queries["1.5.31"][] = "UPDATE `settings` set `dbversion` = '31';";

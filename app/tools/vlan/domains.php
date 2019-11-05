@@ -7,12 +7,14 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 ?>
 
 <!-- Manage link -->
-<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
 <div class="btn-group" style="margin-bottom:10px;">
+<?php if($User->get_module_permissions ("l2dom")>=User::ACCESS_RWA) { ?>
 	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit-domain.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add L2 Domain'); ?></button>
-	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-class='500' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VLAN'); ?></button>
-</div>
 <?php } ?>
+<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) { ?>
+	<button class='btn btn-sm btn-default open_popup' data-script='app/admin/vlans/edit.php' data-class='500' data-action='add'><i class='fa fa-plus'></i> <?php print _('Add VLAN'); ?></button>
+<?php } ?>
+</div>
 
 
 <table class="table sorted nosearch nopagination table-striped table-top table-condensed table-auto-wide" data-cookie-id-table='tools_l2_all'>

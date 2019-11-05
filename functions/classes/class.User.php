@@ -1726,6 +1726,7 @@ class User extends Common_functions {
     public function get_modules_with_permissions () {
         return [
                 "vlan",
+                "l2dom",
                 "vrf",
                 "pdns",
                 "circuits",

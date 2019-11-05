@@ -326,6 +326,8 @@ $(document).ready(function(){
 	$perm_modules = [];
 	// VLAN
 	$perm_modules["perm_vlan"] = "VLAN";
+	// VLAN
+	$perm_modules["perm_l2dom"] = "L2Domains";
 	// VRF
 	$perm_modules["perm_vrf"]  = "VRF";
 	// powerDNS
