@@ -82,9 +82,9 @@ if($_POST['rackid']>0 || @$device['rack']>0) {
 	    if (isset($device['rack_start'])) {
 	        for($m=$device['rack_start']; $m<=($device['rack_start']+($device['rack_size']-1)); $m++) {
 		   if ($m >= $rack->size) {
-		   	$available_back[$m] = $m - $rack->size;
+		   	$available_back[$m] = $m;
 		   } else {
-		   	$available[$m] = $m - $rack->size;
+		   	$available[$m] = $m;
 		   }
 	        }
 	    }
