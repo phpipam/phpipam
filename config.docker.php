@@ -1,6 +1,21 @@
 <?php
 
 /**
+ * Path to access phpipam in site URL, http:/url/BASE/
+ * If not defined it will be discovered and set automatically.
+ *
+ * BASE definition should end with a trailing slash "/"
+ * Examples:
+ *
+ *  If you access the login page at http://company.website/         =  define('BASE', "/");
+ *  If you access the login page at http://company.website/phpipam/ =  define('BASE', "/phpipam/");
+ *  If you access the login page at http://company.website/ipam/    =  define('BASE', "/ipam/");
+ *
+ */
+
+getenv('IPAM_BASE') ? define('BASE', getenv('IPAM_BASE')) : false;
+
+/**
  * Import ENV settings for Docker containers.
  *   ln -s config.docker.php config.php
  */
