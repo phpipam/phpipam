@@ -107,7 +107,7 @@ print "	<td><input type='checkbox' name='note' checked> </td>";
 print "	</tr>";
 
 # note
-if($User->get_module_permissions ("location")>=User::ACCESS_R) {
+if($User->get_module_permissions ("locations")>=User::ACCESS_R) {
 print "	<tr>";
 print "	<td>"._('Location')."</td>";
 print "	<td><input type='checkbox' name='location' checked> </td>";
