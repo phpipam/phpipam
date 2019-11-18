@@ -1,4 +1,8 @@
 <?php
+/**
+ * Import ENV settings for Docker containers.
+ *   ln -s config.docker.php config.php
+ */
 
 /**
  * Path to access phpipam in site URL, http:/url/BASE/
@@ -16,10 +20,8 @@
 getenv('IPAM_BASE') ? define('BASE', getenv('IPAM_BASE')) : false;
 
 /**
- * Import ENV settings for Docker containers.
- *   ln -s config.docker.php config.php
+ * Import default values
  */
-
 require('config.dist.php');
 
 /**
