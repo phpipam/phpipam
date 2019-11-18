@@ -180,3 +180,10 @@ $config['split_ip_custom_fields'] = false;                  // Show custom field
  * If multiple php versions are present; overide selection with $php_cli_binary.
  */
 // $php_cli_binary = '/usr/bin/php7.1';
+
+/**
+ * Path to mysqldump binary
+ *
+ * default: '/usr/bin/mysqldump'
+ */
+// $mysqldump_cli_binary = '/usr/bin/mysqldump';
