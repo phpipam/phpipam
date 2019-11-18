@@ -269,8 +269,8 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
 			# log and changelog
-			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successfull")."!", false);
-			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successfull!", 0);
+			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successful")."!", false);
+			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successful!", 0);
 
 			# send changelog mail
 			$Log->object_action = $action;

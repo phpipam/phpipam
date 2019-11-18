@@ -165,7 +165,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	            //success
 	            if(respStat == "success") {
 	            	$('ul.progressUl li.alert').addClass('alert-success');		//add success class
-	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successfull</strong>');	//add ok sign
+	            	$('ul.progressUl li.alert p').append('<br><strong>Upload successful</strong>');	//add ok sign
 	            }
 	            //error
 	            else {
