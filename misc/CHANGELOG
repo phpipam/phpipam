@@ -17,6 +17,7 @@
     + Add VLAN button not working (#2741);
     + Incorrect subnet links in /tools/vrf/ view. (#2774);
     + Location data missing in exports. (#2833);
+    + Check mysqldump path when exporting database;
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
