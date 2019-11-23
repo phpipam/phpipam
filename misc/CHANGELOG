@@ -25,6 +25,7 @@
     + Incorrect subnet links in /tools/vrf/ view. (#2774);
     + Location data missing in exports. (#2833);
     + Check mysqldump path when exporting database;
+    + Current rack position missing when editing a device. (#2545);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 
