@@ -545,7 +545,7 @@ $(document).ready(function() {
 	<td>
 		<select name="scanPingType" class="form-control input-sm input-w-auto">
 		<?php
-		$types = array("ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping");
+		$types = array("ping"=>"ping", "pear"=>"pear ping", "fping"=>"fping", "none"=>"none");
 		//default
 		foreach($types as $k=>$d) {
 			if($k==$settings['scanPingType']) 	{ print "<option value='$k' selected='selected'>$d</option>"; }
