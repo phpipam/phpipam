@@ -125,7 +125,7 @@ class Scan extends Common_functions {
 		# Log object
 		$this->Log = new Logging ($this->Database, $this->settings);
 
-		if ($errmsg = php_feature_missing(null, ['exec']))
+		if ($this->icmp_type != "none" && $errmsg = php_feature_missing(null, ['exec']))
 			$this->Result->show("danger", $errmsg, true);
 	}
 
@@ -136,7 +136,7 @@ class Scan extends Common_functions {
 	 * @return array
 	 */
 	public function ping_fetch_types () {
-		return array("ping", "pear", "fping");
+		return array("none","ping", "pear", "fping");
 	}
 
 	/**
@@ -243,6 +243,11 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address ($address, $count=1, $timeout = 1) {
+		
+		# when no ping is set, return directly
+		if($this->icmp_type == "none")
+			return;
+		
 		#set parameters
 		$this->icmp_timeout = $timeout;
 		$this->icmp_count = $count;
