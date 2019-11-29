@@ -73,5 +73,9 @@ $upgrade_queries["1.5.31"][] = 'ALTER TABLE `users` CHANGE `module_permissions` 
 $upgrade_queries["1.5.31"][] = "-- Clone users l2dom permissions from existing vlan permission level. MySQL5.7+";
 $upgrade_queries["1.5.31"][] = "UPDATE users SET module_permissions = JSON_SET(module_permissions,'$.l2dom', JSON_EXTRACT(module_permissions,'$.vlan')); -- IGNORE_ON_FAILURE"; // MySQL 5.7+
 
+// None-type on scantype
+// 
+$upgrade_queries["1.5.31"][] = "ALTER TABLE `settings` CHANGE `scanPingType` `scanPingType` SET('ping','pear','fping','none') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'ping';";
+
 $upgrade_queries["1.5.31"][] = "-- Database version bump";
 $upgrade_queries["1.5.31"][] = "UPDATE `settings` set `dbversion` = '31';";
