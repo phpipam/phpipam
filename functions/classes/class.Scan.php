@@ -114,16 +114,22 @@ class Scan extends Common_functions {
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
+
 		# fetch settings
-		$this->settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
+		$settings = is_null($this->settings) ? $this->get_settings() : (object) $this->settings;
+
+		$this->ping_type   = $settings->scanPingType;
+		$this->ping_path   = $settings->scanPingPath;
+		$this->fping_path  = $settings->scanFPingPath;
+
 		# set type
-		$this->reset_scan_method ($this->settings->scanPingType);
+		$this->reset_scan_method ($this->ping_type);
 		# set OS type
 		$this->set_os_type ();
 		# set php exec
 		$this->set_php_exec ();
 		# Log object
-		$this->Log = new Logging ($this->Database, $this->settings);
+		$this->Log = new Logging ($this->Database, $settings);
 
 		if ($errmsg = php_feature_missing(null, ['exec']))
 			$this->Result->show("danger", $errmsg, true);
@@ -268,17 +274,17 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	protected function ping_address_method_ping ($address) {
-		# verify ping path
-		$this->ping_verify_path ($this->settings->scanPingPath);
-
 		# if ipv6 append 6
-		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanPingPath = $this->settings->scanPingPath."6"; }
+		$ping_path = ($this->identify_address ($address)=="IPv6") ? $this->ping_path."6" : $this->ping_path;
+
+		# verify ping path
+		$this->ping_verify_path ($ping_path);
 
 		# set ping command based on OS type
-		if ($this->os_type == "FreeBSD")    { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Linux")   { $cmd = $this->settings->scanPingPath." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
-		elseif($this->os_type == "Windows")	{ $cmd = $this->settings->scanPingPath." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
-		else								{ $cmd = $this->settings->scanPingPath." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
+		if ($this->os_type == "FreeBSD")    { $cmd = $ping_path." -c $this->icmp_count -W ".($this->icmp_timeout*1000)." $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Linux")   { $cmd = $ping_path." -c $this->icmp_count -W $this->icmp_timeout $address 1>/dev/null 2>&1"; }
+		elseif($this->os_type == "Windows")	{ $cmd = $ping_path." -n $this->icmp_count -w ".($this->icmp_timeout*1000)." $address"; }
+		else								{ $cmd = $ping_path." -c $this->icmp_count -n $address 1>/dev/null 2>&1"; }
 
         # for IPv6 remove wait
         if ($this->identify_address ($address)=="IPv6") {
@@ -374,14 +380,14 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping ($address) {
-		# verify ping path
-		$this->ping_verify_path ($this->settings->scanFPingPath);
-
 		# if ipv6 append 6
-		if ($this->identify_address ($address)=="IPv6")	{ $this->settings->scanFPingPath = $this->settings->scanFPingPath."6"; }
+		$fping_path = ($this->identify_address ($address)=="IPv6") ? $this->fping_path."6" : $this->fping_path;
+
+		# verify ping path
+		$this->ping_verify_path ($fping_path);
 
 		# set command
-		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
+		$cmd = $fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -427,10 +433,14 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
+		# if ipv6 append 6
+		$fping_path = ($this->identify_address ($address)=="IPv6") ? $this->fping_path."6" : $this->fping_path;
+
 		# verify ping path
-		$this->ping_verify_path ($this->settings->scanFPingPath);
+		$this->ping_verify_path ($fping_path);
+
 		# set command
-		$cmd = $this->settings->scanFPingPath." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
+		$cmd = $fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
