@@ -31,16 +31,16 @@ else {
     // colspan
     $colspan = 7;
     // table
-    print "<table class='table sorted table-striped table-top table-td-top' data-cookie-id-table='rack_list'>";
+    print "<table class='table sorted sortable table-striped table-top table-td-top' data-sortable='true' data-cookie-id-table='rack_list'>";
     // headers
     print "<thead>";
     print "<tr>";
-    print " <th>"._('Peer name')."</th>";
-    print " <th>"._('Peer AS')."</th>";
-    print " <th>"._('Local AS')."</th>";
-    print " <th>"._('Peer address')."</th>";
-    print " <th>"._('Local address')."</th>";
-    print " <th>"._('BGP type')."</th>";
+    print " <th data-sortable='true'>"._('Peer name')."</th>";
+    print " <th data-sortable='true'>"._('Peer AS')."</th>";
+    print " <th data-sortable='true'>"._('Local AS')."</th>";
+    print " <th data-sortable='true'>"._('Peer address')."</th>";
+    print " <th data-sortable='true'>"._('Local address')."</th>";
+    print " <th data-sortable='true'>"._('BGP type')."</th>";
     print " <th>"._('Subnets')."</th>";
 	if(sizeof($custom_bgp) > 0) {
 		foreach($custom_bgp as $field) {
