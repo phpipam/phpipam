@@ -26,6 +26,8 @@ else {
         if($User->get_module_permissions ("routing")>=User::ACCESS_RWA) {
         print "<a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/routing/edit-bgp.php' data-class='700' data-action='add' data-bgpid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add peer')."</a>";
         }
+        print "<a href='app/admin/import-export/export-bgp.php' class='btn btn-sm btn-default' data-class='700' style='margin-bottom:10px;'><i class='fa fa-download'></i> "._('Export')."</a>";
+
     print "</div>";
 
     // colspan
