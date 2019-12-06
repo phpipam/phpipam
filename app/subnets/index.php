@@ -149,12 +149,11 @@ if ($User->settings->enableNAT==1) {
 	<!-- visual subnet display -->
 	<div class="col-xs-12">
 	<?php
-	if($Subnets->identify_address($subnet['subnet']) == "IPv4") {
-		if($User->settings->visualLimit > 0) {
-			if($User->settings->visualLimit <= $subnet['mask'] && !$slaves) {
+		if(!$slaves && $User->settings->visualLimit > 0) {
+			$max_visual_hosts_subnet = (object) ['subnet'=>'10.0.0.0', 'mask'=>$User->settings->visualLimit, 'isPool'=>true];
+			if($Subnets->max_hosts($subnet) <= $Subnets->max_hosts($max_visual_hosts_subnet)) {
 				include('subnet-visual.php');
 			}
-		}
 	}
 	?>
 	</div>

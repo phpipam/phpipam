@@ -1507,6 +1507,29 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * Fetches all possible subnet addresses
+	 *
+	 * @access private
+	 * @param $subnet		//subnet object
+	 * @return array		//array of ip addresses in decimal format
+	 */
+	public function get_all_possible_subnet_addresses ($subnet) {
+		$subnet = (object) $subnet;
+		$ips = [];
+
+		if (property_exists($subnet, 'subnet') && property_exists($subnet, 'mask') ) {
+			list($ip, $subnet_end) = $this->subnet_boundaries($subnet);
+
+			while (gmp_cmp($ip, $subnet_end)<= 0) {
+				$ips[] = $ip;
+				$ip = gmp_strval(gmp_add($ip, 1));
+			}
+		}
+
+		return $ips;
+	}
+
+	/**
 	* Get maximum number of hosts for subnet
 	*
 	* @param  mixed $subnet

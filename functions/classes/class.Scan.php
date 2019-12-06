@@ -718,12 +718,12 @@ class Scan extends Common_functions {
 		}
 
 		// we should support only up to 4094 hosts!
-		if($Subnets->max_hosts ($subnet)>4094 && php_sapi_name()!="cli")
-		if ($die)												{ die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4094 hosts!"))); }
+		if($Subnets->max_hosts ($subnet)>4096 && php_sapi_name()!="cli")
+		if ($die)												{ die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4096 hosts!"))); }
 		else													{ return array(); }
 
 		# set array of addresses to scan, exclude existing!
-		$ip = $this->get_all_possible_subnet_addresses ($subnet->subnet, $subnet->mask);
+		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
 
 		# remove existing
 		$ip = $this->remove_existing_subnet_addresses ($ip, $subnetId);
@@ -734,42 +734,6 @@ class Scan extends Common_functions {
 			else												{ return array(); }
 		}
 
-		//return
-		return $ip;
-	}
-
-	/**
-	 * Fetches all possible subnet addresses
-	 *
-	 * @access private
-	 * @param $subnet		//subnet in decimal format
-	 * @param int $mask		//subnet mask
-	 * @return void			//array of ip addresses in decimal format
-	 */
-	private function get_all_possible_subnet_addresses ($subnet, $mask) {
-		# initialize classes
-		$Subnets   = new Subnets ($this->Database);
-		# make sure we have proper subnet format
-		$subnet    = $Subnets->transform_address($subnet, "decimal");
-		//fetch start and stop addresses
-		$boundaries = (object) $Subnets->get_network_boundaries ($subnet, $mask);
-		//create array
-		if($mask==32) {
-			$ip[] = $Subnets->transform_to_decimal($boundaries->network);
-		}
-		elseif($mask==31) {
-			$ip[] = $Subnets->transform_to_decimal($boundaries->network);
-			$ip[] = $Subnets->transform_to_decimal($boundaries->broadcast);
-		}
-		else {
-			//set loop limits
-			$start = gmp_strval(gmp_add($Subnets->transform_to_decimal($boundaries->network),1));
-			$stop  = gmp_strval($Subnets->transform_to_decimal($boundaries->broadcast));
-			//loop
-			for($m=$start; $m<$stop; $m++) {
-				$ip[] = $m;
-			}
-		}
 		//return
 		return $ip;
 	}
@@ -810,10 +774,11 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function prepare_addresses_to_discover_subnet ($subnet) {
-		//set subnet / mask
-		$subnet_parsed = explode("/", $subnet);
+		# initialize classes
+		$Subnets   = new Subnets ($this->Database);
+
 		# result
-		$ip = $this->get_all_possible_subnet_addresses ($subnet_parsed[0], $subnet_parsed[1]);
+		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
 		//none to scan?
 		if(sizeof($ip)==0)									{ die(json_encode(array("status"=>1, "error"=>"Didn't find any address to scan!"))); }
 		//result
