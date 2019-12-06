@@ -380,14 +380,11 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping ($address) {
-		# if ipv6 append 6
-		$fping_path = ($this->identify_address ($address)=="IPv6") ? $this->fping_path."6" : $this->fping_path;
-
-		# verify ping path
-		$this->ping_verify_path ($fping_path);
+		$this->ping_verify_path ($this->fping_path);
 
 		# set command
-		$cmd = $fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
+		$type = ($this->identify_address ($address)=="IPv6") ? '--ipv6' : '--ipv4';
+		$cmd = $this->fping_path." $type -c $this->icmp_count -t ".($this->icmp_timeout*1000)." $address";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
@@ -433,14 +430,11 @@ class Scan extends Common_functions {
 	 * @return void
 	 */
 	public function ping_address_method_fping_subnet ($subnet_cidr, $return_result = false) {
-		# if ipv6 append 6
-		$fping_path = ($this->identify_address ($address)=="IPv6") ? $this->fping_path."6" : $this->fping_path;
-
-		# verify ping path
-		$this->ping_verify_path ($fping_path);
+		$this->ping_verify_path ($this->fping_path);
 
 		# set command
-		$cmd = $fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
+		$type = ($this->identify_address ($address)=="IPv6") ? '--ipv6' : '--ipv4';
+		$cmd = $this->fping_path." $type -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
