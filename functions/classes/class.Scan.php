@@ -131,7 +131,7 @@ class Scan extends Common_functions {
 		# Log object
 		$this->Log = new Logging ($this->Database, $settings);
 
-		if ($errmsg = php_feature_missing(null, ['exec']))
+		if ($this->icmp_type != "none" && $errmsg = php_feature_missing(null, ['exec']))
 			$this->Result->show("danger", $errmsg, true);
 	}
 
@@ -142,7 +142,7 @@ class Scan extends Common_functions {
 	 * @return array
 	 */
 	public function ping_fetch_types () {
-		return array("ping", "pear", "fping");
+		return ["none", "ping", "pear", "fping"];
 	}
 
 	/**
@@ -262,6 +262,17 @@ class Scan extends Common_functions {
 		$ping_method = "ping_address_method_".$this->icmp_type;
 		# ping with selected method
 		return $this->{$ping_method} ($address);
+	}
+
+	/**
+	 * Null Ping method - return "Scanning disabled" (1001)
+	 */
+	protected function ping_address_method_none($address) {
+		if($this->icmp_exit) {
+			exit(1001);
+		} else {
+			return 1001;
+		}
 	}
 
 	/**
@@ -521,7 +532,8 @@ class Scan extends Common_functions {
 		$explain_codes[75] = "EX_TEMPFAIL";
 		$explain_codes[77] = "EX_NOPERM";
 		$explain_codes[255] = "EX_NOT_SUPPORTED";
-		$explain_codes[1000] = "Invalid ping path";
+		$explain_codes[1000] = _("Invalid ping path");
+		$explain_codes[1001] = _("Scanning disabled");
 		# return codes
 		return $explain_codes;
 	}

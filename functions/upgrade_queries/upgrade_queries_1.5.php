@@ -75,3 +75,14 @@ $upgrade_queries["1.5.31"][] = "UPDATE users SET module_permissions = JSON_SET(m
 
 $upgrade_queries["1.5.31"][] = "-- Database version bump";
 $upgrade_queries["1.5.31"][] = "UPDATE `settings` set `dbversion` = '31';";
+
+// Fix SET/ENUM usage in settings table
+// Add 'none' scantype
+//
+$upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `scanPingType` `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping';";
+$upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `prettyLinks` `prettyLinks` ENUM('Yes','No') NOT NULL DEFAULT 'No';";
+$upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `log` `log` ENUM('Database','syslog', 'both') NOT NULL DEFAULT 'Database';";
+$upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `2fa_provider` `2fa_provider` ENUM('none','Google_Authenticator') NULL DEFAULT 'none';";
+
+$upgrade_queries["1.5.32"][] = "-- Database version bump";
+$upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";

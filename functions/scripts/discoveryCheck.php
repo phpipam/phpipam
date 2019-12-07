@@ -42,6 +42,10 @@ $Scan->set_debugging(false);
 // change scan type?
 if(@$config['discovery_check_method'])
 $Scan->reset_scan_method ($config['discovery_check_method']);
+
+# Check if scanning has been disabled
+if($Scan->icmp_type=="none") { $Result->show("danger", _('Scanning disabled').' (scanPingType=None)', true, true); }
+
 // set ping statuses
 $statuses = explode(";", $Scan->settings->pingStatus);
 // set mail override flag

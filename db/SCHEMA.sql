@@ -200,9 +200,9 @@ CREATE TABLE `settings` (
   `api` BINARY  NOT NULL  DEFAULT '0',
   `scanPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/ping',
   `scanFPingPath` VARCHAR(64)  NULL  DEFAULT '/bin/fping',
-  `scanPingType` SET('ping','pear','fping')  NOT NULL  DEFAULT 'ping',
+  `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping',
   `scanMaxThreads` INT(4)  NULL  DEFAULT '128',
-  `prettyLinks` SET("Yes","No")  NOT NULL  DEFAULT 'No',
+  `prettyLinks` ENUM('Yes','No') NOT NULL DEFAULT 'No',
   `hiddenCustomFields` text NULL,
   `inactivityTimeout` INT(5)  NOT NULL  DEFAULT '3600',
   `updateTags` TINYINT(1)  NULL  DEFAULT '0',
@@ -212,13 +212,13 @@ CREATE TABLE `settings` (
   `decodeMAC` TINYINT(1)  NULL  DEFAULT '1',
   `tempShare` TINYINT(1)  NULL  DEFAULT '0',
   `tempAccess` TEXT  NULL,
-  `log` SET('Database','syslog', 'both')  NOT NULL  DEFAULT 'Database',
+  `log` ENUM('Database','syslog', 'both') NOT NULL DEFAULT 'Database',
   `subnetView` TINYINT  NOT NULL  DEFAULT '0',
   `enableCircuits` TINYINT(1)  NULL  DEFAULT '1',
   `enableRouting` TINYINT(1)  NULL  DEFAULT '0',
   `permissionPropagate` TINYINT(1)  NULL  DEFAULT '1',
   `passwordPolicy` VARCHAR(1024)  NULL  DEFAULT '{\"minLength\":8,\"maxLength\":0,\"minNumbers\":0,\"minLetters\":0,\"minLowerCase\":0,\"minUpperCase\":0,\"minSymbols\":0,\"maxSymbols\":0,\"allowedSymbols\":\"#,_,-,!,[,],=,~\"}',
-  `2fa_provider` SET('none','Google_Authenticator')  NULL  DEFAULT 'none',
+  `2fa_provider` ENUM('none','Google_Authenticator') NULL DEFAULT 'none',
   `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
   `2fa_length` INT(2)  NULL  DEFAULT '16',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
@@ -999,4 +999,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 31;
+UPDATE `settings` SET `dbversion` = 32;
