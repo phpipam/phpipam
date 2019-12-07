@@ -5,6 +5,7 @@
     + Mark subnet as isPool to allocate network and broadcast addresses;
     + Optionally hide section subnet menus;
     + L2 Domains user permissions;
+    + Add scanPingType=="none" option to disable scanning;
 
     Bugfixes:
     ----------------------------
