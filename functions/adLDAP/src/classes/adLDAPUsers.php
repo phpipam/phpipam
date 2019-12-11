@@ -647,6 +647,22 @@ class adLDAPUsers {
         }
         return ($usersArray);
     }
+
+    /**
+     * Return a list of all entries at baseDn with filter applying
+     *
+     * @param string $baseDn
+     * @param string $filters
+     * @return array
+     */
+    public function search($baseDn, $filters) {
+        if (!$this->adldap->getLdapBind()) { return false; }
+
+        $sr = ldap_search($this->adldap->getLdapConnection(), $baseDn, $filters);
+        $entries = ldap_get_entries($this->adldap->getLdapConnection(), $sr);
+
+        return $entries;
+    }
     
     /**
     * Move a user account to a different OU
