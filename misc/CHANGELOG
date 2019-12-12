@@ -28,6 +28,7 @@
     + Check mysqldump path when exporting database;
     + Current rack position missing when editing a device. (#2545);
     + Permit colon in firewall zone interface names (#2737);
+    + Fixed PowerDNS txt SPF editing (#1641);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
 

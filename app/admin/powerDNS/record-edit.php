@@ -103,7 +103,7 @@ if (!isset($record)) {
 }
 
 // if IPv6 automaticall add AAAA record!
-if ($User->identify_address($record->content)=="IPv6") {
+if ($User->identify_address($record->content)=="IPv6" && $User->validate_ip($record->content)) {
     $record->type = "AAAA";
 }
 
@@ -156,8 +156,7 @@ $readonly = $_POST['action']=="delete" ? "readonly" : "";
 	<tr>
 		<td><?php print _('Content'); ?></td>
 		<td>
-			<input type="text" class="name form-control input-sm" name="content" placeholder="<?php print _('10.10.10.1'); ?>" value="<?php print $record->content; ?>" <?php print $readonly; ?>>
-
+			<input type="text" class="name form-control input-sm" name="content" placeholder="<?php print _('10.10.10.1'); ?>" value='<?php print $record->content; ?>' <?php print $readonly; ?>>
 		</td>
 	</tr>
 
