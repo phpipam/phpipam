@@ -50,7 +50,8 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 	}
 
 	# print box
-	if ($Subnets->identify_address($title) == "IPv6") {
+	$title = $Subnets->transform_to_dotted($m);
+	if ($Subnets->identify_address($m) == "IPv6") {
 		$shortname = substr(strrchr($title,':'), 1);
 	} else {
 		$shortname = '.'.substr(strrchr($title,'.'), 1);
