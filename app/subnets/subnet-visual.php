@@ -17,6 +17,9 @@ $alpha = ($User->user->theme == "dark") ? "50" : "";
 
 # print
 foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
+	$ip_addr = $Subnets->transform_to_dotted($m);
+	$title = $ip_addr;
+
 	# already exists
 	if (array_key_exists($m, $visual_addresses)) {
 
@@ -29,7 +32,6 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 		$id = (int) $visual_addresses[$m]['id'];
 
 		# tooltip
-		$title = $Subnets->transform_to_dotted($m);
 		if(strlen($visual_addresses[$m]['hostname'])>0)		{ $title .= "<br>".$visual_addresses[$m]['hostname']; }
 		if(strlen($visual_addresses[$m]['description'])>0)	{ $title .= "<br>".$visual_addresses[$m]['description']; }
 
@@ -42,7 +44,6 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 		$class = "unused";
 		$id = $m;
 		$action = 'all-add';
-		$title = $Subnets->transform_to_dotted($m);
 
 		# set colors
 		$background = "#ffffff";
@@ -50,12 +51,7 @@ foreach ($Subnets->get_all_possible_subnet_addresses($subnet) as $m) {
 	}
 
 	# print box
-	$title = $Subnets->transform_to_dotted($m);
-	if ($Subnets->identify_address($m) == "IPv6") {
-		$shortname = substr(strrchr($title,':'), 1);
-	} else {
-		$shortname = '.'.substr(strrchr($title,'.'), 1);
-	}
+	$shortname = ($Subnets->identify_address($m) == "IPv6") ? substr(strrchr($ip_addr,':'), 1) : '.'.substr(strrchr($ip_addr,'.'), 1);
 
 	if($subnet_permission > 1) 	{
 		print "<span class='ip-$class modIPaddr' 	style='background:$background;color:$foreground' data-action='$action' rel='tooltip' title='$title' data-position='top' data-html='true' data-subnetId='".$subnet['id']."' data-id='$id'>".$shortname."</span>";
