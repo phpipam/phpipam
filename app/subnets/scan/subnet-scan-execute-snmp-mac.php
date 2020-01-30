@@ -218,7 +218,7 @@ else {
 
 
 	//form
-	print "<form name='scan-snmp-mac-form' class='scan-snmp-mac-form'>";
+	print "<form name='snmp-mac-form' class='snmp-mac-form'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
 	// titles
