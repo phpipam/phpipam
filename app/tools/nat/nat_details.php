@@ -114,8 +114,9 @@ else {
         print " <td>".implode("<br>", $destinations)."</td>";
         print "</tr>";
         if($n->policy=="Yes") {
+        $ntype_p = $n->type=="source" ? "Destination" : "Source";
         print "<tr>";
-        print " <td colspan='3'><br>if "._("Destination address ")." is ".$n->policy_dst."</td>";
+        print " <td colspan='3'>if ".$ntype_p._(" address ")." is ".$n->policy_dst."</td>";
         print "</tr>";
         }
         print "</table>";
