@@ -856,8 +856,8 @@ class phpipamSNMP extends Common_functions {
      *                        -> 0-1-fe   >> 00:01:fe
      *                        -> 00 01 fe >> 00:01:fe
      * @access private
-     * @param mixed $mac
-     * @return void
+     * @param string $mac
+     * @return string
      */
     private function format_snmp_mac_value ($mac) {
         if (!is_string($mac))
@@ -867,22 +867,22 @@ class phpipamSNMP extends Common_functions {
 
         $separators = [':', '-', ' '];
 
+        $mac_parts = [];
         foreach ($separators as $separator) {
             if (strpos($mac, $separator)===false)
                 continue;
-            $mac = explode($separator, $mac);
+            $mac_parts = explode($separator, $mac);
             break;
         }
 
-        if (!is_array($mac) || sizeof($mac)!=6)
-            return '';
+        if (sizeof($mac_parts)!=6)
+            return $mac;
 
-        foreach ($mac as $i=>$v) {
-            $mac[$i] = str_pad($v, 2, "0", STR_PAD_LEFT);;
+        foreach ($mac_parts as $i=>$v) {
+            $mac_parts[$i] = str_pad($v, 2, "0", STR_PAD_LEFT);
         }
 
-        // return
-        return implode(":", $mac);
+        return implode(":", $mac_parts);
     }
 
     /**
