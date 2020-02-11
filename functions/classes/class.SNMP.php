@@ -587,7 +587,7 @@ class phpipamSNMP extends Common_functions {
         // parse MAC
         $n=0;
         foreach ($res2 as $r) {
-            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
+            $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
             // validate mac
             if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
             $n++;
@@ -650,7 +650,7 @@ class phpipamSNMP extends Common_functions {
         // parse MAC
         $n=0;
         foreach ($res1 as $r) {
-            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
+            $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
             // validate mac
             if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
             $n++;
@@ -710,7 +710,7 @@ class phpipamSNMP extends Common_functions {
         }
         $n=0;
         foreach ($res2 as $r) {
-            $res[$n]['mac'] = $this->fill_mac_nulls ($r);
+            $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
             // validate mac
             if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
             $n++;
@@ -851,23 +851,38 @@ class phpipamSNMP extends Common_functions {
         return isset($res) ? $res : false;
     }
 
-	/**
-	 * Fills mac with nulls -> 0:0:fe >> 00:00:fe
-	 *
-	 * @access private
-	 * @param mixed $mac
-	 * @return void
-	 */
-	private function fill_mac_nulls ($mac) {
-        //make sure MAC has all 0
-        $mac = explode(":", trim(substr($mac, strpos($mac, ":")+2)));
-        foreach ($mac as $km=>$mc) {
-            if (strlen($mc)==1) {
-                $mac[$km] = str_pad($mc, 2, "0", STR_PAD_LEFT);
-            }
+    /**
+     * Standardise SNMP MACs  -> 0:1:fe   >> 00:01:fe
+     *                        -> 0-1-fe   >> 00:01:fe
+     *                        -> 00 01 fe >> 00:01:fe
+     * @access private
+     * @param string $mac
+     * @return string
+     */
+    private function format_snmp_mac_value ($mac) {
+        if (!is_string($mac))
+            return '';
+
+        $mac = trim($mac);
+
+        $separators = [':', '-', ' '];
+
+        $mac_parts = [];
+        foreach ($separators as $separator) {
+            if (strpos($mac, $separator)===false)
+                continue;
+            $mac_parts = explode($separator, $mac);
+            break;
         }
-        // return
-        return implode(":", $mac);
+
+        if (sizeof($mac_parts)!=6)
+            return $mac;
+
+        foreach ($mac_parts as $i=>$v) {
+            $mac_parts[$i] = str_pad($v, 2, "0", STR_PAD_LEFT);
+        }
+
+        return implode(":", $mac_parts);
     }
 
     /**
