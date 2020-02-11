@@ -157,7 +157,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-        	<th><?php print _('Source objects'); ?></th>
+        	<th><?php print $nat->type=="destination" ? _('Destination objects') : _('Source objects'); ?></th>
         	<td class='nat-src'>
             	<?php
                 // print sources
@@ -194,7 +194,7 @@ $custom = $Tools->fetch_custom_fields('nat');
         	<td colspan="3"><hr></td>
     	</tr>
     	<tr>
-        	<th><?php print _('Destination objects'); ?></th>
+            <th><?php print _('Translated objects'); ?></th>
         	<td class='nat-dst'>
             	<?php
                 // print sources

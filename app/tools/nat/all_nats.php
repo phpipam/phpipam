@@ -53,7 +53,7 @@ else {
     print " <th></th>";
     print " <th></th>";
     if($policy_nat_found)
-    print " <th>"._('Policy DST IP')."</th>";
+    print " <th>"._('Policy SRC/DST IP')."</th>";
     print " <th>"._('Device')."</th>";
     print " <th>"._('Src Port')."</th>";
     print " <th>"._('Dst Port')."</th>";

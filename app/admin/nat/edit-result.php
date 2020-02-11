@@ -65,8 +65,8 @@ if ($User->get_module_permissions ("devices")==User::ACCESS_NONE) {
 }
 
 // policy NAT override
-if($_POST['action']=="edit" && $_POST['policy']=="Yes" && strlen($_POST['policy_dst'])>0) {
-    $values['policy']     = $_POST['policy'];
+if($_POST['action']=="edit" && strlen($_POST['policy_dst'])>0) {
+    $values['policy']     = "Yes";
     $values['policy_dst'] = $Tools->strip_input_tags($_POST['policy_dst']);
 }
 
