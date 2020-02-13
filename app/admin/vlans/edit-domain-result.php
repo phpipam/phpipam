@@ -32,6 +32,9 @@ $_POST = $Admin->strip_input_tags($_POST);
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "vlan_domain", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('vlanDomains');
+
 # we cannot delete default domain
 if(@$_POST['id']==1 && $_POST['action']=="delete")						{ $Result->show("danger", _("Default domain cannot be deleted"), true); }
 // ID must be numeric
@@ -64,6 +67,15 @@ $values = array(
 				"description" =>@$_POST['description'],
 				"permissions" =>@$_POST['permissions']
 				);
+
+# append custom
+if(sizeof($custom) > 0) {
+	foreach($custom as $myField) {
+		# replace possible ___ back to spaces!
+		$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
+		if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = @$_POST[$myField['nameTest']];}
+	}
+}
 
 # update domain
 if(!$Admin->object_modify("vlanDomains", $_POST['action'], "id", $values))	{}

@@ -13,6 +13,7 @@ $custom_tables = array(
 						"ipaddresses"      => "IP address",
 						"subnets"          => "subnet",
 						"vlans"            => "VLAN",
+						"vlanDomains"      => "L2 Domains",
 						"vrf"              => "VRF",
 						"users"            => "User",
 						"userGroups"       => "User Group",

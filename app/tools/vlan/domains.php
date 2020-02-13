@@ -25,6 +25,14 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Count'); ?></th>
 	<th><?php print _('Sections'); ?></th>
+	<?php if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print " <th>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			}
+		}
+	}
+	?>
 	<th></th>
 	<th></th>
 </tr>
@@ -37,6 +45,14 @@ $User->check_module_permissions ("vlan", User::ACCESS_R, true, false);
 	<td class='border-bottom'><?php print _('List of all VLANs in all domains'); ?></td>
 	<td class='border-bottom'></td>
 	<td class='border-bottom'><span class='text-muted'><?php print _('All sections'); ?></span></td>
+	<?php if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "<td class='border-bottom'></td>";
+			}
+		}
+	}
+	?>
 	<td class='border-bottom'><a class='btn btn-xs btn-default' href='<?php print create_link($_GET['page'], $_GET['section'], "all"); ?>'>Show VLANs</a></td>
 	<?php if($User->get_module_permissions ("vlan")>=User::ACCESS_RW) { ?><td class='border-bottom'></td><?php } ?>
 </tr>
@@ -76,6 +92,16 @@ foreach($vlan_domains as $domain) {
 	print "	<td>$domain->description</td>";
 	print "	<td>$cnt "._("VLANs")."</td>";
 	print "	<td><span class='text-muted'>$sections</span></td>";
+	if(sizeof(@$custom_fields) > 0) {
+		foreach($custom_fields as $field) {
+			if(!in_array($field['name'], $hidden_fields)) {
+				print "<td>";
+				$Tools->print_custom_field ($field['type'], $domain->$field['name']);
+				print "</td>";
+			}
+		}
+	}
+
 	print "	<td><a class='btn btn-xs btn-default' href='".create_link($_GET['page'], $_GET['section'], $domain->id)."'>Show VLANs</a></td>";
 
     // links
