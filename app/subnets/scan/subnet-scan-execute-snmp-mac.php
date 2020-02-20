@@ -159,18 +159,17 @@ foreach ($found_mac as $mac) {
 }
 
 // remove duplicates
-foreach ($found as $k1=>$f) {
-    foreach ($found as $k2=>$f1) {
-        if ($k1!=$k2) {
-            if ($f['mac']==$f1['mac'] && $f['device']==$f1['device']) {
-                unset($found[$k1]);
-            }
-        }
-    }
+$mac_lookup = [];
 
-    // remove Port-channel
-    if(strpos(strtolower($f['port']), "port-channel")!==false) {
-        unset($found[$k1]);
+foreach ($found as $k=>$f) {
+    $dev = $f['device'];
+    $mac = $f['mac'];
+
+    // remove duplicate macs on same device & Port-channels
+    if(isset($mac_lookup[$dev][$mac]) || stripos($f['port'], "port-channel")!==false) {
+        unset($found[$k]);
+    } else {
+        $mac_lookup[$dev][$mac] = 1;
     }
 }
 
