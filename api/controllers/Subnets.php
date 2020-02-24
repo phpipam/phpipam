@@ -752,8 +752,10 @@ class Subnets_controller extends Common_api_functions {
 
 		$subnet_gws = [];
 		$gateways = $this->Subnets->fetch_multiple_objects('ipaddresses', 'is_gateway', 1);
-		foreach($gateways as $gw) {
-			$subnet_gws[$gw->id][] = $this->transform_address ($gw);
+		if(defined($gateways)) {
+			foreach($gateways as $gw) {
+				$subnet_gws[$gw->id][] = $this->transform_address ($gw);
+			}
 		}
 
 		// add nameservers, GW, permission and location for each network found
