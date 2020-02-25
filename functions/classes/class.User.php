@@ -1512,10 +1512,8 @@ class User extends Common_functions {
      * @return void
      */
     private function log_failed_access($username) {
-        if (isset($_SERVER['SERVER_SOFTWARE']) && preg_match('/nginx/i', $_SERVER['SERVER_SOFTWARE'])) {
-            error_log('user "' . $username . '" was not found in "phpIPAM"', 4);
-        } else {
-            error_log('user "' . $username . '" authentication failure for "phpIPAM"', 4);
+        if (strlen(Config::ValueOf('failed_access_message'))) {
+            error_log(str_replace("%u", $username, Config::ValueOf('failed_access_message')), 4);
         }
     }
 
