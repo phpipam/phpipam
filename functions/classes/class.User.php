@@ -1506,7 +1506,7 @@ class User extends Common_functions {
     }
 
     /**
-     * log failed accesses, matching the default fail2ban nginx/apache auth rules
+     * log failed accesses, for further processing by tools like Fail2Ban
      *
      * @access private
      * @return void
