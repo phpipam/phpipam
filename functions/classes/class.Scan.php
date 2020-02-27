@@ -444,8 +444,7 @@ class Scan extends Common_functions {
 		$this->ping_verify_path ($this->fping_path);
 
 		# set command
-		$type = ($this->identify_address ($address)=="IPv6") ? '--ipv6' : '--ipv4';
-		$cmd = $this->fping_path." $type -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
+		$cmd = $this->fping_path." -c $this->icmp_count -t ".($this->icmp_timeout*1000)." -Ag $subnet_cidr";
 		# execute command, return $retval
 	    exec($cmd, $output, $retval);
 
