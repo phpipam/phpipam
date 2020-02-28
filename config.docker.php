@@ -59,3 +59,8 @@ getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
  * @var string
  */
 $session_storage = "database";
+
+/**
+ * Timezone from environment
+ */
+getenv('IPAM_TIMEZONE') ? date_default_timezone_set(getenv('IPAM_TIMEZONE')) : false;
