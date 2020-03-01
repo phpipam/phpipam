@@ -167,6 +167,14 @@ $proxy_pass     = 'PASSWORD';                             // Proxy Password
 $proxy_use_auth = false;                                  // Enable/Disable Proxy authentication
 
 /**
+ * Failed access
+ * message to log into webserver logs in case of failed access, for further processing by tools like Fail2Ban
+ * Apache users should use : user "%u" authentication failure for "phpIPAM"
+ * Nginx  users should use : user "%u" was not found in "phpIPAM"
+ ******************************/
+$failed_access_message = '';
+
+/**
  * General tweaks
  ******************************/
 $config['logo_width']             = 220;                    // logo width

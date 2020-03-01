@@ -805,17 +805,30 @@ class User extends Common_functions {
     private function fetch_user_details ($username, $force = false) {
         # only if not already active
         if(!is_object($this->user) || $force) {
-            try { $user = $this->Database->findObject("users", "username", $username); }
-            catch (Exception $e)     { $this->Result->show("danger", _("Error: ").$e->getMessage(), true);}
+            try {
+                $user = $this->Database->findObject("users", "username", $username);
+            }
+            catch (Exception $e) {
+                $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
+            }
 
             # if not result return false
             $usert = (array) $user;
 
             # admin?
-            if($user->role == "Administrator")    { $this->isadmin = true; }
+            if($user->role == "Administrator") {
+                $this->isadmin = true;
+            }
 
-            if(sizeof($usert)==0)    { $this->block_ip (); $this->Log->write ("User login", _('Invalid username'), 2, $username ); $this->Result->show("danger", _("Invalid username or password"), true);}
-            else                     { $this->user = $user; }
+            if(sizeof($usert)==0) {
+                $this->block_ip ();
+                $this->log_failed_access ($username);
+                $this->Log->write ("User login", _('Invalid username'), 2, $username );
+                $this->Result->show("danger", _("Invalid username or password"), true);
+            }
+            else {
+                $this->user = $user;
+            }
 
             // register permissions
             $this->register_user_module_permissions ();
@@ -907,6 +920,7 @@ class User extends Common_functions {
         else {
             # add blocked count
             $this->block_ip ();
+            $this->log_failed_access ($username);
 
             $this->Log->write( "User login", "Invalid username or password", 2, $username );
 
@@ -1034,6 +1048,7 @@ class User extends Common_functions {
             else {
                 # add blocked count
                 $this->block_ip();
+                $this->log_failed_access ($username);
                 $this->Log->write($method . " login", "User $username failed to authenticate against " . $method, 1, $username);
                 $this->Result->show("danger", _("Invalid username or password"), true);
 
@@ -1146,6 +1161,7 @@ class User extends Common_functions {
         else {
             # add blocked count
             $this->block_ip ();
+            $this->log_failed_access ($username);
             $this->Log->write( "Radius login", "Failed to authenticate user on radius server", 2, $username );
             $this->Result->show("danger", _("Invalid username or password"), true);
         }
@@ -1487,6 +1503,18 @@ class User extends Common_functions {
     private function block_remove_entry() {
         try { $this->Database->deleteRow("loginAttempts", "ip", $this->ip); }
         catch (Exception $e) { !$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false); }
+    }
+
+    /**
+     * log failed accesses, for further processing by tools like Fail2Ban
+     *
+     * @access private
+     * @return void
+     */
+    private function log_failed_access($username) {
+        if (strlen(Config::ValueOf('failed_access_message'))) {
+            error_log(str_replace("%u", $username, Config::ValueOf('failed_access_message')), 4);
+        }
     }
 
 
