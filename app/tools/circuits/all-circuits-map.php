@@ -13,7 +13,7 @@ $User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 # title
 if(isset($_GET['map_specific']) && $_GET['map_specific'] == 'true'){
     print "<h3>"._('Map of circuits')."</h3>";
-    $circuits_to_map = unserialize($_GET['circuits_to_map']);
+    $circuits_to_map = json_decode($_GET['circuits_to_map'], true);
 }else{
     print "<h3>"._('Map of all circuits')."</h3>";
 }
