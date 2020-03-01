@@ -1,7 +1,7 @@
 <?php
 
 # Check we have been included via subnet-scan-result.php and not called directly
-require("subnet-scan-check-included.php");
+require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
 /*
  * insert new hosts to database
