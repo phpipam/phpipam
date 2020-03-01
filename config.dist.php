@@ -172,7 +172,7 @@ $proxy_use_auth = false;                                  // Enable/Disable Prox
  * Apache users should use : user "%u" authentication failure for "phpIPAM"
  * Nginx  users should use : user "%u" was not found in "phpIPAM"
  ******************************/
-$failed_access_message = '';
+// $failed_access_message = '';
 
 /**
  * General tweaks

@@ -1512,9 +1512,13 @@ class User extends Common_functions {
      * @return void
      */
     private function log_failed_access($username) {
-        if (strlen(Config::ValueOf('failed_access_message'))) {
-            error_log(str_replace("%u", $username, Config::ValueOf('failed_access_message')), 4);
-        }
+        $log_msg = Config::ValueOf('failed_access_message');
+
+        if (!is_string($username) || !is_string($log_msg) || strlen($log_msg)<1)
+            return;
+
+        $log_msg = str_replace("%u", $username, $log_msg);
+        error_log($log_msg, 4);
     }
 
 
