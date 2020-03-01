@@ -1,6 +1,6 @@
 <?php
 
-# Check we have been included via subnet-scan-excute.php and not called directly
+# Check we have been included and not called directly
 require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 
 /*

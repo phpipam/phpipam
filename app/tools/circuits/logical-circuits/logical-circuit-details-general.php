@@ -1,5 +1,8 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
+
 # perm check
 $User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
 
@@ -24,7 +27,7 @@ print "<table class='ipaddress_subnet table-condensed table-auto'>";
 	print "	<th>". _('Comment').'</th>';
 	print "	<td>$logical_circuit->comments</td>";
 	print "</tr>";
-      
+
       /* Maybe put in a calculated cost value here */
 
 

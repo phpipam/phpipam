@@ -1,3 +1,8 @@
+<?php
+
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
+?>
 <script>
 /* fix for ajax-loading tooltips */
 $('body').tooltip({ selector: '[rel=tooltip]' });

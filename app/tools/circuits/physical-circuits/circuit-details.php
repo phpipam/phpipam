@@ -1,5 +1,8 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
+
 /**
  * Script to display circuit details
  */

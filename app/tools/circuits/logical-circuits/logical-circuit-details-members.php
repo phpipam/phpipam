@@ -1,5 +1,7 @@
 <?php
 
+# Check we have been included and not called directly
+require( dirname(__FILE__) . '/../../../../functions/include-only.php' );
 
 // title
 print "<h4>"._('Member Circuits')."</h4>";
