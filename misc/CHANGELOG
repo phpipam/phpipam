@@ -34,6 +34,7 @@
     + Permit colon in firewall zone interface names (#2737);
     + Fixed PowerDNS txt SPF editing (#1641);
     + Blank 'MAC' on SNMP-ARP and SNMP-MAC scans (#2911);
+    + Incorrect network/broadcast calculation for IPv6 (#2879);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);

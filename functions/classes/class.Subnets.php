@@ -1474,17 +1474,14 @@ class Subnets extends Common_functions {
 	public function has_network_broadcast($subnet) {
 		$subnet = (object) $subnet;
 
-		# Address/NAT pools
-		if ($subnet->isPool)
-			return false;
-
-		# IPv4/IPv6 networks
 		$type = $this->identify_address($subnet->subnet);
 
-		if (($type == 'IPv4' && $subnet->mask<31) || ($type == 'IPv6' && $subnet->mask<127))
-			return true;
-		else
+		# Address/NAT pools & IPv6
+		if ($subnet->isPool || $type == 'IPv6')
 			return false;
+
+		# IPv4, handle /32 & /31
+		return ($subnet->mask<31) ? true : false;
 	}
 
 	/**
@@ -1730,7 +1727,7 @@ class Subnets extends Common_functions {
 
 		$type = ($subnet->subnet <= 4294967295) ? 'IPv4' : 'IPv6';
 
-		if (($type=="IPv4" && $subnet->mask>=31) || ($type=="IPv6" && $subnet->mask>=127))
+		if (($type=="IPv4" && $subnet->mask>=31) || $type=="IPv6")
 			return false;
 
 		$network   = $this->decimal_network_address($subnet->subnet, $subnet->mask);
