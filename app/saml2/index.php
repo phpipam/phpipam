@@ -83,7 +83,17 @@ else{
 	}
 
 	// try to authenticate in phpipam
-	$User->authenticate ( $auth->getNameId(), '', true);
+        if((defined('SAML_USERNAME_FROM_ATTR')) && (SAML_USERNAME_FROM_ATTR !== false))
+	{
+	    // the username comes from an attribute in the assertion
+	    $attributes = $auth->getAttributes();
+	    $User->authenticate ( $attributes[SAML_USERNAME_FROM_ATTR][0], '', true);
+	}
+	else
+	{
+	    // just use the nameID as username
+	    $User->authenticate ( $auth->getNameId(), '', true);
+	}
 
 	// Redirect user where he came from, if unknown go to dashboard.
 	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }

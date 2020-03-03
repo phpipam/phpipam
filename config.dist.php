@@ -140,6 +140,9 @@ define('MAP_SAML_USER', true);    // Enable SAML username mapping
 if(!defined('SAML_USERNAME'))
 define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
 
+if(!defined('SAML_USERNAME_FROM_ATTR')) // Fetch username from an attr
+define('SAML_USERNAME_FROM_ATTR', false);  // just use the nameID
+//define('SAML_USERNAME_FROM_ATTR', 'urn:oid:0.9.2342.19200300.100.1.1'); // pick another single-valued attr; this is uid
 
 /**
  * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
