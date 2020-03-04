@@ -80,10 +80,6 @@ else {
     	$subnet_old_details['location']         = @$subnet_old_temp['location'];          // inherit location
         if($User->settings->enableCustomers=="1")
         $subnet_old_details['customer_id']         = @$subnet_old_temp['customer_id'];          // inherit location
-    	if($User->settings->enablePowerDNS=="1")
-    	$subnet_old_details['DNSrecursive']     = @$subnet_old_temp['DNSrecursive'];      // inherit DNSrecursive
-    	if($User->settings->enablePowerDNS=="1")
-    	$subnet_old_details['DNSrecords']     = @$subnet_old_temp['DNSrecords'];          // inherit DNSrecords
 	}
 	# set master if it came from free space!
 	if(isset($_POST['freespaceMSID'])) {
