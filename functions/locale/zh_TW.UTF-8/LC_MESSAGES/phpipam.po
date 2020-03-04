@@ -8063,9 +8063,6 @@ msgstr "一般"
 msgid "Firewall address object"
 msgstr "防火牆位址物件"
 
-msgid "Avalibility"
-msgstr "可用性"
-
 msgid "DNS info"
 msgstr "DNS 資訊"
 

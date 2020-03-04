@@ -9427,10 +9427,6 @@ msgstr "一般"
 msgid "Firewall address object"
 msgstr "ファイアウォールアドレスオブジェクトで並べ替え"
 
-#: /var/www/phpipam/app/subnets/addresses/address-details/address-details.php:191
-msgid "Avalibility"
-msgstr "可用性"
-
 #: /var/www/phpipam/app/subnets/addresses/address-details/address-details.php:217
 msgid "DNS info"
 msgstr "DNS名"

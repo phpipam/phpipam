@@ -7426,9 +7426,6 @@ msgstr "Permessi indirizzo"
 msgid "General"
 msgstr "Generale"
 
-msgid "Avalibility"
-msgstr "Disponibilit&agrave;"
-
 msgid "Rack details"
 msgstr "Dettagli rack"
 

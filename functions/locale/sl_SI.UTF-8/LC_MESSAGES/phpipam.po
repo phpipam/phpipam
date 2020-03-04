@@ -7445,9 +7445,6 @@ msgstr "Pravice IP naslova"
 msgid "General"
 msgstr "Splošni"
 
-msgid "Avalibility"
-msgstr "Razpoložljivost"
-
 msgid "Rack details"
 msgstr "Podatki o str. omari"
 

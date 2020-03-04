@@ -201,7 +201,7 @@ if(sizeof($address)>1) {
 
 
     	# availability
-        print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Avalibility')."</h4></tr>";
+        print "<tr><td colspan='2'><h4 style='padding-top:20px;'>"._('Availability')."</h4></tr>";
     	print "<tr>";
 
     	# calculate
