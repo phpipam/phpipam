@@ -272,7 +272,7 @@ else {
                     // search for hostname records
 					$records = $PowerDNS->search_records ("name", $addresses[$n]->hostname, 'name', true);
 					$ptr	 = $PowerDNS->fetch_record ($addresses[$n]->PTR);
-					$ptr_name = $PowerDNS->get_ip_ptr_name($Tools->long2ip4($addresses[$n]->ip_addr));
+					$ptr_name = $PowerDNS->get_ip_ptr_name($Tools->transform_to_dotted($addresses[$n]->ip_addr));
 					if(! $ptr || $ptr_name != $ptr->name) {
 					        $ptr = $PowerDNS->search_records("name", $ptr_name);
 					        if($ptr) {
