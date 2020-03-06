@@ -1890,8 +1890,8 @@ class Tools extends Common_functions {
         $minIp = $Subnets->decimal_network_address($longIp, $mask);
         $maxIp = $Subnets->decimal_broadcast_address($longIp, $mask);
 
-        $out['Min host IP']               = $this->long2ip6 ($minIp);
-        $out['Max host IP']               = $this->long2ip6 ($maxIp);
+        $out['Min host IP']               = $this->transform_to_dotted ($minIp);
+        $out['Max host IP']               = $this->transform_to_dotted ($maxIp);
         $out['Number of hosts']           = $Subnets->max_hosts(['subnet'=>$subnet, 'mask'=>$mask]);
 
         # set address type

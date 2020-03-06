@@ -1150,11 +1150,11 @@ class Common_functions  {
 	/**
 	 * Transforms int to ipv4
 	 *
-	 * @access public
+	 * @access private
 	 * @param mixed $ipv4long
 	 * @return mixed
 	 */
-	public function long2ip4($ipv4long) {
+	private function long2ip4($ipv4long) {
 		if (PHP_INT_SIZE==4) {
 			// As of php7.1 long2ip() no longer accepts strings.
 			// Convert unsigned int IPv4 to signed integer.
@@ -1166,11 +1166,11 @@ class Common_functions  {
 	/**
 	 * Transforms int to ipv6
 	 *
-	 * @access public
+	 * @access private
 	 * @param mixed $ipv6long
 	 * @return mixed
 	 */
-	public function long2ip6($ipv6long) {
+	private function long2ip6($ipv6long) {
 		$hex = sprintf('%032s', gmp_strval(gmp_init($ipv6long, 10), 16));
 		$ipv6 = implode(':', str_split($hex, 4));
 		// compress result
