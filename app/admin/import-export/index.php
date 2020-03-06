@@ -44,7 +44,7 @@ $(document).on('change', "select#dataType", function() {
 		<td class="info2"><?php print _('Not all options are available currently.'); ?></td>
 	</tr>
 	<tr>
-		<td>Action</td>
+		<td><?php print _("Action")?></td>
 		<td colspan="2">
 			<div class="btn-group">
 				<button class='dataImport btn btn-sm btn-default' rel='tooltip' data-placement='bottom' title='<?php print _('Import data entries for the selected type'); ?>'><i class='fa fa-download'></i> <?php print _('Import'); ?></button>
