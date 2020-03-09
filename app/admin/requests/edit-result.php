@@ -77,6 +77,29 @@ else {
 					"port"        =>@$_POST['port'],
 					"note"        =>@$_POST['note']
 					);
+
+	// custom fields
+	if(sizeof($custom) > 0) {
+		foreach($custom as $myField) {
+
+			//replace possible ___ back to spaces
+			$myField['nameTest'] = str_replace(" ", "___", $myField['name']);
+			if(isset($_POST[$myField['nameTest']])) { $_POST[$myField['name']] = $_POST[$myField['nameTest']];}
+
+			//booleans can be only 0 and 1!
+			if($myField['type']=="tinyint(1)") {
+				if($_POST[$myField['name']]>1) {
+					$_POST[$myField['name']] = 0;
+				}
+			}
+			//not null!
+			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+
+			# save to update array
+			$values[$myField['name']] = $_POST[$myField['name']];
+		}
+ 	}
+
 	if(!$Addresses->modify_address($values))	{ $Result->show("danger",  _("Failed to create IP address"), true); }
 
 	//accept message
