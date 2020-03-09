@@ -10,6 +10,9 @@ $User->check_user_session();
 # fetch all Active requests
 $active_requests   = $Tools->fetch_multiple_objects ("requests", "processed", 0, "id", false);
 $inactive_requests = $Tools->fetch_multiple_objects ("requests", "processed", 1, "id", false);
+# set hidden custom fields
+$hidden_cfields = json_decode($User->settings->hiddenCustomFields, true);
+$hidden_cfields = is_array($hidden_cfields['requests']) ? $hidden_cfields['requests'] : array();
 ?>
 
 <h4><?php print _('List of all active IP addresses requests'); ?></h4>
@@ -32,6 +35,27 @@ else {
 	<th><?php print _('Description'); ?></th>
 	<th><?php print _('Requested by'); ?></th>
 	<th><?php print _('Comment'); ?></th>
+	<!-- Custom fields -->
+	<?php
+	$custom_fields = $Tools->fetch_custom_fields('requests');	
+	# hidden custom
+	if(sizeof($custom_fields) > 0) {
+		foreach($custom_fields as $ck=>$myField) 	{
+			if(in_array($myField['name'], $hidden_cfields)) {
+				unset($custom_fields[$ck]);
+			}
+		}
+	}
+	# print custom field
+	if(sizeof($custom_fields) > 0) {
+		foreach ($custom_fields as $field) {
+			print "<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+			if(!in_array($myField['name'], $hidden_cfields)) 	{
+				print '<td>'.ucwords($Tools->print_custom_field_name ($field['name'])).'</td>';
+			}
+		}
+	}
+	?>
 </tr>
 </thead>
 
@@ -59,6 +83,12 @@ else {
 			print '	<td>'. $request['description'] .'</td>'. "\n";
 			print '	<td>'. $request['requester'] .'</td>'. "\n";
 			print '	<td>'. $request['comment'] .'</td>'. "\n";
+			// custom fields
+			if(sizeof($custom_fields) > 0) {
+				foreach ($custom_fields as $field) {
+					print '<td>'.$request[$field['name']] .'</td>';
+				}
+			}
 			print '</tr>'. "\n";
 		}
 	}
