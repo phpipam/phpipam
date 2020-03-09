@@ -131,6 +131,13 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 			<input type="text" name="description" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['description']); ?>" size="30" placeholder="<?php print _('Enter IP description'); ?>">
 		</td>
 	</tr>
+	<!-- MAC Address -->
+	<tr>
+		<th><?php print _('MAC Address'); ?></th>
+		<td>
+			<input type="text" name="mac" class="form-control input-sm" value="<?php print $Tools->strip_xss(@$request['mac']); ?>" size="30" placeholder="<?php print _('Enter MAC Address'); ?>">
+		</td>
+	</tr>
 	<!-- DNS name -->
 	<tr>
 		<th><?php print _('Hostname'); ?></th>
@@ -220,7 +227,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 		# all my fields
 		foreach($custom_fields as $field) {
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $details, $_POST['action'], $timepicker_index);
+    		$custom_input = $Tools->create_custom_field_input ($field, $request, $_POST['action'], $timepicker_index);
     		// add datepicker index
     		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
             // print
