@@ -788,7 +788,7 @@ class Common_api_functions {
 		// loop
 		foreach($this->keys as $k=>$v) {
 			// match
-			if(array_key_exists($v, $this->_params)) {
+			if(property_exists($this->_params, $v)) {
 				// replace
 				$this->_params->{$k} = $this->_params->{$v};
 				// remove
