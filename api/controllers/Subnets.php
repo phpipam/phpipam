@@ -140,8 +140,15 @@ class Subnets_controller extends Common_api_functions {
 		if(!isset($this->_params->isFolder)) { $this->_params->isFolder = "0"; }
 		elseif($this->_params->isFolder==1)	 { unset($this->_params->subnet, $this->_params->mask); }
 
-		if     ($this->_params->id2=="first_subnet") { $this->post_find_free_subnet(Subnets::SEARCH_FIND_FIRST); }
-		elseif ($this->_params->id2=="last_subnet")  { $this->post_find_free_subnet(Subnets::SEARCH_FIND_LAST); }
+		if ($this->_params->id2=="first_subnet" || $this->_params->id2=="last_subnet") {
+			$this->validate_subnet_id ();
+
+			// Obtain exclusive MySQL lock so parallel API requests on the same object are thread safe.
+			$Lock = new LockForUpdate($this->Database, 'subnets', $this->_params->id);
+
+			$direction = ($this->_params->id2=="first_subnet") ? Subnets::SEARCH_FIND_FIRST : Subnets::SEARCH_FIND_LAST;
+			$this->post_find_free_subnet($direction);
+		}
 
 		# validate parameters
         $this->validate_create_parameters ();

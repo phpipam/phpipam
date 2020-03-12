@@ -38,6 +38,7 @@
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
+        + Addresses first_free & Subnets first/last_subnet thread safety (#2960);
 
     Security Fixes:
     ----------------------------
