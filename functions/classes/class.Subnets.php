@@ -1914,7 +1914,7 @@ class Subnets extends Common_functions {
 
 			while (gmp_cmp($candidate_start, $range['start']) >= 0) {
 				if ($count > 0 && ++$discovered > $count) {
-					return array (subnets => $subnets, truncated => true);
+					return array ('subnets' => $subnets, 'truncated' => true);
 				}
 				$subnets[] = $this->transform_to_dotted(gmp_strval($candidate_start)) . '/' . $mask;
 
