@@ -423,7 +423,8 @@ else {
 					"nameserverId" =>$_POST['nameserverId'],
 					"scanAgent"    =>@$_POST['scanAgent'],
 					"device"       =>$_POST['device'],
-					"isFull"       =>$_POST['isFull']
+					"isFull"       =>$Admin->verify_checkbox($_POST['isFull']),
+					"isPool"       =>$Admin->verify_checkbox($_POST['isPool'])
 					);
         # optional values
         if(isset($_POST['allowRequests']))  $values['allowRequests']  = $Admin->verify_checkbox(@$_POST['allowRequests']);
@@ -432,7 +433,7 @@ else {
         if(isset($_POST['pingSubnet']))     $values['pingSubnet']     = $Admin->verify_checkbox(@$_POST['pingSubnet']);
 
         # propagate changes
-		if(sizeof($Subnets->slaves)>0) {
+		if(is_array($Subnets->slaves) && sizeof($Subnets->slaves)>0) {
 			foreach($Subnets->slaves as $slaveId) {
 				 $Admin->object_modify ("subnets", "edit", "id", array_merge(array("id"=>$slaveId), $values));
 			}
