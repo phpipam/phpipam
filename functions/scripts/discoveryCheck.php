@@ -151,9 +151,11 @@ if($Scan->icmp_type=="fping") {
 					$child_response = unserialize( $child_response );
 					//store
 					$scan_subnets[$index]->discovered = $child_response;
-					//now, child is dead, and parent close the pipe
-					unlink( $child_pipe );
-					unset($threads[$index]);
+					if ( ! $thread->isAlive() ) {
+						//now, child is dead, and parent close the pipe
+						unlink( $child_pipe );
+						unset($threads[$index]);
+					}
 				}
 			}
 	        usleep(200000);
