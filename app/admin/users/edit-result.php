@@ -113,7 +113,10 @@ $values = array(
 				"mailNotify"     =>$_POST['mailNotify'],
 				"mailChangelog"  =>$_POST['mailChangelog'],
 				"theme"          =>$_POST['theme']=="default" ? "" : $_POST['theme'],
-				"disabled"       =>$_POST['disabled']=="Yes" ? "Yes" : "No"
+				"disabled"       =>$_POST['disabled']=="Yes" ? "Yes" : "No",
+				"telegramId"     => isset($_POST['telegramId']) ? intval($_POST['telegramId']) : null,
+				"telegramNotify" => isset($_POST['telegramNotify']) && $_POST['telegramNotify']=="Yes" ? "Yes" : "No",
+				"telegramChangelog" => isset($_POST['telegramChangelog']) && $_POST['telegramChangelog']=="Yes" ? "Yes" : "No"
 				);
 
 

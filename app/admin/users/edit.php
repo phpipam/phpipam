@@ -266,11 +266,37 @@ $(document).ready(function(){
         </td>
         <td class="info2"><?php print _('Select yes to receive notification change mail for changelog'); ?></td>
 	</tr>
+
+
+        <!-- Telegram User Id -->
+        <tr>
+            <td><?php print _('Telegram User Id'); ?></td>
+            <td><input type="text" class="form-control input-sm" name="telegramId" value="<?php print isset($user['telegramId']) ? $user['telegramId'] : ''; ?>"></td>
+            <td class="info2"><?php print _('Enter telegram User Id'); ?></td>
+        </tr>
+	
+        <tr>
+            <td><?php print _('Telegram State changes'); ?></td>
+            <td>
+                <select name="telegramNotify" class="form-control input-sm input-w-auto">
+                    <option value="No"><?php print _('No'); ?></option>
+                    <option value="Yes" <?php if (isset($user['telegramNotify']) && $user['telegramNotify'] == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+                </select>
+            </td>
+            <td class="info2"><?php print _('Select yes to receive notification change telegram for State change'); ?></td>
+	</tr>
+        
+	<tr>
+            <td><?php print _('Telegram Changelog'); ?></td>
+            <td>
+                <select name="telegramChangelog" class="form-control input-sm input-w-auto">
+                    <option value="No"><?php print _('No'); ?></option>
+                    <option value="Yes" <?php if (isset($user['telegramChangelog']) && $user['telegramChangelog'] == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+                </select>
+            </td>
+            <td class="info2"><?php print _('Select yes to receive notification change telegram for changelog'); ?></td>
+        </tr>
 	</tbody>
-
-
-
-
 
 	<!-- groups -->
 	<?php

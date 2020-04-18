@@ -34,7 +34,8 @@ $custom_fields = $Tools->fetch_custom_fields('users');
 		"modules"        => "Module permissions",
 		"authentication" => "Authentication",
 		"display"        => "Display settings",
-		"mail"           => "Mail settings"
+		"mail"           => "Mail settings",
+                "telegram"       => "Telegram settings"
 	];
 
 	// default tab
