@@ -394,6 +394,47 @@ class Common_functions  {
         }
 	}
 
+	/**
+	 * Get all admins that are set to receive changelog by Telegram
+	 *
+	 * @access public
+	 * @param bool|mixed $subnetId
+	 * @return bool|array
+	 */
+	public function changelog_telegram_get_recipients ($subnetId = false) {
+            // fetch all users with telegramNotify
+            $notification_users = $this->fetch_multiple_objects ("users", "telegramChangelog", "Yes", "id", true);
+            // recipients array
+            $recipients = array();
+            // any ?
+            if (is_array($notification_users)) {
+                if(sizeof($notification_users)>0) {
+                    foreach ($notification_users as $u) {
+                        if ($u->telegramId) {
+                            // if subnetId is set check who has permissions
+                            if (isset($subnetId)) {
+                                // inti object
+                                $Subnets = new Subnets ($this->Database);
+                                //check permissions
+                                $subnet_permission = $Subnets->check_permission($u, $subnetId);
+                                // if 3 than add
+                                if ($subnet_permission==3) {
+                                    $recipients[] = $u;
+                                }
+                            } elseif($u->role=="Administrator") {
+                                $recipients[] = $u;
+                            }
+                        }
+                    }
+                }
+
+                return sizeof($recipients)>0 ? $recipients : false;
+            }
+            else {
+                return false;
+            }
+	}
+
 
 
 
@@ -2104,4 +2145,33 @@ class Common_functions  {
 	    // result
 	    return implode("\n", $html);
 	}
+        
+	/**
+	 * Send Telegram message
+	 *
+	 * @method sendTelegramMessage
+	 * @param  int $telegramUserId
+	 * @param  string $text
+	 * @return bool
+	 */
+        protected function sendTelegramMessage($telegramUserId, $text)
+        {
+            try {
+                file_get_contents(
+                    "https://api.telegram.org/bot{$this->settings->telegramBotCode}/sendMessage", 
+                    false, 
+                    stream_context_create(
+                        array(
+                            'http' => array(
+                                'method' => 'POST', 
+                                'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL, 
+                                'content' => http_build_query(array('chat_id' => $telegramUserId, 'text' => $text, 'parse_mode' => 'Markdown'))
+                            )
+                        )
+                    )
+                );
+            } catch(Exception $e) { /** do nothing, maybe user stop the bot **/ }  
+
+            return true;
+        }
 }

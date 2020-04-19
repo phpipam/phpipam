@@ -121,12 +121,12 @@ class Logging extends Common_functions {
 	public $object_result;
 
 	/**
-	 * mail_changelog
+	 * send_changelog
 	 *
 	 * @var mixed
 	 * @access public
 	 */
-	public $mail_changelog;
+	public $send_changelog;
 
 	/**
 	 * log_username
@@ -688,15 +688,15 @@ class Logging extends Common_functions {
 	 * @param string $result
 	 * @param array $old (default: array())
 	 * @param array $new (default: array())
-	 * @param bool $mail_changelog (default: true)
+	 * @param bool $send_changelog (default: true)
 	 * @return boolean|null
 	 */
-	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array(), $mail_changelog = true) {
+	public function write_changelog ($object_type, $action, $result, $old = array(), $new = array(), $send_changelog = true) {
 		//set values
 		$this->object_type 	  = $object_type;
 		$this->object_action  = $action;
 		$this->object_result  = $result;
-		$this->mail_changelog = $mail_changelog;
+		$this->send_changelog = $send_changelog;
 		//cast diff objects as array
 		$this->object_old = (array) $old;		// new object
 		$this->object_new = (array) $new;		// old object
@@ -833,9 +833,12 @@ class Logging extends Common_functions {
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
-		# mail
-		if ($this->mail_changelog && strlen($changelog)>0) {
-			$this->changelog_send_mail ($changelog);
+		
+		if ($this->send_changelog && strlen($changelog)>0) {
+                    # mail
+                    $this->changelog_send_mail ($changelog);
+                    # telegram
+                    $this->changelog_send_telegram ($changelog);
 		}
 		# ok
 		return true;
@@ -1734,6 +1737,108 @@ class Logging extends Common_functions {
 
 
 
+	/**
+	 * Send Telegram message on new changelog
+	 *
+	 * @access public
+	 * @param string $changelog
+	 * @return boolean
+	 */
+	public function changelog_send_telegram ($changelog) {
+            # initialize tools class
+            if (!is_object($this->Tools)) $this->Tools = new Tools ($this->Database);
+
+            # set object
+            $obj_details = $this->object_action == "add" ? $this->object_new : $this->object_old;
+
+            # change ip_addr
+            $this->object_type = str_replace("ip_addr", "address", $this->object_type);
+            $this->object_type = str_replace("ip_range", "address range", $this->object_type);
+
+            # folder
+            if ( $this->object_new['isFolder']=="1" || $this->object_old['isFolder']=="1" )	{ $this->object_type = "folder"; }
+
+            # set subject
+            $subject = "";
+            if($this->object_action == "add") 		{ $subject = ucwords($this->object_type)." create notification"; }
+            elseif($this->object_action == "edit") 	{ $subject = ucwords($this->object_type)." change notification"; }
+            elseif($this->object_action == "delete")    { $subject = ucwords($this->object_type)." delete notification"; }
+
+            // if address we need subnet details !
+            $address_subnet = array();
+            if ($this->object_type=="address")		{ $address_subnet = (array) $this->Tools->fetch_object("subnets", "id", $obj_details['subnetId']); }
+
+            # set object details
+            $details = "";
+            if ($this->object_type=="section") 		{ $details = ($this->object_action == "delete" ? "" : "[") . "{$obj_details['name']} ({$obj_details['description']}) - id {$obj_details['id']}" . ($this->object_action == "delete" ? "" : "](".$this->createURL().create_link("subnets",$obj_details['id']).")"); }
+            elseif ($this->object_type=="subnet")	{ $details = ($this->object_action == "delete" ? "" : "[") . "{$this->Subnets->transform_address ($obj_details['subnet'], "dotted")}/{$obj_details['mask']} ({$obj_details['description']}) - id {$obj_details['id']}" . ($this->object_action == "delete" ? "" : "](".$this->createURL().create_link("subnets",$this->object_orig['sectionId'],$obj_details['id']).")"); }
+            elseif ($this->object_type=="folder")	{ $details = ($this->object_action == "delete" ? "" : "[") . "{$obj_details['description']} - id {$obj_details['id']}" . ($this->object_action == "delete" ? "" : "](".$this->createURL().create_link("folder",$this->object_orig['sectionId'],$obj_details['id']).")"); }
+            elseif ($this->object_type=="address")	{ $details = ($this->object_action == "delete" ? "" : "[") . "{$this->Subnets->transform_address ($obj_details['ip_addr'], "dotted")} ( hostname {$obj_details['hostname']}, subnet: {$this->Subnets->transform_address ($address_subnet['subnet'], "dotted")}/{$address_subnet['mask']})- id {$obj_details['id']}" . ($this->object_action == "delete" ? "" : "](".$this->createURL().create_link("subnets",$this->object_orig['section'],$this->object_orig['subnetId'],"address-details",$this->object_orig['id']).")"); }
+            elseif ($this->object_type=="address range")	{ $details = $changelog; }
+
+            # remove subnet sectionId
+            if($this->object_type=="subnet" && $this->object_action == "edit") {
+                unset($obj_details['sectionId']);
+            }
+            
+            // add changelog
+            $changelog = str_replace("\r\n", "<br>",$changelog);
+            $changelog = array_filter(explode("<br>", $changelog));
+
+            # set plain content
+            $content_plain = array();
+            $content_plain[] = "Object type: ".$this->object_type;
+            $content_plain[] = "Object details: ".$details;
+            $content_plain[] = "User: ".$this->user->real_name." (".$this->user->username.")";
+            $content_plain[] = "Action: ".$this->object_action;
+            $content_plain[] = "Date: ".date("Y-m-d H:i:s");
+            $content_plain[] = "\r\n--------------------\r\n";
+            $content_plain[] = implode("\r\n", (array) $changelog);
+
+
+            # get all admins and check who to end mail to
+            //subnets, addresses - send mail to normal users also
+            if ($this->object_type=="subnet" || $this->object_type=="address") {
+                if($this->object_type=="subnet") {
+                    $recipients = $this->changelog_telegram_get_recipients ($obj_details['id']);
+                }
+                else {
+                    $recipients = $this->changelog_telegram_get_recipients ($obj_details['subnetId']);
+                }
+            } else {
+                $recipients = $this->changelog_telegram_get_recipients (false);
+            }
+            
+            if($recipients ===false) {
+                return true;
+            }
+
+            # try to send
+            $content_plain = "*{$subject}*\r\n\r\n".implode("\r\n",$content_plain);
+
+            //$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
+            foreach($recipients as $r) {
+                try {
+                    file_get_contents(
+                        "https://api.telegram.org/bot{$this->settings->telegramBotCode}/sendMessage", 
+                        false, 
+                        stream_context_create(
+                            array(
+                                'http' => array(
+                                    'method' => 'POST', 
+                                    'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL, 
+                                    'content' => http_build_query(array('chat_id' => $r->telegramId, 'text' => $content_plain, 'parse_mode' => 'Markdown'))
+                                )
+                            )
+                        )
+                    );
+                } catch(Exception $e) { /** do nothing, maybe user stop the bot **/ }
+            }
+
+            # ok
+            return true;
+	}
+
 
 	/**
 	 *	@changelog mail methods
@@ -1832,7 +1937,7 @@ class Logging extends Common_functions {
 		}
 		$content[] = "</table>";
 
-		$content[] = "</font></td></tr>";
+		$content[] = "</td></tr>";
 		$content[] = "</table>";
 		$content[] = "</div>";
 

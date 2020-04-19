@@ -26,14 +26,14 @@ class Addresses extends Common_functions {
 	public $address_types = array();
 
 	/**
-	 * Mail changelog or not
+	 * Send changelog by email/telegram or  not
 	 *
 	 * (default value: true)
 	 *
 	 * @var bool
 	 * @access public
 	 */
-	public $mail_changelog = true;
+	public $send_changelog = true;
 
     /**
      * Last insert id
@@ -335,12 +335,12 @@ class Addresses extends Common_functions {
 	 *
 	 * @access public
 	 * @param mixed $address
-	 * @param bool $mail_changelog (default: true)
+	 * @param bool $send_changelog (default: true)
 	 * @return void
 	 */
-	public function modify_address ($address, $mail_changelog = true) {
+	public function modify_address ($address, $send_changelog = true) {
 		# save changelog
-		$this->mail_changelog  = $mail_changelog;
+		$this->send_changelog  = $send_changelog;
 		# null empty values
 		$address = $this->reformat_empty_array_fields ($address, null);
 		# strip tags
@@ -418,7 +418,7 @@ class Addresses extends Common_functions {
 		# log and changelog
 		$address['id'] = $this->lastId;
 		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
-		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
+		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->send_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("add", $address);
@@ -474,7 +474,7 @@ class Addresses extends Common_functions {
 
  		# log and changelog
 		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
-		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
+		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->send_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("edit", $address);
@@ -513,7 +513,7 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
-		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
+		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->send_changelog);
 
 		# edit DNS PTR record
 		$this->ptr_modify ("delete", $address);
@@ -619,7 +619,7 @@ class Addresses extends Common_functions {
 			}
 			// save log
 			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $hostname), 0);
-			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->mail_changelog);
+			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->send_changelog);
 		}
 	}
 
@@ -634,6 +634,7 @@ class Addresses extends Common_functions {
     	$address = (object) $address;
     	$content = array();
     	$content_plain = array();
+        $content_telegram = array();
 
         # fetch settings
         $this->get_settings ();
@@ -652,29 +653,47 @@ class Addresses extends Common_functions {
                 	$admins        = $Tools->fetch_multiple_objects ("users", "role", "Administrator");
                 	// if some recipients
                 	if ($admins !== false) {
-						# try to send
-						try {
-	                    	// mail settings
-	                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
-	                    	// mail class
-	                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
-
-	                        // set parameters
+                            
+                                // set parameters
 	                        $subject = "Subnet threshold limit reached"." (".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask.")";
 	                        $content[] = "<table style='margin-left:10px;margin-top:5px;width:auto;padding:0px;border-collapse:collapse;'>";
 	                        $content[] = "<tr><td style='padding:5px;margin:0px;color:#333;font-size:16px;text-shadow:1px 1px 1px white;border-bottom:1px solid #eeeeee;' colspan='2'>$this->mail_font_style<strong>$subject</font></td></tr>";
-	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</a></font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().''.create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
-	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
+	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Subnet').'</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;padding-top:10px;"><a href="'.$this->createURL().create_link("subnets",$subnet->sectionId, $subnet->id).'">'.$this->mail_font_style_href . $this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask .'</font></a></td></tr>';
+                                if ($subnet->description) {
+                                    $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Description').'</font></td>	  	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. $subnet->description .'</font></td></tr>';
+                                }
 	                        $content[] = '<tr><td style="padding: 0px;padding-left:10px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''._('Usage').' (%)</font></td>	<td style="padding: 0px;padding-left:15px;margin:0px;line-height:18px;text-align:left;">'.$this->mail_font_style.''. gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0))) .'</font></td></tr>';
 	                        $content[] = "</table>";
 	                        // plain
 	                        $content_plain[] = "$subject"."\r\n------------------------------\r\n";
 	                        $content_plain[] = _("Subnet").": ".$this->transform_address($subnet->subnet,"dotted")."/".$subnet->mask;
 	                        $content_plain[] = _("Usage")." (%) : ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)));
+                                
+                                $content_telegram[] = "*{$subject}*\r\n";
+                                $content_telegram[] = _('Subnet')." [{$this->transform_address($subnet->subnet,"dotted")}/{$subnet->mask}](".$this->createURL().create_link("subnets",$subnet->sectionId, $subnet->id).")";
+                                if ($subnet->description) {
+                                    $content_telegram[] = _('Description')." {$subnet->description}";
+                                }
+	                        $content_telegram[] = _('Usage')." ".gmp_strval(gmp_sub(100,(int) round($subnet_usage['freehosts_percent'], 0)))."%";
+                                
+                        	$recipients = $this->changelog_telegram_get_recipients ($subnet->id);
+                        	if ($recipients!==false) {
+                                        $content_telegram = implode("\r\n",$content_telegram);
+                        		foreach($recipients as $a) {
+                                                $this->sendTelegramMessage($a->telegramId, $content_telegram);
+                        		}
+                                }
+                                
+                                # try to send
+                                try {
+	                    	// mail settings
+	                        $mail_settings = $Tools->fetch_object ("settingsMail", "id", 1);
+	                    	// mail class
+	                    	$phpipam_mail = new phpipam_mail ($this->settings, $mail_settings);
 
 	                        # set content
-	                        $content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
-	                        $content_plain 	= implode("\r\n",$content_plain);
+	                        $content = $phpipam_mail->generate_message (implode("\r\n", $content));
+	                        $content_plain = implode("\r\n",$content_plain);
 
                         	$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
                         	//add all admins to CC

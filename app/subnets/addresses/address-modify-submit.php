@@ -279,6 +279,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 			$Log->user 			= $User->user;
 
 			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action");
+                        $Log->changelog_send_telegram ("Address range $address[start] - $address[stop] $action");
 		}
 	}
 }
