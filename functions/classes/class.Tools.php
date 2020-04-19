@@ -1015,6 +1015,69 @@ class Tools extends Common_functions {
 	public function ip_request_send_mail ($action="new", $values) {
 
 		$this->get_settings ();
+                
+                $content = $content_plain = $content_telegram = array();
+
+                # get all users and check who to end mail to
+                $recipients = $this->ip_request_get_mail_recipients ($values['subnetId']);
+                # get all users and check who to end telegram to
+                $recipientsTelegram = $this->ip_request_get_telegram_recipients ($values['subnetId']);
+
+                # add requester to cc
+                $recipients_requester = $values['requester'];
+
+                # reformat key / vaues
+                $values = $this->ip_request_reformat_mail_values ($values);
+                #reformat empty
+                $values = $this->reformat_empty_array_fields ($values, "/");
+
+                # generate content
+                if ($action=="new")		{ $subject	= "New IP address request"; }
+                elseif ($action=="accept")	{ $subject	= "IP address request accepted"; }
+                elseif ($action=="reject")	{ $subject	= "IP address request rejected"; }
+                else				{ $this->Result->show("danger", _("Invalid request action"), true); }
+
+                // set html content
+                $content[] = "<table style='margin-left:10px;margin-top:20px;width:auto;padding:0px;border-collapse:collapse;'>";
+                $content[] = "<tr><td colspan='2' style='margin:0px;>$this->mail_font_style <strong>$subject</strong></font></td></tr>";
+                
+                // set telegram content
+                $content_telegram[] = "*{$subject}*";
+                
+                //set alt content
+                $content_plain[] = "$subject"."\r\n------------------------------\r\n";
+                
+                foreach($values as $k=>$v) {
+                    
+                    // title search
+                    if (preg_match("/s_title_/", $k)) {
+                        $content[] = "<tr><td colspan='2' style='margin:0px;border-bottom:1px solid #eeeeee;'>$this->mail_font_style<strong>$v</strong></font></td></tr>";
+                        
+                        $content_telegram[] = "\r\n*{$v}*";
+                    } else {
+                        //content
+                        $content[] = "<tr>";
+                        $content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $k</font></td>";
+                        $content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $v</font></td>";
+                        $content[] = "</tr>";
+                        
+                        $content_telegram[] = "{$k}: {$v}";
+                    }
+                    
+                    $content_plain[] = $k." => ".$v;
+                }
+                
+                $content[] = "<tr><td style='padding-top:15px;padding-bottom:3px;text-align:right;color:#ccc;'>$this->mail_font_style Sent at ".date('Y/m/d H:i')."</font></td></tr>";
+                $content[] = "</table>";
+                
+                $content_plain[] = "\r\n\r\nSent at ".date('Y/m/d H:i');
+                
+                if ($recipientsTelegram) {                    
+                    $content_telegram = strip_tags(implode("\r\n", $content_telegram));
+                    foreach($recipientsTelegram as $user) {
+                        $this->sendTelegramMessage($user->telegramId, $content_telegram);
+                    }
+                }
 
 		# try to send
 		try {
@@ -1024,50 +1087,8 @@ class Tools extends Common_functions {
 			# initialize mailer
 			$phpipam_mail = new phpipam_mail($this->settings, $mail_settings);
 
-			# get all users and check who to end mail to
-			$recipients = $this->ip_request_get_mail_recipients ($values['subnetId']);
-
-			# add requester to cc
-			$recipients_requester = $values['requester'];
-
-			# reformat key / vaues
-			$values = $this->ip_request_reformat_mail_values ($values);
-			#reformat empty
-			$values = $this->reformat_empty_array_fields ($values, "/");
-
-			# generate content
-			if ($action=="new")			{ $subject	= "New IP address request"; }
-			elseif ($action=="accept")	{ $subject	= "IP address request accepted"; }
-			elseif ($action=="reject")	{ $subject	= "IP address request rejected"; }
-			else						{ $this->Result->show("danger", _("Invalid request action"), true); }
-
-			// set html content
-			$content[] = "<table style='margin-left:10px;margin-top:20px;width:auto;padding:0px;border-collapse:collapse;'>";
-			$content[] = "<tr><td colspan='2' style='margin:0px;>$this->mail_font_style <strong>$subject</strong></font></td></tr>";
-			foreach($values as $k=>$v) {
-			// title search
-			if (preg_match("/s_title_/", $k)) {
-			$content[] = "<tr><td colspan='2' style='margin:0px;border-bottom:1px solid #eeeeee;'>$this->mail_font_style<strong>$v</strong></font></td></tr>";
-			}
-			else {
-			//content
-			$content[] = "<tr>";
-			$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $k</font></td>";
-			$content[] = "<td style='padding-left:15px;margin:0px;'>$this->mail_font_style $v</font></td>";
-			$content[] = "</tr>";
-			}
-			}
-			$content[] = "<tr><td style='padding-top:15px;padding-bottom:3px;text-align:right;color:#ccc;'>$this->mail_font_style Sent at ".date('Y/m/d H:i')."</font></td></tr>";
-			//set alt content
-			$content_plain[] = "$subject"."\r\n------------------------------\r\n";
-			foreach($values as $k=>$v) {
-			$content_plain[] = $k." => ".$v;
-			}
-			$content_plain[] = "\r\n\r\nSent at ".date('Y/m/d H:i');
-			$content[] = "</table>";
-
 			// set content
-			$content 		= $phpipam_mail->generate_message (implode("\r\n", $content));
+			$content 	= $phpipam_mail->generate_message (implode("\r\n", $content));
 			$content_plain 	= implode("\r\n",$content_plain);
 
 			$phpipam_mail->Php_mailer->setFrom($mail_settings->mAdminMail, $mail_settings->mAdminName);
@@ -1095,6 +1116,42 @@ class Tools extends Common_functions {
 		return true;
 
 	}
+
+	/**
+	 * Returns list of recipients to get new
+	 *
+	 * @access private
+	 * @param bool|mixed $subnetId
+	 * @return array|bool
+	 */
+	private function ip_request_get_telegram_recipients ($subnetId = false) {
+            // fetch all users with telegramNotify
+            $notification_users = $this->fetch_multiple_objects ("users", "telegramNotify", "Yes", "id", true);
+            // recipients array
+            $recipients = array();
+            // any ?
+            if ($notification_users!==false) {
+                foreach ($notification_users as $u) {
+                    if ($u->telegramId) {
+                        // if subnetId is set check who has permissions
+                        if (isset($subnetId)) {
+                            // inti object
+                            $Subnets = new Subnets ($this->Database);
+                            //check permissions
+                            $subnet_permission = $Subnets->check_permission($u, $subnetId);
+                            // if 3 than add
+                            if ($subnet_permission==3) {
+                                $recipients[] = $u;
+                            }
+                        } elseif($u->role=="Administrator") {
+                            $recipients[] = $u;
+                        }
+                    }
+                }
+            }
+            
+            return sizeof($recipients)>0 ? $recipients : false;
+        }
 
 	/**
 	 * Returns list of recipients to get new

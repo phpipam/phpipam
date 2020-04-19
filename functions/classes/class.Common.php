@@ -427,12 +427,9 @@ class Common_functions  {
                         }
                     }
                 }
-
-                return sizeof($recipients)>0 ? $recipients : false;
             }
-            else {
-                return false;
-            }
+            
+            return sizeof($recipients)>0 ? $recipients : false;
 	}
 
 
@@ -2154,8 +2151,10 @@ class Common_functions  {
 	 * @param  string $text
 	 * @return bool
 	 */
-        protected function sendTelegramMessage($telegramUserId, $text)
+        public function sendTelegramMessage($telegramUserId, $text)
         {
+            $this->get_settings();
+            
             try {
                 file_get_contents(
                     "https://api.telegram.org/bot{$this->settings->telegramBotCode}/sendMessage", 
