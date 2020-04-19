@@ -2155,21 +2155,23 @@ class Common_functions  {
         {
             $this->get_settings();
             
-            try {
-                file_get_contents(
-                    "https://api.telegram.org/bot{$this->settings->telegramBotCode}/sendMessage", 
-                    false, 
-                    stream_context_create(
-                        array(
-                            'http' => array(
-                                'method' => 'POST', 
-                                'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL, 
-                                'content' => http_build_query(array('chat_id' => $telegramUserId, 'text' => $text, 'parse_mode' => 'Markdown'))
+            if ($this->settings->telegramBotCode) {
+                try {
+                    file_get_contents(
+                        "https://api.telegram.org/bot{$this->settings->telegramBotCode}/sendMessage", 
+                        false, 
+                        stream_context_create(
+                            array(
+                                'http' => array(
+                                    'method' => 'POST', 
+                                    'header' => 'Content-Type: application/x-www-form-urlencoded' . PHP_EOL, 
+                                    'content' => http_build_query(array('chat_id' => $telegramUserId, 'text' => $text, 'parse_mode' => 'Markdown'))
+                                )
                             )
                         )
-                    )
-                );
-            } catch(Exception $e) { /** do nothing, maybe user stop the bot **/ }  
+                    );
+                } catch(Exception $e) { /** do nothing, maybe user stop the bot **/ }
+            }
 
             return true;
         }
