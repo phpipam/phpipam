@@ -86,3 +86,11 @@ $upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `2fa_provider` `2f
 
 $upgrade_queries["1.5.32"][] = "-- Database version bump";
 $upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";
+
+
+// Increase length of SMTP password field
+//
+$upgrade_queries["1.5.33"][] = "ALTER TABLE `settingsMail` CHANGE `mpass` `mpass` varchar(96) DEFAULT NULL;";
+
+$upgrade_queries["1.5.33"][] = "-- Database version bump";
+$upgrade_queries["1.5.33"][] = "UPDATE `settings` set `dbversion` = '33';";

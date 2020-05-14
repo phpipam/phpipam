@@ -242,7 +242,7 @@ CREATE TABLE `settingsMail` (
   `mserver` varchar(128) DEFAULT NULL,
   `mport` int(5) DEFAULT '25',
   `muser` varchar(64) DEFAULT NULL,
-  `mpass` varchar(64) DEFAULT NULL,
+  `mpass` varchar(96) DEFAULT NULL,
   `mAdminName` varchar(64) DEFAULT NULL,
   `mAdminMail` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -999,4 +999,4 @@ CREATE TABLE `routing_subnets` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 32;
+UPDATE `settings` SET `dbversion` = 33;
