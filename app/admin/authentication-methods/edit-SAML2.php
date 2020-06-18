@@ -25,8 +25,9 @@ else {
 	$method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
 	$method_settings->params->idplogout = "";
-	$method_settings->params->idpx509cert = "";
-	$method_settings->params->idpx509key = "";
+	$method_settings->params->idpx509privcert = "";
+	$method_settings->params->idpx509privkey = "";
+	$method_settings->params->idpx509pubcert = "";
 	//$method_settings->params->timeout = 2;
 }
 

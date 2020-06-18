@@ -86,3 +86,8 @@ $upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `2fa_provider` `2f
 
 $upgrade_queries["1.5.32"][] = "-- Database version bump";
 $upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";
+
+// Update SAML2 submodule
+// Increae params length to handle more certificates
+//
+$upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `params` `params` VARCHAR(4096);";
