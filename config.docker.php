@@ -54,6 +54,12 @@ getenv('PROXY_PASS')     ? $proxy_pass     = getenv('PROXY_PASS')     : false;
 getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
 
 /**
+ * SAML settings
+ */
+getenv('MAP_SAML_USER') ? define('MAP_SAML_USER', strtolower(getenv('MAP_SAML_USER')) == "true")  : false;
+getenv('SAML_USERNAME') ? define('SAML_USERNAME', getenv('SAML_USERNAME'))  : false;
+
+/**
  * Session storage - files or database
  *
  * @var string

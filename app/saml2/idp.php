@@ -21,30 +21,36 @@ if($params->advanced=="1"){
 else{
 
 	$settings = array (
+        'strict' => false,
         'sp' => array (
             'entityId' => $Tools->createURL(),
             'assertionConsumerService' => array (
                 'url' => $Tools->createURL().create_link('saml2'),
+                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
             ),
             'singleLogoutService' => array (
                 'url' => $Tools->createURL(),
+                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             ),
             'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
+            'x509cert' => $params->idpx509privcert,
+            'privateKey' => $params->idpx509privkey,
         ),
         'idp' => array (
             'entityId' => $params->idpissuer,
             'singleSignOnService' => array (
                 'url' => $params->idplogin,
+                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             ),
             'singleLogoutService' => array (
                 'url' => $params->idplogout,
+                'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             ),
-            'certFingerprint' => $params->idpcertfingerprint,
-            'certFingerprintAlgorithm' => $params->idpcertalgorithm,
-            'x509cert' => $params->idpx509cert,
+            'x509cert' => $params->idpx509pubcert,
         ),
        'security' => array (
             'requestedAuthnContext' => false,
+            'authnRequestsSigned' => true,
         ),
     );
 }

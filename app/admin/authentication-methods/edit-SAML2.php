@@ -25,9 +25,8 @@ else {
 	$method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
 	$method_settings->params->idplogout = "";
-	$method_settings->params->idpcertfingerprint = "";
-	$method_settings->params->idpcertalgorithm = "sha1";
 	$method_settings->params->idpx509cert = "";
+	$method_settings->params->idpx509key = "";
 	//$method_settings->params->timeout = 2;
 }
 
@@ -111,42 +110,34 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<?php print _('Enter IDP logout url'); ?>
 		</td>
 	</tr>
-	<!-- Idp cert fingerprint -->
+	<!-- Idp x509 private cert -->
 	<tr>
-		<td><?php print _('IDP cert fingerprint'); ?></td>
+		<td><?php print _('IDP x509 private cert'); ?></td>
 		<td>
-			<input type="text" name="idpcertfingerprint" class="form-control input-sm" value="<?php print @$method_settings->params->idpcertfingerprint; ?>" <?php print $delete; ?>>
+			<input type="text" name="idpx509privcert" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509privcert; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="base_dn info2">
-			<?php print _('Enter IDP X509 certificate fingerprint'); ?>
+			<?php print _('Enter IDP X509 private certificate'); ?>
 		</td>
 	</tr>
-	<!-- Idp cert algorithm -->
+	<!-- Idp x509 private cert key --> 
 	<tr>
-		<td><?php print _('IDP cert algorithm'); ?></td>
+ 		<td><?php print _('IDP X509 private cert key'); ?></td>
 		<td>
-			<select name="idpcertalgorithm" class="form-control input-w-auto">
-			<?php
-			$values = array("sha1","sha256", "sha384", "sha512");
-			foreach($values as $v) {
-				if($v==@$method_settings->params->idpcertalgorithm)	{ print "<option value='$v' selected=selected>$v</option>"; }
-				else										{ print "<option value='$v'					 >$v</option>"; }
-			}
-			?>
-			</select>
+			<input type="text" name="idpx509privkey" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509privkey; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="base_dn info2">
-			<?php print _('Enter IDP X509 certificate algorithm'); ?>
+			<?php print _('Enter IDP X509 private certificate key'); ?>
 		</td>
 	</tr>
-	<!-- Idp cert x509 --> 
+	<!-- Idp x509 public cert --> 
 	<tr>
- 		<td><?php print _('IDP X509 certificate'); ?></td>
+ 		<td><?php print _('IDP X509 public cert'); ?></td>
 		<td>
-			<input type="text" name="idpx509cert" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509cert; ?>" <?php print $delete; ?>>
+			<input type="text" name="idpx509pubcert" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509pubcert; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="base_dn info2">
-			<?php print _('Enter IDP X509 certificate'); ?>
+			<?php print _('Enter IDP X509 public certificate'); ?>
 		</td>
 	</tr>
 
@@ -170,10 +161,6 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	if(!in_array("openssl", get_loaded_extensions())) {
 		$Log->write( "SAML2 login", "php openssl extension missing!", 2 );
 		$Result->show("danger", _("php openssl extension missing!"), false);
-	}
-	if(!in_array("mcrypt", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php mcrypt extension missing!", 2 );
-		$Result->show("danger", _("php mcrypt extension missing!"), false);
 	}
 	if(!in_array("gettext", get_loaded_extensions())) {
 		$Log->write( "SAML2 login", "php gettext extension missing!", 2 );
