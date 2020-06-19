@@ -84,8 +84,16 @@ else{
 	    exit();
 	}
 
-	// try to authenticate in phpipam
-	$User->authenticate ( $auth->getNameId(), '', true);
+    // try to authenticate in phpipam
+    if(!isset($params->samluserfield) || $params->samluserfield == "NameId")
+    {
+        $samlusername = $auth->getNameId();
+    }
+    else
+    {
+        $samlusername = $auth->getAttribute($params->samluserfield);
+    }
+	$User->authenticate ( $samlusername, '', true);
 
 	// Redirect user where he came from, if unknown go to dashboard.
 	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }

@@ -28,6 +28,7 @@ else {
 	$method_settings->params->idpx509privcert = "";
 	$method_settings->params->idpx509privkey = "";
 	$method_settings->params->idpx509pubcert = "";
+	$method_settings->params->samluserfield = "NameId";
 	//$method_settings->params->timeout = 2;
 }
 
@@ -139,6 +140,16 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		</td>
 		<td class="base_dn info2">
 			<?php print _('Enter IDP X509 public certificate'); ?>
+		</td>
+	</tr>
+	<!-- SAML username field --> 
+	<tr>
+ 		<td><?php print _('SAML username field'); ?></td>
+		<td>
+			<input type="text" name="samluserfield" class="form-control input-sm" value="<?php print @$method_settings->params->samluserfield; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('SAML username field'); ?>
 		</td>
 	</tr>
 
