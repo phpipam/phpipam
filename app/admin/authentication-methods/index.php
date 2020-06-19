@@ -61,10 +61,21 @@ foreach($all_methods as $method) {
 	print "	<td>";
 	print "	<span class='text-muted'>";
 	if(strlen($method->params)>0) {
+		$secure_keys=array(
+			'adminUsername',
+			'adminUsername',
+			'adminUsername',
+			'idpx509privcert',
+			'idpx509privkey',
+			'idpx509pubcert'
+		);
 		$params = json_decode($method->params);
 		foreach($params as $key=>$parameter) {
-			// mask user/pass
-			if($key=="adminPassword")	{ $parameter = "********"; }
+			// mask secure keys
+			if(in_array($key, $secure_keys))
+			{
+				$parameter = "********";
+			}
 			// print
 			print $key." => ".$parameter."<br>";
 		}

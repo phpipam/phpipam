@@ -35,6 +35,9 @@ if($action=="add") {
 else {
 	//check id
 	if(!is_numeric($_POST['id']))	{ $Result->show("danger", _("Invalid ID"), true); }
+	//Get original values
+	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
+	$original_params = json_decode($method_settings->params);
 }
 
 # set update query
@@ -43,16 +46,41 @@ $values = array(
 				"type"        =>$_POST['type'],
 				"description" =>@$_POST['description'],
 				);
-# add params
+# remove processed params
 unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
-$values["params"]=json_encode($_POST);
+$values["params"] = $_POST;
 
+$secure_keys=array(
+	'adminUsername',
+	'adminUsername',
+	'adminUsername',
+	'idpx509privcert',
+	'idpx509privkey',
+	'idpx509pubcert'
+);
 # log values
 $values_log = $values;
-$_POST['adminUsername'] = "********";
-$_POST['adminPassword'] = "********";
-$_POST['secret']	 	= "********";
-$values_log["params"]=json_encode($_POST);
+# mask secure keys
+foreach($values_log["params"] as $key => &$value)
+{
+	if(in_array($key, $secure_keys))
+	{
+		$value = "********";
+	}
+}
+$values_log["params"]=json_encode($values_log["params"]);
+
+# replace masked values with original values
+foreach ($values["params"] as $key => &$value)
+{
+	if($value == "********")
+	{
+		$value = $original_params->$key;
+	}
+}
+
+# add params
+$values["params"]=json_encode($values["params"]);
 
 # add - set protected
 if($action=="add") {

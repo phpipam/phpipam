@@ -125,7 +125,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	<tr>
  		<td><?php print _('IDP X509 private cert key'); ?></td>
 		<td>
-			<input type="text" name="idpx509privkey" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509privkey; ?>" <?php print $delete; ?>>
+			<input type="text" name="idpx509privkey" class="form-control input-sm" value="<?php if($method_settings->params->idpx509privkey != "") { print('********'); } ?>" <?php print $delete; ?>>
 		</td>
 		<td class="base_dn info2">
 			<?php print _('Enter IDP X509 private certificate key'); ?>
