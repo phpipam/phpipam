@@ -3,6 +3,7 @@
 # verify php build
 include('functions/checks/check_php_build.php');		// check for support for PHP modules and database connection
 define("TOOLKIT_PATH", dirname(__FILE__).'/../../functions/php-saml/');
+require_once(TOOLKIT_PATH . '../xmlseclibs/xmlseclibs.php'); // We load the xmlsec libs required by OneLogin's SAML
 require_once(TOOLKIT_PATH . '_toolkit_loader.php');   // We load the SAML2 lib
 
 // get SAML2 settings from db
@@ -16,7 +17,7 @@ $params=json_decode($dbobj->params);
 
 //if using advanced settings, instantiate without db settings
 if($params->advanced=="1"){
-	$auth = new OneLogin_Saml2_Auth();
+	$auth = new OneLogin\Saml2\Auth();
 }
 else{
 
@@ -53,7 +54,7 @@ else{
             'authnRequestsSigned' => true,
         ),
     );
-	$auth = new OneLogin_Saml2_Auth($settings);
+	$auth = new OneLogin\Saml2\Auth($settings);
 }
 
 //if SAMLResponse is not in the request, create an authnrequest and send it to the idp

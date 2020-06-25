@@ -23,3 +23,6 @@
 [submodule "functions/qrcodejs"]
 	path = functions/qrcodejs
 	url = https://github.com/davidshimjs/qrcodejs
+[submodule "functions\\xmlseclibs"]
+	path = functions\\xmlseclibs
+	url = https://github.com/robrichards/xmlseclibs.git
