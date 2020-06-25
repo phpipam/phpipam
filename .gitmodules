@@ -4,6 +4,7 @@
 	path = functions/php-saml
 	url = https://github.com/onelogin/php-saml.git
 	ignore = all
+	branch = 3.4.1
 [submodule "functions/PHPMailer"]
 	path = functions/PHPMailer
 	url = https://github.com/PHPMailer/PHPMailer.git
