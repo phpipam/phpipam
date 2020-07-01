@@ -863,7 +863,8 @@ class phpipamSNMP extends Common_functions {
         if (!is_string($mac))
             return '';
 
-        $mac = trim($mac);
+        # Remove STRING: and HEX; prefixes
+        $mac = trim(str_ireplace(['STRING:', 'HEX:'], '', $mac));
 
         $separators = [':', '-', ' '];
 
