@@ -42,7 +42,7 @@ if($Subnets->check_permission($User->user, $request['subnetId']) != 3)	{ $Result
 if(strlen($request['ip_addr'])>0) {
 	// check if it exists
 	if ( $Addresses->address_exists ($request['ip_addr'], $request['subnetId'])) {
-		$errmsg = "Requested IP address ($request[ip_addr]) already used. First available address automatically provided.";
+		$errmsg = _("Requested IP address").' '.($request[ip_addr]).' '._("already used. First available address automatically provided.");
 		$errmsg_class = "warning";
 		//fetch first free
 		$ip_address = $Addresses->transform_to_dotted($Addresses->get_first_available_address ($request['subnetId'], $Subnets));
@@ -59,7 +59,7 @@ if(strlen($request['ip_addr'])>0) {
 // false
 if ($ip_address===false) {
 	$ip_address = "";
-	$errmsg = "No IP addresses available in requested subnet";
+	$errmsg = _("No IP addresses available in requested subnet.");
 	$errmsg_class = "danger";
 }
 
@@ -93,7 +93,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	<!-- divider -->
 	<tr>
-		<td colspan="2"><h4>Request details</h4><hr></td>
+		<td colspan="2"><h4><?php print _('Request details'); ?></h4><hr></td>
 	</tr>
 
 	<!-- Subnet -->
@@ -234,7 +234,7 @@ $custom_fields = $Tools->fetch_custom_fields('ipaddresses');
 
 	<!-- divider -->
 	<tr>
-		<td colspan="2" style="padding-top:30px;"><h4>Additional information</h4><hr></td>
+		<td colspan="2" style="padding-top:30px;"><h4><?php print _('Additional information'); ?></h4><hr></td>
 	</tr>
 
 	<!-- requested by -->
