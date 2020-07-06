@@ -166,10 +166,8 @@ function update_hidden_input(){
 			 onPostBody: function(data) { addAllCircuitsHandlers(); }
  		 });
  		 $('#selected_circuits').bootstrapTable({
- 			 pagination:true,
+ 			 pagination:false,
  			 search:true,
- 			 pageSize:5,
- 			 pageList:[5],
 			 onPostBody: function(data) { addSelectedCircuitsHandlers(); update_hidden_input(); }
  		 });
      });
