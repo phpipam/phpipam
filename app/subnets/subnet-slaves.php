@@ -88,11 +88,8 @@ foreach ($slave_subnets as $slave_subnet) {
 	$calculate = $Subnets->calculate_subnet_usage ( $slave_subnet, true);
 
 	# add full information
-	$fullinfo = $slave_subnet['isFull']==1 ? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
-    if ($slave_subnet['isFull']!=1) {
-        # if usage is 100%, fake usFull to true!
-        if ($calculate['freehosts']==0)  { $fullinfo = "<span class='badge badge1 badge2 badge4'>"._("Full")."</span>"; }
-    }
+	# if usage is 100%, fake isFull to true!
+	$fullinfo = ($slave_subnet['isFull']==1 || ($calculate['freehosts']<=0))? " <span class='badge badge1 badge2 badge4'>"._("Full")."</span>" : "";
 
 	# slaves info
 	$has_slaves = $Subnets->has_slaves ($slave_subnet['id']) ? true : false;
