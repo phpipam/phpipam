@@ -57,8 +57,8 @@ getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
  * SAML settings
  * Use GUI to configure
  */
-//getenv('MAP_SAML_USER') ? define('MAP_SAML_USER', strtolower(getenv('MAP_SAML_USER')) == "true")  : false;
-//getenv('SAML_USERNAME') ? define('SAML_USERNAME', getenv('SAML_USERNAME'))  : false;
+getenv('MAP_SAML_USER') ? define('MAP_SAML_USER', strtolower(getenv('MAP_SAML_USER')) == "true");
+getenv('SAML_USERNAME') ? define('SAML_USERNAME', getenv('SAML_USERNAME'));
 
 /**
  * Session storage - files or database
