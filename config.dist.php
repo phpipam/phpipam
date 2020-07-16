@@ -133,12 +133,13 @@ define('MCUNIQUE', "section");
 
 /**
  * SAML mappings
+ * Use GUI to configure
  ******************************/
-if(!defined('MAP_SAML_USER'))
-define('MAP_SAML_USER', false);    // Disable SAML username override by default
+// if(!defined('MAP_SAML_USER'))
+// define('MAP_SAML_USER', false);    // Disable SAML username override by default
 
-if(!defined('SAML_USERNAME'))
-define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
+// if(!defined('SAML_USERNAME'))
+// define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
 
 
 /**

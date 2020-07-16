@@ -49,7 +49,7 @@ else{
             ),
             'certFingerprint' => $params->idpcertfingerprint,
             'certFingerprintAlgorithm' => $params->idpcertalgorithm,
-            'x509cert' => $params->idpx509pubcert,
+            'x509cert' => (is_null($params->idpx509cert) ? $params->idpx509pubcert : $params->idpx509cert),
         ),
        'security' => array (
             'requestedAuthnContext' => false,
