@@ -88,13 +88,20 @@ else{
 	}
 
     // try to authenticate in phpipam
-    if(!isset($params->samluserfield) || $params->samluserfield == "NameId")
+    if(isset($params->idpoverrideusertf) && filter_var($params->idpoverrideusertf, FILTER_VALIDATE_BOOLEAN))
     {
-        $samlusername = $auth->getNameId();
+        $samlusername = $params->idpoverrideuser;
     }
     else
     {
-        $samlusername = $auth->getAttribute($params->samluserfield);
+        if(!isset($params->samluserfield) || $params->samluserfield == "NameId")
+        {
+            $samlusername = $auth->getNameId();
+        }
+        else
+        {
+            $samlusername = $auth->getAttribute($params->samluserfield);
+        }
     }
 	$User->authenticate ( $samlusername, '', true);
 

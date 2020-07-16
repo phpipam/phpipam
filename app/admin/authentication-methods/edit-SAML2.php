@@ -152,6 +152,7 @@ $(document).ready(function() {
 			<?php print _('Enter IDP X509 private certificate'); ?>
 		</td>
 	</tr>
+
 	<!-- Idp x509 private cert key --> 
 	<tr>
  		<td><?php print _('IDP X509 private cert key'); ?></td>
@@ -162,6 +163,7 @@ $(document).ready(function() {
 			<?php print _('Enter IDP X509 private certificate key'); ?>
 		</td>
 	</tr>
+
 	<!-- Idp x509 public cert --> 
 	<tr>
  		<td><?php print _('IDP X509 public cert'); ?></td>
@@ -172,6 +174,7 @@ $(document).ready(function() {
 			<?php print _('Enter IDP X509 public certificate'); ?>
 		</td>
 	</tr>
+
 	<!-- SAML username field --> 
 	<tr>
  		<td><?php print _('SAML username field'); ?></td>
@@ -180,6 +183,28 @@ $(document).ready(function() {
 		</td>
 		<td class="base_dn info2">
 			<?php print _('SAML username field'); ?>
+		</td>
+	</tr>
+
+	<!-- Override username field --> 
+	<tr>
+ 		<td><?php print _('Override Username'); ?></td>
+		<td>
+		<input type="checkbox" class="input-switch" value="true" name="idpoverrideusertf" <?php if(filter_var(@$method_settings->params->idpoverrideusertf, FILTER_VALIDATE_BOOLEAN)) print 'checked'; ?>>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Forces all users authenticated with SAML to log in as this user'); ?>
+		</td>
+	</tr>
+
+	<!-- Override username field --> 
+	<tr>
+ 		<td><?php print _('Override User'); ?></td>
+		<td>
+			<input type="text" name="idpoverrideuser" class="form-control input-sm" value="<?php print @$method_settings->params->idpoverrideuser; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('phpIPAM user to log in as for all SAML users'); ?>
 		</td>
 	</tr>
 
