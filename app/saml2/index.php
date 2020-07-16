@@ -16,7 +16,7 @@ if(!$dbobj){
 $params=json_decode($dbobj->params);
 
 //if using advanced settings, instantiate without db settings
-if($params->advanced=="1"){
+if(filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)){
 	$auth = new OneLogin\Saml2\Auth();
 }
 else{
@@ -47,11 +47,13 @@ else{
                 'url' => $params->idplogout,
                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             ),
+            'certFingerprint' => $params->idpcertfingerprint,
+            'certFingerprintAlgorithm' => $params->idpcertalgorithm,
             'x509cert' => $params->idpx509pubcert,
 	),
        'security' => array (
             'requestedAuthnContext' => false,
-            'authnRequestsSigned' => true,
+            'authnRequestsSigned' => filter_var($params->idpsignauthn, FILTER_VALIDATE_BOOLEAN),
         ),
     );
 	$auth = new OneLogin\Saml2\Auth($settings);

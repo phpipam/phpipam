@@ -25,6 +25,9 @@ $_POST = $Admin->strip_input_tags($_POST);
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "authmethods", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
+# remove csrf cookie
+unset($_POST['csrf_cookie']);
+
 # get action
 $action = $_POST['action'];
 
@@ -85,6 +88,13 @@ $values["params"]=json_encode($values["params"]);
 # add - set protected
 if($action=="add") {
 	$values['protected'] = "No";
+}
+
+#Verify that the private certificate and key are provided if Signing Authn Requests is set
+if(filter_var($params->idpsignauthn, FILTER_VALIDATE_BOOLEAN) && (trim($params->idpx509privcert) == "" || trim($params->idpx509privkey) == ""))
+{
+	$Result->show("danger",  _("Private Certificate and Key are required to sign Authn Requests"), false);
+	die();
 }
 
 # update

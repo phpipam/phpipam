@@ -17,6 +17,10 @@ if($_POST['action']!="add") {
 	# fetch method settings
 	$method_settings = $Admin->fetch_object ("usersAuthMethod", "id", $_POST['id']);
 	$method_settings->params = json_decode($method_settings->params);
+	if(! isset($method_settings->params->idpsignauthn))
+	{
+		$method_settings->params->idpsignauthn = isset($method_settings->params->idpx509privcert);
+	}
 }
 else {
 	$method_settings = new StdClass ();
@@ -25,6 +29,7 @@ else {
 	$method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
 	$method_settings->params->idplogout = "";
+	$method_settings->params->idpsignauthn = "true";
 	$method_settings->params->idpx509privcert = "";
 	$method_settings->params->idpx509privkey = "";
 	$method_settings->params->idpx509pubcert = "";
@@ -35,6 +40,18 @@ else {
 # set delete flag
 $delete = $_POST['action']=="delete" ? "disabled" : "";
 ?>
+
+<script>
+$(document).ready(function() {
+	/* bootstrap switch */
+	var switch_options = {
+	    onColor: 'default',
+	    offColor: 'default',
+	    size: "mini"
+	};
+	$(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
 
 <!-- header -->
 <div class="pHeader"><?php print _('SAML2 connection settings'); ?></div>
@@ -60,14 +77,11 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		<td colspan="3"><hr></td>
 	</tr>
 
-<!-- SSL -->
+	<!-- Advanced Settings -->
 	<tr>
 		<td><?php print _('Use advanced settings'); ?></td>
 		<td>
-			<select name="advanced" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
-				<option value="0" <?php if(@$method_settings->params->advanced == 0) { print 'selected'; } ?>><?php print _('false'); ?></option>
-				<option value="1" <?php if(@$method_settings->params->advanced == 1) { print 'selected'; } ?>><?php print _('true'); ?></option>
-			</select>
+			<input type="checkbox" class="input-switch" value="true" name="advanced" <?php if(filter_var(@$method_settings->params->advanced, FILTER_VALIDATE_BOOLEAN)) print 'checked'; ?>>
 		</td>
 		<td class="info2">
 			<?php print _('Use Onelogin php-saml settings.php configuration'); ?><br>
@@ -102,6 +116,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<?php print _('Enter IDP login url'); ?>
 		</td>
 	</tr>
+
 	<!-- Idp logout -->
 	<tr>
 		<td><?php print _('IDP logout url'); ?></td>
@@ -112,6 +127,21 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<?php print _('Enter IDP logout url'); ?>
 		</td>
 	</tr>
+
+	<!-- Sign Authn Request -->
+	<tr>
+		<td><?php print _('Sign Authn Requests'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" value="true" name="idpsignauthn" <?php if(filter_var(@$method_settings->params->idpsignauthn, FILTER_VALIDATE_BOOLEAN)) print 'checked'; ?>>
+		</td>
+		<td class="info2">
+			<?php print _('Sign Authn Requests'); ?><br>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+
 	<!-- Idp x509 private cert -->
 	<tr>
 		<td><?php print _('IDP x509 private cert'); ?></td>
