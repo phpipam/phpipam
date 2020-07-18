@@ -35,6 +35,17 @@ else {
 $delete = $_POST['action']=="delete" ? "disabled" : "";
 ?>
 
+<script>
+$(document).ready(function() {
+        /* bootstrap switch */
+        var switch_options = {
+            onColor: 'default',
+            offColor: 'default',
+            size: "mini"
+        };
+        $(".input-switch").bootstrapSwitch(switch_options);
+});
+</script>
 <!-- header -->
 <div class="pHeader"><?php print _('SAML2 connection settings'); ?></div>
 
@@ -63,10 +74,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 	<tr>
 		<td><?php print _('Use advanced settings'); ?></td>
 		<td>
-			<select name="advanced" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
-				<option value="0" <?php if(@$method_settings->params->advanced == 0) { print 'selected'; } ?>><?php print _('false'); ?></option>
-				<option value="1" <?php if(@$method_settings->params->advanced == 1) { print 'selected'; } ?>><?php print _('true'); ?></option>
-			</select>
+			<input type="checkbox" class="input-switch" value="1" name="advanced" <?php if(@$method_settings->params->advanced == 1) print 'checked'; ?> >
 		</td>
 		<td class="info2">
 			<?php print _('Use Onelogin php-saml settings.php configuration'); ?><br>
@@ -111,6 +119,9 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<?php print _('Enter IDP logout url'); ?>
 		</td>
 	</tr>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
 	<!-- Idp cert fingerprint -->
 	<tr>
 		<td><?php print _('IDP cert fingerprint'); ?></td>
@@ -139,7 +150,7 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<?php print _('Enter IDP X509 certificate algorithm'); ?>
 		</td>
 	</tr>
-	<!-- Idp cert x509 --> 
+	<!-- Idp cert x509 -->
 	<tr>
  		<td><?php print _('IDP X509 certificate'); ?></td>
 		<td>
@@ -149,35 +160,38 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 			<?php print _('Enter IDP X509 certificate'); ?>
 		</td>
 	</tr>
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<!-- Username attribute -->
+	<tr>
+		<td><?php print _('SAML username attribute'); ?></td>
+		<td>
+			<input type="text" class="form-control input-sm" name="UserNameAttr" value="<?php print @$method_settings->params->UserNameAttr; ?>">
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Extract username from SAML attribute').'<br>'._('blank=use NameId'); ?>
+		</td>
+	</tr>
+	<!-- Map to local users-->
+	<tr>
+		<td><?php print _('SAML mapped user'); ?></td>
+		<td>
+		<input type="text" class="form-control input-sm" name="MappedUser" value="<?php print @$method_settings->params->MappedUser; ?>">
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Map all SAML users to a single local account. e.g. admin').'<br>'._('blank=disabled'); ?>
+		</td>
+	</tr>
 
 	</table>
 	</form>
 
 	<?php
-	# check for support
-	if(!in_array("xml", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php xml extension missing!", 2 );
-		$Result->show("danger", _("php XML extension missing!"), false);
-	}
-	if(!in_array("date", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php date extension missing!", 2 );
-		$Result->show("danger", _("php Date extension missing!"), false);
-	}
-	if(!in_array("zlib", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php zlib extension missing!", 2 );
-		$Result->show("danger", _("php zlib extension missing!"), false);
-	}
-	if(!in_array("openssl", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php openssl extension missing!", 2 );
-		$Result->show("danger", _("php openssl extension missing!"), false);
-	}
-	if(!in_array("mcrypt", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php mcrypt extension missing!", 2 );
-		$Result->show("danger", _("php mcrypt extension missing!"), false);
-	}
-	if(!in_array("gettext", get_loaded_extensions())) {
-		$Log->write( "SAML2 login", "php gettext extension missing!", 2 );
-		$Result->show("danger", _("php gettext extension missing!"), false);
+	$error = php_feature_missing(["xml","date","zlib","openssl","gettext","dom","mcrypt"]);
+	if (is_string($error)) {
+		$Log->write("SAML2 login", $error, 2);
+		$Result->show("danger", $error, false);
 	}
 	?>
 </div>

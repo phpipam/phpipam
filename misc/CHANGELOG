@@ -10,6 +10,9 @@
     Enhancements, changes:
     ----------------------------
     + Improved php7.4 compatibility;
+    + SAML2
+        + MAP_SAML_USER and SAML_USERNAME config.php configuration moved to db;
+        + SAML usernames can be extracted from assertion attributes (#2948);
 
     Bugfixes:
     ----------------------------

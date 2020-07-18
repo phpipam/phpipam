@@ -65,6 +65,7 @@ foreach($all_methods as $method) {
 		foreach($params as $key=>$parameter) {
 			// mask user/pass
 			if($key=="adminPassword")	{ $parameter = "********"; }
+			$parameter = $Tools->shorten_text($parameter, 96);
 			// print
 			print $key." => ".$parameter."<br>";
 		}

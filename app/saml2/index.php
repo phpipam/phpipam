@@ -83,7 +83,16 @@ else{
 	}
 
 	// try to authenticate in phpipam
-	$User->authenticate ( $auth->getNameId(), '', true);
+	if(is_string($params->MappedUser) && strlen($params->MappedUser)>0) {
+		$username = $params->MappedUser;
+	} elseif(is_string($params->UserNameAttr) && strlen($params->UserNameAttr)>0) {
+		$attributes = $auth->getAttributes();
+		$username = $attributes[$params->UserNameAttr][0];
+	} else {
+		$username = $auth->getNameId();
+	}
+
+	$User->authenticate ($username, '', true);
 
 	// Redirect user where he came from, if unknown go to dashboard.
 	if( !empty($_COOKIE['phpipamredirect']) )   { header("Location: ".escape_input($_COOKIE['phpipamredirect'])); }

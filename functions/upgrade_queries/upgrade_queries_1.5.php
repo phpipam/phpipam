@@ -86,3 +86,16 @@ $upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `2fa_provider` `2f
 
 $upgrade_queries["1.5.32"][] = "-- Database version bump";
 $upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";
+
+// Fix SET/ENUM usage in usersAuthMethod
+// Allow for longer json params (e.g. certificates in SAML2)
+//
+$upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `type` `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local';";
+$upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `params` `params` text DEFAULT NULL;";
+$upgrade_queries["1.5.33"][] = "ALTER TABLE `usersAuthMethod` CHANGE `protected` `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes';";
+if(defined('MAP_SAML_USER') && defined('SAML_USERNAME') && MAP_SAML_USER!=false && strlen(SAML_USERNAME)>0) {
+    $upgrade_queries["1.5.33"][] = "UPDATE `usersAuthMethod` SET `params` = JSON_SET(`params`,'$.MappedUser','".SAML_USERNAME."') WHERE `type`='SAML2'; -- IGNORE_ON_FAILURE"; // MySQL 5.7+
+}
+
+$upgrade_queries["1.5.33"][] = "-- Database version bump";
+$upgrade_queries["1.5.33"][] = "UPDATE `settings` set `dbversion` = '33';";
