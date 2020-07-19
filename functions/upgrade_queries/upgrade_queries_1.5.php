@@ -99,3 +99,29 @@ if(defined('MAP_SAML_USER') && defined('SAML_USERNAME') && MAP_SAML_USER!=false 
 
 $upgrade_queries["1.5.33"][] = "-- Database version bump";
 $upgrade_queries["1.5.33"][] = "UPDATE `settings` set `dbversion` = '33';";
+
+// Set email to 254 characters as per RFC 2821, increase email passwords to 128
+// Fix SET/ENUM usage in updated tables
+//
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `customers` CHANGE `contact_mail` `contact_mail` varchar(254) DEFAULT NULL;";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settings` CHANGE `siteAdminMail` `siteAdminMail` varchar(254) DEFAULT NULL;";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `mtype` `mtype` ENUM('localhost','smtp') NOT NULL DEFAULT 'localhost';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `msecure` `msecure` ENUM('none','ssl','tls')  NOT NULL  DEFAULT 'none';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `mauth` `mauth` ENUM('yes','no') NOT NULL DEFAULT 'no';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `muser` `muser` varchar(254) DEFAULT NULL;";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `mpass` `mpass` varchar(128) DEFAULT NULL;";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `mAdminName` `mAdminName` varchar(128) DEFAULT NULL;";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `settingsMail` CHANGE `mAdminMail` `mAdminMail` varchar(254) DEFAULT NULL;";
+$upgrade_queries["1.5.34"][] = "UPDATE `users` SET `mailNotify`='No' WHERE `mailNotify` IS NULL;";
+$upgrade_queries["1.5.34"][] = "UPDATE `users` SET `mailChangelog`='No' WHERE `mailChangelog` IS NULL;";
+$upgrade_queries["1.5.34"][] = "UPDATE `users` SET `menuType`='Dynamic' WHERE `menuType` IS NULL;";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `disabled` `disabled` ENUM('Yes','No')  NOT NULL  DEFAULT 'No';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `mailNotify` `mailNotify` ENUM('Yes','No')  NOT NULL  DEFAULT 'No';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `mailChangelog` `mailChangelog` ENUM('Yes','No')  NOT NULL  DEFAULT 'No';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `passChange` `passChange` ENUM('Yes','No')  NOT NULL  DEFAULT 'No';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `compressOverride` `compressOverride` ENUM('default','Uncompress') NOT NULL DEFAULT 'default';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `menuType` `menuType` ENUM('Static','Dynamic')  NOT NULL  DEFAULT 'Dynamic';";
+$upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `email` `email` varchar(254) CHARACTER SET utf8 DEFAULT NULL;";
+
+$upgrade_queries["1.5.34"][] = "-- Database version bump";
+$upgrade_queries["1.5.34"][] = "UPDATE `settings` set `dbversion` = '34';";
