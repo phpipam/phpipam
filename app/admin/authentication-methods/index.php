@@ -61,17 +61,22 @@ foreach($all_methods as $method) {
 	print "	<td>";
 	print "	<span class='text-muted'>";
 	if(strlen($method->params)>0) {
+		$secure_keys=[
+			'adminPassword',
+			'secret',
+			'spx509key'
+		];
 		$params = json_decode($method->params);
 		foreach($params as $key=>$parameter) {
-			// mask user/pass
-			if($key=="adminPassword")	{ $parameter = "********"; }
+			// mask secure keys
+			if(in_array($key, $secure_keys) && strlen($parameter)>0 ) { $parameter = "********"; }
 			$parameter = $Tools->shorten_text($parameter, 96);
 			// print
 			print $key." => ".$parameter."<br>";
 		}
 	}
 	else {
-		print "no parameters";
+		print _("no parameters");
 	}
 	print "	</span>";
 	print "	</td>";

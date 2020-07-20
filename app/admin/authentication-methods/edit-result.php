@@ -44,15 +44,24 @@ $values = array(
 				"type"        =>$_POST['type'],
 				"description" =>@$_POST['description'],
 				);
-# add params
+# remove processed params
 unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
 $values["params"]=json_encode($_POST);
 
+$secure_keys=[
+	'adminUsername',
+	'adminPassword',
+	'secret',
+	'idpx509cert',
+	'spx509cert',
+	'spx509key'
+	];
 # log values
 $values_log = $values;
-$_POST['adminUsername'] = "********";
-$_POST['adminPassword'] = "********";
-$_POST['secret']	 	= "********";
+# mask secure keys
+foreach($_POST as $key) {
+	if(in_array($key, $secure_keys)){ $_POST[$key] = "********"; }
+}
 $values_log["params"]=json_encode($_POST);
 
 # add - set protected

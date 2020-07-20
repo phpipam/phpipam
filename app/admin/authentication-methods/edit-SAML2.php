@@ -25,9 +25,11 @@ else {
 	$method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
 	$method_settings->params->idplogout = "";
-	$method_settings->params->idpcertfingerprint = "";
-	$method_settings->params->idpcertalgorithm = "sha1";
 	$method_settings->params->idpx509cert = "";
+	$method_settings->params->spsignauthn = "1";
+	$method_settings->params->spx509cert = "";
+	$method_settings->params->spx509key = "";
+	$method_settings->params->samluserfield = "";
 	//$method_settings->params->timeout = 2;
 }
 
@@ -70,7 +72,7 @@ $(document).ready(function() {
 		<td colspan="3"><hr></td>
 	</tr>
 
-<!-- SSL -->
+	<!-- Advanced Settings -->
 	<tr>
 		<td><?php print _('Use advanced settings'); ?></td>
 		<td>
@@ -80,6 +82,7 @@ $(document).ready(function() {
 			<?php print _('Use Onelogin php-saml settings.php configuration'); ?><br>
 		</td>
 	</tr>
+
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
@@ -109,6 +112,7 @@ $(document).ready(function() {
 			<?php print _('Enter IDP login url'); ?>
 		</td>
 	</tr>
+
 	<!-- Idp logout -->
 	<tr>
 		<td><?php print _('IDP logout url'); ?></td>
@@ -119,50 +123,59 @@ $(document).ready(function() {
 			<?php print _('Enter IDP logout url'); ?>
 		</td>
 	</tr>
+
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
-	<!-- Idp cert fingerprint -->
+
+	<!-- Idp X.509 public cert -->
 	<tr>
-		<td><?php print _('IDP cert fingerprint'); ?></td>
-		<td>
-			<input type="text" name="idpcertfingerprint" class="form-control input-sm" value="<?php print @$method_settings->params->idpcertfingerprint; ?>" <?php print $delete; ?>>
-		</td>
-		<td class="base_dn info2">
-			<?php print _('Enter IDP X509 certificate fingerprint'); ?>
-		</td>
-	</tr>
-	<!-- Idp cert algorithm -->
-	<tr>
-		<td><?php print _('IDP cert algorithm'); ?></td>
-		<td>
-			<select name="idpcertalgorithm" class="form-control input-w-auto">
-			<?php
-			$values = array("sha1","sha256", "sha384", "sha512");
-			foreach($values as $v) {
-				if($v==@$method_settings->params->idpcertalgorithm)	{ print "<option value='$v' selected=selected>$v</option>"; }
-				else										{ print "<option value='$v'					 >$v</option>"; }
-			}
-			?>
-			</select>
-		</td>
-		<td class="base_dn info2">
-			<?php print _('Enter IDP X509 certificate algorithm'); ?>
-		</td>
-	</tr>
-	<!-- Idp cert x509 -->
-	<tr>
- 		<td><?php print _('IDP X509 certificate'); ?></td>
+ 		<td><?php print _('IDP X.509 public cert'); ?></td>
 		<td>
 			<input type="text" name="idpx509cert" class="form-control input-sm" value="<?php print @$method_settings->params->idpx509cert; ?>" <?php print $delete; ?>>
 		</td>
 		<td class="base_dn info2">
-			<?php print _('Enter IDP X509 certificate'); ?>
+			<?php print _('Enter IDP X.509 public certificate'); ?>
 		</td>
 	</tr>
+
+	<!-- Sign Authn request -->
+	<tr>
+		<td><?php print _('Sign Authn requests'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" value="1" name="spsignauthn" <?php if(filter_var(@$method_settings->params->spsignauthn, FILTER_VALIDATE_BOOLEAN)) print 'checked'; ?>>
+		</td>
+		<td class="info2">
+			<?php print _('Sign Authn requests'); ?><br>
+		</td>
+	</tr>
+
+	<!-- SP X.509 cert -->
+	<tr>
+		<td><?php print _('Authn X.509 signing cert'); ?></td>
+		<td>
+			<input type="text" name="spx509cert" class="form-control input-sm" value="<?php print @$method_settings->params->spx509cert; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Enter SP (Client) X.509 certificate'); ?>
+		</td>
+	</tr>
+
+	<!-- SP X.509 key -->
+	<tr>
+ 		<td><?php print _('Authn X.509 signing cert key'); ?></td>
+		<td>
+			<input type="text" name="spx509key" class="form-control input-sm" value="<?php print @$method_settings->params->spx509key; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="base_dn info2">
+			<?php print _('Enter SP (Client) X.509 certificate key'); ?>
+		</td>
+	</tr>
+
 	<tr>
 		<td colspan="3"><hr></td>
 	</tr>
+
 	<!-- Username attribute -->
 	<tr>
 		<td><?php print _('SAML username attribute'); ?></td>
@@ -173,6 +186,7 @@ $(document).ready(function() {
 			<?php print _('Extract username from SAML attribute').'<br>'._('blank=use NameId'); ?>
 		</td>
 	</tr>
+
 	<!-- Map to local users-->
 	<tr>
 		<td><?php print _('SAML mapped user'); ?></td>
@@ -188,7 +202,7 @@ $(document).ready(function() {
 	</form>
 
 	<?php
-	$error = php_feature_missing(["xml","date","zlib","openssl","gettext","dom","mcrypt"]);
+	$error = php_feature_missing(["xml","date","zlib","openssl","gettext","dom"]);
 	if (is_string($error)) {
 		$Log->write("SAML2 login", $error, 2);
 		$Result->show("danger", $error, false);
