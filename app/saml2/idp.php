@@ -22,7 +22,7 @@ if(filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)){
 else{
 
 	$settings = array (
-        'strict' => false,
+        'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
         'sp' => array (
             'entityId' => $Tools->createURL(),
             'assertionConsumerService' => array (

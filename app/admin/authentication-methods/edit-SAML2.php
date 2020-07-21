@@ -7,6 +7,13 @@
 # verify that user is logged in
 $User->check_user_session();
 
+$version = json_decode(@file_get_contents(dirname(__FILE__).'/../../../functions/php-saml/src/Saml2/version.json'), true);
+$version = $version['php-saml']['version'];
+
+if ($version < 3.4) {
+	$Result->show("danger", _('php-saml library missing, please update submodules'), true);
+}
+
 # validate action
 $Admin->validate_action ($_POST['action'], true);
 
@@ -22,6 +29,7 @@ else {
 	$method_settings = new StdClass ();
 	$method_settings->params = new StdClass ();
 	# set default values
+	$method_settings->params->strict = "1";
 	$method_settings->params->idpissuer = "";
 	$method_settings->params->idplogin = "";
 	$method_settings->params->idplogout = "";
@@ -85,6 +93,17 @@ $(document).ready(function() {
 
 	<tr>
 		<td colspan="3"><hr></td>
+	</tr>
+
+	<!-- Strict mode -->
+	<tr>
+		<td><?php print _('Use strict mode'); ?></td>
+		<td>
+			<input type="checkbox" class="input-switch" value="1" name="strict" <?php if(@$method_settings->params->strict == 1) print 'checked'; ?> >
+		</td>
+		<td class="info2">
+			<?php print _('Enable Onelogin php-saml strict mode').'<br>'._('Requires pretty links and mod_rewrite'); ?><br>
+		</td>
 	</tr>
 
 	<!-- Idp issuer -->

@@ -158,7 +158,14 @@ if(@$config['requests_public']===false) {
 
 		//check if SAML2 login is possible
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-		if($saml2settings!=false){
+
+		$version = json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
+		$version = $version['php-saml']['version'];
+
+		if ($version < 3.4) {
+			$Result->show("danger", _('php-saml library missing, please update submodules'));
+		}
+		elseif($saml2settings!=false){
 			$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
 		}
 

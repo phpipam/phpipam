@@ -48,6 +48,11 @@ $values = array(
 unset($_POST['id'], $_POST['type'], $_POST['description'], $_POST['action']);
 $values["params"]=json_encode($_POST);
 
+#Verify that the private certificate and key are provided if Signing Authn Requests is set
+if(@$_POST['spsignauthn']=="1" && (empty($_POST['spx509cert']) || empty($_POST['spx509key']))) {
+	$Result->show("danger",  _("SP (Client) certificate and key are required to sign Authn requests"), true);
+}
+
 $secure_keys=[
 	'adminUsername',
 	'adminPassword',
@@ -59,7 +64,7 @@ $secure_keys=[
 # log values
 $values_log = $values;
 # mask secure keys
-foreach($_POST as $key) {
+foreach($_POST as $key => $value) {
 	if(in_array($key, $secure_keys)){ $_POST[$key] = "********"; }
 }
 $values_log["params"]=json_encode($_POST);

@@ -70,7 +70,7 @@ foreach($all_methods as $method) {
 		foreach($params as $key=>$parameter) {
 			// mask secure keys
 			if(in_array($key, $secure_keys) && strlen($parameter)>0 ) { $parameter = "********"; }
-			$parameter = $Tools->shorten_text($parameter, 96);
+			$parameter = $Tools->shorten_text($parameter, 80);
 			// print
 			print $key." => ".$parameter."<br>";
 		}

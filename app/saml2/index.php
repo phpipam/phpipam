@@ -1,4 +1,6 @@
 <?php
+/* @config file ------------------ */
+require_once( dirname(__FILE__) . '/../../functions/classes/class.Config.php' );
 
 # verify php build
 include('functions/checks/check_php_build.php');		// check for support for PHP modules and database connection
@@ -9,20 +11,24 @@ require_once(TOOLKIT_PATH . '_toolkit_loader.php');   // We load the SAML2 lib
 // get SAML2 settings from db
 $dbobj=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
 if(!$dbobj){
-    $Result->show("danger", "SAML settings not found in database", true);
+    $Result->show("danger", _("SAML settings not found in database"), true);
 }
 
 //decode authentication module params
 $params=json_decode($dbobj->params);
+
+if (empty($params->idpx509cert) && !empty($params->idpcertfingerprint)) {
+    $Result->show("danger", _("Please login as admin and update SAML authentication settings"), true);
+}
 
 //if using advanced settings, instantiate without db settings
 if(filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)){
 	$auth = new OneLogin\Saml2\Auth();
 }
 else{
-
 	$settings = array (
-        'strict' => false,
+        'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
+        'debug' => Config::ValueOf('debugging'),
         'sp' => array (
             'entityId' => $Tools->createURL(),
             'assertionConsumerService' => array (
