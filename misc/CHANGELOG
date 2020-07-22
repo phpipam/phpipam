@@ -19,6 +19,7 @@
     + Location data missing in exports. (#2833);
     + Check mysqldump path when exporting database;
     + Current rack position missing when editing a device. (#2545);
+    + Misc html fixes (#3026,#3081,#3082);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
