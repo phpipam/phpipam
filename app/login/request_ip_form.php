@@ -24,7 +24,7 @@ else {
 $subnets = $Tools->requests_fetch_available_subnets ();
 
 # die if no subnets are available for requests!
-if($subnets===NULL) { ?>
+if(!is_array($subnets)) { ?>
 <tr>
 	<td colspan="2"><div class="alert alert-warning" style="white-space:nowrap;"><?php print _('No subnets available for requests'); ?></div></td>
 </tr>
@@ -50,10 +50,7 @@ if($subnets===NULL) { ?>
 		foreach($subnets as $subnet) {
 			# cast
 			$subnet = (array) $subnet;
-			# must not have any slave subnets
-			if(!$Subnets->has_slaves($subnet['id'])) {
-				print '<option value="'.$subnet['id'].'">'.$Subnets->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].' ['.$subnet['description'].']</option>';
-			}
+			print '<option value="'.$subnet['id'].'">'.$Subnets->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].' ['.$subnet['description'].']</option>';
 		}
 		?>
 		</select>

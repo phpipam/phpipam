@@ -997,8 +997,15 @@ class Tools extends Common_functions {
 	 * @return array|null
 	 */
 	public function requests_fetch_available_subnets () {
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull`!=1 ORDER BY `subnet`;"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+		// All subnets where allowRequests=1, isFull=0 and subnet has no children.
+		$query = "SELECT s1.* FROM subnets AS s1
+			LEFT JOIN subnets AS s2 ON s2.masterSubnetId = s1.id
+			WHERE s1.allowRequests=1
+			AND s1.isFull!=1
+			AND s2.masterSubnetId IS NULL
+			ORDER BY LPAD(s1.subnet,39,0);";
+		try { $subnets = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return NULL; }
 
 		# save
 		return sizeof($subnets)>0 ? (array) $subnets : NULL;
