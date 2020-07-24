@@ -8,13 +8,14 @@ $Database 	= new Database_PDO;
 $Subnets 	= new Subnets ($Database);
 $Tools	 	= new Tools ($Database);
 $Admin	 	= new Admin ($Database, false);
+$User		= new User ($Database);
 $Result 	= new Result ();
 
 # fetch settings, user is not authenticated !
 $Tools->get_settings();
 
-# disable requests module for public
-if(@$config['requests_public']===false) {
+# disable requests module for public (non-authenticated users)
+if(!$User->is_authenticated() && @$config['requests_public']===false) {
 	$Tools->settings->enableIPrequests = 0;
 }
 
