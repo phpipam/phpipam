@@ -44,6 +44,7 @@
     + Blank 'MAC' on SNMP-ARP and SNMP-MAC scans (#2911);
     + Incorrect network/broadcast calculation for IPv6 (#2879);
     + Increase allowed email and password lengths (#3021);
+    + Blank 'MAC' on SNMP-ARP and SNMP-MAC (#2911);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
