@@ -21,6 +21,9 @@
 
     Bugfixes:
     ----------------------------
+    + Fixed upgrade queries issues from 1.3.2 to 1.4;
+    + Fixed boolean printout in footer (#2625);
+    + Fixed BGP Admin isn't working (#2631);
     + do not show statistics in dashboard widget for disabled modules (#2602);
     + MySQL 8.0 compatibility. (#2646,#2239);
     + Permit non-numeric postcodes for customers (#2393);
@@ -45,6 +48,7 @@
     + Incorrect network/broadcast calculation for IPv6 (#2879);
     + Increase allowed email and password lengths (#3021);
     + Blank 'MAC' on SNMP-ARP and SNMP-MAC (#2911);
+    + Wrong unit location for dual-sided racks (#3086);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
@@ -63,15 +67,6 @@
     + Italian (it_IT) translation added (#2813);
     + Updated German translation (#2970, #3065);
     + Updated Russian translation (#3028);
-
-== 1.4.1
-
-    Bugfixes:
-    ----------------------------
-    + Fixed upgrade queries issues from 1.3.2 to 1.4;
-    + Fixed boolean printout in footer (#2625);
-    + Fixed BGP Admin isn't working (#2631);
-
 
 == 1.4
 
