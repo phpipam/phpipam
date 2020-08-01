@@ -21,7 +21,7 @@ $all_method_types = $User->fetch_available_auth_method_types();
 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 <?php
 foreach($all_method_types as $type) {
-	print "<li><a class='open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new $type authentication")."</a></li>";
+	print "<li><a class='open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='add' data-type='$type'><i class='fa fa-plus'></i> "._("Create new ").$type._(" authentication")."</a></li>";
 }
 ?>
 </ul>
