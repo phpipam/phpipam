@@ -87,10 +87,10 @@ foreach($all_methods as $method) {
 	print "	<td class='actions'>";
 	print "	<div class='btn-group'>";
 	if ($method->type=="SAML2")
-	print "		<a class='btn btn-xs btn-default' href='".create_link('saml2-idp')."' target='_blank' title='SAML2 Metadata'><i class='fa fa-info'></i></a>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='edit' data-type='$method->type' data-id='$method->id' title='Edit'><i class='fa fa-pencil'></i></button>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='delete' data-type='$method->type' data-id='$method->id' title='Delete'><i class='fa fa-times'></i></button>";
-	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/check-connection.php' data-class='500' data-id='$method->id' title='Verify connection' $disabled><i class='fa fa-bolt'></i></button>";
+	print "		<a class='btn btn-xs btn-default' href='".create_link('saml2-idp')."' target='_blank' title='"._("SAML2 Metadata")."'><i class='fa fa-info'></i></a>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='edit' data-type='$method->type' data-id='$method->id' title='"._("Edit")."'><i class='fa fa-pencil'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/edit.php' data-class='700' data-action='delete' data-type='$method->type' data-id='$method->id' title='"._("Delete")."'><i class='fa fa-times'></i></button>";
+	print "		<button class='btn btn-xs btn-default open_popup' data-script='app/admin/authentication-methods/check-connection.php' data-class='500' data-id='$method->id' title='"._("Verify connection")."' $disabled><i class='fa fa-bolt'></i></button>";
 	print "	</div>";
 	print "	</td>";
 	print "</tr>";
