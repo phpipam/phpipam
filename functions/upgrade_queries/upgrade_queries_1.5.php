@@ -125,3 +125,10 @@ $upgrade_queries["1.5.34"][] = "ALTER TABLE `users` CHANGE `email` `email` varch
 
 $upgrade_queries["1.5.34"][] = "-- Database version bump";
 $upgrade_queries["1.5.34"][] = "UPDATE `settings` set `dbversion` = '34';";
+
+// Custom fields on IP request forms (#2956);
+//
+$upgrade_queries["1.5.35"][] = "ALTER TABLE `requests` ADD `mac` varchar(20) DEFAULT NULL;";
+
+$upgrade_queries["1.5.35"][] = "-- Database version bump";
+$upgrade_queries["1.5.35"][] = "UPDATE `settings` set `dbversion` = '35';";

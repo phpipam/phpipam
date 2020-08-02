@@ -6,6 +6,7 @@
     + Optionally hide section subnet menus;
     + L2 Domains user permissions;
     + Add scanPingType=="none" option to disable scanning;
+    + Custom fields on IP request forms (#2956);
 
     Enhancements, changes:
     ----------------------------
