@@ -1566,7 +1566,7 @@ class Common_functions  {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
-		$html[] = ' <input type="text" class="ip_addr form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
     	// result
     	return $html;
 	}
