@@ -144,7 +144,7 @@ else {
 		if (isset($required_fields)) {
 			$timepicker_index = 0;
 			foreach ($required_fields as $field) {
-				$custom_input = $Tools->create_custom_field_input ($field, $address, $timepicker_index);
+				$custom_input = $Tools->create_custom_field_input ($field, $address, $timepicker_index, false, '', $m);
 				$timepicker_index = $custom_input['timepicker_index'];
 
 				print "<td>".$custom_input['field']."</td>\n";

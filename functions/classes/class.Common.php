@@ -1371,9 +1371,10 @@ class Common_functions  {
      * @param mixed $timepicker_index
      * @param bool $disabled
      * @param string $set_delimiter
+     * @param string $nameSuffix
      * @return array
      */
-    public function create_custom_field_input ($field, $object, $timepicker_index, $disabled = false, $set_delimiter = "") {
+    public function create_custom_field_input ($field, $object, $timepicker_index, $disabled = false, $set_delimiter = "", $nameSuffix = "") {
         # make sure it is array
 		$field  = (array) $field;
 		$object = (object) $object;
@@ -1391,23 +1392,23 @@ class Common_functions  {
 
         //set, enum
         if(substr($field['type'], 0,3) == "set" || substr($field['type'], 0,4) == "enum") {
-        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter);
+        	$html = $this->create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter, $nameSuffix);
         }
         //date and time picker
         elseif($field['type'] == "date" || $field['type'] == "datetime") {
-        	$html = $this->create_custom_field_input_date ($field, $object, $timepicker_index, $disabled_text);
+        	$html = $this->create_custom_field_input_date ($field, $object, $timepicker_index, $disabled_text, $nameSuffix);
         }
         //boolean
         elseif($field['type'] == "tinyint(1)") {
-        	$html = $this->create_custom_field_input_boolean ($field, $object, $disabled_text);
+        	$html = $this->create_custom_field_input_boolean ($field, $object, $disabled_text, $nameSuffix);
         }
         //text
         elseif($field['type'] == "text") {
-        	$html = $this->create_custom_field_input_textarea ($field, $object, $disabled_text);
+        	$html = $this->create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix);
         }
 		//default - input field
 		else {
-            $html = $this->create_custom_field_input_input ($field, $object, $disabled_text);
+            $html = $this->create_custom_field_input_input ($field, $object, $disabled_text, $nameSuffix);
 		}
 
         # result
@@ -1426,9 +1427,10 @@ class Common_functions  {
      * @param mixed $object
      * @param string $disabled_text
      * @param string $set_delimiter
+     * @param string $nameSuffix
      * @return array
      */
-    private function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "") {
+    private function create_custom_field_input_set_enum ($field, $object, $disabled_text, $set_delimiter = "", $nameSuffix = "") {
 		$html = array();
     	//parse values
     	$field['type'] = trim(substr($field['type'],0,-1));
@@ -1436,7 +1438,7 @@ class Common_functions  {
     	//null
     	if($field['Null']!="NO") { array_unshift($tmp, ""); }
 
-    	$html[] = "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
+    	$html[] = "<select name='$field[nameNew]$nameSuffix' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
     	foreach($tmp as $v) {
     		// set selected
 			$selected = $v==$object->{$field['name']} ? "selected='selected'" : "";
@@ -1469,9 +1471,10 @@ class Common_functions  {
      * @param mixed $object
      * @param mixed $timepicker_index
      * @param string $disabled_text
+     * @param string $nameSuffix
      * @return array
      */
-    private function create_custom_field_input_date ($field, $object, &$timepicker_index, $disabled_text) {
+    private function create_custom_field_input_date ($field, $object, &$timepicker_index, $disabled_text, $nameSuffix = "") {
    		$html = array ();
     	// just for first
     	if($timepicker_index==0) {
@@ -1493,8 +1496,8 @@ class Common_functions  {
     	else							{ $size = 19; $class='datetimepicker';	$format = "yyyy-MM-dd"; }
 
     	//field
-    	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
-    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'] .'" maxlength="'.$size.'" value="'. $this->strip_xss($object->{$field['name']}). '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	if(!isset($object->{$field['name']}))	{ $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
+    	else								    { $html[] = ' <input type="text" class="'.$class.' form-control input-sm input-w-auto" data-format="'.$format.'" name="'. $field['nameNew'].$nameSuffix .'" maxlength="'.$size.'" value="'. $this->strip_xss($object->{$field['name']}). '" rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n"; }
 
     	// result
 		return $html;
@@ -1507,11 +1510,12 @@ class Common_functions  {
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
+     * @param string $nameSuffix
      * @return array
      */
-    private function create_custom_field_input_boolean ($field, $object, $disabled_text) {
+    private function create_custom_field_input_boolean ($field, $object, $disabled_text, $nameSuffix = "") {
     	$html = array ();
-    	$html[] =  "<select name='$field[nameNew]' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
+    	$html[] =  "<select name='$field[nameNew]$nameSuffix' class='form-control input-sm input-w-auto' rel='tooltip' data-placement='right' title='$field[Comment]' $disabled_text>";
     	$tmp = array(0=>"No",1=>"Yes");
     	//null
     	if($field['Null']!="NO") { $tmp[2] = ""; }
@@ -1533,11 +1537,12 @@ class Common_functions  {
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
+     * @param string $nameSuffix
      * @return array
      */
-    private function create_custom_field_input_textarea ($field, $object, $disabled_text) {
+    private function create_custom_field_input_textarea ($field, $object, $disabled_text, $nameSuffix = "") {
     	$html = array ();
-    	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
+    	$html[] = ' <textarea class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" rowspan=3 rel="tooltip" data-placement="right" title="'.$field['Comment'].'" '.$disabled_text.'>'. $object->{$field['name']}. '</textarea>'. "\n";
     	// result
     	return $html;
 	}
@@ -1549,9 +1554,10 @@ class Common_functions  {
      * @param mixed $field
      * @param mixed $object
      * @param string $disabled_text
+     * @param string $nameSuffix
      * @return array
      */
-    private function create_custom_field_input_input ($field, $object, $disabled_text) {
+    private function create_custom_field_input_input ($field, $object, $disabled_text, $nameSuffix = "") {
         $html = array ();
         // max length
         $maxlength = 100;
@@ -1562,7 +1568,7 @@ class Common_functions  {
             $maxlength = str_replace(array("int","(",")"),"", $field['type']);
         }
         // print
-		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'] .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
+		$html[] = ' <input type="text" class="form-control input-sm" name="'. $field['nameNew'].$nameSuffix .'" placeholder="'. $this->print_custom_field_name ($field['name']) .'" value="'. $this->strip_xss($object->{$field['name']}). '" size="30" rel="tooltip" data-placement="right" maxlength="'.$maxlength.'" title="'.$field['Comment'].'" '.$disabled_text.'>'. "\n";
     	// result
     	return $html;
 	}
