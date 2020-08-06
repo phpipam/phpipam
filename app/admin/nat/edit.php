@@ -265,9 +265,8 @@ $custom = $Tools->fetch_custom_fields('nat');
             # all my fields
             foreach($custom as $field) {
                 // create input > result is array (required, input(html), timepicker_index)
-                $custom_input = $Tools->create_custom_field_input ($field, $nat, $_POST['action'], $timepicker_index);
-                // add datepicker index
-                $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+                $custom_input = $Tools->create_custom_field_input ($field, $nat, $timepicker_index);
+                $timepicker_index = $custom_input['timepicker_index'];
                 // print
                 print "<tr>";
                 print " <th>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</th>";

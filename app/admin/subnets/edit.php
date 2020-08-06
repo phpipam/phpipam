@@ -595,18 +595,13 @@ $("input[name='subnet']").change(function() {
 	    	print "</tr>";
 
 		    foreach($custom_fields as $field) {
-
-		    	# replace spaces
-		    	$field['nameNew'] = str_replace(" ", "___", $field['name']);
-
 				# set default value !
 				if ($_POST['action']=="add")	{ $subnet_old_details[$field['name']] = $field['Default']; }
 
 
                 // create input > result is array (required, input(html), timepicker_index)
-                $custom_input = $Tools->create_custom_field_input ($field, $subnet_old_details, $_POST['action'], $timepicker_index);
-                // add datepicker index
-                $timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+                $custom_input = $Tools->create_custom_field_input ($field, $subnet_old_details, $timepicker_index);
+                $timepicker_index = $custom_input['timepicker_index'];
 
                 // print
                 print "<tr>";
