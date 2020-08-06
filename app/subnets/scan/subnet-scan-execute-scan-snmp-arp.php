@@ -150,7 +150,7 @@ else {
     // custom
 	if (isset($required_fields)) {
 		foreach ($required_fields as $field) {
-            print "<th>"._($field['name'])."</th>";
+            print "<th>".$Tools->print_custom_field_name($field['name'])."</th>";
 		}
     }
 	print "	<th></th>";

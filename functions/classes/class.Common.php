@@ -1608,7 +1608,7 @@ class Common_functions  {
 	 *
 	 * @return string
 	 */
-	public function print_custom_field_name ($name, $return = true) {
+	public function print_custom_field_name ($name) {
 		return strpos($name, "custom_")===0 ? substr($name, 7) : $name;
 	}
 
