@@ -568,9 +568,10 @@ else {
     			$similar = $Addresses->search_similar_addresses ($addresses[$n], $User->settings->link_field, $addresses[$n]->{$User->settings->link_field});
 
     			if($similar!==false) {
+        			$link_field_print = $User->settings->link_field == "ip_addr" ? $Subnets->transform_to_dotted($addresses[$n]->{$User->settings->link_field}) : $addresses[$n]->{$User->settings->link_field};
 
         			print "<tr class='similar similar-title'>";
-        			print " <td colspan='$colspan[unused]'>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$addresses[$n]->{$User->settings->link_field}."</strong>:</td>";
+        			print " <td colspan='$colspan[unused]'>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$link_field_print."</strong>:</td>";
         			print "</tr>";
 
                     foreach ($similar as $k=>$s) {
