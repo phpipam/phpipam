@@ -54,6 +54,14 @@ getenv('PROXY_PASS')     ? $proxy_pass     = getenv('PROXY_PASS')     : false;
 getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
 
 /**
+ * php debugging on/off
+ *
+ * true  = SHOW all php errors
+ * false = HIDE all php errors
+ ******************************/
+getenv('IPAM_DEBUG') ? $debugging = filter_var(getenv('IPAM_DEBUG'), FILTER_VALIDATE_BOOLEAN) : false;
+
+/**
  * Session storage - files or database
  *
  * @var string
