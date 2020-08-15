@@ -67,7 +67,10 @@ try {
 	// crypt check
 	if($app->app_security=="crypt") {
 		$encryption_method = Config::ValueOf('api_crypt_encryption_library', 'openssl-128-cbc');
-
+		
+		$isHttps = ($_SERVER['HTTPS'] === 'on' && isset($_SERVER['HTTPS']));
+		$isHttpsPort = (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+		
 		// decrypt request - form_encoded
 		if(strpos($_SERVER['CONTENT_TYPE'], "application/x-www-form-urlencoded")!==false) {
 			$decoded = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
@@ -77,7 +80,15 @@ try {
 			$encrypted_params['app_id'] = $_GET['app_id'];
 			$params = (object) $encrypted_params;
 		}
-		// json_encoded
+		// json_encoded / plaintext base64 over HTTPS
+		elseif(isset($_GET['base64']) && ($isHttps || $isHttpsPort)) {
+			$encrypted_params = base64_decode($_GET['enc_request']);
+			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
+			$encrypted_params = json_decode($encrypted_params, true);
+			$encrypted_params['app_id'] = $_GET['app_id'];
+			$params = (object) $encrypted_params;
+		}
+		// json_encoded / encrypted
 		else {
 			$encrypted_params = $User->Crypto->decrypt($_GET['enc_request'], $app->app_code, $encryption_method);
 			if ($encrypted_params === false) $Response->throw_exception(503, 'Invalid enc_request');
