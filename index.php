@@ -307,7 +307,7 @@ else {
 						if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 						elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
 						else {
-	                        if (!in_array($_GET['section'], $admin_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+	                        if (!isset($admin_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
 							elseif(!file_exists("app/admin/$_GET[section]/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
 							else 															{ include("app/admin/$_GET[section]/index.php"); }
 						}
