@@ -303,7 +303,7 @@ class User extends Common_functions {
                     $this->reset_inactivity_time();
                     $this->update_activity_time ();
                     # bind language
-                    $this->set_ui_language();
+                    set_ui_language();
                 }
             }
         }
@@ -458,21 +458,6 @@ class User extends Common_functions {
         # save current redirect vaule
         if($_SERVER['SCRIPT_URL']!="/login/" && $_SERVER['SCRIPT_URL']!="logout" && $_SERVER['SCRIPT_URL']!="?page=login" && $_SERVER['SCRIPT_URL']!="?page=logout" && $_SERVER['SCRIPT_URL']!="index.php?page=login" && $_SERVER['SCRIPT_URL']!="index.php?page=logout" && $_SERVER['SCRIPT_URL']!="/" && $_SERVER['SCRIPT_URL']!="%2f");
         setcookie("phpipamredirect", preg_replace('/^\/+/', '/', $_SERVER['REQUEST_URI']), time()+10, "/", null, null, true);
-    }
-
-    /**
-     * Sets translation for logged in user
-     *
-     * @access private
-     * @return void
-     */
-    private function set_ui_language () {
-        if(strlen($_SESSION['ipamlanguage'])>0)     {
-            putenv("LC_ALL=$_SESSION[ipamlanguage]");
-            bindtextdomain("phpipam", dirname(__FILE__)."/../locale");    // Specify location of translation tables
-            setlocale(LC_ALL, $_SESSION['ipamlanguage']);        // set language
-            textdomain("phpipam");                                // Choose domain
-        }
     }
 
     /**

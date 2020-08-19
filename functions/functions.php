@@ -28,6 +28,9 @@ if (Config::ValueOf('proxy_enabled') == true) {
 /* global and missing functions */
 require('global_functions.php');
 
+/* Set UI language */
+set_ui_language();
+
 /* @http only cookies ------------------- */
 if(php_sapi_name()!="cli")
 	ini_set('session.cookie_httponly', 1);

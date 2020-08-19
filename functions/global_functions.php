@@ -138,3 +138,48 @@ function php_feature_missing($required_extensions = null, $required_functions = 
 
 	return false;
 }
+
+/**
+ * Set phpIPAM UI locale in order of preference
+ *  1) $_SESSION['ipamlanguage']
+ *  2) Administration -> phpIPAM settings -> Default language
+ *  3) LC_ALL environment
+ *  4) HTTP_ACCEPT_LANGUAGE header
+ */
+function set_ui_language($default_lang = null) {
+
+	if (php_feature_missing(["gettext", "pcre"]))
+		return;
+
+	$application_langs = [$_SESSION['ipamlanguage'], $default_lang, getenv("LC_ALL")];
+
+	$http_accept_langs = preg_replace("/;.*$/", "", explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+
+	// Try each langage in order of preference
+	$langs = array_merge($application_langs, $http_accept_langs);
+
+	foreach($langs as $lang) {
+		if (!is_string($lang) || strlen($lang)==0)
+			continue;
+
+		if (!file_exists(dirname(__FILE__)."/locale/$lang/LC_MESSAGES/phpipam.mo"))
+			continue;
+
+		putenv("LC_ALL=".$lang);
+
+		// https://help.ubuntu.com/community/EnvironmentVariables
+		// Unlike "LANG" and "LC_*", "LANGUAGE" should not be assigned a complete locale name including the encoding part (e.g. ".UTF-8").
+		putenv("LANG=".$lang);
+		putenv("LANGUAGE=".preg_replace("/\.utf-?8/i", "", $lang));
+
+		setlocale(LC_ALL, $lang);
+
+		bind_textdomain_codeset('phpipam', 'UTF-8');
+		bindtextdomain("phpipam", dirname(__FILE__)."/locale");
+		textdomain("phpipam");
+
+		return true;
+	}
+
+	return false;
+}

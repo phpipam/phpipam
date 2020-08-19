@@ -115,15 +115,10 @@ if(@$config['requests_public']===false) {
 	<?php
 	# set default language
 	if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
-		# get language
+		# get global default language
 		$lang = $User->get_default_lang();
-
-		if (is_object($lang)) {
-			putenv("LC_ALL=".$lang->l_code);
-			setlocale(LC_ALL, $lang->l_code);					// set language
-		}
-		bindtextdomain("phpipam", "./functions/locale");	// Specify location of translation tables
-		textdomain("phpipam");								// Choose domain
+		if (is_object($lang))
+			set_ui_language($lang->l_code);
 	}
 	?>
 
