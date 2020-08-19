@@ -13,7 +13,7 @@ foreach($tools_menu as $k=>$tool) {
 	print "<div class='panel panel-default toolsMenu'>";
 	# header
 	print "<div class='panel-heading'>";
-	print "<h3 class='panel-title'><i class='fa $tools_menu_icons[$k]'></i> "._($k)."</h3>";
+	print "<h3 class='panel-title'><i class='fa $tools_menu_icons[$k]'></i> ".$k."</h3>";
 	print "</div>";
 
 	# items
@@ -27,12 +27,12 @@ foreach($tools_menu as $k=>$tool) {
 		$href = explode("/", $t['href']);
 		if(sizeof($href)>0) {
 			if(isset($href[1]))
-			print "<a href='".create_link("tools", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+			print "<a href='".create_link("tools", $href[0], $href[1])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
 			else
-			print "<a href='".create_link("tools", $href[0])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+			print "<a href='".create_link("tools", $href[0])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
 		}
 		else {
-			print "<a href='".create_link("tools", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>"._($t['name'])."</a>";
+			print "<a href='".create_link("tools", $t['href'])."'><i class='fa fa-angle-right pull-right icon-gray'></i>".$t['name']."</a>";
 		}
 		print "</li>";
 	}
