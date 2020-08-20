@@ -164,6 +164,12 @@ $proxy_use_auth = false;                                  // Enable/Disable Prox
 // $failed_access_message = '';
 
 /**
+ * Footer message
+ * custom message included in the footer of every page
+ ******************************/
+$config['footer_message'] = "Confidential information, do not disclose.";
+
+/**
  * General tweaks
  ******************************/
 $config['logo_width']             = 220;                    // logo width
