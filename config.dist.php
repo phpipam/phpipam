@@ -164,17 +164,12 @@ $proxy_use_auth = false;                                  // Enable/Disable Prox
 // $failed_access_message = '';
 
 /**
- * Footer message
- * custom message included in the footer of every page
- ******************************/
-$config['footer_message'] = "Confidential information, do not disclose.";
-
-/**
  * General tweaks
  ******************************/
 $config['logo_width']             = 220;                    // logo width
 $config['requests_public']        = true;                   // Show IP request module on login page
 $config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
+$config['footer_message']         = "";                     // Custom message included in the footer of every page
 
 /**
  * PHP CLI binary for scanning and network discovery.
