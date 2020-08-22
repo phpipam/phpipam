@@ -13,8 +13,13 @@
 		}
 		?>
 	</td>
-
+	
 	<?php
+	# custom footer message
+	if(is_string($config['footer_message']) && strlen($config['footer_message'])>0) {
+		print _('<td>' . $config['footer_message'] . '</td>');
+	} 
+
 	# exclude install
 	if($_GET['page']!="install") { ?>
 	<td>

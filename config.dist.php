@@ -169,6 +169,7 @@ $proxy_use_auth = false;                                  // Enable/Disable Prox
 $config['logo_width']             = 220;                    // logo width
 $config['requests_public']        = true;                   // Show IP request module on login page
 $config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
+$config['footer_message']         = "";                     // Custom message included in the footer of every page
 
 /**
  * PHP CLI binary for scanning and network discovery.
