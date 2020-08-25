@@ -151,12 +151,16 @@ function set_ui_language($default_lang = null) {
 	if (php_feature_missing(["gettext", "pcre"]))
 		return;
 
-	$application_langs = [$_SESSION['ipamlanguage'], $default_lang, getenv("LC_ALL")];
+	$user_lang = isset($_SESSION['ipamlanguage']) ? $_SESSION['ipamlanguage'] : null;
+	$sys_lang  = is_string(getenv("LC_ALL")) ? getenv("LC_ALL") : null;
 
-	$http_accept_langs = preg_replace("/;.*$/", "", explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']));
+	// Read accepted HTTP languages
+	$http_accept_langs = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) : [];
+	// remove ;q= (q-factor weighting)
+	$http_accept_langs = preg_replace("/;.*$/", "", $http_accept_langs);
 
 	// Try each langage in order of preference
-	$langs = array_merge($application_langs, $http_accept_langs);
+	$langs = array_merge([$user_lang, $default_lang, $sys_lang], $http_accept_langs);
 
 	foreach($langs as $lang) {
 		if (!is_string($lang) || strlen($lang)==0)
