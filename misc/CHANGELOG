@@ -1,3 +1,9 @@
+== 1.4.2
+
+    Security Fixes:
+    ----------------------------
+    + Upgraded jQuery to 3.5.1 (#3119);
+
 == 1.4.1
 
     Bugfixes:
