@@ -60,6 +60,7 @@
     + SQL injections processing `tableName` (#2738);
     + SQL injections processing `ftype` (#2751);
     + All circuits map, PHP object injection (#2937);
+    + Upgraded jQuery to 3.5.1 (#3119);
 
     Translations:
     ----------------------------
