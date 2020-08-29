@@ -183,12 +183,12 @@ $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropa
 
 /*    generate random password */
 function randomPass() {
-    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890#_-![]=~";
     var pass = "";
     var x;
     var i;
     for(x=0; x<10; x++) {
-        i = Math.floor(Math.random() * 62);
+        i = Math.floor(Math.random() * 70);
         pass += chars.charAt(i);
     }
     return pass;
