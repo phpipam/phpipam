@@ -103,7 +103,9 @@ $values = array("id"=>1,
 				"pingStatus"          =>@$_POST['pingStatus'],
 				"scanPingPath"        =>@$_POST['scanPingPath'],
 				"scanFPingPath"       =>@$_POST['scanFPingPath'],
-				"scanMaxThreads"      =>@$_POST['scanMaxThreads']
+				"scanMaxThreads"      =>@$_POST['scanMaxThreads'],
+                                // telegram token
+                                "telegramBotCode"     =>isset($_POST) && isset($_POST['telegramBotCode']) ? $_POST['telegramBotCode'] : null
 				);
 // Update linked_field indexes
 $Tools->verify_linked_field_indexes($_POST['link_field']);

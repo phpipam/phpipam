@@ -155,16 +155,16 @@ class Subnets extends Common_functions {
 	 * @access public
 	 * @param mixed $action
 	 * @param mixed $values
-	 * @param bool $mail_changelog (default: true)
+	 * @param bool $send_changelog (default: true)
 	 * @return bool
 	 */
-	public function modify_subnet ($action, $values, $mail_changelog = true) {
+	public function modify_subnet ($action, $values, $send_changelog = true) {
 		# strip tags
 		$values = $this->strip_input_tags ($values);
 
 		# execute based on action
 		if($action=="add")			{ return $this->subnet_add ($values); }
-		elseif($action=="edit")		{ return $this->subnet_edit ($values, $mail_changelog); }
+		elseif($action=="edit")		{ return $this->subnet_edit ($values, $send_changelog); }
 		elseif($action=="delete")	{ return $this->subnet_delete ($values['id']); }
 		elseif($action=="truncate")	{ return $this->subnet_truncate ($values['id']); }
 		elseif($action=="resize")	{ return $this->subnet_resize ($values['id'], $values['subnet'], $values['mask']); }
@@ -242,10 +242,10 @@ class Subnets extends Common_functions {
 	 *
 	 * @access private
 	 * @param mixed $values
-	 * @param bool $mail_changelog
+	 * @param bool $send_changelog
 	 * @return bool
 	 */
-	private function subnet_edit ($values, $mail_changelog = true) {
+	private function subnet_edit ($values, $send_changelog = true) {
 		# save old values
 		$old_subnet = $this->fetch_subnet (null, $values['id']);
 		$values = $this->subnet_check_values($values);
@@ -271,7 +271,7 @@ class Subnets extends Common_functions {
 		$this->lastInsertId = $this->Database->lastInsertId();
 
 		# changelog
-		if($mail_changelog)
+		if($send_changelog)
 		$this->Log->write_changelog('subnet', "edit", 'success', $old_subnet, $values);
 		# ok
 		$this->Log->write( "Subnet $old_subnet->description edit", "Subnet $old_subnet->description edited<hr>".$this->array_to_log($this->reformat_empty_array_fields ($values, "NULL")), 0);

@@ -541,6 +541,16 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Telegram API settings -->
+<tr>
+	<td class="title"><?php print _('Telegram bot API Token'); ?></td>
+	<td>
+		<input type="text" class="form-control input-sm" name="telegramBotCode" value="<?php print $settings['telegramBotCode']; ?>">
+	</td>
+	<td class="info2">
+		<?php print _('Set Telegram bot API Token'); ?>
+	</td>
+</tr>
 
 <!-- ICPM -->
 <tr class="settings-title">

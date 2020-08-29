@@ -1291,6 +1291,9 @@ class User extends Common_functions {
                         "menuCompact"      => $this->verify_checkbox(@$post['menuCompact']),
                         "theme"            => $post['theme'],
                         "2fa"              => $this->verify_checkbox(@$post['2fa']),
+                        "telegramId"       => isset($post['telegramId']) ? intval($post['telegramId']) : null,
+                        "telegramNotify"   => isset($post['telegramNotify']) && $post['telegramNotify']=="Yes" ? "Yes" : "No",
+                        "telegramChangelog"=> isset($post['telegramChangelog']) && $post['telegramChangelog']=="Yes" ? "Yes" : "No"
                         );
         if(strlen($post['password1'])>0) {
         $items['password'] = $this->crypt_user_pass ($post['password1']);

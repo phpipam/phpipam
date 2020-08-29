@@ -140,6 +140,39 @@ if($User->user->authMethod == 1) {
     <?php } ?>
 </tr>
 
+<!-- Telegram User Id -->
+<tr>
+    <td><?php print _('Telegram User Id'); ?></td>
+    <td><input type="text" class="form-control input-sm" name="telegramId" value="<?php property_exists($User->user, 'telegramId') ? print $User->user->telegramId : ''; ?>"></td>
+    <td class="info2"><?php print _('Enter telegram User Id'); ?></td>
+</tr>
+
+<tr>
+    <td><?php print _('Telegram notifications'); ?></td>
+    <td>
+        <select name="telegramNotify" class="form-control input-sm input-w-auto">
+            <option value="No"><?php print _('No'); ?></option>
+            <option value="Yes" <?php if (property_exists($User->user, 'telegramNotify') && $User->user->telegramNotify == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+        </select>
+    </td>
+    <?php if($User->user->role=="Administrator") { ?>
+	<td class="info2"><?php print _('Select yes to receive telegram notification changes (IP state change, new hosts, requests)'); ?></td>
+    <?php } else { ?>
+	<td class="info2"><?php print _('Select yes to receive telegram notifications for IP requests'); ?></td>
+    <?php } ?>    
+</tr>
+
+<tr>
+    <td><?php print _('Telegram Changelog'); ?></td>
+    <td>
+        <select name="telegramChangelog" class="form-control input-sm input-w-auto">
+            <option value="No"><?php print _('No'); ?></option>
+            <option value="Yes" <?php if (property_exists($User->user, 'telegramChangelog') && $User->user->telegramChangelog == "Yes") print "selected='selected'"; ?>><?php print _('Yes'); ?></option>
+        </select>
+    </td>
+    <td class="info2"><?php print _('Select yes to receive notification change telegram for changelog'); ?></td>
+</tr>
+
 
 <!-- display settings -->
 <tr>

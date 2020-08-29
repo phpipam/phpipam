@@ -223,6 +223,7 @@ CREATE TABLE `settings` (
   `2fa_name` VARCHAR(32)  NULL  DEFAULT 'phpipam',
   `2fa_length` INT(2)  NULL  DEFAULT '16',
   `2fa_userchange` BOOL  NOT NULL  DEFAULT '1',
+  `telegramBotCode` VARCHAR(128)  DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -396,6 +397,9 @@ CREATE TABLE `users` (
   `token_valid_until` DATETIME  NULL,
   `module_permissions` varchar(255) COLLATE utf8_bin DEFAULT '{"vlan":"1","l2dom":"1","vrf":"1","pdns":"1","circuits":"1","racks":"1","nat":"1","pstn":"1","customers":"1","locations":"1","devices":"1"}',
   `compress_actions` TINYINT(1)  NULL  DEFAULT '1',
+  `telegramId` BIGINT(20) UNSIGNED DEFAULT NULL,
+  `telegramNotify` SET('Yes','No')  NULL  DEFAULT 'No',
+  `telegramChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
   PRIMARY KEY (`username`),
   UNIQUE KEY `id_2` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
