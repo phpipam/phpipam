@@ -154,17 +154,17 @@ foreach ($users as $user) {
 
 	print "	<td class='actions'>";
     $links = [];
-    $links[] = ["type"=>"header", "text"=>"Show user"];
-    $links[] = ["type"=>"link", "text"=>"Show user", "href"=>create_link("administration", "users", $user['id']), "icon"=>"eye", "visible"=>"dropdown"];
- 	$links[] = ["type"=>"divider"];
-    $links[] = ["type"=>"header", "text"=>"Manage user"];
-    $links[] = ["type"=>"link", "text"=>"Edit user", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'", "icon"=>"pencil"];
-    $links[] = ["type"=>"link", "text"=>"Delete user", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'", "icon"=>"times"];
-	if(!isset($_SESSION['realipamusername'])) {
- 	$links[] = ["type"=>"divider"];
-    $links[] = ["type"=>"header", "text"=>"Swap user"];
-    $links[] = ["type"=>"link", "text"=>"Swap user", "href"=>create_link("administration", "users", "switch", $user['username']), "icon"=>"exchange"];
-	}
+    $links[] = ["type"=>"header", "text"=>_("Show user")];
+    $links[] = ["type"=>"link", "text"=>_("Show user"), "href"=>create_link("administration", "users", $user['id']), "icon"=>"eye", "visible"=>"dropdown"];
+    $links[] = ["type"=>"divider"];
+    $links[] = ["type"=>"header", "text"=>_("Manage user")];
+    $links[] = ["type"=>"link", "text"=>_("Edit user"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='edit' data-id='$user[id]'", "icon"=>"pencil"];
+    $links[] = ["type"=>"link", "text"=>_("Delete user"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/users/edit.php' data-class='700' data-action='delete' data-id='$user[id]'", "icon"=>"times"];
+    if(!isset($_SESSION['realipamusername'])) {
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Swap user")];
+        $links[] = ["type"=>"link", "text"=>_("Swap user"), "href"=>create_link("administration", "users", "switch", $user['username']), "icon"=>"exchange"];
+    }
 
     // print links
     print $User->print_actions($User->user->compress_actions, $links);
