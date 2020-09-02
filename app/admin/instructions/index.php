@@ -21,10 +21,10 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
 
     # set params
     if($_GET['subnetId']=="1")  {
-        $title = "Edit user instructions";
+        $title = _("Edit user instructions");
     }
     else {
-        $title = "Edit IP request instructions";
+        $title = _("Edit IP request instructions");
     }
 
     //count rows
@@ -36,8 +36,8 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     ?>
 
     <ul class="nav nav-tabs" style="margin-bottom: 30px;">
-        <li role="presentation" <?php if($_GET['subnetId']==1) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 1); ?>">User instructions</a></li>
-        <li role="presentation" <?php if($_GET['subnetId']==2) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 2); ?>">IP request instructions</a></li>
+        <li role="presentation" <?php if($_GET['subnetId']==1) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 1); ?>"><?php print _("User instructions"); ?></a></li>
+        <li role="presentation" <?php if($_GET['subnetId']==2) { print "class='active'"; } ?>><a href="<?php print create_link("administration", "instructions", 2); ?>"><?php print _("IP request instructions"); ?></a></li>
     </ul>
 
     <!-- title -->
@@ -77,5 +77,5 @@ if($_GET['subnetId']=="1" || $_GET['subnetId']="2")  {
     <?php
 }
 else {
-    $Result->show("danger", "Invalid ID", false);
+    $Result->show("danger", _("Invalid ID"), false);
 }

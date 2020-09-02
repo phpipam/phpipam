@@ -26,7 +26,7 @@ if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User
     print "<tr>";
     print " <td colspan='4'>";
     print "     <div class='btn-group' role='group'>";
-    print "         <a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> Add new nat</a>";
+    print "         <a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/nat/edit.php' data-class='700' data-action='add' data-id='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._("Add new nat")."</a>";
     if($all_nats!==false) {
     print "         <div class='btn-group' role='group'>";
     print "             <button type='button' class='btn btn-sm btn-default dropdown-toggle' data-toggle='dropdown' aria-expanded='false'>"._("Map to existing NAT")." <span class='caret'></span></button>";
@@ -52,9 +52,9 @@ if ($User->settings->enableNAT==1 && $User->get_module_permissions ("nat")>=User
         // set actions
         $links = [];
         if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>"Manage"];
-            $links[] = ["type"=>"link", "text"=>"Edit NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
-            $links[] = ["type"=>"link", "text"=>"Delete NAT", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+            $links[] = ["type"=>"header", "text"=>_("Manage")];
+            $links[] = ["type"=>"link", "text"=>_("Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+            $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
         };
         // print
         print $Tools->print_nat_table ($n, $User->is_admin(false), false, false, false, false, $User->print_actions($User->user->compress_actions, $links, true));

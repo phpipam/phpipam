@@ -130,14 +130,14 @@ if(isset($sections_sorted)) {
 
 	    	   	print '	<td class="actions">'. "\n";
 
-	    	   	// links
-		        $links = [];
-	            $links[] = ["type"=>"header", "text"=>"Show"];
-	            $links[] = ["type"=>"link", "text"=>"View section", "href"=>create_link( "subnets", $section['id']), "icon"=>"eye", "visible"=>"dropdown"];
-	            $links[] = ["type"=>"divider"];
-	            $links[] = ["type"=>"header", "text"=>"Manage"];
-	            $links[] = ["type"=>"link", "text"=>"Edit section", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'", "icon"=>"pencil"];
-	            $links[] = ["type"=>"link", "text"=>"Delete section", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'", "icon"=>"times"];
+            // links
+            $links = [];
+            $links[] = ["type"=>"header", "text"=>_("Show")];
+            $links[] = ["type"=>"link", "text"=>_("View section"), "href"=>create_link( "subnets", $section['id']), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"divider"];
+            $links[] = ["type"=>"header", "text"=>_("Manage")];
+            $links[] = ["type"=>"link", "text"=>_("Edit section"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='edit' data-sectionid='$section[id]'", "icon"=>"pencil"];
+            $links[] = ["type"=>"link", "text"=>_("Delete section"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/sections/edit.php' data-class='700' data-action='delete' data-sectionid='$section[id]'", "icon"=>"times"];
 		        // print links
 		        print $User->print_actions($User->user->compress_actions, $links);
 

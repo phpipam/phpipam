@@ -59,7 +59,7 @@ else {
     # if none than print
     if($all_locations===false) {
         print "<tr>";
-        print " <td colspan='$colspan'>".$Result->show("info","No Locations configured", false, false, true)."</td>";
+        print " <td colspan='$colspan'>".$Result->show("info",_("No Locations configured"), false, false, true)."</td>";
         print "</tr>";
     }
     else {
@@ -96,15 +96,15 @@ else {
             if($User->get_module_permissions ("locations")>=User::ACCESS_RW) {
             print "<td class='actions'>";
             $links = [];
-            $links[] = ["type"=>"header", "text"=>"Show"];
-            $links[] = ["type"=>"link", "text"=>"Show location", "href"=>create_link($_GET['page'], "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"header", "text"=>_("Show")];
+            $links[] = ["type"=>"link", "text"=>_("Show location"), "href"=>create_link($_GET['page'], "locations", $l->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
 
-            $links[] = ["type"=>"header", "text"=>"Manage"];
-            $links[] = ["type"=>"link", "text"=>"Edit location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$l->id'", "icon"=>"pencil"];
+            $links[] = ["type"=>"header", "text"=>_("Manage")];
+            $links[] = ["type"=>"link", "text"=>_("Edit location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='edit'  data-id='$l->id'", "icon"=>"pencil"];
 
             if($User->get_module_permissions ("locations")>=User::ACCESS_RWA) {
-                $links[] = ["type"=>"link", "text"=>"Delete location", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$l->id'", "icon"=>"times"];
+                $links[] = ["type"=>"link", "text"=>_("Delete location"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/locations/edit.php' data-action='delete'  data-id='$l->id'", "icon"=>"times"];
                 $links[] = ["type"=>"divider"];
             }
             // print links

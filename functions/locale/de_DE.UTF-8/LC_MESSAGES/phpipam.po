@@ -366,8 +366,6 @@ msgstr "Aktualisierung aller Benutzer fehlgeschlagen!"
 #: app/admin/admin-menu-config.php:27 app/admin/admin-menu-config.php:28
 #: app/admin/admin-menu-config.php:29 app/admin/admin-menu-config.php:31
 #: app/admin/admin-menu-config.php:32
-#, fuzzy
-#| msgid "User management"
 msgid "Server management"
 msgstr "Server Verwaltung"
 
@@ -379,16 +377,12 @@ msgstr "Server Verwaltung"
 #: app/admin/admin-menu-config.php:49 app/admin/admin-menu-config.php:50
 #: app/admin/admin-menu-config.php:53 app/admin/admin-menu-config.php:55
 #: app/admin/admin-menu-config.php:56 app/admin/admin-menu-config.php:57
-#, fuzzy
-#| msgid "API management"
 msgid "IP related management"
 msgstr "IP Verwaltung"
 
 #: app/admin/admin-menu-config.php:10 app/admin/admin-menu-config.php:60
 #: app/admin/admin-menu-config.php:62 app/admin/admin-menu-config.php:64
 #: app/admin/admin-menu-config.php:66 app/admin/admin-menu-config.php:68
-#, fuzzy
-#| msgid "Device type management"
 msgid "Device management"
 msgstr "Ger&auml;te Verwaltung"
 
@@ -408,14 +402,10 @@ msgid "Tools"
 msgstr "Tools"
 
 #: app/admin/admin-menu-config.php:14
-#, fuzzy
-#| msgid "phpIPAM Server settings"
 msgid "phpIPAM settings"
 msgstr "Einstellungen phpIPAM"
 
 #: app/admin/admin-menu-config.php:14
-#, fuzzy
-#| msgid "phpIPAM Server settings"
 msgid "phpIPAM server settings"
 msgstr "Einstellungen phpIPAM Server"
 
@@ -435,10 +425,8 @@ msgid "Groups"
 msgstr "Gruppen"
 
 #: app/admin/admin-menu-config.php:16
-#, fuzzy
-#| msgid "User management"
 msgid "User group management"
-msgstr "Gruppenmanagement"
+msgstr "Verwaltung Benutzergruppen"
 
 #: app/admin/admin-menu-config.php:17
 #: app/admin/authentication-methods/index.php:13
@@ -446,8 +434,6 @@ msgid "Authentication methods"
 msgstr "Authentifizierungsmethoden"
 
 #: app/admin/admin-menu-config.php:17
-#, fuzzy
-#| msgid "Select authentication method for user"
 msgid "Manage user authentication methods and servers"
 msgstr "Verwaltung Authentifizierungsmethoden und Authentifizierungsserver"
 
@@ -942,8 +928,6 @@ msgid "racks"
 msgstr "Racks"
 
 #: app/admin/admin-menu-config.php:95
-#, fuzzy
-#| msgid "Replaced"
 msgid "replace-fields"
 msgstr "Ersetze Felder"
 
@@ -1068,7 +1052,8 @@ msgstr "Routing"
 #: app/admin/groups/add-users.php:21 app/admin/groups/edit-group.php:39
 #: app/admin/groups/remove-users-result.php:22
 #: app/admin/groups/remove-users.php:21
-#: app/admin/instructions/edit-result.php:55 app/admin/locations/edit.php:37
+#: app/admin/instructions/edit-result.php:55
+#: app/admin/instructions/index.php:80 app/admin/locations/edit.php:37
 #: app/admin/nameservers/edit.php:33 app/admin/nat/edit.php:36
 #: app/admin/nat/item-add-submit.php:26 app/admin/nat/item-add.php:23
 #: app/admin/nat/item-add.php:29 app/admin/nat/item-remove.php:29
@@ -4281,10 +4266,11 @@ msgstr "Ger&auml;t"
 #: app/admin/import-export/export-ipaddr-field-select.php:87
 #: app/admin/import-export/export-ipaddr.php:132
 #: app/admin/import-export/import-template.php:59
+#: app/admin/tags/edit-result.php:54 app/admin/tags/edit-result.php:55
 #: app/subnets/addresses/address-modify.php:302
 #: app/tools/pstn-prefixes/edit-number.php:134
 msgid "Tag"
-msgstr "Tag"
+msgstr "Markierung"
 
 #: app/admin/import-export/export-ipaddr-field-select.php:88
 #: app/admin/import-export/export-ipaddr.php:138
@@ -5039,7 +5025,7 @@ msgstr "Erzeuge MySQL Datenbank Dump"
 
 #: app/admin/import-export/index.php:69
 msgid "Prepare MySQL dump"
-msgstr "Bereite den MySQL Dump vor"
+msgstr "Aufbereiten als MySQL Dump"
 
 #: app/admin/import-export/index.php:72
 msgid "Create XLS file of IP addresses"
@@ -5047,7 +5033,7 @@ msgstr "Erzeuge eine Excel Datei der IP-Adressen"
 
 #: app/admin/import-export/index.php:73
 msgid "Prepare XLS dump"
-msgstr "Bereite den XLS Dump vor"
+msgstr "Aufbereitung als XLS Dump"
 
 #: app/admin/import-export/index.php:76
 msgid "Create hostfile dump"
@@ -5055,7 +5041,7 @@ msgstr "Erzeuge einen Hostfile Dump"
 
 #: app/admin/import-export/index.php:77
 msgid "Prepare hostfile dump"
-msgstr "Bereite den Hostfile Dump vor"
+msgstr "Aufbereitung als Hostfile Dump"
 
 # Missing a word here? Check for what?
 #: app/admin/import-export/not-implemented.php:20
@@ -5208,6 +5194,22 @@ msgstr "Fehler: "
 msgid "Instructions updated successfully"
 msgstr "Hinweise erfolgreich aktualisiert"
 
+#: app/admin/instructions/index.php:24
+msgid "Edit user instructions"
+msgstr "Bearbeiten Benutzerhinweise"
+
+#: app/admin/instructions/index.php:27
+msgid "Edit IP request instructions"
+msgstr "Bearbeiten Hinweise f&uuml;r IP-Anforderungen"
+
+#: app/admin/instructions/index.php:39
+msgid "User instructions"
+msgstr "Benutzerhinweise"
+
+#: app/admin/instructions/index.php:40
+msgid "IP request instructions"
+msgstr "Hinweise IP-Anforderungen"
+
 #: app/admin/instructions/index.php:66
 msgid "preview"
 msgstr "Vorschau"
@@ -5283,7 +5285,7 @@ msgstr "Ung&uuml;ltiger Breitengrad"
 
 #: app/admin/locations/edit-result.php:49
 msgid "Invalid Longitude"
-msgstr "Ung&uuml;ltiger L&aumel;ngengrad"
+msgstr "Ung&uuml;ltiger L&auml;ngengrad"
 
 #: app/admin/locations/edit.php:87
 msgid "or"
@@ -5304,7 +5306,7 @@ msgstr "Breitengrad"
 #: app/admin/locations/edit.php:105 app/admin/locations/edit.php:107
 #: app/admin/locations/edit.php:110
 msgid "Longitude"
-msgstr "L&aumel;ngengrad"
+msgstr "L&auml;ngengradL&aumel;ngengrad"
 
 #: app/admin/mail/index.php:26
 msgid "Mail server type"
@@ -7943,11 +7945,11 @@ msgstr ""
 
 #: app/admin/tags/edit-result.php:36
 msgid "Cannot delete locked tag"
-msgstr "Kann gesperrten Tag nicht l&ouml;schen"
+msgstr "Kann gesperrte Markierung nicht l&ouml;schen"
 
 #: app/admin/tags/edit-result.php:38
 msgid "Invalid tag name"
-msgstr "Ung&uuml;ltiger Tagname"
+msgstr "Ung&uuml;ltiger Markierungsname"
 
 #: app/admin/tags/edit-result.php:39
 msgid "Invalid bg color"
@@ -7957,13 +7959,21 @@ msgstr "Ung&uuml;ltige bg Farbe"
 msgid "Invalid fg color"
 msgstr "Ung&uuml;ltige fg Farbe"
 
+#: app/admin/tags/edit-result.php:54
+msgid " error"
+msgstr " fehlerhaft"
+
+#: app/admin/tags/edit-result.php:55
+msgid " success"
+msgstr " erfolgreich"
+
 #: app/admin/tags/edit.php:54
 msgid "tag"
-msgstr "Tag"
+msgstr "Markierung"
 
 #: app/admin/tags/edit.php:75
 msgid "Show tag"
-msgstr "Tag anzeigen"
+msgstr "Markierung anzeigen"
 
 #: app/admin/tags/edit.php:86
 msgid "Bg color"
@@ -7992,11 +8002,11 @@ msgstr "Verwaltung Adressmarkierungen"
 
 #: app/admin/tags/index.php:17
 msgid "Add Tag"
-msgstr "Tag hinzuf&uuml;gen"
+msgstr "Markierung hinzuf&uuml;gen"
 
 #: app/admin/tags/index.php:27
 msgid "Show Tag"
-msgstr "Tag anzeigen"
+msgstr "Markierung anzeigen"
 
 #: app/admin/tags/index.php:28
 msgid "BG color"
@@ -8310,6 +8320,26 @@ msgstr "Alle"
 #: app/admin/users/print-user/authentication.php:31
 msgid "All groups"
 msgstr "Alle Gruppen"
+
+#: app/admin/users/print-all.php:157 app/admin/users/print-all.php:158
+msgid "Show user"
+msgstr "Benutzer anzeigen"
+
+#: app/admin/users/print-all.php:160
+msgid "Manage user"
+msgstr "Verwaltung Benutzer"
+
+#: app/admin/users/print-all.php:161
+msgid "Edit user"
+msgstr "Benutzer bearbeiten"
+
+#: app/admin/users/print-all.php:162
+msgid "Delete user"
+msgstr "Benutzer l&ouml;schen"
+
+#: app/admin/users/print-all.php:165 app/admin/users/print-all.php:166
+msgid "Swap user"
+msgstr "Benutzer wechseln"
 
 #: app/admin/users/print-all.php:181
 msgid ""
@@ -9191,7 +9221,8 @@ msgstr "Berechtigung"
 #: app/subnets/subnet-details/subnet-details.php:592
 #: app/tools/nat/nat_details.php:177 app/tools/racks/print-single-rack.php:147
 #: app/tools/vlan/vlan-details.php:113 app/tools/vrf/vrf-details.php:124
-#: app/vrf/vrf-details.php:93 functions/classes/class.Common.php:2042
+#: app/vrf/vrf-details.php:93 functions/classes/class.Common.php:2039
+#: functions/classes/class.Common.php:2042
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -9565,6 +9596,33 @@ msgstr "VLANs anzeigen"
 msgid "Show VRFs"
 msgstr "VRF-Instanzen anzeigen"
 
+#: app/sections/all-sections.php:135
+#: app/tools/locations/all-locations-list.php:99
+msgid "Show"
+msgstr "Sichtbarkeit"
+
+#: app/sections/all-sections.php:136
+msgid "View section"
+msgstr "Bereich anzeigen"
+
+#: app/sections/all-sections.php:138
+#: app/subnets/addresses/address-details/address-details-nat.php:57
+#: app/subnets/subnet-details/subnet-nat.php:55
+#: app/tools/devices/device-details/device-nat.php:55
+#: app/tools/dhcp/leases.php:53 app/tools/dhcp/reservations.php:67
+#: app/tools/dhcp/subnets.php:82 app/tools/locations/all-locations-list.php:103
+#: app/tools/locations/single-location.php:115
+msgid "Manage"
+msgstr "Verwaltung"
+
+#: app/sections/all-sections.php:139
+msgid "Edit section"
+msgstr "Bereich bearbeiten"
+
+#: app/sections/all-sections.php:140
+msgid "Delete section"
+msgstr "Bereich l&ouml;schen"
+
 #: app/sections/all-sections.php:152
 msgid "No sections available"
 msgstr "Keine Bereiche verf&uuml;gbar"
@@ -9801,6 +9859,12 @@ msgstr "Keine doppelten IP-Adressen gefunden"
 #: app/subnets/addresses/address-details/address-details-nat.php:6
 msgid "Address NAT translations"
 msgstr "NAT-Adresse &Uuml;bersetzung"
+
+#: app/subnets/addresses/address-details/address-details-nat.php:21
+#: app/subnets/subnet-details/subnet-nat.php:16
+#: app/tools/devices/device-details/device-nat.php:29
+msgid "Add new nat"
+msgstr "Neue NAT Regel"
 
 #: app/subnets/addresses/address-details/address-details-nat.php:24
 #: app/subnets/subnet-details/subnet-nat.php:19
@@ -10814,6 +10878,18 @@ msgstr "Nutzungsgraph"
 msgid "Subnet NAT translations"
 msgstr "Subnetz NAT-&Uuml;bersetzungen"
 
+#: app/subnets/subnet-details/subnet-nat.php:56
+#: app/tools/devices/device-details/device-nat.php:56
+#: app/tools/nat/all_nats.php:152
+msgid "Edit NAT"
+msgstr "NAT-Regel bearbeiten"
+
+#: app/subnets/subnet-details/subnet-nat.php:57
+#: app/tools/devices/device-details/device-nat.php:57
+#: app/tools/nat/all_nats.php:153
+msgid "Delete NAT"
+msgstr "NAT-Regel entfernen"
+
 #: app/subnets/subnet-details/subnet-nat.php:66
 msgid "No NAT translations for this subnet"
 msgstr "Keine NAT-&Uuml;bersetzungen f&uuml;r dieses Subnetz"
@@ -11474,11 +11550,6 @@ msgstr "Aktive Leases"
 msgid "Add"
 msgstr "Hinzuf&uuml;gen"
 
-#: app/tools/dhcp/leases.php:53 app/tools/dhcp/reservations.php:67
-#: app/tools/dhcp/subnets.php:82
-msgid "Manage"
-msgstr "Verwaltung"
-
 #: app/tools/dhcp/leases.php:66
 msgid "Subnet id"
 msgstr "Subnetz-ID"
@@ -11642,9 +11713,27 @@ msgstr "Standort Modul deaktiviert"
 msgid "Coordinates"
 msgstr "Koordinaten"
 
+#: app/tools/locations/all-locations-list.php:62
+msgid "No Locations configured"
+msgstr "Keine Standorte konfiguriert"
+
 #: app/tools/locations/all-locations-list.php:75
 msgid "objects"
 msgstr "Objekte"
+
+#: app/tools/locations/all-locations-list.php:100
+msgid "Show location"
+msgstr "Zeige Standort"
+
+#: app/tools/locations/all-locations-list.php:104
+#: app/tools/locations/single-location.php:116
+msgid "Edit location"
+msgstr "Standort bearbeiten"
+
+#: app/tools/locations/all-locations-list.php:107
+#: app/tools/locations/single-location.php:119
+msgid "Delete location"
+msgstr "Standort l&ouml;schen"
 
 #: app/tools/locations/all-locations-map.php:2
 msgid "Locations Map"
@@ -11718,7 +11807,7 @@ msgstr "Log Dateien"
 
 #: app/tools/logs/index.php:36
 msgid "Download logs"
-msgstr "Download Log Files"
+msgstr "Logdateien herunterladen"
 
 #: app/tools/logs/index.php:43
 msgid "Previous page"
@@ -11789,7 +11878,7 @@ msgstr "Keine Multicast Subnetze verf&uuml;gbar"
 
 #: app/tools/nat/all_nats.php:11 app/tools/tools-menu-config.php:103
 msgid "NAT translations"
-msgstr "NAT &Uuml;bersetzung"
+msgstr "NAT-&Uuml;bersetzung"
 
 #: app/tools/nat/all_nats.php:17
 msgid "Add nat"
@@ -11823,14 +11912,6 @@ msgstr "NAT konfiguriert"
 #: app/tools/nat/all_nats.php:151
 msgid "Manage NAT"
 msgstr "NAT-Regeln verwalten"
-
-#: app/tools/nat/all_nats.php:152
-msgid "Edit NAT"
-msgstr "NAT-Regel bearbeiten"
-
-#: app/tools/nat/all_nats.php:153
-msgid "Delete NAT"
-msgstr "NAT-Regel entfernen"
 
 #: app/tools/nat/nat_details.php:11
 msgid "NAT details"
@@ -13291,7 +13372,7 @@ msgstr "Datenbank kann nicht gelöscht werden: "
 
 #: functions/classes/class.Install.php:194
 msgid "Cannot install sql SCHEMA file"
-msgstr ""
+msgstr "Die SQLSchema Datei kann nicht installiert werden."
 
 #: functions/classes/class.Install.php:194
 msgid "query that failed"
@@ -13312,7 +13393,7 @@ msgstr "Keine Verbindung zur Datenbank m&ouml;glich"
 #: functions/classes/class.Install.php:529
 #: functions/classes/class.Install.php:549
 msgid "Database upgrade"
-msgstr "Datenbankupgrade"
+msgstr "Datenbankaktualisierung"
 
 #: functions/classes/class.Install.php:529
 msgid "query: "
