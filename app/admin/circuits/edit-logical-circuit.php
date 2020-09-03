@@ -66,7 +66,7 @@ foreach($circuit_types as $t) {
 # no providers
 if($circuit_providers===false) 	{
 	$btn = $User->is_admin(false) ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
-	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
+	$Result->show("danger", _("No circuit providers configured.")."<hr>".$btn, true, true);
 }
 
 # set readonly flag
@@ -254,7 +254,7 @@ function update_hidden_input(){
 
 		<tr>
 			<td colspan="2">
-				<p id="duplicate_error" style="display:none" class='alert alert-danger'>Duplicate circuits have been found. Please remove! Reordering will be affected.</p>
+				<p id="duplicate_error" style="display:none" class='alert alert-danger'><?php print _("Duplicate circuits have been found. Please remove! Reordering will be affected."); ?></p>
 			</td>
 		</tr>
 
