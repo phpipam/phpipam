@@ -145,7 +145,7 @@ if(@$config['requests_public']===false) {
 				$Result->show("success", _('You have logged out'));
 
 			# write log
-			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );
+			$Log->write( _("User logged out"), _("User")." ".$User->username." "._("has logged out"), 0, $User->username );
 
 			# destroy session
 			$User->destroy_session();
@@ -161,7 +161,7 @@ if(@$config['requests_public']===false) {
 			if ($version < 3.4) {
 				$Result->show("danger", _('php-saml library missing, please update submodules'));
 			} else {
-				$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
+				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
 			}
 		}
 
