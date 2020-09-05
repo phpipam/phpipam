@@ -193,10 +193,10 @@ $(document).ready(function(){
 	</tr>
 
 	<tr>
-		<td>Point A</td>
+		<td><?php print _("Point A"); ?></td>
 		<td>
 			<select name="device1" class="form-control input-w-auto input-sm">
-				<option value="0">None</option>
+				<option value="0"><?php print _("None"); ?></option>
 				<optgroup label="Devices">
 					<?php
 					if($all_devices!==false) {
@@ -224,10 +224,10 @@ $(document).ready(function(){
 	</tr>
 
 	<tr>
-		<td>Point B</td>
+		<td><?php print _("Point B"); ?></td>
 		<td>
 			<select name="device2" class="form-control input-w-auto input-sm">
-				<option value="0">None</option>
+				<option value="0"><?php print _("None"); ?></option>
 				<optgroup label="Devices">
 					<?php
 					if($all_devices!==false) {
