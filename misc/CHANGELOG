@@ -1,4 +1,7 @@
 == 1.4.2
+    Bugfixes:
+    ----------------------------
+    + Table layout not aligned (#3105,#3113);
 
     Security Fixes:
     ----------------------------

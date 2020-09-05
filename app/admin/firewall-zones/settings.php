@@ -248,7 +248,7 @@ $(function() {
 		<td>
 		</td>
 		<td colspan="2" style="padding-top:15px;">
-			<span class="text-muted"><?php print _('To organize the order of the firewall IP addres object name pattern simply drag and drop the different parts in the lower field.<br>It\'s also possible to reorganize them to fit your needs.'); ?></span>
+			<span class="text-muted"><?php print _('To organize the order of the firewall IP address object name pattern simply drag and drop the different parts in the lower field.<br>It\'s also possible to reorganize them to fit your needs.'); ?></span>
 		</td>
 	</tr>
 	<tr>
