@@ -7,6 +7,7 @@
     Security Fixes:
     ----------------------------
     + Upgraded jQuery to 3.5.1 (#3119);
+    + Stored XSS in instructions widgets (#3025);
 
 == 1.4.1
 
