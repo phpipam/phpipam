@@ -189,8 +189,7 @@ if(is_object($instructions)) {
         $instructions->instructions = stripslashes($instructions->instructions);		//show html
 
         /* prevent <script> */
-        $instructions->instructions = str_replace("<script", "<div class='error'><xmp><script", $instructions->instructions);
-        $instructions->instructions = str_replace("</script>", "</script></xmp></div>", $instructions->instructions);
+        $instructions->instructions = $User->noxss_html($instructions->instructions);
 
         print "<div id='login' class='request'>";
         print "<div class='requestIP'>";

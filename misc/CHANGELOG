@@ -61,6 +61,7 @@
     + SQL injections processing `ftype` (#2751);
     + All circuits map, PHP object injection (#2937);
     + Upgraded jQuery to 3.5.1 (#3119);
+    + Stored XSS in instructions widgets (#3025);
 
     Translations:
     ----------------------------

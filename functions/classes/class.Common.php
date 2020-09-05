@@ -620,6 +620,60 @@ class Common_functions  {
 	}
 
 	/**
+	 * Remove <script>, <iframe> and JS HTML event attributes from HTML to protect from XSS
+	 *
+	 * @param   string  $html
+	 * @return  string
+	 */
+	public function noxss_html($html) {
+		if (!is_string($html) || strlen($html)==0)
+			return "";
+
+		try {
+			$dom = new \DOMDocument();
+
+			if ($dom->loadHTML($html, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD | LIBXML_NOBLANKS | LIBXML_NOWARNING | LIBXML_NOERROR) === false)
+				return "";
+
+			$banned_elements = ['script', 'iframe', 'embed'];
+			$remove_elemets = [];
+
+			$elements = $dom->getElementsByTagName('*');
+
+			if (!is_object($elements) || $elements->length==0)
+				return $html;  // no HTML elements
+
+			foreach($elements as $e) {
+				if (in_array($e->nodeName, $banned_elements)) {
+					$remove_elemets[] = $e;
+					continue;
+				}
+
+				if (!$e->hasAttributes())
+					continue;
+
+				// remove on* HTML event attributes
+				foreach ($e->attributes as $attr) {
+					if (substr($attr->nodeName,0,2) == "on")
+						$e->removeAttribute($attr->nodeName);
+				}
+			}
+
+			// Remove banned elements
+			foreach($remove_elemets as $e)
+				$e->parentNode->removeChild($e);
+
+			// Return sanitised HTML
+			$html = $dom->saveHTML();
+
+			return is_string($html) ? $html : "";
+
+		} catch (Exception $e) {
+			return "";
+		}
+	}
+
+	/**
 	 * Changes empty array fields to specified character
 	 *
 	 * @access public
