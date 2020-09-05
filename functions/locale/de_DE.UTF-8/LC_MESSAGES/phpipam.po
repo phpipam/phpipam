@@ -4,7 +4,7 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2020.
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
-# "POT-Creation-Date: 2020-08-27 11:37+0200\n"
+# "POT-Creation-Date: 2020-09-05 08:50+0200\n"
 # "PO-Revision-Date: 2016-02-12 14:45+0200\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
@@ -1991,6 +1991,8 @@ msgid " authentication"
 msgstr " Authentifizierung"
 
 #: app/admin/authentication-methods/index.php:37
+#: app/admin/circuits/edit-logical-circuit.php:271
+#: app/admin/circuits/edit-logical-circuit.php:335
 #: app/admin/custom-fields/edit.php:102 app/admin/firewall-zones/mapping.php:41
 #: app/admin/firewall-zones/zones.php:29 app/admin/nat/edit.php:74
 #: app/admin/scan-agents/index.php:33 app/admin/tags/edit.php:64
@@ -2146,6 +2148,26 @@ msgstr "Ung&uuml;ltigers Ger&auml;t B"
 msgid "Invalid location B"
 msgstr "Ung&uuml;ltiger Standort B"
 
+#: app/admin/circuits/edit-circuit-submit.php:124
+#: app/admin/circuits/edit-logical-circuit-submit.php:64
+#: app/admin/circuits/edit-provider-submit.php:58
+msgid "can not be empty"
+msgstr "kann nicht leer sein"
+
+#: app/admin/circuits/edit-circuit-submit.php:158
+#: app/admin/circuits/edit-circuit.php:81 app/admin/routing/edit-bgp.php:129
+#: app/tools/routing/bgp/details-general.php:33
+msgid "Circuit"
+msgstr "Schaltung"
+
+#: app/admin/circuits/edit-circuit-submit.php:158
+#: app/admin/circuits/edit-logical-circuit-submit.php:125
+#: app/admin/circuits/edit-logical-circuit-submit.php:129
+#: app/admin/circuits/edit-provider-submit.php:79
+#: app/subnets/addresses/address-modify-submit.php:272
+msgid "successful"
+msgstr "erfolgreich"
+
 #: app/admin/circuits/edit-circuit.php:62
 #: app/admin/circuits/edit-logical-circuit.php:68
 #: app/tools/circuits/providers/all-providers.php:43
@@ -2153,17 +2175,13 @@ msgid "Add provider"
 msgstr "Provider hinzuf&uuml;gen"
 
 #: app/admin/circuits/edit-circuit.php:63
-#: app/admin/circuits/edit-logical-circuit.php:69
 msgid "No circuit providers configured.<hr>"
 msgstr "Keine Provider f&uuml;r Schaltungen definiert.<hr>"
 
-#: app/admin/circuits/edit-circuit.php:81 app/admin/routing/edit-bgp.php:129
-#: app/tools/routing/bgp/details-general.php:33
-msgid "Circuit"
-msgstr "Schaltung"
-
 #: app/admin/circuits/edit-circuit.php:92
 #: app/admin/circuits/edit-logical-circuit.php:194
+#: app/admin/circuits/edit-logical-circuit.php:270
+#: app/admin/circuits/edit-logical-circuit.php:334
 #: app/tools/circuits/logical-circuits/logical-circuits.php:53
 #: app/tools/circuits/physical-circuits/all-circuits.php:53
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:24
@@ -2181,6 +2199,7 @@ msgid "ID"
 msgstr "ID"
 
 #: app/admin/circuits/edit-circuit.php:106
+#: app/admin/circuits/edit-provider-submit.php:79
 #: app/tools/circuits/physical-circuits/all-circuits.php:54
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:29
 #: app/tools/circuits/physical-circuits/circuit-details-provider.php:17
@@ -2246,7 +2265,9 @@ msgstr "Kunden"
 msgid "Select Customer"
 msgstr "Auswahl Kunde"
 
-#: app/admin/circuits/edit-circuit.php:175 app/admin/devices/edit.php:140
+#: app/admin/circuits/edit-circuit.php:175
+#: app/admin/circuits/edit-circuit.php:199
+#: app/admin/circuits/edit-circuit.php:230 app/admin/devices/edit.php:140
 #: app/admin/devices/edit.php:167 app/admin/mail/index.php:72
 #: app/admin/nat/edit-map.php:45 app/admin/nat/edit-map.php:47
 #: app/admin/nat/edit.php:102 app/admin/racks/edit.php:137
@@ -2272,6 +2293,30 @@ msgstr "Auswahl Kunde"
 #: functions/classes/class.Tools.php:2157
 msgid "None"
 msgstr "Keiner"
+
+#: app/admin/circuits/edit-circuit.php:196
+#: app/admin/circuits/edit-logical-circuit.php:272
+#: app/admin/circuits/edit-logical-circuit.php:336
+#: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:131
+#: app/tools/circuits/physical-circuits/all-circuits.php:60
+#: app/tools/circuits/physical-circuits/circuit-details-points.php:131
+#: app/tools/circuits/providers/provider-details.php:134
+#: app/tools/customers/customer/objects/circuits.php:46
+#: app/tools/devices/device-details/device-circuits.php:53
+msgid "Point A"
+msgstr "Punkt A"
+
+#: app/admin/circuits/edit-circuit.php:227
+#: app/admin/circuits/edit-logical-circuit.php:273
+#: app/admin/circuits/edit-logical-circuit.php:337
+#: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:132
+#: app/tools/circuits/physical-circuits/all-circuits.php:61
+#: app/tools/circuits/physical-circuits/circuit-details-points.php:132
+#: app/tools/circuits/providers/provider-details.php:135
+#: app/tools/customers/customer/objects/circuits.php:47
+#: app/tools/devices/device-details/device-circuits.php:54
+msgid "Point B"
+msgstr "Punkt B"
 
 #: app/admin/circuits/edit-logical-circuit-submit.php:41
 msgid "Logical Circuit ID is mandatory"
@@ -2300,6 +2345,15 @@ msgstr "Fehler beim Entfernen der Zuordnung: "
 msgid "Error inserting mapping."
 msgstr "Fehler beim Einf&uuml;gen der Zuordnung."
 
+#: app/admin/circuits/edit-logical-circuit-submit.php:125
+#: app/admin/circuits/edit-logical-circuit-submit.php:129
+msgid "Logical Circuit"
+msgstr "Logische Schaltung"
+
+#: app/admin/circuits/edit-logical-circuit.php:69
+msgid "No circuit providers configured."
+msgstr "Keine Provider f&uuml;r Schaltungen definiert."
+
 #: app/admin/circuits/edit-logical-circuit.php:181
 msgid "Logical circuit"
 msgstr "Logische Schaltung"
@@ -2316,13 +2370,52 @@ msgstr "Verwendung"
 msgid "Comments"
 msgstr "Kommentare"
 
+#: app/admin/circuits/edit-logical-circuit.php:257
+msgid ""
+"Duplicate circuits have been found. Please remove! Reordering will be "
+"affected."
+msgstr ""
+"Es wurde eine doppelte Schaltung gefunden. Bitte entfernen! Sortierung ist "
+"davon betroffen."
+
 #: app/admin/circuits/edit-logical-circuit.php:265
 msgid "Logical circuit physical members"
 msgstr "Physikalische Mitglieder der logischen Schaltung"
 
+#: app/admin/circuits/edit-logical-circuit.php:288
+#: app/admin/circuits/edit-logical-circuit.php:294
+#: app/admin/circuits/edit-logical-circuit.php:347
+#: app/admin/circuits/edit-logical-circuit.php:353
+#: app/tools/circuits/physical-circuits/all-circuits.php:87
+#: app/tools/circuits/physical-circuits/all-circuits.php:93
+#: app/tools/circuits/providers/provider-details.php:151
+#: app/tools/circuits/providers/provider-details.php:157
+msgid "Not set"
+msgstr "Nicht gesetzt"
+
+#: app/admin/circuits/edit-logical-circuit.php:300
+#: app/tools/locations/single-location.php:190
+#: app/tools/racks/print-single-rack.php:236
+#: functions/classes/class.Tools.php:2030 index.php:200
+msgid "Remove"
+msgstr "Entfernen"
+
+#: app/admin/circuits/edit-logical-circuit.php:309
+#: app/admin/custom-fields/index.php:110
+msgid "Move down"
+msgstr "nach unten"
+
+#: app/admin/circuits/edit-logical-circuit.php:310
+msgid "Move up"
+msgstr "nach oben"
+
 #: app/admin/circuits/edit-logical-circuit.php:329
 msgid "Available physical circuits"
 msgstr "Verf&uuml;gbare physikalische Schaltungen"
+
+#: app/admin/circuits/edit-logical-circuit.php:359
+msgid "Add to logical circuit"
+msgstr "Zu logischer Schaltung hinzuf&uuml;gen"
 
 #: app/admin/circuits/edit-options-submit.php:26
 msgid "Value cannot be empty"
@@ -2581,13 +2674,17 @@ msgid "IP addresses"
 msgstr "IP-Adressen"
 
 #: app/admin/custom-fields/index.php:18 app/admin/users/edit-result.php:73
-#: app/dashboard/widgets/changelog.php:54 app/sections/section-changelog.php:33
+#: app/dashboard/widgets/changelog.php:54 app/login/index.php:148
+#: app/sections/section-changelog.php:33
 #: app/subnets/addresses/address-details/address-changelog.php:34
 #: app/subnets/subnet-details/subnet-changelog.php:55
 #: app/subnets/subnet-details/subnet-changelog.php:100
 #: app/subnets/subnet-details/subnet-changelog.php:144
 #: app/tools/changelog/changelog-print.php:57
-#: app/tools/changelog/show-popup.php:55
+#: app/tools/changelog/show-popup.php:55 functions/classes/class.User.php:893
+#: functions/classes/class.User.php:929 functions/classes/class.User.php:1022
+#: functions/classes/class.User.php:1034 functions/classes/class.User.php:1135
+#: functions/classes/class.User.php:1164
 msgid "User"
 msgstr "Benutzer"
 
@@ -2630,7 +2727,7 @@ msgstr "Felder:"
 
 #: app/admin/custom-fields/index.php:38
 msgid "Add new custom"
-msgstr "Hinzuf&uuml;gen eines neuen benutzerspezifischen "
+msgstr "Hinzuf&uuml;gen eines neuen benutzerspezifischen"
 
 #: app/admin/custom-fields/index.php:38
 #: app/admin/import-export/import-button.php:122
@@ -2679,10 +2776,6 @@ msgstr "Sichtbar"
 #: app/admin/custom-fields/index.php:93 app/tools/circuits/options.php:111
 msgid "No custom fields created yet"
 msgstr "Bisher sind keine benutzerspezifischen Felder erstellt"
-
-#: app/admin/custom-fields/index.php:110
-msgid "Move down"
-msgstr "nach unten"
 
 #: app/admin/custom-fields/index.php:141 app/tools/circuits/options.php:159
 msgid "Invalid field name"
@@ -3161,8 +3254,6 @@ msgstr ""
 "&Uuml;berpr&uuml;fen Sie die Felder, die f&uuml;r IP-Adressen verwendet "
 "werden"
 
-# # 1.18.00
-# ## 1.18.006 ###
 #: app/admin/firewall-zones/ajax.php:29
 msgid "Invalid ID."
 msgstr "Ung&uuml;ltige ID."
@@ -3938,12 +4029,13 @@ msgid "Members:"
 msgstr "Mitglieder:"
 
 #: app/admin/groups/ad-search-group-result.php:120
+#: app/tools/circuits/logical-circuits/logical-circuits.php:94
 msgid "No members"
 msgstr "Keine Mitglieder"
 
 #: app/admin/groups/add-users-result.php:33
 msgid "Error - no group ID"
-msgstr "Fehler - keine Gruppen ID"
+msgstr "Fehler - keine Gruppen-ID"
 
 #: app/admin/groups/add-users-result.php:46
 msgid "Please select user(s) to add to selected group!"
@@ -3966,7 +4058,7 @@ msgstr "Benutzer zur Gruppe hinzuf&uuml;gen"
 #: app/admin/groups/add-users.php:48 app/admin/groups/remove-users.php:48
 #: app/admin/users/edit-notify.php:50 app/admin/users/edit-notify.php:69
 msgid "Email"
-msgstr "Email"
+msgstr "E-Mail"
 
 #: app/admin/groups/add-users.php:74
 msgid "No available users to add to group"
@@ -5763,7 +5855,7 @@ msgid "Values must be numeric"
 msgstr "Werte m&uuml;ssen numerisch sein"
 
 #: app/admin/password-policy/save.php:64
-msgid "Error updateing users: "
+msgid "Error updating users: "
 msgstr "Fehler beim Aktualisieren der Benutzer: "
 
 #: app/admin/powerDNS/defaults.php:20
@@ -7380,7 +7472,7 @@ msgstr "Ordnername muss mindestens 2 Zeichen lang sein"
 
 #: app/admin/subnets/edit-folder-result.php:192
 msgid "Error editing folder"
-msgstr "Ordner Fehler beim Bearbeiten"
+msgstr "Fehler beim Bearbeiten des Ordners"
 
 #: app/admin/subnets/edit-folder-result.php:220
 msgid "Folder, IP addresses and all belonging subnets deleted successfully"
@@ -8525,7 +8617,7 @@ msgstr "Verf&uuml;gbare Version"
 msgid "You can download new version"
 msgstr "Es steht eine neue Version zum Download zur Verf&uuml;gung"
 
-#: app/admin/version-check/index.php:17
+#: app/admin/version-check/index.php:17 app/login/index.php:164
 msgid "here"
 msgstr "hier"
 
@@ -9050,7 +9142,7 @@ msgstr "W&auml;hle Subnetz"
 
 #: app/dashboard/widgets/iprequest.php:63
 msgid "First IP Address available"
-msgstr "Erste IP-Adresse die verf&uuml;gbar ist"
+msgstr "Erste verf&uuml;gbare IP-Adresse"
 
 #: app/dashboard/widgets/iprequest.php:70 app/tools/request-ip/index.php:136
 msgid "Request IP"
@@ -9455,9 +9547,17 @@ msgstr "Ihre Sitzung ist abgelaufen"
 msgid "You have logged out"
 msgstr "Sie wurden abgemeldet"
 
+#: app/login/index.php:148
+msgid "User logged out"
+msgstr "Benutzer Abmeldung"
+
+#: app/login/index.php:148
+msgid "has logged out"
+msgstr "hat sich abgemeldet"
+
 #: app/login/index.php:164
-msgid "You can login with SAML2 <a href=\""
-msgstr "Sie k&ouml;nnen sich mit SAML2 einloggen <a href=\""
+msgid "You can login with SAML2"
+msgstr "Anmeldem&ouml;glichkeit mit SAML2 besteht"
 
 #: app/login/login_check.php:40
 msgid "You have been blocked for 5 minutes due to authentication failures"
@@ -9760,6 +9860,7 @@ msgid "VRFs"
 msgstr "VRF-Instanzen"
 
 #: app/sections/user-menu.php:73 app/sections/user-menu.php:82
+#: functions/classes/class.User.php:1253
 msgid "Hi"
 msgstr "Hallo"
 
@@ -10121,10 +10222,6 @@ msgstr "Nicht m&ouml;glich"
 msgid "Range"
 msgstr "Bereich"
 
-#: app/subnets/addresses/address-modify-submit.php:272
-msgid "successful"
-msgstr "erfolgreich"
-
 #: app/subnets/addresses/address-modify-submit.php:292
 msgid "Hostname is not unique"
 msgstr "Rechnername ist nicht eindeutig"
@@ -10136,6 +10233,7 @@ msgstr "Rechnername ist nicht eindeutig"
 #: app/tools/vrf/index.php:22 app/upgrade/index.php:144 app/vlan/index.php:13
 #: app/vrf/index.php:14 functions/classes/class.FirewallZones.php:672
 #: functions/classes/class.FirewallZones.php:705
+#: functions/classes/class.User.php:1039
 msgid "Error"
 msgstr "Fehler"
 
@@ -10383,7 +10481,6 @@ msgstr "IP-Adresse geh&ouml;rt zu allen untergeordneten Subnetzen"
 msgid "FW object"
 msgstr "FW-Objekt"
 
-# is instead of it?
 #: app/subnets/addresses/print-address-table.php:183
 msgid " Subnet is marked as full"
 msgstr "Subnetz ist als voll markiert"
@@ -10721,7 +10818,7 @@ msgstr "Slave Subnetz"
 
 #: app/subnets/subnet-details/subnet-changelog.php:137
 msgid "Underlying hosts"
-msgstr "Zugrundeliegende Hosts"
+msgstr "Zugrundeliegendes Hosts"
 
 #: app/subnets/subnet-details/subnet-details.php:37
 msgid "Linked IPv6 subnet"
@@ -11072,7 +11169,30 @@ msgstr "Details Logische Schaltung"
 
 #: app/tools/circuits/logical-circuits/logical-circuit-details-general.php:17
 msgid "Logical Circuit ID"
-msgstr "Logische Schaltung-ID"
+msgstr "Logische Schaltungs-ID"
+
+#: app/tools/circuits/logical-circuits/logical-circuit-details-general.php:68
+#: app/tools/circuits/physical-circuits/all-circuits.php:134
+#: app/tools/circuits/physical-circuits/circuit-details-general.php:100
+#: app/tools/circuits/providers/provider-details.php:192
+msgid "Manage circuit"
+msgstr "Schaltung verwalten"
+
+#: app/tools/circuits/logical-circuits/logical-circuit-details-general.php:69
+#: app/tools/circuits/logical-circuits/logical-circuits.php:120
+#: app/tools/circuits/physical-circuits/all-circuits.php:135
+#: app/tools/circuits/physical-circuits/circuit-details-general.php:101
+#: app/tools/circuits/providers/provider-details.php:193
+msgid "Edit circuit"
+msgstr "Schaltung bearbeiten"
+
+#: app/tools/circuits/logical-circuits/logical-circuit-details-general.php:71
+#: app/tools/circuits/logical-circuits/logical-circuits.php:123
+#: app/tools/circuits/physical-circuits/all-circuits.php:138
+#: app/tools/circuits/physical-circuits/circuit-details-general.php:103
+#: app/tools/circuits/providers/provider-details.php:196
+msgid "Delete circuit"
+msgstr "Schaltung l&ouml;schen"
 
 #: app/tools/circuits/logical-circuits/logical-circuit-details-map.php:10
 #: app/tools/circuits/physical-circuits/circuit-details-map.php:10
@@ -11088,28 +11208,10 @@ msgstr "Mitglieder der Schaltung"
 msgid "Red locator pin"
 msgstr "Roter Ortungsstift"
 
-#: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:131
-#: app/tools/circuits/physical-circuits/all-circuits.php:60
-#: app/tools/circuits/physical-circuits/circuit-details-points.php:131
-#: app/tools/circuits/providers/provider-details.php:134
-#: app/tools/customers/customer/objects/circuits.php:46
-#: app/tools/devices/device-details/device-circuits.php:53
-msgid "Point A"
-msgstr "Punkt A"
-
 #: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:132
 #: app/tools/circuits/physical-circuits/circuit-details-points.php:132
 msgid "Blue locator pin"
 msgstr "Blauer Ortungsstift"
-
-#: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:132
-#: app/tools/circuits/physical-circuits/all-circuits.php:61
-#: app/tools/circuits/physical-circuits/circuit-details-points.php:132
-#: app/tools/circuits/providers/provider-details.php:135
-#: app/tools/customers/customer/objects/circuits.php:47
-#: app/tools/devices/device-details/device-circuits.php:54
-msgid "Point B"
-msgstr "Punkt B"
 
 #: app/tools/circuits/logical-circuits/logical-circuit-details.php:24
 msgid "All Logical circuits"
@@ -11136,6 +11238,12 @@ msgstr "Anzahl Schaltungen"
 #: app/tools/circuits/logical-circuits/logical-circuits.php:56
 msgid "Members"
 msgstr "Mitglieder"
+
+#: app/tools/circuits/logical-circuits/logical-circuits.php:114
+#: app/tools/circuits/physical-circuits/all-circuits.php:129
+#: app/tools/circuits/providers/provider-details.php:187
+msgid "Show circuit"
+msgstr "Ansicht Schaltung"
 
 #: app/tools/circuits/menu.php:9
 msgid "Physical Circuits"
@@ -11185,6 +11293,12 @@ msgstr "Schaltung hinzuf&uuml;gen"
 msgid "Sort by"
 msgstr "Sortiert nach"
 
+#: app/tools/circuits/physical-circuits/all-circuits.php:130
+#: app/tools/circuits/providers/all-providers.php:102
+#: app/tools/circuits/providers/provider-details.php:188
+msgid "View"
+msgstr "Ansicht"
+
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:9
 msgid "Circuit details"
 msgstr "Anschlussdetails"
@@ -11220,7 +11334,7 @@ msgstr "Alle Schaltungen"
 
 #: app/tools/circuits/providers/all-providers.php:36
 msgid "List of Circuit providers"
-msgstr "Liste Provider fuuml;r Schaltungen"
+msgstr "Liste Provider f&uuml;r Schaltungen"
 
 #: app/tools/circuits/providers/all-providers.php:53
 msgid "Sort by Name"
@@ -11237,6 +11351,25 @@ msgstr "Sortiert nach Schaltung"
 #: app/tools/circuits/providers/all-providers.php:56
 msgid "Sort by Contact"
 msgstr "Sortiert nach Kontakt"
+
+#: app/tools/circuits/providers/all-providers.php:103
+msgid "Show provider"
+msgstr "Ansicht Provider"
+
+#: app/tools/circuits/providers/all-providers.php:106
+#: app/tools/circuits/providers/provider-details.php:92
+msgid "Manage provider"
+msgstr "Provider verwalten"
+
+#: app/tools/circuits/providers/all-providers.php:107
+#: app/tools/circuits/providers/provider-details.php:93
+msgid "Edit provider"
+msgstr "Provider bearbeiten"
+
+#: app/tools/circuits/providers/all-providers.php:110
+#: app/tools/circuits/providers/provider-details.php:95
+msgid "Delete provider"
+msgstr "Provider l&ouml;schen"
 
 #: app/tools/circuits/providers/provider-details.php:23
 msgid "All providers"
@@ -11644,7 +11777,6 @@ msgstr "Fehler beim &auml;ndern der Favoriten"
 msgid "Favourite subnets"
 msgstr "Subnetzfavoriten"
 
-# ## 1.19.002 ###
 #: app/tools/firewall-zones/index.php:31
 msgid " Firewall Zones"
 msgstr " Firewall Zonen"
@@ -11763,12 +11895,6 @@ msgstr "Standort nicht gefunden"
 msgid "Belonging objects"
 msgstr "Zugeh&ouml;rige Objekte"
 
-#: app/tools/locations/single-location.php:190
-#: app/tools/racks/print-single-rack.php:236
-#: functions/classes/class.Tools.php:2030 index.php:200
-msgid "Remove"
-msgstr "Entfernen"
-
 #: app/tools/logs/detail-popup.php:26 app/tools/logs/export.php:80
 #: app/tools/logs/index.php:30 app/tools/logs/show-logs.php:85
 msgid "Informational"
@@ -11785,7 +11911,7 @@ msgstr "Log Details"
 
 #: app/tools/logs/detail-popup.php:55
 msgid "Log ID"
-msgstr "Log ID"
+msgstr "Log-ID"
 
 #: app/tools/logs/detail-popup.php:59 app/tools/logs/show-logs.php:50
 msgid "Event"
@@ -13291,6 +13417,10 @@ msgstr "Fehlende Class Datei"
 msgid ".php`"
 msgstr ".php`"
 
+#: functions/classes/class.DNS.php:253 functions/classes/class.DNS.php:278
+msgid "DNS error"
+msgstr "DNS-Fehler"
+
 #: functions/classes/class.FirewallZones.php:118
 msgid "Invalid generator ID"
 msgstr "Ung&uuml;ltige Generator-ID"
@@ -13827,6 +13957,12 @@ msgstr ""
 msgid "Page not referred properly"
 msgstr "Seite nicht richtig bezeichnet"
 
+#: functions/classes/class.User.php:755 functions/classes/class.User.php:808
+#: functions/classes/class.User.php:893 functions/classes/class.User.php:907
+#: functions/classes/class.User.php:929
+msgid "User login"
+msgstr "Benutzer Anmeldung"
+
 #: functions/classes/class.User.php:755 functions/classes/class.User.php:756
 msgid "Error: Invalid authentication method"
 msgstr "Fehler: Ung&uuml;ltige Authentifizierungsmethode"
@@ -13835,42 +13971,106 @@ msgstr "Fehler: Ung&uuml;ltige Authentifizierungsmethode"
 msgid "Your account has been disabled"
 msgstr "Ihr Account wurde deaktiviert"
 
+#: functions/classes/class.User.php:770
+msgid "Please use"
+msgstr "Bitte hier"
+
+#: functions/classes/class.User.php:770 functions/classes/class.User.php:1022
+#: functions/classes/class.User.php:1034
+msgid "login"
+msgstr "anmelden"
+
 #: functions/classes/class.User.php:808
 msgid "Invalid username"
 msgstr "Ung&uuml;ltiger Benutzername"
 
-#: functions/classes/class.User.php:809 functions/classes/class.User.php:911
-#: functions/classes/class.User.php:1035 functions/classes/class.User.php:1148
+#: functions/classes/class.User.php:809 functions/classes/class.User.php:907
+#: functions/classes/class.User.php:911 functions/classes/class.User.php:1035
+#: functions/classes/class.User.php:1148
 msgid "Invalid username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 
 #: functions/classes/class.User.php:892 functions/classes/class.User.php:928
+#: functions/classes/class.User.php:1023
 msgid "Login successful"
 msgstr "Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:1023
-msgid " Login successful"
-msgstr " Anmeldung erfolgreich"
+#: functions/classes/class.User.php:893 functions/classes/class.User.php:929
+msgid "logged in"
+msgstr "angemeldet"
 
-#: functions/classes/class.User.php:1112
+#: functions/classes/class.User.php:991
+msgid "Directory connection error"
+msgstr "Verbindungsfehler Verzeichnisdienst"
+
+#: functions/classes/class.User.php:991
+msgid "Failed to connect"
+msgstr "Fehler beim Verbinden"
+
+#: functions/classes/class.User.php:1022
+msgid "logged in via"
+msgstr "angemeldet durch"
+
+#: functions/classes/class.User.php:1034
+msgid "failed to authenticate against"
+msgstr "konnte nicht authentifiziert werden mit der Methode"
+
+#: functions/classes/class.User.php:1039
+msgid "Something went wrong during auth: "
+msgstr "Etwas ist schief gelaufen w&auml;hrend der Authentifizierung: "
+
+#: functions/classes/class.User.php:1111 functions/classes/class.User.php:1135
+#: functions/classes/class.User.php:1147
+msgid "Radius login"
+msgstr "Radius Anmeldung"
+
+#: functions/classes/class.User.php:1111 functions/classes/class.User.php:1112
 msgid "php Socket extension missing"
 msgstr "php Socket Erweiterung fehlt"
+
+#: functions/classes/class.User.php:1135
+msgid "logged in via radius"
+msgstr "angemeldet mittels Radius"
 
 #: functions/classes/class.User.php:1136
 msgid "Radius login successful"
 msgstr "Radius Anmeldung erfolgreich"
 
+#: functions/classes/class.User.php:1147
+msgid "Failed to authenticate user on radius server"
+msgstr "Keine Authentifizierung am Radius Server"
+
+#: functions/classes/class.User.php:1164
+msgid "SAML2 login"
+msgstr "SAML2-Anmeldung"
+
+#: functions/classes/class.User.php:1164
+msgid "logged in via SAML2"
+msgstr "angemeldet durch SAML2"
+
 #: functions/classes/class.User.php:1165
 msgid "SAML2 login successful"
 msgstr "SAML2-Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:1225
+#: functions/classes/class.User.php:1225 functions/classes/class.User.php:1239
 msgid "No crypt types supported"
 msgstr "Keine Kryptotypen unterst&uuml;tzt"
 
 #: functions/classes/class.User.php:1253
 msgid "your password was updated"
 msgstr "Ihr Kennwort wurde aktualisiert"
+
+#: functions/classes/class.User.php:1306 functions/classes/class.User.php:1313
+msgid "User self update"
+msgstr "Aktualisierung durch Benutzer"
+
+#: functions/classes/class.User.php:1306
+msgid "User self update failed"
+msgstr "Aktualisierung durch Benutzer fehlgeschlagen"
+
+#: functions/classes/class.User.php:1313
+msgid "User self update suceeded"
+msgstr "Aktualisierung durch Benutzer erfolgreich"
 
 #: functions/classes/class.User.php:1649
 msgid "You do not have permissions to access this object"
