@@ -1,4 +1,3 @@
-== 1.5
 
     New features:
     ------------
@@ -29,7 +28,7 @@
     + MySQL 8.0 compatibility. (#2646,#2239);
     + Permit non-numeric postcodes for customers (#2393);
     + Bandwidth calculator - 400 Bad Request (#1807,#2648);
-    + Table layout not aligned (#2656);
+    + Table layout not aligned (#2656,#3105,#3113);
     + Improve scanning requirement checks (#1183);
     + Date picker hidden (#2673);
     + PDNS Add/Edit DNS record not working for normal users (#2686);
