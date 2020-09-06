@@ -32,17 +32,17 @@ $app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App 
 		# headers
 		print "<thead>";
 		print '<tr>';
-	    print "<th>"._('App id').'</th>';
+		print "<th>"._('App id').'</th>';
 		print "<th>"._('App code').'</th>';
-	    print "<th>"._('App permissions').'</th>';
-	    print "<th>"._('App security').'</th>';
-	    print "<th>"._('Transaction locking').'</th>';
-	    print "<th>"._('Lock timeout').'</th>';
-	    print "<th>"._('Nest custom fields').'</th>';
-	    print "<th>"._('Show links').'</th>';
-	    print "<th>"._('Comment').'</th>';
-	    print "<th>"._('Last access').'</th>';
-	    print '<th></th>';
+		print "<th>"._('App permissions').'</th>';
+		print "<th>"._('App security').'</th>';
+		print "<th>"._('Transaction locking').'</th>';
+		print "<th>"._('Lock timeout').'</th>';
+		print "<th>"._('Nest custom fields').'</th>';
+		print "<th>"._('Show links').'</th>';
+		print "<th>"._('Comment').'</th>';
+		print "<th>"._('Last access').'</th>';
+		print '<th></th>';
 		print '</tr>';
 		print "</thead>";
 
