@@ -11,7 +11,7 @@ $User->check_user_session();
 $all_apis = $Admin->fetch_all_objects("api");
 
 # app security texts
-$app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code token"=>"ssl_code","Encrypted"=>"crypt", "User token"=>"none");
+$app_perms_text = array( _("SSL with User token")=>"ssl_token", _("SSL with App code token")=>"ssl_code", _("Encrypted")=>"crypt", _("User token")=>"none");
 
 ?>
 
@@ -19,7 +19,7 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 <h4><?php print _('API management'); ?></h4>
 <hr><br>
 
-<!-- only IF aPI enabled -->
+<!-- only if API enabled -->
 <?php if($User->settings->api==1) { ?>
 	<!-- Add new -->
 	<button class='btn btn-sm btn-default open_popup' style="margin-bottom:10px;" data-script='app/admin/api/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> <?php print _('Create API key'); ?></button>
@@ -67,7 +67,7 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 			elseif($a['app_permissions']==3)	{ $a['app_permissions'] = _("Read / Write / Admin"); }
 
 			# wait update
-			$a['app_lock_wait'] = $a['app_lock']==1 ? $a['app_lock_wait']." sec" : "/";
+			$a['app_lock_wait'] = $a['app_lock']==1 ? $a['app_lock_wait']." "._("sec") : "/";
 
 			# reformat lock and nesting
 			$a['app_lock']               = $a['app_lock']==1 ? _("Yes") : _("No");
@@ -77,7 +77,7 @@ $app_perms_text = array("SSL with User token"=>"ssl_token","SSL with App code to
 
 			$a['app_security'] = array_search($a['app_security'], $app_perms_text);
 
-			$a['app_last_access'] = strlen($a['app_last_access'])==0 ? "Never" : $a['app_last_access'];
+			$a['app_last_access'] = strlen($a['app_last_access'])==0 ? _("Never") : $a['app_last_access'];
 
 			print '	<td>' . $a['app_permissions'] . '</td>'. "\n";
 			print '	<td>' . $a['app_security'] . '</td>'. "\n";
