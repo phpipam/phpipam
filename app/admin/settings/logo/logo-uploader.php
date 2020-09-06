@@ -50,7 +50,7 @@ else {
 
     <h4><?php print _("New"); ?></h4>
 
-    <span class="text-muted">Image will be shown in <?php print $logo_width; ?>px width in phpipam header and mail headers.</span>
+    <span class="text-muted"><?php print _("Image will be shown in")." ".$logo_width._("px width in phpipam header and mail headers"); ?>.</span>
 
 	<form id="csvimport" method="post" action="app/admin/settings/logo/import-verify.php" enctype="multipart/form-data">
 	<div id="drop">
