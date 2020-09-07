@@ -1,6 +1,7 @@
 == 1.4.2
     Bugfixes:
     ----------------------------
+    + Fix generated functions/upgrade_queries.php queries (#3130);
     + Table layout not aligned (#3105,#3113);
 
     Security Fixes:
