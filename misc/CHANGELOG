@@ -1,3 +1,4 @@
+== 1.5
 
     New features:
     ------------
@@ -21,7 +22,7 @@
 
     Bugfixes:
     ----------------------------
-    + Fixed upgrade queries issues from 1.3.2 to 1.4;
+    + Fixed upgrade queries issues from 1.3.x to 1.4+ (#3130);
     + Fixed boolean printout in footer (#2625);
     + Fixed BGP Admin isn't working (#2631);
     + do not show statistics in dashboard widget for disabled modules (#2602);
