@@ -112,11 +112,11 @@ else {
         $links = [];
         if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
             $links[] = ["type"=>"header", "text"=>_("Show circuit")];
-            $links[] = ["type"=>"link", "text"=>"View", "href"=>create_link($_GET['page'],"circuits","logical",$circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($_GET['page'],"circuits","logical",$circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>"Manage circuit"];
+            $links[] = ["type"=>"header", "text"=>_("Manage circuit")];
             $links[] = ["type"=>"link", "text"=>_("Edit circuit"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-logical-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
         }
         if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
