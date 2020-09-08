@@ -55,8 +55,8 @@ elseif(isset($all_nats_per_object['ipaddresses'][$address['id']])) {
         $links = [];
         if($User->get_module_permissions ("nat")>=User::ACCESS_RW) {
             $links[] = ["type"=>"header", "text"=>_("Manage")];
-            $links[] = ["type"=>"link", "text"=>"_(Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
-            $links[] = ["type"=>"link", "text"=>"_(Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
+            $links[] = ["type"=>"link", "text"=>_("Edit NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='edit' data-id='$n->id'", "icon"=>"pencil"];
+            $links[] = ["type"=>"link", "text"=>_("Delete NAT"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/nat/edit.php' data-class='700' data-action='delete' data-id='$n->id'", "icon"=>"times"];
         };
         // print
         print $Tools->print_nat_table ($n, $User->is_admin(false), false, false, "ipaddresses", $address['id'], $User->print_actions($User->user->compress_actions, $links, true));
