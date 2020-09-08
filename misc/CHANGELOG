@@ -16,7 +16,7 @@
         + Removal of php-mcrypt dependancy;
         + Drop support for idpcertfingerprint;
         + MAP_SAML_USER and SAML_USERNAME config.php configuration moved to db;
-        + php-saml debugging set by config.php $debugging variable;
+        + php-saml protocol debugging;
         + Support for signed assertions;
         + SAML usernames can be extracted from assertion attributes (#2948);
 

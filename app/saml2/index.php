@@ -26,17 +26,20 @@ if(filter_var($params->advanced, FILTER_VALIDATE_BOOLEAN)){
 	$auth = new OneLogin\Saml2\Auth();
 }
 else{
+	// If not set use prior default value for clientId
+	if (!isset($params->clientId)) $params->clientId = $Tools->createURL();
+
 	$settings = array (
         'strict' => filter_var($params->strict, FILTER_VALIDATE_BOOLEAN),
-        'debug' => Config::ValueOf('debugging'),
+        'debug' => filter_var($params->debugprotocol, FILTER_VALIDATE_BOOLEAN),
         'sp' => array (
-            'entityId' => $Tools->createURL(),
+            'entityId' => $params->clientId,
             'assertionConsumerService' => array (
                 'url' => $Tools->createURL().create_link('saml2'),
                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
             ),
             'singleLogoutService' => array (
-                'url' => $Tools->createURL(),
+                'url' => $Tools->createURL().create_link(),
                 'binding' => 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect',
             ),
             'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
