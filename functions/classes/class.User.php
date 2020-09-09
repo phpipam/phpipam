@@ -689,7 +689,6 @@ class User extends Common_functions {
      * @return boolean
      */
     public function is_subnet_favourite ($subnetId) {
-        $this->fetch_favourite_subnets ();
         # check if in array
         $subnets = explode(";", $this->user->favourite_subnets);
         $subnets = array_filter($subnets);
