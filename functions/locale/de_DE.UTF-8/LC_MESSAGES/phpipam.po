@@ -4,8 +4,8 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2020.
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
-# "POT-Creation-Date: 2020-09-05 08:50+0200\n"
-# "PO-Revision-Date: 2016-02-12 14:45+0200\n"
+# "POT-Creation-Date: 2020-09-10 18:05+0200\n"
+# "PO-Revision-Date: 2020-09-10 18:05+0200\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
 # "MIME-Version: 1.0\n"
@@ -142,7 +142,7 @@ msgstr "Anwenden auf alle Benutzer"
 msgid "Force all users to use 2fa on next login or disable 2fa for all users"
 msgstr "Zwinge alle Benutzer 2FA beim n&auml;chsten Login zu benutzen"
 
-#: app/admin/2fa/index.php:78 app/admin/filter-fields/index.php:70
+#: app/admin/2fa/index.php:78 app/admin/filter-fields/index.php:69
 #: app/admin/firewall-zones/settings.php:334
 #: app/admin/import-export/import-recompute-preview.php:50
 #: app/admin/mail/index.php:148 app/admin/password-policy/index.php:114
@@ -797,7 +797,7 @@ msgstr "Verwaltung Racks"
 
 #: app/admin/admin-menu-config.php:64 app/admin/custom-fields/index.php:26
 #: app/admin/users/print_module_permissions.php:51
-#: app/sections/user-menu.php:60
+#: app/sections/user-menu.php:60 app/tools/circuits/options.php:50
 #: app/tools/circuits/providers/all-providers.php:55
 #: app/tools/circuits/providers/all-providers.php:85
 #: app/tools/customers/customer/objects/circuits.php:1
@@ -1108,7 +1108,7 @@ msgstr "Routing"
 #: app/subnets/addresses/move-address.php:34
 #: app/subnets/addresses/ping-address.php:30
 #: app/subnets/addresses/ping-address.php:32
-#: app/subnets/addresses/print-address-table.php:27
+#: app/subnets/addresses/print-address-table.php:45
 #: app/subnets/import-subnet/index.php:29 app/subnets/index.php:9
 #: app/subnets/mail-notify-subnet.php:22
 #: app/subnets/scan/subnet-scan-execute.php:38
@@ -1152,7 +1152,7 @@ msgstr "Neuen API-Schl&uuml;ssel hinzuf&uuml;gen"
 
 #: app/admin/api/edit.php:57 app/admin/api/index.php:35
 msgid "App id"
-msgstr "App ID"
+msgstr "App-ID"
 
 #: app/admin/api/edit.php:64
 msgid "Enter application identifier"
@@ -1160,7 +1160,7 @@ msgstr "Applikation  "
 
 #: app/admin/api/edit.php:69 app/admin/api/index.php:36
 msgid "App code"
-msgstr "App Code"
+msgstr "App-Code"
 
 #: app/admin/api/edit.php:71
 msgid "Application code"
@@ -1172,7 +1172,7 @@ msgstr "regenerieren"
 
 #: app/admin/api/edit.php:76 app/admin/api/index.php:37
 msgid "App permissions"
-msgstr "App Berechtigungen"
+msgstr "App-Berechtigungen"
 
 #: app/admin/api/edit.php:88
 msgid "Application permissions"
@@ -1180,7 +1180,7 @@ msgstr "Anwendungsberechtigung"
 
 #: app/admin/api/edit.php:93 app/admin/api/index.php:38
 msgid "App security"
-msgstr "App Sicherheit"
+msgstr "App-Sicherheit"
 
 #: app/admin/api/edit.php:106
 msgid "Application security"
@@ -1225,7 +1225,7 @@ msgstr ""
 #: app/admin/authentication-methods/edit-LDAP.php:60
 #: app/admin/authentication-methods/edit-NetIQ.php:50
 #: app/admin/authentication-methods/edit-Radius.php:45
-#: app/admin/authentication-methods/edit-SAML2.php:70
+#: app/admin/authentication-methods/edit-SAML2.php:72
 #: app/admin/authentication-methods/index.php:38
 #: app/admin/circuits/edit-provider.php:91
 #: app/admin/circuits/edit-provider.php:93 app/admin/custom-fields/edit.php:94
@@ -1283,7 +1283,7 @@ msgstr ""
 #: app/subnets/addresses/export-field-select.php:61
 #: app/subnets/addresses/mail-notify.php:55
 #: app/subnets/addresses/move-address.php:74
-#: app/subnets/addresses/print-address-table.php:145
+#: app/subnets/addresses/print-address-table.php:157
 #: app/subnets/import-subnet/print-file.php:52
 #: app/subnets/mail-notify-subnet.php:49
 #: app/subnets/scan/subnet-scan-execute-scan-icmp.php:82
@@ -1348,7 +1348,7 @@ msgstr "Geben Sie eine Beschreibung ein"
 #: app/admin/authentication-methods/edit-LDAP.php:179
 #: app/admin/authentication-methods/edit-NetIQ.php:164
 #: app/admin/authentication-methods/edit-Radius.php:140
-#: app/admin/authentication-methods/edit-SAML2.php:236
+#: app/admin/authentication-methods/edit-SAML2.php:268
 #: app/admin/circuits/edit-circuit.php:306
 #: app/admin/circuits/edit-logical-circuit.php:379
 #: app/admin/circuits/edit-options.php:87
@@ -1362,7 +1362,8 @@ msgstr "Geben Sie eine Beschreibung ein"
 #: app/admin/firewall-zones/zones-edit-network.php:141
 #: app/admin/firewall-zones/zones-edit.php:189
 #: app/admin/groups/ad-search-group-form.php:76
-#: app/admin/groups/edit-group.php:110 app/admin/groups/remove-users.php:81
+#: app/admin/groups/add-users.php:81 app/admin/groups/edit-group.php:110
+#: app/admin/groups/remove-users.php:81
 #: app/admin/import-export/export-devices-field-select.php:93
 #: app/admin/import-export/export-devtype-field-select.php:61
 #: app/admin/import-export/export-ipaddr-field-select.php:158
@@ -1419,6 +1420,22 @@ msgstr "Geben Sie eine Beschreibung ein"
 msgid "Cancel"
 msgstr "Abbrechen"
 
+#: app/admin/api/index.php:14
+msgid "SSL with User token"
+msgstr "SSL mit Benutzer-Token"
+
+#: app/admin/api/index.php:14
+msgid "SSL with App code token"
+msgstr "SSL mit App-Token"
+
+#: app/admin/api/index.php:14
+msgid "Encrypted"
+msgstr "Verschlüsselt"
+
+#: app/admin/api/index.php:14
+msgid "User token"
+msgstr "Benutzer-Token"
+
 #: app/admin/api/index.php:19
 msgid "API management"
 msgstr "API-Verwaltung"
@@ -1450,13 +1467,17 @@ msgstr "Letzter Zugriff"
 msgid "Read"
 msgstr "Lesen"
 
-#: app/admin/api/index.php:66
+#: app/admin/api/index.php:66 app/admin/groups/index.php:90
 msgid "Read / Write"
 msgstr "Lesen / Schreiben"
 
 #: app/admin/api/index.php:67
 msgid "Read / Write / Admin"
 msgstr "Lesen / Schreiben / Admin"
+
+#: app/admin/api/index.php:70
+msgid "sec"
+msgstr "Sekunden"
 
 #: app/admin/api/index.php:73 app/admin/api/index.php:74
 #: app/admin/api/index.php:75 app/admin/custom-fields/index.php:131
@@ -1480,7 +1501,7 @@ msgstr "Lesen / Schreiben / Admin"
 #: app/folder/folder-details.php:63 app/sections/all-sections.php:89
 #: app/sections/all-sections.php:94 app/sections/all-sections.php:100
 #: app/subnets/addresses/address-details/address-details.php:261
-#: app/subnets/addresses/print-address-table.php:496
+#: app/subnets/addresses/print-address-table.php:510
 #: app/subnets/import-subnet/print-file.php:106
 #: app/subnets/subnet-details/subnet-details.php:511
 #: app/subnets/subnet-slaves.php:131 app/temp_share/address.php:200
@@ -1520,7 +1541,7 @@ msgstr "Ja"
 #: app/sections/all-sections.php:89 app/sections/all-sections.php:94
 #: app/sections/all-sections.php:100
 #: app/subnets/addresses/address-details/address-details.php:260
-#: app/subnets/addresses/print-address-table.php:495
+#: app/subnets/addresses/print-address-table.php:509
 #: app/subnets/import-subnet/print-file.php:107
 #: app/subnets/subnet-details/subnet-details.php:510
 #: app/subnets/subnet-slaves.php:130 app/temp_share/address.php:199
@@ -1537,9 +1558,29 @@ msgstr "Ja"
 msgid "No"
 msgstr "Kein"
 
+#: app/admin/api/index.php:80 app/admin/scan-agents/index.php:48
+#: app/admin/users/print-all.php:127
+#: app/admin/users/print-user/authentication.php:20
+#: app/admin/users/print-user/authentication.php:24
+#: app/subnets/addresses/address-details/address-details.php:198
+#: app/subnets/addresses/address-details/address-details.php:213
+#: app/subnets/addresses/address-details/address-details.php:214
+#: app/subnets/addresses/print-address-table.php:272
+#: app/subnets/addresses/print-address-table.php:273
+#: app/temp_share/address.php:157 app/temp_share/address.php:174
+#: app/temp_share/address.php:175
+#: app/tools/customers/customer/objects/ipaddresses.php:88
+#: app/tools/customers/customer/objects/ipaddresses.php:89
+#: app/tools/multicast-networks/index.php:140
+#: app/tools/multicast-networks/index.php:141
+#: functions/classes/class.Tools.php:2048
+#: functions/classes/class.Tools.php:2049
+msgid "Never"
+msgstr "Nie"
+
 #: app/admin/api/index.php:94
 msgid "edit app details"
-msgstr "App Details bearbeiten"
+msgstr "App-Details bearbeiten"
 
 #: app/admin/api/index.php:95
 msgid "remove app"
@@ -1574,13 +1615,13 @@ msgstr "Active Directory Konfiguration"
 #: app/admin/authentication-methods/edit-LDAP.php:52
 #: app/admin/authentication-methods/edit-NetIQ.php:42
 msgid "ldap extension not enabled in php"
-msgstr "PHP LDAP Erweitung nicht aktiviert"
+msgstr "PHP LDAP Erweiterung nicht aktiviert"
 
 #: app/admin/authentication-methods/edit-AD.php:55
 #: app/admin/authentication-methods/edit-LDAP.php:65
 #: app/admin/authentication-methods/edit-NetIQ.php:55
 #: app/admin/authentication-methods/edit-Radius.php:50
-#: app/admin/authentication-methods/edit-SAML2.php:75
+#: app/admin/authentication-methods/edit-SAML2.php:77
 msgid "Set name for authentication method"
 msgstr "Namen f&uuml;r Authentifizierungsmethode festlegen"
 
@@ -1694,7 +1735,7 @@ msgstr "Dom&auml;nen-Account f&uuml;r Suchoperationen (optional)"
 #: app/admin/authentication-methods/edit-LDAP.php:190
 #: app/admin/authentication-methods/edit-NetIQ.php:174
 #: app/admin/authentication-methods/edit-Radius.php:150
-#: app/admin/authentication-methods/edit-SAML2.php:247
+#: app/admin/authentication-methods/edit-SAML2.php:279
 msgid ""
 " users have this method for logging in. They will be reset to local auth!"
 msgstr ""
@@ -1770,7 +1811,7 @@ msgstr "Bind Kennwort"
 #: app/admin/authentication-methods/edit-LDAP.php:167
 msgid "Password for the bind account (only required if bind user is set)."
 msgstr ""
-"Kennwort f&uuml;r den Bind-Konto (nur erforderlich, wenn Bind-Benutzer "
+"Kennwort f&uuml;r das Bind-Konto (nur erforderlich, wenn Bind-Benutzer "
 "festgelegt wurde)."
 
 #: app/admin/authentication-methods/edit-NetIQ.php:35
@@ -1809,7 +1850,7 @@ msgstr "Eingabe Radius Secret"
 #: app/subnets/addresses/address-modify.php:528
 #: app/subnets/addresses/export-field-select.php:99
 #: app/subnets/addresses/mail-notify.php:86
-#: app/subnets/addresses/print-address-table.php:154
+#: app/subnets/addresses/print-address-table.php:165
 #: app/subnets/import-subnet/print-file.php:58
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:148
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:230
@@ -1852,108 +1893,129 @@ msgstr "php Socket Erweiterung fehlt"
 msgid "php-saml library missing, please update submodules"
 msgstr "php SAML-Bibliothek fehlt, bitte die Submodule aktualisieren"
 
-#: app/admin/authentication-methods/edit-SAML2.php:60
+#: app/admin/authentication-methods/edit-SAML2.php:62
 msgid "SAML2 connection settings"
 msgstr "SAML2-Verbindungseinstellungen"
 
-#: app/admin/authentication-methods/edit-SAML2.php:85
+#: app/admin/authentication-methods/edit-SAML2.php:87
 msgid "Use advanced settings"
 msgstr "Verwende erweiterte Einstellungen"
 
-#: app/admin/authentication-methods/edit-SAML2.php:90
+#: app/admin/authentication-methods/edit-SAML2.php:92
 msgid "Use Onelogin php-saml settings.php configuration"
 msgstr "Benutze Onelogin php-saml settings.php Konfiguration"
 
-#: app/admin/authentication-methods/edit-SAML2.php:100
-msgid "Use strict mode"
-msgstr "Benutze strikten Modus"
+#: app/admin/authentication-methods/edit-SAML2.php:106
+msgid "Client ID"
+msgstr "Client-ID"
 
-#: app/admin/authentication-methods/edit-SAML2.php:105
+#: app/admin/authentication-methods/edit-SAML2.php:111
+msgid "Enter unique client entity ID"
+msgstr "Eingabe eindeutige Client-Entit&auml;ts-ID"
+
+#: app/admin/authentication-methods/edit-SAML2.php:117
+#: app/admin/sections/index.php:52 app/sections/all-sections.php:48
+msgid "Strict mode"
+msgstr "Strict Mode"
+
+#: app/admin/authentication-methods/edit-SAML2.php:122
 msgid "Enable Onelogin php-saml strict mode"
 msgstr "Onelogin php-saml strikten Modus einschalten"
 
-#: app/admin/authentication-methods/edit-SAML2.php:105
+#: app/admin/authentication-methods/edit-SAML2.php:122
 msgid "Requires pretty links and mod_rewrite"
 msgstr "Ben&ouml;tigt Pretty Links und mod_rewrite"
 
-#: app/admin/authentication-methods/edit-SAML2.php:111
+#: app/admin/authentication-methods/edit-SAML2.php:128
 msgid "IDP issuer"
 msgstr "IDP-Aussteller"
 
-#: app/admin/authentication-methods/edit-SAML2.php:120
+#: app/admin/authentication-methods/edit-SAML2.php:137
 msgid "Enter idp issuer"
 msgstr "Angabe des IDP-Ausstellers"
 
-#: app/admin/authentication-methods/edit-SAML2.php:126
+#: app/admin/authentication-methods/edit-SAML2.php:143
 msgid "IDP login url"
 msgstr "IDP-Login-URL"
 
-#: app/admin/authentication-methods/edit-SAML2.php:131
+#: app/admin/authentication-methods/edit-SAML2.php:148
 msgid "Enter IDP login url"
 msgstr "Angabe IDP-Login-URL"
 
-#: app/admin/authentication-methods/edit-SAML2.php:137
+#: app/admin/authentication-methods/edit-SAML2.php:154
 msgid "IDP logout url"
 msgstr "IDP-Logout-URL"
 
-#: app/admin/authentication-methods/edit-SAML2.php:142
+#: app/admin/authentication-methods/edit-SAML2.php:159
 msgid "Enter IDP logout url"
 msgstr "Angabe IDP-Logout-URL"
 
-#: app/admin/authentication-methods/edit-SAML2.php:152
+#: app/admin/authentication-methods/edit-SAML2.php:169
 msgid "IDP X.509 public cert"
 msgstr "&Ouml;ffentliches IDP X509-Zertifikat"
 
-#: app/admin/authentication-methods/edit-SAML2.php:157
+#: app/admin/authentication-methods/edit-SAML2.php:174
 msgid "Enter IDP X.509 public certificate"
 msgstr "Angabe des &ouml;ffentlichen IDP X509-Zertifikats"
 
-#: app/admin/authentication-methods/edit-SAML2.php:163
-#: app/admin/authentication-methods/edit-SAML2.php:168
+#: app/admin/authentication-methods/edit-SAML2.php:180
+#: app/admin/authentication-methods/edit-SAML2.php:185
 msgid "Sign Authn requests"
 msgstr "Signiere Authentifizierungsanfragen"
 
-#: app/admin/authentication-methods/edit-SAML2.php:174
+#: app/admin/authentication-methods/edit-SAML2.php:191
 msgid "Authn X.509 signing cert"
 msgstr "X.509 Signaturzertifikat"
 
-#: app/admin/authentication-methods/edit-SAML2.php:179
+#: app/admin/authentication-methods/edit-SAML2.php:196
 msgid "Enter SP (Client) X.509 certificate"
 msgstr "Angabe des SP (Client) IDP X509-Zertifikats"
 
-#: app/admin/authentication-methods/edit-SAML2.php:185
+#: app/admin/authentication-methods/edit-SAML2.php:202
 msgid "Authn X.509 signing cert key"
 msgstr "Schlüssel X.509 Signaturzertifikat"
 
-#: app/admin/authentication-methods/edit-SAML2.php:190
+#: app/admin/authentication-methods/edit-SAML2.php:207
 msgid "Enter SP (Client) X.509 certificate key"
 msgstr "Angabe des SP(Client) IDP X509-Zertifikatsschlüssels"
 
-#: app/admin/authentication-methods/edit-SAML2.php:200
+#: app/admin/authentication-methods/edit-SAML2.php:217
 msgid "SAML username attribute"
 msgstr "Attribut SAML-Benutzername"
 
-#: app/admin/authentication-methods/edit-SAML2.php:205
+#: app/admin/authentication-methods/edit-SAML2.php:222
 msgid "Extract username from SAML attribute"
 msgstr "Benutzernamen aus dem SAML-Attribut auslesen"
 
-#: app/admin/authentication-methods/edit-SAML2.php:205
+#: app/admin/authentication-methods/edit-SAML2.php:222
 msgid "blank=use NameId"
 msgstr "leer=Benutze NamenID"
 
-#: app/admin/authentication-methods/edit-SAML2.php:211
+#: app/admin/authentication-methods/edit-SAML2.php:228
 msgid "SAML mapped user"
 msgstr "Zugeordneter SAML-Benutzer"
 
-#: app/admin/authentication-methods/edit-SAML2.php:216
+#: app/admin/authentication-methods/edit-SAML2.php:233
 msgid "Map all SAML users to a single local account. e.g. admin"
 msgstr ""
 "Verknüpfe alle SAML-Benutzer mit einem einzelnen lokalen Benutzer (z.B. "
 "admin)"
 
-#: app/admin/authentication-methods/edit-SAML2.php:216
+#: app/admin/authentication-methods/edit-SAML2.php:233
 msgid "blank=disabled"
 msgstr "leer=deaktiviert"
+
+#: app/admin/authentication-methods/edit-SAML2.php:243
+msgid "Debugging"
+msgstr "Fehlerbeseitigung"
+
+#: app/admin/authentication-methods/edit-SAML2.php:248
+msgid "Enable protocol debugging"
+msgstr "Aktivieren von Protokoll Debugging"
+
+#: app/admin/authentication-methods/edit-SAML2.php:248
+msgid "not for production use"
+msgstr "nicht f&uuml; produktiven Einsatz"
 
 #: app/admin/authentication-methods/edit-result.php:53
 msgid "SP (Client) certificate and key are required to sign Authn requests"
@@ -2245,7 +2307,7 @@ msgstr "Status"
 #: app/admin/vlans/edit.php:142 app/admin/vrf/edit.php:92
 #: app/subnets/addresses/address-details/address-details.php:122
 #: app/subnets/addresses/address-modify.php:440
-#: app/subnets/addresses/print-address-table.php:157
+#: app/subnets/addresses/print-address-table.php:168
 #: app/subnets/subnet-details/subnet-details.php:193
 #: app/subnets/subnet-slaves.php:42
 #: app/tools/circuits/physical-circuits/all-circuits.php:56
@@ -2401,7 +2463,7 @@ msgid "Remove"
 msgstr "Entfernen"
 
 #: app/admin/circuits/edit-logical-circuit.php:309
-#: app/admin/custom-fields/index.php:110
+#: app/admin/custom-fields/index.php:110 app/tools/circuits/options.php:128
 msgid "Move down"
 msgstr "nach unten"
 
@@ -2681,10 +2743,10 @@ msgstr "IP-Adressen"
 #: app/subnets/subnet-details/subnet-changelog.php:100
 #: app/subnets/subnet-details/subnet-changelog.php:144
 #: app/tools/changelog/changelog-print.php:57
-#: app/tools/changelog/show-popup.php:55 functions/classes/class.User.php:893
-#: functions/classes/class.User.php:929 functions/classes/class.User.php:1022
-#: functions/classes/class.User.php:1034 functions/classes/class.User.php:1135
-#: functions/classes/class.User.php:1164
+#: app/tools/changelog/show-popup.php:55 functions/classes/class.User.php:892
+#: functions/classes/class.User.php:928 functions/classes/class.User.php:1021
+#: functions/classes/class.User.php:1033 functions/classes/class.User.php:1134
+#: functions/classes/class.User.php:1163
 msgid "User"
 msgstr "Benutzer"
 
@@ -2709,6 +2771,7 @@ msgid "PSTN Numbers"
 msgstr "PTSN Nummern"
 
 #: app/admin/custom-fields/index.php:25 app/tools/circuits/menu.php:15
+#: app/tools/circuits/options.php:49
 #: app/tools/search/search-results-export.php:535
 msgid "Circuit providers"
 msgstr "Provider f&uuml;r Schaltungen"
@@ -2717,20 +2780,21 @@ msgstr "Provider f&uuml;r Schaltungen"
 msgid "BGP Routing"
 msgstr "BGP Routing"
 
-#: app/admin/custom-fields/index.php:37
+#: app/admin/custom-fields/index.php:37 app/tools/circuits/options.php:57
 msgid "Custom"
-msgstr "Benutzerdefiniert"
+msgstr "Benutzerdefinierte"
 
-#: app/admin/custom-fields/index.php:37
+#: app/admin/custom-fields/index.php:37 app/tools/circuits/options.php:57
 msgid "fields"
 msgstr "Felder:"
 
-#: app/admin/custom-fields/index.php:38
+#: app/admin/custom-fields/index.php:38 app/tools/circuits/options.php:58
 msgid "Add new custom"
 msgstr "Hinzuf&uuml;gen eines neuen benutzerspezifischen"
 
 #: app/admin/custom-fields/index.php:38
 #: app/admin/import-export/import-button.php:122
+#: app/tools/circuits/options.php:58
 msgid "field"
 msgstr "Feld"
 
@@ -3115,7 +3179,7 @@ msgstr "Test"
 #: app/subnets/addresses/address-modify.php:231
 #: app/subnets/addresses/export-field-select.php:67
 #: app/subnets/addresses/mail-notify.php:57
-#: app/subnets/addresses/print-address-table.php:135
+#: app/subnets/addresses/print-address-table.php:151
 #: app/subnets/import-subnet/print-file.php:53
 #: app/subnets/scan/subnet-scan-execute-scan-icmp.php:83
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:145
@@ -3149,7 +3213,7 @@ msgstr "Hostname"
 #: app/subnets/addresses/move-address.php:57
 #: app/subnets/addresses/ping-address.php:79
 #: app/subnets/addresses/ping-address.php:81
-#: app/subnets/addresses/print-address-table.php:134
+#: app/subnets/addresses/print-address-table.php:150
 #: app/temp_share/address.php:52 app/temp_share/subnet-addresses.php:86
 #: app/tools/customers/customer/objects/ipaddresses.php:48
 #: app/tools/devices/all-devices.php:75
@@ -3172,7 +3236,7 @@ msgstr "Ger&auml;tetyp"
 #: app/subnets/addresses/address-details/address-details.php:171
 #: app/subnets/addresses/address-modify.php:541
 #: app/subnets/addresses/export-field-select.php:112
-#: app/subnets/addresses/print-address-table.php:155
+#: app/subnets/addresses/print-address-table.php:166
 #: app/subnets/import-subnet/print-file.php:60 app/subnets/index.php:87
 #: app/subnets/subnet-details/subnet-details.php:255
 #: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:161
@@ -3216,7 +3280,7 @@ msgstr "DHCP Management"
 #: app/tools/pstn-prefixes/single-prefix.php:17 app/tools/racks/index.php:22
 #: app/tools/routing/index.php:26 app/tools/vlan/index.php:18
 #: app/tools/vrf/index.php:13 app/vlan/index.php:8 app/vrf/index.php:10
-#: functions/classes/class.User.php:1727
+#: functions/classes/class.User.php:1726
 msgid "You do not have permissions to access this module"
 msgstr "Sie haben keine Berechtigung dieses Modul zu benutzen"
 
@@ -3234,11 +3298,11 @@ msgstr "Aktualisierung fehlgeschlagen"
 msgid "Update successfull"
 msgstr "Aktualisierung erfolgreich"
 
-#: app/admin/filter-fields/index.php:37
+#: app/admin/filter-fields/index.php:36
 msgid "Filter which fields to display in IP list"
 msgstr "Filter welche Felder in den Ergebnisliste angezeigt wird"
 
-#: app/admin/filter-fields/index.php:40
+#: app/admin/filter-fields/index.php:39
 msgid ""
 "You can select which fields are actually being used for IP management, so "
 "you dont show any overhead if not used. IP, hostname and description are "
@@ -3248,7 +3312,7 @@ msgstr ""
 "individuell konfigurieren. Unbenutzte Felder werden nicht angezeigt. IP-"
 "Adresse, Hostname und Beschreibung sind Pflichtfelder."
 
-#: app/admin/filter-fields/index.php:47
+#: app/admin/filter-fields/index.php:46
 msgid "Check which fields to use for IP addresses"
 msgstr ""
 "&Uuml;berpr&uuml;fen Sie die Felder, die f&uuml;r IP-Adressen verwendet "
@@ -3661,7 +3725,7 @@ msgstr "Kundenzonenanzeige"
 
 #: app/admin/firewall-zones/settings.php:251
 msgid ""
-"To organize the order of the firewall IP addres object name pattern simply "
+"To organize the order of the firewall IP address object name pattern simply "
 "drag and drop the different parts in the lower field.<br>It's also possible "
 "to reorganize them to fit your needs."
 msgstr ""
@@ -3958,6 +4022,15 @@ msgstr "Keine Server verf&uuml;gbar"
 msgid "Search domains in AD"
 msgstr "Dom&auml;nen im AD suchen"
 
+#: app/admin/groups/ad-search-group-form.php:41
+#: app/admin/users/ad-search-form.php:46
+msgid "Select server"
+msgstr "Auswahl Server"
+
+#: app/admin/groups/ad-search-group-form.php:54
+msgid "Filter"
+msgstr "Filter"
+
 #: app/admin/groups/ad-search-group-form.php:55
 msgid "Enter search filter"
 msgstr "Eingabe Suchfilter"
@@ -4076,6 +4149,20 @@ msgstr "Name muss mindestens 2 Zeichen lang sein"
 #: app/admin/groups/edit-group-result.php:41
 msgid "Group already exists"
 msgstr "Gruppe existiert bereits"
+
+#: app/admin/groups/edit-group-result.php:78
+#: app/admin/groups/edit-group-result.php:79
+msgid "Group"
+msgstr "Gruppe"
+
+#: app/admin/groups/edit-group-result.php:78
+#: functions/classes/class.Common.php:1751
+msgid "error"
+msgstr "fehlerhaft"
+
+#: app/admin/groups/edit-group-result.php:79
+msgid "success"
+msgstr "erfolgreich"
 
 #: app/admin/groups/edit-group.php:31
 msgid "Add new group"
@@ -4283,8 +4370,9 @@ msgstr "IP-Adresse"
 #: app/admin/import-export/export-ipaddr-field-select.php:83
 #: app/admin/import-export/export-ipaddr.php:108
 #: app/admin/import-export/import-template.php:55
-#: app/subnets/addresses/print-address-table.php:434
-#: app/subnets/addresses/print-address-table.php:600
+#: app/subnets/addresses/print-address-table.php:160
+#: app/subnets/addresses/print-address-table.php:448
+#: app/subnets/addresses/print-address-table.php:614
 #: app/subnets/import-subnet/print-file.php:55
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:144
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:227
@@ -4304,7 +4392,7 @@ msgstr "MAC"
 #: app/subnets/addresses/address-details/address-details.php:133
 #: app/subnets/addresses/address-modify.php:470
 #: app/subnets/addresses/export-field-select.php:85
-#: app/subnets/addresses/print-address-table.php:156
+#: app/subnets/addresses/print-address-table.php:167
 #: app/subnets/import-subnet/print-file.php:56 app/temp_share/address.php:101
 #: app/temp_share/subnet-addresses.php:100
 #: app/tools/customers/customer/objects/ipaddresses.php:56
@@ -4331,7 +4419,7 @@ msgstr "Eigent&uuml;mer"
 #: app/subnets/addresses/address-details/address-details.php:149
 #: app/subnets/addresses/address-modify.php:488
 #: app/subnets/addresses/mail-notify.php:83
-#: app/subnets/addresses/print-address-table.php:153
+#: app/subnets/addresses/print-address-table.php:164
 #: app/subnets/import-subnet/print-file.php:57
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:228
 #: app/subnets/subnet-details/subnet-details.php:218
@@ -5272,11 +5360,11 @@ msgstr "OK"
 #: functions/classes/class.Tools.php:553 functions/classes/class.Tools.php:586
 #: functions/classes/class.Tools.php:2263
 #: functions/classes/class.Tools.php:2398 functions/classes/class.User.php:614
-#: functions/classes/class.User.php:794 functions/classes/class.User.php:829
-#: functions/classes/class.User.php:846 functions/classes/class.User.php:867
-#: functions/classes/class.User.php:992 functions/classes/class.User.php:1040
-#: functions/classes/class.User.php:1305 functions/classes/class.User.php:1328
-#: functions/classes/class.User.php:1347
+#: functions/classes/class.User.php:793 functions/classes/class.User.php:828
+#: functions/classes/class.User.php:845 functions/classes/class.User.php:866
+#: functions/classes/class.User.php:991 functions/classes/class.User.php:1039
+#: functions/classes/class.User.php:1304 functions/classes/class.User.php:1327
+#: functions/classes/class.User.php:1346
 #: functions/scripts/merge_databases.php:514
 #: functions/scripts/remove_offline_addresses.php:52
 msgid "Error: "
@@ -6667,25 +6755,6 @@ msgstr "Neuen Agenten anlegen"
 msgid "Agent id"
 msgstr "Agenten-ID"
 
-#: app/admin/scan-agents/index.php:48 app/admin/users/print-all.php:127
-#: app/admin/users/print-user/authentication.php:20
-#: app/admin/users/print-user/authentication.php:24
-#: app/subnets/addresses/address-details/address-details.php:198
-#: app/subnets/addresses/address-details/address-details.php:213
-#: app/subnets/addresses/address-details/address-details.php:214
-#: app/subnets/addresses/print-address-table.php:258
-#: app/subnets/addresses/print-address-table.php:259
-#: app/temp_share/address.php:157 app/temp_share/address.php:174
-#: app/temp_share/address.php:175
-#: app/tools/customers/customer/objects/ipaddresses.php:88
-#: app/tools/customers/customer/objects/ipaddresses.php:89
-#: app/tools/multicast-networks/index.php:140
-#: app/tools/multicast-networks/index.php:141
-#: functions/classes/class.Tools.php:2048
-#: functions/classes/class.Tools.php:2049
-msgid "Never"
-msgstr "Nie"
-
 #: app/admin/scan-agents/index.php:62
 msgid "edit agent details"
 msgstr "Agentendetails bearbeiten"
@@ -6828,6 +6897,7 @@ msgstr "Wie m&ouml;chsten Sie die Anzeige der Subnetze sortieren"
 #: app/admin/sections/edit.php:194 app/admin/sections/edit.php:221
 #: app/subnets/addresses/address-details-index.php:95 app/subnets/index.php:81
 #: app/subnets/subnet-details/subnet-permissions.php:1
+#: app/tools/customers/customer/objects/subnets.php:133
 msgid "Permissions"
 msgstr "Berechtigung"
 
@@ -6850,10 +6920,6 @@ msgstr ""
 #: app/admin/sections/index.php:39
 msgid "Add section"
 msgstr "Bereich hinzuf&uuml;gen"
-
-#: app/admin/sections/index.php:52 app/sections/all-sections.php:48
-msgid "Strict mode"
-msgstr "Strict Mode"
 
 #: app/admin/sections/index.php:57 app/sections/all-sections.php:57
 msgid "Group Permissions"
@@ -7391,11 +7457,19 @@ msgstr "Der Ordner 'css/images/logo' ist nicht (be)schreibbar."
 
 #: app/admin/settings/logo/logo-uploader.php:45
 msgid "Current"
-msgstr "Strom"
+msgstr "Aktuell"
 
 #: app/admin/settings/logo/logo-uploader.php:51
 msgid "New"
 msgstr "Neu"
+
+#: app/admin/settings/logo/logo-uploader.php:53
+msgid "Image will be shown in"
+msgstr "Die Grafik wird mit einer Abmessung von"
+
+#: app/admin/settings/logo/logo-uploader.php:53
+msgid "px width in phpipam header and mail headers"
+msgstr "px Breite im Kopf von phpIPAM und den E-Mails angezeigt"
 
 #: app/admin/settings/logo/logo-uploader.php:59
 msgid "Select image"
@@ -7777,8 +7851,9 @@ msgid "Apply changes to underlying subnets"
 msgstr "Wende &Auml;nderungen auf die darunter liegenden Subnetze an"
 
 #: app/admin/subnets/edit.php:655
+#: app/tools/customers/customer/objects/subnets.php:130
 msgid "Delete subnet"
-msgstr "L&ouml;sche Subnetz"
+msgstr "Subnetz l&ouml;schen"
 
 #: app/admin/subnets/find_free_section_subnets.php:58
 msgid "for"
@@ -7878,7 +7953,7 @@ msgstr "Link"
 #: app/admin/subnets/permissions-show.php:61 app/folder/folder-details.php:126
 #: app/folder/folder-details.php:128
 msgid "Manage folder permissions"
-msgstr "Orderberechtigung bearbeiten"
+msgstr "Ordnerberechtigung bearbeiten"
 
 #: app/admin/subnets/permissions-show.php:61
 #: app/subnets/subnet-details/subnet-details.php:644
@@ -9053,9 +9128,9 @@ msgid "Add new IP address"
 msgstr "Hinzuf&uuml;gen einer neuen IP-Adresse"
 
 #: app/dashboard/widgets/favourite_subnets.php:100
-#: app/folder/folder-details.php:165
+#: app/folder/folder-details.php:165 app/folder/folder-subnets.php:154
 #: app/subnets/subnet-details/subnet-details.php:658
-#: app/tools/favourites/index.php:91
+#: app/subnets/subnet-slaves.php:155 app/tools/favourites/index.php:91
 msgid "Click to remove from favourites"
 msgstr "Klicken um von den Favoriten zu entfernen"
 
@@ -9080,11 +9155,11 @@ msgstr "Keine inaktiven Hosts gefunden"
 #: app/subnets/addresses/address-details/address-details.php:212
 #: app/subnets/addresses/address-details/address-details.php:213
 #: app/subnets/addresses/address-details/address-details.php:214
-#: app/subnets/addresses/print-address-table.php:255
-#: app/subnets/addresses/print-address-table.php:256
-#: app/subnets/addresses/print-address-table.php:257
-#: app/subnets/addresses/print-address-table.php:258
-#: app/subnets/addresses/print-address-table.php:259
+#: app/subnets/addresses/print-address-table.php:269
+#: app/subnets/addresses/print-address-table.php:270
+#: app/subnets/addresses/print-address-table.php:271
+#: app/subnets/addresses/print-address-table.php:272
+#: app/subnets/addresses/print-address-table.php:273
 #: app/temp_share/address.php:171 app/temp_share/address.php:172
 #: app/temp_share/address.php:173 app/temp_share/address.php:174
 #: app/temp_share/address.php:175
@@ -9349,8 +9424,9 @@ msgstr "Import IP-Adressen"
 msgid "Export IP addresses"
 msgstr "Export IP-Adressen"
 
-#: app/folder/folder-details.php:167
+#: app/folder/folder-details.php:167 app/folder/folder-subnets.php:157
 #: app/subnets/subnet-details/subnet-details.php:660
+#: app/subnets/subnet-slaves.php:158
 msgid "Click to add to favourites"
 msgstr "Klicken um zu den Favoriten hinzuzuf&uuml;gen"
 
@@ -9410,17 +9486,17 @@ msgstr "In Benutzung"
 msgid "Free"
 msgstr "Frei"
 
-#: app/folder/folder-subnets.php:177
+#: app/folder/folder-subnets.php:184
 msgid "Folder has no belonging subnets"
 msgstr "Ordner hat keine zugeh&ouml;rigen Subnetze"
 
-#: app/folder/folder-subnets.php:187
+#: app/folder/folder-subnets.php:194
 msgid "Folder has no subfolders or belonging subnets"
 msgstr "Ordner hat keine Unterordner oder zugeh&ouml;rige Subnetze"
 
 #: app/folder/index.php:26 app/subnets/addresses/address-details-index.php:44
 #: app/subnets/addresses/address-details/address-changelog.php:15
-#: app/subnets/addresses/print-address-table.php:26 app/subnets/index.php:25
+#: app/subnets/addresses/print-address-table.php:44 app/subnets/index.php:25
 #: app/subnets/subnet-details/subnet-changelog.php:26
 #: app/temp_share/subnet.php:26 functions/classes/class.Sections.php:594
 msgid "You do not have permission to access this network"
@@ -9467,6 +9543,14 @@ msgstr "Ung&uuml;ltige Anfrage"
 #: app/install/install-execute.php:23
 msgid "Database already installed"
 msgstr "Datenbank bereits installiert"
+
+#: app/install/postinstall_submit.php:37
+msgid "Settings updated, installation complete!"
+msgstr "Einstellungen aktualisiert, Installation ist vollst&auml;ndig!"
+
+#: app/install/postinstall_submit.php:37
+msgid "Proceed to login."
+msgstr "Weiter zur Anmeldung."
 
 #: app/login/2fa/2fa_create.php:33
 msgid "Two-factor authentication details"
@@ -9696,10 +9780,10 @@ msgstr "VLANs anzeigen"
 msgid "Show VRFs"
 msgstr "VRF-Instanzen anzeigen"
 
-#: app/sections/all-sections.php:135
+#: app/sections/all-sections.php:135 app/tools/customers/all-customers.php:97
 #: app/tools/locations/all-locations-list.php:99
 msgid "Show"
-msgstr "Sichtbarkeit"
+msgstr "Anzeigen"
 
 #: app/sections/all-sections.php:136
 msgid "View section"
@@ -9708,6 +9792,10 @@ msgstr "Bereich anzeigen"
 #: app/sections/all-sections.php:138
 #: app/subnets/addresses/address-details/address-details-nat.php:57
 #: app/subnets/subnet-details/subnet-nat.php:55
+#: app/tools/customers/all-customers.php:102
+#: app/tools/customers/customer/details.php:113
+#: app/tools/customers/customer/objects/ipaddresses.php:174
+#: app/tools/customers/customer/objects/subnets.php:128
 #: app/tools/devices/device-details/device-nat.php:55
 #: app/tools/dhcp/leases.php:53 app/tools/dhcp/reservations.php:67
 #: app/tools/dhcp/subnets.php:82 app/tools/locations/all-locations-list.php:103
@@ -9860,7 +9948,7 @@ msgid "VRFs"
 msgstr "VRF-Instanzen"
 
 #: app/sections/user-menu.php:73 app/sections/user-menu.php:82
-#: functions/classes/class.User.php:1253
+#: functions/classes/class.User.php:1252
 msgid "Hi"
 msgstr "Hallo"
 
@@ -9881,7 +9969,7 @@ msgid "Logout"
 msgstr "Abmelden"
 
 #: app/subnets/addresses/address-details-index.php:43
-#: app/subnets/addresses/print-address-table.php:25
+#: app/subnets/addresses/print-address-table.php:43
 #: app/temp_share/address.php:27 app/temp_share/subnet.php:19
 msgid "Subnet does not exist"
 msgstr "Subnetz existiert nicht"
@@ -9925,7 +10013,7 @@ msgstr ""
 "gbar"
 
 #: app/subnets/addresses/address-details/address-details-linked.php:13
-#: app/subnets/addresses/print-address-table.php:574
+#: app/subnets/addresses/print-address-table.php:588
 msgid "Addresses linked with"
 msgstr "Adressen verkn&uuml;pft mit"
 
@@ -9977,6 +10065,20 @@ msgstr "Zu einem existierenden NAT hinzuf&uuml;gen"
 #: app/subnets/subnet-details/subnet-nat.php:32
 msgid "No NAT objects available"
 msgstr "Keine NAT-Objekte verf&uuml;gbar"
+
+#: app/subnets/addresses/address-details/address-details-nat.php:58
+#: app/subnets/subnet-details/subnet-nat.php:56
+#: app/tools/devices/device-details/device-nat.php:56
+#: app/tools/nat/all_nats.php:152
+msgid "Edit NAT"
+msgstr "NAT-Regel bearbeiten"
+
+#: app/subnets/addresses/address-details/address-details-nat.php:59
+#: app/subnets/subnet-details/subnet-nat.php:57
+#: app/tools/devices/device-details/device-nat.php:57
+#: app/tools/nat/all_nats.php:153
+msgid "Delete NAT"
+msgstr "NAT-Regel entfernen"
 
 #: app/subnets/addresses/address-details/address-details-nat.php:68
 msgid "No NAT translations for this address"
@@ -10092,15 +10194,16 @@ msgstr "IP-Adressdetails bearbeiten"
 
 #: app/subnets/addresses/address-details/address-details.php:340
 #: app/subnets/addresses/address-details/address-details.php:351
-#: app/subnets/addresses/print-address-table.php:519
+#: app/subnets/addresses/print-address-table.php:533
 #: app/tools/search/search_results/search-results_addresses.php:175
 msgid "Delete IP address"
 msgstr "L&ouml;sche IP-Adresse"
 
 #: app/subnets/addresses/address-details/address-details.php:345
 #: app/subnets/addresses/address-details/address-details.php:371
-#: app/subnets/addresses/print-address-table.php:534
-#: app/subnets/addresses/print-address-table.php:554
+#: app/subnets/addresses/print-address-table.php:548
+#: app/subnets/addresses/print-address-table.php:568
+#: app/tools/customers/customer/objects/ipaddresses.php:180
 #: app/tools/multicast-networks/index.php:251
 #: app/tools/multicast-networks/index.php:260
 msgid "Check availability"
@@ -10108,8 +10211,8 @@ msgstr "Verf&uuml;gbarkeit &uuml;berpr&uuml;fen"
 
 #: app/subnets/addresses/address-details/address-details.php:346
 #: app/subnets/addresses/address-details/address-details.php:372
-#: app/subnets/addresses/print-address-table.php:535
-#: app/subnets/addresses/print-address-table.php:555
+#: app/subnets/addresses/print-address-table.php:549
+#: app/subnets/addresses/print-address-table.php:569
 #: app/tools/multicast-networks/index.php:252
 #: app/tools/multicast-networks/index.php:261
 msgid "Search same hostnames in db"
@@ -10117,8 +10220,8 @@ msgstr "Suche gleiche Hostnamen in der Datenbank"
 
 #: app/subnets/addresses/address-details/address-details.php:347
 #: app/subnets/addresses/address-details/address-details.php:373
-#: app/subnets/addresses/print-address-table.php:536
-#: app/subnets/addresses/print-address-table.php:556
+#: app/subnets/addresses/print-address-table.php:550
+#: app/subnets/addresses/print-address-table.php:570
 #: app/tools/multicast-networks/index.php:253
 #: app/tools/multicast-networks/index.php:262
 #: app/tools/search/search_results/search-results_addresses.php:174
@@ -10127,7 +10230,7 @@ msgid "Send mail notification"
 msgstr "Sende E-Mail Benachrichtigung"
 
 #: app/subnets/addresses/address-details/address-details.php:349
-msgid "Regenerate firewall addres object."
+msgid "Regenerate firewall address object."
 msgstr "Neu generieren des Firewall-Adressobjektes."
 
 #: app/subnets/addresses/address-details/address-details.php:354
@@ -10136,8 +10239,8 @@ msgstr "Adresse tempor&auml;r freigeben"
 
 #: app/subnets/addresses/address-details/address-details.php:362
 #: app/subnets/addresses/address-details/address-details.php:370
-#: app/subnets/addresses/print-address-table.php:545
-#: app/subnets/addresses/print-address-table.php:553
+#: app/subnets/addresses/print-address-table.php:559
+#: app/subnets/addresses/print-address-table.php:567
 #: app/tools/multicast-networks/index.php:259
 #: app/tools/search/search_results/search-results_addresses.php:179
 msgid "Edit IP address details (disabled)"
@@ -10145,8 +10248,8 @@ msgstr "Bearbeite IP-Adressdetails (deaktiviert)"
 
 #: app/subnets/addresses/address-details/address-details.php:366
 #: app/subnets/addresses/address-details/address-details.php:374
-#: app/subnets/addresses/print-address-table.php:549
-#: app/subnets/addresses/print-address-table.php:557
+#: app/subnets/addresses/print-address-table.php:563
+#: app/subnets/addresses/print-address-table.php:571
 #: app/tools/multicast-networks/index.php:263
 #: app/tools/search/search_results/search-results_addresses.php:181
 msgid "Delete IP address (disabled)"
@@ -10233,7 +10336,7 @@ msgstr "Rechnername ist nicht eindeutig"
 #: app/tools/vrf/index.php:22 app/upgrade/index.php:144 app/vlan/index.php:13
 #: app/vrf/index.php:14 functions/classes/class.FirewallZones.php:672
 #: functions/classes/class.FirewallZones.php:705
-#: functions/classes/class.User.php:1039
+#: functions/classes/class.User.php:1038
 msgid "Error"
 msgstr "Fehler"
 
@@ -10455,11 +10558,11 @@ msgstr "Wiederholen"
 msgid "Close window"
 msgstr "Fenster schlie&szlig;en"
 
-#: app/subnets/addresses/print-address-table.php:122
+#: app/subnets/addresses/print-address-table.php:138
 msgid "Orphaned IP addresses for subnet"
 msgstr "Verwaiste IP-Adressen im Subnetz"
 
-#: app/subnets/addresses/print-address-table.php:122
+#: app/subnets/addresses/print-address-table.php:138
 msgid ""
 "This happens if subnet contained IP addresses when new child subnet was "
 "created"
@@ -10467,50 +10570,50 @@ msgstr ""
 "Dies passiert, wenn das Subnetz IP-Adressen enthielt, als ein neues "
 "untergeordnetes Subnetz erstellt wurde"
 
-#: app/subnets/addresses/print-address-table.php:122
+#: app/subnets/addresses/print-address-table.php:138
 msgid "Remove all"
 msgstr "Entferne alles"
 
-#: app/subnets/addresses/print-address-table.php:123
+#: app/subnets/addresses/print-address-table.php:139
 #: app/temp_share/subnet-addresses.php:71
 msgid "IP addresses belonging to ALL nested subnets"
 msgstr "IP-Adresse geh&ouml;rt zu allen untergeordneten Subnetzen"
 
-#: app/subnets/addresses/print-address-table.php:142
+#: app/subnets/addresses/print-address-table.php:154
 #: app/subnets/import-subnet/print-file.php:54
 msgid "FW object"
 msgstr "FW-Objekt"
 
-#: app/subnets/addresses/print-address-table.php:183
+#: app/subnets/addresses/print-address-table.php:196
 msgid " Subnet is marked as full"
 msgstr "Subnetz ist als voll markiert"
 
-#: app/subnets/addresses/print-address-table.php:234
+#: app/subnets/addresses/print-address-table.php:248
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:99
 msgid "range"
 msgstr "Reichweite"
 
-#: app/subnets/addresses/print-address-table.php:254
+#: app/subnets/addresses/print-address-table.php:268
 #: app/tools/customers/customer/objects/ipaddresses.php:84
 #: functions/classes/class.Tools.php:2044
 msgid "Address was never online"
 msgstr "Adresse war noch nie online"
 
-#: app/subnets/addresses/print-address-table.php:255
+#: app/subnets/addresses/print-address-table.php:269
 #: app/tools/customers/customer/objects/ipaddresses.php:85
 #: functions/classes/class.Tools.php:2045
 msgid "Address is alive"
 msgstr "Adresse ist erreichbar"
 
-#: app/subnets/addresses/print-address-table.php:256
+#: app/subnets/addresses/print-address-table.php:270
 #: app/tools/customers/customer/objects/ipaddresses.php:86
 #: functions/classes/class.Tools.php:2046
 msgid "Address warning"
 msgstr "Adressen Warnung"
 
-#: app/subnets/addresses/print-address-table.php:257
-#: app/subnets/addresses/print-address-table.php:258
-#: app/subnets/addresses/print-address-table.php:259
+#: app/subnets/addresses/print-address-table.php:271
+#: app/subnets/addresses/print-address-table.php:272
+#: app/subnets/addresses/print-address-table.php:273
 #: app/tools/customers/customer/objects/ipaddresses.php:87
 #: app/tools/customers/customer/objects/ipaddresses.php:88
 #: app/tools/customers/customer/objects/ipaddresses.php:89
@@ -10520,34 +10623,35 @@ msgstr "Adressen Warnung"
 msgid "Address is offline"
 msgstr "Adresse ist offline"
 
-#: app/subnets/addresses/print-address-table.php:260
+#: app/subnets/addresses/print-address-table.php:274
 #: app/tools/customers/customer/objects/ipaddresses.php:90
 #: functions/classes/class.Tools.php:2050
 msgid "Address status unknown"
 msgstr "Adressenstatus unbekannt"
 
-#: app/subnets/addresses/print-address-table.php:358
+#: app/subnets/addresses/print-address-table.php:372
 #: app/temp_share/subnet-addresses.php:185
 #: app/tools/customers/customer/objects/ipaddresses.php:102
 msgid "Address is marked as gateway"
 msgstr "Adresse ist als Gateway markiert"
 
-#: app/subnets/addresses/print-address-table.php:402
+#: app/subnets/addresses/print-address-table.php:416
 #: app/tools/multicast-networks/index.php:169
 msgid "Duplicate MAC"
 msgstr "Doppelte MAC"
 
-#: app/subnets/addresses/print-address-table.php:427
+#: app/subnets/addresses/print-address-table.php:441
 #: app/tools/customers/customer/objects/ipaddresses.php:127
 msgid "Vendor"
 msgstr "Hersteller"
 
-#: app/subnets/addresses/print-address-table.php:518
+#: app/subnets/addresses/print-address-table.php:532
 msgid "Move to different subnet"
 msgstr "Verschiebe zu einem anderen Subnetz"
 
-#: app/subnets/addresses/print-address-table.php:537
-msgid "Generate or regenerate a firewall addres object of this ip address."
+#: app/subnets/addresses/print-address-table.php:551
+#: app/tools/multicast-networks/index.php:254
+msgid "Generate or regenerate a firewall address object of this ip address."
 msgstr ""
 "Generieren oder regenerieren Sie ein Firewall-Adressobjekt dieser IP-Adresse."
 
@@ -10975,24 +11079,12 @@ msgstr "Nutzungsgraph"
 msgid "Subnet NAT translations"
 msgstr "Subnetz NAT-&Uuml;bersetzungen"
 
-#: app/subnets/subnet-details/subnet-nat.php:56
-#: app/tools/devices/device-details/device-nat.php:56
-#: app/tools/nat/all_nats.php:152
-msgid "Edit NAT"
-msgstr "NAT-Regel bearbeiten"
-
-#: app/subnets/subnet-details/subnet-nat.php:57
-#: app/tools/devices/device-details/device-nat.php:57
-#: app/tools/nat/all_nats.php:153
-msgid "Delete NAT"
-msgstr "NAT-Regel entfernen"
-
 #: app/subnets/subnet-details/subnet-nat.php:66
 msgid "No NAT translations for this subnet"
 msgstr "Keine NAT-&Uuml;bersetzungen f&uuml;r dieses Subnetz"
 
-#: app/subnets/subnet-slaves.php:76 app/subnets/subnet-slaves.php:189
-#: app/subnets/subnet-slaves.php:219
+#: app/subnets/subnet-slaves.php:76 app/subnets/subnet-slaves.php:195
+#: app/subnets/subnet-slaves.php:225
 msgid "Free space"
 msgstr "Freier Adressraum"
 
@@ -11172,9 +11264,11 @@ msgid "Logical Circuit ID"
 msgstr "Logische Schaltungs-ID"
 
 #: app/tools/circuits/logical-circuits/logical-circuit-details-general.php:68
+#: app/tools/circuits/logical-circuits/logical-circuits.php:119
 #: app/tools/circuits/physical-circuits/all-circuits.php:134
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:100
 #: app/tools/circuits/providers/provider-details.php:192
+#: app/tools/customers/customer/objects/circuits.php:116
 msgid "Manage circuit"
 msgstr "Schaltung verwalten"
 
@@ -11183,6 +11277,7 @@ msgstr "Schaltung verwalten"
 #: app/tools/circuits/physical-circuits/all-circuits.php:135
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:101
 #: app/tools/circuits/providers/provider-details.php:193
+#: app/tools/customers/customer/objects/circuits.php:117
 msgid "Edit circuit"
 msgstr "Schaltung bearbeiten"
 
@@ -11191,6 +11286,7 @@ msgstr "Schaltung bearbeiten"
 #: app/tools/circuits/physical-circuits/all-circuits.php:138
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:103
 #: app/tools/circuits/providers/provider-details.php:196
+#: app/tools/customers/customer/objects/circuits.php:120
 msgid "Delete circuit"
 msgstr "Schaltung l&ouml;schen"
 
@@ -11242,8 +11338,19 @@ msgstr "Mitglieder"
 #: app/tools/circuits/logical-circuits/logical-circuits.php:114
 #: app/tools/circuits/physical-circuits/all-circuits.php:129
 #: app/tools/circuits/providers/provider-details.php:187
+#: app/tools/customers/customer/objects/circuits.php:111
 msgid "Show circuit"
 msgstr "Ansicht Schaltung"
+
+#: app/tools/circuits/logical-circuits/logical-circuits.php:115
+#: app/tools/circuits/physical-circuits/all-circuits.php:130
+#: app/tools/circuits/providers/all-providers.php:102
+#: app/tools/circuits/providers/provider-details.php:188
+#: app/tools/customers/customer/objects/circuits.php:112
+#: app/tools/customers/customer/objects/ipaddresses.php:168
+#: app/tools/customers/customer/objects/subnets.php:122
+msgid "View"
+msgstr "Ansicht"
 
 #: app/tools/circuits/menu.php:9
 msgid "Physical Circuits"
@@ -11270,7 +11377,11 @@ msgstr "Optionen von Schaltungen"
 msgid "Here you can manage options for circuit types"
 msgstr "Hier k&ouml;nnen Sie Optionen f&uuml;r Schaltungen verwalten"
 
-#: app/tools/circuits/options.php:34
+#: app/tools/circuits/options.php:28
+msgid "Remove option"
+msgstr "Option entfernen"
+
+#: app/tools/circuits/options.php:33 app/tools/circuits/options.php:34
 msgid "Add option"
 msgstr "Option hinzuf&uuml;gen"
 
@@ -11278,6 +11389,11 @@ msgstr "Option hinzuf&uuml;gen"
 #: functions/classes/class.Admin.php:119
 msgid "Administrative privileges required"
 msgstr "Administrator Rechte erforderlich"
+
+#: app/tools/circuits/options.php:51
+#: app/tools/circuits/physical-circuits/circuit-details-logical-parents.php:10
+msgid "Logical circuits"
+msgstr "Logische Schaltungen"
 
 #: app/tools/circuits/physical-circuits/all-circuits.php:36
 msgid "List of physical circuits"
@@ -11293,19 +11409,9 @@ msgstr "Schaltung hinzuf&uuml;gen"
 msgid "Sort by"
 msgstr "Sortiert nach"
 
-#: app/tools/circuits/physical-circuits/all-circuits.php:130
-#: app/tools/circuits/providers/all-providers.php:102
-#: app/tools/circuits/providers/provider-details.php:188
-msgid "View"
-msgstr "Ansicht"
-
 #: app/tools/circuits/physical-circuits/circuit-details-general.php:9
 msgid "Circuit details"
 msgstr "Anschlussdetails"
-
-#: app/tools/circuits/physical-circuits/circuit-details-logical-parents.php:10
-msgid "Logical circuits"
-msgstr "Logische Schaltungen"
 
 #: app/tools/circuits/physical-circuits/circuit-details-logical-parents.php:15
 msgid "This circuit is member of the following logical circuits"
@@ -11397,6 +11503,20 @@ msgstr "Alle Kunden"
 msgid "Add customer"
 msgstr "Kunden hinzuf&uuml;gen"
 
+#: app/tools/customers/all-customers.php:98
+msgid "Show customer"
+msgstr "Kunden anzeigen"
+
+#: app/tools/customers/all-customers.php:103
+#: app/tools/customers/customer/details.php:114
+msgid "Edit customer"
+msgstr "Kunden bearbeiten"
+
+#: app/tools/customers/all-customers.php:106
+#: app/tools/customers/customer/details.php:117
+msgid "Delete customer"
+msgstr "Kunden l&ouml;schen"
+
 #: app/tools/customers/customer/details.php:14
 msgid "Customer details"
 msgstr "Kundendetails"
@@ -11444,9 +11564,37 @@ msgstr "Sortiert nach Standort A"
 msgid "Sort by location B"
 msgstr "Sortiert nach Standort B"
 
+#: app/tools/customers/customer/objects/circuits.php:124
+#: app/tools/customers/customer/objects/ipaddresses.php:184
+#: app/tools/customers/customer/objects/subnets.php:138
+msgid "Unlink"
+msgstr "Verkn&uuml;pfung aufheben"
+
+#: app/tools/customers/customer/objects/circuits.php:125
+#: app/tools/customers/customer/objects/ipaddresses.php:185
+#: app/tools/customers/customer/objects/subnets.php:139
+msgid "Unlink object"
+msgstr "Objektverkn&uuml;pfung entfernen"
+
 #: app/tools/customers/customer/objects/ipaddresses.php:3
 msgid "All IP addresses belonging to customer"
 msgstr "Alle IP-Adressen mit zugeh&ouml;rigen Kunden"
+
+#: app/tools/customers/customer/objects/ipaddresses.php:169
+msgid "Show address"
+msgstr "IP-Adresse anzeigen"
+
+#: app/tools/customers/customer/objects/ipaddresses.php:175
+msgid "Edit address"
+msgstr "IP-Adresse bearbeiten"
+
+#: app/tools/customers/customer/objects/ipaddresses.php:176
+msgid "Delete address"
+msgstr "IP-Adresse l&ouml;sche"
+
+#: app/tools/customers/customer/objects/ipaddresses.php:179
+msgid "Status check"
+msgstr "Status &Uuml;berpr&uuml;fung"
 
 #: app/tools/customers/customer/objects/racks.php:3
 msgid "All Racks belonging to customer"
@@ -11469,6 +11617,18 @@ msgstr "Keine BGP-Informationen verf&uuml;gbar"
 #: app/tools/customers/customer/objects/subnets.php:3
 msgid "All subnets belonging to customer"
 msgstr "Alle Subnetze mit zugeh&ouml;rigen Kunden"
+
+#: app/tools/customers/customer/objects/subnets.php:123
+msgid "Show subnet"
+msgstr "Subnetz anzeigen"
+
+#: app/tools/customers/customer/objects/subnets.php:129
+msgid "Edit subnet"
+msgstr "Subnetz bearbeiten"
+
+#: app/tools/customers/customer/objects/subnets.php:134
+msgid "Edit permissions"
+msgstr "Berechtigungen bearbeiten"
 
 #: app/tools/customers/customer/objects/vlans.php:3
 msgid "All VLANs belonging to customer"
@@ -11988,11 +12148,6 @@ msgstr "Multicast Netzwerke"
 #: app/tools/multicast-networks/index.php:125
 msgid "Subnets has no hosts"
 msgstr "Subnet hat keine Hosts"
-
-#: app/tools/multicast-networks/index.php:254
-msgid "Gegenerate or regenerate a firewall addres object of this ip address."
-msgstr ""
-"Generieren oder regenerieren Sie ein Firewall-Adressobjekt dieser IP-Adresse."
 
 #: app/tools/multicast-networks/index.php:276
 msgid "Add new address"
@@ -13389,10 +13544,6 @@ msgstr ""
 msgid "Write"
 msgstr "Schreiben"
 
-#: functions/classes/class.Common.php:1751
-msgid "error"
-msgstr "Fehler"
-
 #: functions/classes/class.Crypto.php:64
 msgid "Unsupported hash_hmac algo"
 msgstr "Nicht unterst&uuml;tzter hash_hmac Algorithmus"
@@ -13957,122 +14108,122 @@ msgstr ""
 msgid "Page not referred properly"
 msgstr "Seite nicht richtig bezeichnet"
 
-#: functions/classes/class.User.php:755 functions/classes/class.User.php:808
-#: functions/classes/class.User.php:893 functions/classes/class.User.php:907
-#: functions/classes/class.User.php:929
+#: functions/classes/class.User.php:754 functions/classes/class.User.php:807
+#: functions/classes/class.User.php:892 functions/classes/class.User.php:906
+#: functions/classes/class.User.php:928
 msgid "User login"
 msgstr "Benutzer Anmeldung"
 
-#: functions/classes/class.User.php:755 functions/classes/class.User.php:756
+#: functions/classes/class.User.php:754 functions/classes/class.User.php:755
 msgid "Error: Invalid authentication method"
 msgstr "Fehler: Ung&uuml;ltige Authentifizierungsmethode"
 
-#: functions/classes/class.User.php:760
+#: functions/classes/class.User.php:759
 msgid "Your account has been disabled"
 msgstr "Ihr Account wurde deaktiviert"
 
-#: functions/classes/class.User.php:770
+#: functions/classes/class.User.php:769
 msgid "Please use"
 msgstr "Bitte hier"
 
-#: functions/classes/class.User.php:770 functions/classes/class.User.php:1022
-#: functions/classes/class.User.php:1034
+#: functions/classes/class.User.php:769 functions/classes/class.User.php:1021
+#: functions/classes/class.User.php:1033
 msgid "login"
 msgstr "anmelden"
 
-#: functions/classes/class.User.php:808
+#: functions/classes/class.User.php:807
 msgid "Invalid username"
 msgstr "Ung&uuml;ltiger Benutzername"
 
-#: functions/classes/class.User.php:809 functions/classes/class.User.php:907
-#: functions/classes/class.User.php:911 functions/classes/class.User.php:1035
-#: functions/classes/class.User.php:1148
+#: functions/classes/class.User.php:808 functions/classes/class.User.php:906
+#: functions/classes/class.User.php:910 functions/classes/class.User.php:1034
+#: functions/classes/class.User.php:1147
 msgid "Invalid username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 
-#: functions/classes/class.User.php:892 functions/classes/class.User.php:928
-#: functions/classes/class.User.php:1023
+#: functions/classes/class.User.php:891 functions/classes/class.User.php:927
+#: functions/classes/class.User.php:1022
 msgid "Login successful"
 msgstr "Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:893 functions/classes/class.User.php:929
+#: functions/classes/class.User.php:892 functions/classes/class.User.php:928
 msgid "logged in"
 msgstr "angemeldet"
 
-#: functions/classes/class.User.php:991
+#: functions/classes/class.User.php:990
 msgid "Directory connection error"
 msgstr "Verbindungsfehler Verzeichnisdienst"
 
-#: functions/classes/class.User.php:991
+#: functions/classes/class.User.php:990
 msgid "Failed to connect"
 msgstr "Fehler beim Verbinden"
 
-#: functions/classes/class.User.php:1022
+#: functions/classes/class.User.php:1021
 msgid "logged in via"
 msgstr "angemeldet durch"
 
-#: functions/classes/class.User.php:1034
+#: functions/classes/class.User.php:1033
 msgid "failed to authenticate against"
 msgstr "konnte nicht authentifiziert werden mit der Methode"
 
-#: functions/classes/class.User.php:1039
+#: functions/classes/class.User.php:1038
 msgid "Something went wrong during auth: "
 msgstr "Etwas ist schief gelaufen w&auml;hrend der Authentifizierung: "
 
-#: functions/classes/class.User.php:1111 functions/classes/class.User.php:1135
-#: functions/classes/class.User.php:1147
+#: functions/classes/class.User.php:1110 functions/classes/class.User.php:1134
+#: functions/classes/class.User.php:1146
 msgid "Radius login"
 msgstr "Radius Anmeldung"
 
-#: functions/classes/class.User.php:1111 functions/classes/class.User.php:1112
+#: functions/classes/class.User.php:1110 functions/classes/class.User.php:1111
 msgid "php Socket extension missing"
 msgstr "php Socket Erweiterung fehlt"
 
-#: functions/classes/class.User.php:1135
+#: functions/classes/class.User.php:1134
 msgid "logged in via radius"
 msgstr "angemeldet mittels Radius"
 
-#: functions/classes/class.User.php:1136
+#: functions/classes/class.User.php:1135
 msgid "Radius login successful"
 msgstr "Radius Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:1147
+#: functions/classes/class.User.php:1146
 msgid "Failed to authenticate user on radius server"
 msgstr "Keine Authentifizierung am Radius Server"
 
-#: functions/classes/class.User.php:1164
+#: functions/classes/class.User.php:1163
 msgid "SAML2 login"
 msgstr "SAML2-Anmeldung"
 
-#: functions/classes/class.User.php:1164
+#: functions/classes/class.User.php:1163
 msgid "logged in via SAML2"
 msgstr "angemeldet durch SAML2"
 
-#: functions/classes/class.User.php:1165
+#: functions/classes/class.User.php:1164
 msgid "SAML2 login successful"
 msgstr "SAML2-Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:1225 functions/classes/class.User.php:1239
+#: functions/classes/class.User.php:1224 functions/classes/class.User.php:1238
 msgid "No crypt types supported"
 msgstr "Keine Kryptotypen unterst&uuml;tzt"
 
-#: functions/classes/class.User.php:1253
+#: functions/classes/class.User.php:1252
 msgid "your password was updated"
 msgstr "Ihr Kennwort wurde aktualisiert"
 
-#: functions/classes/class.User.php:1306 functions/classes/class.User.php:1313
+#: functions/classes/class.User.php:1305 functions/classes/class.User.php:1312
 msgid "User self update"
 msgstr "Aktualisierung durch Benutzer"
 
-#: functions/classes/class.User.php:1306
+#: functions/classes/class.User.php:1305
 msgid "User self update failed"
 msgstr "Aktualisierung durch Benutzer fehlgeschlagen"
 
-#: functions/classes/class.User.php:1313
+#: functions/classes/class.User.php:1312
 msgid "User self update suceeded"
 msgstr "Aktualisierung durch Benutzer erfolgreich"
 
-#: functions/classes/class.User.php:1649
+#: functions/classes/class.User.php:1648
 msgid "You do not have permissions to access this object"
 msgstr "Sie haben keine Berechtigung dieses Objekt einzusehen"
 
@@ -14095,3 +14246,18 @@ msgstr "Fehler beim L&ouml;schen der Logs"
 #: functions/scripts/clear_logs.php:28
 msgid "Changelogs cleared successfully"
 msgstr "Logs wurden erfolgreich gel&ouml;scht"
+
+#~ msgid "none"
+#~ msgstr "keine"
+
+#~ msgid "Use strict mode"
+#~ msgstr "Benutze strikten Modus"
+
+#~ msgid "readonly"
+#~ msgstr "nur lesen"
+
+#~ msgid ""
+#~ "Gegenerate or regenerate a firewall addres object of this ip address."
+#~ msgstr ""
+#~ "Generieren oder regenerieren Sie ein Firewall-Adressobjekt dieser IP-"
+#~ "Adresse."
