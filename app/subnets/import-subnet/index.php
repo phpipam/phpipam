@@ -79,7 +79,7 @@ $custom_address_fields = $Tools->fetch_custom_fields('ipaddresses');
 	<div id="drop">
 		<input type="file" name="file" id="csvfile" style="display:none;">
 
-		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default">Browse</a>
+		<?php print _('Select CSV file'); ?>: <a class="btn btn-sm btn-default"><?php print _("Browse"); ?></a>
 	</div>
 	<span class="fname" style="display:none"></span>
 
