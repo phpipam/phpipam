@@ -87,7 +87,7 @@ if($_POST['action']=="add" && $_POST['master']==0) {
     if($all_prefixes!==false) {
         foreach ($all_prefixes as $master_prefix) {
 
-            $overlap_text = _("Prefix overlaps with prefix")." ".$master_prefix->name." (".$master_prefix->prefix.")");
+            $overlap_text = _("Prefix overlaps with prefix")." ".$master_prefix->name." (".$master_prefix->prefix.")";
 
             // ranges
             $master_prefix->prefix_raw = $Tools->prefix_normalize ($master_prefix->prefix);
@@ -153,13 +153,17 @@ if(isset($update)) {
 }
 
 # execute update
-if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values))    { $Result->show("danger", _("Prefix")." ".$_POST[action]." "._("failed"), false); }
-else { $Result->show("success", _("Prefix")." ".$_POST[action]." "._("successful"), false); }
+if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("Prefix")." ".$_POST[action]." "._("failed"), false);
+}
+else {
+    $Result->show("success", _("Prefix")." ".$_POST[action]." "._("successful"), false);
+}
 
 # if delete remove all slaves
 if ($_POST['action']=="delete") {
-    $values['master'] =  $values['id'];
-	# remove all references from prefixes and remove all numbers
-	$Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
+    $values['master'] = $values['id'];
+    # remove all references from prefixes and remove all numbers
+    $Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
     $Admin->object_modify ("pstnNumbers", "delete", "prefix", $values);
 }

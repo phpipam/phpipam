@@ -180,8 +180,8 @@ else {
 			}
 			//not null!
 			if ($_POST['action']!="delete") {
-    			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
-            }
+          if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
+      }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];
@@ -218,7 +218,7 @@ else {
 
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Folder, IP addresses and all belonging subnets deleted successfully').'!', false); }
-		else							{ $Result->show("success", _("Folder $_POST[action] successful").'!', true); }
+		else { $Result->show("success", _("Folder")." ".$_POST[action]." "._("successful").'!', true); }
 	}
 }
 
