@@ -78,8 +78,8 @@ if($User->settings->enableCustomers=="1") {
 	}
 }
 # update
-if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values))	{ $Result->show("danger",  _("Failed to $_POST[action] VRF").'!', true); }
-else																	{ $Result->show("success", _("VRF $_POST[action] successful").'!', false); }
+if(!$Admin->object_modify("vrf", $_POST['action'], "vrfId", $values))	{ $Result->show("danger", _("Failed to")." ".$_POST[action]." "._("VRF").'!', true); }
+else { $Result->show("success", _("VRF")." ".$_POST[action]." "._("successful").'!', false); }
 
 
 # remove all references if delete
