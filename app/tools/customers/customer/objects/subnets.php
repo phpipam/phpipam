@@ -119,24 +119,24 @@ foreach ($objects['subnets'] as $slave_subnet) {
 
     $links = [];
 
-    $links[] = ["type"=>"header", "text"=>"View"];
-    $links[] = ["type"=>"link", "text"=>"Show subnet", "href"=>create_link("subnets", $section->id,$slave_subnet['id']), "icon"=>"eye", "visible"=>"dropdown"];
+    $links[] = ["type"=>"header", "text"=>_("View")];
+    $links[] = ["type"=>"link", "text"=>_("Show subnet"), "href"=>create_link("subnets", $section->id,$slave_subnet['id']), "icon"=>"eye", "visible"=>"dropdown"];
 
     if($slave_subnet_permission==3) {
-    	// manage
-	    $links[] = ["type"=>"divider"];
-        $links[] = ["type"=>"header", "text"=>"Manage"];
-        $links[] = ["type"=>"link", "text"=>"Edit subnet", "href"=>"", "class"=>"editSubnet", "dataparams"=>" data-action='edit'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"pencil"];
-        $links[] = ["type"=>"link", "text"=>"Delete subnet", "href"=>"", "class"=>"editSubnet", "dataparams"=>" data-action='delete'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"times"];
-	    // permissions
-	    $links[] = ["type"=>"divider"];
-        $links[] = ["type"=>"header", "text"=>"Permissions"];
-        $links[] = ["type"=>"link", "text"=>"Edit permissions", "href"=>"", "class"=>"showSubnetPerm", "dataparams"=>"data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"tasks"];
+        // manage
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Manage")];
+        $links[] = ["type"=>"link", "text"=>_("Edit subnet"), "href"=>"", "class"=>"editSubnet", "dataparams"=>" data-action='edit'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"pencil"];
+        $links[] = ["type"=>"link", "text"=>_("Delete subnet"), "href"=>"", "class"=>"editSubnet", "dataparams"=>" data-action='delete'   data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"times"];
+        // permissions
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Permissions")];
+        $links[] = ["type"=>"link", "text"=>_("Edit permissions"), "href"=>"", "class"=>"showSubnetPerm", "dataparams"=>"data-subnetid='".$slave_subnet['id']."'  data-sectionid='".$slave_subnet['sectionId']."'", "icon"=>"tasks"];
     }
     if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
- 	    $links[] = ["type"=>"divider"];
-        $links[] = ["type"=>"header", "text"=>"Unlink"];
-        $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700'data-object='subnets' data-id='{$slave_subnet['id']}'", "icon"=>"unlink"];
+        $links[] = ["type"=>"divider"];
+        $links[] = ["type"=>"header", "text"=>_("Unlink")];
+        $links[] = ["type"=>"link", "text"=>_("Unlink object"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700'data-object='subnets' data-id='{$slave_subnet['id']}'", "icon"=>"unlink"];
     }
     // print links
     print $User->print_actions($User->user->compress_actions, $links);
