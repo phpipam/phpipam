@@ -958,7 +958,7 @@ class Common_functions  {
 		// create links only for varchar fields
 		if (strpos($field_type, "varchar")!==false) {
 			// regular expression
-			$reg_exUrl = "#((http|https|ftp|ftps|telnet|ssh)://\S+[^\s.,>)\];'\"!?])#";
+			$reg_exUrl = "#((http|https|ftp|ftps|telnet|ssh|rdp)://\S+[^\s.,>)\];'\"!?])#";
 
 			// Check if there is a url in the text, make the urls hyper links
 			$text = preg_replace($reg_exUrl, "<a href='$0' target='_blank'>$0</a>", $text);
