@@ -20,7 +20,7 @@ $tpl_field_names = "";
 $tpl_field_types = "";
 
 # predefine field list
-$expfields = array ("section","subnet","mask","description","vlan","domain","vrf");
+$expfields = array ("section","subnet","mask","description","vlan","domain","vrf","location");
 // we don't want to support importing of special fields yet, like master, requests, ping, permissions, etc.
 // $expfields = array ("section","subnet","mask","description","vlan","domain","vrf","master_subnet","master_mask","allowRequests","pingSubnet","discoverSubnet");
 $mtable = "subnets"; # main table where to check the fields
@@ -37,6 +37,9 @@ $extfields["domain"]["pname"] = "domain";
 $extfields["vrf"]["table"] = "vrf";
 $extfields["vrf"]["field"] = "name";
 $extfields["vrf"]["pname"] = "vrf";
+$extfields["location"]["table"] = "locations";
+$extfields["location"]["field"] = "name";
+$extfields["location"]["pname"] = "location";
 // $extfields["master_subnet"]["table"] = "subnets";
 // $extfields["master_subnet"]["field"] = "subnet";
 // $extfields["master_subnet"]["pname"] = "master";
@@ -44,7 +47,7 @@ $extfields["vrf"]["pname"] = "vrf";
 // $extfields["master_mask"]["field"] = "mask";
 // $extfields["master_mask"]["pname"] = "master";
 # required fields without which we will not continue, vrf is optional - if not set we check against default VRF
-$reqfields = array("section","subnet");
+$reqfields = array("section","subnet","location");
 
 # manually adjust the standard fields
 foreach($expfields as $std_field) {
