@@ -5,9 +5,9 @@
  */
 
 function file_env($var, $default) {
-  $file_var = $var . '_FILE';
+  $filevar = $var . '_FILE';
   if (getenv($filevar)) {
-    return file_get_contents($filevar);
+    return file_get_contents(getenv($filevar));
   } elseif (getenv($var)) {
     return getenv($var);
   } else {
