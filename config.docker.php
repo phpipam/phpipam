@@ -7,7 +7,7 @@
 function file_env($var, $default) {
   $filevar = $var . '_FILE';
   if (getenv($filevar)) {
-    return file_get_contents(getenv($filevar));
+    return trim(file_get_contents(getenv($filevar)), "\n\r");
   } elseif (getenv($var)) {
     return getenv($var);
   } else {
