@@ -76,7 +76,7 @@ if(isset($update)) {
 
 # update device
 if(!$Admin->object_modify("circuitProviders", $provider['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Provider")." ".$provider[action]." "._("successful").'!', false); }
+else																	{ $Result->show("success", _("Provider")." ".$provider["action"]." "._("successful").'!', false); }
 
 if($provider['action']=="delete"){
 	# remove all references

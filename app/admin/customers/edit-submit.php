@@ -64,7 +64,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($customer[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && strlen($customer[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		// save to update array
 		$update[$myField['name']] = $customer[$myField['name']];
 	}
@@ -103,12 +103,12 @@ else {
 	if (!empty($latlng['info'])) {
 		$Result->show("info", escape_input($latlng['info']), false);
 	} else {
-		$Result->show("warning", _('Failed to update location lat/lng from google')."<br>".escape_input($latlng['error']), false);
+		$Result->show("warning", _('Failed to update location lat/lng from Google').".<br>".escape_input($latlng['error']), false);
 	}
 }
 
 // update customer
 if(!$Admin->object_modify("customers", $customer['action'], "id", $values))	{}
 else {
-	$Result->show("success", _("Customer $customer[action] successfull").'!', false);
+    $Result->show("success", _("Customer")." ".$customer["action"]." "._("successful").'!', false);
 }

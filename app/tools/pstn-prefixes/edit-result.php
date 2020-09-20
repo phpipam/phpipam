@@ -45,7 +45,7 @@ if($_POST['action']=="add" || $_POST['action']=="edit") {
     if(strlen($_POST['name'])<3)                                        { $Result->show("danger",  _("Name must have at least 3 characters"), true); }
 
     // prefix
-    if(!$_POST['prefix'])						{ $Result->show("danger", "Prefix can not be empty!", true); }
+    if(!$_POST['prefix'])                                               { $Result->show("danger", _("Prefix can not be empty!"), true); }
 
     // number
     if(!is_numeric($_POST['start']))                                    { $Result->show("danger",  _("Start must be numeric"), true); }
@@ -87,7 +87,7 @@ if($_POST['action']=="add" && $_POST['master']==0) {
     if($all_prefixes!==false) {
         foreach ($all_prefixes as $master_prefix) {
 
-            $overlap_text = _("Prefix overlaps with prefix ".$master_prefix->name." (".$master_prefix->prefix.")");
+            $overlap_text = _("Prefix overlaps with prefix")." ".$master_prefix->name." (".$master_prefix->prefix.")";
 
             // ranges
             $master_prefix->prefix_raw = $Tools->prefix_normalize ($master_prefix->prefix);
@@ -123,7 +123,7 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
-																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $_POST[$myField['name']];
@@ -153,13 +153,17 @@ if(isset($update)) {
 }
 
 # execute update
-if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values))    { $Result->show("danger",  _("Prefix $_POST[action] failed"), false); }
-else																	        { $Result->show("success", _("Prefix $_POST[action] successful"), false); }
+if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("Prefix")." ".$_POST["action"]." "._("failed"), false);
+}
+else {
+    $Result->show("success", _("Prefix")." ".$_POST["action"]." "._("successful"), false);
+}
 
 # if delete remove all slaves
 if ($_POST['action']=="delete") {
-    $values['master'] =  $values['id'];
-	# remove all references from prefixes and remove all numbers
-	$Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
+    $values['master'] = $values['id'];
+    # remove all references from prefixes and remove all numbers
+    $Admin->remove_object_references ("pstnPrefixes", "master", $values["id"], 0);
     $Admin->object_modify ("pstnNumbers", "delete", "prefix", $values);
 }

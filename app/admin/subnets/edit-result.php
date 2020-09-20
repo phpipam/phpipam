@@ -376,7 +376,7 @@ else {
 				}
 			}
 			//not null!
-			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 
 			# save to update array
 			$values[$myField['name']] = $_POST[$myField['name']];
@@ -403,9 +403,9 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($_POST['action']=="add"){ $Result->show("success", _("Subnet $_POST[action] successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST["action"]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
-		else							{ $Result->show("success", _("Subnet $_POST[action] successful").'!', false); }
+		else { $Result->show("success", _("Subnet")." ".$_POST["action"]." "._("successful").'!', false); }
 	}
 
 	# propagate to slaves
@@ -471,7 +471,7 @@ else {
 				print "	</div>";
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print "	&nbsp;&nbsp; "._("DNS zone")." <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -503,7 +503,7 @@ else {
 				print "	</div>";
 
 				print _('Do you wish to delete DNS zone and all records')."?<br>";
-				print "	&nbsp;&nbsp; DNS zone <strong>$domain->name</strong></li>";
+				print "	&nbsp;&nbsp; "._("DNS zone")." <strong>$domain->name</strong></li>";
 				print " <form name='domainEdit' id='domainEdit'><input type='hidden' name='action' value='delete'><input type='hidden' name='id' value='$domain->id'><input type='hidden' name='csrf_cookie' value='$csrf'></form>";
 				print "	<div class='domain-edit-result'></div>";
 				print "</div>";
@@ -541,10 +541,10 @@ else {
 						}
 					}
 					// print
-					$Result->show ("success", "$cnt PTR records created");
+					$Result->show ("success", "$cnt "._("PTR records created"));
 					// error
 					if ($err!=0) {
-					$Result->show ("warning", "$err invalid hostnames");
+					$Result->show ("warning", "$err "._("invalid hostnames"));
 					}
 				}
 			}
