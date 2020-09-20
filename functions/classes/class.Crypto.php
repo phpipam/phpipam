@@ -122,12 +122,12 @@ class Crypto {
                 break;
 
             default:
-                $this->Result->show("danger", _("Error: "). _('Unsupported $api_crypt_encryption_library method: ').escape_input($method), true);
+                $this->Result->show("danger", _("Error: "). _("Unsupported")." ".$api_crypt_encryption_library." "._("method").": ".escape_input($method), true);
         }
 
         $required_ext = ($retval === 'mcrypt') ? 'mcrypt' : 'openssl';
         if (!in_array($required_ext, get_loaded_extensions()))
-            $this->Result->show("danger", _("Error: "). _('php extension not installed: ').$required_ext, true);
+            $this->Result->show("danger", _("Error: "). _('PHP extension not installed: ').$required_ext, true);
 
         return $retval;
     }
