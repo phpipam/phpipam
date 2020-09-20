@@ -107,6 +107,16 @@ class Common_functions  {
 	protected $Net_IPv6;
 
 	/**
+	 * (array) IP address types from Addresses object
+	 *
+	 * (default value: null)
+	 *
+	 * @var mixed
+	 * @access public
+	 */
+	public $address_types = null;
+
+	/**
 	 * NET_DNS object
 	 *
 	 * @var mixed
@@ -1286,6 +1296,41 @@ class Common_functions  {
 	public function transform_to_decimal ($address) {
 	    if ($this->identify_address ($address) == "IPv4" ) 				{ return( sprintf("%u", ip2long($address)) ); }
 	    else 								 							{ return($this->ip2long6($address)); }
+	}
+
+	/**
+	 * Returns array of address types
+	 *
+	 * @access protected
+	 * @return void
+	 */
+	protected function get_addresses_types () {
+		# from cache
+		if($this->address_types == null) {
+			# fetch
+			$types = $this->fetch_all_objects ("ipTags", "id");
+
+			# save to array
+			$types_out = array();
+			foreach($types as $t) {
+				$types_out[$t->id] = (array) $t;
+			}
+			# save to cache
+			$this->address_types = $types_out;
+		}
+	}
+
+	/**
+	 * Translates address type from index (int) to type
+	 *
+	 *	e.g.: 0 > offline
+	 *
+	 * @access protected
+	 * @param mixed $index
+	 * @return mixed
+	 */
+	protected function translate_address_type ($index) {
+		return isset($this->address_types[$index]["type"]) ? $this->address_types[$index]["type"] : "Used";
 	}
 
 	/**
