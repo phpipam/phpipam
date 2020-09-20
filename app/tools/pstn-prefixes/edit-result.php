@@ -154,10 +154,10 @@ if(isset($update)) {
 
 # execute update
 if(!$Admin->object_modify ("pstnPrefixes", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("Prefix")." ".$_POST[action]." "._("failed"), false);
+    $Result->show("danger", _("Prefix")." ".$_POST["action"]." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("Prefix")." ".$_POST[action]." "._("successful"), false);
+    $Result->show("success", _("Prefix")." ".$_POST["action"]." "._("successful"), false);
 }
 
 # if delete remove all slaves

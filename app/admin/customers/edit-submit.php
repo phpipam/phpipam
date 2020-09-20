@@ -110,5 +110,5 @@ else {
 // update customer
 if(!$Admin->object_modify("customers", $customer['action'], "id", $values))	{}
 else {
-    $Result->show("success", _("Customer")." ".$customer[action]." "._("successful").'!', false);
+    $Result->show("success", _("Customer")." ".$customer["action"]." "._("successful").'!', false);
 }

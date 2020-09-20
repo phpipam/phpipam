@@ -137,7 +137,7 @@ if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cust
 
 # update rack
 if(!$Admin->object_modify("racks", $_POST['action'], "id", $values))	{}
-else { $Result->show("success", _("Rack")." ".$rack[action]." "._("successful").'!', false); }
+else { $Result->show("success", _("Rack")." ".$rack["action"]." "._("successful").'!', false); }
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses

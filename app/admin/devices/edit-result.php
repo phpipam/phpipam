@@ -118,7 +118,7 @@ if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 
 # update device
 if(!$Admin->object_modify("devices", $_POST['action'], "id", $values))	{}
-else { $Result->show("success", _("Device")." ".$device[action]." "._("successful").'!', false); }
+else { $Result->show("success", _("Device")." ".$device["action"]." "._("successful").'!', false); }
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses

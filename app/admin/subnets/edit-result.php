@@ -403,9 +403,9 @@ else {
 		# edit success
 		if($_POST['action']=="delete")	{ $Result->show("success", _('Subnet, IP addresses and all belonging subnets deleted successfully').'!', false); }
 		# create - for redirect
-		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST[action]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
+		elseif ($_POST['action']=="add") { $Result->show("success", _("Subnet")." ". $_POST["action"]." "._("successful").'!<div class="hidden subnet_id_new">'.$new_subnet_id.'</div><div class="hidden section_id_new">'.$values['sectionId'].'</div>', false); }
 		#
-		else { $Result->show("success", _("Subnet")." ".$_POST[action]." "._("successful").'!', false); }
+		else { $Result->show("success", _("Subnet")." ".$_POST["action"]." "._("successful").'!', false); }
 	}
 
 	# propagate to slaves

@@ -122,11 +122,11 @@ else {
 			$order++;
 		}
 		// all ok
-		$Result->show("success", _("Logical Circuit")." ".$circuit[action]." "._("successful")."!", false);
+		$Result->show("success", _("Logical Circuit")." ".$circuit["action"]." "._("successful")."!", false);
 	}
 	else {
 		if($circuit['action'] == "delete"){
-        $Result->show("success", _("Logical Circuit")." ".$circuit[action]." "._("successful")."!", false);
+        $Result->show("success", _("Logical Circuit")." ".$circuit["action"]." "._("successful")."!", false);
 		}
 		else{
         $Result->show("warning", _("No circuits selected")."!", false);

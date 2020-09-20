@@ -74,10 +74,10 @@ if(isset($_POST['customer_id'])) {
 
 # execute update
 if(!$Admin->object_modify ("routing_bgp", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("BGP")." ".$_POST[action]." "._("failed"), false);
+    $Result->show("danger", _("BGP")." ".$_POST["action"]." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("BGP")." ".$_POST[action]." "._("successful"), false);
+    $Result->show("success", _("BGP")." ".$_POST["action"]." "._("successful"), false);
 }
 
 # add

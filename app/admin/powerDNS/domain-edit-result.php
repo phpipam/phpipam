@@ -104,10 +104,10 @@ if ($_POST['action']=="add" && !isset($_POST['manual']))            { $PowerDNS-
 
 # update
 if(!$PowerDNS->domain_edit($_POST['action'], $values)) {
-    $Result->show("danger", _("Failed to")." ".$_POST[action]." "._("domain").'!', true);
+    $Result->show("danger", _("Failed to")." ".$_POST["action"]." "._("domain").'!', true);
 }
 else {
-    $Result->show("success", _("Domain")." ".$_POST[action]." "._("successful").'!', false);
+    $Result->show("success", _("Domain")." ".$_POST["action"]." "._("successful").'!', false);
 }
 
 # create default records

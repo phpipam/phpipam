@@ -25,8 +25,8 @@ $values = [
 
 # submit
 if(!$Admin->object_modify ("routing_subnets", "add", "id", $values)) {
-    $Result->show("danger", _("Mapping")." ".$_POST[action]." "._("failed"), false);
+    $Result->show("danger", _("Mapping")." ".$_POST["action"]." "._("failed"), false);
 }
 else {
-    $Result->show("success", _("Mapping")." ".$_POST[action]." "._("successful"), false);
+    $Result->show("success", _("Mapping")." ".$_POST["action"]." "._("successful"), false);
 }

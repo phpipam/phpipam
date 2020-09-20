@@ -163,10 +163,10 @@ $values['module_permissions'] = json_encode($permissions);
 
 # execute
 if(!$Admin->object_modify("users", $_POST['action'], "id", $values)) {
-    $Result->show("danger", _("User")." ".$_POST[action]." "._("failed").'!', true);
+    $Result->show("danger", _("User")." ".$_POST["action"]." "._("failed").'!', true);
 }
 else {
-    $Result->show("success", _("User")." ".$_POST[action]." "._("successful").'!', false);
+    $Result->show("success", _("User")." ".$_POST["action"]." "._("successful").'!', false);
 }
 
 # mail user
