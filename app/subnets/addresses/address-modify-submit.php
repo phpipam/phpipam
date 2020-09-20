@@ -263,14 +263,14 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 		if(isset($errors)) {
 			$log = $Log->array_to_log ($errors);
 			$Result->show("danger", $log, false);
-			$Log->write( _("IP address modification"), _("Error")." ".$action." "._("range")." ".$address[start]." - ".$address[stop]."<br> $log", 2);
+			$Log->write( _("IP address modification"), _("Error")." ".$action." "._("range")." ".$address["start"]." - ".$address["stop"]."<br> $log", 2);
 		}
 		else {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
 			# log and changelog
 			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successful")."!", false);
-			$Log->write( _("IP address modification"), _("Range")." ".$address[start]." - ".$address[stop]." ".$action." "._("successful")."!", 0);
+			$Log->write( _("IP address modification"), _("Range")." ".$address["start"]." - ".$address["stop"]." ".$action." "._("successful")."!", 0);
 
 			# send changelog mail
 			$Log->object_action = $action;
@@ -278,7 +278,7 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 			$Log->object_result = _("success");
 			$Log->user 			= $User->user;
 
-			$Log->changelog_send_mail ( _("Address range")." ".$address[start]." - "."$address[stop] $action");
+			$Log->changelog_send_mail ( _("Address range")." ".$address["start"]." - "."$address[stop] $action");
 		}
 	}
 }
