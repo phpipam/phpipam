@@ -4,6 +4,23 @@
  *   ln -s config.docker.php config.php
  */
 
+function file_env($var, $default) {
+  $filevar = $var . '_FILE';
+  if (getenv($filevar)) {
+    $file = getenv($filevar);
+    if (is_readable($file))
+    {
+      return trim(file_get_contents($file), "\n\r");
+    } else {
+      error_log($file . " cannot be found or read.");
+    }
+  } elseif (getenv($var)) {
+    return getenv($var);
+  } else {
+    return $default;
+  }
+}
+
 /**
  * Path to access phpipam in site URL, http:/url/BASE/
  * If not defined it will be discovered and set automatically.
@@ -27,12 +44,12 @@ require('config.dist.php');
 /**
  * database connection details
  ******************************/
-getenv('IPAM_DATABASE_HOST') ? $db['host'] = getenv('IPAM_DATABASE_HOST') : false;
-getenv('IPAM_DATABASE_USER') ? $db['user'] = getenv('IPAM_DATABASE_USER') : false;
-getenv('IPAM_DATABASE_PASS') ? $db['pass'] = getenv('IPAM_DATABASE_PASS') : false;
-getenv('IPAM_DATABASE_NAME') ? $db['name'] = getenv('IPAM_DATABASE_NAME') : false;
-getenv('IPAM_DATABASE_PORT') ? $db['port'] = getenv('IPAM_DATABASE_PORT') : false;
-getenv('IPAM_DATABASE_WEBHOST') ? $db['webhost'] = getenv('IPAM_DATABASE_WEBHOST') : false;
+$db['host']    = file_env('IPAM_DATABASE_HOST',    $db['host']);
+$db['user']    = file_env('IPAM_DATABASE_USER',    $db['user']);
+$db['pass']    = file_env('IPAM_DATABASE_PASS',    $db['pass']);
+$db['name']    = file_env('IPAM_DATABASE_NAME',    $db['name']);
+$db['port']    = file_env('IPAM_DATABASE_PORT',    $db['port']);
+$db['webhost'] = file_env('IPAM_DATABASE_WEBHOST', $db['webhost']);
 
  /**
   * Google MAPs API key for locations to display map
@@ -40,18 +57,18 @@ getenv('IPAM_DATABASE_WEBHOST') ? $db['webhost'] = getenv('IPAM_DATABASE_WEBHOST
   *  Obtain key: Go to your Google Console (https://console.developers.google.com) and enable "Google Maps JavaScript API"
   *  from overview tab, so go to Credentials tab and make an API key for your project.
   ******************************/
-getenv('IPAM_GMAPS_API_KEY') ? $gmaps_api_key         = getenv('IPAM_GMAPS_API_KEY') : false;
-getenv('IPAM_GMAPS_API_KEY') ? $gmaps_api_geocode_key = getenv('IPAM_GMAPS_API_KEY') : false;
+$gmaps_api_key = file_env('IPAM_GMAPS_API_KEY', $gmaps_api_key);
+$gmaps_api_geocode_key = file_env('IPAM_GMAPS_API_KEY', $gmaps_api_geocode_key);
 
 /**
  * proxy connection details
  ******************************/
-getenv('PROXY_ENABLED')  ? $proxy_enabled  = getenv('PROXY_ENABLED')  : false;
-getenv('PROXY_SERVER')   ? $proxy_server   = getenv('PROXY_SERVER')   : false;
-getenv('PROXY_PORT')     ? $proxy_port     = getenv('PROXY_PORT')     : false;
-getenv('PROXY_USER')     ? $proxy_user     = getenv('PROXY_USER')     : false;
-getenv('PROXY_PASS')     ? $proxy_pass     = getenv('PROXY_PASS')     : false;
-getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
+$proxy_enabled  = file_env('PROXY_ENABLED',  $proxy_enabled);
+$proxy_server   = file_env('PROXY_SERVER',   $proxy_server);
+$proxy_port     = file_env('PROXY_PORT',     $proxy_port);
+$proxy_user     = file_env('PROXY_USER',     $proxy_user);
+$proxy_pass     = file_env('PROXY_PASS',     $proxy_pass);
+$proxy_use_auth = file_env('PROXY_USE_AUTH', $proxy_use_auth);
 
 /**
  * php debugging on/off
@@ -59,7 +76,7 @@ getenv('PROXY_USE_AUTH') ? $proxy_use_auth = getenv('PROXY_USE_AUTH') : false;
  * true  = SHOW all php errors
  * false = HIDE all php errors
  ******************************/
-getenv('IPAM_DEBUG') ? $debugging = filter_var(getenv('IPAM_DEBUG'), FILTER_VALIDATE_BOOLEAN) : false;
+$debugging = filter_var(file_env('IPAM_DEBUG', $debugging), FILTER_VALIDATE_BOOLEAN);
 
 /**
  * Session storage - files or database
