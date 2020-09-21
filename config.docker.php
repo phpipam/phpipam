@@ -7,7 +7,13 @@
 function file_env($var, $default) {
   $filevar = $var . '_FILE';
   if (getenv($filevar)) {
-    return trim(file_get_contents(getenv($filevar)), "\n\r");
+    $file = getenv($filevar);
+    if (is_readable($file))
+    {
+      return trim(file_get_contents($file), "\n\r");
+    } else {
+      error_log($file . " cannot be found or read.");
+    }
   } elseif (getenv($var)) {
     return getenv($var);
   } else {
