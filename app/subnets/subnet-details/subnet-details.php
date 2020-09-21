@@ -296,7 +296,7 @@ else {
     		<span class="text-muted">
     		<?php
     		if(strlen($subnet['editDate'])>1)  	{ print $subnet['editDate']; }
-    		else 								{ print "Never"; }
+    		else 								{ print _("Never"); }
     		?>
     		</span>
     	</td>
