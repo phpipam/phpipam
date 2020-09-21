@@ -5,20 +5,18 @@
  */
 
 function file_env($var, $default) {
-  $filevar = $var . '_FILE';
-  if (getenv($filevar)) {
-    $file = getenv($filevar);
-    if (is_readable($file))
-    {
-      return trim(file_get_contents($file), "\n\r");
+    $env_filename = getenv($var.'_FILE');
+
+    if ($env_filename===false)
+        return getenv($var) ?: $default;
+
+    if (is_readable($env_filename)) {
+        return trim(file_get_contents($env_filename), "\n\r");
     } else {
-      error_log($file . " cannot be found or read.");
+        // no i10n, gettext not yet loaded
+        error_log("$var:$env_filename can not be read");
+        return $default;
     }
-  } elseif (getenv($var)) {
-    return getenv($var);
-  } else {
-    return $default;
-  }
 }
 
 /**
