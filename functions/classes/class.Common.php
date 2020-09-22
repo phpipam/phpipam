@@ -646,7 +646,7 @@ class Common_functions  {
 				return "";
 
 			$banned_elements = ['script', 'iframe', 'embed'];
-			$remove_elemets = [];
+			$remove_elements = [];
 
 			$elements = $dom->getElementsByTagName('*');
 
@@ -655,7 +655,7 @@ class Common_functions  {
 
 			foreach($elements as $e) {
 				if (in_array($e->nodeName, $banned_elements)) {
-					$remove_elemets[] = $e;
+					$remove_elements[] = $e;
 					continue;
 				}
 
@@ -670,7 +670,7 @@ class Common_functions  {
 			}
 
 			// Remove banned elements
-			foreach($remove_elemets as $e)
+			foreach($remove_elements as $e)
 				$e->parentNode->removeChild($e);
 
 			// Return sanitised HTML
