@@ -129,6 +129,7 @@ else {
 
     	//table
         print '<form id="editSubnetDetailsSNMPall">';
+        print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
     	print "<table class='table table-striped table-top table-condensed' id='editSubnetDetailsSNMPallTable'>";
 
     	// titles
@@ -211,7 +212,6 @@ else {
                     		print " <input type='hidden' name='masterSubnetId-$m' value='$_POST[subnetId]'>";
                             else
                     		print " <input type='hidden' name='masterSubnetId-$m' value='0'>";
-                    		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
                     		print "</td>";
 
                     		//vlan

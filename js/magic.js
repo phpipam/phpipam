@@ -765,9 +765,11 @@ $(document).on('click', 'a#saveScanResults', function() {
 	showSpinner();
 	var script   = $(this).attr('data-script');
 	var subnetId = $(this).attr('data-subnetId');
-	var postData = $('form.'+script+"-form").serialize();
+	var postData = "type="+script;
 	var postData = postData+"&subnetId="+subnetId;
-	var postData = postData+"&type="+script;
+	var postData = postData+"&"+$('form.'+script+"-form").serialize();
+	var postData = postData+"&canary=true";
+
 	$.post('app/subnets/scan/subnet-scan-result.php', postData, function(data) {
         $('#subnetScanAddResult').html(data);
         //hide if success!

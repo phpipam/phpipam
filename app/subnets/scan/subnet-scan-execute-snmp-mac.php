@@ -219,6 +219,7 @@ else {
 
 	//form
 	print "<form name='snmp-mac-form' class='snmp-mac-form'>";
+	print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
 	// titles
@@ -263,7 +264,6 @@ else {
     		print "	<input type='text' class='form-control input-sm' name='description$m'>";
     		print "	<input type='hidden' name='ip$m' value='$ip[ip]'>";
     		print "	<input type='hidden' name='device$m' value='$ip[device]'>";
-    		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
     		print "</td>";
     		// mac
     		print "<td>";

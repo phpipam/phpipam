@@ -74,6 +74,7 @@ else {
 
 	//form
 	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
+	print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
 	// titles
@@ -103,7 +104,6 @@ else {
 		print "<td>";
 		print "	<input type='text' class='form-control input-sm' name='description$m'>";
 		print "	<input type='hidden' name='ip$m' value=".$Subnets->transform_to_dotted($ip).">";
-		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
 		print "</td>";
 		//hostname
 		print "<td>";
