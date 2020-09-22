@@ -255,7 +255,7 @@ class phpipam_mail extends Common_functions {
     	$html = array();
 		$html[] = "<hr style='margin-left:10px;width:300px;height:0px;margin-top:40px;margin-left:0px;border-top:0px;border-bottom:1px solid #ddd;'>";
 		$html[] = "<div class='padding-left:10px;'>";
-		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $this->mail_font_style_light This email was automatically generated. You can change your notification settings in account details!</font><br>";
+		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $this->mail_font_style_light "._("This email was automatically generated. You can change your notification settings in account details")."!</font><br>";
 		$html[] = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href='".$this->settings->siteURL."' font-size:'11px;'>$this->mail_font_style_href ".$this->settings->siteURL."</font></a><br>";
 		$html[] = "</div>";
 
