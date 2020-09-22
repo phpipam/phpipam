@@ -7,10 +7,9 @@
 function file_env($var, $default) {
     $env_filename = getenv($var.'_FILE');
 
-    if ($env_filename===false)
+    if ($env_filename===false) {
         return getenv($var) ?: $default;
-
-    if (is_readable($env_filename)) {
+	} elseif (is_readable($env_filename)) {
         return trim(file_get_contents($env_filename), "\n\r");
     } else {
         // no i10n, gettext not yet loaded
