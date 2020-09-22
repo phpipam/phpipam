@@ -576,6 +576,103 @@ class Subnets extends Common_functions {
 	}
 
 	/**
+	 * Recompute masterSubnetId for a section (by Id)
+	 *
+	 * @param   integer $sectionId
+	 * @param   array   $options
+	 * @return  array
+	 */
+	public function recompute_masterIds($sectionId, $options = ['IPv4'=>true, 'IPv6'=>true, 'CVRF'=>true]) {
+		$subnets = $this->fetch_section_subnets($sectionId);
+
+		if (!is_array($subnets) || sizeof($subnets)==0)
+			return [];
+
+		// Build hash lookup tables
+		$subnetByMaskNetwork = []; $subnetByVrfMaskNetwork = []; $subnetById = [];
+
+		foreach ($subnets as $i=>$subnet) {
+			$subnet->type = $this->identify_address($subnet->subnet);
+
+			// ignore folders and wrong IP types
+			if ($subnet->isFolder || $options[$subnet->type]!==true) {
+				unset($subnets[$i]);
+				continue;
+			}
+
+			$subnet->ip      = $this->transform_to_dotted($subnet->subnet);
+			$subnet->network = $this->decimal_network_address($subnet->subnet, $subnet->mask);
+			$subnet->vrfId   = (int) $subnet->vrfId;   // map null to 0
+
+			// store in lookup tables
+			$subnetById[$subnet->id] = $subnet;
+			$subnetByMaskNetwork[$subnet->type][$subnet->mask][$subnet->network][] = $subnet;
+			$subnetByVrfMaskNetwork[$subnet->type][$subnet->vrfId][$subnet->mask][$subnet->network][] = $subnet;
+		}
+
+		// Recompute nested relationships for $subnets
+		$results = [];
+
+		foreach ($subnets as $i=>$subnet) {
+			// Skip changing subnets with folder masters
+			if (isset($subnetById[$subnet->masterSubnetId]) && $subnetById[$subnet->masterSubnetId]->isFolder)
+				continue;
+
+			// Find matching candidates of the same IP type with the largest mask smaller than $subnet->mask
+			$valid_parents = [];
+			$search_mask = $subnet->mask;
+
+			while (--$search_mask >= 0) {
+				$search_network = $this->decimal_network_address($subnet->subnet, $search_mask);
+
+				if (isset($subnetByVrfMaskNetwork[$subnet->type][$subnet->vrfId][$search_mask][$search_network])) {
+					// All possible parents in the same VRF
+					$valid_parents = $subnetByVrfMaskNetwork[$subnet->type][$subnet->vrfId][$search_mask][$search_network];
+					break;
+
+				} elseif ($options['CVRF']===true && isset($subnetByMaskNetwork[$subnet->type][$search_mask][$search_network])) {
+					//  All possible parents not in the same VRF
+					$valid_parents = $subnetByMaskNetwork[$subnet->type][$search_mask][$search_network];
+					break;
+				}
+			}
+
+			// No matches == no change
+			if (sizeof($valid_parents)==0) {
+				$results[] = ["subnet"=>$subnet, "newMasterSubnetId"=>$subnet->masterSubnetId];
+				continue;
+			}
+
+			// Choose the best matching subnet from $valid_parents
+			// Ether all $valid_parents match $subnet->vrfId or they all do not match $subnet->vrfId.
+			//
+			// Select the parent from the available candidates based on the selection rules below.
+			// First matching rule wins.
+			//  - Prefer parent subnets in the same VRF. ($valid_parents from same VRF if matched from $subnetByVrfMaskNetwork)
+			//  - Prefer the currently set parent subnet.
+			//  - Prefer the parent subnet with the lowest id value.
+
+			$best_match = null;
+
+			foreach($valid_parents as $parent) {
+				// Keep the current masterSubnetId if valid
+				if ($parent->id == $subnet->masterSubnetId) {
+					$best_match = $parent;
+					break;
+				}
+
+				// lower id?
+				if (!isset($best_match) || ($parent->id < $best_match->id))
+					$best_match = $parent;
+			}
+
+			$results[] = ["subnet"=>$subnet, "newMasterSubnetId"=>$best_match->id];
+		}
+
+		return $results;
+	}
+
+	/**
 	 * This function fetches id, subnet and mask for all subnets
 	 *
 	 *	Needed for search > search_subnets_inside
