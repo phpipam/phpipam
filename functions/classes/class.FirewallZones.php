@@ -1027,7 +1027,7 @@ class FirewallZones extends Common_functions {
 			# write changelog
 			$this->Log->write_changelog('subnet', 'edit', 'success', $subnet_old,$subnet);
 
-			return ture;
+			return true;
 		}
 		return false;
 	}
@@ -1146,7 +1146,7 @@ class FirewallZones extends Common_functions {
 			# write changelog
 			$this->Log->write_changelog('ip_addr', 'edit', 'success', (array)$address_old,(array)$address);
 
-			return ture;
+			return true;
 		}
 
 		return false;

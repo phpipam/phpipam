@@ -23,16 +23,6 @@ class Subnets extends Common_functions {
 	public $slaves_full;
 
 	/**
-	 * (array) IP address types from Addresses object
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $address_types = null;
-
-	/**
 	 * Last id of new entries
 	 *
 	 * (default value: null)
@@ -112,6 +102,8 @@ class Subnets extends Common_functions {
 	 * @access public
 	 */
 	public function __construct (Database_PDO $database) {
+		parent::__construct();
+
 		# Save database object
 		$this->Database = $database;
 		# initialize Result
@@ -120,6 +112,8 @@ class Subnets extends Common_functions {
 		$this->Log = new Logging ($this->Database);
 		# pre-generate GMP math bitmask values to manipulate subnets/addresses
 		$this->gmp_bitmasks = $this->generate_network_bitmasks();
+		// fetch address types
+		$this->get_addresses_types();
 	}
 
 	/**
@@ -1263,8 +1257,6 @@ class Subnets extends Common_functions {
 
 		// init addresses object
 		$this->Addresses = new Addresses ($this->Database);
-		// fetch address types
-		$this->get_addresses_types();
 
 		$cached_item = $this->cache_check("subnet_usage", "$subnet->id d=$detailed");
 		if(is_object($cached_item)) return $cached_item->result;
@@ -1391,61 +1383,20 @@ class Subnets extends Common_functions {
 	 * @return array
 	 */
 	private function calculate_subnet_usage_sort_addresses ($addresses = false) {
-		$count = array();
-		$count['Reserved'] = 0;
-		# fetch address types
-		$this->get_addresses_types();
+		$count = ['Reserved' => 0];
 		# create array of keys with initial value of 0
 		foreach($this->address_types as $a) {
 			$count[$a['type']] = 0;
 		}
 		# count
-		if($addresses) {
+		if(is_array($addresses)) {
 			foreach($addresses as $ip) {
 				$type = $this->translate_address_type($ip->state);
-				$count[$type] = gmp_strval(gmp_add($count[$type],1));
+				$count[$type] = isset($count[$type]) ? $count[$type] + 1 : 0;
 			}
 		}
 		# result
 		return $count;
-	}
-
-	/**
-	 * Returns array of address types
-	 *
-	 * @access public
-	 * @return void
-	 */
-	public function get_addresses_types () {
-		# from cache
-		if($this->address_types == null) {
-        	# fetch
-        	$types = $this->fetch_all_objects ("ipTags", "id");
-
-            # save to array
-			$types_out = array();
-			foreach($types as $t) {
-				$types_out[$t->id] = (array) $t;
-			}
-			# save to cache
-			$this->address_types = $types_out;
-		}
-	}
-
-	/**
-	 * Translates address type from index (int) to type
-	 *
-	 *	e.g.: 0 > offline
-	 *
-	 * @access public
-	 * @param mixed $index
-	 * @return mixed
-	 */
-	public function translate_address_type ($index) {
-		# fetch
-		$this->get_addresses_types();
-		# return
-		return isset($this->address_types[$index]["type"]) ? $this->address_types[$index]["type"] : "Used";
 	}
 
 	/**
@@ -3164,7 +3115,7 @@ class Subnets extends Common_functions {
 							$html[] = '<a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].'">'.$subnet['description'].'</a></li>';
 						}
 						else {
-							$html[] = '<li class="leaf '.$active.'""><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
+							$html[] = '<li class="leaf '.$active.'"><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
 							$html[] = '<a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" rel="tooltip" data-placement="right" title="'.$subnet['description'].'">'.$this->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].'</a></li>';
 						}
 					}
@@ -3256,7 +3207,7 @@ class Subnets extends Common_functions {
 							$html[] = '<a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" rel="tooltip" data-placement="right" title="'.$this->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].'">'.$subnet['description'].'</a></li>';
 						}
 						else {
-							$html[] = '<li class="leaf '.$active.'""><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
+							$html[] = '<li class="leaf '.$active.'"><i class="'.$leafClass.' fa fa-gray fa-angle-right"></i>';
 							$html[] = '<a href="'.create_link("subnets",$subnet['sectionId'],$subnet['id']).'" rel="tooltip" data-placement="right" title="'.$subnet['description'].'">'.$this->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].'</a></li>';
 						}
 					}

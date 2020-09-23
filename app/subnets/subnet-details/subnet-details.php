@@ -223,12 +223,14 @@ else {
 		if(!empty($subnet['device'])) {
 			# fetch recursive nameserver details
 			$device = $Tools->fetch_object("devices", "id", $subnet['device']);
-			if ($device!==false) {
-    			# rack
-    			if ($User->settings->enableRACK=="1" && strlen($device->rack)>0 && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-        			$rack = $Tools->fetch_object("racks", "id", $device->rack);
-        			$rack_text = $rack===false ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
-    			}
+			if (is_object($device)) {
+				# rack
+				if ($User->settings->enableRACK=="1" && strlen($device->rack)>0 && $User->get_module_permissions ("racks")>=User::ACCESS_RW) {
+					if (!is_object($Racks)) $Racks = new phpipam_rack ($Database);
+					$Racks->add_rack_start_print($device);
+					$rack = $Tools->fetch_object("racks", "id", $device->rack);
+					$rack_text = !is_object($rack) ? "" : "<br><span class='badge badge1 badge5' style='padding-top:4px;'>$rack->name / "._('Position').": $device->rack_start_print "._("Size").": $device->rack_size U <i class='btn btn-default btn-xs fa fa-server showRackPopup' data-rackId='$rack->id' data-deviceId='$device->id'></i></span>";
+				}
 				print "<a href='".create_link("tools","devices",$device->id)."'>".$device->hostname."</a>";
 				if (strlen($device->description)>0) {
 					print ' ('.$device->description.')';

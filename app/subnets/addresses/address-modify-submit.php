@@ -71,7 +71,7 @@ if(is_array($required_ip_fields) && $action!="delete") {
 	}
 	// check
 	if(sizeof($required_field_errors)>0) {
-		array_unshift($required_field_errors, "Please fix following errors:");
+		array_unshift($required_field_errors, _("Please fix following errors:"));
 		$Result->show("danger", implode("<br> - ", $required_field_errors), true);
 	}
 }
@@ -131,7 +131,7 @@ if(sizeof($custom_fields) > 0 && $action!="delete") {
 		}
 		# null custom fields not permitted
 		if($field['Null']=="NO" && strlen($address[$field['name']])==0) {
-			$Result->show("danger", $field['name']._(" can not be empty!"), true);
+			$Result->show("danger", $field['name']." "._("can not be empty!"), true);
 		}
 	}
 }
@@ -263,22 +263,22 @@ if (strlen(strstr($address['ip_addr'],"-")) > 0) {
 		if(isset($errors)) {
 			$log = $Log->array_to_log ($errors);
 			$Result->show("danger", $log, false);
-			$Log->write( "IP address modification", "'Error $action range $address[start] - $address[stop]<br> $log", 2);
+			$Log->write( _("IP address modification"), _("Error")." ".$action." "._("range")." ".$address["start"]." - ".$address["stop"]."<br> $log", 2);
 		}
 		else {
 			# reset IP for mailing
 			$address['ip_addr'] = $address['start'] .' - '. $address['stop'];
 			# log and changelog
 			$Result->show("success", _("Range")." $address[start] - $address[stop] "._($action)." "._("successful")."!", false);
-			$Log->write( "IP address modification", "Range $address[start] - $address[stop] $action successful!", 0);
+			$Log->write( _("IP address modification"), _("Range")." ".$address["start"]." - ".$address["stop"]." ".$action." "._("successful")."!", 0);
 
 			# send changelog mail
 			$Log->object_action = $action;
-			$Log->object_type   = "address range";
-			$Log->object_result = "success";
+			$Log->object_type   = _("address range");
+			$Log->object_result = _("success");
 			$Log->user 			= $User->user;
 
-			$Log->changelog_send_mail ("Address range $address[start] - $address[stop] $action");
+			$Log->changelog_send_mail ( _("Address range")." ".$address["start"]." - "."$address[stop] $action");
 		}
 	}
 }

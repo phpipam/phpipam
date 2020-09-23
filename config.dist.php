@@ -12,13 +12,13 @@ $db['port'] = 3306;
 /**
  * Database webhost settings
  *
- * Enable and change this setting if your MySQL database does not run on
- * localhost and you want to use the automatic database installation method
- * to create a database user for you (which by default is created @localhost)
+ * Change this setting if your MySQL database does not run on localhost
+ * and you want to use the automatic database installation method to
+ * create a database user for you (which by default is created @localhost)
  *
  * Set to the hostname or IP address of the webserver, or % to allow all
  ******************************/
-// $db['webhost'] = 'localhost';
+$db['webhost'] = '';
 
 
 /**
@@ -130,17 +130,6 @@ define('BASE', "/");
 if(!defined('MCUNIQUE'))
 define('MCUNIQUE', "section");
 
-
-/**
- * SAML mappings
- ******************************/
-if(!defined('MAP_SAML_USER'))
-define('MAP_SAML_USER', true);    // Enable SAML username mapping
-
-if(!defined('SAML_USERNAME'))
-define('SAML_USERNAME', 'admin'); // Map SAML to explicit user
-
-
 /**
  * Permit private subpages - private apps under /app/tools/custom/<custom_app_name>/index.php
  ******************************/
@@ -180,6 +169,7 @@ $proxy_use_auth = false;                                  // Enable/Disable Prox
 $config['logo_width']             = 220;                    // logo width
 $config['requests_public']        = true;                   // Show IP request module on login page
 $config['split_ip_custom_fields'] = false;                  // Show custom fields in separate table when editing IP address
+$config['footer_message']         = "";                     // Custom message included in the footer of every page
 
 /**
  * PHP CLI binary for scanning and network discovery.

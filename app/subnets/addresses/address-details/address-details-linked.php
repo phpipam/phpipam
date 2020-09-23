@@ -8,8 +8,9 @@ if (strlen($User->settings->link_field)>0) {
 	$similar = $Addresses->search_similar_addresses ((object)$address, $User->settings->link_field, $address[$User->settings->link_field]);
 
 	if($similar!==false) {
+		$link_field_print = $User->settings->link_field == "ip_addr" ? $Subnets->transform_to_dotted($address[$User->settings->link_field]) : $address[$User->settings->link_field];
 
-		print "<h4>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$address[$User->settings->link_field]."</strong>:</h4><hr>";
+		print "<h4>"._('Addresses linked with')." ".$User->settings->link_field." <strong>".$link_field_print."</strong>:</h4><hr>";
 
         print "<table class='ipaddress_subnet table-condensed table-auto'>";
 

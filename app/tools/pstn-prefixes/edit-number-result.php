@@ -70,7 +70,7 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($_POST[$myField['name']])==0) {
-																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $_POST[$myField['name']];
@@ -99,5 +99,9 @@ if(isset($update)) {
 }
 
 # execute update
-if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values))    { $Result->show("danger",   _("Number $_POST[action] failed"), false); }
-else																	       { $Result->show("success", _("Number $_POST[action] successful"), false); }
+if(!$Admin->object_modify ("pstnNumbers", $_POST['action'], "id", $values)) {
+    $Result->show("danger", _("Number")." ".$_POST["action"]." "._("failed"), false);
+}
+else {
+    $Result->show("success", _("Number")." ".$_POST["action"]." "._("successful"), false);
+}

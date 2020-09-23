@@ -10,9 +10,6 @@ require( dirname(__FILE__) . '/../../../functions/include-only.php' );
 # verify that user has write permissionss for subnet
 if($Subnets->check_permission ($User->user, $_POST['subnetId']) != 3) 	{ $Result->show("danger", _('You do not have permissions to modify hosts in this subnet')."!", true); }
 
-# check for number of input values
-$max = ini_get("max_input_vars");
-if(sizeof($_POST)>=ini_get("max_input_vars")) 							{ $Result->show("danger", _("Number of discovered hosts exceed maximum possible defined by php.ini - set to ")." $max <hr>"._("Please adjust your php.ini settings for value `max_input_vars`"), true); }
 # subnet Id must be a integer
 if(!is_numeric($_POST['subnetId']) || $_POST['subnetId']==0)			{ $Result->show("danger", _("Invalid ID"), true); }
 # verify that user has write permissionss for subnet

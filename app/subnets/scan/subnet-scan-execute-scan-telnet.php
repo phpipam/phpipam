@@ -51,6 +51,7 @@ else {
 	$nsid = $subnet===false ? false : $subnet->nameserverId;
 
 	print "<form name='".$_POST['type']."-form' class='".$_POST['type']."-form'>";
+	print "<input type='hidden' name='csrf_cookie' value='$csrf'>";
 	print "<table class='table table-striped table-top table-condensed'>";
 
 	// titles
@@ -78,7 +79,6 @@ else {
 		//hostname
 		print "<td>";
 		print "	<input type='text' class='form-control input-sm' name='hostname$m' value='".@$hostname['name']."'>";
-		print " <input type='hidden' name='csrf_cookie' value='$csrf'>";
 		print "</td>";
 		//remove button
 		print 	"<td><a href='' class='btn btn-xs btn-danger resultRemove' data-target='result$m'><i class='fa fa-times'></i></a></td>";

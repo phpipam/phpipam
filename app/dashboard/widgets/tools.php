@@ -20,16 +20,16 @@ if($_SERVER['HTTP_X_REQUESTED_WITH']!="XMLHttpRequest")	{
 
 # set items
 # Tools
-$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-search", 		"name"=>"Search", 		 		"href"=>"search", 		"description"=>"Search database Addresses, subnets and VLANs");
-$tools_menu['Tools'][] = array("show"=>true,	"icon"=>"fa-calculator",	"name"=>"IP calculator", 		"href"=>"ip-calculator","description"=>"IPv4v6 calculator for subnet calculations");
+$tools_menu[_('Tools')][]   = ["show"=>true, "icon"=>"fa-search",     "href"=>"search",        "name"=>_("Search"),        "description"=>_("Search database Addresses, subnets and VLANs")];
+$tools_menu[_('Tools')][]   = ["show"=>true, "icon"=>"fa-calculator", "href"=>"ip-calculator", "name"=>_("IP calculator"), "description"=>_("IPv4v6 calculator for subnet calculations")];
 # Subnets
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-sitemap", 	"name"=>"Subnets",  		   	"href"=>"subnets", 		"description"=>"Show all subnets");
+$tools_menu[_('Subnets')][] = ["show"=>true, "icon"=>"fa-sitemap",    "href"=>"subnets",       "name"=>_("Subnets"),       "description"=>_("Show all subnets")];
 if($User->get_module_permissions ("vlan")>=User::ACCESS_R)
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	"name"=>"VLAN",  				"href"=>"vlan", 		"description"=>"Show VLANs and belonging subnets");
+$tools_menu[_('Subnets')][] = ["show"=>true, "icon"=>"fa-cloud",      "href"=>"vlan",          "name"=>_("VLAN"),          "description"=>_("Show VLANs and belonging subnets")];
 if($User->settings->enableVRF == 1 && $User->get_module_permissions ("vlan")>=User::ACCESS_R)
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-cloud", 	 "name"=>"VRF",  				"href"=>"vrf", 			"description"=>"Show VRFs and belonging networks");
+$tools_menu[_('Subnets')][] = ["show"=>true, "icon"=>"fa-cloud",      "href"=>"vrf",           "name"=>_("VRF"),           "description"=>_("Show VRFs and belonging networks")];
 if($User->get_module_permissions ("devices")>=User::ACCESS_R)
-$tools_menu['Subnets'][] 	= array("show"=>true,	"icon"=>"fa-desktop", 	 "name"=>"Devices",  			"href"=>"devices", 		"description"=>"Show all configured devices");
+$tools_menu[_('Subnets')][] = ["show"=>true, "icon"=>"fa-desktop", 	  "href"=>"devices",       "name"=>_("Devices"),       "description"=>_("Show all configured devices")];
 ?>
 
 
@@ -89,7 +89,7 @@ foreach($tools_menu as $k=>$tool) {
 		print "	<div class='inner thumbnail'>";
 		print "		<div class='hContent'>";
 		print "			<div class='icon'><a href='".create_link("tools",$t['href'])."'><i class='fa $t[icon]'></i></a></div>";
-		print "			<div class='text'><a href='".create_link("tools",$t['href'])."'>"._($t['name'])."</a><hr><span class='text-muted'>"._($t['description'])."</span></div>";
+		print "			<div class='text'><a href='".create_link("tools",$t['href'])."'>".$t['name']."</a><hr><span class='text-muted'>".$t['description']."</span></div>";
 		print "		</div>";
 		print "	</div>";
 		print "	</div>";

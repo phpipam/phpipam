@@ -588,8 +588,6 @@ class phpipamSNMP extends Common_functions {
         $n=0;
         foreach ($res2 as $r) {
             $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
-            // validate mac
-            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
             $n++;
         };
 
@@ -651,8 +649,6 @@ class phpipamSNMP extends Common_functions {
         $n=0;
         foreach ($res1 as $r) {
             $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
-            // validate mac
-            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
             $n++;
         };
 
@@ -700,7 +696,7 @@ class phpipamSNMP extends Common_functions {
 
         // fetch
         $res1 = $this->snmp_walk ( "IP-MIB::ipAdEntAddr" );
-        $res2 = $this->snmp_walk ( "IP-MIB::ipAdEntNetMask" );
+        $res2 = $this->snmp_walk ( "IP-MIB::ipNetToMediaPhysAddress" );
 
         // parse result
         $n=0;
@@ -711,8 +707,6 @@ class phpipamSNMP extends Common_functions {
         $n=0;
         foreach ($res2 as $r) {
             $res[$n]['mac'] = $this->format_snmp_mac_value ($r);
-            // validate mac
-            if ($this->validate_mac($res[$n]['mac'])===false) { $res[$n]['mac'] = ""; }
             $n++;
         };
 
@@ -852,54 +846,90 @@ class phpipamSNMP extends Common_functions {
     }
 
     /**
+     * Extract TYPE: VALUE from SNMP output
+     *  IPADDRESS: 1.2.3.4
+     *  STRING:  255.255.255.0
+     *
+     * @param   mixed  $input
+     * @return  array
+     */
+    private function extract_type_and_value($input) {
+        if (!is_string($input))
+            throw new Exception(_('SNMP response is not a valid string'));
+
+        $input = stripslashes($input);
+
+        // extract "TYPE: VALUE"
+        preg_match('/^"?([^ ]+:)(.*)"?$/', $input, $matches);
+
+        if (sizeof($matches)!=3)
+            throw new Exception(_('Unable to parse "type: value" from SNMP response'));
+
+        // return array($type, $value)
+        return [trim($matches[1]), trim($matches[2])];
+    }
+
+    /**
      * Standardise SNMP MACs  -> 0:1:fe   >> 00:01:fe
      *                        -> 0-1-fe   >> 00:01:fe
      *                        -> 00 01 fe >> 00:01:fe
      * @access private
-     * @param string $mac
+     * @param string $input
      * @return string
      */
-    private function format_snmp_mac_value ($mac) {
-        if (!is_string($mac))
+    private function format_snmp_mac_value ($input) {
+        try {
+            $mac_parts = [];
+            list($type, $mac) = $this->extract_type_and_value($input);
+
+            if (strlen($mac)==6) {
+                // 6 byte binary string (Cisco bug?), try unpacking to hex string.
+                $mac = unpack('H*mac', $mac)['mac'];
+            }
+
+            if (preg_match('/^[0-9a-fA-F]{12}$/',$mac)) {
+                // hex string "0011223344AA"
+                $mac_parts = str_split($mac, 2);
+
+            } elseif (preg_match('/^([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})[ :-]([0-9a-fA-F]{1,2})$/', $mac, $matches)) {
+                // separated MAC address, 0:1b:c:55:7
+                unset($matches[0]);
+                foreach($matches as $i => $v)
+                    $mac_parts[$i] = str_pad($v, 2, '0', STR_PAD_LEFT);
+            }
+
+            if (sizeof($mac_parts)!=6)
+                throw new Exception(_("Unable to process SNMP value"));
+
+            return strtoupper(implode(':', $mac_parts));
+
+        } catch (Exception $e) {
+            if (Config::ValueOf('debugging'))
+                    $this->Result->show('info', $e->getMessage().': "'.escape_input($input).'"', false);
+
             return '';
-
-        $mac = trim($mac);
-
-        $separators = [':', '-', ' '];
-
-        $mac_parts = [];
-        foreach ($separators as $separator) {
-            if (strpos($mac, $separator)===false)
-                continue;
-            $mac_parts = explode($separator, $mac);
-            break;
         }
-
-        if (sizeof($mac_parts)!=6)
-            return $mac;
-
-        foreach ($mac_parts as $i=>$v) {
-            $mac_parts[$i] = str_pad($v, 2, "0", STR_PAD_LEFT);
-        }
-
-        return implode(":", $mac_parts);
     }
 
     /**
      * Parses result - removes STRING:
      *
      * @access private
-     * @param mixed $r
-     * @return void
+     * @param string input
+     * @return string
      */
-    private function parse_snmp_result_value ($r) {
-        $r = stripslashes($r);
-        $r = trim(substr($r, strpos($r, ":")+2));
-        // if the first char is a " then remove it
-        if(substr_compare($r, '"', 0, 1)===0)  $r=substr($r, 1);
-        // if the last char is a " then remove it
-        if(substr_compare($r, '"', -1, 1)===0) $r=substr($r, 0,-1);
-        return escape_input($r);
+    private function parse_snmp_result_value ($input) {
+        try {
+            list($type, $value) = $this->extract_type_and_value($input);
+
+            return escape_input($value);
+
+        } catch (Exception $e) {
+            if (Config::ValueOf('debugging'))
+                    $this->Result->show('info', $e->getMessage().': "'.escape_input($input).'"', false);
+
+            return '';
+        }
     }
 
 }

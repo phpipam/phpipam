@@ -11,7 +11,8 @@ $User->check_user_session();
 /* fetch all custom fields */
 $custom_tables = array(
 						"ipaddresses"      => _("IP addresses"),
-						"subnets"          => _("subnets"),
+						"requests"         => _("IP requests"),
+						"subnets"          => _("Subnets"),
 						"vlans"            => _("VLAN"),
 						"vrf"              => _("VRF"),
 						"users"            => _("User"),

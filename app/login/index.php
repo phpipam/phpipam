@@ -50,7 +50,7 @@ if(@$config['requests_public']===false) {
 	<link rel="shortcut icon" href="css/images/favicon.png">
 
 	<!-- js -->
-	<script src="js/jquery-3.4.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+	<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script src="js/bootstrap.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 	<script>
@@ -115,15 +115,10 @@ if(@$config['requests_public']===false) {
 	<?php
 	# set default language
 	if(isset($User->settings->defaultLang) && !is_null($User->settings->defaultLang) ) {
-		# get language
+		# get global default language
 		$lang = $User->get_default_lang();
-
-		if (is_object($lang)) {
-			putenv("LC_ALL=".$lang->l_code);
-			setlocale(LC_ALL, $lang->l_code);					// set language
-		}
-		bindtextdomain("phpipam", "./functions/locale");	// Specify location of translation tables
-		textdomain("phpipam");								// Choose domain
+		if (is_object($lang))
+			set_ui_language($lang->l_code);
 	}
 	?>
 
@@ -150,7 +145,7 @@ if(@$config['requests_public']===false) {
 				$Result->show("success", _('You have logged out'));
 
 			# write log
-			$Log->write( "User logged out", "User $User->username has logged out", 0, $User->username );
+			$Log->write( _("User logged out"), _("User")." ".$User->username." "._("has logged out"), 0, $User->username );
 
 			# destroy session
 			$User->destroy_session();
@@ -158,8 +153,16 @@ if(@$config['requests_public']===false) {
 
 		//check if SAML2 login is possible
 		$saml2settings=$Tools->fetch_object("usersAuthMethod", "type", "SAML2");
-		if($saml2settings!=false){
-			$Result->show("success", _('You can login with SAML2 <a href="'.create_link('saml2').'">here</a>'));
+
+		if ($saml2settings!=false) {
+			$version = json_decode(@file_get_contents(dirname(__FILE__).'/../../functions/php-saml/src/Saml2/version.json'), true);
+			$version = $version['php-saml']['version'];
+
+			if ($version < 3.4) {
+				$Result->show("danger", _('php-saml library missing, please update submodules'));
+			} else {
+				$Result->show("success", _('You can login with SAML2').' <a href="'.create_link('saml2').'">'._('here').'</a>!');
+			}
 		}
 
 		?>

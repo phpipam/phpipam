@@ -28,7 +28,7 @@ CREATE TABLE `customers` (
   `long` varchar(12) DEFAULT NULL,
   `contact_person` text DEFAULT NULL,
   `contact_phone` varchar(32) DEFAULT NULL,
-  `contact_mail` varchar(255) DEFAULT NULL,
+  `contact_mail` varchar(254) DEFAULT NULL,
   `note` text DEFAULT NULL,
   `status` set('Active','Reserved','Inactive') DEFAULT 'Active',
   PRIMARY KEY (`id`),
@@ -108,6 +108,7 @@ CREATE TABLE `requests` (
   `subnetId` INT(11)  UNSIGNED  NULL  DEFAULT NULL,
   `ip_addr` varchar(100) DEFAULT NULL,
   `description` varchar(64) DEFAULT NULL,
+  `mac` varchar(20) DEFAULT NULL,
   `hostname` varchar(255) DEFAULT NULL,
   `state` INT  NULL  DEFAULT '2',
   `owner` varchar(128) DEFAULT NULL,
@@ -157,7 +158,7 @@ CREATE TABLE `settings` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `siteTitle` varchar(64) DEFAULT NULL,
   `siteAdminName` varchar(64) DEFAULT NULL,
-  `siteAdminMail` varchar(64) DEFAULT NULL,
+  `siteAdminMail` varchar(254) DEFAULT NULL,
   `siteDomain` varchar(32) DEFAULT NULL,
   `siteURL` varchar(64) DEFAULT NULL,
   `siteLoginText` varchar(128) DEFAULT NULL,
@@ -236,15 +237,15 @@ DROP TABLE IF EXISTS `settingsMail`;
 
 CREATE TABLE `settingsMail` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `mtype` set('localhost','smtp') NOT NULL DEFAULT 'localhost',
-  `msecure` SET('none','ssl','tls')  NOT NULL  DEFAULT 'none',
-  `mauth` set('yes','no') NOT NULL DEFAULT 'no',
+  `mtype` ENUM('localhost','smtp') NOT NULL DEFAULT 'localhost',
+  `msecure` ENUM('none','ssl','tls')  NOT NULL  DEFAULT 'none',
+  `mauth` ENUM('yes','no') NOT NULL DEFAULT 'no',
   `mserver` varchar(128) DEFAULT NULL,
   `mport` int(5) DEFAULT '25',
-  `muser` varchar(64) DEFAULT NULL,
-  `mpass` varchar(64) DEFAULT NULL,
-  `mAdminName` varchar(64) DEFAULT NULL,
-  `mAdminMail` varchar(64) DEFAULT NULL,
+  `muser` varchar(254) DEFAULT NULL,
+  `mpass` varchar(128) DEFAULT NULL,
+  `mAdminName` varchar(128) DEFAULT NULL,
+  `mAdminMail` varchar(254) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
@@ -372,21 +373,21 @@ CREATE TABLE `users` (
   `groups` varchar(1024) COLLATE utf8_bin DEFAULT NULL,
   `role` text CHARACTER SET utf8,
   `real_name` varchar(128) CHARACTER SET utf8 DEFAULT NULL,
-  `email` varchar(64) CHARACTER SET utf8 DEFAULT NULL,
+  `email` varchar(254) CHARACTER SET utf8 DEFAULT NULL,
   `domainUser` binary(1) DEFAULT '0',
   `widgets` VARCHAR(1024)  NULL  DEFAULT 'statistics;favourite_subnets;changelog;top10_hosts_v4',
   `lang` INT(11) UNSIGNED  NULL  DEFAULT '9',
   `favourite_subnets` VARCHAR(1024)  NULL  DEFAULT NULL,
-  `disabled` SET('Yes','No')  NOT NULL  DEFAULT 'No',
-  `mailNotify` SET('Yes','No')  NULL  DEFAULT 'No',
-  `mailChangelog` SET('Yes','No')  NULL  DEFAULT 'No',
-  `passChange` SET('Yes','No')  NOT NULL  DEFAULT 'No',
+  `disabled` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `mailNotify` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `mailChangelog` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
+  `passChange` ENUM('Yes','No')  NOT NULL  DEFAULT 'No',
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
   `lastLogin` TIMESTAMP  NULL,
   `lastActivity` TIMESTAMP  NULL,
-  `compressOverride` SET('default','Uncompress') NOT NULL DEFAULT 'default',
+  `compressOverride` ENUM('default','Uncompress') NOT NULL DEFAULT 'default',
   `hideFreeRange` tinyint(1) DEFAULT '0',
-  `menuType` SET('Static','Dynamic')  NULL  DEFAULT 'Dynamic',
+  `menuType` ENUM('Static','Dynamic')  NOT NULL  DEFAULT 'Dynamic',
   `menuCompact` TINYINT  NULL  DEFAULT '1',
   `2fa` BOOL  NOT NULL  DEFAULT '0',
   `2fa_secret` VARCHAR(32)  NULL  DEFAULT NULL,
@@ -634,9 +635,9 @@ DROP TABLE IF EXISTS `usersAuthMethod`;
 
 CREATE TABLE `usersAuthMethod` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `type` set('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
-  `params` varchar(2048) DEFAULT NULL,
-  `protected` set('Yes','No') NOT NULL DEFAULT 'Yes',
+  `type` ENUM('local','http','AD','LDAP','NetIQ','Radius','SAML2') NOT NULL DEFAULT 'local',
+  `params` text DEFAULT NULL,
+  `protected` ENUM('Yes','No') NOT NULL DEFAULT 'Yes',
   `description` text,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1028,4 +1029,4 @@ CREATE TABLE `vaultItems` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 33;
+UPDATE `settings` SET `dbversion` = 36;

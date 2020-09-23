@@ -7,16 +7,6 @@
 class Tools extends Common_functions {
 
 	/**
-	 * (array) IP address types from Addresses object
-	 *
-	 * (default value: null)
-	 *
-	 * @var mixed
-	 * @access public
-	 */
-	public $address_types = null;
-
-	/**
 	 * CSV delimiter
 	 *
 	 * @var string
@@ -59,6 +49,8 @@ class Tools extends Common_functions {
 		$this->Database = $database;
 		# initialize Result
 		$this->Result = new Result ();
+		// fetch address types
+		$this->get_addresses_types();
 	}
 
 
@@ -997,8 +989,15 @@ class Tools extends Common_functions {
 	 * @return array|null
 	 */
 	public function requests_fetch_available_subnets () {
-		try { $subnets = $this->Database->getObjectsQuery("SELECT * FROM `subnets` where `allowRequests`=1 and `isFull`!=1 ORDER BY `subnet`;"); }
-		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return false; }
+		// All subnets where allowRequests=1, isFull=0 and subnet has no children.
+		$query = "SELECT s1.* FROM subnets AS s1
+			LEFT JOIN subnets AS s2 ON s2.masterSubnetId = s1.id
+			WHERE s1.allowRequests=1
+			AND s1.isFull!=1
+			AND s2.masterSubnetId IS NULL
+			ORDER BY LPAD(s1.subnet,39,0);";
+		try { $subnets = $this->Database->getObjectsQuery($query); }
+		catch (Exception $e) { $this->Result->show("danger", $e->getMessage(), false);	return NULL; }
 
 		# save
 		return sizeof($subnets)>0 ? (array) $subnets : NULL;
@@ -2775,8 +2774,6 @@ class Tools extends Common_functions {
 	public function calculate_prefix_usage_sort_numbers ($numbers) {
 		$count = array();
 		$count['used'] = 0;				//initial sum count
-		# fetch address types
-		$this->get_addresses_types();
 		# create array of keys with initial value of 0
 		foreach($this->address_types as $a) {
 			$count[$a['type']] = 0;
@@ -2790,43 +2787,6 @@ class Tools extends Common_functions {
 		}
 		# result
 		return $count;
-	}
-
-	/**
-	 * Returns array of address types
-	 *
-	 * @access public
-	 */
-	public function get_addresses_types () {
-		# from cache
-		if($this->address_types == null) {
-        	# fetch
-        	$types = $this->fetch_all_objects ("ipTags", "id");
-
-            # save to array
-			$types_out = array();
-			foreach($types as $t) {
-				$types_out[$t->id] = (array) $t;
-			}
-			# save to cache
-			$this->address_types = $types_out;
-		}
-	}
-
-	/**
-	 * Translates address type from index (int) to type
-	 *
-	 *	e.g.: 0 > offline
-	 *
-	 * @access public
-	 * @param mixed $index
-	 * @return array
-	 */
-	public function translate_address_type ($index) {
-		# fetch
-		$this->get_addresses_types();
-		# return
-		return $this->address_types[$index]["type"];
 	}
 
 	/**

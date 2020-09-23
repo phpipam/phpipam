@@ -66,7 +66,7 @@ foreach($circuit_types as $t) {
 # no providers
 if($circuit_providers===false) 	{
 	$btn = $User->is_admin(false) ? "<hr><a href='' class='btn btn-sm btn-default open_popup' data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='add' data-providerid='' style='margin-bottom:10px;'><i class='fa fa-plus'></i> "._('Add provider')."</a>" : "";
-	$Result->show("danger", _("No circuit providers configured."."<hr>".$btn), true, true);
+	$Result->show("danger", _("No circuit providers configured.")."<hr>".$btn, true, true);
 }
 
 # set readonly flag
@@ -166,10 +166,8 @@ function update_hidden_input(){
 			 onPostBody: function(data) { addAllCircuitsHandlers(); }
  		 });
  		 $('#selected_circuits').bootstrapTable({
- 			 pagination:true,
+ 			 pagination:false,
  			 search:true,
- 			 pageSize:5,
- 			 pageList:[5],
 			 onPostBody: function(data) { addSelectedCircuitsHandlers(); update_hidden_input(); }
  		 });
      });
@@ -242,9 +240,8 @@ function update_hidden_input(){
 				// readonly
 				$disabled = $readonly == "readonly" ? true : false;
 	    		// create input > result is array (required, input(html), timepicker_index)
-	    		$custom_input = $Tools->create_custom_field_input ($field, $logical_circuit, $_POST['action'], $timepicker_index, $disabled);
-	    		// add datepicker index
-	    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+	    		$custom_input = $Tools->create_custom_field_input ($field, $logical_circuit, $timepicker_index, $disabled);
+	    		$timepicker_index = $custom_input['timepicker_index'];
 	            // print
 				print "<tr>";
 				print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
@@ -257,7 +254,7 @@ function update_hidden_input(){
 
 		<tr>
 			<td colspan="2">
-				<p id="duplicate_error" style="display:none" class='alert alert-danger'>Duplicate circuits have been found. Please remove! Reordering will be affected.</p>
+				<p id="duplicate_error" style="display:none" class='alert alert-danger'><?php print _("Duplicate circuits have been found. Please remove! Reordering will be affected."); ?></p>
 			</td>
 		</tr>
 
@@ -270,10 +267,10 @@ function update_hidden_input(){
 	<table class="table table-striped table-condensed table-top table-no-bordered" id='selected_circuits'>
 		<thead>
 			<th></th>
-			<th>Circuit ID</th>
-			<th>Type</th>
-			<th>Point A</th>
-			<th>Point B</th>
+			<th><?php print _("Circuit ID"); ?></th>
+			<th><?php print _("Type"); ?></th>
+			<th><?php print _("Point A"); ?></th>
+			<th><?php print _("Point B"); ?></th>
 			<?php if($_POST['action'] != "delete") { ?>
 			<th></th>
 			<?php } ?>
@@ -288,19 +285,19 @@ function update_hidden_input(){
 					if($member_circuits != false){
 						foreach($member_circuits as $circuit){
 							$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
-							$locationA_html = "<span class='text-muted'>Not set</span>";
+							$locationA_html = "<span class='text-muted'>"._("Not set")."</span>";
 							if($locationA!==false) {
 								$locationA_html = "<a href='".create_link('tools',$locationA['type'],$locationA['id'])."' target='_blank'>$locationA[name]</a>";
 							}
 
 							$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
-							$locationB_html = "<span class='text-muted'>Not set</span>";
+							$locationB_html = "<span class='text-muted'>"._("Not set")."</span>";
 							if($locationB!==false) {
 								$locationB_html = "<a href='".create_link('tools',$locationB['type'],$locationB['id'])."' target='_blank'>$locationB[name]</a>";
 							}
 
 							print "<tr>";
-							print "	<td><a name='rembtn' class='btn btn-xs btn-default btn-danger' rel='tooltip' title='Remove'><i class='fa fa-times'></i></a></td>";
+							print "	<td><a name='rembtn' class='btn btn-xs btn-default btn-danger' rel='tooltip' title="._('Remove')."><i class='fa fa-times'></i></a></td>";
 							print "	<td><a class='btn btn-xs btn-default' href='".create_link('tools',"circuits",$circuit->id)."' target='_blank'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 							print "	<td>".$type_hash[$circuit->type]."</td>";
 							print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";
@@ -309,8 +306,8 @@ function update_hidden_input(){
 								print "	<td class='text-right'>";
 								print "		<input class='id' type='hidden' value='$circuit->id'>";
 								print "		<div class='input-group pull-right'>";
-								print "		<a name='mvdnbtn' class='btn btn-xs btn-default' rel='tooltip' title='Move down'><i class='fa fa-angle-down'></i></a>";
-								print "		<a name='mvupbtn' class='btn btn-xs btn-default' rel='tooltip' title='Move up'><i class='fa fa-angle-up'></i></a>";
+								print "		<a name='mvdnbtn' class='btn btn-xs btn-default' rel='tooltip' title="._('Move down')."><i class='fa fa-angle-down'></i></a>";
+								print "		<a name='mvupbtn' class='btn btn-xs btn-default' rel='tooltip' title="._('Move up')."><i class='fa fa-angle-up'></i></a>";
 								print "		</div>";
 								print "	</td>";
 						    }
@@ -334,10 +331,10 @@ function update_hidden_input(){
 	<table id="all_circuits" class="table table-striped table-condensed table-top table-no-bordered">
 		<thead>
 			<th></th>
-			<th>Circuit ID</th>
-			<th>Type</th>
-			<th>Point A</th>
-			<th>Point B</th>
+			<th><?php print _("Circuit ID"); ?></th>
+			<th><?php print _("Type"); ?></th>
+			<th><?php print _("Point A"); ?></th>
+			<th><?php print _("Point B"); ?></th>
 		</thead>
 		<tbody>
 		<?php
@@ -347,19 +344,19 @@ function update_hidden_input(){
 			foreach($all_circuits as $circuit) {
 				// reformat locations
 				$locationA = $Tools->reformat_circuit_location ($circuit->device1, $circuit->location1);
-				$locationA_html = "<span class='text-muted'>Not set</span>";
+				$locationA_html = "<span class='text-muted'>"._("Not set")."</span>";
 				if($locationA!==false) {
 					$locationA_html = "<a href='".create_link('tools',$locationA['type'],$locationA['id'])."' target='_blank'>$locationA[name]</a>";
 				}
 
 				$locationB = $Tools->reformat_circuit_location ($circuit->device2, $circuit->location2);
-				$locationB_html = "<span class='text-muted'>Not set</span>";
+				$locationB_html = "<span class='text-muted'>"._("Not set")."</span>";
 				if($locationB!==false) {
 					$locationB_html = "<a href='".create_link('tools',$locationB['type'],$locationB['id'])."' target='_blank'>$locationB[name]</a>";
 				}
 
 				print '<tr>'. "\n";
-				print " <td><input class='id' type='hidden' value='$circuit->id'><a name='addbtn' class='btn btn-xs btn-success' rel='tooltip' title='Add to logical circuit'><i class='fa fa-plus'></i></a></td>";
+				print " <td><input class='id' type='hidden' value='$circuit->id'><a name='addbtn' class='btn btn-xs btn-success' rel='tooltip' title="._('Add to logical circuit')."><i class='fa fa-plus'></i></a></td>";
 				print "	<td><a class='btn btn-xs btn-default' href='".create_link('tools',"circuits",$circuit->id)."' target='_blank'><i class='fa fa-random prefix'></i> $circuit->cid</a></td>";
 				print "	<td>".$type_hash[$circuit->type]."</td>";
 				print "	<td class='hidden-xs hidden-sm'>$locationA_html</td>";

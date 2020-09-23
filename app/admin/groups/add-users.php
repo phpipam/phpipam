@@ -78,7 +78,7 @@ $missing = $Admin->group_fetch_missing_users ($_POST['g_id']);
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<button class="btn btn-sm btn-default hidePopups">Cancel</button>
+		<button class="btn btn-sm btn-default hidePopups"><?php print _("Cancel"); ?></button>
 		<?php if(sizeof($missing) > 0) { ?>
 		<button class='btn btn-sm btn-success submit_popup' data-script="app/admin/groups/add-users-result.php" data-result_div="groupAddUsersResult" data-form='groupAddUsers'><?php print _("Add selected users"); ?></button>
 		<?php } ?>

@@ -18,37 +18,17 @@ $User->check_user_session ();
 
 # prepare list of permitted subnets with requests
 
-// get all sections
-$sections = $Sections->fetch_all_sections();
-
 $subnets_count = 0;
-if ($sections!==false) {
-    foreach ($sections as $section) {
-    	# cast
-    	$section = (array) $section;
 
+$subnets = $Tools->requests_fetch_available_subnets();
+if (is_array($subnets)) {
+    foreach($subnets as $subnet) {
     	# check permission
-    	$permission = $Sections->check_permission ($User->user, $section['id']);
-    	if($permission > 0) {
-    		$subnets = $Subnets->fetch_section_subnets ($section['id']);
-    		if ($subnets!==false) {
-        		foreach($subnets as $subnet) {
-        			# check permission
-        			$subpermission = $Subnets->check_permission ($User->user, $subnet->id);
-        			if($subpermission > 0) {
-        				/* show only subnets that allow IP exporting */
-        				if($subnet->allowRequests == 1) {
-        					$subnets_count ++;
-        					/* must not have any nested subnets! */
-        					if(!$Subnets->has_slaves($subnet->id))
-        					{
-        						$html[] = '<option value="'. $subnet->id .'">' . $Subnets->transform_to_dotted($subnet->subnet) .'/'. $subnet->mask .' ['. $subnet->description .']</option>';
-        					}
-        				}
-        			}
-        		}
-    		}
-    	}
+		if(!$Subnets->check_permission ($User->user, $subnet->id))
+			continue;
+
+		$html[] = '<option value="'. $subnet->id .'">' . $Subnets->transform_to_dotted($subnet->subnet) .'/'. $subnet->mask .' ['. $subnet->description .']</option>';
+		$subnets_count ++;
     }
 }
 ?>

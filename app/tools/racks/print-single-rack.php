@@ -23,6 +23,8 @@ else {
     $rack = $Racks->fetch_rack_details ($_GET['subnetId']);
     $rack_devices = $Racks->fetch_rack_devices ($_GET['subnetId']);
     $rack_contents = $Racks->fetch_rack_contents ($_GET['subnetId']);
+    $Racks->add_rack_start_print($rack_devices);
+    $Racks->add_rack_start_print($rack_contents);
 
     // rack check
     if($rack===false)                       { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
@@ -228,14 +230,6 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                 if ($rack->hasBack!="0" && $cur->rack_start>$rack->size && !$is_back) {
                     print "<br>"._("Back side").":<hr>";
                     $is_back = true;
-                }
-
-                // reformat front / back start position
-                if($rack->hasBack!="0" && $cur->rack_start>$rack->size) {
-                    $cur->rack_start_print = $cur->rack_start - $rack->size;
-                }
-                else {
-                    $cur->rack_start_print = $cur->rack_start;
                 }
 
                 if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {

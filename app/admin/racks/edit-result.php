@@ -100,7 +100,7 @@ if(sizeof($custom) > 0) {
 		}
 		//not null!
 		if($myField['Null']=="NO" && strlen($rack[$myField['name']])==0) {
-																		{ $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+			{ $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 		}
 		# save to update array
 		$update[$myField['name']] = $rack[$myField['name']];
@@ -137,7 +137,7 @@ if($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cust
 
 # update rack
 if(!$Admin->object_modify("racks", $_POST['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Rack $rack[action] successful").'!', false); }
+else { $Result->show("success", _("Rack")." ".$rack["action"]." "._("successful").'!', false); }
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses

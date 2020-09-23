@@ -193,10 +193,10 @@ $(document).ready(function(){
 	</tr>
 
 	<tr>
-		<td>Point A</td>
+		<td><?php print _("Point A"); ?></td>
 		<td>
 			<select name="device1" class="form-control input-w-auto input-sm">
-				<option value="0">None</option>
+				<option value="0"><?php print _("None"); ?></option>
 				<optgroup label="Devices">
 					<?php
 					if($all_devices!==false) {
@@ -224,10 +224,10 @@ $(document).ready(function(){
 	</tr>
 
 	<tr>
-		<td>Point B</td>
+		<td><?php print _("Point B"); ?></td>
 		<td>
 			<select name="device2" class="form-control input-w-auto input-sm">
-				<option value="0">None</option>
+				<option value="0"><?php print _("None"); ?></option>
 				<optgroup label="Devices">
 					<?php
 					if($all_devices!==false) {
@@ -284,9 +284,8 @@ $(document).ready(function(){
 			// readonly
 			$disabled = $readonly == "readonly" ? true : false;
     		// create input > result is array (required, input(html), timepicker_index)
-    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $_POST['action'], $timepicker_index, $disabled);
-    		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$custom_input = $Tools->create_custom_field_input ($field, $circuit, $timepicker_index, $disabled);
+    		$timepicker_index = $custom_input['timepicker_index'];
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";

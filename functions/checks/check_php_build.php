@@ -17,7 +17,7 @@
 
 
 # Required extensions
-$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl");
+$requiredExt  = array("session", "sockets", "filter", "openssl", "gmp", "json", "gettext", "PDO", "pdo_mysql", "mbstring", "gd", "iconv", "ctype", "curl", "dom", "pcre");
 
 # Available extensions
 $availableExt = get_loaded_extensions();
@@ -87,7 +87,7 @@ if (sizeof($missingExt) != 1 || (phpversion() < "5.4") || PHP_INT_SIZE==4) {
     else {
         $error[] = "<div class='alert alert-danger' style='margin:auto;margin-top:20px;width:500px;'><strong>"._('Not 64-bit system')."!</strong><br><hr>";
         $error[] = _('From release 1.4 on 64bit system is required!')."<br>";
-        $error[] = _("Last development version can be downloaded ")." <a href='https://github.com/phpipam/phpipam/tree/9ca731d475d5830ca421bac12da31d5023f02636' target='_blank'>here</a>.";
+        $error[] = _("Last development version can be downloaded ")." <a href='https://github.com/phpipam/phpipam/' target='_blank'>here</a>.";
     }
 
     $error[] = "</body>";
