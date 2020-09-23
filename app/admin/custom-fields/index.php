@@ -27,6 +27,7 @@ $custom_tables = array(
 						"customers" 	   => _("Customers"),
 						"nat"			   => _("NAT"),
 						"routing_bgp" 	   => _("BGP Routing"),
+						"vaultItems" 	   => _("Vault items"),
 						//"routing_ospf" 	   => _("OSPF Routing")
 						);
 
