@@ -86,3 +86,32 @@ $upgrade_queries["1.5.32"][] = "ALTER TABLE `settings` CHANGE `2fa_provider` `2f
 
 $upgrade_queries["1.5.32"][] = "-- Database version bump";
 $upgrade_queries["1.5.32"][] = "UPDATE `settings` set `dbversion` = '32';";
+
+
+
+//
+// Vaults
+//
+$upgrade_queries["1.5.33"][] = "ALTER TABLE `settings` CHANGE `scanPingType` `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping';";
+// vaults table
+$upgrade_queries["1.5.33"][] = "CREATE TABLE `vaults` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `type` enum('passwords','certificates') NOT NULL DEFAULT 'passwords',
+  `description` text,
+  `test` char(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+// vault items
+$upgrade_queries["1.5.33"][] = "CREATE TABLE `vaultItems` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `vaultId` int(11) unsigned NOT NULL,
+  `type` enum('password','certificate') NOT NULL DEFAULT 'password',
+  `values` text,
+  PRIMARY KEY (`id`),
+  KEY `vaultId` (`vaultId`),
+  CONSTRAINT `vaultItems_ibfk_1` FOREIGN KEY (`vaultId`) REFERENCES `vaults` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$upgrade_queries["1.5.33"][] = "-- Database version bump";
+$upgrade_queries["1.5.33"][] = "UPDATE `settings` set `dbversion` = '33';";

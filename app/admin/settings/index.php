@@ -541,6 +541,17 @@ $(document).ready(function() {
 	</td>
 </tr>
 
+<!-- Vaults -->
+<tr>
+	<td class="title"><?php print _("Enable Vaults"); ?></td>
+	<td>
+		<input type="checkbox" class="input-switch" value="1" name="enableVaults" <?php if($settings['enableVaults'] == 1) print 'checked'; ?>>
+	</td>
+	<td class="info2">
+		<?php print _('Enable Vaults for storing encrypted information'); ?>
+	</td>
+</tr>
+
 
 <!-- ICPM -->
 <tr class="settings-title">

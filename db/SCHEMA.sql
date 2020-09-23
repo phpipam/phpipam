@@ -994,9 +994,38 @@ CREATE TABLE `routing_subnets` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+# Dump of table vaults
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `vaults`;
+
+CREATE TABLE `vaults` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) NOT NULL DEFAULT '',
+  `type` enum('passwords','certificates') NOT NULL DEFAULT 'passwords',
+  `description` text,
+  `test` char(128) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+# Dump of table vaultItems
+# ------------------------------------------------------------
+DROP TABLE IF EXISTS `vaultItems`;
+
+CREATE TABLE `vaultItems` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `vaultId` int(11) unsigned NOT NULL,
+  `type` enum('password','certificate') NOT NULL DEFAULT 'password',
+  `type_certificate` enum('public','pkcs12','certificate','website') DEFAULT NULL,
+  `values` text,
+  PRIMARY KEY (`id`),
+  KEY `vaultId` (`vaultId`),
+  CONSTRAINT `vaultItems_ibfk_1` FOREIGN KEY (`vaultId`) REFERENCES `vaults` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 
 # Dump of table -- for autofix comment, leave as it is
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 32;
+UPDATE `settings` SET `dbversion` = 33;

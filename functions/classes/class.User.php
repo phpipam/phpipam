@@ -1769,7 +1769,8 @@ class User extends Common_functions {
                 "locations",
                 "devices",
                 "dhcp",
-                "routing"
+                "routing",
+                "vaults"
             ];
     }
 

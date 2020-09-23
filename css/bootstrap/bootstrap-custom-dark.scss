@@ -475,7 +475,9 @@ html {
         background: rgba(0,0,0,0.2) !important;
         color: white !important;
     }
-
+.btn:focus {
+  background-position: 0 -14px;
+}
 
     ul#subnets li.folder i,
     ul.submenu li i.fa-folder-close-o,
@@ -546,6 +548,22 @@ html {
     table#userModSelf.table {
         td {
             border: none !important;
+        }
+    }
+
+    table.table-certificates {
+        tr.warning td {
+            color: #FFC47B !important;
+
+            a {
+                color: #FFC47B !important;
+            }
+        }
+        tr.danger td {
+            color: #EA6C85 !important;
+            a {
+                color: #EA6C85 !important;
+            }
         }
     }
 
