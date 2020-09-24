@@ -97,11 +97,11 @@ else {
 			$links[] = ["type"=>"link", "text"=>"Download certificate with key (.p12)", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-type='pkcs12' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
 			}
 
-			if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+			if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
 			    $links[] = ["type"=>"header", "text"=>"Manage"];
 			    $links[] = ["type"=>"link", "text"=>"Edit Item", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='edit' data-vaultId='$vault->id' data-id='$vault_item->id'", "icon"=>"pencil"];
 			    }
-			if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
+			if($User->get_module_permissions ("vaults")>=User::ACCESS_RWA) {
 			    $links[] = ["type"=>"link", "text"=>"Delete Item", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='delete' data-vaultId='$vault->id' data-id='$vault_item->id'", "icon"=>"times"];
 			}
 			// print links

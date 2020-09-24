@@ -137,7 +137,7 @@ $upgrade_queries["1.5.35"][] = "UPDATE `settings` set `dbversion` = '35';";
 //
 // Vaults
 //
-$upgrade_queries["1.5.36"][] = "ALTER TABLE `settings` CHANGE `scanPingType` `scanPingType` ENUM('none','ping','pear','fping') NOT NULL DEFAULT 'ping';";
+$upgrade_queries["1.5.36"][] = "ALTER TABLE `settings` ADD `enableVaults` TINYINT(1)  NOT NULL  DEFAULT '1';";
 // vaults table
 $upgrade_queries["1.5.36"][] = "CREATE TABLE `vaults` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -152,7 +152,7 @@ $upgrade_queries["1.5.36"][] = "CREATE TABLE `vaultItems` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `vaultId` int(11) unsigned NOT NULL,
   `type` enum('password','certificate') NOT NULL DEFAULT 'password',
-  `type_certificate` enum('public','pkcs12','certificate','website') DEFAULT 'public',
+  `type_certificate` enum('public','pkcs12','certificate','website') NOT NULL DEFAULT 'public',
   `values` text,
   PRIMARY KEY (`id`),
   KEY `vaultId` (`vaultId`),
