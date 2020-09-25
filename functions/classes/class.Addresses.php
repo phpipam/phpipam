@@ -408,7 +408,7 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->insertObject("ipaddresses", $address); }
 		catch (Exception $e) {
-			$this->Log->write( "Address create", "Failed to create new address<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
+			$this->Log->write( _("Address create"), _("Failed to create new address").".<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -417,7 +417,7 @@ class Addresses extends Common_functions {
 
 		# log and changelog
 		$address['id'] = $this->lastId;
-		$this->Log->write( "Address created", "New address created<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write( _("Address create"), _("New address created").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "add", 'success', array(), $address, $this->mail_changelog);
 
 		# edit DNS PTR record
@@ -464,7 +464,7 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->updateObject("ipaddresses", $address, $id1, $id2); }
 		catch (Exception $e) {
-			$this->Log->write( "Address edit", "Failed to edit address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
+			$this->Log->write( _("Address edit"), _("Failed to edit address")." ".$address["ip_addr"].".<hr>".$e->getMessage()."<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
@@ -473,7 +473,7 @@ class Addresses extends Common_functions {
 		$address['firewallAddressObject'] = $address_old->firewallAddressObject;
 
  		# log and changelog
-		$this->Log->write( "Address updated", "Address $address[ip_addr] updated<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
+		$this->Log->write( _("Address update"), _("Address")." ".$address["ip_addr"]." "._("updated").".<hr>".$this->array_to_log($this->reformat_empty_array_fields ($address, "NULL")), 0);
 		$this->Log->write_changelog('ip_addr', "edit", 'success', (array) $address_old, $address, $this->mail_changelog);
 
 		# edit DNS PTR record
@@ -506,13 +506,13 @@ class Addresses extends Common_functions {
 		# execute
 		try { $this->Database->deleteRow("ipaddresses", $field, $value, $field2, $value2); }
 		catch (Exception $e) {
-			$this->Log->write( "Address delete", "Failed to delete address $address[ip_addr]<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
+			$this->Log->write( _("Address delete"), _("Failed to delete address")." ".$address["ip_addr"].".<hr>".$e->getMessage()."<hr>".$this->array_to_log((array) $address_old), 2);
 			$this->Result->show("danger", _("Error: ").$e->getMessage(), false);
 			return false;
 		}
 
 		# log and changelog
-		$this->Log->write( "Address deleted", "Address $address[ip_addr] deleted<hr>".$this->array_to_log((array) $address_old), 0);
+		$this->Log->write( _("Address delete"), _("Address")." ".$address["ip_addr"]." "._("deleted").".<hr>".$this->array_to_log((array) $address_old), 0);
 		$this->Log->write_changelog('ip_addr', "delete", 'success', (array) $address_old, array(), $this->mail_changelog);
 
 		# edit DNS PTR record
@@ -590,7 +590,7 @@ class Addresses extends Common_functions {
 
 				    if($Admin->object_modify ("nat", "edit", "id", array("id"=>$nat->id, "src"=>$src_new, "dst"=>$dst_new))!==false) {
 				    	if($print) {
-					        $this->Result->show("success", "Address removed from NAT", false);
+					        $this->Result->show("success", _("Address removed from NAT"), false);
 						}
 				    }
 			    }
@@ -618,7 +618,7 @@ class Addresses extends Common_functions {
 				return false;
 			}
 			// save log
-			$this->Log->write( "Address DNS resolved", "Address $ip resolved<hr>".$this->array_to_log((array) $hostname), 0);
+			$this->Log->write( _("Address DNS resolved"), _("Address")." ".$ip." "._("resolved").".<hr>".$this->array_to_log((array) $hostname), 0);
 			$this->Log->write_changelog('ip_addr', "edit", 'success', array ("id"=>$id, "hostname"=>""), array("id"=>$id, "hostname"=>$hostname), $this->mail_changelog);
 		}
 	}
@@ -695,9 +695,9 @@ class Addresses extends Common_functions {
                             	return true;
                         	}
                         } catch (phpmailerException $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->errorMessage(), true);
+                        	$this->Result->show("danger", _("Mailer Error").": ".$e->errorMessage(), true);
                         } catch (Exception $e) {
-                        	$this->Result->show("danger", "Mailer Error: ".$e->getMessage(), true);
+                        	$this->Result->show("danger", _("Mailer Error").": ".$e->getMessage(), true);
                         }
                     }
             	}
@@ -997,7 +997,7 @@ class Addresses extends Common_functions {
 		$this->ptr_link ($id, $this->PowerDNS->lastId);
 		// ok
 		if ($print_error && php_sapi_name()!="cli")
-		$this->Result->show("success", "PTR record created", false);
+		$this->Result->show("success", _("PTR record created"), false);
 
 		return true;
 	}
@@ -1041,7 +1041,7 @@ class Addresses extends Common_functions {
 			$this->PowerDNS->update_domain_record ($domain->id, $update, $print_error);
 			// ok
 			if ($print_error && php_sapi_name()!="cli")
-			$this->Result->show("success", "PTR record updated", false);
+			$this->Result->show("success", _("PTR record updated"), false);
  		}
 	}
 
@@ -1067,7 +1067,7 @@ class Addresses extends Common_functions {
 			$this->PowerDNS->remove_domain_record ($domain->id, $address->PTR);
     		// ok
     		if ($print_error && php_sapi_name()!="cli")
-    		$this->Result->show("success", "PTR record removed", false);
+    		$this->Result->show("success", _("PTR record removed"), false);
 		}
 	}
 

@@ -5,7 +5,7 @@
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2020-09-19 11:17+0200\n"
-# "PO-Revision-Date: 2020-09-12 20:22+0200\n"
+# "PO-Revision-Date: 2020-09-23 19:31+0200\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
 # "MIME-Version: 1.0\n"
@@ -303,8 +303,7 @@ msgstr ""
 #: app/subnets/addresses/mail-notify-check.php:16
 #: app/subnets/import-subnet/import-file.php:23
 #: app/subnets/scan/subnet-scan-execute.php:28
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:11
-#: app/subnets/scan/subnet-scan-result.php:20
+#: app/subnets/scan/subnet-scan-result.php:26
 #: app/tools/pstn-prefixes/edit-number-result.php:23
 #: app/tools/pstn-prefixes/edit-result.php:30
 #: app/tools/pstn-prefixes/edit-result.php:33
@@ -398,7 +397,7 @@ msgstr "Ger&auml;te Verwaltung"
 #: app/tools/tools-menu-config.php:83 app/tools/tools-menu-config.php:84
 #: app/tools/tools-menu-config.php:86 app/tools/tools-menu-config.php:88
 #: app/tools/tools-menu-config.php:90 app/tools/tools-menu-config.php:91
-#: functions/classes/class.Common.php:1936
+#: functions/classes/class.Common.php:1981
 msgid "Tools"
 msgstr "Tools"
 
@@ -585,8 +584,9 @@ msgstr "Verwaltung Bereiche"
 #: app/tools/tools-menu-config.php:110 app/tools/tools-menu-config.php:111
 #: app/tools/tools-menu-config.php:113 app/tools/tools-menu-config.php:114
 #: app/tools/tools-menu-config.php:115 app/tools/tools-menu-config.php:117
-#: functions/classes/class.Common.php:1988
-#: functions/classes/class.Subnets.php:3314
+#: functions/classes/class.Common.php:2033
+#: functions/classes/class.FirewallZones.php:577
+#: functions/classes/class.Subnets.php:3265
 msgid "Subnets"
 msgstr "Subnetze"
 
@@ -607,7 +607,7 @@ msgstr "Verwaltung Subnetze"
 #: app/dashboard/widgets/favourite_subnets.php:50
 #: app/dashboard/widgets/tools.php:28 app/folder/folder-subnets.php:85
 #: app/subnets/mail-notify-subnet.php:56
-#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:138
+#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:139
 #: app/subnets/subnet-details/subnet-details.php:126
 #: app/subnets/subnet-slaves.php:38 app/temp_share/subnet-details.php:48
 #: app/tools/customers/customer/objects/subnets.php:37
@@ -647,7 +647,7 @@ msgstr "Verwaltung VLANs"
 #: app/admin/vrf/edit-result.php:82 app/admin/vrf/edit-result.php:85
 #: app/admin/vrf/edit.php:50 app/dashboard/widgets/tools.php:30
 #: app/folder/folder-subnets.php:87 app/subnets/mail-notify-subnet.php:59
-#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:140
+#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:141
 #: app/subnets/subnet-details/subnet-details.php:160
 #: app/temp_share/subnet-details.php:70
 #: app/tools/customers/customer/objects/vrf.php:1
@@ -693,7 +693,7 @@ msgstr "Verwaltung Routing"
 #: app/admin/admin-menu-config.php:46 app/admin/nameservers/index.php:31
 #: app/admin/subnets/edit.php:294 app/subnets/addresses/mail-notify.php:76
 #: app/subnets/mail-notify-subnet.php:65
-#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:141
+#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:142
 #: app/subnets/subnet-details/subnet-details.php:170
 msgid "Nameservers"
 msgstr "Nameserver"
@@ -726,7 +726,7 @@ msgstr "RIPE-Import"
 
 #: app/admin/admin-menu-config.php:50 app/admin/ripe-import/index.php:11
 msgid "Import subnets from RIPE"
-msgstr "Importieren von SubnetzenF aus der RIPE-Datenbank"
+msgstr "Importieren von Subnetzen aus der RIPE-Datenbank"
 
 #: app/admin/admin-menu-config.php:53 app/admin/custom-fields/index.php:14
 #: app/subnets/subnet-details/subnet-details.php:378
@@ -1109,16 +1109,16 @@ msgstr "Routing"
 #: app/subnets/addresses/mail-notify.php:44
 #: app/subnets/addresses/move-address.php:33
 #: app/subnets/addresses/move-address.php:34
+#: app/subnets/addresses/ping-address.php:28
 #: app/subnets/addresses/ping-address.php:30
-#: app/subnets/addresses/ping-address.php:32
 #: app/subnets/addresses/print-address-table.php:45
 #: app/subnets/import-subnet/index.php:29 app/subnets/index.php:9
 #: app/subnets/mail-notify-subnet.php:22
 #: app/subnets/scan/subnet-scan-execute.php:38
 #: app/subnets/scan/subnet-scan-execute.php:45
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:17
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:17
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:17
+#: app/subnets/scan/subnet-scan-result-scan-icmp.php:11
+#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:14
+#: app/subnets/scan/subnet-scan-result-snmp-mac.php:14
 #: app/subnets/scan/subnet-scan.php:24 app/subnets/scan/subnet-scan.php:34
 #: app/subnets/subnets-menu.php:13 app/temp_share/subnet.php:11
 #: app/tools/changelog/show-popup.php:19 app/tools/changelog/show-popup.php:23
@@ -1139,13 +1139,13 @@ msgstr "Routing"
 #: app/tools/routing/bgp/details.php:19
 #: app/tools/temp-shares/edit-result.php:23 app/tools/temp-shares/edit.php:23
 #: app/tools/vlan/domain-vlans.php:14 app/tools/vlan/vlan-details.php:16
-#: functions/classes/class.Subnets.php:3098
-#: functions/classes/class.Subnets.php:3099
-#: functions/classes/class.Subnets.php:3201
-#: functions/classes/class.Subnets.php:3202
-#: functions/classes/class.Subnets.php:3287
-#: functions/classes/class.Subnets.php:3356
-#: functions/classes/class.Subnets.php:3414
+#: functions/classes/class.Subnets.php:3049
+#: functions/classes/class.Subnets.php:3050
+#: functions/classes/class.Subnets.php:3152
+#: functions/classes/class.Subnets.php:3153
+#: functions/classes/class.Subnets.php:3238
+#: functions/classes/class.Subnets.php:3307
+#: functions/classes/class.Subnets.php:3365
 msgid "Invalid ID"
 msgstr "Ung&uuml;ltige ID"
 
@@ -1178,7 +1178,7 @@ msgid "App permissions"
 msgstr "App-Berechtigungen"
 
 #: app/admin/api/edit.php:80 app/admin/api/index.php:65
-#: functions/classes/class.Common.php:1802
+#: functions/classes/class.Common.php:1847
 msgid "Read"
 msgstr "Lesen"
 
@@ -1259,9 +1259,9 @@ msgstr "Transaktionslock"
 #: app/tools/multicast-networks/index.php:228 app/tools/nat/all_nats.php:95
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:137
 #: app/tools/user-menu/account.php:116 app/tools/user-menu/account.php:132
-#: functions/classes/class.Common.php:1650
+#: functions/classes/class.Common.php:1695
 #: functions/classes/class.SubnetsTable.php:164
-#: functions/classes/class.Tools.php:2551
+#: functions/classes/class.Tools.php:2543
 msgid "No"
 msgstr "Kein"
 
@@ -1300,9 +1300,9 @@ msgstr "Kein"
 #: app/tools/multicast-networks/index.php:229
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:138
 #: app/tools/user-menu/account.php:117 app/tools/user-menu/account.php:133
-#: functions/classes/class.Common.php:1648
+#: functions/classes/class.Common.php:1693
 #: functions/classes/class.SubnetsTable.php:165
-#: functions/classes/class.Tools.php:2552
+#: functions/classes/class.Tools.php:2544
 msgid "Yes"
 msgstr "Ja"
 
@@ -1402,12 +1402,12 @@ msgstr ""
 #: app/subnets/addresses/print-address-table.php:157
 #: app/subnets/import-subnet/print-file.php:52
 #: app/subnets/mail-notify-subnet.php:49
-#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:82
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:143
-#: app/subnets/scan/subnet-scan-execute-scan-telnet.php:59
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:226
-#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:137
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:140
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:83
+#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:144
+#: app/subnets/scan/subnet-scan-execute-scan-telnet.php:60
+#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:227
+#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:138
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:137
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:107
 #: app/subnets/subnet-details/subnet-changelog.php:57
 #: app/subnets/subnet-details/subnet-changelog.php:102
@@ -1582,8 +1582,8 @@ msgstr "Sekunden"
 #: app/tools/customers/customer/objects/ipaddresses.php:89
 #: app/tools/multicast-networks/index.php:140
 #: app/tools/multicast-networks/index.php:141
-#: functions/classes/class.Tools.php:2048
-#: functions/classes/class.Tools.php:2049
+#: functions/classes/class.Tools.php:2040
+#: functions/classes/class.Tools.php:2041
 msgid "Never"
 msgstr "Nie"
 
@@ -1861,8 +1861,8 @@ msgstr "Eingabe Radius Secret"
 #: app/subnets/addresses/mail-notify.php:86
 #: app/subnets/addresses/print-address-table.php:165
 #: app/subnets/import-subnet/print-file.php:58
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:148
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:230
+#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:149
+#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:231
 #: app/temp_share/address.php:146 app/temp_share/subnet-addresses.php:98
 #: app/tools/customers/customer/objects/ipaddresses.php:55
 #: app/tools/devices/device-details/device-addresses.php:41
@@ -2378,8 +2378,8 @@ msgstr "Auswahl Kunde"
 #: app/tools/pstn-prefixes/edit.php:175
 #: functions/classes/class.Addresses.php:1882
 #: functions/classes/class.Addresses.php:1884
-#: functions/classes/class.Tools.php:2155
-#: functions/classes/class.Tools.php:2157
+#: functions/classes/class.Tools.php:2147
+#: functions/classes/class.Tools.php:2149
 msgid "None"
 msgstr "Keiner"
 
@@ -2485,7 +2485,7 @@ msgstr "Nicht gesetzt"
 #: app/admin/circuits/edit-logical-circuit.php:300
 #: app/tools/locations/single-location.php:190
 #: app/tools/racks/print-single-rack.php:236
-#: functions/classes/class.Tools.php:2030 index.php:200
+#: functions/classes/class.Tools.php:2022 index.php:200
 msgid "Remove"
 msgstr "Entfernen"
 
@@ -2518,7 +2518,7 @@ msgstr "Der Wert darf nicht leer sein"
 #: functions/classes/class.PowerDNS.php:358
 #: functions/classes/class.PowerDNS.php:792
 #: functions/classes/class.Sections.php:88
-#: functions/classes/class.Subnets.php:171
+#: functions/classes/class.Subnets.php:165
 msgid "Invalid action"
 msgstr "Ung&uuml;ltige Aktion"
 
@@ -2950,6 +2950,9 @@ msgstr "Kundentitel"
 #: app/tools/locations/single-location.php:63
 #: app/tools/search/search-results-export.php:588
 #: app/tools/search/search_results/search-results_customers.php:39
+#: functions/classes/class.Addresses.php:476
+#: functions/classes/class.Addresses.php:515
+#: functions/classes/class.Addresses.php:621
 msgid "Address"
 msgstr "Adresse"
 
@@ -3129,7 +3132,7 @@ msgstr "Rack existiert nicht"
 #: app/subnets/addresses/mail-notify.php:83
 #: app/subnets/addresses/print-address-table.php:164
 #: app/subnets/import-subnet/print-file.php:57
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:228
+#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:229
 #: app/subnets/subnet-details/subnet-details.php:218
 #: app/temp_share/address.php:125 app/temp_share/subnet-addresses.php:96
 #: app/tools/circuits/logical-circuits/logical-circuit-details-members.php:153
@@ -3147,7 +3150,7 @@ msgstr "Rack existiert nicht"
 #: app/tools/search/search_results/search-results_pstn.php:35
 #: app/tools/search/search_results/search-results_pstn.php:115
 #: functions/classes/class.Sections.php:575
-#: functions/classes/class.Tools.php:2209
+#: functions/classes/class.Tools.php:2201
 msgid "Device"
 msgstr "Ger&auml;t"
 
@@ -3268,10 +3271,10 @@ msgstr "Test"
 #: app/subnets/addresses/mail-notify.php:57
 #: app/subnets/addresses/print-address-table.php:151
 #: app/subnets/import-subnet/print-file.php:53
-#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:83
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:145
-#: app/subnets/scan/subnet-scan-execute-scan-telnet.php:60
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:229
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:84
+#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:146
+#: app/subnets/scan/subnet-scan-execute-scan-telnet.php:61
+#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:230
 #: app/temp_share/address.php:94 app/temp_share/subnet-addresses.php:88
 #: app/tools/customers/customer/objects/ipaddresses.php:50
 #: app/tools/devices/device-details/device-addresses.php:46
@@ -3298,8 +3301,8 @@ msgstr "Hostname"
 #: app/subnets/addresses/export-field-select.php:49
 #: app/subnets/addresses/mail-notify.php:53
 #: app/subnets/addresses/move-address.php:57
+#: app/subnets/addresses/ping-address.php:77
 #: app/subnets/addresses/ping-address.php:79
-#: app/subnets/addresses/ping-address.php:81
 #: app/subnets/addresses/print-address-table.php:150
 #: app/temp_share/address.php:52 app/temp_share/subnet-addresses.php:86
 #: app/tools/customers/customer/objects/ipaddresses.php:48
@@ -3372,14 +3375,13 @@ msgstr "Sie haben keine Berechtigung dieses Modul zu benutzen"
 msgid "Please enable DHCP module under server management"
 msgstr "Bitte aktiviere das DHCP Modul in der Server Verwaltung"
 
-#: app/admin/filter-fields/filter-result.php:27
+#: app/admin/filter-fields/filter-result.php:28
 #: app/admin/required-fields/submit.php:27
 msgid "Update failed"
 msgstr "Aktualisierung fehlgeschlagen"
 
-#: app/admin/filter-fields/filter-result.php:28
-#: app/admin/required-fields/submit.php:28
-msgid "Update successfull"
+#: app/admin/filter-fields/filter-result.php:30
+msgid "Update successful"
 msgstr "Aktualisierung erfolgreich"
 
 #: app/admin/filter-fields/index.php:36
@@ -3984,7 +3986,7 @@ msgstr "Keinen Bereich ausgew&auml;hlt"
 #: app/subnets/addresses/address-details/address-details.php:50
 #: app/subnets/addresses/mail-notify.php:61
 #: app/subnets/mail-notify-subnet.php:47
-#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:136
+#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:137
 #: app/subnets/scan/subnet-scan-execute-snmp-route.php:75
 #: app/subnets/scan/subnet-scan.php:52
 #: app/subnets/subnet-details/subnet-changelog.php:29
@@ -4066,6 +4068,7 @@ msgid "Own zone"
 msgstr "Eigene Zone"
 
 #: app/admin/firewall-zones/zones-edit.php:106
+#: functions/classes/class.FirewallZones.php:566
 msgid "Own Zone"
 msgstr "Eigene Zone"
 
@@ -4074,6 +4077,7 @@ msgid "Customer zone"
 msgstr "Kunden Zone"
 
 #: app/admin/firewall-zones/zones-edit.php:115
+#: functions/classes/class.FirewallZones.php:566
 msgid "Customer Zone"
 msgstr "Kunden Zone"
 
@@ -4242,7 +4246,7 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: app/admin/groups/edit-group-result.php:78
-#: functions/classes/class.Common.php:1805
+#: functions/classes/class.Common.php:1850
 msgid "error"
 msgstr "fehlerhaft"
 
@@ -4365,7 +4369,7 @@ msgstr "ID"
 #: app/login/request_ip_result.php:30
 #: app/subnets/addresses/export-subnet.php:112
 #: app/subnets/import-subnet/import-template.php:40
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:142
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:139
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:109
 #: app/tools/request-ip/index.php:65
 #: app/tools/search/search-results-export.php:141
@@ -4461,8 +4465,8 @@ msgstr "IP-Adresse"
 #: app/subnets/addresses/print-address-table.php:448
 #: app/subnets/addresses/print-address-table.php:614
 #: app/subnets/import-subnet/print-file.php:55
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:144
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:227
+#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:145
+#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:228
 #: app/temp_share/subnet-addresses.php:197
 #: app/tools/customers/customer/objects/ipaddresses.php:52
 #: app/tools/customers/customer/objects/ipaddresses.php:132
@@ -5319,12 +5323,12 @@ msgstr "OK"
 #: functions/classes/class.Admin.php:336 functions/classes/class.Admin.php:619
 #: functions/classes/class.Admin.php:669 functions/classes/class.Admin.php:715
 #: functions/classes/class.Admin.php:746 functions/classes/class.Admin.php:776
-#: functions/classes/class.Common.php:198
-#: functions/classes/class.Common.php:240
-#: functions/classes/class.Common.php:271
-#: functions/classes/class.Common.php:299
-#: functions/classes/class.Common.php:315
-#: functions/classes/class.Common.php:341 functions/classes/class.Crypto.php:64
+#: functions/classes/class.Common.php:208
+#: functions/classes/class.Common.php:250
+#: functions/classes/class.Common.php:281
+#: functions/classes/class.Common.php:309
+#: functions/classes/class.Common.php:325
+#: functions/classes/class.Common.php:351 functions/classes/class.Crypto.php:64
 #: functions/classes/class.Crypto.php:125
 #: functions/classes/class.Crypto.php:130
 #: functions/classes/class.FirewallZones.php:136
@@ -5377,45 +5381,45 @@ msgstr "OK"
 #: functions/classes/class.Sections.php:274
 #: functions/classes/class.Sections.php:316
 #: functions/classes/class.Sections.php:336
-#: functions/classes/class.Subnets.php:226
-#: functions/classes/class.Subnets.php:266
-#: functions/classes/class.Subnets.php:310
-#: functions/classes/class.Subnets.php:337
-#: functions/classes/class.Subnets.php:358
-#: functions/classes/class.Subnets.php:461
-#: functions/classes/class.Subnets.php:571
-#: functions/classes/class.Subnets.php:599
-#: functions/classes/class.Subnets.php:617
-#: functions/classes/class.Subnets.php:660
-#: functions/classes/class.Subnets.php:697
-#: functions/classes/class.Subnets.php:738
-#: functions/classes/class.Subnets.php:781
-#: functions/classes/class.Subnets.php:830
-#: functions/classes/class.Subnets.php:868
-#: functions/classes/class.Subnets.php:889
-#: functions/classes/class.Subnets.php:908
-#: functions/classes/class.Subnets.php:992
-#: functions/classes/class.Subnets.php:1055
-#: functions/classes/class.Subnets.php:1126
-#: functions/classes/class.Subnets.php:1223
-#: functions/classes/class.Subnets.php:1740
-#: functions/classes/class.Subnets.php:2567
-#: functions/classes/class.Subnets.php:2584
-#: functions/classes/class.Subnets.php:2601
-#: functions/classes/class.Subnets.php:2622
-#: functions/classes/class.Subnets.php:2655
-#: functions/classes/class.Subnets.php:2685
-#: functions/classes/class.Subnets.php:2699
-#: functions/classes/class.Subnets.php:2790
-#: functions/classes/class.Subnets.php:2837
-#: functions/classes/class.Subnets.php:3029
-#: functions/classes/class.Tools.php:101 functions/classes/class.Tools.php:175
-#: functions/classes/class.Tools.php:241 functions/classes/class.Tools.php:382
-#: functions/classes/class.Tools.php:416 functions/classes/class.Tools.php:449
-#: functions/classes/class.Tools.php:482 functions/classes/class.Tools.php:519
-#: functions/classes/class.Tools.php:553 functions/classes/class.Tools.php:586
-#: functions/classes/class.Tools.php:2263
-#: functions/classes/class.Tools.php:2398 functions/classes/class.User.php:614
+#: functions/classes/class.Subnets.php:220
+#: functions/classes/class.Subnets.php:260
+#: functions/classes/class.Subnets.php:304
+#: functions/classes/class.Subnets.php:331
+#: functions/classes/class.Subnets.php:352
+#: functions/classes/class.Subnets.php:455
+#: functions/classes/class.Subnets.php:565
+#: functions/classes/class.Subnets.php:593
+#: functions/classes/class.Subnets.php:611
+#: functions/classes/class.Subnets.php:654
+#: functions/classes/class.Subnets.php:691
+#: functions/classes/class.Subnets.php:732
+#: functions/classes/class.Subnets.php:775
+#: functions/classes/class.Subnets.php:824
+#: functions/classes/class.Subnets.php:862
+#: functions/classes/class.Subnets.php:883
+#: functions/classes/class.Subnets.php:902
+#: functions/classes/class.Subnets.php:986
+#: functions/classes/class.Subnets.php:1049
+#: functions/classes/class.Subnets.php:1120
+#: functions/classes/class.Subnets.php:1217
+#: functions/classes/class.Subnets.php:1691
+#: functions/classes/class.Subnets.php:2518
+#: functions/classes/class.Subnets.php:2535
+#: functions/classes/class.Subnets.php:2552
+#: functions/classes/class.Subnets.php:2573
+#: functions/classes/class.Subnets.php:2606
+#: functions/classes/class.Subnets.php:2636
+#: functions/classes/class.Subnets.php:2650
+#: functions/classes/class.Subnets.php:2741
+#: functions/classes/class.Subnets.php:2788
+#: functions/classes/class.Subnets.php:2980
+#: functions/classes/class.Tools.php:93 functions/classes/class.Tools.php:167
+#: functions/classes/class.Tools.php:233 functions/classes/class.Tools.php:374
+#: functions/classes/class.Tools.php:408 functions/classes/class.Tools.php:441
+#: functions/classes/class.Tools.php:474 functions/classes/class.Tools.php:511
+#: functions/classes/class.Tools.php:545 functions/classes/class.Tools.php:578
+#: functions/classes/class.Tools.php:2255
+#: functions/classes/class.Tools.php:2390 functions/classes/class.User.php:614
 #: functions/classes/class.User.php:793 functions/classes/class.User.php:828
 #: functions/classes/class.User.php:845 functions/classes/class.User.php:866
 #: functions/classes/class.User.php:991 functions/classes/class.User.php:1039
@@ -5529,6 +5533,7 @@ msgstr "Ung&uuml;ltiger L&auml;ngengrad"
 #: app/admin/sections/edit-result.php:113 app/admin/users/edit-result.php:166
 #: app/tools/pstn-prefixes/edit-number-result.php:103
 #: app/tools/pstn-prefixes/edit-result.php:157
+#: functions/classes/class.Admin.php:716
 msgid "failed"
 msgstr "fehlerhaft"
 
@@ -5799,11 +5804,11 @@ msgstr "Serveradresse"
 
 #: app/admin/nat/edit.php:149 app/admin/requests/index.php:32
 #: app/subnets/import-subnet/print-file.php:50
-#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:81
-#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:142
-#: app/subnets/scan/subnet-scan-execute-scan-telnet.php:58
-#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:225
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:139
+#: app/subnets/scan/subnet-scan-execute-scan-icmp.php:82
+#: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:143
+#: app/subnets/scan/subnet-scan-execute-scan-telnet.php:59
+#: app/subnets/scan/subnet-scan-execute-snmp-mac.php:226
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:136
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:106
 #: app/subnets/subnet-details/subnet-changelog.php:145
 msgid "IP"
@@ -6593,6 +6598,10 @@ msgstr ""
 msgid "Check all fields that are required"
 msgstr "Auswahl der Felder die zwingend ben&ouml;tigt werden"
 
+#: app/admin/required-fields/submit.php:28
+msgid "Update successfull"
+msgstr "Aktualisierung erfolgreich"
+
 #: app/admin/ripe-import/import-subnets.php:67
 msgid "Please fix the following errors before inserting"
 msgstr "Bitte beheben Sie zun&auml;chst folgende Fehler vor dem Einf&uuml;gen"
@@ -6665,9 +6674,8 @@ msgid "Please enter at least 2 characters."
 msgstr "Bitte mindestens 2 Zeichen eingeben."
 
 #: app/admin/routing/edit-bgp-mapping-search.php:51
-#, fuzzy
 msgid "Advertised"
-msgstr "Advertised"
+msgstr "Beworben"
 
 #: app/admin/routing/edit-bgp-mapping-search.php:52
 msgid "Received"
@@ -7563,6 +7571,7 @@ msgid "Current"
 msgstr "Aktuell"
 
 #: app/admin/settings/logo/logo-uploader.php:51
+#: functions/classes/class.Admin.php:193
 msgid "New"
 msgstr "Neu"
 
@@ -7626,7 +7635,7 @@ msgstr "Keine Ger&auml;te"
 #: app/admin/subnets/find_free_section_subnets_result.php:24
 #: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:27
 #: app/subnets/scan/subnet-scan-execute-snmp-route.php:19
-#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:28
+#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:26
 msgid "You do not have permissions to add new subnet in this section"
 msgstr ""
 "Sie haben keine Berechtigung ein Subnetz in diesem Bereich einzurichten"
@@ -7660,6 +7669,7 @@ msgstr ""
 #: app/folder/folder-subnets.php:35 app/folder/folder-subnets.php:43
 #: app/folder/folder-subnets.php:76
 #: app/tools/search/search-results-export.php:343
+#: functions/classes/class.FirewallZones.php:641
 msgid "Folder"
 msgstr "Ordner"
 
@@ -7782,8 +7792,8 @@ msgstr "+ VLAN hinzuf&uuml;gen"
 msgid "No VLANs"
 msgstr "Keine VLANs"
 
-#: app/admin/subnets/edit.php:56 functions/classes/class.Subnets.php:988
-#: functions/classes/class.Subnets.php:1015
+#: app/admin/subnets/edit.php:56 functions/classes/class.Subnets.php:982
+#: functions/classes/class.Subnets.php:1009
 msgid "Invalid subnetId"
 msgstr "Ung&uuml;ltige Subnetz-ID"
 
@@ -8907,7 +8917,7 @@ msgstr "Keine Dom&auml;nen verf&uuml;gbar!"
 #: app/admin/vrf/vrf-scan-execute.php:26 app/admin/vrf/vrf-scan.php:21
 #: app/subnets/scan/subnet-scan-execute-scan-snmp-arp.php:14
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:18
-#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:25
+#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:23
 msgid "SNMP module disbled"
 msgstr "Modul SNMP ist deaktiviert"
 
@@ -8937,10 +8947,6 @@ msgstr "Gefundene VLANs hinzuf&uuml;gen"
 
 #: app/admin/vlans/vlans-scan-result.php:29
 #: app/admin/vrf/vrf-scan-result.php:27
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:15
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:15
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:15
-#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:22
 msgid ""
 "Number of discovered hosts exceed maximum possible defined by php.ini - set "
 "to "
@@ -8950,10 +8956,6 @@ msgstr ""
 
 #: app/admin/vlans/vlans-scan-result.php:29
 #: app/admin/vrf/vrf-scan-result.php:27
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:15
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:15
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:15
-#: app/subnets/scan/subnet-scan-result-snmp-route-all.php:22
 msgid "Please adjust your php.ini settings for value `max_input_vars`"
 msgstr ""
 "Bitte passen Sie Ihre php.ini Einstellungen f&uuml;r den Wert "
@@ -8961,24 +8963,24 @@ msgstr ""
 
 #: app/admin/vlans/vlans-scan-result.php:78
 #: app/admin/vrf/vrf-scan-result.php:73
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:92
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:97
+#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:89
+#: app/subnets/scan/subnet-scan-result-snmp-mac.php:94
 msgid "Failed to import entry"
 msgstr "Fehler beim Import des Eintrags"
 
 #: app/admin/vlans/vlans-scan-result.php:82
 #: app/admin/vrf/vrf-scan-result.php:77
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:80
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:96
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:101
+#: app/subnets/scan/subnet-scan-result-scan-icmp.php:74
+#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:93
+#: app/subnets/scan/subnet-scan-result-snmp-mac.php:98
 msgid "Scan results added to database"
 msgstr "Scanergebnisse zur Datenbank hinzugef&uuml;gt"
 
 #: app/admin/vlans/vlans-scan-result.php:85
 #: app/admin/vrf/vrf-scan-result.php:80
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:83
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:99
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:104
+#: app/subnets/scan/subnet-scan-result-scan-icmp.php:77
+#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:96
+#: app/subnets/scan/subnet-scan-result-snmp-mac.php:101
 msgid "No entries available"
 msgstr "Keine Eintr&auml;ge verf&uuml;gbar"
 
@@ -9062,7 +9064,7 @@ msgstr "Neues Widget erzeugen"
 msgid "No widgets created yet"
 msgstr "Es wurden bisher keine Widgets erstellt"
 
-#: app/admin/widgets/index.php:42 functions/classes/class.Common.php:1804
+#: app/admin/widgets/index.php:42 functions/classes/class.Common.php:1849
 msgid "Admin"
 msgstr "Admin"
 
@@ -9178,6 +9180,7 @@ msgstr "Keine &Auml;nderungsprotokolleintr&auml;ge vorhanden"
 #: app/dashboard/widgets/favourite_subnets.php:46
 #: app/tools/changelog/changelog-print.php:59
 #: app/tools/changelog/show-popup.php:61 app/tools/favourites/index.php:30
+#: functions/classes/class.Admin.php:223 functions/classes/class.Admin.php:277
 msgid "Object"
 msgstr "Objekt"
 
@@ -9296,11 +9299,11 @@ msgstr "Keine inaktiven Hosts gefunden"
 #: app/tools/multicast-networks/index.php:139
 #: app/tools/multicast-networks/index.php:140
 #: app/tools/multicast-networks/index.php:141
-#: functions/classes/class.Tools.php:2045
-#: functions/classes/class.Tools.php:2046
-#: functions/classes/class.Tools.php:2047
-#: functions/classes/class.Tools.php:2048
-#: functions/classes/class.Tools.php:2049
+#: functions/classes/class.Tools.php:2037
+#: functions/classes/class.Tools.php:2038
+#: functions/classes/class.Tools.php:2039
+#: functions/classes/class.Tools.php:2040
+#: functions/classes/class.Tools.php:2041
 msgid "Last seen"
 msgstr "Zuletzt gesehen"
 
@@ -9510,8 +9513,8 @@ msgstr "Berechtigung"
 #: app/subnets/subnet-details/subnet-details.php:592
 #: app/tools/nat/nat_details.php:177 app/tools/racks/print-single-rack.php:147
 #: app/tools/vlan/vlan-details.php:113 app/tools/vrf/vrf-details.php:124
-#: app/vrf/vrf-details.php:93 functions/classes/class.Common.php:2093
-#: functions/classes/class.Common.php:2096
+#: app/vrf/vrf-details.php:93 functions/classes/class.Common.php:2138
+#: functions/classes/class.Common.php:2141
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -10019,7 +10022,7 @@ msgstr "IP-Adressen waren auf Zustimmung"
 msgid "New version available"
 msgstr "Neue Version verf&uuml;gbar"
 
-#: app/sections/menu/menu-tools.php:143
+#: app/sections/menu/menu-tools.php:143 functions/classes/class.Common.php:2024
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -10405,7 +10408,7 @@ msgstr "IP-Adressbearbeitung fehlgeschlagen"
 
 #: app/subnets/addresses/address-modify-submit.php:166
 #: app/subnets/addresses/address-modify-submit.php:167
-#: app/subnets/addresses/ping-address.php:39
+#: app/subnets/addresses/ping-address.php:37
 msgid "Invalid IP address"
 msgstr "Ung&uuml;tige IP-Adresse"
 
@@ -10445,8 +10448,8 @@ msgstr "IP-Adressen &Auml;nderung"
 
 #: app/subnets/addresses/address-modify-submit.php:266
 #: app/subnets/addresses/address-modify-submit.php:316
-#: app/subnets/addresses/ping-address.php:86
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:128
+#: app/subnets/addresses/ping-address.php:84
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:125
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:83
 #: app/tools/vrf/index.php:22 app/upgrade/index.php:144 app/vlan/index.php:13
 #: app/vrf/index.php:14 functions/classes/class.FirewallZones.php:672
@@ -10494,7 +10497,7 @@ msgid "Error inserting IP address"
 msgstr "Fehler beim Einf&uuml;gen der IP-Adresse"
 
 #: app/subnets/addresses/address-modify-submit.php:374
-#: app/subnets/addresses/ping-address.php:79
+#: app/subnets/addresses/ping-address.php:77
 msgid "is alive"
 msgstr "ist verf&uuml;gbar"
 
@@ -10503,17 +10506,17 @@ msgstr "ist verf&uuml;gbar"
 #: app/subnets/import-subnet/import-file.php:42
 #: app/subnets/import-subnet/print-file.php:26
 #: app/subnets/import-subnet/print-file.php:36
-#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:154
+#: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:155
 msgid "Invalid subnet ID"
 msgstr "Ung&uuml;ltige Subnetz-ID"
 
 #: app/subnets/addresses/address-modify.php:46
-#: app/subnets/addresses/ping-address.php:46
+#: app/subnets/addresses/ping-address.php:44
 msgid "Cannot edit IP address details"
 msgstr "Kann IP-Adressdetails nicht bearbeiten"
 
 #: app/subnets/addresses/address-modify.php:46
-#: app/subnets/addresses/ping-address.php:46
+#: app/subnets/addresses/ping-address.php:44
 msgid "You do not have write access for this network"
 msgstr ""
 "Sie verf&uuml;gen &uuml;ber keine Schreibrechte f&uuml;r dieses Netzwerk"
@@ -10531,10 +10534,13 @@ msgstr "Hinzuf&uuml;gen"
 
 #: app/subnets/addresses/address-modify.php:81
 #: app/subnets/addresses/address-modify.php:82
+#: functions/classes/class.Admin.php:217 functions/classes/class.Admin.php:223
+#: functions/classes/class.Admin.php:277
 msgid "edit"
 msgstr "Bearbeiten"
 
 #: app/subnets/addresses/address-modify.php:83
+#: functions/classes/class.Admin.php:270
 msgid "delete"
 msgstr "L&ouml;schen"
 
@@ -10685,19 +10691,19 @@ msgstr "W&auml;hlen Sie ein neues Subnetz"
 msgid "Move IP address"
 msgstr "Verschiebe IP-Adresse"
 
-#: app/subnets/addresses/ping-address.php:73
+#: app/subnets/addresses/ping-address.php:71
 msgid "Ping check result"
 msgstr "Ergebnis der Ping&uuml;berpr&uuml;fung"
 
-#: app/subnets/addresses/ping-address.php:81
+#: app/subnets/addresses/ping-address.php:79
 msgid "is not alive"
 msgstr "ist nicht erreichbar"
 
-#: app/subnets/addresses/ping-address.php:105
+#: app/subnets/addresses/ping-address.php:103
 msgid "Repeat"
 msgstr "Wiederholen"
 
-#: app/subnets/addresses/ping-address.php:106
+#: app/subnets/addresses/ping-address.php:104
 #: app/subnets/import-subnet/index.php:215
 #: app/tools/changelog/show-popup.php:141 app/tools/logs/detail-popup.php:88
 msgid "Close window"
@@ -10735,19 +10741,19 @@ msgstr "Subnetz ist als voll markiert"
 
 #: app/subnets/addresses/print-address-table.php:268
 #: app/tools/customers/customer/objects/ipaddresses.php:84
-#: functions/classes/class.Tools.php:2044
+#: functions/classes/class.Tools.php:2036
 msgid "Address was never online"
 msgstr "Adresse war noch nie online"
 
 #: app/subnets/addresses/print-address-table.php:269
 #: app/tools/customers/customer/objects/ipaddresses.php:85
-#: functions/classes/class.Tools.php:2045
+#: functions/classes/class.Tools.php:2037
 msgid "Address is alive"
 msgstr "Adresse ist erreichbar"
 
 #: app/subnets/addresses/print-address-table.php:270
 #: app/tools/customers/customer/objects/ipaddresses.php:86
-#: functions/classes/class.Tools.php:2046
+#: functions/classes/class.Tools.php:2038
 msgid "Address warning"
 msgstr "Adressen Warnung"
 
@@ -10757,15 +10763,15 @@ msgstr "Adressen Warnung"
 #: app/tools/customers/customer/objects/ipaddresses.php:87
 #: app/tools/customers/customer/objects/ipaddresses.php:88
 #: app/tools/customers/customer/objects/ipaddresses.php:89
-#: functions/classes/class.Tools.php:2047
-#: functions/classes/class.Tools.php:2048
-#: functions/classes/class.Tools.php:2049
+#: functions/classes/class.Tools.php:2039
+#: functions/classes/class.Tools.php:2040
+#: functions/classes/class.Tools.php:2041
 msgid "Address is offline"
 msgstr "Adresse ist offline"
 
 #: app/subnets/addresses/print-address-table.php:274
 #: app/tools/customers/customer/objects/ipaddresses.php:90
-#: functions/classes/class.Tools.php:2050
+#: functions/classes/class.Tools.php:2042
 msgid "Address status unknown"
 msgstr "Adressenstatus unbekannt"
 
@@ -10871,7 +10877,7 @@ msgid "Strict Subnets"
 msgstr "Strikte Subnetze"
 
 #: app/subnets/mastersubnet-dropdown.php:65
-#: functions/classes/class.Subnets.php:3308
+#: functions/classes/class.Subnets.php:3259
 msgid "Folders"
 msgstr "Ordner"
 
@@ -10881,7 +10887,7 @@ msgstr "Ordner"
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:11
 #: app/subnets/scan/subnet-scan-execute-snmp-route-all.php:121
 #: app/subnets/scan/subnet-scan-execute-snmp-route.php:64
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:117
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:114
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:93
 msgid "Scan results"
 msgstr "Ergebnis der &Uuml;berpr&uuml;fung"
@@ -10902,11 +10908,11 @@ msgstr "Gefundene Ger&auml;te hinzuf&uuml;gen"
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:14
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:17
 #: app/subnets/scan/subnet-scan-execute.php:41
-#: app/subnets/scan/subnet-scan-result-scan-icmp.php:19
+#: app/subnets/scan/subnet-scan-result-scan-icmp.php:13
 #: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:11
-#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:19
+#: app/subnets/scan/subnet-scan-result-scan-snmp-arp.php:16
 #: app/subnets/scan/subnet-scan-result-snmp-mac.php:11
-#: app/subnets/scan/subnet-scan-result-snmp-mac.php:19
+#: app/subnets/scan/subnet-scan-result-snmp-mac.php:16
 #: app/subnets/scan/subnet-scan.php:27
 msgid "You do not have permissions to modify hosts in this subnet"
 msgstr ""
@@ -10974,12 +10980,12 @@ msgstr ""
 msgid "Bitmask"
 msgstr "Bitmaske"
 
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:126
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:123
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:98
 msgid "Subnet is empty"
 msgstr "Subnetz ist leer"
 
-#: app/subnets/scan/subnet-scan-execute-update-icmp.php:141
+#: app/subnets/scan/subnet-scan-execute-update-icmp.php:138
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:108
 msgid "status"
 msgstr "Status"
@@ -10989,7 +10995,7 @@ msgid "Invalid php path"
 msgstr "Ung&uuml;ltiger PHP Pfad"
 
 #: app/subnets/scan/subnet-scan-execute.php:72
-#: app/subnets/scan/subnet-scan-result.php:34
+#: app/subnets/scan/subnet-scan-result.php:39
 msgid "Invalid scan type"
 msgstr "Ung&uuml;ltiger Scantyp"
 
@@ -10997,8 +11003,18 @@ msgstr "Ung&uuml;ltiger Scantyp"
 msgid "Invalid section Id"
 msgstr "Ung&uuml;ltige Bereichs-ID"
 
+#: app/subnets/scan/subnet-scan-result.php:21
+msgid "Number of discovered hosts exceed maximum possible defined by php.ini"
+msgstr ""
+"Die Anzahl der gefundenen Ger&auml;te &uuml;berschreitet die in der Datei "
+"php.ini definierten maximal m&ouml;glichen"
+
+#: app/subnets/scan/subnet-scan-result.php:21
+msgid "Please increase your php.ini setting:"
+msgstr "Bitte erhöhen Sie in php.ini die Einstellungen f&uuml;r:"
+
 #: app/subnets/scan/subnet-scan.php:30 functions/classes/class.Scan.php:535
-#: functions/scripts/discoveryCheck.php:47 functions/scripts/pingCheck.php:59
+#: functions/scripts/discoveryCheck.php:47 functions/scripts/pingCheck.php:57
 msgid "Scanning disabled"
 msgstr "Scannen deaktiviert"
 
@@ -11091,7 +11107,7 @@ msgid "Subnet is natted"
 msgstr "Subnetz ist geNAT'et"
 
 #: app/subnets/subnet-details/subnet-details.php:137
-#: functions/classes/class.Subnets.php:3128
+#: functions/classes/class.Subnets.php:3079
 #: functions/classes/class.SubnetsTable.php:108
 msgid "VLAN is in domain"
 msgstr "VLAN ist in der Dom&auml;ne"
@@ -11119,6 +11135,7 @@ msgid "Alert threshold"
 msgstr "Schwellwert Alarm"
 
 #: app/subnets/subnet-details/subnet-details.php:344
+#: functions/classes/class.FirewallZones.php:863
 msgid "Firewall zone"
 msgstr "Firewall Zone"
 
@@ -13044,7 +13061,7 @@ msgstr "Erstellt von"
 msgid "Access log"
 msgstr "Zugriffsprotokoll"
 
-#: app/tools/temp-shares/index.php:76 functions/classes/class.Common.php:1801
+#: app/tools/temp-shares/index.php:76 functions/classes/class.Common.php:1846
 msgid "No access"
 msgstr "Zugriff verweigert"
 
@@ -13647,9 +13664,83 @@ msgstr "Kein 64-Bit System"
 msgid "From release 1.4 on 64bit system is required!"
 msgstr "Ab der Version 1.4 wird ein 64-Bit System ben&ouml;tigt!"
 
+#: functions/classes/class.Addresses.php:411
+#: functions/classes/class.Addresses.php:420
+msgid "Address create"
+msgstr "Anlegen Adresse"
+
+#: functions/classes/class.Addresses.php:411
+msgid "Failed to create new address"
+msgstr "Fehler beim Anlegen einer neuen Adresse"
+
+#: functions/classes/class.Addresses.php:420
+msgid "New address created"
+msgstr "Neue Adresse angelegt"
+
+#: functions/classes/class.Addresses.php:467
+msgid "Address edit"
+msgstr "Bearbeiten Adresse"
+
+#: functions/classes/class.Addresses.php:467
+msgid "Failed to edit address"
+msgstr "Fehler beim Bearbeiten der Adresse"
+
+#: functions/classes/class.Addresses.php:476
+msgid "Address update"
+msgstr "Aktualisierung Adresse"
+
+#: functions/classes/class.Addresses.php:476
+msgid "updated"
+msgstr "aktualisiert"
+
+#: functions/classes/class.Addresses.php:509
+#: functions/classes/class.Addresses.php:515
+msgid "Address delete"
+msgstr "Löschen Adresse"
+
+#: functions/classes/class.Addresses.php:509
+msgid "Failed to delete address"
+msgstr "Fehler beim Löschen der Adresse"
+
+#: functions/classes/class.Addresses.php:515
+#: functions/classes/class.Admin.php:277
+#: functions/classes/class.FirewallZones.php:863
+#: functions/classes/class.FirewallZones.php:956
+msgid "deleted"
+msgstr "gelöscht"
+
+#: functions/classes/class.Addresses.php:593
+msgid "Address removed from NAT"
+msgstr "Adresse aus dem NAT entfernt"
+
+#: functions/classes/class.Addresses.php:621
+msgid "Address DNS resolved"
+msgstr "Auflösung DNS-Adresse"
+
+#: functions/classes/class.Addresses.php:621
+msgid "resolved"
+msgstr "aufgelöst"
+
+#: functions/classes/class.Addresses.php:698
+#: functions/classes/class.Addresses.php:700
+msgid "Mailer Error"
+msgstr "Fehler E-Mail-Versand"
+
 #: functions/classes/class.Addresses.php:903
 msgid "Invalid PDNS action"
 msgstr "Ung&uuml;ltige PDNS Aktion"
+
+#: functions/classes/class.Addresses.php:1000
+msgid "PTR record created"
+msgstr "PTR-Eintag erstellt"
+
+#: functions/classes/class.Addresses.php:1044
+msgid "PTR record updated"
+msgstr "PTR-Eintrag aktualisiert"
+
+#: functions/classes/class.Addresses.php:1070
+msgid "PTR record removed"
+msgstr "PTR-Eintrag entfernt"
 
 #: functions/classes/class.Addresses.php:1505
 msgid " is not a valid address for subnet "
@@ -13660,13 +13751,60 @@ msgstr " ist keine g&uuml;ltige Adresse f&uuml;r Subnetz "
 msgid "Object is Natted"
 msgstr "Objekt ist NAT'ed"
 
-#: functions/classes/class.Admin.php:622
-msgid "Replaced"
-msgstr "Ersetzt"
+#: functions/classes/class.Admin.php:187 functions/classes/class.Admin.php:193
+msgid "object creation"
+msgstr "Objekt Erstellung"
+
+#: functions/classes/class.Admin.php:187
+msgid "Failed to create new"
+msgstr "Fehler beim Anlegen neue"
+
+#: functions/classes/class.Admin.php:187
+msgid "database object"
+msgstr "als Datenbank Objekt"
+
+#: functions/classes/class.Admin.php:193
+msgid "database object created"
+msgstr "Datenbank Objekt erstellt"
+
+#: functions/classes/class.Admin.php:217 functions/classes/class.Admin.php:223
+#: functions/classes/class.Admin.php:270 functions/classes/class.Admin.php:277
+msgid "object"
+msgstr "Objekt"
+
+#: functions/classes/class.Admin.php:217
+msgid "Failed to edit object"
+msgstr "Fehler beim Bearbeiten des Objektes"
+
+#: functions/classes/class.Admin.php:217 functions/classes/class.Admin.php:223
+#: functions/classes/class.Admin.php:270 functions/classes/class.Admin.php:277
+#| msgid "Link"
+msgid "in"
+msgstr "in"
+
+#: functions/classes/class.Admin.php:223 functions/classes/class.Admin.php:253
+msgid "edited"
+msgstr "bearbeitet"
+
+#: functions/classes/class.Admin.php:247 functions/classes/class.Admin.php:253
+msgid "multiple objects edit"
+msgstr "bearbeiten mehrerer Objekte"
+
+#: functions/classes/class.Admin.php:247
+msgid "Failed to edit multiple objects in"
+msgstr "Fehler beim Bearbeiten von mehreren Objekten in"
+
+#: functions/classes/class.Admin.php:253
+msgid "Multiple objects in"
+msgstr "Mehrere Objekte in"
+
+#: functions/classes/class.Admin.php:270
+msgid "Failed to delete object"
+msgstr "Fehler beim Löschen des Objektes"
 
 #: functions/classes/class.Admin.php:622
-msgid "items successfully"
-msgstr "Eintrag erfolgreich"
+msgid "items replaced successfully"
+msgstr "Eintr&auml;ge erfolgreich ersetzt"
 
 #: functions/classes/class.Admin.php:625
 msgid "No records found to replace"
@@ -13676,21 +13814,29 @@ msgstr "Keine Eintr&auml;ge zum Ersetzen gefunden"
 msgid "Invalid custom field type"
 msgstr "Ung&uuml;ltiger benutzerspezifischer Feldtyp"
 
-#: functions/classes/class.Common.php:1058
+#: functions/classes/class.Admin.php:716
+msgid "Custom field"
+msgstr "Benutzerdefiniertes Feld"
+
+#: functions/classes/class.Admin.php:716
+msgid "Custom Field"
+msgstr "Benutzerdefiniertes Feld"
+
+#: functions/classes/class.Common.php:1068
 msgid "Invalid action!"
 msgstr "Ung&uuml;ltige Aktion!"
 
-#: functions/classes/class.Common.php:1375
+#: functions/classes/class.Common.php:1420
 msgid "Geocode API key not set"
 msgstr "Geocode API-Key ist nicht gesetzt"
 
-#: functions/classes/class.Common.php:1383
+#: functions/classes/class.Common.php:1428
 msgid "Geocode lookup failed. Check Internet connectivity."
 msgstr ""
 "Geocode-Suche fehlgeschlagen. &Uuml;berpr&uuml;fen Sie die "
 "Internetverbindung."
 
-#: functions/classes/class.Common.php:1803
+#: functions/classes/class.Common.php:1848
 msgid "Write"
 msgstr "Schreiben"
 
@@ -13699,24 +13845,36 @@ msgid "Unsupported hash_hmac algo"
 msgstr "Nicht unterst&uuml;tzter hash_hmac Algorithmus"
 
 #: functions/classes/class.Crypto.php:125
-msgid "Unsupported $api_crypt_encryption_library method: "
-msgstr "Nicht unterst&uuml;tzte $api_crypt_encryption_library Methode: "
+msgid "Unsupported"
+msgstr "Nicht unterst&uuml;tzte"
+
+#: functions/classes/class.Crypto.php:125
+msgid "method"
+msgstr "Methode"
 
 #: functions/classes/class.Crypto.php:130
-msgid "php extension not installed: "
+msgid "PHP extension not installed: "
 msgstr "PHP-Erweiterung nicht installiert: "
 
 #: functions/classes/class.Crypto.php:248
 msgid "Invalid CSRF cookie action"
 msgstr "Ung&uuml;ltige CSRF-Cookie-Aktion"
 
+#: functions/classes/class.DHCP.php:88
+msgid "Invalid server type"
+msgstr "Ung&uuml;ltiger Servertyp"
+
 #: functions/classes/class.DHCP.php:129
 msgid "Missing class file"
 msgstr "Fehlende Class Datei"
 
 #: functions/classes/class.DHCP.php:145
-msgid ".php`"
-msgstr ".php`"
+msgid "Method"
+msgstr "Methode"
+
+#: functions/classes/class.DHCP.php:145
+msgid "does not exist in class"
+msgstr "existiert nicht in der Klasse"
 
 #: functions/classes/class.DNS.php:253 functions/classes/class.DNS.php:278
 msgid "DNS error"
@@ -13746,8 +13904,12 @@ msgstr ""
 "zu &auml;ndern."
 
 #: functions/classes/class.FirewallZones.php:195
-msgid "Error: The zone name "
-msgstr "Fehler: Der Zonenname "
+msgid "Error: The zone name"
+msgstr "Fehler: Der Zonenname"
+
+#: functions/classes/class.FirewallZones.php:195
+msgid "is not unique"
+msgstr "ist nicht eindeutig"
 
 #: functions/classes/class.FirewallZones.php:234
 #: functions/classes/class.FirewallZones.php:253
@@ -13768,18 +13930,101 @@ msgstr "Fehler: Der Zonenname "
 msgid "Database error: "
 msgstr "Datenbankfehler:"
 
+#: functions/classes/class.FirewallZones.php:559
+msgid "Zone details"
+msgstr "Zonendetails"
+
 #: functions/classes/class.FirewallZones.php:561
 msgid "Zone Name"
 msgstr "Zonenname"
 
 #: functions/classes/class.FirewallZones.php:672
 #: functions/classes/class.FirewallZones.php:705
-msgid ""
-"This network is already bound to this or another zone.<br>The binding must "
-"be unique."
+msgid "This network is already bound to this or another zone."
 msgstr ""
 "Dieses Netzwerk ist bereits zu dieser oder einer anderen Zone gebunden."
-"<br>Die Bindung muss einmalig sein."
+
+#: functions/classes/class.FirewallZones.php:672
+#: functions/classes/class.FirewallZones.php:705
+msgid "The binding must be unique."
+msgstr "Die Bindung muss einmalig sein."
+
+#: functions/classes/class.FirewallZones.php:786
+msgid "Firewall zone create"
+msgstr "Erstellen Firewall-Zone"
+
+#: functions/classes/class.FirewallZones.php:786
+msgid "Failed to add new firewall zone"
+msgstr "Beim Anlegen einer neuen Firewall-Zone ist ein Fehler aufgetreten"
+
+#: functions/classes/class.FirewallZones.php:827
+#: functions/classes/class.FirewallZones.php:831
+msgid "Firewall zone edit"
+msgstr "Bearbeiten Firewall-Zone"
+
+#: functions/classes/class.FirewallZones.php:827
+msgid "Failed to edit firewall zone"
+msgstr "Beim Bearbeitende einer Firewall-Zone ist ein Fehler aufgetreten"
+
+#: functions/classes/class.FirewallZones.php:831
+msgid "Firewall zone edited"
+msgstr "Firewall-Zone bearbeitet"
+
+#: functions/classes/class.FirewallZones.php:850
+msgid "Firewall zone and mappings delete"
+msgstr "Löschen Firewall-Zonen und -zuordnungen"
+
+#: functions/classes/class.FirewallZones.php:850
+msgid "Failed to delete firewall zone mappings of"
+msgstr "Fehler beim Löschen der Firewall-Zonenzuordnung von"
+
+#: functions/classes/class.FirewallZones.php:858
+#: functions/classes/class.FirewallZones.php:863
+msgid "Firewall zone delete"
+msgstr "Löschen Firewall-Zone"
+
+#: functions/classes/class.FirewallZones.php:858
+msgid "Failed to delete firewall zone"
+msgstr "Fehler beim Löschen der Firewall-Zone"
+
+#: functions/classes/class.FirewallZones.php:907
+#: functions/classes/class.FirewallZones.php:911
+msgid "Firewall zone mapping create"
+msgstr "Anlegen Firewall-Zonenzuordnung"
+
+#: functions/classes/class.FirewallZones.php:907
+msgid "Failed to add new firewall zone mapping"
+msgstr "Beim Anlegen einer Firewall-Zonenzuordnung ist ein Fehler aufgetreten"
+
+#: functions/classes/class.FirewallZones.php:911
+msgid "New firewall zone mapping created"
+msgstr "Neue Firewall-Zonenzuordnung erstellt"
+
+#: functions/classes/class.FirewallZones.php:928
+#: functions/classes/class.FirewallZones.php:932
+msgid "Firewall zone mapping edit"
+msgstr "Bearbeitung Firewall-Zonenzuordnung"
+
+#: functions/classes/class.FirewallZones.php:928
+msgid "Failed to edit firewall zone mapping"
+msgstr "Beim Bearbeiten der Firewall-Zonenzuordnung ist ein Fehler aufgetreten"
+
+#: functions/classes/class.FirewallZones.php:932
+msgid "Firewall zone mapping edited"
+msgstr "Bearbeiten Firewall-Zonenzuordnung"
+
+#: functions/classes/class.FirewallZones.php:951
+#: functions/classes/class.FirewallZones.php:956
+msgid "Firewall zone mapping delete"
+msgstr "Löschen Firewall-Zonenzuordnung"
+
+#: functions/classes/class.FirewallZones.php:951
+msgid "Failed to delete firewall zone mapping"
+msgstr "Fehler beim Löschen der Firewall-Zonenzuordnung"
+
+#: functions/classes/class.FirewallZones.php:956
+msgid "Firewall zone mapping"
+msgstr "Zuordnung Firewall Zone"
 
 #: functions/classes/class.Install.php:106
 msgid "Database installation"
@@ -14046,121 +14291,121 @@ msgstr "Subnetz finden"
 msgid "Only master subnets are shown"
 msgstr "Nur Master-Subnetze werden angezeigt"
 
-#: functions/classes/class.Subnets.php:256
+#: functions/classes/class.Subnets.php:250
 msgid "Can not disable isPool, network or broadcast address is allocated"
 msgstr ""
 "isPool kann nicht deaktiviert werden, Netzwerk- oder Broadcastadresse ist "
 "nicht zugewiesen"
 
-#: functions/classes/class.Subnets.php:432
+#: functions/classes/class.Subnets.php:426
 msgid "Failed to move IP address"
 msgstr "IP-Adresse verschieben fehlgeschlagen"
 
-#: functions/classes/class.Subnets.php:438
+#: functions/classes/class.Subnets.php:432
 msgid "Failed to remove old subnet"
 msgstr "Fehler beim Entfernen des alten Subnetzes"
 
-#: functions/classes/class.Subnets.php:1970
+#: functions/classes/class.Subnets.php:1921
 msgid "Invalid IP address!"
 msgstr "Falsche IP-Adresse!"
 
-#: functions/classes/class.Subnets.php:1971
-#: functions/classes/class.Subnets.php:2000
+#: functions/classes/class.Subnets.php:1922
+#: functions/classes/class.Subnets.php:1951
 msgid "IP address cannot be subnet! (Consider using"
 msgstr "IP-Adresse kann kein Subnetz sein!"
 
-#: functions/classes/class.Subnets.php:1972
-#: functions/classes/class.Subnets.php:2019
-#: functions/classes/class.Subnets.php:2020
+#: functions/classes/class.Subnets.php:1923
+#: functions/classes/class.Subnets.php:1970
+#: functions/classes/class.Subnets.php:1971
 msgid "Invalid netmask"
 msgstr "Falsche Netzmaske"
 
-#: functions/classes/class.Subnets.php:1975
-#: functions/classes/class.Subnets.php:2015
+#: functions/classes/class.Subnets.php:1926
+#: functions/classes/class.Subnets.php:1966
 msgid "Invalid CIDR format!"
 msgstr "Falsches CIDR Format!"
 
-#: functions/classes/class.Subnets.php:1992
+#: functions/classes/class.Subnets.php:1943
 msgid "Invalid IPv6 address!"
 msgstr "Falsche IPv6 Adresse!"
 
-#: functions/classes/class.Subnets.php:2017
+#: functions/classes/class.Subnets.php:1968
 msgid "Invalid Network!"
 msgstr "Ung&uuml;ltiges Netzwerk!"
 
-#: functions/classes/class.Subnets.php:2053
-#: functions/classes/class.Subnets.php:2140
+#: functions/classes/class.Subnets.php:2004
+#: functions/classes/class.Subnets.php:2091
 msgid "in section"
 msgstr "im Bereich"
 
-#: functions/classes/class.Subnets.php:2217
-#: functions/classes/class.Subnets.php:2367
-#: functions/classes/class.Subnets.php:2385
+#: functions/classes/class.Subnets.php:2168
+#: functions/classes/class.Subnets.php:2318
+#: functions/classes/class.Subnets.php:2336
 msgid "Subnet overlaps with"
 msgstr "Subnetz &uuml;berschneidet sich mit"
 
-#: functions/classes/class.Subnets.php:2329
+#: functions/classes/class.Subnets.php:2280
 msgid "New mask must be at least /8"
 msgstr "Neue Netzmaske muss mindestens /8 sein"
 
-#: functions/classes/class.Subnets.php:2330
+#: functions/classes/class.Subnets.php:2281
 msgid "Mask must be an integer"
 msgstr "Maske muss eine Zahl sein"
 
-#: functions/classes/class.Subnets.php:2341
+#: functions/classes/class.Subnets.php:2292
 msgid "New network is same as old network"
 msgstr "Neues Netzwerk ist das gleiche wie alte Netzwerk"
 
-#: functions/classes/class.Subnets.php:2353
+#: functions/classes/class.Subnets.php:2304
 msgid "New subnet not in master subnet"
 msgstr "Neues Subnetz ist nicht im Master Subnetz"
 
-#: functions/classes/class.Subnets.php:2357
+#: functions/classes/class.Subnets.php:2308
 msgid "New subnet cannot be same as master subnet"
 msgstr "Neues Subnetz kann nicht gleich dem Master-Subnetz sein"
 
 # is instead of it?
-#: functions/classes/class.Subnets.php:2427
+#: functions/classes/class.Subnets.php:2378
 msgid "Subnet it same as "
 msgstr "Subnetz ist gleich wie"
 
-#: functions/classes/class.Subnets.php:2431
+#: functions/classes/class.Subnets.php:2382
 msgid "Nested subnet out of new subnet"
 msgstr "eingegliedertes Netz befindet sich au&szlig;erhalb des neuen Netzes"
 
-#: functions/classes/class.Subnets.php:2461
+#: functions/classes/class.Subnets.php:2412
 msgid "Invalid number of subnets"
 msgstr "Ung&uuml;ltige Anzahl von Subnetzen"
 
-#: functions/classes/class.Subnets.php:2514
+#: functions/classes/class.Subnets.php:2465
 msgid "Subnet overlapping - "
 msgstr "Subnetz &uuml;berschneidet sich -"
 
-#: functions/classes/class.Subnets.php:3023
+#: functions/classes/class.Subnets.php:2974
 msgid "Failed to set subnet permissons for subnet"
 msgstr "&Auml;ndern der Berechtigung f&uuml;r das Subnetz fehlgeschlagen"
 
-#: functions/classes/class.Subnets.php:3036
+#: functions/classes/class.Subnets.php:2987
 msgid "Subnet permissions recursively set"
 msgstr "Subnetz Berechtigungen rekursiv gesetzt"
 
-#: functions/classes/class.Subnets.php:3038
+#: functions/classes/class.Subnets.php:2989
 msgid "Subnet permissions set"
 msgstr "Subnetz Berechtigungen gesetzt"
 
-#: functions/classes/class.Subnets.php:3133
+#: functions/classes/class.Subnets.php:3084
 msgid "VLAN contains subnets"
 msgstr "VLAN enth&auml;lt Subnetze"
 
-#: functions/classes/class.Subnets.php:3133
-#: functions/classes/class.Subnets.php:3226
+#: functions/classes/class.Subnets.php:3084
+#: functions/classes/class.Subnets.php:3177
 #: functions/classes/class.SubnetsMenu.php:154
 #: functions/classes/class.SubnetsMenu.php:159
 #: functions/classes/class.SubnetsMenu.php:164
 msgid "Click on folder to open/close"
 msgstr "Zum &Ouml;ffnen/Schlie&szlig;en auf Ordner klicken"
 
-#: functions/classes/class.Subnets.php:3226
+#: functions/classes/class.Subnets.php:3177
 msgid "VRF contains subnets"
 msgstr "VRF enth&auml;lt Subnetze"
 
@@ -14177,61 +14422,61 @@ msgstr "Subnetz enth&auml;lt mehrere Subnetze"
 msgid "Root folder"
 msgstr "Wurzelordner"
 
-#: functions/classes/class.Tools.php:1049
+#: functions/classes/class.Tools.php:1041
 msgid "Invalid request action"
 msgstr "Ung&uuml;ltige Anfrage"
 
-#: functions/classes/class.Tools.php:1414
-#: functions/classes/class.Tools.php:1440
+#: functions/classes/class.Tools.php:1406
+#: functions/classes/class.Tools.php:1432
 msgid "Update: "
 msgstr "Aktualisierung:"
 
-#: functions/classes/class.Tools.php:1582
+#: functions/classes/class.Tools.php:1574
 msgid "Creating index failed: "
 msgstr "Indexerstellung fehlgeschlagen: "
 
-#: functions/classes/class.Tools.php:1628
+#: functions/classes/class.Tools.php:1620
 msgid "Removing link addresses index : "
 msgstr "Linkadressen-Index entfernen : "
 
-#: functions/classes/class.Tools.php:1644
+#: functions/classes/class.Tools.php:1636
 msgid "Warning: "
 msgstr "Warnung: "
 
-#: functions/classes/class.Tools.php:1644
+#: functions/classes/class.Tools.php:1636
 msgid "Unable to create index for MySQL TEXT/BLOB datatypes."
 msgstr ""
 "Indexerstellung f&uuml;r MySQL TEXT/BLOB Datentypen nicht m&ouml;glich."
 
-#: functions/classes/class.Tools.php:1645
+#: functions/classes/class.Tools.php:1637
 msgid "Reduced performance when displaying linked addresses by "
 msgstr ""
 "Reduzierte Leistung wenn verkn&uuml;pfte Adressen angezeigt werden durch "
 
-#: functions/classes/class.Tools.php:1646
+#: functions/classes/class.Tools.php:1638
 msgid ""
 "Change custom field data type to VARCHAR and re-save to enable indexing."
 msgstr ""
 "&Auml;ndern des benutzerspezifischen Datentyps auf VARCHAR und erneutes "
 "Speichern um die Indizierung zu erm&ouml;glichen."
 
-#: functions/classes/class.Tools.php:1656
+#: functions/classes/class.Tools.php:1648
 msgid "Adding link addresses index : "
 msgstr "Linkadressen-Index hinzuf&uuml;gen : "
 
-#: functions/classes/class.Tools.php:1933
+#: functions/classes/class.Tools.php:1925
 msgid "(closest parent)"
 msgstr "(n&auml;chste &uuml;bergeordnete)"
 
-#: functions/classes/class.Tools.php:2639
+#: functions/classes/class.Tools.php:2631
 msgid "Root subnet"
 msgstr "Root Subnetz"
 
-#: functions/classes/class.Tools.php:3306
+#: functions/classes/class.Tools.php:3259
 msgid "Invalid filetype"
 msgstr "Ung&uuml;ltiger Dateityp"
 
-#: functions/classes/class.Tools.php:3377
+#: functions/classes/class.Tools.php:3330
 msgid "Cannot open upload/import.csv"
 msgstr "Kann .csv nicht hochladen/importieren"
 

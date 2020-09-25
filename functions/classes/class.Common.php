@@ -2021,7 +2021,7 @@ class Common_functions  {
     	if (isset($get['page'])) {
         	// dashboard
         	if ($get['page']=="dashboard") {
-            	return $this->settings->siteTitle." Dashboard";
+            	return $this->settings->siteTitle." "._("Dashboard");
         	}
         	// install, upgrade
         	elseif ($get['page']=="temp_share" || $get['page']=="request_ip" || $get['page']=="opensearch") {
