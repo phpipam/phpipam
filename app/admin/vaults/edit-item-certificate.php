@@ -182,7 +182,7 @@ $(document).ready(function () {
         }
         else {
             // load
-            $.post("/app/admin/vaults/edit-item-certificate-upload-form.php", {"type":"website"}, function(data) {
+            $.post("app/admin/vaults/edit-item-certificate-upload-form.php", {"type":"website"}, function(data) {
                 $('tbody#upload').html(data)
             })
         }
@@ -191,7 +191,7 @@ $(document).ready(function () {
     // on change
     $('select[name=type]').on('change', function() {
         var value = $(this).find(":selected").val();
-        $.post("/app/admin/vaults/edit-item-certificate-upload-form.php", {"type":value}, function(data) {
+        $.post("app/admin/vaults/edit-item-certificate-upload-form.php", {"type":value}, function(data) {
             $('tbody#upload').html(data)
         })
     });
