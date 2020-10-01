@@ -5,7 +5,7 @@
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
 # "POT-Creation-Date: 2020-09-19 11:17+0200\n"
-# "PO-Revision-Date: 2020-09-23 19:31+0200\n"
+# "PO-Revision-Date: 2020-10-01 18:31+0200\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
 # "MIME-Version: 1.0\n"
@@ -20,6 +20,7 @@ msgstr "Subnetz-ID muss numerisch sein"
 #: app/subnets/scan/subnet-scan-execute-snmp-mac.php:21
 #: functions/classes/class.Addresses.php:959
 #: functions/classes/class.Addresses.php:1523
+#: functions/classes/class.Log.php:1689
 msgid "Invalid subnet Id"
 msgstr "Ung&uuml;ltige Subnetz-ID"
 
@@ -1139,6 +1140,7 @@ msgstr "Routing"
 #: app/tools/routing/bgp/details.php:19
 #: app/tools/temp-shares/edit-result.php:23 app/tools/temp-shares/edit.php:23
 #: app/tools/vlan/domain-vlans.php:14 app/tools/vlan/vlan-details.php:16
+#: functions/classes/class.Log.php:1544
 #: functions/classes/class.Subnets.php:3049
 #: functions/classes/class.Subnets.php:3050
 #: functions/classes/class.Subnets.php:3152
@@ -1783,7 +1785,7 @@ msgstr "UID Attribut"
 
 #: app/admin/authentication-methods/edit-LDAP.php:116
 msgid "LDAP uid naming attribute for users, e.g. \"uid\" or \"cn\""
-msgstr "LDAP UID Namensattribut f&uuml;r Benutzer, z.B. \"uid\" oder \"cn\""
+msgstr "LDAP-UID-Namensattribut f&uuml;r Benutzer, z.B. \"uid\" oder \"cn\""
 
 #: app/admin/authentication-methods/edit-LDAP.php:122
 msgid "LDAP Security Type"
@@ -1795,7 +1797,7 @@ msgstr "SSL, TLS oder Keine (Standard: TLS)"
 
 #: app/admin/authentication-methods/edit-LDAP.php:137
 msgid "LDAP port"
-msgstr "LDAP Port"
+msgstr "LDAP-Port"
 
 #: app/admin/authentication-methods/edit-LDAP.php:142
 msgid ""
@@ -2378,6 +2380,11 @@ msgstr "Auswahl Kunde"
 #: app/tools/pstn-prefixes/edit.php:175
 #: functions/classes/class.Addresses.php:1882
 #: functions/classes/class.Addresses.php:1884
+#: functions/classes/class.Log.php:1208 functions/classes/class.Log.php:1216
+#: functions/classes/class.Log.php:1237 functions/classes/class.Log.php:1245
+#: functions/classes/class.Log.php:1266 functions/classes/class.Log.php:1274
+#: functions/classes/class.Log.php:1295 functions/classes/class.Log.php:1303
+#: functions/classes/class.Log.php:1324 functions/classes/class.Log.php:1332
 #: functions/classes/class.Tools.php:2147
 #: functions/classes/class.Tools.php:2149
 msgid "None"
@@ -2771,10 +2778,10 @@ msgstr "IP-Adressen"
 #: app/subnets/subnet-details/subnet-changelog.php:100
 #: app/subnets/subnet-details/subnet-changelog.php:144
 #: app/tools/changelog/changelog-print.php:57
-#: app/tools/changelog/show-popup.php:55 functions/classes/class.User.php:892
-#: functions/classes/class.User.php:928 functions/classes/class.User.php:1021
-#: functions/classes/class.User.php:1033 functions/classes/class.User.php:1134
-#: functions/classes/class.User.php:1163
+#: app/tools/changelog/show-popup.php:55 functions/classes/class.Log.php:1843
+#: functions/classes/class.User.php:892 functions/classes/class.User.php:928
+#: functions/classes/class.User.php:1021 functions/classes/class.User.php:1033
+#: functions/classes/class.User.php:1134 functions/classes/class.User.php:1163
 msgid "User"
 msgstr "Benutzer"
 
@@ -4252,6 +4259,7 @@ msgstr "fehlerhaft"
 
 #: app/admin/groups/edit-group-result.php:79
 #: app/subnets/addresses/address-modify-submit.php:278
+#: functions/classes/class.Admin.php:720
 msgid "success"
 msgstr "erfolgreich"
 
@@ -4885,7 +4893,7 @@ msgstr "Herunter scrollen f&uuml;r Details."
 #: app/subnets/subnet-details/subnet-changelog.php:103
 #: app/subnets/subnet-details/subnet-changelog.php:146
 #: app/tools/changelog/changelog-print.php:60
-#: app/tools/changelog/show-popup.php:75
+#: app/tools/changelog/show-popup.php:75 functions/classes/class.Log.php:1844
 msgid "Action"
 msgstr "Aktion"
 
@@ -5074,7 +5082,9 @@ msgid " in XLS file. Please check input file."
 msgstr " in XLS Datei. Bitte &uuml;berpr&uuml;fen Sie die Eingabedatei."
 
 #: app/admin/import-export/import-recompute-logic.php:153
-#: app/sections/all-sections.php:86
+#: app/sections/all-sections.php:86 functions/classes/class.Log.php:1177
+#: functions/classes/class.Log.php:1186 functions/classes/class.Log.php:1353
+#: functions/classes/class.Log.php:1361
 msgid "Root"
 msgstr "Root"
 
@@ -5244,7 +5254,7 @@ msgstr "Export der Datenelemente f&uuml;r ausgew&auml;ten Typ"
 
 #: app/admin/import-export/index.php:53
 msgid "Recompute master/nested subnet relations."
-msgstr "Neu berechneten der Haupt- und verschachtelten Subnetze."
+msgstr "Neu berechnen der Haupt- und verschachtelten Subnetze."
 
 #: app/admin/import-export/index.php:53
 msgid "Recompute"
@@ -5888,7 +5898,7 @@ msgstr "Statisches NAT kann nur eine Quelladresse haben"
 msgid "Static NAT can only have 1 destination address"
 msgstr "Statisches NAT kann nur eine Zieladresse haben"
 
-#: app/admin/nat/item-add-submit.php:95
+#: app/admin/nat/item-add-submit.php:95 functions/classes/class.Log.php:1653
 msgid "Invalid object type"
 msgstr "Ung&uuml;ltiger Objekttyp"
 
@@ -7571,7 +7581,6 @@ msgid "Current"
 msgstr "Aktuell"
 
 #: app/admin/settings/logo/logo-uploader.php:51
-#: functions/classes/class.Admin.php:193
 msgid "New"
 msgstr "Neu"
 
@@ -9136,6 +9145,7 @@ msgstr "Komando"
 #: app/tools/changelog/changelog-print.php:62
 #: app/tools/changelog/show-popup.php:87 app/tools/logs/detail-popup.php:67
 #: app/tools/logs/export.php:67 app/tools/logs/show-logs.php:46
+#: functions/classes/class.Log.php:1845
 msgid "Date"
 msgstr "Datum"
 
@@ -11285,7 +11295,6 @@ msgstr "Ein-/Ausblenden der Baumstruktur"
 msgid "Associated VLANs"
 msgstr "Assoziierte VLANs"
 
-# site/subnets.php
 #: app/subnets/subnets-menu.php:116
 msgid "Associated VRFs"
 msgstr "Assoziierte VRF-Instanzen"
@@ -11341,7 +11350,8 @@ msgid "Invalid search string"
 msgstr "Ung&uuml;ltige Sucheingabe"
 
 #: app/tools/changelog/changelog-print.php:33
-#: functions/classes/class.Table.php:76
+#: functions/classes/class.Log.php:1481 functions/classes/class.Log.php:1635
+#: functions/classes/class.Log.php:1687 functions/classes/class.Table.php:76
 msgid "Invalid limit"
 msgstr "Ung&uuml;ltige Grenze"
 
@@ -13723,6 +13733,7 @@ msgstr "aufgelöst"
 
 #: functions/classes/class.Addresses.php:698
 #: functions/classes/class.Addresses.php:700
+#: functions/classes/class.Log.php:1889 functions/classes/class.Log.php:1891
 msgid "Mailer Error"
 msgstr "Fehler E-Mail-Versand"
 
@@ -13751,7 +13762,7 @@ msgstr " ist keine g&uuml;ltige Adresse f&uuml;r Subnetz "
 msgid "Object is Natted"
 msgstr "Objekt ist NAT'ed"
 
-#: functions/classes/class.Admin.php:187 functions/classes/class.Admin.php:193
+#: functions/classes/class.Admin.php:187
 msgid "object creation"
 msgstr "Objekt Erstellung"
 
@@ -13762,6 +13773,14 @@ msgstr "Fehler beim Anlegen neue"
 #: functions/classes/class.Admin.php:187
 msgid "database object"
 msgstr "als Datenbank Objekt"
+
+#: functions/classes/class.Admin.php:193
+msgid "Object creation"
+msgstr "Erstellung Objekt"
+
+#: functions/classes/class.Admin.php:193
+msgid "A new"
+msgstr "Ein neues"
 
 #: functions/classes/class.Admin.php:193
 msgid "database object created"
@@ -13778,7 +13797,6 @@ msgstr "Fehler beim Bearbeiten des Objektes"
 
 #: functions/classes/class.Admin.php:217 functions/classes/class.Admin.php:223
 #: functions/classes/class.Admin.php:270 functions/classes/class.Admin.php:277
-#| msgid "Link"
 msgid "in"
 msgstr "in"
 
@@ -13807,19 +13825,15 @@ msgid "items replaced successfully"
 msgstr "Eintr&auml;ge erfolgreich ersetzt"
 
 #: functions/classes/class.Admin.php:625
-msgid "No records found to replace"
-msgstr "Keine Eintr&auml;ge zum Ersetzen gefunden"
+msgid "No records found to replace."
+msgstr "Keine Eintr&auml;ge zum Ersetzen gefunden."
 
 #: functions/classes/class.Admin.php:669
 msgid "Invalid custom field type"
 msgstr "Ung&uuml;ltiger benutzerspezifischer Feldtyp"
 
-#: functions/classes/class.Admin.php:716
+#: functions/classes/class.Admin.php:716 functions/classes/class.Admin.php:720
 msgid "Custom field"
-msgstr "Benutzerdefiniertes Feld"
-
-#: functions/classes/class.Admin.php:716
-msgid "Custom Field"
 msgstr "Benutzerdefiniertes Feld"
 
 #: functions/classes/class.Common.php:1068
@@ -14115,17 +14129,67 @@ msgstr "Ung&uuml;ltiger Tabellenname"
 msgid "Invalid log command"
 msgstr "Ung&uuml;ltiges Log Kommando"
 
+#: functions/classes/class.Log.php:603
+msgid "Invalid logcount value"
+msgstr "Ung&uuml;ltiger Wert f&uuml;r Log Eintr&auml;ge"
+
+#: functions/classes/class.Log.php:606
+msgid "Invalid direction"
+msgstr "Ung&uuml;ltige Richtung"
+
+#: functions/classes/class.Log.php:758
+msgid "Subnet truncated"
+msgstr "Subnetz verkleinert"
+
+#: functions/classes/class.Log.php:761
+msgid "Subnet resized"
+msgstr "Subnetzgr&ouml;&szlig;e ge&auml;ndert"
+
+#: functions/classes/class.Log.php:1792
+msgid "The following change was made on ipam"
+msgstr "Die folgende &Auml;nderung wurde in IPAM durchgef&uuml;hrt"
+
+#: functions/classes/class.Log.php:1841
+msgid "Object type"
+msgstr "Objekttyp"
+
+#: functions/classes/class.Log.php:1842
+msgid "Object details"
+msgstr "Objektdetails"
+
 #: functions/classes/class.Mail.php:62
 msgid "PHPMailer submodule is missing."
 msgstr "PHPMailer Submodul fehlt."
+
+#: functions/classes/class.Mail.php:258
+msgid ""
+"This email was automatically generated. You can change your notification "
+"settings in account details"
+msgstr ""
+"Diese E-Mail wurde automatisch generiert. Sie können Ihre "
+"Benachrichtigungseinstellungen in den Kontodetails &auml;ndern"
 
 #: functions/classes/class.Password_check.php:146
 msgid "Password is too short"
 msgstr "Passwort ist zu kurz"
 
+#: functions/classes/class.Password_check.php:146
+#: functions/classes/class.Password_check.php:170
+#: functions/classes/class.Password_check.php:182
+#: functions/classes/class.Password_check.php:194
+#: functions/classes/class.Password_check.php:205
+#: functions/classes/class.Password_check.php:219
+msgid "minimum"
+msgstr "Minimall&auml;nge"
+
 #: functions/classes/class.Password_check.php:158
 msgid "Password is too long"
 msgstr "Passwort ist zu lang"
+
+#: functions/classes/class.Password_check.php:158
+#: functions/classes/class.Password_check.php:233
+msgid "maximum"
+msgstr "Maximall&auml;ge"
 
 #: functions/classes/class.Password_check.php:170
 msgid "Not enough numbers"
@@ -14155,9 +14219,61 @@ msgstr "Zu viele Sondersymbole"
 msgid "Invalid character"
 msgstr "Ung&uuml;ltiges Zeichen"
 
+#: functions/classes/class.PowerDNS.php:376
+#: functions/classes/class.PowerDNS.php:381
+msgid "PowerDNS domain create"
+msgstr "Erstellung PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:376
+msgid "Failed to create PowerDNS domain"
+msgstr "Fehler beim Anlegen der PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:381
+msgid "New PowerDNS domain created"
+msgstr "Neue PowerDNS Dom&auml;ne erstellt"
+
+#: functions/classes/class.PowerDNS.php:401
+msgid "PowerDNS domain edit"
+msgstr "Bearbeiten PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:401
+msgid "Failed to edit PowerDNS domain"
+msgstr "Fehler beim Bearbeiten der PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:425
+#: functions/classes/class.PowerDNS.php:430
+msgid "PowerDNS domain delete"
+msgstr "L&ouml;schen PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:425
+msgid "Failed to delete PowerDNS domain"
+msgstr "Fehler beim Löschen der PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:430
+msgid "PowerDNS domain deleted"
+msgstr "PowerDNS Dom&auml;ne gel&ouml;scht"
+
+#: functions/classes/class.PowerDNS.php:815
+#: functions/classes/class.PowerDNS.php:820
+msgid "PowerDNS record create"
+msgstr "Erstellung PowerDNS Dom&auml;nen Eintrag"
+
+#: functions/classes/class.PowerDNS.php:815
+msgid "Failed to create PowerDNS domain record"
+msgstr "Fehler beim Erstellen des Erstellung PowerDNS Dom&auml;nen Eintrages"
+
+#: functions/classes/class.PowerDNS.php:820
+msgid "New PowerDNS domain record created"
+msgstr "Neuer PowerDNS Dom&auml;nen Eintrag erstellt"
+
 #: functions/classes/class.PowerDNS.php:825
 msgid "Record created"
 msgstr "Eintrag erstellt"
+
+#: functions/classes/class.PowerDNS.php:847
+#: functions/classes/class.PowerDNS.php:884
+msgid "Invalid domain id"
+msgstr "Ung&uuml;ltige Dom&auml;nen-ID"
 
 #: functions/classes/class.PowerDNS.php:866
 msgid "Record updated"
@@ -14166,6 +14282,40 @@ msgstr "Eintrag aktualisiert"
 #: functions/classes/class.PowerDNS.php:893
 msgid "Record deleted"
 msgstr "Eintrag gel&ouml;scht"
+
+#: functions/classes/class.PowerDNS.php:915
+#: functions/classes/class.PowerDNS.php:920
+msgid "PowerDNS record delete"
+msgstr "L&ouml:schen PowerDNS Dom&auml;nen Eintrag"
+
+#: functions/classes/class.PowerDNS.php:915
+msgid "Failed to delete PowerDNS domain record"
+msgstr "Fehler beim L&ouml;schen des PowerDNS Dom&auml;nen Eintrages"
+
+#: functions/classes/class.PowerDNS.php:920
+msgid "PowerDNS domain record deleted"
+msgstr "PowerDNS Dom&auml;nen Eintrag ghel&ouml:scht"
+
+#: functions/classes/class.PowerDNS.php:960
+#: functions/classes/class.PowerDNS.php:965
+msgid "PowerDNS record update"
+msgstr "Aktualisierung PowerDNS Dom&auml;nen Eintrag"
+
+#: functions/classes/class.PowerDNS.php:960
+msgid "Failed to update PowerDNS domain record"
+msgstr "Fehler beim Aktualisieren des PowerDNS Dom&auml;nen Eintrages"
+
+#: functions/classes/class.PowerDNS.php:965
+msgid "PowerDNS domain record updated"
+msgstr "PTR-Eintrag aktualisiertPowerDNS Dom&auml;nen Eintrag aktualisiert"
+
+#: functions/classes/class.PowerDNS.php:1057
+msgid "Invalid NS"
+msgstr "Ung&uuml;ltiger NS"
+
+#: functions/classes/class.PowerDNS.php:1071
+msgid "Default records created"
+msgstr "Standard Eintr&auml;ge erstellt"
 
 #: functions/classes/class.PowerDNS.php:1146
 msgid "A record must be an IP address"
@@ -14191,9 +14341,71 @@ msgstr "Ung&uuml;ltiger Eintragsname"
 msgid "Invalid record type"
 msgstr "Ung&uuml;ltiger Eintragstyp"
 
+#: functions/classes/class.PowerDNS.php:1241
+msgid "Invalid TTL"
+msgstr "Ung&uuml;ltige TTL"
+
+#: functions/classes/class.PowerDNS.php:1243
+msgid "TTL range is from 0 to 2147483647"
+msgstr "Der TTL-Bereich reicht von 0 bis 2147483647"
+
+#: functions/classes/class.PowerDNS.php:1257
+msgid "Invalid NXDOMAIN TTL"
+msgstr "Ung&uuml;ltige NXDOMAIN TTL"
+
+#: functions/classes/class.PowerDNS.php:1259
+msgid "NXDOMAIN TTL range is from 0 to 10800"
+msgstr "Der NXDOMAIN TTL-Bereich reicht von 0 bis 10800"
+
+#: functions/classes/class.PowerDNS.php:1273
+msgid "Invalid refresh TTL"
+msgstr "Ung&uuml;ltiger Wiederholungswert TTL"
+
+#: functions/classes/class.PowerDNS.php:1275
+msgid "Refresh TTL range is from 1200 to 2147483647"
+msgstr "Der TTL-Aktualisierungsbereich reicht von 1200 bis 2147483647"
+
+#: functions/classes/class.PowerDNS.php:1290
+msgid "Invalid priority value"
+msgstr "Ung&uuml;ltiger Priorit&auml;tswert"
+
+#: functions/classes/class.PowerDNS.php:1292
+msgid "Priority range is from 0 to 1000"
+msgstr "Der Priorit&auml;tsbereich reicht von 0 bis 1000"
+
+#: functions/classes/class.PowerDNS.php:1308
+msgid "Invalid integer value"
+msgstr "Ung&uuml;ltiger ganzzahliger Wert"
+
+#: functions/classes/class.PowerDNS.php:1377
+#: functions/classes/class.PowerDNS.php:1382
+msgid "PowerDNS domain truncate"
+msgstr "Verkleinerung PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:1377
+msgid "Failed to remove all PowerDNS domain records"
+msgstr "Fehler beim Entfernen aller PowerDNS Dom&auml;en Einträge"
+
+#: functions/classes/class.PowerDNS.php:1382
+msgid "PowerDNS domain records truncated"
+msgstr "PowerDNS Dom&auml;en Eintr&auml;ge verkleinert"
+
 #: functions/classes/class.PowerDNS.php:1385
 msgid "All records for domain removed"
 msgstr "Alle Eintr&auml;ge f&uuml;r die Dom&auml;ne gel&ouml;scht"
+
+#: functions/classes/class.PowerDNS.php:1569
+#: functions/classes/class.PowerDNS.php:1574
+msgid "PowerDNS records delete"
+msgstr "L&ouml:schen PowerDNS Dom&auml;nen Eintr&auml;ge"
+
+#: functions/classes/class.PowerDNS.php:1569
+msgid "Failed to delete all PowerDNS domain PTR records"
+msgstr "Fehler beim L&ouml;schen der PowerDNS Dom&auml;en PTR-Eintr&auml;ge"
+
+#: functions/classes/class.PowerDNS.php:1574
+msgid "All PTR records for PowerDNS removed"
+msgstr "Alle PTR-Eintr&auml;ge f&uuml;r PowerDNS gel&ouml;scht"
 
 #: functions/classes/class.Result.php:83
 msgid "OK"
@@ -14267,13 +14479,40 @@ msgstr "SNMP-Antwort \"Typ: Wert\" nicht gelesen werden"
 msgid "Unable to process SNMP value"
 msgstr "SNMP-Wert kann nicht verarbeitet werden"
 
+#: functions/classes/class.Scan.php:161 functions/classes/class.Scan.php:162
+msgid "Invalid scan method."
+msgstr "Ung&uuml;ltige Suchmethode."
+
 #: functions/classes/class.Scan.php:534
 msgid "Invalid ping path"
 msgstr "Ung&uuml;ltiger Ping Pfad"
 
 #: functions/classes/class.Scan.php:556
-msgid "Failed to update address status"
-msgstr "Statusaktualisierung der Adresse fehlgeschlagen"
+msgid "Status update"
+msgstr "Statusaktualisierung"
+
+#: functions/classes/class.Scan.php:556
+msgid "Failed to update address status."
+msgstr "Statusaktualisierung der Adresse fehlgeschlagen."
+
+#: functions/classes/class.Scan.php:704
+msgid "Invalid scan type provided."
+msgstr "Ung&uuml;ltiger Suchtyp angegeben."
+
+#: functions/classes/class.Scan.php:721
+msgid "Invalid subnet ID provided."
+msgstr "Ung&uuml;ltige Subnetz-ID angegeben."
+
+#: functions/classes/class.Scan.php:727
+msgid ""
+"Scanning from GUI is only available for subnets up to /20 or 4096 hosts!"
+msgstr ""
+"Das Suchen in der GUI ist nur f&uuml;r Subnetze bis /20 oder 4096 Hosts "
+"verf&uuml;gbar!"
+
+#: functions/classes/class.Scan.php:788
+msgid "Didn't find any address to scan!"
+msgstr "Keine Adresse zum Suchen gefunden!"
 
 #: functions/classes/class.Sections.php:558
 msgid "Add new subnet to section"
@@ -14641,3 +14880,9 @@ msgstr "Fehler beim L&ouml;schen der Logs"
 #: functions/scripts/clear_logs.php:28
 msgid "Changelogs cleared successfully"
 msgstr "Logs wurden erfolgreich gel&ouml;scht"
+
+#~ msgid "Custom Field"
+#~ msgstr "Benutzerdefiniertes Feld"
+
+#~ msgid "No value provided"
+#~ msgstr "Kein Wert vorgegeben"
