@@ -198,7 +198,7 @@ $(document).ready(function () {
 
     // fetch
     $(document).on('click', ".fetch_certificate",  function () {
-        $.post("app/admin/vaults/fetch_website_certificate.php", {"website": $("input[name=website]").val()}, function(data) {
+        $.post("app/admin/vaults/fetch_website_certificate.php", {"website": $("input[name=website]").val(),"verify_peer": $('#verify_peer').is(':checked')}, function(data) {
             // check for error
             if(data.indexOf("Error") !== -1 || data.indexOf("Warning") !== -1 || data.indexOf("alert-danger") !== -1) {
                 // print error
