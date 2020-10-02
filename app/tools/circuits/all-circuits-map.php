@@ -1,19 +1,16 @@
 <?php
 
-# Check we have been included and not called directly
-require( dirname(__FILE__) . '/../../../functions/include-only.php' );
-
 #
 # Prints map of all Circuits
 #
 
 # perm check
-$User->check_module_permissions ("circuits", User::ACCESS_R, true, false);
+$User->check_module_permissions ("circuits", 1, true, false);
 
 # title
 if(isset($_GET['map_specific']) && $_GET['map_specific'] == 'true'){
     print "<h3>"._('Map of circuits')."</h3>";
-    $circuits_to_map = json_decode($_GET['circuits_to_map'], true);
+    $circuits_to_map = unserialize($_GET['circuits_to_map']);
 }else{
     print "<h3>"._('Map of all circuits')."</h3>";
 }
@@ -31,11 +28,16 @@ foreach($circuit_types as $t){
 //This will elimate the need of looping through circuits the first time
 $locations = $Tools->fetch_all_objects("locations");
 $all_locations = [];
-
 foreach($locations as $l){ $all_locations[$l->id] = $l; }
 
+$devices = $Tools->fetch_all_objects("devices");
+$all_devices = [];
+foreach($devices as $de){ $all_devices[$de->id] = $de; }
+
+
+
 // check
-if ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))==0) {
+if ($User->settings->enableLocations=="1" && strlen(Config::get('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
 }
 //elseif ($locA->name!=="/" && $locB->name!=="/") { ?
@@ -66,14 +68,14 @@ elseif(true) {
 
     // print
     if (sizeof($all_locations)>0) { ?>
-        <script>
+        <script type="text/javascript">
             $(document).ready(function() {
                 // init gmaps
                 var map = new GMaps({
-                  div: '#gmap',
-                  zoom: 15,
-                  lat: '<?php print $all_locations[0]->lat; ?>',
-                  lng: '<?php print $all_locations[0]->long; ?>'
+                    div: '#gmap',
+                    zoom: 15,
+                    lat: '<?php print $all_locations[0]->lat; ?>',
+                    lng: '<?php print $all_locations[0]->long; ?>'
                 });
 
                 var bounds = [];
@@ -81,7 +83,7 @@ elseif(true) {
                     path: 'M 0,-1 0,1',
                     strokeOpacity: 1,
                     scale: 4
-                      };
+                };
 
 
 
@@ -128,25 +130,25 @@ elseif(true) {
                 }
                 //Add all circuits to map with type information
                 foreach ($circuits as $circuit) {
-                  //If map_spepcifc is set and its in the array OR it isn't set, map all
-                  if((isset($_GET['map_specific']) && in_array($circuit->id,$circuits_to_map)) || (!isset($_GET['map_specific']))){
-                    $html[] = "path = [[".$all_locations[$circuit->location1]->lat.", ".$all_locations[$circuit->location1]->long."], [".$all_locations[$circuit->location2]->lat.", ".$all_locations[$circuit->location2]->long."]]";
-                    $html[] = "map.drawPolyline({";
-                    $html[] = "  path: path,";
-                    $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
-                    if($type_hash[$circuit->type]->ctpattern == "Dotted") { $html[] = "  strokeOpacity: 0,"; }
-                    else{ $html[] = "  strokeOpacity: 0.6,"; }
-                    if($type_hash[$circuit->type]->ctpattern == "Dotted") {
-                      $html[] = " icons:[{
+                    //If map_spepcifc is set and its in the array OR it isn't set, map all
+                    if((isset($_GET['map_specific']) && in_array($circuit->id,$circuits_to_map)) || (!isset($_GET['map_specific']))){
+                        $html[] = "path = [[".$all_locations[$all_devices[$circuit->device1]->location]->lat.", ".$all_locations[$all_devices[$circuit->device1]->location]->long."], [".$all_locations[$all_devices[$circuit->device2]->location]->lat.", ".$all_locations[$all_devices[$circuit->device2]->location]->long."]]";
+                        $html[] = "map.drawPolyline({";
+                        $html[] = "  path: path,";
+                        $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
+                        if($type_hash[$circuit->type]->ctpattern == "Dotted") { $html[] = "  strokeOpacity: 0,"; }
+                        else{ $html[] = "  strokeOpacity: 0.6,"; }
+                        if($type_hash[$circuit->type]->ctpattern == "Dotted") {
+                            $html[] = " icons:[{
                         icon: lineSymbol,
                         offset: '0',
                         repeat: '20px'
                         }],"; }
-                    $html[] = "  strokeWeight: 3";
-                    $html[] = "});";
+                        $html[] = "  strokeWeight: 3";
+                        $html[] = "});";
 
-                    print implode("\n", $html);
-                  }
+                        print implode("\n", $html);
+                    }
                 }
                 ?>
 
@@ -169,7 +171,7 @@ elseif(true) {
         </script>
 
         <div style="width:100%; height:<?php print isset($height) ? $height : "1000px";?>;" id="map_overlay">
-        	<div id="gmap" style="width:100%; height:100%;"></div>
+            <div id="gmap" style="width:100%; height:100%;"></div>
         </div>
 
 
@@ -178,18 +180,18 @@ elseif(true) {
         print "<div class='text-right'>";
         print "<h5>"._('Circuit Type Legend')."</h5>";
         foreach($circuit_types as $t){
-          print "<span class='badge badge1'  style='color:white;background:$t->ctcolor !important'></i>$t->ctname ($t->ctpattern Line)</span>";
+            print "<span class='badge badge1'  style='color:white;background:$t->ctcolor !important'></i>$t->ctname ($t->ctpattern Line)</span>";
         }
         print "</div>";
         ?>
 
         <?php
         # no coordinates
-        }
-        else {
-            $Result->show("info","No Locations with coordinates configured", false);
-        }
+    }
+    else {
+        $Result->show("info","No Locations with coordinates configured", false);
+    }
 }
 else {
-	$Result->show("danger", _("Location not set"), true);
+    $Result->show("danger", _("Location not set"), true);
 }
