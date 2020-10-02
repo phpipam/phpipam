@@ -34,6 +34,11 @@ $all_locations = [];
 
 foreach($locations as $l){ $all_locations[$l->id] = $l; }
 
+$devices = $Tools->fetch_all_objects("devices");
+$all_devices = [];
+
+foreach($devices as $de){ $all_devices[$de->id] = $de; }
+
 // check
 if ($User->settings->enableLocations=="1" && strlen(Config::ValueOf('gmaps_api_key'))==0) {
     $Result->show("info text-center nomargin", _("Location: Google Maps API key is unset. Please configure config.php \$gmaps_api_key to enable."));
@@ -130,7 +135,7 @@ elseif(true) {
                 foreach ($circuits as $circuit) {
                   //If map_spepcifc is set and its in the array OR it isn't set, map all
                   if((isset($_GET['map_specific']) && in_array($circuit->id,$circuits_to_map)) || (!isset($_GET['map_specific']))){
-                    $html[] = "path = [[".$all_locations[$circuit->location1]->lat.", ".$all_locations[$circuit->location1]->long."], [".$all_locations[$circuit->location2]->lat.", ".$all_locations[$circuit->location2]->long."]]";
+                    $html[] = "path = [[".$all_locations[$all_devices[$circuit->device1]->location]->lat.", ".$all_locations[$all_devices[$circuit->device1]->location]->long."], [".$all_locations[$all_devices[$circuit->device2]->location]->lat.", ".$all_locations[$all_devices[$circuit->device2]->location]->long."]]";
                     $html[] = "map.drawPolyline({";
                     $html[] = "  path: path,";
                     $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
