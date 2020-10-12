@@ -4,7 +4,7 @@
         "Pipeline": "poc-vault"
     },
     "Git": {
-        "Ref": "refs/heads/devops/k8s",
+        "Ref": "refs/heads/master",
         "Revision": "",
         "URL": "https://github.com/umg/phpipam.git"
     },
