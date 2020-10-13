@@ -4,13 +4,13 @@
         "Pipeline": "poc-vault"
     },
     "Git": {
-        "Ref": "refs/heads/master",
+        "Ref": "refs/heads/umg-1.0",
         "Revision": "",
         "URL": "https://github.com/umg/phpipam.git"
     },
     "Image": {
         "URL": "docker-registry.umusic.com/networking/phpipam",
-        "Tag": "v1.4.2-umg-1.0.9",
+        "Tag": "v1.4.2-umg-1.0.10",
         "Dockerfile": "Dockerfile",
         "Context": ""
     },
