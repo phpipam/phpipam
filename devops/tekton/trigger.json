@@ -10,7 +10,7 @@
     },
     "Image": {
         "URL": "docker-registry.umusic.com/networking/phpipam",
-        "Tag": "v1.4.2-umg-1.0.11",
+        "Tag": "v1.4.2-umg-1.0.12",
         "Dockerfile": "Dockerfile",
         "Context": ""
     },
