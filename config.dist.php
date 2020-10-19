@@ -157,9 +157,8 @@ $proxy_use_auth = false;                                  // Enable/Disable Prox
 
 /**
  * Failed access
- * message to log into webserver logs in case of failed access, for further processing by tools like Fail2Ban
- * Apache users should use : user "%u" authentication failure for "phpIPAM"
- * Nginx  users should use : user "%u" was not found in "phpIPAM"
+ * Message to log into webserver logs in case of failed access, for further processing by tools like Fail2Ban
+ * The message can contain a %u parameter which will be replaced with the login user identifier.
  ******************************/
 // $failed_access_message = '';
 
