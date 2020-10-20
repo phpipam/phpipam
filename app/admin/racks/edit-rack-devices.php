@@ -75,7 +75,7 @@ if ($_POST['action']=="remove") {
 # add to rack
 else {
     # create csrf token
-    $csrf = $User->Crypto->csrf_cookie ("create", "rack_devices");
+    $csrf = $User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices");
     # fetch rack details
     $rack = $Admin->fetch_object("racks", "id", $_POST['rackid']);
     # check

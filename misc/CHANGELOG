@@ -4,6 +4,7 @@
     + Fix generated functions/upgrade_queries.php queries (#3130);
     + Table layout not aligned (#3105,#3113);
     + Invalid scan type () error (#2785);
+    + Invalid CSRF cookie editing rack items (#2556);
 
     Security Fixes:
     ----------------------------
