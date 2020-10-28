@@ -193,6 +193,11 @@ class User extends Common_functions {
      * @return [type]
      */
     private function start_session () {
+        $options = ["path"=>"/",
+                    "httponly"=>true,
+                    "samesite"=>"Strict"];
+        session_set_cookie_params($options);
+
         // check if database should be set for sessions
         if (Config::get('session_storage') == "database") {
             new Session_db ($this->Database);
@@ -456,8 +461,26 @@ class User extends Common_functions {
      */
     private function set_redirect_cookie () {
         # save current redirect vaule
-        if($_SERVER['SCRIPT_URL']!="/login/" && $_SERVER['SCRIPT_URL']!="logout" && $_SERVER['SCRIPT_URL']!="?page=login" && $_SERVER['SCRIPT_URL']!="?page=logout" && $_SERVER['SCRIPT_URL']!="index.php?page=login" && $_SERVER['SCRIPT_URL']!="index.php?page=logout" && $_SERVER['SCRIPT_URL']!="/" && $_SERVER['SCRIPT_URL']!="%2f");
-        setcookie("phpipamredirect", preg_replace('/^\/+/', '/', $_SERVER['REQUEST_URI']), time()+10, "/", null, null, true);
+        if( $_SERVER['SCRIPT_URL']=="/login/" ||
+            $_SERVER['SCRIPT_URL']=="logout" ||
+            $_SERVER['SCRIPT_URL']=="?page=login" ||
+            $_SERVER['SCRIPT_URL']=="?page=logout" ||
+            $_SERVER['SCRIPT_URL']=="index.php?page=login" ||
+            $_SERVER['SCRIPT_URL']=="index.php?page=logout" ||
+            $_SERVER['SCRIPT_URL']=="/" ||
+            $_SERVER['SCRIPT_URL']=="%2f")
+        {
+            return;
+        }
+
+        $uri = is_string($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : $_SERVER['REQUEST_URI'];
+
+        $options = ["expires"  => time()+10,
+                    "path"     => '/',
+                    "httponly" => true,
+                    "samesite" => "Strict"];
+
+        setcookie("phpipamredirect", preg_replace('/^\/+/', '/', $uri), $options);
     }
 
     /**
