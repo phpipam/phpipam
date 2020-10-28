@@ -37,7 +37,11 @@ class Table extends Common_functions {
     }
 
     private function set_display_limit_cookie () {
-         setcookie("table-page-size", $this->limit, time()+2592000, "/", null, null, true);
+        $options = ["expires"  => time()+2592000,
+                    "path"     => '/',
+                    "httponly" => true,
+                    "samesite" => "Strict"];
+        setcookie("table-page-size", $this->limit, $options);
     }
 
 
