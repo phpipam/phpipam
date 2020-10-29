@@ -193,11 +193,6 @@ class User extends Common_functions {
      * @return [type]
      */
     private function start_session () {
-        $options = ["path"=>"/",
-                    "httponly"=>true,
-                    "samesite"=>"Strict"];
-        session_set_cookie_params($options);
-
         // check if database should be set for sessions
         if (Config::ValueOf('session_storage') == "database") {
             new Session_db ($this->Database);
@@ -206,6 +201,17 @@ class User extends Common_functions {
         else {
             session_start ();
         }
+
+        // Re-set HTTP session cookie with mandatory samesite=Strict attribute.
+        // php native support for samesite is >=php7.3
+
+        $session_name = session_name();
+        $session_id = session_id();
+        $session_lifetime = ini_get('session.cookie_lifetime');
+        $session_use_cookies  = ini_get('session.use_cookies');
+
+        if ($session_use_cookies && is_string($session_id) && strlen($session_id) > 0)
+            setcookie_samesite($session_name, $session_id, $session_lifetime, true, $this->IsHttps());
     }
 
     /**
@@ -475,12 +481,7 @@ class User extends Common_functions {
 
         $uri = is_string($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : $_SERVER['REQUEST_URI'];
 
-        $options = ["expires"  => time()+10,
-                    "path"     => '/',
-                    "httponly" => true,
-                    "samesite" => "Strict"];
-
-        setcookie("phpipamredirect", preg_replace('/^\/+/', '/', $uri), $options);
+        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true, $this->isHttps());
     }
 
     /**

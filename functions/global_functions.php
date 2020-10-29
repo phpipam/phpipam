@@ -187,3 +187,34 @@ function set_ui_language($default_lang = null) {
 
 	return false;
 }
+
+/**
+ * Set HTTP cookie with samesite=Strict attribute
+ * Required to support php <7.3 and modern browsers
+ *
+ * @param   string $name
+ * @param   mixed $value
+ * @param   int $expires
+ * @param   bool $httponly
+ * @param   bool $secure
+ * @return  void
+ */
+function setcookie_samesite($name, $value, $lifetime, $httponly=false, $secure=false) {
+
+	$lifetime = (int) $lifetime;
+
+	# Manually set cookie via header, php native support for samesite attribute is >=php7.3
+
+	$name = urlencode($name);
+	$value = urlencode($value);
+
+	$tz = date_default_timezone_get();
+	date_default_timezone_set('UTC');
+	$expire_date = date('r', time()+$lifetime);
+	date_default_timezone_set($tz);
+
+	$httponly = ($httponly===true) ? ' HttpOnly;' : '';
+	$secure   = ($secure===true)   ? ' Secure;'   : '';
+
+	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=Strict;".$httponly.$secure);
+}
