@@ -1,4 +1,9 @@
 == 1.4.2
+
+    Enhancements, changes:
+    ----------------------------
+    + SameSite=Strict enabled on site cookies;
+
     Bugfixes:
     ----------------------------
     + Fix generated functions/upgrade_queries.php queries (#3130);

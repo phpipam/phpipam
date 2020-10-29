@@ -62,11 +62,7 @@ else {
 
 		# set default pagesize
 		if(!isset($_COOKIE['table-page-size'])) {
-			$options = ["expires"  => time()+2592000,
-						"path"     => '/',
-						"httponly" => false,
-						"samesite" => "Strict"];
-			setcookie("table-page-size", 50, $options);
+			setcookie_samesite("table-page-size", 50, 2592000, false, $User->isHttps());
 		}
 	?>
 	<!DOCTYPE HTML>
