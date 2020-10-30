@@ -2,7 +2,7 @@
 
     Enhancements, changes:
     ----------------------------
-    + SameSite=Strict enabled on site cookies;
+    + SameSite attribute enabled for site cookies;
 
     Bugfixes:
     ----------------------------

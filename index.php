@@ -62,7 +62,7 @@ else {
 
 		# set default pagesize
 		if(!isset($_COOKIE['table-page-size'])) {
-			setcookie_samesite("table-page-size", 50, 2592000, false, $User->isHttps());
+			$User->setcookie_samesite("table-page-size", 50, 2592000, false);
 		}
 	?>
 	<!DOCTYPE HTML>
