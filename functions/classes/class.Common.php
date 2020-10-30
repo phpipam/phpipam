@@ -684,6 +684,39 @@ class Common_functions  {
 	}
 
 	/**
+	 * Set HTTP cookie with mandatory samesite attribute
+	 * Required to support php <7.3 and modern browsers
+	 *
+	 * @param   string $name
+	 * @param   mixed $value
+	 * @param   int $lifetime
+	 * @param   bool $httponly
+	 * @return  void
+	 */
+	public function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
+
+		$lifetime = (int) $lifetime;
+
+		# Manually set cookie via header, php native support for samesite attribute is >=php7.3
+
+		$name = urlencode($name);
+		$value = urlencode($value);
+
+		$tz = date_default_timezone_get();
+		date_default_timezone_set('UTC');
+		$expire_date = date('r', time()+$lifetime);
+		date_default_timezone_set($tz);
+
+		$samesite = Config::ValueOf("cookie_samesite", "Lax");
+		if (!in_array($samesite, ["None", "Lax", "Secure"])) $samesite="Lax";
+
+		$httponly = ($httponly===true) ? ' HttpOnly;' : '';
+		$secure   = $this->IsHttps()   ? ' Secure;'   : '';
+
+		header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$httponly.$secure);
+	}
+
+	/**
 	 * Changes empty array fields to specified character
 	 *
 	 * @access public

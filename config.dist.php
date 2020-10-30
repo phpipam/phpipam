@@ -100,6 +100,13 @@ $api_allow_unsafe = false;
  ******************************/
 $phpsessname = "phpipam";
 
+/**
+ * Cookie SameSite settings ("None", "Lax"=Default, "Strict")
+ * - "Strict" increases security
+ * - "Lax" required for SAML2
+ * - "None" requires HTTPS
+ */
+$cookie_samesite = "Lax";
 
 /**
  * Session storage - files or database

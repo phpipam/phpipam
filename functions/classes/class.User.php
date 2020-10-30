@@ -211,7 +211,7 @@ class User extends Common_functions {
         $session_use_cookies  = ini_get('session.use_cookies');
 
         if ($session_use_cookies && is_string($session_id) && strlen($session_id) > 0)
-            setcookie_samesite($session_name, $session_id, $session_lifetime, true, $this->IsHttps());
+            $this->setcookie_samesite($session_name, $session_id, $session_lifetime, true);
     }
 
     /**
@@ -481,7 +481,7 @@ class User extends Common_functions {
 
         $uri = is_string($_SERVER['HTTP_X_FORWARDED_URI']) ? $_SERVER['HTTP_X_FORWARDED_URI'] : $_SERVER['REQUEST_URI'];
 
-        setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true, $this->isHttps());
+        $this->setcookie_samesite("phpipamredirect", preg_replace('/^\/+/', '/', $uri), 10, true);
     }
 
     /**
