@@ -1342,6 +1342,8 @@ class Common_functions  {
 		if($this->address_types == null) {
 			# fetch
 			$types = $this->fetch_all_objects ("ipTags", "id");
+			if (!is_array($types))
+				return;
 
 			# save to array
 			$types_out = array();
