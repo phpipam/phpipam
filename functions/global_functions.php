@@ -176,7 +176,7 @@ function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
 	$expire_date = date('r', time()+$lifetime);
 	date_default_timezone_set($tz);
 
-	$samesite = Config::ValueOf("cookie_samesite", "Lax");
+	$samesite = Config::get("cookie_samesite", "Lax");
 	if (!in_array($samesite, ["None", "Lax", "Secure"])) $samesite="Lax";
 
 	$httponly = ($httponly===true) ? ' HttpOnly;' : '';
