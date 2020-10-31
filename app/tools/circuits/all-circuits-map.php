@@ -130,7 +130,23 @@ elseif(true) {
                 foreach ($circuits as $circuit) {
                   //If map_spepcifc is set and its in the array OR it isn't set, map all
                   if((isset($_GET['map_specific']) && in_array($circuit->id,$circuits_to_map)) || (!isset($_GET['map_specific']))){
-                    $html[] = "path = [[".$all_locations[$circuit->location1]->lat.", ".$all_locations[$circuit->location1]->long."], [".$all_locations[$circuit->location2]->lat.", ".$all_locations[$circuit->location2]->long."]]";
+
+                    // Reformat circuit location
+                    // result will be false or array
+                    $rcl1 = $Tools->reformat_circuit_location($circuit->device1, $circuit->location1);
+                    $rcl2 = $Tools->reformat_circuit_location($circuit->device2, $circuit->location2);
+
+                    if (!is_array($rcl1) || !is_array($rcl2))
+                        continue;
+
+                    // Convert location id to location object
+                    $circuit_l1 = $all_locations[$rcl1[0]->location];
+                    $circuit_l2 = $all_locations[$rcl2[0]->location];
+
+                    if (!is_object($circuit_l1) || !is_object($circuit_l2))
+                        continue;
+
+                    $html[] = "path = [[".$circuit_l1->lat.", ".$circuit_l1->long."], [".$circuit_l2->lat.", ".$circuit_l2->long."]]";
                     $html[] = "map.drawPolyline({";
                     $html[] = "  path: path,";
                     $html[] = "  strokeColor: '".$type_hash[$circuit->type]->ctcolor."',";
