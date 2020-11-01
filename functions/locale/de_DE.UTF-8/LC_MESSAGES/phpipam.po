@@ -4,8 +4,8 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2020.
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
-# "POT-Creation-Date: 2020-09-19 11:17+0200\n"
-# "PO-Revision-Date: 2020-10-01 18:31+0200\n"
+# "POT-Creation-Date: 2020-11-01 10:14+0100\n"
+# "PO-Revision-Date: 2020-11-01 10:14+0100\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
 # "MIME-Version: 1.0\n"
@@ -398,7 +398,7 @@ msgstr "Ger&auml;te Verwaltung"
 #: app/tools/tools-menu-config.php:83 app/tools/tools-menu-config.php:84
 #: app/tools/tools-menu-config.php:86 app/tools/tools-menu-config.php:88
 #: app/tools/tools-menu-config.php:90 app/tools/tools-menu-config.php:91
-#: functions/classes/class.Common.php:1981
+#: functions/classes/class.Common.php:1983
 msgid "Tools"
 msgstr "Tools"
 
@@ -585,9 +585,10 @@ msgstr "Verwaltung Bereiche"
 #: app/tools/tools-menu-config.php:110 app/tools/tools-menu-config.php:111
 #: app/tools/tools-menu-config.php:113 app/tools/tools-menu-config.php:114
 #: app/tools/tools-menu-config.php:115 app/tools/tools-menu-config.php:117
-#: functions/classes/class.Common.php:2033
+#: functions/classes/class.Common.php:2035
 #: functions/classes/class.FirewallZones.php:577
-#: functions/classes/class.Subnets.php:3265
+#: functions/classes/class.Subnets.php:3362
+#: functions/classes/class.Tools.php:3211
 msgid "Subnets"
 msgstr "Subnetze"
 
@@ -627,6 +628,7 @@ msgstr "Verwaltung Subnetze"
 #: app/vlan/vlan-subnets.php:18 app/vlan/vlan-subnets.php:25
 #: functions/classes/class.FirewallZones.php:580
 #: functions/classes/class.Sections.php:569
+#: functions/classes/class.Tools.php:3213
 msgid "VLAN"
 msgstr "VLAN"
 
@@ -658,6 +660,7 @@ msgstr "Verwaltung VLANs"
 #: app/tools/tools-menu-config.php:101 app/tools/vrf/vrf-subnets.php:18
 #: app/tools/vrf/vrf-subnets.php:25 app/vrf/vrf-subnets.php:18
 #: app/vrf/vrf-subnets.php:25 functions/classes/class.Sections.php:571
+#: functions/classes/class.Tools.php:3214
 msgid "VRF"
 msgstr "VRF"
 
@@ -792,6 +795,7 @@ msgstr "Ger&auml;te"
 #: app/tools/customers/customer/objects/racks.php:1
 #: app/tools/racks/index.php:21 app/tools/racks/print-single-rack.php:42
 #: app/tools/racks/print-single-rack.php:65 app/tools/tools-menu-config.php:123
+#: functions/classes/class.Tools.php:3216
 msgid "Racks"
 msgstr "Racks"
 
@@ -809,7 +813,7 @@ msgstr "Verwaltung Racks"
 #: app/tools/devices/device-details/device-details.php:226
 #: app/tools/devices/index.php:66 app/tools/search/index.php:57
 #: app/tools/search/search-results-export.php:479
-#: app/tools/tools-menu-config.php:125
+#: app/tools/tools-menu-config.php:125 functions/classes/class.Tools.php:3215
 msgid "Circuits"
 msgstr "Schaltungen"
 
@@ -1141,13 +1145,13 @@ msgstr "Routing"
 #: app/tools/temp-shares/edit-result.php:23 app/tools/temp-shares/edit.php:23
 #: app/tools/vlan/domain-vlans.php:14 app/tools/vlan/vlan-details.php:16
 #: functions/classes/class.Log.php:1544
-#: functions/classes/class.Subnets.php:3049
-#: functions/classes/class.Subnets.php:3050
-#: functions/classes/class.Subnets.php:3152
-#: functions/classes/class.Subnets.php:3153
-#: functions/classes/class.Subnets.php:3238
-#: functions/classes/class.Subnets.php:3307
-#: functions/classes/class.Subnets.php:3365
+#: functions/classes/class.Subnets.php:3146
+#: functions/classes/class.Subnets.php:3147
+#: functions/classes/class.Subnets.php:3249
+#: functions/classes/class.Subnets.php:3250
+#: functions/classes/class.Subnets.php:3335
+#: functions/classes/class.Subnets.php:3404
+#: functions/classes/class.Subnets.php:3462
 msgid "Invalid ID"
 msgstr "Ung&uuml;ltige ID"
 
@@ -1180,7 +1184,7 @@ msgid "App permissions"
 msgstr "App-Berechtigungen"
 
 #: app/admin/api/edit.php:80 app/admin/api/index.php:65
-#: functions/classes/class.Common.php:1847
+#: functions/classes/class.Common.php:1849
 msgid "Read"
 msgstr "Lesen"
 
@@ -1261,7 +1265,7 @@ msgstr "Transaktionslock"
 #: app/tools/multicast-networks/index.php:228 app/tools/nat/all_nats.php:95
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:137
 #: app/tools/user-menu/account.php:116 app/tools/user-menu/account.php:132
-#: functions/classes/class.Common.php:1695
+#: functions/classes/class.Common.php:1697
 #: functions/classes/class.SubnetsTable.php:164
 #: functions/classes/class.Tools.php:2543
 msgid "No"
@@ -1302,7 +1306,7 @@ msgstr "Kein"
 #: app/tools/multicast-networks/index.php:229
 #: app/tools/pstn-prefixes/single-prefix-numbers.php:138
 #: app/tools/user-menu/account.php:117 app/tools/user-menu/account.php:133
-#: functions/classes/class.Common.php:1693
+#: functions/classes/class.Common.php:1695
 #: functions/classes/class.SubnetsTable.php:165
 #: functions/classes/class.Tools.php:2544
 msgid "Yes"
@@ -2166,8 +2170,8 @@ msgid ""
 "For AD/LDAP/NetIQ connection phpipam is using adLDAP, for documentation "
 "please check "
 msgstr ""
-"F&uuml;r AD/LDAP/NetIQ Verbindungen verwendet phpIPAM adLDAP, f&uuml;r "
-"Dokumentation bitte pr&uuml;fe"
+"F&uuml;r AD, LDAP und NetIQ-Verbindungen verwendet phpIPAM adLDAP, "
+"Dokumentation hierzu ist zu finden unter "
 
 #: app/admin/authentication-methods/index.php:119
 msgid ""
@@ -2727,7 +2731,7 @@ msgstr "Erforderliches Feld"
 #: app/admin/import-export/import-devtype.php:70
 #: app/admin/import-export/import-ipaddr.php:89
 #: app/admin/import-export/import-l2dom.php:70
-#: app/admin/import-export/import-recompute.php:71
+#: app/admin/import-export/import-recompute.php:79
 #: app/admin/import-export/import-subnets.php:86
 #: app/admin/import-export/import-vlan.php:81
 #: app/admin/import-export/import-vrf.php:71 app/admin/nat/cleanup.php:121
@@ -2779,9 +2783,9 @@ msgstr "IP-Adressen"
 #: app/subnets/subnet-details/subnet-changelog.php:144
 #: app/tools/changelog/changelog-print.php:57
 #: app/tools/changelog/show-popup.php:55 functions/classes/class.Log.php:1843
-#: functions/classes/class.User.php:892 functions/classes/class.User.php:928
-#: functions/classes/class.User.php:1021 functions/classes/class.User.php:1033
-#: functions/classes/class.User.php:1134 functions/classes/class.User.php:1163
+#: functions/classes/class.User.php:916 functions/classes/class.User.php:952
+#: functions/classes/class.User.php:1045 functions/classes/class.User.php:1057
+#: functions/classes/class.User.php:1158 functions/classes/class.User.php:1187
 msgid "User"
 msgstr "Benutzer"
 
@@ -2812,7 +2816,7 @@ msgstr "PTSN Nummern"
 msgid "Circuit providers"
 msgstr "Provider f&uuml;r Schaltungen"
 
-#: app/admin/custom-fields/index.php:29
+#: app/admin/custom-fields/index.php:29 functions/classes/class.Tools.php:3217
 msgid "BGP Routing"
 msgstr "BGP Routing"
 
@@ -3181,6 +3185,7 @@ msgid "Invalid timeout"
 msgstr "Ung&uuml;ter Timeout"
 
 #: app/admin/devices/edit-snmp-result.php:41
+#: functions/classes/class.SNMP.php:369
 msgid "Invalid device IP address"
 msgstr "Ung&uuml;ltige Ger&auml;te IP-Adresse"
 
@@ -3374,7 +3379,7 @@ msgstr "DHCP Management"
 #: app/tools/pstn-prefixes/single-prefix.php:17 app/tools/racks/index.php:22
 #: app/tools/routing/index.php:26 app/tools/vlan/index.php:18
 #: app/tools/vrf/index.php:13 app/vlan/index.php:8 app/vrf/index.php:10
-#: functions/classes/class.User.php:1726
+#: functions/classes/class.User.php:1750
 msgid "You do not have permissions to access this module"
 msgstr "Sie haben keine Berechtigung dieses Modul zu benutzen"
 
@@ -3407,9 +3412,7 @@ msgstr ""
 
 #: app/admin/filter-fields/index.php:46
 msgid "Check which fields to use for IP addresses"
-msgstr ""
-"&Uuml;berpr&uuml;fen Sie die Felder, die f&uuml;r IP-Adressen verwendet "
-"werden"
+msgstr "W&auml;en Sie die Felder aus die f&uuml;r IP-Adressen verwendet werden"
 
 #: app/admin/firewall-zones/ajax.php:29
 msgid "Invalid ID."
@@ -3967,6 +3970,10 @@ msgstr ""
 #: app/tools/search/search-results-export.php:286
 #: app/tools/search/search_results/search-results_subnets.php:28
 #: app/tools/vlan/domain-vlans.php:90 app/tools/vlan/vlan-details.php:213
+#: functions/classes/class.Sections.php:141
+#: functions/classes/class.Sections.php:148
+#: functions/classes/class.Sections.php:181
+#: functions/classes/class.Sections.php:190
 msgid "Section"
 msgstr "Bereich"
 
@@ -4015,6 +4022,14 @@ msgstr "Keinen Bereich ausgew&auml;hlt"
 #: functions/classes/class.Addresses.php:672
 #: functions/classes/class.FirewallZones.php:579
 #: functions/classes/class.Sections.php:566
+#: functions/classes/class.Subnets.php:271
+#: functions/classes/class.Subnets.php:313
+#: functions/classes/class.Subnets.php:333
+#: functions/classes/class.Subnets.php:357
+#: functions/classes/class.Subnets.php:2101
+#: functions/classes/class.Subnets.php:2148
+#: functions/classes/class.Subnets.php:2188
+#: functions/classes/class.Subnets.php:2225
 msgid "Subnet"
 msgstr "Subnetz"
 
@@ -4253,7 +4268,7 @@ msgid "Group"
 msgstr "Gruppe"
 
 #: app/admin/groups/edit-group-result.php:78
-#: functions/classes/class.Common.php:1850
+#: functions/classes/class.Common.php:1852
 msgid "error"
 msgstr "fehlerhaft"
 
@@ -4367,7 +4382,10 @@ msgstr "W&auml;hlen Sie die zu exportierenden Felder"
 #: app/admin/import-export/export-devices-field-select.php:55
 #: app/admin/import-export/export-devtype-field-select.php:40
 #: app/admin/import-export/export-devtype.php:51 app/tools/dhcp/subnets.php:94
-#: app/tools/logs/export.php:65
+#: app/tools/logs/export.php:65 functions/classes/class.Subnets.php:330
+#: functions/classes/class.Subnets.php:333
+#: functions/classes/class.Subnets.php:353
+#: functions/classes/class.Subnets.php:357
 msgid "id"
 msgstr "ID"
 
@@ -5081,18 +5099,18 @@ msgstr " in der CSV Datei. CSV-Begrenzer im Wertefeld verwendet?"
 msgid " in XLS file. Please check input file."
 msgstr " in XLS Datei. Bitte &uuml;berpr&uuml;fen Sie die Eingabedatei."
 
-#: app/admin/import-export/import-recompute-logic.php:153
+#: app/admin/import-export/import-recompute-logic.php:67
 #: app/sections/all-sections.php:86 functions/classes/class.Log.php:1177
 #: functions/classes/class.Log.php:1186 functions/classes/class.Log.php:1353
 #: functions/classes/class.Log.php:1361
 msgid "Root"
 msgstr "Root"
 
-#: app/admin/import-export/import-recompute-logic.php:155
+#: app/admin/import-export/import-recompute-logic.php:69
 msgid "No change, skip"
 msgstr "Keine &Auml;nderungen, &uuml;berspringe"
 
-#: app/admin/import-export/import-recompute-logic.php:155
+#: app/admin/import-export/import-recompute-logic.php:69
 msgid "New master, update"
 msgstr "Neuer Master, Aktualisierung"
 
@@ -5398,43 +5416,43 @@ msgstr "OK"
 #: functions/classes/class.Subnets.php:352
 #: functions/classes/class.Subnets.php:455
 #: functions/classes/class.Subnets.php:565
-#: functions/classes/class.Subnets.php:593
-#: functions/classes/class.Subnets.php:611
-#: functions/classes/class.Subnets.php:654
-#: functions/classes/class.Subnets.php:691
-#: functions/classes/class.Subnets.php:732
-#: functions/classes/class.Subnets.php:775
-#: functions/classes/class.Subnets.php:824
-#: functions/classes/class.Subnets.php:862
-#: functions/classes/class.Subnets.php:883
-#: functions/classes/class.Subnets.php:902
-#: functions/classes/class.Subnets.php:986
-#: functions/classes/class.Subnets.php:1049
-#: functions/classes/class.Subnets.php:1120
+#: functions/classes/class.Subnets.php:690
+#: functions/classes/class.Subnets.php:708
+#: functions/classes/class.Subnets.php:751
+#: functions/classes/class.Subnets.php:788
+#: functions/classes/class.Subnets.php:829
+#: functions/classes/class.Subnets.php:872
+#: functions/classes/class.Subnets.php:921
+#: functions/classes/class.Subnets.php:959
+#: functions/classes/class.Subnets.php:980
+#: functions/classes/class.Subnets.php:999
+#: functions/classes/class.Subnets.php:1083
+#: functions/classes/class.Subnets.php:1146
 #: functions/classes/class.Subnets.php:1217
-#: functions/classes/class.Subnets.php:1691
-#: functions/classes/class.Subnets.php:2518
-#: functions/classes/class.Subnets.php:2535
-#: functions/classes/class.Subnets.php:2552
-#: functions/classes/class.Subnets.php:2573
-#: functions/classes/class.Subnets.php:2606
-#: functions/classes/class.Subnets.php:2636
-#: functions/classes/class.Subnets.php:2650
-#: functions/classes/class.Subnets.php:2741
-#: functions/classes/class.Subnets.php:2788
-#: functions/classes/class.Subnets.php:2980
+#: functions/classes/class.Subnets.php:1314
+#: functions/classes/class.Subnets.php:1788
+#: functions/classes/class.Subnets.php:2615
+#: functions/classes/class.Subnets.php:2632
+#: functions/classes/class.Subnets.php:2649
+#: functions/classes/class.Subnets.php:2670
+#: functions/classes/class.Subnets.php:2703
+#: functions/classes/class.Subnets.php:2733
+#: functions/classes/class.Subnets.php:2747
+#: functions/classes/class.Subnets.php:2838
+#: functions/classes/class.Subnets.php:2885
+#: functions/classes/class.Subnets.php:3077
 #: functions/classes/class.Tools.php:93 functions/classes/class.Tools.php:167
 #: functions/classes/class.Tools.php:233 functions/classes/class.Tools.php:374
 #: functions/classes/class.Tools.php:408 functions/classes/class.Tools.php:441
 #: functions/classes/class.Tools.php:474 functions/classes/class.Tools.php:511
 #: functions/classes/class.Tools.php:545 functions/classes/class.Tools.php:578
 #: functions/classes/class.Tools.php:2255
-#: functions/classes/class.Tools.php:2390 functions/classes/class.User.php:614
-#: functions/classes/class.User.php:793 functions/classes/class.User.php:828
-#: functions/classes/class.User.php:845 functions/classes/class.User.php:866
-#: functions/classes/class.User.php:991 functions/classes/class.User.php:1039
-#: functions/classes/class.User.php:1304 functions/classes/class.User.php:1327
-#: functions/classes/class.User.php:1346
+#: functions/classes/class.Tools.php:2390 functions/classes/class.User.php:638
+#: functions/classes/class.User.php:817 functions/classes/class.User.php:852
+#: functions/classes/class.User.php:869 functions/classes/class.User.php:890
+#: functions/classes/class.User.php:1015 functions/classes/class.User.php:1063
+#: functions/classes/class.User.php:1328 functions/classes/class.User.php:1351
+#: functions/classes/class.User.php:1370
 #: functions/scripts/merge_databases.php:514
 #: functions/scripts/remove_offline_addresses.php:52
 msgid "Error: "
@@ -6573,7 +6591,7 @@ msgstr "Keine IP-Anforderungen verf&uuml;gbar"
 msgid "Requested by"
 msgstr "Angefordert von"
 
-#: app/admin/requests/index.php:76
+#: app/admin/requests/index.php:76 functions/classes/class.Tools.php:1174
 msgid "Automatic"
 msgstr "Automatisch"
 
@@ -6585,7 +6603,7 @@ msgstr "Prozess"
 msgid "List of all processes IP addresses requests"
 msgstr "Liste aller IP-Adressanfragen"
 
-#: app/admin/requests/index.php:116
+#: app/admin/requests/index.php:116 functions/classes/class.Tools.php:1204
 msgid "Admin comment"
 msgstr "Adminkommentar"
 
@@ -6637,6 +6655,7 @@ msgid "AS number"
 msgstr "AS Nummer"
 
 #: app/admin/ripe-import/ripe-telnet.php:27
+#: functions/classes/class.Subnets.php:3640
 msgid "Invalid AS"
 msgstr "Ung&uuml;ltiger AS"
 
@@ -7801,8 +7820,8 @@ msgstr "+ VLAN hinzuf&uuml;gen"
 msgid "No VLANs"
 msgstr "Keine VLANs"
 
-#: app/admin/subnets/edit.php:56 functions/classes/class.Subnets.php:982
-#: functions/classes/class.Subnets.php:1009
+#: app/admin/subnets/edit.php:56 functions/classes/class.Subnets.php:1079
+#: functions/classes/class.Subnets.php:1106
 msgid "Invalid subnetId"
 msgstr "Ung&uuml;ltige Subnetz-ID"
 
@@ -8232,6 +8251,7 @@ msgstr ""
 "deaktiviert."
 
 #: app/admin/subnets/truncate-save.php:43
+#: functions/classes/class.Subnets.php:330
 msgid "Failed to truncate subnet"
 msgstr "Subnetz verkleinern fehlgeschlagen"
 
@@ -9073,7 +9093,7 @@ msgstr "Neues Widget erzeugen"
 msgid "No widgets created yet"
 msgstr "Es wurden bisher keine Widgets erstellt"
 
-#: app/admin/widgets/index.php:42 functions/classes/class.Common.php:1849
+#: app/admin/widgets/index.php:42 functions/classes/class.Common.php:1851
 msgid "Admin"
 msgstr "Admin"
 
@@ -9523,8 +9543,8 @@ msgstr "Berechtigung"
 #: app/subnets/subnet-details/subnet-details.php:592
 #: app/tools/nat/nat_details.php:177 app/tools/racks/print-single-rack.php:147
 #: app/tools/vlan/vlan-details.php:113 app/tools/vrf/vrf-details.php:124
-#: app/vrf/vrf-details.php:93 functions/classes/class.Common.php:2138
-#: functions/classes/class.Common.php:2141
+#: app/vrf/vrf-details.php:93 functions/classes/class.Common.php:2140
+#: functions/classes/class.Common.php:2143
 msgid "Actions"
 msgstr "Aktionen"
 
@@ -9737,7 +9757,7 @@ msgstr ""
 "Authenticator ein"
 
 #: app/login/2fa/2fa_form.php:36 app/login/index.php:104
-#: app/login/login_form.php:53 functions/classes/class.User.php:359
+#: app/login/login_form.php:53 functions/classes/class.User.php:370
 msgid "Login"
 msgstr "Anmelden"
 
@@ -9919,6 +9939,7 @@ msgstr "VRF-Instanzen anzeigen"
 
 #: app/sections/all-sections.php:135 app/tools/customers/all-customers.php:97
 #: app/tools/locations/all-locations-list.php:99
+#: functions/classes/class.Tools.php:2565
 msgid "Show"
 msgstr "Anzeigen"
 
@@ -9937,6 +9958,7 @@ msgstr "Bereich anzeigen"
 #: app/tools/dhcp/leases.php:53 app/tools/dhcp/reservations.php:67
 #: app/tools/dhcp/subnets.php:82 app/tools/locations/all-locations-list.php:103
 #: app/tools/locations/single-location.php:115
+#: functions/classes/class.Tools.php:2570
 msgid "Manage"
 msgstr "Verwaltung"
 
@@ -10032,7 +10054,7 @@ msgstr "IP-Adressen waren auf Zustimmung"
 msgid "New version available"
 msgstr "Neue Version verf&uuml;gbar"
 
-#: app/sections/menu/menu-tools.php:143 functions/classes/class.Common.php:2024
+#: app/sections/menu/menu-tools.php:143 functions/classes/class.Common.php:2026
 msgid "Dashboard"
 msgstr "Dashboard"
 
@@ -10085,7 +10107,7 @@ msgid "VRFs"
 msgstr "VRF-Instanzen"
 
 #: app/sections/user-menu.php:73 app/sections/user-menu.php:82
-#: functions/classes/class.User.php:1252
+#: functions/classes/class.User.php:1276
 msgid "Hi"
 msgstr "Hallo"
 
@@ -10437,6 +10459,7 @@ msgstr ""
 
 #: app/subnets/addresses/address-modify-submit.php:237
 #: app/subnets/addresses/address-modify-submit.php:301
+#: functions/classes/class.Subnets.php:2926
 msgid "Invalid MAC address"
 msgstr "Ung&uuml;tige MAC-Adresse"
 
@@ -10464,7 +10487,7 @@ msgstr "IP-Adressen &Auml;nderung"
 #: app/tools/vrf/index.php:22 app/upgrade/index.php:144 app/vlan/index.php:13
 #: app/vrf/index.php:14 functions/classes/class.FirewallZones.php:672
 #: functions/classes/class.FirewallZones.php:705
-#: functions/classes/class.User.php:1038
+#: functions/classes/class.User.php:1062
 msgid "Error"
 msgstr "Fehler"
 
@@ -10546,11 +10569,17 @@ msgstr "Hinzuf&uuml;gen"
 #: app/subnets/addresses/address-modify.php:82
 #: functions/classes/class.Admin.php:217 functions/classes/class.Admin.php:223
 #: functions/classes/class.Admin.php:277
+#: functions/classes/class.Sections.php:141
+#: functions/classes/class.Sections.php:148
+#: functions/classes/class.Subnets.php:271
 msgid "edit"
 msgstr "Bearbeiten"
 
 #: app/subnets/addresses/address-modify.php:83
 #: functions/classes/class.Admin.php:270
+#: functions/classes/class.Sections.php:181
+#: functions/classes/class.Sections.php:190
+#: functions/classes/class.Subnets.php:313
 msgid "delete"
 msgstr "L&ouml;schen"
 
@@ -10879,6 +10908,7 @@ msgstr "Subnetz in Bereich"
 #: app/subnets/mail-notify-subnet.php:43
 #: app/subnets/subnet-details/subnet-details.php:21
 #: app/temp_share/subnet-details.php:2 app/temp_share/subnet-details.php:7
+#: functions/classes/class.Tools.php:1160
 msgid "Subnet details"
 msgstr "Subnetz Details"
 
@@ -10887,7 +10917,7 @@ msgid "Strict Subnets"
 msgstr "Strikte Subnetze"
 
 #: app/subnets/mastersubnet-dropdown.php:65
-#: functions/classes/class.Subnets.php:3259
+#: functions/classes/class.Subnets.php:3356
 msgid "Folders"
 msgstr "Ordner"
 
@@ -11117,7 +11147,7 @@ msgid "Subnet is natted"
 msgstr "Subnetz ist geNAT'et"
 
 #: app/subnets/subnet-details/subnet-details.php:137
-#: functions/classes/class.Subnets.php:3079
+#: functions/classes/class.Subnets.php:3176
 #: functions/classes/class.SubnetsTable.php:108
 msgid "VLAN is in domain"
 msgstr "VLAN ist in der Dom&auml;ne"
@@ -11413,12 +11443,12 @@ msgstr ""
 "entsprechend konfigurieren um die Variable $gmaps_api_key benutzen zu k&ouml;"
 "nnen."
 
-#: app/tools/circuits/all-circuits-map.php:179
+#: app/tools/circuits/all-circuits-map.php:195
 #: app/tools/circuits/logical-circuits/logical-circuit-details-map.php:167
 msgid "Circuit Type Legend"
 msgstr "Legende Schaltungstypen"
 
-#: app/tools/circuits/all-circuits-map.php:194
+#: app/tools/circuits/all-circuits-map.php:210
 #: app/tools/circuits/logical-circuits/logical-circuit-details-map.php:182
 #: app/tools/circuits/physical-circuits/circuit-details-map.php:118
 #: app/tools/locations/all-locations-list.php:84
@@ -11938,6 +11968,7 @@ msgstr "Kontext Engine-ID"
 #: app/tools/devices/device-details/device-details.php:211
 #: app/tools/devices/index.php:58
 #: app/tools/search/search-results-export.php:128
+#: functions/classes/class.Tools.php:3212
 msgid "Addresses"
 msgstr "Adressen"
 
@@ -13071,7 +13102,7 @@ msgstr "Erstellt von"
 msgid "Access log"
 msgstr "Zugriffsprotokoll"
 
-#: app/tools/temp-shares/index.php:76 functions/classes/class.Common.php:1846
+#: app/tools/temp-shares/index.php:76 functions/classes/class.Common.php:1848
 msgid "No access"
 msgstr "Zugriff verweigert"
 
@@ -13716,6 +13747,8 @@ msgstr "Fehler beim Löschen der Adresse"
 #: functions/classes/class.Admin.php:277
 #: functions/classes/class.FirewallZones.php:863
 #: functions/classes/class.FirewallZones.php:956
+#: functions/classes/class.Sections.php:190
+#: functions/classes/class.Subnets.php:313
 msgid "deleted"
 msgstr "gelöscht"
 
@@ -13734,6 +13767,8 @@ msgstr "aufgelöst"
 #: functions/classes/class.Addresses.php:698
 #: functions/classes/class.Addresses.php:700
 #: functions/classes/class.Log.php:1889 functions/classes/class.Log.php:1891
+#: functions/classes/class.Tools.php:1088
+#: functions/classes/class.Tools.php:1090
 msgid "Mailer Error"
 msgstr "Fehler E-Mail-Versand"
 
@@ -13801,6 +13836,8 @@ msgid "in"
 msgstr "in"
 
 #: functions/classes/class.Admin.php:223 functions/classes/class.Admin.php:253
+#: functions/classes/class.Sections.php:148
+#: functions/classes/class.Subnets.php:271
 msgid "edited"
 msgstr "bearbeitet"
 
@@ -13840,17 +13877,17 @@ msgstr "Benutzerdefiniertes Feld"
 msgid "Invalid action!"
 msgstr "Ung&uuml;ltige Aktion!"
 
-#: functions/classes/class.Common.php:1420
+#: functions/classes/class.Common.php:1422
 msgid "Geocode API key not set"
 msgstr "Geocode API-Key ist nicht gesetzt"
 
-#: functions/classes/class.Common.php:1428
+#: functions/classes/class.Common.php:1430
 msgid "Geocode lookup failed. Check Internet connectivity."
 msgstr ""
 "Geocode-Suche fehlgeschlagen. &Uuml;berpr&uuml;fen Sie die "
 "Internetverbindung."
 
-#: functions/classes/class.Common.php:1848
+#: functions/classes/class.Common.php:1850
 msgid "Write"
 msgstr "Schreiben"
 
@@ -13940,7 +13977,7 @@ msgstr "ist nicht eindeutig"
 #: functions/classes/class.FirewallZones.php:693
 #: functions/classes/class.FirewallZones.php:703
 #: functions/classes/class.FirewallZones.php:726
-#: functions/classes/class.Log.php:352 functions/classes/class.User.php:556
+#: functions/classes/class.Log.php:352 functions/classes/class.User.php:580
 msgid "Database error: "
 msgstr "Datenbankfehler:"
 
@@ -14193,7 +14230,7 @@ msgstr "Maximall&auml;ge"
 
 #: functions/classes/class.Password_check.php:170
 msgid "Not enough numbers"
-msgstr "Nicht gen&uuml;gend Nummern"
+msgstr "Nicht gen&uuml;gend Zahlen"
 
 #: functions/classes/class.Password_check.php:182
 msgid "Not enough letters"
@@ -14467,6 +14504,42 @@ msgstr "HTTP-Version unterst&uuml;tzt"
 msgid "Invalid result code"
 msgstr "Ung&uuml;ltiger Ergebnisscode"
 
+#: functions/classes/class.SNMP.php:181
+msgid "Displays device system info"
+msgstr "Systeminformationen des Ger&auml;tesystems"
+
+#: functions/classes/class.SNMP.php:187
+msgid "Fetches ARP table"
+msgstr "Abrufen der ARP-Tabelle"
+
+#: functions/classes/class.SNMP.php:193
+msgid "Fetches MAC address table"
+msgstr "Abrufen Tabelle der MAC-Adressen"
+
+#: functions/classes/class.SNMP.php:199
+msgid "Fetches interface ip addresses"
+msgstr "Abrufen IP-Adressen der Schnittstellen"
+
+#: functions/classes/class.SNMP.php:205
+msgid "Fetches routing table"
+msgstr "Abrufen der Routing-Tabelle"
+
+#: functions/classes/class.SNMP.php:211
+msgid "Fetches VLAN table"
+msgstr "Abrufen der VLAN-Tabelle"
+
+#: functions/classes/class.SNMP.php:217
+msgid "Fetches VRF table"
+msgstr "Abrufen der VRF-Tabelle"
+
+#: functions/classes/class.SNMP.php:499
+msgid "Invalid SNMP version"
+msgstr "Ung&uuml;ltige SNMP-Version"
+
+#: functions/classes/class.SNMP.php:544
+msgid "Invalid query"
+msgstr "Ung&uuml;ltige Abfrage"
+
 #: functions/classes/class.SNMP.php:858
 msgid "SNMP response is not a valid string"
 msgstr "SNMP-Antwort ist kein gültiger String"
@@ -14514,6 +14587,27 @@ msgstr ""
 msgid "Didn't find any address to scan!"
 msgstr "Keine Adresse zum Suchen gefunden!"
 
+#: functions/classes/class.Sections.php:110
+#: functions/classes/class.Sections.php:117
+msgid "Sections create"
+msgstr "Erstellen Bereich"
+
+#: functions/classes/class.Sections.php:110
+msgid "Failed to create new section"
+msgstr "Fehler beim Anlegen neuer Bereich"
+
+#: functions/classes/class.Sections.php:117
+msgid "New section created"
+msgstr "Neuer Bereich erstellt"
+
+#: functions/classes/class.Sections.php:141
+msgid "Failed to edit section"
+msgstr "Fehler beim Bearbeiten des Bereichs"
+
+#: functions/classes/class.Sections.php:181
+msgid "Failed to delete section"
+msgstr "Fehler beim L&ouml;schen des Bereichs"
+
 #: functions/classes/class.Sections.php:558
 msgid "Add new subnet to section"
 msgstr "Hinzuf&uuml;gen eines neuen Subnetz zum Bereich"
@@ -14530,11 +14624,64 @@ msgstr "Subnetz finden"
 msgid "Only master subnets are shown"
 msgstr "Nur Master-Subnetze werden angezeigt"
 
+#: functions/classes/class.Subnets.php:221
+#: functions/classes/class.Subnets.php:228
+msgid "Subnet creation"
+msgstr "Erstellen Subnetz"
+
+#: functions/classes/class.Subnets.php:221
+msgid "Failed to add new subnet"
+msgstr "Fehler beim Hinzuf&uuml;gen neues Subnetz"
+
+#: functions/classes/class.Subnets.php:228
+msgid "New subnet created"
+msgstr "Neue Subnetz erstellt"
+
 #: functions/classes/class.Subnets.php:250
 msgid "Can not disable isPool, network or broadcast address is allocated"
 msgstr ""
 "isPool kann nicht deaktiviert werden, Netzwerk- oder Broadcastadresse ist "
 "nicht zugewiesen"
+
+#: functions/classes/class.Subnets.php:252
+#: functions/classes/class.Subnets.php:261
+#: functions/classes/class.Subnets.php:353
+msgid "Subnet edit"
+msgstr "Bearbeiten Subnetz"
+
+#: functions/classes/class.Subnets.php:252
+#: functions/classes/class.Subnets.php:261
+msgid "Failed to edit subnet"
+msgstr "Fehler beim Bearbeiten des Subnetzes"
+
+#: functions/classes/class.Subnets.php:303
+msgid "Subnet delete"
+msgstr "L&ouml;schen Subnetz"
+
+#: functions/classes/class.Subnets.php:303
+msgid "Failed to delete subnet"
+msgstr "Fehler beim L&ouml;schen des Subnetzes"
+
+#: functions/classes/class.Subnets.php:330
+#: functions/classes/class.Subnets.php:333
+msgid "Subnet truncate"
+msgstr "Verkleinern Subnetz"
+
+#: functions/classes/class.Subnets.php:333
+msgid "truncated"
+msgstr "verkleinert"
+
+#: functions/classes/class.Subnets.php:353
+msgid "Failed to resize subnet"
+msgstr "Fehler beim Anpassen Gr&ouml;e des Subnetzes"
+
+#: functions/classes/class.Subnets.php:357
+msgid "Subnet resize"
+msgstr "Anpassung Subnetz"
+
+#: functions/classes/class.Subnets.php:357
+msgid "resized"
+msgstr "agepasst"
 
 #: functions/classes/class.Subnets.php:426
 msgid "Failed to move IP address"
@@ -14544,109 +14691,144 @@ msgstr "IP-Adresse verschieben fehlgeschlagen"
 msgid "Failed to remove old subnet"
 msgstr "Fehler beim Entfernen des alten Subnetzes"
 
-#: functions/classes/class.Subnets.php:1921
+#: functions/classes/class.Subnets.php:483
+msgid "Subnet removed from NAT"
+msgstr "Subnetz vom NAT entfernt"
+
+#: functions/classes/class.Subnets.php:2018
 msgid "Invalid IP address!"
 msgstr "Falsche IP-Adresse!"
 
-#: functions/classes/class.Subnets.php:1922
-#: functions/classes/class.Subnets.php:1951
+#: functions/classes/class.Subnets.php:2019
+#: functions/classes/class.Subnets.php:2048
 msgid "IP address cannot be subnet! (Consider using"
 msgstr "IP-Adresse kann kein Subnetz sein!"
 
-#: functions/classes/class.Subnets.php:1923
-#: functions/classes/class.Subnets.php:1970
-#: functions/classes/class.Subnets.php:1971
+#: functions/classes/class.Subnets.php:2020
+#: functions/classes/class.Subnets.php:2067
+#: functions/classes/class.Subnets.php:2068
 msgid "Invalid netmask"
 msgstr "Falsche Netzmaske"
 
-#: functions/classes/class.Subnets.php:1926
-#: functions/classes/class.Subnets.php:1966
+#: functions/classes/class.Subnets.php:2023
+#: functions/classes/class.Subnets.php:2063
 msgid "Invalid CIDR format!"
 msgstr "Falsches CIDR Format!"
 
-#: functions/classes/class.Subnets.php:1943
+#: functions/classes/class.Subnets.php:2040
 msgid "Invalid IPv6 address!"
 msgstr "Falsche IPv6 Adresse!"
 
-#: functions/classes/class.Subnets.php:1968
+#: functions/classes/class.Subnets.php:2065
 msgid "Invalid Network!"
 msgstr "Ung&uuml;ltiges Netzwerk!"
 
-#: functions/classes/class.Subnets.php:2004
-#: functions/classes/class.Subnets.php:2091
+#: functions/classes/class.Subnets.php:2101
+#: functions/classes/class.Subnets.php:2148
+#: functions/classes/class.Subnets.php:2188
+#: functions/classes/class.Subnets.php:2225
+#: functions/classes/class.Subnets.php:2562
+msgid "overlaps with"
+msgstr "&uuml;berschneidet sich mit"
+
+#: functions/classes/class.Subnets.php:2101
+#: functions/classes/class.Subnets.php:2188
 msgid "in section"
 msgstr "im Bereich"
 
-#: functions/classes/class.Subnets.php:2168
-#: functions/classes/class.Subnets.php:2318
-#: functions/classes/class.Subnets.php:2336
+#: functions/classes/class.Subnets.php:2265
+#: functions/classes/class.Subnets.php:2415
+#: functions/classes/class.Subnets.php:2433
 msgid "Subnet overlaps with"
 msgstr "Subnetz &uuml;berschneidet sich mit"
 
-#: functions/classes/class.Subnets.php:2280
+#: functions/classes/class.Subnets.php:2377
 msgid "New mask must be at least /8"
 msgstr "Neue Netzmaske muss mindestens /8 sein"
 
-#: functions/classes/class.Subnets.php:2281
+#: functions/classes/class.Subnets.php:2378
 msgid "Mask must be an integer"
 msgstr "Maske muss eine Zahl sein"
 
-#: functions/classes/class.Subnets.php:2292
+#: functions/classes/class.Subnets.php:2389
 msgid "New network is same as old network"
 msgstr "Neues Netzwerk ist das gleiche wie alte Netzwerk"
 
-#: functions/classes/class.Subnets.php:2304
+#: functions/classes/class.Subnets.php:2401
 msgid "New subnet not in master subnet"
 msgstr "Neues Subnetz ist nicht im Master Subnetz"
 
-#: functions/classes/class.Subnets.php:2308
+#: functions/classes/class.Subnets.php:2405
 msgid "New subnet cannot be same as master subnet"
 msgstr "Neues Subnetz kann nicht gleich dem Master-Subnetz sein"
 
-# is instead of it?
-#: functions/classes/class.Subnets.php:2378
-msgid "Subnet it same as "
-msgstr "Subnetz ist gleich wie"
+#: functions/classes/class.Subnets.php:2475
+msgid "Subnet is same as"
+msgstr "Subnetz ist das Gleiche wie"
 
-#: functions/classes/class.Subnets.php:2382
+#: functions/classes/class.Subnets.php:2479
 msgid "Nested subnet out of new subnet"
 msgstr "eingegliedertes Netz befindet sich au&szlig;erhalb des neuen Netzes"
 
-#: functions/classes/class.Subnets.php:2412
+#: functions/classes/class.Subnets.php:2509
 msgid "Invalid number of subnets"
 msgstr "Ung&uuml;ltige Anzahl von Subnetzen"
 
-#: functions/classes/class.Subnets.php:2465
+#: functions/classes/class.Subnets.php:2562
 msgid "Subnet overlapping - "
 msgstr "Subnetz &uuml;berschneidet sich -"
 
-#: functions/classes/class.Subnets.php:2974
+#: functions/classes/class.Subnets.php:2930
+msgid "Not multicast MAC address"
+msgstr "Keine Multicast MAC-Adresse"
+
+#: functions/classes/class.Subnets.php:2934
+msgid "MAC address already exists"
+msgstr "MAC-Adresse existiert bereits"
+
+#: functions/classes/class.Subnets.php:3071
 msgid "Failed to set subnet permissons for subnet"
 msgstr "&Auml;ndern der Berechtigung f&uuml;r das Subnetz fehlgeschlagen"
 
-#: functions/classes/class.Subnets.php:2987
+#: functions/classes/class.Subnets.php:3084
 msgid "Subnet permissions recursively set"
 msgstr "Subnetz Berechtigungen rekursiv gesetzt"
 
-#: functions/classes/class.Subnets.php:2989
+#: functions/classes/class.Subnets.php:3086
 msgid "Subnet permissions set"
 msgstr "Subnetz Berechtigungen gesetzt"
 
-#: functions/classes/class.Subnets.php:3084
+#: functions/classes/class.Subnets.php:3181
 msgid "VLAN contains subnets"
 msgstr "VLAN enth&auml;lt Subnetze"
 
-#: functions/classes/class.Subnets.php:3084
-#: functions/classes/class.Subnets.php:3177
+#: functions/classes/class.Subnets.php:3181
+#: functions/classes/class.Subnets.php:3274
 #: functions/classes/class.SubnetsMenu.php:154
 #: functions/classes/class.SubnetsMenu.php:159
 #: functions/classes/class.SubnetsMenu.php:164
 msgid "Click on folder to open/close"
 msgstr "Zum &Ouml;ffnen/Schlie&szlig;en auf Ordner klicken"
 
-#: functions/classes/class.Subnets.php:3177
+#: functions/classes/class.Subnets.php:3274
 msgid "VRF contains subnets"
 msgstr "VRF enth&auml;lt Subnetze"
+
+#: functions/classes/class.Subnets.php:3516
+msgid "Not RIPE or ARIN subnet"
+msgstr "Kein RIPE oder ARIN-Subnetz"
+
+#: functions/classes/class.Subnets.php:3541
+msgid "Error connecting to RIPE REST API"
+msgstr "Fehler aufgetreten beim Verbinden zur RIPE REST-API"
+
+#: functions/classes/class.Subnets.php:3573
+msgid "Subnet not found"
+msgstr "Subnetz nicht gefunden"
+
+#: functions/classes/class.Subnets.php:3578
+msgid "Error connecting to ARIN REST API"
+msgstr "Fehler aufgetreten beim Verbinden zur ARIN REST-API"
 
 #: functions/classes/class.SubnetsMenu.php:154
 msgid "Folder contains more subnets"
@@ -14661,18 +14843,67 @@ msgstr "Subnetz enth&auml;lt mehrere Subnetze"
 msgid "Root folder"
 msgstr "Wurzelordner"
 
+#: functions/classes/class.Table.php:125 functions/classes/class.Table.php:127
+msgid "Previous"
+msgstr "Vorherige"
+
+#: functions/classes/class.Table.php:147 functions/classes/class.Table.php:149
+msgid "Next"
+msgstr "N&auml;chste"
+
+#: functions/classes/class.Tools.php:1038
+msgid "New IP address request"
+msgstr "Neue Anforderung einer IP-Adresse"
+
+#: functions/classes/class.Tools.php:1039
+msgid "IP address request accepted"
+msgstr "Anfrage der IP-Anforderung wurde akzeptiert"
+
+#: functions/classes/class.Tools.php:1040
+msgid "IP address request rejected"
+msgstr "Anfrage der IP-Anforderung wurde zur&uuml;ckgewiesen"
+
 #: functions/classes/class.Tools.php:1041
 msgid "Invalid request action"
 msgstr "Ung&uuml;ltige Anfrage"
+
+#: functions/classes/class.Tools.php:1059
+msgid "Sent at"
+msgstr "Gesendet am"
+
+#: functions/classes/class.Tools.php:1169
+msgid "Address details"
+msgstr "IP-Adressdetails"
 
 #: functions/classes/class.Tools.php:1406
 #: functions/classes/class.Tools.php:1432
 msgid "Update: "
 msgstr "Aktualisierung:"
 
+#: functions/classes/class.Tools.php:1406
+#: functions/classes/class.Tools.php:1432
+msgid "query"
+msgstr "Query"
+
+#: functions/classes/class.Tools.php:1505
+msgid "Invalid query for"
+msgstr "Ung&uuml;ltige Abfrage f&uuml;r"
+
+#: functions/classes/class.Tools.php:1505
+msgid "database index check : "
+msgstr "Datenbankindex &Uuml;berpr&uuml;fung : "
+
 #: functions/classes/class.Tools.php:1574
 msgid "Creating index failed: "
 msgstr "Indexerstellung fehlgeschlagen: "
+
+#: functions/classes/class.Tools.php:1578
+msgid "Created index for table"
+msgstr "Index erstellt f&uuml;r Tabelle"
+
+#: functions/classes/class.Tools.php:1578
+msgid "named"
+msgstr "mit der Bezeichnung"
 
 #: functions/classes/class.Tools.php:1620
 msgid "Removing link addresses index : "
@@ -14683,9 +14914,8 @@ msgid "Warning: "
 msgstr "Warnung: "
 
 #: functions/classes/class.Tools.php:1636
-msgid "Unable to create index for MySQL TEXT/BLOB datatypes."
-msgstr ""
-"Indexerstellung f&uuml;r MySQL TEXT/BLOB Datentypen nicht m&ouml;glich."
+msgid "Unable to create index for MySQL TEXT/BLOB data types."
+msgstr "Indexerstellung f&uuml;r Datentyp MySQL TEXT/BLOB nicht m&ouml;glich."
 
 #: functions/classes/class.Tools.php:1637
 msgid "Reduced performance when displaying linked addresses by "
@@ -14703,9 +14933,31 @@ msgstr ""
 msgid "Adding link addresses index : "
 msgstr "Linkadressen-Index hinzuf&uuml;gen : "
 
+#: functions/classes/class.Tools.php:1681
+msgid "Cannot fetch https://github.com/phpipam/phpipam/releases.atom : "
+msgstr ""
+"https://github.com/phpipam/phpipam/releases.atom kann nicht abgerufen "
+"werden: "
+
 #: functions/classes/class.Tools.php:1925
 msgid "(closest parent)"
 msgstr "(n&auml;chste &uuml;bergeordnete)"
+
+#: functions/classes/class.Tools.php:2383
+msgid "Duplicate check failed"
+msgstr "&Uuml;berpr&uuml;fung auf Duplikate fehlgeschlagen"
+
+#: functions/classes/class.Tools.php:2566
+msgid "View prefix"
+msgstr "Anzeige Pr&auml;fix"
+
+#: functions/classes/class.Tools.php:2571
+msgid "Edit prefix"
+msgstr "Bearbeiten Pr&auml;fix"
+
+#: functions/classes/class.Tools.php:2574
+msgid "Delete prefix"
+msgstr "L&ouml;schen Pr&auml;fix"
 
 #: functions/classes/class.Tools.php:2631
 msgid "Root subnet"
@@ -14719,145 +14971,145 @@ msgstr "Ung&uuml;ltiger Dateityp"
 msgid "Cannot open upload/import.csv"
 msgstr "Kann .csv nicht hochladen/importieren"
 
-#: functions/classes/class.User.php:334
+#: functions/classes/class.User.php:345
 msgid "Administrator level privileges required"
 msgstr "Administrator Rechte erforderlich"
 
-#: functions/classes/class.User.php:359
+#: functions/classes/class.User.php:370
 msgid "Please login first"
 msgstr "Bitte melden Sie sich an"
 
-#: functions/classes/class.User.php:473 functions/classes/class.User.php:476
+#: functions/classes/class.User.php:497 functions/classes/class.User.php:500
 #: index.php:201
 msgid "System is running in maintenance mode"
 msgstr "Das System befindet sich aktuell im Wartungsmodus"
 
-#: functions/classes/class.User.php:519
+#: functions/classes/class.User.php:543
 msgid "was migrated to database. It can be deleted from config.php"
 msgstr ""
 "war zur Datenbank migriert. Es kann aus der Datei 'config.php' entfernt "
 "werden"
 
-#: functions/classes/class.User.php:543 functions/classes/class.User.php:544
+#: functions/classes/class.User.php:567 functions/classes/class.User.php:568
 msgid "Page not referred properly"
 msgstr "Seite nicht richtig bezeichnet"
 
-#: functions/classes/class.User.php:754 functions/classes/class.User.php:807
-#: functions/classes/class.User.php:892 functions/classes/class.User.php:906
-#: functions/classes/class.User.php:928
+#: functions/classes/class.User.php:778 functions/classes/class.User.php:831
+#: functions/classes/class.User.php:916 functions/classes/class.User.php:930
+#: functions/classes/class.User.php:952
 msgid "User login"
 msgstr "Benutzer Anmeldung"
 
-#: functions/classes/class.User.php:754 functions/classes/class.User.php:755
+#: functions/classes/class.User.php:778 functions/classes/class.User.php:779
 msgid "Error: Invalid authentication method"
 msgstr "Fehler: Ung&uuml;ltige Authentifizierungsmethode"
 
-#: functions/classes/class.User.php:759
+#: functions/classes/class.User.php:783
 msgid "Your account has been disabled"
 msgstr "Ihr Account wurde deaktiviert"
 
-#: functions/classes/class.User.php:769
+#: functions/classes/class.User.php:793
 msgid "Please use"
 msgstr "Bitte hier"
 
-#: functions/classes/class.User.php:769 functions/classes/class.User.php:1021
-#: functions/classes/class.User.php:1033
+#: functions/classes/class.User.php:793 functions/classes/class.User.php:1045
+#: functions/classes/class.User.php:1057
 msgid "login"
 msgstr "anmelden"
 
-#: functions/classes/class.User.php:807
+#: functions/classes/class.User.php:831
 msgid "Invalid username"
 msgstr "Ung&uuml;ltiger Benutzername"
 
-#: functions/classes/class.User.php:808 functions/classes/class.User.php:906
-#: functions/classes/class.User.php:910 functions/classes/class.User.php:1034
-#: functions/classes/class.User.php:1147
+#: functions/classes/class.User.php:832 functions/classes/class.User.php:930
+#: functions/classes/class.User.php:934 functions/classes/class.User.php:1058
+#: functions/classes/class.User.php:1171
 msgid "Invalid username or password"
 msgstr "Falscher Benutzername oder falsches Passwort"
 
-#: functions/classes/class.User.php:891 functions/classes/class.User.php:927
-#: functions/classes/class.User.php:1022
+#: functions/classes/class.User.php:915 functions/classes/class.User.php:951
+#: functions/classes/class.User.php:1046
 msgid "Login successful"
 msgstr "Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:892 functions/classes/class.User.php:928
+#: functions/classes/class.User.php:916 functions/classes/class.User.php:952
 msgid "logged in"
 msgstr "angemeldet"
 
-#: functions/classes/class.User.php:990
+#: functions/classes/class.User.php:1014
 msgid "Directory connection error"
 msgstr "Verbindungsfehler Verzeichnisdienst"
 
-#: functions/classes/class.User.php:990
+#: functions/classes/class.User.php:1014
 msgid "Failed to connect"
 msgstr "Fehler beim Verbinden"
 
-#: functions/classes/class.User.php:1021
+#: functions/classes/class.User.php:1045
 msgid "logged in via"
 msgstr "angemeldet durch"
 
-#: functions/classes/class.User.php:1033
+#: functions/classes/class.User.php:1057
 msgid "failed to authenticate against"
 msgstr "konnte nicht authentifiziert werden mit der Methode"
 
-#: functions/classes/class.User.php:1038
+#: functions/classes/class.User.php:1062
 msgid "Something went wrong during auth: "
 msgstr "Etwas ist schief gelaufen w&auml;hrend der Authentifizierung: "
 
-#: functions/classes/class.User.php:1110 functions/classes/class.User.php:1134
-#: functions/classes/class.User.php:1146
+#: functions/classes/class.User.php:1134 functions/classes/class.User.php:1158
+#: functions/classes/class.User.php:1170
 msgid "Radius login"
 msgstr "Radius Anmeldung"
 
-#: functions/classes/class.User.php:1110 functions/classes/class.User.php:1111
+#: functions/classes/class.User.php:1134 functions/classes/class.User.php:1135
 msgid "php Socket extension missing"
 msgstr "php Socket Erweiterung fehlt"
 
-#: functions/classes/class.User.php:1134
+#: functions/classes/class.User.php:1158
 msgid "logged in via radius"
 msgstr "angemeldet mittels Radius"
 
-#: functions/classes/class.User.php:1135
+#: functions/classes/class.User.php:1159
 msgid "Radius login successful"
 msgstr "Radius Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:1146
+#: functions/classes/class.User.php:1170
 msgid "Failed to authenticate user on radius server"
 msgstr "Keine Authentifizierung am Radius Server"
 
-#: functions/classes/class.User.php:1163
+#: functions/classes/class.User.php:1187
 msgid "SAML2 login"
 msgstr "SAML2-Anmeldung"
 
-#: functions/classes/class.User.php:1163
+#: functions/classes/class.User.php:1187
 msgid "logged in via SAML2"
 msgstr "angemeldet durch SAML2"
 
-#: functions/classes/class.User.php:1164
+#: functions/classes/class.User.php:1188
 msgid "SAML2 login successful"
 msgstr "SAML2-Anmeldung erfolgreich"
 
-#: functions/classes/class.User.php:1224 functions/classes/class.User.php:1238
+#: functions/classes/class.User.php:1248 functions/classes/class.User.php:1262
 msgid "No crypt types supported"
 msgstr "Keine Kryptotypen unterst&uuml;tzt"
 
-#: functions/classes/class.User.php:1252
+#: functions/classes/class.User.php:1276
 msgid "your password was updated"
 msgstr "Ihr Kennwort wurde aktualisiert"
 
-#: functions/classes/class.User.php:1305 functions/classes/class.User.php:1312
+#: functions/classes/class.User.php:1329 functions/classes/class.User.php:1336
 msgid "User self update"
 msgstr "Aktualisierung durch Benutzer"
 
-#: functions/classes/class.User.php:1305
+#: functions/classes/class.User.php:1329
 msgid "User self update failed"
 msgstr "Aktualisierung durch Benutzer fehlgeschlagen"
 
-#: functions/classes/class.User.php:1312
+#: functions/classes/class.User.php:1336
 msgid "User self update suceeded"
 msgstr "Aktualisierung durch Benutzer erfolgreich"
 
-#: functions/classes/class.User.php:1648
+#: functions/classes/class.User.php:1672
 msgid "You do not have permissions to access this object"
 msgstr "Sie haben keine Berechtigung dieses Objekt einzusehen"
 
@@ -14880,6 +15132,17 @@ msgstr "Fehler beim L&ouml;schen der Logs"
 #: functions/scripts/clear_logs.php:28
 msgid "Changelogs cleared successfully"
 msgstr "Logs wurden erfolgreich gel&ouml;scht"
+
+#~ msgid "selected"
+#~ msgstr "ausgew&auml;hlt"
+
+#~ msgid "Error connecting to arin REST API"
+#~ msgstr "Fehler aufgetreten beim Verbinden zur ARIN REST-API"
+
+#, fuzzy
+#~| msgid "Section name"
+#~ msgid "Section create"
+#~ msgstr "Bereichsname"
 
 #~ msgid "Custom Field"
 #~ msgstr "Benutzerdefiniertes Feld"
