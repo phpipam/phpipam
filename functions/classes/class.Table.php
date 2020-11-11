@@ -122,9 +122,9 @@ class Table extends Common_functions {
 
 		// previous
 		if($this->filters['subpage']==1)
-		$html[] = " <li class='disabled'><a><span aria-hidden='true'>«</span><span class='sr-only'>Previous</span></a></li>";
+		$html[] = " <li class='disabled'><a><span aria-hidden='true'>«</span><span class='sr-only'>"._("Previous")."</span></a></li>";
 		else
-		$html[] = " <li><a href='".create_link("subnets",$_GET['section'])."?subpage=".($this->filters['subpage']-1)."&limit=".$this->filters['limit']."'><span aria-hidden='true'>«</span><span class='sr-only'>Previous</span></a></li> ";
+		$html[] = " <li><a href='".create_link("subnets",$_GET['section'])."?subpage=".($this->filters['subpage']-1)."&limit=".$this->filters['limit']."'><span aria-hidden='true'>«</span><span class='sr-only'>"._("Previous")."</span></a></li> ";
 
  		// one page
 		if ($this->filters['pagenum']==1) {
@@ -144,9 +144,9 @@ class Table extends Common_functions {
 
 		// next
 		if($this->filters['pagenum']==$this->filters['subpage'])
-		$html[] = " <li class='disabled'><a><span aria-hidden='true'>»</span><span class='sr-only'>Next</span></a></li>";
+		$html[] = " <li class='disabled'><a><span aria-hidden='true'>»</span><span class='sr-only'>"._("Next")."</span></a></li>";
 		else
-		$html[] = " <li><a href='".create_link("subnets",$_GET['section'])."?subpage=".($this->filters['subpage']+1)."&limit=".$this->filters['limit']."'><span aria-hidden='true'>»</span><span class='sr-only'>Next</span></a></li> ";
+		$html[] = " <li><a href='".create_link("subnets",$_GET['section'])."?subpage=".($this->filters['subpage']+1)."&limit=".$this->filters['limit']."'><span aria-hidden='true'>»</span><span class='sr-only'>"._("Next")."</span></a></li> ";
 
         // finish
         $html[] = "</ul>";

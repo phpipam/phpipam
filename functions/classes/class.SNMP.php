@@ -178,43 +178,43 @@ class phpipamSNMP extends Common_functions {
     	$this->snmp_queries['get_system_info'] = new StdClass();
     	$this->snmp_queries['get_system_info']->id  = 1;
     	$this->snmp_queries['get_system_info']->oid = "SNMPv2-MIB::sysDescr";
-    	$this->snmp_queries['get_system_info']->description = "Displays device system info";
+    	$this->snmp_queries['get_system_info']->description = _("Displays device system info");
 
     	// arp table
     	$this->snmp_queries['get_arp_table'] = new StdClass();
     	$this->snmp_queries['get_arp_table']->id  = 2;
     	$this->snmp_queries['get_arp_table']->oid = "IP-MIB::ipNetToMediaEntry";
-    	$this->snmp_queries['get_arp_table']->description = "Fetches ARP table";
+    	$this->snmp_queries['get_arp_table']->description = _("Fetches ARP table");
 
     	// mac address table
     	$this->snmp_queries['get_mac_table'] = new StdClass();
     	$this->snmp_queries['get_mac_table']->id  = 3;
     	$this->snmp_queries['get_mac_table']->oid = "BRIDGE-MIB::dot1dTpFdbEntry";
-    	$this->snmp_queries['get_mac_table']->description = "Fetches MAC address table";
+    	$this->snmp_queries['get_mac_table']->description = _("Fetches MAC address table");
 
     	// interface ip addresses
     	$this->snmp_queries['get_interfaces_ip'] = new StdClass();
     	$this->snmp_queries['get_interfaces_ip']->id  = 4;
     	$this->snmp_queries['get_interfaces_ip']->oid = "IP-MIB::ipAddrEntry";
-    	$this->snmp_queries['get_interfaces_ip']->description = "Fetches interface ip addresses";
+    	$this->snmp_queries['get_interfaces_ip']->description = _("Fetches interface ip addresses");
 
     	// get_routing_table
     	$this->snmp_queries['get_routing_table'] = new StdClass();
     	$this->snmp_queries['get_routing_table']->id  = 5;
     	$this->snmp_queries['get_routing_table']->oid = "IP-FORWARD-MIB::ipCidrRouteEntry";
-    	$this->snmp_queries['get_routing_table']->description = "Fetches routing table";
+    	$this->snmp_queries['get_routing_table']->description = _("Fetches routing table");
 
     	// get vlans
     	$this->snmp_queries['get_vlan_table'] = new StdClass();
     	$this->snmp_queries['get_vlan_table']->id  = 6;
     	$this->snmp_queries['get_vlan_table']->oid = "CISCO-VTP-MIB::vtpVlanName";
-    	$this->snmp_queries['get_vlan_table']->description = "Fetches VLAN table";
+    	$this->snmp_queries['get_vlan_table']->description = _("Fetches VLAN table");
 
     	// get vrfs
     	$this->snmp_queries['get_vrf_table'] = new StdClass();
     	$this->snmp_queries['get_vrf_table']->id  = 7;
     	$this->snmp_queries['get_vrf_table']->oid = "MPLS-VPN-MIB::mplsVpnVrfDescription";
-    	$this->snmp_queries['get_vrf_table']->description = "Fetches VRF table";
+    	$this->snmp_queries['get_vrf_table']->description = _("Fetches VRF table");
 
     	// Text to numerical OID conversion table
     	$this->snmp_oids = [
@@ -366,7 +366,7 @@ class phpipamSNMP extends Common_functions {
         	$this->snmp_host = $ip;
     	}
     	else {
-        	$this->Result->show("danger", "Invalid device IP address", true, true, false, true);
+        	$this->Result->show("danger", _("Invalid device IP address"), true, true, false, true);
     	}
 	}
 
@@ -496,7 +496,7 @@ class phpipamSNMP extends Common_functions {
                                                                                    $this->snmpv3_security->contextName,
                                                                                    $this->snmpv3_security->contextEngineID
                                                                                    );}
-            else                                { throw new Exception ("Invalid SNMP version"); }
+            else                                { throw new Exception (_("Invalid SNMP version")); }
         }
         // set parameters
         $this->snmp_session->oid_output_format = SNMP_OID_OUTPUT_NUMERIC;
@@ -541,7 +541,7 @@ class phpipamSNMP extends Common_functions {
      */
     public function get_query ($query) {
         if (method_exists($this, $query))   { return $this->{$query} (); }
-        else                                { throw new Exception ("Invalid query"); }
+        else                                { throw new Exception (_("Invalid query")); }
     }
 
     /**
