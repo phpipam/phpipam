@@ -403,7 +403,7 @@ class PowerDNS extends Common_functions {
             return false;
         }
         // write log
-        $this->Log->write( "PowerDNS domain edit", "PowerDNS domain edited<hr>".$this->array_to_log((array) $values), 0);
+        $this->Log->write( _("PowerDNS domain edit"), _("PowerDNS domain edited")."<hr>".$this->array_to_log((array) $values), 0);
         # ok
         return true;
     }
