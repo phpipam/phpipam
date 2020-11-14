@@ -76,7 +76,7 @@ $settings = $Tools->get_settings();
 	<nav class="navbar navbar-default" id="menu-navbar" role="navigation">
 	<div class="collapse navbar-collapse" id="menu-collapse">
 		<ul class="nav navbar-nav sections pull-right">
-			<li><a href="<?php print create_link("login"); ?>"><i class='fa fa-user'></i> Login</a></li>
+			<li><a href="<?php print create_link("login"); ?>"><i class='fa fa-user'></i> <?php print _("Login"); ?></a></li>
 		</ul>
 	</div>
 	</nav>
