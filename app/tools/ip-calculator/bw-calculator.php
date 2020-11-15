@@ -245,13 +245,13 @@ $(document).ready(function () {
 <?php if(!isset($widget)) { ?>
 <h4><?php print _('Bandwidth calculator');?></h4>
 <hr>
-<?php print _("Select TCP window size, delay and Filesize to calculate how long file transfer will take."); ?>
+<?php print _("Select TCP window size, delay and file size to calculate how long file transfer will take."); ?>
 
 <br><br><br>
 <?php } ?>
 
 <div class="slider_overlay">
-	<p>TCP Window size:</p>
+	<p><?php print _("TCP window size").":"; ?></p>
 	<div class='res_sel' id="slider1"></div>
 	<div class='res_val' id="slider1-val">50000</div>
 	<br>
@@ -260,7 +260,7 @@ $(document).ready(function () {
 <div class="clearfix"></div>
 
 <div class="slider_overlay">
-	<p>Delay:</p>
+	<p><?php print _("Delay").":"; ?></p>
 	<div class='res_sel' id="slider2"></div>
 	<div class='res_val' id="slider2-val">10 ms</div>
 	<br>
@@ -269,7 +269,7 @@ $(document).ready(function () {
 <div class="clearfix"></div>
 
 <div class="slider_overlay">
-	<p>Filesize:</p>
+	<p><?php print _("File size").":"; ?></p>
 	<div class='res_sel' id="slider3"></div>
 	<div class='res_val' id="slider3-val">1 GByte</div>
 	<br>
