@@ -54,7 +54,7 @@ else {
 		$subnet = $Subnets->fetch_subnet ("id", $request['subnetId']);
 
 		print '<tr>'. "\n";
-		print "	<td><button class='btn btn-xs btn-default' data-requestid='$request[id]'><i class='fa fa-pencil'></i></button></td>";
+		print "	<td><button class='btn btn-xs btn-default open_popup' data-script='app/admin/requests/edit.php' data-class='700' data-action='edit' data-requestid='$request[id]'><i class='fa fa-pencil'></i></button></td>";
 		print '	<td>'. $subnet->ip .'/'. $subnet->mask .' ('. $subnet->description .')</td>'. "\n";
 		print '	<td>'. $request['hostname'] .'</td>'. "\n";
 		print '	<td>'. $request['description'] .'</td>'. "\n";

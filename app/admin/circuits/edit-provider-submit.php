@@ -55,7 +55,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($provider[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && strlen($provider[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty").'!', true); }
 
 		# save to update array
 		$update[$myField['name']] = $provider[$myField['nameTest']];
@@ -76,7 +76,7 @@ if(isset($update)) {
 
 # update device
 if(!$Admin->object_modify("circuitProviders", $provider['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Provider $provider[action] successfull").'!', false); }
+else																	{ $Result->show("success", _("Provider")." ".$provider["action"]." "._("successful").'!', false); }
 
 if($provider['action']=="delete"){
 	# remove all references

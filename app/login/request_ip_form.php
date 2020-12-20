@@ -24,7 +24,7 @@ else {
 $subnets = $Tools->requests_fetch_available_subnets ();
 
 # die if no subnets are available for requests!
-if($subnets===NULL) { ?>
+if(!is_array($subnets)) { ?>
 <tr>
 	<td colspan="2"><div class="alert alert-warning" style="white-space:nowrap;"><?php print _('No subnets available for requests'); ?></div></td>
 </tr>
@@ -50,10 +50,7 @@ if($subnets===NULL) { ?>
 		foreach($subnets as $subnet) {
 			# cast
 			$subnet = (array) $subnet;
-			# must not have any slave subnets
-			if(!$Subnets->has_slaves($subnet['id'])) {
-				print '<option value="'.$subnet['id'].'">'.$Subnets->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].' ['.$subnet['description'].']</option>';
-			}
+			print '<option value="'.$subnet['id'].'">'.$Subnets->transform_to_dotted($subnet['subnet']).'/'.$subnet['mask'].' ['.$subnet['description'].']</option>';
 		}
 		?>
 		</select>
@@ -65,6 +62,13 @@ if($subnets===NULL) { ?>
 	<th><?php print _('Description'); ?></th>
 	<td>
 		<input type="text" name="description" class="form-control" size="30" placeholder="<?php print _('IP description'); ?>"></td>
+</tr>
+
+<!-- MAC address -->
+<tr>
+	<th><?php print _('MAC Address'); ?></th>
+	<td>
+		<input type="text" name="mac" class="form-control" size="30" placeholder="<?php print _('MAC Address'); ?>"></td>
 </tr>
 
 <!-- DNS name -->
@@ -125,6 +129,24 @@ if(in_array('owner', $setFields)) {
 	</td>
 </tr>
 
+<!-- custom fields -->
+<?php
+$custom_fields = $Tools->fetch_custom_fields('requests');
+
+if(sizeof($custom_fields) > 0) {
+	$timepicker_index = 0;
+	foreach ($custom_fields as $field) {
+		$custom_input = $Tools->create_custom_field_input ($field, $address, $timepicker_index);
+		$timepicker_index = $custom_input['timepicker_index'];
+
+		print ' <tr>'. "\n";
+		print " <td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
+		print " <td>".$custom_input['field']."</td>";
+		print '</tr>'. "\n";
+	}
+}
+?>
+
 <!-- submit -->
 <tr>
 	<td class="submit"></td>
@@ -167,8 +189,7 @@ if(is_object($instructions)) {
         $instructions->instructions = stripslashes($instructions->instructions);		//show html
 
         /* prevent <script> */
-        $instructions->instructions = str_replace("<script", "<div class='error'><xmp><script", $instructions->instructions);
-        $instructions->instructions = str_replace("</script>", "</script></xmp></div>", $instructions->instructions);
+        $instructions->instructions = $User->noxss_html($instructions->instructions);
 
         print "<div id='login' class='request'>";
         print "<div class='requestIP'>";

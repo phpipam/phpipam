@@ -7314,11 +7314,11 @@ msgstr "ラックドローモジュールを有効または無効にする"
 
 #: /var/www/phpipam/app/admin/settings/index.php:373
 msgid "Circuits module"
-msgstr "ロケーションモジュール"
+msgstr "サーキットモジュール"
 
 #: /var/www/phpipam/app/admin/settings/index.php:378
 msgid "Enable or disable Circuits module"
-msgstr "DHCPモジュールを有効または無効にします"
+msgstr "サーキットモジュールを有効または無効にします"
 
 #: /var/www/phpipam/app/admin/settings/index.php:384
 msgid "Locations module"

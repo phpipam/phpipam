@@ -46,7 +46,7 @@ if(sizeof($clogs)==0) {
 # result
 else {
 	# if more that configured print it!
-	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last $input_climit lines")."!", false); }
+	if(sizeof($clogs)==$input_climit) { $Result->show("warning alert-absolute", _("Output has been limited to last")." ".$input_climit." "._("lines")."!", false); }
 
 	# printout
 	print "<table class='table sorted table-striped table-top table-condensed' data-cookie-id-table='changelog_all'>";

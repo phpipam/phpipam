@@ -16,7 +16,7 @@ foreach ($Tools->get_customer_object_types () as $href=>$name) {
 	// print
 	$active = $_GET['sPage']==$href ? "active" : "";
 	$menu[] = "<li role='presentation' class='$active'>";
-	$menu[] = "	 <a href='".create_link($_GET['page'], "customers", $_GET['subnetId'], $href)."''>"._($name)." <span class='badge ' style='margin-left:5px;'>$cnt<span></a>";
+	$menu[] = "	 <a href='".create_link($_GET['page'], "customers", $_GET['subnetId'], $href)."''>".$name." <span class='badge ' style='margin-left:5px;'>$cnt<span></a>";
 	$menu[] = "</li>";
 }
 $menu[] = "</ul>";

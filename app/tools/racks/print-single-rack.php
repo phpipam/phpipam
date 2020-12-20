@@ -23,6 +23,8 @@ else {
     $rack = $Racks->fetch_rack_details ($_GET['subnetId']);
     $rack_devices = $Racks->fetch_rack_devices ($_GET['subnetId']);
     $rack_contents = $Racks->fetch_rack_contents ($_GET['subnetId']);
+    $Racks->add_rack_start_print($rack_devices);
+    $Racks->add_rack_start_print($rack_contents);
 
     // rack check
     if($rack===false)                       { header("Location: ".create_link($_GET['page'], "racks")); $error =_("Invalid rack Id"); }
@@ -230,16 +232,8 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
                     $is_back = true;
                 }
 
-                // reformat front / back start position
-                if($rack->hasBack!="0" && $cur->rack_start>$rack->size) {
-                    $cur->rack_start_print = $cur->rack_start - $rack->size;
-                }
-                else {
-                    $cur->rack_start_print = $cur->rack_start;
-                }
-
                 if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                    print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='$ctype' data-csrf='".$User->Crypto->csrf_cookie ("create", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
+                    print "<a href='' class='btn btn-xs btn-default btn-danger editRackDevice' data-action='remove' rel='tooltip' data-html='true' data-placement='left' title='"._("Remove")."' data-action='remove' style='margin-bottom:2px;margin-right:5px;' data-rackid='$rack->id' data-deviceid='$cur->id' data-devicetype='$ctype' data-csrf='".$User->Crypto->csrf_cookie ("create-if-not-exists", "rack_devices_".$rack->id."_device_".$cur->id)."'><i class='fa fa-times'></i></a> ";
                 }
                 print "<span class='badge badge1 badge5 $error' style='margin-bottom:3px;margin-right:5px;'>"._("Position").": $cur->rack_start_print, "._("Size").": $cur->rack_size U</span>";
                 if ($ctype == 'device') {

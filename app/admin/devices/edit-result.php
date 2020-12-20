@@ -84,7 +84,7 @@ if(sizeof($custom) > 0) {
 			}
 		}
 		//not null!
-		if($myField['Null']=="NO" && strlen($device[$myField['name']])==0) { $Result->show("danger", $myField['name'].'" can not be empty!', true); }
+		if($myField['Null']=="NO" && strlen($device[$myField['name']])==0) { $Result->show("danger", $myField['name']." "._("can not be empty!"), true); }
 
 		# save to update array
 		$update[$myField['name']] = $device[$myField['nameTest']];
@@ -118,7 +118,7 @@ if ($User->get_module_permissions ("locations")==User::ACCESS_NONE) {
 
 # update device
 if(!$Admin->object_modify("devices", $_POST['action'], "id", $values))	{}
-else																	{ $Result->show("success", _("Device $device[action] successfull").'!', false); }
+else { $Result->show("success", _("Device")." ".$device["action"]." "._("successful").'!', false); }
 
 if($_POST['action']=="delete"){
 	# remove all references from subnets and ip addresses

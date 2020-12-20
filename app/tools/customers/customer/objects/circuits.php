@@ -108,21 +108,21 @@ if (isset($objects["circuits"])) {
 	        print "<td class='actions'>";
 	        $links = [];
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_R) {
-	            $links[] = ["type"=>"header", "text"=>"Show circuit"];
-	            $links[] = ["type"=>"link", "text"=>"View", "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
+	            $links[] = ["type"=>"header", "text"=>_("Show circuit")];
+	            $links[] = ["type"=>"link", "text"=>_("View"), "href"=>create_link($_GET['page'], "circuits", $circuit->id), "icon"=>"eye", "visible"=>"dropdown"];
 	        }
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
 	            $links[] = ["type"=>"divider"];
-	            $links[] = ["type"=>"header", "text"=>"Manage circuit"];
-	            $links[] = ["type"=>"link", "text"=>"Edit circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
+	            $links[] = ["type"=>"header", "text"=>_("Manage circuit")];
+	            $links[] = ["type"=>"link", "text"=>_("Edit circuit"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='edit' data-circuitid='$circuit->id'", "icon"=>"pencil"];
 	        }
 	        if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
-	            $links[] = ["type"=>"link", "text"=>"Delete circuit", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", "icon"=>"times"];
+	            $links[] = ["type"=>"link", "text"=>_("Delete circuit"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-circuit.php' data-class='700' data-action='delete' data-circuitid='$circuit->id'", "icon"=>"times"];
 	        }
-			if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+	        if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
 	            $links[] = ["type"=>"divider"];
-		        $links[] = ["type"=>"header", "text"=>"Unlink"];
-	            $links[] = ["type"=>"link", "text"=>"Unlink object", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='circuits' data-id='$circuit->id'", "icon"=>"unlink"];
+	            $links[] = ["type"=>"header", "text"=>_("Unlink")];
+	            $links[] = ["type"=>"link", "text"=>_("Unlink object"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/unlink.php' data-class='700' data-object='circuits' data-id='$circuit->id'", "icon"=>"unlink"];
 			}
 	        // print links
 	        print $User->print_actions($User->user->compress_actions, $links);

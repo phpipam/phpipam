@@ -3359,7 +3359,7 @@ msgid "IP address request deleted"
 msgstr "IP地址申请删除"
 
 msgid "Online"
-msgstr "离线"
+msgstr "在线"
 
 msgid "Folders"
 msgstr "文件夹"

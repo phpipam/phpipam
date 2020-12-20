@@ -9,12 +9,6 @@ $('body').tooltip({ selector: '[rel=tooltip]' });
  * Script to display devices
  *
  */
-
-# rack object
-if($User->settings->enableRACK=="1") {
-	$Racks      = new phpipam_rack ($Database);
-}
-
 # verify that user is logged in
 $User->check_user_session();
 # perm check
@@ -22,6 +16,11 @@ $User->check_module_permissions ("devices", User::ACCESS_R, true, false);
 
 # filter devices or fetch print all?
 $devices = $Tools->fetch_all_objects("devices", "hostname");
+if($User->settings->enableRACK=="1") {
+	# rack object
+	$Racks = new phpipam_rack ($Database);
+	$Racks->add_rack_start_print($devices);
+}
 $device_types = $Tools->fetch_all_objects ("deviceTypes", "tid");
 
 # get custom device fields
@@ -132,9 +131,9 @@ else {
 	        print "<td>";
 	        # rack
 	        $rack = $Racks->fetch_rack_details ($device['rack']);
-	        if ($rack!==false) {
+	        if (is_object($rack)) {
 	            print "<a href='".create_link("tools", "racks", $rack->id)."'>".$rack->name."</a><br>";
-	            print "<span class='badge badge1 badge5'>"._('Position').": $device[rack_start], "._("Size").": $device[rack_size] U</span>";
+	            print "<span class='badge badge1 badge5'>"._('Position').": $device[rack_start_print], "._("Size").": $device[rack_size] U</span>";
 	        }
 	        print "</td>";
 	    }

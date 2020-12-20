@@ -158,8 +158,8 @@ class Scan extends Common_functions {
 		//check
 		if(!in_array($method, $possible)) {
 			//die or print?
-			if($this->icmp_exit)				{ die(json_encode(array("status"=>1, "error"=>"Invalid scan method"))); }
-			else								{ $this->Result->show("danger", "Invalid scan method", true); }
+			if($this->icmp_exit)				{ die(json_encode(array("status"=>1, "error"=>_("Invalid scan method.")))); }
+			else								{ $this->Result->show("danger", _("Invalid scan method."), true); }
 		}
 		//ok
 		else {
@@ -553,7 +553,7 @@ class Scan extends Common_functions {
 		catch (Exception $e) {
 			!$this->debugging ? : $this->Result->show("danger", $e->getMessage(), false);
 			# log
-			!$this->debugging ? : $this->Log->write ("status_update", _('Failed to update address status'), 0 );
+			!$this->debugging ? : $this->Log->write (_("Status update"), _('Failed to update address status.'), 0 );
 		}
 	}
 
@@ -701,7 +701,7 @@ class Scan extends Common_functions {
 		# update addresses statuses
 		elseif($type=="update") { return $this->prepare_addresses_to_update ($subnet); }
 		# fail
-		else 					{ die(json_encode(array("status"=>1, "error"=>"Invalid scan type provided"))); }
+		else 					{ die(json_encode(array("status"=>1, "error"=>_("Invalid scan type provided.")))); }
 	}
 
 	/**
@@ -718,13 +718,13 @@ class Scan extends Common_functions {
 		//subnet ID is provided, fetch subnet
 		$subnet = $Subnets->fetch_subnet(null, $subnetId);
 		if($subnet===false)	{
-			 if ($die)											{ die(json_encode(array("status"=>1, "error"=>"Invalid subnet ID provided"))); }
+			 if ($die)											{ die(json_encode(array("status"=>1, "error"=>_("Invalid subnet ID provided.")))); }
 			 else												{ return array(); }
 		}
 
 		// we should support only up to 4094 hosts!
 		if($Subnets->max_hosts ($subnet)>4096 && php_sapi_name()!="cli")
-		if ($die)												{ die(json_encode(array("status"=>1, "error"=>"Scanning from GUI is only available for subnets up to /20 or 4096 hosts!"))); }
+		if ($die)												{ die(json_encode(array("status"=>1, "error"=>_("Scanning from GUI is only available for subnets up to /20 or 4096 hosts!")))); }
 		else													{ return array(); }
 
 		# set array of addresses to scan, exclude existing!
@@ -785,7 +785,7 @@ class Scan extends Common_functions {
 		# result
 		$ip = $Subnets->get_all_possible_subnet_addresses ($subnet);
 		//none to scan?
-		if(sizeof($ip)==0)									{ die(json_encode(array("status"=>1, "error"=>"Didn't find any address to scan!"))); }
+		if(sizeof($ip)==0)									{ die(json_encode(array("status"=>1, "error"=>_("Didn't find any address to scan!")))); }
 		//result
 		return $ip;
 	}

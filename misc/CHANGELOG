@@ -6,18 +6,31 @@
     + Optionally hide section subnet menus;
     + L2 Domains user permissions;
     + Add scanPingType=="none" option to disable scanning;
+    + Custom fields on IP request forms (#2956);
 
     Enhancements, changes:
     ----------------------------
     + Improved php7.4 compatibility;
+    + SameSite attribute enabled for site cookies;
+    + SAML2
+        + php-saml updated to 3.4.1 (#3055);
+        + Removal of php-mcrypt dependancy;
+        + Drop support for idpcertfingerprint;
+        + MAP_SAML_USER and SAML_USERNAME config.php configuration moved to db;
+        + php-saml protocol debugging;
+        + Support for signed assertions;
+        + SAML usernames can be extracted from assertion attributes (#2948);
 
     Bugfixes:
     ----------------------------
+    + Fixed upgrade queries issues from 1.3.x to 1.4+ (#3130);
+    + Fixed boolean printout in footer (#2625);
+    + Fixed BGP Admin isn't working (#2631);
     + do not show statistics in dashboard widget for disabled modules (#2602);
     + MySQL 8.0 compatibility. (#2646,#2239);
     + Permit non-numeric postcodes for customers (#2393);
     + Bandwidth calculator - 400 Bad Request (#1807,#2648);
-    + Table layout not aligned (#2656);
+    + Table layout not aligned (#2656,#3105,#3113);
     + Improve scanning requirement checks (#1183);
     + Date picker hidden (#2673);
     + PDNS Add/Edit DNS record not working for normal users (#2686);
@@ -35,6 +48,11 @@
     + Fixed PowerDNS txt SPF editing (#1641);
     + Blank 'MAC' on SNMP-ARP and SNMP-MAC scans (#2911);
     + Incorrect network/broadcast calculation for IPv6 (#2879);
+    + Increase allowed email and password lengths (#3021);
+    + Wrong unit location for dual-sided racks (#3086);
+    + Linked ip_addr shows integer notation (#3100);
+    + Invalid scan type () error (#2785);
+    + Invalid CSRF cookie editing rack items (#2556);
     + API:
         + Fixed /user/ calls for SSL with app code (static app code);
         + Address IP field not displayed when using filter_by (#2934);
@@ -45,21 +63,16 @@
     + SQL injections processing `tableName` (#2738);
     + SQL injections processing `ftype` (#2751);
     + All circuits map, PHP object injection (#2937);
+    + Upgraded jQuery to 3.5.1 (#3119);
+    + Stored XSS in instructions widgets (#3025);
 
     Translations:
     ----------------------------
     + Update Traditional Chinese support to version 1.5 (#2658);
     + Update Simplified Chinese Translation (#2725);
     + Italian (it_IT) translation added (#2813);
-
-== 1.4.1
-
-    Bugfixes:
-    ----------------------------
-    + Fixed upgrade queries issues from 1.3.2 to 1.4;
-    + Fixed boolean printout in footer (#2625);
-    + Fixed BGP Admin isn't working (#2631);
-
+    + Updated German translation (#2970, #3065);
+    + Updated Russian translation (#3028);
 
 == 1.4
 

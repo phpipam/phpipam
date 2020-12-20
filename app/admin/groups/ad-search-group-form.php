@@ -38,7 +38,7 @@ if(sizeof($servers)==0) 	{ $Result->show("danger", _("No servers available"), tr
 	<table class="table table-noborder">
 
 	<tr>
-		<td>Select server</td>
+		<td><?php print _("Select server"); ?></td>
 		<td>
 			<select name="server" id="adserver" class="form-control input-w-auto">
 			<?php
@@ -51,7 +51,7 @@ if(sizeof($servers)==0) 	{ $Result->show("danger", _("No servers available"), tr
 	</tr>
 
 	<tr>
-		<td style="width:150px;">Filter</td>
+		<td style="width:150px;"><?php print _("Filter"); ?></td>
 		<td><input type="text" class="form-control input-sm" id='dfilter' name="dfilter" placeholder="<?php print _('Enter search filter'); ?>"></td>
 	</tr>
 

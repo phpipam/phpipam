@@ -60,7 +60,7 @@ else {
 
 		# set default pagesize
 		if(!isset($_COOKIE['table-page-size'])) {
-	        setcookie("table-page-size", 50, time()+2592000, "/", false, false, false);
+			setcookie_samesite("table-page-size", 50, 2592000, false);
 		}
 	?>
 	<!DOCTYPE HTML>
@@ -104,7 +104,7 @@ else {
 		<?php } ?>
 
 		<!-- js -->
-		<script src="js/jquery-3.4.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
+		<script src="js/jquery-3.5.1.min.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<script src="js/jclock.jquery.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
 		<?php if($_GET['page']=="login" || $_GET['page']=="request_ip") { ?>
 		<script src="js/login.js?v=<?php print SCRIPT_PREFIX; ?>"></script>
@@ -286,7 +286,7 @@ else {
 					elseif ($_GET['page']=="tools") {
 						if (!isset($_GET['section']))										{ include("app/tools/index.php"); }
 						else {
-	                        if (!in_array($_GET['section'], $tools_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+	                        if (!isset($tools_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
 							elseif (!file_exists("app/tools/$_GET[section]/index.php") && !file_exists("app/tools/custom/$_GET[section]/index.php"))
 							                                                                { header("Location: ".create_link("error","404")); die(); }
 							else 															{
@@ -307,7 +307,7 @@ else {
 						if (!isset($_GET['section']))										{ include("app/admin/index.php"); }
 						elseif (@$_GET['subnetId']=="section-changelog")					{ include("app/sections/section-changelog.php"); }
 						else {
-	                        if (!in_array($_GET['section'], $admin_menu_items))             { header("Location: ".create_link("error","400")); die(); }
+	                        if (!isset($admin_menu_items[$_GET['section']]))             { header("Location: ".create_link("error","400")); die(); }
 							elseif(!file_exists("app/admin/$_GET[section]/index.php")) 		{ header("Location: ".create_link("error","404")); die(); }
 							else 															{ include("app/admin/$_GET[section]/index.php"); }
 						}

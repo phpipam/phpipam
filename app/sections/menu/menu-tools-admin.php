@@ -20,7 +20,7 @@ if($User->is_admin(false)) {
 	# print admin items
 	foreach($admin_menu as $k=>$item) {
 		# header
-		print "<li class='nav-header'>"._($k)."</li>";
+		print "<li class='nav-header'>".$k."</li>";
 		# items
 		foreach($item as $i) {
 			# only selected
@@ -31,7 +31,7 @@ if($User->is_admin(false)) {
 				} else {
 					$active = "";
 				}
-				print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>"._($i['name'])."</a></li>";
+				print "<li class='$active'><a href='".create_link("administration",$i['href'])."'>".$i['name']."</a></li>";
 			}
 		}
 	}
@@ -59,7 +59,7 @@ if($User->is_admin(false)) {
 			$m=0;
 			foreach($tools_menu as $k=>$item) {
 				# header
-				print "<li class='nav-header'>"._($k)."</li>";
+				print "<li class='nav-header'>".$k."</li>";
 				# items
 				foreach($item as $i) {
 					# only active
@@ -70,7 +70,7 @@ if($User->is_admin(false)) {
 						} else {
 							$active = "";
 						}
-						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
+						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>".$i['name']."</a></li>";
 					}
 				}
 			}
@@ -125,7 +125,7 @@ if($User->is_admin(false)) {
 			# print tools items
 			foreach($tools_menu as $k=>$item) {
 				# header
-				print "<li class='nav-header'>"._($k)."</li>";
+				print "<li class='nav-header'>".$k."</li>";
 				# items
 				foreach($item as $i) {
 					# only selected
@@ -136,7 +136,7 @@ if($User->is_admin(false)) {
 						} else {
 							$active = "";
 						}
-						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>"._($i['name'])."</a></li>";
+						print "<li class='$active'><a href='".create_link("tools",$i['href'])."'>".$i['name']."</a></li>";
 					}
 				}
 			}

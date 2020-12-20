@@ -23,7 +23,7 @@ $User->check_maintaneance_mode ();
 $User->Crypto->csrf_cookie ("validate", "instructions", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
 
 # strip script
-$_POST['instructions'] = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $_POST['instructions']);
+$_POST['instructions'] = $User->noxss_html($_POST['instructions']);
 
 # validate ID
 if ($_POST['id']=="1" || $_POST['id']=="2") {

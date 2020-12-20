@@ -99,15 +99,15 @@ else {
 		// actions
         print "<td class='actions'>";
         $links = [];
-        $links[] = ["type"=>"header", "text"=>"View"];
-        $links[] = ["type"=>"link", "text"=>"Show provider", "href"=>create_link($_GET['page'], "circuits","providers",$provider->id), "icon"=>"eye", "visible"=>"dropdown"];
+        $links[] = ["type"=>"header", "text"=>_("View")];
+        $links[] = ["type"=>"link", "text"=>_("Show provider"), "href"=>create_link($_GET['page'], "circuits","providers",$provider->id), "icon"=>"eye", "visible"=>"dropdown"];
         $links[] = ["type"=>"divider"];
         if($User->get_module_permissions ("circuits")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>"Manage provider"];
-            $links[] = ["type"=>"link", "text"=>"Edit provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
+            $links[] = ["type"=>"header", "text"=>_("Manage provider")];
+            $links[] = ["type"=>"link", "text"=>_("Edit provider"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='edit' data-providerid='$provider->id'", "icon"=>"pencil"];
         }
         if($User->get_module_permissions ("circuits")>=User::ACCESS_RWA) {
-            $links[] = ["type"=>"link", "text"=>"Delete provider", "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
+            $links[] = ["type"=>"link", "text"=>_("Delete provider"), "href"=>"", "class"=>"open_popup", "dataparams"=>"  data-script='app/admin/circuits/edit-provider.php' data-class='700' data-action='delete' data-providerid='$provider->id'", "icon"=>"times"];
             $links[] = ["type"=>"divider"];
         }
         // print links

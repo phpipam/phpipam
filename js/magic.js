@@ -183,12 +183,12 @@ $('body').on('touchstart.dropdown', '.dropdown-menu', function (e) { e.stopPropa
 
 /*    generate random password */
 function randomPass() {
-    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+    var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890#_-![]=~";
     var pass = "";
     var x;
     var i;
     for(x=0; x<10; x++) {
-        i = Math.floor(Math.random() * 62);
+        i = Math.floor(Math.random() * 70);
         pass += chars.charAt(i);
     }
     return pass;
@@ -765,9 +765,11 @@ $(document).on('click', 'a#saveScanResults', function() {
 	showSpinner();
 	var script   = $(this).attr('data-script');
 	var subnetId = $(this).attr('data-subnetId');
-	var postData = $('form.'+script+"-form").serialize();
+	var postData = "type="+script;
 	var postData = postData+"&subnetId="+subnetId;
-	var postData = postData+"&type="+script;
+	var postData = postData+"&"+$('form.'+script+"-form").serialize();
+	var postData = postData+"&canary=true";
+
 	$.post('app/subnets/scan/subnet-scan-result.php', postData, function(data) {
         $('#subnetScanAddResult').html(data);
         //hide if success!
