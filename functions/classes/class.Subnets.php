@@ -940,7 +940,40 @@ class Subnets extends Common_functions {
 		return $out;
 	}
 
+	/**
+	 * Returns all IPv4 subnet masks with different presentations
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function get_ipv4_masks_for_subnet ($subnet_mask = "32") {
+    	$out = array();
+		# loop masks
+		for($mask=32; $mask>=$subnet_mask; $mask--) {
+			// initialize
+			$out[$mask] = new StdClass ();
 
+			// fake cidr
+			$this->initialize_pear_net_IPv4 ();
+			$net = $this->Net_IPv4->parseAddress("10.0.0.0/$mask");
+
+			// set
+			$out[$mask]->bitmask = $mask;									// bitmask
+			$out[$mask]->netmask = $net->netmask;							// netmask
+			$out[$mask]->host_bits = 32-$mask;								// host bits
+			$out[$mask]->subnet_bits = 32-$out[$mask]->host_bits;			// network bits
+			$out[$mask]->hosts = number_format( $this->max_hosts(['subnet'=>'10.0.0.0', 'mask'=>$mask]) , 0, ",", ".");		// max hosts
+			$out[$mask]->subnets = number_format(pow(2,($mask-$subnet_mask)), 0, ",", ".");
+			$out[$mask]->wildcard = long2ip(~ip2long($net->netmask));	   //0.0.255.255
+
+			// binary
+			$parts = explode(".", $net->netmask);
+			foreach($parts as $k=>$p) { $parts[$k] = str_pad(decbin($p),8, 0); }
+			$out[$mask]->binary = implode(".", $parts);
+		}
+		# return result
+		return $out;
+	}
 
 
 
