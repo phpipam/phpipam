@@ -10,7 +10,8 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 # initialize user object
 $Database       = new Database_PDO;
 $User           = new User ($Database);
-$Admin          = new Admin ($Database);
+$Admin          = new Admin ($Database, false);
+$Tools          = new Tools ($Database);
 $Result         = new Result ();
 $Password_check = new Password_check ();
 
@@ -27,6 +28,9 @@ $_POST = $Admin->strip_input_tags($_POST);
 
 # validate csrf cookie
 $User->Crypto->csrf_cookie ("validate", "vaults", $_POST['csrf_cookie']) === false ? $Result->show("danger", _("Invalid CSRF cookie"), true) : "";
+
+# fetch custom fields
+$custom = $Tools->fetch_custom_fields('vaults');
 
 /* checks */
 $error = array();
@@ -57,6 +61,15 @@ else {
 					"name"                   =>@$_POST['name'],
 					"description"            =>$_POST['description']
 					);
+
+	# append custom
+	if(sizeof($custom) > 0) {
+		foreach($custom as $myField) {
+			# replace possible ___ back to spaces!
+			$myField['nameTest']      = str_replace(" ", "___", $myField['name']);
+			if(isset($_POST[$myField['nameTest']])) { $values[$myField['name']] = @$_POST[$myField['nameTest']];}
+		}
+	}
 
 	# add test
 	if($_POST['action']=="add") {

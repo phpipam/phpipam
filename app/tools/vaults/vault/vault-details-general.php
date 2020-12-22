@@ -3,6 +3,9 @@
 # verify that user is logged in
 $User->check_user_session();
 
+// get custom fields
+$custom_fields_v = $Tools->fetch_custom_fields('vaults');
+
 # printout
 // perm check
 if ($User->get_module_permissions ("vaults")==User::ACCESS_NONE) {
@@ -15,7 +18,6 @@ else {
 
 	// back
 	print "<a class='btn btn-sm btn-default' href='".create_link($_GET['page'], "vaults")."'><i class='fa fa-angle-left'></i> "._("All vaults")."</a><br><br>";
-
 
 	print "<table class='ipaddress_subnet table-condensed table-auto'>";
 
@@ -36,6 +38,33 @@ else {
 	print "	<th>"._("Type")."</th>";
 	print "	<td>".$vault->type."</td>";
 	print "</tr>";
+
+	// print custom fields
+	if(sizeof($custom_fields_v) > 0) {
+
+		print "<tr>";
+		print "	<td colspan='2'><hr></td>";
+		print "</tr>";
+
+		foreach($custom_fields_v as $key=>$field) {
+			$vault->{$key} = str_replace("\n", "<br>",$vault->{$key});
+
+			# fix for boolean
+			if($field['type']=="tinyint(1)" || $field['type']=="boolean") {
+				if($vault->{$key}==0)		{ $vault->{$key} = "false"; }
+				elseif($vault->{$key}==1)	{ $vault->{$key} = "true"; }
+				else						{ $vault->{$key} = ""; }
+			}
+
+			// create links
+			$vault->{$key} = $Tools->create_links($vault->{$key});
+
+			print "<tr>";
+			print "	<th>".$Tools->print_custom_field_name ($key)."</th>";
+			print "	<td style='vertical-align:top;align:left;'>".$vault->{$key}."</td>";
+			print "</tr>";
+		}
+	}
 
 	// status
 	print "<tr>";

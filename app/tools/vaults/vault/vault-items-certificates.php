@@ -4,7 +4,8 @@
 $User->check_user_session();
 
 # fetch items
-$certificates = $Tools->fetch_multiple_objects ("vaultItems", "vaultId", $_GET['subnetId']);
+$certificates_db = $Tools->fetch_multiple_objects ("vaultItems", "vaultId", $_GET['subnetId'], 'id', false);
+
 
 // create new item
 if ($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
@@ -22,10 +23,9 @@ print "<table class='table sorted table-striped sorted table-certificates' data-
 // headers
 print "<thead>";
 print "	<th>"._("Name")."</th>";
-print "	<th>"._("Type")."</th>";
 print "	<th>"._("Key")."</th>";
 print "	<th>"._("Status")."</th>";
-print "	<th>"._("Subject")."</th>";
+print "	<th>"._("Name")."</th>";
 print "	<th class='hidden-sm'>"._("Expires")."</th>";
 print "	<th class='hidden-sm'>"._("Issuer")."</th>";
 print "	<th class='hidden-sm'>"._("Alt names")."</th>";
@@ -39,9 +39,9 @@ print "	<th style='width:50px;'></th>";
 print "</thead>";
 
 print "<tbody>";
-if($certificates!==false) {
+if($certificates_db!==false) {
 	// loop
-	foreach ($certificates as $p) {
+	foreach ($certificates_db as $p) {
 		// decrypt values
 		$values = $User->Crypto->decrypt($p->values, $_SESSION["vault".$vault->id]);
 		// check
@@ -70,9 +70,9 @@ if($certificates!==false) {
 
 			// warning class
 			// status
-			if($valid_days<0)  		{ $status = "Expired"; $warning = "danger";  $warningIcon = "<i class='fa fa-warning'></i>"; }
-			elseif($valid_days<30) 	{ $status = "Warning"; $warning = "warning"; $warningIcon = "<i class='fa fa-warning'></i>"; }
-			else 					{ $status = "OK"; $warning = ""; $warningIcon = ""; }
+			if($valid_days<0)  		{ $status = "<span class='badge alert-danger'>"._("Expired")."</span>"; $warning = "danger";  $warningIcon = "<i class='fa fa-warning'></i>"; }
+			elseif($valid_days<30) 	{ $status = "<span class='badge alert-warning'>"._("Warning")."</span>"; $warning = "warning"; $warningIcon = "<i class='fa fa-warning'></i>"; }
+			else 					{ $status = "<span class='badge alert-success'>"._("OK")."</span>"; $warning = ""; $warningIcon = ""; }
 
 			// pkey
 			$pkey = openssl_get_privatekey(base64_decode($values['certificate']))===false ? "-" : "<i class='fa fa-key' rel='tooltip' title='"._("Certificate has private key")."'></i>";
@@ -80,19 +80,22 @@ if($certificates!==false) {
 			// print
 			print "<tr class='text-top $warning'>";
 			print "	<td><strong><a href='".create_link("tools","vaults",$vault->id, $p->id)."'>".$values['name']."</a> $warningIcon</strong></td>";
-			print "	<td>".ucwords($p->type)."</td>";
 			print "	<td>"._($pkey)."</td>";
 			print "	<td>$status</td>";
 			print "	<td>".$certificate['subject']['CN']."</td>";
 			print "	<td>".$validTo." ($valid_days days)</td>";
-			print "	<td>".$certificate['issuer']['CN']."</td>";
+			print "	<td>".$certificate['issuer']['O']."</td>";
 			print "	<td>".str_replace([","], "<br>", $certificate['extensions']['subjectAltName'])."</td>";
 
 	        // custom fields
 	        if(sizeof(@$custom_fields) > 0) {
 		   		foreach($custom_fields as $field) {
 					print "<td class='hidden-xs hidden-sm hidden-md'>";
-					$Tools->print_custom_field ($field['type'], $p->{$field['name']});
+
+					// fix for text
+					if($field['type']=="text") { $field['type'] = "varchar(255)"; }
+
+					$Tools->print_custom_field ($field['type'], $p->{$field['name']}, "\n", "<br>");
 					print "</td>";
 		    	}
 		    }
@@ -102,10 +105,7 @@ if($certificates!==false) {
 			$links = [];
 
 			$links[] = ["type"=>"header", "text"=>"Download"];
-			$links[] = ["type"=>"link", "text"=>"Download certificate (.cer)", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-type='public' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
-			if(openssl_get_privatekey(base64_decode($values['certificate']))!==false) {
-			$links[] = ["type"=>"link", "text"=>"Download certificate with key (.p12)", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-type='pkcs12' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
-			}
+			$links[] = ["type"=>"link", "text"=>"Download certificate", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
 
 			if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
 			    $links[] = ["type"=>"header", "text"=>"Manage"];

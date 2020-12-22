@@ -15,6 +15,9 @@ else {
 	// fetch vaults
 	$all_vaults = $Tools->fetch_all_objects ("vaults");
 
+	// get custom fields
+	$custom_fields_v = $Tools->fetch_custom_fields('vaults');
+
 	// create new Vault
 	if ($User->get_module_permissions ("vaults")==User::ACCESS_RWA) {
 		print "<button class='btn btn-sm btn-default open_popup' style='margin-bottom:10px;' data-script='app/admin/vaults/edit.php' data-class='700' data-action='add'><i class='fa fa-plus'></i> "._('Create Vault')."</button>";
@@ -48,6 +51,12 @@ else {
 			    print "<th data-width='300' data-width-unit='px'>"._('Name').'</th>';
 			    print "<th data-width='120' data-width-unit='px'>"._('Status').'</th>';
 				print "<th>"._('Description').'</th>';
+				// custom
+				if(sizeof(@$custom_fields_v) > 0) {
+					foreach($custom_fields_v as $field) {
+						print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
+					}
+				}
 			    print '<th></th>';
 				print '</tr>';
 				print "</thead>";
@@ -74,7 +83,24 @@ else {
 					print '	<td>'._($status).'</td>';
 					print '	<td class="text-muted">' . $a->description . '</td>'. "\n";
 
-					# add/remove APIs
+			        // custom fields
+			        if(sizeof(@$custom_fields_v) > 0) {
+				   		foreach($custom_fields_v as $field) {
+							print "<td class='hidden-xs hidden-sm hidden-md'>";
+
+							// fix for text
+							if($status=="Unlocked") {
+								if($field['type']=="text") { $field['type'] = "varchar(255)"; }
+								$Tools->print_custom_field ($field['type'], $a->{$field['name']}, "\n", "<br>");
+							}
+							else {
+								print "********";
+							}
+							print "</td>";
+				    	}
+				    }
+
+					// add/remove vaults
 					print "	<td class='actions'>";
 					print "	<div class='btn-group'>";
 					if($User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) == "test") {

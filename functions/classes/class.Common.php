@@ -1679,14 +1679,20 @@ class Common_functions  {
 	 *
 	 * @param  string $type
 	 * @param  string $value
+	 * @param  string $delimiter
 	 *
 	 * @return void
 	 */
-	public function print_custom_field ($type, $value) {
+	public function print_custom_field ($type, $value, $delimiter = false, $replacement = false) {
 		// escape
 		$value = str_replace("'", "&#39;", $value);
 		// create links
 		$value = $this->create_links ($value, $type);
+
+		// delimiter ?
+		if($delimiter !== false && $replacement !== false) {
+			$value = str_replace($delimiter, $replacement, $value);
+		}
 
 		//booleans
 		if($type=="tinyint(1)")	{

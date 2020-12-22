@@ -40,7 +40,8 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
 $error = array();
 // cert check
 if($_POST['action']=="add") {
-	if(openssl_x509_parse(base64_decode($_POST['certificate']))===false) { $Result->show("danger", _("Cannot parse certificate"), true); }
+	// print_r(base64_decode($_POST['certificate']));
+	// if(openssl_x509_parse(base64_decode($_POST['certificate']))===false) { $Result->show("danger", _("Cannot parse certificate"), true); }
 }
 // for edits without certificate get old value!
 elseif($_POST['action']=="edit") {

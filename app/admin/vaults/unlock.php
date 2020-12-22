@@ -70,3 +70,13 @@ $vault===false ? $Result->show("danger", _("Invalid ID"), true) : null;
 	<!-- Result -->
 	<div id="vaultEditResult"></div>
 </div>
+
+
+<script type="text/javascript">
+$(document).keypress(function(e){
+    if (e.which == 13){
+        $(".submit_popup").click();
+	    return false
+    }
+});
+</script>
