@@ -59,8 +59,7 @@ elseif($_POST['type']=="certificate") {
 // public + private
 elseif($_POST['type']=="website") {
 	$html[] = "<tr>";
-	$html[] = "<td></td>";
-	$html[] = "<td>";
+	$html[] = "<td></td><td>";
 	$html[] = "<div class='row'>";
 	$html[] = "<div class='input-group'>";
 	$html[] = "	<input class='form-control input-sm' name='website' value='https://'>";
@@ -68,11 +67,21 @@ elseif($_POST['type']=="website") {
 	$html[] = "	<button class='btn btn-sm btn-success fetch_certificate' type='button'>"._("Fetch")."</button>";
 	$html[] = "	</span>";
 	$html[] = "</div>";
-	$html[] = " <div class='fetch-result' style='margin-top: 5px;'>";
 	$html[] = "</div>";
 	$html[] = "</td>";
 	$html[] = "<td class='info2'>"._("Enter website URL")."</td>";
 	$html[] = "</tr>";
+
+	$html[] = "<tr>";
+	$html[] = "<td></td><td>";
+	$html[] = " <input type='checkbox' id='verify_peer' checked='On'>";
+	$html[] = "</td>";
+	$html[] = "<td class='info2'>"._("Verify certificate chain")."</td>";
+	$html[] = "</tr>";
+
+	$html[] = "<tr>";
+	$html[] = "<td colspan='3'><div class='fetch-result' style='margin-top: 5px;'></td>";
+	$html[] = "</td>";
 }
 // error
 else {

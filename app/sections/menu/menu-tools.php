@@ -125,7 +125,7 @@ $tool_items["multicast-networks"] = array (
                         );
 }
 
-// pstn
+// vaults
 if($User->settings->enableVaults==1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R) {
 $tool_items["vaults"] = array (
                         "name"=>"Vaults",

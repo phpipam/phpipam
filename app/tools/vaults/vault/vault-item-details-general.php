@@ -97,11 +97,11 @@ else {
 			$links[] = ["type"=>"link", "text"=>"Download certificate with key (.p12)", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-type='pkcs12' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
 			}
 
-			if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+			if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
 			    $links[] = ["type"=>"header", "text"=>"Manage"];
 			    $links[] = ["type"=>"link", "text"=>"Edit Item", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='edit' data-vaultId='$vault->id' data-id='$vault_item->id'", "icon"=>"pencil"];
 			    }
-			if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
+			if($User->get_module_permissions ("vaults")>=User::ACCESS_RWA) {
 			    $links[] = ["type"=>"link", "text"=>"Delete Item", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='delete' data-vaultId='$vault->id' data-id='$vault_item->id'", "icon"=>"times"];
 			}
 			// print links
@@ -109,125 +109,128 @@ else {
 			print "</td>";
 			print "</tr>";
 
-			// decode and print cert
-			$certificate_details = openssl_x509_parse(base64_decode($vault_item_values->certificate), true);
+			$cert_chain = preg_split("/(?=-----BEGIN CERTIFICATE-----)/m", base64_decode($vault_item_values->certificate), -1, PREG_SPLIT_NO_EMPTY);
 
-			// get public key details
-			$key = openssl_pkey_get_public(base64_decode($vault_item_values->certificate));
-			$key_details = openssl_pkey_get_details($key);
+			foreach($cert_chain as $link) {
+				// decode and print cert
+				$certificate_details = openssl_x509_parse($link, true);
 
-			// get hash
-			$cert = openssl_x509_read(base64_decode($vault_item_values->certificate));
-			$sha1_hash = openssl_x509_fingerprint($cert); // sha1 hash
-			$sha256_hash = openssl_x509_fingerprint($cert, 'SHA256'); // md5 hash
+				// get public key details
+				$key = openssl_pkey_get_public(base64_decode($vault_item_values->certificate));
+				$key_details = openssl_pkey_get_details($key);
 
-			// print "<pre>";
-			// print_r($key_details);
-			// print_r($certificate_details);
-			// print_r($sha1_hash);
-			// print "</pre>";
+				// get hash
+				$cert = openssl_x509_read(base64_decode($vault_item_values->certificate));
+				$sha1_hash = openssl_x509_fingerprint($cert); // sha1 hash
+				$sha256_hash = openssl_x509_fingerprint($cert, 'SHA256'); // md5 hash
 
-			// Subnect name
-			print "<tr>";
-			print "	<td colspan='2'><h4 style='margin-top:50px;'>"._("Subject name")."</h4><hr></td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Common name")."</th>";
-			print "	<td>".$certificate_details['subject']['CN']."</td>";
-			print "</tr>";
-			print "	<th>"._("Alt names")."</th>";
-			print "	<td>".str_replace(",","<br>",$certificate_details['extensions']['subjectAltName'])."</td>";
-			print "</tr>";
+				// print "<pre>";
+				// print_r($key_details);
+				// print_r($certificate_details);
+				// print_r($sha1_hash);
+				// print "</pre>";
 
-			// Certificate details
-			print "<tr>";
-			print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Certificate details")."</h4><hr></td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Serial number")."</th>";
-			print "	<td>".chunk_split($certificate_details['serialNumberHex'], 2, ' ')."</td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Key size")."</th>";
-			print "	<td>".$key_details['bits']." kB</td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Version")."</th>";
-			print "	<td>".$certificate_details['version']."</td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Signature algorithm")."</th>";
-			print "	<td>".$certificate_details['signatureTypeSN']."</td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Not valid before")."</th>";
-			print "	<td>".date("Y-m-d H:i:s", $certificate_details['validFrom_time_t'])."</td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("Not valid after")."</th>";
-			print "	<td>".date("Y-m-d H:i:s", $certificate_details['validTo_time_t'])."</td>";
-			print "</tr>";
-
-			// Fingerptints
-			print "<tr>";
-			print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Fingerprints")."</h4><hr></td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("SHA-256")."</th>";
-			print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA256'), 2, ' ')."</td>";
-			print "</tr>";
-			print "<tr>";
-			print "	<th>"._("SHA-1")."</th>";
-			print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA1'), 2, ' ')."</td>";
-			print "</tr>";
-
-			// Issuer
-			print "<tr>";
-			print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Issuer")."</h4><hr></td>";
-			print "</tr>";
-			if(strlen($certificate_details['issuer']['C'])>0) {
-			print "<tr>";
-			print "	<th>"._("Country")."</th>";
-			print "	<td>".$certificate_details['issuer']['C']."</td>";
-			print "</tr>";
-			}
-			if(strlen($certificate_details['issuer']['ST'])) {
-			print "<tr>";
-			print "	<th>"._("County")."</th>";
-			print "	<td>".$certificate_details['issuer']['ST']."</td>";
-			print "</tr>";
-			}
-			if(strlen($certificate_details['issuer']['L'])) {
-			print "<tr>";
-			print "	<th>"._("Locality")."</th>";
-			print "	<td>".$certificate_details['issuer']['L']."</td>";
-			print "</tr>";
-			}
-			if(strlen($certificate_details['issuer']['O'])>0) {
-			print "<tr>";
-			print "	<th>"._("Organisation name")."</th>";
-			print "	<td>".$certificate_details['issuer']['O']."</td>";
-			print "</tr>";
-			}
-			print "<tr>";
-			print "	<th>"._("Common name")."</th>";
-			print "	<td>".$certificate_details['issuer']['CN']."</td>";
-			print "</tr>";
-
-			// Extensions
-
-			unset($certificate_details['extensions']['ct_precert_scts']);
-
-			print "<tr>";
-			print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Extensions")."</h4><hr></td>";
-			print "</tr>";
-			foreach($certificate_details['extensions'] as $ext_key=>$e) {
+				// Subject name
 				print "<tr>";
-				print "	<th>".ucwords(preg_replace('/(?<!\ )[A-Z]/', ' $0', $ext_key))."</th>";
-				print "	<td>".str_replace(",","<br>",$e)."</td>";
+				print "	<td colspan='2'><h4 style='margin-top:50px;'>"._("Subject name")."</h4><hr></td>";
 				print "</tr>";
-			}
+				print "<tr>";
+				print "	<th>"._("Common name")."</th>";
+				print "	<td>".$certificate_details['subject']['CN']."</td>";
+				print "</tr>";
+				print "	<th>"._("Alt names")."</th>";
+				print "	<td>".str_replace(",","<br>",$certificate_details['extensions']['subjectAltName'])."</td>";
+				print "</tr>";
 
+				// Certificate details
+				print "<tr>";
+				print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Certificate details")."</h4><hr></td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("Serial number")."</th>";
+				print "	<td>".chunk_split($certificate_details['serialNumberHex'], 2, ' ')."</td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("Key size")."</th>";
+				print "	<td>".$key_details['bits']." kB</td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("Version")."</th>";
+				print "	<td>".$certificate_details['version']."</td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("Signature algorithm")."</th>";
+				print "	<td>".$certificate_details['signatureTypeSN']."</td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("Not valid before")."</th>";
+				print "	<td>".date("Y-m-d H:i:s", $certificate_details['validFrom_time_t'])."</td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("Not valid after")."</th>";
+				print "	<td>".date("Y-m-d H:i:s", $certificate_details['validTo_time_t'])."</td>";
+				print "</tr>";
+
+				// Fingerptints
+				print "<tr>";
+				print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Fingerprints")."</h4><hr></td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("SHA-256")."</th>";
+				print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA256'), 2, ' ')."</td>";
+				print "</tr>";
+				print "<tr>";
+				print "	<th>"._("SHA-1")."</th>";
+				print "	<td>".chunk_split(openssl_x509_fingerprint($cert, 'SHA1'), 2, ' ')."</td>";
+				print "</tr>";
+
+				// Issuer
+				print "<tr>";
+				print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Issuer")."</h4><hr></td>";
+				print "</tr>";
+				if(strlen($certificate_details['issuer']['C'])>0) {
+				print "<tr>";
+				print "	<th>"._("Country")."</th>";
+				print "	<td>".$certificate_details['issuer']['C']."</td>";
+				print "</tr>";
+				}
+				if(strlen($certificate_details['issuer']['ST'])) {
+				print "<tr>";
+				print "	<th>"._("County")."</th>";
+				print "	<td>".$certificate_details['issuer']['ST']."</td>";
+				print "</tr>";
+				}
+				if(strlen($certificate_details['issuer']['L'])) {
+				print "<tr>";
+				print "	<th>"._("Locality")."</th>";
+				print "	<td>".$certificate_details['issuer']['L']."</td>";
+				print "</tr>";
+				}
+				if(strlen($certificate_details['issuer']['O'])>0) {
+				print "<tr>";
+				print "	<th>"._("Organisation name")."</th>";
+				print "	<td>".$certificate_details['issuer']['O']."</td>";
+				print "</tr>";
+				}
+				print "<tr>";
+				print "	<th>"._("Common name")."</th>";
+				print "	<td>".$certificate_details['issuer']['CN']."</td>";
+				print "</tr>";
+
+				// Extensions
+
+				unset($certificate_details['extensions']['ct_precert_scts']);
+
+				print "<tr>";
+				print "	<td colspan='2'><h4 style='margin-top:30px;'>"._("Extensions")."</h4><hr></td>";
+				print "</tr>";
+				foreach($certificate_details['extensions'] as $ext_key=>$e) {
+					print "<tr>";
+					print "	<th>".ucwords(preg_replace('/(?<!\ )[A-Z]/', ' $0', $ext_key))."</th>";
+					print "	<td>".str_replace(",","<br>",$e)."</td>";
+					print "</tr>";
+				}
+			}
 		}
 
 		print "</table>";

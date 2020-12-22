@@ -102,11 +102,11 @@ else {
 	$links[] = ["type"=>"header", "text"=>"Actions"];
 	$links[] = ["type"=>"link", "text"=>"Lock Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/lock.php' data-class='700' data-id='$vault->id'", "icon"=>"key"];
 
-	if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
+	if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
 	    $links[] = ["type"=>"header", "text"=>"Manage"];
 	    $links[] = ["type"=>"link", "text"=>"Edit Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit.php' data-class='700' data-action='edit' data-id='$vault->id'", "icon"=>"pencil"];
 	    }
-	if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
+	if($User->get_module_permissions ("vaults")>=User::ACCESS_RWA) {
 	    $links[] = ["type"=>"link", "text"=>"Delete Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit.php' data-class='700' data-action='delete' data-id='$vault->id'", "icon"=>"times"];
 	}
 	// print links

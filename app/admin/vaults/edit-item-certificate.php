@@ -182,7 +182,7 @@ $(document).ready(function () {
         }
         else {
             // load
-            $.post("/app/admin/vaults/edit-item-certificate-upload-form.php", {"type":"website"}, function(data) {
+            $.post("app/admin/vaults/edit-item-certificate-upload-form.php", {"type":"website"}, function(data) {
                 $('tbody#upload').html(data)
             })
         }
@@ -191,14 +191,14 @@ $(document).ready(function () {
     // on change
     $('select[name=type]').on('change', function() {
         var value = $(this).find(":selected").val();
-        $.post("/app/admin/vaults/edit-item-certificate-upload-form.php", {"type":value}, function(data) {
+        $.post("app/admin/vaults/edit-item-certificate-upload-form.php", {"type":value}, function(data) {
             $('tbody#upload').html(data)
         })
     });
 
     // fetch
     $(document).on('click', ".fetch_certificate",  function () {
-        $.post("app/admin/vaults/fetch_website_certificate.php", {"website": $("input[name=website]").val()}, function(data) {
+        $.post("app/admin/vaults/fetch_website_certificate.php", {"website": $("input[name=website]").val(),"verify_peer": $('#verify_peer').is(':checked')}, function(data) {
             // check for error
             if(data.indexOf("Error") !== -1 || data.indexOf("Warning") !== -1 || data.indexOf("alert-danger") !== -1) {
                 // print error
