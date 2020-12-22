@@ -1258,3 +1258,40 @@ html {
         background: $color_gray_8 !important;
     }
 }
+
+
+.subnet_map_found {
+    border-color: #d6e9c6;
+    background: rgba(0,255,0,0.15) !important;
+    color: white !important;
+}
+.subnet_map_found:hover {
+    background: rgba(0,255,0,0.2) !important;
+}
+.subnet_map_notfound {
+    background-color: rgba(255,0,0,0.15) !important;
+    color: white !important;
+}
+.subnet_map_found  a {
+    color: white !important;
+}
+.ip_vis_subnet span {
+    box-shadow: 0px 0px 1px #777;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 3px;
+    padding-top: 7px;
+    text-align: center;
+    font-size: 12px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    width: 120px;
+    height: 30px;
+    float: left;
+    border-left: none;
+}
+.clearfix1 {
+    border-left: 1px solid rgba(255,255,255,0.2);
+}
+.ip_vis_subnet span a {
+    font-size: 12px;
+}
