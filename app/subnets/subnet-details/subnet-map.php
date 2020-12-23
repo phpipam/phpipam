@@ -36,7 +36,7 @@ if (sizeof($free_subnets)>0) {
 		print "<div class='ip_vis_subnet'>";
 		for($m=1; $m<=$max_subnets;$m++) {
 			if(in_array($Subnets->transform_address($subnet_start, "dotted")."/".$free_mask, $items)) {
-				print "<span class='subnet_map subnet_map_found'><a href='' data-sectionid='{$section[id]}' data-mastersubnetid='{$subnet[id]}' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
+				print "<span class='subnet_map subnet_map_found'><a href='' data-sectionid='".$section['id']."' data-mastersubnetid='".$subnet['id']."' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
 			}
 			else {
 				print "<span class='subnet_map subnet_map_notfound'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</span>";
