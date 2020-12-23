@@ -88,11 +88,12 @@ else {
 	print "</tr>";
 
 
-	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
 	// divider
 	print "<tr>";
 	print "	<td colspan='2'><hr></td>";
 	print "</tr>";
+
+	if($User->Crypto->decrypt($vault->test, $_SESSION[$vault_id])=="test") {
 
 	print "<tr>";
 	print "	<td></td>";
@@ -100,7 +101,7 @@ else {
 	print "<td class='actions'>";
 	$links = [];
 	$links[] = ["type"=>"header", "text"=>"Actions"];
-	$links[] = ["type"=>"link", "text"=>"Lock Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/lock.php' data-class='700' data-id='$vault->id'", "icon"=>"key"];
+	$links[] = ["type"=>"link", "text"=>"Lock Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/lock.php' data-class='500' data-id='$vault->id'", "icon"=>"key"];
 
 	if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
 	    $links[] = ["type"=>"header", "text"=>"Manage"];
@@ -109,6 +110,19 @@ else {
 	if($User->get_module_permissions ("vaults")>=User::ACCESS_RWA) {
 	    $links[] = ["type"=>"link", "text"=>"Delete Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit.php' data-class='700' data-action='delete' data-id='$vault->id'", "icon"=>"times"];
 	}
+	// print links
+	print $User->print_actions($User->user->compress_actions, $links, true, true);
+	print "</td>";
+	print "</tr>";
+	}
+	else {
+	print "<tr>";
+	print "	<td></td>";
+	// actions
+	print "<td class='actions'>";
+	$links = [];
+	$links[] = ["type"=>"header", "text"=>"Actions"];
+	$links[] = ["type"=>"link", "text"=>"Unlock Vault", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/unlock.php' data-class='500' data-id='$vault->id'", "icon"=>"key"];
 	// print links
 	print $User->print_actions($User->user->compress_actions, $links, true, true);
 	print "</td>";
