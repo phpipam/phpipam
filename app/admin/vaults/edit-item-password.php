@@ -115,7 +115,7 @@ $custom = $Tools->fetch_custom_fields('vaultItems');
     		// create input > result is array (required, input(html), timepicker_index)
     		$custom_input = $Tools->create_custom_field_input ($field, $item, $_POST['action'], $timepicker_index);
     		// add datepicker index
-    		$timepicker_index = $timepicker_index + $custom_input['timepicker_index'];
+    		$timepicker_index++;
             // print
 			print "<tr>";
 			print "	<td>".ucwords($Tools->print_custom_field_name ($field['name']))." ".$custom_input['required']."</td>";
