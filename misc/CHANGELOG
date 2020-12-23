@@ -7,6 +7,8 @@
     + L2 Domains user permissions;
     + Add scanPingType=="none" option to disable scanning;
     + Custom fields on IP request forms (#2956);
+    + Added subnet free space map for each possible subnet mask;
+    + Added Vaults;
 
     Enhancements, changes:
     ----------------------------
@@ -19,6 +21,7 @@
         + php-saml protocol debugging;
         + Support for signed assertions;
         + SAML usernames can be extracted from assertion attributes (#2948);
+    + Selectable mask for number of subnets/hosts in subnet masks;
 
     Bugfixes:
     ----------------------------
