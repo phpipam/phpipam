@@ -17,6 +17,7 @@ else {
 
 	// get custom fields
 	$custom_fields_v = $Tools->fetch_custom_fields('vaults');
+	$colspan = 4 + sizeof(@$custom_fields_v);
 
 	// create new Vault
 	if ($User->get_module_permissions ("vaults")==User::ACCESS_RWA) {
@@ -25,48 +26,43 @@ else {
 	// print vaults
 	if($all_vaults!==false) {
 
-		// show single if only 1 configured !
-		if(sizeof($all_vaults)==1) {
-			$_GET['subnetId'] = $all_vaults[0]->id;
-			include('vault/index.php');
+		// group by type
+		$all_vault_types = ["certificates"=>[], "passwords"=>[]];
+		foreach ($all_vaults as $v) {
+			$all_vault_types[$v->type][] = $v;
 		}
-		else {
 
-			// group by type
-			$all_vault_types = ["certificates"=>[], "passwords"=>[]];
-			foreach ($all_vaults as $v) {
-				$all_vault_types[$v->type][] = $v;
-			}
+		// print
+		foreach ($all_vault_types as $key=>$all_vaults_grouped) {
 
-			// print
-			foreach ($all_vault_types as $key=>$all_vaults_grouped) {
+			// title
+			print "<h4 style='margin-top:30px;'>".ucwords(_($key))."</h4><hr>";
 
-				// title
-				print "<h4 style='margin-top:30px;'>".ucwords(_($key))."</h4><hr>";
-
-				print '<table id="userPrint" class="table sorted table-striped sorted tab1le-auto" data-cookie-id-table="admin_vaults">';
-				# headers
-				print "<thead>";
-				print '<tr>';
-			    print "<th data-width='300' data-width-unit='px'>"._('Name').'</th>';
-			    print "<th data-width='120' data-width-unit='px'>"._('Status').'</th>';
-				print "<th>"._('Description').'</th>';
-				// custom
-				if(sizeof(@$custom_fields_v) > 0) {
-					foreach($custom_fields_v as $field) {
-						print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
-					}
+			print '<table id="userPrint" class="table sorted table-striped sorted tab1le-auto" data-cookie-id-table="admin_vaults">';
+			# headers
+			print "<thead>";
+			print '<tr>';
+		    print "<th data-width='300' data-width-unit='px'>"._('Name').'</th>';
+		    print "<th data-width='120' data-width-unit='px'>"._('Status').'</th>';
+			print "<th>"._('Description').'</th>';
+			// custom
+			if(sizeof(@$custom_fields_v) > 0) {
+				foreach($custom_fields_v as $field) {
+					print "	<th class='hidden-xs hidden-sm hidden-md'>".$Tools->print_custom_field_name ($field['name'])."</th>";
 				}
-			    print '<th></th>';
-				print '</tr>';
-				print "</thead>";
+			}
+		    print '<th></th>';
+			print '</tr>';
+			print "</thead>";
 
-				// icon
-				if($key=="passwords")   { $icon = "fa fa-key"; }
-				else 					{ $icon = "fa fa-certificate"; }
+			// icon
+			if($key=="passwords")   { $icon = "fa fa-key"; }
+			else 					{ $icon = "fa fa-certificate"; }
 
-				# loop
-				print "<tbody>";
+			# loop
+			print "<tbody>";
+
+			if(sizeof($all_vaults_grouped)>0) {
 				foreach ($all_vaults_grouped as $a) {
 					// set link
 					if($User->Crypto->decrypt($a->test, $_SESSION['vault'.$a->id]) == "test") {
@@ -116,9 +112,15 @@ else {
 
 					print '</tr>' . "\n";
 				}
-				print "</tbody>";
-				print "</table>";
 			}
+		else {
+			print '<tr class="text-top">';
+			print '	<td colspan="'.$colspan.'">'.$Result->show("info", _("No vaults created"), false, false, true).'</td>';
+			print "</tr>";
+		}
+
+		print "</tbody>";
+		print "</table>";
 		}
 	}
 	else {
