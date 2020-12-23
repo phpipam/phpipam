@@ -124,6 +124,17 @@ $tool_items["multicast-networks"] = array (
                         "icon"=>"fa-map-o"
                         );
 }
+
+// vaults
+if($User->settings->enableVaults==1 && $User->get_module_permissions ("vaults")>=User::ACCESS_R) {
+$tool_items["vaults"] = array (
+                        "name"=>"Vaults",
+                        "href"=>array("tools", "vaults"),
+                        "title"=>"Vaults",
+                        "icon"=>"fa-key"
+                        );
+}
+
 // search
 $tool_items["search"] = array (
                         "name"=>"Search",

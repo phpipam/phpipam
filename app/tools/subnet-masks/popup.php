@@ -37,6 +37,6 @@ $_POST = $User->strip_input_tags ($_POST);
 <!-- footer -->
 <div class="pFooter">
 	<div class="btn-group">
-		<button class="btn btn-sm btn-default <?php print @$_POST['closeClass']; ?>"><?php print _('Close'); ?></button>
+		<button class="btn btn-sm btn-default <?php print @$_REQUEST['closeClass']; ?>"><?php print _('Close'); ?></button>
 	</div>
 </div>
