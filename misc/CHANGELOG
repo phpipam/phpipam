@@ -8,7 +8,7 @@
     + Add scanPingType=="none" option to disable scanning;
     + Custom fields on IP request forms (#2956);
     + Added subnet free space map for each possible subnet mask;
-    + Added Vaults;
+    + Added Vaults (Certificate andf password storing);
 
     Enhancements, changes:
     ----------------------------
