@@ -78,6 +78,6 @@ else {
 	}
 
 	# execute
-	if(!$Admin->object_modify("vaults", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("Vault $_POST[action] error"), true); }
-	else 																	{ $Result->show("success", _("Vault $_POST[action] success"), true); }
+	if(!$Admin->object_modify("vaults", $_POST['action'], "id", $values)) 	{ $Result->show("danger",  _("Vault")." $_POST[action] "._("error"), true); }
+	else 																	{ $Result->show("success", _("Vault")." $_POST[action] "._("success"), true); }
 }
