@@ -2745,6 +2745,9 @@ div.fixed-table-container {
 	float: left;
 	border-left: none;
 }
+.ip_vis_subnet span.subnet_map_128 {
+	width: 220px !important;
+}
 .clearfix1 {
 	border-left: 1px solid rgba(255,255,255,0.2);
 }
