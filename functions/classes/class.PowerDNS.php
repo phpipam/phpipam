@@ -277,6 +277,7 @@ class PowerDNS extends Common_functions {
         $record_types[] = "A";
         $record_types[] = "AAAA";
         $record_types[] = "MX";
+        $record_types[] = "CAA";
         $record_types[] = "CNAME";
         $record_types[] = "PTR";
         $record_types[] = "TXT";
@@ -403,7 +404,7 @@ class PowerDNS extends Common_functions {
             return false;
         }
         // write log
-        $this->Log->write( "PowerDNS domain edit", "PowerDNS domain edited<hr>".$this->array_to_log((array) $values), 0);
+        $this->Log->write( _("PowerDNS domain edit"), _("PowerDNS domain edited")."<hr>".$this->array_to_log((array) $values), 0);
         # ok
         return true;
     }

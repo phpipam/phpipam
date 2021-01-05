@@ -36,7 +36,7 @@ if( !empty($_POST['ipamusername']) && !empty($_POST['ipampassword']) )  {
 	}
 	# count set, captcha required
 	elseif(!isset($_POST['captcha'])) {
-		$Log->write( "Login IP blocked", "Login from IP address ".$_SERVER['REMOTE_ADDR']." was blocked because of 5 minute block after 5 failed attempts", 1);
+		$Log->write( _("Login IP blocked"), _("Login from IP address")." ".$_SERVER['REMOTE_ADDR']." "._("was blocked because of 5 minute block after 5 failed 2fa attempts"), 1);
 		$Result->show("danger", _('You have been blocked for 5 minutes due to authentication failures'), true);
 	}
 	# captcha check

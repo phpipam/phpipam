@@ -4,8 +4,8 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2020.
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
-# "POT-Creation-Date: 2020-11-01 10:14+0100\n"
-# "PO-Revision-Date: 2020-11-01 10:14+0100\n"
+# "POT-Creation-Date: 2020-11-14 23:28+0100\n"
+# "PO-Revision-Date: 2020-11-14 23:28+0100\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
 # "MIME-Version: 1.0\n"
@@ -463,7 +463,8 @@ msgstr "E-Mail-Einstellungen"
 msgid "Set mail parameters and mail server settings"
 msgstr "Verwaltung E-Mail Einstellungen"
 
-#: app/admin/admin-menu-config.php:21 app/admin/settings/index.php:236
+#: app/admin/admin-menu-config.php:21 app/admin/api/edit-result.php:73
+#: app/admin/api/edit-result.php:74 app/admin/settings/index.php:236
 msgid "API"
 msgstr "API"
 
@@ -536,7 +537,7 @@ msgstr "Bearbeiten Hinweise"
 
 #: app/admin/admin-menu-config.php:32
 msgid "Set phpipam instructions for end users"
-msgstr "Hinweise zu phpIPAM für Endbenutzer anpassen"
+msgstr "Hinweise zu phpIPAM f&uuml;r Endbenutzer anpassen"
 
 #: app/admin/admin-menu-config.php:36 app/admin/custom-fields/index.php:27
 #: app/admin/users/print_module_permissions.php:59
@@ -704,7 +705,7 @@ msgstr "Nameserver"
 
 #: app/admin/admin-menu-config.php:46
 msgid "Recursive nameserver sets for subnets"
-msgstr "Rekursive Nameserver-Sets für Subnetze"
+msgstr "Rekursive Nameserver-Sets f&uuml;r Subnetze"
 
 #: app/admin/admin-menu-config.php:48 app/tools/tools-menu-config.php:109
 msgid "Firewall Zones"
@@ -897,7 +898,7 @@ msgstr "Felder Filterung"
 
 #: app/admin/admin-menu-config.php:85
 msgid "required-fields"
-msgstr "Benötigte Felder"
+msgstr "Ben&uoml;tigte Felder"
 
 #: app/admin/admin-menu-config.php:86 app/tools/tools-menu-config.php:23
 msgid "firewall-zones"
@@ -1028,6 +1029,17 @@ msgstr "Kunden"
 #: app/admin/admin-menu-config.php:116 app/tools/tools-menu-config.php:50
 msgid "routing"
 msgstr "Routing"
+
+#: app/admin/api/edit-result.php:73 app/admin/groups/edit-group-result.php:78
+#: functions/classes/class.Common.php:1852
+msgid "error"
+msgstr "fehlerhaft"
+
+#: app/admin/api/edit-result.php:74 app/admin/groups/edit-group-result.php:79
+#: app/subnets/addresses/address-modify-submit.php:278
+#: functions/classes/class.Admin.php:720
+msgid "success"
+msgstr "erfolgreich"
 
 #: app/admin/api/edit.php:26 app/admin/api/edit.php:33
 #: app/admin/authentication-methods/check-connection.php:23
@@ -1582,12 +1594,14 @@ msgstr "Sekunden"
 #: app/subnets/addresses/address-details/address-details.php:214
 #: app/subnets/addresses/print-address-table.php:272
 #: app/subnets/addresses/print-address-table.php:273
+#: app/subnets/subnet-details/subnet-details.php:299
 #: app/temp_share/address.php:157 app/temp_share/address.php:174
 #: app/temp_share/address.php:175
 #: app/tools/customers/customer/objects/ipaddresses.php:88
 #: app/tools/customers/customer/objects/ipaddresses.php:89
 #: app/tools/multicast-networks/index.php:140
 #: app/tools/multicast-networks/index.php:141
+#: app/tools/powerDNS/domain-records.php:92
 #: functions/classes/class.Tools.php:2040
 #: functions/classes/class.Tools.php:2041
 msgid "Never"
@@ -1900,6 +1914,13 @@ msgstr "Time-out"
 msgid "Set timeout in seconds"
 msgstr "Time-out in Sekunden"
 
+#: app/admin/authentication-methods/edit-Radius.php:130
+#: functions/classes/class.User.php:1134 functions/classes/class.User.php:1158
+#: functions/classes/class.User.php:1170
+msgid "Radius login"
+msgstr "Radius Anmeldung"
+
+#: app/admin/authentication-methods/edit-Radius.php:130
 #: app/admin/authentication-methods/edit-Radius.php:131
 msgid "php Socket extension missing!"
 msgstr "php Socket Erweiterung fehlt"
@@ -1988,11 +2009,11 @@ msgstr "Angabe des SP (Client) IDP X509-Zertifikats"
 
 #: app/admin/authentication-methods/edit-SAML2.php:202
 msgid "Authn X.509 signing cert key"
-msgstr "Schlüssel X.509 Signaturzertifikat"
+msgstr "Schl&uuml;ssel X.509 Signaturzertifikat"
 
 #: app/admin/authentication-methods/edit-SAML2.php:207
 msgid "Enter SP (Client) X.509 certificate key"
-msgstr "Angabe des SP(Client) IDP X509-Zertifikatsschlüssels"
+msgstr "Angabe des SP(Client) IDP X509-Zertifikatsschl&uuml;ssels"
 
 #: app/admin/authentication-methods/edit-SAML2.php:217
 msgid "SAML username attribute"
@@ -2013,7 +2034,7 @@ msgstr "Zugeordneter SAML-Benutzer"
 #: app/admin/authentication-methods/edit-SAML2.php:233
 msgid "Map all SAML users to a single local account. e.g. admin"
 msgstr ""
-"Verknüpfe alle SAML-Benutzer mit einem einzelnen lokalen Benutzer (z.B. "
+"Verkn&uuml;pfe alle SAML-Benutzer mit einem einzelnen lokalen Benutzer (z.B. "
 "admin)"
 
 #: app/admin/authentication-methods/edit-SAML2.php:233
@@ -2035,8 +2056,8 @@ msgstr "nicht f&uuml; produktiven Einsatz"
 #: app/admin/authentication-methods/edit-result.php:53
 msgid "SP (Client) certificate and key are required to sign Authn requests"
 msgstr ""
-"SP (Client) Zertifikat und Schlüssel werden benötigt um "
-"Autorisierungsanfragen signieren zu können"
+"SP (Client) Zertifikat und Schl&uuml;ssel werden ben&uoml;tigt um "
+"Autorisierungsanfragen signieren zu k&uoml;nnen"
 
 #: app/admin/authentication-methods/edit-result.php:78
 msgid "Failed to edit authentication method"
@@ -2123,7 +2144,7 @@ msgstr "Entfernen"
 
 #: app/admin/authentication-methods/index.php:93
 msgid "Verify connection"
-msgstr "Verbindung prüfen"
+msgstr "Verbindung pr&uuml;fen"
 
 #: app/admin/authentication-methods/index.php:105
 msgid "Here you can set different authentication methods for your users."
@@ -3294,6 +3315,7 @@ msgstr "Test"
 #: app/tools/inactive-hosts/index.php:64
 #: app/tools/multicast-networks/index.php:51
 #: app/tools/search/search_results/search-results_addresses.php:29
+#: functions/scripts/discoveryCheck.php:307
 msgid "Hostname"
 msgstr "Hostname"
 
@@ -3974,6 +3996,7 @@ msgstr ""
 #: functions/classes/class.Sections.php:148
 #: functions/classes/class.Sections.php:181
 #: functions/classes/class.Sections.php:190
+#: functions/scripts/discoveryCheck.php:309
 msgid "Section"
 msgstr "Bereich"
 
@@ -4030,6 +4053,7 @@ msgstr "Keinen Bereich ausgew&auml;hlt"
 #: functions/classes/class.Subnets.php:2148
 #: functions/classes/class.Subnets.php:2188
 #: functions/classes/class.Subnets.php:2225
+#: functions/scripts/discoveryCheck.php:308
 msgid "Subnet"
 msgstr "Subnetz"
 
@@ -4266,17 +4290,6 @@ msgstr "Gruppe existiert bereits"
 #: app/admin/groups/edit-group-result.php:79
 msgid "Group"
 msgstr "Gruppe"
-
-#: app/admin/groups/edit-group-result.php:78
-#: functions/classes/class.Common.php:1852
-msgid "error"
-msgstr "fehlerhaft"
-
-#: app/admin/groups/edit-group-result.php:79
-#: app/subnets/addresses/address-modify-submit.php:278
-#: functions/classes/class.Admin.php:720
-msgid "success"
-msgstr "erfolgreich"
 
 #: app/admin/groups/edit-group.php:31
 msgid "Add new group"
@@ -5458,6 +5471,21 @@ msgstr "OK"
 msgid "Error: "
 msgstr "Fehler: "
 
+#: app/admin/instructions/edit-result.php:36
+#: app/admin/instructions/edit-result.php:44
+#: app/admin/instructions/edit-result.php:50
+msgid "Instructions updated"
+msgstr "Hinweise aktualisiert"
+
+#: app/admin/instructions/edit-result.php:36
+#: app/admin/instructions/edit-result.php:44
+msgid "Failed to update instructions"
+msgstr "Fehler beim Aktualisieren der Hinweise"
+
+#: app/admin/instructions/edit-result.php:50
+msgid "Instructions updated succesfully"
+msgstr "Hinweise erfolgreich aktualisiert"
+
 #: app/admin/instructions/edit-result.php:51
 msgid "Instructions updated successfully"
 msgstr "Hinweise erfolgreich aktualisiert"
@@ -5839,6 +5867,7 @@ msgstr "Serveradresse"
 #: app/subnets/scan/subnet-scan-execute-update-icmp.php:136
 #: app/subnets/scan/subnet-scan-execute-update-snmp-arp.php:106
 #: app/subnets/subnet-details/subnet-changelog.php:145
+#: functions/scripts/discoveryCheck.php:306
 msgid "IP"
 msgstr "IP"
 
@@ -9757,7 +9786,8 @@ msgstr ""
 "Authenticator ein"
 
 #: app/login/2fa/2fa_form.php:36 app/login/index.php:104
-#: app/login/login_form.php:53 functions/classes/class.User.php:370
+#: app/login/login_form.php:53 app/temp_share/index.php:79
+#: functions/classes/class.User.php:370
 msgid "Login"
 msgstr "Anmelden"
 
@@ -9773,6 +9803,19 @@ msgstr "Code validiert. Umleiten ..."
 #: app/tools/temp-shares/edit-result.php:24
 msgid "Invalid code"
 msgstr "Ung&uuml;ltiger Code"
+
+#: app/login/2fa/2fa_validate.php:53 app/login/login_check.php:39
+msgid "Login IP blocked"
+msgstr "Eingeloggte IP blockiert"
+
+#: app/login/2fa/2fa_validate.php:53 app/login/login_check.php:39
+msgid "Login from IP address"
+msgstr "Der Login von der IP-Adresse"
+
+#: app/login/2fa/2fa_validate.php:53 app/login/login_check.php:39
+msgid "was blocked because of 5 minute block after 5 failed 2fa attempts"
+msgstr ""
+"wurde nach f&uuml;nf fehlerhaften 2FA-Login Versuchen f&uuml;r 5min blockiert"
 
 #: app/login/2fa/2fa_validate.php:54
 msgid "You have been blocked for 5 minutes due to 2fa authentication failures"
@@ -10375,7 +10418,7 @@ msgstr "Verf&uuml;gbarkeit &uuml;berpr&uuml;fen"
 #: app/tools/multicast-networks/index.php:252
 #: app/tools/multicast-networks/index.php:261
 msgid "Search same hostnames in db"
-msgstr "Suche gleiche Hostnamen in der Datenbank"
+msgstr "Suche gleichen Hostnamen in der Datenbank"
 
 #: app/subnets/addresses/address-details/address-details.php:347
 #: app/subnets/addresses/address-details/address-details.php:373
@@ -10562,6 +10605,7 @@ msgstr ""
 
 #: app/subnets/addresses/address-modify.php:79
 #: app/subnets/addresses/address-modify.php:80
+#: functions/scripts/discoveryCheck.php:260
 msgid "add"
 msgstr "Hinzuf&uuml;gen"
 
@@ -11051,7 +11095,7 @@ msgstr ""
 
 #: app/subnets/scan/subnet-scan-result.php:21
 msgid "Please increase your php.ini setting:"
-msgstr "Bitte erhöhen Sie in php.ini die Einstellungen f&uuml;r:"
+msgstr "Bitte erh&uoml;hen Sie in php.ini die Einstellungen f&uuml;r:"
 
 #: app/subnets/scan/subnet-scan.php:30 functions/classes/class.Scan.php:535
 #: functions/scripts/discoveryCheck.php:47 functions/scripts/pingCheck.php:57
@@ -11354,6 +11398,11 @@ msgstr "Tempor&auml;r freigeben"
 #: app/tools/temp-shares/index.php:20
 msgid "Temporary sharing disabled"
 msgstr "zeitweises Teilen deaktiviert"
+
+#: app/temp_share/index.php:104 app/temp_share/index.php:106
+#: app/temp_share/index.php:110 app/temp_share/index.php:113
+msgid "Tempory share access"
+msgstr "Tempor&auml;rer Share Zugang"
 
 #: app/temp_share/index.php:104 app/temp_share/index.php:106
 msgid "Invalid share key"
@@ -12157,6 +12206,45 @@ msgstr "Inaktive Hosts"
 msgid "Instructions for managing IP addresses"
 msgstr "Anleitungen zum IP-Adressmanagement"
 
+#: app/tools/ip-calculator/bw-calculator-result.php:32
+msgid "Transfer time (h:m:s)"
+msgstr "&Uuml;bertragungszeit (H:M:S)"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:39
+msgid "Calculation parameters"
+msgstr "Kalkulationsparameter"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:41
+#: app/tools/ip-calculator/bw-calculator.php:254
+msgid "TCP window size"
+msgstr "TCP Fenstergr&ouml;&szlig;e"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:42
+#: app/tools/ip-calculator/bw-calculator.php:263
+msgid "Delay"
+msgstr "Verz&uoml;gerung"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:42
+msgid "ms"
+msgstr "ms"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:43
+msgid "Speed"
+msgstr "Geschwindigkeit"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:43
+msgid "MBps"
+msgstr "MB/s"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:44
+msgid "Newtork type"
+msgstr "Netzwerktyp"
+
+#: app/tools/ip-calculator/bw-calculator-result.php:45
+#: app/tools/ip-calculator/bw-calculator.php:272
+msgid "File size"
+msgstr "Dateigr&ouml;&szlig;e"
+
 #: app/tools/ip-calculator/bw-calculator.php:246
 #: app/tools/ip-calculator/index.php:17 app/tools/tools-menu-config.php:78
 msgid "Bandwidth calculator"
@@ -12164,11 +12252,11 @@ msgstr "Bandbreiten Kalkulator"
 
 #: app/tools/ip-calculator/bw-calculator.php:248
 msgid ""
-"Select TCP window size, delay and Filesize to calculate how long file "
+"Select TCP window size, delay and file size to calculate how long file "
 "transfer will take."
 msgstr ""
-"Auswahl der TCP window size, der Verz&ouml;gerung und der Dateigr&ouml;"
-"&szlig;e um die Zeit des Transfers zu kalkulieren."
+"Auswahl der TCP Fenstergr&ouml;&szlig;e, der Verz&ouml;gerung und der "
+"Dateigr&ouml;&szlig;e zur Kalkulation der Transferzeit."
 
 #: app/tools/ip-calculator/index.php:11
 msgid "IP and bandwidth calculator"
@@ -13552,7 +13640,7 @@ msgstr ""
 #: app/upgrade/index.php:133 app/upgrade/index.php:139
 #: app/upgrade/index.php:143
 msgid "Database upgrade check"
-msgstr "Datenbankupgrade &Uuml;berpr&uuml;fung"
+msgstr "&Uuml;berpr&uuml;fung Aktualisierung Datenbank"
 
 #: app/upgrade/index.php:134
 msgid "Database seems up to date and doesn't need to be upgraded!"
@@ -13566,7 +13654,7 @@ msgstr "Zum Dashboard gehen"
 #: app/upgrade/index.php:140
 msgid "Your phpIPAM version is too old to be upgraded, at least version"
 msgstr ""
-"Die benutze phpIPAM Version ist zu alt um aktualisiert werden zu können, es "
+"Die benutze phpIPAM Version ist zu alt um aktualisiert werden zu k&uoml;nnen, es "
 "ist mindestens Version"
 
 #: app/upgrade/index.php:140
@@ -13597,7 +13685,7 @@ msgstr ""
 
 #: app/upgrade/index.php:148
 msgid "phpIPAM database upgrade required"
-msgstr "phpPIPAM Datenbankupgrade ist erforderlich"
+msgstr "phpPIPAM Aktualisierung der Datenbank erforderlich"
 
 #: app/upgrade/index.php:149
 msgid "Database needs to be upgraded to version"
@@ -13613,7 +13701,7 @@ msgstr "es sieht danach aus Sie benutzen die Version"
 
 #: app/upgrade/index.php:152
 msgid "Automatic database upgrade"
-msgstr "Automatisches Datenbankupgrade"
+msgstr "Automatische Aktualisierung der Datenbank"
 
 #: app/upgrade/index.php:154
 msgid ""
@@ -13628,7 +13716,7 @@ msgid ""
 "max_execution_time before upgrading."
 msgstr ""
 "Das Aktualisierungsskript kann eventuell nicht komplett angewendet werden. "
-"Ziehen Sie eine Erhöhung von max_execution_time in Betracht bevor Sie "
+"Ziehen Sie eine Erh&uoml;hung von max_execution_time in Betracht bevor Sie "
 "fortfahren."
 
 #: app/upgrade/index.php:160
@@ -13737,11 +13825,11 @@ msgstr "aktualisiert"
 #: functions/classes/class.Addresses.php:509
 #: functions/classes/class.Addresses.php:515
 msgid "Address delete"
-msgstr "Löschen Adresse"
+msgstr "L&uoml;schen Adresse"
 
 #: functions/classes/class.Addresses.php:509
 msgid "Failed to delete address"
-msgstr "Fehler beim Löschen der Adresse"
+msgstr "Fehler beim L&uoml;schen der Adresse"
 
 #: functions/classes/class.Addresses.php:515
 #: functions/classes/class.Admin.php:277
@@ -13750,7 +13838,7 @@ msgstr "Fehler beim Löschen der Adresse"
 #: functions/classes/class.Sections.php:190
 #: functions/classes/class.Subnets.php:313
 msgid "deleted"
-msgstr "gelöscht"
+msgstr "gel&uoml;scht"
 
 #: functions/classes/class.Addresses.php:593
 msgid "Address removed from NAT"
@@ -13758,17 +13846,19 @@ msgstr "Adresse aus dem NAT entfernt"
 
 #: functions/classes/class.Addresses.php:621
 msgid "Address DNS resolved"
-msgstr "Auflösung DNS-Adresse"
+msgstr "Aufl&uoml;sung DNS-Adresse"
 
 #: functions/classes/class.Addresses.php:621
 msgid "resolved"
-msgstr "aufgelöst"
+msgstr "aufgel&uoml;st"
 
 #: functions/classes/class.Addresses.php:698
 #: functions/classes/class.Addresses.php:700
 #: functions/classes/class.Log.php:1889 functions/classes/class.Log.php:1891
 #: functions/classes/class.Tools.php:1088
 #: functions/classes/class.Tools.php:1090
+#: functions/scripts/discoveryCheck.php:352
+#: functions/scripts/discoveryCheck.php:354
 msgid "Mailer Error"
 msgstr "Fehler E-Mail-Versand"
 
@@ -13855,7 +13945,7 @@ msgstr "Mehrere Objekte in"
 
 #: functions/classes/class.Admin.php:270
 msgid "Failed to delete object"
-msgstr "Fehler beim Löschen des Objektes"
+msgstr "Fehler beim L&uoml;schen des Objektes"
 
 #: functions/classes/class.Admin.php:622
 msgid "items replaced successfully"
@@ -14023,20 +14113,20 @@ msgstr "Firewall-Zone bearbeitet"
 
 #: functions/classes/class.FirewallZones.php:850
 msgid "Firewall zone and mappings delete"
-msgstr "Löschen Firewall-Zonen und -zuordnungen"
+msgstr "L&uoml;schen Firewall-Zonen und -zuordnungen"
 
 #: functions/classes/class.FirewallZones.php:850
 msgid "Failed to delete firewall zone mappings of"
-msgstr "Fehler beim Löschen der Firewall-Zonenzuordnung von"
+msgstr "Fehler beim L&uoml;schen der Firewall-Zonenzuordnung von"
 
 #: functions/classes/class.FirewallZones.php:858
 #: functions/classes/class.FirewallZones.php:863
 msgid "Firewall zone delete"
-msgstr "Löschen Firewall-Zone"
+msgstr "L&uoml;schen Firewall-Zone"
 
 #: functions/classes/class.FirewallZones.php:858
 msgid "Failed to delete firewall zone"
-msgstr "Fehler beim Löschen der Firewall-Zone"
+msgstr "Fehler beim L&uoml;schen der Firewall-Zone"
 
 #: functions/classes/class.FirewallZones.php:907
 #: functions/classes/class.FirewallZones.php:911
@@ -14067,11 +14157,11 @@ msgstr "Bearbeiten Firewall-Zonenzuordnung"
 #: functions/classes/class.FirewallZones.php:951
 #: functions/classes/class.FirewallZones.php:956
 msgid "Firewall zone mapping delete"
-msgstr "Löschen Firewall-Zonenzuordnung"
+msgstr "L&uoml;schen Firewall-Zonenzuordnung"
 
 #: functions/classes/class.FirewallZones.php:951
 msgid "Failed to delete firewall zone mapping"
-msgstr "Fehler beim Löschen der Firewall-Zonenzuordnung"
+msgstr "Fehler beim L&uoml;schen der Firewall-Zonenzuordnung"
 
 #: functions/classes/class.FirewallZones.php:956
 msgid "Firewall zone mapping"
@@ -14095,7 +14185,7 @@ msgstr " installiert"
 
 #: functions/classes/class.Install.php:191
 msgid "Cannot drop database: "
-msgstr "Datenbank kann nicht gelöscht werden: "
+msgstr "Datenbank kann nicht gel&uoml;scht werden: "
 
 #: functions/classes/class.Install.php:194
 msgid "Cannot install sql SCHEMA file"
@@ -14148,7 +14238,7 @@ msgstr "Erfolgreiche Abfragen"
 
 #: functions/classes/class.Install.php:541
 msgid "Not executed queries"
-msgstr "Nicht ausgeführte Abfragen"
+msgstr "Nicht ausgef&uuml;hrte Abfragen"
 
 #: functions/classes/class.Install.php:549
 msgid "Database upgraded from version "
@@ -14203,7 +14293,7 @@ msgid ""
 "This email was automatically generated. You can change your notification "
 "settings in account details"
 msgstr ""
-"Diese E-Mail wurde automatisch generiert. Sie können Ihre "
+"Diese E-Mail wurde automatisch generiert. Sie k&uoml;nnen Ihre "
 "Benachrichtigungseinstellungen in den Kontodetails &auml;ndern"
 
 #: functions/classes/class.Password_check.php:146
@@ -14270,12 +14360,17 @@ msgid "New PowerDNS domain created"
 msgstr "Neue PowerDNS Dom&auml;ne erstellt"
 
 #: functions/classes/class.PowerDNS.php:401
+#: functions/classes/class.PowerDNS.php:406
 msgid "PowerDNS domain edit"
 msgstr "Bearbeiten PowerDNS Dom&auml;ne"
 
 #: functions/classes/class.PowerDNS.php:401
 msgid "Failed to edit PowerDNS domain"
 msgstr "Fehler beim Bearbeiten der PowerDNS Dom&auml;ne"
+
+#: functions/classes/class.PowerDNS.php:406
+msgid "PowerDNS domain edited"
+msgstr "PowerDNS Dom&auml;ne bearbeitet"
 
 #: functions/classes/class.PowerDNS.php:425
 #: functions/classes/class.PowerDNS.php:430
@@ -14284,7 +14379,7 @@ msgstr "L&ouml;schen PowerDNS Dom&auml;ne"
 
 #: functions/classes/class.PowerDNS.php:425
 msgid "Failed to delete PowerDNS domain"
-msgstr "Fehler beim Löschen der PowerDNS Dom&auml;ne"
+msgstr "Fehler beim L&uoml;schen der PowerDNS Dom&auml;ne"
 
 #: functions/classes/class.PowerDNS.php:430
 msgid "PowerDNS domain deleted"
@@ -14421,7 +14516,7 @@ msgstr "Verkleinerung PowerDNS Dom&auml;ne"
 
 #: functions/classes/class.PowerDNS.php:1377
 msgid "Failed to remove all PowerDNS domain records"
-msgstr "Fehler beim Entfernen aller PowerDNS Dom&auml;en Einträge"
+msgstr "Fehler beim Entfernen aller PowerDNS Dom&auml;en Eintr&uaml;ge"
 
 #: functions/classes/class.PowerDNS.php:1382
 msgid "PowerDNS domain records truncated"
@@ -14542,7 +14637,7 @@ msgstr "Ung&uuml;ltige Abfrage"
 
 #: functions/classes/class.SNMP.php:858
 msgid "SNMP response is not a valid string"
-msgstr "SNMP-Antwort ist kein gültiger String"
+msgstr "SNMP-Antwort ist kein g&uuml;ltiger String"
 
 #: functions/classes/class.SNMP.php:866
 msgid "Unable to parse \"type: value\" from SNMP response"
@@ -15056,11 +15151,6 @@ msgstr "konnte nicht authentifiziert werden mit der Methode"
 msgid "Something went wrong during auth: "
 msgstr "Etwas ist schief gelaufen w&auml;hrend der Authentifizierung: "
 
-#: functions/classes/class.User.php:1134 functions/classes/class.User.php:1158
-#: functions/classes/class.User.php:1170
-msgid "Radius login"
-msgstr "Radius Anmeldung"
-
 #: functions/classes/class.User.php:1134 functions/classes/class.User.php:1135
 msgid "php Socket extension missing"
 msgstr "php Socket Erweiterung fehlt"
@@ -15133,19 +15223,25 @@ msgstr "Fehler beim L&ouml;schen der Logs"
 msgid "Changelogs cleared successfully"
 msgstr "Logs wurden erfolgreich gel&ouml;scht"
 
-#~ msgid "selected"
-#~ msgstr "ausgew&auml;hlt"
+#: functions/scripts/discoveryCheck.php:256
+msgid "-- autodiscovered --"
+msgstr "-- automatisch entdeckt --"
 
-#~ msgid "Error connecting to arin REST API"
-#~ msgstr "Fehler aufgetreten beim Verbinden zur ARIN REST-API"
+#: functions/scripts/discoveryCheck.php:257
+msgid "This host was autodiscovered on"
+msgstr "Dieses Ger&auml;t wurde neu gefunden am"
 
-#, fuzzy
-#~| msgid "Section name"
-#~ msgid "Section create"
-#~ msgstr "Bereichsname"
+#: functions/scripts/discoveryCheck.php:300
+msgid "phpIPAM new addresses detected"
+msgstr "phpIPAM hat neue Adressen gefunden am"
 
-#~ msgid "Custom Field"
-#~ msgstr "Benutzerdefiniertes Feld"
+#: functions/scripts/discoveryCheck.php:303
+#: functions/scripts/discoveryCheck.php:312
+msgid "phpIPAM found"
+msgstr "phpIPAM hat"
 
-#~ msgid "No value provided"
-#~ msgstr "Kein Wert vorgegeben"
+#: functions/scripts/discoveryCheck.php:303
+#: functions/scripts/discoveryCheck.php:312
+msgid "new hosts"
+msgstr "neue Ger&auml;te gefunden"
+

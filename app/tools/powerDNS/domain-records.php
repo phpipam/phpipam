@@ -89,7 +89,7 @@ if ($domain === false) {
         print " <td>" . $domain->notified_serial . "</td>";
         print "</tr>";
         // last check
-        $domain->last_check = strlen($domain->last_check) > 0 ? $domain->last_check : "Never";
+        $domain->last_check = strlen($domain->last_check) > 0 ? $domain->last_check : _("Never");
         print "<tr>";
         print " <td>" . _("Last check:") . "</td>";
         print " <td>" . $domain->last_check . "</td>";

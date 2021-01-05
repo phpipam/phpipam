@@ -91,7 +91,7 @@ $custom = $Tools->fetch_custom_fields('vaults');
 	<?php if($_POST['action'] === "add") { ?>
 	<tr>
 	    <td><?php print _('Vault secret'); ?></td>
-	    <td><input type="text" id="secret" name="secret" class="form-control input-sm"></td>
+	    <td><input type="password" id="secret" name="secret" class="form-control input-sm"></td>
        	<td class="info2"><?php print _('Vault secret. Please store secret as it cannot be retreived if lost!'); ?></td>
     </tr>
     <?php } ?>
