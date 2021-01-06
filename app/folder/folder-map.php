@@ -1,5 +1,7 @@
 <?php
 
+
+
 //
 // Print map
 //
@@ -42,12 +44,23 @@ if($slaves) {
 	# set smallest mask
 	$smallest_subnet_mask = $biggest_subnet_mask+$max_mask_diff>$pow ? $pow : $biggest_subnet_mask+$max_mask_diff;
 
+
+	# reset mask on get
+	if(@$from_search===true) {
+		$smallest_subnet_mask = $_GET['ipaddrid']+1;
+	}
+
 	// loop
 	foreach($slaves as $id=>$subnet) {
 		// not folders
 		if($subnet->isFolder!=1) {
 			// to array
 			$subnet = (array) $subnet;
+
+			// reset requested
+			if(@$from_search===true) {
+				$subnet['mask'] = $smallest_subnet_mask-2;
+			}
 
 			// not same type ignore
 			if($Tools->identify_address($subnet['subnet'])==$type) {

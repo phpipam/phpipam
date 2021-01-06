@@ -6,7 +6,7 @@
 <?php
 
 // tabs
-$tabs = array("details"=>"Folder details", "map"=>"Space map");
+$tabs = array("details"=>"Folder details", "map"=>"Space map", "mapsearch"=>"Mask search");
 
 print '<ul class="nav nav-tabs">';
 // default tab
@@ -54,6 +54,25 @@ if($_GET['sPage']=="details") {
 	    $Result->show("info alert-absolute", _("Folder is empty"), false);
 	}
 }
+// mask search
+elseif($_GET['sPage']=="mapsearch") {
+	# Subnets in Folder
+	if ($slaves!==false) {
+	    print '<div class="ipaddresses_overlay">';
+	    include_once('folder-subnets.php');
+	    print '</div>';
+	}
+
+	# Subnets in Folder
+	include ("folder-map-search.php");
+
+	# empty
+	if (sizeof($addresses)==0 && !$slaves) {
+	    print "<hr>";
+	    $Result->show("info alert-absolute", _("Folder is empty"), false);
+	}
+}
+// default map
 else {
 	# Subnets in Folder
 	if ($slaves!==false) {

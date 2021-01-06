@@ -15,8 +15,20 @@ else {
 }
 
 
+# reset if search
+if(@$from_search===true) {
+	$maxmask = $_GET['ipaddrid']+1;
+	$subnetmask = $_GET['ipaddrid']-1;
+}
+else {
+	$subnetmask = $subnet['mask'];
+}
+
+// print $subnet['mask'];
+// print $maxmask;
+
 # create free objects
-for($searchmask=$subnet['mask']+1; $searchmask<$maxmask; $searchmask++) {
+for($searchmask=$subnetmask+1; $searchmask<$maxmask; $searchmask++) {
 	$found = $Subnets->search_available_subnets ($subnet['id'], $searchmask, $count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST);
 	if($found!==false) {
 		// check if subnet has addresses
@@ -74,7 +86,7 @@ if (sizeof($free_subnets)>0) {
 		print "<div class='ip_vis_subnet'>";
 		for($m=1; $m<=$max_subnets;$m++) {
 			if(in_array($Subnets->transform_address($subnet_start, "dotted")."/".$free_mask, $items)) {
-				print "<span class='subnet_map subnet_map_found'><a href='' data-sectionid='".$section['id']."' data-mastersubnetid='".$subnet['id']."' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
+				print "<span class='subnet_map subnet_map_$pow subnet_map_found'><a href='' data-sectionid='".$section['id']."' data-mastersubnetid='".$subnet['id']."' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
 			}
 			else {
 				print "<span class='subnet_map subnet_map_$pow subnet_map_notfound'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</span>";
