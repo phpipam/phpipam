@@ -8,9 +8,9 @@
 if($slaves) {
 
 	# diff
-	if(sizeof($slaves)>8)		{ $max_mask_diff = 6; }
+	if(@$from_search==true) 	{ $max_mask_diff = 1000;}
+	elseif(sizeof($slaves)>8)	{ $max_mask_diff = 6; }
 	elseif(sizeof($slaves)>6)	{ $max_mask_diff = 8; }
-	elseif(@$from_search==true) { $max_mask_diff = 1000;}
 	else 						{ $max_mask_diff = 10; }
 
 
