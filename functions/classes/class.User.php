@@ -285,7 +285,7 @@ class User extends Common_functions {
         // not for api
         if ($this->api !== true) {
             # update user object
-            $this->fetch_user_details ($this->username, true);
+            $this->fetch_user_details ($this->username, null, true);
             $_SESSION['ipamlanguage'] = $this->fetch_lang_details ();
         }
     }
@@ -761,7 +761,8 @@ class User extends Common_functions {
      */
     public function authenticate ($username, $password, $saml = false) {
         # first we need to check if username exists
-        $this->fetch_user_details ($username);
+        $this->fetch_user_details ($username, $password);
+
         # set method type if set, otherwise presume local auth
         $this->authmethodid = strlen(@$this->user->authMethod)>0 ? $this->user->authMethod : 1;
 
@@ -804,34 +805,43 @@ class User extends Common_functions {
      *
      * @access private
      * @param string $username
+     * @param string $password // needed for AD autocreate
      * @param bool $force
      * @return void
      */
-    private function fetch_user_details ($username, $force = false) {
+    private function fetch_user_details ($username, $password = "", $force = false) {
         # only if not already active
         if(!is_object($this->user) || $force) {
-            try {
-                $user = $this->Database->findObject("users", "username", $username);
-            }
+            try { $user = $this->Database->findObject("users", "username", $username); }
             catch (Exception $e) {
                 $this->Result->show("danger", _("Error: ").$e->getMessage(), true);
             }
 
-            # if not result return false
-            $usert = (array) $user;
+            # check
+            if(!isset($user->username)) {
+                # retry to autocreate user
+                $this->AD_group_user_autocreate ($username, $password);
 
-            # admin?
-            if($user->role == "Administrator") {
-                $this->isadmin = true;
-            }
-
-            if(sizeof($usert)==0) {
-                $this->block_ip ();
-                $this->log_failed_access ($username);
-                $this->Log->write ( _("User login"), _('Invalid username'), 2, $username );
-                $this->Result->show("danger", _("Invalid username or password"), true);
+                # recheck
+                if(!isset($this->user->username)) {
+                    $this->block_ip ();
+                    $this->log_failed_access ($username);
+                    $this->Log->write ( _("User login"), _('Invalid username'), 2, $username );
+                    $this->Result->show("danger", _("Invalid username or password"), true);
+                }
+                else {
+                    // register permissions
+                    $this->register_user_module_permissions ();
+                    # save to session
+                    $this->write_session_parameters ();
+                }
             }
             else {
+                # admin flag
+                if($user->role == "Administrator") {
+                    $this->isadmin = true;
+                }
+                # save
                 $this->user = $user;
             }
 
@@ -978,11 +988,12 @@ class User extends Common_functions {
      *
      * @access private
      * @param mixed $authparams
+     * @param bool $die
      * @return adLDAP object
      */
-    private function directory_connect ($authparams) {
+    private function directory_connect ($authparams, $die = true) {
         # adLDAP script
-        require(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
+        require_once(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
         $dirparams = Array();
         $dirparams['base_dn'] = @$authparams['base_dn'];
         $dirparams['ad_port'] = @$authparams['ad_port'];
@@ -1012,7 +1023,10 @@ class User extends Common_functions {
             $dirconn = new adLDAP($dirparams);
         } catch (adLDAPException $e) {
             $this->Log->write( _("Directory connection error"), _("Failed to connect").": " . $e->getMessage(), 2, null);
+            if ($die)
             $this->Result->show("danger", _("Error: ") . $e->getMessage(), true);
+            else
+            $dirconn = false;
         }
         return $dirconn;
     }
@@ -1191,6 +1205,137 @@ class User extends Common_functions {
         $this->update_login_time ();
         # remove possible blocked IP
         $this->block_remove_entry ();
+    }
+
+    /**
+     * Autocreate user from AD
+     * @method AD_group_user_autocreate
+     * @param  string $username
+     * @param  string $password
+     */
+    private function AD_group_user_autocreate ($username = "", $password = "") {
+        // fetch all configured search LDAP servers
+        $ad_autocreate_servers = $this->fetch_AD_autocreate_servers ();
+
+        // check
+        if (sizeof($ad_autocreate_servers)>0 && $username="mihapet") {
+            // set AD
+            $this->ldap = false;
+            // make new connection for each
+            foreach ($ad_autocreate_servers as $authindex=>$server_params) {
+                // set group name
+                $group_name = $server_params['autocreateGroup'];
+                // connect
+                $ad_conn = $this->directory_connect ($server_params);
+
+                // check
+                if($ad_conn!==false) {
+                    try {
+                        // authenticate user
+                        if($ad_conn->authenticate($username, $password)===false) {
+                            throw new adLDAPException ("Failed to authenticate");
+                        }
+                        // Group search
+                        if($ad_conn->user()->inGroup($username, $group_name)) {
+                            // get user info from AD
+                            $userinfo = $ad_conn->user()->info($username, array("*"),false);
+                            // set ?
+                            if (isset($userinfo[0]['mail'])) {
+                                // get group membership
+                                $user_groups = $this->get_autocreate_group_membership ($ad_conn, $username);
+                                // autocreate values
+                                $values = [
+                                    "username"   => $username,
+                                    "authMethod" => $authindex,
+                                    "real_name"  => $userinfo[0]['samaccountname'][0],
+                                    "email"      => $userinfo[0]['mail'][0],
+                                    "groups"     => $this->get_autocreate_group_membership ($ad_conn, $username),
+                                    "role"       => "User"
+                                ];
+                                # admin
+                                $Admin = new Admin ($this->Database, false);
+                                # execute
+                                if(!$Admin->object_modify("users", "add", "id", $values)) {
+                                    $this->Result->show("danger", _("User")." "._("add")." "._("failed").'!', true);
+                                }
+                                else {
+                                    // ok
+                                    $this->Result->show("success", _("User")." "._("add")." "._("successful").'!', false);
+                                    // fetch and reregister user
+                                    $this->user = $this->Database->findObject("users", "username", $username);
+                                    // mail
+                                    $_POST = $values;
+                                    $_POST['action'] = "add";
+                                    $from_autocreate = true;
+                                    $Result = new Result ();
+                                    include(dirname(__FILE__)."/../../app/admin/users/edit-notify.php");
+                                }
+                            }
+                        }
+                    } catch (adLDAPException $e) {
+                        //$this->Log->write( _("Info"), _("AD search group failed: ") . $e->getMessage(), 2, $username);
+                    }
+
+                }
+            }
+        }
+    }
+
+    /**
+     * Fetch all LDAP autocreate servers
+     * @method fetch_ad_autocreate_servers
+     * @return array
+     */
+    private function fetch_AD_autocreate_servers () {
+        // ldap autocreate servers
+        $ad_autocreate_servers = [];
+        // fetch all AD/LDAP authmethods and filter autocreate ones
+        $auth_types = $this->fetch_multiple_objects("usersAuthMethod", "type", "AD");
+        // loop and check for AD
+        if ($auth_types!==false) {
+            // loop
+            foreach ($auth_types as $t) {
+                // parse parameters
+                $params = json_decode ($t->params, true);
+                // check
+                if ($params['autocreateUsers']=="1" && strlen($params['autocreateGroup'])>0) {
+                    $ad_autocreate_servers[$t->id] = $params;
+                }
+            }
+        }
+        // result
+        return $ad_autocreate_servers;
+    }
+
+    /**
+     * Match groups user belong to in AD with local groups
+     *
+     * @method get_autocreate_group_membership
+     * @param  bool $ad_conn
+     * @param  string $username
+     * @return json
+     */
+    private function get_autocreate_group_membership ($ad_conn = false, $username = "") {
+        // get user groups
+        $ad_group_membership = $ad_conn->user()->groups($username);
+        // get phpipam groups
+        $phpipam_groups = $this->fetch_all_objects ("userGroups", "g_id");
+        // result
+        $out = [];
+
+        // check
+        if (is_array($phpipam_groups) && is_array($ad_group_membership)) {
+            if (sizeof($phpipam_groups)>0 && sizeof($ad_group_membership)>0) {
+                foreach ($phpipam_groups as $id=>$phpipam_group) {
+                    if (in_array($phpipam_group->g_name, $ad_group_membership)) {
+                        $out[$phpipam_group->g_id] = $phpipam_group->g_id;
+                    }
+                }
+            }
+        }
+
+        // return
+        return sizeof($out)>0 ? json_encode($out) : NULL;
     }
 
 

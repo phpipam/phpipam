@@ -5,6 +5,7 @@
  ***********************************************/
 
 # verify that user is logged in
+if(@$from_autocreate!==true)
 $User->check_user_session();
 
 # fetch users to receive notification and filter

@@ -153,6 +153,34 @@ $delete = $_POST['action']=="delete" ? "disabled" : "";
 		</td>
 	</tr>
 
+
+	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+	<!-- Autocreate -->
+	<tr>
+		<td><?php print _('Autocreate users'); ?></td>
+		<td>
+			<select name="autocreateUsers" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
+				<option value="0" <?php if(@$method_settings->params->autocreateUsers == 0) { print 'selected'; } ?>><?php print _('false'); ?></option>
+				<option value="1" <?php if(@$method_settings->params->autocreateUsers == 1) { print 'selected'; } ?>><?php print _('true'); ?></option>
+			</select>
+		</td>
+		<td class="info2">
+			<?php print _('Autocreate new users from AD group on first login'); ?>
+		</td>
+	</tr>
+
+	<tr>
+		<td><?php print _('Autocreate group'); ?></td>
+		<td>
+			<input type="text" name="autocreateGroup" class="form-control input-sm" style="margin-bottom:5px;" placeholder="PHPIPAM_USERS" value="<?php print @$method_settings->params->autocreateGroup; ?>" <?php print $delete; ?>>
+		</td>
+		<td class="info2">
+			<?php print _('Domain group name membership check for user autocreation'); ?>
+		</td>
+	</tr>
+
 	</table>
 	</form>
 </div>

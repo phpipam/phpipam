@@ -74,7 +74,6 @@ catch (adLDAPException $e) {
 	$Result->show("danger", $e->getMessage(), true);
 }
 
-
 //check for found
 if(sizeof($groups)==0) {
 	print "<div class='alert alert-info'>";
@@ -93,23 +92,14 @@ if(sizeof($groups)==0) {
  	foreach($groups as $k=>$g) {
 		print "<tr>";
 		print "	<td>$k</td>";
-		print "	<td>$g</td>";
-		//actions
-		print " <td style='width:10px;'>";
-		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
-		print "	</td>";
-		print "</tr>";
-
-		print "<tr>";
-		print "	<td>"._("Members:")."</td>";
-		print "<td colspan='2'>";
-		print "	<div class='adgroup-$k'></div>";
+		print "	<td>";
+		print $g."<br>";
 		// search members
 		$groupMembers = $adldap->group()->members($k);
 		unset($members);
 		if($groupMembers!==false) {
 			foreach($groupMembers as $m) {
-				print "<span class='muted'>$m</span><br>";
+				print " &middot; <span class='muted'>$m</span><br>";
 				$members[] = $m;
 			}
 			if(isset($members))
@@ -119,8 +109,13 @@ if(sizeof($groups)==0) {
 			$members = "";
 			print "<span class='muted'>"._("No members")."</span>";
 		}
+		print "</td>";
+		//actions
+		print " <td style='width:10px;'>";
+		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
 		print "	</td>";
-		print "	</tr>";
+		print "</tr>";
+
 
 	}
 	print "</table>";
