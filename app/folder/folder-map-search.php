@@ -41,7 +41,9 @@ for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
 	// number of subnets
 	$subnet_num = 0;
 	foreach ($cnt as $mask=>$repeats) {
-		$subnet_num = @gmp_strval(gmp_mul($repeats,gmp_add($subnet_num, gmp_pow(2, ($m-$mask)))));
+		if($mask<$m) {
+			$subnet_num = @gmp_strval(gmp_mul($repeats,gmp_add($subnet_num, gmp_pow(2, ($m-$mask)))));
+		}
 	}
 
 	// print link
@@ -50,21 +52,22 @@ for($m=$biggest_subnet_mask+1; $m<=$pow; $m++) {
 	$masks[] = $m;
 }
 
-
-// validate
-
-
-
-
 //
 // include
 //
 if(is_numeric(@$_GET['ipaddrid'])) {
-	$from_search = true;
-	$from_search_mask = $_GET['ipaddrid']+1;
+	// validate
+	if(!in_array($_GET['ipaddrid'], $masks)) {
+		print "<h4 style='margin-top:30px;'>"._("Result").":</h4><hr>";
+		$Result->show("danger", _("Invalid mask"), false);
+	}
+	else {
+		$from_search = true;
+		$from_search_mask = $_GET['ipaddrid'];
 
-	print "<h4 style='margin-top:30px;'>"._("Result").":</h4><hr>";
+		print "<h4 style='margin-top:30px;'>"._("Result").":</h4><hr>";
 
-	// include
-	include ('folder-map.php');
+		// include
+		include ('folder-map.php');
+	}
 }

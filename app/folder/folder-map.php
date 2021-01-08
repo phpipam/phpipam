@@ -44,23 +44,12 @@ if($slaves) {
 	# set smallest mask
 	$smallest_subnet_mask = $biggest_subnet_mask+$max_mask_diff>$pow ? $pow : $biggest_subnet_mask+$max_mask_diff;
 
-
-	# reset mask on get
-	if(@$from_search===true) {
-		$smallest_subnet_mask = $_GET['ipaddrid']+1;
-	}
-
 	// loop
 	foreach($slaves as $id=>$subnet) {
 		// not folders
 		if($subnet->isFolder!=1) {
 			// to array
 			$subnet = (array) $subnet;
-
-			// reset requested
-			if(@$from_search===true) {
-				$subnet['mask'] = $smallest_subnet_mask-2;
-			}
 
 			// not same type ignore
 			if($Tools->identify_address($subnet['subnet'])==$type) {
@@ -69,39 +58,44 @@ if($slaves) {
 
 				# create free objects
 				for($searchmask=$subnet['mask']+1; $searchmask<$smallest_subnet_mask; $searchmask++) {
-					$found = $Subnets->search_available_subnets ($subnet['id'], $searchmask, $count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST);
-					if($found!==false) {
-						// check if subnet has addresses
-						if($Addresses->count_subnet_addresses ($subnet['id'])>0) {
-							// existing subnet addresses
-							$subnet_addresses = $Addresses->fetch_subnet_addresses ($subnet['id'], null, null, $fields = ['ip_addr']);
-							// remove found subnets with hosts !
-							foreach($found as $k=>$f) {
-								// parse
-								$parsed = explode("/", $f);
-								// boundaries
-								$boundaries = $Subnets->get_network_boundaries ($parsed[0], $searchmask);
-								// broadcast to int
-								$maxint = isset($boundaries['broadcast']) ? $Subnets->transform_address ($boundaries['broadcast'],"decimal") : 0;
+					// search ?
+					if((@$from_search==true && $searchmask==$from_search_mask) ||  $from_search==false) {
+						// search
+						$found = $Subnets->search_available_subnets ($subnet['id'], $searchmask, $count = Subnets::SEARCH_FIND_ALL, $direction = Subnets::SEARCH_FIND_FIRST);
 
-								if(sizeof($subnet_addresses)>0) {
-									foreach ($subnet_addresses as $a) {
-										if ($a->ip_addr>=$Subnets->transform_address($parsed[0],"decimal") && $a->ip_addr<=$maxint ) {
-											unset($found[$k]);
+						if($found!==false) {
+							// check if subnet has addresses
+							if($Addresses->count_subnet_addresses ($subnet['id'])>0) {
+								// existing subnet addresses
+								$subnet_addresses = $Addresses->fetch_subnet_addresses ($subnet['id'], null, null, $fields = ['ip_addr']);
+								// remove found subnets with hosts !
+								foreach($found as $k=>$f) {
+									// parse
+									$parsed = explode("/", $f);
+									// boundaries
+									$boundaries = $Subnets->get_network_boundaries ($parsed[0], $searchmask);
+									// broadcast to int
+									$maxint = isset($boundaries['broadcast']) ? $Subnets->transform_address ($boundaries['broadcast'],"decimal") : 0;
+
+									if(sizeof($subnet_addresses)>0) {
+										foreach ($subnet_addresses as $a) {
+											if ($a->ip_addr>=$Subnets->transform_address($parsed[0],"decimal") && $a->ip_addr<=$maxint ) {
+												unset($found[$k]);
+											}
 										}
 									}
 								}
-							}
 
-							// save remaining
-							$free_subnets[$searchmask][$id] = $found;
+								// save remaining
+								$free_subnets[$searchmask][$id] = $found;
+							}
+							else {
+								$free_subnets[$searchmask][$id] = $found;
+							}
 						}
 						else {
-							$free_subnets[$searchmask][$id] = $found;
+							$free_subnets[$searchmask][$id] = [];
 						}
-					}
-					else {
-						$free_subnets[$searchmask][$id] = [];
 					}
 				}
 			}
@@ -130,29 +124,32 @@ if($slaves) {
 				// arr
 				$subnet = (array) $slaves[$subnet_id];
 				// max
-				$max_subnets = pow(2,$free_mask-$subnet['mask']);
+				$max_subnets = floor(gmp_strval(gmp_pow(2, ($free_mask-$subnet['mask']))));
 
-				// save start
-				$subnet_start = $subnet['subnet'];
+				// if possible
+				if($max_subnets>0) {
 
-				// print
-				print "<span class='subnet_map subnet_map_subnet'>"._("In Subnet")." ".$Subnets->transform_address($subnet_start, "dotted")."/".$subnet['mask'].":</span>";
-				print "<div class='ip_vis_subnet'>";
-				for($m=1; $m<=$max_subnets;$m++) {
-					if(in_array($Subnets->transform_address($subnet_start, "dotted")."/".$free_mask, $items)) {
-						print "<span class='subnet_map subnet_map_$pow subnet_map_found'><a href='' data-sectionid='{$section->id}' data-mastersubnetid='{$subnet[id]}' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
+					// save start
+					$subnet_start = $subnet['subnet'];
+
+					// print
+					print "<span class='subnet_map subnet_map_subnet'>"._("In Subnet")." ".$Subnets->transform_address($subnet_start, "dotted")."/".$subnet['mask'].":</span>";
+					print "<div class='ip_vis_subnet'>";
+					for($m=1; $m<=$max_subnets;$m++) {
+						if(in_array($Subnets->transform_address($subnet_start, "dotted")."/".$free_mask, $items)) {
+							print "<span class='subnet_map subnet_map_$pow subnet_map_found'><a href='' data-sectionid='{$section->id}' data-mastersubnetid='{$subnet[id]}' class='createfromfree' data-cidr='".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."' rel='tooltip' title='"._("Create subnet")."'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</a></span>";
+						}
+						else {
+							print "<span class='subnet_map subnet_map_$pow subnet_map_notfound'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</span>";
+						}
+
+						// next subnet
+						$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$free_mask-1))));
+
 					}
-					else {
-						print "<span class='subnet_map subnet_map_$pow subnet_map_notfound'>".$Subnets->transform_address($subnet_start, "dotted")."/".$free_mask."</span>";
-					}
-
-					// next subnet
-					// $subnet_start = $subnet_start+pow(2,(32-$free_mask));
-					$subnet_start = gmp_strval(gmp_add($subnet_start, gmp_pow(2, ($pow-$free_mask))));
-
+					print "</div>";
+					print "<div class='clearfix clearfix1' style='margin-bottom:10px;'></div>";
 				}
-				print "</div>";
-				print "<div class='clearfix clearfix1' style='margin-bottom:10px;'></div>";
 			}
 		}
 
