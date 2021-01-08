@@ -10,6 +10,7 @@ if($slaves) {
 	# diff
 	if(sizeof($slaves)>8)		{ $max_mask_diff = 6; }
 	elseif(sizeof($slaves)>6)	{ $max_mask_diff = 8; }
+	elseif(@$from_search==true) { $max_mask_diff = 1000;}
 	else 						{ $max_mask_diff = 10; }
 
 
@@ -57,7 +58,7 @@ if($slaves) {
 				$subnet_limits = $Subnets->max_hosts($subnet);
 
 				# create free objects
-				for($searchmask=$subnet['mask']+1; $searchmask<$smallest_subnet_mask; $searchmask++) {
+				for($searchmask=$subnet['mask']+1; $searchmask<$smallest_subnet_mask+1; $searchmask++) {
 					// search ?
 					if((@$from_search==true && $searchmask==$from_search_mask) ||  $from_search==false) {
 						// search
