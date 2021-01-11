@@ -11,26 +11,21 @@ require_once( dirname(__FILE__) . '/../../../functions/functions.php' );
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$AD_sync  	= new AD_user_sync ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
 
 # fetch all available LDAP servers
-$servers = $Admin->fetch_all_objects ("usersAuthMethod");
-foreach($servers as $k=>$s) {
-	if($s->type!="AD" && $s->type!="LDAP" && $s->type!="NetIQ") {
-		unset($servers[$k]);
-	}
-}
-
+$servers = $AD_sync->get_ad_servers ();
 # die if no servers
 if(sizeof($servers)==0) 	{ $Result->show("danger", _("No servers available"), true, true); }
 ?>
 
 
 <!-- header -->
-<div class="pHeader"><?php print _('Search domains in AD'); ?></div>
+<div class="pHeader"><?php print _('Search groups in AD'); ?></div>
 
 <!-- content -->
 <div class="pContent">
@@ -42,8 +37,8 @@ if(sizeof($servers)==0) 	{ $Result->show("danger", _("No servers available"), tr
 		<td>
 			<select name="server" id="adserver" class="form-control input-w-auto">
 			<?php
-			foreach($servers as $s) {
-				print "<option value='$s->id'>$s->description</option>";
+			foreach($servers as $id=>$s) {
+				print "<option value='$id'>$s->description</option>";
 			}
 			?>
 			</select>

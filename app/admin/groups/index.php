@@ -35,6 +35,11 @@ $ffields = json_decode($User->settings->hiddenCustomFields, true);
 $ffields = is_array(@$ffields['userGroups']) ? $ffields['userGroups'] : array();
 
 $colspanCustom = 0;
+
+# ad Sync
+$AD_sync = new AD_user_sync ($Database);
+# ad servers
+$ad_servers = $AD_sync->get_ad_servers ();
 ?>
 
 
@@ -58,6 +63,7 @@ $colspanCustom = 0;
 <tr>
     <th><?php print _('Group name'); ?></th>
     <th><?php print _('Group description'); ?></th>
+    <th><?php print _('Domain group'); ?></th>
     <th><?php print _('Belonging users'); ?></th>
     <th><?php print _('Section permissions'); ?></th>
 	<?php
@@ -80,6 +86,7 @@ $colspanCustom = 0;
 <tr>
 	<td><strong><?php print _('Administrators'); ?></strong></td>
 	<td><?php print _('Administrator level users'); ?></td>
+	<td>/</td>
 	<td>
 	<?php
 	foreach($admins as $a) {
@@ -101,6 +108,9 @@ if($groups) {
 		print '<tr>' . "\n";
 		print '	<td><strong>' . $g['g_name'] . '</strong></td>'. "\n";
 		print '	<td>' . $g['g_desc'] . '</td>'. "\n";
+		// domain
+		$domain = isset($ad_servers[$g['g_domain']]) ? $ad_servers[$g['g_domain']]->description : "/";
+		print '	<td>' . _($domain) . '</td>'. "\n";
 		# users in group
 		print "	<td>";
 		$u = $Admin->group_fetch_users($g['g_id']);

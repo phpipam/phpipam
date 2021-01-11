@@ -12,70 +12,42 @@ require( dirname(__FILE__) . "/../../../functions/adLDAP/src/adLDAP.php");
 $Database 	= new Database_PDO;
 $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
+$AD_sync  	= new AD_user_sync ($Database);
 $Result 	= new Result ();
 
 # verify that user is logged in
 $User->check_user_session();
 
-# fetch server
-$server = $Admin->fetch_object("usersAuthMethod", "id", $_POST['server']);
-$server!==false ? : $Result->show("danger", _("Invalid server ID"), true);
+# get server details and check
+$server = $AD_sync->get_ad_servers ($_POST['server']);
+!is_object($server)==0 ? : $Result->show("danger", _("Invalid server ID"), true);
+
+# connect to server
+$AD_sync->ad_server_connect ($server->id);
 
 # create csrf token
 $csrf = $User->Crypto->csrf_cookie ("create", "group");
 
-//parse parameters
-$params = json_decode($server->params);
-
-if ($server->type == "LDAP") {
-
-	// Just discovered that adLDAP flat out won't work for normal ldap groups. Stop LDAP here.
-	$Result->show("danger", _("Only AD group search is supported right now. Sorry."), true);
-	return;
-
-}
-
 //no login parameters
-if(strlen(@$params->adminUsername)==0 || strlen(@$params->adminPassword)==0)	{ $Result->show("danger", _("Missing credentials"), true); }
+if(strlen(@$server->adminUsername)==0 || strlen(@$server->adminPassword)==0)	{ $Result->show("danger", _("Missing admin credentials"), true); }
 //at least 2 chars
 if(strlen($_POST['dfilter'])<2) 												{ $Result->show("danger", _('Please enter at least 2 characters'), true); }
 
-
-//open connection
-try {
-	if($server->type == "NetIQ" || $server->type == "LDAP") { $params->account_suffix = ""; }
-	//set options
-	$options = array(
-			'base_dn'=>$params->base_dn,
-			'account_suffix'=>$params->account_suffix,
-			'domain_controllers'=>explode(";",$params->domain_controllers),
-			'use_ssl'=>$params->use_ssl,
-			'use_tls'=>$params->use_tls,
-			'ad_port'=>$params->ad_port
-			);
-	//AD
-	$adldap = new adLDAP($options);
-
-	// Use credentials if they've been provided
-	if (isset($params->adminUsername) && isset($params->adminPassword)) {
-		$authUser = $adldap->authenticate($params->adminUsername, $params->adminPassword);
-		if ($authUser == false) {
-			$Result->show("danger", _("Invalid credentials"), true);
-		}
-	}
-
-	//search groups
-	$groups = $adldap->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP,true,"*$_POST[dfilter]*");
-
-	//echo $adldap->getLastError();
+// recheck server
+$server = $AD_sync->get_ad_servers ($_POST['server']);
+if($server->connection==false) {
+	$Result->show("danger", "Error connectiong to AD server", true);
 }
-catch (adLDAPException $e) {
-	$Result->show("danger", $adldap->getLastError(), false);
-	$Result->show("danger", $e->getMessage(), true);
+else {
+	// authenticate
+	$AD_sync->ad_user_admin_authenticate ();
+	// search
+	$found_ad_groups = $AD_sync->ad_group_search ($_POST['dfilter']);
 }
+
 
 //check for found
-if(sizeof($groups)==0) {
+if(sizeof($found_ad_groups)==0) {
 	print "<div class='alert alert-info'>";
 	print _('No groups found')."!<hr>";
 	print _('Possible reasons').":";
@@ -84,18 +56,18 @@ if(sizeof($groups)==0) {
 	print "<li>"._($server->type . ' account does not have enough privileges for search')."</li>";
 	print "</div>";
 } else {
-	print _(" Following groups were found").": (".sizeof($groups)."):<hr>";
+	print _(" Following groups were found").": (".sizeof($found_ad_groups)."):";
 
-	print "<table class='table table-top table-td-top  table-striped'>";
+	print "<table class='table table-top table-td-top table-striped'>";
 
 	// loop
- 	foreach($groups as $k=>$g) {
+ 	foreach($found_ad_groups as $k=>$g) {
 		print "<tr>";
 		print "	<td>$k</td>";
 		print "	<td>";
 		print $g."<br>";
 		// search members
-		$groupMembers = $adldap->group()->members($k);
+		$groupMembers = $AD_sync->ad_group_users($k);
 		unset($members);
 		if($groupMembers!==false) {
 			foreach($groupMembers as $m) {
@@ -112,13 +84,14 @@ if(sizeof($groups)==0) {
 		print "</td>";
 		//actions
 		print " <td style='width:10px;'>";
-		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
+		print "		<a href='' class='btn btn-sm btn-default btn-success groupselect' data-gname='$k' data-gdescription='$g' data-members='$members' data-gid='$k' data-g_domain='{$server->id}' data-csrf_cookie='$csrf'>"._('Add group')."</a>";
 		print "	</td>";
 		print "</tr>";
 
+		print "<tr>";
+		print "<td colspan='3' style='border-top:none !important'><div class='adgroup-$k'></div></td>";
+		print "</tr>";
 
 	}
 	print "</table>";
 }
-
-?>

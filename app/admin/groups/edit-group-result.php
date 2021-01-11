@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script to display usermod result
+ * Modify user group
  *************************************/
 
 
@@ -65,9 +65,15 @@ if(sizeof($custom) > 0) {
 }
 
 # create array of values for modification
-$values = array("g_id"=>@$_POST['g_id'],
-				"g_name"=>$_POST['g_name'],
-				"g_desc"=>@$_POST['g_desc']);
+$values = array(
+				"g_id"     => @$_POST['g_id'],
+				"g_name"   => $_POST['g_name'],
+				"g_desc"   => @$_POST['g_desc']
+				);
+# check domain
+if (isset($_POST['g_domain'])) {
+	$values['g_domain'] = $_POST['g_domain'];
+}
 
 # custom fields
 if(isset($update)) {
@@ -94,5 +100,3 @@ if (strlen($_POST['gmembers'])>0) {
 		}
 	}
 }
-
-?>

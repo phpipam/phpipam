@@ -162,3 +162,13 @@ $upgrade_queries["1.5.36"][] = "CREATE TABLE `vaultItems` (
 $upgrade_queries["1.5.36"][] = "-- Database version bump";
 $upgrade_queries["1.5.36"][] = "UPDATE `settings` set `dbversion` = '36';";
 
+
+//
+// Domain group
+//
+$upgrade_queries["1.5.37"][] = "ALTER TABLE `userGroups` ADD `g_domain` INT(11)  UNSIGNED  DEFAULT NULL AFTER `g_desc`;";
+$upgrade_queries["1.5.37"][] = "ALTER TABLE `userGroups` ADD CONSTRAINT `rel_authm` FOREIGN KEY (`g_domain`) REFERENCES `usersAuthMethod` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;";
+
+$upgrade_queries["1.5.37"][] = "-- Database version bump";
+$upgrade_queries["1.5.37"][] = "UPDATE `settings` set `dbversion` = '37';";
+

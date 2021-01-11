@@ -352,8 +352,11 @@ CREATE TABLE `userGroups` (
   `g_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `g_name` varchar(32) DEFAULT NULL,
   `g_desc` varchar(1024) DEFAULT NULL,
+  `g_domain` int(11) unsigned DEFAULT NULL,
   `editDate` TIMESTAMP  NULL  ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`g_id`)
+  PRIMARY KEY (`g_id`),
+  KEY `rel_authm` (`g_domain`),
+  CONSTRAINT `rel_authm` FOREIGN KEY (`g_domain`) REFERENCES `usersAuthMethod` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* insert default values */
 INSERT INTO `userGroups` (`g_id`, `g_name`, `g_desc`)
@@ -1030,4 +1033,4 @@ CREATE TABLE `vaultItems` (
 # ------------------------------------------------------------
 
 UPDATE `settings` SET `version` = "1.5";
-UPDATE `settings` SET `dbversion` = 36;
+UPDATE `settings` SET `dbversion` = 37;

@@ -820,7 +820,11 @@ class User extends Common_functions {
             # check
             if(!isset($user->username)) {
                 # retry to autocreate user
-                $this->AD_group_user_autocreate ($username, $password);
+                $AD_sync = new AD_user_sync ($this->Database);
+                $AD_sync->AD_user_autocreate ($username, $password);
+
+                # recheck for user
+                $this->user = $this->Database->findObject("users", "username", $username);
 
                 # recheck
                 if(!isset($this->user->username)) {
@@ -991,7 +995,7 @@ class User extends Common_functions {
      * @param bool $die
      * @return adLDAP object
      */
-    private function directory_connect ($authparams, $die = true) {
+    protected function directory_connect ($authparams, $die = true) {
         # adLDAP script
         require_once(dirname(__FILE__) . "/../adLDAP/src/adLDAP.php");
         $dirparams = Array();
@@ -1205,137 +1209,6 @@ class User extends Common_functions {
         $this->update_login_time ();
         # remove possible blocked IP
         $this->block_remove_entry ();
-    }
-
-    /**
-     * Autocreate user from AD
-     * @method AD_group_user_autocreate
-     * @param  string $username
-     * @param  string $password
-     */
-    private function AD_group_user_autocreate ($username = "", $password = "") {
-        // fetch all configured search LDAP servers
-        $ad_autocreate_servers = $this->fetch_AD_autocreate_servers ();
-
-        // check
-        if (sizeof($ad_autocreate_servers)>0 && $username="mihapet") {
-            // set AD
-            $this->ldap = false;
-            // make new connection for each
-            foreach ($ad_autocreate_servers as $authindex=>$server_params) {
-                // set group name
-                $group_name = $server_params['autocreateGroup'];
-                // connect
-                $ad_conn = $this->directory_connect ($server_params);
-
-                // check
-                if($ad_conn!==false) {
-                    try {
-                        // authenticate user
-                        if($ad_conn->authenticate($username, $password)===false) {
-                            throw new adLDAPException ("Failed to authenticate");
-                        }
-                        // Group search
-                        if($ad_conn->user()->inGroup($username, $group_name)) {
-                            // get user info from AD
-                            $userinfo = $ad_conn->user()->info($username, array("*"),false);
-                            // set ?
-                            if (isset($userinfo[0]['mail'])) {
-                                // get group membership
-                                $user_groups = $this->get_autocreate_group_membership ($ad_conn, $username);
-                                // autocreate values
-                                $values = [
-                                    "username"   => $username,
-                                    "authMethod" => $authindex,
-                                    "real_name"  => $userinfo[0]['samaccountname'][0],
-                                    "email"      => $userinfo[0]['mail'][0],
-                                    "groups"     => $this->get_autocreate_group_membership ($ad_conn, $username),
-                                    "role"       => "User"
-                                ];
-                                # admin
-                                $Admin = new Admin ($this->Database, false);
-                                # execute
-                                if(!$Admin->object_modify("users", "add", "id", $values)) {
-                                    $this->Result->show("danger", _("User")." "._("add")." "._("failed").'!', true);
-                                }
-                                else {
-                                    // ok
-                                    $this->Result->show("success", _("User")." "._("add")." "._("successful").'!', false);
-                                    // fetch and reregister user
-                                    $this->user = $this->Database->findObject("users", "username", $username);
-                                    // mail
-                                    $_POST = $values;
-                                    $_POST['action'] = "add";
-                                    $from_autocreate = true;
-                                    $Result = new Result ();
-                                    include(dirname(__FILE__)."/../../app/admin/users/edit-notify.php");
-                                }
-                            }
-                        }
-                    } catch (adLDAPException $e) {
-                        //$this->Log->write( _("Info"), _("AD search group failed: ") . $e->getMessage(), 2, $username);
-                    }
-
-                }
-            }
-        }
-    }
-
-    /**
-     * Fetch all LDAP autocreate servers
-     * @method fetch_ad_autocreate_servers
-     * @return array
-     */
-    private function fetch_AD_autocreate_servers () {
-        // ldap autocreate servers
-        $ad_autocreate_servers = [];
-        // fetch all AD/LDAP authmethods and filter autocreate ones
-        $auth_types = $this->fetch_multiple_objects("usersAuthMethod", "type", "AD");
-        // loop and check for AD
-        if ($auth_types!==false) {
-            // loop
-            foreach ($auth_types as $t) {
-                // parse parameters
-                $params = json_decode ($t->params, true);
-                // check
-                if ($params['autocreateUsers']=="1" && strlen($params['autocreateGroup'])>0) {
-                    $ad_autocreate_servers[$t->id] = $params;
-                }
-            }
-        }
-        // result
-        return $ad_autocreate_servers;
-    }
-
-    /**
-     * Match groups user belong to in AD with local groups
-     *
-     * @method get_autocreate_group_membership
-     * @param  bool $ad_conn
-     * @param  string $username
-     * @return json
-     */
-    private function get_autocreate_group_membership ($ad_conn = false, $username = "") {
-        // get user groups
-        $ad_group_membership = $ad_conn->user()->groups($username);
-        // get phpipam groups
-        $phpipam_groups = $this->fetch_all_objects ("userGroups", "g_id");
-        // result
-        $out = [];
-
-        // check
-        if (is_array($phpipam_groups) && is_array($ad_group_membership)) {
-            if (sizeof($phpipam_groups)>0 && sizeof($ad_group_membership)>0) {
-                foreach ($phpipam_groups as $id=>$phpipam_group) {
-                    if (in_array($phpipam_group->g_name, $ad_group_membership)) {
-                        $out[$phpipam_group->g_id] = $phpipam_group->g_id;
-                    }
-                }
-            }
-        }
-
-        // return
-        return sizeof($out)>0 ? json_encode($out) : NULL;
     }
 
 
@@ -1936,5 +1809,311 @@ class User extends Common_functions {
         if(is_null($level)) $level = 0;
         // return
         return $level=="0" ? "<span class='badge badge1 badge5 alert-danger'>"._($this->parse_permissions ($level))."</span>" : "<span class='badge badge1 badge5 alert-success'>"._($this->parse_permissions ($level))."</span>";
+    }
+}
+
+
+
+/**
+ * AD usersync class
+ */
+class AD_user_sync extends User {
+
+    /**
+     * Debug - show errors
+     * @var bool
+     */
+    private $debug = false;
+
+    /**
+     * Array of AD servers
+     * @var array
+     */
+    private $servers = [];
+
+    /**
+     * Array of AD server indexes for user aurtocreation
+     * @var array
+     */
+    private $servers_autocreate = [];
+
+    /**
+     * Constructor
+     * @method __construct
+     * @param  Database_PDO $database
+     */
+    public function __construct (Database_PDO $database) {
+        // construct parent
+        parent::__construct($database, false);
+        // Save database object
+        $this->Database = $database;
+        // fetch all AD servers
+        $this->fetch_ad_servers ();
+    }
+
+    /**
+     * Set debugging flag
+     * @method set_debug
+     * @param  bool $debug
+     */
+    public function set_debug ($debug = false) {
+        if(is_bool($debug)) {
+            $this->debug = $debug;
+        }
+    }
+
+    /**
+     * Fetch all AD servers from database and store autocreate server indexes array
+     * @method fetch_ad_servers
+     * @return void
+     */
+    private function fetch_ad_servers () {
+        // fetch all AD/LDAP authmethods and filter autocreate ones
+        $auth_types = $this->fetch_multiple_objects("usersAuthMethod", "type", "AD");
+        // loop and check for AD
+        if ($auth_types!==false) {
+            // loop
+            foreach ($auth_types as $t) {
+                // save
+                $this->servers[$t->id] = new stdClass();
+                // parse params
+                $this->servers[$t->id] = json_decode ($t->params);
+                // autocreate ?
+                if ($this->servers[$t->id]->autocreateUsers=="1" && strlen($this->servers[$t->id]->autocreateGroup)>0) {
+                    $this->servers_autocreate[] = $t->id;
+                }
+                // description
+                $this->servers[$t->id]->description = $t->description;
+                $this->servers[$t->id]->type        = $t->type;
+                $this->servers[$t->id]->id          = $t->id;
+            }
+        }
+    }
+
+    /**
+     * Connect to AD server
+     * @method ad_server_connect
+     * @param  int $ad_index
+     * @return void
+     */
+    public function ad_server_connect ($ad_index = 0) {
+        // check
+        if (is_numeric($ad_index)) {
+            // reset index to current
+            $this->ad_index = $ad_index;
+            // is it already active ?
+            if (!isset($this->servers[$ad_index]->connection)) {
+                // set AD type
+                $this->ldap = false;
+                // connect
+                $this->servers[$ad_index]->connection = $this->directory_connect ((array) $this->servers[$ad_index]);
+            }
+        }
+    }
+
+    /**
+     * Return created AD indexes
+     * @method get_ad_servers
+     * @param  int $index
+     * @return [type]
+     */
+    public function get_ad_servers ($index = 0) {
+        return $index==0 ? $this->servers : $this->servers[$index];
+    }
+
+    /**
+     * Autocreate user from AD
+     * @method AD_group_user_autocreate
+     * @param  string $username
+     * @param  string $password
+     */
+    protected function AD_user_autocreate ($username = "", $password = "") {
+        // check if some servers are available
+        if (sizeof($this->servers_autocreate)==0) { return false; }
+
+        if($username!="mihapet") { return false; }
+
+        // make new connection for each
+        foreach ($this->servers_autocreate as $ad_index) {
+            // connect
+            $this->ad_server_connect ($ad_index);
+
+            // check
+            if($this->servers[$ad_index]->connection!==false) {
+                // authenticate user
+                if($this->ad_user_authenticate($username, $password)===false) { break; }
+                // reauthenticate with admin account for search operations
+                if($this->ad_user_admin_authenticate()) { break; };
+                // group search
+                if($this->ad_group_user_search ($username, $this->servers[$ad_index]->autocreateGroup)===false) { break; }
+                // create user
+                $this->user_autocreate ($username);
+            }
+        }
+    }
+
+    /**
+     * Try to authenticate user to AD wiih specifiec credentials
+     * @method ad_user_authenticate
+     * @param  string $username
+     * @param  string $password
+     * @return bool
+     */
+    public function ad_user_authenticate ($username = "", $password = "") {
+        if($this->servers[$this->ad_index]->connection!==false) {
+            return $this->servers[$this->ad_index]->connection->authenticate($username, $password);
+        }
+    }
+
+    /**
+     * Try to authenticate admin to AD with admin credentials - needed for group search
+     * @method ad_user_authenticate
+     * @param  string $username
+     * @param  string $password
+     * @return bool
+     */
+    public function ad_user_admin_authenticate () {
+        if($this->servers[$this->ad_index]->connection!==false) {
+            if(strlen($this->servers[$this->ad_index]->adminUsername)>0 && strlen($this->servers[$this->ad_index]->adminPassword)>0) {
+                return $this->servers[$this->ad_index]->connection->authenticate($this->servers[$this->ad_index]->adminUsername, $this->servers[$this->ad_index]->adminPassword);
+            }
+        }
+    }
+
+    /**
+     * Get user info from AD
+     * @method ad_user_info
+     * @param  string $username
+     * @return array
+     */
+    private function ad_user_info ($username = "") {
+        if($this->servers[$this->ad_index]->connection!==false) {
+            return $this->servers[$this->ad_index]->connection->user()->info($username, array("*"),false);;
+        }
+    }
+
+    /**
+     * Get AD groups to which user belongs to
+     * @method ad_user_groups
+     * @param  string $username
+     * @return array
+     */
+    private function ad_user_groups ($username = "") {
+        if($this->servers[$this->ad_index]->connection!==false) {
+            return $this->servers[$this->ad_index]->connection->user()->groups($username);
+        }
+    }
+
+    /**
+     * Check if user is in group
+     * @method ad_group_user_search
+     * @param  string $username
+     * @param  string $groupname
+     * @return bool
+     */
+    private function ad_group_user_search ($username = "", $groupname = "") {
+        if($this->servers[$this->ad_index]->connection!==false) {
+            return $this->servers[$this->ad_index]->connection->user()->inGroup($username, $groupname);
+        }
+    }
+
+    /**
+     * Search AD for group name
+     * @method ad_group_search
+     * @param  string $groupname
+     * @return [type]
+     */
+    public function ad_group_search ($groupname = "") {
+        return $this->servers[$this->ad_index]->connection->group()->search(adLDAP::ADLDAP_SECURITY_GLOBAL_GROUP,true,"*$groupname*");
+    }
+
+    /**
+     * Get all users in some AD group
+     * @method ad_group_users
+     * @param  string $groupname
+     * @return array
+     */
+    public function ad_group_users ($groupname = "") {
+        if($this->servers[$this->ad_index]->connection!==false) {
+            return $this->servers[$this->ad_index]->connection->group()->members($groupname);
+        }
+    }
+
+    /**
+     * Get all phpipam groups belonging to specified AD
+     * @method phpipam_all_ad_groups
+     * @return [type]
+     */
+    private function phpipam_all_ad_groups () {
+        return $this->fetch_multiple_objects ("userGroups", "g_domain", $this->ad_index, "g_id");
+    }
+
+    /**
+     * Autocreate AD user
+     * @method user_autocreate
+     * @param  string $username
+     * @return void
+     */
+    private function user_autocreate ($username) {
+        // get info
+        $userinfo = $this->ad_user_info ($username);
+        // check
+        if (isset($userinfo[0]['mail'])) {
+            // autocreate values
+            $values = [
+                "username"   => $username,
+                "authMethod" => $this->ad_index,
+                "real_name"  => $userinfo[0]['samaccountname'][0],
+                "email"      => $userinfo[0]['mail'][0],
+                "groups"     => $this->user_autocreate_set_group_membership ($username),
+                "role"       => "User"
+            ];
+
+            // Admin class
+            $Admin = new Admin ($this->Database, false);
+            // create
+            if(!$Admin->object_modify("users", "add", "id", $values)) {
+                $this->Result->show("danger", _("User")." "._("add")." "._("failed").'!', true);
+            }
+            else {
+                // ok
+                $this->Result->show("success", _("User")." "._("add")." "._("successful").'!', false);
+                // mail
+                $_POST = $values;
+                $_POST['action'] = "add";
+                $from_autocreate = true;
+                $Result = new Result ();
+                include(dirname(__FILE__)."/../../app/admin/users/edit-notify.php");
+            }
+        }
+    }
+
+    /**
+     * Get groups user is member of from AD and sync them with local groups to define group membership
+     * @method user_autocreate_set_group_membership
+     * @param  string $username
+     * @return json|NULL
+     */
+    private function user_autocreate_set_group_membership ($username = "") {
+        // get user group membership from AD
+        $ad_group_membership = $this->ad_user_groups ($username);
+        // get all groups from phpIPAM for this AD index
+        $phpipam_groups = $this->phpipam_all_ad_groups ();
+        // result
+        $out = [];
+
+        // check
+        if (is_array($phpipam_groups) && is_array($ad_group_membership)) {
+            if (sizeof($phpipam_groups)>0 && sizeof($ad_group_membership)>0) {
+                foreach ($phpipam_groups as $id=>$phpipam_group) {
+                    if (in_array($phpipam_group->g_name, $ad_group_membership)) {
+                        $out[$phpipam_group->g_id] = $phpipam_group->g_id;
+                    }
+                }
+            }
+        }
+
+        // return
+        return sizeof($out)>0 ? json_encode($out) : NULL;
     }
 }

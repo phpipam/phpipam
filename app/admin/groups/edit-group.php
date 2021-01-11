@@ -13,6 +13,7 @@ $User 		= new User ($Database);
 $Admin	 	= new Admin ($Database);
 $Tools      = new Tools ($Database);
 $Result 	= new Result ();
+$AD_sync    = new AD_user_sync ($Database);
 
 # verify that user is logged in
 $User->check_user_session();
@@ -29,7 +30,8 @@ $custom     = $Tools->fetch_custom_fields('userGroups');
 # fetch group and set title
 if($_POST['action']=="add") {
 	$title = _('Add new group');
-} else {
+}
+else {
     # ID
     if(!is_numeric($_POST['id']))   $Result->show("danger", _("Invalid Id"), true, true);
 
@@ -40,6 +42,9 @@ if($_POST['action']=="add") {
 
 	$title = ucwords($_POST['action']) .' '._('group').' '.$group['g_name'];
 }
+
+# ad servers
+$ad_servers = $AD_sync->get_ad_servers ();
 ?>
 
 <!-- header -->
@@ -72,6 +77,29 @@ if($_POST['action']=="add") {
     	</td>
     	<td class="info2"><?php print _('Enter description'); ?></td>
     </tr>
+
+    <!-- Domain -->
+    <?php if(sizeof($ad_servers)>0) { ?>
+    <tr>
+        <td><?php print _('Domain group'); ?></td>
+        <td>
+            <select name="g_domain" class="form-control input-sm input-w-auto" <?php print $delete; ?>>
+                <?php
+                print "<option value='0'>"._("No")."</option>";
+                foreach ($ad_servers as $index=>$server) {
+                    // selected
+                    $selected = $group['g_domain']==$index ? "selected='selected'" : "";
+                    // print
+                    print "<option value='$index' $selected>".$server->description."</option>";
+                }
+                ?>
+            </select>
+        </td>
+        <td class="info2">
+            <?php print _('Flag to sync users with domain group membership'); ?>
+        </td>
+    </tr>
+    <?php } ?>
 
     <!-- Custom -->
     <?php
