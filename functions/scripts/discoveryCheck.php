@@ -257,7 +257,7 @@ foreach($scan_subnets as $s) {
 							"note"        =>_("This host was autodiscovered on")." ".$nowdate,
 							"lastSeen"    =>$nowdate,
 							"state"       =>"2",
-							"action"      =>_("add")
+							"action"      =>"add"
 							);
 			//insert
 			$Addresses->modify_address($values);
