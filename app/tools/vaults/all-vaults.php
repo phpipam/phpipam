@@ -10,7 +10,7 @@ if ($User->get_module_permissions ("vaults")==User::ACCESS_NONE) {
 else {
 
 	// title
-	print "<h4>Vaults</h4><hr>";
+	print "<h4>"._("Vaults")."</h4><hr>";
 
 	// fetch vaults
 	$all_vaults = $Tools->fetch_all_objects ("vaults");
