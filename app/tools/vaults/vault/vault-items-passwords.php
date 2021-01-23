@@ -75,9 +75,9 @@ if($passwords!==false) {
 		print " <td class='actions' style='width:50px;'>";
 		$links = [];
 		if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
-		    $links[] = ["type"=>"header", "text"=>"Manage"];
-		    $links[] = ["type"=>"link", "text"=>"Edit password", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-password.php' data-class='700' data-action='edit' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"pencil"];
-		    $links[] = ["type"=>"link", "text"=>"Delete password", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-password.php' data-class='700' data-action='delete' data-vaultId='$vault->id', data-id='$p->id'", "icon"=>"times"];
+		    $links[] = ["type"=>"header", "text"=>_("Manage")];
+		    $links[] = ["type"=>"link", "text"=>_("Edit password"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-password.php' data-class='700' data-action='edit' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"pencil"];
+		    $links[] = ["type"=>"link", "text"=>_("Delete password"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-password.php' data-class='700' data-action='delete' data-vaultId='$vault->id', data-id='$p->id'", "icon"=>"times"];
 		}
 		// print links
 		print $User->print_actions($User->user->compress_actions, $links, false, true);
@@ -89,7 +89,7 @@ if($passwords!==false) {
 else {
 	print "<tr>";
 	print "	<td colspan='$csize'>";
-	$Result->show('info', "No items");
+	$Result->show('info', _("No items"));
 	print "	</td>";
 	print "</tr>";
 }
