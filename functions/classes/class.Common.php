@@ -2146,7 +2146,7 @@ class Common_functions  {
 	    $action_text = $print_text ? " <i class='fa fa-cogs'></i> "._("Actions")." " : " <i class='fa fa-cogs'></i> ";
 
 	    $html[] = "<div class='dropdown'>";
-	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> "._($action_text)." <span class='caret'></span></button>";
+	    $html[] = "  <button class='btn btn-xs btn-default dropdown-toggle ' type='button' id='dropdownMenu' data-toggle='dropdown' aria-haspopup='true' aria-expanded='true' rel='tooltip' title='"._("Actions")."'> ".$action_text." <span class='caret'></span></button>";
 	    $html[] = "  <ul class='dropdown-menu $alignment' aria-labelledby='dropdownMenu'>";
 
 	    // loop items
@@ -2168,7 +2168,7 @@ class Common_functions  {
 	        }
 	        // item
 	        else {
-	            $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> "._($i['text'])."</a></li>";
+	            $html[] = "   <li><a class='$i[class]' href='$i[href]' $i[dataparams]><i class='fa fa-$i[icon]'></i> ".$i['text']."</a></li>";
 	        }
 	    }
 	    // remove last divider if present
@@ -2205,7 +2205,7 @@ class Common_functions  {
 	        }
 	        // save only links
 	        if($i['type']=="link") {
-	            $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='"._($i['text'])."'><i class='fa fa-$i[icon]'></i></a>";
+	            $html[] = " <a href='$i[href]' class='btn btn-xs btn-default $i[class]' $i[dataparams] rel='tooltip' title='".$i['text']."'><i class='fa fa-$i[icon]'></i></a>";
 	        }
 	    }
 	    // end
