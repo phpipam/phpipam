@@ -151,11 +151,11 @@ if ($User->settings->enableCustomers=="1" && $User->get_module_permissions ("cus
             $links = [];
             # permissions
             if($User->get_module_permissions ("racks")>=User::ACCESS_RW) {
-                $links[] = ["type"=>"header", "text"=>"Manage"];
-                $links[] = ["type"=>"link", "text"=>"Edit rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$rack->id'", "icon"=>"pencil"];
+                $links[] = ["type"=>"header", "text"=>_("Manage")];
+                $links[] = ["type"=>"link", "text"=>_("Edit rack"), "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='edit' data-rackid='$rack->id'", "icon"=>"pencil"];
             }
             if($User->get_module_permissions ("racks")>=User::ACCESS_RWA) {
-                $links[] = ["type"=>"link", "text"=>"Delete rack", "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$rack->id'", "icon"=>"times"];
+                $links[] = ["type"=>"link", "text"=>_("Delete rack"), "href"=>"", "class"=>"editRack", "dataparams"=>" data-action='delete' data-rackid='$rack->id'", "icon"=>"times"];
             }
             // print links
             print $User->print_actions($User->user->compress_actions, $links, true, true);

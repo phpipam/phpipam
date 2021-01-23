@@ -195,13 +195,13 @@ else {
 					if ($k==0 && $User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
 			            print "<td class='actions'>";
 			            $links = [];
-		                $links[] = ["type"=>"header", "text"=>"Manage"];
-		                $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$v->vlanId'", "icon"=>"pencil"];
+		                $links[] = ["type"=>"header", "text"=>_("Manage")];
+		                $links[] = ["type"=>"link", "text"=>_("Edit VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$v->vlanId'", "icon"=>"pencil"];
 
 			            if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
 			                $links[] = ["type"=>"divider"];
-			                $links[] = ["type"=>"link", "text"=>"Move VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"external-link"];
-			                $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"times"];
+			                $links[] = ["type"=>"link", "text"=>_("Move VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"external-link"];
+			                $links[] = ["type"=>"link", "text"=>_("Delete VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"times"];
 			            }
 			            // print links
 			            print $User->print_actions($User->user->compress_actions, $links);
@@ -220,14 +220,14 @@ else {
 					if ($k==0 && $User->get_module_permissions ("vlan")>=User::ACCESS_RW) {
 			            print "<td class='actions'>";
 			            $links = [];
-		                $links[] = ["type"=>"header", "text"=>"Manage"];
-		                $links[] = ["type"=>"link", "text"=>"Edit VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$v->vlanId'", "icon"=>"pencil"];
+		                $links[] = ["type"=>"header", "text"=>_("Manage")];
+		                $links[] = ["type"=>"link", "text"=>_("Edit VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='edit' data-vlanid='$v->vlanId'", "icon"=>"pencil"];
 
 			            if($User->get_module_permissions ("vlan")>=User::ACCESS_RWA) {
 			                $links[] = ["type"=>"divider"];
-			                $links[] = ["type"=>"header", "text"=>"Administer"];
-			                $links[] = ["type"=>"link", "text"=>"Move VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"external-link"];
-			                $links[] = ["type"=>"link", "text"=>"Delete VLAN", "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"times"];
+			                $links[] = ["type"=>"header", "text"=>_("Administer")];
+			                $links[] = ["type"=>"link", "text"=>_("Move VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/move-vlan.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"external-link"];
+			                $links[] = ["type"=>"link", "text"=>_("Delete VLAN"), "href"=>"", "class"=>"open_popup", "dataparams"=>"data-script='app/admin/vlans/edit.php' data-action='delete' data-vlanid='$v->vlanId'", "icon"=>"times"];
 			            }
 			            // print links
 			            print $User->print_actions($User->user->compress_actions, $links);

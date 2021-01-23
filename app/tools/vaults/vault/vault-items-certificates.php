@@ -104,13 +104,13 @@ if($certificates_db!==false) {
 			print " <td class='actions' style='width:50px;'>";
 			$links = [];
 
-			$links[] = ["type"=>"header", "text"=>"Download"];
-			$links[] = ["type"=>"link", "text"=>"Download certificate", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
+			$links[] = ["type"=>"header", "text"=>_("Download")];
+			$links[] = ["type"=>"link", "text"=>_("Download certificate"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/download-certificate.php' data-class='700' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"download"];
 
 			if($User->get_module_permissions ("vaults")>=User::ACCESS_RW) {
-			    $links[] = ["type"=>"header", "text"=>"Manage"];
-			    $links[] = ["type"=>"link", "text"=>"Edit certificate", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='edit' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"pencil"];
-			    $links[] = ["type"=>"link", "text"=>"Delete certificate", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='delete' data-vaultId='$vault->id', data-id='$p->id'", "icon"=>"times"];
+			    $links[] = ["type"=>"header", "text"=>_("Manage")];
+			    $links[] = ["type"=>"link", "text"=>_("Edit certificate"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='edit' data-vaultid='$vault->id', data-id='$p->id'", "icon"=>"pencil"];
+			    $links[] = ["type"=>"link", "text"=>_("Delete certificate"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/vaults/edit-item-certificate.php' data-class='700' data-action='delete' data-vaultId='$vault->id', data-id='$p->id'", "icon"=>"times"];
 			}
 			// print links
 			print $User->print_actions($User->user->compress_actions, $links, false, true);

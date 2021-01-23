@@ -76,16 +76,16 @@ else {
         print "<td class='actions'>";
         $links = [];
         if($User->get_module_permissions ("customers")>=User::ACCESS_R) {
-            $links[] = ["type"=>"header", "text"=>"Show"];
-            $links[] = ["type"=>"link", "text"=>"Show customer", "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
+            $links[] = ["type"=>"header", "text"=>_("Show")];
+            $links[] = ["type"=>"link", "text"=>_("Show customer"), "href"=>create_link($_GET['page'], "customers", $customer->title), "icon"=>"eye", "visible"=>"dropdown"];
             $links[] = ["type"=>"divider"];
         }
         if($User->get_module_permissions ("customers")>=User::ACCESS_RW) {
-            $links[] = ["type"=>"header", "text"=>"Manage"];
-            $links[] = ["type"=>"link", "text"=>"Edit customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
+            $links[] = ["type"=>"header", "text"=>_("Manage")];
+            $links[] = ["type"=>"link", "text"=>_("Edit customer"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='edit' data-id='$customer->id'", "icon"=>"pencil"];
         }
         if($User->get_module_permissions ("customers")>=User::ACCESS_RWA) {
-            $links[] = ["type"=>"link", "text"=>"Delete customer", "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
+            $links[] = ["type"=>"link", "text"=>_("Delete customer"), "href"=>"", "class"=>"open_popup", "dataparams"=>" data-script='app/admin/customers/edit.php' data-class='700' data-action='delete' data-id='$customer->id'", "icon"=>"times"];
         }
         // print links
         print $User->print_actions($User->user->compress_actions, $links);
