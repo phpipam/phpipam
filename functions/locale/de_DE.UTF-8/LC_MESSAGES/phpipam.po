@@ -4,8 +4,8 @@
 # miha petkovsek <miha.petkovsek@gmail.com>, 2020.
 # "Project-Id-Version: 1.50\n"
 # "Report-Msgid-Bugs-To: Miha Petkovsek <miha.petkovsek@gmail.com>\n"
-# "POT-Creation-Date: 2021-01-23 10:17+0100\n"
-# "PO-Revision-Date: 2021-01-23 10:24+0100\n"
+# "POT-Creation-Date: 2021-01-24 18:15+0100\n"
+# "PO-Creation-Date: 2021-01-24 18:15+0100\n"
 # "Last-Translator: Carsten Schoenert <c.schoenert@t-online.de>\n"
 # "Language: German\n"
 # "MIME-Version: 1.0\n"
@@ -3183,6 +3183,10 @@ msgstr "Vorderseite"
 
 #: app/admin/devices/edit-rack-dropdown.php:84
 #: app/admin/racks/edit-rack-devices.php:156
+#: app/install/install_automatic.php:96 app/install/install_manual.php:17
+#: app/install/install_mysqlimport.php:18
+#: app/install/invalid_install_type.php:9
+#: app/install/postinstall_configure.php:89
 #: app/tools/powerDNS/domains-print.php:72 app/tools/vlan/vlan-details.php:43
 msgid "Back"
 msgstr "Zur&uuml;ck"
@@ -7229,7 +7233,7 @@ msgstr "phpIPAM Server Konfiguration"
 msgid "Site settings"
 msgstr "Seiten Einstellungen"
 
-#: app/admin/settings/index.php:46
+#: app/admin/settings/index.php:46 app/install/postinstall_configure.php:71
 msgid "Site title"
 msgstr "Seitentitel"
 
@@ -7245,7 +7249,7 @@ msgstr "Seiten Dom&auml;ne"
 msgid "Set domain for sending mail notifications"
 msgstr "Festlegen der Dom&auml;ne um E-Mail Benachrichtigungen zu versenden"
 
-#: app/admin/settings/index.php:65
+#: app/admin/settings/index.php:65 app/install/postinstall_configure.php:78
 msgid "Site URL"
 msgstr "Seiten URL"
 
@@ -9008,6 +9012,7 @@ msgstr ""
 
 #: app/admin/vaults/fetch_website_certificate.php:21
 #: app/admin/vaults/fetch_website_certificate.php:24
+#: app/install/sql_error.php:17
 #: app/subnets/addresses/address-modify-submit.php:266
 #: app/subnets/addresses/address-modify-submit.php:316
 #: app/subnets/addresses/ping-address.php:84
@@ -10039,6 +10044,228 @@ msgstr "Datenbank erfolgreich installiert!"
 msgid "Continue"
 msgstr "Fortfahren"
 
+#: app/install/install_automatic.php:5 app/install/install_manual.php:5
+#: app/install/install_mysqlimport.php:5 app/install/select_install_type.php:3
+msgid "migration"
+msgstr "Migration"
+
+#: app/install/install_automatic.php:5 app/install/install_manual.php:5
+#: app/install/install_mysqlimport.php:5 app/install/select_install_type.php:3
+msgid "installation"
+msgstr "Installation"
+
+#: app/install/install_automatic.php:6 app/install/install_mysqlimport.php:6
+#: app/install/select_install_type.php:4
+msgid "migrate"
+msgstr "migrieren"
+
+#: app/install/install_automatic.php:6 app/install/install_mysqlimport.php:6
+#: app/install/select_install_type.php:4
+msgid "install"
+msgstr "installieren"
+
+#: app/install/install_automatic.php:12 app/install/select_install_type.php:41
+msgid "Automatic database"
+msgstr "Automatische Datenbank"
+
+#: app/install/install_automatic.php:17
+msgid "Please provide required inputs in below form for automatic database"
+msgstr ""
+"Bitte geben Sie alle nachfolgend ben&ouml;tigten Angaben ein f&uuml:r eine "
+"automatische Datenebank"
+
+#: app/install/install_automatic.php:17
+msgid "once finished click Install database."
+msgstr "wenn Sie fertig sind klicken Sie auf Datenbank installieren."
+
+#: app/install/install_automatic.php:19
+msgid "Before you proceed to"
+msgstr "Bevor Sie fortfahren zu"
+
+#: app/install/install_automatic.php:19
+msgid "please fill in all settings in <strong>config.php</strong> file!"
+msgstr ""
+"passen Sie bitte alle Einstellungen in der Datei <strong>config.php</strong> "
+"an!"
+
+#: app/install/install_automatic.php:27
+msgid "MySQL/MariaDB username"
+msgstr "MySQL/MariaDB Benutzername"
+
+#: app/install/install_automatic.php:34
+msgid "MySQL/MariaDB password"
+msgstr "MySQL/MariaDB Password"
+
+#: app/install/install_automatic.php:37
+msgid "* User must have permissions to create new MySQL/MariaDB database"
+msgstr ""
+"* Der Benutzer muss Berechtigung besitzen um eine neue MySQL/MariaDB "
+"Datenbank erstellen zu k&ouml;nnen."
+
+#: app/install/install_automatic.php:42
+msgid "MySQL/MariaDB database location"
+msgstr "MySQL/MariaDB Datenbank Quelle"
+
+#: app/install/install_automatic.php:49
+msgid "MySQL/MariaDB database name"
+msgstr "MySQL/MariaDB Datenbankname"
+
+#: app/install/install_automatic.php:52
+msgid "* change database details on config.php"
+msgstr "* Anpassen der Datenbankdetails in config.php"
+
+#: app/install/install_automatic.php:59
+msgid "Show advanced options"
+msgstr "Zeige erweiterte Einstellungen"
+
+#: app/install/install_automatic.php:65
+msgid "Drop exisitng database"
+msgstr "Drop exisitng database"
+
+#: app/install/install_automatic.php:68
+msgid "Drop existing database if it exists"
+msgstr "L&ouml;schen der Datenbank sofern diese schon vorhanden ist"
+
+#: app/install/install_automatic.php:70 app/install/install_mysqlimport.php:29
+msgid "Create database"
+msgstr "Datenbank erstellen"
+
+#: app/install/install_automatic.php:73
+msgid "Create new database"
+msgstr "Neue Datenbank erstellen"
+
+#: app/install/install_automatic.php:75
+msgid "Create permissions"
+msgstr "Berechtigungen erstellen"
+
+#: app/install/install_automatic.php:78
+msgid "Set permissions to tables"
+msgstr "Setzen der Berechtigungen auf die Tabellen"
+
+#: app/install/install_automatic.php:86 app/install/install_mysqlimport.php:42
+msgid "Cannot access file db/MIGRATE.sql!"
+msgstr "Auf die Datei db/MIGRATE.sql kann nicht zugegriffen werden!"
+
+#: app/install/install_automatic.php:97
+msgid "phpipam database"
+msgstr "phpIPAM Datenbank"
+
+#: app/install/install_manual.php:11 app/install/select_install_type.php:57
+msgid "Manual database"
+msgstr "Manuelle Datenbank"
+
+#: app/install/install_manual.php:20
+msgid ""
+"For importing database file with mysqlimport tool please follow below "
+"instructions:"
+msgstr ""
+"Um eine Datenbank mit dem mysqlimport Werkzeug zu importieren folgen Sie "
+"bitte den nachfolgenden Anweisungen:"
+
+#: app/install/install_manual.php:22 app/install/install_mysqlimport.php:23
+msgid "Set variables for database connection in config.php"
+msgstr "Setzen der Werte für die Datenbankverbindung in config.php"
+
+#: app/install/install_manual.php:23
+msgid "Open mysql connection, create database"
+msgstr "&Ouml;ffnen einer MySQL Verbindung, Erstellen einer Datenbank"
+
+#: app/install/install_manual.php:27
+msgid "Copy below SQL queries and paste them to mysql"
+msgstr ""
+"Kopieren Sie die folgenden SQL-Queries und f&uuml;hren diese in der MySQL "
+"CLI aus."
+
+#: app/install/install_manual.php:29 app/install/install_mysqlimport.php:55
+msgid "Finished ! Now login with <strong>Admin/ipamadmin</strong> to webpage."
+msgstr ""
+"Fertig ! Loggen Sie sich mit <strong>Admin/ipamadmin</strong> auf der "
+"Webseite ein."
+
+#: app/install/install_manual.php:30 app/install/install_mysqlimport.php:56
+#: app/login/2fa/2fa_form.php:36 app/login/index.php:104
+#: app/login/login_form.php:53 app/temp_share/index.php:79
+#: functions/classes/class.User.php:370
+msgid "Login"
+msgstr "Anmelden"
+
+#: app/install/install_mysqlimport.php:12
+msgid "with mysqlimport tool"
+msgstr "mit dem mysqlimport Werkzeug"
+
+#: app/install/install_mysqlimport.php:21
+msgid "Please follow below steps for"
+msgstr "Bitte f&uuml;hren Sie die nachfolgenden Schritte aus für eine"
+
+#: app/install/install_mysqlimport.php:21
+msgid "with mysqlimport:"
+msgstr "mit dem mysqlimport Werkzeug:"
+
+#: app/install/install_mysqlimport.php:24
+msgid "Open mysql connection"
+msgstr "&Ouml;ffnen einer mysql Verbindung"
+
+#: app/install/install_mysqlimport.php:34
+msgid "Import SQL file"
+msgstr "SQL-Datei importieren"
+
+#: app/install/install_mysqlimport.php:46
+msgid "Cannot access file db/SCHEMA.sql!"
+msgstr "Auf die Datei db/SCHEMA.sql kann nicht zugegriffen werden!"
+
+#: app/install/install_mysqlimport.php:51
+msgid "Set permissions for phpipam user"
+msgstr "Setzen der Berechtigungen f&uuml;r den Benutzer phpipam"
+
+#: app/install/invalid_install_type.php:3
+msgid "Invalid installation type"
+msgstr "Ung&uuml;ltiger Installationstyp"
+
+#: app/install/invalid_install_type.php:7
+msgid ""
+"This installation type does not exist. Please select valid installation "
+"method!"
+msgstr ""
+"Dieser Installationstyp existiert nicht. Bitte w&auml;hlen Sie eine g&uuml;"
+"ltige Installationsmethode!"
+
+#: app/install/postinstall_configure.php:3
+msgid "Postinstall configuration"
+msgstr "Postinstall configuration"
+
+#: app/install/postinstall_configure.php:8
+msgid ""
+"Hi, almost set, lets just set some basic settings. You can change all "
+"settings under administration once logged in!"
+msgstr ""
+"Hi, fast geschafft, ein paar wenige Basiseinstellungen m&uuml;ssen noch "
+"bearbeitet werden. Sie k&ouml;nnen alle Einstellungen administrieren wenn "
+"Sie eingeloggt sind!"
+
+#: app/install/postinstall_configure.php:20
+msgid "Some tables or fields are missing in database"
+msgstr "Einige Tabellen oder Felder existieren nicht in der Datenbank"
+
+#: app/install/postinstall_configure.php:24
+msgid "Missing tables"
+msgstr "Fehlende Tabellen"
+
+#: app/install/postinstall_configure.php:37
+msgid "Table"
+msgstr "Tabelle"
+
+#: app/install/postinstall_configure.php:37
+msgid "missing field"
+msgstr "fehlendes Feld"
+
+#: app/install/postinstall_configure.php:53
+msgid "Admin password"
+msgstr "Admin Password"
+
+#: app/install/postinstall_configure.php:62
+msgid "Set password for Admin user"
+msgstr "Setzen des Kennwort f&uuml;r den Admin Benutzer"
+
 #: app/install/postinstall_submit.php:37
 msgid "Settings updated, installation complete!"
 msgstr "Einstellungen aktualisiert, Installation ist vollst&auml;ndig!"
@@ -10046,6 +10273,159 @@ msgstr "Einstellungen aktualisiert, Installation ist vollst&auml;ndig!"
 #: app/install/postinstall_submit.php:37
 msgid "Proceed to login."
 msgstr "Weiter zur Anmeldung."
+
+#: app/install/select_install_type.php:9 app/install/welcome.php:3
+msgid "Welcome to phpipam"
+msgstr "Willkommen zu phpIPAM"
+
+#: app/install/select_install_type.php:15
+msgid "We are glad you decided phpipam to"
+msgstr "Wir freuen uns, dass Sie sich entschieden haben phpIPAM zu"
+
+#: app/install/select_install_type.php:15
+msgid "Before you can start to process please:"
+msgstr "Bevor Sie fortfahren beachten Sie bitte folgende Punkte:"
+
+#: app/install/select_install_type.php:17
+msgid "Edit settings in config.php file"
+msgstr "Bearbeiten der Einstellungen in der Datei config.php"
+
+#: app/install/select_install_type.php:18
+msgid ""
+"Create a MySQL/MariaDB database for phpipam, you can do this three ways "
+"(select below)"
+msgstr ""
+"Erstellen einer MySQL/MariaDB Datenbank f&uuml:r phpIPAM, dies k&ouml;nnen "
+"Sie auf drei verschiedene Wege erledigen (siehe unten)"
+
+#: app/install/select_install_type.php:21
+msgid "Before you start to"
+msgstr "Bevor Sie die"
+
+#: app/install/select_install_type.php:21
+msgid "please visit phpipam installation website"
+msgstr "starten besuchen Sie bitte die phpIPAM Webseite zur Installation"
+
+#: app/install/select_install_type.php:21
+msgid "to get all documentation and to make sure all requirements are met for"
+msgstr ""
+"um alle die ben&ouml;tigten Informationen zu erhalten damit die n&ouml;tigen "
+"Voraussetzungen erf&uuml;llt sind für eine"
+
+#: app/install/select_install_type.php:29
+msgid "You selected option to migrate from old database."
+msgstr "Sie haben die Option zur Migration der alten Datenbank gew&auml;hlt."
+
+#: app/install/select_install_type.php:29
+msgid ""
+"Please put SQL dump file from old phpipam installation to db/MIGRATE.sql "
+"file !"
+msgstr ""
+"Bitte stellen Sie den SQL-Dump der alten phpIPAM Installation als db/MIGRATE."
+"sql bereit !"
+
+#: app/install/select_install_type.php:34
+msgid "Please select preferred type of database"
+msgstr ""
+"Bitte w&auml;hlen Sie den Typ der Datenbank aus f&uuml;r die"
+
+#: app/install/select_install_type.php:43
+msgid "phpipam installer will create database for you automatically."
+msgstr ""
+"Der phpIPAM Installer wird die Datenbank automatisch f&uuml;r Sie erstellen."
+
+#: app/install/select_install_type.php:49
+msgid "MySQL/MariaDB import instructions"
+msgstr "Hinweise MySQL/MariaDB Import"
+
+#: app/install/select_install_type.php:51
+msgid "Install DB files with mysqlimport tool."
+msgstr "Installation der Datenbankdatei mit Hilfe des mysqlimport Werkzeugs."
+
+#: app/install/select_install_type.php:59
+msgid "Install database manually with SQL queries."
+msgstr "Manuelle Installation der Datenbank mit SQL-Queries."
+
+#: app/install/sql_error.php:3
+msgid "Database connection check"
+msgstr "Pr&uuml;fung Datenbankverbindung"
+
+#: app/install/sql_error.php:8
+msgid "Database connection check result:"
+msgstr "Ergebnis Pr&uuml;fung Datenbankverbindung:"
+
+#: app/install/sql_error.php:22
+msgid "Troubleshooting:"
+msgstr "Fehlersuche:"
+
+#: app/install/sql_error.php:24
+msgid "Make sure all settings in config.php are correct."
+msgstr ""
+"Stellen Sie die Korrektheit der Einstellungen in der Datei config.php sicher."
+
+#: app/install/sql_error.php:25
+msgid "Make sure database is running and accepting connections."
+msgstr ""
+"Vergewissern Sie sich, dass der konfigurierte Datenbankserver oder -dienst "
+"verfügbar ist und Verbindungen akzeptiert."
+
+#: app/install/sql_error.php:26
+msgid "Make sure user defined in config.php has access to database."
+msgstr ""
+"Pr&uuml;fen Sie die Zugriffsberechtigungen auf die Datenbank des angegebenen "
+"Datenbankbenutzers in der Datei config.php."
+
+#: app/install/sql_error.php:31
+msgid "Database connection succesfull"
+msgstr "Datenbankverbindung erfolgreich"
+
+#: app/install/welcome.php:9
+msgid "Welcome to phpipam installation wizard!"
+msgstr "Willkommen zum Installationswizard von phpIPAM!"
+
+#: app/install/welcome.php:9
+msgid "Please select one of the options below:"
+msgstr "Bitte w&auml;hlen Sie eine der nachfolgenden Optionen aus:"
+
+#: app/install/welcome.php:18
+msgid "New phpipam installation"
+msgstr "Neue phpIPAM Installation"
+
+#: app/install/welcome.php:20
+msgid "Select this option to install a fresh instance of phpipam."
+msgstr "W&auml;hlen Sie dies Option für eine neue Instanz von phpIPAM."
+
+#: app/install/welcome.php:26
+msgid "Migrate phpipam installation"
+msgstr "Migration phpIPAM Installation"
+
+#: app/install/welcome.php:28
+msgid ""
+"Select this option to migrate phpipam database from another server. Place "
+"SQL dump from old server to directory db and name it MIGRATE.sql (db/MIGRATE."
+"sql)."
+msgstr ""
+"W&auml;hlen Sie dies Option für eine Migration einer vorhandenen Datenbank "
+"von einem anderen Datenbankserver. Transferieren Sie den vorhandenen SQL-"
+"Dump vom alten Server in das Verzeichnis db/ und benennen die Datei in "
+"MIGRATE.sql (db/MOGRATE.sql) um."
+
+#: app/install/welcome.php:34
+msgid "Working installation"
+msgstr "Bestehende Installation"
+
+#: app/install/welcome.php:36
+msgid ""
+"Select this option if you have a working phpipam installation and this "
+"screen occured. Generally it means\n"
+"\t\t\t\t\tphpipam was unable to connnect to the database. This will check "
+"for connection errors."
+msgstr ""
+"W&auml;hlen Sie dies Option wenn Sie eine bestehende und funktionierende "
+"Version von phpIPAM betreiben und diese Webseite jetzt zu sehen ist. "
+"Allgemein bedeutet dies, dass phpIPAM sich nicht mit dem konfigurierten "
+"Datenbankserver verbinden konnte. Beim Fortfahren wird die Verbindung zum "
+"Datenbankserver auf Fehler gepr&uuml;ft."
 
 #: app/login/2fa/2fa_create.php:33
 msgid "Two-factor authentication details"
@@ -10093,12 +10473,6 @@ msgid "Please enter two-factor authentication code from Google Authenticator"
 msgstr ""
 "Bitte geben Sie den Zwei-Faktor-Authentifizierungscode von Google "
 "Authenticator ein"
-
-#: app/login/2fa/2fa_form.php:36 app/login/index.php:104
-#: app/login/login_form.php:53 app/temp_share/index.php:79
-#: functions/classes/class.User.php:370
-msgid "Login"
-msgstr "Anmelden"
 
 #: app/login/2fa/2fa_validate.php:24
 msgid "Invalid code length"
