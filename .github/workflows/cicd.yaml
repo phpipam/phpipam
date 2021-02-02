@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "umg-master" ]
   workflow_dispatch:
     inputs:
       Environment:
