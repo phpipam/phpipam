@@ -2,7 +2,9 @@
 
 export VAULT_ADDR=${VAULT_ADDR:-"https://vault.umusic.net"}
 
-export VAULT_TOKEN=$(vault login -token-only -method=aws role=network-engineering-phpipam-reader)
+if [[ -z $VAULT_TOKEN ]]; 
+  export VAULT_TOKEN=$(vault login -token-only -method=aws role=network-engineering-phpipam-reader)
+fi
 
 if [[ -z "$VAULT_TOKEN" ]]; then
   echo "VAULT_TOKEN required" >&2
