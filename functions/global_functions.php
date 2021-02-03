@@ -59,54 +59,41 @@ function create_link ($l0 = null, $l1 = null, $l2 = null, $l3 = null, $l4 = null
 	# get settings
 	global $User;
 
-	// url encode all
-	if(!is_null($l6))	{ $l6 = urlencode($l6); }
-	if(!is_null($l5))	{ $l5 = urlencode($l5); }
-	if(!is_null($l4))	{ $l4 = urlencode($l4); }
-	if(!is_null($l3))	{ $l3 = urlencode($l3); }
-	if(!is_null($l2))	{ $l2 = urlencode($l2); }
-	if(!is_null($l1))	{ $l1 = urlencode($l1); }
-	if(!is_null($l0))	{ $l0 = urlencode($l0); }
+	$parts = [];
+	for($i=0; $i<=6; $i++) {
+		if (is_null(${"l$i"})) continue;
 
+		foreach(explode('/', ${"l$i"}) as $p) {
+			// url encode all
+			$parts[] = urlencode($p);
+		}
+	}
 
-	# set normal link array
+	if (empty($parts))
+		return BASE;
+
+	# Pretty Links
+	if($User->settings->prettyLinks=="Yes") {
+		$link = BASE.implode('/', $parts);
+
+		# IP search fix
+		if (!is_null($parts[6]) || ($parts[0]=="tools" && $parts[1]=="search" && isset($parts[2])))
+			return $link;
+
+		return $link.'/';
+	}
+
+	# Normal links
 	$el = array("page", "section", "subnetId", "sPage", "ipaddrid", "tab");
 	// override for search
 	if ($l0=="tools" && $l1=="search")
-    $el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
+	$el = array("page", "section", "ip", "addresses", "subnets", "vlans", "ip");
 
-	# set rewrite
-	if($User->settings->prettyLinks=="Yes") {
-		if(!is_null($l6))		{ $link = "$l0/$l1/$l2/$l3/$l4/$l5/$l6"; }
-		elseif(!is_null($l5))	{ $link = "$l0/$l1/$l2/$l3/$l4/$l5/"; }
-		elseif(!is_null($l4))	{ $link = "$l0/$l1/$l2/$l3/$l4/"; }
-		elseif(!is_null($l3))	{ $link = "$l0/$l1/$l2/$l3/"; }
-		elseif(!is_null($l2))	{ $link = "$l0/$l1/$l2/"; }
-		elseif(!is_null($l1))	{ $link = "$l0/$l1/"; }
-		elseif(!is_null($l0))	{ $link = "$l0/"; }
-		else					{ $link = ""; }
-
-		# IP search fix
-		if ($l0=="tools" && $l1=="search" && isset($l2) && substr($link,-1)=="/") {
-    		$link = substr($link, 0, -1);
-		}
+	foreach($parts as $i=>$p) {
+		$parts[$i] = "$el[$i]=$p";
 	}
-	# normal
-	else {
-		if(!is_null($l6))		{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5&$el[6]=$l6"; }
-		elseif(!is_null($l5))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4&$el[5]=$l5"; }
-		elseif(!is_null($l4))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3&$el[4]=$l4"; }
-		elseif(!is_null($l3))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2&$el[3]=$l3"; }
-		elseif(!is_null($l2))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1&$el[2]=$l2"; }
-		elseif(!is_null($l1))	{ $link = "index.php?$el[0]=$l0&$el[1]=$l1"; }
-		elseif(!is_null($l0))	{ $link = "index.php?$el[0]=$l0"; }
-		else					{ $link = ""; }
-	}
-	# prepend base
-	$link = BASE.$link;
 
-	# result
-	return $link;
+	return BASE."index.php?".implode('&', $parts);
 }
 
 /**
@@ -150,4 +137,85 @@ function php_feature_missing($required_extensions = null, $required_functions = 
 	}
 
 	return false;
+}
+
+/**
+ * Set phpIPAM UI locale in order of preference
+ *  1) $_SESSION['ipamlanguage']
+ *  2) Administration -> phpIPAM settings -> Default language
+ *  3) LC_ALL environment
+ *  4) HTTP_ACCEPT_LANGUAGE header
+ */
+function set_ui_language($default_lang = null) {
+
+	if (php_feature_missing(["gettext", "pcre"]))
+		return;
+
+	$user_lang = isset($_SESSION['ipamlanguage']) ? $_SESSION['ipamlanguage'] : null;
+	$sys_lang  = is_string(getenv("LC_ALL")) ? getenv("LC_ALL") : null;
+
+	// Read accepted HTTP languages
+	$http_accept_langs = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? explode(',', $_SERVER['HTTP_ACCEPT_LANGUAGE']) : [];
+	// remove ;q= (q-factor weighting)
+	$http_accept_langs = preg_replace("/;.*$/", "", $http_accept_langs);
+
+	// Try each langage in order of preference
+	$langs = array_merge([$user_lang, $default_lang, $sys_lang], $http_accept_langs);
+
+	foreach($langs as $lang) {
+		if (!is_string($lang) || strlen($lang)==0)
+			continue;
+
+		if (!file_exists(dirname(__FILE__)."/locale/$lang/LC_MESSAGES/phpipam.mo"))
+			continue;
+
+		putenv("LC_ALL=".$lang);
+
+		// https://help.ubuntu.com/community/EnvironmentVariables
+		// Unlike "LANG" and "LC_*", "LANGUAGE" should not be assigned a complete locale name including the encoding part (e.g. ".UTF-8").
+		putenv("LANG=".$lang);
+		putenv("LANGUAGE=".preg_replace("/\.utf-?8/i", "", $lang));
+
+		setlocale(LC_ALL, $lang);
+
+		bind_textdomain_codeset('phpipam', 'UTF-8');
+		bindtextdomain("phpipam", dirname(__FILE__)."/locale");
+		textdomain("phpipam");
+
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Set HTTP cookie with mandatory samesite attribute
+ * Required to support php <7.3 and modern browsers
+ *
+ * @param   string $name
+ * @param   mixed $value
+ * @param   int $lifetime
+ * @param   bool $httponly
+ * @return  void
+ */
+function setcookie_samesite($name, $value, $lifetime, $httponly=false) {
+
+	$lifetime = (int) $lifetime;
+
+	# Manually set cookie via header, php native support for samesite attribute is >=php7.3
+
+	$name = urlencode($name);
+	$value = urlencode($value);
+
+	$tz = date_default_timezone_get();
+	date_default_timezone_set('UTC');
+	$expire_date = date('r', time()+$lifetime);
+	date_default_timezone_set($tz);
+
+	$samesite = Config::ValueOf("cookie_samesite", "Lax");
+	if (!in_array($samesite, ["None", "Lax", "Secure"])) $samesite="Lax";
+
+	$httponly = ($httponly===true) ? ' HttpOnly;' : '';
+
+	header("Set-Cookie: $name=$value; expires=$expire_date; Max-Age=$lifetime; path=/; SameSite=$samesite;".$httponly);
 }
