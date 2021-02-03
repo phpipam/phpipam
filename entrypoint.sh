@@ -2,7 +2,7 @@
 
 export VAULT_ADDR=${VAULT_ADDR:-"https://vault.umusic.net"}
 
-if [[ -z $VAULT_TOKEN ]]; 
+if [[ -z $VAULT_TOKEN ]]; then
   export VAULT_TOKEN=$(vault login -token-only -method=aws role=network-engineering-phpipam-reader)
 fi
 
